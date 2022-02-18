@@ -1016,7 +1016,6 @@ void Monster::onThinkDefense(uint32_t interval)
 					summon->setSkillLoss(false);
 					summon->setMaster(this);
 					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
-					g_game.addMagicEffect(summon->getPosition(), CONST_ME_TELEPORT);
 				} else {
 					delete summon;
 				}

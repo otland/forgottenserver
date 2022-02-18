@@ -314,43 +314,61 @@ function Player.getWeaponType(self)
 end
 
 function Player.updateKillTracker(self, monster, corpse)
-    local monsterType = monster:getType()
-    if not monsterType then
-        return false
-    end
-    
-    local monsterOutfit = monsterType:getOutfit()
+	local monsterType = monster:getType()
+	if not monsterType then
+		return false
+	end
 
-    local networkMessage = NetworkMessage()
-    networkMessage:addByte(0xD1)
-    networkMessage:addString(monster:getName())
-    networkMessage:addU16(monsterOutfit.lookType or 19)
-    networkMessage:addByte(monsterOutfit.lookHead)
-    networkMessage:addByte(monsterOutfit.lookBody)
-    networkMessage:addByte(monsterOutfit.lookLegs)
-    networkMessage:addByte(monsterOutfit.lookFeet)
-    networkMessage:addByte(monsterOutfit.lookAddons)
-    networkMessage:addByte(corpse:getSize())
+	local msg = NetworkMessage()
+	msg:addByte(0xD1)
+	msg:addString(monster:getName())
+	
+	local monsterOutfit = monsterType:getOutfit()
+	msg:addU16(monsterOutfit.lookType or 19)
+	msg:addByte(monsterOutfit.lookHead)
+	msg:addByte(monsterOutfit.lookBody)
+	msg:addByte(monsterOutfit.lookLegs)
+	msg:addByte(monsterOutfit.lookFeet)
+	msg:addByte(monsterOutfit.lookAddons)
 
-    for i = corpse:getSize() - 1, 0, -1 do
-        local item = corpse:getItem(i)
-        networkMessage:addItem(item)
-    end
+	local corpseSize = corpse:getSize()
+	msg:addByte(corpseSize)
+	for index = corpseSize - 1, 0, -1 do
+		msg:addItem(corpse:getItem(index))
+	end
 
-    if self:getParty() then
-        networkMessage:sendToPlayer(self:getParty():getLeader())
-        local membersList = self:getParty():getMembers()
-        for i = 1, #membersList do
-            local player = membersList[i]
-            if player then
-                networkMessage:sendToPlayer(player)
-            end
-        end
-        networkMessage:delete()
-        return true 
-    end
+	local party = self:getParty()
+	if party then
+		local members = party:getMembers()
+		members[#members + 1] = party:getLeader()
 
-    networkMessage:sendToPlayer(self)
-    networkMessage:delete()
-    return true
+		for _, member in ipairs(members) do
+			msg:sendToPlayer(member)
+		end
+	else
+		 msg:sendToPlayer(self)
+	end
+
+	msg:delete()
+	return true
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end
+
+function Player.addAddonToAllOutfits(self, addon)
+	for sex = 0, 1 do
+		local outfits = Game.getOutfits(sex)
+		for outfit = 1, #outfits do
+			self:addOutfitAddon(outfits[outfit].lookType, addon)
+		end
+	end
+end
+
+function Player.addAllMounts(self)
+	local mounts = Game.getMounts()
+	for mount = 1, #mounts do
+		self:addMount(mounts[mount].id)
+	end
 end

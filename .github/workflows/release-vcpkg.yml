@@ -1,21 +1,9 @@
-name: Build with vcpkg
+name: Release builds with vcpkg
 
 on:
   push:
-    branches:
-      - master
+    tags:
       - v*
-
-    paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
-
-  pull_request:
-    paths:
-      - cmake/**
-      - src/**
-      - CMakeLists.txt
 
 jobs:
   unix:
@@ -23,24 +11,16 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
-      max-parallel: 10
+      max-parallel: 8
       matrix:
-        name: [ubuntu-gcc, ubuntu-clang, macos-clang]
-        buildtype: [Debug, Release]
-        luajit: [on, off]
+        name: [ubuntu-gcc, macos-clang]
+        buildtype: [Release]
+        luajit: [on]
         include:
           - name: ubuntu-gcc
             os: ubuntu
             cxx: g++
             cc: gcc
-            triplet: x64-linux
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
-          - name: ubuntu-clang
-            os: ubuntu
-            cxx: clang++
-            cc: clang
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
@@ -53,13 +33,6 @@ jobs:
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua libmariadb pugixml cryptopp fmt
-        exclude:
-          - name: ubuntu-clang
-            buildtype: Release
-          - name: ubuntu-clang
-            luajit: off
-          - name: macos-clang
-            luajit: off
 
     steps:
       - uses: actions/checkout@v2
@@ -109,21 +82,29 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Upload artifact binary
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
-
       - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        run: |
+          pwd
+          ls -al
+          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+          mv ../build/tfs .
         shell: bash
 
-      - name: Upload datapack contents
-        uses: actions/upload-artifact@v2
+      - name: Zip the release files
+        uses: thedoctor0/zip-release@master
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ github.workspace }}
+          type: tar
+          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
+          path: forgottenserver
+          directory: ../
+
+      - name: Upload release artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
+          generateReleaseNotes: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   windows:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=on
@@ -133,7 +114,7 @@ jobs:
       max-parallel: 8
       matrix:
         name: [windows-msvc]
-        buildtype: [Debug, Release]
+        buildtype: [Release]
         include:
           - name: windows-msvc
             os: windows
@@ -185,25 +166,27 @@ jobs:
         run: find $RUNNER_WORKSPACE
         shell: bash
 
-      - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs.exe
-
-      - name: Upload artifact binary (dlls)
-        uses: actions/upload-artifact@v2
-        with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/*.dll
-
       - name: Prepare datapack contents
-        run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+        run: |
+          pwd
+          ls -al
+          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+          mv ../build/tfs.exe* .
+          mv ../build/*.dll .
         shell: bash
 
-      - name: Upload datapack contents
-        uses: actions/upload-artifact@v2
+      - name: Zip the release files
+        uses: thedoctor0/zip-release@master
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
-          path: ${{ github.workspace }}
+          type: zip
+          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          path: forgottenserver
+          directory: ../
 
+      - name: Upload release artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          generateReleaseNotes: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}

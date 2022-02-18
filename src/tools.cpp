@@ -639,6 +639,12 @@ MagicEffectNames magicEffectNames = {
 	{"fatal", 		CONST_ME_FATAL},
 	{"dodge", 		CONST_ME_DODGE},
 	{"hourglass",		CONST_ME_HOURGLASS},
+	{"ferumbras1",		CONST_ME_FERUMBRAS_1},
+	{"gazharagoth",		CONST_ME_GAZHARAGOTH},
+	{"madmage",			CONST_ME_MAD_MAGE},
+	{"horestis",		CONST_ME_HORESTIS},
+	{"devovorga",		CONST_ME_DEVOVORGA},
+	{"ferumbras2",		CONST_ME_FERUMBRAS_2},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -946,19 +952,6 @@ bool booleanString(const std::string& str)
 
 	char ch = tolower(str.front());
 	return ch != 'f' && ch != 'n' && ch != '0';
-}
-
-std::string getWeaponName(WeaponType_t weaponType)
-{
-	switch (weaponType) {
-		case WEAPON_SWORD: return "sword";
-		case WEAPON_CLUB: return "club";
-		case WEAPON_AXE: return "axe";
-		case WEAPON_DISTANCE: return "distance";
-		case WEAPON_WAND: return "wand";
-		case WEAPON_AMMO: return "ammunition";
-		default: return std::string();
-	}
 }
 
 size_t combatTypeToIndex(CombatType_t combatType)
@@ -1333,3 +1326,4 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
+
