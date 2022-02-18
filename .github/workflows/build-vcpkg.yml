@@ -23,7 +23,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 10
       matrix:
         name: [ubuntu-gcc, ubuntu-clang, macos-clang]
         buildtype: [Debug, Release]
@@ -53,6 +53,13 @@ jobs:
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua libmariadb pugixml cryptopp fmt
+        exclude:
+          - name: ubuntu-clang
+            buildtype: Release
+          - name: ubuntu-clang
+            luajit: off
+          - name: macos-clang
+            luajit: off
 
     steps:
       - uses: actions/checkout@v2
