@@ -11,18 +11,32 @@ local modalWindowHelper = CreatureEvent(ModalWindows.eventName)
 
 function modalWindowHelper.onModalWindow(player, modalWindowId, buttonId, choiceId)
 	local modalWindow = ModalWindows.windows[modalWindowId]
-	if not modalWindow then return end
-	if modalWindow.playerGuid ~= player:getGuid() then return end
+	if not modalWindow then
+		return
+	end
+
+	if modalWindow.playerGuid ~= player:getGuid() then
+		return
+	end
+
 	local button = modalWindow.buttons[buttonId]
 	local choice = modalWindow.choices[choiceId]
 	local buttonCallback = button.callback
 	local choiceCallback = choice.callback
 	local defaultCallback = modalWindow.defaultCallback
-    ModalWindows.windows[modalWindowId] = nil
-    local returnValue = true
-    if buttonCallback then returnValue = buttonCallback(player, button, choice) end
-    if returnValue and choiceCallback then returnValue = choiceCallback(player, button, choice) end
-    if returnValue and defaultCallback then defaultCallback(player, button, choice) end
+	ModalWindows.windows[modalWindowId] = nil
+	local returnValue = true
+	if buttonCallback then
+		returnValue = buttonCallback(player, button, choice)
+	end
+
+	if returnValue and choiceCallback then
+		returnValue = choiceCallback(player, button, choice)
+	end
+
+	if returnValue and defaultCallback then
+		defaultCallback(player, button, choice)
+	end
 end
 
 modalWindowHelper:register()
