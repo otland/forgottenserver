@@ -33,6 +33,7 @@ ec.onLook = {[5]=1}
 ec.onLookInBattleList = {[4]=1}
 ec.onLookInTrade = {[5]=1}
 ec.onLookInShop = {[4]=1}
+ec.onLookInMarket = {}
 ec.onTradeRequest = {}
 ec.onTradeAccept = {}
 ec.onTradeCompleted = {}

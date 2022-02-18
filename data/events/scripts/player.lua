@@ -223,7 +223,7 @@ function Player:onWrapItem(item)
 end
 
 function Player:onInventoryUpdate(item, slot, equip)
-	if hasEventCallback(EVENT_CALLBACK_ONINVENTORYUPDATE) then
-		EventCallback(EVENT_CALLBACK_ONINVENTORYUPDATE, self, item, slot, equip)
+	if EventCallback.onInventoryUpdate then
+		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
 end
