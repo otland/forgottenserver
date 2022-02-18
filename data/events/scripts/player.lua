@@ -37,17 +37,11 @@ function Player:onLookInShop(itemType, count, description)
 	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
 end
 
-function Player:onLookInMarket(itemType)
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINMARKET) then
-		EventCallback(EVENT_CALLBACK_ONLOOKINMARKET, self, itemType)
-	end
-end
-
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if EventCallback.onMoveItem then
 		return EventCallback.onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
-	return RETURNVALUE_NOERROR
+	return true
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
@@ -219,11 +213,5 @@ function Player:onWrapItem(item)
 		if item then
 			item:setAttribute("wrapid", oldId)
 		end
-	end
-end
-
-function Player:onInventoryUpdate(item, slot, equip)
-	if hasEventCallback(EVENT_CALLBACK_ONINVENTORYUPDATE) then
-		EventCallback(EVENT_CALLBACK_ONINVENTORYUPDATE, self, item, slot, equip)
 	end
 end

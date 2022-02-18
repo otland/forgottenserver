@@ -40,9 +40,6 @@
 	<wand id="24839" level="37" mana="13" min="56" max="74" type="earth"> <!-- Ogre Scepta -->
 		<vocation name="Druid" />
 	</wand>
-	<wand id="30114" level="200" mana="18" min="80" max="110" type="ice"> <!-- Rod of Destruction -->
-		<vocation name="Druid" />
-	</wand>
 
 	<!-- Wands -->
 	<wand id="23719" level="1" mana="1" min="3" max="7" type="fire"> <!-- The Scorcher -->
@@ -91,9 +88,6 @@
 		<vocation name="Sorcerer" />
 	</wand>
 	<wand id="25422" level="100" mana="19" min="80" max="110" type="energy"> <!-- Ferumbras' Staff (Enchanted) -->
-		<vocation name="Sorcerer" />
-	</wand>
-	<wand id="30113" level="200" mana="18" min="80" max="110" type="energy"> <!-- Wand of Destruction -->
 		<vocation name="Sorcerer" />
 	</wand>
 

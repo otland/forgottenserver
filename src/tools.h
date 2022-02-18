@@ -80,6 +80,8 @@ std::string ucfirst(std::string str);
 std::string ucwords(std::string str);
 bool booleanString(const std::string& str);
 
+std::string getWeaponName(WeaponType_t weaponType);
+
 size_t combatTypeToIndex(CombatType_t combatType);
 CombatType_t indexToCombatType(size_t v);
 

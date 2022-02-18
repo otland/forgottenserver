@@ -40,8 +40,6 @@
 #include "enums.h"
 #include "position.h"
 #include "outfit.h"
-#include "mounts.h"
-#include <fmt/format.h>
 
 class Thing;
 class Creature;
@@ -294,31 +292,12 @@ class LuaScriptInterface
 		{
 			return static_cast<T>(static_cast<int64_t>(lua_tonumber(L, arg)));
 		}
-
 		template<typename T>
-		static typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value, T>::type
+		static typename std::enable_if<std::is_integral<T>::value || std::is_floating_point<T>::value, T>::type
 			getNumber(lua_State* L, int32_t arg)
 		{
-			double num = lua_tonumber(L, arg);
-			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
-			}
-
-			return static_cast<T>(num);
+			return static_cast<T>(lua_tonumber(L, arg));
 		}
-
-		template<typename T>
-		static typename std::enable_if<(std::is_integral<T>::value && (std::is_signed<T>::value) || std::is_floating_point<T>::value), T>::type
-			getNumber(lua_State* L, int32_t arg)
-		{
-			double num = lua_tonumber(L, arg);
-			if (num < static_cast<double>(std::numeric_limits<T>::lowest()) || num > static_cast<double>(std::numeric_limits<T>::max())) {
-				reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
-			}
-
-			return static_cast<T>(num);
-		}
-
 		template<typename T>
 		static T getNumber(lua_State *L, int32_t arg, T defaultValue)
 		{
@@ -368,7 +347,6 @@ class LuaScriptInterface
 		static Outfit getOutfitClass(lua_State* L, int32_t arg);
 		static LuaVariant getVariant(lua_State* L, int32_t arg);
 		static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
-		static Reflect getReflect(lua_State* L, int32_t arg);
 
 		static Thing* getThing(lua_State* L, int32_t arg);
 		static Creature* getCreature(lua_State* L, int32_t arg);
@@ -418,9 +396,7 @@ class LuaScriptInterface
 		static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 		static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 		static void pushOutfit(lua_State* L, const Outfit* outfit);
-		static void pushMount(lua_State* L, const Mount* mount);
 		static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
-		static void pushReflect(lua_State* L, const Reflect& reflect);
 
 		//
 		static void setField(lua_State* L, const char* index, lua_Number value)
@@ -580,8 +556,6 @@ class LuaScriptInterface
 
 		static int luaGameGetTowns(lua_State* L);
 		static int luaGameGetHouses(lua_State* L);
-		static int luaGameGetOutfits(lua_State* L);
-		static int luaGameGetMounts(lua_State* L);
 
 		static int luaGameGetGameState(lua_State* L);
 		static int luaGameSetGameState(lua_State* L);
@@ -781,12 +755,6 @@ class LuaScriptInterface
 
 		static int luaItemSetStoreItem(lua_State* L);
 		static int luaItemIsStoreItem(lua_State* L);
-
-		static int luaItemSetReflect(lua_State* L);
-		static int luaItemGetReflect(lua_State* L);
-
-		static int luaItemSetBoostPercent(lua_State* L);
-		static int luaItemGetBoostPercent(lua_State* L);
 
 		// Container
 		static int luaContainerCreate(lua_State* L);
@@ -1065,10 +1033,6 @@ class LuaScriptInterface
 
 		static int luaPlayerGetStoreInbox(lua_State* L);
 
-		static int luaPlayerIsNearDepotBox(lua_State* L);
-
-		static int luaPlayerGetIdleTime(lua_State* L);
-
 		// Monster
 		static int luaMonsterCreate(lua_State* L);
 
@@ -1271,7 +1235,6 @@ class LuaScriptInterface
 		static int luaItemTypeGetRequiredLevel(lua_State* L);
 		static int luaItemTypeGetAmmoType(lua_State* L);
 		static int luaItemTypeGetCorpseType(lua_State* L);
-		static int luaItemTypeGetClassification(lua_State* L);
 		static int luaItemTypeHasShowCount(lua_State* L);
 		static int luaItemTypeGetAbilities(lua_State* L);
 		static int luaItemTypeHasShowAttributes(lua_State* L);
@@ -1285,9 +1248,6 @@ class LuaScriptInterface
 		static int luaItemTypeGetVocationString(lua_State* L);
 		static int luaItemTypeGetMinReqLevel(lua_State* L);
 		static int luaItemTypeGetMinReqMagicLevel(lua_State* L);
-
-		static int luaItemTypeGetMarketBuyStatistics(lua_State* L);
-		static int luaItemTypeGetMarketSellStatistics(lua_State* L);
 
 		static int luaItemTypeHasSubType(lua_State* L);
 

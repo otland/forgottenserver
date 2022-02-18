@@ -18,7 +18,7 @@ function blessingCharms.onUse(player, item, fromPosition, target, toPosition, is
 		player:addBlessing(blessItem.id)
 		player:say(blessItem.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(blessItem.effect)
-		item:remove(1)
+		item:remove()
 	end
 	return true
 end

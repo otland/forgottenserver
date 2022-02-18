@@ -186,6 +186,7 @@
     <ClCompile Include="..\src\house.cpp" />
     <ClCompile Include="..\src\housetile.cpp" />
     <ClCompile Include="..\src\inbox.cpp" />
+    <ClCompile Include="..\src\ioguild.cpp" />
     <ClCompile Include="..\src\iologindata.cpp" />
     <ClCompile Include="..\src\iomap.cpp" />
     <ClCompile Include="..\src\iomapserialize.cpp" />
@@ -274,6 +275,7 @@
     <ClInclude Include="..\src\house.h" />
     <ClInclude Include="..\src\housetile.h" />
     <ClInclude Include="..\src\inbox.h" />
+    <ClInclude Include="..\src\ioguild.h" />
     <ClInclude Include="..\src\iologindata.h" />
     <ClInclude Include="..\src\iomap.h" />
     <ClInclude Include="..\src\iomapserialize.h" />

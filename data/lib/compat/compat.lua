@@ -656,7 +656,6 @@ function doPlayerRemOutfit(cid, lookType, addons)
 	end
 end
 doPlayerRemoveOutfit = doPlayerRemOutfit
-function doPlayerAddAddons(cid, addon) local p = Player(cid) return p and p:addAddonToAllOutfits(addon) or false end
 function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return p and p:hasOutfit(lookType, addons) or false end
 function doPlayerAddMount(cid, mountId) local p = Player(cid) return p and p:addMount(mountId) or false end
 function doPlayerRemoveMount(cid, mountId) local p = Player(cid) return p and p:removeMount(mountId) or false end
@@ -1479,19 +1478,6 @@ do
 
 	function getSpecialSkillName(specialSkill)
 		return specialSkills[specialSkill] or 'unknown'
-	end
-end
-
-do
-	local stats = {
-		[STAT_MAXHITPOINTS] = 'hitpoints',
-		[STAT_MAXMANAPOINTS] = 'mana',
-		[STAT_SOULPOINTS] = 'soul points',
-		[STAT_MAGICPOINTS] = 'magic level'
-	}
-
-	function getStatName(stat)
-		return stats[stat] or 'unknown'
 	end
 end
 

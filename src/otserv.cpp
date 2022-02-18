@@ -36,7 +36,7 @@
 #include "databasetasks.h"
 #include "script.h"
 #include <fstream>
-#include <fmt/color.h>
+#include <fmt/format.h>
 #if __has_include("gitmetadata.h")
 	#include "gitmetadata.h"
 #endif
@@ -58,7 +58,7 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
+	std::cout << "> ERROR: " << errorStr << std::endl;
 	g_loaderSignal.notify_all();
 }
 
@@ -189,7 +189,6 @@ void mainLoader(int, char*[], ServiceManager* services)
 #endif
 
 	//set RSA key
-	std::cout << ">> Loading RSA key " << std::endl;
 	try {
 		g_RSA.loadPEM("key.pem");
 	} catch(const std::exception& e) {

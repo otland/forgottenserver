@@ -1,0 +1,42 @@
+os: linux
+dist: focal
+language: cpp
+compiler:
+  - clang
+  - gcc
+env:
+  global:
+    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+    #   via the "travis encrypt" command using the project repo's public key
+    - secure: "jg/5nV1Xe6ePlplxIyRmyTaSEDmKhOxF/Z3cMMU6xOnEyhMTnKgcvi88YB0JA/Y7y3SBFyHdvzSfADgTPYsE+TDp2BTlhPpaS/x987nXfB+0jWB3WyEdxtUuscis9m3vAfdO9OraOfrthQDKQgt1mEoJcdVfLabnZ2hs+wzuFGA="
+  jobs:
+    - LUAJIT=OFF
+    - LUAJIT=ON
+cache: apt
+addons:
+  apt:
+    packages:
+      - libboost-date-time-dev
+      - libboost-system-dev
+      - libboost-filesystem-dev
+      - libboost-iostreams-dev
+      - libcrypto++-dev
+      - libfmt-dev
+      - liblua5.2-dev
+      - libluajit-5.1-dev
+      - libmysqlclient-dev
+      - libpugixml-dev
+  coverity_scan:
+    project:
+      name: otland/forgottenserver
+      description: A free and open-source MMORPG server emulator written in C++
+    build_command_prepend: "cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} .."
+    build_command: make -j2
+    branch_pattern: coverity_scan
+    notification_email: coverity@otland.net
+before_install:
+  - echo -n | openssl s_client -connect https://scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+before_script:
+  - mkdir build && cd build
+  - cmake -DCMAKE_BUILD_TYPE=Release -DUSE_LUAJIT=${LUAJIT} ..
+script: if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j2; fi

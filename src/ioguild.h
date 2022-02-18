@@ -17,38 +17,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef FS_HOUSETILE_H_57D59BEC1CE741D9B142BFC54634505B
-#define FS_HOUSETILE_H_57D59BEC1CE741D9B142BFC54634505B
+#ifndef FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
+#define FS_IOGUILD_H_EF9ACEBA0B844C388B70FF52E69F1AFF
 
-#include "tile.h"
+class Guild;
+using GuildWarVector = std::vector<uint32_t>;
 
-class House;
-
-class HouseTile final : public DynamicTile
+class IOGuild
 {
 	public:
-		HouseTile(int32_t x, int32_t y, int32_t z, House* house);
-
-		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const override;
-
-		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-				uint32_t& flags) override;
-
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
-
-		void addThing(int32_t index, Thing* thing) override;
-		void internalAddThing(uint32_t index, Thing* thing) override;
-
-		House* getHouse() {
-			return house;
-		}
-
-	private:
-		void updateHouse(Item* item);
-
-		House* house;
+		static Guild* loadGuild(uint32_t guildId);
+		static uint32_t getGuildIdByName(const std::string& name);
+		static void getWarList(uint32_t guildId, GuildWarVector& guildWarVector);
 };
 
 #endif

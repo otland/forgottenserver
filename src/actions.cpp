@@ -430,8 +430,9 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+		if (HouseTile* houseTile = dynamic_cast<HouseTile*>(item->getTile())) {
+			House* house = houseTile->getHouse();
+			if (house && !house->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return false;
 			}
@@ -474,15 +475,6 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	if (isHotkey) {
 		uint16_t subType = item->getSubType();
 		showUseHotkeyMessage(player, item, player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1));
-	}
-
-	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return false;
-			}
-		}
 	}
 
 	if (action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey)) {

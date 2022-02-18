@@ -610,7 +610,6 @@ enum CombatOrigin
 	ORIGIN_MELEE,
 	ORIGIN_RANGED,
 	ORIGIN_WAND,
-	ORIGIN_REFLECT,
 };
 
 struct CombatDamage
@@ -637,20 +636,6 @@ enum MonstersEvent_t : uint8_t {
 	MONSTERS_EVENT_DISAPPEAR = 3,
 	MONSTERS_EVENT_MOVE = 4,
 	MONSTERS_EVENT_SAY = 5,
-};
-
-struct Reflect {
-	Reflect() = default;
-	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
-
-	Reflect& operator+=(const Reflect& other) {
-		percent += other.percent;
-		chance = std::min(100, chance + other.chance);
-		return *this;
-	}
-
-	uint16_t percent = 0;
-	uint16_t chance = 0;
 };
 
 #endif

@@ -39,7 +39,7 @@ class AccessList
 		void addGuild(const std::string& name);
 		void addGuildRank(const std::string& name, const std::string& rankName);
 
-		bool isInList(const Player* player) const;
+		bool isInList(const Player* player);
 
 		void getList(std::string& list) const;
 
@@ -142,9 +142,9 @@ class House
 		void setAccessList(uint32_t listId, const std::string& textlist);
 		bool getAccessList(uint32_t listId, std::string& list) const;
 
-		bool isInvited(const Player* player) const;
+		bool isInvited(const Player* player);
 
-		AccessHouseLevel_t getHouseAccessLevel(const Player* player) const;
+		AccessHouseLevel_t getHouseAccessLevel(const Player* player);
 		bool kickPlayer(Player* player, Player* target);
 
 		void setEntryPos(Position pos) {

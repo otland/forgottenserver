@@ -303,15 +303,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		}
 	}
 
-	const Cylinder* const topParent = getTopParent();
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
-			}
-		}
-	}
-
+	const Cylinder* topParent = getTopParent();
 	if (topParent != this) {
 		return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
 	}
@@ -389,13 +381,9 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		const Cylinder* const topParent = getTopParent();
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
-			}
-		}
+	const HouseTile* houseTile = dynamic_cast<const HouseTile*>(getTopParent());
+	if (houseTile) {
+		return houseTile->queryRemove(thing, count, flags, actor);
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -703,8 +691,6 @@ void Container::internalAddThing(uint32_t, Thing* thing)
 
 void Container::startDecaying()
 {
-	Item::startDecaying();
-
 	for (Item* item : itemlist) {
 		item->startDecaying();
 	}

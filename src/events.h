@@ -22,15 +22,10 @@
 
 #include "luascript.h"
 #include "const.h"
-#include "creature.h"
 
 class Party;
 class ItemType;
 class Tile;
-
-enum class EventInfoId {
-	CREATURE_ONHEAR
-};
 
 class Events
 {
@@ -53,7 +48,6 @@ class Events
 		int32_t playerOnLookInBattleList = -1;
 		int32_t playerOnLookInTrade = -1;
 		int32_t playerOnLookInShop = -1;
-		int32_t playerOnLookInMarket = -1;
 		int32_t playerOnMoveItem = -1;
 		int32_t playerOnItemMoved = -1;
 		int32_t playerOnMoveCreature = -1;
@@ -67,7 +61,6 @@ class Events
 		int32_t playerOnLoseExperience = -1;
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
-		int32_t playerOnInventoryUpdate = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -97,8 +90,7 @@ class Events
 		void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
 		void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
 		bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description);
-		bool eventPlayerOnLookInMarket(Player* player, const ItemType* itemType);
-		ReturnValue eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
+		bool eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
 		void eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder);
 		bool eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition);
 		void eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation);
@@ -111,21 +103,10 @@ class Events
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 		void eventPlayerOnWrapItem(Player* player, Item* item);
-		void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
 		bool eventMonsterOnSpawn(Monster* monster, const Position& position, bool startup, bool artificial);
-
-		int32_t getScriptId(EventInfoId eventInfoId) {
-			switch (eventInfoId)
-			{
-			case EventInfoId::CREATURE_ONHEAR:
-				return info.creatureOnHear;
-			default:
-				return -1;
-			}
-		};
 
 	private:
 		LuaScriptInterface scriptInterface;

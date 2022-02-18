@@ -106,15 +106,15 @@ local potions = {
 		flask = 7635,
 		description = "Only druids and sorcerers of level 130 or above may drink this fluid."
 	},
-	[26030] = { -- ultimate spirit potion
-		health = {410, 580},
-		mana = {150, 250},
+	[26030] = { -- supreme health potion
+		health = {420, 580},
+		mana = {200, 350},
 		vocations = {3, 7},
 		level = 130,
 		flask = 7635,
 		description = "Only paladins of level 130 or above may drink this fluid."
 	},
-	[26031] = { -- supreme health potion
+	[26031] = { -- ultimate spirit potion
 		health = {875, 1125},
 		vocations = {4, 8},
 		level = 200,
