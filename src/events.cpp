@@ -901,8 +901,7 @@ void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
 
 void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction)
 {
-	// Player:onPodiumEdit(item, outfit, direction, isVisible)
-	// Player.onPodiumEdit(self, item, outfit, direction, isVisible)
+	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction, isVisible)
 	if (info.playerOnPodiumEdit == -1) {
 		return;
 	}

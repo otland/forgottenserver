@@ -98,8 +98,7 @@ function Player:onTradeCompleted(target, item, targetItem, isSuccess)
 end
 
 function Player:onPodiumRequest(item)
-	local podium = Podium(item.uid)
-	if not podium then
+	if not item:isPodium() then
 		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return
 	end
@@ -108,8 +107,7 @@ function Player:onPodiumRequest(item)
 end
 
 function Player:onPodiumEdit(item, outfit, direction, isVisible)
-	local podium = Podium(item.uid)
-	if not podium then
+	if not item:isPodium() then
 		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
 		return
 	end
@@ -133,7 +131,7 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 		end
 	end
 
-	local podiumOutfit = podium:getOutfit()
+	local podiumOutfit = item:getOutfit()
 	local playerOutfit = self:getOutfit()
 
 	-- use player outfit if podium is empty
@@ -180,11 +178,11 @@ function Player:onPodiumEdit(item, outfit, direction, isVisible)
 	end
 
 	-- save player choices
-	podium:setFlag(PODIUM_SHOW_PLATFORM, isVisible)
-	podium:setFlag(PODIUM_SHOW_OUTFIT, outfit.lookType ~= 0)
-	podium:setFlag(PODIUM_SHOW_MOUNT, outfit.lookMount ~= 0)
-	podium:setDirection(direction < DIRECTION_NORTHEAST and direction or DIRECTION_SOUTH)
-	podium:setOutfit(podiumOutfit)
+	item:setFlag(PODIUM_SHOW_PLATFORM, isVisible)
+	item:setFlag(PODIUM_SHOW_OUTFIT, outfit.lookType ~= 0)
+	item:setFlag(PODIUM_SHOW_MOUNT, outfit.lookMount ~= 0)
+	item:setDirection(direction < DIRECTION_NORTHEAST and direction or DIRECTION_SOUTH)
+	item:setOutfit(podiumOutfit)
 end
 
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
