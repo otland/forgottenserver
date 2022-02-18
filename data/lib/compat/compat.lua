@@ -44,6 +44,28 @@ NORTHEAST = DIRECTION_NORTHEAST
 SPEECHBUBBLE_QUESTTRADER = SPEECHBUBBLE_QUEST
 
 do
+	local function storageProxy(player)
+		return setmetatable({}, {
+			__index = function (self, key)
+				return player:getStorageValue(key)
+			end,
+			__newindex = function (self, key, value)
+				player:setStorageValue(key, value)
+			end
+		})
+	end
+
+	local function accountStorageProxy(player)
+		return setmetatable({}, {
+			__index = function (self, key)
+				return Game.getAccountStorageValue(player:getAccountId(), key)
+			end,
+			__newindex = function (self, key, value)
+				Game.setAccountStorageValue(player:getAccountId(), key, value)
+			end
+		})
+	end
+
 	local function CreatureIndex(self, key)
 		local methods = getmetatable(self)
 		if key == "uid" then
@@ -62,23 +84,21 @@ do
 			return 1
 		elseif key == "actionid" then
 			return 0
+		elseif key == "storage" then
+			if methods.isPlayer(self) then
+				return storageProxy(self)
+			end
+		elseif key == "accountStorage" then
+			if methods.isPlayer(self) then
+				return accountStorageProxy(self)
+			end
 		end
 
-		local value = methods[key]
-		if not value and creatureType == THING_TYPE_PLAYER then
-			return methods.getStorageValue(self, key)
-		end
-
-		return value
+		return methods[key]
 	end
 	rawgetmetatable("Player").__index = CreatureIndex
 	rawgetmetatable("Monster").__index = CreatureIndex
 	rawgetmetatable("Npc").__index = CreatureIndex
-
-	local function PlayerNewIndex(self, key, value)
-		getmetatable(self).setStorageValue(self, key, value)
-	end
-	rawgetmetatable("Player").__newindex = PlayerNewIndex
 end
 
 do
