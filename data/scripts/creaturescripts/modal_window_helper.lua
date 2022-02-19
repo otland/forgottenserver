@@ -41,12 +41,12 @@ end
 
 modalWindowHelper:register()
 
-local MT = {}
-MT.__index = MT
+local ModalWindowMeta = {}
+ModalWindowMeta.__index = ModalWindowMeta
 
 function ModalWindow(modalWindow, ...)
 	if type(modalWindow) == 'table' then
-		local self = setmetatable(modalWindow, MT)
+		local self = setmetatable(modalWindow, ModalWindowMeta)
 		self.tmpButtons = {}
 		local mt = {
 			__index = function ()
@@ -61,43 +61,43 @@ function ModalWindow(modalWindow, ...)
 	return ModalWindows.modalWindowConstructor(modalWindow, ...)
 end
 
-function MT:setDefaultCallback(callback)
+function ModalWindowMeta:setDefaultCallback(callback)
 	self.defaultCallback = callback
 end
 
-function MT:addButton(text, callback)
+function ModalWindowMeta:addButton(text, callback)
 	self.tmpButtons[#self.tmpButtons +1] = {text = tostring(text), callback = callback}
 end
 
-function MT:addButtons(...)
+function ModalWindowMeta:addButtons(...)
 	for _, text in ipairs({...}) do
 		self.tmpButtons[#self.tmpButtons +1] = {text = tostring(text)}
 	end
 end
 
-function MT:addChoice(text, callback)
+function ModalWindowMeta:addChoice(text, callback)
 	self.choices[#self.choices +1] = {text = tostring(text), callback = callback}
 end
 
-function MT:addChoices(...)
+function ModalWindowMeta:addChoices(...)
 	for _, text in ipairs({...}) do
 		self.choices[#self.choices +1] = {text = tostring(text)}
 	end
 end
 
-function MT:setDefaultEnterButton(text)
+function ModalWindowMeta:setDefaultEnterButton(text)
 	self.defaultEnterButton = text
 end
 
-function MT:setDefaultEscapeButton(text)
+function ModalWindowMeta:setDefaultEscapeButton(text)
 	self.defaultEscapeButton = text
 end
 
-function MT:setTitle(title)
+function ModalWindowMeta:setTitle(title)
 	self.title = tostring(title)
 end
 
-function MT:setMessage(message)
+function ModalWindowMeta:setMessage(message)
 	self.message = tostring(message)
 end
 
@@ -107,7 +107,8 @@ local buttonOrder = {
 	[2] = {1, 2},
 	[1] = {1}
 }
-function MT:create(player)
+
+function ModalWindowMeta:create(player)
 	local playerGuid = player:getGuid()
 	local id = ModalWindows.baseId + playerGuid
 	self.playerGuid = playerGuid
@@ -140,7 +141,7 @@ function MT:create(player)
 	self.modalWindow = modalWindow
 end
 
-function MT:sendToPlayer(player)
+function ModalWindowMeta:sendToPlayer(player)
 	if not self.modalWindow then
 		self:create(player)
 	end
