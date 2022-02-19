@@ -40,6 +40,7 @@ class Mailbox;
 class Door;
 class MagicField;
 class BedItem;
+class Podium;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -107,7 +108,7 @@ enum AttrTypes_t {
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
 	ATTR_OPENCONTAINER = 39,
-	// ATTR_PODIUMOUTFIT = 40, // mapeditor
+	ATTR_PODIUMOUTFIT = 40,
 	// ATTR_TIER = 41, // mapeditor
 	ATTR_REFLECT = 42,
 	ATTR_BOOST = 43,
@@ -614,6 +615,12 @@ class Item : virtual public Thing
 		virtual const BedItem* getBed() const {
 			return nullptr;
 		}
+		virtual Podium* getPodium() {
+			return nullptr;
+		}
+		virtual const Podium* getPodium() const {
+			return nullptr;
+		}
 
 		const std::string& getStrAttr(itemAttrTypes type) const {
 			if (!attributes) {
@@ -955,6 +962,9 @@ class Item : virtual public Thing
 		bool isRotatable() const {
 			const ItemType& it = items[id];
 			return it.rotatable && it.rotateTo;
+		}
+		bool isPodium() const {
+			return items[id].isPodium();
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;

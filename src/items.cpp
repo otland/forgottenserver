@@ -225,6 +225,7 @@ const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
 	{"door", ITEM_TYPE_DOOR},
 	{"bed", ITEM_TYPE_BED},
 	{"rune", ITEM_TYPE_RUNE},
+	{"podium", ITEM_TYPE_PODIUM}
 };
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
@@ -513,7 +514,9 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_FLUID:
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
+				break;
 			case ITEM_GROUP_PODIUM:
+				iType.type = ITEM_TYPE_PODIUM;
 				break;
 			default:
 				return false;

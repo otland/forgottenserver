@@ -28,6 +28,8 @@
 	<event class="Player" method="onTradeRequest" enabled="0" />
 	<event class="Player" method="onTradeAccept" enabled="0" />
 	<event class="Player" method="onTradeCompleted" enabled="0" />
+	<event class="Player" method="onPodiumRequest" enabled="1" />
+	<event class="Player" method="onPodiumEdit" enabled="1" />
 	<event class="Player" method="onGainExperience" enabled="1" />
 	<event class="Player" method="onLoseExperience" enabled="0" />
 	<event class="Player" method="onGainSkillTries" enabled="1" />

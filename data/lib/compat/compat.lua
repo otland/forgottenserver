@@ -44,6 +44,28 @@ NORTHEAST = DIRECTION_NORTHEAST
 SPEECHBUBBLE_QUESTTRADER = SPEECHBUBBLE_QUEST
 
 do
+	local function storageProxy(player)
+		return setmetatable({}, {
+			__index = function (self, key)
+				return player:getStorageValue(key)
+			end,
+			__newindex = function (self, key, value)
+				player:setStorageValue(key, value)
+			end
+		})
+	end
+
+	local function accountStorageProxy(player)
+		return setmetatable({}, {
+			__index = function (self, key)
+				return Game.getAccountStorageValue(player:getAccountId(), key)
+			end,
+			__newindex = function (self, key, value)
+				Game.setAccountStorageValue(player:getAccountId(), key, value)
+			end
+		})
+	end
+
 	local function CreatureIndex(self, key)
 		local methods = getmetatable(self)
 		if key == "uid" then
@@ -62,7 +84,16 @@ do
 			return 1
 		elseif key == "actionid" then
 			return 0
+		elseif key == "storage" then
+			if methods.isPlayer(self) then
+				return storageProxy(self)
+			end
+		elseif key == "accountStorage" then
+			if methods.isPlayer(self) then
+				return accountStorageProxy(self)
+			end
 		end
+
 		return methods[key]
 	end
 	rawgetmetatable("Player").__index = CreatureIndex
@@ -87,6 +118,7 @@ do
 	rawgetmetatable("Item").__index = ItemIndex
 	rawgetmetatable("Container").__index = ItemIndex
 	rawgetmetatable("Teleport").__index = ItemIndex
+	rawgetmetatable("Podium").__index = ItemIndex
 end
 
 do
