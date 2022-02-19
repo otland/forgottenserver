@@ -38,8 +38,8 @@ function Player:onLookInShop(itemType, count, description)
 end
 
 function Player:onLookInMarket(itemType)
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINMARKET) then
-		EventCallback(EVENT_CALLBACK_ONLOOKINMARKET, self, itemType)
+	if EventCallback.onLookInMarket then
+		EventCallback.onLookInMarket(self, itemType)
 	end
 end
 
