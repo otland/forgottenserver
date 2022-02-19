@@ -618,7 +618,7 @@ do
 		-- wield info
 		do
 			if itemType:isRune() then
-				local rune = Spell(it:getId())
+				local rune = Spell(itemType:getId())
 				if rune then
 					local runeLevel = rune:runeLevel()
 					local runeMagLevel = rune:runeMagicLevel()
