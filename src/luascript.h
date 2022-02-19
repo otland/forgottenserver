@@ -76,6 +76,7 @@ enum LuaDataType {
 	LuaData_Item,
 	LuaData_Container,
 	LuaData_Teleport,
+	LuaData_Podium,
 	LuaData_Player,
 	LuaData_Monster,
 	LuaData_Npc,
@@ -577,6 +578,7 @@ class LuaScriptInterface
 		static int luaGameGetNpcCount(lua_State* L);
 		static int luaGameGetMonsterTypes(lua_State* L);
 		static int luaGameGetCurrencyItems(lua_State* L);
+		static int luaGameGetMountIdByLookType(lua_State* L);
 
 		static int luaGameGetTowns(lua_State* L);
 		static int luaGameGetHouses(lua_State* L);
@@ -810,6 +812,16 @@ class LuaScriptInterface
 		static int luaTeleportGetDestination(lua_State* L);
 		static int luaTeleportSetDestination(lua_State* L);
 
+		// Podium
+		static int luaPodiumCreate(lua_State* L);
+
+		static int luaPodiumGetOutfit(lua_State* L);
+		static int luaPodiumSetOutfit(lua_State* L);
+		static int luaPodiumHasFlag(lua_State* L);
+		static int luaPodiumSetFlag(lua_State* L);
+		static int luaPodiumGetDirection(lua_State* L);
+		static int luaPodiumSetDirection(lua_State* L);
+
 		// Creature
 		static int luaCreatureCreate(lua_State* L);
 
@@ -1019,6 +1031,8 @@ class LuaScriptInterface
 		static int luaPlayerHasOutfit(lua_State* L);
 		static int luaPlayerCanWearOutfit(lua_State* L);
 		static int luaPlayerSendOutfitWindow(lua_State* L);
+
+		static int luaPlayerSendEditPodium(lua_State* L);
 
 		static int luaPlayerAddMount(lua_State* L);
 		static int luaPlayerRemoveMount(lua_State* L);

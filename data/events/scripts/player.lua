@@ -103,6 +103,94 @@ function Player:onTradeCompleted(target, item, targetItem, isSuccess)
 	end
 end
 
+function Player:onPodiumRequest(item)
+	if not item:isPodium() then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return
+	end
+
+	self:sendEditPodium(item)
+end
+
+function Player:onPodiumEdit(item, outfit, direction, isVisible)
+	if not item:isPodium() then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return
+	end
+
+	if not self:getGroup():getAccess() then
+		-- check if the player is in melee range
+		if getDistanceBetween(self:getPosition(), item:getPosition()) > 1 then
+			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+			return
+		end
+
+		-- reset outfit if unable to wear
+		if not self:canWearOutfit(outfit.lookType, outfit.lookAddons) then
+			outfit.lookType = 0
+		end
+
+		-- reset mount if unable to ride
+		local mount = Game.getMountIdByLookType(outfit.lookMount)
+		if not (mount and self:hasMount(mount)) then
+			outfit.lookMount = 0
+		end
+	end
+
+	local podiumOutfit = item:getOutfit()
+	local playerOutfit = self:getOutfit()
+
+	-- use player outfit if podium is empty
+	if podiumOutfit.lookType == 0 then
+		podiumOutfit.lookType = playerOutfit.lookType
+		podiumOutfit.lookHead = playerOutfit.lookHead
+		podiumOutfit.lookBody = playerOutfit.lookBody
+		podiumOutfit.lookLegs = playerOutfit.lookLegs
+		podiumOutfit.lookFeet = playerOutfit.lookFeet
+		podiumOutfit.lookAddons = playerOutfit.lookAddons
+	end
+
+	-- set player mount colors podium is empty
+	if podiumOutfit.lookMount == 0 then
+		podiumOutfit.lookMount = playerOutfit.lookMount
+		podiumOutfit.lookMountHead = playerOutfit.lookMountHead
+		podiumOutfit.lookMountBody = playerOutfit.lookMountBody
+		podiumOutfit.lookMountLegs = playerOutfit.lookMountLegs
+		podiumOutfit.lookMountFeet = playerOutfit.lookMountFeet
+	end
+
+	-- "outfit" box checked
+	if outfit.lookType ~= 0 then
+		podiumOutfit.lookType = outfit.lookType
+		podiumOutfit.lookHead = outfit.lookHead
+		podiumOutfit.lookBody = outfit.lookBody
+		podiumOutfit.lookLegs = outfit.lookLegs
+		podiumOutfit.lookFeet = outfit.lookFeet
+		podiumOutfit.lookAddons = outfit.lookAddons
+	end
+
+	-- "mount" box checked
+	if outfit.lookMount ~= 0 then
+		podiumOutfit.lookMount = outfit.lookMount
+		podiumOutfit.lookMountHead = outfit.lookMountHead
+		podiumOutfit.lookMountBody = outfit.lookMountBody
+		podiumOutfit.lookMountLegs = outfit.lookMountLegs
+		podiumOutfit.lookMountFeet = outfit.lookMountFeet
+	end
+
+	-- prevent invisible podium state
+	if outfit.lookType == 0 and outfit.lookMount == 0 then
+		isVisible = true
+	end
+
+	-- save player choices
+	item:setFlag(PODIUM_SHOW_PLATFORM, isVisible)
+	item:setFlag(PODIUM_SHOW_OUTFIT, outfit.lookType ~= 0)
+	item:setFlag(PODIUM_SHOW_MOUNT, outfit.lookMount ~= 0)
+	item:setDirection(direction < DIRECTION_NORTHEAST and direction or DIRECTION_SOUTH)
+	item:setOutfit(podiumOutfit)
+end
+
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
 soulCondition:setTicks(4 * 60 * 1000)
 soulCondition:setParameter(CONDITION_PARAM_SOULGAIN, 1)

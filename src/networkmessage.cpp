@@ -23,6 +23,7 @@
 
 #include "container.h"
 #include "creature.h"
+#include "podium.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
@@ -112,14 +113,9 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(0x00); // item tier (0-10)
 	}
 
-	// podium (placeholder)
-	// to do: read podium flag from otb
-	if (it.clientId == 35973 || it.clientId == 35974) {
+	if (it.isPodium()) {
 		add<uint16_t>(0); //looktype
-		//4x byte colors if not 0
 		add<uint16_t>(0); //lookmount
-		//4x byte colors if not 0
-
 		addByte(2); //direction
 		addByte(0x01); //is visible (bool)
 	}
@@ -144,16 +140,41 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(0x00); // quiver ammo count
 	}
 
-	// podium (placeholder)
-	// to do: read podium flag from otb
-	if (it.clientId == 35973 || it.clientId == 35974) {
-		add<uint16_t>(0); //looktype
-		//4x byte colors if not 0
-		add<uint16_t>(0); //lookmount
-		//4x byte colors if not 0
+	// display outfit on the podium
+	if (it.isPodium()) {
+		const Podium* podium = item->getPodium();
+		const Outfit_t &outfit = podium->getOutfit();
 
-		addByte(2); //direction
-		addByte(0x01); //is visible (bool)
+		//add outfit
+		if (podium->hasFlag(PODIUM_SHOW_OUTFIT)) {
+			add<uint16_t>(outfit.lookType);
+			if (outfit.lookType != 0) {
+				addByte(outfit.lookHead);
+				addByte(outfit.lookBody);
+				addByte(outfit.lookLegs);
+				addByte(outfit.lookFeet);
+				addByte(outfit.lookAddons);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		//add mount
+		if (podium->hasFlag(PODIUM_SHOW_MOUNT)) {
+			add<uint16_t>(outfit.lookMount);
+			if (outfit.lookMount != 0) {
+				addByte(outfit.lookMountHead);
+				addByte(outfit.lookMountBody);
+				addByte(outfit.lookMountLegs);
+				addByte(outfit.lookMountFeet);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		addByte(podium->getDirection());
+		addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00);
+		return;
 	}
 }
 
