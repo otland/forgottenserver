@@ -136,7 +136,7 @@ setmetatable(EventCallback, {
 						break
 					end
 					-- If the call returns false then we exit the loop
-					if output == false then
+					if not output then
 						return false
 					end
 					-- If the call of type returnvalue returns noerror then we continue the loop

@@ -615,7 +615,7 @@ if NpcHandler == nil then
 		end
 
 		local shallDelay = not shallDelay and true or shallDelay
-		if NPCHANDLER_TALKDELAY == TALKDELAY_NONE or shallDelay == false then
+		if NPCHANDLER_TALKDELAY == TALKDELAY_NONE or not shallDelay then
 			selfSay(message, focus, publicize and true or false)
 			return
 		end

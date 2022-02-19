@@ -43,7 +43,7 @@ if Modules == nil then
 		if npcHandler == nil then
 			error("StdModule.say called without any npcHandler instance.")
 		end
-		local onlyFocus = (parameters.onlyFocus == nil or parameters.onlyFocus == true)
+		local onlyFocus = (parameters.onlyFocus == nil or parameters.onlyFocus)
 		if not npcHandler:isFocused(cid) and onlyFocus then
 			return false
 		end
@@ -1112,7 +1112,7 @@ if Modules == nil then
 
 		if shop_eventtype[cid] == SHOPMODULE_SELL_ITEM then
 			local ret = doPlayerSellItem(cid, shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid])
-			if ret == true then
+			if ret then
 				local msg = module.npcHandler:getMessage(MESSAGE_ONSELL)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
 				module.npcHandler:say(msg, cid)
@@ -1164,7 +1164,7 @@ if Modules == nil then
 			end
 		elseif shop_eventtype[cid] == SHOPMODULE_BUY_ITEM_CONTAINER then
 			local ret = doPlayerBuyItemContainer(cid, shop_container[cid], shop_itemid[cid], shop_amount[cid], shop_cost[cid] * shop_amount[cid], shop_subtype[cid])
-			if ret == true then
+			if ret then
 				local msg = module.npcHandler:getMessage(MESSAGE_ONBUY)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
 				module.npcHandler:say(msg, cid)

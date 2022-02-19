@@ -616,7 +616,7 @@ function getPlayerGUIDByName(name)
 	end
 
 	local resultId = db.storeQuery("SELECT `id` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if resultId ~= false then
+	if resultId then
 		local guid = result.getNumber(resultId, "id")
 		result.free(resultId)
 		return guid
@@ -630,7 +630,7 @@ function getAccountNumberByPlayerName(name)
 	end
 
 	local resultId = db.storeQuery("SELECT `account_id` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if resultId ~= false then
+	if resultId then
 		local accountId = result.getNumber(resultId, "account_id")
 		result.free(resultId)
 		return accountId
@@ -925,7 +925,7 @@ getPlayerPromotionLevel = getPromotedVocation
 
 function getGuildId(guildName)
 	local resultId = db.storeQuery("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
-	if resultId == false then
+	if not resultId then
 		return false
 	end
 

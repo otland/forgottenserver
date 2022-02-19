@@ -54,14 +54,14 @@ local flowerPot = Action()
 function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	for _, flower in pairs(flowers) do
 		if target.itemid == flower.itemid then
-			if (flower.watered == false and flower.advance == false) then
+			if (not flower.watered and not flower.advance) then
 				player:say(flower.msg, TALKTYPE_MONSTER_SAY)
-			elseif (flower.watered == true and flower.advance == false) then
+			elseif (flower.watered and not flower.advance) then
 				target:transform(flower.after)
 				player:say(flower.msg, TALKTYPE_MONSTER_SAY)
 				toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 				target:decay()
-			elseif (flower.watered == true and flower.advance == true) then
+			elseif (flower.watered and flower.advance) then
 				local i = 1
 				if (math.random(100) <= flower.chance) then
 					i = 2
