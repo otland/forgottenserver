@@ -140,6 +140,29 @@ bool Quest::isStarted(Player* player) const
 	return true;
 }
 
+const Mission* Quest::getMissionById(uint16_t missionId) const
+{
+	auto it = std::find_if(missions.cbegin(), missions.cend(), [missionId](const Mission& mission) {
+		return mission.id == missionId;
+	});
+
+	return it != missions.cend() ? &*it : nullptr;
+}
+
+bool Quest::isTracking(const uint32_t key, const int32_t value) const
+{
+	if (startStorageID == key && startStorageValue == value) {
+		return true;
+	}
+
+	for (const Mission& mission : missions) {
+		if (mission.getStorageId() == key && value >= mission.getStartStorageValue() && value <= mission.getEndStorageValue()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Quests::reload()
 {
 	quests.clear();
@@ -165,11 +188,13 @@ bool Quests::loadFromXml()
 		);
 		Quest& quest = quests.back();
 
+		uint16_t missionAutoId = 0;
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
 
 			quest.missions.emplace_back(
 				missionNode.attribute("name").as_string(),
+				++missionAutoId,
 				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
 				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
 				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),

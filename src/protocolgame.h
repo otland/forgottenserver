@@ -40,6 +40,7 @@ class Container;
 class Tile;
 class Connection;
 class Quest;
+class TrackedQuest;
 class ProtocolGame;
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
@@ -104,6 +105,7 @@ class ProtocolGame final : public Protocol
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
 		void parseSetOutfit(NetworkMessage& msg);
+		void parseEditPodiumRequest(NetworkMessage& msg);
 		void parseSay(NetworkMessage& msg);
 		void parseLookAt(NetworkMessage& msg);
 		void parseLookInBattleList(NetworkMessage& msg);
@@ -132,6 +134,7 @@ class ProtocolGame final : public Protocol
 		void parsePlayerSale(NetworkMessage& msg);
 
 		void parseQuestLine(NetworkMessage& msg);
+		void parseQuestTracker(NetworkMessage& msg);
 
 		void parseInviteToParty(NetworkMessage& msg);
 		void parseJoinParty(NetworkMessage& msg);
@@ -195,6 +198,8 @@ class ProtocolGame final : public Protocol
 
 		void sendQuestLog();
 		void sendQuestLine(const Quest* quest);
+		void sendQuestTracker();
+		void sendUpdateQuestTracker(const TrackedQuest& trackedQuest);
 
 		void sendCancelWalk();
 		void sendChangeSpeed(const Creature* creature, uint32_t speed);
@@ -225,7 +230,6 @@ class ProtocolGame final : public Protocol
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
 		void sendMarketCancelOffer(const MarketOfferEx& offer);
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers);
-		void sendMarketDetail(uint16_t itemId);
 		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
 		void sendCloseTrade();
 
@@ -233,6 +237,8 @@ class ProtocolGame final : public Protocol
 		void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 		void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 		void sendOutfitWindow();
+
+		void sendPodiumWindow(const Item* item);
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
@@ -265,7 +271,7 @@ class ProtocolGame final : public Protocol
 		void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
-		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin);
+		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, MagicEffectClasses magicEffect = CONST_ME_NONE);
 		void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos,
 		                      const Position& oldPos, int32_t oldStackPos, bool teleport);
 

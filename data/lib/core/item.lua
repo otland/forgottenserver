@@ -2,6 +2,10 @@ function Item.getType(self)
 	return ItemType(self:getId())
 end
 
+function Item:getClassification()
+	return self:getType():getClassification()
+end
+
 function Item.isContainer(self)
 	return false
 end
@@ -23,6 +27,10 @@ function Item.isPlayer(self)
 end
 
 function Item.isTeleport(self)
+	return false
+end
+
+function Item.isPodium(self)
 	return false
 end
 

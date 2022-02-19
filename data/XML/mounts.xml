@@ -190,4 +190,8 @@
 	<mount id="188" clientid="1446" name="Rustwurm" speed="20" premium="no" />
 	<mount id="189" clientid="1447" name="Bogwurm" speed="20" premium="no" />
 	<mount id="190" clientid="1448" name="Gloomwurm" speed="20" premium="no" />
+	<mount id="191" clientid="1453" name="Emerald Raven" speed="20" premium="no" />
+	<mount id="192" clientid="1454" name="Mystic Raven" speed="20" premium="no" />
+	<mount id="193" clientid="1455" name="Radiant Raven" speed="20" premium="no" />
+	<mount id="194" clientid="1459" name="Gloothomotive" speed="20" premium="yes" />
 </mounts>

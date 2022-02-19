@@ -27,7 +27,6 @@
 #include "enums.h"
 #include "vocation.h"
 #include "protocolgame.h"
-#include "ioguild.h"
 #include "party.h"
 #include "inbox.h"
 #include "depotchest.h"
@@ -112,6 +111,8 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
+
+static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
 class Player final : public Creature, public Cylinder
 {
@@ -368,6 +369,9 @@ class Player final : public Creature, public Cylinder
 			return lastDepotId;
 		}
 
+		int32_t getIdleTime() const {
+			return idleTime;
+		}
 		void resetIdleTime() {
 			idleTime = 0;
 		}
@@ -711,6 +715,10 @@ class Player final : public Creature, public Cylinder
 		size_t getMaxVIPEntries() const;
 		size_t getMaxDepotItems() const;
 
+		//quest tracker
+		size_t getMaxTrackedQuests() const;
+		void resetQuestTracker(const std::vector<uint16_t>& missionIds);
+
 		//tile
 		//send methods
 		void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item) {
@@ -760,9 +768,9 @@ class Player final : public Creature, public Cylinder
 				client->sendChannelEvent(channelId, playerName, channelEvent);
 			}
 		}
-		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
+		void sendCreatureAppear(const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE) {
 			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), isLogin);
+				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), magicEffect);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
@@ -819,7 +827,7 @@ class Player final : public Creature, public Cylinder
 				}
 
 				if (visible) {
-					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
+					client->sendAddCreature(creature, creature->getPosition(), stackpos);
 				} else {
 					client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 				}
@@ -1043,11 +1051,6 @@ class Player final : public Creature, public Cylinder
 				client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
 			}
 		}
-		void sendMarketDetail(uint16_t itemId) const {
-			if (client) {
-				client->sendMarketDetail(itemId);
-			}
-		}
 		void sendMarketAcceptOffer(const MarketOfferEx& offer) const {
 			if (client) {
 				client->sendMarketAcceptOffer(offer);
@@ -1088,6 +1091,11 @@ class Player final : public Creature, public Cylinder
 				client->sendOutfitWindow();
 			}
 		}
+		void sendPodiumWindow(const Item* item) {
+			if (client) {
+				client->sendPodiumWindow(item);
+			}
+		}
 		void sendCloseContainer(uint8_t cid) {
 			if (client) {
 				client->sendCloseContainer(cid);
@@ -1117,6 +1125,16 @@ class Player final : public Creature, public Cylinder
 		void sendQuestLine(const Quest* quest) {
 			if (client) {
 				client->sendQuestLine(quest);
+			}
+		}
+		void sendQuestTracker() {
+			if (client) {
+				client->sendQuestTracker();
+			}
+		}
+		void sendUpdateQuestTracker(const TrackedQuest& trackedQuest) {
+			if (client) {
+				client->sendUpdateQuestTracker(trackedQuest);
 			}
 		}
 		void sendEnterWorld() {
@@ -1234,6 +1252,9 @@ class Player final : public Creature, public Cylinder
 		std::forward_list<uint32_t> modalWindows;
 		std::forward_list<std::string> learnedInstantSpellList;
 		std::forward_list<Condition*> storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
+
+		//quest tracker
+		std::vector<TrackedQuest> trackedQuests;
 
 		std::string name;
 		std::string guildNick;

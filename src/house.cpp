@@ -115,7 +115,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 	}
 }
 
-AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
+AccessHouseLevel_t House::getHouseAccessLevel(const Player* player) const
 {
 	if (!player) {
 		return HOUSE_OWNER;
@@ -267,7 +267,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	return door->getAccessList(list);
 }
 
-bool House::isInvited(const Player* player)
+bool House::isInvited(const Player* player) const
 {
 	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
@@ -488,7 +488,7 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 	}
 }
 
-bool AccessList::isInList(const Player* player)
+bool AccessList::isInList(const Player* player) const
 {
 	if (allowEveryone) {
 		return true;
