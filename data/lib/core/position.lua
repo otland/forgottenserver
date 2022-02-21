@@ -16,6 +16,7 @@ function Position:getNextPosition(direction, steps)
 		self.x = self.x + offset.x * steps
 		self.y = self.y + offset.y * steps
 	end
+	return self
 end
 
 function Position:moveUpstairs()
