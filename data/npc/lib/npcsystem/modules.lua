@@ -809,7 +809,7 @@ if not Modules then
 	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
 	function ShopModule:addBuyableItem(names, itemid, cost, itemSubType, realName)
 		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
-			if itemnot subType then
+			if not itemSubType then
 				itemSubType = 1
 			end
 			local it = ItemType(itemid)
@@ -909,7 +909,7 @@ if not Modules then
 	--	realName - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (ItemType(itemId):getName() will be used)
 	function ShopModule:addSellableItem(names, itemid, cost, realName, itemSubType)
 		if SHOPMODULE_MODE ~= SHOPMODULE_MODE_TALK then
-			if itemnot subType then
+			if not itemSubType then
 				itemSubType = 0
 			end
 			local it = ItemType(itemid)
