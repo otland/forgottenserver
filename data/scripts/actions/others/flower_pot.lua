@@ -63,7 +63,7 @@ function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotke
 				target:decay()
 			elseif flower.watered and flower.advance then
 				local i = 1
-				if flower.chance >= math.random(100) then
+				if math.random(100) <= flower.chance then
 					i = 2
 					target:transform(flower.after[math.random(2, #flower.after)])
 				else
