@@ -817,7 +817,7 @@ function doSetMonsterTarget(cid, target)
 	end
 
 	local target = Creature(cid)
-	if targenot t then
+	if not target then
 		return false
 	end
 
