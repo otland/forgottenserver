@@ -52,7 +52,7 @@ end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if EventCallback.onItemMoved then
-		EventCallback.onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+		EventCallback.onItemMoved(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
 end
 
