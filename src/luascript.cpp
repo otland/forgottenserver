@@ -9195,7 +9195,7 @@ int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
 	// player:setOfflineTrainingSkill(skillId)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		uint32_t skillId = getNumber<uint32_t>(L, 2);
+		int32_t skillId = getNumber<int32_t>(L, 2);
 		player->setOfflineTrainingSkill(skillId);
 		pushBoolean(L, true);
 	} else {
