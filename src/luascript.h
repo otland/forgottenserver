@@ -24,7 +24,6 @@
 #include "enums.h"
 #include "position.h"
 #include "outfit.h"
-#include "mounts.h"
 #include <fmt/format.h>
 
 class Thing;
