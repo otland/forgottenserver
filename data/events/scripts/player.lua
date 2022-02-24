@@ -261,7 +261,7 @@ function Player:onLoseExperience(exp)
 end
 
 function Player:onGainSkillTries(skill, tries)
-	if APPLY_SKILL_MULTIPLIER == false then
+	if not APPLY_SKILL_MULTIPLIER then
 		return EventCallback.onGainSkillTries and EventCallback.onGainSkillTries(self, skill, tries) or tries
 	end
 

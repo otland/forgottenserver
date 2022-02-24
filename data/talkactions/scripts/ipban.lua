@@ -6,7 +6,7 @@ function onSay(player, words, param)
 	end
 
 	local resultId = db.storeQuery("SELECT `name`, `lastip` FROM `players` WHERE `name` = " .. db.escapeString(param))
-	if resultId == false then
+	if not resultId then
 		return false
 	end
 
@@ -25,7 +25,7 @@ function onSay(player, words, param)
 	end
 
 	resultId = db.storeQuery("SELECT 1 FROM `ip_bans` WHERE `ip` = " .. targetIp)
-	if resultId ~= false then
+	if resultId then
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, targetName .. "  is already IP banned.")
 		result.free(resultId)
 		return false
