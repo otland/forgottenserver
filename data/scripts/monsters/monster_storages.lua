@@ -1,14 +1,14 @@
 if not MonsterStorages then
     MonsterStorages = setmetatable({}, {
         __index = function (storage, cid)
-        	local self = Monster(cid)
+            local self = Monster(cid)
             if not self then
                 return
             end
 
             if self:registerEvent("MonsterStorages") then
-            	storage[cid] = {}
-            	return storage[cid]
+                storage[cid] = {}
+                return storage[cid]
             end
         end
     })
