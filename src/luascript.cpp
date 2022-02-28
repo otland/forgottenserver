@@ -28,6 +28,7 @@
 #include "script.h"
 #include "weapons.h"
 #include "iomarket.h"
+#include "luavariant.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -564,17 +565,20 @@ void LuaScriptInterface::callVoidFunction(int params)
 void LuaScriptInterface::pushVariant(lua_State* L, const LuaVariant& var)
 {
 	lua_createtable(L, 0, 2);
-	setField(L, "type", var.type);
-	switch (var.type) {
+	setField(L, "type", var.index());
+	switch (var.index()) {
 		case VARIANT_NUMBER:
-			setField(L, "number", var.number);
+			setField(L, "number", std::get<VARIANT_NUMBER>(var));
 			break;
 		case VARIANT_STRING:
-			setField(L, "string", var.text);
+			setField(L, "string", std::get<VARIANT_STRING>(var));
 			break;
 		case VARIANT_TARGETPOSITION:
+			pushPosition(L, std::get<VARIANT_TARGETPOSITION>(var));
+			lua_setfield(L, -2, "pos");
+			break;
 		case VARIANT_POSITION: {
-			pushPosition(L, var.pos);
+			pushPosition(L, std::get<VARIANT_POSITION>(var));
 			lua_setfield(L, -2, "pos");
 			break;
 		}
@@ -791,32 +795,37 @@ Outfit LuaScriptInterface::getOutfitClass(lua_State* L, int32_t arg)
 	return Outfit(name, lookType, premium, unlocked);
 }
 
-LuaVariant LuaScriptInterface::getVariant(lua_State* L, int32_t arg)
+static LuaVariant getVariant(lua_State* L, int32_t arg)
 {
 	LuaVariant var;
-	switch (var.type = getField<LuaVariantType_t>(L, arg, "type")) {
+	switch (LuaScriptInterface::getField<LuaVariantType_t>(L, arg, "type")) {
 		case VARIANT_NUMBER: {
-			var.number = getField<uint32_t>(L, arg, "number");
+			var.emplace<VARIANT_NUMBER>(LuaScriptInterface::getField<uint32_t>(L, arg, "number"));
 			lua_pop(L, 2);
 			break;
 		}
 
 		case VARIANT_STRING: {
-			var.text = getFieldString(L, arg, "string");
+			var.emplace<VARIANT_STRING>(LuaScriptInterface::getFieldString(L, arg, "string"));
 			lua_pop(L, 2);
 			break;
 		}
 
 		case VARIANT_POSITION:
+			lua_getfield(L, arg, "pos");
+			var.emplace<VARIANT_POSITION>(LuaScriptInterface::getPosition(L, lua_gettop(L)));
+			lua_pop(L, 2);
+			break;
+
 		case VARIANT_TARGETPOSITION: {
 			lua_getfield(L, arg, "pos");
-			var.pos = getPosition(L, lua_gettop(L));
+			var.emplace<VARIANT_TARGETPOSITION>(LuaScriptInterface::getPosition(L, lua_gettop(L)));
 			lua_pop(L, 2);
 			break;
 		}
 
 		default: {
-			var.type = VARIANT_NONE;
+			var = {};
 			lua_pop(L, 1);
 			break;
 		}
@@ -4948,18 +4957,14 @@ int LuaScriptInterface::luaVariantCreate(lua_State* L)
 	LuaVariant variant;
 	if (isUserdata(L, 2)) {
 		if (Thing* thing = getThing(L, 2)) {
-			variant.type = VARIANT_TARGETPOSITION;
-			variant.pos = thing->getPosition();
+			variant.emplace<VARIANT_TARGETPOSITION>(thing->getPosition());
 		}
 	} else if (isTable(L, 2)) {
-		variant.type = VARIANT_POSITION;
-		variant.pos = getPosition(L, 2);
+		variant.emplace<VARIANT_POSITION>(getPosition(L, 2));
 	} else if (isNumber(L, 2)) {
-		variant.type = VARIANT_NUMBER;
-		variant.number = getNumber<uint32_t>(L, 2);
+		variant.emplace<VARIANT_NUMBER>(getNumber<uint32_t>(L, 2));
 	} else if (isString(L, 2)) {
-		variant.type = VARIANT_STRING;
-		variant.text = getString(L, 2);
+		variant.emplace<VARIANT_STRING>(getString(L, 2));
 	}
 	pushVariant(L, variant);
 	return 1;
@@ -4969,8 +4974,8 @@ int LuaScriptInterface::luaVariantGetNumber(lua_State* L)
 {
 	// Variant:getNumber()
 	const LuaVariant& variant = getVariant(L, 1);
-	if (variant.type == VARIANT_NUMBER) {
-		lua_pushnumber(L, variant.number);
+	if (variant.index() == VARIANT_NUMBER) {
+		lua_pushnumber(L, std::get<VARIANT_NUMBER>(variant));
 	} else {
 		lua_pushnumber(L, 0);
 	}
@@ -4981,8 +4986,8 @@ int LuaScriptInterface::luaVariantGetString(lua_State* L)
 {
 	// Variant:getString()
 	const LuaVariant& variant = getVariant(L, 1);
-	if (variant.type == VARIANT_STRING) {
-		pushString(L, variant.text);
+	if (variant.index() == VARIANT_STRING) {
+		pushString(L, std::get<VARIANT_STRING>(variant));
 	} else {
 		pushString(L, std::string());
 	}
@@ -4993,8 +4998,10 @@ int LuaScriptInterface::luaVariantGetPosition(lua_State* L)
 {
 	// Variant:getPosition()
 	const LuaVariant& variant = getVariant(L, 1);
-	if (variant.type == VARIANT_POSITION || variant.type == VARIANT_TARGETPOSITION) {
-		pushPosition(L, variant.pos);
+	if (variant.index() == VARIANT_POSITION) {
+		pushPosition(L, std::get<VARIANT_POSITION>(variant));
+	} else if (variant.index() == VARIANT_TARGETPOSITION) {
+		pushPosition(L, std::get<VARIANT_TARGETPOSITION>(variant));
 	} else {
 		pushPosition(L, Position());
 	}
@@ -13318,9 +13325,9 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 	Creature* creature = getCreature(L, 2);
 
 	const LuaVariant& variant = getVariant(L, 3);
-	switch (variant.type) {
+	switch (variant.index()) {
 		case VARIANT_NUMBER: {
-			Creature* target = g_game.getCreatureByID(variant.number);
+			Creature* target = g_game.getCreatureByID(std::get<VARIANT_NUMBER>(variant));
 			if (!target) {
 				pushBoolean(L, false);
 				return 1;
@@ -13335,22 +13342,22 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		}
 
 		case VARIANT_POSITION: {
-			combat->doCombat(creature, variant.pos);
+			combat->doCombat(creature, std::get<VARIANT_POSITION>(variant));
 			break;
 		}
 
 		case VARIANT_TARGETPOSITION: {
 			if (combat->hasArea()) {
-				combat->doCombat(creature, variant.pos);
+				combat->doCombat(creature, std::get<VARIANT_TARGETPOSITION>(variant));
 			} else {
-				combat->postCombatEffects(creature, variant.pos);
-				g_game.addMagicEffect(variant.pos, CONST_ME_POFF);
+				combat->postCombatEffects(creature, std::get<VARIANT_TARGETPOSITION>(variant));
+				g_game.addMagicEffect(std::get<VARIANT_TARGETPOSITION>(variant), CONST_ME_POFF);
 			}
 			break;
 		}
 
 		case VARIANT_STRING: {
-			Player* target = g_game.getPlayerByName(variant.text);
+			Player* target = g_game.getPlayerByName(std::get<VARIANT_STRING>(variant));
 			if (!target) {
 				pushBoolean(L, false);
 				return 1;
