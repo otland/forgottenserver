@@ -362,7 +362,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 {
 	if (scripted) {
 		LuaVariant var;
-		var.emplace<VARIANT_NUMBER>(target->getID());
+		var.setNumber(target->getID());
 		executeUseWeapon(player, var);
 	} else {
 		CombatDamage damage;
@@ -388,7 +388,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 {
 	if (scripted) {
 		LuaVariant var;
-		var.emplace<VARIANT_TARGETPOSITION>(tile->getPosition());
+		var.setTargetPosition(tile->getPosition());
 		executeUseWeapon(player, var);
 	} else {
 		Combat::postCombatEffects(player, tile->getPosition(), params);
