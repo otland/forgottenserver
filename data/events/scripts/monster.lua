@@ -15,3 +15,9 @@ function Monster:onSpawn(position, startup, artificial)
 		return true
 	end
 end
+
+function Monster:onSpawned(position, startup, artificial, forced)
+	if EventCallback.onSpawned then
+		EventCallback.onSpawned(self, position, startup, artificial, forced)
+	end
+end

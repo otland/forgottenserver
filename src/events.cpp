@@ -122,6 +122,8 @@ bool Events::load()
 				info.monsterOnDropLoot = event;
 			} else if (methodName == "onSpawn") {
 				info.monsterOnSpawn = event;
+			} else if (methodName == "onSpawned") {
+				info.monsterOnSpawned = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown monster method: " << methodName << std::endl;
 			}
@@ -158,6 +160,34 @@ bool Events::eventMonsterOnSpawn(Monster* monster, const Position& position, boo
 	LuaScriptInterface::pushBoolean(L, artificial);
 
 	return scriptInterface.callFunction(4);
+}
+
+void Events::eventMonsterOnSpawned(Monster* monster, const Position& position, bool startup, bool artificial, bool forced /*= false*/)
+{
+	// Monster:onSpawned(position, startup, artificial, forced)
+	if (info.monsterOnSpawned == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::monsterOnSpawned] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.monsterOnSpawned, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.monsterOnSpawned);
+
+	LuaScriptInterface::pushUserdata<Monster>(L, monster);
+	LuaScriptInterface::setMetatable(L, -1, "Monster");
+	LuaScriptInterface::pushPosition(L, position);
+	LuaScriptInterface::pushBoolean(L, startup);
+	LuaScriptInterface::pushBoolean(L, artificial);
+	LuaScriptInterface::pushBoolean(L, forced);
+
+	scriptInterface.callVoidFunction(5);
 }
 
 // Creature

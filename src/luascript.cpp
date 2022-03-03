@@ -4758,6 +4758,7 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	MagicEffectClasses magicEffect = getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
 	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
+			g_events->eventMonsterOnSpawned(monster, position, false, true, force);
 			pushUserdata<Monster>(L, monster);
 			setMetatable(L, -1, "Monster");
 		} else {

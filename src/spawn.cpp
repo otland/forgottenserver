@@ -326,6 +326,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 		}
 	}
 
+	g_events->eventMonsterOnSpawned(monster_ptr.get(), pos, startup, false);
 	Monster* monster = monster_ptr.release();
 	monster->setDirection(dir);
 	monster->setSpawn(this);

@@ -57,6 +57,7 @@ ec.onInventoryUpdate = {}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}
+ec.onSpawned = {}
 
 EventCallback = {
 	register = function (self, triggerIndex)
