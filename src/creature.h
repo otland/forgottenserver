@@ -464,6 +464,13 @@ class Creature : virtual public Thing
 			}
 		}
 
+		void setRemovable(bool isRemovable) {
+			removable = isRemovable;
+		}
+		bool isRemovable() const {
+			return removable;
+		}
+
 	protected:
 		virtual bool useCacheMap() const {
 			return false;
@@ -534,6 +541,9 @@ class Creature : virtual public Thing
 		bool hiddenHealth = false;
 		bool canUseDefense = true;
 		bool movementBlocked = false;
+
+		//exclusive to not allow the removal of this creature from lua
+		bool removable = true;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

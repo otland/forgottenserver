@@ -525,7 +525,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 	return nullptr;
 }
 
-bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/)
+bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, bool artificial /*=false*/)
 {
 	if (creature->getParent()) {
 		return false;
@@ -538,12 +538,28 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 	creature->incrementReferenceCounter();
 	creature->setID();
 	creature->addList();
+
+	if (Monster* monster = creature->getMonster()) {
+		creature->setRemovable(false);
+		if (g_events->eventMonsterOnSpawn(monster, pos, false, artificial) || forced) {
+			creature->setRemovable(true);
+			return true;
+		}
+
+		creature->removeList();
+		if (Tile* tile = creature->getTile()) {
+			tile->removeCreature(creature);
+		}
+
+		return false;
+	}
+
 	return true;
 }
 
-bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, MagicEffectClasses magicEffect /*= CONST_ME_TELEPORT*/)
+bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, MagicEffectClasses magicEffect /*= CONST_ME_TELEPORT*/, bool artificial /*=false*/)
 {
-	if (!internalPlaceCreature(creature, pos, extendedPos, forced)) {
+	if (!internalPlaceCreature(creature, pos, extendedPos, forced, artificial)) {
 		return false;
 	}
 
