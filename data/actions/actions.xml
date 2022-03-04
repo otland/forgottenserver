@@ -152,6 +152,7 @@
 	<!-- Other -->
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="486" script="other/snow_heap.lua" />
+	<action itemid="1369" script="other/draw_well.lua" />
 	<action itemid="1386" script="other/teleport.lua" />
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
 	<action fromid="1816" toid="1817" script="other/wall_mirror.lua" />
