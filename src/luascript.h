@@ -27,6 +27,8 @@
 #include "mounts.h"
 #include <fmt/format.h>
 
+#include <variant>
+
 class Thing;
 class Creature;
 class Player;
