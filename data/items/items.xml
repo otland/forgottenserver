@@ -41413,6 +41413,7 @@
 	<item id="39649" article="a" name="gold cup" />
 	<item id="39650" article="a" name="golden blessed shield" />
 	<item id="39651" article="a" name="gilded magic longsword" />
+	<item fromid="39652" toid="39655" name="Luna" />
 	<item fromid="39656" toid="39657" article="a" name="magic forcefield" />
 	<item id="39658" article="a" name="tagralt-inlaid scabbard">
 		<attribute key="weight" value="100" />
@@ -41420,8 +41421,118 @@
 	<item id="39659" article="an" name="eye-embroidered veil">
 		<attribute key="weight" value="2500" />
 	</item>
+	<item fromid="39660" toid="39663" article="a" name="leaf chair" />
+	<item id="39664" article="a" name="stump table" />
+	<item fromid="39665" toid="39666" article="a" name="shroom cupboard" />
+	<item fromid="39667" toid="39670" article="a" name="log chest" />
+	<item fromid="39671" toid="39672" article="a" name="yellow shroom lamp" />
+	<item fromid="39673" toid="39674" article="a" name="pink shroom lamp" />
+	<item fromid="39675" toid="39676" name="grass" />
+	<item fromid="39677" toid="39678" article="a" name="dragon plant" />
+	<item fromid="39679" toid="39690" article="a" name="log bed" />
 	<item fromid="39691" toid="39692" article="a" name="small boat" />
 	<item fromid="39693" toid="39701" name="sand" />
 	<item fromid="39702" toid="39704" name="dirt floor" />
 	<item fromid="39705" toid="39706" name="muddy floor" />
+	<item id="39707" name="mud" />
+	<item fromid="39708" toid="39709" article="a" name="bonelord tome" />
+	<item fromid="39710" toid="39713" name="Bella Bonecrusher's doll" />
+	<item id="39714" name="little adventure doll" />
+	<item id="39715" article="a" name="lucky clover amulet" />
+	<item id="39716" article="a" name="shield of endless search" />
+	<item fromid="39717" toid="39720" name="Evora" />
+	<item id="39722" name="the drome leaderboard" />
+	<item id="39723" name="the drome board" />
+	<item id="39724" name="the modifier board" />
+	<item id="39726" article="a" name="lever" />
+	<item fromid="39727" toid="39735" article="a" name="pit demon statue" />
+	<item id="39735" name="sorrow seeds" />
+	<item id="39736" name="root seeds" />
+	<item fromid="39737" toid="39741" name="blackboard" />
+	<item id="39742" article="a" name="plush of a murmillion" />
+	<item id="39743" article="a" name="plush of a scissorion" />
+	<item id="39744" article="a" name="plush of a hoodinion" />
+	<item id="39745" article="a" name="plush of a mearidion" />
+	<item id="39746" article="a" name="plush of a domestikion" />
+	<item id="39747" article="a" name="teleporter vortex" />
+	<item id="39748" article="a" name="foul puddle" />
+	<item id="39749" article="a" name="lava puddle" />
+	<item fromid="39750" toid="39751" name="sorrow seeds" />
+	<item fromid="39752" toid="39753" name="root seeds" />
+	<item id="39754" article="a" name="sewer grate" />
+	<item fromid="39755" toid="39763" name="sand" />
+	<item id="39764" name="mud" />
+	<item id="39765" article="a" name="sliver" />
+	<item id="39766" article="an" name="exalted core" />
+	<item fromid="39767" toid="39770" article="an" name="armillary sphere" />
+	<item fromid="39771" toid="39815" article="an" name="exaltation forge" />
+	<item id="39816" name="dust" />
+	<item id="39817" article="a" name="bronze cup" />
+	<item id="39818" article="a" name="silver cup" />
+	<item id="39819" article="a" name="gold cup" />
+	<item id="39820" article="a" name="golden horned helmet" />
+	<item id="39821" article="a" name="gilded blessed shield" />
+	<item fromid="39830" toid="39833" article="a" name="kraken chair" />
+	<item id="39834" article="a" name="kraken table" />
+	<item fromid="39835" toid="39836" article="a" name="kraken cabinet" />
+	<item fromid="39837" toid="39840" article="a" name="kraken chest" />
+	<item fromid="39841" toid="39842" article="a" name="kraken watcher lamp" />
+	<item id="39843" article="a" name="kraken buoy lamp" />
+	<item id="39844" article="a" name="kraken tentacle lamp" />
+	<item fromid="39845" toid="39846" article="an" name="empty kraken shelf" />
+	<item fromid="39847" toid="39848" article="a" name="filled kraken shelf" />
+	<item fromid="39849" toid="39860" article="a" name="kraken bed" />
+	<item fromid="39861" toid="39866" article="a" name="sculpture of an octoputz" />
+	<item fromid="39867" toid="39868" article="an" name="octoputz" />
+	<item id="40175" article="a" name="kraken buoy lamp" />
+	<item id="40176" article="a" name="kraken tentacle lamp" />
+	<item id="40217" article="an" name="exaltation chest" />
+	<item id="40356" article="a" name="kraken watcher lamp" />
+	<item id="40357" article="a" name="magic forcefield" />
+	<item id="40359" article="an" name="easter egg" />
+	<item id="40360" article="a" name="festival cake" />
+	<item id="40361" article="an" name="ignore button" />
+	<item id="40362" article="an" name="unremarkable hammer" />
+	<item id="40363" name="the ban hammer" />
+	<item id="40364" article="a" name="bot detector" />
+	<item id="40365" article="a" name="blue balloon" />
+	<item id="40366" article="a" name="green balloon" />
+	<item id="40367" article="an" name="orange balloon" />
+	<item id="40368" article="a" name="pink balloon" />
+	<item id="40369" article="a" name="purple balloon" />
+	<item id="40370" article="a" name="red balloon" />
+	<item id="40371" article="a" name="teal balloon" />
+	<item id="40372" article="a" name="yellow balloon" />
+	<item id="40373" name="colourful balloons" />
+	<item id="40374" article="a" name="bonelord balloon" />
+	<item id="40375" article="a" name="cyclops balloon" />
+	<item id="40376" article="a" name="cyclops head balloon" />
+	<item id="40377" article="a" name="dwarf balloon" />
+	<item id="40378" article="a" name="hydra balloon" />
+	<item id="40379" article="an" name="orc balloon" />
+	<item id="40380" article="an" name="orc head balloon" />
+	<item id="40381" article="a" name="king balloon" />
+	<item id="40382" article="a" name="queen balloon" />
+	<item fromid="40384" toid="40385" article="a" name="flautist" />
+	<item fromid="40386" toid="40387" article="a" name="harpist" />
+	<item fromid="40388" toid="40389" article="a" name="lutenist" />
+	<item fromid="40390" toid="40391" article="a" name="singer" />
+	<item fromid="40392" toid="40400" name="colourful ribbons" />
+	<item id="40401" article="a" name="decorated fence" />
+	<item id="40402" article="a" name="fence" />
+	<item id="40403" article="a" name="decorated fence" />
+	<item fromid="40404" toid="40405" article="a" name="fence" />
+	<item fromid="40406" toid="40407" article="a" name="decorated fence" />
+	<item fromid="40410" toid="40411" name="blue fireworks" />
+	<item fromid="40412" toid="40413" name="green fireworks" />
+	<item fromid="40414" toid="40415" name="orange fireworks" />
+	<item fromid="40416" toid="40417" name="purple fireworks" />
+	<item fromid="40418" toid="40419" name="white fireworks" />
+	<item fromid="40420" toid="40423" article="a" name="birthday banner" />
+	<item id="40424" article="a" name="confetti cannon" />
+	<item id="40425" name="confetti" />
+	<item id="40426" name="trampled decoration" />
+	<item id="40427" article="a" name="festive structure" />
+	<item id="40428" article="a" name="rotworm balloon" />
+	<item id="40429" article="a" name="rotworm head balloon" />
 </items>
