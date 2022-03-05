@@ -74,12 +74,14 @@ struct LuaVariant {
 	uint32_t number = 0;
 };
 
-struct VariantMap : public std::map<std::string, std::variant<bool, int32_t, Creature*>>
+struct VariantMap
 {
 	public:
-		bool getBoolean(const std::string& key) {
+		std::variant<bool, int32_t, Creature*>& operator[](const std::string& key) { return vMap[key]; }
+
+		bool getBoolean(const std::string& key) const {
 			try {
-				const auto& variant = (*this).at(key);
+				const auto& variant = vMap.at(key);
 				if (!std::holds_alternative<bool>(variant)) {
 					return false;
 				}
@@ -91,9 +93,9 @@ struct VariantMap : public std::map<std::string, std::variant<bool, int32_t, Cre
 			}
 		};
 
-		int32_t getNumber(const std::string& key) {
+		int32_t getNumber(const std::string& key) const {
 			try {
-				const auto& variant = (*this).at(key);
+				const auto& variant = vMap.at(key);
 				if (!std::holds_alternative<int32_t>(variant)) {
 					return -1;
 				}
@@ -105,9 +107,9 @@ struct VariantMap : public std::map<std::string, std::variant<bool, int32_t, Cre
 			}
 		};
 
-		Creature* getCreature(const std::string& key) {
+		Creature* getCreature(const std::string& key) const {
 			try {
-				const auto& variant = (*this).at(key);
+				const auto& variant = vMap.at(key);
 				if (!std::holds_alternative<Creature*>(variant)) {
 					return nullptr;
 				}
@@ -118,6 +120,9 @@ struct VariantMap : public std::map<std::string, std::variant<bool, int32_t, Cre
 				return nullptr;
 			}
 		};
+
+	private:
+		std::map<std::string, std::variant<bool, int32_t, Creature*>> vMap;
 };
 
 struct LuaTimerEventDesc {
