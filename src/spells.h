@@ -117,6 +117,12 @@ class Spell : public BaseSpell
 		void setName(std::string n) {
 			name = n;
 		}
+		const std::string& getSpellName() const {
+			return spellName;
+		}
+		void setSpellName(std::string n) {
+			spellName = n;
+		}
 		uint8_t getId() const {
 			return spellId;
 		}
@@ -313,6 +319,7 @@ class Spell : public BaseSpell
 		bool premium = false;
 
 		std::string name;
+		std::string spellName;
 };
 
 class InstantSpell final : public TalkAction, public Spell

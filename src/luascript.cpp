@@ -3154,6 +3154,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Spell", "runeLevel", LuaScriptInterface::luaSpellRuneLevel);
 	registerMethod("Spell", "runeMagicLevel", LuaScriptInterface::luaSpellRuneMagicLevel);
 	registerMethod("Spell", "runeId", LuaScriptInterface::luaSpellRuneId);
+	registerMethod("Spell", "runeSpellName", LuaScriptInterface::luaSpellRuneSpellName);
 	registerMethod("Spell", "charges", LuaScriptInterface::luaSpellCharges);
 	registerMethod("Spell", "allowFarUse", LuaScriptInterface::luaSpellAllowFarUse);
 	registerMethod("Spell", "blockWalls", LuaScriptInterface::luaSpellBlockWalls);
@@ -15507,10 +15508,11 @@ int LuaScriptInterface::luaSpellRegister(lua_State* L)
 			pushBoolean(L, g_spells->registerInstantLuaEvent(instant));
 		} else if (spell->spellType == SPELL_RUNE) {
 			RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-			if (rune->getMagicLevel() != 0 || rune->getLevel() != 0) {
+			if (rune->getMagicLevel() != 0 || rune->getLevel() != 0 || !rune->getSpellName().empty()) {
 				//Change information in the ItemType to get accurate description
 				ItemType& iType = Item::items.getItemType(rune->getRuneItemId());
 				iType.name = rune->getName();
+				iType.runeSpellName = rune->getSpellName();
 				iType.runeMagLevel = rune->getMagicLevel();
 				iType.runeLevel = rune->getLevel();
 				iType.charges = rune->getCharges();
@@ -16170,6 +16172,30 @@ int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 			lua_pushnumber(L, rune->getRuneItemId());
 		} else {
 			rune->setRuneItemId(getNumber<uint16_t>(L, 2));
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// only for RuneSpells
+int LuaScriptInterface::luaSpellRuneSpellName(lua_State* L)
+{
+	// spell:runeSpellName(spellName)
+	RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
+	if (rune) {
+		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
+		if (rune->spellType != SPELL_RUNE) {
+			lua_pushnil(L);
+			return 1;
+		}
+
+		if (lua_gettop(L) == 1) {
+			pushString(L, rune->getSpellName());
+		} else {
+			rune->setSpellName(getString(L, 2));
 			pushBoolean(L, true);
 		}
 	} else {
