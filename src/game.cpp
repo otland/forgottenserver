@@ -525,7 +525,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 	return nullptr;
 }
 
-bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, bool artificial /*=false*/)
+bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, VariantMap variantMap /*={}*/)
 {
 	if (creature->getParent()) {
 		return false;
@@ -541,8 +541,18 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 
 	if (Monster* monster = creature->getMonster()) {
 		creature->setRemovable(false);
-		if (g_events->eventMonsterOnSpawn(monster, pos, false, artificial) || forced) {
+		Creature* master = variantMap.getCreature("master");
+		if (master) {
+			monster->setMaster(master);
+			master->setRemovable(false);
+		}
+
+		if (g_events->eventMonsterOnSpawn(monster, pos, false, variantMap.getBoolean("artificial")) || forced) {
 			creature->setRemovable(true);
+			if (master) {
+				master->setRemovable(true);
+			}
+
 			return true;
 		}
 
@@ -557,9 +567,9 @@ bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool e
 	return true;
 }
 
-bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, MagicEffectClasses magicEffect /*= CONST_ME_TELEPORT*/, bool artificial /*=false*/)
+bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/, bool forced /*= false*/, MagicEffectClasses magicEffect /*= CONST_ME_TELEPORT*/, VariantMap variantMap /*={}*/)
 {
-	if (!internalPlaceCreature(creature, pos, extendedPos, forced, artificial)) {
+	if (!internalPlaceCreature(creature, pos, extendedPos, forced, variantMap)) {
 		return false;
 	}
 

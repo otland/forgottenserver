@@ -74,6 +74,52 @@ struct LuaVariant {
 	uint32_t number = 0;
 };
 
+struct VariantMap : public std::map<std::string, std::variant<bool, int32_t, Creature*>>
+{
+	public:
+		bool getBoolean(const std::string& key) {
+			try {
+				const auto& variant = (*this).at(key);
+				if (!std::holds_alternative<bool>(variant)) {
+					return false;
+				}
+
+				return std::get<bool>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return false;
+			}
+		};
+
+		int32_t getNumber(const std::string& key) {
+			try {
+				const auto& variant = (*this).at(key);
+				if (!std::holds_alternative<int32_t>(variant)) {
+					return -1;
+				}
+
+				return std::get<int32_t>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return -1;
+			}
+		};
+
+		Creature* getCreature(const std::string& key) {
+			try {
+				const auto& variant = (*this).at(key);
+				if (!std::holds_alternative<Creature*>(variant)) {
+					return nullptr;
+				}
+
+				return std::get<Creature*>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return nullptr;
+			}
+		};
+};
+
 struct LuaTimerEventDesc {
 	int32_t scriptId = -1;
 	int32_t function = -1;
