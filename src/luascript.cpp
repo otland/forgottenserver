@@ -4756,14 +4756,11 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
 	MagicEffectClasses magicEffect = getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
-	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
-		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
-			pushUserdata<Monster>(L, monster);
-			setMetatable(L, -1, "Monster");
-		} else {
-			delete monster;
-			lua_pushnil(L);
-		}
+	VariantMap varMap;
+	varMap["artificial"] = true;
+	if (g_game.placeCreature(monster, position, extended, force, magicEffect, varMap)) {
+		pushUserdata<Monster>(L, monster);
+		setMetatable(L, -1, "Monster");
 	} else {
 		delete monster;
 		lua_pushnil(L);
@@ -8334,7 +8331,7 @@ int LuaScriptInterface::luaCreatureRemove(lua_State* L)
 	}
 
 	Creature* creature = *creaturePtr;
-	if (!creature) {
+	if (!creature || !creature->isRemovable()) {
 		lua_pushnil(L);
 		return 1;
 	}

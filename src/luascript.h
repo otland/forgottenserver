@@ -27,6 +27,8 @@
 #include "mounts.h"
 #include <fmt/format.h>
 
+#include <variant>
+
 class Thing;
 class Creature;
 class Player;
@@ -72,6 +74,57 @@ struct LuaVariant {
 	std::string text;
 	Position pos;
 	uint32_t number = 0;
+};
+
+struct VariantMap
+{
+	public:
+		std::variant<bool, int32_t, Creature*>& operator[](const std::string& key) { return vMap[key]; }
+
+		bool getBoolean(const std::string& key) const {
+			try {
+				const auto& variant = vMap.at(key);
+				if (!std::holds_alternative<bool>(variant)) {
+					return false;
+				}
+
+				return std::get<bool>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return false;
+			}
+		};
+
+		int32_t getNumber(const std::string& key) const {
+			try {
+				const auto& variant = vMap.at(key);
+				if (!std::holds_alternative<int32_t>(variant)) {
+					return -1;
+				}
+
+				return std::get<int32_t>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return -1;
+			}
+		};
+
+		Creature* getCreature(const std::string& key) const {
+			try {
+				const auto& variant = vMap.at(key);
+				if (!std::holds_alternative<Creature*>(variant)) {
+					return nullptr;
+				}
+
+				return std::get<Creature*>(variant);
+			}
+			catch (const std::out_of_range&) {
+				return nullptr;
+			}
+		};
+
+	private:
+		std::map<std::string, std::variant<bool, int32_t, Creature*>> vMap;
 };
 
 struct LuaTimerEventDesc {

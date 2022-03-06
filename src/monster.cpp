@@ -995,10 +995,11 @@ void Monster::onThinkDefense(uint32_t interval)
 
 			Monster* summon = Monster::createMonster(summonBlock.name);
 			if (summon) {
-				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force)) {
+				VariantMap varMap;
+				varMap["master"] = this;
+				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force, CONST_ME_TELEPORT, varMap)) {
 					summon->setDropLoot(false);
 					summon->setSkillLoss(false);
-					summon->setMaster(this);
 					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
 				} else {
 					delete summon;
