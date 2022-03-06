@@ -7,15 +7,13 @@ on:
       - v*
 
     paths:
-      - cmake/**
       - src/**
-      - CMakeLists.txt
+      - meson.build
 
   pull_request:
     paths:
-      - cmake/**
       - src/**
-      - CMakeLists.txt
+      - meson.build
 
 jobs:
   unix:
@@ -36,7 +34,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
+              lua libmariadb cryptopp meson ninja
           - name: ubuntu-clang
             os: ubuntu
             cxx: clang++
@@ -44,7 +42,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
+              lua libmariadb cryptopp meson ninja
           - name: macos-clang
             os: macos
             cxx: clang++
@@ -52,7 +50,7 @@ jobs:
             triplet: x64-osx
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb pugixml cryptopp fmt
+              lua libmariadb cryptopp meson ninja
         exclude:
           - name: ubuntu-clang
             buildtype: Release
@@ -68,10 +66,6 @@ jobs:
 
       - name: Unshallow
         run: git fetch --prune --unshallow
-
-      - name: Get latest CMake
-        # Using 'latest' branch, the latest CMake is installed.
-        uses: lukka/get-cmake@latest
 
       - name: Ubuntu - install luajit, remove libmysqlclient-dev
         run: |
@@ -97,13 +91,8 @@ jobs:
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
-      - name: Build with CMake
-        uses: lukka/run-cmake@v3
-        with:
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}/build
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="${{ matrix.luajit }}"'
+      - name: Build with meson
+        run: meson -D buildtype=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -142,7 +131,7 @@ jobs:
             triplet: x64-windows
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua luajit libmariadb pugixml cryptopp fmt
+              lua luajit libmariadb cryptopp meson ninja
 
     steps:
       - uses: actions/checkout@v2
@@ -151,10 +140,6 @@ jobs:
 
       - name: Unshallow
         run: git fetch --prune --unshallow
-
-      - name: Get latest CMake
-        # Using 'latest' branch, the latest CMake is installed.
-        uses: lukka/get-cmake@latest
 
       - name: Windows - remove C:/mysql*
         run: rm -r -fo C:/mysql*
@@ -173,13 +158,8 @@ jobs:
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
-      - name: Build with CMake
-        uses: lukka/run-cmake@v3
-        with:
-          useVcpkgToolchainFile: true
-          buildDirectory: ${{ runner.workspace }}/build
-          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="on"'
+      - name: Build with meson
+        run: meson -D buildtype=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -206,4 +186,3 @@ jobs:
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
           path: ${{ github.workspace }}
-

@@ -7,15 +7,13 @@ on:
       - v*
 
     paths:
-      - cmake/**
       - src/**
-      - CMakeLists.txt
+      - meson.build
 
   pull_request:
     paths:
-      - cmake/**
       - src/**
-      - CMakeLists.txt
+      - meson.build
 
 jobs:
   build-ubuntu:
@@ -27,22 +25,12 @@ jobs:
       - name: Install dependencies
         run: >
           sudo apt-get update &&
-          sudo apt-get install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
+          sudo apt-get install git meson ninja build-essential libluajit-5.1-dev libmysqlclient-dev
           libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-          libpugixml-dev libcrypto++-dev libfmt-dev
+          libcrypto++-dev
 
-      - name: Build with cmake
-        uses: ashutoshvarma/action-cmake-build@master
-        with:
-          build-dir: ${{ runner.workspace }}/build
-          # will set the CC & CXX for cmake
-          cc: gcc
-          cxx: g++
-          build-type: Release
-          # Extra options pass to cmake while configuring project
-          configure-options: -DUSE_LUAJIT=on
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
+      - name: Build with meson
+        run: meson -D buildtype=release ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: Upload binary
         uses: actions/upload-artifact@v2
