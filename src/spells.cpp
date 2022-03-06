@@ -1178,9 +1178,11 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 
 	postCastSpell(player);
 
-	target = g_game.getCreatureByID(var.getNumber());
-	if (getPzLock() && target) {
-		player->onAttackedCreature(target->getCreature());
+	if (var.isNumber()) {
+		target = g_game.getCreatureByID(var.getNumber());
+		if (getPzLock() && target) {
+			player->onAttackedCreature(target->getCreature());
+		}
 	}
 
 	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
