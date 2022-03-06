@@ -1,0 +1,1 @@
+option('luajit', type: 'feature', value: 'auto', description: 'Use LuaJIT instead of Lua')

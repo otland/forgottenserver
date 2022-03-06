@@ -1,0 +1,12 @@
+[wrap-file]
+directory = pugixml-1.13
+source_url = https://github.com/zeux/pugixml/archive/v1.13.tar.gz
+source_filename = pugixml-1.13.tar.gz
+source_hash = 5c5ad5d7caeb791420408042a7d88c2c6180781bf218feca259fd9d840a888e1
+patch_filename = pugixml_1.13-2_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/pugixml_1.13-2/get_patch
+patch_hash = 95affd3674e5339beb19055e11a1a088e6b91d2bf317a59de3e5dbe9133cc7dd
+wrapdb_version = 1.13-2
+
+[provide]
+pugixml = pugixml_dep

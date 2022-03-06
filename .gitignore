@@ -21,7 +21,6 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
-cmake-build-*/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -141,6 +140,9 @@ UpgradeLog*.htm
 # SQL Server files
 App_Data/*.mdf
 App_Data/*.ldf
+
+# meson
+subprojects/*/
 
 #############
 ## Windows detritus
