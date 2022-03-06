@@ -293,7 +293,7 @@ class LuaScriptInterface
 		}
 
 		template<typename T>
-		static typename std::enable_if<(std::is_integral<T>::value && (std::is_signed<T>::value) || std::is_floating_point<T>::value), T>::type
+		static typename std::enable_if<(std::is_integral<T>::value && std::is_signed<T>::value) || std::is_floating_point<T>::value, T>::type
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);

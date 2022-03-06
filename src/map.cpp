@@ -596,7 +596,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 	}
 
 	//skip checks for sight line in case fromPos and toPos cross the ground floor
-	if (fromPos.z < 8 && toPos.z > 7 || fromPos.z > 7 && toPos.z < 8) {
+	if ((fromPos.z < 8 && toPos.z > 7) || (fromPos.z > 7 && toPos.z < 8)) {
 		return false;
 	}
 
