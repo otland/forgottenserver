@@ -4,7 +4,6 @@
 #ifndef FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
 #define FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
 
-#include "luascript.h"
 #include "player.h"
 #include "actions.h"
 #include "talkaction.h"
