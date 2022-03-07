@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
-#define FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
+#ifndef FS_SPELLS_H
+#define FS_SPELLS_H
 
 #include "player.h"
 #include "actions.h"
@@ -429,4 +429,4 @@ class RuneSpell final : public Action, public Spell
 		bool hasCharges = false;
 };
 
-#endif
+#endif // FS_SPELLS_H

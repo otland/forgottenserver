@@ -35,4 +35,4 @@ class LuaVariant {
 		std::variant<uint32_t, Position, Position, std::string> variant;
 };
 
-#endif
+#endif // FS_LUAVARIANT_H

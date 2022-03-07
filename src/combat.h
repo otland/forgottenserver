@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_COMBAT_H_B02CE79230FC43708699EE91FCC8F7CC
-#define FS_COMBAT_H_B02CE79230FC43708699EE91FCC8F7CC
+#ifndef FS_COMBAT_H
+#define FS_COMBAT_H
 
 #include "thing.h"
 #include "condition.h"
@@ -219,4 +219,4 @@ class MagicField final : public Item
 		int64_t createTime;
 };
 
-#endif
+#endif // FS_COMBAT_H

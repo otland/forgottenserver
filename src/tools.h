@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
-#define FS_TOOLS_H_5F9A9742DA194628830AA1C64909AE43
+#ifndef FS_TOOLS_H
+#define FS_TOOLS_H
 
 #include <random>
 
@@ -78,4 +78,4 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-#endif
+#endif // FS_TOOLS_H

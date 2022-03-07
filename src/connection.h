@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
-#define FS_CONNECTION_H_FC8E1B4392D24D27A2F129D8B93A6348
+#ifndef FS_CONNECTION_H
+#define FS_CONNECTION_H
 
 #include <unordered_set>
 
@@ -125,4 +125,4 @@ class Connection : public std::enable_shared_from_this<Connection>
 		bool receivedLastChar = false;
 };
 
-#endif
+#endif // FS_CONNECTION_H

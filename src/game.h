@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
-#define FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
+#ifndef FS_GAME_H
+#define FS_GAME_H
 
 #include "account.h"
 #include "combat.h"
@@ -598,4 +598,4 @@ class Game
 		bool useLastStageLevel = false;
 };
 
-#endif
+#endif // FS_GAME_H

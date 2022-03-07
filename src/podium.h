@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PODIUM_H_CF65BECF5129B787F25DF96395759CCA
-#define FS_PODIUM_H_CF65BECF5129B787F25DF96395759CCA
+#ifndef FS_PODIUM_H
+#define FS_PODIUM_H
 
 #include "item.h"
 
@@ -61,4 +61,4 @@ class Podium final : public Item
 		Direction direction = DIRECTION_SOUTH;
 };
 
-#endif
+#endif // FS_PODIUM_H

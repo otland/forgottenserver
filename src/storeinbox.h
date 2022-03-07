@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_STOREINBOX_H_074FB99DD3FEDB823AAD2D2CD6F10119
-#define FS_STOREINBOX_H_074FB99DD3FEDB823AAD2D2CD6F10119
+#ifndef FS_STOREINBOX_H
+#define FS_STOREINBOX_H
 
 #include "container.h"
 
@@ -30,4 +30,4 @@ class StoreInbox final : public Container
 		}
 };
 
-#endif
+#endif // FS_STOREINBOX_H

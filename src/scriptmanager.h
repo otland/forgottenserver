@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SCRIPTMANAGER_H_F9428B7803A44FB88EB1A915CFD37F8B
-#define FS_SCRIPTMANAGER_H_F9428B7803A44FB88EB1A915CFD37F8B
+#ifndef FS_SCRIPTMANAGER_H
+#define FS_SCRIPTMANAGER_H
 
 class ScriptingManager
 {
@@ -22,4 +22,4 @@ class ScriptingManager
 		bool loadScriptSystems();
 };
 
-#endif
+#endif // FS_SCRIPTMANAGER_H

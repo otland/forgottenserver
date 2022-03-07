@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TELEPORT_H_873B7F7F1DB24101A7ACFB54B25E0ABC
-#define FS_TELEPORT_H_873B7F7F1DB24101A7ACFB54B25E0ABC
+#ifndef FS_TELEPORT_H
+#define FS_TELEPORT_H
 
 #include "tile.h"
 
@@ -53,4 +53,4 @@ class Teleport final : public Item, public Cylinder
 		Position destPos;
 };
 
-#endif
+#endif // FS_TELEPORT_H
