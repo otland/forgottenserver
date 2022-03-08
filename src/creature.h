@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CREATURE_H_5363C04015254E298F84E6D59A139508
-#define FS_CREATURE_H_5363C04015254E298F84E6D59A139508
+#ifndef FS_CREATURE_H
+#define FS_CREATURE_H
 
 #include "map.h"
 #include "position.h"
@@ -567,4 +567,4 @@ class Creature : virtual public Thing
 		friend class LuaScriptInterface;
 };
 
-#endif
+#endif // FS_CREATURE_H

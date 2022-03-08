@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
-#define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
+#ifndef FS_LUASCRIPT_H
+#define FS_LUASCRIPT_H
 
 #if __has_include("luajit/lua.hpp")
 #include <luajit/lua.hpp>
@@ -1643,4 +1643,4 @@ class LuaEnvironment : public LuaScriptInterface
 		friend class CombatSpell;
 };
 
-#endif
+#endif // FS_LUASCRIPT_H

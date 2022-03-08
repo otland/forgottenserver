@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
-#define FS_OUTPUTMESSAGE_H_C06AAED85C7A43939F22D229297C0CC1
+#ifndef FS_OUTPUTMESSAGE_H
+#define FS_OUTPUTMESSAGE_H
 
 #include "networkmessage.h"
 #include "connection.h"
@@ -87,4 +87,4 @@ class OutputMessagePool
 		std::vector<Protocol_ptr> bufferedProtocols;
 };
 
-#endif
+#endif // FS_OUTPUTMESSAGE_H

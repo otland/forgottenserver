@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
-#define FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
+#ifndef FS_DEFINITIONS_H
+#define FS_DEFINITIONS_H
 
 static constexpr auto STATUS_SERVER_NAME = "The Forgotten Server";
 static constexpr auto STATUS_SERVER_VERSION = "1.5";
@@ -60,4 +60,4 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #endif
 #endif
 
-#endif
+#endif // FS_DEFINITIONS_H

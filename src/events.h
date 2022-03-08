@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
-#define FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
+#ifndef FS_EVENTS_H
+#define FS_EVENTS_H
 
 #include "luascript.h"
 #include "const.h"
@@ -120,4 +120,4 @@ class Events
 		EventsInfo info;
 };
 
-#endif
+#endif // FS_EVENTS_H

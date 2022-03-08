@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ACCOUNT_H_34817537BA2B4CB7B71AA562AFBB118F
-#define FS_ACCOUNT_H_34817537BA2B4CB7B71AA562AFBB118F
+#ifndef FS_ACCOUNT_H
+#define FS_ACCOUNT_H
 
 #include "enums.h"
 
@@ -17,4 +17,4 @@ struct Account {
 	Account() = default;
 };
 
-#endif
+#endif // FS_ACCOUNT_H

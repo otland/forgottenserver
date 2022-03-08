@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
-#define FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
+#ifndef FS_TILE_H
+#define FS_TILE_H
 
 #include "cylinder.h"
 #include "item.h"
@@ -368,4 +368,4 @@ class StaticTile final : public Tile
 		}
 };
 
-#endif
+#endif // FS_TILE_H

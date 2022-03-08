@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ITEM_H_009A319FB13D477D9EEFFBBD9BB83562
-#define FS_ITEM_H_009A319FB13D477D9EEFFBBD9BB83562
+#ifndef FS_ITEM_H
+#define FS_ITEM_H
 
 #include "cylinder.h"
 #include "thing.h"
@@ -1090,4 +1090,4 @@ class Item : virtual public Thing
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
 
-#endif
+#endif // FS_ITEM_H

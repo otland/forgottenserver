@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
-#define FS_HOUSE_H_EB9732E7771A438F9CD0EFA8CB4C58C4
+#ifndef FS_HOUSE_H
+#define FS_HOUSE_H
 
 #include <set>
 #include <unordered_set>
@@ -296,4 +296,4 @@ class Houses
 		HouseMap houseMap;
 };
 
-#endif
+#endif // FS_HOUSE_H
