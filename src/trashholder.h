@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TRASHHOLDER_H_BA162024D67B4D388147F5EE06F33098
-#define FS_TRASHHOLDER_H_BA162024D67B4D388147F5EE06F33098
+#ifndef FS_TRASHHOLDER_H
+#define FS_TRASHHOLDER_H
 
 #include "item.h"
 #include "cylinder.h"
@@ -38,4 +38,4 @@ class TrashHolder final : public Item, public Cylinder
 		void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER) override;
 };
 
-#endif
+#endif // FS_TRASHHOLDER_H

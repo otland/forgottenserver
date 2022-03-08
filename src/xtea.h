@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef TFS_XTEA_H
-#define TFS_XTEA_H
+#ifndef FS_XTEA_H
+#define FS_XTEA_H
 
 namespace xtea {
 
@@ -15,4 +15,4 @@ void decrypt(uint8_t* data, size_t length, const round_keys& k);
 
 } // namespace xtea
 
-#endif // TFS_XTEA_H
+#endif // FS_XTEA_H

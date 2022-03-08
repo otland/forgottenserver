@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_NETWORKMESSAGE_H_B853CFED58D1413A87ACED07B2926E03
-#define FS_NETWORKMESSAGE_H_B853CFED58D1413A87ACED07B2926E03
+#ifndef FS_NETWORKMESSAGE_H
+#define FS_NETWORKMESSAGE_H
 
 #include "const.h"
 
@@ -165,4 +165,4 @@ class NetworkMessage
 		}
 };
 
-#endif // #ifndef __NETWORK_MESSAGE_H__
+#endif // FS_NETWORKMESSAGE_H

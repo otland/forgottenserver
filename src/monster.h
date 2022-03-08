@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MONSTER_H_9F5EEFE64314418CA7DA41D1B9409DD0
-#define FS_MONSTER_H_9F5EEFE64314418CA7DA41D1B9409DD0
+#ifndef FS_MONSTER_H
+#define FS_MONSTER_H
 
 #include "tile.h"
 #include "monsters.h"
@@ -268,4 +268,4 @@ class Monster final : public Creature
 		friend class LuaScriptInterface;
 };
 
-#endif
+#endif // FS_MONSTER_H

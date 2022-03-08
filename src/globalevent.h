@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
-#define FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
+#ifndef FS_GLOBALEVENT_H
+#define FS_GLOBALEVENT_H
 #include "baseevents.h"
 
 #include "const.h"
@@ -107,4 +107,4 @@ class GlobalEvent final : public Event
 		uint32_t interval = 0;
 };
 
-#endif
+#endif // FS_GLOBALEVENT_H

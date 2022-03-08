@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
-#define FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
+#ifndef FS_VOCATION_H
+#define FS_VOCATION_H
 
 #include "enums.h"
 #include "item.h"
@@ -126,4 +126,4 @@ class Vocations
 		std::map<uint16_t, Vocation> vocationsMap;
 };
 
-#endif
+#endif // FS_VOCATION_H

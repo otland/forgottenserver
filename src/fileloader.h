@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
-#define FS_FILELOADER_H_9B663D19E58D42E6BFACFE5B09D7A05E
+#ifndef FS_FILELOADER_H
+#define FS_FILELOADER_H
 
 #include <limits>
 #include <vector>
@@ -148,4 +148,4 @@ class PropWriteStream
 		std::vector<char> buffer;
 };
 
-#endif
+#endif // FS_FILELOADER_H

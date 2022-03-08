@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SCHEDULER_H_2905B3D5EAB34B4BA8830167262D2DC1
-#define FS_SCHEDULER_H_2905B3D5EAB34B4BA8830167262D2DC1
+#ifndef FS_SCHEDULER_H
+#define FS_SCHEDULER_H
 
 #include "tasks.h"
 #include <unordered_map>
@@ -53,4 +53,4 @@ class Scheduler : public ThreadHolder<Scheduler>
 
 extern Scheduler g_scheduler;
 
-#endif
+#endif // FS_SCHEDULER_H

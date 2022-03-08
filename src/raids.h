@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_RAIDS_H_3583C7C054584881856D55765DEDAFA9
-#define FS_RAIDS_H_3583C7C054584881856D55765DEDAFA9
+#ifndef FS_RAIDS_H
+#define FS_RAIDS_H
 
 #include "const.h"
 #include "position.h"
@@ -209,4 +209,4 @@ class ScriptEvent final : public RaidEvent, public Event
 		std::string getScriptEventName() const override;
 };
 
-#endif
+#endif // FS_RAIDS_H

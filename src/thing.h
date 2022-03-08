@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_THING_H_6F16A8E566AF4ACEAE02CF32A7246144
-#define FS_THING_H_6F16A8E566AF4ACEAE02CF32A7246144
+#ifndef FS_THING_H
+#define FS_THING_H
 
 #include "position.h"
 
@@ -66,4 +66,4 @@ class Thing
 		}
 };
 
-#endif
+#endif // FS_THING_H

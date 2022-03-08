@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GUILD_H_C00F0A1D732E4BA88FF62ACBE74D76BC
-#define FS_GUILD_H_C00F0A1D732E4BA88FF62ACBE74D76BC
+#ifndef FS_GUILD_H
+#define FS_GUILD_H
 
 class Player;
 
@@ -73,4 +73,4 @@ namespace IOGuild
 	uint32_t getGuildIdByName(const std::string& name);
 };
 
-#endif
+#endif // FS_GUILD_H

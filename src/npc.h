@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_NPC_H_B090D0CB549D4435AFA03647195D156F
-#define FS_NPC_H_B090D0CB549D4435AFA03647195D156F
+#ifndef FS_NPC_H
+#define FS_NPC_H
 
 #include "creature.h"
 #include "luascript.h"
@@ -236,4 +236,4 @@ class Npc final : public Creature
 		friend class NpcScriptInterface;
 };
 
-#endif
+#endif // FS_NPC_H

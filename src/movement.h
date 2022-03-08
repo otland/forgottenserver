@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
-#define FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
+#ifndef FS_MOVEMENT_H
+#define FS_MOVEMENT_H
 
 #include "baseevents.h"
 #include "item.h"
@@ -242,4 +242,4 @@ class MoveEvent final : public Event
 		std::vector<Position> posList;
 };
 
-#endif
+#endif // FS_MOVEMENT_H

@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SERVER_H_984DA68ABF744127850F90CC710F281B
-#define FS_SERVER_H_984DA68ABF744127850F90CC710F281B
+#ifndef FS_SERVER_H
+#define FS_SERVER_H
 
 #include "connection.h"
 #include "signals.h"
@@ -137,4 +137,4 @@ bool ServiceManager::add(uint16_t port)
 	return service_port->add_service(std::make_shared<Service<ProtocolType>>());
 }
 
-#endif
+#endif // FS_SERVER_H

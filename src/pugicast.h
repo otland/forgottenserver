@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PUGICAST_H_07810DF7954D411EB14A16C3ED2A7548
-#define FS_PUGICAST_H_07810DF7954D411EB14A16C3ED2A7548
+#ifndef FS_PUGICAST_H
+#define FS_PUGICAST_H
 
 #include <boost/lexical_cast.hpp>
 
@@ -20,4 +20,4 @@ namespace pugi {
 	}
 }
 
-#endif
+#endif // FS_PUGICAST_H

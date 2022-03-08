@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_IOMAPSERIALIZE_H_7E903658F34E44F9BE03A713B55A3D6D
-#define FS_IOMAPSERIALIZE_H_7E903658F34E44F9BE03A713B55A3D6D
+#ifndef FS_IOMAPSERIALIZE_H
+#define FS_IOMAPSERIALIZE_H
 
 #include "database.h"
 #include "map.h"
@@ -26,4 +26,4 @@ class IOMapSerialize
 		static bool loadItem(PropStream& propStream, Cylinder* parent);
 };
 
-#endif
+#endif // FS_IOMAPSERIALIZE_H

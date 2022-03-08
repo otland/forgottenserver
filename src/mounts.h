@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MOUNTS_H_73716D11906A4C5C9F4A7B68D34C9BA6
-#define FS_MOUNTS_H_73716D11906A4C5C9F4A7B68D34C9BA6
+#ifndef FS_MOUNTS_H
+#define FS_MOUNTS_H
 
 struct Mount
 {
@@ -33,4 +33,4 @@ class Mounts
 		std::vector<Mount> mounts;
 };
 
-#endif
+#endif // FS_MOUNTS_H
