@@ -7,7 +7,6 @@ function lotteryTicket.onUse(player, item, fromPosition, target, toPosition, isH
 	else
 		player:addAchievementProgress("Jinx", 500)
 		item:getPosition():sendMagicEffect(CONST_ME_POFF)
-		player:sendSupplyUsed(item)
 		item:remove(1)
 	end
 	return true
