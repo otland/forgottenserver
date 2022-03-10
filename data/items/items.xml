@@ -41445,7 +41445,7 @@
 	<item id="39723" name="the drome board" />
 	<item id="39724" name="the modifier board" />
 	<item id="39726" article="a" name="lever" />
-	<item fromid="39727" toid="39735" article="a" name="pit demon statue" />
+	<item fromid="39727" toid="39734" article="a" name="pit demon statue" />
 	<item id="39735" name="sorrow seeds" />
 	<item id="39736" name="root seeds" />
 	<item fromid="39737" toid="39741" name="blackboard" />
