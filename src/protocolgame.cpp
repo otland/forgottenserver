@@ -3191,8 +3191,7 @@ void ProtocolGame::sendUseItemCooldown(uint32_t time)
 
 void ProtocolGame::sendSupplyUsed(const Item* item)
 {
-	if (!item)
-	{
+	if (!item) {
 		return;
 	}
 
