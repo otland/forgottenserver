@@ -145,6 +145,8 @@ rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
 
+analyserSendTrueRawExp = false
+
 -- Monster Despawn Config
 -- despawnRange is the amount of floors a monster can be from its spawn position
 -- despawnRadius is how many tiles away it can be from its spawn position
