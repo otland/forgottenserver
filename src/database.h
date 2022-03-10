@@ -4,7 +4,7 @@
 #ifndef FS_DATABASE_H
 #define FS_DATABASE_H
 
-#include <boost/lexical_cast.hpp>
+#include "pugicast.h"
 
 #include <mysql/mysql.h>
 
@@ -136,20 +136,14 @@ class DBResult
 			auto it = listNames.find(s);
 			if (it == listNames.end()) {
 				std::cout << "[Error - DBResult::getNumber] Column '" << s << "' doesn't exist in the result set" << std::endl;
-				return static_cast<T>(0);
+				return {};
 			}
 
 			if (!row[it->second]) {
-				return static_cast<T>(0);
+				return {};
 			}
 
-			T data;
-			try {
-				data = boost::lexical_cast<T>(row[it->second]);
-			} catch (boost::bad_lexical_cast&) {
-				data = 0;
-			}
-			return data;
+			return pugi::cast<T>(row[it->second]);
 		}
 
 		std::string getString(const std::string& s) const;
