@@ -53,6 +53,7 @@ function belongings.onUse(player, item, fromPosition, target, toPosition, isHotk
 			end
 
 			item:getPosition():sendMagicEffect(CONST_ME_POFF)
+			player:sendSupplyUsed(item)
 			item:remove(1)
 			return true
 		end

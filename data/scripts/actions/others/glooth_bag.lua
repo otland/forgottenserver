@@ -28,6 +28,7 @@ function gloothBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 			end
 
 			item:getPosition():sendMagicEffect(CONST_ME_HITBYPOISON)
+			player:sendSupplyUsed(item)
 			item:remove(1)
 			return true
 		end

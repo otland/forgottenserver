@@ -847,6 +847,11 @@ class Player final : public Creature, public Cylinder
 				client->sendUseItemCooldown(time);
 			}
 		}
+		void sendSupplyUsed(const Item* item) {
+			if (client) {
+				client->sendSupplyUsed(item);
+			}
+		}
 		void sendModalWindow(const ModalWindow& modalWindow);
 
 		//container
