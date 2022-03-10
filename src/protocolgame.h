@@ -190,7 +190,6 @@ class ProtocolGame final : public Protocol
 		void sendCancelTarget();
 		void sendCreatureOutfit(const Creature* creature, const Outfit_t& outfit);
 		void sendStats();
-		void sendExperienceTracker(int64_t rawExp, int64_t finalExp);
 		void sendClientFeatures();
 		void sendBasicData();
 		void sendTextMessage(const TextMessage& message);
