@@ -38,8 +38,8 @@ function Player:onLookInShop(itemType, count)
 end
 
 function Player:onLookInMarket(itemType)
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINMARKET) then
-		EventCallback(EVENT_CALLBACK_ONLOOKINMARKET, self, itemType)
+	if EventCallback.onLookInMarket then
+		EventCallback.onLookInMarket(self, itemType)
 	end
 end
 
@@ -52,7 +52,7 @@ end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if EventCallback.onItemMoved then
-		EventCallback.onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+		EventCallback.onItemMoved(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
 end
 
@@ -261,7 +261,7 @@ function Player:onLoseExperience(exp)
 end
 
 function Player:onGainSkillTries(skill, tries)
-	if APPLY_SKILL_MULTIPLIER == false then
+	if not APPLY_SKILL_MULTIPLIER then
 		return EventCallback.onGainSkillTries and EventCallback.onGainSkillTries(self, skill, tries) or tries
 	end
 
