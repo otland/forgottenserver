@@ -2158,7 +2158,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND)
 	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS)
 	registerEnumIn("configKeys", ConfigManager::TWO_FACTOR_AUTH)
-	registerEnumIn("configKeys", ConfigManager::EXP_ANALYSER_SEND_TRUE_RAW_EXP)
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);

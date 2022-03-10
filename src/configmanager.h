@@ -54,7 +54,6 @@ class ConfigManager
 			REMOVE_ON_DESPAWN,
 			PLAYER_CONSOLE_LOGS,
 			TWO_FACTOR_AUTH,
-			EXP_ANALYSER_SEND_TRUE_RAW_EXP,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};

@@ -1825,11 +1825,8 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		levelPercent = 0;
 	}
 	sendStats();
-	if (g_config.getBoolean(ConfigManager::EXP_ANALYSER_SEND_TRUE_RAW_EXP)) {
-		sendExperienceTracker(rawExp, exp);
-	} else {
-		sendExperienceTracker(rawExp * g_config.getExperienceStage(getLevel()), exp);
-	}
+
+	sendExperienceTracker(rawExp * g_config.getExperienceStage(getLevel()), exp);
 }
 
 void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
