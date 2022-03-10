@@ -39,6 +39,7 @@ function mysteriousRemains.onUse(player, item, fromPosition, target, toPosition,
 				end
 				player:addItem(gift, count)
 			end
+
 			item:remove(1)
 			return true
 		end
