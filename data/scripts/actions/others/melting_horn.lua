@@ -13,6 +13,7 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 	if target.itemid == 22729 or target.itemid == 22730 or target.itemid == 22731 then
 		if math.random(100) > 32 then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The ice cracked and the frozen creature with it - be more careful next time!")
+			player:sendSupplyUsed(item)
 			item:remove(1)
 			target:transform(22732)
 		else
@@ -22,6 +23,7 @@ function meltingHorn.onUse(player, item, fromPosition, target, toPosition, isHot
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You managed to melt almost the whole block, only the feet of the creature are still stuck in the ice. Finish the job!")
 			elseif target.itemid == 22731 then
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The freed ursagrodon look at you with glowing, obedient eyes.")
+				player:sendSupplyUsed(item)
 				item:remove(1)
 				player:addMount(38)
 				player:addAchievement("Natural Born Cowboy")

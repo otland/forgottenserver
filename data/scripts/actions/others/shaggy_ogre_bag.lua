@@ -35,7 +35,7 @@ function shaggyBag.onUse(player, item, fromPosition, target, toPosition, isHotke
 				end
 				player:addItem(gift, count)
 			end
-
+			player:sendSupplyUsed(item)
 			item:remove(1)
 			return true
 		end

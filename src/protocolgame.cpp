@@ -3198,6 +3198,20 @@ void ProtocolGame::sendUseItemCooldown(uint32_t time)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendSupplyUsed(const Item* item)
+{
+	if (!item)
+	{
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0xCE);
+	msg.add<uint16_t>(item->getClientID());
+
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 {
 	NetworkMessage msg;

@@ -14,8 +14,10 @@ function cupOfMoltenGold.onUse(player, item, fromPosition, target, toPosition, i
 	else
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Drizzling all over a fir cone you picked from the tree, the molten gold only covers about half of it - not enough.")
 		if targetId == 21428 then -- fir cone
+			player:sendSupplyUsed(item)
 			target:remove(1)
 		end
+		player:sendSupplyUsed(item)
 		item:remove(1)
 	end
 	return true

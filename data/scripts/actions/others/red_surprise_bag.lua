@@ -34,6 +34,7 @@ function redSurpriseBag.onUse(player, item, fromPosition, target, toPosition, is
 			end
 
 			item:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
+			player:sendSupplyUsed(item)
 			item:remove(1)
 			return true
 		end
