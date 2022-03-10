@@ -20,7 +20,6 @@ function afflictedOutfit.onUse(player, item, fromPosition, target, toPosition, i
 		if player:hasOutfit(looktype, 3) then
 			player:addAchievement("Beak Doctor")
 		end
-		player:sendSupplyUsed(item)
 		item:remove(1)
 	elseif item.itemid == 13926 then -- plague bell
 		if not hasOutfit then

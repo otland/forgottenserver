@@ -122,6 +122,7 @@ function rustRemover.onUse(player, item, fromPosition, target, toPosition, isHot
 		target:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
 		player:addAchievementProgress("Polisher", 1000)
 	end
+	player:sendSupplyUsed(item)
 	return item:remove(1)
 end
 

@@ -43,7 +43,6 @@ function gnomish.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 
 			item:getPosition():sendMagicEffect(CONST_ME_CRAPS)
-			player:sendSupplyUsed(item)
 			item:remove(1)
 			return true
 		end
