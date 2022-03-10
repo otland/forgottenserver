@@ -98,6 +98,7 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 luaItemDesc = false
 showPlayerLogInConsole = true
+analyserSendTrueRawExp = false
 
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
@@ -144,8 +145,6 @@ rateSkill = 3
 rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
-
-analyserSendTrueRawExp = false
 
 -- Monster Despawn Config
 -- despawnRange is the amount of floors a monster can be from its spawn position
