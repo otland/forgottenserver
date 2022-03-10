@@ -639,7 +639,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		//case 0xFE: break; // store window history 2
 
 		default:
-			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
+			if (g_config.getBoolean(ConfigManager::PRINT_UNKNOWN_PACKAGE) == true) {
+				std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex << static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
+			}
 			break;
 	}
 
@@ -1593,12 +1595,11 @@ void ProtocolGame::sendBlessStatus()
 	uint8_t blessCount = 0;
 	uint16_t flag = 0;
 	uint16_t pow2 = 2;
-	for (int i = 1; i <= 8; i++)
+	for (int i = 1; i <= PLAYER_MAX_BLESSING + 1; i++)
 	{
 		if (player->hasBlessing(i))
 		{
-			if (i > 1)
-				blessCount++;
+			blessCount++;
 			flag |= pow2;
 		}
 		pow2 = pow2 * 2;

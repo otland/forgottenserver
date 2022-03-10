@@ -95,7 +95,7 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
-static constexpr int32_t PLAYER_MAX_BLESSING = 7;
+static constexpr int32_t PLAYER_MAX_BLESSING = 8;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
@@ -1348,7 +1348,7 @@ class Player final : public Creature, public Cylinder
 		int16_t lastDepotId = -1;
 
 		uint8_t soul = 0;
-		std::array<uint32_t, PLAYER_MAX_BLESSING> blessings;
+		std::array<uint32_t, PLAYER_MAX_BLESSING> blessings = {0};
 		uint8_t levelPercent = 0;
 		uint8_t magLevelPercent = 0;
 
