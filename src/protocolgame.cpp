@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -32,7 +16,9 @@
 #include "iomarket.h"
 #include "ban.h"
 #include "scheduler.h"
+#include "podium.h"
 
+#include <boost/range/adaptor/reversed.hpp>
 #include <fmt/format.h>
 
 extern ConfigManager g_config;
@@ -42,27 +28,20 @@ extern Chat* g_chat;
 
 namespace {
 
-using WaitList = std::deque<std::pair<int64_t, uint32_t>>; // (timeout, player guid)
+std::deque<std::pair<int64_t, uint32_t>> waitList; // (timeout, player guid)
+auto priorityEnd = waitList.end();
 
-WaitList priorityWaitList, waitList;
-
-std::tuple<WaitList&, WaitList::iterator, WaitList::size_type> findClient(const Player& player) {
-	const auto fn = [&](const WaitList::value_type& it) { return it.second == player.getGUID(); };
-
-	auto it = std::find_if(priorityWaitList.begin(), priorityWaitList.end(), fn);
-	if (it != priorityWaitList.end()) {
-		return std::make_tuple(std::ref(priorityWaitList), it, std::distance(it, priorityWaitList.end()) + 1);
+auto findClient(uint32_t guid) {
+	std::size_t slot = 1;
+	for (auto it = waitList.begin(), end = waitList.end(); it != end; ++it, ++slot) {
+		if (it->second == guid) {
+			return std::make_pair(it, slot);
+		}
 	}
-
-	it = std::find_if(waitList.begin(), waitList.end(), fn);
-	if (it != waitList.end()) {
-		return std::make_tuple(std::ref(waitList), it, priorityWaitList.size() + std::distance(it, waitList.end()) + 1);
-	}
-
-	return std::make_tuple(std::ref(waitList), waitList.end(), priorityWaitList.size() + waitList.size());
+	return std::make_pair(waitList.end(), slot);
 }
 
-uint8_t getWaitTime(std::size_t slot)
+constexpr int64_t getWaitTime(std::size_t slot)
 {
 	if (slot < 5) {
 		return 5;
@@ -77,63 +56,55 @@ uint8_t getWaitTime(std::size_t slot)
 	}
 }
 
-int64_t getTimeout(std::size_t slot)
+constexpr int64_t getTimeout(std::size_t slot)
 {
 	// timeout is set to 15 seconds longer than expected retry attempt
 	return getWaitTime(slot) + 15;
 }
 
-void cleanupList(WaitList& list)
-{
-	int64_t time = OTSYS_TIME();
-
-	auto it = list.begin();
-	while (it != list.end()) {
-		if (it->first <= time) {
-			it = list.erase(it);
-		} else {
-			++it;
-		}
-	}
-}
-
 std::size_t clientLogin(const Player& player)
 {
-	// Currentslot = position in wait list, 0 for direct access
 	if (player.hasFlag(PlayerFlag_CanAlwaysLogin) || player.getAccountType() >= ACCOUNT_TYPE_GAMEMASTER) {
 		return 0;
 	}
 
-	cleanupList(priorityWaitList);
-	cleanupList(waitList);
-
 	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-	if (maxPlayers == 0 || (priorityWaitList.empty() && waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
+	if (maxPlayers == 0 || (waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return 0;
 	}
 
-	auto result = findClient(player);
-	if (std::get<1>(result) != std::get<0>(result).end()) {
-		auto currentSlot = std::get<2>(result);
+	int64_t time = OTSYS_TIME();
+
+	auto it = waitList.begin();
+	while (it != waitList.end()) {
+		if ((it->first - time) <= 0) {
+			it = waitList.erase(it);
+		} else {
+			++it;
+		}
+	}
+
+	std::size_t slot;
+	std::tie(it, slot) = findClient(player.getGUID());
+	if (it != waitList.end()) {
 		// If server has capacity for this client, let him in even though his current slot might be higher than 0.
-		if ((g_game.getPlayersOnline() + currentSlot) <= maxPlayers) {
-			std::get<0>(result).erase(std::get<1>(result));
+		if ((g_game.getPlayersOnline() + slot) <= maxPlayers) {
+			waitList.erase(it);
 			return 0;
 		}
 
 		//let them wait a bit longer
-		std::get<1>(result)->second = OTSYS_TIME() + (getTimeout(currentSlot) * 1000);
-		return currentSlot;
+		it->first = time + (getTimeout(slot) * 1000);
+		return slot;
 	}
 
-	auto currentSlot = priorityWaitList.size();
 	if (player.isPremium()) {
-		priorityWaitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
-	} else {
-		currentSlot += waitList.size();
-		waitList.emplace_back(OTSYS_TIME() + (getTimeout(++currentSlot) * 1000), player.getGUID());
+		priorityEnd = waitList.emplace(priorityEnd, time + (getTimeout(slot + 1) * 1000), player.getGUID());
+		return std::distance(waitList.begin(), priorityEnd);
 	}
-	return currentSlot;
+
+	waitList.emplace_back(time + (getTimeout(waitList.size() + 1) * 1000), player.getGUID());
+	return waitList.size();
 }
 
 }
@@ -279,7 +250,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->isConnecting = false;
 
 	player->client = getThis();
-	sendAddCreature(player, player->getPosition(), 0, false);
+	sendAddCreature(player, player->getPosition(), 0);
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	player->resetIdleTime();
@@ -576,7 +547,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x83: parseUseItemEx(msg); break;
 		case 0x84: parseUseWithCreature(msg); break;
 		case 0x85: parseRotateItem(msg); break;
-		//case 0x86: break; // podium interaction
+		case 0x86: parseEditPodiumRequest(msg); break;
 		case 0x87: parseCloseContainer(msg); break;
 		case 0x88: parseUpArrowContainer(msg); break;
 		case 0x89: parseTextWindow(msg); break;
@@ -962,14 +933,20 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		newOutfit.lookMountBody = msg.getByte();
 		newOutfit.lookMountLegs = msg.getByte();
 		newOutfit.lookMountFeet = msg.getByte();
-
-		msg.get<uint16_t>(); // familiar looktype
-		msg.getByte(); // outfit direction
-		msg.getByte(); // show outfit (bool)
+		Direction direction = static_cast<Direction>(msg.getByte());
+		bool podiumVisible = msg.getByte() == 1;
 
 		//apply to podium
-		//player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction
+		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerEditPodium, player->getID(), newOutfit, pos, stackpos, spriteId, podiumVisible, direction);
 	}
+}
+
+void ProtocolGame::parseEditPodiumRequest(NetworkMessage& msg)
+{
+	Position pos = msg.getPosition();
+	uint16_t spriteId = msg.get<uint16_t>();
+	uint8_t stackpos = msg.getByte();
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerRequestEditPodium, player->getID(), pos, stackpos, spriteId);
 }
 
 void ProtocolGame::parseToggleMount(NetworkMessage& msg)
@@ -2154,231 +2131,6 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendMarketDetail(uint16_t itemId)
-{
-	NetworkMessage msg;
-	msg.addByte(0xF8);
-	msg.addItemId(itemId);
-
-	if (Item::items[itemId].classification > 0) {
-		msg.addByte(0); // item tier
-	}
-
-	const ItemType& it = Item::items[itemId];
-	if (it.armor != 0) {
-		msg.addString(std::to_string(it.armor));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.attack != 0) {
-		// TODO: chance to hit, range
-		// example:
-		// "attack +x, chance to hit +y%, z fields"
-		if (it.abilities && it.abilities->elementType != COMBAT_NONE && it.abilities->elementDamage != 0) {
-			msg.addString(fmt::format("{:d} physical +{:d} {:s}", it.attack, it.abilities->elementDamage, getCombatName(it.abilities->elementType)));
-		} else {
-			msg.addString(std::to_string(it.attack));
-		}
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.isContainer()) {
-		msg.addString(std::to_string(it.maxItems));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.defense != 0) {
-		if (it.extraDefense != 0) {
-			msg.addString(fmt::format("{:d} {:+d}", it.defense, it.extraDefense));
-		} else {
-			msg.addString(std::to_string(it.defense));
-		}
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (!it.description.empty()) {
-		const std::string& descr = it.description;
-		if (descr.back() == '.') {
-			msg.addString(std::string(descr, 0, descr.length() - 1));
-		} else {
-			msg.addString(descr);
-		}
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.decayTime != 0) {
-		msg.addString(fmt::format("{:d} seconds", it.decayTime));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.abilities) {
-		std::ostringstream ss;
-		bool separator = false;
-
-		for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-			if (it.abilities->absorbPercent[i] == 0) {
-				continue;
-			}
-
-			if (separator) {
-				ss << ", ";
-			} else {
-				separator = true;
-			}
-
-			ss << getCombatName(indexToCombatType(i)) << ' ' << std::showpos << it.abilities->absorbPercent[i] << std::noshowpos << '%';
-		}
-
-		msg.addString(ss.str());
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.minReqLevel != 0) {
-		msg.addString(std::to_string(it.minReqLevel));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.minReqMagicLevel != 0) {
-		msg.addString(std::to_string(it.minReqMagicLevel));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	msg.addString(it.vocationString);
-
-	msg.addString(it.runeSpellName);
-
-	if (it.abilities) {
-		std::ostringstream ss;
-		bool separator = false;
-
-		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; i++) {
-			if (!it.abilities->skills[i]) {
-				continue;
-			}
-
-			if (separator) {
-				ss << ", ";
-			} else {
-				separator = true;
-			}
-
-			ss << getSkillName(i) << ' ' << std::showpos << it.abilities->skills[i] << std::noshowpos;
-		}
-
-		if (it.abilities->stats[STAT_MAGICPOINTS] != 0) {
-			if (separator) {
-				ss << ", ";
-			} else {
-				separator = true;
-			}
-
-			ss << "magic level " << std::showpos << it.abilities->stats[STAT_MAGICPOINTS] << std::noshowpos;
-		}
-
-		for (size_t i = 0; i < COMBAT_COUNT; ++i) {
-			if (it.abilities->specialMagicLevelSkill[i] == 0) {
-				continue;
-			}
-
-			if (separator) {
-				ss << ", ";
-			} else {
-				separator = true;
-			}
-			ss << getCombatName(indexToCombatType(i)) << " magic level " << std::showpos << it.abilities->specialMagicLevelSkill[i] << std::noshowpos;
-		}
-
-		if (it.abilities->speed != 0) {
-			if (separator) {
-				ss << ", ";
-			}
-
-			ss << "speed " << std::showpos << (it.abilities->speed >> 1) << std::noshowpos;
-		}
-
-		msg.addString(ss.str());
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	if (it.charges != 0) {
-		msg.addString(std::to_string(it.charges));
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	std::string weaponName = getWeaponName(it.weaponType);
-
-	if (it.slotPosition & SLOTP_TWO_HAND) {
-		if (!weaponName.empty()) {
-			weaponName += ", two-handed";
-		} else {
-			weaponName = "two-handed";
-		}
-	}
-
-	msg.addString(weaponName);
-
-	if (it.weight != 0) {
-		std::ostringstream ss;
-		if (it.weight < 10) {
-			ss << "0.0" << it.weight;
-		} else if (it.weight < 100) {
-			ss << "0." << it.weight;
-		} else {
-			std::string weightString = std::to_string(it.weight);
-			weightString.insert(weightString.end() - 2, '.');
-			ss << weightString;
-		}
-		ss << " oz";
-		msg.addString(ss.str());
-	} else {
-		msg.add<uint16_t>(0x00);
-	}
-
-	//string or u16 0x00
-	msg.add<uint16_t>(0x00); // magic shield capacity
-	msg.add<uint16_t>(0x00); // cleave
-	msg.add<uint16_t>(0x00); // damage reflection
-	msg.add<uint16_t>(0x00); // perfect shot
-	msg.add<uint16_t>(0x00); // imbuing slots
-	msg.add<uint16_t>(0x00); // class level
-	msg.add<uint16_t>(0x00); // item tier
-
-	MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemId);
-	if (statistics) {
-		msg.addByte(0x01);
-		msg.add<uint32_t>(statistics->numTransactions);
-		msg.add<uint64_t>(statistics->totalPrice);
-		msg.add<uint64_t>(statistics->highestPrice);
-		msg.add<uint64_t>(statistics->lowestPrice);
-	} else {
-		msg.addByte(0x00);
-	}
-
-	statistics = IOMarket::getInstance().getSaleStatistics(itemId);
-	if (statistics) {
-		msg.addByte(0x01);
-		msg.add<uint32_t>(statistics->numTransactions);
-		msg.add<uint64_t>(statistics->totalPrice);
-		msg.add<uint64_t>(statistics->highestPrice);
-		msg.add<uint64_t>(statistics->lowestPrice);
-	} else {
-		msg.addByte(0x00);
-	}
-
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendQuestLog()
 {
 	NetworkMessage msg;
@@ -2835,7 +2587,7 @@ void ProtocolGame::sendFightModes()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin)
+void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, MagicEffectClasses magicEffect/*= CONST_ME_NONE*/)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2867,8 +2619,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			writeToOutputBuffer(msg);
 		}
 
-		if (isLogin) {
-			sendMagicEffect(pos, CONST_ME_TELEPORT);
+		if (magicEffect != CONST_ME_NONE) {
+			sendMagicEffect(pos, magicEffect);
 		}
 		return;
 	}
@@ -2889,8 +2641,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendMapDescription(pos);
 
 	// send login effect
-	if (isLogin) {
-		sendMagicEffect(pos, CONST_ME_TELEPORT);
+	if (magicEffect != CONST_ME_NONE) {
+		sendMagicEffect(pos, magicEffect);
 	}
 
 	// send equipment
@@ -2966,7 +2718,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 	} else if (canSee(oldPos) && canSee(creature->getPosition())) {
 		if (teleport || (oldPos.z == 7 && newPos.z >= 8)) {
 			sendRemoveTileCreature(creature, oldPos, oldStackPos);
-			sendAddCreature(creature, newPos, newStackPos, false);
+			sendAddCreature(creature, newPos, newStackPos);
 		} else {
 			NetworkMessage msg;
 			msg.addByte(0x6D);
@@ -2983,7 +2735,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 	} else if (canSee(oldPos)) {
 		sendRemoveTileCreature(creature, oldPos, oldStackPos);
 	} else if (canSee(creature->getPosition())) {
-		sendAddCreature(creature, newPos, newStackPos, false);
+		sendAddCreature(creature, newPos, newStackPos);
 	}
 }
 
@@ -3147,7 +2899,7 @@ void ProtocolGame::sendOutfitWindow()
 	AddOutfit(msg, currentOutfit);
 
 	// mount color bytes are required here regardless of having one
-	if (currentOutfit.lookMount == 0){
+	if (currentOutfit.lookMount == 0) {
 		msg.addByte(currentOutfit.lookMountHead);
 		msg.addByte(currentOutfit.lookMountBody);
 		msg.addByte(currentOutfit.lookMountLegs);
@@ -3203,6 +2955,141 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0x00); // Try outfit mode (?)
 	msg.addByte(mounted ? 0x01 : 0x00);
 	msg.addByte(0x00); // randomize mount (bool)
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendPodiumWindow(const Item* item)
+{
+	if (!item) {
+		return;
+	}
+
+	const Podium* podium = item->getPodium();
+	if (!podium) {
+		return;
+	}
+
+	const Tile* tile = item->getTile();
+	if (!tile) {
+		return;
+	}
+
+	int32_t stackpos = tile->getThingIndex(item);
+
+	// read podium outfit
+	Outfit_t podiumOutfit = podium->getOutfit();
+	Outfit_t playerOutfit = player->getDefaultOutfit();
+	bool isEmpty = podiumOutfit.lookType == 0 && podiumOutfit.lookMount == 0;
+
+	if (podiumOutfit.lookType == 0) {
+		// copy player outfit
+		podiumOutfit.lookType = playerOutfit.lookType;
+		podiumOutfit.lookHead = playerOutfit.lookHead;
+		podiumOutfit.lookBody = playerOutfit.lookBody;
+		podiumOutfit.lookLegs = playerOutfit.lookLegs;
+		podiumOutfit.lookFeet = playerOutfit.lookFeet;
+		podiumOutfit.lookAddons = playerOutfit.lookAddons;
+	}
+
+	if (podiumOutfit.lookMount == 0) {
+		// copy player mount
+		podiumOutfit.lookMount = playerOutfit.lookMount;
+		podiumOutfit.lookMountHead = playerOutfit.lookMountHead;
+		podiumOutfit.lookMountBody = playerOutfit.lookMountBody;
+		podiumOutfit.lookMountLegs = playerOutfit.lookMountLegs;
+		podiumOutfit.lookMountFeet = playerOutfit.lookMountFeet;
+	}
+
+	// fetch player outfits
+	const auto& outfits = Outfits::getInstance().getOutfits(player->getSex());
+	if (outfits.size() == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// add GM outfit for staff members
+	std::vector<ProtocolOutfit> protocolOutfits;
+	if (player->isAccessPlayer()) {
+		static const std::string gamemasterOutfitName = "Gamemaster";
+		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
+	}
+
+	// fetch player addons info
+	protocolOutfits.reserve(outfits.size());
+	for (const Outfit& outfit : outfits) {
+		uint8_t addons;
+		if (!player->getOutfitAddons(outfit, addons)) {
+			continue;
+		}
+
+		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
+	}
+
+	// select first outfit available when the one from podium is not unlocked
+	if (!player->canWear(podiumOutfit.lookType, 0)) {
+		podiumOutfit.lookType = outfits.front().lookType;
+	}
+
+	// fetch player mounts
+	std::vector<const Mount*> mounts;
+	for (const Mount& mount : g_game.mounts.getMounts()) {
+		if (player->hasMount(&mount)) {
+			mounts.push_back(&mount);
+		}
+	}
+
+	// packet header
+	NetworkMessage msg;
+	msg.addByte(0xC8);
+
+	// current outfit
+	msg.add<uint16_t>(podiumOutfit.lookType);
+	msg.addByte(podiumOutfit.lookHead);
+	msg.addByte(podiumOutfit.lookBody);
+	msg.addByte(podiumOutfit.lookLegs);
+	msg.addByte(podiumOutfit.lookFeet);
+	msg.addByte(podiumOutfit.lookAddons);
+
+	// current mount
+	msg.add<uint16_t>(podiumOutfit.lookMount);
+	msg.addByte(podiumOutfit.lookMountHead);
+	msg.addByte(podiumOutfit.lookMountBody);
+	msg.addByte(podiumOutfit.lookMountLegs);
+	msg.addByte(podiumOutfit.lookMountFeet);
+
+	// current familiar (not used in podium mode)
+	msg.add<uint16_t>(0);
+
+	// available outfits
+	msg.add<uint16_t>(protocolOutfits.size());
+	for (const ProtocolOutfit& outfit : protocolOutfits) {
+		msg.add<uint16_t>(outfit.lookType);
+		msg.addString(outfit.name);
+		msg.addByte(outfit.addons);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit tooltip (hardcoded)
+	}
+
+	// available mounts
+	msg.add<uint16_t>(mounts.size());
+	for (const Mount* mount : mounts) {
+		msg.add<uint16_t>(mount->clientId);
+		msg.addString(mount->name);
+		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId)
+	}
+
+	// available familiars (not used in podium mode)
+	msg.add<uint16_t>(0);
+
+	msg.addByte(0x05); // "set outfit" window mode (5 = podium)
+	msg.addByte((isEmpty && playerOutfit.lookMount != 0) || podium->hasFlag(PODIUM_SHOW_MOUNT) ? 0x01 : 0x00); // "mount" checkbox
+	msg.add<uint16_t>(0); // unknown
+	msg.addPosition(item->getPosition());
+	msg.add<uint16_t>(item->getClientID());
+	msg.addByte(stackpos);
+
+	msg.addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00); // is platform visible
+	msg.addByte(0x01); // "outfit" checkbox, ignored by the client
+	msg.addByte(podium->getDirection()); // outfit direction
 	writeToOutputBuffer(msg);
 }
 

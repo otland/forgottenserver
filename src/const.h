@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
-#define FS_CONST_H_0A49B5996F074465BF44B90F4F780E8B
+#ifndef FS_CONST_H
+#define FS_CONST_H
 
 static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
 static constexpr int32_t MIN_MARKET_FEE = 20;
@@ -148,7 +132,7 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_FIREWORK_ORANGE = 197,
 	CONST_ME_FIREWORK_PURPLE = 198,
 	CONST_ME_FIREWORK_TURQUOISE = 199,
-	// 200 us empty
+	// 200 is empty
 	CONST_ME_THECUBE = 201,
 	CONST_ME_DRAWINK = 202,
 	CONST_ME_PRISMATICSPARKLES = 203,
@@ -178,6 +162,13 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_FATAL = 230,
 	CONST_ME_DODGE = 231,
 	CONST_ME_HOURGLASS = 232,
+	// 233-234 are empty
+	CONST_ME_FERUMBRAS_1 = 235,
+	CONST_ME_GAZHARAGOTH = 236,
+	CONST_ME_MAD_MAGE = 237,
+	CONST_ME_HORESTIS = 238,
+	CONST_ME_DEVOVORGA = 239,
+	CONST_ME_FERUMBRAS_2 = 240,
 };
 
 enum ShootType_t : uint8_t {
@@ -597,6 +588,7 @@ enum item_t : uint16_t {
 	ITEM_DEPOT_BOX_XV = 25467,
 	ITEM_DEPOT_BOX_XVI = 25468,
 	ITEM_DEPOT_BOX_XVII = 25469,
+	ITEM_DEPOT_BOX_XVIII = 34571,
 
 	ITEM_MALE_CORPSE = 3058,
 	ITEM_FEMALE_CORPSE = 3065,
@@ -665,6 +657,12 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IgnoreSendPrivateCheck = static_cast<uint64_t>(1) << 39,
 };
 
+enum PodiumFlags : uint8_t {
+	PODIUM_SHOW_PLATFORM = 0, // show the platform below the outfit
+	PODIUM_SHOW_OUTFIT = 1, // show outfit
+	PODIUM_SHOW_MOUNT = 2 // show mount
+};
+
 enum ReloadTypes_t : uint8_t {
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,
@@ -705,4 +703,4 @@ static constexpr int32_t PSTRG_MOUNTS_CURRENTMOUNT = (PSTRG_MOUNTS_RANGE_START +
 
 #define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 
-#endif
+#endif // FS_CONST_H

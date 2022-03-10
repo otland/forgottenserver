@@ -122,12 +122,10 @@
 	<spawn centerx="125" centery="495" centerz="5" radius="1">
 		<npc name="Alice" x="1" y="0" z="5" spawntime="60" />
 	</spawn>
-	<spawn centerx="277" centery="511" centerz="5" radius="5">
-		<monster name="Valkyrie" x="3" y="-1" z="5" spawntime="60" />
-		<monster name="Valkyrie" x="-1" y="2" z="5" spawntime="60" />
-	</spawn>
-	<spawn centerx="270" centery="512" centerz="5" radius="5">
-		<monster name="Witch" x="0" y="-1" z="5" spawntime="60" />
+	<spawn centerx="275" centery="511" centerz="5" radius="5">
+		<monster name="Valkyrie" x="5" y="-1" z="5" spawntime="60" />
+		<monster name="Witch" x="-5" y="0" z="5" spawntime="60" />
+		<monster name="Valkyrie" x="1" y="2" z="5" spawntime="60" />
 	</spawn>
 	<spawn centerx="225" centery="546" centerz="5" radius="1">
 		<npc name="Eryn" x="0" y="0" z="5" spawntime="60" direction="1" />
@@ -747,7 +745,7 @@
 	</spawn>
 	<spawn centerx="328" centery="520" centerz="7" radius="5">
 		<monster name="Wolf" x="-2" y="-2" z="7" spawntime="60" />
-		<monster name="War wolf" x="0" y="1" z="7" spawntime="60" />
+		<monster name="War Wolf" x="0" y="1" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="152" centery="521" centerz="7" radius="5">
 		<monster name="Giant Spider" x="-2" y="-2" z="7" spawntime="60" />

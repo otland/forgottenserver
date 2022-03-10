@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
-#define FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
+#ifndef FS_PLAYER_H
+#define FS_PLAYER_H
 
 #include "creature.h"
 #include "container.h"
@@ -27,7 +11,6 @@
 #include "enums.h"
 #include "vocation.h"
 #include "protocolgame.h"
-#include "ioguild.h"
 #include "party.h"
 #include "inbox.h"
 #include "depotchest.h"
@@ -112,6 +95,8 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
+
+static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
 class Player final : public Creature, public Cylinder
 {
@@ -368,6 +353,9 @@ class Player final : public Creature, public Cylinder
 			return lastDepotId;
 		}
 
+		int32_t getIdleTime() const {
+			return idleTime;
+		}
 		void resetIdleTime() {
 			idleTime = 0;
 		}
@@ -780,9 +768,9 @@ class Player final : public Creature, public Cylinder
 				client->sendChannelEvent(channelId, playerName, channelEvent);
 			}
 		}
-		void sendCreatureAppear(const Creature* creature, const Position& pos, bool isLogin) {
+		void sendCreatureAppear(const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE) {
 			if (client) {
-				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), isLogin);
+				client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), magicEffect);
 			}
 		}
 		void sendCreatureMove(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport) {
@@ -839,7 +827,7 @@ class Player final : public Creature, public Cylinder
 				}
 
 				if (visible) {
-					client->sendAddCreature(creature, creature->getPosition(), stackpos, false);
+					client->sendAddCreature(creature, creature->getPosition(), stackpos);
 				} else {
 					client->sendRemoveTileCreature(creature, creature->getPosition(), stackpos);
 				}
@@ -1063,11 +1051,6 @@ class Player final : public Creature, public Cylinder
 				client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
 			}
 		}
-		void sendMarketDetail(uint16_t itemId) const {
-			if (client) {
-				client->sendMarketDetail(itemId);
-			}
-		}
 		void sendMarketAcceptOffer(const MarketOfferEx& offer) const {
 			if (client) {
 				client->sendMarketAcceptOffer(offer);
@@ -1106,6 +1089,11 @@ class Player final : public Creature, public Cylinder
 		void sendOutfitWindow() {
 			if (client) {
 				client->sendOutfitWindow();
+			}
+		}
+		void sendPodiumWindow(const Item* item) {
+			if (client) {
+				client->sendPodiumWindow(item);
 			}
 		}
 		void sendCloseContainer(uint8_t cid) {
@@ -1416,4 +1404,4 @@ class Player final : public Creature, public Cylinder
 		friend class ProtocolGame;
 };
 
-#endif
+#endif // FS_PLAYER_H

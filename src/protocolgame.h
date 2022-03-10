@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PROTOCOLGAME_H_FACA2A2D1A9348B78E8FD7E8003EBB87
-#define FS_PROTOCOLGAME_H_FACA2A2D1A9348B78E8FD7E8003EBB87
+#ifndef FS_PROTOCOLGAME_H
+#define FS_PROTOCOLGAME_H
 
 #include "protocol.h"
 #include "chat.h"
@@ -105,6 +89,7 @@ class ProtocolGame final : public Protocol
 		//Parse methods
 		void parseAutoWalk(NetworkMessage& msg);
 		void parseSetOutfit(NetworkMessage& msg);
+		void parseEditPodiumRequest(NetworkMessage& msg);
 		void parseSay(NetworkMessage& msg);
 		void parseLookAt(NetworkMessage& msg);
 		void parseLookInBattleList(NetworkMessage& msg);
@@ -229,7 +214,6 @@ class ProtocolGame final : public Protocol
 		void sendMarketBrowseOwnOffers(const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
 		void sendMarketCancelOffer(const MarketOfferEx& offer);
 		void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers);
-		void sendMarketDetail(uint16_t itemId);
 		void sendTradeItemRequest(const std::string& traderName, const Item* item, bool ack);
 		void sendCloseTrade();
 
@@ -237,6 +221,8 @@ class ProtocolGame final : public Protocol
 		void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 		void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 		void sendOutfitWindow();
+
+		void sendPodiumWindow(const Item* item);
 
 		void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 		void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify, VipStatus_t status);
@@ -269,7 +255,7 @@ class ProtocolGame final : public Protocol
 		void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 		void sendUpdateTile(const Tile* tile, const Position& pos);
 
-		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, bool isLogin);
+		void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos, MagicEffectClasses magicEffect = CONST_ME_NONE);
 		void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos,
 		                      const Position& oldPos, int32_t oldStackPos, bool teleport);
 
@@ -351,4 +337,4 @@ class ProtocolGame final : public Protocol
 		bool acceptPackets = false;
 };
 
-#endif
+#endif // FS_PROTOCOLGAME_H

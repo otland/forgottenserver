@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -23,6 +7,7 @@
 
 #include "container.h"
 #include "creature.h"
+#include "podium.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
@@ -112,14 +97,9 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(0x00); // item tier (0-10)
 	}
 
-	// podium (placeholder)
-	// to do: read podium flag from otb
-	if (it.clientId == 35973 || it.clientId == 35974) {
+	if (it.isPodium()) {
 		add<uint16_t>(0); //looktype
-		//4x byte colors if not 0
 		add<uint16_t>(0); //lookmount
-		//4x byte colors if not 0
-
 		addByte(2); //direction
 		addByte(0x01); //is visible (bool)
 	}
@@ -144,16 +124,41 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(0x00); // quiver ammo count
 	}
 
-	// podium (placeholder)
-	// to do: read podium flag from otb
-	if (it.clientId == 35973 || it.clientId == 35974) {
-		add<uint16_t>(0); //looktype
-		//4x byte colors if not 0
-		add<uint16_t>(0); //lookmount
-		//4x byte colors if not 0
+	// display outfit on the podium
+	if (it.isPodium()) {
+		const Podium* podium = item->getPodium();
+		const Outfit_t &outfit = podium->getOutfit();
 
-		addByte(2); //direction
-		addByte(0x01); //is visible (bool)
+		//add outfit
+		if (podium->hasFlag(PODIUM_SHOW_OUTFIT)) {
+			add<uint16_t>(outfit.lookType);
+			if (outfit.lookType != 0) {
+				addByte(outfit.lookHead);
+				addByte(outfit.lookBody);
+				addByte(outfit.lookLegs);
+				addByte(outfit.lookFeet);
+				addByte(outfit.lookAddons);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		//add mount
+		if (podium->hasFlag(PODIUM_SHOW_MOUNT)) {
+			add<uint16_t>(outfit.lookMount);
+			if (outfit.lookMount != 0) {
+				addByte(outfit.lookMountHead);
+				addByte(outfit.lookMountBody);
+				addByte(outfit.lookMountLegs);
+				addByte(outfit.lookMountFeet);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		addByte(podium->getDirection());
+		addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00);
+		return;
 	}
 }
 
