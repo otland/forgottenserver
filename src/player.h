@@ -95,6 +95,7 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
+static constexpr int32_t PLAYER_MAX_BLESSING = 7;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
@@ -298,14 +299,36 @@ class Player final : public Creature, public Cylinder
 			bedItem = b;
 		}
 
-		void addBlessing(uint8_t blessing) {
-			blessings.set(blessing);
+		void addBlessing(uint8_t blessing, uint32_t count = 1) {
+			if (blessing < PLAYER_MAX_BLESSING) {
+				blessings[blessing] += count;
+				sendBlessStatus();
+			}
 		}
-		void removeBlessing(uint8_t blessing) {
-			blessings.reset(blessing);
+		void removeBlessing(uint8_t blessing, uint32_t count = 1) {
+			if (blessing < PLAYER_MAX_BLESSING) {
+				if (blessings[blessing] < count) {
+					blessings[blessing] = 0;
+				} else {
+
+					blessings[blessing] -= count;
+				}
+			}
 		}
 		bool hasBlessing(uint8_t blessing) const {
-			return blessings.test(blessing);
+			if (blessing < PLAYER_MAX_BLESSING) {
+				if (blessings[blessing] != 0) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		uint32_t getBlessingCount(uint8_t blessing) const {
+			if (blessing < PLAYER_MAX_BLESSING) {
+				return blessings[blessing];
+			}
+			return 0;
 		}
 
 		bool isOffline() const {
@@ -959,6 +982,11 @@ class Player final : public Creature, public Cylinder
 				client->sendBasicData();
 			}
 		}
+		void sendBlessStatus() const {
+			if (client) {
+				client->sendBlessStatus();
+			}
+		}
 		void sendSkills() const {
 			if (client) {
 				client->sendSkills();
@@ -1320,7 +1348,7 @@ class Player final : public Creature, public Cylinder
 		int16_t lastDepotId = -1;
 
 		uint8_t soul = 0;
-		std::bitset<6> blessings;
+		std::array<uint32_t, PLAYER_MAX_BLESSING> blessings;
 		uint8_t levelPercent = 0;
 		uint8_t magLevelPercent = 0;
 

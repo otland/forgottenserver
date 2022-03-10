@@ -1499,7 +1499,7 @@ void ProtocolGame::sendTutorial(uint8_t tutorialId)
 	NetworkMessage msg;
 	msg.addByte(0xDC);
 	msg.addByte(tutorialId);
-	writeToOutputBuffer(msg);
+writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendAddMarker(const Position& pos, uint8_t markType, const std::string& desc)
@@ -1564,7 +1564,8 @@ void ProtocolGame::sendBasicData()
 	if (player->isPremium()) {
 		msg.addByte(1);
 		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
-	} else {
+	}
+	else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
 	}
@@ -1578,6 +1579,39 @@ void ProtocolGame::sendBasicData()
 	}
 
 	msg.addByte(0x00); // is magic shield active (bool)
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendBlessStatus()
+{
+	if (!player) {
+		return;
+	}
+
+	NetworkMessage msg;
+
+	uint8_t blessCount = 0;
+	uint16_t flag = 0;
+	uint16_t pow2 = 2;
+	for (int i = 1; i <= 8; i++)
+	{
+		if (player->hasBlessing(i))
+		{
+			if (i > 1)
+				blessCount++;
+			flag |= pow2;
+		}
+		pow2 = pow2 * 2;
+	}
+
+	msg.addByte(0x9C);
+
+	//Show up the glowing effect in items if have all blesses
+	msg.add<uint16_t>((blessCount >= 5) ? (flag | 1) : flag);
+
+	// 1 = Disabled | 2 = normal | 3 = green
+	msg.addByte((blessCount >= 7) ? 3 : ((blessCount >= 5) ? 2 : 1));
+
 	writeToOutputBuffer(msg);
 }
 

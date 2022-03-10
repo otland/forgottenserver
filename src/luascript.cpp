@@ -2058,6 +2058,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnum(MAX_LOOTCHANCE)
 
+	registerEnum(PLAYER_MAX_BLESSING)
+
 	registerEnum(SPELL_INSTANT)
 	registerEnum(SPELL_RUNE)
 
@@ -10251,7 +10253,11 @@ int LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		pushBoolean(L, player->hasBlessing(blessing));
+		if (blessing < PLAYER_MAX_BLESSING) {
+			pushBoolean(L, player->hasBlessing(blessing));
+		} else {
+			pushBoolean(L, false);
+		}
 	} else {
 		lua_pushnil(L);
 	}
@@ -10260,7 +10266,7 @@ int LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
 
 int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 {
-	// player:addBlessing(blessing)
+	// player:addBlessing(blessing, count)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -10268,19 +10274,22 @@ int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 	}
 
 	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
-	if (player->hasBlessing(blessing)) {
-		pushBoolean(L, false);
-		return 1;
+	uint8_t count = getNumber<uint8_t>(L, 3, 1);
+	
+	if (blessing < PLAYER_MAX_BLESSING) {
+		player->addBlessing(blessing, count);
+		player->sendBlessStatus();
+		pushBoolean(L, true);
 	}
-
-	player->addBlessing(blessing);
-	pushBoolean(L, true);
+	else {
+		pushBoolean(L, false);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 {
-	// player:removeBlessing(blessing)
+	// player:removeBlessing(blessing, count)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -10288,13 +10297,15 @@ int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 	}
 
 	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
-	if (!player->hasBlessing(blessing)) {
-		pushBoolean(L, false);
-		return 1;
+	uint8_t count = getNumber<uint8_t>(L, 3, 1);
+	if (blessing < PLAYER_MAX_BLESSING) {
+		player->removeBlessing(blessing, count);
+		player->sendBlessStatus();
+		pushBoolean(L, true);
 	}
-
-	player->removeBlessing(blessing);
-	pushBoolean(L, true);
+	else {
+		pushBoolean(L, false);
+	}
 	return 1;
 }
 

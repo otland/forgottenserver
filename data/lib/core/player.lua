@@ -37,22 +37,24 @@ function Player.hasFlag(self, flag)
 end
 
 function Player.getLossPercent(self)
-	local blessings = 0
-	local lossPercent = {
-		[0] = 100,
-		[1] = 70,
-		[2] = 45,
-		[3] = 25,
-		[4] = 10,
-		[5] = 0
+	local lossPercent = { --PLAYER_MAX_BLESSING = 7
+		[0] = { container = 100, other = 10},
+		[1] = { container = 70,	other = 7},
+		[2] = { container = 45,	other = 4.5},
+		[3] = { container = 25,	other = 2.5},
+		[4] = { container = 10,	other = 1},
+		[5] = { container = 0, other = 0},
+		[6] = { container = 0, other = 0},
+		[7] = { container = 0, other = 0},
 	}
 
-	for i = 1, 5 do
+	local blessCount = 0;
+	for i = 0, PLAYER_MAX_BLESSING, 1 do
 		if self:hasBlessing(i) then
-			blessings = blessings + 1
+			blessCount = blessCount + 1
 		end
 	end
-	return lossPercent[blessings]
+	return lossPercent[blessCount]
 end
 
 function Player.getPremiumTime(self)

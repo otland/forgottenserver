@@ -2146,20 +2146,21 @@ void Player::death(Creature* lastHitCreature)
 			}
 		}
 
-		if (blessings.test(5)) {
-			if (lastHitPlayer) {
-				blessings.reset(5);
-			} else {
-				blessings.reset();
-				blessings.set(5);
-			}
+		uint8_t blessCount = 0;
+		if (lastHitPlayer) {
+			removeBlessing(1);
 		} else {
-			blessings.reset();
+			for (uint8_t i = 0; i < PLAYER_MAX_BLESSING; i++) {
+				if (hasBlessing(i)) {
+					removeBlessing(i);
+				}
+			}
 		}
 
 		sendStats();
 		sendSkills();
 		sendReLoginWindow(unfairFightReduction);
+		sendBlessStatus();
 
 		if (getSkull() == SKULL_BLACK) {
 			health = 40;
@@ -4028,12 +4029,19 @@ bool Player::isPromoted() const
 double Player::getLostPercent() const
 {
 	int32_t deathLosePercent = g_config.getNumber(ConfigManager::DEATH_LOSE_PERCENT);
+	uint8_t blessCount = 0;
+	for (uint8_t i = 0; i < PLAYER_MAX_BLESSING; i++) {
+		if (hasBlessing(i)) {
+			blessCount += 1;
+		}
+	}
+
 	if (deathLosePercent != -1) {
 		if (isPromoted()) {
 			deathLosePercent -= 3;
 		}
 
-		deathLosePercent -= blessings.count();
+		deathLosePercent -= blessCount;
 		return std::max<int32_t>(0, deathLosePercent) / 100.;
 	}
 
@@ -4049,7 +4057,7 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		percentReduction += 30;
 	}
-	percentReduction += blessings.count() * 8;
+	percentReduction += blessCount * 8;
 	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 

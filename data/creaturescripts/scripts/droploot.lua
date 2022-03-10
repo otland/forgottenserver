@@ -1,3 +1,5 @@
+local BLESS_COUNT_TO_KEEP_ITEMS = 5
+
 function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if player:hasFlag(PlayerFlag_NotGenerateLoot) or player:getVocation():getId() == VOCATION_NONE then
 		return true
@@ -18,7 +20,13 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 			end
 		end
 
-		if not isPlayer or not player:hasBlessing(6) then
+		local blessCount = 0;
+		for i = 0, PLAYER_MAX_BLESSING, 1 do
+			if player:hasBlessing(i) then
+				blessCount = blessCount + 1
+			end
+		end
+		if not isPlayer or not BLESS_COUNT_TO_KEEP_ITEMS >= 5 then
 			player:removeItem(ITEM_AMULETOFLOSS, 1, -1, false)
 		end
 	else
@@ -26,8 +34,16 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 			local item = player:getSlotItem(i)
 			local lossPercent = player:getLossPercent()
 			if item then
-				if isRedOrBlack or math.random(item:isContainer() and 100 or 1000) <= lossPercent then
-					if (isRedOrBlack or lossPercent ~= 0) and not item:moveTo(corpse) then
+				local chanceToLostItem = 0
+				if item:isContainer() then
+					chanceToLostItem = lossPercent.container
+				else
+					chanceToLostItem = lossPercent.other
+				end
+
+				-- chanceToLostItem multiplet by 10 to correct calculation for float values
+				if isRedOrBlack or (math.random(0, 1000) <= chanceToLostItem * 10) then
+					if not item:moveTo(corpse) then
 						item:remove()
 					end
 				end

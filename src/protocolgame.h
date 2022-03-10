@@ -192,6 +192,7 @@ class ProtocolGame final : public Protocol
 		void sendStats();
 		void sendClientFeatures();
 		void sendBasicData();
+		void sendBlessStatus();
 		void sendTextMessage(const TextMessage& message);
 		void sendReLoginWindow(uint8_t unfairFightReduction);
 
