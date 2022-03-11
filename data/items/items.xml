@@ -13006,10 +13006,12 @@
 	<item id="7439" article="a" name="berserk potion">
 		<attribute key="description" value="Drinking this potion increases temporarily your fighting skill while decreasing your defense." />
 		<attribute key="weight" value="200" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7440" article="a" name="mastermind potion">
 		<attribute key="description" value="Drinking this potion temporarily increases your magic skill." />
 		<attribute key="weight" value="290" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7441" article="an" name="ice cube">
 		<attribute key="weight" value="2000" />
@@ -13021,6 +13023,7 @@
 	<item id="7443" article="a" name="bullseye potion">
 		<attribute key="description" value="Drinking this potion increases temporarily your distance skill while decreasing your defense." />
 		<attribute key="weight" value="200" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7444" article="an" name="ice cube">
 		<attribute key="description" value="There is a rough shape of a head with tusks." />
@@ -13346,18 +13349,22 @@
 	<item id="7588" article="a" name="strong health potion">
 		<attribute key="weight" value="290" />
 		<attribute key="description" value="This potion can only be consumed by paladins and knights of level 50 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7589" article="a" name="strong mana potion">
 		<attribute key="weight" value="290" />
 		<attribute key="description" value="This potion can only be consumed by players of level 50 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7590" article="a" name="great mana potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by sorcerers, druids and paladins of level 80 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7591" article="a" name="great health potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by knights of level 80 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item fromid="7592" toid="7599" name="linen" />
 	<item id="7600" name="wood" />
@@ -13366,6 +13373,7 @@
 	<item id="7617" name="linen" />
 	<item id="7618" article="a" name="health potion">
 		<attribute key="weight" value="270" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7619" name="linen" />
 	<item id="7620" article="a" name="mana potion">
@@ -15451,13 +15459,16 @@
 	<item id="8472" article="a" name="great spirit potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by paladins of level 80 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="8473" article="an" name="ultimate health potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by knights of level 130 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="8474" article="an" name="antidote potion">
 		<attribute key="weight" value="265" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item fromid="8475" toid="8525" article="a" name="stone wall" />
 	<item fromid="8526" toid="8533" article="a" name="gem" />
@@ -36641,14 +36652,17 @@
 	<item id="26029" article="an" name="ultimate mana potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by sorcerers and druids of level 130 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26030" article="an" name="ultimate spirit potion">
 		<attribute key="weight" value="310" />
 		<attribute key="description" value="This potion can only be consumed by paladins of level 130 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26031" article="a" name="supreme health potion">
 		<attribute key="weight" value="350" />
 		<attribute key="description" value="This potion can only be consumed by knights of level 200 or higher." />
+		<attribute key="supply" value="true" />
 	</item>
 	<item fromid="26032" toid="26034" name="stones" />
 	<item fromid="26035" toid="26043" article="a" name="stone" />
