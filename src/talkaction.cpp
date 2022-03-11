@@ -143,7 +143,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute separatorAttribute = node.attribute("separator");
 	if (separatorAttribute) {
-		separator = pugi::cast<char>(separatorAttribute.value());
+		separator = separatorAttribute.as_string();
 	}
 
 	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
