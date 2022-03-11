@@ -17,7 +17,9 @@ end
 local creatureEvent = CreatureEvent("MonsterStorages")
 
 function creatureEvent.onDeath(self)
-    MonsterStorages[self:getId()] = nil
+    addTask(function (id)
+        MonsterStorages[id] = nil
+    end, self:getId())
     return true
 end
 
