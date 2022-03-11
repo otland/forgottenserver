@@ -2954,11 +2954,11 @@ void Player::removeThing(Thing* thing, uint32_t count)
 			onUpdateInventoryItem(item, item);
 		}
 	} else {
-		//send change to client
 		Player* player = item->getHoldingPlayer();
 		if (player != nullptr && item->isSupply()) {
 			player->sendSupplyUsed(item->getClientID());
 		}
+		//send change to client
 		sendInventoryItem(static_cast<slots_t>(index), nullptr);
 
 		//event methods
