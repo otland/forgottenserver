@@ -9811,7 +9811,7 @@ int LuaScriptInterface::luaPlayerSendSupplyUsed(lua_State* L)
 		return 1;
 	}
 
-	player->sendSupplyUsed(item);
+	player->sendSupplyUsed(item->getClientID());
 	return 1;
 }
 

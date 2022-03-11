@@ -3189,15 +3189,11 @@ void ProtocolGame::sendUseItemCooldown(uint32_t time)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendSupplyUsed(const Item* item)
+void ProtocolGame::sendSupplyUsed(const uint16_t itemClientId)
 {
-	if (!item) {
-		return;
-	}
-
 	NetworkMessage msg;
 	msg.addByte(0xCE);
-	msg.add<uint16_t>(item->getClientID());
+	msg.add<uint16_t>(itemClientId);
 
 	writeToOutputBuffer(msg);
 }

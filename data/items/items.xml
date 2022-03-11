@@ -2247,6 +2247,7 @@
 		<attribute key="absorbPercentPhysical" value="20" />
 		<attribute key="absorbPercentMagic" value="20" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2165" article="a" name="stealth ring">
 		<attribute key="weight" value="100" />
@@ -2254,6 +2255,7 @@
 		<attribute key="transformEquipTo" value="2202" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2166" article="a" name="power ring">
 		<attribute key="weight" value="80" />
@@ -2261,6 +2263,7 @@
 		<attribute key="transformEquipTo" value="2203" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2167" article="an" name="energy ring">
 		<attribute key="weight" value="80" />
@@ -2268,6 +2271,7 @@
 		<attribute key="transformEquipTo" value="2204" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2168" article="a" name="life ring">
 		<attribute key="weight" value="80" />
@@ -2275,6 +2279,7 @@
 		<attribute key="transformEquipTo" value="2205" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2169" article="a" name="time ring">
 		<attribute key="weight" value="90" />
@@ -2282,6 +2287,7 @@
 		<attribute key="transformEquipTo" value="2206" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2170" article="a" name="silver amulet">
 		<attribute key="weight" value="500" />
@@ -2290,6 +2296,7 @@
 		<attribute key="showcharges" value="1" />
 		<attribute key="absorbPercentEarth" value="10" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2171" article="a" name="platinum amulet">
 		<attribute key="description" value="It is an amulet of protection." />
@@ -2304,11 +2311,13 @@
 		<attribute key="showcharges" value="1" />
 		<attribute key="absorbPercentManaDrain" value="20" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2173" article="an" name="amulet of loss">
 		<attribute key="weight" value="420" />
 		<attribute key="slotType" value="necklace" />
 		<attribute key="charges" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2174" article="a" name="strange symbol">
 		<attribute key="slotType" value="ammo" />
@@ -2459,6 +2468,7 @@
 		<attribute key="showcharges" value="1" />
 		<attribute key="absorbPercentPhysical" value="6" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2201" article="a" name="dragon necklace">
 		<attribute key="weight" value="630" />
@@ -2519,6 +2529,7 @@
 		<attribute key="showduration" value="1" />
 		<attribute key="speed" value="60" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2207" article="a" name="sword ring">
 		<attribute key="weight" value="90" />
@@ -2526,6 +2537,7 @@
 		<attribute key="transformEquipTo" value="2210" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2208" article="an" name="axe ring">
 		<attribute key="weight" value="90" />
@@ -2533,6 +2545,7 @@
 		<attribute key="transformEquipTo" value="2211" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2209" article="a" name="club ring">
 		<attribute key="weight" value="90" />
@@ -2540,6 +2553,7 @@
 		<attribute key="transformEquipTo" value="2212" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2210" article="a" name="sword ring">
 		<attribute key="weight" value="90" />
@@ -2574,6 +2588,7 @@
 		<attribute key="transformEquipTo" value="2215" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2214" article="a" name="ring of healing">
 		<attribute key="weight" value="80" />
@@ -2581,6 +2596,7 @@
 		<attribute key="transformEquipTo" value="2216" />
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2215" article="a" name="dwarven ring">
 		<attribute key="weight" value="110" />
@@ -2769,6 +2785,7 @@
 		<attribute key="runeSpellName" value="adura vita" />
 		<attribute key="weight" value="210" />
 		<attribute key="charges" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2274" article="an" name="avalanche rune">
 		<attribute key="type" value="rune" />
@@ -2893,6 +2910,7 @@
 		<attribute key="runeSpellName" value="adori mas flam" />
 		<attribute key="weight" value="52" />
 		<attribute key="charges" value="4" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="2305" article="a" name="fire bomb rune">
 		<attribute key="type" value="rune" />
@@ -10800,6 +10818,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 		<attribute key="absorbPercentDeath" value="5" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="6301" article="a" name="death ring">
 		<attribute key="weight" value="80" />
@@ -13289,6 +13308,7 @@
 	<item id="7619" name="linen" />
 	<item id="7620" article="a" name="mana potion">
 		<attribute key="weight" value="270" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="7621" article="a" name="dead dragon hatchling">
 		<attribute key="containerSize" value="30" />
@@ -26294,6 +26314,7 @@
 		<attribute key="stopduration" value="1" />
 		<attribute key="showduration" value="1" />
 		<attribute key="showattributes" value="1" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="18409" article="a" name="wand of everblazing">
 		<attribute key="description" value="It contains the everblazing fire." />

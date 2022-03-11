@@ -2129,8 +2129,11 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
-
-	g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
+	bool isItemUsed = false;
+	isItemUsed = g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
+	if (item->isSupply() && isItemUsed && item->getHoldingPlayer() != nullptr) {
+		player->sendSupplyUsed(item->getClientID());
+	}
 }
 
 void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos,
@@ -2190,7 +2193,11 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
-	g_actions->useItem(player, pos, index, item, isHotkey);
+	bool isItemUsed = false;
+	isItemUsed = g_actions->useItem(player, pos, index, item, isHotkey);
+	if (item->isSupply() && isItemUsed) {
+		player->sendSupplyUsed(item->getClientID());
+	}
 }
 
 void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint32_t creatureId, uint16_t spriteId)
@@ -2284,8 +2291,11 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
-
-	g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creature);
+	bool isItemUsed = false;
+	isItemUsed = g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creature);
+	if (item->isSupply() && isItemUsed) {
+		player->sendSupplyUsed(item->getClientID());
+	}
 }
 
 void Game::playerCloseContainer(uint32_t playerId, uint8_t cid)
@@ -4625,6 +4635,10 @@ void Game::internalDecayItem(Item* item)
 	if (decayTo > 0) {
 		startDecay(transformItem(item, decayTo));
 	} else {
+		Player* player = item->getHoldingPlayer();
+		if (player != nullptr) {
+			player->sendSupplyUsed(it.transformDeEquipTo > 0 ? Item::items[it.transformDeEquipTo].clientId : item->getClientID());
+		}
 		ReturnValue ret = internalRemoveItem(item);
 		if (ret != RETURNVALUE_NOERROR) {
 			std::cout << "[Debug - Game::internalDecayItem] internalDecayItem failed, error code: " << static_cast<uint32_t>(ret) << ", item id: " << item->getID() << std::endl;

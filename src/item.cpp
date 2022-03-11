@@ -238,7 +238,6 @@ void Item::setDefaultSubtype()
 void Item::onRemoved()
 {
 	ScriptEnvironment::removeTempItem(this);
-
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		g_game.removeUniqueItem(getUniqueId());
 	}
