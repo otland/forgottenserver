@@ -1494,6 +1494,7 @@ class LuaScriptInterface
 		static int luaSpellRuneLevel(lua_State* L);
 		static int luaSpellRuneMagicLevel(lua_State* L);
 		static int luaSpellRuneId(lua_State* L);
+		static int luaSpellRuneSpellName(lua_State* L);
 		static int luaSpellCharges(lua_State* L);
 		static int luaSpellAllowFarUse(lua_State* L);
 		static int luaSpellBlockWalls(lua_State* L);
