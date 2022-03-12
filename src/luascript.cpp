@@ -257,6 +257,7 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 		case LUA_ERROR_SPELL_NOT_FOUND: return "Spell not found";
 		case LUA_ERROR_MOUNT_NOT_FOUND: return "Mount not found";
 		case LUA_ERROR_LOOT_NOT_FOUND: return "Loot not found";
+		case LUA_ERROR_CHANNEL_NOT_FOUND: return "Channel not found";
 		default: return "Bad error code";
 	}
 }
