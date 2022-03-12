@@ -242,6 +242,7 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 		case LUA_ERROR_CREATURE_NOT_FOUND: return "Creature not found";
 		case LUA_ERROR_MONSTER_NOT_FOUND: return "Monster not found";
 		case LUA_ERROR_MONSTERTYPE_NOT_FOUND: return "MonsterType not found";
+		case LUA_ERROR_NPC_NOT_FOUND: return "Npc not found";
 		case LUA_ERROR_ITEM_NOT_FOUND: return "Item not found";
 		case LUA_ERROR_ITEMTYPE_NOT_FOUND: return "ItemType not found";
 		case LUA_ERROR_THING_NOT_FOUND: return "Thing not found";
