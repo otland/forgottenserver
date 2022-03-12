@@ -11198,10 +11198,23 @@ int LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
 {
 	// npc:setSpeechBubble(speechBubble)
 	Npc* npc = getUserdata<Npc>(L, 1);
-	if (npc) {
-		npc->setSpeechBubble(getNumber<uint8_t>(L, 2));
+	if (!npc) {
+		lua_pushnil(L);
+		return 1;
 	}
-	return 0;
+
+	if (!isNumber(L, 2)) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint8_t speechBubble = getNumber<uint8_t>(L, 2);
+	if (speechBubble > SPEECHBUBBLE_LAST) {
+		lua_pushnil(L);
+	} else {
+		npc->setSpeechBubble(speechBubble);
+	}
+	return 1;
 }
 
 // Guild
