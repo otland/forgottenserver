@@ -2954,9 +2954,10 @@ void Player::removeThing(Thing* thing, uint32_t count)
 			onUpdateInventoryItem(item, item);
 		}
 	} else {
-		Player* player = item->getHoldingPlayer();
-		if (player != nullptr && item->isSupply()) {
-			player->sendSupplyUsed(item->getClientID());
+		if (item->isSupply()) {
+			if (Player* player = item->getHoldingPlayer()) {
+				player->sendSupplyUsed(item->getClientID());
+			}
 		}
 		//send change to client
 		sendInventoryItem(static_cast<slots_t>(index), nullptr);

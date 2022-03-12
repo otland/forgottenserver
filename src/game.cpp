@@ -2129,9 +2129,9 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
-	bool isItemUsed = false;
-	isItemUsed = g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
-	if (item->isSupply() && isItemUsed && item->getHoldingPlayer() != nullptr) {
+
+	bool isItemUsed = g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
+	if (isItemUsed && item->isSupply() && item->getHoldingPlayer() != nullptr) {
 		player->sendSupplyUsed(item->getClientID());
 	}
 }
@@ -2193,9 +2193,8 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
-	bool isItemUsed = false;
-	isItemUsed = g_actions->useItem(player, pos, index, item, isHotkey);
-	if (item->isSupply() && isItemUsed) {
+	bool isItemUsed = g_actions->useItem(player, pos, index, item, isHotkey);
+	if (isItemUsed && item->isSupply()) {
 		player->sendSupplyUsed(item->getClientID());
 	}
 }
@@ -2291,9 +2290,9 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
-	bool isItemUsed = false;
-	isItemUsed = g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creature);
-	if (item->isSupply() && isItemUsed) {
+
+	bool isItemUsed = g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item, isHotkey, creature);
+	if (isItemUsed && item->isSupply()) {
 		player->sendSupplyUsed(item->getClientID());
 	}
 }
@@ -4635,9 +4634,8 @@ void Game::internalDecayItem(Item* item)
 	if (decayTo > 0) {
 		startDecay(transformItem(item, decayTo));
 	} else {
-		Player* player = item->getHoldingPlayer();
-		if (player != nullptr) {
-			player->sendSupplyUsed(it.transformDeEquipTo > 0 ? Item::items[it.transformDeEquipTo].clientId : item->getClientID());
+		if (Player* player = item->getHoldingPlayer()) {
+			player->sendSupplyUsed(it.transformDeEquipTo != 0 ? Item::items[it.transformDeEquipTo].clientId : item->getClientID());
 		}
 		ReturnValue ret = internalRemoveItem(item);
 		if (ret != RETURNVALUE_NOERROR) {
