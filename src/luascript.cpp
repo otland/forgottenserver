@@ -258,6 +258,7 @@ std::string LuaScriptInterface::getErrorDesc(ErrorCode_t code)
 		case LUA_ERROR_MOUNT_NOT_FOUND: return "Mount not found";
 		case LUA_ERROR_LOOT_NOT_FOUND: return "Loot not found";
 		case LUA_ERROR_CHANNEL_NOT_FOUND: return "Channel not found";
+		case LUA_ERROR_DEPOTCHEST_NOT_FOUND: return "DepotChest not found";
 		default: return "Bad error code";
 	}
 }
