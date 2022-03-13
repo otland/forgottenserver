@@ -183,7 +183,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	std::cout << ">> Establishing database connection..." << std::flush;
 
-	if (!Database::getInstance().connect()) {
+	Database& db = Database::getInstance();
+	if (!db.connect()) {
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}

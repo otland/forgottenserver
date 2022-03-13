@@ -185,7 +185,8 @@ class DBTransaction
 
 		~DBTransaction() {
 			if (state == STATE_START) {
-				Database::getInstance().rollback();
+				Database& db = Database::getInstance();
+				db.rollback();
 			}
 		}
 
@@ -195,7 +196,9 @@ class DBTransaction
 
 		bool begin() {
 			state = STATE_START;
-			return Database::getInstance().beginTransaction();
+
+			Database& db = Database::getInstance();
+			return db.beginTransaction();
 		}
 
 		bool commit() {
@@ -204,7 +207,9 @@ class DBTransaction
 			}
 
 			state = STATE_COMMIT;
-			return Database::getInstance().commit();
+
+			Database& db = Database::getInstance();
+			return db.commit();
 		}
 
 	private:

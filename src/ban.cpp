@@ -94,5 +94,6 @@ bool IOBan::isIpBanned(uint32_t clientIP, BanInfo& banInfo)
 
 bool IOBan::isPlayerNamelocked(uint32_t playerId)
 {
-	return Database::getInstance().storeQuery(fmt::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId)).get();
+	Database& db = Database::getInstance();
+	return db.storeQuery(fmt::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId)).get();
 }

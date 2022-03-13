@@ -239,7 +239,9 @@ bool DBInsert::addRow(const std::string& row)
 	// adds new row to buffer
 	const size_t rowLength = row.length();
 	length += rowLength;
-	if (length > Database::getInstance().getMaxPacketSize() && !execute()) {
+
+	Database& db = Database::getInstance();
+	if (length > db.getMaxPacketSize() && !execute()) {
 		return false;
 	}
 
@@ -272,7 +274,8 @@ bool DBInsert::execute()
 	}
 
 	// executes buffer
-	bool res = Database::getInstance().executeQuery(query + values);
+	Database& db = Database::getInstance();
+	bool res = db.executeQuery(query + values);
 	values.clear();
 	length = query.length();
 	return res;
