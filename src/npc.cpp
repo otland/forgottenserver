@@ -727,7 +727,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 
 	Npc* npc = env->getNpc();
 	if (!npc) {
-		reportErrorFunc(L, getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -769,6 +769,7 @@ int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 	if (npc) {
 		lua_pushnumber(L, npc->getID());
 	} else {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		lua_pushnil(L);
 	}
 	return 1;
@@ -779,6 +780,7 @@ int NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 	//getNpcParameter(paramKey)
 	Npc* npc = getScriptEnv()->getNpc();
 	if (!npc) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
@@ -986,6 +988,7 @@ int NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 			lua_pushnil(L);
 		}
 	} else {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		lua_pushnil(L);
 	}
 	return 1;
@@ -1000,6 +1003,7 @@ int NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 		npc->setCreatureFocus(creature);
 		pushBoolean(L, true);
 	} else {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		lua_pushnil(L);
 	}
 	return 1;
@@ -1023,7 +1027,7 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 
 	Npc* npc = getUserdata<Npc>(L, 1);
 	if (!npc) {
-		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_NPC_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
