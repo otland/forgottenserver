@@ -39,7 +39,7 @@ void ServiceManager::stop()
 
 	for (auto& servicePortIt : acceptors) {
 		try {
-			io_service.post(std::bind(&ServicePort::onStopServer, servicePortIt.second));
+			io_service.post([servicePort = servicePortIt.second]() { servicePort->onStopServer(); });
 		} catch (boost::system::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}
@@ -48,7 +48,7 @@ void ServiceManager::stop()
 	acceptors.clear();
 
 	death_timer.expires_from_now(std::chrono::seconds(3));
-	death_timer.async_wait(std::bind(&ServiceManager::die, this));
+	death_timer.async_wait([this](const boost::system::error_code&) { die(); });
 }
 
 ServicePort::~ServicePort()
@@ -83,7 +83,7 @@ void ServicePort::accept()
 	}
 
 	auto connection = ConnectionManager::getInstance().createConnection(io_service, shared_from_this());
-	acceptor->async_accept(connection->getSocket(), std::bind(&ServicePort::onAccept, shared_from_this(), connection, std::placeholders::_1));
+	acceptor->async_accept(connection->getSocket(), [=, thisPtr = shared_from_this()](const boost::system::error_code &error) { thisPtr->onAccept(connection, error); });
 }
 
 void ServicePort::onAccept(Connection_ptr connection, const boost::system::error_code& error)
@@ -110,8 +110,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		if (!pendingStart) {
 			close();
 			pendingStart = true;
-			g_scheduler.addEvent(createSchedulerTask(15000,
-			                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), serverPort)));
+			g_scheduler.addEvent(createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() { ServicePort::openAcceptor(thisPtr, serverPort); }));
 		}
 	}
 }
@@ -163,8 +162,7 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		pendingStart = true;
-		g_scheduler.addEvent(createSchedulerTask(15000,
-		                     std::bind(&ServicePort::openAcceptor, std::weak_ptr<ServicePort>(shared_from_this()), port)));
+		g_scheduler.addEvent(createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() { ServicePort::openAcceptor(thisPtr, serverPort); }));
 	}
 }
 
