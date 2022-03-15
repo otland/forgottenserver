@@ -336,17 +336,15 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-Player* Item::getHoldingPlayer() const
+const Player* Item::getHoldingPlayer() const
 {
-	Cylinder* p = getParent();
-	while (p) {
-		if (p->getCreature()) {
-			return p->getCreature()->getPlayer();
-		}
-
-		p = p->getParent();
+	const Cylinder* topParent = getTopParent();
+	if (!topParent) {
+		return nullptr;
 	}
-	return nullptr;
+
+	const Creature* topParentCreature = topParent->getCreature();
+	return topParentCreature ? topParentCreature->getPlayer() : nullptr;
 }
 
 void Item::setSubType(uint16_t n)

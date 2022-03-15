@@ -839,7 +839,7 @@ class Item : virtual public Thing
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory
-		Player* getHoldingPlayer() const;
+		const Player* getHoldingPlayer() const;
 
 		WeaponType_t getWeaponType() const {
 			return items[id].weaponType;
