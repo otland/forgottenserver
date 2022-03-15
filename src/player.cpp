@@ -840,7 +840,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	return it->second;
 }
 
-DepotLocker* Player::getDepotLocker()
+DepotLocker& Player::getDepotLocker()
 {
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
@@ -856,7 +856,7 @@ DepotLocker* Player::getDepotLocker()
 			depotLocker->internalAddThing(depotChest);
 		}
 	}
-	return depotLocker.get();
+	return *depotLocker;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const

@@ -5182,7 +5182,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return;
 		}
 
-		std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, player);
+		const auto& itemList = getMarketItemList(it.wareId, amount, player);
 		if (itemList.empty()) {
 			return;
 		}
@@ -5329,7 +5329,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	uint64_t totalPrice = offer.price * amount;
 
 	if (offer.type == MARKETACTION_BUY) {
-		std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, player);
+		const auto& itemList = getMarketItemList(it.wareId, amount, player);
 		if (itemList.empty()) {
 			return;
 		}
@@ -5477,9 +5477,9 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	}
 }
 
-std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player* player)
+std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player* player)
 {
-	std::forward_list<Item*> itemList;
+	std::vector<Item*> itemList;
 
 	if (!player) {
 		return itemList;
@@ -5499,9 +5499,9 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 		containers.pop_front();
 
 		for (Item* item : container->getItemList()) {
-			Container* c = item->getContainer();
-			if (c && !c->empty()) {
-				containers.push_back(c);
+			Container* containerItem = item->getContainer();
+			if (containerItem && !containerItem->empty()) {
+				containers.push_back(containerItem);
 				continue;
 			}
 
@@ -5510,7 +5510,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 				continue;
 			}
 
-			if (c && (!itemType.isContainer() || c->capacity() != itemType.maxItems)) {
+			if (containerItem && (!itemType.isContainer() || containerItem->capacity() != itemType.maxItems)) {
 				continue;
 			}
 
@@ -5518,7 +5518,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 				continue;
 			}
 
-			itemList.push_front(item);
+			itemList.push_back(item);
 
 			count += Item::countByType(item, -1);
 			if (count >= sufficientCount) {
@@ -5526,7 +5526,8 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 			}
 		}
 	} while (!containers.empty());
-	return std::forward_list<Item*>();
+
+	return std::vector<Item*>();
 }
 
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)

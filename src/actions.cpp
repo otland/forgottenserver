@@ -347,9 +347,9 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 		//depot container
 		if (DepotLocker* depot = container->getDepotLocker()) {
-			DepotLocker* myDepotLocker = player->getDepotLocker();
-			myDepotLocker->setParent(depot->getParent()->getTile());
-			openContainer = myDepotLocker;
+			DepotLocker& myDepotLocker = player->getDepotLocker();
+			myDepotLocker.setParent(depot->getParent()->getTile());
+			openContainer = &myDepotLocker;
 		} else {
 			openContainer = container;
 		}
