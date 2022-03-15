@@ -4623,6 +4623,42 @@ void Game::internalDecayItem(Item* item)
 {
 	const ItemType& it = Item::items[item->getID()];
 	if (it.decayTo != 0) {
+		Player* player = item->getHoldingPlayer();
+		if (player && player->isEquippedItem(item)) {
+			bool needUpdateSkills = false;
+			for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+				if (it.abilities && it.abilities->skills[i] != 0) {
+					needUpdateSkills = true;
+					player->setVarSkill(static_cast<skills_t>(i), -it.abilities->skills[i]);
+				}
+			}
+
+			if (needUpdateSkills) {
+				player->sendSkills();
+			}
+
+			bool needUpdateStats = false;
+			for (int32_t s = STAT_FIRST; s <= STAT_LAST; ++s) {
+				if (it.abilities && it.abilities->stats[s] != 0) {
+					needUpdateStats = true;
+					needUpdateSkills = true;
+					player->setVarStats(static_cast<stats_t>(s), -it.abilities->stats[s]);
+				}
+				if (it.abilities && it.abilities->statsPercent[s] != 0) {
+					needUpdateStats = true;
+					player->setVarStats(static_cast<stats_t>(s), -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)));
+				}
+			}
+
+			if (needUpdateStats) {
+				player->sendStats();
+			}
+
+			if (needUpdateSkills) {
+				player->sendSkills();
+			}
+		}
+
 		Item* newItem = transformItem(item, item->getDecayTo());
 		startDecay(newItem);
 	} else {
