@@ -39998,8 +39998,12 @@
 	<item fromid="34120" toid="34121" article="a" name="cerberus champion puppy" />
 	<item id="34122" article="a" name="tournament carpet" />
 	<item id="34123" article="a" name="sublime tournament carpet" />
-	<item id="34124" article="a" name="tournament carpet" />
-	<item id="34125" article="a" name="sublime tournament carpet" />
+	<item id="34124" article="a" name="tournament carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="34125" article="a" name="sublime tournament carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item fromid="34126" toid="34127" article="a" name="tournament accolade" />
 	<item fromid="34128" toid="34129" article="a" name="sublime tournament accolade" />
 	<item fromid="34130" toid="34133" article="a" name="pillar" />
@@ -41327,13 +41331,34 @@
 	<item fromid="38507" toid="38518" article="a" name="magnificent bed" />
 	<item fromid="38519" toid="38530" article="an" name="ornate bed" />
 	<item fromid="38531" toid="38542" article="a" name="vengothic bed" />
-	<item fromid="38543" toid="38544" article="a" name="lilac carpet" />
-	<item fromid="38545" toid="38546" article="a" name="colourful pom-pom carpet" />
-	<item fromid="38547" toid="38548" article="a" name="natural pom-pom carpet" />
-	<item fromid="38549" toid="38550" article="an" name="owin rug" />
-	<item fromid="38551" toid="38552" article="a" name="midnight panther rug" />
-	<item fromid="38553" toid="38554" article="a" name="moon carpet" />
-	<item fromid="38555" toid="38556" article="a" name="romantic carpet" />
+	<item id="38543" article="a" name="lilac carpet" />
+	<item id="38544" article="a" name="lilac carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38545" article="a" name="colourful pom-pom carpet" />
+	<item id="38546" article="a" name="colourful pom-pom carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38547" article="a" name="natural pom-pom carpet" />
+	<item id="38548" article="a" name="natural pom-pom carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38549" article="an" name="owin rug" />
+	<item id="38550" article="an" name="owin rug">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38551" article="a" name="midnight panther rug" />
+	<item id="38552" article="a" name="midnight panther rug">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38553" article="a" name="moon carpet" />
+	<item id="38554" article="a" name="moon carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="38555" article="a" name="romantic carpet" />
+	<item id="38556" article="a" name="romantic carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="38557" article="a" name="diamond arrow">
 		<attribute key="weight" value="80" />
 		<attribute key="weaponType" value="ammunition" />
@@ -41358,7 +41383,10 @@
 	<item id="38583" article="a" name="grandiose couch" />
 	<item fromid="38584" toid="38595" article="a" name="grandiose bed" />
 	<item id="38596" article="a" name="grandiose painting" />
-	<item fromid="38597" toid="38598" article="a" name="grandiose carpet" />
+	<item id="38597"article="a" name="grandiose carpet" />
+	<item id="38598" article="a" name="grandiose carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item fromid="38599" toid="38600" article="a" name="grandiose lamp" />
 	<item fromid="38605" toid="38608" article="a" name="portable aqueduct" />
 	<item fromid="38610" toid="38620" article="a" name="grandiose couch" />
@@ -41407,7 +41435,9 @@
 	<item id="39149" article="a" name="boulder" />
 	<item id="39150" article="an" name="eldritch chair" />
 	<item id="39151" article="an" name="eldritch table" />
-	<item id="39152" article="an" name="eldritch carpet" />
+	<item id="39152" article="an" name="eldritch carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item fromid="39153" toid="39156" name="eldritch grass" />
 	<item fromid="39157" toid="39161" article="an" name="eldritch bed" />
 	<item fromid="39162" toid="39169" article="an" name="eldritch cupboard" />
@@ -41847,27 +41877,55 @@
 	<item id="40502" article="a" name="green 25 years balloon" />
 	<item id="40503" article="an" name="orange 25 years balloon" />
 	<item id="40504" article="a" name="pink 25 years balloon" />
-	<item id="40505" article="a" name="dragon lord carpet" />
+	<item id="40505" article="a" name="dragon lord carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40506" article="a" name="folded dragon lord carpet" />
-	<item id="40507" article="a" name="dragon carpet" />
-	<item id="40508" article="a" name="fire elemental carpet" />
+	<item id="40507" article="a" name="dragon carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40508" article="a" name="fire elemental carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40509" article="a" name="folded dragon carpet" />
 	<item id="40510" article="a" name="folded elemental carpet" />
-	<item id="40511" article="a" name="Morgaroth carpet" />
+	<item id="40511" article="a" name="Morgaroth carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40512" article="a" name="folded morgaroth carpet" />
-	<item id="40513" article="a" name="Ghazbaran carpet" />
+	<item id="40513" article="a" name="Ghazbaran carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40514" article="a" name="folded Ghazbaran carpet" />
-	<item id="40515" article="an" name="Orshabaal carpet" />
+	<item id="40515" article="an" name="Orshabaal carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40516" article="a" name="folded Orshabaal carpet" />
-	<item id="40517" article="a" name="red cake carpet" />
+	<item id="40517" article="a" name="red cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40518" article="a" name="folded red cake carpet" />
-	<item id="40519" article="an" name="orange cake carpet" />
-	<item id="40520" article="a" name="yellow cake carpet" />
-	<item id="40521" article="a" name="green cake carpet" />
-	<item id="40522" article="a" name="sky cake carpet" />
-	<item id="40523" article="a" name="blue cake carpet" />
-	<item id="40524" article="a" name="purple cake carpet" />
-	<item id="40525" article="a" name="pink cake carpet" />
+	<item id="40519" article="an" name="orange cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40520" article="a" name="yellow cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40521" article="a" name="green cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40522" article="a" name="sky cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40523" article="a" name="blue cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40524" article="a" name="purple cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40525" article="a" name="pink cake carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40526" article="a" name="folded orange cake carpet" />
 	<item id="40527" article="a" name="folded yellow cake carpet" />
 	<item id="40528" article="a" name="folded green cake carpet" />
@@ -41875,15 +41933,31 @@
 	<item id="40530" article="a" name="folded blue cake carpet" />
 	<item id="40531" article="a" name="folded purple cake carpet" />
 	<item id="40532" article="a" name="folded pink cake carpet" />
-	<item id="40533" article="a" name="red t carpet" />
+	<item id="40533" article="a" name="red t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40534" article="a" name="folded red t carpet" />
-	<item id="40535" article="an" name="orange t carpet" />
-	<item id="40536" article="a" name="yellow t carpet" />
-	<item id="40537" article="a" name="green t carpet" />
-	<item id="40538" article="a" name="sky t carpet" />
-	<item id="40539" article="a" name="blue t carpet" />
-	<item id="40540" article="a" name="purple t carpet" />
-	<item id="40541" article="a" name="pink t carpet" />
+	<item id="40535" article="an" name="orange t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40536" article="a" name="yellow t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40537" article="a" name="green t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40538" article="a" name="sky t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40539" article="a" name="blue t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40540" article="a" name="purple t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
+	<item id="40541" article="a" name="pink t carpet">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40542" article="a" name="folded orange t carpet" />
 	<item id="40543" article="a" name="folded yellow t carpet" />
 	<item id="40544" article="a" name="folded green t carpet" />
@@ -42069,7 +42143,9 @@
 	<item id="40865" article="a" name="dragon pinata kit" />
 	<item fromid="40891" toid="40894" article="a" name="draptor doll" />
 	<item fromid="40897" toid="40898" article="a" name="dark oracle" />
-	<item fromid="40911" toid="40922" name="Zaoan bamboo tiles" />
+	<item fromid="40911" toid="40922" name="Zaoan bamboo tiles">
+		<attribute key="forceSerialize" value="true" />
+	</item>
 	<item id="40923" article="a" name="Zaoan panel base" />
 	<item id="40924" article="a" name="Zaoan panel" />
 	<item id="40925" article="a" name="blank Zaoan panel" />
