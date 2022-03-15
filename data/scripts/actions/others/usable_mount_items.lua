@@ -17,7 +17,14 @@ local config = {
 	[25521] = { -- mysterious scroll
 		name = "rift runner",
 		mountId = 87,
+		achievement = "Running the Rift",
 		tameMessage = "You receive the permission to ride a rift runner."
+	},
+	[35285] = { -- spectral scrap of cloth
+		name = "haze",
+		mountId = 162,
+		achievement = "Nothing but Hot Air",
+		tameMessage = "You are now versed to ride the haze!"
 	}
 }
 
@@ -42,6 +49,10 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 		end
 	end
 
+	if useItem.achievement then
+		player:addAchievement(useItem.achievement)
+	end
+
 	player:addMount(useItem.mountId)
 	player:addAchievement("Natural Born Cowboy")
 	player:say(useItem.tameMessage, TALKTYPE_MONSTER_SAY)
@@ -52,4 +63,5 @@ end
 for k, v in pairs(config) do
 	usableItemMounts:id(k)
 end
+
 usableItemMounts:register()

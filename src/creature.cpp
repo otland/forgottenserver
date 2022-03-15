@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -445,11 +429,7 @@ void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 void Creature::onRemoveCreature(Creature* creature, bool)
 {
 	onCreatureDisappear(creature, true);
-	if (creature == this) {
-		if (master && !master->isRemoved()) {
-			setMaster(nullptr);
-		}
-	} else if (isMapLoaded) {
+	if (creature != this && isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
 			updateTileCache(creature->getTile(), creature->getPosition());
 		}
@@ -753,6 +733,10 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_BLOOD);
 				break;
 
+			case RACE_INK:
+				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_INK);
+				break;
+
 			default:
 				splash = nullptr;
 				break;
@@ -882,6 +866,29 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	}
 
 	if (attacker) {
+		if (Player* attackerPlayer = attacker->getPlayer()) {
+			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+					continue;
+				}
+
+				Item* item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
+				if (!item) {
+					continue;
+				}
+
+				const uint16_t boostPercent = item->getBoostPercent(combatType);
+				if (boostPercent != 0) {
+					damage += std::round(damage * (boostPercent / 100.));
+				}
+			}
+		}
+
+		if (damage <= 0) {
+			damage = 0;
+			blockType = BLOCK_ARMOR;
+		}
+		
 		attacker->onAttackedCreature(this);
 		attacker->onAttackedCreatureBlockHit(blockType);
 	}

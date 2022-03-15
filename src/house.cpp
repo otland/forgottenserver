@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -113,19 +97,9 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			ownerAccountId = IOLoginData::getAccountIdByPlayerName(name);
 		}
 	}
-
-	updateDoorDescription();
 }
 
-void House::updateDoorDescription() const
-{
-	const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
-	for (const auto& it : doorSet) {
-		it->setSpecialDescription(fmt::format("It belongs to house '{:s}'. {:s} owns this house.{:s}", houseName, (owner != 0) ? ownerName : "Nobody", g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE) && (housePrice != -1) && (owner == 0) ? fmt::format(" It costs {:d} gold coins.", (houseTiles.size() * housePrice)) : ""));
-	}
-}
-
-AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
+AccessHouseLevel_t House::getHouseAccessLevel(const Player* player) const
 {
 	if (!player) {
 		return HOUSE_OWNER;
@@ -277,7 +251,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	return door->getAccessList(list);
 }
 
-bool House::isInvited(const Player* player)
+bool House::isInvited(const Player* player) const
 {
 	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
@@ -287,7 +261,6 @@ void House::addDoor(Door* door)
 	door->incrementReferenceCounter();
 	doorSet.insert(door);
 	door->setHouse(this);
-	updateDoorDescription();
 }
 
 void House::removeDoor(Door* door)
@@ -499,7 +472,7 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 	}
 }
 
-bool AccessList::isInList(const Player* player)
+bool AccessList::isInList(const Player* player) const
 {
 	if (allowEveryone) {
 		return true;

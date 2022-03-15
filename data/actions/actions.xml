@@ -85,6 +85,16 @@
 	<action itemid="24843" script="other/food.lua" />
 	<action itemid="26191" script="other/food.lua" />
 	<action itemid="26201" script="other/food.lua" />
+	<action itemid="27038" script="other/food.lua" />
+	<action itemid="27039" script="other/food.lua" />
+	<action itemid="27052" script="other/food.lua" />
+	<action itemid="27095" script="other/food.lua" />
+	<action itemid="27604" script="other/food.lua" />
+	<action itemid="28348" script="other/food.lua" />
+	<action itemid="32854" script="other/food.lua" />
+	<action itemid="32858" script="other/food.lua" />
+	<action itemid="34216" script="other/food.lua" />
+	<action itemid="34725" script="other/food.lua" />
 
 	<!-- Music -->
 	<action fromid="2070" toid="2085" script="other/music.lua" />
@@ -142,7 +152,7 @@
 	<!-- Other -->
 	<action itemid="430" script="other/teleport.lua" />
 	<action itemid="486" script="other/snow_heap.lua" />
-	<action itemid="1369" script="other/teleport.lua" />
+	<action itemid="1369" script="other/draw_well.lua" />
 	<action itemid="1386" script="other/teleport.lua" />
 	<action fromid="1728" toid="1731" script="other/watch.lua" />
 	<action fromid="1816" toid="1817" script="other/wall_mirror.lua" />
@@ -154,9 +164,6 @@
 	<action itemid="2095" script="other/bird_cage.lua" />
 	<action itemid="2099" script="other/water_pipe.lua" />
 	<action itemid="2114" script="other/piggy_bank.lua" />
-	<action itemid="2148" script="other/change_gold.lua" />
-	<action itemid="2152" script="other/change_gold.lua" />
-	<action itemid="2160" script="other/change_gold.lua" />
 	<action fromid="2376" toid="2404" script="other/destroy.lua" />
 	<action fromid="2406" toid="2415" script="other/destroy.lua" />
 	<action fromid="2417" toid="2419" script="other/destroy.lua" />

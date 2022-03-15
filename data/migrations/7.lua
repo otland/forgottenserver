@@ -14,7 +14,7 @@ function onUpdateDatabase()
 
 	-- Remove duplicates
 	local resultId = db.storeQuery("SELECT `account_id`, `player_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id`, `player_id` HAVING COUNT(*) > 1")
-	if resultId ~= false then
+	if resultId then
 		repeat
 			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getNumber(resultId, "account_id") .. " AND `player_id` = " .. result.getNumber(resultId, "player_id") .. " LIMIT " .. (result.getNumber(resultId, "count") - 1))
 		until not result.next(resultId)
@@ -23,7 +23,7 @@ function onUpdateDatabase()
 
 	-- Remove if an account has over 200 entries
 	resultId = db.storeQuery("SELECT `account_id`, COUNT(*) AS `count` FROM `account_viplist` GROUP BY `account_id` HAVING COUNT(*) > 200")
-	if resultId ~= false then
+	if resultId then
 		repeat
 			db.query("DELETE FROM `account_viplist` WHERE `account_id` = " .. result.getNumber(resultId, "account_id") .. " LIMIT " .. (result.getNumber(resultId, "count") - 200))
 		until not result.next(resultId)

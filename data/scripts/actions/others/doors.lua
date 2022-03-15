@@ -1,8 +1,8 @@
 local positionOffsets = {
-	Position(1, 0, 0), -- east
-	Position(0, 1, 0), -- south
-	Position(-1, 0, 0), -- west
-	Position(0, -1, 0) -- north
+	{x = 1, y = 0}, -- east
+	{x = 0, y = 1}, -- south
+	{x = -1, y = 0}, -- west
+	{x = 0, y = -1}, -- north
 }
 
 --[[
@@ -18,7 +18,7 @@ In round 4 it checks if there's a tile blocked by a magic wall or wild growth.
 local function findPushPosition(creature, round)
 	local pos = creature:getPosition()
 	for _, offset in ipairs(positionOffsets) do
-		local offsetPosition = pos + offset
+		local offsetPosition = Position(pos.x + offset.x, pos.y + offset.y, pos.z)
 		local tile = Tile(offsetPosition)
 		if tile then
 			local creatureCount = tile:getCreatureCount()
@@ -102,7 +102,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return true
 	elseif table.contains(lockedDoors, itemId) then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
-		return true	
+		return true
 	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
 		local creaturePositionTable = {}
 		local doorCreatures = Tile(toPosition):getCreatures()
@@ -119,9 +119,9 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
 		end
-	
+
 		item:transform(itemId - 1)
-		return true	
+		return true
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
 		item:transform(itemId + 1)
 		return true

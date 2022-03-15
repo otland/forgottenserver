@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -121,6 +105,67 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"absorbpercentphysical", ITEM_PARSE_ABSORBPERCENTPHYSICAL},
 	{"absorbpercenthealing", ITEM_PARSE_ABSORBPERCENTHEALING},
 	{"absorbpercentundefined", ITEM_PARSE_ABSORBPERCENTUNDEFINED},
+	{"reflectpercentall", ITEM_PARSE_REFLECTPERCENTALL},
+	{"reflectpercentallelements", ITEM_PARSE_REFLECTPERCENTALL},
+	{"reflectpercentelements", ITEM_PARSE_REFLECTPERCENTELEMENTS},
+	{"reflectpercentmagic", ITEM_PARSE_REFLECTPERCENTMAGIC},
+	{"reflectpercentenergy", ITEM_PARSE_REFLECTPERCENTENERGY},
+	{"reflectpercentfire", ITEM_PARSE_REFLECTPERCENTFIRE},
+	{"reflectpercentpoison", ITEM_PARSE_REFLECTPERCENTEARTH},
+	{"reflectpercentearth", ITEM_PARSE_REFLECTPERCENTEARTH},
+	{"reflectpercentice", ITEM_PARSE_REFLECTPERCENTICE},
+	{"reflectpercentholy", ITEM_PARSE_REFLECTPERCENTHOLY},
+	{"reflectpercentdeath", ITEM_PARSE_REFLECTPERCENTDEATH},
+	{"reflectpercentlifedrain", ITEM_PARSE_REFLECTPERCENTLIFEDRAIN},
+	{"reflectpercentmanadrain", ITEM_PARSE_REFLECTPERCENTMANADRAIN},
+	{"reflectpercentdrown", ITEM_PARSE_REFLECTPERCENTDROWN},
+	{"reflectpercentphysical", ITEM_PARSE_REFLECTPERCENTPHYSICAL},
+	{"reflectpercenthealing", ITEM_PARSE_REFLECTPERCENTHEALING},
+	{"reflectchanceall", ITEM_PARSE_REFLECTCHANCEALL},
+	{"reflectchanceallelements", ITEM_PARSE_REFLECTCHANCEALL},
+	{"reflectchanceelements", ITEM_PARSE_REFLECTCHANCEELEMENTS},
+	{"reflectchancemagic", ITEM_PARSE_REFLECTCHANCEMAGIC},
+	{"reflectchanceenergy", ITEM_PARSE_REFLECTCHANCEENERGY},
+	{"reflectchancefire", ITEM_PARSE_REFLECTCHANCEFIRE},
+	{"reflectchancepoison", ITEM_PARSE_REFLECTCHANCEEARTH},
+	{"reflectchanceearth", ITEM_PARSE_REFLECTCHANCEEARTH},
+	{"reflectchanceice", ITEM_PARSE_REFLECTCHANCEICE},
+	{"reflectchanceholy", ITEM_PARSE_REFLECTCHANCEHOLY},
+	{"reflectchancedeath", ITEM_PARSE_REFLECTCHANCEDEATH},
+	{"reflectchancelifedrain", ITEM_PARSE_REFLECTCHANCELIFEDRAIN},
+	{"reflectchancemanadrain", ITEM_PARSE_REFLECTCHANCEMANADRAIN},
+	{"reflectchancedrown", ITEM_PARSE_REFLECTCHANCEDROWN},
+	{"reflectchancephysical", ITEM_PARSE_REFLECTCHANCEPHYSICAL},
+	{"reflectchancehealing", ITEM_PARSE_REFLECTCHANCEHEALING},
+	{"boostpercentall", ITEM_PARSE_BOOSTPERCENTALL},
+	{"boostpercentallelements", ITEM_PARSE_BOOSTPERCENTALL},
+	{"boostpercentelements", ITEM_PARSE_BOOSTPERCENTELEMENTS},
+	{"boostpercentmagic", ITEM_PARSE_BOOSTPERCENTMAGIC},
+	{"boostpercentenergy", ITEM_PARSE_BOOSTPERCENTENERGY},
+	{"boostpercentfire", ITEM_PARSE_BOOSTPERCENTFIRE},
+	{"boostpercentpoison", ITEM_PARSE_BOOSTPERCENTEARTH},
+	{"boostpercentearth", ITEM_PARSE_BOOSTPERCENTEARTH},
+	{"boostpercentice", ITEM_PARSE_BOOSTPERCENTICE},
+	{"boostpercentholy", ITEM_PARSE_BOOSTPERCENTHOLY},
+	{"boostpercentdeath", ITEM_PARSE_BOOSTPERCENTDEATH},
+	{"boostpercentlifedrain", ITEM_PARSE_BOOSTPERCENTLIFEDRAIN},
+	{"boostpercentmanadrain", ITEM_PARSE_BOOSTPERCENTMANADRAIN},
+	{"boostpercentdrown", ITEM_PARSE_BOOSTPERCENTDROWN},
+	{"boostpercentphysical", ITEM_PARSE_BOOSTPERCENTPHYSICAL},
+	{"boostpercenthealing", ITEM_PARSE_BOOSTPERCENTHEALING},
+	{"magiclevelenergy", ITEM_PARSE_MAGICLEVELENERGY},
+	{"magiclevelfire", ITEM_PARSE_MAGICLEVELFIRE},
+	{"magiclevelpoison", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelearth", ITEM_PARSE_MAGICLEVELPOISON},
+	{"magiclevelice", ITEM_PARSE_MAGICLEVELICE},
+	{"magiclevelholy", ITEM_PARSE_MAGICLEVELHOLY},
+	{"magicleveldeath", ITEM_PARSE_MAGICLEVELDEATH},
+	{"magiclevellifedrain", ITEM_PARSE_MAGICLEVELLIFEDRAIN},
+	{"magiclevelmanadrain", ITEM_PARSE_MAGICLEVELMANADRAIN},
+	{"magicleveldrown", ITEM_PARSE_MAGICLEVELDROWN},
+	{"magiclevelphysical", ITEM_PARSE_MAGICLEVELPHYSICAL},
+	{"magiclevelhealing", ITEM_PARSE_MAGICLEVELHEALING},
+	{"magiclevelundefined", ITEM_PARSE_MAGICLEVELUNDEFINED},
 	{"suppressdrunk", ITEM_PARSE_SUPPRESSDRUNK},
 	{"suppressenergy", ITEM_PARSE_SUPPRESSENERGY},
 	{"suppressfire", ITEM_PARSE_SUPPRESSFIRE},
@@ -150,6 +195,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"blocking", ITEM_PARSE_BLOCKING},
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
 	{"storeitem", ITEM_PARSE_STOREITEM},
+	{"worth", ITEM_PARSE_WORTH},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -163,6 +209,7 @@ const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
 	{"door", ITEM_TYPE_DOOR},
 	{"bed", ITEM_TYPE_BED},
 	{"rune", ITEM_TYPE_RUNE},
+	{"podium", ITEM_TYPE_PODIUM}
 };
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
@@ -181,6 +228,7 @@ const std::unordered_map<std::string, RaceType_t> RaceTypesMap = {
 	{"undead", RACE_UNDEAD},
 	{"fire", RACE_FIRE},
 	{"energy", RACE_ENERGY},
+	{"ink", RACE_INK},
 };
 
 const std::unordered_map<std::string, WeaponType_t> WeaponTypesMap = {
@@ -213,12 +261,13 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
 	{"swamp", FLUID_SWAMP},
 	{"tea", FLUID_TEA},
 	{"mead", FLUID_MEAD},
+	{"ink", FLUID_INK},
 };
 
 Items::Items()
 {
-	items.reserve(30000);
-	nameToItems.reserve(30000);
+	items.reserve(45000);
+	nameToItems.reserve(45000);
 }
 
 void Items::clear()
@@ -226,6 +275,7 @@ void Items::clear()
 	items.clear();
 	clientIdToServerIdMap.clear();
 	nameToItems.clear();
+	currencyItems.clear();
 	inventory.clear();
 }
 
@@ -293,7 +343,7 @@ bool Items::loadFromOtb(const std::string& file)
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
 		return false;
-	} else if (minorVersion < CLIENT_VERSION_1098) {
+	} else if (minorVersion < CLIENT_VERSION_LAST) {
 		std::cout << "A newer version of items.otb is required." << std::endl;
 		return false;
 	}
@@ -316,6 +366,7 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t lightLevel = 0;
 		uint8_t lightColor = 0;
 		uint8_t alwaysOnTopOrder = 0;
+		uint8_t classification = 0;
 
 		uint8_t attrib;
 		while (stream.read<uint8_t>(attrib)) {
@@ -395,6 +446,17 @@ bool Items::loadFromOtb(const std::string& file)
 					break;
 				}
 
+				case ITEM_ATTR_CLASSIFICATION: {
+					if (datalen != sizeof(uint8_t)) {
+						return false;
+					}
+
+					if (!stream.read<uint8_t>(classification)) {
+						return false;
+					}
+					break;
+				}
+
 				default: {
 					//skip unknown attributes
 					if (!stream.skip(datalen)) {
@@ -437,6 +499,9 @@ bool Items::loadFromOtb(const std::string& file)
 			case ITEM_GROUP_CHARGES:
 			case ITEM_GROUP_DEPRECATED:
 				break;
+			case ITEM_GROUP_PODIUM:
+				iType.type = ITEM_TYPE_PODIUM;
+				break;
 			default:
 				return false;
 		}
@@ -468,6 +533,7 @@ bool Items::loadFromOtb(const std::string& file)
 		iType.lightLevel = lightLevel;
 		iType.lightColor = lightColor;
 		iType.wareId = wareId;
+		iType.classification = classification;
 		iType.alwaysOnTopOrder = alwaysOnTopOrder;
 	}
 
@@ -510,30 +576,7 @@ bool Items::loadFromXml()
 		}
 	}
 
-	buildInventoryList();
 	return true;
-}
-
-void Items::buildInventoryList()
-{
-	inventory.reserve(items.size());
-	for (const auto& type: items) {
-		if (type.weaponType != WEAPON_NONE || type.ammoType != AMMO_NONE ||
-			type.attack != 0 || type.defense != 0 ||
-			type.extraDefense != 0 || type.armor != 0 ||
-			type.slotPosition & SLOTP_NECKLACE ||
-			type.slotPosition & SLOTP_RING ||
-			type.slotPosition & SLOTP_AMMO ||
-			type.slotPosition & SLOTP_FEET ||
-			type.slotPosition & SLOTP_HEAD ||
-			type.slotPosition & SLOTP_ARMOR ||
-			type.slotPosition & SLOTP_LEGS)
-		{
-			inventory.push_back(type.clientId);
-		}
-	}
-	inventory.shrink_to_fit();
-	std::sort(inventory.begin(), inventory.end());
 }
 
 void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
@@ -1105,6 +1148,315 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					break;
 				}
 
+				case ITEM_PARSE_REFLECTPERCENTALL: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					for (auto& i : abilities.reflect) {
+						i.percent += value;
+					}
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTELEMENTS: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += value;
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTMAGIC: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].percent += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].percent += value;
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTENERGY: {
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTFIRE: {
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTEARTH: {
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTICE: {
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTHOLY: {
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTDEATH: {
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTLIFEDRAIN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_LIFEDRAIN)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTMANADRAIN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_MANADRAIN)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTDROWN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_DROWNDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTPHYSICAL: {
+					abilities.reflect[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTPERCENTHEALING: {
+					abilities.reflect[combatTypeToIndex(COMBAT_HEALING)].percent += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEALL: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					for (auto& i : abilities.reflect) {
+						i.chance += value;
+					}
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEELEMENTS: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += value;
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEMAGIC: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].chance += value;
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].chance += value;
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEENERGY: {
+					abilities.reflect[combatTypeToIndex(COMBAT_ENERGYDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEFIRE: {
+					abilities.reflect[combatTypeToIndex(COMBAT_FIREDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEEARTH: {
+					abilities.reflect[combatTypeToIndex(COMBAT_EARTHDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEICE: {
+					abilities.reflect[combatTypeToIndex(COMBAT_ICEDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEHOLY: {
+					abilities.reflect[combatTypeToIndex(COMBAT_HOLYDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEDEATH: {
+					abilities.reflect[combatTypeToIndex(COMBAT_DEATHDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCELIFEDRAIN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_LIFEDRAIN)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEMANADRAIN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_MANADRAIN)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEDROWN: {
+					abilities.reflect[combatTypeToIndex(COMBAT_DROWNDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEPHYSICAL: {
+					abilities.reflect[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_REFLECTCHANCEHEALING: {
+					abilities.reflect[combatTypeToIndex(COMBAT_HEALING)].chance += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTALL: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					for (auto& i : abilities.boostPercent) {
+						i += value;
+					}
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTELEMENTS: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTMAGIC: {
+					int16_t value = pugi::cast<int16_t>(valueAttribute.value());
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += value;
+					abilities.boostPercent[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += value;
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTENERGY: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTFIRE: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTEARTH: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTICE: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTHOLY: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTDEATH: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTLIFEDRAIN: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTMANADRAIN: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTDROWN: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTPHYSICAL: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_BOOSTPERCENTHEALING: {
+					abilities.boostPercent[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELENERGY: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ENERGYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELFIRE: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_FIREDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELPOISON: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_EARTHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELICE: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_ICEDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELHOLY: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HOLYDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELDEATH: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DEATHDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELLIFEDRAIN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_LIFEDRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELMANADRAIN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_MANADRAIN)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELDROWN: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_DROWNDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELPHYSICAL: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_PHYSICALDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELHEALING: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_HEALING)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
+				case ITEM_PARSE_MAGICLEVELUNDEFINED: {
+					abilities.specialMagicLevelSkill[combatTypeToIndex(COMBAT_UNDEFINEDDAMAGE)] += pugi::cast<int16_t>(valueAttribute.value());
+					break;
+				}
+
 				case ITEM_PARSE_SUPPRESSDRUNK: {
 					if (valueAttribute.as_bool()) {
 						abilities.conditionSuppressions |= CONDITION_DRUNK;
@@ -1365,6 +1717,17 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_STOREITEM: {
 					it.storeItem = booleanString(valueAttribute.as_string());
+					break;
+				}
+
+				case ITEM_PARSE_WORTH: {
+					uint64_t worth = pugi::cast<uint64_t>(valueAttribute.value());
+					if (currencyItems.find(worth) != currencyItems.end()) {
+						std::cout << "[Warning - Items::parseItemNode] Duplicated currency worth. Item " << id << " redefines worth " << worth << std::endl;
+					} else {
+						currencyItems.insert(CurrencyMap::value_type(worth, id));
+						it.worth = worth;
+					}
 					break;
 				}
 

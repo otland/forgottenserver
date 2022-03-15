@@ -1,21 +1,5 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
@@ -23,6 +7,7 @@
 
 #include "container.h"
 #include "creature.h"
+#include "podium.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 {
@@ -101,16 +86,22 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 
 	add<uint16_t>(it.clientId);
 
-	addByte(0xFF); // MARK_UNMARKED
-
 	if (it.stackable) {
 		addByte(count);
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[count & 7]);
+	} else if (it.isContainer()) {
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
+	} else if (it.classification > 0) {
+		addByte(0x00); // item tier (0-10)
 	}
 
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
+	if (it.isPodium()) {
+		add<uint16_t>(0); //looktype
+		add<uint16_t>(0); //lookmount
+		addByte(2); //direction
+		addByte(0x01); //is visible (bool)
 	}
 }
 
@@ -119,16 +110,55 @@ void NetworkMessage::addItem(const Item* item)
 	const ItemType& it = Item::items[item->getID()];
 
 	add<uint16_t>(it.clientId);
-	addByte(0xFF); // MARK_UNMARKED
 
 	if (it.stackable) {
 		addByte(std::min<uint16_t>(0xFF, item->getItemCount()));
 	} else if (it.isSplash() || it.isFluidContainer()) {
 		addByte(fluidMap[item->getFluidType() & 7]);
+	} else if (it.classification > 0) {
+		addByte(0x00); // item tier (0-10)
 	}
 
-	if (it.isAnimation) {
-		addByte(0xFE); // random phase (0xFF for async)
+	if (it.isContainer()) {
+		addByte(0x00); // assigned loot container icon
+		addByte(0x00); // quiver ammo count
+	}
+
+	// display outfit on the podium
+	if (it.isPodium()) {
+		const Podium* podium = item->getPodium();
+		const Outfit_t &outfit = podium->getOutfit();
+
+		//add outfit
+		if (podium->hasFlag(PODIUM_SHOW_OUTFIT)) {
+			add<uint16_t>(outfit.lookType);
+			if (outfit.lookType != 0) {
+				addByte(outfit.lookHead);
+				addByte(outfit.lookBody);
+				addByte(outfit.lookLegs);
+				addByte(outfit.lookFeet);
+				addByte(outfit.lookAddons);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		//add mount
+		if (podium->hasFlag(PODIUM_SHOW_MOUNT)) {
+			add<uint16_t>(outfit.lookMount);
+			if (outfit.lookMount != 0) {
+				addByte(outfit.lookMountHead);
+				addByte(outfit.lookMountBody);
+				addByte(outfit.lookMountLegs);
+				addByte(outfit.lookMountFeet);
+			}
+		} else {
+			add<uint16_t>(0);
+		}
+
+		addByte(podium->getDirection());
+		addByte(podium->hasFlag(PODIUM_SHOW_PLATFORM) ? 0x01 : 0x00);
+		return;
 	}
 }
 

@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ITEM_H_009A319FB13D477D9EEFFBBD9BB83562
-#define FS_ITEM_H_009A319FB13D477D9EEFFBBD9BB83562
+#ifndef FS_ITEM_H
+#define FS_ITEM_H
 
 #include "cylinder.h"
 #include "thing.h"
@@ -40,6 +24,7 @@ class Mailbox;
 class Door;
 class MagicField;
 class BedItem;
+class Podium;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -106,6 +91,11 @@ enum AttrTypes_t {
 	ATTR_WRAPID = 36,
 	ATTR_STOREITEM = 37,
 	ATTR_ATTACK_SPEED = 38,
+	ATTR_OPENCONTAINER = 39,
+	ATTR_PODIUMOUTFIT = 40,
+	// ATTR_TIER = 41, // mapeditor
+	ATTR_REFLECT = 42,
+	ATTR_BOOST = 43,
 };
 
 enum Attr_ReadValue {
@@ -221,6 +211,14 @@ class ItemAttributes
 			VariantAttribute value;
 
 			CustomAttribute() : value(boost::blank()) {}
+
+			bool operator==(const CustomAttribute& otherAttr) const {
+				return value == otherAttr.value;
+			}
+
+			bool operator!=(const CustomAttribute& otherAttr) const {
+				return value != otherAttr.value;
+			}
 
 			template<typename T>
 			explicit CustomAttribute(const T& v) : value(v) {}
@@ -349,6 +347,7 @@ class ItemAttributes
 		static int64_t emptyInt;
 		static double emptyDouble;
 		static bool emptyBool;
+		static Reflect emptyReflect;
 
 		typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
@@ -416,6 +415,18 @@ class ItemAttributes
 
 		std::vector<Attribute> attributes;
 		uint32_t attributeBits = 0;
+
+		std::map<CombatType_t, Reflect> reflect;
+		std::map<CombatType_t, uint16_t> boostPercent;
+
+		const Reflect& getReflect(CombatType_t combatType) {
+			auto it = reflect.find(combatType);
+			return it != reflect.end() ? it->second : emptyReflect;
+		}
+		int16_t getBoostPercent(CombatType_t combatType) {
+			auto it = boostPercent.find(combatType);
+			return it != boostPercent.end() ? it->second : 0;
+		}
 
 		const std::string& getStrAttr(itemAttrTypes type) const;
 		void setStrAttr(itemAttrTypes type, const std::string& value);
@@ -503,7 +514,7 @@ class ItemAttributes
 			| ITEM_ATTRIBUTE_ARMOR | ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER
 			| ITEM_ATTRIBUTE_DURATION | ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES
 			| ITEM_ATTRIBUTE_FLUIDTYPE | ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM
-			| ITEM_ATTRIBUTE_ATTACK_SPEED;
+			| ITEM_ATTRIBUTE_ATTACK_SPEED | ITEM_ATTRIBUTE_OPENCONTAINER;
 		const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT | ITEM_ATTRIBUTE_WRITER
 			| ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE | ITEM_ATTRIBUTE_PLURALNAME;
 
@@ -586,6 +597,12 @@ class Item : virtual public Thing
 			return nullptr;
 		}
 		virtual const BedItem* getBed() const {
+			return nullptr;
+		}
+		virtual Podium* getPodium() {
+			return nullptr;
+		}
+		virtual const Podium* getPodium() const {
 			return nullptr;
 		}
 
@@ -792,7 +809,6 @@ class Item : virtual public Thing
 			return items[id].decayTo;
 		}
 
-		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
@@ -888,6 +904,16 @@ class Item : virtual public Thing
 		uint32_t getWorth() const;
 		LightInfo getLightInfo() const;
 
+		void setReflect(CombatType_t combatType, const Reflect& reflect) {
+			getAttributes()->reflect[combatType] = reflect;
+		}
+		Reflect getReflect(CombatType_t combatType, bool total = true) const;
+
+		void setBoostPercent(CombatType_t combatType, uint16_t value) {
+			getAttributes()->boostPercent[combatType] = value;
+		}
+		uint16_t getBoostPercent(CombatType_t combatType, bool total = true) const;
+
 		bool hasProperty(ITEMPROPERTY prop) const;
 		bool isBlocking() const {
 			return items[id].blockSolid;
@@ -919,6 +945,9 @@ class Item : virtual public Thing
 		bool isRotatable() const {
 			const ItemType& it = items[id];
 			return it.rotatable && it.rotateTo;
+		}
+		bool isPodium() const {
+			return items[id].isPodium();
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
@@ -1060,4 +1089,4 @@ class Item : virtual public Thing
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
 
-#endif
+#endif // FS_ITEM_H

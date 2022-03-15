@@ -459,6 +459,136 @@ achievements =
 	-- 10.94
 	[397] = {name = "Ender of the End", grade = 2, points = 5, description = "You have entered the heart of destruction and valiantly defeated the world devourer. By your actions you have postponed the end of the world — at least for a while."},
 	[398] = {name = "Vortex Tamer", grade = 2, points = 5, description = "After a long journey and dedication you were favoured by fortune and have tamed all three elusive beasts of the vortex. Unless the Vortexion decides you're a tasty morsel you can enjoy your small stable of ravaging beasts from beyond."},
+
+	-- 11.02
+	[399] = {name = "Forbidden Fruit", grade = 1, points = 1, secret = true, description = "You could not resist the taste of the forbidden fruit. Since you don't feel changed at all, it couldn't have been that bad after all. Or could it?"},
+	[400] = {name = "Forbidden Knowledge", grade = 1, points = 1, secret = true, description = "Perhaps with so much acquired knowledge, never meant for you, you know even when to stop! Time will tell whether this knowledge will do more harm or good."},
+	[401] = {name = "Rhino Rider", grade = 1, points = 1, description = "Don't forget, even your rhino sometimes needs a hug. A careful one in this case."},
+
+	-- 11.03?
+	[402] = {name = "Treasure Hunter", grade = 1, points = 3, description = "You wandered the world in search of the ancient dragons' hoards. You are sure, you found them all."},
+
+	-- 11.40
+	[403] = {name = "Corruption Contained", grade = 2, points = 5, description = "You have managed to stall the worst incursion of corruption. Still this is just one battle won in an all out war for your world."},
+	[404] = {name = "Fairy Teasing", grade = 1, points = 1, secret = true, description = "Teasing fairies is fun. They leave behind such pretty clouds of glittering dust when chased. Just hope they don't get you back for it."},
+	[405] = {name = "Toothfairy Assistant", grade = 1, points = 1, description = "You assisted a very prominent fae and you fought tooth and nail to earn this title."},
+
+	-- 11.50
+	[406] = {name = "Buried the Baron", grade = 1, points = 1, description = "You defeated the Baron from Below and destroyed his lava pump!"},
+	[407] = {name = "Contender", grade = 1, points = 3, description = "You have fully unlocked 10 medium monsters in the cyclopedia."},
+	[408] = {name = "Death in the Depths", grade = 1, points = 2, description = "The Baron from Below, Duke of the Depths and the Count of the Core are no more!"},
+	[409] = {name = "Duked It Out", grade = 1, points = 1, description = "You defeated the Duke of the Depths and destroyed his lava pump!"},
+	[410] = {name = "His Days are Counted", grade = 1, points = 1, description = "You defeated the Count of the Core and destroyed his lava pump!"},
+	[411] = {name = "Hunting Permit", grade = 1, points = 1, description = "You have fully unlocked your very first monster in the cyclopedia."},
+	[412] = {name = "Little Adventure", grade = 1, points = 1, description = "You have fully unlocked 10 easy monsters in the cyclopedia."},
+	[413] = {name = "Little Big Adventure", grade = 1, points = 2, secret = true, description = "You have fully unlocked 100 easy monsters in the cyclopedia."},
+	[414] = {name = "Master Hunter", grade = 2, points = 6, secret = true, description = "You have fully unlocked 100 hard monsters in the cyclopedia."},
+	[415] = {name = "Over the Moon", grade = 2, points = 5, description = "The Curse of the Full Moon transforms harmless citizens into feral beasts. But with your help, Edron and Cormaya are safe - fairly."},
+	[416] = {name = "Scourge of Scarabs", grade = 1, points = 3, description = "You took the heat and defeated the Ancient Spawn of Morgathla!"},
+	[417] = {name = "Serious Contender", grade = 2, points = 4, secret = true, description = "You have fully unlocked 100 medium monsters in the cyclopedia."},
+	[418] = {name = "Skilled Hunter", grade = 2, points = 5, description = "You have fully unlocked 10 hard monsters in the cyclopedia."},
+
+	-- 11.80
+	[419] = {name = "All Hail the King", grade = 1, points = 1, description = "Old temples, a meadowy countryside and the splendour of Thais - you really know every corner of King' realm now."},
+	[420] = {name = "Ancient Splendor", grade = 1, points = 1, description = "You've braved the perils of Yalahar and learned of its gloomy shadows of long gone greatness."},
+	[421] = {name = "Battle Mage", grade = 2, points = 6, description = "Wielding dangerous knowledge as well as the sword is your expertise. You have proven yourself versatile in all manner of situations."},
+	[422] = {name = "Bibliomaniac", grade = 1, points = 3, description = "You passion for reading was somewhat diminished by biting books and aggressive quills. But this flying specimen proved to be a loyal companion. Never judge a book by its cover!"},
+	[423] = {name = "Daraman's Footsteps", grade = 1, points = 1, description = "You journeyed through Darashia and the sea of sand around it, while fighting the perils of the desert."},
+	[424] = {name = "Dwarven Mines", grade = 1, points = 1, description = "Vast mines, an orc fortress and the magnificence of Kazordoon - you really know every corner of North-Eastern Mainland now."},
+	[425] = {name = "Elven Woods", grade = 1, points = 1, description = "Tall trees, deep forests and and the beauty of Ab'Dendriel - you really know every corner of the elven lands now."},
+	[426] = {name = "Glooth Punk", grade = 1, points = 1, description = "Glooth is the substance that powers a whole continent and all its weird inhabitants, workshops and factories. You travelled this strange smorgasbord of curiosities in its entirety - just in time for tea."},
+	[427] = {name = "High and Dry", grade = 1, points = 2, description = "You asked Captain Charles to take a shortcut quite a few times. Now you are all too familiar with desert islands all over the world."},
+	[428] = {name = "Jewel in the Swamp", grade = 1, points = 1, description = "Damp swamps, a dry desert and the opulence of Venore - you really know every corner of Eastern Mainland now."},
+	[429] = {name = "King of the Jungle", grade = 1, points = 1, description = "You have searched Port Hope and the jungle that thoroughly, that you are up to adoption by a friendly ape family."},
+	[430] = {name = "Liberty Bay Watch", grade = 1, points = 1, description = "A pirate's haven and a burglar's hideout. You found your way around Liberty Bay and its surroundings - land, ho!"},
+	[431] = {name = "Library Liberator", grade = 1, points = 3, description = "Though you couldn't prevent the theft of the godbreaker knowledge, you still managed to fight of the invasion of the library and to kill the scourge of oblivion, a powerful servant of the enemy."},
+	[432] = {name = "Lizard Kingdom", grade = 1, points = 1, description = "From the southern steppe through the Dragonblaze Mountains and the Muggy Plains to the forbidden city of Razzachai - you really know every corner of Zao now."},
+	[433] = {name = "Long Live the Queen", grade = 1, points = 1, description = "Ancient battlefields, amazons and the glory of Carlin - you really know every corner of Queen Eloise's realm now."},
+	[434] = {name = "Master Debater", grade = 1, points = 1, secret = true, description = "You truly are the grand master of verbal debate! Now going forth and putting this wisdom to good use in everyday life... is probably debatable."},
+	[435] = {name = "Millennial Falcon", grade = 1, points = 3, secret = true, description = "You defeated Grand Master Oberon and the remnants of the Order of the Falcon, no matter the odds."},
+	[436] = {name = "Mummy's Dearest", grade = 1, points = 1, description = "You have combed the desert and searched the pyramid city of Ankrahmun."},
+	[437] = {name = "Race to the Pole", grade = 1, points = 1, description = "You have expelled the fog of the unknown from the islands of Svargrond. Maybe not as first, but that's not what matters in the end."},
+	[438] = {name = "Realms of Dreams", grade = 1, points = 1, description = "Lush meadows, colourful fairies and sentient stones - you really know every corner of Feyrist now."},
+	[439] = {name = "Spectulation", grade = 1, points = 1, secret = true, description = "You checked out a strange temple deep in the jungles of Tiquanda. Spectulus was right, it was indeed overrun by strange fish-men you now call Deathlings."},
+	[440] = {name = "Stronghold of Edron", grade = 1, points = 1, description = "Strong fortresses, sprawling woods and ivory towers - you really know every corner of Edron now."},
+	[441] = {name = "The Ogre Steppe", grade = 1, points = 1, description = "A vast steppe, voracious ogres and dried out salt seas - you really know every corner of Krailos now."},
+	[442] = {name = "Trip to the Beach", grade = 1, points = 1, description = "Braving a hive full of unimaginable proportions and its grotesque creatures on the surface is only one side of Gray Beach. Your full trip of the island also included a dive into the black nothingness of the deep sea, facing the wrath of the Njey."},
+	[443] = {name = "Twisted Dreams", grade = 1, points = 1, description = "A journey through a dreamscape of evil is no small feat. Yet you traversed the nightmarish lands of Roshamuul and live to tell the tale. Don't fall asleep now..."},
+	[444] = {name = "Widely Travelled", grade = 3, points = 7, description = "As a true globetrotter you can now show your colours proudly with this extraordinary outfit."},
+
+	-- 11.86
+	[445] = {name = "Exalted Battle Mage", grade = 1, points = 2, description = "Not only did you master the battlefield as a mage, you were also induced to the most inner secrets of the art of magical warfare and prevailed."},
+	[446] = {name = "Running the Rift", grade = 1, points = 3, description = "You don't just have a permission to ride a rift runner, you literally went through hell and earned it!"},
+
+	-- 12.00
+	[447] = {name = "Champion of Summer", grade = 1, points = 2, secret = true, description = "You have vanquished numerous arena champions in the name of the Summer Court."},
+	[448] = {name = "Champion of Winter", grade = 1, points = 2, secret = true, description = "You have vanquished numerous arena champions in the name of the Winter Court."},
+	[449] = {name = "Dream Catcher", grade = 1, points = 3, description = "You are the slayer of the ancient nightmare beast and prevented the nightmare to spread its madness."},
+	[450] = {name = "Dream Warrior", grade = 2, points = 6, description = "You became an acquaintance of the courts of dreams and acquired the right to display your new status and title of 'dream warrior'."},
+	[451] = {name = "Keeper of the 7 Keys", grade = 1, points = 2, description = "You found the Seven Keys to unlock ... no, not the seven seas. But at least seven doors in the realm of dreams."},
+	[452] = {name = "Lacewing Catcher", grade = 1, points = 3, description = "You caught a lacewing moth with your lantern. It will follow you in companionship as the bearer of the lantern will be its guide through the darkness now."},
+	[453] = {name = "Moth Whisperer", grade = 1, points = 3, description = "Your lantern was too bewitching for a hibernal moth. It couldn't withstand and follows you, the bearer of the lantern, now."},
+	[454] = {name = "Tied the Knot", grade = 1, points = 1, secret = true, description = "You figured out the right order of spells in the buried cathedral, how enchanting!"},
+
+	-- 12.02
+	[455] = {name = "No Horse Open Sleigh", grade = 1, points = 3, description = "This sleigh is not driven by magic but pushed by a percht. Hopefully you two get along well together...!"},
+	[456] = {name = "Raider in the Dark", grade = 2, points = 6, description = "But can you truly be one of them?"},
+
+	-- 12.20
+	[457] = {name = "A Study in Scarlett", grade = 1, points = 3, secret = true, description = "You ended the regn of Scarlett Etzel. All-seeing yet blind, ever powerful yet ultimately helpless, she never got a second chance to truly see. Or has she..."},
+	[458] = {name = "Avid Spectral Reader", grade = 1, points = 1, secret = true, description = "What draws things to other dimensions, one wonders. You read the almanac at just the right spot to end up... where, of all places? That is the problem with dimensional travel: you will never know. Or you have always known. And everything in between."},
+	[459] = {name = "Gryphon Rider", grade = 1, points = 3, description = "Unmasking spies, killing demons, discovering omens, solving puzzles and fighting ogres, manticores and feral sphinxes. - Nobody said it was easy to become a gryphon rider."},
+	[460] = {name = "Hippofoddermus", grade = 1, points = 1, secret = true, description = "You did the hippo population of Kilmaresh a great favour. A well-fed hippo is a happy hippo."},
+	[461] = {name = "Inquisition's Hand", grade = 1, points = 3, secret = true, description = "You defeated the Lich Knights and became the hand of the Inquisition, allowed to wear their special garb."},
+	[462] = {name = "Sculptor Apprentice", grade = 1, points = 2, secret = true, description = "Granted, you didn't carve those lifelike animal figurines yourself. But helping a medusa to find proper objects and even watching her using her petrifying gaze is almost as rewarding."},
+	[463] = {name = "Sun and Sea", grade = 2, points = 5, description = "You made sure that the balance of sun and sea is preserved in Kilmaresh. The Golden City of Issavi won't forget your favour."},
+	[464] = {name = "The Empire's Glory", grade = 1, points = 1, description = "Mythical creatures, forgotten catacombs and the Golden City - you really know every corner of Kilmaresh now."},
+
+	-- 12.20.9066
+	[465] = {name = "Do a Barrel Roll!", grade = 1, points = 3, description = "Riding a traditional beer barrel from the Orcsoberfest is a once-in-a-lifetime experience. Beer sold separately."},
+	[466] = {name = "Orcsoberfest Welcome", grade = 1, points = 3, secret = true, description = "The Orcsoberfest is not only known for its traditional food, beer and customs but also fun events and excitement! You took part in all of that and can now truly say: \"I survived!\""},
+	[467] = {name = "Traditionalist", grade = 2, points = 0, description = "You proudly wear the traditional Orcsoberfest garb, same as it ever was and as it always will be."},
+
+	-- 12.30
+	[468] = {name = "Beyonder", grade = 1, points = 3, description = "Adventurous beyond death, you travelled the Netherworld. Although you had just the ghost of a chance you survived and even came back from the realm of the dead."},
+	[469] = {name = "Falconer", grade = 1, points = 3, description = "A true beastmaster learns the language of his animal companions. Now you as well can bolster your unique bond with nature and help preserve the balance of life as a proud falconer."},
+	[470] = {name = "Mainstreet Nightmare", grade = 1, points = 2, description = "Now you are able to wander around the world wearing an angst-inducing vestment."},
+	[471] = {name = "Monsterhunter", grade = 1, points = 2, description = "Fear me, monsters! There is some more slaying to come!"},
+	[472] = {name = "Nothing but Hot Air", grade = 1, points = 2, description = "You have tamed the ghostly mists to do your bidding. For now ..."},
+	[473] = {name = "Prospectre", grade = 1, points = 1, secret = true, description = "You made acquaintance with the Thaian. A strange contemporary with a dark history. No man but a derivate of green and obsession."},
+	[474] = {name = "Steppe Elegance", grade = 1, points = 2, description = "Champion of the wildlands, a swift strider among the creatures of the wild. The elegant nature of the gallop, this envoy of speed has mastered, indicates the precise understanding of its terrain and environment."},
+	[475] = {name = "Taskmaster", grade = 1, points = 2, description = "Having hunted and bested them all, you live for the thrill of the hunt!"},
+	[476] = {name = "Verminbane", grade = 1, points = 2, description = "And so it begins!"},
+
+	-- 11.53
+	[477] = {name = "Up the Molehill", grade = 1, points = 3, description = "Putting this candle stump on your new mount was kind of a waiting game. You're even tempted to call it whack-a-mole. But in the end you found a loyal companion for your journeys into the depths."},
+
+	-- 11.90.7293
+	[478] = {name = "Areas of Effect", grade = 1, points = 3, description = "Wisely contributing your resources to areas, you pushed creatures to maximum effect, allowing improved respawn for everyone! Well done!"},
+
+	-- 12.40
+	[479] = {name = "Drama in Darama", grade = 1, points = 3, description = "f a pride of lions and a pack of hyaenas feud, it is not called a catfight but a ... whatsoever. For sure, it caused a lot of drama in the Darama Desert."},
+	[480] = {name = "Lionheart", grade = 1, points = 3, description = "You bested the maleficent duo Drume and Fugue and restored order to the besieged town of Bounac. You conquered the exotic stronghold of the Order of the Cobra and bested the undead knights of the Order of the Falcon. A true knight in heart and mind."},
+	[481] = {name = "Malefitz", grade = 1, points = 1, secret = true, description = "Made acquaintance with three brothers Fitz."},
+	[482] = {name = "Unleash the Beast", grade = 3, points = 8, description = "You defeated the manifestation of Goshnar's evil traits by fighting your way through beasts you didn't even want to imagine. It transformed you and now you can also look the part."},
+	[483] = {name = "Well Roared, Lion!", grade = 1, points = 1, description = "You helped Domizian and thus proved yourself worthy to enter the werelion sanctum underneath Lion's Rock. You faced the mighty werelions there and one of the rare white lions even chose to accompany you."},
+	[484] = {name = "You Got Horse Power", grade = 3, points = 8, description = "Brought back to the realm of the living this magnificent creature will carry you through death and everything that lays beyond."},
+
+	-- 12.60
+	[485] = {name = "Honorary Rascoohan", grade = 1, points = 2, description = "When in Rascacoon, do as the Rascoohans do!"},
+	[486] = {name = "Pied Piper", grade = 1, points = 3, description = "You are not exactly the Pied Piper of Hamelin but at least you managed to fend off a decent amount of pirats and helped to keep them out of the cities."},
+	[487] = {name = "Release the Kraken", grade = 1, points = 3, description = "Riding around on this squishy companion gives you the feeling of flying through the air... uhm... swimming through the seven seas!"},
+
+	-- 12.70
+	[488] = {name = "Bounacean Chivalry", grade = 1, points = 2, secret = true, description = "Yselda forever stands watch against the carnisylvan menace. Ever awake, waiting in the dark, her heart longs to be united with her king once again. Deep empathy let a hero to bring her Kesar's tulip as a token of his love. That hero was you."},
+	[489] = {name = "Citizen of Issavi", grade = 1, points = 2, description = "It was not the first time that you helped the Sapphire Blade or the Midnight Flame with a difficult task. You may now wear the Kilmareshian robes as well as the tagralt blade and the eye-embroidered veil of the seers as a sign of Issavi's gratitude."},
+	[490] = {name = "Hot on the Trail", grade = 1, points = 3, description = "Since it is fireproof, this flaming creature feels right at home in raging infernos. But remember: just because it doesn't burn, you still do!"},
+	[491] = {name = "King's Council", grade = 1, points = 3, description = "Your continued efforts in keeping Bounac and the people of Kesar the Younger safe, earned you a permanent place at the royal court as an advisor to the king."},
+	[492] = {name = "Knowledge Raider", grade = 1, points = 3, description = "Your thirst for knowledge is insatiable. In the task of helping your gnomish friends, flawless execution is just the icing on the cake."},
+	[493] = {name = "Phantastic!", grade = 1, points = 3, description = "This mighty pachyderm will march into battle as if just taking its Sunday stroll. The cost of friendship was only a few drome points!"},
+	[494] = {name = "Shell we take a Ride", grade = 1, points = 3, description = "Equipped with the shell of a tortoise and claws of a lobster this insect like companion will help you through every hardship."},
+	[495] = {name = "Some Like It Hot", grade = 1, points = 2, description = "You have braved the searing heat in the tunnels deep below Kazordoon and vanquished the Brainstealer. The voices inside your head are finally silenced."},
+	[496] = {name = "Woodcarver", grade = 1, points = 3, secret = true, description = "You defeated Megasylvan Yselda in the wake of the sleeping carnisylvan menace deep under Bounac."},
 }
 
 ACHIEVEMENT_FIRST = 1
@@ -520,7 +650,7 @@ end
 
 function isAchievementSecret(ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -535,7 +665,7 @@ end
 
 function Player.hasAchievement(self, ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -560,7 +690,7 @@ end
 
 function Player.addAchievement(self, ach, hideMsg)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -581,7 +711,7 @@ end
 
 function Player.removeAchievement(self, ach)
 	local achievement
-	if tonumber(ach) ~= nil then
+	if tonumber(ach) then
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -648,7 +778,7 @@ function Player.getAchievementPoints(self)
 end
 
 function Player.addAchievementProgress(self, ach, value)
-	local achievement = tonumber(ach) ~= nil and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
+	local achievement = tonumber(ach) and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
 	if not achievement then
 		print('[!] -> Invalid achievement "' .. ach .. '".')
 		return true
