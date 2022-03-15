@@ -39693,7 +39693,9 @@
 	<item id="33104" article="a" name="ruddy obelisk" />
 	<item id="33105" article="a" name="broken ruddy obelisk" />
 	<item fromid="33106" toid="33107" article="a" name="pile of ruddy ashlars" />
-	<item fromid="33108" toid="33109" article="an" name="ancient sepulchre" />
+	<item fromid="33108" toid="33109" article="an" name="ancient sepulchre">
+		<attribute key="floorchange" value="down" />
+	</item>
 	<item fromid="33110" toid="33115" article="a" name="sphinx statue" />
 	<item fromid="33116" toid="33117" article="a" name="gryphon statue" />
 	<item fromid="33118" toid="33121" article="a" name="lamassu statue" />
@@ -39828,7 +39830,9 @@
 	<item id="33820" article="a" name="golden idol" />
 	<item id="33821" article="a" name="wounded shark" />
 	<item fromid="33822" toid="33823" article="a" name="buttress" />
-	<item id="33824" name="stairs" />
+	<item id="33824" name="stairs">
+		<attribute key="floorchange" value="down" />
+	</item>
 	<item id="33826" article="a" name="dead ogre brute" />
 	<item fromid="33827" toid="33838" name="shallow water" />
 	<item fromid="33839" toid="33842" article="a" name="dwarven stone chair" />
@@ -41383,7 +41387,7 @@
 	<item id="38583" article="a" name="grandiose couch" />
 	<item fromid="38584" toid="38595" article="a" name="grandiose bed" />
 	<item id="38596" article="a" name="grandiose painting" />
-	<item id="38597"article="a" name="grandiose carpet" />
+	<item id="38597" article="a" name="grandiose carpet" />
 	<item id="38598" article="a" name="grandiose carpet">
 		<attribute key="forceSerialize" value="true" />
 	</item>
