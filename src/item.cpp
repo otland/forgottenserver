@@ -2073,8 +2073,13 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	const ItemType& it = Item::items[id];
-	if (getDecayTo() < 0 || it.decayTime == 0) {
+	uint32_t decayTime = getDuration();
+	if (decayTime == 0) {
+		const ItemType& it = Item::items[id];
+		decayTime = it.decayTime;
+	}
+
+	if (getDecayTo() < 0 || decayTime == 0) {
 		return false;
 	}
 

@@ -2067,6 +2067,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTERS_EVENT_MOVE)
 	registerEnum(MONSTERS_EVENT_SAY)
 
+	registerEnum(DECAYING_FALSE)
+	registerEnum(DECAYING_TRUE)
+	registerEnum(DECAYING_PENDING)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
