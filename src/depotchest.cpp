@@ -7,7 +7,7 @@
 #include "tools.h"
 
 DepotChest::DepotChest(uint16_t type, bool paginated /*= true*/) :
-	Container(type, items[type].maxItems, true, paginated), maxDepotItems(2000) {}
+	Container(type, items[type].maxItems, true, paginated) {}
 
 ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t flags, Creature* actor/* = nullptr*/) const

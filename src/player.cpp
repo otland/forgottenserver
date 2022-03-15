@@ -835,7 +835,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT_BOX_I + depotId)).first;
+	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT_BOX_FIRST + depotId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
 	return it->second;
 }
