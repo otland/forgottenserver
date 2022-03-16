@@ -54,7 +54,7 @@ void Connection::close(bool force)
 	connectionState = CONNECTION_STATE_DISCONNECTED;
 
 	if (protocol) {
-		g_dispatcher.addTask(createTask([=]() { protocol->release(); }));
+		g_dispatcher.addTask(createTask([protocol = protocol]() { protocol->release(); }));
 	}
 
 	if (messageQueue.empty() || force) {
