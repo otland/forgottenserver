@@ -1237,6 +1237,7 @@ class Player final : public Creature, public Cylinder
 		int64_t lastPong;
 		int64_t nextAction = 0;
 
+		ProtocolGame_ptr client;
 		BedItem* bedItem = nullptr;
 		Guild* guild = nullptr;
 		GuildRank_ptr guildRank = nullptr;
@@ -1249,7 +1250,6 @@ class Player final : public Creature, public Cylinder
 		Npc* shopOwner = nullptr;
 		Party* party = nullptr;
 		Player* tradePartner = nullptr;
-		ProtocolGame_ptr client;
 		SchedulerTask* walkTask = nullptr;
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
