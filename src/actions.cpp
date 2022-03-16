@@ -8,9 +8,9 @@
 #include "configmanager.h"
 #include "container.h"
 #include "game.h"
+#include "housetile.h"
 #include "pugicast.h"
 #include "spells.h"
-#include <fmt/format.h>
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -388,7 +388,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
-
 
 static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
 {

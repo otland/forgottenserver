@@ -6,9 +6,6 @@
 
 #include "connection.h"
 #include "signals.h"
-#include <memory>
-
-class Protocol;
 
 class ServiceBase
 {

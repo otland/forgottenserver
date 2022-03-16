@@ -4,9 +4,9 @@
 #ifndef FS_TALKACTION_H
 #define FS_TALKACTION_H
 
-#include "luascript.h"
 #include "baseevents.h"
 #include "const.h"
+#include "luascript.h"
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;

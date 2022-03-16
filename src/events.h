@@ -4,12 +4,12 @@
 #ifndef FS_EVENTS_H
 #define FS_EVENTS_H
 
-#include "luascript.h"
 #include "const.h"
 #include "creature.h"
+#include "luascript.h"
 
-class Party;
 class ItemType;
+class Party;
 class Tile;
 
 enum class EventInfoId {

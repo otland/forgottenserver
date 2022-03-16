@@ -3,11 +3,11 @@
 
 #include "otpch.h"
 
-#include "game.h"
-
-#include "pugicast.h"
-
 #include "movement.h"
+
+#include "combat.h"
+#include "game.h"
+#include "pugicast.h"
 
 extern Game g_game;
 extern Vocations g_vocations;

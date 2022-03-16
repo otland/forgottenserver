@@ -4,19 +4,18 @@
 #ifndef FS_COMBAT_H
 #define FS_COMBAT_H
 
-#include "thing.h"
-#include "condition.h"
-#include "map.h"
 #include "baseevents.h"
+#include "condition.h"
+#include "item.h"
 
 #include <utility>
 #include <valarray>
 
-class Condition;
 class Creature;
-class Item;
-
+class Player;
 struct Position;
+class SpectatorVec;
+class Tile;
 
 //for luascript callback
 class ValueCallback final : public CallBack

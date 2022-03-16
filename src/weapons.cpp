@@ -3,12 +3,13 @@
 
 #include "otpch.h"
 
+#include "weapons.h"
+
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
 #include "luavariant.h"
 #include "pugicast.h"
-#include "weapons.h"
 
 extern Game g_game;
 extern Vocations g_vocations;

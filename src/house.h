@@ -4,15 +4,14 @@
 #ifndef FS_HOUSE_H
 #define FS_HOUSE_H
 
-#include <set>
-#include <unordered_set>
-
+#include "const.h"
 #include "container.h"
-#include "housetile.h"
+#include "enums.h"
 #include "position.h"
 
-class House;
 class BedItem;
+class House;
+class HouseTile;
 class Player;
 
 class AccessList

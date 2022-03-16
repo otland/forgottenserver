@@ -4,9 +4,10 @@
 #include "otpch.h"
 
 #include "housetile.h"
-#include "house.h"
-#include "game.h"
+
 #include "configmanager.h"
+#include "game.h"
+#include "house.h"
 
 extern Game g_game;
 extern ConfigManager g_config;

@@ -5,15 +5,12 @@
 
 #include "protocollogin.h"
 
+#include "ban.h"
+#include "configmanager.h"
+#include "game.h"
+#include "iologindata.h"
 #include "outputmessage.h"
 #include "tasks.h"
-
-#include "configmanager.h"
-#include "iologindata.h"
-#include "ban.h"
-#include "game.h"
-
-#include <fmt/format.h>
 
 extern ConfigManager g_config;
 extern Game g_game;

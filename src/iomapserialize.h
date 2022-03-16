@@ -4,9 +4,14 @@
 #ifndef FS_IOMAPSERIALIZE_H
 #define FS_IOMAPSERIALIZE_H
 
-#include "database.h"
-#include "map.h"
-#include "house.h"
+class Container;
+class Cylinder;
+class House;
+class Item;
+class Map;
+class PropStream;
+class PropWriteStream;
+class Tile;
 
 class IOMapSerialize
 {

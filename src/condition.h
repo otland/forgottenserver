@@ -4,12 +4,14 @@
 #ifndef FS_CONDITION_H
 #define FS_CONDITION_H
 
-#include "fileloader.h"
 #include "enums.h"
+
+#include <limits>
 
 class Creature;
 class Player;
 class PropStream;
+class PropWriteStream;
 
 enum ConditionAttr_t {
 	CONDITIONATTR_TYPE = 1,

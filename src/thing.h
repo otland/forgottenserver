@@ -4,13 +4,12 @@
 #ifndef FS_THING_H
 #define FS_THING_H
 
-#include "position.h"
-
-class Tile;
+class Container;
+class Creature;
 class Cylinder;
 class Item;
-class Creature;
-class Container;
+class Tile;
+struct Position;
 
 class Thing
 {

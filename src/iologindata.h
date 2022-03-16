@@ -5,8 +5,12 @@
 #define FS_IOLOGINDATA_H
 
 #include "account.h"
-#include "player.h"
 #include "database.h"
+
+class Item;
+class Player;
+class PropWriteStream;
+struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
