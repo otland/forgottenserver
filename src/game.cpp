@@ -4624,8 +4624,7 @@ void Game::internalDecayItem(Item* item)
 {
 	const int32_t decayTo = item->getDecayTo();
 	if (decayTo > 0) {
-		Item* newItem = transformItem(item, decayTo);
-		startDecay(newItem);
+		startDecay(transformItem(item, decayTo));
 	} else {
 		ReturnValue ret = internalRemoveItem(item);
 		if (ret != RETURNVALUE_NOERROR) {
