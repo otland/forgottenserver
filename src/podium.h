@@ -6,8 +6,6 @@
 
 #include "item.h"
 
-#include <bitset>
-
 class Podium final : public Item
 {
 	public:
