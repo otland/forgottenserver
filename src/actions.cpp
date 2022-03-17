@@ -60,7 +60,7 @@ std::string Actions::getScriptBaseName() const
 
 Event_ptr Actions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "action") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "action")) {
 		return nullptr;
 	}
 	return Event_ptr(new Action(&scriptInterface));
@@ -516,7 +516,7 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "market") == 0) {
+	if (caseInsensitiveEqual(functionName, "market")) {
 		function = enterMarket;
 	} else {
 		if (!isScripted) {

@@ -51,9 +51,6 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #pragma warning(disable:4458) // declaration hides class member
 #endif
 
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-
 #ifndef _WIN32_WINNT
 // 0x0602: Windows 7
 #define _WIN32_WINNT 0x0602

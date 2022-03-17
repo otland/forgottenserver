@@ -43,7 +43,7 @@ std::string TalkActions::getScriptBaseName() const
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "talkaction")) {
 		return nullptr;
 	}
 	return Event_ptr(new TalkAction(&scriptInterface));
@@ -86,15 +86,14 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
 		const std::string& talkactionWords = it->first;
-		size_t talkactionLength = talkactionWords.length();
-		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+		if (!caseInsensitiveStartsWith(words, talkactionWords)) {
 			++it;
 			continue;
 		}
 
 		std::string param;
-		if (wordsLength != talkactionLength) {
-			param = words.substr(talkactionLength);
+		if (wordsLength != talkactionWords.size()) {
+			param = words.substr(talkactionWords.size());
 			if (param.front() != ' ') {
 				++it;
 				continue;

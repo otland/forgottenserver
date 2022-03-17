@@ -162,7 +162,7 @@ bool Raids::reload()
 Raid* Raids::getRaidByName(const std::string& name)
 {
 	for (Raid* raid : raidList) {
-		if (strcasecmp(raid->getName().c_str(), name.c_str()) == 0) {
+		if (caseInsensitiveEqual(raid->getName(), name)) {
 			return raid;
 		}
 	}
@@ -191,13 +191,13 @@ bool Raid::loadFromXml(const std::string& filename)
 
 	for (auto eventNode : doc.child("raid").children()) {
 		RaidEvent* event;
-		if (strcasecmp(eventNode.name(), "announce") == 0) {
+		if (caseInsensitiveEqual(eventNode.name(), "announce")) {
 			event = new AnnounceEvent();
-		} else if (strcasecmp(eventNode.name(), "singlespawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "singlespawn")) {
 			event = new SingleSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "areaspawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "areaspawn")) {
 			event = new AreaSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "script") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "script")) {
 			event = new ScriptEvent(&g_game.raids.getScriptInterface());
 		} else {
 			continue;

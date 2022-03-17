@@ -77,7 +77,7 @@ std::string MoveEvents::getScriptBaseName() const
 
 Event_ptr MoveEvents::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "movevent") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "movevent")) {
 		return nullptr;
 	}
 	return Event_ptr(new MoveEvent(&scriptInterface));
@@ -898,17 +898,17 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "onstepinfield") == 0) {
+	if (caseInsensitiveEqual(functionName, "onstepinfield")) {
 		stepFunction = StepInField;
-	} else if (strcasecmp(functionName, "onstepoutfield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onstepoutfield")) {
 		stepFunction = StepOutField;
-	} else if (strcasecmp(functionName, "onaddfield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onaddfield")) {
 		moveFunction = AddItemField;
-	} else if (strcasecmp(functionName, "onremovefield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onremovefield")) {
 		moveFunction = RemoveItemField;
-	} else if (strcasecmp(functionName, "onequipitem") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onequipitem")) {
 		equipFunction = EquipItem;
-	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "ondeequipitem")) {
 		equipFunction = DeEquipItem;
 	} else {
 		if (!isScripted) {
