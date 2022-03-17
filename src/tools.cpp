@@ -264,7 +264,7 @@ bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 
 bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 {
-	return str.size() <= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
+	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
 		return tolower(a) == tolower(b);
 	});
 }
