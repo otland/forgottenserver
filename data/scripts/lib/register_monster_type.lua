@@ -356,6 +356,10 @@ registerMonsterType.attacks = function(mtype, mask)
 					if attack.shootEffect then
 						spell:setCombatShootEffect(attack.shootEffect)
 					end
+					local outfit = attack.outfit or attack.monster or attack.item
+					if outfit then
+						spell:setOutfit(outfit)
+					end
 					if attack.name == "drunk" then
 						spell:setConditionType(CONDITION_DRUNK)
 						if attack.drunkenness then
