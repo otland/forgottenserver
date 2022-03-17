@@ -327,6 +327,10 @@ local function AbilityTableToSpell(ability)
 			if ability.shootEffect then
 				spell:setCombatShootEffect(ability.shootEffect)
 			end
+			local outfit = ability.outfit or ability.monster or ability.item
+			if outfit then
+				spell:setOutfit(outfit)
+			end
 			if ability.name == "drunk" then
 				spell:setConditionType(CONDITION_DRUNK)
 				if ability.drunkenness then
