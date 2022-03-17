@@ -255,6 +255,20 @@ std::string asUpperCaseString(std::string source)
 	return source;
 }
 
+bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
+{
+	return str1.size() == str2.size() && std::equal(str1.begin(), str1.end(), str2.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
+}
+
+bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
+{
+	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
+}
+
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
 {
 	StringVector returnVector;
@@ -1310,4 +1324,3 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
-
