@@ -9801,13 +9801,15 @@ int LuaScriptInterface::luaPlayerSendSupplyUsed(lua_State* L)
 	// player:sendSupplyUsed(item)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
-		lua_pushnil(L);
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		pushBoolean(L, false);
 		return 1;
 	}
 
 	Item* item = getUserdata<Item>(L, 2);
 	if (!item) {
-		lua_pushnil(L);
+		reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
+		pushBoolean(L, false);
 		return 1;
 	}
 
