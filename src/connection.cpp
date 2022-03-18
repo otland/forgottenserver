@@ -3,12 +3,13 @@
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "connection.h"
+
+#include "configmanager.h"
 #include "outputmessage.h"
 #include "protocol.h"
-#include "scheduler.h"
 #include "server.h"
+#include "tasks.h"
 
 extern ConfigManager g_config;
 

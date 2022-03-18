@@ -4,20 +4,17 @@
 #ifndef FS_WEAPONS_H
 #define FS_WEAPONS_H
 
-#include "player.h"
 #include "baseevents.h"
 #include "combat.h"
 #include "const.h"
+#include "luascript.h"
 #include "vocation.h"
 
-extern Vocations g_vocations;
-
 class Weapon;
-class WeaponMelee;
-class WeaponDistance;
-class WeaponWand;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
+
+extern Vocations g_vocations;
 
 class Weapons final : public BaseEvents
 {

@@ -4,11 +4,9 @@
 #ifndef FS_QUESTS_H
 #define FS_QUESTS_H
 
-#include "player.h"
-#include "networkmessage.h"
-
 class Mission;
 class Quest;
+class Player;
 
 using MissionsList = std::list<Mission>;
 using QuestsList = std::list<Quest>;

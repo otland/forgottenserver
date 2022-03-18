@@ -4,13 +4,15 @@
 #include "otpch.h"
 
 #include "spawn.h"
+
+#include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
-#include "scheduler.h"
-
+#include "npc.h"
 #include "pugicast.h"
-#include "events.h"
+#include "scheduler.h"
+#include "spectators.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;

@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "inbox.h"
+
 #include "tools.h"
 
 Inbox::Inbox(uint16_t type) : Container(type, 30, false, true) {}

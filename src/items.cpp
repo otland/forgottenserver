@@ -4,11 +4,10 @@
 #include "otpch.h"
 
 #include "items.h"
-#include "spells.h"
-#include "movement.h"
-#include "weapons.h"
 
+#include "movement.h"
 #include "pugicast.h"
+#include "weapons.h"
 
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;

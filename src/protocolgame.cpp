@@ -7,20 +7,21 @@
 
 #include "protocolgame.h"
 
-#include "outputmessage.h"
-
-#include "player.h"
-
-#include "configmanager.h"
 #include "actions.h"
+#include "ban.h"
+#include "condition.h"
+#include "configmanager.h"
+#include "depotchest.h"
 #include "game.h"
+#include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "ban.h"
+#include "npc.h"
+#include "outfit.h"
+#include "outputmessage.h"
+#include "player.h"
 #include "scheduler.h"
-
-#include <boost/range/adaptor/reversed.hpp>
-#include <fmt/format.h>
+#include "storeinbox.h"
 
 extern ConfigManager g_config;
 extern Actions actions;

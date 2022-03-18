@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "protocolstatus.h"
+
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"

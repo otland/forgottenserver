@@ -4,9 +4,8 @@
 #ifndef FS_MAILBOX_H
 #define FS_MAILBOX_H
 
-#include "item.h"
 #include "cylinder.h"
-#include "const.h"
+#include "item.h"
 
 class Mailbox final : public Item, public Cylinder
 {

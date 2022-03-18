@@ -4,7 +4,7 @@
 #ifndef FS_TELEPORT_H
 #define FS_TELEPORT_H
 
-#include "tile.h"
+#include "item.h"
 
 class Teleport final : public Item, public Cylinder
 {

@@ -4,20 +4,21 @@
 #ifndef FS_PROTOCOLGAME_H
 #define FS_PROTOCOLGAME_H
 
-#include "protocol.h"
 #include "chat.h"
 #include "creature.h"
+#include "definitions.h"
+#include "protocol.h"
 #include "tasks.h"
 
+class Container;
+class Game;
 class NetworkMessage;
 class Player;
-class Game;
-class House;
-class Container;
-class Tile;
-class Connection;
-class Quest;
 class ProtocolGame;
+class Quest;
+class Tile;
+class TrackedQuest;
+
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;

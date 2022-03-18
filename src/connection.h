@@ -4,8 +4,6 @@
 #ifndef FS_CONNECTION_H
 #define FS_CONNECTION_H
 
-#include <unordered_set>
-
 #include "networkmessage.h"
 
 static constexpr int32_t CONNECTION_WRITE_TIMEOUT = 30;

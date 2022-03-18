@@ -5,7 +5,8 @@
 #define FS_DEPOTLOCKER_H
 
 #include "container.h"
-#include "inbox.h"
+
+class Inbox;
 
 using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 

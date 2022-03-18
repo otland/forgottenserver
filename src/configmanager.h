@@ -4,9 +4,6 @@
 #ifndef FS_CONFIGMANAGER_H
 #define FS_CONFIGMANAGER_H
 
-#include <utility>
-#include <vector>
-
 using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
 
 class ConfigManager

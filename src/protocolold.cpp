@@ -4,11 +4,9 @@
 #include "otpch.h"
 
 #include "protocolold.h"
-#include "outputmessage.h"
 
 #include "game.h"
-
-#include <fmt/format.h>
+#include "outputmessage.h"
 
 extern Game g_game;
 

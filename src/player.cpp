@@ -3,20 +3,27 @@
 
 #include "otpch.h"
 
+#include "player.h"
+
 #include "bed.h"
 #include "chat.h"
 #include "combat.h"
 #include "configmanager.h"
 #include "creatureevent.h"
+#include "depotchest.h"
 #include "events.h"
 #include "game.h"
+#include "inbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
+#include "npc.h"
+#include "outfit.h"
+#include "party.h"
 #include "scheduler.h"
+#include "spectators.h"
+#include "storeinbox.h"
 #include "weapons.h"
-
-#include <fmt/format.h>
 
 extern ConfigManager g_config;
 extern Game g_game;

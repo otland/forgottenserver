@@ -4,9 +4,8 @@
 #ifndef FS_FILELOADER_H
 #define FS_FILELOADER_H
 
-#include <limits>
-#include <vector>
 #include <boost/iostreams/device/mapped_file.hpp>
+#include <limits>
 
 class PropStream;
 

@@ -3,13 +3,14 @@
 
 #include "otpch.h"
 
+#include "spells.h"
+
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
 #include "luavariant.h"
-#include "monster.h"
+#include "monsters.h"
 #include "pugicast.h"
-#include "spells.h"
 
 extern Game g_game;
 extern Spells* g_spells;

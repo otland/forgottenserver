@@ -5,6 +5,7 @@
 
 #include "mounts.h"
 
+#include "definitions.h"
 #include "pugicast.h"
 #include "tools.h"
 

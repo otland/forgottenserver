@@ -4,6 +4,8 @@
 #ifndef FS_PUGICAST_H
 #define FS_PUGICAST_H
 
+#include <cstdlib>
+
 namespace pugi {
 
 template<class T> T cast(const char* str);

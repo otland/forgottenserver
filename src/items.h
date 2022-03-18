@@ -9,6 +9,8 @@
 #include "itemloader.h"
 #include "position.h"
 
+class ConditionDamage;
+
 enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
 	SLOTP_HEAD = 1 << 0,
@@ -188,8 +190,6 @@ struct Abilities {
 	bool invisible = false;
 	bool regeneration = false;
 };
-
-class ConditionDamage;
 
 class ItemType
 {

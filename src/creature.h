@@ -4,13 +4,19 @@
 #ifndef FS_CREATURE_H
 #define FS_CREATURE_H
 
+#include "const.h"
+#include "creatureevent.h"
+#include "enums.h"
 #include "map.h"
 #include "position.h"
-#include "condition.h"
-#include "const.h"
 #include "tile.h"
-#include "enums.h"
-#include "creatureevent.h"
+
+class Condition;
+class Container;
+class Item;
+class Monster;
+class Npc;
+class Player;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
@@ -42,15 +48,6 @@ struct FindPathParams {
 	int32_t minTargetDist = -1;
 	int32_t maxTargetDist = -1;
 };
-
-class Map;
-class Thing;
-class Container;
-class Player;
-class Monster;
-class Npc;
-class Item;
-class Tile;
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;

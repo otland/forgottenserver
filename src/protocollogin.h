@@ -7,7 +7,6 @@
 #include "protocol.h"
 
 class NetworkMessage;
-class OutputMessage;
 
 class ProtocolLogin : public Protocol
 {

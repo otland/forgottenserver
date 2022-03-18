@@ -4,9 +4,9 @@
 #ifndef FS_THREAD_HOLDER_BASE_H
 #define FS_THREAD_HOLDER_BASE_H
 
-#include <thread>
-#include <atomic>
 #include "enums.h"
+
+#include <atomic>
 
 template <typename Derived>
 class ThreadHolder
