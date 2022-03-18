@@ -336,17 +336,9 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-Player* Item::getHoldingPlayer() const
+const Player* Item::getHoldingPlayer() const
 {
-	Cylinder* p = getParent();
-	while (p) {
-		if (p->getCreature()) {
-			return p->getCreature()->getPlayer();
-		}
-
-		p = p->getParent();
-	}
-	return nullptr;
+	return dynamic_cast<const Player*>(getTopParent());
 }
 
 void Item::setSubType(uint16_t n)
