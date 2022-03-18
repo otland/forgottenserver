@@ -799,6 +799,13 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		int32_t getDecayTime() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+			}
+			return items[id].decayTime;
+		}
+
 		void setDecayTo(int32_t decayTo) {
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 		}
