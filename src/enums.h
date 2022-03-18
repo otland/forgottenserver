@@ -473,6 +473,8 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_NORMAL2 = 5,
 	SPEECHBUBBLE_NORMAL3 = 6,
 	SPEECHBUBBLE_HIRELING = 7,
+
+	SPEECHBUBBLE_LAST = SPEECHBUBBLE_HIRELING
 };
 
 enum MapMark_t
@@ -524,12 +526,12 @@ struct LightInfo {
 struct ShopInfo {
 	uint16_t itemId = 0;
 	int32_t subType = 1;
-	uint32_t buyPrice = 0;
-	uint32_t sellPrice = 0;
+	int64_t buyPrice = 0;
+	int64_t sellPrice = 0;
 	std::string realName = "";
 
 	ShopInfo() = default;
-	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
+	ShopInfo(uint16_t itemId, int32_t subType = 0, int64_t buyPrice = 0, int64_t sellPrice = 0, std::string realName = "")
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
 };
 

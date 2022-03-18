@@ -99,11 +99,11 @@ void Weapons::loadDefaults()
 
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
+	if (caseInsensitiveEqual(nodeName, "melee")) {
 		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "distance")) {
 		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "wand")) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;

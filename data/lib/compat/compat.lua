@@ -1501,12 +1501,12 @@ end
 
 do
 	local specialSkills = {
-		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance',
-		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage',
-		[SPECIALSKILL_LIFELEECHCHANCE] = 'hitpoints leech chance',
-		[SPECIALSKILL_LIFELEECHAMOUNT] = 'hitpoints leech amount',
-		[SPECIALSKILL_MANALEECHCHANCE] = 'manapoints leech chance',
-		[SPECIALSKILL_MANALEECHAMOUNT] = 'manapoints leech amount'
+		[SPECIALSKILL_CRITICALHITCHANCE] = 'critical hit chance', -- format: x%
+		[SPECIALSKILL_CRITICALHITAMOUNT] = 'critical extra damage', -- format: +y%
+		[SPECIALSKILL_LIFELEECHCHANCE] = 'life leech chance',
+		[SPECIALSKILL_LIFELEECHAMOUNT] = 'life leech amount',
+		[SPECIALSKILL_MANALEECHCHANCE] = 'mana leech chance',
+		[SPECIALSKILL_MANALEECHAMOUNT] = 'mana leech amount',
 	}
 
 	function getSpecialSkillName(specialSkill)
@@ -1524,6 +1524,17 @@ do
 
 	function getStatName(stat)
 		return stats[stat] or 'unknown'
+	end
+end
+
+do
+	local mounts = {}
+	for _, mountData in pairs(Game.getMounts()) do
+		mounts[mountData.clientId] = mountData.name
+	end
+
+	function getMountNameByLookType(lookType)
+		return mounts[lookType]
 	end
 end
 

@@ -45,7 +45,7 @@ std::string CreatureEvents::getScriptBaseName() const
 
 Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "event") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "event")) {
 		return nullptr;
 	}
 	return Event_ptr(new CreatureEvent(&scriptInterface));

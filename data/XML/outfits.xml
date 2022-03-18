@@ -105,6 +105,7 @@
 	<outfit type="0" looktype="1450" name="Arbalester" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1456" name="Royal Costume" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1461" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1490" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -212,4 +213,5 @@
 	<outfit type="1" looktype="1449" name="Arbalester" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1457" name="Royal Costume" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1460" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1489" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 </outfits>
