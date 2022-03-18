@@ -49,4 +49,3 @@ void StoreInbox::postRemoveNotification(Thing* thing, const Cylinder* newParent,
 		parent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	}
 }
-

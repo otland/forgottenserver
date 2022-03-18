@@ -4,9 +4,9 @@
 #ifndef FS_TASKS_H
 #define FS_TASKS_H
 
-#include <condition_variable>
 #include "thread_holder_base.h"
-#include "enums.h"
+
+#include <condition_variable>
 
 using TaskFunc = std::function<void(void)>;
 const int DISPATCHER_TASK_EXPIRATION = 2000;

@@ -3,26 +3,26 @@
 
 #include "otpch.h"
 
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "game.h"
+#include "iomarket.h"
+#include "monsters.h"
+#include "outfit.h"
+#include "protocollogin.h"
+#include "protocolold.h"
+#include "protocolstatus.h"
+#include "rsa.h"
+#include "scheduler.h"
+#include "script.h"
+#include "scriptmanager.h"
 #include "server.h"
 
-#include "game.h"
-
-#include "iomarket.h"
-
-#include "configmanager.h"
-#include "scriptmanager.h"
-#include "rsa.h"
-#include "protocolold.h"
-#include "protocollogin.h"
-#include "protocolstatus.h"
-#include "databasemanager.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "script.h"
 #include <fstream>
-#include <fmt/color.h>
+
 #if __has_include("gitmetadata.h")
-	#include "gitmetadata.h"
+#include "gitmetadata.h"
 #endif
 
 DatabaseTasks g_databaseTasks;

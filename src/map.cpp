@@ -3,12 +3,15 @@
 
 #include "otpch.h"
 
-#include "iomap.h"
-#include "iomapserialize.h"
+#include "map.h"
+
 #include "combat.h"
 #include "creature.h"
 #include "game.h"
+#include "iomap.h"
+#include "iomapserialize.h"
 #include "monster.h"
+#include "spectators.h"
 
 extern Game g_game;
 

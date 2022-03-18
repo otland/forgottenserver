@@ -4,10 +4,14 @@
 #include "otpch.h"
 
 #include "creature.h"
+
+#include "combat.h"
+#include "configmanager.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
+#include "party.h"
 #include "scheduler.h"
+#include "spectators.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -888,7 +892,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			damage = 0;
 			blockType = BLOCK_ARMOR;
 		}
-		
+
 		attacker->onAttackedCreature(this);
 		attacker->onAttackedCreatureBlockHit(blockType);
 	}

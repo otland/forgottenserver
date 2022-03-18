@@ -3,32 +3,40 @@
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
-#include <fmt/format.h>
-
 #include "luascript.h"
+
+#include "bed.h"
 #include "chat.h"
-#include "player.h"
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "depotchest.h"
+#include "events.h"
 #include "game.h"
-#include "protocolstatus.h"
-#include "spells.h"
+#include "globalevent.h"
+#include "housetile.h"
+#include "inbox.h"
 #include "iologindata.h"
 #include "iomapserialize.h"
-#include "configmanager.h"
-#include "teleport.h"
-#include "databasemanager.h"
-#include "bed.h"
-#include "podium.h"
-#include "monster.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "events.h"
-#include "movement.h"
-#include "globalevent.h"
-#include "script.h"
-#include "weapons.h"
 #include "iomarket.h"
 #include "luavariant.h"
+#include "monster.h"
+#include "movement.h"
+#include "npc.h"
+#include "outfit.h"
+#include "party.h"
+#include "player.h"
+#include "podium.h"
+#include "protocolstatus.h"
+#include "scheduler.h"
+#include "script.h"
+#include "spectators.h"
+#include "spells.h"
+#include "storeinbox.h"
+#include "teleport.h"
+#include "weapons.h"
+
+#include <boost/range/adaptor/reversed.hpp>
 
 extern Chat* g_chat;
 extern Game g_game;

@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "depotchest.h"
+
 #include "tools.h"
 
 DepotChest::DepotChest(uint16_t type) :

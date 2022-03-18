@@ -3,11 +3,12 @@
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "globalevent.h"
-#include "tools.h"
-#include "scheduler.h"
+
+#include "configmanager.h"
 #include "pugicast.h"
+#include "scheduler.h"
+#include "tools.h"
 
 extern ConfigManager g_config;
 

@@ -3,8 +3,9 @@
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "database.h"
+
+#include "configmanager.h"
 
 #include <mysql/errmsg.h>
 

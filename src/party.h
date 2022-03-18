@@ -4,11 +4,10 @@
 #ifndef FS_PARTY_H
 #define FS_PARTY_H
 
-#include "player.h"
-#include "monsters.h"
+#include "const.h"
 
+class Creature;
 class Player;
-class Party;
 
 using PlayerVector = std::vector<Player*>;
 

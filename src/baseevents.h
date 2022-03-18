@@ -4,7 +4,7 @@
 #ifndef FS_BASEEVENTS_H
 #define FS_BASEEVENTS_H
 
-#include "luascript.h"
+class LuaScriptInterface;
 
 class Event;
 using Event_ptr = std::unique_ptr<Event>;

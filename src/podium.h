@@ -8,8 +8,6 @@
 
 #include <bitset>
 
-class Player;
-
 class Podium final : public Item
 {
 	public:

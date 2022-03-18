@@ -5,7 +5,7 @@
 
 #include "baseevents.h"
 
-#include "pugicast.h"
+#include "luascript.h"
 #include "tools.h"
 
 extern LuaEnvironment g_luaEnvironment;
