@@ -8,14 +8,6 @@
 #include "enums.h"
 #include "position.h"
 
-#include <cassert>
-
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
-
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
 #ifndef LUA_COMPAT_MODULE

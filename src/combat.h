@@ -8,9 +8,6 @@
 #include "condition.h"
 #include "item.h"
 
-#include <utility>
-#include <valarray>
-
 class Creature;
 class Player;
 struct Position;

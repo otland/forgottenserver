@@ -6,8 +6,6 @@
 
 #include "thread_holder_base.h"
 
-#include <condition_variable>
-
 using TaskFunc = std::function<void(void)>;
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));

@@ -8,9 +8,6 @@
 #include "enums.h"
 #include "position.h"
 
-#include <random>
-#include <string_view>
-
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 
 std::string transformToSHA1(const std::string& input);

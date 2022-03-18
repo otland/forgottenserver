@@ -6,7 +6,6 @@
 
 #include "chat.h"
 #include "creature.h"
-#include "definitions.h"
 #include "protocol.h"
 #include "tasks.h"
 

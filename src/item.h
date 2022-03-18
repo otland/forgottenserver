@@ -10,9 +10,6 @@
 #include "thing.h"
 #include "tools.h"
 
-#include <boost/variant.hpp>
-#include <deque>
-
 class BedItem;
 class Container;
 class Door;
