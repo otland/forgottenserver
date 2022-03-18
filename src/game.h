@@ -337,7 +337,7 @@ class Game
 		void playerRequestChannels(uint32_t playerId);
 		void playerOpenChannel(uint32_t playerId, uint16_t channelId);
 		void playerCloseChannel(uint32_t playerId, uint16_t channelId);
-		void playerOpenPrivateChannel(uint32_t playerId, std::string& receiver);
+		void playerOpenPrivateChannel(uint32_t playerId, std::string receiver);
 		void playerCloseNpcChannel(uint32_t playerId);
 		void playerReceivePing(uint32_t playerId);
 		void playerReceivePingBack(uint32_t playerId);

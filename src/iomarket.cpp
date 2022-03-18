@@ -178,7 +178,7 @@ void IOMarket::checkExpiredOffers()
 		return;
 	}
 
-	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, std::bind(IOMarket::checkExpiredOffers)));
+	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &IOMarket::checkExpiredOffers));
 }
 
 uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
