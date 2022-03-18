@@ -236,10 +236,6 @@ void Creature::onWalk(Direction& dir)
 
 bool Creature::getNextStep(Direction& dir, uint32_t&)
 {
-	if (hasCondition(CONDITION_ROOT)) {
-		return;
-	}
-
 	if (listWalkDir.empty()) {
 		return false;
 	}
@@ -276,6 +272,10 @@ void Creature::startAutoWalk(Direction direction)
 
 void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 {
+	if (hasCondition(CONDITION_ROOT)) {
+		return;
+	}
+
 	Player* player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
