@@ -46,7 +46,7 @@ function onSay(player, words, param)
 				if date.hour < 10 then date.hour = "0" .. date.hour end
 				if date.min < 10 then date.min = "0" .. date.min end
 				if date.sec < 10 then date.sec = "0" .. date.sec end
-				str = str .. breakline .. " " .. date.day .. getMonthDayEnding(date.day) .. " " .. getMonthString(date.month) .. " " .. date.year .. " " .. date.hour .. ":" .. date.min .. ":" .. date.sec .. "   Died at Level " .. result.getNumber(resultId, "level") .. " by " .. article .. killed_by .. "."
+				str = str .. breakline .. " " .. date.day .. getMonthDayEnding(date.day) .. " " .. getMonthString(date.month) .. " " .. date.year .. " " .. date.hour .. ":" .. date.min .. ":" .. date.sec .. " Died at Level " .. result.getNumber(resultId, "level") .. " by " .. article .. killed_by .. "."
 			until not result.next(resultId)
 			result.free(resultId)
 		end
