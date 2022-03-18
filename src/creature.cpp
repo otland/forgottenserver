@@ -236,6 +236,10 @@ void Creature::onWalk(Direction& dir)
 
 bool Creature::getNextStep(Direction& dir, uint32_t&)
 {
+	if (hasCondition(CONDITION_ROOT)) {
+		return;
+	}
+
 	if (listWalkDir.empty()) {
 		return false;
 	}
