@@ -15,9 +15,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery("SELECT `data` FROM `tile_store`");
+	DBResult_ptr result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
 	if (!result) {
 		return;
 	}
