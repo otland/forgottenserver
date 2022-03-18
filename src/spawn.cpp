@@ -4,13 +4,15 @@
 #include "otpch.h"
 
 #include "spawn.h"
+
+#include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
-#include "scheduler.h"
-
+#include "npc.h"
 #include "pugicast.h"
-#include "events.h"
+#include "scheduler.h"
+#include "spectators.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
@@ -239,7 +241,7 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 void Spawn::startSpawnCheck()
 {
 	if (checkSpawnEvent == 0) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
@@ -374,7 +376,7 @@ void Spawn::checkSpawn()
 	}
 
 	if (spawnedMap.size() < spawnMap.size()) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 

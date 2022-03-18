@@ -3,32 +3,40 @@
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
-#include <fmt/format.h>
-
 #include "luascript.h"
+
+#include "bed.h"
 #include "chat.h"
-#include "player.h"
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "depotchest.h"
+#include "events.h"
 #include "game.h"
-#include "protocolstatus.h"
-#include "spells.h"
+#include "globalevent.h"
+#include "housetile.h"
+#include "inbox.h"
 #include "iologindata.h"
 #include "iomapserialize.h"
-#include "configmanager.h"
-#include "teleport.h"
-#include "databasemanager.h"
-#include "bed.h"
-#include "podium.h"
-#include "monster.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "events.h"
-#include "movement.h"
-#include "globalevent.h"
-#include "script.h"
-#include "weapons.h"
 #include "iomarket.h"
 #include "luavariant.h"
+#include "monster.h"
+#include "movement.h"
+#include "npc.h"
+#include "outfit.h"
+#include "party.h"
+#include "player.h"
+#include "podium.h"
+#include "protocolstatus.h"
+#include "scheduler.h"
+#include "script.h"
+#include "spectators.h"
+#include "spells.h"
+#include "storeinbox.h"
+#include "teleport.h"
+#include "weapons.h"
+
+#include <boost/range/adaptor/reversed.hpp>
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -2067,6 +2075,10 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTERS_EVENT_MOVE)
 	registerEnum(MONSTERS_EVENT_SAY)
 
+	registerEnum(DECAYING_FALSE)
+	registerEnum(DECAYING_TRUE)
+	registerEnum(DECAYING_PENDING)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -3931,9 +3943,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
 	auto& lastTimerEventId = g_luaEnvironment.lastEventTimerId;
-	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(
-		delay, std::bind(&LuaEnvironment::executeTimerEvent, &g_luaEnvironment, lastTimerEventId)
-	));
+	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(delay, [&]() { g_luaEnvironment.executeTimerEvent(lastTimerEventId); }));
 
 	g_luaEnvironment.timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
 	lua_pushnumber(L, lastTimerEventId++);

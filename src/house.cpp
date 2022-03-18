@@ -3,15 +3,15 @@
 
 #include "otpch.h"
 
-#include "pugicast.h"
-
 #include "house.h"
-#include "iologindata.h"
-#include "game.h"
-#include "configmanager.h"
-#include "bed.h"
 
-#include <fmt/format.h>
+#include "bed.h"
+#include "configmanager.h"
+#include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iologindata.h"
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

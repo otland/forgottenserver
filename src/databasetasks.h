@@ -4,10 +4,8 @@
 #ifndef FS_DATABASETASKS_H
 #define FS_DATABASETASKS_H
 
-#include <condition_variable>
-#include "thread_holder_base.h"
 #include "database.h"
-#include "enums.h"
+#include "thread_holder_base.h"
 
 struct DatabaseTask {
 	DatabaseTask(std::string&& query, std::function<void(DBResult_ptr, bool)>&& callback, bool store) :

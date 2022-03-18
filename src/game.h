@@ -4,24 +4,18 @@
 #ifndef FS_GAME_H
 #define FS_GAME_H
 
-#include "account.h"
-#include "combat.h"
 #include "groups.h"
 #include "map.h"
-#include "position.h"
-#include "item.h"
-#include "container.h"
+#include "mounts.h"
 #include "player.h"
-#include "raids.h"
-#include "npc.h"
-#include "wildcardtree.h"
+#include "position.h"
 #include "quests.h"
+#include "raids.h"
+#include "wildcardtree.h"
 
-class ServiceManager;
-class Creature;
 class Monster;
 class Npc;
-class CombatInfo;
+class ServiceManager;
 
 enum stackPosType_t {
 	STACKPOS_MOVE,
@@ -343,7 +337,7 @@ class Game
 		void playerRequestChannels(uint32_t playerId);
 		void playerOpenChannel(uint32_t playerId, uint16_t channelId);
 		void playerCloseChannel(uint32_t playerId, uint16_t channelId);
-		void playerOpenPrivateChannel(uint32_t playerId, std::string& receiver);
+		void playerOpenPrivateChannel(uint32_t playerId, std::string receiver);
 		void playerCloseNpcChannel(uint32_t playerId);
 		void playerReceivePing(uint32_t playerId);
 		void playerReceivePingBack(uint32_t playerId);

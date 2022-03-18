@@ -4,11 +4,7 @@
 #ifndef FS_SPAWN_H
 #define FS_SPAWN_H
 
-#include "tile.h"
 #include "position.h"
-
-#include <utility>
-#include <vector>
 
 class Monster;
 class MonsterType;

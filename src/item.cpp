@@ -4,17 +4,18 @@
 #include "otpch.h"
 
 #include "item.h"
+
+#include "bed.h"
+#include "combat.h"
 #include "container.h"
+#include "game.h"
+#include "house.h"
+#include "mailbox.h"
+#include "podium.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "mailbox.h"
-#include "house.h"
-#include "game.h"
-#include "bed.h"
-#include "podium.h"
 
-#include "actions.h"
-#include "spells.h"
+class Spells;
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -1055,8 +1056,7 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	const ItemType& it = Item::items[id];
-	if (getDecayTo() < 0 || it.decayTime == 0) {
+	if (getDecayTo() < 0 || getDecayTime() == 0) {
 		return false;
 	}
 

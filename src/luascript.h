@@ -4,11 +4,9 @@
 #ifndef FS_LUASCRIPT_H
 #define FS_LUASCRIPT_H
 
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
+#include "database.h"
+#include "enums.h"
+#include "position.h"
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -20,26 +18,23 @@
 #endif
 #endif
 
-#include "database.h"
-#include "enums.h"
-#include "position.h"
-#include "outfit.h"
-#include "mounts.h"
-#include "luavariant.h"
-#include <fmt/format.h>
-
-class Thing;
-class Creature;
-class Player;
-class Item;
-class Container;
 class AreaCombat;
 class Combat;
-using Combat_ptr = std::shared_ptr<Combat>;
-class Condition;
-class Npc;
-class Monster;
+class Container;
+class Creature;
+class Cylinder;
 class InstantSpell;
+class Item;
+class LuaScriptInterface;
+class LuaVariant;
+class Npc;
+class Player;
+class Thing;
+struct LootBlock;
+struct Mount;
+struct Outfit;
+
+using Combat_ptr = std::shared_ptr<Combat>;
 
 enum {
 	EVENT_ID_LOADING = 1,
@@ -68,12 +63,6 @@ struct LuaTimerEventDesc {
 	LuaTimerEventDesc() = default;
 	LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
 };
-
-class LuaScriptInterface;
-class Cylinder;
-class Game;
-
-struct LootBlock;
 
 class ScriptEnvironment
 {

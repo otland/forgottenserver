@@ -5,15 +5,17 @@
 
 #include "tile.h"
 
-#include "creature.h"
 #include "combat.h"
+#include "configmanager.h"
+#include "creature.h"
 #include "game.h"
+#include "housetile.h"
 #include "mailbox.h"
 #include "monster.h"
 #include "movement.h"
+#include "spectators.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "configmanager.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;

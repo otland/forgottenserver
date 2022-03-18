@@ -5,26 +5,20 @@
 #define FS_ITEM_H
 
 #include "cylinder.h"
-#include "thing.h"
 #include "items.h"
 #include "luascript.h"
+#include "thing.h"
 #include "tools.h"
-#include <typeinfo>
 
-#include <boost/variant.hpp>
-#include <deque>
-
-class Creature;
-class Player;
+class BedItem;
 class Container;
-class Depot;
-class Teleport;
-class TrashHolder;
-class Mailbox;
 class Door;
 class MagicField;
-class BedItem;
+class Mailbox;
+class Player;
 class Podium;
+class Teleport;
+class TrashHolder;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -797,6 +791,13 @@ class Item : virtual public Thing
 				return DECAYING_FALSE;
 			}
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
+		}
+
+		int32_t getDecayTime() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+			}
+			return items[id].decayTime;
 		}
 
 		void setDecayTo(int32_t decayTo) {

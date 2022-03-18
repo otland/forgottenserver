@@ -4,11 +4,10 @@
 #include "otpch.h"
 
 #include "chat.h"
+
 #include "game.h"
 #include "pugicast.h"
 #include "scheduler.h"
-
-#include <fmt/format.h>
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -80,7 +79,7 @@ bool ChatChannel::addUser(Player& player)
 	if (id == CHANNEL_GUILD) {
 		Guild* guild = player.getGuild();
 		if (guild && !guild->getMotd().empty()) {
-			g_scheduler.addEvent(createSchedulerTask(150, std::bind(&Game::sendGuildMotd, &g_game, player.getID())));
+			g_scheduler.addEvent(createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
 		}
 	}
 

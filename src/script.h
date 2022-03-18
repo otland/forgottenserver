@@ -5,7 +5,6 @@
 #define FS_SCRIPT_H
 
 #include "luascript.h"
-#include "enums.h"
 
 class Scripts
 {

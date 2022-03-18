@@ -5,8 +5,6 @@
 
 #include "networkmessage.h"
 
-#include "container.h"
-#include "creature.h"
 #include "podium.h"
 
 std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
