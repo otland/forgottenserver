@@ -4625,7 +4625,7 @@ void Game::internalDecayItem(Item* item)
 	if (decayTo > 0) {
 		startDecay(transformItem(item, decayTo));
 	} else {
-		if (const Player* player = item->getHoldingPlayer()) {
+		if (Player* player = item->getHoldingPlayer()) {
 			player->sendSupplyUsed(it.transformDeEquipTo != 0 ? Item::items[it.transformDeEquipTo].clientId : item->getClientID());
 		}
 		ReturnValue ret = internalRemoveItem(item);
