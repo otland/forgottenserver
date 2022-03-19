@@ -493,7 +493,7 @@ class Player final : public Creature, public Cylinder
 			varSpecialSkills[skill] += modifier;
 		}
 
-		void setSpecialMagicLevelSkill(CombatType_t type, int32_t modifier) {
+		void setSpecialMagicLevelSkill(CombatType_t type, int16_t modifier) {
 			specialMagicLevelSkill[combatTypeToIndex(type)] += modifier;
 		}
 
