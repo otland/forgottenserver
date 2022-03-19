@@ -3180,6 +3180,12 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 	}
 
 	if (const Item* item = thing->getItem()) {
+		if (item->isSupply()) {
+			if (const Player* player = item->getHoldingPlayer()) {
+				player->sendSupplyUsed(item->getClientID());
+			}
+		}
+
 		if (const Container* container = item->getContainer()) {
 			if (container->isRemoved() || !Position::areInRange<1, 1, 0>(getPosition(), container->getPosition())) {
 				autoCloseContainers(container);
