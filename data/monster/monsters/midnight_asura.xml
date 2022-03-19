@@ -52,7 +52,7 @@
 	</immunities>
 	<voices interval="2000" chance="7">
 		<voice sentence="Ah, the sweet music of a beating heart!" />
-		<voice sentence="Death and Darkness"/>
+		<voice sentence="Death and Darkness" />
 		<voice sentence="Embrace the night!" />
 		<voice sentence="May night fall upon you!" />
 	</voices>
