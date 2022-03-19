@@ -17,7 +17,6 @@ class Teleport;
 class TrashHolder;
 
 using CreatureVector = std::vector<Creature*>;
-using ItemVector = std::vector<Item*>;
 
 enum tileflags_t : uint32_t {
 	TILESTATE_NONE = 0,
@@ -48,14 +47,6 @@ enum tileflags_t : uint32_t {
 	TILESTATE_SUPPORTS_HANGABLE = 1 << 23,
 
 	TILESTATE_FLOORCHANGE = TILESTATE_FLOORCHANGE_DOWN | TILESTATE_FLOORCHANGE_NORTH | TILESTATE_FLOORCHANGE_SOUTH | TILESTATE_FLOORCHANGE_EAST | TILESTATE_FLOORCHANGE_WEST | TILESTATE_FLOORCHANGE_SOUTH_ALT | TILESTATE_FLOORCHANGE_EAST_ALT,
-};
-
-enum ZoneType_t {
-	ZONE_PROTECTION,
-	ZONE_NOPVP,
-	ZONE_PVP,
-	ZONE_NOLOGOUT,
-	ZONE_NORMAL,
 };
 
 class TileItemVector : private ItemVector

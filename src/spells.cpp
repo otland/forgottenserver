@@ -131,8 +131,7 @@ Event_ptr Spells::getEvent(const std::string& nodeName)
 
 bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
-	if (instant) {
+	if (InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get())) {
 		auto result = instants.emplace(instant->getWords(), std::move(*instant));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
@@ -140,8 +139,7 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		return result.second;
 	}
 
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(event.get());
-	if (rune) {
+	if (RuneSpell* rune = dynamic_cast<RuneSpell*>(event.get())) {
 		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
@@ -745,8 +743,8 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	}
 
 	if (aggressive && needTarget && topVisibleCreature && player->hasSecureMode()) {
-		const Player* targetPlayer = topVisibleCreature->getPlayer();
-		if (targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE && !Combat::isInPvpZone(player, targetPlayer)) {
+		if (const Player* targetPlayer = dynamic_cast<const Player*>(topVisibleCreature);
+				targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE && !Combat::isInPvpZone(player, targetPlayer)) {
 			player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
@@ -1167,7 +1165,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 				}
 			}
 		} else {
-			var.setNumber(target->getCreature()->getID());
+			var.setNumber(dynamic_cast<const Creature*>(target)->getID());
 		}
 	} else {
 		var.setPosition(toPosition);
@@ -1182,7 +1180,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 	if (var.isNumber()) {
 		target = g_game.getCreatureByID(var.getNumber());
 		if (getPzLock() && target) {
-			player->onAttackedCreature(target->getCreature());
+			player->onAttackedCreature(dynamic_cast<Creature*>(target));
 		}
 	}
 

@@ -92,13 +92,6 @@ class Npc final : public Creature
 		Npc(const Npc&) = delete;
 		Npc& operator=(const Npc&) = delete;
 
-		Npc* getNpc() override {
-			return this;
-		}
-		const Npc* getNpc() const override {
-			return this;
-		}
-
 		bool isPushable() const override {
 			return pushable && walkTicks != 0;
 		}

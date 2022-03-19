@@ -13,7 +13,7 @@ DepotChest::DepotChest(uint16_t type) :
 ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -27,7 +27,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 		}
 
 		if (item->getTopParent() != this) {
-			if (const Container* container = item->getContainer()) {
+			if (const Container* container = dynamic_cast<const Container*>(item)) {
 				addCount = container->getItemHoldingCount() + 1;
 			} else {
 				addCount = 1;

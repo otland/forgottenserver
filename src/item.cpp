@@ -8,6 +8,7 @@
 #include "bed.h"
 #include "combat.h"
 #include "container.h"
+#include "depotlocker.h"
 #include "game.h"
 #include "house.h"
 #include "mailbox.h"

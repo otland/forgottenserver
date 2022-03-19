@@ -14,6 +14,7 @@
 #include "depotchest.h"
 #include "events.h"
 #include "game.h"
+#include "guild.h"
 #include "housetile.h"
 #include "inbox.h"
 #include "iologindata.h"
@@ -47,6 +48,7 @@ extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern Scripts* g_scripts;
+extern Game g_game;
 
 Game::Game()
 {
@@ -268,7 +270,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 
 		if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 			//do extra checks here if the thing is accessible
-			if (thing && thing->getItem()) {
+			if (thing && dynamic_cast<Item*>(thing)) {
 				if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 					if (player->getPosition().x + 1 == tile->getPosition().x) {
 						thing = nullptr;
@@ -346,8 +348,7 @@ void Game::internalGetPosition(Item* item, Position& pos, uint8_t& stackpos)
 		if (Player* player = dynamic_cast<Player*>(topParent)) {
 			pos.x = 0xFFFF;
 
-			Container* container = dynamic_cast<Container*>(item->getParent());
-			if (container) {
+			if (Container* container = dynamic_cast<Container*>(item->getParent())) {
 				pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
 				pos.z = container->getThingIndex(item);
 				stackpos = pos.z;
@@ -555,7 +556,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = dynamic_cast<Player*>(spectator)) {
 			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
 		}
 	}
@@ -584,7 +585,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
+		if (const Player* player = dynamic_cast<const Player*>(spectator)) {
 			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getClientIndexOfCreature(player, creature) : -1);
 		}
 	}
@@ -596,7 +597,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	//send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
+		if (Player* player = dynamic_cast<Player*>(spectator)) {
 			player->sendRemoveTileCreature(creature, tilePosition, oldStackPosVector[i++]);
 		}
 	}
@@ -659,7 +660,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
-	if (Creature* movingCreature = thing->getCreature()) {
+	if (Creature* movingCreature = dynamic_cast<Creature*>(thing)) {
 		Tile* tile = map.getTile(toPos);
 		if (!tile) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -674,14 +675,14 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		} else {
 			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
-	} else if (thing->getItem()) {
+	} else if (Item* item = dynamic_cast<Item*>(thing)) {
 		Cylinder* toCylinder = internalGetCylinder(player, toPos);
 		if (!toCylinder) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, thing->getItem(), toCylinder);
+		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, item, toCylinder);
 	}
 }
 
@@ -777,8 +778,8 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 				}
 			}
 
-			Npc* movingNpc = movingCreature->getNpc();
-			if (movingNpc && !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
+			if (const Npc* movingNpc = dynamic_cast<const Npc*>(movingCreature);
+					movingNpc && !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
 				player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 				return;
 			}
@@ -800,10 +801,9 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
-	Player* player = creature->getPlayer();
 
 	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
-	if (player && !diagonalMovement) {
+	if (Player* player = dynamic_cast<Player*>(creature); player && !diagonalMovement) {
 		//try to go up
 		if (currentPos.z != 8 && creature->getTile()->hasHeight(3)) {
 			Tile* tmpTile = map.getTile(currentPos.x, currentPos.y, currentPos.getZ() - 1);
@@ -934,12 +934,12 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		}
 
 		Thing* thing = internalGetThing(player, fromPos, fromIndex, 0, STACKPOS_MOVE);
-		if (!thing || !thing->getItem()) {
+		if (!thing || !dynamic_cast<Item*>(thing)) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		item = thing->getItem();
+		item = dynamic_cast<Item*>(thing);
 	}
 
 	if (item->getClientID() != spriteId) {
@@ -1083,7 +1083,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
                                    Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = nullptr*/, Item* tradeItem/* = nullptr*/, const Position* fromPos /*= nullptr*/, const Position* toPos/*= nullptr*/)
 {
-	Player* actorPlayer = actor ? actor->getPlayer() : nullptr;
+	Player* actorPlayer = dynamic_cast<Player*>(actor);
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret = g_events->eventPlayerOnMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		if (ret != RETURNVALUE_NOERROR) {
@@ -1191,13 +1191,13 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	if (tradeItem) {
-		if (toCylinder->getItem() == tradeItem) {
+		if (dynamic_cast<Item*>(toCylinder) == tradeItem) {
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 
 		Cylinder* tmpCylinder = toCylinder->getParent();
 		while (tmpCylinder) {
-			if (tmpCylinder->getItem() == tradeItem) {
+			if (dynamic_cast<Item*>(tmpCylinder) == tradeItem) {
 				return RETURNVALUE_NOTENOUGHROOM;
 			}
 
@@ -1464,7 +1464,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			continue;
 		}
 
-		Item* item = thing->getItem();
+		Item* item = dynamic_cast<Item*>(thing);
 		if (!item) {
 			continue;
 		}
@@ -1474,8 +1474,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		}
 
 		if (depthSearch) {
-			Container* container = item->getContainer();
-			if (container) {
+			if (Container* container = dynamic_cast<Container*>(item)) {
 				containers.push_back(container);
 			}
 		}
@@ -1489,8 +1488,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 				return item;
 			}
 
-			Container* subContainer = item->getContainer();
-			if (subContainer) {
+			if (Container* subContainer = dynamic_cast<Container*>(item)) {
 				containers.push_back(subContainer);
 			}
 		}
@@ -1514,18 +1512,12 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	uint64_t moneyCount = 0;
 
 	for (size_t i = cylinder->getFirstIndex(), j = cylinder->getLastIndex(); i < j; ++i) {
-		Thing* thing = cylinder->getThing(i);
-		if (!thing) {
-			continue;
-		}
-
-		Item* item = thing->getItem();
+		Item* item = dynamic_cast<Item*>(cylinder->getThing(i));
 		if (!item) {
 			continue;
 		}
 
-		Container* container = item->getContainer();
-		if (container) {
+		if (Container* container = dynamic_cast<Container*>(item)) {
 			containers.push_back(container);
 		} else {
 			const uint32_t worth = item->getWorth();
@@ -1540,8 +1532,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	while (i < containers.size()) {
 		Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
-			Container* tmpContainer = item->getContainer();
-			if (tmpContainer) {
+			if (Container* tmpContainer = dynamic_cast<Container*>(item)) {
 				containers.push_back(tmpContainer);
 			} else {
 				const uint32_t worth = item->getWorth();
@@ -1761,7 +1752,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = dynamic_cast<Creature*>(thing)) {
 		ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
@@ -1769,7 +1760,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 
 		map.moveCreature(*creature, *toTile, !pushMove);
 		return RETURNVALUE_NOERROR;
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = dynamic_cast<Item*>(thing)) {
 		return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
@@ -1827,7 +1818,7 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	Container* backpack = item->getContainer();
+	Container* backpack = dynamic_cast<Container*>(item);
 	if (!backpack) {
 		return;
 	}
@@ -2013,7 +2004,7 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
-		if (Npc* npc = spectator->getNpc()) {
+		if (Npc* npc = dynamic_cast<Npc*>(spectator)) {
 			npc->onPlayerCloseChannel(player);
 		}
 	}
@@ -2080,7 +2071,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || !item->isUseable() || item->getClientID() != fromSpriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2165,7 +2156,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2219,11 +2210,9 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 	}
 
 	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
-	if (!g_config.getBoolean(ConfigManager::AIMBOT_HOTKEY_ENABLED)) {
-		if (creature->getPlayer() || isHotkey) {
-			player->sendCancelMessage(RETURNVALUE_DIRECTPLAYERSHOOT);
-			return;
-		}
+	if (!g_config.getBoolean(ConfigManager::AIMBOT_HOTKEY_ENABLED) && (dynamic_cast<Player*>(creature) || isHotkey)) {
+		player->sendCancelMessage(RETURNVALUE_DIRECTPLAYERSHOOT);
+		return;
 	}
 
 	Thing* thing = internalGetThing(player, fromPos, fromStackPos, spriteId, STACKPOS_USEITEM);
@@ -2232,7 +2221,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || !item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2371,7 +2360,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || item->getClientID() != spriteId || (!item->isRotatable() && !item->isPodium()) || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2389,7 +2378,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	if (Podium* podium = item->getPodium()) {
+	if (Podium* podium = dynamic_cast<Podium*>(item)) {
 		podium->setDirection(static_cast<Direction>((podium->getDirection() + 1) % 4));
 		updatePodium(podium);
 	} else {
@@ -2422,8 +2411,7 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 
 	Cylinder* topParent = writeItem->getTopParent();
 
-	Player* owner = dynamic_cast<Player*>(topParent);
-	if (owner && owner != player) {
+	if (Player* owner = dynamic_cast<Player*>(topParent); owner && owner != player) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -2567,7 +2555,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || item->getClientID() != spriteId || !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID) || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2618,18 +2606,17 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	Item* tradeItem = tradeThing->getItem();
+	Item* tradeItem = dynamic_cast<Item*>(tradeThing);
 	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile())) {
-			if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return;
-			}
+		if (const HouseTile* houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile());
+				houseTile && !dynamic_cast<Creature*>(tradeItem->getTopParent()) && !houseTile->getHouse()->isInvited(player)) {
+			player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+			return;
 		}
 	}
 
@@ -2654,8 +2641,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	Container* tradeItemContainer = tradeItem->getContainer();
-	if (tradeItemContainer) {
+	if (Container* tradeItemContainer = dynamic_cast<Container*>(tradeItem)) {
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
 			if (tradeItem == item) {
@@ -2668,8 +2654,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 				return;
 			}
 
-			Container* container = item->getContainer();
-			if (container && container->isHoldingItem(tradeItem)) {
+			if (Container* container = dynamic_cast<Container*>(item); container && container->isHoldingItem(tradeItem)) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
@@ -2682,16 +2667,14 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 				return;
 			}
 
-			Container* container = item->getContainer();
-			if (container && container->isHoldingItem(tradeItem)) {
+			if (Container* container = dynamic_cast<Container*>(item); container && container->isHoldingItem(tradeItem)) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
 			}
 		}
 	}
 
-	Container* tradeContainer = tradeItem->getContainer();
-	if (tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
+	if (Container* tradeContainer = dynamic_cast<Container*>(tradeItem); tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
 		player->sendCancelMessage("You can only trade up to 100 objects at once.");
 		return;
 	}
@@ -2895,7 +2878,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 		return;
 	}
 
-	Container* tradeContainer = tradeItem->getContainer();
+	Container* tradeContainer = dynamic_cast<Container*>(tradeItem);
 	if (!tradeContainer) {
 		return;
 	}
@@ -2905,8 +2888,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 	while (i < containers.size()) {
 		const Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
-			Container* tmpContainer = item->getContainer();
-			if (tmpContainer) {
+			if (Container* tmpContainer = dynamic_cast<Container*>(item)) {
 				containers.push_back(tmpContainer);
 			}
 
@@ -3334,7 +3316,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item || item->getClientID() != spriteId || it.type != ITEM_TYPE_PODIUM) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -3371,7 +3353,7 @@ void Game::playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& 
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return;
 	}
@@ -3577,7 +3559,7 @@ void Game::playerWhisper(Player* player, const std::string& text)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* spectatorPlayer = spectator->getPlayer()) {
+		if (Player* spectatorPlayer = dynamic_cast<Player*>(spectator)) {
 			if (!Position::areInRange<1, 1>(player->getPosition(), spectatorPlayer->getPosition())) {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
 			} else {
@@ -3667,7 +3649,7 @@ void Game::playerSpeakToNpc(Player* player, const std::string& text)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
-		if (spectator->getNpc()) {
+		if (dynamic_cast<Npc*>(spectator)) {
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
 		}
 	}
@@ -3697,7 +3679,8 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureTurn(creature);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendCreatureTurn(creature);
 	}
 	return true;
 }
@@ -3735,10 +3718,8 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
-				tmpPlayer->sendCreatureSay(creature, type, text, pos);
-			}
+		if (Player* tmpPlayer = dynamic_cast<Player*>(spectator); tmpPlayer && (!ghostMode || tmpPlayer->canSeeCreature(creature))) {
+			tmpPlayer->sendCreatureSay(creature, type, text, pos);
 		}
 	}
 
@@ -3836,7 +3817,8 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendChangeSpeed(creature, creature->getStepSpeed());
+		assert(dynamic_cast<const Player*>(spectator));
+		static_cast<const Player*>(spectator)->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
 }
 
@@ -3856,7 +3838,8 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendCreatureChangeOutfit(creature, outfit);
 	}
 }
 
@@ -3866,7 +3849,8 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureChangeVisible(creature, visible);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendCreatureChangeVisible(creature, visible);
 	}
 }
 
@@ -3876,7 +3860,8 @@ void Game::changeLight(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureLight(creature);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendCreatureLight(creature);
 	}
 }
 
@@ -3886,7 +3871,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		return true;
 	}
 
-	if (target->getPlayer() && target->isInGhostMode()) {
+	if (dynamic_cast<Player*>(target) && target->isInGhostMode()) {
 		return true;
 	}
 
@@ -4068,14 +4053,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			return false;
 		}
 
-		Player* attackerPlayer;
-		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
-		} else {
-			attackerPlayer = nullptr;
-		}
-
-		Player* targetPlayer = target->getPlayer();
+		const Player* attackerPlayer = dynamic_cast<const Player*>(attacker);
+		Player* targetPlayer = dynamic_cast<Player*>(target);
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
@@ -4108,7 +4087,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			SpectatorVec spectators;
 			map.getSpectators(spectators, targetPos, false, true);
 			for (Creature* spectator : spectators) {
-				Player* tmpPlayer = spectator->getPlayer();
+				const Player* tmpPlayer = dynamic_cast<const Player*>(spectator);
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					message.text = fmt::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
@@ -4146,14 +4125,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			return true;
 		}
 
-		Player* attackerPlayer;
-		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
-		} else {
-			attackerPlayer = nullptr;
-		}
-
-		Player* targetPlayer = target->getPlayer();
+		const Player* attackerPlayer  = dynamic_cast<const Player*>(attacker);
+		Player* targetPlayer = dynamic_cast<Player*>(target);
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
@@ -4197,7 +4170,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				message.primary.color = TEXTCOLOR_BLUE;
 
 				for (Creature* spectator : spectators) {
-					Player* tmpPlayer = spectator->getPlayer();
+					const Player* tmpPlayer = dynamic_cast<const Player*>(spectator);
 					if (tmpPlayer->getPosition().z != targetPos.z) {
 						continue;
 					}
@@ -4297,7 +4270,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			std::string spectatorMessage;
 
 			for (Creature* spectator : spectators) {
-				Player* tmpPlayer = spectator->getPlayer();
+				const Player* tmpPlayer = dynamic_cast<const Player*>(spectator);
 				if (tmpPlayer->getPosition().z != targetPos.z) {
 					continue;
 				}
@@ -4350,18 +4323,16 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& damage)
 {
-	Player* targetPlayer = target->getPlayer();
+	Player* targetPlayer = dynamic_cast<Player*>(target);
 	if (!targetPlayer) {
 		return true;
 	}
 
 	int32_t manaChange = damage.primary.value + damage.secondary.value;
 	if (manaChange > 0) {
-		if (attacker) {
-			const Player* attackerPlayer = attacker->getPlayer();
-			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
-				return false;
-			}
+		if (const Player* attackerPlayer = dynamic_cast<Player*>(attacker);
+				attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
+			return false;
 		}
 
 		if (damage.origin != ORIGIN_NONE) {
@@ -4395,13 +4366,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 			return false;
 		}
 
-		Player* attackerPlayer;
-		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
-		} else {
-			attackerPlayer = nullptr;
-		}
-
+		const Player* attackerPlayer = dynamic_cast<const Player*>(attacker);
 		if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
@@ -4440,7 +4405,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		SpectatorVec spectators;
 		map.getSpectators(spectators, targetPos, false, true);
 		for (Creature* spectator : spectators) {
-			Player* tmpPlayer = spectator->getPlayer();
+			const Player* tmpPlayer = dynamic_cast<const Player*>(spectator);
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
 				message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
@@ -4485,7 +4450,7 @@ void Game::addCreatureHealth(const Creature* target)
 void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* target)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (const Player* tmpPlayer = dynamic_cast<const Player*>(spectator)) {
 			tmpPlayer->sendCreatureHealth(target);
 		}
 	}
@@ -4501,7 +4466,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect)
 void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (const Player* tmpPlayer = dynamic_cast<const Player*>(spectator)) {
 			tmpPlayer->sendMagicEffect(pos, effect);
 		}
 	}
@@ -4520,7 +4485,7 @@ void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uin
 void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = dynamic_cast<Player*>(spectator)) {
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
@@ -4778,7 +4743,7 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		Player* tmpPlayer = spectator->getPlayer();
+		Player* tmpPlayer = dynamic_cast<Player*>(spectator);
 		tmpPlayer->sendCreatureWalkthrough(creature, tmpPlayer->canWalkthroughEx(creature));
 	}
 }
@@ -4792,7 +4757,8 @@ void Game::updateCreatureSkull(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureSkull(creature);
+		assert(dynamic_cast<const Player*>(spectator));
+		static_cast<const Player*>(spectator)->sendCreatureSkull(creature);
 	}
 }
 
@@ -4801,7 +4767,8 @@ void Game::updatePlayerShield(Player* player)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureShield(player);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendCreatureShield(player);
 	}
 }
 
@@ -5494,7 +5461,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 		containers.pop_front();
 
 		for (Item* item : container->getItemList()) {
-			Container* c = item->getContainer();
+			Container* c = dynamic_cast<Container*>(item);
 			if (c && !c->empty()) {
 				containers.push_back(c);
 				continue;
@@ -5704,7 +5671,7 @@ void Game::removeBedSleeper(uint32_t guid)
 
 void Game::updatePodium(Item* item)
 {
-	if (!item->getPodium()) {
+	if (!dynamic_cast<Podium*>(item)) {
 		return;
 	}
 
@@ -5717,7 +5684,8 @@ void Game::updatePodium(Item* item)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, item->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTileItem(tile, item->getPosition(), item);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendUpdateTileItem(tile, item->getPosition(), item);
 	}
 }
 

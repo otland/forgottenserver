@@ -441,8 +441,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			Item* item = pair.first;
 			int32_t pid = pair.second;
 
-			Container* itemContainer = item->getContainer();
-			if (itemContainer) {
+			if (Container* itemContainer = dynamic_cast<Container*>(item)) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
 					openContainersList.emplace(cid, itemContainer);
@@ -457,8 +456,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (Container* container = dynamic_cast<Container*>(it2->second.first)) {
 					container->internalAddThing(item);
 				}
 			}
@@ -492,8 +490,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (Container* container = dynamic_cast<Container*>(it2->second.first)) {
 					container->internalAddThing(item);
 				}
 			}
@@ -520,8 +517,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (Container* container = dynamic_cast<Container*>(it2->second.first)) {
 					container->internalAddThing(item);
 				}
 			}
@@ -548,8 +544,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
-				if (container) {
+				if (Container* container = dynamic_cast<Container*>(it2->second.first)) {
 					container->internalAddThing(item);
 				}
 			}
@@ -591,7 +586,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		Item* item = it.second;
 		++runningId;
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = dynamic_cast<Container*>(item)) {
 			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
@@ -630,8 +625,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		for (Item* item : container->getItemList()) {
 			++runningId;
 
-			Container* subContainer = item->getContainer();
-			if (subContainer) {
+			if (Container* subContainer = dynamic_cast<Container*>(item)) {
 				containers.emplace_back(subContainer, runningId);
 
 				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {

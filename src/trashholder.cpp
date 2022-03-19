@@ -37,7 +37,7 @@ void TrashHolder::addThing(Thing* thing)
 
 void TrashHolder::addThing(int32_t, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return;
 	}

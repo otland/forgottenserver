@@ -7,6 +7,7 @@
 
 #include "actions.h"
 #include "chat.h"
+#include "creatureevent.h"
 #include "events.h"
 #include "globalevent.h"
 #include "movement.h"

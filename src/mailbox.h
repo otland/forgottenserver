@@ -12,13 +12,6 @@ class Mailbox final : public Item, public Cylinder
 	public:
 		explicit Mailbox(uint16_t itemId) : Item(itemId) {}
 
-		Mailbox* getMailbox() override {
-			return this;
-		}
-		const Mailbox* getMailbox() const override {
-			return this;
-		}
-
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 				uint32_t flags, Creature* actor = nullptr) const override;

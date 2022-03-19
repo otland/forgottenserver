@@ -30,7 +30,7 @@ Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
 		for (Item* item : *itemVector) {
-			if ((item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) && !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+			if ((dynamic_cast<Container*>(item) || item->hasProperty(CONST_PROP_MOVEABLE)) && !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 				itemlist.push_front(item);
 				item->setParent(this);
 			}
@@ -68,11 +68,7 @@ Item* Container::clone() const
 
 Container* Container::getParentContainer()
 {
-	Thing* thing = getParent();
-	if (!thing) {
-		return nullptr;
-	}
-	return thing->getContainer();
+	return dynamic_cast<Container*>(getParent());
 }
 
 std::string Container::getName(bool addArticle /* = false*/) const {
@@ -183,12 +179,14 @@ void Container::onAddContainerItem(Item* item)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendAddContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendAddContainerItem(this, item);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onAddContainerItem(item);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->onAddContainerItem(item);
 	}
 }
 
@@ -199,12 +197,14 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
@@ -215,12 +215,14 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//send change to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendRemoveContainerItem(this, index);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onRemoveContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->onRemoveContainerItem(this, item);
 	}
 }
 
@@ -238,7 +240,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -295,10 +297,9 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 
 	const Cylinder* const topParent = getTopParent();
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
-			}
+		if (const HouseTile* houseTile = dynamic_cast<const HouseTile*>(topParent->getTile());
+				houseTile && !dynamic_cast<const Creature*>(topParent) && !houseTile->getHouse()->isInvited(dynamic_cast<Player*>(actor))) {
+			return RETURNVALUE_PLAYERISNOTINVITED;
 		}
 	}
 
@@ -311,7 +312,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -366,7 +367,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -381,10 +382,9 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
-			}
+		if (const HouseTile* houseTile = dynamic_cast<const HouseTile*>(topParent->getTile());
+				houseTile && !dynamic_cast<const Creature*>(topParent) && !houseTile->getHouse()->isInvited(dynamic_cast<Player*>(actor))) {
+			return RETURNVALUE_PLAYERISNOTINVITED;
 		}
 	}
 
@@ -403,8 +403,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
 
-		Container* parentContainer = dynamic_cast<Container*>(getParent());
-		if (parentContainer) {
+		if (Container* parentContainer = dynamic_cast<Container*>(getParent())) {
 			return parentContainer;
 		}
 		return this;
@@ -425,7 +424,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 		*destItem = nullptr;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return this;
 	}
@@ -436,8 +435,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 			*destItem = itemFromIndex;
 		}
 
-		Cylinder* subCylinder = dynamic_cast<Cylinder*>(*destItem);
-		if (subCylinder) {
+		if (Cylinder* subCylinder = dynamic_cast<Cylinder*>(*destItem)) {
 			index = INDEX_WHEREEVER;
 			*destItem = nullptr;
 			return subCylinder;
@@ -475,7 +473,7 @@ void Container::addThing(int32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -508,7 +506,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -526,7 +524,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Container::replaceThing(uint32_t index, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -550,7 +548,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 
 void Container::removeThing(Thing* thing, uint32_t count)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -647,7 +645,7 @@ Thing* Container::getThing(size_t index) const
 void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
+	if (dynamic_cast<Creature*>(topParent)) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
@@ -662,7 +660,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
+	if (dynamic_cast<Creature*>(topParent)) {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
@@ -681,7 +679,7 @@ void Container::internalAddThing(Thing* thing)
 
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return;
 	}
@@ -718,10 +716,8 @@ Item* ContainerIterator::operator*()
 void ContainerIterator::advance()
 {
 	if (Item* i = *cur) {
-		if (Container* c = i->getContainer()) {
-			if (!c->empty()) {
-				over.push_back(c);
-			}
+		if (Container* c = dynamic_cast<Container*>(i); c && !c->empty()) {
+			over.push_back(c);
 		}
 	}
 

@@ -6,11 +6,9 @@
 
 #include "cylinder.h"
 #include "item.h"
-#include "tile.h"
 
 class Container;
-class DepotLocker;
-class StoreInbox;
+class Tile;
 
 class ContainerIterator
 {
@@ -42,27 +40,6 @@ class Container : public Item, public Cylinder
 		Container& operator=(const Container&) = delete;
 
 		Item* clone() const override final;
-
-		Container* getContainer() override final {
-			return this;
-		}
-		const Container* getContainer() const override final {
-			return this;
-		}
-
-		virtual DepotLocker* getDepotLocker() {
-			return nullptr;
-		}
-		virtual const DepotLocker* getDepotLocker() const {
-			return nullptr;
-		}
-
-		virtual StoreInbox* getStoreInbox() {
-			return nullptr;
-		}
-		virtual const StoreInbox* getStoreInbox() const {
-			return nullptr;
-		}
 
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 		bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;

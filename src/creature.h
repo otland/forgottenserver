@@ -5,7 +5,6 @@
 #define FS_CREATURE_H
 
 #include "const.h"
-#include "creatureevent.h"
 #include "enums.h"
 #include "map.h"
 #include "position.h"
@@ -13,10 +12,8 @@
 
 class Condition;
 class Container;
+class CreatureEvent;
 class Item;
-class Monster;
-class Npc;
-class Player;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
@@ -87,31 +84,6 @@ class Creature : virtual public Thing
 		// non-copyable
 		Creature(const Creature&) = delete;
 		Creature& operator=(const Creature&) = delete;
-
-		Creature* getCreature() override final {
-			return this;
-		}
-		const Creature* getCreature() const override final {
-			return this;
-		}
-		virtual Player* getPlayer() {
-			return nullptr;
-		}
-		virtual const Player* getPlayer() const {
-			return nullptr;
-		}
-		virtual Npc* getNpc() {
-			return nullptr;
-		}
-		virtual const Npc* getNpc() const {
-			return nullptr;
-		}
-		virtual Monster* getMonster() {
-			return nullptr;
-		}
-		virtual const Monster* getMonster() const {
-			return nullptr;
-		}
 
 		virtual const std::string& getName() const = 0;
 		virtual const std::string& getNameDescription() const = 0;

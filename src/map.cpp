@@ -161,7 +161,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	if (tile) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				if (Player* player = (*creatures)[i]->getPlayer()) {
+				if (Player* player = dynamic_cast<Player*>((*creatures)[i])) {
 					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
@@ -270,8 +270,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	spectators.addSpectators(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
-	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+	for (const Creature* spectator : spectators) {
+		if (const Player* tmpPlayer = dynamic_cast<const Player*>(spectator)) {
 			if (tmpPlayer->canSeeCreature(&creature)) {
 				oldStackPosVector.push_back(oldTile.getClientIndexOfCreature(tmpPlayer, &creature));
 			} else {
@@ -312,7 +312,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	//send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = dynamic_cast<Player*>(spectator)) {
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
@@ -427,7 +427,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				} else {
 					const SpectatorVec& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
-						if (spectator->getPlayer()) {
+						if (dynamic_cast<Player*>(spectator)) {
 							spectators.emplace_back(spectator);
 						}
 					}
@@ -927,8 +927,8 @@ int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* t
 
 	if (const MagicField* field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		const Monster* monster = creature.getMonster();
-		if (!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType)) && (monster && !monster->canWalkOnFieldType(combatType))) {
+		if (const Monster* monster = dynamic_cast<const Monster*>(&creature);
+				!creature.isImmune(combatType) && !creature.hasCondition(Combat::DamageToConditionType(combatType)) && (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
 		}
 	}
@@ -1005,7 +1005,7 @@ void QTreeLeafNode::addCreature(Creature* c)
 {
 	creature_list.push_back(c);
 
-	if (c->getPlayer()) {
+	if (dynamic_cast<Player*>(c)) {
 		player_list.push_back(c);
 	}
 }
@@ -1017,7 +1017,7 @@ void QTreeLeafNode::removeCreature(Creature* c)
 	*iter = creature_list.back();
 	creature_list.pop_back();
 
-	if (c->getPlayer()) {
+	if (dynamic_cast<Player*>(c)) {
 		iter = std::find(player_list.begin(), player_list.end(), c);
 		assert(iter != player_list.end());
 		*iter = player_list.back();

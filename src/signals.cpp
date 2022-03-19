@@ -7,6 +7,7 @@
 
 #include "actions.h"
 #include "configmanager.h"
+#include "creatureevent.h"
 #include "databasetasks.h"
 #include "events.h"
 #include "game.h"

@@ -7,6 +7,7 @@
 #include "bed.h"
 #include "configmanager.h"
 #include "container.h"
+#include "depotlocker.h"
 #include "game.h"
 #include "housetile.h"
 #include "pugicast.h"
@@ -301,10 +302,8 @@ Action* Actions::getAction(const Item* item)
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey)
 {
-	if (Door* door = item->getDoor()) {
-		if (!door->canUse(player)) {
-			return RETURNVALUE_NOTPOSSIBLE;
-		}
+	if (Door* door = dynamic_cast<Door*>(item); door && !door->canUse(player)) {
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	Action* action = getAction(item);
@@ -322,7 +321,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 	}
 
-	if (BedItem* bed = item->getBed()) {
+	if (BedItem* bed = dynamic_cast<BedItem*>(item)) {
 		if (!bed->canUse(player)) {
 			if (!bed->getHouse()) {
 				return RETURNVALUE_YOUCANNOTUSETHISBED;
@@ -342,11 +341,11 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (Container* container = item->getContainer()) {
+	if (Container* container = dynamic_cast<Container*>(item)) {
 		Container* openContainer;
 
 		//depot container
-		if (DepotLocker* depot = container->getDepotLocker()) {
+		if (DepotLocker* depot = dynamic_cast<DepotLocker*>(container)) {
 			DepotLocker* myDepotLocker = player->getDepotLocker(depot->getDepotId());
 			myDepotLocker->setParent(depot->getParent()->getTile());
 			openContainer = myDepotLocker;
@@ -416,11 +415,10 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return false;
-			}
+		if (const HouseTile* houseTile = dynamic_cast<const HouseTile*>(item->getTile());
+				houseTile && !dynamic_cast<Creature*>(item->getTopParent()) && !houseTile->getHouse()->isInvited(player)) {
+			player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+			return false;
 		}
 	}
 
@@ -463,11 +461,10 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return false;
-			}
+		if (const HouseTile* houseTile = dynamic_cast<const HouseTile*>(item->getTile());
+				houseTile && !dynamic_cast<Creature*>(item->getTopParent()) && !houseTile->getHouse()->isInvited(player)) {
+			player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+			return false;
 		}
 	}
 

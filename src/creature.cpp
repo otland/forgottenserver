@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "creatureevent.h"
 #include "game.h"
 #include "monster.h"
 #include "party.h"
@@ -191,7 +192,7 @@ void Creature::onWalk()
 		if (getNextStep(dir, flags)) {
 			ReturnValue ret = g_game.internalMoveCreature(this, dir, flags);
 			if (ret != RETURNVALUE_NOERROR) {
-				if (Player* player = getPlayer()) {
+				if (Player* player = dynamic_cast<Player*>(this)) {
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
@@ -248,8 +249,7 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk()
 {
-	Player* player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (Player* player = dynamic_cast<Player*>(this); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -259,8 +259,7 @@ void Creature::startAutoWalk()
 
 void Creature::startAutoWalk(Direction direction)
 {
-	Player* player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (Player* player = dynamic_cast<Player*>(this); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -276,8 +275,7 @@ void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 		return;
 	}
 
-	Player* player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (Player* player = dynamic_cast<Player*>(this); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -674,8 +672,8 @@ void Creature::onDeath()
 
 			if (attacker != this) {
 				uint64_t gainExp = getGainedExperience(attacker);
-				if (Player* attackerPlayer = attacker->getPlayer()) {
-					attackerPlayer->removeAttacked(getPlayer());
+				if (Player* attackerPlayer = dynamic_cast<Player*>(attacker)) {
+					attackerPlayer->removeAttacked(dynamic_cast<Player*>(this));
 
 					Party* party = attackerPlayer->getParty();
 					if (party && party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
@@ -720,7 +718,7 @@ void Creature::onDeath()
 
 bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)
 {
-	if (!lootDrop && getMonster()) {
+	if (!lootDrop && dynamic_cast<Monster*>(this)) {
 		if (master) {
 			//scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
@@ -769,7 +767,7 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 		}
 
 		if (corpse) {
-			dropLoot(corpse->getContainer(), lastHitCreature);
+			dropLoot(dynamic_cast<Container*>(corpse), lastHitCreature);
 		}
 	}
 
@@ -874,7 +872,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	}
 
 	if (attacker) {
-		if (Player* attackerPlayer = attacker->getPlayer()) {
+		if (Player* attackerPlayer = dynamic_cast<Player*>(attacker)) {
 			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 					continue;
@@ -942,8 +940,8 @@ void Creature::goToFollowCreature()
 		FindPathParams fpp;
 		getPathSearchParams(followCreature, fpp);
 
-		Monster* monster = getMonster();
-		if (monster && !monster->getMaster() && (monster->isFleeing() || fpp.maxTargetDist > 1)) {
+		if (Monster* monster = dynamic_cast<Monster*>(this);
+				monster && !monster->getMaster() && (monster->isFleeing() || fpp.maxTargetDist > 1)) {
 			Direction dir = DIRECTION_NONE;
 
 			if (monster->isFleeing()) {
@@ -1167,7 +1165,8 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendTextMessage(message);
 	}
 }
 
@@ -1444,8 +1443,8 @@ int64_t Creature::getStepDuration() const
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
 	int64_t stepDuration = std::ceil(duration / 50) * 50;
 
-	const Monster* monster = getMonster();
-	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
+	if (const Monster* monster = dynamic_cast<const Monster*>(this);
+			monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
 		stepDuration *= 2;
 	}
 

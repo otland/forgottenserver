@@ -37,13 +37,6 @@ class Monster final : public Creature
 		Monster(const Monster&) = delete;
 		Monster& operator=(const Monster&) = delete;
 
-		Monster* getMonster() override {
-			return this;
-		}
-		const Monster* getMonster() const override {
-			return this;
-		}
-
 		void setID() override {
 			if (id == 0) {
 				id = monsterAutoID++;

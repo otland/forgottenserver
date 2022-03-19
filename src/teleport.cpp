@@ -90,7 +90,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = dynamic_cast<Creature*>(thing)) {
 		Position origPos = creature->getPosition();
 		g_game.internalCreatureTurn(creature, origPos.x > destPos.x ? DIRECTION_WEST : DIRECTION_EAST);
 		g_game.map.moveCreature(*creature, *destTile);
@@ -98,7 +98,7 @@ void Teleport::addThing(int32_t, Thing* thing)
 			g_game.addMagicEffect(origPos, effect);
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 		}
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = dynamic_cast<Item*>(thing)) {
 		if (effect != CONST_ME_NONE) {
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 			g_game.addMagicEffect(item->getPosition(), effect);

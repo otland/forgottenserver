@@ -8,19 +8,10 @@
 
 class Inbox;
 
-using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
-
 class DepotLocker final : public Container
 {
 	public:
 		explicit DepotLocker(uint16_t type);
-
-		DepotLocker* getDepotLocker() override {
-			return this;
-		}
-		const DepotLocker* getDepotLocker() const override {
-			return this;
-		}
 
 		void removeInbox(Inbox* inbox);
 
@@ -48,5 +39,7 @@ class DepotLocker final : public Container
 	private:
 		uint16_t depotId;
 };
+
+using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 
 #endif // FS_DEPOTLOCKER_H

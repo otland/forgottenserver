@@ -11,13 +11,6 @@ class StoreInbox final : public Container
 	public:
 		explicit StoreInbox(uint16_t type);
 
-		StoreInbox* getStoreInbox() override {
-			return this;
-		}
-		const StoreInbox* getStoreInbox() const override {
-			return this;
-		}
-
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
 			uint32_t flags, Creature* actor = nullptr) const override;

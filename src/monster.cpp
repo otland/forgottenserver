@@ -90,7 +90,7 @@ void Monster::setName(const std::string& name)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = dynamic_cast<Player*>(spectator)) {
 			tmpPlayer->sendUpdateTileCreature(this);
 		}
 	}
@@ -448,24 +448,20 @@ void Monster::onCreatureEnter(Creature* creature)
 
 bool Monster::isFriend(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
-		const Player* masterPlayer = getMaster()->getPlayer();
+	if (isSummon() && dynamic_cast<const Player*>(getMaster())) {
+		const Player* masterPlayer = dynamic_cast<const Player*>(getMaster());
 		const Player* tmpPlayer = nullptr;
 
-		if (creature->getPlayer()) {
-			tmpPlayer = creature->getPlayer();
-		} else {
-			const Creature* creatureMaster = creature->getMaster();
-
-			if (creatureMaster && creatureMaster->getPlayer()) {
-				tmpPlayer = creatureMaster->getPlayer();
-			}
+		if (const Player* player = dynamic_cast<const Player*>(creature)) {
+			tmpPlayer = player;
+		} else if (const Creature* creatureMaster = creature->getMaster(); creatureMaster && dynamic_cast<const Player*>(creatureMaster)) {
+			tmpPlayer = dynamic_cast<const Player*>(creatureMaster);
 		}
 
 		if (tmpPlayer && (tmpPlayer == getMaster() || masterPlayer->isPartner(tmpPlayer))) {
 			return true;
 		}
-	} else if (creature->getMonster() && !creature->isSummon()) {
+	} else if (dynamic_cast<const Monster*>(creature) && !creature->isSummon()) {
 		return true;
 	}
 
@@ -474,13 +470,13 @@ bool Monster::isFriend(const Creature* creature) const
 
 bool Monster::isOpponent(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
+	if (isSummon() && dynamic_cast<const Player*>(getMaster())) {
 		if (creature != getMaster()) {
 			return true;
 		}
 	} else {
-		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		        (creature->getMaster() && creature->getMaster()->getPlayer())) {
+		if (const Player* player = dynamic_cast<const Player*>(creature); player && !player->hasFlag(PlayerFlag_IgnoredByMonsters) ||
+		        (creature->getMaster() && dynamic_cast<Player*>(creature->getMaster()))) {
 			return true;
 		}
 	}
@@ -1155,8 +1151,7 @@ void Monster::pushCreatures(Tile* tile)
 		Monster* lastPushedMonster = nullptr;
 
 		for (size_t i = 0; i < creatures->size();) {
-			Monster* monster = creatures->at(i)->getMonster();
-			if (monster && monster->isPushable()) {
+			if (Monster* monster = dynamic_cast<Monster*>(creatures->at(i)); monster && monster->isPushable()) {
 				if (monster != lastPushedMonster && Monster::pushCreature(monster)) {
 					lastPushedMonster = monster;
 					continue;
@@ -1865,11 +1860,11 @@ Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse) {
 		if (mostDamageCreature) {
-			if (mostDamageCreature->getPlayer()) {
+			if (dynamic_cast<const Player*>(mostDamageCreature)) {
 				corpse->setCorpseOwner(mostDamageCreature->getID());
 			} else {
 				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
+				if (mostDamageCreatureMaster && dynamic_cast<const Player*>(mostDamageCreatureMaster)) {
 					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 				}
 			}
@@ -2064,8 +2059,7 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 
 bool Monster::canPushItems() const
 {
-	Monster* master = this->master ? this->master->getMonster() : nullptr;
-	if (master) {
+	if (const Monster* master = dynamic_cast<const Monster*>(this->master)) {
 		return master->mType->info.canPushItems;
 	}
 

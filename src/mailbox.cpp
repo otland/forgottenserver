@@ -13,8 +13,7 @@ extern Game g_game;
 
 ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
 {
-	const Item* item = thing.getItem();
-	if (item && Mailbox::canSend(item)) {
+	if (const Item* item = dynamic_cast<const Item*>(&thing); item && Mailbox::canSend(item)) {
 		return RETURNVALUE_NOERROR;
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
@@ -43,8 +42,7 @@ void Mailbox::addThing(Thing* thing)
 
 void Mailbox::addThing(int32_t, Thing* thing)
 {
-	Item* item = thing->getItem();
-	if (item && Mailbox::canSend(item)) {
+	if (Item* item = dynamic_cast<Item*>(thing); item && Mailbox::canSend(item)) {
 		sendItem(item);
 	}
 }
@@ -112,8 +110,7 @@ bool Mailbox::sendItem(Item* item) const
 
 bool Mailbox::getReceiver(Item* item, std::string& name) const
 {
-	const Container* container = item->getContainer();
-	if (container) {
+	if (const Container* container = dynamic_cast<Container*>(item)) {
 		for (Item* containerItem : container->getItemList()) {
 			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
 				return true;

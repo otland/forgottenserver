@@ -5,6 +5,7 @@
 
 #include "housetile.h"
 
+#include "bed.h"
 #include "configmanager.h"
 #include "game.h"
 #include "house.h"
@@ -23,7 +24,7 @@ void HouseTile::addThing(int32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = dynamic_cast<Item*>(thing)) {
 		updateHouse(item);
 	}
 }
@@ -36,7 +37,7 @@ void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = dynamic_cast<Item*>(thing)) {
 		updateHouse(item);
 	}
 }
@@ -47,36 +48,32 @@ void HouseTile::updateHouse(Item* item)
 		return;
 	}
 
-	Door* door = item->getDoor();
-	if (door) {
+	if (Door* door = dynamic_cast<Door*>(item)) {
 		if (door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
-	} else {
-		BedItem* bed = item->getBed();
-		if (bed) {
-			house->addBed(bed);
-		}
+	} else if (BedItem* bed = dynamic_cast<BedItem*>(item)) {
+		house->addBed(bed);
 	}
 }
 
 ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	if (const Creature* creature = thing.getCreature()) {
-		if (const Player* player = creature->getPlayer()) {
+	if (const Creature* creature = dynamic_cast<const Creature*>(&thing)) {
+		if (const Player* player = dynamic_cast<const Player*>(creature)) {
 			if (!house->isInvited(player)) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		} else {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (const Item* item = thing.getItem()) {
+	} else if (const Item* item = dynamic_cast<const Item*>(&thing)) {
 		if (item->isStoreItem() && !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
 
 		if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-			if (!house->isInvited(actor->getPlayer())) {
+			if (!house->isInvited(dynamic_cast<const Player*>(actor))) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}
@@ -86,8 +83,8 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 
 Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
-	if (const Creature* creature = thing.getCreature()) {
-		if (const Player* player = creature->getPlayer()) {
+	if (const Creature* creature = dynamic_cast<const Creature*>(&thing)) {
+		if (const Player* player = dynamic_cast<const Player*>(creature)) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
 				Tile* destTile = g_game.map.getTile(entryPos);
@@ -115,13 +112,12 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 
 ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr*/) const
 {
-	const Item* item = thing.getItem();
-	if (!item) {
+	if (const Item* item = dynamic_cast<const Item*>(&thing); !item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (!house->isInvited(actor->getPlayer())) {
+		if (!house->isInvited(dynamic_cast<const Player*>(actor))) {
 			return RETURNVALUE_PLAYERISNOTINVITED;
 		}
 	}

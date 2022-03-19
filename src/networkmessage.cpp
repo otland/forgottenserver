@@ -124,7 +124,7 @@ void NetworkMessage::addItem(const Item* item)
 
 	// display outfit on the podium
 	if (it.isPodium()) {
-		const Podium* podium = item->getPodium();
+		const Podium* podium = dynamic_cast<const Podium*>(item);
 		const Outfit_t &outfit = podium->getOutfit();
 
 		//add outfit

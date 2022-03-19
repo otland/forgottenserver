@@ -10,6 +10,7 @@
 #include "town.h"
 
 class Creature;
+class SpectatorVec;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
@@ -133,6 +134,8 @@ class QTreeLeafNode final : public QTreeNode
 		QTreeLeafNode* leafS = nullptr;
 		QTreeLeafNode* leafE = nullptr;
 		Floor* array[MAP_MAX_LAYERS] = {};
+
+		using CreatureVector = std::vector<Creature*>;
 		CreatureVector creature_list;
 		CreatureVector player_list;
 

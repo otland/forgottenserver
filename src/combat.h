@@ -188,13 +188,6 @@ class MagicField final : public Item
 	public:
 		explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {}
 
-		MagicField* getMagicField() override {
-			return this;
-		}
-		const MagicField* getMagicField() const override {
-			return this;
-		}
-
 		bool isReplaceable() const {
 			return Item::items[getID()].replaceable;
 		}

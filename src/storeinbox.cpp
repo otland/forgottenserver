@@ -9,7 +9,7 @@ StoreInbox::StoreInbox(uint16_t type) : Container(type, 20, true, true) {}
 
 ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -27,8 +27,7 @@ ReturnValue StoreInbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t
 			return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
 		}
 
-		const Container* container = item->getContainer();
-		if (container && !container->empty()) {
+		if (const Container* container = dynamic_cast<const Container*>(item); container && !container->empty()) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
 	}

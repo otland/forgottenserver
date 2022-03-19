@@ -438,12 +438,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 	}
 
 	for (size_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
-		Thing* thing = tile->getThing(i);
-		if (!thing) {
-			continue;
-		}
-
-		Item* tileItem = thing->getItem();
+		Item* tileItem = dynamic_cast<Item*>(tile->getThing(i));
 		if (!tileItem) {
 			continue;
 		}
@@ -497,12 +492,7 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 	}
 
 	for (size_t i = tile->getFirstIndex(), j = tile->getLastIndex(); i < j; ++i) {
-		Thing* thing = tile->getThing(i);
-		if (!thing) {
-			continue;
-		}
-
-		Item* tileItem = thing->getItem();
+		Item* tileItem = dynamic_cast<Item*>(tile->getThing(i));
 		if (!tileItem || tileItem == item) {
 			continue;
 		}
@@ -655,8 +645,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 {
-	MagicField* field = item->getMagicField();
-	if (field) {
+	if (MagicField* field = dynamic_cast<MagicField*>(item)) {
 		field->onStepInField(creature);
 		return 1;
 	}
@@ -671,7 +660,7 @@ uint32_t MoveEvent::StepOutField(Creature*, Item*, const Position&)
 
 uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 {
-	if (MagicField* field = item->getMagicField()) {
+	if (MagicField* field = dynamic_cast<MagicField*>(item)) {
 		Tile* tile = item->getTile();
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (Creature* creature : *creatures) {

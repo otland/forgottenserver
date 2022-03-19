@@ -9,6 +9,7 @@
 #include "ban.h"
 #include "condition.h"
 #include "configmanager.h"
+#include "creatureevent.h"
 #include "depotchest.h"
 #include "game.h"
 #include "inbox.h"
@@ -26,6 +27,7 @@ extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Game g_game;
 
 namespace {
 
@@ -1464,7 +1466,7 @@ void ProtocolGame::sendCreatureShield(const Creature* creature)
 	NetworkMessage msg;
 	msg.addByte(0x91);
 	msg.add<uint32_t>(creature->getID());
-	msg.addByte(player->getPartyShield(creature->getPlayer()));
+	msg.addByte(player->getPartyShield(dynamic_cast<const Player*>(creature)));
 	writeToOutputBuffer(msg);
 }
 
@@ -1937,7 +1939,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		containerList.pop_front();
 
 		for (Item* item : container->getItemList()) {
-			Container* c = item->getContainer();
+			Container* c = dynamic_cast<Container*>(item);
 			if (c && !c->empty()) {
 				containerList.push_front(c);
 				continue;
@@ -2243,7 +2245,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 
 	msg.addString(traderName);
 
-	if (const Container* tradeContainer = item->getContainer()) {
+	if (const Container* tradeContainer = dynamic_cast<const Container*>(item)) {
 		std::list<const Container*> listContainer {tradeContainer};
 		std::list<const Item*> itemList {tradeContainer};
 		while (!listContainer.empty()) {
@@ -2251,8 +2253,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 			listContainer.pop_front();
 
 			for (Item* containerItem : container->getItemList()) {
-				Container* tmpContainer = containerItem->getContainer();
-				if (tmpContainer) {
+				if (Container* tmpContainer = dynamic_cast<Container*>(containerItem)) {
 					listContainer.push_back(tmpContainer);
 				}
 				itemList.push_back(containerItem);
@@ -2320,7 +2321,7 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	msg.addByte(0x00); // "(Traded)" suffix after player name
 
 	//Add level only for players
-	if (const Player* speaker = creature->getPlayer()) {
+	if (const Player* speaker = dynamic_cast<const Player*>(creature)) {
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2352,7 +2353,7 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 		msg.addByte(0x00); // "(Traded)" suffix after player name
 
 		//Add level only for players
-		if (const Player* speaker = creature->getPlayer()) {
+		if (const Player* speaker = dynamic_cast<const Player*>(creature)) {
 			msg.add<uint16_t>(speaker->getLevel());
 		} else {
 			msg.add<uint16_t>(0x00);
@@ -2680,7 +2681,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	// send store inbox
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox());
 
 	// gameworld time of the day
 	sendWorldLight(g_game.getWorldLightInfo());
@@ -2993,7 +2994,7 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 		return;
 	}
 
-	const Podium* podium = item->getPodium();
+	const Podium* podium = dynamic_cast<const Podium*>(item);
 	if (!podium) {
 		return;
 	}
@@ -3266,14 +3267,13 @@ void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
 void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
-	const Player* otherPlayer = creature->getPlayer();
+	const Player* otherPlayer = dynamic_cast<const Player*>(creature);
 	const Player* masterPlayer = nullptr;
 	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
-		const Creature* master = creature->getMaster();
-		if (master) {
-			masterPlayer = master->getPlayer();
+		if (const Creature* master = creature->getMaster()) {
+			masterPlayer = dynamic_cast<const Player*>(creature->getMaster());
 			if (masterPlayer) {
 				masterId = master->getID();
 				creatureType = CREATURETYPE_SUMMON_OWN;
@@ -3343,8 +3343,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	// Player vocation info
 	if (creatureType == CREATURETYPE_PLAYER) {
-		const Player* otherCreature = creature->getPlayer();
-		if (otherCreature) {
+		if (const Player* otherCreature = dynamic_cast<const Player*>(creature)) {
 			msg.addByte(otherCreature->getVocation()->getClientId());
 		} else {
 			msg.addByte(0x00);

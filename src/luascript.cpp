@@ -8,9 +8,11 @@
 #include "bed.h"
 #include "chat.h"
 #include "configmanager.h"
+#include "creatureevent.h"
 #include "databasemanager.h"
 #include "databasetasks.h"
 #include "depotchest.h"
+#include "depotlocker.h"
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
@@ -119,12 +121,11 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return 0;
 	}
 
-	Creature* creature = thing->getCreature();
-	if (creature) {
+	if (const Creature* creature = dynamic_cast<const Creature*>(thing)) {
 		return creature->getID();
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (item && item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return item->getUniqueId();
 	}
@@ -173,20 +174,12 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 
 Item* ScriptEnvironment::getItemByUID(uint32_t uid)
 {
-	Thing* thing = getThingByUID(uid);
-	if (!thing) {
-		return nullptr;
-	}
-	return thing->getItem();
+	return dynamic_cast<Item*>(getThingByUID(uid));
 }
 
 Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 {
-	Item* item = getItemByUID(uid);
-	if (!item) {
-		return nullptr;
-	}
-	return item->getContainer();
+	return dynamic_cast<Container*>(getItemByUID(uid));
 }
 
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
@@ -607,10 +600,10 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = dynamic_cast<Item*>(thing)) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
+	} else if (Creature* creature = dynamic_cast<Creature*>(thing)) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
 	} else {
@@ -620,10 +613,10 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 
 void LuaScriptInterface::pushCylinder(lua_State* L, Cylinder* cylinder)
 {
-	if (Creature* creature = cylinder->getCreature()) {
+	if (Creature* creature = dynamic_cast<Creature*>(cylinder)) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
+	} else if (Item* parentItem = dynamic_cast<Item*>(cylinder)) {
 		pushUserdata<Item>(L, parentItem);
 		setItemMetatable(L, -1, parentItem);
 	} else if (Tile* tile = cylinder->getTile()) {
@@ -706,11 +699,11 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 
 void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Item* item)
 {
-	if (item->getContainer()) {
+	if (dynamic_cast<const Container*>(item)) {
 		luaL_getmetatable(L, "Container");
-	} else if (item->getTeleport()) {
+	} else if (dynamic_cast<const Teleport*>(item)) {
 		luaL_getmetatable(L, "Teleport");
-	} else if (item->getPodium()) {
+	} else if (dynamic_cast<const Podium*>(item)) {
 		luaL_getmetatable(L, "Podium");
 	} else {
 		luaL_getmetatable(L, "Item");
@@ -720,9 +713,9 @@ void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Ite
 
 void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 {
-	if (creature->getPlayer()) {
+	if (dynamic_cast<const Player*>(creature)) {
 		luaL_getmetatable(L, "Player");
-	} else if (creature->getMonster()) {
+	} else if (dynamic_cast<const Monster*>(creature)) {
 		luaL_getmetatable(L, "Monster");
 	} else {
 		luaL_getmetatable(L, "Npc");
@@ -3733,8 +3726,8 @@ int LuaScriptInterface::luaIsValidUID(lua_State* L)
 int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	//isDepot(uid)
-	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
-	pushBoolean(L, container && container->getDepotLocker());
+	const Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
+	pushBoolean(L, container && dynamic_cast<const DepotLocker*>(container));
 	return 1;
 }
 
@@ -3817,14 +3810,14 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 	//getDepotId(uid)
 	uint32_t uid = getNumber<uint32_t>(L, -1);
 
-	Container* container = getScriptEnv()->getContainerByUID(uid);
+	const Container* container = getScriptEnv()->getContainerByUID(uid);
 	if (!container) {
 		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CONTAINER_NOT_FOUND));
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	DepotLocker* depotLocker = container->getDepotLocker();
+	const DepotLocker* depotLocker = dynamic_cast<const DepotLocker*>(container);
 	if (!depotLocker) {
 		reportErrorFunc(L, "Depot not found");
 		pushBoolean(L, false);
@@ -5256,10 +5249,10 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = dynamic_cast<Creature*>(thing)) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = dynamic_cast<Item*>(thing)) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
 	} else {
@@ -5296,10 +5289,10 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* visibleCreature = thing->getCreature()) {
+	if (Creature* visibleCreature = dynamic_cast<Creature*>(thing)) {
 		pushUserdata<Creature>(L, visibleCreature);
 		setCreatureMetatable(L, -1, visibleCreature);
-	} else if (Item* visibleItem = thing->getItem()) {
+	} else if (Item* visibleItem = dynamic_cast<Item*>(thing)) {
 		pushUserdata<Item>(L, visibleItem);
 		setItemMetatable(L, -1, visibleItem);
 	} else {
@@ -7255,7 +7248,7 @@ int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 	bool recursive = getBoolean(L, 2, false);
 	if (recursive) {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			if (Container* tmpContainer = (*it)->getContainer()) {
+			if (Container* tmpContainer = (dynamic_cast<Container*>(*it))) {
 				slots += tmpContainer->capacity() - tmpContainer->size();
 			}
 		}
@@ -7453,7 +7446,7 @@ int LuaScriptInterface::luaTeleportCreate(lua_State* L)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
 	Item* item = getScriptEnv()->getItemByUID(id);
-	if (item && item->getTeleport()) {
+	if (item && dynamic_cast<Teleport*>(item)) {
 		pushUserdata(L, item);
 		setMetatable(L, -1, "Teleport");
 	} else {
@@ -7494,7 +7487,7 @@ int LuaScriptInterface::luaPodiumCreate(lua_State* L)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
 	Item* item = getScriptEnv()->getItemByUID(id);
-	if (item && item->getPodium()) {
+	if (item && dynamic_cast<Podium*>(item)) {
 		pushUserdata(L, item);
 		setMetatable(L, -1, "Podium");
 	} else {
@@ -7920,7 +7913,8 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTileCreature(creature);
+		assert(dynamic_cast<Player*>(spectator));
+		static_cast<Player*>(spectator)->sendUpdateTileCreature(creature);
 	}
 	return 1;
 }
@@ -8103,8 +8097,7 @@ int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
 	creature->health = std::min<int32_t>(getNumber<uint32_t>(L, 2), creature->healthMax);
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (Player* player = dynamic_cast<Player*>(creature)) {
 		player->sendStats();
 	}
 	pushBoolean(L, true);
@@ -8156,8 +8149,7 @@ int LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 	creature->health = std::min<int32_t>(creature->health, creature->healthMax);
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (Player* player = dynamic_cast<Player*>(creature)) {
 		player->sendStats();
 	}
 	pushBoolean(L, true);
@@ -8362,8 +8354,7 @@ int LuaScriptInterface::luaCreatureRemove(lua_State* L)
 		return 1;
 	}
 
-	Player* player = creature->getPlayer();
-	if (player) {
+	if (Player* player = dynamic_cast<Player*>(creature)) {
 		player->kickPlayer(true);
 	} else {
 		g_game.removeCreature(creature);
@@ -10045,8 +10036,7 @@ int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 		return 1;
 	}
 
-	Item* item = thing->getItem();
-	if (item) {
+	if (Item* item = dynamic_cast<Item*>(thing)) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
 	} else {
@@ -10581,7 +10571,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		Player* tmpPlayer = spectator->getPlayer();
+		Player* tmpPlayer = dynamic_cast<Player*>(spectator);
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
 			if (enabled) {
 				tmpPlayer->sendRemoveTileCreature(player, position, tile->getClientIndexOfCreature(tmpPlayer, player));
@@ -13619,8 +13609,7 @@ int LuaScriptInterface::luaConditionSetFormula(lua_State* L)
 	double maxa = getNumber<double>(L, 4);
 	double minb = getNumber<double>(L, 3);
 	double mina = getNumber<double>(L, 2);
-	ConditionSpeed* condition = dynamic_cast<ConditionSpeed*>(getUserdata<Condition>(L, 1));
-	if (condition) {
+	if (ConditionSpeed* condition = dynamic_cast<ConditionSpeed*>(getUserdata<Condition>(L, 1))) {
 		condition->setFormulaVars(mina, minb, maxa, maxb);
 		pushBoolean(L, true);
 	} else {
@@ -13647,8 +13636,7 @@ int LuaScriptInterface::luaConditionSetOutfit(lua_State* L)
 		outfit.lookTypeEx = getNumber<uint16_t>(L, 2);
 	}
 
-	ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(getUserdata<Condition>(L, 1));
-	if (condition) {
+	if (ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(getUserdata<Condition>(L, 1))) {
 		condition->setOutfit(outfit);
 		pushBoolean(L, true);
 	} else {
@@ -13663,8 +13651,7 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 	int32_t value = getNumber<int32_t>(L, 4);
 	int32_t time = getNumber<int32_t>(L, 3);
 	int32_t rounds = getNumber<int32_t>(L, 2);
-	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(getUserdata<Condition>(L, 1));
-	if (condition) {
+	if (ConditionDamage* condition = dynamic_cast<ConditionDamage*>(getUserdata<Condition>(L, 1))) {
 		pushBoolean(L, condition->addDamage(rounds, time, value));
 	} else {
 		lua_pushnil(L);
@@ -16049,8 +16036,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 int LuaScriptInterface::luaSpellWords(lua_State* L)
 {
 	// spell:words(words[, separator = ""])
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16080,8 +16066,7 @@ int LuaScriptInterface::luaSpellWords(lua_State* L)
 int LuaScriptInterface::luaSpellNeedDirection(lua_State* L)
 {
 	// spell:needDirection(bool)
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16104,8 +16089,7 @@ int LuaScriptInterface::luaSpellNeedDirection(lua_State* L)
 int LuaScriptInterface::luaSpellHasParams(lua_State* L)
 {
 	// spell:hasParams(bool)
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16128,8 +16112,7 @@ int LuaScriptInterface::luaSpellHasParams(lua_State* L)
 int LuaScriptInterface::luaSpellHasPlayerNameParam(lua_State* L)
 {
 	// spell:hasPlayerNameParam(bool)
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16152,8 +16135,7 @@ int LuaScriptInterface::luaSpellHasPlayerNameParam(lua_State* L)
 int LuaScriptInterface::luaSpellNeedCasterTargetOrDirection(lua_State* L)
 {
 	// spell:needCasterTargetOrDirection(bool)
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16176,8 +16158,7 @@ int LuaScriptInterface::luaSpellNeedCasterTargetOrDirection(lua_State* L)
 int LuaScriptInterface::luaSpellIsBlockingWalls(lua_State* L)
 {
 	// spell:blockWalls(bool)
-	InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (InstantSpell* spell = dynamic_cast<InstantSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_INSTANT, it means that this actually is no InstantSpell, so we return nil
 		if (spell->spellType != SPELL_INSTANT) {
 			lua_pushnil(L);
@@ -16200,9 +16181,8 @@ int LuaScriptInterface::luaSpellIsBlockingWalls(lua_State* L)
 int LuaScriptInterface::luaSpellRuneLevel(lua_State* L)
 {
 	// spell:runeLevel(level)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	int32_t level = getNumber<int32_t>(L, 2);
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16225,9 +16205,8 @@ int LuaScriptInterface::luaSpellRuneLevel(lua_State* L)
 int LuaScriptInterface::luaSpellRuneMagicLevel(lua_State* L)
 {
 	// spell:runeMagicLevel(magLevel)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
 	int32_t magLevel = getNumber<int32_t>(L, 2);
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16250,8 +16229,7 @@ int LuaScriptInterface::luaSpellRuneMagicLevel(lua_State* L)
 int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 {
 	// spell:runeId(id)
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-	if (rune) {
+	if (RuneSpell* rune = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (rune->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16274,8 +16252,7 @@ int LuaScriptInterface::luaSpellRuneId(lua_State* L)
 int LuaScriptInterface::luaSpellCharges(lua_State* L)
 {
 	// spell:charges(charges)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16298,8 +16275,7 @@ int LuaScriptInterface::luaSpellCharges(lua_State* L)
 int LuaScriptInterface::luaSpellAllowFarUse(lua_State* L)
 {
 	// spell:allowFarUse(bool)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16322,8 +16298,7 @@ int LuaScriptInterface::luaSpellAllowFarUse(lua_State* L)
 int LuaScriptInterface::luaSpellBlockWalls(lua_State* L)
 {
 	// spell:blockWalls(bool)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);
@@ -16346,8 +16321,7 @@ int LuaScriptInterface::luaSpellBlockWalls(lua_State* L)
 int LuaScriptInterface::luaSpellCheckFloor(lua_State* L)
 {
 	// spell:checkFloor(bool)
-	RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1));
-	if (spell) {
+	if (RuneSpell* spell = dynamic_cast<RuneSpell*>(getUserdata<Spell>(L, 1))) {
 		// if spell != SPELL_RUNE, it means that this actually is no RuneSpell, so we return nil
 		if (spell->spellType != SPELL_RUNE) {
 			lua_pushnil(L);

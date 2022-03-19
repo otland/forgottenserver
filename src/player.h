@@ -6,7 +6,6 @@
 
 #include "creature.h"
 #include "cylinder.h"
-#include "depotlocker.h"
 #include "enums.h"
 #include "groups.h"
 #include "guild.h"
@@ -15,11 +14,14 @@
 #include "vocation.h"
 
 class DepotChest;
+class DepotLocker;
 class House;
+class Inbox;
 class NetworkMessage;
 class Npc;
 class Party;
 class SchedulerTask;
+class StoreInbox;
 
 enum skillsid_t {
 	SKILLVALUE_LEVEL = 0,
@@ -95,13 +97,6 @@ class Player final : public Creature, public Cylinder
 		// non-copyable
 		Player(const Player&) = delete;
 		Player& operator=(const Player&) = delete;
-
-		Player* getPlayer() override {
-			return this;
-		}
-		const Player* getPlayer() const override {
-			return this;
-		}
 
 		void setID() final;
 
@@ -783,7 +778,7 @@ class Player final : public Creature, public Cylinder
 				return;
 			}
 
-			if (creature->getPlayer()) {
+			if (dynamic_cast<const Player*>(creature)) {
 				if (visible) {
 					client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 				} else {
@@ -1222,6 +1217,7 @@ class Player final : public Creature, public Cylinder
 		std::unordered_set<uint32_t> attackedSet;
 		std::unordered_set<uint32_t> VIPList;
 
+		using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 		std::map<uint8_t, OpenContainer> openContainers;
 		std::map<uint32_t, DepotLocker_ptr> depotLockerMap;
 		std::map<uint32_t, DepotChest*> depotChests;

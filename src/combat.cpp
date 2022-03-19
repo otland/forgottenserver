@@ -8,6 +8,7 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
+#include "monster.h"
 #include "spectators.h"
 #include "weapons.h"
 
@@ -112,7 +113,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 		int32_t min, max;
 		if (creature->getCombatValues(min, max)) {
 			damage.primary.value = normal_random(min, max);
-		} else if (Player* player = creature->getPlayer()) {
+		} else if (Player* player = dynamic_cast<Player*>(creature)) {
 			if (params.valueCallback) {
 				params.valueCallback->getMinMaxValues(player, damage);
 			} else if (formulaType == COMBAT_FORMULA_LEVELMAGIC) {
@@ -202,11 +203,11 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 
 bool Combat::isPlayerCombat(const Creature* target)
 {
-	if (target->getPlayer()) {
+	if (dynamic_cast<const Player*>(target)) {
 		return true;
 	}
 
-	if (target->isSummon() && target->getMaster()->getPlayer()) {
+	if (target->isSummon() && dynamic_cast<Player*>(target->getMaster())) {
 		return true;
 	}
 
@@ -242,18 +243,18 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 	}
 
 	if (attacker->hasFlag(PlayerFlag_CannotUseCombat) || !target->isAttackable()) {
-		if (target->getPlayer()) {
+		if (dynamic_cast<Player*>(target)) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 		}
 		return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 	}
 
-	if (target->getPlayer()) {
-		if (isProtected(attacker, target->getPlayer())) {
+	if (Player* targetPlayer = dynamic_cast<Player*>(target)) {
+		if (isProtected(attacker, targetPlayer)) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 		}
 
-		if (attacker->hasSecureMode() && !Combat::isInPvpZone(attacker, target) && attacker->getSkullClient(target->getPlayer()) == SKULL_NONE) {
+		if (attacker->hasSecureMode() && !Combat::isInPvpZone(attacker, target) && attacker->getSkullClient(target) == SKULL_NONE) {
 			return RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS;
 		}
 	}
@@ -284,10 +285,8 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool aggressive)
 			return RETURNVALUE_FIRSTGOUPSTAIRS;
 		}
 
-		if (const Player* player = caster->getPlayer()) {
-			if (player->hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-				return RETURNVALUE_NOERROR;
-			}
+		if (const Player* player = dynamic_cast<const Player*>(caster); player && player->hasFlag(PlayerFlag_IgnoreProtectionZone)) {
+			return RETURNVALUE_NOERROR;
 		}
 	}
 
@@ -328,12 +327,12 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 		return g_events->eventCreatureOnTargetCombat(attacker, target);
 	}
 
-	if (const Player* targetPlayer = target->getPlayer()) {
+	if (const Player* targetPlayer = dynamic_cast<const Player*>(target)) {
 		if (targetPlayer->hasFlag(PlayerFlag_CannotBeAttacked)) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 		}
 
-		if (const Player* attackerPlayer = attacker->getPlayer()) {
+		if (const Player* attackerPlayer = dynamic_cast<const Player*>(attacker)) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 			}
@@ -352,7 +351,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 		}
 
 		if (attacker->isSummon()) {
-			if (const Player* masterAttackerPlayer = attacker->getMaster()->getPlayer()) {
+			if (const Player* masterAttackerPlayer = dynamic_cast<const Player*>(attacker->getMaster())) {
 				if (masterAttackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 				}
@@ -366,22 +365,22 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 				}
 			}
 		}
-	} else if (target->getMonster()) {
-		if (const Player* attackerPlayer = attacker->getPlayer()) {
+	} else if (dynamic_cast<Monster*>(target)) {
+		if (const Player* attackerPlayer = dynamic_cast<const Player*>(attacker)) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackMonster)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
 
-			if (target->isSummon() && target->getMaster()->getPlayer() && target->getZone() == ZONE_NOPVP) {
+			if (target->isSummon() && dynamic_cast<Player*>(target->getMaster()) && target->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
-		} else if (attacker->getMonster()) {
+		} else if (dynamic_cast<Monster*>(attacker)) {
 			const Creature* targetMaster = target->getMaster();
 
-			if (!targetMaster || !targetMaster->getPlayer()) {
+			if (!targetMaster || !dynamic_cast<const Player*>(targetMaster)) {
 				const Creature* attackerMaster = attacker->getMaster();
 
-				if (!attackerMaster || !attackerMaster->getPlayer()) {
+				if (!attackerMaster || !dynamic_cast<const Player*>(attackerMaster)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 				}
 			}
@@ -389,14 +388,14 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 	}
 
 	if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-		if (attacker->getPlayer() || (attacker->isSummon() && attacker->getMaster()->getPlayer())) {
-			if (target->getPlayer()) {
+		if (dynamic_cast<Player*>(attacker) || (attacker->isSummon() && dynamic_cast<Player*>(attacker->getMaster()))) {
+			if (dynamic_cast<Player*>(target)) {
 				if (!isInPvpZone(attacker, target)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 				}
 			}
 
-			if (target->isSummon() && target->getMaster()->getPlayer()) {
+			if (target->isSummon() && dynamic_cast<Player*>(target->getMaster())) {
 				if (!isInPvpZone(attacker, target)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 				}
@@ -592,14 +591,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 		}
 
 		if (caster) {
-			Player* casterPlayer;
-			if (caster->isSummon()) {
-				casterPlayer = caster->getMaster()->getPlayer();
-			} else {
-				casterPlayer = caster->getPlayer();
-			}
-
-			if (casterPlayer) {
+			if (Player* casterPlayer = dynamic_cast<Player*>(caster->isSummon() ? caster->getMaster() : caster)) {
 				if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || tile->hasFlag(TILESTATE_NOPVPZONE)) {
 					if (itemId == ITEM_FIREFIELD_PVP_FULL) {
 						itemId = ITEM_FIREFIELD_NOPVP;
@@ -654,7 +646,7 @@ void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const 
 			return;
 		}
 
-		Player* player = caster->getPlayer();
+		const Player* player = dynamic_cast<const Player*>(caster);
 		if (!player) {
 			return;
 		}
@@ -827,7 +819,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 	}
 
-	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
+	Player* casterPlayer = dynamic_cast<Player*>(caster);
 
 	bool success = false;
 	if (damage.primary.type != COMBAT_MANADRAIN) {
@@ -836,8 +828,8 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		}
 
 		if (casterPlayer) {
-			Player* targetPlayer = target ? target->getPlayer() : nullptr;
-			if (targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK && damage.primary.type != COMBAT_HEALING) {
+			if (const Player* targetPlayer = dynamic_cast<const Player*>(target);
+					targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK && damage.primary.type != COMBAT_HEALING) {
 				damage.primary.value /= 2;
 				damage.secondary.value /= 2;
 			}
@@ -921,7 +913,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 {
 	auto tiles = caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
 
-	Player* casterPlayer = caster ? caster->getPlayer() : nullptr;
+	Player* casterPlayer = dynamic_cast<Player*>(caster);
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
 	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer && damage.origin != ORIGIN_CONDITION) {
@@ -1002,8 +994,8 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		CombatDamage damageCopy = damage; // we cannot avoid copying here, because we don't know if it's player combat or not, so we can't modify the initial damage.
 		bool playerCombatReduced = false;
 		if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
-			Player* targetPlayer = creature->getPlayer();
-			if (casterPlayer && targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
+			if (const Player* targetPlayer = dynamic_cast<const Player*>(creature);
+					casterPlayer && targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK) {
 				damageCopy.primary.value /= 2;
 				damageCopy.secondary.value /= 2;
 				playerCombatReduced = true;
@@ -1489,16 +1481,14 @@ void MagicField::onStepInField(Creature* creature)
 			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
 				Creature* owner = g_game.getCreatureByID(ownerId);
 				if (owner) {
-					if (owner->getPlayer() || (owner->isSummon() && owner->getMaster()->getPlayer())) {
+					if (dynamic_cast<Player*>(owner) || (owner->isSummon() && dynamic_cast<Player*>(owner->getMaster()))) {
 						harmfulField = false;
 					}
 				}
 			}
 
-			Player* targetPlayer = creature->getPlayer();
-			if (targetPlayer) {
-				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
-				if (attackerPlayer) {
+			if (const Player* targetPlayer = dynamic_cast<const Player*>(creature)) {
+				if (Player* attackerPlayer = g_game.getPlayerByID(ownerId)) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
 						harmfulField = false;
 					}

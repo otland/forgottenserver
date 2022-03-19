@@ -10,15 +10,8 @@
 #include "thing.h"
 #include "tools.h"
 
-class BedItem;
 class Container;
-class Door;
-class MagicField;
-class Mailbox;
 class Player;
-class Podium;
-class Teleport;
-class TrashHolder;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -551,55 +544,6 @@ class Item : virtual public Thing
 
 		bool equals(const Item* otherItem) const;
 
-		Item* getItem() override final {
-			return this;
-		}
-		const Item* getItem() const override final {
-			return this;
-		}
-		virtual Teleport* getTeleport() {
-			return nullptr;
-		}
-		virtual const Teleport* getTeleport() const {
-			return nullptr;
-		}
-		virtual TrashHolder* getTrashHolder() {
-			return nullptr;
-		}
-		virtual const TrashHolder* getTrashHolder() const {
-			return nullptr;
-		}
-		virtual Mailbox* getMailbox() {
-			return nullptr;
-		}
-		virtual const Mailbox* getMailbox() const {
-			return nullptr;
-		}
-		virtual Door* getDoor() {
-			return nullptr;
-		}
-		virtual const Door* getDoor() const {
-			return nullptr;
-		}
-		virtual MagicField* getMagicField() {
-			return nullptr;
-		}
-		virtual const MagicField* getMagicField() const {
-			return nullptr;
-		}
-		virtual BedItem* getBed() {
-			return nullptr;
-		}
-		virtual const BedItem* getBed() const {
-			return nullptr;
-		}
-		virtual Podium* getPodium() {
-			return nullptr;
-		}
-		virtual const Podium* getPodium() const {
-			return nullptr;
-		}
-
 		const std::string& getStrAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return ItemAttributes::emptyString;
@@ -1092,5 +1036,6 @@ class Item : virtual public Thing
 
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
+using ItemVector = std::vector<Item*>;
 
 #endif // FS_ITEM_H

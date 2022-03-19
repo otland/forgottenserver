@@ -48,7 +48,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 		for (HouseTile* tile : houseTiles) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
-					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
+					kickPlayer(nullptr, dynamic_cast<Player*>((*creatures)[i]));
 				}
 			}
 		}
@@ -136,8 +136,7 @@ bool House::kickPlayer(Player* player, Player* target)
 		return false;
 	}
 
-	HouseTile* houseTile = dynamic_cast<HouseTile*>(target->getTile());
-	if (!houseTile || houseTile->getHouse() != this) {
+	if (HouseTile* houseTile = dynamic_cast<HouseTile*>(target->getTile()); !houseTile || houseTile->getHouse() != this) {
 		return false;
 	}
 
@@ -173,8 +172,7 @@ void House::setAccessList(uint32_t listId, const std::string& textlist)
 	for (HouseTile* tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				Player* player = (*creatures)[i]->getPlayer();
-				if (player && !isInvited(player)) {
+				if (Player* player = dynamic_cast<Player*>((*creatures)[i]); player && !isInvited(player)) {
 					kickPlayer(nullptr, player);
 				}
 			}
@@ -216,8 +214,7 @@ bool House::transferToDepot(Player* player) const
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
 				} else {
-					Container* container = item->getContainer();
-					if (container) {
+					if (Container* container = dynamic_cast<Container*>(item)) {
 						for (Item* containerItem : container->getItemList()) {
 							moveItemList.push_back(containerItem);
 						}

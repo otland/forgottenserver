@@ -133,7 +133,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		Item* item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
+				Container* container = dynamic_cast<Container*>(item);
 				if (container && !loadContainer(propStream, container)) {
 					delete item;
 					return false;
@@ -155,10 +155,10 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 				if (findItem->getID() == id) {
 					item = findItem;
 					break;
-				} else if (iType.isDoor() && findItem->getDoor()) {
+				} else if (iType.isDoor() && dynamic_cast<Door*>(findItem)) {
 					item = findItem;
 					break;
-				} else if (iType.isBed() && findItem->getBed()) {
+				} else if (iType.isBed() && dynamic_cast<BedItem*>(findItem)) {
 					item = findItem;
 					break;
 				}
@@ -167,8 +167,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
-				if (container && !loadContainer(propStream, container)) {
+				if (Container* container = dynamic_cast<Container*>(item); container && !loadContainer(propStream, container)) {
 					return false;
 				}
 
@@ -181,14 +180,12 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
-				Container* container = dummy->getContainer();
-				if (container) {
+				if (Container* container = dynamic_cast<Container*>(dummy.get())) {
 					if (!loadContainer(propStream, container)) {
 						return false;
 					}
 				} else if (BedItem* bedItem = dynamic_cast<BedItem*>(dummy.get())) {
-					uint32_t sleeperGUID = bedItem->getSleeper();
-					if (sleeperGUID != 0) {
+					if (uint32_t sleeperGUID = bedItem->getSleeper(); sleeperGUID != 0) {
 						g_game.removeBedSleeper(sleeperGUID);
 					}
 				}
@@ -200,7 +197,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 {
-	const Container* container = item->getContainer();
+	const Container* container = dynamic_cast<const Container*>(item);
 
 	// Write ID & props
 	stream.write<uint16_t>(item->getID());
@@ -231,7 +228,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
-		if (!(it.moveable || it.forceSerialize || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText || item->getBed())) {
+		if (!(it.moveable || it.forceSerialize || dynamic_cast<Door*>(item) || (dynamic_cast<Container*>(item) && !static_cast<Container*>(item)->empty()) || it.canWriteText || dynamic_cast<BedItem*>(item))) {
 			continue;
 		}
 

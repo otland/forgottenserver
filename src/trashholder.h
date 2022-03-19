@@ -11,13 +11,6 @@ class TrashHolder final : public Item, public Cylinder
 	public:
 		explicit TrashHolder(uint16_t itemId) : Item(itemId) {}
 
-		TrashHolder* getTrashHolder() override {
-			return this;
-		}
-		const TrashHolder* getTrashHolder() const override {
-			return this;
-		}
-
 		//cylinder implementations
 		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
 		ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags) const override;

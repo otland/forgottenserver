@@ -14,13 +14,6 @@ class BedItem final : public Item
 	public:
 		explicit BedItem(uint16_t id);
 
-		BedItem* getBed() override {
-			return this;
-		}
-		const BedItem* getBed() const override {
-			return this;
-		}
-
 		Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 		void serializeAttr(PropWriteStream& propWriteStream) const override;
 

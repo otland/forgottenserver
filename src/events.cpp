@@ -460,10 +460,10 @@ void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = dynamic_cast<Creature*>(thing)) {
 		LuaScriptInterface::pushUserdata<Creature>(L, creature);
 		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = dynamic_cast<Item*>(thing)) {
 		LuaScriptInterface::pushUserdata<Item>(L, item);
 		LuaScriptInterface::setItemMetatable(L, -1, item);
 	} else {

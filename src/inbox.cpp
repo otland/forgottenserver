@@ -16,7 +16,7 @@ ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t,
 		return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}

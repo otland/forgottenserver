@@ -42,13 +42,6 @@ class Door final : public Item
 		Door(const Door&) = delete;
 		Door& operator=(const Door&) = delete;
 
-		Door* getDoor() override {
-			return this;
-		}
-		const Door* getDoor() const override {
-			return this;
-		}
-
 		House* getHouse() {
 			return house;
 		}

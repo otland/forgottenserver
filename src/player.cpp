@@ -11,6 +11,7 @@
 #include "configmanager.h"
 #include "creatureevent.h"
 #include "depotchest.h"
+#include "depotlocker.h"
 #include "events.h"
 #include "game.h"
 #include "inbox.h"
@@ -735,7 +736,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return false;
 	}
 
-	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
+	if (!dynamic_cast<const Player*>(creature) && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
 	return true;
@@ -752,7 +753,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 		return true;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = dynamic_cast<const Player*>(creature);
 	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
@@ -767,6 +768,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 		return false;
 	}
 
+	// TODO: remove const_cast
 	Player* thisPlayer = const_cast<Player*>(this);
 	if ((OTSYS_TIME() - lastWalkthroughAttempt) > 2000) {
 		thisPlayer->setLastWalkthroughAttempt(OTSYS_TIME());
@@ -788,7 +790,7 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 		return true;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = dynamic_cast<const Player*>(creature);
 	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
@@ -882,7 +884,7 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
+	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && dynamic_cast<Player*>(attackedCreature)) {
 		setAttackedCreature(nullptr);
 	}
 
@@ -1049,15 +1051,13 @@ void Player::openSavedContainers()
 			continue;
 		}
 
-		Container* itemContainer = item->getContainer();
-		if (itemContainer) {
+		if (Container* itemContainer = dynamic_cast<Container*>(item)) {
 			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 			if (cid > 0) {
 				openContainersList.emplace(cid, itemContainer);
 			}
 			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
-				Container* subContainer = (*it)->getContainer();
-				if (subContainer) {
+				if (Container* subContainer = (dynamic_cast<Container*>(*it))) {
 					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 					if (subcid > 0) {
 						openContainersList.emplace(subcid, subContainer);
@@ -1105,8 +1105,7 @@ void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemT
 		checkTradeState(item);
 
 		if (tradeItem) {
-			const Container* container = item->getContainer();
-			if (container && container->isHoldingItem(tradeItem)) {
+			if (const Container* container = dynamic_cast<const Container*>(item); container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
 		}
@@ -1233,19 +1232,15 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
-		if (attackedCreature->getPlayer()) {
-			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-				setAttackedCreature(nullptr);
-				onAttackedCreatureDisappear(false);
-			}
+		if (dynamic_cast<Player*>(attackedCreature) && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
+			setAttackedCreature(nullptr);
+			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NORMAL) {
 		//attackedCreature can leave a pvp zone if not pzlocked
-		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-			if (attackedCreature->getPlayer()) {
-				setAttackedCreature(nullptr);
-				onAttackedCreatureDisappear(false);
-			}
+		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP && dynamic_cast<Player*>(attackedCreature)) {
+			setAttackedCreature(nullptr);
+			onAttackedCreatureDisappear(false);
 		}
 	}
 }
@@ -1472,8 +1467,7 @@ void Player::onRemoveInventoryItem(Item* item)
 		checkTradeState(item);
 
 		if (tradeItem) {
-			const Container* container = item->getContainer();
-			if (container && container->isHoldingItem(tradeItem)) {
+			if (const Container* container = dynamic_cast<Container*>(item); container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
 		}
@@ -1770,8 +1764,9 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
-			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+			for (const Creature* spectator : spectators) {
+				assert(dynamic_cast<const Player*>(spectator));
+				static_cast<const Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -1859,7 +1854,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				assert(dynamic_cast<Player*>(spectator));
+				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -2223,7 +2219,7 @@ bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature,
 Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
-	if (corpse && corpse->getContainer()) {
+	if (corpse && dynamic_cast<Container*>(corpse)) {
 		std::unordered_map<std::string, uint16_t> names;
 		for (const auto& killer : getKillers()) {
 			++names[killer->getName()];
@@ -2396,7 +2392,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	uint32_t itemWeight = item->getContainer() ? item->getWeight() : item->getBaseWeight();
+	uint32_t itemWeight = dynamic_cast<const Container*>(item) ? item->getWeight() : item->getBaseWeight();
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
@@ -2405,7 +2401,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 
 ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature*) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2620,8 +2616,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 	//need an exchange with source? (destination item is swapped with currently moved item)
 	const Item* inventoryItem = getInventoryItem(static_cast<slots_t>(index));
 	if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
-		const Cylinder* cylinder = item->getTopParent();
-		if (cylinder && (dynamic_cast<const DepotChest*>(cylinder) || dynamic_cast<const Player*>(cylinder))) {
+		if (const Cylinder* cylinder = item->getTopParent(); dynamic_cast<const DepotChest*>(cylinder) || dynamic_cast<const Player*>(cylinder)) {
 			return RETURNVALUE_NEEDEXCHANGE;
 		}
 
@@ -2633,7 +2628,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 		uint32_t flags) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -2644,14 +2639,14 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		for (int32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
-				if (Container* subContainer = inventoryItem->getContainer()) {
+				if (Container* subContainer = dynamic_cast<Container*>(inventoryItem)) {
 					uint32_t queryCount = 0;
 					subContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
 					n += queryCount;
 
 					//iterate through all items, including sub-containers (deep search)
 					for (ContainerIterator it = subContainer->iterator(); it.hasNext(); it.advance()) {
-						if (Container* tmpContainer = (*it)->getContainer()) {
+						if (Container* tmpContainer = (dynamic_cast<Container*>(*it))) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
 							n += queryCount;
@@ -2675,14 +2670,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 
 		maxQueryCount = n;
 	} else {
-		const Item* destItem = nullptr;
-
-		const Thing* destThing = getThing(index);
-		if (destThing) {
-			destItem = destThing->getItem();
-		}
-
-		if (destItem) {
+		if (const Item* destItem = dynamic_cast<const Item*>(getThing(index))) {
 			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < 100) {
 				maxQueryCount = 100 - destItem->getItemCount();
 			} else {
@@ -2712,7 +2700,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = dynamic_cast<const Item*>(&thing);
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2734,7 +2722,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		*destItem = nullptr;
 
-		const Item* item = thing.getItem();
+		const Item* item = dynamic_cast<const Item*>(&thing);
 		if (!item) {
 			return this;
 		}
@@ -2765,10 +2753,10 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 						}
 					}
 
-					if (Container* subContainer = inventoryItem->getContainer()) {
+					if (Container* subContainer = dynamic_cast<Container*>(inventoryItem)) {
 						containers.push_back(subContainer);
 					}
-				} else if (Container* subContainer = inventoryItem->getContainer()) {
+				} else if (Container* subContainer = dynamic_cast<Container*>(inventoryItem)) {
 					containers.push_back(subContainer);
 				}
 			} else if (queryAdd(slotIndex, *item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { //empty slot
@@ -2795,7 +2783,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				}
 
 				for (Item* tmpContainerItem : tmpContainer->getItemList()) {
-					if (Container* subContainer = tmpContainerItem->getContainer()) {
+					if (Container* subContainer = dynamic_cast<Container*>(tmpContainerItem)) {
 						containers.push_back(subContainer);
 					}
 				}
@@ -2821,7 +2809,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 					return tmpContainer;
 				}
 
-				if (Container* subContainer = tmpItem->getContainer()) {
+				if (Container* subContainer = dynamic_cast<Container*>(tmpItem)) {
 					containers.push_back(subContainer);
 				}
 
@@ -2840,11 +2828,10 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 
 	Thing* destThing = getThing(index);
 	if (destThing) {
-		*destItem = destThing->getItem();
+		*destItem = dynamic_cast<Item*>(destThing);
 	}
 
-	Cylinder* subCylinder = dynamic_cast<Cylinder*>(destThing);
-	if (subCylinder) {
+	if (Cylinder* subCylinder = dynamic_cast<Cylinder*>(destThing)) {
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
 		return subCylinder;
@@ -2858,7 +2845,7 @@ void Player::addThing(int32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2877,7 +2864,7 @@ void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2903,7 +2890,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2921,7 +2908,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 
 void Player::removeThing(Thing* thing, uint32_t count)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2996,7 +2983,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 			count += Item::countByType(item, subType);
 		}
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = dynamic_cast<Container*>(item)) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
@@ -3035,7 +3022,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 				g_game.internalRemoveItems(std::move(itemList), amount, Item::items[itemId].stackable);
 				return true;
 			}
-		} else if (Container* container = item->getContainer()) {
+		} else if (Container* container = dynamic_cast<Container*>(item)) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
@@ -3068,7 +3055,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 
 		countMap[item->getID()] += Item::countByType(item, -1);
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = dynamic_cast<Container*>(item)) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				countMap[(*it)->getID()] += Item::countByType(*it, -1);
 			}
@@ -3089,21 +3076,21 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
-		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), true);
+		g_moveEvents->onPlayerEquip(this, dynamic_cast<Item*>(thing), static_cast<slots_t>(index), false);
+		g_events->eventPlayerOnInventoryUpdate(this, dynamic_cast<Item*>(thing), static_cast<slots_t>(index), true);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (oldParent ? oldParent->getItem() : nullptr);
+		const Item* i = dynamic_cast<const Item*>(oldParent);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(!i || dynamic_cast<const Container*>(i));
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = oldParent != this;
 		}
@@ -3114,15 +3101,15 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		sendItems();
 	}
 
-	if (const Item* item = thing->getItem()) {
-		if (const Container* container = item->getContainer()) {
+	if (const Item* item = dynamic_cast<const Item*>(thing)) {
+		if (const Container* container = dynamic_cast<const Container*>(item)) {
 			onSendContainer(container);
 		}
 
 		if (shopOwner && requireListUpdate) {
 			updateSaleShopList(item);
 		}
-	} else if (const Creature* creature = thing->getCreature()) {
+	} else if (const Creature* creature = dynamic_cast<const Creature*>(thing)) {
 		if (creature == this) {
 			//check containers
 			std::vector<Container*> containers;
@@ -3145,21 +3132,21 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
-		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), false);
+		g_moveEvents->onPlayerDeEquip(this, dynamic_cast<Item*>(thing), static_cast<slots_t>(index));
+		g_events->eventPlayerOnInventoryUpdate(this, dynamic_cast<Item*>(thing), static_cast<slots_t>(index), false);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (newParent ? newParent->getItem() : nullptr);
+		const Item* i = dynamic_cast<const Item*>(newParent);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(!i || dynamic_cast<const Container*>(i));
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = newParent != this;
 		}
@@ -3170,14 +3157,14 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		sendItems();
 	}
 
-	if (const Item* item = thing->getItem()) {
+	if (const Item* item = dynamic_cast<const Item*>(thing)) {
 		if (item->isSupply()) {
 			if (const Player* player = item->getHoldingPlayer()) {
 				player->sendSupplyUsed(item->getClientID());
 			}
 		}
 
-		if (const Container* container = item->getContainer()) {
+		if (const Container* container = dynamic_cast<const Container*>(item)) {
 			if (container->isRemoved() || !Position::areInRange<1, 1, 0>(getPosition(), container->getPosition())) {
 				autoCloseContainers(container);
 			} else if (container->getTopParent() == this) {
@@ -3224,7 +3211,7 @@ bool Player::updateSaleShopList(const Item* item)
 	if (!isCurrency) {
 		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.sellPrice != 0; });
 		if (it == shopItemList.end()) {
-			const Container* container = item->getContainer();
+			const Container* container = dynamic_cast<const Container*>(item);
 			if (!container) {
 				return false;
 			}
@@ -3257,7 +3244,7 @@ void Player::internalAddThing(Thing* thing)
 
 void Player::internalAddThing(uint32_t index, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = dynamic_cast<Item*>(thing);
 	if (!item) {
 		return;
 	}
@@ -3376,8 +3363,8 @@ void Player::doAttacking(uint32_t)
 uint64_t Player::getGainedExperience(Creature* attacker) const
 {
 	if (g_config.getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {
-		Player* attackerPlayer = attacker->getPlayer();
-		if (attackerPlayer && attackerPlayer != this && skillLoss && std::abs(static_cast<int32_t>(attackerPlayer->getLevel() - level)) <= g_config.getNumber(ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)) {
+		if (const Player* attackerPlayer = dynamic_cast<const Player*>(attacker);
+				attackerPlayer && attackerPlayer != this && skillLoss && std::abs(static_cast<int32_t>(attackerPlayer->getLevel() - level)) <= g_config.getNumber(ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)) {
 			return std::max<uint64_t>(0, std::floor(getLostExperience() * getDamageRatio(attacker) * 0.75));
 		}
 	}
@@ -3580,8 +3567,7 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 		return;
 	}
 
-	Player* targetPlayer = target->getPlayer();
-	if (targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
+	if (Player* targetPlayer = dynamic_cast<Player*>(target); targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
 		if (!pzLocked && g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 			pzLocked = true;
 			sendIcons();
@@ -3645,28 +3631,23 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);
 
-	if (target) {
-		if (party && !Combat::isPlayerCombat(target)) {
-			Monster* tmpMonster = target->getMonster();
-			if (tmpMonster && tmpMonster->isHostile()) {
-				//We have fulfilled a requirement for shared experience
-				party->updatePlayerTicks(this, points);
-			}
+	if (target && party && !Combat::isPlayerCombat(target)) {
+		if (const Monster* tmpMonster = dynamic_cast<const Monster*>(target); tmpMonster && tmpMonster->isHostile()) {
+			//We have fulfilled a requirement for shared experience
+			party->updatePlayerTicks(this, points);
 		}
 	}
 }
 
-void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
+void Player::onTargetCreatureGainHealth(/*const*/ Creature* target, int32_t points)
 {
 	if (target && party) {
-		Player* tmpPlayer = nullptr;
+		const Player* tmpPlayer = nullptr;
 
-		if (target->getPlayer()) {
-			tmpPlayer = target->getPlayer();
-		} else if (Creature* targetMaster = target->getMaster()) {
-			if (Player* targetMasterPlayer = targetMaster->getPlayer()) {
-				tmpPlayer = targetMasterPlayer;
-			}
+		if (dynamic_cast<const Player*>(target)) {
+			tmpPlayer = static_cast<const Player*>(target);
+		} else if (const Player* targetMasterPlayer = dynamic_cast<const Player*>(target->getMaster())) {
+			tmpPlayer = targetMasterPlayer;
 		}
 
 		if (isPartner(tmpPlayer)) {
@@ -3685,7 +3666,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 	Creature::onKilledCreature(target, lastHit);
 
-	Player* targetPlayer = target->getPlayer();
+	Player* targetPlayer = dynamic_cast<Player*>(target);
 	if (!targetPlayer) {
 		return false;
 	}
@@ -3726,7 +3707,7 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 		return;
 	}
 
-	if (target && !target->getPlayer() && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
+	if (target && !dynamic_cast<Player*>(target) && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
 		party->shareExperience(gainExp, target);
 		//We will get a share of the experience through the sharing mechanism
 		return;
@@ -3768,12 +3749,12 @@ bool Player::lastHitIsPlayer(Creature* lastHitCreature)
 		return false;
 	}
 
-	if (lastHitCreature->getPlayer()) {
+	if (dynamic_cast<Player*>(lastHitCreature)) {
 		return true;
 	}
 
-	Creature* lastHitMaster = lastHitCreature->getMaster();
-	return lastHitMaster && lastHitMaster->getPlayer();
+	const Creature* lastHitMaster = lastHitCreature->getMaster();
+	return dynamic_cast<const Player*>(lastHitCreature->getMaster());
 }
 
 void Player::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*/)
@@ -3948,7 +3929,7 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 		return SKULL_NONE;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = dynamic_cast<const Player*>(creature);
 	if (!player || player->getSkull() != SKULL_NONE) {
 		return Creature::getSkullClient(creature);
 	}
@@ -4628,8 +4609,7 @@ uint64_t Player::getMoney() const
 			continue;
 		}
 
-		const Container* container = item->getContainer();
-		if (container) {
+		if (const Container* container = dynamic_cast<Container*>(item)) {
 			containers.push_back(container);
 		} else {
 			moneyCount += item->getWorth();
@@ -4640,8 +4620,7 @@ uint64_t Player::getMoney() const
 	while (i < containers.size()) {
 		const Container* container = containers[i++];
 		for (const Item* item : container->getItemList()) {
-			const Container* tmpContainer = item->getContainer();
-			if (tmpContainer) {
+			if (const Container* tmpContainer = dynamic_cast<const Container*>(item)) {
 				containers.push_back(tmpContainer);
 			} else {
 				moneyCount += item->getWorth();
