@@ -667,6 +667,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					it.showCount = valueAttribute.as_bool();
 					break;
 				}
+
 				case ITEM_PARSE_SUPPLY: {
 					it.supply = valueAttribute.as_bool();
 					break;
