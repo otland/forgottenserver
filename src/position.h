@@ -56,7 +56,7 @@ struct Position
 		return std::abs(Position::getOffsetY(p1, p2));
 	}
 	static int16_t getDistanceZ(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetZ(p1, p2));
+		return static_cast<int16_t>(std::abs(Position::getOffsetZ(p1, p2)));
 	}
 
 	uint16_t x = 0;
