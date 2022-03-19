@@ -1907,7 +1907,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 	}
 	sendStats();
 
-	sendExperienceTracker(0, - static_cast<int64_t>(exp));
+	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
 uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
