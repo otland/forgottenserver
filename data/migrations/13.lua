@@ -31,7 +31,7 @@ function onUpdateDatabase()
 	print("DELIMITER //")
 	print("CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`")
 	print(" FOR EACH ROW BEGIN")
-	print("  UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
+	print(" UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
 	print("END //")
 	return true
 end
