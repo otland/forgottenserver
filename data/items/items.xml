@@ -38223,6 +38223,7 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="attack" value="37" />
 		<attribute key="shootType" value="diamondarrow" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="28414" article="a" name="spectral bolt">
 		<attribute key="weight" value="90" />
@@ -38230,6 +38231,7 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="attack" value="78" />
 		<attribute key="shootType" value="spectralbolt" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="28415" article="a" name="royal star">
 		<attribute key="weight" value="220" />
@@ -38238,6 +38240,7 @@
 		<attribute key="range" value="4" />
 		<attribute key="elementFire" value="2" />
 		<attribute key="shootType" value="royalstar" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="28416" article="a" name="wand of darkness" />
 	<item id="28417" name="strange colours" />
@@ -41214,6 +41217,7 @@
 		<attribute key="ammoType" value="arrow" />
 		<attribute key="attack" value="37" />
 		<attribute key="shootType" value="diamondarrow" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="38558" article="a" name="spectral bolt">
 		<attribute key="weight" value="90" />
@@ -41221,6 +41225,7 @@
 		<attribute key="ammoType" value="bolt" />
 		<attribute key="attack" value="78" />
 		<attribute key="shootType" value="spectralbolt" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="38564" article="a" name="rope-ladder" />
 	<item fromid="38565" toid="38566" name="chaos critical dice" />
