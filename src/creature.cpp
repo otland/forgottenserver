@@ -272,6 +272,10 @@ void Creature::startAutoWalk(Direction direction)
 
 void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 {
+	if (hasCondition(CONDITION_ROOT)) {
+		return;
+	}
+
 	Player* player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
