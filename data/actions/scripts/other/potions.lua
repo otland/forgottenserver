@@ -171,6 +171,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if not configManager.getBoolean(configKeys.REMOVE_POTION_CHARGES) then
 		return true
 	end
+
 	item:remove(1)
 	return true
 end
