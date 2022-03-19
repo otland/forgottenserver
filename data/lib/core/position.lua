@@ -63,9 +63,9 @@ function Position:isInRange(from, to)
 		}
 	}
 
-	if self.x >= zone.nW.x and self.x <= zone.sE.x and
-	   self.y >= zone.nW.y and self.y <= zone.sE.y and
-	   self.z >= zone.nW.z and self.z <= zone.sE.z then
+	if self.x >= zone.nW.x and self.x <= zone.sE.x
+	and self.y >= zone.nW.y and self.y <= zone.sE.y
+	and self.z >= zone.nW.z and self.z <= zone.sE.z then
 		return true
 	end
 	return false
