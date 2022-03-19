@@ -195,6 +195,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
 	{"allowdistread", ITEM_PARSE_ALLOWDISTREAD},
 	{"storeitem", ITEM_PARSE_STOREITEM},
 	{"worth", ITEM_PARSE_WORTH},
+	{"supply", ITEM_PARSE_SUPPLY},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
@@ -663,6 +664,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 				case ITEM_PARSE_SHOWCOUNT: {
 					it.showCount = valueAttribute.as_bool();
+					break;
+				}
+
+				case ITEM_PARSE_SUPPLY: {
+					it.supply = valueAttribute.as_bool();
 					break;
 				}
 

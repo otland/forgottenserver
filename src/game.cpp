@@ -843,6 +843,10 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 
 ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags /*= 0*/)
 {
+	if (creature.hasCondition(CONDITION_ROOT)) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+
 	//check if we can move the creature to the destination
 	ReturnValue ret = toTile.queryAdd(0, creature, 1, flags);
 	if (ret != RETURNVALUE_NOERROR) {
@@ -4615,6 +4619,10 @@ void Game::internalDecayItem(Item* item)
 	if (decayTo > 0) {
 		startDecay(transformItem(item, decayTo));
 	} else {
+		if (const Player* player = item->getHoldingPlayer()) {
+			const ItemType& it = Item::items[item->getID()];
+			player->sendSupplyUsed(it.transformDeEquipTo != 0 ? Item::items[it.transformDeEquipTo].clientId : item->getClientID());
+		}
 		ReturnValue ret = internalRemoveItem(item);
 		if (ret != RETURNVALUE_NOERROR) {
 			std::cout << "[Debug - Game::internalDecayItem] internalDecayItem failed, error code: " << static_cast<uint32_t>(ret) << ", item id: " << item->getID() << std::endl;

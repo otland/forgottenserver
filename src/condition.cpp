@@ -220,6 +220,9 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 		case CONDITION_MANASHIELD:
 			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
 
+		case CONDITION_ROOT:
+			return new ConditionGeneric(id, type, ticks, buff, subId, aggressive);
+
 		default:
 			return nullptr;
 	}
@@ -361,6 +364,10 @@ uint32_t ConditionGeneric::getIcons() const
 
 		case CONDITION_INFIGHT:
 			icons |= ICON_SWORDS;
+			break;
+
+		case CONDITION_ROOT:
+			icons |= ICON_ROOT;
 			break;
 
 		default:
