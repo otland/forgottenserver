@@ -60,7 +60,7 @@ std::string Actions::getScriptBaseName() const
 
 Event_ptr Actions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "action") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "action")) {
 		return nullptr;
 	}
 	return Event_ptr(new Action(&scriptInterface));
@@ -407,6 +407,9 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	int32_t cooldown = g_config.getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
 	player->sendUseItemCooldown(cooldown);
+	if (item->isSupply()) {
+		player->sendSupplyUsed(item->getClientID());
+	}
 
 	if (isHotkey) {
 		uint16_t subType = item->getSubType();
@@ -520,7 +523,7 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "market") == 0) {
+	if (caseInsensitiveEqual(functionName, "market")) {
 		function = enterMarket;
 	} else {
 		if (!isScripted) {

@@ -120,9 +120,9 @@ std::string Spells::getScriptBaseName() const
 
 Event_ptr Spells::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "rune") == 0) {
+	if (caseInsensitiveEqual(nodeName, "rune")) {
 		return Event_ptr(new RuneSpell(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "instant") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "instant")) {
 		return Event_ptr(new InstantSpell(&scriptInterface));
 	}
 	return nullptr;
@@ -207,7 +207,7 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
 	for (auto& it : runes) {
-		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
+		if (caseInsensitiveEqual(it.second.getName(), name)) {
 			return &it.second;
 		}
 	}
@@ -221,8 +221,8 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	for (auto& it : instants) {
 		const std::string& instantSpellWords = it.second.getWords();
 		size_t spellLen = instantSpellWords.length();
-		if (strncasecmp(instantSpellWords.c_str(), words.c_str(), spellLen) == 0) {
-			if (!result || spellLen > result->getWords().length()) {
+		if (caseInsensitiveStartsWith(words, instantSpellWords)) {
+			if (!result || spellLen > result->getWords().size()) {
 				result = &it.second;
 				if (words.length() == spellLen) {
 					break;
@@ -252,7 +252,7 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 {
 	for (auto& it : instants) {
-		if (strcasecmp(it.second.getName().c_str(), name.c_str()) == 0) {
+		if (caseInsensitiveEqual(it.second.getName(), name)) {
 			return &it.second;
 		}
 	}
@@ -395,7 +395,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	//static size_t size = sizeof(reservedList) / sizeof(const char*);
 	//for (size_t i = 0; i < size; ++i) {
 	for (const char* reserved : reservedList) {
-		if (strcasecmp(reserved, name.c_str()) == 0) {
+		if (caseInsensitiveEqual(reserved, name)) {
 			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
 			return false;
 		}

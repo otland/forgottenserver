@@ -496,7 +496,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		for (auto attributeNode : node.children()) {
 			if ((attr = attributeNode.attribute("key"))) {
 				const char* value = attr.value();
-				if (strcasecmp(value, "shooteffect") == 0) {
+				if (caseInsensitiveEqual(value, "shooteffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
 						ShootType_t shoot = getShootType(asLowerCaseString(attr.as_string()));
 						if (shoot != CONST_ANI_NONE) {
@@ -505,7 +505,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
 					}
-				} else if (strcasecmp(value, "areaeffect") == 0) {
+				} else if (caseInsensitiveEqual(value, "areaeffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
 						MagicEffectClasses effect = getMagicEffect(asLowerCaseString(attr.as_string()));
 						if (effect != CONST_ME_NONE) {
@@ -885,29 +885,29 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		for (auto flagNode : node.children()) {
 			attr = flagNode.first_attribute();
 			const char* attrName = attr.name();
-			if (strcasecmp(attrName, "summonable") == 0) {
+			if (caseInsensitiveEqual(attrName, "summonable")) {
 				mType->info.isSummonable = attr.as_bool();
-			} else if (strcasecmp(attrName, "attackable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "attackable")) {
 				mType->info.isAttackable = attr.as_bool();
-			} else if (strcasecmp(attrName, "hostile") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "hostile")) {
 				mType->info.isHostile = attr.as_bool();
-			} else if (strcasecmp(attrName, "ignorespawnblock") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "ignorespawnblock")) {
 				mType->info.isIgnoringSpawnBlock = attr.as_bool();
-			} else if (strcasecmp(attrName, "illusionable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "illusionable")) {
 				mType->info.isIllusionable = attr.as_bool();
-			} else if (strcasecmp(attrName, "challengeable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "challengeable")) {
 				mType->info.isChallengeable = attr.as_bool();
-			} else if (strcasecmp(attrName, "convinceable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "convinceable")) {
 				mType->info.isConvinceable = attr.as_bool();
-			} else if (strcasecmp(attrName, "pushable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "pushable")) {
 				mType->info.pushable = attr.as_bool();
-			} else if (strcasecmp(attrName, "isboss") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "isboss")) {
 				mType->info.isBoss = attr.as_bool();
-			} else if (strcasecmp(attrName, "canpushitems") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canpushitems")) {
 				mType->info.canPushItems = attr.as_bool();
-			} else if (strcasecmp(attrName, "canpushcreatures") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canpushcreatures")) {
 				mType->info.canPushCreatures = attr.as_bool();
-			} else if (strcasecmp(attrName, "staticattack") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "staticattack")) {
 				uint32_t staticAttack = pugi::cast<uint32_t>(attr.value());
 				if (staticAttack > 100) {
 					std::cout << "[Warning - Monsters::loadMonster] staticattack greater than 100. " << file << std::endl;
@@ -915,26 +915,26 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				}
 
 				mType->info.staticAttackChance = staticAttack;
-			} else if (strcasecmp(attrName, "lightlevel") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "lightlevel")) {
 				mType->info.light.level = pugi::cast<uint16_t>(attr.value());
-			} else if (strcasecmp(attrName, "lightcolor") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "lightcolor")) {
 				mType->info.light.color = pugi::cast<uint16_t>(attr.value());
-			} else if (strcasecmp(attrName, "targetdistance") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "targetdistance")) {
 				int32_t targetDistance = pugi::cast<int32_t>(attr.value());
 				if (targetDistance < 1) {
 					targetDistance = 1;
 					std::cout << "[Warning - Monsters::loadMonster] targetdistance less than 1. " << file << std::endl;
 				}
 				mType->info.targetDistance = targetDistance;
-			} else if (strcasecmp(attrName, "runonhealth") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "runonhealth")) {
 				mType->info.runAwayHealth = pugi::cast<int32_t>(attr.value());
-			} else if (strcasecmp(attrName, "hidehealth") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "hidehealth")) {
 				mType->info.hiddenHealth = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonenergy") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonenergy")) {
 				mType->info.canWalkOnEnergy = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonfire") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonfire")) {
 				mType->info.canWalkOnFire = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonpoison") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonpoison")) {
 				mType->info.canWalkOnPoison = attr.as_bool();
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown flag attribute: " << attrName << ". " << file << std::endl;

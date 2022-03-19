@@ -799,6 +799,13 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		int32_t getDecayTime() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+			}
+			return items[id].decayTime;
+		}
+
 		void setDecayTo(int32_t decayTo) {
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 		}
@@ -809,7 +816,6 @@ class Item : virtual public Thing
 			return items[id].decayTo;
 		}
 
-		static std::string getDescription(const ItemType& it, int32_t lookDistance, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
@@ -840,7 +846,7 @@ class Item : virtual public Thing
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory
-		Player* getHoldingPlayer() const;
+		const Player* getHoldingPlayer() const;
 
 		WeaponType_t getWeaponType() const {
 			return items[id].weaponType;
@@ -952,6 +958,9 @@ class Item : virtual public Thing
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
+		}
+		bool isSupply() const {
+			return items[id].isSupply();
 		}
 
 		void setStoreItem(bool storeItem) {

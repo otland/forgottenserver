@@ -9,8 +9,8 @@ static constexpr auto STATUS_SERVER_VERSION = "1.5";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "The Forgotten Server Team";
 
 static constexpr auto CLIENT_VERSION_MIN = 1280;
-static constexpr auto CLIENT_VERSION_MAX = 1285;
-static constexpr auto CLIENT_VERSION_STR = "12.85";
+static constexpr auto CLIENT_VERSION_MAX = 1286;
+static constexpr auto CLIENT_VERSION_STR = "12.86";
 
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;
 static constexpr auto AUTHENTICATOR_PERIOD = 30U;
@@ -50,9 +50,6 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #pragma warning(disable:4351) // new behavior: elements of array will be default initialized
 #pragma warning(disable:4458) // declaration hides class member
 #endif
-
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
 
 #ifndef _WIN32_WINNT
 // 0x0602: Windows 7

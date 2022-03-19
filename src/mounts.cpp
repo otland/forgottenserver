@@ -59,7 +59,7 @@ Mount* Mounts::getMountByID(uint8_t id)
 Mount* Mounts::getMountByName(const std::string& name) {
 	auto mountName = name.c_str();
 	for (auto& it : mounts) {
-		if (strcasecmp(mountName, it.name.c_str()) == 0) {
+		if (caseInsensitiveEqual(mountName, it.name)) {
 			return &it;
 		}
 	}

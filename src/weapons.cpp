@@ -99,11 +99,11 @@ void Weapons::loadDefaults()
 
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
+	if (caseInsensitiveEqual(nodeName, "melee")) {
 		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "distance")) {
 		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "wand")) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
@@ -424,7 +424,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	}
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
-		player->sendSupplyUsed(item);
+		player->sendSupplyUsed(item->getClientID());
 		Weapon::decrementItemCount(item);
 		return;
 	}
@@ -432,7 +432,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
 			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
-				player->sendSupplyUsed(item);
+				player->sendSupplyUsed(item->getClientID());
 				Weapon::decrementItemCount(item);
 			}
 			break;

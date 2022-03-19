@@ -5,6 +5,7 @@
 #define FS_TOOLS_H
 
 #include <random>
+#include <string_view>
 
 #include "position.h"
 #include "const.h"
@@ -21,6 +22,12 @@ void trim_left(std::string& source, char t);
 void toLowerCaseString(std::string& source);
 std::string asLowerCaseString(std::string source);
 std::string asUpperCaseString(std::string source);
+
+// checks that str1 is equivalent to str2 ignoring letter case
+bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
+
+// checks that str1 starts with str2 ignoring letter case
+bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix);
 
 using StringVector = std::vector<std::string>;
 using IntegerVector = std::vector<int32_t>;

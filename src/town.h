@@ -56,7 +56,7 @@ class Towns
 
 		Town* getTown(const std::string& townName) const {
 			for (const auto& it : townMap) {
-				if (strcasecmp(townName.c_str(), it.second->getName().c_str()) == 0) {
+				if (caseInsensitiveEqual(townName, it.second->getName())) {
 					return it.second;
 				}
 			}
