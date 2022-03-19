@@ -35,7 +35,8 @@ void DatabaseTasks::threadMain()
 	}
 }
 
-void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback/* = nullptr*/, bool store/* = false*/)
+void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/,
+                            bool store /* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();
@@ -69,7 +70,7 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 
 void DatabaseTasks::flush()
 {
-	std::unique_lock<std::mutex> guard{ taskLock };
+	std::unique_lock<std::mutex> guard{taskLock};
 	while (!tasks.empty()) {
 		auto task = std::move(tasks.front());
 		tasks.pop_front();
