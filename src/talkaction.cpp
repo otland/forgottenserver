@@ -97,7 +97,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 				++it;
 				continue;
 			}
-			trim_left(param, ' ');
+			boost::algorithm::trim_left(param);
 
 			std::string separator = it->second.getSeparator();
 			if (separator != " ") {
