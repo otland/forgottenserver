@@ -108,6 +108,44 @@ std::size_t clientLogin(const Player& player)
 	return waitList.size();
 }
 
+ClientElement getClientElement(CombatType_t combatType) {
+	switch (combatType) {
+	case COMBAT_PHYSICALDAMAGE:
+		return CLIENT_ELEMENTAL_PHYSICAL;
+
+	case COMBAT_ENERGYDAMAGE:
+		return CLIENT_ELEMENTAL_ENERGY;
+
+	case COMBAT_EARTHDAMAGE:
+		return CLIENT_ELEMENTAL_EARTH;
+
+	case COMBAT_FIREDAMAGE:
+		return CLIENT_ELEMENTAL_FIRE;
+
+	case COMBAT_LIFEDRAIN:
+		return CLIENT_ELEMENTAL_LIFEDRAIN;
+
+	case COMBAT_HEALING:
+		return CLIENT_ELEMENTAL_HEALING;
+
+	case COMBAT_DROWNDAMAGE:
+		return CLIENT_ELEMENTAL_DROWN;
+
+	case COMBAT_ICEDAMAGE:
+		return CLIENT_ELEMENTAL_ICE;
+
+	case COMBAT_HOLYDAMAGE:
+		return CLIENT_ELEMENTAL_HOLY;
+
+	case COMBAT_DEATHDAMAGE:
+		return CLIENT_ELEMENTAL_DEATH;
+
+	default:
+		return CLIENT_ELEMENTAL_UNDEFINED;
+	}
+}
+
+
 }
 
 void ProtocolGame::release()
@@ -2883,22 +2921,21 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCombatAlalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target)
+void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target)
 {
 	NetworkMessage msg;
 	msg.addByte(0xCC);
-	if (impactType == DamageAnalyzerImpactType::HEALING) {
-		msg.addByte(HEALING);
-		msg.add<uint32_t>(amount);
-	} else if(impactType == DamageAnalyzerImpactType::RECEIVE) {
-		msg.addByte(RECEIVE);
-		msg.add<uint32_t>(amount);
-		msg.addByte(getClientElement(type));
-		msg.addString(target);
-	} else if (impactType == DamageAnalyzerImpactType::DEALT) {
-		msg.addByte(DEALT);
-		msg.add<uint32_t>(amount);
-		msg.addByte(getClientElement(type));
+	msg.addByte(impactType);
+	msg.add<uint32_t>(amount);
+
+	switch (impactType)	{
+		case RECEIVE:
+			msg.addByte(getClientElement(type));
+			msg.addString(target);
+			break;
+		case DEALT:
+			msg.addByte(getClientElement(type));
+			break;
 	}
 	writeToOutputBuffer(msg);
 }

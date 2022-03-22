@@ -78,6 +78,4 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-ClientElement getClientElement(CombatType_t combatType);
-
 #endif // FS_TOOLS_H
