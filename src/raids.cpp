@@ -294,7 +294,7 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute typeAttribute = eventNode.attribute("type");
 	if (typeAttribute) {
-		std::string tmpStrValue = asLowerCaseString(typeAttribute.as_string());
+		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(typeAttribute.as_string());
 		if (tmpStrValue == "warning") {
 			messageType = MESSAGE_STATUS_WARNING;
 		} else if (tmpStrValue == "event") {

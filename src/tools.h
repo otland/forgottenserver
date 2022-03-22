@@ -13,13 +13,6 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 std::string transformToSHA1(const std::string& input);
 std::string generateToken(const std::string& key, uint32_t ticks);
 
-void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
-void trim_right(std::string& source, char t);
-void trim_left(std::string& source, char t);
-void toLowerCaseString(std::string& source);
-std::string asLowerCaseString(std::string source);
-std::string asUpperCaseString(std::string source);
-
 // checks that str1 is equivalent to str2 ignoring letter case
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
 
@@ -49,8 +42,6 @@ std::string getFirstLine(const std::string& str);
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string convertIPToString(uint32_t ip);
-
-void trimString(std::string& str);
 
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);

@@ -15,8 +15,8 @@ std::string Mission::getDescription(Player* player) const
 
 	if (!mainDescription.empty()) {
 		std::string desc = mainDescription;
-		replaceString(desc, "|STATE|", std::to_string(value));
-		replaceString(desc, "\\n", "\n");
+		boost::algorithm::replace_all(desc, "|STATE|", std::to_string(value));
+		boost::algorithm::replace_all(desc, "\\n", "\n");
 		return desc;
 	}
 

@@ -128,7 +128,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 	}
 
 	name = getFirstLine(text);
-	trimString(name);
+	boost::algorithm::trim(name);
 	return true;
 }
 
