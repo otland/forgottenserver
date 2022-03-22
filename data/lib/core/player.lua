@@ -372,3 +372,12 @@ function Player.addAllMounts(self)
 		self:addMount(mounts[mount].id)
 	end
 end
+
+function Player.getAttackFactor(self)
+	local factors = {
+		FIGHTMODE_ATTACK = 1.0,
+		FIGHTMODE_BALANCED = 1.2,
+		FIGHTMODE_DEFENSE = 2.0
+	}
+	return factors[self:getFightMode()]
+end
