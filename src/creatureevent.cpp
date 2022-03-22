@@ -173,7 +173,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	std::string tmpStr = asLowerCaseString(typeAttribute.as_string());
+	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(typeAttribute.as_string());
 	if (tmpStr == "login") {
 		type = CREATURE_EVENT_LOGIN;
 	} else if (tmpStr == "logout") {

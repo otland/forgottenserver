@@ -389,7 +389,7 @@ class LuaScriptInterface
 			lua_setfield(L, -2, index);
 		}
 
-		static std::string escapeString(const std::string& string);
+		static std::string escapeString(std::string string);
 
 #ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[7];

@@ -218,46 +218,6 @@ std::string generateToken(const std::string& key, uint32_t ticks)
 	return message;
 }
 
-void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
-{
-	size_t pos = 0;
-	size_t start = 0;
-	size_t soughtLen = sought.length();
-	size_t replaceLen = replacement.length();
-
-	while ((pos = str.find(sought, start)) != std::string::npos) {
-		str = str.substr(0, pos) + replacement + str.substr(pos + soughtLen);
-		start = pos + replaceLen;
-	}
-}
-
-void trim_right(std::string& source, char t)
-{
-	source.erase(source.find_last_not_of(t) + 1);
-}
-
-void trim_left(std::string& source, char t)
-{
-	source.erase(0, source.find_first_not_of(t));
-}
-
-void toLowerCaseString(std::string& source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), tolower);
-}
-
-std::string asLowerCaseString(std::string source)
-{
-	toLowerCaseString(source);
-	return source;
-}
-
-std::string asUpperCaseString(std::string source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), toupper);
-	return source;
-}
-
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 {
 	return str1.size() == str2.size() && std::equal(str1.begin(), str1.end(), str2.begin(), [](char a, char b) {
@@ -339,12 +299,6 @@ bool boolean_random(double probability/* = 0.5*/)
 {
 	static std::bernoulli_distribution booleanRand;
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
-}
-
-void trimString(std::string& str)
-{
-	str.erase(str.find_last_not_of(' ') + 1);
-	str.erase(0, str.find_first_not_of(' '));
 }
 
 std::string convertIPToString(uint32_t ip)
@@ -1254,7 +1208,7 @@ int64_t OTSYS_TIME()
 
 SpellGroup_t stringToSpellGroup(const std::string& value)
 {
-	std::string tmpStr = asLowerCaseString(value);
+	std::string tmpStr = boost::algorithm::to_lower_copy(value);
 	if (tmpStr == "attack" || tmpStr == "1") {
 		return SPELLGROUP_ATTACK;
 	} else if (tmpStr == "healing" || tmpStr == "2") {

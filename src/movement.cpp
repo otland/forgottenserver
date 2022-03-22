@@ -540,7 +540,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	std::string tmpStr = asLowerCaseString(eventAttr.as_string());
+	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(eventAttr.as_string());
 	if (tmpStr == "stepin") {
 		eventType = MOVE_EVENT_STEP_IN;
 	} else if (tmpStr == "stepout") {
@@ -561,7 +561,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	if (eventType == MOVE_EVENT_EQUIP || eventType == MOVE_EVENT_DEEQUIP) {
 		pugi::xml_attribute slotAttribute = node.attribute("slot");
 		if (slotAttribute) {
-			tmpStr = asLowerCaseString(slotAttribute.as_string());
+			tmpStr = boost::algorithm::to_lower_copy<std::string>(slotAttribute.as_string());
 			if (tmpStr == "head") {
 				slot = SLOTP_HEAD;
 			} else if (tmpStr == "necklace") {
@@ -627,7 +627,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			if (vocationId != -1) {
 				vocEquipMap[vocationId] = true;
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {
-					vocStringList.push_back(asLowerCaseString(vocationNameAttribute.as_string()));
+					vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string()));
 				}
 			}
 		}

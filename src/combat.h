@@ -7,6 +7,7 @@
 #include "baseevents.h"
 #include "condition.h"
 #include "item.h"
+#include "tools.h"
 
 class Creature;
 class Player;
