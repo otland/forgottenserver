@@ -651,7 +651,7 @@ enum ClientElement {
 	CLIENT_ELEMENTAL_UNDEFINED = 10
 };
 
-enum DamageAnalyzerImpactType{
+enum DamageAnalyzerImpactType {
 	HEALING = 0,
 	DEALT = 1,
 	RECEIVE = 2
