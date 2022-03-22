@@ -2929,7 +2929,7 @@ void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageA
 	msg.add<uint32_t>(amount);
 
 	switch (impactType)	{
-		case RECEIVE:
+		case RECEIVED:
 			msg.addByte(getClientElement(type));
 			msg.addString(target);
 			break;

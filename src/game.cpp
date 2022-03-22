@@ -4109,7 +4109,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::DEALT,
 					target ? target->getName() : "(other)");
 			}
-		}else if (targetPlayer) {
+		} else if (targetPlayer) {
 			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::HEALING,
 				attacker ? attacker->getName() : "(other)");
 			if (damage.secondary.type == COMBAT_HEALING) {
@@ -4322,10 +4322,10 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (targetPlayer) {
-			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::RECEIVE,
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::RECEIVED,
 				attacker ? attacker->getName() : "(other)");
 			if (damage.secondary.type != COMBAT_NONE) {
-				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::RECEIVE,
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::RECEIVED,
 				attacker ? attacker->getName() : "(other)");
 			}
 		}

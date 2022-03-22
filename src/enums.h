@@ -654,7 +654,7 @@ enum ClientElement {
 enum DamageAnalyzerImpactType {
 	HEALING = 0,
 	DEALT = 1,
-	RECEIVE = 2
+	RECEIVED = 2
 };
 
 #endif // FS_ENUMS_H
