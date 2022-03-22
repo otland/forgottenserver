@@ -587,10 +587,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint16_t getSpecialSkill(uint8_t skill) const {
-			return std::max<int32_t>(0, varSpecialSkills[skill]);
+			return std::max<uint16_t>(0, varSpecialSkills[skill]);
 		}
 		uint16_t getSkillLevel(uint8_t skill) const {
-			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
+			return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 		}
 		uint16_t getBaseSkill(uint8_t skill) const {
 			return skills[skill].level;
