@@ -2,7 +2,7 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 	maxRadius = maxRadius or 1
 
 	-- backward compatability (extended)
-	if maxRadius == true then
+	if maxRadius then
 		maxRadius = 2
 	end
 

@@ -1,29 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
-#define FS_MOVEMENT_H_5E0D2626D4634ACA83AC6509518E5F49
+#ifndef FS_MOVEMENT_H
+#define FS_MOVEMENT_H
 
 #include "baseevents.h"
-#include "item.h"
+#include "creature.h"
 #include "luascript.h"
 #include "vocation.h"
+
+class MoveEvent;
 
 extern Vocations g_vocations;
 
@@ -41,7 +27,6 @@ enum MoveEvent_t {
 	MOVE_EVENT_NONE
 };
 
-class MoveEvent;
 using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
 
 struct MoveEventList {
@@ -258,4 +243,4 @@ class MoveEvent final : public Event
 		std::vector<Position> posList;
 };
 
-#endif
+#endif // FS_MOVEMENT_H

@@ -194,4 +194,7 @@
 	<mount id="192" clientid="1454" name="Mystic Raven" speed="20" premium="no" />
 	<mount id="193" clientid="1455" name="Radiant Raven" speed="20" premium="no" />
 	<mount id="194" clientid="1459" name="Gloothomotive" speed="20" premium="yes" />
+	<mount id="195" clientid="1491" name="Topaz Shrine" speed="20" premium="no" />
+	<mount id="196" clientid="1492" name="Jade Shrine" speed="20" premium="no" />
+	<mount id="197" clientid="1493" name="Obsidian Shrine" speed="20" premium="no" />
 </mounts>

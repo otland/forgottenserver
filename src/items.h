@@ -1,29 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
-#define FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
+#ifndef FS_ITEMS_H
+#define FS_ITEMS_H
 
 #include "const.h"
 #include "enums.h"
 #include "itemloader.h"
 #include "position.h"
+
+class ConditionDamage;
 
 enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
@@ -54,6 +40,7 @@ enum ItemTypes_t {
 	ITEM_TYPE_BED,
 	ITEM_TYPE_KEY,
 	ITEM_TYPE_RUNE,
+	ITEM_TYPE_PODIUM,
 	ITEM_TYPE_LAST
 };
 
@@ -182,6 +169,49 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ALLOWDISTREAD,
 	ITEM_PARSE_STOREITEM,
 	ITEM_PARSE_WORTH,
+	ITEM_PARSE_REFLECTPERCENTALL,
+	ITEM_PARSE_REFLECTPERCENTELEMENTS,
+	ITEM_PARSE_REFLECTPERCENTMAGIC,
+	ITEM_PARSE_REFLECTPERCENTENERGY,
+	ITEM_PARSE_REFLECTPERCENTFIRE,
+	ITEM_PARSE_REFLECTPERCENTEARTH,
+	ITEM_PARSE_REFLECTPERCENTICE,
+	ITEM_PARSE_REFLECTPERCENTHOLY,
+	ITEM_PARSE_REFLECTPERCENTDEATH,
+	ITEM_PARSE_REFLECTPERCENTLIFEDRAIN,
+	ITEM_PARSE_REFLECTPERCENTMANADRAIN,
+	ITEM_PARSE_REFLECTPERCENTDROWN,
+	ITEM_PARSE_REFLECTPERCENTPHYSICAL,
+	ITEM_PARSE_REFLECTPERCENTHEALING,
+	ITEM_PARSE_REFLECTCHANCEALL,
+	ITEM_PARSE_REFLECTCHANCEELEMENTS,
+	ITEM_PARSE_REFLECTCHANCEMAGIC,
+	ITEM_PARSE_REFLECTCHANCEENERGY,
+	ITEM_PARSE_REFLECTCHANCEFIRE,
+	ITEM_PARSE_REFLECTCHANCEEARTH,
+	ITEM_PARSE_REFLECTCHANCEICE,
+	ITEM_PARSE_REFLECTCHANCEHOLY,
+	ITEM_PARSE_REFLECTCHANCEDEATH,
+	ITEM_PARSE_REFLECTCHANCELIFEDRAIN,
+	ITEM_PARSE_REFLECTCHANCEMANADRAIN,
+	ITEM_PARSE_REFLECTCHANCEDROWN,
+	ITEM_PARSE_REFLECTCHANCEPHYSICAL,
+	ITEM_PARSE_REFLECTCHANCEHEALING,
+	ITEM_PARSE_BOOSTPERCENTALL,
+	ITEM_PARSE_BOOSTPERCENTELEMENTS,
+	ITEM_PARSE_BOOSTPERCENTMAGIC,
+	ITEM_PARSE_BOOSTPERCENTENERGY,
+	ITEM_PARSE_BOOSTPERCENTFIRE,
+	ITEM_PARSE_BOOSTPERCENTEARTH,
+	ITEM_PARSE_BOOSTPERCENTICE,
+	ITEM_PARSE_BOOSTPERCENTHOLY,
+	ITEM_PARSE_BOOSTPERCENTDEATH,
+	ITEM_PARSE_BOOSTPERCENTLIFEDRAIN,
+	ITEM_PARSE_BOOSTPERCENTMANADRAIN,
+	ITEM_PARSE_BOOSTPERCENTDROWN,
+	ITEM_PARSE_BOOSTPERCENTPHYSICAL,
+	ITEM_PARSE_BOOSTPERCENTHEALING,
+	ITEM_PARSE_SUPPLY,
 };
 
 struct Abilities {
@@ -209,6 +239,10 @@ struct Abilities {
 	//damage abilities modifiers
 	std::array<int16_t, COMBAT_COUNT> absorbPercent = {0};
 
+	std::array<Reflect, COMBAT_COUNT> reflect;
+
+	int16_t boostPercent[COMBAT_COUNT] = {0};
+
 	//elemental damage
 	uint16_t elementDamage = 0;
 	CombatType_t elementType = COMBAT_NONE;
@@ -217,8 +251,6 @@ struct Abilities {
 	bool invisible = false;
 	bool regeneration = false;
 };
-
-class ConditionDamage;
 
 class ItemType
 {
@@ -272,6 +304,9 @@ class ItemType
 		bool isRune() const {
 			return (type == ITEM_TYPE_RUNE);
 		}
+		bool isPodium() const {
+			return (type == ITEM_TYPE_PODIUM);
+		}
 		bool isPickupable() const {
 			return (allowPickupable || pickupable);
 		}
@@ -280,6 +315,9 @@ class ItemType
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
+		}
+		bool isSupply() const {
+			return supply;
 		}
 
 		Abilities& getAbilities() {
@@ -403,6 +441,7 @@ class ItemType
 		bool lookThrough = false;
 		bool stopTime = false;
 		bool showCount = true;
+		bool supply = false;
 };
 
 class Items
@@ -481,4 +520,5 @@ class Items
 				std::vector<uint16_t> vec;
 		} clientIdToServerIdMap;
 };
-#endif
+
+#endif // FS_ITEMS_H

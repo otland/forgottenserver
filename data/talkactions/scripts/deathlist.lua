@@ -20,7 +20,7 @@ end
 
 function onSay(player, words, param)
 	local resultId = db.storeQuery("SELECT `id`, `name` FROM `players` WHERE `name` = " .. db.escapeString(param))
-	if resultId ~= false then
+	if resultId then
 		local targetGUID = result.getNumber(resultId, "id")
 		local targetName = result.getString(resultId, "name")
 		result.free(resultId)
@@ -28,7 +28,7 @@ function onSay(player, words, param)
 		local breakline = ""
 
 		local resultId = db.storeQuery("SELECT `time`, `level`, `killed_by`, `is_player` FROM `player_deaths` WHERE `player_id` = " .. targetGUID .. " ORDER BY `time` DESC")
-		if resultId ~= false then
+		if resultId then
 			repeat
 				if str ~= "" then
 					breakline = "\n"

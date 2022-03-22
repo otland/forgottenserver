@@ -1,29 +1,17 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "creature.h"
+
+#include "combat.h"
+#include "configmanager.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
+#include "party.h"
 #include "scheduler.h"
+#include "spectators.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -284,6 +272,10 @@ void Creature::startAutoWalk(Direction direction)
 
 void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 {
+	if (hasCondition(CONDITION_ROOT)) {
+		return;
+	}
+
 	Player* player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
@@ -316,7 +308,7 @@ void Creature::addEventWalk(bool firstStep)
 		g_game.checkCreatureWalk(getID());
 	}
 
-	eventWalk = g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Game::checkCreatureWalk, &g_game, getID())));
+	eventWalk = g_scheduler.addEvent(createSchedulerTask(ticks, [id = getID()]() { g_game.checkCreatureWalk(id); }));
 }
 
 void Creature::stopEventWalk()
@@ -445,11 +437,7 @@ void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 void Creature::onRemoveCreature(Creature* creature, bool)
 {
 	onCreatureDisappear(creature, true);
-	if (creature == this) {
-		if (master && !master->isRemoved()) {
-			setMaster(nullptr);
-		}
-	} else if (isMapLoaded) {
+	if (creature != this && isMapLoaded) {
 		if (creature->getPosition().z == getPosition().z) {
 			updateTileCache(creature->getTile(), creature->getPosition());
 		}
@@ -633,7 +621,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		} else {
 			if (hasExtraSwing()) {
 				//our target is moving lets see if we can get in hit
-				g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
+				g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -817,7 +805,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 	}
 
 	if (health <= 0) {
-		g_dispatcher.addTask(createTask(std::bind(&Game::executeDeath, &g_game, getID())));
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
 	}
 }
 
@@ -886,6 +874,29 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	}
 
 	if (attacker) {
+		if (Player* attackerPlayer = attacker->getPlayer()) {
+			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
+					continue;
+				}
+
+				Item* item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
+				if (!item) {
+					continue;
+				}
+
+				const uint16_t boostPercent = item->getBoostPercent(combatType);
+				if (boostPercent != 0) {
+					damage += std::round(damage * (boostPercent / 100.));
+				}
+			}
+		}
+
+		if (damage <= 0) {
+			damage = 0;
+			blockType = BLOCK_ARMOR;
+		}
+
 		attacker->onAttackedCreature(this);
 		attacker->onAttackedCreatureBlockHit(blockType);
 	}
@@ -1192,7 +1203,7 @@ bool Creature::addCondition(Condition* condition, bool force/* = false*/)
 	if (!force && condition->getType() == CONDITION_HASTE && hasCondition(CONDITION_PARALYZE)) {
 		int64_t walkDelay = getWalkDelay();
 		if (walkDelay > 0) {
-			g_scheduler.addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceAddCondition, &g_game, getID(), condition)));
+			g_scheduler.addEvent(createSchedulerTask(walkDelay, [=, id = getID()]() { g_game.forceAddCondition(id, condition); }));
 			return false;
 		}
 	}
@@ -1240,7 +1251,7 @@ void Creature::removeCondition(ConditionType_t type, bool force/* = false*/)
 		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
-				g_scheduler.addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
+				g_scheduler.addEvent(createSchedulerTask(walkDelay, [=, id = getID()] () { g_game.forceRemoveCondition(id, type); }));
 				return;
 			}
 		}
@@ -1267,7 +1278,7 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
-				g_scheduler.addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceRemoveCondition, &g_game, getID(), type)));
+				g_scheduler.addEvent(createSchedulerTask(walkDelay, [=, id = getID()] () { g_game.forceRemoveCondition(id, type); }));
 				return;
 			}
 		}
@@ -1305,7 +1316,7 @@ void Creature::removeCondition(Condition* condition, bool force/* = false*/)
 	if (!force && condition->getType() == CONDITION_PARALYZE) {
 		int64_t walkDelay = getWalkDelay();
 		if (walkDelay > 0) {
-			g_scheduler.addEvent(createSchedulerTask(walkDelay, std::bind(&Game::forceRemoveCondition, &g_game, getID(), condition->getType())));
+			g_scheduler.addEvent(createSchedulerTask(walkDelay, [id = getID(), type = condition->getType()]() { g_game.forceRemoveCondition(id, type); }));
 			return;
 		}
 	}

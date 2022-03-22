@@ -1,44 +1,28 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "game.h"
+#include "iomarket.h"
+#include "monsters.h"
+#include "outfit.h"
+#include "protocollogin.h"
+#include "protocolold.h"
+#include "protocolstatus.h"
+#include "rsa.h"
+#include "scheduler.h"
+#include "script.h"
+#include "scriptmanager.h"
 #include "server.h"
 
-#include "game.h"
-
-#include "iomarket.h"
-
-#include "configmanager.h"
-#include "scriptmanager.h"
-#include "rsa.h"
-#include "protocolold.h"
-#include "protocollogin.h"
-#include "protocolstatus.h"
-#include "databasemanager.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "script.h"
 #include <fstream>
-#include <fmt/format.h>
+
 #if __has_include("gitmetadata.h")
-	#include "gitmetadata.h"
+#include "gitmetadata.h"
 #endif
 
 DatabaseTasks g_databaseTasks;
@@ -58,7 +42,7 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	std::cout << "> ERROR: " << errorStr << std::endl;
+	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
 	g_loaderSignal.notify_all();
 }
 
@@ -88,7 +72,7 @@ int main(int argc, char* argv[])
 	g_dispatcher.start();
 	g_scheduler.start();
 
-	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
+	g_dispatcher.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
@@ -181,14 +165,15 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
-	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
+	if (caseInsensitiveEqual(defaultPriority, "high")) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
+	} else if (caseInsensitiveEqual(defaultPriority, "above-normal")) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
 
 	//set RSA key
+	std::cout << ">> Loading RSA key " << std::endl;
 	try {
 		g_RSA.loadPEM("key.pem");
 	} catch(const std::exception& e) {
@@ -271,7 +256,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	std::cout << ">> Checking world type... " << std::flush;
-	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
+	std::string worldType = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -283,7 +268,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage(fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.", g_config.getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
-	std::cout << asUpperCaseString(worldType) << std::endl;
+	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
@@ -305,7 +290,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
-	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+	std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;

@@ -82,6 +82,7 @@ local transformItems = {
 	[26091] = 26093, [26093] = 26091, -- predator lamp
 	[26096] = 26094, [26094] = 26096, -- protectress lamp
 	[26097] = 26095, [26095] = 26097, -- protectress lamp
+	[38629] = 38630, [38630] = 38629, -- toggle light on podium
 }
 
 local transformTo = Action()

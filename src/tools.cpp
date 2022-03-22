@@ -1,26 +1,13 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "tools.h"
+
 #include "configmanager.h"
+
+#include <chrono>
 
 extern ConfigManager g_config;
 
@@ -231,44 +218,18 @@ std::string generateToken(const std::string& key, uint32_t ticks)
 	return message;
 }
 
-void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
+bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 {
-	size_t pos = 0;
-	size_t start = 0;
-	size_t soughtLen = sought.length();
-	size_t replaceLen = replacement.length();
-
-	while ((pos = str.find(sought, start)) != std::string::npos) {
-		str = str.substr(0, pos) + replacement + str.substr(pos + soughtLen);
-		start = pos + replaceLen;
-	}
+	return str1.size() == str2.size() && std::equal(str1.begin(), str1.end(), str2.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
 }
 
-void trim_right(std::string& source, char t)
+bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 {
-	source.erase(source.find_last_not_of(t) + 1);
-}
-
-void trim_left(std::string& source, char t)
-{
-	source.erase(0, source.find_first_not_of(t));
-}
-
-void toLowerCaseString(std::string& source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), tolower);
-}
-
-std::string asLowerCaseString(std::string source)
-{
-	toLowerCaseString(source);
-	return source;
-}
-
-std::string asUpperCaseString(std::string source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), toupper);
-	return source;
+	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
 }
 
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
@@ -338,12 +299,6 @@ bool boolean_random(double probability/* = 0.5*/)
 {
 	static std::bernoulli_distribution booleanRand;
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
-}
-
-void trimString(std::string& str)
-{
-	str.erase(str.find_last_not_of(' ') + 1);
-	str.erase(0, str.find_first_not_of(' '));
 }
 
 std::string convertIPToString(uint32_t ip)
@@ -954,19 +909,6 @@ bool booleanString(const std::string& str)
 	return ch != 'f' && ch != 'n' && ch != '0';
 }
 
-std::string getWeaponName(WeaponType_t weaponType)
-{
-	switch (weaponType) {
-		case WEAPON_SWORD: return "sword";
-		case WEAPON_CLUB: return "club";
-		case WEAPON_AXE: return "axe";
-		case WEAPON_DISTANCE: return "distance";
-		case WEAPON_WAND: return "wand";
-		case WEAPON_AMMO: return "ammunition";
-		default: return std::string();
-	}
-}
-
 size_t combatTypeToIndex(CombatType_t combatType)
 {
 	switch (combatType) {
@@ -1326,7 +1268,7 @@ int64_t OTSYS_TIME()
 
 SpellGroup_t stringToSpellGroup(const std::string& value)
 {
-	std::string tmpStr = asLowerCaseString(value);
+	std::string tmpStr = boost::algorithm::to_lower_copy(value);
 	if (tmpStr == "attack" || tmpStr == "1") {
 		return SPELLGROUP_ATTACK;
 	} else if (tmpStr == "healing" || tmpStr == "2") {

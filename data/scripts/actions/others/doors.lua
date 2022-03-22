@@ -1,8 +1,8 @@
 local positionOffsets = {
-	Position(1, 0, 0), -- east
-	Position(0, 1, 0), -- south
-	Position(-1, 0, 0), -- west
-	Position(0, -1, 0) -- north
+	{x = 1, y = 0}, -- east
+	{x = 0, y = 1}, -- south
+	{x = -1, y = 0}, -- west
+	{x = 0, y = -1}, -- north
 }
 
 --[[
@@ -18,7 +18,7 @@ In round 4 it checks if there's a tile blocked by a magic wall or wild growth.
 local function findPushPosition(creature, round)
 	local pos = creature:getPosition()
 	for _, offset in ipairs(positionOffsets) do
-		local offsetPosition = pos + offset
+		local offsetPosition = Position(pos.x + offset.x, pos.y + offset.y, pos.z)
 		local tile = Tile(offsetPosition)
 		if tile then
 			local creatureCount = tile:getCreatureCount()

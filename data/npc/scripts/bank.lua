@@ -233,6 +233,12 @@ local function creatureSayCallback(cid, type, msg)
 			end
 		end
 	elseif npcHandler.topic[cid] == topicList.TRANSFER_PLAYER_GOLD then
+		local currencyValue = tonumber(msg)
+		if not currencyValue or currencyValue < 1 then
+			npcHandler:say("Please tell me the amount of gold you would like to transfer, make sure to specify a number.", cid)
+			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_GOLD
+			return true
+		end
 		count[cid] = getMoneyCount(msg)
 		if player:getBankBalance() < count[cid] then
 			npcHandler:say("There is not enough gold in your account.", cid)
@@ -248,6 +254,11 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == topicList.TRANSFER_PLAYER_WHO then
 		transfer[cid] = getPlayerDatabaseInfo(msg)
+		if not transfer[cid] then
+			npcHandler:say("Hmm, my ledgers have no records of anyone with the name "..msg..". Please ensure the name is correct.", cid)
+			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_WHO
+			return true
+		end
 		if player:getName() == transfer[cid].name then
 			npcHandler:say("Fill in this field with person who receives your gold!", cid)
 			npcHandler.topic[cid] = topicList.NONE

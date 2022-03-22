@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
-#define FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
+#ifndef FS_ENUMS_H
+#define FS_ENUMS_H
 
 enum RuleViolationType_t : uint8_t {
 	REPORT_TYPE_NAME = 0,
@@ -373,6 +357,7 @@ enum ConditionType_t {
 	CONDITION_PACIFIED = 1 << 25,
 	CONDITION_SPELLCOOLDOWN = 1 << 26,
 	CONDITION_SPELLGROUPCOOLDOWN = 1 << 27,
+	CONDITION_ROOT = 1 << 28,
 };
 
 enum ConditionId_t : int8_t {
@@ -489,6 +474,8 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_NORMAL2 = 5,
 	SPEECHBUBBLE_NORMAL3 = 6,
 	SPEECHBUBBLE_HIRELING = 7,
+
+	SPEECHBUBBLE_LAST = SPEECHBUBBLE_HIRELING
 };
 
 enum MapMark_t
@@ -540,12 +527,12 @@ struct LightInfo {
 struct ShopInfo {
 	uint16_t itemId = 0;
 	int32_t subType = 1;
-	uint32_t buyPrice = 0;
-	uint32_t sellPrice = 0;
+	int64_t buyPrice = 0;
+	int64_t sellPrice = 0;
 	std::string realName = "";
 
 	ShopInfo() = default;
-	ShopInfo(uint16_t itemId, int32_t subType = 0, uint32_t buyPrice = 0, uint32_t sellPrice = 0, std::string realName = "")
+	ShopInfo(uint16_t itemId, int32_t subType = 0, int64_t buyPrice = 0, int64_t sellPrice = 0, std::string realName = "")
 		: itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName)) {}
 };
 
@@ -610,6 +597,7 @@ enum CombatOrigin
 	ORIGIN_MELEE,
 	ORIGIN_RANGED,
 	ORIGIN_WAND,
+	ORIGIN_REFLECT,
 };
 
 struct CombatDamage
@@ -638,4 +626,18 @@ enum MonstersEvent_t : uint8_t {
 	MONSTERS_EVENT_SAY = 5,
 };
 
-#endif
+struct Reflect {
+	Reflect() = default;
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
+
+	Reflect& operator+=(const Reflect& other) {
+		percent += other.percent;
+		chance = std::min<uint16_t>(100, chance + other.chance);
+		return *this;
+	}
+
+	uint16_t percent = 0;
+	uint16_t chance = 0;
+};
+
+#endif // FS_ENUMS_H

@@ -1,32 +1,18 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "spawn.h"
+
+#include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
-#include "scheduler.h"
-
+#include "npc.h"
 #include "pugicast.h"
-#include "events.h"
+#include "scheduler.h"
+#include "spectators.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
@@ -80,7 +66,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 		Spawn& spawn = spawnList.front();
 
 		for (auto childNode : spawnNode.children()) {
-			if (strcasecmp(childNode.name(), "monsters") == 0) {
+			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
 				Position pos(
 					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
 					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
@@ -151,7 +137,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 				}
 
 				spawn.addBlock(sb);
-			} else if (strcasecmp(childNode.name(), "monster") == 0) {
+			} else if (caseInsensitiveEqual(childNode.name(), "monster")) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
 				if (!nameAttribute) {
 					continue;
@@ -181,7 +167,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 						std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be more than " << MAXSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 					}
 				}
-			} else if (strcasecmp(childNode.name(), "npc") == 0) {
+			} else if (caseInsensitiveEqual(childNode.name(), "npc")) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
 				if (!nameAttribute) {
 					continue;
@@ -255,7 +241,7 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 void Spawn::startSpawnCheck()
 {
 	if (checkSpawnEvent == 0) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
@@ -390,7 +376,7 @@ void Spawn::checkSpawn()
 	}
 
 	if (spawnedMap.size() < spawnMap.size()) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
