@@ -481,7 +481,7 @@ class Player final : public Creature, public Cylinder
 			varSpecialSkills[skill] += modifier;
 		}
 
-		void setSpecialMagicLevelSkill(CombatType_t type, int32_t modifier) {
+		void setSpecialMagicLevelSkill(CombatType_t type, int16_t modifier) {
 			specialMagicLevelSkill[combatTypeToIndex(type)] += modifier;
 		}
 
@@ -595,10 +595,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint16_t getSpecialSkill(uint8_t skill) const {
-			return std::max<int32_t>(0, varSpecialSkills[skill]);
+			return std::max<uint16_t>(0, varSpecialSkills[skill]);
 		}
 		uint16_t getSkillLevel(uint8_t skill) const {
-			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
+			return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 		}
 		uint16_t getSpecialMagicLevelSkill(CombatType_t type) const {
 			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);

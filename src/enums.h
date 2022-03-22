@@ -632,7 +632,7 @@ struct Reflect {
 
 	Reflect& operator+=(const Reflect& other) {
 		percent += other.percent;
-		chance = std::min(100, chance + other.chance);
+		chance = std::min<uint16_t>(100, chance + other.chance);
 		return *this;
 	}
 
