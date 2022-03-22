@@ -30,7 +30,7 @@ end
 
 local currencyItems = Game.getCurrencyItems()
 for index, currency in pairs(currencyItems) do
-	local back, to = currencyItems[index-1], currencyItems[index+1]
+	local back, to = currencyItems[index - 1], currencyItems[index + 1]
 	local currencyId = currency:getId()
 	config[currencyId] = { changeBack = back and back:getId(), changeTo = to and to:getId() }
 end
