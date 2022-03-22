@@ -1,29 +1,14 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "globalevent.h"
-#include "tools.h"
-#include "scheduler.h"
+
+#include "configmanager.h"
 #include "pugicast.h"
+#include "scheduler.h"
+#include "tools.h"
 
 extern ConfigManager g_config;
 
@@ -40,7 +25,7 @@ GlobalEvents::~GlobalEvents()
 
 void GlobalEvents::clearMap(GlobalEventMap& map, bool fromLua)
 {
-	for (auto it = map.begin(); it != map.end(); ) {
+	for (auto it = map.begin(); it != map.end();) {
 		if (fromLua == it->second.fromLua) {
 			it = map.erase(it);
 		} else {
@@ -65,7 +50,7 @@ void GlobalEvents::clear(bool fromLua)
 
 Event_ptr GlobalEvents::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "globalevent") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "globalevent")) {
 		return nullptr;
 	}
 	return Event_ptr(new GlobalEvent(&scriptInterface));
@@ -78,7 +63,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
+				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
 			return true;
 		}
@@ -91,7 +76,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = thinkMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (thinkEventId == 0) {
-				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
+				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { think(); }));
 			}
 			return true;
 		}
@@ -108,7 +93,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (timerEventId == 0) {
-				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::timer, this)));
+				timerEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
 			return true;
 		}
@@ -121,7 +106,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 		auto result = thinkMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (thinkEventId == 0) {
-				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&GlobalEvents::think, this)));
+				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { think(); }));
 			}
 			return true;
 		}
@@ -172,8 +157,7 @@ void GlobalEvents::timer()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000),
-							                std::bind(&GlobalEvents::timer, this)));
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000), [this]() { timer(); }));
 	}
 }
 
@@ -206,7 +190,7 @@ void GlobalEvents::think()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		thinkEventId = g_scheduler.addEvent(createSchedulerTask(nextScheduledTime, std::bind(&GlobalEvents::think, this)));
+		thinkEventId = g_scheduler.addEvent(createSchedulerTask(nextScheduledTime, [this]() { think(); }));
 	}
 }
 
@@ -299,11 +283,11 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		eventType = GLOBALEVENT_TIMER;
 	} else if ((attr = node.attribute("type"))) {
 		const char* value = attr.value();
-		if (strcasecmp(value, "startup") == 0) {
+		if (caseInsensitiveEqual(value, "startup")) {
 			eventType = GLOBALEVENT_STARTUP;
-		} else if (strcasecmp(value, "shutdown") == 0) {
+		} else if (caseInsensitiveEqual(value, "shutdown")) {
 			eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (strcasecmp(value, "record") == 0) {
+		} else if (caseInsensitiveEqual(value, "record")) {
 			eventType = GLOBALEVENT_RECORD;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string() << "\" for globalevent with name " << name << std::endl;

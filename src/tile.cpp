@@ -1,37 +1,21 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
-#include <boost/range/adaptor/reversed.hpp>
-
 #include "tile.h"
 
-#include "creature.h"
 #include "combat.h"
+#include "configmanager.h"
+#include "creature.h"
 #include "game.h"
+#include "housetile.h"
 #include "mailbox.h"
 #include "monster.h"
 #include "movement.h"
+#include "spectators.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "configmanager.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
@@ -505,7 +489,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
-		if (ground == nullptr) {
+		if (!ground) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -585,7 +569,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
-			if (player->getParent() == nullptr && hasFlag(TILESTATE_NOLOGOUT)) {
+			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
 				//player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -654,7 +638,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 		}
 
 		bool itemIsHangable = item->isHangable();
-		if (ground == nullptr && !itemIsHangable) {
+		if (!ground && !itemIsHangable) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -730,7 +714,7 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -827,7 +811,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		destTile = g_game.map.getTile(dx, dy, dz);
 	}
 
-	if (destTile == nullptr) {
+	if (!destTile) {
 		destTile = this;
 	} else {
 		flags |= FLAG_NOLIMIT; //Will ignore that there is blocking items/creatures
@@ -861,7 +845,7 @@ void Tile::addThing(int32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
@@ -874,7 +858,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				onAddTileItem(item);
 			} else {
@@ -967,7 +951,7 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -985,7 +969,7 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 	int32_t pos = index;
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -1218,7 +1202,8 @@ int32_t Tile::getClientIndexOfCreature(const Player* player, const Creature* cre
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		for (const Creature* c : boost::adaptors::reverse(*creatures)) {
+		for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
+			const Creature* c = (*it);
 			if (c == creature) {
 				return n;
 			} else if (player->canSeeCreature(c)) {
@@ -1439,13 +1424,13 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return;
 		}
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				setTileFlags(item);
 			}

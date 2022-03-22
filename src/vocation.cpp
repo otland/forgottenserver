@@ -1,26 +1,11 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "vocation.h"
 
+#include "player.h"
 #include "pugicast.h"
 #include "tools.h"
 
@@ -48,41 +33,41 @@ bool Vocations::loadFromXml()
 		vocationNode.remove_attribute("id");
 		for (auto attrNode : vocationNode.attributes()) {
 			const char* attrName = attrNode.name();
-			if (strcasecmp(attrName, "name") == 0) {
+			if (caseInsensitiveEqual(attrName, "name")) {
 				voc.name = attrNode.as_string();
-			} else if (strcasecmp(attrName, "allowpvp") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "allowpvp")) {
 				voc.allowPvp = attrNode.as_bool();
-			} else if (strcasecmp(attrName, "clientid") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "clientid")) {
 				voc.clientId = pugi::cast<uint16_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "description") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "description")) {
 				voc.description = attrNode.as_string();
-			} else if (strcasecmp(attrName, "gaincap") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gaincap")) {
 				voc.gainCap = pugi::cast<uint32_t>(attrNode.value()) * 100;
-			} else if (strcasecmp(attrName, "gainhp") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainhp")) {
 				voc.gainHP = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainmana") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainmana")) {
 				voc.gainMana = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainhpticks") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainhpticks")) {
 				voc.gainHealthTicks = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainhpamount") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainhpamount")) {
 				voc.gainHealthAmount = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainmanaticks") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainmanaticks")) {
 				voc.gainManaTicks = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainmanaamount") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainmanaamount")) {
 				voc.gainManaAmount = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "manamultiplier") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "manamultiplier")) {
 				voc.manaMultiplier = pugi::cast<float>(attrNode.value());
-			} else if (strcasecmp(attrName, "attackspeed") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "attackspeed")) {
 				voc.attackSpeed = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "basespeed") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "basespeed")) {
 				voc.baseSpeed = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "soulmax") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "soulmax")) {
 				voc.soulMax = pugi::cast<uint16_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "gainsoulticks") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "gainsoulticks")) {
 				voc.gainSoulTicks = pugi::cast<uint16_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "fromvoc") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "fromvoc")) {
 				voc.fromVocation = pugi::cast<uint32_t>(attrNode.value());
-			} else if (strcasecmp(attrName, "nopongkicktime") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "nopongkicktime")) {
 				voc.noPongKickTime = pugi::cast<uint32_t>(attrNode.value()) * 1000;
 			} else {
 				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName << "\" for vocation: " << voc.id << std::endl;
@@ -90,7 +75,7 @@ bool Vocations::loadFromXml()
 		}
 
 		for (auto childNode : vocationNode.children()) {
-			if (strcasecmp(childNode.name(), "skill") == 0) {
+			if (caseInsensitiveEqual(childNode.name(), "skill")) {
 				if ((attr = childNode.attribute("id"))) {
 					uint16_t skillId = pugi::cast<uint16_t>(attr.value());
 					if (skillId <= SKILL_LAST) {
@@ -101,7 +86,7 @@ bool Vocations::loadFromXml()
 				} else {
 					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id << std::endl;
 				}
-			} else if (strcasecmp(childNode.name(), "formula") == 0) {
+			} else if (caseInsensitiveEqual(childNode.name(), "formula")) {
 				if ((attr = childNode.attribute("meleeDamage"))) {
 					voc.meleeDamageMultiplier = pugi::cast<float>(attr.value());
 				}
@@ -158,7 +143,7 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - 11));
+	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - (MINIMUM_SKILL_LEVEL + 1)));
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)

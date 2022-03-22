@@ -1,38 +1,29 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019 Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
+
+#include "player.h"
 
 #include "bed.h"
 #include "chat.h"
 #include "combat.h"
 #include "configmanager.h"
 #include "creatureevent.h"
+#include "depotchest.h"
 #include "events.h"
 #include "game.h"
+#include "inbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
+#include "npc.h"
+#include "outfit.h"
+#include "party.h"
 #include "scheduler.h"
+#include "spectators.h"
+#include "storeinbox.h"
 #include "weapons.h"
-
-#include <fmt/format.h>
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -46,9 +37,10 @@ extern Events* g_events;
 MuteCountMap Player::muteCountMap;
 
 uint32_t Player::playerAutoID = 0x10000000;
+uint32_t Player::playerIDLimit = 0x20000000;
 
 Player::Player(ProtocolGame_ptr p) :
-	Creature(), lastPing(OTSYS_TIME()), lastPong(lastPing), inbox(new Inbox(ITEM_INBOX)), storeInbox(new StoreInbox(ITEM_STORE_INBOX)), client(std::move(p))
+	Creature(), lastPing(OTSYS_TIME()), lastPong(lastPing), client(std::move(p)), inbox(new Inbox(ITEM_INBOX)), storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
 	inbox->incrementReferenceCounter();
 
@@ -76,6 +68,21 @@ Player::~Player()
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);
+}
+
+void Player::setID() {
+	if (id == 0) {
+		// allowClones id assignment
+		if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+			id = playerAutoID++;
+			return;
+		}
+
+		// normal id assignment
+		if (guid != 0) {
+			id = playerAutoID + guid;
+		}
+	}
 }
 
 bool Player::setVocation(uint16_t vocId)
@@ -346,7 +353,7 @@ int32_t Player::getDefense() const
 	}
 
 	if (shield) {
-		defenseValue = weapon != nullptr ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
+		defenseValue = weapon ? shield->getDefense() + weapon->getExtraDefense() : shield->getDefense();
 		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
@@ -394,9 +401,9 @@ float Player::getDefenseFactor() const
 	}
 }
 
-uint16_t Player::getClientIcons() const
+uint32_t Player::getClientIcons() const
 {
-	uint16_t icons = 0;
+	uint32_t icons = 0;
 	for (Condition* condition : conditions) {
 		if (!isSuppress(condition->getType())) {
 			icons |= condition->getIcons();
@@ -414,16 +421,7 @@ uint16_t Player::getClientIcons() const
 		icons &= ~ICON_SWORDS;
 	}
 
-	// Game client debugs with 10 or more icons
-	// so let's prevent that from happening.
-	std::bitset<20> icon_bitset(static_cast<uint64_t>(icons));
-	for (size_t pos = 0, bits_set = icon_bitset.count(); bits_set >= 10; ++pos) {
-		if (icon_bitset[pos]) {
-			icon_bitset.reset(pos);
-			--bits_set;
-		}
-	}
-	return icon_bitset.to_ulong();
+	return icons;
 }
 
 void Player::updateInventoryWeight()
@@ -506,8 +504,8 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify/* = fa
 	while (count > skills[skill].tries) {
 		count -= skills[skill].tries;
 
-		if (skills[skill].level <= 10) {
-			skills[skill].level = 10;
+		if (skills[skill].level <= MINIMUM_SKILL_LEVEL) {
+			skills[skill].level = MINIMUM_SKILL_LEVEL;
 			skills[skill].tries = 0;
 			count = 0;
 			break;
@@ -660,9 +658,8 @@ uint16_t Player::getLookCorpse() const
 {
 	if (sex == PLAYERSEX_FEMALE) {
 		return ITEM_FEMALE_CORPSE;
-	} else {
-		return ITEM_MALE_CORPSE;
 	}
+	return ITEM_MALE_CORPSE;
 }
 
 void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin/* = false*/)
@@ -693,6 +690,14 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 			if (lastQuestlogUpdate != currentFrameTime && g_game.quests.isQuestStorage(key, value, oldValue)) {
 				lastQuestlogUpdate = currentFrameTime;
 				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
+			}
+
+			for (const TrackedQuest& trackedQuest : trackedQuests) {
+				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
+					if (quest->isTracking(key, value)) {
+						sendUpdateQuestTracker(trackedQuest);
+					}
+				}
 			}
 		}
 	} else {
@@ -802,8 +807,8 @@ void Player::onReceiveMail() const
 bool Player::isNearDepotBox() const
 {
 	const Position& pos = getPosition();
-	for (int32_t cx = -1; cx <= 1; ++cx) {
-		for (int32_t cy = -1; cy <= 1; ++cy) {
+	for (int32_t cx = -NOTIFY_DEPOT_BOX_RANGE; cx <= NOTIFY_DEPOT_BOX_RANGE; ++cx) {
+		for (int32_t cy = -NOTIFY_DEPOT_BOX_RANGE; cy <= NOTIFY_DEPOT_BOX_RANGE; ++cy) {
 			Tile* tile = g_game.map.getTile(pos.x + cx, pos.y + cy, pos.z);
 			if (!tile) {
 				continue;
@@ -1034,6 +1039,47 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 	}
 }
 
+void Player::openSavedContainers()
+{
+	std::map<uint8_t, Container*> openContainersList;
+
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+		Item* item = inventory[i];
+		if (!item) {
+			continue;
+		}
+
+		Container* itemContainer = item->getContainer();
+		if (itemContainer) {
+			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
+			if (cid > 0) {
+				openContainersList.emplace(cid, itemContainer);
+			}
+			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
+				Container* subContainer = (*it)->getContainer();
+				if (subContainer) {
+					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
+					if (subcid > 0) {
+						openContainersList.emplace(subcid, subContainer);
+					}
+				}
+			}
+		}
+	}
+
+	// fix broken containers when logged in from another location
+	for (uint8_t i = 0; i < 16; i++) {
+		client->sendEmptyContainer(i);
+		client->sendCloseContainer(i);
+	}
+
+	// send actual containers
+	for (auto& it : openContainersList) {
+		addContainer(it.first - 1, it.second);
+		onSendContainer(it.second);
+	}
+}
+
 void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem,
                               const ItemType& oldType, const Item* newItem, const ItemType& newType)
 {
@@ -1094,7 +1140,20 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			bed->wakeUp(this);
 		}
 
-		Account account = IOLoginData::loadAccount(accountNumber);
+		// load mount speed bonus
+		uint16_t currentMountId = currentOutfit.lookMount;
+		if (currentMountId != 0) {
+			Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
+			if (currentMount && hasMount(currentMount)) {
+				g_game.changeSpeed(this, currentMount->speed);
+			} else {
+				defaultOutfit.lookMount = 0;
+				g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+			}
+		}
+
+		// mounted player moved to pz on login, update mount status
+		onChangeZone(getZone());
 
 		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
 			std::cout << name << " has logged in." << std::endl;
@@ -1288,7 +1347,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
 		isUpdatingPath = false;
-		g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 
 	if (creature != this) {
@@ -1635,6 +1694,7 @@ void Player::addManaSpent(uint64_t amount)
 
 	if (sendUpdateStats) {
 		sendStats();
+		sendSkills();
 	}
 }
 
@@ -1671,6 +1731,7 @@ void Player::removeManaSpent(uint64_t amount, bool notify/* = false*/)
 
 		if (sendUpdateStats || oldPercent != magLevelPercent) {
 			sendStats();
+			sendSkills();
 		}
 	}
 }
@@ -1762,6 +1823,8 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 		levelPercent = 0;
 	}
 	sendStats();
+
+	sendExperienceTracker(rawExp * g_config.getExperienceStage(getLevel()), exp);
 }
 
 void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
@@ -1841,6 +1904,8 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 		levelPercent = 0;
 	}
 	sendStats();
+
+	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
 uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
@@ -1931,7 +1996,10 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	}
 
 	if (!ignoreResistances) {
-		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_AMMO; ++slot) {
+		Reflect reflect;
+
+		size_t combatIndex = combatTypeToIndex(combatType);
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 			if (!isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 				continue;
 			}
@@ -1951,7 +2019,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				continue;
 			}
 
-			const int16_t& absorbPercent = it.abilities->absorbPercent[combatTypeToIndex(combatType)];
+			const int16_t& absorbPercent = it.abilities->absorbPercent[combatIndex];
 			if (absorbPercent != 0) {
 				damage -= std::round(damage * (absorbPercent / 100.));
 
@@ -1961,8 +2029,10 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 				}
 			}
 
+			reflect += item->getReflect(combatType);
+
 			if (field) {
-				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatTypeToIndex(combatType)];
+				const int16_t& fieldAbsorbPercent = it.abilities->fieldAbsorbPercent[combatIndex];
 				if (fieldAbsorbPercent != 0) {
 					damage -= std::round(damage * (fieldAbsorbPercent / 100.));
 
@@ -1972,6 +2042,14 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 					}
 				}
 			}
+		}
+
+		if (attacker && reflect.chance > 0 && reflect.percent != 0 && uniform_random(1, 100) <= reflect.chance) {
+			CombatDamage reflectDamage;
+			reflectDamage.primary.type = combatType;
+			reflectDamage.primary.value = -std::round(damage * (reflect.percent / 100.));
+			reflectDamage.origin = ORIGIN_REFLECT;
+			g_game.combatChangeHealth(this, attacker, reflectDamage);
 		}
 	}
 
@@ -2030,7 +2108,7 @@ void Player::death(Creature* lastHitCreature)
 		//Skill loss
 		for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) { //for each skill
 			uint64_t sumSkillTries = 0;
-			for (uint16_t c = 11; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
+			for (uint16_t c = MINIMUM_SKILL_LEVEL + 1; c <= skills[i].level; ++c) { //sum up all required tries for all skill levels
 				sumSkillTries += vocation->getReqSkillTries(i, c);
 			}
 
@@ -2318,7 +2396,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	uint32_t itemWeight = item->getContainer() != nullptr ? item->getWeight() : item->getBaseWeight();
+	uint32_t itemWeight = item->getContainer() ? item->getWeight() : item->getBaseWeight();
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
@@ -2328,7 +2406,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature*) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -2350,7 +2428,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 	}
 
-	ReturnValue ret = RETURNVALUE_NOERROR;
+	ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
 
 	const int32_t& slotPosition = item->getSlotPosition();
 	if ((slotPosition & SLOTP_HEAD) || (slotPosition & SLOTP_NECKLACE) ||
@@ -2448,7 +2526,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 			if (slotPosition & SLOTP_LEFT) {
 				if (!g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
 					WeaponType_t type = item->getWeaponType();
-					if (type == WEAPON_NONE || type == WEAPON_SHIELD) {
+					if (type == WEAPON_NONE || type == WEAPON_SHIELD || type == WEAPON_AMMO) {
 						ret = RETURNVALUE_CANNOTBEDRESSED;
 					} else if (inventory[CONST_SLOT_RIGHT] && (slotPosition & SLOTP_TWO_HAND)) {
 						ret = RETURNVALUE_BOTHHANDSNEEDTOBEFREE;
@@ -2532,9 +2610,11 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 		return RETURNVALUE_NOTENOUGHCAPACITY;
 	}
 
-	ret = g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true);
-	if (ret != RETURNVALUE_NOERROR) {
-		return ret;
+	if (index != CONST_SLOT_WHEREEVER && index != -1) { // we don't try to equip whereever call
+		ret = g_moveEvents->onPlayerEquip(const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true);
+		if (ret != RETURNVALUE_NOERROR) {
+			return ret;
+		}
 	}
 
 	//need an exchange with source? (destination item is swapped with currently moved item)
@@ -2554,7 +2634,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2621,9 +2701,8 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 
 	if (maxQueryCount < count) {
 		return RETURNVALUE_NOTENOUGHROOM;
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* /*= nullptr*/) const
@@ -2634,7 +2713,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -2656,7 +2735,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		*destItem = nullptr;
 
 		const Item* item = thing.getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return this;
 		}
 
@@ -2769,9 +2848,8 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 		index = INDEX_WHEREEVER;
 		*destItem = nullptr;
 		return subCylinder;
-	} else {
-		return this;
 	}
+	return this;
 }
 
 void Player::addThing(int32_t index, Thing* thing)
@@ -3012,6 +3090,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	if (link == LINK_OWNER) {
 		//calling movement scripts
 		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
+		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), true);
 	}
 
 	bool requireListUpdate = false;
@@ -3032,6 +3111,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		updateInventoryWeight();
 		updateItemsLight();
 		sendStats();
+		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
@@ -3066,6 +3146,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 	if (link == LINK_OWNER) {
 		//calling movement scripts
 		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
+		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), false);
 	}
 
 	bool requireListUpdate = false;
@@ -3086,9 +3167,16 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		updateInventoryWeight();
 		updateItemsLight();
 		sendStats();
+		sendItems();
 	}
 
 	if (const Item* item = thing->getItem()) {
+		if (item->isSupply()) {
+			if (const Player* player = item->getHoldingPlayer()) {
+				player->sendSupplyUsed(item->getClientID());
+			}
+		}
+
 		if (const Container* container = item->getContainer()) {
 			if (container->isRemoved() || !Position::areInRange<1, 1, 0>(getPosition(), container->getPosition())) {
 				autoCloseContainers(container);
@@ -3125,7 +3213,15 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 bool Player::updateSaleShopList(const Item* item)
 {
 	uint16_t itemId = item->getID();
-	if (itemId != ITEM_GOLD_COIN && itemId != ITEM_PLATINUM_COIN && itemId != ITEM_CRYSTAL_COIN) {
+	bool isCurrency = false;
+	for (const auto& it : Item::items.currencyItems) {
+		if (it.second == itemId) {
+			isCurrency = true;
+			break;
+		}
+	}
+
+	if (!isCurrency) {
 		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.sellPrice != 0; });
 		if (it == shopItemList.end()) {
 			const Container* container = item->getContainer();
@@ -3208,7 +3304,7 @@ bool Player::setAttackedCreature(Creature* creature)
 	}
 
 	if (creature) {
-		g_dispatcher.addTask(createTask(std::bind(&Game::checkCreatureAttack, &g_game, getID())));
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
 	}
 	return true;
 }
@@ -3264,7 +3360,7 @@ void Player::doAttacking(uint32_t)
 			result = Weapon::useFist(this, attackedCreature);
 		}
 
-		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay), std::bind(&Game::checkCreatureAttack, &g_game, getID()));
+		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay), [id = getID()]() { g_game.checkCreatureAttack(id); });
 		if (!classicSpeed) {
 			setNextActionTask(task, false);
 		} else {
@@ -3408,6 +3504,10 @@ void Player::onAddCombatCondition(ConditionType_t type)
 
 		case CONDITION_BLEEDING:
 			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are bleeding.");
+			break;
+
+		case CONDITION_ROOT:
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, "You are rooted.");
 			break;
 
 		default:
@@ -3857,7 +3957,7 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 		return SKULL_YELLOW;
 	}
 
-	if (isPartner(player)) {
+	if (party && party == player->party) {
 		return SKULL_GREEN;
 	}
 	return Creature::getSkullClient(creature);
@@ -3988,7 +4088,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	}
 
 	for (const auto& learnedSpellName : learnedInstantSpellList) {
-		if (strcasecmp(learnedSpellName.c_str(), spellName.c_str()) == 0) {
+		if (caseInsensitiveEqual(learnedSpellName, spellName)) {
 			return true;
 		}
 	}
@@ -4068,7 +4168,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 			return SHIELD_BLUE;
 		}
 
-		if (isInviting(player)) {
+		// isInviting(player) if members aren't supposed to see the invited player emblem
+		if (party->isPlayerInvited(player)) {
 			return SHIELD_WHITEBLUE;
 		}
 	}
@@ -4566,6 +4667,34 @@ size_t Player::getMaxDepotItems() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
+}
+
+size_t Player::getMaxTrackedQuests() const
+{
+	return g_config.getNumber(isPremium() ? ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT : ConfigManager::QUEST_TRACKER_FREE_LIMIT);
+}
+
+void Player::resetQuestTracker(const std::vector<uint16_t>& missionIds)
+{
+	const size_t maxTrackedQuests = getMaxTrackedQuests();
+	trackedQuests.clear();
+	size_t index = 0;
+
+	const QuestsList& quests = g_game.quests.getQuests();
+	for (const uint8_t missionId : missionIds) {
+		for (const Quest& quest : quests) {
+			for (const Mission& mission : quest.getMissions()) {
+				if (mission.getID() == missionId && mission.isStarted(this)) {
+					trackedQuests.emplace_back(quest.getID(), missionId);
+					if (++index == maxTrackedQuests) {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	sendQuestTracker();
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

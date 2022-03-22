@@ -171,40 +171,20 @@ function Player.canCarryMoney(self, amount)
 	local totalWeight = 0
 	local inventorySlots = 0
 
-	-- Add crystal coins to totalWeight and inventorySlots
-	local type_crystal = ItemType(ITEM_CRYSTAL_COIN)
-	local crystalCoins = math.floor(amount / 10000)
-	if crystalCoins > 0 then
-		amount = amount - (crystalCoins * 10000)
-		while crystalCoins > 0 do
-			local count = math.min(100, crystalCoins)
-			totalWeight = totalWeight + type_crystal:getWeight(count)
-			crystalCoins = crystalCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add platinum coins to totalWeight and inventorySlots
-	local type_platinum = ItemType(ITEM_PLATINUM_COIN)
-	local platinumCoins = math.floor(amount / 100)
-	if platinumCoins > 0 then
-		amount = amount - (platinumCoins * 100)
-		while platinumCoins > 0 do
-			local count = math.min(100, platinumCoins)
-			totalWeight = totalWeight + type_platinum:getWeight(count)
-			platinumCoins = platinumCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add gold coins to totalWeight and inventorySlots
-	local type_gold = ItemType(ITEM_GOLD_COIN)
-	if amount > 0 then
-		while amount > 0 do
-			local count = math.min(100, amount)
-			totalWeight = totalWeight + type_gold:getWeight(count)
-			amount = amount - count
-			inventorySlots = inventorySlots + 1
+	local currencyItems = Game.getCurrencyItems()
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
+		-- Add currency coins to totalWeight and inventorySlots
+		local worth = currency:getWorth()
+		local currencyCoins = math.floor(amount / worth)
+		if currencyCoins > 0 then
+			amount = amount - (currencyCoins * worth)
+			while currencyCoins > 0 do
+				local count = math.min(100, currencyCoins)
+				totalWeight = totalWeight + currency:getWeight(count)
+				currencyCoins = currencyCoins - count
+				inventorySlots = inventorySlots + 1
+			end
 		end
 	end
 
@@ -331,4 +311,64 @@ function Player.getWeaponType(self)
 		return weapon:getType():getWeaponType()
 	end
 	return WEAPON_NONE
+end
+
+function Player.updateKillTracker(self, monster, corpse)
+	local monsterType = monster:getType()
+	if not monsterType then
+		return false
+	end
+
+	local msg = NetworkMessage()
+	msg:addByte(0xD1)
+	msg:addString(monster:getName())
+	
+	local monsterOutfit = monsterType:getOutfit()
+	msg:addU16(monsterOutfit.lookType or 19)
+	msg:addByte(monsterOutfit.lookHead)
+	msg:addByte(monsterOutfit.lookBody)
+	msg:addByte(monsterOutfit.lookLegs)
+	msg:addByte(monsterOutfit.lookFeet)
+	msg:addByte(monsterOutfit.lookAddons)
+
+	local corpseSize = corpse:getSize()
+	msg:addByte(corpseSize)
+	for index = corpseSize - 1, 0, -1 do
+		msg:addItem(corpse:getItem(index))
+	end
+
+	local party = self:getParty()
+	if party then
+		local members = party:getMembers()
+		members[#members + 1] = party:getLeader()
+
+		for _, member in ipairs(members) do
+			msg:sendToPlayer(member)
+		end
+	else
+		 msg:sendToPlayer(self)
+	end
+
+	msg:delete()
+	return true
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end
+
+function Player.addAddonToAllOutfits(self, addon)
+	for sex = 0, 1 do
+		local outfits = Game.getOutfits(sex)
+		for outfit = 1, #outfits do
+			self:addOutfitAddon(outfits[outfit].lookType, addon)
+		end
+	end
+end
+
+function Player.addAllMounts(self)
+	local mounts = Game.getMounts()
+	for mount = 1, #mounts do
+		self:addMount(mounts[mount].id)
+	end
 end

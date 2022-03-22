@@ -1,27 +1,17 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "container.h"
-#include "iomap.h"
+
+#include "depotchest.h"
 #include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iomap.h"
+#include "spectators.h"
+#include "storeinbox.h"
 
 extern Game g_game;
 
@@ -92,7 +82,7 @@ std::string Container::getName(bool addArticle /* = false*/) const {
 
 bool Container::hasParent() const
 {
-	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
+	return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent());
 }
 
 void Container::addItem(Item* item)
@@ -157,38 +147,6 @@ void Container::updateItemWeight(int32_t diff)
 uint32_t Container::getWeight() const
 {
 	return Item::getWeight() + totalWeight;
-}
-
-std::string Container::getContentDescription() const
-{
-	std::ostringstream os;
-	return getContentDescription(os).str();
-}
-
-std::ostringstream& Container::getContentDescription(std::ostringstream& os) const
-{
-	bool firstitem = true;
-	for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
-		Item* item = *it;
-
-		Container* container = item->getContainer();
-		if (container && !container->empty()) {
-			continue;
-		}
-
-		if (firstitem) {
-			firstitem = false;
-		} else {
-			os << ", ";
-		}
-
-		os << item->getNameDescription();
-	}
-
-	if (firstitem) {
-		os << "nothing";
-	}
-	return os;
 }
 
 Item* Container::getItemByIndex(size_t index) const
@@ -281,7 +239,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -335,19 +293,26 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		}
 	}
 
-	const Cylinder* topParent = getTopParent();
+	const Cylinder* const topParent = getTopParent();
+	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				return RETURNVALUE_PLAYERISNOTINVITED;
+			}
+		}
+	}
+
 	if (topParent != this) {
 		return topParent->queryAdd(INDEX_WHEREEVER, *item, count, flags | FLAG_CHILDISOWNER, actor);
-	} else {
-		return RETURNVALUE_NOERROR;
 	}
+	return RETURNVALUE_NOERROR;
 }
 
 ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -402,7 +367,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -414,9 +379,13 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	const HouseTile* houseTile = dynamic_cast<const HouseTile*>(getTopParent());
-	if (houseTile) {
-		return houseTile->queryRemove(thing, count, flags, actor);
+	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+		const Cylinder* const topParent = getTopParent();
+		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+				return RETURNVALUE_PLAYERISNOTINVITED;
+			}
+		}
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -507,7 +476,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -540,7 +509,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -582,7 +551,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 void Container::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -713,7 +682,7 @@ void Container::internalAddThing(Thing* thing)
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return;
 	}
 
@@ -724,6 +693,8 @@ void Container::internalAddThing(uint32_t, Thing* thing)
 
 void Container::startDecaying()
 {
+	Item::startDecaying();
+
 	for (Item* item : itemlist) {
 		item->startDecaying();
 	}

@@ -177,6 +177,7 @@
 	<monster name="Dreadwing" file="monsters/dreadwing.xml" />
 	<monster name="Drillworm" file="monsters/drillworm.xml" />
 	<monster name="Dromedary" file="monsters/dromedary.xml" />
+	<monster name="Druid Familiar" file="monsters/druid_familiar.xml" />
 	<monster name="Dryad" file="monsters/dryad.xml" />
 	<monster name="Dwarf Dispenser" file="monsters/dwarf_dispenser.xml" />
 	<monster name="Dwarf Geomancer" file="monsters/dwarf_geomancer.xml" />
@@ -349,6 +350,7 @@
 	<monster name="Killer Caiman" file="monsters/killer_caiman.xml" />
 	<monster name="Killer Rabbit" file="monsters/killer_rabbit.xml" />
 	<monster name="Kitty" file="monsters/kitty.xml" />
+	<monster name="Knight Familiar" file="monsters/knight_familiar.xml" />
 	<monster name="Kollos" file="monsters/kollos.xml" />
 	<monster name="Kongra" file="monsters/kongra.xml" />
 	<monster name="Koshei The Deathless" file="monsters/koshei_the_deathless.xml" />
@@ -477,6 +479,7 @@
 	<monster name="Orewalker" file="monsters/orewalker.xml" />
 	<monster name="Orshabaal" file="monsters/orshabaal.xml" />
 	<monster name="Overcharged Energy Element" file="monsters/overcharged_energy_element.xml" />
+	<monster name="Paladin Familiar" file="monsters/paladin_familiar.xml" />
 	<monster name="Panda" file="monsters/panda.xml" />
 	<monster name="Parasite" file="monsters/parasite.xml" />
 	<monster name="Parrot" file="monsters/parrot.xml" />
@@ -582,6 +585,7 @@
 	<monster name="Snake Thing" file="monsters/snake_thing.xml" />
 	<monster name="Snake" file="monsters/snake.xml" />
 	<monster name="Son of Verminor" file="monsters/son_of_verminor.xml" />
+	<monster name="Sorcerer Familiar" file="monsters/sorcerer_familiar.xml" />
 	<monster name="Souleater" file="monsters/souleater.xml" />
 	<monster name="Sparkion" file="monsters/sparkion.xml" />
 	<monster name="Spectral Scum" file="monsters/spectral_scum.xml" />

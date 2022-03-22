@@ -5,6 +5,8 @@ on:
     paths:
       - data/**.lua
   push:
+    branches:
+      - master
     paths:
       - data/**.lua
 

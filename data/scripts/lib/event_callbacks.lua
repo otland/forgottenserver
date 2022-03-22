@@ -1,137 +1,161 @@
+local unpack = unpack
+local pack = table.pack
+
+local EventCallbackData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
+-- This metatable creates an auto-configuration mechanism to create new types of EventCallbacks
+local ec = setmetatable({}, { __newindex = function (self, key, value)
+	autoID = autoID + 1
+	callbacks[key] = autoID
+	local info, update = {}, {}
+	for k, v in pairs(value) do
+		if type(k) == "string" then
+			info[k] = v
+		else
+			update[k] = v
+		end
+	end
+	updateableParameters[autoID] = update
+	callbacks[autoID] = info
+	EventCallbackData[autoID] = {maxn = 0}
+	EVENT_CALLBACK_LAST = autoID
+end})
+
+--@ Definitions of valid EventCallback types to hook according to the given field name
+--@ The fields within the assigned table, allow to save arbitrary information
 -- Creature
-EVENT_CALLBACK_ONCHANGEOUTFIT = 1
-EVENT_CALLBACK_ONCHANGEMOUNT = 2
-EVENT_CALLBACK_ONAREACOMBAT = 3
-EVENT_CALLBACK_ONTARGETCOMBAT = 4
-EVENT_CALLBACK_ONHEAR = 5
+ec.onChangeOutfit = {}
+ec.onChangeMount = {}
+ec.onAreaCombat = {returnValue=true}
+ec.onTargetCombat = {returnValue=true}
+ec.onHear = {}
 -- Party
-EVENT_CALLBACK_ONJOIN = 6
-EVENT_CALLBACK_ONLEAVE = 7
-EVENT_CALLBACK_ONDISBAND = 8
-EVENT_CALLBACK_ONSHAREEXPERIENCE = 9
+ec.onJoin = {}
+ec.onLeave = {}
+ec.onDisband = {}
+ec.onShareExperience = {}
 -- Player
-EVENT_CALLBACK_ONBROWSEFIELD = 10
-EVENT_CALLBACK_ONLOOK = 11
-EVENT_CALLBACK_ONLOOKINBATTLELIST = 12
-EVENT_CALLBACK_ONLOOKINTRADE = 13
-EVENT_CALLBACK_ONLOOKINSHOP = 14
-EVENT_CALLBACK_ONTRADEREQUEST = 15
-EVENT_CALLBACK_ONTRADEACCEPT = 16
-EVENT_CALLBACK_ONTRADECOMPLETED = 17
-EVENT_CALLBACK_ONMOVEITEM = 18
-EVENT_CALLBACK_ONITEMMOVED = 19
-EVENT_CALLBACK_ONMOVECREATURE = 20
-EVENT_CALLBACK_ONREPORTRULEVIOLATION = 21
-EVENT_CALLBACK_ONREPORTBUG = 22
-EVENT_CALLBACK_ONTURN = 23
-EVENT_CALLBACK_ONGAINEXPERIENCE = 24
-EVENT_CALLBACK_ONLOSEEXPERIENCE = 25
-EVENT_CALLBACK_ONGAINSKILLTRIES = 26
-EVENT_CALLBACK_ONWRAPITEM = 27
+ec.onBrowseField = {}
+ec.onLook = {[5] = 1}
+ec.onLookInBattleList = {[4] = 1}
+ec.onLookInTrade = {[5] = 1}
+ec.onLookInShop = {[4] = 1}
+ec.onLookInMarket = {}
+ec.onTradeRequest = {}
+ec.onTradeAccept = {}
+ec.onTradeCompleted = {}
+ec.onMoveItem = {}
+ec.onItemMoved = {}
+ec.onMoveCreature = {}
+ec.onReportRuleViolation = {}
+ec.onReportBug = {}
+ec.onTurn = {}
+ec.onGainExperience = {[3] = 1}
+ec.onLoseExperience = {[2] = 1}
+ec.onGainSkillTries = {[3] = 1}
+ec.onWrapItem = {}
+ec.onInventoryUpdate = {}
 -- Monster
-EVENT_CALLBACK_ONDROPLOOT = 28
-EVENT_CALLBACK_ONSPAWN = 29
--- last (for correct table counting)
-EVENT_CALLBACK_LAST = EVENT_CALLBACK_ONSPAWN
-
-local callbacks = {
-	-- Creature
-	["onChangeOutfit"] = EVENT_CALLBACK_ONCHANGEOUTFIT,
-	["onChangeMount"] = EVENT_CALLBACK_ONCHANGEMOUNT,
-	["onAreaCombat"] = EVENT_CALLBACK_ONAREACOMBAT,
-	["onTargetCombat"] = EVENT_CALLBACK_ONTARGETCOMBAT,
-	["onHear"] = EVENT_CALLBACK_ONHEAR,
-	-- Party
-	["onJoin"] = EVENT_CALLBACK_ONJOIN,
-	["onLeave"] = EVENT_CALLBACK_ONLEAVE,
-	["onDisband"] = EVENT_CALLBACK_ONDISBAND,
-	["onShareExperience"] = EVENT_CALLBACK_ONSHAREEXPERIENCE,
-	-- Player
-	["onBrowseField"] = EVENT_CALLBACK_ONBROWSEFIELD,
-	["onLook"] = EVENT_CALLBACK_ONLOOK,
-	["onLookInBattleList"] = EVENT_CALLBACK_ONLOOKINBATTLELIST,
-	["onLookInTrade"] = EVENT_CALLBACK_ONLOOKINTRADE,
-	["onLookInShop"] = EVENT_CALLBACK_ONLOOKINSHOP,
-	["onTradeRequest"] = EVENT_CALLBACK_ONTRADEREQUEST,
-	["onTradeAccept"] = EVENT_CALLBACK_ONTRADEACCEPT,
-	["onTradeCompleted"] = EVENT_CALLBACK_ONTRADECOMPLETED,
-	["onMoveItem"] = EVENT_CALLBACK_ONMOVEITEM,
-	["onItemMoved"] = EVENT_CALLBACK_ONITEMMOVED,
-	["onMoveCreature"] = EVENT_CALLBACK_ONMOVECREATURE,
-	["onReportRuleViolation"] = EVENT_CALLBACK_ONREPORTRULEVIOLATION,
-	["onReportBug"] = EVENT_CALLBACK_ONREPORTBUG,
-	["onTurn"] = EVENT_CALLBACK_ONTURN,
-	["onGainExperience"] = EVENT_CALLBACK_ONGAINEXPERIENCE,
-	["onLoseExperience"] = EVENT_CALLBACK_ONLOSEEXPERIENCE,
-	["onGainSkillTries"] = EVENT_CALLBACK_ONGAINSKILLTRIES,
-	["onWrapItem"] = EVENT_CALLBACK_ONWRAPITEM,
-	-- Monster
-	["onDropLoot"] = EVENT_CALLBACK_ONDROPLOOT,
-	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
-}
-
-local auxargs = {
-	[EVENT_CALLBACK_ONLOOK] = {[5] = 1},
-	[EVENT_CALLBACK_ONLOOKINBATTLELIST] = {[4] = 1},
-	[EVENT_CALLBACK_ONLOOKINTRADE] = {[5] = 1},
-	[EVENT_CALLBACK_ONLOOKINSHOP] = {[4] = 1},
-	[EVENT_CALLBACK_ONGAINEXPERIENCE] = {[3] = 1},
-	[EVENT_CALLBACK_ONLOSEEXPERIENCE] = {[2] = 1},
-	[EVENT_CALLBACK_ONGAINSKILLTRIES] = {[3] = 1}
-}
-
-EventCallbackData = {}
-hasEventCallback = function (type)
-	return #EventCallbackData[type] > 0
-end
+ec.onDropLoot = {}
+ec.onSpawn = {}
 
 EventCallback = {
-	register = function (self, index)
+	register = function (self, triggerIndex)
 		if isScriptsInterface() then
-			local type, call = rawget(self, "type"), rawget(self, "call")
-			if type and call then
-				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, tonumber(index) or 0}
-				table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
-				return rawset(self, "type", nil) and rawset(self, "call", nil)
+			local eventType = rawget(self, 'eventType')
+			local callback = rawget(self, 'callback')
+			if not eventType or not callback then
+				debugPrint("[Warning - EventCallback::register] need to setup a callback before you can register.")
+				return
 			end
-			debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
+
+			local eventData = EventCallbackData[eventType]
+			eventData.maxn = #eventData + 1
+			eventData[eventData.maxn] = {
+				callback = callback,
+				triggerIndex = tonumber(triggerIndex) or 0
+			}
+			table.sort(eventData, function (ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
+			self.eventType = nil
+			self.callback = nil
 		end
 	end,
+
 	clear = function (self)
 		EventCallbackData = {}
 		for i = 1, EVENT_CALLBACK_LAST do
-			EventCallbackData[i] = {}
+			EventCallbackData[i] = {maxn = 0}
 		end
 	end
 }
 
 setmetatable(EventCallback, {
-	__index = function (self) return self end,
-	__newindex = function (self, k, v)
-		if isScriptsInterface() then
-			local ecType = callbacks[k]
-			if ecType then
-				if type(v) == "function" then
-					return rawset(self, "type", ecType) and rawset(self, "call", v)
-				end
-				debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", k))
-			else
-				debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", k))
-			end
+	__newindex = function (self, key, callback)
+		if not isScriptsInterface() then
+			return
 		end
+
+		local eventType = callbacks[key]
+		if not eventType then
+			debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", key))
+			return
+		end
+
+		if type(callback) ~= "function" then
+			debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", key))
+			return
+		end
+
+		rawset(self, 'eventType', eventType)
+		rawset(self, 'callback', callback)
 	end,
-	__call = function (self, type, ...)
-		local eventTable, ret = EventCallbackData[type]
-		local args, events = table.pack(...), #eventTable
-		for k, ev in pairs(eventTable) do
-			ret = {ev[1](unpack(args))}
-			if k == events or (ret[1] ~= nil and (ret[1] == false or table.contains({EVENT_CALLBACK_ONAREACOMBAT, EVENT_CALLBACK_ONTARGETCOMBAT}, type) and ret[1] ~= RETURNVALUE_NOERROR)) then
-				return unpack(ret)
+
+	__index = function (self, key)
+		local callback = callbacks[key]
+		if not callback then
+			if not isScriptsInterface() then
+				return
 			end
-			for k, v in pairs(auxargs[type] or {}) do args[k] = ret[v] end
+
+			return rawget(self, key)
+		end
+
+		local eventData = EventCallbackData[callback]
+		if eventData.maxn == 0 then
+			return
+		end
+
+		return function (...)
+			local results, args, info = {}, pack(...), callbacks[callback]
+			for index = 1, eventData.maxn do
+				local event = eventData[index]
+				repeat
+					results = {event.callback(unpack(args))}
+					local output = results[1]
+					-- If the call returns nil then we continue with the next call
+					if not output then
+						break
+					end
+					-- If the call returns false then we exit the loop
+					if not output then
+						return false
+					end
+					-- If the call of type returnvalue returns noerror then we continue the loop
+					if info.returnValue then
+						if output == RETURNVALUE_NOERROR then
+							break
+						end
+						return output
+					end
+					-- We left the loop why have we reached the end
+					if index == eventData.maxn then
+						return unpack(results)
+					end
+				until true
+				-- Update the results for the next call
+				for index, value in pairs(updateableParameters[callback]) do
+					args[index] = results[value]
+				end
+			end
 		end
 	end
-	})
-
--- can't be overwritten on reloads
-EventCallback:clear()
+})

@@ -1,27 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
-#define FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
-
-#include <utility>
-#include <vector>
+#ifndef FS_CONFIGMANAGER_H
+#define FS_CONFIGMANAGER_H
 
 using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
 
@@ -59,15 +40,16 @@ class ConfigManager
 			SERVER_SAVE_SHUTDOWN,
 			ONLINE_OFFLINE_CHARLIST,
 			YELL_ALLOW_PREMIUM,
+			PREMIUM_TO_SEND_PRIVATE,
 			FORCE_MONSTERTYPE_LOAD,
 			DEFAULT_WORLD_LIGHT,
 			HOUSE_OWNED_BY_ACCOUNT,
-			LUA_ITEM_DESC,
 			CLEAN_PROTECTION_ZONES,
 			HOUSE_DOOR_SHOW_PRICE,
 			ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS,
 			REMOVE_ON_DESPAWN,
 			PLAYER_CONSOLE_LOGS,
+			TWO_FACTOR_AUTH,
 
 			LAST_BOOLEAN_CONFIG /* this must be the last one */
 		};
@@ -130,10 +112,13 @@ class ConfigManager
 			MAX_PACKETS_PER_SECOND,
 			SERVER_SAVE_NOTIFY_DURATION,
 			YELL_MINIMUM_LEVEL,
+			MINIMUM_LEVEL_TO_SEND_PRIVATE,
 			VIP_FREE_LIMIT,
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			QUEST_TRACKER_FREE_LIMIT,
+			QUEST_TRACKER_PREMIUM_LIMIT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
@@ -160,4 +145,4 @@ class ConfigManager
 		bool loaded = false;
 };
 
-#endif
+#endif // FS_CONFIGMANAGER_H

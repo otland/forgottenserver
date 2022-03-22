@@ -1,33 +1,17 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
-#include "pugicast.h"
-
 #include "house.h"
-#include "iologindata.h"
-#include "game.h"
-#include "configmanager.h"
-#include "bed.h"
 
-#include <fmt/format.h>
+#include "bed.h"
+#include "configmanager.h"
+#include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iologindata.h"
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -86,7 +70,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			door->setAccessList("");
 		}
 	} else {
-		std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+		std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
 			currentTime += 24 * 60 * 60 * 365;
@@ -113,19 +97,9 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			ownerAccountId = IOLoginData::getAccountIdByPlayerName(name);
 		}
 	}
-
-	updateDoorDescription();
 }
 
-void House::updateDoorDescription() const
-{
-	const int32_t housePrice = g_config.getNumber(ConfigManager::HOUSE_PRICE);
-	for (const auto& it : doorSet) {
-		it->setSpecialDescription(fmt::format("It belongs to house '{:s}'. {:s} owns this house.{:s}", houseName, (owner != 0) ? ownerName : "Nobody", g_config.getBoolean(ConfigManager::HOUSE_DOOR_SHOW_PRICE) && (housePrice != -1) && (owner == 0) ? fmt::format(" It costs {:d} gold coins.", (houseTiles.size() * housePrice)) : ""));
-	}
-}
-
-AccessHouseLevel_t House::getHouseAccessLevel(const Player* player)
+AccessHouseLevel_t House::getHouseAccessLevel(const Player* player) const
 {
 	if (!player) {
 		return HOUSE_OWNER;
@@ -277,7 +251,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 	return door->getAccessList(list);
 }
 
-bool House::isInvited(const Player* player)
+bool House::isInvited(const Player* player) const
 {
 	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
@@ -287,7 +261,6 @@ void House::addDoor(Door* door)
 	door->incrementReferenceCounter();
 	doorSet.insert(door);
 	door->setHouse(this);
-	updateDoorDescription();
 }
 
 void House::removeDoor(Door* door)
@@ -341,7 +314,7 @@ bool House::canEditAccessList(uint32_t listId, const Player* player)
 
 HouseTransferItem* House::getTransferItem()
 {
-	if (transferItem != nullptr) {
+	if (transferItem) {
 		return nullptr;
 	}
 
@@ -418,16 +391,13 @@ void AccessList::parseList(const std::string& list)
 			break;
 		}
 
-		trimString(line);
-		trim_left(line, '\t');
-		trim_right(line, '\t');
-		trimString(line);
+		boost::algorithm::trim(line);
 
 		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
 
-		toLowerCaseString(line);
+		boost::algorithm::to_lower(line);
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {
@@ -499,7 +469,7 @@ void AccessList::addGuildRank(const std::string& name, const std::string& rankNa
 	}
 }
 
-bool AccessList::isInList(const Player* player)
+bool AccessList::isInList(const Player* player) const
 {
 	if (allowEveryone) {
 		return true;
@@ -537,7 +507,7 @@ Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 void Door::setHouse(House* house)
 {
-	if (this->house != nullptr) {
+	if (this->house) {
 		return;
 	}
 

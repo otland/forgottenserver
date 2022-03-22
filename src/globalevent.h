@@ -1,27 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
-#define FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
+#ifndef FS_GLOBALEVENT_H
+#define FS_GLOBALEVENT_H
+
 #include "baseevents.h"
+#include "luascript.h"
 
-#include "const.h"
+class GlobalEvent;
+using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
+using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 enum GlobalEvent_t {
 	GLOBALEVENT_NONE,
@@ -31,10 +19,6 @@ enum GlobalEvent_t {
 	GLOBALEVENT_SHUTDOWN,
 	GLOBALEVENT_RECORD,
 };
-
-class GlobalEvent;
-using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
-using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 class GlobalEvents final : public BaseEvents
 {
@@ -123,4 +107,4 @@ class GlobalEvent final : public Event
 		uint32_t interval = 0;
 };
 
-#endif
+#endif // FS_GLOBALEVENT_H

@@ -5,6 +5,8 @@ on:
     paths:
       - data/**.xml
   push:
+    branches:
+      - master
     paths:
       - data/**.xml
 

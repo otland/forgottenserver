@@ -1,29 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
+
+#include "weapons.h"
 
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
+#include "luavariant.h"
 #include "pugicast.h"
-#include "weapons.h"
 
 extern Game g_game;
 extern Vocations g_vocations;
@@ -55,7 +41,7 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 
 void Weapons::clear(bool fromLua)
 {
-	for (auto it = weapons.begin(); it != weapons.end(); ) {
+	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
 			it = weapons.erase(it);
 		} else {
@@ -114,11 +100,11 @@ void Weapons::loadDefaults()
 
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
+	if (caseInsensitiveEqual(nodeName, "melee")) {
 		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "distance")) {
 		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "wand")) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
@@ -191,7 +177,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("action"))) {
-		action = getWeaponAction(asLowerCaseString(attr.as_string()));
+		action = getWeaponAction(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 		if (action == WEAPONACTION_NONE) {
 			std::cout << "[Warning - Weapon::configureEvent] Unknown action " << attr.as_string() << std::endl;
 		}
@@ -220,7 +206,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 			}
 
 			if (vocationNode.attribute("showInDescription").as_bool(true)) {
-				vocStringList.push_back(asLowerCaseString(attr.as_string()));
+				vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 			}
 		}
 	}
@@ -377,14 +363,15 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 {
 	if (scripted) {
 		LuaVariant var;
-		var.type = VARIANT_NUMBER;
-		var.number = target->getID();
+		var.setNumber(target->getID());
 		executeUseWeapon(player, var);
 	} else {
 		CombatDamage damage;
 		WeaponType_t weaponType = item->getWeaponType();
 		if (weaponType == WEAPON_AMMO || weaponType == WEAPON_DISTANCE) {
 			damage.origin = ORIGIN_RANGED;
+		} else if (weaponType == WEAPON_WAND) {
+			damage.origin = ORIGIN_WAND;
 		} else {
 			damage.origin = ORIGIN_MELEE;
 		}
@@ -402,8 +389,7 @@ void Weapon::internalUseWeapon(Player* player, Item* item, Tile* tile) const
 {
 	if (scripted) {
 		LuaVariant var;
-		var.type = VARIANT_TARGETPOSITION;
-		var.pos = tile->getPosition();
+		var.setTargetPosition(tile->getPosition());
 		executeUseWeapon(player, var);
 	} else {
 		Combat::postCombatEffects(player, tile->getPosition(), params);
@@ -439,6 +425,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	}
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
+		player->sendSupplyUsed(item->getClientID());
 		Weapon::decrementItemCount(item);
 		return;
 	}
@@ -446,6 +433,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
 			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+				player->sendSupplyUsed(item->getClientID());
 				Weapon::decrementItemCount(item);
 			}
 			break;
@@ -788,7 +776,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 			for (const auto& dir : destList) {
 				// Blocking tiles or tiles without ground ain't valid targets for spears
 				Tile* tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
-				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround() != nullptr) {
+				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
 					destTile = tmpTile;
 					break;
 				}
@@ -909,7 +897,7 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		return true;
 	}
 
-	std::string tmpStrValue = asLowerCaseString(attr.as_string());
+	std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 	if (tmpStrValue == "earth") {
 		params.combatType = COMBAT_EARTHDAMAGE;
 	} else if (tmpStrValue == "ice") {

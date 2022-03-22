@@ -1,34 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "raids.h"
 
-#include "pugicast.h"
-
-#include "game.h"
 #include "configmanager.h"
-#include "scheduler.h"
+#include "game.h"
 #include "monster.h"
-
-#include <fmt/format.h>
+#include "pugicast.h"
+#include "scheduler.h"
 
 extern Game g_game;
 extern ConfigManager g_config;
@@ -120,7 +101,7 @@ bool Raids::startup()
 
 	setLastRaidEnd(OTSYS_TIME());
 
-	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, std::bind(&Raids::checkRaids, this)));
+	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 
 	started = true;
 	return started;
@@ -147,7 +128,7 @@ void Raids::checkRaids()
 		}
 	}
 
-	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, std::bind(&Raids::checkRaids, this)));
+	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 }
 
 void Raids::clear()
@@ -178,7 +159,7 @@ bool Raids::reload()
 Raid* Raids::getRaidByName(const std::string& name)
 {
 	for (Raid* raid : raidList) {
-		if (strcasecmp(raid->getName().c_str(), name.c_str()) == 0) {
+		if (caseInsensitiveEqual(raid->getName(), name)) {
 			return raid;
 		}
 	}
@@ -207,13 +188,13 @@ bool Raid::loadFromXml(const std::string& filename)
 
 	for (auto eventNode : doc.child("raid").children()) {
 		RaidEvent* event;
-		if (strcasecmp(eventNode.name(), "announce") == 0) {
+		if (caseInsensitiveEqual(eventNode.name(), "announce")) {
 			event = new AnnounceEvent();
-		} else if (strcasecmp(eventNode.name(), "singlespawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "singlespawn")) {
 			event = new SingleSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "areaspawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "areaspawn")) {
 			event = new AreaSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "script") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "script")) {
 			event = new ScriptEvent(&g_game.raids.getScriptInterface());
 		} else {
 			continue;
@@ -241,7 +222,7 @@ void Raid::startRaid()
 	RaidEvent* raidEvent = getNextRaidEvent();
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
-		nextEventEvent = g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), std::bind(&Raid::executeRaidEvent, this, raidEvent)));
+		nextEventEvent = g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
 	}
 }
 
@@ -253,7 +234,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 
 		if (newRaidEvent) {
 			uint32_t ticks = static_cast<uint32_t>(std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
-			nextEventEvent = g_scheduler.addEvent(createSchedulerTask(ticks, std::bind(&Raid::executeRaidEvent, this, newRaidEvent)));
+			nextEventEvent = g_scheduler.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
 		} else {
 			resetRaid();
 		}
@@ -282,9 +263,8 @@ RaidEvent* Raid::getNextRaidEvent()
 {
 	if (nextEvent < raidEvents.size()) {
 		return raidEvents[nextEvent];
-	} else {
-		return nullptr;
 	}
+	return nullptr;
 }
 
 bool RaidEvent::configureRaidEvent(const pugi::xml_node& eventNode)
@@ -314,7 +294,7 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute typeAttribute = eventNode.attribute("type");
 	if (typeAttribute) {
-		std::string tmpStrValue = asLowerCaseString(typeAttribute.as_string());
+		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(typeAttribute.as_string());
 		if (tmpStrValue == "warning") {
 			messageType = MESSAGE_STATUS_WARNING;
 		} else if (tmpStrValue == "event") {
@@ -325,10 +305,8 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 			messageType = MESSAGE_INFO_DESCR;
 		} else if (tmpStrValue == "smallstatus") {
 			messageType = MESSAGE_STATUS_SMALL;
-		} else if (tmpStrValue == "blueconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_BLUE;
-		} else if (tmpStrValue == "redconsole") {
-			messageType = MESSAGE_STATUS_CONSOLE_RED;
+		} else if (tmpStrValue == "blueconsole" || tmpStrValue == "redconsole") {
+			std::cout << "[Notice] Raid: Deprecated type tag for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		} else {
 			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
 		}
@@ -534,7 +512,7 @@ bool AreaSpawnEvent::executeEvent()
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}
