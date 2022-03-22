@@ -206,24 +206,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setArea(area);
 		}
 
-<<<<<<< HEAD
-		std::string tmpName = asLowerCaseString(name);
-=======
-		if ((attr = node.attribute("ring"))) {
-			int32_t ring = pugi::cast<int32_t>(attr.value());
-
-			//target spell
-			if ((attr = node.attribute("target"))) {
-				needTarget = attr.as_bool();
-			}
-
-			AreaCombat* area = new AreaCombat();
-			area->setupAreaRing(ring);
-			combat->setArea(area);
-		}
-
 		std::string tmpName = boost::algorithm::to_lower_copy(name);
->>>>>>> 2f26b7db (Use existing boost algorithms where available (#4032))
 
 		if (tmpName == "melee") {
 			sb.isMelee = true;
@@ -602,15 +585,6 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->setArea(area);
 		}
 
-<<<<<<< HEAD
-		std::string tmpName = asLowerCaseString(spell->name);
-=======
-		if (spell->ring > 0) {
-			AreaCombat* area = new AreaCombat();
-			area->setupAreaRing(spell->ring);
-			combat->setArea(area);
-		}
-
 		if (spell->conditionType != CONDITION_NONE) {
 			ConditionType_t conditionType = spell->conditionType;
 
@@ -628,7 +602,6 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		}
 
 		std::string tmpName = boost::algorithm::to_lower_copy(spell->name);
->>>>>>> 2f26b7db (Use existing boost algorithms where available (#4032))
 
 		if (tmpName == "melee") {
 			sb.isMelee = true;
