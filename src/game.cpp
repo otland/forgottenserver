@@ -4102,6 +4102,24 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		target->gainHealth(attacker, damage.primary.value);
 		realHealthChange = target->getHealth() - realHealthChange;
 
+		if (attackerPlayer && targetPlayer && attackerPlayer != targetPlayer) {
+			attackerPlayer->sendCombatAlalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::DEALT,
+				target ? target->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				attackerPlayer->sendCombatAlalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::DEALT,
+					target ? target->getName() : "(other)");
+			}
+		}
+
+		if (targetPlayer && attackerPlayer && targetPlayer == attackerPlayer) {
+			targetPlayer->sendCombatAlalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::HEALING,
+				attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				targetPlayer->sendCombatAlalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::HEALING,
+					attacker ? attacker->getName() : "(other)");
+			}
+		}
+
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
@@ -4298,7 +4316,24 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			}
 		}
 
+		if (attackerPlayer) {
+			attackerPlayer->sendCombatAlalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::DEALT, target->getName());
+			if (damage.secondary.type != COMBAT_NONE) {
+				attackerPlayer->sendCombatAlalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::DEALT, target->getName());
+			}
+		}
+
+		if (targetPlayer) {
+			targetPlayer->sendCombatAlalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::RECEIVE,
+				attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type != COMBAT_NONE) {
+				targetPlayer->sendCombatAlalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::RECEIVE,
+				attacker ? attacker->getName() : "(other)");
+			}
+		}
+
 		if (message.primary.color != TEXTCOLOR_NONE || message.secondary.color != TEXTCOLOR_NONE) {
+
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realDamage, realDamage != 1 ? "s" : "");
 
 			std::string spectatorMessage;

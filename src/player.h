@@ -1138,6 +1138,11 @@ class Player final : public Creature, public Cylinder
 				client->sendFightModes();
 			}
 		}
+		void sendCombatAlalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target) {
+			if (client) {
+				client->sendCombatAlalyzer(type, amount, impactType, target);
+			}
+		}
 		void sendNetworkMessage(const NetworkMessage& message) {
 			if (client) {
 				client->writeToOutputBuffer(message);

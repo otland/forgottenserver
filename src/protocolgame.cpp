@@ -17,6 +17,7 @@
 #include "ban.h"
 #include "scheduler.h"
 #include "podium.h"
+#include "tools.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <fmt/format.h>
@@ -2879,6 +2880,26 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 	msg.addByte(0x00);
 	msg.add<uint32_t>(windowTextId);
 	msg.addString(text);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendCombatAlalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target)
+{
+	NetworkMessage msg;
+	msg.addByte(0xCC);
+	if (impactType == DamageAnalyzerImpactType::HEALING) {
+		msg.addByte(HEALING);
+		msg.add<uint32_t>(amount);
+	} else if(impactType == DamageAnalyzerImpactType::RECEIVE) {
+		msg.addByte(RECEIVE);
+		msg.add<uint32_t>(amount);
+		msg.addByte(getClientElement(type));
+		msg.addString(target);
+	} else if (impactType == DamageAnalyzerImpactType::DEALT) {
+		msg.addByte(DEALT);
+		msg.add<uint32_t>(amount);
+		msg.addByte(getClientElement(type));
+	}
 	writeToOutputBuffer(msg);
 }
 

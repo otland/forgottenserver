@@ -1311,3 +1311,40 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	return SPELLGROUP_NONE;
 }
 
+
+ClientElement getClientElement(CombatType_t combatType) {
+	switch (combatType) {
+	case COMBAT_PHYSICALDAMAGE:
+		return CLIENT_ELEMENTAL_PHYSICAL;
+
+	case COMBAT_ENERGYDAMAGE:
+		return CLIENT_ELEMENTAL_ENERGY;
+
+	case COMBAT_EARTHDAMAGE:
+		return CLIENT_ELEMENTAL_EARTH;
+
+	case COMBAT_FIREDAMAGE:
+		return CLIENT_ELEMENTAL_FIRE;
+
+	case COMBAT_LIFEDRAIN:
+		return CLIENT_ELEMENTAL_LIFEDRAIN;
+
+	case COMBAT_HEALING:
+		return CLIENT_ELEMENTAL_HEALING;
+
+	case COMBAT_DROWNDAMAGE:
+		return CLIENT_ELEMENTAL_DROWN;
+
+	case COMBAT_ICEDAMAGE:
+		return CLIENT_ELEMENTAL_ICE;
+
+	case COMBAT_HOLYDAMAGE:
+		return CLIENT_ELEMENTAL_HOLY;
+
+	case COMBAT_DEATHDAMAGE:
+		return CLIENT_ELEMENTAL_DEATH;
+
+	default:
+		return CLIENT_ELEMENTAL_UNDEFINED;
+	}
+}
