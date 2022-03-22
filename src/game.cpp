@@ -4102,7 +4102,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		target->gainHealth(attacker, damage.primary.value);
 		realHealthChange = target->getHealth() - realHealthChange;
 
-		if (attackerPlayer && targetPlayer && attackerPlayer != targetPlayer) {
+		if (attackerPlayer && attackerPlayer != targetPlayer) {
 			attackerPlayer->sendCombatAlalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::DEALT,
 				target ? target->getName() : "(other)");
 			if (damage.secondary.type == COMBAT_HEALING) {
