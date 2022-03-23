@@ -145,7 +145,6 @@ ClientElement getClientElement(CombatType_t combatType) {
 	}
 }
 
-
 }
 
 void ProtocolGame::release()
