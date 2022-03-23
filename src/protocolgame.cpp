@@ -17,7 +17,6 @@
 #include "ban.h"
 #include "scheduler.h"
 #include "podium.h"
-#include "tools.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <fmt/format.h>
@@ -108,7 +107,7 @@ std::size_t clientLogin(const Player& player)
 	return waitList.size();
 }
 
-ClientElement getClientElement(CombatType_t combatType) {
+ClientDamageType getClientElement(CombatType_t combatType) {
 	switch (combatType) {
 	case COMBAT_PHYSICALDAMAGE:
 		return CLIENT_ELEMENTAL_PHYSICAL;
@@ -2932,6 +2931,7 @@ void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageA
 			msg.addByte(getClientElement(type));
 			msg.addString(target);
 			break;
+
 		case DEALT:
 			msg.addByte(getClientElement(type));
 			break;

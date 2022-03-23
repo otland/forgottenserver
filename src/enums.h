@@ -637,7 +637,7 @@ struct Reflect {
 	uint16_t chance = 0;
 };
 
-enum ClientElement {
+enum ClientDamageType {
 	CLIENT_ELEMENTAL_PHYSICAL = 0,
 	CLIENT_ELEMENTAL_FIRE = 1,
 	CLIENT_ELEMENTAL_EARTH = 2,
