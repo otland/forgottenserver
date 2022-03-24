@@ -616,6 +616,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 				getAttributes()->reflect[combatType] = reflect;
 			}
+			break;
 		}
 
 		case ATTR_BOOST: {
@@ -634,6 +635,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 				getAttributes()->boostPercent[combatType] = percent;
 			}
+			break;
 		}
 
 		//these should be handled through derived classes
