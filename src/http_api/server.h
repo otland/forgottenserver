@@ -38,7 +38,7 @@ class Server : NonCopyable, NonMovable
 	void start(const std::string& address, uint16_t port);
 public:
 
-    explicit Server(IoService& service);
+    explicit Server(asio::io_service& service);
 	~Server();
 
 	/** \brief Stops the API server
@@ -49,7 +49,7 @@ public:
 	 */
 	void stop();
 
-	IoService& getIoService();
+	asio::io_service& getIoService();
 
 	/** \brief Handles closing of a remote connection
 	 *

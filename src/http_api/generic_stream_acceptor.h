@@ -37,7 +37,7 @@ public:
 	 * \returns a unique_ptr pointing to the constructed object if successful (address is valid),
 	 * otherwise the pointer is nullptr.
 	 */
-	static Pointer make(IoService& service, const std::string& address, uint16_t port);
+	static Pointer make(asio::io_service& service, const std::string& address, uint16_t port);
 
 	virtual ~GenericStreamAcceptor() = default;
 

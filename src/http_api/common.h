@@ -12,9 +12,8 @@ namespace HttpApi
 {
 
 namespace asio = boost::asio;
-using IoService = asio::io_service;
 /// Synchronization primitive provided by asio
-using Strand = IoService::strand;
+using Strand = asio::io_service::strand;
 using ErrorCode = boost::system::error_code;
 
 using Request = boost::beast::http::request<boost::beast::http::string_body>;

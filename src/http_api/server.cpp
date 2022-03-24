@@ -12,7 +12,7 @@ extern ConfigManager g_config;
 namespace HttpApi
 {
 
-Server::Server(IoService& service) :
+Server::Server(asio::io_service& service) :
 	strand(service)
 {
 	//
@@ -95,7 +95,7 @@ void Server::loadRoutes()
 	start(address, port);
 }
 
-IoService& Server::getIoService()
+asio::io_service& Server::getIoService()
 {
 	return strand.context();
 }

@@ -47,7 +47,7 @@ static const std::string LOCAL_SOCKET_PREFIX {"unix://"};
 class LocalAcceptorWrapper : public GenericStreamAcceptor
 {
 public:
-	explicit LocalAcceptorWrapper(IoService& service):
+	explicit LocalAcceptorWrapper(asio::io_service& service):
 		acceptor{service}
 	{
 	}
@@ -88,7 +88,7 @@ private:
 class IpAcceptorWrapper : public GenericStreamAcceptor
 {
 public:
-	explicit IpAcceptorWrapper(IoService& service):
+	explicit IpAcceptorWrapper(asio::io_service& service):
 		acceptor{service}
 	{
 	}
@@ -122,7 +122,7 @@ private:
 
 }
 
-GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(IoService& service, const std::string& address, uint16_t port)
+GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(asio::io_service& service, const std::string& address, uint16_t port)
 {
 	auto pos = address.find(LOCAL_SOCKET_PREFIX);
 	GenericStreamAcceptor::Pointer acceptor;
