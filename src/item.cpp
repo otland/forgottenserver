@@ -1223,6 +1223,19 @@ bool Item::hasMarketAttributes() const
 		return true;
 	}
 
+	// disregard items with custom boost and reflect
+	for (uint16_t i = 0; i < COMBAT_COUNT; ++i) {
+		if (getBoostPercent(indexToCombatType(i), false) > 0) {
+			return false;
+		}
+
+		Reflect tmpReflect = getReflect(indexToCombatType(i), false);
+		if (tmpReflect.chance != 0 || tmpReflect.percent != 0) {
+			return false;
+		}
+	}
+
+	// disregard items with other modified attributes
 	for (const auto& attr : attributes->getList()) {
 		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
 			uint16_t charges = static_cast<uint16_t>(attr.value.integer);
