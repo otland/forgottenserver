@@ -9,6 +9,7 @@
 #include "luascript.h"
 
 class ItemType;
+class NetworkMessage;
 class Party;
 class Tile;
 
@@ -56,6 +57,7 @@ class Events
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
+		int32_t playerOnNetworkMessage = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -109,6 +111,7 @@ public:
 	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
+	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
