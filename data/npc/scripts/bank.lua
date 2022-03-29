@@ -59,10 +59,10 @@ local function creatureSayCallback(cid, type, msg)
 		elseif player:getBankBalance() >= 100000 then
 			npcHandler:say("You certainly have made a pretty penny. Your account balance is " .. player:getBankBalance() .. " gold.", cid)
 			return true
-		else
-			npcHandler:say("Your account balance is " .. player:getBankBalance() .. " gold.", cid)
-			return true
 		end
+
+		npcHandler:say("Your account balance is " .. player:getBankBalance() .. " gold.", cid)
+		return true
 	elseif msgcontains(msg, "deposit") then
 		count[cid] = player:getMoney()
 		if count[cid] < 1 then
@@ -85,11 +85,11 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 				npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 				return true
-			else
-				npcHandler:say("Please tell me how much gold it is you would like to deposit.", cid)
-				npcHandler.topic[cid] = topicList.DEPOSIT_GOLD
-				return true
 			end
+
+			npcHandler:say("Please tell me how much gold it is you would like to deposit.", cid)
+			npcHandler.topic[cid] = topicList.DEPOSIT_GOLD
+			return true
 		end
 		if not isValidMoney(count[cid]) then
 			npcHandler:say("Sorry, but you can't deposit that much.", cid)
@@ -102,11 +102,11 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 			npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 			return true
-		else
-			npcHandler:say("You do not have enough gold.", cid)
-			npcHandler.topic[cid] = topicList.NONE
-			return true
 		end
+
+		npcHandler:say("You do not have enough gold.", cid)
+		npcHandler.topic[cid] = topicList.NONE
+		return true
 	elseif npcHandler.topic[cid] == topicList.DEPOSIT_CONSENT then
 		if msgcontains(msg, "yes") then
 			if player:getMoney() >= tonumber(count[cid]) then
@@ -131,11 +131,11 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler.topic[cid] = topicList.NONE
 			end
 			return true
-		else
-			npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
-			npcHandler.topic[cid] = topicList.WITHDRAW_CONSENT
-			return true
 		end
+		
+		npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
+		npcHandler.topic[cid] = topicList.WITHDRAW_CONSENT
+		return true
 	elseif npcHandler.topic[cid] == topicList.WITHDRAW_CONSENT then
 		count[cid] = getMoneyCount(msg)
 		if isValidMoney(count[cid]) then

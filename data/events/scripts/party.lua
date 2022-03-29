@@ -1,25 +1,22 @@
 function Party:onJoin(player)
 	if EventCallback.onJoin then
 		return EventCallback.onJoin(self, player)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onLeave(player)
 	if EventCallback.onLeave then
 		return EventCallback.onLeave(self, player)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onDisband()
 	if EventCallback.onDisband then
 		return EventCallback.onDisband(self)
-	else
-		return true
 	end
+	return true
 end
 
 function Party:onShareExperience(exp)
