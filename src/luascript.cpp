@@ -436,21 +436,7 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 
 std::string LuaScriptInterface::getStackTrace(lua_State* L, const std::string& error_desc)
 {
-	lua_getglobal(L, "debug");
-	if (!isTable(L, -1)) {
-		lua_pop(L, 1);
-		return error_desc;
-	}
-
-	lua_getfield(L, -1, "traceback");
-	if (!isFunction(L, -1)) {
-		lua_pop(L, 2);
-		return error_desc;
-	}
-
-	lua_replace(L, -2);
-	pushString(L, error_desc);
-	lua_call(L, 1, 1);
+	luaL_traceback(L, L, error_desc.c_str(), 1);
 	return popString(L);
 }
 
