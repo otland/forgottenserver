@@ -180,6 +180,7 @@ class LuaScriptInterface
 		int32_t getEvent(const std::string& eventName);
 		int32_t getEvent();
 		int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
+		bool deleteEvent(int32_t eventId);
 
 		static ScriptEnvironment* getScriptEnv() {
 			assert(scriptEnvIndex >= 0 && scriptEnvIndex < 16);
@@ -417,6 +418,7 @@ class LuaScriptInterface
 
 		int32_t eventTableRef = -1;
 		int32_t runningEventId = EVENT_ID_USER;
+		std::vector<int32_t> eventIdPool;
 
 		//script file cache
 		std::map<int32_t, std::string> cacheFiles;

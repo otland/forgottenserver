@@ -22,7 +22,7 @@ void Npcs::reload()
 		it.second->closeAllShopWindows();
 	}
 
-	delete Npc::scriptInterface;
+	std::unique_ptr<NpcScriptInterface> oldScriptInterface(Npc::scriptInterface);
 	Npc::scriptInterface = nullptr;
 
 	for (const auto& it : npcs) {
@@ -588,6 +588,7 @@ bool NpcScriptInterface::initState()
 	lua_newtable(luaState);
 	eventTableRef = luaL_ref(luaState, LUA_REGISTRYINDEX);
 	runningEventId = EVENT_ID_USER;
+	eventIdPool.clear();
 	return true;
 }
 
@@ -1127,6 +1128,14 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
 		playerCloseChannelEvent = scriptInterface->getEvent("onPlayerCloseChannel");
 		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
 		thinkEvent = scriptInterface->getEvent("onThink");
+	}
+}
+
+NpcEventsHandler::~NpcEventsHandler()
+{
+	std::array<int32_t, 7> eventArray = {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent, playerCloseChannelEvent, playerEndTradeEvent, thinkEvent};
+	for (int32_t eventId : eventArray) {
+		scriptInterface->deleteEvent(eventId);
 	}
 }
 
