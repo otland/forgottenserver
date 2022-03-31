@@ -5175,15 +5175,10 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		}
 
 		if (it.id != ITEM_STORE_COIN) {
-			std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotLocker);
+			std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
 			if (itemList.empty()) {
 				return;
 			}
-		}
-
-		std::forward_list<Item*> itemList = getMarketItemList(it.wareId, amount, depotChest, player->getInbox());
-		if (itemList.empty()) {
-			return;
 		}
 
 		if (it.stackable) {
