@@ -34,7 +34,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	std::string str_words = words;
 
 	//strip trailing spaces
-	trimString(str_words);
+	boost::algorithm::trim(str_words);
 
 	InstantSpell* instantSpell = getInstantSpell(str_words);
 	if (!instantSpell) {
@@ -59,7 +59,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 
 				param = paramText.substr(loc1 + 1, loc2 - loc1 - 1);
 			} else {
-				trimString(paramText);
+				boost::algorithm::trim(paramText);
 				loc1 = paramText.find(' ', 0);
 				if (loc1 == std::string::npos) {
 					param = paramText;
@@ -408,7 +408,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("group"))) {
-		std::string tmpStr = asLowerCaseString(attr.as_string());
+		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			group = SPELLGROUP_NONE;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -429,7 +429,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("secondarygroup"))) {
-		std::string tmpStr = asLowerCaseString(attr.as_string());
+		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			secondaryGroup = SPELLGROUP_NONE;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
@@ -507,7 +507,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("blocktype"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStrValue == "all") {
 			blockingSolid = true;
 			blockingCreature = true;
@@ -1188,6 +1188,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 
 	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
+		player->sendSupplyUsed(item->getClientID());
 		g_game.transformItem(item, item->getID(), newCount);
 	}
 	return true;

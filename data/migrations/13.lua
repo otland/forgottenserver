@@ -10,7 +10,7 @@ function onUpdateDatabase()
 	if resultId then
 		local stmt = "INSERT INTO `player_namelocks` (`player_id`, `namelocked_at`, `namelocked_by`) VALUES "
 		repeat
-			stmt = stmt .. "(" .. result.getNumber(resultId, "player") .. "," .. result.getNumber(resultId, "time") .. "," .. result.getNumber(resultId, "player") .. "),"
+			stmt = stmt .. "(" .. result.getNumber(resultId, "player") .. ", " .. result.getNumber(resultId, "time") .. ", " .. result.getNumber(resultId, "player") .. "),"
 		until not result.next(resultId)
 		result.free(resultId)
 
@@ -31,7 +31,7 @@ function onUpdateDatabase()
 	print("DELIMITER //")
 	print("CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`")
 	print(" FOR EACH ROW BEGIN")
-	print("  UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
+	print(" UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
 	print("END //")
 	return true
 end

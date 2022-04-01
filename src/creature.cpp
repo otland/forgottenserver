@@ -272,6 +272,10 @@ void Creature::startAutoWalk(Direction direction)
 
 void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 {
+	if (hasCondition(CONDITION_ROOT)) {
+		return;
+	}
+
 	Player* player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
@@ -1043,16 +1047,9 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 
 	uint32_t attackerId = attacker->id;
 
-	auto it = damageMap.find(attackerId);
-	if (it == damageMap.end()) {
-		CountBlock_t cb;
-		cb.ticks = OTSYS_TIME();
-		cb.total = damagePoints;
-		damageMap[attackerId] = cb;
-	} else {
-		it->second.total += damagePoints;
-		it->second.ticks = OTSYS_TIME();
-	}
+	auto& cb = damageMap[attackerId];
+	cb.ticks = OTSYS_TIME();
+	cb.total += damagePoints;
 
 	lastHitCreatureId = attackerId;
 }

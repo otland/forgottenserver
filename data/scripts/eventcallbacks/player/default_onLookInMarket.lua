@@ -234,7 +234,7 @@ ec.onLookInMarket = function(self, itemType)
 		-- special skills
 		for skill, value in pairs(abilities.specialSkills) do
 			if value ~= 0 then
-				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getSpecialSkillName[skill-1], value)
+				skillBoosts[#skillBoosts + 1] = string.format("%s %+d", getSpecialSkillName[skill - 1], value)
 			end
 		end
 

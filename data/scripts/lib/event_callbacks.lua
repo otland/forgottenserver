@@ -3,7 +3,7 @@ local pack = table.pack
 
 local EventCallbackData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
 -- This metatable creates an auto-configuration mechanism to create new types of EventCallbacks
-local ec = setmetatable({}, { __newindex = function (self, key, value)
+local ec = setmetatable({}, { __newindex = function(self, key, value)
 	autoID = autoID + 1
 	callbacks[key] = autoID
 	local info, update = {}, {}
@@ -59,7 +59,7 @@ ec.onDropLoot = {}
 ec.onSpawn = {}
 
 EventCallback = {
-	register = function (self, triggerIndex)
+	register = function(self, triggerIndex)
 		if isScriptsInterface() then
 			local eventType = rawget(self, 'eventType')
 			local callback = rawget(self, 'callback')
@@ -74,13 +74,13 @@ EventCallback = {
 				callback = callback,
 				triggerIndex = tonumber(triggerIndex) or 0
 			}
-			table.sort(eventData, function (ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
+			table.sort(eventData, function(ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
 			self.eventType = nil
 			self.callback = nil
 		end
 	end,
 
-	clear = function (self)
+	clear = function(self)
 		EventCallbackData = {}
 		for i = 1, EVENT_CALLBACK_LAST do
 			EventCallbackData[i] = {maxn = 0}
@@ -89,7 +89,7 @@ EventCallback = {
 }
 
 setmetatable(EventCallback, {
-	__newindex = function (self, key, callback)
+	__newindex = function(self, key, callback)
 		if not isScriptsInterface() then
 			return
 		end
@@ -109,7 +109,7 @@ setmetatable(EventCallback, {
 		rawset(self, 'callback', callback)
 	end,
 
-	__index = function (self, key)
+	__index = function(self, key)
 		local callback = callbacks[key]
 		if not callback then
 			if not isScriptsInterface() then
@@ -124,7 +124,7 @@ setmetatable(EventCallback, {
 			return
 		end
 
-		return function (...)
+		return function(...)
 			local results, args, info = {}, pack(...), callbacks[callback]
 			for index = 1, eventData.maxn do
 				local event = eventData[index]

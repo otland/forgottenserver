@@ -393,7 +393,7 @@ class LuaScriptInterface
 			lua_setfield(L, -2, index);
 		}
 
-		static std::string escapeString(const std::string& string);
+		static std::string escapeString(std::string string);
 
 #ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[7];
@@ -963,6 +963,7 @@ class LuaScriptInterface
 		static int luaPlayerAddItem(lua_State* L);
 		static int luaPlayerAddItemEx(lua_State* L);
 		static int luaPlayerRemoveItem(lua_State* L);
+		static int luaPlayerSendSupplyUsed(lua_State* L);
 
 		static int luaPlayerGetMoney(lua_State* L);
 		static int luaPlayerAddMoney(lua_State* L);
