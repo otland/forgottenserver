@@ -477,8 +477,8 @@ bool Monster::isOpponent(const Creature* creature) const
 			return true;
 		}
 	} else {
-		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		        (creature->getMaster() && creature->getMaster()->getPlayer())) {
+		if ((creature->getPlayer() && !static_cast<const Player*>(creature)->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
+		        (creature->getMaster() && static_cast<const Creature*>(creature)->getPlayer())) {
 			return true;
 		}
 	}
