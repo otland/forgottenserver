@@ -4106,11 +4106,11 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			for (Creature* spectator : spectators) {
 				assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-				Player* tmpPlayer = static_cast<Player*>(spectator);
-				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+				Player* spectatorPlayer = static_cast<Player*>(spectator);
+				if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					message.text = fmt::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
-				} else if (tmpPlayer == targetPlayer) {
+				} else if (spectatorPlayer == targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					if (!attacker) {
 						message.text = fmt::format("You were healed for {:s}.", damageString);
@@ -4133,7 +4133,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					}
 					message.text = spectatorMessage;
 				}
-				tmpPlayer->sendTextMessage(message);
+				spectatorPlayer->sendTextMessage(message);
 			}
 		}
 	} else {
@@ -4197,16 +4197,16 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				for (Creature* spectator : spectators) {
 					assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-					Player* tmpPlayer = static_cast<Player*>(spectator);
-					if (tmpPlayer->getPosition().z != targetPos.z) {
+					Player* spectatorPlayer = static_cast<Player*>(spectator);
+					if (spectatorPlayer->getPosition().z != targetPos.z) {
 						continue;
 					}
 
-					if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+					if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 						message.type = MESSAGE_DAMAGE_DEALT;
 						message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaDamage);
 						message.text[0] = std::toupper(message.text[0]);
-					} else if (tmpPlayer == targetPlayer) {
+					} else if (spectatorPlayer == targetPlayer) {
 						message.type = MESSAGE_DAMAGE_RECEIVED;
 						if (!attacker) {
 							message.text = fmt::format("You lose {:d} mana.", manaDamage);
@@ -4229,7 +4229,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 						}
 						message.text = spectatorMessage;
 					}
-					tmpPlayer->sendTextMessage(message);
+					spectatorPlayer->sendTextMessage(message);
 				}
 
 				damage.primary.value -= manaDamage;
@@ -4299,16 +4299,16 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			for (Creature* spectator : spectators) {
 				assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-				Player* tmpPlayer = static_cast<Player*>(spectator);
-				if (tmpPlayer->getPosition().z != targetPos.z) {
+				Player* spectatorPlayer = static_cast<Player*>(spectator);
+				if (spectatorPlayer->getPosition().z != targetPos.z) {
 					continue;
 				}
 
-				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+				if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_DAMAGE_DEALT;
 					message.text = fmt::format("{:s} loses {:s} due to your attack.", target->getNameDescription(), damageString);
 					message.text[0] = std::toupper(message.text[0]);
-				} else if (tmpPlayer == targetPlayer) {
+				} else if (spectatorPlayer == targetPlayer) {
 					message.type = MESSAGE_DAMAGE_RECEIVED;
 					if (!attacker) {
 						message.text = fmt::format("You lose {:s}.", damageString);
@@ -4331,7 +4331,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					}
 					message.text = spectatorMessage;
 				}
-				tmpPlayer->sendTextMessage(message);
+				spectatorPlayer->sendTextMessage(message);
 			}
 		}
 
@@ -4444,12 +4444,12 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		for (Creature* spectator : spectators) {
 			assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-			Player* tmpPlayer = static_cast<Player*>(spectator);
-			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
+			Player* spectatorPlayer = static_cast<Player*>(spectator);
+			if (spectatorPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
 				message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
 				message.text[0] = std::toupper(message.text[0]);
-			} else if (tmpPlayer == targetPlayer) {
+			} else if (spectatorPlayer == targetPlayer) {
 				message.type = MESSAGE_DAMAGE_RECEIVED;
 				if (!attacker) {
 					message.text = fmt::format("You lose {:d} mana.", manaLoss);
@@ -4472,7 +4472,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 				}
 				message.text = spectatorMessage;
 			}
-			tmpPlayer->sendTextMessage(message);
+			spectatorPlayer->sendTextMessage(message);
 		}
 	}
 
@@ -4784,8 +4784,8 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-		Player* tmpPlayer = static_cast<Player*>(spectator);
-		tmpPlayer->sendCreatureWalkthrough(creature, tmpPlayer->canWalkthroughEx(creature));
+		Player* spectatorPlayer = static_cast<Player*>(spectator);
+		spectatorPlayer->sendCreatureWalkthrough(creature, spectatorPlayer->canWalkthroughEx(creature));
 	}
 }
 

@@ -261,8 +261,8 @@ bool Spawn::findPlayer(const Position& pos)
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
 
-		Player* tmpPlayer = static_cast<Player*>(spectator);
-		if (!tmpPlayer->hasFlag(PlayerFlag_IgnoredByMonsters)) {
+		Player* spectatorPlayer = static_cast<Player*>(spectator);
+		if (!spectatorPlayer->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
 		}
 	}
