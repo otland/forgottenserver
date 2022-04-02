@@ -1318,8 +1318,8 @@ function doCreateTeleport(itemId, destination, position)
 	return item:getUniqueId()
 end
 
-function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
-	local result = Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)
+function getSpectators(centerPos, rangex, rangey, multifloor, searchType)
+	local result = Game.getSpectators(centerPos, multifloor, searchType, rangex, rangex, rangey, rangey)
 	if #result == 0 then
 		return nil
 	end
