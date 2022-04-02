@@ -1489,7 +1489,7 @@ void MagicField::onStepInField(Creature* creature)
 			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
 				Creature* owner = g_game.getCreatureByID(ownerId);
 				if (owner) {
-					if (owner->getPlayer() || (owner->isSummon() && static_cast<const Creature*>(owner)->getPlayer())) {
+					if (owner->getPlayer() || (owner->isSummon() && owner->getMaster()->getPlayer())) {
 						harmfulField = false;
 					}
 				}
