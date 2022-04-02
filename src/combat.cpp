@@ -206,7 +206,7 @@ bool Combat::isPlayerCombat(const Creature* target)
 		return true;
 	}
 
-	if (target->isSummon() && static_cast<const Creature*>(target)->getPlayer()) {
+	if (target->isSummon() && target->getMaster()->getPlayer()) {
 		return true;
 	}
 
@@ -352,7 +352,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 		}
 
 		if (attacker->isSummon()) {
-			if (const Player* masterAttackerPlayer = static_cast<const Creature*>(attacker)->getPlayer()) {
+			if (const Player* masterAttackerPlayer = attacker->getMaster()->getPlayer()) {
 				if (masterAttackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 				}
@@ -372,7 +372,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
 
-			if (target->isSummon() && static_cast<const Creature*>(target)->getPlayer() && target->getZone() == ZONE_NOPVP) {
+			if (target->isSummon() && target->getMaster()->getPlayer() && target->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
 		} else if (attacker->getMonster()) {
@@ -389,14 +389,14 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 	}
 
 	if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-		if (attacker->getPlayer() || (attacker->isSummon() && static_cast<const Creature*>(attacker)->getPlayer())) {
+		if (attacker->getPlayer() || (attacker->isSummon() && attacker->getMaster()->getPlayer())) {
 			if (target->getPlayer()) {
 				if (!isInPvpZone(attacker, target)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 				}
 			}
 
-			if (target->isSummon() && static_cast<const Creature*>(target)->getPlayer()) {
+			if (target->isSummon() && target->getMaster()->getPlayer()) {
 				if (!isInPvpZone(attacker, target)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 				}
@@ -594,7 +594,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 		if (caster) {
 			Player* casterPlayer;
 			if (caster->isSummon()) {
-				casterPlayer = static_cast<Creature*>(caster)->getPlayer();
+				casterPlayer = caster->getMaster()->getPlayer();
 			} else {
 				casterPlayer = caster->getPlayer();
 			}
