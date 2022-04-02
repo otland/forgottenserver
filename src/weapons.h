@@ -162,7 +162,7 @@ class Weapon : public Event
 		void addVocWeaponMap(std::string vocName) {
 			int32_t vocationId = g_vocations.getVocationId(vocName);
 			if (vocationId != -1) {
-				vocWeaponMap[vocationId] = true;
+				vocWeaponMap[static_cast<uint16_t>(vocationId)] = true;
 			}
 		}
 

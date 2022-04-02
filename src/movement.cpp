@@ -177,7 +177,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			return false;
 		}
 
-		Position pos(posList[0], posList[1], posList[2]);
+		Position pos(posList[0], posList[1], static_cast<uint8_t>(posList[2]));
 		addEvent(std::move(*moveEvent), pos, positionMap);
 	} else {
 		return false;

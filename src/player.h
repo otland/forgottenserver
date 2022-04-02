@@ -595,13 +595,13 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint16_t getSpecialSkill(uint8_t skill) const {
-			return std::max<uint16_t>(0, varSpecialSkills[skill]);
+			return std::max<uint16_t>(0, static_cast<uint16_t>(varSpecialSkills[skill]));
 		}
 		uint16_t getSkillLevel(uint8_t skill) const {
 			return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 		}
 		uint16_t getSpecialMagicLevelSkill(CombatType_t type) const {
-			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
+			return std::max<uint16_t>(0, static_cast<uint16_t>(specialMagicLevelSkill[combatTypeToIndex(type)]));
 		}
 		uint16_t getBaseSkill(uint8_t skill) const {
 			return skills[skill].level;

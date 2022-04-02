@@ -199,7 +199,7 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
+		spectator->getPlayer()->sendUpdateContainerItem(this, static_cast<uint16_t>(index), newItem);
 	}
 
 	//event methods
@@ -215,7 +215,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//send change to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendRemoveContainerItem(this, index);
+		spectator->getPlayer()->sendRemoveContainerItem(this, static_cast<uint16_t>(index));
 	}
 
 	//event methods
@@ -515,7 +515,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 	const int32_t oldWeight = item->getWeight();
 	item->setID(itemId);
-	item->setSubType(count);
+	item->setSubType(static_cast<uint16_t>(count));
 	updateItemWeight(-oldWeight + item->getWeight());
 
 	//send change to client
