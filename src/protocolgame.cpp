@@ -52,9 +52,8 @@ constexpr int64_t getWaitTime(std::size_t slot)
 		return 20;
 	} else if (slot < 50) {
 		return 60;
-	} else {
-		return 120;
 	}
+	return 120;
 }
 
 constexpr int64_t getTimeout(std::size_t slot)
