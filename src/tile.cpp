@@ -1327,7 +1327,7 @@ Thing* Tile::getThing(size_t index) const
 void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	g_game.map.getSpectators(spectators, getPosition(), true, ONLY_PLAYERS);
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
@@ -1382,7 +1382,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	g_game.map.getSpectators(spectators, getPosition(), true, ONLY_PLAYERS);
 
 	if (getThingCount() > 8) {
 		onUpdateTile(spectators);

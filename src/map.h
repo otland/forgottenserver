@@ -65,6 +65,11 @@ struct Floor {
 	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
+enum SearchType_t : uint8_t {
+	ALL_SPECTATORS,
+	ONLY_PLAYERS,
+};
+
 class FrozenPathingConditionCall;
 class QTreeLeafNode;
 
@@ -203,7 +208,7 @@ class Map
 
 		void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-		void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+		void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false, SearchType_t searchType = ALL_SPECTATORS,
 		                   int32_t minRangeX = 0, int32_t maxRangeX = 0,
 		                   int32_t minRangeY = 0, int32_t maxRangeY = 0);
 
@@ -272,7 +277,7 @@ class Map
 		void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos,
 		                           int32_t minRangeX, int32_t maxRangeX,
 		                           int32_t minRangeY, int32_t maxRangeY,
-		                           int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers) const;
+		                           int32_t minRangeZ, int32_t maxRangeZ, SearchType_t searchType) const;
 
 		friend class Game;
 		friend class IOMap;

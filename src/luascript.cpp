@@ -2066,6 +2066,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE)
 	registerEnum(DECAYING_PENDING)
 
+	registerEnum(ALL_SPECTATORS)
+	registerEnum(ONLY_PLAYERS)
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -4406,17 +4409,17 @@ int LuaScriptInterface::luaTablePack(lua_State* L)
 // Game
 int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 {
-	// Game.getSpectators(position[, multifloor = false[, onlyPlayer = false[, minRangeX = 0[, maxRangeX = 0[, minRangeY = 0[, maxRangeY = 0]]]]]])
+	// Game.getSpectators(position[, multifloor = false[, searchType = ALL_SPECTATORS[, minRangeX = 0[, maxRangeX = 0[, minRangeY = 0[, maxRangeY = 0]]]]]])
 	const Position& position = getPosition(L, 1);
 	bool multifloor = getBoolean(L, 2, false);
-	bool onlyPlayers = getBoolean(L, 3, false);
+	SearchType_t searchType = getNumber<SearchType_t>(L, 3, ALL_SPECTATORS);
 	int32_t minRangeX = getNumber<int32_t>(L, 4, 0);
 	int32_t maxRangeX = getNumber<int32_t>(L, 5, 0);
 	int32_t minRangeY = getNumber<int32_t>(L, 6, 0);
 	int32_t maxRangeY = getNumber<int32_t>(L, 7, 0);
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
+	g_game.map.getSpectators(spectators, position, multifloor, searchType, minRangeX, maxRangeX, minRangeY, maxRangeY);
 
 	lua_createtable(L, spectators.size(), 0);
 
@@ -7902,7 +7905,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 
 	// update summon icon
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
+	g_game.map.getSpectators(spectators, creature->getPosition(), true, ONLY_PLAYERS);
 
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateTileCreature(creature);
@@ -10564,7 +10567,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const bool isInvisible = player->isInvisible();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
+	g_game.map.getSpectators(spectators, position, true, ONLY_PLAYERS);
 	for (Creature* spectator : spectators) {
 		Player* tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
