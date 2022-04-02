@@ -291,12 +291,6 @@ bool ConfigManager::load()
 	return true;
 }
 
-bool ConfigManager::reload()
-{
-	bool result = load();
-	return result;
-}
-
 static std::string dummyStr;
 
 const std::string& ConfigManager::getString(string_config_t what) const

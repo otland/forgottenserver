@@ -5712,7 +5712,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 	switch (reloadType) {
 		case RELOAD_TYPE_ACTIONS: return g_actions->reload();
 		case RELOAD_TYPE_CHAT: return g_chat->load();
-		case RELOAD_TYPE_CONFIG: return g_config.reload();
+		case RELOAD_TYPE_CONFIG: return g_config.load();
 		case RELOAD_TYPE_CREATURESCRIPTS: {
 			g_creatureEvents->reload();
 			g_creatureEvents->removeInvalidEvents();
@@ -5786,7 +5786,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			}
 
 			g_actions->reload();
-			g_config.reload();
+			g_config.load();
 			g_creatureEvents->reload();
 			g_monsters.reload();
 			g_moveEvents->reload();
