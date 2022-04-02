@@ -3882,7 +3882,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		return true;
 	}
 
-	if (Player* targetPlayer = target->getPlayer(); targetPlayer && targetPlayer->isInGhostMode()) {
+	if (target->getPlayer() && target->isInGhostMode()) {
 		return true;
 	}
 
