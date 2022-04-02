@@ -652,7 +652,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
 		if (topParent->getParent()) {
-			static_cast<Cylinder*>(topParent)->postAddNotification(thing, oldParent, index, LINK_NEAR);
+			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
 	} else {
 		topParent->postAddNotification(thing, oldParent, index, LINK_PARENT);
@@ -667,7 +667,7 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
 		if (topParent->getParent()) {
-			static_cast<Cylinder*>(topParent)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}
 	} else {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
