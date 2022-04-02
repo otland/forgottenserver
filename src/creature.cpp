@@ -1160,7 +1160,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		static_cast<Player*>(spectator)->sendTextMessage(message);
 	}
 }
 

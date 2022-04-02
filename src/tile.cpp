@@ -474,7 +474,7 @@ void Tile::onUpdateTile(const SpectatorVec& spectators)
 
 	//send to clients
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTile(this, cylinderMapPos);
+		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
 	}
 }
 
@@ -1329,7 +1329,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
+		static_cast<Player*>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
 	//add a reference to this item, it may be deleted after being added (mailbox for example)
@@ -1389,7 +1389,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
 	//calling movement scripts
