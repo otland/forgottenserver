@@ -63,7 +63,6 @@ class ConfigManager
 			URL,
 			LOCATION,
 			IP,
-			MOTD,
 			WORLD_TYPE,
 			MYSQL_HOST,
 			MYSQL_USER,
@@ -124,7 +123,6 @@ class ConfigManager
 		};
 
 		bool load();
-		bool reload();
 
 		const std::string& getString(string_config_t what) const;
 		int32_t getNumber(integer_config_t what) const;

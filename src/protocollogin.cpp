@@ -49,13 +49,6 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	const std::string& motd = g_config.getString(ConfigManager::MOTD);
-	if (!motd.empty()) {
-		//Add MOTD
-		output->addByte(0x14);
-		output->addString(fmt::format("{:d}\n{:s}", g_game.getMotdNum(), motd));
-	}
-
 	//Add session key
 	output->addByte(0x28);
 	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));

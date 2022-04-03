@@ -238,7 +238,6 @@ bool ConfigManager::load()
 	string[OWNER_EMAIL] = getGlobalString(L, "ownerEmail", "");
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
-	string[MOTD] = getGlobalString(L, "motd", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
@@ -290,15 +289,6 @@ bool ConfigManager::load()
 	lua_close(L);
 
 	return true;
-}
-
-bool ConfigManager::reload()
-{
-	bool result = load();
-	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
-		g_game.incrementMotdNum();
-	}
-	return result;
 }
 
 static std::string dummyStr;

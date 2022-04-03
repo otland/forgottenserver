@@ -130,7 +130,7 @@ void ProtocolStatus::sendStatusString()
 	map.append_attribute("height") = std::to_string(mapHeight).c_str();
 
 	pugi::xml_node motd = tsqp.append_child("motd");
-	motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
+	motd.text() = "N/A";
 
 	std::ostringstream ss;
 	doc.save(ss, "", pugi::format_raw);
@@ -160,7 +160,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 	if (requestedInfo & REQUEST_MISC_SERVER_INFO) {
 		output->addByte(0x12);
-		output->addString(g_config.getString(ConfigManager::MOTD));
+		output->addString("N/A"); //MOTD
 		output->addString(g_config.getString(ConfigManager::LOCATION));
 		output->addString(g_config.getString(ConfigManager::URL));
 		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);

@@ -61,7 +61,7 @@ void sighupHandler()
 	g_actions->reload();
 	std::cout << "Reloaded actions." << std::endl;
 
-	g_config.reload();
+	g_config.load();
 	std::cout << "Reloaded config." << std::endl;
 
 	g_creatureEvents->reload();
