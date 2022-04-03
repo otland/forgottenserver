@@ -32,7 +32,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	return account;
 }
 
-std::string decodeSecret(const std::string& secret)
+std::string decodeSecret(std::string_view secret)
 {
 	// simple base32 decoding
 	std::string key;
@@ -86,7 +86,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", account.id));
 	if (result) {
 		do {
-			account.characters.push_back(result->getString("name"));
+			account.characters.emplace_back(result->getString("name"));
 		} while (result->next());
 	}
 	return true;
@@ -970,9 +970,11 @@ std::string IOLoginData::getNameByGuid(uint32_t guid)
 	DBResult_ptr result =
 	    Database::getInstance().storeQuery(fmt::format("SELECT `name` FROM `players` WHERE `id` = {:d}", guid));
 	if (!result) {
-		return std::string();
+		return {};
 	}
-	return result->getString("name");
+
+	auto name = result->getString("name");
+	return {name.data(), name.size()};
 }
 
 uint32_t IOLoginData::getGuidByName(const std::string& name)

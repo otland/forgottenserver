@@ -12,7 +12,7 @@ struct GuildRank
 	std::string name;
 	uint8_t level;
 
-	GuildRank(uint32_t id, std::string name, uint8_t level) : id(id), name(std::move(name)), level(level) {}
+	GuildRank(uint32_t id, std::string_view name, uint8_t level) : id{id}, name{name}, level{level} {}
 };
 
 using GuildRank_ptr = std::shared_ptr<GuildRank>;
@@ -20,7 +20,7 @@ using GuildRank_ptr = std::shared_ptr<GuildRank>;
 class Guild
 {
 public:
-	Guild(uint32_t id, std::string name) : name(std::move(name)), id(id) {}
+	Guild(uint32_t id, std::string_view name) : name{name}, id{id} {}
 
 	void addMember(Player* player);
 	void removeMember(Player* player);
@@ -35,7 +35,7 @@ public:
 	GuildRank_ptr getRankById(uint32_t rankId);
 	GuildRank_ptr getRankByName(const std::string& name) const;
 	GuildRank_ptr getRankByLevel(uint8_t level) const;
-	void addRank(uint32_t rankId, const std::string& rankName, uint8_t level);
+	void addRank(uint32_t rankId, std::string_view rankName, uint8_t level);
 
 	const std::string& getMotd() const { return motd; }
 	void setMotd(const std::string& motd) { this->motd = motd; }

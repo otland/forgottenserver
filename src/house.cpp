@@ -156,7 +156,7 @@ bool House::kickPlayer(Player* player, Player* target)
 	return true;
 }
 
-void House::setAccessList(uint32_t listId, const std::string& textlist)
+void House::setAccessList(uint32_t listId, std::string_view textlist)
 {
 	if (listId == GUEST_LIST) {
 		guestList.parseList(textlist);
@@ -373,7 +373,7 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 	return true;
 }
 
-void AccessList::parseList(const std::string& list)
+void AccessList::parseList(std::string_view list)
 {
 	playerList.clear();
 	guildRankList.clear();
@@ -383,7 +383,7 @@ void AccessList::parseList(const std::string& list)
 		return;
 	}
 
-	std::istringstream listStream(list);
+	std::istringstream listStream{this->list};
 	std::string line;
 
 	uint16_t lineNo = 1;
@@ -530,7 +530,7 @@ bool Door::canUse(const Player* player)
 	return accessList->isInList(player);
 }
 
-void Door::setAccessList(const std::string& textlist)
+void Door::setAccessList(std::string_view textlist)
 {
 	if (!accessList) {
 		accessList.reset(new AccessList());

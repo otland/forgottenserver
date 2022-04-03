@@ -626,9 +626,9 @@ void LuaScriptInterface::pushCylinder(lua_State* L, Cylinder* cylinder)
 	}
 }
 
-void LuaScriptInterface::pushString(lua_State* L, const std::string& value)
+void LuaScriptInterface::pushString(lua_State* L, std::string_view value)
 {
-	lua_pushlstring(L, value.c_str(), value.length());
+	lua_pushlstring(L, value.data(), value.length());
 }
 
 void LuaScriptInterface::pushCallback(lua_State* L, int32_t callback) { lua_rawgeti(L, LUA_REGISTRYINDEX, callback); }

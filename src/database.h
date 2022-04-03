@@ -65,7 +65,7 @@ public:
 	 * @param s string to be escaped
 	 * @return quoted string
 	 */
-	std::string escapeString(const std::string& s) const;
+	std::string escapeString(std::string_view s) const { return escapeBlob(s.data(), s.length()); }
 
 	/**
 	 * Escapes binary stream for query.
@@ -126,11 +126,11 @@ public:
 	DBResult& operator=(const DBResult&) = delete;
 
 	template <typename T>
-	T getNumber(const std::string& s) const
+	T getNumber(std::string_view column) const
 	{
-		auto it = listNames.find(s);
+		auto it = listNames.find(column);
 		if (it == listNames.end()) {
-			std::cout << "[Error - DBResult::getNumber] Column '" << s << "' doesn't exist in the result set"
+			std::cout << "[Error - DBResult::getNumber] Column '" << column << "' doesn't exist in the result set"
 			          << std::endl;
 			return {};
 		}
@@ -142,8 +142,8 @@ public:
 		return pugi::cast<T>(row[it->second]);
 	}
 
-	std::string getString(const std::string& s) const;
-	const char* getStream(const std::string& s, unsigned long& size) const;
+	std::string_view getString(std::string_view column) const;
+	const char* getStream(std::string_view column, unsigned long& size) const;
 
 	bool hasNext() const;
 	bool next();
@@ -152,7 +152,7 @@ private:
 	MYSQL_RES* handle;
 	MYSQL_ROW row;
 
-	std::map<std::string, size_t> listNames;
+	std::map<std::string_view, size_t> listNames;
 
 	friend class Database;
 };

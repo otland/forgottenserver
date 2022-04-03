@@ -22,7 +22,7 @@ bool DatabaseManager::optimizeTables()
 	}
 
 	do {
-		std::string tableName = result->getString("TABLE_NAME");
+		const auto tableName = result->getString("TABLE_NAME");
 		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
 
 		if (db.executeQuery(fmt::format("OPTIMIZE TABLE `{:s}`", tableName))) {
