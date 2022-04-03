@@ -18,7 +18,7 @@
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"
-#include "http_api/server.h"
+#include "http/server.h"
 
 #include <fstream>
 #include <fmt/color.h>
@@ -48,7 +48,7 @@ void startupErrorMessage(const std::string& errorStr)
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* services, HttpApi::Server* apiServer);
+void mainLoader(int argc, char* argv[], ServiceManager* services, Http::Server* apiServer);
 bool argumentsHandler(const StringVector& args);
 
 [[noreturn]] void badAllocationHandler()
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
 
 	boost::asio::io_service service;
 	ServiceManager serviceManager{service};
-	HttpApi::Server apiServer{service};
+	Http::Server apiServer{service};
 	g_dispatcher.start();
 	g_scheduler.start();
 
@@ -181,7 +181,7 @@ void printServerVersion()
 	std::cout << std::endl;
 }
 
-void mainLoader(int, char*[], ServiceManager* services, HttpApi::Server* apiServer)
+void mainLoader(int, char*[], ServiceManager* services, Http::Server* apiServer)
 {
 	//dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);
@@ -189,7 +189,7 @@ void mainLoader(int, char*[], ServiceManager* services, HttpApi::Server* apiServ
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
 #ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
-	
+
 	// fixes a problem with escape characters not being processed in Windows consoles
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	DWORD dwMode = 0;

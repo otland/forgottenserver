@@ -5,7 +5,7 @@
 
 #include <memory>
 
-namespace HttpApi
+namespace Http
 {
 
 namespace
@@ -141,4 +141,4 @@ GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(asio::io_service& ser
 	return acceptor;
 }
 
-} //namespace HttpApi
+} //namespace Http

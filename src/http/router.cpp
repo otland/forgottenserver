@@ -3,7 +3,7 @@
 
 #include "router.h"
 
-namespace HttpApi
+namespace Http
 {
 
 Router::Router()
@@ -96,7 +96,7 @@ void Router::handleSessionClose(PeerId peerId)
 	}
 }
 
-void Router::sendInternalServerError(HttpApi::Responder& responder) const
+void Router::sendInternalServerError(Http::Responder& responder) const
 {
 	responder.response.result(boost::beast::http::status::internal_server_error);
 	responder.response.body() = "Internal Server Error";
@@ -136,4 +136,4 @@ bool Router::loadRoutingFunctions()
 	return true;
 }
 
-} //namespace HttpApi
+} //namespace Http

@@ -1,15 +1,15 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HTTP_API_SERVER_H
-#define FS_HTTP_API_SERVER_H
+#ifndef FS_HTTP_SERVER_H
+#define FS_HTTP_SERVER_H
 
 #include "common.h"
 #include "../tools.h"
 #include <memory>
 #include <unordered_set>
 
-namespace HttpApi
+namespace Http
 {
 
 class Peer;
@@ -67,6 +67,6 @@ public:
 	void loadRoutes();
 };
 
-} //namespace HttpApi
+} //namespace Http
 
-#endif // FS_HTTP_API_SERVER_H
+#endif // FS_HTTP_SERVER_H

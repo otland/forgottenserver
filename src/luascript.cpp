@@ -35,7 +35,7 @@
 #include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
-#include "http_api/responder.h"
+#include "http/responder.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -3278,7 +3278,7 @@ void LuaScriptInterface::registerFunctions()
 	// exclusively for wands & distance weapons
 	registerMethod("Weapon", "shootType", LuaScriptInterface::luaWeaponShootType);
 
-	using HttpApi::Responder;
+	using Http::Responder;
 	registerClass("Responder", "", nullptr);
 	registerMetaMethod("Responder", "__gc", Responder::luaDelete);
 	registerMethod("Responder", "delete", Responder::luaDelete);

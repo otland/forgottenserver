@@ -9,7 +9,7 @@
 
 extern ConfigManager g_config;
 
-namespace HttpApi
+namespace Http
 {
 
 Server::Server(asio::io_service& service) :
@@ -90,8 +90,8 @@ void Server::loadRoutes()
 		return;
 	}
 
-	const auto &address = g_config.getString(ConfigManager::HTTP_API_IP);
-	auto port = static_cast<uint16_t>(g_config.getNumber(ConfigManager::HTTP_API_PORT));
+	const auto &address = g_config.getString(ConfigManager::HTTP_IP);
+	auto port = static_cast<uint16_t>(g_config.getNumber(ConfigManager::HTTP_PORT));
 	start(address, port);
 }
 
@@ -101,4 +101,4 @@ asio::io_service& Server::getIoService()
 }
 
 
-} //namespace HttpApi
+} //namespace Http

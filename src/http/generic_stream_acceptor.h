@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HTTP_API_GENERIC_STREAM_ACCEPTOR_H
-#define FS_HTTP_API_GENERIC_STREAM_ACCEPTOR_H
+#ifndef FS_HTTP_GENERIC_STREAM_ACCEPTOR_H
+#define FS_HTTP_GENERIC_STREAM_ACCEPTOR_H
 
 #include "common.h"
 #include "peer.h"
@@ -10,7 +10,7 @@
 #include <memory>
 #include <functional>
 
-namespace HttpApi
+namespace Http
 {
 /** \brief Represents an acceptor socket that uses either a local UNIX socket or a normal TCP/IP
  * acceptor.
@@ -73,6 +73,6 @@ public:
 	virtual void asyncAccept(Peer::Socket& socket, AcceptHandler handler) = 0;
 };
 
-} //namespace HttpApi
+} //namespace Http
 
-#endif //FS_HTTP_API_GENERIC_STREAM_ACCEPTOR_H
+#endif //FS_HTTP_GENERIC_STREAM_ACCEPTOR_H

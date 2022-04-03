@@ -1,13 +1,13 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HTTP_API_ROUTER_H
-#define FS_HTTP_API_ROUTER_H
+#ifndef FS_HTTP_ROUTER_H
+#define FS_HTTP_ROUTER_H
 
 #include "responder.h"
 #include "../luascript.h"
 
-namespace HttpApi
+namespace Http
 {
 
 /** \brief Represents the lua HTTP API subsystem
@@ -72,6 +72,6 @@ public:
 	void handleSessionClose(PeerId peerId);
 };
 
-} //namespace HttpApi
+} //namespace Http
 
-#endif //FS_HTTP_API_ROUTER_H
+#endif //FS_HTTP_ROUTER_H

@@ -72,7 +72,7 @@ class ConfigManager
 			DEFAULT_PRIORITY,
 			MAP_AUTHOR,
 			CONFIG_FILE,
-			HTTP_API_IP,
+			HTTP_IP,
 
 			LAST_STRING_CONFIG /* this must be the last one */
 		};
@@ -119,7 +119,7 @@ class ConfigManager
 			DEPOT_PREMIUM_LIMIT,
 			QUEST_TRACKER_FREE_LIMIT,
 			QUEST_TRACKER_PREMIUM_LIMIT,
-			HTTP_API_PORT,
+			HTTP_PORT,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};

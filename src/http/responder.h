@@ -1,14 +1,14 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HTTP_API_RESPONDER_H
-#define FS_HTTP_API_RESPONDER_H
+#ifndef FS_HTTP_RESPONDER_H
+#define FS_HTTP_RESPONDER_H
 
 #include "../tools.h"
 #include "common.h"
 #include <lua.hpp>
 
-namespace HttpApi
+namespace Http
 {
 
 class Peer;
@@ -58,6 +58,6 @@ public:
 	void send();
 };
 
-} //namespace HttpApi
+} //namespace Http
 
-#endif // FS_HTTP_API_RESPONDER_H
+#endif // FS_HTTP_RESPONDER_H

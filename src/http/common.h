@@ -1,14 +1,14 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_HTTP_API_COMMON_H
-#define FS_HTTP_API_COMMON_H
+#ifndef FS_HTTP_COMMON_H
+#define FS_HTTP_COMMON_H
 
 #include <boost/asio.hpp>
 #include <boost/beast/http/message.hpp>
 #include <boost/beast/http/string_body.hpp>
 
-namespace HttpApi
+namespace Http
 {
 
 namespace asio = boost::asio;
@@ -21,6 +21,6 @@ using Response = boost::beast::http::response<boost::beast::http::string_body>;
 using RequestID = uint32_t;
 using PeerId = uint32_t;
 
-} //namespace HttpApi
+} //namespace Http
 
-#endif // FS_HTTP_API_COMMON_H
+#endif // FS_HTTP_COMMON_H
