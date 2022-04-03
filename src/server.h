@@ -76,7 +76,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 class ServiceManager
 {
 	public:
-		ServiceManager(boost::asio::io_service& service);
+		explicit ServiceManager(boost::asio::io_service& service) : io_service(service)	{};
 		~ServiceManager();
 
 		// non-copyable
