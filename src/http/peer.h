@@ -4,9 +4,10 @@
 #ifndef FS_HTTP_PEER_H
 #define FS_HTTP_PEER_H
 
+#include "../otpch.h"
+
 #include "../tools.h"
 #include "common.h"
-#include <boost/beast/http.hpp>
 
 namespace Http
 {

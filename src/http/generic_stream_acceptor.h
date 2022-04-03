@@ -4,11 +4,10 @@
 #ifndef FS_HTTP_GENERIC_STREAM_ACCEPTOR_H
 #define FS_HTTP_GENERIC_STREAM_ACCEPTOR_H
 
+#include "../otpch.h"
+
 #include "common.h"
 #include "peer.h"
-
-#include <memory>
-#include <functional>
 
 namespace Http
 {

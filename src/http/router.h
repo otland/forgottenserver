@@ -22,11 +22,11 @@ class Router final
 	/// Represents the lua interface handle used by the HTTP API subsystem
 	LuaScriptInterface interface{"HTTP API Router interface"};
 	/// Represents the handle to the request handling lua callback
-	int32_t luaRequestHandlerId{-1};
+	int32_t luaRequestHandlerId = -1;
 	/// Represents the handle to the session creation lua callback
-	int32_t luaSessionOpenId{-1};
+	int32_t luaSessionOpenId = -1;
 	/// Represents the handle to the session destruction lua callback
-	int32_t luaSessionCloseId{-1};
+	int32_t luaSessionCloseId = -1;
 
 	void sendInternalServerError(Responder& responder) const;
 public:

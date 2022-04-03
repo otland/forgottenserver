@@ -10,11 +10,9 @@
 namespace Http
 {
 
-using Minutes = boost::posix_time::minutes;
-
 /** \brief Determines the time after which a connection is closed due to inactivity
  */
-const static Minutes TIMER_TIMEOUT{30};
+const static boost::posix_time::minutes TIMER_TIMEOUT{30};
 
 Peer::Peer(Server& server, Router& router, PeerId peerId) :
 	server(server),
@@ -29,8 +27,7 @@ Peer::Peer(Server& server, Router& router, PeerId peerId) :
 
 void Peer::onAccept()
 {
-	auto sharedThis = shared_from_this();
-	g_dispatcher.addTask(createTask([sharedThis, this]() {
+	g_dispatcher.addTask(createTask([sharedThis = shared_from_this(), this]() {
 		router.handleSessionOpen(peerId);
 	}));
 	read();

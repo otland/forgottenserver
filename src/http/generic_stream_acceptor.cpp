@@ -3,19 +3,14 @@
 
 #include "generic_stream_acceptor.h"
 
-#include <memory>
-
 namespace Http
 {
 
 namespace
 {
 
-namespace detail
-{
-
 template<typename Acceptor, typename Endpoint>
-static void open(Acceptor& acceptor, Endpoint endpoint, ErrorCode& error)
+static void openDetail(Acceptor& acceptor, Endpoint endpoint, ErrorCode& error)
 {
 	acceptor.open(endpoint.protocol(), error);
 	if (error) {
@@ -39,18 +34,13 @@ static void open(Acceptor& acceptor, Endpoint endpoint, ErrorCode& error)
 	}
 }
 
-} //namespace detail
+const std::string_view LOCAL_SOCKET_PREFIX = "unix://";
 
-static const std::string LOCAL_SOCKET_PREFIX {"unix://"};
-
-#if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
+#ifdef BOOST_ASIO_HAS_LOCAL_SOCKETS
 class LocalAcceptorWrapper : public GenericStreamAcceptor
 {
 public:
-	explicit LocalAcceptorWrapper(asio::io_service& service):
-		acceptor{service}
-	{
-	}
+	explicit LocalAcceptorWrapper(asio::io_service& service): acceptor{service}	{}
 
 private:
 	using LocalEndpoint = asio::local::stream_protocol::endpoint;
@@ -64,8 +54,8 @@ private:
 		//GenericStreamAcceptor::make() already checked if address is longer than the prefix
 		auto path = address.substr(prefixPosition + LOCAL_SOCKET_PREFIX.size());
 		LocalEndpoint endpoint{path};
-		::unlink(endpoint.path().c_str());
-		detail::open(acceptor, endpoint, error);
+		unlink(endpoint.path().c_str());
+		openDetail(acceptor, endpoint, error);
 	}
 
 	void close(ErrorCode& error) override
@@ -88,10 +78,7 @@ private:
 class IpAcceptorWrapper : public GenericStreamAcceptor
 {
 public:
-	explicit IpAcceptorWrapper(asio::io_service& service):
-		acceptor{service}
-	{
-	}
+	explicit IpAcceptorWrapper(asio::io_service& service): acceptor{service} {}
 
 private:
 	using IpEndpoint = asio::ip::tcp::endpoint;
@@ -102,7 +89,7 @@ private:
 	void open(const std::string& address, uint16_t port, ErrorCode& error) override
 	{
 		IpEndpoint endpoint {asio::ip::address::from_string(address), port};
-		detail::open(acceptor, endpoint, error);
+		openDetail(acceptor, endpoint, error);
 	}
 
 	void close(ErrorCode& error) override
@@ -120,7 +107,7 @@ private:
 
 };
 
-}
+} // anonymous namespace
 
 GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(asio::io_service& service, const std::string& address, uint16_t port)
 {
@@ -129,7 +116,7 @@ GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(asio::io_service& ser
 	if (pos == std::string::npos) {
 		acceptor = std::make_unique<IpAcceptorWrapper>(service);
 	} else if (address.size() > LOCAL_SOCKET_PREFIX.size()) {
-#if defined(BOOST_ASIO_HAS_LOCAL_SOCKETS)
+#ifdef BOOST_ASIO_HAS_LOCAL_SOCKETS
 		acceptor = std::make_unique<LocalAcceptorWrapper>(service);
 #else
 		std::cerr << "HTTP API makeAcceptor error: Local stream sockets not supported" << std::endl;
@@ -141,4 +128,4 @@ GenericStreamAcceptor::Pointer GenericStreamAcceptor::make(asio::io_service& ser
 	return acceptor;
 }
 
-} //namespace Http
+} // namespace Http
