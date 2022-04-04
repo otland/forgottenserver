@@ -403,7 +403,7 @@ class Game
 
 		void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
 
-		std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player* player);
+		std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
 
 		void cleanup();
 		void shutdown();

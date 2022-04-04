@@ -5169,7 +5169,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			return;
 		}
 
-		const auto& itemList = getMarketItemList(it.wareId, amount, player);
+		const auto& itemList = getMarketItemList(it.wareId, amount, *player);
 		if (itemList.empty()) {
 			return;
 		}
@@ -5316,7 +5316,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	uint64_t totalPrice = offer.price * amount;
 
 	if (offer.type == MARKETACTION_BUY) {
-		const auto& itemList = getMarketItemList(it.wareId, amount, player);
+		const auto& itemList = getMarketItemList(it.wareId, amount, *player);
 		if (itemList.empty()) {
 			return;
 		}
@@ -5464,22 +5464,18 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	}
 }
 
-std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player* player)
+std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player)
 {
-	std::vector<Item*> itemList;
-
-	if (!player) {
-		return itemList;
-	}
-
 	uint16_t count = 0;
-	std::list<Container*> containers { player->getInbox() };
+	std::list<Container*> containers{player.getInbox()};
 
-	for (const auto& chest : player->depotChests) {
+	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {
 			containers.push_front(chest.second);
 		}
 	}
+
+	std::vector<Item*> itemList;
 
 	do {
 		Container* container = containers.front();
@@ -5514,7 +5510,7 @@ std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientC
 		}
 	} while (!containers.empty());
 
-	return std::vector<Item*>();
+	return {};
 }
 
 void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
