@@ -24,6 +24,7 @@
 #include "spectators.h"
 #include "storeinbox.h"
 #include "weapons.h"
+#include "tools.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -833,7 +834,12 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT_BOX_FIRST + depotId)).first;
+	uint16_t depotItemId = getDepotBoxId(depotId);
+	if (depotItemId == 0) {
+		return nullptr;
+	}
+
+	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
 	return it->second;
 }
@@ -847,8 +853,11 @@ DepotLocker& Player::getDepotLocker()
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		if (depotChest) {
-			for (int16_t depotId = ITEM_DEPOT_BOX_LAST - ITEM_DEPOT_BOX_FIRST; depotId >= 0; --depotId) {
-				depotChest->internalAddThing(getDepotChest(depotId, true));
+			// adding in reverse to align them from first to last
+			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
+				if (DepotChest* box = getDepotChest(depotId, true)) {
+					depotChest->internalAddThing(box);
+				}
 			}
 
 			depotLocker->internalAddThing(depotChest);

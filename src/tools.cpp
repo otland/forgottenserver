@@ -730,6 +730,35 @@ SkullNames skullNames = {
 	{"orange",	SKULL_ORANGE},
 };
 
+std::vector<uint16_t> depotBoxes = {
+	ITEM_DEPOT_BOX_I,
+	ITEM_DEPOT_BOX_II,
+	ITEM_DEPOT_BOX_III,
+	ITEM_DEPOT_BOX_IV,
+	ITEM_DEPOT_BOX_V,
+	ITEM_DEPOT_BOX_VI,
+	ITEM_DEPOT_BOX_VII,
+	ITEM_DEPOT_BOX_VIII,
+	ITEM_DEPOT_BOX_IX,
+	ITEM_DEPOT_BOX_X,
+	ITEM_DEPOT_BOX_XI,
+	ITEM_DEPOT_BOX_XII,
+	ITEM_DEPOT_BOX_XIII,
+	ITEM_DEPOT_BOX_XIV,
+	ITEM_DEPOT_BOX_XV,
+	ITEM_DEPOT_BOX_XVI,
+	ITEM_DEPOT_BOX_XVII,
+	ITEM_DEPOT_BOX_XVIII
+};
+
+uint16_t getDepotBoxId(uint16_t index)
+{
+	if (index >= depotBoxes.size()) {
+		return 0;
+	}
+	return depotBoxes[index];
+}
+
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
 	auto magicEffect = magicEffectNames.find(strValue);
