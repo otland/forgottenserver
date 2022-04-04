@@ -41,10 +41,10 @@ class Thing
 		virtual int32_t getThrowRange() const = 0;
 		virtual bool isPushable() const = 0;
 
-		virtual Container* getContainer() {
+		virtual Container* asContainer() {
 			return nullptr;
 		}
-		virtual const Container* getContainer() const {
+		virtual const Container* asContainer() const {
 			return nullptr;
 		}
 		virtual Item* asItem() {

@@ -1936,7 +1936,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		containerList.pop_front();
 
 		for (Item* item : container->getItemList()) {
-			Container* c = item->getContainer();
+			Container* c = item->asContainer();
 			if (c && !c->empty()) {
 				containerList.push_front(c);
 				continue;
@@ -2242,7 +2242,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 
 	msg.addString(traderName);
 
-	if (const Container* tradeContainer = item->getContainer()) {
+	if (const Container* tradeContainer = item->asContainer()) {
 		std::list<const Container*> listContainer {tradeContainer};
 		std::list<const Item*> itemList {tradeContainer};
 		while (!listContainer.empty()) {
@@ -2250,7 +2250,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const Ite
 			listContainer.pop_front();
 
 			for (Item* containerItem : container->getItemList()) {
-				Container* tmpContainer = containerItem->getContainer();
+				Container* tmpContainer = containerItem->asContainer();
 				if (tmpContainer) {
 					listContainer.push_back(tmpContainer);
 				}

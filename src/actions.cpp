@@ -342,7 +342,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (Container* container = item->getContainer()) {
+	if (Container* container = item->asContainer()) {
 		Container* openContainer;
 
 		//depot container

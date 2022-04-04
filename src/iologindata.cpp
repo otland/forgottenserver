@@ -441,7 +441,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			Item* item = pair.first;
 			int32_t pid = pair.second;
 
-			Container* itemContainer = item->getContainer();
+			Container* itemContainer = item->asContainer();
 			if (itemContainer) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
@@ -457,7 +457,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				Container* container = it2->second.first->asContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -492,7 +492,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				Container* container = it2->second.first->asContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -520,7 +520,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				Container* container = it2->second.first->asContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -548,7 +548,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				Container* container = it2->second.first->asContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -591,7 +591,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		Item* item = it.second;
 		++runningId;
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = item->asContainer()) {
 			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
@@ -630,7 +630,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		for (Item* item : container->getItemList()) {
 			++runningId;
 
-			Container* subContainer = item->getContainer();
+			Container* subContainer = item->asContainer();
 			if (subContainer) {
 				containers.emplace_back(subContainer, runningId);
 

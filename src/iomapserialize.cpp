@@ -133,7 +133,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 		Item* item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
+				Container* container = item->asContainer();
 				if (container && !loadContainer(propStream, container)) {
 					delete item;
 					return false;
@@ -167,7 +167,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
+				Container* container = item->asContainer();
 				if (container && !loadContainer(propStream, container)) {
 					return false;
 				}
@@ -181,7 +181,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
-				Container* container = dummy->getContainer();
+				Container* container = dummy->asContainer();
 				if (container) {
 					if (!loadContainer(propStream, container)) {
 						return false;
@@ -200,7 +200,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 {
-	const Container* container = item->getContainer();
+	const Container* container = item->asContainer();
 
 	// Write ID & props
 	stream.write<uint16_t>(item->getID());
@@ -231,7 +231,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
-		if (!(it.moveable || it.forceSerialize || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText || item->getBed())) {
+		if (!(it.moveable || it.forceSerialize || item->getDoor() || (item->asContainer() && !item->asContainer()->empty()) || it.canWriteText || item->getBed())) {
 			continue;
 		}
 

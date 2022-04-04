@@ -1463,7 +1463,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 		}
 
 		if (depthSearch) {
-			Container* container = item->getContainer();
+			Container* container = item->asContainer();
 			if (container) {
 				containers.push_back(container);
 			}
@@ -1478,7 +1478,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 				return item;
 			}
 
-			Container* subContainer = item->getContainer();
+			Container* subContainer = item->asContainer();
 			if (subContainer) {
 				containers.push_back(subContainer);
 			}
@@ -1513,7 +1513,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			continue;
 		}
 
-		Container* container = item->getContainer();
+		Container* container = item->asContainer();
 		if (container) {
 			containers.push_back(container);
 		} else {
@@ -1529,7 +1529,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 	while (i < containers.size()) {
 		Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
-			Container* tmpContainer = item->getContainer();
+			Container* tmpContainer = item->asContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
 			} else {
@@ -1816,7 +1816,7 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 		return;
 	}
 
-	Container* backpack = item->getContainer();
+	Container* backpack = item->asContainer();
 	if (!backpack) {
 		return;
 	}
@@ -2643,7 +2643,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	Container* tradeItemContainer = tradeItem->getContainer();
+	Container* tradeItemContainer = tradeItem->asContainer();
 	if (tradeItemContainer) {
 		for (const auto& it : tradeItems) {
 			Item* item = it.first;
@@ -2657,7 +2657,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 				return;
 			}
 
-			Container* container = item->getContainer();
+			Container* container = item->asContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -2671,7 +2671,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 				return;
 			}
 
-			Container* container = item->getContainer();
+			Container* container = item->asContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -2679,7 +2679,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		}
 	}
 
-	Container* tradeContainer = tradeItem->getContainer();
+	Container* tradeContainer = tradeItem->asContainer();
 	if (tradeContainer && tradeContainer->getItemHoldingCount() + 1 > 100) {
 		player->sendCancelMessage("You can only trade up to 100 objects at once.");
 		return;
@@ -2884,7 +2884,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 		return;
 	}
 
-	Container* tradeContainer = tradeItem->getContainer();
+	Container* tradeContainer = tradeItem->asContainer();
 	if (!tradeContainer) {
 		return;
 	}
@@ -2894,7 +2894,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 	while (i < containers.size()) {
 		const Container* container = containers[i++];
 		for (Item* item : container->getItemList()) {
-			Container* tmpContainer = item->getContainer();
+			Container* tmpContainer = item->asContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
 			}
@@ -5452,7 +5452,7 @@ std::forward_list<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t suffi
 		containers.pop_front();
 
 		for (Item* item : container->getItemList()) {
-			Container* c = item->getContainer();
+			Container* c = item->asContainer();
 			if (c && !c->empty()) {
 				containers.push_back(c);
 				continue;

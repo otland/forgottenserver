@@ -186,7 +186,7 @@ Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 	if (!item) {
 		return nullptr;
 	}
-	return item->getContainer();
+	return item->asContainer();
 }
 
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
@@ -692,7 +692,7 @@ void LuaScriptInterface::setWeakMetatable(lua_State* L, int32_t index, const std
 
 void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Item* item)
 {
-	if (item->getContainer()) {
+	if (item->asContainer()) {
 		luaL_getmetatable(L, "Container");
 	} else if (item->getTeleport()) {
 		luaL_getmetatable(L, "Teleport");
@@ -7239,7 +7239,7 @@ int LuaScriptInterface::luaContainerGetEmptySlots(lua_State* L)
 	bool recursive = getBoolean(L, 2, false);
 	if (recursive) {
 		for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-			if (Container* tmpContainer = (*it)->getContainer()) {
+			if (Container* tmpContainer = (*it)->asContainer()) {
 				slots += tmpContainer->capacity() - tmpContainer->size();
 			}
 		}

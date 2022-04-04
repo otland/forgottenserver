@@ -1049,14 +1049,14 @@ void Player::openSavedContainers()
 			continue;
 		}
 
-		Container* itemContainer = item->getContainer();
+		Container* itemContainer = item->asContainer();
 		if (itemContainer) {
 			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 			if (cid > 0) {
 				openContainersList.emplace(cid, itemContainer);
 			}
 			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
-				Container* subContainer = (*it)->getContainer();
+				Container* subContainer = (*it)->asContainer();
 				if (subContainer) {
 					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 					if (subcid > 0) {
@@ -1105,7 +1105,7 @@ void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemT
 		checkTradeState(item);
 
 		if (tradeItem) {
-			const Container* container = item->getContainer();
+			const Container* container = item->asContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
@@ -1472,7 +1472,7 @@ void Player::onRemoveInventoryItem(Item* item)
 		checkTradeState(item);
 
 		if (tradeItem) {
-			const Container* container = item->getContainer();
+			const Container* container = item->asContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(this);
 			}
@@ -2223,7 +2223,7 @@ bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature,
 Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
-	if (corpse && corpse->getContainer()) {
+	if (corpse && corpse->asContainer()) {
 		std::unordered_map<std::string, uint16_t> names;
 		for (const auto& killer : getKillers()) {
 			++names[killer->getName()];
@@ -2396,7 +2396,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 		return true;
 	}
 
-	uint32_t itemWeight = item->getContainer() ? item->getWeight() : item->getBaseWeight();
+	uint32_t itemWeight = item->asContainer() ? item->getWeight() : item->getBaseWeight();
 	if (item->isStackable()) {
 		itemWeight *= count;
 	}
@@ -2644,14 +2644,14 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		for (int32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
 			Item* inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
-				if (Container* subContainer = inventoryItem->getContainer()) {
+				if (Container* subContainer = inventoryItem->asContainer()) {
 					uint32_t queryCount = 0;
 					subContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
 					n += queryCount;
 
 					//iterate through all items, including sub-containers (deep search)
 					for (ContainerIterator it = subContainer->iterator(); it.hasNext(); it.advance()) {
-						if (Container* tmpContainer = (*it)->getContainer()) {
+						if (Container* tmpContainer = (*it)->asContainer()) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags);
 							n += queryCount;
@@ -2765,10 +2765,10 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 						}
 					}
 
-					if (Container* subContainer = inventoryItem->getContainer()) {
+					if (Container* subContainer = inventoryItem->asContainer()) {
 						containers.push_back(subContainer);
 					}
-				} else if (Container* subContainer = inventoryItem->getContainer()) {
+				} else if (Container* subContainer = inventoryItem->asContainer()) {
 					containers.push_back(subContainer);
 				}
 			} else if (queryAdd(slotIndex, *item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { //empty slot
@@ -2795,7 +2795,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				}
 
 				for (Item* tmpContainerItem : tmpContainer->getItemList()) {
-					if (Container* subContainer = tmpContainerItem->getContainer()) {
+					if (Container* subContainer = tmpContainerItem->asContainer()) {
 						containers.push_back(subContainer);
 					}
 				}
@@ -2821,7 +2821,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 					return tmpContainer;
 				}
 
-				if (Container* subContainer = tmpItem->getContainer()) {
+				if (Container* subContainer = tmpItem->asContainer()) {
 					containers.push_back(subContainer);
 				}
 
@@ -2996,7 +2996,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 			count += Item::countByType(item, subType);
 		}
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = item->asContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
@@ -3035,7 +3035,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 				g_game.internalRemoveItems(std::move(itemList), amount, Item::items[itemId].stackable);
 				return true;
 			}
-		} else if (Container* container = item->getContainer()) {
+		} else if (Container* container = item->asContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				Item* containerItem = *it;
 				if (containerItem->getID() == itemId) {
@@ -3068,7 +3068,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 
 		countMap[item->getID()] += Item::countByType(item, -1);
 
-		if (Container* container = item->getContainer()) {
+		if (Container* container = item->asContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				countMap[(*it)->getID()] += Item::countByType(*it, -1);
 			}
@@ -3100,10 +3100,10 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(i ? i->asContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = i->asContainer()->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = oldParent != this;
 		}
@@ -3115,7 +3115,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 	}
 
 	if (const Item* item = thing->asItem()) {
-		if (const Container* container = item->getContainer()) {
+		if (const Container* container = item->asContainer()) {
 			onSendContainer(container);
 		}
 
@@ -3156,10 +3156,10 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
-		assert(i ? i->getContainer() != nullptr : true);
+		assert(i ? i->asContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = i->asContainer()->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = newParent != this;
 		}
@@ -3177,7 +3177,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 			}
 		}
 
-		if (const Container* container = item->getContainer()) {
+		if (const Container* container = item->asContainer()) {
 			if (container->isRemoved() || !Position::areInRange<1, 1, 0>(getPosition(), container->getPosition())) {
 				autoCloseContainers(container);
 			} else if (container->getTopParent() == this) {
@@ -3224,7 +3224,7 @@ bool Player::updateSaleShopList(const Item* item)
 	if (!isCurrency) {
 		auto it = std::find_if(shopItemList.begin(), shopItemList.end(), [itemId](const ShopInfo& shopInfo) { return shopInfo.itemId == itemId && shopInfo.sellPrice != 0; });
 		if (it == shopItemList.end()) {
-			const Container* container = item->getContainer();
+			const Container* container = item->asContainer();
 			if (!container) {
 				return false;
 			}
@@ -4627,7 +4627,7 @@ uint64_t Player::getMoney() const
 			continue;
 		}
 
-		const Container* container = item->getContainer();
+		const Container* container = item->asContainer();
 		if (container) {
 			containers.push_back(container);
 		} else {
@@ -4639,7 +4639,7 @@ uint64_t Player::getMoney() const
 	while (i < containers.size()) {
 		const Container* container = containers[i++];
 		for (const Item* item : container->getItemList()) {
-			const Container* tmpContainer = item->getContainer();
+			const Container* tmpContainer = item->asContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
 			} else {

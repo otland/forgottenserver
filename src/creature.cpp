@@ -769,7 +769,7 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 		}
 
 		if (corpse) {
-			dropLoot(corpse->getContainer(), lastHitCreature);
+			dropLoot(corpse->asContainer(), lastHitCreature);
 		}
 	}
 

@@ -43,10 +43,10 @@ class Container : public Item, public Cylinder
 
 		Item* clone() const override final;
 
-		Container* getContainer() override final {
+		Container* asContainer() override final {
 			return this;
 		}
-		const Container* getContainer() const override final {
+		const Container* asContainer() const override final {
 			return this;
 		}
 

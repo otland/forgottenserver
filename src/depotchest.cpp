@@ -27,7 +27,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 		}
 
 		if (item->getTopParent() != this) {
-			if (const Container* container = item->getContainer()) {
+			if (const Container* container = item->asContainer()) {
 				addCount = container->getItemHoldingCount() + 1;
 			} else {
 				addCount = 1;

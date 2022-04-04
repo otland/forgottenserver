@@ -216,7 +216,7 @@ bool House::transferToDepot(Player* player) const
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
 				} else {
-					Container* container = item->getContainer();
+					Container* container = item->asContainer();
 					if (container) {
 						for (Item* containerItem : container->getItemList()) {
 							moveItemList.push_back(containerItem);

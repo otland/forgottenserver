@@ -112,7 +112,7 @@ bool Mailbox::sendItem(Item* item) const
 
 bool Mailbox::getReceiver(Item* item, std::string& name) const
 {
-	const Container* container = item->getContainer();
+	const Container* container = item->asContainer();
 	if (container) {
 		for (Item* containerItem : container->getItemList()) {
 			if (containerItem->getID() == ITEM_LABEL && getReceiver(containerItem, name)) {
