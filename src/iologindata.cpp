@@ -667,12 +667,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		propWriteStream.clear();
 		item->serializeAttr(propWriteStream);
 
-		size_t attributesSize;
-		const char* attributes = propWriteStream.getStream(attributesSize);
-
 		if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), pid, runningId,
 		                                     item->getID(), item->getSubType(),
-		                                     db.escapeBlob(attributes, attributesSize)))) {
+		                                     db.escapeString(propWriteStream.getStream())))) {
 			return false;
 		}
 	}
@@ -709,12 +706,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			propWriteStream.clear();
 			item->serializeAttr(propWriteStream);
 
-			size_t attributesSize;
-			const char* attributes = propWriteStream.getStream(attributesSize);
-
 			if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), parentId,
 			                                     runningId, item->getID(), item->getSubType(),
-			                                     db.escapeBlob(attributes, attributesSize)))) {
+			                                     db.escapeString(propWriteStream.getStream())))) {
 				return false;
 			}
 		}
@@ -750,9 +744,6 @@ bool IOLoginData::savePlayer(Player* player)
 			propWriteStream.write<uint8_t>(CONDITIONATTR_END);
 		}
 	}
-
-	size_t conditionsSize;
-	const char* conditions = propWriteStream.getStream(conditionsSize);
 
 	// First, an UPDATE query to write the player itself
 	std::ostringstream query;
@@ -798,7 +789,7 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = INET6_ATON('" << player->lastIP.to_string() << "'),";
 	}
 
-	query << "`conditions` = " << db.escapeBlob(conditions, conditionsSize) << ',';
+	query << "`conditions` = " << db.escapeString(propWriteStream.getStream()) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int64_t skullTime = 0;

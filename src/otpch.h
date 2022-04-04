@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <deque>
+#include <filesystem>
 #include <fmt/color.h>
 #include <forward_list>
 #include <functional>
