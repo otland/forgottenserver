@@ -183,12 +183,12 @@ void Container::onAddContainerItem(Item* item)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendAddContainerItem(this, item);
+		spectator->asPlayer()->sendAddContainerItem(this, item);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onAddContainerItem(item);
+		spectator->asPlayer()->onAddContainerItem(item);
 	}
 }
 
@@ -199,12 +199,12 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
+		spectator->asPlayer()->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
+		spectator->asPlayer()->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
@@ -215,12 +215,12 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//send change to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendRemoveContainerItem(this, index);
+		spectator->asPlayer()->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onRemoveContainerItem(this, item);
+		spectator->asPlayer()->onRemoveContainerItem(this, item);
 	}
 }
 
@@ -296,7 +296,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	const Cylinder* const topParent = getTopParent();
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}
@@ -382,7 +382,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}

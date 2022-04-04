@@ -735,7 +735,7 @@ bool Player::canSeeCreature(const Creature* creature) const
 		return false;
 	}
 
-	if (!creature->getPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
+	if (!creature->asPlayer() && !canSeeInvisibility() && creature->isInvisible()) {
 		return false;
 	}
 	return true;
@@ -752,7 +752,7 @@ bool Player::canWalkthrough(const Creature* creature) const
 		return true;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = creature->asPlayer();
 	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
@@ -788,7 +788,7 @@ bool Player::canWalkthroughEx(const Creature* creature) const
 		return true;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = creature->asPlayer();
 	if (!player || !g_config.getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
@@ -882,7 +882,7 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
+	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->asPlayer()) {
 		setAttackedCreature(nullptr);
 	}
 
@@ -1233,7 +1233,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
-		if (attackedCreature->getPlayer()) {
+		if (attackedCreature->asPlayer()) {
 			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 				setAttackedCreature(nullptr);
 				onAttackedCreatureDisappear(false);
@@ -1242,7 +1242,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	} else if (zone == ZONE_NORMAL) {
 		//attackedCreature can leave a pvp zone if not pzlocked
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-			if (attackedCreature->getPlayer()) {
+			if (attackedCreature->asPlayer()) {
 				setAttackedCreature(nullptr);
 				onAttackedCreatureDisappear(false);
 			}
@@ -1771,7 +1771,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				spectator->asPlayer()->sendTextMessage(message);
 			}
 		}
 	}
@@ -1859,7 +1859,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				spectator->asPlayer()->sendTextMessage(message);
 			}
 		}
 	}
@@ -3376,7 +3376,7 @@ void Player::doAttacking(uint32_t)
 uint64_t Player::getGainedExperience(Creature* attacker) const
 {
 	if (g_config.getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {
-		Player* attackerPlayer = attacker->getPlayer();
+		Player* attackerPlayer = attacker->asPlayer();
 		if (attackerPlayer && attackerPlayer != this && skillLoss && std::abs(static_cast<int32_t>(attackerPlayer->getLevel() - level)) <= g_config.getNumber(ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)) {
 			return std::max<uint64_t>(0, std::floor(getLostExperience() * getDamageRatio(attacker) * 0.75));
 		}
@@ -3580,7 +3580,7 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 		return;
 	}
 
-	Player* targetPlayer = target->getPlayer();
+	Player* targetPlayer = target->asPlayer();
 	if (targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
 		if (!pzLocked && g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 			pzLocked = true;
@@ -3661,10 +3661,10 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 	if (target && party) {
 		Player* tmpPlayer = nullptr;
 
-		if (target->getPlayer()) {
-			tmpPlayer = target->getPlayer();
+		if (target->asPlayer()) {
+			tmpPlayer = target->asPlayer();
 		} else if (Creature* targetMaster = target->getMaster()) {
-			if (Player* targetMasterPlayer = targetMaster->getPlayer()) {
+			if (Player* targetMasterPlayer = targetMaster->asPlayer()) {
 				tmpPlayer = targetMasterPlayer;
 			}
 		}
@@ -3685,7 +3685,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit/* = true*/)
 
 	Creature::onKilledCreature(target, lastHit);
 
-	Player* targetPlayer = target->getPlayer();
+	Player* targetPlayer = target->asPlayer();
 	if (!targetPlayer) {
 		return false;
 	}
@@ -3726,7 +3726,7 @@ void Player::onGainExperience(uint64_t gainExp, Creature* target)
 		return;
 	}
 
-	if (target && !target->getPlayer() && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
+	if (target && !target->asPlayer() && party && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
 		party->shareExperience(gainExp, target);
 		//We will get a share of the experience through the sharing mechanism
 		return;
@@ -3768,12 +3768,12 @@ bool Player::lastHitIsPlayer(Creature* lastHitCreature)
 		return false;
 	}
 
-	if (lastHitCreature->getPlayer()) {
+	if (lastHitCreature->asPlayer()) {
 		return true;
 	}
 
 	Creature* lastHitMaster = lastHitCreature->getMaster();
-	return lastHitMaster && lastHitMaster->getPlayer();
+	return lastHitMaster && lastHitMaster->asPlayer();
 }
 
 void Player::changeHealth(int32_t healthChange, bool sendHealthChange/* = true*/)
@@ -3948,7 +3948,7 @@ Skulls_t Player::getSkullClient(const Creature* creature) const
 		return SKULL_NONE;
 	}
 
-	const Player* player = creature->getPlayer();
+	const Player* player = creature->asPlayer();
 	if (!player || player->getSkull() != SKULL_NONE) {
 		return Creature::getSkullClient(creature);
 	}

@@ -109,7 +109,7 @@ void Npc::reload()
 	SpectatorVec players;
 	g_game.map.getSpectators(players, getPosition(), true, true);
 	for (const auto& player : players) {
-		spectators.insert(player->getPlayer());
+		spectators.insert(player->asPlayer());
 	}
 
 	const bool hasSpectators = !spectators.empty();
@@ -254,7 +254,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		SpectatorVec players;
 		g_game.map.getSpectators(players, getPosition(), true, true);
 		for (const auto& player : players) {
-			spectators.insert(player->getPlayer());
+			spectators.insert(player->asPlayer());
 		}
 
 		const bool hasSpectators = !spectators.empty();
@@ -267,7 +267,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (Player* player = creature->getPlayer()) {
+	} else if (Player* player = creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
@@ -286,7 +286,7 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (Player* player = creature->getPlayer()) {
+	} else if (Player* player = creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -301,13 +301,13 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	if (creature == this || creature->getPlayer()) {
+	if (creature == this || creature->asPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
 		}
 
 		if (creature != this) {
-			Player* player = creature->getPlayer();
+			Player* player = creature->asPlayer();
 
 			// if player is now in range, add to spectators list, otherwise erase
 			if (player->canSee(position)) {
@@ -328,7 +328,7 @@ void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string
 	}
 
 	//only players for script events
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 	if (player) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureSay(player, type, text);

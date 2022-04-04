@@ -191,7 +191,7 @@ void Creature::onWalk()
 		if (getNextStep(dir, flags)) {
 			ReturnValue ret = g_game.internalMoveCreature(this, dir, flags);
 			if (ret != RETURNVALUE_NOERROR) {
-				if (Player* player = getPlayer()) {
+				if (Player* player = asPlayer()) {
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
@@ -248,7 +248,7 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk()
 {
-	Player* player = getPlayer();
+	Player* player = asPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -259,7 +259,7 @@ void Creature::startAutoWalk()
 
 void Creature::startAutoWalk(Direction direction)
 {
-	Player* player = getPlayer();
+	Player* player = asPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -276,7 +276,7 @@ void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 		return;
 	}
 
-	Player* player = getPlayer();
+	Player* player = asPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -674,8 +674,8 @@ void Creature::onDeath()
 
 			if (attacker != this) {
 				uint64_t gainExp = getGainedExperience(attacker);
-				if (Player* attackerPlayer = attacker->getPlayer()) {
-					attackerPlayer->removeAttacked(getPlayer());
+				if (Player* attackerPlayer = attacker->asPlayer()) {
+					attackerPlayer->removeAttacked(asPlayer());
 
 					Party* party = attackerPlayer->getParty();
 					if (party && party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
@@ -874,7 +874,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	}
 
 	if (attacker) {
-		if (Player* attackerPlayer = attacker->getPlayer()) {
+		if (Player* attackerPlayer = attacker->asPlayer()) {
 			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 					continue;
@@ -1160,7 +1160,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		spectator->asPlayer()->sendTextMessage(message);
 	}
 }
 

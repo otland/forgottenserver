@@ -161,7 +161,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	if (tile) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				if (Player* player = (*creatures)[i]->getPlayer()) {
+				if (Player* player = (*creatures)[i]->asPlayer()) {
 					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
@@ -271,7 +271,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			if (tmpPlayer->canSeeCreature(&creature)) {
 				oldStackPosVector.push_back(oldTile.getClientIndexOfCreature(tmpPlayer, &creature));
 			} else {
@@ -312,7 +312,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport/* =
 	//send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			//Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
@@ -427,7 +427,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				} else {
 					const SpectatorVec& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
-						if (spectator->getPlayer()) {
+						if (spectator->asPlayer()) {
 							spectators.emplace_back(spectator);
 						}
 					}
@@ -1005,7 +1005,7 @@ void QTreeLeafNode::addCreature(Creature* c)
 {
 	creature_list.push_back(c);
 
-	if (c->getPlayer()) {
+	if (c->asPlayer()) {
 		player_list.push_back(c);
 	}
 }
@@ -1017,7 +1017,7 @@ void QTreeLeafNode::removeCreature(Creature* c)
 	*iter = creature_list.back();
 	creature_list.pop_back();
 
-	if (c->getPlayer()) {
+	if (c->asPlayer()) {
 		iter = std::find(player_list.begin(), player_list.end(), c);
 		assert(iter != player_list.end());
 		*iter = player_list.back();

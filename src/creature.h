@@ -94,10 +94,10 @@ class Creature : virtual public Thing
 		const Creature* getCreature() const override final {
 			return this;
 		}
-		virtual Player* getPlayer() {
+		virtual Player* asPlayer() {
 			return nullptr;
 		}
-		virtual const Player* getPlayer() const {
+		virtual const Player* asPlayer() const {
 			return nullptr;
 		}
 		virtual Npc* getNpc() {

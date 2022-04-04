@@ -1463,7 +1463,7 @@ void ProtocolGame::sendCreatureShield(const Creature* creature)
 	NetworkMessage msg;
 	msg.addByte(0x91);
 	msg.add<uint32_t>(creature->getID());
-	msg.addByte(player->getPartyShield(creature->getPlayer()));
+	msg.addByte(player->getPartyShield(creature->asPlayer()));
 	writeToOutputBuffer(msg);
 }
 
@@ -2319,7 +2319,7 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 	msg.addByte(0x00); // "(Traded)" suffix after player name
 
 	//Add level only for players
-	if (const Player* speaker = creature->getPlayer()) {
+	if (const Player* speaker = creature->asPlayer()) {
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2351,7 +2351,7 @@ void ProtocolGame::sendToChannel(const Creature* creature, SpeakClasses type, co
 		msg.addByte(0x00); // "(Traded)" suffix after player name
 
 		//Add level only for players
-		if (const Player* speaker = creature->getPlayer()) {
+		if (const Player* speaker = creature->asPlayer()) {
 			msg.add<uint16_t>(speaker->getLevel());
 		} else {
 			msg.add<uint16_t>(0x00);
@@ -3265,14 +3265,14 @@ void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
 void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
-	const Player* otherPlayer = creature->getPlayer();
+	const Player* otherPlayer = creature->asPlayer();
 	const Player* masterPlayer = nullptr;
 	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
 		const Creature* master = creature->getMaster();
 		if (master) {
-			masterPlayer = master->getPlayer();
+			masterPlayer = master->asPlayer();
 			if (masterPlayer) {
 				masterId = master->getID();
 				creatureType = CREATURETYPE_SUMMON_OWN;
@@ -3342,7 +3342,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	// Player vocation info
 	if (creatureType == CREATURETYPE_PLAYER) {
-		const Player* otherCreature = creature->getPlayer();
+		const Player* otherCreature = creature->asPlayer();
 		if (otherCreature) {
 			msg.addByte(otherCreature->getVocation()->getClientId());
 		} else {

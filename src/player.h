@@ -96,10 +96,10 @@ class Player final : public Creature, public Cylinder
 		Player(const Player&) = delete;
 		Player& operator=(const Player&) = delete;
 
-		Player* getPlayer() override {
+		Player* asPlayer() override {
 			return this;
 		}
-		const Player* getPlayer() const override {
+		const Player* asPlayer() const override {
 			return this;
 		}
 
@@ -783,7 +783,7 @@ class Player final : public Creature, public Cylinder
 				return;
 			}
 
-			if (creature->getPlayer()) {
+			if (creature->asPlayer()) {
 				if (visible) {
 					client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 				} else {

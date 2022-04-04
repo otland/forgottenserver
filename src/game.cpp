@@ -544,7 +544,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
 		}
 	}
@@ -573,7 +573,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
+		if (Player* player = spectator->asPlayer()) {
 			oldStackPosVector.push_back(player->canSeeCreature(creature) ? tile->getClientIndexOfCreature(player, creature) : -1);
 		}
 	}
@@ -585,7 +585,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 	//send to client
 	size_t i = 0;
 	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
+		if (Player* player = spectator->asPlayer()) {
 			player->sendRemoveTileCreature(creature, tilePosition, oldStackPosVector[i++]);
 		}
 	}
@@ -789,7 +789,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
 	Position destPos = getNextPosition(direction, currentPos);
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 
 	bool diagonalMovement = (direction & DIRECTION_DIAGONAL_MASK) != 0;
 	if (player && !diagonalMovement) {
@@ -1072,7 +1072,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index,
                                    Item* item, uint32_t count, Item** _moveItem, uint32_t flags /*= 0*/, Creature* actor/* = nullptr*/, Item* tradeItem/* = nullptr*/, const Position* fromPos /*= nullptr*/, const Position* toPos/*= nullptr*/)
 {
-	Player* actorPlayer = actor ? actor->getPlayer() : nullptr;
+	Player* actorPlayer = actor ? actor->asPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret = g_events->eventPlayerOnMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		if (ret != RETURNVALUE_NOERROR) {
@@ -2209,7 +2209,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
 	if (!g_config.getBoolean(ConfigManager::AIMBOT_HOTKEY_ENABLED)) {
-		if (creature->getPlayer() || isHotkey) {
+		if (creature->asPlayer() || isHotkey) {
 			player->sendCancelMessage(RETURNVALUE_DIRECTPLAYERSHOOT);
 			return;
 		}
@@ -3564,7 +3564,7 @@ void Game::playerWhisper(Player* player, const std::string& text)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* spectatorPlayer = spectator->getPlayer()) {
+		if (Player* spectatorPlayer = spectator->asPlayer()) {
 			if (!Position::areInRange<1, 1>(player->getPosition(), spectatorPlayer->getPosition())) {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
 			} else {
@@ -3684,7 +3684,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureTurn(creature);
+		spectator->asPlayer()->sendCreatureTurn(creature);
 	}
 	return true;
 }
@@ -3722,7 +3722,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			if (!ghostMode || tmpPlayer->canSeeCreature(creature)) {
 				tmpPlayer->sendCreatureSay(creature, type, text, pos);
 			}
@@ -3823,7 +3823,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendChangeSpeed(creature, creature->getStepSpeed());
+		spectator->asPlayer()->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
 }
 
@@ -3843,7 +3843,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
+		spectator->asPlayer()->sendCreatureChangeOutfit(creature, outfit);
 	}
 }
 
@@ -3853,7 +3853,7 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureChangeVisible(creature, visible);
+		spectator->asPlayer()->sendCreatureChangeVisible(creature, visible);
 	}
 }
 
@@ -3863,7 +3863,7 @@ void Game::changeLight(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureLight(creature);
+		spectator->asPlayer()->sendCreatureLight(creature);
 	}
 }
 
@@ -3873,7 +3873,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		return true;
 	}
 
-	if (target->getPlayer() && target->isInGhostMode()) {
+	if (target->asPlayer() && target->isInGhostMode()) {
 		return true;
 	}
 
@@ -4057,12 +4057,12 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 		Player* attackerPlayer;
 		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
+			attackerPlayer = attacker->asPlayer();
 		} else {
 			attackerPlayer = nullptr;
 		}
 
-		Player* targetPlayer = target->getPlayer();
+		Player* targetPlayer = target->asPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
@@ -4095,7 +4095,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			SpectatorVec spectators;
 			map.getSpectators(spectators, targetPos, false, true);
 			for (Creature* spectator : spectators) {
-				Player* tmpPlayer = spectator->getPlayer();
+				Player* tmpPlayer = spectator->asPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
 					message.text = fmt::format("You heal {:s} for {:s}.", target->getNameDescription(), damageString);
@@ -4135,12 +4135,12 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 		Player* attackerPlayer;
 		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
+			attackerPlayer = attacker->asPlayer();
 		} else {
 			attackerPlayer = nullptr;
 		}
 
-		Player* targetPlayer = target->getPlayer();
+		Player* targetPlayer = target->asPlayer();
 		if (attackerPlayer && targetPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(targetPlayer) == SKULL_NONE) {
 			return false;
 		}
@@ -4184,7 +4184,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				message.primary.color = TEXTCOLOR_BLUE;
 
 				for (Creature* spectator : spectators) {
-					Player* tmpPlayer = spectator->getPlayer();
+					Player* tmpPlayer = spectator->asPlayer();
 					if (tmpPlayer->getPosition().z != targetPos.z) {
 						continue;
 					}
@@ -4284,7 +4284,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			std::string spectatorMessage;
 
 			for (Creature* spectator : spectators) {
-				Player* tmpPlayer = spectator->getPlayer();
+				Player* tmpPlayer = spectator->asPlayer();
 				if (tmpPlayer->getPosition().z != targetPos.z) {
 					continue;
 				}
@@ -4337,7 +4337,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 
 bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& damage)
 {
-	Player* targetPlayer = target->getPlayer();
+	Player* targetPlayer = target->asPlayer();
 	if (!targetPlayer) {
 		return true;
 	}
@@ -4345,7 +4345,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 	int32_t manaChange = damage.primary.value + damage.secondary.value;
 	if (manaChange > 0) {
 		if (attacker) {
-			const Player* attackerPlayer = attacker->getPlayer();
+			const Player* attackerPlayer = attacker->asPlayer();
 			if (attackerPlayer && attackerPlayer->getSkull() == SKULL_BLACK && attackerPlayer->getSkullClient(target) == SKULL_NONE) {
 				return false;
 			}
@@ -4384,7 +4384,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 
 		Player* attackerPlayer;
 		if (attacker) {
-			attackerPlayer = attacker->getPlayer();
+			attackerPlayer = attacker->asPlayer();
 		} else {
 			attackerPlayer = nullptr;
 		}
@@ -4427,7 +4427,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		SpectatorVec spectators;
 		map.getSpectators(spectators, targetPos, false, true);
 		for (Creature* spectator : spectators) {
-			Player* tmpPlayer = spectator->getPlayer();
+			Player* tmpPlayer = spectator->asPlayer();
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
 				message.text = fmt::format("{:s} loses {:d} mana due to your attack.", target->getNameDescription(), manaLoss);
@@ -4472,7 +4472,7 @@ void Game::addCreatureHealth(const Creature* target)
 void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* target)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendCreatureHealth(target);
 		}
 	}
@@ -4488,7 +4488,7 @@ void Game::addMagicEffect(const Position& pos, uint8_t effect)
 void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendMagicEffect(pos, effect);
 		}
 	}
@@ -4507,7 +4507,7 @@ void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uin
 void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
@@ -4765,7 +4765,7 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		Player* tmpPlayer = spectator->getPlayer();
+		Player* tmpPlayer = spectator->asPlayer();
 		tmpPlayer->sendCreatureWalkthrough(creature, tmpPlayer->canWalkthroughEx(creature));
 	}
 }
@@ -4779,7 +4779,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureSkull(creature);
+		spectator->asPlayer()->sendCreatureSkull(creature);
 	}
 }
 
@@ -4788,7 +4788,7 @@ void Game::updatePlayerShield(Player* player)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendCreatureShield(player);
+		spectator->asPlayer()->sendCreatureShield(player);
 	}
 }
 
@@ -5675,7 +5675,7 @@ void Game::updatePodium(Item* item)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, item->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTileItem(tile, item->getPosition(), item);
+		spectator->asPlayer()->sendUpdateTileItem(tile, item->getPosition(), item);
 	}
 }
 

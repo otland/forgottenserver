@@ -394,7 +394,7 @@ void ConditionAttributes::addCondition(Creature* creature, const Condition* cond
 		memcpy(statsPercent, conditionAttrs.statsPercent, sizeof(statsPercent));
 		disableDefense = conditionAttrs.disableDefense;
 
-		if (Player* player = creature->getPlayer()) {
+		if (Player* player = creature->asPlayer()) {
 			updatePercentSkills(player);
 			updateSkills(player);
 			updatePercentStats(player);
@@ -448,7 +448,7 @@ bool ConditionAttributes::startCondition(Creature* creature)
 
 	creature->setUseDefense(!disableDefense);
 
-	if (Player* player = creature->getPlayer()) {
+	if (Player* player = creature->asPlayer()) {
 		updatePercentSkills(player);
 		updateSkills(player);
 		updatePercentStats(player);
@@ -540,7 +540,7 @@ bool ConditionAttributes::executeCondition(Creature* creature, int32_t interval)
 
 void ConditionAttributes::endCondition(Creature* creature)
 {
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 	if (player) {
 		bool needUpdateSkills = false;
 
@@ -898,7 +898,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 		realHealthGain = creature->getHealth() - realHealthGain;
 
 		if (isBuff && realHealthGain > 0) {
-			Player* player = creature->getPlayer();
+			Player* player = creature->asPlayer();
 			if (player) {
 				std::string healString = std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
 
@@ -915,7 +915,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " was healed for " + healString;
 					for (Creature* spectator : spectators) {
-						spectator->getPlayer()->sendTextMessage(message);
+						spectator->asPlayer()->sendTextMessage(message);
 					}
 				}
 			}
@@ -925,7 +925,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	if (internalManaTicks >= manaTicks) {
 		internalManaTicks = 0;
 
-		if (Player* player = creature->getPlayer()) {
+		if (Player* player = creature->asPlayer()) {
 			int32_t realManaGain = player->getMana();
 			player->changeMana(manaGain);
 			realManaGain = player->getMana() - realManaGain;
@@ -946,7 +946,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " gained " + manaGainString + " mana.";
 					for (Creature* spectator : spectators) {
-						spectator->getPlayer()->sendTextMessage(message);
+						spectator->asPlayer()->sendTextMessage(message);
 					}
 				}
 			}
@@ -1039,7 +1039,7 @@ bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 {
 	internalSoulTicks += interval;
 
-	if (Player* player = creature->getPlayer()) {
+	if (Player* player = creature->asPlayer()) {
 		if (player->getZone() != ZONE_PROTECTION) {
 			if (internalSoulTicks >= soulTicks) {
 				internalSoulTicks = 0;
@@ -1372,7 +1372,7 @@ bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 	damage.primary.type = Combat::ConditionToDamageType(conditionType);
 
 	Creature* attacker = g_game.getCreatureByID(owner);
-	if (field && creature->getPlayer() && attacker && attacker->getPlayer()) {
+	if (field && creature->asPlayer() && attacker && attacker->asPlayer()) {
 		damage.primary.value = static_cast<int32_t>(std::round(damage.primary.value / 2.));
 	}
 
@@ -1879,7 +1879,7 @@ void ConditionSpellCooldown::addCondition(Creature* creature, const Condition* c
 		setTicks(condition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			Player* player = creature->getPlayer();
+			Player* player = creature->asPlayer();
 			if (player) {
 				player->sendSpellCooldown(subId, ticks);
 			}
@@ -1894,7 +1894,7 @@ bool ConditionSpellCooldown::startCondition(Creature* creature)
 	}
 
 	if (subId != 0 && ticks > 0) {
-		Player* player = creature->getPlayer();
+		Player* player = creature->asPlayer();
 		if (player) {
 			player->sendSpellCooldown(subId, ticks);
 		}
@@ -1908,7 +1908,7 @@ void ConditionSpellGroupCooldown::addCondition(Creature* creature, const Conditi
 		setTicks(condition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			Player* player = creature->getPlayer();
+			Player* player = creature->asPlayer();
 			if (player) {
 				player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 			}
@@ -1923,7 +1923,7 @@ bool ConditionSpellGroupCooldown::startCondition(Creature* creature)
 	}
 
 	if (subId != 0 && ticks > 0) {
-		Player* player = creature->getPlayer();
+		Player* player = creature->asPlayer();
 		if (player) {
 			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}

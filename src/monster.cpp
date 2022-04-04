@@ -90,7 +90,7 @@ void Monster::setName(const std::string& name)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
+		if (Player* tmpPlayer = spectator->asPlayer()) {
 			tmpPlayer->sendUpdateTileCreature(this);
 		}
 	}
@@ -448,17 +448,17 @@ void Monster::onCreatureEnter(Creature* creature)
 
 bool Monster::isFriend(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
-		const Player* masterPlayer = getMaster()->getPlayer();
+	if (isSummon() && getMaster()->asPlayer()) {
+		const Player* masterPlayer = getMaster()->asPlayer();
 		const Player* tmpPlayer = nullptr;
 
-		if (creature->getPlayer()) {
-			tmpPlayer = creature->getPlayer();
+		if (creature->asPlayer()) {
+			tmpPlayer = creature->asPlayer();
 		} else {
 			const Creature* creatureMaster = creature->getMaster();
 
-			if (creatureMaster && creatureMaster->getPlayer()) {
-				tmpPlayer = creatureMaster->getPlayer();
+			if (creatureMaster && creatureMaster->asPlayer()) {
+				tmpPlayer = creatureMaster->asPlayer();
 			}
 		}
 
@@ -474,13 +474,13 @@ bool Monster::isFriend(const Creature* creature) const
 
 bool Monster::isOpponent(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
+	if (isSummon() && getMaster()->asPlayer()) {
 		if (creature != getMaster()) {
 			return true;
 		}
 	} else {
-		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		        (creature->getMaster() && creature->getMaster()->getPlayer())) {
+		if ((creature->asPlayer() && !creature->asPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
+		        (creature->getMaster() && creature->getMaster()->asPlayer())) {
 			return true;
 		}
 	}
@@ -1865,11 +1865,11 @@ Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse) {
 		if (mostDamageCreature) {
-			if (mostDamageCreature->getPlayer()) {
+			if (mostDamageCreature->asPlayer()) {
 				corpse->setCorpseOwner(mostDamageCreature->getID());
 			} else {
 				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
+				if (mostDamageCreatureMaster && mostDamageCreatureMaster->asPlayer()) {
 					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 				}
 			}

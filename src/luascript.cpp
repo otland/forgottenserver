@@ -706,7 +706,7 @@ void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Ite
 
 void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 {
-	if (creature->getPlayer()) {
+	if (creature->asPlayer()) {
 		luaL_getmetatable(L, "Player");
 	} else if (creature->getMonster()) {
 		luaL_getmetatable(L, "Monster");
@@ -7904,7 +7904,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTileCreature(creature);
+		spectator->asPlayer()->sendUpdateTileCreature(creature);
 	}
 	return 1;
 }
@@ -8087,7 +8087,7 @@ int LuaScriptInterface::luaCreatureSetHealth(lua_State* L)
 	creature->health = std::min<int32_t>(getNumber<uint32_t>(L, 2), creature->healthMax);
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 	if (player) {
 		player->sendStats();
 	}
@@ -8140,7 +8140,7 @@ int LuaScriptInterface::luaCreatureSetMaxHealth(lua_State* L)
 	creature->health = std::min<int32_t>(creature->health, creature->healthMax);
 	g_game.addCreatureHealth(creature);
 
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 	if (player) {
 		player->sendStats();
 	}
@@ -8346,7 +8346,7 @@ int LuaScriptInterface::luaCreatureRemove(lua_State* L)
 		return 1;
 	}
 
-	Player* player = creature->getPlayer();
+	Player* player = creature->asPlayer();
 	if (player) {
 		player->kickPlayer(true);
 	} else {
@@ -10566,7 +10566,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		Player* tmpPlayer = spectator->getPlayer();
+		Player* tmpPlayer = spectator->asPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {
 			if (enabled) {
 				tmpPlayer->sendRemoveTileCreature(player, position, tile->getClientIndexOfCreature(tmpPlayer, player));
