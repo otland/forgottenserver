@@ -37,10 +37,10 @@ class Monster final : public Creature
 		Monster(const Monster&) = delete;
 		Monster& operator=(const Monster&) = delete;
 
-		Monster* getMonster() override {
+		Monster* asMonster() override {
 			return this;
 		}
-		const Monster* getMonster() const override {
+		const Monster* asMonster() const override {
 			return this;
 		}
 

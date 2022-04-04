@@ -366,7 +366,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 				}
 			}
 		}
-	} else if (target->getMonster()) {
+	} else if (target->asMonster()) {
 		if (const Player* attackerPlayer = attacker->asPlayer()) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackMonster)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
@@ -375,7 +375,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 			if (target->isSummon() && target->getMaster()->asPlayer() && target->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
-		} else if (attacker->getMonster()) {
+		} else if (attacker->asMonster()) {
 			const Creature* targetMaster = target->getMaster();
 
 			if (!targetMaster || !targetMaster->asPlayer()) {

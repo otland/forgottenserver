@@ -493,7 +493,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
-		if (const Monster* monster = creature->getMonster()) {
+		if (const Monster* monster = creature->asMonster()) {
 			if (hasFlag(TILESTATE_PROTECTIONZONE | TILESTATE_FLOORCHANGE | TILESTATE_TELEPORT)) {
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -506,7 +506,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 							continue;
 						}
 
-						const Monster* creatureMonster = tileCreature->getMonster();
+						const Monster* creatureMonster = tileCreature->asMonster();
 						if (!creatureMonster || !tileCreature->isPushable() ||
 								(creatureMonster->isSummon() && creatureMonster->getMaster()->asPlayer())) {
 							return RETURNVALUE_NOTPOSSIBLE;

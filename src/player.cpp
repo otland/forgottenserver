@@ -3647,7 +3647,7 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 
 	if (target) {
 		if (party && !Combat::isPlayerCombat(target)) {
-			Monster* tmpMonster = target->getMonster();
+			Monster* tmpMonster = target->asMonster();
 			if (tmpMonster && tmpMonster->isHostile()) {
 				//We have fulfilled a requirement for shared experience
 				party->updatePlayerTicks(this, points);

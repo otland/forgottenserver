@@ -708,7 +708,7 @@ void LuaScriptInterface::setCreatureMetatable(lua_State* L, int32_t index, const
 {
 	if (creature->asPlayer()) {
 		luaL_getmetatable(L, "Player");
-	} else if (creature->getMonster()) {
+	} else if (creature->asMonster()) {
 		luaL_getmetatable(L, "Monster");
 	} else {
 		luaL_getmetatable(L, "Npc");

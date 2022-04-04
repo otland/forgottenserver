@@ -465,7 +465,7 @@ bool Monster::isFriend(const Creature* creature) const
 		if (tmpPlayer && (tmpPlayer == getMaster() || masterPlayer->isPartner(tmpPlayer))) {
 			return true;
 		}
-	} else if (creature->getMonster() && !creature->isSummon()) {
+	} else if (creature->asMonster() && !creature->isSummon()) {
 		return true;
 	}
 
@@ -1155,7 +1155,7 @@ void Monster::pushCreatures(Tile* tile)
 		Monster* lastPushedMonster = nullptr;
 
 		for (size_t i = 0; i < creatures->size();) {
-			Monster* monster = creatures->at(i)->getMonster();
+			Monster* monster = creatures->at(i)->asMonster();
 			if (monster && monster->isPushable()) {
 				if (monster != lastPushedMonster && Monster::pushCreature(monster)) {
 					lastPushedMonster = monster;
@@ -2064,7 +2064,7 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 
 bool Monster::canPushItems() const
 {
-	Monster* master = this->master ? this->master->getMonster() : nullptr;
+	Monster* master = this->master ? this->master->asMonster() : nullptr;
 	if (master) {
 		return master->mType->info.canPushItems;
 	}
