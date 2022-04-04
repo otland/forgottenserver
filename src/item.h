@@ -5,26 +5,19 @@
 #define FS_ITEM_H
 
 #include "cylinder.h"
-#include "thing.h"
 #include "items.h"
 #include "luascript.h"
-#include "tools.h"
-#include <typeinfo>
+#include "thing.h"
 
-#include <boost/variant.hpp>
-#include <deque>
-
-class Creature;
-class Player;
+class BedItem;
 class Container;
-class Depot;
-class Teleport;
-class TrashHolder;
-class Mailbox;
 class Door;
 class MagicField;
-class BedItem;
+class Mailbox;
+class Player;
 class Podium;
+class Teleport;
+class TrashHolder;
 
 enum ITEMPROPERTY {
 	CONST_PROP_BLOCKSOLID = 0,
@@ -459,7 +452,7 @@ class ItemAttributes
 
 		template<typename R>
 		void setCustomAttribute(std::string& key, R value) {
-			toLowerCaseString(key);
+			boost::algorithm::to_lower(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
 			} else {
@@ -469,7 +462,7 @@ class ItemAttributes
 		}
 
 		void setCustomAttribute(std::string& key, CustomAttribute& value) {
-			toLowerCaseString(key);
+			boost::algorithm::to_lower(key);
 			if (hasAttribute(ITEM_ATTRIBUTE_CUSTOM)) {
 				removeCustomAttribute(key);
 			} else {
@@ -485,7 +478,7 @@ class ItemAttributes
 
 		const CustomAttribute* getCustomAttribute(const std::string& key) {
 			if (const CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-				auto it = customAttrMap->find(asLowerCaseString(key));
+				auto it = customAttrMap->find(boost::algorithm::to_lower_copy(key));
 				if (it != customAttrMap->end()) {
 					return &(it->second);
 				}
@@ -500,7 +493,7 @@ class ItemAttributes
 
 		bool removeCustomAttribute(const std::string& key) {
 			if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-				auto it = customAttrMap->find(asLowerCaseString(key));
+				auto it = customAttrMap->find(boost::algorithm::to_lower_copy(key));
 				if (it != customAttrMap->end()) {
 					customAttrMap->erase(it);
 					return true;
@@ -799,6 +792,13 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
+		int32_t getDecayTime() const {
+			if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
+				return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+			}
+			return items[id].decayTime;
+		}
+
 		void setDecayTo(int32_t decayTo) {
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 		}
@@ -839,7 +839,7 @@ class Item : virtual public Thing
 		void setID(uint16_t newid);
 
 		// Returns the player that is holding this item in his inventory
-		Player* getHoldingPlayer() const;
+		const Player* getHoldingPlayer() const;
 
 		WeaponType_t getWeaponType() const {
 			return items[id].weaponType;
@@ -951,6 +951,9 @@ class Item : virtual public Thing
 		}
 		bool hasWalkStack() const {
 			return items[id].walkStack;
+		}
+		bool isSupply() const {
+			return items[id].isSupply();
 		}
 
 		void setStoreItem(bool storeItem) {

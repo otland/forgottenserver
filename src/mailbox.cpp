@@ -4,7 +4,9 @@
 #include "otpch.h"
 
 #include "mailbox.h"
+
 #include "game.h"
+#include "inbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
@@ -126,7 +128,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 	}
 
 	name = getFirstLine(text);
-	trimString(name);
+	boost::algorithm::trim(name);
 	return true;
 }
 

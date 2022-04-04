@@ -129,7 +129,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local potion = potions[item:getId()]
-	if potion.level and player:getLevel() < potion.level or potion.vocations and not table.contains(potion.vocations, player:getVocation():getId()) then
+	if not player:getGroup():getAccess() and (potion.level and player:getLevel() < potion.level or potion.vocations and not table.contains(potion.vocations, player:getVocation():getId())) then
 		player:say(potion.description, TALKTYPE_POTION)
 		return true
 	end

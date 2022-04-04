@@ -2,25 +2,28 @@
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
-#include <csignal>
 
 #include "signals.h"
-#include "tasks.h"
-#include "game.h"
+
 #include "actions.h"
 #include "configmanager.h"
+#include "databasetasks.h"
+#include "events.h"
+#include "game.h"
+#include "globalevent.h"
+#include "monsters.h"
+#include "mounts.h"
+#include "movement.h"
+#include "npc.h"
+#include "quests.h"
+#include "raids.h"
+#include "scheduler.h"
 #include "spells.h"
 #include "talkaction.h"
-#include "movement.h"
+#include "tasks.h"
 #include "weapons.h"
-#include "raids.h"
-#include "quests.h"
-#include "mounts.h"
-#include "globalevent.h"
-#include "monster.h"
-#include "events.h"
-#include "scheduler.h"
-#include "databasetasks.h"
+
+#include <csignal>
 
 extern Scheduler g_scheduler;
 extern DatabaseTasks g_databaseTasks;

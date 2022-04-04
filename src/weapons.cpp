@@ -3,12 +3,13 @@
 
 #include "otpch.h"
 
+#include "weapons.h"
+
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
 #include "luavariant.h"
 #include "pugicast.h"
-#include "weapons.h"
 
 extern Game g_game;
 extern Vocations g_vocations;
@@ -99,11 +100,11 @@ void Weapons::loadDefaults()
 
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "melee") == 0) {
+	if (caseInsensitiveEqual(nodeName, "melee")) {
 		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "distance") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "distance")) {
 		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (strcasecmp(nodeName.c_str(), "wand") == 0) {
+	} else if (caseInsensitiveEqual(nodeName, "wand")) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
@@ -176,7 +177,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	if ((attr = node.attribute("action"))) {
-		action = getWeaponAction(asLowerCaseString(attr.as_string()));
+		action = getWeaponAction(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 		if (action == WEAPONACTION_NONE) {
 			std::cout << "[Warning - Weapon::configureEvent] Unknown action " << attr.as_string() << std::endl;
 		}
@@ -205,7 +206,7 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 			}
 
 			if (vocationNode.attribute("showInDescription").as_bool(true)) {
-				vocStringList.push_back(asLowerCaseString(attr.as_string()));
+				vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 			}
 		}
 	}
@@ -424,6 +425,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	}
 
 	if (breakChance != 0 && uniform_random(1, 100) <= breakChance) {
+		player->sendSupplyUsed(item->getClientID());
 		Weapon::decrementItemCount(item);
 		return;
 	}
@@ -431,6 +433,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
 			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+				player->sendSupplyUsed(item->getClientID());
 				Weapon::decrementItemCount(item);
 			}
 			break;
@@ -894,7 +897,7 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		return true;
 	}
 
-	std::string tmpStrValue = asLowerCaseString(attr.as_string());
+	std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 	if (tmpStrValue == "earth") {
 		params.combatType = COMBAT_EARTHDAMAGE;
 	} else if (tmpStrValue == "ice") {

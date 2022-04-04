@@ -4,13 +4,15 @@
 #include "otpch.h"
 
 #include "spawn.h"
+
+#include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
-#include "scheduler.h"
-
+#include "npc.h"
 #include "pugicast.h"
-#include "events.h"
+#include "scheduler.h"
+#include "spectators.h"
 
 extern ConfigManager g_config;
 extern Monsters g_monsters;
@@ -64,7 +66,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 		Spawn& spawn = spawnList.front();
 
 		for (auto childNode : spawnNode.children()) {
-			if (strcasecmp(childNode.name(), "monsters") == 0) {
+			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
 				Position pos(
 					centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
 					centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()),
@@ -135,7 +137,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 				}
 
 				spawn.addBlock(sb);
-			} else if (strcasecmp(childNode.name(), "monster") == 0) {
+			} else if (caseInsensitiveEqual(childNode.name(), "monster")) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
 				if (!nameAttribute) {
 					continue;
@@ -165,7 +167,7 @@ bool Spawns::loadFromXml(const std::string& filename)
 						std::cout << "[Warning - Spawns::loadFromXml] " << nameAttribute.as_string() << ' ' << pos << " spawntime can not be more than " << MAXSPAWN_INTERVAL / 1000 << " seconds." << std::endl;
 					}
 				}
-			} else if (strcasecmp(childNode.name(), "npc") == 0) {
+			} else if (caseInsensitiveEqual(childNode.name(), "npc")) {
 				pugi::xml_attribute nameAttribute = childNode.attribute("name");
 				if (!nameAttribute) {
 					continue;
@@ -239,7 +241,7 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 void Spawn::startSpawnCheck()
 {
 	if (checkSpawnEvent == 0) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
@@ -374,7 +376,7 @@ void Spawn::checkSpawn()
 	}
 
 	if (spawnedMap.size() < spawnMap.size()) {
-		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), std::bind(&Spawn::checkSpawn, this)));
+		checkSpawnEvent = g_scheduler.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 

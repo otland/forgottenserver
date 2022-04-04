@@ -5,33 +5,21 @@
 #define FS_PLAYER_H
 
 #include "creature.h"
-#include "container.h"
 #include "cylinder.h"
-#include "outfit.h"
-#include "enums.h"
-#include "vocation.h"
-#include "protocolgame.h"
-#include "party.h"
-#include "inbox.h"
-#include "depotchest.h"
 #include "depotlocker.h"
-#include "guild.h"
+#include "enums.h"
 #include "groups.h"
+#include "guild.h"
+#include "protocolgame.h"
 #include "town.h"
-#include "mounts.h"
-#include "storeinbox.h"
+#include "vocation.h"
 
-#include <bitset>
-
+class DepotChest;
 class House;
 class NetworkMessage;
-class Weapon;
-class ProtocolGame;
 class Npc;
 class Party;
 class SchedulerTask;
-class Bed;
-class Guild;
 
 enum skillsid_t {
 	SKILLVALUE_LEVEL = 0,
@@ -487,7 +475,7 @@ class Player final : public Creature, public Cylinder
 			varSpecialSkills[skill] += modifier;
 		}
 
-		void setSpecialMagicLevelSkill(CombatType_t type, int32_t modifier) {
+		void setSpecialMagicLevelSkill(CombatType_t type, int16_t modifier) {
 			specialMagicLevelSkill[combatTypeToIndex(type)] += modifier;
 		}
 
@@ -601,10 +589,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint16_t getSpecialSkill(uint8_t skill) const {
-			return std::max<int32_t>(0, varSpecialSkills[skill]);
+			return std::max<uint16_t>(0, varSpecialSkills[skill]);
 		}
 		uint16_t getSkillLevel(uint8_t skill) const {
-			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
+			return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 		}
 		uint16_t getSpecialMagicLevelSkill(CombatType_t type) const {
 			return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
@@ -839,6 +827,11 @@ class Player final : public Creature, public Cylinder
 		void sendUseItemCooldown(uint32_t time) {
 			if (client) {
 				client->sendUseItemCooldown(time);
+			}
+		}
+		void sendSupplyUsed(const uint16_t clientId) const {
+			if (client) {
+				client->sendSupplyUsed(clientId);
 			}
 		}
 		void sendModalWindow(const ModalWindow& modalWindow);
@@ -1265,6 +1258,7 @@ class Player final : public Creature, public Cylinder
 		int64_t lastPong;
 		int64_t nextAction = 0;
 
+		ProtocolGame_ptr client;
 		BedItem* bedItem = nullptr;
 		Guild* guild = nullptr;
 		GuildRank_ptr guildRank = nullptr;
@@ -1277,7 +1271,6 @@ class Player final : public Creature, public Cylinder
 		Npc* shopOwner = nullptr;
 		Party* party = nullptr;
 		Player* tradePartner = nullptr;
-		ProtocolGame_ptr client;
 		SchedulerTask* walkTask = nullptr;
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;

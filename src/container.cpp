@@ -4,8 +4,14 @@
 #include "otpch.h"
 
 #include "container.h"
-#include "iomap.h"
+
+#include "depotchest.h"
 #include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iomap.h"
+#include "spectators.h"
+#include "storeinbox.h"
 
 extern Game g_game;
 

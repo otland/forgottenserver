@@ -3,17 +3,16 @@
 
 #include "otpch.h"
 
-#include <algorithm>
+#include "configmanager.h"
+#include "game.h"
+#include "monster.h"
+#include "pugicast.h"
+
 #if __has_include("luajit/lua.hpp")
 #include <luajit/lua.hpp>
 #else
 #include <lua.hpp>
 #endif
-
-#include "configmanager.h"
-#include "game.h"
-#include "monster.h"
-#include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
@@ -115,7 +114,7 @@ ExperienceStages loadXMLStages()
 
 	ExperienceStages stages;
 	for (auto stageNode : doc.child("stages").children()) {
-		if (strcasecmp(stageNode.name(), "config") == 0) {
+		if (caseInsensitiveEqual(stageNode.name(), "config")) {
 			if (!stageNode.attribute("enabled").as_bool()) {
 				return {};
 			}

@@ -27,8 +27,6 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #define _USE_MATH_DEFINES
 #endif
 
-#include <cmath>
-
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -50,9 +48,6 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #pragma warning(disable:4351) // new behavior: elements of array will be default initialized
 #pragma warning(disable:4458) // declaration hides class member
 #endif
-
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
 
 #ifndef _WIN32_WINNT
 // 0x0602: Windows 7

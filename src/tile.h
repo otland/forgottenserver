@@ -7,15 +7,14 @@
 #include "cylinder.h"
 #include "item.h"
 #include "tools.h"
-#include "spectators.h"
 
+class BedItem;
 class Creature;
+class MagicField;
+class Mailbox;
+class SpectatorVec;
 class Teleport;
 class TrashHolder;
-class Mailbox;
-class MagicField;
-class QTreeLeafNode;
-class BedItem;
 
 using CreatureVector = std::vector<Creature*>;
 using ItemVector = std::vector<Item*>;
@@ -122,7 +121,7 @@ class TileItemVector : private ItemVector
 			}
 			return *getBeginDownItem();
 		}
-		void addDownItemCount(int32_t increment) {
+		void addDownItemCount(uint16_t increment) {
 			downItemCount += increment;
 		}
 

@@ -5,7 +5,6 @@
 #define FS_VOCATION_H
 
 #include "enums.h"
-#include "item.h"
 
 class Vocation
 {

@@ -9,6 +9,8 @@
 #include "itemloader.h"
 #include "position.h"
 
+class ConditionDamage;
+
 enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
 	SLOTP_HEAD = 1 << 0,
@@ -209,6 +211,7 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_BOOSTPERCENTDROWN,
 	ITEM_PARSE_BOOSTPERCENTPHYSICAL,
 	ITEM_PARSE_BOOSTPERCENTHEALING,
+	ITEM_PARSE_SUPPLY,
 };
 
 struct Abilities {
@@ -248,8 +251,6 @@ struct Abilities {
 	bool invisible = false;
 	bool regeneration = false;
 };
-
-class ConditionDamage;
 
 class ItemType
 {
@@ -314,6 +315,9 @@ class ItemType
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
+		}
+		bool isSupply() const {
+			return supply;
 		}
 
 		Abilities& getAbilities() {
@@ -437,6 +441,7 @@ class ItemType
 		bool lookThrough = false;
 		bool stopTime = false;
 		bool showCount = true;
+		bool supply = false;
 };
 
 class Items

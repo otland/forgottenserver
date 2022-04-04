@@ -4,8 +4,9 @@
 #ifndef FS_PROTOCOLSTATUS_H
 #define FS_PROTOCOLSTATUS_H
 
-#include "networkmessage.h"
 #include "protocol.h"
+
+class NetworkMessage;
 
 class ProtocolStatus final : public Protocol
 {

@@ -357,6 +357,7 @@ enum ConditionType_t {
 	CONDITION_PACIFIED = 1 << 25,
 	CONDITION_SPELLCOOLDOWN = 1 << 26,
 	CONDITION_SPELLGROUPCOOLDOWN = 1 << 27,
+	CONDITION_ROOT = 1 << 28,
 };
 
 enum ConditionId_t : int8_t {
@@ -631,7 +632,7 @@ struct Reflect {
 
 	Reflect& operator+=(const Reflect& other) {
 		percent += other.percent;
-		chance = std::min(100, chance + other.chance);
+		chance = std::min<uint16_t>(100, chance + other.chance);
 		return *this;
 	}
 

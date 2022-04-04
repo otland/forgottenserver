@@ -7,11 +7,10 @@
 
 #include "configmanager.h"
 #include "databasetasks.h"
-#include "iologindata.h"
 #include "game.h"
+#include "inbox.h"
+#include "iologindata.h"
 #include "scheduler.h"
-
-#include <fmt/format.h>
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -179,7 +178,7 @@ void IOMarket::checkExpiredOffers()
 		return;
 	}
 
-	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, std::bind(IOMarket::checkExpiredOffers)));
+	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &IOMarket::checkExpiredOffers));
 }
 
 uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)

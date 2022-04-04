@@ -4,17 +4,18 @@
 #include "otpch.h"
 
 #include "item.h"
+
+#include "bed.h"
+#include "combat.h"
 #include "container.h"
+#include "game.h"
+#include "house.h"
+#include "mailbox.h"
+#include "podium.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "mailbox.h"
-#include "house.h"
-#include "game.h"
-#include "bed.h"
-#include "podium.h"
 
-#include "actions.h"
-#include "spells.h"
+class Spells;
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -54,18 +55,6 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 			newItem = new BedItem(type);
 		} else if (it.isPodium()) {
 			newItem = new Podium(type);
-		} else if (it.id >= 2210 && it.id <= 2212) { // magic rings
-			newItem = new Item(type - 3, count);
-		} else if (it.id == 2215 || it.id == 2216) { // magic rings
-			newItem = new Item(type - 2, count);
-		} else if (it.id >= 2202 && it.id <= 2206) { // magic rings
-			newItem = new Item(type - 37, count);
-		} else if (it.id == 2640) { // soft boots
-			newItem = new Item(6132, count);
-		} else if (it.id == 6301) { // death ring
-			newItem = new Item(6300, count);
-		} else if (it.id == 18528) { // prismatic ring
-			newItem = new Item(18408, count);
 		} else {
 			newItem = new Item(type, count);
 		}
@@ -336,17 +325,9 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-Player* Item::getHoldingPlayer() const
+const Player* Item::getHoldingPlayer() const
 {
-	Cylinder* p = getParent();
-	while (p) {
-		if (p->getCreature()) {
-			return p->getCreature()->getPlayer();
-		}
-
-		p = p->getParent();
-	}
-	return nullptr;
+	return dynamic_cast<const Player*>(getTopParent());
 }
 
 void Item::setSubType(uint16_t n)
@@ -635,6 +616,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 				getAttributes()->reflect[combatType] = reflect;
 			}
+			break;
 		}
 
 		case ATTR_BOOST: {
@@ -653,6 +635,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 				getAttributes()->boostPercent[combatType] = percent;
 			}
+			break;
 		}
 
 		//these should be handled through derived classes
@@ -1063,8 +1046,7 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	const ItemType& it = Item::items[id];
-	if (getDecayTo() < 0 || it.decayTime == 0) {
+	if (getDecayTo() < 0 || getDecayTime() == 0) {
 		return false;
 	}
 
@@ -1243,6 +1225,19 @@ bool Item::hasMarketAttributes() const
 		return true;
 	}
 
+	// discard items with custom boost and reflect
+	for (uint16_t i = 0; i < COMBAT_COUNT; ++i) {
+		if (getBoostPercent(indexToCombatType(i), false) > 0) {
+			return false;
+		}
+
+		Reflect tmpReflect = getReflect(indexToCombatType(i), false);
+		if (tmpReflect.chance != 0 || tmpReflect.percent != 0) {
+			return false;
+		}
+	}
+
+	// discard items with other modified attributes
 	for (const auto& attr : attributes->getList()) {
 		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
 			uint16_t charges = static_cast<uint16_t>(attr.value.integer);

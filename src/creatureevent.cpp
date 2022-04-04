@@ -4,8 +4,9 @@
 #include "otpch.h"
 
 #include "creatureevent.h"
+
+#include "item.h"
 #include "tools.h"
-#include "player.h"
 
 CreatureEvents::CreatureEvents() :
 	scriptInterface("CreatureScript Interface")
@@ -45,7 +46,7 @@ std::string CreatureEvents::getScriptBaseName() const
 
 Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "event") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "event")) {
 		return nullptr;
 	}
 	return Event_ptr(new CreatureEvent(&scriptInterface));
@@ -170,7 +171,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	std::string tmpStr = asLowerCaseString(typeAttribute.as_string());
+	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(typeAttribute.as_string());
 	if (tmpStr == "login") {
 		type = CREATURE_EVENT_LOGIN;
 	} else if (tmpStr == "logout") {

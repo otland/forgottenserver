@@ -4,23 +4,20 @@
 #ifndef FS_TOOLS_H
 #define FS_TOOLS_H
 
-#include <random>
-
-#include "position.h"
 #include "const.h"
 #include "enums.h"
+#include "position.h"
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 
 std::string transformToSHA1(const std::string& input);
 std::string generateToken(const std::string& key, uint32_t ticks);
 
-void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
-void trim_right(std::string& source, char t);
-void trim_left(std::string& source, char t);
-void toLowerCaseString(std::string& source);
-std::string asLowerCaseString(std::string source);
-std::string asUpperCaseString(std::string source);
+// checks that str1 is equivalent to str2 ignoring letter case
+bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
+
+// checks that str1 starts with str2 ignoring letter case
+bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix);
 
 using StringVector = std::vector<std::string>;
 using IntegerVector = std::vector<int32_t>;
@@ -45,8 +42,6 @@ std::string getFirstLine(const std::string& str);
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string convertIPToString(uint32_t ip);
-
-void trimString(std::string& str);
 
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);

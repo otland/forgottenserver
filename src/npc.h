@@ -7,8 +7,6 @@
 #include "creature.h"
 #include "luascript.h"
 
-#include <set>
-
 class Npc;
 class Player;
 
@@ -107,7 +105,7 @@ class Npc final : public Creature
 
 		void setID() override {
 			if (id == 0) {
-				id = npcAutoID++;
+				id = ++npcAutoID;
 			}
 		}
 

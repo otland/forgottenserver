@@ -4,10 +4,19 @@
 #ifndef FS_PROTOCOLGAME_H
 #define FS_PROTOCOLGAME_H
 
-#include "protocol.h"
 #include "chat.h"
 #include "creature.h"
+#include "protocol.h"
 #include "tasks.h"
+
+class Container;
+class Game;
+class NetworkMessage;
+class Player;
+class ProtocolGame;
+class Quest;
+class Tile;
+class TrackedQuest;
 
 enum SessionEndTypes_t : uint8_t {
 	SESSION_END_LOGOUT = 0,
@@ -16,16 +25,6 @@ enum SessionEndTypes_t : uint8_t {
 	SESSION_END_UNKNOWN2 = 3, // unknown, no difference from logout
 };
 
-class NetworkMessage;
-class Player;
-class Game;
-class House;
-class Container;
-class Tile;
-class Connection;
-class Quest;
-class TrackedQuest;
-class ProtocolGame;
 using ProtocolGame_ptr = std::shared_ptr<ProtocolGame>;
 
 extern Game g_game;
@@ -245,6 +244,7 @@ class ProtocolGame final : public Protocol
 		void sendSpellCooldown(uint8_t spellId, uint32_t time);
 		void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time);
 		void sendUseItemCooldown(uint32_t time);
+		void sendSupplyUsed(const uint16_t clientId);
 
 		//tiles
 		void sendMapDescription(const Position& pos);
@@ -315,14 +315,14 @@ class ProtocolGame final : public Protocol
 		friend class Player;
 
 		// Helpers so we don't need to bind every time
-		template <typename Callable, typename... Args>
-		void addGameTask(Callable&& function, Args&&... args) {
-			g_dispatcher.addTask(createTask(std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
+		template <typename Callable>
+		void addGameTask(Callable&& function) {
+			g_dispatcher.addTask(createTask(std::forward<Callable>(function)));
 		}
 
-		template <typename Callable, typename... Args>
-		void addGameTaskTimed(uint32_t delay, Callable&& function, Args&&... args) {
-			g_dispatcher.addTask(createTask(delay, std::bind(std::forward<Callable>(function), &g_game, std::forward<Args>(args)...)));
+		template <typename Callable>
+		void addGameTaskTimed(uint32_t delay, Callable&& function) {
+			g_dispatcher.addTask(createTask(delay, std::forward<Callable>(function)));
 		}
 
 		std::unordered_set<uint32_t> knownCreatureSet;

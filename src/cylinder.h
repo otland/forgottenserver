@@ -7,8 +7,8 @@
 #include "enums.h"
 #include "thing.h"
 
-class Item;
 class Creature;
+class Item;
 
 static constexpr int32_t INDEX_WHEREEVER = -1;
 

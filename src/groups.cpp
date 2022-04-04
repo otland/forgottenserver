@@ -61,7 +61,7 @@ bool Groups::load()
 
 	for (auto groupNode : doc.child("groups").children()) {
 		Group group;
-		group.id = pugi::cast<uint32_t>(groupNode.attribute("id").value());
+		group.id = pugi::cast<uint16_t>(groupNode.attribute("id").value());
 		group.name = groupNode.attribute("name").as_string();
 		group.access = groupNode.attribute("access").as_bool();
 		group.maxDepotItems = pugi::cast<uint32_t>(groupNode.attribute("maxdepotitems").value());

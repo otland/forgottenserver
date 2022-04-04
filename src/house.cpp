@@ -3,15 +3,15 @@
 
 #include "otpch.h"
 
-#include "pugicast.h"
-
 #include "house.h"
-#include "iologindata.h"
-#include "game.h"
-#include "configmanager.h"
-#include "bed.h"
 
-#include <fmt/format.h>
+#include "bed.h"
+#include "configmanager.h"
+#include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iologindata.h"
+#include "pugicast.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -70,7 +70,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase/* = true*/, Player* play
 			door->setAccessList("");
 		}
 	} else {
-		std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+		std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
 			currentTime += 24 * 60 * 60 * 365;
@@ -391,16 +391,13 @@ void AccessList::parseList(const std::string& list)
 			break;
 		}
 
-		trimString(line);
-		trim_left(line, '\t');
-		trim_right(line, '\t');
-		trimString(line);
+		boost::algorithm::trim(line);
 
 		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
 
-		toLowerCaseString(line);
+		boost::algorithm::to_lower(line);
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {

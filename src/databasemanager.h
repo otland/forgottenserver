@@ -3,7 +3,6 @@
 
 #ifndef FS_DATABASEMANAGER_H
 #define FS_DATABASEMANAGER_H
-#include "database.h"
 
 class DatabaseManager
 {

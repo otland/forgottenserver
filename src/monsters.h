@@ -4,7 +4,11 @@
 #ifndef FS_MONSTERS_H
 #define FS_MONSTERS_H
 
-#include "creature.h"
+#include "const.h"
+#include "enums.h"
+
+class ConditionDamage;
+class LuaScriptInterface;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
