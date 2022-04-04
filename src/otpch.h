@@ -19,7 +19,6 @@
 #include <boost/variant.hpp>
 #include <cassert>
 #include <condition_variable>
-#include <cryptopp/rsa.h>
 #include <cstdint>
 #include <cstdlib>
 #include <deque>
