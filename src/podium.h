@@ -11,10 +11,10 @@ class Podium final : public Item
 	public:
 		explicit Podium(uint16_t type) : Item(type) {};
 
-		Podium* getPodium() override {
+		Podium* asPodium() override {
 			return this;
 		}
-		const Podium* getPodium() const override {
+		const Podium* asPodium() const override {
 			return this;
 		}
 

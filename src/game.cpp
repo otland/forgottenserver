@@ -2378,7 +2378,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	if (Podium* podium = item->getPodium()) {
+	if (Podium* podium = item->asPodium()) {
 		podium->setDirection(static_cast<Direction>((podium->getDirection() + 1) % 4));
 		updatePodium(podium);
 	} else {
@@ -5662,7 +5662,7 @@ void Game::removeBedSleeper(uint32_t guid)
 
 void Game::updatePodium(Item* item)
 {
-	if (!item->getPodium()) {
+	if (!item->asPodium()) {
 		return;
 	}
 

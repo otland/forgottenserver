@@ -2992,7 +2992,7 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 		return;
 	}
 
-	const Podium* podium = item->getPodium();
+	const Podium* podium = item->asPodium();
 	if (!podium) {
 		return;
 	}

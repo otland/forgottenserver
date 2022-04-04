@@ -592,10 +592,10 @@ class Item : virtual public Thing
 		virtual const BedItem* asBed() const {
 			return nullptr;
 		}
-		virtual Podium* getPodium() {
+		virtual Podium* asPodium() {
 			return nullptr;
 		}
-		virtual const Podium* getPodium() const {
+		virtual const Podium* asPodium() const {
 			return nullptr;
 		}
 
