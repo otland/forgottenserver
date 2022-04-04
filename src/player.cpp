@@ -23,8 +23,8 @@
 #include "scheduler.h"
 #include "spectators.h"
 #include "storeinbox.h"
-#include "weapons.h"
 #include "tools.h"
+#include "weapons.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
