@@ -82,7 +82,7 @@ public:
 	bool loadFromXml();
 
 	Vocation* getVocation(uint16_t id);
-	int32_t getVocationId(const std::string& name) const;
+	int32_t getVocationId(std::string_view name) const;
 	uint16_t getPromotedVocation(uint16_t vocationId) const;
 
 private:

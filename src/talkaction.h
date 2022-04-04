@@ -27,10 +27,10 @@ public:
 
 	const std::string& getWords() const { return words; }
 	const std::vector<std::string>& getWordsMap() const { return wordsMap; }
-	void setWords(std::string word)
+	void setWords(std::string_view word)
 	{
 		words = word;
-		wordsMap.push_back(word);
+		wordsMap.emplace_back(word);
 	}
 	std::string getSeparator() const { return separator; }
 	void setSeparator(std::string sep) { separator = sep; }

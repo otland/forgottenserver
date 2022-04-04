@@ -8,19 +8,19 @@
 #include "container.h"
 #include "podium.h"
 
-std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
+std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
 	}
 
 	if (!canRead(stringLen)) {
-		return std::string();
+		return {};
 	}
 
 	char* v = reinterpret_cast<char*>(buffer) + info.position; // does not break strict aliasing
 	info.position += stringLen;
-	return std::string(v, stringLen);
+	return {v, stringLen};
 }
 
 Position NetworkMessage::getPosition()
@@ -32,15 +32,15 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
-void NetworkMessage::addString(const std::string& value)
+void NetworkMessage::addString(std::string_view value)
 {
-	size_t stringLen = value.length();
+	size_t stringLen = value.size();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
 	add<uint16_t>(stringLen);
-	memcpy(buffer + info.position, value.c_str(), stringLen);
+	memcpy(buffer + info.position, value.data(), stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
 }

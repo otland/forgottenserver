@@ -121,7 +121,7 @@ static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	H[4] += E;
 }
 
-std::string transformToSHA1(const std::string& input)
+std::string transformToSHA1(std::string_view input)
 {
 	uint32_t H[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
 
@@ -240,12 +240,13 @@ bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 	                                                 [](char a, char b) { return tolower(a) == tolower(b); });
 }
 
-StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit /* = -1*/)
+std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
+                                            int32_t limit /* = -1*/)
 {
-	StringVector returnVector;
-	std::string::size_type start = 0, end = 0;
+	std::vector<std::string_view> returnVector;
+	std::string_view::size_type start = 0, end = 0;
 
-	while (--limit != -1 && (end = inString.find(separator, start)) != std::string::npos) {
+	while (--limit != -1 && (end = inString.find(separator, start)) != std::string_view::npos) {
 		returnVector.push_back(inString.substr(start, end - start));
 		start = end + separator.size();
 	}
@@ -254,11 +255,11 @@ StringVector explodeString(const std::string& inString, const std::string& separ
 	return returnVector;
 }
 
-IntegerVector vectorAtoi(const StringVector& stringVector)
+IntegerVector vectorAtoi(const std::vector<std::string_view>& stringVector)
 {
 	IntegerVector returnVector;
 	for (const auto& string : stringVector) {
-		returnVector.push_back(std::stoi(string));
+		returnVector.push_back(std::stoi(string.data()));
 	}
 	return returnVector;
 }
@@ -876,7 +877,7 @@ std::string ucwords(std::string str)
 	return str;
 }
 
-bool booleanString(const std::string& str)
+bool booleanString(std::string_view str)
 {
 	if (str.empty()) {
 		return false;

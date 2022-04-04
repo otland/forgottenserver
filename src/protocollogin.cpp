@@ -183,13 +183,13 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	std::string accountName = msg.getString();
+	auto accountName = msg.getString();
 	if (accountName.empty()) {
 		disconnectClient("Invalid account name.", version);
 		return;
 	}
 
-	std::string password = msg.getString();
+	auto password = msg.getString();
 	if (password.empty()) {
 		disconnectClient("Invalid password.", version);
 		return;
@@ -202,10 +202,11 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	std::string authToken = msg.getString();
+	auto authToken = msg.getString();
 
-	g_dispatcher.addTask(
-	    [=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()), accountName = std::move(accountName),
-	     password = std::move(password),
-	     authToken = std::move(authToken)]() { thisPtr->getCharacterList(accountName, password, authToken, version); });
+	g_dispatcher.addTask([=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()),
+	                      accountName = std::string{accountName}, password = std::string{password},
+	                      authToken = std::string{authToken}]() {
+		thisPtr->getCharacterList(accountName, password, authToken, version);
+	});
 }

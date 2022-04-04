@@ -192,7 +192,8 @@ std::string_view DBResult::getString(std::string_view column) const
 {
 	auto it = listNames.find(column);
 	if (it == listNames.end()) {
-		std::cout << "[Error - DBResult::getString] Column '" << column << "' does not exist in result set." << std::endl;
+		std::cout << "[Error - DBResult::getString] Column '" << column << "' does not exist in result set."
+		          << std::endl;
 		return {};
 	}
 

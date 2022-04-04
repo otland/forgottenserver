@@ -92,15 +92,17 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	return true;
 }
 
-uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password,
-                                              std::string& characterName, std::string& token, uint32_t tokenTime)
+std::pair<uint32_t, std::string_view> IOLoginData::gameworldAuthentication(std::string_view accountName,
+                                                                           std::string_view password,
+                                                                           std::string_view characterName,
+                                                                           std::string_view token, uint32_t tokenTime)
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(
 	    fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
 	                db.escapeString(accountName), db.escapeString(accountName)));
 	if (!result) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
 	// two-factor auth
@@ -108,20 +110,20 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
-				return 0;
+				return std::make_pair(0, characterName);
 			}
 
 			bool tokenValid = token == generateToken(secret, tokenTime) ||
 			                  token == generateToken(secret, tokenTime - 1) ||
 			                  token == generateToken(secret, tokenTime + 1);
 			if (!tokenValid) {
-				return 0;
+				return std::make_pair(0, characterName);
 			}
 		}
 	}
 
 	if (transformToSHA1(password) != result->getString("password")) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
 	uint32_t accountId = result->getNumber<uint32_t>("id");
@@ -130,11 +132,10 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	    fmt::format("SELECT `name` FROM `players` WHERE `name` = {:s} AND `account_id` = {:d} AND `deletion` = 0",
 	                db.escapeString(characterName), accountId));
 	if (!result) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
-	characterName = result->getString("name");
-	return accountId;
+	return std::make_pair(accountId, result->getString("name"));
 }
 
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
