@@ -47,7 +47,7 @@ void HouseTile::updateHouse(Item* item)
 		return;
 	}
 
-	Door* door = item->getDoor();
+	Door* door = item->asDoor();
 	if (door) {
 		if (door->getDoorId() != 0) {
 			house->addDoor(door);

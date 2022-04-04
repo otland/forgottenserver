@@ -574,10 +574,10 @@ class Item : virtual public Thing
 		virtual const Mailbox* asMailbox() const {
 			return nullptr;
 		}
-		virtual Door* getDoor() {
+		virtual Door* asDoor() {
 			return nullptr;
 		}
-		virtual const Door* getDoor() const {
+		virtual const Door* asDoor() const {
 			return nullptr;
 		}
 		virtual MagicField* getMagicField() {

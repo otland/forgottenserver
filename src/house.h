@@ -42,10 +42,10 @@ class Door final : public Item
 		Door(const Door&) = delete;
 		Door& operator=(const Door&) = delete;
 
-		Door* getDoor() override {
+		Door* asDoor() override {
 			return this;
 		}
-		const Door* getDoor() const override {
+		const Door* asDoor() const override {
 			return this;
 		}
 
