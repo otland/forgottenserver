@@ -57,10 +57,10 @@ class Container : public Item, public Cylinder
 			return nullptr;
 		}
 
-		virtual StoreInbox* getStoreInbox() {
+		virtual StoreInbox* asStoreInbox() {
 			return nullptr;
 		}
-		virtual const StoreInbox* getStoreInbox() const {
+		virtual const StoreInbox* asStoreInbox() const {
 			return nullptr;
 		}
 

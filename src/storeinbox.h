@@ -11,10 +11,10 @@ class StoreInbox final : public Container
 	public:
 		explicit StoreInbox(uint16_t type);
 
-		StoreInbox* getStoreInbox() override {
+		StoreInbox* asStoreInbox() override {
 			return this;
 		}
-		const StoreInbox* getStoreInbox() const override {
+		const StoreInbox* asStoreInbox() const override {
 			return this;
 		}
 
