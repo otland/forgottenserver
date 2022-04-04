@@ -562,10 +562,10 @@ class Item : virtual public Thing
 		virtual const Teleport* asTeleport() const {
 			return nullptr;
 		}
-		virtual TrashHolder* getTrashHolder() {
+		virtual TrashHolder* asTrashHolder() {
 			return nullptr;
 		}
-		virtual const TrashHolder* getTrashHolder() const {
+		virtual const TrashHolder* asTrashHolder() const {
 			return nullptr;
 		}
 		virtual Mailbox* getMailbox() {

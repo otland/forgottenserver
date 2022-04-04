@@ -11,10 +11,10 @@ class TrashHolder final : public Item, public Cylinder
 	public:
 		explicit TrashHolder(uint16_t itemId) : Item(itemId) {}
 
-		TrashHolder* getTrashHolder() override {
+		TrashHolder* asTrashHolder() override {
 			return this;
 		}
-		const TrashHolder* getTrashHolder() const override {
+		const TrashHolder* asTrashHolder() const override {
 			return this;
 		}
 
