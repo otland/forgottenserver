@@ -694,7 +694,7 @@ void LuaScriptInterface::setItemMetatable(lua_State* L, int32_t index, const Ite
 {
 	if (item->asContainer()) {
 		luaL_getmetatable(L, "Container");
-	} else if (item->getTeleport()) {
+	} else if (item->asTeleport()) {
 		luaL_getmetatable(L, "Teleport");
 	} else if (item->getPodium()) {
 		luaL_getmetatable(L, "Podium");
@@ -7437,7 +7437,7 @@ int LuaScriptInterface::luaTeleportCreate(lua_State* L)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
 	Item* item = getScriptEnv()->getItemByUID(id);
-	if (item && item->getTeleport()) {
+	if (item && item->asTeleport()) {
 		pushUserdata(L, item);
 		setMetatable(L, -1, "Teleport");
 	} else {

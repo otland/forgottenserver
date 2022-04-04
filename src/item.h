@@ -556,10 +556,10 @@ class Item : virtual public Thing
 		const Item* asItem() const override final {
 			return this;
 		}
-		virtual Teleport* getTeleport() {
+		virtual Teleport* asTeleport() {
 			return nullptr;
 		}
-		virtual const Teleport* getTeleport() const {
+		virtual const Teleport* asTeleport() const {
 			return nullptr;
 		}
 		virtual TrashHolder* getTrashHolder() {

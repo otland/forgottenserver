@@ -132,8 +132,8 @@ Teleport* Tile::getTeleportItem() const
 
 	if (const TileItemVector* items = getItemList()) {
 		for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-			if ((*it)->getTeleport()) {
-				return (*it)->getTeleport();
+			if ((*it)->asTeleport()) {
+				return (*it)->asTeleport();
 			}
 		}
 	}
@@ -1489,7 +1489,7 @@ void Tile::setTileFlags(const Item* item)
 		setFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
 	}
 
-	if (item->getTeleport()) {
+	if (item->asTeleport()) {
 		setFlag(TILESTATE_TELEPORT);
 	}
 
@@ -1554,7 +1554,7 @@ void Tile::resetTileFlags(const Item* item)
 		resetFlag(TILESTATE_IMMOVABLENOFIELDBLOCKPATH);
 	}
 
-	if (item->getTeleport()) {
+	if (item->asTeleport()) {
 		resetFlag(TILESTATE_TELEPORT);
 	}
 
