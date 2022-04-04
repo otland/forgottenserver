@@ -189,10 +189,10 @@ class MagicField final : public Item
 	public:
 		explicit MagicField(uint16_t type) : Item(type), createTime(OTSYS_TIME()) {}
 
-		MagicField* getMagicField() override {
+		MagicField* asMagicField() override {
 			return this;
 		}
-		const MagicField* getMagicField() const override {
+		const MagicField* asMagicField() const override {
 			return this;
 		}
 

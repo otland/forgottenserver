@@ -655,7 +655,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 uint32_t MoveEvent::StepInField(Creature* creature, Item* item, const Position&)
 {
-	MagicField* field = item->getMagicField();
+	MagicField* field = item->asMagicField();
 	if (field) {
 		field->onStepInField(creature);
 		return 1;
@@ -671,7 +671,7 @@ uint32_t MoveEvent::StepOutField(Creature*, Item*, const Position&)
 
 uint32_t MoveEvent::AddItemField(Item* item, Item*, const Position&)
 {
-	if (MagicField* field = item->getMagicField()) {
+	if (MagicField* field = item->asMagicField()) {
 		Tile* tile = item->getTile();
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (Creature* creature : *creatures) {

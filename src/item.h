@@ -580,10 +580,10 @@ class Item : virtual public Thing
 		virtual const Door* asDoor() const {
 			return nullptr;
 		}
-		virtual MagicField* getMagicField() {
+		virtual MagicField* asMagicField() {
 			return nullptr;
 		}
-		virtual const MagicField* getMagicField() const {
+		virtual const MagicField* asMagicField() const {
 			return nullptr;
 		}
 		virtual BedItem* getBed() {

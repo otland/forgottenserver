@@ -146,14 +146,14 @@ MagicField* Tile::getFieldItem() const
 		return nullptr;
 	}
 
-	if (ground && ground->getMagicField()) {
-		return ground->getMagicField();
+	if (ground && ground->asMagicField()) {
+		return ground->asMagicField();
 	}
 
 	if (const TileItemVector* items = getItemList()) {
 		for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-			if ((*it)->getMagicField()) {
-				return (*it)->getMagicField();
+			if ((*it)->asMagicField()) {
+				return (*it)->asMagicField();
 			}
 		}
 	}
@@ -915,7 +915,7 @@ void Tile::addThing(int32_t, Thing* thing)
 				//remove old field item if exists
 				if (items) {
 					for (ItemVector::const_iterator it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
-						MagicField* oldField = (*it)->getMagicField();
+						MagicField* oldField = (*it)->asMagicField();
 						if (oldField) {
 							if (oldField->isReplaceable()) {
 								removeThing(oldField, 1);
@@ -1493,7 +1493,7 @@ void Tile::setTileFlags(const Item* item)
 		setFlag(TILESTATE_TELEPORT);
 	}
 
-	if (item->getMagicField()) {
+	if (item->asMagicField()) {
 		setFlag(TILESTATE_MAGICFIELD);
 	}
 
@@ -1558,7 +1558,7 @@ void Tile::resetTileFlags(const Item* item)
 		resetFlag(TILESTATE_TELEPORT);
 	}
 
-	if (item->getMagicField()) {
+	if (item->asMagicField()) {
 		resetFlag(TILESTATE_MAGICFIELD);
 	}
 
