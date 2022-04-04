@@ -200,6 +200,9 @@ class Game
 		bool removeCreature(Creature* creature, bool isLogout = true);
 		void executeDeath(uint32_t creatureId);
 
+		void despawnPlayer(uint32_t creatureId);
+		void spawnPlayer(uint32_t creatureId);
+
 		void addCreatureCheck(Creature* creature);
 		static void removeCreatureCheck(Creature* creature);
 

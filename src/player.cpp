@@ -1117,69 +1117,77 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
-	if (isLogin && creature == this) {
-		sendItems();
+	if (creature == this) {
+		if (isLogin) {
+			sendItems();
 
-		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
-			Item* item = inventory[slot];
-			if (item) {
-				item->startDecaying();
-				g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
+			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+				Item* item = inventory[slot];
+				if (item) {
+					item->startDecaying();
+					g_moveEvents->onPlayerEquip(this, item, static_cast<slots_t>(slot), false);
+				}
 			}
-		}
 
-		for (Condition* condition : storedConditionList) {
-			addCondition(condition);
-		}
-		storedConditionList.clear();
+			for (Condition* condition : storedConditionList) {
+				addCondition(condition);
+			}
+			storedConditionList.clear();
 
-		updateRegeneration();
+			updateRegeneration();
 
-		BedItem* bed = g_game.getBedBySleeper(guid);
-		if (bed) {
-			bed->wakeUp(this);
-		}
+			BedItem* bed = g_game.getBedBySleeper(guid);
+			if (bed) {
+				bed->wakeUp(this);
+			}
 
-		// load mount speed bonus
-		uint16_t currentMountId = currentOutfit.lookMount;
-		if (currentMountId != 0) {
-			Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
-			if (currentMount && hasMount(currentMount)) {
-				g_game.changeSpeed(this, currentMount->speed);
+			// load mount speed bonus
+			uint16_t currentMountId = currentOutfit.lookMount;
+			if (currentMountId != 0) {
+				Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId);
+				if (currentMount && hasMount(currentMount)) {
+					g_game.changeSpeed(this, currentMount->speed);
+				} else {
+					defaultOutfit.lookMount = 0;
+					g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+				}
+			}
+
+			// mounted player moved to pz on login, update mount status
+			onChangeZone(getZone());
+
+			if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+				std::cout << name << " has logged in." << std::endl;
+			}
+
+			if (guild) {
+				guild->addMember(this);
+			}
+
+			int32_t offlineTime;
+			if (getLastLogout() != 0) {
+				// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
+				offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
 			} else {
-				defaultOutfit.lookMount = 0;
-				g_game.internalCreatureChangeOutfit(this, defaultOutfit);
+				offlineTime = 0;
+			}
+
+			for (Condition* condition : getMuteConditions()) {
+				condition->setTicks(condition->getTicks() - (offlineTime * 1000));
+				if (condition->getTicks() <= 0) {
+					removeCondition(condition);
+				}
+			}
+
+			g_game.checkPlayersRecord();
+			IOLoginData::updateOnlineStatus(guid, true);
+		} else if (isDead()) {
+			sendItems();
+
+			if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+				std::cout << name << " has spawned." << std::endl;
 			}
 		}
-
-		// mounted player moved to pz on login, update mount status
-		onChangeZone(getZone());
-
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << name << " has logged in." << std::endl;
-		}
-
-		if (guild) {
-			guild->addMember(this);
-		}
-
-		int32_t offlineTime;
-		if (getLastLogout() != 0) {
-			// Not counting more than 21 days to prevent overflow when multiplying with 1000 (for milliseconds).
-			offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
-		} else {
-			offlineTime = 0;
-		}
-
-		for (Condition* condition : getMuteConditions()) {
-			condition->setTicks(condition->getTicks() - (offlineTime * 1000));
-			if (condition->getTicks() <= 0) {
-				removeCondition(condition);
-			}
-		}
-
-		g_game.checkPlayersRecord();
-		IOLoginData::updateOnlineStatus(guid, true);
 	}
 }
 
@@ -1255,11 +1263,34 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
-		if (isLogout) {
-			loginPosition = getPosition();
-		}
+		if (!isDead()) {
+			if (isLogout) {
+				loginPosition = getPosition();
+				lastLogout = time(nullptr);
+			}
 
-		lastLogout = time(nullptr);
+			if (party) {
+				party->leaveParty(this);
+			}
+
+			g_chat->removeUserFromAllChannels(*this);
+
+			clearPartyInvitations();
+
+			if (guild) {
+				guild->removeMember(this);
+			}
+
+			if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+				std::cout << getName() << " has logged out." << std::endl;
+			}
+
+			IOLoginData::updateOnlineStatus(guid, false);
+		} else {
+			if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
+				std::cout << getName() << " has died." << std::endl;
+			}
+		}
 
 		if (eventWalk != 0) {
 			setFollowCreature(nullptr);
@@ -1270,24 +1301,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		closeShopWindow();
-
-		clearPartyInvitations();
-
-		if (party) {
-			party->leaveParty(this);
-		}
-
-		g_chat->removeUserFromAllChannels(*this);
-
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << getName() << " has logged out." << std::endl;
-		}
-
-		if (guild) {
-			guild->removeMember(this);
-		}
-
-		IOLoginData::updateOnlineStatus(guid, false);
 
 		bool saved = false;
 		for (uint32_t tries = 0; tries < 3; ++tries) {
@@ -2209,91 +2222,7 @@ void Player::death(Creature* lastHitCreature)
 		sendStats();
 	}
 
-	despawn();
-}
-
-bool Player::spawn()
-{
-	setDead(false);
-
-	const Position& pos = getLoginPosition();
-
-	if (!g_game.map.placeCreature(pos, this, false, true)) {
-		return false;
-	}
-
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, pos, true);
-	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(this, pos);
-		}
-	}
-
-	for (Creature* spectator : spectators) {
-		spectator->onCreatureAppear(this, true);
-	}
-
-	getParent()->postAddNotification(this, nullptr, 0);
-	g_game.addCreatureCheck(this);
-
-	addList();
-	return true;
-}
-
-void Player::despawn()
-{
-	if (isDead()) {
-		return;
-	}
-
-	listWalkDir.clear();
-	stopEventWalk();
-	onWalkAborted();
-
-	// remove check
-	g_game.removeCreatureCheck(this);
-
-	// remove from map
-	Tile* tile = getTile();
-
-	std::vector<int32_t> oldStackPosVector;
-
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, tile->getPosition(), true);
-	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
-			oldStackPosVector.push_back(player->canSeeCreature(this) ? tile->getClientIndexOfCreature(player, this) : -1);
-		}
-	}
-
-	tile->removeCreature(this);
-
-	const Position& tilePosition = tile->getPosition();
-
-	//send to client
-	size_t i = 0;
-	for (Creature* spectator : spectators) {
-		if (Player* player = spectator->getPlayer()) {
-			player->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
-		}
-	}
-
-	//event method
-	for (Creature* spectator : spectators) {
-		spectator->onRemoveCreature(this, false);
-	}
-
-	getParent()->postRemoveNotification(this, nullptr, 0);
-
-	g_game.removePlayer(this);
-
-	// show player as pending
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(this, VIPSTATUS_PENDING);
-	}
-
-	setDead(true);
+	g_game.despawnPlayer(getID());
 }
 
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified)

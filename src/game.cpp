@@ -631,6 +631,87 @@ void Game::executeDeath(uint32_t creatureId)
 	}
 }
 
+void Game::despawnPlayer(uint32_t creatureId)
+{
+	Player* player = getPlayerByID(creatureId);
+	if (!player || player->isDead()) {
+		return;
+	}
+
+	player->setDead(true);
+
+	player->listWalkDir.clear();
+	player->stopEventWalk();
+	player->onWalkAborted();
+
+	// remove from map
+	Tile* tile = player->getTile();
+
+	std::vector<int32_t> oldStackPosVector;
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, tile->getPosition(), true, false);
+	for (Creature* spectator : spectators) {
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			oldStackPosVector.push_back(spectatorPlayer->canSeeCreature(player) ? tile->getClientIndexOfCreature(spectatorPlayer, player) : -1);
+		}
+	}
+
+	tile->removeCreature(player);
+
+	const Position& tilePosition = tile->getPosition();
+
+	//send to client
+	size_t i = 0;
+	for (Creature* spectator : spectators) {
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
+		}
+	}
+
+	//event method
+	for (Creature* spectator : spectators) {
+		spectator->onRemoveCreature(player, false);
+	}
+
+	player->getParent()->postRemoveNotification(player, nullptr, 0);
+
+	// show player as pending
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(player, VIPSTATUS_PENDING);
+	}
+}
+
+void Game::spawnPlayer(uint32_t creatureId)
+{
+	Player* player = getPlayerByID(creatureId);
+	if (!player || !player->isDead()) {
+		return;
+	}
+
+	const Position& pos = player->getLoginPosition();
+
+	if (!g_game.map.placeCreature(pos, player)) {
+		return;
+	}
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, pos, true, false);
+	for (Creature* spectator : spectators) {
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendCreatureAppear(player, pos);
+		}
+	}
+
+	for (Creature* spectator : spectators) {
+		spectator->onCreatureAppear(player, false);
+	}
+
+	player->getParent()->postAddNotification(player, nullptr, 0);
+
+	player->setDead(false);
+}
+
 void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
                            uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
 {
