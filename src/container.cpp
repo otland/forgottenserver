@@ -238,7 +238,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -311,7 +311,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t count,
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -366,7 +366,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -425,7 +425,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 		*destItem = nullptr;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return this;
 	}
@@ -475,7 +475,7 @@ void Container::addThing(int32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -508,7 +508,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -526,7 +526,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Container::replaceThing(uint32_t index, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -550,7 +550,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 
 void Container::removeThing(Thing* thing, uint32_t count)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -681,7 +681,7 @@ void Container::internalAddThing(Thing* thing)
 
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return;
 	}

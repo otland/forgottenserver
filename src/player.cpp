@@ -2405,7 +2405,7 @@ bool Player::hasCapacity(const Item* item, uint32_t count) const
 
 ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature*) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2633,7 +2633,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
 		uint32_t flags) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -2679,7 +2679,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 
 		const Thing* destThing = getThing(index);
 		if (destThing) {
-			destItem = destThing->getItem();
+			destItem = destThing->asItem();
 		}
 
 		if (destItem) {
@@ -2712,7 +2712,7 @@ ReturnValue Player::queryRemove(const Thing& thing, uint32_t count, uint32_t fla
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2734,7 +2734,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		*destItem = nullptr;
 
-		const Item* item = thing.getItem();
+		const Item* item = thing.asItem();
 		if (!item) {
 			return this;
 		}
@@ -2840,7 +2840,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 
 	Thing* destThing = getThing(index);
 	if (destThing) {
-		*destItem = destThing->getItem();
+		*destItem = destThing->asItem();
 	}
 
 	Cylinder* subCylinder = dynamic_cast<Cylinder*>(destThing);
@@ -2858,7 +2858,7 @@ void Player::addThing(int32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2877,7 +2877,7 @@ void Player::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2903,7 +2903,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2921,7 +2921,7 @@ void Player::replaceThing(uint32_t index, Thing* thing)
 
 void Player::removeThing(Thing* thing, uint32_t count)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -3089,14 +3089,14 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerEquip(this, thing->getItem(), static_cast<slots_t>(index), false);
-		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), true);
+		g_moveEvents->onPlayerEquip(this, thing->asItem(), static_cast<slots_t>(index), false);
+		g_events->eventPlayerOnInventoryUpdate(this, thing->asItem(), static_cast<slots_t>(index), true);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (oldParent ? oldParent->getItem() : nullptr);
+		const Item* i = (oldParent ? oldParent->asItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3114,7 +3114,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		sendItems();
 	}
 
-	if (const Item* item = thing->getItem()) {
+	if (const Item* item = thing->asItem()) {
 		if (const Container* container = item->getContainer()) {
 			onSendContainer(container);
 		}
@@ -3145,14 +3145,14 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 {
 	if (link == LINK_OWNER) {
 		//calling movement scripts
-		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
-		g_events->eventPlayerOnInventoryUpdate(this, thing->getItem(), static_cast<slots_t>(index), false);
+		g_moveEvents->onPlayerDeEquip(this, thing->asItem(), static_cast<slots_t>(index));
+		g_events->eventPlayerOnInventoryUpdate(this, thing->asItem(), static_cast<slots_t>(index), false);
 	}
 
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		const Item* i = (newParent ? newParent->getItem() : nullptr);
+		const Item* i = (newParent ? newParent->asItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3170,7 +3170,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		sendItems();
 	}
 
-	if (const Item* item = thing->getItem()) {
+	if (const Item* item = thing->asItem()) {
 		if (item->isSupply()) {
 			if (const Player* player = item->getHoldingPlayer()) {
 				player->sendSupplyUsed(item->getClientID());
@@ -3257,7 +3257,7 @@ void Player::internalAddThing(Thing* thing)
 
 void Player::internalAddThing(uint32_t index, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return;
 	}

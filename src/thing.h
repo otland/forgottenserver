@@ -47,10 +47,10 @@ class Thing
 		virtual const Container* getContainer() const {
 			return nullptr;
 		}
-		virtual Item* getItem() {
+		virtual Item* asItem() {
 			return nullptr;
 		}
-		virtual const Item* getItem() const {
+		virtual const Item* asItem() const {
 			return nullptr;
 		}
 		virtual Creature* asCreature() {

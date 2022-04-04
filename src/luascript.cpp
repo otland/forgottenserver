@@ -124,7 +124,7 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return creature->getID();
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (item && item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		return item->getUniqueId();
 	}
@@ -177,7 +177,7 @@ Item* ScriptEnvironment::getItemByUID(uint32_t uid)
 	if (!thing) {
 		return nullptr;
 	}
-	return thing->getItem();
+	return thing->asItem();
 }
 
 Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
@@ -593,7 +593,7 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = thing->asItem()) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
 	} else if (Creature* creature = thing->asCreature()) {
@@ -609,7 +609,7 @@ void LuaScriptInterface::pushCylinder(lua_State* L, Cylinder* cylinder)
 	if (Creature* creature = cylinder->asCreature()) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
+	} else if (Item* parentItem = cylinder->asItem()) {
 		pushUserdata<Item>(L, parentItem);
 		setItemMetatable(L, -1, parentItem);
 	} else if (Tile* tile = cylinder->getTile()) {
@@ -5243,7 +5243,7 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 	if (Creature* creature = thing->asCreature()) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = thing->asItem()) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
 	} else {
@@ -5283,7 +5283,7 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 	if (Creature* visibleCreature = thing->asCreature()) {
 		pushUserdata<Creature>(L, visibleCreature);
 		setCreatureMetatable(L, -1, visibleCreature);
-	} else if (Item* visibleItem = thing->getItem()) {
+	} else if (Item* visibleItem = thing->asItem()) {
 		pushUserdata<Item>(L, visibleItem);
 		setItemMetatable(L, -1, visibleItem);
 	} else {
@@ -10030,7 +10030,7 @@ int LuaScriptInterface::luaPlayerGetSlotItem(lua_State* L)
 		return 1;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (item) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);

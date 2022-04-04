@@ -23,7 +23,7 @@ void HouseTile::addThing(int32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = thing->asItem()) {
 		updateHouse(item);
 	}
 }
@@ -36,7 +36,7 @@ void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	if (Item* item = thing->getItem()) {
+	if (Item* item = thing->asItem()) {
 		updateHouse(item);
 	}
 }
@@ -70,7 +70,7 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		} else {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (const Item* item = thing.getItem()) {
+	} else if (const Item* item = thing.asItem()) {
 		if (item->isStoreItem() && !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
@@ -115,7 +115,7 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 
 ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr*/) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}

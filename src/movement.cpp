@@ -443,7 +443,7 @@ uint32_t MoveEvents::onCreatureMove(Creature* creature, const Tile* tile, MoveEv
 			continue;
 		}
 
-		Item* tileItem = thing->getItem();
+		Item* tileItem = thing->asItem();
 		if (!tileItem) {
 			continue;
 		}
@@ -502,7 +502,7 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 			continue;
 		}
 
-		Item* tileItem = thing->getItem();
+		Item* tileItem = thing->asItem();
 		if (!tileItem || tileItem == item) {
 			continue;
 		}

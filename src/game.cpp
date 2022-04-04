@@ -266,7 +266,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 
 		if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 			//do extra checks here if the thing is accessible
-			if (thing && thing->getItem()) {
+			if (thing && thing->asItem()) {
 				if (tile->hasProperty(CONST_PROP_ISVERTICAL)) {
 					if (player->getPosition().x + 1 == tile->getPosition().x) {
 						thing = nullptr;
@@ -663,14 +663,14 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		} else {
 			playerMoveCreature(player, movingCreature, movingCreature->getPosition(), tile);
 		}
-	} else if (thing->getItem()) {
+	} else if (thing->asItem()) {
 		Cylinder* toCylinder = internalGetCylinder(player, toPos);
 		if (!toCylinder) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, thing->getItem(), toCylinder);
+		playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, thing->asItem(), toCylinder);
 	}
 }
 
@@ -923,12 +923,12 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 		}
 
 		Thing* thing = internalGetThing(player, fromPos, fromIndex, 0, STACKPOS_MOVE);
-		if (!thing || !thing->getItem()) {
+		if (!thing || !thing->asItem()) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 			return;
 		}
 
-		item = thing->getItem();
+		item = thing->asItem();
 	}
 
 	if (item->getClientID() != spriteId) {
@@ -1180,13 +1180,13 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	if (tradeItem) {
-		if (toCylinder->getItem() == tradeItem) {
+		if (toCylinder->asItem() == tradeItem) {
 			return RETURNVALUE_NOTENOUGHROOM;
 		}
 
 		Cylinder* tmpCylinder = toCylinder->getParent();
 		while (tmpCylinder) {
-			if (tmpCylinder->getItem() == tradeItem) {
+			if (tmpCylinder->asItem() == tradeItem) {
 				return RETURNVALUE_NOTENOUGHROOM;
 			}
 
@@ -1453,7 +1453,7 @@ Item* Game::findItemOfType(Cylinder* cylinder, uint16_t itemId,
 			continue;
 		}
 
-		Item* item = thing->getItem();
+		Item* item = thing->asItem();
 		if (!item) {
 			continue;
 		}
@@ -1508,7 +1508,7 @@ bool Game::removeMoney(Cylinder* cylinder, uint64_t money, uint32_t flags /*= 0*
 			continue;
 		}
 
-		Item* item = thing->getItem();
+		Item* item = thing->asItem();
 		if (!item) {
 			continue;
 		}
@@ -1758,7 +1758,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 
 		map.moveCreature(*creature, *toTile, !pushMove);
 		return RETURNVALUE_NOERROR;
-	} else if (Item* item = thing->getItem()) {
+	} else if (Item* item = thing->asItem()) {
 		return internalMoveItem(item->getParent(), toTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, flags);
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
@@ -2069,7 +2069,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || !item->isUseable() || item->getClientID() != fromSpriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2154,7 +2154,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2221,7 +2221,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || !item->isUseable() || item->getClientID() != spriteId) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
 		return;
@@ -2360,7 +2360,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || (!item->isRotatable() && !item->isPodium()) || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2556,7 +2556,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID) || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2607,7 +2607,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	Item* tradeItem = tradeThing->getItem();
+	Item* tradeItem = tradeThing->asItem();
 	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() || tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -3323,7 +3323,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item || item->getClientID() != spriteId || it.type != ITEM_TYPE_PODIUM) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -3360,7 +3360,7 @@ void Game::playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& 
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return;
 	}

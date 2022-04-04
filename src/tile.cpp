@@ -623,7 +623,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 		}
-	} else if (const Item* item = thing.getItem()) {
+	} else if (const Item* item = thing.asItem()) {
 		const TileItemVector* items = getItemList();
 		if (items && items->size() >= 0xFFFF) {
 			return RETURNVALUE_NOTPOSSIBLE;
@@ -713,7 +713,7 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -820,7 +820,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 	if (destTile) {
 		Thing* destThing = destTile->getTopDownItem();
 		if (destThing) {
-			*destItem = destThing->getItem();
+			*destItem = destThing->asItem();
 		}
 	}
 	return destTile;
@@ -844,7 +844,7 @@ void Tile::addThing(int32_t, Thing* thing)
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
 	} else {
-		Item* item = thing->getItem();
+		Item* item = thing->asItem();
 		if (!item) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
@@ -950,7 +950,7 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -968,7 +968,7 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 {
 	int32_t pos = index;
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -1055,7 +1055,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		return;
 	}
 
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (!item) {
 		return;
 	}
@@ -1147,7 +1147,7 @@ int32_t Tile::getThingIndex(const Thing* thing) const
 
 	const TileItemVector* items = getItemList();
 	if (items) {
-		const Item* item = thing->getItem();
+		const Item* item = thing->asItem();
 		if (item && item->isAlwaysOnTop()) {
 			for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 				++n;
@@ -1174,7 +1174,7 @@ int32_t Tile::getThingIndex(const Thing* thing) const
 	}
 
 	if (items) {
-		const Item* item = thing->getItem();
+		const Item* item = thing->asItem();
 		if (item && !item->isAlwaysOnTop()) {
 			for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 				++n;
@@ -1339,7 +1339,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		creature->incrementReferenceCounter();
 		item = nullptr;
 	} else {
-		item = thing->getItem();
+		item = thing->asItem();
 		if (item) {
 			item->incrementReferenceCounter();
 		}
@@ -1397,7 +1397,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	if (creature) {
 		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);
 	} else {
-		Item* item = thing->getItem();
+		Item* item = thing->asItem();
 		if (item) {
 			g_moveEvents->onItemMove(item, this, false);
 		}
@@ -1423,7 +1423,7 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		CreatureVector* creatures = makeCreatures();
 		creatures->insert(creatures->begin(), creature);
 	} else {
-		Item* item = thing->getItem();
+		Item* item = thing->asItem();
 		if (!item) {
 			return;
 		}
@@ -1597,7 +1597,7 @@ Item* Tile::getUseItem(int32_t index) const
 	}
 
 	if (Thing* thing = getThing(index)) {
-		return thing->getItem();
+		return thing->asItem();
 	}
 
 	return nullptr;

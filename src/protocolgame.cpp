@@ -2679,7 +2679,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	// send store inbox
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->asItem());
 
 	// gameworld time of the day
 	sendWorldLight(g_game.getWorldLightInfo());

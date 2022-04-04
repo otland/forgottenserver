@@ -13,7 +13,7 @@ extern Game g_game;
 
 ReturnValue Mailbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t, Creature*) const
 {
-	const Item* item = thing.getItem();
+	const Item* item = thing.asItem();
 	if (item && Mailbox::canSend(item)) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -43,7 +43,7 @@ void Mailbox::addThing(Thing* thing)
 
 void Mailbox::addThing(int32_t, Thing* thing)
 {
-	Item* item = thing->getItem();
+	Item* item = thing->asItem();
 	if (item && Mailbox::canSend(item)) {
 		sendItem(item);
 	}

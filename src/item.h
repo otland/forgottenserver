@@ -550,10 +550,10 @@ class Item : virtual public Thing
 
 		bool equals(const Item* otherItem) const;
 
-		Item* getItem() override final {
+		Item* asItem() override final {
 			return this;
 		}
-		const Item* getItem() const override final {
+		const Item* asItem() const override final {
 			return this;
 		}
 		virtual Teleport* getTeleport() {
