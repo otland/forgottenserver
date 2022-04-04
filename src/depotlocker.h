@@ -15,10 +15,10 @@ class DepotLocker final : public Container
 	public:
 		explicit DepotLocker(uint16_t type);
 
-		DepotLocker* getDepotLocker() override {
+		DepotLocker* asDepotLocker() override {
 			return this;
 		}
-		const DepotLocker* getDepotLocker() const override {
+		const DepotLocker* asDepotLocker() const override {
 			return this;
 		}
 

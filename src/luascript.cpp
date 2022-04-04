@@ -3719,7 +3719,7 @@ int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	//isDepot(uid)
 	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
-	pushBoolean(L, container && container->getDepotLocker());
+	pushBoolean(L, container && container->asDepotLocker());
 	return 1;
 }
 
@@ -3809,7 +3809,7 @@ int LuaScriptInterface::luaGetDepotId(lua_State* L)
 		return 1;
 	}
 
-	DepotLocker* depotLocker = container->getDepotLocker();
+	DepotLocker* depotLocker = container->asDepotLocker();
 	if (!depotLocker) {
 		reportErrorFunc(L, "Depot not found");
 		pushBoolean(L, false);

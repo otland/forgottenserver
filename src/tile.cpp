@@ -1514,7 +1514,7 @@ void Tile::setTileFlags(const Item* item)
 	}
 
 	const Container* container = item->asContainer();
-	if (container && container->getDepotLocker()) {
+	if (container && container->asDepotLocker()) {
 		setFlag(TILESTATE_DEPOT);
 	}
 
@@ -1575,7 +1575,7 @@ void Tile::resetTileFlags(const Item* item)
 	}
 
 	const Container* container = item->asContainer();
-	if (container && container->getDepotLocker()) {
+	if (container && container->asDepotLocker()) {
 		resetFlag(TILESTATE_DEPOT);
 	}
 
