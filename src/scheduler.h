@@ -1,29 +1,10 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SCHEDULER_H_2905B3D5EAB34B4BA8830167262D2DC1
-#define FS_SCHEDULER_H_2905B3D5EAB34B4BA8830167262D2DC1
+#ifndef FS_SCHEDULER_H
+#define FS_SCHEDULER_H
 
 #include "tasks.h"
-#include <unordered_set>
-#include <queue>
-
 #include "thread_holder_base.h"
 
 static constexpr int32_t SCHEDULER_MINTICKS = 50;
@@ -38,46 +19,36 @@ class SchedulerTask : public Task
 			return eventId;
 		}
 
-		std::chrono::system_clock::time_point getCycle() const {
-			return expiration;
+		uint32_t getDelay() const {
+			return delay;
 		}
-
 	private:
-		SchedulerTask(uint32_t delay, std::function<void (void)>&& f) : Task(delay, std::move(f)) {}
+		SchedulerTask(uint32_t delay, TaskFunc&& f) : Task(std::move(f)), delay(delay) {}
 
 		uint32_t eventId = 0;
+		uint32_t delay = 0;
 
-		friend SchedulerTask* createSchedulerTask(uint32_t, std::function<void (void)>);
+		friend SchedulerTask* createSchedulerTask(uint32_t, TaskFunc&&);
 };
 
-SchedulerTask* createSchedulerTask(uint32_t delay, std::function<void (void)> f);
-
-struct TaskComparator {
-	bool operator()(const SchedulerTask* lhs, const SchedulerTask* rhs) const {
-		return lhs->getCycle() > rhs->getCycle();
-	}
-};
+SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f);
 
 class Scheduler : public ThreadHolder<Scheduler>
 {
 	public:
 		uint32_t addEvent(SchedulerTask* task);
-		bool stopEvent(uint32_t eventId);
+		void stopEvent(uint32_t eventId);
 
 		void shutdown();
 
-		void threadMain();
-
+		void threadMain() { io_context.run(); }
 	private:
-		std::thread thread;
-		std::mutex eventLock;
-		std::condition_variable eventSignal;
-
-		uint32_t lastEventId {0};
-		std::priority_queue<SchedulerTask*, std::deque<SchedulerTask*>, TaskComparator> eventList;
-		std::unordered_set<uint32_t> eventIds;
+		std::atomic<uint32_t> lastEventId{0};
+		std::unordered_map<uint32_t, boost::asio::steady_timer> eventIdTimerMap;
+		boost::asio::io_context io_context;
+		boost::asio::io_context::work work{io_context};
 };
 
 extern Scheduler g_scheduler;
 
-#endif
+#endif // FS_SCHEDULER_H

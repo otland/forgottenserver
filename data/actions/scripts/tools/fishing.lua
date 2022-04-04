@@ -7,7 +7,7 @@ local useWorms = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
-	if not table.contains(waterIds, target.itemid) then
+	if not table.contains(waterIds, targetId) then
 		return false
 	end
 

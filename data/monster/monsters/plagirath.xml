@@ -71,7 +71,8 @@
 		<item id="18421" countmax="6" chance="23000" /><!-- green crystal fragment -->
 		<item id="2143" countmax="8" chance="12000" /><!-- white pearl -->
 		<item id="2146" countmax="9" chance="12000" /><!-- small sapphire -->
-		<item id="2148" countmax="200" chance="98000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="49000" /><!-- gold coin -->
 		<item id="2150" countmax="5" chance="10000" /><!-- small amethyst -->
 		<item id="2152" countmax="58" chance="8000" /><!-- platinum coin -->
 		<item id="25383" chance="800" /><!-- rift lance -->

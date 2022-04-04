@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ushuriel" nameDescription="Ushuriel" race="fire" experience="10500" speed="350">
 	<health now="31500" max="31500" />
 	<look type="12" head="0" body="57" legs="0" feet="61" corpse="6068" />

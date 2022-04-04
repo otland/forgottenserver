@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200">
 	<health now="260" max="260" />
 	<look type="550" corpse="21223" />

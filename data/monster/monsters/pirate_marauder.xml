@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490">
 	<health now="210" max="210" />
 	<look type="93" corpse="20483" />

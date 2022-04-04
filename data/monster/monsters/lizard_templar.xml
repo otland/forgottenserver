@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="174">
 	<health now="410" max="410" />
 	<look type="113" corpse="4251" />

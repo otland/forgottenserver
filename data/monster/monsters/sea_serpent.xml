@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sea Serpent" nameDescription="a sea serpent" race="blood" experience="2300" speed="350" manacost="390">
 	<health now="1950" max="1950" />
 	<look type="275" corpse="8307" />

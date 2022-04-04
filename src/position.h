@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
-#define FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
+#ifndef FS_POSITION_H
+#define FS_POSITION_H
 
 enum Direction : uint8_t {
 	DIRECTION_NORTH = 0,
@@ -51,6 +35,10 @@ struct Position
 		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay && Position::getDistanceZ(p1, p2) <= deltaz;
 	}
 
+	static bool areInRange(const Position& p1, const Position& p2, int_fast32_t deltax, int_fast32_t deltay) {
+		return Position::getDistanceX(p1, p2) <= deltax && Position::getDistanceY(p1, p2) <= deltay;
+	}
+
 	static int_fast32_t getOffsetX(const Position& p1, const Position& p2) {
 		return p1.getX() - p2.getX();
 	}
@@ -68,7 +56,7 @@ struct Position
 		return std::abs(Position::getOffsetY(p1, p2));
 	}
 	static int16_t getDistanceZ(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetZ(p1, p2));
+		return static_cast<int16_t>(std::abs(Position::getOffsetZ(p1, p2)));
 	}
 
 	uint16_t x = 0;
@@ -131,4 +119,4 @@ struct Position
 std::ostream& operator<<(std::ostream&, const Position&);
 std::ostream& operator<<(std::ostream&, const Direction&);
 
-#endif
+#endif // FS_POSITION_H

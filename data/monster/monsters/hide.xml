@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hide" nameDescription="Hide" race="venom" experience="240" speed="280">
 	<health now="500" max="500" />
 	<look type="219" corpse="6060" />

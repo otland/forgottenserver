@@ -1,33 +1,16 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "monsters.h"
-#include "monster.h"
-#include "spells.h"
+
 #include "combat.h"
-#include "weapons.h"
 #include "configmanager.h"
 #include "game.h"
-
 #include "pugicast.h"
+#include "spells.h"
+#include "weapons.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -69,20 +52,19 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	loaded = true;
 
 	for (auto monsterNode : doc.child("monsters").children()) {
-		std::string name = asLowerCaseString(monsterNode.attribute("name").as_string());
+		std::string name = boost::algorithm::to_lower_copy<std::string>(monsterNode.attribute("name").as_string());
 		std::string file = "data/monster/" + std::string(monsterNode.attribute("file").as_string());
-		auto forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
-		if (forceLoad) {
-			loadMonster(file, name, true);
-			continue;
-		}
+		unloadedMonsters.emplace(name, file);
+	}
 
-		if (reloading && monsters.find(name) != monsters.end()) {
-			loadMonster(file, name, true);
-		} else {
-			unloadedMonsters.emplace(name, file);
+	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+
+	for (auto it : unloadedMonsters) {
+		if ((forceLoad || reloading) && monsters.find(it.first) != monsters.end()) {
+			loadMonster(it.second, it.first, reloading);
 		}
 	}
+
 	return true;
 }
 
@@ -135,7 +117,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Chance value out of bounds for spell: " << name << std::endl;
 		}
 		sb.chance = chance;
-	} else if (asLowerCaseString(name) != "melee") {
+	} else if (boost::algorithm::to_lower_copy(name) != "melee") {
 		std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Missing chance value on non-melee spell: " << name << std::endl;
 	}
 
@@ -192,7 +174,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		Combat* combat = new Combat;
+		Combat_ptr combat = std::make_shared<Combat>();
 		if ((attr = node.attribute("length"))) {
 			int32_t length = pugi::cast<int32_t>(attr.value());
 			if (length > 0) {
@@ -224,7 +206,20 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->setArea(area);
 		}
 
-		std::string tmpName = asLowerCaseString(name);
+		if ((attr = node.attribute("ring"))) {
+			int32_t ring = pugi::cast<int32_t>(attr.value());
+
+			//target spell
+			if ((attr = node.attribute("target"))) {
+				needTarget = attr.as_bool();
+			}
+
+			AreaCombat* area = new AreaCombat();
+			area->setupAreaRing(ring);
+			combat->setArea(area);
+		}
+
+		std::string tmpName = boost::algorithm::to_lower_copy(name);
 
 		if (tmpName == "melee") {
 			sb.isMelee = true;
@@ -351,18 +346,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 
 				if (minSpeedChange == 0) {
 					std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - missing speedchange/minspeedchange value" << std::endl;
-					delete combat;
 					return false;
-				}
-
-				if (minSpeedChange < -1000) {
-					std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
-					minSpeedChange = -1000;
 				}
 
 				if (maxSpeedChange == 0) {
 					maxSpeedChange = minSpeedChange; // static speedchange value
 				}
+			}
+
+			if (minSpeedChange < -1000) {
+				std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - you cannot reduce a creatures speed below -1000 (100%)" << std::endl;
+				minSpeedChange = -1000;
 			}
 
 			ConditionType_t conditionType;
@@ -412,12 +406,17 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			combat->addCondition(condition);
 		} else if (tmpName == "drunk") {
 			int32_t duration = 10000;
+			uint8_t drunkenness = 25;
 
 			if ((attr = node.attribute("duration"))) {
 				duration = pugi::cast<int32_t>(attr.value());
 			}
 
-			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			if ((attr = node.attribute("drunkenness"))) {
+				drunkenness = pugi::cast<uint8_t>(attr.value());
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, drunkenness);
 			combat->addCondition(condition);
 		} else if (tmpName == "firefield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
@@ -426,12 +425,12 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		} else if (tmpName == "energyfield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
 		} else if (tmpName == "firecondition" || tmpName == "energycondition" ||
-		           tmpName == "earthcondition" || tmpName == "poisoncondition" ||
-		           tmpName == "icecondition" || tmpName == "freezecondition" ||
-		           tmpName == "deathcondition" || tmpName == "cursecondition" ||
-		           tmpName == "holycondition" || tmpName == "dazzlecondition" ||
-		           tmpName == "drowncondition" || tmpName == "bleedcondition" ||
-		           tmpName == "physicalcondition") {
+				   tmpName == "earthcondition" || tmpName == "poisoncondition" ||
+				   tmpName == "icecondition" || tmpName == "freezecondition" ||
+				   tmpName == "deathcondition" || tmpName == "cursecondition" ||
+				   tmpName == "holycondition" || tmpName == "dazzlecondition" ||
+				   tmpName == "drowncondition" || tmpName == "bleedcondition" ||
+				   tmpName == "physicalcondition") {
 			ConditionType_t conditionType = CONDITION_NONE;
 			uint32_t tickInterval = 2000;
 
@@ -487,7 +486,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			//
 		} else {
 			std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Unknown spell name: " << name << std::endl;
-			delete combat;
 			return false;
 		}
 
@@ -497,18 +495,18 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		for (auto attributeNode : node.children()) {
 			if ((attr = attributeNode.attribute("key"))) {
 				const char* value = attr.value();
-				if (strcasecmp(value, "shooteffect") == 0) {
+				if (caseInsensitiveEqual(value, "shooteffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
-						ShootType_t shoot = getShootType(asLowerCaseString(attr.as_string()));
+						ShootType_t shoot = getShootType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 						if (shoot != CONST_ANI_NONE) {
 							combat->setParam(COMBAT_PARAM_DISTANCEEFFECT, shoot);
 						} else {
 							std::cout << "[Warning - Monsters::deserializeSpell] " << description << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
 					}
-				} else if (strcasecmp(value, "areaeffect") == 0) {
+				} else if (caseInsensitiveEqual(value, "areaeffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
-						MagicEffectClasses effect = getMagicEffect(asLowerCaseString(attr.as_string()));
+						MagicEffectClasses effect = getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 						if (effect != CONST_ME_NONE) {
 							combat->setParam(COMBAT_PARAM_EFFECT, effect);
 						} else {
@@ -581,7 +579,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		combatSpell = combatSpellPtr.release();
 		combatSpell->getCombat()->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
 	} else {
-		std::unique_ptr<Combat> combat{ new Combat };
+		Combat_ptr combat = std::make_shared<Combat>();
 		sb.combatSpell = true;
 
 		if (spell->length > 0) {
@@ -600,7 +598,29 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->setArea(area);
 		}
 
-		std::string tmpName = asLowerCaseString(spell->name);
+		if (spell->ring > 0) {
+			AreaCombat* area = new AreaCombat();
+			area->setupAreaRing(spell->ring);
+			combat->setArea(area);
+		}
+
+		if (spell->conditionType != CONDITION_NONE) {
+			ConditionType_t conditionType = spell->conditionType;
+
+			uint32_t tickInterval = 2000;
+			if (spell->tickInterval != 0) {
+				tickInterval = spell->tickInterval;
+			}
+
+			int32_t conMinDamage = std::abs(spell->conditionMinDamage);
+			int32_t conMaxDamage = std::abs(spell->conditionMaxDamage);
+			int32_t startDamage = std::abs(spell->conditionStartDamage);
+
+			Condition* condition = getDamageCondition(conditionType, conMaxDamage, conMinDamage, startDamage, tickInterval);
+			combat->addCondition(condition);
+		}
+
+		std::string tmpName = boost::algorithm::to_lower_copy(spell->name);
 
 		if (tmpName == "melee") {
 			sb.isMelee = true;
@@ -610,27 +630,17 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 				sb.maxCombatValue = -Weapons::getMaxMeleeDamage(spell->skill, spell->attack);
 			}
 
-			if (spell->conditionType != CONDITION_NONE) {
-				ConditionType_t conditionType = spell->conditionType;
-
-				int32_t minDamage = spell->conditionMinDamage;
-				int32_t maxDamage = minDamage;
-
-				uint32_t tickInterval = 2000;
-				if (spell->tickInterval != 0) {
-					tickInterval = spell->tickInterval;
-				}
-
-				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, spell->conditionStartDamage, tickInterval);
-				combat->addCondition(condition);
-			}
-
 			sb.range = 1;
 			combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
 			combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
 			combat->setParam(COMBAT_PARAM_BLOCKSHIELD, 1);
 			combat->setOrigin(ORIGIN_MELEE);
 		} else if (tmpName == "combat") {
+			if (spell->combatType == COMBAT_UNDEFINEDDAMAGE) {
+				std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - spell has undefined damage" << std::endl;
+				combat->setParam(COMBAT_PARAM_TYPE, COMBAT_PHYSICALDAMAGE);
+			}
+
 			if (spell->combatType == COMBAT_PHYSICALDAMAGE) {
 				combat->setParam(COMBAT_PARAM_BLOCKARMOR, 1);
 				combat->setOrigin(ORIGIN_RANGED);
@@ -700,12 +710,17 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			combat->addCondition(condition);
 		} else if (tmpName == "drunk") {
 			int32_t duration = 10000;
+			uint8_t drunkenness = 25;
 
 			if (spell->duration != 0) {
 				duration = spell->duration;
 			}
 
-			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, 0);
+			if (spell->drunkenness != 0) {
+				drunkenness = spell->drunkenness;
+			}
+
+			Condition* condition = Condition::createCondition(CONDITIONID_COMBAT, CONDITION_DRUNK, duration, drunkenness);
 			combat->addCondition(condition);
 		} else if (tmpName == "firefield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL);
@@ -714,32 +729,9 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		} else if (tmpName == "energyfield") {
 			combat->setParam(COMBAT_PARAM_CREATEITEM, ITEM_ENERGYFIELD_PVP);
 		} else if (tmpName == "condition") {
-			uint32_t tickInterval = 2000;
-
 			if (spell->conditionType == CONDITION_NONE) {
 				std::cout << "[Error - Monsters::deserializeSpell] - " << description << " - Condition is not set for: " << spell->name << std::endl;
 			}
-
-			if (spell->tickInterval != 0) {
-				int32_t value = spell->tickInterval;
-				if (value > 0) {
-					tickInterval = value;
-				}
-			}
-
-			int32_t minDamage = std::abs(spell->conditionMinDamage);
-			int32_t maxDamage = std::abs(spell->conditionMaxDamage);
-			int32_t startDamage = 0;
-
-			if (spell->conditionStartDamage != 0) {
-				int32_t value = std::abs(spell->conditionStartDamage);
-				if (value <= minDamage) {
-					startDamage = value;
-				}
-			}
-
-			Condition* condition = getDamageCondition(spell->conditionType, maxDamage, minDamage, startDamage, tickInterval);
-			combat->addCondition(condition);
 		} else if (tmpName == "strength") {
 			//
 		} else if (tmpName == "effect") {
@@ -759,7 +751,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		}
 
 		combat->setPlayerCombatValues(COMBAT_FORMULA_DAMAGE, sb.minCombatValue, 0, sb.maxCombatValue, 0);
-		combatSpell = new CombatSpell(combat.release(), spell->needTarget, spell->needDirection);
+		combatSpell = new CombatSpell(combat, spell->needTarget, spell->needDirection);
 	}
 
 	sb.spell = combatSpell;
@@ -793,7 +785,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if (reloading) {
-		auto it = monsters.find(asLowerCaseString(monsterName));
+		auto it = monsters.find(boost::algorithm::to_lower_copy(monsterName));
 		if (it != monsters.end()) {
 			mType = &it->second;
 			mType->info = {};
@@ -801,7 +793,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if (!mType) {
-		mType = &monsters[asLowerCaseString(monsterName)];
+		mType = &monsters[boost::algorithm::to_lower_copy(monsterName)];
 	}
 
 	mType->name = attr.as_string();
@@ -809,11 +801,11 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	if ((attr = monsterNode.attribute("nameDescription"))) {
 		mType->nameDescription = attr.as_string();
 	} else {
-		mType->nameDescription = "a " + asLowerCaseString(mType->name);
+		mType->nameDescription = "a " + boost::algorithm::to_lower_copy(mType->name);
 	}
 
 	if ((attr = monsterNode.attribute("race"))) {
-		std::string tmpStrValue = asLowerCaseString(attr.as_string());
+		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		uint16_t tmpInt = pugi::cast<uint16_t>(attr.value());
 		if (tmpStrValue == "venom" || tmpInt == 1) {
 			mType->info.race = RACE_VENOM;
@@ -825,6 +817,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.race = RACE_FIRE;
 		} else if (tmpStrValue == "energy" || tmpInt == 5) {
 			mType->info.race = RACE_ENERGY;
+		} else if (tmpStrValue == "ink" || tmpInt == 6) {
+			mType->info.race = RACE_INK;
 		} else {
 			std::cout << "[Warning - Monsters::loadMonster] Unknown race type " << attr.as_string() << ". " << file << std::endl;
 		}
@@ -843,7 +837,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if ((attr = monsterNode.attribute("skull"))) {
-		mType->info.skull = getSkullType(asLowerCaseString(attr.as_string()));
+		mType->info.skull = getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
@@ -879,31 +873,40 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		} else {
 			std::cout << "[Error - Monsters::loadMonster] Missing health max. " << file << std::endl;
 		}
+
+		if (mType->info.health > mType->info.healthMax) {
+			mType->info.health = mType->info.healthMax;
+			std::cout << "[Warning - Monsters::loadMonster] Health now is greater than health max." << file << std::endl;
+		}
 	}
 
 	if ((node = monsterNode.child("flags"))) {
 		for (auto flagNode : node.children()) {
 			attr = flagNode.first_attribute();
 			const char* attrName = attr.name();
-			if (strcasecmp(attrName, "summonable") == 0) {
+			if (caseInsensitiveEqual(attrName, "summonable")) {
 				mType->info.isSummonable = attr.as_bool();
-			} else if (strcasecmp(attrName, "attackable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "attackable")) {
 				mType->info.isAttackable = attr.as_bool();
-			} else if (strcasecmp(attrName, "hostile") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "hostile")) {
 				mType->info.isHostile = attr.as_bool();
-			} else if (strcasecmp(attrName, "illusionable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "ignorespawnblock")) {
+				mType->info.isIgnoringSpawnBlock = attr.as_bool();
+			} else if (caseInsensitiveEqual(attrName, "illusionable")) {
 				mType->info.isIllusionable = attr.as_bool();
-			} else if (strcasecmp(attrName, "convinceable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "challengeable")) {
+				mType->info.isChallengeable = attr.as_bool();
+			} else if (caseInsensitiveEqual(attrName, "convinceable")) {
 				mType->info.isConvinceable = attr.as_bool();
-			} else if (strcasecmp(attrName, "pushable") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "pushable")) {
 				mType->info.pushable = attr.as_bool();
-			} else if (strcasecmp(attrName, "isboss") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "isboss")) {
 				mType->info.isBoss = attr.as_bool();
-			} else if (strcasecmp(attrName, "canpushitems") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canpushitems")) {
 				mType->info.canPushItems = attr.as_bool();
-			} else if (strcasecmp(attrName, "canpushcreatures") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canpushcreatures")) {
 				mType->info.canPushCreatures = attr.as_bool();
-			} else if (strcasecmp(attrName, "staticattack") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "staticattack")) {
 				uint32_t staticAttack = pugi::cast<uint32_t>(attr.value());
 				if (staticAttack > 100) {
 					std::cout << "[Warning - Monsters::loadMonster] staticattack greater than 100. " << file << std::endl;
@@ -911,34 +914,34 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				}
 
 				mType->info.staticAttackChance = staticAttack;
-			} else if (strcasecmp(attrName, "lightlevel") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "lightlevel")) {
 				mType->info.light.level = pugi::cast<uint16_t>(attr.value());
-			} else if (strcasecmp(attrName, "lightcolor") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "lightcolor")) {
 				mType->info.light.color = pugi::cast<uint16_t>(attr.value());
-			} else if (strcasecmp(attrName, "targetdistance") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "targetdistance")) {
 				int32_t targetDistance = pugi::cast<int32_t>(attr.value());
 				if (targetDistance < 1) {
 					targetDistance = 1;
 					std::cout << "[Warning - Monsters::loadMonster] targetdistance less than 1. " << file << std::endl;
 				}
 				mType->info.targetDistance = targetDistance;
-			} else if (strcasecmp(attrName, "runonhealth") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "runonhealth")) {
 				mType->info.runAwayHealth = pugi::cast<int32_t>(attr.value());
-			} else if (strcasecmp(attrName, "hidehealth") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "hidehealth")) {
 				mType->info.hiddenHealth = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonenergy") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonenergy")) {
 				mType->info.canWalkOnEnergy = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonfire") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonfire")) {
 				mType->info.canWalkOnFire = attr.as_bool();
-			} else if (strcasecmp(attrName, "canwalkonpoison") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "canwalkonpoison")) {
 				mType->info.canWalkOnPoison = attr.as_bool();
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown flag attribute: " << attrName << ". " << file << std::endl;
 			}
 		}
 
-		//if a monster can push creatures,
-		// it should not be pushable
+		// if a monster can push creatures,
+		// it should not be pushable.
 		if (mType->info.canPushCreatures) {
 			mType->info.pushable = false;
 		}
@@ -1037,7 +1040,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	if ((node = monsterNode.child("immunities"))) {
 		for (auto immunityNode : node.children()) {
 			if ((attr = immunityNode.attribute("name"))) {
-				std::string tmpStrValue = asLowerCaseString(attr.as_string());
+				std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 				if (tmpStrValue == "physical") {
 					mType->info.damageImmunities |= COMBAT_PHYSICALDAMAGE;
 					mType->info.conditionImmunities |= CONDITION_BLEEDING;
@@ -1363,7 +1366,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 
 	} else if ((attr = node.attribute("name"))) {
 		auto name = attr.as_string();
-		auto ids = Item::items.nameToItems.equal_range(asLowerCaseString(name));
+		auto ids = Item::items.nameToItems.equal_range(boost::algorithm::to_lower_copy<std::string>(name));
 
 		if (ids.first == Item::items.nameToItems.cend()) {
 			std::cout << "[Warning - Monsters::loadMonster] Unknown loot item \"" << name << "\". " << std::endl;
@@ -1385,7 +1388,8 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 	}
 
 	if ((attr = node.attribute("countmax"))) {
-		lootBlock.countmax = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
+		int32_t lootCountMax = pugi::cast<int32_t>(attr.value());
+		lootBlock.countmax = std::max<int32_t>(1, lootCountMax);
 	} else {
 		lootBlock.countmax = 1;
 	}
@@ -1438,16 +1442,16 @@ void Monsters::loadLootContainer(const pugi::xml_node& node, LootBlock& lBlock)
 
 MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile /*= true */)
 {
-	std::string lowerCaseName = asLowerCaseString(name);
+	std::string lowerCaseName = boost::algorithm::to_lower_copy(name);
 
 	auto it = monsters.find(lowerCaseName);
 	if (it == monsters.end()) {
-		auto it2 = unloadedMonsters.find(lowerCaseName);
-		if (it2 == unloadedMonsters.end()) {
+		if (!loadFromFile) {
 			return nullptr;
 		}
 
-		if (!loadFromFile) {
+		auto it2 = unloadedMonsters.find(lowerCaseName);
+		if (it2 == unloadedMonsters.end()) {
 			return nullptr;
 		}
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gloom Wolf" nameDescription="a gloom wolf" race="blood" experience="70" speed="125">
+	<health now="200" max="200" />
+	<look type="716" corpse="24639" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-92" />
+		<attack name="bleedcondition" interval="2000" chance="15" target="0" radius="2" min="-12" max="-26">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="8">
+		<defense name="speed" interval="2000" chance="15" speedchange="250" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-5" />
+		<element firePercent="-5" />
+		<element icePercent="-5" />
+		<element deathPercent="10" />
+		<element earthPercent="20" />
+	</elements>
+	<loot>
+		<item name="gold coin" countmax="15" chance="66710" />
+		<item name="meat" countmax="2" chance="40860" />
+		<item name="ham" countmax="2" chance="39530" />
+		<item name="gloom wolf fur" chance="8260" />
+		<item name="wolf tooth chain" chance="7250" />
+		<item name="wolf paw" chance="3030" />
+	</loot>
+</monster>

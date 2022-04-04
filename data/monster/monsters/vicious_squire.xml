@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vicious Squire" nameDescription="a vicious squire" race="blood" experience="900" speed="210">
+	<health now="1000" max="1000" />
+	<look type="131" head="97" body="24" legs="73" feet="116" addons="1" corpse="20418" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="82" attack="50" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-110">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+	</attacks>
+	<defenses armor="27" defense="33">
+		<defense name="healing" interval="2000" chance="7" min="150" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="40" />
+		<element icePercent="10" />
+		<element firePercent="30" />
+		<element holyPercent="50" />
+		<element earthPercent="50" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="For hurting me, my sire will kill you!" />
+		<voice sentence="Your stuff will be mine soon!" />
+		<voice sentence="I'll cut you a bloody grin!" />
+		<voice sentence="You shouldn't have come here!" />
+		<voice sentence="You are as good as dead!" />
+	</voices>
+	<loot>
+		<item id="2455" chance="12763" /><!-- crossbow -->
+		<item id="2148" countmax="70" chance="100000" /><!-- gold coin -->
+		<item id="2661" chance="743" /><!-- scarf -->
+		<item id="2543" countmax="10" chance="21685" /><!-- bolt -->
+		<item id="2666" chance="11771" /><!-- meat -->
+		<item id="2145" chance="2602" /><!-- small diamond -->
+		<item id="2149" chance="3097" /><!-- small emerald -->
+		<item id="2150" chance="2973" /><!-- small amethyst -->
+		<item id="2391" chance="991" /><!-- war hammer -->
+		<item id="2381" chance="2230" /><!-- halberd -->
+		<item id="2477" chance="619" /><!-- knight legs -->
+		<item id="2515" chance="247" /><!-- guardian shield -->
+		<item id="2475" chance="123" /><!-- warrior helmet -->
+		<item id="7591" chance="5576" /><!-- great health potion -->
+		<item id="2164" chance="247" /><!-- might ring -->
+	</loot>
+</monster>

@@ -11,9 +11,15 @@ local function getSkillId(skillName)
 		return SKILL_SHIELD
 	elseif skillName:sub(1, 4) == "fish" then
 		return SKILL_FISHING
-	else
+	elseif skillName:sub(1, 4) == "fist" then
 		return SKILL_FIST
+	elseif skillName:sub(1, 1) == "m" then
+		return SKILL_MAGLEVEL
+	elseif skillName == "level" or skillName:sub(1, 1) == "l" or skillName:sub(1, 1) == "e" then
+		return SKILL_LEVEL
 	end
+
+	return nil
 end
 
 function onSay(player, words, param)
@@ -42,16 +48,12 @@ function onSay(player, words, param)
 		count = tonumber(split[3])
 	end
 
-	local ch = split[2]:sub(1, 1)
-	for i = 1, count do
-		if ch == "l" or ch == "e" then
-			target:addExperience(getExperienceForLevel(target:getLevel() + 1) - target:getExperience(), false)
-		elseif ch == "m" then
-			target:addManaSpent(target:getVocation():getRequiredManaSpent(target:getBaseMagicLevel() + 1) - target:getManaSpent())
-		else
-			local skillId = getSkillId(split[2])
-			target:addSkillTries(skillId, target:getVocation():getRequiredSkillTries(skillId, target:getSkillLevel(skillId) + 1) - target:getSkillTries(skillId))
-		end
+	local skillId = getSkillId(split[2])
+	if not skillId then
+		player:sendCancelMessage("Unknown skill.")
+		return false
 	end
+
+	target:addSkill(skillId, count)
 	return false
 end

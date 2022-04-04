@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deepling Master Librarian" nameDescription="a deepling master librarian" race="blood" experience="1900" speed="190">
 	<health now="1700" max="1700" />
 	<look type="443" corpse="15211" />

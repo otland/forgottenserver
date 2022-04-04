@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Behemoth" nameDescription="a behemoth" race="blood" experience="2500" speed="340">
 	<health now="4000" max="4000" />
 	<look type="55" corpse="5999" />
@@ -69,7 +69,7 @@
 		<item name="steel boots" chance="440" />
 		<item name="crowbar" chance="130" />
 		<item id="7396" chance="170" /><!-- behemoth trophy -->
-		<item name="amphora" chance="90" />
+		<item id="2023" chance="90" /><!-- amphora -->
 		<item name="titan axe" chance="70" />
 		<item name="war axe" chance="60" />
 	</loot>

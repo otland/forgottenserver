@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Massacre" nameDescription="Massacre" race="blood" experience="20000" speed="390">
 	<health now="32000" max="32000" />
 	<look type="244" corpse="6336" />

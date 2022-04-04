@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Demodras" nameDescription="Demodras" race="blood" experience="6000" speed="230">
 	<health now="4500" max="4500" />
 	<look type="204" corpse="5984" />

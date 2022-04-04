@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crustacea Gigantica" nameDescription="a crustacea gigantica" race="blood" experience="1800" speed="290">
 	<health now="1600" max="1600" />
 	<look type="383" corpse="13331" />

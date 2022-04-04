@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ron the Ripper" nameDescription="Ron the Ripper" race="blood" experience="500" speed="240">
 	<health now="1500" max="1500" />
 	<look type="151" head="95" body="94" legs="117" feet="97" addons="1" corpse="20502" />

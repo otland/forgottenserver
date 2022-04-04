@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="World Bug" namedescription="a world bug" race="venom" experience="50" speed="240">
 	<health now="270" max="270" />
 	<look type="45" corpse="5990" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Guzzlemaw" nameDescription="a guzzlemaw" race="blood" experience="5500" speed="270">
 	<health now="6400" max="6400" />
 	<look type="584" corpse="22485" />
@@ -66,7 +66,7 @@
 		<item id="2229" chance="10400" /><!-- skull -->
 		<item id="2230" chance="9200" /><!-- bone -->
 		<item id="2231" chance="4500" /><!-- big bone -->
-		<item name="fish remains" chance="10110" />
+		<item name="remains of a fish" chance="10110" />
 		<item name="two handed sword" chance="2700" />
 		<item id="2667" countmax="3" chance="7000" /><!-- fish -->
 		<item name="ham" chance="10000" />
@@ -83,7 +83,7 @@
 		<item name="violet crystal shard" chance="3000" />
 		<item name="brown crystal splinter" countmax="2" chance="12000" />
 		<item name="red crystal fragment" chance="7600" />
-		<item name="crystal rubbish" chance="12000" />
+		<item id="18554" chance="12000" /><!-- crystal rubbish -->
 		<item name="cluster of solace" chance="920" />
 		<item name="frazzle tongue" chance="15000" />
 		<item name="frazzle skin" chance="14000" />

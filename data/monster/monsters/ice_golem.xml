@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ice Golem" nameDescription="an ice golem" race="undead" experience="295" speed="195">
 	<health now="385" max="385" />
 	<look type="261" corpse="7282" />

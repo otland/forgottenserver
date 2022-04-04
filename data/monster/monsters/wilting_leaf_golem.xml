@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Wilting Leaf Golem" nameDescription="a wilting leaf golem" race="blood" experience="145" speed="145" manacost="390">
 	<health now="380" max="380" />
 	<look type="573" corpse="21434" />

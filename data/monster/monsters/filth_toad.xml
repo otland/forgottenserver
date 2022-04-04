@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Filth Toad" nameDescription="a filth toad" race="blood" experience="90" speed="210">
 	<health now="185" max="185" />
 	<look type="222" corpse="6077" />

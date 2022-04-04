@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Zavarash" nameDescription="Zavarash" race="fire" experience="21000" speed="440">
 	<health now="35000" max="35000" />
 	<look type="12" head="0" body="15" legs="57" feet="84" corpse="6068" />

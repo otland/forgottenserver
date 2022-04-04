@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Thornfire Wolf" nameDescription="a thornfire wolf" race="energy" experience="200" speed="250">
 	<health now="600" max="600" />
 	<look type="414" corpse="13859" />

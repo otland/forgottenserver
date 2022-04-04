@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Retching Horror" nameDescription="a retching horror" race="fire" experience="3900" speed="250">
 	<health now="5300" max="5300" />
 	<look type="588" corpse="22508" />

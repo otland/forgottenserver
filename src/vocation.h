@@ -1,27 +1,10 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
-#define FS_VOCATION_H_ADCAA356C0DB44CEBA994A0D678EC92D
+#ifndef FS_VOCATION_H
+#define FS_VOCATION_H
 
 #include "enums.h"
-#include "item.h"
 
 class Vocation
 {
@@ -86,6 +69,14 @@ class Vocation
 			return fromVocation;
 		}
 
+		uint32_t getNoPongKickTime() const {
+			return noPongKickTime;
+		}
+
+		bool allowsPvp() const {
+			return allowPvp;
+		}
+
 		float meleeDamageMultiplier = 1.0f;
 		float distDamageMultiplier = 1.0f;
 		float defenseMultiplier = 1.0f;
@@ -94,13 +85,10 @@ class Vocation
 	private:
 		friend class Vocations;
 
-		std::map<uint32_t, uint64_t> cacheMana;
-		std::map<uint32_t, uint32_t> cacheSkill[SKILL_LAST + 1];
-
 		std::string name = "none";
 		std::string description;
 
-		float skillMultipliers[SKILL_LAST + 1] = {1.5f, 2.0f, 2.0f, 2.0f, 2.0f, 1.5f, 1.1f};
+		double skillMultipliers[SKILL_LAST + 1] = {1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1};
 		float manaMultiplier = 4.0f;
 
 		uint32_t gainHealthTicks = 6;
@@ -113,14 +101,15 @@ class Vocation
 		uint32_t fromVocation = VOCATION_NONE;
 		uint32_t attackSpeed = 1500;
 		uint32_t baseSpeed = 220;
-		uint16_t id;
+		uint32_t noPongKickTime = 60000;
 
+		uint16_t id;
 		uint16_t gainSoulTicks = 120;
 
 		uint8_t soulMax = 100;
 		uint8_t clientId = 0;
 
-		static uint32_t skillBase[SKILL_LAST + 1];
+		bool allowPvp = true;
 };
 
 class Vocations
@@ -136,4 +125,4 @@ class Vocations
 		std::map<uint16_t, Vocation> vocationsMap;
 };
 
-#endif
+#endif // FS_VOCATION_H

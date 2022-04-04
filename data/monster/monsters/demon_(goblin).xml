@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Demon" nameDescription="a demon" race="blood" experience="25" speed="120">
 	<health now="50" max="50" />
 	<look type="35" corpse="6002" />

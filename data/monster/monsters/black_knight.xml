@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Black Knight" nameDescription="a black knight" race="blood" experience="1600" speed="250">
 	<health now="1800" max="1800" />
 	<look type="131" head="95" body="95" legs="95" feet="95" addons="3" corpse="20355" />
@@ -7,6 +7,7 @@
 		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
+		<flag ignorespawnblock="0" />
 		<flag illusionable="0" />
 		<flag convinceable="0" />
 		<flag pushable="0" />
@@ -44,12 +45,13 @@
 		<voice sentence="You're no match for me!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="136" chance="48000" />
+		<item name="gold coin" countmax="100" chance="24000" />
+		<item name="gold coin" countmax="36" chance="24000" />
 		<item name="spear" countmax="3" chance="30800" />
 		<item name="brown bread" countmax="2" chance="21600" />
 		<item id="2120" chance="14020" /><!-- rope -->
 		<item name="brass legs" chance="13200" />
-		<item name="halberd" chance="12050" />
+		<item id="2381" chance="12050" /><!-- halberd -->
 		<item name="plate armor" chance="11000" />
 		<item name="steel helmet" chance="10500" />
 		<item name="two handed sword" chance="9600" />

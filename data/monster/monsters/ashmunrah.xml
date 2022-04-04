@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ashmunrah" nameDescription="Ashmunrah" race="undead" experience="3100" speed="430">
 	<health now="5000" max="5000" />
 	<look type="87" corpse="6031" />
@@ -75,7 +75,10 @@
 		<voice sentence="You will be history soon." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="304" chance="100000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="100" chance="33000" />
+		<item name="gold coin" countmax="4" chance="50000" />
 		<item name="great mana potion" chance="12500" />
 		<item name="might ring" chance="4600" />
 		<item name="silver brooch" chance="4000" />

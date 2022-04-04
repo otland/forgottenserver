@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Gaz'haragoth" nameDescription="Gaz'haragoth" race="undead" experience="1000000" speed="400">
 	<health now="350000" max="350000" />
 	<look type="591" head="0" body="94" legs="79" feet="79" corpse="22562" />

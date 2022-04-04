@@ -16,8 +16,11 @@ ec.onLookInBattleList = function(self, creature, distance)
 		)
 
 		if creature:isPlayer() then
+			description = string.format("%s\nGUID: %s", description, creature:getGuid())
 			description = string.format("%s\nIP: %s", description, Game.convertIpToString(creature:getIp()))
 		end
 	end
 	return description
 end
+
+ec:register()

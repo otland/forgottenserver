@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Hive Overseer" nameDescription="a hive overseer" race="venom" experience="5500" speed="200">
 	<health now="7500" max="7500" />
 	<look type="458" corpse="15354" />

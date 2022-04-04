@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Stampor" nameDescription="a stampor" race="blood" experience="780" speed="240">
 	<health now="1200" max="1200" />
 	<look type="381" corpse="13312" />
@@ -49,7 +49,9 @@
 		<voice sentence="KRRRRRNG" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="242" chance="30000" />
+		<item name="gold coin" countmax="100" chance="10000" />
+		<item name="gold coin" countmax="100" chance="10000" />
+		<item name="gold coin" countmax="42" chance="10000" />
 		<item name="platinum coin" countmax="2" chance="9920" />
 		<item name="war hammer" chance="1010" />
 		<item name="knight armor" chance="870" />

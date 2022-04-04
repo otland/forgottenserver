@@ -27,7 +27,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/house.cpp
 	${CMAKE_CURRENT_LIST_DIR}/housetile.cpp
 	${CMAKE_CURRENT_LIST_DIR}/inbox.cpp
-	${CMAKE_CURRENT_LIST_DIR}/ioguild.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iologindata.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iomap.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iomapserialize.cpp
@@ -48,6 +47,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/party.cpp
 	${CMAKE_CURRENT_LIST_DIR}/player.cpp
+	${CMAKE_CURRENT_LIST_DIR}/podium.cpp
 	${CMAKE_CURRENT_LIST_DIR}/position.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocol.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolgame.cpp
@@ -73,9 +73,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/tools.cpp
 	${CMAKE_CURRENT_LIST_DIR}/trashholder.cpp
 	${CMAKE_CURRENT_LIST_DIR}/vocation.cpp
-	${CMAKE_CURRENT_LIST_DIR}/waitlist.cpp
 	${CMAKE_CURRENT_LIST_DIR}/weapons.cpp
 	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
 	${CMAKE_CURRENT_LIST_DIR}/xtea.cpp
 	PARENT_SCOPE)
-

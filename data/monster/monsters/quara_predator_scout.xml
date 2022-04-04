@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Predator Scout" nameDescription="a quara predator scout" race="blood" experience="400" speed="250">
 	<health now="890" max="890" />
 	<look type="20" corpse="6067" />

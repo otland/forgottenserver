@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dragon Lord" nameDescription="a dragon lord" race="blood" experience="2100" speed="200">
 	<health now="1900" max="1900" />
 	<look type="39" corpse="5984" />
@@ -49,12 +49,14 @@
 		<voice sentence="YOU WILL BURN!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="245" chance="95000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="100" chance="32000" />
+		<item name="gold coin" countmax="45" chance="32000" />
 		<item name="dragon ham" countmax="5" chance="80000" />
 		<item name="green mushroom" chance="12000" />
 		<item name="royal spear" countmax="3" chance="9000" />
 		<item id="1976" chance="9000" /><!-- book (gemmed) -->
-		<item name="power bolt" countmax="7" chance="6700" />
+		<item id="2547" countmax="7" chance="6700" /><!-- power bolt -->
 		<item name="energy ring" chance="5250" />
 		<item name="small sapphire" chance="5300" />
 		<item name="golden mug" chance="3190" />
@@ -68,6 +70,6 @@
 		<item name="royal helmet" chance="280" />
 		<item name="dragon scale mail" chance="170" />
 		<item name="dragon slayer" chance="110" />
-		<item name="dragon lord trophy" chance="90" />
+		<item id="7399" chance="90" /><!-- dragon lord trophy -->
 	</loot>
 </monster>

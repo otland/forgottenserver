@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190">
 	<health now="325" max="325" />
 	<look type="133" head="39" body="0" legs="19" feet="20" addons="1" corpse="20439" />

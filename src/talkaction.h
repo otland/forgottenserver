@@ -1,28 +1,12 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TALKACTION_H_E6AABAC0F89843469526ADF310F3131C
-#define FS_TALKACTION_H_E6AABAC0F89843469526ADF310F3131C
+#ifndef FS_TALKACTION_H
+#define FS_TALKACTION_H
 
-#include "luascript.h"
 #include "baseevents.h"
 #include "const.h"
+#include "luascript.h"
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
@@ -59,7 +43,22 @@ class TalkAction : public Event
 
 		//scripting
 		bool executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const;
-		//
+
+		AccountType_t getRequiredAccountType() const {
+			return requiredAccountType;
+		}
+
+		void setRequiredAccountType(AccountType_t reqAccType) {
+			requiredAccountType = reqAccType;
+		}
+
+		bool getNeedAccess() const {
+			return needAccess;
+		}
+
+		void setNeedAccess(bool b) {
+			needAccess = b;
+		}
 
 	private:
 		std::string getScriptEventName() const override;
@@ -67,6 +66,8 @@ class TalkAction : public Event
 		std::string words;
 		std::vector<std::string> wordsMap;
 		std::string separator = "\"";
+		bool needAccess = false;
+		AccountType_t requiredAccountType = ACCOUNT_TYPE_NORMAL;
 };
 
 class TalkActions final : public BaseEvents
@@ -95,4 +96,4 @@ class TalkActions final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-#endif
+#endif // FS_TALKACTION_H

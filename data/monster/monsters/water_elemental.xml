@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Water Elemental" nameDescription="a water elemental" race="undead" experience="650" speed="220">
 	<health now="550" max="550" />
 	<look type="286" corpse="10499" />

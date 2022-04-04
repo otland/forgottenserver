@@ -1,43 +1,29 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "game.h"
+#include "iomarket.h"
+#include "monsters.h"
+#include "outfit.h"
+#include "protocollogin.h"
+#include "protocolold.h"
+#include "protocolstatus.h"
+#include "rsa.h"
+#include "scheduler.h"
+#include "script.h"
+#include "scriptmanager.h"
 #include "server.h"
 
-#include "game.h"
-
-#include "iomarket.h"
-
-#include "configmanager.h"
-#include "scriptmanager.h"
-#include "rsa.h"
-#include "protocolold.h"
-#include "protocollogin.h"
-#include "protocolstatus.h"
-#include "databasemanager.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "script.h"
 #include <fstream>
+#include <fmt/color.h>
+
 #if __has_include("gitmetadata.h")
-	#include "gitmetadata.h"
+#include "gitmetadata.h"
 #endif
 
 DatabaseTasks g_databaseTasks;
@@ -57,7 +43,7 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	std::cout << "> ERROR: " << errorStr << std::endl;
+	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
 	g_loaderSignal.notify_all();
 }
 
@@ -72,10 +58,56 @@ bool argumentsHandler(const StringVector& args);
 	exit(-1);
 }
 
+namespace anniversary {
+fmt::color paintA = fmt::color(0xFABC01);
+fmt::color paintB = fmt::color(0x955A26);
+fmt::color paintC = fmt::color(0x0000C0);
+fmt::color paintD = fmt::color(0x006500);
+
+std::string colorA(const std::string text)
+{
+	return fmt::format(fg(paintA), text);
+}
+
+std::string colorB(const std::string text)
+{
+	return fmt::format(fg(paintB), text);
+}
+
+std::string colorC(const std::string text)
+{
+	return fmt::format(fg(paintC), text);
+}
+
+std::string colorD(const std::string text)
+{
+	return fmt::format(fg(paintD), text);
+}
+
+void celebrate()
+{
+	std::cout << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("   .  .  ,----.") << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("  /|_/| /      ',") << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("#`  ") << "                 ''+#.     " << colorB(" /") << ", ," << colorB(" )/  ,;'' .'") << std::endl;
+	std::cout << colorA("   .####. ") << "   .#.    " << colorA("#|  ") << "                    +#.    " << colorB("(y_ )  |  ;...;' ") << std::endl;
+	std::cout << colorA("  .##  ##.") << " ######'  " << colorA("#|  ") << "    _+  '##_###.    ,+##   " << colorB(" ") << "\"" << colorB("| |  \\. '.") << std::endl;
+	std::cout << colorA("  ##    ##") << "  ##'     " << colorA("#|  ") << "    ##.  ###''|#, .#'  '#, " << colorB("(") << colorC("#") << colorD("#") << colorB("(/   )  ;") << std::endl;
+	std::cout << colorA("  ##    ##") << "  ##      " << colorA("#|  ") << "   # #.  ##   .#' #'    #' " << colorB(" ") << colorD("#") << colorC("#") << colorB(" ..  |. .'") << std::endl;
+	std::cout << colorA("  `##  ##`") << "  `##  ,# " << colorA("#|  ") << "  #==#.  ##  .#'  '#   #'  " << colorB(" \\_(  ._|--'") << std::endl;
+	std::cout << colorA("   `####` ") << "   `###`  " << colorA("##==") << " #    #. ##  |##.  '###'   " << colorB(" '--'--'''") << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" Happy 15th anniversary! \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+}
+} // namespace anniversary
+
 int main(int argc, char* argv[])
 {
 	StringVector args = StringVector(argv, argv + argc);
-	if(argc > 1 && !argumentsHandler(args)) {
+	if (argc > 1 && !argumentsHandler(args)) {
 		return 0;
 	}
 
@@ -87,11 +119,12 @@ int main(int argc, char* argv[])
 	g_dispatcher.start();
 	g_scheduler.start();
 
-	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
+	g_dispatcher.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
+		anniversary::celebrate();
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 		serviceManager.run();
 	} else {
@@ -111,7 +144,7 @@ void printServerVersion()
 {
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
 	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
-	std::cout << "Git SHA1 " << GIT_SHORT_SHA1  << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
+	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
 	#if GIT_IS_DIRTY
 	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
 	#endif
@@ -134,7 +167,7 @@ void printServerVersion()
 #if defined(LUAJIT_VERSION)
 	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
 #else
-	std::cout << "Linked with " << LUA_RELEASE << " for Lua support"  << std::endl;
+	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
 #endif
 	std::cout << std::endl;
 
@@ -151,6 +184,13 @@ void mainLoader(int, char*[], ServiceManager* services)
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
 #ifdef _WIN32
 	SetConsoleTitle(STATUS_SERVER_NAME);
+	
+	// fixes a problem with escape characters not being processed in Windows consoles
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD dwMode = 0;
+	GetConsoleMode(hOut, &dwMode);
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hOut, dwMode);
 #endif
 
 	printServerVersion();
@@ -180,14 +220,15 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
-	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
+	if (caseInsensitiveEqual(defaultPriority, "high")) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
+	} else if (caseInsensitiveEqual(defaultPriority, "above-normal")) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
 
 	//set RSA key
+	std::cout << ">> Loading RSA key " << std::endl;
 	try {
 		g_RSA.loadPEM("key.pem");
 	} catch(const std::exception& e) {
@@ -227,11 +268,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	// load item data
-	std::cout << ">> Loading items" << std::endl;
+	std::cout << ">> Loading items... ";
 	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
+	std::cout << fmt::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber) << std::endl;
 
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
@@ -269,7 +311,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	std::cout << ">> Checking world type... " << std::flush;
-	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
+	std::string worldType = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -278,13 +320,10 @@ void mainLoader(int, char*[], ServiceManager* services)
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	} else {
 		std::cout << std::endl;
-
-		std::ostringstream ss;
-		ss << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << ", valid world types are: pvp, no-pvp and pvp-enforced.";
-		startupErrorMessage(ss.str());
+		startupErrorMessage(fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.", g_config.getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
-	std::cout << asUpperCaseString(worldType) << std::endl;
+	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
@@ -306,7 +345,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
-	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+	std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;

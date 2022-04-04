@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tiquandas Revenge" nameDescription="Tiquandas Revenge" race="venom" experience="2635" speed="440">
 	<health now="1800" max="1800" />
 	<look type="120" corpse="6047" />

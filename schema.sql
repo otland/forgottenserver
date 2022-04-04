@@ -20,24 +20,29 @@ CREATE TABLE IF NOT EXISTS `players` (
   `vocation` int NOT NULL DEFAULT '0',
   `health` int NOT NULL DEFAULT '150',
   `healthmax` int NOT NULL DEFAULT '150',
-  `experience` bigint NOT NULL DEFAULT '0',
+  `experience` bigint unsigned NOT NULL DEFAULT '0',
   `lookbody` int NOT NULL DEFAULT '0',
   `lookfeet` int NOT NULL DEFAULT '0',
   `lookhead` int NOT NULL DEFAULT '0',
   `looklegs` int NOT NULL DEFAULT '0',
   `looktype` int NOT NULL DEFAULT '136',
   `lookaddons` int NOT NULL DEFAULT '0',
+  `lookmount` int NOT NULL DEFAULT '0',
+  `lookmounthead` int NOT NULL DEFAULT '0',
+  `lookmountbody` int NOT NULL DEFAULT '0',
+  `lookmountlegs` int NOT NULL DEFAULT '0',
+  `lookmountfeet` int NOT NULL DEFAULT '0',
   `direction` tinyint unsigned NOT NULL DEFAULT '2',
   `maglevel` int NOT NULL DEFAULT '0',
   `mana` int NOT NULL DEFAULT '0',
   `manamax` int NOT NULL DEFAULT '0',
-  `manaspent` int unsigned NOT NULL DEFAULT '0',
+  `manaspent` bigint unsigned NOT NULL DEFAULT '0',
   `soul` int unsigned NOT NULL DEFAULT '0',
   `town_id` int NOT NULL DEFAULT '1',
   `posx` int NOT NULL DEFAULT '0',
   `posy` int NOT NULL DEFAULT '0',
   `posz` int NOT NULL DEFAULT '0',
-  `conditions` blob NOT NULL,
+  `conditions` blob DEFAULT NULL,
   `cap` int NOT NULL DEFAULT '400',
   `sex` int NOT NULL DEFAULT '0',
   `lastlogin` bigint unsigned NOT NULL DEFAULT '0',
@@ -47,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `skulltime` bigint NOT NULL DEFAULT '0',
   `lastlogout` bigint unsigned NOT NULL DEFAULT '0',
   `blessings` tinyint NOT NULL DEFAULT '0',
-  `onlinetime` int NOT NULL DEFAULT '0',
+  `onlinetime` bigint NOT NULL DEFAULT '0',
   `deletion` bigint NOT NULL DEFAULT '0',
   `balance` bigint unsigned NOT NULL DEFAULT '0',
   `offlinetraining_time` smallint unsigned NOT NULL DEFAULT '43200',
@@ -94,6 +99,14 @@ CREATE TABLE IF NOT EXISTS `account_ban_history` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   FOREIGN KEY (`banned_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+
+CREATE TABLE IF NOT EXISTS `account_storage` (
+  `account_id` int NOT NULL,
+  `key` int unsigned NOT NULL,
+  `value` int NOT NULL,
+  PRIMARY KEY (`account_id`, `key`),
+  FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `ip_bans` (
@@ -223,9 +236,9 @@ CREATE TABLE IF NOT EXISTS `market_history` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `player_id` int NOT NULL,
   `sale` tinyint NOT NULL DEFAULT '0',
-  `itemtype` int unsigned NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `amount` smallint unsigned NOT NULL,
-  `price` int unsigned NOT NULL DEFAULT '0',
+  `price` bigint unsigned NOT NULL DEFAULT '0',
   `expires_at` bigint unsigned NOT NULL,
   `inserted` bigint unsigned NOT NULL,
   `state` tinyint unsigned NOT NULL,
@@ -238,11 +251,11 @@ CREATE TABLE IF NOT EXISTS `market_offers` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `player_id` int NOT NULL,
   `sale` tinyint NOT NULL DEFAULT '0',
-  `itemtype` int unsigned NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `amount` smallint unsigned NOT NULL,
   `created` bigint unsigned NOT NULL,
   `anonymous` tinyint NOT NULL DEFAULT '0',
-  `price` int unsigned NOT NULL DEFAULT '0',
+  `price` bigint unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `sale` (`sale`,`itemtype`),
   KEY `created` (`created`),
@@ -273,7 +286,7 @@ CREATE TABLE IF NOT EXISTS `player_depotitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL COMMENT 'any given range eg 0-100 will be reserved for depot lockers and all > 100 will be then normal items inside depots',
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -284,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `player_inboxitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL,
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -295,7 +308,7 @@ CREATE TABLE IF NOT EXISTS `player_storeinboxitems` (
   `player_id` int NOT NULL,
   `sid` int NOT NULL,
   `pid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL,
+  `itemtype` smallint unsigned NOT NULL,
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   UNIQUE KEY `player_id_2` (`player_id`, `sid`),
@@ -306,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `player_items` (
   `player_id` int NOT NULL DEFAULT '0',
   `pid` int NOT NULL DEFAULT '0',
   `sid` int NOT NULL DEFAULT '0',
-  `itemtype` smallint NOT NULL DEFAULT '0',
+  `itemtype` smallint unsigned NOT NULL DEFAULT '0',
   `count` smallint NOT NULL DEFAULT '0',
   `attributes` blob NOT NULL,
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE,
@@ -349,7 +362,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '26'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '32'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

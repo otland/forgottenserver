@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Shaburak Lord" nameDescription="a shaburak lord" race="fire" experience="1200" speed="230">
 	<health now="2100" max="2100" />
 	<look type="409" corpse="13958" />

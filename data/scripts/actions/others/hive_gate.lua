@@ -15,7 +15,6 @@ end
 hiveGateHorizontal:id(14755, 14756, 14757, 14758, 14759, 14760)
 hiveGateHorizontal:register()
 
-
 local hiveGateVertical = Action()
 
 function hiveGateVertical.onUse(player, item, fromPosition, target, toPosition, isHotkey)

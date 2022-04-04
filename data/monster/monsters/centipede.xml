@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Centipede" namedescription="a centipede" race="venom" experience="34" speed="166" manacost="335">
 	<health now="70" max="70" />
 	<look type="124" corpse="6050" />

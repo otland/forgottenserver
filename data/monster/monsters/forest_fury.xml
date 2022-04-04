@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Forest Fury" nameDescription="a forest fury" race="blood" experience="235" speed="210">
 	<health now="480" max="480" />
 	<look type="569" corpse="21359" />

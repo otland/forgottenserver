@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="250">
 	<health now="4100" max="4100" />
 	<look type="594" corpse="22567" />
@@ -66,7 +66,7 @@
 		<item id="2229" chance="12680" /><!-- skull -->
 		<item id="2230" chance="10000" /><!-- bone -->
 		<item id="2231" chance="5500" /><!-- big bone -->
-		<item name="fish remains" chance="9420" />
+		<item name="remains of a fish" chance="9420" />
 		<item name="two handed sword" chance="3200" />
 		<item id="2667" countmax="3" chance="6750" /><!-- fish -->
 		<item name="ham" countmax="2" chance="6000" />
@@ -84,7 +84,7 @@
 		<item name="violet crystal shard" chance="3000" />
 		<item name="brown crystal splinter" chance="16000" />
 		<item name="red crystal fragment" chance="7600" />
-		<item name="crystal rubbish" chance="10000" />
+		<item id="18554" chance="10000" /><!-- crystal rubbish -->
 		<item name="cluster of solace" chance="450" />
 		<item name="frazzle tongue" chance="18760" />
 		<item name="frazzle skin" chance="16000" />

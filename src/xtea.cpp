@@ -1,75 +1,59 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2020  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "xtea.h"
 
-#include <array>
-#include <assert.h>
+#include <cstring>
 
 namespace xtea {
 
-namespace {
-
-constexpr uint32_t delta = 0x9E3779B9;
-
-template<typename Round>
-void apply_rounds(uint8_t* data, size_t length, Round round)
+round_keys expand_key(const key& k)
 {
-    for (auto j = 0u; j < length; j += 8) {
-        uint32_t left = data[j+0] | data[j+1] << 8u | data[j+2] << 16u | data[j+3] << 24u,
-                right = data[j+4] | data[j+5] << 8u | data[j+6] << 16u | data[j+7] << 24u;
+	constexpr uint32_t delta = 0x9E3779B9;
+	round_keys expanded;
 
-        round(left, right);
+	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < expanded.size(); i += 2, sum = next_sum, next_sum += delta) {
+		expanded[i] = sum + k[sum & 3];
+		expanded[i + 1] = next_sum + k[(next_sum >> 11) & 3];
+	}
 
-        data[j] = static_cast<uint8_t>(left);
-        data[j+1] = static_cast<uint8_t>(left >> 8u);
-        data[j+2] = static_cast<uint8_t>(left >> 16u);
-        data[j+3] = static_cast<uint8_t>(left >> 24u);
-        data[j+4] = static_cast<uint8_t>(right);
-        data[j+5] = static_cast<uint8_t>(right >> 8u);
-        data[j+6] = static_cast<uint8_t>(right >> 16u);
-        data[j+7] = static_cast<uint8_t>(right >> 24u);
-    }
+	return expanded;
 }
 
+void encrypt(uint8_t* data, size_t length, const round_keys& k)
+{
+	for (int32_t i = 0; i < k.size(); i += 2) {
+		for (auto it = data, last = data + length; it < last; it += 8) {
+			uint32_t left, right;
+			std::memcpy(&left, it, 4);
+			std::memcpy(&right, it + 4, 4);
+
+			left += ((right << 4 ^ right >> 5) + right) ^ k[i];
+			right += ((left << 4 ^ left >> 5) + left) ^ k[i + 1];
+
+			std::memcpy(it, &left, 4);
+			std::memcpy(it + 4, &right, 4);
+		}
+	}
 }
 
-void encrypt(uint8_t* data, size_t length, const key& k)
+void decrypt(uint8_t* data, size_t length, const round_keys& k)
 {
-    for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < 32; ++i, sum = next_sum, next_sum += delta) {
-        apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
-            left += ((right << 4 ^ right >> 5) + right) ^ (sum + k[sum & 3]);
-            right += ((left << 4 ^ left >> 5) + left) ^ (next_sum + k[(next_sum >> 11) & 3]);
-        });
-    };
-}
+	for (int32_t i = k.size() - 1; i > 0; i -= 2) {
+		for (auto it = data, last = data + length; it < last; it += 8) {
+			uint32_t left, right;
+			std::memcpy(&left, it, 4);
+			std::memcpy(&right, it + 4, 4);
 
-void decrypt(uint8_t* data, size_t length, const key& k)
-{
-    for (uint32_t i = 0, sum = delta << 5, next_sum = sum - delta; i < 32; ++i, sum = next_sum, next_sum -= delta) {
-        apply_rounds(data, length, [&](uint32_t& left, uint32_t& right) {
-            right -= ((left << 4 ^ left >> 5) + left) ^ (sum + k[(sum >> 11) & 3]);
-            left -= ((right << 4 ^ right >> 5) + right) ^ (next_sum + k[next_sum & 3]);
-        });
-    };
+			right -= ((left << 4 ^ left >> 5) + left) ^ k[i];
+			left -= ((right << 4 ^ right >> 5) + right) ^ k[i - 1];
+
+			std::memcpy(it, &left, 4);
+			std::memcpy(it + 4, &right, 4);
+		}
+	}
 }
 
 } // namespace xtea

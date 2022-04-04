@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Horestis" nameDescription="Horestis" race="undead" experience="3500" speed="276">
 	<health now="6000" max="6000" />
 	<look type="88" head="20" body="30" legs="40" feet="50" corpse="6031" />
@@ -56,7 +56,9 @@
 	</voices>
 	<loot>
 		<item name="silver brooch" chance="12500" />
-		<item name="gold coin" countmax="243" chance="50000" />
+		<item name="gold coin" countmax="100" chance="17000" />
+		<item name="gold coin" countmax="100" chance="17000" />
+		<item name="gold coin" countmax="43" chance="17000" />
 		<item name="platinum coin" countmax="5" chance="33333" />
 		<item name="scarab coin" countmax="5" chance="14285" />
 		<item name="pharaoh sword" chance="5000" />

@@ -1,29 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
-#define FS_ITEMS_H_4E2221634ABA45FE85BA50F710669B3C
+#ifndef FS_ITEMS_H
+#define FS_ITEMS_H
 
 #include "const.h"
 #include "enums.h"
 #include "itemloader.h"
 #include "position.h"
+
+class ConditionDamage;
 
 enum SlotPositionBits : uint32_t {
 	SLOTP_WHEREEVER = 0xFFFFFFFF,
@@ -54,6 +40,7 @@ enum ItemTypes_t {
 	ITEM_TYPE_BED,
 	ITEM_TYPE_KEY,
 	ITEM_TYPE_RUNE,
+	ITEM_TYPE_PODIUM,
 	ITEM_TYPE_LAST
 };
 
@@ -67,6 +54,7 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_DEFENSE,
 	ITEM_PARSE_EXTRADEF,
 	ITEM_PARSE_ATTACK,
+	ITEM_PARSE_ATTACK_SPEED,
 	ITEM_PARSE_ROTATETO,
 	ITEM_PARSE_MOVEABLE,
 	ITEM_PARSE_BLOCKPROJECTILE,
@@ -141,6 +129,18 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_ABSORBPERCENTPHYSICAL,
 	ITEM_PARSE_ABSORBPERCENTHEALING,
 	ITEM_PARSE_ABSORBPERCENTUNDEFINED,
+	ITEM_PARSE_MAGICLEVELENERGY,
+	ITEM_PARSE_MAGICLEVELFIRE,
+	ITEM_PARSE_MAGICLEVELPOISON,
+	ITEM_PARSE_MAGICLEVELICE,
+	ITEM_PARSE_MAGICLEVELHOLY,
+	ITEM_PARSE_MAGICLEVELDEATH,
+	ITEM_PARSE_MAGICLEVELLIFEDRAIN,
+	ITEM_PARSE_MAGICLEVELMANADRAIN,
+	ITEM_PARSE_MAGICLEVELDROWN,
+	ITEM_PARSE_MAGICLEVELPHYSICAL,
+	ITEM_PARSE_MAGICLEVELHEALING,
+	ITEM_PARSE_MAGICLEVELUNDEFINED,
 	ITEM_PARSE_SUPPRESSDRUNK,
 	ITEM_PARSE_SUPPRESSENERGY,
 	ITEM_PARSE_SUPPRESSFIRE,
@@ -168,6 +168,50 @@ enum ItemParseAttributes_t {
 	ITEM_PARSE_BLOCKING,
 	ITEM_PARSE_ALLOWDISTREAD,
 	ITEM_PARSE_STOREITEM,
+	ITEM_PARSE_WORTH,
+	ITEM_PARSE_REFLECTPERCENTALL,
+	ITEM_PARSE_REFLECTPERCENTELEMENTS,
+	ITEM_PARSE_REFLECTPERCENTMAGIC,
+	ITEM_PARSE_REFLECTPERCENTENERGY,
+	ITEM_PARSE_REFLECTPERCENTFIRE,
+	ITEM_PARSE_REFLECTPERCENTEARTH,
+	ITEM_PARSE_REFLECTPERCENTICE,
+	ITEM_PARSE_REFLECTPERCENTHOLY,
+	ITEM_PARSE_REFLECTPERCENTDEATH,
+	ITEM_PARSE_REFLECTPERCENTLIFEDRAIN,
+	ITEM_PARSE_REFLECTPERCENTMANADRAIN,
+	ITEM_PARSE_REFLECTPERCENTDROWN,
+	ITEM_PARSE_REFLECTPERCENTPHYSICAL,
+	ITEM_PARSE_REFLECTPERCENTHEALING,
+	ITEM_PARSE_REFLECTCHANCEALL,
+	ITEM_PARSE_REFLECTCHANCEELEMENTS,
+	ITEM_PARSE_REFLECTCHANCEMAGIC,
+	ITEM_PARSE_REFLECTCHANCEENERGY,
+	ITEM_PARSE_REFLECTCHANCEFIRE,
+	ITEM_PARSE_REFLECTCHANCEEARTH,
+	ITEM_PARSE_REFLECTCHANCEICE,
+	ITEM_PARSE_REFLECTCHANCEHOLY,
+	ITEM_PARSE_REFLECTCHANCEDEATH,
+	ITEM_PARSE_REFLECTCHANCELIFEDRAIN,
+	ITEM_PARSE_REFLECTCHANCEMANADRAIN,
+	ITEM_PARSE_REFLECTCHANCEDROWN,
+	ITEM_PARSE_REFLECTCHANCEPHYSICAL,
+	ITEM_PARSE_REFLECTCHANCEHEALING,
+	ITEM_PARSE_BOOSTPERCENTALL,
+	ITEM_PARSE_BOOSTPERCENTELEMENTS,
+	ITEM_PARSE_BOOSTPERCENTMAGIC,
+	ITEM_PARSE_BOOSTPERCENTENERGY,
+	ITEM_PARSE_BOOSTPERCENTFIRE,
+	ITEM_PARSE_BOOSTPERCENTEARTH,
+	ITEM_PARSE_BOOSTPERCENTICE,
+	ITEM_PARSE_BOOSTPERCENTHOLY,
+	ITEM_PARSE_BOOSTPERCENTDEATH,
+	ITEM_PARSE_BOOSTPERCENTLIFEDRAIN,
+	ITEM_PARSE_BOOSTPERCENTMANADRAIN,
+	ITEM_PARSE_BOOSTPERCENTDROWN,
+	ITEM_PARSE_BOOSTPERCENTPHYSICAL,
+	ITEM_PARSE_BOOSTPERCENTHEALING,
+	ITEM_PARSE_SUPPLY,
 };
 
 struct Abilities {
@@ -180,20 +224,24 @@ struct Abilities {
 	uint32_t conditionSuppressions = 0;
 
 	//stats modifiers
-	int32_t stats[STAT_LAST + 1] = { 0 };
-	int32_t statsPercent[STAT_LAST + 1] = { 0 };
+	std::array<int32_t, STAT_LAST + 1> stats = {0};
+	std::array<int32_t, STAT_LAST + 1> statsPercent = {0};
 
 	//extra skill modifiers
-	int32_t skills[SKILL_LAST + 1] = { 0 };
-	int32_t specialSkills[SPECIALSKILL_LAST + 1] = { 0 };
-
+	std::array<int32_t, SKILL_LAST + 1> skills = {0};
+	std::array<int32_t, SPECIALSKILL_LAST + 1> specialSkills = {0};
+	std::array<int16_t, COMBAT_COUNT> specialMagicLevelSkill = {0};
 	int32_t speed = 0;
 
 	// field damage abilities modifiers
-	int16_t fieldAbsorbPercent[COMBAT_COUNT] = { 0 };
+	std::array<int16_t, COMBAT_COUNT> fieldAbsorbPercent = {0};
 
 	//damage abilities modifiers
-	int16_t absorbPercent[COMBAT_COUNT] = { 0 };
+	std::array<int16_t, COMBAT_COUNT> absorbPercent = {0};
+
+	std::array<Reflect, COMBAT_COUNT> reflect;
+
+	int16_t boostPercent[COMBAT_COUNT] = {0};
 
 	//elemental damage
 	uint16_t elementDamage = 0;
@@ -203,8 +251,6 @@ struct Abilities {
 	bool invisible = false;
 	bool regeneration = false;
 };
-
-class ConditionDamage;
 
 class ItemType
 {
@@ -258,6 +304,9 @@ class ItemType
 		bool isRune() const {
 			return (type == ITEM_TYPE_RUNE);
 		}
+		bool isPodium() const {
+			return (type == ITEM_TYPE_PODIUM);
+		}
 		bool isPickupable() const {
 			return (allowPickupable || pickupable);
 		}
@@ -266,6 +315,9 @@ class ItemType
 		}
 		bool hasSubType() const {
 			return (isFluidContainer() || isSplash() || stackable || charges != 0);
+		}
+		bool isSupply() const {
+			return supply;
 		}
 
 		Abilities& getAbilities() {
@@ -312,6 +364,7 @@ class ItemType
 		std::unique_ptr<Abilities> abilities;
 		std::unique_ptr<ConditionDamage> conditionDamage;
 
+		uint32_t attackSpeed = 0;
 		uint32_t weight = 0;
 		uint32_t levelDoor = 0;
 		uint32_t decayTime = 0;
@@ -328,6 +381,7 @@ class ItemType
 		uint16_t rotateTo = 0;
 		int32_t runeMagLevel = 0;
 		int32_t runeLevel = 0;
+		uint64_t worth = 0;
 
 		CombatType_t combatType = COMBAT_NONE;
 
@@ -356,6 +410,7 @@ class ItemType
 		uint8_t lightLevel = 0;
 		uint8_t lightColor = 0;
 		uint8_t shootRange = 1;
+		uint8_t classification = 0;
 		int8_t hitChance = 0;
 
 		bool storeItem = false;
@@ -386,13 +441,16 @@ class ItemType
 		bool lookThrough = false;
 		bool stopTime = false;
 		bool showCount = true;
+		bool supply = false;
 };
 
 class Items
 {
 	public:
-		using NameMap = std::unordered_multimap<std::string, uint16_t>;
+		using NameMap = std::unordered_map<std::string, uint16_t>;
 		using InventoryVector = std::vector<uint16_t>;
+
+		using CurrencyMap = std::map<uint64_t, uint16_t, std::greater<uint64_t>>;
 
 		Items();
 
@@ -421,16 +479,12 @@ class Items
 		bool loadFromXml();
 		void parseItemNode(const pugi::xml_node& itemNode, uint16_t id);
 
-		void buildInventoryList();
-		const InventoryVector& getInventory() const {
-			return inventory;
-		}
-
 		size_t size() const {
 			return items.size();
 		}
 
 		NameMap nameToItems;
+		CurrencyMap currencyItems;
 
 	private:
 		std::vector<ItemType> items;
@@ -439,7 +493,7 @@ class Items
 		{
 			public:
 				ClientIdToServerIdMap() {
-					vec.reserve(30000);
+					vec.reserve(45000);
 				}
 
 				void emplace(uint16_t clientId, uint16_t serverId) {
@@ -466,4 +520,5 @@ class Items
 				std::vector<uint16_t> vec;
 		} clientIdToServerIdMap;
 };
-#endif
+
+#endif // FS_ITEMS_H

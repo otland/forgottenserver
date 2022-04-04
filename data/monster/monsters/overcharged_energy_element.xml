@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Overcharged Energy Element" nameDescription="an orvercharged energy element" race="energy" experience="1300" speed="300">
 	<health now="1700" max="1700" />
 	<look type="290" corpse="8966" />

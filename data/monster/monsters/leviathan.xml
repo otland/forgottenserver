@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Leviathan" nameDescription="Leviathan" race="blood" experience="5000" speed="758">
 	<health now="6000" max="6000" />
 	<look type="275" corpse="8307" />

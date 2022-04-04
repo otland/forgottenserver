@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cyclops Drone" nameDescription="a cyclops drone" race="blood" experience="200" speed="205" manacost="525">
 	<health now="325" max="325" />
 	<look type="280" corpse="7847" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Marsh Stalker" nameDescription="a marsh stalker" race="blood" experience="50" speed="210">
 	<health now="100" max="100" />
 	<look type="530" corpse="19708" />

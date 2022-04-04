@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="250">
 	<health now="1300" max="1300" />
 	<look type="299" corpse="8951" />

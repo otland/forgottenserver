@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Crystal Wolf" nameDescription="a crystal wolf" race="undead" experience="275" speed="200">
 	<health now="750" max="750" />
 	<look type="391" corpse="13584" />

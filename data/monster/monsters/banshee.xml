@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Banshee" nameDescription="a banshee" race="undead" experience="900" speed="220">
 	<health now="1000" max="1000" />
 	<look type="78" corpse="6019" />

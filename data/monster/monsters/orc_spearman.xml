@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Orc Spearman" nameDescription="an orc spearman" race="blood" experience="38" speed="176" manacost="310">
 	<health now="105" max="105" />
 	<look type="50" corpse="5996" />

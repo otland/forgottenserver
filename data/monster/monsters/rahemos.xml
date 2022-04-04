@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Rahemos" nameDescription="Rahemos" race="undead" experience="3100" speed="320">
 	<health now="3700" max="3700" />
 	<look type="87" corpse="6031" />
@@ -72,7 +72,9 @@
 	</voices>
 	<loot>
 		<item name="ancient rune" chance="100000" />
-		<item name="gold coin" countmax="242" chance="90000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="42" chance="30000" />
 		<item name="great mana potion" chance="9000" />
 		<item name="small amethyst" countmax="3" chance="8000" />
 		<item name="ring of healing" chance="4000" />

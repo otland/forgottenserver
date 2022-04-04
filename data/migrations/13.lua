@@ -7,10 +7,10 @@ function onUpdateDatabase()
 	db.query("CREATE TABLE IF NOT EXISTS `player_namelocks` (`player_id` int NOT NULL, `reason` varchar(255) NOT NULL, `namelocked_at` bigint NOT NULL, `namelocked_by` int NOT NULL, PRIMARY KEY (`player_id`), KEY `namelocked_by` (`namelocked_by`), FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`namelocked_by`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB")
 
 	local resultId = db.storeQuery("SELECT `player`, `time` FROM `bans` WHERE `type` = 2")
-	if resultId ~= false then
+	if resultId then
 		local stmt = "INSERT INTO `player_namelocks` (`player_id`, `namelocked_at`, `namelocked_by`) VALUES "
 		repeat
-			stmt = stmt .. "(" .. result.getNumber(resultId, "player") .. "," .. result.getNumber(resultId, "time") .. "," .. result.getNumber(resultId, "player") .. "),"
+			stmt = stmt .. "(" .. result.getNumber(resultId, "player") .. ", " .. result.getNumber(resultId, "time") .. ", " .. result.getNumber(resultId, "player") .. "),"
 		until not result.next(resultId)
 		result.free(resultId)
 
@@ -31,7 +31,7 @@ function onUpdateDatabase()
 	print("DELIMITER //")
 	print("CREATE TRIGGER `ondelete_players` BEFORE DELETE ON `players`")
 	print(" FOR EACH ROW BEGIN")
-	print("  UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
+	print(" UPDATE `houses` SET `owner` = 0 WHERE `owner` = OLD.`id`;")
 	print("END //")
 	return true
 end

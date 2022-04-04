@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185">
 	<health now="125" max="125" />
 	<look type="425" addons="2" corpse="20395" />

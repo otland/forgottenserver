@@ -1,25 +1,10 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "chat.h"
+
 #include "game.h"
 #include "pugicast.h"
 #include "scheduler.h"
@@ -47,13 +32,9 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 		return;
 	}
 
-	std::ostringstream ss;
-	ss << player.getName() << " invites you to " << (player.getSex() == PLAYERSEX_FEMALE ? "her" : "his") << " private chat channel.";
-	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} invites you to {:s} private chat channel.", player.getName(), player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
 
-	ss.str(std::string());
-	ss << invitePlayer.getName() << " has been invited.";
-	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
 
 	for (const auto& it : users) {
 		it.second->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
@@ -68,9 +49,7 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 
 	removeUser(excludePlayer);
 
-	std::ostringstream ss;
-	ss << excludePlayer.getName() << " has been excluded.";
-	player.sendTextMessage(MESSAGE_INFO_DESCR, ss.str());
+	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been excluded.", excludePlayer.getName()));
 
 	excludePlayer.sendClosePrivate(id);
 
@@ -100,7 +79,7 @@ bool ChatChannel::addUser(Player& player)
 	if (id == CHANNEL_GUILD) {
 		Guild* guild = player.getGuild();
 		if (guild && !guild->getMotd().empty()) {
-			g_scheduler.addEvent(createSchedulerTask(150, std::bind(&Game::sendGuildMotd, &g_game, player.getID())));
+			g_scheduler.addEvent(createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
 		}
 	}
 

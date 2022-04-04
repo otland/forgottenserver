@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Omruc" nameDescription="Omruc" race="undead" experience="2950" speed="370">
 	<health now="4300" max="4300" />
 	<look type="90" corpse="6025" />
@@ -68,7 +68,8 @@
 	</voices>
 	<loot>
 		<item name="crystal arrow" chance="100000" />
-		<item name="gold coin" countmax="160" chance="85000" />
+		<item name="gold coin" countmax="100" chance="43000" />
+		<item name="gold coin" countmax="60" chance="43000" />
 		<item name="red apple" countmax="2" chance="76000" />
 		<item name="poison arrow" countmax="20" chance="56000" />
 		<item name="burst arrow" countmax="15" chance="47000" />

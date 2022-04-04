@@ -1,30 +1,14 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
-#define FS_SPELLS_H_D78A7CCB7080406E8CAA6B1D31D3DA71
+#ifndef FS_SPELLS_H
+#define FS_SPELLS_H
 
-#include "luascript.h"
-#include "player.h"
 #include "actions.h"
-#include "talkaction.h"
 #include "baseevents.h"
+#include "creature.h"
+#include "luascript.h"
+#include "talkaction.h"
 
 class InstantSpell;
 class RuneSpell;
@@ -50,8 +34,6 @@ class Spells final : public BaseEvents
 
 		InstantSpell* getInstantSpell(const std::string& words);
 		InstantSpell* getInstantSpellByName(const std::string& name);
-
-		InstantSpell* getInstantSpellById(uint32_t spellId);
 
 		TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
@@ -79,8 +61,6 @@ class Spells final : public BaseEvents
 		LuaScriptInterface scriptInterface { "Spell Interface" };
 };
 
-using RuneSpellFunction = std::function<bool(const RuneSpell* spell, Player* player, const Position& posTo)>;
-
 class BaseSpell
 {
 	public:
@@ -94,8 +74,7 @@ class BaseSpell
 class CombatSpell final : public Event, public BaseSpell
 {
 	public:
-		CombatSpell(Combat* combat, bool needTarget, bool needDirection);
-		~CombatSpell();
+		CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection);
 
 		// non-copyable
 		CombatSpell(const CombatSpell&) = delete;
@@ -111,7 +90,7 @@ class CombatSpell final : public Event, public BaseSpell
 		bool executeCastSpell(Creature* creature, const LuaVariant& var);
 
 		bool loadScriptCombat();
-		Combat* getCombat() {
+		Combat_ptr getCombat() {
 			return combat;
 		}
 
@@ -120,7 +99,7 @@ class CombatSpell final : public Event, public BaseSpell
 			return "onCastSpell";
 		}
 
-		Combat* combat;
+		Combat_ptr combat;
 
 		bool needDirection;
 		bool needTarget;
@@ -320,7 +299,6 @@ class Spell : public BaseSpell
 		bool needTarget = false;
 
 	private:
-
 		uint32_t mana = 0;
 		uint32_t manaPercent = 0;
 		uint32_t soul = 0;
@@ -334,8 +312,6 @@ class Spell : public BaseSpell
 		bool enabled = true;
 		bool premium = false;
 
-
-	private:
 		std::string name;
 };
 
@@ -454,4 +430,4 @@ class RuneSpell final : public Action, public Spell
 		bool hasCharges = false;
 };
 
-#endif
+#endif // FS_SPELLS_H

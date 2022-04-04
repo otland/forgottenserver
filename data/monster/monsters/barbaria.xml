@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Barbaria" nameDescription="Barbaria" race="blood" experience="355" speed="280">
 	<health now="345" max="345" />
 	<look type="264" head="78" body="97" legs="95" feet="120" corpse="20339" />

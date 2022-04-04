@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Spitter" nameDescription="a spitter" race="venom" experience="1100" speed="190">
 	<health now="1500" max="1500" />
 	<look type="461" corpse="15392" />

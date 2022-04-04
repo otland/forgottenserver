@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Pale Count" nameDescription="The Pale Count" race="blood" experience="28000" speed="300">
 	<health now="50000" max="50000" />
-	<look type="558" corpse="21279" />
+	<look type="557" corpse="21272" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

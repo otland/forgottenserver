@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Morguthis" nameDescription="Morguthis" race="undead" experience="3000" speed="320">
 	<health now="4800" max="4800" />
 	<look type="90" corpse="6025" />
@@ -69,7 +69,9 @@
 	</voices>
 	<loot>
 		<item name="sword hilt" chance="100000" />
-		<item name="gold coin" countmax="221" chance="91000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="21" chance="30000" />
 		<item name="black pearl" chance="10000" />
 		<item name="assassin star" countmax="3" chance="9700" />
 		<item name="great health potion" chance="9500" />

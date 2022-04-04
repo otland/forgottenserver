@@ -1,40 +1,15 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MAP_H_E3953D57C058461F856F5221D359DAFA
-#define FS_MAP_H_E3953D57C058461F856F5221D359DAFA
+#ifndef FS_MAP_H
+#define FS_MAP_H
 
-#include "position.h"
-#include "item.h"
-#include "fileloader.h"
-
-#include "tools.h"
-#include "tile.h"
-#include "town.h"
 #include "house.h"
+#include "position.h"
 #include "spawn.h"
+#include "town.h"
 
 class Creature;
-class Player;
-class Game;
-class Tile;
-class Map;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
@@ -222,7 +197,7 @@ class Map
 		  * \param centerPos The position to place the creature
 		  * \param creature Creature to place on the map
 		  * \param extendedPos If true, the creature will in first-hand be placed 2 tiles away
-		  * \param forceLogin If true, placing the creature will not fail becase of obstacles (creatures/chests)
+		  * \param forceLogin If true, placing the creature will not fail because of obstacles (creatures/chests)
 		  */
 		bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
@@ -239,28 +214,36 @@ class Map
 		  * Checks if you can throw an object to that position
 		  *	\param fromPos from Source point
 		  *	\param toPos Destination point
-		  *	\param rangex maximum allowed range horizontially
+		  *	\param rangex maximum allowed range horizontally
 		  *	\param rangey maximum allowed range vertically
 		  *	\param checkLineOfSight checks if there is any blocking objects in the way
+		  *	\param sameFloor checks if the destination is on same floor
 		  *	\returns The result if you can throw there or not
 		  */
-		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
+		bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true, bool sameFloor = false,
 		                      int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY) const;
+
+		/**
+		  * Checks if there are no obstacles on that position
+		  *	\param blockFloor counts the ground tile as an obstacle
+		  *	\returns The result if there is an obstacle or not
+		  */
+		bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) const;
 
 		/**
 		  * Checks if path is clear from fromPos to toPos
 		  * Notice: This only checks a straight line if the path is clear, for path finding use getPathTo.
 		  *	\param fromPos from Source point
 		  *	\param toPos Destination point
-		  *	\param floorCheck if true then view is not clear if fromPos.z is not the same as toPos.z
+		  *	\param sameFloor checks if the destination is on same floor
 		  *	\returns The result if there is no obstacles
 		  */
-		bool isSightClear(const Position& fromPos, const Position& toPos, bool floorCheck) const;
-		bool checkSightLine(const Position& fromPos, const Position& toPos) const;
+		bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
+		bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
 
 		const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-		bool getPathMatching(const Creature& creature, std::forward_list<Direction>& dirList,
+		bool getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
 		                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 		std::map<std::string, Position> waypoints;
@@ -295,4 +278,4 @@ class Map
 		friend class IOMap;
 };
 
-#endif
+#endif // FS_MAP_H

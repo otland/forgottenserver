@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dwarf Guard" nameDescription="a dwarf guard" race="blood" experience="165" speed="206" manacost="650">
 	<health now="245" max="245" />
 	<look type="70" corpse="6013" />

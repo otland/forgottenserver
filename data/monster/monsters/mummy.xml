@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mummy" nameDescription="a mummy" race="undead" experience="150" speed="150">
 	<health now="240" max="240" />
 	<look type="65" corpse="6004" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Scarab" nameDescription="a scarab" race="venom" experience="120" speed="160" manacost="395">
 	<health now="320" max="320" />
 	<look type="83" corpse="6024" />

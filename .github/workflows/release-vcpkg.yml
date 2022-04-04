@@ -1,0 +1,192 @@
+name: Release builds with vcpkg
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  unix:
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        name: [ubuntu-gcc, macos-clang]
+        buildtype: [Release]
+        luajit: [on]
+        include:
+          - name: ubuntu-gcc
+            os: ubuntu
+            cxx: g++
+            cc: gcc
+            triplet: x64-linux
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp fmt
+          - name: macos-clang
+            os: macos
+            cxx: clang++
+            cc: clang
+            triplet: x64-osx
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua libmariadb pugixml cryptopp fmt
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
+
+      - name: Ubuntu - install luajit, remove libmysqlclient-dev
+        run: |
+          sudo apt-get install libluajit-5.1-dev
+          sudo apt-get remove -y libmysqlclient-dev
+        if: contains( matrix.os, 'ubuntu')
+
+      - name: MacOS - install luajit pkgconfig
+        run: brew install luajit pkgconfig
+        if: contains( matrix.os, 'macos')
+
+      - name: Set Environment vars
+        run: |
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v7
+        with:
+          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
+          vcpkgTriplet: ${{ matrix.triplet }}
+          appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
+          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v3
+        with:
+          useVcpkgToolchainFile: true
+          buildDirectory: ${{ runner.workspace }}/build
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="${{ matrix.luajit }}"'
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Prepare datapack contents
+        run: |
+          pwd
+          ls -al
+          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+          mv ../build/tfs .
+        shell: bash
+
+      - name: Zip the release files
+        uses: thedoctor0/zip-release@master
+        with:
+          type: tar
+          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
+          path: forgottenserver
+          directory: ../
+
+      - name: Upload release artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
+          generateReleaseNotes: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  windows:
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=on
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        name: [windows-msvc]
+        buildtype: [Release]
+        include:
+          - name: windows-msvc
+            os: windows
+            cxx: cl.exe
+            cc: cl.exe
+            triplet: x64-windows
+            packages: >
+              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              lua luajit libmariadb pugixml cryptopp fmt
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Unshallow
+        run: git fetch --prune --unshallow
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
+
+      - name: Windows - remove C:/mysql*
+        run: rm -r -fo C:/mysql*
+
+      - name: Set Environment vars
+        run: |
+          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v7
+        with:
+          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
+          vcpkgTriplet: ${{ matrix.triplet }}
+          appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
+          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v3
+        with:
+          useVcpkgToolchainFile: true
+          buildDirectory: ${{ runner.workspace }}/build
+          cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+          cmakeAppendedArgs: '-G Ninja -DCMAKE_BUILD_TYPE="${{ matrix.buildtype }}" -DUSE_LUAJIT="on"'
+
+      - name: dir
+        run: find $RUNNER_WORKSPACE
+        shell: bash
+
+      - name: Prepare datapack contents
+        run: |
+          pwd
+          ls -al
+          find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
+          mv ../build/tfs.exe* .
+          mv ../build/*.dll .
+        shell: bash
+
+      - name: Zip the release files
+        uses: thedoctor0/zip-release@master
+        with:
+          type: zip
+          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          path: forgottenserver
+          directory: ../
+
+      - name: Upload release artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          generateReleaseNotes: true
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bonelord" nameDescription="a bonelord" race="venom" experience="170" speed="150">
 	<health now="260" max="260" />
 	<look type="17" corpse="5992" />

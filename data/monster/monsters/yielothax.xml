@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Yielothax" nameDescription="Yielothax" race="venom" experience="1250" speed="240">
 	<health now="1500" max="1500" />
 	<look type="408" corpse="13752" />

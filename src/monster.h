@@ -1,31 +1,17 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MONSTER_H_9F5EEFE64314418CA7DA41D1B9409DD0
-#define FS_MONSTER_H_9F5EEFE64314418CA7DA41D1B9409DD0
+#ifndef FS_MONSTER_H
+#define FS_MONSTER_H
 
-#include "tile.h"
 #include "monsters.h"
 
-class Creature;
-class Game;
+#include "creature.h"
+#include "position.h"
+
+class Item;
 class Spawn;
+class Tile;
 
 using CreatureHashSet = std::unordered_set<Creature*>;
 using CreatureList = std::list<Creature*>;
@@ -64,17 +50,19 @@ class Monster final : public Creature
 			}
 		}
 
-		void removeList() override;
 		void addList() override;
+		void removeList() override;
 
-		const std::string& getName() const override {
-			return mType->name;
-		}
-		const std::string& getNameDescription() const override {
-			return mType->nameDescription;
-		}
+		const std::string& getName() const override;
+		void setName(const std::string& name);
+
+		const std::string& getNameDescription() const override;
+		void setNameDescription(const std::string& nameDescription) {
+			this->nameDescription = nameDescription;
+		};
+
 		std::string getDescription(int32_t) const override {
-			return strDescription + '.';
+			return nameDescription + '.';
 		}
 
 		CreatureType_t getType() const override {
@@ -104,9 +92,7 @@ class Monster final : public Creature
 			return mType->info.isAttackable;
 		}
 
-		bool canPushItems() const {
-			return mType->info.canPushItems;
-		}
+		bool canPushItems() const;
 		bool canPushCreatures() const {
 			return mType->info.canPushCreatures;
 		}
@@ -125,7 +111,6 @@ class Monster final : public Creature
 		}
 		bool canWalkOnFieldType(CombatType_t combatType) const;
 
-
 		void onAttackedCreatureDisappear(bool isLogout) override;
 
 		void onCreatureAppear(Creature* creature, bool isLogin) override;
@@ -135,20 +120,26 @@ class Monster final : public Creature
 
 		void drainHealth(Creature* attacker, int32_t damage) override;
 		void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
+
+		bool isWalkingToSpawn() const {
+			return walkingToSpawn;
+		}
+		bool walkToSpawn();
 		void onWalk() override;
+		void onWalkComplete() override;
 		bool getNextStep(Direction& direction, uint32_t& flags) override;
 		void onFollowCreatureComplete(const Creature* creature) override;
 
 		void onThink(uint32_t interval) override;
 
-		bool challengeCreature(Creature* creature) override;
+		bool challengeCreature(Creature* creature, bool force = false) override;
 
 		void setNormalCreatureLight() override;
 		bool getCombatValues(int32_t& min, int32_t& max) override;
 
 		void doAttacking(uint32_t interval) override;
 		bool hasExtraSwing() override {
-			return extraMeleeAttack;
+			return lastMeleeAttack == 0;
 		}
 
 		bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
@@ -175,7 +166,7 @@ class Monster final : public Creature
 		}
 
 		BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-		                     bool checkDefense = false, bool checkArmor = false, bool field = false) override;
+		                     bool checkDefense = false, bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
 		static uint32_t monsterAutoID;
 
@@ -183,7 +174,8 @@ class Monster final : public Creature
 		CreatureHashSet friendList;
 		CreatureList targetList;
 
-		std::string strDescription;
+		std::string name;
+		std::string nameDescription;
 
 		MonsterType* mType;
 		Spawn* spawn = nullptr;
@@ -203,11 +195,11 @@ class Monster final : public Creature
 
 		Position masterPos;
 
+		bool ignoreFieldDamage = false;
 		bool isIdle = true;
-		bool extraMeleeAttack = false;
 		bool isMasterInRange = false;
 		bool randomStepping = false;
-		bool ignoreFieldDamage = false;
+		bool walkingToSpawn = false;
 
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);
@@ -278,4 +270,4 @@ class Monster final : public Creature
 		friend class LuaScriptInterface;
 };
 
-#endif
+#endif // FS_MONSTER_H

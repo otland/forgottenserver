@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Orc Berserker" nameDescription="an orc berserker" race="blood" experience="195" speed="250" manacost="590">
 	<health now="210" max="210" />
 	<look type="8" corpse="5980" />
@@ -43,7 +43,7 @@
 		<item name="gold coin" countmax="12" chance="54000" />
 		<item name="orcish gear" chance="10500" />
 		<item name="ham" chance="9720" />
-		<item name="halberd" chance="7000" />
+		<item id="2381" chance="7000" /><!-- halberd -->
 		<item name="battle axe" chance="5770" />
 		<item name="hunting spear" chance="5000" />
 		<item name="orc leather" chance="4000" />

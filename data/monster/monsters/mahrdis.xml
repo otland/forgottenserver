@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mahrdis" nameDescription="Mahrdis" race="undead" experience="3050" speed="340">
 	<health now="3900" max="3900" />
 	<look type="90" corpse="6025" />
@@ -69,7 +69,9 @@
 	</voices>
 	<loot>
 		<item name="burning heart" chance="100000" />
-		<item name="gold coin" countmax="230" chance="88000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="100" chance="30000" />
+		<item name="gold coin" countmax="30" chance="30000" />
 		<item name="small ruby" countmax="3" chance="12000" />
 		<item name="great health potion" chance="10500" />
 		<item name="life ring" chance="6700" />

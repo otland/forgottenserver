@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="210" manacost="500">
 	<health now="320" max="320" />
 	<look type="199" corpse="6074" />

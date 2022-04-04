@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Elf Arcanist" nameDescription="an elf arcanist" race="blood" experience="175" speed="220">
 	<health now="220" max="220" />
 	<look type="63" corpse="6011" />
@@ -63,7 +63,7 @@
 		<item name="elvish talisman" chance="10000" />
 		<item name="elven astral observer" chance="7710" />
 		<item name="green tunic" chance="7000" />
-		<item name="arrow" countmax="3" chance="6000" />
+		<item id="2544" countmax="3" chance="6000" /><!-- arrow -->
 		<item name="sling herb" chance="5000" />
 		<item name="health potion" chance="4000" />
 		<item name="strong mana potion" chance="3000" />
@@ -72,9 +72,9 @@
 		<item name="holy orchid" chance="2000" />
 		<item name="wand of cosmic energy" chance="1160" />
 		<item name="life crystal" chance="970" />
-		<item name="inkwell" chance="1000" />
+		<item id="2600" chance="1000" /><!-- inkwell -->
 		<item name="sandals" chance="950" />
-		<item name="grave flower" chance="880" />
+		<item id="2747" chance="880" /><!-- grave flower -->
 		<item name="yellow gem" chance="50" />
 	</loot>
 </monster>

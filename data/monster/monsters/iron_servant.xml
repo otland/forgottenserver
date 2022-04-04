@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Iron Servant" nameDescription="an iron servant" race="energy" experience="210" speed="190">
 	<health now="350" max="350" />
 	<look type="395" corpse="13486" />

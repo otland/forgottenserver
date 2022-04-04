@@ -8,6 +8,9 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 			if spell.manapercent > 0 then
 				spell.mana = spell.manapercent .. "%"
 			end
+			if spell.params > 0 then
+				spell.words = spell.words .. " para"
+			end
 			spells[#spells + 1] = spell
 		end
 	end
@@ -18,14 +21,14 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 	for i, spell in ipairs(spells) do
 		if prevLevel ~= spell.level then
 			if i == 1 then
-				text[#text == nil and 1 or #text+1] = "Spells for Level "
+				text[not #text and 1 or #text + 1] = "Spells for Level "
 			else
-				text[#text+1] = "\nSpells for Level "
+				text[#text + 1] = "\nSpells for Level "
 			end
-			text[#text+1] = spell.level .. "\n"
+			text[#text + 1] = spell.level .. "\n"
 			prevLevel = spell.level
 		end
-		text[#text+1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
+		text[#text + 1] = spell.words .. " - " .. spell.name .. " : " .. spell.mana .. "\n"
 	end
 
 	player:showTextDialog(item:getId(), table.concat(text))

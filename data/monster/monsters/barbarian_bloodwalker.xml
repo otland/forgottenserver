@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="230" manacost="590">
 	<health now="305" max="305" />
 	<look type="255" head="114" body="113" legs="132" feet="94" corpse="20335" />

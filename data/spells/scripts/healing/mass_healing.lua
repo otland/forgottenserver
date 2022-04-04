@@ -10,7 +10,7 @@ function onCastSpell(creature, variant)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
 		local master = target:getMaster()
 		if target:isPlayer() or master and master:isPlayer() then
-			doTargetCombat(0, target, COMBAT_HEALING, min, max)
+			doTargetCombat(creature, target, COMBAT_HEALING, min, max)
 		end
 	end
 	return true

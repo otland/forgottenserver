@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Orewalker" nameDescription="an orewalker" race="undead" experience="4800" speed="250">
 	<health now="7200" max="7200" />
 	<look type="490" corpse="17256" />

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tanjis" nameDescription="Tanjis" race="blood" experience="15000" speed="560">
 	<health now="30000" max="30000" />
 	<look type="446" corpse="15228" />

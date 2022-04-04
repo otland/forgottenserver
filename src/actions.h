@@ -1,24 +1,8 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ACTIONS_H_87F60C5F587E4B84948F304A6451E6E6
-#define FS_ACTIONS_H_87F60C5F587E4B84948F304A6451E6E6
+#ifndef FS_ACTIONS_H
+#define FS_ACTIONS_H
 
 #include "baseevents.h"
 #include "enums.h"
@@ -61,21 +45,30 @@ class Action : public Event
 			checkFloor = v;
 		}
 
-		std::vector<uint16_t> getItemIdRange() {
+		void clearItemIdRange() {
+			return ids.clear();
+		}
+		const std::vector<uint16_t>& getItemIdRange() const {
 			return ids;
 		}
 		void addItemId(uint16_t id) {
 			ids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getUniqueIdRange() {
+		void clearUniqueIdRange() {
+			return uids.clear();
+		}
+		const std::vector<uint16_t>& getUniqueIdRange() const {
 			return uids;
 		}
 		void addUniqueId(uint16_t id) {
 			uids.emplace_back(id);
 		}
 
-		std::vector<uint16_t> getActionIdRange() {
+		void clearActionIdRange() {
+			return aids.clear();
+		}
+		const std::vector<uint16_t>& getActionIdRange() const {
 			return aids;
 		}
 		void addActionId(uint16_t id) {
@@ -123,7 +116,6 @@ class Actions final : public BaseEvents
 
 	private:
 		ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
-		static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count);
 
 		LuaScriptInterface& getScriptInterface() override;
 		std::string getScriptBaseName() const override;
@@ -141,4 +133,4 @@ class Actions final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-#endif
+#endif // FS_ACTIONS_H

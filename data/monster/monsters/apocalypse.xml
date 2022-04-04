@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Apocalypse" nameDescription="Apocalypse" race="fire" experience="30000" speed="380">
 	<health now="125000" max="125000" />
 	<look type="12" head="58" body="13" legs="58" feet="85" corpse="6068" />
