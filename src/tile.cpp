@@ -206,14 +206,14 @@ BedItem* Tile::getBedItem() const
 		return nullptr;
 	}
 
-	if (ground && ground->getBed()) {
-		return ground->getBed();
+	if (ground && ground->asBed()) {
+		return ground->asBed();
 	}
 
 	if (const TileItemVector* items = getItemList()) {
 		for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-			if ((*it)->getBed()) {
-				return (*it)->getBed();
+			if ((*it)->asBed()) {
+				return (*it)->asBed();
 			}
 		}
 	}
@@ -1509,7 +1509,7 @@ void Tile::setTileFlags(const Item* item)
 		setFlag(TILESTATE_BLOCKSOLID);
 	}
 
-	if (item->getBed()) {
+	if (item->asBed()) {
 		setFlag(TILESTATE_BED);
 	}
 
@@ -1570,7 +1570,7 @@ void Tile::resetTileFlags(const Item* item)
 		resetFlag(TILESTATE_TRASHHOLDER);
 	}
 
-	if (item->getBed()) {
+	if (item->asBed()) {
 		resetFlag(TILESTATE_BED);
 	}
 

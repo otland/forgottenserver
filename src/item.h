@@ -586,10 +586,10 @@ class Item : virtual public Thing
 		virtual const MagicField* asMagicField() const {
 			return nullptr;
 		}
-		virtual BedItem* getBed() {
+		virtual BedItem* asBed() {
 			return nullptr;
 		}
-		virtual const BedItem* getBed() const {
+		virtual const BedItem* asBed() const {
 			return nullptr;
 		}
 		virtual Podium* getPodium() {

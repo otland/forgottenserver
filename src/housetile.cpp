@@ -53,7 +53,7 @@ void HouseTile::updateHouse(Item* item)
 			house->addDoor(door);
 		}
 	} else {
-		BedItem* bed = item->getBed();
+		BedItem* bed = item->asBed();
 		if (bed) {
 			house->addBed(bed);
 		}

@@ -14,10 +14,10 @@ class BedItem final : public Item
 	public:
 		explicit BedItem(uint16_t id);
 
-		BedItem* getBed() override {
+		BedItem* asBed() override {
 			return this;
 		}
-		const BedItem* getBed() const override {
+		const BedItem* asBed() const override {
 			return this;
 		}
 

@@ -322,7 +322,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 	}
 
-	if (BedItem* bed = item->getBed()) {
+	if (BedItem* bed = item->asBed()) {
 		if (!bed->canUse(player)) {
 			if (!bed->getHouse()) {
 				return RETURNVALUE_YOUCANNOTUSETHISBED;

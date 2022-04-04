@@ -158,7 +158,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 				} else if (iType.isDoor() && findItem->asDoor()) {
 					item = findItem;
 					break;
-				} else if (iType.isBed() && findItem->getBed()) {
+				} else if (iType.isBed() && findItem->asBed()) {
 					item = findItem;
 					break;
 				}
@@ -231,7 +231,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
-		if (!(it.moveable || it.forceSerialize || item->asDoor() || (item->asContainer() && !item->asContainer()->empty()) || it.canWriteText || item->getBed())) {
+		if (!(it.moveable || it.forceSerialize || item->asDoor() || (item->asContainer() && !item->asContainer()->empty()) || it.canWriteText || item->asBed())) {
 			continue;
 		}
 
