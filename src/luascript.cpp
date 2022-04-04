@@ -11233,6 +11233,13 @@ int LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
 		lua_pushnil(L);
 	} else {
 		npc->setSpeechBubble(speechBubble);
+		
+		// refresh npc bubble
+		SpectatorVec spectators;
+		g_game.map.getSpectators(spectators, npc->getPosition(), true, true);
+		for (Creature* spectator : spectators) {
+			spectator->getPlayer()->sendUpdateTileCreature(npc);
+		}
 	}
 	return 1;
 }
