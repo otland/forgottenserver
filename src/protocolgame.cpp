@@ -282,9 +282,6 @@ void ProtocolGame::despawn()
 		return;
 	}
 
-	//fire onLogout
-	g_creatureEvents->playerLogout(player);
-
 	disconnect();
 	g_game.removeCreature(player, false);
 }
