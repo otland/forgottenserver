@@ -143,7 +143,6 @@ public:
 	}
 
 	std::string_view getString(std::string_view column) const;
-	const char* getStream(std::string_view column, unsigned long& size) const;
 
 	bool hasNext() const;
 	bool next();

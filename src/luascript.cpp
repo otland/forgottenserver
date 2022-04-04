@@ -4273,10 +4273,9 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 		return 1;
 	}
 
-	unsigned long length;
-	const char* stream = res->getStream(getString(L, 2), length);
-	lua_pushlstring(L, stream, length);
-	lua_pushnumber(L, length);
+	auto stream = res->getString(getString(L, 2));
+	lua_pushlstring(L, stream.data(), stream.size());
+	lua_pushnumber(L, stream.size());
 	return 2;
 }
 

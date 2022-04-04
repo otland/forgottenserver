@@ -308,10 +308,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->capacity = result->getNumber<uint32_t>("cap") * 100;
 	player->blessings = result->getNumber<uint16_t>("blessings");
 
-	unsigned long conditionsSize;
-	const char* conditions = result->getStream("conditions", conditionsSize);
+	auto conditions = result->getString("conditions");
 	PropStream propStream;
-	propStream.init(conditions, conditionsSize);
+	propStream.init(conditions.data(), conditions.size());
 
 	Condition* condition = Condition::createCondition(propStream);
 	while (condition) {
@@ -1036,11 +1035,9 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		uint16_t type = result->getNumber<uint16_t>("itemtype");
 		uint16_t count = result->getNumber<uint16_t>("count");
 
-		unsigned long attrSize;
-		const char* attr = result->getStream("attributes", attrSize);
-
+		auto attr = result->getString("attributes");
 		PropStream propStream;
-		propStream.init(attr, attrSize);
+		propStream.init(attr.data(), attr.size());
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {
