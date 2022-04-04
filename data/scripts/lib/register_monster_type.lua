@@ -202,13 +202,11 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.aid or loot.actionId then
 				parent:setActionId(loot.aid or loot.actionId)
 			end
+			local charges = loot.charges or ItemType(loot.id):getCharges()
 			if loot.subType or loot.charges then
-				parent:setSubType(loot.subType or loot.charges)
+				parent:setSubType(loot.subType or charges)
 			else
-				local charges = ItemType(loot.id):getCharges()
-				if charges > 0 then
-					parent:setSubType(charges)
-				end
+				parent:setSubType(charges)
 			end
 			if loot.text or loot.description then
 				parent:setDescription(loot.text or loot.description)
@@ -228,13 +226,11 @@ registerMonsterType.loot = function(mtype, mask)
 					if children.aid or children.actionId then
 						child:setActionId(children.aid or children.actionId)
 					end
+					local charges = children.charges or ItemType(children.id):getCharges()
 					if children.subType or children.charges then
-						child:setSubType(children.subType or children.charges)
+						child:setSubType(children.subType or charges)
 					else
-						local charges = ItemType(children.id):getCharges()
-						if charges > 0 then
-							child:setSubType(charges)
-						end
+						child:setSubType(charges)
 					end
 					if children.text or children.description then
 						child:setDescription(children.text or children.description)
