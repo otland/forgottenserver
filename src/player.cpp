@@ -2226,7 +2226,7 @@ bool Player::spawn()
 	g_game.map.getSpectators(spectators, pos, true);
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(this, pos, true);
+			tmpPlayer->sendCreatureAppear(this, pos);
 		}
 	}
 
@@ -2263,7 +2263,7 @@ void Player::despawn()
 	g_game.map.getSpectators(spectators, tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
-			oldStackPosVector.push_back(player->canSeeCreature(this) ? tile->getStackposOfCreature(player, this) : -1);
+			oldStackPosVector.push_back(player->canSeeCreature(this) ? tile->getClientIndexOfCreature(player, this) : -1);
 		}
 	}
 

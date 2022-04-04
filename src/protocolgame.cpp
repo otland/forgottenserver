@@ -272,7 +272,7 @@ void ProtocolGame::spawn()
 		return;
 	}
 
-	sendAddCreature(player, player->getPosition(), 0, false);
+	sendAddCreature(player, player->getPosition(), 0);
 }
 
 void ProtocolGame::despawn()
