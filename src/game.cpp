@@ -766,7 +766,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 				}
 			}
 
-			Npc* movingNpc = movingCreature->getNpc();
+			Npc* movingNpc = movingCreature->asNpc();
 			if (movingNpc && !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
 				player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 				return;
@@ -2002,7 +2002,7 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
-		if (Npc* npc = spectator->getNpc()) {
+		if (Npc* npc = spectator->asNpc()) {
 			npc->onPlayerCloseChannel(player);
 		}
 	}
@@ -3654,7 +3654,7 @@ void Game::playerSpeakToNpc(Player* player, const std::string& text)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
 	for (Creature* spectator : spectators) {
-		if (spectator->getNpc()) {
+		if (spectator->asNpc()) {
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
 		}
 	}

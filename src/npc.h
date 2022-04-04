@@ -92,10 +92,10 @@ class Npc final : public Creature
 		Npc(const Npc&) = delete;
 		Npc& operator=(const Npc&) = delete;
 
-		Npc* getNpc() override {
+		Npc* asNpc() override {
 			return this;
 		}
-		const Npc* getNpc() const override {
+		const Npc* asNpc() const override {
 			return this;
 		}
 

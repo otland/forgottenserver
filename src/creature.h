@@ -100,10 +100,10 @@ class Creature : virtual public Thing
 		virtual const Player* asPlayer() const {
 			return nullptr;
 		}
-		virtual Npc* getNpc() {
+		virtual Npc* asNpc() {
 			return nullptr;
 		}
-		virtual const Npc* getNpc() const {
+		virtual const Npc* asNpc() const {
 			return nullptr;
 		}
 		virtual Monster* getMonster() {
