@@ -186,14 +186,14 @@ Mailbox* Tile::getMailbox() const
 		return nullptr;
 	}
 
-	if (ground && ground->getMailbox()) {
-		return ground->getMailbox();
+	if (ground && ground->asMailbox()) {
+		return ground->asMailbox();
 	}
 
 	if (const TileItemVector* items = getItemList()) {
 		for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-			if ((*it)->getMailbox()) {
-				return (*it)->getMailbox();
+			if ((*it)->asMailbox()) {
+				return (*it)->asMailbox();
 			}
 		}
 	}
@@ -1497,7 +1497,7 @@ void Tile::setTileFlags(const Item* item)
 		setFlag(TILESTATE_MAGICFIELD);
 	}
 
-	if (item->getMailbox()) {
+	if (item->asMailbox()) {
 		setFlag(TILESTATE_MAILBOX);
 	}
 
@@ -1562,7 +1562,7 @@ void Tile::resetTileFlags(const Item* item)
 		resetFlag(TILESTATE_MAGICFIELD);
 	}
 
-	if (item->getMailbox()) {
+	if (item->asMailbox()) {
 		resetFlag(TILESTATE_MAILBOX);
 	}
 

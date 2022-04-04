@@ -12,10 +12,10 @@ class Mailbox final : public Item, public Cylinder
 	public:
 		explicit Mailbox(uint16_t itemId) : Item(itemId) {}
 
-		Mailbox* getMailbox() override {
+		Mailbox* asMailbox() override {
 			return this;
 		}
-		const Mailbox* getMailbox() const override {
+		const Mailbox* asMailbox() const override {
 			return this;
 		}
 

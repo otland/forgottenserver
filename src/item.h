@@ -568,10 +568,10 @@ class Item : virtual public Thing
 		virtual const TrashHolder* asTrashHolder() const {
 			return nullptr;
 		}
-		virtual Mailbox* getMailbox() {
+		virtual Mailbox* asMailbox() {
 			return nullptr;
 		}
-		virtual const Mailbox* getMailbox() const {
+		virtual const Mailbox* asMailbox() const {
 			return nullptr;
 		}
 		virtual Door* getDoor() {
