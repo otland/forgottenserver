@@ -88,10 +88,10 @@ class Creature : virtual public Thing
 		Creature(const Creature&) = delete;
 		Creature& operator=(const Creature&) = delete;
 
-		Creature* getCreature() override final {
+		Creature* asCreature() override final {
 			return this;
 		}
-		const Creature* getCreature() const override final {
+		const Creature* asCreature() const override final {
 			return this;
 		}
 		virtual Player* asPlayer() {

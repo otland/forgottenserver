@@ -480,7 +480,7 @@ void Tile::onUpdateTile(const SpectatorVec& spectators)
 
 ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
-	if (const Creature* creature = thing.getCreature()) {
+	if (const Creature* creature = thing.asCreature()) {
 		if (hasBitSet(FLAG_NOLIMIT, flags)) {
 			return RETURNVALUE_NOERROR;
 		}
@@ -833,7 +833,7 @@ void Tile::addThing(Thing* thing)
 
 void Tile::addThing(int32_t, Thing* thing)
 {
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	if (creature) {
 		g_game.map.clearSpectatorCache();
 		if (creature->asPlayer()) {
@@ -1038,7 +1038,7 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 
 void Tile::removeThing(Thing* thing, uint32_t count)
 {
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	if (creature) {
 		CreatureVector* creatures = getCreatures();
 		if (creatures) {
@@ -1161,7 +1161,7 @@ int32_t Tile::getThingIndex(const Thing* thing) const
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		if (thing->getCreature()) {
+		if (thing->asCreature()) {
 			for (Creature* creature : *creatures) {
 				++n;
 				if (creature == thing) {
@@ -1333,7 +1333,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	}
 
 	//add a reference to this item, it may be deleted after being added (mailbox for example)
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	Item* item;
 	if (creature) {
 		creature->incrementReferenceCounter();
@@ -1393,7 +1393,7 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 
 	//calling movement scripts
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	if (creature) {
 		g_moveEvents->onCreatureMove(creature, this, MOVE_EVENT_STEP_OUT);
 	} else {
@@ -1413,7 +1413,7 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 {
 	thing->setParent(this);
 
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	if (creature) {
 		g_game.map.clearSpectatorCache();
 		if (creature->asPlayer()) {

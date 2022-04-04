@@ -417,7 +417,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+			if (!item->getTopParent()->asCreature() && !houseTile->getHouse()->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return false;
 			}
@@ -464,7 +464,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
-			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+			if (!item->getTopParent()->asCreature() && !houseTile->getHouse()->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return false;
 			}

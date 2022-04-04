@@ -3122,7 +3122,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		if (shopOwner && requireListUpdate) {
 			updateSaleShopList(item);
 		}
-	} else if (const Creature* creature = thing->getCreature()) {
+	} else if (const Creature* creature = thing->asCreature()) {
 		if (creature == this) {
 			//check containers
 			std::vector<Container*> containers;

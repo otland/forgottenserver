@@ -62,7 +62,7 @@ void HouseTile::updateHouse(Item* item)
 
 ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
 {
-	if (const Creature* creature = thing.getCreature()) {
+	if (const Creature* creature = thing.asCreature()) {
 		if (const Player* player = creature->asPlayer()) {
 			if (!house->isInvited(player)) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
@@ -86,7 +86,7 @@ ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 
 Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags)
 {
-	if (const Creature* creature = thing.getCreature()) {
+	if (const Creature* creature = thing.asCreature()) {
 		if (const Player* player = creature->asPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();

@@ -648,7 +648,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
 		return;
 	}
 
-	if (Creature* movingCreature = thing->getCreature()) {
+	if (Creature* movingCreature = thing->asCreature()) {
 		Tile* tile = map.getTile(toPos);
 		if (!tile) {
 			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
@@ -1750,7 +1750,7 @@ ReturnValue Game::internalTeleport(Thing* thing, const Position& newPos, bool pu
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = thing->asCreature()) {
 		ReturnValue ret = toTile->queryAdd(0, *creature, 1, FLAG_NOLIMIT);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
@@ -2615,7 +2615,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile())) {
-			if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+			if (!tradeItem->getTopParent()->asCreature() && !houseTile->getHouse()->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return;
 			}

@@ -119,7 +119,7 @@ uint32_t ScriptEnvironment::addThing(Thing* thing)
 		return 0;
 	}
 
-	Creature* creature = thing->getCreature();
+	Creature* creature = thing->asCreature();
 	if (creature) {
 		return creature->getID();
 	}
@@ -596,7 +596,7 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 	if (Item* item = thing->getItem()) {
 		pushUserdata<Item>(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
+	} else if (Creature* creature = thing->asCreature()) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
 	} else {
@@ -606,7 +606,7 @@ void LuaScriptInterface::pushThing(lua_State* L, Thing* thing)
 
 void LuaScriptInterface::pushCylinder(lua_State* L, Cylinder* cylinder)
 {
-	if (Creature* creature = cylinder->getCreature()) {
+	if (Creature* creature = cylinder->asCreature()) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
 	} else if (Item* parentItem = cylinder->getItem()) {
@@ -5240,7 +5240,7 @@ int LuaScriptInterface::luaTileGetThing(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* creature = thing->getCreature()) {
+	if (Creature* creature = thing->asCreature()) {
 		pushUserdata<Creature>(L, creature);
 		setCreatureMetatable(L, -1, creature);
 	} else if (Item* item = thing->getItem()) {
@@ -5280,7 +5280,7 @@ int LuaScriptInterface::luaTileGetTopVisibleThing(lua_State* L)
 		return 1;
 	}
 
-	if (Creature* visibleCreature = thing->getCreature()) {
+	if (Creature* visibleCreature = thing->asCreature()) {
 		pushUserdata<Creature>(L, visibleCreature);
 		setCreatureMetatable(L, -1, visibleCreature);
 	} else if (Item* visibleItem = thing->getItem()) {

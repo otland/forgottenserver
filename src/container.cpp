@@ -296,7 +296,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	const Cylinder* const topParent = getTopParent();
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
+			if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}
@@ -382,7 +382,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
+			if (!topParent->asCreature() && !houseTile->getHouse()->isInvited(actor->asPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		}
@@ -647,7 +647,7 @@ Thing* Container::getThing(size_t index) const
 void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
+	if (topParent->asCreature()) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
@@ -662,7 +662,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
+	if (topParent->asCreature()) {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		//let the tile class notify surrounding players
