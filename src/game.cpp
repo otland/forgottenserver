@@ -675,6 +675,12 @@ void Game::despawnPlayer(uint32_t playerId)
 	for (const auto& it : g_game.getPlayers()) {
 		it.second->notifyStatusChange(player, VIPSTATUS_PENDING);
 	}
+
+	// remove summons
+	for (Creature* summon : player->summons) {
+		summon->setSkillLoss(false);
+		removeCreature(summon);
+	}
 }
 
 void Game::spawnPlayer(uint32_t playerId)
