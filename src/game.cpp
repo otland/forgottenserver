@@ -631,9 +631,9 @@ void Game::executeDeath(uint32_t creatureId)
 	}
 }
 
-void Game::despawnPlayer(uint32_t creatureId)
+void Game::despawnPlayer(uint32_t playerId)
 {
-	Player* player = getPlayerByID(creatureId);
+	Player* player = getPlayerByID(playerId);
 	if (!player || player->isDead()) {
 		return;
 	}
@@ -677,9 +677,9 @@ void Game::despawnPlayer(uint32_t creatureId)
 	}
 }
 
-void Game::spawnPlayer(uint32_t creatureId)
+void Game::spawnPlayer(uint32_t playerId)
 {
-	Player* player = getPlayerByID(creatureId);
+	Player* player = getPlayerByID(playerId);
 	if (!player || !player->isDead()) {
 		return;
 	}
