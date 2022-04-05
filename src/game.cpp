@@ -669,7 +669,7 @@ void Game::despawnPlayer(uint32_t creatureId)
 		spectator->onRemoveCreature(player, false);
 	}
 
-	player->getParent()->postRemoveNotification(player, nullptr, 0);
+	tile->postRemoveNotification(player, nullptr, 0);
 
 	// show player as pending
 	for (const auto& it : g_game.getPlayers()) {
