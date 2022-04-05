@@ -646,28 +646,23 @@ void Game::despawnPlayer(uint32_t creatureId)
 
 	// remove from map
 	Tile* tile = player->getTile();
+	if (!tile) {
+		return;
+	}
 
-	std::vector<int32_t> oldStackPosVector;
+	const Position& position = tile->getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, tile->getPosition(), true, false);
+	g_game.map.getSpectators(spectators, position, true, false);
+
 	for (Creature* spectator : spectators) {
 		if (Player* spectatorPlayer = spectator->getPlayer()) {
-			oldStackPosVector.push_back(spectatorPlayer->canSeeCreature(player) ? tile->getClientIndexOfCreature(spectatorPlayer, player) : -1);
+			spectatorPlayer->sendRemoveTileCreature(player, position, spectatorPlayer->canSeeCreature(player) ? tile->getClientIndexOfCreature(spectatorPlayer, player) : -1);
 		}
 	}
 
+	// remove from tile
 	tile->removeCreature(player);
-
-	const Position& tilePosition = tile->getPosition();
-
-	//send to client
-	size_t i = 0;
-	for (Creature* spectator : spectators) {
-		if (Player* spectatorPlayer = spectator->getPlayer()) {
-			spectatorPlayer->sendRemoveTileThing(tilePosition, oldStackPosVector[i++]);
-		}
-	}
 
 	//event method
 	for (Creature* spectator : spectators) {
