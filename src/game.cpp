@@ -684,17 +684,17 @@ void Game::spawnPlayer(uint32_t creatureId)
 		return;
 	}
 
-	const Position& pos = player->getLoginPosition();
+	const Position& loginPosition = player->getLoginPosition();
 
-	if (!g_game.map.placeCreature(pos, player)) {
+	if (!g_game.map.placeCreature(loginPosition, player)) {
 		return;
 	}
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, pos, true, false);
+	g_game.map.getSpectators(spectators, loginPosition, true, false);
 	for (Creature* spectator : spectators) {
 		if (Player* spectatorPlayer = spectator->getPlayer()) {
-			spectatorPlayer->sendCreatureAppear(player, pos);
+			spectatorPlayer->sendCreatureAppear(player, loginPosition);
 		}
 	}
 
