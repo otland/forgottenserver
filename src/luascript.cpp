@@ -17332,7 +17332,7 @@ int LuaScriptInterface::luaWeaponOnUseWeapon(lua_State* L)
 
 int LuaScriptInterface::luaWeaponUnproperly(lua_State* L)
 {
-	// weapon:wieldedUnproperly(bool)
+	// weapon:wieldUnproperly(bool)
 	Weapon* weapon = getUserdata<Weapon>(L, 1);
 	if (weapon) {
 		weapon->setWieldUnproperly(getBoolean(L, 2));
