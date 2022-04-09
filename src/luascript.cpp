@@ -12558,8 +12558,9 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 int LuaScriptInterface::luaCombatGetParameter(lua_State* L)
 {
 	// combat:getParameter(key)
-	Combat* combat = getUserdata<Combat>(L, 1);
+	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
 		lua_pushnil(L);
 		return 1;
 	}
