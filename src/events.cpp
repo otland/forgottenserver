@@ -6,6 +6,7 @@
 #include "events.h"
 
 #include "item.h"
+#include "monster.h"
 #include "player.h"
 
 Events::Events() :
