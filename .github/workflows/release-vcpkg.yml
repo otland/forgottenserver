@@ -23,7 +23,7 @@ jobs:
             cc: gcc
             triplet: x64-linux
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-beast boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua libmariadb pugixml cryptopp fmt
           - name: macos-clang
             os: macos
@@ -31,7 +31,7 @@ jobs:
             cc: clang
             triplet: x64-osx
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-beast boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua libmariadb pugixml cryptopp fmt
 
     steps:
@@ -122,7 +122,7 @@ jobs:
             cc: cl.exe
             triplet: x64-windows
             packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
+              boost-asio boost-beast boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
               lua luajit libmariadb pugixml cryptopp fmt
 
     steps:

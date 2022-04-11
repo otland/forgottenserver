@@ -35,6 +35,7 @@
 #include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
+#include "http/responder.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -3276,6 +3277,19 @@ void LuaScriptInterface::registerFunctions()
 
 	// exclusively for wands & distance weapons
 	registerMethod("Weapon", "shootType", LuaScriptInterface::luaWeaponShootType);
+
+	using Http::Responder;
+	registerClass("Responder", "", nullptr);
+	registerMetaMethod("Responder", "__gc", Responder::luaDelete);
+	registerMethod("Responder", "delete", Responder::luaDelete);
+	registerMethod("Responder", "send", Responder::luaSend);
+	registerMethod("Responder", "getRequestBody", Responder::luaGetRequestBody);
+	registerMethod("Responder", "setResponseBody", Responder::luaSetResponseBody);
+	registerMethod("Responder", "getRequestField", Responder::luaGetRequestField);
+	registerMethod("Responder", "setResponseField", Responder::luaSetResponseField);
+	registerMethod("Responder", "getRequestMethod", Responder::luaGetRequestMethod);
+	registerMethod("Responder", "setResponseStatus", Responder::luaSetResponseStatus);
+	registerMethod("Responder", "getRequestURL", Responder::luaGetRequestURL);
 }
 
 #undef registerEnum

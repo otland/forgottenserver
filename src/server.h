@@ -76,7 +76,7 @@ class ServicePort : public std::enable_shared_from_this<ServicePort>
 class ServiceManager
 {
 	public:
-		ServiceManager() = default;
+		explicit ServiceManager(boost::asio::io_service& service) : io_service(service)	{};
 		~ServiceManager();
 
 		// non-copyable
@@ -98,7 +98,7 @@ class ServiceManager
 
 		std::unordered_map<uint16_t, ServicePort_ptr> acceptors;
 
-		boost::asio::io_service io_service;
+		boost::asio::io_service& io_service;
 		Signals signals{io_service};
 		boost::asio::steady_timer death_timer { io_service };
 		bool running = false;
