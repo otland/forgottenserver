@@ -207,7 +207,7 @@ class ProtocolGame final : public Protocol
 		void sendSaleItemList(const std::list<ShopInfo>& shop);
 		void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount);
 		void sendStoreBalance();
-		void sendMarketEnter(uint32_t depotId);
+		void sendMarketEnter();
 		void sendMarketLeave();
 		void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers);
 		void sendMarketAcceptOffer(const MarketOfferEx& offer);

@@ -23,6 +23,7 @@
 #include "scheduler.h"
 #include "spectators.h"
 #include "storeinbox.h"
+#include "tools.h"
 #include "weapons.h"
 
 extern ConfigManager g_config;
@@ -57,8 +58,8 @@ Player::~Player()
 		}
 	}
 
-	for (const auto& it : depotLockerMap) {
-		it.second->removeInbox(inbox);
+	if (depotLocker) {
+		depotLocker->removeInbox(inbox);
 	}
 
 	inbox->decrementReferenceCounter();
@@ -833,25 +834,36 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(ITEM_DEPOT)).first;
+	uint16_t depotItemId = getDepotBoxId(depotId);
+	if (depotItemId == 0) {
+		return nullptr;
+	}
+
+	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
 	return it->second;
 }
 
-DepotLocker* Player::getDepotLocker(uint32_t depotId)
+DepotLocker& Player::getDepotLocker()
 {
-	auto it = depotLockerMap.find(depotId);
-	if (it != depotLockerMap.end()) {
-		inbox->setParent(it->second.get());
-		return it->second.get();
-	}
+	if (!depotLocker) {
+		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
+		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
+		depotLocker->internalAddThing(inbox);
 
-	it = depotLockerMap.emplace(depotId, new DepotLocker(ITEM_LOCKER1)).first;
-	it->second->setDepotId(depotId);
-	it->second->internalAddThing(Item::CreateItem(ITEM_MARKET));
-	it->second->internalAddThing(inbox);
-	it->second->internalAddThing(getDepotChest(depotId, true));
-	return it->second.get();
+		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
+		if (depotChest) {
+			// adding in reverse to align them from first to last
+			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
+				if (DepotChest* box = getDepotChest(depotId, true)) {
+					depotChest->internalAddThing(box);
+				}
+			}
+
+			depotLocker->internalAddThing(depotChest);
+		}
+	}
+	return *depotLocker;
 }
 
 void Player::sendCancelMessage(ReturnValue message) const

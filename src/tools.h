@@ -43,6 +43,7 @@ std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 std::string convertIPToString(uint32_t ip);
 
+uint16_t getDepotBoxId(uint16_t index);
 MagicEffectClasses getMagicEffect(const std::string& strValue);
 ShootType_t getShootType(const std::string& strValue);
 Ammo_t getAmmoType(const std::string& strValue);

@@ -280,7 +280,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 			cylinder = cylinder->getParent();
 		}
 
-		if (index == INDEX_WHEREEVER && size() >= capacity()) {
+		if (index == INDEX_WHEREEVER && size() >= capacity() && !hasPagination()) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	} else {
@@ -317,7 +317,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (hasBitSet(FLAG_NOLIMIT, flags)) {
+	if (hasBitSet(FLAG_NOLIMIT, flags) || hasPagination()) {
 		maxQueryCount = std::max<uint32_t>(1, count);
 		return RETURNVALUE_NOERROR;
 	}
