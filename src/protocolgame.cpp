@@ -491,7 +491,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 	uint8_t recvbyte = msg.getByte();
 
-	if (!player) {
+	if (!player || player->isRemoved()) {
 		if (recvbyte == 0x0F) {
 			disconnect();
 		}
@@ -500,13 +500,19 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	//a dead player can not performs actions
-	if (player->isRemoved() || player->getHealth() <= 0) {
-		if (recvbyte == 0x0F) {
-			disconnect();
+	if (player->isDead() || player->getHealth() <= 0) {
+		if (recvbyte == 0x14 || OTSYS_TIME() - player->getLastPong() >= 60000) {
+			g_dispatcher.addTask(createTask([thisPtr = getThis()]() { thisPtr->logout(false, true); }));
 			return;
 		}
 
-		if (recvbyte != 0x14) {
+		if (recvbyte == 0x0F) {
+			addGameTask([playerID = player->getID()]() { g_game.spawnPlayer(playerID); });
+			return;
+		}
+
+		if (recvbyte != 0x1D && recvbyte != 0x1E) {
+			// keep the connection alive
 			return;
 		}
 	}

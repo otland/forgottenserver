@@ -72,6 +72,10 @@ bool Creature::canSee(const Position& pos) const
 
 bool Creature::canSeeCreature(const Creature* creature) const
 {
+	if (creature->isDead()) {
+		return false;
+	}
+
 	if (!canSeeGhostMode(creature) && creature->isInGhostMode()) {
 		return false;
 	}
@@ -713,7 +717,7 @@ void Creature::onDeath()
 		setMaster(nullptr);
 	}
 
-	if (droppedCorpse) {
+	if (droppedCorpse && !getPlayer()) {
 		g_game.removeCreature(this, false);
 	}
 }

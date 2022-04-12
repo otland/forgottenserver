@@ -461,6 +461,13 @@ class Creature : virtual public Thing
 			}
 		}
 
+		void setDead(bool isDead) {
+			dead = isDead;
+		}
+		bool isDead() const {
+			return dead;
+		}
+
 	protected:
 		virtual bool useCacheMap() const {
 			return false;
@@ -531,6 +538,7 @@ class Creature : virtual public Thing
 		bool hiddenHealth = false;
 		bool canUseDefense = true;
 		bool movementBlocked = false;
+		bool dead = false;
 
 		//creature script events
 		bool hasEventRegistered(CreatureEventType_t event) const {

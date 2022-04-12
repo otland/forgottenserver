@@ -566,6 +566,14 @@ bool Game::removeCreature(Creature* creature, bool isLogout/* = true*/)
 		return false;
 	}
 
+	if (creature->isDead()) {
+		creature->removeList();
+		creature->setRemoved();
+		ReleaseCreature(creature);
+		removeCreatureCheck(creature);
+		return true;
+	}
+
 	Tile* tile = creature->getTile();
 
 	std::vector<int32_t> oldStackPosVector;
@@ -621,6 +629,88 @@ void Game::executeDeath(uint32_t creatureId)
 	if (creature && !creature->isRemoved()) {
 		creature->onDeath();
 	}
+}
+
+void Game::despawnPlayer(uint32_t playerId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player || player->isDead()) {
+		return;
+	}
+
+	player->setDead(true);
+
+	player->listWalkDir.clear();
+	player->stopEventWalk();
+	player->onWalkAborted();
+
+	// remove from map
+	Tile* tile = player->getTile();
+	if (!tile) {
+		return;
+	}
+
+	const Position& position = tile->getPosition();
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, position, true, false);
+
+	for (Creature* spectator : spectators) {
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendRemoveTileCreature(player, position, spectatorPlayer->canSeeCreature(player) ? tile->getClientIndexOfCreature(spectatorPlayer, player) : -1);
+		}
+	}
+
+	// remove from tile
+	tile->removeCreature(player);
+
+	//event method
+	for (Creature* spectator : spectators) {
+		spectator->onRemoveCreature(player, false);
+	}
+
+	tile->postRemoveNotification(player, nullptr, 0);
+
+	// show player as pending
+	for (const auto& it : g_game.getPlayers()) {
+		it.second->notifyStatusChange(player, VIPSTATUS_PENDING);
+	}
+
+	// remove summons
+	for (Creature* summon : player->summons) {
+		summon->setSkillLoss(false);
+		removeCreature(summon);
+	}
+}
+
+void Game::spawnPlayer(uint32_t playerId)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player || !player->isDead()) {
+		return;
+	}
+
+	const Position& loginPosition = player->getLoginPosition();
+
+	if (!g_game.map.placeCreature(loginPosition, player)) {
+		return;
+	}
+
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, loginPosition, true, false);
+	for (Creature* spectator : spectators) {
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendCreatureAppear(player, loginPosition);
+		}
+	}
+
+	for (Creature* spectator : spectators) {
+		spectator->onCreatureAppear(player, false);
+	}
+
+	player->getParent()->postAddNotification(player, nullptr, 0);
+
+	player->setDead(false);
 }
 
 void Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
