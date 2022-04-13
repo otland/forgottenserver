@@ -225,7 +225,7 @@ void Creature::onWalk(Direction& dir)
 		return;
 	}
 
-	uint16_t rand = uniform_random(0, 399);
+	auto rand = static_cast<uint16_t>(uniform_random(0, 399));
 	if (rand / 4 > getDrunkenness()) {
 		return;
 	}

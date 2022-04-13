@@ -136,7 +136,7 @@ class MoveEvent final : public Event
 		void addVocEquipMap(std::string vocName) {
 			int32_t vocationId = g_vocations.getVocationId(vocName);
 			if (vocationId != -1) {
-				vocEquipMap[vocationId] = true;
+				vocEquipMap[static_cast<uint16_t>(vocationId)] = true;
 			}
 		}
 		bool getTileItem() const {
