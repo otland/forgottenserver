@@ -26,8 +26,7 @@ bool Vocations::loadFromXml()
 		}
 
 		uint16_t id = pugi::cast<uint16_t>(attr.value());
-		auto res = vocationsMap.emplace(std::piecewise_construct,
-				std::forward_as_tuple(id), std::forward_as_tuple(id));
+		auto res = vocationsMap.emplace(std::piecewise_construct, std::forward_as_tuple(id), std::forward_as_tuple(id));
 		Vocation& voc = res.first->second;
 
 		vocationNode.remove_attribute("id");
@@ -70,7 +69,8 @@ bool Vocations::loadFromXml()
 			} else if (caseInsensitiveEqual(attrName, "nopongkicktime")) {
 				voc.noPongKickTime = pugi::cast<uint32_t>(attrNode.value()) * 1000;
 			} else {
-				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName << "\" for vocation: " << voc.id << std::endl;
+				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName
+				          << "\" for vocation: " << voc.id << std::endl;
 			}
 		}
 
@@ -81,10 +81,12 @@ bool Vocations::loadFromXml()
 					if (skillId <= SKILL_LAST) {
 						voc.skillMultipliers[skillId] = pugi::cast<double>(childNode.attribute("multiplier").value());
 					} else {
-						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skillId << " for vocation: " << voc.id << std::endl;
+						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skillId
+						          << " for vocation: " << voc.id << std::endl;
 					}
 				} else {
-					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id << std::endl;
+					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id
+					          << std::endl;
 				}
 			} else if (caseInsensitiveEqual(childNode.name(), "formula")) {
 				if ((attr = childNode.attribute("meleeDamage"))) {
@@ -121,18 +123,17 @@ Vocation* Vocations::getVocation(uint16_t id)
 int32_t Vocations::getVocationId(const std::string& name) const
 {
 	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](auto it) {
-		return name.size() == it.second.name.size() && std::equal(name.begin(), name.end(), it.second.name.begin(), [](char a, char b) {
-			return std::tolower(a) == std::tolower(b);
-		});
+		return name.size() == it.second.name.size() &&
+		       std::equal(name.begin(), name.end(), it.second.name.begin(),
+		                  [](char a, char b) { return std::tolower(a) == std::tolower(b); });
 	});
 	return it != vocationsMap.end() ? it->first : -1;
 }
 
 uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](auto it) {
-		return it.second.fromVocation == id && it.first != id;
-	});
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
+	                       [id](auto it) { return it.second.fromVocation == id && it.first != id; });
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 
@@ -143,7 +144,8 @@ uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 	if (skill > SKILL_LAST) {
 		return 0;
 	}
-	return skillBase[skill] * std::pow(skillMultipliers[skill], static_cast<int32_t>(level - (MINIMUM_SKILL_LEVEL + 1)));
+	return skillBase[skill] *
+	       std::pow(skillMultipliers[skill], static_cast<int32_t>(level - (MINIMUM_SKILL_LEVEL + 1)));
 }
 
 uint64_t Vocation::getReqMana(uint32_t magLevel)

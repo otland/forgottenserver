@@ -14,7 +14,8 @@ round_keys expand_key(const key& k)
 	constexpr uint32_t delta = 0x9E3779B9;
 	round_keys expanded;
 
-	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < expanded.size(); i += 2, sum = next_sum, next_sum += delta) {
+	for (uint32_t i = 0, sum = 0, next_sum = sum + delta; i < expanded.size();
+	     i += 2, sum = next_sum, next_sum += delta) {
 		expanded[i] = sum + k[sum & 3];
 		expanded[i + 1] = next_sum + k[(next_sum >> 11) & 3];
 	}

@@ -24,9 +24,7 @@ using IntegerVector = std::vector<int32_t>;
 
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
 IntegerVector vectorAtoi(const StringVector& stringVector);
-constexpr bool hasBitSet(uint32_t flag, uint32_t flags) {
-	return (flags & flag) != 0;
-}
+constexpr bool hasBitSet(uint32_t flag, uint32_t flags) { return (flags & flag) != 0; }
 
 std::mt19937& getRandomGenerator();
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);

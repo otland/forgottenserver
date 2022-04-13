@@ -7,11 +7,12 @@
 class Signals
 {
 	boost::asio::signal_set set;
-	public:
-		explicit Signals(boost::asio::io_service& service);
 
-	private:
-		void asyncWait();
+public:
+	explicit Signals(boost::asio::io_service& service);
+
+private:
+	void asyncWait();
 };
 
 #endif // FS_SIGNALS_H

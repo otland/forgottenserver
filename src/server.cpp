@@ -12,15 +12,9 @@
 extern ConfigManager g_config;
 Ban g_bans;
 
-ServiceManager::~ServiceManager()
-{
-	stop();
-}
+ServiceManager::~ServiceManager() { stop(); }
 
-void ServiceManager::die()
-{
-	io_service.stop();
-}
+void ServiceManager::die() { io_service.stop(); }
 
 void ServiceManager::run()
 {
@@ -51,15 +45,9 @@ void ServiceManager::stop()
 	death_timer.async_wait([this](const boost::system::error_code&) { die(); });
 }
 
-ServicePort::~ServicePort()
-{
-	close();
-}
+ServicePort::~ServicePort() { close(); }
 
-bool ServicePort::is_single_socket() const
-{
-	return !services.empty() && services.front()->is_single_socket();
-}
+bool ServicePort::is_single_socket() const { return !services.empty() && services.front()->is_single_socket(); }
 
 std::string ServicePort::get_protocol_names() const
 {
@@ -83,7 +71,10 @@ void ServicePort::accept()
 	}
 
 	auto connection = ConnectionManager::getInstance().createConnection(io_service, shared_from_this());
-	acceptor->async_accept(connection->getSocket(), [=, thisPtr = shared_from_this()](const boost::system::error_code &error) { thisPtr->onAccept(connection, error); });
+	acceptor->async_accept(connection->getSocket(),
+	                       [=, thisPtr = shared_from_this()](const boost::system::error_code& error) {
+		                       thisPtr->onAccept(connection, error);
+	                       });
 }
 
 void ServicePort::onAccept(Connection_ptr connection, const boost::system::error_code& error)
@@ -110,7 +101,10 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		if (!pendingStart) {
 			close();
 			pendingStart = true;
-			g_scheduler.addEvent(createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() { ServicePort::openAcceptor(thisPtr, serverPort); }));
+			g_scheduler.addEvent(
+			    createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() {
+				    ServicePort::openAcceptor(thisPtr, serverPort);
+			    }));
 		}
 	}
 }
@@ -127,10 +121,7 @@ Protocol_ptr ServicePort::make_protocol(NetworkMessage& msg, const Connection_pt
 	return nullptr;
 }
 
-void ServicePort::onStopServer()
-{
-	close();
-}
+void ServicePort::onStopServer() { close(); }
 
 void ServicePort::openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
 {
@@ -148,11 +139,15 @@ void ServicePort::open(uint16_t port)
 
 	try {
 		if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4::from_string(g_config.getString(ConfigManager::IP))), serverPort)));
+			acceptor.reset(new boost::asio::ip::tcp::acceptor(
+			    io_service,
+			    boost::asio::ip::tcp::endpoint(boost::asio::ip::address(boost::asio::ip::address_v4::from_string(
+			                                       g_config.getString(ConfigManager::IP))),
+			                                   serverPort)));
 		} else {
-			acceptor.reset(new boost::asio::ip::tcp::acceptor(io_service, boost::asio::ip::tcp::endpoint(
-			            boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), serverPort)));
+			acceptor.reset(new boost::asio::ip::tcp::acceptor(
+			    io_service, boost::asio::ip::tcp::endpoint(
+			                    boost::asio::ip::address(boost::asio::ip::address_v4(INADDR_ANY)), serverPort)));
 		}
 
 		acceptor->set_option(boost::asio::ip::tcp::no_delay(true));
@@ -162,7 +157,10 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		pendingStart = true;
-		g_scheduler.addEvent(createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() { ServicePort::openAcceptor(thisPtr, serverPort); }));
+		g_scheduler.addEvent(
+		    createSchedulerTask(15000, [=, thisPtr = std::weak_ptr<ServicePort>(shared_from_this())]() {
+			    ServicePort::openAcceptor(thisPtr, serverPort);
+		    }));
 	}
 }
 
@@ -176,7 +174,7 @@ void ServicePort::close()
 
 bool ServicePort::add_service(const Service_ptr& new_svc)
 {
-	if (std::any_of(services.begin(), services.end(), [](const Service_ptr& svc) {return svc->is_single_socket();})) {
+	if (std::any_of(services.begin(), services.end(), [](const Service_ptr& svc) { return svc->is_single_socket(); })) {
 		return false;
 	}
 

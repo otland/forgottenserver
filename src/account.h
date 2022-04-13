@@ -6,7 +6,8 @@
 
 #include "enums.h"
 
-struct Account {
+struct Account
+{
 	std::vector<std::string> characters;
 	std::string name;
 	std::string key;
