@@ -1771,6 +1771,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText/* = fal
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
 			for (Creature* spectator : spectators) {
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
 				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
@@ -1859,6 +1860,7 @@ void Player::removeExperience(uint64_t exp, bool sendText/* = false*/)
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : spectators) {
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
 				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}

@@ -3688,6 +3688,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureTurn(creature);
 	}
 	return true;
@@ -3827,6 +3828,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
 }
@@ -3847,6 +3849,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureChangeOutfit(creature, outfit);
 	}
 }
@@ -3857,6 +3860,7 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureChangeVisible(creature, visible);
 	}
 }
@@ -3867,6 +3871,7 @@ void Game::changeLight(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureLight(creature);
 	}
 }
@@ -4099,6 +4104,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			SpectatorVec spectators;
 			map.getSpectators(spectators, targetPos, false, true);
 			for (Creature* spectator : spectators) {
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+
 				Player* tmpPlayer = static_cast<Player*>(spectator);
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 					message.type = MESSAGE_HEALED;
@@ -4188,6 +4195,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 				message.primary.color = TEXTCOLOR_BLUE;
 
 				for (Creature* spectator : spectators) {
+					assert(dynamic_cast<Player*>(spectator) != nullptr);
+
 					Player* tmpPlayer = static_cast<Player*>(spectator);
 					if (tmpPlayer->getPosition().z != targetPos.z) {
 						continue;
@@ -4288,6 +4297,8 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			std::string spectatorMessage;
 
 			for (Creature* spectator : spectators) {
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+
 				Player* tmpPlayer = static_cast<Player*>(spectator);
 				if (tmpPlayer->getPosition().z != targetPos.z) {
 					continue;
@@ -4431,6 +4442,8 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		SpectatorVec spectators;
 		map.getSpectators(spectators, targetPos, false, true);
 		for (Creature* spectator : spectators) {
+			assert(dynamic_cast<Player*>(spectator) != nullptr);
+
 			Player* tmpPlayer = static_cast<Player*>(spectator);
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
 				message.type = MESSAGE_DAMAGE_DEALT;
@@ -4769,6 +4782,8 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+
 		Player* tmpPlayer = static_cast<Player*>(spectator);
 		tmpPlayer->sendCreatureWalkthrough(creature, tmpPlayer->canWalkthroughEx(creature));
 	}
@@ -4783,6 +4798,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureSkull(creature);
 	}
 }
@@ -4792,6 +4808,7 @@ void Game::updatePlayerShield(Player* player)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureShield(player);
 	}
 }
@@ -5708,6 +5725,7 @@ void Game::updatePodium(Item* item)
 	SpectatorVec spectators;
 	map.getSpectators(spectators, item->getPosition(), true, true);
 	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendUpdateTileItem(tile, item->getPosition(), item);
 	}
 }
