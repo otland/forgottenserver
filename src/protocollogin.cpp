@@ -131,12 +131,13 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	} else {
 		msg.skipBytes(12);
 	}
+
 	/*
 	 * Skipped bytes:
 	 * 4 bytes: protocolVersion
 	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
 	 * 1 byte: 0
-	 */
+	*/
 
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnect();
@@ -163,6 +164,12 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
 		disconnectClient("Gameworld is under maintenance.\nPlease re-connect in a while.", version);
+		return;
+	}
+
+	if (g_config.getBoolean(ConfigManager::MAINTENCE_MODE)) {
+		disconnectClient("The Server is in maintenance mode and only players with positions above tutors can login.",
+		                 version);
 		return;
 	}
 

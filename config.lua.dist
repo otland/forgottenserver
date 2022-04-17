@@ -80,7 +80,7 @@ mysqlSock = ""
 -- may cause high CPU usage with many players and potentially affect performance!
 -- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
 -- You can disable it to save some memory if you don't see any errors at startup.
--- When activating maintenance mode, only players with a position above tutors will be able to login to the server
+-- When activating maintenance mode, only players with a position above tutors will be able to login to the server.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
