@@ -15,7 +15,7 @@ public:
 	const std::string& getName() const { return name; }
 
 	void setTemplePos(Position pos) { templePosition = pos; }
-	void setName(std::string_view name) { this->name = std::string(name); }
+	void setName(std::string_view name) { this->name = name; }
 	uint32_t getID() const { return id; }
 
 private:

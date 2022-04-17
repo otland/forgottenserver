@@ -17,7 +17,7 @@ bool BaseEvents::loadFromXml()
 		return false;
 	}
 
-	std::string scriptsName = getScriptBaseName();
+	std::string scriptsName{getScriptBaseName()};
 	std::string basePath = "data/" + scriptsName + "/";
 	if (getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
 		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName

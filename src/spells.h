@@ -40,7 +40,7 @@ public:
 	TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 	static Position getCasterPosition(Creature* creature, Direction dir);
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "spells"; }
 
 	const std::map<std::string, InstantSpell>& getInstantSpells() const { return instants; };
 
@@ -91,7 +91,7 @@ public:
 	Combat_ptr getCombat() { return combat; }
 
 private:
-	std::string getScriptEventName() const override { return "onCastSpell"; }
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	Combat_ptr combat;
 
@@ -249,7 +249,7 @@ public:
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
@@ -296,7 +296,7 @@ public:
 	}
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 

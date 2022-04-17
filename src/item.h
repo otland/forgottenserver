@@ -232,7 +232,7 @@ public:
 					if (!ok) {
 						return false;
 					}
-					value = std::string(str);
+					value = std::string{str};
 					break;
 				}
 
@@ -408,7 +408,7 @@ private:
 		} else {
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 		}
-		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string(key));
+		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 		getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(lowercaseKey, value);
 	}
 
@@ -419,7 +419,7 @@ private:
 		} else {
 			getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = new CustomAttributeMap();
 		}
-		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string(key));
+		auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 		getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom->emplace(lowercaseKey, value);
 	}
 
@@ -432,7 +432,7 @@ private:
 	const CustomAttribute* getCustomAttribute(std::string_view key)
 	{
 		if (const CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string(key));
+			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 			if (auto it = customAttrMap->find(lowercaseKey); it != customAttrMap->end()) {
 				return &(it->second);
 			}
@@ -449,7 +449,7 @@ private:
 	bool removeCustomAttribute(std::string_view key)
 	{
 		if (CustomAttributeMap* customAttrMap = getCustomAttributeMap()) {
-			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string(key));
+			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 			if (auto it = customAttrMap->find(lowercaseKey); it != customAttrMap->end()) {
 				customAttrMap->erase(it);
 				return true;

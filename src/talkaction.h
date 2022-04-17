@@ -47,7 +47,7 @@ public:
 	void setNeedAccess(bool b) { needAccess = b; }
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onSay"; }
 
 	std::string words;
 	std::vector<std::string> wordsMap;
@@ -73,7 +73,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "talkactions"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 

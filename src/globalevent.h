@@ -44,7 +44,7 @@ public:
 	void clear(bool fromLua) override final;
 
 private:
-	std::string getScriptBaseName() const override { return "globalevents"; }
+	std::string_view getScriptBaseName() const override { return "globalevents"; }
 
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
@@ -81,7 +81,7 @@ public:
 private:
 	GlobalEvent_t eventType = GLOBALEVENT_NONE;
 
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override;
 
 	std::string name;
 	int64_t nextExecution = 0;

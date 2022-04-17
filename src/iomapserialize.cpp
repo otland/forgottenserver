@@ -74,8 +74,7 @@ bool IOMapSerialize::saveHouseItems()
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
-				if (!stmt.addRow(
-				        fmt::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
+				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
 					return false;
 				}
 				stream.clear();

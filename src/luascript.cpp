@@ -340,7 +340,7 @@ int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = null
 	return 0;
 }
 
-int32_t LuaScriptInterface::getEvent(const std::string& eventName)
+int32_t LuaScriptInterface::getEvent(std::string_view eventName)
 {
 	// get our events table
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
@@ -350,7 +350,7 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 	}
 
 	// get current event function pointer
-	lua_getglobal(luaState, eventName.c_str());
+	lua_getglobal(luaState, eventName.data());
 	if (!isFunction(luaState, -1)) {
 		lua_pop(luaState, 2);
 		return -1;
@@ -363,9 +363,9 @@ int32_t LuaScriptInterface::getEvent(const std::string& eventName)
 
 	// reset global value of this event
 	lua_pushnil(luaState);
-	lua_setglobal(luaState, eventName.c_str());
+	lua_setglobal(luaState, eventName.data());
 
-	cacheFiles[runningEventId] = loadingFile + ":" + eventName;
+	cacheFiles[runningEventId] = fmt::format("{:s}:{:s}", loadingFile, eventName);
 	return runningEventId++;
 }
 
