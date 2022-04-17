@@ -167,12 +167,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (g_config.getBoolean(ConfigManager::MAINTENCE_MODE)) {
-		disconnectClient("The Server is in maintenance mode and only players with positions above tutors can login.",
-		                 version);
-		return;
-	}
-
 	BanInfo banInfo;
 	auto connection = getConnection();
 	if (!connection) {
@@ -186,6 +180,12 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
+		                 version);
+		return;
+	}
+
+	if (g_config.getBoolean(ConfigManager::MAINTENCE_MODE)) {
+		disconnectClient("The Server is in maintenance mode and only players with positions above tutors can login.",
 		                 version);
 		return;
 	}
