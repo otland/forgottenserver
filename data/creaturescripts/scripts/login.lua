@@ -1,4 +1,8 @@
 function onLogin(player)
+	if configManager.getBoolean(configKeys.MAINTENCE_MODE) and player:getGroup():getId() < ACCOUNT_TYPE_TUTOR then
+		return false
+	end
+
 	local serverName = configManager.getString(configKeys.SERVER_NAME)
 	local loginStr = "Welcome to " .. serverName .. "!"
 	if player:getLastLoginSaved() <= 0 then
