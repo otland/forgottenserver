@@ -51,7 +51,7 @@ public:
 		REMOVE_ON_DESPAWN,
 		PLAYER_CONSOLE_LOGS,
 		TWO_FACTOR_AUTH,
-		MAINTENCE_MODE,
+		MAINTENANCE_MODE,
 
 		LAST_BOOLEAN_CONFIG /* this must be the last one */
 	};

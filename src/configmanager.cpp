@@ -230,7 +230,7 @@ bool ConfigManager::load()
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
 	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
-	boolean[MAINTENCE_MODE] = getGlobalBoolean(L, "maintenanceMode", false);
+	boolean[MAINTENANCE_MODE] = getGlobalBoolean(L, "maintenanceMode", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");

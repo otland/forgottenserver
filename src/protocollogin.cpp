@@ -184,7 +184,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (g_config.getBoolean(ConfigManager::MAINTENCE_MODE)) {
+	if (g_config.getBoolean(ConfigManager::MAINTENANCE_MODE)) {
 		disconnectClient("The Server is in maintenance mode and only players with positions above tutors can login.",
 		                 version);
 		return;

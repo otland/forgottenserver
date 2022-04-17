@@ -1,5 +1,5 @@
 function onLogin(player)
-	if configManager.getBoolean(configKeys.MAINTENCE_MODE) and player:getGroup():getId() < ACCOUNT_TYPE_TUTOR then
+	if configManager.getBoolean(configKeys.MAINTENANCE_MODE) and player:getGroup():getId() < ACCOUNT_TYPE_TUTOR then
 		return false
 	end
 
