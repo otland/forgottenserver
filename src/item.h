@@ -181,7 +181,7 @@ class ItemAttributes
 			return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
 		}
 
-		void setDuration(int32_t time) {
+		void setDuration(uint32_t time) {
 			setIntAttr(ITEM_ATTRIBUTE_DURATION, time);
 		}
 		void decreaseDuration(int32_t time) {
@@ -553,7 +553,7 @@ class Item : virtual public Thing
 		Item* getItem() override final {
 			return this;
 		}
-		const Item* getItem() const override final {
+		const Item* getItem() const final {
 			return this;
 		}
 		virtual Teleport* getTeleport() {
@@ -609,11 +609,12 @@ class Item : virtual public Thing
 			getAttributes()->setStrAttr(type, value);
 		}
 
-		int64_t getIntAttr(itemAttrTypes type) const {
+		template<typename IntType = int64_t>
+		IntType getIntAttr(itemAttrTypes type) const {
 			if (!attributes) {
 				return 0;
 			}
-			return attributes->getIntAttr(type);
+			return static_cast<IntType>(attributes->getIntAttr(type));
 		}
 		void setIntAttr(itemAttrTypes type, int64_t value) {
 			getAttributes()->setIntAttr(type, value);
@@ -769,7 +770,7 @@ class Item : virtual public Thing
 			return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
 		}
 
-		void setDuration(int32_t time) {
+		void setDuration(uint32_t time) {
 			setIntAttr(ITEM_ATTRIBUTE_DURATION, time);
 		}
 		void decreaseDuration(int32_t time) {
@@ -792,9 +793,9 @@ class Item : virtual public Thing
 			return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 		}
 
-		int32_t getDecayTime() const {
+		uint32_t getDecayTime() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
-				return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+				return getIntAttr<uint32_t>(ITEM_ATTRIBUTE_DURATION);
 			}
 			return items[id].decayTime;
 		}
@@ -804,7 +805,7 @@ class Item : virtual public Thing
 		}
 		int32_t getDecayTo() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_DECAYTO)) {
-				return getIntAttr(ITEM_ATTRIBUTE_DECAYTO);
+				return getIntAttr<int32_t>(ITEM_ATTRIBUTE_DECAYTO);
 			}
 			return items[id].decayTo;
 		}
@@ -812,7 +813,7 @@ class Item : virtual public Thing
 		static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-		std::string getDescription(int32_t lookDistance) const override final;
+		std::string getDescription(int32_t lookDistance) const final;
 		std::string getNameDescription() const;
 		std::string getWeightDescription() const;
 
@@ -823,10 +824,10 @@ class Item : virtual public Thing
 
 		virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
-		bool isPushable() const override final {
+		bool isPushable() const final {
 			return isMoveable();
 		}
-		int32_t getThrowRange() const override final {
+		int32_t getThrowRange() const final {
 			return (isPickupable() ? 15 : 2);
 		}
 
@@ -863,7 +864,7 @@ class Item : virtual public Thing
 		}
 		int32_t getAttack() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ATTACK)) {
-				return getIntAttr(ITEM_ATTRIBUTE_ATTACK);
+				return getIntAttr<int32_t>(ITEM_ATTRIBUTE_ATTACK);
 			}
 			return items[id].attack;
 		}
@@ -875,19 +876,19 @@ class Item : virtual public Thing
 		}
 		int32_t getArmor() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_ARMOR)) {
-				return getIntAttr(ITEM_ATTRIBUTE_ARMOR);
+				return getIntAttr<int32_t>(ITEM_ATTRIBUTE_ARMOR);
 			}
 			return items[id].armor;
 		}
 		int32_t getDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_DEFENSE)) {
-				return getIntAttr(ITEM_ATTRIBUTE_DEFENSE);
+				return getIntAttr<int32_t>(ITEM_ATTRIBUTE_DEFENSE);
 			}
 			return items[id].defense;
 		}
 		int32_t getExtraDefense() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_EXTRADEFENSE)) {
-				return getIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE);
+				return getIntAttr<int32_t>(ITEM_ATTRIBUTE_EXTRADEFENSE);
 			}
 			return items[id].extraDefense;
 		}
@@ -896,12 +897,12 @@ class Item : virtual public Thing
 		}
 		int8_t getHitChance() const {
 			if (hasAttribute(ITEM_ATTRIBUTE_HITCHANCE)) {
-				return getIntAttr(ITEM_ATTRIBUTE_HITCHANCE);
+				return getIntAttr<int8_t>(ITEM_ATTRIBUTE_HITCHANCE);
 			}
 			return items[id].hitChance;
 		}
 
-		uint32_t getWorth() const;
+		uint64_t getWorth() const;
 		LightInfo getLightInfo() const;
 
 		void setReflect(CombatType_t combatType, const Reflect& reflect) {
@@ -988,7 +989,7 @@ class Item : virtual public Thing
 		uint16_t getItemCount() const {
 			return count;
 		}
-		void setItemCount(uint8_t n) {
+		void setItemCount(uint16_t n) {
 			count = n;
 		}
 
@@ -1082,7 +1083,7 @@ class Item : virtual public Thing
 
 		uint32_t referenceCounter = 0;
 
-		uint8_t count = 1; // number of stacked items
+		uint16_t count = 1; // number of stacked items
 
 		bool loadedFromMap = false;
 

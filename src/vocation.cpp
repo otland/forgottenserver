@@ -118,7 +118,7 @@ Vocation* Vocations::getVocation(uint16_t id)
 	return &it->second;
 }
 
-int32_t Vocations::getVocationId(const std::string& name) const
+uint16_t Vocations::getVocationId(const std::string& name) const
 {
 	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](auto it) {
 		return name.size() == it.second.name.size() && std::equal(name.begin(), name.end(), it.second.name.begin(), [](char a, char b) {

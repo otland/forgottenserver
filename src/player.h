@@ -493,7 +493,7 @@ class Player final : public Creature, public Cylinder
 		void removeConditionSuppressions(uint32_t conditions);
 
 		DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
-		DepotLocker* getDepotLocker(uint32_t depotId);
+		DepotLocker* getDepotLocker(uint16_t depotId);
 		void onReceiveMail() const;
 		bool isNearDepotBox() const;
 

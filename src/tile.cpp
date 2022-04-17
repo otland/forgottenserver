@@ -959,7 +959,7 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	const ItemType& newType = Item::items[itemId];
 	resetTileFlags(item);
 	item->setID(itemId);
-	item->setSubType(count);
+	item->setSubType(static_cast<uint16_t>(count));
 	setTileFlags(item);
 	onUpdateTileItem(item, oldType, item, newType);
 }

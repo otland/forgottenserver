@@ -11,7 +11,7 @@
 
 class Creature;
 
-static constexpr int32_t MAP_MAX_LAYERS = 16;
+static constexpr uint8_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 struct AStarNode {
@@ -28,7 +28,7 @@ static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
 class AStarNodes
 {
 	public:
-		AStarNodes(uint32_t x, uint32_t y);
+		AStarNodes(uint16_t x, uint16_t y);
 
 		AStarNode* createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f);
 		AStarNode* getBestNode();

@@ -11,8 +11,6 @@
 #include "luavariant.h"
 #include "pugicast.h"
 
-extern Game g_game;
-extern Vocations g_vocations;
 extern ConfigManager g_config;
 extern Weapons* g_weapons;
 
@@ -112,7 +110,7 @@ Event_ptr Weapons::getEvent(const std::string& nodeName)
 
 bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
-	Weapon* weapon = static_cast<Weapon*>(event.release()); //event is guaranteed to be a Weapon
+	Weapon* weapon = static_cast<Weapon*>(event.release()); // NOLINT event is guaranteed to be a Weapon
 
 	auto result = weapons.emplace(weapon->getID(), weapon);
 	if (!result.second) {
@@ -136,7 +134,7 @@ int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
 //players
 int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
-	return static_cast<int32_t>(std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
+	return static_cast<int32_t>(std::round((level / 5.) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
 }
 
 bool Weapon::configureEvent(const pugi::xml_node& node)
@@ -199,10 +197,10 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
-			vocWeaponMap[vocationId] = true;
-			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
+			vocWeaponMap[static_cast<uint16_t>(vocationId)] = true;
+			int32_t promotedVocation = g_vocations.getPromotedVocation(static_cast<uint16_t>(vocationId));
 			if (promotedVocation != VOCATION_NONE) {
-				vocWeaponMap[promotedVocation] = true;
+				vocWeaponMap[static_cast<uint16_t>(promotedVocation)] = true;
 			}
 
 			if (vocationNode.attribute("showInDescription").as_bool(true)) {
@@ -468,7 +466,7 @@ uint32_t Weapon::getManaCost(const Player* player) const
 	return (player->getMaxMana() * manaPercent) / 100;
 }
 
-int32_t Weapon::getHealthCost(const Player* player) const
+uint32_t Weapon::getHealthCost(const Player* player) const
 {
 	if (health != 0) {
 		return health;
@@ -740,7 +738,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 					chance = static_cast<uint32_t>(std::min<uint32_t>(skill, 90) * 1.10f) + 1;
 					break;
 				default:
-					chance = it.hitChance;
+					chance = it.hitChance; // NOLINT
 					break;
 			}
 		} else {
@@ -757,7 +755,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		}
 	}
 
-	if (chance >= uniform_random(1, 100)) {
+	if (chance >= uniform_random<int32_t>(1, 100)) {
 		Weapon::internalUseWeapon(player, item, target, damageModifier);
 	} else {
 		//miss target
@@ -897,7 +895,7 @@ bool WeaponWand::configureEvent(const pugi::xml_node& node)
 		return true;
 	}
 
-	std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+	auto tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 	if (tmpStrValue == "earth") {
 		params.combatType = COMBAT_EARTHDAMAGE;
 	} else if (tmpStrValue == "ice") {

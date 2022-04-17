@@ -207,7 +207,7 @@ Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, in
 			return new ConditionSpellGroupCooldown(id, type, ticks, buff, subId, aggressive);
 
 		case CONDITION_DRUNK:
-			return new ConditionDrunk(id, type, ticks, buff, subId, param, aggressive);
+			return new ConditionDrunk(id, type, ticks, buff, subId, static_cast<uint8_t>(param), aggressive);
 
 		case CONDITION_INFIGHT:
 		case CONDITION_EXHAUST_WEAPON:
@@ -1268,7 +1268,7 @@ bool ConditionDamage::init()
 
 	setTicks(0);
 
-	int32_t amount = uniform_random(minDamage, maxDamage);
+	int32_t amount = uniform_random<int32_t>(minDamage, maxDamage);
 	if (amount != 0) {
 		if (startDamage > maxDamage) {
 			startDamage = maxDamage;
@@ -1602,7 +1602,7 @@ bool ConditionSpeed::startCondition(Creature* creature)
 
 	if (speedDelta == 0) {
 		auto minmax = getFormulaValues(creature->getBaseSpeed(), mina, minb, maxa, maxb);
-		speedDelta = uniform_random(minmax.first, minmax.second);
+		speedDelta = uniform_random<int32_t>(minmax.first, minmax.second);
 	}
 
 	g_game.changeSpeed(creature, speedDelta);
@@ -1641,7 +1641,7 @@ void ConditionSpeed::addCondition(Creature* creature, const Condition* condition
 
 	if (speedDelta == 0) {
 		auto minmax = getFormulaValues(creature->getBaseSpeed(), mina, minb, maxa, maxb);
-		speedDelta = uniform_random(minmax.first, minmax.second);
+		speedDelta = uniform_random<int32_t>(minmax.first, minmax.second);
 	}
 
 	int32_t newSpeedChange = (speedDelta - oldSpeedDelta);
@@ -1801,11 +1801,11 @@ bool ConditionLight::setParam(ConditionParam_t param, int32_t value)
 
 	switch (param) {
 		case CONDITION_PARAM_LIGHT_LEVEL:
-			lightInfo.level = value;
+			lightInfo.level = static_cast<uint8_t>(value);
 			return true;
 
 		case CONDITION_PARAM_LIGHT_COLOR:
-			lightInfo.color = value;
+			lightInfo.color = static_cast<uint8_t>(value);
 			return true;
 
 		default:
@@ -1835,7 +1835,7 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 			return false;
 		}
 
-		lightInfo.color = value;
+		lightInfo.color = static_cast<uint8_t>(value);
 		return true;
 	} else if (attr == CONDITIONATTR_LIGHTLEVEL) {
 		uint32_t value;
@@ -1843,7 +1843,7 @@ bool ConditionLight::unserializeProp(ConditionAttr_t attr, PropStream& propStrea
 			return false;
 		}
 
-		lightInfo.level = value;
+		lightInfo.level = static_cast<uint8_t>(value);
 		return true;
 	} else if (attr == CONDITIONATTR_LIGHTTICKS) {
 		return propStream.read<uint32_t>(internalLightTicks);
@@ -1881,7 +1881,7 @@ void ConditionSpellCooldown::addCondition(Creature* creature, const Condition* c
 		if (subId != 0 && ticks > 0) {
 			Player* player = creature->getPlayer();
 			if (player) {
-				player->sendSpellCooldown(subId, ticks);
+				player->sendSpellCooldown(static_cast<uint8_t>(subId), ticks);
 			}
 		}
 	}
@@ -1896,7 +1896,7 @@ bool ConditionSpellCooldown::startCondition(Creature* creature)
 	if (subId != 0 && ticks > 0) {
 		Player* player = creature->getPlayer();
 		if (player) {
-			player->sendSpellCooldown(subId, ticks);
+			player->sendSpellCooldown(static_cast<uint8_t>(subId), ticks);
 		}
 	}
 	return true;
@@ -1974,7 +1974,7 @@ bool ConditionDrunk::setParam(ConditionParam_t param, int32_t value)
 
 	switch (param) {
 		case CONDITION_PARAM_DRUNKENNESS: {
-			drunkenness = value;
+			drunkenness = static_cast<uint8_t>(value);
 			return true;
 		}
 

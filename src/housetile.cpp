@@ -13,7 +13,7 @@ extern Game g_game;
 extern ConfigManager g_config;
 
 HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* house) :
-	DynamicTile(x, y, z), house(house) {}
+	DynamicTile(static_cast<uint16_t>(x), static_cast<uint16_t>(y), static_cast<uint8_t>(z)), house(house) {}
 
 void HouseTile::addThing(int32_t index, Thing* thing)
 {

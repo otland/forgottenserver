@@ -371,16 +371,16 @@ class ItemType
 		uint32_t wieldInfo = 0;
 		uint32_t minReqLevel = 0;
 		uint32_t minReqMagicLevel = 0;
-		uint32_t charges = 0;
-		int32_t maxHitChance = -1;
-		int32_t decayTo = -1;
+		uint16_t charges = 0;
+		int32_t maxHitChance = -1; // -1 = based on level/skill rules
+		int32_t decayTo = -1; // -1 = item will be deleted; 0 = ?
 		int32_t attack = 0;
 		int32_t defense = 0;
 		int32_t extraDefense = 0;
 		int32_t armor = 0;
 		uint16_t rotateTo = 0;
-		int32_t runeMagLevel = 0;
-		int32_t runeLevel = 0;
+		uint32_t runeMagLevel = 0;
+		uint32_t runeLevel = 0;
 		uint64_t worth = 0;
 
 		CombatType_t combatType = COMBAT_NONE;

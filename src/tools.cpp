@@ -153,12 +153,12 @@ std::string transformToSHA1(const std::string& input)
 	messageBlock[56] = length_high >> 24;
 	messageBlock[57] = length_high >> 16;
 	messageBlock[58] = length_high >> 8;
-	messageBlock[59] = length_high;
+	messageBlock[59] = static_cast<uint8_t>(length_high);
 
 	messageBlock[60] = length_low >> 24;
 	messageBlock[61] = length_low >> 16;
 	messageBlock[62] = length_low >> 8;
-	messageBlock[63] = length_low;
+	messageBlock[63] = static_cast<uint8_t>(length_low);
 
 	processSHA1MessageBlock(messageBlock, H);
 
@@ -262,15 +262,16 @@ std::mt19937& getRandomGenerator()
 	return generator;
 }
 
-int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
+// uniform_int_distribution does not natively support uint8_t
+uint8_t uniform_random(uint8_t minNumber, uint8_t maxNumber)
 {
-	static std::uniform_int_distribution<int32_t> uniformRand;
 	if (minNumber == maxNumber) {
 		return minNumber;
 	} else if (minNumber > maxNumber) {
 		std::swap(minNumber, maxNumber);
 	}
-	return uniformRand(getRandomGenerator(), std::uniform_int_distribution<int32_t>::param_type(minNumber, maxNumber));
+	static std::uniform_int_distribution<uint16_t> uniformRand(minNumber, maxNumber);
+	return static_cast<uint8_t>(uniformRand(getRandomGenerator()));
 }
 
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
@@ -875,7 +876,7 @@ std::string ucfirst(std::string str)
 {
 	for (char& i : str) {
 		if (i != ' ') {
-			i = toupper(i);
+			i = static_cast<char>(toupper(i));
 			break;
 		}
 	}
@@ -889,10 +890,10 @@ std::string ucwords(std::string str)
 		return str;
 	}
 
-	str[0] = toupper(str.front());
+	str[0] = static_cast<char>(toupper(str.front()));
 	for (size_t i = 1; i < strLength; ++i) {
 		if (str[i - 1] == ' ') {
-			str[i] = toupper(str[i]);
+			str[i] = static_cast<char>(toupper(str[i]));
 		}
 	}
 
@@ -905,7 +906,7 @@ bool booleanString(const std::string& str)
 		return false;
 	}
 
-	char ch = tolower(str.front());
+	char ch = static_cast<char>(tolower(str.front()));
 	return ch != 'f' && ch != 'n' && ch != '0';
 }
 

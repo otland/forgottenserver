@@ -93,7 +93,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 	return offerList;
 }
 
-void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
+void IOMarket::processExpiredOffers(const DBResult_ptr& result, bool)
 {
 	if (!result) {
 		return;
@@ -104,8 +104,8 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 			continue;
 		}
 
-		const uint32_t playerId = result->getNumber<uint32_t>("player_id");
-		const uint16_t amount = result->getNumber<uint16_t>("amount");
+		const auto playerId = result->getNumber<uint32_t>("player_id");
+		const auto amount = result->getNumber<uint16_t>("amount");
 		if (result->getNumber<uint16_t>("sale") == 1) {
 			const ItemType& itemType = Item::items[result->getNumber<uint16_t>("itemtype")];
 			if (itemType.id == 0) {
@@ -134,15 +134,8 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 					tmpAmount -= stackCount;
 				}
 			} else {
-				int32_t subType;
-				if (itemType.charges != 0) {
-					subType = itemType.charges;
-				} else {
-					subType = -1;
-				}
-
 				for (uint16_t i = 0; i < amount; ++i) {
-					Item* item = Item::CreateItem(itemType.id, subType);
+					Item* item = Item::CreateItem(itemType.id, itemType.charges);
 					if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
 						delete item;
 						break;

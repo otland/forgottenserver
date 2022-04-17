@@ -479,7 +479,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 
 	skills[skill].tries += count;
 
-	uint32_t newPercent;
+	uint8_t newPercent;
 	if (nextReqTries > currReqTries) {
 		newPercent = Player::getPercentLevel(skills[skill].tries, nextReqTries);
 	} else {
@@ -838,7 +838,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 	return it->second;
 }
 
-DepotLocker* Player::getDepotLocker(uint32_t depotId)
+DepotLocker* Player::getDepotLocker(uint16_t depotId)
 {
 	auto it = depotLockerMap.find(depotId);
 	if (it != depotLockerMap.end()) {
@@ -1031,7 +1031,7 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 
 		uint16_t& firstIndex = openContainer.index;
 		if (firstIndex > 0 && firstIndex >= container->size() - 1) {
-			firstIndex -= container->capacity();
+			firstIndex -= static_cast<uint16_t>(container->capacity());
 			sendContainer(it.first, container, false, firstIndex);
 		}
 
@@ -2044,7 +2044,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 			}
 		}
 
-		if (attacker && reflect.chance > 0 && reflect.percent != 0 && uniform_random(1, 100) <= reflect.chance) {
+		if (attacker && reflect.chance > 0 && reflect.percent != 0 && uniform_random<uint16_t>(1, 100) <= reflect.chance) {
 			CombatDamage reflectDamage;
 			reflectDamage.primary.type = combatType;
 			reflectDamage.primary.value = -std::round(damage * (reflect.percent / 100.));
@@ -2365,7 +2365,7 @@ bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t 
 //close container and its child containers
 void Player::autoCloseContainers(const Container* container)
 {
-	std::vector<uint32_t> closeList;
+	std::vector<uint8_t> closeList;
 	for (const auto& it : openContainers) {
 		Container* tmpContainer = it.second.container;
 		while (tmpContainer) {
@@ -2378,7 +2378,7 @@ void Player::autoCloseContainers(const Container* container)
 		}
 	}
 
-	for (uint32_t containerId : closeList) {
+	for (uint8_t containerId : closeList) {
 		closeContainer(containerId);
 		if (client) {
 			client->sendCloseContainer(containerId);
@@ -2783,7 +2783,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 			Container* tmpContainer = containers[i++];
 			if (!autoStack || !isStackable) {
 				//we need to find first empty container as fast as we can for non-stackable items
-				uint32_t n = tmpContainer->capacity() - std::min(tmpContainer->capacity(), static_cast<uint32_t>(tmpContainer->size()));
+				uint32_t n = tmpContainer->capacity() - std::min<uint8_t>(tmpContainer->capacity(), tmpContainer->size());
 				while (n) {
 					if (tmpContainer->queryAdd(tmpContainer->capacity() - n, *item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) {
 						index = tmpContainer->capacity() - n;
@@ -3541,7 +3541,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 			Item* item = getInventoryItem(static_cast<slots_t>(condition->getId()));
 			if (item) {
 				//25% chance to destroy the item
-				if (25 >= uniform_random(1, 100)) {
+				if (25 >= uniform_random<int32_t>(1, 100)) {
 					g_game.internalRemoveItem(item);
 				}
 			}

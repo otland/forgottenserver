@@ -892,7 +892,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_CHARGES: {
-					it.charges = pugi::cast<uint32_t>(valueAttribute.value());
+					it.charges = pugi::cast<uint16_t>(valueAttribute.value());
 					break;
 				}
 

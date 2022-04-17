@@ -73,7 +73,7 @@ std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, co
 				}
 			}
 		}
-		tmpPos.x -= area.getCols();
+		tmpPos.x -= static_cast<uint16_t>(area.getCols());
 	}
 	return vec;
 }
@@ -449,7 +449,7 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 		}
 
 		case COMBAT_PARAM_CREATEITEM: {
-			params.itemId = value;
+			params.itemId = static_cast<uint16_t>(value);
 			return true;
 		}
 
@@ -471,6 +471,8 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 	return false;
 }
 
+// This function is only used in to implement luaCombatGetParam
+// and its return type is geared toward Lua.
 int32_t Combat::getParam(CombatParam_t param)
 {
 	switch (param) {
@@ -927,7 +929,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer && damage.origin != ORIGIN_CONDITION) {
 		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 		uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
-		if (chance > 0 && skill > 0 && uniform_random(1, 100) <= chance) {
+		if (chance > 0 && skill > 0 && uniform_random<uint16_t>(1, 100) <= chance) {
 			criticalPrimary = std::round(damage.primary.value * (skill / 100.));
 			criticalSecondary = std::round(damage.secondary.value * (skill / 100.));
 			damage.critical = true;

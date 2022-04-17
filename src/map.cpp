@@ -338,12 +338,12 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 	auto max_x = centerPos.x + maxRangeX;
 
 	int32_t minoffset = centerPos.getZ() - maxRangeZ;
-	uint16_t x1 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (min_x + minoffset)));
-	uint16_t y1 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (min_y + minoffset)));
+	uint16_t x1 = std::min<uint16_t>(0xFFFF, std::max<int16_t>(0, (min_x + minoffset)));
+	uint16_t y1 = std::min<uint16_t>(0xFFFF, std::max<int16_t>(0, (min_y + minoffset)));
 
 	int32_t maxoffset = centerPos.getZ() - minRangeZ;
-	uint16_t x2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
-	uint16_t y2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
+	uint16_t x2 = std::min<uint16_t>(0xFFFF, std::max<int16_t>(0, (max_x + maxoffset)));
+	uint16_t y2 = std::min<uint16_t>(0xFFFF, std::max<int16_t>(0, (max_y + maxoffset)));
 
 	int32_t startx1 = x1 - (x1 % FLOOR_SIZE);
 	int32_t starty1 = y1 - (y1 % FLOOR_SIZE);
@@ -680,8 +680,8 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 			return false;
 		}
 
-		const int_fast32_t x = n->x;
-		const int_fast32_t y = n->y;
+		const auto x = n->x;
+		const auto y = n->y;
 		pos.x = x;
 		pos.y = y;
 		if (pathCondition(startPos, pos, fpp, bestMatch)) {
@@ -822,7 +822,7 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 
 // AStarNodes
 
-AStarNodes::AStarNodes(uint32_t x, uint32_t y)
+AStarNodes::AStarNodes(uint16_t x, uint16_t y)
 	: nodes(), openNodes()
 {
 	curNode = 1;

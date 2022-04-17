@@ -154,7 +154,7 @@ Thing* ScriptEnvironment::getThingByUID(uint32_t uid)
 	}
 
 	if (uid <= std::numeric_limits<uint16_t>::max()) {
-		Item* item = g_game.getUniqueItem(uid);
+		Item* item = g_game.getUniqueItem(static_cast<uint16_t>(uid));
 		if (item && !item->isRemoved()) {
 			return item;
 		}
@@ -192,7 +192,7 @@ Container* ScriptEnvironment::getContainerByUID(uint32_t uid)
 void ScriptEnvironment::removeItemByUID(uint32_t uid)
 {
 	if (uid <= std::numeric_limits<uint16_t>::max()) {
-		g_game.removeUniqueItem(uid);
+		g_game.removeUniqueItem(static_cast<uint16_t>(uid));
 		return;
 	}
 
@@ -3430,26 +3430,26 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 	}
 
 	uint16_t itemId = getNumber<uint16_t>(L, 2);
-	int32_t count = getNumber<int32_t>(L, 3, 1);
+	auto count = getNumber<uint16_t>(L, 3, 1);
 	bool canDropOnMap = getBoolean(L, 4, true);
 	uint16_t subType = getNumber<uint16_t>(L, 5, 1);
 
 	const ItemType& it = Item::items[itemId];
-	int32_t itemCount;
+	uint16_t itemCount;
 
 	auto parameters = lua_gettop(L);
 	if (parameters > 4) {
 		//subtype already supplied, count then is the amount
-		itemCount = std::max<int32_t>(1, count);
+		itemCount = std::max<uint16_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / 100));
+			itemCount = static_cast<uint16_t>(std::ceil(static_cast<float>(count) / 100));
 		} else {
 			itemCount = 1;
 		}
 		subType = count;
 	} else {
-		itemCount = std::max<int32_t>(1, count);
+		itemCount = std::max<uint16_t>(1, count);
 	}
 
 	while (itemCount > 0) {
@@ -3764,7 +3764,7 @@ int LuaScriptInterface::luaDoAddContainerItem(lua_State* L)
 	}
 
 	while (itemCount > 0) {
-		int32_t stackCount = std::min<int32_t>(100, subType);
+		uint16_t stackCount = static_cast<uint16_t>(std::min<int32_t>(100, subType)); // max 100
 		Item* newItem = Item::CreateItem(itemId, stackCount);
 		if (!newItem) {
 			reportErrorFunc(L, getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
@@ -4015,7 +4015,7 @@ int LuaScriptInterface::luaGetWaypointPositionByName(lua_State* L)
 int LuaScriptInterface::luaSendChannelMessage(lua_State* L)
 {
 	//sendChannelMessage(channelId, type, message)
-	uint32_t channelId = getNumber<uint32_t>(L, 1);
+	auto channelId = getNumber<uint16_t>(L, 1);
 	ChatChannel* channel = g_chat->getChannelById(channelId);
 	if (!channel) {
 		pushBoolean(L, false);
@@ -5477,7 +5477,7 @@ int LuaScriptInterface::luaTileGetItemCountById(lua_State* L)
 		return 1;
 	}
 
-	int32_t subType = getNumber<int32_t>(L, 3, -1);
+	auto subType = getNumber<int32_t>(L, 3, -1);
 
 	uint16_t itemId;
 	if (isNumber(L, 2)) {
@@ -6551,10 +6551,10 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 
 int LuaScriptInterface::luaItemRemove(lua_State* L)
 {
-	// item:remove([count = -1])
+	// item:remove([count = 0])
 	Item* item = getUserdata<Item>(L, 1);
 	if (item) {
-		int32_t count = getNumber<int32_t>(L, 2, -1);
+		uint32_t count = getNumber<int32_t>(L, 2, -1);
 		pushBoolean(L, g_game.internalRemoveItem(item, count) == RETURNVALUE_NOERROR);
 	} else {
 		lua_pushnil(L);
@@ -12858,7 +12858,7 @@ int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
 			lua_rawseti(L, -2, i + 1);
 		}
 		lua_setfield(L, -2, "specialMagicLevel");
-		
+
 		// Damage boost percent
 		lua_createtable(L, 0, COMBAT_COUNT);
 		for (int32_t i = 0; i < COMBAT_COUNT; i++) {
@@ -17618,7 +17618,7 @@ int LuaScriptInterface::luaWeaponCharges(lua_State* L)
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
 
-		it.charges = getNumber<uint8_t>(L, 2);
+		it.charges = getNumber<uint32_t>(L, 2);
 		it.showCharges = showCharges;
 		pushBoolean(L, true);
 	} else {

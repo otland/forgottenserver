@@ -285,11 +285,11 @@ class ProtocolGame final : public Protocol
 		void GetTileDescription(const Tile* tile, NetworkMessage& msg);
 
 		// translate a floor to client-readable format
-		void GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z,
-		                         int32_t width, int32_t height, int32_t offset, int32_t& skip);
+		void GetFloorDescription(NetworkMessage& msg, uint16_t x, uint16_t y, uint8_t z,
+		                         int32_t width, int32_t height, int32_t offset, int8_t& skip);
 
 		// translate a map area to client-readable format
-		void GetMapDescription(int32_t x, int32_t y, int32_t z,
+		void GetMapDescription(uint16_t x, uint16_t y, uint8_t z,
 		                       int32_t width, int32_t height, NetworkMessage& msg);
 
 		void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);

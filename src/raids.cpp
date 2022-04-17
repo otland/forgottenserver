@@ -115,7 +115,7 @@ void Raids::checkRaids()
 		for (auto it = raidList.begin(), end = raidList.end(); it != end; ++it) {
 			Raid* raid = *it;
 			if (now >= (getLastRaidEnd() + raid->getMargin())) {
-				if (((MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL) / raid->getInterval()) >= static_cast<uint32_t>(uniform_random(0, MAX_RAND_RANGE))) {
+				if (((MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL) / raid->getInterval()) >= uniform_random<uint32_t>(0, MAX_RAND_RANGE)) {
 					setRunning(raid);
 					raid->startRaid();
 
@@ -402,18 +402,18 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		}
 
 		if ((attr = eventNode.attribute("centerz"))) {
-			centerPos.z = pugi::cast<uint16_t>(attr.value());
+			centerPos.z = pugi::cast<uint8_t>(attr.value());
 		} else {
 			std::cout << "[Error] Raid: centerz tag missing for areaspawn event." << std::endl;
 			return false;
 		}
 
-		fromPos.x = std::max<int32_t>(0, centerPos.getX() - radius);
-		fromPos.y = std::max<int32_t>(0, centerPos.getY() - radius);
+		fromPos.x = std::max<uint16_t>(0, centerPos.getX() - radius);
+		fromPos.y = std::max<uint16_t>(0, centerPos.getY() - radius);
 		fromPos.z = centerPos.z;
 
-		toPos.x = std::min<int32_t>(0xFFFF, centerPos.getX() + radius);
-		toPos.y = std::min<int32_t>(0xFFFF, centerPos.getY() + radius);
+		toPos.x = std::min<uint16_t>(0xFFFF, centerPos.getX() + radius);
+		toPos.y = std::min<uint16_t>(0xFFFF, centerPos.getY() + radius);
 		toPos.z = centerPos.z;
 	} else {
 		if ((attr = eventNode.attribute("fromx"))) {
@@ -501,7 +501,7 @@ bool AreaSpawnEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 bool AreaSpawnEvent::executeEvent()
 {
 	for (const MonsterSpawn& spawn : spawnList) {
-		uint32_t amount = uniform_random(spawn.minAmount, spawn.maxAmount);
+		auto amount = uniform_random<uint32_t>(spawn.minAmount, spawn.maxAmount);
 		for (uint32_t i = 0; i < amount; ++i) {
 			Monster* monster = Monster::createMonster(spawn.name);
 			if (!monster) {
@@ -511,7 +511,7 @@ bool AreaSpawnEvent::executeEvent()
 
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
-				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
+				Tile* tile = g_game.map.getTile(uniform_random<uint16_t>(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
 				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;

@@ -17,7 +17,6 @@
 
 class Spells;
 
-extern Game g_game;
 extern Spells* g_spells;
 extern Vocations g_vocations;
 
@@ -72,7 +71,7 @@ Container* Item::CreateItemAsContainer(const uint16_t type, uint16_t size)
 		return nullptr;
 	}
 
-	Container* newItem = new Container(type, size);
+	auto* newItem = new Container(type, size);
 	newItem->incrementReferenceCounter();
 	return newItem;
 }
@@ -1057,7 +1056,7 @@ bool Item::canDecay() const
 	return true;
 }
 
-uint32_t Item::getWorth() const
+uint64_t Item::getWorth() const
 {
 	return items[id].worth * count;
 }
@@ -1240,12 +1239,12 @@ bool Item::hasMarketAttributes() const
 	// discard items with other modified attributes
 	for (const auto& attr : attributes->getList()) {
 		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-			uint16_t charges = static_cast<uint16_t>(attr.value.integer);
+			auto charges = static_cast<uint16_t>(attr.value.integer);
 			if (charges != items[id].charges) {
 				return false;
 			}
 		} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-			uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+			auto duration = static_cast<uint32_t>(attr.value.integer);
 			if (duration != getDefaultDuration()) {
 				return false;
 			}

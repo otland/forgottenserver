@@ -1354,7 +1354,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 {
 	pugi::xml_attribute attr;
 	if ((attr = node.attribute("id"))) {
-		int32_t id = pugi::cast<int32_t>(attr.value());
+		auto id = pugi::cast<uint16_t>(attr.value());
 		const ItemType& it = Item::items.getItemType(id);
 
 		if (it.name.empty()) {
@@ -1373,7 +1373,7 @@ bool Monsters::loadLootItem(const pugi::xml_node& node, LootBlock& lootBlock)
 			return false;
 		}
 
-		uint32_t id = ids.first->second;
+		auto id = ids.first->second;
 
 		if (std::next(ids.first) != ids.second) {
 			std::cout << "[Warning - Monsters::loadMonster] Non-unique loot item \"" << name << "\". " << std::endl;

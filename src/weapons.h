@@ -190,7 +190,7 @@ class Weapon : public Event
 		}
 
 		uint32_t getManaCost(const Player* player) const;
-		int32_t getHealthCost(const Player* player) const;
+		uint32_t getHealthCost(const Player* player) const;
 
 		uint32_t level = 0;
 		uint32_t magLevel = 0;
@@ -204,9 +204,9 @@ class Weapon : public Event
 		bool enabled = true;
 		bool premium = false;
 		bool wieldUnproperly = false;
-		std::string vocationString = "";
+		std::string vocationString;
 
-		std::string getScriptEventName() const override final;
+		std::string getScriptEventName() const final;
 
 		bool executeUseWeapon(Player* player, const LuaVariant& var) const;
 		void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;

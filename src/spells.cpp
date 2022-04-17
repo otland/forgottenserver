@@ -193,7 +193,7 @@ Spell* Spells::getSpellByName(const std::string& name)
 
 RuneSpell* Spells::getRuneSpell(uint32_t id)
 {
-	auto it = runes.find(id);
+	auto it = runes.find(static_cast<uint16_t>(id));
 	if (it == runes.end()) {
 		for (auto& rune : runes) {
 			if (rune.second.getId() == id) {
@@ -540,7 +540,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
 			attr = vocationNode.attribute("showInDescription");
-			vocSpellMap[vocationId] = !attr || attr.as_bool();
+			vocSpellMap[static_cast<uint16_t>(vocationId)] = !attr || attr.as_bool();
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
@@ -1106,7 +1106,7 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	runeId = pugi::cast<uint16_t>(attr.value());
 
 	if ((attr = node.attribute("charges"))) {
-		charges = pugi::cast<uint32_t>(attr.value());
+		charges = pugi::cast<uint16_t>(attr.value());
 	} else {
 		charges = 0;
 	}

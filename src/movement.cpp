@@ -177,7 +177,7 @@ bool MoveEvents::registerEvent(Event_ptr event, const pugi::xml_node& node)
 			return false;
 		}
 
-		Position pos(posList[0], posList[1], static_cast<uint8_t>(posList[2]));
+		Position pos(static_cast<uint16_t>(posList[0]), static_cast<uint16_t>(posList[1]), static_cast<uint8_t>(posList[2]));
 		addEvent(std::move(*moveEvent), pos, positionMap);
 	} else {
 		return false;
@@ -623,7 +623,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 				continue;
 			}
 
-			int32_t vocationId = g_vocations.getVocationId(vocationNameAttribute.as_string());
+			auto vocationId = g_vocations.getVocationId(vocationNameAttribute.as_string());
 			if (vocationId != -1) {
 				vocEquipMap[vocationId] = true;
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {

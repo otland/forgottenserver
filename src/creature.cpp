@@ -225,7 +225,7 @@ void Creature::onWalk(Direction& dir)
 		return;
 	}
 
-	auto rand = static_cast<uint16_t>(uniform_random(0, 399));
+	auto rand = uniform_random<uint16_t>(0, 399);
 	if (rand / 4 > getDrunkenness()) {
 		return;
 	}
@@ -846,7 +846,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 
 		if (checkDefense && hasDefense && canUseDefense) {
 			int32_t defense = getDefense();
-			damage -= uniform_random(defense / 2, defense);
+			damage -= uniform_random<int32_t>(defense / 2, defense);
 			if (damage <= 0) {
 				damage = 0;
 				blockType = BLOCK_DEFENSE;
@@ -857,7 +857,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		if (checkArmor) {
 			int32_t armor = getArmor();
 			if (armor > 3) {
-				damage -= uniform_random(armor / 2, armor - (armor % 2 + 1));
+				damage -= uniform_random<int32_t>(armor / 2, armor - (armor % 2 + 1));
 			} else if (armor > 0) {
 				--damage;
 			}

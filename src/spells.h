@@ -410,10 +410,10 @@ class RuneSpell final : public Action, public Spell
 		void setRuneItemId(uint16_t i) {
 			runeId = i;
 		}
-		uint32_t getCharges() const {
+		uint16_t getCharges() const {
 			return charges;
 		}
-		void setCharges(uint32_t c) {
+		void setCharges(uint16_t c) {
 			if (c > 0) {
 				hasCharges = true;
 			}
@@ -426,7 +426,7 @@ class RuneSpell final : public Action, public Spell
 		bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 
 		uint16_t runeId = 0;
-		uint32_t charges = 0;
+		uint16_t charges = 0;
 		bool hasCharges = false;
 };
 

@@ -72,7 +72,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 			output->addByte(i); // world id
 			output->addString(i == 0 ? "Offline" : "Online");
 			output->addString(g_config.getString(ConfigManager::IP));
-			output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+			output->add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
 			output->addByte(0);
 		}
 	} else {
@@ -80,7 +80,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0); // world id
 		output->addString(g_config.getString(ConfigManager::SERVER_NAME));
 		output->addString(g_config.getString(ConfigManager::IP));
-		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
 		output->addByte(0);
 	}
 

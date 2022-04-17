@@ -168,7 +168,7 @@ bool Npc::loadFromXml()
 	}
 
 	if ((attr = npcNode.attribute("speechbubble"))) {
-		speechBubble = pugi::cast<uint32_t>(attr.value());
+		speechBubble = pugi::cast<uint8_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
@@ -488,7 +488,7 @@ bool Npc::getRandomStep(Direction& dir) const
 		return false;
 	}
 
-	dir = dirList[uniform_random(0, dirList.size() - 1)];
+	dir = dirList[uniform_random<int32_t>(0, dirList.size() - 1)];
 	return true;
 }
 
@@ -827,10 +827,10 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 		const auto tableIndex = lua_gettop(L);
 		ShopInfo item;
 
-		item.itemId = getField<uint32_t>(L, tableIndex, "id");
-		item.subType = getField<int32_t>(L, tableIndex, "subType");
+		item.itemId = getField<uint16_t>(L, tableIndex, "id");
+		item.subType = getField<uint8_t>(L, tableIndex, "subType");
 		if (item.subType == 0) {
-			item.subType = getField<int32_t>(L, tableIndex, "subtype");
+			item.subType = getField<uint8_t>(L, tableIndex, "subtype");
 			lua_pop(L, 1);
 		}
 
@@ -923,23 +923,23 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 	uint32_t sellCount = 0;
 
 	uint32_t itemId = getNumber<uint32_t>(L, 2);
-	uint32_t amount = getNumber<uint32_t>(L, 3);
-	uint32_t subType;
+	uint16_t amount = getNumber<uint16_t>(L, 3);
+	uint16_t subType;
 
-	int32_t n = getNumber<int32_t>(L, 4, -1);
+	auto n = getNumber<uint16_t>(L, 4, -1);
 	if (n != -1) {
 		subType = n;
 	} else {
 		subType = 1;
 	}
 
-	uint32_t actionId = getNumber<uint32_t>(L, 5, 0);
+	auto actionId = getNumber<uint16_t>(L, 5, 0);
 	bool canDropOnMap = getBoolean(L, 6, true);
 
 	const ItemType& it = Item::items[itemId];
 	if (it.stackable) {
 		while (amount > 0) {
-			int32_t stackCount = std::min<int32_t>(100, amount);
+			uint16_t stackCount = std::min<uint16_t>(100, amount);
 			Item* item = Item::CreateItem(it.id, stackCount);
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
@@ -1047,10 +1047,10 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 		const auto tableIndex = lua_gettop(L);
 		ShopInfo item;
 
-		item.itemId = getField<uint32_t>(L, tableIndex, "id");
-		item.subType = getField<int32_t>(L, tableIndex, "subType");
+		item.itemId = getField<uint16_t>(L, tableIndex, "id");
+		item.subType = getField<uint8_t>(L, tableIndex, "subType");
 		if (item.subType == 0) {
-			item.subType = getField<int32_t>(L, tableIndex, "subtype");
+			item.subType = getField<uint8_t>(L, tableIndex, "subtype");
 			lua_pop(L, 1);
 		}
 

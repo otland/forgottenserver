@@ -685,14 +685,14 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	}
 }
 
-void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg)
+void ProtocolGame::GetMapDescription(uint16_t x, uint16_t y, uint8_t z, int32_t width, int32_t height, NetworkMessage& msg)
 {
-	int32_t skip = -1;
-	int32_t startz, endz, zstep;
+	int8_t skip = -1;
+	uint8_t startz, endz, zstep;
 
 	if (z > 7) {
 		startz = z - 2;
-		endz = std::min<int32_t>(MAP_MAX_LAYERS - 1, z + 2);
+		endz = std::min<uint8_t>(MAP_MAX_LAYERS - 1, z + 2);
 		zstep = 1;
 	} else {
 		startz = 7;
@@ -700,7 +700,7 @@ void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t wi
 		zstep = -1;
 	}
 
-	for (int32_t nz = startz; nz != endz + zstep; nz += zstep) {
+	for (uint8_t nz = startz; nz != endz + zstep; nz += zstep) {
 		GetFloorDescription(msg, x, y, nz, width, height, z - nz, skip);
 	}
 
@@ -710,7 +710,7 @@ void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t wi
 	}
 }
 
-void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, int32_t offset, int32_t& skip)
+void ProtocolGame::GetFloorDescription(NetworkMessage& msg, uint16_t x, uint16_t y, uint8_t z, int32_t width, int32_t height, int32_t offset, int8_t& skip)
 {
 	for (int32_t nx = 0; nx < width; nx++) {
 		for (int32_t ny = 0; ny < height; ny++) {
@@ -723,7 +723,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 
 				skip = 0;
 				GetTileDescription(tile, msg);
-			} else if (skip == 0xFE) {
+			} else if (skip == 0xFE) {  // TODO something wrong with skip?
 				msg.addByte(0xFF);
 				msg.addByte(0xFF);
 				skip = -1;
@@ -1737,11 +1737,11 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	msg.addByte(container->isUnlocked() ? 0x01 : 0x00); // Drag and drop
 	msg.addByte(container->hasPagination() ? 0x01 : 0x00); // Pagination
 
-	uint32_t containerSize = container->size();
+	uint16_t containerSize = container->size();
 	msg.add<uint16_t>(containerSize);
 	msg.add<uint16_t>(firstIndex);
 	if (firstIndex < containerSize) {
-		uint8_t itemsToSend = std::min<uint32_t>(std::min<uint32_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
+		uint8_t itemsToSend = std::min<uint16_t>(std::min<uint16_t>(container->capacity(), containerSize - firstIndex), std::numeric_limits<uint8_t>::max());
 
 		msg.addByte(itemsToSend);
 		for (auto it = container->getItemList().begin() + firstIndex, end = it + itemsToSend; it != end; ++it) {
@@ -1884,7 +1884,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	uint8_t i = 0;
 	for (std::map<uint16_t, uint32_t>::const_iterator it = saleMap.begin(); i < itemsToSend; ++it, ++i) {
 		msg.addItemId(it->first);
-		msg.addByte(std::min<uint32_t>(it->second, std::numeric_limits<uint8_t>::max()));
+		msg.addByte(static_cast<uint8_t>(std::min<uint32_t>(it->second, std::numeric_limits<uint8_t>::max())));
 	}
 
 	writeToOutputBuffer(msg);
@@ -1917,7 +1917,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 {
 	NetworkMessage msg;
 	msg.addByte(0xF6);
-	msg.addByte(std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max()));
+	msg.addByte(static_cast<uint8_t>(std::min<uint32_t>(IOMarket::getPlayerOfferCount(player->getGUID()), std::numeric_limits<uint8_t>::max())));
 
 	DepotChest* depotChest = player->getDepotChest(depotId, false);
 	if (!depotChest) {
@@ -1969,7 +1969,7 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId)
 		if (itemType.classification > 0) {
 			msg.addByte(0);
 		}
-		msg.add<uint16_t>(std::min<uint32_t>(0xFFFF, it->second));
+		msg.add<uint16_t>(static_cast<uint16_t>(std::min<uint32_t>(0xFFFF, it->second)));
 	}
 	writeToOutputBuffer(msg);
 
@@ -2297,7 +2297,7 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 		msg.add<uint32_t>(creature->getID());
 	} else {
 		msg.addPosition(creature->getPosition());
-		msg.addByte(stackPos);
+		msg.addByte(static_cast<uint8_t>(stackPos)); // guaranteed not <= 9
 	}
 
 	msg.add<uint16_t>(0x63);
@@ -2320,7 +2320,7 @@ void ProtocolGame::sendCreatureSay(const Creature* creature, SpeakClasses type, 
 
 	//Add level only for players
 	if (const Player* speaker = creature->getPlayer()) {
-		msg.add<uint16_t>(speaker->getLevel());
+		msg.add<uint16_t>(static_cast<uint16_t>(std::min<uint32_t>(speaker->getLevel(), std::numeric_limits<uint16_t>::max())));
 	} else {
 		msg.add<uint16_t>(0x00);
 	}
@@ -3505,7 +3505,7 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 
 	//going to surface
 	if (newPos.z == 7) {
-		int32_t skip = -1;
+		int8_t skip = -1;
 
 		// floor 7 and 6 already set
 		for (int i = 5; i >= 0; --i) {
@@ -3518,7 +3518,7 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const Creature* creature,
 	}
 	//underground, going one floor up (still underground)
 	else if (newPos.z > 7) {
-		int32_t skip = -1;
+		int8_t skip = -1;
 		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, oldPos.getZ() - 3, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, 3, skip);
 
 		if (skip >= 0) {
@@ -3548,7 +3548,7 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 
 	//going from surface to underground
 	if (newPos.z == 8) {
-		int32_t skip = -1;
+		int8_t skip = -1;
 
 		for (int i = 0; i < 3; ++i) {
 			GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + i, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -i - 1, skip);
@@ -3560,7 +3560,7 @@ void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const Creature* creatur
 	}
 	//going further down
 	else if (newPos.z > oldPos.z && newPos.z > 8 && newPos.z < 14) {
-		int32_t skip = -1;
+		int8_t skip = -1;
 		GetFloorDescription(msg, oldPos.x - Map::maxClientViewportX, oldPos.y - Map::maxClientViewportY, newPos.z + 2, (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2, -3, skip);
 
 		if (skip >= 0) {

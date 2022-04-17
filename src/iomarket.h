@@ -19,7 +19,7 @@ class IOMarket
 		static MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
 		static HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
 
-		static void processExpiredOffers(DBResult_ptr result, bool);
+		static void processExpiredOffers(const DBResult_ptr& result, bool);
 		static void checkExpiredOffers();
 
 		static uint32_t getPlayerOfferCount(uint32_t playerId);

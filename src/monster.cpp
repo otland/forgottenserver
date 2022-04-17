@@ -577,7 +577,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 		default: {
 			if (!resultList.empty()) {
 				auto it = resultList.begin();
-				std::advance(it, uniform_random(0, resultList.size() - 1));
+				std::advance(it, uniform_random<int32_t>(0, resultList.size() - 1));
 				return selectTarget(*it);
 			}
 
@@ -819,7 +819,7 @@ void Monster::doAttacking(uint32_t interval)
 		}
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
-			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
+			if (spellBlock.chance >= uniform_random<uint32_t>(1, 100)) {
 				if (updateLook) {
 					updateLookDirection();
 					updateLook = false;
@@ -929,7 +929,7 @@ void Monster::onThinkTarget(uint32_t interval)
 						challengeFocusDuration = 0;
 					}
 
-					if (mType->info.changeTargetChance >= uniform_random(1, 100)) {
+					if (mType->info.changeTargetChance >= uniform_random<int32_t>(1, 100)) {
 						if (mType->info.targetDistance <= 1) {
 							searchTarget(TARGETSEARCH_RANDOM);
 						} else {
@@ -958,7 +958,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			continue;
 		}
 
-		if ((spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100)))) {
+		if ((spellBlock.chance >= uniform_random<uint32_t>(1, 100))) {
 			minCombatValue = spellBlock.minCombatValue;
 			maxCombatValue = spellBlock.maxCombatValue;
 			spellBlock.spell->castSpell(this, this);
@@ -992,7 +992,7 @@ void Monster::onThinkDefense(uint32_t interval)
 				continue;
 			}
 
-			if (summonBlock.chance < static_cast<uint32_t>(uniform_random(1, 100))) {
+			if (summonBlock.chance < uniform_random<uint32_t>(1, 100)) {
 				continue;
 			}
 
@@ -1025,8 +1025,8 @@ void Monster::onThinkYell(uint32_t interval)
 	if (yellTicks >= mType->info.yellSpeedTicks) {
 		yellTicks = 0;
 
-		if (!mType->info.voiceVector.empty() && (mType->info.yellChance >= static_cast<uint32_t>(uniform_random(1, 100)))) {
-			uint32_t index = uniform_random(0, mType->info.voiceVector.size() - 1);
+		if (!mType->info.voiceVector.empty() && (mType->info.yellChance >= uniform_random<uint32_t>(1, 100))) {
+			auto index = uniform_random<uint32_t>(0, mType->info.voiceVector.size() - 1);
 			const voiceBlock_t& vb = mType->info.voiceVector[index];
 
 			if (vb.yellText) {
@@ -1204,7 +1204,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			if (attackedCreature && attackedCreature == followCreature) {
 				if (isFleeing()) {
 					result = getDanceStep(getPosition(), direction, false, false);
-				} else if (mType->info.staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
+				} else if (mType->info.staticAttackChance < uniform_random<uint32_t>(1, 100)) {
 					result = getDanceStep(getPosition(), direction);
 				}
 			}
@@ -1327,7 +1327,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 
 	if (!dirList.empty()) {
 		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
-		direction = dirList[uniform_random(0, dirList.size() - 1)];
+		direction = dirList[uniform_random<int32_t>(0, dirList.size() - 1)];
 		return true;
 	}
 	return false;

@@ -179,8 +179,8 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 		output->addString(g_config.getString(ConfigManager::MAP_AUTHOR));
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->add<uint16_t>(mapWidth);
-		output->add<uint16_t>(mapHeight);
+		output->add<uint16_t>(static_cast<uint16_t>(mapWidth));
+		output->add<uint16_t>(static_cast<uint16_t>(mapHeight));
 	}
 
 	if (requestedInfo & REQUEST_EXT_PLAYERS_INFO) {

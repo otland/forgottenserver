@@ -12,7 +12,6 @@
 #include "pugicast.h"
 #include "spells.h"
 
-extern Game g_game;
 extern Spells* g_spells;
 extern Actions* g_actions;
 extern ConfigManager g_config;
@@ -361,7 +360,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 
 		//open/close container
-		int32_t oldContainerId = player->getContainerID(openContainer);
+		int8_t oldContainerId = player->getContainerID(openContainer);
 		if (oldContainerId == -1) {
 			player->addContainer(index, openContainer);
 			player->onSendContainer(openContainer);
@@ -416,7 +415,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
+		if (const auto* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
 			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return false;
@@ -463,7 +462,7 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
+		if (const auto* const houseTile = dynamic_cast<const HouseTile*>(item->getTile())) {
 			if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 				return false;
