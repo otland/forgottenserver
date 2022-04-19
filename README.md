@@ -1,7 +1,7 @@
 forgottenserver [![Build Status](https://github.com/otland/forgottenserver/actions/workflows/build-vcpkg.yml/badge.svg?branch=master)](https://github.com/otland/forgottenserver/actions/workflows/build-vcpkg.yml "vcpkg build status") [![Build Status](https://github.com/otland/forgottenserver/actions/workflows/docker-image.yml/badge.svg?branch=master)](https://github.com/otland/forgottenserver/actions/workflows/docker-image.yml "Docker image build status")
 ===============
 
-The Forgotten Server is a free and open-source MMORPG server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project. To connect to the server, you can use [OTClient](https://github.com/edubart/otclient).
+The Forgotten Server is a free and open-source tibia server emulator written in C++. It is a fork of the [OpenTibia Server](https://github.com/opentibia/server) project. To connect to the server, you can use the CipSoft Tibia Client (https://www.tibia.com/account/?subtopic=downloadclient).
 
 ### Getting Started
 
