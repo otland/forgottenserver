@@ -314,9 +314,6 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
                          bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
-		return false;
-	}
 
 	if (startup) {
 		// No need to send out events to the surrounding since there is no one out there to listen!
@@ -336,6 +333,12 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 	monster->setSpawn(this);
 	monster->setMasterPos(pos);
 	monster->incrementReferenceCounter();
+	if (!g_events->eventMonsterOnSpawn(monster, pos, startup, false)) {
+		g_game.removeCreature(monster, false);
+		monster->decrementReferenceCounter();
+		spawnMap[spawnId].lastSpawn = OTSYS_TIME();
+		return false;
+	}
 
 	spawnedMap.insert({spawnId, monster});
 	spawnMap[spawnId].lastSpawn = OTSYS_TIME();
@@ -347,7 +350,9 @@ void Spawn::startup()
 	for (const auto& it : spawnMap) {
 		uint32_t spawnId = it.first;
 		const spawnBlock_t& sb = it.second;
-		spawnMonster(spawnId, sb, true);
+		if (!spawnMonster(spawnId, sb, true)) {
+			startSpawnCheck();
+		}
 	}
 }
 
