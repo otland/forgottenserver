@@ -4415,7 +4415,7 @@
 		<attribute key="type" value="mailbox" />
 	</item>
 	<item id="2594" article="a" name="depot chest">
-		<attribute key="containerSize" value="30" />
+		<attribute key="containerSize" value="18" />
 	</item>
 	<item id="2595" article="a" name="parcel">
 		<attribute key="type" value="container" />
@@ -40033,7 +40033,9 @@
 	<item id="34568" article="a" name="small fish" />
 	<item id="34569" article="a" name="baking tray" />
 	<item id="34570" article="a" name="lump of reed flour dough" />
-	<item id="34571" article="a" name="depot box XVIII" />
+	<item id="34571" article="a" name="depot box XVIII" >
+		<attribute key="containerSize" value="32" />
+	</item>
 	<item fromid="34572" toid="34575" article="a" name="cot" />
 	<item fromid="34576" toid="34579" article="a" name="dead Custodian" />
 	<item id="34580" article="a" name="beer trap" />

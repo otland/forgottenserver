@@ -10,29 +10,27 @@ class House;
 
 class HouseTile final : public DynamicTile
 {
-	public:
-		HouseTile(int32_t x, int32_t y, int32_t z, House* house);
+public:
+	HouseTile(int32_t x, int32_t y, int32_t z, House* house);
 
-		//cylinder implementations
-		ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count,
-				uint32_t flags, Creature* actor = nullptr) const override;
+	// cylinder implementations
+	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
+	                     Creature* actor = nullptr) const override;
 
-		Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem,
-				uint32_t& flags) override;
+	Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
-		ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const override;
+	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
+	                        Creature* actor = nullptr) const override;
 
-		void addThing(int32_t index, Thing* thing) override;
-		void internalAddThing(uint32_t index, Thing* thing) override;
+	void addThing(int32_t index, Thing* thing) override;
+	void internalAddThing(uint32_t index, Thing* thing) override;
 
-		House* getHouse() const {
-			return house;
-		}
+	House* getHouse() const { return house; }
 
-	private:
-		void updateHouse(Item* item);
+private:
+	void updateHouse(Item* item);
 
-		House* house;
+	House* house;
 };
 
 #endif // FS_HOUSETILE_H

@@ -34,7 +34,8 @@ void RSA::loadPEM(const std::string& filename)
 	}
 
 	std::ostringstream oss;
-	for (std::string line; std::getline(file, line); oss << line);
+	for (std::string line; std::getline(file, line); oss << line)
+		;
 	std::string key = oss.str();
 
 	auto headerIndex = key.find(header);
