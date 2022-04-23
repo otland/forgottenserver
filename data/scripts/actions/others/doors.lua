@@ -120,10 +120,22 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		item:transform(itemId - 1)
+		if itemId == 12695 then
+			item:transform(itemId - 3)
+		elseif itemId == 12703 then
+			item:transform(itemId - 2)
+		else
+			item:transform(itemId - 1)
+		end
 		return true
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
-		item:transform(itemId + 1)
+		if itemId == 12692 then
+			item:transform(itemId + 3)
+		elseif itemId == 12701 then
+			item:transform(itemId + 2)
+		else
+			item:transform(itemId + 1)
+		end
 		return true
 	end
 	return false
