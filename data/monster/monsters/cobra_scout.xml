@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cobra Scout" nameDescription="a cobra scout" race="blood" experience="7310" speed="300">
 	<health now="8500" max="8500" />
-	<look type="1217" head="2" body="2" legs="77" feet="19" corpse="34291" />
+	<look type="1217" head="1" body="1" legs="102" feet="78" addons="2" corpse="34291" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
