@@ -53,6 +53,33 @@ local function findPushPosition(creature, round)
 	end
 end
 
+--[[
+First value should be lockedDoor or closedDoor(if no lock), second closedDoor, third openDoor.
+Odd ID doors must be added to this table and their respective ones. IDs don't matter, only their order.
+]]
+local oddDoors = {
+	[1] = {12692, 12692, 12695}, [2] = {12701, 12701, 12703}, [3] = {33431, 33430, 33433}, [4] = {33429, 33428, 33432}
+}
+
+local function findOddDoor(itemId, vi)
+	local k = 1
+	local v = 1
+	local newId = 0
+	for k, _ in pairs(oddDoors) do
+		for v, _ in pairs(oddDoors[k]) do
+			if itemId == oddDoors[k][v] then
+				if vi == nil then
+					return true
+				else
+					newId = oddDoors[k][vi]
+					return newId
+				end
+			end
+		end
+	end
+	return false
+end
+
 local door = Action()
 
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -93,10 +120,21 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 		local transformTo = target.itemid + 2
+		if findOddDoor(target.itemid) then
+			transformTo = findOddDoor(target.itemid, 3)
+		end
 		if table.contains(openDoors, target.itemid) then
-			transformTo = target.itemid - 2
+			if findOddDoor(target.itemid) then
+				transformTo = findOddDoor(target.itemid, 1)
+			else
+				transformTo = target.itemid - 2
+			end
 		elseif table.contains(closedDoors, target.itemid) then
-			transformTo = target.itemid - 1
+			if findOddDoor(target.itemid) then
+				transformTo = findOddDoor(target.itemid, 1)
+			else
+				transformTo = target.itemid - 1
+			end
 		end
 		target:transform(transformTo)
 		return true
@@ -119,11 +157,18 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
 		end
-
-		item:transform(itemId - 1)
+		if findOddDoor(itemId) then
+			item:transform(findOddDoor(itemId, 2))
+		else
+			item:transform(itemId - 1)
+		end
 		return true
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
-		item:transform(itemId + 1)
+		if findOddDoor(itemId) then
+			item:transform(findOddDoor(itemId, 3))
+		else
+			item:transform(itemId + 1)
+		end
 		return true
 	end
 	return false
