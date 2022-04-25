@@ -28,8 +28,8 @@
 		</attack>
 	</attacks>
 	<defenses armor="82" defense="82">
-	    <defense name="speed" interval="2000" chance="8" speedchange="340" duration="5000">
-		    <attribute key="areaEffect" value="greenshimmer" />
+		<defense name="speed" interval="2000" chance="8" speedchange="340" duration="5000">
+			<attribute key="areaEffect" value="greenshimmer" />
 		</defense>
 	</defenses>
 	<elements>
