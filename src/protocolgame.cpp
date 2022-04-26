@@ -3594,12 +3594,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	// Player vocation info
 	if (creatureType == CREATURETYPE_PLAYER) {
-		const Player* otherCreature = creature->getPlayer();
-		if (otherCreature) {
-			msg.addByte(otherCreature->getVocation()->getClientId());
-		} else {
-			msg.addByte(0x00);
-		}
+		msg.addByte(otherPlayer ? otherPlayer->getVocation()->getClientId() : 0x00);
 	}
 
 	msg.addByte(creature->getSpeechBubble());
