@@ -38195,7 +38195,18 @@
 		<attribute key="shootType" value="royalstar" />
 		<attribute key="supply" value="true" />
 	</item>
-	<item id="28416" article="a" name="wand of darkness" />
+	<item id="28416" article="a" name="wand of darkness">
+		<attribute key="weight" value="3200" />
+		<attribute key="weaponType" value="wand" />
+		<attribute key="shootType" value="death" />
+		<attribute key="criticalhitamount" value="35" />
+		<attribute key="criticalhitchance" value="10" />
+		<attribute key="magiclevelpoints" value="2" />
+		<attribute key="range" value="4" />
+		<attribute key="duration" value="900" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="showduration" value="1" />
+	</item>
 	<item id="28417" name="strange colours" />
 	<item id="28418" article="a" name="stump" />
 	<item fromid="28419" toid="28422" name="remains of a barkless" />
