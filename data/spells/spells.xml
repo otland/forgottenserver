@@ -81,7 +81,7 @@
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
-	<instant group="attack" spellid="19" name="Great Fire Wave" words="exevo gran flam hur" level="38" mana="120" premium="1" direction="1" cooldown="4000" groupcooldown="2000" needlearn="0" script="attack/great_fire_wave.lua">
+	<instant group="attack" spellid="240" name="Great Fire Wave" words="exevo gran flam hur" level="38" mana="120" premium="1" direction="1" cooldown="4000" groupcooldown="2000" needlearn="0" script="attack/great_fire_wave.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Master Sorcerer" />
 	</instant>
@@ -252,7 +252,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="161" name="Nature's Embrace" words="exura gran sio" level="300" mana="400" premium="1" aggressive="0" blockwalls="1" needtarget="1" playernameparam="1" params="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/natures_embrace.lua">
+	<instant group="healing" spellid="242" name="Nature's Embrace" words="exura gran sio" level="300" mana="400" premium="1" aggressive="0" blockwalls="1" needtarget="1" playernameparam="1" params="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/natures_embrace.lua">
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
@@ -313,7 +313,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="3" name="Restoration" words="exura max vita" level="300" mana="260" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/restoration.lua">
+	<instant group="healing" spellid="241" name="Restoration" words="exura max vita" level="300" mana="260" aggressive="0" selftarget="1" cooldown="6000" groupcooldown="1000" needlearn="0" script="healing/restoration.lua">
 		<vocation name="Sorcerer" />
 		<vocation name="Druid" />
 		<vocation name="Master Sorcerer" />
@@ -323,7 +323,7 @@
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
-	<instant group="healing" spellid="123" name="Fair Wound Cleansing" words="exura med ico" level="300" mana="90" premium="1" selftarget="1" aggressive="0" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/fair_wound_cleansing.lua">
+	<instant group="healing" spellid="239" name="Fair Wound Cleansing" words="exura med ico" level="300" mana="90" premium="1" selftarget="1" aggressive="0" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/fair_wound_cleansing.lua">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" />
 	</instant>
