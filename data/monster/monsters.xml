@@ -46,7 +46,7 @@
 	<monster name="Berserker Chicken" file="monsters/berserker_chicken.xml" />
 	<monster name="Betrayed Wraith" file="monsters/betrayed_wraith.xml" />
 	<monster name="Big Boss Trolliver" file="monsters/big_boss_trolliver.xml" />
-	<monster name="Black Cobra" file="monsters/black_knight.xml" />
+	<monster name="Black Cobra" file="monsters/black_cobra.xml" />
 	<monster name="Black Knight" file="monsters/black_knight.xml" />
 	<monster name="Black Sheep" file="monsters/black_sheep.xml" />
 	<monster name="Black Sphinx Acolyte" file="monsters/black_sphinx_acolyte.xml" />
@@ -234,7 +234,7 @@
 	<monster name="Eye of the Seven" file="monsters/eye_of_the_seven.xml" />
 	<monster name="Fallen Mooh'tah Master Ghar" file="monsters/fallen_mooh'tah_master_ghar.xml" />
 	<monster name="Fatality" file="monsters/fatality.xml" />
-	<monster name="Feral Sphinx" file="monsters/feral_Sphinx.xml" />
+	<monster name="Feral Sphinx" file="monsters/feral_sphinx.xml" />
 	<monster name="Fernfang" file="monsters/fernfang.xml" />
 	<monster name="Ferumbras Mortal Shell" file="monsters/ferumbras_mortal_shell.xml" />
 	<monster name="Ferumbras" file="monsters/ferumbras.xml" />

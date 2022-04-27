@@ -52,7 +52,7 @@
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
 		<item id="34099" name="fafnar symbol" chance="8759" />
-		<item name="secret instruction" chance="7183" />
+		<item id="34089" name="secret instruction" chance="7183" />
 		<item id="33987" name="empty honey glass" chance="2927" />
 		<item id="2454" name="war axe" chance="2567" />
 		<item id="2188" name="wand of decay" chance="2499" />

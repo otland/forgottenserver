@@ -61,6 +61,6 @@
 		<item id="2158" name="blue gem" chance="1133" />
 		<item id="24850" name="opal" chance="1133" />
 		<item id="24828" name="ogre choppa" chance="971" />
-		<item id="7633" name="giant shimmering pearl (brown)" chance="809" />
+		<item id="7633" name="giant shimmering pearl" chance="809" />
 	</loot>
 </monster>
