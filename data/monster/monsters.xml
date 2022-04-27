@@ -88,9 +88,6 @@
 	<monster name="Clay Guardian" file="monsters/clay_guardian.xml" />
 	<monster name="Cliff Strider" file="monsters/cliff_strider.xml" />
 	<monster name="Cobra" file="monsters/cobra.xml" />
-	<monster name="Cobra Assassin" file="monsters/cobra_assassin.xml" />
-	<monster name="Cobra Scout" file="monsters/cobra_scout.xml" />
-	<monster name="Cobra Vizier" file="monsters/cobra_vizier.xml" />
 	<monster name="Cockroach" file="monsters/cockroach.xml" />
 	<monster name="Coldheart" file="monsters/coldheart.xml" />
 	<monster name="Colerian The Barbarian" file="monsters/colerian_the_barbarian.xml" />
