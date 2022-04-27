@@ -4,7 +4,7 @@
 	<channel id="3" name="World Chat" public="1" script="world_chat.lua" />
 	<channel id="4" name="English Chat" public="1" script="english_chat.lua" />
 	<channel id="5" name="Advertising" public="1" script="advertising.lua" />
-	<channel id="6" name="Advertising-Rookgaard" public="1" script="advertising-rook.lua" />
+	<channel id="6" name="Advertising-Rookgaard" public="1" script="advertising_rook.lua" />
 	<channel id="7" name="Help" public="1" script="help.lua" />
 	<channel id="8" name="Gamemaster" script="gamemaster.lua" />
 </channels>
