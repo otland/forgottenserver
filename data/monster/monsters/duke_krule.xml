@@ -16,7 +16,6 @@
 		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="4" />
-		<flag healthhidden="0" />
 		<flag canwalkonenergy="1" />
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
