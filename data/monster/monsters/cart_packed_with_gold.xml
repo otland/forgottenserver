@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Cart Packed With Gold" nameDescription="a cart packed with gold" experience="0" speed="0">
+<monster name="Cart Packed With Gold" nameDescription="a cart packed with gold" race="blood" experience="0" speed="0">
 	<health now="10000" max="10000" />
-	<look type="0" corpse="0" />
+	<look type="1175" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -23,22 +23,11 @@
 	</flags>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element firePercent="80" />
 	</elements>
 	<defenses armor="10" defense="10" />
 	<loot>
