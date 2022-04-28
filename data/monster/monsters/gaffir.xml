@@ -28,10 +28,10 @@
 		<attack name="earth" interval="2000" chance="10" length="5" spread="0" min="-400" max="-580">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		<attack name="fire" interval="3000" chance="14" distance="4" target="1" min="-500" max="-750">
+		<attack name="fire" interval="3000" chance="14" range="4" target="1" min="-500" max="-750">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
-		<attack name="earth" interval="2000" chance="16" distance="4" radius="4" target="1" min="-500" max="-620">
+		<attack name="earth" interval="2000" chance="16" range="4" radius="4" target="1" min="-500" max="-620">
 			<attribute key="shootEffect" value="earth" />
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>

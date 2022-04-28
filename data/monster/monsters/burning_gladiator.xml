@@ -22,8 +22,12 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-550" />
-		<attack name="firering" interval="2000" chance="10" min="-300" max="-500" />
-		<attack name="firex" interval="2000" chance="15" min="-300" max="-500" />
+		<attack name="fire" interval="2000" chance="10" ring="3" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" ring="2" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
 		<attack name="fire" interval="2000" chance="17" radius="2" min="-300" max="-500">
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>

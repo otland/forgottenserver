@@ -22,17 +22,17 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-580" />
-		<attack name="earth" interval="2000" chance="18" distance="4" radius="4" target="1" min="-500" max="-620">
+		<attack name="earth" interval="2000" chance="18" range="4" radius="4" target="1" min="-500" max="-620">
 			<attribute key="shootEffect" value="earth" />
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
-		<attack name="physical" interval="2000" chance="22" distance="4" target="1" min="-450" max="-700">
+		<attack name="physical" interval="2000" chance="22" range="4" target="1" min="-450" max="-700">
 			<attribute key="shootEffect" value="throwingknife" />
 		</attack>
 		<attack name="physical" interval="2000" chance="14" length="5" spread="0" min="-350" max="-550">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		<attack name="fire" interval="2000" chance="15" distance="4" target="1" radius="1" min="-400" max="-550">
+		<attack name="fire" interval="2000" chance="15" range="4" target="1" radius="1" min="-400" max="-550">
 			<attribute key="shootEffect" value="burstarrow" />
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

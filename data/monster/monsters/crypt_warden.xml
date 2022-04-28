@@ -22,8 +22,12 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-500" />
-		<attack name="warden x" interval="2000" chance="15" min="-250" max="-430" />
-		<attack name="warden ring" interval="2000" chance="8" min="-250" max="-380" />
+		<attack name="earth" interval="2000" chance="8" ring="3" target="0" min="-250" max="-380">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" ring="2" target="0" min="-250" max="-430">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
 		<attack name="earth" interval="2000" chance="12" radius="2" min="-200" max="-480">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>

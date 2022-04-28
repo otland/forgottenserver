@@ -22,7 +22,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-480" />
 		<attack name="explosion wave" interval="2000" chance="15" min="-280" max="-400" />
-		<attack name="earth" interval="2000" chance="12" radius="4" distance="4" target="1" min="-350" max="-520">
+		<attack name="earth" interval="2000" chance="12" radius="4" range="4" target="1" min="-350" max="-520">
 			<attribute key="areaEffect" value="greenbubble" />
 			<attribute key="shootEffect" value="smallearth" />
 		</attack>

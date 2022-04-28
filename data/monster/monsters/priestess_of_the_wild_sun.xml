@@ -22,8 +22,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" />
-		<attack name="priestess firering" interval="2000" chance="8" target="1" distance="3" min="-300" max="-500" />
-		<attack name="fire" interval="2000" chance="14" radius="2" target="1" distance="3" min="-350" max="-500">
+		<attack name="fire" interval="2000" chance="8" ring="2" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="14" radius="2" target="1" range="3" min="-350" max="-500">
 			<attribute key="shootEffect" value="fire" />
 			<attribute key="areaEffect" value="explosion" />
 		</attack>

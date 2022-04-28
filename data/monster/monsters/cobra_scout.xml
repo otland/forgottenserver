@@ -21,10 +21,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-500" />
-		<attack name="earth" interval="2000" chance="22" distance="4" target="1" min="-350" max="-450">
+		<attack name="earth" interval="2000" chance="22" range="4" target="1" min="-350" max="-450">
 			<attribute key="shootEffect" value="sniperarrow" />
 		</attack>
-		<attack name="earth" interval="2000" chance="16" radius="4" distance="4" target="1" min="-300" max="-420">
+		<attack name="earth" interval="2000" chance="16" radius="4" range="4" target="1" min="-300" max="-420">
 			<attribute key="areaEffect" value="greenbubble" />
 			<attribute key="shootEffect" value="poisonarrow" />
 		</attack>
