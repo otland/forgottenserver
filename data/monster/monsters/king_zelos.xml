@@ -54,15 +54,15 @@
 		<item id="26199" name="collar of green plasma" chance="11538" />
 		<item id="2158" name="blue gem" chance="11264" />
 		<item id="7884" name="terra mantle" chance="10714" />
-		<item name="ring of green plasma" chance="10440" />
-		<item name="collar of blue plasma" chance="10165" />
+		<item id="26187" name="ring of green plasma" chance="10440" />
+		<item id="26198" name="collar of blue plasma" chance="10165" />
 		<item id="26200" name="collar of red plasma" chance="9341" />
 		<item id="7899" name="magma coat" chance="9341" />
 		<item id="7898" name="lightning robe" chance="7967" />
 		<item id="1986" name="red tome" chance="7692" />
-		<item name="ring of blue plasma" chance="7143" />
+		<item id="26185" name="ring of blue plasma" chance="7143" />
 		<item id="34246" name="young lich worm" chance="7143" />
-		<item name="ring of red plasma" chance="6868" />
+		<item id="26189" name="ring of red plasma" chance="6868" />
 		<item id="7897" name="glacier robe" chance="6593" />
 		<item id="2153" name="violet gem" chance="6044" countmax="2" />
 		<item id="34244" name="ancient liche bone" chance="5495" />

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Count Vlarkorth" nameDescription="Count Vlarkorth" race="venom" experience="6300" speed="250">
-	<health now="1000" max="1000" />
+	<health now="15000" max="15000" />
 	<look type="1221" head="10" body="19" legs="19" feet="19" addons="1" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -21,12 +21,12 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-200" max="-600" />
+		<attack name="melee" interval="2000" min="0" max="-600" />
 		<attack name="manadrain" interval="2000" chance="50" length="7" spread="0" min="-400" max="-1000">
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 		<attack name="physical" interval="2000" chance="30" length="7" spread="0" min="-400" max="-1000">
-			<attribute key="areaEffect" value="yellowenergyspark" />
+			<attribute key="areaEffect" value="yellowchain" />
 		</attack>
 		<attack name="fire" interval="2000" chance="15" length="7" spread="0" min="-300" max="-500">
 			<attribute key="areaEffect" value="fire" />
@@ -69,12 +69,12 @@
 		<item id="5904" name="magic sulphur" chance="12381" />
 		<item id="26199" name="collar of green plasma" chance="11429" />
 		<item id="7891" name="magma boots" chance="10476" />
-		<item name="collar of blue plasma" chance="9524" />
+		<item id="26198" name="collar of blue plasma" chance="9524" />
 		<item id="34246" name="young lich worm" chance="9524" />
-		<item name="ring of blue plasma" chance="8571" />
-		<item name="ring of green plasma" chance="7619" />
+		<item id="26185" name="ring of blue plasma" chance="8571" />
+		<item id="26187" name="ring of green plasma" chance="7619" />
 		<item id="2153" name="violet gem" chance="6667" />
-		<item name="ring of red plasma" chance="5714" />
+		<item id="26189" name="ring of red plasma" chance="5714" />
 		<item id="34244" name="ancient liche bone" chance="4762" />
 		<item id="32716" name="giant emerald" chance="4762" />
 		<item id="34245" name="rotten heart" chance="4762" />

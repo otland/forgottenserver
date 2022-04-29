@@ -28,7 +28,7 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="energy" interval="2000" chance="30" range="3" target="1" min="-260" max="-420">
-			<attribute key="areaEffect" value="blueenergyspark" />
+			<attribute key="areaEffect" value="bluechain" />
 		</attack>
 	</attacks>
 	<defenses armor="78" defense="25">
@@ -69,12 +69,12 @@
 		<item id="7902" name="glacier mask" chance="14362" />
 		<item id="34246" name="young lich worm" chance="10106" />
 		<item id="2153" name="violet gem" chance="8511" />
-		<item name="ring of blue plasma" chance="7979" />
-		<item name="ring of red plasma" chance="7979" />
-		<item name="collar of blue plasma" chance="7447" />
+		<item id="26185" name="ring of blue plasma" chance="7979" />
+		<item id="26189" name="ring of red plasma" chance="7979" />
+		<item id="26198" name="collar of blue plasma" chance="7447" />
 		<item id="9971" name="gold ingot" chance="7447" />
 		<item id="26200" name="collar of red plasma" chance="6915" />
-		<item name="ring of green plasma" chance="6383" />
+		<item id="26187" name="ring of green plasma" chance="6383" />
 		<item id="34245" name="rotten heart" chance="5319" />
 		<item id="34244" name="ancient liche bone" chance="4255" />
 		<item id="32716" name="giant emerald" chance="3191" />

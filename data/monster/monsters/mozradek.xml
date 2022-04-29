@@ -44,7 +44,7 @@
 		<item id="2156" name="red gem" chance="85294" />
 		<item id="33980" name="golden mask" chance="8824" />
 		<item id="33979" name="sea horse figurine" chance="2941" />
-		<item name="enchanted theurgic amulet" chance="1471" />
+		<item id="33058" name="enchanted theurgic amulet" chance="1471" />
 		<item id="34273" name="winged boots" chance="1471" />
 	</loot>
 </monster>

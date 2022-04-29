@@ -33,7 +33,7 @@
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
 		<attack name="death" interval="2000" chance="12" range="5" target="1" length="5" spread="0" min="-300" max="-600">
-			<attribute key="areaEffect" value="whiteenergyspark" />
+			<attribute key="areaEffect" value="greychain" />
 		</attack>
 	</attacks>
 	<immunities>

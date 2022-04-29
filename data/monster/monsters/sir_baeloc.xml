@@ -59,20 +59,20 @@
 		<item id="2158" name="blue gem" chance="20000" />
 		<item id="2436" name="skull staff" chance="18667" />
 		<item id="7439" name="berserk potion" chance="17333" countmax="10" />
-		<item name="collar of blue plasma" chance="17333" />
+		<item id="26198" name="collar of blue plasma" chance="17333" />
 		<item id="9971" name="gold ingot" chance="17333" />
 		<item id="7440" name="mastermind potion" chance="17333" countmax="10" />
 		<item id="5887" name="piece of royal steel" chance="14667" />
 		<item id="2160" name="crystal coin" chance="13333" countmax="2" />
 		<item id="7900" name="magma monocle" chance="13333" />
-		<item name="ring of red plasma" chance="12000" />
+		<item id="26189" name="ring of red plasma" chance="12000" />
 		<item id="26199" name="collar of green plasma" chance="10667" />
 		<item id="34246" name="young lich worm" chance="10667" />
-		<item name="ring of blue plasma" chance="8000" />
+		<item id="26185" name="ring of blue plasma" chance="8000" />
 		<item id="2153" name="violet gem" chance="6667" />
 		<item id="34244" name="ancient liche bone" chance="5333" />
 		<item id="26200" name="collar of red plasma" chance="5333" />
-		<item name="ring of green plasma" chance="2667" />
+		<item id="26187" name="ring of green plasma" chance="2667" />
 		<item id="34245" name="rotten heart" chance="2667" />
 		<item id="34233" name="terra helmet" chance="2667" />
 		<item id="34234" name="bear skin" chance="1333" />

@@ -29,7 +29,7 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="energy" interval="2000" chance="0" target="1" radius="3" min="-400" max="-650">
-			<attribute key="areaEffect" value="greenenergyspark" />
+			<attribute key="areaEffect" value="greenchain" />
 		</attack>
 	</attacks>
 	<defenses armor="78" defense="25">
@@ -39,10 +39,8 @@
 	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<elements>
 		<element firePercent="-20" />

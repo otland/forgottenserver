@@ -22,10 +22,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="350" />
-		<attack name="holy" interval="2000" chance="13" radius="3" needtarget="0" min="-250" max="-450">
+		<attack name="holy" interval="2000" chance="13" radius="3" target="0" min="-250" max="-450">
 			<attribute key="areaEffect" value="holyarea" />
 		</attack>
-		<attack name="fire" interval="2000" chance="10" needtarget="0" length="3" spread="0" min="-200" max="-300">
+		<attack name="fire" interval="2000" chance="10" target="0" length="3" spread="0" min="-200" max="-300">
 			<attribute key="areaEffect" value="fire" />
 		</attack>
 	</attacks>

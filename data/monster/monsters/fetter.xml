@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fetter" nameDescription="a fetter" race="undead" experience="0" speed="0">
 	<health now="5500" max="5500" />
-	<look type="235" head="20" corpse="0" />
+	<look type="235" corpse="6348" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -31,7 +31,7 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="10" defense="10">
+	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="20" min="100" max="700">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>

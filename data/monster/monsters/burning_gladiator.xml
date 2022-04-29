@@ -54,7 +54,7 @@
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="4" />
 		<item id="34099" name="fafnar symbol" chance="10157" />
-		<item name="secret instruction" chance="7419" />
+		<item id="34089" name="secret instruction" chance="7419" />
 		<item id="2201" name="dragon necklace" chance="5951" />
 		<item id="2161" name="strange talisman" chance="4979" />
 		<item id="7889" name="lightning pendant" chance="4602" />

@@ -39,7 +39,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="93" defense="93">
-		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+		<defense name="speed" interval="2000" chance="15" speedchange="490" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>

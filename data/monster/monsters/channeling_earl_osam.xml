@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Channeling Earl Osam" nameDescription="Channeling Earl Osam" race="venom" experience="0" speed="78">
 	<health now="1000" max="1000" />
-	<look type="0" corpse="0" />
+	<look type="1223" head="95" body="38" legs="60" feet="76" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

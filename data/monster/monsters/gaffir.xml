@@ -40,7 +40,7 @@
 		</attack>
 	</attacks>
 	<summons maxSummons="1">
-		<summon name="Black Cobra" interval="2000" chance="10" max="1" />
+		<summon name="Black Cobra" interval="2000" chance="10" />
 	</summons>
 	<immunities>
 		<immunity paralyze="1" />
