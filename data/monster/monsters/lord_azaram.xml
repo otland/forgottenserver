@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lord Azaram" nameDescription="Lord Azaram" race="venom" experience="55000" speed="250">
 	<health now="1000" max="1000" />
-	<look type="1223" head="0" body="38" legs="94" feet="82" addons="3" corpse="0" />
+	<look type="1223" head="0" body="38" legs="94" feet="82" addons="3" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

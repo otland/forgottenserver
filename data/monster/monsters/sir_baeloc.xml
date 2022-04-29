@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sir Baeloc" nameDescription="Sir Baeloc" experience="55000" speed="250">
 	<health now="50000" max="50000" />
-	<look type="1222" head="19" addons="1" corpse="0" />
+	<look type="1222" head="19" addons="1" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

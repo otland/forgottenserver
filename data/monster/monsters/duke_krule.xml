@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Duke Krule" nameDescription="Duke Krule" race="venom" experience="55000" speed="250">
 	<health now="290000" max="290000" />
-	<look type="1221" head="19" addons="3" corpse="0" />
+	<look type="1221" head="19" addons="3" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

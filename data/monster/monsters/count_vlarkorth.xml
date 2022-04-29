@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Count Vlarkorth" nameDescription="Count Vlarkorth" race="venom" experience="6300" speed="250">
 	<health now="1000" max="1000" />
-	<look type="1221" head="10" body="19" legs="19" feet="19" addons="1" corpse="0" />
+	<look type="1221" head="10" body="19" legs="19" feet="19" addons="1" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

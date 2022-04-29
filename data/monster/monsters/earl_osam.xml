@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Earl Osam" nameDescription="Earl Osam" race="venom" experience="55000" speed="250">
 	<health now="50000" max="50000" />
-	<look type="1223" head="95" body="38" legs="60" feet="76" corpse="0" />
+	<look type="1223" head="95" body="38" legs="60" feet="76" corpse="34255" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
