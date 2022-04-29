@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Sir Nictros" nameDescription="" experience="55000" speed="0">
-	<health now="1000" max="1000" />
-	<look type="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sir Nictros" nameDescription="Sir Nictros" race="venom" experience="55000" speed="250">
+	<health now="50000" max="50000" />
+	<look type="1222" head="19" addons="3" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -20,24 +20,25 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<attacks>
+		<attack name="manadrain" interval="1800" chance="40" radius="5" min="-300" max="-500">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="physical" interval="1800" chance="89" length="7" spread="0" min="-400" max="-1000">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="78" defense="25">
+		<defense name="healing" interval="2000" chance="35" min="350" max="550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element firePercent="20" />
 	</elements>
-	<defenses armor="10" defense="10" />
 </monster>

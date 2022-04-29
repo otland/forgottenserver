@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Scarlett Etzel" nameDescription="" experience="550" speed="0">
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Scarlett Etzel" nameDescription="Scarlett Etzel" race="blood" experience="20000" speed="175">
 	<health now="30000" max="30000" />
-	<look type="0" corpse="34109" />
+	<look type="1201" corpse="34109" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -20,25 +20,21 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-600" />
+		<attack name="Sudden Death" interval="2000" chance="16" distance="7" target="1" min="-400" max="-600" />
+		<attack name="holy" interval="2000" chance="13" length="7" spread="0" min="-450" max="-640">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" radius="5" min="-480" max="-630">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+	</attacks>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
-	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
-	</elements>
 	<defenses armor="10" defense="10" />
 	<loot>
 		<item id="2155" name="green gem" chance="100000" countmax="2" />

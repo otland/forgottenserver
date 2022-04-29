@@ -424,7 +424,6 @@
 	<monster name="Magic Pillar" file="monsters/magic_pillar.xml" />
 	<monster name="Magicthrower" file="monsters/magicthrower.xml" />
 	<monster name="Magma Crawler" file="monsters/magma_crawler.xml" />
-	<monster name="Magnor Mournbringer" file="monsters/magnor_mournbringer.xml" />
 	<monster name="Mahrdis" file="monsters/mahrdis.xml" />
 	<monster name="Mammoth" file="monsters/mammoth.xml" />
 	<monster name="Man In The Cave" file="monsters/man_in_the_cave.xml" />
@@ -477,7 +476,6 @@
 	<monster name="Mutated Human" file="monsters/mutated_human.xml" />
 	<monster name="Mutated Rat" file="monsters/mutated_rat.xml" />
 	<monster name="Mutated Tiger" file="monsters/mutated_tiger.xml" />
-	<monster name="Nargol The Impaler" file="monsters/nargol_the_impaler.xml" />
 	<monster name="Necromancer Servant" file="monsters/necromancer_servant.xml" />
 	<monster name="Necromancer" file="monsters/necromancer.xml" />
 	<monster name="Necropharus" file="monsters/necropharus.xml" />
@@ -560,11 +558,9 @@
 	<monster name="Rahemos" file="monsters/rahemos.xml" />
 	<monster name="Rat" file="monsters/rat.xml" />
 	<monster name="Red Butterfly" file="monsters/red_butterfly.xml" />
-	<monster name="Regenerating Mass" file="monsters/regenerating_mass.xml" />
 	<monster name="Renegade Knight" file="monsters/renegade_knight.xml" />
 	<monster name="Renegade Orc" file="monsters/renegade_orc.xml" />
 	<monster name="Retching Horror" file="monsters/retching_horror.xml" />
-	<monster name="Rewar The Bloody" file="monsters/rewar_the_bloody.xml" />
 	<monster name="Rift Brood" file="monsters/rift_brood.xml" />
 	<monster name="Rift Lord" file="monsters/rift_lord.xml" />
 	<monster name="Rift Phantom" file="monsters/rift_phantom.xml" />
@@ -701,7 +697,6 @@
 	<monster name="The Pale Count" file="monsters/the_pale_count.xml" />
 	<monster name="The Pit Lord" file="monsters/the_pit_lord.xml" />
 	<monster name="The Plasmother" file="monsters/the_plasmother.xml" />
-	<monster name="The Red Knight" file="monsters/the_red_knight.xml" />
 	<monster name="The Ruthless Herald" file="monsters/the_ruthless_herald.xml" />
 	<monster name="The Snapper" file="monsters/the_snapper.xml" />
 	<monster name="The Weakened Count" file="monsters/the_weakened_count.xml" />
