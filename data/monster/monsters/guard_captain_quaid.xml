@@ -43,6 +43,7 @@
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -52,7 +53,6 @@
 		<element physicalPercent="85" />
 		<element holyPercent="-20" />
 	</elements>
-	<defenses armor="10" defense="10" />
 	<loot>
 		<item id="2146" name="small sapphire" chance="100000" />
 	</loot>

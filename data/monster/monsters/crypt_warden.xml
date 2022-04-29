@@ -35,6 +35,7 @@
 			<attribute key="areaEffect" value="holyarea" />
 		</attack>
 	</attacks>
+	<defenses armor="84" defense="84" />
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />
@@ -44,7 +45,6 @@
 		<element deathPercent="-35" />
 		<element holyPercent="75" />
 	</elements>
-	<defenses armor="84" defense="84" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="90096" countmax="6" />
 		<item id="18419" name="cyan crystal fragment" chance="20702" />

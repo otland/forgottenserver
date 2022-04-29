@@ -35,6 +35,7 @@
 			<attribute key="areaEffect" value="energy" />
 		</attack>
 	</attacks>
+	<defenses armor="89" defense="89" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -45,7 +46,6 @@
 		<element energyPercent="80" />
 		<element icePercent="-20" />
 	</elements>
-	<defenses armor="89" defense="89" />
 	<voices interval="2000" chance="5">
 		<voice sentence="Burn, infidel!" />
 		<voice sentence="Only the Wild Sun shall shine down on this world!" />

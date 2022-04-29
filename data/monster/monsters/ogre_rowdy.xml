@@ -33,6 +33,7 @@
 			<attribute key="shootEffect" value="flammingarrow" />
 		</attack>
 	</attacks>
+	<defenses armor="98" defense="98" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -42,7 +43,6 @@
 		<element firePercent="70" />
 		<element icePercent="-30" />
 	</elements>
-	<defenses armor="98" defense="98" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" />
 		<item id="7840" name="flaming arrow" chance="24595" countmax="9" />

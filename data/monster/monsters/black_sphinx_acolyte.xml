@@ -30,6 +30,7 @@
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 	</attacks>
+	<defenses armor="82" defense="82" />
 	<immunities>
 		<immunity death="1" />
 		<immunity paralyze="1" />
@@ -38,7 +39,6 @@
 	<elements>
 		<element earthPercent="90" />
 	</elements>
-	<defenses armor="82" defense="82" />
 	<voices interval="2000" chance="5">
 		<voice sentence="Darkness is the mother of all knowledge!" />
 		<voice sentence="Get thee gone, unworthy!" />

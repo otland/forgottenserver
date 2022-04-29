@@ -29,6 +29,7 @@
 			<attribute key="areaEffect" value="fire" />
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -37,5 +38,4 @@
 	<elements>
 		<element firePercent="100" />
 	</elements>
-	<defenses armor="10" defense="10" />
 </monster>

@@ -36,6 +36,7 @@
 			<attribute key="areaEffect" value="greychain" />
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -46,7 +47,6 @@
 		<element deathPercent="50" />
 		<element firePercent="30" />
 	</elements>
-	<defenses armor="10" defense="10" />
 	<loot>
 		<item id="2156" name="red gem" chance="85156" />
 		<item id="33979" name="sea horse figurine" chance="10938" />

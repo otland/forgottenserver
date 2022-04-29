@@ -36,6 +36,7 @@
 			<attribute key="areaEffect" value="energy" />
 		</attack>
 	</attacks>
+	<defenses armor="82" defense="82" />
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />
@@ -45,7 +46,6 @@
 		<element firePercent="80" />
 		<element icePercent="-25" />
 	</elements>
-	<defenses armor="82" defense="82" />
 	<voices interval="2000" chance="5">
 		<voice sentence="Fafnar will burn you!" />
 		<voice sentence="Fear the Wild Sun!" />

@@ -30,6 +30,7 @@
 			<attribute key="areaEffect" value="poff" />
 		</attack>
 	</attacks>
+	<defenses armor="102" defense="102" />
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />
@@ -38,7 +39,6 @@
 		<element icePercent="-20" />
 		<element physicalPercent="50" />
 	</elements>
-	<defenses armor="102" defense="102" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" />
 		<item id="24845" name="ogre nose ring" chance="17820" />
