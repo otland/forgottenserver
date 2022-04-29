@@ -22,7 +22,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-600" />
-		<attack name="death" interval="2000" chance="16" distance="7" target="1" min="-400" max="-600" />
+		<attack name="death" interval="2000" chance="16" distance="7" target="1" min="-400" max="-600">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
 		<attack name="holy" interval="2000" chance="13" length="7" spread="0" min="-450" max="-640">
 			<attribute key="areaEffect" value="holyarea" />
 		</attack>
