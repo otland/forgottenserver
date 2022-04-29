@@ -38,14 +38,14 @@
 		</defense>
 		<defense name="healing" interval="2000" chance="15" min="15" max="25" />
 	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element physicalPercent="35" />
 		<element firePercent="-10" />
 		<element holyPercent="-25" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 </monster>

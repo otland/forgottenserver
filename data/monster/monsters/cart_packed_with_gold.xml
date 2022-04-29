@@ -20,15 +20,15 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element firePercent="80" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="80" />
-	</elements>
-	<defenses armor="10" defense="10" />
 	<loot>
 		<item id="2145" name="small diamond" chance="100000" />
 	</loot>

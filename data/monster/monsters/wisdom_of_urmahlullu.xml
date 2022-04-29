@@ -37,14 +37,14 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="40" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element energyPercent="40" />
-	</elements>
 	<voices interval="2000" chance="5">
 		<voice sentence="How can you be that dumb?" />
 	</voices>

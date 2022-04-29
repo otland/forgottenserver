@@ -34,15 +34,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="98" defense="98" />
+	<elements>
+		<element firePercent="70" />
+		<element icePercent="-30" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="70" />
-		<element icePercent="-30" />
-	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" />
 		<item id="7840" name="flaming arrow" chance="24595" countmax="9" />

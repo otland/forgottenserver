@@ -36,16 +36,16 @@
 		</attack>
 	</attacks>
 	<defenses armor="89" defense="89" />
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element physicalPercent="80" />
 		<element firePercent="70" />
 		<element energyPercent="80" />
 		<element icePercent="-20" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<voices interval="2000" chance="5">
 		<voice sentence="Burn, infidel!" />
 		<voice sentence="Only the Wild Sun shall shine down on this world!" />

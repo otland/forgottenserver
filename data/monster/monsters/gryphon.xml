@@ -29,10 +29,10 @@
 			<attribute key="areaEffect" value="fire" />
 		</attack>
 	</attacks>
+	<defenses armor="76" defense="76" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="76" defense="76" />
 </monster>

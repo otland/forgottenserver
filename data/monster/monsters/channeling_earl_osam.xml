@@ -20,17 +20,17 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="-5" />
+		<element firePercent="-10" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 		<immunity earth="1" />
 	</immunities>
-	<elements>
-		<element energyPercent="-5" />
-		<element firePercent="-10" />
-	</elements>
-	<defenses armor="10" defense="10" />
 	<voices interval="2000" chance="5">
 		<voice sentence="NEW POWER SHALL BE MINE!" />
 	</voices>

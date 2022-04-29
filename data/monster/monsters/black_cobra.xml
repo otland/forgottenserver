@@ -26,10 +26,10 @@
 			<attribute key="shooteffect" value="poison" />
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10" />
 	<immunities>
 		<immunity earth="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<defenses armor="10" defense="10" />
 </monster>

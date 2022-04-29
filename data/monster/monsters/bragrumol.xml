@@ -37,16 +37,16 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element icePercent="-10" />
 		<element deathPercent="50" />
 		<element firePercent="30" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 	<loot>
 		<item id="2156" name="red gem" chance="85156" />
 		<item id="33979" name="sea horse figurine" chance="10938" />

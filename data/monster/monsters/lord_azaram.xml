@@ -34,17 +34,17 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<summons maxSummons="3">
-		<summon name="Condensed Sins" interval="2000" chance="50" />
-	</summons>
+	<elements>
+		<element firePercent="20" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="20" />
-	</elements>
+	<summons maxSummons="3">
+		<summon name="Condensed Sins" interval="2000" chance="50" />
+	</summons>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
 		<item id="25172" name="silver token" chance="100000" countmax="2" />
