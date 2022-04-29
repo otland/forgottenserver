@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Sun-Marked Goanna" nameDescription="a sun-marked goanna" experience="7600" speed="190">
 	<health now="7800" max="7800" />
-	<look type="1195" corpse="0" />
+	<look type="1195" corpse="34061" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
