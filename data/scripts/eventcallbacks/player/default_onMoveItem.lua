@@ -14,7 +14,7 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 		return RETURNVALUE_NOERROR
 	end
 
-	if item:getTopParent() == self and bit.band(toPosition.y, 0x40) == 0 then
+	if bit.band(toPosition.y, 0x40) == 0 then
 		local itemType, moveItem = ItemType(item:getId())
 		if bit.band(itemType:getSlotPosition(), SLOTP_TWO_HAND) ~= 0 and toPosition.y == CONST_SLOT_LEFT then
 			moveItem = self:getSlotItem(CONST_SLOT_RIGHT)
