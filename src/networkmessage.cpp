@@ -92,14 +92,7 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(fluidMap[count & 7]);
 	} else if (it.isContainer()) {
 		addByte(0x00); // assigned loot container icon
-		// quiver ammo count
-		const Container* container = item->getContainer();
-		if (container && it.weaponType == WEAPON_QUIVER) {
-			addByte(0x01);
-			add<uint32_t>(container->getAmmoCount());
-		} else {
-			addByte(0x00);
-		}
+		addByte(0x00); // quiver ammo count
 	} else if (it.classification > 0) {
 		addByte(0x00); // item tier (0-10)
 	}
@@ -128,7 +121,14 @@ void NetworkMessage::addItem(const Item* item)
 
 	if (it.isContainer()) {
 		addByte(0x00); // assigned loot container icon
-		addByte(0x00); // quiver ammo count
+		// quiver ammo count
+		const Container* container = item->getContainer();
+		if (container && it.weaponType == WEAPON_QUIVER) {
+			addByte(0x01);
+			add<uint32_t>(container->getAmmoCount());
+		} else {
+			addByte(0x00);
+		}
 	}
 
 	// display outfit on the podium
