@@ -38,15 +38,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
+	<elements>
+		<element deathPercent="50" />
+		<element icePercent="-10" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element deathPercent="50" />
-		<element icePercent="-10" />
-	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
 		<item id="18418" name="blue crystal splinter" chance="16667" />

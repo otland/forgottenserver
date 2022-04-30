@@ -40,17 +40,17 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element firePercent="80" />
 		<element deathPercent="-15" />
 		<element holyPercent="80" />
 		<element icePercent="-15" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 	<voices interval="2000" chance="5">
 		<voice sentence="I am not as kind as my sisters!" />
 	</voices>

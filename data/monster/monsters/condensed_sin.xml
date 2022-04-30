@@ -28,14 +28,14 @@
 		<attack name="death blob curse" interval="2000" range="5" chance="5" />
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element firePercent="-10" />
 		<element icePercent="20" />
 		<element energyPercent="-10" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 </monster>

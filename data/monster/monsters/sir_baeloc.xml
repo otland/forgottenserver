@@ -36,14 +36,14 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element firePercent="20" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="20" />
-	</elements>
 	<loot>
 		<item id="25172" name="silver token" chance="100000" countmax="2" />
 		<item id="2152" name="platinum coin" chance="98667" countmax="5" />

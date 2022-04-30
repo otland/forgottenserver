@@ -31,11 +31,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element earthPercent="-10" />
 		<element holyPercent="10" />
@@ -43,4 +38,9 @@
 		<element energyPercent="20" />
 		<element deathPercent="-5" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 </monster>

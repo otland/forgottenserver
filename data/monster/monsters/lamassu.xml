@@ -31,15 +31,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="82" defense="82" />
-	<immunities>
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element earthPercent="80" />
 		<element deathPercent="-30" />
 		<element holyPercent="80" />
 	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" />
 		<item id="34098" name="lamassu horn" chance="13744" />

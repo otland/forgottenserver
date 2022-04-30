@@ -37,17 +37,17 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<summons maxSummons="3">
-		<summon name="Soul Scourge" interval="2000" chance="20" />
-	</summons>
+	<elements>
+		<element firePercent="20" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="20" />
-	</elements>
+	<summons maxSummons="3">
+		<summon name="Soul Scourge" interval="2000" chance="20" />
+	</summons>
 	<loot>
 		<item id="2158" name="blue gem" chance="100000" countmax="2" />
 		<item id="7443" name="bullseye potion" chance="100000" countmax="11" />

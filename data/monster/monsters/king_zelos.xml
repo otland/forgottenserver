@@ -22,16 +22,16 @@
 	</flags>
 	<attack name="melee" interval="2000" min="0" max="-1000" />
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element physicalPercent="10" />
 		<element energyPercent="3" />
 		<element firePercent="5" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 	<voices interval="2000" chance="5">
 		<voice sentence="Mine is the power of death! You can't defeat me!" />
 		<voice sentence="I will rule again and my realm of death will span the world!" />

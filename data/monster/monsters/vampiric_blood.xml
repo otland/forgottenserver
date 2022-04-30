@@ -30,12 +30,12 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
+	<elements>
+		<element firePercent="100" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="100" />
-	</elements>
 </monster>

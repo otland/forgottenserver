@@ -40,15 +40,15 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element physicalPercent="90" />
 		<element icePercent="1" />
 		<element firePercent="-8" />
 		<element energyPercent="-8" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 </monster>

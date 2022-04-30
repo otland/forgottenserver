@@ -25,11 +25,6 @@
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-200" />
 	</attacks>
 	<defenses armor="10" defense="10" />
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
 	<elements>
 		<element firePercent="95" />
 		<element energyPercent="80" />
@@ -37,4 +32,9 @@
 		<element deathPercent="20" />
 		<element holyPercent="-10" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
 </monster>

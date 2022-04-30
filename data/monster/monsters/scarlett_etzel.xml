@@ -33,12 +33,12 @@
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
 	</attacks>
+	<defenses armor="10" defense="10" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="10" defense="10" />
 	<loot>
 		<item id="2155" name="green gem" chance="100000" countmax="2" />
 		<item id="26191" name="energy bar" chance="95652" />

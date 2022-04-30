@@ -34,15 +34,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="78" defense="78" />
+	<elements>
+		<element firePercent="80" />
+		<element icePercent="-20" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element firePercent="80" />
-		<element icePercent="-20" />
-	</elements>
 	<voices interval="2000" chance="5">
 		<voice sentence="I'm spotting my next meal" />
 	</voices>

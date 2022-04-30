@@ -39,15 +39,15 @@
 			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
 	</attacks>
-	<summons maxSummons="1">
-		<summon name="Black Cobra" interval="2000" chance="10" />
-	</summons>
+	<defenses armor="83" defense="83" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="83" defense="83" />
+	<summons maxSummons="1">
+		<summon name="Black Cobra" interval="2000" chance="10" />
+	</summons>
 	<loot>
 		<item id="9970" name="small topaz" chance="20163" />
 		<item id="2146" name="small sapphire" chance="19619" />

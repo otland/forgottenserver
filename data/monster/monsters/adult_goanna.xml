@@ -36,14 +36,14 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-	</immunities>
 	<elements>
 		<element earthPercent="75" />
 		<element energyPercent="-10" />
 	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
 		<item id="18437" name="envenomed arrow" chance="55359" countmax="8" />

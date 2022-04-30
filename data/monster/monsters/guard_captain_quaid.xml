@@ -44,15 +44,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="10" />
+	<elements>
+		<element physicalPercent="85" />
+		<element holyPercent="-20" />
+	</elements>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<elements>
-		<element physicalPercent="85" />
-		<element holyPercent="-20" />
-	</elements>
 	<loot>
 		<item id="2146" name="small sapphire" chance="100000" />
 	</loot>

@@ -31,14 +31,14 @@
 		</attack>
 	</attacks>
 	<defenses armor="82" defense="82" />
+	<elements>
+		<element earthPercent="90" />
+	</elements>
 	<immunities>
 		<immunity death="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element earthPercent="90" />
-	</elements>
 	<voices interval="2000" chance="5">
 		<voice sentence="Darkness is the mother of all knowledge!" />
 		<voice sentence="Get thee gone, unworthy!" />
