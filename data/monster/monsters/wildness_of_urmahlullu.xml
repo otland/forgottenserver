@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Wildness Of Urmahlullu" nameDescription="Wildness Of Urmahlullu" race="blood" experience="0" speed="190">
 	<health now="90000" max="90000" />
-	<look type="570" head="57" body="75" legs="38" feet="86" corpse="0" />
+	<look type="570" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

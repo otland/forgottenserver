@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Urmahlullu The Weakened" nameDescription="Urmahlullu The Weakened" race="blood" experience="85000" speed="190">
 	<health now="130000" max="130000" />
-	<look type="1197" head="57" body="75" legs="38" feet="86" corpse="34069" />
+	<look type="1197" corpse="34069" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
