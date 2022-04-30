@@ -1270,8 +1270,6 @@
 	<movevent event="DeEquip" itemid="23551" slot="hand" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="23590" slot="hand" level="70" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="23590" slot="hand" function="onDeEquipItem" />
-	<movevent event="Equip" itemid="28416" slot="hand" level="41" function="onEquipItem" />
-	<movevent event="DeEquip" itemid="28416" slot="hand" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="30105" level="200" slot="hand" function="onEquipItem">
 		<vocation name="Knight" />
 		<vocation name="Elite Knight" showInDescription="0" />

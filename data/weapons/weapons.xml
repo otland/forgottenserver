@@ -93,9 +93,6 @@
 	<wand id="25422" level="100" mana="19" min="80" max="110" type="energy"> <!-- Ferumbras' Staff (Enchanted) -->
 		<vocation name="Sorcerer" />
 	</wand>
-	<wand id="28416" level="41" mana="15" min="75" max="95" type="death"> <!-- Wand of Darkness -->
-		<vocation name="Sorcerer" />
-	</wand>
 	<wand id="30113" level="200" mana="18" min="80" max="110" type="energy"> <!-- Wand of Destruction -->
 		<vocation name="Sorcerer" />
 	</wand>
