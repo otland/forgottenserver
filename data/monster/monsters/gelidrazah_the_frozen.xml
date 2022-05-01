@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Gelidrazah The Frozen" nameDescription="" experience="9000" speed="0" manacost="0">
+	<health now="10000" max="10000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-380" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="180" max="240" />
+	</defenses>
+	<loot>
+		<item id="27593" name="dragon blood" chance="100000" />
+		<item id="27594" name="dragon tongue" chance="100000" />
+		<item id="27595" name="scale of gelidrazah" chance="100000" />
+		<item id="2148" name="gold coin" chance="87243" countmax="138" />
+		<item id="2672" name="dragon ham" chance="81481" />
+		<item id="2152" name="platinum coin" chance="66667" countmax="3" />
+		<item id="7290" name="shard" chance="30453" />
+		<item id="7888" name="glacier amulet" chance="26337" />
+		<item id="2146" name="small sapphire" chance="11523" />
+		<item id="7902" name="glacier mask" chance="10700" />
+		<item id="21696" name="icicle bow" chance="9465" />
+		<item id="21697" name="runic ice shield" chance="6173" />
+		<item id="2167" name="energy ring" chance="5761" />
+		<item id="7441" name="ice cube" chance="5350" />
+		<item id="18412" name="glacial rod" chance="3704" />
+		<item id="2033" name="golden mug" chance="3292" />
+		<item id="8887" name="frozen plate" chance="1646" />
+		<item id="7409" name="northern star" chance="823" />
+		<item id="2177" name="life crystal" chance="412" />
+	</loot>
+</monster>

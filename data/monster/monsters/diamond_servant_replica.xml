@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" experience="700" speed="172" manacost="0">
+	<health now="2000" max="2000" />
+	<look type="397" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<loot>
+		<item id="2148" name="gold coin" chance="93197" countmax="179" />
+		<item id="5944" name="soul orb" chance="45574" />
+		<item id="2177" name="life crystal" chance="9590" />
+		<item id="7589" name="strong mana potion" chance="6270" />
+		<item id="7588" name="strong health potion" chance="6066" />
+		<item id="9690" name="gear wheel" chance="5697" />
+		<item id="10572" name="gear crystal" chance="5205" />
+		<item name="crystal pedestal" chance="4303" />
+		<item id="2164" name="might ring" chance="984" />
+		<item id="7889" name="lightning pendant" chance="820" />
+		<item id="13758" name="slime mould" chance="574" />
+		<item id="2154" name="yellow gem" chance="574" />
+		<item id="7440" name="mastermind potion" chance="451" />
+		<item id="2189" name="wand of cosmic energy" chance="369" />
+		<item id="10221" name="shockwave amulet" chance="123" />
+		<item id="7428" name="bonebreaker" chance="82" />
+		<item id="8878" name="crystalline armor" chance="41" />
+	</loot>
+</monster>
