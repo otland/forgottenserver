@@ -75,7 +75,7 @@ ec.onLookInMarket = function(self, itemType)
 			local def = itemType:getDefense()
 			if weaponType == WEAPON_DISTANCE then
 				-- throwables
-				local ammoType = self:getAmmoType()
+				local ammoType = itemType:getAmmoType()
 				if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
 					response:addString(def)
 				else
