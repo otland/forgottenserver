@@ -75,6 +75,7 @@ ec.onLookInMarket = function(self, itemType)
 			local def = itemType:getDefense()
 			if weaponType == WEAPON_DISTANCE then
 				-- throwables
+				local ammoType = self:getAmmoType()
 				if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
 					response:addString(def)
 				else
@@ -185,12 +186,12 @@ ec.onLookInMarket = function(self, itemType)
 	do
 		-- atk speed
 		local atkSpeed = itemType:getAttackSpeed()
+		local skillBoosts = {}
 		if atkSpeed ~= 0 then
 			skillBoosts[#skillBoosts + 1] = string.format("attack speed %0.2f/turn", 2000 / atkSpeed)
 		end
 
 		-- skill boost
-		local skillBoosts = {}
 		if abilities.manaGain > 0 or abilities.healthGain > 0 or abilities.regeneration then
 			skillBoosts[#skillBoosts + 1] = "faster regeneration"
 		end
