@@ -33,4 +33,5 @@ PlayerStorageKeys = {
 }
 
 GlobalStorageKeys = {
+	cobraBastionFlask = 30000,
 }
