@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Lady Tenebris" nameDescription="" experience="50000" speed="0" >
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lady Tenebris" nameDescription="Lady Tenebris" race="blood" experience="50000" speed="370">
+	<health now="150000" max="150000" />
+	<look type="433" head="57" body="95" legs="38" feet="94" addons="2" corpse="6560" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,26 +22,37 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-1800" />
+		<attack name="death" interval="06000" chance="13" length="8" spread="0" min="-1200" max="-1500">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="13" radius="4" target="1" min="-400" max="-600">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="tenebris summon" interval="2000" chance="14" />
+		<attack name="tenebris ultimate" interval="2000" chance="30" />
 	</attacks>
-	<defenses armor="10" defense="5" />
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="3000" chance="25" min="600" max="2700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element firePercent="50" />
+		<element earthPercent="-10" />
+		<element energyPercent="50" />
+		<element deathPercent="80" />
+		<element physicalPercent="50" />
+		<element holyPercent="80" />
+		<element icePercent="50" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="May the embrace of darkness kill you!" yell="false" />

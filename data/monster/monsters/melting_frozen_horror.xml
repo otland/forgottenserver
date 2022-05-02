@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Melting Frozen Horror" nameDescription="a melting frozen horror" experience="0" speed="0" >
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Melting Frozen Horror" nameDescription="a melting frozen horror" race="undead" experience="0" speed="240">
+	<health now="70000" max="70000" />
+	<look type="261" corpse="7282" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,26 +22,28 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="hirintror freeze" interval="2000" chance="15" />
+		<attack name="ice" interval="2000" chance="15" range="7" target="1" radius="3" min="-75" max="-150">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="ice golem paralyze" interval="2000" chance="11" />
+		<attack name="hirintror skill reducer" interval="2000" chance="10" />
 	</attacks>
-	<defenses armor="10" defense="5" />
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" radius="7" min="0" max="0">
+			<attribute key="areaEffect" value="yellowspark" />
+		</defense>
+	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element deathPercent="-50" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
-		<immunity invisible="1" />
+		<immunity ice="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="Chrrrrrk! Chrrrk!" yell="false" />

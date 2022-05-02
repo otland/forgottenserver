@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Kalyassa" nameDescription="" experience="9000" speed="0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kalyassa" nameDescription="kalyassa" race="blood" experience="9000" speed="350">
 	<health now="10000" max="10000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="947" head="37" body="113" legs="38" feet="95" addons="3" corpse="5984" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,10 +22,28 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-500" />
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" radius="5" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="4" min="-310" max="-495">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="0" min="-710" max="-895">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="7" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
 	</attacks>
 	<defenses armor="10" defense="5">
-		<defense name="healing" interval="2000" chance="20" min="600" max="700" />
+		<defense name="healing" interval="2000" chance="20" min="600" max="700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
 	</defenses>
+	<summons maxSummons="2">
+		<summon name="Dragon Lord" interval="2000" chance="20" max="2" />
+	</summons>
 	<elements>
 		<element physicalPercent="0" />
 		<element energyPercent="0" />

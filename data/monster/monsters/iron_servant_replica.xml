@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Iron Servant Replica" nameDescription="an iron servant replica" experience="210" speed="190" >
+<monster name="Iron Servant Replica" nameDescription="an iron servant replica" race="energy" experience="210" speed="190">
 	<health now="1000" max="1000" />
-	<look type="395" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="395" corpse="13483" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,26 +22,27 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-154" />
+		<attack name="physical" interval="2000" chance="12" range="7" min="0" max="-60">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="14" range="7" duration="2000">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
 	</attacks>
 	<defenses armor="17" defense="17" />
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element earthPercent="-5" />
+		<element holyPercent="5" />
+		<element firePercent="10" />
+		<element energyPercent="5" />
+		<element deathPercent="-5" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<loot>
 		<item id="2148" name="gold coin" chance="82462" countmax="55" />

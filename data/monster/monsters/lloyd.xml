@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Lloyd" nameDescription="" experience="50000" speed="0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lloyd" nameDescription="Lloyd" race="energy" experience="50000" speed="400">
 	<health now="64000" max="64000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="940" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,26 +22,26 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-1200" />
+		<attack name="energy" interval="2000" chance="12" length="6" spread="0" min="-130" max="-460">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="lloyd wave" interval="2000" chance="12" min="-430" max="-560" />
+		<attack name="lloyd wave2" interval="2000" chance="12" min="-230" max="-460" />
+		<attack name="lloyd wave3" interval="2000" chance="12" min="-430" max="-660" />
 	</attacks>
-	<defenses armor="10" defense="5" />
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="15" min="180" max="250" />
+	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element deathPercent="50" />
+		<element holyPercent="50" />
 	</elements>
 	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<loot>
 		<item id="2148" name="gold coin" chance="100000" countmax="100" />
