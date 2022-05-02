@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="The Time Guardian" nameDescription="" experience="50000" speed="0" >
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Time Guardian" nameDescription="The Time Guardian" race="undead" experience="50000" speed="340">
+	<health now="150000" max="150000" />
+	<look type="945" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,26 +22,40 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-744" />
+		<attack name="death" interval="2000" chance="15" range="7" radius="4" target="1" min="-600" max="-780">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" length="9" spread="0" min="-600" max="-780">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" length="9" spread="3" min="-600" max="-780">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="energycondition" interval="2000" chance="20" radius="7" min="-2000" max="-2000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="20" length="9" spread="0" min="-2000" max="-2000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
 	</attacks>
-	<defenses armor="10" defense="5" />
+	<defenses armor="70" defense="70">
+		<defense name="time guardian" interval="2000" chance="10" />
+		<defense name="time guardiann" interval="2000" chance="10" />
+	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element earthPercent="70" />
+		<element icePercent="70" />
+		<element energyPercent="70" />
+		<element firePercent="70" />
+		<element holyPercent="70" />
+		<element deathPercent="70" />
+		<element physicalPercent="70" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="This place is sacred!" yell="false" />
