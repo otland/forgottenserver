@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Soul of Dragonking Zyrtarch" nameDescription="Soul of Dragonking Zyrtarch" race="fire" experience="70700" speed="500">
+<monster name="Soul Of Dragonking Zyrtarch" nameDescription="Soul Of Dragonking Zyrtarch" race="fire" experience="70700" speed="500">
 	<health now="150000" max="150000" />
 	<look type="938" corpse="0" />
 	<targetchange interval="2000" chance="0" />
