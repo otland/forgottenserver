@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Baby Dragon" nameDescription="a baby dragon" experience="0" speed="0" manacost="0">
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Baby Dragon" nameDescription="a baby dragon" race="blood" experience="185" speed="176">
+	<health now="380" max="380" />
+	<look type="271" corpse="7621" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -16,29 +16,39 @@
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag healthhidden="0" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<defenses armor="10" defense="5" />
+	<attacks>
+		<attack name="melee" interval="2000" skill="45" attack="20" />
+		<attack name="fire" interval="2000" chance="12" length="8" spread="3" min="-60" max="-90">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="14" radius="4" target="1" range="7" min="-30" max="-55">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="38">
+		<defense name="healing" interval="2000" chance="13" min="5" max="35">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="100" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element earthPercent="75" />
+		<element icePercent="-10" />
+		<element energyPercent="-5" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
+		<immunity fire="1" />
+		<immunity energy="1" />
+		<immunity death="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity holy="1" />
+		<immunity physical="1" />
 		<immunity invisible="1" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 </monster>
