@@ -16,7 +16,7 @@
 	<monster name="Ancient Scarab" file="monsters/ancient_scarab.xml" />
 	<monster name="Angry Adventurer" file="monsters/angry_adventurer.xml" />
 	<monster name="Angry Plant" file="monsters/angry_plant.xml" />
-	<monster name="Animated Sword" file="monsters/angry_plant.xml" />
+	<monster name="Animated Sword" file="monsters/angry_sword.xml" />
 	<monster name="Annihilon" file="monsters/annihilon.xml" />
 	<monster name="Apocalypse" file="monsters/apocalypse.xml" />
 	<monster name="Apprentice Sheng" file="monsters/apprentice_sheng.xml" />
@@ -289,7 +289,7 @@
 	<monster name="Frost Giantess" file="monsters/frost_giantess.xml" />
 	<monster name="Frost Troll" file="monsters/frost_troll.xml" />
 	<monster name="Frostfur" file="monsters/frostfur.xml" />
-	<monster name="Frozen Minion" file="monsters/fallen_challenger.xml" />
+	<monster name="Frozen Minion" file="monsters/fallen_minion.xml" />
 	<monster name="Furious Orc Berserker" file="monsters/furious_orc_berserker.xml" />
 	<monster name="Furious Troll" file="monsters/furious_troll.xml" />
 	<monster name="Fury of the Emperor" file="monsters/fury_of_the_emperor.xml" />
@@ -559,7 +559,7 @@
 	<monster name="Pig" file="monsters/pig.xml" />
 	<monster name="Pigeon" file="monsters/pigeon.xml" />
 	<monster name="Pillar" file="monsters/pillar.xml" />
-	<monster name="Piñata Dragon" file="monsters/piñata_dragon.xml" />
+	<monster name="Pinata Dragon" file="monsters/pinata_dragon.xml" />
 	<monster name="Pirate Buccaneer" file="monsters/pirate_buccaneer.xml" />
 	<monster name="Pirate Corsair" file="monsters/pirate_corsair.xml" />
 	<monster name="Pirate Cutthroat" file="monsters/pirate_cutthroat.xml" />
