@@ -21,13 +21,9 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<immunities>
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity invisible="0" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
-	</immunities>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="130" max="170" />
+	</defenses>
 	<elements>
 		<element physicalPercent="0" />
 		<element energyPercent="0" />
@@ -40,9 +36,13 @@
 		<element holyPercent="0" />
 		<element deathPercent="0" />
 	</elements>
-	<defenses armor="10" defense="5">
-		<defense name="healing" interval="2000" chance="20" min="130" max="170" />
-	</defenses>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="0" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="You can't have my treasures!" yell="false" />
 		<voice sentence="Hit me one more time!" yell="false" />

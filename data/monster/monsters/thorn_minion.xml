@@ -21,13 +21,10 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity outfit="0" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
-	</immunities>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-264" />
+	</attacks>
+	<defenses armor="10" defense="5" />
 	<elements>
 		<element physicalPercent="0" />
 		<element energyPercent="0" />
@@ -40,8 +37,11 @@
 		<element holyPercent="0" />
 		<element deathPercent="0" />
 	</elements>
-	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-264" />
-	</attacks>
-	<defenses armor="10" defense="5" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
 </monster>
