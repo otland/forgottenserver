@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Twisted Shaper" nameDescription="a twisted shaper" experience="1750" speed="280" >
 	<health now="2500" max="2500" />
 	<look type="932" head="105" body="0" legs="0" feet="94" addons="1" mount="0" corpse="0" />
@@ -22,21 +22,29 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-100" />
+		<attack name="physical" interval="2000" chance="10" range="7" target="1" min="-50" max="-100">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="35" length="5" spread="0" min="0" max="-100">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" radius="7" min="-50" max="-100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="9" target="1" speedchange="-440" duration="7000">
+			<attribute key="areaEffect" value="giantice" />
+		</attack>
 	</attacks>
 	<defenses armor="35" defense="35">
-		<defense name="healing" interval="2000" chance="20" min="0" max="300" />
+		<defense name="healing" interval="2000" chance="20" min="0" max="300">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element energyPercent="-25" />
+		<element earthPercent="20" />
+		<element firePercent="-20" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />

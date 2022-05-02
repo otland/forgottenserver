@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Unbeatable Dragon" nameDescription="an unbeatable dragon" experience="0" speed="0" >
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Unbeatable Dragon" nameDescription="an unbeatable dragon" race="blood" experience="2100" speed="200">
+	<health now="1900" max="1900" />
+	<look type="39" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,25 +22,28 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+		<attack name="fire" interval="2000" chance="17" range="7" radius="4" target="1" min="-100" max="-200">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="17" length="8" spread="3" min="-150" max="-230">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
 	</attacks>
-	<defenses armor="10" defense="5" />
-	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
-	</elements>
+	<defenses armor="32" defense="48">
+		<defense name="healing" interval="2000" chance="25" min="55" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity energy="1" />
+		<immunity physical="1" />
+		<immunity earth="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
 	</immunities>
 </monster>
