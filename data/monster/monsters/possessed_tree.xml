@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Possessed Tree" nameDescription="a possessed tree" experience="1300" speed="0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Possessed Tree" nameDescription="a possessed tree" race="undead" experience="1300" speed="0">
 	<health now="2500" max="2500" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="310" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -22,25 +22,19 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-162" />
+		<attack name="haunted treeling paralyze" interval="2000" chance="10" />
+		<attack name="poison" interval="2000" chance="9" target="1" radius="4" range="4" min="-86" max="-200">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="poison" interval="2000" chance="9" length="4" spread="0" min="-286" max="-300">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
 	</attacks>
 	<defenses armor="10" defense="5" />
-	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
-	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 </monster>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Piñata Dragon" nameDescription="a Piñata Dragon" experience="50" speed="0" >
+<monster name="Piñata Dragon" nameDescription="a piñata dragon" race="undead" experience="50" speed="0" >
 	<health now="10000" max="10000" />
 	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
 	<targetchange interval="2000" chance="0" />
@@ -21,26 +21,25 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<defenses armor="10" defense="5">
-		<defense name="healing" interval="2000" chance="20" min="130" max="170" />
+		<defense name="healing" interval="2000" chance="20" min="130" max="170">
+			<attribute key="areaEffect" value="mortarea" />
+		</defense>
 	</defenses>
-	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
-	</elements>
+	<summons maxSummons="3">
+		<summon name="Demon" interval="2000" chance="7" />
+	</summons>
 	<immunities>
-		<immunity paralyze="0" />
-		<immunity outfit="0" />
-		<immunity invisible="0" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity poison="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="You can't have my treasures!" yell="false" />
