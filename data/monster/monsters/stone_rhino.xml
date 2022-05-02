@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<monster name="Stone Rhino" nameDescription="a stone rhino" experience="1800" speed="290" >
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stone Rhino" nameDescription="a stone rhino" race="blood" experience="1800" speed="290">
 	<health now="3000" max="3000" />
-	<look type="936" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="936" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
@@ -25,18 +25,13 @@
 	</attacks>
 	<defenses armor="72" defense="72">
 		<defense name="healing" interval="2000" chance="20" min="0" max="195" />
+		<defense name="healing" interval="2000" chance="15" min="0" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element physicalPercent="20" />
+		<element icePercent="-10" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
