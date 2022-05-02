@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Fallen Challenger" nameDescription="a fallen challenger" race="undead" experience="0" speed="300">
 	<health now="9000" max="9000" />
-	<look type="231" corpse="1397" />
+	<look type="231" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

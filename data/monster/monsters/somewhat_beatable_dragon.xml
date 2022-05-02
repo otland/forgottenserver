@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Somewhat Beatable Dragon" nameDescription="a somewhat beatable dragon" race="blood" experience="0" speed="200">
 	<health now="1900" max="1900" />
-	<look type="39" corpse="5984" />
+	<look type="39" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

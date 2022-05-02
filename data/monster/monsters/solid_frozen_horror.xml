@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Solid Frozen Horror" nameDescription="a solid frozen horror" race="undead" experience="0" speed="240">
 	<health now="70000" max="70000" />
-	<look type="261" corpse="7282" />
+	<look type="261" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Frozen Minion" nameDescription="a frozen minion" race="blood" experience="230" speed="200">
 	<health now="2200" max="2200" />
-	<look type="53" corpse="5998" />
+	<look type="53" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

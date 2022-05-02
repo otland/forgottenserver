@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lloyd" nameDescription="Lloyd" race="energy" experience="50000" speed="400">
 	<health now="64000" max="64000" />
-	<look type="940" corpse="0" />
+	<look type="940" corpse="27583" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

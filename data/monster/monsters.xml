@@ -16,7 +16,7 @@
 	<monster name="Ancient Scarab" file="monsters/ancient_scarab.xml" />
 	<monster name="Angry Adventurer" file="monsters/angry_adventurer.xml" />
 	<monster name="Angry Plant" file="monsters/angry_plant.xml" />
-	<monster name="Animated Sword" file="monsters/angry_sword.xml" />
+	<monster name="Animated Sword" file="monsters/animated_sword.xml" />
 	<monster name="Annihilon" file="monsters/annihilon.xml" />
 	<monster name="Apocalypse" file="monsters/apocalypse.xml" />
 	<monster name="Apprentice Sheng" file="monsters/apprentice_sheng.xml" />
@@ -289,7 +289,7 @@
 	<monster name="Frost Giantess" file="monsters/frost_giantess.xml" />
 	<monster name="Frost Troll" file="monsters/frost_troll.xml" />
 	<monster name="Frostfur" file="monsters/frostfur.xml" />
-	<monster name="Frozen Minion" file="monsters/fallen_minion.xml" />
+	<monster name="Frozen Minion" file="monsters/frozen_minion.xml" />
 	<monster name="Furious Orc Berserker" file="monsters/furious_orc_berserker.xml" />
 	<monster name="Furious Troll" file="monsters/furious_troll.xml" />
 	<monster name="Fury of the Emperor" file="monsters/fury_of_the_emperor.xml" />
