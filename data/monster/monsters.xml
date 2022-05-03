@@ -32,7 +32,7 @@
 	<monster name="Axeitus Headbanger" file="monsters/axeitus_headbanger.xml" />
 	<monster name="Azerus" file="monsters/azerus.xml" />
 	<monster name="Azure Frog" file="monsters/azure_frog.xml" />
-	<monster name="Baby Dragon" file="monsters/baby_dragon_(creature).xml" />
+	<monster name="Baby Dragon" file="monsters/baby_dragon.xml" />
 	<monster name="Bad Dream" file="monsters/bad_dream.xml" />
 	<monster name="Badger" file="monsters/badger.xml" />
 	<monster name="Bandit" file="monsters/bandit.xml" />
@@ -380,7 +380,7 @@
 	<monster name="Ice Golem" file="monsters/ice_golem.xml" />
 	<monster name="Ice Overlord" file="monsters/ice_overlord.xml" />
 	<monster name="Ice Witch" file="monsters/ice_witch.xml" />
-	<monster name="Icicle" file="monsters/icicle_(creature).xml" />
+	<monster name="Icicle" file="monsters/icicle.xml" />
 	<monster name="Incineron" file="monsters/incineron.xml" />
 	<monster name="Incredibly Old Witch" file="monsters/incredibly_old_witch.xml" />
 	<monster name="Infected Weeper" file="monsters/infected_weeper.xml" />
