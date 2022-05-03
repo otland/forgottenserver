@@ -2,7 +2,7 @@
 <monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300">
 	<health now="305" max="305" />
 	<look type="60" corpse="6000" />
-	<targetchange interval="2000" chance="5" />
+	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />

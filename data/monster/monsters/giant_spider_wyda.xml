@@ -2,7 +2,7 @@
 <monster name="Giant Spider" nameDescription="a giant spider" race="venom" experience="12" speed="152">
 	<health now="20" max="20" />
 	<look type="38" corpse="5977" />
-	<targetchange interval="2000" chance="5" />
+	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />

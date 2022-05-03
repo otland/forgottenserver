@@ -2,7 +2,7 @@
 <monster name="Morik The Gladiator" nameDescription="Morik The Gladiator" race="blood" experience="160" speed="200">
 	<health now="1235" max="1235" />
 	<look type="131" head="57" body="57" legs="57" feet="57" addons="1" corpse="20450" />
-	<targetchange interval="2000" chance="5" />
+	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />

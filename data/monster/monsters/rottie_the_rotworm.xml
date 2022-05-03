@@ -2,7 +2,7 @@
 <monster name="Rottie The Rotworm" nameDescription="Rottie The Rotworm" race="blood" experience="40" speed="180">
 	<health now="65" max="65" />
 	<look type="26" corpse="5967" />
-	<targetchange interval="2000" chance="5" />
+	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="1" />
