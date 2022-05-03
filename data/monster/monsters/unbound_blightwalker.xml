@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Unbound Blightwalker" nameDescription="an unbound blightwalker" race="undead" experience="5850" speed="350">
 	<health now="7900" max="7900" />
-	<look type="246" corpse="6354" />
+	<look type="246" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

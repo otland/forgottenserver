@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Unbound Defiler" nameDescription="an unbound defiler" race="venom" experience="3700" speed="160">
 	<health now="2650" max="2650" />
-	<look type="238" corpse="6532" />
+	<look type="238" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

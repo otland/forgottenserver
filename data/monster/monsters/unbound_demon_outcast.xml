@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Unbound Demon Outcast" nameDescription="an unbound demon outcast" race="fire" experience="6200" speed="300">
 	<health now="5900" max="5900" />
-	<look type="590" corpse="22549" />
+	<look type="590" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
