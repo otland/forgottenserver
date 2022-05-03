@@ -823,4 +823,13 @@
 	<instant name="root branchy" words="###53" blockwalls="1" needtarget="1" needlearn="1" script="monster/root_branchy.lua" />
 	<instant name="explosion wave" words="###54" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/explosion_wave.lua" />
 	<instant name="wave t" words="###55" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/wave_t.lua" />
+	<instant name="souleater wave" words="###56" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/souleater_wave.lua"/>
+	<instant name="wyrm wave" words="###57" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/wyrm_wave.lua"/>
+	<instant name="frozen minion wave" words="###58" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/frozen_minion_wave.lua"/>
+	<instant name="frozen minion heal" words="###59" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/frozen_minion_heal.lua"/>
+	<instant name="icecle heal" words="###60" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/icecle_heal.lua"/>
+	<instant name="lloyd wave 1" words="###61" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_1.lua"/>
+	<instant name="lloyd wave 2" words="###62" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_2.lua"/>
+	<instant name="lloyd wave 3" words="###63" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/lloyd_wave_3.lua"/>
+	<instant name="white shade paralyze" words="###64" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/white_shade_paralyze.lua"/>
 </spells>

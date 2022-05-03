@@ -29,8 +29,6 @@
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="tenebris summon" interval="2000" chance="14" />
-		<attack name="tenebris ultimate" interval="2000" chance="30" />
 	</attacks>
 	<defenses armor="10" defense="5">
 		<defense name="healing" interval="3000" chance="25" min="600" max="2700">
