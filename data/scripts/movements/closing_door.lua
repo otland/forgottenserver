@@ -1,4 +1,7 @@
-function onStepOut(creature, item, position, fromPosition)
+local closingDoor = MoveEvent()
+closingDoor:type("stepout")
+
+function closingDoor.onStepOut(creature, item, position, fromPosition)
 	local tile = Tile(position)
 	if tile:getCreatureCount() > 0 then
 		return true
@@ -29,3 +32,11 @@ function onStepOut(creature, item, position, fromPosition)
 	item:transform(item.itemid - 1)
 	return true
 end
+
+for _, i in ipairs(openLevelDoors) do
+	closingDoor:id(i)
+end
+for _, i in ipairs(openQuestDoors) do
+	closingDoor:id(i)
+end
+closingDoor:register()
