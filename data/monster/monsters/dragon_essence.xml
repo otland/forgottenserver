@@ -41,11 +41,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element poisonPercent="10" />
-		<element energyPercent="10" />
+		<element poisonPercent="-10" />
+		<element energyPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
+		<immunity ice="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>

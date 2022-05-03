@@ -42,6 +42,7 @@
 		<element energyPercent="-10" />
 	</elements>
 	<immunities>
+		<immunity poison="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />

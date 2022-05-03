@@ -40,9 +40,11 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="-10" />
 		<element physicalPercent="10" />
-		<element icePercent="10" />
+		<element energyPercent="20" />
+		<element firePercent="20" />
+		<element icePercent="50" />
+		<element holyPercent="-35" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />

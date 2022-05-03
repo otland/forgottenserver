@@ -38,4 +38,7 @@
 		<element energyPercent="-10" />
 		<element deathPercent="-15" />
 	</elements>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
 </monster>

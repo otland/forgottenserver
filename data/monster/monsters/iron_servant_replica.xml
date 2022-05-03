@@ -33,11 +33,11 @@
 	</attacks>
 	<defenses armor="17" defense="17" />
 	<elements>
-		<element earthPercent="-5" />
-		<element holyPercent="5" />
-		<element firePercent="10" />
-		<element energyPercent="5" />
-		<element deathPercent="-5" />
+		<element earthPercent="-10" />
+		<element holyPercent="20" />
+		<element firePercent="25" />
+		<element energyPercent="25" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />

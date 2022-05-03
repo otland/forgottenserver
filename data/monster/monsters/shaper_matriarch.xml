@@ -18,7 +18,7 @@
 		<flag targetdistance="4" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
-		<flag canwalkonpoison="0" />
+		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" chance="100" min="0" max="-120" />
@@ -39,8 +39,12 @@
 		</defense>
 	</defenses>
 	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="-5" />
 		<element earthPercent="40" />
-		<element icePercent="-20" />
+		<element icePercent="20" />
+		<element holyPercent="30" />
+		<element deathPercent="15" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />

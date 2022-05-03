@@ -39,18 +39,13 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element energyPercent="20" />
+		<element earthPercent="50" />
+		<element icePercent="-10" />
+		<element holyPercent="-5" />
 	</elements>
 	<immunities>
+		<immunity fire="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
