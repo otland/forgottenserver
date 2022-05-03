@@ -2,7 +2,7 @@
 <monster name="The Shielded Thorn Knight" nameDescription="The Shielded Thorn Knight" race="blood" experience="0" speed="390">
 	<health now="70000" max="70000" />
 	<look type="512" addons="3" head="81" body="121" legs="121" feet="121" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

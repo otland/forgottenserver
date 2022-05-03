@@ -2,7 +2,7 @@
 <monster name="Lady Tenebris" nameDescription="Lady Tenebris" race="blood" experience="50000" speed="370">
 	<health now="150000" max="150000" />
 	<look type="433" head="57" body="95" legs="38" feet="94" addons="2" corpse="6560" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

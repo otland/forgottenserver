@@ -2,7 +2,7 @@
 <monster name="Cosmic Energy Prism D" nameDescription="cosmic energy prism D" race="undead" experience="840" speed="0">
 	<health now="1000" max="1000" />
 	<look typeex="1548" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

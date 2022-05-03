@@ -2,7 +2,7 @@
 <monster name="An Observer Eye" nameDescription="An Observer Eye" race="blood" experience="0" speed="0" >
 	<health now="30000" max="30000" />
 	<look type="925" corpse="27584" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

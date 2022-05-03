@@ -2,7 +2,7 @@
 <monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" experience="700" speed="172" >
 	<health now="2000" max="2000" />
 	<look type="397" corpse="13485" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

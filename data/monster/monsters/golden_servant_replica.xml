@@ -2,7 +2,7 @@
 <monster name="Golden Servant Replica" nameDescription="a golden servant replica" race="energy" experience="450" speed="210">
 	<health now="2000" max="2000" />
 	<look type="396" corpse="13484" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

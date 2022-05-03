@@ -2,7 +2,7 @@
 <monster name="Dragon Wrath" nameDescription="a dragon wrath" race="undead" experience="4600" speed="320">
 	<health now="7800" max="7800" />
 	<look type="351" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

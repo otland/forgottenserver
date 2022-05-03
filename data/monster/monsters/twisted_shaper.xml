@@ -2,7 +2,7 @@
 <monster name="Twisted Shaper" nameDescription="a twisted shaper" experience="1750" speed="280" >
 	<health now="2500" max="2500" />
 	<look type="932" head="105" body="0" legs="0" feet="94" addons="1" mount="0" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

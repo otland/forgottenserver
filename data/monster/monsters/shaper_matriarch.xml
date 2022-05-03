@@ -2,7 +2,7 @@
 <monster name="Shaper Matriarch" nameDescription="a shaper matriarch" experience="1650" speed="260">
 	<health now="2000" max="2000" />
 	<look type="933" corpse="27727" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

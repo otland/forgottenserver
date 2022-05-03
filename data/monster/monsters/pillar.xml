@@ -2,7 +2,7 @@
 <monster name="Pillar" nameDescription="a pillar" race="undead" experience="0" speed="0">
 	<health now="100" max="100" />
 	<look typeex="1551" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag summonable="0" />
 		<flag attackable="0" />

@@ -2,7 +2,7 @@
 <monster name="Orclops Ravager" nameDescription="an orclops ravager" race="blood" experience="1100" speed="260">
 	<health now="1200" max="1200" />
 	<look type="935" head="94" body="1" legs="80" feet="94" corpse="27730" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

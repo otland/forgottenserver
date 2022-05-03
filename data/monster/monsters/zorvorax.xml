@@ -2,7 +2,7 @@
 <monster name="Zorvorax" nameDescription="Zorvorax" race="undead" experience="9000" speed="350">
 	<health now="10000" max="10000" />
 	<look type="928" corpse="6306" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

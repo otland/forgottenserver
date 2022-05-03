@@ -2,7 +2,7 @@
 <monster name="Dragon Essence" nameDescription="a dragon essence" race="undead" experience="0" speed="250" >
 	<health now="30000" max="30000" />
 	<look type="248" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

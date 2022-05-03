@@ -2,7 +2,7 @@
 <monster name="Shadow Fiend" nameDescription="a shadow fiend" race="undead" experience="500" speed="360">
 	<health now="4000" max="4000" />
 	<look type="320" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

@@ -2,7 +2,7 @@
 <monster name="Lloyd" nameDescription="Lloyd" race="energy" experience="50000" speed="400">
 	<health now="64000" max="64000" />
 	<look type="940" corpse="27583" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

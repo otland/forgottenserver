@@ -2,7 +2,7 @@
 <monster name="Spirit Of Fertility" nameDescription="a spirit of fertility" race="undead" experience="1100" speed="130">
 	<health now="1250" max="1250" />
 	<look type="11" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

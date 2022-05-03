@@ -2,7 +2,7 @@
 <monster name="Baby Dragon" nameDescription="a baby dragon" race="blood" experience="185" speed="176">
 	<health now="380" max="380" />
 	<look type="271" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

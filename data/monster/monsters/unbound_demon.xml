@@ -2,7 +2,7 @@
 <monster name="Unbound Demon" nameDescription="an unbound demon" race="fire" experience="5000" speed="256">
 	<health now="7200" max="7200" />
 	<look type="35" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

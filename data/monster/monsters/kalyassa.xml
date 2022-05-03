@@ -2,7 +2,7 @@
 <monster name="Kalyassa" nameDescription="kalyassa" race="blood" experience="9000" speed="350">
 	<health now="10000" max="10000" />
 	<look type="947" head="37" body="113" legs="38" feet="95" addons="3" corpse="5984" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

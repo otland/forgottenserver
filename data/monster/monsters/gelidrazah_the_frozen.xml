@@ -2,7 +2,7 @@
 <monster name="Gelidrazah The Frozen" nameDescription="Gelidrazah The Frozen" race="blood" experience="9000" speed="350" >
 	<health now="10000" max="10000" />
 	<look type="947" head="57" body="11" legs="38" feet="38" addons="3" corpse="27721" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

@@ -2,7 +2,7 @@
 <monster name="Cave Parrot" nameDescription="a cave parrot" experience="0" speed="320" manacost="250">
 	<health now="30" max="30" />
 	<look type="217" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

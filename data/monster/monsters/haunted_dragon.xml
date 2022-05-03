@@ -2,7 +2,7 @@
 <monster name="Haunted Dragon" nameDescription="a haunted dragon" race="undead" experience="6500" speed="280">
 	<health now="6500" max="6500" />
 	<look type="231" corpse="6306" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

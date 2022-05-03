@@ -2,7 +2,7 @@
 <monster name="Sword Of Vengeance" nameDescription="a sword of vengeance" race="fire" experience="0" speed="360">
 	<health now="2000" max="2000" />
 	<look typeex="26883" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

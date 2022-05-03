@@ -2,7 +2,7 @@
 <monster name="Thorn Minion" nameDescription="a thorn minion" race="venom" experience="1600" speed="150" manacost="290">
 	<health now="3500" max="3500" />
 	<look type="717" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

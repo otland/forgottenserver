@@ -2,7 +2,7 @@
 <monster name="Corrupted Soul" nameDescription="a corrupted soul" race="undead" experience="1300" speed="210">
 	<health now="1100" max="1100" />
 	<look type="355" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

@@ -2,7 +2,7 @@
 <monster name="Angry Plant" nameDescription="an angry plant" race="venom" experience="110" speed="0" >
 	<health now="10000" max="10000" />
 	<look type="120" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

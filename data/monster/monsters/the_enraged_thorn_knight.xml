@@ -2,7 +2,7 @@
 <monster name="The Enraged Thorn Knight" nameDescription="The Enraged Thorn Knight" race="blood" experience="30000" speed="350">
 	<health now="20000" max="20000" />
 	<look type="512" addons="3" head="81" body="121" legs="121" feet="121" corpse="6080" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

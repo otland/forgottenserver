@@ -2,7 +2,7 @@
 <monster name="Possessed Tree" nameDescription="a possessed tree" race="undead" experience="1300" speed="0">
 	<health now="2500" max="2500" />
 	<look type="310" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

@@ -2,7 +2,7 @@
 <monster name="Shadow Tentacle" nameDescription="a shadow tentacle" race="venom" experience="0" speed="350">
 	<health now="22500" max="22500" />
 	<look type="681" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

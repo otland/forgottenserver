@@ -2,7 +2,7 @@
 <monster name="The Time Guardian" nameDescription="The Time Guardian" race="undead" experience="50000" speed="340">
 	<health now="150000" max="150000" />
 	<look type="945" corpse="27741" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />

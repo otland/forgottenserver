@@ -2,7 +2,7 @@
 <monster name="The Astral Source" nameDescription="The Astral Source" race="energy" experience="3000" speed="0">
 	<health now="150000" max="150000" />
 	<look typeex="26884" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
