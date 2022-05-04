@@ -37,7 +37,9 @@
 		<attack name="earth" interval="2000" chance="20" radius="5" target="1" min="-640" max="-800">
 			<attribute key="areaeffect" value="stones" />
 		</attack>
-		<attack name="medusa paralyze" interval="2000" chance="20" />
+		<attack name="speed" interval="2000" chance="25" radius="7" target="1" speedchange="-900">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
 	</attacks>
 	<defenses armor="50" defense="50">
 		<defense name="healing" interval="2000" chance="25" min="1500" max="3000">

@@ -37,16 +37,17 @@
 		<attack name="firefield" interval="2000" chance="14" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="fire" />
 		</attack>
-		<attack name="demon paralyze" interval="2000" chance="10" range="7" />
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-480">
 			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" radius="1" target="1" speedchange="-700" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
 	<defenses armor="40" defense="65">
 		<defense name="healing" interval="2000" chance="14" min="150" max="250">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="demon summon" interval="2000" chance="8" />
 		<defense name="speed" interval="2000" chance="10" speedchange="388" duration="4000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
@@ -65,4 +66,7 @@
 		<immunity fire="1" />
 		<immunity invisible="1" />
 	</immunities>
+	<summons maxSummons="1">
+		<summon name="fire elemental" interval="2000" chance="10" />
+	</summons>
 </monster>

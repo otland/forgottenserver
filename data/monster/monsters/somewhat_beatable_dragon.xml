@@ -46,15 +46,9 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity ice="1" />
 		<immunity drunk="1" />
 		<immunity lifedrain="1" />
 		<immunity invisible="1" />
 		<immunity fire="1" />
-		<immunity physical="1" />
-		<immunity death="1" />
-		<immunity holy="1" />
-		<immunity energy="1" />
-		<immunity earth="1" />
 	</immunities>
 </monster>

@@ -33,7 +33,7 @@
 		<attack name="manadrain" interval="2000" chance="20" radius="8" min="-110" max="-495">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
-		<attack name="charged energy elemental electrify" interval="2000" chance="15" radius="5" min="-1100" max="-1100">
+		<attack name="energycondition" interval="2000" chance="15" radius="5" min="-1100" max="-1100">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
 		<attack name="energy" interval="2000" chance="15" length="9" spread="4" min="-710" max="-895">
@@ -51,12 +51,6 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
-	<elements>
-		<element energyPercent="20" />
-		<element holyPercent="1" />
-		<element earthPercent="-12" />
-		<element deathPercent="-10" />
-	</elements>
 	<immunities>
 		<immunity fire="1" />
 		<immunity drown="1" />
