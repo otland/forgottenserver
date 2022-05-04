@@ -832,4 +832,6 @@
 	<instant name="lloyd wave 2" words="###62" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_2.lua"/>
 	<instant name="lloyd wave 3" words="###63" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/lloyd_wave_3.lua"/>
 	<instant name="white shade paralyze" words="###64" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/white_shade_paralyze.lua"/>
+	<instant name="hirintror skill reducer" words="###65" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_skill_reducer.lua"/>
+	<instant name="hirintror freeze" words="###66" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_freeze.lua"/>
 </spells>
