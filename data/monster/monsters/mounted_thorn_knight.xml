@@ -36,7 +36,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="60" defense="60">
-		<defense name="thorn summon" interval="2000" chance="20" />
 		<defense name="healing" interval="2000" chance="20" min="1550" max="2550">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>

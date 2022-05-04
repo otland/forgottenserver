@@ -39,10 +39,7 @@
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
 	</attacks>
-	<defenses armor="70" defense="70">
-		<defense name="time guardian" interval="2000" chance="10" />
-		<defense name="time guardiann" interval="2000" chance="10" />
-	</defenses>
+	<defenses armor="70" defense="70" />
 	<elements>
 		<element earthPercent="70" />
 		<element icePercent="70" />

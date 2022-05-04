@@ -26,7 +26,6 @@
 		</attack>
 	</attacks>
 	<defenses armor="50" defense="50">
-		<defense name="soulcatcher summon" interval="2000" chance="10" />
 		<defense name="healing" interval="2000" chance="25" min="100" max="145">
 			<attribute key="areaEffect" value="fire" />
 		</defense>
