@@ -37,7 +37,7 @@
 		<attack name="earth" interval="2000" chance="20" radius="5" target="1" min="-640" max="-800">
 			<attribute key="areaeffect" value="stones" />
 		</attack>
-		<attack name="speed" interval="2000" chance="25" radius="7" target="1" speedchange="-900">
+		<attack name="speed" interval="2000" chance="20" radius="7" target="1" speedchange="-900">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
 	</attacks>

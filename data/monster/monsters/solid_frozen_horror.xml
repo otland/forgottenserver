@@ -27,7 +27,7 @@
 			<attribute key="shootEffect" value="ice" />
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
-		<attack name="speed" interval="1000" chance="13" length="8" spread="0" speedchange="-800" duration="20000">
+		<attack name="speed" interval="1000" chance="11" length="8" spread="0" speedchange="-800" duration="20000">
 			<attribute key="areaEffect" value="energy" />
 		</attack>
 		<attack name="hirintror skill reducer" interval="2000" chance="10" />
