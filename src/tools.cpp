@@ -1145,12 +1145,6 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL:
 			return "You need a magic item to cast this spell.";
 
-		case RETURNVALUE_CANNOTCONJUREITEMHERE:
-			return "You cannot conjure items here.";
-
-		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
-			return "You need to split your spears first.";
-
 		case RETURNVALUE_NAMEISTOOAMBIGUOUS:
 			return "Player name is ambiguous.";
 
