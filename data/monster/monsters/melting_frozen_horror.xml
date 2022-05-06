@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="melee" interval="2000" min="0" max="0" />
 		<attack name="hirintror freeze" interval="2000" chance="15" />
 		<attack name="ice" interval="2000" chance="15" range="7" target="1" radius="3" min="-75" max="-150">
 			<attribute key="shootEffect" value="ice" />

@@ -21,25 +21,9 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="60" attack="60" />
-		<attack name="souleater drown" interval="2000" chance="9" />
-		<attack name="ice" interval="2000" chance="8" radius="1" target="1" min="-50" max="-100">
-			<attribute key="shootEffect" value="ice" />
-			<attribute key="areaEffect" value="iceattack" />
-		</attack>
-		<attack name="lifedrain" interval="2000" chance="14" radius="4" target="0" min="-10" max="-60">
-			<attribute key="areaEffect" value="redshimmer" />
-		</attack>
-		<attack name="souleater wave" interval="2000" chance="12" min="-100" max="-210" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 	</attacks>
-	<defenses armor="25" defense="20">
-		<defense name="invisible" interval="2000" chance="12" duration="4000">
-			<attribute key="areaEffect" value="poff" />
-		</defense>
-		<defense name="healing" interval="2000" chance="16" min="130" max="205">
-			<attribute key="areaEffect" value="redshimmer" />
-		</defense>
-	</defenses>
+	<defenses armor="25" defense="20" />
 	<elements>
 		<element holyPercent="-10" />
 		<element icePercent="50" />

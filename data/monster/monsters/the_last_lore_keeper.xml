@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-1000" />
+		<attack name="melee" interval="2000" min="0" max="-1000" />
 		<attack name="physical" interval="2000" chance="7" length="8" spread="3" min="-650" max="-900">
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
@@ -89,18 +89,18 @@
 		<item id="24850" name="opal" chance="17164" countmax="2" />
 		<item id="10577" name="mystical hourglass" chance="16791" />
 		<item id="9970" name="small topaz" chance="16418" countmax="20" />
-		<item name="giant shimmering pearl" chance="15672" />
+		<item id="7632" name="giant shimmering pearl" chance="15672" />
 		<item id="2155" name="green gem" chance="15672" />
 		<item id="5909" name="white piece of cloth" chance="14925" countmax="4" />
 		<item id="5904" name="magic sulphur" chance="14552" />
 		<item id="2150" name="small amethyst" chance="14179" countmax="20" />
 		<item id="2147" name="small ruby" chance="14179" countmax="20" />
-		<item name="ring of red plasma" chance="12687" />
+		<item id="26189" name="ring of red plasma" chance="12687" />
 		<item id="5891" name="enchanted chicken wing" chance="11567" />
 		<item id="2436" name="skull staff" chance="11194" />
 		<item id="2153" name="violet gem" chance="10821" />
 		<item id="7437" name="sapphire hammer" chance="9701" />
-		<item name="part of a rune" chance="5597" />
+		<item id="27610" name="part of a rune" chance="5597" />
 		<item id="8857" name="silkweaver bow" chance="3731" />
 		<item id="8879" name="voltage armor" chance="2985" />
 		<item id="3972" name="bonelord helmet" chance="1866" />

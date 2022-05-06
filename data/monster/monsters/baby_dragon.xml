@@ -20,30 +20,4 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<attacks>
-		<attack name="melee" interval="2000" skill="45" attack="20" />
-		<attack name="fire" interval="2000" chance="12" length="8" spread="3" min="-60" max="-90">
-			<attribute key="areaEffect" value="firearea" />
-		</attack>
-		<attack name="fire" interval="2000" chance="14" radius="4" target="1" range="7" min="-30" max="-55">
-			<attribute key="shootEffect" value="fire" />
-			<attribute key="areaEffect" value="firearea" />
-		</attack>
-	</attacks>
-	<defenses armor="25" defense="38">
-		<defense name="healing" interval="2000" chance="13" min="5" max="35">
-			<attribute key="areaEffect" value="blueshimmer" />
-		</defense>
-	</defenses>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity fire="1" />
-		<immunity energy="1" />
-		<immunity death="1" />
-		<immunity ice="1" />
-		<immunity earth="1" />
-		<immunity holy="1" />
-		<immunity physical="1" />
-		<immunity invisible="1" />
-	</immunities>
 </monster>

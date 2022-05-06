@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-219" />
+		<attack name="melee" interval="2000" min="0" max="-219" />
 	</attacks>
 	<defenses armor="10" defense="5">
 		<defense name="icecle heal" interval="2000" chance="25" />

@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-600" max="-1000" />
+		<attack name="melee" interval="2000" min="0" max="-1000" />
 		<attack name="lifedrain" interval="2000" chance="12" length="4" spread="3" min="-400" max="-700">
 			<attribute key="areaEffect" value="poff" />
 		</attack>

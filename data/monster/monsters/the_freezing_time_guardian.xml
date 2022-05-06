@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="melee" interval="2000" min="0" max="-500" />
 		<attack name="death" interval="2000" chance="15" range="7" radius="4" target="1" min="-600" max="-780">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />
@@ -68,7 +68,7 @@
 		<item id="18413" name="blue crystal shard" chance="36364" countmax="3" />
 		<item id="2145" name="small diamond" chance="36364" countmax="10" />
 		<item id="2197" name="stone skin amulet" chance="36364" />
-		<item name="giant shimmering pearl" chance="27273" />
+		<item id="7632" name="giant shimmering pearl" chance="27273" />
 		<item id="25377" name="gold token" chance="27273" />
 		<item id="8472" name="great spirit potion" chance="27273" countmax="10" />
 		<item id="2156" name="red gem" chance="27273" />

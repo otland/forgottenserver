@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thorn Minion" nameDescription="a thorn minion" race="venom" experience="1600" speed="150" manacost="290">
+<monster name="Thorn Minion" nameDescription="a thorn minion" race="venom" experience="1600" speed="210">
 	<health now="3500" max="3500" />
 	<look type="717" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -43,9 +43,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="20" />
-		<element holyPercent="1" />
-		<element earthPercent="-12" />
-		<element deathPercent="-10" />
+		<element energyPercent="10" />
+		<element deathPercent="20" />
+		<element firePercent="-10" />
+		<element icePercent="20" />
 	</elements>
+	<immunities>
+		<immunity earth="1" />
+	</immunities>
 </monster>

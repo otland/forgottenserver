@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-196" />
+		<attack name="melee" interval="2000" min="0" max="-196" />
 		<attack name="ice" interval="2000" chance="15" target="1" min="-150" max="-200">
 			<attribute key="shootEffect" value="snowball" />
 		</attack>

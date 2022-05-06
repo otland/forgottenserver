@@ -21,11 +21,10 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-400" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 	</attacks>
 	<defenses armor="72" defense="72">
-		<defense name="healing" interval="2000" chance="20" min="0" max="195" />
-		<defense name="healing" interval="2000" chance="15" min="0" max="250">
+		<defense name="healing" interval="2000" chance="15" min="0" max="195">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>

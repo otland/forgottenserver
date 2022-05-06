@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Broken Shaper" nameDescription="a broken shaper" race="blood" experience="1600" speed="310" manacost="290">
+<monster name="Broken Shaper" nameDescription="a broken shaper" race="blood" experience="1600" speed="310">
 	<health now="2200" max="2200" />
-	<look type="932" head="94" body="76" legs="0" feet="82" addons="1" corpse="27724" />
+	<look type="932" head="94" body="76" legs="0" feet="82" corpse="27724" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-200" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="physical" interval="2000" chance="35" range="7" target="1" min="0" max="-150">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
@@ -33,7 +33,7 @@
 		<defense name="healing" interval="2000" chance="20" min="0" max="327">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
-		<defense name="speed" interval="2000" chance="15" minspeedchange="300" maxspeedchange="300" duration="7000">
+		<defense name="speed" interval="2000" chance="15" speedchange="360" duration="7000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>

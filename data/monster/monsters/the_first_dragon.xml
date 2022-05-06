@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The First Dragon" nameDescription="The First Dragon" race="blood" experience="9000" speed="350">
 	<health now="50000" max="50000" />
-	<look type="947" head="94" body="80" legs="120" feet="60" addons="3" corpse="0" />
+	<look type="947" head="94" body="80" legs="120" feet="60" addons="3" corpse="27787" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="120" attack="130" />
+		<attack name="melee" interval="2000" min="0" max="-1200" />
 		<attack name="fire" interval="2000" chance="20" radius="5" target="1" range="5" min="-410" max="-695">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

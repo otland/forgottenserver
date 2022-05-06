@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-1200" />
+		<attack name="melee" interval="2000" min="0" max="-1200" />
 		<attack name="energy" interval="2000" chance="12" length="6" spread="0" min="-130" max="-460">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>

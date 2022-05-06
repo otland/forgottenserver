@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Iron Servant Replica" nameDescription="an iron servant replica" race="energy" experience="210" speed="190">
 	<health now="1000" max="1000" />
 	<look type="395" corpse="13483" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-154" />
+		<attack name="melee" interval="2000" min="0" max="-154" />
 		<attack name="physical" interval="2000" chance="12" range="7" min="0" max="-60">
 			<attribute key="shootEffect" value="explosion" />
 			<attribute key="areaEffect" value="explosionarea" />

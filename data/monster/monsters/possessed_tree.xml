@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Possessed Tree" nameDescription="a possessed tree" race="undead" experience="1300" speed="0">
+<monster name="Possessed Tree" nameDescription="a possessed tree" race="undead" experience="1300" speed="230">
 	<health now="2500" max="2500" />
 	<look type="310" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-162" />
+		<attack name="melee" interval="2000" min="0" max="-162" />
 		<attack name="speed" interval="2000" chance="10" length="5" spread="0" duration="15000" speedchange="-700">
 			<attribute key="areaEffect" value="smallplants" />
 		</attack>

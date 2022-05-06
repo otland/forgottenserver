@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" experience="700" speed="172" >
+<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" experience="700" speed="172">
 	<health now="2000" max="2000" />
 	<look type="397" corpse="13485" />
 	<targetchange interval="2000" chance="5" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="energy" interval="2000" chance="11" radius="3" min="-100" max="-210">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>

@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="speed" interval="2000" chance="18" range="7" radius="4" target="1" duration="20000" max="-400">
 			<attribute key="areaEffect" value="icetornado" />
 		</attack>

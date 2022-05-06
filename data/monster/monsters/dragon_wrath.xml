@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="melee" interval="2000" min="0" max="-500" />
 		<attack name="ghastly dragon wave" interval="2000" chance="10" min="-50" max="-250" />
 		<attack name="ghastly dragon curse" interval="2000" chance="10" range="7" />
 		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-920" max="-1260">

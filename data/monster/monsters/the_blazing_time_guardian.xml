@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" chance="100" min="0" max="0" />
+		<attack name="melee" interval="2000" min="0" max="-800" />
 		<attack name="death" interval="2000" chance="15" range="7" radius="4" target="1" min="-600" max="-780">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />
@@ -39,9 +39,7 @@
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
 	</attacks>
-	<defenses armor="70" defense="70">
-		<defense name="time guardian lost time" interval="2000" chance="10" />
-	</defenses>
+	<defenses armor="70" defense="70" />
 	<elements>
 		<element earthPercent="70" />
 		<element icePercent="-40" />
@@ -74,7 +72,7 @@
 		<item id="2155" name="green gem" chance="30769" />
 		<item id="25172" name="silver token" chance="30769" />
 		<item id="7387" name="diamond sceptre" chance="23077" />
-		<item name="giant shimmering pearl" chance="23077" />
+		<item id="7632" name="giant shimmering pearl" chance="23077" />
 		<item id="22396" name="cluster of solace" chance="15385" />
 		<item id="25377" name="gold token" chance="15385" />
 		<item id="5892" name="huge chunk of crude iron" chance="15385" />
