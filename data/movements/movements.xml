@@ -1294,4 +1294,31 @@
 	<movevent event="DeEquip" itemid="25411" slot="shield" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="25414" slot="shield" level="200" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="25414" slot="shield" function="onDeEquipItem" />
+
+	<!-- Quivers -->
+	<movevent event="Equip" itemid="38180" slot="shield" level="150" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="38180" slot="shield" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="38218" slot="shield" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="38218" slot="shield" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="38504" slot="shield" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="38504" slot="shield" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="38505" slot="shield" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="38505" slot="shield" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="39322" slot="shield" level="250" function="onEquipItem">
+		<vocation name="Paladin" />
+		<vocation name="Royal Paladin" showInDescription="0" />
+	</movevent>
+	<movevent event="DeEquip" itemid="39322" slot="shield" function="onDeEquipItem" />
 </movements>

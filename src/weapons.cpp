@@ -303,6 +303,25 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 	return 100;
 }
 
+bool Weapon::ammoCheck(const Player* player) const
+{
+	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck)) {
+		if (!enabled || player->getMana() < getManaCost(player) || player->getHealth() < getHealthCost(player) ||
+		    (isPremium() && !player->isPremium()) || player->getLevel() < getReqLevel() ||
+		    player->getMagicLevel() < getReqMagLv() || player->getSoul() < soul) {
+			return false;
+		}
+
+		if (!vocWeaponMap.empty()) {
+			if (vocWeaponMap.find(player->getVocationId()) == vocWeaponMap.end()) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 bool Weapon::useWeapon(Player* player, Item* item, Creature* target) const
 {
 	int32_t damageModifier = playerWeaponCheck(player, target, item->getShootRange());
@@ -420,6 +439,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
 				player->sendSupplyUsed(item->getClientID());
 				Weapon::decrementItemCount(item);
+				player->sendQuiverUpdate();
 			}
 			break;
 
