@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<monster name="Pinata Dragon" nameDescription="a pinata dragon" race="undead" experience="50" speed="0">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<monster name="Pi�ata Dragon" nameDescription="a pi�ata dragon" race="undead" experience="50" speed="0">
 	<health now="10000" max="10000" />
 	<look typeex="27718" corpse="27719" />
 	<targetchange interval="2000" chance="5" />
