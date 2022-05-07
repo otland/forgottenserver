@@ -251,7 +251,7 @@ public:
 	    Condition(id, type, 0, buff, subId, aggressive)
 	{}
 
-	static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
+	static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list, ConditionDamageFormula_t damageFormula);
 
 	bool startCondition(Creature* creature) override;
 	bool executeCondition(Creature* creature, int32_t interval) override;
@@ -282,6 +282,7 @@ private:
 	int32_t periodDamageTick = 0;
 	int32_t tickInterval = 2000;
 	int32_t initDamage = 0;
+	ConditionDamageFormula_t damageFormula = CONDITION_DAMAGE_FORMULA_LOG;
 
 	bool forceUpdate = false;
 	bool delayed = false;

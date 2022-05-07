@@ -86,45 +86,40 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 
 	uint32_t defaultTickInterval = 2000;
 	uint32_t defaultTickInterval2 = 0;
-	// -1 = skip invalid condition
-	// 0 = constant
-	// 1 = log
-	// 2 = 20% growth
-	int32_t damageType = -1;
+	ConditionDamageFormula_t damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 	int32_t rounds = 0;
 	int32_t damagePerRound = 0;
 
-
 	if (conditionType == CONDITION_FIRE) {
 		defaultTickInterval = 9000;
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		damagePerRound = 10;
 	} else if (conditionType == CONDITION_POISON) {
 		defaultTickInterval = 4000;
-		damageType = 1;
+		damageType = CONDITION_DAMAGE_FORMULA_LOG;
 	} else if (conditionType == CONDITION_ENERGY) {
 		defaultTickInterval = 11000;
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		damagePerRound = 25;
 	} else if (conditionType == CONDITION_DROWN) {
 		defaultTickInterval = 5000; // Need to find out tick rate
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		damagePerRound = 20;
 	} else if (conditionType == CONDITION_FREEZING) {
 		defaultTickInterval = 8000;
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		damagePerRound = 8;
 	} else if (conditionType == CONDITION_CURSED) {
 		defaultTickInterval = 4000;
-		damageType = 2;
+		damageType = CONDITION_DAMAGE_FORMULA_GROWTH;
 	} else if (conditionType == CONDITION_DAZZLED) {
 		defaultTickInterval = 10000;
 		defaultTickInterval2 = 12000;
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		damagePerRound = 20;
 	} else if (conditionType == CONDITION_BLEEDING) {
 		defaultTickInterval = 4000;
-		damageType = 0;
+		damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
 		// Not clear on how this works, it might be random damage per turn between 1 and 19?
 		damagePerRound = 15;
 	}
@@ -133,50 +128,24 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 	} else {
 		defaultTickInterval2 = tickInterval;
 	}
+	if (startDamage > 0) {
+		damagePerRound = startDamage;
+	}
 
-	// constant
-	if (damageType == 0) {
-		if (startDamage > 0) {
-			damagePerRound = startDamage;
-		}
+	// Maybe better to just check if condition is dazzled? It would make more sense if we need special block for bleeding too
+	if ((damageType == CONDITION_DAMAGE_FORMULA_CONSTANT) && (defaultTickInterval2 != 0)) {
 		rounds = normal_random(minDamage, maxDamage) / damagePerRound;
-		if (defaultTickInterval2 == 0) {
-			condition->addDamage(rounds, tickInterval, damagePerRound * -1);
-		}
-		else {
-			for (int32_t i = 0; i <= rounds; i++) {
-				int32_t randTickInterval = uniform_random(tickInterval, defaultTickInterval2);
-				condition->addDamage(1, randTickInterval, damagePerRound * -1);
-			}
+		for (int32_t i = 0; i <= rounds; i++) {
+			int32_t randTickInterval = uniform_random(tickInterval, defaultTickInterval2);
+			condition->addDamage(1, randTickInterval, damagePerRound * -1);
 		}
 	}
-	// log
-	else if (damageType == 1) {
+	else {
 		condition->setParam(CONDITION_PARAM_TICKINTERVAL, tickInterval);
 		condition->setParam(CONDITION_PARAM_MINVALUE, minDamage);
 		condition->setParam(CONDITION_PARAM_MAXVALUE, maxDamage);
-		condition->setParam(CONDITION_PARAM_STARTVALUE, startDamage);
-	}
-	// 20% growth
-	else if (damageType == 2) {
-		int32_t roundDamage = 0;
-		if (startDamage != 0) {
-			roundDamage = startDamage;
-		}
-
-		int32_t totalDamage = 0;
-		int32_t damage = uniform_random(minDamage, maxDamage);
-		std::cout << "growth condition calc dmgExp:" << damage << "   totalNow:" << totalDamage << std::endl;
-		while (totalDamage + roundDamage <= damage) {
-			roundDamage = std::ceil(roundDamage * 1.2 + 0.5);
-			totalDamage += roundDamage;
-			std::cout << "roundDamage: " << roundDamage << "   totalNow:" << totalDamage << std::endl;
-			condition->addDamage(1, tickInterval, roundDamage * -1);
-		}
-		float lastMultiplier = uniform_random(10, 1200) / 1000.0;
-		roundDamage = std::floor(roundDamage * lastMultiplier);
-		std::cout << "roundDamage (lastmult): " << roundDamage << "(" << lastMultiplier << ")" << "   totalNow:" << totalDamage + roundDamage << std::endl;
-		condition->addDamage(1, tickInterval, roundDamage * -1);
+		condition->setParam(CONDITION_PARAM_STARTVALUE, damagePerRound);
+		condition->setParam(CONDITION_PARAM_DAMAGE_FORMULA, damageType);
 	}
 
 	return condition;

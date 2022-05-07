@@ -1120,6 +1120,10 @@ bool ConditionDamage::setParam(ConditionParam_t param, int32_t value)
 			field = (value != 0);
 			break;
 
+		case CONDITION_PARAM_DAMAGE_FORMULA:
+			damageFormula = static_cast<ConditionDamageFormula_t>(value);
+			break;
+
 		default:
 			return false;
 	}
@@ -1156,6 +1160,9 @@ int32_t ConditionDamage::getParam(ConditionParam_t param)
 
 		case CONDITION_PARAM_FIELD:
 			return field ? 1 : 0;
+
+		case CONDITION_PARAM_DAMAGE_FORMULA:
+			return static_cast<int32_t>(damageFormula);
 
 		default:
 			return Condition::getParam(param);
@@ -1269,12 +1276,10 @@ bool ConditionDamage::init()
 	if (amount != 0) {
 		if (startDamage > maxDamage) {
 			startDamage = maxDamage;
-		} else if (startDamage == 0) {
-			startDamage = std::max<int32_t>(1, std::ceil(amount / 20.0));
 		}
 
 		std::list<int32_t> list;
-		ConditionDamage::generateDamageList(amount, startDamage, list);
+		ConditionDamage::generateDamageList(amount, startDamage, list, damageFormula);
 		for (int32_t value : list) {
 			addDamage(1, tickInterval, -value);
 		}
@@ -1411,6 +1416,7 @@ void ConditionDamage::addCondition(Creature* creature, const Condition* conditio
 	startDamage = conditionDamage.startDamage;
 	tickInterval = conditionDamage.tickInterval;
 	periodDamage = conditionDamage.periodDamage;
+	damageFormula = conditionDamage.damageFormula;
 	int32_t nextTimeLeft = tickInterval;
 
 	if (!damageList.empty()) {
@@ -1494,23 +1500,56 @@ uint32_t ConditionDamage::getIcons() const
 	return icons;
 }
 
-void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list)
+void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list, ConditionDamageFormula_t damageFormula)
 {
-	amount = std::abs(amount);
-	int32_t sum = 0;
-	double x1, x2;
+	if (damageFormula == CONDITION_DAMAGE_FORMULA_CONSTANT) {
+		if (start == 0) {
+			start = 20;
+		}
+		int32_t rounds = amount / start;
+		for (int32_t i = 0; i < rounds; ++i) {
+			list.push_back(start);
+		}
+	}
+	else if (damageFormula == CONDITION_DAMAGE_FORMULA_LOG) {
+		if (start == 0) {
+			start = std::max<int32_t>(1, std::ceil(amount / 20.0));
+		}
+		amount = std::abs(amount);
+		int32_t sum = 0;
+		double x1, x2;
 
-	for (int32_t i = start; i > 0; --i) {
-		int32_t n = start + 1 - i;
-		int32_t med = (n * amount) / start;
+		for (int32_t i = start; i > 0; --i) {
+			int32_t n = start + 1 - i;
+			int32_t med = (n * amount) / start;
 
-		do {
-			sum += i;
-			list.push_back(i);
+			do {
+				sum += i;
+				list.push_back(i);
 
-			x1 = std::fabs(1.0 - ((static_cast<float>(sum)) + i) / med);
-			x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
-		} while (x1 < x2);
+				x1 = std::fabs(1.0 - ((static_cast<float>(sum)) + i) / med);
+				x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
+			} while (x1 < x2);
+		}
+	}
+	else if (damageFormula == CONDITION_DAMAGE_FORMULA_GROWTH) {
+		int32_t roundDamage = 0;
+		if (start != 0) {
+			roundDamage = start;
+		}
+
+		int32_t totalDamage = 0;
+		std::cout << "growth condition calc dmg:" << amount << "   totalNow:" << totalDamage << std::endl;
+		while (totalDamage + roundDamage <= amount) {
+			roundDamage = std::ceil(roundDamage * 1.2 + 0.5);
+			totalDamage += roundDamage;
+			std::cout << "roundDamage: " << roundDamage << "   totalNow:" << totalDamage << std::endl;
+			list.push_back(roundDamage);
+		}
+		float lastMultiplier = uniform_random(10, 1200) / 1000.0;
+		roundDamage = std::floor(roundDamage * lastMultiplier);
+		std::cout << "roundDamage (lastmult): " << roundDamage << "(" << lastMultiplier << ")" << "   totalNow:" << totalDamage + roundDamage << std::endl;
+		list.push_back(roundDamage);
 	}
 }
 
