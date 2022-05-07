@@ -7,7 +7,7 @@
 		<flag attackable="1" />
 		<flag hostile="1" />
 		<flag summonable="0" />
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag illusionable="0" />
 		<flag isboss="0" />
 		<flag ignorespawnblock="0" />
