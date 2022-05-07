@@ -49,10 +49,10 @@
 		<immunity drunk="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Me mash!" yell="false" />
-		<voice sentence="GRRRRR!" yell="false" />
-		<voice sentence="Muhahaha!" yell="false" />
-		<voice sentence="Me strong, you weak!" yell="false" />
+		<voice sentence="Me mash!" />
+		<voice sentence="GRRRRR!" />
+		<voice sentence="Muhahaha!" />
+		<voice sentence="Me strong, you weak!" />
 	</voices>
 	<loot>
 		<item id="2148" name="gold coin" chance="100000" countmax="184" />

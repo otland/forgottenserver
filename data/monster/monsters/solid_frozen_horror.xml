@@ -51,6 +51,6 @@
 		<immunity earth="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Chrrrrrk! Chrrrk!" yell="false" />
+		<voice sentence="Chrrrrrk! Chrrrk!" />
 	</voices>
 </monster>

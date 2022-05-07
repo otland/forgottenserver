@@ -61,9 +61,9 @@
 		<immunity drunk="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="You shall not pass!" yell="false" />
-		<voice sentence="You are not worthy!" yell="false" />
-		<voice sentence="This knowledge is forbidden!" yell="false" />
+		<voice sentence="You shall not pass!" />
+		<voice sentence="You are not worthy!" />
+		<voice sentence="This knowledge is forbidden!" />
 	</voices>
 	<loot>
 		<item id="10549" name="ancient stone" chance="100000" />

@@ -40,7 +40,7 @@
 		<immunity drunk="1" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="SNIFF!" yell="false" />
+		<voice sentence="SNIFF!" />
 	</voices>
 	<loot>
 		<item id="24842" name="raw meat" chance="17625" />
