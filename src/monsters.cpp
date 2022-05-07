@@ -82,11 +82,103 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 {
 	ConditionDamage* condition =
 	    static_cast<ConditionDamage*>(Condition::createCondition(CONDITIONID_COMBAT, conditionType, 0, 0));
-	condition->setParam(CONDITION_PARAM_TICKINTERVAL, tickInterval);
-	condition->setParam(CONDITION_PARAM_MINVALUE, minDamage);
-	condition->setParam(CONDITION_PARAM_MAXVALUE, maxDamage);
-	condition->setParam(CONDITION_PARAM_STARTVALUE, startDamage);
 	condition->setParam(CONDITION_PARAM_DELAYED, 1);
+
+	uint32_t defaultTickInterval = 2000;
+	uint32_t defaultTickInterval2 = 0;
+	// -1 = skip invalid condition
+	// 0 = constant
+	// 1 = log
+	// 2 = 20% growth
+	int32_t damageType = -1;
+	int32_t rounds = 0;
+	int32_t damagePerRound = 0;
+
+
+	if (conditionType == CONDITION_FIRE) {
+		defaultTickInterval = 9000;
+		damageType = 0;
+		damagePerRound = 10;
+	} else if (conditionType == CONDITION_POISON) {
+		defaultTickInterval = 4000;
+		damageType = 1;
+	} else if (conditionType == CONDITION_ENERGY) {
+		defaultTickInterval = 11000;
+		damageType = 0;
+		damagePerRound = 25;
+	} else if (conditionType == CONDITION_DROWN) {
+		defaultTickInterval = 5000; // Need to find out tick rate
+		damageType = 0;
+		damagePerRound = 20;
+	} else if (conditionType == CONDITION_FREEZING) {
+		defaultTickInterval = 8000;
+		damageType = 0;
+		damagePerRound = 8;
+	} else if (conditionType == CONDITION_CURSED) {
+		defaultTickInterval = 4000;
+		damageType = 2;
+	} else if (conditionType == CONDITION_DAZZLED) {
+		defaultTickInterval = 10000;
+		defaultTickInterval2 = 12000;
+		damageType = 0;
+		damagePerRound = 20;
+	} else if (conditionType == CONDITION_BLEEDING) {
+		defaultTickInterval = 4000;
+		damageType = 0;
+		// Not clear on how this works, it might be random damage per turn between 1 and 19?
+		damagePerRound = 15;
+	}
+	if (tickInterval == 0) {
+		tickInterval = defaultTickInterval;
+	} else {
+		defaultTickInterval2 = tickInterval;
+	}
+
+	// constant
+	if (damageType == 0) {
+		if (startDamage > 0) {
+			damagePerRound = startDamage;
+		}
+		rounds = normal_random(minDamage, maxDamage) / damagePerRound;
+		if (defaultTickInterval2 == 0) {
+			condition->addDamage(rounds, tickInterval, damagePerRound * -1);
+		}
+		else {
+			for (int32_t i = 0; i <= rounds; i++) {
+				int32_t randTickInterval = uniform_random(tickInterval, defaultTickInterval2);
+				condition->addDamage(1, randTickInterval, damagePerRound * -1);
+			}
+		}
+	}
+	// log
+	else if (damageType == 1) {
+		condition->setParam(CONDITION_PARAM_TICKINTERVAL, tickInterval);
+		condition->setParam(CONDITION_PARAM_MINVALUE, minDamage);
+		condition->setParam(CONDITION_PARAM_MAXVALUE, maxDamage);
+		condition->setParam(CONDITION_PARAM_STARTVALUE, startDamage);
+	}
+	// 20% growth
+	else if (damageType == 2) {
+		int32_t roundDamage = 0;
+		if (startDamage != 0) {
+			roundDamage = startDamage;
+		}
+
+		int32_t totalDamage = 0;
+		int32_t damage = uniform_random(minDamage, maxDamage);
+		std::cout << "growth condition calc dmgExp:" << damage << "   totalNow:" << totalDamage << std::endl;
+		while (totalDamage + roundDamage <= damage) {
+			roundDamage = std::ceil(roundDamage * 1.2 + 0.5);
+			totalDamage += roundDamage;
+			std::cout << "roundDamage: " << roundDamage << "   totalNow:" << totalDamage << std::endl;
+			condition->addDamage(1, tickInterval, roundDamage * -1);
+		}
+		float lastMultiplier = uniform_random(10, 1200) / 1000.0;
+		roundDamage = std::floor(roundDamage * lastMultiplier);
+		std::cout << "roundDamage (lastmult): " << roundDamage << "(" << lastMultiplier << ")" << "   totalNow:" << totalDamage + roundDamage << std::endl;
+		condition->addDamage(1, tickInterval, roundDamage * -1);
+	}
+
 	return condition;
 }
 
@@ -238,63 +330,38 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			ConditionType_t conditionType = CONDITION_NONE;
 			int32_t minDamage = 0;
 			int32_t maxDamage = 0;
-			uint32_t tickInterval = 2000;
+			uint32_t tickInterval = 0;
 
 			if ((attr = node.attribute("fire"))) {
 				conditionType = CONDITION_FIRE;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 9000;
 			} else if ((attr = node.attribute("poison"))) {
 				conditionType = CONDITION_POISON;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 4000;
 			} else if ((attr = node.attribute("energy"))) {
 				conditionType = CONDITION_ENERGY;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 10000;
 			} else if ((attr = node.attribute("drown"))) {
 				conditionType = CONDITION_DROWN;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 5000;
 			} else if ((attr = node.attribute("freeze"))) {
 				conditionType = CONDITION_FREEZING;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 8000;
 			} else if ((attr = node.attribute("dazzle"))) {
 				conditionType = CONDITION_DAZZLED;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 10000;
 			} else if ((attr = node.attribute("curse"))) {
 				conditionType = CONDITION_CURSED;
-
-				minDamage = pugi::cast<int32_t>(attr.value());
-				maxDamage = minDamage;
-				tickInterval = 4000;
 			} else if ((attr = node.attribute("bleed")) || (attr = node.attribute("physical"))) {
 				conditionType = CONDITION_BLEEDING;
-				tickInterval = 4000;
-			}
-
-			if ((attr = node.attribute("tick"))) {
-				int32_t value = pugi::cast<int32_t>(attr.value());
-				if (value > 0) {
-					tickInterval = value;
-				}
 			}
 
 			if (conditionType != CONDITION_NONE) {
+				minDamage = std::abs(pugi::cast<int32_t>(attr.value()));
+				maxDamage = minDamage;
+
+
+				if ((attr = node.attribute("tick"))) {
+					int32_t value = pugi::cast<int32_t>(attr.value());
+					if (value > 0) {
+						tickInterval = value;
+					}
+				}
+
 				Condition* condition = getDamageCondition(conditionType, maxDamage, minDamage, 0, tickInterval);
 				combat->addCondition(condition);
 			}
@@ -441,32 +508,24 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		           tmpName == "dazzlecondition" || tmpName == "drowncondition" || tmpName == "bleedcondition" ||
 		           tmpName == "physicalcondition") {
 			ConditionType_t conditionType = CONDITION_NONE;
-			uint32_t tickInterval = 2000;
+			uint32_t tickInterval = 0;
 
 			if (tmpName == "firecondition") {
 				conditionType = CONDITION_FIRE;
-				tickInterval = 10000;
 			} else if (tmpName == "poisoncondition" || tmpName == "earthcondition") {
 				conditionType = CONDITION_POISON;
-				tickInterval = 4000;
 			} else if (tmpName == "energycondition") {
 				conditionType = CONDITION_ENERGY;
-				tickInterval = 10000;
 			} else if (tmpName == "drowncondition") {
 				conditionType = CONDITION_DROWN;
-				tickInterval = 5000;
 			} else if (tmpName == "freezecondition" || tmpName == "icecondition") {
 				conditionType = CONDITION_FREEZING;
-				tickInterval = 10000;
 			} else if (tmpName == "cursecondition" || tmpName == "deathcondition") {
 				conditionType = CONDITION_CURSED;
-				tickInterval = 4000;
 			} else if (tmpName == "dazzlecondition" || tmpName == "holycondition") {
 				conditionType = CONDITION_DAZZLED;
-				tickInterval = 10000;
 			} else if (tmpName == "physicalcondition" || tmpName == "bleedcondition") {
 				conditionType = CONDITION_BLEEDING;
-				tickInterval = 4000;
 			}
 
 			if ((attr = node.attribute("tick"))) {
@@ -623,7 +682,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		if (spell->conditionType != CONDITION_NONE) {
 			ConditionType_t conditionType = spell->conditionType;
 
-			uint32_t tickInterval = 2000;
+			uint32_t tickInterval = 0;
 			if (spell->tickInterval != 0) {
 				tickInterval = spell->tickInterval;
 			}

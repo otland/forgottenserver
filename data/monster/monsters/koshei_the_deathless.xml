@@ -28,7 +28,7 @@
 		<attack name="death" interval="2000" chance="9" length="8" spread="0" min="-50" max="-140">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="cursecondition" interval="3000" chance="15" range="1" min="-54" max="-54" />
+		<attack name="cursecondition" interval="3000" chance="15" range="1" min="-300" max="-340" />
 		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-900" duration="30000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
