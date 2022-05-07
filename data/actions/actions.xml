@@ -157,11 +157,6 @@
 	<action itemid="2148" script="other/change_gold.lua" />
 	<action itemid="2152" script="other/change_gold.lua" />
 	<action itemid="2160" script="other/change_gold.lua" />
-	<action fromid="2376" toid="2404" script="other/destroy.lua" />
-	<action fromid="2406" toid="2415" script="other/destroy.lua" />
-	<action fromid="2417" toid="2419" script="other/destroy.lua" />
-	<action fromid="2421" toid="2441" script="other/destroy.lua" />
-	<action fromid="2443" toid="2453" script="other/destroy.lua" />
 	<action itemid="2579" script="other/trap.lua" />
 	<action itemid="2692" script="other/create_bread.lua" />
 	<action itemid="2694" script="other/create_bread.lua" />
