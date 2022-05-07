@@ -76,7 +76,8 @@
 		<item id="2150" name="small amethyst" chance="23611" countmax="10" />
 		<item id="25377" name="gold token" chance="22222" />
 		<item id="2158" name="blue gem" chance="20833" />
-		<item id="7632" name="giant shimmering pearl" chance="19444" />
+		<item id="7632" name="giant shimmering pearl" chance="9722" />
+		<item id="7633" name="giant shimmering pearl" chance="9722" />
 		<item id="5910" name="green piece of cloth" chance="19444" countmax="3" />
 		<item id="9809" name="rusted armor" chance="18056" />
 		<item id="25172" name="silver token" chance="18056" />

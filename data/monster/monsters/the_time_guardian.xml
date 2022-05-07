@@ -84,7 +84,8 @@
 		<item id="11240" name="guardian boots" chance="13043" />
 		<item id="2145" name="small diamond" chance="13043" countmax="10" />
 		<item id="2147" name="small ruby" chance="13043" countmax="10" />
-		<item id="7632" name="giant shimmering pearl" chance="8696" />
+		<item id="7632" name="giant shimmering pearl" chance="4348" />
+		<item id="7633" name="giant shimmering pearl" chance="4348" />
 		<item id="2156" name="red gem" chance="8696" />
 		<item id="2150" name="small amethyst" chance="8696" countmax="10" />
 		<item id="5809" name="soul stone" chance="8696" />

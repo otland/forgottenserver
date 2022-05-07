@@ -89,7 +89,8 @@
 		<item id="24850" name="opal" chance="17164" countmax="2" />
 		<item id="10577" name="mystical hourglass" chance="16791" />
 		<item id="9970" name="small topaz" chance="16418" countmax="20" />
-		<item id="7632" name="giant shimmering pearl" chance="15672" />
+		<item id="7632" name="giant shimmering pearl" chance="7836" />
+		<item id="7633" name="giant shimmering pearl" chance="7836" />
 		<item id="2155" name="green gem" chance="15672" />
 		<item id="5909" name="white piece of cloth" chance="14925" countmax="4" />
 		<item id="5904" name="magic sulphur" chance="14552" />

@@ -83,7 +83,8 @@
 		<item id="2145" name="small diamond" chance="18605" countmax="10" />
 		<item id="8902" name="spellbook of mind control" chance="18605" />
 		<item id="9980" name="crystal of power" chance="16279" />
-		<item id="7632" name="giant shimmering pearl" chance="16279" />
+		<item id="7632" name="giant shimmering pearl" chance="8139" />
+		<item id="7633" name="giant shimmering pearl" chance="8139" />
 		<item id="2150" name="small amethyst" chance="16279" countmax="10" />
 		<item id="12608" name="broken key ring" chance="13953" />
 		<item id="9809" name="rusted armor" chance="13953" />

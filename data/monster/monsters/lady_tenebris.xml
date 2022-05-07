@@ -74,7 +74,8 @@
 		<item id="2156" name="red gem" chance="19767" />
 		<item id="2150" name="small amethyst" chance="19767" countmax="10" />
 		<item id="2145" name="small diamond" chance="19767" countmax="10" />
-		<item name="giant shimmering pearl" chance="18605" />
+		<item id="7632" name="giant shimmering pearl" chance="9302" />
+		<item id="7633" name="giant shimmering pearl" chance="9302" />
 		<item id="2123" name="ring of the sky" chance="17442" />
 		<item id="18390" name="wand of defiance" chance="16279" />
 		<item id="2155" name="green gem" chance="13953" />

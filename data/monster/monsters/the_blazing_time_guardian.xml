@@ -72,7 +72,8 @@
 		<item id="2155" name="green gem" chance="30769" />
 		<item id="25172" name="silver token" chance="30769" />
 		<item id="7387" name="diamond sceptre" chance="23077" />
-		<item id="7632" name="giant shimmering pearl" chance="23077" />
+		<item id="7632" name="giant shimmering pearl" chance="11538" />
+		<item id="7633" name="giant shimmering pearl" chance="11538" />
 		<item id="22396" name="cluster of solace" chance="15385" />
 		<item id="25377" name="gold token" chance="15385" />
 		<item id="5892" name="huge chunk of crude iron" chance="15385" />
