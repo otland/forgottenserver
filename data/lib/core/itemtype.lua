@@ -56,6 +56,10 @@ function ItemType:isMissile()
 	return self:getWeaponType() == WEAPON_DISTANCE and ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT
 end
 
+function ItemType:isQuiver()
+	return self:getWeaponType() == WEAPON_QUIVER
+end
+
 function ItemType:isWand()
 	return self:getWeaponType() == WEAPON_WAND
 end
@@ -114,6 +118,8 @@ function ItemType:getWeaponString()
 		weaponString = self:isBow() and "firearm" or "missile"
 	elseif weaponType == WEAPON_WAND then
 		weaponString = "wand/rod"
+	elseif weaponType == WEAPON_QUIVER then
+		weaponString = "quiver"
 	end
 
 	if self:isTwoHanded() then
