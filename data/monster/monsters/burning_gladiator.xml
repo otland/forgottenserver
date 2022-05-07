@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Burning Gladiator" nameDescription="a burning gladiator" race="blood" experience="7350" speed="290">
+	<health now="10000" max="10000" />
+	<look type="541" head="95" body="113" legs="3" feet="3" addons="1" corpse="34302" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-550" />
+		<attack name="fire" interval="2000" chance="10" ring="3" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" ring="2" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="17" radius="2" min="-300" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="3" spread="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="89" defense="89" />
+	<elements>
+		<element physicalPercent="80" />
+		<element firePercent="70" />
+		<element energyPercent="80" />
+		<element icePercent="-20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Burn, infidel!" />
+		<voice sentence="Only the Wild Sun shall shine down on this world!" />
+		<voice sentence="Praised be Fafnar, the Smiter!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="4" />
+		<item id="34099" name="fafnar symbol" chance="10157" />
+		<item id="34089" name="secret instruction" chance="7419" />
+		<item id="2201" name="dragon necklace" chance="5951" />
+		<item id="2161" name="strange talisman" chance="4979" />
+		<item id="7889" name="lightning pendant" chance="4602" />
+		<item id="7890" name="magma amulet" chance="4463" />
+		<item id="7901" name="lightning headband" chance="4305" />
+		<item id="7891" name="magma boots" chance="4225" />
+		<item id="7895" name="lightning legs" chance="3967" />
+		<item id="33987" name="empty honey glass" chance="2579" />
+		<item id="2198" name="elven amulet" chance="2559" />
+		<item id="7893" name="lightning boots" chance="1627" />
+		<item id="11355" name="spellweaver's robe" chance="1111" />
+		<item id="33980" name="golden mask" chance="893" />
+		<item id="33979" name="sea horse figurine" chance="575" />
+	</loot>
+</monster>
