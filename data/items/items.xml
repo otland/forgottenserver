@@ -38125,7 +38125,7 @@
 		<attribute key="blockprojectile" value="1" />
 		<attribute key="description" value="It is locked." />
 	</item>
-	<item id="28278"article="an" name="open door">
+	<item id="28278" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
 	<item id="28279" article="an" name="open door">
