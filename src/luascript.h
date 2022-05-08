@@ -1554,6 +1554,17 @@ private:
 	// exclusively for wands & distance weapons
 	static int luaWeaponShootType(lua_State* L);
 
+	// XML
+	static int luaCreateXmlDocument(lua_State* L);
+	static int luaDeleteXmlDocument(lua_State* L);
+	static int luaXmlDocumentChild(lua_State* L);
+
+	static int luaDeleteXmlNode(lua_State* L);
+	static int luaXmlNodeAttribute(lua_State* L);
+	static int luaXmlNodeName(lua_State* L);
+	static int luaXmlNodeFirstChild(lua_State* L);
+	static int luaXmlNodeNextSibling(lua_State* L);
+
 	//
 	std::string lastLuaError;
 
