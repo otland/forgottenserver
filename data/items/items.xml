@@ -20967,7 +20967,7 @@
 	<item id="12098" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="12099" article="a" name="closed door">
+	<item id="12099" article="a" name="closed door" editorsuffix=" (Locked)">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 		<attribute key="description" value="It is locked." />
