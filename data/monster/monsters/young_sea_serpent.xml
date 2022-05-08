@@ -24,7 +24,9 @@
 		<attack name="ice" interval="2000" chance="10" length="7" spread="2" min="-80" max="-250">
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
-		<attack name="young sea serpent drown" range="5" interval="2000" chance="15" />
+		<attack name="drowncondition" range="5" radius="3" target="1" interval="2000" chance="15" min="-120" max="-120">
+			<attribute key="areaEffect" value="watersplash" />
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="30" min="25" max="175">

@@ -44,7 +44,10 @@
 		<attack name="lifedrain" interval="2000" chance="10" radius="3" min="-100" max="-200">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="undead dragon curse" interval="2000" chance="10" />
+		<attack name="cursecondition" interval="2000" chance="10" length="11" spread="3" min="-154" max="-266">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="healing" interval="2000" chance="15" min="200" max="250">

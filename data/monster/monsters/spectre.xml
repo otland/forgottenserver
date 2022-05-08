@@ -23,7 +23,9 @@
 		<attack name="drunk" interval="2000" chance="15" radius="4" target="0" duration="6000">
 			<attribute key="areaEffect" value="purplenote" />
 		</attack>
-		<attack name="spectre drown" interval="2000" chance="15" />
+		<attack name="drowncondition" interval="2000" chance="15" radius="3" target="0" min="-400" max="-400">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
 		<attack name="manadrain" interval="2000" chance="15" range="7" min="-100" max="-400" />
 		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-300" max="-550">
 			<attribute key="areaEffect" value="redshimmer" />
