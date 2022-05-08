@@ -4041,7 +4041,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 
 	time_t now = time(nullptr), today = (now - 84600), week = (now - (7 * 84600));
 	std::vector<time_t> killsList = IOLoginData::getUnjustifiedDates(name, now); // get kills from last month
-	killsList.push_back(now); // add current kill to list
+	killsList.push_back(now);                                                    // add current kill to list
 	int32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
 	Skulls_t playerSkull = getSkull();
 
@@ -4056,12 +4056,16 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	}
 
 	if (playerSkull < SKULL_RED) {
-		if (todayKills >= g_config.getNumber(ConfigManager::RED_DAILY_LIMIT) || weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) || monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
+		if (todayKills >= g_config.getNumber(ConfigManager::RED_DAILY_LIMIT) ||
+		    weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) ||
+		    monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
 			setSkull(SKULL_RED);
 			skullTicks = g_config.getNumber(ConfigManager::RED_SKULL_LENGTH);
 		}
 	} else if (playerSkull == SKULL_RED) {
-		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) || weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) || monthKills >= g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT)) {
+		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) ||
+		    weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) ||
+		    monthKills >= g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT)) {
 			setSkull(SKULL_BLACK);
 			skullTicks = g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH);
 		} else {
