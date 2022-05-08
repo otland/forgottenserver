@@ -243,6 +243,11 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 		return RETURNVALUE_THISISIMPOSSIBLE;
 	}
 
+	// quiver: allow ammo only
+	if (getWeaponType() == WEAPON_QUIVER && item->getWeaponType() != WEAPON_AMMO) {
+		return RETURNVALUE_QUIVERAMMOONLY;
+	}
+
 	// store items can be only moved into depot chest or store inbox
 	if (item->isStoreItem() && !dynamic_cast<const DepotChest*>(this)) {
 		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
@@ -472,6 +477,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	item->setParent(this);
 	itemlist.push_front(item);
 	updateItemWeight(item->getWeight());
+	ammoCount += item->getItemCount();
 
 	// send change to client
 	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
@@ -483,6 +489,7 @@ void Container::addItemBack(Item* item)
 {
 	addItem(item);
 	updateItemWeight(item->getWeight());
+	ammoCount += item->getItemCount();
 
 	// send change to client
 	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
@@ -501,6 +508,9 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
+
+	ammoCount += count;
+	ammoCount -= item->getItemCount();
 
 	const int32_t oldWeight = item->getWeight();
 	item->setID(itemId);
@@ -525,9 +535,13 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
+	ammoCount -= replacedItem->getItemCount();
+
 	itemlist[index] = item;
 	item->setParent(this);
 	updateItemWeight(-static_cast<int32_t>(replacedItem->getWeight()) + item->getWeight());
+
+	ammoCount += item->getItemCount();
 
 	// send change to client
 	if (getParent()) {
@@ -552,6 +566,9 @@ void Container::removeThing(Thing* thing, uint32_t count)
 	if (item->isStackable() && count != item->getItemCount()) {
 		uint8_t newCount = static_cast<uint8_t>(std::max<int32_t>(0, item->getItemCount() - count));
 		const int32_t oldWeight = item->getWeight();
+
+		ammoCount -= (item->getItemCount() - newCount);
+
 		item->setItemCount(newCount);
 		updateItemWeight(-oldWeight + item->getWeight());
 
@@ -561,6 +578,8 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		}
 	} else {
 		updateItemWeight(-static_cast<int32_t>(item->getWeight()));
+
+		ammoCount -= item->getItemCount();
 
 		// send change to client
 		if (getParent()) {
@@ -666,6 +685,7 @@ void Container::internalAddThing(uint32_t, Thing* thing)
 	item->setParent(this);
 	itemlist.push_front(item);
 	updateItemWeight(item->getWeight());
+	ammoCount += item->getItemCount();
 }
 
 void Container::startDecaying()

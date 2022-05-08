@@ -742,6 +742,31 @@ public:
 		}
 	}
 	void openSavedContainers();
+	void sendQuiverUpdate(bool sendAll = false)
+	{
+		if (!sendAll) {
+			// update one slot
+			Thing* slotThing = getThing(CONST_SLOT_RIGHT);
+			if (slotThing) {
+				Item* slotItem = slotThing->getItem();
+				if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
+					sendInventoryItem(CONST_SLOT_RIGHT, slotItem);
+				}
+			}
+		} else {
+			// update all slots
+			std::vector<slots_t> slots = {CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_AMMO};
+			for (auto const& slot : slots) {
+				Thing* slotThing = getThing(slot);
+				if (slotThing) {
+					Item* slotItem = slotThing->getItem();
+					if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
+						sendInventoryItem(slot, slotItem);
+					}
+				}
+			}
+		}
+	}
 
 	// event methods
 	void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,

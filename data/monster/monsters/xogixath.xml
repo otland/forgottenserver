@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Xogixath" nameDescription="Xogixath" race="fire" experience="22000" speed="190">
+	<health now="28000" max="28000" />
+	<look type="842" head="3" body="16" legs="75" feet="19" addons="2" corpse="13973" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-650" />
+		<attack name="death" interval="2000" chance="16" range="5" target="1" min="-450" max="-550">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="14" range="5" radius="3" target="1" min="-400" max="-480">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" radius="4" min="-400" max="-550">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="12" length="5" spread="0" min="-420" max="-600">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element deathPercent="50" />
+		<element icePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="18418" name="blue crystal splinter" chance="16667" />
+		<item id="18421" name="green crystal fragment" chance="16667" />
+		<item id="18415" name="green crystal shard" chance="16667" />
+		<item id="2156" name="red gem" chance="11111" />
+		<item id="2197" name="stone skin amulet" chance="11111" />
+		<item id="6300" name="death ring" chance="5556" />
+		<item id="7759" name="small enchanted sapphire" chance="5556" countmax="2" />
+		<item id="8921" name="wand of draconia" chance="5556" />
+		<item id="2187" name="wand of inferno" chance="5556" />
+	</loot>
+</monster>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crypt Warden" nameDescription="a crypt warden" race="blood" experience="8400" speed="290">
+	<health now="8300" max="8300" />
+	<look type="1190" head="41" body="38" legs="0" feet="0" corpse="34306" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="earth" interval="2000" chance="8" ring="3" target="0" min="-250" max="-380">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" ring="2" target="0" min="-250" max="-430">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="earth" interval="2000" chance="12" radius="2" min="-200" max="-480">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="holy" interval="2000" chance="13" length="5" spread="0" min="-300" max="-450">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="84" defense="84" />
+	<elements>
+		<element earthPercent="80" />
+		<element deathPercent="-35" />
+		<element holyPercent="75" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="90096" countmax="6" />
+		<item id="18419" name="cyan crystal fragment" chance="20702" />
+		<item id="34098" name="lamassu horn" chance="17555" />
+		<item id="34097" name="lamassu hoof" chance="10798" />
+		<item id="2150" name="small amethyst" chance="9388" />
+		<item id="9971" name="gold ingot" chance="5949" />
+		<item id="18421" name="green crystal fragment" chance="3903" />
+		<item id="2155" name="green gem" chance="3542" />
+		<item id="2198" name="elven amulet" chance="843" />
+	</loot>
+</monster>

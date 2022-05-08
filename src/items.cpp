@@ -224,7 +224,7 @@ const std::unordered_map<std::string, RaceType_t> RaceTypesMap = {
 
 const std::unordered_map<std::string, WeaponType_t> WeaponTypesMap = {
     {"sword", WEAPON_SWORD},       {"club", WEAPON_CLUB}, {"axe", WEAPON_AXE},         {"shield", WEAPON_SHIELD},
-    {"distance", WEAPON_DISTANCE}, {"wand", WEAPON_WAND}, {"ammunition", WEAPON_AMMO},
+    {"distance", WEAPON_DISTANCE}, {"wand", WEAPON_WAND}, {"ammunition", WEAPON_AMMO}, {"quiver", WEAPON_QUIVER},
 };
 
 const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
