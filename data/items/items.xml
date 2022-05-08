@@ -38105,30 +38105,6 @@
 	<item fromid="28256" toid="28257" article="a" name="closed window" />
 	<item fromid="28258" toid="28265" article="a" name="ramp" />
 	<item fromid="28266" toid="28273" article="a" name="broken wall" />
-	<item id="28274" article="a" name="closed door">
-		<attribute key="type" value="door" />
-		<attribute key="blockprojectile" value="1" />
-	</item>
-	<item id="28275" article="a" name="closed door" editorsuffix=" (Locked)">
-		<attribute key="type" value="door" />
-		<attribute key="blockprojectile" value="1" />
-		<attribute key="description" value="It is locked." />
-	</item>
-	<item id="28276" article="a" name="closed door">
-		<attribute key="type" value="door" />
-		<attribute key="blockprojectile" value="1" />
-	</item>
-	<item id="28277" article="a" name="closed door" editorsuffix=" (Locked)">
-		<attribute key="type" value="door" />
-		<attribute key="blockprojectile" value="1" />
-		<attribute key="description" value="It is locked." />
-	</item>
-	<item id="28278" article="an" name="open door">
-		<attribute key="type" value="door" />
-	</item>
-	<item id="28279" article="an" name="open door">
-		<attribute key="type" value="door" />
-	</item>
 	<item id="28280" article="a" name="wall" />
 	<item fromid="28281" toid="28286" article="a" name="slant" />
 	<item id="28287" article="a" name="big fly agaric" />
