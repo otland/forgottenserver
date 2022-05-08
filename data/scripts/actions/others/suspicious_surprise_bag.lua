@@ -6,7 +6,7 @@ local config = {
 	{chanceFrom = 8328, chanceTo = 9141, itemId = 6574}, -- bar of chocolate
 	{chanceFrom = 9142, chanceTo = 9654, itemId = 6394}, -- cream cake
 	{chanceFrom = 9655, chanceTo = 9850, itemId = 7377}, -- ice cream cone
-	{chanceFrom = 9851, chanceTo = 9986, itemId = 8110}, -- present
+	{chanceFrom = 9851, chanceTo = 9986, itemId = 9074}, -- explosive present
 	{chanceFrom = 9987, chanceTo = 10000, itemId = 7487} -- toy mouse
 }
 

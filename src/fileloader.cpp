@@ -1,33 +1,17 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
-#include <stack>
 #include "fileloader.h"
+
+#include <stack>
 
 namespace OTB {
 
 constexpr Identifier wildcard = {{'\0', '\0', '\0', '\0'}};
 
-Loader::Loader(const std::string& fileName, const Identifier& acceptedIdentifier):
-	fileContents(fileName)
+Loader::Loader(const std::string& fileName, const Identifier& acceptedIdentifier) : fileContents(fileName)
 {
 	constexpr auto minimalSize = sizeof(Identifier) + sizeof(Node::START) + sizeof(Node::type) + sizeof(Node::END);
 	if (fileContents.size() <= minimalSize) {
@@ -42,7 +26,8 @@ Loader::Loader(const std::string& fileName, const Identifier& acceptedIdentifier
 }
 
 using NodeStack = std::stack<Node*, std::vector<Node*>>;
-static Node& getCurrentNode(const NodeStack& nodeStack) {
+static Node& getCurrentNode(const NodeStack& nodeStack)
+{
 	if (nodeStack.empty()) {
 		throw InvalidOTBFormat{};
 	}
@@ -61,7 +46,7 @@ const Node& Loader::parseTree()
 	parseStack.push(&root);
 
 	for (; it != fileContents.end(); ++it) {
-		switch(static_cast<uint8_t>(*it)) {
+		switch (static_cast<uint8_t>(*it)) {
 			case Node::START: {
 				auto& currentNode = getCurrentNode(parseStack);
 				if (currentNode.children.empty()) {
@@ -112,12 +97,13 @@ bool Loader::getProps(const Node& node, PropStream& props)
 	propBuffer.resize(size);
 	bool lastEscaped = false;
 
-	auto escapedPropEnd = std::copy_if(node.propsBegin, node.propsEnd, propBuffer.begin(), [&lastEscaped](const char& byte) {
-		lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
-		return !lastEscaped;
-	});
+	auto escapedPropEnd =
+	    std::copy_if(node.propsBegin, node.propsEnd, propBuffer.begin(), [&lastEscaped](const char& byte) {
+		    lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
+		    return !lastEscaped;
+	    });
 	props.init(&propBuffer[0], std::distance(propBuffer.begin(), escapedPropEnd));
 	return true;
 }
 
-} //namespace OTB
+} // namespace OTB

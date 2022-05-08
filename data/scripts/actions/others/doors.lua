@@ -1,8 +1,8 @@
 local positionOffsets = {
-	Position(1, 0, 0), -- east
-	Position(0, 1, 0), -- south
-	Position(-1, 0, 0), -- west
-	Position(0, -1, 0) -- north
+	{x = 1, y = 0}, -- east
+	{x = 0, y = 1}, -- south
+	{x = -1, y = 0}, -- west
+	{x = 0, y = -1}, -- north
 }
 
 --[[
@@ -18,7 +18,7 @@ In round 4 it checks if there's a tile blocked by a magic wall or wild growth.
 local function findPushPosition(creature, round)
 	local pos = creature:getPosition()
 	for _, offset in ipairs(positionOffsets) do
-		local offsetPosition = pos + offset
+		local offsetPosition = Position(pos.x + offset.x, pos.y + offset.y, pos.z)
 		local tile = Tile(offsetPosition)
 		if tile then
 			local creatureCount = tile:getCreatureCount()
@@ -57,16 +57,16 @@ local door = Action()
 
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
-	if table.contains(questDoors, itemId) then
-		if player:getStorageValue(item.actionid) ~= -1 then
+	if table.contains(closedQuestDoors, itemId) then
+		if player:getStorageValue(item.actionid) ~= -1 or player:getGroup():getAccess() then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The door seems to be sealed against unwanted intruders.")
 		end
 		return true
-	elseif table.contains(levelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor then
+	elseif table.contains(closedLevelDoors, itemId) then
+		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor or player:getGroup():getAccess() then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
@@ -74,18 +74,36 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(keys, itemId) then
-		if target.actionid > 0 then
-			if item.actionid == target.actionid and doors[target.itemid] then
-				target:transform(doors[target.itemid])
-				return true
-			end
+		local tile = Tile(toPosition)
+		if not tile then
+			return false
+		end
+		target = tile:getTopVisibleThing()
+		if target.actionid == 0 then
+			return false
+		end
+		if table.contains(keys, target.itemid) then
+			return false
+		end
+		if not table.contains(openDoors, target.itemid) and not table.contains(closedDoors, target.itemid) and not table.contains(lockedDoors, target.itemid) then
+			return false
+		end
+		if item.actionid ~= target.actionid then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
-		return false
-	end
-
-	if table.contains(horizontalOpenDoors, itemId) or table.contains(verticalOpenDoors, itemId) then
+		local transformTo = target.itemid + 2
+		if table.contains(openDoors, target.itemid) then
+			transformTo = target.itemid - 2
+		elseif table.contains(closedDoors, target.itemid) then
+			transformTo = target.itemid - 1
+		end
+		target:transform(transformTo)
+		return true
+	elseif table.contains(lockedDoors, itemId) then
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
+		return true
+	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
 		local creaturePositionTable = {}
 		local doorCreatures = Tile(toPosition):getCreatures()
 		if doorCreatures and #doorCreatures > 0 then
@@ -102,32 +120,19 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 		end
 
-		if not(table.contains(openQuestDoors, itemId)) and not(table.contains(openLevelDoors, itemId)) then
-			item:transform(itemId - 1)
-		end
+		item:transform(itemId - 1)
 		return true
-	end
-
-	if doors[itemId] then
-		if item.actionid == 0 then
-			item:transform(doors[itemId])
-		else
-			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is locked.")
-		end
+	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
+		item:transform(itemId + 1)
 		return true
 	end
 	return false
 end
 
-local doorsSet = {} -- unique value set for door ids
-for _, d in ipairs(questDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(levelDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(keys) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(horizontalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for _, d in ipairs(verticalOpenDoors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for d, _ in pairs(doors) do if doorsSet[d] == nil then doorsSet[d] = true end end
-for i, _ in pairs(doorsSet) do
-	door:id(i)
+local doorTables = {keys, openDoors, closedDoors, lockedDoors, openExtraDoors, closedExtraDoors, openHouseDoors, closedHouseDoors, closedQuestDoors, closedLevelDoors}
+for _, doors in pairs(doorTables) do
+	for _, doorId in pairs(doors) do
+		door:id(doorId)
+	end
 end
-doorsSet = nil
 door:register()

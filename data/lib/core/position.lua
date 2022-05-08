@@ -19,7 +19,7 @@ function Position:getNextPosition(direction, steps)
 end
 
 function Position:moveUpstairs()
-	local swap = function (lhs, rhs)
+	local swap = function(lhs, rhs)
 		lhs.x, rhs.x = rhs.x, lhs.x
 		lhs.y, rhs.y = rhs.y, lhs.y
 		lhs.z, rhs.z = rhs.z, lhs.z
@@ -63,7 +63,7 @@ function Position:isInRange(from, to)
 		}
 	}
 
-	if  self.x >= zone.nW.x and self.x <= zone.sE.x
+	if self.x >= zone.nW.x and self.x <= zone.sE.x
 	and self.y >= zone.nW.y and self.y <= zone.sE.y
 	and self.z >= zone.nW.z and self.z <= zone.sE.z then
 		return true

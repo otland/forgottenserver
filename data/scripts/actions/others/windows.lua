@@ -79,7 +79,11 @@ local windows = {
 	[20182] = {19974}, -- window
 	[20183] = {19445}, -- window
 	[20184] = {19446}, -- small window
-	[20185] = {19975} -- window
+	[20185] = {19975}, -- window
+	[22813] = {22839}, -- window
+	[22839] = {22813}, -- window
+	[22812] = {22838}, -- window
+	[22838] = {22812}, -- window
 }
 
 local window = Action()

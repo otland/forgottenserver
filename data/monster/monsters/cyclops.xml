@@ -44,7 +44,7 @@
 		<item name="plate shield" chance="2500" />
 		<!-- Heavy Old Tome 2.02% -->
 		<item name="battle shield" chance="1400" />
-		<item name="halberd" chance="730" />
+		<item id="2381" chance="730" /><!-- halberd -->
 		<item name="wolf tooth chain" chance="360" />
 		<item name="dark helmet" chance="230" />
 		<item id="7398" chance="180" /><!-- cyclops trophy -->

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <talkactions>
 	<!-- commands -->
+	<talkaction words="/attr" separator=" " script="attributes.lua" />
 	<talkaction words="/ban" separator=" " script="ban.lua" />
 	<talkaction words="/ipban" separator=" " script="ipban.lua" />
 	<talkaction words="/unban" separator=" " script="unban.lua" />
@@ -41,7 +42,7 @@
 	<talkaction words="!leavehouse" script="leavehouse.lua" />
 	<talkaction words="!changesex" script="changesex.lua" />
 	<talkaction words="!uptime" script="uptime.lua" />
-	<talkaction words="!deathlist" script="deathlist.lua" />
+	<talkaction words="!deathlist" separator=" " script="deathlist.lua" />
 	<talkaction words="!kills" script="kills.lua" />
 	<talkaction words="!online;/online" script="online.lua" />
 	<talkaction words="!serverinfo" script="serverinfo.lua" />

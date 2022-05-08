@@ -52,7 +52,7 @@
 		<item name="steel shield" chance="15000" />
 		<item name="crossbow" chance="10000" />
 		<item name="dragon's tail" chance="9740" />
-		<item name="burst arrow" countmax="10" chance="8060" />
+		<item id="2546" countmax="10" chance="8060" /><!-- burst arrow -->
 		<item name="longsword" chance="4000" />
 		<item name="steel helmet" chance="3000" />
 		<item name="broadsword" chance="1950" />

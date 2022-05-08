@@ -76,7 +76,7 @@
 		<item name="knight legs" chance="6250" />
 		<item name="steel shield" chance="20000" />
 		<item name="steel boots" chance="1123" />
-		<item id="3957" chance="100" /><!-- war horn -->
+		<item id="2079" chance="100" /><!-- war horn -->
 		<item name="piece of royal steel" chance="1234" />
 		<item name="piece of hell steel" chance="1010" />
 		<item name="piece of draconian steel" chance="1030" />

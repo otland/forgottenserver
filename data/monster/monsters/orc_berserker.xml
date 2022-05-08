@@ -43,7 +43,7 @@
 		<item name="gold coin" countmax="12" chance="54000" />
 		<item name="orcish gear" chance="10500" />
 		<item name="ham" chance="9720" />
-		<item name="halberd" chance="7000" />
+		<item id="2381" chance="7000" /><!-- halberd -->
 		<item name="battle axe" chance="5770" />
 		<item name="hunting spear" chance="5000" />
 		<item name="orc leather" chance="4000" />

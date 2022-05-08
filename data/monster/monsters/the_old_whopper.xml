@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Old Whopper" nameDescription="The Old Whopper" race="blood" experience="750" speed="420">
+	<health now="785" max="785" />
+	<look type="277" corpse="7740" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-175" />
+		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-170">
+			<attribute key="shootEffect" value="whirlwindclub" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="50" duration="34000">
+			<attribute key="shootEffect" value="whirlwindclub" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element energyPercent="20" />
+		<element firePercent="10" />
+		<element holyPercent="1" />
+		<element earthPercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="1000" chance="2">
+		<voice sentence="Han oydar hot auden oydar" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="club ring" chance="90" />
+		<item name="battle axe" chance="5450" />
+		<item name="double axe" chance="880" />
+		<item name="battle hammer" chance="5200" />
+		<item name="heavy machete" chance="2000" />
+		<item name="dark helmet" chance="200" />
+		<item name="plate shield" chance="2000" />
+		<item name="battle shield" chance="6190" />
+		<item name="meat" chance="49950" />
+		<item id="7398" chance="5140" /><!-- cyclops trophy -->
+		<item name="spiked squelcher" chance="5150" />
+		<item name="strong health potion" chance="390" />
+		<item name="cyclops toe" chance="10280" />
+	</loot>
+</monster>

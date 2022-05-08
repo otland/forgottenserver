@@ -12,7 +12,7 @@ function onSay(player, words, param)
 	if player:getPremiumDays() <= config.maxDays then
 		if player:removeTotalMoney(config.price) then
 			player:addPremiumDays(config.days)
-			player:sendTextMessage(MESSAGE_INFO_DESCR, "You have bought " .. config.days .." days of premium account.")
+			player:sendTextMessage(MESSAGE_INFO_DESCR, "You have bought " .. config.days .. " days of premium account.")
 		else
 			player:sendCancelMessage("You don't have enough money, " .. config.maxDays .. " days premium account costs " .. config.price .. " gold coins.")
 			player:getPosition():sendMagicEffect(CONST_ME_POFF)

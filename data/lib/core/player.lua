@@ -92,7 +92,7 @@ function Player.removePremiumDays(self, days)
 end
 
 function Player.isPremium(self)
-	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM)
+	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM) or self:hasFlag(PlayerFlag_IsAlwaysPremium)
 end
 
 function Player.sendCancelMessage(self, message)
@@ -171,40 +171,20 @@ function Player.canCarryMoney(self, amount)
 	local totalWeight = 0
 	local inventorySlots = 0
 
-	-- Add crystal coins to totalWeight and inventorySlots
-	local type_crystal = ItemType(ITEM_CRYSTAL_COIN)
-	local crystalCoins = math.floor(amount / 10000)
-	if crystalCoins > 0 then
-		amount = amount - (crystalCoins * 10000)
-		while crystalCoins > 0 do
-			local count = math.min(100, crystalCoins)
-			totalWeight = totalWeight + type_crystal:getWeight(count)
-			crystalCoins = crystalCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add platinum coins to totalWeight and inventorySlots
-	local type_platinum = ItemType(ITEM_PLATINUM_COIN)
-	local platinumCoins = math.floor(amount / 100)
-	if platinumCoins > 0 then
-		amount = amount - (platinumCoins * 100)
-		while platinumCoins > 0 do
-			local count = math.min(100, platinumCoins)
-			totalWeight = totalWeight + type_platinum:getWeight(count)
-			platinumCoins = platinumCoins - count
-			inventorySlots = inventorySlots + 1
-		end
-	end
-
-	-- Add gold coins to totalWeight and inventorySlots
-	local type_gold = ItemType(ITEM_GOLD_COIN)
-	if amount > 0 then
-		while amount > 0 do
-			local count = math.min(100, amount)
-			totalWeight = totalWeight + type_gold:getWeight(count)
-			amount = amount - count
-			inventorySlots = inventorySlots + 1
+	local currencyItems = Game.getCurrencyItems()
+	for index = #currencyItems, 1, -1 do
+		local currency = currencyItems[index]
+		-- Add currency coins to totalWeight and inventorySlots
+		local worth = currency:getWorth()
+		local currencyCoins = math.floor(amount / worth)
+		if currencyCoins > 0 then
+			amount = amount - (currencyCoins * worth)
+			while currencyCoins > 0 do
+				local count = math.min(100, currencyCoins)
+				totalWeight = totalWeight + currency:getWeight(count)
+				currencyCoins = currencyCoins - count
+				inventorySlots = inventorySlots + 1
+			end
 		end
 	end
 
@@ -240,33 +220,154 @@ function Player.depositMoney(self, amount)
 	return true
 end
 
-function Player.addLevel(self, amount, round)
-	local experience, level, amount = 0, self:getLevel(), amount or 1
-	if amount > 0 then
-		experience = getExperienceForLevel(level + amount) - (round and self:getExperience() or getExperienceForLevel(level))
-	else
-		experience = -((round and self:getExperience() or getExperienceForLevel(level)) - getExperienceForLevel(level + amount))
+function Player.removeTotalMoney(self, amount)
+	local moneyCount = self:getMoney()
+	local bankCount = self:getBankBalance()
+	if amount <= moneyCount then
+		self:removeMoney(amount)
+		return true
+	elseif amount <= (moneyCount + bankCount) then
+		if moneyCount ~= 0 then
+			self:removeMoney(moneyCount)
+			local remains = amount - moneyCount
+			self:setBankBalance(bankCount - remains)
+			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+			return true
+		end
+		
+		self:setBankBalance(bankCount - amount)
+		self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
+		return true
 	end
-	return self:addExperience(experience)
+	return false
+end
+
+function Player.addLevel(self, amount, round)
+	round = round or false
+	local level, amount = self:getLevel(), amount or 1
+	if amount > 0 then
+		return self:addExperience(Game.getExperienceForLevel(level + amount) - (round and self:getExperience() or Game.getExperienceForLevel(level)))
+	end
+	return self:removeExperience(((round and self:getExperience() or Game.getExperienceForLevel(level)) - Game.getExperienceForLevel(level + amount)))
 end
 
 function Player.addMagicLevel(self, value)
-	return self:addManaSpent(self:getVocation():getRequiredManaSpent(self:getBaseMagicLevel() + value + 1) - self:getManaSpent())
+	local currentMagLevel = self:getBaseMagicLevel()
+	local sum = 0
+
+	if value > 0 then
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredManaSpent(currentMagLevel + value)
+			value = value - 1
+		end
+
+		return self:addManaSpent(sum - self:getManaSpent())
+	end
+
+	value = math.min(currentMagLevel, math.abs(value))
+	while value > 0 do
+		sum = sum + self:getVocation():getRequiredManaSpent(currentMagLevel - value + 1)
+		value = value - 1
+	end
+
+	return self:removeManaSpent(sum + self:getManaSpent())
+end
+
+function Player.addSkillLevel(self, skillId, value)
+	local currentSkillLevel = self:getSkillLevel(skillId)
+	local sum = 0
+
+	if value > 0 then
+		while value > 0 do
+			sum = sum + self:getVocation():getRequiredSkillTries(skillId, currentSkillLevel + value)
+			value = value - 1
+		end
+
+		return self:addSkillTries(skillId, sum - self:getSkillTries(skillId))
+	end
+	
+	value = math.min(currentSkillLevel, math.abs(value))
+	while value > 0 do
+		sum = sum + self:getVocation():getRequiredSkillTries(skillId, currentSkillLevel - value + 1)
+		value = value - 1
+	end
+
+	return self:removeSkillTries(skillId, sum + self:getSkillTries(skillId), true)
 end
 
 function Player.addSkill(self, skillId, value, round)
 	if skillId == SKILL_LEVEL then
-		return self:addLevel(value, round)
+		return self:addLevel(value, round or false)
 	elseif skillId == SKILL_MAGLEVEL then
 		return self:addMagicLevel(value)
 	end
-	return self:addSkillTries(skillId, self:getVocation():getRequiredSkillTries(skillId, self:getSkillLevel(skillId) + value) - self:getSkillTries(skillId))
+	return self:addSkillLevel(skillId, value)
 end
 
-function Player.getWeaponType()
+function Player.getWeaponType(self)
 	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
 	if weapon then
-		return ItemType(weapon:getId()):getWeaponType()
+		return weapon:getType():getWeaponType()
 	end
 	return WEAPON_NONE
+end
+
+function Player.updateKillTracker(self, monster, corpse)
+	local monsterType = monster:getType()
+	if not monsterType then
+		return false
+	end
+
+	local msg = NetworkMessage()
+	msg:addByte(0xD1)
+	msg:addString(monster:getName())
+
+	local monsterOutfit = monsterType:getOutfit()
+	msg:addU16(monsterOutfit.lookType or 19)
+	msg:addByte(monsterOutfit.lookHead)
+	msg:addByte(monsterOutfit.lookBody)
+	msg:addByte(monsterOutfit.lookLegs)
+	msg:addByte(monsterOutfit.lookFeet)
+	msg:addByte(monsterOutfit.lookAddons)
+
+	local corpseSize = corpse:getSize()
+	msg:addByte(corpseSize)
+	for index = corpseSize - 1, 0, -1 do
+		msg:addItem(corpse:getItem(index))
+	end
+
+	local party = self:getParty()
+	if party then
+		local members = party:getMembers()
+		members[#members + 1] = party:getLeader()
+
+		for _, member in ipairs(members) do
+			msg:sendToPlayer(member)
+		end
+	else
+		msg:sendToPlayer(self)
+	end
+
+	msg:delete()
+	return true
+end
+
+function Player.getTotalMoney(self)
+	return self:getMoney() + self:getBankBalance()
+end
+
+function Player.addAddonToAllOutfits(self, addon)
+	for sex = 0, 1 do
+		local outfits = Game.getOutfits(sex)
+		for outfit = 1, #outfits do
+			self:addOutfitAddon(outfits[outfit].lookType, addon)
+		end
+	end
+end
+
+function Player.addAllMounts(self)
+	local mounts = Game.getMounts()
+	for mount = 1, #mounts do
+		self:addMount(mounts[mount].id)
+	end
 end

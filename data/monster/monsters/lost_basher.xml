@@ -55,7 +55,7 @@
 		<item name="piggy bank" chance="4450" />
 		<item name="gold coin" countmax="100" chance="60000" />
 		<item name="platinum coin" countmax="2" chance="70000" />
-		<item name="dwarven ring (hard drinking)" chance="2560" />
+		<item name="dwarven ring" chance="2560" />
 		<item name="fire axe" chance="310" />
 		<item name="war axe" chance="120" />
 		<item name="knight legs" chance="310" />

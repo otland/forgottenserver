@@ -66,7 +66,7 @@
 		<item id="2229" chance="12680" /><!-- skull -->
 		<item id="2230" chance="10000" /><!-- bone -->
 		<item id="2231" chance="5500" /><!-- big bone -->
-		<item name="fish remains" chance="9420" />
+		<item name="remains of a fish" chance="9420" />
 		<item name="two handed sword" chance="3200" />
 		<item id="2667" countmax="3" chance="6750" /><!-- fish -->
 		<item name="ham" countmax="2" chance="6000" />

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Metal Gargoyle" nameDescription="a metal gargoyle" race="energy" experience="1400" speed="190">
+	<health now="2100" max="2100" />
+	<look type="601" corpse="23347" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="84" attack="50" />
+		<attack name="death" interval="2000" chance="10" length="8" spread="0" min="-125" max="-230">
+		<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="9" target="1" range="7" radius="3" min="-85" max="-150">
+		<attribute key="areaEffect" value="mortarea" />
+		<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+	</attacks>
+	<defenses armor="26" defense="33" />
+	<elements>
+		<element firePercent="10" />
+		<element energyPercent="-10" />
+		<element icePercent="-5" />
+		<element physicalPercent="40" />
+		<element deathPercent="80" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="*click*" />
+		<voice sentence="*clonk*" />
+		<voice sentence="*stomp*" />
+	</voices>
+	<loot>
+		<item id="2148" countmax="100" chance="100000" /><!-- gold coin -->
+		<item id="2148" countmax="100" chance="60000" /><!-- gold coin -->
+		<item id="24124" chance="1490" /><!-- bronze gear wheel -->
+		<item id="23564" chance="17160" /><!-- metal jaw -->
+		<item id="2152" countmax="2" chance="43280" /><!-- platinum coin -->
+		<item id="7588" countmax="2" chance="9700" /><!-- strong health potion -->
+		<item id="7589" countmax="2" chance="9700" /><!-- strong mana potion -->
+		<item id="23542" chance="1490" /><!-- metal bat -->
+		<item id="2167" chance="2240" /><!-- energy ring -->
+		<item id="2168" chance="750" /><!-- life ring -->
+		<item id="11227" chance="2240" /><!-- shiny stone -->
+		<item id="23540" chance="1490" /><!-- metal spats -->
+		<item id="23539" chance="1490" /><!-- alloy legs -->
+		<item id="9810" chance="2990" /><!-- rusty armor(rare) -->
+	</loot>
+</monster>

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-project(tfs)
+project(tfs CXX)
 
 add_subdirectory(src)
 add_executable(tfs ${tfs_SRC})
@@ -12,15 +12,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set_target_properties(tfs PROPERTIES CXX_STANDARD 17)
 set_target_properties(tfs PROPERTIES CXX_STANDARD_REQUIRED ON)
-
-if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-    target_precompile_headers(tfs PUBLIC src/otpch.h)
-else ()
-    include(cotire)
-    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
-    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-    cotire(tfs)
-endif ()
 
 if (NOT WIN32)
     add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
@@ -40,7 +31,16 @@ else()
     find_package(Crypto++ REQUIRED)
 endif ()
 find_package(fmt 6.1.2 REQUIRED)
-find_package(MySQL REQUIRED)
+
+# Look for vcpkg-provided libmariadb first
+# If we link to the file directly, we might miss its dependencies from vcpkg
+find_package(unofficial-libmariadb CONFIG QUIET)
+if (unofficial-libmariadb_FOUND)
+    set(MYSQL_CLIENT_LIBS "libmariadb")
+else ()
+    find_package(MySQL REQUIRED)
+endif ()
+
 find_package(Threads REQUIRED)
 find_package(PugiXML REQUIRED)
 
@@ -61,13 +61,12 @@ else ()
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system iostreams)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 target_link_libraries(tfs PRIVATE
         Boost::date_time
         Boost::system
-        Boost::filesystem
         Boost::iostreams
         fmt::fmt
         ${CMAKE_THREAD_LIBS_INIT}
@@ -103,3 +102,14 @@ if(NOT SKIP_GIT)
 	endif()
 endif()
 ### END  Git Version ###
+
+# Precompiled header
+# note: cotire() must be called last on a target
+if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
+    target_precompile_headers(tfs PUBLIC src/otpch.h)
+else ()
+    include(cotire)
+    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
+    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
+    cotire(tfs)
+endif ()
