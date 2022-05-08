@@ -11724,21 +11724,21 @@
 	</item>
 	<item id="6792" article="an" name="archway" />
 	<item fromid="6793" toid="6794" article="a" name="barbarian banner" />
-	<item id="6795" article="an" name="entrance">
+	<item id="6795" article="an" name="closed entrance">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
 	<item id="6796" article="an" name="entrance">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="6797" article="an" name="entrance">
+	<item id="6797" article="an" name="closed entrance">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
-	<item id="6798" article="an" name="open door">
+	<item id="6798" article="an" name="entrance">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="6799" article="an" name="entrance">
+	<item id="6799" article="an" name="closed entrance" editorsuffix=" (Locked)">
 		<attribute key="description" value="It seems tightly closed." />
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
@@ -11746,12 +11746,12 @@
 	<item id="6800" article="an" name="entrance">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="6801" article="an" name="entrance">
+	<item id="6801" article="an" name="closed entrance" editorsuffix=" (Locked)">
 		<attribute key="description" value="It seems tightly closed." />
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
 	</item>
-	<item id="6802" article="an" name="open door">
+	<item id="6802" article="an" name="entrance">
 		<attribute key="type" value="door" />
 	</item>
 	<item id="6803" article="an" name="archway" />
