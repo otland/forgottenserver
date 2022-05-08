@@ -2,6 +2,10 @@ function Item.getType(self)
 	return ItemType(self:getId())
 end
 
+function Item:getClientId()
+	return self:getType():getClientId()
+end
+
 function Item:getClassification()
 	return self:getType():getClassification()
 end
@@ -38,8 +42,42 @@ function Item.isTile(self)
 	return false
 end
 
+function Item:isCorpse()
+	return self:getType():isCorpse()
+end
+
 function Item:isItemType()
 	return false
+end
+
+function Item:isSupply()
+	return self:getType():isSupply()
+end
+
+function Item:isCurrency()
+	return self:getType():isCurrency()
+end
+
+-- used interchangeably with ItemType:getAllReflects() for polymorphism in onLook
+-- returns table with [combatId] = {chance = x, percent = y}
+-- COMBAT_(element)DAMAGE = 2^combatId
+function Item:getAllReflects()
+	local response = {}
+	for combatId = 0, 11 do
+		response[combatId + 1] = self:getReflect(2 ^ combatId)
+	end
+
+	return response
+end
+
+-- same as above
+function Item:getAllBoosts()
+	local response = {}
+	for combatId = 0, 11 do
+		response[combatId + 1] = self:getBoostPercent(2 ^ combatId)
+	end
+
+	return response
 end
 
 do
@@ -223,221 +261,329 @@ do
 			actionId = item:getActionId()
 		end
 
+		-- item group checks for later use
+		local isDoor = itemType:isDoor()
+		local isTeleport = itemType:isTeleport()
+		local isPodium = itemType:isPodium()
+		local isBed = itemType:isBed()
+		local isKey = itemType:isKey()
+
 		-- key
 		do
-			if not isVirtual and itemType:isKey() then
+			if not isVirtual and isKey then
 				descriptions[#descriptions + 1] = string.format("Key:%0.4d", actionId)
 			end
 		end
 
-		-- weapon type (will be reused)
-		local weaponType = itemType:getWeaponType()
+		-- skip all these checks if not applicable
+		if not (isDoor or isTeleport or isPodium or isBed or isKey) then
 
-		-- attack attributes
-		do
-			local attack = item:getAttack()
+			-- weapon type (will be reused)
+			local weaponType = itemType:getWeaponType()
 
-			-- bows and crossbows
-			-- range, attack, hit%
-			if itemType:isBow() then
-				descriptions[#descriptions + 1] = string.format("Range:%d", item:getShootRange())
+			-- attack attributes
+			do
+				local attack = item:getAttack()
 
-				if attack ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Atk:%+d", attack)
+				-- bows and crossbows
+				-- range, attack, hit%
+				if itemType:isBow() then
+					descriptions[#descriptions + 1] = string.format("Range:%d", item:getShootRange())
+
+					if attack ~= 0 then
+						descriptions[#descriptions + 1] = string.format("Atk:%+d", attack)
+					end
+
+					local hitPercent = item:getHitChance()
+					if hitPercent ~= 0 then
+						descriptions[#descriptions + 1] = string.format("Hit%%:%+d", hitPercent)
+					end
+
+				-- melee weapons and missiles
+				-- atk x physical +y% element
+				elseif table.contains(showAtkWeaponTypes, weaponType) then
+					local atkString = string.format("Atk:%d", attack)
+					local elementDmg = itemType:getElementDamage()
+					if elementDmg ~= 0 then
+						atkString = string.format("%s physical %+d %s", atkString, elementDmg, getCombatName(itemType:getElementType()))
+					end
+
+					descriptions[#descriptions + 1] = atkString
 				end
-
-				local hitPercent = item:getHitChance()
-				if hitPercent ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Hit%%:%+d", item:hitPercent())
-				end
-
-			-- melee weapons and missiles
-			-- atk x physical +y% element
-			elseif table.contains(showAtkWeaponTypes, weaponType) then
-				local atkString = string.format("Atk:%d", attack)
-				local elementDmg = itemType:getElementDamage()
-				if elementDmg ~= 0 then
-					atkString = string.format("%s physical %+d %s", atkString, elementDmg, getCombatName(itemType:getElementType()))
-				end
-
-				descriptions[#descriptions + 1] = atkString
 			end
-		end
 
-		-- attack speed
-		do
-			local atkSpeed = item:getAttackSpeed()
-			if atkSpeed ~= 0 then
-				descriptions[#descriptions + 1] = string.format("AS:%0.2f/turn", 2000 / atkSpeed)
+			-- attack speed
+			do
+				local atkSpeed = item:getAttackSpeed()
+				if atkSpeed ~= 0 then
+					descriptions[#descriptions + 1] = string.format("AS:%0.2f/turn", 2000 / atkSpeed)
+				end
 			end
-		end
 
-		-- defense attributes
-		do
-			local showDef = table.contains(showDefWeaponTypes, weaponType)
-			local ammoType = itemType:getAmmoType()
-			if showDef then
-				local defense = item:getDefense()
-				local defAttrs = {}
-				if weaponType == WEAPON_DISTANCE then
-					-- throwables
-					if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
+			-- defense attributes
+			do
+				local showDef = table.contains(showDefWeaponTypes, weaponType)
+				local ammoType = itemType:getAmmoType()
+				if showDef then
+					local defense = item:getDefense()
+					local defAttrs = {}
+					if weaponType == WEAPON_DISTANCE then
+						-- throwables
+						if ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT then
+							defAttrs[#defAttrs + 1] = defense
+						end
+					else
 						defAttrs[#defAttrs + 1] = defense
 					end
-				else
-					defAttrs[#defAttrs + 1] = defense
-				end
 
-				-- extra def
-				local xD = item:getExtraDefense()
-				if xD ~= 0 then
-					defAttrs[#defAttrs + 1] = string.format("%+d", xD)
-				end
-
-				if #defAttrs > 0 then
-					descriptions[#descriptions + 1] = string.format("Def:%s", table.concat(defAttrs, " "))
-				end
-			end
-		end
-
-		-- armor
-		do
-			local arm = item:getArmor()
-			if arm > 0 then
-				descriptions[#descriptions + 1] = string.format("Arm:%d", arm)
-			end
-		end
-
-		-- abilities (will be reused)
-		local abilities = itemType:getAbilities()
-
-		-- stats: hp/mp/soul/magic level
-		do
-			local stats = {}
-			-- flat buffs
-			for stat, value in pairs(abilities.stats) do
-				stats[stat] = {name = getStatName(stat-1)}
-				if value ~= 0 then
-					stats[stat].flat = value
-				end
-			end
-
-			-- percent buffs
-			for stat, value in pairs(abilities.statsPercent) do
-				if value ~= 0 then
-					stats[stat].percent = value
-				end
-			end
-
-			-- display the buffs
-			for _, statData in pairs(stats) do
-				local displayValues = {}
-				if statData.flat then
-					displayValues[#displayValues + 1] = statData.flat
-				end
-
-				if statData.percent then
-					displayValues[#displayValues + 1] = statData.percent
-				end
-
-				-- desired format examples:
-				-- +5%
-				-- +20 and 5%
-				if #displayValues > 0 then
-					displayValues[1] = string.format("%+d", displayValues[1])
-					descriptions[#descriptions + 1] = string.format("%s %s", statData.name, table.concat(displayValues, " and "))
-				end
-			end
-		end
-
-		-- skill boosts
-		do
-			for skill, value in pairs(abilities.skills) do
-				if value ~= 0 then
-					descriptions[#descriptions + 1] = string.format("%s %+d", getSkillName(skill-1), value)
-				end
-			end
-		end
-
-		-- element magic level
-		do
-			for element, value in pairs(abilities.specialMagicLevel) do
-				if value ~= 0 then
-					descriptions[#descriptions + 1] = string.format("%s magic level %+d", getCombatName(2^(element-1)), value)
-				end
-			end
-		end
-
-		-- special skills
-		do
-			for skill, value in pairs(abilities.specialSkills) do
-				if value ~= 0 then
-					-- add + symbol to special skill "amount" fields
-					if skill-1 < 6 and skill % 2 == 1 then
-						value = string.format("%+d", value)
-					elseif skill-1 >= 6 then
-						-- fatal, dodge, momentum coming from the item natively
-						-- (stats coming from tier are near tier info)
-						value = string.format("%0.2f", value/100)
+					-- extra def
+					local xD = item:getExtraDefense()
+					if xD ~= 0 then
+						defAttrs[#defAttrs + 1] = string.format("%+d", xD)
 					end
 
-					descriptions[#descriptions + 1] = string.format("%s %s%%", getSpecialSkillName(skill-1), value)
-				end
-			end
-		end
-
-		-- cleave
-		-- perfect shot
-		-- to do
-
-		-- protections
-		do
-			local protections = {}
-			for element, value in pairs(abilities.absorbPercent) do
-				if value ~= 0 then
-					protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2^(element-1)), value)
+					if #defAttrs > 0 then
+						descriptions[#descriptions + 1] = string.format("Def:%s", table.concat(defAttrs, " "))
+					end
 				end
 			end
 
-			if #protections > 0 then
-				descriptions[#descriptions + 1] = string.format("protection %s", table.concat(protections, ", "))
-			end
-		end
-
-		-- damage reflection
-		-- to do
-
-		-- magic shield (classic)
-		if abilities.manaShield then
-			descriptions[#descriptions + 1] = "magic shield"
-		end
-
-		-- magic shield capacity +flat and x%
-		-- to do
-
-		-- regeneration
-		if abilities.manaGain > 0 or abilities.healthGain > 0 or abilities.regeneration then
-			descriptions[#descriptions + 1] = "faster regeneration"
-		end
-
-		-- invisibility
-		if abilities.invisible then
-			descriptions[#descriptions + 1] = "invisibility"
-		end
-
-		-- condition immunities
-		do
-			local suppressions = abilities.conditionSuppressions
-			for conditionId, conditionName in pairs(suppressedConditionNames) do
-				if bit.band(abilities.conditionSuppressions, conditionId) ~= 0 then
-					descriptions[#descriptions + 1] = conditionName
+			-- armor
+			do
+				local arm = item:getArmor()
+				if arm > 0 then
+					descriptions[#descriptions + 1] = string.format("Arm:%d", arm)
 				end
 			end
-		end
 
-		-- speed
-		if abilities.speed ~= 0 then
-			descriptions[#descriptions + 1] = string.format("speed %+d", math.floor(abilities.speed / 2))
+			-- abilities (will be reused)
+			local abilities = itemType:getAbilities()
+
+			-- stats: hp/mp/soul/magic level
+			do
+				local stats = {}
+				-- flat buffs
+				for stat, value in pairs(abilities.stats) do
+					stats[stat] = {name = getStatName(stat-1)}
+					if value ~= 0 then
+						stats[stat].flat = value
+					end
+				end
+
+				-- percent buffs
+				for stat, value in pairs(abilities.statsPercent) do
+					if value ~= 0 then
+						stats[stat].percent = value
+					end
+				end
+
+				-- display the buffs
+				for _, statData in pairs(stats) do
+					local displayValues = {}
+					if statData.flat then
+						displayValues[#displayValues + 1] = statData.flat
+					end
+
+					if statData.percent then
+						displayValues[#displayValues + 1] = statData.percent
+					end
+
+					-- desired format examples:
+					-- +5%
+					-- +20 and 5%
+					if #displayValues > 0 then
+						displayValues[1] = string.format("%+d", displayValues[1])
+						descriptions[#descriptions + 1] = string.format("%s %s", statData.name, table.concat(displayValues, " and "))
+					end
+				end
+			end
+
+			-- skill boosts
+			do
+				for skill, value in pairs(abilities.skills) do
+					if value ~= 0 then
+						descriptions[#descriptions + 1] = string.format("%s %+d", getSkillName(skill-1), value)
+					end
+				end
+			end
+
+			-- element magic level
+			do
+				for element, value in pairs(abilities.specialMagicLevel) do
+					if value ~= 0 then
+						descriptions[#descriptions + 1] = string.format("%s magic level %+d", getCombatName(2^(element-1)), value)
+					end
+				end
+			end
+
+			-- special skills
+			do
+				for skill, value in pairs(abilities.specialSkills) do
+					if value ~= 0 then
+						-- add + symbol to special skill "amount" fields
+						if skill-1 < 6 and skill % 2 == 1 then
+							value = string.format("%+d", value)
+						end
+
+						descriptions[#descriptions + 1] = string.format("%s %s%%", getSpecialSkillName(skill-1), value)
+					end
+				end
+			end
+
+			-- cleave
+			-- perfect shot
+			-- to do
+
+			-- protections
+			do
+				local protections = {}
+				for element, value in pairs(abilities.absorbPercent) do
+					if value ~= 0 then
+						protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2^(element-1)), value)
+					end
+				end
+
+				if #protections > 0 then
+					descriptions[#descriptions + 1] = string.format("protection %s", table.concat(protections, ", "))
+				end
+			end
+
+			-- damage boosts
+			do
+				local boostInfo = item:getAllBoosts()
+				local boosts = {}
+
+				local allElements = true
+
+				local identicalValue = true
+				local currentValue = -1
+
+				for combatId, boost in pairs(boostInfo) do
+					if boost > 0 then
+						boosts[#boosts + 1] = {element = getCombatName(2^(combatId-1)), percent = boost}
+						if currentValue == -1 then
+							currentValue = boost
+						elseif currentValue ~= boost then
+							identicalValue = false
+						end
+					else
+						allElements = false
+					end
+				end
+
+				if #boosts > 0 then
+					local boostResponse = ""
+
+					if allElements and identicalValue then
+						-- all elements identical value
+						-- display short info
+						boostResponse = string.format("damage and healing %+d%%", boosts[1].percent)
+
+					else
+						-- incomplete elements list/different values
+						-- display full info
+						local boostValues = {}
+						for i = 1, #boosts do
+							boostValues[#boostValues + 1] = string.format("%s %+d%%", boosts[i].element, boosts[i].percent)
+						end
+
+						boostResponse = string.format("damage ", table.concat(boostValues, ", "))
+					end
+
+					descriptions[#descriptions + 1] = boostResponse
+				end
+			end
+
+			-- damage reflection
+			do
+				local reflectInfo = item:getAllReflects()
+				local reflects = {}
+
+				local allElements = true
+
+				local identicalChance = true
+				local currentChance = -1
+
+				for combatId, reflect in pairs(reflectInfo) do
+					if reflect.chance > 0 and reflect.percent > 0 then
+						reflects[#reflects + 1] = {element = getCombatName(2^(combatId-1)), percent = reflect.percent, chance = reflect.chance}
+
+						if currentChance == -1 then
+							currentChance = reflect.chance
+						elseif currentChance ~= reflect.chance then
+							identicalChance = false
+						end
+					else
+						allElements = false
+					end
+				end
+
+				if #reflects > 0 then
+					local reflectResponse = ""
+
+					if allElements and identicalChance then
+						-- chance and amount are identical
+						-- display single values for chance and amount
+						local chanceInfo = reflects[1].chance ~= 100 and string.format(" chance %d%%", reflects[1].chance) or ""
+						reflectResponse = string.format("%+d%%%s", reflects[1].percent, chanceInfo)
+
+					elseif identicalChance then
+						-- incomplete elements list (chances still identical)
+						-- display single value for chance only
+						local reflectValues = {}
+						for i = 1, #reflects do
+							reflectValues[#reflectValues + 1] = string.format("%s %+d%%", reflects[i].element, reflects[i].percent)
+						end
+
+						local chanceInfo = reflects[1].chance ~= 100 and string.format(" chance %d%%", reflects[1].chance) or ""
+						reflectResponse = string.format("%s%s", table.concat(reflectValues, ", "), chanceInfo)
+					else
+						-- chances or amounts are different
+						-- display full info
+						local reflectValues = {}
+						for i = 1, #reflects do
+							reflectValues[#reflectValues + 1] = string.format("%s %+d%% chance %d%%", reflects[i].element, reflects[i].percent, reflects[i].chance)
+						end
+
+						reflectResponse = table.concat(reflectValues, ", ")
+					end
+
+					descriptions[#descriptions + 1] = string.format("reflect %s", reflectResponse)
+				end
+			end
+
+			-- magic shield (classic)
+			if abilities.manaShield then
+				descriptions[#descriptions + 1] = "magic shield"
+			end
+
+			-- magic shield capacity +flat and x%
+			-- to do
+
+			-- regeneration
+			if abilities.manaGain > 0 or abilities.healthGain > 0 or abilities.regeneration then
+				descriptions[#descriptions + 1] = "faster regeneration"
+			end
+
+			-- invisibility
+			if abilities.invisible then
+				descriptions[#descriptions + 1] = "invisibility"
+			end
+
+			-- condition immunities
+			do
+				local suppressions = abilities.conditionSuppressions
+				for conditionId, conditionName in pairs(suppressedConditionNames) do
+					if bit.band(abilities.conditionSuppressions, conditionId) ~= 0 then
+						descriptions[#descriptions + 1] = conditionName
+					end
+				end
+			end
+
+			-- speed
+			if abilities.speed ~= 0 then
+				descriptions[#descriptions + 1] = string.format("speed %+d", math.floor(abilities.speed / 2))
+			end
 		end
 
 		-- collecting attributes finished
@@ -454,9 +600,6 @@ do
 				response[#response + 1] = string.format(" of %s", (subTypeName ~= '' and subTypeName or "unknown"))
 			end
 		end
-
-		-- door check (will be reused)
-		local isDoor = itemType:isDoor()
 
 		-- door info
 		if isDoor then
@@ -476,7 +619,7 @@ do
 		end
 
 		-- podium description
-		if not isVirtual and itemType:isPodium() then
+		if not isVirtual and isPodium then
 			local outfit = item:getOutfit()
 			local hasOutfit = item:hasFlag(PODIUM_SHOW_OUTFIT)
 			local hasMount = item:hasFlag(PODIUM_SHOW_MOUNT)
@@ -524,28 +667,35 @@ do
 			end
 
 			-- duration
-			if itemType:hasShowDuration() then
+			local transferId = itemType:getTransformEquipId()
+
+			-- magic light wand (exception)
+			if item:getId() == 2162 then
+				transferId = 2163
+			end
+
+			local transferType = transferId ~= 0 and ItemType(transferId) or itemType
+			local hasShowDuration = transferType:hasShowDuration()
+
+			if hasShowDuration then
 				local currentDuration = item:getDuration()
 				if isVirtual then
 					currentDuration = currentDuration * 1000
 				end
 
-				local maxDuration = itemType:getDuration() * 1000
-				if maxDuration == 0 then
-					local transferType = itemType:getTransformEquipId()
-					if transferType ~= 0 then
-						transferType = ItemType(transferType)
-						maxDuration = transferType and transferType:getDuration() * 1000 or maxDuration
-					end
+				local maxDuration = transferType:getDuration() * 1000
+				if currentDuration == 0 then
+					currentDuration = maxDuration
 				end
 
-				if currentDuration == maxDuration then
+				if currentDuration == maxDuration and itemType ~= transferType then
 					expireInfo[#expireInfo + 1] = "is brand-new"
 				elseif currentDuration ~= 0 then
 					expireInfo[#expireInfo + 1] = string.format("will expire in %s", Game.getCountdownString(math.floor(currentDuration/1000), true, true))
 				end
 			end
 
+			-- response
 			if #expireInfo > 0 then
 				response[#response + 1] = string.format(" that %s", table.concat(expireInfo, " and "))
 			end
@@ -635,7 +785,7 @@ do
 							for _, vocName in ipairs(runeVocMap) do
 								local vocation = Vocation(vocName)
 								if vocation and vocation:getPromotion() then
-									vocAttrs[#vocAttrs + 1] = vocName
+									vocAttrs[#vocAttrs + 1] = string.format("%ss", vocName:lower())
 								end
 							end
 						end
@@ -740,7 +890,6 @@ do
 		end
 
 		-- item description
-		local isBed = itemType:isBed()
 		if lookDistance <= 1 or (not isVirtual and (isDoor or isBed)) then
 			-- custom item description
 			local desc = not isVirtual and item:getSpecialDescription()

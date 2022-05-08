@@ -3,6 +3,17 @@ function ItemType:isItemType()
 end
 
 do
+	local currencies = {}
+	for _, itemType in ipairs(Game.getCurrencyItems()) do
+		currencies[#currencies + 1] = itemType:getId()
+	end
+
+	function ItemType:isCurrency()
+		return table.contains(currencies, self:getId())
+	end
+end
+
+do
 	local slotBits = {
 		[CONST_SLOT_HEAD] = SLOTP_HEAD,
 		[CONST_SLOT_NECKLACE] = SLOTP_NECKLACE,
@@ -104,6 +115,26 @@ function ItemType:isPodium()
 	return self:getGroup() == ITEM_GROUP_PODIUM
 end
 
+function ItemType:isTeleport()
+	return self:getGroup() == ITEM_GROUP_TELEPORT or self:getType() == ITEM_TYPE_TELEPORT
+end
+
+do
+	local supplies = {
+		-- enchanting
+		2146, 2147, 2149, 2150, 2342, 7759, 7760, 7761, 7762, 24739,
+
+		-- blessing charms
+		11258, 11259, 11260, 11261, 11262,
+
+		-- rust and muck removers
+		9930, 18395
+	}
+	function ItemType:isSupply()
+		return self:getCharges() > 0 or self:getDuration() > 0 or table.contains(supplies, self:getId())
+	end
+end
+
 function ItemType:getWeaponString()
 	local weaponType = self:getWeaponType()
 	local weaponString = "unknown"
@@ -127,4 +158,24 @@ function ItemType:getWeaponString()
 	end
 
 	return weaponString
+end
+
+-- used interchangeably with Item:getAllReflects() for polymorphism in onLook
+-- returns table with [combatId] = {chance = x, percent = y}
+-- COMBAT_(element)DAMAGE = 2 ^ combatId
+function ItemType:getAllReflects()
+	local abilities = self:getAbilities()
+	local response = {}
+
+	for combatId, chance in pairs(abilities.reflectChance) do
+		local percent = abilities.reflectPercent[combatId]
+		response[combatId] = {chance = chance, percent = percent}
+	end
+
+	return response
+end
+
+-- same as above
+function ItemType:getAllBoosts()
+	return self:getAbilities().boostPercent
 end
