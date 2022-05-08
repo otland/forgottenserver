@@ -16954,18 +16954,16 @@
 	<item id="9272" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="9273" article="a" name="closed door" editorsuffix=" (Locked)">
+	<item id="9273" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
-		<attribute key="description" value="It is locked." />
 	</item>
 	<item id="9274" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="9275" article="a" name="closed door" editorsuffix=" (Locked)">
+	<item id="9275" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
-		<attribute key="description" value="It is locked." />
 	</item>
 	<item id="9276" article="an" name="open door">
 		<attribute key="type" value="door" />
