@@ -40770,9 +40770,6 @@
 	<item fromid="35897" toid="35906" article="a" name="wall" />
 	<item fromid="35907" toid="35910" article="an" name="archway" />
 	<item fromid="35911" toid="35918" article="a" name="ramp" />
-	<item id="35919" article="an" name="open door">
-		<attribute key="type" value="door" />
-	</item>
 	<item id="35920" article="a" name="pillar" />
 	<item fromid="35921" toid="35922" article="a" name="framework window" />
 	<item fromid="35923" toid="35926" article="a" name="buttress" />
