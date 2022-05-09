@@ -103,6 +103,7 @@ local door = Action()
 
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
+	local transformTo = 0
 	if table.contains(closedQuestDoors, itemId) then
 		if player:getStorageValue(item.actionid) ~= -1 or player:getGroup():getAccess() then
 			item:transform(itemId + 1)
@@ -138,11 +139,23 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
-		local transformTo = target.itemid + 2
+		if lockedOddDoors[target.itemid] then
+			transformTo = lockedOddDoors[target.itemid].open
+		else
+			transformTo = target.itemid + 2
+		end
 		if table.contains(openDoors, target.itemid) then
-			transformTo = target.itemid - 2
+			if openOddDoors[target.itemid] then
+				transformTo = openOddDoors[target.itemid].locked
+			else
+				transformTo = target.itemid - 2
+			end
 		elseif table.contains(closedDoors, target.itemid) then
-			transformTo = target.itemid - 1
+			if closedOddDoors[target.itemid] then
+				transformTo = closedOddDoors[target.itemid].locked
+			else
+				transformTo = target.itemid - 1
+			end
 		end
 		target:transform(transformTo)
 		return true
@@ -165,11 +178,20 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
 		end
-
-		item:transform(itemId - 1)
+		if openOddDoors[itemId] then
+			transformTo = openOddDoors[itemId].closed
+		else
+			transformTo = itemId - 1
+		end
+		item:transform(transformTo)
 		return true
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
-		item:transform(itemId + 1)
+		if closedOddDoors[itemId] then
+			transformTo = closedOddDoors[itemId].open
+		else
+			transformTo = itemId + 1
+		end
+		item:transform(transformTo)
 		return true
 	end
 	return false
