@@ -23,11 +23,16 @@
 		<attack name="lifedrain" interval="2000" chance="10" radius="3" target="0" min="-50" max="-90">
 			<attribute key="areaEffect" value="blackspark" />
 		</attack>
-		<attack name="quara constrictor freeze" interval="2000" chance="10" />
+		<attack name="freezecondition" interval="2000" chance="10" radius="3" min="-80" max="-80">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
 		<attack name="ice" interval="2000" chance="10" range="7" radius="4" min="-40" max="-70" target="0">
 			<attribute key="areaEffect" value="iceattack" />
 		</attack>
-		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
+		<attack name="energycondition" interval="2000" chance="10" range="1" target="1" min="-75" max="-75">
+			<attribute key="areaEffect" value="energy" />
+			<attribute key="shootEffect" value="energy" />
+		</attack>
 	</attacks>
 	<defenses armor="20" defense="20" />
 	<elements>

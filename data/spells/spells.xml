@@ -781,12 +781,9 @@
 	<instant name="death blob curse" words="###14" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/death_blob_curse.lua" />
 	<instant name="choking fear drown" words="###15" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/choking_fear_drown.lua" />
 	<instant name="blightwalker curse" words="###16" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/blightwalker_curse.lua" />
-	<instant name="quara constrictor freeze" words="###19" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/quara_constrictor_freeze.lua" />
-	<instant name="quara constrictor electrify" words="###20" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/quara_constrictor_electrify.lua" />
 	<instant name="cliff strider electrify" words="###21" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/cliff_strider_electrify.lua" />
 	<instant name="mutated bat curse" words="###24" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/mutated_bat_curse.lua" />
 	<instant name="lava golem soulfire" words="###26" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/lava_golem_soulfire.lua" />
-	<instant name="magma crawler soulfire" words="###27" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/magma_crawler_soulfire.lua" />
 	<instant name="war golem skill reducer" words="###28" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/war_golem_skill_reducer.lua" />
 	<instant name="silencer skill reducer" words="###29" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/silencer_skill_reducer.lua" />
 	<instant name="warlock skill reducer" words="###30" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/warlock_skill_reducer.lua" />
@@ -809,7 +806,6 @@
 	<instant name="djinn cancel invisibility" words="###47" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/djinn_cancel_invisibility.lua" />
 	<instant name="betrayed wraith skill reducer" words="###48" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/betrayed_wraith_skill_reducer.lua" />
 	<instant name="pirate corsair skill reducer" words="###49" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/pirate_corsair_skill_reducer.lua" />
-	<instant name="monster soulfire" words="###50" aggressive="1" blockwalls="1" range="7" needtarget="1" needlearn="1" script="monster/monster_soulfire.lua" />
 	<instant name="dipthrah skill reducer" words="###51" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/dipthrah_skill_reducer.lua" />
 	<instant name="summon challenge" words="###52" blockwalls="1" needtarget="0" needlearn="1" script="monster/summon_challenge.lua" />
 	<instant name="root branchy" words="###53" blockwalls="1" needtarget="1" needlearn="1" script="monster/root_branchy.lua" />
