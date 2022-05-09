@@ -22376,13 +22376,15 @@
 		<attribute key="weight" value="000" />
 	</item>
 	<item fromid="13234" toid="13235" article="a" name="stone" />
-	<item id="13236" article="a" name="closed door">
+	<item id="13236" article="a" name="closed door" editorsuffix=" (Locked)">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
 	</item>
-	<item id="13237" article="a" name="closed door">
+	<item id="13237" article="a" name="closed door" editorsuffix=" (Locked)">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
 	</item>
 	<item id="13238" article="a" name="shapechanger">
 		<attribute key="description" value="It might do some funny things to you." />
