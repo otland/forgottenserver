@@ -1813,8 +1813,9 @@ void ProtocolGame::sendBasicData()
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
 	}
+
 	msg.addByte(player->getVocation()->getClientId());
-	msg.addByte(0x00); // is prey system enabled (bool)
+	msg.addByte(player->getVocation()->getId() != VOCATION_NONE ? 0x01 : 0x00); // prey system
 
 	// unlock spells on action bar
 	msg.add<uint16_t>(0xFF);
