@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Pirat Scoundrel" nameDescription="a pirat scoundrel" experience="1600" speed="380" manacost="0">
 	<health now="2200" max="2200" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="1346" head="97" body="119" legs="80" feet="80" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

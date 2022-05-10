@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Pirat Bombardier" nameDescription="a pirat bombardier" experience="1700" speed="370" manacost="0">
 	<health now="2300" max="2300" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="1346" head="57" body="125" legs="86" feet="67" addons="2" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

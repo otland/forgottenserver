@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Pirat Cutthroat" nameDescription="a pirat cutthroat" experience="1800" speed="320" manacost="0">
 	<health now="2600" max="2600" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="1346" head="2" body="96" legs="78" feet="96" addons="1" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

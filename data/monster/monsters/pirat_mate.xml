@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Pirat Mate" nameDescription="a pirat mate" experience="2400" speed="350" manacost="0">
 	<health now="3200" max="3200" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="1346" head="0" body="95" legs="95" feet="113" addons="3" corpse="0" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
