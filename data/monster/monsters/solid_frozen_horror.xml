@@ -32,11 +32,7 @@
 		</attack>
 		<attack name="hirintror skill reducer" interval="2000" chance="10" />
 	</attacks>
-	<defenses armor="60" defense="60">
-		<defense name="healing" interval="2000" chance="20" radius="7" min="0" max="0">
-			<attribute key="areaEffect" value="yellowspark" />
-		</defense>
-	</defenses>
+	<defenses armor="60" defense="60" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity ice="1" />

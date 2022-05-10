@@ -24,7 +24,7 @@
 		<attack name="melee" interval="2000" min="0" max="-219" />
 	</attacks>
 	<defenses armor="10" defense="5">
-		<defense name="icecle heal" interval="2000" chance="25" />
+		<defense name="icicle heal" interval="2000" chance="25" />
 	</defenses>
 	<immunities>
 		<immunity physical="1" />

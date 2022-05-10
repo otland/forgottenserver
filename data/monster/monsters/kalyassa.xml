@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Kalyassa" nameDescription="kalyassa" race="blood" experience="9000" speed="350">
+<monster name="Kalyassa" nameDescription="Kalyassa" race="blood" experience="9000" speed="350">
 	<health now="10000" max="10000" />
 	<look type="947" head="37" body="113" legs="38" feet="95" addons="3" corpse="5984" />
 	<targetchange interval="2000" chance="5" />
@@ -42,7 +42,7 @@
 		</defense>
 	</defenses>
 	<summons maxSummons="2">
-		<summon name="Dragon Lord" interval="2000" chance="20" max="2" />
+		<summon name="Dragon Lord" interval="2000" chance="20" />
 	</summons>
 	<elements>
 		<element energyPercent="70" />

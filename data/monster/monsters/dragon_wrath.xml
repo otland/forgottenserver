@@ -22,13 +22,17 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-500" />
-		<attack name="ghastly dragon wave" interval="2000" chance="10" min="-50" max="-250" />
+		<attack name="death" interval="2000" chance="10" length="8" spread="3" min="-50" max="-250">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
 		<attack name="ghastly dragon curse" interval="2000" chance="10" range="7" />
 		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-920" max="-1260">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="ghastly dragon paralyze" interval="2000" chance="9" range="7" />
+		<attack name="speed" interval="2000" chance="20" range="9" target="1" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
 		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" min="-90" max="-250">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

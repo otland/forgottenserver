@@ -10,9 +10,9 @@ area = {
 
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
-combat:setParameter(COMBAT_PARAM_EFFECT, 179)
+combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_PURPLECHAIN)
 combat:setArea(createCombatArea(area))
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

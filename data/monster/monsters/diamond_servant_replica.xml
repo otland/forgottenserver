@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" experience="700" speed="172">
+<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" race="energy" experience="700" speed="172">
 	<health now="2000" max="2000" />
 	<look type="397" corpse="13485" />
 	<targetchange interval="2000" chance="5" />
@@ -29,7 +29,9 @@
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />
 		</attack>
-		<attack name="wyrm wave" interval="2000" chance="9" min="-70" max="-120" />
+		<attack name="energy" interval="2000" chance="9" length="5" spread="2" min="-70" max="-120">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
 	</attacks>
 	<defenses armor="40" defense="45">
 		<defense name="healing" interval="2000" chance="11" min="50" max="150">
@@ -58,7 +60,7 @@
 		<item id="7588" name="strong health potion" chance="6066" />
 		<item id="9690" name="gear wheel" chance="5697" />
 		<item id="10572" name="gear crystal" chance="5205" />
-		<item name="crystal pedestal" chance="4303" />
+		<item id="9978" name="crystal pedestal" chance="4303" />
 		<item id="2164" name="might ring" chance="984" />
 		<item id="7889" name="lightning pendant" chance="820" />
 		<item id="13758" name="slime mould" chance="574" />
