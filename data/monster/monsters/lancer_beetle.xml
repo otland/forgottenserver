@@ -29,7 +29,10 @@
 		<attack name="poisoncondition" interval="2000" chance="10" range="7" target="0" min="-40" max="-80">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
-		<attack name="lancer beetle curse" interval="2000" range="5" chance="5" />
+		<attack name="cursecondition" interval="2000" range="5" chance="5" target="1" min="-280" max="-310">
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="shootEffect" value="death" />
+		</attack>
 	</attacks>
 	<defenses armor="20" defense="20">
 		<defense name="invisible" interval="2000" chance="10" duration="3000">

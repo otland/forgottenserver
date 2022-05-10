@@ -29,7 +29,9 @@
 		<attack name="manadrain" interval="2000" chance="10" target="0" radius="3" min="-5" max="-80">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</attack>
-		<attack name="phantasm drown" interval="2000" chance="10" />
+		<attack name="drowncondition" interval="2000" chance="10" length="10" spread="3" min="-400" max="-400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
 		<attack name="drunk" interval="2000" chance="5" radius="5" target="0" duration="6000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>

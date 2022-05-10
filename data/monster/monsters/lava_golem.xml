@@ -25,7 +25,9 @@
 		<attack name="manadrain" interval="2000" chance="10" length="8" spread="0" min="-600" max="-1300">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="lava golem soulfire" interval="2000" chance="15" />
+		<attack name="firecondition" interval="2000" chance="15" radius="3" min="-400" max="-400">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
 		<attack name="fire" interval="2000" chance="15" radius="4" target="1" min="-220" max="-350">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>

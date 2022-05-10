@@ -29,7 +29,9 @@
 		<attack name="fire" interval="2000" chance="15" range="7" radius="3" target="0" min="-60" max="-330">
 			<attribute key="areaEffect" value="fire" />
 		</attack>
-		<attack name="hellfire fighter soulfire" interval="2000" chance="15" />
+		<attack name="firecondition" interval="2000" chance="15" radius="7" min="-200" max="-200">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
 	</attacks>
 	<defenses armor="35" defense="35" />
 	<elements>

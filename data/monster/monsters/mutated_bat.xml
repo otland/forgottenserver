@@ -26,7 +26,10 @@
 		<attack name="drown" interval="2000" chance="15" target="0" radius="6" min="-30" max="-90">
 			<attribute key="areaEffect" value="whitenote" />
 		</attack>
-		<attack name="mutated bat curse" interval="2000" chance="10" />
+		<attack name="cursecondition" interval="2000" chance="10" length="10" spread="3" min="-40" max="-50">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaeffect" value="smallclouds" />
+		</attack>
 		<attack name="poisoncondition" interval="2000" chance="15" target="0" length="4" spread="3" min="-190" max="-240">
 			<attribute key="areaeffect" value="poison" />
 		</attack>

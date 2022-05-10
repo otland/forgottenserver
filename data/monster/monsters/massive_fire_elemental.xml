@@ -30,7 +30,9 @@
 		<attack name="fire" interval="2000" chance="15" radius="3" target="0" min="-60" max="-250">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		<attack name="massive fire elemental soulfire" interval="2000" chance="15" />
+		<attack name="firecondition" interval="2000" chance="15" radius="7" min="-200" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<elements>
