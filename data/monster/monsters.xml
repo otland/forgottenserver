@@ -2,6 +2,7 @@
 <monsters>
 	<monster name="a carved stone tile" file="monsters/a_carved_stone_tile.xml" />
 	<monster name="A Shielded Astral Glyph" file="monsters/a_shielded_astral_glyph.xml" />
+	<monster name="A Weak Spot" file="monsters/a_weak_spot.xml" />
 	<monster name="Abyssador" file="monsters/abyssador.xml" />
 	<monster name="Achad" file="monsters/achad.xml" />
 	<monster name="Acid Blob" file="monsters/acid_blob.xml" />
@@ -15,6 +16,7 @@
 	<monster name="An Observer Eye" file="monsters/an_observer_eye.xml" />
 	<monster name="Ancient Scarab" file="monsters/ancient_scarab.xml" />
 	<monster name="Angry Adventurer" file="monsters/angry_adventurer.xml" />
+	<monster name="Angry Elemental" file="monsters/angry_elemental.xml" />
 	<monster name="Angry Plant" file="monsters/angry_plant.xml" />
 	<monster name="Animated Sword" file="monsters/animated_sword.xml" />
 	<monster name="Annihilon" file="monsters/annihilon.xml" />
@@ -98,6 +100,7 @@
 	<monster name="Chakoya Windcaller" file="monsters/chakoya_windcaller.xml" />
 	<monster name="Channeling Earl Osam" file="monsters/channeling_earl_osam.xml" />
 	<monster name="Charged Energy Elemental" file="monsters/charged_energy_elemental.xml" />
+	<monster name="Cheese Thief" file="monsters/cheese_thief.xml" />
 	<monster name="Chicken" file="monsters/chicken.xml" />
 	<monster name="Chizzoron the Distorter" file="monsters/chizzoron_the_distorter.xml" />
 	<monster name="Choking Fear" file="monsters/choking_fear.xml" />
@@ -257,6 +260,8 @@
 	<monster name="Evil Sheep Lord" file="monsters/evil_sheep_lord.xml" />
 	<monster name="Evil Sheep" file="monsters/evil_sheep.xml" />
 	<monster name="Execowtioner" file="monsters/execowtioner.xml" />
+	<monster name="Exotic Bat" file="monsters/exotic_bat.xml" />
+	<monster name="Exotic Cave Spider" file="monsters/exotic_cave_spider.xml" />
 	<monster name="Eye of the Seven" file="monsters/eye_of_the_seven.xml" />
 	<monster name="Fallen Challenger" file="monsters/fallen_challenger.xml" />
 	<monster name="Fallen Mooh'tah Master Ghar" file="monsters/fallen_mooh'tah_master_ghar.xml" />
@@ -345,6 +350,7 @@
 	<monster name="Grynch Clan Goblin" file="monsters/grynch_clan_goblin.xml" />
 	<monster name="Gryphon" file="monsters/gryphon.xml" />
 	<monster name="Guard Captain Quaid" file="monsters/guard_captain_quaid.xml" />
+	<monster name="Gust Of Wind" file="monsters/gust_of_wind.xml" />
 	<monster name="Guzzlemaw" file="monsters/guzzlemaw.xml" />
 	<monster name="Hacker" file="monsters/hacker.xml" />
 	<monster name="Hairman The Huge" file="monsters/hairman_the_huge.xml" />
@@ -469,6 +475,7 @@
 	<monster name="Massive Water Elemental" file="monsters/massive_water_elemental.xml" />
 	<monster name="Mawhawk" file="monsters/mawhawk.xml" />
 	<monster name="Mazoran" file="monsters/mazoran.xml" />
+	<monster name="Mean Termite" file="monsters/mean_termite.xml" />
 	<monster name="Mechanical Fighter" file="monsters/mechanical_fighter.xml" />
 	<monster name="Medusa" file="monsters/medusa.xml" />
 	<monster name="Melting Frozen Horror" file="monsters/melting_frozen_horror.xml" />
@@ -560,6 +567,10 @@
 	<monster name="Pigeon" file="monsters/pigeon.xml" />
 	<monster name="Pillar" file="monsters/pillar.xml" />
 	<monster name="Pinata Dragon" file="monsters/pinata_dragon.xml" />
+	<monster name="Pirat Bombardier" file="monsters/pirat_bombardier.xml" />
+	<monster name="Pirat Cutthroat" file="monsters/pirat_cutthroat.xml" />
+	<monster name="Pirat Mate" file="monsters/pirat_mate.xml" />
+	<monster name="Pirat Scoundrel" file="monsters/pirat_scoundre.xml" />
 	<monster name="Pirate Buccaneer" file="monsters/pirate_buccaneer.xml" />
 	<monster name="Pirate Corsair" file="monsters/pirate_corsair.xml" />
 	<monster name="Pirate Cutthroat" file="monsters/pirate_cutthroat.xml" />
@@ -590,10 +601,13 @@
 	<monster name="Quara Pincher" file="monsters/quara_pincher.xml" />
 	<monster name="Quara Predator Scout" file="monsters/quara_predator_scout.xml" />
 	<monster name="Quara Predator" file="monsters/quara_predator.xml" />
+	<monster name="Quara Saboteur" file="monsters/quara_saboteur.xml" />
 	<monster name="Rabbit" file="monsters/rabbit.xml" />
+	<monster name="Raccoon Supplies" file="monsters/raccoon_supplies.xml" />
 	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
 	<monster name="Rahemos" file="monsters/rahemos.xml" />
 	<monster name="Rat" file="monsters/rat.xml" />
+	<monster name="Ratmiral Blackwhiskers" file="monsters/ratmiral_blackwhiskers.xml" />
 	<monster name="Red Butterfly" file="monsters/red_butterfly.xml" />
 	<monster name="Renegade Knight" file="monsters/renegade_knight.xml" />
 	<monster name="Renegade Orc" file="monsters/renegade_orc.xml" />
@@ -628,6 +642,7 @@
 	<monster name="Sea Serpent" file="monsters/sea_serpent.xml" />
 	<monster name="Seagull" file="monsters/seagull.xml" />
 	<monster name="Serpent Spawn" file="monsters/serpent_spawn.xml" />
+	<monster name="Servant Of Tentugly" file="monsters/servant_of_tentugly.xml" />
 	<monster name="Shaburak Demon" file="monsters/shaburak_demon.xml" />
 	<monster name="Shaburak Lord" file="monsters/shaburak_lord.xml" />
 	<monster name="Shaburak Prince" file="monsters/shaburak_prince.xml" />
@@ -688,6 +703,11 @@
 	<monster name="Spite of the Emperor" file="monsters/spite_of_the_emperor.xml" />
 	<monster name="Spitter" file="monsters/spitter.xml" />
 	<monster name="Splasher" file="monsters/splasher.xml" />
+	<monster name="Spy Rat" file="monsters/spy_rat.xml" />
+	<monster name="Spyrat" file="monsters/spyrat.xml" />
+	<monster name="Spyrat" file="monsters/spyrat.xml" />
+	<monster name="Spyrat" file="monsters/spyrat.xml" />
+	<monster name="Spyrat" file="monsters/spyrat.xml" />
 	<monster name="Squidgy Slime" file="monsters/squidgy_slime.xml" />
 	<monster name="Squire Of Nictros" file="monsters/squire_of_nictros.xml" />
 	<monster name="Squirrel" file="monsters/squirrel.xml" />
@@ -711,6 +731,8 @@
 	<monster name="Tarnished Spirit" file="monsters/tarnished_spirit.xml" />
 	<monster name="Tazhadur" file="monsters/tazhadur.xml" />
 	<monster name="Teleskor" file="monsters/teleskor.xml" />
+	<monster name="Tentacle" file="monsters/tentacle.xml" />
+	<monster name="Tentugly's Head" file="monsters/tentugly's_head.xml" />
 	<monster name="Terofar" file="monsters/terofar.xml" />
 	<monster name="Terramite" file="monsters/terramite.xml" />
 	<monster name="Terrified Elephant" file="monsters/terrified_elephant.xml" />
