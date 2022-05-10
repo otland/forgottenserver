@@ -11738,7 +11738,7 @@
 	<item id="6798" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="6799" article="an" name="entrance" editorsuffix=" (Locked)">
+	<item id="6799" article="an" name="entrance">
 		<attribute key="description" value="It seems tightly closed." />
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
@@ -11746,7 +11746,7 @@
 	<item id="6800" article="an" name="entrance">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="6801" article="an" name="entrance" editorsuffix=" (Locked)">
+	<item id="6801" article="an" name="entrance">
 		<attribute key="description" value="It seems tightly closed." />
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />

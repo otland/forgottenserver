@@ -6,6 +6,7 @@ local openOddDoors = {
 
 	[33432] = { locked = 33429, closed = 33428 },
 	[33433] = { locked = 33431, closed = 33430 },
+
 	[00000] = { locked = 00000, closed = 00000 },
 	[00000] = { locked = 00000, closed = 00000 },
 	[00000] = { locked = 00000, closed = 00000 },
@@ -23,6 +24,7 @@ local closedOddDoors = {
 
 	[33428] = { locked = 33429, open = 33432 },
 	[33430] = { locked = 33431, open = 33433 },
+
 	[00000] = { locked = 00000, open = 00000 },
 	[00000] = { locked = 00000, open = 00000 },
 	[00000] = { locked = 00000, open = 00000 },
@@ -41,6 +43,7 @@ local lockedOddDoors = {
 
 	[33429] = { closed = 33428, open = 33432 },
 	[33431] = { closed = 33430, open = 33433 },
+	
 	[00000] = { closed = 00000, open = 00000 },
 	[00000] = { closed = 00000, open = 00000 },
 	[00000] = { closed = 00000, open = 00000 },
