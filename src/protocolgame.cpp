@@ -1617,7 +1617,8 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 
 void ProtocolGame::parsePlayerMinimapQuery(NetworkMessage& msg)
 {
-	addGameTask(&Game::playerMinimapQuery, player->getID(), msg.getPosition());
+	Position pos = msg.getPosition();
+	addGameTask([=, playerID = player->getID()]() { g_game.playerMinimapQuery(playerID, pos); });
 }
 
 // Send methods
