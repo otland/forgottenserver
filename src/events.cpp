@@ -1127,7 +1127,7 @@ void Events::eventPlayerOnMinimapQuery(Player* player, const Position& position)
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		console::reportOverflow("Events::onMinimapQuery");
+		std::cout << "Events::onMinimapQuery" << std::endl;
 		return;
 	}
 
