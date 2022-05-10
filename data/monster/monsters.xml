@@ -704,10 +704,10 @@
 	<monster name="Spitter" file="monsters/spitter.xml" />
 	<monster name="Splasher" file="monsters/splasher.xml" />
 	<monster name="Spy Rat" file="monsters/spy_rat.xml" />
-	<monster name="Spyrat" file="monsters/spyrat.xml" />
-	<monster name="Spyrat" file="monsters/spyrat.xml" />
-	<monster name="Spyrat" file="monsters/spyrat.xml" />
-	<monster name="Spyrat" file="monsters/spyrat.xml" />
+	<monster name="Spyrat Facing East" file="monsters/spyrat_(facing_east).xml" />
+	<monster name="Spyrat Facing North" file="monsters/spyrat_(facing_north).xml" />
+	<monster name="Spyrat Facing South" file="monsters/spyrat_(facing_south).xml" />
+	<monster name="Spyrat Facing West" file="monsters/spyrat_(facing_west).xml" />
 	<monster name="Squidgy Slime" file="monsters/squidgy_slime.xml" />
 	<monster name="Squire Of Nictros" file="monsters/squire_of_nictros.xml" />
 	<monster name="Squirrel" file="monsters/squirrel.xml" />
