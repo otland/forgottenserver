@@ -43,9 +43,6 @@
 		<attack name="lifedrain" interval="3000" chance="20" length="8" spread="3" min="-300" max="-600">
 			<attribute key="areaEffect" value="greenshimmer" />
 		</attack>
-		<attack name="drowncondition" interval="1000" chance="20" length="8" spread="3">
-			<attribute key="areaEffect" value="poff" />
-		</attack>
 	</attacks>
 	<defenses armor="40" defense="39" />
 	<immunities>

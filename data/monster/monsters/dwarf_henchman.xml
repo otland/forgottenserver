@@ -17,7 +17,8 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" poison="20" />
-		<attack name="drowncondition" interval="2000" chance="20" target="1" />
+		<attack name="drown" interval="2000" chance="20" target="1" min="-20" max="-20"/>
+		<attack name="drowncondition" interval="2000" chance="20" target="1" min="-80" max="-80"/>
 	</attacks>
 	<defenses armor="16" defense="16" />
 	<immunities>
