@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Saboteur" nameDescription="a quara saboteur" experience="0" speed="0" manacost="0">
 	<health now="7000" max="7000" />
 	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
@@ -21,13 +21,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity outfit="0" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-		<immunity bleed="0" />
-	</immunities>
+	<defenses armor="10" defense="5" />
 	<elements>
 		<element physicalPercent="0" />
 		<element energyPercent="0" />
@@ -40,5 +34,11 @@
 		<element holyPercent="0" />
 		<element deathPercent="0" />
 	</elements>
-	<defenses armor="10" defense="5" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
 </monster>
