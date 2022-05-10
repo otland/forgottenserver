@@ -28,11 +28,13 @@ ec.onChangeMount = {}
 ec.onAreaCombat = {returnValue=true}
 ec.onTargetCombat = {returnValue=true}
 ec.onHear = {}
+
 -- Party
 ec.onJoin = {}
 ec.onLeave = {}
 ec.onDisband = {}
 ec.onShareExperience = {}
+
 -- Player
 ec.onBrowseField = {}
 ec.onLook = {[5] = 1}
@@ -54,6 +56,8 @@ ec.onLoseExperience = {[2] = 1}
 ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
+ec.onMinimapQuery = {}
+
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}

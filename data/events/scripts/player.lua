@@ -315,3 +315,20 @@ function Player:onInventoryUpdate(item, slot, equip)
 		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
 end
+
+function Player:onMinimapQuery(position)
+	if EventCallback.onMinimapQuery then
+		EventCallback.onMinimapQuery(self, position)
+	end
+
+	if not self:getGroup():getAccess() then
+		return
+	end
+
+	local tile = Tile(position)
+	if not tile then
+		Game.createTile(position)
+	end
+
+	self:teleportTo(position)
+end

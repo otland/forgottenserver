@@ -137,6 +137,8 @@ private:
 	void parseBrowseField(NetworkMessage& msg);
 	void parseSeekInContainer(NetworkMessage& msg);
 
+	void parsePlayerMinimapQuery(NetworkMessage& msg);
+
 	// trade methods
 	void parseRequestTrade(NetworkMessage& msg);
 	void parseLookInTrade(NetworkMessage& msg);

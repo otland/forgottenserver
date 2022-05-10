@@ -586,7 +586,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_WEST); });
 			break;
-		// case 0x73: break; // map click(?)
+		case 0x73:
+			parsePlayerMinimapQuery(msg);
+			break;
 		case 0x77:
 			parseEquipObject(msg);
 			break;
@@ -1611,6 +1613,11 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 	uint8_t containerId = msg.getByte();
 	uint16_t index = msg.get<uint16_t>();
 	addGameTask([=, playerID = player->getID()]() { g_game.playerSeekInContainer(playerID, containerId, index); });
+}
+
+void ProtocolGame::parsePlayerMinimapQuery(NetworkMessage& msg)
+{
+	addGameTask(&Game::playerMinimapQuery, player->getID(), msg.getPosition());
 }
 
 // Send methods
