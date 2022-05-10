@@ -25,9 +25,11 @@
 		<attack name="energy" interval="2000" chance="12" length="6" spread="0" min="-130" max="-460">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
+		<attack name="energy" interval="2000" chance="15" radius="2" target="0" min="-430" max="-660">
+			<attribute key="areaEffect" value="purplechain" />
+		</attack>
 		<attack name="lloyd wave 1" interval="2000" chance="12" min="-430" max="-560" />
 		<attack name="lloyd wave 2" interval="2000" chance="12" min="-230" max="-460" />
-		<attack name="lloyd wave 3" interval="2000" chance="12" min="-430" max="-660" />
 	</attacks>
 	<defenses armor="55" defense="55">
 		<defense name="healing" interval="2000" chance="15" min="180" max="250" />

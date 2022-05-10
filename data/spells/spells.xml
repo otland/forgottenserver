@@ -829,7 +829,6 @@
 	<instant name="icicle heal" words="###59" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/icicle_heal.lua" />
 	<instant name="lloyd wave 1" words="###60" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_1.lua" />
 	<instant name="lloyd wave 2" words="###61" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_2.lua" />
-	<instant name="lloyd wave 3" words="###62" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/lloyd_wave_3.lua" />
+	<instant name="hirintror freeze" words="###62" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_freeze.lua" />
 	<instant name="hirintror skill reducer" words="###63" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_skill_reducer.lua" />
-	<instant name="hirintror freeze" words="###64" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_freeze.lua" />
 </spells>
