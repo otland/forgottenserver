@@ -16,13 +16,13 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-180" />
-		<attack name="drown" interval="1000" chance="100" length="5" spread="6" min="-10" max="-50">
+		<attack name="drown" interval="1000" length="5" spread="6" min="-10" max="-50">
 			<attribute key="areaEffect" value="energyarea" />
 		</attack>
-		<attack name="speed" interval="4000" chance="100" radius="3" duration="10000" speedchange="-400">
+		<attack name="speed" interval="4000" radius="3" duration="10000" speedchange="-400">
 			<attribute key="areaEffect" value="poff" />
 		</attack>
-		<attack name="physical" interval="6000" chance="100" radius="1" target="1" range="5" min="0" max="-40">
+		<attack name="physical" interval="6000" radius="1" target="1" range="5" min="0" max="-40">
 			<attribute key="shootEffect" value="largerock" />
 		</attack>
 	</attacks>

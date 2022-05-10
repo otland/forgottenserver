@@ -22,7 +22,7 @@
 		<attack name="speed" interval="2000" chance="20" range="7" speedchange="-400" duration="2500">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 		</attack>
-		<attack name="fire" interval="2000" chance="100" range="7" min="-820" max="-950">
+		<attack name="fire" interval="2000" range="7" min="-820" max="-950">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
 		<attack name="energy" interval="1000" chance="12" range="3" target="1" min="-350" max="-800">

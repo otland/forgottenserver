@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="earth" interval="2000" chance="100" range="7" min="0" max="-100">
+		<attack name="earth" interval="2000" range="7" min="0" max="-100">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 	</attacks>

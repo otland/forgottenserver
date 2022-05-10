@@ -22,7 +22,7 @@
 		<attack name="physical" interval="2000" chance="20" range="7" min="-10" max="-95">
 			<attribute key="shootEffect" value="smallstone" />
 		</attack>
-		<attack name="lifedrain" interval="1000" chance="100" range="1" min="-20" max="-30">
+		<attack name="lifedrain" interval="1000" range="1" min="-20" max="-30">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
