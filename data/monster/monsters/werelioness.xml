@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Werelioness" nameDescription="a werelioness" experience="2300" speed="220" manacost="0">
+	<health now="3000" max="3000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="38" defense="38" />
+	<loot>
+		<item id="2148" name="gold coin" chance="87916" countmax="99" />
+		<item id="2152" name="platinum coin" chance="87317" countmax="8" />
+		<item id="2671" name="ham" chance="69574" />
+		<item id="5944" name="soul orb" chance="17011" />
+		<item id="2666" name="meat" chance="16977" />
+		<item id="10608" name="lion's mane" chance="13249" />
+		<item id="2384" name="rapier" chance="11684" />
+		<item id="7449" name="crystal sword" chance="10120" />
+		<item id="2461" name="leather helmet" chance="9887" />
+		<item id="7759" name="small enchanted sapphire" chance="9221" countmax="6" />
+		<item id="2193" name="ankh" chance="7823" />
+		<item id="2144" name="black pearl" chance="7124" />
+		<item id="2409" name="serpent sword" chance="4960" />
+		<item id="3351" name="steel helmet" chance="3129" />
+		<item id="36601" name="ivory carving" chance="3029" />
+		<item id="2143" name="white pearl" chance="2963" />
+		<item id="7901" name="lightning headband" chance="2330" />
+		<item id="24739" name="moonlight crystals" chance="1431" />
+		<item id="7894" name="magma legs" chance="965" />
+		<item id="2491" name="crown helmet" chance="832" />
+		<item id="36437" name="lion figurine" chance="300" />
+		<item id="36664" name="white silk flower" chance="266" />
+	</loot>
+</monster>

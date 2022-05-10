@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Brachiodemon" nameDescription="a brachiodemon" experience="15770" speed="440" manacost="0">
+	<health now="25000" max="25000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="100" defense="100" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Feel the heat!" yell="false" />
+		<voice sentence="Hand over your life." yell="false" />
+		<voice sentence="I can give you a hand... or two." yell="false" />
+	</voices>
+	<loot>
+		<item id="2160" name="crystal coin" chance="51508" />
+		<item id="8473" name="ultimate health potion" chance="23893" countmax="4" />
+		<item id="36592" name="hand" chance="5758" />
+		<item id="2438" name="epee" chance="2664" />
+		<item id="36593" name="head (brachiodemon)" chance="2468" />
+		<item id="2445" name="crystal mace" chance="1606" />
+		<item id="2436" name="skull staff" chance="1410" />
+		<item id="8902" name="spellbook of mind control" chance="862" />
+		<item id="7456" name="noble axe" chance="823" />
+		<item id="7412" name="butcher's axe" chance="666" />
+		<item id="7404" name="assassin dagger" chance="627" />
+		<item name="ring of green plasma" chance="548" />
+		<item id="23539" name="alloy legs" chance="509" />
+		<item id="2432" name="fire axe" chance="509" />
+		<item id="23542" name="metal bat" chance="509" />
+		<item id="7422" name="jade hammer" chance="353" />
+		<item id="2498" name="royal helmet" chance="313" />
+		<item id="18450" name="crystalline sword" chance="235" />
+		<item id="36681" name="diabolic skull" chance="235" />
+		<item id="2514" name="mastermind shield" chance="235" />
+	</loot>
+</monster>

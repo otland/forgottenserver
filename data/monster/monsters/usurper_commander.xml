@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Usurper Commander" nameDescription="a usurper commander" experience="7200" speed="0" manacost="0">
+	<health now="8500" max="8500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="36820" name="fur shred" chance="16363" />
+		<item id="2386" name="axe" chance="15322" />
+		<item id="36818" name="lion cloak patch" chance="10078" />
+		<item id="36816" name="lion crest" chance="9000" />
+		<item id="9971" name="gold ingot" chance="8814" />
+		<item id="2456" name="bow" chance="8665" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="8144" />
+		<item id="8901" name="spellbook of warding" chance="5169" />
+		<item id="8912" name="springsprout rod" chance="4165" />
+		<item id="8922" name="wand of voodoo" chance="4054" />
+		<item id="2155" name="green gem" chance="2789" />
+		<item id="2153" name="violet gem" chance="2640" />
+		<item name="ring of blue plasma" chance="2194" />
+		<item name="ring of red plasma" chance="1859" />
+		<item id="18413" name="blue crystal shard" chance="1562" />
+		<item id="7443" name="bullseye potion" chance="409" />
+		<item name="giant shimmering pearl" chance="149" />
+	</loot>
+</monster>
