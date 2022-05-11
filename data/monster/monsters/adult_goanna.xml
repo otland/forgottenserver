@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Adult Goanna" nameDescription="an adult goanna" race="blood" experience="6650" speed="420">
+	<health now="8300" max="8300" />
+	<look type="1195" corpse="34061" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" poison="19" />
+		<attack name="wave t" interval="2000" chance="10" min="-250" max="-380" />
+		<attack name="earth" interval="2000" chance="12" range="3" radius="1" target="1" min="-450" max="-550">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" radius="5" min="-210" max="-300">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+	</attacks>
+	<defenses armor="84" defense="84">
+		<defense name="speed" interval="2000" chance="5" speedchange="500" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="75" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="18437" name="envenomed arrow" chance="55359" countmax="8" />
+		<item id="7850" name="earth arrow" chance="14253" countmax="30" />
+		<item id="34216" name="goanna meat" chance="11621" />
+		<item id="2127" name="emerald bangle" chance="10154" />
+		<item id="7761" name="small enchanted emerald" chance="8951" />
+		<item id="18413" name="blue crystal shard" chance="8161" />
+		<item id="2146" name="small sapphire" chance="7747" countmax="2" />
+		<item id="34214" name="red goanna scale" chance="7559" />
+		<item id="2181" name="terra rod" chance="7409" />
+		<item id="7903" name="terra hood" chance="6732" />
+		<item id="18416" name="green crystal splinter" chance="6581" />
+		<item id="7887" name="terra amulet" chance="6093" />
+		<item id="34217" name="goanna claw" chance="4739" />
+		<item id="2134" name="silver brooch" chance="3874" />
+		<item id="2154" name="yellow gem" chance="3761" />
+		<item id="34144" name="scared frog" chance="3159" />
+		<item id="2155" name="green gem" chance="3121" />
+		<item id="2409" name="serpent sword" chance="2670" />
+		<item id="24849" name="onyx chip" chance="2219" />
+		<item id="24850" name="opal" chance="2106" countmax="2" />
+		<item id="10219" name="sacred tree amulet" chance="1956" />
+		<item id="2664" name="wood cape" chance="1692" />
+		<item id="2150" name="small amethyst" chance="1504" />
+		<item id="33996" name="lizard heart" chance="1354" />
+		<item id="24741" name="fur armor" chance="1241" />
+		<item id="34101" name="small tortoise" chance="1015" />
+		<item id="2143" name="white pearl" chance="1015" />
+		<item id="27047" name="coral brooch" chance="827" />
+		<item id="27048" name="gemmed figurine" chance="790" />
+	</loot>
+</monster>

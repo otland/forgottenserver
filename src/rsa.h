@@ -4,24 +4,20 @@
 #ifndef FS_RSA_H
 #define FS_RSA_H
 
-#include <cryptopp/rsa.h>
-
-#include <string>
-
 class RSA
 {
-	public:
-		RSA() = default;
+public:
+	RSA() = default;
 
-		// non-copyable
-		RSA(const RSA&) = delete;
-		RSA& operator=(const RSA&) = delete;
+	// non-copyable
+	RSA(const RSA&) = delete;
+	RSA& operator=(const RSA&) = delete;
 
-		void loadPEM(const std::string& filename);
-		void decrypt(char* msg) const;
+	void loadPEM(const std::string& filename);
+	void decrypt(char* msg) const;
 
-	private:
-		CryptoPP::RSA::PrivateKey pk;
+private:
+	CryptoPP::RSA::PrivateKey pk;
 };
 
 #endif // FS_RSA_H

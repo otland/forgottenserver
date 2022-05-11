@@ -4,10 +4,10 @@
 #include "otpch.h"
 
 #include "iomapserialize.h"
-#include "game.h"
-#include "bed.h"
 
-#include <fmt/format.h>
+#include "bed.h"
+#include "game.h"
+#include "housetile.h"
 
 extern Game g_game;
 
@@ -55,13 +55,13 @@ bool IOMapSerialize::saveHouseItems()
 	int64_t start = OTSYS_TIME();
 	Database& db = Database::getInstance();
 
-	//Start the transaction
+	// Start the transaction
 	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
 
-	//clear old tile data
+	// clear old tile data
 	if (!db.executeQuery("DELETE FROM `tile_store`")) {
 		return false;
 	}
@@ -70,7 +70,7 @@ bool IOMapSerialize::saveHouseItems()
 
 	PropWriteStream stream;
 	for (const auto& it : g_game.map.houses.getHouses()) {
-		//save house items
+		// save house items
 		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
 			saveTile(stream, tile);
@@ -78,7 +78,8 @@ bool IOMapSerialize::saveHouseItems()
 			size_t attributesSize;
 			const char* attributes = stream.getStream(attributesSize);
 			if (attributesSize > 0) {
-				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
+				if (!stmt.addRow(
+				        fmt::format("{:d}, {:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
 					return false;
 				}
 				stream.clear();
@@ -90,10 +91,9 @@ bool IOMapSerialize::saveHouseItems()
 		return false;
 	}
 
-	//End the transaction
+	// End the transaction
 	bool success = transaction.commit();
-	std::cout << "> Saved house items in: " <<
-	          (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
+	std::cout << "> Saved house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << std::endl;
 	return success;
 }
 
@@ -101,7 +101,8 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 {
 	while (container->serializationCount > 0) {
 		if (!loadItem(propStream, container)) {
-			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
+			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
+			          << container->getID() << std::endl;
 			return false;
 		}
 		container->serializationCount--;
@@ -109,7 +110,8 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 
 	uint8_t endAttr;
 	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
-		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: " << container->getID() << std::endl;
+		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
+		          << container->getID() << std::endl;
 		return false;
 	}
 	return true;
@@ -129,7 +131,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || iType.forceSerialize || !tile) {
-		//create a new item
+		// create a new item
 		Item* item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
@@ -177,7 +179,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
 			}
 		} else {
-			//The map changed since the last save, just read the attributes
+			// The map changed since the last save, just read the attributes
 			std::unique_ptr<Item> dummy(Item::CreateItem(id));
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
@@ -231,7 +233,8 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
-		if (!(it.moveable || it.forceSerialize || item->getDoor() || (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText || item->getBed())) {
+		if (!(it.moveable || it.forceSerialize || item->getDoor() ||
+		      (item->getContainer() && !item->getContainer()->empty()) || it.canWriteText || item->getBed())) {
 			continue;
 		}
 
@@ -299,9 +302,17 @@ bool IOMapSerialize::saveHouseInfo()
 		House* house = it.second;
 		DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
 		if (result) {
-			db.executeQuery(fmt::format("UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}", house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(), db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(), house->getBedCount(), house->getId()));
+			db.executeQuery(fmt::format(
+			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
+			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
+			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
+			    house->getBedCount(), house->getId()));
 		} else {
-			db.executeQuery(fmt::format("INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})", house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(), db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(), house->getBedCount()));
+			db.executeQuery(fmt::format(
+			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
+			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
+			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
+			    house->getBedCount()));
 		}
 	}
 
@@ -329,7 +340,8 @@ bool IOMapSerialize::saveHouseInfo()
 
 		for (Door* door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
-				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(), db.escapeString(listText)))) {
+				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
+				                             db.escapeString(listText)))) {
 					return false;
 				}
 
@@ -349,7 +361,7 @@ bool IOMapSerialize::saveHouse(House* house)
 {
 	Database& db = Database::getInstance();
 
-	//Start the transaction
+	// Start the transaction
 	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
@@ -357,7 +369,7 @@ bool IOMapSerialize::saveHouse(House* house)
 
 	uint32_t houseId = house->getId();
 
-	//clear old tile data
+	// clear old tile data
 	if (!db.executeQuery(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
 		return false;
 	}
@@ -382,6 +394,6 @@ bool IOMapSerialize::saveHouse(House* house)
 		return false;
 	}
 
-	//End the transaction
+	// End the transaction
 	return transaction.commit();
 }

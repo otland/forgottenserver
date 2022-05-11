@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gaffir" nameDescription="Gaffir" race="blood" experience="25000" speed="190">
+	<health now="48500" max="48500" />
+	<look type="1217" head="34" body="129" legs="113" feet="19" corpse="33963" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-550" />
+		<attack name="physical" interval="2000" chance="8" radius="3" min="-450" max="-650">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="5" spread="0" min="-400" max="-580">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="3000" chance="14" range="4" target="1" min="-500" max="-750">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="earth" interval="2000" chance="16" range="4" radius="4" target="1" min="-500" max="-620">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="earth" interval="3000" chance="12" radius="2" min="-320" max="-500">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="83" defense="83" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="Black Cobra" interval="2000" chance="10" />
+	</summons>
+	<loot>
+		<item id="9970" name="small topaz" chance="20163" />
+		<item id="2146" name="small sapphire" chance="19619" />
+		<item id="2145" name="small diamond" chance="17439" />
+		<item id="2149" name="small emerald" chance="14714" />
+		<item id="2147" name="small ruby" chance="14169" />
+		<item id="2150" name="small amethyst" chance="13896" />
+	</loot>
+</monster>

@@ -1,4 +1,7 @@
-function onStepIn(creature, item, position, fromPosition)
+local levelDoor = MoveEvent()
+levelDoor:type("stepin")
+
+function levelDoor.onStepIn(creature, item, position, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end
@@ -10,3 +13,8 @@ function onStepIn(creature, item, position, fromPosition)
 	end
 	return true
 end
+
+for _, i in ipairs(openLevelDoors) do
+	levelDoor:id(i)
+end
+levelDoor:register()

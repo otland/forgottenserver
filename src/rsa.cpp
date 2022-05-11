@@ -7,10 +7,7 @@
 
 #include <cryptopp/base64.h>
 #include <cryptopp/osrng.h>
-#include <fmt/color.h>
-
 #include <fstream>
-#include <sstream>
 
 static CryptoPP::AutoSeededRandomPool prng;
 
@@ -37,7 +34,8 @@ void RSA::loadPEM(const std::string& filename)
 	}
 
 	std::ostringstream oss;
-	for (std::string line; std::getline(file, line); oss << line);
+	for (std::string line; std::getline(file, line); oss << line)
+		;
 	std::string key = oss.str();
 
 	auto headerIndex = key.find(header);

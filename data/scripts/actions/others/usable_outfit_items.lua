@@ -56,50 +56,49 @@ local config = {
 local usableOutfitItems = Action()
 
 function usableOutfitItems.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-    -- stop if player is not premium
-    if not player:isPremium() then
-        player:sendCancelMessage("You need a premium account to use this outfit.")
-        return true
-    end
+	-- stop if player is not premium
+	if not player:isPremium() then
+		player:sendCancelMessage("You need a premium account to use this outfit.")
+		return true
+	end
 
-    local outfitConfig = config[item.itemid]
-    local looktype = player:getSex() == PLAYERSEX_FEMALE and outfitConfig.female or outfitConfig.male
+	local outfitConfig = config[item.itemid]
+	local looktype = player:getSex() == PLAYERSEX_FEMALE and outfitConfig.female or outfitConfig.male
 
-    -- If player is missing the outfit
-    if not player:hasOutfit(looktype) then
-        
-        -- And this is an addon item, then stop
-        if outfitConfig.addon then
-            player:sendCancelMessage("You need the outfit for this part.")
-            return true
-        end
-        
-        -- Give outfit
-        player:addOutfit(outfitConfig.female)
-        player:addOutfit(outfitConfig.male)
-        player:getPosition():sendMagicEffect(outfitConfig.effect)
-        item:remove(1)
-        return true
-    end
+	-- If player is missing the outfit
+	if not player:hasOutfit(looktype) then
+		-- And this is an addon item, then stop
+		if outfitConfig.addon then
+			player:sendCancelMessage("You need the outfit for this part.")
+			return true
+		end
 
-    -- stop if player already have this addon
-    if player:hasOutfit(looktype, outfitConfig.addon) then
-        player:sendCancelMessage("You already own this outfit part.")
-        return true
-    end
+		-- Give outfit
+		player:addOutfit(outfitConfig.female)
+		player:addOutfit(outfitConfig.male)
+		player:getPosition():sendMagicEffect(outfitConfig.effect)
+		item:remove(1)
+		return true
+	end
 
-    -- Give addon
-    player:addOutfitAddon(outfitConfig.female, outfitConfig.addon)
-    player:addOutfitAddon(outfitConfig.male, outfitConfig.addon)
-    player:getPosition():sendMagicEffect(outfitConfig.effect)
-    item:remove(1)
+	-- stop if player already have this addon
+	if player:hasOutfit(looktype, outfitConfig.addon) then
+		player:sendCancelMessage("You already own this outfit part.")
+		return true
+	end
 
-    -- full set achievement check and give
-    if player:hasOutfit(looktype, 3) then
-        player:addAchievement(outfitConfig.achievement)
-    end
+	-- Give addon
+	player:addOutfitAddon(outfitConfig.female, outfitConfig.addon)
+	player:addOutfitAddon(outfitConfig.male, outfitConfig.addon)
+	player:getPosition():sendMagicEffect(outfitConfig.effect)
+	item:remove(1)
 
-    return true
+	-- full set achievement check and give
+	if player:hasOutfit(looktype, 3) then
+		player:addAchievement(outfitConfig.achievement)
+	end
+
+	return true
 end
 
 for k, v in pairs(config) do

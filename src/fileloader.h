@@ -4,10 +4,6 @@
 #ifndef FS_FILELOADER_H
 #define FS_FILELOADER_H
 
-#include <limits>
-#include <vector>
-#include <boost/iostreams/device/mapped_file.hpp>
-
 class PropStream;
 
 namespace OTB {
@@ -23,7 +19,7 @@ struct Node
 	ContentIt propsBegin;
 	ContentIt propsEnd;
 	uint8_t type;
-	enum NodeChar: uint8_t
+	enum NodeChar : uint8_t
 	{
 		ESCAPE = 0xFD,
 		START = 0xFE,
@@ -31,121 +27,126 @@ struct Node
 	};
 };
 
-struct LoadError : std::exception {
+struct LoadError : std::exception
+{
 	const char* what() const noexcept override = 0;
 };
 
-struct InvalidOTBFormat final : LoadError {
-	const char* what() const noexcept override {
-		return "Invalid OTBM file format";
-	}
+struct InvalidOTBFormat final : LoadError
+{
+	const char* what() const noexcept override { return "Invalid OTBM file format"; }
 };
 
-class Loader {
+class Loader
+{
 	MappedFile fileContents;
 	Node root;
 	std::vector<char> propBuffer;
+
 public:
 	Loader(const std::string& fileName, const Identifier& acceptedIdentifier);
 	bool getProps(const Node& node, PropStream& props);
 	const Node& parseTree();
 };
 
-} //namespace OTB
+} // namespace OTB
 
 class PropStream
 {
-	public:
-		void init(const char* a, size_t size) {
-			p = a;
-			end = a + size;
+public:
+	void init(const char* a, size_t size)
+	{
+		p = a;
+		end = a + size;
+	}
+
+	size_t size() const { return end - p; }
+
+	template <typename T>
+	bool read(T& ret)
+	{
+		if (size() < sizeof(T)) {
+			return false;
 		}
 
-		size_t size() const {
-			return end - p;
+		memcpy(&ret, p, sizeof(T));
+		p += sizeof(T);
+		return true;
+	}
+
+	bool readString(std::string& ret)
+	{
+		uint16_t strLen;
+		if (!read<uint16_t>(strLen)) {
+			return false;
 		}
 
-		template <typename T>
-		bool read(T& ret) {
-			if (size() < sizeof(T)) {
-				return false;
-			}
-
-			memcpy(&ret, p, sizeof(T));
-			p += sizeof(T);
-			return true;
+		if (size() < strLen) {
+			return false;
 		}
 
-		bool readString(std::string& ret) {
-			uint16_t strLen;
-			if (!read<uint16_t>(strLen)) {
-				return false;
-			}
+		char* str = new char[strLen + 1];
+		memcpy(str, p, strLen);
+		str[strLen] = 0;
+		ret.assign(str, strLen);
+		delete[] str;
+		p += strLen;
+		return true;
+	}
 
-			if (size() < strLen) {
-				return false;
-			}
-
-			char* str = new char[strLen + 1];
-			memcpy(str, p, strLen);
-			str[strLen] = 0;
-			ret.assign(str, strLen);
-			delete[] str;
-			p += strLen;
-			return true;
+	bool skip(size_t n)
+	{
+		if (size() < n) {
+			return false;
 		}
 
-		bool skip(size_t n) {
-			if (size() < n) {
-				return false;
-			}
+		p += n;
+		return true;
+	}
 
-			p += n;
-			return true;
-		}
-
-	private:
-		const char* p = nullptr;
-		const char* end = nullptr;
+private:
+	const char* p = nullptr;
+	const char* end = nullptr;
 };
 
 class PropWriteStream
 {
-	public:
-		PropWriteStream() = default;
+public:
+	PropWriteStream() = default;
 
-		// non-copyable
-		PropWriteStream(const PropWriteStream&) = delete;
-		PropWriteStream& operator=(const PropWriteStream&) = delete;
+	// non-copyable
+	PropWriteStream(const PropWriteStream&) = delete;
+	PropWriteStream& operator=(const PropWriteStream&) = delete;
 
-		const char* getStream(size_t& size) const {
-			size = buffer.size();
-			return buffer.data();
+	const char* getStream(size_t& size) const
+	{
+		size = buffer.size();
+		return buffer.data();
+	}
+
+	void clear() { buffer.clear(); }
+
+	template <typename T>
+	void write(T add)
+	{
+		char* addr = reinterpret_cast<char*>(&add);
+		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
+	}
+
+	void writeString(const std::string& str)
+	{
+		size_t strLength = str.size();
+		if (strLength > std::numeric_limits<uint16_t>::max()) {
+			write<uint16_t>(0);
+			return;
 		}
 
-		void clear() {
-			buffer.clear();
-		}
+		write(static_cast<uint16_t>(strLength));
+		std::copy(str.begin(), str.end(), std::back_inserter(buffer));
+	}
 
-		template <typename T>
-		void write(T add) {
-			char* addr = reinterpret_cast<char*>(&add);
-			std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
-		}
-
-		void writeString(const std::string& str) {
-			size_t strLength = str.size();
-			if (strLength > std::numeric_limits<uint16_t>::max()) {
-				write<uint16_t>(0);
-				return;
-			}
-
-			write(static_cast<uint16_t>(strLength));
-			std::copy(str.begin(), str.end(), std::back_inserter(buffer));
-		}
-
-	private:
-		std::vector<char> buffer;
+private:
+	std::vector<char> buffer;
 };
 
 #endif // FS_FILELOADER_H
