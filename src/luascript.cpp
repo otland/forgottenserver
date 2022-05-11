@@ -12192,7 +12192,7 @@ int LuaScriptInterface::luaItemTypeGetAbilities(lua_State* L)
 	ItemType* itemType = getUserdata<ItemType>(L, 1);
 	if (itemType) {
 		Abilities& abilities = itemType->getAbilities();
-		lua_createtable(L, 6, 12);
+		lua_createtable(L, 10, 12);
 		setField(L, "healthGain", abilities.healthGain);
 		setField(L, "healthTicks", abilities.healthTicks);
 		setField(L, "manaGain", abilities.manaGain);
