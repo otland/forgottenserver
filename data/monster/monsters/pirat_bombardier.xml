@@ -61,7 +61,7 @@
 		<item id="38229" name="pirat's tail" chance="5031" />
 		<item id="38252" name="mouldy powder" chance="4220" />
 		<item id="7891" name="magma boots" chance="3756" />
-		<item name="ring of blue plasma" chance="2203" />
+		<item id="26185" name="ring of blue plasma" chance="2203" />
 		<item id="7893" name="lightning boots" chance="1693" />
 		<item id="2664" name="wood cape" chance="1600" />
 	</loot>
