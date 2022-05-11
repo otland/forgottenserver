@@ -15796,6 +15796,7 @@
 	<item id="8769" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
 	</item>
 	<item fromid="8770" toid="8776" article="the" name="demon oak" />
 	<item fromid="8777" toid="8778" article="a" name="sorcerer statue">
@@ -23586,6 +23587,7 @@
 	<item id="13955" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
 	</item>
 	<item id="13956" article="a" name="dead askarak lord">
 		<attribute key="weight" value="26000" />
@@ -34557,6 +34559,7 @@
 	<item id="24626" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="1" />
+		<attribute key="description" value="It is locked." />
 	</item>
 	<item id="24627" article="a" name="hole" />
 	<item id="24628" article="a" name="pitfall" />
