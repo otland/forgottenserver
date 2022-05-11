@@ -3,56 +3,42 @@ local openOddDoors = {
 	[12703] = { locked = 13236, closed = 12701 },
 	[14635] = { locked = 14634, closed = 14633 },
 	[17435] = { locked = 14641, closed = 14640 },
+	[26533] = { locked = 26530, closed = 26529 },
+	[26534] = { locked = 26532, closed = 26531 },
+
+	[00000] = { locked = 00000, closed = 00000 },
+	[00000] = { locked = 00000, closed = 00000 },
 
 	[33432] = { locked = 33429, closed = 33428 },
 	[33433] = { locked = 33431, closed = 33430 },
-
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 },
-	[00000] = { locked = 00000, closed = 00000 }
 }
 local closedOddDoors = {	
 	[12692] = { locked = 13237, open = 12695 },
 	[12701] = { locked = 13236, open = 12703 },
 	[14633] = { locked = 14634, open = 14635 },
 	[14640] = { locked = 14641, open = 17435 },
+	[26529] = { locked = 26530, open = 26533 },
+	[26531] = { locked = 26532, open = 26534 },
+
+	[00000] = { locked = 00000, open = 00000 },
+	[00000] = { locked = 00000, open = 00000 },
 
 	[33428] = { locked = 33429, open = 33432 },
 	[33430] = { locked = 33431, open = 33433 },
-
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 },
-	[00000] = { locked = 00000, open = 00000 }
 }
 local lockedOddDoors = {
 	[13237] = { closed = 12692, open = 12695 },
 	[13236] = { closed = 12701, open = 12703 },
 	[14634] = { closed = 14633, open = 14635 },
-	[14641] = { closed = 14640, open = 17435 },
+	[14641] = { closed = 14640, open = 17435 },	
+	[26530] = { closed = 26529, open = 26533 },	
+	[26532] = { closed = 26531, open = 26534 },
+
+	[00000] = { closed = 00000, open = 00000 },
+	[00000] = { closed = 00000, open = 00000 },
 
 	[33429] = { closed = 33428, open = 33432 },
-	[33431] = { closed = 33430, open = 33433 },
-	
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 }
+	[33431] = { closed = 33430, open = 33433 }
 }
 
 local positionOffsets = {
