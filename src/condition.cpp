@@ -1976,7 +1976,6 @@ bool ConditionManaShield::startCondition(Creature* creature)
 	}
 
 	if (Player* player = creature->getPlayer()) {
-
 		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*this);
 
 		manaShield = conditionManaShield.manaShield;
@@ -2005,7 +2004,6 @@ void ConditionManaShield::addCondition(Creature* creature, const Condition* addC
 		manaShield = conditionManaShield.manaShield;
 		maxManaShield = conditionManaShield.manaShield;
 		player->sendStats();
-
 	}
 }
 
@@ -2021,7 +2019,8 @@ bool ConditionManaShield::unserializeProp(ConditionAttr_t attr, PropStream& prop
 	return Condition::unserializeProp(attr, propStream);
 }
 
-int32_t ConditionManaShield::onDamageTaken(Player* player, int32_t manaChange) {
+int32_t ConditionManaShield::onDamageTaken(Player* player, int32_t manaChange)
+{
 	if (!player) {
 		return 0;
 	}

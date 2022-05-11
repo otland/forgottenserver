@@ -337,8 +337,8 @@ public:
 	int32_t getMaxHealth() const override { return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]); }
 	uint32_t getMana() const { return mana; }
 	uint32_t getMaxMana() const { return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]); }
-	uint16_t getManaShieldBar() const {	return manaShieldBar; }
-	void setManaShieldBar(uint16_t value) {	manaShieldBar = value; }
+	uint16_t getManaShieldBar() const { return manaShieldBar; }
+	void setManaShieldBar(uint16_t value) { manaShieldBar = value; }
 	uint16_t getMaxManaShieldBar() const { return maxManaShieldBar; }
 	void setMaxManaShieldBar(uint16_t value) { maxManaShieldBar = value; }
 
@@ -614,7 +614,6 @@ public:
 		if (client) {
 			client->sendMoveCreature(creature, newPos, newStackPos, oldPos, oldStackPos, teleport);
 		}
-
 	}
 	void sendCreatureTurn(const Creature* creature)
 	{

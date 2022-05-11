@@ -44,7 +44,8 @@ public:
 
 	bool allowsPvp() const { return allowPvp; }
 
-	bool getMagicShield() const {
+	bool getMagicShield() const
+	{
 		if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL)) {
 			return true;
 		}
@@ -52,7 +53,7 @@ public:
 		if (!g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
 			return false;
 		}
-			return magicShield;
+		return magicShield;
 	}
 
 	float meleeDamageMultiplier = 1.0f;

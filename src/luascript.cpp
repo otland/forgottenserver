@@ -1296,7 +1296,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SUBID);
 	registerEnum(CONDITION_PARAM_FIELD);
 	registerEnum(CONDITION_PARAM_DISABLE_DEFENSE);
-	registerEnum(registerEnum(CONDITION_PARAM_MANASHIELD_BREAKABLE));
+	registerEnum(CONDITION_PARAM_MANASHIELD_BREAKABLE);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE);
@@ -8984,10 +8984,10 @@ int LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
 {
 	// player:setManaShieldBar(capacity, value)
-	Player* player = getPlayer(L, 1);
+	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setMaxManaShieldBar(getNumber<int32_t>(L, 2));
-		player->setManaShieldBar(getNumber<int32_t>(L, 3));
+		player->setMaxManaShieldBar(getNumber<uint16_t>(L, 2));
+		player->setManaShieldBar(getNumber<uint16_t>(L, 3));
 		player->sendStats();
 		pushBoolean(L, true);
 		return 1;
