@@ -1127,7 +1127,7 @@ void Events::eventPlayerOnMinimapQuery(Player* player, const Position& position)
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "Events::onMinimapQuery" << std::endl;
+		std::cout << "[Error - Events::onMinimapQuery] Call stack overflow" << std::endl;
 		return;
 	}
 
