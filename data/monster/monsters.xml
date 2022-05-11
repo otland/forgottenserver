@@ -17,6 +17,7 @@
 	<monster name="Ancient Scarab" file="monsters/ancient_scarab.xml" />
 	<monster name="Angry Adventurer" file="monsters/angry_adventurer.xml" />
 	<monster name="Angry Elemental" file="monsters/angry_elemental.xml" />
+	<monster name="Angry King Chuck" file="monsters/angry_king_chuck.xml" />
 	<monster name="Angry Plant" file="monsters/angry_plant.xml" />
 	<monster name="Animated Sword" file="monsters/animated_sword.xml" />
 	<monster name="Annihilon" file="monsters/annihilon.xml" />
@@ -94,6 +95,7 @@
 	<monster name="Cat" file="monsters/cat.xml" />
 	<monster name="Cave Parrot" file="monsters/cave_parrot.xml" />
 	<monster name="Cave Rat" file="monsters/cave_rat.xml" />
+	<monster name="Celebrating Orger" file="monsters/celebrating_orger.xml" />
 	<monster name="Centipede" file="monsters/centipede.xml" />
 	<monster name="Chakoya Toolshaper" file="monsters/chakoya_toolshaper.xml" />
 	<monster name="Chakoya Tribewarden" file="monsters/chakoya_tribewarden.xml" />
@@ -125,6 +127,7 @@
 	<monster name="Cosmic Energy Prism D" file="monsters/cosmic_energy_prism_d.xml" />
 	<monster name="Count Vlarkorth" file="monsters/count_vlarkorth.xml" />
 	<monster name="Countess Sorrow" file="monsters/countess_sorrow.xml" />
+	<monster name="Cow" file="monsters/cow.xml" />
 	<monster name="Crab" file="monsters/crab.xml" />
 	<monster name="Crawler" file="monsters/crawler.xml" />
 	<monster name="Crazed Beggar" file="monsters/crazed_beggar.xml" />
@@ -234,6 +237,7 @@
 	<monster name="Earth Elemental" file="monsters/earth_elemental.xml" />
 	<monster name="Earth Overlord" file="monsters/earth_overlord.xml" />
 	<monster name="Earworm" file="monsters/earworm.xml" />
+	<monster name="Eating Dog" file="monsters/eating_dog.xml" />
 	<monster name="Efreet" file="monsters/efreet.xml" />
 	<monster name="Elder Bonelord" file="monsters/elder_bonelord.xml" />
 	<monster name="Elder Forest Fury" file="monsters/elder_forest_fury.xml" />
@@ -265,6 +269,7 @@
 	<monster name="Eye of the Seven" file="monsters/eye_of_the_seven.xml" />
 	<monster name="Fallen Challenger" file="monsters/fallen_challenger.xml" />
 	<monster name="Fallen Mooh'tah Master Ghar" file="monsters/fallen_mooh'tah_master_ghar.xml" />
+	<monster name="Fat Porker" file="monsters/fat_porker.xml" />
 	<monster name="Fatality" file="monsters/fatality.xml" />
 	<monster name="Feral Sphinx" file="monsters/feral_sphinx.xml" />
 	<monster name="Fernfang" file="monsters/fernfang.xml" />
@@ -284,6 +289,7 @@
 	<monster name="Fleshslicer" file="monsters/fleshslicer.xml" />
 	<monster name="Floor Blob" file="monsters/floor_blob.xml" />
 	<monster name="Fluffy" file="monsters/fluffy.xml" />
+	<monster name="Food Wagon" file="monsters/food_wagon.xml" />
 	<monster name="Foreman Kneebiter" file="monsters/foreman_kneebiter.xml" />
 	<monster name="Forest Fury" file="monsters/forest_fury.xml" />
 	<monster name="Frazzlemaw" file="monsters/frazzlemaw.xml" />
@@ -409,6 +415,7 @@
 	<monster name="Kalyassa" file="monsters/kalyassa.xml" />
 	<monster name="Killer Caiman" file="monsters/killer_caiman.xml" />
 	<monster name="Killer Rabbit" file="monsters/killer_rabbit.xml" />
+	<monster name="King Chuck" file="monsters/king_chuck.xml" />
 	<monster name="King Zelos" file="monsters/king_zelos.xml" />
 	<monster name="Kitty" file="monsters/kitty.xml" />
 	<monster name="Knight Familiar" file="monsters/knight_familiar.xml" />
@@ -447,6 +454,7 @@
 	<monster name="Lloyd" file="monsters/lloyd.xml" />
 	<monster name="Lord Azaram" file="monsters/lord_azaram.xml" />
 	<monster name="Lord of the Elements" file="monsters/lord_of_the_elements.xml" />
+	<monster name="Loricate Orger" file="monsters/loricate_orger.xml" />
 	<monster name="Lost Basher" file="monsters/lost_basher.xml" />
 	<monster name="Lost Berserker" file="monsters/lost_berserker.xml" />
 	<monster name="Lost Husher" file="monsters/lost_husher.xml" />
@@ -542,6 +550,7 @@
 	<monster name="Orc Berserker" file="monsters/orc_berserker.xml" />
 	<monster name="Orc Leader" file="monsters/orc_leader.xml" />
 	<monster name="Orc Marauder" file="monsters/orc_marauder.xml" />
+	<monster name="Orc Musician" file="monsters/orc_musician.xml" />
 	<monster name="Orc Rider" file="monsters/orc_rider.xml" />
 	<monster name="Orc Shaman" file="monsters/orc_shaman.xml" />
 	<monster name="Orc Spearman" file="monsters/orc_spearman.xml" />
@@ -553,6 +562,8 @@
 	<monster name="Orclops Ravager" file="monsters/orclops_ravager.xml" />
 	<monster name="Orcus the Cruel" file="monsters/orcus_the_cruel.xml" />
 	<monster name="Orewalker" file="monsters/orewalker.xml" />
+	<monster name="Orger Treasure" file="monsters/orger_treasure.xml" />
+	<monster name="Orger" file="monsters/orger.xml" />
 	<monster name="Orshabaal" file="monsters/orshabaal.xml" />
 	<monster name="Overcharged Energy Element" file="monsters/overcharged_energy_element.xml" />
 	<monster name="Paladin Familiar" file="monsters/paladin_familiar.xml" />
@@ -620,6 +631,7 @@
 	<monster name="Risen Soldier" file="monsters/risen_soldier.xml" />
 	<monster name="Roaring Lion" file="monsters/roaring_lion.xml" />
 	<monster name="Roaring Water Elemental" file="monsters/roaring_water_elemental.xml" />
+	<monster name="Roast Pork" file="monsters/roast_pork.xml" />
 	<monster name="Robby the Reckless" file="monsters/robby_the_reckless.xml" />
 	<monster name="Rocko" file="monsters/rocko.xml" />
 	<monster name="Rocky" file="monsters/rocky.xml" />
@@ -673,6 +685,7 @@
 	<monster name="Slim" file="monsters/slim.xml" />
 	<monster name="Slime" file="monsters/slime.xml" />
 	<monster name="Slippery Northern Pike" file="monsters/slippery_northern_pike.xml" />
+	<monster name="Slowing Slime" file="monsters/slowing_slime.xml" />
 	<monster name="Slug" file="monsters/slug.xml" />
 	<monster name="Smuggler Baron Silvertoe" file="monsters/smuggler_baron_silvertoe.xml" />
 	<monster name="Smuggler" file="monsters/smuggler.xml" />
@@ -688,6 +701,7 @@
 	<monster name="Souleater" file="monsters/souleater.xml" />
 	<monster name="Soulless Minion" file="monsters/soulless_minion.xml" />
 	<monster name="Sparkion" file="monsters/sparkion.xml" />
+	<monster name="Spawn Of The Schnitzel" file="monsters/spawn_of_the_schnitzel.xml" />
 	<monster name="Spectral Scum" file="monsters/spectral_scum.xml" />
 	<monster name="Spectre" file="monsters/spectre.xml" />
 	<monster name="Sphinx" file="monsters/sphinx.xml" />
@@ -758,6 +772,7 @@
 	<monster name="The First Dragon" file="monsters/the_first_dragon.xml" />
 	<monster name="The Freezing Time Guardian" file="monsters/the_freezing_time_guardian.xml" />
 	<monster name="The Frog Prince" file="monsters/the_frog_prince.xml" />
+	<monster name="The Great Schnitzel" file="monsters/the_great_schnitzel.xml" />
 	<monster name="The Hag" file="monsters/the_hag.xml" />
 	<monster name="The Hairy One" file="monsters/the_hairy_one.xml" />
 	<monster name="The Halloween Hare" file="monsters/the_halloween_hare.xml" />
@@ -816,6 +831,7 @@
 	<monster name="Urmahlullu The Immaculate" file="monsters/urmahlullu_the_immaculate.xml" />
 	<monster name="Urmahlullu The Tamed" file="monsters/urmahlullu_the_tamed.xml" />
 	<monster name="Urmahlullu The Weakened" file="monsters/urmahlullu_the_weakened.xml" />
+	<monster name="Used Food Wagon" file="monsters/used_food_wagon.xml" />
 	<monster name="Ushuriel" file="monsters/ushuriel.xml" />
 	<monster name="Valkyrie" file="monsters/valkyrie.xml" />
 	<monster name="Vampire Bride" file="monsters/vampire_bride.xml" />

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Orc Musician" nameDescription="an orc musician" experience="0" speed="0" manacost="0">
+	<health now="0" max="0" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="physical" interval="2000" chance="15">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15">
+			<attribute key="areaEffect" value="purplenote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15">
+			<attribute key="areaEffect" value="whitenote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15">
+			<attribute key="areaEffect" value="yellownote" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="And now a classic song!" yell="false" />
+		<voice sentence="ARE YOU READY TO ORC?" yell="false" />
+		<voice sentence="GAH! GUH! GAHGAH!" yell="false" />
+		<voice sentence="Give us your screams!" yell="false" />
+		<voice sentence="Hey you! Meet me backstage later!" yell="false" />
+		<voice sentence="HOLLAROOODUUDOOODELDUU!" yell="false" />
+		<voice sentence="I CAN'T HEAR YOU!" yell="false" />
+		<voice sentence="LaaaLaaaLAAAA!" yell="false" />
+		<voice sentence="NAAA! NAAANAAA! NAAA! NAAAA!" yell="false" />
+		<voice sentence="Pump up the beer!" yell="false" />
+		<voice sentence="This is for you!" yell="false" />
+	</voices>
+</monster>
