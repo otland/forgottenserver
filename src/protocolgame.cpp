@@ -108,19 +108,31 @@ std::size_t clientLogin(const Player& player)
 	return waitList.size();
 }
 
-ClientDamageType getClientDamageType(CombatType_t combatType) {
+ClientDamageType getClientDamageType(CombatType_t combatType)
+{
 	switch (combatType) {
-		case COMBAT_PHYSICALDAMAGE: return CLIENT_DAMAGETYPE_PHYSICAL;
-		case COMBAT_ENERGYDAMAGE: return CLIENT_DAMAGETYPE_ENERGY;
-		case COMBAT_EARTHDAMAGE: return CLIENT_DAMAGETYPE_EARTH;
-		case COMBAT_FIREDAMAGE: return CLIENT_DAMAGETYPE_FIRE;
-		case COMBAT_LIFEDRAIN: return CLIENT_DAMAGETYPE_LIFEDRAIN;
-		case COMBAT_HEALING: return CLIENT_DAMAGETYPE_HEALING;
-		case COMBAT_DROWNDAMAGE: return CLIENT_DAMAGETYPE_DROWN;
-		case COMBAT_ICEDAMAGE: return CLIENT_DAMAGETYPE_ICE;
-		case COMBAT_HOLYDAMAGE: return CLIENT_DAMAGETYPE_HOLY;
-		case COMBAT_DEATHDAMAGE: return CLIENT_DAMAGETYPE_DEATH;
-		default: return CLIENT_DAMAGETYPE_UNDEFINED;
+		case COMBAT_PHYSICALDAMAGE:
+			return CLIENT_DAMAGETYPE_PHYSICAL;
+		case COMBAT_ENERGYDAMAGE:
+			return CLIENT_DAMAGETYPE_ENERGY;
+		case COMBAT_EARTHDAMAGE:
+			return CLIENT_DAMAGETYPE_EARTH;
+		case COMBAT_FIREDAMAGE:
+			return CLIENT_DAMAGETYPE_FIRE;
+		case COMBAT_LIFEDRAIN:
+			return CLIENT_DAMAGETYPE_LIFEDRAIN;
+		case COMBAT_HEALING:
+			return CLIENT_DAMAGETYPE_HEALING;
+		case COMBAT_DROWNDAMAGE:
+			return CLIENT_DAMAGETYPE_DROWN;
+		case COMBAT_ICEDAMAGE:
+			return CLIENT_DAMAGETYPE_ICE;
+		case COMBAT_HOLYDAMAGE:
+			return CLIENT_DAMAGETYPE_HOLY;
+		case COMBAT_DEATHDAMAGE:
+			return CLIENT_DAMAGETYPE_DEATH;
+		default:
+			return CLIENT_DAMAGETYPE_UNDEFINED;
 	}
 }
 
@@ -3162,14 +3174,15 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target)
+void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+                                      const std::string& target)
 {
 	NetworkMessage msg;
 	msg.addByte(0xCC);
 	msg.addByte(impactType);
 	msg.add<uint32_t>(amount);
 
-	switch (impactType)	{
+	switch (impactType) {
 		case RECEIVED:
 			msg.addByte(getClientDamageType(type));
 			msg.addString(target);

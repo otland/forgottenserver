@@ -692,7 +692,8 @@ struct Reflect
 	uint16_t chance = 0;
 };
 
-enum ClientDamageType {
+enum ClientDamageType
+{
 	CLIENT_DAMAGETYPE_PHYSICAL = 0,
 	CLIENT_DAMAGETYPE_FIRE = 1,
 	CLIENT_DAMAGETYPE_EARTH = 2,
@@ -706,7 +707,8 @@ enum ClientDamageType {
 	CLIENT_DAMAGETYPE_UNDEFINED = 10
 };
 
-enum DamageAnalyzerImpactType {
+enum DamageAnalyzerImpactType
+{
 	HEALING = 0,
 	DEALT = 1,
 	RECEIVED = 2

@@ -1094,7 +1094,8 @@ public:
 			client->writeToOutputBuffer(message);
 		}
 	}
-	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string &target)
+	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+	                        const std::string& target)
 	{
 		if (client) {
 			client->sendCombatAnalyzer(type, amount, impactType, target);

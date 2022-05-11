@@ -4182,18 +4182,21 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		realHealthChange = target->getHealth() - realHealthChange;
 
 		if (attackerPlayer && attackerPlayer != targetPlayer) {
-			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::DEALT,
-				target ? target->getName() : "(other)");
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target ? target->getName() : "(other)");
 			if (damage.secondary.type == COMBAT_HEALING) {
-				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::DEALT,
-					target ? target->getName() : "(other)");
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT,
+				                                   target ? target->getName() : "(other)");
 			}
 		} else if (targetPlayer) {
-			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::HEALING,
-				attacker ? attacker->getName() : "(other)");
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::HEALING,
+			                                 attacker ? attacker->getName() : "(other)");
 			if (damage.secondary.type == COMBAT_HEALING) {
-				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::HEALING,
-					attacker ? attacker->getName() : "(other)");
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::HEALING,
+				                                 attacker ? attacker->getName() : "(other)");
 			}
 		}
 
@@ -4409,18 +4412,22 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (attackerPlayer) {
-			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::DEALT, target->getName());
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target->getName());
 			if (damage.secondary.type != COMBAT_NONE) {
-				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::DEALT, target->getName());
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT, target->getName());
 			}
 		}
 
 		if (targetPlayer) {
-			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value, DamageAnalyzerImpactType::RECEIVED,
-				attacker ? attacker->getName() : "(other)");
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::RECEIVED,
+			                                 attacker ? attacker->getName() : "(other)");
 			if (damage.secondary.type != COMBAT_NONE) {
-				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value, DamageAnalyzerImpactType::RECEIVED,
-				attacker ? attacker->getName() : "(other)");
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::RECEIVED,
+				                                 attacker ? attacker->getName() : "(other)");
 			}
 		}
 
