@@ -2,7 +2,7 @@
 <monsters>
 	<monster name="a carved stone tile" file="monsters/a_carved_stone_tile.xml" />
 	<monster name="A Shielded Astral Glyph" file="monsters/a_shielded_astral_glyph.xml" />
-	<monster name="A Weak Spot" file="monsters/a_weak_spot.xml" />
+	<monster name="a weak spot" file="monsters/a_weak_spot.xml" />
 	<monster name="Abyssador" file="monsters/abyssador.xml" />
 	<monster name="Achad" file="monsters/achad.xml" />
 	<monster name="Acid Blob" file="monsters/acid_blob.xml" />
