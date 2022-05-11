@@ -42,8 +42,8 @@
 		<immunity bleed="0" />
 	</immunities>
 	<voices interval="5000" chance="10">
-		<voice sentence="Catch me if you can!" yell="false" />
-		<voice sentence="Never cross the rat line!" yell="false" />
-		<voice sentence="Smoke on the water!" yell="false" />
+		<voice sentence="Catch me if you can!" />
+		<voice sentence="Never cross the rat line!" />
+		<voice sentence="Smoke on the water!" />
 	</voices>
 </monster>

@@ -42,8 +42,8 @@
 	</elements>
 	<defenses armor="10" defense="5" />
 	<voices interval="5000" chance="10">
-		<voice sentence="Let's paaarty!!" yell="false" />
-		<voice sentence="More beeeer!" yell="false" />
-		<voice sentence="Paaaartimeee!" yell="false" />
+		<voice sentence="Let's paaarty!!" />
+		<voice sentence="More beeeer!" />
+		<voice sentence="Paaaartimeee!" />
 	</voices>
 </monster>

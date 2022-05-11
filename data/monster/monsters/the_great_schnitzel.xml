@@ -42,8 +42,8 @@
 	</elements>
 	<defenses armor="10" defense="5" />
 	<voices interval="5000" chance="10">
-		<voice sentence="YOU DARE TO HUNT ME? INFIDELS!" yell="false" />
-		<voice sentence="FEEL THE POWER OF THE ALLMIGHTY SCHNITZEL!" yell="false" />
-		<voice sentence="COME HERE AND TASTE MY LEMON JUICE OF DOOM!" yell="false" />
+		<voice sentence="YOU DARE TO HUNT ME? INFIDELS!" />
+		<voice sentence="FEEL THE POWER OF THE ALLMIGHTY SCHNITZEL!" />
+		<voice sentence="COME HERE AND TASTE MY LEMON JUICE OF DOOM!" />
 	</voices>
 </monster>

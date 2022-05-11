@@ -56,16 +56,16 @@
 	</attacks>
 	<defenses armor="10" defense="5" />
 	<voices interval="5000" chance="10">
-		<voice sentence="And now a classic song!" yell="false" />
-		<voice sentence="ARE YOU READY TO ORC?" yell="false" />
-		<voice sentence="GAH! GUH! GAHGAH!" yell="false" />
-		<voice sentence="Give us your screams!" yell="false" />
-		<voice sentence="Hey you! Meet me backstage later!" yell="false" />
-		<voice sentence="HOLLAROOODUUDOOODELDUU!" yell="false" />
-		<voice sentence="I CAN'T HEAR YOU!" yell="false" />
-		<voice sentence="LaaaLaaaLAAAA!" yell="false" />
-		<voice sentence="NAAA! NAAANAAA! NAAA! NAAAA!" yell="false" />
-		<voice sentence="Pump up the beer!" yell="false" />
-		<voice sentence="This is for you!" yell="false" />
+		<voice sentence="And now a classic song!" />
+		<voice sentence="ARE YOU READY TO ORC?" />
+		<voice sentence="GAH! GUH! GAHGAH!" />
+		<voice sentence="Give us your screams!" />
+		<voice sentence="Hey you! Meet me backstage later!" />
+		<voice sentence="HOLLAROOODUUDOOODELDUU!" />
+		<voice sentence="I CAN'T HEAR YOU!" />
+		<voice sentence="LaaaLaaaLAAAA!" />
+		<voice sentence="NAAA! NAAANAAA! NAAA! NAAAA!" />
+		<voice sentence="Pump up the beer!" />
+		<voice sentence="This is for you!" />
 	</voices>
 </monster>
