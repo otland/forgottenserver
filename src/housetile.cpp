@@ -4,15 +4,15 @@
 #include "otpch.h"
 
 #include "housetile.h"
-#include "house.h"
-#include "game.h"
+
 #include "configmanager.h"
+#include "game.h"
+#include "house.h"
 
 extern Game g_game;
 extern ConfigManager g_config;
 
-HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* house) :
-	DynamicTile(x, y, z), house(house) {}
+HouseTile::HouseTile(int32_t x, int32_t y, int32_t z, House* house) : DynamicTile(x, y, z), house(house) {}
 
 void HouseTile::addThing(int32_t index, Thing* thing)
 {
@@ -59,7 +59,8 @@ void HouseTile::updateHouse(Item* item)
 	}
 }
 
-ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue HouseTile::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
+                                Creature* actor /* = nullptr*/) const
 {
 	if (const Creature* creature = thing.getCreature()) {
 		if (const Player* player = creature->getPlayer()) {
@@ -92,8 +93,7 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 				Tile* destTile = g_game.map.getTile(entryPos);
 				if (!destTile) {
 					std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
-					          << " - Name: " << house->getName()
-					          << " - House id: " << house->getId()
+					          << " - Name: " << house->getName() << " - House id: " << house->getId()
 					          << " - Tile not found: " << entryPos << std::endl;
 
 					destTile = g_game.map.getTile(player->getTemplePosition());
@@ -112,7 +112,8 @@ Tile* HouseTile::queryDestination(int32_t& index, const Thing& thing, Item** des
 	return Tile::queryDestination(index, thing, destItem, flags);
 }
 
-ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr*/) const
+ReturnValue HouseTile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
+                                   Creature* actor /*= nullptr*/) const
 {
 	const Item* item = thing.getItem();
 	if (!item) {

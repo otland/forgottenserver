@@ -1,18 +1,24 @@
-local slotBits = {
-	[CONST_SLOT_HEAD] = SLOTP_HEAD,
-	[CONST_SLOT_NECKLACE] = SLOTP_NECKLACE,
-	[CONST_SLOT_BACKPACK] = SLOTP_BACKPACK,
-	[CONST_SLOT_ARMOR] = SLOTP_ARMOR,
-	[CONST_SLOT_RIGHT] = SLOTP_RIGHT,
-	[CONST_SLOT_LEFT] = SLOTP_LEFT,
-	[CONST_SLOT_LEGS] = SLOTP_LEGS,
-	[CONST_SLOT_FEET] = SLOTP_FEET,
-	[CONST_SLOT_RING] = SLOTP_RING,
-	[CONST_SLOT_AMMO] = SLOTP_AMMO
-}
+function ItemType:isItemType()
+	return true
+end
 
-function ItemType.usesSlot(self, slot)
-	return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
+do
+	local slotBits = {
+		[CONST_SLOT_HEAD] = SLOTP_HEAD,
+		[CONST_SLOT_NECKLACE] = SLOTP_NECKLACE,
+		[CONST_SLOT_BACKPACK] = SLOTP_BACKPACK,
+		[CONST_SLOT_ARMOR] = SLOTP_ARMOR,
+		[CONST_SLOT_RIGHT] = SLOTP_RIGHT,
+		[CONST_SLOT_LEFT] = SLOTP_LEFT,
+		[CONST_SLOT_LEGS] = SLOTP_LEGS,
+		[CONST_SLOT_FEET] = SLOTP_FEET,
+		[CONST_SLOT_RING] = SLOTP_RING,
+		[CONST_SLOT_AMMO] = SLOTP_AMMO
+	}
+
+	function ItemType:usesSlot(slot)
+		return bit.band(self:getSlotPosition(), slotBits[slot] or 0) ~= 0
+	end
 end
 
 function ItemType:isHelmet()
@@ -48,6 +54,10 @@ end
 function ItemType:isMissile()
 	local ammoType = self:getAmmoType()
 	return self:getWeaponType() == WEAPON_DISTANCE and ammoType ~= AMMO_ARROW and ammoType ~= AMMO_BOLT
+end
+
+function ItemType:isQuiver()
+	return self:getWeaponType() == WEAPON_QUIVER
 end
 
 function ItemType:isWand()
@@ -86,6 +96,14 @@ function ItemType:isBed()
 	return self:getType() == ITEM_TYPE_BED
 end
 
+function ItemType:isSplash()
+	return self:getGroup() == ITEM_GROUP_SPLASH
+end
+
+function ItemType:isPodium()
+	return self:getGroup() == ITEM_GROUP_PODIUM
+end
+
 function ItemType:getWeaponString()
 	local weaponType = self:getWeaponType()
 	local weaponString = "unknown"
@@ -100,6 +118,8 @@ function ItemType:getWeaponString()
 		weaponString = self:isBow() and "firearm" or "missile"
 	elseif weaponType == WEAPON_WAND then
 		weaponString = "wand/rod"
+	elseif weaponType == WEAPON_QUIVER then
+		weaponString = "quiver"
 	end
 
 	if self:isTwoHanded() then

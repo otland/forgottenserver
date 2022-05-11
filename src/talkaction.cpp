@@ -3,20 +3,13 @@
 
 #include "otpch.h"
 
-#include "player.h"
 #include "talkaction.h"
-#include "pugicast.h"
 
-TalkActions::TalkActions()
-	: scriptInterface("TalkAction Interface")
-{
-	scriptInterface.initState();
-}
+#include "player.h"
 
-TalkActions::~TalkActions()
-{
-	clear(false);
-}
+TalkActions::TalkActions() : scriptInterface("TalkAction Interface") { scriptInterface.initState(); }
+
+TalkActions::~TalkActions() { clear(false); }
 
 void TalkActions::clear(bool fromLua)
 {
@@ -31,19 +24,13 @@ void TalkActions::clear(bool fromLua)
 	reInitState(fromLua);
 }
 
-LuaScriptInterface& TalkActions::getScriptInterface()
-{
-	return scriptInterface;
-}
+LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; }
 
-std::string TalkActions::getScriptBaseName() const
-{
-	return "talkactions";
-}
+std::string TalkActions::getScriptBaseName() const { return "talkactions"; }
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "talkaction")) {
 		return nullptr;
 	}
 	return Event_ptr(new TalkAction(&scriptInterface));
@@ -67,7 +54,7 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
-	TalkAction_ptr talkAction{ event };
+	TalkAction_ptr talkAction{event};
 	std::vector<std::string> words = talkAction->getWordsMap();
 
 	for (size_t i = 0; i < words.size(); i++) {
@@ -86,20 +73,19 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
 		const std::string& talkactionWords = it->first;
-		size_t talkactionLength = talkactionWords.length();
-		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+		if (!caseInsensitiveStartsWith(words, talkactionWords)) {
 			++it;
 			continue;
 		}
 
 		std::string param;
-		if (wordsLength != talkactionLength) {
-			param = words.substr(talkactionLength);
+		if (wordsLength != talkactionWords.size()) {
+			param = words.substr(talkactionWords.size());
 			if (param.front() != ' ') {
 				++it;
 				continue;
 			}
-			trim_left(param, ' ');
+			boost::algorithm::trim_left(param);
 
 			std::string separator = it->second.getSeparator();
 			if (separator != " ") {
@@ -126,9 +112,8 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 
 		if (it->second.executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
-		} else {
-			return TALKACTION_BREAK;
 		}
+		return TALKACTION_BREAK;
 	}
 	return TALKACTION_CONTINUE;
 }
@@ -143,7 +128,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute separatorAttribute = node.attribute("separator");
 	if (separatorAttribute) {
-		separator = pugi::cast<char>(separatorAttribute.value());
+		separator = separatorAttribute.as_string();
 	}
 
 	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
@@ -152,14 +137,11 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string TalkAction::getScriptEventName() const
-{
-	return "onSay";
-}
+std::string TalkAction::getScriptEventName() const { return "onSay"; }
 
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
-	//onSay(player, words, param, type)
+	// onSay(player, words, param, type)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;

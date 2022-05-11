@@ -4,11 +4,9 @@
 #include "otpch.h"
 
 #include "protocolold.h"
-#include "outputmessage.h"
 
 #include "game.h"
-
-#include <fmt/format.h>
+#include "outputmessage.h"
 
 extern Game g_game;
 
@@ -29,7 +27,7 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	/*uint16_t clientOS =*/ msg.get<uint16_t>();
+	/*uint16_t clientOS =*/msg.get<uint16_t>();
 	uint16_t version = msg.get<uint16_t>();
 	msg.skipBytes(12);
 

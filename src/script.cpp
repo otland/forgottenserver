@@ -3,24 +3,18 @@
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "script.h"
+
+#include "configmanager.h"
 
 #include <filesystem>
 
 extern LuaEnvironment g_luaEnvironment;
 extern ConfigManager g_config;
 
-Scripts::Scripts() :
-	scriptInterface("Scripts Interface")
-{
-	scriptInterface.initState();
-}
+Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.initState(); }
 
-Scripts::~Scripts()
-{
-	scriptInterface.reInitState();
-}
+Scripts::~Scripts() { scriptInterface.reInitState(); }
 
 bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cobra Assassin" nameDescription="a cobra assassin" race="blood" experience="6980" speed="280">
+	<health now="8200" max="8200" />
+	<look type="1217" head="2" body="2" legs="77" feet="19" addons="1" corpse="34203" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="wave t" interval="2000" chance="10" min="-300" max="-380" />
+		<attack name="physical" interval="2000" chance="15" radius="4" min="-280" max="-400">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="physical" interval="2000" chance="12" length="5" spread="0" min="-250" max="-400">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="81" defense="81" />
+	<elements>
+		<element physicalPercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hey, maybe you want to strike a deal... no?" />
+		<voice sentence="Stand and deliver! Your money... AND your life actually!" />
+		<voice sentence="You will not leave this place breathing!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="71666" countmax="9" />
+		<item id="24850" name="opal" chance="31115" countmax="5" />
+		<item id="2149" name="small emerald" chance="27969" countmax="3" />
+		<item id="2403" name="knife" chance="23456" />
+		<item id="2419" name="scimitar" chance="17438" />
+		<item id="34334" name="cobra crest" chance="16093" />
+		<item id="2200" name="protection amulet" chance="14247" />
+		<item id="2450" name="bone sword" chance="8913" />
+		<item id="2442" name="heavy machete" chance="7955" />
+		<item id="18415" name="green crystal shard" chance="7112" />
+		<item id="2395" name="carlin sword" chance="4946" />
+		<item id="2420" name="machete" chance="4924" />
+		<item id="9971" name="gold ingot" chance="4673" />
+		<item id="18421" name="green crystal fragment" chance="3032" />
+		<item id="5944" name="soul orb" chance="2279" />
+		<item id="18420" name="red crystal fragment" chance="957" />
+	</loot>
+</monster>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Black Sphinx Acolyte" nameDescription="a black sphinx acolyte" race="blood" experience="7200" speed="310">
+	<health now="8100" max="8100" />
+	<look type="1200" head="95" body="95" legs="94" feet="95" corpse="34079" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="earth" interval="2000" chance="10" radius="3" min="-300" max="-400">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="death" interval="2000" chance="13" range="4" radius="3" target="1" min="-400" max="-450">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="82" />
+	<elements>
+		<element earthPercent="90" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Darkness is the mother of all knowledge!" />
+		<voice sentence="Get thee gone, unworthy!" />
+		<voice sentence="The Black Sphinx will prevail!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="2182" name="snakebite rod" chance="7247" />
+		<item id="8910" name="underworld rod" chance="6649" />
+		<item id="18413" name="blue crystal shard" chance="6449" />
+		<item id="24850" name="opal" chance="3291" countmax="2" />
+		<item id="2153" name="violet gem" chance="3225" />
+		<item id="8922" name="wand of voodoo" chance="2460" />
+		<item id="33987" name="empty honey glass" chance="2261" />
+		<item id="7761" name="small enchanted emerald" chance="2161" countmax="3" />
+	</loot>
+</monster>

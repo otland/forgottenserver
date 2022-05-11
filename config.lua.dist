@@ -26,7 +26,6 @@ loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
 maxPlayers = 0
-motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
 allowWalkthrough = true
@@ -96,7 +95,6 @@ minimumLevelToSendPrivate = 1
 premiumToSendPrivate = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
-luaItemDesc = false
 showPlayerLogInConsole = true
 
 -- VIP and Depot limits

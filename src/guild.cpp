@@ -9,10 +9,7 @@
 
 extern Game g_game;
 
-void Guild::addMember(Player* player)
-{
-	membersOnline.push_back(player);
-}
+void Guild::addMember(Player* player) { membersOnline.push_back(player); }
 
 void Guild::removeMember(Player* player)
 {
@@ -65,9 +62,11 @@ Guild* IOGuild::loadGuild(uint32_t guildId)
 	if (DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId))) {
 		Guild* guild = new Guild(guildId, result->getString("name"));
 
-		if ((result = db.storeQuery(fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
+		if ((result = db.storeQuery(
+		         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
 			do {
-				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level"));
+				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
+				               result->getNumber<uint16_t>("level"));
 			} while (result->next());
 		}
 		return guild;
@@ -79,7 +78,8 @@ uint32_t IOGuild::getGuildIdByName(const std::string& name)
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `guilds` WHERE `name` = {:s}", db.escapeString(name)));
+	DBResult_ptr result =
+	    db.storeQuery(fmt::format("SELECT `id` FROM `guilds` WHERE `name` = {:s}", db.escapeString(name)));
 	if (!result) {
 		return 0;
 	}

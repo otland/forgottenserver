@@ -5,20 +5,18 @@
 #define FS_SCRIPT_H
 
 #include "luascript.h"
-#include "enums.h"
 
 class Scripts
 {
-	public:
-		Scripts();
-		~Scripts();
+public:
+	Scripts();
+	~Scripts();
 
-		bool loadScripts(std::string folderName, bool isLib, bool reload);
-		LuaScriptInterface& getScriptInterface() {
-			return scriptInterface;
-		}
-	private:
-		LuaScriptInterface scriptInterface;
+	bool loadScripts(std::string folderName, bool isLib, bool reload);
+	LuaScriptInterface& getScriptInterface() { return scriptInterface; }
+
+private:
+	LuaScriptInterface scriptInterface;
 };
 
 #endif // FS_SCRIPT_H
