@@ -41,9 +41,6 @@ local lockedOddDoors = {
 	[31021] = { closed = 31020, open = 31024 },
 	[31023] = { closed = 31022, open = 31025 },
 
-	[00000] = { closed = 00000, open = 00000 },
-	[00000] = { closed = 00000, open = 00000 },
-
 	[33429] = { closed = 33428, open = 33432 },
 	[33431] = { closed = 33430, open = 33433 }
 }
