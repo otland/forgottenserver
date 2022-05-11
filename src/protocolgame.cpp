@@ -3191,6 +3191,9 @@ void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageA
 		case DEALT:
 			msg.addByte(getClientDamageType(type));
 			break;
+
+		default:
+			break;
 	}
 	writeToOutputBuffer(msg);
 }
