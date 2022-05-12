@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Possessed Tree" nameDescription="a possessed tree" race="undead" experience="1300" speed="230">
+	<health now="2500" max="2500" />
+	<look type="310" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-162" />
+		<attack name="speed" interval="2000" chance="10" length="5" spread="0" duration="15000" speedchange="-700">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="poison" interval="2000" chance="9" target="1" radius="4" range="4" min="-86" max="-200">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="poison" interval="2000" chance="9" length="4" spread="0" min="-286" max="-300">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>
