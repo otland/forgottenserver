@@ -87,8 +87,7 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 	uint32_t defaultTickInterval = 2000;
 	uint32_t defaultTickInterval2 = 0;
 	ConditionDamageFormula_t damageType = CONDITION_DAMAGE_FORMULA_CONSTANT;
-	int32_t rounds = 0;
-	int32_t damagePerRound = 0;
+	int32_t rounds = 0, damagePerRound = 0;
 
 	if (conditionType == CONDITION_FIRE) {
 		defaultTickInterval = 9000;
@@ -127,20 +126,20 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 		tickInterval = defaultTickInterval;
 	} else {
 		defaultTickInterval2 = tickInterval;
+
 	}
 	if (startDamage > 0) {
 		damagePerRound = startDamage;
 	}
 
 	// Maybe better to just check if condition is dazzled? It would make more sense if we need special block for bleeding too
-	if ((damageType == CONDITION_DAMAGE_FORMULA_CONSTANT) && (defaultTickInterval2 != 0)) {
+	if (defaultTickInterval2 > 0 && damageType == CONDITION_DAMAGE_FORMULA_CONSTANT) {
 		rounds = normal_random(minDamage, maxDamage) / damagePerRound;
-		for (int32_t i = 0; i <= rounds; i++) {
+		do {
 			int32_t randTickInterval = uniform_random(tickInterval, defaultTickInterval2);
 			condition->addDamage(1, randTickInterval, damagePerRound * -1);
-		}
-	}
-	else {
+		} while (rounds-- != 0);
+	} else {
 		condition->setParam(CONDITION_PARAM_TICKINTERVAL, tickInterval);
 		condition->setParam(CONDITION_PARAM_MINVALUE, minDamage);
 		condition->setParam(CONDITION_PARAM_MAXVALUE, maxDamage);
@@ -322,7 +321,6 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			if (conditionType != CONDITION_NONE) {
 				minDamage = std::abs(pugi::cast<int32_t>(attr.value()));
 				maxDamage = minDamage;
-
 
 				if ((attr = node.attribute("tick"))) {
 					int32_t value = pugi::cast<int32_t>(attr.value());
