@@ -581,7 +581,7 @@
 	<monster name="Pirat Bombardier" file="monsters/pirat_bombardier.xml" />
 	<monster name="Pirat Cutthroat" file="monsters/pirat_cutthroat.xml" />
 	<monster name="Pirat Mate" file="monsters/pirat_mate.xml" />
-	<monster name="Pirat Scoundrel" file="monsters/pirat_scoundre.xml" />
+	<monster name="Pirat Scoundrel" file="monsters/pirat_scoundrel.xml" />
 	<monster name="Pirate Buccaneer" file="monsters/pirate_buccaneer.xml" />
 	<monster name="Pirate Corsair" file="monsters/pirate_corsair.xml" />
 	<monster name="Pirate Cutthroat" file="monsters/pirate_cutthroat.xml" />
@@ -718,10 +718,10 @@
 	<monster name="Spitter" file="monsters/spitter.xml" />
 	<monster name="Splasher" file="monsters/splasher.xml" />
 	<monster name="Spy Rat" file="monsters/spy_rat.xml" />
-	<monster name="Spyrat Facing East" file="monsters/spyrat_(facing_east).xml" />
-	<monster name="Spyrat Facing North" file="monsters/spyrat_(facing_north).xml" />
-	<monster name="Spyrat Facing South" file="monsters/spyrat_(facing_south).xml" />
-	<monster name="Spyrat Facing West" file="monsters/spyrat_(facing_west).xml" />
+	<monster name="Spyrat Facing East" file="monsters/spyrat_facing_east.xml" />
+	<monster name="Spyrat Facing North" file="monsters/spyrat_facing_north.xml" />
+	<monster name="Spyrat Facing South" file="monsters/spyrat_facing_south.xml" />
+	<monster name="Spyrat Facing West" file="monsters/spyrat_facing_west.xml" />
 	<monster name="Squidgy Slime" file="monsters/squidgy_slime.xml" />
 	<monster name="Squire Of Nictros" file="monsters/squire_of_nictros.xml" />
 	<monster name="Squirrel" file="monsters/squirrel.xml" />

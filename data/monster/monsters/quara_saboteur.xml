@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Quara Saboteur" nameDescription="a quara saboteur" experience="0" speed="0">
 	<health now="7000" max="7000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="20" corpse="6067" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Angry Elemental" nameDescription="an angry elemental" experience="0" speed="0">
+<monster name="Angry Elemental" nameDescription="an angry elemental" race="undead" experience="0" speed="220">
 	<health now="7000" max="7000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="286" corpse="10499" />
 	<targetchange interval="2000" chance="0" />
 	<flags>
 		<flag attackable="1" />
