@@ -254,7 +254,7 @@ function Player.removeTotalMoney(self, amount)
 			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
 			return true
 		end
-		
+
 		self:setBankBalance(bankCount - amount)
 		self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
 		return true
@@ -305,7 +305,7 @@ function Player.addSkillLevel(self, skillId, value)
 
 		return self:addSkillTries(skillId, sum - self:getSkillTries(skillId))
 	end
-	
+
 	value = math.min(currentSkillLevel, math.abs(value))
 	while value > 0 do
 		sum = sum + self:getVocation():getRequiredSkillTries(skillId, currentSkillLevel - value + 1)
