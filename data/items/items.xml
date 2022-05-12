@@ -23432,7 +23432,6 @@
 		<attribute key="weaponType" value="sword" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="604800" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 	</item>
 	<item id="13872" article="a" name="shimmer rod">
 		<attribute key="description" value="It feels cold and smooth." />
@@ -23442,7 +23441,6 @@
 		<attribute key="range" value="4" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="604800" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 	</item>
 	<item id="13873" article="a" name="shimmer bow">
 		<attribute key="weight" value="4800" />
@@ -23454,7 +23452,6 @@
 		<attribute key="hitChance" value="7" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="604800" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 	</item>
 	<item id="13874" article="a" name="shimmer ball" />
 	<item id="13875" article="a" name="shimmer glower">
@@ -23481,7 +23478,6 @@
 		<attribute key="range" value="4" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="604800" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 	</item>
 	<item id="13881" name="yielowax">
 		<attribute key="description" value="Fine wax for various different uses." />
@@ -33695,32 +33691,26 @@
 	</item>
 	<item id="23790" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23791" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23792" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23793" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23794" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23795" article="a" name="book">
 		<attribute key="weight" value="1300" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="maxTextLen" value="0" />
 	</item>
 	<item id="23796" article="a" name="parchment">
@@ -33784,7 +33774,6 @@
 	</item>
 	<item id="23816" article="a" name="war backpack">
 		<attribute key="weight" value="1800" />
-		<attribute key="writeable" value="0" /> -- default is 0 (bool canReadText = false)
 		<attribute key="description" value="Carry all you need for battle in it." />
 	</item>
 	<item id="23817" article="a" name="dead woodling">
@@ -36017,7 +36006,6 @@
 		<attribute key="weaponType" value="wand" />
 		<attribute key="shootType" value="energy" />
 		<attribute key="range" value="3" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25420" />
 		<attribute key="duration" value="43200" />
 	</item>
@@ -36028,7 +36016,6 @@
 		<attribute key="shootType" value="energy" />
 		<attribute key="magiclevelpoints" value="1" />
 		<attribute key="range" value="4" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25420" />
 		<attribute key="duration" value="43200" />
 	</item>
@@ -36043,7 +36030,6 @@
 		<attribute key="description" value="The rare jewel is made of sapphire and ruby and has a golden F pendant." />
 		<attribute key="armor" value="3" />
 		<attribute key="slotType" value="necklace" />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25423" />
 		<attribute key="duration" value="3600" />
 	</item>
@@ -36054,7 +36040,6 @@
 	<item id="25426" name="Ferumbras' mana keg">
 		<attribute key="weight" value="1400" />
 		<attribute key="description" value="It is made of dark oak and crested with a large golden F." />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25425" />
 		<attribute key="duration" value="86400" />
 	</item>
@@ -36065,7 +36050,6 @@
 	<item id="25428" article="a" name="scroll of ascension">
 		<attribute key="weight" value="800" />
 		<attribute key="description" value="It is inscribed with faintly glowing ink and sealed with the letter F." />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25427" />
 		<attribute key="duration" value="3600" />
 	</item>
@@ -36079,7 +36063,6 @@
 		<attribute key="weight" value="1600" />
 		<attribute key="armor" value="2" />
 		<attribute key="description" value="They are made of dark red buckskin and the golden clasps look like the letter F." />
-		<attribute key="showduration" value="0" /> -- default is 0 (bool showDuration = false)
 		<attribute key="decayTo" value="25429" />
 		<attribute key="duration" value="86400" />
 	</item>
