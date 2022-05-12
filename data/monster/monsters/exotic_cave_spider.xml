@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Exotic Cave Spider" nameDescription="an exotic cave spider" experience="1400" speed="264">
+<monster name="Exotic Cave Spider" nameDescription="an exotic cave spider" race="venom" experience="1400" speed="264">
 	<health now="1900" max="1900" />
 	<look type="1344" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -22,23 +22,15 @@
 	</flags>
 	<defenses armor="40" defense="40" />
 	<elements>
-		<element physicalPercent="0" />
-		<element energyPercent="0" />
-		<element earthPercent="0" />
-		<element firePercent="0" />
-		<element lifedrainPercent="0" />
-		<element manadrainPercent="0" />
-		<element drownPercent="0" />
-		<element icePercent="0" />
-		<element holyPercent="0" />
-		<element deathPercent="0" />
+		<element energyPercent="20" />
+		<element firePercent="-10" />
+		<element icePercent="20" />
 	</elements>
 	<immunities>
+		<immunity earth="1" />
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" />

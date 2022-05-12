@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mean Termite" nameDescription="a mean termite" experience="0" speed="0">
+<monster name="Mean Termite" nameDescription="a mean termite" race="venom" experience="0" speed="0">
 	<health now="4300" max="4300" />
 	<look type="82" corpse="6023" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -12,7 +12,7 @@
 		<flag isboss="0" />
 		<flag ignorespawnblock="0" />
 		<flag pushable="0" />
-		<flag canpushitems="0" />
+		<flag canpushitems="1" />
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
@@ -35,9 +35,7 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 </monster>

@@ -2,7 +2,7 @@
 <monster name="Quara Saboteur" nameDescription="a quara saboteur" experience="0" speed="0">
 	<health now="7000" max="7000" />
 	<look type="20" corpse="6067" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -35,9 +35,7 @@
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
-		<immunity outfit="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
-		<immunity bleed="0" />
 	</immunities>
 </monster>

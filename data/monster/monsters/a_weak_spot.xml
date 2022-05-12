@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="a weak spot" nameDescription="a weak spot" experience="0" speed="0">
+<monster name="a weak spot" nameDescription="a weak spot" race="venom" experience="0" speed="0">
 	<health now="1000" max="1000" />
 	<look typeex="35382" corpse="0" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -10,7 +10,7 @@
 		<flag convinceable="0" />
 		<flag illusionable="0" />
 		<flag isboss="0" />
-		<flag ignorespawnblock="0" />
+		<flag ignorespawnblock="1" />
 		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />
