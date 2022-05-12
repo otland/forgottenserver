@@ -1500,18 +1500,19 @@ uint32_t ConditionDamage::getIcons() const
 	return icons;
 }
 
-void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list, ConditionDamageFormula_t damageFormula)
+void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list,
+                                         ConditionDamageFormula_t damageFormula)
 {
 	if (damageFormula == CONDITION_DAMAGE_FORMULA_CONSTANT) {
 		if (start == 0) {
 			start = 20;
 		}
 		int32_t rounds = amount / start;
+		rounds = (rounds > 0) ? rounds : 1;
 		for (int32_t i = 0; i < rounds; ++i) {
 			list.push_back(start);
 		}
-	}
-	else if (damageFormula == CONDITION_DAMAGE_FORMULA_LOG) {
+	} else if (damageFormula == CONDITION_DAMAGE_FORMULA_LOG) {
 		if (start == 0) {
 			start = std::max<int32_t>(1, std::ceil(amount / 20.0));
 		}
@@ -1531,8 +1532,7 @@ void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::lis
 				x2 = std::fabs(1.0 - (static_cast<float>(sum) / med));
 			} while (x1 < x2);
 		}
-	}
-	else if (damageFormula == CONDITION_DAMAGE_FORMULA_GROWTH) {
+	} else if (damageFormula == CONDITION_DAMAGE_FORMULA_GROWTH) {
 		int32_t roundDamage = 0;
 		if (start != 0) {
 			roundDamage = start;
@@ -1548,7 +1548,8 @@ void ConditionDamage::generateDamageList(int32_t amount, int32_t start, std::lis
 		}
 		float lastMultiplier = uniform_random(10, 1200) / 1000.0;
 		roundDamage = std::floor(roundDamage * lastMultiplier);
-		std::cout << "roundDamage (lastmult): " << roundDamage << "(" << lastMultiplier << ")" << "   totalNow:" << totalDamage + roundDamage << std::endl;
+		std::cout << "roundDamage (lastmult): " << roundDamage << "(" << lastMultiplier << ")"
+		          << "   totalNow:" << totalDamage + roundDamage << std::endl;
 		list.push_back(roundDamage);
 	}
 }

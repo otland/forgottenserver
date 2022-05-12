@@ -122,19 +122,22 @@ ConditionDamage* Monsters::getDamageCondition(ConditionType_t conditionType, int
 		// Not clear on how this works, it might be random damage per turn between 1 and 19?
 		damagePerRound = 15;
 	}
+
+	// Providing a tick interval overrides condition defaults
 	if (tickInterval == 0) {
 		tickInterval = defaultTickInterval;
 	} else {
-		defaultTickInterval2 = tickInterval;
-
+		defaultTickInterval2 = 0;
 	}
 	if (startDamage > 0) {
 		damagePerRound = startDamage;
 	}
 
-	// Maybe better to just check if condition is dazzled? It would make more sense if we need special block for bleeding too
+	// Maybe better to just check if condition is dazzled? It would make more sense if we need special block for
+	// bleeding too
 	if (defaultTickInterval2 > 0 && damageType == CONDITION_DAMAGE_FORMULA_CONSTANT) {
 		rounds = normal_random(minDamage, maxDamage) / damagePerRound;
+		rounds = (rounds > 0) ? rounds : 1;
 		do {
 			int32_t randTickInterval = uniform_random(tickInterval, defaultTickInterval2);
 			condition->addDamage(1, randTickInterval, damagePerRound * -1);
