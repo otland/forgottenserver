@@ -25,9 +25,7 @@
 		</defense>
 	</defenses>
 	<summons maxSummons="3">
-		<summon name="Lesser Swarmer" interval="30000" chance="100" />
-		<summon name="Lesser Swarmer" interval="30000" chance="100" />
-		<summon name="Lesser Swarmer" interval="30000" chance="100" />
+		<summon name="Lesser Swarmer" interval="10000" chance="100" />
 	</summons>
 	<immunities>
 		<immunity physical="1" />
