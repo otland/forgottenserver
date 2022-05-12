@@ -1,25 +1,10 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "teleport.h"
+
 #include "game.h"
 
 extern Game g_game;
@@ -27,7 +12,8 @@ extern Game g_game;
 Attr_ReadValue Teleport::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_TELE_DEST) {
-		if (!propStream.read<uint16_t>(destPos.x) || !propStream.read<uint16_t>(destPos.y) || !propStream.read<uint8_t>(destPos.z)) {
+		if (!propStream.read<uint16_t>(destPos.x) || !propStream.read<uint16_t>(destPos.y) ||
+		    !propStream.read<uint8_t>(destPos.z)) {
 			return ATTR_READ_ERROR;
 		}
 		return ATTR_READ_CONTINUE;
@@ -60,31 +46,9 @@ ReturnValue Teleport::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*
 	return RETURNVALUE_NOERROR;
 }
 
-Cylinder* Teleport::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
-{
-	return this;
-}
+Cylinder* Teleport::queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return this; }
 
-void Teleport::addThing(Thing* thing)
-{
-	return addThing(0, thing);
-}
-
-bool Teleport::checkInfinityLoop(Tile* destTile)
-{
-	if (!destTile) {
-		return false;
-	}
-
-	if (Teleport* teleport = destTile->getTeleportItem()) {
-		const Position& nextDestPos = teleport->getDestPos();
-		if (getPosition() == nextDestPos) {
-			return true;
-		}
-		return checkInfinityLoop(g_game.map.getTile(nextDestPos));
-	}
-	return false;
-}
+void Teleport::addThing(Thing* thing) { return addThing(0, thing); }
 
 void Teleport::addThing(int32_t, Thing* thing)
 {
@@ -93,11 +57,30 @@ void Teleport::addThing(int32_t, Thing* thing)
 		return;
 	}
 
-	// Prevent infinity loop
-	if (checkInfinityLoop(destTile)) {
-		const Position& pos = getPosition();
-		std::cout << "Warning: infinity loop teleport. " << pos << std::endl;
-		return;
+	// Prevent infinite loop
+	Teleport* destTeleport = destTile->getTeleportItem();
+	if (destTeleport) {
+		std::vector<Position> lastPositions = {getPosition()};
+
+		while (true) {
+			const Position& nextPos = destTeleport->getDestPos();
+			if (std::find(lastPositions.begin(), lastPositions.end(), nextPos) != lastPositions.end()) {
+				std::cout << "Warning: possible infinite loop teleport. " << nextPos << std::endl;
+				return;
+			}
+
+			const Tile* tile = g_game.map.getTile(nextPos);
+			if (!tile) {
+				break;
+			}
+
+			destTeleport = tile->getTeleportItem();
+			if (!destTeleport) {
+				break;
+			}
+
+			lastPositions.push_back(nextPos);
+		}
 	}
 
 	const MagicEffectClasses effect = Item::items[id].magicEffect;
@@ -115,7 +98,8 @@ void Teleport::addThing(int32_t, Thing* thing)
 			g_game.addMagicEffect(destTile->getPosition(), effect);
 			g_game.addMagicEffect(item->getPosition(), effect);
 		}
-		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT);
+		g_game.internalMoveItem(getTile(), destTile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+		                        FLAG_NOLIMIT);
 	}
 }
 

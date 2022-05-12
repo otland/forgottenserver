@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Fetter" nameDescription="a fetter" race="undead" experience="0" speed="280">
+	<health now="5500" max="5500" />
+	<look type="235" corpse="6348" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag runonhealth="219" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-308" poison="300" />
+		<attack name="drunk" interval="2000" chance="15" radius="4" target="0" duration="6000">
+			<attribute key="areaEffect" value="purplenote" />
+		</attack>
+		<attack name="spectre drown" interval="2000" chance="15" />
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-100" max="-600" />
+		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-300" max="-850">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="20" min="100" max="700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="290" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="90" />
+		<element icePercent="1" />
+		<element firePercent="-8" />
+		<element energyPercent="-8" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

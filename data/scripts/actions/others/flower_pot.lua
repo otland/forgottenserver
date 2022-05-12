@@ -29,16 +29,16 @@ local flowers = {
 	{itemid = 7677, watered = true, advance = false, msg = "You finally remembered to water your plant and it recovered.", after = 7694},
 	{itemid = 9984, watered = true, advance = false, msg = "You finally remembered to water your plant and it recovered.", after = 9990},
 	{itemid = 9985, watered = true, advance = false, msg = "You finally remembered to water your plant and it recovered.", after = 9988},
-	{itemid = 7679, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7673, 7670}, chance = 80},
-	{itemid = 7681, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7680, 7688}, chance = 80},
-	{itemid = 7683, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7682, 7690}, chance = 80},
-	{itemid = 7685, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7684, 7692}, chance = 80},
-	{itemid = 7687, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7686, 7694}, chance = 80},
-	{itemid = 9983, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {9982, 9990}, chance = 80},
-	{itemid = 9987, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {9986, 9988}, chance = 80},
-	{itemid = 7678, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {7670, 7680, 7682, 7684, 7686, 9982, 9986}, chance = 80},
+	{itemid = 7679, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7673, 7670}, chance = 80},
+	{itemid = 7681, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7680, 7688}, chance = 80},
+	{itemid = 7683, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7682, 7690}, chance = 80},
+	{itemid = 7685, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7684, 7692}, chance = 80},
+	{itemid = 7687, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7686, 7694}, chance = 80},
+	{itemid = 9983, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {9982, 9990}, chance = 80},
+	{itemid = 9987, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {9986, 9988}, chance = 80},
+	{itemid = 7678, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {7670, 7680, 7682, 7684, 7686, 9982, 9986}, chance = 80},
 	{itemid = 15444, watered = true, advance = false, msg = "You finally remembered to water your plant and it recovered.", after = 15443},
-	{itemid = 15442, watered = true, advance = true, msg = {"You watered your plant.","Your plant has grown to the next stage!"}, after = {15443, 15441}, chance = 80},
+	{itemid = 15442, watered = true, advance = true, msg = {"You watered your plant.", "Your plant has grown to the next stage!"}, after = {15443, 15441}, chance = 80},
 	{itemid = 15443, watered = false, advance = false, msg = "Your plant doesn't need water."},
 	{itemid = 15441, watered = false, advance = false, msg = "This plant can't wither anymore."},
 	{itemid = 15445, watered = false, advance = false, msg = "This plant can't wither anymore."},
@@ -54,16 +54,16 @@ local flowerPot = Action()
 function flowerPot.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	for _, flower in pairs(flowers) do
 		if target.itemid == flower.itemid then
-			if (flower.watered == false and flower.advance == false) then
+			if not flower.watered and not flower.advance then
 				player:say(flower.msg, TALKTYPE_MONSTER_SAY)
-			elseif (flower.watered == true and flower.advance == false) then
+			elseif flower.watered and not flower.advance then
 				target:transform(flower.after)
 				player:say(flower.msg, TALKTYPE_MONSTER_SAY)
 				toPosition:sendMagicEffect(CONST_ME_LOSEENERGY)
 				target:decay()
-			elseif (flower.watered == true and flower.advance == true) then
+			elseif flower.watered and flower.advance then
 				local i = 1
-				if (math.random(100) <= flower.chance) then
+				if math.random(100) <= flower.chance then
 					i = 2
 					target:transform(flower.after[math.random(2, #flower.after)])
 				else

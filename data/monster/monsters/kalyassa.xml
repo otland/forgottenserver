@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kalyassa" nameDescription="Kalyassa" race="blood" experience="9000" speed="350">
+	<health now="10000" max="10000" />
+	<look type="947" head="37" body="113" legs="38" feet="95" addons="3" corpse="5984" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" radius="5" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="4" min="-310" max="-495">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="0" min="-710" max="-895">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="7" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="600" max="700">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<summons maxSummons="2">
+		<summon name="Dragon Lord" interval="2000" chance="20" />
+	</summons>
+	<elements>
+		<element energyPercent="70" />
+		<element earthPercent="50" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="27593" name="dragon blood" chance="100000" />
+		<item id="27594" name="dragon tongue" chance="100000" />
+		<item id="27597" name="horn of kalyassa" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="10" />
+		<item id="5948" name="red dragon leather" chance="97207" />
+		<item id="2672" name="dragon ham" chance="70391" />
+		<item id="2547" name="power bolt" chance="52514" countmax="10" />
+		<item id="2167" name="energy ring" chance="19553" />
+		<item id="2392" name="fire sword" chance="9497" />
+		<item id="7591" name="great health potion" chance="9497" countmax="2" />
+		<item id="7590" name="great mana potion" chance="9497" countmax="2" />
+		<item id="7365" name="onyx arrow" chance="9497" countmax="10" />
+		<item id="2498" name="royal helmet" chance="3352" />
+		<item id="2492" name="dragon scale mail" chance="2793" />
+		<item id="2177" name="life crystal" chance="2793" />
+	</loot>
+</monster>

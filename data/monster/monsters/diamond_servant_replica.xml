@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Diamond Servant Replica" nameDescription="a diamond servant replica" race="energy" experience="700" speed="172">
+	<health now="2000" max="2000" />
+	<look type="397" corpse="13485" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="energy" interval="2000" chance="11" radius="3" min="-100" max="-210">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" range="7" target="1" min="-75" max="-125">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="9" length="5" spread="2" min="-70" max="-120">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="2000" chance="11" min="50" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="10" min="0" max="0">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="75" />
+		<element firePercent="10" />
+		<element holyPercent="-15" />
+	</elements>
+	<immunities>
+		<immunity energy="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="93197" countmax="179" />
+		<item id="5944" name="soul orb" chance="45574" />
+		<item id="2177" name="life crystal" chance="9590" />
+		<item id="7589" name="strong mana potion" chance="6270" />
+		<item id="7588" name="strong health potion" chance="6066" />
+		<item id="9690" name="gear wheel" chance="5697" />
+		<item id="10572" name="gear crystal" chance="5205" />
+		<item id="9978" name="crystal pedestal" chance="4303" />
+		<item id="2164" name="might ring" chance="984" />
+		<item id="7889" name="lightning pendant" chance="820" />
+		<item id="13758" name="slime mould" chance="574" />
+		<item id="2154" name="yellow gem" chance="574" />
+		<item id="7440" name="mastermind potion" chance="451" />
+		<item id="2189" name="wand of cosmic energy" chance="369" />
+		<item id="10221" name="shockwave amulet" chance="123" />
+		<item id="7428" name="bonebreaker" chance="82" />
+		<item id="8878" name="crystalline armor" chance="41" />
+	</loot>
+</monster>

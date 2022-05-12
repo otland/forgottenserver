@@ -5,10 +5,10 @@ NpcSystem.parseParameters(npcHandler)
 local count = {}
 local transfer = {}
 
-function onCreatureAppear(cid)              npcHandler:onCreatureAppear(cid)            end
-function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid)         end
-function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
-function onThink()                          npcHandler:onThink()                        end
+function onCreatureAppear(cid)				npcHandler:onCreatureAppear(cid)			end
+function onCreatureDisappear(cid)			npcHandler:onCreatureDisappear(cid)			end
+function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)	end
+function onThink()							npcHandler:onThink()						end
 
 local function greetCallback(cid)
 	count[cid], transfer[cid] = nil, nil
@@ -59,10 +59,10 @@ local function creatureSayCallback(cid, type, msg)
 		elseif player:getBankBalance() >= 100000 then
 			npcHandler:say("You certainly have made a pretty penny. Your account balance is " .. player:getBankBalance() .. " gold.", cid)
 			return true
-		else
-			npcHandler:say("Your account balance is " .. player:getBankBalance() .. " gold.", cid)
-			return true
 		end
+
+		npcHandler:say("Your account balance is " .. player:getBankBalance() .. " gold.", cid)
+		return true
 	elseif msgcontains(msg, "deposit") then
 		count[cid] = player:getMoney()
 		if count[cid] < 1 then
@@ -71,12 +71,11 @@ local function creatureSayCallback(cid, type, msg)
 			return false
 		end
 		if msgcontains(msg, "all") then
-			count[cid] = player:getMoney()
 			npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 			npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 			return true
 		else
-			if string.match(msg,"%d+") then
+			if string.match(msg, "%d+") then
 				count[cid] = getMoneyCount(msg)
 				if count[cid] < 1 then
 					npcHandler:say("You do not have enough gold.", cid)
@@ -86,11 +85,11 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 				npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 				return true
-			else
-				npcHandler:say("Please tell me how much gold it is you would like to deposit.", cid)
-				npcHandler.topic[cid] = topicList.DEPOSIT_GOLD
-				return true
 			end
+
+			npcHandler:say("Please tell me how much gold it is you would like to deposit.", cid)
+			npcHandler.topic[cid] = topicList.DEPOSIT_GOLD
+			return true
 		end
 		if not isValidMoney(count[cid]) then
 			npcHandler:say("Sorry, but you can't deposit that much.", cid)
@@ -103,11 +102,11 @@ local function creatureSayCallback(cid, type, msg)
 			npcHandler:say("Would you really like to deposit " .. count[cid] .. " gold?", cid)
 			npcHandler.topic[cid] = topicList.DEPOSIT_CONSENT
 			return true
-		else
-			npcHandler:say("You do not have enough gold.", cid)
-			npcHandler.topic[cid] = topicList.NONE
-			return true
 		end
+
+		npcHandler:say("You do not have enough gold.", cid)
+		npcHandler.topic[cid] = topicList.NONE
+		return true
 	elseif npcHandler.topic[cid] == topicList.DEPOSIT_CONSENT then
 		if msgcontains(msg, "yes") then
 			if player:getMoney() >= tonumber(count[cid]) then
@@ -122,7 +121,7 @@ local function creatureSayCallback(cid, type, msg)
 		npcHandler.topic[cid] = topicList.NONE
 		return true
 	elseif msgcontains(msg, "withdraw") then
-		if string.match(msg,"%d+") then
+		if string.match(msg, "%d+") then
 			count[cid] = getMoneyCount(msg)
 			if isValidMoney(count[cid]) then
 				npcHandler:say("Are you sure you wish to withdraw " .. count[cid] .. " gold from your bank account?", cid)
@@ -132,11 +131,11 @@ local function creatureSayCallback(cid, type, msg)
 				npcHandler.topic[cid] = topicList.NONE
 			end
 			return true
-		else
-			npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
-			npcHandler.topic[cid] = topicList.WITHDRAW_CONSENT
-			return true
 		end
+		
+		npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
+		npcHandler.topic[cid] = topicList.WITHDRAW_CONSENT
+		return true
 	elseif npcHandler.topic[cid] == topicList.WITHDRAW_CONSENT then
 		count[cid] = getMoneyCount(msg)
 		if isValidMoney(count[cid]) then
@@ -234,6 +233,12 @@ local function creatureSayCallback(cid, type, msg)
 			end
 		end
 	elseif npcHandler.topic[cid] == topicList.TRANSFER_PLAYER_GOLD then
+		local currencyValue = tonumber(msg)
+		if not currencyValue or currencyValue < 1 then
+			npcHandler:say("Please tell me the amount of gold you would like to transfer, make sure to specify a number.", cid)
+			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_GOLD
+			return true
+		end
 		count[cid] = getMoneyCount(msg)
 		if player:getBankBalance() < count[cid] then
 			npcHandler:say("There is not enough gold in your account.", cid)
@@ -249,6 +254,11 @@ local function creatureSayCallback(cid, type, msg)
 		end
 	elseif npcHandler.topic[cid] == topicList.TRANSFER_PLAYER_WHO then
 		transfer[cid] = getPlayerDatabaseInfo(msg)
+		if not transfer[cid] then
+			npcHandler:say("Hmm, my ledgers have no records of anyone with the name " .. msg .. ". Please ensure the name is correct.", cid)
+			npcHandler.topic[cid] = topicList.TRANSFER_PLAYER_WHO
+			return true
+		end
 		if player:getName() == transfer[cid].name then
 			npcHandler:say("Fill in this field with person who receives your gold!", cid)
 			npcHandler.topic[cid] = topicList.NONE
@@ -272,7 +282,7 @@ local function creatureSayCallback(cid, type, msg)
 			if not player:transferMoneyTo(transfer[cid], count[cid]) then
 				npcHandler:say("You cannot transfer money to this account.", cid)
 			else
-				npcHandler:say("Very well. You have transfered " .. count[cid] .. " gold to " .. transfer[cid].name ..".", cid)
+				npcHandler:say("Very well. You have transfered " .. count[cid] .. " gold to " .. transfer[cid].name .. ".", cid)
 				transfer[cid] = nil
 			end
 		elseif msgcontains(msg, "no") then
@@ -412,7 +422,7 @@ local function creatureSayCallback(cid, type, msg)
 	return true
 end
 
-keywordHandler:addKeyword({"money"}, StdModule.say,{
+keywordHandler:addKeyword({"money"}, StdModule.say, {
 	npcHandler = npcHandler,
 	text = "We can {change} money for you. You can also access your {bank account}."
 })

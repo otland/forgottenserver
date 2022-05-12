@@ -19,13 +19,13 @@ expFromPlayersLevelRange = 75
 -- Connection Config
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players
+-- NOTE: two-factor auth requires token and timestamp in session key
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
 maxPlayers = 0
-motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
 allowWalkthrough = true
@@ -33,6 +33,7 @@ serverName = "Forgotten"
 statusTimeout = 5000
 replaceKickOnLogin = true
 maxPacketsPerSecond = 25
+enableTwoFactorAuth = true
 
 -- Deaths
 -- NOTE: Leave deathLosePercent as -1 if you want to use the default
@@ -86,13 +87,14 @@ maxMessageBuffer = 4
 emoteSpells = false
 classicEquipmentSlots = false
 classicAttackSpeed = false
-showScriptsLogInConsole = true
+showScriptsLogInConsole = false
 showOnlineStatusInCharlist = false
 yellMinimumLevel = 2
 yellAlwaysAllowPremium = false
+minimumLevelToSendPrivate = 1
+premiumToSendPrivate = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
-luaItemDesc = false
 showPlayerLogInConsole = true
 
 -- VIP and Depot limits
@@ -100,7 +102,11 @@ showPlayerLogInConsole = true
 vipFreeLimit = 20
 vipPremiumLimit = 100
 depotFreeLimit = 2000
-depotPremiumLimit = 10000
+depotPremiumLimit = 15000
+
+-- Quest Tracker limits
+questTrackerFreeLimit = 10
+questTrackerPremiumLimit = 15
 
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
@@ -141,9 +147,11 @@ rateSpawn = 1
 -- despawnRange is the amount of floors a monster can be from its spawn position
 -- despawnRadius is how many tiles away it can be from its spawn position
 -- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
+-- walkToSpawnRadius is the allowed distance that the monster will stay away from spawn position when left with no targets, 0 to disable
 deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
+walkToSpawnRadius = 15
 
 -- Stamina
 staminaSystem = true

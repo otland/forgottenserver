@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
-project(tfs)
+project(tfs CXX)
 
 add_subdirectory(src)
 add_executable(tfs ${tfs_SRC})
@@ -61,13 +61,12 @@ else ()
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system iostreams)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 target_link_libraries(tfs PRIVATE
         Boost::date_time
         Boost::system
-        Boost::filesystem
         Boost::iostreams
         fmt::fmt
         ${CMAKE_THREAD_LIBS_INIT}

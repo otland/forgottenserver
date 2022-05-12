@@ -1,27 +1,11 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "baseevents.h"
 
-#include "pugicast.h"
+#include "luascript.h"
 #include "tools.h"
 
 extern LuaEnvironment g_luaEnvironment;
@@ -36,7 +20,8 @@ bool BaseEvents::loadFromXml()
 	std::string scriptsName = getScriptBaseName();
 	std::string basePath = "data/" + scriptsName + "/";
 	if (getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
-		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
+		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName
+		          << ".lua" << std::endl;
 	}
 
 	std::string filename = basePath + scriptsName + ".xml";
@@ -97,13 +82,15 @@ void BaseEvents::reInitState(bool fromLua)
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
-bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
+bool Event::checkScript(const std::string& basePath, const std::string& scriptsName,
+                        const std::string& scriptFile) const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
 	testInterface->reInitState();
 
 	if (testInterface->loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
-		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
+		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua"
+		          << std::endl;
 	}
 
 	if (scriptId != 0) {
@@ -119,7 +106,8 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 
 	int32_t id = testInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile
+		          << std::endl;
 		return false;
 	}
 	return true;
@@ -140,7 +128,8 @@ bool Event::loadScript(const std::string& scriptFile)
 
 	int32_t id = scriptInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile
+		          << std::endl;
 		return false;
 	}
 

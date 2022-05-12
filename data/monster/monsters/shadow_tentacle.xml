@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shadow Tentacle" nameDescription="a shadow tentacle" race="venom" experience="0" speed="350">
+	<health now="22500" max="22500" />
+	<look type="681" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-330" />
+		<attack name="blightwalker curse" interval="2000" chance="10" />
+		<attack name="lifedrain" interval="2000" chance="14" radius="4" target="0" min="-65" max="-135">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="20" duration="35000" radius="7" target="0">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="14" legth="4" target="0" min="-165" max="-535">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="225" max="850">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="50" />
+		<element energyPercent="20" />
+		<element icePercent="50" />
+		<element physicalPercent="-10" />
+		<element holyPercent="-30" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity paralyze="1" />
+	</immunities>
+</monster>

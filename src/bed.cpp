@@ -1,35 +1,18 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "bed.h"
+
+#include "condition.h"
 #include "game.h"
 #include "iologindata.h"
 #include "scheduler.h"
 
 extern Game g_game;
 
-BedItem::BedItem(uint16_t id) : Item(id)
-{
-	internalRemoveSleeper();
-}
+BedItem::BedItem(uint16_t id) : Item(id) { internalRemoveSleeper(); }
 
 Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
@@ -163,8 +146,8 @@ bool BedItem::sleep(Player* player)
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);
 
 	// kick player after he sees himself walk onto the bed and it change id
-	uint32_t playerId = player->getID();
-	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Game::kickPlayer, &g_game, playerId, false)));
+	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+	                                         [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
 
 	// change self and partner's appearance
 	updateAppearance(player);

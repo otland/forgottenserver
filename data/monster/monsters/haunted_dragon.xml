@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Haunted Dragon" nameDescription="a haunted dragon" race="undead" experience="6500" speed="280">
+	<health now="6500" max="6500" />
+	<look type="231" corpse="6306" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-480" />
+		<attack name="physical" interval="2000" chance="5" range="7" radius="4" target="1" min="-300" max="-400">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-125" max="-600">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" radius="4" target="1" min="-100" max="-390">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="1" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-150" max="-690">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="-300" max="-700">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" radius="3" min="-100" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="undead dragon curse" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element icePercent="50" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="186" />
+		<item id="11233" name="unholy bone" chance="33910" />
+		<item id="2152" name="platinum coin" chance="33397" countmax="2" />
+		<item id="27046" name="ancient coin" chance="28782" countmax="2" />
+		<item id="7368" name="assassin star" chance="25321" countmax="5" />
+		<item id="2144" name="black pearl" chance="24744" countmax="2" />
+		<item id="2146" name="small sapphire" chance="23846" countmax="2" />
+		<item id="7591" name="great health potion" chance="23269" countmax="2" />
+		<item id="7590" name="great mana potion" chance="19744" countmax="2" />
+		<item id="5925" name="hardened bone" chance="15705" />
+		<item id="6500" name="demonic essence" chance="14359" />
+		<item id="2178" name="mind stone" chance="7692" />
+		<item id="2201" name="dragon necklace" chance="6410" />
+		<item id="2156" name="red gem" chance="5128" />
+		<item id="2489" name="dark armor" chance="4551" />
+		<item id="2521" name="dark shield" chance="4487" />
+		<item id="7430" name="dragonbone staff" chance="3654" />
+		<item id="9971" name="gold ingot" chance="2628" />
+		<item id="6300" name="death ring" chance="1923" />
+		<item id="2177" name="life crystal" chance="1346" />
+		<item id="11355" name="spellweaver's robe" chance="577" />
+		<item id="7402" name="dragon slayer" chance="513" />
+		<item id="8889" name="skullcracker armor" chance="192" />
+	</loot>
+</monster>
