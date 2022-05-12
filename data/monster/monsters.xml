@@ -158,7 +158,7 @@
 	<monster name="Deer" file="monsters/deer.xml" />
 	<monster name="Defiler" file="monsters/defiler.xml" />
 	<monster name="Demodras" file="monsters/demodras.xml" />
-	<monster name="Demon (Goblin)" file="monsters/demon_(goblin).xml" />
+	<monster name="Demon (Goblin)" file="monsters/demon_goblin.xml" />
 	<monster name="Demon Outcast" file="monsters/demon_outcast.xml" />
 	<monster name="Demon Parrot" file="monsters/demon_parrot.xml" />
 	<monster name="Demon Skeleton" file="monsters/demon_skeleton.xml" />
