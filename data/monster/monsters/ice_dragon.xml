@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ice Dragon" nameDescription="an ice dragon" race="undead" experience="2300" speed="212">
+	<health now="2500" max="2500" />
+	<look type="947" body="9" corpse="27841" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="speed" interval="2000" chance="18" range="7" radius="4" target="1" duration="20000" max="-400">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" range="7" radius="3" target="0" min="-50" max="-120">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		<attack name="speed" interval="2000" chance="12" length="7" spread="3" duration="20000" max="-400">
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="12" length="8" spread="3" min="-150" max="-380">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="41" defense="41">
+		<defense name="healing" interval="2000" chance="20" min="100" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element earthPercent="50" />
+		<element firePercent="-30" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="96552" countmax="219" />
+		<item id="2672" name="dragon ham" chance="78796" />
+		<item id="27593" name="dragon blood" chance="19506" />
+		<item id="27594" name="dragon tongue" chance="12043" />
+		<item id="7839" name="shiver arrow" chance="7977" countmax="10" />
+		<item id="7441" name="ice cube" chance="4426" />
+		<item id="2167" name="energy ring" chance="4117" />
+		<item id="2146" name="small sapphire" chance="3911" />
+		<item id="7590" name="great mana potion" chance="3500" countmax="2" />
+		<item id="2033" name="golden mug" chance="2934" />
+		<item id="2183" name="hailstorm rod" chance="2213" />
+		<item id="7902" name="glacier mask" chance="1081" />
+		<item id="7888" name="glacier amulet" chance="978" />
+		<item id="7290" name="shard" chance="978" />
+		<item id="2177" name="life crystal" chance="669" />
+		<item id="2492" name="dragon scale mail" chance="257" />
+	</loot>
+</monster>

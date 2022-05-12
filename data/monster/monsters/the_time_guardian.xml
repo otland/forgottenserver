@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Time Guardian" nameDescription="The Time Guardian" race="undead" experience="50000" speed="340">
+	<health now="150000" max="150000" />
+	<look type="945" corpse="27741" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-744" />
+		<attack name="death" interval="2000" chance="15" range="7" radius="4" target="1" min="-600" max="-780">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" length="9" spread="0" min="-600" max="-780">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" length="9" spread="3" min="-600" max="-780">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="energycondition" interval="2000" chance="20" radius="7" min="-2000" max="-2000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="20" length="9" spread="0" min="-2000" max="-2000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="70" defense="70" />
+	<elements>
+		<element earthPercent="70" />
+		<element icePercent="70" />
+		<element energyPercent="70" />
+		<element firePercent="70" />
+		<element holyPercent="70" />
+		<element deathPercent="70" />
+		<element physicalPercent="70" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="This place is sacred!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="7440" name="mastermind potion" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="30" />
+		<item id="2214" name="ring of healing" chance="100000" />
+		<item id="2436" name="skull staff" chance="100000" />
+		<item id="18415" name="green crystal shard" chance="73913" countmax="3" />
+		<item id="18413" name="blue crystal shard" chance="69565" countmax="3" />
+		<item id="7590" name="great mana potion" chance="69565" countmax="10" />
+		<item id="18414" name="violet crystal shard" chance="65217" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="60870" countmax="10" />
+		<item id="8473" name="ultimate health potion" chance="43478" countmax="10" />
+		<item id="22396" name="cluster of solace" chance="34783" />
+		<item id="2197" name="stone skin amulet" chance="34783" />
+		<item id="12410" name="luminous orb" chance="30435" />
+		<item id="25172" name="silver token" chance="30435" />
+		<item id="2149" name="small emerald" chance="30435" countmax="10" />
+		<item id="25377" name="gold token" chance="26087" />
+		<item id="2158" name="blue gem" chance="21739" />
+		<item id="2155" name="green gem" chance="21739" />
+		<item id="9970" name="small topaz" chance="21739" countmax="10" />
+		<item id="2154" name="yellow gem" chance="21739" />
+		<item id="7387" name="diamond sceptre" chance="17391" />
+		<item id="5904" name="magic sulphur" chance="17391" />
+		<item id="11240" name="guardian boots" chance="13043" />
+		<item id="2145" name="small diamond" chance="13043" countmax="10" />
+		<item id="2147" name="small ruby" chance="13043" countmax="10" />
+		<item id="7632" name="giant shimmering pearl" chance="4348" />
+		<item id="7633" name="giant shimmering pearl" chance="4348" />
+		<item id="2156" name="red gem" chance="8696" />
+		<item id="2150" name="small amethyst" chance="8696" countmax="10" />
+		<item id="5809" name="soul stone" chance="8696" />
+		<item id="7896" name="glacier kilt" chance="4348" />
+		<item id="7897" name="glacier robe" chance="4348" />
+		<item id="5892" name="huge chunk of crude iron" chance="4348" />
+		<item id="13293" name="leather whip" chance="4348" />
+		<item id="7894" name="magma legs" chance="4348" />
+		<item id="27612" name="part of a rune (three)" chance="4348" />
+		<item id="2539" name="phoenix shield" chance="4348" />
+		<item id="2153" name="violet gem" chance="4348" />
+	</loot>
+</monster>

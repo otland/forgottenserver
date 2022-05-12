@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Enraged Thorn Knight" nameDescription="The Enraged Thorn Knight" race="blood" experience="30000" speed="350">
+	<health now="20000" max="20000" />
+	<look type="512" addons="3" head="81" body="121" legs="121" feet="121" corpse="6080" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="lifedrain" interval="2000" chance="12" length="4" spread="3" min="-400" max="-700">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="12" length="9" spread="0" min="-1400" max="-1700">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="death" interval="2000" chance="12" length="9" spread="0" min="-400" max="-700">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="10" min="-200" max="-250">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60">
+		<defense name="healing" interval="2000" chance="20" min="1550" max="2550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="12" speedchange="620" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="80" />
+		<element holyPercent="80" />
+		<element earthPercent="100" />
+		<element deathPercent="80" />
+		<element firePercent="80" />
+		<element physicalPercent="80" />
+		<element icePercent="80" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2430" name="knight axe" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="35" />
+		<item id="2214" name="ring of healing" chance="100000" />
+		<item id="18414" name="violet crystal shard" chance="72222" countmax="3" />
+		<item id="18415" name="green crystal shard" chance="70833" countmax="3" />
+		<item id="18413" name="blue crystal shard" chance="65278" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="58333" countmax="10" />
+		<item id="8473" name="ultimate health potion" chance="54167" countmax="10" />
+		<item id="7443" name="bullseye potion" chance="51389" />
+		<item id="7590" name="great mana potion" chance="51389" countmax="10" />
+		<item id="7439" name="berserk potion" chance="48611" />
+		<item id="22537" name="trapped bad dream monster" chance="37500" />
+		<item id="10219" name="sacred tree amulet" chance="31944" />
+		<item id="2156" name="red gem" chance="29167" />
+		<item id="6500" name="demonic essence" chance="25000" />
+		<item id="2149" name="small emerald" chance="25000" countmax="10" />
+		<item id="2150" name="small amethyst" chance="23611" countmax="10" />
+		<item id="25377" name="gold token" chance="22222" />
+		<item id="2158" name="blue gem" chance="20833" />
+		<item id="7632" name="giant shimmering pearl" chance="9722" />
+		<item id="7633" name="giant shimmering pearl" chance="9722" />
+		<item id="5910" name="green piece of cloth" chance="19444" countmax="3" />
+		<item id="9809" name="rusted armor" chance="18056" />
+		<item id="25172" name="silver token" chance="18056" />
+		<item id="2145" name="small diamond" chance="16667" countmax="10" />
+		<item id="2147" name="small ruby" chance="16667" countmax="10" />
+		<item id="9970" name="small topaz" chance="16667" countmax="10" />
+		<item id="2155" name="green gem" chance="15278" />
+		<item id="2536" name="medusa shield" chance="11111" />
+		<item id="5884" name="spirit container" chance="11111" />
+		<item id="7452" name="spiked squelcher" chance="9722" />
+		<item id="2154" name="yellow gem" chance="9722" />
+		<item id="7407" name="haunted blade" chance="6944" />
+		<item id="2498" name="royal helmet" chance="5556" />
+		<item id="5885" name="flask of warrior's sweat" chance="4167" />
+		<item id="27610" name="part of a rune (one)" chance="4167" />
+		<item id="2153" name="violet gem" chance="4167" />
+		<item id="5015" name="mandrake" chance="2778" />
+		<item id="8880" name="swamplair armor" chance="2778" />
+		<item id="5887" name="piece of royal steel" chance="1389" countmax="2" />
+		<item id="6553" name="ruthless axe" chance="1389" />
+		<item id="27621" name="thorn seed" chance="1389" />
+	</loot>
+</monster>

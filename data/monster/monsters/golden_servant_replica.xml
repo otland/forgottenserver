@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Golden Servant Replica" nameDescription="a golden servant replica" race="energy" experience="450" speed="210">
+	<health now="2000" max="2000" />
+	<look type="396" corpse="13484" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-220" />
+		<attack name="fire" interval="2000" chance="11" length="5" spread="1" min="-80" max="-110">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" radius="4" min="-70" max="-110">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="2000" chance="13" min="40" max="70">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="80" />
+		<element firePercent="10" />
+		<element icePercent="-5" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="85419" countmax="137" />
+		<item id="7620" name="mana potion" chance="5290" />
+		<item id="7618" name="health potion" chance="4559" />
+		<item id="2381" name="halberd" chance="2280" />
+		<item id="2796" name="green mushroom" chance="1634" />
+		<item id="9690" name="gear wheel" chance="989" />
+		<item id="8900" name="spellbook of enlightenment" chance="430" />
+		<item id="2165" name="stealth ring" chance="301" />
+		<item id="13758" name="slime mould" chance="258" />
+		<item id="13938" name="golden can of oil" chance="43" />
+	</loot>
+</monster>

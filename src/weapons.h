@@ -57,6 +57,7 @@ public:
 	virtual bool interruptSwing() const { return false; }
 
 	int32_t playerWeaponCheck(Player* player, Creature* target, uint8_t shootRange) const;
+	bool ammoCheck(const Player* player) const;
 	static bool useFist(Player* player, Creature* target);
 	virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
 

@@ -1272,6 +1272,11 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
+	// update quiver
+	if (actorPlayer) {
+		actorPlayer->sendQuiverUpdate(g_config.getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS));
+	}
+
 	// we could not move all, inform the player
 	if (item->isStackable() && maxQueryCount < count) {
 		return retMaxCount;
@@ -1800,7 +1805,7 @@ Item* searchForItem(Container* container, uint16_t itemId)
 slots_t getSlotType(const ItemType& it)
 {
 	slots_t slot = CONST_SLOT_RIGHT;
-	if (it.weaponType != WeaponType_t::WEAPON_SHIELD) {
+	if (it.weaponType != WeaponType_t::WEAPON_SHIELD && it.weaponType != WeaponType_t::WEAPON_QUIVER) {
 		int32_t slotPosition = it.slotPosition;
 
 		if (slotPosition & SLOTP_HEAD) {
@@ -4176,6 +4181,25 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		target->gainHealth(attacker, damage.primary.value);
 		realHealthChange = target->getHealth() - realHealthChange;
 
+		if (attackerPlayer && attackerPlayer != targetPlayer) {
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target ? target->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT,
+				                                   target ? target->getName() : "(other)");
+			}
+		} else if (targetPlayer) {
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::HEALING,
+			                                 attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::HEALING,
+				                                 attacker ? attacker->getName() : "(other)");
+			}
+		}
+
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
@@ -4384,6 +4408,26 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
 			if (hitEffect != CONST_ME_NONE) {
 				addMagicEffect(spectators, targetPos, hitEffect);
+			}
+		}
+
+		if (attackerPlayer) {
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target->getName());
+			if (damage.secondary.type != COMBAT_NONE) {
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT, target->getName());
+			}
+		}
+
+		if (targetPlayer) {
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::RECEIVED,
+			                                 attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type != COMBAT_NONE) {
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::RECEIVED,
+				                                 attacker ? attacker->getName() : "(other)");
 			}
 		}
 

@@ -41101,8 +41101,16 @@
 	<item id="38177" article="a" name="jungle rod" />
 	<item id="38178" article="a" name="jungle wand" />
 	<item id="38179" article="an" name="exotic amulet" />
-	<item id="38180" article="a" name="jungle quiver" />
-	<item id="38218" article="a" name="quiver" />
+	<item id="38180" article="a" name="jungle quiver">
+		<attribute key="weaponType" value="quiver"/>
+		<attribute key="containersize" value="8"/>
+		<attribute key="weight" value="1800"/>
+	</item>
+	<item id="38218" article="a" name="quiver">
+		<attribute key="weaponType" value="quiver"/>
+		<attribute key="containersize" value="6"/>
+		<attribute key="weight" value="1700"/>
+	</item>
 	<item id="38219" article="a" name="magic shield potion" />
 	<item id="38223" article="a" name="quiver" />
 	<item fromid="38224" toid="38226" name="reef" />
@@ -41165,8 +41173,16 @@
 	<item fromid="38481" toid="38485" article="a" name="ship" />
 	<item fromid="38499" toid="38502" name="dead ratmiral" />
 	<item id="38503" name="nothing special" />
-	<item id="38504" article="a" name="blue quiver" />
-	<item id="38505" article="a" name="red quiver" />
+	<item id="38504" article="a" name="blue quiver">
+		<attribute key="weaponType" value="quiver"/>
+		<attribute key="containersize" value="6"/>
+		<attribute key="weight" value="1700"/>
+	</item>
+	<item id="38505" article="a" name="red quiver">
+		<attribute key="weaponType" value="quiver"/>
+		<attribute key="containersize" value="6"/>
+		<attribute key="weight" value="1700"/>
+	</item>
 	<item fromid="38507" toid="38518" article="a" name="magnificent bed" />
 	<item fromid="38519" toid="38530" article="an" name="ornate bed" />
 	<item fromid="38531" toid="38542" article="a" name="vengothic bed" />
@@ -41321,7 +41337,11 @@
 	<item id="39319" article="an" name="eldritch cuirass" />
 	<item id="39320" article="an" name="eldritch bow" />
 	<item id="39321" article="a" name="gilded eldritch bow" />
-	<item id="39322" article="an" name="eldritch quiver" />
+	<item id="39322" article="an" name="eldritch quiver">
+		<attribute key="weaponType" value="quiver"/>
+		<attribute key="containersize" value="8"/>
+		<attribute key="weight" value="2200"/>
+	</item>
 	<item id="39323" name="eldritch breeches" />
 	<item id="39324" article="an" name="eldritch wand" />
 	<item id="39325" article="a" name="gilded eldritch wand" />
