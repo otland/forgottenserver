@@ -19,7 +19,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-1" />
-		<attack name="outfit" interval="2000" range="1" item="7556" duration="5000">
+		<attack name="outfit" interval="2000" chance="100" range="1" item="7556" duration="5000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
 	</attacks>

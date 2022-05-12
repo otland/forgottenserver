@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="physical" interval="2000" range="7" min="0" max="-110">
+		<attack name="physical" interval="2000" chance="100" range="7" min="0" max="-110">
 			<attribute key="shootEffect" value="throwingstar" />
 		</attack>
 	</attacks>

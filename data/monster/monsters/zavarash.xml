@@ -51,7 +51,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Dark Torturer" interval="1000" />
+		<summon name="Dark Torturer" interval="1000" chance="100" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Harrr, Harrr!" yell="1" />

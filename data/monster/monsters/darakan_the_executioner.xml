@@ -17,7 +17,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-210" />
-		<attack name="physical" interval="1000" min="-72" max="-130">
+		<attack name="physical" interval="1000" chance="100" min="-72" max="-130">
 			<attribute key="shootEffect" value="spear" />
 		</attack>
 	</attacks>

@@ -22,7 +22,7 @@
 		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-400" max="-1000">
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
-		<attack name="fire" interval="3000" target="0" radius="3" min="-80" max="-250">
+		<attack name="fire" interval="3000" chance="100" target="0" radius="3" min="-80" max="-250">
 			<attribute key="areaEffect" value="fire" />
 		</attack>
 		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
