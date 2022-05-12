@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Guard Captain Quaid" nameDescription="Guard Captain Quaid" race="blood" experience="28000" speed="185">
+	<health now="55000" max="55000" />
+	<look type="1217" head="38" body="57" legs="21" feet="2" addons="2" corpse="34310" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-580" />
+		<attack name="earth" interval="2000" chance="18" range="4" radius="4" target="1" min="-500" max="-620">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="physical" interval="2000" chance="22" range="4" target="1" min="-450" max="-700">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+		<attack name="physical" interval="2000" chance="14" length="5" spread="0" min="-350" max="-550">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="4" target="1" radius="1" min="-400" max="-550">
+			<attribute key="shootEffect" value="burstarrow" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="12" length="5" spread="0" min="-300" max="-480">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" radius="3" min="-300" max="-450">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element physicalPercent="85" />
+		<element holyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2146" name="small sapphire" chance="100000" />
+	</loot>
+</monster>

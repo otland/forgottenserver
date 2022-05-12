@@ -8,16 +8,18 @@ static constexpr int32_t NETWORKMESSAGE_MAXSIZE = 24590;
 static constexpr int32_t MIN_MARKET_FEE = 20;
 static constexpr int32_t MAX_MARKET_FEE = 100000;
 
-enum MagicEffectsType_t : uint8_t {
-	MAGIC_EFFECTS_END_LOOP = 0, // ends the magic effect loop
-	MAGIC_EFFECTS_DELTA = 1, // needs uint8_t delta after type to adjust position
-	MAGIC_EFFECTS_DELAY = 2, // needs uint16_t delay after type to delay in miliseconds effect display
-	MAGIC_EFFECTS_CREATE_EFFECT = 3, // needs uint8_t effectid after type
+enum MagicEffectsType_t : uint8_t
+{
+	MAGIC_EFFECTS_END_LOOP = 0,              // ends the magic effect loop
+	MAGIC_EFFECTS_DELTA = 1,                 // needs uint8_t delta after type to adjust position
+	MAGIC_EFFECTS_DELAY = 2,                 // needs uint16_t delay after type to delay in miliseconds effect display
+	MAGIC_EFFECTS_CREATE_EFFECT = 3,         // needs uint8_t effectid after type
 	MAGIC_EFFECTS_CREATE_DISTANCEEFFECT = 4, // needs uint8_t and deltaX(int8_t), deltaY(int8_t) after type
 	MAGIC_EFFECTS_CREATE_DISTANCEEFFECT_REVERSED = 5, // needs uint8_t and deltaX(int8_t), deltaY(int8_t) after type
 };
 
-enum MagicEffectClasses : uint8_t {
+enum MagicEffectClasses : uint8_t
+{
 	CONST_ME_NONE,
 
 	CONST_ME_DRAWBLOOD = 1,
@@ -171,7 +173,8 @@ enum MagicEffectClasses : uint8_t {
 	CONST_ME_FERUMBRAS_2 = 240,
 };
 
-enum ShootType_t : uint8_t {
+enum ShootType_t : uint8_t
+{
 	CONST_ANI_NONE,
 
 	CONST_ANI_SPEAR = 1,
@@ -237,35 +240,37 @@ enum ShootType_t : uint8_t {
 	CONST_ANI_WEAPONTYPE = 0xFE, // 254
 };
 
-enum SpeakClasses : uint8_t {
+enum SpeakClasses : uint8_t
+{
 	TALKTYPE_SAY = 1,
 	TALKTYPE_WHISPER = 2,
 	TALKTYPE_YELL = 3,
 	TALKTYPE_PRIVATE_FROM = 4, // Received private message
-	TALKTYPE_PRIVATE_TO = 5, // Sent private message
-	//TALKTYPE_CHANNEL_M = 6 // not working (?)
+	TALKTYPE_PRIVATE_TO = 5,   // Sent private message
+	// TALKTYPE_CHANNEL_M = 6 // not working (?)
 	TALKTYPE_CHANNEL_Y = 7,
 	TALKTYPE_CHANNEL_O = 8,
-	TALKTYPE_SPELL = 9, // Like SAY but with "casts" instead of "says"
-	TALKTYPE_PRIVATE_NP = 10, // NPC speaking to player
+	TALKTYPE_SPELL = 9,               // Like SAY but with "casts" instead of "says"
+	TALKTYPE_PRIVATE_NP = 10,         // NPC speaking to player
 	TALKTYPE_PRIVATE_NP_CONSOLE = 11, // NPC channel message, no text on game screen, for sendPrivateMessage use only
-	TALKTYPE_PRIVATE_PN = 12, // Player speaking to NPC
+	TALKTYPE_PRIVATE_PN = 12,         // Player speaking to NPC
 	TALKTYPE_BROADCAST = 13,
-	TALKTYPE_CHANNEL_R1 = 14, // red - #c text
+	TALKTYPE_CHANNEL_R1 = 14,       // red - #c text
 	TALKTYPE_PRIVATE_RED_FROM = 15, // @name@text
-	TALKTYPE_PRIVATE_RED_TO = 16, // @name@text
+	TALKTYPE_PRIVATE_RED_TO = 16,   // @name@text
 	TALKTYPE_MONSTER_SAY = 36,
 	TALKTYPE_MONSTER_YELL = 37,
 	TALKTYPE_POTION = 52, // Like MONSTER_SAY but can be disabled in client settings
 };
 
-enum MessageClasses : uint8_t {
-	MESSAGE_STATUS_DEFAULT = 17, // White, bottom + console
-	MESSAGE_STATUS_WARNING = 18, // Red, over player + console
-	MESSAGE_EVENT_ADVANCE = 19, // White, over player + console
+enum MessageClasses : uint8_t
+{
+	MESSAGE_STATUS_DEFAULT = 17,  // White, bottom + console
+	MESSAGE_STATUS_WARNING = 18,  // Red, over player + console
+	MESSAGE_EVENT_ADVANCE = 19,   // White, over player + console
 	MESSAGE_STATUS_WARNING2 = 20, // Red, over player + console
-	MESSAGE_STATUS_SMALL = 21, // White, bottom of the screen
-	MESSAGE_INFO_DESCR = 22, // Green, over player + console
+	MESSAGE_STATUS_SMALL = 21,    // White, bottom of the screen
+	MESSAGE_INFO_DESCR = 22,      // Green, over player + console
 
 	// White, console
 	MESSAGE_DAMAGE_DEALT = 23,
@@ -277,31 +282,32 @@ enum MessageClasses : uint8_t {
 	MESSAGE_EXPERIENCE_OTHERS = 29,
 
 	MESSAGE_EVENT_DEFAULT = 30, // White, bottom + console
-	MESSAGE_LOOT = 31, // White, over player + console, supports colors as {text|itemClientId}
-	MESSAGE_TRADE = 32, // Green, over player + console
+	MESSAGE_LOOT = 31,          // White, over player + console, supports colors as {text|itemClientId}
+	MESSAGE_TRADE = 32,         // Green, over player + console
 
 	// White, in channel (needs channel Id)
 	MESSAGE_GUILD = 33,
 	MESSAGE_PARTY_MANAGEMENT = 34,
 	MESSAGE_PARTY = 35,
 
-	MESSAGE_REPORT = 38, // White, over player + conosle
+	MESSAGE_REPORT = 38,         // White, over player + conosle
 	MESSAGE_HOTKEY_PRESSED = 39, // Green, over player + console
-	//MESSAGE_TUTORIAL_HINT = 40, // not working (?)
-	//MESSAGE_THANK_YOU = 41, // not working (?)
+	// MESSAGE_TUTORIAL_HINT = 40, // not working (?)
+	// MESSAGE_THANK_YOU = 41, // not working (?)
 	MESSAGE_MARKET = 42, // Window "Market Message" + "Ok" button
-	//MESSAGE_MANA = 43, // not working (?)
-	MESSAGE_BEYOND_LAST = 44, // White, console only
+	// MESSAGE_MANA = 43, // not working (?)
+	MESSAGE_BEYOND_LAST = 44,     // White, console only
 	MESSAGE_TOURNAMENT_INFO = 45, // Window "Tournament" + "Ok" button
 	// unused 46?
 	// unused 47?
-	MESSAGE_ATTENTION = 48, // White, console only
+	MESSAGE_ATTENTION = 48,        // White, console only
 	MESSAGE_BOOSTED_CREATURE = 49, // White, console only
 	MESSAGE_OFFLINE_TRAINING = 50, // White, over player + console
-	MESSAGE_TRANSACTION = 51, // White, console only
+	MESSAGE_TRANSACTION = 51,      // White, console only
 };
 
-enum FluidColors_t : uint8_t {
+enum FluidColors_t : uint8_t
+{
 	FLUID_EMPTY,
 	FLUID_BLUE,
 	FLUID_RED,
@@ -313,7 +319,8 @@ enum FluidColors_t : uint8_t {
 	FLUID_BLACK,
 };
 
-enum FluidTypes_t : uint8_t {
+enum FluidTypes_t : uint8_t
+{
 	FLUID_NONE = FLUID_EMPTY,
 	FLUID_WATER = FLUID_BLUE,
 	FLUID_BLOOD = FLUID_RED,
@@ -343,42 +350,18 @@ enum FluidTypes_t : uint8_t {
 };
 
 const uint8_t reverseFluidMap[] = {
-	FLUID_EMPTY,
-	FLUID_WATER,
-	FLUID_MANA,
-	FLUID_BEER,
-	FLUID_EMPTY,
-	FLUID_BLOOD,
-	FLUID_SLIME,
-	FLUID_EMPTY,
-	FLUID_LEMONADE,
-	FLUID_MILK,
-	FLUID_INK,
+    FLUID_EMPTY, FLUID_WATER, FLUID_MANA,     FLUID_BEER, FLUID_EMPTY, FLUID_BLOOD,
+    FLUID_SLIME, FLUID_EMPTY, FLUID_LEMONADE, FLUID_MILK, FLUID_INK,
 };
 
 const uint8_t clientToServerFluidMap[] = {
-	FLUID_EMPTY,
-	FLUID_WATER,
-	FLUID_MANA,
-	FLUID_BEER,
-	FLUID_MUD,
-	FLUID_BLOOD,
-	FLUID_SLIME,
-	FLUID_RUM,
-	FLUID_LEMONADE,
-	FLUID_MILK,
-	FLUID_WINE,
-	FLUID_LIFE,
-	FLUID_URINE,
-	FLUID_OIL,
-	FLUID_FRUITJUICE,
-	FLUID_COCONUTMILK,
-	FLUID_TEA,
-	FLUID_MEAD,
-	FLUID_INK,
+    FLUID_EMPTY,      FLUID_WATER,       FLUID_MANA, FLUID_BEER, FLUID_MUD,  FLUID_BLOOD, FLUID_SLIME,
+    FLUID_RUM,        FLUID_LEMONADE,    FLUID_MILK, FLUID_WINE, FLUID_LIFE, FLUID_URINE, FLUID_OIL,
+    FLUID_FRUITJUICE, FLUID_COCONUTMILK, FLUID_TEA,  FLUID_MEAD, FLUID_INK,
 };
 
-enum ClientFluidTypes_t : uint8_t {
+enum ClientFluidTypes_t : uint8_t
+{
 	CLIENTFLUID_EMPTY = 0,
 	CLIENTFLUID_BLUE = 1,
 	CLIENTFLUID_PURPLE = 2,
@@ -393,22 +376,17 @@ enum ClientFluidTypes_t : uint8_t {
 };
 
 const uint8_t fluidMap[] = {
-	CLIENTFLUID_EMPTY,
-	CLIENTFLUID_BLUE,
-	CLIENTFLUID_RED,
-	CLIENTFLUID_BROWN_1,
-	CLIENTFLUID_GREEN,
-	CLIENTFLUID_YELLOW,
-	CLIENTFLUID_WHITE,
-	CLIENTFLUID_PURPLE,
-	CLIENTFLUID_BLACK,
+    CLIENTFLUID_EMPTY,  CLIENTFLUID_BLUE,  CLIENTFLUID_RED,    CLIENTFLUID_BROWN_1, CLIENTFLUID_GREEN,
+    CLIENTFLUID_YELLOW, CLIENTFLUID_WHITE, CLIENTFLUID_PURPLE, CLIENTFLUID_BLACK,
 };
 
-enum SquareColor_t : uint8_t {
+enum SquareColor_t : uint8_t
+{
 	SQ_COLOR_BLACK = 0,
 };
 
-enum TextColor_t : uint8_t {
+enum TextColor_t : uint8_t
+{
 	TEXTCOLOR_BLUE = 5,
 	TEXTCOLOR_LIGHTGREEN = 30,
 	TEXTCOLOR_LIGHTBLUE = 35,
@@ -427,7 +405,8 @@ enum TextColor_t : uint8_t {
 	TEXTCOLOR_NONE = 255,
 };
 
-enum Icons_t {
+enum Icons_t
+{
 	ICON_POISON = 1 << 0,
 	ICON_BURN = 1 << 1,
 	ICON_ENERGY = 1 << 2,
@@ -457,7 +436,8 @@ enum Icons_t {
 	ICON_MANASHIELD_BREAKABLE = 1 << 26,
 };
 
-enum WeaponType_t : uint8_t {
+enum WeaponType_t : uint8_t
+{
 	WEAPON_NONE,
 	WEAPON_SWORD,
 	WEAPON_CLUB,
@@ -466,9 +446,11 @@ enum WeaponType_t : uint8_t {
 	WEAPON_DISTANCE,
 	WEAPON_WAND,
 	WEAPON_AMMO,
+	WEAPON_QUIVER,
 };
 
-enum Ammo_t : uint8_t {
+enum Ammo_t : uint8_t
+{
 	AMMO_NONE,
 	AMMO_BOLT,
 	AMMO_ARROW,
@@ -479,14 +461,16 @@ enum Ammo_t : uint8_t {
 	AMMO_SNOWBALL,
 };
 
-enum WeaponAction_t : uint8_t {
+enum WeaponAction_t : uint8_t
+{
 	WEAPONACTION_NONE,
 	WEAPONACTION_REMOVECOUNT,
 	WEAPONACTION_REMOVECHARGE,
 	WEAPONACTION_MOVE,
 };
 
-enum WieldInfo_t {
+enum WieldInfo_t
+{
 	WIELDINFO_NONE = 0 << 0,
 	WIELDINFO_LEVEL = 1 << 0,
 	WIELDINFO_MAGLV = 1 << 1,
@@ -494,7 +478,8 @@ enum WieldInfo_t {
 	WIELDINFO_PREMIUM = 1 << 3,
 };
 
-enum Skulls_t : uint8_t {
+enum Skulls_t : uint8_t
+{
 	SKULL_NONE = 0,
 	SKULL_YELLOW = 1,
 	SKULL_GREEN = 2,
@@ -504,7 +489,8 @@ enum Skulls_t : uint8_t {
 	SKULL_ORANGE = 6,
 };
 
-enum PartyShields_t : uint8_t {
+enum PartyShields_t : uint8_t
+{
 	SHIELD_NONE = 0,
 	SHIELD_WHITEYELLOW = 1,
 	SHIELD_WHITEBLUE = 2,
@@ -519,7 +505,8 @@ enum PartyShields_t : uint8_t {
 	SHIELD_GRAY = 11,
 };
 
-enum GuildEmblems_t : uint8_t {
+enum GuildEmblems_t : uint8_t
+{
 	GUILDEMBLEM_NONE = 0,
 	GUILDEMBLEM_ALLY = 1,
 	GUILDEMBLEM_ENEMY = 2,
@@ -528,7 +515,8 @@ enum GuildEmblems_t : uint8_t {
 	GUILDEMBLEM_OTHER = 5,
 };
 
-enum item_t : uint16_t {
+enum item_t : uint16_t
+{
 	ITEM_BROWSEFIELD = 460, // for internal use
 	ITEM_DECORATION_KIT = 26054,
 
@@ -567,10 +555,12 @@ enum item_t : uint16_t {
 	ITEM_STORE_COIN = 24774, // in-game store currency
 
 	ITEM_DEPOT = 2594,
-	ITEM_LOCKER1 = 2589,
+	ITEM_LOCKER = 2589,
 	ITEM_INBOX = 14404,
 	ITEM_MARKET = 14405,
 	ITEM_STORE_INBOX = 26052,
+
+	// move to separate enum class?
 	ITEM_DEPOT_BOX_I = 25453,
 	ITEM_DEPOT_BOX_II = 25454,
 	ITEM_DEPOT_BOX_III = 25455,
@@ -603,10 +593,11 @@ enum item_t : uint16_t {
 
 	ITEM_AMULETOFLOSS = 2173,
 
-	ITEM_DOCUMENT_RO = 1968, //read-only
+	ITEM_DOCUMENT_RO = 1968, // read-only
 };
 
-enum ResourceTypes_t: uint8_t {
+enum ResourceTypes_t : uint8_t
+{
 	RESOURCE_BANK_BALANCE = 0x00,
 	RESOURCE_GOLD_EQUIPPED = 0x01,
 	RESOURCE_PREY_WILDCARDS = 0x0A,
@@ -614,7 +605,8 @@ enum ResourceTypes_t: uint8_t {
 	RESOURCE_DAILYREWARD_JOKERS = 0x15,
 };
 
-enum PlayerFlags : uint64_t {
+enum PlayerFlags : uint64_t
+{
 	PlayerFlag_CannotUseCombat = 1 << 0,
 	PlayerFlag_CannotAttackPlayer = 1 << 1,
 	PlayerFlag_CannotAttackMonster = 1 << 2,
@@ -657,13 +649,15 @@ enum PlayerFlags : uint64_t {
 	PlayerFlag_IgnoreSendPrivateCheck = static_cast<uint64_t>(1) << 39,
 };
 
-enum PodiumFlags : uint8_t {
+enum PodiumFlags : uint8_t
+{
 	PODIUM_SHOW_PLATFORM = 0, // show the platform below the outfit
-	PODIUM_SHOW_OUTFIT = 1, // show outfit
-	PODIUM_SHOW_MOUNT = 2 // show mount
+	PODIUM_SHOW_OUTFIT = 1,   // show outfit
+	PODIUM_SHOW_MOUNT = 2     // show mount
 };
 
-enum ReloadTypes_t : uint8_t {
+enum ReloadTypes_t : uint8_t
+{
 	RELOAD_TYPE_ALL,
 	RELOAD_TYPE_ACTIONS,
 	RELOAD_TYPE_CHAT,
@@ -689,7 +683,7 @@ static constexpr int32_t CHANNEL_GUILD = 0x00;
 static constexpr int32_t CHANNEL_PARTY = 0x01;
 static constexpr int32_t CHANNEL_PRIVATE = 0xFFFF;
 
-//Reserved player storage key ranges;
+// Reserved player storage key ranges;
 //[10000000 - 20000000];
 static constexpr int32_t PSTRG_RESERVED_RANGE_START = 10000000;
 static constexpr int32_t PSTRG_RESERVED_RANGE_SIZE = 10000000;
@@ -701,6 +695,7 @@ static constexpr int32_t PSTRG_MOUNTS_RANGE_START = (PSTRG_RESERVED_RANGE_START 
 static constexpr int32_t PSTRG_MOUNTS_RANGE_SIZE = 10;
 static constexpr int32_t PSTRG_MOUNTS_CURRENTMOUNT = (PSTRG_MOUNTS_RANGE_START + 10);
 
-#define IS_IN_KEYRANGE(key, range) (key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
+#define IS_IN_KEYRANGE(key, range) \
+	(key >= PSTRG_##range##_START && ((key - PSTRG_##range##_START) <= PSTRG_##range##_SIZE))
 
 #endif // FS_CONST_H

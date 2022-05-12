@@ -11,7 +11,6 @@ end
 function Monster:onSpawn(position, startup, artificial)
 	if EventCallback.onSpawn then
 		return EventCallback.onSpawn(self, position, startup, artificial)
-	else
-		return true
 	end
+	return true
 end

@@ -1,19 +1,20 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
-// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
+// Use of this source code is governed by the GPL-2.0 License that can be found
+// in the LICENSE file.
 
 #include "otpch.h"
 
-#include <algorithm>
+#include "configmanager.h"
+
+#include "game.h"
+#include "monster.h"
+#include "pugicast.h"
+
 #if __has_include("luajit/lua.hpp")
 #include <luajit/lua.hpp>
 #else
 #include <lua.hpp>
 #endif
-
-#include "configmanager.h"
-#include "game.h"
-#include "monster.h"
-#include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
@@ -71,12 +72,9 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	return val != 0;
 }
 
-}
+} // namespace
 
-ConfigManager::ConfigManager()
-{
-	string[CONFIG_FILE] = "config.lua";
-}
+ConfigManager::ConfigManager() { string[CONFIG_FILE] = "config.lua"; }
 
 namespace {
 
@@ -115,7 +113,7 @@ ExperienceStages loadXMLStages()
 
 	ExperienceStages stages;
 	for (auto stageNode : doc.child("stages").children()) {
-		if (strcasecmp(stageNode.name(), "config") == 0) {
+		if (caseInsensitiveEqual(stageNode.name(), "config")) {
 			if (!stageNode.attribute("enabled").as_bool()) {
 				return {};
 			}
@@ -146,7 +144,7 @@ ExperienceStages loadXMLStages()
 	return stages;
 }
 
-}
+} // namespace
 
 bool ConfigManager::load()
 {
@@ -163,8 +161,8 @@ bool ConfigManager::load()
 		return false;
 	}
 
-	//parse config
-	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
+	// parse config
+	if (!loaded) { // info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
 
@@ -239,7 +237,6 @@ bool ConfigManager::load()
 	string[OWNER_EMAIL] = getGlobalString(L, "ownerEmail", "");
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
-	string[MOTD] = getGlobalString(L, "motd", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
@@ -283,7 +280,9 @@ bool ConfigManager::load()
 	if (expStages.empty()) {
 		expStages = loadLuaStages(L);
 	} else {
-		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
+		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, "
+		             "consider moving to config.lua."
+		          << std::endl;
 	}
 	expStages.shrink_to_fit();
 
@@ -291,15 +290,6 @@ bool ConfigManager::load()
 	lua_close(L);
 
 	return true;
-}
-
-bool ConfigManager::reload()
-{
-	bool result = load();
-	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
-		g_game.incrementMotdNum();
-	}
-	return result;
 }
 
 static std::string dummyStr;

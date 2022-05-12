@@ -46,10 +46,10 @@ SPEECHBUBBLE_QUESTTRADER = SPEECHBUBBLE_QUEST
 do
 	local function storageProxy(player)
 		return setmetatable({}, {
-			__index = function (self, key)
+			__index = function(self, key)
 				return player:getStorageValue(key)
 			end,
-			__newindex = function (self, key, value)
+			__newindex = function(self, key, value)
 				player:setStorageValue(key, value)
 			end
 		})
@@ -57,10 +57,10 @@ do
 
 	local function accountStorageProxy(player)
 		return setmetatable({}, {
-			__index = function (self, key)
+			__index = function(self, key)
 				return Game.getAccountStorageValue(player:getAccountId(), key)
 			end,
-			__newindex = function (self, key, value)
+			__newindex = function(self, key, value)
 				Game.setAccountStorageValue(player:getAccountId(), key, value)
 			end
 		})
@@ -683,9 +683,8 @@ function doPlayerRemOutfit(cid, lookType, addons)
 	end
 	if addons == 255 then
 		return player:removeOutfit(lookType)
-	else
-		return player:removeOutfitAddon(lookType, addons)
 	end
+	return player:removeOutfitAddon(lookType, addons)
 end
 doPlayerRemoveOutfit = doPlayerRemOutfit
 function doPlayerAddAddons(cid, addon) local p = Player(cid) return p and p:addAddonToAllOutfits(addon) or false end
@@ -1007,9 +1006,8 @@ function hasProperty(uid, prop)
 	local parent = item:getParent()
 	if parent:isTile() and item == parent:getGround() then
 		return parent:hasProperty(prop)
-	else
-		return item:hasProperty(prop)
 	end
+	return item:hasProperty(prop)
 end
 
 function doSetItemText(uid, text)

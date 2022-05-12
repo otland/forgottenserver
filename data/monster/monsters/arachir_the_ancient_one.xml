@@ -47,8 +47,7 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Lich" interval="9000" chance="100" />
-		<summon name="Lich" interval="9000" chance="100" />
+		<summon name="Lich" interval="4500" chance="100" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="I was the shadow that haunted the cradle of humanity!" />

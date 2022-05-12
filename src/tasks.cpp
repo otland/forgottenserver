@@ -4,19 +4,15 @@
 #include "otpch.h"
 
 #include "tasks.h"
+
+#include "enums.h"
 #include "game.h"
 
 extern Game g_game;
 
-Task* createTask(TaskFunc&& f)
-{
-	return new Task(std::move(f));
-}
+Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
 
-Task* createTask(uint32_t expiration, TaskFunc&& f)
-{
-	return new Task(expiration, std::move(f));
-}
+Task* createTask(uint32_t expiration, TaskFunc&& f) { return new Task(expiration, std::move(f)); }
 
 void Dispatcher::threadMain()
 {
@@ -28,7 +24,7 @@ void Dispatcher::threadMain()
 		// check if there are tasks waiting
 		taskLockUnique.lock();
 		if (taskList.empty()) {
-			//if the list is empty wait for signal
+			// if the list is empty wait for signal
 			taskSignal.wait(taskLockUnique);
 		}
 		tmpTaskList.swap(taskList);
