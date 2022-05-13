@@ -227,6 +227,8 @@ private:
 	void sendTextWindow(uint32_t windowTextId, Item* item, uint16_t maxlen, bool canWrite);
 	void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 	void sendHouseWindow(uint32_t windowTextId, const std::string& text);
+	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+	                        const std::string& target);
 	void sendOutfitWindow();
 
 	void sendPodiumWindow(const Item* item);
