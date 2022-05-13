@@ -132,7 +132,7 @@ local function creatureSayCallback(cid, type, msg)
 			end
 			return true
 		end
-		
+
 		npcHandler:say("Please tell me how much gold you would like to withdraw.", cid)
 		npcHandler.topic[cid] = topicList.WITHDRAW_CONSENT
 		return true

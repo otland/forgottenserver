@@ -1052,7 +1052,7 @@ if not Modules then
 			self.npcHandler.talkStart[cid] = os.time()
 			return true
 		end
-		
+
 		local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
 		msg = self.npcHandler:parseMessage(msg, parseInfo)
 		player:sendCancelMessage(msg)
