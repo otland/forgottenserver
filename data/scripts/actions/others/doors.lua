@@ -10,9 +10,22 @@ local openOddDoors = {
 	[31025] = { locked = 31023, closed = 31022 },
 	[31541] = { locked = 31314, closed = 31314 },
 	[31542] = { locked = 31315, closed = 31315 },
-
+	[32691] = { locked = 32705, closed = 32689 },
+	[32692] = { locked = 32706, closed = 32690 },
+	[32695] = { locked = 32707, closed = 32693 },
+	[32696] = { locked = 32708, closed = 32694 },
 	[33432] = { locked = 33429, closed = 33428 },
 	[33433] = { locked = 33431, closed = 33430 },
+	[33493] = { locked = 33490, closed = 33489 },
+	[33494] = { locked = 33492, closed = 33491 },
+	[34152] = { locked = 34150, closed = 34150 },
+	[34153] = { locked = 34151, closed = 34151 },
+	[36292] = { locked = 36289, closed = 36288 },
+	[36293] = { locked = 36291, closed = 36290 },
+	[37596] = { locked = 37593, closed = 37592 },
+	[37597] = { locked = 37595, closed = 37594 },	
+	[39119] = { locked = 39116, closed = 39115 },
+	[39120] = { locked = 39118, closed = 39117 }
 }
 local closedOddDoors = {	
 	[12692] = { locked = 13237, open = 12695 },
@@ -26,9 +39,22 @@ local closedOddDoors = {
 	[31022] = { locked = 31023, open = 31025 },
 	[31314] = { locked = 31314, open = 31541 },
 	[31315] = { locked = 31315, open = 31542 },
-
+	[32689] = { locked = 32705, open = 32691 },
+	[32690] = { locked = 32706, open = 32692 },
+	[32693] = { locked = 32707, open = 32695 },
+	[32694] = { locked = 32708, open = 32696 },
 	[33428] = { locked = 33429, open = 33432 },
 	[33430] = { locked = 33431, open = 33433 },
+	[33489] = { locked = 33490, open = 33493 },
+	[33491] = { locked = 33492, open = 33494 },
+	[34150] = { locked = 34150, open = 34152 },
+	[34151] = { locked = 34151, open = 34153 },
+	[36288] = { locked = 36289, open = 36292 },
+	[36290] = { locked = 36291, open = 36293 },
+	[37592] = { locked = 37593, open = 37596 },
+	[37594] = { locked = 37595, open = 37597 },
+	[39115] = { locked = 39116, open = 39119 },
+	[39117] = { locked = 39118, open = 39120 }
 }
 local lockedOddDoors = {
 	[13237] = { closed = 12692, open = 12695 },
@@ -40,9 +66,20 @@ local lockedOddDoors = {
 	[31175] = { closed = 27559, open = 31176 },	
 	[31021] = { closed = 31020, open = 31024 },
 	[31023] = { closed = 31022, open = 31025 },
-
+	[32705] = { closed = 32689, open = 32691 },
+	[32706] = { closed = 32690, open = 32692 },
+	[32707] = { closed = 32693, open = 32695 },
+	[32708] = { closed = 32694, open = 32696 },
 	[33429] = { closed = 33428, open = 33432 },
-	[33431] = { closed = 33430, open = 33433 }
+	[33431] = { closed = 33430, open = 33433 },
+	[33490] = { closed = 33489, open = 33493 },
+	[33492] = { closed = 33491, open = 33494 },
+	[36289] = { closed = 36288, open = 36292 },
+	[36291] = { closed = 36290, open = 36293 },
+	[37593] = { closed = 37592, open = 37596 },
+	[37595] = { closed = 37594, open = 37597 },
+	[39116] = { closed = 39115, open = 39119 },
+	[39118] = { closed = 39117, open = 39120 }
 }
 
 local positionOffsets = {
