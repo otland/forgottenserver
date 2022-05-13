@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frozen Minion" nameDescription="a frozen minion" race="blood" experience="230" speed="200">
+	<health now="2200" max="2200" />
+	<look type="53" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-196" />
+		<attack name="ice" interval="2000" chance="15" target="1" min="-150" max="-200">
+			<attribute key="shootEffect" value="snowball" />
+		</attack>
+		<attack name="frozen minion wave" interval="2000" chance="25" />
+		<attack name="frozen minion beam" interval="2000" chance="25" />
+	</attacks>
+	<defenses armor="7" defense="9">
+		<defense name="frozen minion heal" interval="2000" chance="15" />
+	</defenses>
+	<elements>
+		<element firePercent="50" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element energyPercent="-10" />
+		<element deathPercent="-15" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+</monster>

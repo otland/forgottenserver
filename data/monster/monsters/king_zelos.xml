@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="King Zelos" nameDescription="King Zelos" experience="75000" speed="250">
 	<health now="480000" max="480000" />
 	<look type="1224" corpse="34267" />
