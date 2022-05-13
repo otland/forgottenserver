@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="A Shielded Astral Glyph" nameDescription="a shielded astral glyph" race="undead" experience="0" speed="470">
+	<health now="50000" max="50000" />
+	<look typeex="26882" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-780" />
+		<attack name="energy" interval="2000" chance="25" radius="3" target="0" min="-200" max="-400">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="25" radius="5" min="-200" max="-400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="0" max="118" />
+	</defenses>
+	<immunities>
+		<immunity physical="1" />
+		<immunity energy="1" />
+		<immunity fire="1" />
+		<immunity poison="1" />
+		<immunity ice="1" />
+		<immunity holy="1" />
+		<immunity death="1" />
+		<immunity lifedrain="1" />
+		<immunity manadrain="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+		<immunity outfit="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

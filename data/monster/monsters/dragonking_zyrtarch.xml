@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dragonking Zyrtarch" nameDescription="Dragonking Zyrtarch" race="fire" experience="1600" speed="280">
+	<health now="150000" max="150000" />
+	<look type="938" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" radius="4" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="5" min="-110" max="-495">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="firecondition" interval="2000" chance="15" radius="5" min="-1100" max="-1100">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="4" min="-710" max="-895">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="0" min="-710" max="-895">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="52" defense="64" />
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity energy="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity holy="1" />
+		<immunity physical="1" />
+	</immunities>
+</monster>

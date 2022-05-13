@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Soul Of Dragonking Zyrtarch" nameDescription="Soul Of Dragonking Zyrtarch" race="fire" experience="70700" speed="400">
+	<health now="150000" max="150000" />
+	<look type="938" corpse="27787" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1200" />
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" radius="4" min="-110" max="-495">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" radius="8" min="-110" max="-495">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="energycondition" interval="2000" chance="15" radius="5" min="-1100" max="-1100">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" length="9" spread="4" min="-710" max="-895">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="4" min="-710" max="-895">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" length="9" spread="0" min="-710" max="-895">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="52" defense="64">
+		<defense name="healing" interval="2000" chance="15" min="450" max="550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="35" />
+		<item id="5948" name="red dragon leather" chance="100000" />
+		<item id="5882" name="red dragon scale" chance="100000" />
+		<item id="5904" name="magic sulphur" chance="76744" />
+		<item id="5889" name="piece of draconian steel" chance="76744" />
+		<item id="18413" name="blue crystal shard" chance="74419" countmax="3" />
+		<item id="18414" name="violet crystal shard" chance="67442" countmax="3" />
+		<item id="7590" name="great mana potion" chance="60465" countmax="10" />
+		<item id="18415" name="green crystal shard" chance="60465" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="51163" countmax="10" />
+		<item id="8473" name="ultimate health potion" chance="41860" countmax="10" />
+		<item id="25377" name="gold token" chance="32558" />
+		<item id="2156" name="red gem" chance="32558" />
+		<item id="9970" name="small topaz" chance="32558" countmax="10" />
+		<item id="25172" name="silver token" chance="27907" />
+		<item id="2147" name="small ruby" chance="23256" countmax="10" />
+		<item id="2158" name="blue gem" chance="20930" />
+		<item id="9971" name="gold ingot" chance="18605" />
+		<item id="2155" name="green gem" chance="18605" />
+		<item id="2145" name="small diamond" chance="18605" countmax="10" />
+		<item id="8902" name="spellbook of mind control" chance="18605" />
+		<item id="9980" name="crystal of power" chance="16279" />
+		<item id="7632" name="giant shimmering pearl" chance="8139" />
+		<item id="7633" name="giant shimmering pearl" chance="8139" />
+		<item id="2150" name="small amethyst" chance="16279" countmax="10" />
+		<item id="12608" name="broken key ring" chance="13953" />
+		<item id="9809" name="rusted armor" chance="13953" />
+		<item id="9810" name="slightly rusted armor" chance="11628" />
+		<item id="2154" name="yellow gem" chance="11628" />
+		<item id="8849" name="modified crossbow" chance="9302" />
+		<item id="2149" name="small emerald" chance="9302" countmax="10" />
+		<item id="7430" name="dragonbone staff" chance="6977" />
+		<item id="2492" name="dragon scale mail" chance="4651" />
+		<item id="27624" name="golden talon" chance="4651" />
+		<item id="5887" name="piece of royal steel" chance="4651" />
+		<item id="11308" name="drachaku" chance="2326" />
+		<item id="27623" name="dragon crown" chance="2326" />
+		<item id="12646" name="draken boots" chance="2326" />
+		<item id="11305" name="drakinata" chance="2326" />
+		<item id="27611" name="part of a rune (two)" chance="2326" />
+		<item id="12648" name="snake god's sceptre" chance="2326" />
+	</loot>
+</monster>
