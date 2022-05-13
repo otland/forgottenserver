@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mould Phantom" nameDescription="a mould phantom" race="venom" experience="17860" speed="480">
+	<health now="28000" max="28000" />
+	<look type="1298" head="106" body="60" legs="131" feet="116" corpse="36789" />
+	<targetchange interval="4000" chance="20" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="95" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="holy" interval="2000" chance="15" radius="3" target="1" min="-1200" max="-1300">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="holy" interval="2000" chance="25" range="7" min="-1000" max="-1250">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="25" radius="4" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="100" defense="100" />
+	<elements>
+		<element physicalPercent="-10" />
+		<element earthPercent="50" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item id="2160" name="crystal coin" chance="59000" />
+		<item id="9971" name="gold ingot" chance="12000" />
+		<item id="2155" name="green gem" chance="4300" />
+		<item id="18390" name="wand of defiance" chance="3800" />
+		<item id="36797" name="mould heart" chance="3600" />
+		<item id="2153" name="violet gem" chance="3400" />
+		<item id="8920" name="wand of starstorm" chance="3400" />
+		<item id="36804" name="mould robe" chance="2500" />
+		<item id="8922" name="wand of voodoo" chance="2500" />
+		<item id="2158" name="blue gem" chance="1500" />
+		<item id="26185" name="ring of blue plasma" chance="1100" />
+		<item id="15644" name="ornate crossbow" chance="1000" />
+		<item id="26198" name="collar of blue plasma" chance="800" />
+		<item id="18453" name="crystal crossbow" chance="570" />
+		<item id="36765" name="bag you desire" chance="10" />
+	</loot>
+</monster>
