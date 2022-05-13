@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Shielded Thorn Knight" nameDescription="The Shielded Thorn Knight" race="blood" experience="0" speed="390">
+	<health now="70000" max="70000" />
+	<look type="512" addons="3" head="81" body="121" legs="121" feet="121" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="lifedrain" interval="2000" chance="12" length="4" spread="3" min="-400" max="-700">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="12" length="9" spread="0" min="-1400" max="-1700">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="death" interval="2000" chance="12" length="9" spread="0" min="-400" max="-700">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="10" min="-200" max="-250">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60">
+		<defense name="healing" interval="2000" chance="20" min="1550" max="2550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="12" speedchange="620" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="80" />
+		<element holyPercent="80" />
+		<element earthPercent="100" />
+		<element deathPercent="80" />
+		<element firePercent="80" />
+		<element physicalPercent="80" />
+		<element icePercent="80" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

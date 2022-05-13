@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pinata Dragon" nameDescription="a pinata dragon" race="undead" experience="50" speed="0">
+	<health now="10000" max="10000" />
+	<look typeex="27718" corpse="27719" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="outfit" interval="2000" chance="10" target="1" range="3" monster="chicken" duration="3000" />
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="4" min="0" max="-40">
+			<attribute key="shootEffect" value="cake" />
+			<attribute key="areaEffect" value="cake" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="130" max="170">
+			<attribute key="areaEffect" value="mortarea" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-30" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="You can't have my treasures!" />
+		<voice sentence="Hit me one more time!" />
+		<voice sentence="Na Nana Naaa Naaa!" />
+		<voice sentence="You'll never get my stuff!" />
+		<voice sentence="Do you really want to hurt me?" />
+		<voice sentence="Bring it on!" />
+	</voices>
+	<loot>
+		<item id="6569" name="candy" chance="100000" countmax="3" />
+		<item id="6570" name="surprise bag" chance="26475" countmax="2" />
+		<item id="6571" name="surprise bag" chance="26475" countmax="2" />
+		<item id="2687" name="cookie" chance="50552" countmax="5" />
+		<item id="32858" name="winterberry liquor" chance="13909" />
+		<item id="32854" name="meringue cake" chance="11127" />
+		<item id="6574" name="bar of chocolate" chance="6859" />
+		<item id="32971" name="pinata" chance="6523" />
+		<item id="6280" name="party cake" chance="6379" />
+		<item id="27605" name="costume bag (retro)" chance="5084" />
+		<item id="32853" name="festive backpack" chance="3981" />
+		<item id="27058" name="chocolatey dragon scale legs" chance="2734" />
+		<item id="27053" name="ferumbras' candy hat" chance="2302" />
+		<item id="2110" name="doll" chance="1487" />
+		<item id="32973" name="ferumbras puppet" chance="240" />
+		<item id="7487" name="toy mouse" chance="240" />
+		<item id="6566" name="stuffed dragon" chance="192" />
+	</loot>
+</monster>
