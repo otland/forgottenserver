@@ -1471,7 +1471,7 @@
 	<item id="1950" article="a" name="book">
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="1300" />
-		<attribute key="writeOnceItemId" value="1971" />
+		<attribute key="readable" value="true" />
 	</item>
 	<item id="1951" article="a" name="blank parchment">
 		<attribute key="weight" value="200" />
@@ -1486,12 +1486,15 @@
 		<attribute key="writeOnceItemId" value="1968" />
 	</item>
 	<item id="1953" article="a" name="parchment">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1954" article="a" name="sheet of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="50" />
 	</item>
 	<item id="1955" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1956" article="a" name="map">
@@ -1501,6 +1504,7 @@
 		<attribute key="weight" value="790" />
 	</item>
 	<item fromid="1958" toid="1966" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1967" article="a" name="parchment">
@@ -1509,7 +1513,7 @@
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1968" article="a" name="document">
-		<attribute key="writeable" value="true" />
+		<attribute key="readable" value="true" />
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="150" />
 	</item>
@@ -17172,6 +17176,7 @@
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="9663" toid="9668" article="an" name="old piece of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item fromid="9669" toid="9670" article="a" name="wall mirror" />
