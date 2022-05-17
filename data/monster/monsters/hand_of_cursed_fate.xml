@@ -73,7 +73,7 @@
 		<item name="soul orb" chance="31111" />
 		<item id="6300" chance="1750" /><!-- death ring -->
 		<item name="demonic essence" chance="12000" />
-		<item name="concentrated demonic blood" countmax="4" chance="30000" />
+		<item name="flask of demonic blood" countmax="4" chance="30000" />
 		<item name="onyx arrow" countmax="3" chance="8333" />
 		<item name="assassin star" countmax="5" chance="7692" />
 		<item name="abyss hammer" chance="495" />
