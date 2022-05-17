@@ -80,7 +80,7 @@
 		<item name="soul orb" chance="53000" />
 		<item name="demonic essence" chance="17000" />
 		<item name="ruthless axe" chance="400" />
-		<item name="concentrated demonic blood" countmax="2" chance="31000" />
+		<item name="flask of demonic blood" countmax="2" chance="31000" />
 		<item name="assassin star" countmax="10" chance="38000" />
 		<item name="great mana potion" countmax="3" chance="15150" />
 		<item name="great health potion" countmax="2" chance="15150" />

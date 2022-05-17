@@ -71,7 +71,7 @@
 		<item name="orichalcum pearl" countmax="4" chance="1400" />
 		<item id="6300" chance="330" /><!-- death ring -->
 		<item name="demonic essence" chance="10600" />
-		<item name="concentrated demonic blood" chance="35000" />
+		<item name="flask of demonic blood" chance="35000" />
 		<item name="nightmare blade" chance="880" />
 		<item name="great mana potion" chance="10000" />
 		<item name="glacier kilt" chance="330" />

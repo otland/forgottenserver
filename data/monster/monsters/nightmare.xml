@@ -73,7 +73,7 @@
 		<item id="6300" chance="1298" /><!-- death ring -->
 		<item name="demonic essence" chance="10000" />
 		<item name="skeleton decoration" chance="337" />
-		<item name="concentrated demonic blood" countmax="2" chance="19666" />
+		<item name="flask of demonic blood" countmax="2" chance="19666" />
 		<item name="essence of a bad dream" chance="15240" />
 		<item name="scythe leg" chance="9090" />
 	</loot>

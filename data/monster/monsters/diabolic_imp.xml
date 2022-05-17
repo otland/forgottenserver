@@ -72,7 +72,7 @@
 		<item name="soul orb" chance="7230" />
 		<item id="6300" chance="120" /><!-- death ring -->
 		<item name="demonic essence" chance="8000" />
-		<item name="concentrated demonic blood" countmax="2" chance="25000" />
+		<item name="flask of demonic blood" countmax="2" chance="25000" />
 		<item name="magma coat" chance="250" />
 		<item name="magma monocle" chance="430" />
 	</loot>

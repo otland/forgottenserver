@@ -61,7 +61,7 @@
 		<item name="soul orb" chance="23000" />
 		<item id="6300" chance="2008" /><!-- death ring -->
 		<item name="demonic essence" chance="8520" />
-		<item name="concentrated demonic blood" countmax="3" chance="33333" />
+		<item name="flask of demonic blood" countmax="3" chance="33333" />
 		<item name="assassin star" countmax="5" chance="2222" />
 		<item name="vile axe" chance="480" />
 		<item name="butcher's axe" chance="850" />
