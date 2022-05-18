@@ -54,12 +54,12 @@
 		<item name="the ring of the count" chance="100000" />
 		<item name="vampire teeth" chance="7600" />
 		<item name="blood preservation" chance="5100" />
-		<item name="grave flower" chance="1910" />
+		<item id="2747" name="grave flower" chance="1910" />
 		<item name="black pearl" chance="1800" />
 		<item name="strong health potion" chance="1500" />
 		<item name="katana" chance="1560" />
 		<item name="spike sword" chance="1000" />
-		<item id="2229" chance="1000" /><!-- skull -->
+		<item id="2229" name="skull" chance="1000" />
 		<item name="ice rapier" chance="470" />
 		<item name="strange helmet" chance="420" />
 		<item name="bronze amulet" chance="230" />

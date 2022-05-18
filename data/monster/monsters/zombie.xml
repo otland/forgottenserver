@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Zombie" nameDescription="a zombie" race="undead" experience="280" speed="180">
+<monster name="Zombie" nameDescription="a zombie" race="blood" experience="280" speed="180">
 	<health now="500" max="500" />
 	<look type="311" corpse="9875" />
 	<targetchange interval="4000" chance="10" />
@@ -48,16 +48,15 @@
 		<voice sentence="Httt.... hmnnsss..." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="65" chance="82000" />
-		<item name="life ring" chance="1000" />
-		<item name="halberd" chance="3750" />
-		<item name="mace" chance="7250" />
-		<item name="battle hammer" chance="7000" />
-		<item name="steel helmet" chance="4600" />
-		<item name="brass helmet" chance="9400" />
-		<item name="simple dress" chance="560" />
-		<item name="mana potion" chance="740" />
-		<item id="9808" chance="5680" /><!-- rusty armor (common) -->
-		<item name="half-eaten brain" chance="10000" />
+		<item id="2148" name="gold coin" chance="82036" countmax="65" />
+		<item id="2460" name="brass helmet" chance="9793" />
+		<item id="2398" name="mace" chance="7847" />
+		<item id="2417" name="battle hammer" chance="6856" />
+		<item id="9808" name="heavily rusted armor" chance="5790" />
+		<item id="3351" name="steel helmet" chance="4799" />
+		<item id="2381" name="halberd" chance="3802" />
+		<item id="2168" name="life ring" chance="960" />
+		<item id="7620" name="mana potion" chance="748" />
+		<item id="2657" name="simple dress" chance="530" />
 	</loot>
 </monster>

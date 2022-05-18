@@ -45,7 +45,7 @@
 		<voice sentence="Valor who?" />
 		<voice sentence="Die noob!" />
 		<voice sentence="There are no dragons!" />
-		<voice sentence="I'll quit forever! Again ..." />
+		<voice sentence="I'll quit forever! Again..." />
 		<voice sentence="You all are noobs!" />
 		<voice sentence="Beware of the cyclops!" />
 		<voice sentence="Just had a disconnect." />
@@ -57,9 +57,9 @@
 		<item name="sabre" chance="10250" />
 		<item name="axe" chance="12250" />
 		<item name="studded helmet" chance="9500" />
-		<item name="studded armor" chance="7000" />
-		<item name="studded shield" chance="1200" />
-		<item id="6570" chance="500" /><!-- blue surprise bag -->
-		<item id="6571" chance="500" /><!-- red surprise bag -->
+		<item id="2484" name="studded armor" chance="7000" />
+		<item id="2526" name="studded shield" chance="1200" />
+		<item id="6570" name="blue surprise bag" chance="500" />
+		<item id="6571" name="red surprise bag" chance="500" />
 	</loot>
 </monster>

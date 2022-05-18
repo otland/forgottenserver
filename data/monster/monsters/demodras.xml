@@ -49,21 +49,21 @@
 		<voice sentence="I WILL PROTECT MY BROOD!" yell="1" />
 	</voices>
 	<loot>
-		<item id="5919" chance="100000" /><!-- dragon claw -->
-		<item name="platinum coin" countmax="10" chance="99000" />
-		<item name="dragon ham" countmax="10" chance="75000" />
-		<item name="green mushroom" countmax="7" chance="25666" />
-		<item name="power bolt" countmax="10" chance="19000" />
-		<item name="red dragon leather" chance="15000" />
-		<item name="small sapphire" chance="12222" />
-		<item id="1976" chance="10000" /><!-- book (gemmed) -->
-		<item name="energy ring" chance="10000" />
-		<item name="great mana potion" chance="8800" />
-		<item name="great health potion" chance="8800" />
-		<item name="golden mug" chance="6100" />
-		<item name="onyx arrow" countmax="5" chance="4500" />
-		<item name="dragon scale mail" chance="2000" />
-		<item name="fire sword" chance="2000" />
-		<item name="life crystal" chance="1000" />
+		<item id="5919" name="dragon claw" chance="100000" />
+		<item id="2152" name="platinum coin" chance="99145" countmax="10" />
+		<item id="2672" name="dragon ham" chance="75214" />
+		<item id="2796" name="green mushroom" chance="25641" countmax="7" />
+		<item id="2547" name="power bolt" chance="19658" countmax="10" />
+		<item id="5948" name="red dragon leather" chance="13675" />
+		<item id="2146" name="small sapphire" chance="11966" />
+		<item id="1976" name="book (gemmed)" chance="10256" />
+		<item id="2167" name="energy ring" chance="10256" />
+		<item id="7591" name="great health potion" chance="9402" />
+		<item id="7590" name="great mana potion" chance="9402" />
+		<item id="2033" name="golden mug" chance="5983" />
+		<item id="7365" name="onyx arrow" chance="4274" countmax="5" />
+		<item id="2492" name="dragon scale mail" chance="1709" />
+		<item id="2392" name="fire sword" chance="1709" />
+		<item id="2177" name="life crystal" chance="855" />
 	</loot>
 </monster>

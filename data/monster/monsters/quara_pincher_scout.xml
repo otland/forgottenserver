@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Pincher Scout" nameDescription="a quara pincher scout" race="blood" experience="600" speed="200">
+<monster name="Quara Pincher Scout" nameDescription="a quara pincher scout" race="blood" experience="600" speed="156">
 	<health now="775" max="775" />
 	<look type="77" corpse="6063" />
 	<targetchange interval="4000" chance="10" />
@@ -42,14 +42,12 @@
 		<voice sentence="Crrrk! Crrrk!" />
 	</voices>
 	<loot>
-		<item name="small ruby" chance="3440" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="43" chance="49000" />
-		<item name="life crystal" chance="1000" />
-		<item name="halberd" chance="1840" />
-		<item name="plate armor" chance="4170" />
-		<item name="fish fin" chance="1000" />
-		<item name="quara pincers" chance="9940" />
-		<item name="giant shrimp" chance="10" />
+		<item id="2148" name="gold coin" chance="89910" countmax="129" />
+		<item id="12446" name="quara pincers" chance="9912" />
+		<item id="2463" name="plate armor" chance="4965" />
+		<item id="2147" name="small ruby" chance="3836" countmax="2" />
+		<item id="2381" name="halberd" chance="2056" />
+		<item id="5895" name="fish fin" chance="808" />
+		<item id="2177" name="life crystal" chance="781" />
 	</loot>
 </monster>

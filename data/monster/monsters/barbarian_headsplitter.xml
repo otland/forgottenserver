@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="200" manacost="450">
+<monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="168" manacost="450">
 	<health now="100" max="100" />
 	<look type="253" head="115" body="86" legs="119" feet="113" corpse="20343" />
 	<targetchange interval="60000" chance="0" />
@@ -24,13 +24,13 @@
 			<attribute key="shootEffect" value="whirlwindaxe" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="7" defense="7" />
 	<elements>
-		<element icePercent="50" />
-		<element holyPercent="10" />
 		<element energyPercent="20" />
 		<element earthPercent="-10" />
-		<element deathPercent="-1" />
+		<element icePercent="50" />
+		<element holyPercent="20" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
@@ -43,17 +43,17 @@
 		<voice sentence="Die! Die! Die!" />
 	</voices>
 	<loot>
-		<item id="2050" chance="61500" /><!-- torch -->
-		<item name="gold coin" countmax="30" chance="60000" />
-		<item name="life ring" chance="230" />
-		<item name="skull of Ratha" chance="3270" />
-		<item name="knife" chance="15500" />
-		<item name="brass helmet" chance="20360" />
-		<item name="viking helmet" chance="5080" />
-		<item name="scale armor" chance="4090" />
-		<item name="brown piece of cloth" chance="950" />
-		<item name="fur boots" chance="100" />
-		<item name="krimhorn helmet" chance="110" />
-		<item name="health potion" chance="560" />
+		<item id="2148" name="gold coin" chance="75228" countmax="30" />
+		<item id="2050" name="torch" chance="59812" />
+		<item id="2460" name="brass helmet" chance="20170" />
+		<item id="2403" name="knife" chance="14928" />
+		<item id="2473" name="viking helmet" chance="4960" />
+		<item id="2483" name="scale armor" chance="4046" />
+		<item id="2229" name="skull (item)" chance="3194" />
+		<item id="5913" name="brown piece of cloth" chance="968" />
+		<item id="7618" name="health potion" chance="531" />
+		<item id="2168" name="life ring" chance="228" />
+		<item id="7461" name="krimhorn helmet" chance="112" />
+		<item id="7457" name="fur boots" chance="87" />
 	</loot>
 </monster>

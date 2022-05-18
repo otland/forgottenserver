@@ -48,16 +48,16 @@
 		<voice sentence="HUAHAHA!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="76225" />
-		<item name="small amethyst" countmax="2" chance="7650" />
-		<item name="double axe" chance="7650" />
-		<item name="crowbar" chance="14800" />
-		<item name="plate armor" chance="7650" />
-		<item name="dark armor" chance="7650" />
-		<item name="pick" chance="14800" />
-		<item name="meat" chance="36200" />
-		<item name="perfect behemoth fang" chance="64800" />
-		<item name="behemoth claw" chance="50500" />
-		<item name="assassin star" countmax="2" chance="11225" />
+		<item id="5930" name="behemoth claw" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="162" />
+		<item id="5893" name="perfect behemoth fang" chance="100000" />
+		<item id="7396" name="behemoth trophy" chance="97619" />
+		<item id="2150" name="small amethyst" chance="69048" countmax="5" />
+		<item id="7368" name="assassin star" chance="64286" countmax="94" />
+		<item id="2377" name="two handed sword" chance="52381" />
+		<item id="2666" name="meat" chance="23810" />
+		<item id="2489" name="dark armor" chance="14286" />
+		<item id="2387" name="double axe" chance="7143" />
+		<item id="11227" name="shiny stone" chance="4762" />
 	</loot>
 </monster>
