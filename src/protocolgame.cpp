@@ -782,7 +782,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xDE:
 			parseEditVip(msg);
 			break;
-		// case 0xDF: break; // premium shop (?)
+		case 0xDF:
+			parseVipGroupAction(msg);
+			break;
 		// case 0xE0: break; // premium shop (?)
 		// case 0xE1: break; // bestiary 1
 		// case 0xE2: break; // bestiary 2
@@ -1446,9 +1448,44 @@ void ProtocolGame::parseEditVip(NetworkMessage& msg)
 	std::string description = msg.getString();
 	uint32_t icon = std::min<uint32_t>(10, msg.get<uint32_t>()); // 10 is max icon in 9.63
 	bool notify = msg.getByte() != 0;
-	addGameTask([=, playerID = player->getID(), description = std::move(description)]() {
-		g_game.playerRequestEditVip(playerID, guid, description, icon, notify);
-	});
+	uint8_t groups = msg.getByte();
+	std::vector<uint16_t> groupIds;
+	groupIds.reserve(groups);
+	for (uint8_t i = 0; i < groups; i++) {
+		groupIds.push_back(msg.getByte());
+	}
+	addGameTask(
+	    [=, playerID = player->getID(), description = std::move(description), groupIds = std::move(groupIds)]() {
+		    g_game.playerRequestEditVip(playerID, guid, description, icon, notify, groupIds);
+	    });
+}
+
+void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
+{
+	uint8_t action = msg.getByte();
+
+	uint8_t id;
+	std::string name;
+
+	switch (action) {
+		case VIPGROUPACTION_CREATE:
+			name = msg.getString();
+			addGameTask([=, playerID = player->getID(), name = std::move(name)]() {
+				g_game.playerRequestAddVipGroup(playerID, name);
+			});
+			break;
+		case VIPGROUPACTION_EDIT:
+			id = msg.getByte();
+			name = msg.getString();
+			addGameTask([=, playerID = player->getID(), name = std::move(name)]() {
+				g_game.playerRequestEditVipGroup(playerID, id, name);
+			});
+			break;
+		case VIPGROUPACTION_REMOVE:
+			id = msg.getByte();
+			addGameTask([=, playerID = player->getID()]() { g_game.playerRequestRemoveVipGroup(playerID, id); });
+			break;
+	}
 }
 
 void ProtocolGame::parseRotateItem(NetworkMessage& msg)
@@ -2957,6 +2994,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	// player light level
 	sendCreatureLight(creature);
 
+	// player vip groups
+	sendVIPGroups();
+
 	// player vip list
 	sendVIPEntries();
 
@@ -3432,8 +3472,9 @@ void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
 	writeToOutputBuffer(msg);
 }
 
+
 void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon,
-                           bool notify, VipStatus_t status)
+                           bool notify, VipStatus_t status, std::vector<uint16_t> groupIds)
 {
 	NetworkMessage msg;
 	msg.addByte(0xD2);
@@ -3443,7 +3484,10 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 	msg.add<uint32_t>(std::min<uint32_t>(10, icon));
 	msg.addByte(notify ? 0x01 : 0x00);
 	msg.addByte(status);
-	msg.addByte(0x00); // vipGroups (placeholder)
+	msg.addByte(groupIds.size());
+	for (uint8_t groupId : groupIds) {
+		msg.addByte(groupId);
+	}
 	writeToOutputBuffer(msg);
 }
 
@@ -3454,14 +3498,37 @@ void ProtocolGame::sendVIPEntries()
 	for (const VIPEntry& entry : vipEntries) {
 		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
 
-		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
+		Player* vipPlayer = g_game.getPlayerByGUID(entry.playerId);
 
 		if (!vipPlayer || !player->canSeeCreature(vipPlayer)) {
 			vipStatus = VIPSTATUS_OFFLINE;
 		}
 
-		sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
+		sendVIP(entry.playerId, entry.name, entry.description, entry.icon, entry.notify, vipStatus, entry.groupIds);
 	}
+}
+
+void ProtocolGame::sendVIPGroups()
+{
+	const std::vector<VIPGroup>& vipGroups = IOLoginData::getVIPGroups(player->getAccount());
+	if (vipGroups.empty()) {
+		return;
+	}
+
+	size_t groupsCount = std::distance(vipGroups.begin(), vipGroups.end());
+
+	NetworkMessage msg;
+	msg.addByte(0xD4);
+	msg.addByte(groupsCount);
+
+	for (const VIPGroup& group : vipGroups) {
+		msg.addByte(group.id);
+		msg.addString(group.name);
+		msg.addByte(group.isEditable ? 0x01 : 0x00);
+	}
+
+	msg.addByte(std::max(0, static_cast<int>(player->getMaxVIPGroups() - groupsCount)));
+	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendItemClasses()
