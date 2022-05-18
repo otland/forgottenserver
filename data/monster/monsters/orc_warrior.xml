@@ -35,15 +35,15 @@
 		<voice sentence="Alk!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="15" chance="65000" />
-		<item name="meat" chance="15000" />
-		<item name="broken helmet" chance="10800" />
-		<item name="chain armor" chance="7360" />
-		<item name="orc leather" chance="4000" />
-		<!-- Heavy Old Tome 2.03% -->
-		<item name="skull belt" chance="870" />
-		<item id="2530" chance="670" /><!-- copper shield -->
-		<item name="orc tooth" chance="620" />
-		<item name="poison dagger" chance="30" />
+		<item id="2148" name="gold coin" chance="64165" countmax="15" />
+		<item id="2666" name="meat" chance="15373" />
+		<item id="12409" name="broken helmet" chance="9694" />
+		<item id="2464" name="chain armor" chance="7516" />
+		<item id="12435" name="orc leather" chance="3696" />
+		<item id="26642" name="heavy old tome" chance="1776" />
+		<item id="12436" name="skull belt" chance="1001" />
+		<item id="11113" name="orc tooth" chance="681" />
+		<item id="2530" name="copper shield" chance="506" />
+		<item id="2411" name="poison dagger" chance="41" />
 	</loot>
 </monster>
