@@ -49,7 +49,7 @@
 		<item name="soul orb" chance="5555" />
 		<item name="demonic essence" chance="7200" />
 		<item id="6558" name="flask of demonic blood" chance="8888" />
-		<item id="6570" countmax="4" chance="5538" /><!-- blue surprise bag -->
-		<item id="6571" chance="1538" /><!-- red surprise bag -->
+		<item id="6570" name="blue surprise bag" countmax="4" chance="5538" />
+		<item id="6571" name="red surprise bag" chance="1538" />
 	</loot>
 </monster>
