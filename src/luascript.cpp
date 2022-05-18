@@ -1434,6 +1434,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_FATAL);
 	registerEnum(CONST_ME_DODGE);
 	registerEnum(CONST_ME_HOURGLASS);
+	registerEnum(CONST_ME_FIREWORKSSTAR);
+	registerEnum(CONST_ME_FIREWORKSCIRCLE);
 	registerEnum(CONST_ME_FERUMBRAS_1);
 	registerEnum(CONST_ME_GAZHARAGOTH);
 	registerEnum(CONST_ME_MAD_MAGE);
