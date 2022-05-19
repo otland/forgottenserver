@@ -3474,7 +3474,7 @@ void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
 
 
 void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon,
-                           bool notify, VipStatus_t status, std::vector<uint16_t> groupIds)
+                           bool notify, VipStatus_t status, const std::vector<uint16_t>& groupIds)
 {
 	NetworkMessage msg;
 	msg.addByte(0xD2);
@@ -3493,7 +3493,7 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::st
 
 void ProtocolGame::sendVIPEntries()
 {
-	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
+	const std::vector<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
 
 	for (const VIPEntry& entry : vipEntries) {
 		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
@@ -3515,7 +3515,7 @@ void ProtocolGame::sendVIPGroups()
 		return;
 	}
 
-	size_t groupsCount = std::distance(vipGroups.begin(), vipGroups.end());
+	size_t groupsCount = vipGroups.size();
 
 	NetworkMessage msg;
 	msg.addByte(0xD4);

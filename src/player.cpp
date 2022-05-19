@@ -2444,7 +2444,7 @@ bool Player::addVIPGroup(const std::string& name)
 		return false;
 	}
 
-	const std::vector<std::string>& reservedNames = {"Friends", "Enemies", "Trading Partners"};
+	auto reservedNames = std::array{"Friends", "Enemies", "Trading Partners"};
 	if (std::find(reservedNames.begin(), reservedNames.end(), name) != reservedNames.end()) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You have selected an invalid group name. Please choose another one.");
 		return false;
@@ -2462,16 +2462,14 @@ bool Player::addVIPGroup(const std::string& name)
 		return false;
 	}
 
-	if (client) {
-		client->sendVIPGroups();
-	}
+	sendVIPGroups();
 
 	return true;
 }
 
 bool Player::editVIPGroup(uint16_t vipGroupId, const std::string& name)
 {
-	const std::vector<std::string>& reservedNames = {"Friends", "Enemies", "Trading Partners"};
+	auto reservedNames = std::array{"Friends", "Enemies", "Trading Partners"};
 	if (std::find(reservedNames.begin(), reservedNames.end(), name) != reservedNames.end()) {
 		sendTextMessage(MESSAGE_STATUS_SMALL, "You have selected an invalid group name. Please choose another one.");
 		return false;
@@ -2484,9 +2482,7 @@ bool Player::editVIPGroup(uint16_t vipGroupId, const std::string& name)
 
 	IOLoginData::editVIPGroup(vipGroupId, name);
 
-	if (client) {
-		client->sendVIPGroups();
-	}
+	sendVIPGroups();
 
 	return true;
 }
@@ -2499,10 +2495,8 @@ bool Player::removeVIPGroup(uint16_t vipGroupId)
 
 	IOLoginData::removeVIPGroup(vipGroupId);
 
-	if (client) {
-		client->sendVIPEntries();
-		client->sendVIPGroups();
-	}
+	sendVIPEntries();
+	sendVIPGroups();
 
 	return true;
 }

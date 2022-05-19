@@ -54,15 +54,13 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t id, uint32_t playerId, std::string name, std::string description, uint32_t icon, bool notify,
-	         std::vector<uint16_t> groupIds) :
+	VIPEntry(uint32_t id, uint32_t playerId, std::string name, std::string description, uint32_t icon, bool notify) :
 	    id(id),
 	    playerId(playerId),
 	    name(std::move(name)),
 	    description(std::move(description)),
 	    icon(icon),
-	    notify(notify),
-	    groupIds(groupIds)
+	    notify(notify)
 	{}
 
 	uint32_t id;
@@ -1123,6 +1121,18 @@ public:
 	{
 		if (client) {
 			client->sendCombatAnalyzer(type, amount, impactType, target);
+		}
+	}
+	void sendVIPEntries()
+	{
+		if (client) {
+			client->sendVIPEntries();
+		}
+	}
+	void sendVIPGroups()
+	{
+		if (client) {
+			client->sendVIPGroups();
 		}
 	}
 

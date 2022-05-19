@@ -42,8 +42,8 @@ public:
 	static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 	static bool hasBiddedOnHouse(uint32_t guid);
 
-	static const std::vector<VIPGroup>& getVIPGroups(uint32_t accountId);
-	static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
+	static std::vector<VIPGroup> getVIPGroups(uint32_t accountId);
+	static std::vector<VIPEntry> getVIPEntries(uint32_t accountId);
 	static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
 	                        bool notify);
 	static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,

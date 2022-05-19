@@ -61,20 +61,6 @@ std::string decodeSecret(const std::string& secret)
 	return key;
 }
 
-std::vector<uint16_t> stringToIntArray(const std::string value)
-{
-	std::vector<uint16_t> groups;
-	std::stringstream ss(value);
-	uint16_t groupId;
-	while (ss >> groupId) {
-		groups.push_back(groupId);
-		if (ss.peek() == ',') {
-			ss.ignore();
-		}
-	}
-	return groups;
-}
-
 bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
 {
 	Database& db = Database::getInstance();
@@ -1083,7 +1069,7 @@ bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 	return db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid)).get();
 }
 
-const std::vector<VIPGroup>& IOLoginData::getVIPGroups(uint32_t accountId)
+std::vector<VIPGroup> IOLoginData::getVIPGroups(uint32_t accountId)
 {
 	std::vector<VIPGroup> groups;
 
@@ -1098,21 +1084,41 @@ const std::vector<VIPGroup>& IOLoginData::getVIPGroups(uint32_t accountId)
 	return groups;
 }
 
-std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
+std::vector<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 {
-	std::forward_list<VIPEntry> entries;
+	Database& db = Database::getInstance();
+	std::vector<VIPEntry> entries;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify`, (SELECT GROUP_CONCAT(DISTINCT `group_id` SEPARATOR ',') FROM `account_vipgroup_entry` WHERE `entry_id` = `id`) AS `groupIds` FROM `account_viplist` WHERE `account_id` = {:d}",
+	DBResult_ptr result = db.storeQuery(fmt::format(
+	    "SELECT `id`, `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = {:d}",
 	    accountId));
 	if (result) {
 		do {
-			entries.emplace_front(result->getNumber<uint32_t>("id"), result->getNumber<uint32_t>("player_id"),
-			                      result->getString("name"), result->getString("description"),
-			                      result->getNumber<uint32_t>("icon"), result->getNumber<uint16_t>("notify") != 0,
-			                      stringToIntArray(result->getString("groupIds")));
+			entries.emplace_back(result->getNumber<uint32_t>("id"), result->getNumber<uint32_t>("player_id"),
+			                     result->getString("name"), result->getString("description"),
+			                     result->getNumber<uint32_t>("icon"), result->getNumber<uint16_t>("notify") != 0);
 		} while (result->next());
 	}
+
+	std::vector<std::pair<uint32_t, uint16_t>> entryGroups;
+	if (result = db.storeQuery(fmt::format(
+	        "SELECT `entry_id`, `group_id` FROM `account_vipgroup_entry` INNER JOIN `account_viplist` ON `id` = `entry_id` WHERE `account_id` = {:d}",
+	        accountId))) {
+		do {
+			entryGroups.emplace_back(result->getNumber<uint32_t>("entry_id"), result->getNumber<uint16_t>("group_id"));
+		} while (result->next());
+	}
+
+	for (VIPEntry& entry : entries) {
+		for (size_t i = 0; i < entryGroups.size(); i++) {
+			const std::pair<uint32_t, uint16_t>& entryGroup = entryGroups[i];
+			if (entry.id != entryGroup.first) {
+				continue;
+			}
+			entry.groupIds.push_back(entryGroup.second);
+		}
+	}
+
 	return entries;
 }
 
