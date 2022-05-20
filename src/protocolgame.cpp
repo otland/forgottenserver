@@ -1464,27 +1464,27 @@ void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
 {
 	uint8_t action = msg.getByte();
 
-	uint8_t id;
-	std::string name;
-
 	switch (action) {
-		case VIPGROUPACTION_CREATE:
-			name = msg.getString();
+		case VIPGROUPACTION_CREATE: {
+			std::string name = msg.getString();
 			addGameTask([=, playerID = player->getID(), name = std::move(name)]() {
 				g_game.playerRequestAddVipGroup(playerID, name);
 			});
 			break;
-		case VIPGROUPACTION_EDIT:
-			id = msg.getByte();
-			name = msg.getString();
+		}
+		case VIPGROUPACTION_EDIT: {
+			uint8_t id = msg.getByte();
+			std::string name = msg.getString();
 			addGameTask([=, playerID = player->getID(), name = std::move(name)]() {
 				g_game.playerRequestEditVipGroup(playerID, id, name);
 			});
 			break;
-		case VIPGROUPACTION_REMOVE:
-			id = msg.getByte();
+		}
+		case VIPGROUPACTION_REMOVE: {
+			uint8_t id = msg.getByte();
 			addGameTask([=, playerID = player->getID()]() { g_game.playerRequestRemoveVipGroup(playerID, id); });
 			break;
+		}
 	}
 }
 
@@ -3471,7 +3471,6 @@ void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
 	msg.addByte(newStatus);
 	writeToOutputBuffer(msg);
 }
-
 
 void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon,
                            bool notify, VipStatus_t status, const std::vector<uint16_t>& groupIds)

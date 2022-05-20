@@ -1110,12 +1110,10 @@ std::vector<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 	}
 
 	for (VIPEntry& entry : entries) {
-		for (size_t i = 0; i < entryGroups.size(); i++) {
-			const std::pair<uint32_t, uint16_t>& entryGroup = entryGroups[i];
-			if (entry.id != entryGroup.first) {
-				continue;
+		for (auto [entryId, groupId] : entryGroups) {
+			if (entry.id == entryId) {
+				entry.groupIds.push_back(groupId);
 			}
-			entry.groupIds.push_back(entryGroup.second);
 		}
 	}
 
@@ -1166,8 +1164,8 @@ void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::str
 
 void IOLoginData::removeVIPEntry(uint32_t accountId, uint32_t guid)
 {
-	Database::getInstance().executeQuery(fmt::format(
-	    "DELETE FROM `account_viplist` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
+	Database::getInstance().executeQuery(
+	    fmt::format("DELETE FROM `account_viplist` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
 }
 
 bool IOLoginData::checkVIPGroupName(uint32_t accountId, const std::string& name)
