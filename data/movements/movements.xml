@@ -259,6 +259,9 @@
 		<vocation name="Elder Druid" showInDescription="0" />
 	</movevent>
 	<movevent event="DeEquip" itemid="23554" slot="necklace" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="24717" slot="necklace" function="onEquipItem" />
+	<movevent event="Equip" itemid="24790" slot="necklace" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="24790" slot="necklace" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="24851" slot="necklace" level="60" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="24851" slot="necklace" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="25423" slot="necklace" level="100" function="onEquipItem" />
@@ -486,6 +489,8 @@
 	<movevent event="DeEquip" itemid="23536" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="24261" level="80" slot="head" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="24261" slot="head" function="onDeEquipItem" />
+	<movevent event="Equip" itemid="24718" level="100" slot="head" function="onEquipItem" />
+	<movevent event="DeEquip" itemid="24718" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="25413" level="150" slot="head" function="onEquipItem" />
 	<movevent event="DeEquip" itemid="25413" slot="head" function="onDeEquipItem" />
 	<movevent event="Equip" itemid="26130" slot="head" function="onEquipItem">

@@ -34898,6 +34898,7 @@
 	</item>
 	<item id="24716" article="a" name="werewolf amulet">
 		<attribute key="weight" value="550" />
+		<attribute key="slotType" value="necklace" />
 	</item>
 	<item id="24717" article="an" name="enchanted werewolf amulet">
 		<attribute key="weight" value="550" />
@@ -34905,11 +34906,12 @@
 		<attribute key="transformEquipTo" value="24790" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
-		<attribute key="armor" value="2" />
-		<attribute key="absorbPercentPhysical" value="3" />
+		<attribute key="armor" value="3" />
+		<attribute key="absorbPercentPhysical" value="6" />
 	</item>
 	<item id="24718" article="a" name="werewolf helmet">
 		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="speed" value="30" />
 	</item>
@@ -35159,10 +35161,10 @@
 	<item id="24790" article="an" name="enchanted werewolf amulet">
 		<attribute key="weight" value="550" />
 		<attribute key="slotType" value="necklace" />
-		<attribute key="decayTo" value="0" />
+		<attribute key="decayTo" value="24716" />
 		<attribute key="transformDeEquipTo" value="24717" />
-		<attribute key="armor" value="2" />
-		<attribute key="absorbPercentPhysical" value="3" />
+		<attribute key="armor" value="3" />
+		<attribute key="absorbPercentPhysical" value="6" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="true" />
 	</item>
