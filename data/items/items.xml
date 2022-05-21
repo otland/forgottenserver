@@ -23968,7 +23968,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="true" />
 		<attribute key="description" value="It is locked." />
-	</item>	
+	</item>
 	<item id="14635" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
@@ -35036,7 +35036,7 @@
 		<attribute key="transformEquipTo" value="24788" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
-	</item>	
+	</item>
 	<item id="24745" article="the" name="remains of Feroxa">
 		<attribute key="containerSize" value="28" />
 		<attribute key="decayTo" value="24746" />
@@ -35131,7 +35131,7 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="transformEquipTo" value="24785" />		
+		<attribute key="transformEquipTo" value="24785" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
 	</item>
@@ -35143,7 +35143,7 @@
 		<attribute key="transformEquipTo" value="24786" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
-	</item>	
+	</item>
 	<item id="24773" article="the" name="remains of Feroxa" />
 	<item id="24774" name="Store Coins">
 		<attribute key="weight" value="0" />
