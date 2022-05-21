@@ -35032,7 +35032,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="transformEquipTo" value="24788" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35112,7 +35112,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="transformEquipTo" value="24783" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35121,7 +35121,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="transformEquipTo" value="24784" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35130,7 +35130,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="transformEquipTo" value="24785" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35139,7 +35139,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="transformEquipTo" value="24786" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35176,7 +35176,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="skillClub" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24769" />
@@ -35187,7 +35187,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="skillSword" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24770" />
@@ -35198,7 +35198,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="skillAxe" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24771" />
@@ -35209,7 +35209,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="skillDist" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24772" />
@@ -35226,7 +35226,7 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="magiclevelpoints" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24744" />
@@ -35244,7 +35244,7 @@
 		<attribute key="decayTo" value="24716" />
 		<attribute key="transformDeEquipTo" value="24717" />
 		<attribute key="armor" value="3" />
-		<attribute key="absorbPercentPhysical" value="6" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="true" />
 	</item>
