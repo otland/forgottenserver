@@ -37067,7 +37067,6 @@
 		<attribute key="magiclevelpoints" value="2" />
 		<attribute key="showduration" value="true" />
 		<attribute key="transformDeEquipTo" value="26198" />
-		<attribute key="supply" value="true" />
 	</item>
 	<item id="26183" article="a" name="collar of green plasma">
 		<attribute key="weight" value="500" />
@@ -37093,7 +37092,6 @@
 		<attribute key="absorbPercentPhysical" value="5" />
 		<attribute key="showduration" value="true" />
 		<attribute key="transformDeEquipTo" value="26200" />
-		<attribute key="supply" value="true" />
 	</item>
 	<item id="26185" article="a" name="ring of blue plasma">
 		<attribute key="weight" value="90" />
@@ -37181,6 +37179,7 @@
 		<attribute key="transformEquipTo" value="26182" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26199" article="a" name="collar of green plasma">
 		<attribute key="weight" value="500" />
@@ -37188,6 +37187,7 @@
 		<attribute key="transformEquipTo" value="26183" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26200" article="a" name="collar of red plasma">
 		<attribute key="weight" value="500" />
@@ -37195,6 +37195,7 @@
 		<attribute key="transformEquipTo" value="26184" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26201" article="an" name="energy drink">
 		<attribute key="weight" value="900" />
