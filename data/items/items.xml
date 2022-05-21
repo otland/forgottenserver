@@ -35033,7 +35033,6 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="magiclevelpoints" value="1" />		
 		<attribute key="transformEquipTo" value="24788" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35114,7 +35113,6 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillClub" value="1" />		
 		<attribute key="transformEquipTo" value="24783" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35124,7 +35122,6 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillSword" value="1" />		
 		<attribute key="transformEquipTo" value="24784" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35134,7 +35131,6 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillAxe" value="1" />		
 		<attribute key="transformEquipTo" value="24785" />		
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35144,7 +35140,6 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillDist" value="1" />
 		<attribute key="transformEquipTo" value="24786" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
@@ -35182,7 +35177,7 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillClub" value="1" />				
+		<attribute key="skillClub" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24769" />
 		<attribute key="duration" value="3600" />
@@ -35193,7 +35188,7 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillSword" value="1" />		
+		<attribute key="skillSword" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24770" />
 		<attribute key="duration" value="3600" />
@@ -35204,7 +35199,7 @@
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="absorbPercentPhysical" value="6" />
-		<attribute key="skillAxe" value="1" />	
+		<attribute key="skillAxe" value="1" />
 		<attribute key="decayTo" value="24718" />
 		<attribute key="transformDeEquipTo" value="24771" />
 		<attribute key="duration" value="3600" />
