@@ -35220,6 +35220,7 @@
 		<attribute key="transformDeEquipTo" value="24772" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="true" />
+	</item>
 	<item id="24787" article="the" name="remains of Owin">
 		<attribute key="containerSize" value="24" />
 		<attribute key="decayTo" value="24789" />
