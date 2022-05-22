@@ -37047,6 +37047,7 @@
 		<attribute key="transformEquipTo" value="26182" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26199" article="a" name="collar of green plasma">
 		<attribute key="weight" value="500" />
@@ -37054,6 +37055,7 @@
 		<attribute key="transformEquipTo" value="26183" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26200" article="a" name="collar of red plasma">
 		<attribute key="weight" value="500" />
@@ -37061,6 +37063,7 @@
 		<attribute key="transformEquipTo" value="26184" />
 		<attribute key="stopduration" value="true" />
 		<attribute key="showduration" value="true" />
+		<attribute key="supply" value="true" />
 	</item>
 	<item id="26201" article="an" name="energy drink">
 		<attribute key="weight" value="900" />
