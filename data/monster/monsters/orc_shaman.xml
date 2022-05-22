@@ -43,23 +43,23 @@
 		<immunity invisible="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<summon name="Snake" interval="2000" chance="20" max="4" />
+		<summon name="Snake" interval="2000" chance="20" />
 	</summons>
 	<voices interval="5000" chance="10">
 		<voice sentence="Huumans stinkk!" />
 		<voice sentence="Grak brrretz gulu." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="5" chance="90000" />
-		<item name="corncob" countmax="2" chance="10000" />
-		<item name="broken shamanic staff" chance="10000" />
-		<item name="chain armor" chance="8750" />
-		<item name="shamanic hood" chance="7800" />
-		<item name="spear" chance="5500" />
-		<item name="orc leather" chance="3500" />
-		<!-- Heavy Old Tome 2.47% -->
-		<item name="orc tooth" chance="2100" />
-		<item name="wand of decay" chance="1000" />
-		<item id="1958" chance="520" /><!-- book -->
+		<item id="2148" name="gold coin" chance="89750" countmax="5" />
+		<item id="2686" name="corncob" chance="10877" countmax="2" />
+		<item id="12408" name="broken shamanic staff" chance="10161" />
+		<item id="2464" name="chain armor" chance="8658" />
+		<item id="12434" name="shamanic hood" chance="7513" />
+		<item id="2389" name="spear" chance="5170" />
+		<item id="12435" name="orc leather" chance="3792" />
+		<item id="26642" name="heavy old tome" chance="2397" />
+		<item id="11113" name="orc tooth" chance="2182" />
+		<item id="2188" name="wand of decay" chance="966" />
+		<item id="1958" name="book (grey)" chance="465" />
 	</loot>
 </monster>

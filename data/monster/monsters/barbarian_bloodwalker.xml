@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="230" manacost="590">
+<monster name="Barbarian Bloodwalker" nameDescription="a barbarian bloodwalker" race="blood" experience="195" speed="236" manacost="590">
 	<health now="305" max="305" />
 	<look type="255" head="114" body="113" legs="132" feet="94" corpse="20335" />
 	<targetchange interval="4000" chance="10" />
@@ -21,18 +21,18 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-240" />
 	</attacks>
-	<defenses armor="15" defense="15">
+	<defenses armor="9" defense="9">
 		<defense name="speed" interval="2000" chance="15" speedchange="240" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
 	<elements>
-		<element physicalPercent="5" />
-		<element holyPercent="20" />
+		<element physicalPercent="10" />
 		<element energyPercent="10" />
-		<element icePercent="50" />
-		<element deathPercent="-5" />
 		<element earthPercent="-5" />
+		<element icePercent="50" />
+		<element holyPercent="20" />
+		<element deathPercent="-10" />
 	</elements>
 	<voices interval="5000" chance="10">
 		<voice sentence="YAAAHEEE!" />
@@ -41,17 +41,17 @@
 		<voice sentence="You can run but you can't hide" />
 	</voices>
 	<loot>
-		<item id="2044" chance="8280" /><!-- lamp -->
-		<item name="gold coin" countmax="12" chance="50000" />
-		<item name="battle axe" chance="6000" />
-		<item name="halberd" chance="6730" />
-		<item name="chain helmet" chance="10440" />
-		<item name="chain armor" chance="10290" />
-		<item name="ham" chance="4970" />
-		<item name="beastslayer axe" chance="390" />
-		<item name="red piece of cloth" chance="530" />
-		<item name="shard" chance="290" />
-		<item name="fur boots" chance="100" />
-		<item name="health potion" chance="950" />
+		<item id="2148" name="gold coin" chance="55130" countmax="12" />
+		<item id="2458" name="chain helmet" chance="10639" />
+		<item id="2464" name="chain armor" chance="10270" />
+		<item id="2044" name="lamp" chance="8135" />
+		<item id="2381" name="halberd" chance="7013" />
+		<item id="2378" name="battle axe" chance="5934" />
+		<item id="2671" name="ham" chance="4955" />
+		<item id="7618" name="health potion" chance="950" />
+		<item id="5911" name="red piece of cloth" chance="504" />
+		<item id="3962" name="beastslayer axe" chance="350" />
+		<item id="7290" name="shard" chance="317" />
+		<item id="7457" name="fur boots" chance="86" />
 	</loot>
 </monster>

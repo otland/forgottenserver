@@ -61,18 +61,16 @@
 		<voice sentence="You don't need this magic anymore." />
 	</voices>
 	<loot>
-		<item name="ornamented ankh" chance="100000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="26" chance="30000" />
-		<item name="small sapphire" countmax="3" chance="9800" />
-		<item name="great mana potion" chance="8900" />
-		<item name="energy ring" chance="4800" />
-		<item name="mind stone" chance="1000" />
-		<item name="blue gem" chance="900" />
-		<item name="ankh" chance="600" />
-		<item name="skull staff" chance="560" />
-		<item name="pharaoh sword" chance="90" />
-		<item name="mini mummy" chance="90" />
+		<item id="3241" name="ornamented ankh" chance="100000" />
+		<item id="2148" name="gold coin" chance="90981" countmax="226" />
+		<item id="2146" name="small sapphire" chance="9806" countmax="3" />
+		<item id="7590" name="great mana potion" chance="8927" />
+		<item id="2167" name="energy ring" chance="4857" />
+		<item id="2178" name="mind stone" chance="925" />
+		<item id="2158" name="blue gem" chance="833" />
+		<item id="2193" name="ankh" chance="601" />
+		<item id="2436" name="skull staff" chance="555" />
+		<item id="11207" name="mini mummy" chance="93" />
+		<item id="2446" name="pharaoh sword" chance="93" />
 	</loot>
 </monster>

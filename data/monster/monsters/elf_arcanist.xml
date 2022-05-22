@@ -55,26 +55,26 @@
 		<voice sentence="Vihil Ealuel!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="47" chance="37000" />
-		<item id="1949" chance="31000" /><!-- scroll -->
-		<item name="melon" chance="22000" />
-		<item name="blank rune" chance="18000" />
-		<item name="bread" chance="14000" />
-		<item name="elvish talisman" chance="10000" />
-		<item name="elven astral observer" chance="7710" />
-		<item name="green tunic" chance="7000" />
-		<item id="2544" countmax="3" chance="6000" /><!-- arrow -->
-		<item name="sling herb" chance="5000" />
-		<item name="health potion" chance="4000" />
-		<item name="strong mana potion" chance="3000" />
-		<item name="candlestick" chance="2100" />
-		<item name="elven amulet" chance="2000" />
-		<item name="holy orchid" chance="2000" />
-		<item name="wand of cosmic energy" chance="1160" />
-		<item name="life crystal" chance="970" />
-		<item id="2600" chance="1000" /><!-- inkwell -->
-		<item name="sandals" chance="950" />
-		<item id="2747" chance="880" /><!-- grave flower -->
-		<item name="yellow gem" chance="50" />
+		<item id="2148" name="gold coin" chance="37127" countmax="49" />
+		<item id="1949" name="scroll" chance="30500" />
+		<item id="2682" name="melon" chance="21814" />
+		<item id="2260" name="blank rune" chance="17953" />
+		<item id="2689" name="bread" chance="13899" />
+		<item id="10552" name="elvish talisman" chance="10070" />
+		<item id="12421" name="elven astral observer" chance="7786" />
+		<item id="2652" name="green tunic" chance="7294" />
+		<item id="2544" name="arrow" chance="6127" countmax="3" />
+		<item id="2802" name="sling herb" chance="4846" />
+		<item id="7618" name="health potion" chance="4050" />
+		<item id="7589" name="strong mana potion" chance="2991" />
+		<item id="2047" name="candlestick" chance="2192" />
+		<item id="2198" name="elven amulet" chance="2047" />
+		<item id="5922" name="holy orchid" chance="2047" />
+		<item id="2189" name="wand of cosmic energy" chance="1126" />
+		<item id="2177" name="life crystal" chance="1059" />
+		<item id="2642" name="sandals" chance="974" />
+		<item id="2600" name="inkwell" chance="951" />
+		<item id="2747" name="grave flower" chance="803" />
+		<item id="2154" name="yellow gem" chance="48" />
 	</loot>
 </monster>

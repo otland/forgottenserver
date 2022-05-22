@@ -39,10 +39,10 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="20" />
 		<element energyPercent="10" />
-		<element holyPercent="10" />
+		<element firePercent="20" />
 		<element icePercent="-15" />
+		<element holyPercent="10" />
 		<element deathPercent="-5" />
 	</elements>
 	<immunities>
@@ -56,15 +56,15 @@
 		<voice sentence="Chakka! Chakka!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="45" chance="83000" />
-		<item name="banana" countmax="12" chance="30350" />
-		<item id="2162" chance="3000" /><!-- magic lightwand -->
-		<item name="banana sash" chance="1900" />
-		<item name="ape fur" chance="1000" />
-		<item name="orange" countmax="5" chance="1000" />
-		<item name="wand of decay" chance="980" />
-		<item name="mana potion" chance="700" />
-		<item name="small amethyst" chance="310" />
-		<item name="banana staff" chance="100" />
+		<item id="2148" name="gold coin" chance="82947" countmax="45" />
+		<item id="2676" name="banana" chance="30430" countmax="12" />
+		<item id="2162" name="magic light wand" chance="3020" />
+		<item id="12467" name="banana sash" chance="1918" />
+		<item id="5883" name="ape fur" chance="1014" />
+		<item id="2675" name="orange" chance="1010" countmax="5" />
+		<item id="2188" name="wand of decay" chance="980" />
+		<item id="7620" name="mana potion" chance="693" />
+		<item id="2150" name="small amethyst" chance="310" />
+		<item id="3966" name="banana staff" chance="102" />
 	</loot>
 </monster>
