@@ -61,7 +61,7 @@
 		<item id="2148" countmax="100" chance="80000" /><!-- gold coin -->
 		<item id="2148" countmax="42" chance="60000" /><!-- gold coin -->
 		<item id="2152" countmax="6" chance="18200" /><!-- fish -->
-		<item id="6558" chance="2000" /><!-- concentrated demonic blood -->
+		<item id="6558" chance="2000" /><!-- flask of demonic blood -->
 		<item id="7590" chance="2000" /><!-- great mana potion -->
 		<item id="2150" countmax="3" chance="210" /><!-- small amethyst -->
 		<item id="2145" countmax="3" chance="300" /><!-- small diamond -->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Salamander" nameDescription="a salamander" race="blood" experience="25" speed="220">
+<monster name="Salamander" nameDescription="a salamander" race="blood" experience="25" speed="120">
 	<health now="70" max="70" />
 	<look type="529" corpse="19707" />
 	<targetchange interval="4000" chance="10" />
@@ -20,9 +20,9 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-60" poison="10" />
+		<attack name="melee" interval="2000" min="0" max="-10" poison="10" />
 	</attacks>
-	<defenses armor="5" defense="5">
+	<defenses armor="3" defense="3">
 		<defense name="healing" interval="6000" chance="20" min="0" max="4">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -32,14 +32,14 @@
 		<voice sentence="Chhh!" />
 	</voices>
 	<loot>
-		<item id="2120" chance="4700" /><!-- Rope -->
-		<item name="gold coin" countmax="15" chance="60000" />
-		<item name="mace" chance="3780" />
-		<item id="2419" chance="420" /><!-- Scimitar -->
-		<item name="bow" chance="1090" />
-		<item name="brass helmet" chance="2180" />
-		<item name="arrow" countmax="3" chance="7890" />
-		<item name="health potion" chance="840" />
-		<item name="insectoid eggs" countmax="5" chance="32830" />
+		<item id="2148" name="gold coin" chance="71933" countmax="15" />
+		<item id="19737" name="insectoid eggs" chance="34928" />
+		<item id="2544" name="arrow" chance="7985" countmax="3" />
+		<item id="2120" name="rope" chance="5077" />
+		<item id="2398" name="mace" chance="3978" />
+		<item id="2460" name="brass helmet" chance="1976" />
+		<item id="7618" name="health potion" chance="1480" />
+		<item id="2456" name="bow" chance="739" />
+		<item id="2419" name="scimitar" chance="487" />
 	</loot>
 </monster>

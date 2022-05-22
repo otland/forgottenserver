@@ -34,16 +34,16 @@
 		<voice sentence="Kaplar" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="20" chance="59640" />
-		<item name="minotaur horn" countmax="2" chance="8330" />
-		<item name="piece of warrior armor" chance="5040" />
-		<item name="brass armor" chance="4390" />
-		<item name="chain armor" chance="2980" />
-		<item name="battle shield" chance="2150" />
-		<item name="minotaur leather" chance="1000" />
-		<item name="fishing rod" chance="480" />
-		<item name="double axe" chance="400" />
-		<item name="health potion" chance="400" />
-		<item id="7401" chance="80" /><!-- minotaur trophy -->
+		<item id="2148" name="gold coin" chance="59686" countmax="20" />
+		<item id="12428" name="minotaur horn" chance="8195" countmax="2" />
+		<item id="12438" name="piece of warrior armor" chance="4980" />
+		<item id="2465" name="brass armor" chance="4125" />
+		<item id="2464" name="chain armor" chance="2983" />
+		<item id="2513" name="battle shield" chance="2093" />
+		<item id="5878" name="minotaur leather" chance="945" />
+		<item id="2580" name="fishing rod" chance="481" />
+		<item id="2387" name="double axe" chance="434" />
+		<item id="7618" name="health potion" chance="413" />
+		<item id="7401" name="minotaur trophy" chance="94" />
 	</loot>
 </monster>

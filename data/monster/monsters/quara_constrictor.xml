@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="230" manacost="670">
+<monster name="Quara Constrictor" nameDescription="a quara constrictor" race="blood" experience="250" speed="380" manacost="670">
 	<health now="450" max="450" />
 	<look type="46" corpse="6065" />
 	<targetchange interval="4000" chance="10" />
@@ -29,7 +29,7 @@
 		</attack>
 		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
 	</attacks>
-	<defenses armor="20" defense="20" />
+	<defenses armor="14" defense="14" />
 	<elements>
 		<element earthPercent="-10" />
 		<element energyPercent="-25" />
@@ -48,12 +48,12 @@
 		<voice sentence="Boohaa!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="87500" />
-		<item name="small amethyst" chance="2860" />
-		<item name="longsword" chance="7761" />
-		<item name="brass armor" chance="5000" />
-		<item name="shrimp" countmax="5" chance="5000" />
-		<item name="fish fin" chance="430" />
-		<item name="quara tentacle" chance="14520" />
+		<item id="2148" name="gold coin" chance="87662" countmax="100" />
+		<item id="12443" name="quara tentacle" chance="14598" />
+		<item id="2397" name="longsword" chance="6951" />
+		<item id="2670" name="shrimp" chance="5169" />
+		<item id="2465" name="brass armor" chance="4804" />
+		<item id="2150" name="small amethyst" chance="3042" />
+		<item id="5895" name="fish fin" chance="484" />
 	</loot>
 </monster>

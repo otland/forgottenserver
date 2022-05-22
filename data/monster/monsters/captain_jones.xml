@@ -39,13 +39,12 @@
 		<immunity physical="1" />
 		<immunity paralyze="1" />
 		<immunity lifedrain="1" />
-		<immunity physical="1" />
 	</immunities>
 	<loot>
 		<item name="gold coin" countmax="100" chance="50000" />
 		<item name="gold coin" countmax="50" chance="50000" />
 		<item name="stealth ring" chance="20000" />
-		<item name="crown legs" chance="5000" />
+		<item id="2488" name="crown legs" chance="5000" />
 		<item name="focus cape" chance="5000" />
 		<item name="red robe" chance="5000" />
 		<item name="spike sword" chance="5000" />

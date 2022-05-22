@@ -14,7 +14,6 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
 	<attacks>
@@ -37,19 +36,19 @@
 		<immunity drunk="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="75" chance="97000" />
-		<item name="demonic skeletal hand" chance="12600" />
-		<item name="throwing star" countmax="3" chance="10000" />
-		<item name="health potion" countmax="2" chance="9700" />
-		<item name="mana potion" chance="5000" />
-		<item name="battle shield" chance="5000" />
-		<item id="2050" chance="4800" /><!-- torch -->
-		<item name="battle hammer" chance="4000" />
-		<item name="iron helmet" chance="3450" />
-		<item name="black pearl" chance="2900" />
-		<item name="small ruby" chance="1500" />
-		<item name="mysterious fetish" chance="530" />
-		<item name="mind stone" chance="470" />
-		<item name="guardian shield" chance="110" />
+		<item id="2148" name="gold coin" chance="97515" countmax="75" />
+		<item id="10564" name="demonic skeletal hand" chance="11978" />
+		<item id="2399" name="throwing star" chance="9982" countmax="3" />
+		<item id="7618" name="health potion" chance="9693" countmax="2" />
+		<item id="7620" name="mana potion" chance="5050" />
+		<item id="2513" name="battle shield" chance="4960" />
+		<item id="2050" name="torch" chance="4861" />
+		<item id="2417" name="battle hammer" chance="4061" />
+		<item id="2459" name="iron helmet" chance="3377" />
+		<item id="2144" name="black pearl" chance="2976" />
+		<item id="2147" name="small ruby" chance="1531" />
+		<item id="2194" name="mysterious fetish" chance="535" />
+		<item id="2178" name="mind stone" chance="469" />
+		<item id="2515" name="guardian shield" chance="113" />
 	</loot>
 </monster>
