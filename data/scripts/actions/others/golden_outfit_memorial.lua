@@ -1,36 +1,73 @@
-local goldenOutfitMemorial = Action()
+-- update cache only if last request was x seconds ago
+local updateInterval = 10 * 60 -- 10 minutes
 
-function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local resultId = db.storeQuery("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 1;")
-	if not resultId then
-		player:showTextDialog(item.itemid, "The Golden Outfit has not been acquired by anyone yet.")
-		result.free(resultId)
-		return true
+-- load/update cached info
+-- NOT CONFIGURABLE
+local goldenOutfitCache
+local lastUpdated = 0
+local function updateGoldenOutfitCache()
+	if os.time() < lastUpdated + updateInterval then
+		return
 	end
 
-	local playerAddons = {[1] = {}, [2] = {}, [3] = {}}
+	goldenOutfitCache = {[1] = {}, [2] = {}, [3] = {}}
+
+	local resultId = db.storeQuery("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = " .. PlayerStorageKeys.goldenOutfit .. " AND `value` >= 1;")
+	if not resultId then
+		result.free(resultId)
+		lastUpdated = os.time()
+		return
+	end
+
 	repeat
 		local addons = result.getNumber(resultId, "value")
 		local name = result.getString(resultId, "name")
-		table.insert(playerAddons[addons], "- " .. name)
+		table.insert(goldenOutfitCache[addons], name)
 	until not result.next(resultId)
-
 	result.free(resultId)
 
-	local message = "The following characters have spent a fortune on a Golden Outfit:\n"
-	if #playerAddons[3] > 0 then
-		message = message .. string.format("\nFull Outfit for 1,000,000,000 gold:\n%s", table.concat(playerAddons[3], "\n"))
+	lastUpdated = os.time()
+end
+
+local function displayMemorialUI(player)
+	-- response header
+	local response = NetworkMessage()
+	response:addByte(0xB0)
+
+	-- golden outfit
+	local price = 500000000
+	response:addU32(price)
+
+	price = price + 250000000
+	response:addU32(price)
+
+	price = price + 250000000
+	response:addU32(price)
+
+	for i = 1, 3 do
+		response:addU16(#goldenOutfitCache[i])
+		for j = 1, #goldenOutfitCache[i] do
+			response:addString(goldenOutfitCache[i][j])
+		end
 	end
 
-	if #playerAddons[2] > 0 then
-		message = message .. string.format("\n\nWith One Addon for 750,000,000 gold:\n%s", table.concat(playerAddons[2], "\n"))
+	-- royal costume
+	for i = 1, 3 do
+		response:addU16(0) -- price in silver tokens
+		response:addU16(0) -- price in golden tokens
 	end
 
-	if #playerAddons[1] > 0 then
-		message = message .. string.format("\n\nBasic Outfit for 500,000,000 gold:\n%s", table.concat(playerAddons[1], "\n"))
+	for i = 1, 3 do
+		response:addU16(0) -- list of spenders
 	end
 
-	player:showTextDialog(item.itemid, message)
+	response:sendToPlayer(player)
+end
+
+local goldenOutfitMemorial = Action()
+function goldenOutfitMemorial.onUse(player, item, fromPosition, target, toPosition, isHotkey)
+	updateGoldenOutfitCache()
+	displayMemorialUI(player)
 	return true
 end
 
