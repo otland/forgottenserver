@@ -23968,7 +23968,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="true" />
 		<attribute key="description" value="It is locked." />
-	</item>	
+	</item>
 	<item id="14635" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
@@ -39166,7 +39166,6 @@
 	<item id="31025" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item fromid="31024" toid="31025" article="an" name="open door" />
 	<item fromid="31036" toid="31067" name="book shelves" />
 	<item fromid="31068" toid="31080" article="a" name="slate column" />
 	<item fromid="31085" toid="31086" article="an" name="archway" />
