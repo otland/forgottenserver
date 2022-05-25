@@ -48,6 +48,8 @@ bool Events::load()
 				info.creatureOnTargetCombat = event;
 			} else if (methodName == "onHear") {
 				info.creatureOnHear = event;
+			} else  if (methodName == "onChangeZone") {
+				info.creatureOnChangeZone = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 			}
@@ -293,6 +295,33 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 	lua_pushnumber(L, type);
 
 	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventCreatureOnChangeZone(Creature* creature, const ZoneType_t& fromZone, const ZoneType_t& toZone)
+{
+	// Creature:onChangeZone(fromZone, toZone)
+	if (info.creatureOnChangeZone == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnChangeZone] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.creatureOnChangeZone, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.creatureOnChangeZone);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+
+	lua_pushnumber(L, fromZone);
+	lua_pushnumber(L, toZone);
+
+	scriptInterface.callVoidFunction(3);
 }
 
 // Party

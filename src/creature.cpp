@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
 #include "party.h"
@@ -20,6 +21,7 @@ double Creature::speedC = -4795.01;
 extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 Creature::Creature() { onIdleStatus(); }
 
@@ -506,6 +508,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		}
 
 		if (newTile->getZone() != oldTile->getZone()) {
+			g_events->eventCreatureOnChangeZone(this, oldTile->getZone(), newTile->getZone());
 			onChangeZone(getZone());
 		}
 
