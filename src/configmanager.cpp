@@ -78,6 +78,32 @@ ConfigManager::ConfigManager() { string[CONFIG_FILE] = "config.lua"; }
 
 namespace {
 
+LoyaltyBonuses loadLuaLoyaltyBonuses(lua_State* L)
+{
+	LoyaltyBonuses bonuses;
+
+	lua_getglobal(L, "loyaltyBonuses");
+	if (!lua_istable(L, -1)) {
+		return {};
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		const auto tableIndex = lua_gettop(L);
+		uint16_t min = LuaScriptInterface::getField<uint16_t>(L, tableIndex, "min");
+		uint16_t max = LuaScriptInterface::getField<uint16_t>(L, tableIndex, "max");
+		float bonus = LuaScriptInterface::getField<float>(L, tableIndex, "bonus");
+
+		max = max == 0 ? std ::numeric_limits<std::uint16_t>::max() : max;
+		bonuses.emplace_back(min, max, bonus);
+		lua_pop(L, 4);
+	}
+	lua_pop(L, 1);
+
+	std::sort(bonuses.begin(), bonuses.end());
+	return bonuses;
+};
+
 ExperienceStages loadLuaStages(lua_State* L)
 {
 	ExperienceStages stages;
@@ -230,6 +256,7 @@ bool ConfigManager::load()
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
 	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
+	boolean[LOYALTY_SYSTEM] = getGlobalBoolean(L, "loyaltyEnabled", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -286,6 +313,9 @@ bool ConfigManager::load()
 	}
 	expStages.shrink_to_fit();
 
+	loyaltyBonuses = loadLuaLoyaltyBonuses(L);
+	loyaltyBonuses.shrink_to_fit();
+
 	loaded = true;
 	lua_close(L);
 
@@ -329,6 +359,19 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 
 	if (it == expStages.end()) {
 		return getNumber(ConfigManager::RATE_EXPERIENCE);
+	}
+
+	return std::get<2>(*it);
+}
+
+float ConfigManager::getLoyaltyBonus(uint16_t points) const
+{
+	auto it = std::find_if(loyaltyBonuses.begin(), loyaltyBonuses.end(), [points](LoyaltyBonuses::value_type bonus) {
+		return points >= std::get<0>(bonus) && points <= std::get<1>(bonus);
+	});
+
+	if (it == loyaltyBonuses.end()) {
+		return 0;
 	}
 
 	return std::get<2>(*it);

@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `secret` char(16) DEFAULT NULL,
   `type` int NOT NULL DEFAULT '1',
   `premium_ends_at` int unsigned NOT NULL DEFAULT '0',
+  `loyalty_points` smallint unsigned NOT NULL DEFAULT '0',
   `email` varchar(255) NOT NULL DEFAULT '',
   `creation` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -362,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '32'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '32'), ('players_record', '0'), ('loyalty_updated', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

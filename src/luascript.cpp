@@ -2108,6 +2108,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::SERVER_SAVE_CLOSE);
 	registerEnumIn("configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN);
 	registerEnumIn("configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST);
+	registerEnumIn("configKeys", ConfigManager::LOYALTY_SYSTEM);
 
 	registerEnumIn("configKeys", ConfigManager::MAP_NAME);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_RENT_PERIOD);
@@ -2698,6 +2699,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "isNearDepotBox", LuaScriptInterface::luaPlayerIsNearDepotBox);
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
+
+	registerMethod("Player", "getLoyaltyStatus", LuaScriptInterface::luaPlayerGetLoyaltyStatus);
+	registerMethod("Player", "addLoyalty", LuaScriptInterface::luaPlayerAddLoyalty);
+	registerMethod("Player", "removeLoyalty", LuaScriptInterface::luaPlayerRemoveLoyalty);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10797,6 +10802,49 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	}
 
 	lua_pushnumber(L, player->getIdleTime());
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltyStatus(lua_State* L)
+{
+	// player:getLoyaltyStatus()
+	const Player* const player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_createtable(L, 0, 2);
+		setField(L, "points", player->getLoyaltyPoints());
+		setField(L, "bonus", player->getLoyaltyBonus());
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerAddLoyalty(lua_State* L)
+{
+	// player:addLoyalty([points = 1])
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+	}
+
+	uint16_t points = getNumber<uint16_t>(L, 2, 1);
+	pushBoolean(L, player->addLoyalty(points));
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerRemoveLoyalty(lua_State* L)
+{
+	// player:removeLoyalty([points = 1])
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+	}
+
+	uint16_t points = getNumber<uint16_t>(L, 2, 1);
+	pushBoolean(L, player->addLoyalty(-points));
+
 	return 1;
 }
 

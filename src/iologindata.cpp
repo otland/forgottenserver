@@ -20,7 +20,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	Account account;
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
+	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at`, `loyalty_points` FROM `accounts` WHERE `id` = {:d}", accno));
 	if (!result) {
 		return account;
 	}
@@ -29,6 +29,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	account.name = result->getString("name");
 	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
 	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
+	account.loyaltyPoints = result->getNumber<uint16_t>("loyalty_points");
 	return account;
 }
 
@@ -174,6 +175,12 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 {
 	Database::getInstance().executeQuery(fmt::format("UPDATE `accounts` SET `type` = {:d} WHERE `id` = {:d}",
 	                                                 static_cast<uint16_t>(accountType), accountId));
+}
+
+void IOLoginData::updateLoyalty(uint32_t accountId, uint16_t points)
+{
+	Database::getInstance().executeQuery(
+	    fmt::format("UPDATE `accounts` SET `loyalty_points` = {:d} WHERE `id` = {:d}", points, accountId));
 }
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
@@ -329,6 +336,11 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		return false;
 	}
 
+	if (g_config.getBoolean(ConfigManager::LOYALTY_SYSTEM)) {
+		player->loyaltyBonus = g_config.getLoyaltyBonus(acc.loyaltyPoints);
+		player->loyaltyPoints = acc.loyaltyPoints;
+	}
+
 	player->mana = result->getNumber<uint32_t>("mana");
 	player->manaMax = result->getNumber<uint32_t>("manamax");
 	player->magLevel = result->getNumber<uint32_t>("maglevel");
@@ -341,6 +353,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	player->manaSpent = manaSpent;
 	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
+
+	player->updateLoyaltyMagLevel();
 
 	player->health = result->getNumber<int32_t>("health");
 	player->healthMax = result->getNumber<int32_t>("healthmax");
@@ -417,6 +431,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		player->skills[i].level = skillLevel;
 		player->skills[i].tries = skillTries;
 		player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
+
+		player->updateLoyaltySkill(i);
 	}
 
 	if ((result = db.storeQuery(
@@ -957,6 +973,8 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!storageQuery.execute()) {
 		return false;
 	}
+
+	updateLoyalty(player->accountNumber, player->loyaltyPoints);
 
 	// End the transaction
 	return transaction.commit();

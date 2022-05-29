@@ -42,4 +42,18 @@ function onStartup()
 		local position = town:getTemplePosition()
 		db.query("INSERT INTO `towns` (`id`, `name`, `posx`, `posy`, `posz`) VALUES (" .. town:getId() .. ", " .. db.escapeString(town:getName()) .. ", " .. position.x .. ", " .. position.y .. ", " .. position.z .. ")")
 	end
+	
+	--  loyalty system (update points)
+	if configManager.getBoolean(configKeys.LOYALTY_SYSTEM) then
+		local updatedAt = 0
+		local resultId = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'loyalty_updated'")
+		if resultId then
+			updatedAt = result.getNumber(resultId, "value")
+			result.free(resultId)
+		end	
+		if (os.time() - updatedAt) >= 86400 then
+			db.asyncQuery("UPDATE `accounts` SET `loyalty_points` = `loyalty_points` + 1 WHERE `premium_ends_at` > " .. os.time())
+			db.query("UPDATE `server_config` SET `value` = " .. os.time() .. " WHERE `config` = 'loyalty_updated'")
+		end
+	end
 end

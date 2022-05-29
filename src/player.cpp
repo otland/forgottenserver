@@ -126,6 +126,10 @@ std::string Player::getDescription(int32_t lookDistance) const
 		} else {
 			s << " You have no vocation.";
 		}
+
+		if (loyaltyPoints > 0) {
+			s << " You are " << getLoyaltyTitleDescription() << '.';
+		}
 	} else {
 		s << name;
 		if (!group->access) {
@@ -145,6 +149,15 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " is " << vocation->getVocDescription() << '.';
 		} else {
 			s << " has no vocation.";
+		}
+
+		if (loyaltyPoints > 0) {
+			if (sex == PLAYERSEX_FEMALE) {
+				s << " She";
+			} else {
+				s << " He";
+			}
+			s << " is " << getLoyaltyTitleDescription() << '.';
 		}
 	}
 
@@ -523,6 +536,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 	}
 
 	if (sendUpdateSkills) {
+		updateLoyaltySkill(skill);
 		sendSkills();
 	}
 }
@@ -561,6 +575,65 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 		if (sendUpdateSkills || oldPercent != skills[skill].percent) {
 			sendSkills();
 		}
+	}
+}
+
+void Player::setLoyaltySkill(uint8_t skill, uint64_t count)
+{
+	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill].level);
+	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill].level + 1);
+	if (currReqTries >= nextReqTries) {
+		// player has reached max skill
+		return;
+	}
+
+	while ((skills[skill].bTries + count) >= nextReqTries) {
+		count -= nextReqTries - skills[skill].bTries;
+
+		skills[skill].bLevel++;
+		skills[skill].bTries = 0;
+
+		currReqTries = nextReqTries;
+		nextReqTries = vocation->getReqSkillTries(skill, skills[skill].bLevel + 1);
+		if (currReqTries >= nextReqTries) {
+			count = 0;
+			break;
+		}
+	}
+
+	skills[skill].percent = Player::getPercentLevel(count, nextReqTries);
+	skills[skill].bTries += count;
+}
+
+uint64_t Player::getAccumulatedSkillTries(uint8_t skill) const
+{
+	if (skill > SKILL_LAST) {
+		return 0;
+	}
+
+	uint64_t count = 0;
+	for (uint16_t level = MINIMUM_SKILL_LEVEL; level <= skills[skill].level; level++) {
+		count += vocation->getReqSkillTries(skill, level);
+	}
+
+	count += skills[skill].tries;
+
+	return count;
+}
+
+void Player::updateLoyaltySkill(uint8_t skill)
+{
+	if (skill > SKILL_LAST) {
+		return;
+	}
+
+	skills[skill].bLevel = skills[skill].level;
+	skills[skill].bTries = skills[skill].tries;
+
+	if (loyaltyBonus > 0) {
+		uint64_t totalTries = getAccumulatedSkillTries(skill);
+		uint64_t bonusTries = totalTries + (totalTries * loyaltyBonus);
+		setLoyaltySkill(skill, (bonusTries - totalTries));
 	}
 }
 
@@ -1735,6 +1808,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 
 	if (sendUpdateStats) {
+		updateLoyaltyMagLevel();
 		sendStats();
 		sendSkills();
 	}
@@ -1775,6 +1849,57 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 			sendStats();
 			sendSkills();
 		}
+	}
+}
+
+void Player::setLoyaltyMagLevel(uint64_t count)
+{
+	uint64_t currReqManaSpent = vocation->getReqMana(magLevel);
+	uint64_t nextReqManaSpent = vocation->getReqMana(magLevel + 1);
+	if (currReqManaSpent >= nextReqManaSpent) {
+		// player has reached max magic level
+		return;
+	}
+
+	while ((bManaSpent + count) >= nextReqManaSpent) {
+		count -= nextReqManaSpent - bManaSpent;
+
+		bMagLevel++;
+		bManaSpent = 0;
+
+		currReqManaSpent = nextReqManaSpent;
+		nextReqManaSpent = vocation->getReqMana(bMagLevel + 1);
+		if (currReqManaSpent >= nextReqManaSpent) {
+			count = 0;
+			break;
+		}
+	}
+
+	magLevelPercent = Player::getPercentLevel(count, nextReqManaSpent);
+	bManaSpent += count;
+}
+
+uint64_t Player::getAccumulatedManaSpent() const
+{
+	uint64_t count = 0;
+	for (uint16_t level = 0; level <= magLevel; level++) {
+		count += vocation->getReqMana(level);
+	}
+
+	count += manaSpent;
+
+	return count;
+}
+
+void Player::updateLoyaltyMagLevel()
+{
+	bMagLevel = magLevel;
+	bManaSpent = manaSpent;
+
+	if (loyaltyBonus > 0) {
+		uint64_t totalManaSpent = getAccumulatedManaSpent();
+		uint64_t bonusManaSpent = totalManaSpent + (totalManaSpent * loyaltyBonus);
+		setLoyaltyMagLevel(bonusManaSpent - totalManaSpent);
 	}
 }
 
@@ -1952,13 +2077,13 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
-uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
+float Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 {
 	if (nextLevelCount == 0) {
 		return 0;
 	}
 
-	uint8_t result = (count * 100) / nextLevelCount;
+	float result = (count * 100.) / nextLevelCount;
 	if (result > 100) {
 		return 0;
 	}
@@ -4834,4 +4959,40 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
+}
+
+bool Player::addLoyalty(int32_t points)
+{
+	if (loyaltyPoints == 0) {
+		return false;
+	}
+
+	loyaltyPoints += points;
+	return true;
+}
+
+std::string Player::getLoyaltyTitleDescription() const
+{
+	if (loyaltyPoints <= 50) {
+		return "a Scout of Tibia";
+	} else if (loyaltyPoints <= 100) {
+		return "a Sentinel of Tibia";
+	} else if (loyaltyPoints <= 200) {
+		return "a Steward of Tibia";
+	} else if (loyaltyPoints <= 400) {
+		return "a Warden of Tibia";
+	} else if (loyaltyPoints <= 1000) {
+		return "a Squire of Tibia";
+	} else if (loyaltyPoints <= 2000) {
+		return "a Warrior of Tibia";
+	} else if (loyaltyPoints <= 3000) {
+		return "a Keeper of Tibia";
+	} else if (loyaltyPoints <= 4000) {
+		return "a Guardian of Tibia";
+	} else if (loyaltyPoints <= 5000) {
+		return "a Sage of Tibia";
+	} else if (loyaltyPoints <= 6000) {
+		return "a Savant of Tibia";
+	}
+	return "an Enlightened of Tibia";
 }

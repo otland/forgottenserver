@@ -24,6 +24,13 @@ function onLogin(player)
 	elseif not promotion then
 		player:setVocation(vocation:getDemotion())
 	end
+	
+	-- Loyalty
+	local loyalty = player:getLoyaltyStatus()
+	if loyalty.bonus > 0 then
+		loginStr = string.format("Due to your long-term loyalty to %s, you currently benefit from a %d%% bonus on all of your skills.", serverName, loyalty.bonus * 100)
+		player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
+	end
 
 	-- Events
 	player:registerEvent("PlayerDeath")

@@ -85,7 +85,10 @@ struct Skill
 {
 	uint64_t tries = 0;
 	uint16_t level = MINIMUM_SKILL_LEVEL;
-	uint8_t percent = 0;
+	float percent = 0;
+
+	uint64_t bTries = 0;
+	uint16_t bLevel = MINIMUM_SKILL_LEVEL;
 };
 
 using MuteCountMap = std::map<uint32_t, uint32_t>;
@@ -263,6 +266,11 @@ public:
 
 	int32_t getIdleTime() const { return idleTime; }
 
+	uint16_t getLoyaltyPoints() const { return loyaltyPoints; }
+	float getLoyaltyBonus() const { return loyaltyBonus; }
+	bool addLoyalty(int32_t points);
+	std::string getLoyaltyTitleDescription() const;
+
 	void resetIdleTime() { idleTime = 0; }
 
 	bool isInGhostMode() const override { return ghostMode; }
@@ -273,13 +281,14 @@ public:
 	AccountType_t getAccountType() const { return accountType; }
 	uint32_t getLevel() const { return level; }
 	uint8_t getLevelPercent() const { return levelPercent; }
-	uint32_t getMagicLevel() const { return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]); }
+	uint32_t getMagicLevel() const { return std::max<int32_t>(0, bMagLevel + varStats[STAT_MAGICPOINTS]); }
 	uint32_t getSpecialMagicLevel(CombatType_t type) const
 	{
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint32_t getBaseMagicLevel() const { return magLevel; }
-	uint8_t getMagicLevelPercent() const { return magLevelPercent; }
+	uint32_t getLoyaltyMagicLevel() const { return bMagLevel; }
+	float getMagicLevelPercent() const { return magLevelPercent; }
 	uint8_t getSoul() const { return soul; }
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
@@ -451,14 +460,15 @@ public:
 	uint16_t getSpecialSkill(uint8_t skill) const { return std::max<uint16_t>(0, varSpecialSkills[skill]); }
 	uint16_t getSkillLevel(uint8_t skill) const
 	{
-		return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
+		return std::max<uint16_t>(0, skills[skill].bLevel + varSkills[skill]);
 	}
 	uint16_t getSpecialMagicLevelSkill(CombatType_t type) const
 	{
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
-	uint8_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+	uint16_t getLoyaltySkill(uint8_t skill) const { return skills[skill].bLevel; }
+	float getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -475,6 +485,13 @@ public:
 	void removeManaSpent(uint64_t amount, bool notify = false);
 	void addSkillAdvance(skills_t skill, uint64_t count);
 	void removeSkillTries(skills_t skill, uint64_t count, bool notify = false);
+
+	void setLoyaltyMagLevel(uint64_t count);
+	uint64_t getAccumulatedManaSpent() const;
+	void updateLoyaltyMagLevel();
+	void setLoyaltySkill(uint8_t skill, uint64_t count);
+	uint64_t getAccumulatedSkillTries(uint8_t skill) const;
+	void updateLoyaltySkill(uint8_t skill);
 
 	int32_t getArmor() const override;
 	int32_t getDefense() const override;
@@ -1217,6 +1234,7 @@ private:
 
 	uint64_t experience = 0;
 	uint64_t manaSpent = 0;
+	uint64_t bManaSpent = 0;
 	uint64_t lastAttack = 0;
 	uint64_t bankBalance = 0;
 	uint64_t lastQuestlogUpdate = 0;
@@ -1254,6 +1272,7 @@ private:
 	uint32_t conditionSuppressions = 0;
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
+	uint32_t bMagLevel = 0;
 	uint32_t actionTaskEvent = 0;
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
@@ -1285,7 +1304,7 @@ private:
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
-	uint8_t magLevelPercent = 0;
+	float magLevelPercent = 0.0f;
 
 	PlayerSex_t sex = PLAYERSEX_FEMALE;
 	OperatingSystem_t operatingSystem = CLIENTOS_NONE;
@@ -1303,6 +1322,9 @@ private:
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+
+	uint16_t loyaltyPoints = 0;
+	float loyaltyBonus = 0.0f;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;
@@ -1325,7 +1347,7 @@ private:
 
 	uint32_t getAttackSpeed() const;
 
-	static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
+	static float getPercentLevel(uint64_t count, uint64_t nextLevelCount);
 	double getLostPercent() const;
 	uint64_t getLostExperience() const override
 	{

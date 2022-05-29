@@ -5,6 +5,7 @@
 #define FS_CONFIGMANAGER_H
 
 using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
+using LoyaltyBonuses = std::vector<std::tuple<uint16_t, uint16_t, float>>;
 
 class ConfigManager
 {
@@ -51,6 +52,7 @@ public:
 		REMOVE_ON_DESPAWN,
 		PLAYER_CONSOLE_LOGS,
 		TWO_FACTOR_AUTH,
+		LOYALTY_SYSTEM,
 
 		LAST_BOOLEAN_CONFIG /* this must be the last one */
 	};
@@ -131,6 +133,7 @@ public:
 	int32_t getNumber(integer_config_t what) const;
 	bool getBoolean(boolean_config_t what) const;
 	float getExperienceStage(uint32_t level) const;
+	float getLoyaltyBonus(uint16_t points) const;
 
 	bool setString(string_config_t what, const std::string& value);
 	bool setNumber(integer_config_t what, int32_t value);
@@ -142,6 +145,7 @@ private:
 	bool boolean[LAST_BOOLEAN_CONFIG] = {};
 
 	ExperienceStages expStages = {};
+	LoyaltyBonuses loyaltyBonuses = {};
 
 	bool loaded = false;
 };
