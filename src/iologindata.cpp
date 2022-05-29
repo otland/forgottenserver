@@ -20,7 +20,8 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	Account account;
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at`, `loyalty_points` FROM `accounts` WHERE `id` = {:d}", accno));
+	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at`, `loyalty_points` FROM `accounts` WHERE `id` = {:d}",
+	    accno));
 	if (!result) {
 		return account;
 	}
