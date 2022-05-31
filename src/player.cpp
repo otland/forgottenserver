@@ -128,7 +128,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 		}
 
 		if (loyaltyPoints > 0) {
-			s << " You are " << getLoyaltyTitleDescription() << '.';
+			s << " You are " << getLoyaltyTitleDescription() << " " << g_config.getString(ConfigManager::SERVER_NAME)
+			  << '.';
 		}
 	} else {
 		s << name;
@@ -157,7 +158,7 @@ std::string Player::getDescription(int32_t lookDistance) const
 			} else {
 				s << " He";
 			}
-			s << " is " << getLoyaltyTitleDescription() << '.';
+			s << " is " << getLoyaltyTitleDescription() << " " << g_config.getString(ConfigManager::SERVER_NAME) << '.';
 		}
 	}
 
@@ -4974,25 +4975,25 @@ bool Player::addLoyalty(int32_t points)
 std::string Player::getLoyaltyTitleDescription() const
 {
 	if (loyaltyPoints <= 50) {
-		return "a Scout of Tibia";
+		return "a Scout of";
 	} else if (loyaltyPoints <= 100) {
-		return "a Sentinel of Tibia";
+		return "a Sentinel of";
 	} else if (loyaltyPoints <= 200) {
-		return "a Steward of Tibia";
+		return "a Steward of";
 	} else if (loyaltyPoints <= 400) {
-		return "a Warden of Tibia";
+		return "a Warden of";
 	} else if (loyaltyPoints <= 1000) {
-		return "a Squire of Tibia";
+		return "a Squire of";
 	} else if (loyaltyPoints <= 2000) {
-		return "a Warrior of Tibia";
+		return "a Warrior of";
 	} else if (loyaltyPoints <= 3000) {
-		return "a Keeper of Tibia";
+		return "a Keeper of";
 	} else if (loyaltyPoints <= 4000) {
-		return "a Guardian of Tibia";
+		return "a Guardian of";
 	} else if (loyaltyPoints <= 5000) {
-		return "a Sage of Tibia";
+		return "a Sage of";
 	} else if (loyaltyPoints <= 6000) {
-		return "a Savant of Tibia";
+		return "a Savant of";
 	}
-	return "an Enlightened of Tibia";
+	return "an Enlightened of";
 }
