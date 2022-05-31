@@ -385,6 +385,8 @@ public:
 	                             const uint16_t spriteId);
 	void playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos,
 	                      const uint16_t spriteId, bool podiumVisible, Direction direction);
+	void playerShowHighscores(uint32_t playerId, uint8_t category, uint32_t vocation, const std::string& world,
+	                          uint16_t page);
 	void playerShowQuestLog(uint32_t playerId);
 	void playerShowQuestLine(uint32_t playerId, uint16_t questId);
 	void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);

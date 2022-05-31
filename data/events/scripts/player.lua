@@ -315,3 +315,15 @@ function Player:onInventoryUpdate(item, slot, equip)
 		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
 end
+
+function Player:onRequestHighscores(params)
+	local cacheKey = getHighscoresCacheKey(params)
+	if highscoresCache[cacheKey] ~= nil and ((os.time() - highscoresTimestamps[cacheKey]) < highscoresCacheTime) then
+		return highscoresCache[cacheKey], highscoresTimestamps[cacheKey]
+	end
+
+	highscoresCache[cacheKey] = getHighscores(params)
+	highscoresTimestamps[cacheKey] = os.time()
+
+	return highscoresCache[cacheKey], highscoresTimestamps[cacheKey]
+end

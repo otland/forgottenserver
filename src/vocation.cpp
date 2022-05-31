@@ -137,6 +137,17 @@ uint16_t Vocations::getPromotedVocation(uint16_t id) const
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 
+std::map<uint16_t, Vocation> Vocations::getBaseVocations()
+{
+	std::map<uint16_t, Vocation> vocations;
+	for (auto& [id, vocation] : vocationsMap) {
+		if (id == vocation.fromVocation) {
+			vocations.emplace(id, vocation);
+		}
+	}
+	return vocations;
+}
+
 static const uint32_t skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)

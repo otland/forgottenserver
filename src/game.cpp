@@ -3516,6 +3516,36 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	}
 }
 
+void Game::playerShowHighscores(uint32_t playerId, uint8_t category, uint32_t vocation, const std::string& world,
+                                uint16_t page)
+{
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+
+	std::vector<HighscoresEntry> entries;
+	HighscoresParams params;
+	params.category = category;
+	params.vocation = vocation;
+	params.world = world;
+	params.type = 0x00;
+	params.battlEye = 0xFF;
+
+	uint32_t totalPlayers = IOLoginData::getTotalExistingPlayers();
+	uint16_t totalPages = totalPlayers / 20;
+	if ((totalPlayers % 20) > 0) {
+		totalPages++;
+	}
+
+	params.page = page > totalPages ? 1 : page;
+	params.totalPages = totalPages;
+
+	g_events->eventPlayerOnRequestHighscores(player, entries, params);
+
+	player->sendHighscores(entries, params);
+}
+
 void Game::playerShowQuestLog(uint32_t playerId)
 {
 	Player* player = getPlayerByID(playerId);

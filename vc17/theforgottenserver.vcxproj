@@ -272,6 +272,7 @@
     <ClInclude Include="..\src\globalevent.h" />
     <ClInclude Include="..\src\groups.h" />
     <ClInclude Include="..\src\guild.h" />
+    <ClInclude Include="..\src\highscores.h" />
     <ClInclude Include="..\src\house.h" />
     <ClInclude Include="..\src\housetile.h" />
     <ClInclude Include="..\src\inbox.h" />

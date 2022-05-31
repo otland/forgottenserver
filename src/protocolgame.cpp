@@ -21,16 +21,20 @@
 #include "podium.h"
 #include "scheduler.h"
 #include "storeinbox.h"
+#include "vocation.h"
 
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Vocations g_vocations;
 
 namespace {
 
 std::deque<std::pair<int64_t, uint32_t>> waitList; // (timeout, player guid)
 auto priorityEnd = waitList.end();
+
+const std::map<uint8_t, std::string> highscoresCategories = Highscores::init();
 
 auto findClient(uint32_t guid)
 {
@@ -741,7 +745,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xAC:
 			parseChannelExclude(msg);
 			break;
-		// case 0xB1: break; // request highscores
+		case 0xB1:
+			parseRequestHighscores(msg);
+			break;
 		case 0xBE:
 			addGameTask([playerID = player->getID()]() { g_game.playerCancelAttackAndFollow(playerID); });
 			break;
@@ -1641,6 +1647,30 @@ void ProtocolGame::parseSeekInContainer(NetworkMessage& msg)
 	addGameTask([=, playerID = player->getID()]() { g_game.playerSeekInContainer(playerID, containerId, index); });
 }
 
+void ProtocolGame::parseRequestHighscores(NetworkMessage& msg)
+{
+	HighscoresAction action = static_cast<HighscoresAction>(msg.getByte());
+	if (action == HIGHSCORES_ACTION_OWN) {
+		// NOT IMPLEMENTED YET
+		sendEmptyHighscores();
+		return;
+	}
+
+	uint8_t category = msg.getByte();
+	uint32_t vocation = msg.get<uint32_t>();
+	std::string world = msg.getString();
+
+	msg.getByte(); // type?
+	msg.getByte(); // battlEye
+	uint16_t page = msg.get<uint16_t>();
+
+	// uint8_t items = msg.getByte(); // 20
+
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID(), world = std::move(world)]() {
+		g_game.playerShowHighscores(playerID, category, vocation, world, page);
+	});
+}
+
 // Send methods
 void ProtocolGame::sendOpenPrivateChannel(const std::string& receiver)
 {
@@ -2420,6 +2450,76 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 		msg.add<uint64_t>(it->price);
 		msg.addByte(it->state);
 	}
+
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendEmptyHighscores()
+{
+	NetworkMessage msg;
+	msg.addByte(0xB1);
+	msg.addByte(HIGHSCORES_ACTION_OWN);
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::sendHighscores(std::vector<HighscoresEntry> entries, const HighscoresParams& params)
+{
+	NetworkMessage msg;
+	msg.addByte(0xB1);
+
+	msg.addByte(HIGHSCORES_ACTION_BROWSE);
+
+	// WORLDS BLOCK
+	msg.addByte(0x01);                                             // WORLDS COUNT
+	msg.addString(g_config.getString(ConfigManager::SERVER_NAME)); // DEFAULT
+	msg.addString(params.world);                                   // SELECTED
+	msg.addByte(params.type);                                      // WORLD TYPE
+	msg.addByte(params.battlEye);                                  // WORLD BATTLEYE
+	// WORLDS BLOCK
+
+	// VOCATIONS BLOCK
+	const auto& vocations = g_vocations.getBaseVocations();
+	msg.addByte(vocations.size() + 1); // SIZE
+	msg.add<uint32_t>(0xFFFFFFFF);     // DEFAULT ID
+	msg.addString("All Vocations");    // DEFAULT NAME
+	for (auto& [id, vocation] : vocations) {
+		msg.add<uint32_t>(id);                // ID
+		msg.addString(vocation.getVocName()); // NAME
+	}
+	msg.add<uint32_t>(params.vocation); // SELECTED
+	// VOCATIONS BLOCK
+
+	// CATEGORIES BLOCK
+	msg.addByte(highscoresCategories.size()); // SIZE
+	for (const auto& category : highscoresCategories) {
+		msg.addByte(category.first);    // ID
+		msg.addString(category.second); // NAME
+	}
+
+	HighscoresCategoryTypes categoryType = static_cast<HighscoresCategoryTypes>(params.category);
+	msg.addByte(categoryType); // SELECTED
+	// CATEGORIES BLOCK
+
+	msg.add<uint16_t>(params.page);        // CURRENT PAGE
+	msg.add<uint16_t>(params.totalPages);  // TOTAL PAGES
+
+	msg.addByte(entries.size());
+	for (const auto& entry : entries) {
+		msg.add<uint32_t>(entry.rank);
+		msg.addString(entry.name);
+		msg.addString("");
+		msg.addByte(entry.vocation);
+		msg.addString(entry.world);
+		msg.add<uint16_t>(entry.level);
+		msg.addByte(player->getGUID() == entry.id ? 0x01 : 0x00);
+		msg.add<uint64_t>(entry.points);
+	}
+
+	msg.addByte(0xFF); // UNKNOWN
+	msg.addByte(categoryType == HIGHSCORES_CATEGORY_LOYALTY ? 0x01 : 0x00);
+	msg.addByte(Highscores::getType(categoryType));
+
+	msg.add<uint32_t>(params.timestamp);
 
 	writeToOutputBuffer(msg);
 }

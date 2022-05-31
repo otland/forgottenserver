@@ -30,6 +30,7 @@ PlayerStorageKeys = {
 
 	achievementsBase = 300000,
 	achievementsCounter = 20000,
+	achievementPoints = 19999
 }
 
 GlobalStorageKeys = {

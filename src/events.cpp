@@ -108,6 +108,8 @@ bool Events::load()
 				info.playerOnWrapItem = event;
 			} else if (methodName == "onInventoryUpdate") {
 				info.playerOnInventoryUpdate = event;
+			} else if (methodName == "onRequestHighscores") {
+				info.playerOnRequestHighscores = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -1115,6 +1117,62 @@ void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t sl
 	LuaScriptInterface::pushBoolean(L, equip);
 
 	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventPlayerOnRequestHighscores(Player* player, std::vector<HighscoresEntry>& entries,
+                                            HighscoresParams& params)
+{
+	// Player:onRequestHighscores(params)
+	if (info.playerOnRequestHighscores == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnRequestHighscores] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnRequestHighscores, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnRequestHighscores);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+	
+	lua_createtable(L, 0, 4);
+	LuaScriptInterface::setField(L, "world", params.world);
+	LuaScriptInterface::setField(L, "vocation", params.vocation);
+	LuaScriptInterface::setField(L, "category", params.category);
+	LuaScriptInterface::setField(L, "page", params.page);
+
+	if (scriptInterface.protectedCall(L, 2, 2) != 0) {
+	    LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+
+		lua_pushnil(L);
+		while (lua_next(L, -3) != 0) {
+			const auto tableIndex = lua_gettop(L);
+			uint32_t id = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "id");
+			uint32_t rank = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "rank");
+			std::string name = LuaScriptInterface::getFieldString(L, tableIndex, "name");
+			std::string title = LuaScriptInterface::getFieldString(L, tableIndex, "title");
+			uint8_t vocation = LuaScriptInterface::getField<uint8_t>(L, tableIndex, "vocation");
+			std::string world = LuaScriptInterface::getFieldString(L, tableIndex, "world");
+			uint16_t level = LuaScriptInterface::getField<uint16_t>(L, tableIndex, "level");
+			uint64_t points = LuaScriptInterface::getField<uint64_t>(L, tableIndex, "points");
+
+			entries.emplace_back(id, rank, name, title, vocation, world, level, points);
+			lua_pop(L, 9);
+		}
+
+		params.totalPages = entries.size() < 20 ? params.page : params.totalPages;
+		params.timestamp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
+	    lua_pop(L, 2);
+	}
+
+	scriptInterface.resetScriptEnv();
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)

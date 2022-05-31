@@ -6,6 +6,7 @@
 
 #include "chat.h"
 #include "creature.h"
+#include "highscores.h"
 #include "protocol.h"
 #include "tasks.h"
 
@@ -162,6 +163,8 @@ private:
 	void parseOpenPrivateChannel(NetworkMessage& msg);
 	void parseCloseChannel(NetworkMessage& msg);
 
+	void parseRequestHighscores(NetworkMessage& msg);
+
 	// Send functions
 	void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel);
 	void sendChannelEvent(uint16_t channelId, const std::string& playerName, ChannelEvent_t channelEvent);
@@ -185,6 +188,9 @@ private:
 	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
+
+	void sendEmptyHighscores();
+	void sendHighscores(std::vector<HighscoresEntry> entries, const HighscoresParams& params);
 
 	void sendQuestLog();
 	void sendQuestLine(const Quest* quest);

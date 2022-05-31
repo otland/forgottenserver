@@ -15,6 +15,7 @@
 #include "vocation.h"
 
 class DepotChest;
+class Game;
 class House;
 class NetworkMessage;
 class Npc;
@@ -1050,6 +1051,12 @@ public:
 	{
 		if (client) {
 			client->sendAddMarker(pos, markType, desc);
+		}
+	}
+	void sendHighscores(std::vector<HighscoresEntry> entries, const HighscoresParams& params)
+	{
+		if (client) {
+			client->sendHighscores(entries, params);
 		}
 	}
 	void sendQuestLog()

@@ -50,6 +50,8 @@ public:
 
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
+	static uint32_t getTotalExistingPlayers();
+
 private:
 	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 

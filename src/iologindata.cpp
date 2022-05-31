@@ -1107,3 +1107,14 @@ void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 	Database::getInstance().executeQuery(
 	    fmt::format("UPDATE `accounts` SET `premium_ends_at` = {:d} WHERE `id` = {:d}", endTime, accountId));
 }
+
+uint32_t IOLoginData::getTotalExistingPlayers()
+{
+	Database& db = Database::getInstance();
+
+	DBResult_ptr result = db.storeQuery("SELECT COUNT(*) AS `players_total` FROM `players` WHERE `deletion` = 0 AND `group_id` NOT IN (4, 5, 6)");
+	if (!result) {
+		return 0;
+	}
+	return result->getNumber<uint32_t>("players_total");
+}
