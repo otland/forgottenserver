@@ -297,7 +297,7 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 	scriptInterface.callVoidFunction(4);
 }
 
-void Events::eventCreatureOnChangeZone(Creature* creature, const ZoneType_t& fromZone, const ZoneType_t& toZone)
+void Events::eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 {
 	// Creature:onChangeZone(fromZone, toZone)
 	if (info.creatureOnChangeZone == -1) {

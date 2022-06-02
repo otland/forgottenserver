@@ -73,7 +73,7 @@ public:
 	ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
-	void eventCreatureOnChangeZone(Creature* creature, const ZoneType_t& fromZone, const ZoneType_t& toZone);
+	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
 
 	// Party
 	bool eventPartyOnJoin(Party* party, Player* player);
