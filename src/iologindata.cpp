@@ -355,7 +355,14 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->manaSpent = manaSpent;
 	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
-	player->updateLoyaltyMagLevel();
+	player->bonusMagLevel = player->magLevel;
+	player->bonusManaSpent = manaSpent;
+
+	player->totalManaSpent = player->getAccumulatedManaSpent();
+	player->totalBonusManaSpent = player->totalManaSpent * (1 + player->loyaltyBonus);
+
+	uint64_t manaDiff = player->totalBonusManaSpent - player->totalManaSpent;
+	player->updateLoyaltyMagLevel(manaDiff, true);
 
 	player->health = result->getNumber<int32_t>("health");
 	player->healthMax = result->getNumber<int32_t>("healthmax");
@@ -431,9 +438,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		player->skills[i].level = skillLevel;
 		player->skills[i].tries = skillTries;
+		player->skills[i].totalTries = player->getAccumulatedSkillTries(i);
 		player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
 
-		player->updateLoyaltySkill(i);
+		player->skills[i].bonusLevel = skillLevel;
+		player->skills[i].bonusTries = skillTries;
+
+		player->skills[i].totalBonusTries = player->skills[i].totalTries * (1 + player->loyaltyBonus);
+		uint64_t triesDiff = player->skills[i].totalBonusTries - player->skills[i].totalTries;
+
+		player->updateLoyaltySkill(i, triesDiff, true);
 	}
 
 	if ((result = db.storeQuery(

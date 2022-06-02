@@ -127,9 +127,9 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " You have no vocation.";
 		}
 
-		if (loyaltyPoints > 0) {
-			s << " You are " << getLoyaltyTitleDescription() << " " << g_config.getString(ConfigManager::SERVER_NAME)
-			  << '.';
+		if (g_config.getBoolean(ConfigManager::LOYALTY_SYSTEM) && loyaltyPoints >= 50) {
+			s << " You are " << getLoyaltyTitleDescription(loyaltyPoints) << " "
+			  << g_config.getString(ConfigManager::SERVER_NAME) << '.';
 		}
 	} else {
 		s << name;
@@ -152,13 +152,14 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " has no vocation.";
 		}
 
-		if (loyaltyPoints > 0) {
+		if (g_config.getBoolean(ConfigManager::LOYALTY_SYSTEM) && loyaltyPoints >= 50) {
 			if (sex == PLAYERSEX_FEMALE) {
 				s << " She";
 			} else {
 				s << " He";
 			}
-			s << " is " << getLoyaltyTitleDescription() << " " << g_config.getString(ConfigManager::SERVER_NAME) << '.';
+			s << " is " << getLoyaltyTitleDescription(loyaltyPoints) << " "
+			  << g_config.getString(ConfigManager::SERVER_NAME) << '.';
 		}
 	}
 
@@ -501,17 +502,14 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 		return;
 	}
 
+	uint64_t fullCount = count;
+
 	bool sendUpdateSkills = false;
 	while ((skills[skill].tries + count) >= nextReqTries) {
 		count -= nextReqTries - skills[skill].tries;
 		skills[skill].level++;
 		skills[skill].tries = 0;
 		skills[skill].percent = 0;
-
-		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
-
-		g_creatureEvents->playerAdvance(this, skill, (skills[skill].level - 1), skills[skill].level);
 
 		sendUpdateSkills = true;
 		currReqTries = nextReqTries;
@@ -523,6 +521,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 	}
 
 	skills[skill].tries += count;
+	skills[skill].totalTries += fullCount;
 
 	uint32_t newPercent;
 	if (nextReqTries > currReqTries) {
@@ -536,8 +535,9 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 		sendUpdateSkills = true;
 	}
 
+	updateLoyaltySkill(skill, fullCount, false);
+
 	if (sendUpdateSkills) {
-		updateLoyaltySkill(skill);
 		sendSkills();
 	}
 }
@@ -579,31 +579,39 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 	}
 }
 
-void Player::setLoyaltySkill(uint8_t skill, uint64_t count)
+void Player::setLoyaltySkill(uint8_t skill, uint64_t count, bool isLogin /* = false */)
 {
-	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill].level);
-	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill].level + 1);
+	uint64_t currReqTries = vocation->getReqSkillTries(skill, skills[skill].bonusLevel);
+	uint64_t nextReqTries = vocation->getReqSkillTries(skill, skills[skill].bonusLevel + 1);
 	if (currReqTries >= nextReqTries) {
 		// player has reached max skill
 		return;
 	}
 
-	while ((skills[skill].bTries + count) >= nextReqTries) {
-		count -= nextReqTries - skills[skill].bTries;
+	while ((skills[skill].bonusTries + count) >= nextReqTries) {
+		count -= nextReqTries - skills[skill].bonusTries;
 
-		skills[skill].bLevel++;
-		skills[skill].bTries = 0;
+		skills[skill].bonusLevel++;
+		skills[skill].bonusTries = 0;
+
+		if (!isLogin) {
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill),
+			                                                   skills[skill].bonusLevel));
+
+			g_creatureEvents->playerAdvance(this, static_cast<skills_t>(skill), (skills[skill].bonusLevel - 1),
+			                                skills[skill].bonusLevel);
+		}
 
 		currReqTries = nextReqTries;
-		nextReqTries = vocation->getReqSkillTries(skill, skills[skill].bLevel + 1);
+		nextReqTries = vocation->getReqSkillTries(skill, skills[skill].bonusLevel + 1);
 		if (currReqTries >= nextReqTries) {
 			count = 0;
 			break;
 		}
 	}
 
-	skills[skill].percent = Player::getPercentLevel(count, nextReqTries);
-	skills[skill].bTries += count;
+	skills[skill].bonusTries += count;
+	skills[skill].percent = Player::getPercentLevel(skills[skill].bonusTries, nextReqTries);
 }
 
 uint64_t Player::getAccumulatedSkillTries(uint8_t skill) const
@@ -622,20 +630,29 @@ uint64_t Player::getAccumulatedSkillTries(uint8_t skill) const
 	return count;
 }
 
-void Player::updateLoyaltySkill(uint8_t skill)
+void Player::updateLoyaltySkill(uint8_t skill, uint64_t count, bool isLogin /* = false */)
 {
 	if (skill > SKILL_LAST) {
 		return;
 	}
 
-	skills[skill].bLevel = skills[skill].level;
-	skills[skill].bTries = skills[skill].tries;
+	if (!isLogin) {
+		float bonusTries = count * (1 + loyaltyBonus);
 
-	if (loyaltyBonus > 0) {
-		uint64_t totalTries = getAccumulatedSkillTries(skill);
-		uint64_t bonusTries = totalTries + (totalTries * loyaltyBonus);
-		setLoyaltySkill(skill, (bonusTries - totalTries));
+		float tries, fractional;
+		fractional = std::modf(bonusTries, &tries);
+		skills[skill].bonusFractional += std::round(fractional * 100) / 100;
+
+		count = static_cast<uint64_t>(tries);
+
+		if (skills[skill].bonusFractional == (int)skills[skill].bonusFractional) {
+			count += static_cast<int>(skills[skill].bonusFractional);
+			skills[skill].bonusFractional = 0.0;
+		}
 	}
+
+	skills[skill].totalBonusTries += count;
+	setLoyaltySkill(skill, count, isLogin);
 }
 
 void Player::setVarStats(stats_t stat, int32_t modifier)
@@ -1776,16 +1793,14 @@ void Player::addManaSpent(uint64_t amount)
 		return;
 	}
 
+	uint64_t fullAmount = amount;
+
 	bool sendUpdateStats = false;
 	while ((manaSpent + amount) >= nextReqMana) {
 		amount -= nextReqMana - manaSpent;
 
 		magLevel++;
 		manaSpent = 0;
-
-		sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", magLevel));
-
-		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel - 1, magLevel);
 
 		sendUpdateStats = true;
 		currReqMana = nextReqMana;
@@ -1796,6 +1811,7 @@ void Player::addManaSpent(uint64_t amount)
 	}
 
 	manaSpent += amount;
+	totalManaSpent += fullAmount;
 
 	uint8_t oldPercent = magLevelPercent;
 	if (nextReqMana > currReqMana) {
@@ -1808,8 +1824,9 @@ void Player::addManaSpent(uint64_t amount)
 		sendUpdateStats = true;
 	}
 
+	updateLoyaltyMagLevel(fullAmount, false);
+
 	if (sendUpdateStats) {
-		updateLoyaltyMagLevel();
 		sendStats();
 		sendSkills();
 	}
@@ -1853,31 +1870,37 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 	}
 }
 
-void Player::setLoyaltyMagLevel(uint64_t count)
+void Player::setLoyaltyMagLevel(uint64_t count, bool isLogin /* = false */)
 {
-	uint64_t currReqManaSpent = vocation->getReqMana(magLevel);
-	uint64_t nextReqManaSpent = vocation->getReqMana(magLevel + 1);
+	uint64_t currReqManaSpent = vocation->getReqMana(bonusMagLevel);
+	uint64_t nextReqManaSpent = vocation->getReqMana(bonusMagLevel + 1);
 	if (currReqManaSpent >= nextReqManaSpent) {
 		// player has reached max magic level
 		return;
 	}
 
-	while ((bManaSpent + count) >= nextReqManaSpent) {
-		count -= nextReqManaSpent - bManaSpent;
+	while ((bonusManaSpent + count) >= nextReqManaSpent) {
+		count -= nextReqManaSpent - bonusManaSpent;
 
-		bMagLevel++;
-		bManaSpent = 0;
+		bonusMagLevel++;
+		bonusManaSpent = 0;
+
+		if (!isLogin) {
+			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", bonusMagLevel));
+
+			g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, bonusMagLevel - 1, bonusMagLevel);
+		}
 
 		currReqManaSpent = nextReqManaSpent;
-		nextReqManaSpent = vocation->getReqMana(bMagLevel + 1);
+		nextReqManaSpent = vocation->getReqMana(bonusMagLevel + 1);
 		if (currReqManaSpent >= nextReqManaSpent) {
 			count = 0;
 			break;
 		}
 	}
 
-	magLevelPercent = Player::getPercentLevel(count, nextReqManaSpent);
-	bManaSpent += count;
+	bonusManaSpent += count;
+	magLevelPercent = Player::getPercentLevel(bonusManaSpent, nextReqManaSpent);
 }
 
 uint64_t Player::getAccumulatedManaSpent() const
@@ -1892,16 +1915,25 @@ uint64_t Player::getAccumulatedManaSpent() const
 	return count;
 }
 
-void Player::updateLoyaltyMagLevel()
+void Player::updateLoyaltyMagLevel(uint64_t count, bool isLogin /* = false */)
 {
-	bMagLevel = magLevel;
-	bManaSpent = manaSpent;
+	if (!isLogin) {
+		float bonusCount = count * (1 + loyaltyBonus);
 
-	if (loyaltyBonus > 0) {
-		uint64_t totalManaSpent = getAccumulatedManaSpent();
-		uint64_t bonusManaSpent = totalManaSpent + (totalManaSpent * loyaltyBonus);
-		setLoyaltyMagLevel(bonusManaSpent - totalManaSpent);
+		float amount, fractional;
+		fractional = std::modf(bonusCount, &amount);
+		manaSpentFractional += std::round(fractional * 100) / 100;
+
+		count = static_cast<uint64_t>(amount);
+
+		if (manaSpentFractional == (int)manaSpentFractional) {
+			count += static_cast<int>(manaSpentFractional);
+			manaSpentFractional = 0.0;
+		}
 	}
+
+	totalBonusManaSpent += count;
+	setLoyaltyMagLevel(count, isLogin);
 }
 
 void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = false*/)
@@ -4964,36 +4996,10 @@ void Player::updateRegeneration()
 
 bool Player::addLoyalty(int32_t points)
 {
-	if (loyaltyPoints == 0) {
+	if (loyaltyPoints == 0 && points < 0) {
 		return false;
 	}
 
-	loyaltyPoints += points;
+	loyaltyPoints = std::max(0, loyaltyPoints + points);
 	return true;
-}
-
-std::string Player::getLoyaltyTitleDescription() const
-{
-	if (loyaltyPoints <= 50) {
-		return "a Scout of";
-	} else if (loyaltyPoints <= 100) {
-		return "a Sentinel of";
-	} else if (loyaltyPoints <= 200) {
-		return "a Steward of";
-	} else if (loyaltyPoints <= 400) {
-		return "a Warden of";
-	} else if (loyaltyPoints <= 1000) {
-		return "a Squire of";
-	} else if (loyaltyPoints <= 2000) {
-		return "a Warrior of";
-	} else if (loyaltyPoints <= 3000) {
-		return "a Keeper of";
-	} else if (loyaltyPoints <= 4000) {
-		return "a Guardian of";
-	} else if (loyaltyPoints <= 5000) {
-		return "a Sage of";
-	} else if (loyaltyPoints <= 6000) {
-		return "a Savant of";
-	}
-	return "an Enlightened of";
 }

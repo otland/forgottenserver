@@ -87,8 +87,12 @@ struct Skill
 	uint16_t level = MINIMUM_SKILL_LEVEL;
 	float percent = 0;
 
-	uint64_t bTries = 0;
-	uint16_t bLevel = MINIMUM_SKILL_LEVEL;
+	uint64_t bonusTries = 0;
+	uint16_t bonusLevel = MINIMUM_SKILL_LEVEL;
+
+	uint64_t totalTries = 0;
+	uint64_t totalBonusTries = 0;
+	float bonusFractional = 0.0;
 };
 
 using MuteCountMap = std::map<uint32_t, uint32_t>;
@@ -269,7 +273,6 @@ public:
 	uint16_t getLoyaltyPoints() const { return loyaltyPoints; }
 	float getLoyaltyBonus() const { return loyaltyBonus; }
 	bool addLoyalty(int32_t points);
-	std::string getLoyaltyTitleDescription() const;
 
 	void resetIdleTime() { idleTime = 0; }
 
@@ -281,13 +284,13 @@ public:
 	AccountType_t getAccountType() const { return accountType; }
 	uint32_t getLevel() const { return level; }
 	uint8_t getLevelPercent() const { return levelPercent; }
-	uint32_t getMagicLevel() const { return std::max<int32_t>(0, bMagLevel + varStats[STAT_MAGICPOINTS]); }
+	uint32_t getMagicLevel() const { return std::max<int32_t>(0, bonusMagLevel + varStats[STAT_MAGICPOINTS]); }
 	uint32_t getSpecialMagicLevel(CombatType_t type) const
 	{
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint32_t getBaseMagicLevel() const { return magLevel; }
-	uint32_t getLoyaltyMagicLevel() const { return bMagLevel; }
+	uint32_t getLoyaltyMagicLevel() const { return bonusMagLevel; }
 	float getMagicLevelPercent() const { return magLevelPercent; }
 	uint8_t getSoul() const { return soul; }
 	bool isAccessPlayer() const { return group->access; }
@@ -460,14 +463,14 @@ public:
 	uint16_t getSpecialSkill(uint8_t skill) const { return std::max<uint16_t>(0, varSpecialSkills[skill]); }
 	uint16_t getSkillLevel(uint8_t skill) const
 	{
-		return std::max<uint16_t>(0, skills[skill].bLevel + varSkills[skill]);
+		return std::max<uint16_t>(0, skills[skill].bonusLevel + varSkills[skill]);
 	}
 	uint16_t getSpecialMagicLevelSkill(CombatType_t type) const
 	{
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
-	uint16_t getLoyaltySkill(uint8_t skill) const { return skills[skill].bLevel; }
+	uint16_t getLoyaltySkill(uint8_t skill) const { return skills[skill].bonusLevel; }
 	float getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
@@ -486,12 +489,12 @@ public:
 	void addSkillAdvance(skills_t skill, uint64_t count);
 	void removeSkillTries(skills_t skill, uint64_t count, bool notify = false);
 
-	void setLoyaltyMagLevel(uint64_t count);
+	void setLoyaltyMagLevel(uint64_t count, bool isLogin = false);
 	uint64_t getAccumulatedManaSpent() const;
-	void updateLoyaltyMagLevel();
-	void setLoyaltySkill(uint8_t skill, uint64_t count);
+	void updateLoyaltyMagLevel(uint64_t count, bool isLogin = false);
+	void setLoyaltySkill(uint8_t skill, uint64_t count, bool isLogin = false);
 	uint64_t getAccumulatedSkillTries(uint8_t skill) const;
-	void updateLoyaltySkill(uint8_t skill);
+	void updateLoyaltySkill(uint8_t skill, uint64_t count, bool isLogin = false);
 
 	int32_t getArmor() const override;
 	int32_t getDefense() const override;
@@ -1234,7 +1237,10 @@ private:
 
 	uint64_t experience = 0;
 	uint64_t manaSpent = 0;
-	uint64_t bManaSpent = 0;
+	uint64_t bonusManaSpent = 0;
+	uint64_t totalManaSpent = 0;
+	uint64_t totalBonusManaSpent = 0;
+	float manaSpentFractional = 0.0;
 	uint64_t lastAttack = 0;
 	uint64_t bankBalance = 0;
 	uint64_t lastQuestlogUpdate = 0;
@@ -1272,7 +1278,7 @@ private:
 	uint32_t conditionSuppressions = 0;
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
-	uint32_t bMagLevel = 0;
+	uint32_t bonusMagLevel = 0;
 	uint32_t actionTaskEvent = 0;
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;

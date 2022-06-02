@@ -72,4 +72,6 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
+std::string getLoyaltyTitleDescription(uint16_t points);
+
 #endif // FS_TOOLS_H

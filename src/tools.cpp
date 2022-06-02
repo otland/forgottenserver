@@ -1291,3 +1291,29 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
+
+std::string getLoyaltyTitleDescription(uint16_t points)
+{
+	if (points >= 7000) {
+		return "an Enlightened of";
+	} else if (points >= 6000) {
+		return "a Savant of";
+	} else if (points >= 5000) {
+		return "a Sage of";
+	} else if (points >= 4000) {
+		return "a Guardian of";
+	} else if (points >= 3000) {
+		return "a Keeper of";
+	} else if (points >= 2000) {
+		return "a Warrior of";
+	} else if (points >= 1000) {
+		return "a Squire of";
+	} else if (points >= 400) {
+		return "a Warden of";
+	} else if (points >= 200) {
+		return "a Steward of";
+	} else if (points >= 100) {
+		return "a Sentinel of";
+	}
+	return "a Scout of";
+}
