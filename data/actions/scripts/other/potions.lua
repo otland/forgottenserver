@@ -64,8 +64,7 @@ local potions = {
 		flask = 7634,
 		description = "Only knights and paladins of level 50 or above may drink this fluid."
 	},
-	[7589] = {
-		-- strong mana potion
+	[7589] = { -- strong mana potion
 		mana = {115, 185},
 		level = 50,
 		flask = 7634,
@@ -190,6 +189,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			Game.createItem(reward, 1, fromPosition)
 		end
+
 		item:getPosition():sendMagicEffect(potion.effect)
 		item:remove(1)
 		return true
