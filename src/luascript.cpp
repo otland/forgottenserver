@@ -1763,6 +1763,14 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(REPORT_TYPE_BOT);
 
 	registerEnum(VOCATION_NONE);
+	registerEnum(VOCATION_SORCERER);
+	registerEnum(VOCATION_DRUID);
+	registerEnum(VOCATION_PALADIN);
+	registerEnum(VOCATION_KNIGHT);
+	registerEnum(VOCATION_MASTER_SORCERER);
+	registerEnum(VOCATION_ELDER_DRUID);
+	registerEnum(VOCATION_ROYAL_PALADIN);
+	registerEnum(VOCATION_ELITE_KNIGHT);
 
 	registerEnum(SKILL_FIST);
 	registerEnum(SKILL_CLUB);

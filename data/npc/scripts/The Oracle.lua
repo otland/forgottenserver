@@ -20,7 +20,7 @@ local function greetCallback(cid)
 	elseif level > 9 then
 		npcHandler:say(player:getName() .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
 		return false
-	elseif player:getVocation():getId() > 0 then
+	elseif player:getVocation():getId() ~= VOCATION_NONE then
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
 		return false
 	end
@@ -48,19 +48,19 @@ local function creatureSayCallback(cid, type, msg)
 		if msgcontains(msg, "sorcerer") then
 			npcHandler:say("A SORCERER! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!", cid)
 			npcHandler.topic[cid] = 3
-			vocation[cid] = 1
+			vocation[cid] = VOCATION_SORCERER
 		elseif msgcontains(msg, "druid") then
 			npcHandler:say("A DRUID! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!", cid)
 			npcHandler.topic[cid] = 3
-			vocation[cid] = 2
+			vocation[cid] = VOCATION_DRUID
 		elseif msgcontains(msg, "paladin") then
 			npcHandler:say("A PALADIN! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!", cid)
 			npcHandler.topic[cid] = 3
-			vocation[cid] = 3
+			vocation[cid] = VOCATION_PALADIN
 		elseif msgcontains(msg, "knight") then
 			npcHandler:say("A KNIGHT! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!", cid)
 			npcHandler.topic[cid] = 3
-			vocation[cid] = 4
+			vocation[cid] = VOCATION_KNIGHT
 		else
 			npcHandler:say("{KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
 		end
