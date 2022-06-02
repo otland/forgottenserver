@@ -926,34 +926,7 @@ bool booleanString(const std::string& str)
 
 size_t combatTypeToIndex(CombatType_t combatType)
 {
-	switch (combatType) {
-		case COMBAT_PHYSICALDAMAGE:
-			return 0;
-		case COMBAT_ENERGYDAMAGE:
-			return 1;
-		case COMBAT_EARTHDAMAGE:
-			return 2;
-		case COMBAT_FIREDAMAGE:
-			return 3;
-		case COMBAT_UNDEFINEDDAMAGE:
-			return 4;
-		case COMBAT_LIFEDRAIN:
-			return 5;
-		case COMBAT_MANADRAIN:
-			return 6;
-		case COMBAT_HEALING:
-			return 7;
-		case COMBAT_DROWNDAMAGE:
-			return 8;
-		case COMBAT_ICEDAMAGE:
-			return 9;
-		case COMBAT_HOLYDAMAGE:
-			return 10;
-		case COMBAT_DEATHDAMAGE:
-			return 11;
-		default:
-			return 0;
-	}
+	return static_cast<size_t>(std::log2(static_cast<uint64_t>(combatType)));
 }
 
 CombatType_t indexToCombatType(size_t v) { return static_cast<CombatType_t>(1 << v); }
