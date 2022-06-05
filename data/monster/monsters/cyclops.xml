@@ -14,7 +14,6 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
@@ -37,18 +36,19 @@
 		<voice sentence="Let da mashing begin!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="47" chance="82000" />
-		<item name="meat" chance="30070" />
-		<item name="short sword" chance="8000" />
-		<item name="cyclops toe" chance="4930" />
-		<item name="plate shield" chance="2500" />
-		<!-- Heavy Old Tome 2.02% -->
-		<item name="battle shield" chance="1400" />
-		<item id="2381" chance="730" /><!-- halberd -->
-		<item name="wolf tooth chain" chance="360" />
-		<item name="dark helmet" chance="230" />
-		<item id="7398" chance="180" /><!-- cyclops trophy -->
-		<item name="club ring" chance="140" />
-		<item name="health potion" chance="50" />
+		<item id="2148" name="gold coin" chance="82276" countmax="47" />
+		<item id="2666" name="meat" chance="29087" />
+		<item id="2406" name="short sword" chance="7795" />
+		<item id="10574" name="cyclops toe" chance="5265" />
+		<item id="2510" name="plate shield" chance="2442" />
+		<item id="26642" name="heavy old tome" chance="2062" />
+		<item id="2513" name="battle shield" chance="1462" />
+		<item id="2381" name="halberd" chance="892" />
+		<item id="27071" name="old rag" chance="322" />
+		<item id="2129" name="wolf tooth chain" chance="322" />
+		<item id="2490" name="dark helmet" chance="234" />
+		<item id="7618" name="health potion" chance="146" />
+		<item id="7398" name="cyclops trophy" chance="117" />
+		<item id="2209" name="club ring" chance="44" />
 	</loot>
 </monster>

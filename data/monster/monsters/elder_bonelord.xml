@@ -65,17 +65,17 @@
 		<voice sentence="653768764!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="90" chance="99000" />
-		<item name="elder bonelord tentacle" chance="20000" />
-		<item name="small flask of eyedrops" chance="9700" />
-		<item name="sniper arrow" countmax="4" chance="8700" />
-		<item name="two handed sword" chance="3000" />
-		<item name="steel shield" chance="2000" />
-		<item name="bonelord eye" chance="2000" />
-		<item id="2175" chance="1000" /><!-- spellbook -->
-		<item name="strong mana potion" chance="830" />
-		<item name="giant eye" chance="460" />
-		<item name="bonelord shield" chance="90" />
-		<item name="bonelord helmet" chance="90" />
+		<item id="2148" name="gold coin" chance="99298" countmax="90" />
+		<item id="11193" name="elder bonelord tentacle" chance="20030" />
+		<item id="12468" name="small flask of eyedrops" chance="9698" />
+		<item id="7364" name="sniper arrow" chance="8785" countmax="4" />
+		<item id="2377" name="two handed sword" chance="2968" />
+		<item id="2509" name="steel shield" chance="2033" />
+		<item id="5898" name="bonelord eye" chance="1927" />
+		<item id="2175" name="spellbook" chance="1016" />
+		<item id="7589" name="strong mana potion" chance="836" />
+		<item id="11197" name="giant eye" chance="458" />
+		<item id="2518" name="bonelord shield" chance="86" />
+		<item id="3972" name="bonelord helmet" chance="84" />
 	</loot>
 </monster>

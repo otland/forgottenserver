@@ -41,13 +41,12 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="small diamond" countmax="3" chance="33333" />
-		<item name="gold coin" countmax="10" chance="100000" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="meat" countmax="50" chance="33333" />
-		<item name="ham" countmax="8" chance="20000" />
-		<item name="worm" countmax="10" chance="50000" />
-		<item name="mandrake" chance="100000" />
-		<item name="seeds" chance="4000" />
+		<item id="5015" name="mandrake" chance="100000" />
+		<item id="7732" name="seeds" chance="100000" />
+		<item id="2148" name="gold coin" chance="87234" countmax="118" />
+		<item id="2666" name="meat" chance="70213" />
+		<item id="2671" name="ham" chance="38298" />
+		<item id="2792" name="dark mushroom" chance="21277" countmax="5" />
+		<item id="13298" name="carrot on a stick" chance="12766" />
 	</loot>
 </monster>

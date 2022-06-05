@@ -125,7 +125,7 @@
 		<item name="strange symbol" chance="2500" />
 		<item name="orb" chance="12000" />
 		<item name="life crystal" chance="1000" />
-		<item name="mind stone" chance="4000" />
+		<item id="2178" name="mind stone" chance="4000" />
 		<item name="gold ring" chance="8000" />
 		<item name="snakebite rod" chance="3500" />
 		<item name="necrotic rod" chance="3500" />
@@ -150,7 +150,7 @@
 		<item name="devil helmet" chance="11000" />
 		<item name="golden legs" chance="5000" />
 		<item name="magic plate armor" chance="3000" />
-		<item name="mastermind shield" chance="7500" />
+		<item id="2514" name="mastermind shield" chance="7500" />
 		<item name="demon shield" chance="15500" />
 		<item id="3955" chance="100" /><!-- voodoo doll-->
 	</loot>
