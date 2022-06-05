@@ -21,7 +21,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-35" />
 	</attacks>
-	<defenses armor="20" defense="20" />
+	<defenses armor="10" defense="10" />
 	<elements>
 		<element energyPercent="15" />
 		<element holyPercent="10" />
@@ -36,15 +36,15 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="12" chance="64000" />
-		<item name="silver amulet" chance="230" />
-		<item name="spear" chance="25000" />
-		<item name="studded club" chance="5450" />
-		<item id="2512" chance="6000" /><!-- wooden shield -->
-		<item name="arrow" countmax="5" chance="5450" />
-		<item name="leather boots" chance="9000" />
-		<item name="meat" chance="9650" />
-		<item name="bunch of troll hair" chance="3000" />
-		<item name="trollroot" chance="750" />
+		<item id="2148" name="gold coin" chance="64606" countmax="12" />
+		<item id="2389" name="spear" chance="25082" />
+		<item id="2666" name="meat" chance="9962" />
+		<item id="2643" name="leather boots" chance="9936" />
+		<item id="2512" name="wooden shield" chance="5322" />
+		<item id="2544" name="arrow" chance="5069" countmax="5" />
+		<item id="2448" name="studded club" chance="5069" />
+		<item id="10606" name="bunch of troll hair" chance="3075" />
+		<item id="12471" name="trollroot" chance="909" />
+		<item id="2170" name="silver amulet" chance="127" />
 	</loot>
 </monster>

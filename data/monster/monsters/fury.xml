@@ -85,7 +85,7 @@
 		<item name="soul orb" chance="50" />
 		<item id="6301" chance="60" /><!-- death ring-->
 		<item name="demonic essence" chance="22500" />
-		<item name="concentrated demonic blood" countmax="3" chance="35000" />
+		<item name="flask of demonic blood" countmax="3" chance="35000" />
 		<item name="assassin dagger" chance="660" />
 		<item name="noble axe" chance="2000" />
 		<item name="great health potion" chance="10500" />

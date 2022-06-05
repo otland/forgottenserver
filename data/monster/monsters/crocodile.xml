@@ -24,16 +24,16 @@
 	</attacks>
 	<defenses armor="13" defense="13" />
 	<elements>
-		<element earthPercent="20" />
-		<element icePercent="10" />
-		<element energyPercent="-5" />
-		<element firePercent="-10" />
 		<element physicalPercent="-10" />
+		<element energyPercent="-5" />
+		<element earthPercent="20" />
+		<element firePercent="-10" />
+		<element icePercent="10" />
 	</elements>
 	<loot>
-		<item name="gold coin" countmax="10" chance="50000" />
-		<item name="ham" chance="40000" />
-		<item name="piece of crocodile leather" chance="20180" />
-		<item name="crocodile boots" chance="100" />
+		<item id="2148" name="gold coin" chance="49805" countmax="10" />
+		<item id="2671" name="ham" chance="39795" />
+		<item id="11196" name="piece of crocodile leather" chance="20032" />
+		<item id="3982" name="crocodile boots" chance="86" />
 	</loot>
 </monster>

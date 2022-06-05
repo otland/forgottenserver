@@ -40,23 +40,23 @@
 		<voice sentence="Ulderek futgyr human!" />
 	</voices>
 	<loot>
-		<item id="2667" chance="30000" /><!-- fish -->
-		<item name="gold coin" countmax="35" chance="28000" />
-		<item name="orc leather" chance="19510" />
-		<item name="plate shield" chance="10000" />
-		<item name="throwing knife" countmax="4" chance="9950" />
-		<item name="brown mushroom" chance="9650" />
-		<item name="sword ring" chance="3920" />
-		<item name="longsword" chance="2800" />
-		<item name="royal spear" chance="2600" />
-		<item name="brass legs" chance="2400" />
-		<item id="2419" chance="2160" /><!-- scimitar -->
-		<item name="skull belt" chance="2100" />
-		<item name="plate armor" chance="1650" />
-		<item name="orc tooth" chance="1030" />
-		<item name="broadsword" chance="760" />
-		<item name="health potion" chance="550" />
-		<item name="plate legs" chance="400" />
-		<item name="warrior helmet" chance="180" />
+		<item id="2667" name="fish" chance="30075" />
+		<item id="2148" name="gold coin" chance="28207" countmax="35" />
+		<item id="12435" name="orc leather" chance="19721" />
+		<item id="2510" name="plate shield" chance="10140" />
+		<item id="2410" name="throwing knife" chance="10007" countmax="4" />
+		<item id="2789" name="brown mushroom" chance="9833" />
+		<item id="2207" name="sword ring" chance="3778" />
+		<item id="2397" name="longsword" chance="2970" />
+		<item id="7378" name="royal spear" chance="2647" />
+		<item id="2478" name="brass legs" chance="2435" />
+		<item id="2419" name="scimitar" chance="2191" />
+		<item id="12436" name="skull belt" chance="2115" />
+		<item id="2463" name="plate armor" chance="1597" />
+		<item id="11113" name="orc tooth" chance="1022" />
+		<item id="2413" name="broadsword" chance="748" />
+		<item id="7618" name="health potion" chance="583" />
+		<item id="2647" name="plate legs" chance="396" />
+		<item id="2475" name="warrior helmet" chance="114" />
 	</loot>
 </monster>

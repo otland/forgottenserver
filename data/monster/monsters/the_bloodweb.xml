@@ -48,19 +48,18 @@
 		<voice sentence="Screeech!" />
 	</voices>
 	<loot>
-		<item id="2169" chance="3703" /><!-- time ring -->
-		<item name="plate armor" chance="100000" />
-		<item name="knight armor" chance="7692" />
-		<item name="knight legs" chance="5555" />
-		<item name="jewelled backpack" chance="7692" />
-		<item name="spider silk" chance="50000" />
-		<item name="party hat" chance="1886" />
-		<item name="shard" chance="3703" />
-		<item name="sniper arrow" countmax="9" chance="100000" />
-		<item name="sapphire hammer" chance="20000" />
-		<item name="strong mana potion" chance="100000" />
-		<item name="glacier kilt" chance="33333" />
-		<item name="glacier mask" chance="33333" />
-		<item name="sai" chance="20000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="7441" name="ice cube" chance="99231" />
+		<item id="7589" name="strong mana potion" chance="70769" />
+		<item id="5879" name="spider silk" chance="65385" />
+		<item id="7902" name="glacier mask" chance="28462" />
+		<item id="7896" name="glacier kilt" chance="26154" />
+		<item id="11306" name="sai" chance="20769" />
+		<item id="7437" name="sapphire hammer" chance="12308" />
+		<item id="2476" name="knight armor" chance="8462" />
+		<item id="5801" name="jewelled backpack" chance="5385" />
+		<item id="2477" name="knight legs" chance="5385" />
+		<item id="7290" name="shard" chance="1538" />
+		<item id="2169" name="time ring" chance="1538" />
 	</loot>
 </monster>

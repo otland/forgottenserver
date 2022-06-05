@@ -20,16 +20,17 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-165" />
 	</attacks>
-	<defenses armor="26" defense="26">
+	<defenses armor="27" defense="27">
 		<defense name="speed" interval="2000" chance="15" speedchange="260" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
 	<elements>
+		<element physicalPercent="5" />
+		<element earthPercent="20" />
 		<element firePercent="20" />
-		<element icePercent="25" />
-		<element earthPercent="25" />
 		<element holyPercent="50" />
+		<element deathPercent="10" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
@@ -38,9 +39,9 @@
 		<voice sentence="Groarrrr! Rwarrrr!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="62" chance="100000" />
-		<item name="meat" countmax="4" chance="25000" />
-		<item name="ham" countmax="2" chance="25000" />
-		<item name="lion's mane" chance="21000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="74" />
+		<item id="2666" name="meat" chance="25278" />
+		<item id="2671" name="ham" chance="23609" />
+		<item id="10608" name="lion's mane" chance="20581" />
 	</loot>
 </monster>
