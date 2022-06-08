@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="60" poison="140" />
+		<attack name="melee" interval="2000" min="0" max="-60" poison="140" />
 		<attack name="lifedrain" interval="2000" chance="20" countmax="5" range="7" target="1" min="-21" max="-150">
 			<attribute key="shootEffect" value="earth" />
 			<attribute key="areaEffect" value="carniphila" />

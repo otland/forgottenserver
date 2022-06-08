@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="88" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="blightwalker curse" interval="2000" chance="10" />
 		<attack name="lifedrain" interval="2000" chance="14" radius="4" target="0" min="-65" max="-135">
 			<attribute key="areaEffect" value="greenshimmer" />

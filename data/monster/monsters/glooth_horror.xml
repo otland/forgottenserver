@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="110" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="death" interval="2000" chance="9" length="8" spread="3" min="-300" max="-700" />
 		<attack name="drunk" interval="2000" chance="8" radius="8" target="0" duration="15000">
 			<attribute key="areaEffect" value="greenspark" />

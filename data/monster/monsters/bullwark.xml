@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="180" attack="200" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="lifedrain" interval="2000" chance="19" radius="6" target="0" min="-200" max="-400">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
@@ -30,9 +30,9 @@
 			<attribute key="shootEffect" value="whirlwindclub" />
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		  <attack name="speed" interval="2000" chance="6" target="0" length="3" spread="2" minspeedchange="-550" maxspeedchange="-700" duration="50000">
-            <attribute key="areaEffect" value="blackspark" />
-        </attack>
+		<attack name="speed" interval="2000" chance="6" target="0" length="3" spread="2" minspeedchange="-550" maxspeedchange="-700" duration="50000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="1" min="4000" max="6000">

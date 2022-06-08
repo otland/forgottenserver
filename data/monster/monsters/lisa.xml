@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="150" attack="100" poison="900" />
+		<attack name="melee" interval="2000" min="0" max="-100" poison="900" />
 		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" radius="1" min="-200" max="-400">
 			<attribute key="shootEffect" value="greenstar" />
 			<attribute key="areaEffect" value="mortarea" />
@@ -32,9 +32,8 @@
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 		<attack name="speed" interval="2000" chance="12" range="7" radius="4" target="1" minspeedchange="-200" maxspeedchange="-450" duration="15000">
-            <attribute key="areaEffect" value="blackspark" />
-        </attack>
-		<attack name="lisa wave" interval="2000" chance="11" min="-400" max="-900" />
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="25" />
 	<elements>

@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="130" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="physical" interval="2000" chance="32" radius="8" target="0" min="-200" max="-400">
 			<attribute key="areaEffect" value="carniphila" />
 		</attack>

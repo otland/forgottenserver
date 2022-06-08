@@ -24,6 +24,6 @@ local condition = Condition(CONDITION_ENERGY)
 condition:setParameter(CONDITION_PARAM_DELAYED, 1)
 condition:addDamage(20, 10000, -25)
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

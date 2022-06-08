@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="66" attack="70" />
+		<attack name="melee" interval="2000" min="0" max="-70" />
 		<attack name="energy" interval="2000" chance="10" range="7" radius="2" target="1" min="-205" max="-497">
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="energy" />

@@ -19,6 +19,6 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYAREA)
 combat:setArea(createCombatArea(area))
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var), creature:remove()
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant), creature:remove()
 end

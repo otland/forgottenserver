@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="13" />
+		<attack name="melee" interval="2000" min="0" max="-13" />
 		<attack name="drown" interval="2000" chance="30" radius="6" min="-260" max="-320">
 			<attribute key="areaEffect" value="bubbles" />
 		</attack>

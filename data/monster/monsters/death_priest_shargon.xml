@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="200" attack="150" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="death" interval="2000" chance="12" range="7" radius="6" min="0" max="-660">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="mortarea" />

@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="110" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="physical" interval="2000" chance="13" length="3" spread="0" min="-100" max="-230">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>

@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="110" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="15" min="500" max="600">

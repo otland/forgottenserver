@@ -2,7 +2,7 @@
 <monster name="Ekatrix" nameDescription="Ekatrix" race="blood" experience="200" speed="204">
 	<health now="500" max="500" />
 	<look type="54" corpse="20535" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
