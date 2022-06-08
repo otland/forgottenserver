@@ -104,12 +104,6 @@ function creatureSayCallback(cid, type, msg)
 
 	local player = Player(cid)
 	local vocationId = player:getVocation():getId()
-	local vocations = {
-		VOCATION_SORCERER,
-		VOCATION_DRUID,
-		VOCATION_MASTER_SORCERER,
-		VOCATION_ELDER_DRUID
-	}
 	local items = {
 		[VOCATION_SORCERER] = 2190,
 		[VOCATION_DRUID] = 2182,
@@ -118,7 +112,7 @@ function creatureSayCallback(cid, type, msg)
 	}
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
-		if table.contains(vocations, vocationId) then
+		if items[vocationId] then
 			if player:getStorageValue(PlayerStorageKeys.firstRod) == -1 then
 				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your adventure?', cid)
 				npcHandler.topic[cid] = 1
