@@ -16,7 +16,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-70" poison="320" />
+		<attack name="melee" interval="2000" min="0" max="-400" poison="320" />
 		<attack name="death" interval="2000" chance="12" range="7" min="-200" max="-750">
 			<attribute key="shootEffect" value="death" />
 			<attribute key="areaEffect" value="mortarea" />
@@ -54,6 +54,6 @@
 		<item id="2440" name="daramian waraxe" chance="6452" />
 		<item id="2540" name="scarab shield" chance="4839" />
 		<item id="2134" name="silver brooch" chance="4839" />
-		<item id="9808" name="rusty armor" chance="1613" />
+		<item id="9808" name="heavily rusted armor" chance="1613" />
 	</loot>
 </monster>

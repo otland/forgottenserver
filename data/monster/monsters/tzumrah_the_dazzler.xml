@@ -2,7 +2,7 @@
 <monster name="Tzumrah The Dazzler" nameDescription="Tzumrah The Dazzler" race="blood" experience="1700" speed="200">
 	<health now="1700" max="1700" />
 	<look type="193" corpse="20391" />
-	<targetchange interval="2000" chance="0" />
+	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
 		<flag hostile="1" />
@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-100" poison="4" />
+		<attack name="melee" interval="2000" min="0" max="-150" poison="4" />
 		<attack name="lifedrain" interval="2000" chance="25" range="1" radius="1" target="1" min="-70" max="-185">
 			<attribute key="shootEffect" value="holy" />
 			<attribute key="areaEffect" value="holyarea" />

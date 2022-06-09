@@ -16,7 +16,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="quara constrictor freeze" interval="2000" chance="10" />
 		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
 	</attacks>

@@ -32,15 +32,9 @@
 			<attribute key="shootEffect" value="fire" />
 		</attack>
 		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" minspeedchange="-300" maxspeedchange="-450" duration="25000">
-<<<<<<< Updated upstream
-            <attribute key="shootEffect" value="suddendeath" />
-			<attribute key="areaEffect" value="smallclouds" />
-        </attack>
-=======
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
->>>>>>> Stashed changes
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-480">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>

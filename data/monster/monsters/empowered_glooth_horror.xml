@@ -5,8 +5,8 @@
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
-		<flag canpushitems="0" />
-		<flag canpushcreatures="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
 		<flag canwalkonenergy="0" />
@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="death" interval="2000" chance="10" target="1" range="1" min="-400" max="-600">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
