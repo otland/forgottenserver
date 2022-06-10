@@ -47,7 +47,7 @@
 		<element deathPercent="20" />
 	</elements>
 	<immunities>
-		<immunity fire="1" />
+		<immunity earth="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>

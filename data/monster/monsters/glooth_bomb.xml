@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Bomb" nameDescription="a glooth bomb" race="blood" experience="0" speed="80">
+	<health now="250000" max="250000" />
+	<look type="680" corpse="24256" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-328" />
+		<attack name="physical" interval="2000" chance="13" length="3" spread="0" min="-100" max="-230">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="physical" interval="2000" chance="12" radius="3" target="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="19" radius="5" target="0" min="-50" max="-225">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" range="7" target="1" radius="4" min="-150" max="-235">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="9" min="50" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="85" />
+		<element energyPercent="85" />
+		<element earthPercent="85" />
+		<element firePercent="85" />
+		<element lifedrainPercent="85" />
+		<element drownPercent="85" />
+		<element icePercent="85" />
+		<element holyPercent="85" />
+		<element deathPercent="85" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="7591" name="great health potion" chance="100000" countmax="20" />
+		<item id="7590" name="great mana potion" chance="100000" countmax="13" />
+		<item id="8472" name="great spirit potion" chance="100000" countmax="5" />
+		<item id="23571" name="moohtant horn" chance="100000" countmax="2" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="24" />
+	</loot>
+</monster>
