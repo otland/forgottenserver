@@ -402,8 +402,8 @@
 	<monster name="Grynch Clan Goblin" file="monsters/grynch_clan_goblin.xml" />
 	<monster name="Gryphon" file="monsters/gryphon.xml" />
 	<monster name="Guard Captain Quaid" file="monsters/guard_captain_quaid.xml" />
-	<monster name="Gust Of Wind" file="monsters/gust_of_wind.xml" />
 	<monster name="Guilt" file="monsters/guilt.xml" />
+	<monster name="Gust Of Wind" file="monsters/gust_of_wind.xml" />
 	<monster name="Guzzlemaw" file="monsters/guzzlemaw.xml" />
 	<monster name="Hacker" file="monsters/hacker.xml" />
 	<monster name="Hairman The Huge" file="monsters/hairman_the_huge.xml" />
@@ -514,8 +514,8 @@
 	<monster name="Lonely Yielothax" file="monsters/lonely_yielothax.xml" />
 	<monster name="Lord Azaram" file="monsters/lord_azaram.xml" />
 	<monster name="Lord of the Elements" file="monsters/lord_of_the_elements.xml" />
-	<monster name="Loricate Orger" file="monsters/loricate_orger.xml" />
 	<monster name="Lord Of The Elements" file="monsters/lord_of_the_elements.xml" />
+	<monster name="Loricate Orger" file="monsters/loricate_orger.xml" />
 	<monster name="Lost Basher" file="monsters/lost_basher.xml" />
 	<monster name="Lost Berserker" file="monsters/lost_berserker.xml" />
 	<monster name="Lost Husher" file="monsters/lost_husher.xml" />
@@ -687,16 +687,16 @@
 	<monster name="Quara Saboteur" file="monsters/quara_saboteur.xml" />
 	<monster name="Rabbit" file="monsters/rabbit.xml" />
 	<monster name="Raccoon Supplies" file="monsters/raccoon_supplies.xml" />
-	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
-	<monster name="Rahemos" file="monsters/rahemos.xml" />
-	<monster name="Rat" file="monsters/rat.xml" />
-	<monster name="Ratmiral Blackwhiskers" file="monsters/ratmiral_blackwhiskers.xml" />
 	<monster name="Rage Of Mazoran" file="monsters/rage_of_mazoran.xml" />
 	<monster name="Ragiaz" file="monsters/ragiaz.xml" />
 	<monster name="Raging Fire" file="monsters/raging_fire.xml" />
 	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
+	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
+	<monster name="Rahemos" file="monsters/rahemos.xml" />
 	<monster name="Rahemos" file="monsters/rahemos.xml" />
 	<monster name="Rat" file="monsters/rat.xml" />
+	<monster name="Rat" file="monsters/rat.xml" />
+	<monster name="Ratmiral Blackwhiskers" file="monsters/ratmiral_blackwhiskers.xml" />
 	<monster name="Razzagorn" file="monsters/razzagorn.xml" />
 	<monster name="Red Butterfly" file="monsters/red_butterfly.xml" />
 	<monster name="Redeemed Soul" file="monsters/redeemed_soul.xml" />
@@ -841,9 +841,9 @@
 	<monster name="Tarnished Spirit" file="monsters/tarnished_spirit.xml" />
 	<monster name="Tazhadur" file="monsters/tazhadur.xml" />
 	<monster name="Teleskor" file="monsters/teleskor.xml" />
+	<monster name="Tentacle Of The Deep Terror" file="monsters/tentacle_of_the_deep_terror.xml" />
 	<monster name="Tentacle" file="monsters/tentacle.xml" />
 	<monster name="Tentugly's Head" file="monsters/tentugly's_head.xml" />
-	<monster name="Tentacle Of The Deep Terror" file="monsters/tentacle_of_the_deep_terror.xml" />
 	<monster name="Terofar" file="monsters/terofar.xml" />
 	<monster name="Terramite" file="monsters/terramite.xml" />
 	<monster name="Terrified Elephant" file="monsters/terrified_elephant.xml" />
