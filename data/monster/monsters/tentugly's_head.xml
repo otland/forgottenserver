@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Tentugly's Head" nameDescription="an tentugly's head" race="energy" experience="40000" speed="80">
+<monster name="Tentugly's Head" nameDescription="Tentugly's Head" race="energy" experience="40000" speed="0">
 	<health now="75000" max="75000" />
 	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />

@@ -34,7 +34,6 @@
 		<element earthPercent="-30" />
 	</elements>
 	<immunities>
-		<immunity paralyze="0" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>

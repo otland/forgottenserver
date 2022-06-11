@@ -21,16 +21,15 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<defenses armor="10" defense="5" />
-	<elements>
-		<element energyPercent="-25" />
-	</elements>
 	<immunities>
-		<immunity ice="1" />
-		<immunity fire="1" />
-		<immunity earth="1" />
-		<immunity drown="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
+	<elements>
+		<element energyPercent="-25" />
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element icePercent="100" />
+	</elements>
 </monster>
