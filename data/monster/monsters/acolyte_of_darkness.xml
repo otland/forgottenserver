@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Acolyte Of Darkness" nameDescription="an acolyte of darkness" race="blood" experience="200" speed="180">
+	<health now="325" max="325" />
+	<look type="9" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element holyPercent="-25" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-120" />
+		<attack name="death" interval="2000" chance="15" min="-25" max="-30" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" min="-5" max="-15" radius="3" target="0">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="19" defense="19">
+		<defense name="healing" interval="2000" chance="20" min="32" max="81" />
+	</defenses>
+	<voices interval="1000" chance="5">
+		<voice sentence="Mine is the power of the night!" />
+		<voice sentence="You can not hope to stop us all!" />
+		<voice sentence="The power of darkness is with me!" />
+	</voices>
+	<loot>
+		<item id="10531" name="midnight shard" chance="1373" />
+	</loot>
+</monster>

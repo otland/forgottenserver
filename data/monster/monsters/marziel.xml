@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Marziel" nameDescription="Marziel" race="blood" experience="3000" speed="0">
+	<health now="1900" max="1900" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="43" />
+		<element energyPercent="20" />
+		<element earthPercent="100" />
+		<element firePercent="10" />
+		<element icePercent="-5" />
+		<element holyPercent="-5" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="190" max="475" />
+	</defenses>
+	<voices interval="1000" chance="5">
+		<voice sentence="My brides will show you how to suffer beautifully." />
+		<voice sentence="I smell warm blood." />
+		<voice sentence="Why are you disturbing me and my brides?" />
+		<voice sentence="You shouldn't have come." />
+		<voice sentence="You! You had no right to read my diary!" />
+		<voice sentence="I... want... your... blood!" />
+	</voices>
+	<summons maxSummons="3">
+		<voice name="Vampire" interval="2000" chance="15" max="3" />
+	</summons>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="80" />
+		<item id="2152" name="platinum coin" chance="23077" countmax="5" />
+		<item id="7588" name="strong health potion" chance="15385" />
+		<item id="2214" name="ring of healing" chance="7692" />
+		<item id="2534" name="vampire shield" chance="7692" />
+	</loot>
+</monster>

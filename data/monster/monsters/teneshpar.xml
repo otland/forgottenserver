@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Teneshpar" nameDescription="Teneshpar" race="blood" experience="20000" speed="340">
+	<health now="15000" max="15000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="100" />
+		<element energyPercent="-10" />
+		<element earthPercent="20" />
+		<element firePercent="-10" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2151" name="Talon" chance="20000" />
+	</loot>
+</monster>

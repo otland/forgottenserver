@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Boreth" nameDescription="Boreth" race="blood" experience="1800" speed="0">
+	<health now="1400" max="1400" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element firePercent="-1" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="140" max="350" />
+	</defenses>
+	<voices interval="1000" chance="5">
+		<voice sentence="I'll water my plants with your blood!" />
+	</voices>
+	<summons maxSummons="4">
+		<voice name="Vampire" interval="2000" chance="15" max="4" />
+	</summons>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="12405" name="blood preservation" chance="84762" />
+		<item id="7588" name="strong health potion" chance="17143" />
+		<item id="2152" name="platinum coin" chance="9524" countmax="5" />
+		<item id="2214" name="ring of healing" chance="9524" />
+		<item id="2534" name="vampire shield" chance="1905" />
+		<item id="2144" name="black pearl" chance="952" />
+		<item id="8873" name="hibiscus dress" chance="952" />
+	</loot>
+</monster>

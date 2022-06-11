@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Arthei" nameDescription="Arthei" race="blood" experience="4000" speed="270">
+	<health now="4200" max="4200" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element earthPercent="100" />
+		<element firePercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="-5" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Marziel! Lersatio! Boreth! Come join me in this fight!" />
+		<voice sentence="Now that you're here, you'll stay forever." />
+		<voice sentence="You have no idea who you're messing with." />
+		<voice sentence="I don't regret anything." />
+		<voice sentence="I will revenge my brothers!" />
+		<voice sentence="Stupid little human - I'm glad I'm past that pitiful stadium of my life." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="98" />
+		<item id="12405" name="blood preservation" chance="93333" />
+		<item id="2152" name="platinum coin" chance="20000" countmax="2" />
+		<item id="2214" name="ring of healing" chance="20000" />
+		<item id="7588" name="strong health potion" chance="6667" />
+	</loot>
+</monster>

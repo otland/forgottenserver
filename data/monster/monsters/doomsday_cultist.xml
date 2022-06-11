@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Doomsday Cultist" nameDescription="a doomsday cultist" race="blood" experience="100" speed="150">
+	<health now="125" max="125" />
+	<look type="194" head="95" body="76" legs="95" feet="76" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="-25" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="lifedrain" interval="2000" chance="15" min="0" max="-80" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+	</attacks>
+	<defenses armor="9" defense="9" />
+	<loot>
+		<item id="10531" name="midnight shard" chance="1643" />
+	</loot>
+</monster>
