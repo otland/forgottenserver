@@ -291,7 +291,6 @@
 	<monster name="Execowtioner" file="monsters/execowtioner.xml" />
 	<monster name="Exotic Bat" file="monsters/exotic_bat.xml" />
 	<monster name="Exotic Cave Spider" file="monsters/exotic_cave_spider.xml" />
-	<monster name="Eye of the Seven" file="monsters/eye_of_the_seven.xml" />
 	<monster name="Eye Of The Seven" file="monsters/eye_of_the_seven.xml" />
 	<monster name="Fahim The Wise" file="monsters/fahim_the_wise.xml" />
 	<monster name="Fallen Challenger" file="monsters/fallen_challenger.xml" />
@@ -513,7 +512,6 @@
 	<monster name="Lonely Souleater" file="monsters/lonely_souleater.xml" />
 	<monster name="Lonely Yielothax" file="monsters/lonely_yielothax.xml" />
 	<monster name="Lord Azaram" file="monsters/lord_azaram.xml" />
-	<monster name="Lord of the Elements" file="monsters/lord_of_the_elements.xml" />
 	<monster name="Lord Of The Elements" file="monsters/lord_of_the_elements.xml" />
 	<monster name="Loricate Orger" file="monsters/loricate_orger.xml" />
 	<monster name="Lost Basher" file="monsters/lost_basher.xml" />
@@ -691,10 +689,7 @@
 	<monster name="Ragiaz" file="monsters/ragiaz.xml" />
 	<monster name="Raging Fire" file="monsters/raging_fire.xml" />
 	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
-	<monster name="Raging Mage" file="monsters/raging_mage.xml" />
 	<monster name="Rahemos" file="monsters/rahemos.xml" />
-	<monster name="Rahemos" file="monsters/rahemos.xml" />
-	<monster name="Rat" file="monsters/rat.xml" />
 	<monster name="Rat" file="monsters/rat.xml" />
 	<monster name="Ratmiral Blackwhiskers" file="monsters/ratmiral_blackwhiskers.xml" />
 	<monster name="Razzagorn" file="monsters/razzagorn.xml" />
@@ -720,7 +715,6 @@
 	<monster name="Roaring Water Elemental" file="monsters/roaring_water_elemental.xml" />
 	<monster name="Roast Pork" file="monsters/roast_pork.xml" />
 	<monster name="Robby the Reckless" file="monsters/robby_the_reckless.xml" />
-	<monster name="Robby The Reckless" file="monsters/robby_the_reckless.xml" />
 	<monster name="Rocko" file="monsters/rocko.xml" />
 	<monster name="Rocky" file="monsters/rocky.xml" />
 	<monster name="Ron The Ripper" file="monsters/ron_the_ripper.xml" />

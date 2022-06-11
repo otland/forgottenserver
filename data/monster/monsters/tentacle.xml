@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Tentacle" nameDescription="a tentacle" race="energy" experience="0" speed="80">
 	<health now="2500" max="2500" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look typeex="37763" corpse="38267" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

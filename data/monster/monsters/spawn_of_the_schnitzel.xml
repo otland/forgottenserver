@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Spawn Of The Schnitzel" nameDescription="a spawn of the schnitzel" race="venom" experience="0" speed="200">
 	<health now="1000" max="1000" />
-	<look type="2671" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="34734" />
+	<look typeex="2671" corpse="34734" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

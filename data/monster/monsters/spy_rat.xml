@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Spy Rat" nameDescription="a spy rat" race="blood" experience="0" speed="0">
-	<health now="0" max="0" />
+	<health now="20" max="20" />
 	<look type="21" corpse="5964" />
 	<targetchange interval="2000" chance="5" />
 	<flags>

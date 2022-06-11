@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Slowing Slime" nameDescription="a slowing slime" race="venom" experience="0" speed="0">
-	<health now="0" max="0" />
+	<health now="150" max="150" />
 	<look type="19" corpse="1496" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
