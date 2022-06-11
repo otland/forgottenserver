@@ -32,14 +32,14 @@
 		<voice sentence="Hand me your purse!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="49000" />
-		<item name="axe" chance="29900" />
-		<item name="brass shield" chance="16800" />
-		<item name="leather legs" chance="15500" />
-		<item name="mace" chance="10100" />
-		<item name="tomato" countmax="2" chance="7630" />
-		<item name="chain helmet" chance="5000" />
-		<item name="brass armor" chance="2500" />
-		<item name="iron helmet" chance="540" />
+		<item id="2148" name="gold coin" chance="48956" countmax="30" />
+		<item id="2386" name="axe" chance="29905" />
+		<item id="2511" name="brass shield" chance="16794" />
+		<item id="2649" name="leather legs" chance="14967" />
+		<item id="2398" name="mace" chance="10342" />
+		<item id="2685" name="tomato" chance="7692" countmax="2" />
+		<item id="2458" name="chain helmet" chance="4956" />
+		<item id="2465" name="brass armor" chance="2376" />
+		<item id="2459" name="iron helmet" chance="544" />
 	</loot>
 </monster>

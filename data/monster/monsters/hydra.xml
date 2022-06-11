@@ -15,6 +15,9 @@
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
 		<flag runonhealth="300" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-270" />
@@ -54,23 +57,21 @@
 		<voice sentence="HISSSS" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="34000" />
-		<item name="gold coin" countmax="100" chance="34000" />
-		<item name="gold coin" countmax="46" chance="20000" />
-		<item name="ham" countmax="4" chance="60000" />
-		<item name="platinum coin" countmax="3" chance="49000" />
-		<item name="hydra head" chance="10120" />
-		<item name="small sapphire" chance="5000" />
-		<item name="cucumber" chance="4780" />
-		<item name="ring of healing" chance="1190" />
-		<item name="knight armor" chance="1000" />
-		<item name="hydra egg" chance="930" />
-		<item name="stone skin amulet" chance="900" />
-		<item name="warrior helmet" chance="890" />
-		<item name="life crystal" chance="520" />
-		<item name="strong mana potion" chance="470" />
-		<item name="royal helmet" chance="220" />
-		<item name="medusa shield" chance="220" />
-		<item name="boots of haste" chance="110" />
+		<item id="2148" name="gold coin" chance="87759" countmax="246" />
+		<item id="2671" name="ham" chance="60233" />
+		<item id="2152" name="platinum coin" chance="49522" countmax="3" />
+		<item id="11199" name="hydra head" chance="10149" />
+		<item id="2146" name="small sapphire" chance="4949" />
+		<item id="8842" name="cucumber" chance="4941" />
+		<item id="2214" name="ring of healing" chance="1215" />
+		<item id="2476" name="knight armor" chance="1098" />
+		<item id="4850" name="hydra egg" chance="942" />
+		<item id="2197" name="stone skin amulet" chance="902" />
+		<item id="2475" name="warrior helmet" chance="823" />
+		<item id="2177" name="life crystal" chance="512" />
+		<item id="7589" name="strong mana potion" chance="465" />
+		<item id="2536" name="medusa shield" chance="223" />
+		<item id="2498" name="royal helmet" chance="223" />
+		<item id="2195" name="boots of haste" chance="95" />
 	</loot>
 </monster>

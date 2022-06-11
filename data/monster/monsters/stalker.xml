@@ -40,13 +40,13 @@
 		<immunity lifedrain="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="8" chance="13000" />
-		<item name="throwing knife" countmax="2" chance="11170" />
-		<item name="blank rune" chance="8670" />
-		<item name="brass shield" chance="5600" />
-		<item name="brass legs" chance="3510" />
-		<item name="miraculum" chance="1550" />
-		<item name="obsidian lance" chance="1210" />
-		<item name="katana" chance="530" />
+		<item id="2148" name="gold coin" chance="13123" countmax="8" />
+		<item id="2410" name="throwing knife" chance="11116" countmax="2" />
+		<item id="2260" name="blank rune" chance="8811" />
+		<item id="2511" name="brass shield" chance="5617" />
+		<item id="2478" name="brass legs" chance="3531" />
+		<item id="12430" name="miraculum" chance="1543" />
+		<item id="2425" name="obsidian lance" chance="1198" />
+		<item id="2412" name="katana" chance="519" />
 	</loot>
 </monster>

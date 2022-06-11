@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Lord Of The Lice" nameDescription="The Lord Of The Lice" race="blood" experience="600" speed="230">
+	<health now="80000" max="80000" />
+	<look type="305" corpse="9871" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" poison="100" />
+		<attack name="earth" interval="2000" chance="30" range="7" min="-120" max="-310">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="22" length="8" spread="0" min="-1000" max="-1800">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" radius="3" min="-80" max="-80">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="25" range="7" radius="7" target="0" min="-300" max="-420">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="mutated rat paralyze" interval="2000" chance="20" range="7" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="9" min="250" max="550">
+			<attribute key="areaEffect" value="greenspark" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="7590" name="great mana potion" chance="100000" countmax="16" />
+		<item id="8472" name="great spirit potion" chance="100000" countmax="17" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="16" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="13" />
+		<item id="2150" name="small amethyst" chance="66667" countmax="12" />
+		<item id="2168" name="life ring" chance="33333" />
+		<item id="2147" name="small ruby" chance="33333" countmax="7" />
+	</loot>
+</monster>

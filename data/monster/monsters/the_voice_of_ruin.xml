@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Voice Of Ruin" nameDescription="The Voice Of Ruin" race="blood" experience="3500" speed="460">
+	<health now="5500" max="5500" />
+	<look type="344" corpse="11288" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-440" max="-820">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" target="0" radius="3" min="-290" max="-540">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="0" min="-190" max="-480">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="475" max="625">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="43" />
+		<item id="11326" name="corrupted flag" chance="50000" />
+		<item id="2152" name="platinum coin" chance="50000" countmax="2" />
+	</loot>
+</monster>

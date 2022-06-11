@@ -14,7 +14,6 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
 		<flag isboss="1" />
 	</flags>
 	<attacks>
@@ -45,18 +44,19 @@
 		<voice sentence="Guards!" />
 	</voices>
 	<loot>
-		<item name="minotaur horn" countmax="2" chance="100000" />
-		<item name="minotaur leather" chance="100000" />
-		<item name="gold coin" countmax="97" chance="92000" />
-		<item name="platinum coin" countmax="3" chance="92000" />
-		<item name="brass armor" chance="76000" />
-		<item name="double axe" chance="76000" />
-		<item name="piercing bolt" countmax="7" chance="40000" />
-		<item name="meat" countmax="2" chance="30000" />
-		<item name="battle shield" chance="23000" />
-		<item name="chain legs" chance="23000" />
-		<item id="7401" chance="23000" /><!-- minotaur trophy -->
-		<item name="power bolt" countmax="7" chance="23000" />
-		<item name="dwarven helmet" chance="100" />
+		<item id="12428" name="minotaur horn" chance="100000" countmax="2" />
+		<item id="5878" name="minotaur leather" chance="100000" />
+		<item id="2148" name="gold coin" chance="93333" countmax="97" />
+		<item id="2152" name="platinum coin" chance="93333" countmax="3" />
+		<item id="2387" name="double axe" chance="80000" />
+		<item id="2465" name="brass armor" chance="66667" />
+		<item id="2513" name="battle shield" chance="33333" />
+		<item id="7363" name="piercing bolt" chance="33333" countmax="11" />
+		<item id="2666" name="meat" chance="26667" />
+		<item id="2648" name="chain legs" chance="20000" />
+		<item id="7401" name="minotaur trophy" chance="20000" />
+		<item id="2547" name="power bolt" chance="20000" countmax="7" />
+		<item id="2580" name="fishing rod" chance="6667" />
+		<item id="7588" name="strong health potion" chance="6667" />
 	</loot>
 </monster>

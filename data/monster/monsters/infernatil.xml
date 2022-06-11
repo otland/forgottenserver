@@ -79,9 +79,9 @@
 		<item name="golden mug" chance="7500" />
 		<item name="teddy bear" chance="14500" />
 		<item name="ring of the sky" chance="3500" />
-		<item id="2124" chance="5500" /><!-- crystal ring -->
+		<item id="2124" name="crystal ring" chance="5500" />
 		<item name="crystal necklace" chance="1500" />
-		<item id="2142" chance="3500" /><!-- ancient amulet -->
+		<item id="2142" name="ancient amulet" chance="3500" />
 		<item name="white pearl" countmax="15" chance="12500" />
 		<item name="black pearl" countmax="15" chance="15000" />
 		<item name="small diamond" countmax="5" chance="9500" />
@@ -95,7 +95,7 @@
 		<item name="talon" countmax="7" chance="14000" />
 		<item name="green gem" chance="1500" />
 		<item name="blue gem" chance="1500" />
-		<item id="2162" chance="11500" /><!-- magic lightwand -->
+		<item id="2162" name="magic lightwand" chance="11500" />
 		<item name="might ring" chance="5000" />
 		<item name="stealth ring" chance="9500" />
 		<item name="energy ring" chance="13500" />
@@ -104,18 +104,18 @@
 		<item name="strange symbol" chance="2500" />
 		<item name="orb" chance="12000" />
 		<item name="life crystal" chance="1000" />
-		<item name="mind stone" chance="4000" />
+		<item id="2178" name="mind stone" chance="4000" />
 		<item name="gold ring" chance="8000" />
 		<item name="snakebite rod" chance="3500" />
 		<item name="necrotic rod" chance="3500" />
 		<item name="moonlight rod" chance="3500" />
 		<item name="wand of decay" chance="2500" />
-		<item id="2192" chance="2500" /><!-- crystal ball -->
+		<item id="2192" name="crystal ball" chance="2500" />
 		<item name="boots of haste" chance="4000" />
 		<item name="stone skin amulet" chance="4000" />
 		<item name="protection amulet" chance="4500" />
 		<item name="ring of healing" chance="13000" />
-		<item id="2231" chance="9000" /><!-- big bone -->
+		<item id="2231" name="big bone" chance="9000" />
 		<item name="two handed sword" chance="20000" />
 		<item name="double axe" chance="20000" />
 		<item name="giant sword" chance="12500" />
@@ -129,8 +129,8 @@
 		<item name="devil helmet" chance="11000" />
 		<item name="golden legs" chance="5000" />
 		<item name="magic plate armor" chance="3000" />
-		<item name="mastermind shield" chance="7500" />
+		<item id="2514" name="mastermind shield" chance="7500" />
 		<item name="demon shield" chance="15500" />
-		<item id="3955" chance="100" /><!-- voodoo doll-->
+		<item id="3955" name="voodoo doll" chance="100" />
 	</loot>
 </monster>

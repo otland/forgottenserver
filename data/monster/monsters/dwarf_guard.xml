@@ -36,18 +36,18 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item name="white mushroom" countmax="2" chance="55000" />
-		<item name="leather boots" chance="40000" />
-		<item name="gold coin" countmax="30" chance="40000" />
-		<item name="scale armor" chance="9200" />
-		<item name="battle shield" chance="6000" />
-		<item name="battle hammer" chance="4000" />
-		<item name="steel helmet" chance="1600" />
-		<item name="double axe" chance="600" />
-		<item name="iron ore" chance="510" />
-		<item name="health potion" chance="400" />
-		<item name="axe ring" chance="200" />
-		<item id="13757" chance="190" /><!-- coal -->
-		<item name="small amethyst" chance="100" />
+		<item id="2787" name="white mushroom" chance="55243" countmax="2" />
+		<item id="2643" name="leather boots" chance="40075" />
+		<item id="2148" name="gold coin" chance="39985" countmax="30" />
+		<item id="2483" name="scale armor" chance="9009" />
+		<item id="2513" name="battle shield" chance="6014" />
+		<item id="2417" name="battle hammer" chance="3849" />
+		<item id="3351" name="steel helmet" chance="1549" />
+		<item id="2387" name="double axe" chance="592" />
+		<item id="5880" name="iron ore" chance="481" />
+		<item id="7618" name="health potion" chance="394" />
+		<item id="2208" name="axe ring" chance="198" />
+		<item id="13757" name="coal" chance="195" />
+		<item id="2150" name="small amethyst" chance="120" />
 	</loot>
 </monster>

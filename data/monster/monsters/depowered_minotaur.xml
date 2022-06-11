@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Depowered Minotaur" nameDescription="a depowered minotaur" race="blood" experience="1100" speed="212">
+	<health now="1500" max="1500" />
+	<look type="25" corpse="5969" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="I want my power back!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="58146" countmax="5" />
+		<item id="12428" name="minotaur horn" chance="14607" countmax="2" />
+		<item id="5878" name="minotaur leather" chance="10112" />
+		<item id="7589" name="strong mana potion" chance="10112" countmax="3" />
+		<item id="7588" name="strong health potion" chance="9551" countmax="3" />
+		<item id="2666" name="meat" chance="7865" />
+		<item id="2145" name="small diamond" chance="5899" />
+		<item id="2149" name="small emerald" chance="4213" />
+		<item id="2147" name="small ruby" chance="4213" />
+		<item id="2146" name="small sapphire" chance="4213" />
+		<item id="23537" name="mooh'tah plate" chance="1685" />
+		<item id="5911" name="red piece of cloth" chance="1124" />
+		<item id="2209" name="club ring" chance="843" />
+		<item id="23548" name="cowtana" chance="843" />
+		<item id="7401" name="minotaur trophy" chance="843" />
+		<item id="7452" name="spiked squelcher" chance="281" />
+	</loot>
+</monster>
