@@ -124,10 +124,13 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		          << " - Missing chance value on non-melee spell: " << name << std::endl;
 	}
 
+	sb.range = std::max<uint32_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1);
 	if ((attr = node.attribute("range"))) {
 		uint32_t range = pugi::cast<uint32_t>(attr.value());
-		if (range > (Map::maxViewportX * 2)) {
-			range = Map::maxViewportX * 2;
+		if (range > std::max<uint32_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1)) {
+			range = std::max<uint32_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1);
+			std::cout << "[Warning - Monsters::deserializeSpell] - " << description
+			          << " - spell range exceeds limit of " << range << std::endl;
 		}
 		sb.range = range;
 	}
@@ -560,8 +563,10 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 		sb.chance = spell->chance;
 	}
 
-	if (spell->range > (Map::maxViewportX * 2)) {
-		spell->range = Map::maxViewportX * 2;
+	if (spell->range > std::max<uint8_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1)) {
+		spell->range = std::max<uint8_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1);
+		std::cout << "[Warning - Monsters::deserializeSpell] - " << description << " - spell range exceeds limit of "
+		          << spell->range << std::endl;
 	}
 	sb.range = spell->range;
 
