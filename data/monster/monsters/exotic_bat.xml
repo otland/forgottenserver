@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Exotic Bat" nameDescription="an exotic bat" race="venom" experience="1200" speed="200">
 	<health now="1500" max="1500" />
-	<look type="1373" corpse="0" />
+	<look type="1373" corpse="38346" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

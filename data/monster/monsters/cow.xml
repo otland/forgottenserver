@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cow" nameDescription="a cow" race="blood" experience="600" speed="190" manacost="300">
 	<health now="700" max="700" />
-	<look type="1253" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look type="1253" corpse="34747" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

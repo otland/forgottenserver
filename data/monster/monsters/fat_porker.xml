@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <monster name="Fat Porker" nameDescription="a fat porker" race="blood" experience="0" speed="0">
 	<health now="20000" max="20000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<look typeex="34681" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />

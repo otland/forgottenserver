@@ -837,7 +837,7 @@
 	<monster name="Teleskor" file="monsters/teleskor.xml" />
 	<monster name="Tentacle Of The Deep Terror" file="monsters/tentacle_of_the_deep_terror.xml" />
 	<monster name="Tentacle" file="monsters/tentacle.xml" />
-	<monster name="Tentugly's Head" file="monsters/tentugly's_head.xml" />
+	<monster name="Tentugly's Head" file="monsters/tentuglys_head.xml" />
 	<monster name="Terofar" file="monsters/terofar.xml" />
 	<monster name="Terramite" file="monsters/terramite.xml" />
 	<monster name="Terrified Elephant" file="monsters/terrified_elephant.xml" />
