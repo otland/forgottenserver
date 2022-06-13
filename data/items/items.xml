@@ -23968,7 +23968,7 @@
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="true" />
 		<attribute key="description" value="It is locked." />
-	</item>	
+	</item>
 	<item id="14635" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
@@ -39166,7 +39166,6 @@
 	<item id="31025" article="an" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item fromid="31024" toid="31025" article="an" name="open door" />
 	<item fromid="31036" toid="31067" name="book shelves" />
 	<item fromid="31068" toid="31080" article="a" name="slate column" />
 	<item fromid="31085" toid="31086" article="an" name="archway" />
@@ -42505,7 +42504,11 @@
 	<item id="40682" article="an" name="ice cream cone" />
 	<item id="40683" article="a" name="birthday layer cake" />
 	<item fromid="40684" toid="40685" article="a" name="tapestry of honour" />
-	<item id="40686" article="a" name="changing backpack" />
+	<item id="40686" article="a" name="changing backpack">
+		<attribute key="weight" value="1500" />
+		<attribute key="containerSize" value="20" />
+		<attribute key="slotType" value="backpack" />
+	</item>
 	<item fromid="40687" toid="40688" article="a" name="tapestry of honour" />
 	<item id="40689" article="a" name="portrait with Ferumbras" />
 	<item id="40690" article="a" name="blue wallpaper" />
@@ -42611,4 +42614,58 @@
 	<item id="40958" article="a" name="Morshabaal's extract" />
 	<item fromid="40959" toid="40962" article="a" name="sculpture of a fox" />
 	<item fromid="40963" toid="40964" article="a" name="Zaoan divider" />
+	<item id="41785" article="a" name="bronze cup" />
+	<item id="41786" article="a" name="silver cup" />
+	<item id="41787" article="a" name="gold cup" />
+	<item id="41788" article="a" name="gilded horned helmet" />
+	<item id="41790" article="a" name="golden warlord sword" />
+	<item id="41825" article="a" name="beaver of wisdom" />
+	<item id="41828" article="a" name="beaver of wisdom" />
+	<item id="41852" article="a" name="beaver of wisdom" />
+	<item id="41853" article="a" name="beaver of wisdom" />
+	<item id="41854" article="an" name="observer tapestry" />
+	<item id="42817" article="a" name="purple 25 years balloon" />
+	<item id="42818" article="a" name="blue 25 years balloon" />
+	<item id="42819" article="a" name="balloon no.0" />
+	<item id="42820" article="a" name="balloon no.1" />
+	<item id="42821" article="a" name="balloon no.2" />
+	<item id="42822" article="a" name="balloon no.3" />
+	<item id="42823" article="a" name="balloon no.4" />
+	<item id="42824" article="a" name="balloon no.5" />
+	<item id="42825" article="a" name="balloon no.6" />
+	<item id="42826" article="a" name="balloon no.7" />
+	<item id="42827" article="a" name="balloon no.8" />
+	<item id="42828" article="a" name="balloon no.9" />
+	<item id="42829" article="a" name="purple 25 years balloon" />
+	<item id="42830" article="a" name="blue 25 years balloon" />
+	<item id="42831" article="a" name="balloon no.0" />
+	<item id="42832" article="a" name="balloon no.1" />
+	<item id="42833" article="a" name="balloon no.2" />
+	<item id="42834" article="a" name="balloon no.3" />
+	<item id="42835" article="a" name="balloon no.4" />
+	<item id="42836" article="a" name="balloon no.5" />
+	<item id="42837" article="a" name="balloon no.6" />
+	<item id="42838" article="a" name="balloon no.7" />
+	<item id="42839" article="a" name="balloon no.8" />
+	<item id="42840" article="a" name="balloon no.9" />
+	<item id="42841" article="a" name="25 years backpack">
+		<attribute key="weight" value="1700" />
+		<attribute key="containerSize" value="25" />
+		<attribute key="slotType" value="backpack" />
+	</item>
+	<item id="42842" article="a" name="lucky dragon" />
+	<item id="42843" article="a" name="lucky dragon kit" />
+	<item id="42844" article="a" name="lucky dragon" />
+	<item id="42845" article="a" name="rainbow torch" />
+	<item id="42846" article="a" name="lit rainbow torch" />
+	<item id="42847" article="a" name="rainbow torch" />
+	<item id="42848" article="a" name="lit rainbow torch" />
+	<item id="42849" article="a" name="rainbow torch" />
+	<item id="42850" article="a" name="lit rainbow torch" />
+	<item id="42851" article="a" name="burnt down rainbow torch" />
+	<item id="42852" article="a" name="small reward box" />
+	<item id="42853" article="a" name="reward box" />
+	<item id="42854" article="a" name="box full of ballons" />
+	<item id="42855" article="a" name="Pan Amphora" />
+	<item id="42858" article="a" name="big reward box" />
 </items>

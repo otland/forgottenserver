@@ -38,15 +38,15 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element energyPercent="99" />
-		<element firePercent="-1" />
-		<element icePercent="1" />
+		<element energyPercent="95" />
+		<element firePercent="-5" />
+		<element icePercent="5" />
 		<element deathPercent="95" />
 	</elements>
 	<immunities>
-		<immunity energy="1" />
-		<immunity fire="1" />
+		<immunity paralyze="1" />
 		<immunity invisible="1" />
+		<immunity drunk="1" />
 	</immunities>
 	<voices interval="1000" chance="5">
 		<voice sentence="I am going to play with yourself!" yell="1" />

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Enthralled Demon" nameDescription="an enthralled demon" race="fire" experience="100" speed="256">
+	<health now="8200" max="8200" />
+	<look type="35" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="manadrain" interval="2000" chance="13" range="7" min="-60" max="-120">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="fire" interval="2000" chance="33" range="7" radius="7" target="1" min="-150" max="-250">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="drown" interval="2000" chance="25" radius="7" min="-350" max="-450" />
+		<attack name="energy" interval="2000" chance="7" range="1" radius="1" target="1" min="-210" max="-300">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="14" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" minspeedchange="-300" maxspeedchange="-450" duration="25000">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-300" max="-480">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="65">
+		<defense name="healing" interval="2000" chance="14" min="150" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="10" speedchange="388" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element earthPercent="40" />
+		<element energyPercent="50" />
+		<element deathPercent="30" />
+		<element icePercent="-10" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="MUHAHAHAHA!" yell="1" />
+		<voice sentence="I SMELL FEEEEEAAAR!" yell="1" />
+		<voice sentence="CHAMEK ATH UTHUL ARAK!" yell="1" />
+		<voice sentence="Your resistance is futile!" />
+		<voice sentence="Your soul will be mine!" yell="1" />
+	</voices>
+</monster>
