@@ -2164,6 +2164,10 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
 
+	if (!g_events->eventPlayerOnUseItem(player, item)) {
+		return;
+	}
+
 	g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
 }
 
@@ -2222,6 +2226,10 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
+
+	if (!g_events->eventPlayerOnUseItem(player, item)) {
+		return;
+	}
 
 	g_actions->useItem(player, pos, index, item, isHotkey);
 }
@@ -2322,6 +2330,10 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	player->resetIdleTime();
 	player->setNextActionTask(nullptr);
+
+	if (!g_events->eventPlayerOnUseItem(player, item)) {
+		return;
+	}
 
 	g_actions->useItemEx(player, fromPos, creature->getPosition(), creature->getParent()->getThingIndex(creature), item,
 	                     isHotkey, creature);
