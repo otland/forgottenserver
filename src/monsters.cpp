@@ -1349,7 +1349,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				force = attr.as_bool();
 			}
 
-			for (auto attributeNode : summonNode.children()) {
+			for (const auto& attributeNode : summonNode.children()) {
 				if ((attr = attributeNode.attribute("key"))) {
 					const char* value = attr.value();
 					if (caseInsensitiveEqual(value, "mastereffect")) {
