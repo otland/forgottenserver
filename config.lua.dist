@@ -156,7 +156,7 @@ walkToSpawnRadius = 15
 -- Stamina
 staminaSystem = true
 timeToRegenMinuteStamina = 3 * 60
-timeToRegenPremiumStamina = 10 * 60
+timeToRegenMinutePremiumStamina = 10 * 60
 
 -- Scripts
 warnUnsafeScripts = true
