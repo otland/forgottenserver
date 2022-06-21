@@ -3514,6 +3514,11 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 			return;
 		}
 
+		if (player->randomizeMount) {
+			const Mount* mount = mounts.getMountByID(player->getRandomMount());
+			outfit.lookMount = mount->clientId;
+		}
+
 		internalCreatureChangeOutfit(player, outfit);
 	}
 }
