@@ -119,6 +119,7 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
+	uint8_t getRandomMount() const;
 	uint8_t getCurrentMount() const;
 	void setCurrentMount(uint8_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
@@ -1303,6 +1304,7 @@ private:
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+	bool randomizeMount = false;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;

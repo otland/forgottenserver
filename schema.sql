@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `lookmountbody` int NOT NULL DEFAULT '0',
   `lookmountlegs` int NOT NULL DEFAULT '0',
   `lookmountfeet` int NOT NULL DEFAULT '0',
+  `randomizemount` tinyint NOT NULL DEFAULT '0',
   `direction` tinyint unsigned NOT NULL DEFAULT '2',
   `maglevel` int NOT NULL DEFAULT '0',
   `mana` int NOT NULL DEFAULT '0',

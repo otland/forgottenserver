@@ -3465,7 +3465,7 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 	player->toggleMount(mount);
 }
 
-void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
+void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount /* = false*/)
 {
 	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
 		return;
@@ -3475,6 +3475,8 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	if (!player) {
 		return;
 	}
+
+	player->randomizeMount = randomizeMount;
 
 	const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(player->getSex(), outfit.lookType);
 	if (!playerOutfit) {
