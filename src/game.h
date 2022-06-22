@@ -390,7 +390,7 @@ public:
 	void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);
 	void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, const std::string& receiver,
 	               const std::string& text);
-	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit);
+	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount = false);
 	void playerInviteToParty(uint32_t playerId, uint32_t invitedId);
 	void playerJoinParty(uint32_t playerId, uint32_t leaderId);
 	void playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId);
