@@ -127,6 +127,7 @@ public:
 	bool tameMount(uint8_t mountId);
 	bool untameMount(uint8_t mountId);
 	bool hasMount(const Mount* mount) const;
+	bool hasMounts() const;
 	void dismount();
 
 	void sendFYIBox(const std::string& message)
