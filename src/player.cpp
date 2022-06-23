@@ -4508,6 +4508,16 @@ bool Player::hasMount(const Mount* mount) const
 	return ((1 << (tmpMountId % 31)) & value) != 0;
 }
 
+bool Player::hasMounts() const
+{
+	for (const Mount& mount : g_game.mounts.getMounts()) {
+		if (hasMount(&mount)) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Player::dismount()
 {
 	Mount* mount = g_game.mounts.getMountByID(getCurrentMount());
