@@ -115,6 +115,8 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			STAMINA_REGEN_MINUTE,
+			STAMINA_REGEN_PREMIUM,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
