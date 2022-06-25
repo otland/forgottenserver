@@ -5214,7 +5214,7 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	}
 
 	if (!player->isInMarket()) {
-		return;
+		player->sendMarketEnter();
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);
