@@ -5150,14 +5150,18 @@ int LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 	}
 
 	MagicEffectClasses magicEffect = getNumber<MagicEffectClasses>(L, 2);
-	const Position& position = getPosition(L, 1);
-	if (!spectators.empty()) {
-		Game::addMagicEffect(spectators, position, magicEffect);
-	} else {
-		g_game.addMagicEffect(position, magicEffect);
-	}
+	if (magicEffect != CONST_ME_NONE) {
+		const Position& position = getPosition(L, 1);
+		if (!spectators.empty()) {
+			Game::addMagicEffect(spectators, position, magicEffect);
+		} else {
+			g_game.addMagicEffect(position, magicEffect);
+		}
 
-	pushBoolean(L, true);
+		pushBoolean(L, true);
+	} else {
+		pushBoolean(L, false);
+	}
 	return 1;
 }
 
