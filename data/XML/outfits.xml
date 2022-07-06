@@ -107,6 +107,7 @@
 	<outfit type="0" looktype="1461" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1490" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1501" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1568" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -216,4 +217,5 @@
 	<outfit type="1" looktype="1460" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1489" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1500" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1569" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 </outfits>

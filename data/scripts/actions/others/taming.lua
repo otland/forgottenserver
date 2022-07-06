@@ -359,6 +359,14 @@ local config = {
 			{sound = "GRRRRRRRRR", text = "The noble lion majestically rejects your amulet."}
 		},
 		success = {sound = "Grrr", text = "The noble lion will now accompany you as a friend and ally."}
+	},
+	[] = { -- colourful water lily
+		name = "giant beaver",
+		id = ,
+		type = TYPE_MONSTER,
+		achievement = "Beaver Away",
+		chance = 100,
+		success = {sound = "Grrr!", text = "You tamed the giant beaver."}
 	}
 }
 

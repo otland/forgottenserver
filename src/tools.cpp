@@ -614,6 +614,7 @@ MagicEffectNames magicEffectNames = {
     {"horestis", CONST_ME_HORESTIS},
     {"devovorga", CONST_ME_DEVOVORGA},
     {"ferumbras2", CONST_ME_FERUMBRAS_2},
+    {"foam", CONST_ME_FOAM},
 };
 
 ShootTypeNames shootTypeNames = {

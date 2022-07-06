@@ -589,6 +589,15 @@ achievements =
 	[494] = {name = "Shell we take a Ride", grade = 1, points = 3, description = "Equipped with the shell of a tortoise and claws of a lobster this insect like companion will help you through every hardship."},
 	[495] = {name = "Some Like It Hot", grade = 1, points = 2, description = "You have braved the searing heat in the tunnels deep below Kazordoon and vanquished the Brainstealer. The voices inside your head are finally silenced."},
 	[496] = {name = "Woodcarver", grade = 1, points = 3, secret = true, description = "You defeated Megasylvan Yselda in the wake of the sleeping carnisylvan menace deep under Bounac."},
+
+	-- 12.90
+	[497] = {name = "Beaver Away", grade = 1, points = 1, description = "You really were as busy as a beaver in order to help the nagas. Enjoy some eager company!"},
+	[498] = {name = "Friendly Fire", grade = 1, points = 1, description = "You mastered the fire and tamed a supervulcano!"},
+	[499] = {name = "Measuring the World", grade = 1, points = 3, description = "Step by step you discovered many of the secrets hidden in the world, thus gaining the right to wear the Discoverer outfit and hat. Made-to-measure for a brave traveller of the wilds."},
+	[500] = {name = "Ripp-Ripp Hooray!", grade = 1, points = 3, description = "Don't get carried away by your success. Get carried away by your ripptor."},
+	[501] = {name = "Royalty of Hazard", grade = 1, points = 1, description = "For some it can't be hazardous enough."},
+	[502] = {name = "Snake Pit", grade = 1, points = 1, description = "Mysterious nagas, a vibrant jungle and a sinking island - you really know every corner of Marapur now."},
+	[503] = {name = "Wedding Planner", grade = 1, points = 3, description = "Alas! What could be more beautiful and satisfying than bringing two loving hearts together? So romantic!"},
 }
 
 ACHIEVEMENT_FIRST = 1
