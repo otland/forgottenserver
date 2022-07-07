@@ -63,6 +63,8 @@ std::string decodeSecret(const std::string& secret)
 
 bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
 {
+	std::string passwordHash = transformToSHA1(password);
+
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
@@ -72,7 +74,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 		return false;
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (passwordHash != result->getString("password")) {
 		return false;
 	}
 
