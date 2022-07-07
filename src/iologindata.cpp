@@ -97,6 +97,8 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password,
                                               std::string& characterName, std::string& token, uint32_t tokenTime)
 {
+	std::string passwordHash = transformToSHA1(password);
+
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(
 	    fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
@@ -122,7 +124,7 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		}
 	}
 
-	if (transformToSHA1(password) != result->getString("password")) {
+	if (passwordHash != result->getString("password")) {
 		return 0;
 	}
 
