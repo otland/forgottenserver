@@ -97,7 +97,7 @@ const std::string& Monster::getNameDescription() const
 
 bool Monster::canSee(const Position& pos) const
 {
-	return Creature::canSee(getPosition(), pos, Map::maxClientViewportX + 1, Map::maxClientViewportY + 1);
+	return Creature::canSee(getPosition(), pos, Map::maxClientViewportX + 1, Map::maxClientViewportX + 1);
 }
 
 bool Monster::canWalkOnFieldType(CombatType_t combatType) const
