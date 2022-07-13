@@ -13804,7 +13804,7 @@ int LuaScriptInterface::luaQuestDelete(lua_State* L)
 	// quest:delete()
 	Quest** questPtr = getRawUserdata<Quest>(L, 1);
 	if (questPtr && *questPtr) {
-		delete* questPtr;
+		delete *questPtr;
 		*questPtr = nullptr;
 	}
 	return 0;
@@ -13825,7 +13825,8 @@ int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
 		const int32_t startValue = getNumber<int32_t>(L, 4);
 		const int32_t endValue = getNumber<int32_t>(L, 5);
 		const bool ignoreEndValue = getBoolean(L, 6);
-		Mission& mission = quest->createMission(++g_game.quests.missionAutoID, name, storageId, startValue, endValue, ignoreEndValue);
+		Mission& mission =
+		    quest->createMission(++g_game.quests.missionAutoID, name, storageId, startValue, endValue, ignoreEndValue);
 		if (isTable(L, 7)) {
 			lua_pushnil(L);
 			while (lua_next(L, -2)) {

@@ -11,12 +11,12 @@ class Player;
 using MissionsList = std::list<Mission>;
 using QuestsList = std::list<Quest>;
 
-//for luascript callback
+// for luascript callback
 class MissionCallback final : public CallBack
 {
-	public:
-		MissionCallback() = default;
-		std::string getDescription(Player* player) const;
+public:
+	MissionCallback() = default;
+	std::string getDescription(Player* player) const;
 };
 
 class Mission
@@ -44,7 +44,8 @@ public:
 	std::map<int32_t, std::string> descriptions;
 	std::string mainDescription;
 
-	CallBack* getCallback() {
+	CallBack* getCallback()
+	{
 		if (!callback) {
 			callback.reset(new MissionCallback());
 		}
@@ -86,7 +87,8 @@ public:
 
 	bool isTracking(const uint32_t key, const int32_t value) const;
 
-	Mission& createMission(const uint16_t id, const std::string& name, const int32_t storageId, const int32_t startValue, const int32_t endValue, const bool ignoreEndValue);
+	Mission& createMission(const uint16_t id, const std::string& name, const int32_t storageId,
+	                       const int32_t startValue, const int32_t endValue, const bool ignoreEndValue);
 
 private:
 	std::string name;
@@ -115,6 +117,7 @@ public:
 
 	static uint32_t questAutoID;
 	static uint32_t missionAutoID;
+
 private:
 	QuestsList quests;
 };

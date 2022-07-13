@@ -99,7 +99,7 @@ std::string Mission::getName(Player* player) const
 
 std::string MissionCallback::getDescription(Player* player) const
 {
-	//getDescription(player)
+	// getDescription(player)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - MissionCallback::getDescription] Call stack overflow" << std::endl;
 		return std::string();
@@ -273,9 +273,8 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32
 void Quests::createQuest(Quest* quest)
 {
 	const uint16_t id = quest->getID();
-	auto it = std::find_if(quests.begin(), quests.end(), [id](const Quest& tmpQuest) {
-		return tmpQuest.getID() == id;
-	});
+	auto it =
+	    std::find_if(quests.begin(), quests.end(), [id](const Quest& tmpQuest) { return tmpQuest.getID() == id; });
 
 	if (it != quests.end()) {
 		Quest& tmpQuest = *it;
@@ -291,11 +290,11 @@ void Quests::createQuest(Quest* quest)
 	tmpQuest.missions = std::move(quest->missions);
 }
 
-Mission& Quest::createMission(const uint16_t id, const std::string& name, const int32_t storageId, const int32_t startValue, const int32_t endValue, const bool ignoreEndValue)
+Mission& Quest::createMission(const uint16_t id, const std::string& name, const int32_t storageId,
+                              const int32_t startValue, const int32_t endValue, const bool ignoreEndValue)
 {
-	auto it = std::find_if(missions.begin(), missions.end(), [id](const Mission& mission) {
-		return mission.getID() == id;
-	});
+	auto it =
+	    std::find_if(missions.begin(), missions.end(), [id](const Mission& mission) { return mission.getID() == id; });
 
 	if (it != missions.end()) {
 		Mission& mission = *it;
