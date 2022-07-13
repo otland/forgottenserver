@@ -8,8 +8,15 @@
 #include "player.h"
 #include "pugicast.h"
 
+uint32_t Quests::questAutoID = 0;
+uint32_t Quests::missionAutoID = 0;
+
 std::string Mission::getDescription(Player* player) const
 {
+	if (callback) {
+		return callback.get()->getDescription(player);
+	}
+
 	int32_t value;
 	player->getStorageValue(storageID, value);
 
@@ -90,6 +97,38 @@ std::string Mission::getName(Player* player) const
 	return name;
 }
 
+std::string MissionCallback::getDescription(Player* player) const
+{
+	//getDescription(player)
+	if (!scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - MissionCallback::getDescription] Call stack overflow" << std::endl;
+		return std::string();
+	}
+
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	if (!env->setCallbackId(scriptId, scriptInterface)) {
+		scriptInterface->resetScriptEnv();
+		return std::string();
+	}
+
+	lua_State* L = scriptInterface->getLuaState();
+	scriptInterface->pushFunction(scriptId);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	std::string description;
+	if (scriptInterface->protectedCall(L, 1, 1) != 0) {
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+		description = std::move(LuaScriptInterface::getString(L, -1));
+		lua_pop(L, 1);
+	}
+
+	scriptInterface->resetScriptEnv();
+	return description;
+}
+
 uint16_t Quest::getMissionsCount(Player* player) const
 {
 	uint16_t count = 0;
@@ -163,18 +202,16 @@ bool Quests::loadFromXml()
 		return false;
 	}
 
-	uint16_t id = 0;
 	for (auto questNode : doc.child("quests").children()) {
-		quests.emplace_back(questNode.attribute("name").as_string(), ++id,
+		quests.emplace_back(questNode.attribute("name").as_string(), ++questAutoID,
 		                    pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
 		                    pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value()));
 		Quest& quest = quests.back();
 
-		uint16_t missionAutoId = 0;
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
 
-			quest.missions.emplace_back(missionNode.attribute("name").as_string(), ++missionAutoId,
+			quest.missions.emplace_back(missionNode.attribute("name").as_string(), ++missionAutoID,
 			                            pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
 			                            pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
 			                            pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
@@ -231,4 +268,47 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32
 		}
 	}
 	return false;
+}
+
+void Quests::createQuest(Quest* quest)
+{
+	const uint16_t id = quest->getID();
+	auto it = std::find_if(quests.begin(), quests.end(), [id](const Quest& tmpQuest) {
+		return tmpQuest.getID() == id;
+	});
+
+	if (it != quests.end()) {
+		Quest& tmpQuest = *it;
+		tmpQuest.name = std::move(quest->name);
+		tmpQuest.startStorageID = quest->startStorageID;
+		tmpQuest.startStorageValue = quest->startStorageValue;
+		tmpQuest.missions = std::move(quest->missions);
+		return;
+	}
+
+	quests.emplace_back(std::move(quest->name), id, quest->startStorageID, quest->startStorageValue);
+	Quest& tmpQuest = quests.back();
+	tmpQuest.missions = std::move(quest->missions);
+}
+
+Mission& Quest::createMission(const uint16_t id, const std::string& name, const int32_t storageId, const int32_t startValue, const int32_t endValue, const bool ignoreEndValue)
+{
+	auto it = std::find_if(missions.begin(), missions.end(), [id](const Mission& mission) {
+		return mission.getID() == id;
+	});
+
+	if (it != missions.end()) {
+		Mission& mission = *it;
+		mission.name = name;
+		mission.storageID = storageId;
+		mission.startValue = startValue;
+		mission.endValue = endValue;
+		mission.ignoreEndValue = ignoreEndValue;
+		mission.mainDescription.clear();
+		mission.descriptions.clear();
+		return mission;
+	}
+
+	missions.emplace_back(name, id, storageId, startValue, endValue, ignoreEndValue);
+	return missions.back();
 }

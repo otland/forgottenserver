@@ -532,6 +532,7 @@ private:
 	static int luaGameCreateNpc(lua_State* L);
 	static int luaGameCreateTile(lua_State* L);
 	static int luaGameCreateMonsterType(lua_State* L);
+	static int luaGameCreateQuest(lua_State* L);
 
 	static int luaGameStartRaid(lua_State* L);
 
@@ -1283,6 +1284,13 @@ private:
 	// Outfit
 	static int luaOutfitCreate(lua_State* L);
 	static int luaOutfitCompare(lua_State* L);
+
+	// Quest
+	static int luaQuestCreate(lua_State* L);
+	static int luaQuestCompare(lua_State* L);
+	static int luaQuestDelete(lua_State* L);
+	static int luaQuestCreateMission(lua_State* L);
+	static int luaQuestRegister(lua_State* L);
 
 	// MonsterType
 	static int luaMonsterTypeCreate(lua_State* L);

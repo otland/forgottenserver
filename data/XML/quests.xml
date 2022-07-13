@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <quests>
-	<quest name="Example Quest I" startstorageid="1001" startstoragevalue="1">
+	<!-- The new Quest system is in data/scripts/quests/ -->
+
+	<!-- <quest name="Example Quest I" startstorageid="1001" startstoragevalue="1">
 		<mission name="Example Mission 1" storageid="1001" startvalue="1" endvalue="3" ignoreendvalue="true">
 			<missionstate id="1" description="Example description 1" />
 			<missionstate id="2" description="Example description 2" />
@@ -10,5 +12,5 @@
 			<missionstate id="4" description="Example description 1" />
 			<missionstate id="5" description="Example description 2" />
 		</mission>
-	</quest>
+	</quest> -->
 </quests>

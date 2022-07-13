@@ -2208,6 +2208,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
+	registerMethod("Game", "createQuest", LuaScriptInterface::luaGameCreateQuest);
 
 	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
 
@@ -2982,6 +2983,13 @@ void LuaScriptInterface::registerFunctions()
 	// Outfit
 	registerClass("Outfit", "", LuaScriptInterface::luaOutfitCreate);
 	registerMetaMethod("Outfit", "__eq", LuaScriptInterface::luaOutfitCompare);
+
+	// Quest
+	registerClass("Quest", "", LuaScriptInterface::luaQuestCreate);
+	registerMetaMethod("Quest", "__eq", LuaScriptInterface::luaQuestCompare);
+	registerMetaMethod("Quest", "__gc", LuaScriptInterface::luaQuestDelete);
+	registerMethod("Quest", "createMission", LuaScriptInterface::luaQuestCreateMission);
+	registerMethod("Quest", "register", LuaScriptInterface::luaQuestRegister);
 
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
@@ -4910,6 +4918,28 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 
 	pushUserdata<MonsterType>(L, monsterType);
 	setMetatable(L, -1, "MonsterType");
+	return 1;
+}
+
+int LuaScriptInterface::luaGameCreateQuest(lua_State* L)
+{
+	// Game.createQuest(name, storageId, storageValue)
+	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+		reportErrorFunc(L, "Quests can only be registered in the Scripts interface.");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const std::string& name = getString(L, 1);
+	if (name.empty()) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const int32_t storageId = getNumber<int32_t>(L, 2);
+	const int32_t storageValue = getNumber<int32_t>(L, 3);
+	pushUserdata<Quest>(L, new Quest(name, ++g_game.quests.questAutoID, storageId, storageValue));
+	setMetatable(L, -1, "Quest");
 	return 1;
 }
 
@@ -13738,6 +13768,99 @@ int LuaScriptInterface::luaOutfitCompare(lua_State* L)
 	Outfit outfitEx = getOutfitClass(L, 2);
 	Outfit outfit = getOutfitClass(L, 1);
 	pushBoolean(L, outfit == outfitEx);
+	return 1;
+}
+
+// Quest
+int LuaScriptInterface::luaQuestCreate(lua_State* L)
+{
+	// Quest(id)
+	Quest* quest = g_game.quests.getQuestByID(getNumber<uint16_t>(L, 2));
+	if (quest) {
+		pushUserdata<Quest>(L, quest);
+		setMetatable(L, -1, "Quest");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaQuestCompare(lua_State* L)
+{
+	// quest == questEx
+	if (Quest* questEx = getUserdata<Quest>(L, 2)) {
+		if (Quest* quest = getUserdata<Quest>(L, 1)) {
+			pushBoolean(L, quest->getID() == questEx->getID());
+			return 1;
+		}
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
+int LuaScriptInterface::luaQuestDelete(lua_State* L)
+{
+	// quest:delete()
+	Quest** questPtr = getRawUserdata<Quest>(L, 1);
+	if (questPtr && *questPtr) {
+		delete* questPtr;
+		*questPtr = nullptr;
+	}
+	return 0;
+}
+
+int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
+{
+	// quest:createMission(name, key, value, endValue, ignoreEndValue, description)
+	Quest* quest = getUserdata<Quest>(L, 1);
+	if (quest) {
+		const std::string& name = getString(L, 2);
+		if (name.empty()) {
+			lua_pushnil(L);
+			return 1;
+		}
+
+		const int32_t storageId = getNumber<int32_t>(L, 3);
+		const int32_t startValue = getNumber<int32_t>(L, 4);
+		const int32_t endValue = getNumber<int32_t>(L, 5);
+		const bool ignoreEndValue = getBoolean(L, 6);
+		Mission& mission = quest->createMission(++g_game.quests.missionAutoID, name, storageId, startValue, endValue, ignoreEndValue);
+		if (isTable(L, 7)) {
+			lua_pushnil(L);
+			while (lua_next(L, -2)) {
+				if (isTable(L, -1)) {
+					const int32_t missionId = getField<int32_t>(L, -1, "id");
+					const std::string& description = getFieldString(L, -1, "description");
+					lua_pop(L, 2);
+					mission.descriptions.emplace(missionId, description);
+				}
+
+				lua_pop(L, 1);
+			}
+
+			lua_pop(L, 1);
+		} else if (isFunction(L, 7)) {
+			mission.getCallback()->loadCallBack(&g_scripts->getScriptInterface());
+		} else if (isString(L, 7)) {
+			mission.mainDescription = std::move(getString(L, 7));
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaQuestRegister(lua_State* L)
+{
+	// quest:register()
+	Quest* quest = getUserdata<Quest>(L, 1);
+	if (quest) {
+		g_game.quests.createQuest(quest);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
