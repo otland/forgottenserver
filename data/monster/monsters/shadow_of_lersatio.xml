@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Shadow_Of_Lersatio" nameDescription="" race="blood" experience="0" speed="0">
+<monster name="Shadow Of Lersatio" nameDescription="Shadow Of Lersatio" race="blood" experience="0" speed="0">
 	<health now="600" max="600" />
 	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />
