@@ -41,6 +41,9 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<summons maxSummons="2">
+		<summon name="Badger" interval="2000" chance="25" />
+	</summons>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

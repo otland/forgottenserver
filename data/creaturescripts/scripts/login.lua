@@ -5,10 +5,7 @@ function onLogin(player)
 		loginStr = loginStr .. " Please choose your outfit."
 		player:sendOutfitWindow()
 	else
-		if loginStr ~= "" then
-			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
-		end
-
+		player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 		loginStr = string.format("Your last visit in %s: %s.", serverName, os.date("%d %b %Y %X", player:getLastLoginSaved()))
 	end
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
