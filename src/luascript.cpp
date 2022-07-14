@@ -4938,7 +4938,9 @@ int LuaScriptInterface::luaGameCreateQuest(lua_State* L)
 
 	const int32_t storageId = getNumber<int32_t>(L, 2);
 	const int32_t storageValue = getNumber<int32_t>(L, 3);
-	pushUserdata<Quest>(L, new Quest(name, ++g_game.quests.questAutoID, storageId, storageValue));
+	Quest* quest = new Quest(name, ++g_game.quests.questAutoID, storageId, storageValue);
+	quest->fromLua = true;
+	pushUserdata<Quest>(L, quest);
 	setMetatable(L, -1, "Quest");
 	return 1;
 }

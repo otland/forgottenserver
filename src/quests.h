@@ -90,6 +90,8 @@ public:
 	Mission& createMission(const uint16_t id, const std::string& name, const int32_t storageId,
 	                       const int32_t startValue, const int32_t endValue, const bool ignoreEndValue);
 
+	bool fromLua = false;
+
 private:
 	std::string name;
 
@@ -112,6 +114,7 @@ public:
 	bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
 	uint16_t getQuestsCount(Player* player) const;
 	bool reload();
+	void clear(bool fromLua);
 
 	void createQuest(Quest* quest);
 

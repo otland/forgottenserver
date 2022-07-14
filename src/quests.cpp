@@ -189,8 +189,13 @@ bool Quest::isTracking(const uint32_t key, const int32_t value) const
 
 bool Quests::reload()
 {
-	quests.clear();
+	clear(false);
 	return loadFromXml();
+}
+
+void Quests::clear(bool fromLua)
+{
+	quests.remove_if([fromLua](const Quest& quest) { return quest.fromLua == fromLua; });
 }
 
 bool Quests::loadFromXml()
@@ -285,9 +290,7 @@ void Quests::createQuest(Quest* quest)
 		return;
 	}
 
-	quests.emplace_back(std::move(quest->name), id, quest->startStorageID, quest->startStorageValue);
-	Quest& tmpQuest = quests.back();
-	tmpQuest.missions = std::move(quest->missions);
+	quests.push_back(std::move(*quest));
 }
 
 Mission& Quest::createMission(const uint16_t id, const std::string& name, const int32_t storageId,
