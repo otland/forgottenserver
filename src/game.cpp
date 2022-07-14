@@ -3465,7 +3465,7 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 	player->toggleMount(mount);
 }
 
-void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
+void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount /* = false*/)
 {
 	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
 		return;
@@ -3475,6 +3475,8 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	if (!player) {
 		return;
 	}
+
+	player->randomizeMount = randomizeMount;
 
 	const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(player->getSex(), outfit.lookType);
 	if (!playerOutfit) {
@@ -3510,6 +3512,11 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 
 		if (player->hasCondition(CONDITION_OUTFIT)) {
 			return;
+		}
+
+		if (player->randomizeMount && player->hasMounts()) {
+			const Mount* mount = mounts.getMountByID(player->getRandomMount());
+			outfit.lookMount = mount->clientId;
 		}
 
 		internalCreatureChangeOutfit(player, outfit);
@@ -5207,7 +5214,7 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	}
 
 	if (!player->isInMarket()) {
-		return;
+		player->sendMarketEnter();
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);

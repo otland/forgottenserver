@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Unstable Tunnel" nameDescription="an unstable tunnel" experience="0" speed="0">
+<monster name="Unstable Tunnel" nameDescription="an unstable tunnel" race="undead" experience="0" speed="0">
 	<health now="1000" max="1000" />
 	<look typeex="31311" corpse="0" />
 	<targetchange interval="2000" chance="5" />
