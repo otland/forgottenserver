@@ -525,6 +525,13 @@ private:
 	void checkDecay();
 	void internalDecayItem(Item* item);
 
+	// Helpers so we don't need to bind every time
+	template <typename Callable>
+	void addGameTask(Callable&& function)
+	{
+		g_dispatcher.addTask(createTask(std::forward<Callable>(function)));
+	}
+
 	std::unordered_map<uint32_t, Player*> players;
 	std::unordered_map<std::string, Player*> mappedPlayerNames;
 	std::unordered_map<uint32_t, Player*> mappedPlayerGuids;
