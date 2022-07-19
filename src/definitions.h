@@ -9,7 +9,7 @@ static constexpr auto STATUS_SERVER_VERSION = "1.5";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "The Forgotten Server Team";
 
 static constexpr auto CLIENT_VERSION_MIN = 1290;
-static constexpr auto CLIENT_VERSION_MAX = 1290;
+static constexpr auto CLIENT_VERSION_MAX = 1291;
 static constexpr auto CLIENT_VERSION_STR = "12.90";
 
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;

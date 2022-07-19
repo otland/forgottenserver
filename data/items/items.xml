@@ -42668,4 +42668,186 @@
 	<item id="42854" article="a" name="box full of ballons" />
 	<item id="42855" article="a" name="Pan Amphora" />
 	<item id="42858" article="a" name="big reward box" />
+	<item id="43675" name="peacock feather" />
+	<item id="43676" name="flamingo feather" />
+	<item id="43677" name="swan feather" />
+	<item id="43686" name="silver hand" />
+	<item id="43687" name="golden hand" />
+	<item id="43688" name="bronze hand" />
+	<item id="43738" name="podium of vigour" />
+	<item id="43874" name="silver and a golden hand" />
+	<item id="43875" name="asuri talisman" />
+	<item id="43965" name="handwritten message" />
+	<item id="44067" name="rainbow opal" />
+	<item id="44068" name="cobalt ridge" />
+	<item id="44069" name="royal almandine" />
+	<item id="44070" name="cerulean abyss" />
+	<item id="44071" name="fiery tear" />
+	<item id="44163" name="moon mint" />
+	<item id="44165" name="moonshine pearl" />
+	<item id="44166" name="shimmering pearl" />
+	<item id="44167" name="celestial chart" />
+	<item id="44168" name="burning splint" />
+	<item id="44172" name="coral vow flower" />
+	<item id="44175" name="splint" />
+	<item id="44176" name="blessed water" />
+	<item id="44178" name="spiritthorn armor" />
+	<item id="44179" name="spiritthorn helmet" />
+	<item id="44180" name="alicorn headguard" />
+	<item id="44181" name="alicorn quiver" />
+	<item id="44182" name="arcanomancer regalia" />
+	<item id="44183" name="arcanomancer folio" />
+	<item id="44184" name="arboreal crown" />
+	<item id="44185" name="arboreal tome" />
+	<item id="44186" name="naga sword" />
+	<item id="44187" name="naga axe" />
+	<item id="44188" name="naga club" />
+	<item id="44189" name="frostflower boots" />
+	<item id="44190" name="naga crossbow" />
+	<item id="44191" name="naga quiver" />
+	<item id="44192" name="feverbloom boots" />
+	<item id="44193" name="naga wand" />
+	<item id="44194" name="naga rod" />
+	<item id="44195" name="dawnfire sherwani" />
+	<item id="44196" name="midnight tunic" />
+	<item id="44197" name="dawnfire pantaloons" />
+	<item id="44198" name="midnight sarong" />
+	<item id="44208" name="charged spiritthorn ring" />
+	<item id="44209" name="charged spiritthorn ring" />
+	<item id="44210" name="spiritthorn ring" />
+	<item id="44211" name="charged alicorn ring" />
+	<item id="44212" name="charged alicorn ring" />
+	<item id="44213" name="alicorn ring" />
+	<item id="44214" name="charged arcanomancer sigil" />
+	<item id="44215" name="charged arcanomancer ring" />
+	<item id="44216" name="arcanomancer sigil" />
+	<item id="44217" name="charged arboreal ring" />
+	<item id="44218" name="charged arboreal ring" />
+	<item id="44219" name="arboreal ring" />
+	<item id="44261" name="charged flame" />
+	<item id="44264" name="enchanted turtle amulet" />
+	<item id="44265" name="enchanted turtle amulet" />
+	<item id="44266" name="turtle amulet" />
+	<item id="44271" name="foam stalker spume" />
+	<item id="44272" name="glass lens" />
+	<item id="44273" name="empty bucket" />
+	<item id="44274" name="bucket full of water" />
+	<item id="44275" name="bucket full of sparkles" />
+	<item id="44369" name="flask of mango juice" />
+	<item id="44370" name="flask of mango honey juice" />
+	<item id="44371" name="butterfly conservation kit" />
+	<item id="44406" name="sulphider shell" />
+	<item id="44407" name="sulphur powder" />
+	<item id="44408" name="gore horn" />
+	<item id="44409" name="sabretooth fur" />
+	<item id="44410" name="emerald tortoise shell" />
+	<item id="44411" name="undertaker fangs" />
+	<item id="44412" name="nighthunter wing" />
+	<item id="44413" name="prehemoth horns" />
+	<item id="44414" name="prehemoth claw" />
+	<item id="44415" name="stalking seeds" />
+	<item id="44416" name="fungal blister" />
+	<item id="44417" name="mantosaurus jaw" />
+	<item id="44418" name="headpecker beak" />
+	<item id="44419" name="headpecker feather" />
+	<item id="44420" name="ripptor claw" />
+	<item id="44422" name="ripptor scales" />
+	<item id="44423" name="gorerilla mane" />
+	<item id="44424" name="gorerilla tail" />
+	<item id="44425" name="cry-stal" />
+	<item id="44426" name="mercurial wing" />
+	<item id="44428" name="coral powder" />
+	<item id="44429" name="cure for sick beavers" />
+	<item id="44430" name="one of Timira's many heads" />
+	<item id="44431" name="piece of Timira's sensors" />
+	<item id="44432" name="makara fin" />
+	<item id="44433" name="makara tongue" />
+	<item id="44434" name="jungle moa feather" />
+	<item id="44435" name="jungle moa claw" />
+	<item id="44436" name="jungle moa egg" />
+	<item id="44437" name="coral branch" />
+	<item id="44438" name="flotsam" />
+	<item id="44439" name="small tropical fish" />
+	<item id="44440" name="two-headed turtle heads" />
+	<item id="44441" name="hydrophytes" />
+	<item id="44442" name="naga armring" />
+	<item id="44443" name="naga earring" />
+	<item id="44444" name="naga archer scales" />
+	<item id="44445" name="naga warrior scales" />
+	<item id="44446" name="corrupt naga scales" />
+	<item id="44447" name="rogue naga scales" />
+	<item id="44448" name="parder tooth" />
+	<item id="44449" name="parder fur" />
+	<item id="44450" name="knightly chair" />
+	<item id="44451" name="knightly chair" />
+	<item id="44452" name="knightly chair" />
+	<item id="44453" name="knightly chair" />
+	<item id="44454" name="knightly table" />
+	<item id="44455" name="knightly table" />
+	<item id="44456" name="well-laid knightly table" />
+	<item id="44457" name="well-laid knightly table" />
+	<item id="44458" name="knightly chess table" />
+	<item id="44459" name="knightly chess table" />
+	<item id="44460" name="knightly bed" />
+	<item id="44461" name="knightly bed" />
+	<item id="44462" name="knightly bed" />
+	<item id="44463" name="knightly bed" />
+	<item id="44464" name="knightly bed" />
+	<item id="44465" name="knightly bed" />
+	<item id="44466" name="knightly bed" />
+	<item id="44467" name="knightly bed" />
+	<item id="44468" name="knightly bed" />
+	<item id="44469" name="knightly bed" />
+	<item id="44470" name="knightly bed" />
+	<item id="44471" name="knightly bed" />
+	<item id="44472" name="knightly cabinet" />
+	<item id="44473" name="knightly cabinet" />
+	<item id="44474" name="knightly fire bowl" />
+	<item id="44475" name="knightly fire bowl" />
+	<item id="44476" name="knightly fire bowl" />
+	<item id="44477" name="knightly wall lamp" />
+	<item id="44478" name="knightly wall lamp" />
+	<item id="44527" name="knightly sword lamp" />
+	<item id="44528" name="knightly sword lamp" />
+	<item id="44529" name="knightly candelabra" />
+	<item id="44530" name="knightly candelabra" />
+	<item id="44531" name="knightly candle holder" />
+	<item id="44532" name="knightly candle holder" />
+	<item id="44533" name="knightly decorative shield" />
+	<item id="44535" name="knightly chest" />
+	<item id="44536" name="knightly chest" />
+	<item id="44537" name="knightly chest" />
+	<item id="44538" name="knightly chest" />
+	<item id="44539" name="knightly guard" />
+	<item id="44540" name="knightly guard" />
+	<item id="44541" name="knightly guard" />
+	<item id="44548" name="knightly bench" />
+	<item id="44549" name="knightly bench" />
+	<item id="44550" name="knightly bench" />
+	<item id="44551" name="knightly bench" />
+	<item id="44552" name="knightly bench" />
+	<item id="44553" name="knightly bench" />
+	<item id="44554" name="knightly bench" />
+	<item id="44555" name="knightly bench" />
+	<item id="44556" name="knightly bench" />
+	<item id="44557" name="knightly bench" />
+	<item id="44567" name="candy lure" />
+	<item id="44574" name="smoldering eye" />
+	<item id="44575" name="firefighting axe" />
+	<item id="44576" name="portable flame" />
+	<item id="44577" name="primal bag" />
+	<item id="44579" name="colourful water lily" />
+	<item id="44599" name="naga nest" />
+	<item id="44600" name="naga nest" />
+	<item id="44602" name="canary feather" />
+	<item id="44604" name="gemmed lotus brooch" />
+	<item id="44608" name="bag with naga eggs" />
+	<item id="44609" name="icicle chisel" />
+	<item id="44610" name="marvelous ice flowers" />
+	<item id="44611" name="beautiful ice flowers" />
+	<item id="44612" name="pretty ice flower" />
+	<item id="44613" name="puny ice flower" />
+	<item id="44699" name="knightly guard" />
+	<item id="44745" name="lilypad backpack" />
+	<item id="44746" name="naga basin" />
 </items>
