@@ -14,12 +14,12 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	local amount = amount or 1
 	local subType = subType or 0
 	local item = 0
-	local stuff
+	local stuff, item
 	
 	if ItemType(itemid):isStackable() then
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			item = stuff:addItem(itemid, math.min(100, amount))
+			stuff:addItem(itemid, math.min(100, amount))
 		else
 			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
