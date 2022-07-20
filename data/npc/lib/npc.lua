@@ -13,8 +13,7 @@ end
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
 	local amount = amount or 1
 	local subType = subType or 0
-	local item = 0
-	local stuff, item
+	local stuff
 	
 	if ItemType(itemid):isStackable() then
 		if inBackpacks then
