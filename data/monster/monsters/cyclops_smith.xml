@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cyclops Smith" nameDescription="a cyclops smith" race="blood" experience="255" speed="210" manacost="695">
+<monster name="Cyclops Smith" nameDescription="a cyclops smith" race="blood" experience="255" speed="204" manacost="695">
 	<health now="435" max="435" />
 	<look type="277" corpse="7740" />
 	<targetchange interval="4000" chance="10" />
@@ -28,12 +28,12 @@
 			<attribute key="areaEffect" value="stun" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25" />
+	<defenses armor="28" defense="28" />
 	<elements>
 		<element energyPercent="20" />
-		<element firePercent="10" />
-		<element holyPercent="1" />
 		<element earthPercent="-10" />
+		<element firePercent="10" />
+		<element holyPercent="20" />
 		<element deathPercent="-5" />
 	</elements>
 	<voices interval="5000" chance="10">
@@ -42,19 +42,19 @@
 		<voice sentence="Ai humy phary ty kaynon" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="70" chance="82920" />
-		<item name="club ring" chance="90" />
-		<item name="battle axe" chance="5450" />
-		<item name="double axe" chance="880" />
-		<item name="battle hammer" chance="5200" />
-		<item name="heavy machete" chance="2000" />
-		<item name="dark helmet" chance="200" />
-		<item name="plate shield" chance="2000" />
-		<item name="battle shield" chance="6190" />
-		<item name="meat" chance="49950" />
-		<item id="7398" chance="140" /><!-- cyclops trophy -->
-		<item name="spiked squelcher" chance="150" />
-		<item name="strong health potion" chance="390" />
-		<item name="cyclops toe" chance="10280" />
+		<item id="2148" name="gold coin" chance="82761" countmax="70" />
+		<item id="2666" name="meat" chance="50252" />
+		<item id="10574" name="cyclops toe" chance="10011" />
+		<item id="2513" name="battle shield" chance="6211" />
+		<item id="2378" name="battle axe" chance="5139" />
+		<item id="2417" name="battle hammer" chance="5117" />
+		<item id="2510" name="plate shield" chance="2099" />
+		<item id="2442" name="heavy machete" chance="2064" />
+		<item id="2387" name="double axe" chance="977" />
+		<item id="7588" name="strong health potion" chance="520" />
+		<item id="2490" name="dark helmet" chance="199" />
+		<item id="7452" name="spiked squelcher" chance="142" />
+		<item id="7398" name="cyclops trophy" chance="126" />
+		<item id="2209" name="club ring" chance="88" />
 	</loot>
 </monster>

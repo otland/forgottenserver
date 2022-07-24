@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zamulosh" nameDescription="Zamulosh" race="undead" experience="50000" speed="320">
+	<health now="300000" max="300000" />
+	<look type="862" head="16" body="12" legs="73" feet="55" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="3000" min="0" max="-2300" />
+		<attack name="death" interval="1000" chance="10" length="12" spread="3" min="-700" max="-800">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" length="12" spread="0" target="0" min="-2600" max="-3300">
+			<attribute key="areaEffect" value="teleport" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" length="6" spread="2" min="-900" max="-1500">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="35" radius="8" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="25" min="220" max="535">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-1" />
+		<element holyPercent="-1" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="18418" name="blue crystal splinter" chance="100000" countmax="10" />
+		<item id="2148" name="gold coin" chance="100000" countmax="179" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="28" />
+		<item id="25172" name="silver token" chance="100000" />
+		<item id="2165" name="stealth ring" chance="100000" />
+		<item id="2169" name="time ring" chance="100000" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="8" />
+		<item id="18417" name="brown crystal splinter" chance="66667" countmax="5" />
+		<item id="6500" name="demonic essence" chance="66667" />
+		<item id="6558" name="flask of demonic blood" chance="66667" countmax="6" />
+		<item id="8472" name="great spirit potion" chance="66667" countmax="7" />
+		<item id="18416" name="green crystal splinter" chance="66667" countmax="11" />
+		<item id="2158" name="blue gem" chance="33333" />
+		<item id="25411" name="book of lies" chance="33333" />
+		<item id="7632" name="giant shimmering pearl" chance="33333" />
+		<item id="2150" name="small amethyst" chance="33333" countmax="9" />
+		<item id="2146" name="small sapphire" chance="33333" countmax="3" />
+	</loot>
+</monster>

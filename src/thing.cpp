@@ -16,12 +16,6 @@ const Position& Thing::getPosition() const
 	return tile->getPosition();
 }
 
-Tile* Thing::getTile()
-{
-	return dynamic_cast<Tile*>(this);
-}
+Tile* Thing::getTile() { return dynamic_cast<Tile*>(this); }
 
-const Tile* Thing::getTile() const
-{
-	return dynamic_cast<const Tile*>(this);
-}
+const Tile* Thing::getTile() const { return dynamic_cast<const Tile*>(this); }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Weakened Glooth Horror" nameDescription="a weakened glooth horror" race="venom" experience="245" speed="240">
+	<health now="10000" max="10000" />
+	<look type="677" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

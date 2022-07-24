@@ -35,17 +35,17 @@
 		<immunity earth="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="40" chance="95000" />
-		<item name="small stone" countmax="4" chance="12890" />
-		<item name="sulphurous stone" chance="10370" />
-		<item name="power ring" chance="5070" />
-		<item name="carlin sword" chance="2500" />
-		<item name="iron ore" chance="2000" />
-		<item name="ancient stone" chance="1020" />
-		<item name="shiny stone" chance="790" />
-		<item id="13757" chance="530" /><!-- coal -->
-		<item name="piece of marble rock" chance="410" />
-		<item id="2124" chance="170" /><!-- crystal ring -->
-		<item name="red gem" chance="40" />
+		<item id="2148" name="gold coin" chance="95794" countmax="40" />
+		<item id="1294" name="small stone" chance="12849" countmax="4" />
+		<item id="11232" name="sulphurous stone" chance="10115" />
+		<item id="2166" name="power ring" chance="5137" />
+		<item id="2395" name="carlin sword" chance="2572" />
+		<item id="5880" name="iron ore" chance="2054" />
+		<item id="10549" name="ancient stone" chance="1017" />
+		<item id="11227" name="shiny stone" chance="782" />
+		<item id="13757" name="coal" chance="528" />
+		<item id="11343" name="piece of marble rock" chance="416" />
+		<item id="2124" name="crystal ring" chance="181" />
+		<item id="2156" name="red gem" chance="48" />
 	</loot>
 </monster>

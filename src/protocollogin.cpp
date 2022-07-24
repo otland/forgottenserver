@@ -26,7 +26,8 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 	disconnect();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password, const std::string& token, uint16_t version)
+void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
+                                     const std::string& token, uint16_t version)
 {
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
@@ -38,7 +39,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	auto output = OutputMessagePool::getOutputMessage();
 	if (!account.key.empty()) {
-		if (token.empty() || !(token == generateToken(account.key, ticks) || token == generateToken(account.key, ticks - 1) || token == generateToken(account.key, ticks + 1))) {
+		if (token.empty() ||
+		    !(token == generateToken(account.key, ticks) || token == generateToken(account.key, ticks - 1) ||
+		      token == generateToken(account.key, ticks + 1))) {
 			output->addByte(0x0D);
 			output->addByte(0);
 			send(output);
@@ -49,18 +52,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	const std::string& motd = g_config.getString(ConfigManager::MOTD);
-	if (!motd.empty()) {
-		//Add MOTD
-		output->addByte(0x14);
-		output->addString(fmt::format("{:d}\n{:s}", g_game.getMotdNum(), motd));
-	}
-
-	//Add session key
+	// Add session key
 	output->addByte(0x28);
 	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));
 
-	//Add char list
+	// Add char list
 	output->addByte(0x64);
 
 	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
@@ -95,7 +91,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addString(character);
 	}
 
-	//Add premium days
+	// Add premium days
 	output->addByte(0);
 	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
 		output->addByte(1);
@@ -181,7 +177,9 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 			banInfo.reason = "(none)";
 		}
 
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}", formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason), version);
+		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
+		                 version);
 		return;
 	}
 
@@ -206,8 +204,9 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	std::string authToken = msg.getString();
 
-	g_dispatcher.addTask(createTask(
-		[=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()), accountName = std::move(accountName), password = std::move(password), authToken = std::move(authToken)]() {
-			thisPtr->getCharacterList(accountName, password, authToken, version);
-		}));
+	g_dispatcher.addTask(createTask([=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()),
+	                                 accountName = std::move(accountName), password = std::move(password),
+	                                 authToken = std::move(authToken)]() {
+		thisPtr->getCharacterList(accountName, password, authToken, version);
+	}));
 }

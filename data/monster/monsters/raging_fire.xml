@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Raging Fire" nameDescription="a raging fire" race="fire" experience="1500" speed="200">
+	<health now="1800" max="1800" />
+	<look type="242" corpse="24184" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="fire" interval="2000" chance="9" length="7" spread="0" min="-65" max="-605" />
+		<attack name="massive fire elemental soulfire" interval="2000" chance="12" />
+		<attack name="firefield" interval="2000" chance="11" range="7" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="11" radius="3" target="0">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="50" />
+	<elements>
+		<element icePercent="-10" />
+		<element deathPercent="20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity fire="1" />
+	</immunities>
+</monster>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Death Reaper" nameDescription="a death reaper" race="undead" experience="0" speed="320">
+	<health now="3900" max="3900" />
+	<look type="300" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-320" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-165">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" length="8" spread="0" min="-350" max="-720">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" length="7" spread="3" min="0" max="-300">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" radius="4" target="0" min="-225" max="-275">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="15" min="130" max="205">
+			<attribute key="areaEffect" value="redspark" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="450" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

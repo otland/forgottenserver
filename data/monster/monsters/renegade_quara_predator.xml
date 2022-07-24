@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Renegade Quara Predator" nameDescription="a renegade quara predator" race="blood" experience="2700" speed="450">
+	<health now="3250" max="3250" />
+	<look type="20" corpse="6067" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag illusionable="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-470" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="50" max="100" />
+	</defenses>
+	<elements>
+		<element energyPercent="-25" />
+		<element earthPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="80027" countmax="4" />
+		<item id="12447" name="quara bone" chance="9920" />
+		<item id="7378" name="royal spear" chance="8274" countmax="7" />
+		<item id="2178" name="mind stone" chance="7117" />
+		<item id="7591" name="great health potion" chance="6406" countmax="2" />
+		<item id="7368" name="assassin star" chance="5160" countmax="10" />
+		<item id="2670" name="shrimp" chance="4537" />
+		<item id="2145" name="small diamond" chance="3915" countmax="3" />
+		<item id="5895" name="fish fin" chance="2046" />
+		<item id="7383" name="relic sword" chance="1201" />
+		<item id="18413" name="blue crystal shard" chance="1023" />
+		<item id="7897" name="glacier robe" chance="534" />
+		<item id="5741" name="skull helmet" chance="489" />
+		<item id="7414" name="abyss hammer" chance="445" />
+		<item id="8887" name="frozen plate" chance="178" />
+		<item id="13305" name="giant shrimp" chance="44" />
+	</loot>
+</monster>

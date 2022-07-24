@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="220" manacost="450">
+<monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="168" manacost="450">
 	<health now="135" max="135" />
 	<look type="254" head="0" body="77" legs="96" feet="114" corpse="20347" />
 	<targetchange interval="60000" chance="0" />
@@ -19,16 +19,16 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-60" />
+		<attack name="melee" interval="2000" min="0" max="-65" />
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="8" defense="8" />
 	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="20" />
+		<element earthPercent="-10" />
 		<element icePercent="50" />
 		<element holyPercent="10" />
-		<element energyPercent="20" />
-		<element physicalPercent="5" />
-		<element earthPercent="-10" />
-		<element deathPercent="-1" />
+		<element deathPercent="-5" />
 	</elements>
 	<immunities>
 		<immunity paralyze="1" />
@@ -39,18 +39,18 @@
 		<voice sentence="Show that you are a worthy opponent." />
 	</voices>
 	<loot>
-		<item id="2050" chance="60500" /><!-- torch -->
-		<item name="gold coin" countmax="30" chance="60000" />
-		<item name="life ring" chance="250" />
-		<item id="2229" chance="3000" /><!-- skull -->
-		<item name="knife" chance="15250" />
-		<item name="brass helmet" chance="19000" />
-		<item name="viking helmet" chance="8000" />
-		<item name="scale armor" chance="3850" />
-		<item name="brown piece of cloth" chance="500" />
-		<item name="crystal sword" chance="90" />
-		<item name="fur boots" chance="120" />
-		<item name="ragnir helmet" chance="100" />
-		<item name="health potion" chance="930" />
+		<item id="2148" name="gold coin" chance="74364" countmax="30" />
+		<item id="2050" name="torch" chance="60308" />
+		<item id="2460" name="brass helmet" chance="19950" />
+		<item id="2403" name="knife" chance="15045" />
+		<item id="2473" name="viking helmet" chance="7886" />
+		<item id="2483" name="scale armor" chance="4024" />
+		<item id="2229" name="skull (item)" chance="3002" />
+		<item id="7618" name="health potion" chance="914" />
+		<item id="5913" name="brown piece of cloth" chance="521" />
+		<item id="2168" name="life ring" chance="240" />
+		<item id="7457" name="fur boots" chance="99" />
+		<item id="7462" name="ragnir helmet" chance="95" />
+		<item id="7449" name="crystal sword" chance="87" />
 	</loot>
 </monster>

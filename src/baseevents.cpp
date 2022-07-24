@@ -20,7 +20,8 @@ bool BaseEvents::loadFromXml()
 	std::string scriptsName = getScriptBaseName();
 	std::string basePath = "data/" + scriptsName + "/";
 	if (getScriptInterface().loadFile(basePath + "lib/" + scriptsName + ".lua") == -1) {
-		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
+		std::cout << "[Warning - BaseEvents::loadFromXml] Can not load " << scriptsName << " lib/" << scriptsName
+		          << ".lua" << std::endl;
 	}
 
 	std::string filename = basePath + scriptsName + ".xml";
@@ -81,13 +82,15 @@ void BaseEvents::reInitState(bool fromLua)
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
-bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const
+bool Event::checkScript(const std::string& basePath, const std::string& scriptsName,
+                        const std::string& scriptFile) const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
 	testInterface->reInitState();
 
 	if (testInterface->loadFile(std::string(basePath + "lib/" + scriptsName + ".lua")) == -1) {
-		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua" << std::endl;
+		std::cout << "[Warning - Event::checkScript] Can not load " << scriptsName << " lib/" << scriptsName << ".lua"
+		          << std::endl;
 	}
 
 	if (scriptId != 0) {
@@ -103,7 +106,8 @@ bool Event::checkScript(const std::string& basePath, const std::string& scriptsN
 
 	int32_t id = testInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::checkScript] Event " << getScriptEventName() << " not found. " << scriptFile
+		          << std::endl;
 		return false;
 	}
 	return true;
@@ -124,7 +128,8 @@ bool Event::loadScript(const std::string& scriptFile)
 
 	int32_t id = scriptInterface->getEvent(getScriptEventName());
 	if (id == -1) {
-		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile << std::endl;
+		std::cout << "[Warning - Event::loadScript] Event " << getScriptEventName() << " not found. " << scriptFile
+		          << std::endl;
 		return false;
 	}
 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Seacrest Serpent" nameDescription="a seacrest serpent" race="venom" experience="2600" speed="500">
+	<health now="3000" max="3000" />
+	<look type="675" corpse="24262" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-530" />
+		<attack name="death" interval="2000" chance="7" range="7" target="1" min="-200" max="-260">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="11" target="0" radius="3" min="-200" max="-285">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="ice" interval="2000" chance="30" length="8" spread="3" min="0" max="-284">
+			<attribute key="areaEffect" value="watersplash" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="4" spread="0" min="-200" max="-300">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="51" defense="51">
+		<defense name="healing" interval="2000" chance="15" min="145" max="200">
+			<attribute key="areaEffect" value="bluenote" />
+		</defense>
+		<defense name="melee" interval="2000" chance="10">
+			<attribute key="areaEffect" value="smallplants" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element earthPercent="10" />
+		<element firePercent="20" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="LEAVE THESE GROUNDS..." />
+		<voice sentence="THE DARK TIDE WILL SWALLOW YOU..." />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="24169" name="seacrest scale" chance="16853" />
+		<item id="2672" name="dragon ham" chance="14030" />
+		<item id="24170" name="seacrest hair" chance="11330" />
+		<item id="7839" name="shiver arrow" chance="8305" countmax="19" />
+		<item id="7589" name="strong mana potion" chance="7919" countmax="2" />
+		<item id="7588" name="strong health potion" chance="7452" countmax="2" />
+		<item id="24116" name="seacrest pearl" chance="6843" />
+		<item id="2145" name="small diamond" chance="4284" countmax="3" />
+		<item id="5944" name="soul orb" chance="3533" />
+		<item id="7896" name="glacier kilt" chance="2335" />
+		<item id="2143" name="white pearl" chance="2132" countmax="2" />
+		<item id="7902" name="glacier mask" chance="2112" />
+		<item id="2144" name="black pearl" chance="1929" countmax="3" />
+		<item id="7892" name="glacier shoes" chance="1848" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="1624" />
+		<item id="24261" name="crest of the deep seas" chance="1076" />
+		<item id="7888" name="glacier amulet" chance="1015" />
+		<item id="8921" name="wand of draconia" chance="893" />
+		<item id="18390" name="wand of defiance" chance="223" />
+	</loot>
+</monster>

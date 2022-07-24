@@ -229,9 +229,8 @@ if not Modules then
 		if parameters.module.npcHandler:isFocused(cid) then
 			parameters.module.npcHandler:onFarewell(cid)
 			return true
-		else
-			return false
 		end
+		return false
 	end
 
 	-- Custom message matching callback function for greeting messages.
@@ -1052,13 +1051,13 @@ if not Modules then
 			player:addMoney(amount * shopItem.sell)
 			self.npcHandler.talkStart[cid] = os.time()
 			return true
-		else
-			local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
-			msg = self.npcHandler:parseMessage(msg, parseInfo)
-			player:sendCancelMessage(msg)
-			self.npcHandler.talkStart[cid] = os.time()
-			return false
 		end
+
+		local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
+		msg = self.npcHandler:parseMessage(msg, parseInfo)
+		player:sendCancelMessage(msg)
+		self.npcHandler.talkStart[cid] = os.time()
+		return false
 	end
 
 	-- Callback for requesting a trade window with the NPC.

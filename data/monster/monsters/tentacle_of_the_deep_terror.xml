@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tentacle Of The Deep Terror" nameDescription="a tentacle of the deep terror" race="venom" experience="0" speed="350">
+	<health now="25500" max="25500" />
+	<look type="681" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="blightwalker curse" interval="2000" chance="10" />
+		<attack name="lifedrain" interval="2000" chance="14" radius="4" target="0" min="-65" max="-135">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="20" duration="35000" radius="7" target="0">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="20" min="0" max="715">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element firePercent="50" />
+		<element holyPercent="-30" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

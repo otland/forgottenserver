@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Death Priest Shargon" nameDescription="Death Priest Shargon" race="blood" experience="20000" speed="340">
+	<health now="65000" max="65000" />
+	<look type="278" addons="3" corpse="23494" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-800" />
+		<attack name="death" interval="2000" chance="12" range="7" radius="6" min="0" max="-660">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="holy" interval="2000" chance="18" length="6" spread="2" min="-350" max="-1000">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="0" max="699">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="91" />
+		<item id="2185" name="necrotic rod" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="14" />
+		<item id="7590" name="great mana potion" chance="30000" countmax="3" />
+		<item id="9969" name="black skull (item)" chance="20000" />
+		<item id="9971" name="gold ingot" chance="20000" />
+		<item id="7591" name="great health potion" chance="20000" countmax="5" />
+	</loot>
+</monster>

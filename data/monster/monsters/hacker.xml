@@ -46,14 +46,14 @@
 		<voice sentence="Me other char is highlevel!" />
 	</voices>
 	<loot>
-		<item id="2044" chance="6666" /><!-- lamp -->
+		<item id="2044" name="lamp" chance="6666" />
 		<item name="gold coin" countmax="12" chance="100000" />
 		<item name="battle axe" chance="5000" />
-		<item name="halberd" chance="10000" />
+		<item id="2381" name="halberd" chance="10000" />
 		<item name="axe" chance="10000" />
 		<item name="war hammer" chance="5000" />
-		<item name="ham" chance="50000" />
-		<item id="6570" chance="5538" /><!-- blue surprise bag -->
-		<item id="6571" chance="1538" /><!-- red surprise bag -->
+		<item id="2671" name="ham" chance="50000" />
+		<item id="6570" name="blue surprise bag" chance="5538" />
+		<item id="6571" name="red surprise bag" chance="1538" />
 	</loot>
 </monster>

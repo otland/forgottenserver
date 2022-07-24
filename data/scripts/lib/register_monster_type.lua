@@ -82,40 +82,40 @@ registerMonsterType.corpse = function(mtype, mask)
 end
 registerMonsterType.flags = function(mtype, mask)
 	if mask.flags then
-		if mask.flags.attackable then
+		if mask.flags.attackable ~= nil then
 			mtype:isAttackable(mask.flags.attackable)
 		end
-		if mask.flags.healthHidden then
+		if mask.flags.healthHidden ~= nil then
 			mtype:isHealthHidden(mask.flags.healthHidden)
 		end
-		if mask.flags.boss then
+		if mask.flags.boss ~= nil then
 			mtype:isBoss(mask.flags.boss)
 		end
-		if mask.flags.challengeable then
+		if mask.flags.challengeable ~= nil then
 			mtype:isChallengeable(mask.flags.challengeable)
 		end
-		if mask.flags.convinceable then
+		if mask.flags.convinceable ~= nil then
 			mtype:isConvinceable(mask.flags.convinceable)
 		end
-		if mask.flags.summonable then
+		if mask.flags.summonable ~= nil then
 			mtype:isSummonable(mask.flags.summonable)
 		end
-		if mask.flags.ignoreSpawnBlock then
+		if mask.flags.ignoreSpawnBlock ~= nil then
 			mtype:isIgnoringSpawnBlock(mask.flags.ignoreSpawnBlock)
 		end
-		if mask.flags.illusionable then
+		if mask.flags.illusionable ~= nil then
 			mtype:isIllusionable(mask.flags.illusionable)
 		end
-		if mask.flags.hostile then
+		if mask.flags.hostile ~= nil then
 			mtype:isHostile(mask.flags.hostile)
 		end
-		if mask.flags.pushable then
+		if mask.flags.pushable ~= nil then
 			mtype:isPushable(mask.flags.pushable)
 		end
-		if mask.flags.canPushItems then
+		if mask.flags.canPushItems ~= nil then
 			mtype:canPushItems(mask.flags.canPushItems)
 		end
-		if mask.flags.canPushCreatures then
+		if mask.flags.canPushCreatures ~= nil then
 			mtype:canPushCreatures(mask.flags.canPushCreatures)
 		end
 		-- if a monster can push creatures,
@@ -129,13 +129,13 @@ registerMonsterType.flags = function(mtype, mask)
 		if mask.flags.staticAttackChance then
 			mtype:staticAttackChance(mask.flags.staticAttackChance)
 		end
-		if mask.flags.canWalkOnEnergy then
+		if mask.flags.canWalkOnEnergy ~= nil then
 			mtype:canWalkOnEnergy(mask.flags.canWalkOnEnergy)
 		end
-		if mask.flags.canWalkOnFire then
+		if mask.flags.canWalkOnFire ~= nil then
 			mtype:canWalkOnFire(mask.flags.canWalkOnFire)
 		end
-		if mask.flags.canWalkOnPoison then
+		if mask.flags.canWalkOnPoison ~= nil then
 			mtype:canWalkOnPoison(mask.flags.canWalkOnPoison)
 		end
 	end
@@ -202,8 +202,11 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.aid or loot.actionId then
 				parent:setActionId(loot.aid or loot.actionId)
 			end
+			local charges = loot.charges or ItemType(loot.id):getCharges()
 			if loot.subType or loot.charges then
-				parent:setSubType(loot.subType or loot.charges)
+				parent:setSubType(loot.subType or charges)
+			else
+				parent:setSubType(charges)
 			end
 			if loot.text or loot.description then
 				parent:setDescription(loot.text or loot.description)
@@ -223,8 +226,11 @@ registerMonsterType.loot = function(mtype, mask)
 					if children.aid or children.actionId then
 						child:setActionId(children.aid or children.actionId)
 					end
+					local charges = children.charges or ItemType(children.id):getCharges()
 					if children.subType or children.charges then
-						child:setSubType(children.subType or children.charges)
+						child:setSubType(children.subType or charges)
+					else
+						child:setSubType(charges)
 					end
 					if children.text or children.description then
 						child:setDescription(children.text or children.description)

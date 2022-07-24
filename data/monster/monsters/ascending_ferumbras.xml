@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ascending Ferumbras" nameDescription="Ascending Ferumbras" race="venom" experience="12000" speed="0">
+	<health now="150000" max="150000" />
+	<look type="844" corpse="6078" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="manadrain" interval="2000" chance="20" radius="9" target="0" min="-425" max="-810">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="energy" interval="2000" chance="21" radius="9" target="0" min="-400" max="-650">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+		<immunity physical="1" />
+		<immunity holy="1" />
+		<immunity fire="1" />
+		<immunity energy="1" />
+		<immunity earth="1" />
+		<immunity ice="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+</monster>

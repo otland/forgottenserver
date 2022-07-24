@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `players` (
   `lookmountbody` int NOT NULL DEFAULT '0',
   `lookmountlegs` int NOT NULL DEFAULT '0',
   `lookmountfeet` int NOT NULL DEFAULT '0',
+  `randomizemount` tinyint NOT NULL DEFAULT '0',
   `direction` tinyint unsigned NOT NULL DEFAULT '2',
   `maglevel` int NOT NULL DEFAULT '0',
   `mana` int NOT NULL DEFAULT '0',
@@ -362,7 +363,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '31'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '33'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

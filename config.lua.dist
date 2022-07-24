@@ -26,7 +26,6 @@ loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
 maxPlayers = 0
-motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
 allowWalkthrough = true
@@ -156,6 +155,8 @@ walkToSpawnRadius = 15
 
 -- Stamina
 staminaSystem = true
+timeToRegenMinuteStamina = 3 * 60
+timeToRegenMinutePremiumStamina = 10 * 60
 
 -- Scripts
 warnUnsafeScripts = true

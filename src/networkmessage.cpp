@@ -5,9 +5,10 @@
 
 #include "networkmessage.h"
 
+#include "container.h"
 #include "podium.h"
 
-std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
+std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
@@ -17,7 +18,7 @@ std::string NetworkMessage::getString(uint16_t stringLen/* = 0*/)
 		return std::string();
 	}
 
-	char* v = reinterpret_cast<char*>(buffer) + info.position; //does not break strict aliasing
+	char* v = reinterpret_cast<char*>(buffer) + info.position; // does not break strict aliasing
 	info.position += stringLen;
 	return std::string(v, stringLen);
 }
@@ -44,10 +45,11 @@ void NetworkMessage::addString(const std::string& value)
 	info.length += stringLen;
 }
 
-void NetworkMessage::addDouble(double value, uint8_t precision/* = 2*/)
+void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
 {
 	addByte(precision);
-	add<uint32_t>(static_cast<uint32_t>((value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max()));
+	add<uint32_t>(static_cast<uint32_t>((value * std::pow(static_cast<float>(10), precision)) +
+	                                    std::numeric_limits<int32_t>::max()));
 }
 
 void NetworkMessage::addBytes(const char* bytes, size_t size)
@@ -96,10 +98,10 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 	}
 
 	if (it.isPodium()) {
-		add<uint16_t>(0); //looktype
-		add<uint16_t>(0); //lookmount
-		addByte(2); //direction
-		addByte(0x01); //is visible (bool)
+		add<uint16_t>(0); // looktype
+		add<uint16_t>(0); // lookmount
+		addByte(2);       // direction
+		addByte(0x01);    // is visible (bool)
 	}
 }
 
@@ -119,15 +121,22 @@ void NetworkMessage::addItem(const Item* item)
 
 	if (it.isContainer()) {
 		addByte(0x00); // assigned loot container icon
-		addByte(0x00); // quiver ammo count
+		// quiver ammo count
+		const Container* container = item->getContainer();
+		if (container && it.weaponType == WEAPON_QUIVER) {
+			addByte(0x01);
+			add<uint32_t>(container->getAmmoCount());
+		} else {
+			addByte(0x00);
+		}
 	}
 
 	// display outfit on the podium
 	if (it.isPodium()) {
 		const Podium* podium = item->getPodium();
-		const Outfit_t &outfit = podium->getOutfit();
+		const Outfit_t& outfit = podium->getOutfit();
 
-		//add outfit
+		// add outfit
 		if (podium->hasFlag(PODIUM_SHOW_OUTFIT)) {
 			add<uint16_t>(outfit.lookType);
 			if (outfit.lookType != 0) {
@@ -141,7 +150,7 @@ void NetworkMessage::addItem(const Item* item)
 			add<uint16_t>(0);
 		}
 
-		//add mount
+		// add mount
 		if (podium->hasFlag(PODIUM_SHOW_MOUNT)) {
 			add<uint16_t>(outfit.lookMount);
 			if (outfit.lookMount != 0) {
@@ -160,7 +169,4 @@ void NetworkMessage::addItem(const Item* item)
 	}
 }
 
-void NetworkMessage::addItemId(uint16_t itemId)
-{
-	add<uint16_t>(Item::items[itemId].clientId);
-}
+void NetworkMessage::addItemId(uint16_t itemId) { add<uint16_t>(Item::items[itemId].clientId); }

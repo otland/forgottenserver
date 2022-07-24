@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Retching Horror" nameDescription="a retching horror" race="fire" experience="3900" speed="250">
+<monster name="Retching Horror" nameDescription="a retching horror" race="fire" experience="4100" speed="360">
 	<health now="5300" max="5300" />
 	<look type="588" corpse="22508" />
 	<targetchange interval="4000" chance="10" />
@@ -38,15 +38,16 @@
 			<attribute key="areaEffect" value="fireattack" />
 		</attack>
 	</attacks>
-	<defenses armor="30" defense="30" />
+	<defenses armor="74" defense="74" />
 	<elements>
-		<element physicalPercent="10" />
-		<element deathPercent="20" />
+		<element physicalPercent="5" />
 		<element energyPercent="10" />
+		<element firePercent="85" />
 		<element icePercent="15" />
+		<element deathPercent="20" />
 	</elements>
 	<immunities>
-		<immunity fire="1" />
+		<immunity earth="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
@@ -56,21 +57,24 @@
 		<voice sentence="My little beetles, go forth, eat, feast!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="platinum coin" countmax="9" chance="100000" />
-		<item name="fire sword" chance="1240" />
-		<item name="crown shield" chance="1700" />
-		<item name="tower shield" chance="550" />
-		<item name="brown mushroom" countmax="2" chance="14000" />
-		<item name="beastslayer axe" chance="4260" />
-		<item name="mercenary sword" chance="2500" />
-		<item name="spiked squelcher" chance="410" />
-		<item name="great mana potion" chance="12500" />
-		<item name="great health potion" chance="15000" />
-		<item name="underworld rod" chance="1800" />
-		<item name="wand of starstorm" chance="960" />
-		<item id="22363" chance="3700" /><!-- broken dream -->
-		<item name="goosebump leather" chance="16400" />
-		<item name="pool of chitinous glue" chance="14000" />
+		<item id="2152" name="platinum coin" chance="82759" countmax="9" />
+		<item id="2148" name="gold coin" chance="81103" countmax="100" />
+		<item id="22539" name="goosebump leather" chance="13379" />
+		<item id="2789" name="brown mushroom" chance="11310" countmax="2" />
+		<item id="7590" name="great mana potion" chance="11310" />
+		<item id="22541" name="pool of chitinous glue" chance="11034" />
+		<item id="7591" name="great health potion" chance="10759" />
+		<item id="22363" name="broken dream" chance="4000" />
+		<item id="3962" name="beastslayer axe" chance="3172" />
+		<item id="7386" name="mercenary sword" chance="2207" />
+		<item id="7452" name="spiked squelcher" chance="2207" />
+		<item id="2392" name="fire sword" chance="1793" />
+		<item id="8910" name="underworld rod" chance="1241" />
+		<item id="7421" name="onyx flail" chance="1103" />
+		<item id="8920" name="wand of starstorm" chance="1103" />
+		<item id="2519" name="crown shield" chance="690" />
+		<item id="7412" name="butcher's axe" chance="414" />
+		<item id="2528" name="tower shield" chance="414" />
+		<item id="22396" name="cluster of solace" chance="276" />
 	</loot>
 </monster>
