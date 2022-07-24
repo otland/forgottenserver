@@ -20,7 +20,7 @@
 	<event class="Player" method="onLookInShop" enabled="1" />
 	<event class="Player" method="onLookInMarket" enabled="1" />
 	<event class="Player" method="onMoveItem" enabled="1" />
-	<event class="Player" method="onItemMoved" enabled="0" />
+	<event class="Player" method="onItemMoved" enabled="1" />
 	<event class="Player" method="onMoveCreature" enabled="0" />
 	<event class="Player" method="onReportBug" enabled="1" />
 	<event class="Player" method="onReportRuleViolation" enabled="1" />
