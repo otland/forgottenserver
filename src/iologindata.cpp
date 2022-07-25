@@ -1112,10 +1112,10 @@ std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, ti
 {
 	std::vector<time_t> killsList;
 	Database& db = Database::getInstance();
-	std::ostringstream query;
-	query << "SELECT `time` FROM `player_deaths` WHERE `killed_by` = " << db.escapeString(name)
-	      << " AND `unjustified` = 1 AND `time` >= " << offsetTime - 30 * 86400;
-	DBResult_ptr result = db.storeQuery(query.str());
+
+	DBResult_ptr result = db.storeQuery(
+		fmt::format("SELECT `time` FROM `player_deaths` WHERE `killed_by` = {:s} AND `unjustified` = 1 AND `time` >= {:d}",
+		db.escapeString(name), offsetTime - 30 * 86400));
 
 	if (result) {
 		do {
