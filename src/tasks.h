@@ -49,6 +49,14 @@ class Dispatcher : public ThreadHolder<Dispatcher>
 public:
 	void addTask(Task* task);
 
+	void addTask(TaskFunc&& f) {
+		addTask(new Task(std::move(f)));
+	}
+
+	void addTask(uint32_t expiration, TaskFunc&& f) {
+		addTask(new Task(expiration, std::move(f)));
+	}
+
 	void shutdown();
 
 	uint64_t getDispatcherCycle() const { return dispatcherCycle; }
