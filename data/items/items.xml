@@ -42668,29 +42668,1126 @@
 	<item id="42854" article="a" name="box full of ballons" />
 	<item id="42855" article="a" name="Pan Amphora" />
 	<item id="42858" article="a" name="big reward box" />
+	<item id="42971" name="clinker wall" />
+	<item id="42972" name="clinker wall" />
+	<item id="42973" name="clinker wall" />
+	<item id="42974" name="clinker wall" />
+	<item id="42975" name="clinker wall" />
+	<item id="42976" name="clinker wall" />
+	<item id="42977" name="clinker wall" />
+	<item id="42978" name="clinker wall" />
+	<item id="42979" name="clinker wall" />
+	<item id="42980" name="clinker wall" />
+	<item id="42981" name="clinker wall" />
+	<item id="42982" name="clinker wall" />
+	<item id="42983" name="clinker wall" />
+	<item id="42984" name="clinker wall" />
+	<item id="42985" name="clinker wall" />
+	<item id="42986" name="clinker wall" />
+	<item id="42987" name="clinker wall" />
+	<item id="42988" name="clinker wall" />
+	<item id="42989" name="clinker wall" />
+	<item id="42990" name="clinker wall" />
+	<item id="42991" name="clinker wall" />
+	<item id="42992" name="clinker wall" />
+	<item id="42993" name="archway" />
+	<item id="42994" name="archway" />
+	<item id="42995" name="archway" />
+	<item id="42996" name="archway" />
+	<item id="42997" name="railing" />
+	<item id="42998" name="railing" />
+	<item id="42999" name="railing" />
+	<item id="43000" name="railing" />
+	<item id="43001" name="railing" />
+	<item id="43002" name="railing" />
+	<item id="43003" name="window" />
+	<item id="43004" name="window" />
+	<item id="43005" name="ramp" />
+	<item id="43006" name="ramp" />
+	<item id="43007" name="ramp" />
+	<item id="43008" name="ramp" />
+	<item id="43009" name="ramp" />
+	<item id="43010" name="ramp" />
+	<item id="43011" name="ramp" />
+	<item id="43012" name="ramp" />
+	<item id="43013" name="broken wall" />
+	<item id="43014" name="broken wall" />
+	<item id="43015" name="broken wall" />
+	<item id="43016" name="broken wall" />
+	<item id="43017" name="broken wall" />
+	<item id="43018" name="broken wall" />
+	<item id="43019" name="broken wall" />
+	<item id="43020" name="broken wall" />
+	<item id="43021" name="broken wall" />
+	<item id="43022" name="broken wall" />
+	<item id="43023" name="closed door" />
+	<item id="43024" name="locked door" />
+	<item id="43025" name="closed door" />
+	<item id="43026" name="locked door" />
+	<item id="43027" name="open door" />
+	<item id="43028" name="open door" />
+	<item id="43029" name="wall" />
+	<item id="43030" name="clinker wall" />
+	<item id="43031" name="clinker wall" />
+	<item id="43032" name="clinker wall" />
+	<item id="43033" name="clinker wall" />
+	<item id="43034" name="railing" />
+	<item id="43035" name="railing" />
+	<item id="43036" name="railing" />
+	<item id="43037" name="pillar" />
+	<item id="43038" name="pillar" />
+	<item id="43039" name="pillar" />
+	<item id="43040" name="pillar" />
+	<item id="43041" name="column" />
+	<item id="43042" name="column" />
+	<item id="43043" name="ruined column" />
+	<item id="43044" name="column" />
+	<item id="43045" name="column" />
+	<item id="43046" name="ruined column" />
+	<item id="43047" name="spire" />
+	<item id="43048" name="spire" />
+	<item id="43049" name="spire" />
+	<item id="43050" name="column" />
+	<item id="43051" name="column" />
+	<item id="43052" name="ruined column" />
+	<item id="43053" name="column" />
+	<item id="43054" name="column" />
+	<item id="43055" name="ruined column" />
+	<item id="43056" name="spire" />
+	<item id="43057" name="spire" />
+	<item id="43058" name="spire" />
+	<item id="43059" name="small tree" />
+	<item id="43060" name="small tree" />
+	<item id="43061" name="branches" />
+	<item id="43062" name="branches" />
+	<item id="43063" name="twigs" />
+	<item id="43064" name="twigs" />
+	<item id="43065" name="leaves" />
+	<item id="43066" name="leaves" />
+	<item id="43067" name="blue flowers" />
+	<item id="43068" name="blue flowers" />
+	<item id="43069" name="purple flowers" />
+	<item id="43070" name="purple flowers" />
+	<item id="43071" name="solid water" />
+	<item id="43072" name="solid water" />
+	<item id="43073" name="solid water" />
+	<item id="43074" name="solid water" />
+	<item id="43075" name="solid water" />
+	<item id="43076" name="solid water" />
+	<item id="43077" name="solid water" />
+	<item id="43078" name="solid water" />
+	<item id="43079" name="water vortex" />
+	<item id="43080" name="naga boat" />
+	<item id="43081" name="shallow water" />
+	<item id="43082" name="shallow water" />
+	<item id="43083" name="shallow water" />
+	<item id="43084" name="shallow water" />
+	<item id="43085" name="shallow water" />
+	<item id="43086" name="shallow water" />
+	<item id="43087" name="shallow water" />
+	<item id="43088" name="shallow water" />
+	<item id="43089" name="shallow water" />
+	<item id="43090" name="shallow water" />
+	<item id="43091" name="shallow water" />
+	<item id="43092" name="shallow water" />
+	<item id="43093" name="shallow water" />
+	<item id="43094" name="shallow water" />
+	<item id="43095" name="shallow water" />
+	<item id="43096" name="water vortex" />
+	<item id="43097" name="lily pads" />
+	<item id="43098" name="lily pads" />
+	<item id="43099" name="lily pads" />
+	<item id="43100" name="lily pads" />
+	<item id="43101" name="lily pads" />
+	<item id="43102" name="lily pads" />
+	<item id="43103" name="stone floor" />
+	<item id="43104" name="stone floor" />
+	<item id="43105" name="stone floor" />
+	<item id="43106" name="stone floor" />
+	<item id="43107" name="stone floor" />
+	<item id="43108" name="stone floor" />
+	<item id="43109" name="stone floor" />
+	<item id="43110" name="stone floor" />
+	<item id="43111" name="stone floor" />
+	<item id="43112" name="stone floor" />
+	<item id="43113" name="stone floor" />
+	<item id="43114" name="stone floor" />
+	<item id="43115" name="stone floor" />
+	<item id="43116" name="stone floor" />
+	<item id="43117" name="stone floor" />
+	<item id="43118" name="stone floor" />
+	<item id="43119" name="stone floor" />
+	<item id="43120" name="stone floor" />
+	<item id="43121" name="stone floor" />
+	<item id="43122" name="stone floor" />
+	<item id="43123" name="stone floor" />
+	<item id="43124" name="stone floor" />
+	<item id="43125" name="stone floor" />
+	<item id="43126" name="stone floor" />
+	<item id="43127" name="stone floor" />
+	<item id="43128" name="stone floor" />
+	<item id="43129" name="stone floor" />
+	<item id="43130" name="stone floor" />
+	<item id="43131" name="stone floor" />
+	<item id="43132" name="stone floor" />
+	<item id="43133" name="stone floor" />
+	<item id="43134" name="stone floor" />
+	<item id="43135" name="stone floor" />
+	<item id="43136" name="stone floor" />
+	<item id="43137" name="stone floor" />
+	<item id="43138" name="stone floor" />
+	<item id="43139" name="stone floor" />
+	<item id="43140" name="stone floor" />
+	<item id="43141" name="stone floor" />
+	<item id="43142" name="lianas" />
+	<item id="43143" name="lianas" />
+	<item id="43144" name="lianas" />
+	<item id="43145" name="lianas" />
+	<item id="43146" name="lianas" />
+	<item id="43147" name="lianas" />
+	<item id="43148" name="lianas" />
+	<item id="43149" name="lianas" />
+	<item id="43150" name="lily pads" />
+	<item id="43151" name="lily pads" />
+	<item id="43152" name="lily pads" />
+	<item id="43153" name="lily pads" />
+	<item id="43154" name="shallow water" />
+	<item id="43155" name="shallow water" />
+	<item id="43157" name="shallow water" />
+	<item id="43158" name="shallow water" />
+	<item id="43159" name="shallow water" />
+	<item id="43160" name="shallow water" />
+	<item id="43161" name="shallow water" />
+	<item id="43162" name="shallow water" />
+	<item id="43163" name="shallow water" />
+	<item id="43164" name="shallow water" />
+	<item id="43165" name="shallow water" />
+	<item id="43166" name="shallow water" />
+	<item id="43167" name="shallow water" />
+	<item id="43168" name="shallow water" />
+	<item id="43169" name="shallow water" />
+	<item id="43170" name="shallow water" />
+	<item id="43171" name="shallow water" />
+	<item id="43172" name="shallow water" />
+	<item id="43173" name="shallow water" />
+	<item id="43174" name="shallow water" />
+	<item id="43175" name="shallow water" />
+	<item id="43176" name="shallow water" />
+	<item id="43177" name="shallow water" />
+	<item id="43178" name="shallow water" />
+	<item id="43179" name="shallow water" />
+	<item id="43180" name="shallow water" />
+	<item id="43181" name="shallow water" />
+	<item id="43182" name="shallow water" />
+	<item id="43183" name="shallow water" />
+	<item id="43184" name="shallow water" />
+	<item id="43185" name="shallow water" />
+	<item id="43186" name="shallow water" />
+	<item id="43187" name="water" />
+	<item id="43188" name="water" />
+	<item id="43189" name="water" />
+	<item id="43190" name="water" />
+	<item id="43191" name="water" />
+	<item id="43192" name="water" />
+	<item id="43193" name="water" />
+	<item id="43194" name="water" />
+	<item id="43195" name="water" />
+	<item id="43196" name="water" />
+	<item id="43197" name="water" />
+	<item id="43198" name="water" />
+	<item id="43199" name="flooded grass" />
+	<item id="43200" name="flooded grass" />
+	<item id="43201" name="flooded grass" />
+	<item id="43202" name="flooded grass" />
+	<item id="43203" name="flooded grass" />
+	<item id="43204" name="flooded grass" />
+	<item id="43205" name="flooded grass" />
+	<item id="43206" name="flooded grass" />
+	<item id="43207" name="flooded grass" />
+	<item id="43208" name="flooded grass" />
+	<item id="43209" name="flooded grass" />
+	<item id="43210" name="flooded grass" />
+	<item id="43211" name="flooded grass" />
+	<item id="43212" name="flooded grass" />
+	<item id="43213" name="flooded grass" />
+	<item id="43214" name="flooded grass" />
+	<item id="43215" name="flooded grass" />
+	<item id="43216" name="huge lily pad" />
+	<item id="43217" name="huge lily pad" />
+	<item id="43218" name="huge lily pad" />
+	<item id="43219" name="huge lily pad" />
+	<item id="43220" name="huge lily pad" />
+	<item id="43221" name="huge lily pad" />
+	<item id="43222" name="huge lily pad" />
+	<item id="43223" name="huge lily pad" />
+	<item id="43224" name="huge lily pad" />
+	<item id="43225" name="huge lily pad" />
+	<item id="43226" name="huge lily pad" />
+	<item id="43227" name="huge lily pad" />
+	<item id="43228" name="huge lily pad" />
+	<item id="43229" name="huge lily pad" />
+	<item id="43230" name="huge lily pad" />
+	<item id="43231" name="huge lily pad" />
+	<item id="43232" name="huge lily pad" />
+	<item id="43233" name="huge lily pad" />
+	<item id="43234" name="huge lily pad" />
+	<item id="43235" name="huge lily pad" />
+	<item id="43236" name="huge lily pad" />
+	<item id="43237" name="huge lily pad" />
+	<item id="43238" name="huge lily pad" />
+	<item id="43239" name="huge lily pad" />
+	<item id="43240" name="huge lily pad" />
+	<item id="43241" name="huge lily pad" />
+	<item id="43242" name="huge lily pad" />
+	<item id="43243" name="huge lily pad" />
+	<item id="43244" name="huge lily pad" />
+	<item id="43245" name="huge lily pad" />
+	<item id="43246" name="huge lily pad" />
+	<item id="43247" name="huge lily pad" />
+	<item id="43248" name="huge lily pad" />
+	<item id="43249" name="huge lily pad" />
+	<item id="43250" name="huge lily pad" />
+	<item id="43251" name="huge lily pad" />
+	<item id="43252" name="huge lily pad" />
+	<item id="43253" name="huge lily pad" />
+	<item id="43254" name="huge lily pad" />
+	<item id="43255" name="huge lily pad" />
+	<item id="43256" name="huge lily pad" />
+	<item id="43257" name="huge lily pad" />
+	<item id="43258" name="huge lily pad" />
+	<item id="43259" name="huge lily pad" />
+	<item id="43260" name="huge lily pad" />
+	<item id="43261" name="huge lily pad" />
+	<item id="43262" name="huge lily pad" />
+	<item id="43263" name="huge lily pad" />
+	<item id="43264" name="huge lily pad" />
+	<item id="43265" name="huge lily pad" />
+	<item id="43266" name="huge lily pad" />
+	<item id="43267" name="huge lily pad" />
+	<item id="43268" name="huge lily pad" />
+	<item id="43269" name="huge lily pad" />
+	<item id="43270" name="lily pads" />
+	<item id="43271" name="patch of lily pads" />
+	<item id="43272" name="lily pad" />
+	<item id="43273" name="lily pad" />
+	<item id="43274" name="patch of lily pads" />
+	<item id="43275" name="big naga statue" />
+	<item id="43276" name="big naga statue" />
+	<item id="43277" name="big naga statue" />
+	<item id="43278" name="big naga statue" />
+	<item id="43279" name="big naga statue" />
+	<item id="43280" name="big naga statue" />
+	<item id="43281" name="big naga statue" />
+	<item id="43282" name="big naga statue" />
+	<item id="43283" name="big naga statue" />
+	<item id="43284" name="big naga statue" />
+	<item id="43285" name="big naga statue" />
+	<item id="43286" name="big naga statue" />
+	<item id="43287" name="big naga statue" />
+	<item id="43288" name="big naga statue" />
+	<item id="43289" name="big naga statue" />
+	<item id="43290" name="big naga statue" />
+	<item id="43291" name="big naga statue" />
+	<item id="43292" name="big naga statue" />
+	<item id="43293" name="big naga statue" />
+	<item id="43294" name="big naga statue" />
+	<item id="43295" name="big naga statue" />
+	<item id="43296" name="big naga statue" />
+	<item id="43297" name="big naga statue" />
+	<item id="43298" name="big naga statue" />
+	<item id="43299" name="big naga statue" />
+	<item id="43300" name="big naga statue" />
+	<item id="43301" name="big naga statue" />
+	<item id="43302" name="big naga statue" />
+	<item id="43303" name="big naga statue" />
+	<item id="43304" name="big naga statue" />
+	<item id="43305" name="big naga statue" />
+	<item id="43306" name="big naga statue" />
+	<item id="43307" name="big naga statue" />
+	<item id="43308" name="big naga statue" />
+	<item id="43309" name="star leaves" />
+	<item id="43310" name="star leaves" />
+	<item id="43311" name="star leaves" />
+	<item id="43312" name="star leaves" />
+	<item id="43313" name="star leaves" />
+	<item id="43314" name="star leaves" />
+	<item id="43315" name="star leaves" />
+	<item id="43316" name="star leaves" />
+	<item id="43317" name="star leaves" />
+	<item id="43318" name="star leaves" />
+	<item id="43319" name="star leaves" />
+	<item id="43320" name="star leaves" />
+	<item id="43321" name="star leaves" />
+	<item id="43322" name="star leaves" />
+	<item id="43323" name="star leaves" />
+	<item id="43324" name="star leaves" />
+	<item id="43325" name="star leaves" />
+	<item id="43326" name="star leaves" />
+	<item id="43327" name="star leaves" />
+	<item id="43328" name="star leaves" />
+	<item id="43329" name="star leaves" />
+	<item id="43330" name="star leaves" />
+	<item id="43331" name="star leaves" />
+	<item id="43332" name="star blossom" />
+	<item id="43333" name="star blossom leaf" />
+	<item id="43334" name="star blossom leaf" />
+	<item id="43335" name="star blossom leaf" />
+	<item id="43336" name="star blossom leaf" />
+	<item id="43337" name="star leaves" />
+	<item id="43338" name="star leaves" />
+	<item id="43339" name="star leaves" />
+	<item id="43340" name="star leaves" />
+	<item id="43341" name="star leaves" />
+	<item id="43342" name="star leaves" />
+	<item id="43343" name="star leaves" />
+	<item id="43344" name="star leaves" />
+	<item id="43345" name="star leaves" />
+	<item id="43346" name="star leaves" />
+	<item id="43347" name="star leaves" />
+	<item id="43358" name="stone floor" />
+	<item id="43359" name="stone floor" />
+	<item id="43360" name="stone floor" />
+	<item id="43361" name="stone floor" />
+	<item id="43362" name="stone floor" />
+	<item id="43363" name="stone floor" />
+	<item id="43364" name="stone floor" />
+	<item id="43365" name="stone floor" />
+	<item id="43366" name="stone floor" />
+	<item id="43367" name="stone floor" />
+	<item id="43368" name="stone floor" />
+	<item id="43369" name="stone floor" />
+	<item id="43370" name="mangrove" />
+	<item id="43371" name="mangrove" />
+	<item id="43372" name="mangrove" />
+	<item id="43373" name="mangrove roots" />
+	<item id="43374" name="mangrove roots" />
+	<item id="43375" name="mangrove roots" />
+	<item id="43376" name="mangrove roots" />
+	<item id="43377" name="mangrove roots" />
+	<item id="43378" name="mangrove roots" />
+	<item id="43379" name="mangrove roots" />
+	<item id="43380" name="mangrove roots" />
+	<item id="43381" name="mangrove roots" />
+	<item id="43382" name="mangrove roots" />
+	<item id="43383" name="mangrove roots" />
+	<item id="43384" name="mangrove roots" />
+	<item id="43385" name="mangrove roots" />
+	<item id="43386" name="mangrove roots" />
+	<item id="43387" name="mangrove roots" />
+	<item id="43388" name="mangrove roots" />
+	<item id="43389" name="mangrove roots" />
+	<item id="43390" name="stepping stones" />
+	<item id="43391" name="stepping stones" />
+	<item id="43392" name="stepping stones" />
+	<item id="43393" name="stepping stones" />
+	<item id="43394" name="stepping stones" />
+	<item id="43395" name="stepping stones" />
+	<item id="43396" name="stepping stones" />
+	<item id="43397" name="stone" />
+	<item id="43398" name="small stone" />
+	<item id="43399" name="small stone" />
+	<item id="43400" name="small stone" />
+	<item id="43401" name="lily pads" />
+	<item id="43402" name="small stone" />
+	<item id="43403" name="small stone" />
+	<item id="43404" name="small stone" />
+	<item id="43405" name="small stone" />
+	<item id="43406" name="small stone" />
+	<item id="43407" name="stepping stones" />
+	<item id="43408" name="stepping stones" />
+	<item id="43409" name="stepping stones" />
+	<item id="43410" name="stepping stones" />
+	<item id="43411" name="stepping stones" />
+	<item id="43412" name="stepping stones" />
+	<item id="43413" name="stepping stones" />
+	<item id="43414" name="small stone" />
+	<item id="43415" name="lily pads" />
+	<item id="43416" name="small stone" />
+	<item id="43417" name="small stone" />
+	<item id="43418" name="lily pads" />
+	<item id="43419" name="small stone" />
+	<item id="43420" name="small stone" />
+	<item id="43421" name="small stone" />
+	<item id="43422" name="small stone" />
+	<item id="43423" name="small stone" />
+	<item id="43424" name="flooded stone floor" />
+	<item id="43425" name="flooded stone floor" />
+	<item id="43426" name="flooded stone floor" />
+	<item id="43427" name="flooded stone floor" />
+	<item id="43428" name="flooded stone floor" />
+	<item id="43429" name="flooded stone floor" />
+	<item id="43430" name="flooded stone floor" />
+	<item id="43431" name="flooded stone floor" />
+	<item id="43432" name="flooded stone floor" />
+	<item id="43433" name="flooded stone floor" />
+	<item id="43434" name="flooded stone floor" />
+	<item id="43435" name="flooded stone floor" />
+	<item id="43436" name="flooded stone floor" />
+	<item id="43437" name="flooded stone floor" />
+	<item id="43438" name="flooded stone floor" />
+	<item id="43439" name="flooded stone floor" />
+	<item id="43440" name="flooded stone floor" />
+	<item id="43445" name="snake statue" />
+	<item id="43446" name="snake statue" />
+	<item id="43447" name="snake statue" />
+	<item id="43448" name="snake statue" />
+	<item id="43449" name="railing" />
+	<item id="43450" name="railing" />
+	<item id="43451" name="railing" />
+	<item id="43452" name="railing" />
+	<item id="43453" name="railing" />
+	<item id="43454" name="railing" />
+	<item id="43455" name="railing" />
+	<item id="43456" name="railing" />
+	<item id="43457" name="railing" />
+	<item id="43458" name="railing" />
+	<item id="43459" name="railing pillar" />
+	<item id="43460" name="railing pillar" />
+	<item id="43461" name="railing" />
+	<item id="43462" name="railing" />
+	<item id="43463" name="railing" />
+	<item id="43464" name="railing" />
+	<item id="43465" name="railing" />
+	<item id="43466" name="railing" />
+	<item id="43467" name="railing" />
+	<item id="43468" name="railing" />
+	<item id="43469" name="railing" />
+	<item id="43470" name="railing" />
+	<item id="43471" name="railing" />
+	<item id="43472" name="railing" />
+	<item id="43473" name="water" />
+	<item id="43474" name="water" />
+	<item id="43475" name="water" />
+	<item id="43476" name="water" />
+	<item id="43477" name="big mangrove" />
+	<item id="43478" name="mangrove" />
+	<item id="43479" name="mangrove" />
+	<item id="43480" name="mangrove roots" />
+	<item id="43481" name="mangrove roots" />
+	<item id="43482" name="mangrove roots" />
+	<item id="43483" name="mangrove roots" />
+	<item id="43484" name="mangrove roots" />
+	<item id="43485" name="mangrove roots" />
+	<item id="43486" name="mangrove roots" />
+	<item id="43487" name="mangrove roots" />
+	<item id="43488" name="mangrove roots" />
+	<item id="43489" name="mangrove roots" />
+	<item id="43490" name="mangrove roots" />
+	<item id="43491" name="mangrove roots" />
+	<item id="43492" name="mangrove roots" />
+	<item id="43493" name="mangrove roots" />
+	<item id="43494" name="mangrove branches" />
+	<item id="43495" name="mangrove branches" />
+	<item id="43496" name="mangrove branches" />
+	<item id="43497" name="mangrove branches" />
+	<item id="43498" name="mangrove branches" />
+	<item id="43499" name="mangrove branches" />
+	<item id="43500" name="mangrove branches" />
+	<item id="43501" name="mangrove roots" />
+	<item id="43502" name="mangrove roots" />
+	<item id="43503" name="mangrove roots" />
+	<item id="43504" name="stone floor" />
+	<item id="43505" name="stone floor" />
+	<item id="43506" name="stone floor" />
+	<item id="43507" name="stone floor" />
+	<item id="43508" name="stone floor" />
+	<item id="43509" name="stone floor" />
+	<item id="43510" name="stone floor" />
+	<item id="43511" name="stone floor" />
+	<item id="43512" name="stone floor" />
+	<item id="43513" name="stone floor" />
+	<item id="43514" name="stone floor" />
+	<item id="43515" name="stone floor" />
+	<item id="43516" name="snake statue" />
+	<item id="43517" name="water" />
+	<item id="43518" name="water" />
+	<item id="43519" name="tree" />
+	<item id="43520" name="water" />
+	<item id="43521" name="water" />
+	<item id="43522" name="water" />
+	<item id="43523" name="water" />
+	<item id="43524" name="water" />
+	<item id="43525" name="water" />
+	<item id="43526" name="water" />
+	<item id="43527" name="water" />
+	<item id="43528" name="water" />
+	<item id="43529" name="water" />
+	<item id="43530" name="water" />
+	<item id="43546" name="lily pads" />
+	<item id="43547" name="lily pads" />
+	<item id="43548" name="lily pads" />
+	<item id="43549" name="lily pads" />
+	<item id="43550" name="lily pads" />
+	<item id="43551" name="lily pads" />
+	<item id="43552" name="lily pads" />
+	<item id="43553" name="lily pads" />
+	<item id="43554" name="lily pads" />
+	<item id="43555" name="lily pads" />
+	<item id="43556" name="lily pads" />
+	<item id="43557" name="lily pads" />
+	<item id="43558" name="lily pads" />
+	<item id="43559" name="lily pads" />
+	<item id="43560" name="lily pads" />
+	<item id="43561" name="lily pads" />
+	<item id="43562" name="lily pads" />
+	<item id="43563" name="lily pads" />
+	<item id="43564" name="naga lamp" />
+	<item id="43565" name="naga lamp" />
+	<item id="43566" name="naga lamp" />
+	<item id="43567" name="naga lamp" />
+	<item id="43568" name="basin with a glowing flower" />
+	<item id="43570" name="basin with a flower" />
+	<item id="43571" name="wall lamp" />
+	<item id="43572" name="lit wall lamp" />
+	<item id="43573" name="wall lamp" />
+	<item id="43574" name="lit wall lamp" />
+	<item id="43575" name="wall lamp" />
+	<item id="43576" name="lit wall lamp" />
+	<item id="43577" name="wall lamp" />
+	<item id="43578" name="lit wall lamp" />
+	<item id="43579" name="big naga statue" />
+	<item id="43580" name="big naga statue" />
+	<item id="43581" name="big naga statue" />
+	<item id="43582" name="big naga statue" />
+	<item id="43583" name="big naga statue" />
+	<item id="43584" name="big naga statue" />
+	<item id="43585" name="big naga statue" />
+	<item id="43586" name="big naga statue" />
+	<item id="43587" name="big naga statue" />
+	<item id="43588" name="big naga statue" />
+	<item id="43589" name="big naga statue" />
+	<item id="43590" name="big naga statue" />
+	<item id="43591" name="big naga statue" />
+	<item id="43592" name="big naga statue" />
+	<item id="43593" name="big naga statue" />
+	<item id="43594" name="big naga statue" />
+	<item id="43595" name="big naga statue" />
+	<item id="43596" name="big naga statue" />
+	<item id="43597" name="big naga statue" />
+	<item id="43598" name="big naga statue" />
+	<item id="43599" name="big naga statue" />
+	<item id="43600" name="big naga statue" />
+	<item id="43601" name="big naga statue" />
+	<item id="43602" name="big naga statue" />
+	<item id="43603" name="big naga statue" />
+	<item id="43604" name="big naga statue" />
+	<item id="43605" name="big naga statue" />
+	<item id="43606" name="big naga statue" />
+	<item id="43607" name="big naga statue" />
+	<item id="43608" name="big naga statue" />
+	<item id="43609" name="big naga statue" />
+	<item id="43610" name="big naga statue" />
+	<item id="43611" name="big naga statue" />
+	<item id="43612" name="big naga statue" />
+	<item id="43613" name="big naga statue" />
+	<item id="43614" name="big naga statue" />
+	<item id="43615" name="big naga statue" />
+	<item id="43616" name="big naga statue" />
+	<item id="43617" name="big naga statue" />
+	<item id="43618" name="big naga statue" />
+	<item id="43619" name="big naga statue" />
+	<item id="43620" name="big naga statue" />
+	<item id="43621" name="big naga statue" />
+	<item id="43622" name="big naga statue" />
+	<item id="43623" name="big naga statue" />
+	<item id="43624" name="big naga statue" />
+	<item id="43625" name="big naga statue" />
+	<item id="43626" name="big naga statue" />
+	<item id="43627" name="big naga statue" />
+	<item id="43628" name="big naga statue" />
+	<item id="43629" name="big naga statue" />
+	<item id="43630" name="big naga statue" />
+	<item id="43631" name="big naga statue" />
+	<item id="43632" name="big naga statue" />
+	<item id="43633" name="big naga statue" />
+	<item id="43634" name="big naga statue" />
+	<item id="43635" name="big naga statue" />
+	<item id="43636" name="big naga statue" />
+	<item id="43637" name="big naga statue" />
+	<item id="43638" name="big naga statue" />
+	<item id="43639" name="big naga statue" />
+	<item id="43640" name="big naga statue" />
+	<item id="43641" name="big naga statue" />
+	<item id="43642" name="big naga statue" />
+	<item id="43643" name="big naga statue" />
+	<item id="43644" name="big naga statue" />
+	<item id="43645" name="big naga statue" />
+	<item id="43646" name="big naga statue" />
+	<item id="43647" name="big naga statue" />
+	<item id="43648" name="big naga statue" />
+	<item id="43649" name="big naga statue" />
+	<item id="43650" name="big naga statue" />
+	<item id="43651" name="big naga statue" />
+	<item id="43652" name="big naga statue" />
+	<item id="43653" name="big naga statue" />
+	<item id="43654" name="big naga statue" />
+	<item id="43655" name="big naga statue" />
+	<item id="43656" name="mangrove branches" />
+	<item id="43657" name="mangrove branches" />
+	<item id="43658" name="mangrove branches" />
+	<item id="43659" name="mangrove branches" />
+	<item id="43660" name="mangrove branches" />
+	<item id="43661" name="mangrove branches" />
+	<item id="43662" name="mangrove branches" />
+	<item id="43663" name="mangrove branches" />
+	<item id="43664" name="mangrove branches" />
+	<item id="43665" name="wall lamp" />
+	<item id="43666" name="lit wall lamp" />
+	<item id="43667" name="wall lamp" />
+	<item id="43668" name="lit wall lamp" />
 	<item id="43675" name="peacock feather" />
 	<item id="43676" name="flamingo feather" />
 	<item id="43677" name="swan feather" />
+	<item id="43678" name="floor" />
+	<item id="43679" name="dawnfire blossoms" />
+	<item id="43680" name="floor" />
+	<item id="43681" name="dawnfire blossoms" />
+	<item id="43682" name="floor" />
+	<item id="43683" name="floor" />
+	<item id="43684" name="frost flowers" />
+	<item id="43685" name="frost flowers" />
 	<item id="43686" name="silver hand" />
 	<item id="43687" name="golden hand" />
 	<item id="43688" name="bronze hand" />
+	<item id="43699" name="flooded sand" />
+	<item id="43700" name="flooded sand" />
+	<item id="43701" name="flooded sand" />
+	<item id="43703" name="flooded sand" />
+	<item id="43704" name="flooded sand" />
+	<item id="43705" name="flooded sand" />
+	<item id="43706" name="flooded sand" />
+	<item id="43707" name="flooded sand" />
+	<item id="43708" name="flooded sand" />
+	<item id="43709" name="flooded sand" />
+	<item id="43710" name="flooded sand" />
+	<item id="43711" name="flooded sand" />
+	<item id="43712" name="lianas" />
+	<item id="43713" name="lianas" />
+	<item id="43714" name="water" />
+	<item id="43715" name="water" />
+	<item id="43716" name="water" />
+	<item id="43717" name="water" />
+	<item id="43718" name="water" />
+	<item id="43719" name="water" />
+	<item id="43720" name="water" />
+	<item id="43721" name="water" />
+	<item id="43722" name="water" />
+	<item id="43723" name="water" />
+	<item id="43724" name="water" />
+	<item id="43725" name="water" />
+	<item id="43726" name="water" />
+	<item id="43727" name="water" />
+	<item id="43728" name="water" />
+	<item id="43729" name="water" />
+	<item id="43730" name="water" />
+	<item id="43731" name="water" />
+	<item id="43732" name="water" />
+	<item id="43733" name="water" />
+	<item id="43734" name="water" />
+	<item id="43735" name="water" />
+	<item id="43736" name="water" />
+	<item id="43737" name="water" />
 	<item id="43738" name="podium of vigour" />
+	<item id="43743" name="stone floor" />
+	<item id="43744" name="stone floor" />
+	<item id="43745" name="stone floor" />
+	<item id="43746" name="stone floor" />
+	<item id="43747" name="stone floor" />
+	<item id="43748" name="stone floor" />
+	<item id="43749" name="stone floor" />
+	<item id="43750" name="stone floor" />
+	<item id="43751" name="stone floor" />
+	<item id="43752" name="stone floor" />
+	<item id="43753" name="stone floor" />
+	<item id="43754" name="stone floor" />
+	<item id="43755" name="shallow water" />
+	<item id="43756" name="shallow water" />
+	<item id="43757" name="shallow water" />
+	<item id="43758" name="shallow water" />
+	<item id="43759" name="shallow water" />
+	<item id="43760" name="shallow water" />
+	<item id="43761" name="shallow water" />
+	<item id="43762" name="shallow water" />
+	<item id="43763" name="shallow water" />
+	<item id="43764" name="shallow water" />
+	<item id="43765" name="shallow water" />
+	<item id="43766" name="shallow water" />
+	<item id="43767" name="solid water" />
+	<item id="43768" name="roof" />
+	<item id="43769" name="roof" />
+	<item id="43770" name="roof" />
+	<item id="43771" name="roof" />
+	<item id="43772" name="roof" />
+	<item id="43773" name="roof" />
+	<item id="43774" name="roof" />
+	<item id="43775" name="roof" />
+	<item id="43776" name="roof" />
+	<item id="43777" name="roof" />
+	<item id="43778" name="roof" />
+	<item id="43779" name="roof" />
+	<item id="43780" name="shallow water" />
+	<item id="43782" name="crystal desk" />
+	<item id="43783" name="crystal stool" />
+	<item id="43784" name="crystal stool" />
+	<item id="43785" name="crystal handcart" />
+	<item id="43786" name="quarry workplace" />
+	<item id="43787" name="crystal box" />
+	<item id="43788" name="fossile skull" />
+	<item id="43789" name="mushroom house" />
+	<item id="43790" name="mushroom house" />
+	<item id="43791" name="mushroom house" />
+	<item id="43792" name="mushroom house" />
+	<item id="43793" name="mushroom house" />
+	<item id="43794" name="mushroom house" />
+	<item id="43795" name="mushroom house" />
+	<item id="43796" name="mushroom house" />
+	<item id="43797" name="mushroom house" />
+	<item id="43798" name="mushroom house" />
+	<item id="43799" name="mushroom house" />
+	<item id="43800" name="mushroom house" />
+	<item id="43801" name="mushroom house" />
+	<item id="43802" name="mushroom house" />
+	<item id="43803" name="mushroom house" />
+	<item id="43804" name="mushroom house" />
+	<item id="43805" name="mushroom house" />
+	<item id="43806" name="mushroom house" />
+	<item id="43807" name="mushroom house" />
+	<item id="43808" name="mushroom house" />
+	<item id="43809" name="mushroom house" />
+	<item id="43810" name="mushroom house" />
+	<item id="43811" name="mushroom house" />
+	<item id="43812" name="mushroom house" />
+	<item id="43813" name="mushroom house" />
+	<item id="43814" name="mushroom house" />
+	<item id="43815" name="mushroom house" />
+	<item id="43816" name="mushroom house" />
+	<item id="43817" name="mushroom house" />
+	<item id="43818" name="mushroom house" />
+	<item id="43819" name="mushroom house" />
+	<item id="43820" name="mushroom house" />
+	<item id="43821" name="mushroom house" />
+	<item id="43822" name="mushroom house" />
+	<item id="43823" name="mushroom house" />
+	<item id="43824" name="mushroom house" />
+	<item id="43825" name="mushroom house" />
+	<item id="43826" name="mushroom house" />
+	<item id="43827" name="mushroom house" />
+	<item id="43828" name="mushroom house" />
+	<item id="43829" name="mushroom house" />
+	<item id="43830" name="mushroom house" />
+	<item id="43831" name="mushroom house" />
+	<item id="43832" name="mushroom house" />
+	<item id="43833" name="mushroom house" />
+	<item id="43834" name="mushroom house" />
+	<item id="43835" name="mushroom house" />
+	<item id="43836" name="mushroom house" />
+	<item id="43837" name="mushroom house" />
+	<item id="43838" name="mushroom house" />
+	<item id="43839" name="mushroom house" />
+	<item id="43840" name="mushroom house" />
+	<item id="43841" name="mushroom house" />
+	<item id="43842" name="mushroom house" />
+	<item id="43843" name="mushroom house" />
+	<item id="43844" name="mushroom house" />
+	<item id="43845" name="mushroom house" />
+	<item id="43846" name="mushroom house" />
+	<item id="43847" name="mushroom house" />
+	<item id="43848" name="mushroom house" />
+	<item id="43849" name="mushroom house" />
+	<item id="43850" name="mushroom house" />
+	<item id="43851" name="mushroom house" />
+	<item id="43852" name="mushroom house" />
+	<item id="43853" name="fossile skull" />
+	<item id="43854" name="pineapple fern" />
+	<item id="43855" name="limb tree" />
+	<item id="43856" name="spire palm" />
+	<item id="43857" name="volcano barbecue" />
+	<item id="43858" name="mushroom lamp" />
+	<item id="43859" name="mushroom lamp" />
+	<item id="43860" name="mushroom plant" />
+	<item id="43861" name="mushroom plant" />
+	<item id="43862" name="stairs" />
+	<item id="43863" name="stairs" />
+	<item id="43864" name="railing" />
+	<item id="43865" name="railing" />
+	<item id="43866" name="decoration" />
+	<item id="43867" name="decoration" />
+	<item id="43868" name="decoration" />
+	<item id="43869" name="decoration" />
+	<item id="43870" name="bridge" />
+	<item id="43871" name="bridge" />
+	<item id="43872" name="bridge" />
 	<item id="43874" name="silver and a golden hand" />
 	<item id="43875" name="asuri talisman" />
+	<item id="43876" name="closed fence gate" />
+	<item id="43877" name="naga boat" />
+	<item id="43878" name="floor" />
+	<item id="43879" name="floor" />
+	<item id="43880" name="midnight flowers" />
+	<item id="43881" name="midnight flowers" />
+	<item id="43882" name="closed door" />
+	<item id="43883" name="burnt soil" />
+	<item id="43884" name="burnt soil" />
+	<item id="43885" name="burnt soil" />
+	<item id="43886" name="burnt soil" />
+	<item id="43887" name="burnt soil" />
+	<item id="43888" name="burnt soil" />
+	<item id="43889" name="burnt soil" />
+	<item id="43890" name="burnt soil" />
+	<item id="43891" name="burnt soil" />
+	<item id="43892" name="burnt soil" />
+	<item id="43893" name="burnt soil" />
+	<item id="43894" name="rock soil burnt soil" />
+	<item id="43895" name="rock soil burnt soil" />
+	<item id="43896" name="rock soil burnt soil" />
+	<item id="43897" name="rock soil burnt soil" />
+	<item id="43898" name="rock soil burnt soil" />
+	<item id="43899" name="rock soil burnt soil" />
+	<item id="43900" name="rock soil burnt soil" />
+	<item id="43901" name="rock soil burnt soil" />
+	<item id="43902" name="rock soil burnt soil" />
+	<item id="43903" name="rock soil burnt soil" />
+	<item id="43904" name="rock soil burnt soil" />
+	<item id="43905" name="rock soil burnt soil" />
+	<item id="43906" name="shallow water" />
+	<item id="43907" name="basket full of star leaves" />
+	<item id="43908" name="basket full of lily pads" />
+	<item id="43909" name="empty basket" />
+	<item id="43910" name="naga nest" />
+	<item id="43911" name="naga nest" />
+	<item id="43912" name="lily pads" />
+	<item id="43913" name="lily pads" />
+	<item id="43914" name="lily pads" />
+	<item id="43915" name="lily pads" />
+	<item id="43916" name="lily pads" />
+	<item id="43917" name="lily pads" />
+	<item id="43918" name="lily pads" />
+	<item id="43919" name="lily pads" />
+	<item id="43920" name="lily pads" />
+	<item id="43921" name="lily pads" />
+	<item id="43922" name="lily pads" />
+	<item id="43923" name="lily pads" />
+	<item id="43924" name="lily pads" />
+	<item id="43925" name="lily pads" />
+	<item id="43926" name="roof" />
+	<item id="43927" name="roof" />
+	<item id="43928" name="roof" />
+	<item id="43929" name="roof" />
+	<item id="43930" name="roof" />
+	<item id="43931" name="roof" />
+	<item id="43932" name="roof" />
+	<item id="43933" name="roof" />
+	<item id="43934" name="roof" />
+	<item id="43935" name="roof" />
+	<item id="43936" name="roof" />
+	<item id="43937" name="roof" />
+	<item id="43938" name="roof" />
+	<item id="43939" name="roof" />
+	<item id="43940" name="roof" />
+	<item id="43941" name="roof" />
+	<item id="43942" name="roof" />
+	<item id="43943" name="roof" />
+	<item id="43944" name="roof" />
+	<item id="43945" name="roof" />
+	<item id="43946" name="stone floor" />
+	<item id="43947" name="stone floor" />
+	<item id="43948" name="stone floor" />
+	<item id="43949" name="stone floor" />
+	<item id="43950" name="stone floor" />
+	<item id="43951" name="stone floor" />
+	<item id="43952" name="stone floor" />
+	<item id="43953" name="stone floor" />
+	<item id="43954" name="stone floor" />
+	<item id="43955" name="stone floor" />
+	<item id="43956" name="stone floor" />
+	<item id="43957" name="stone floor" />
+	<item id="43958" name="water trickle" />
+	<item id="43959" name="water trickle" />
+	<item id="43960" name="water trickle" />
+	<item id="43961" name="water trickle" />
+	<item id="43962" name="water trickle" />
+	<item id="43963" name="water trickle" />
+	<item id="43964" name="floor" />
 	<item id="43965" name="handwritten message" />
+	<item id="43966" name="stone floor" />
+	<item id="43967" name="stone floor" />
+	<item id="43968" name="stone floor" />
+	<item id="43969" name="stone floor" />
+	<item id="43970" name="stone floor" />
+	<item id="43971" name="stone floor" />
+	<item id="43972" name="stone floor" />
+	<item id="43973" name="stone floor" />
+	<item id="43974" name="stone floor" />
+	<item id="43975" name="stone floor" />
+	<item id="43976" name="stone floor" />
+	<item id="43977" name="stone floor" />
+	<item id="43978" name="stone floor" />
+	<item id="43979" name="stone floor" />
+	<item id="43980" name="stone floor" />
+	<item id="43981" name="stone floor" />
+	<item id="43982" name="stone floor" />
+	<item id="43983" name="stone floor" />
+	<item id="43984" name="stone floor" />
+	<item id="43985" name="stone floor" />
+	<item id="43986" name="stone floor" />
+	<item id="43987" name="stone floor" />
+	<item id="43988" name="stone floor" />
+	<item id="43989" name="stone floor" />
+	<item id="43990" name="stone floor" />
+	<item id="43991" name="stone floor" />
+	<item id="43992" name="stone floor" />
+	<item id="43993" name="stone floor" />
+	<item id="43994" name="stone floor" />
+	<item id="43995" name="stone floor" />
+	<item id="43996" name="stone floor" />
+	<item id="43997" name="stone floor" />
+	<item id="43998" name="stone floor" />
+	<item id="43999" name="stone floor" />
+	<item id="44000" name="stone floor" />
+	<item id="44001" name="stone floor" />
+	<item id="44002" name="stone floor" />
+	<item id="44003" name="stone floor" />
+	<item id="44004" name="stone floor" />
+	<item id="44005" name="stone floor" />
+	<item id="44006" name="stone floor" />
+	<item id="44007" name="stone floor" />
+	<item id="44008" name="stone floor" />
+	<item id="44009" name="stone floor" />
+	<item id="44010" name="stone floor" />
+	<item id="44011" name="burnt soil" />
+	<item id="44012" name="burnt soil" />
+	<item id="44013" name="burnt soil" />
+	<item id="44014" name="burnt soil" />
+	<item id="44015" name="burnt soil" />
+	<item id="44016" name="burnt soil" />
+	<item id="44017" name="burnt soil" />
+	<item id="44018" name="burnt soil" />
+	<item id="44019" name="burnt soil" />
+	<item id="44020" name="burnt soil" />
+	<item id="44021" name="burnt soil" />
+	<item id="44022" name="burnt soil 2" />
+	<item id="44023" name="burnt soil 2" />
+	<item id="44024" name="burnt soil 2" />
+	<item id="44025" name="burnt soil 2" />
+	<item id="44026" name="burnt soil 2" />
+	<item id="44027" name="burnt soil 2" />
+	<item id="44028" name="burnt soil 2" />
+	<item id="44029" name="burnt soil 2" />
+	<item id="44030" name="burnt soil 2" />
+	<item id="44031" name="burnt soil 2" />
+	<item id="44032" name="burnt soil 2" />
+	<item id="44033" name="burnt soil 2" />
+	<item id="44034" name="Tentugly" />
+	<item id="44035" name="shallow water" />
+	<item id="44036" name="shallow water" />
+	<item id="44037" name="shallow water" />
+	<item id="44038" name="shallow water" />
+	<item id="44039" name="shallow water" />
+	<item id="44040" name="shallow water" />
+	<item id="44041" name="shallow water" />
+	<item id="44042" name="shallow water" />
+	<item id="44043" name="shallow water" />
+	<item id="44044" name="shallow water" />
+	<item id="44045" name="shallow water" />
+	<item id="44046" name="shallow water" />
+	<item id="44047" name="shallow water" />
+	<item id="44048" name="shallow water" />
+	<item id="44049" name="shallow water" />
+	<item id="44050" name="shallow water" />
+	<item id="44051" name="shallow water" />
+	<item id="44052" name="shallow water" />
+	<item id="44053" name="shallow water" />
+	<item id="44054" name="shallow water" />
+	<item id="44055" name="shallow water" />
+	<item id="44056" name="shallow water" />
+	<item id="44057" name="shallow water" />
+	<item id="44058" name="shallow water" />
+	<item id="44059" name="shallow water" />
+	<item id="44060" name="shallow water" />
+	<item id="44061" name="shallow water" />
+	<item id="44062" name="shallow water" />
+	<item id="44063" name="shallow water" />
+	<item id="44064" name="shallow water" />
+	<item id="44065" name="shallow water" />
+	<item id="44066" name="shallow water" />
 	<item id="44067" name="rainbow opal" />
 	<item id="44068" name="cobalt ridge" />
 	<item id="44069" name="royal almandine" />
 	<item id="44070" name="cerulean abyss" />
 	<item id="44071" name="fiery tear" />
+	<item id="44072" name="bridge" />
+	<item id="44073" name="bridge" />
+	<item id="44078" name="bridge" />
+	<item id="44079" name="bridge" />
+	<item id="44080" name="bridge" />
+	<item id="44083" name="bridge" />
+	<item id="44084" name="bridge" />
+	<item id="44086" name="bridge" />
+	<item id="44087" name="bridge" />
+	<item id="44088" name="bridge" />
+	<item id="44089" name="bridge" />
+	<item id="44090" name="bridge" />
+	<item id="44113" name="bridge" />
+	<item id="44115" name="bridge" />
+	<item id="44116" name="bridge" />
+	<item id="44119" name="bridge" />
+	<item id="44120" name="bridge" />
+	<item id="44121" name="bridge" />
+	<item id="44122" name="bridge" />
+	<item id="44123" name="primal light" />
+	<item id="44124" name="primal light" />
+	<item id="44125" name="primal light" />
+	<item id="44126" name="primal light" />
+	<item id="44127" name="primal light" />
+	<item id="44128" name="primal light" />
+	<item id="44129" name="primal light" />
+	<item id="44130" name="primal light" />
+	<item id="44131" name="primal light" />
+	<item id="44132" name=" flame" />
+	<item id="44133" name="flame" />
+	<item id="44134" name="flame" />
+	<item id="44135" name="flame" />
+	<item id="44136" name=" flame" />
+	<item id="44137" name="fire" />
+	<item id="44138" name="delicate vase" />
+	<item id="44139" name="small amphora" />
+	<item id="44140" name="small amphora" />
+	<item id="44141" name="small amphora" />
+	<item id="44142" name="small amphora" />
+	<item id="44143" name="small amphora" />
+	<item id="44144" name="small amphora" />
+	<item id="44145" name="broken amphora" />
+	<item id="44146" name="small amphora" />
+	<item id="44147" name="shallow water" />
+	<item id="44148" name="naga sleeping basket" />
+	<item id="44149" name="naga sleeping basket" />
+	<item id="44150" name="naga sleeping basket" />
+	<item id="44151" name="naga sleeping basket" />
+	<item id="44152" name="trapped water" />
+	<item id="44153" name="shattered water" />
+	<item id="44154" name="frozen pond" />
+	<item id="44155" name="frozen pond" />
+	<item id="44156" name="frozen pond" />
+	<item id="44157" name="frozen pond" />
+	<item id="44158" name="large seashell" />
+	<item id="44159" name="large seashell" />
+	<item id="44160" name="large seashell" />
+	<item id="44161" name="large seashell" />
+	<item id="44162" name="moon mint" />
 	<item id="44163" name="moon mint" />
+	<item id="44164" name="jungle moa nest" />
 	<item id="44165" name="moonshine pearl" />
 	<item id="44166" name="shimmering pearl" />
 	<item id="44167" name="celestial chart" />
 	<item id="44168" name="burning splint" />
+	<item id="44169" name="brightly burning flames" />
+	<item id="44170" name="moon mint stalks" />
+	<item id="44171" name="coral vow flower" />
 	<item id="44172" name="coral vow flower" />
+	<item id="44174" name="pile of dry wood" />
 	<item id="44175" name="splint" />
 	<item id="44176" name="blessed water" />
+	<item id="44177" name="stony pond" />
 	<item id="44178" name="spiritthorn armor" />
 	<item id="44179" name="spiritthorn helmet" />
 	<item id="44180" name="alicorn headguard" />
@@ -42712,6 +43809,15 @@
 	<item id="44196" name="midnight tunic" />
 	<item id="44197" name="dawnfire pantaloons" />
 	<item id="44198" name="midnight sarong" />
+	<item id="44199" name="fire crystal" />
+	<item id="44200" name="polarity reversed crystal" />
+	<item id="44201" name="extremly hot fire" />
+	<item id="44202" name="extremly hot fire" />
+	<item id="44203" name="extremly hot fire" />
+	<item id="44204" name="stony pond" />
+	<item id="44205" name="stony pond" />
+	<item id="44206" name="stony pond" />
+	<item id="44207" name="primal pod" />
 	<item id="44208" name="charged spiritthorn ring" />
 	<item id="44209" name="charged spiritthorn ring" />
 	<item id="44210" name="spiritthorn ring" />
@@ -42724,18 +43830,170 @@
 	<item id="44217" name="charged arboreal ring" />
 	<item id="44218" name="charged arboreal ring" />
 	<item id="44219" name="arboreal ring" />
+	<item id="44226" name="lava" />
+	<item id="44227" name="lava" />
+	<item id="44228" name="lava" />
+	<item id="44229" name="lava" />
+	<item id="44230" name="lava" />
+	<item id="44231" name="lava" />
+	<item id="44232" name="dead parder" />
+	<item id="44233" name="dead parder" />
+	<item id="44234" name="dead parder" />
+	<item id="44235" name="dead parder" />
+	<item id="44236" name="dead jungle moa" />
+	<item id="44237" name="dead jungle moa" />
+	<item id="44238" name="dead jungle moa" />
+	<item id="44239" name="dead jungle moa" />
+	<item id="44240" name="dead two-headed turtle" />
+	<item id="44241" name="dead two-headed turtle" />
+	<item id="44242" name="dead two-headed turtle" />
+	<item id="44243" name="dead two-headed turtle" />
+	<item id="44245" name="dead corrupt naga" />
+	<item id="44246" name="dead corrupt naga" />
+	<item id="44247" name="dead corrupt naga" />
+	<item id="44248" name="dead corrupt naga" />
+	<item id="44249" name="dead rogue naga" />
+	<item id="44250" name="dead rogue naga" />
+	<item id="44251" name="dead rogue naga" />
+	<item id="44252" name="dead rogue naga" />
+	<item id="44253" name="dead naga archer" />
+	<item id="44254" name="dead naga archer" />
+	<item id="44255" name="dead naga archer" />
+	<item id="44256" name="dead naga archer" />
+	<item id="44257" name="dead naga warrior" />
+	<item id="44258" name="dead naga warrior" />
+	<item id="44259" name="dead naga warrior" />
+	<item id="44260" name="dead naga warrior" />
 	<item id="44261" name="charged flame" />
+	<item id="44263" name="crystal flame" />
 	<item id="44264" name="enchanted turtle amulet" />
 	<item id="44265" name="enchanted turtle amulet" />
 	<item id="44266" name="turtle amulet" />
+	<item id="44267" name="primal light" />
+	<item id="44269" name="portal without energy" />
+	<item id="44270" name="burnt coral vow flower" />
 	<item id="44271" name="foam stalker spume" />
 	<item id="44272" name="glass lens" />
 	<item id="44273" name="empty bucket" />
 	<item id="44274" name="bucket full of water" />
 	<item id="44275" name="bucket full of sparkles" />
+	<item id="44277" name="turtle shell" />
+	<item id="44278" name="turtle shell" />
+	<item id="44279" name="turtle shell" />
+	<item id="44280" name="turtle shell" />
+	<item id="44281" name="turtle shell" />
+	<item id="44282" name="turtle shell" />
+	<item id="44283" name="turtle shell" />
+	<item id="44284" name="turtle shell" />
+	<item id="44285" name="turtle shell" />
+	<item id="44286" name="turtle shell" />
+	<item id="44287" name="turtle shell" />
+	<item id="44288" name="turtle shell" />
+	<item id="44289" name="turtle shell" />
+	<item id="44290" name="turtle shell" />
+	<item id="44291" name="turtle shell" />
+	<item id="44292" name="turtle shell" />
+	<item id="44293" name="turtle shell" />
+	<item id="44294" name="turtle shell" />
+	<item id="44295" name="turtle shell" />
+	<item id="44296" name="turtle shell" />
+	<item id="44297" name="trapped water" />
+	<item id="44298" name="corrupted trapped water" />
+	<item id="44299" name="trapped water" />
+	<item id="44300" name="shattered water" />
+	<item id="44302" name="rigged elemental resonator" />
+	<item id="44303" name="dead sulphider" />
+	<item id="44304" name="dead sulphider" />
+	<item id="44305" name="dead sulphider" />
+	<item id="44306" name="dead sulphider" />
+	<item id="44307" name="dead sulphur spouter" />
+	<item id="44308" name="dead sulphur spouter" />
+	<item id="44309" name="dead sulphur spouter" />
+	<item id="44310" name="dead sulphur spouter" />
+	<item id="44311" name="dead gore horn" />
+	<item id="44312" name="dead gore horn" />
+	<item id="44313" name="dead gore horn" />
+	<item id="44314" name="dead gore horn" />
+	<item id="44315" name="dead sabretooth" />
+	<item id="44316" name="dead sabretooth" />
+	<item id="44317" name="dead sabretooth" />
+	<item id="44318" name="dead sabretooth" />
+	<item id="44319" name="dead emerald tortoise" />
+	<item id="44320" name="dead emerald tortoise" />
+	<item id="44321" name="dead emerald tortoise" />
+	<item id="44322" name="dead emerald tortoise" />
+	<item id="44323" name="dead undertaker" />
+	<item id="44324" name="dead undertaker" />
+	<item id="44325" name="dead undertaker" />
+	<item id="44326" name="dead undertaker" />
+	<item id="44327" name="dead nighthunter" />
+	<item id="44328" name="dead nighthunter" />
+	<item id="44329" name="dead nighthunter" />
+	<item id="44330" name="dead nighthunter" />
+	<item id="44331" name="dead hulking prehemoth" />
+	<item id="44332" name="dead hulking prehemoth" />
+	<item id="44333" name="dead hulking prehemoth" />
+	<item id="44334" name="dead hulking prehemoth" />
+	<item id="44335" name="dead stalking stalk" />
+	<item id="44336" name="dead stalking stalk" />
+	<item id="44337" name="dead stalking stalk" />
+	<item id="44338" name="dead stalking stalk" />
+	<item id="44339" name="dead fungosaurus" />
+	<item id="44340" name="dead fungosaurus" />
+	<item id="44341" name="dead fungosaurus" />
+	<item id="44342" name="dead fungosaurus" />
+	<item id="44343" name="dead mantosaurus" />
+	<item id="44344" name="dead mantosaurus" />
+	<item id="44345" name="dead mantosaurus" />
+	<item id="44346" name="dead mantosaurus" />
+	<item id="44347" name="dead headpecker" />
+	<item id="44348" name="dead headpecker" />
+	<item id="44349" name="dead headpecker" />
+	<item id="44350" name="dead headpecker" />
+	<item id="44351" name="dead noxious ripptor" />
+	<item id="44352" name="dead noxious ripptor" />
+	<item id="44353" name="dead noxious ripptor" />
+	<item id="44354" name="dead noxious ripptor" />
+	<item id="44355" name="dead gorerilla" />
+	<item id="44356" name="dead gorerrilla" />
+	<item id="44357" name="dead gorerilla" />
+	<item id="44358" name="dead gorerilla" />
+	<item id="44359" name="dead shrieking cry-stal" />
+	<item id="44360" name="dead shrieking cry-stal" />
+	<item id="44361" name="dead shrieking cry-stal" />
+	<item id="44362" name="dead shrieking cry-stal" />
+	<item id="44363" name="dead mercurial menace" />
+	<item id="44364" name="dead mercurial menace" />
+	<item id="44365" name="dead mercurial menace" />
+	<item id="44366" name="dead mercurial menace" />
+	<item id="44367" name="damselfly wing" />
+	<item id="44368" name="damselfly eye" />
 	<item id="44369" name="flask of mango juice" />
 	<item id="44370" name="flask of mango honey juice" />
 	<item id="44371" name="butterfly conservation kit" />
+	<item id="44372" name="dead foam stalker" />
+	<item id="44373" name="dead foam stalker" />
+	<item id="44374" name="dead foam stalker" />
+	<item id="44375" name="dead foam stalker" />
+	<item id="44376" name="extremly hot fire" />
+	<item id="44378" name="starting fire" />
+	<item id="44381" name="ember" />
+	<item id="44382" name="closed door" />
+	<item id="44383" name="closed door" />
+	<item id="44384" name="open door" />
+	<item id="44385" name="open door" />
+	<item id="44394" name="dead makara" />
+	<item id="44395" name="dead makara" />
+	<item id="44396" name="dead makara" />
+	<item id="44397" name="dead makara" />
+	<item id="44398" name="primal light" />
+	<item id="44399" name="primal light" />
+	<item id="44400" name="mossy floor" />
+	<item id="44401" name="mossy floor" />
+	<item id="44402" name="mossy floor" />
+	<item id="44403" name="monster leftovers" />
+	<item id="44404" name="crystal flame" />
+	<item id="44405" name="energy extractor" />
 	<item id="44406" name="sulphider shell" />
 	<item id="44407" name="sulphur powder" />
 	<item id="44408" name="gore horn" />
@@ -42751,11 +44009,13 @@
 	<item id="44418" name="headpecker beak" />
 	<item id="44419" name="headpecker feather" />
 	<item id="44420" name="ripptor claw" />
+	<item id="44421" name="ornamented chest" />
 	<item id="44422" name="ripptor scales" />
 	<item id="44423" name="gorerilla mane" />
 	<item id="44424" name="gorerilla tail" />
 	<item id="44425" name="cry-stal" />
 	<item id="44426" name="mercurial wing" />
+	<item id="44427" name="ornamented chest" />
 	<item id="44428" name="coral powder" />
 	<item id="44429" name="cure for sick beavers" />
 	<item id="44430" name="one of Timira's many heads" />
@@ -42807,6 +44067,18 @@
 	<item id="44476" name="knightly fire bowl" />
 	<item id="44477" name="knightly wall lamp" />
 	<item id="44478" name="knightly wall lamp" />
+	<item id="44515" name="some crystals" />
+	<item id="44516" name="some crystals" />
+	<item id="44517" name="some crystals" />
+	<item id="44518" name="some crystals" />
+	<item id="44519" name="some crystals" />
+	<item id="44520" name="some crystals" />
+	<item id="44521" name="some crystals" />
+	<item id="44522" name="some crystals" />
+	<item id="44523" name="some crystals" />
+	<item id="44524" name="some crystals" />
+	<item id="44525" name="some crystals" />
+	<item id="44526" name="some crystals" />
 	<item id="44527" name="knightly sword lamp" />
 	<item id="44528" name="knightly sword lamp" />
 	<item id="44529" name="knightly candelabra" />
@@ -42821,6 +44093,10 @@
 	<item id="44539" name="knightly guard" />
 	<item id="44540" name="knightly guard" />
 	<item id="44541" name="knightly guard" />
+	<item id="44542" name="lever" />
+	<item id="44543" name="lever" />
+	<item id="44544" name="something sparkling" />
+	<item id="44545" name="something sparkling" />
 	<item id="44548" name="knightly bench" />
 	<item id="44549" name="knightly bench" />
 	<item id="44550" name="knightly bench" />
@@ -42831,23 +44107,119 @@
 	<item id="44555" name="knightly bench" />
 	<item id="44556" name="knightly bench" />
 	<item id="44557" name="knightly bench" />
+	<item id="44558" name="dead primal menace" />
+	<item id="44559" name="dead primal menace" />
+	<item id="44560" name="dead primal menace" />
+	<item id="44561" name="dead primal menace" />
+	<item id="44562" name="omnious device" />
+	<item id="44563" name="large crystal plate" />
+	<item id="44564" name="ripe primal pod" />
+	<item id="44565" name="thin air" />
 	<item id="44567" name="candy lure" />
+	<item id="44568" name="lazyfairy" />
+	<item id="44569" name="dead plunder patriarch" />
+	<item id="44570" name="dead plunder patriach" />
+	<item id="44571" name="dead plunder patriarch" />
+	<item id="44572" name="dead plunder patriarch" />
+	<item id="44573" name="water wheel" />
 	<item id="44574" name="smoldering eye" />
 	<item id="44575" name="firefighting axe" />
 	<item id="44576" name="portable flame" />
 	<item id="44577" name="primal bag" />
+	<item id="44578" name="energy vein" />
 	<item id="44579" name="colourful water lily" />
+	<item id="44580" name="stony face" />
+	<item id="44581" name="alga" />
+	<item id="44582" name="seaweed" />
+	<item id="44583" name="small coral" />
+	<item id="44584" name="stone" />
+	<item id="44585" name="stone" />
+	<item id="44586" name="small coral" />
+	<item id="44587" name="palm lettuce coral" />
+	<item id="44588" name="bubbles" />
+	<item id="44589" name="sponge" />
+	<item id="44590" name="tree coral" />
+	<item id="44591" name="large coral" />
+	<item id="44592" name="underwater volcano" />
+	<item id="44593" name="underwater volcano" />
+	<item id="44594" name="lava hole" />
+	<item id="44595" name="bubbles" />
+	<item id="44596" name="lava hole" />
+	<item id="44597" name="gold coins" />
+	<item id="44598" name="gold coins" />
 	<item id="44599" name="naga nest" />
 	<item id="44600" name="naga nest" />
+	<item id="44601" name="stony face" />
 	<item id="44602" name="canary feather" />
+	<item id="44603" name="birdcage" />
 	<item id="44604" name="gemmed lotus brooch" />
+	<item id="44605" name="clinker wall" />
+	<item id="44606" name="stone" />
+	<item id="44607" name="stone" />
 	<item id="44608" name="bag with naga eggs" />
 	<item id="44609" name="icicle chisel" />
 	<item id="44610" name="marvelous ice flowers" />
 	<item id="44611" name="beautiful ice flowers" />
 	<item id="44612" name="pretty ice flower" />
 	<item id="44613" name="puny ice flower" />
+	<item id="44643" name="shallow water" />
+	<item id="44644" name="shallow water" />
+	<item id="44645" name="shallow water" />
+	<item id="44646" name="shallow water" />
+	<item id="44663" name="mangrove" />
+	<item id="44664" name="mangrove" />
+	<item id="44665" name="mangrove" />
+	<item id="44666" name="big mangrove" />
+	<item id="44667" name="mangrove" />
+	<item id="44668" name="mangrove" />
+	<item id="44669" name="mangrove branches" />
+	<item id="44670" name="mangrove branches" />
+	<item id="44671" name="mangrove branches" />
+	<item id="44672" name="mangrove branches" />
+	<item id="44679" name="mangrove branches" />
+	<item id="44680" name="mangrove branches" />
+	<item id="44681" name="mangrove branches" />
+	<item id="44682" name="mangrove branches" />
+	<item id="44683" name="mangrove branches" />
+	<item id="44684" name="mangrove branches" />
+	<item id="44685" name="mangrove branches" />
+	<item id="44686" name="mangrove branches" />
+	<item id="44687" name="mangrove branches" />
+	<item id="44688" name="mangrove branches" />
+	<item id="44689" name="mangrove branches" />
+	<item id="44690" name="mangrove branches" />
+	<item id="44691" name="closed door" />
+	<item id="44692" name="closed door" />
+	<item id="44697" name="open door" />
+	<item id="44698" name="open door" />
 	<item id="44699" name="knightly guard" />
+	<item id="44700" name="ashes" />
+	<item id="44701" name="ashes" />
+	<item id="44703" name="Timira's skin" />
+	<item id="44704" name="parasol" />
+	<item id="44705" name="parasol" />
+	<item id="44706" name="parasol" />
+	<item id="44707" name="parasol" />
+	<item id="44708" name="parasol" />
+	<item id="44709" name="parasol" />
+	<item id="44710" name="parasol" />
+	<item id="44711" name="parasol" />
+	<item id="44712" name="ramp" />
+	<item id="44713" name="ramp" />
+	<item id="44714" name="depot box XIX" />
+	<item id="44715" name="depot box XX" />
+	<item id="44716" name="water vortex" />
+	<item id="44738" name="exaltation forge" />
+	<item id="44739" name="exaltation forge" />
+	<item id="44740" name="exaltation forge" />
+	<item id="44741" name="exaltation forge" />
+	<item id="44742" name="exaltation forge" />
+	<item id="44744" name="spring board" />
 	<item id="44745" name="lilypad backpack" />
 	<item id="44746" name="naga basin" />
+	<item id="44747" name="naga boat" />
+	<item id="44754" name="huge lily pad" />
+	<item id="44755" name="pillar" />
+	<item id="44756" name="pillar" />
+	<item id="44757" name="pillar" />
 </items>
