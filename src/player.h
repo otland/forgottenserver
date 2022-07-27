@@ -119,6 +119,7 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
+	uint8_t getRandomMount() const;
 	uint8_t getCurrentMount() const;
 	void setCurrentMount(uint8_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
@@ -126,6 +127,7 @@ public:
 	bool tameMount(uint8_t mountId);
 	bool untameMount(uint8_t mountId);
 	bool hasMount(const Mount* mount) const;
+	bool hasMounts() const;
 	void dismount();
 
 	void sendFYIBox(const std::string& message)
@@ -1303,6 +1305,7 @@ private:
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+	bool randomizeMount = false;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;
