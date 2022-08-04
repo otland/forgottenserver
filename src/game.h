@@ -491,6 +491,7 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
+		bool isTileInCleanList(Tile* tile) { return tilesToClean.find(tile) != tilesToClean.end(); }
 		std::unordered_set<Tile*> getTilesToClean() const {
 			return tilesToClean;
 		}
