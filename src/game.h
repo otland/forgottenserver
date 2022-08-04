@@ -511,6 +511,7 @@ public:
 	std::forward_list<Item*> toDecayItems;
 
 	std::unordered_set<Tile*> getTilesToClean() const { return tilesToClean; }
+	bool isTileInCleanList(Tile* tile) { return tilesToClean.find(tile) != tilesToClean.end(); }
 	void addTileToClean(Tile* tile) { tilesToClean.emplace(tile); }
 	void removeTileToClean(Tile* tile) { tilesToClean.erase(tile); }
 	void clearTilesToClean() { tilesToClean.clear(); }

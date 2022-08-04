@@ -5223,6 +5223,10 @@ int LuaScriptInterface::luaTileRemove(lua_State* L)
 		return 1;
 	}
 
+	if (g_game.isTileInCleanList(tile)) {
+		g_game.removeTileToClean(tile);
+	}
+
 	g_game.map.removeTile(tile->getPosition());
 	pushBoolean(L, true);
 	return 1;
