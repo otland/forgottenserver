@@ -10,7 +10,10 @@ function Player:onLook(thing, position, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOK) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInBattleList(creature, distance)
@@ -18,7 +21,10 @@ function Player:onLookInBattleList(creature, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInTrade(partner, item, distance)
@@ -26,7 +32,10 @@ function Player:onLookInTrade(partner, item, distance)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInShop(itemType, count, description)
@@ -34,7 +43,10 @@ function Player:onLookInShop(itemType, count, description)
 	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
 		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
