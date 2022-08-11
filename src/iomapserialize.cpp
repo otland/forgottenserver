@@ -265,11 +265,14 @@ bool IOMapSerialize::loadHouseInfo()
 	}
 
 	do {
-		House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("id"));
+		uint32_t houseId = result->getNumber<uint32_t>("id");
+		House* house = g_game.map.houses.getHouse(houseId);
 		if (house) {
 			house->setOwner(result->getNumber<uint32_t>("owner"), false);
 			house->setPaidUntil(result->getNumber<time_t>("paid"));
 			house->setPayRentWarnings(result->getNumber<uint32_t>("warnings"));
+		} else {
+			db.executeQuery(fmt::format("DELETE FROM `houses` WHERE `id` = {:d}", houseId));
 		}
 	} while (result->next());
 
