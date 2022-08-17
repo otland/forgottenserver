@@ -71,14 +71,6 @@ struct OpenContainer
 	uint16_t index;
 };
 
-struct OutfitEntry
-{
-	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
-
-	uint16_t lookType;
-	uint8_t addons;
-};
-
 static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
 
 struct Skill
@@ -119,8 +111,8 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
-	uint8_t getRandomMount() const;
-	uint8_t getCurrentMount() const;
+	uint16_t getRandomMount() const;
+	uint16_t getCurrentMount() const;
 	void setCurrentMount(uint8_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
 	bool toggleMount(bool mount);
@@ -255,7 +247,6 @@ public:
 
 	void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
 	bool getStorageValue(const uint32_t key, int32_t& value) const;
-	void genReservedStorageRange();
 
 	void setGroup(Group* newGroup) { group = newGroup; }
 	Group* getGroup() const { return group; }
@@ -1191,7 +1182,8 @@ private:
 	std::map<uint32_t, DepotChest*> depotChests;
 	std::map<uint32_t, int32_t> storageMap;
 
-	std::vector<OutfitEntry> outfits;
+	std::map<uint16_t, uint8_t> outfits;
+	std::unordered_set<uint16_t> mounts;
 	GuildWarVector guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
