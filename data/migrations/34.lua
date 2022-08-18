@@ -27,7 +27,7 @@ function onUpdateDatabase()
 	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500))
 	if resultId then
 		repeat
-			local playerId = result.getNumber(resultId, "player_id"))
+			local playerId = result.getNumber(resultId, "player_id")
 			local outfitId = bit.rshift(result.getNumber(resultId, "value"), 16)
 			local addons = bit.band(result.getNumber(resultId, "value"), 0xFF)
 			local key = result.getNumber(resultId, "key")
@@ -41,7 +41,7 @@ function onUpdateDatabase()
 	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", mountRange, mountRange + 10))
 	if resultId then
 		repeat
-			local playerId = result.getNumber(resultId, "player_id"))
+			local playerId = result.getNumber(resultId, "player_id")
 			local key = result.getNumber(resultId, "key")
 			local mounts = {}
 
