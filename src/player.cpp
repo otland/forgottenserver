@@ -3906,7 +3906,7 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 		return true;
 	}
 
-	for (auto &outfit : outfits) {
+	for (auto& outfit : outfits) {
 		if (outfit.first == lookType) {
 			if (outfit.second == addons || outfit.second == 3 || addons == 0) {
 				return true;
@@ -4456,7 +4456,7 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	return &mounts.find(mount->id);
+	return mounts.find(mount->id) != mounts.end();
 }
 
 bool Player::hasMounts() const
