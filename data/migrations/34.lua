@@ -3,8 +3,8 @@ function onUpdateDatabase()
 	db.query(
 	--[[
 	CREATE TABLE IF NOT EXISTS `player_outfits` (
-  	`player_id` int NOT NULL DEFAULT '0',
-  	`outfit_id` smallint unsigned NOT NULL DEFAULT '0',
+	`player_id` int NOT NULL DEFAULT '0',
+	`outfit_id` smallint unsigned NOT NULL DEFAULT '0',
 	`addons` tinyint unsigned NOT NULL DEFAULT '0',
 	PRIMARY KEY (`player_id`,`key`),
 	FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
