@@ -346,14 +346,14 @@ CREATE TABLE IF NOT EXISTS `player_outfits` (
   `player_id` int NOT NULL DEFAULT '0',
   `outfit_id` smallint unsigned NOT NULL DEFAULT '0',
   `addons` tinyint unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`player_id`,`key`),
+  PRIMARY KEY (`player_id`,`outfit_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `player_mounts` (
   `player_id` int NOT NULL DEFAULT '0',
   `mount_id` smallint unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`player_id`,`key`),
+  PRIMARY KEY (`player_id`,`mount_id`),
   FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
@@ -379,7 +379,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '34'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '35'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;
