@@ -36,10 +36,7 @@ bool Mounts::loadFromXml()
 			continue;
 		}
 
-		mounts.emplace_back(static_cast<uint16_t>(nodeId), pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
-		                    mountNode.attribute("name").as_string(),
-		                    pugi::cast<int32_t>(mountNode.attribute("speed").value()),
-		                    mountNode.attribute("premium").as_bool());
+		mounts.emplace_back(static_cast<uint16_t>(nodeId), pugi::cast<uint16_t>(mountNode.attribute("clientid").value()), mountNode.attribute("name").as_string(), pugi::cast<int32_t>(mountNode.attribute("speed").value()), mountNode.attribute("premium").as_bool());
 	}
 	mounts.shrink_to_fit();
 	return true;

@@ -624,16 +624,16 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	// load outfits & addons
-	if ((result = db.storeQuery(
-	         fmt::format("SELECT `outfit_id`, `addons` FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID())))) {
+	if ((result = db.storeQuery(fmt::format("SELECT `outfit_id`, `addons` FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID())))) {
+
 		do {
 			player->addOutfit(result->getNumber<uint16_t>("outfit_id"), result->getNumber<uint8_t>("addons"));
 		} while (result->next());
 	}
 
 	// load mounts
-	if ((result = db.storeQuery(fmt::format(
-	         "SELECT `mount_id` FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID())))) {
+	if ((result = db.storeQuery(fmt::format("SELECT `mount_id` FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID())))) {
+
 		do {
 			player->tameMount(result->getNumber<uint16_t>("mount_id"));
 		} while (result->next());

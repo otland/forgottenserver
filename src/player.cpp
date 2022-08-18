@@ -3943,7 +3943,7 @@ void Player::addOutfit(uint16_t lookType, uint8_t addons) { outfits.insert(std::
 
 bool Player::removeOutfit(uint16_t lookType)
 {
-	for (auto &outfit : outfits) {
+	for (auto& outfit : outfits) {
 		if (outfit.first == lookType) {
 			outfits.erase(outfit.first);
 			return true;
