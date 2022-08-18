@@ -4333,7 +4333,7 @@ uint16_t Player::getRandomMount() const
 
 uint16_t Player::getCurrentMount() const { return currentMount; }
 
-void Player::setCurrentMount(uint8_t mountId) { currentMount = mountId; }
+void Player::setCurrentMount(uint16_t mountId) { currentMount = mountId; }
 
 bool Player::toggleMount(bool mount)
 {
@@ -4406,7 +4406,7 @@ bool Player::toggleMount(bool mount)
 	return true;
 }
 
-bool Player::tameMount(uint8_t mountId)
+bool Player::tameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
@@ -4421,7 +4421,7 @@ bool Player::tameMount(uint8_t mountId)
 	return true;
 }
 
-bool Player::untameMount(uint8_t mountId)
+bool Player::untameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;

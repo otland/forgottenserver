@@ -10245,9 +10245,9 @@ int LuaScriptInterface::luaPlayerAddMount(lua_State* L)
 		return 1;
 	}
 
-	uint8_t mountId;
+	uint16_t mountId;
 	if (isNumber(L, 2)) {
-		mountId = getNumber<uint8_t>(L, 2);
+		mountId = getNumber<uint16_t>(L, 2);
 	} else {
 		Mount* mount = g_game.mounts.getMountByName(getString(L, 2));
 		if (!mount) {
@@ -10269,9 +10269,9 @@ int LuaScriptInterface::luaPlayerRemoveMount(lua_State* L)
 		return 1;
 	}
 
-	uint8_t mountId;
+	uint16_t mountId;
 	if (isNumber(L, 2)) {
-		mountId = getNumber<uint8_t>(L, 2);
+		mountId = getNumber<uint16_t>(L, 2);
 	} else {
 		Mount* mount = g_game.mounts.getMountByName(getString(L, 2));
 		if (!mount) {
@@ -10295,7 +10295,7 @@ int LuaScriptInterface::luaPlayerHasMount(lua_State* L)
 
 	Mount* mount = nullptr;
 	if (isNumber(L, 2)) {
-		mount = g_game.mounts.getMountByID(getNumber<uint8_t>(L, 2));
+		mount = g_game.mounts.getMountByID(getNumber<uint16_t>(L, 2));
 	} else {
 		mount = g_game.mounts.getMountByName(getString(L, 2));
 	}
