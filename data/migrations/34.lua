@@ -7,16 +7,14 @@ function onUpdateDatabase()
 	local outfitRange = 10001000
 	local mountRange = 10002001
 
-	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500))
+	local resultId = db.storeQuery(string.format("SELECT `player_id`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500))
 	if resultId then
 		repeat
 			local playerId = result.getNumber(resultId, "player_id")
 			local outfitId = bit.rshift(result.getNumber(resultId, "value"), 16)
 			local addons = bit.band(result.getNumber(resultId, "value"), 0xFF)
-			local key = result.getNumber(resultId, "key")
 			
 			db.query(string.format("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES (%d, %d, %d)", playerId, outfitId, addons))
-			db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `player_id` = %d AND `key` = %d", playerId, key))			
 		until not result.next(resultId)
 		result.free(resultId)
 	end
@@ -39,9 +37,8 @@ function onUpdateDatabase()
 		end
 	end
 
-	for i = 0, 9 do
-		db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` = %d", mountRange + i))
-	end
-	
+	-- deleting all outfit & mount storages at once
+	db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d AND `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500, mountRange, mountRange + 10))
+
 	return true
 end
