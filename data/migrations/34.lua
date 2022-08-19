@@ -54,7 +54,7 @@ function onUpdateDatabase()
 	end
 
 	-- deleting all outfit & mount storages at once
-	db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d AND `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500, mountRange, mountRange + 10))
+	db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d OR `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500, mountRange, mountRange + 10))
 
 	return true
 end
