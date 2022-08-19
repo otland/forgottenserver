@@ -3939,7 +3939,16 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 	return false;
 }
 
-void Player::addOutfit(uint16_t lookType, uint8_t addons) { outfits.insert(std::pair(lookType, addons)); }
+void Player::addOutfit(uint16_t lookType, uint8_t addons)
+{
+	for (auto& outfit : outfits) {
+		if (outfit.first == lookType) {
+			outfit.second |= addons;
+			return;
+		}
+	}
+	outfits.insert(std::pair(lookType, addons));
+}
 
 bool Player::removeOutfit(uint16_t lookType)
 {
