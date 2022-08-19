@@ -35,22 +35,23 @@ function onUpdateDatabase()
 		result.free(resultId)
 	end
 
-	-- this equals to our current id range from mounts
-	for i = 1, 200 do
-		local key = mountRange + ((i-1) / 31)
-		local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key` = %d", key))
-		if resultId then
-			repeat
-				local playerId = result.getNumber(resultId, "player_id")
-				local lshift = bit.lshift(1, ((i-1) % 31))
-				local mount = bit.band(lshift, result.getNumber(resultId, "value"))
+	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` < %d", mountRange, mountRange + 10))
+	if resultId then
+		repeat
+			for i = 1, 200 do
+				local key = mountRange + ((i-1) / 31)
+				if key == result.getNumber(resultId, "key") then
+					local playerId = result.getNumber(resultId, "player_id")
+					local lshift = bit.lshift(1, ((i-1) % 31))
+					local mount = bit.band(lshift, result.getNumber(resultId, "value"))
 
-				if mount ~= 0 then
-					db.query(string.format("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)", playerId, i))
+					if mount ~= 0 then
+						db.query(string.format("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)", playerId, i))
+					end
 				end
-			until not result.next(resultId)
-			result.free(resultId)
-		end
+			end
+		until not result.next(resultId)
+		result.free(resultId)
 	end
 
 	-- deleting all outfit & mount storages at once
