@@ -806,14 +806,12 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 					// The node on the closed/open list is cheaper than this one
 					continue;
 				}
-
-				// g_game.addMagicEffect(pos, CONST_ME_TELEPORT);
+				
 				neighborNode->f = newf;
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
-				g_game.addMagicEffect(pos, CONST_ME_POFF);
 				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighborNode) {
 					if (found) {
