@@ -587,7 +587,7 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/,
-                       bool pathFinding = false) const
+                       bool pathFinding /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
