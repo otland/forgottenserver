@@ -3906,9 +3906,9 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 		return true;
 	}
 
-	for (auto& outfit : outfits) {
-		if (outfit.first == lookType) {
-			if (outfit.second == addons || outfit.second == 3 || addons == 0) {
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
 			return false; // have lookType on list and addons don't match
@@ -3928,9 +3928,9 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 		return true;
 	}
 
-	for (auto& outfit : outfits) {
-		if (outfit.first == lookType) {
-			if (outfit.second == addons || outfit.second == 3 || addons == 0) {
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
 			return false; // have lookType on list and addons don't match
@@ -3941,9 +3941,9 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 
 void Player::addOutfit(uint16_t lookType, uint8_t addons)
 {
-	for (auto& outfit : outfits) {
-		if (outfit.first == lookType) {
-			outfit.second |= addons;
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			addon |= addons;
 			return;
 		}
 	}
@@ -3952,9 +3952,9 @@ void Player::addOutfit(uint16_t lookType, uint8_t addons)
 
 bool Player::removeOutfit(uint16_t lookType)
 {
-	for (auto& outfit : outfits) {
-		if (outfit.first == lookType) {
-			outfits.erase(outfit.first);
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			outfits.erase(outfit);
 			return true;
 		}
 	}
@@ -3963,9 +3963,9 @@ bool Player::removeOutfit(uint16_t lookType)
 
 bool Player::removeOutfitAddon(uint16_t lookType, uint8_t addons)
 {
-	for (auto& outfit : outfits) {
-		if (outfit.first == lookType) {
-			outfit.second &= ~addons;
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			addon &= ~addons;
 			return true;
 		}
 	}
@@ -3983,12 +3983,12 @@ bool Player::getOutfitAddons(const Outfit& outfit, uint8_t& addons) const
 		return false;
 	}
 
-	for (auto& outfitEntry : outfits) {
-		if (outfitEntry.first != outfit.lookType) {
+	for (auto& [lookType, addon] : outfits) {
+		if (lookType != outfit.lookType) {
 			continue;
 		}
 
-		addons = outfitEntry.second;
+		addons = addon;
 		return true;
 	}
 
