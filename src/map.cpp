@@ -493,7 +493,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/, bool pathFinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
@@ -504,20 +504,31 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 		return false;
 	}
 
+	if (pathFinding) {
+		if (tile->hasProperty(CONST_PROP_BLOCKPATH) || tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
+			return false;
+		}
+	}
+
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
 namespace {
 
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
 	float yi = y0 + slope;
 
+	bool isPathFinding = false;
+	if (pathFinding) {
+		isPathFinding = true;
+	}
+
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z, false, isPathFinding)) {
 			return false;
 		}
 		yi += slope;
@@ -526,15 +537,20 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
 	float yi = y0 + slope;
 
+	bool isPathFinding = false;
+	if (pathFinding) {
+		isPathFinding = true;
+	}
+
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z, false, isPathFinding)) {
 			return false;
 		}
 		yi += slope;
@@ -545,33 +561,43 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
 	}
 
+	bool isPathFinding = false;
+	if (pathFinding) {
+		isPathFinding = true;
+	}
+
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z);
+			return checkSteepLine(y0, x0, y1, x1, z, isPathFinding);
 		}
-		return checkSteepLine(y1, x1, y0, x0, z);
+		return checkSteepLine(y1, x1, y0, x0, z, isPathFinding);
 	}
 
 	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z);
+		return checkSlightLine(x1, y1, x0, y0, z, isPathFinding);
 	}
 
-	return checkSlightLine(x0, y0, x1, y1, z);
+	return checkSlightLine(x0, y0, x1, y1, z, isPathFinding);
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/, bool pathFinding /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
 		// skip checks if toPos is next to us
 		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
 			return true;
+		}
+
+		// Path finding line is clear
+		if (pathFinding) {
+			return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
 		}
 
 		// sight is clear or sameFloor is enabled
@@ -643,24 +669,18 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
+bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
                           const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
-
-	AStarNodes nodes(pos.x, pos.y);
+	const Position startPos = pos;
 
 	int32_t bestMatch = 0;
 
-	static int_fast32_t dirNeighbors[8][5][2] = {
-	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
-	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+	AStarNodes nodes(pos.x, pos.y);
 
-	const Position startPos = pos;
+	bool sightClear = isSightClear(startPos, targetPos, true, true);
 
 	AStarNode* found = nullptr;
 	while (fpp.maxSearchDist != 0 || nodes.getClosedNodes() < 100) {
@@ -718,7 +738,6 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 			neighbors = *allNeighbors;
 		}
 
-		const int_fast32_t f = n->f;
 		for (uint_fast32_t i = 0; i < dirCount; ++i) {
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
@@ -732,6 +751,39 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 				continue;
 			}
 
+			// Sight is clear. We shouldn't have to move backwards.
+			if (sightClear) {
+				if (startPos.x == targetPos.x) {
+					// Don't check nodes if start and end pos X are the same and node X is different.
+					if (pos.x != targetPos.x) {
+						continue;
+					}
+				} else if (startPos.y == targetPos.y) {
+					// Don't check nodes if start and end pos Y are the same and node Y is different.
+					if (pos.y != targetPos.y) {
+						continue;
+					}
+				}
+
+				const int_fast32_t startDistXtarget = std::abs(startPos.x - targetPos.x);
+				const int_fast32_t startDistYtarget = std::abs(startPos.y - targetPos.y);
+				const int_fast32_t startDistXNode = std::abs(startPos.x - pos.x);
+				const int_fast32_t startDistYNode = std::abs(startPos.y - pos.y);
+				// We shouldn't check past the targets X or Y
+				if (startDistXtarget < startDistXNode) {
+					continue;
+				} else if (startDistYtarget < startDistYNode) {
+					continue;
+				}
+
+				// We don't need to check behind us. The sight is clear to go forward.
+				const int_fast32_t nodeDistXtarget = std::abs(pos.x - targetPos.x);
+				const int_fast32_t nodeDistYtarget = std::abs(pos.y - targetPos.y);
+				if (startDistXtarget < nodeDistXtarget || startDistYtarget < nodeDistYtarget) {
+					continue;
+				}
+			}
+
 			const Tile* tile;
 			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
 			if (neighborNode) {
@@ -743,10 +795,11 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 				}
 			}
 
-			// The cost (g) for this neighbor
-			const int_fast32_t cost = AStarNodes::getMapWalkCost(n, pos);
-			const int_fast32_t extraCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t newf = f + cost + extraCost;
+			// The cost to walk to this neighbor
+			const int_fast32_t G = AStarNodes::getMapWalkCost(n, pos);
+			const int_fast32_t E = AStarNodes::getTileWalkCost(creature, tile);
+			const int_fast32_t H = (Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos));
+			const int_fast32_t newf = H + (G + E);
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -754,11 +807,13 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 					continue;
 				}
 
+				// g_game.addMagicEffect(pos, CONST_ME_TELEPORT);
 				neighborNode->f = newf;
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
+				g_game.addMagicEffect(pos, CONST_ME_POFF);
 				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighborNode) {
 					if (found) {
