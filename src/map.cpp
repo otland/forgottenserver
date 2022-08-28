@@ -807,7 +807,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 					// The node on the closed/open list is cheaper than this one
 					continue;
 				}
-				
+
 				neighborNode->f = newf;
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
