@@ -493,7 +493,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/, bool pathFinding /*= false*/) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/, bool isPathfinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
@@ -504,10 +504,8 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 		return false;
 	}
 
-	if (pathFinding) {
-		if (tile->hasProperty(CONST_PROP_BLOCKPATH) || tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
-			return false;
-		}
+	if (isPathfinding && tile->hasProperty(CONST_PROP_BLOCKPATH) || tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
+		return false;
 	}
 
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
@@ -515,20 +513,15 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 
 namespace {
 
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/)
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
 	float yi = y0 + slope;
 
-	bool isPathFinding = false;
-	if (pathFinding) {
-		isPathFinding = true;
-	}
-
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z, false, isPathFinding)) {
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z, false, isPathfinding)) {
 			return false;
 		}
 		yi += slope;
@@ -537,20 +530,15 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/)
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
 	float yi = y0 + slope;
 
-	bool isPathFinding = false;
-	if (pathFinding) {
-		isPathFinding = true;
-	}
-
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z, false, isPathFinding)) {
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z, false, isPathfinding)) {
 			return false;
 		}
 		yi += slope;
@@ -561,33 +549,28 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding /*= false*/) const
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
 	}
 
-	bool isPathFinding = false;
-	if (pathFinding) {
-		isPathFinding = true;
-	}
-
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z, isPathFinding);
+			return checkSteepLine(y0, x0, y1, x1, z, isPathfinding);
 		}
-		return checkSteepLine(y1, x1, y0, x0, z, isPathFinding);
+		return checkSteepLine(y1, x1, y0, x0, z, isPathfinding);
 	}
 
 	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z, isPathFinding);
+		return checkSlightLine(x1, y1, x0, y0, z, isPathfinding);
 	}
 
-	return checkSlightLine(x0, y0, x1, y1, z, isPathFinding);
+	return checkSlightLine(x0, y0, x1, y1, z, isPathfinding);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/,
-                       bool pathFinding /*= false*/) const
+                       bool isPathfinding /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
@@ -597,7 +580,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 		}
 
 		// Path finding line is clear
-		if (pathFinding) {
+		if (isPathfinding) {
 			return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
 		}
 
