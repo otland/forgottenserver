@@ -234,7 +234,7 @@ public:
 	 *	\param blockFloor counts the ground tile as an obstacle
 	 *	\returns The result if there is an obstacle or not
 	 */
-	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false, bool pathFinding = false) const;
+	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false, bool isPathfinding = false) const;
 
 	/**
 	 * Checks if path is clear from fromPos to toPos
@@ -244,8 +244,8 @@ public:
 	 *floor \returns The result if there is no obstacles
 	 */
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false,
-	                  bool pathFinding = false) const;
-	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathFinding = false) const;
+	                  bool isPathfinding = false) const;
+	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding = false) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
