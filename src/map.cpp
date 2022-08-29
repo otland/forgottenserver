@@ -550,8 +550,8 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-					 bool isPathfinding /*= false*/)
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
+					 bool isPathfinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
