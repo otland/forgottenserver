@@ -493,7 +493,8 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/, bool isPathfinding /*= false*/) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
+					  bool isPathfinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
@@ -549,7 +550,8 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding /*= false*/) const
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
+					 bool isPathfinding /*= false*/)
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
@@ -782,7 +784,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			// The cost to walk to this neighbor
 			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t distEnd = (Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos));
+			const int_fast32_t distEnd = Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
 			const int_fast32_t f = distEnd + (walkCost + speedCost);
 
 			if (neighborNode) {
