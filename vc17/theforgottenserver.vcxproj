@@ -242,6 +242,43 @@
     <ClCompile Include="..\src\weapons.cpp" />
     <ClCompile Include="..\src\wildcardtree.cpp" />
     <ClCompile Include="..\src\xtea.cpp" />
+    <ClCompile Include="..\src\luamodules\actions.cpp" />
+    <ClCompile Include="..\src\luamodules\combat.cpp" />
+    <ClCompile Include="..\src\luamodules\condition.cpp" />
+    <ClCompile Include="..\src\luamodules\configmanager.cpp" />
+    <ClCompile Include="..\src\luamodules\container.cpp" />
+    <ClCompile Include="..\src\luamodules\creature.cpp" />
+    <ClCompile Include="..\src\luamodules\creatureevent.cpp" />
+    <ClCompile Include="..\src\luamodules\game.cpp" />
+    <ClCompile Include="..\src\luamodules\globalevent.cpp" />
+    <ClCompile Include="..\src\luamodules\globals.cpp" />
+    <ClCompile Include="..\src\luamodules\groups.cpp" />
+    <ClCompile Include="..\src\luamodules\guild.cpp" />
+    <ClCompile Include="..\src\luamodules\house.cpp" />
+    <ClCompile Include="..\src\luamodules\item.cpp" />
+    <ClCompile Include="..\src\luamodules\items.cpp" />
+    <ClCompile Include="..\src\luamodules\luaregister.cpp" />
+    <ClCompile Include="..\src\luamodules\modalwindow.cpp" />
+    <ClCompile Include="..\src\luamodules\monster.cpp" />
+    <ClCompile Include="..\src\luamodules\monsters.cpp" />
+    <ClCompile Include="..\src\luamodules\moveevent.cpp" />
+    <ClCompile Include="..\src\luamodules\networkmessage.cpp" />
+    <ClCompile Include="..\src\luamodules\npc.cpp" />
+    <ClCompile Include="..\src\luamodules\outfit.cpp" />
+    <ClCompile Include="..\src\luamodules\party.cpp" />
+    <ClCompile Include="..\src\luamodules\player.cpp" />
+    <ClCompile Include="..\src\luamodules\podium.cpp" />
+    <ClCompile Include="..\src\luamodules\position.cpp" />
+    <ClCompile Include="..\src\luamodules\spells.cpp" />
+    <ClCompile Include="..\src\luamodules\stdlib.cpp" />
+    <ClCompile Include="..\src\luamodules\talkaction.cpp" />
+    <ClCompile Include="..\src\luamodules\teleport.cpp" />
+    <ClCompile Include="..\src\luamodules\tile.cpp" />
+    <ClCompile Include="..\src\luamodules\town.cpp" />
+    <ClCompile Include="..\src\luamodules\variant.cpp" />
+    <ClCompile Include="..\src\luamodules\vocation.cpp" />
+    <ClCompile Include="..\src\luamodules\weapons.cpp" />
+    <ClCompile Include="..\src\luamodules\xml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\account.h" />
@@ -330,6 +367,8 @@
     <ClInclude Include="..\src\weapons.h" />
     <ClInclude Include="..\src\wildcardtree.h" />
     <ClInclude Include="..\src\xtea.h" />
+    <ClInclude Include="..\src\luamodules\luamodules.h" />
+    <ClInclude Include="..\src\luamodules\luaregister.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="theforgottenserver.rc" />

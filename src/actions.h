@@ -9,6 +9,12 @@
 #include "luascript.h"
 
 class Action;
+class Creature;
+class Item;
+class Player;
+struct Position;
+class Thing;
+
 using Action_ptr = std::unique_ptr<Action>;
 using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target,
                                           const Position& toPosition, bool isHotkey)>;

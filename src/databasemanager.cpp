@@ -6,6 +6,8 @@
 #include "databasemanager.h"
 
 #include "configmanager.h"
+#include "luaapi.h"
+#include "luaenv.h"
 #include "luascript.h"
 
 extern ConfigManager g_config;
@@ -72,6 +74,8 @@ int32_t DatabaseManager::getDatabaseVersion()
 
 void DatabaseManager::updateDatabase()
 {
+	using namespace tfs;
+
 	lua_State* L = luaL_newstate();
 	if (!L) {
 		return;
@@ -99,20 +103,20 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
-		if (!LuaScriptInterface::reserveScriptEnv()) {
+		if (!lua::reserveScriptEnv()) {
 			break;
 		}
 
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
-			LuaScriptInterface::resetScriptEnv();
+			lua::resetScriptEnv();
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
 			          << lua_tostring(L, -1) << std::endl;
 			break;
 		}
 
-		if (!LuaScriptInterface::getBoolean(L, -1, false)) {
-			LuaScriptInterface::resetScriptEnv();
+		if (!lua::getBoolean(L, -1, false)) {
+			lua::resetScriptEnv();
 			break;
 		}
 
@@ -120,7 +124,7 @@ void DatabaseManager::updateDatabase()
 		std::cout << "> Database has been updated to version " << version << '.' << std::endl;
 		registerDatabaseConfig("db_version", version);
 
-		LuaScriptInterface::resetScriptEnv();
+		lua::resetScriptEnv();
 	} while (true);
 	lua_close(L);
 }

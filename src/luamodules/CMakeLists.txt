@@ -1,0 +1,44 @@
+set(tfs_luamodules_SRC
+	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
+	${CMAKE_CURRENT_LIST_DIR}/combat.cpp
+	${CMAKE_CURRENT_LIST_DIR}/condition.cpp
+	${CMAKE_CURRENT_LIST_DIR}/configmanager.cpp
+	${CMAKE_CURRENT_LIST_DIR}/container.cpp
+	${CMAKE_CURRENT_LIST_DIR}/creature.cpp
+	${CMAKE_CURRENT_LIST_DIR}/creatureevent.cpp
+	${CMAKE_CURRENT_LIST_DIR}/game.cpp
+	${CMAKE_CURRENT_LIST_DIR}/globalevent.cpp
+	${CMAKE_CURRENT_LIST_DIR}/globals.cpp
+	${CMAKE_CURRENT_LIST_DIR}/groups.cpp
+	${CMAKE_CURRENT_LIST_DIR}/guild.cpp
+	${CMAKE_CURRENT_LIST_DIR}/house.cpp
+	${CMAKE_CURRENT_LIST_DIR}/item.cpp
+	${CMAKE_CURRENT_LIST_DIR}/items.cpp
+	${CMAKE_CURRENT_LIST_DIR}/luaregister.cpp
+	${CMAKE_CURRENT_LIST_DIR}/modalwindow.cpp
+	${CMAKE_CURRENT_LIST_DIR}/monster.cpp
+	${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
+	${CMAKE_CURRENT_LIST_DIR}/moveevent.cpp
+	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
+	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
+	${CMAKE_CURRENT_LIST_DIR}/party.cpp
+	${CMAKE_CURRENT_LIST_DIR}/player.cpp
+	${CMAKE_CURRENT_LIST_DIR}/podium.cpp
+	${CMAKE_CURRENT_LIST_DIR}/position.cpp
+	${CMAKE_CURRENT_LIST_DIR}/spells.cpp
+	${CMAKE_CURRENT_LIST_DIR}/stdlib.cpp
+	${CMAKE_CURRENT_LIST_DIR}/talkaction.cpp
+	${CMAKE_CURRENT_LIST_DIR}/teleport.cpp
+	${CMAKE_CURRENT_LIST_DIR}/tile.cpp
+	${CMAKE_CURRENT_LIST_DIR}/town.cpp
+	${CMAKE_CURRENT_LIST_DIR}/variant.cpp
+	${CMAKE_CURRENT_LIST_DIR}/vocation.cpp
+	${CMAKE_CURRENT_LIST_DIR}/weapons.cpp
+	${CMAKE_CURRENT_LIST_DIR}/xml.cpp
+	PARENT_SCOPE)
+
+set(tfs_luamodules_HDR
+	${CMAKE_CURRENT_LIST_DIR}/luamodules.h
+	${CMAKE_CURRENT_LIST_DIR}/luaregister.h
+	PARENT_SCOPE)

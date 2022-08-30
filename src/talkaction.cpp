@@ -5,6 +5,8 @@
 
 #include "talkaction.h"
 
+#include "luaenv.h"
+#include "luameta.h"
 #include "player.h"
 
 TalkActions::TalkActions() : scriptInterface("TalkAction Interface") { scriptInterface.initState(); }
@@ -138,23 +140,25 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
 	// onSay(player, words, param, type)
-	if (!scriptInterface->reserveScriptEnv()) {
+	using namespace tfs;
+
+	if (!lua::reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	lua::ScriptEnvironment* env = lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
 
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
+	lua::pushUserdata<Player>(L, player);
+	lua::setMetatable(L, -1, "Player");
 
-	LuaScriptInterface::pushString(L, words);
-	LuaScriptInterface::pushString(L, param);
+	lua::pushString(L, words);
+	lua::pushString(L, param);
 	lua_pushnumber(L, type);
 
 	return scriptInterface->callFunction(4);

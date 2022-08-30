@@ -5,6 +5,7 @@
 #define FS_TOWN_H
 
 #include "position.h"
+#include "tools.h"
 
 class Town
 {

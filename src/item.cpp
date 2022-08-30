@@ -10,6 +10,7 @@
 #include "container.h"
 #include "game.h"
 #include "house.h"
+#include "luaenv.h"
 #include "mailbox.h"
 #include "podium.h"
 #include "teleport.h"
@@ -225,7 +226,9 @@ void Item::setDefaultSubtype()
 
 void Item::onRemoved()
 {
-	ScriptEnvironment::removeTempItem(this);
+	using namespace tfs;
+
+	lua::ScriptEnvironment::removeTempItem(this);
 
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		g_game.removeUniqueItem(getUniqueId());

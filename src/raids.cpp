@@ -7,12 +7,13 @@
 
 #include "configmanager.h"
 #include "game.h"
+#include "luaenv.h"
 #include "monster.h"
 #include "pugicast.h"
 #include "scheduler.h"
 
-extern Game g_game;
 extern ConfigManager g_config;
+extern Game g_game;
 
 Raids::Raids() { scriptInterface.initState(); }
 
@@ -558,12 +559,14 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 bool ScriptEvent::executeEvent()
 {
 	// onRaid()
-	if (!scriptInterface->reserveScriptEnv()) {
+	using namespace tfs;
+
+	if (!lua::reserveScriptEnv()) {
 		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	lua::ScriptEnvironment* env = lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	scriptInterface->pushFunction(scriptId);

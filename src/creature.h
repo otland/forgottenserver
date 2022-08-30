@@ -156,7 +156,9 @@ public:
 	uint32_t getBaseSpeed() const { return baseSpeed; }
 
 	int32_t getHealth() const { return health; }
+	void setHealth(int32_t health) { this->health = health; }
 	virtual int32_t getMaxHealth() const { return healthMax; }
+	virtual void setMaxHealth(int32_t healthMax) { this->healthMax = healthMax; }
 	bool isDead() const { return health <= 0; }
 
 	void setDrunkenness(uint8_t newDrunkenness) { drunkenness = newDrunkenness; }
@@ -165,6 +167,7 @@ public:
 	const Outfit_t getCurrentOutfit() const { return currentOutfit; }
 	void setCurrentOutfit(Outfit_t outfit) { currentOutfit = outfit; }
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
+	void setDefaultOutfit(Outfit_t outfit) { defaultOutfit = outfit; }
 	bool isInvisible() const;
 	ZoneType_t getZone() const { return getTile()->getZone(); }
 
@@ -344,6 +347,9 @@ public:
 		}
 	}
 
+	decltype(auto) getDamageMap() const { return damageMap; }
+	CreatureEventList getCreatureEvents(CreatureEventType_t type);
+
 protected:
 	virtual bool useCacheMap() const { return false; }
 
@@ -419,7 +425,6 @@ protected:
 	{
 		return (0 != (scriptEventsBitField & (static_cast<uint32_t>(1) << event)));
 	}
-	CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
 	void updateMapCache();
 	void updateTileCache(const Tile* tile, int32_t dx, int32_t dy);
@@ -439,7 +444,6 @@ protected:
 
 	friend class Game;
 	friend class Map;
-	friend class LuaScriptInterface;
 };
 
 #endif // FS_CREATURE_H

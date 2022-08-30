@@ -6,10 +6,13 @@
 
 #include "baseevents.h"
 #include "const.h"
+#include "enums.h"
 #include "luascript.h"
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
+
+class Player;
 
 enum TalkActionResult_t
 {

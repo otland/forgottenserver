@@ -35,6 +35,7 @@
 #include "weapons.h"
 
 extern ConfigManager g_config;
+extern Game g_game;
 extern Actions* g_actions;
 extern Chat* g_chat;
 extern TalkActions* g_talkActions;

@@ -11,6 +11,10 @@
 class CreatureEvent;
 using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;
 
+class Creature;
+class Item;
+class Player;
+
 enum CreatureEventType_t
 {
 	CREATURE_EVENT_NONE,

@@ -6,9 +6,12 @@
 #include "globalevent.h"
 
 #include "configmanager.h"
+#include "luaenv.h"
 #include "pugicast.h"
 #include "scheduler.h"
 #include "tools.h"
+
+using namespace tfs;
 
 extern ConfigManager g_config;
 
@@ -324,12 +327,12 @@ std::string_view GlobalEvent::getScriptEventName() const
 bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 {
 	// onRecord(current, old)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!lua::reserveScriptEnv()) {
 		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	lua::ScriptEnvironment* env = lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
@@ -342,12 +345,12 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 
 bool GlobalEvent::executeEvent() const
 {
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!lua::reserveScriptEnv()) {
 		std::cout << "[Error - GlobalEvent::executeEvent] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	lua::ScriptEnvironment* env = lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);

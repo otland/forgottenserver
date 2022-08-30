@@ -7,7 +7,8 @@
 
 #include "configmanager.h"
 
-extern LuaEnvironment g_luaEnvironment;
+#include <filesystem>
+
 extern ConfigManager g_config;
 
 Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.initState(); }

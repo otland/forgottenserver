@@ -1,5 +1,7 @@
-#ifndef FS_LUAVARIANT_H
-#define FS_LUAVARIANT_H
+#ifndef TFS_LUAVARIANT
+#define TFS_LUAVARIANT
+
+#include "position.h"
 
 enum LuaVariantType_t
 {

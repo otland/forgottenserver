@@ -6,22 +6,14 @@
 
 #include "configmanager.h"
 
-#include "game.h"
+#include "luaapi.h"
 #include "monster.h"
 #include "pugicast.h"
-
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
 #define lua_strlen lua_rawlen
 #endif
-
-extern Game g_game;
 
 namespace {
 
@@ -80,6 +72,8 @@ namespace {
 
 ExperienceStages loadLuaStages(lua_State* L)
 {
+	using namespace tfs;
+
 	ExperienceStages stages;
 
 	lua_getglobal(L, "experienceStages");
@@ -90,10 +84,9 @@ ExperienceStages loadLuaStages(lua_State* L)
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
 		const auto tableIndex = lua_gettop(L);
-		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel", 1);
-		auto maxLevel =
-		    LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
-		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier", 1);
+		auto minLevel = lua::getField<uint32_t>(L, tableIndex, "minlevel", 1);
+		auto maxLevel = lua::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
+		auto multiplier = lua::getField<float>(L, tableIndex, "multiplier", 1);
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
 	}

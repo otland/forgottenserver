@@ -6,9 +6,6 @@
 #include "tasks.h"
 
 #include "enums.h"
-#include "game.h"
-
-extern Game g_game;
 
 Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
 
