@@ -199,7 +199,7 @@ void Creature::onWalk()
 		addEventWalk();
 	}
 
-	if (followCreature) {
+	if (followCreature && !attackedCreature || attackedCreature != followCreature) {
 		listWalkDir.clear();
 		goToFollowCreature();
 		return;
