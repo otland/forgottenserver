@@ -212,12 +212,14 @@ void Creature::onWalk()
 				return;
 			}
 
+			if (followCreature) {
+				goToFollowCreature();
+				return;
+			}
+
 			followPosition = attackedCreature->getPosition();
 			listWalkDir.clear();
 			g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
-			if (followCreature) {
-				goToFollowCreature();
-			}
 		}
 	}
 }
