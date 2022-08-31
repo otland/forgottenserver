@@ -198,7 +198,13 @@ void Creature::onWalk()
 		eventWalk = 0;
 		addEventWalk();
 	}
-	
+
+	if (followCreature) {
+		listWalkDir.clear();
+		goToFollowCreature();
+		return;
+	}
+
 	if (attackedCreature) {
 		const Position& targetPos = attackedCreature->getPosition();
 		if (followPosition != targetPos) {
@@ -209,11 +215,6 @@ void Creature::onWalk()
 			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
 				// Attacked Creature has gone too far. Stop trying to get a path.
 				listWalkDir.clear();
-				return;
-			}
-
-			if (followCreature) {
-				goToFollowCreature();
 				return;
 			}
 
