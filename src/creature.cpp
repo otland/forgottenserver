@@ -137,20 +137,6 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
-	if (followCreature) {
-		walkUpdateTicks += interval;
-		if (forceUpdateFollowPath || walkUpdateTicks >= 2000) {
-			walkUpdateTicks = 0;
-			forceUpdateFollowPath = false;
-			isUpdatingPath = true;
-		}
-	}
-
-	if (isUpdatingPath) {
-		isUpdatingPath = false;
-		goToFollowCreature();
-	}
-
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
@@ -192,8 +178,6 @@ void Creature::onWalk()
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
-
-				forceUpdateFollowPath = true;
 			}
 		} else {
 			stopEventWalk();
@@ -213,6 +197,25 @@ void Creature::onWalk()
 	if (eventWalk != 0) {
 		eventWalk = 0;
 		addEventWalk();
+	}
+	
+	if (attackedCreature) {
+		const Position& targetPos = attackedCreature->getPosition();
+		if (followPosition != targetPos) {
+
+			FindPathParams fpp;
+			getPathSearchParams(attackedCreature, fpp);
+			const Position& pos = getPosition();
+			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
+				// Attacked Creature has gone too far. Stop trying to get a path.
+				listWalkDir.clear();
+				return;
+			}
+
+			followPosition = attackedCreature->getPosition();
+			listWalkDir.clear();
+			g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
+		}
 	}
 }
 
@@ -608,10 +611,6 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 
 	if (creature == followCreature || (creature == this && followCreature)) {
-		if (hasFollowPath) {
-			isUpdatingPath = true;
-		}
-
 		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
 			onCreatureDisappear(followCreature, false);
 		}
@@ -918,8 +917,18 @@ bool Creature::setAttackedCreature(Creature* creature)
 			attackedCreature = nullptr;
 			return false;
 		}
+		
+		// Target is too far to get a path too. We shouldn't add him as a target.
+		FindPathParams fpp;
+		getPathSearchParams(creature, fpp);
+		const Position& pos = getPosition();
+		if (Position::getDistanceX(pos, creaturePos) > fpp.maxSearchDist || Position::getDistanceY(pos, creaturePos) > fpp.maxSearchDist) {
+			attackedCreature = nullptr;
+			return false;
+		}
 
 		attackedCreature = creature;
+		followPosition = creaturePos;
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
 	} else {
@@ -1007,11 +1016,8 @@ bool Creature::setFollowCreature(Creature* creature)
 		}
 
 		hasFollowPath = false;
-		forceUpdateFollowPath = false;
 		followCreature = creature;
-		isUpdatingPath = true;
 	} else {
-		isUpdatingPath = false;
 		followCreature = nullptr;
 	}
 
