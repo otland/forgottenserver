@@ -220,7 +220,7 @@ void Creature::onWalk()
 
 			followPosition = attackedCreature->getPosition();
 			listWalkDir.clear();
-			g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
+			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 		}
 	}
 }
@@ -936,7 +936,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 		attackedCreature = creature;
 		followPosition = creaturePos;
 		listWalkDir.clear();
-		g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
 	} else {
@@ -1026,7 +1026,7 @@ bool Creature::setFollowCreature(Creature* creature)
 		hasFollowPath = false;
 		followCreature = creature;
 		listWalkDir.clear();
-		g_dispatcher.addTask(createTask(std::bind(&Game::updateCreatureWalk, &g_game, getID())));
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	} else {
 		followCreature = nullptr;
 	}
