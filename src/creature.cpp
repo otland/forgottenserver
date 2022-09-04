@@ -211,6 +211,7 @@ void Creature::onWalk()
 	if (attackedCreature) {
 		const Position& targetPos = attackedCreature->getPosition();
 		if (followPosition != targetPos || forceUpdatePath) {
+			forceUpdatePath = false;
 
 			FindPathParams fpp;
 			getPathSearchParams(attackedCreature, fpp);
