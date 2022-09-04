@@ -494,7 +494,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 }
 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
-					  bool isPathfinding /*= false*/) const
+                      bool isPathfinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
@@ -551,7 +551,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 } // namespace
 
 bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-					 bool isPathfinding /*= false*/) const
+                         bool isPathfinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
@@ -663,7 +663,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	const Position startPos = pos;
 
 	// Don't update path if the target is too far away
-	if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+	if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
+	    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
 		return false;
 	}
 
