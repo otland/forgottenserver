@@ -137,10 +137,7 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
-	if (forceUpdatePath) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-		forceUpdatePath = false;
-	} else {
+	if (!forceUpdatePath) {
 		forceUpdatePath = true;
 	}
 
@@ -213,7 +210,7 @@ void Creature::onWalk()
 
 	if (attackedCreature) {
 		const Position& targetPos = attackedCreature->getPosition();
-		if (followPosition != targetPos) {
+		if (followPosition != targetPos || forceUpdatePath) {
 
 			FindPathParams fpp;
 			getPathSearchParams(attackedCreature, fpp);
