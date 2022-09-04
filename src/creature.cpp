@@ -137,6 +137,13 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
+	if (forceUpdatePath) {
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		forceUpdatePath = false;
+	} else {
+		forceUpdatePath = true;
+	}
+
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
