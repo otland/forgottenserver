@@ -246,7 +246,7 @@ public:
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false,
 	                  bool isPathfinding = false) const;
 	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-						bool isPathfinding = false) const;
+	                    bool isPathfinding = false) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
