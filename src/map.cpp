@@ -791,7 +791,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t distEnd = Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
-			const int_fast32_t f = distEnd + (walkCost + speedCost);
+			const int_fast32_t distStart = Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
+			const int_fast32_t f = distEnd + distStart + (walkCost + speedCost);
 
 			if (neighborNode) {
 				if (neighborNode->f <= f) {
