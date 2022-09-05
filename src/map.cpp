@@ -514,7 +514,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	}
 
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
-};
+}
 
 namespace {
 
