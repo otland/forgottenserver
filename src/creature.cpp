@@ -216,7 +216,8 @@ void Creature::onWalk()
 			FindPathParams fpp;
 			getPathSearchParams(attackedCreature, fpp);
 			const Position& pos = getPosition();
-			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
+			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist ||
+	                    Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
 				// Attacked Creature has gone too far. Stop trying to get a path.
 				listWalkDir.clear();
 				return;
@@ -926,12 +927,13 @@ bool Creature::setAttackedCreature(Creature* creature)
 			attackedCreature = nullptr;
 			return false;
 		}
-		
+
 		// Target is too far to get a path too. We shouldn't add him as a target.
 		FindPathParams fpp;
 		getPathSearchParams(creature, fpp);
 		const Position& pos = getPosition();
-		if (Position::getDistanceX(pos, creaturePos) > fpp.maxSearchDist || Position::getDistanceY(pos, creaturePos) > fpp.maxSearchDist) {
+		if (Position::getDistanceX(pos, creaturePos) > fpp.maxSearchDist ||
+                    Position::getDistanceY(pos, creaturePos) > fpp.maxSearchDist) {
 			attackedCreature = nullptr;
 			return false;
 		}
