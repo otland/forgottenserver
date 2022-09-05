@@ -118,7 +118,8 @@ public:
 	virtual Skulls_t getSkullClient(const Creature* creature) const { return creature->getSkull(); }
 	void setSkull(Skulls_t newSkull);
 	Direction getDirection() const { return direction; }
-	void setDirection(Direction dir) {
+	void setDirection(Direction dir)
+	{
 		direction = dir;
 		if (attackedCreature) {
 			goToFollowCreature();
