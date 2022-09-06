@@ -119,13 +119,7 @@ public:
 	virtual Skulls_t getSkullClient(const Creature* creature) const { return creature->getSkull(); }
 	void setSkull(Skulls_t newSkull);
 	Direction getDirection() const { return direction; }
-	void setDirection(Direction dir)
-	{
-		direction = dir;
-		if (attackedCreature) {
-			goToFollowCreature();
-		}
-	}
+	void setDirection(Direction dir) { direction = dir; }
 
 	bool isHealthHidden() const { return hiddenHealth; }
 	void setHiddenHealth(bool b) { hiddenHealth = b; }
