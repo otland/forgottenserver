@@ -78,6 +78,7 @@ void Game::start(ServiceManager* manager)
 		g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
 	}
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL, std::bind(&Game::checkCreaturesPath, this, 0)));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
@@ -3908,6 +3909,23 @@ void Game::checkCreatures(size_t index)
 			it = checkCreatureList.erase(it);
 			ReleaseCreature(creature);
 		}
+	}
+
+	cleanup();
+}
+
+void Game::checkCreaturesPath(size_t index)
+{
+	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL, std::bind(&Game::checkCreaturesPath, this, (index + 1) % EVENT_CREATURECOUNT)));
+
+	auto& checkCreatureList = checkCreatureLists[index];
+	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
+	while (it != end) {
+		Creature* creature = *it;
+		if (creature->getHealth() > 0) {
+			creature->checkPath();
+		}
+		++it;
 	}
 
 	cleanup();
