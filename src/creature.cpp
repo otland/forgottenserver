@@ -218,11 +218,6 @@ void Creature::onWalk()
 		eventWalk = 0;
 		addEventWalk();
 	}
-
-	if (!hasFollowPath && !followCreature && !attackedCreature || attackedCreature != followCreature) {
-		goToFollowCreature();
-		return;
-	}
 }
 
 void Creature::onWalk(Direction& dir)
