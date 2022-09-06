@@ -924,16 +924,6 @@ bool Creature::setAttackedCreature(Creature* creature)
 			return false;
 		}
 
-		// Target is too far to get a path too. We shouldn't add him as a target.
-		FindPathParams fpp;
-		getPathSearchParams(creature, fpp);
-		const Position& pos = getPosition();
-		if (Position::getDistanceX(pos, creaturePos) > fpp.maxSearchDist ||
-		    Position::getDistanceY(pos, creaturePos) > fpp.maxSearchDist) {
-			attackedCreature = nullptr;
-			return false;
-		}
-
 		attackedCreature = creature;
 		followPosition = creaturePos;
 		onAttackedCreature(attackedCreature);
