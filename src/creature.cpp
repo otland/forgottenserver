@@ -136,6 +136,10 @@ void Creature::onThink(uint32_t interval)
 		blockCount = std::min<uint32_t>(blockCount + 1, 2);
 		blockTicks = 0;
 	}
+	
+	if (!forceUpdateFollowPath) {
+		forceUpdateFollowPath = true;
+	}
 
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
@@ -148,7 +152,9 @@ void Creature::checkPath()
 {
 	if (attackedCreature) {
 		const Position& targetPos = attackedCreature->getPosition();
-		if (followPosition != targetPos) {
+		if (followPosition != targetPos || forceUpdateFollowPath) {
+			forceUpdateFollowPath = false;
+
 			FindPathParams fpp;
 			getPathSearchParams(attackedCreature, fpp);
 			const Position& pos = getPosition();
