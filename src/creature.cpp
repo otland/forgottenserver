@@ -137,9 +137,7 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 	
-	if (!forceUpdateFollowPath) {
-		forceUpdateFollowPath = true;
-	}
+	forceUpdateFollowPath = true;
 
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
