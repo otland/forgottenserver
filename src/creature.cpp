@@ -136,7 +136,7 @@ void Creature::onThink(uint32_t interval)
 		blockCount = std::min<uint32_t>(blockCount + 1, 2);
 		blockTicks = 0;
 	}
-	
+
 	if (followCreature) {
 		goToFollowCreature();
 	}
