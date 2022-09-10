@@ -61,6 +61,7 @@ private:
 class Connection : public std::enable_shared_from_this<Connection>
 {
 public:
+	using Address = boost::asio::ip::address;
 	// non-copyable
 	Connection(const Connection&) = delete;
 	Connection& operator=(const Connection&) = delete;
@@ -88,7 +89,7 @@ public:
 
 	void send(const OutputMessage_ptr& msg);
 
-	uint32_t getIP();
+	const Address& getIP() const { return remoteAddress; };
 
 private:
 	void parseHeader(const boost::system::error_code& error);
@@ -117,7 +118,7 @@ private:
 	Protocol_ptr protocol;
 
 	boost::asio::ip::tcp::socket socket;
-
+	Address remoteAddress;
 	time_t timeConnected;
 	uint32_t packetsSent = 0;
 

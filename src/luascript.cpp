@@ -2176,6 +2176,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getSpectators", LuaScriptInterface::luaGameGetSpectators);
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
+	registerMethod("Game", "getNpcs", LuaScriptInterface::luaGameGetNpcs);
+	registerMethod("Game", "getMonsters", LuaScriptInterface::luaGameGetMonsters);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
 	registerMethod("Game", "getExperienceStage", LuaScriptInterface::luaGameGetExperienceStage);
@@ -4479,6 +4481,34 @@ int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
+{
+	// Game.getNpcs()
+	lua_createtable(L, g_game.getNpcsOnline(), 0);
+
+	int index = 0;
+	for (const auto& npcEntry : g_game.getNpcs()) {
+		pushUserdata<Npc>(L, npcEntry.second);
+		setMetatable(L, -1, "Npc");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetMonsters(lua_State* L)
+{
+	// Game.getMonsters()
+	lua_createtable(L, g_game.getMonstersOnline(), 0);
+
+	int index = 0;
+	for (const auto& monsterEntry : g_game.getMonsters()) {
+		pushUserdata<Monster>(L, monsterEntry.second);
+		setMetatable(L, -1, "Monster");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
@@ -5253,6 +5283,10 @@ int LuaScriptInterface::luaTileRemove(lua_State* L)
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
+	}
+
+	if (g_game.isTileInCleanList(tile)) {
+		g_game.removeTileToClean(tile);
 	}
 
 	g_game.map.removeTile(tile->getPosition());
@@ -8693,7 +8727,7 @@ int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 	// player:getIp()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getIP());
+		pushString(L, player->getIP().to_string());
 	} else {
 		lua_pushnil(L);
 	}
