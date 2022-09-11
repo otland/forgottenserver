@@ -3919,14 +3919,10 @@ void Game::checkCreaturesPath(size_t index)
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL,
 	                                         [=]() { checkCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
 
-	auto& checkCreatureList = checkCreatureLists[index];
-	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
-	while (it != end) {
-		Creature* creature = *it;
+	for (Creature* creature : checkCreatureLists[index]) {
 		if (creature->getHealth() > 0) {
 			creature->checkPath();
 		}
-		++it;
 	}
 
 	cleanup();
