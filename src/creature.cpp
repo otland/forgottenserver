@@ -152,24 +152,34 @@ void Creature::onThink(uint32_t interval)
 
 void Creature::checkPath()
 {
-	if (attackedCreature) {
-		const Position& targetPos = attackedCreature->getPosition();
-		if (followPosition != targetPos || forceUpdateFollowPath) {
-			forceUpdateFollowPath = false;
-
-			FindPathParams fpp;
-			getPathSearchParams(attackedCreature, fpp);
-			const Position& pos = getPosition();
-			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
-				// Attacked Creature has gone too far. Stop trying to get a path.
-				listWalkDir.clear();
-				return;
-			}
-
-			followPosition = attackedCreature->getPosition();
-			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-		}
+	if (followCreature && !attackedCreature && followPosition != followCreature->getPosition()) {
+		goToFollowCreature();
+		return;
 	}
+
+	if (!attackedCreature) {
+		return;
+	}
+
+	const Position& targetPos = attackedCreature->getPosition();
+	if (!forceUpdateFollowPath || followPosition == targetPos) {
+		return;
+	}
+
+	forceUpdateFollowPath = false;
+
+	FindPathParams fpp;
+	getPathSearchParams(attackedCreature, fpp);
+	const Position& pos = getPosition();
+	if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist ||
+	    Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
+		// Attacked Creature has gone too far. Stop trying to get a path.
+		listWalkDir.clear();
+		return;
+	}
+
+	followPosition = attackedCreature->getPosition();
+	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
 void Creature::onAttacking(uint32_t interval)
@@ -1017,6 +1027,7 @@ bool Creature::setFollowCreature(Creature* creature)
 
 		hasFollowPath = false;
 		followCreature = creature;
+		followPosition = creaturePos;
 	} else {
 		followCreature = nullptr;
 	}
