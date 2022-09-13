@@ -754,7 +754,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// Sight is clear. We shouldn't have to move backwards.
-			if (sightClear) {
+			if (sightClear && !fpp.keepDistance) {
 				if (startPos.x == targetPos.x) {
 					// Don't check nodes if start and end pos X are the same and node X is different.
 					if (pos.x != targetPos.x) {
