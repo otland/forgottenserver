@@ -153,6 +153,7 @@ void Creature::onThink(uint32_t interval)
 void Creature::checkPath()
 {
 	if (followCreature && !attackedCreature && followPosition != followCreature->getPosition()) {
+		followPosition = followCreature->getPosition();
 		goToFollowCreature();
 		return;
 	}
