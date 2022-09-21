@@ -636,7 +636,16 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	// used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
+		uint32_t searchFlags = FLAG_PATHFINDING;
+		if (!creature.getPlayer()) {
+			// monster pathfinding (monster ai)
+			searchFlags |= FLAG_IGNOREFIELDDAMAGE;
+		} else {
+			// player pathfinding (walk to use, rotate, etc.)
+			searchFlags |= FLAG_CHECKMOVABLE;
+		}
+
+		if (!tile || tile->queryAdd(0, creature, 1, searchFlags) != RETURNVALUE_NOERROR) {
 			return nullptr;
 		}
 	}

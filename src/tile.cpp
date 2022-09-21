@@ -488,6 +488,10 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOERROR;
 		}
 
+		if (hasBitSet(FLAG_CHECKMOVABLE, flags) && hasFlag(TILESTATE_BLOCKPATH)) {
+			return RETURNVALUE_THEREISNOWAY;
+		}
+
 		if (hasBitSet(FLAG_PATHFINDING, flags) && hasFlag(TILESTATE_FLOORCHANGE | TILESTATE_TELEPORT)) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}

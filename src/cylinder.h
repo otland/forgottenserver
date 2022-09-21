@@ -22,6 +22,7 @@ enum cylinderflags_t
 	FLAG_IGNOREFIELDDAMAGE = 1 << 5,   // Bypass field damage checks
 	FLAG_IGNORENOTMOVEABLE = 1 << 6,   // Bypass check for mobility
 	FLAG_IGNOREAUTOSTACK = 1 << 7,     // queryDestination will not try to stack items together
+	FLAG_CHECKMOVABLE = 1 << 8,        // Stop if tile is occupied by fields or furniture
 };
 
 enum cylinderlink_t

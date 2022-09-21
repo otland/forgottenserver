@@ -1900,6 +1900,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(FLAG_IGNOREFIELDDAMAGE);
 	registerEnum(FLAG_IGNORENOTMOVEABLE);
 	registerEnum(FLAG_IGNOREAUTOSTACK);
+	registerEnum(FLAG_CHECKMOVABLE);
 
 	// Use with itemType:getSlotPosition
 	registerEnum(SLOTP_WHEREEVER);
