@@ -1,32 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Phantasm" nameDescription="a phantasm" race="undead" experience="0" speed="240">
+<monster name="Phantasm" nameDescription="a phantasm" race="undead" experience="1" speed="340">
 	<health now="65" max="65" />
 	<look type="241" head="20" corpse="6344" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
-		<flag summonable="0" />
 		<flag attackable="1" />
 		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-50" />
-		<attack name="death" interval="2000" chance="15" range="7" min="-50" max="-80">
+		<attack name="melee" interval="2000" min="0" max="-15" />
+		<attack name="death" interval="2000" chance="15" range="7" min="-34" max="-59">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />
-			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
-		<attack name="manadrain" interval="2000" chance="10" target="0" radius="3" min="-5" max="-80">
+		<attack name="manadrain" interval="2000" chance="10" target="0" radius="3" min="-5" max="-7">
 			<attribute key="areaEffect" value="yellowbubble" />
 		</attack>
 		<attack name="phantasm drown" interval="2000" chance="10" />
@@ -34,7 +29,7 @@
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses>
+	<defenses armor="10" defense="10">
 		<defense name="healing" interval="2000" chance="30" min="40" max="65">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>

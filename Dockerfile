@@ -1,4 +1,4 @@
-FROM alpine:3.15.0 AS build
+FROM alpine:3.16.2 AS build
 # crypto++-dev is in edge/testing
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
   binutils \
@@ -21,7 +21,7 @@ COPY CMakeLists.txt /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver/build
 RUN cmake .. && make
 
-FROM alpine:3.15.0
+FROM alpine:3.16.2
 # crypto++ is in edge/testing
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
   boost-iostreams \

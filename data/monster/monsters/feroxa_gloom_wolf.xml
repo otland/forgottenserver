@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Feroxa" nameDescription="Feroxa" race="blood" experience="0" speed="400">
+	<health now="130000" max="130000" />
+	<look type="716" corpse="24745" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1800" />
+		<attack name="death" interval="2000" chance="20" radius="6" target="0" min="-700" max="-1250">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" length="9" spread="1" min="-700" max="-1250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" range="6" target="1" min="-700" max="-1250">
+			<attribute key="shootEffect" value="arrow" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="speed" interval="2000" chance="12" speedchange="450" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="24739" name="moonlight crystals" chance="85714" countmax="3" />
+		<item id="2152" name="platinum coin" chance="85714" countmax="20" />
+		<item id="18417" name="brown crystal splinter" chance="42857" countmax="5" />
+		<item id="24741" name="fur armor" chance="42857" />
+		<item id="2186" name="moonlight rod" chance="42857" />
+		<item id="2145" name="small diamond" chance="42857" countmax="5" />
+		<item id="18414" name="violet crystal shard" chance="42857" countmax="5" />
+		<item id="24742" name="badger boots" chance="28571" />
+		<item id="18418" name="blue crystal splinter" chance="28571" countmax="5" />
+		<item id="8472" name="great spirit potion" chance="28571" countmax="5" />
+		<item id="18415" name="green crystal shard" chance="28571" countmax="5" />
+		<item id="2148" name="gold coin" chance="28571" countmax="200" />
+		<item id="7590" name="great mana potion" chance="28571" countmax="5" />
+		<item id="2146" name="small sapphire" chance="28571" countmax="5" />
+		<item id="8473" name="ultimate health potion" chance="28571" countmax="5" />
+		<item id="18413" name="blue crystal shard" chance="14286" countmax="5" />
+		<item id="18416" name="green crystal splinter" chance="14286" countmax="5" />
+		<item id="9970" name="small topaz" chance="14286" countmax="5" />
+		<item id="2197" name="stone skin amulet" chance="14286" />
+		<item id="8910" name="underworld rod" chance="14286" />
+		<item id="8922" name="wand of voodoo" chance="14286" />
+		<item id="24743" name="wereboar loincloth" chance="14286" />
+		<item id="24716" name="werewolf amulet" chance="14286" />
+	</loot>
+</monster>

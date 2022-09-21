@@ -32,16 +32,16 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item name="white mushroom" chance="50000" />
-		<item name="gold coin" countmax="8" chance="35000" />
-		<item name="hatchet" chance="25000" />
-		<item name="axe" chance="15000" />
-		<item name="pick" chance="10000" />
-		<item name="copper shield" chance="10000" />
-		<item name="leather legs" chance="10000" />
-		<item name="studded armor" chance="8000" />
-		<item name="letter" chance="8000" />
-		<item name="dwarven ring" chance="100" />
-		<item name="iron ore" chance="100" />
+		<item id="2787" name="white mushroom" chance="50140" />
+		<item id="2148" name="gold coin" chance="35361" countmax="8" />
+		<item id="2388" name="hatchet" chance="24739" />
+		<item id="2386" name="axe" chance="14596" />
+		<item id="3456" name="pick" chance="10143" />
+		<item id="2530" name="copper shield" chance="10098" />
+		<item id="2649" name="leather legs" chance="9682" />
+		<item id="2484" name="studded armor" chance="8017" />
+		<item id="2597" name="letter" chance="7929" />
+		<item id="2213" name="dwarven ring" chance="95" />
+		<item id="5880" name="iron ore" chance="83" />
 	</loot>
 </monster>

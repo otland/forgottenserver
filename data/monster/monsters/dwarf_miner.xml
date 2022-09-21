@@ -28,13 +28,13 @@
 		<voice sentence="Mine, all mine!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="10" chance="33333" />
-		<item name="dwarven ring" chance="793" />
-		<item name="axe" chance="14285" />
-		<item name="studded armor" chance="6666" />
-		<item name="pick" chance="11111" />
-		<item name="leather legs" chance="9090" />
-		<item name="meat" chance="3846" />
-		<item name="iron ore" chance="793" />
+		<item id="2148" name="gold coin" chance="41358" countmax="10" />
+		<item id="2386" name="axe" chance="15123" />
+		<item id="3456" name="pick" chance="12037" />
+		<item id="2649" name="leather legs" chance="8951" />
+		<item id="2484" name="studded armor" chance="7099" />
+		<item id="2666" name="meat" chance="3704" />
+		<item id="2213" name="dwarven ring" chance="617" />
+		<item id="5880" name="iron ore" chance="617" />
 	</loot>
 </monster>

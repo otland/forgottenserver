@@ -823,4 +823,17 @@
 	<instant name="root branchy" words="###53" blockwalls="1" needtarget="1" needlearn="1" script="monster/root_branchy.lua" />
 	<instant name="explosion wave" words="###54" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/explosion_wave.lua" />
 	<instant name="wave t" words="###55" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/wave_t.lua" />
+	<instant name="frozen minion wave" words="###56" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/frozen_minion_wave.lua" />
+	<instant name="frozen minion heal" words="###57" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/frozen_minion_heal.lua" />
+	<instant name="frozen minion beam" words="###58" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/frozen_minion_beam.lua" />
+	<instant name="icicle heal" words="###59" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/icicle_heal.lua" />
+	<instant name="lloyd wave 1" words="###60" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_1.lua" />
+	<instant name="lloyd wave 2" words="###61" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_2.lua" />
+	<instant name="hirintror freeze" words="###62" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_freeze.lua" />
+	<instant name="hirintror skill reducer" words="###63" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_skill_reducer.lua" />
+	<instant name="energy pulse explosion" words="###64" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/energy_pulse_explosion.lua" />
+	<instant name="ferumbras electrify" words="###65" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/ferumbras_electrify.lua" />
+	<instant name="ferumbras soulfire" words="###66" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/ferumbras_soulfire.lua" />
+	<instant name="glooth fairy skill reducer" words="###67" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/glooth_fairy_skill_reducer.lua" />
+	<instant name="physical explosion" words="###68" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/physical_explosion.lua" />
 </spells>

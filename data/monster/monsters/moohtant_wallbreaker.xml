@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Moohtant Wallbreaker" nameDescription="a moohtant wallbreaker" experience="0" speed="80">
+	<health now="250000" max="250000" />
+	<look type="607" corpse="23367" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element physicalPercent="85" />
+		<element icePercent="85" />
+		<element holyPercent="85" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="23570" name="giant pacifier" chance="100000" />
+		<item id="7591" name="great health potion" chance="100000" countmax="13" />
+		<item id="7590" name="great mana potion" chance="100000" countmax="9" />
+		<item id="23571" name="moohtant horn" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="19" />
+		<item id="2145" name="small diamond" chance="100000" countmax="2" />
+	</loot>
+</monster>

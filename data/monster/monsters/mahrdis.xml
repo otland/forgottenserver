@@ -68,17 +68,15 @@
 		<voice sentence="This is why I'm hot." />
 	</voices>
 	<loot>
-		<item name="burning heart" chance="100000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="100" chance="30000" />
-		<item name="gold coin" countmax="30" chance="30000" />
-		<item name="small ruby" countmax="3" chance="12000" />
-		<item name="great health potion" chance="10500" />
-		<item name="life ring" chance="6700" />
-		<item name="fire axe" chance="1050" />
-		<item name="red gem" chance="600" />
-		<item name="holy falcon" chance="150" />
-		<item name="mini mummy" chance="110" />
-		<item name="phoenix shield" chance="110" />
+		<item id="2353" name="burning heart" chance="100000" />
+		<item id="2148" name="gold coin" chance="88738" countmax="230" />
+		<item id="2147" name="small ruby" chance="12255" countmax="3" />
+		<item id="7591" name="great health potion" chance="10213" />
+		<item id="2168" name="life ring" chance="6752" />
+		<item id="2432" name="fire axe" chance="936" />
+		<item id="2156" name="red gem" chance="624" />
+		<item id="2141" name="holy falcon" chance="142" />
+		<item id="11207" name="mini mummy" chance="113" />
+		<item id="2539" name="phoenix shield" chance="113" />
 	</loot>
 </monster>

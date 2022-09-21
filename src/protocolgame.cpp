@@ -108,6 +108,34 @@ std::size_t clientLogin(const Player& player)
 	return waitList.size();
 }
 
+ClientDamageType getClientDamageType(CombatType_t combatType)
+{
+	switch (combatType) {
+		case COMBAT_PHYSICALDAMAGE:
+			return CLIENT_DAMAGETYPE_PHYSICAL;
+		case COMBAT_ENERGYDAMAGE:
+			return CLIENT_DAMAGETYPE_ENERGY;
+		case COMBAT_EARTHDAMAGE:
+			return CLIENT_DAMAGETYPE_EARTH;
+		case COMBAT_FIREDAMAGE:
+			return CLIENT_DAMAGETYPE_FIRE;
+		case COMBAT_LIFEDRAIN:
+			return CLIENT_DAMAGETYPE_LIFEDRAIN;
+		case COMBAT_HEALING:
+			return CLIENT_DAMAGETYPE_HEALING;
+		case COMBAT_DROWNDAMAGE:
+			return CLIENT_DAMAGETYPE_DROWN;
+		case COMBAT_ICEDAMAGE:
+			return CLIENT_DAMAGETYPE_ICE;
+		case COMBAT_HOLYDAMAGE:
+			return CLIENT_DAMAGETYPE_HOLY;
+		case COMBAT_DEATHDAMAGE:
+			return CLIENT_DAMAGETYPE_DEATH;
+		default:
+			return CLIENT_DAMAGETYPE_UNDEFINED;
+	}
+}
+
 } // namespace
 
 void ProtocolGame::release()
@@ -1115,7 +1143,9 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		}
 
 		msg.get<uint16_t>(); // familiar looktype
-		addGameTask([=, playerID = player->getID()]() { g_game.playerChangeOutfit(playerID, newOutfit); });
+		bool randomizeMount = msg.getByte() == 0x01;
+		addGameTask(
+		    [=, playerID = player->getID()]() { g_game.playerChangeOutfit(playerID, newOutfit, randomizeMount); });
 
 		// Store "try outfit" window
 	} else if (outfitType == 1) {
@@ -3146,6 +3176,30 @@ void ProtocolGame::sendHouseWindow(uint32_t windowTextId, const std::string& tex
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+                                      const std::string& target)
+{
+	NetworkMessage msg;
+	msg.addByte(0xCC);
+	msg.addByte(impactType);
+	msg.add<uint32_t>(amount);
+
+	switch (impactType) {
+		case RECEIVED:
+			msg.addByte(getClientDamageType(type));
+			msg.addString(target);
+			break;
+
+		case DEALT:
+			msg.addByte(getClientDamageType(type));
+			break;
+
+		default:
+			break;
+	}
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendOutfitWindow()
 {
 	const auto& outfits = Outfits::getInstance().getOutfits(player->getSex());
@@ -3229,7 +3283,7 @@ void ProtocolGame::sendOutfitWindow()
 
 	msg.addByte(0x00); // Try outfit mode (?)
 	msg.addByte(mounted ? 0x01 : 0x00);
-	msg.addByte(0x00); // randomize mount (bool)
+	msg.addByte(player->randomizeMount ? 0x01 : 0x00);
 	writeToOutputBuffer(msg);
 }
 

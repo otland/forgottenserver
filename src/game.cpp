@@ -3465,7 +3465,7 @@ void Game::playerToggleMount(uint32_t playerId, bool mount)
 	player->toggleMount(mount);
 }
 
-void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
+void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount /* = false*/)
 {
 	if (!g_config.getBoolean(ConfigManager::ALLOW_CHANGEOUTFIT)) {
 		return;
@@ -3475,6 +3475,8 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 	if (!player) {
 		return;
 	}
+
+	player->randomizeMount = randomizeMount;
 
 	const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(player->getSex(), outfit.lookType);
 	if (!playerOutfit) {
@@ -3510,6 +3512,11 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit)
 
 		if (player->hasCondition(CONDITION_OUTFIT)) {
 			return;
+		}
+
+		if (player->randomizeMount && player->hasMounts()) {
+			const Mount* mount = mounts.getMountByID(player->getRandomMount());
+			outfit.lookMount = mount->clientId;
 		}
 
 		internalCreatureChangeOutfit(player, outfit);
@@ -4181,6 +4188,25 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		target->gainHealth(attacker, damage.primary.value);
 		realHealthChange = target->getHealth() - realHealthChange;
 
+		if (attackerPlayer && attackerPlayer != targetPlayer) {
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target ? target->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT,
+				                                   target ? target->getName() : "(other)");
+			}
+		} else if (targetPlayer) {
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::HEALING,
+			                                 attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type == COMBAT_HEALING) {
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::HEALING,
+				                                 attacker ? attacker->getName() : "(other)");
+			}
+		}
+
 		if (realHealthChange > 0 && !target->isInGhostMode()) {
 			auto damageString = fmt::format("{:d} hitpoint{:s}", realHealthChange, realHealthChange != 1 ? "s" : "");
 
@@ -4389,6 +4415,26 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			combatGetTypeInfo(damage.secondary.type, target, message.secondary.color, hitEffect);
 			if (hitEffect != CONST_ME_NONE) {
 				addMagicEffect(spectators, targetPos, hitEffect);
+			}
+		}
+
+		if (attackerPlayer) {
+			attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                   DamageAnalyzerImpactType::DEALT, target->getName());
+			if (damage.secondary.type != COMBAT_NONE) {
+				attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                   DamageAnalyzerImpactType::DEALT, target->getName());
+			}
+		}
+
+		if (targetPlayer) {
+			targetPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+			                                 DamageAnalyzerImpactType::RECEIVED,
+			                                 attacker ? attacker->getName() : "(other)");
+			if (damage.secondary.type != COMBAT_NONE) {
+				targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+				                                 DamageAnalyzerImpactType::RECEIVED,
+				                                 attacker ? attacker->getName() : "(other)");
 			}
 		}
 
@@ -5144,7 +5190,7 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
 		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(),
-		        convertIPToString(player->getIP()).c_str());
+		        player->getIP().to_string().c_str());
 		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
 		fclose(file);
 	}
@@ -5168,7 +5214,7 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	}
 
 	if (!player->isInMarket()) {
-		return;
+		player->sendMarketEnter();
 	}
 
 	const ItemType& it = Item::items.getItemIdByClientId(spriteId);

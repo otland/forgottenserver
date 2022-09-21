@@ -119,6 +119,7 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
+	uint8_t getRandomMount() const;
 	uint8_t getCurrentMount() const;
 	void setCurrentMount(uint8_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
@@ -126,6 +127,7 @@ public:
 	bool tameMount(uint8_t mountId);
 	bool untameMount(uint8_t mountId);
 	bool hasMount(const Mount* mount) const;
+	bool hasMounts() const;
 	void dismount();
 
 	void sendFYIBox(const std::string& message)
@@ -239,7 +241,7 @@ public:
 			client->disconnect();
 		}
 	}
-	uint32_t getIP() const;
+	Connection::Address getIP() const;
 
 	void addContainer(uint8_t cid, Container* container);
 	void closeContainer(uint8_t cid);
@@ -1094,6 +1096,13 @@ public:
 			client->writeToOutputBuffer(message);
 		}
 	}
+	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+	                        const std::string& target)
+	{
+		if (client) {
+			client->sendCombatAnalyzer(type, amount, impactType, target);
+		}
+	}
 
 	void receivePing() { lastPong = OTSYS_TIME(); }
 
@@ -1222,6 +1231,7 @@ private:
 	int64_t nextAction = 0;
 
 	ProtocolGame_ptr client;
+	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
 	Guild* guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
@@ -1251,7 +1261,6 @@ private:
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
 	uint32_t MessageBufferTicks = 0;
-	uint32_t lastIP = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;
 	uint32_t windowTextId = 0;
@@ -1296,6 +1305,7 @@ private:
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+	bool randomizeMount = false;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;

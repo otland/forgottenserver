@@ -29,26 +29,23 @@
 	</defenses>
 	<elements>
 		<element energyPercent="15" />
-		<element holyPercent="10" />
 		<element earthPercent="-10" />
+		<element holyPercent="10" />
 		<element deathPercent="-10" />
 	</elements>
-	<immunities>
-		<immunity invisible="0" />
-	</immunities>
 	<voices interval="5000" chance="10">
 		<voice sentence="KRAK ORRRRRRK!" yell="1" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="12" chance="54000" />
-		<item name="orcish gear" chance="10500" />
-		<item name="ham" chance="9720" />
-		<item id="2381" chance="7000" /><!-- halberd -->
-		<item name="battle axe" chance="5770" />
-		<item name="hunting spear" chance="5000" />
-		<item name="orc leather" chance="4000" />
-		<item name="orc tooth" chance="3000" />
-		<item name="chain armor" chance="940" />
-		<item id="2044" chance="850" /><!-- lamp -->
+		<item id="2148" name="gold coin" chance="54944" countmax="25" />
+		<item id="12433" name="orcish gear" chance="10397" />
+		<item id="2671" name="ham" chance="9754" />
+		<item id="2381" name="halberd" chance="6943" />
+		<item id="2378" name="battle axe" chance="5740" />
+		<item id="3965" name="hunting spear" chance="4968" />
+		<item id="12435" name="orc leather" chance="4144" />
+		<item id="11113" name="orc tooth" chance="2763" />
+		<item id="2464" name="chain armor" chance="982" />
+		<item id="2044" name="lamp" chance="840" />
 	</loot>
 </monster>

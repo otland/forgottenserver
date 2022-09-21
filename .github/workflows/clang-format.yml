@@ -22,9 +22,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: >
-          sudo apt-get update &&
-          sudo apt-get install clang-format
+        run: sudo apt update -q && sudo apt install -yq clang-format
 
       - name: Check code style
         run: clang-format -n -style=file --Werror src/*.{cpp,h}
