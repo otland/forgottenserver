@@ -484,10 +484,20 @@ do
 						-- display full info
 						local boostValues = {}
 						for i = 1, #boosts do
-							boostValues[#boostValues + 1] = string.format("%s %+d%%", boosts[i].element, boosts[i].percent)
+							if boosts[i].element ~= "healing" then
+								boostValues[#boostValues + 1] = string.format("%s %+d%%", boosts[i].element, boosts[i].percent)
+							else
+								healString = string.format("healing power %+d%%", boosts[i].percent)
+							end
 						end
 
-						boostResponse = string.format("damage ", table.concat(boostValues, ", "))
+						local boostResponseData = {}
+						if #boostValues > 0 then
+							boostResponseData[#boostResponseData + 1] = string.format("damage %s", table.concat(boostValues, ", "))
+						end
+
+						boostResponseData[#boostResponseData + 1] = healString
+						boostResponse = table.concat(boostResponseData, ", ")
 					end
 
 					descriptions[#descriptions + 1] = boostResponse
