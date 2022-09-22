@@ -998,12 +998,8 @@ ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool 
 	if (equipFunction) {
 		ret = equipFunction(this, player, item, slot, isCheck);
 	}
-	if (scripted) {
-		if (ret == RETURNVALUE_NOERROR) {
-			if (!executeEquip(player, item, slot, isCheck)) {
-				ret = RETURNVALUE_CANNOTBEDRESSED;
-			}
-		}
+	if (scripted && (ret == RETURNVALUE_NOERROR) && !executeEquip(player, item, slot, isCheck)) {
+		ret = RETURNVALUE_CANNOTBEDRESSED;
 	}
 	return ret;
 }
