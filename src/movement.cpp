@@ -968,17 +968,14 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 
 ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	if (scripted) {
-		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == RETURNVALUE_NOERROR) {
-			if (executeEquip(player, item, slot, isCheck)) {
-				return RETURNVALUE_NOERROR;
-			}
-			return RETURNVALUE_CANNOTBEDRESSED;
-		}
-		return equipFunction(this, player, item, slot, isCheck);
-	} else {
-		return equipFunction(this, player, item, slot, isCheck);
+	ReturnValue ret = RETURNVALUE_NOERROR;
+	if (equipFunction) {
+		ret = equipFunction(this, player, item, slot, isCheck);
 	}
+	if (scripted && (ret == RETURNVALUE_NOERROR) && !executeEquip(player, item, slot, isCheck)) {
+		ret = RETURNVALUE_CANNOTBEDRESSED;
+	}
+	return ret;
 }
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)
