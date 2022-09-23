@@ -3027,6 +3027,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("MonsterType", "getElementList", LuaScriptInterface::luaMonsterTypeGetElementList);
 	registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
+	
+	registerMethod("MonsterType", "getWeaponList", LuaScriptInterface::luaMonsterTypeGetWeaponList);
+	registerMethod("MonsterType", "addWeapon", LuaScriptInterface::luaMonsterTypeAddWeapon);
 
 	registerMethod("MonsterType", "getVoices", LuaScriptInterface::luaMonsterTypeGetVoices);
 	registerMethod("MonsterType", "addVoice", LuaScriptInterface::luaMonsterTypeAddVoice);
@@ -14411,6 +14414,37 @@ int LuaScriptInterface::luaMonsterTypeAddElement(lua_State* L)
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeAddElement(lua_State* L)
+{
+	// monsterType:addElement(type, percent)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		CombatType_t element = getNumber<CombatType_t>(L, 2);
+		monsterType->info.elementMap[element] = getNumber<int32_t>(L, 3);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeGetWeaponList(lua_State* L)
+{
+	// monsterType:getWeaponList()
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (!monsterType) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, monsterType->info.weaponMap.size(), 0);
+	for (const auto& weaponEntry : monsterType->info.weaponMap) {
+		lua_pushnumber(L, weaponEntry.second);
+		lua_rawseti(L, -2, weaponEntry.first);
 	}
 	return 1;
 }
