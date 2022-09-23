@@ -626,6 +626,23 @@ BlockType_t Monster::blockHit(Creature* attacker, CombatType_t combatType, int32
 				blockType = BLOCK_ARMOR;
 			}
 		}
+		
+		if (const Player* player = attacker->getPlayer()) {
+			int32_t weaponMod = 0;
+			WeaponType_t weapon = player->getWeaponType();
+			auto it = mType->info.weaponMap.find(weapon);
+			if (it != mType->info.weaponMap.end()) {
+				weaponMod = it->second;
+			}
+
+			if (weaponMod != 0) {
+				damage = static_cast<int32_t>(std::round(damage * ((100 - weaponMod) / 100.)));
+				if (damage <= 0) {
+					damage = 0;
+					blockType = BLOCK_ARMOR;
+				}
+			}
+		}
 	}
 
 	return blockType;
