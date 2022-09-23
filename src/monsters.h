@@ -99,6 +99,7 @@ class MonsterType
 		LuaScriptInterface* scriptInterface;
 
 		std::map<CombatType_t, int32_t> elementMap;
+		std::map<WeaponType_t, int32_t> weaponMap;
 
 		std::vector<voiceBlock_t> voiceVector;
 
