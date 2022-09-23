@@ -569,6 +569,11 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
+			MagicField* field = getFieldItem();
+			if (!hasBitSet(FLAG_IGNOREFIELDDAMAGE) && field && field->getDamage() != 0)) {
+				return RETURNVALUE_NOTPOSSIBLE;
+			}
+
 			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
 				//player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
