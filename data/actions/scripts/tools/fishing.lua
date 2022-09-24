@@ -5,6 +5,9 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
+local fishers = {}
+local fishingSpotCooldown = 120 -- Seconds
+
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
 	if not table.contains(waterIds, targetId) then
@@ -42,6 +45,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if targetId == 493 or targetId == 15402 then
 		return true
 	end
+	
+	-- We caught a fish at this spot. We cant gain anymore skill or catch another for a while.
+	if fishers[player:getName()] and fishers[player:getName()].positions[toPosition] then
+		if fishers[player:getName()].positions[toPosition] then
+			return true
+		end
+	end
 
 	player:addSkillTries(SKILL_FISHING, 1)
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
@@ -75,8 +85,25 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				return true
 			end
 		end
+		
+		local playerName = player:getName()
+		if not fishers[playerName] then
+			fishers[playerName] = {positions = {}}
+		end
+		
+		fishers[player:getName()].positions[toPosition] = true
+		addEvent(resetFishingSpot, fishingSpotCooldown * 1000, playerName, toPosition)
+		
 		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 		player:addItem(2667, 1)
 	end
 	return true
+end
+
+function resetFishingSpot(name, pos)
+	if fishers[playerName] and fishers[playerName].positions then
+		if fishers[playerName].positions[pos] then
+			fishers[playerName].positions[pos] = nil
+		end
+	end
 end
