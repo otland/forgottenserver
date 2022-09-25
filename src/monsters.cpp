@@ -1316,17 +1316,17 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	if ((node = monsterNode.child("weaponWeakness"))) {
 		for (auto elementNode : node.children()) {
 			if ((attr = elementNode.attribute("fistPercent"))) {
-				mType->info.weaponMap[WEAPON_NONE] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_NONE] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("swordPercent"))) {
-				mType->info.weaponMap[WEAPON_SWORD] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_SWORD] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("axePercent"))) {
-				mType->info.weaponMap[WEAPON_AXE] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_AXE] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("clubPercent"))) {
-				mType->info.weaponMap[WEAPON_CLUB] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_CLUB] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("distPercent")) || (attr = elementNode.attribute("ammoPercent"))) {
-				mType->info.weaponMap[WEAPON_DISTANCE] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_DISTANCE] = pugi::cast<int32_t>(attr.value());
 			} else if ((attr = elementNode.attribute("wandPercent"))) {
-				mType->info.weaponMap[WEAPON_WAND] = pugi::cast<int32_t>(attr.value());
+				mType->info.weaponWeaknessMap[WEAPON_WAND] = pugi::cast<int32_t>(attr.value());
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown weapon percent. " << file << std::endl;
 			}
