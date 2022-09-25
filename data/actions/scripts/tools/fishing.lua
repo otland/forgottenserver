@@ -6,7 +6,7 @@ local lootVeryRare = {7632, 7633, 10220}
 local useWorms = true
 
 local fishers = {}
-local fishingSpotCooldown = 120 -- Seconds
+local fishingSpotCooldown = 2200 -- Seconds
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetId = target.itemid
@@ -45,15 +45,21 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if targetId == 493 or targetId == 15402 then
 		return true
 	end
+
+	player:addSkillTries(SKILL_FISHING, 1)
+	
+	if Tile(toPosition):hasFlag(TILESTATE_PROTECTIONZONE) then
+		return true
+	end
 	
 	-- We caught a fish at this spot. We cant gain anymore skill or catch another for a while.
-	if fishers[player:getName()] and fishers[player:getName()].positions[toPosition] then
-		if fishers[player:getName()].positions[toPosition] then
+	local posIndex = toPosition.x + toPosition.y + toPosition.z
+	if fishers[player:getName()] and fishers[player:getName()].positions[posIndex] then
+		if fishers[player:getName()].positions[posIndex] then
 			return true
 		end
 	end
-
-	player:addSkillTries(SKILL_FISHING, 1)
+	
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
 		if useWorms and not player:removeItem(3976, 1) then
 			return true
@@ -90,9 +96,12 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if not fishers[playerName] then
 			fishers[playerName] = {positions = {}}
 		end
+
+		fishers[player:getName()].positions[posIndex] = true
+		addEvent(resetFishingSpot, fishingSpotCooldown * 1000, playerName, posIndex)
 		
-		fishers[player:getName()].positions[toPosition] = true
-		addEvent(resetFishingSpot, fishingSpotCooldown * 1000, playerName, toPosition)
+		target:transform(noFishWater)
+		target:decay()
 		
 		player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 		player:addItem(2667, 1)
@@ -100,10 +109,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return true
 end
 
-function resetFishingSpot(name, pos)
+function resetFishingSpot(name, posIndex)
 	if fishers[playerName] and fishers[playerName].positions then
-		if fishers[playerName].positions[pos] then
-			fishers[playerName].positions[pos] = nil
+		if fishers[playerName].positions[posIndex] then
+			fishers[playerName].positions[posIndex] = nil
 		end
 	end
 end
