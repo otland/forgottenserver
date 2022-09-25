@@ -45,8 +45,6 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if targetId == 493 or targetId == 15402 then
 		return true
 	end
-
-	player:addSkillTries(SKILL_FISHING, 1)
 	
 	if Tile(toPosition):hasFlag(TILESTATE_PROTECTIONZONE) then
 		return true
@@ -59,6 +57,8 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 	end
+	
+	player:addSkillTries(SKILL_FISHING, 1)
 	
 	if math.random(1, 100) <= math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) then
 		if useWorms and not player:removeItem(3976, 1) then
