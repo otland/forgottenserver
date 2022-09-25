@@ -1313,7 +1313,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		}
 	}
 	
-	if ((node = monsterNode.child("weapons"))) {
+	if ((node = monsterNode.child("weaponWeakness"))) {
 		for (auto elementNode : node.children()) {
 			if ((attr = elementNode.attribute("fistPercent"))) {
 				mType->info.weaponMap[WEAPON_NONE] = pugi::cast<int32_t>(attr.value());
