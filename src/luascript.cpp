@@ -14418,9 +14418,9 @@ int LuaScriptInterface::luaMonsterTypeAddElement(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaMonsterTypeGetWeaponList(lua_State* L)
+int LuaScriptInterface::luaMonsterTypeGetWeaponWeaknessList(lua_State* L)
 {
-	// monsterType:getWeaponList()
+	// monsterType:getWeaponWeaknessList()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (!monsterType) {
 		lua_pushnil(L);
@@ -14435,9 +14435,9 @@ int LuaScriptInterface::luaMonsterTypeGetWeaponList(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaMonsterTypeAddWeapon(lua_State* L)
+int LuaScriptInterface::luaMonsterTypeAddWeaponWeakness(lua_State* L)
 {
-	// monsterType:addWeapon(type, percent)
+	// monsterType:addWeaponWeakness(type, percent)
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		WeaponType_t weapon = getNumber<WeaponType_t>(L, 2);
