@@ -3028,8 +3028,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "getElementList", LuaScriptInterface::luaMonsterTypeGetElementList);
 	registerMethod("MonsterType", "addElement", LuaScriptInterface::luaMonsterTypeAddElement);
 	
-	registerMethod("MonsterType", "getWeaponList", LuaScriptInterface::luaMonsterTypeGetWeaponList);
-	registerMethod("MonsterType", "addWeapon", LuaScriptInterface::luaMonsterTypeAddWeapon);
+	registerMethod("MonsterType", "getWeaponWeaknessList", LuaScriptInterface::luaMonsterTypeGetWeaponWeaknessList);
+	registerMethod("MonsterType", "addWeakness", LuaScriptInterface::luaMonsterTypeAddWeakness);
 
 	registerMethod("MonsterType", "getVoices", LuaScriptInterface::luaMonsterTypeGetVoices);
 	registerMethod("MonsterType", "addVoice", LuaScriptInterface::luaMonsterTypeAddVoice);
