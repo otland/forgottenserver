@@ -1,4 +1,4 @@
-local logFormat = "[%s] %s %s"
+local logFormat = "[%s] %s %s\n"
 
 function logCommand(player, words, param)
 	local file = io.open("data/logs/" .. player:getName() .. " commands.log", "a")
@@ -6,6 +6,6 @@ function logCommand(player, words, param)
 		return
 	end
 
-	file:write(logFormat:format(os.date("%d/%m/%Y %H:%M"), words, param):trim() .. "\n")
-	file:close(file)
+	file:write(logFormat:format(os.date("%d/%m/%Y %H:%M"), words, param:trim()))
+	file:close()
 end
