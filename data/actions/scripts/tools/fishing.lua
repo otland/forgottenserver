@@ -51,7 +51,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		
 		player:addSkillTries(SKILL_FISHING, 1)
 			
-		local skillChance = math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) * 1000
+		local skillChance = math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) / 100
 		local rand = math.random(100000)
 		for i = 1, #fish do
 			-- Loop is at sand fish. They must be fishing on itemid 15401 --
@@ -68,7 +68,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			end
 				
 			-- Chance to catch fish is baseChance + skill Chance
-			if rand <= math.floor(fish[i].baseChance + skillChance) then
+			if rand <= math.floor(fish[i].baseChance + (fish[i].baseChance * skillChance)) then
 				player:addItem(fish[i].itemid, 1)
 				target:transform(target.itemid + 1)
 				target:decay()
