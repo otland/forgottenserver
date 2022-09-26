@@ -52,15 +52,15 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			local rand = math.random(100000)
 			for i = 1, #fish do
 				-- Loop is at sand fish. They must be fishing on itemid 15401 --
-				if i > 4 and targetId ~= 15401 then
-					break
+				if i == 5 and targetId ~= 15401 then
+					i = 6
 				end
 				
 				-- Loop is at mechanical fish, we must be using a mechanical rod --
-				if i > 5 and item.itemid ~= 10223 then
+				if i == 6 and item.itemid ~= 10223 then
 					break
 					-- Remove a nail if we use them. It is required to catch mechanical fish --
-				elseif i > 5 and useNails and not player:removeItem(nailId, 1) then
+				elseif i == 6 and useNails and not player:removeItem(nailId, 1) then
 					break
 				end
 				
