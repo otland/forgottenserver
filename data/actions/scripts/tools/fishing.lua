@@ -40,47 +40,49 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			return true
 		end
 		
+		if not table.contains(waterWithFish, target.itemid) then
+			return true
+		end
+		
 		-- Remove worm if we use them --
 		if useWorms and not player:removeItem(wormId, 1) then
 			return true
 		end
 		
-		if table.contains(waterWithFish, target.itemid) then
-			player:addSkillTries(SKILL_FISHING, 1)
+		player:addSkillTries(SKILL_FISHING, 1)
 			
-			local skillChance = math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) * 1000
-			local rand = math.random(100000)
-			for i = 1, #fish do
-				-- Loop is at sand fish. They must be fishing on itemid 15401 --
-				if i == 5 and targetId ~= 15401 then
-					i = 6
-				end
+		local skillChance = math.min(math.max(10 + (player:getEffectiveSkillLevel(SKILL_FISHING) - 10) * 0.597, 10), 50) * 1000
+		local rand = math.random(100000)
+		for i = 1, #fish do
+			-- Loop is at sand fish. They must be fishing on itemid 15401 --
+			if i == 5 and targetId ~= 15401 then
+				i = 6
+			end
 				
-				-- Loop is at mechanical fish, we must be using a mechanical rod --
-				if i == 6 and item.itemid ~= 10223 then
-					break
-					-- Remove a nail if we use them. It is required to catch mechanical fish --
-				elseif i == 6 and useNails and not player:removeItem(nailId, 1) then
-					break
-				end
+			-- Loop is at mechanical fish, we must be using a mechanical rod --
+			if i == 6 and item.itemid ~= 10223 then
+				break
+				-- Remove a nail if we use them. It is required to catch mechanical fish --
+			elseif i == 6 and useNails and not player:removeItem(nailId, 1) then
+				break
+			end
 				
-				-- Chance to catch fish is baseChance + skill Chance
-				if rand <= math.floor(fish[i].baseChance + skillChance) then
-					player:addItem(fish[i].itemid, 1)
-					target:transform(target.itemid + 1)
-					target:decay()
+			-- Chance to catch fish is baseChance + skill Chance
+			if rand <= math.floor(fish[i].baseChance + skillChance) then
+				player:addItem(fish[i].itemid, 1)
+				target:transform(target.itemid + 1)
+				target:decay()
 					
-					-- Add achievement based on which waterId is being fished on --
-					if target.itemid == 7236 then
-						player:addAchievementProgress("Exquisite Taste", 250)
-					elseif target.itemid == 15401 then
-						player:addAchievementProgress("Desert Fisher")
-					else
-						player:addAchievementProgress("Here, Fishy Fishy!", 1000)
-					end
-					
-					break
+				-- Add achievement based on which waterId is being fished on --
+				if target.itemid == 7236 then
+					player:addAchievementProgress("Exquisite Taste", 250)
+				elseif target.itemid == 15401 then
+					player:addAchievementProgress("Desert Fisher")
+				else
+					player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 				end
+					
+				break
 			end
 		end
 		return true
