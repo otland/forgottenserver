@@ -2,7 +2,7 @@
 local waterWithFish = {4608, 4610, 4612, 4614, 4616, 4618, 4664, 7236, 15401}
 local waterWithoutFish = {4609, 4611, 4613, 4615, 4617, 4619, 4665, 7237, 15402}
 local iceHoles = {7236, 7237}
-local waterSpiritId = 10449
+local waterElementalId = 10449
 
 local fish = {
 	[1] = {itemid = 2667, baseChance = 25000}, -- Fish : 25%
@@ -27,7 +27,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		return false 
 	end
 	
-	if target.itemid == waterSpiritId then
+	if target.itemid == waterElementalId then
 		waterSpiritFishing(player, item, target, toPosition)
 		return true
 	elseif table.contains(waterWithFish, target.itemid) or table.contains(waterWithoutFish, target.itemid) then
