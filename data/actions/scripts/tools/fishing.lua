@@ -18,8 +18,6 @@ local lootRare = {2143, 2146, 2149, 7158, 7159}
 local lootVeryRare = {7632, 7633, 10220}
 
 local useWorms = true
-local rodId = 2580
-local mechanicalRodId = 10223
 local wormId = 3976
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
