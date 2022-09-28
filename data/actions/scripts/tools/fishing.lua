@@ -78,7 +78,7 @@ function waterFishing(player, item, target, toPosition)
 			if target.itemid == 7236 then
 				player:addAchievementProgress("Exquisite Taste", 250)
 			elseif target.itemid == 15401 then
-				player:addAchievementProgress("Desert Fisher")
+				player:player:addAchievement("Desert Fisher")
 			else
 				player:addAchievementProgress("Here, Fishy Fishy!", 1000)
 			end
