@@ -26,7 +26,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 	
 	if target.itemid == waterElementalId then
-		waterSpiritFishing(player, item, target, toPosition)
+		waterElementalFishing(player, item, target, toPosition)
 		return true
 	elseif table.contains(waterWithFish, target.itemid) or table.contains(waterWithoutFish, target.itemid) then
 		waterFishing(player, item, target, toPosition)
@@ -88,7 +88,7 @@ function waterFishing(player, item, target, toPosition)
 	end
 end
 
-function waterSpiritFishing(player, item, target, toPosition)
+function waterElementalFishing(player, item, target, toPosition)
 	local owner = target:getAttribute(ITEM_ATTRIBUTE_CORPSEOWNER)
 	if owner ~= 0 and owner ~= player:getId() then
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You are not the owner.")
