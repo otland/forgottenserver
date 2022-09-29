@@ -72,6 +72,8 @@ target_link_libraries(tfs PRIVATE
         ${PUGIXML_LIBRARIES}
         )
 
+option(BUILD_TESTING "Build unit tests" OFF)
+
 ### INTERPROCEDURAL_OPTIMIZATION ###
 cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)

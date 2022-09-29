@@ -169,3 +169,7 @@ set(tfs_HDR
 	)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC})
+
+if (BUILD_TESTING)
+	add_subdirectory(tests)
+endif()
