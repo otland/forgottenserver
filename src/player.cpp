@@ -78,7 +78,7 @@ bool Player::setVocation(uint16_t vocId)
 	vocation = voc;
 
 	updateRegeneration();
-	setBaseSpeed(voc->getBaseSpeed()); 
+	setBaseSpeed(voc->getBaseSpeed());
 	updateBaseSpeed();
 	g_game.changeSpeed(this, 0);
 	return true;
