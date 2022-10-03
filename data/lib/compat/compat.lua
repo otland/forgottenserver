@@ -102,6 +102,17 @@ do
 end
 
 do
+	local function customAttributeProxy(item)
+		return setmetatable({}, {
+			__index = function (self, key)
+				return item:getCustomAttribute(key)
+			end,
+			__newindex = function (self, key, value)
+				item:setCustomAttribute(key, value)
+			end
+		})
+	end
+
 	local function ItemIndex(self, key)
 		local methods = getmetatable(self)
 		if key == "itemid" then
@@ -112,6 +123,8 @@ do
 			return methods.getUniqueId(self)
 		elseif key == "type" then
 			return methods.getSubType(self)
+		elseif key == "custom" then
+			return customAttributeProxy(self)
 		end
 		return methods[key]
 	end
