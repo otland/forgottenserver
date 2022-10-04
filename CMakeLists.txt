@@ -5,13 +5,7 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
 project(tfs CXX)
 
-add_subdirectory(src)
-add_executable(tfs ${tfs_SRC})
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-
-set_target_properties(tfs PROPERTIES CXX_STANDARD 17)
-set_target_properties(tfs PROPERTIES CXX_STANDARD_REQUIRED ON)
 
 if (NOT WIN32)
     add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
@@ -59,20 +53,21 @@ endif ()
 
 find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system iostreams)
 
-include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
-target_link_libraries(tfs PRIVATE
-        Boost::date_time
-        Boost::system
-        Boost::iostreams
-        fmt::fmt
-        ${CMAKE_THREAD_LIBS_INIT}
-        ${Crypto++_LIBRARIES}
-        ${LUA_LIBRARIES}
-        ${MYSQL_CLIENT_LIBS}
-        ${PUGIXML_LIBRARIES}
-        )
+option(ENABLE_TESTING "Build unit tests" OFF)
 
-option(BUILD_TESTING "Build unit tests" OFF)
+include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_subdirectory(src)
+add_executable(tfs ${tfs_MAIN})
+target_link_libraries(tfs tfslib)
+
+if (ENABLE_TESTING)
+    enable_testing()
+    add_subdirectory(src/tests)
+endif()
 
 ### INTERPROCEDURAL_OPTIMIZATION ###
 cmake_policy(SET CMP0069 NEW)

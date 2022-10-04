@@ -17,11 +17,11 @@ Attr_ReadValue Podium::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			uint8_t flags;
+			uint8_t flags = 0;
 			propStream.read<uint8_t>(flags);
 			setFlags(flags);
 
-			uint8_t newDirection;
+			uint8_t newDirection = DIRECTION_NONE;
 			propStream.read<uint8_t>(newDirection);
 			setDirection(static_cast<Direction>(newDirection));
 
