@@ -110,6 +110,11 @@ function ModalWindow:clearChoices()
     self.choices = {}
 end
 
+function ModalWindow:clear()
+    self.choices = {}
+    self.buttons = {}
+end
+
 function ModalWindow:setPriority(priority)
     self.priority = priority and true or false
 end
