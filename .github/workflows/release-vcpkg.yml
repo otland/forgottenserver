@@ -35,9 +35,7 @@ jobs:
               lua libmariadb pugixml cryptopp fmt
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
+      - uses: actions/checkout@v3
 
       - name: Unshallow
         run: git fetch --prune --unshallow
@@ -62,7 +60,7 @@ jobs:
           echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v7
+        uses: lukka/run-vcpkg@v10
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -71,7 +69,7 @@ jobs:
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
       - name: Build with CMake
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@v10
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build
@@ -126,9 +124,7 @@ jobs:
               lua luajit libmariadb pugixml cryptopp fmt
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
+      - uses: actions/checkout@v3
 
       - name: Unshallow
         run: git fetch --prune --unshallow
@@ -146,7 +142,7 @@ jobs:
           echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
 
       - name: Run vcpkg
-        uses: lukka/run-vcpkg@v7
+        uses: lukka/run-vcpkg@v10
         with:
           vcpkgArguments: ${{ matrix.packages }}
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
@@ -155,7 +151,7 @@ jobs:
           vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
 
       - name: Build with CMake
-        uses: lukka/run-cmake@v3
+        uses: lukka/run-cmake@v10
         with:
           useVcpkgToolchainFile: true
           buildDirectory: ${{ runner.workspace }}/build

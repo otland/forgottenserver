@@ -14,9 +14,9 @@ jobs:
   luac:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: leafo/gh-actions-lua@v8.0.0
+      - uses: leafo/gh-actions-lua@v9
         with:
            luaVersion: "5.3.5"
 

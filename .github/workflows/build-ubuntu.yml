@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
         run: >
@@ -45,7 +45,7 @@ jobs:
           parallel: 2
 
       - name: Upload binary
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs
