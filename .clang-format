@@ -3,7 +3,14 @@ Language:        Cpp
 BasedOnStyle:    Google
 AccessModifierOffset: -4
 AlignEscapedNewlines: DontAlign
-BreakBeforeBraces: Mozilla
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass:      true
+  AfterEnum:       true
+  AfterFunction:   true
+  AfterStruct:     true
+  AfterUnion:      true
+  SplitEmptyFunction: false
 BreakConstructorInitializers: AfterColon
 BreakStringLiterals: false
 ColumnLimit:     120

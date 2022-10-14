@@ -101,6 +101,9 @@ bool Player::setVocation(uint16_t vocId)
 	vocation = voc;
 
 	updateRegeneration();
+	setBaseSpeed(voc->getBaseSpeed());
+	updateBaseSpeed();
+	g_game.changeSpeed(this, 0);
 	return true;
 }
 
@@ -2106,13 +2109,13 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	return blockType;
 }
 
-uint32_t Player::getIP() const
+Connection::Address Player::getIP() const
 {
 	if (client) {
 		return client->getIP();
 	}
 
-	return 0;
+	return {};
 }
 
 void Player::death(Creature* lastHitCreature)
