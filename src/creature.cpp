@@ -138,24 +138,49 @@ void Creature::onThink(uint32_t interval)
 	}
 
 	if (followCreature) {
-		walkUpdateTicks += interval;
-		if (forceUpdateFollowPath || walkUpdateTicks >= 2000) {
-			walkUpdateTicks = 0;
-			forceUpdateFollowPath = false;
-			isUpdatingPath = true;
-		}
-	}
-
-	if (isUpdatingPath) {
-		isUpdatingPath = false;
 		goToFollowCreature();
 	}
+
+	forceUpdateFollowPath = true;
 
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
 		thinkEvent->executeOnThink(this, interval);
 	}
+}
+
+void Creature::checkPath()
+{
+	if (followCreature && !attackedCreature && followPosition != followCreature->getPosition()) {
+		followPosition = followCreature->getPosition();
+		goToFollowCreature();
+		return;
+	}
+
+	if (!attackedCreature) {
+		return;
+	}
+
+	const Position& targetPos = attackedCreature->getPosition();
+	if (!forceUpdateFollowPath || followPosition == targetPos) {
+		return;
+	}
+
+	forceUpdateFollowPath = false;
+
+	FindPathParams fpp;
+	getPathSearchParams(attackedCreature, fpp);
+	const Position& pos = getPosition();
+	if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist ||
+	    Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
+		// Attacked Creature has gone too far. Stop trying to get a path.
+		listWalkDir.clear();
+		return;
+	}
+
+	followPosition = attackedCreature->getPosition();
+	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
 void Creature::onAttacking(uint32_t interval)
@@ -192,8 +217,6 @@ void Creature::onWalk()
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
-
-				forceUpdateFollowPath = true;
 			}
 		} else {
 			stopEventWalk();
@@ -608,10 +631,6 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 
 	if (creature == followCreature || (creature == this && followCreature)) {
-		if (hasFollowPath) {
-			isUpdatingPath = true;
-		}
-
 		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
 			onCreatureDisappear(followCreature, false);
 		}
@@ -920,6 +939,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 		}
 
 		attackedCreature = creature;
+		followPosition = creaturePos;
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
 	} else {
@@ -1007,11 +1027,9 @@ bool Creature::setFollowCreature(Creature* creature)
 		}
 
 		hasFollowPath = false;
-		forceUpdateFollowPath = false;
 		followCreature = creature;
-		isUpdatingPath = true;
+		followPosition = creaturePos;
 	} else {
-		isUpdatingPath = false;
 		followCreature = nullptr;
 	}
 

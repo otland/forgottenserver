@@ -78,6 +78,7 @@ void Game::start(ServiceManager* manager)
 		g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
 	}
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL, [this]() { checkCreaturesPath(0); }));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
@@ -712,7 +713,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
 		// need to walk to the creature first before moving it
 		std::vector<Direction> listDir;
-		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -969,7 +970,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 	if (!Position::areInRange<1, 1>(playerPos, mapFromPos)) {
 		// need to walk to the item first before using it
 		std::vector<Direction> listDir;
-		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
+		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -1030,7 +1031,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 			}
 
 			std::vector<Direction> listDir;
-			if (player->getPathTo(walkPos, listDir, 0, 0, true, true)) {
+			if (player->getPathTo(walkPos, listDir, 0, 0, true, true, PLAYER_SEARCHDIST)) {
 				g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
@@ -2134,7 +2135,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 			}
 
 			std::vector<Direction> listDir;
-			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 				g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
@@ -2195,7 +2196,7 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 	if (ret != RETURNVALUE_NOERROR) {
 		if (ret == RETURNVALUE_TOOFARAWAY) {
 			std::vector<Direction> listDir;
-			if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(pos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 				g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
@@ -2294,7 +2295,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 			}
 
 			std::vector<Direction> listDir;
-			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 				g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
@@ -2413,7 +2414,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 
 	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
 		std::vector<Direction> listDir;
-		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -2512,7 +2513,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 
 	if (!Position::areInRange<1, 1>(playerPos, pos)) {
 		std::vector<Direction> listDir;
-		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -2618,7 +2619,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 
 	if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
 		std::vector<Direction> listDir;
-		if (player->getPathTo(position, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(position, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -2690,7 +2691,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	if (!Position::areInRange<1, 1>(tradeItemPosition, playerPosition)) {
 		std::vector<Direction> listDir;
-		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
+		if (player->getPathTo(pos, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 			g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
@@ -3412,7 +3413,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 	if (!player->isAccessPlayer()) {
 		if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
 			std::vector<Direction> listDir;
-			if (player->getPathTo(position, listDir, 0, 1, true, true)) {
+			if (player->getPathTo(position, listDir, 0, 1, true, true, PLAYER_SEARCHDIST)) {
 				g_dispatcher.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
@@ -3907,6 +3908,20 @@ void Game::checkCreatures(size_t index)
 			creature->inCheckCreaturesVector = false;
 			it = checkCreatureList.erase(it);
 			ReleaseCreature(creature);
+		}
+	}
+
+	cleanup();
+}
+
+void Game::checkCreaturesPath(size_t index)
+{
+	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL,
+	                                         [=]() { checkCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
+
+	for (Creature* creature : checkCreatureLists[index]) {
+		if (creature->getHealth() > 0) {
+			creature->checkPath();
 		}
 	}
 
