@@ -704,7 +704,7 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 {
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
 		const VocationEquipSet& vocationEquipSet = moveEvent->getVocationEquipSet();
-		if (!vocationEquipSet.empty() && !moveEvent->hasVocationEquipSet(player->getVocationId())) {
+		if (!moveEvent->hasVocationEquipSet(player->getVocationId())) {
 			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
 		}
 

@@ -129,7 +129,7 @@ public:
 	}
 	bool hasVocationEquipSet(uint16_t vocationId) const
 	{
-		return vocationEquipSet.find(vocationId) != vocationEquipSet.end();
+		return !vocationEquipSet.empty() && vocationEquipSet.find(vocationId) != vocationEquipSet.end();
 	}
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }

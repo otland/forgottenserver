@@ -144,7 +144,7 @@ public:
 	}
 	bool hasVocationSpellSet(uint16_t vocationId) const
 	{
-		return vocationSpellSet.find(vocationId) != vocationSpellSet.end();
+		return !vocationSpellSet.empty() && vocationSpellSet.find(vocationId) != vocationSpellSet.end();
 	}
 
 	const SpellGroup_t getGroup() const { return group; }
