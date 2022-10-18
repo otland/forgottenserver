@@ -189,10 +189,10 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
-			vocWeaponMap[vocationId] = true;
+			vocationWeaponSet.insert(vocationId);
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
 			if (promotedVocation != VOCATION_NONE) {
-				vocWeaponMap[promotedVocation] = true;
+				vocationWeaponSet.insert(promotedVocation);
 			}
 
 			if (vocationNode.attribute("showInDescription").as_bool(true)) {
@@ -286,8 +286,8 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (!vocWeaponMap.empty()) {
-		if (vocWeaponMap.find(player->getVocationId()) == vocWeaponMap.end()) {
+	if (!vocationWeaponSet.empty()) {
+		if (hasVocationWeapon(player->getVocationId())) {
 			return 0;
 		}
 	}
@@ -301,6 +301,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 	if (player->getMagicLevel() < getReqMagLv()) {
 		damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
 	}
+
 	return damageModifier;
 }
 
@@ -338,9 +339,8 @@ bool Weapon::ammoCheck(const Player* player) const
 		return false;
 	}
 
-	if (!vocWeaponMap.empty()) {
-		auto it = vocWeaponMap.find(player->getVocationId());
-		if (it == vocWeaponMap.end()) {
+	if (!vocationWeaponSet.empty()) {
+		if (hasVocationWeapon(player->getVocationId())) {
 			return false;
 		}
 	}
