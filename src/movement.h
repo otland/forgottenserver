@@ -35,7 +35,7 @@ struct MoveEventList
 	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
-using VocEquipMap = std::map<uint16_t, bool>;
+using VocationEquipSet = std::unordered_set<uint16_t>;
 
 class MoveEvents final : public BaseEvents
 {
@@ -119,13 +119,17 @@ public:
 	const std::string& getVocationString() const { return vocationString; }
 	void setVocationString(const std::string& str) { vocationString = str; }
 	uint32_t getWieldInfo() const { return wieldInfo; }
-	const VocEquipMap& getVocEquipMap() const { return vocEquipMap; }
-	void addVocEquipMap(std::string vocName)
+	const VocationEquipSet& getVocationEquipSet() const { return vocationEquipSet; }
+	void addVocationEquipSet(std::string vocationName)
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocName);
+		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
-			vocEquipMap[vocationId] = true;
+			vocationEquipSet.insert(vocationId);
 		}
+	}
+	bool hasVocationEquipSet(uint16_t vocationId) const
+	{
+		return vocationEquipSet.find(vocationId) != vocationEquipSet.end();
 	}
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }
@@ -176,7 +180,7 @@ private:
 	bool premium = false;
 	std::string vocationString;
 	uint32_t wieldInfo = 0;
-	VocEquipMap vocEquipMap;
+	VocationEquipSet vocationEquipSet;
 	bool tileItem = false;
 
 	std::vector<uint32_t> itemIdRange;

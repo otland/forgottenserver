@@ -287,7 +287,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 	}
 
 	if (!vocationWeaponSet.empty()) {
-		if (hasVocationWeapon(player->getVocationId())) {
+		if (hasVocationWeaponSet(player->getVocationId())) {
 			return 0;
 		}
 	}
@@ -340,7 +340,7 @@ bool Weapon::ammoCheck(const Player* player) const
 	}
 
 	if (!vocationWeaponSet.empty()) {
-		if (hasVocationWeapon(player->getVocationId())) {
+		if (hasVocationWeaponSet(player->getVocationId())) {
 			return false;
 		}
 	}
