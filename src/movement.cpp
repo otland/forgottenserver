@@ -703,7 +703,6 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&) { return 1; }
 ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
-		const VocationEquipSet& vocationEquipSet = moveEvent->getVocationEquipSet();
 		if (!moveEvent->hasVocationEquipSet(player->getVocationId())) {
 			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
 		}
