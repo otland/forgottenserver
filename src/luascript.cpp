@@ -10412,7 +10412,7 @@ int LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
 		return 1;
 	}
 
-	if (!spell->hasVocationSpellSet(player->getVocationId())) {
+	if (!spell->hasVocationSpellMap(player->getVocationId())) {
 		pushBoolean(L, false);
 	} else if (player->getLevel() < spell->getLevel()) {
 		pushBoolean(L, false);
