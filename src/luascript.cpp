@@ -16112,8 +16112,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 	if (lua_gettop(L) == 1) {
 		lua_createtable(L, 0, 0);
 		int i = 0;
-		for (auto& vocationId : spell->getVocationSpellSet()) {
-			std::string name = g_vocations.getVocation(vocationId)->getVocName();
+		for (auto& vocation : spell->getVocationSpellMap()) {
+			std::string name = g_vocations.getVocation(vocation.first)->getVocName();
 			pushString(L, name);
 			lua_rawseti(L, -2, ++i);
 		}
@@ -16121,9 +16121,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		for (int i = 0; i < parameters; ++i) {
 			std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
-			if (vocList.size() > 1 && booleanString(vocList[1])) {
-				spell->addVocationSpellSet(vocList[0]);
-			}
+			spell->addVocationSpellMap(vocList[0], vocList.size() > 1 ? booleanString(vocList[1]) : false);
 		}
 		pushBoolean(L, true);
 	}

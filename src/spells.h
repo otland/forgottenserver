@@ -15,7 +15,7 @@ class InstantSpell;
 class RuneSpell;
 class Spell;
 
-using VocationSpellSet = std::unordered_set<uint16_t>;
+using VocationSpellMap = std::map<uint16_t, bool>;
 using InstantSpell_ptr = std::unique_ptr<InstantSpell>;
 using RuneSpell_ptr = std::unique_ptr<RuneSpell>;
 
@@ -134,17 +134,17 @@ public:
 	bool isLearnable() const { return learnable; }
 	void setLearnable(bool l) { learnable = l; }
 
-	const VocationSpellSet& getVocationSpellSet() const { return vocationSpellSet; }
-	void addVocationSpellSet(std::string vocationName)
+	const VocationSpellMap& getVocationSpellMap() const { return vocationSpellMap; }
+	void addVocationSpellMap(std::string vocationName, bool showInDescription)
 	{
 		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
-			vocationSpellSet.insert(vocationId);
+			vocationSpellMap[vocationId] = showInDescription;
 		}
 	}
-	bool hasVocationSpellSet(uint16_t vocationId) const
+	bool hasVocationSpellMap(uint16_t vocationId) const
 	{
-		return !vocationSpellSet.empty() && vocationSpellSet.find(vocationId) != vocationSpellSet.end();
+		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
 	}
 
 	const SpellGroup_t getGroup() const { return group; }
@@ -186,7 +186,7 @@ protected:
 	bool playerInstantSpellCheck(Player* player, const Position& toPos);
 	bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
-	VocationSpellSet vocationSpellSet;
+	VocationSpellMap vocationSpellMap;
 
 	SpellGroup_t group = SPELLGROUP_NONE;
 	SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
