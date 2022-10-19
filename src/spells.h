@@ -15,7 +15,6 @@ class InstantSpell;
 class RuneSpell;
 class Spell;
 
-using VocationSpellMap = std::map<uint16_t, bool>;
 using InstantSpell_ptr = std::unique_ptr<InstantSpell>;
 using RuneSpell_ptr = std::unique_ptr<RuneSpell>;
 
@@ -134,8 +133,8 @@ public:
 	bool isLearnable() const { return learnable; }
 	void setLearnable(bool l) { learnable = l; }
 
-	const VocationSpellMap& getVocationSpellMap() const { return vocationSpellMap; }
-	void addVocationSpellMap(std::string vocationName, bool showInDescription)
+	const auto& getVocationSpellMap() const { return vocationSpellMap; }
+	void addVocationSpellMap(const std::string& vocationName, bool showInDescription)
 	{
 		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
@@ -186,7 +185,7 @@ protected:
 	bool playerInstantSpellCheck(Player* player, const Position& toPos);
 	bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
-	VocationSpellMap vocationSpellMap;
+	std::map<uint16_t, bool> vocationSpellMap;
 
 	SpellGroup_t group = SPELLGROUP_NONE;
 	SpellGroup_t secondaryGroup = SPELLGROUP_NONE;

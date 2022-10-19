@@ -14,8 +14,6 @@ class Weapon;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
 
-using VocationWeaponSet = std::unordered_set<uint16_t>;
-
 extern Vocations g_vocations;
 
 class Weapons final : public BaseEvents
@@ -107,8 +105,8 @@ public:
 	uint32_t getWieldInfo() const { return wieldInfo; }
 	void setWieldInfo(uint32_t info) { wieldInfo |= info; }
 
-	const VocationWeaponSet& getVocationWeaponSet() const { return vocationWeaponSet; }
-	void addVocationWeaponSet(std::string vocationName)
+	const auto& getVocationWeaponSet() const { return vocationWeaponSet; }
+	void addVocationWeaponSet(const std::string& vocationName)
 	{
 		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
@@ -126,7 +124,7 @@ public:
 	WeaponAction_t action = WEAPONACTION_NONE;
 	CombatParams params;
 	WeaponType_t weaponType;
-	VocationWeaponSet vocationWeaponSet;
+	std::unordered_set<uint16_t> vocationWeaponSet;
 
 protected:
 	void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;

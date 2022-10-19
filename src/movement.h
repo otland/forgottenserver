@@ -35,8 +35,6 @@ struct MoveEventList
 	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
-using VocationEquipSet = std::unordered_set<uint16_t>;
-
 class MoveEvents final : public BaseEvents
 {
 public:
@@ -119,8 +117,8 @@ public:
 	const std::string& getVocationString() const { return vocationString; }
 	void setVocationString(const std::string& str) { vocationString = str; }
 	uint32_t getWieldInfo() const { return wieldInfo; }
-	const VocationEquipSet& getVocationEquipSet() const { return vocationEquipSet; }
-	void addVocationEquipSet(std::string vocationName)
+	const auto& getVocationEquipSet() const { return vocationEquipSet; }
+	void addVocationEquipSet(const std::string& vocationName)
 	{
 		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
@@ -180,7 +178,7 @@ private:
 	bool premium = false;
 	std::string vocationString;
 	uint32_t wieldInfo = 0;
-	VocationEquipSet vocationEquipSet;
+	std::unordered_set<uint16_t> vocationEquipSet;
 	bool tileItem = false;
 
 	std::vector<uint32_t> itemIdRange;
