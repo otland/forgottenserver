@@ -1,10 +1,4 @@
 local ModalWindowAutoID = 10000
-local buttonOrder = {
-    [4] = {2, 3, 4, 1},
-    [3] = {2, 3, 1},
-    [2] = {2, 1},
-    [1] = {1}
-}
 
 if not __ModalWindow then
     __ModalWindow = ModalWindow
@@ -34,93 +28,125 @@ setmetatable(ModalWindow, {
 
 function ModalWindow:setTitle(title)
     self.title = title
+    return true
 end
 
 function ModalWindow:setMessage(message)
     self.message = message
+    return true
 end
 
 function ModalWindow:addButton(name, callback)
-    for _, button in pairs(self.buttons) do
-        if button.name == name then
-            button.callback = callback
-            return
-        end
+    if self.buttons[name] then
+        io.write("ModalWindow: Button with name '" .. name .. "' already exists.")
+        return false
     end
-    self.buttons[#self.buttons + 1] = {name = name, callback = callback}
+
+    local id = #self.buttons + 1
+    local button = { id = id, name = name, callback = callback }
+    self.buttons[id] = button
+    self.buttons[name] = button
+    return true
 end
 
 function ModalWindow:removeButton(name)
-    for i = 1, #self.buttons do
-        if self.buttons[i].name == name then
-            table.remove(self.buttons, i)
-            break
-        end
+    local button = self.buttons[name]
+    if not button then
+        io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
+        return false
     end
+
+    self.buttons[button.id] = nil
+    self.buttons[name] = nil
+    return true
 end
 
 function ModalWindow:callButton(name, player, button, choice)
-    for _, button in pairs(self.buttons) do
-        if button.name == name then
-            button.callback(player, button, choice)
-            return
-        end
+    local button = self.buttons[name]
+    if not button then
+        io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
+        return false
     end
+
+    if not button.callback then
+        io.write("ModalWindow: Button with name '" .. name .. "' has no callback.")
+        return false
+    end
+    return button.callback(player, button, choice)
 end
 
 function ModalWindow:clearButtons()
     self.buttons = {}
+    return true
 end
 
 function ModalWindow:setDefaultEnterButton(buttonId)
     self.defaultEnterButton = buttonId
+    return true
 end
 
 function ModalWindow:setDefaultEscapeButton(buttonId)
     self.defaultEscapeButton = buttonId
+    return true
 end
 
 function ModalWindow:setDefaultCallback(callback)
     self.defaultCallback = callback
+    return true
 end
 
 function ModalWindow:addChoice(text, callback)
-    self.choices[#self.choices + 1] = {text = text, callback = callback}
+    local id = #self.choices + 1
+    local choice = { id = id, text = text, callback = callback }
+    self.choices[id] = choice
+    self.choices[text] = choice
+    return true
 end
 
 function ModalWindow:removeChoice(text)
-    for i = 1, #self.choices do
-        if self.choices[i].text == text then
-            table.remove(self.choices, i)
-            break
-        end
+    local choice = self.choices[text]
+    if not choice then
+        io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
+        return false
     end
+
+    self.choices[choice.id] = nil
+    self.choices[text] = nil
+    return true
 end
 
 function ModalWindow:callChoice(text, player, button, choice)
-    for _, choice in pairs(self.choices) do
-        if choice.text == text then
-            choice.callback(player, button, choice)
-            return
-        end
+    local choice = self.choices[text]
+    if not choice then
+        io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
+        return false
     end
+
+    if not choice.callback then
+        io.write("ModalWindow: Choice with text '" .. text .. "' has no callback.")
+        return false
+    end
+    return choice.callback(player, button, choice)
 end
 
 function ModalWindow:clearChoices()
     self.choices = {}
+    return true
 end
 
 function ModalWindow:clear()
     self.choices = {}
     self.buttons = {}
+    return true
 end
 
 function ModalWindow:setPriority(priority)
-    self.priority = priority and true or false
+    self.priority = priority
+    return true
 end
 
 function ModalWindow:setId()
-    if self.modalWindowId > 0 then
+    if self.modalWindowId ~= 0 then
         return self.modalWindowId
     end
 
@@ -131,25 +157,20 @@ end
 
 function ModalWindow:create()
     local modalWindow = __ModalWindow(self:setId(), self.title, self.message)
-    modalWindow:setPriority(self.priority)
+    modalWindow:setPriority(self.priority and true or false)
 
-    local order = buttonOrder[math.min(#self.buttons, 4)]
-    if order then
-        for _, i in pairs(order) do
-            local button = self.buttons[i]
-            modalWindow:addButton(i, button.name)
-            button.id = i
-
-            if button.name == self.defaultEnterButton then
-                modalWindow:setDefaultEnterButton(i)
-            elseif button.name == self.defaultEscapeButton then
-                modalWindow:setDefaultEscapeButton(i)
-            end
+    for id = 1, #self.buttons do
+        local name = self.buttons[id].name
+        modalWindow:addButton(id, name)
+        if id == self.defaultEnterButton or name == self.defaultEnterButton then
+            modalWindow:setDefaultEnterButton(id)
+        elseif id == self.defaultEscapeButton or name == self.defaultEscapeButton then
+            modalWindow:setDefaultEscapeButton(id)
         end
     end
 
-    for i, choice in pairs(self.choices) do
-        modalWindow:addChoice(i, choice.text)
+    for id = 1, #self.choices do
+        modalWindow:addChoice(id, self.choices[id].text)
     end
     return modalWindow
 end
@@ -167,7 +188,8 @@ end
 local creatureEvent = CreatureEvent("modalWindowHelper")
 
 function creatureEvent.onModalWindow(player, modalWindowId, buttonId, choiceId)
-    local modalWindows = ModalWindows[player:getId()]
+    local playerId = player:getId()
+    local modalWindows = ModalWindows[playerId]
     if not modalWindows then
         return true
     end
@@ -190,6 +212,9 @@ function creatureEvent.onModalWindow(player, modalWindowId, buttonId, choiceId)
     modalWindow.using = modalWindow.using - 1
     if modalWindow.using == 0 then
         modalWindows[modalWindowId] = nil
+        if not next(modalWindows) then
+            ModalWindows[playerId] = nil
+        end
     end
     return true
 end
