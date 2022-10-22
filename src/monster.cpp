@@ -357,7 +357,7 @@ void Monster::updateTargetList()
 	auto friendIterator = friendList.begin();
 	while (friendIterator != friendList.end()) {
 		Creature* creature = *friendIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (!creature->hasHealth() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			friendIterator = friendList.erase(friendIterator);
 		} else {
@@ -368,7 +368,7 @@ void Monster::updateTargetList()
 	auto targetIterator = targetList.begin();
 	while (targetIterator != targetList.end()) {
 		Creature* creature = *targetIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (!creature->hasHealth() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			targetIterator = targetList.erase(targetIterator);
 		} else {
@@ -666,7 +666,7 @@ bool Monster::selectTarget(Creature* creature)
 
 void Monster::setIdle(bool idle)
 {
-	if (isRemoved() || getHealth() <= 0) {
+	if (isRemoved() || !hasHealth()) {
 		return;
 	}
 
@@ -1159,7 +1159,7 @@ void Monster::pushCreatures(Tile* tile)
 
 bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
-	if (!walkingToSpawn && (isIdle || getHealth() <= 0)) {
+	if (!walkingToSpawn && (isIdle || !hasHealth())) {
 		// we don't have anyone watching, might as well stop walking
 		eventWalk = 0;
 		return false;
