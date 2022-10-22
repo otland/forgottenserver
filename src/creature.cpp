@@ -808,7 +808,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 		g_game.addCreatureHealth(this);
 	}
 
-	if (health <= 0) {
+	if (!hasHealth()) {
 		g_dispatcher.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
 	}
 }
