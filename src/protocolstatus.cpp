@@ -48,8 +48,9 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 		// XML info protocol
 		case 0xFF: {
 			if (msg.getString(4) == "info") {
-				g_dispatcher.addTask([thisPtr = std::static_pointer_cast<ProtocolStatus>(
-				                                     shared_from_this())]() { thisPtr->sendStatusString(); });
+				g_dispatcher.addTask([thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this())]() {
+					thisPtr->sendStatusString();
+				});
 				return;
 			}
 			break;
