@@ -16,6 +16,8 @@ on:
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - .github/workflows/build-vcpkg.yml
+
 
 jobs:
   unix:
