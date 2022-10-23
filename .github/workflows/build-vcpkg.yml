@@ -95,7 +95,7 @@ jobs:
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+          vcpkgGitCommitId: 934a99dc13cabb330824ae1a5ab4a53a9acc5a49
 
       - name: Build with CMake
         uses: lukka/run-cmake@v3
@@ -171,7 +171,7 @@ jobs:
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+          vcpkgGitCommitId: 934a99dc13cabb330824ae1a5ab4a53a9acc5a49
 
       - name: Build with CMake
         uses: lukka/run-cmake@v3
