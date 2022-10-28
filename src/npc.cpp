@@ -409,7 +409,7 @@ void Npc::setIdle(const bool idle)
 		return;
 	}
 
-	if (isRemoved() || !hasHealth()) {
+	if (isRemoved() || isDead()) {
 		return;
 	}
 

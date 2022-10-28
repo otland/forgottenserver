@@ -724,7 +724,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
-	if (!player->hasHealth()) {
+	if (player->isDead()) {
 		player->changeHealth(1);
 	}
 

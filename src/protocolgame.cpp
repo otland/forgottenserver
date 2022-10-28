@@ -540,7 +540,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 
 	// a dead player can not performs actions
-	if (player->isRemoved() || !player->hasHealth()) {
+	if (player->isRemoved() || player->isDead()) {
 		if (recvbyte == 0x0F) {
 			disconnect();
 			return;

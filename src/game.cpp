@@ -4156,7 +4156,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 {
 	const Position& targetPos = target->getPosition();
 	if (damage.primary.value > 0) {
-		if (!target->hasHealth()) {
+		if (target->isDead()) {
 			return false;
 		}
 
