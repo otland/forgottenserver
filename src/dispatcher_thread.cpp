@@ -3,7 +3,7 @@
 
 #include "otpch.h"
 
-#include "tasks.h"
+#include "dispatcher_thread.h"
 
 #include "enums.h"
 #include "game.h"
@@ -14,7 +14,7 @@ Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
 
 Task* createTask(uint32_t expiration, TaskFunc&& f) { return new Task(expiration, std::move(f)); }
 
-void Dispatcher::threadMain()
+void DispatcherThread::run()
 {
 	std::vector<Task*> tmpTaskList;
 	// NOTE: second argument defer_lock is to prevent from immediate locking
@@ -32,7 +32,7 @@ void Dispatcher::threadMain()
 
 		for (Task* task : tmpTaskList) {
 			if (!task->hasExpired()) {
-				++dispatcherCycle;
+				++cycle;
 				// execute it
 				(*task)();
 			}
@@ -42,7 +42,7 @@ void Dispatcher::threadMain()
 	}
 }
 
-void Dispatcher::addTask(Task* task)
+void DispatcherThread::addTask(Task* task)
 {
 	bool do_signal = false;
 
@@ -63,10 +63,10 @@ void Dispatcher::addTask(Task* task)
 	}
 }
 
-void Dispatcher::shutdown()
+void DispatcherThread::shutdown()
 {
 	Task* task = createTask([this]() {
-		setState(THREAD_STATE_TERMINATED);
+		ThreadHolder::shutdown();
 		taskSignal.notify_one();
 	});
 

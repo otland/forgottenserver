@@ -56,7 +56,7 @@ void Connection::close(bool force)
 	connectionState = CONNECTION_STATE_DISCONNECTED;
 
 	if (protocol) {
-		g_dispatcher.addTask(createTask([protocol = protocol]() { protocol->release(); }));
+		g_dispatcherThread.addTask(createTask([protocol = protocol]() { protocol->release(); }));
 	}
 
 	if (messageQueue.empty() || force) {
@@ -86,7 +86,7 @@ Connection::~Connection() { closeSocket(); }
 void Connection::accept(Protocol_ptr protocol)
 {
 	this->protocol = protocol;
-	g_dispatcher.addTask(createTask([=]() { protocol->onConnect(); }));
+	g_dispatcherThread.addTask(createTask([=]() { protocol->onConnect(); }));
 	connectionState = CONNECTION_STATE_GAMEWORLD_AUTH;
 	accept();
 }

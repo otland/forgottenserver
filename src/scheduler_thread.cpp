@@ -3,9 +3,9 @@
 
 #include "otpch.h"
 
-#include "scheduler.h"
+#include "scheduler_thread.h"
 
-uint32_t Scheduler::addEvent(SchedulerTask* task)
+uint32_t SchedulerThread::addEvent(SchedulerTask* task)
 {
 	// check if the event has a valid id
 	if (task->getEventId() == 0) {
@@ -27,14 +27,14 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 				return;
 			}
 
-			g_dispatcher.addTask(task);
+			g_dispatcherThread.addTask(task);
 		});
 	});
 
 	return task->getEventId();
 }
 
-void Scheduler::stopEvent(uint32_t eventId)
+void SchedulerThread::stopEvent(uint32_t eventId)
 {
 	if (eventId == 0) {
 		return;
@@ -49,9 +49,9 @@ void Scheduler::stopEvent(uint32_t eventId)
 	});
 }
 
-void Scheduler::shutdown()
+void SchedulerThread::shutdown()
 {
-	setState(THREAD_STATE_TERMINATED);
+	ThreadHolder::shutdown();
 	boost::asio::post(io_context, [this]() {
 		// cancel all active timers
 		for (auto& it : eventIdTimerMap) {

@@ -18,17 +18,17 @@ struct DatabaseTask
 	bool store;
 };
 
-class DatabaseTasks : public ThreadHolder<DatabaseTasks>
+class DatabaseThread : public ThreadHolder<DatabaseThread>
 {
 public:
-	DatabaseTasks() = default;
+	DatabaseThread() = default;
 	void start();
 	void flush();
 	void shutdown();
 
 	void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
 
-	void threadMain();
+	void run();
 
 private:
 	void runTask(const DatabaseTask& task);
@@ -40,6 +40,6 @@ private:
 	std::condition_variable taskSignal;
 };
 
-extern DatabaseTasks g_databaseTasks;
+extern DatabaseThread g_databaseThread;
 
 #endif // FS_DATABASETASKS_H

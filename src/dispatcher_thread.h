@@ -44,25 +44,25 @@ private:
 Task* createTask(TaskFunc&& f);
 Task* createTask(uint32_t expiration, TaskFunc&& f);
 
-class Dispatcher : public ThreadHolder<Dispatcher>
+class DispatcherThread : public ThreadHolder<DispatcherThread>
 {
 public:
 	void addTask(Task* task);
 
 	void shutdown();
 
-	uint64_t getDispatcherCycle() const { return dispatcherCycle; }
+	uint64_t getCycle() const { return cycle; }
 
-	void threadMain();
+	void run();
 
 private:
 	std::mutex taskLock;
 	std::condition_variable taskSignal;
 
 	std::vector<Task*> taskList;
-	uint64_t dispatcherCycle = 0;
+	uint64_t cycle = 0;
 };
 
-extern Dispatcher g_dispatcher;
+extern DispatcherThread g_dispatcherThread;
 
 #endif // FS_TASKS_H

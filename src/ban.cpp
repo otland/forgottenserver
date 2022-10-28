@@ -58,11 +58,11 @@ bool IOBan::isAccountBanned(uint32_t accountId, BanInfo& banInfo)
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		// Move the ban to history if it has expired
-		g_databaseTasks.addTask(fmt::format(
+		g_databaseThread.addTask(fmt::format(
 		    "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES ({:d}, {:s}, {:d}, {:d}, {:d})",
 		    accountId, db.escapeString(result->getString("reason")), result->getNumber<time_t>("banned_at"), expiresAt,
 		    result->getNumber<uint32_t>("banned_by")));
-		g_databaseTasks.addTask(fmt::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
+		g_databaseThread.addTask(fmt::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
 		return false;
 	}
 
@@ -89,7 +89,7 @@ bool IOBan::isIpBanned(const Connection::Address& clientIP, BanInfo& banInfo)
 
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
-		g_databaseTasks.addTask(
+		g_databaseThread.addTask(
 		    fmt::format("DELETE FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')", clientIP.to_string()));
 		return false;
 	}

@@ -28,7 +28,7 @@ private:
 
 SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f);
 
-class Scheduler : public ThreadHolder<Scheduler>
+class SchedulerThread : public ThreadHolder<SchedulerThread>
 {
 public:
 	uint32_t addEvent(SchedulerTask* task);
@@ -36,7 +36,7 @@ public:
 
 	void shutdown();
 
-	void threadMain() { io_context.run(); }
+	void run() { io_context.run(); }
 
 private:
 	std::atomic<uint32_t> lastEventId{0};
@@ -45,6 +45,6 @@ private:
 	boost::asio::io_context::work work{io_context};
 };
 
-extern Scheduler g_scheduler;
+extern SchedulerThread g_schedulerThread;
 
 #endif // FS_SCHEDULER_H

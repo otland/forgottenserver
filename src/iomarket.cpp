@@ -179,7 +179,7 @@ void IOMarket::checkExpiredOffers()
 {
 	const time_t lastExpireDate = time(nullptr) - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	g_databaseTasks.addTask(
+	g_databaseThread.addTask(
 	    fmt::format(
 	        "SELECT `id`, `amount`, `price`, `itemtype`, `player_id`, `sale` FROM `market_offers` WHERE `created` <= {:d}",
 	        lastExpireDate),
@@ -191,7 +191,7 @@ void IOMarket::checkExpiredOffers()
 		return;
 	}
 
-	g_scheduler.addEvent(
+	g_schedulerThread.addEvent(
 	    createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &IOMarket::checkExpiredOffers));
 }
 
@@ -258,7 +258,7 @@ void IOMarket::deleteOffer(uint32_t offerId)
 void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint64_t price,
                              time_t timestamp, MarketOfferState_t state)
 {
-	g_databaseTasks.addTask(fmt::format(
+	g_databaseThread.addTask(fmt::format(
 	    "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
 	    playerId, type, itemId, amount, price, timestamp, time(nullptr), state));
 }

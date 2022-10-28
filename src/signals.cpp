@@ -25,9 +25,9 @@
 
 #include <csignal>
 
-extern Scheduler g_scheduler;
-extern DatabaseTasks g_databaseTasks;
-extern Dispatcher g_dispatcher;
+extern SchedulerThread g_schedulerThread;
+extern DatabaseThread g_databaseThread;
+extern DispatcherThread g_dispatcherThread;
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -143,10 +143,10 @@ void dispatchSignalHandler(int signal)
 {
 	switch (signal) {
 		case SIGINT: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigintHandler));
+			g_dispatcherThread.addTask(createTask(sigintHandler));
 			break;
 		case SIGTERM: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigtermHandler));
+			g_dispatcherThread.addTask(createTask(sigtermHandler));
 			break;
 #ifndef _WIN32
 		case SIGHUP: // Reload config/data
@@ -157,11 +157,11 @@ void dispatchSignalHandler(int signal)
 			break;
 #else
 		case SIGBREAK: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigbreakHandler));
+			g_dispatcherThread.addTask(createTask(sigbreakHandler));
 			// hold the thread until other threads end
-			g_scheduler.join();
-			g_databaseTasks.join();
-			g_dispatcher.join();
+			g_schedulerThread.join();
+			g_databaseThread.join();
+			g_dispatcherThread.join();
 			break;
 #endif
 		default:

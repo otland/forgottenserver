@@ -101,7 +101,7 @@ bool Raids::startup()
 	setLastRaidEnd(OTSYS_TIME());
 
 	checkRaidsEvent =
-	    g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
+	    g_schedulerThread.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 
 	started = true;
 	return started;
@@ -130,12 +130,12 @@ void Raids::checkRaids()
 	}
 
 	checkRaidsEvent =
-	    g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
+	    g_schedulerThread.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 }
 
 void Raids::clear()
 {
-	g_scheduler.stopEvent(checkRaidsEvent);
+	g_schedulerThread.stopEvent(checkRaidsEvent);
 	checkRaidsEvent = 0;
 
 	for (Raid* raid : raidList) {
@@ -225,7 +225,7 @@ void Raid::startRaid()
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
 		nextEventEvent =
-		    g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
+		    g_schedulerThread.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
 	}
 }
 
@@ -239,7 +239,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 			uint32_t ticks = static_cast<uint32_t>(
 			    std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
 			nextEventEvent =
-			    g_scheduler.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
+			    g_schedulerThread.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
 		} else {
 			resetRaid();
 		}
@@ -259,7 +259,7 @@ void Raid::resetRaid()
 void Raid::stopEvents()
 {
 	if (nextEventEvent != 0) {
-		g_scheduler.stopEvent(nextEventEvent);
+		g_schedulerThread.stopEvent(nextEventEvent);
 		nextEventEvent = 0;
 	}
 }

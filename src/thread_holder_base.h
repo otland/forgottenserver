@@ -14,10 +14,11 @@ public:
 	void start()
 	{
 		setState(THREAD_STATE_RUNNING);
-		thread = std::thread(&Derived::threadMain, static_cast<Derived*>(this));
+		thread = std::thread(&Derived::run, static_cast<Derived*>(this));
 	}
 
 	void stop() { setState(THREAD_STATE_CLOSING); }
+	void shutdown() { setState(THREAD_STATE_CLOSING); }
 
 	void join()
 	{
@@ -27,13 +28,13 @@ public:
 	}
 
 protected:
-	void setState(ThreadState newState) { threadState.store(newState, std::memory_order_relaxed); }
-
-	ThreadState getState() const { return threadState.load(std::memory_order_relaxed); }
+	ThreadState getState() const { return state.load(std::memory_order_relaxed); }
 
 private:
-	std::atomic<ThreadState> threadState{THREAD_STATE_TERMINATED};
 	std::thread thread;
+	std::atomic<ThreadState> state{THREAD_STATE_TERMINATED};
+
+	void setState(ThreadState state) { this.state.store(state, std::memory_order_relaxed); }
 };
 
 #endif // FS_THREAD_HOLDER_BASE_H

@@ -174,7 +174,7 @@
     <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
-    <ClCompile Include="..\src\databasetasks.cpp" />
+    <ClCompile Include="..\src\database_thread.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
     <ClCompile Include="..\src\events.cpp" />
@@ -222,7 +222,7 @@
     <ClCompile Include="..\src\quests.cpp" />
     <ClCompile Include="..\src\raids.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
-    <ClCompile Include="..\src\scheduler.cpp" />
+    <ClCompile Include="..\src\scheduler_thread.cpp" />
     <ClCompile Include="..\src\script.cpp" />
     <ClCompile Include="..\src\scriptmanager.cpp" />
     <ClCompile Include="..\src\server.cpp" />
@@ -232,7 +232,7 @@
     <ClCompile Include="..\src\storeinbox.cpp" />
     <ClCompile Include="..\src\protocolstatus.cpp" />
     <ClCompile Include="..\src\talkaction.cpp" />
-    <ClCompile Include="..\src\tasks.cpp" />
+    <ClCompile Include="..\src\dispatcher_thread.cpp" />
     <ClCompile Include="..\src\teleport.cpp" />
     <ClCompile Include="..\src\thing.cpp" />
     <ClCompile Include="..\src\tile.cpp" />
@@ -261,7 +261,7 @@
     <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
-    <ClInclude Include="..\src\databasetasks.h" />
+    <ClInclude Include="..\src\database_thread.h" />
     <ClInclude Include="..\src\definitions.h" />
     <ClInclude Include="..\src\depotchest.h" />
     <ClInclude Include="..\src\depotlocker.h" />
@@ -307,7 +307,7 @@
     <ClInclude Include="..\src\quests.h" />
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />
-    <ClInclude Include="..\src\scheduler.h" />
+    <ClInclude Include="..\src\scheduler_thread.h" />
     <ClInclude Include="..\src\script.h" />
     <ClInclude Include="..\src\scriptmanager.h" />
     <ClInclude Include="..\src\server.h" />
@@ -318,7 +318,7 @@
     <ClInclude Include="..\src\storeinbox.h" />
     <ClInclude Include="..\src\protocolstatus.h" />
     <ClInclude Include="..\src\talkaction.h" />
-    <ClInclude Include="..\src\tasks.h" />
+    <ClInclude Include="..\src\dispatcher_thread.h" />
     <ClInclude Include="..\src\teleport.h" />
     <ClInclude Include="..\src\thing.h" />
     <ClInclude Include="..\src\thread_holder_base.h" />

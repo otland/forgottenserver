@@ -9,7 +9,7 @@
 #include "protocol.h"
 #include "scheduler.h"
 
-extern Scheduler g_scheduler;
+extern SchedulerThread g_schedulerThread;
 
 namespace {
 
@@ -20,7 +20,7 @@ void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols);
 
 void scheduleSendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
-	g_scheduler.addEvent(
+	g_schedulerThread.addEvent(
 	    createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
 }
 

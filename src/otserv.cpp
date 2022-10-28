@@ -25,9 +25,9 @@
 #include "gitmetadata.h"
 #endif
 
-DatabaseTasks g_databaseTasks;
-Dispatcher g_dispatcher;
-Scheduler g_scheduler;
+DatabaseThread g_databaseThread;
+DispatcherThread g_dispatcherThread;
+SchedulerThread g_schedulerThread;
 
 Game g_game;
 ConfigManager g_config;
@@ -107,10 +107,10 @@ int main(int argc, char* argv[])
 
 	ServiceManager serviceManager;
 
-	g_dispatcher.start();
-	g_scheduler.start();
+	g_dispatcherThread.start();
+	g_schedulerThread.start();
 
-	g_dispatcher.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
+	g_dispatcherThread.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
@@ -121,14 +121,14 @@ int main(int argc, char* argv[])
 		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler.shutdown();
-		g_databaseTasks.shutdown();
-		g_dispatcher.shutdown();
+		g_schedulerThread.shutdown();
+		g_databaseThread.shutdown();
+		g_dispatcherThread.shutdown();
 	}
 
-	g_scheduler.join();
-	g_databaseTasks.join();
-	g_dispatcher.join();
+	g_schedulerThread.join();
+	g_databaseThread.join();
+	g_dispatcherThread.join();
 	return 0;
 }
 
@@ -245,7 +245,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		    "The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
-	g_databaseTasks.start();
+	g_databaseThread.start();
 
 	DatabaseManager::updateDatabase();
 
