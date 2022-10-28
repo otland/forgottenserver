@@ -3844,7 +3844,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 void Game::checkCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->hasHealth()) {
+	if (creature && creature->isAlive()) {
 		creature->onWalk();
 		cleanup();
 	}
@@ -3853,7 +3853,7 @@ void Game::checkCreatureWalk(uint32_t creatureId)
 void Game::updateCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->hasHealth()) {
+	if (creature && creature->isAlive()) {
 		creature->goToFollowCreature();
 	}
 }
@@ -3861,7 +3861,7 @@ void Game::updateCreatureWalk(uint32_t creatureId)
 void Game::checkCreatureAttack(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->hasHealth()) {
+	if (creature && creature->isAlive()) {
 		creature->onAttacking(0);
 	}
 }
@@ -3897,7 +3897,7 @@ void Game::checkCreatures(size_t index)
 	while (it != end) {
 		Creature* creature = *it;
 		if (creature->creatureCheck) {
-			if (creature->hasHealth()) {
+			if (creature->isAlive()) {
 				creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
 				creature->onAttacking(EVENT_CREATURE_THINK_INTERVAL);
 				creature->executeConditions(EVENT_CREATURE_THINK_INTERVAL);

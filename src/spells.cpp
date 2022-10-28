@@ -984,7 +984,7 @@ bool InstantSpell::castSpell(Creature* creature)
 
 	if (casterTargetOrDirection) {
 		Creature* target = creature->getAttackedCreature();
-		if (target && target->hasHealth()) {
+		if (target && target->isAlive()) {
 			if (!canThrowSpell(creature, target)) {
 				return false;
 			}

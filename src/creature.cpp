@@ -174,7 +174,7 @@ void Creature::onAttacking(uint32_t interval)
 
 void Creature::onIdleStatus()
 {
-	if (hasHealth()) {
+	if (isAlive()) {
 		damageMap.clear();
 		lastHitCreatureId = 0;
 	}
