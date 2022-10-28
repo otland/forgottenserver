@@ -10,7 +10,7 @@
 #include "game.h"
 #include "monster.h"
 #include "party.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "spectators.h"
 
 double Creature::speedA = 857.36;

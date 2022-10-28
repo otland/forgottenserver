@@ -7,7 +7,7 @@
 
 #include "ban.h"
 #include "configmanager.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 
 extern ConfigManager g_config;
 Ban g_bans;

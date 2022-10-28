@@ -34,7 +34,7 @@ private:
 	std::thread thread;
 	std::atomic<ThreadState> state{THREAD_STATE_TERMINATED};
 
-	void setState(ThreadState state) { this.state.store(state, std::memory_order_relaxed); }
+	void setState(ThreadState newState) { state.store(newState, std::memory_order_relaxed); }
 };
 
 #endif // FS_THREAD_HOLDER_BASE_H

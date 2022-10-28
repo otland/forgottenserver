@@ -4,7 +4,7 @@
 #ifndef FS_SCHEDULER_H
 #define FS_SCHEDULER_H
 
-#include "tasks.h"
+#include "dispatcher_thread.h"
 #include "thread_holder_base.h"
 
 static constexpr int32_t SCHEDULER_MINTICKS = 50;

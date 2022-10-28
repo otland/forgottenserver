@@ -9,7 +9,7 @@
 #include "outputmessage.h"
 #include "protocol.h"
 #include "server.h"
-#include "tasks.h"
+#include "dispatcher_thread.h"
 
 extern ConfigManager g_config;
 

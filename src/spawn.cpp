@@ -11,7 +11,7 @@
 #include "monster.h"
 #include "npc.h"
 #include "pugicast.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "spectators.h"
 
 extern ConfigManager g_config;

@@ -9,7 +9,7 @@
 #include "chat.h"
 #include "configmanager.h"
 #include "databasemanager.h"
-#include "databasetasks.h"
+#include "database_thread.h"
 #include "depotchest.h"
 #include "events.h"
 #include "game.h"
@@ -28,7 +28,7 @@
 #include "player.h"
 #include "podium.h"
 #include "protocolstatus.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "script.h"
 #include "spectators.h"
 #include "spells.h"
@@ -3967,7 +3967,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
 	auto& lastTimerEventId = g_luaEnvironment.lastEventTimerId;
-	eventDesc.eventId = g_scheduler.addEvent(
+	eventDesc.eventId = g_schedulerThread.addEvent(
 	    createSchedulerTask(delay, [=]() { g_luaEnvironment.executeTimerEvent(lastTimerEventId); }));
 
 	g_luaEnvironment.timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
@@ -3990,7 +3990,7 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 	LuaTimerEventDesc timerEventDesc = std::move(it->second);
 	timerEvents.erase(it);
 
-	g_scheduler.stopEvent(timerEventDesc.eventId);
+	g_schedulerThread.stopEvent(timerEventDesc.eventId);
 	luaL_unref(L, LUA_REGISTRYINDEX, timerEventDesc.function);
 
 	for (auto parameter : timerEventDesc.parameters) {
@@ -4219,7 +4219,7 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 		};
 	}
-	g_databaseTasks.addTask(getString(L, -1), callback);
+	g_databaseThread.addTask(getString(L, -1), callback);
 	return 0;
 }
 
@@ -4263,7 +4263,7 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 			luaL_unref(luaState, LUA_REGISTRYINDEX, ref);
 		};
 	}
-	g_databaseTasks.addTask(getString(L, -1), callback, true);
+	g_databaseThread.addTask(getString(L, -1), callback, true);
 	return 0;
 }
 
@@ -4505,7 +4505,7 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
 	const std::string& path = getString(L, 1);
-	g_dispatcher.addTask(createTask([path]() {
+	g_dispatcherThread.addTask(createTask([path]() {
 		try {
 			g_game.loadMap(path);
 		} catch (const std::exception& e) {

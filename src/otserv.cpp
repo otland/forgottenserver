@@ -5,7 +5,7 @@
 
 #include "configmanager.h"
 #include "databasemanager.h"
-#include "databasetasks.h"
+#include "database_thread.h"
 #include "game.h"
 #include "iomarket.h"
 #include "monsters.h"
@@ -14,7 +14,7 @@
 #include "protocolold.h"
 #include "protocolstatus.h"
 #include "rsa.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"

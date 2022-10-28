@@ -20,7 +20,7 @@
 #include "npc.h"
 #include "outfit.h"
 #include "party.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "spectators.h"
 #include "storeinbox.h"
 #include "tools.h"

@@ -5,7 +5,7 @@
 
 #include "database_thread.h"
 
-#include "tasks.h"
+#include "dispatcher_thread.h"
 
 extern DispatcherThread g_dispatcherThread;
 

@@ -7,7 +7,7 @@
 
 #include "lockfree.h"
 #include "protocol.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 
 extern SchedulerThread g_schedulerThread;
 

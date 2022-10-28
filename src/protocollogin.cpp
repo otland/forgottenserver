@@ -10,7 +10,7 @@
 #include "game.h"
 #include "iologindata.h"
 #include "outputmessage.h"
-#include "tasks.h"
+#include "dispatcher_thread.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

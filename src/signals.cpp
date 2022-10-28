@@ -7,7 +7,7 @@
 
 #include "actions.h"
 #include "configmanager.h"
-#include "databasetasks.h"
+#include "database_thread.h"
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
@@ -17,10 +17,10 @@
 #include "npc.h"
 #include "quests.h"
 #include "raids.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "spells.h"
 #include "talkaction.h"
-#include "tasks.h"
+#include "dispatcher_thread.h"
 #include "weapons.h"
 
 #include <csignal>

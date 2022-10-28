@@ -7,7 +7,7 @@
 
 #include "configmanager.h"
 #include "pugicast.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "tools.h"
 
 extern ConfigManager g_config;

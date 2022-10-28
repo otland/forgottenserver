@@ -19,7 +19,7 @@
 #include "outputmessage.h"
 #include "player.h"
 #include "podium.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 #include "storeinbox.h"
 
 extern ConfigManager g_config;

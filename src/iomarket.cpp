@@ -6,11 +6,11 @@
 #include "iomarket.h"
 
 #include "configmanager.h"
-#include "databasetasks.h"
+#include "database_thread.h"
 #include "game.h"
 #include "inbox.h"
 #include "iologindata.h"
-#include "scheduler.h"
+#include "scheduler_thread.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

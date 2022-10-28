@@ -7,7 +7,7 @@
 
 #include "connection.h"
 #include "database.h"
-#include "databasetasks.h"
+#include "database_thread.h"
 #include "tools.h"
 
 bool Ban::acceptConnection(const Connection::Address& clientIP)
