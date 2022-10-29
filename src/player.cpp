@@ -67,6 +67,10 @@ Player::~Player()
 		depotLocker->removeInbox(inbox);
 	}
 
+	for (const auto& it : depotChests) {
+		it.second->setOwner(nullptr);
+	}
+
 	inbox->decrementReferenceCounter();
 
 	storeInbox->setParent(nullptr);
@@ -878,6 +882,8 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 
 	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
+	it->second->setDepotId(depotId);
+	it->second->setOwner(this);
 	return it->second;
 }
 

@@ -5,14 +5,21 @@
 #define FS_DEPOTCHEST_H
 
 #include "container.h"
+#include "player.h"
 
 class DepotChest final : public Container
 {
 public:
 	explicit DepotChest(uint16_t type, bool paginated = true);
 
+	DepotChest* getDepotChest() override { return this; }
+	const DepotChest* getDepotChest() const override { return this; }
+
 	// serialization
 	void setMaxDepotItems(uint32_t maxitems) { maxDepotItems = maxitems; }
+
+	uint16_t getDepotId() const { return depotId; }
+	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
@@ -29,8 +36,14 @@ public:
 	Cylinder* getParent() const override;
 	Cylinder* getRealParent() const override { return parent; }
 
+	Player* getOwner() const { return owner; }
+	void setOwner(Player* owner) { this->owner = owner; }
+
 private:
 	uint32_t maxDepotItems = 0;
+	uint16_t depotId = 0;
+
+	Player* owner = nullptr;
 };
 
 #endif // FS_DEPOTCHEST_H
