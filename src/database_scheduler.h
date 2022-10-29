@@ -18,10 +18,10 @@ struct DatabaseTask
 	bool store;
 };
 
-class DatabaseThread : public ThreadHolder<DatabaseThread>
+class DatabaseScheduler : public ThreadHolder<DatabaseScheduler>
 {
 public:
-	DatabaseThread() = default;
+	DatabaseScheduler() = default;
 	void start();
 	void flush();
 	void shutdown();
@@ -40,6 +40,6 @@ private:
 	std::condition_variable taskSignal;
 };
 
-extern DatabaseThread g_databaseThread;
+extern DatabaseScheduler g_databaseScheduler;
 
 #endif // FS_DATABASETASKS_H

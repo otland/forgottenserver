@@ -658,7 +658,7 @@ bool Monster::selectTarget(Creature* creature)
 
 	if (isHostile() || isSummon()) {
 		if (setAttackedCreature(creature) && !isSummon()) {
-			g_dispatcherThread.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+			g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
 		}
 	}
 	return setFollowCreature(creature);

@@ -7,7 +7,7 @@
 
 #include "game.h"
 #include "pugicast.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -78,8 +78,8 @@ bool ChatChannel::addUser(Player& player)
 	if (id == CHANNEL_GUILD) {
 		Guild* guild = player.getGuild();
 		if (guild && !guild->getMotd().empty()) {
-			g_schedulerThread.addEvent(
-			    createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
+			g_gameScheduler.addEvent(
+			    createGameTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
 		}
 	}
 

@@ -7,7 +7,7 @@
 
 #include "ban.h"
 #include "configmanager.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 
 extern ConfigManager g_config;
 Ban g_bans;
@@ -120,7 +120,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		if (!pendingStart) {
 			close();
 			pendingStart = true;
-			g_schedulerThread.addEvent(createSchedulerTask(
+			g_gameScheduler.addEvent(createGameTask(
 			    15000, [serverPort = this->serverPort, service = std::weak_ptr<ServicePort>(shared_from_this())]() {
 				    openAcceptor(service, serverPort);
 			    }));
@@ -174,7 +174,7 @@ void ServicePort::open(uint16_t port)
 		std::cout << "[ServicePort::open] Error: " << e.what() << std::endl;
 
 		pendingStart = true;
-		g_schedulerThread.addEvent(createSchedulerTask(
+		g_gameScheduler.addEvent(createGameTask(
 		    15000,
 		    [port, service = std::weak_ptr<ServicePort>(shared_from_this())]() { openAcceptor(service, port); }));
 	}

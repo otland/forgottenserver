@@ -7,7 +7,7 @@
 
 #include "configmanager.h"
 #include "pugicast.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "tools.h"
 
 extern ConfigManager g_config;
@@ -29,9 +29,9 @@ void GlobalEvents::clearMap(GlobalEventMap& map, bool fromLua)
 
 void GlobalEvents::clear(bool fromLua)
 {
-	g_schedulerThread.stopEvent(thinkEventId);
+	g_gameScheduler.stopEvent(thinkEventId);
 	thinkEventId = 0;
-	g_schedulerThread.stopEvent(timerEventId);
+	g_gameScheduler.stopEvent(timerEventId);
 	timerEventId = 0;
 
 	clearMap(thinkMap, fromLua);
@@ -56,7 +56,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (timerEventId == 0) {
-				timerEventId = g_schedulerThread.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
+				timerEventId = g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
 			return true;
 		}
@@ -69,7 +69,7 @@ bool GlobalEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = thinkMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (thinkEventId == 0) {
-				thinkEventId = g_schedulerThread.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { think(); }));
+				thinkEventId = g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS, [this]() { think(); }));
 			}
 			return true;
 		}
@@ -87,7 +87,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 		auto result = timerMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (timerEventId == 0) {
-				timerEventId = g_schedulerThread.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
+				timerEventId = g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS, [this]() { timer(); }));
 			}
 			return true;
 		}
@@ -100,7 +100,7 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 		auto result = thinkMap.emplace(globalEvent->getName(), std::move(*globalEvent));
 		if (result.second) {
 			if (thinkEventId == 0) {
-				thinkEventId = g_schedulerThread.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [this]() { think(); }));
+				thinkEventId = g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS, [this]() { think(); }));
 			}
 			return true;
 		}
@@ -149,8 +149,8 @@ void GlobalEvents::timer()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_schedulerThread.addEvent(
-		    createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime * 1000), [this]() { timer(); }));
+		timerEventId = g_gameScheduler.addEvent(
+		    createGameTask(std::max<int64_t>(1000, nextScheduledTime * 1000), [this]() { timer(); }));
 	}
 }
 
@@ -184,7 +184,7 @@ void GlobalEvents::think()
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		thinkEventId = g_schedulerThread.addEvent(createSchedulerTask(nextScheduledTime, [this]() { think(); }));
+		thinkEventId = g_gameScheduler.addEvent(createGameTask(nextScheduledTime, [this]() { think(); }));
 	}
 }
 

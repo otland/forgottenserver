@@ -5,7 +5,7 @@
 
 #include "configmanager.h"
 #include "databasemanager.h"
-#include "database_thread.h"
+#include "database_scheduler.h"
 #include "game.h"
 #include "iomarket.h"
 #include "monsters.h"
@@ -14,7 +14,7 @@
 #include "protocolold.h"
 #include "protocolstatus.h"
 #include "rsa.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"
@@ -25,9 +25,9 @@
 #include "gitmetadata.h"
 #endif
 
-DatabaseThread g_databaseThread;
-DispatcherThread g_dispatcherThread;
-SchedulerThread g_schedulerThread;
+DatabaseScheduler g_databaseScheduler;
+NetworkScheduler g_networkScheduler;
+GameScheduler g_gameScheduler;
 
 Game g_game;
 ConfigManager g_config;
@@ -107,10 +107,10 @@ int main(int argc, char* argv[])
 
 	ServiceManager serviceManager;
 
-	g_dispatcherThread.start();
-	g_schedulerThread.start();
+	g_networkScheduler.start();
+	g_gameScheduler.start();
 
-	g_dispatcherThread.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
+	g_networkScheduler.addTask(createNetworkTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
@@ -121,14 +121,14 @@ int main(int argc, char* argv[])
 		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_schedulerThread.shutdown();
-		g_databaseThread.shutdown();
-		g_dispatcherThread.shutdown();
+		g_gameScheduler.shutdown();
+		g_databaseScheduler.shutdown();
+		g_networkScheduler.shutdown();
 	}
 
-	g_schedulerThread.join();
-	g_databaseThread.join();
-	g_dispatcherThread.join();
+	g_gameScheduler.join();
+	g_databaseScheduler.join();
+	g_networkScheduler.join();
 	return 0;
 }
 
@@ -170,7 +170,7 @@ void printServerVersion()
 
 void mainLoader(int, char*[], ServiceManager* services)
 {
-	// dispatcher thread
+	// Network Scheduler
 	g_game.setGameState(GAME_STATE_STARTUP);
 
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
@@ -245,7 +245,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		    "The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
-	g_databaseThread.start();
+	g_databaseScheduler.start();
 
 	DatabaseManager::updateDatabase();
 

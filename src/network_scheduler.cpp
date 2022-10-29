@@ -3,20 +3,20 @@
 
 #include "otpch.h"
 
-#include "dispatcher_thread.h"
+#include "network_scheduler.h"
 
 #include "enums.h"
 #include "game.h"
 
 extern Game g_game;
 
-Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
+NetworkTask* createNetworkTask(NetworkTaskFunc&& f) { return new NetworkTask(std::move(f)); }
 
-Task* createTask(uint32_t expiration, TaskFunc&& f) { return new Task(expiration, std::move(f)); }
+NetworkTask* createNetworkTask(uint32_t expiration, NetworkTaskFunc&& f) { return new NetworkTask(expiration, std::move(f)); }
 
-void DispatcherThread::run()
+void NetworkScheduler::run()
 {
-	std::vector<Task*> tmpTaskList;
+	std::vector<NetworkTask*> tmpTaskList;
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
 
@@ -30,7 +30,7 @@ void DispatcherThread::run()
 		tmpTaskList.swap(taskList);
 		taskLockUnique.unlock();
 
-		for (Task* task : tmpTaskList) {
+		for (NetworkTask* task : tmpTaskList) {
 			if (!task->hasExpired()) {
 				++cycle;
 				// execute it
@@ -42,7 +42,7 @@ void DispatcherThread::run()
 	}
 }
 
-void DispatcherThread::addTask(Task* task)
+void NetworkScheduler::addTask(NetworkTask* task)
 {
 	bool do_signal = false;
 
@@ -63,9 +63,9 @@ void DispatcherThread::addTask(Task* task)
 	}
 }
 
-void DispatcherThread::shutdown()
+void NetworkScheduler::shutdown()
 {
-	Task* task = createTask([this]() {
+	NetworkTask* task = createNetworkTask([this]() {
 		ThreadHolder::shutdown();
 		taskSignal.notify_one();
 	});

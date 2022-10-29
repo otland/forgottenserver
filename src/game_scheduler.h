@@ -4,12 +4,12 @@
 #ifndef FS_SCHEDULER_H
 #define FS_SCHEDULER_H
 
-#include "dispatcher_thread.h"
+#include "network_scheduler.h"
 #include "thread_holder_base.h"
 
 static constexpr int32_t SCHEDULER_MINTICKS = 50;
 
-class SchedulerTask : public Task
+class GameTask : public NetworkTask
 {
 public:
 	void setEventId(uint32_t id) { eventId = id; }
@@ -18,20 +18,20 @@ public:
 	uint32_t getDelay() const { return delay; }
 
 private:
-	SchedulerTask(uint32_t delay, TaskFunc&& f) : Task(std::move(f)), delay(delay) {}
+	GameTask(uint32_t delay, NetworkTaskFunc&& f) : NetworkTask(std::move(f)), delay(delay) {}
 
 	uint32_t eventId = 0;
 	uint32_t delay = 0;
 
-	friend SchedulerTask* createSchedulerTask(uint32_t, TaskFunc&&);
+	friend GameTask* createGameTask(uint32_t, NetworkTaskFunc&&);
 };
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f);
+GameTask* createGameTask(uint32_t delay, NetworkTaskFunc&& f);
 
-class SchedulerThread : public ThreadHolder<SchedulerThread>
+class GameScheduler : public ThreadHolder<GameScheduler>
 {
 public:
-	uint32_t addEvent(SchedulerTask* task);
+	uint32_t addEvent(GameTask* task);
 	void stopEvent(uint32_t eventId);
 
 	void shutdown();
@@ -45,6 +45,6 @@ private:
 	boost::asio::io_context::work work{io_context};
 };
 
-extern SchedulerThread g_schedulerThread;
+extern GameScheduler g_gameScheduler;
 
 #endif // FS_SCHEDULER_H

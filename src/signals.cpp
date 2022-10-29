@@ -7,7 +7,7 @@
 
 #include "actions.h"
 #include "configmanager.h"
-#include "database_thread.h"
+#include "database_scheduler.h"
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
@@ -17,17 +17,17 @@
 #include "npc.h"
 #include "quests.h"
 #include "raids.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "spells.h"
 #include "talkaction.h"
-#include "dispatcher_thread.h"
+#include "network_scheduler.h"
 #include "weapons.h"
 
 #include <csignal>
 
-extern SchedulerThread g_schedulerThread;
-extern DatabaseThread g_databaseThread;
-extern DispatcherThread g_dispatcherThread;
+extern GameScheduler g_gameScheduler;
+extern DatabaseScheduler g_databaseScheduler;
+extern NetworkScheduler g_networkScheduler;
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -48,14 +48,14 @@ namespace {
 #ifndef _WIN32
 void sigusr1Handler()
 {
-	// Dispatcher thread
+	// Network Scheduler
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
 	g_game.saveGameState();
 }
 
 void sighupHandler()
 {
-	// Dispatcher thread
+	// Network Scheduler
 	std::cout << "SIGHUP received, reloading config files..." << std::endl;
 
 	g_actions->reload();
@@ -116,7 +116,7 @@ void sighupHandler()
 #else
 void sigbreakHandler()
 {
-	// Dispatcher thread
+	// Network Scheduler
 	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
@@ -124,14 +124,14 @@ void sigbreakHandler()
 
 void sigtermHandler()
 {
-	// Dispatcher thread
+	// Network Scheduler
 	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
 void sigintHandler()
 {
-	// Dispatcher thread
+	// Network Scheduler
 	std::cout << "SIGINT received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
@@ -143,25 +143,25 @@ void dispatchSignalHandler(int signal)
 {
 	switch (signal) {
 		case SIGINT: // Shuts the server down
-			g_dispatcherThread.addTask(createTask(sigintHandler));
+			g_networkScheduler.addTask(createNetworkTask(sigintHandler));
 			break;
 		case SIGTERM: // Shuts the server down
-			g_dispatcherThread.addTask(createTask(sigtermHandler));
+			g_networkScheduler.addTask(createNetworkTask(sigtermHandler));
 			break;
 #ifndef _WIN32
 		case SIGHUP: // Reload config/data
-			g_dispatcher.addTask(createTask(sighupHandler));
+			g_networkScheduler.addTask(createNetworkTask(sighupHandler));
 			break;
 		case SIGUSR1: // Saves game state
-			g_dispatcher.addTask(createTask(sigusr1Handler));
+			g_networkScheduler.addTask(createNetworkTask(sigusr1Handler));
 			break;
 #else
 		case SIGBREAK: // Shuts the server down
-			g_dispatcherThread.addTask(createTask(sigbreakHandler));
+			g_networkScheduler.addTask(createNetworkTask(sigbreakHandler));
 			// hold the thread until other threads end
-			g_schedulerThread.join();
-			g_databaseThread.join();
-			g_dispatcherThread.join();
+			g_gameScheduler.join();
+			g_databaseScheduler.join();
+			g_networkScheduler.join();
 			break;
 #endif
 		default:

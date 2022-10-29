@@ -10,7 +10,7 @@
 #include "game.h"
 #include "monster.h"
 #include "party.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "spectators.h"
 
 double Creature::speedA = 857.36;
@@ -305,13 +305,13 @@ void Creature::addEventWalk(bool firstStep)
 		g_game.checkCreatureWalk(getID());
 	}
 
-	eventWalk = g_schedulerThread.addEvent(createSchedulerTask(ticks, [id = getID()]() { g_game.checkCreatureWalk(id); }));
+	eventWalk = g_gameScheduler.addEvent(createGameTask(ticks, [id = getID()]() { g_game.checkCreatureWalk(id); }));
 }
 
 void Creature::stopEventWalk()
 {
 	if (eventWalk != 0) {
-		g_schedulerThread.stopEvent(eventWalk);
+		g_gameScheduler.stopEvent(eventWalk);
 		eventWalk = 0;
 	}
 }
@@ -623,7 +623,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		} else {
 			if (hasExtraSwing()) {
 				// our target is moving lets see if we can get in hit
-				g_dispatcherThread.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+				g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -809,7 +809,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 	}
 
 	if (health <= 0) {
-		g_dispatcherThread.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
+		g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.executeDeath(id); }));
 	}
 }
 
@@ -1201,8 +1201,8 @@ bool Creature::addCondition(Condition* condition, bool force /* = false*/)
 	if (!force && condition->getType() == CONDITION_HASTE && hasCondition(CONDITION_PARALYZE)) {
 		int64_t walkDelay = getWalkDelay();
 		if (walkDelay > 0) {
-			g_schedulerThread.addEvent(
-			    createSchedulerTask(walkDelay, [=, id = getID()]() { g_game.forceAddCondition(id, condition); }));
+			g_gameScheduler.addEvent(
+			    createGameTask(walkDelay, [=, id = getID()]() { g_game.forceAddCondition(id, condition); }));
 			return false;
 		}
 	}
@@ -1250,8 +1250,8 @@ void Creature::removeCondition(ConditionType_t type, bool force /* = false*/)
 		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
-				g_schedulerThread.addEvent(
-				    createSchedulerTask(walkDelay, [=, id = getID()]() { g_game.forceRemoveCondition(id, type); }));
+				g_gameScheduler.addEvent(
+				    createGameTask(walkDelay, [=, id = getID()]() { g_game.forceRemoveCondition(id, type); }));
 				return;
 			}
 		}
@@ -1278,8 +1278,8 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 		if (!force && type == CONDITION_PARALYZE) {
 			int64_t walkDelay = getWalkDelay();
 			if (walkDelay > 0) {
-				g_schedulerThread.addEvent(
-				    createSchedulerTask(walkDelay, [=, id = getID()]() { g_game.forceRemoveCondition(id, type); }));
+				g_gameScheduler.addEvent(
+				    createGameTask(walkDelay, [=, id = getID()]() { g_game.forceRemoveCondition(id, type); }));
 				return;
 			}
 		}
@@ -1317,7 +1317,7 @@ void Creature::removeCondition(Condition* condition, bool force /* = false*/)
 	if (!force && condition->getType() == CONDITION_PARALYZE) {
 		int64_t walkDelay = getWalkDelay();
 		if (walkDelay > 0) {
-			g_schedulerThread.addEvent(createSchedulerTask(
+			g_gameScheduler.addEvent(createGameTask(
 			    walkDelay, [id = getID(), type = condition->getType()]() { g_game.forceRemoveCondition(id, type); }));
 			return;
 		}

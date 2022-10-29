@@ -11,7 +11,7 @@
 #include "monster.h"
 #include "npc.h"
 #include "pugicast.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "spectators.h"
 
 extern ConfigManager g_config;
@@ -244,7 +244,7 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 void Spawn::startSpawnCheck()
 {
 	if (checkSpawnEvent == 0) {
-		checkSpawnEvent = g_schedulerThread.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
+		checkSpawnEvent = g_gameScheduler.addEvent(createGameTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
@@ -379,7 +379,7 @@ void Spawn::checkSpawn()
 	}
 
 	if (spawnedMap.size() < spawnMap.size()) {
-		checkSpawnEvent = g_schedulerThread.addEvent(createSchedulerTask(getInterval(), [this]() { checkSpawn(); }));
+		checkSpawnEvent = g_gameScheduler.addEvent(createGameTask(getInterval(), [this]() { checkSpawn(); }));
 	}
 }
 
@@ -441,7 +441,7 @@ void Spawn::removeMonster(Monster* monster)
 void Spawn::stopEvent()
 {
 	if (checkSpawnEvent != 0) {
-		g_schedulerThread.stopEvent(checkSpawnEvent);
+		g_gameScheduler.stopEvent(checkSpawnEvent);
 		checkSpawnEvent = 0;
 	}
 }

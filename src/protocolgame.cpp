@@ -19,7 +19,7 @@
 #include "outputmessage.h"
 #include "player.h"
 #include "podium.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "storeinbox.h"
 
 extern ConfigManager g_config;
@@ -140,7 +140,7 @@ ClientDamageType getClientDamageType(CombatType_t combatType)
 
 void ProtocolGame::release()
 {
-	// dispatcher thread
+	// Network Scheduler
 	if (player && player->client == shared_from_this()) {
 		player->client.reset();
 		player->decrementReferenceCounter();
@@ -153,7 +153,7 @@ void ProtocolGame::release()
 
 void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
-	// dispatcher thread
+	// Network Scheduler
 	Player* foundPlayer = g_game.getPlayerByName(name);
 	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
@@ -252,8 +252,8 @@ void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingS
 			foundPlayer->disconnect();
 			foundPlayer->isConnecting = true;
 
-			eventConnect = g_schedulerThread.addEvent(
-			    createSchedulerTask(1000, [=, thisPtr = getThis(), playerID = foundPlayer->getID()]() {
+			eventConnect = g_gameScheduler.addEvent(
+			    createGameTask(1000, [=, thisPtr = getThis(), playerID = foundPlayer->getID()]() {
 				    thisPtr->connect(playerID, operatingSystem);
 			    }));
 		} else {
@@ -297,7 +297,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 
 void ProtocolGame::logout(bool displayEffect, bool forced)
 {
-	// dispatcher thread
+	// Network Scheduler
 	if (!player) {
 		return;
 	}
@@ -599,19 +599,19 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			addGameTask([playerID = player->getID()]() { g_game.playerMove(playerID, DIRECTION_NORTHWEST); });
 			break;
 		case 0x6F:
-			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+			addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_NORTH); });
 			break;
 		case 0x70:
-			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+			addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_EAST); });
 			break;
 		case 0x71:
-			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+			addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_SOUTH); });
 			break;
 		case 0x72:
-			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+			addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_WEST); });
 			break;
 		// case 0x73: break; // map click(?)
@@ -802,7 +802,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		// case 0xEF: break; // request store coins transfer
 		case 0xF0:
-			addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+			addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 			                 [playerID = player->getID()]() { g_game.playerShowQuestLog(playerID); });
 			break;
 		case 0xF1:
@@ -1171,7 +1171,7 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 		bool podiumVisible = msg.getByte() == 1;
 
 		// apply to podium
-		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+		addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 			g_game.playerEditPodium(playerID, newOutfit, pos, stackpos, spriteId, podiumVisible, direction);
 		});
 	}
@@ -1182,7 +1182,7 @@ void ProtocolGame::parseEditPodiumRequest(NetworkMessage& msg)
 	Position pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerRequestEditPodium(playerID, pos, stackpos, spriteId);
 	});
 }
@@ -1199,7 +1199,7 @@ void ProtocolGame::parseUseItem(NetworkMessage& msg)
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
 	uint8_t index = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerUseItem(playerID, pos, stackpos, index, spriteId);
 	});
 }
@@ -1212,7 +1212,7 @@ void ProtocolGame::parseUseItemEx(NetworkMessage& msg)
 	Position toPos = msg.getPosition();
 	uint16_t toSpriteId = msg.get<uint16_t>();
 	uint8_t toStackPos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerUseItemEx(playerID, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
 	});
 }
@@ -1223,7 +1223,7 @@ void ProtocolGame::parseUseWithCreature(NetworkMessage& msg)
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t fromStackPos = msg.getByte();
 	uint32_t creatureId = msg.get<uint32_t>();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerUseWithCreature(playerID, fromPos, fromStackPos, creatureId, spriteId);
 	});
 }
@@ -1255,7 +1255,7 @@ void ProtocolGame::parseThrow(NetworkMessage& msg)
 	uint8_t count = msg.getByte();
 
 	if (toPos != fromPos) {
-		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+		addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 			g_game.playerMoveThing(playerID, fromPos, spriteId, fromStackpos, toPos, count);
 		});
 	}
@@ -1266,14 +1266,14 @@ void ProtocolGame::parseLookAt(NetworkMessage& msg)
 	Position pos = msg.getPosition();
 	msg.skipBytes(2); // spriteId
 	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerLookAt(playerID, pos, stackpos); });
 }
 
 void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
 {
 	uint32_t creatureID = msg.get<uint32_t>();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerLookInBattleList(playerID, creatureID); });
 }
 
@@ -1351,7 +1351,7 @@ void ProtocolGame::parseEquipObject(NetworkMessage& msg)
 	uint16_t spriteID = msg.get<uint16_t>();
 	// msg.get<uint8_t>(); // bool smartMode (?)
 
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerEquipItem(playerID, spriteID); });
 }
 
@@ -1377,7 +1377,7 @@ void ProtocolGame::parseWrapItem(NetworkMessage& msg)
 	Position pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerWrapItem(playerID, pos, stackpos, spriteId); });
 }
 
@@ -1385,7 +1385,7 @@ void ProtocolGame::parseLookInShop(NetworkMessage& msg)
 {
 	uint16_t id = msg.get<uint16_t>();
 	uint8_t count = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerLookInShop(playerID, id, count); });
 }
 
@@ -1396,7 +1396,7 @@ void ProtocolGame::parsePlayerPurchase(NetworkMessage& msg)
 	uint8_t amount = msg.getByte();
 	bool ignoreCap = msg.getByte() != 0;
 	bool inBackpacks = msg.getByte() != 0;
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerPurchaseItem(playerID, id, count, amount, ignoreCap, inBackpacks);
 	});
 }
@@ -1407,7 +1407,7 @@ void ProtocolGame::parsePlayerSale(NetworkMessage& msg)
 	uint8_t count = msg.getByte();
 	uint8_t amount = msg.getByte();
 	bool ignoreEquipped = msg.getByte() != 0;
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerSellItem(playerID, id, count, amount, ignoreEquipped);
 	});
 }
@@ -1426,7 +1426,7 @@ void ProtocolGame::parseLookInTrade(NetworkMessage& msg)
 {
 	bool counterOffer = (msg.getByte() == 0x01);
 	uint8_t index = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerLookInTrade(playerID, counterOffer, index); });
 }
 
@@ -1458,7 +1458,7 @@ void ProtocolGame::parseRotateItem(NetworkMessage& msg)
 	Position pos = msg.getPosition();
 	uint16_t spriteId = msg.get<uint16_t>();
 	uint8_t stackpos = msg.getByte();
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION,
+	addGameTaskTimed(NETWORKSCHEDULER_TASK_EXPIRATION,
 	                 [=, playerID = player->getID()]() { g_game.playerRotateItem(playerID, pos, stackpos, spriteId); });
 }
 

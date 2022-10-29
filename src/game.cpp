@@ -10,7 +10,7 @@
 #include "configmanager.h"
 #include "creature.h"
 #include "creatureevent.h"
-#include "database_thread.h"
+#include "database_scheduler.h"
 #include "depotchest.h"
 #include "events.h"
 #include "globalevent.h"
@@ -25,7 +25,7 @@
 #include "outfit.h"
 #include "party.h"
 #include "podium.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 #include "script.h"
 #include "server.h"
 #include "spectators.h"
@@ -75,10 +75,10 @@ void Game::start(ServiceManager* manager)
 	updateWorldTime();
 
 	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
-		g_schedulerThread.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
+		g_gameScheduler.addEvent(createGameTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
 	}
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
+	g_gameScheduler.addEvent(createGameTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_gameScheduler.addEvent(createGameTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
 GameState_t Game::getGameState() const { return gameState; }
@@ -128,11 +128,11 @@ void Game::setGameState(GameState_t newState)
 
 			saveGameState();
 
-			g_dispatcherThread.addTask(createTask([this]() { shutdown(); }));
+			g_networkScheduler.addTask(createNetworkTask([this]() { shutdown(); }));
 
-			g_schedulerThread.stop();
-			g_databaseThread.stop();
-			g_dispatcherThread.stop();
+			g_gameScheduler.stop();
+			g_databaseScheduler.stop();
+			g_networkScheduler.stop();
 			break;
 		}
 
@@ -176,7 +176,7 @@ void Game::saveGameState()
 
 	Map::save();
 
-	g_databaseThread.flush();
+	g_databaseScheduler.flush();
 
 	if (gameState == GAME_STATE_MAINTAIN) {
 		setGameState(GAME_STATE_NORMAL);
@@ -647,7 +647,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 		}
 
 		if (Position::areInRange<1, 1, 0>(movingCreature->getPosition(), player->getPosition())) {
-			SchedulerTask* task = createSchedulerTask(
+			GameTask* task = createGameTask(
 			    MOVE_CREATURE_INTERVAL, [=, playerID = player->getID(), creatureID = movingCreature->getID()]() {
 				    playerMoveCreatureByID(playerID, creatureID, fromPos, toPos);
 			    });
@@ -693,8 +693,8 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task =
-		    createSchedulerTask(delay, [=, playerID = player->getID(), movingCreatureID = movingCreature->getID(),
+		GameTask* task =
+		    createGameTask(delay, [=, playerID = player->getID(), movingCreatureID = movingCreature->getID(),
 		                                toPos = toTile->getPosition()]() {
 			    playerMoveCreatureByID(playerID, movingCreatureID, movingCreatureOrigPos, toPos);
 		    });
@@ -713,11 +713,11 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		// need to walk to the creature first before moving it
 		std::vector<Direction> listDir;
 		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task =
-			    createSchedulerTask(RANGE_MOVE_CREATURE_INTERVAL, [=, playerID = player->getID(),
+			GameTask* task =
+			    createGameTask(RANGE_MOVE_CREATURE_INTERVAL, [=, playerID = player->getID(),
 			                                                       movingCreatureID = movingCreature->getID(),
 			                                                       toPos = toTile->getPosition()] {
 				    playerMoveCreatureByID(playerID, movingCreatureID, movingCreatureOrigPos, toPos);
@@ -904,7 +904,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(delay, [=, playerID = player->getID()]() {
+		GameTask* task = createGameTask(delay, [=, playerID = player->getID()]() {
 			playerMoveItemByPlayerID(playerID, fromPos, spriteId, fromStackPos, toPos, count);
 		});
 		player->setNextActionTask(task);
@@ -970,10 +970,10 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		// need to walk to the item first before using it
 		std::vector<Direction> listDir;
 		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task = createSchedulerTask(RANGE_MOVE_ITEM_INTERVAL, [=, playerID = player->getID()]() {
+			GameTask* task = createGameTask(RANGE_MOVE_ITEM_INTERVAL, [=, playerID = player->getID()]() {
 				playerMoveItemByPlayerID(playerID, fromPos, spriteId, fromStackPos, toPos, count);
 			});
 			player->setNextWalkActionTask(task);
@@ -1031,10 +1031,10 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 
 			std::vector<Direction> listDir;
 			if (player->getPathTo(walkPos, listDir, 0, 0, true, true)) {
-				g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+				g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
-				SchedulerTask* task = createSchedulerTask(
+				GameTask* task = createGameTask(
 				    RANGE_MOVE_ITEM_INTERVAL,
 				    [this, playerID = player->getID(), itemPos, spriteId, itemStackPos, toPos, count]() {
 					    playerMoveItemByPlayerID(playerID, itemPos, spriteId, itemStackPos, toPos, count);
@@ -2135,10 +2135,10 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 			std::vector<Direction> listDir;
 			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
-				g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+				g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
-				SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [=]() {
+				GameTask* task = createGameTask(RANGE_USE_ITEM_EX_INTERVAL, [=]() {
 					playerUseItemEx(playerId, itemPos, itemStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
 				});
 				player->setNextWalkActionTask(task);
@@ -2154,7 +2154,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(delay, [=]() {
+		GameTask* task = createGameTask(delay, [=]() {
 			playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
 		});
 		player->setNextActionTask(task);
@@ -2196,10 +2196,10 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 		if (ret == RETURNVALUE_TOOFARAWAY) {
 			std::vector<Direction> listDir;
 			if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
-				g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+				g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
-				SchedulerTask* task = createSchedulerTask(
+				GameTask* task = createGameTask(
 				    RANGE_USE_ITEM_INTERVAL, [=]() { playerUseItem(playerId, pos, stackPos, index, spriteId); });
 				player->setNextWalkActionTask(task);
 				return;
@@ -2214,8 +2214,8 @@ void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task =
-		    createSchedulerTask(delay, [=]() { playerUseItem(playerId, pos, stackPos, index, spriteId); });
+		GameTask* task =
+		    createGameTask(delay, [=]() { playerUseItem(playerId, pos, stackPos, index, spriteId); });
 		player->setNextActionTask(task);
 		return;
 	}
@@ -2295,10 +2295,10 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 			std::vector<Direction> listDir;
 			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
-				g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+				g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
-				SchedulerTask* task = createSchedulerTask(RANGE_USE_WITH_CREATURE_INTERVAL, [=]() {
+				GameTask* task = createGameTask(RANGE_USE_WITH_CREATURE_INTERVAL, [=]() {
 					playerUseWithCreature(playerId, itemPos, itemStackPos, creatureId, spriteId);
 				});
 				player->setNextWalkActionTask(task);
@@ -2314,7 +2314,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(
+		GameTask* task = createGameTask(
 		    delay, [=]() { playerUseWithCreature(playerId, fromPos, fromStackPos, creatureId, spriteId); });
 		player->setNextActionTask(task);
 		return;
@@ -2366,7 +2366,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 			parentContainer = new Container(tile);
 			parentContainer->incrementReferenceCounter();
 			browseFields[tile] = parentContainer;
-			g_schedulerThread.addEvent(createSchedulerTask(
+			g_gameScheduler.addEvent(createGameTask(
 			    30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
 		} else {
 			parentContainer = it->second;
@@ -2414,10 +2414,10 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task = createSchedulerTask(RANGE_ROTATE_ITEM_INTERVAL,
+			GameTask* task = createGameTask(RANGE_ROTATE_ITEM_INTERVAL,
 			                                          [=]() { playerRotateItem(playerId, pos, stackPos, spriteId); });
 			player->setNextWalkActionTask(task);
 		} else {
@@ -2513,11 +2513,11 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	if (!Position::areInRange<1, 1>(playerPos, pos)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task =
-			    createSchedulerTask(RANGE_BROWSE_FIELD_INTERVAL, [=]() { playerBrowseField(playerId, pos); });
+			GameTask* task =
+			    createGameTask(RANGE_BROWSE_FIELD_INTERVAL, [=]() { playerBrowseField(playerId, pos); });
 			player->setNextWalkActionTask(task);
 		} else {
 			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
@@ -2541,8 +2541,8 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		container = new Container(tile);
 		container->incrementReferenceCounter();
 		browseFields[tile] = container;
-		g_schedulerThread.addEvent(
-		    createSchedulerTask(30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
+		g_gameScheduler.addEvent(
+		    createGameTask(30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
 	} else {
 		container = it->second;
 	}
@@ -2619,10 +2619,10 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 	if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(position, listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task = createSchedulerTask(
+			GameTask* task = createGameTask(
 			    RANGE_WRAP_ITEM_INTERVAL, [=]() { playerWrapItem(playerId, position, stackPos, spriteId); });
 			player->setNextWalkActionTask(task);
 		} else {
@@ -2691,10 +2691,10 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	if (!Position::areInRange<1, 1>(tradeItemPosition, playerPosition)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
-			g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+			g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 				playerAutoWalk(playerID, listDir);
 			}));
-			SchedulerTask* task = createSchedulerTask(RANGE_REQUEST_TRADE_INTERVAL, [=]() {
+			GameTask* task = createGameTask(RANGE_REQUEST_TRADE_INTERVAL, [=]() {
 				playerRequestTrade(playerId, pos, stackPos, tradePlayerId, spriteId);
 			});
 			player->setNextWalkActionTask(task);
@@ -3265,7 +3265,7 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	player->setAttackedCreature(attackCreature);
-	g_dispatcherThread.addTask(createTask([this, id = player->getID()]() { updateCreatureWalk(id); }));
+	g_networkScheduler.addTask(createNetworkTask([this, id = player->getID()]() { updateCreatureWalk(id); }));
 }
 
 void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
@@ -3276,7 +3276,7 @@ void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	player->setAttackedCreature(nullptr);
-	g_dispatcherThread.addTask(createTask([this, id = player->getID()]() { updateCreatureWalk(id); }));
+	g_networkScheduler.addTask(createNetworkTask([this, id = player->getID()]() { updateCreatureWalk(id); }));
 	player->setFollowCreature(getCreatureByID(creatureId));
 }
 
@@ -3413,10 +3413,10 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 		if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
 			std::vector<Direction> listDir;
 			if (player->getPathTo(position, listDir, 0, 1, true, true)) {
-				g_dispatcherThread.addTask(createTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
+				g_networkScheduler.addTask(createNetworkTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				}));
-				SchedulerTask* task = createSchedulerTask(
+				GameTask* task = createGameTask(
 				    400, [=]() { playerRequestEditPodium(playerId, position, stackPos, spriteId); });
 				player->setNextWalkActionTask(task);
 			} else {
@@ -3889,7 +3889,7 @@ void Game::removeCreatureCheck(Creature* creature)
 
 void Game::checkCreatures(size_t index)
 {
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_CHECK_CREATURE_INTERVAL,
+	g_gameScheduler.addEvent(createGameTask(EVENT_CHECK_CREATURE_INTERVAL,
 	                                         [=]() { checkCreatures((index + 1) % EVENT_CREATURECOUNT); }));
 
 	auto& checkCreatureList = checkCreatureLists[index];
@@ -4799,7 +4799,7 @@ void Game::internalDecayItem(Item* item)
 
 void Game::checkDecay()
 {
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
+	g_gameScheduler.addEvent(createGameTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 	size_t bucket = (lastBucket + 1) % EVENT_DECAY_BUCKETS;
 
 	auto it = decayItems[bucket].begin(), end = decayItems[bucket].end();
@@ -4842,7 +4842,7 @@ void Game::checkDecay()
 
 void Game::checkLight()
 {
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
+	g_gameScheduler.addEvent(createGameTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
 	uint8_t previousLightLevel = lightLevel;
 	updateWorldLightLevel();
 
@@ -4871,7 +4871,7 @@ void Game::updateWorldLightLevel()
 
 void Game::updateWorldTime()
 {
-	g_schedulerThread.addEvent(createSchedulerTask(EVENT_WORLDTIMEINTERVAL, [this]() { updateWorldTime(); }));
+	g_gameScheduler.addEvent(createGameTask(EVENT_WORLDTIMEINTERVAL, [this]() { updateWorldTime(); }));
 	time_t osTime = time(nullptr);
 	tm* timeInfo = localtime(&osTime);
 	worldTime = (timeInfo->tm_sec + (timeInfo->tm_min * 60)) / 2.5f;
@@ -4888,9 +4888,9 @@ void Game::shutdown()
 {
 	std::cout << "Shutting down..." << std::flush;
 
-	g_schedulerThread.shutdown();
-	g_databaseThread.shutdown();
-	g_dispatcherThread.shutdown();
+	g_gameScheduler.shutdown();
+	g_databaseScheduler.shutdown();
+	g_networkScheduler.shutdown();
 	map.spawns.clear();
 	raids.clear();
 

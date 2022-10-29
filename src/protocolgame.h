@@ -7,7 +7,7 @@
 #include "chat.h"
 #include "creature.h"
 #include "protocol.h"
-#include "dispatcher_thread.h"
+#include "network_scheduler.h"
 
 class Container;
 class Game;
@@ -330,13 +330,13 @@ private:
 	template <typename Callable>
 	void addGameTask(Callable&& function)
 	{
-		g_dispatcherThread.addTask(createTask(std::forward<Callable>(function)));
+		g_networkScheduler.addTask(createNetworkTask(std::forward<Callable>(function)));
 	}
 
 	template <typename Callable>
 	void addGameTaskTimed(uint32_t delay, Callable&& function)
 	{
-		g_dispatcherThread.addTask(createTask(delay, std::forward<Callable>(function)));
+		g_networkScheduler.addTask(createNetworkTask(delay, std::forward<Callable>(function)));
 	}
 
 	std::unordered_set<uint32_t> knownCreatureSet;

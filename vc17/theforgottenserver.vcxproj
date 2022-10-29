@@ -174,12 +174,13 @@
     <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
-    <ClCompile Include="..\src\database_thread.cpp" />
+    <ClCompile Include="..\src\database_scheduler.cpp" />
     <ClCompile Include="..\src\depotchest.cpp" />
     <ClCompile Include="..\src\depotlocker.cpp" />
     <ClCompile Include="..\src\events.cpp" />
     <ClCompile Include="..\src\fileloader.cpp" />
     <ClCompile Include="..\src\game.cpp" />
+    <ClCompile Include="..\src\game_scheduler.cpp" />
     <ClCompile Include="..\src\globalevent.cpp" />
     <ClCompile Include="..\src\groups.cpp" />
     <ClCompile Include="..\src\guild.cpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="..\src\mounts.cpp" />
     <ClCompile Include="..\src\movement.cpp" />
     <ClCompile Include="..\src\networkmessage.cpp" />
+    <ClCompile Include="..\src\network_scheduler.cpp" />
     <ClCompile Include="..\src\npc.cpp" />
     <ClCompile Include="..\src\otpch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -222,7 +224,6 @@
     <ClCompile Include="..\src\quests.cpp" />
     <ClCompile Include="..\src\raids.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
-    <ClCompile Include="..\src\scheduler_thread.cpp" />
     <ClCompile Include="..\src\script.cpp" />
     <ClCompile Include="..\src\scriptmanager.cpp" />
     <ClCompile Include="..\src\server.cpp" />
@@ -232,7 +233,6 @@
     <ClCompile Include="..\src\storeinbox.cpp" />
     <ClCompile Include="..\src\protocolstatus.cpp" />
     <ClCompile Include="..\src\talkaction.cpp" />
-    <ClCompile Include="..\src\dispatcher_thread.cpp" />
     <ClCompile Include="..\src\teleport.cpp" />
     <ClCompile Include="..\src\thing.cpp" />
     <ClCompile Include="..\src\tile.cpp" />
@@ -261,7 +261,7 @@
     <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
-    <ClInclude Include="..\src\database_thread.h" />
+    <ClInclude Include="..\src\database_scheduler.h" />
     <ClInclude Include="..\src\definitions.h" />
     <ClInclude Include="..\src\depotchest.h" />
     <ClInclude Include="..\src\depotlocker.h" />
@@ -269,6 +269,7 @@
     <ClInclude Include="..\src\events.h" />
     <ClInclude Include="..\src\fileloader.h" />
     <ClInclude Include="..\src\game.h" />
+    <ClInclude Include="..\src\game_scheduler.h" />
     <ClInclude Include="..\src\globalevent.h" />
     <ClInclude Include="..\src\groups.h" />
     <ClInclude Include="..\src\guild.h" />
@@ -291,6 +292,7 @@
     <ClInclude Include="..\src\mounts.h" />
     <ClInclude Include="..\src\movement.h" />
     <ClInclude Include="..\src\networkmessage.h" />
+    <ClInclude Include="..\src\network_scheduler.h" />
     <ClInclude Include="..\src\npc.h" />
     <ClInclude Include="..\src\otpch.h" />
     <ClInclude Include="..\src\outfit.h" />
@@ -307,7 +309,6 @@
     <ClInclude Include="..\src\quests.h" />
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />
-    <ClInclude Include="..\src\scheduler_thread.h" />
     <ClInclude Include="..\src\script.h" />
     <ClInclude Include="..\src\scriptmanager.h" />
     <ClInclude Include="..\src\server.h" />
@@ -318,7 +319,6 @@
     <ClInclude Include="..\src\storeinbox.h" />
     <ClInclude Include="..\src\protocolstatus.h" />
     <ClInclude Include="..\src\talkaction.h" />
-    <ClInclude Include="..\src\dispatcher_thread.h" />
     <ClInclude Include="..\src\teleport.h" />
     <ClInclude Include="..\src\thing.h" />
     <ClInclude Include="..\src\thread_holder_base.h" />

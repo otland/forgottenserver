@@ -7,9 +7,9 @@
 
 #include "lockfree.h"
 #include "protocol.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 
-extern SchedulerThread g_schedulerThread;
+extern GameScheduler g_gameScheduler;
 
 namespace {
 
@@ -20,13 +20,13 @@ void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols);
 
 void scheduleSendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
-	g_schedulerThread.addEvent(
-	    createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
+	g_gameScheduler.addEvent(
+	    createGameTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
 }
 
 void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
-	// dispatcher thread
+	// Network Scheduler
 	for (auto& protocol : bufferedProtocols) {
 		auto& msg = protocol->getCurrentBuffer();
 		if (msg) {
@@ -43,7 +43,7 @@ void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 
 void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 {
-	// dispatcher thread
+	// Network Scheduler
 	if (bufferedProtocols.empty()) {
 		scheduleSendAll(bufferedProtocols);
 	}
@@ -52,7 +52,7 @@ void OutputMessagePool::addProtocolToAutosend(Protocol_ptr protocol)
 
 void OutputMessagePool::removeProtocolFromAutosend(const Protocol_ptr& protocol)
 {
-	// dispatcher thread
+	// Network Scheduler
 	auto it = std::find(bufferedProtocols.begin(), bufferedProtocols.end(), protocol);
 	if (it != bufferedProtocols.end()) {
 		std::swap(*it, bufferedProtocols.back());

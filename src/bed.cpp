@@ -8,7 +8,7 @@
 #include "condition.h"
 #include "game.h"
 #include "iologindata.h"
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 
 extern Game g_game;
 
@@ -146,7 +146,7 @@ bool BedItem::sleep(Player* player)
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);
 
 	// kick player after he sees himself walk onto the bed and it change id
-	g_schedulerThread.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+	g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS,
 	                                         [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
 
 	// change self and partner's appearance

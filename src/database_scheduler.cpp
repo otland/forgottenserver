@@ -3,19 +3,19 @@
 
 #include "otpch.h"
 
-#include "database_thread.h"
+#include "database_scheduler.h"
 
-#include "dispatcher_thread.h"
+#include "network_scheduler.h"
 
-extern DispatcherThread g_dispatcherThread;
+extern NetworkScheduler g_networkScheduler;
 
-void DatabaseThread::start()
+void DatabaseScheduler::start()
 {
 	db.connect();
 	ThreadHolder::start();
 }
 
-void DatabaseThread::run()
+void DatabaseScheduler::run()
 {
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
 	while (getState() != THREAD_STATE_TERMINATED) {
@@ -35,8 +35,8 @@ void DatabaseThread::run()
 	}
 }
 
-void DatabaseThread::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/,
-                            bool store /* = false*/)
+void DatabaseScheduler::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/,
+                                bool store /* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();
@@ -51,7 +51,7 @@ void DatabaseThread::addTask(std::string query, std::function<void(DBResult_ptr,
 	}
 }
 
-void DatabaseThread::runTask(const DatabaseTask& task)
+void DatabaseScheduler::runTask(const DatabaseTask& task)
 {
 	bool success;
 	DBResult_ptr result;
@@ -64,11 +64,11 @@ void DatabaseThread::runTask(const DatabaseTask& task)
 	}
 
 	if (task.callback) {
-		g_dispatcherThread.addTask(createTask([=, callback = task.callback]() { callback(result, success); }));
+		g_networkScheduler.addTask(createNetworkTask([=, callback = task.callback]() { callback(result, success); }));
 	}
 }
 
-void DatabaseThread::flush()
+void DatabaseScheduler::flush()
 {
 	std::unique_lock<std::mutex> guard{taskLock};
 	while (!tasks.empty()) {
@@ -80,7 +80,7 @@ void DatabaseThread::flush()
 	}
 }
 
-void DatabaseThread::shutdown()
+void DatabaseScheduler::shutdown()
 {
 	taskLock.lock();
 	ThreadHolder::shutdown();

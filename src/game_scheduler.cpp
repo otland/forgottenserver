@@ -3,9 +3,9 @@
 
 #include "otpch.h"
 
-#include "scheduler_thread.h"
+#include "game_scheduler.h"
 
-uint32_t SchedulerThread::addEvent(SchedulerTask* task)
+uint32_t GameScheduler::addEvent(GameTask* task)
 {
 	// check if the event has a valid id
 	if (task->getEventId() == 0) {
@@ -27,14 +27,14 @@ uint32_t SchedulerThread::addEvent(SchedulerTask* task)
 				return;
 			}
 
-			g_dispatcherThread.addTask(task);
+			g_networkScheduler.addTask(task);
 		});
 	});
 
 	return task->getEventId();
 }
 
-void SchedulerThread::stopEvent(uint32_t eventId)
+void GameScheduler::stopEvent(uint32_t eventId)
 {
 	if (eventId == 0) {
 		return;
@@ -49,7 +49,7 @@ void SchedulerThread::stopEvent(uint32_t eventId)
 	});
 }
 
-void SchedulerThread::shutdown()
+void GameScheduler::shutdown()
 {
 	ThreadHolder::shutdown();
 	boost::asio::post(io_context, [this]() {
@@ -62,4 +62,4 @@ void SchedulerThread::shutdown()
 	});
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f) { return new SchedulerTask(delay, std::move(f)); }
+GameTask* createGameTask(uint32_t delay, NetworkTaskFunc&& f) { return new GameTask(delay, std::move(f)); }

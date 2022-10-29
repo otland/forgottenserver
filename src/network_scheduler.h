@@ -6,20 +6,20 @@
 
 #include "thread_holder_base.h"
 
-using TaskFunc = std::function<void(void)>;
-const int DISPATCHER_TASK_EXPIRATION = 2000;
+using NetworkTaskFunc = std::function<void(void)>;
+const int NETWORKSCHEDULER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
-class Task
+class NetworkTask
 {
 public:
 	// DO NOT allocate this class on the stack
-	explicit Task(TaskFunc&& f) : func(std::move(f)) {}
-	Task(uint32_t ms, TaskFunc&& f) :
+	explicit NetworkTask(NetworkTaskFunc&& f) : func(std::move(f)) {}
+	NetworkTask(uint32_t ms, NetworkTaskFunc&& f) :
 	    expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f))
 	{}
 
-	virtual ~Task() = default;
+	virtual ~NetworkTask() = default;
 	void operator()() { func(); }
 
 	void setDontExpire() { expiration = SYSTEM_TIME_ZERO; }
@@ -36,18 +36,19 @@ protected:
 	std::chrono::system_clock::time_point expiration = SYSTEM_TIME_ZERO;
 
 private:
-	// Expiration has another meaning for scheduler tasks, then it is the time the task should be added to the
-	// dispatcher
-	TaskFunc func;
+	// Expiration has another meaning for scheduler
+	// tasks, then it is the time the task should
+	// be added to the Network Scheduler.
+	NetworkTaskFunc func;
 };
 
-Task* createTask(TaskFunc&& f);
-Task* createTask(uint32_t expiration, TaskFunc&& f);
+NetworkTask* createNetworkTask(NetworkTaskFunc&& f);
+NetworkTask* createNetworkTask(uint32_t expiration, NetworkTaskFunc&& f);
 
-class DispatcherThread : public ThreadHolder<DispatcherThread>
+class NetworkScheduler : public ThreadHolder<NetworkScheduler>
 {
 public:
-	void addTask(Task* task);
+	void addTask(NetworkTask* task);
 
 	void shutdown();
 
@@ -59,10 +60,10 @@ private:
 	std::mutex taskLock;
 	std::condition_variable taskSignal;
 
-	std::vector<Task*> taskList;
+	std::vector<NetworkTask*> taskList;
 	uint64_t cycle = 0;
 };
 
-extern DispatcherThread g_dispatcherThread;
+extern NetworkScheduler g_networkScheduler;
 
 #endif // FS_TASKS_H
