@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mad Sheep" nameDescription="a mad sheep" race="blood" experience="0" speed="272">
+	<health now="22" max="22" />
+	<look type="14" corpse="5991" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1" />
+	</attacks>
+	<defenses armor="1" defense="1">
+		<defense name="healing" interval="2000" chance="50" min="5" max="10">
+			<attribute key="areaEffect" value="hearts" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="292" duration="5000" />
+	</defenses>
+	<elements>
+		<element firePercent="-1" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Maeh" />
+		<voice sentence="Groar!" />
+		<voice sentence="Fchhhh" />
+		<voice sentence="Meow!" />
+		<voice sentence="Woof!" />
+	</voices>
+</monster>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Horned Fox" nameDescription="The Horned Fox" race="blood" experience="300" speed="210">
+	<health now="265" max="265" />
+	<look type="202" corpse="5983" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-122" />
+		<attack name="physical" interval="1000" chance="25" range="7" min="-50" max="-120">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+		<attack name="poisoncondition" interval="1000" chance="17" range="7" min="-50" max="-120">
+			<attribute key="shootEffect" value="bolt" />
+		</attack>
+	</attacks>
+	<defenses armor="16" defense="16">
+		<defense name="healing" interval="1000" chance="15" min="25" max="75">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="1000" chance="10" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="-1" />
+		<element icePercent="-1" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="6">
+		<summon name="minotaur archer" interval="1000" chance="13" max="2" />
+		<summon name="minotaur guard" interval="1000" chance="13" max="2" />
+		<summon name="minotaur mage" interval="1000" chance="13" max="2" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will never get me!" />
+		<voice sentence="I'll be back!" />
+		<voice sentence="Catch me, if you can!" />
+		<voice sentence="Help me, boys!" />
+	</voices>
+	<loot>
+		<item id="5804" name="nose ring" chance="100000" />
+		<item id="2148" name="gold coin" chance="96875" countmax="99" />
+		<item id="5878" name="minotaur leather" chance="96875" />
+		<item id="12428" name="minotaur horn" chance="93750" countmax="2" />
+		<item id="12438" name="piece of warrior armor" chance="81250" />
+		<item id="7363" name="piercing bolt" chance="46875" countmax="14" />
+		<item id="2465" name="brass armor" chance="28125" />
+		<item id="2666" name="meat" chance="15625" />
+		<item id="2513" name="battle shield" chance="12500" />
+		<item id="2502" name="dwarven helmet" chance="9375" />
+		<item id="7588" name="strong health potion" chance="9375" />
+		<item id="2580" name="fishing rod" chance="6250" />
+		<item id="2387" name="double axe" chance="3125" />
+	</loot>
+</monster>

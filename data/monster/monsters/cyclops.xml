@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cyclops" nameDescription="a cyclops" race="blood" experience="150" speed="190" manacost="490">
+	<health now="260" max="260" />
+	<look type="22" corpse="5962" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-105" />
+	</attacks>
+	<defenses armor="17" defense="17" />
+	<elements>
+		<element energyPercent="25" />
+		<element holyPercent="20" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Il lorstok human!" />
+		<voice sentence="Toks utat." />
+		<voice sentence="Human, uh whil dyh!" />
+		<voice sentence="Youh ah trak!" />
+		<voice sentence="Let da mashing begin!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="82276" countmax="47" />
+		<item id="2666" name="meat" chance="29087" />
+		<item id="2406" name="short sword" chance="7795" />
+		<item id="10574" name="cyclops toe" chance="5265" />
+		<item id="2510" name="plate shield" chance="2442" />
+		<item id="26642" name="heavy old tome" chance="2062" />
+		<item id="2513" name="battle shield" chance="1462" />
+		<item id="2381" name="halberd" chance="892" />
+		<item id="27071" name="old rag" chance="322" />
+		<item id="2129" name="wolf tooth chain" chance="322" />
+		<item id="2490" name="dark helmet" chance="234" />
+		<item id="7618" name="health potion" chance="146" />
+		<item id="7398" name="cyclops trophy" chance="117" />
+		<item id="2209" name="club ring" chance="44" />
+	</loot>
+</monster>

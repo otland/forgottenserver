@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pythius The Rotten" nameDescription="Pythius the rotten" race="undead" experience="7000" speed="350">
+	<health now="9500" max="9500" />
+	<look type="231" corpse="7349" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="1950" min="0" max="-210" />
+		<attack name="melee" interval="2000" chance="16" range="7" radius="4" target="1" min="0" max="-795">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2800" chance="15" range="7" min="0" max="-400">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="17" range="7" radius="4" target="1" min="-55" max="-155">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2500" chance="14" length="8" spread="3" min="-333" max="-413">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="death" interval="2000" chance="18" length="7" spread="0" min="-165" max="-200">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="manadrain" interval="2500" chance="22" range="8" min="-85" max="-110">
+			<attribute key="shootEffect" value="ice" />
+		</attack>
+		<attack name="drowncondition" interval="1000" chance="45" length="8" spread="3">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+	</defenses>
+	<elements>
+		<element holyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity energy="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Undead Gladiator" interval="1000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="YOU'LL NEVER GET MY TREASURE!" yell="1" />
+		<voice sentence="MINIONS, MEET YOUR NEW BROTHER!" yell="1" />
+		<voice sentence="YOU WILL REGRET THAT YOU ARE BORN!" yell="1" />
+		<voice sentence="YOU MADE A HUGE WASTE!" yell="1" />
+		<voice sentence="I SENSE LIFE" yell="1" />
+	</voices>
+</monster>

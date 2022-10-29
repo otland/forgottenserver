@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Basher" nameDescription="a lost basher" race="blood" experience="1800" speed="250">
+	<health now="2600" max="2600" />
+	<look type="538" corpse="19963" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-351" />
+		<attack name="physical" interval="2000" chance="15" range="7" target="1" radius="3" min="0" max="-220">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="15" target="1" radius="4" duration="6000">
+			<attribute key="shootEffect" value="whirlwindclub" />
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="0" radius="2" speedchange="-650" duration="15000">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="250" max="500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="1" />
+		<element icePercent="1" />
+		<element energyPercent="15" />
+		<element firePercent="40" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yhouuuu!" />
+	</voices>
+	<loot>
+		<item name="piggy bank" chance="4450" />
+		<item name="gold coin" countmax="100" chance="60000" />
+		<item name="platinum coin" countmax="2" chance="70000" />
+		<item name="dwarven ring" chance="2560" />
+		<item name="fire axe" chance="310" />
+		<item name="war axe" chance="120" />
+		<item name="knight legs" chance="310" />
+		<item name="black shield" chance="3710" />
+		<item name="brown mushroom" countmax="2" chance="15170" />
+		<item name="iron ore" chance="5280" />
+		<item name="chaos mace" chance="160" />
+		<item name="spiked squelcher" chance="420" />
+		<item name="great mana potion" chance="11240" />
+		<item name="fiery knight axe" chance="1200" />
+		<item name="terra boots" chance="780" />
+		<item name="ultimate health potion" chance="10250" />
+		<item name="small topaz" chance="10200" />
+		<item id="13757" chance="21130" /><!-- Coal -->
+		<item name="blue crystal shard" chance="840" />
+		<item name="lost basher's spike" chance="17260" />
+		<item name="lost basher's spike" chance="14380" />
+		<item name="bloody dwarven beard" chance="1730" />
+		<item name="pair of iron fists" chance="1410" />
+		<item name="buckle" chance="10930" />
+		<item name="bonecarving knife" chance="7320" />
+		<item name="leather harness" chance="12500" />
+		<item name="mad froth" chance="11870" />
+		<item name="basalt fetish" chance="8800" />
+		<item name="basalt figurine" chance="9470" />
+	</loot>
+</monster>

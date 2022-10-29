@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Rift Brood" nameDescription="a rift brood" race="energy" experience="1600" speed="300">
+	<health now="2950" max="2950" />
+	<look type="290" corpse="1495" />
+	<targetchange interval="20000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="85" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-255" />
+		<attack name="manadrain" interval="2000" chance="50" target="1" range="1" min="-100" max="-180" />
+		<attack name="energy" interval="1000" chance="90" range="3" target="1" radius="2" min="-200" max="-400">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="70" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element holyPercent="15" />
+		<element deathPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

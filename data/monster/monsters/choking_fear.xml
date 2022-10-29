@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Choking Fear" nameDescription="a choking fear" race="undead" experience="4700" speed="260">
+	<health now="5800" max="5800" />
+	<look type="586" corpse="22493" />
+	<targetchange interval="4000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-499" poison="600" />
+		<attack name="poisoncondition" interval="2000" chance="10" length="5" spread="3" target="0" min="-700" max="-900">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" radius="1" target="1" min="0" max="-300">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="sleep" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="1" target="1" speedchange="-800" duration="15000">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="sleep" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" radius="4" target="0" min="-130" max="-300">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="choking fear drown" interval="2000" chance="20" />
+		<attack name="death" interval="2000" chance="20" radius="4" target="1" min="-250" max="-500">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="10" min="80" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="10" />
+		<element energyPercent="15" />
+		<element deathPercent="50" />
+		<element physicalPercent="10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ah, sweet air... don't you miss it?" />
+		<voice sentence="Murr tat muuza!" />
+		<voice sentence="kchh" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" countmax="8" chance="100000" />
+		<item name="energy ring" chance="3000" />
+		<item name="life ring" chance="4200" />
+		<item name="ring of healing" chance="3000" />
+		<item name="guardian shield" chance="1540" />
+		<item name="beastslayer axe" chance="3290" />
+		<item name="brown piece of cloth" chance="6000" />
+		<item name="yellow piece of cloth" chance="3500" />
+		<item name="great mana potion" countmax="3" chance="20000" />
+		<item name="terra boots" chance="720" />
+		<item name="great spirit potion" countmax="3" chance="20000" />
+		<item name="ultimate health potion" countmax="3" chance="19000" />
+		<item name="spellbook of mind control" chance="720" />
+		<item name="underworld rod" chance="720" />
+		<item name="springsprout rod" chance="510" />
+		<item name="green crystal shard" chance="1540" />
+		<item name="brown crystal splinter" countmax="2" chance="52500" />
+		<item name="blue crystal splinter" countmax="3" chance="10000" />
+		<item name="cluster of solace" chance="620" />
+		<item name="dead weight" chance="14180" />
+		<item name="hemp rope" chance="14180" />
+	</loot>
+</monster>

@@ -1,12 +1,13 @@
-FROM alpine:edge AS build
-# pugixml-dev is in edge/testing
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
+FROM alpine:3.16.2 AS build
+# crypto++-dev is in edge/testing
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
   binutils \
   boost-dev \
   build-base \
   clang \
   cmake \
   crypto++-dev \
+  fmt-dev \
   gcc \
   gmp-dev \
   luajit-dev \
@@ -20,18 +21,18 @@ COPY CMakeLists.txt /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver/build
 RUN cmake .. && make
 
-FROM alpine:edge
-# pugixml-dev is in edge/testing
-RUN apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ \
+FROM alpine:3.16.2
+# crypto++ is in edge/testing
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
   boost-iostreams \
   boost-system \
   crypto++ \
+  fmt \
   gmp \
   luajit \
   mariadb-connector-c \
   pugixml
 
-RUN ln -s /usr/lib/libcryptopp.so /usr/lib/libcryptopp.so.5.6
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/

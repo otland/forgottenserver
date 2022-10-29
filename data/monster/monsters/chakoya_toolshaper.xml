@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Chakoya Toolshaper" nameDescription="a chakoya toolshaper" race="blood" experience="40" speed="136">
+	<health now="80" max="80" />
+	<look type="259" corpse="7320" />
+	<targetchange interval="60000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="physical" interval="2000" chance="10" range="7" radius="3" target="1" min="0" max="-45">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+	</attacks>
+	<defenses armor="7" defense="7" />
+	<elements>
+		<element energyPercent="-15" />
+		<element firePercent="40" />
+		<element holyPercent="10" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Chikuva!!" />
+		<voice sentence="Jinuma jamjam!" />
+		<voice sentence="Suvituka siq chuqua!" />
+		<voice sentence="Kiyosa sipaju!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="78354" countmax="20" />
+		<item id="2667" name="fish" chance="25021" countmax="2" />
+		<item id="2398" name="mace" chance="5209" />
+		<item id="3456" name="pick" chance="1016" />
+		<item id="2541" name="bone shield" chance="874" />
+		<item id="22727" name="fireproof horn" chance="461" />
+		<item id="7441" name="ice cube" chance="404" />
+		<item id="7381" name="mammoth whopper" chance="179" />
+		<item id="7158" name="rainbow trout" chance="122" />
+		<item id="7159" name="green perch" chance="75" />
+		<item id="2669" name="northern pike" chance="66" />
+	</loot>
+</monster>

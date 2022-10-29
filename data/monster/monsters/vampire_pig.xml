@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vampire Pig" nameDescription="a vampire pig" race="blood" experience="165" speed="300">
+	<health now="305" max="305" />
+	<look type="60" corpse="6000" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="30" target="1" radius="4" min="-15" max="-25">
+			<attribute key="areaEffect" value="bats" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" target="1" range="3" min="-35" max="-55" />
+	</attacks>
+	<defenses armor="30" defense="35">
+		<defense name="outfit" interval="2000" chance="20" monster="mutated bat" duration="1500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Oink" />
+		<voice sentence="Oink oink" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="40" chance="90000" />
+	</loot>
+</monster>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Armenius" nameDescription="Armenius" race="venom" experience="500" speed="330">
+	<health now="550" max="550" />
+	<look type="79" corpse="6021" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-210" poison="100" />
+		<attack name="earth" interval="1000" chance="12" range="7" min="-15" max="-135">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="1000" chance="13" range="7" speedchange="-700" duration="25000">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="3000" chance="17" radius="5" target="0" min="-30" max="-100">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="20">
+		<defense name="speed" interval="1000" chance="8" speedchange="350" duration="9000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="20" />
+		<element physicalPercent="10" />
+		<element firePercent="-15" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Larva" interval="1000" chance="15" max="3" />
+	</summons>
+	<loot>
+		<item name="scarab amulet" chance="2063" />
+		<item id="2142" chance="2564" /><!-- ancient amulet -->
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="small emerald" countmax="3" chance="4347" />
+		<item name="small amethyst" countmax="4" chance="4166" />
+		<item name="scarab coin" countmax="2" chance="7692" />
+		<item id="2162" chance="11111" /><!-- magic lightwand -->
+		<item name="daramian waraxe" chance="781" />
+		<item name="plate armor" chance="10000" />
+		<item name="scarab shield" chance="518" />
+		<item name="strong health potion" chance="1041" />
+		<item name="terra hood" chance="1298" />
+		<item name="scarab pincers" chance="3571" />
+	</loot>
+</monster>

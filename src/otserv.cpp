@@ -1,41 +1,29 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
+#include "configmanager.h"
+#include "databasemanager.h"
+#include "databasetasks.h"
+#include "game.h"
+#include "iomarket.h"
+#include "monsters.h"
+#include "outfit.h"
+#include "protocollogin.h"
+#include "protocolold.h"
+#include "protocolstatus.h"
+#include "rsa.h"
+#include "scheduler.h"
+#include "script.h"
+#include "scriptmanager.h"
 #include "server.h"
 
-#include "game.h"
-
-#include "iomarket.h"
-
-#include "configmanager.h"
-#include "scriptmanager.h"
-#include "rsa.h"
-#include "protocolold.h"
-#include "protocollogin.h"
-#include "protocolstatus.h"
-#include "databasemanager.h"
-#include "scheduler.h"
-#include "databasetasks.h"
-#include "script.h"
 #include <fstream>
+
+#if __has_include("gitmetadata.h")
+#include "gitmetadata.h"
+#endif
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
@@ -54,11 +42,12 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	std::cout << "> ERROR: " << errorStr << std::endl;
+	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
 	g_loaderSignal.notify_all();
 }
 
 void mainLoader(int argc, char* argv[], ServiceManager* services);
+bool argumentsHandler(const StringVector& args);
 
 [[noreturn]] void badAllocationHandler()
 {
@@ -68,8 +57,51 @@ void mainLoader(int argc, char* argv[], ServiceManager* services);
 	exit(-1);
 }
 
+namespace anniversary {
+
+fmt::color paintA = fmt::color(0xFABC01);
+fmt::color paintB = fmt::color(0x955A26);
+fmt::color paintC = fmt::color(0x0000C0);
+fmt::color paintD = fmt::color(0x006500);
+
+std::string colorA(const std::string text) { return fmt::format(fg(paintA), text); }
+
+std::string colorB(const std::string text) { return fmt::format(fg(paintB), text); }
+
+std::string colorC(const std::string text) { return fmt::format(fg(paintC), text); }
+
+std::string colorD(const std::string text) { return fmt::format(fg(paintD), text); }
+
+void celebrate()
+{
+	// clang-format off
+	std::cout << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("   .  .  ,----.") << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("  /|_/| /      ',") << std::endl;
+	std::cout << colorA("          ") << "          " << colorA("#`  ") << "                 ''+#.     " << colorB(" /") << ", ," << colorB(" )/  ,;'' .'") << std::endl;
+	std::cout << colorA("   .####. ") << "   .#.    " << colorA("#|  ") << "                    +#.    " << colorB("(y_ )  |  ;...;' ") << std::endl;
+	std::cout << colorA("  .##  ##.") << " ######'  " << colorA("#|  ") << "    _+  '##_###.    ,+##   " << colorB(" ") << "\"" << colorB("| |  \\. '.") << std::endl;
+	std::cout << colorA("  ##    ##") << "  ##'     " << colorA("#|  ") << "    ##.  ###''|#, .#'  '#, " << colorB("(") << colorC("#") << colorD("#") << colorB("(/   )  ;") << std::endl;
+	std::cout << colorA("  ##    ##") << "  ##      " << colorA("#|  ") << "   # #.  ##   .#' #'    #' " << colorB(" ") << colorD("#") << colorC("#") << colorB(" ..  |. .'") << std::endl;
+	std::cout << colorA("  `##  ##`") << "  `##  ,# " << colorA("#|  ") << "  #==#.  ##  .#'  '#   #'  " << colorB(" \\_(  ._|--'") << std::endl;
+	std::cout << colorA("   `####` ") << "   `###`  " << colorA("##==") << " #    #. ##  |##.  '###'   " << colorB(" '--'--'''") << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	std::cout << "   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" Happy 15th anniversary! \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"" << std::endl;
+	std::cout << std::endl;
+	std::cout << std::endl;
+	// clang-format on
+}
+
+} // namespace anniversary
+
 int main(int argc, char* argv[])
 {
+	StringVector args = StringVector(argv, argv + argc);
+	if (argc > 1 && !argumentsHandler(args)) {
+		return 0;
+	}
+
 	// Setup bad allocation handler
 	std::set_new_handler(badAllocationHandler);
 
@@ -78,12 +110,14 @@ int main(int argc, char* argv[])
 	g_dispatcher.start();
 	g_scheduler.start();
 
-	g_dispatcher.addTask(createTask(std::bind(mainLoader, argc, argv, &serviceManager)));
+	g_dispatcher.addTask(createTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
+		anniversary::celebrate();
+		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
+		          << std::endl;
 		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
@@ -98,19 +132,21 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void mainLoader(int, char*[], ServiceManager* services)
+void printServerVersion()
 {
-	//dispatcher thread
-	g_game.setGameState(GAME_STATE_STARTUP);
-
-	srand(static_cast<unsigned int>(OTSYS_TIME()));
-#ifdef _WIN32
-	SetConsoleTitle(STATUS_SERVER_NAME);
+#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
+	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
+	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
+#if GIT_IS_DIRTY
+	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
 #endif
+#else
 	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
+#endif
+	std::cout << std::endl;
+
 	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
 	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
-
 #if defined(__amd64__) || defined(_M_X64)
 	std::cout << "x64" << std::endl;
 #elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
@@ -120,19 +156,45 @@ void mainLoader(int, char*[], ServiceManager* services)
 #else
 	std::cout << "unknown" << std::endl;
 #endif
+#if defined(LUAJIT_VERSION)
+	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
+#else
+	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
+#endif
 	std::cout << std::endl;
 
 	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
-	std::cout << "Visit our forum for updates, support, and resources: http://otland.net/." << std::endl;
+	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
 	std::cout << std::endl;
+}
+
+void mainLoader(int, char*[], ServiceManager* services)
+{
+	// dispatcher thread
+	g_game.setGameState(GAME_STATE_STARTUP);
+
+	srand(static_cast<unsigned int>(OTSYS_TIME()));
+#ifdef _WIN32
+	SetConsoleTitle(STATUS_SERVER_NAME);
+
+	// fixes a problem with escape characters not being processed in Windows consoles
+	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+	DWORD dwMode = 0;
+	GetConsoleMode(hOut, &dwMode);
+	dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+	SetConsoleMode(hOut, dwMode);
+#endif
+
+	printServerVersion();
 
 	// check if config.lua or config.lua.dist exist
-	std::ifstream c_test("./config.lua");
+	const std::string& configFile = g_config.getString(ConfigManager::CONFIG_FILE);
+	std::ifstream c_test("./" + configFile);
 	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
 		if (config_lua_dist.is_open()) {
-			std::cout << ">> copying config.lua.dist to config.lua" << std::endl;
-			std::ofstream config_lua("config.lua");
+			std::cout << ">> copying config.lua.dist to " << configFile << std::endl;
+			std::ofstream config_lua(configFile);
 			config_lua << config_lua_dist.rdbuf();
 			config_lua.close();
 			config_lua_dist.close();
@@ -144,23 +206,24 @@ void mainLoader(int, char*[], ServiceManager* services)
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
 	if (!g_config.load()) {
-		startupErrorMessage("Unable to load config.lua!");
+		startupErrorMessage("Unable to load " + configFile + "!");
 		return;
 	}
 
 #ifdef _WIN32
 	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
-	if (strcasecmp(defaultPriority.c_str(), "high") == 0) {
+	if (caseInsensitiveEqual(defaultPriority, "high")) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (strcasecmp(defaultPriority.c_str(), "above-normal") == 0) {
+	} else if (caseInsensitiveEqual(defaultPriority, "above-normal")) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
 
-	//set RSA key
+	// set RSA key
+	std::cout << ">> Loading RSA key " << std::endl;
 	try {
 		g_RSA.loadPEM("key.pem");
-	} catch(const std::exception& e) {
+	} catch (const std::exception& e) {
 		startupErrorMessage(e.what());
 		return;
 	}
@@ -178,7 +241,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	std::cout << ">> Running database manager" << std::endl;
 
 	if (!DatabaseManager::isDatabaseSetup()) {
-		startupErrorMessage("The database you have specified in config.lua is empty, please import the schema.sql to your database.");
+		startupErrorMessage(
+		    "The database you have specified in config.lua is empty, please import the schema.sql to your database.");
 		return;
 	}
 	g_databaseTasks.start();
@@ -189,7 +253,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
-	//load vocations
+	// load vocations
 	std::cout << ">> Loading vocations" << std::endl;
 	if (!g_vocations.loadFromXml()) {
 		startupErrorMessage("Unable to load vocations!");
@@ -197,11 +261,14 @@ void mainLoader(int, char*[], ServiceManager* services)
 	}
 
 	// load item data
-	std::cout << ">> Loading items" << std::endl;
+	std::cout << ">> Loading items... ";
 	if (!Item::items.loadFromOtb("data/items/items.otb")) {
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
+	std::cout << fmt::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion,
+	                         Item::items.buildNumber)
+	          << std::endl;
 
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
@@ -214,9 +281,21 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
+	std::cout << ">> Loading lua scripts" << std::endl;
+	if (!g_scripts->loadScripts("scripts", false, false)) {
+		startupErrorMessage("Failed to load lua scripts");
+		return;
+	}
+
 	std::cout << ">> Loading monsters" << std::endl;
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
+		return;
+	}
+
+	std::cout << ">> Loading lua monsters" << std::endl;
+	if (!g_scripts->loadScripts("monster", false, false)) {
+		startupErrorMessage("Failed to load lua monsters");
 		return;
 	}
 
@@ -226,14 +305,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 
-	std::cout << ">> Loading lua scripts" << std::endl;
-	if (!g_scripts->loadScripts("scripts", false, false)) {
-		startupErrorMessage("Failed to load lua scripts");
-		return;
-	}
-
 	std::cout << ">> Checking world type... " << std::flush;
-	std::string worldType = asLowerCaseString(g_config.getString(ConfigManager::WORLD_TYPE));
+	std::string worldType = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -242,13 +315,12 @@ void mainLoader(int, char*[], ServiceManager* services)
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	} else {
 		std::cout << std::endl;
-
-		std::ostringstream ss;
-		ss << "> ERROR: Unknown world type: " << g_config.getString(ConfigManager::WORLD_TYPE) << ", valid world types are: pvp, no-pvp and pvp-enforced.";
-		startupErrorMessage(ss.str());
+		startupErrorMessage(
+		    fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
+		                g_config.getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
-	std::cout << asUpperCaseString(worldType) << std::endl;
+	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
 	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
@@ -270,7 +342,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
-	std::string strRentPeriod = asLowerCaseString(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+	std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;
@@ -293,11 +365,44 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 #ifndef _WIN32
 	if (getuid() == 0 || geteuid() == 0) {
-		std::cout << "> Warning: " << STATUS_SERVER_NAME << " has been executed as root user, please consider running it as a normal user." << std::endl;
+		std::cout << "> Warning: " << STATUS_SERVER_NAME
+		          << " has been executed as root user, please consider running it as a normal user." << std::endl;
 	}
 #endif
 
 	g_game.start(services);
 	g_game.setGameState(GAME_STATE_NORMAL);
 	g_loaderSignal.notify_all();
+}
+
+bool argumentsHandler(const StringVector& args)
+{
+	for (const auto& arg : args) {
+		if (arg == "--help") {
+			std::clog << "Usage:\n"
+			             "\n"
+			             "\t--config=$1\t\tAlternate configuration file path.\n"
+			             "\t--ip=$1\t\t\tIP address of the server.\n"
+			             "\t\t\t\tShould be equal to the global IP.\n"
+			             "\t--login-port=$1\tPort for login server to listen on.\n"
+			             "\t--game-port=$1\tPort for game server to listen on.\n";
+			return false;
+		} else if (arg == "--version") {
+			printServerVersion();
+			return false;
+		}
+
+		StringVector tmp = explodeString(arg, "=");
+
+		if (tmp[0] == "--config")
+			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
+		else if (tmp[0] == "--ip")
+			g_config.setString(ConfigManager::IP, tmp[1]);
+		else if (tmp[0] == "--login-port")
+			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
+		else if (tmp[0] == "--game-port")
+			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
+	}
+
+	return true;
 }

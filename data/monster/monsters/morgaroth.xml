@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Morgaroth" nameDescription="Morgaroth" race="fire" experience="15000" speed="400">
+	<health now="55000" max="55000" />
+	<look type="12" head="1" body="75" legs="59" feet="1" corpse="6068" />
+	<targetchange interval="10000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="98" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2000" />
+		<attack name="fire" interval="3000" chance="35" range="7" radius="7" target="1" min="-700" max="-1200">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="melee" interval="1800" chance="40" range="7" radius="5" target="0" min="-250" max="-400">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="energy" interval="3000" chance="30" length="8" spread="0" min="-300" max="-1000">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="physical" interval="2500" chance="20" range="7" radius="5" target="0" min="-200" max="-480">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="7" radius="13" target="0" min="-250" max="-500">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="14" target="0" min="-200" max="-450">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="melee" interval="3000" chance="15" range="7" radius="3" target="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="130" defense="130">
+		<defense name="healing" interval="3000" chance="35" min="300" max="800">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="4000" chance="80" speedchange="440" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="80" />
+		<element icePercent="-5" />
+		<element holyPercent="-5" />
+		<element deathPercent="80" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="6">
+		<summon name="Demon" interval="4000" chance="33" />
+	</summons>
+	<voices interval="5000" chance="30">
+		<voice sentence="I AM MORGAROTH, LORD OF THE TRIANGLE... AND YOU ARE LOST!" yell="1" />
+		<voice sentence="MY SEED IS FEAR AND MY HARVEST ARE YOUR SOULS!" yell="1" />
+		<voice sentence="ZATHROTH! LOOK AT THE DESTRUCTION I AM CAUSING IN YOUR NAME!" yell="1" />
+		<voice sentence="THE TRIANGLE OF TERROR WILL RISE!" yell="1" />
+	</voices>
+	<loot>
+		<item id="6500" name="demonic essence" chance="95455" />
+		<item id="2152" name="platinum coin" chance="95455" countmax="74" />
+		<item id="2155" name="green gem" chance="50000" />
+		<item id="7590" name="great mana potion" chance="45455" />
+		<item id="2150" name="small amethyst" chance="36364" countmax="18" />
+		<item id="8852" name="the devileye" chance="36364" />
+		<item id="1986" name="red tome" chance="27273" />
+		<item id="2149" name="small emerald" chance="27273" countmax="6" />
+		<item id="2146" name="small sapphire" chance="27273" countmax="8" />
+		<item id="8473" name="ultimate health potion" chance="27273" />
+		<item id="8850" name="chain bolter" chance="22727" />
+		<item id="8865" name="dark lord's cape" chance="22727" />
+		<item id="6300" name="death ring" chance="22727" />
+		<item id="5954" name="demon horn" chance="22727" countmax="2" />
+		<item id="2214" name="ring of healing" chance="22727" />
+		<item id="2151" name="talon" chance="22727" countmax="7" />
+		<item id="8853" name="the ironworker" chance="22727" />
+		<item id="2387" name="double axe" chance="18182" />
+		<item id="8881" name="fireborn giant armor" chance="18182" />
+		<item id="8472" name="great spirit potion" chance="18182" />
+		<item id="2472" name="magic plate armor" chance="18182" />
+		<item id="2164" name="might ring" chance="18182" />
+		<item id="2178" name="mind stone" chance="18182" />
+		<item id="8851" name="royal crossbow" chance="18182" />
+		<item id="2165" name="stealth ring" chance="18182" />
+		<item id="2112" name="teddy bear" chance="18182" />
+		<item id="7368" name="assassin star" chance="13636" countmax="28" />
+		<item id="2144" name="black pearl" chance="13636" countmax="15" />
+		<item id="7431" name="demonbone" chance="13636" />
+		<item id="2033" name="golden mug" chance="13636" />
+		<item id="5943" name="morgaroth's heart" chance="13636" />
+		<item id="8928" name="obsidian truncheon" chance="13636" />
+		<item id="8929" name="the stomper" chance="13636" />
+		<item id="2143" name="white pearl" chance="13636" countmax="13" />
+		<item id="2158" name="blue gem" chance="9091" />
+		<item id="2520" name="demon shield" chance="9091" />
+		<item id="2167" name="energy ring" chance="9091" />
+		<item id="2393" name="giant sword" chance="9091" />
+		<item id="2179" name="gold ring" chance="9091" />
+		<item id="2470" name="golden legs" chance="9091" />
+		<item id="2177" name="life crystal" chance="9091" />
+		<item id="2162" name="magic light wand" chance="9091" />
+		<item id="2176" name="orb" chance="9091" />
+		<item id="2645" name="steel boots" chance="9091" />
+		<item id="2174" name="strange symbol" chance="9091" />
+		<item id="2421" name="thunder hammer" chance="9091" />
+		<item id="2124" name="crystal ring" chance="4545" />
+		<item id="8867" name="dragon robe" chance="4545" />
+		<item id="2432" name="fire axe" chance="4545" />
+		<item id="7591" name="great health potion" chance="4545" />
+		<item id="2514" name="mastermind shield" chance="4545" />
+		<item id="8886" name="molten plate" chance="4545" />
+		<item id="2145" name="small diamond" chance="4545" countmax="5" />
+	</loot>
+</monster>

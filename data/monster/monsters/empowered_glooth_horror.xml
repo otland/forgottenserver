@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Empowered Glooth Horror" nameDescription="an empowered glooth horror" race="venom" experience="2150" speed="200">
+	<health now="25000" max="25000" />
+	<look type="677" corpse="24276" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="death" interval="2000" chance="10" target="1" range="1" min="-400" max="-600">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="8" radius="8" target="0" duration="15000">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="12" radius="8" target="0" min="-600" max="-900">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="500" max="700">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="23574" name="glooth bag" chance="60000" />
+		<item id="9809" name="rusted armor" chance="20000" />
+		<item id="9810" name="slightly rusted armor" chance="20000" />
+	</loot>
+</monster>

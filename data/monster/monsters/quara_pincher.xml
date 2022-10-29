@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Pincher" nameDescription="a quara pincher" race="blood" experience="1200" speed="396">
+	<health now="1800" max="1800" />
+	<look type="77" corpse="6063" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-340" />
+		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-600" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="85" defense="85" />
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
+		<element physicalPercent="10" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Clank clank!" />
+		<voice sentence="Clap!" />
+		<voice sentence="Crrrk! Crrrk!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="150" />
+		<item id="2152" name="platinum coin" chance="40655" />
+		<item id="12446" name="quara pincers" chance="14711" />
+		<item id="7591" name="great health potion" chance="10371" />
+		<item id="2147" name="small ruby" chance="7539" countmax="2" />
+		<item id="2381" name="halberd" chance="6979" />
+		<item id="2670" name="shrimp" chance="4919" />
+		<item id="5895" name="fish fin" chance="1616" />
+		<item id="2475" name="warrior helmet" chance="1481" />
+		<item id="2487" name="crown armor" chance="270" />
+		<item id="7897" name="glacier robe" chance="116" />
+		<item id="13305" name="giant shrimp" chance="45" />
+	</loot>
+</monster>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jagged Earth Elemental" nameDescription="a jagged earth elemental" race="undead" experience="1300" speed="280">
+	<health now="1500" max="1500" />
+	<look type="285" corpse="8933" />
+	<targetchange interval="20000" chance="50" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="earth" interval="1000" chance="10" length="6" spread="0" min="-100" max="-250">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="earth" interval="1000" chance="11" target="1" range="7" radius="6" min="0" max="-200">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element deathPercent="20" />
+		<element icePercent="20" />
+		<element energyPercent="20" />
+		<element firePercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="*STOMP STOMP*" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="87298" countmax="175" />
+		<item id="11222" name="lump of earth" chance="48625" />
+		<item id="1294" name="small stone" chance="24919" countmax="10" />
+		<item id="2245" name="twigs" chance="20874" />
+		<item id="8298" name="natural soil" chance="7686" />
+		<item id="2149" name="small emerald" chance="5502" countmax="2" />
+		<item id="7732" name="seeds" chance="2184" />
+		<item id="11339" name="clay lump" chance="1133" />
+		<item id="13757" name="coal" chance="485" />
+		<item id="5880" name="iron ore" chance="324" />
+	</loot>
+</monster>

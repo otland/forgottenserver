@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ogre Savage" nameDescription="an ogre savage" race="blood" experience="625" speed="105">
+	<health now="800" max="800" />
+	<look type="858" corpse="24803" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="90" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="70" attack="60" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-140">
+			<attribute key="shootEffect" value="whirlwindclub" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" range="1" radius="5" min="-60" max="-200">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="15" range="1" radius="4" min="-20" max="-25">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="24">
+		<defense name="speed" interval="2000" chance="15" speedchange="210" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+		<element deathPercent="10" />
+		<element firePercent="20" />
+		<element icePercent="20" />
+		<element holyPercent="50" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity poison="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="You tasty!" />
+		<voice sentence="Must! Chop! Food! Raahh!" />
+		<voice sentence="UGGA UGGA!!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="gold coin" countmax="54" chance="50000" />
+		<item name="ogre ear stud" chance="19720" />
+		<item name="ogre nose ring" chance="17360" />
+		<item name="strong health potion" chance="15330" />
+		<item name="skull fetish" chance="9300" />
+		<item name="cookie" countmax="5" chance="8350" />
+		<item name="mysterious fetish" chance="6120" />
+		<item name="jalapeno pepper" countmax="2" chance="4130" />
+		<item name="onyx chip" countmax="2" chance="3060" />
+		<item name="small ruby" countmax="2" chance="2840" />
+		<item name="small topaz" countmax="2" chance="2500" />
+		<item name="opal" countmax="2" chance="2240" />
+		<item name="war hammer" chance="1510" />
+		<item name="ogre choppa" chance="1160" />
+		<item name="berserk potion" chance="520" />
+		<item name="shamanic mask" chance="340" />
+		<item name="dreaded cleaver" chance="40" />
+	</loot>
+</monster>

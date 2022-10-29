@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Skeleton" nameDescription="a skeleton" race="undead" experience="35" speed="154" manacost="300">
+	<health now="50" max="50" />
+	<look type="33" corpse="5972" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-17" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13" />
+	</attacks>
+	<defenses armor="2" defense="2" />
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<loot>
+		<item id="2230" name="bone" chance="50915" />
+		<item id="2148" name="gold coin" chance="44978" countmax="10" />
+		<item id="2050" name="torch" chance="10285" />
+		<item id="12437" name="pelvis bone" chance="10178" />
+		<item id="2473" name="viking helmet" chance="7687" />
+		<item id="2388" name="hatchet" chance="5375" />
+		<item id="2398" name="mace" chance="4625" />
+		<item id="2376" name="sword" chance="2107" />
+		<item id="26642" name="heavy old tome" chance="2036" />
+		<item id="2511" name="brass shield" chance="920" />
+	</loot>
+</monster>

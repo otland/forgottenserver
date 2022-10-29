@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shaburak Prince" nameDescription="a shaburak Prince" race="fire" experience="1700" speed="240">
+	<health now="2600" max="2600" />
+	<look type="418" corpse="13969" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-319" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="6" target="0" min="-40" max="-90">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" target="0" length="4" spread="3" min="-100" max="-200">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" target="0" length="4" spread="0" min="-150" max="-250">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-700" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="100" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="50" />
+		<element icePercent="50" />
+		<element earthPercent="-30" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="GREEN IS MEAN!" yell="1" />
+		<voice sentence="WE RULE!" yell="1" />
+		<voice sentence="POWER TO THE SHABURAK!" yell="1" />
+		<voice sentence="DEATH TO THE ASKARAK!" />
+		<voice sentence="ONLY WE ARE TRUE DEMONS!" />
+	</voices>
+	<loot>
+		<item name="small ruby" countmax="5" chance="12500" />
+		<item name="gold coin" countmax="100" chance="50000" />
+		<item name="gold coin" countmax="78" chance="50000" />
+		<item name="platinum coin" countmax="4" chance="33333" />
+		<item name="stealth ring" chance="5000" />
+		<item name="wand of inferno" chance="892" />
+		<item name="steel boots" chance="89" />
+		<item name="brown mushroom" chance="4545" />
+		<item name="magic sulphur" chance="534" />
+		<item name="butcher's axe" chance="357" />
+		<item name="bullseye potion" chance="714" />
+		<item name="strong health potion" chance="14285" />
+		<item name="strong mana potion" chance="14285" />
+		<item name="magma coat" chance="714" />
+		<item name="demonic finger" chance="178" />
+	</loot>
+</monster>

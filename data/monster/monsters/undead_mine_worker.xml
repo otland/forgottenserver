@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Undead Mine Worker" nameDescription="an undead mine worker" race="undead" experience="45" speed="150">
+	<health now="65" max="65" />
+	<look type="33" corpse="5972" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-7" max="-13">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="10" chance="73000" />
+		<item id="2230" chance="42000" /><!-- bone -->
+		<item id="2376" chance="3850" /><!-- sword -->
+		<item name="mace" chance="26900" />
+		<item name="white mushroom" countmax="3" chance="15400" />
+		<item name="brown mushroom" chance="3850" />
+	</loot>
+</monster>

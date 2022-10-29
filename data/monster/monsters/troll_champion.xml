@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="40" speed="190" manacost="340">
+	<health now="75" max="75" />
+	<look type="281" corpse="7926" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="15" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Meee maity!" />
+		<voice sentence="Grrrr" />
+		<voice sentence="Whaaaz up!?" />
+		<voice sentence="Gruntz!" />
+		<voice sentence="Groar" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="64606" countmax="12" />
+		<item id="2389" name="spear" chance="25082" />
+		<item id="2666" name="meat" chance="9962" />
+		<item id="2643" name="leather boots" chance="9936" />
+		<item id="2512" name="wooden shield" chance="5322" />
+		<item id="2544" name="arrow" chance="5069" countmax="5" />
+		<item id="2448" name="studded club" chance="5069" />
+		<item id="10606" name="bunch of troll hair" chance="3075" />
+		<item id="12471" name="trollroot" chance="909" />
+		<item id="2170" name="silver amulet" chance="127" />
+	</loot>
+</monster>

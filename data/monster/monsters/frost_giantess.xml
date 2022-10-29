@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="194" manacost="490">
+	<health now="275" max="275" />
+	<look type="265" corpse="7330" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="60" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-60" />
+		<attack name="physical" interval="2000" chance="30" range="7" min="0" max="-90">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="20" />
+		<element holyPercent="10" />
+		<element energyPercent="-10" />
+		<element deathPercent="-3" />
+	</elements>
+	<immunities>
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="Ymirs Mjalle!" />
+		<voice sentence="No run so much, must stay fat!" />
+		<voice sentence="Hörre Sjan Flan!" />
+		<voice sentence="Damned fast food." />
+		<voice sentence="Come kiss the cook!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="82053" countmax="40" />
+		<item id="2671" name="ham" chance="20794" />
+		<item id="1294" name="small stone" chance="10397" countmax="3" />
+		<item id="2406" name="short sword" chance="7946" />
+		<item id="10575" name="frost giant pelt" chance="4953" />
+		<item id="7441" name="ice cube" chance="2093" />
+		<item id="2513" name="battle shield" chance="1532" />
+		<item id="7620" name="mana potion" chance="945" />
+		<item id="7460" name="norse shield" chance="287" />
+		<item id="2490" name="dark helmet" chance="172" />
+		<item id="7290" name="shard" chance="102" />
+		<item id="2209" name="club ring" chance="70" />
+	</loot>
+</monster>

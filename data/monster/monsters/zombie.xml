@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zombie" nameDescription="a zombie" race="blood" experience="280" speed="180">
+	<health now="500" max="500" />
+	<look type="311" corpse="9875" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="manadrain" interval="2000" chance="10" target="1" range="1" min="-14" max="-23" />
+		<attack name="lifedrain" interval="2000" chance="15" target="1" range="7" min="-15" max="-24">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" target="1" range="1" min="-30" max="-49">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element firePercent="50" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity energy="1" />
+		<immunity ice="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity drunk="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Mst.... klll...." />
+		<voice sentence="Whrrrr... ssss.... mmm.... grrrrl" />
+		<voice sentence="Dnnnt... cmmm... clsrrr...." />
+		<voice sentence="Httt.... hmnnsss..." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="82036" countmax="65" />
+		<item id="2460" name="brass helmet" chance="9793" />
+		<item id="2398" name="mace" chance="7847" />
+		<item id="2417" name="battle hammer" chance="6856" />
+		<item id="9808" name="heavily rusted armor" chance="5790" />
+		<item id="3351" name="steel helmet" chance="4799" />
+		<item id="2381" name="halberd" chance="3802" />
+		<item id="2168" name="life ring" chance="960" />
+		<item id="7620" name="mana potion" chance="748" />
+		<item id="2657" name="simple dress" chance="530" />
+	</loot>
+</monster>

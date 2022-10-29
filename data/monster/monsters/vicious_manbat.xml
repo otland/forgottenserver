@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220">
+	<health now="1700" max="1700" />
+	<look type="554" corpse="21266" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-215" />
+		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-100" max="-250">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-400">
+			<attribute key="areaEffect" value="bats" />
+		</attack>
+		<attack name="bleedcondition" interval="2000" chance="20" radius="2" target="0" min="-400" max="-600">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="5" />
+		<element icePercent="5" />
+		<element firePercent="-5" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity paralyze="1" />
+		<immunity death="1" />
+		<immunity earth="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="50000" />
+	</loot>
+</monster>

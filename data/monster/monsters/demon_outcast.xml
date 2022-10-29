@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Outcast" nameDescription="a demon outcast" race="fire" experience="6200" speed="296">
+	<health now="6900" max="6900" />
+	<look type="590" corpse="22549" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="energy" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-450">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="8" spread="0" target="1" min="-350" max="-550">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="20" radius="3" target="1" min="-100" max="-250">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="demon outcast skill reducer" range="5" interval="2000" chance="10" />
+		<attack name="manadrain" interval="2000" chance="10" radius="4" target="0" min="-80" max="-150">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="250" max="425">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="15" />
+		<element energyPercent="-8" />
+		<element earthPercent="40" />
+		<element icePercent="5" />
+		<element holyPercent="-6" />
+		<element deathPercent="30" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="energy elemental" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Back in the evil business!" />
+		<voice sentence="This prison break will have casualties!" />
+		<voice sentence="At last someone to hurt" />
+		<voice sentence="No one will imprison me again!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="6" />
+		<item id="2795" name="fire mushroom" chance="20245" countmax="6" />
+		<item id="8473" name="ultimate health potion" chance="20029" countmax="3" />
+		<item id="7590" name="great mana potion" chance="19829" countmax="2" />
+		<item id="2145" name="small diamond" chance="10310" countmax="5" />
+		<item id="2147" name="small ruby" chance="10055" countmax="5" />
+		<item id="2146" name="small sapphire" chance="10003" countmax="5" />
+		<item id="2149" name="small emerald" chance="9939" countmax="5" />
+		<item id="9970" name="small topaz" chance="9784" countmax="5" />
+		<item id="7368" name="assassin star" chance="8655" countmax="10" />
+		<item id="2214" name="ring of healing" chance="2448" />
+		<item id="2393" name="giant sword" chance="2010" />
+		<item id="2165" name="stealth ring" chance="1397" />
+		<item id="2519" name="crown shield" chance="903" />
+		<item id="2396" name="ice rapier" chance="877" />
+		<item id="2164" name="might ring" chance="661" />
+		<item id="2171" name="platinum amulet" chance="661" />
+		<item id="2497" name="crusader helmet" chance="571" />
+		<item id="2462" name="devil helmet" chance="555" />
+		<item id="5906" name="demon dust" chance="532" />
+		<item id="22396" name="cluster of solace" chance="468" />
+		<item id="2520" name="demon shield" chance="458" />
+		<item id="2487" name="crown armor" chance="274" />
+		<item id="7382" name="demonrage sword" chance="87" />
+	</loot>
+</monster>

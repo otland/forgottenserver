@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Devourer" nameDescription="a devourer" race="venom" experience="1755" speed="200">
+	<health now="1900" max="1900" />
+	<look type="617" corpse="23484" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-260" poison="160" />
+		<attack name="lifedrain" interval="2000" chance="10" range="7" min="-40" max="-125" target="1">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="8" range="7" target="1" min="-50" max="-160">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="speed" interval="2000" chance="9" range="7" radius="4" target="1" minspeedchange="-550" maxspeedchange="-750" duration="15000">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="earth" interval="2000" chance="11" length="1" spread="0" min="-50" max="-150">
+			<attribute key="areaEffect" value="smoke" />
+		</attack>
+		<attack name="earth" interval="2000" chance="7" radius="4" target="0" min="-120" max="-135">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="20" min="0" max="136">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-5" />
+		<element icePercent="15" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="*gulp*" />
+		<voice sentence="*Bruaarrr!*" />
+		<voice sentence="*omnnommm nomm*" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="99437" countmax="165" />
+		<item id="2152" name="platinum coin" chance="55673" countmax="2" />
+		<item id="23553" name="glob of glooth" chance="12882" />
+		<item id="2147" name="small ruby" chance="5801" countmax="3" />
+		<item id="2149" name="small emerald" chance="5750" countmax="3" />
+		<item id="9970" name="small topaz" chance="5511" countmax="3" />
+		<item id="2150" name="small amethyst" chance="5409" countmax="3" />
+		<item id="2146" name="small sapphire" chance="5255" countmax="3" />
+		<item id="2145" name="small diamond" chance="5136" countmax="3" />
+		<item id="23551" name="glooth axe" chance="2986" />
+		<item id="23549" name="glooth club" chance="2952" />
+		<item id="23550" name="glooth blade" chance="2696" />
+		<item id="2151" name="talon" chance="2491" />
+		<item id="2154" name="yellow gem" chance="1740" />
+		<item id="23529" name="glooth spear" chance="1621" />
+		<item id="8912" name="springsprout rod" chance="1041" />
+		<item id="23554" name="glooth amulet" chance="682" />
+		<item id="2181" name="terra rod" chance="648" />
+		<item id="23535" name="glooth cape" chance="188" />
+		<item id="2155" name="green gem" chance="51" />
+	</loot>
+</monster>

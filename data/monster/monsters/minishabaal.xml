@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minishabaal" nameDescription="Minishabaal" race="blood" experience="4000" speed="700">
+	<health now="6000" max="6000" />
+	<look type="237" corpse="6364" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="350" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-380" />
+		<attack name="fire" interval="2000" chance="10" range="7" radius="4" target="1" min="-80" max="-350">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="3000" chance="34" range="7" radius="2" target="1" min="-120" max="-500">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="diabolic imp skill reducer" range="5" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="29" defense="29">
+		<defense name="healing" interval="1000" chance="50" min="155" max="255">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="12" speedchange="800" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="4000" chance="50" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="50" />
+		<element icePercent="-10" />
+		<element holyPercent="-5" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="3">
+		<summon name="Diabolic Imp" interval="2000" chance="40" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="I had Princess Lumelia as breakfast!" />
+		<voice sentence="Naaa-Nana-Naaa-Naaa!" />
+		<voice sentence="My brother will come and get you for this!" />
+		<voice sentence="Get them Fluffy!" />
+		<voice sentence="He He He!" />
+		<voice sentence="Pftt, Ferumbras such an upstart!" />
+		<voice sentence="My dragon is not that old, it's just second hand!" />
+		<voice sentence="My other dragon is a red one!" />
+		<voice sentence="When I am big I want to become the ruthless eighth!" />
+		<voice sentence="WHERE'S FLUFFY?" />
+		<voice sentence="Muahaha!" />
+	</voices>
+	<loot>
+		<item id="2136" name="demonbone amulet" chance="909" />
+		<item name="gold coin" countmax="40" chance="100000" />
+		<item name="small amethyst" countmax="2" chance="1428" />
+		<item name="fire axe" chance="666" />
+		<item name="golden legs" chance="180" />
+		<item id="2488" name="crown legs" chance="800" />
+		<item name="guardian shield" chance="1333" />
+		<item name="demon shield" chance="200" />
+		<item name="tempest shield" chance="100" />
+		<item name="demon helmet" chance="100" />
+		<item name="pitchfork" chance="2857" />
+		<item name="soul orb" countmax="2" chance="909" />
+		<item name="demonic essence" countmax="2" chance="1000" />
+	</loot>
+</monster>

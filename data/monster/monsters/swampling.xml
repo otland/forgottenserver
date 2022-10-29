@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Swampling" nameDescription="a swampling" race="venom" experience="45" speed="190">
+	<health now="80" max="80" />
+	<look type="535" corpse="19902" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-80" />
+		<attack name="earth" interval="2000" chance="15" range="7" min="-2" max="-15">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" length="3" spread="2" speedchange="-300" duration="5000">
+			<attribute key="areaEffect" value="watersplash" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Gnark!" />
+		<voice sentence="Crrrck!" />
+	</voices>
+	<loot>
+		<item id="2120" chance="4540" /><!-- rope -->
+		<item name="gold coin" countmax="12" chance="60000" />
+		<item name="white mushroom" countmax="5" chance="8980" />
+		<item name="rat cheese" chance="18670" />
+		<item name="swampling moss" chance="12610" />
+		<item name="piece of swampling wood" chance="8270" />
+	</loot>
+</monster>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Abomination" nameDescription="a lizard abomination" race="blood" experience="1350" speed="220">
+	<health now="20000" max="20000" />
+	<look type="364" corpse="12385" />
+	<targetchange interval="2000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-550" />
+		<attack name="earth" interval="2000" chance="40" radius="3" max="-980">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="50" length="8" spread="0" min="-200" max="-300">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="3" speedchange="-800">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="60" />
+	<elements>
+		<element physicalPercent="15" />
+		<element firePercent="-10" />
+		<element energyPercent="-10" />
+		<element icePercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="10">
+		<voice sentence="NOOOO! NOW YOU HERETICS WILL FACE MY GODLY WRATH!" yell="1" />
+		<voice sentence="RAAARRRR! I WILL DEVOL YOU!" yell="1" />
+		<voice sentence="I WILL MAKE YOU ZHEE!" yell="1" />
+	</voices>
+</monster>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Quara Predator" nameDescription="a quara predator" race="blood" experience="1600" speed="450">
+	<health now="2200" max="2200" />
+	<look type="20" corpse="6067" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-470" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="speed" interval="2000" chance="15" speedchange="270" duration="5000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="10" min="25" max="75">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Rrrah!" />
+		<voice sentence="Rraaar!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="78107" countmax="154" />
+		<item id="12447" name="quara bone" chance="9797" />
+		<item id="7378" name="royal spear" chance="9260" countmax="7" />
+		<item id="2145" name="small diamond" chance="5322" countmax="2" />
+		<item id="2670" name="shrimp" chance="4985" />
+		<item id="2387" name="double axe" chance="3005" />
+		<item id="5895" name="fish fin" chance="1922" />
+		<item id="7591" name="great health potion" chance="1034" />
+		<item id="7383" name="relic sword" chance="657" />
+		<item id="7368" name="assassin star" chance="528" />
+		<item id="7897" name="glacier robe" chance="462" />
+		<item id="5741" name="skull helmet" chance="382" />
+		<item id="13305" name="giant shrimp" chance="22" />
+	</loot>
+</monster>

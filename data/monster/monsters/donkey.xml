@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Donkey" nameDescription="a donkey" race="blood" experience="0" speed="150">
+	<health now="45" max="45" />
+	<look type="399" corpse="13509" />
+	<targetchange interval="2000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="25" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-5" />
+	</attacks>
+	<defenses armor="2" defense="2" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Grunt!" />
+	</voices>
+	<loot>
+		<item name="meat" countmax="2" chance="20000" />
+	</loot>
+</monster>

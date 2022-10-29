@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Undead Prospector" nameDescription="an undead prospector" race="blood" experience="85" speed="170" manacost="440">
+	<health now="100" max="100" />
+	<look type="18" corpse="5976" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="5" max="15">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Our mine... leave us alone." />
+		<voice sentence="Turn back..." />
+		<voice sentence="These mine is ours... you shall not pass." />
+	</voices>
+	<loot>
+		<item id="3976" name="worm" chance="80636" countmax="6" />
+		<item id="2148" name="gold coin" chance="71225" countmax="30" />
+		<item id="2050" name="torch" chance="61070" />
+		<item id="2460" name="brass helmet" chance="18551" />
+		<item id="2403" name="knife" chance="14760" />
+		<item id="2473" name="viking helmet" chance="5349" />
+		<item id="2483" name="scale armor" chance="3588" />
+		<item id="2229" name="skull (item)" chance="2708" />
+		<item id="5913" name="brown piece of cloth" chance="948" />
+		<item id="2168" name="life ring" chance="135" />
+	</loot>
+</monster>

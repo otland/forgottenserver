@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grave Guard" nameDescription="a grave guard" race="undead" experience="485" speed="200">
+	<health now="720" max="720" />
+	<look type="234" corpse="13975" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-147" />
+		<attack name="physical" interval="2000" chance="5" target="0" radius="1">
+			<attribute key="areaEffect" value="bluenote" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="90" />
+		<element icePercent="-10" />
+		<element holyPercent="-10" />
+		<element deathPercent="10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="95445" countmax="129" />
+		<item id="2747" name="grave flower" chance="69968" />
+		<item id="7620" name="mana potion" chance="20318" />
+		<item id="7618" name="health potion" chance="19920" />
+		<item id="2159" name="scarab coin" chance="4802" />
+		<item id="6300" name="death ring" chance="2181" />
+		<item id="2440" name="daramian waraxe" chance="933" />
+	</loot>
+</monster>

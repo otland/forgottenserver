@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lava Golem" nameDescription="a lava golem" race="fire" experience="6200" speed="420">
+	<health now="9000" max="9000" />
+	<look type="491" corpse="17333" />
+	<targetchange interval="5000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-350" max="-700">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" length="8" spread="0" min="-600" max="-1300">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lava golem soulfire" interval="2000" chance="15" />
+		<attack name="fire" interval="2000" chance="15" radius="4" target="1" min="-220" max="-350">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="fire" interval="2000" chance="30" target="0" radius="3" min="-280" max="-350">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="84" defense="84">
+		<defense name="speed" interval="2000" chance="15" speedchange="450" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="-5" />
+		<element deathPercent="35" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grrrrunt" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="2152" name="platinum coin" chance="99981" countmax="11" />
+		<item id="7620" name="mana potion" chance="20316" countmax="2" />
+		<item id="7588" name="strong health potion" chance="18903" countmax="2" />
+		<item id="7589" name="strong mana potion" chance="17770" countmax="2" />
+		<item id="7590" name="great mana potion" chance="16171" countmax="2" />
+		<item id="18424" name="magma clump" chance="15186" countmax="2" />
+		<item id="8473" name="ultimate health potion" chance="15093" />
+		<item id="18425" name="blazing bone" chance="14591" />
+		<item id="18416" name="green crystal splinter" chance="13885" countmax="2" />
+		<item id="10553" name="fiery heart" chance="13606" />
+		<item id="18435" name="prismatic bolt" chance="12063" countmax="5" />
+		<item id="5880" name="iron ore" chance="11617" />
+		<item id="18420" name="red crystal fragment" chance="10446" />
+		<item id="5914" name="yellow piece of cloth" chance="7175" />
+		<item id="2154" name="yellow gem" chance="6413" />
+		<item id="18414" name="violet crystal shard" chance="6041" />
+		<item id="5909" name="white piece of cloth" chance="4907" />
+		<item id="5911" name="red piece of cloth" chance="3569" />
+		<item id="7890" name="magma amulet" chance="3197" />
+		<item id="2187" name="wand of inferno" chance="3160" />
+		<item id="7891" name="magma boots" chance="2602" />
+		<item id="2392" name="fire sword" chance="1784" />
+		<item id="2432" name="fire axe" chance="1413" />
+		<item id="18409" name="wand of everblazing" chance="1338" />
+		<item id="2519" name="crown shield" chance="1227" />
+		<item id="2156" name="red gem" chance="1171" />
+		<item id="8902" name="spellbook of mind control" chance="613" />
+		<item id="7899" name="magma coat" chance="428" />
+	</loot>
+</monster>

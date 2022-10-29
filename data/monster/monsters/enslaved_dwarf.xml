@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Enslaved Dwarf" nameDescription="an enslaved dwarf" race="blood" experience="2700" speed="270">
+	<health now="3800" max="3800" />
+	<look type="494" corpse="17408" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-501" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-340">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" range="7" target="1" radius="3" min="0" max="-250">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="20" target="0" radius="5" duration="6000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="enslaved dwarf skill reducer 1" interval="2000" chance="5" />
+		<attack name="enslaved dwarf skill reducer 2" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="396" max="478">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-3" />
+		<element energyPercent="5" />
+		<element earthPercent="30" />
+		<element icePercent="10" />
+		<element deathPercent="15" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Bark!" />
+		<voice sentence="Blood!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="149" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="6" />
+		<item id="2789" name="brown mushroom" chance="14724" countmax="2" />
+		<item id="5880" name="iron ore" chance="10357" />
+		<item id="2150" name="small amethyst" chance="10328" countmax="2" />
+		<item id="2149" name="small emerald" chance="9826" countmax="2" />
+		<item id="7590" name="great mana potion" chance="6019" />
+		<item id="7591" name="great health potion" chance="5754" />
+		<item id="11227" name="shiny stone" chance="5341" />
+		<item id="18436" name="drill bolt" chance="5193" countmax="5" />
+		<item id="18417" name="brown crystal splinter" chance="4721" countmax="2" />
+		<item id="2391" name="war hammer" chance="3924" />
+		<item id="18420" name="red crystal fragment" chance="3747" />
+		<item id="2532" name="ancient shield" chance="3305" />
+		<item id="18416" name="green crystal splinter" chance="3275" />
+		<item id="2515" name="guardian shield" chance="2567" />
+		<item id="2208" name="axe ring" chance="2006" />
+		<item id="18415" name="green crystal shard" chance="1977" />
+		<item id="7454" name="glorious axe" chance="1564" />
+		<item id="13757" name="coal" chance="1121" />
+		<item id="7413" name="titan axe" chance="1121" />
+		<item id="2528" name="tower shield" chance="472" />
+		<item id="7437" name="sapphire hammer" chance="384" />
+		<item id="2475" name="warrior helmet" chance="325" />
+	</loot>
+</monster>

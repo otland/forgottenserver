@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Yeti" nameDescription="a yeti" race="blood" experience="460" speed="250">
+	<health now="950" max="950" />
+	<look type="110" corpse="6038" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="28" defense="28" />
+	<elements>
+		<element icePercent="-1" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Yooodelaaahooohooo!" />
+		<voice sentence="Yooodelaaaheeeheee!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="79310" countmax="27" />
+		<item id="2666" name="meat" chance="71264" />
+		<item id="2111" name="snowball" chance="52874" countmax="22" />
+		<item id="2671" name="ham" chance="39080" />
+		<item id="2644" name="bunnyslippers" chance="1149" />
+		<item id="2129" name="wolf tooth chain" chance="1149" />
+	</loot>
+</monster>

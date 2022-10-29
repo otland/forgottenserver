@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shock Head" nameDescription="a shock head" race="blood" experience="2300" speed="250">
+	<health now="4200" max="4200" />
+	<look type="579" corpse="22392" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-798" />
+		<attack name="death" interval="2000" chance="15" length="5" spread="2" target="1" min="-200" max="-300">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" length="8" spread="3" target="1" speedchange="-800" duration="7500">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-350">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="shock head skill reducer 1" range="5" interval="2000" chance="5" />
+		<attack name="shock head skill reducer 2" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="250" max="350">
+			<attribute key="areaEffect" value="insects" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element deathPercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="&lt;brrzz&gt;" />
+		<voice sentence="Thun... Thun... THUNDER!" />
+	</voices>
+	<loot>
+		<item name="small sapphire" chance="5000" />
+		<item name="gold coin" countmax="100" chance="43000" />
+		<item name="gold coin" countmax="87" chance="50000" />
+		<item name="royal helmet" chance="270" />
+		<item name="goosebump leather" chance="10000" />
+	</loot>
+</monster>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Madareth" nameDescription="Madareth" race="fire" experience="10000" speed="330">
+	<health now="75000" max="75000" />
+	<look type="12" head="77" body="78" legs="100" feet="79" corpse="8721" />
+	<targetchange interval="5000" chance="8" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="85" />
+		<flag runonhealth="1000" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2000" />
+		<attack name="energy" interval="2000" chance="40" range="7" radius="6" target="0" min="-180" max="-660">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="death" interval="4000" chance="30" length="8" spread="0" min="-600" max="-850">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" radius="5" target="0" min="0" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="5" radius="7" target="0" min="0" max="-250">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="65" defense="65">
+		<defense name="healing" interval="3000" chance="35" min="300" max="800">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="95" />
+		<element firePercent="-5" />
+		<element icePercent="5" />
+		<element deathPercent="95" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="I am going to play with yourself!" yell="1" />
+		<voice sentence="Feel my wrath!" />
+		<voice sentence="No one matches my battle prowess!" />
+		<voice sentence="You will all die!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="9813" name="slightly rusted legs" chance="59259" />
+		<item id="9810" name="slightly rusted armor" chance="40741" />
+		<item id="7443" name="bullseye potion" chance="37037" />
+		<item id="7591" name="great health potion" chance="29630" />
+		<item id="8472" name="great spirit potion" chance="27778" />
+		<item id="7439" name="berserk potion" chance="25926" />
+		<item id="7440" name="mastermind potion" chance="25926" />
+		<item id="7590" name="great mana potion" chance="22222" />
+		<item id="6300" name="death ring" chance="20370" />
+		<item id="2152" name="platinum coin" chance="20370" countmax="26" />
+		<item id="8473" name="ultimate health potion" chance="20370" />
+		<item id="8912" name="springsprout rod" chance="18519" />
+		<item id="7404" name="assassin dagger" chance="16667" />
+		<item id="2072" name="lute" chance="16667" />
+		<item id="2377" name="two handed sword" chance="16667" />
+		<item id="2208" name="axe ring" chance="14815" />
+		<item id="2183" name="hailstorm rod" chance="14815" />
+		<item id="7418" name="nightmare blade" chance="14815" />
+		<item id="8910" name="underworld rod" chance="14815" />
+		<item id="2187" name="wand of inferno" chance="14815" />
+		<item id="7416" name="bloody edge" chance="12963" />
+		<item id="2209" name="club ring" chance="12963" />
+		<item id="7407" name="haunted blade" chance="12963" />
+		<item id="2071" name="lyre" chance="12963" />
+		<item id="2214" name="ring of healing" chance="12963" />
+		<item id="8922" name="wand of voodoo" chance="12963" />
+		<item id="6500" name="demonic essence" chance="11111" />
+		<item id="3953" name="war drum" chance="11111" />
+		<item id="2079" name="war horn" chance="11111" />
+		<item id="7449" name="crystal sword" chance="9259" />
+		<item id="2168" name="life ring" chance="9259" />
+		<item id="2169" name="time ring" chance="9259" />
+		<item id="5954" name="demon horn" chance="7407" countmax="2" />
+		<item id="3952" name="didgeridoo" chance="7407" />
+		<item id="7383" name="relic sword" chance="7407" />
+		<item id="8920" name="wand of starstorm" chance="7407" />
+		<item id="7386" name="mercenary sword" chance="5556" />
+		<item id="2070" name="wooden flute" chance="5556" />
+		<item id="2213" name="dwarven ring" chance="3704" />
+		<item id="2396" name="ice rapier" chance="3704" />
+		<item id="2207" name="sword ring" chance="3704" />
+	</loot>
+</monster>

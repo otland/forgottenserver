@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard High Guard" nameDescription="a lizard high guard" race="blood" experience="1450" speed="238">
+	<health now="1800" max="1800" />
+	<look type="337" corpse="11272" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-306" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="25" max="75">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="-10" />
+		<element physicalPercent="5" />
+		<element firePercent="45" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Hizzzzzzz!" />
+		<voice sentence="To armzzzz!" />
+		<voice sentence="Engage zze aggrezzor!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="96078" countmax="281" />
+		<item id="7588" name="strong health potion" chance="11938" />
+		<item id="11333" name="high guard shoulderplates" chance="8091" />
+		<item id="7591" name="great health potion" chance="7075" />
+		<item id="11325" name="spiked iron ball" chance="6970" />
+		<item id="11245" name="bunch of ripe rice" chance="4932" />
+		<item id="2152" name="platinum coin" chance="4910" countmax="2" />
+		<item id="11332" name="high guard flag" chance="3006" />
+		<item id="2149" name="small emerald" chance="2487" countmax="4" />
+		<item id="11206" name="red lantern" chance="1209" />
+		<item id="2528" name="tower shield" chance="1032" />
+		<item id="5876" name="lizard leather" chance="997" />
+		<item id="5881" name="lizard scale" chance="957" />
+		<item id="11304" name="zaoan legs" chance="734" />
+		<item id="11303" name="zaoan shoes" chance="688" />
+		<item id="11301" name="zaoan armor" chance="76" />
+	</loot>
+</monster>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Penguin" nameDescription="a penguin" race="blood" experience="1" speed="180" manacost="300">
+	<health now="33" max="33" />
+	<look type="250" corpse="7334" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag runonhealth="32" />
+		<flag staticattack="90" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-3" />
+	</attacks>
+	<defenses armor="5" defense="5" />
+	<elements>
+		<element icePercent="5" />
+		<element energyPercent="-5" />
+	</elements>
+	<loot>
+		<item id="2667" countmax="2" chance="7500" /><!-- fish -->
+		<item name="rainbow trout" chance="60" />
+		<item name="green perch" chance="140" />
+	</loot>
+</monster>

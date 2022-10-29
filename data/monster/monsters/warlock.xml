@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Warlock" nameDescription="a warlock" race="blood" experience="4000" speed="230">
+	<health now="3500" max="3500" />
+	<look type="130" head="0" body="52" legs="128" feet="95" addons="1" corpse="20527" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="900" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="energy" interval="2000" chance="25" range="7" min="-90" max="-180">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="warlock skill reducer" range="5" interval="2000" chance="5" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-120" />
+		<attack name="fire" interval="2000" chance="20" range="7" radius="3" target="1" min="-50" max="-180">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="2" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="8" spread="0" min="-150" max="-230">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="33" defense="33">
+		<defense name="healing" interval="2000" chance="20" min="100" max="225">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="20" duration="10000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element earthPercent="95" />
+		<element holyPercent="-8" />
+		<element physicalPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity energy="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="stone golem" interval="2000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Learn the secret of our magic! YOUR death!" />
+		<voice sentence="Even a rat is a better mage than you." />
+		<voice sentence="We don't like intruders!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="30006" countmax="80" />
+		<item id="2679" name="cherry" chance="19630" countmax="4" />
+		<item id="2689" name="bread" chance="8925" />
+		<item id="2411" name="poison dagger" chance="7693" />
+		<item id="2436" name="skull staff" chance="6088" />
+		<item id="7591" name="great health potion" chance="5094" />
+		<item id="7590" name="great mana potion" chance="5017" />
+		<item id="7368" name="assassin star" chance="3289" countmax="4" />
+		<item id="2792" name="dark mushroom" chance="2934" />
+		<item id="2178" name="mind stone" chance="2128" />
+		<item id="2167" name="energy ring" chance="1967" />
+		<item id="2047" name="candlestick" chance="1573" />
+		<item id="2656" name="blue robe" chance="1561" />
+		<item id="2146" name="small sapphire" chance="1283" />
+		<item id="2151" name="talon" chance="1051" />
+		<item id="7898" name="lightning robe" chance="1006" />
+		<item id="2600" name="inkwell" chance="935" />
+		<item id="2124" name="crystal ring" chance="742" />
+		<item id="12410" name="luminous orb" chance="477" />
+		<item id="2123" name="ring of the sky" chance="406" />
+		<item id="2197" name="stone skin amulet" chance="355" />
+		<item id="1986" name="red tome" chance="239" />
+		<item id="2466" name="golden armor" chance="206" />
+		<item id="2114" name="piggy bank" chance="77" />
+	</loot>
+</monster>

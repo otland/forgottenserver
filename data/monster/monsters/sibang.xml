@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sibang" nameDescription="a sibang" race="blood" experience="105" speed="214">
+	<health now="225" max="225" />
+	<look type="118" corpse="6045" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="70" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-40" />
+		<attack name="physical" interval="2000" chance="35" range="7" min="0" max="-55">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="380" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="25" />
+		<element holyPercent="10" />
+		<element icePercent="-15" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Eeeeek! Eeeeek" />
+		<voice sentence="Huh! Huh! Huh!" />
+		<voice sentence="Ahhuuaaa!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="88771" countmax="35" />
+		<item id="2676" name="banana" chance="30452" countmax="12" />
+		<item id="1294" name="small stone" chance="29967" countmax="3" />
+		<item id="2675" name="orange" chance="19971" countmax="5" />
+		<item id="12467" name="banana sash" chance="4948" />
+		<item id="2678" name="coconut" chance="1968" countmax="3" />
+		<item id="2682" name="melon" chance="1001" />
+		<item id="5883" name="ape fur" chance="988" />
+	</loot>
+</monster>

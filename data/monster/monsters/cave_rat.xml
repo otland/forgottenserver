@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cave Rat" nameDescription="a cave rat" race="blood" experience="10" speed="150" manacost="250">
+	<health now="30" max="30" />
+	<look type="56" corpse="5964" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="3" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-10" />
+	</attacks>
+	<defenses armor="1" defense="1" />
+	<elements>
+		<element firePercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Meeeeep!" />
+		<voice sentence="Meep!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="2" chance="85000" />
+		<item id="2696" chance="30000" /><!-- cheese -->
+		<item name="worm" countmax="2" chance="10000" />
+		<item name="cookie" chance="940" />
+	</loot>
+</monster>

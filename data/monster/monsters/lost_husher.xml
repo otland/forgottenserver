@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="250">
+	<health now="1600" max="1600" />
+	<look type="537" corpse="19964" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="death" interval="2000" chance="10" length="6" spread="0" min="-150" max="-300">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" spread="0" min="-150" max="-250">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-150" max="-200">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" range="7" target="1" radius="2" min="-150" max="-250">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" target="0" radius="4" duration="6000">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="15" min="75" max="92">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="5000">
+			<attribute key="areaEffect" value="teleport" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="10" />
+		<element firePercent="25" />
+		<element icePercent="15" />
+		<element holyPercent="-10" />
+		<element deathPercent="20" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Arr far zwar!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="59669" countmax="2" />
+		<item id="20135" name="red hair dye" chance="15336" />
+		<item id="2789" name="brown mushroom" chance="15105" countmax="2" />
+		<item id="20127" name="wimp tooth chain" chance="12042" />
+		<item id="13757" name="coal" chance="11812" />
+		<item id="20130" name="holy ash" chance="11608" />
+		<item id="7588" name="strong health potion" chance="10466" countmax="3" />
+		<item id="7590" name="great mana potion" chance="10377" countmax="2" />
+		<item id="9970" name="small topaz" chance="9695" />
+		<item id="20128" name="lost husher's staff" chance="9217" />
+		<item id="20129" name="skull shatterer" chance="8996" />
+		<item id="20110" name="bonecarving knife" chance="8465" />
+		<item id="20137" name="basalt figurine" chance="7739" />
+		<item id="20111" name="bone fetish" chance="7677" />
+		<item id="20136" name="basalt fetish" chance="5932" />
+		<item id="2213" name="dwarven ring" chance="2656" />
+		<item id="2515" name="guardian shield" chance="965" />
+		<item id="11339" name="clay lump" chance="885" />
+		<item id="2430" name="knight axe" chance="744" />
+		<item id="20109" name="buckle" chance="726" />
+		<item id="7886" name="terra boots" chance="620" />
+		<item id="2436" name="skull staff" chance="469" />
+		<item id="7452" name="spiked squelcher" chance="283" />
+		<item id="2432" name="fire axe" chance="266" />
+		<item id="7885" name="terra legs" chance="221" />
+		<item id="2528" name="tower shield" chance="195" />
+	</loot>
+</monster>

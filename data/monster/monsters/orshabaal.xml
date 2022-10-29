@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orshabaal" nameDescription="Orshabaal" race="fire" experience="10000" speed="380">
+	<health now="22500" max="22500" />
+	<look type="201" corpse="2916" />
+	<targetchange interval="2000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="2500" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1990" />
+		<attack name="manadrain" interval="1000" chance="13" range="7" min="-300" max="-600" />
+		<attack name="manadrain" interval="1000" chance="6" radius="5" target="0" min="-150" max="-350">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="effect" interval="1000" chance="6" radius="5" target="0">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="7" target="1" min="-310" max="-600">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="10" range="7" radius="4" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="1000" chance="15" length="8" spread="0" min="-500" max="-850">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="90" defense="90">
+		<defense name="healing" interval="1000" chance="9" min="1500" max="2500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="1000" chance="17" min="600" max="1000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="5" speedchange="1140" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="80" />
+		<element icePercent="-1" />
+		<element holyPercent="-1" />
+		<element deathPercent="50" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="4">
+		<summon name="demon" interval="1000" chance="10" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="PRAISED BE MY MASTERS, THE RUTHLESS SEVEN!" />
+		<voice sentence="YOU ARE DOOMED!" />
+		<voice sentence="ORSHABAAL IS BACK!" />
+		<voice sentence="Be prepared for the day my masters will come for you!" />
+		<voice sentence="SOULS FOR ORSHABAAL!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="72" />
+		<item id="6500" name="demonic essence" chance="94444" />
+		<item id="6300" name="death ring" chance="55556" />
+		<item id="5954" name="demon horn" chance="50000" countmax="2" />
+		<item id="7590" name="great mana potion" chance="33333" />
+		<item id="2146" name="small sapphire" chance="33333" countmax="8" />
+		<item id="2143" name="white pearl" chance="33333" countmax="15" />
+		<item id="2144" name="black pearl" chance="27778" countmax="15" />
+		<item id="2462" name="devil helmet" chance="27778" />
+		<item id="7591" name="great health potion" chance="27778" countmax="5" />
+		<item id="2214" name="ring of healing" chance="27778" />
+		<item id="8473" name="ultimate health potion" chance="27778" />
+		<item id="2158" name="blue gem" chance="22222" />
+		<item id="2520" name="demon shield" chance="22222" />
+		<item id="2393" name="giant sword" chance="22222" />
+		<item id="2178" name="mind stone" chance="22222" />
+		<item id="2145" name="small diamond" chance="22222" countmax="5" />
+		<item id="2149" name="small emerald" chance="22222" countmax="7" />
+		<item id="7368" name="assassin star" chance="16667" countmax="42" />
+		<item id="2195" name="boots of haste" chance="16667" />
+		<item id="2125" name="crystal necklace" chance="16667" />
+		<item id="2200" name="protection amulet" chance="16667" />
+		<item id="1982" name="purple tome" chance="16667" />
+		<item id="2170" name="silver amulet" chance="16667" />
+		<item id="2150" name="small amethyst" chance="16667" countmax="17" />
+		<item id="2174" name="strange symbol" chance="16667" />
+		<item id="2151" name="talon" chance="16667" countmax="3" />
+		<item id="2377" name="two handed sword" chance="16667" />
+		<item id="2432" name="fire axe" chance="11111" />
+		<item id="2470" name="golden legs" chance="11111" />
+		<item id="2033" name="golden mug" chance="11111" />
+		<item id="8472" name="great spirit potion" chance="11111" />
+		<item id="2177" name="life crystal" chance="11111" />
+		<item id="2514" name="mastermind shield" chance="11111" />
+		<item id="2176" name="orb" chance="11111" />
+		<item id="2171" name="platinum amulet" chance="11111" />
+		<item id="2197" name="stone skin amulet" chance="11111" />
+		<item id="2142" name="ancient amulet" chance="5556" />
+		<item id="2434" name="dragon hammer" chance="5556" />
+		<item id="9971" name="gold ingot" chance="5556" />
+		<item id="2418" name="golden sickle" chance="5556" />
+		<item id="2155" name="green gem" chance="5556" />
+		<item id="2162" name="magic light wand" chance="5556" />
+		<item id="2472" name="magic plate armor" chance="5556" />
+		<item id="2164" name="might ring" chance="5556" />
+		<item id="7365" name="onyx arrow" chance="5556" countmax="50" />
+		<item id="5808" name="orshabaal's brain" chance="5556" />
+		<item id="2402" name="silver dagger" chance="5556" />
+		<item id="2112" name="teddy bear" chance="5556" />
+		<item id="2421" name="thunder hammer" chance="5556" />
+		<item id="3955" name="voodoo doll" chance="5556" />
+	</loot>
+</monster>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Juggernaut" nameDescription="a juggernaut" race="blood" experience="11200" speed="340">
+	<health now="20000" max="20000" />
+	<look type="244" corpse="6336" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="60" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1470" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-780">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60">
+		<defense name="speed" interval="2000" chance="15" speedchange="520" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="400" max="900">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="30" />
+		<element energyPercent="-10" />
+		<element earthPercent="20" />
+		<element firePercent="30" />
+		<element icePercent="10" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="RAAARRR!" />
+		<voice sentence="GRRRRRR!" />
+		<voice sentence="WAHHHH!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="87649" countmax="198" />
+		<item id="2152" name="platinum coin" chance="85549" countmax="15" />
+		<item id="2671" name="ham" chance="44730" />
+		<item id="6500" name="demonic essence" chance="30098" />
+		<item id="5944" name="soul orb" chance="23144" />
+		<item id="7591" name="great health potion" chance="21152" countmax="3" />
+		<item id="7590" name="great mana potion" chance="20645" countmax="3" />
+		<item id="6558" name="flask of demonic blood" chance="19775" />
+		<item id="7368" name="assassin star" chance="16661" countmax="10" />
+		<item id="2149" name="small emerald" chance="13654" countmax="5" />
+		<item id="9970" name="small topaz" chance="13003" countmax="5" />
+		<item id="2147" name="small ruby" chance="12821" countmax="5" />
+		<item id="2150" name="small amethyst" chance="12677" countmax="5" />
+		<item id="2145" name="small diamond" chance="12387" countmax="5" />
+		<item id="7365" name="onyx arrow" chance="10286" countmax="15" />
+		<item id="2156" name="red gem" chance="9381" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="6918" />
+		<item id="9971" name="gold ingot" chance="5179" countmax="2" />
+		<item id="7413" name="titan axe" chance="4745" />
+		<item id="2476" name="knight armor" chance="4382" />
+		<item id="7452" name="spiked squelcher" chance="4020" />
+		<item id="2155" name="green gem" chance="2390" />
+		<item id="2454" name="war axe" chance="1594" />
+		<item id="2153" name="violet gem" chance="942" />
+		<item id="2514" name="mastermind shield" chance="435" />
+		<item id="2136" name="demonbone amulet" chance="362" />
+		<item id="2466" name="golden armor" chance="326" />
+		<item id="2452" name="heavy mace" chance="326" />
+		<item id="2578" name="closed trap" chance="181" />
+	</loot>
+</monster>

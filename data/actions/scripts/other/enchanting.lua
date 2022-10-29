@@ -67,6 +67,12 @@ local items = {
 			[COMBAT_FIREDAMAGE] = {id = 8906}, [COMBAT_ICEDAMAGE] = {id = 8907},
 			[COMBAT_EARTHDAMAGE] = {id = 8909}, [COMBAT_ENERGYDAMAGE] = {id = 8908}
 		},
+		[9949] = { -- dracoyle statue
+			[COMBAT_EARTHDAMAGE] = {id = 9948} -- dracoyle statue (enchanted)
+		},
+		[9954] = { -- dracoyle statue
+			[COMBAT_EARTHDAMAGE] = {id = 9953} -- dracoyle statue (enchanted)
+		},
 		[10022] = { -- worn firewalker boots
 			[COMBAT_FIREDAMAGE] = {id = 9933, say = {text = "Take the boots off first."}},
 			slot = {type = CONST_SLOT_FEET, check = true}
@@ -141,9 +147,10 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		player:addSoul(-items.valuables.soul)
 		player:addMana(-items.valuables.mana)
-		player:addManaSpent(items.valuables.mana * configManager.getNumber(configKeys.RATE_MAGIC))
+		player:addManaSpent(items.valuables.mana)
 		player:addItem(targetType.id)
 		player:getPosition():sendMagicEffect(items.valuables.effect)
+		player:sendSupplyUsed(item)
 		item:remove(1)
 	else
 		local targetItem = targetType[items[itemId].combatType]
@@ -165,6 +172,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			if targetItem.targetId then
 				item:transform(targetItem.id)
 				item:decay()
+				player:sendSupplyUsed(target)
 				target:remove(1)
 			else
 				if targetItem.usesStorage then
@@ -195,6 +203,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				if target:hasAttribute(ITEM_ATTRIBUTE_CHARGES) then
 					target:setAttribute(ITEM_ATTRIBUTE_CHARGES, items.equipment.charges)
 				end
+				player:sendSupplyUsed(item)
 				item:remove(1)
 			end
 		end

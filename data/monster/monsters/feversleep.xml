@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Feversleep" nameDescription="a feversleep" race="blood" experience="4400" speed="270">
+	<health now="5900" max="5900" />
+	<look type="593" corpse="22497" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="poisoncondition" interval="2000" chance="20" radius="7" target="0" min="-800" max="-1000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" radius="5" target="0" min="-70" max="-100">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="feversleep skill reducer" interval="2000" chance="10" />
+		<attack name="lifedrain" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-300">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" radius="1" target="1" min="-150" max="-300">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45">
+		<defense name="healing" interval="2000" chance="20" min="250" max="425">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="10" duration="5000">
+			<attribute key="areaEffect" value="blackspark" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+		<element deathPercent="5" />
+		<element firePercent="5" />
+		<element energyPercent="5" />
+		<element icePercent="5" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="small emerald" countmax="2" chance="11000" />
+		<item name="small amethyst" countmax="3" chance="12000" />
+		<item name="platinum coin" countmax="9" chance="100000" />
+		<item name="blue robe" chance="1500" />
+		<item name="great mana potion" countmax="2" chance="40000" />
+		<item name="ultimate health potion" chance="18000" />
+		<item name="small topaz" countmax="2" chance="16000" />
+		<item name="blue crystal shard" chance="11000" />
+		<item name="blue crystal splinter" chance="13000" />
+		<item name="cyan crystal fragment" chance="18000" />
+		<item name="trapped bad dream monster" chance="17000" />
+		<item name="bowl of terror sweat" chance="14000" />
+	</loot>
+</monster>

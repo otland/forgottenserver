@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Crypt Shambler" nameDescription="a crypt shambler" race="undead" experience="195" speed="140" manacost="580">
+	<health now="330" max="330" />
+	<look type="100" corpse="6029" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-140" />
+		<attack name="lifedrain" interval="2000" chance="15" target="1" range="1" min="-28" max="-55" />
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity earth="1" />
+		<immunity death="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Aaaaahhhh!" />
+		<voice sentence="Hoooohhh!" />
+		<voice sentence="Uhhhhhhh!" />
+		<voice sentence="Chhhhhhh!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="55" chance="58000" />
+		<item name="worm" countmax="10" chance="9000" />
+		<item name="half-digested piece of meat" chance="5000" />
+		<item id="2230" chance="5000" /><!-- bone -->
+		<item name="iron helmet" chance="2000" />
+		<item name="rotten meat" chance="1950" />
+		<item name="two handed sword" chance="1950" />
+		<item name="bone shield" chance="1000" />
+		<item name="throwing star" countmax="3" chance="1000" />
+		<item name="bone sword" chance="1000" />
+		<item name="small diamond" chance="500" />
+	</loot>
+</monster>

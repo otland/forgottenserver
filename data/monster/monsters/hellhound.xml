@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Hellhound" nameDescription="a hellhound" race="blood" experience="5440" speed="360">
+	<health now="7500" max="7500" />
+	<look type="240" corpse="6332" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="70" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-520" poison="800" />
+		<attack name="earth" interval="2000" chance="5" length="8" spread="3" min="-300" max="-700">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" range="7" min="-395" max="-498">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-350" max="-660">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="3" min="-350" max="-976">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" radius="1" target="1" min="-200" max="-403">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="earth" interval="2000" chance="5" range="7" min="-300" max="-549">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60">
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="220" max="425">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10" />
+		<element earthPercent="20" />
+		<element icePercent="-5" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="GROOOWL!" />
+		<voice sentence="GRRRRR!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="2671" name="ham" chance="30654" />
+		<item id="7590" name="great mana potion" chance="29039" countmax="3" />
+		<item id="7368" name="assassin star" chance="24901" countmax="10" />
+		<item id="6500" name="demonic essence" chance="21552" />
+		<item id="10554" name="hellhound slobber" chance="20449" />
+		<item id="6558" name="flask of demonic blood" chance="20331" />
+		<item id="8472" name="great spirit potion" chance="19819" />
+		<item id="5944" name="soul orb" chance="19622" />
+		<item id="8473" name="ultimate health potion" chance="15288" />
+		<item id="18425" name="blazing bone" chance="13396" />
+		<item id="2149" name="small emerald" chance="11072" countmax="3" />
+		<item id="5925" name="hardened bone" chance="10914" />
+		<item id="9970" name="small topaz" chance="10402" countmax="3" />
+		<item id="10553" name="fiery heart" chance="9890" />
+		<item id="2147" name="small ruby" chance="9614" countmax="3" />
+		<item id="2144" name="black pearl" chance="9456" countmax="4" />
+		<item id="2187" name="wand of inferno" chance="8353" />
+		<item id="2430" name="knight axe" chance="7486" />
+		<item id="2392" name="fire sword" chance="6422" />
+		<item id="5914" name="yellow piece of cloth" chance="5792" />
+		<item id="5910" name="green piece of cloth" chance="5280" />
+		<item id="2156" name="red gem" chance="4610" />
+		<item id="2154" name="yellow gem" chance="4452" />
+		<item id="5911" name="red piece of cloth" chance="3034" />
+		<item id="9971" name="gold ingot" chance="2955" />
+		<item id="7890" name="magma amulet" chance="2561" />
+		<item id="7426" name="amber staff" chance="2049" />
+		<item id="7894" name="magma legs" chance="1458" />
+		<item id="7891" name="magma boots" chance="1340" />
+		<item id="2231" name="big bone" chance="985" />
+		<item id="2155" name="green gem" chance="985" />
+		<item id="7899" name="magma coat" chance="985" />
+		<item id="7900" name="magma monocle" chance="985" />
+		<item id="7421" name="onyx flail" chance="867" />
+		<item id="2393" name="giant sword" chance="827" />
+		<item id="6553" name="ruthless axe" chance="788" />
+		<item id="4873" name="explorer brooch" chance="276" />
+	</loot>
+</monster>

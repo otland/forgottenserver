@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Boar" nameDescription="a boar" race="blood" experience="60" speed="410" manacost="465">
+	<health now="198" max="198" />
+	<look type="380" corpse="13308" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Grunt! Grunt!" />
+		<voice sentence="Grunt" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="25313" countmax="20" />
+		<item id="13297" name="haunch of boar" chance="19949" countmax="2" />
+	</loot>
+</monster>

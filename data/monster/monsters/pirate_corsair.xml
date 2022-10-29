@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="238" manacost="775">
+	<health now="675" max="675" />
+	<look type="98" corpse="20475" />
+	<targetchange interval="4000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="40" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-170" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-150">
+			<attribute key="shootEffect" value="throwingstar" />
+		</attack>
+		<attack name="pirate corsair skill reducer" interval="2000" chance="5" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element earthPercent="20" />
+		<element holyPercent="10" />
+		<element deathPercent="-5" />
+		<element icePercent="-5" />
+		<element firePercent="-10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Give up!" />
+		<voice sentence="Hiyaa!" />
+		<voice sentence="Plundeeeeer!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="55352" countmax="86" />
+		<item id="11219" name="compass" chance="10163" />
+		<item id="2385" name="sabre" chance="9816" />
+		<item id="2399" name="throwing star" chance="8104" countmax="12" />
+		<item id="2489" name="dark armor" chance="1874" />
+		<item id="2521" name="dark shield" chance="1105" />
+		<item id="6096" name="pirate hat" chance="1094" />
+		<item id="5926" name="pirate backpack" chance="1029" />
+		<item id="7588" name="strong health potion" chance="802" />
+		<item id="6097" name="hook" chance="574" />
+		<item id="6126" name="peg leg" chance="553" />
+		<item id="6098" name="eye patch" chance="488" />
+		<item id="5462" name="pirate boots" chance="325" />
+		<item id="5813" name="skull candle" chance="119" />
+		<item id="5553" name="rum flask" chance="98" />
+		<item id="2114" name="piggy bank" chance="87" />
+	</loot>
+</monster>

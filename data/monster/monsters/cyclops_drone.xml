@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cyclops Drone" nameDescription="a cyclops drone" race="blood" experience="200" speed="198" manacost="525">
+	<health now="325" max="325" />
+	<look type="280" corpse="7847" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-105" />
+		<attack name="physical" interval="2000" chance="35" range="7" min="0" max="-80">
+			<attribute key="shootEffect" value="largerock" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element energyPercent="10" />
+		<element icePercent="20" />
+		<element holyPercent="1" />
+		<element earthPercent="-10" />
+		<element deathPercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Fee! Fie! Foe! Fum!" />
+		<voice sentence="Luttl pest!" />
+		<voice sentence="Me makking you pulp!" />
+		<voice sentence="Humy tasy! Hum hum!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="82050" countmax="30" />
+		<item id="2666" name="meat" chance="50295" />
+		<item id="2406" name="short sword" chance="7867" />
+		<item id="10574" name="cyclops toe" chance="6895" />
+		<item id="2510" name="plate shield" chance="2026" />
+		<item id="2513" name="battle shield" chance="1580" />
+		<item id="2381" name="halberd" chance="679" />
+		<item id="7588" name="strong health potion" chance="517" />
+		<item id="2490" name="dark helmet" chance="198" />
+		<item id="7398" name="cyclops trophy" chance="124" />
+		<item id="2209" name="club ring" chance="73" />
+	</loot>
+</monster>

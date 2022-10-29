@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deepling Scout" nameDescription="a deepling scout" race="blood" experience="160" speed="200">
+	<health now="240" max="240" />
+	<look type="413" corpse="13839" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="50" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="drown" interval="2000" chance="15" range="7" target="1" min="-40" max="-100">
+			<attribute key="shootEffect" value="spear" />
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element earthPercent="-10" />
+		<element energyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity ice="1" />
+		<immunity drown="1" />
+		<immunity fire="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Njaaarh!!" />
+		<voice sentence="Begjone, intrjuder!!" />
+		<voice sentence="Djon't djare stjare injo the eyes of the djeep!" />
+		<voice sentence="Ljeave this sjacred pljace while you cjan" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="50" chance="60000" />
+		<item name="small emerald" chance="121" />
+		<item name="life ring" chance="2127" />
+		<item name="hunting spear" countmax="3" chance="14285" />
+		<item name="fish fin" chance="310" />
+		<item id="9809" chance="925" /><!-- rusty armor (semi-rare) -->
+		<item name="flask of rust remover" chance="111" />
+		<item name="heavy trident" chance="505" />
+		<item name="eye of a deepling" chance="310" />
+	</loot>
+</monster>

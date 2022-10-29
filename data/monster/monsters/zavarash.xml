@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Zavarash" nameDescription="Zavarash" race="fire" experience="21000" speed="440">
+	<health now="35000" max="35000" />
+	<look type="12" head="0" body="15" legs="57" feet="84" corpse="6068" />
+	<targetchange interval="2000" chance="25" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag runonhealth="0" />
+		<flag isboss="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-600" />
+		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-6000">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="65">
+		<defense name="healing" interval="2000" chance="30" min="400" max="600" radius="8">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="18" speedchange="784" duration="7000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="20" duration="10000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="90" />
+		<element deathPercent="65" />
+		<element energyPercent="60" />
+		<element firePercent="70" />
+		<element icePercent="60" />
+		<element earthPercent="60" />
+		<element holyPercent="-20" />
+	</elements>
+	<immunities>
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity outfit="1" />
+		<immunity drunk="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="Dark Torturer" interval="1000" chance="100" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="Harrr, Harrr!" yell="1" />
+	</voices>
+	<loot>
+		<item id="22396" chance="100000" /><!-- cluster of solace -->
+		<item id="2148" countmax="100" chance="50000" /><!-- gold coin -->
+		<item id="2148" countmax="97" chance="50000" /><!-- gold coin -->
+		<item id="2152" countmax="50" chance="100000" /><!-- platinum coin -->
+		<item id="5954" chance="100000" /><!-- demon horn -->
+		<item id="22598" chance="60000" /><!-- unrealized dream -->
+		<item id="6500" chance="60000" /><!-- demonic essence -->
+		<item id="7632" chance="40000" /><!-- giant shimmering pearl -->
+		<item id="18414" countmax="8" chance="40000" /><!-- violet crystal shard -->
+		<item id="7590" countmax="10" chance="34440" /><!-- great mana potion -->
+		<item id="8473" countmax="10" chance="34440" /><!-- ultimate health potion -->
+		<item id="8472" countmax="5" chance="34440" /><!-- great spirit potion -->
+		<item id="18413" countmax="8" chance="30000" /><!-- blue crystal shard -->
+		<item id="18415" countmax="8" chance="30000" /><!-- green crystal shard -->
+		<item id="2155" chance="20000" /><!-- green gem -->
+		<item id="2515" chance="15030" /><!-- guardian shield -->
+		<item id="2427" chance="15030" /><!-- guardian halberd -->
+		<item id="2158" chance="15030" /><!-- blue gem -->
+		<item id="9971" chance="15030" /><!-- gold ingot -->
+		<item id="7428" chance="15030" /><!-- bonebreaker -->
+		<item id="2452" chance="12940" /><!-- heavy mace -->
+		<item id="2519" chance="11540" /><!-- crown shield -->
+		<item id="22610" chance="10000" /><!-- dream warden mask -->
+		<item id="8891" chance="9620" /><!-- paladin armor -->
+		<item id="7387" chance="8390" /><!-- diamond sceptre -->
+		<item id="2520" chance="6290" /><!-- demon shield -->
+		<item id="2514" chance="1400" /><!-- mastermind shield -->
+		<item id="7431" chance="700" /><!-- demonbone -->
+		<item id="8877" chance="350" /><!-- lavos armor -->
+		<item id="8928" chance="170" /><!-- obsidian truncheon -->
+	</loot>
+</monster>

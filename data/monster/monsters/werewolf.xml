@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Werewolf" nameDescription="a werewolf" race="blood" experience="1900" speed="280">
+	<health now="1955" max="1955" />
+	<look type="308" corpse="20380" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="300" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="outfit" interval="2000" chance="1" target="1" radius="1" monster="werewolf" duration="2000">
+			<attribute key="areaeffect" value="bluenote" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="2" target="0" min="-80" max="-200">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="40" radius="3" target="0">
+			<attribute key="areaEffect" value="whitenote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" radius="1" target="0">
+			<attribute key="areaEffect" value="greennote" />
+		</attack>
+		<attack name="werewolf skill reducer" interval="2000" range="1" chance="15" />
+	</attacks>
+	<defenses armor="36" defense="36">
+		<defense name="healing" interval="2000" chance="15" min="120" max="225">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" range="7" speedchange="400" duration="5000">
+			<attribute key="areaEffect" value="purplenote" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="15" />
+		<element earthPercent="75" />
+		<element firePercent="-5" />
+		<element icePercent="-5" />
+		<element holyPercent="-5" />
+		<element deathPercent="55" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<summons maxSummons="2">
+		<summon name="war wolf" interval="2000" chance="40" />
+	</summons>
+	<voices interval="5000" chance="10">
+		<voice sentence="BLOOD!" yell="1" />
+		<voice sentence="HRAAAAAAAAAARRRRRR!" yell="1" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="98760" countmax="301" />
+		<item id="24708" name="werewolf fangs" chance="14788" />
+		<item id="11234" name="werewolf fur" chance="9757" />
+		<item id="2510" name="plate shield" chance="9645" countmax="2" />
+		<item id="9809" name="rusted armor" chance="7958" />
+		<item id="2789" name="brown mushroom" chance="6903" />
+		<item id="5897" name="wolf paw" chance="5211" />
+		<item id="7588" name="strong health potion" chance="5171" countmax="2" />
+		<item id="2805" name="troll green" chance="4987" />
+		<item id="2381" name="halberd" chance="3072" />
+		<item id="8473" name="ultimate health potion" chance="2016" />
+		<item id="7439" name="berserk potion" chance="938" />
+		<item id="2197" name="stone skin amulet" chance="882" />
+		<item id="2171" name="platinum amulet" chance="799" />
+		<item id="24739" name="moonlight crystals" chance="726" />
+		<item id="2169" name="time ring" chance="581" />
+		<item id="2438" name="epee" chance="475" />
+		<item id="7383" name="relic sword" chance="363" />
+		<item id="7428" name="bonebreaker" chance="268" />
+		<item id="7419" name="dreaded cleaver" chance="106" />
+	</loot>
+</monster>

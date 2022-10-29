@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="260">
+	<health now="120" max="120" />
+	<look type="128" head="97" body="116" legs="95" feet="95" corpse="20511" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-70" />
+		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-20" max="-30">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="14" defense="14">
+		<defense name="invisible" interval="2000" chance="30" duration="15000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="5" />
+		<element physicalPercent="-20" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity lifedrain="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="13123" countmax="8" />
+		<item id="2410" name="throwing knife" chance="11116" countmax="2" />
+		<item id="2260" name="blank rune" chance="8811" />
+		<item id="2511" name="brass shield" chance="5617" />
+		<item id="2478" name="brass legs" chance="3531" />
+		<item id="12430" name="miraculum" chance="1543" />
+		<item id="2425" name="obsidian lance" chance="1198" />
+		<item id="2412" name="katana" chance="519" />
+	</loot>
+</monster>

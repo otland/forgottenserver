@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Elder Forest Fury" nameDescription="an elder forest fury" race="blood" experience="330" speed="240">
+	<health now="670" max="670" />
+	<look type="569" corpse="21359" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="3" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-53" poison="5" />
+		<attack name="physical" interval="1500" chance="40" radius="4" target="1" range="5" min="0" max="-100">
+			<attribute key="shootEffect" value="huntingspear" />
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element deathPercent="40" />
+		<element holyPercent="10" />
+		<element firePercent="-5" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="To arms, sisters!" />
+		<voice sentence="Feel the wrath of mother forest!" />
+		<voice sentence="By the power of Greenskull!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="90713" countmax="68" />
+		<item id="2543" name="bolt" chance="43844" countmax="15" />
+		<item id="2666" name="meat" chance="20086" />
+		<item id="21312" name="venison" chance="18575" />
+		<item id="7363" name="piercing bolt" chance="17063" countmax="5" />
+		<item id="21311" name="elven hoof" chance="11879" />
+		<item id="3965" name="hunting spear" chance="9071" countmax="2" />
+		<item id="2455" name="crossbow" chance="3456" />
+		<item id="2149" name="small emerald" chance="3240" />
+		<item id="8840" name="raspberry" chance="864" countmax="3" />
+		<item id="7443" name="bullseye potion" chance="432" />
+		<item id="2181" name="terra rod" chance="432" />
+	</loot>
+</monster>

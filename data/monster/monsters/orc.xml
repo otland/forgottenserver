@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300">
+	<health now="70" max="70" />
+	<look type="5" corpse="5966" />
+	<targetchange interval="4000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="15" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+	</attacks>
+	<defenses armor="4" defense="4" />
+	<elements>
+		<element energyPercent="20" />
+		<element holyPercent="10" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Grak brrretz!" />
+		<voice sentence="Grow truk grrrrr." />
+		<voice sentence="Prek tars, dekklep zurk." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="84724" countmax="14" />
+		<item id="2666" name="meat" chance="9613" />
+		<item id="2484" name="studded armor" chance="8232" />
+		<item id="2526" name="studded shield" chance="6685" />
+		<item id="2385" name="sabre" chance="5580" />
+		<item id="2386" name="axe" chance="5442" />
+		<item id="2482" name="studded helmet" chance="2873" />
+		<item id="26642" name="heavy old tome" chance="2238" />
+		<item id="12435" name="orc leather" chance="359" />
+		<item id="11113" name="orc tooth" chance="55" />
+	</loot>
+</monster>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ogre Shaman" nameDescription="an ogre shaman" race="blood" experience="625" speed="105">
+	<health now="800" max="800" />
+	<look type="859" corpse="24795" />
+	<targetchange interval="2000" chance="20" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="90" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="5" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="50" attack="50" />
+		<attack name="earth" interval="2000" chance="11" range="7" radius="1" target="1" min="-80" max="-110">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="terra wave" interval="2000" chance="13" min="-90" max="-200">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="11" range="7" monster="chicken" duration="2000">
+			<attribute key="shootEffect" value="earth" />
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-20" max="-40">
+			<attribute key="shooteffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="24">
+		<defense name="healing" interval="2000" chance="25" min="0" max="0">
+			<attribute key="areaEffect" value="mortarea" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="20" />
+		<element energyPercent="20" />
+		<element icePercent="20" />
+		<element holyPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity poison="1" />
+		<immunity death="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="Terror Bird" interval="2000" chance="10" max="1" />
+		<summon name="Dworc Voodoomaster" interval="2000" chance="10" max="1" />
+		<summon name="Dworc Fleshhunter" interval="2000" chance="10" max="1" />
+	</summons>
+	<voices interval="2000" chance="5">
+		<voice sentence="Stay here, soul food!" />
+		<voice sentence="You more delicate than clomp!" />
+		<voice sentence="The spirits hunger!" />
+		<voice sentence="A sacrifice for Great Hunger!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="90" chance="100000" />
+		<item name="strong mana potion" chance="15650" />
+		<item name="ogre ear stud" chance="14010" />
+		<item name="skull fetish" chance="10920" />
+		<item name="shamanic talisman" chance="10350" />
+		<item name="ogre nose ring" chance="10040" />
+		<item id="2229" chance="9700" /><!-- skull -->
+		<item name="prickly pear" countmax="2" chance="9240" />
+		<item name="broken shamanic staff" chance="6680" />
+		<item name="bone fetish" chance="5080" />
+		<item name="small ruby" chance="3130" />
+		<item name="black pearl" chance="2600" />
+		<item name="necrotic rod" chance="2600" />
+		<item name="wand of decay" chance="2330" />
+		<item name="waterskin" chance="2060" />
+		<item name="opal" countmax="2" chance="1640" />
+		<item name="onyx chip" countmax="2" chance="1340" />
+		<item name="shamanic mask" chance="880" />
+		<item name="ogre scepta" chance="500" />
+		<item name="didgeridoo" chance="460" />
+		<item id="3955" chance="40" /><!-- voodoo doll -->
+	</loot>
+</monster>

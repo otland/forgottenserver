@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Vulcongra" nameDescription="Vulcongra" race="fire" experience="1100" speed="320">
+	<health now="1600" max="1600" />
+	<look type="509" corpse="18476" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="220" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-235" />
+		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="7" target="1" min="-100" max="-200">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="vulcongra soulfire" interval="3000" chance="100" />
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<elements>
+		<element deathPercent="5" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Fuchah! Fuchah!" />
+		<voice sentence="Fuchah!" />
+		<voice sentence="Yag! Yag! Yag!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="107" />
+		<item id="2152" name="platinum coin" chance="14338" />
+		<item id="18424" name="magma clump" chance="12277" />
+		<item id="2676" name="banana" chance="9563" countmax="10" />
+		<item id="10553" name="fiery heart" chance="9041" />
+		<item id="18425" name="blazing bone" chance="7893" />
+		<item id="7589" name="strong mana potion" chance="7319" />
+		<item id="7588" name="strong health potion" chance="7280" />
+		<item id="18417" name="brown crystal splinter" chance="4945" />
+		<item id="2207" name="sword ring" chance="3053" />
+		<item id="18420" name="red crystal fragment" chance="2401" />
+		<item id="2187" name="wand of inferno" chance="978" />
+		<item id="7890" name="magma amulet" chance="887" />
+		<item id="13757" name="coal" chance="848" />
+		<item id="2392" name="fire sword" chance="300" />
+		<item id="7899" name="magma coat" chance="170" />
+	</loot>
+</monster>

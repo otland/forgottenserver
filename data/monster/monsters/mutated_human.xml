@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mutated Human" nameDescription="a mutated human" race="blood" experience="150" speed="154">
+	<health now="240" max="240" />
+	<look type="323" corpse="9107" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-90" poison="60" />
+		<attack name="death" interval="2000" chance="15" length="3" spread="1" target="0" min="-50" max="-60">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="20" target="1" length="1" spread="0" min="-190" max="-280">
+			<attribute key="areaeffect" value="greenspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="1" range="7" speedchange="-600" duration="30000">
+			<attribute key="areaEffect" value="explosion" />
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="220" duration="5000">
+			<attribute key="areaEffect" value="greenbubble" />
+		</defense>
+	</defenses>
+	<elements>
+		<element icePercent="20" />
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Take that creature off my back!! I can fell it!" />
+		<voice sentence="HEEEEEEEELP!" />
+		<voice sentence="You will be the next infected one... GRAAAAAAAAARRR!" />
+		<voice sentence="Science... is a curse." />
+		<voice sentence="Run as fast as you can." />
+		<voice sentence="Oh by the gods! What is this... aaaaaargh!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="88222" countmax="130" />
+		<item id="11225" name="mutated flesh" chance="19936" />
+		<item id="2226" name="fishbone" chance="10064" />
+		<item id="3607" name="cheese" chance="8076" />
+		<item id="2483" name="scale armor" chance="7833" />
+		<item id="3976" name="worm" chance="7081" countmax="2" />
+		<item id="2376" name="sword" chance="5069" />
+		<item id="2161" name="strange talisman" chance="4946" />
+		<item id="9808" name="heavily rusted armor" chance="2007" />
+		<item id="7910" name="peanut" chance="534" />
+		<item id="2801" name="fern" chance="421" />
+		<item id="2170" name="silver amulet" chance="102" />
+	</loot>
+</monster>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goblin" nameDescription="a goblin" race="blood" experience="25" speed="120" manacost="290">
+	<health now="50" max="50" />
+	<look type="61" corpse="6002" />
+	<targetchange interval="5000" chance="0" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="35" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-10" />
+		<attack name="physical" interval="2000" chance="10" range="7" min="0" max="-25">
+			<attribute key="shootEffect" value="smallstone" />
+		</attack>
+	</attacks>
+	<defenses armor="6" defense="6" />
+	<elements>
+		<element energyPercent="20" />
+		<element holyPercent="20" />
+		<element earthPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Me have him!" />
+		<voice sentence="Zig Zag! Gobo attack!" />
+		<voice sentence="Help! Goblinkiller!" />
+		<voice sentence="Bugga! Bugga!" />
+		<voice sentence="Me green, me mean!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="50250" countmax="9" />
+		<item id="1294" name="small stone" chance="15265" />
+		<item id="2667" name="fish" chance="13004" />
+		<item id="2559" name="small axe" chance="9863" />
+		<item id="2406" name="short sword" chance="8832" />
+		<item id="2449" name="bone club" chance="4934" />
+		<item id="2467" name="leather armor" chance="2514" />
+		<item id="2461" name="leather helmet" chance="1947" />
+		<item id="2379" name="dagger" chance="1795" />
+		<item id="2230" name="bone" chance="1065" />
+		<item id="2235" name="mouldy cheese" chance="999" />
+		<item id="12495" name="goblin ear" chance="951" />
+	</loot>
+</monster>

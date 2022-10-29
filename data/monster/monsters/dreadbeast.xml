@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dreadbeast" nameDescription="a dreadbeast" race="undead" experience="250" speed="136" manacost="800">
+	<health now="800" max="800" />
+	<look type="101" corpse="6030" />
+	<targetchange interval="60000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag staticattack="80" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" poison="100" />
+		<attack name="drown" interval="4000" chance="30" range="7" target="1" min="-70" max="-90">
+			<attribute key="areaEffect" value="bluebubble" />
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="20" radius="3" target="0" min="-10" max="-80">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="35" max="65">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element holyPercent="-50" />
+		<element firePercent="55" />
+		<element icePercent="40" />
+		<element physicalPercent="30" />
+		<element energyPercent="15" />
+		<element drownPercent="75" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+	</immunities>
+	<loot>
+		<item name="gold coin" countmax="88" chance="11690" />
+		<item id="2230" chance="8230" /><!-- bone -->
+		<item name="plate armor" chance="2810" />
+		<item id="2229" chance="2810" /><!-- skull -->
+		<item id="2231" chance="1950" /><!-- big bone -->
+		<item name="bone club" chance="1520" />
+		<item name="bone shield" chance="1520" />
+		<item name="health potion" chance="870" />
+		<item name="green mushroom" chance="650" />
+		<item name="hardened bone" chance="650" />
+	</loot>
+</monster>

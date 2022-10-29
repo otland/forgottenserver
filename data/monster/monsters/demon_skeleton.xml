@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Skeleton" nameDescription="a demon skeleton" race="undead" experience="240" speed="180" manacost="620">
+	<health now="400" max="400" />
+	<look type="37" corpse="5963" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag canwalkonenergy="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-185" />
+		<attack name="death" interval="2000" chance="10" radius="1" target="1" range="1" min="-30" max="-50">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<elements>
+		<element holyPercent="-25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity death="1" />
+		<immunity fire="1" />
+		<immunity earth="1" />
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="97515" countmax="75" />
+		<item id="10564" name="demonic skeletal hand" chance="11978" />
+		<item id="2399" name="throwing star" chance="9982" countmax="3" />
+		<item id="7618" name="health potion" chance="9693" countmax="2" />
+		<item id="7620" name="mana potion" chance="5050" />
+		<item id="2513" name="battle shield" chance="4960" />
+		<item id="2050" name="torch" chance="4861" />
+		<item id="2417" name="battle hammer" chance="4061" />
+		<item id="2459" name="iron helmet" chance="3377" />
+		<item id="2144" name="black pearl" chance="2976" />
+		<item id="2147" name="small ruby" chance="1531" />
+		<item id="2194" name="mysterious fetish" chance="535" />
+		<item id="2178" name="mind stone" chance="469" />
+		<item id="2515" name="guardian shield" chance="113" />
+	</loot>
+</monster>

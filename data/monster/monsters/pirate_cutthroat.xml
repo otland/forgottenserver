@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pirate Cutthroat" nameDescription="a pirate cutthroat" race="blood" experience="175" speed="214" manacost="495">
+	<health now="325" max="325" />
+	<look type="96" corpse="20479" />
+	<targetchange interval="4000" chance="15" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-170" poison="10" />
+		<attack name="physical" interval="2000" chance="20" range="7" radius="1" target="1" min="0" max="-95">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15" />
+	<elements>
+		<element earthPercent="10" />
+		<element holyPercent="20" />
+		<element deathPercent="-5" />
+		<element firePercent="-10" />
+		<element icePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Give up!" />
+		<voice sentence="Hiyaa!" />
+		<voice sentence="Plundeeeeer!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="77548" countmax="50" />
+		<item id="11219" name="compass" chance="10074" />
+		<item id="2483" name="scale armor" chance="3070" />
+		<item id="2509" name="steel shield" chance="2884" />
+		<item id="5710" name="light shovel" chance="1960" />
+		<item id="14337" name="treasure map (pirate)" chance="1092" />
+		<item id="5918" name="pirate knee breeches" chance="1019" />
+		<item id="5927" name="pirate bag" chance="987" />
+		<item id="6097" name="hook" chance="534" />
+		<item id="6126" name="peg leg" chance="514" />
+		<item id="6098" name="eye patch" chance="468" />
+		<item id="5792" name="die" chance="93" />
+		<item id="5553" name="rum flask" chance="89" />
+	</loot>
+</monster>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Witch" nameDescription="a witch" race="blood" experience="120" speed="204">
+	<health now="300" max="300" />
+	<look type="54" corpse="20535" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="4" />
+		<flag staticattack="90" />
+		<flag runonhealth="30" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" />
+		<attack name="fire" interval="2000" chance="20" range="7" min="-30" max="-75">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="1" target="1" range="5" monster="green frog" duration="2000" />
+	</attacks>
+	<defenses armor="8" defense="8" />
+	<elements>
+		<element earthPercent="20" />
+		<element deathPercent="-5" />
+		<element physicalPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity energy="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Horax pokti!" />
+		<voice sentence="Herba budinia ex!" />
+		<voice sentence="Hihihihi!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="63913" countmax="40" />
+		<item id="2687" name="cookie" chance="30001" countmax="8" />
+		<item id="2129" name="wolf tooth chain" chance="10121" />
+		<item id="10569" name="witch broom" chance="10009" />
+		<item id="2800" name="star herb" chance="9005" />
+		<item id="2643" name="leather boots" chance="5017" />
+		<item id="2654" name="cape" chance="4958" />
+		<item id="2405" name="sickle" chance="3892" />
+		<item id="2199" name="garlic necklace" chance="2515" />
+		<item id="2651" name="coat" chance="2008" />
+		<item id="2185" name="necrotic rod" chance="1085" />
+		<item id="13537" name="bag of apple slices" chance="895" />
+		<item id="2402" name="silver dagger" chance="556" />
+		<item id="10570" name="witch hat" chance="90" />
+		<item id="11211" name="stuffed toad" chance="6" />
+	</loot>
+</monster>

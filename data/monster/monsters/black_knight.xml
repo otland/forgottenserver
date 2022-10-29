@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Black Knight" nameDescription="a black knight" race="blood" experience="1600" speed="250">
+	<health now="1800" max="1800" />
+	<look type="131" head="95" body="95" legs="95" feet="95" addons="3" corpse="20355" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag ignorespawnblock="0" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-200">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="42" defense="42" />
+	<elements>
+		<element firePercent="95" />
+		<element energyPercent="80" />
+		<element physicalPercent="10" />
+		<element deathPercent="20" />
+		<element holyPercent="-8" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity earth="1" />
+		<immunity ice="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="MINE!" />
+		<voice sentence="NO PRISONERS!" />
+		<voice sentence="NO MERCY!" />
+		<voice sentence="By Bolg's blood!" />
+		<voice sentence="You're no match for me!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="48586" countmax="143" />
+		<item id="2389" name="spear" chance="29429" countmax="3" />
+		<item id="2691" name="brown bread" chance="20600" countmax="2" />
+		<item id="2120" name="rope" chance="14426" />
+		<item id="2478" name="brass legs" chance="13070" />
+		<item id="2381" name="halberd" chance="12522" />
+		<item id="2463" name="plate armor" chance="10935" />
+		<item id="3351" name="steel helmet" chance="10531" />
+		<item id="2377" name="two handed sword" chance="9608" />
+		<item id="2417" name="battle hammer" chance="6896" />
+		<item id="2475" name="warrior helmet" chance="4703" />
+		<item id="2430" name="knight axe" chance="2654" />
+		<item id="2490" name="dark helmet" chance="2424" />
+		<item id="2489" name="dark armor" chance="2020" />
+		<item id="2477" name="knight legs" chance="1039" />
+		<item id="2476" name="knight armor" chance="750" />
+		<item id="2133" name="ruby necklace" chance="750" />
+		<item id="7895" name="lightning legs" chance="577" />
+		<item id="2195" name="boots of haste" chance="404" />
+		<item id="2414" name="dragon lance" chance="289" />
+		<item id="2114" name="piggy bank" chance="115" />
+	</loot>
+</monster>

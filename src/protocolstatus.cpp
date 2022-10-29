@@ -1,25 +1,10 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2018  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "protocolstatus.h"
+
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
@@ -27,10 +12,11 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-std::map<uint32_t, int64_t> ProtocolStatus::ipConnectMap;
+std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
 const uint64_t ProtocolStatus::start = OTSYS_TIME();
 
-enum RequestedInfo_t : uint16_t {
+enum RequestedInfo_t : uint16_t
+{
 	REQUEST_BASIC_SERVER_INFO = 1 << 0,
 	REQUEST_OWNER_SERVER_INFO = 1 << 1,
 	REQUEST_MISC_SERVER_INFO = 1 << 2,
@@ -43,40 +29,42 @@ enum RequestedInfo_t : uint16_t {
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
-	uint32_t ip = getIP();
-	if (ip != 0x0100007F) {
-		std::string ipStr = convertIPToString(ip);
-		if (ipStr != g_config.getString(ConfigManager::IP)) {
-			std::map<uint32_t, int64_t>::const_iterator it = ipConnectMap.find(ip);
-			if (it != ipConnectMap.end() && (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
-				disconnect();
-				return;
-			}
+	const static auto acceptorAddress = Connection::Address::from_string(g_config.getString(ConfigManager::IP));
+
+	const auto& ip = getIP();
+
+	if (!ip.is_loopback() && ip != acceptorAddress) {
+		if (auto it = ipConnectMap.find(ip);
+		    it != ipConnectMap.end() &&
+		    (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
+			disconnect();
+			return;
 		}
 	}
 
 	ipConnectMap[ip] = OTSYS_TIME();
 
 	switch (msg.getByte()) {
-		//XML info protocol
+		// XML info protocol
 		case 0xFF: {
 			if (msg.getString(4) == "info") {
-				g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendStatusString,
-									  std::static_pointer_cast<ProtocolStatus>(shared_from_this()))));
+				g_dispatcher.addTask(createTask([thisPtr = std::static_pointer_cast<ProtocolStatus>(
+				                                     shared_from_this())]() { thisPtr->sendStatusString(); }));
 				return;
 			}
 			break;
 		}
 
-		//Another ServerInfo protocol
+		// Another ServerInfo protocol
 		case 0x01: {
 			uint16_t requestedInfo = msg.get<uint16_t>(); // only a Byte is necessary, though we could add new info here
 			std::string characterName;
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.getString();
 			}
-			g_dispatcher.addTask(createTask(std::bind(&ProtocolStatus::sendInfo, std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
-								  requestedInfo, characterName)));
+			g_dispatcher.addTask(createTask(
+			    [=, thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
+			     characterName = std::move(characterName)]() { thisPtr->sendInfo(requestedInfo, characterName); }));
 			return;
 		}
 
@@ -144,7 +132,7 @@ void ProtocolStatus::sendStatusString()
 	map.append_attribute("height") = std::to_string(mapHeight).c_str();
 
 	pugi::xml_node motd = tsqp.append_child("motd");
-	motd.text() = g_config.getString(ConfigManager::MOTD).c_str();
+	motd.text() = "N/A";
 
 	std::ostringstream ss;
 	doc.save(ss, "", pugi::format_raw);
@@ -174,7 +162,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 	if (requestedInfo & REQUEST_MISC_SERVER_INFO) {
 		output->addByte(0x12);
-		output->addString(g_config.getString(ConfigManager::MOTD));
+		output->addString("N/A"); // MOTD
 		output->addString(g_config.getString(ConfigManager::LOCATION));
 		output->addString(g_config.getString(ConfigManager::URL));
 		output->add<uint64_t>((OTSYS_TIME() - ProtocolStatus::start) / 1000);
@@ -210,7 +198,7 @@ void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& charact
 
 	if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 		output->addByte(0x22); // players info - online status info of a player
-		if (g_game.getPlayerByName(characterName) != nullptr) {
+		if (g_game.getPlayerByName(characterName)) {
 			output->addByte(0x01);
 		} else {
 			output->addByte(0x00);

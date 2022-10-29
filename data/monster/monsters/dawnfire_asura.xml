@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dawnfire Asura" nameDescription="a dawnfire asura" race="blood" experience="4100" speed="280">
+	<health now="2900" max="2900" />
+	<look type="150" head="114" body="94" legs="78" feet="79" addons="1" corpse="24643" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-269" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-70" />
+		<attack name="firefield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-50" max="-200">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" range="1" min="-10" max="-100">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-100" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="55">
+		<defense name="healing" interval="2000" chance="15" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="-5" />
+		<element icePercent="-10" />
+		<element holyPercent="-10" />
+		<element deathPercent="20" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="2000" chance="7">
+		<voice sentence="Encounter the flames of destiny!" />
+		<voice sentence="Fire and destruction!" yell="1" />
+		<voice sentence="I will end your torment. Do not run, little mortal." />
+		<voice sentence="Join me, brothers, for a BLOODY FRENZY!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="84190" countmax="9" />
+		<item id="2148" name="gold coin" chance="69612" countmax="100" />
+		<item id="6558" name="flask of demonic blood" chance="20830" />
+		<item id="5944" name="soul orb" chance="14157" />
+		<item id="24630" name="golden lotus brooch" chance="12263" />
+		<item id="24631" name="peacock feather fan" chance="11211" />
+		<item id="6500" name="demonic essence" chance="10400" />
+		<item id="7590" name="great mana potion" chance="9107" countmax="2" />
+		<item id="2147" name="small ruby" chance="5981" countmax="3" />
+		<item id="2149" name="small emerald" chance="3336" countmax="2" />
+		<item id="2150" name="small amethyst" chance="3306" countmax="2" />
+		<item id="9970" name="small topaz" chance="2825" countmax="2" />
+		<item id="2145" name="small diamond" chance="2765" countmax="2" />
+		<item id="5911" name="red piece of cloth" chance="2555" />
+		<item id="2663" name="mystic turban" chance="2314" />
+		<item id="2187" name="wand of inferno" chance="1172" />
+		<item id="2194" name="mysterious fetish" chance="1022" />
+		<item id="2156" name="red gem" chance="932" />
+		<item id="8871" name="focus cape" chance="751" />
+		<item id="2133" name="ruby necklace" chance="751" />
+		<item id="7899" name="magma coat" chance="421" />
+		<item id="2158" name="blue gem" chance="301" />
+		<item id="6300" name="death ring" chance="271" />
+		<item id="24637" name="oriental shoes" chance="180" />
+		<item id="8902" name="spellbook of mind control" chance="60" />
+	</loot>
+</monster>

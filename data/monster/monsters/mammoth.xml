@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="190" manacost="500">
+	<health now="320" max="320" />
+	<look type="199" corpse="6074" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-110" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<elements>
+		<element physicalPercent="10" />
+		<element earthPercent="20" />
+		<element firePercent="-10" />
+		<element icePercent="20" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Troooooot!" />
+		<voice sentence="Hooooot-Toooooot!" />
+		<voice sentence="Tooooot." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="89882" countmax="40" />
+		<item id="2666" name="meat" chance="40278" />
+		<item id="2671" name="ham" chance="29949" />
+		<item id="11224" name="thick fur" chance="7669" />
+		<item id="11238" name="mammoth tusk" chance="7462" countmax="2" />
+		<item id="7381" name="mammoth whopper" chance="2507" />
+		<item id="7432" name="furry club" chance="526" />
+		<item id="3973" name="tusk shield" chance="494" />
+	</loot>
+</monster>

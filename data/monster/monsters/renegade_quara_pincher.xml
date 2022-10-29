@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Renegade Quara Pincher" nameDescription="a renegade quara pincher" race="blood" experience="2200" speed="396">
+	<health now="2800" max="2800" />
+	<look type="77" corpse="6063" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-340" />
+		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="85" defense="85" />
+	<elements>
+		<element energyPercent="-25" />
+		<element earthPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="80480" countmax="5" />
+		<item id="12446" name="quara pincers" chance="18549" />
+		<item id="7590" name="great mana potion" chance="10169" countmax="2" />
+		<item id="7591" name="great health potion" chance="9044" countmax="2" />
+		<item id="2147" name="small ruby" chance="8482" countmax="2" />
+		<item id="2145" name="small diamond" chance="7665" countmax="2" />
+		<item id="2178" name="mind stone" chance="6030" />
+		<item id="2156" name="red gem" chance="5774" />
+		<item id="2670" name="shrimp" chance="5110" />
+		<item id="15649" name="vortex bolt" chance="4037" countmax="5" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="1584" />
+		<item id="5895" name="fish fin" chance="1533" />
+		<item id="2475" name="warrior helmet" chance="1431" />
+		<item id="2169" name="time ring" chance="511" />
+		<item id="2487" name="crown armor" chance="358" />
+		<item id="2151" name="talon" chance="255" />
+		<item id="7897" name="glacier robe" chance="204" />
+		<item id="13305" name="giant shrimp" chance="102" />
+		<item id="12613" name="twiceslicer" chance="51" />
+	</loot>
+</monster>

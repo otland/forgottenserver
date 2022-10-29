@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Dwarf Miner" nameDescription="a dwarf miner" race="blood" experience="60" speed="170" manacost="420">
+	<health now="120" max="120" />
+	<look type="160" head="77" body="100" legs="97" feet="116" corpse="6007" />
+	<flags>
+		<flag summonable="1" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="80" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+	</attacks>
+	<defenses armor="7" defense="7" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Work, work!" />
+		<voice sentence="Intruders in the mines!" />
+		<voice sentence="Mine, all mine!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="41358" countmax="10" />
+		<item id="2386" name="axe" chance="15123" />
+		<item id="3456" name="pick" chance="12037" />
+		<item id="2649" name="leather legs" chance="8951" />
+		<item id="2484" name="studded armor" chance="7099" />
+		<item id="2666" name="meat" chance="3704" />
+		<item id="2213" name="dwarven ring" chance="617" />
+		<item id="5880" name="iron ore" chance="617" />
+	</loot>
+</monster>

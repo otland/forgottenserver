@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mad Scientist" nameDescription="a mad scientist" race="blood" experience="205" speed="190">
+	<health now="325" max="325" />
+	<look type="133" head="39" body="0" legs="19" feet="20" addons="1" corpse="20439" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="drown" interval="2000" chance="15" range="7" radius="3" target="1" min="-20" max="-56">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-20" max="-36">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" target="1" duration="2000" speedchange="-300">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="10" max="30">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element firePercent="10" />
+		<element earthPercent="20" />
+		<element energyPercent="20" />
+		<element icePercent="10" />
+		<element holyPercent="20" />
+		<element deathPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drown="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Die in the name of Science!" />
+		<voice sentence="You will regret interrupting my studies!" />
+		<voice sentence="Let me test this!" />
+		<voice sentence="I will study your corpse!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="65" chance="30000" />
+		<item name="gold coin" countmax="50" chance="30000" />
+		<item id="2162" chance="2000" /><!-- magic lightwand -->
+		<item name="life crystal" chance="2000" />
+		<item name="soulfire rune" chance="6000" />
+		<item name="cookie" countmax="5" chance="1200" />
+		<item name="white mushroom" countmax="3" chance="8000" />
+		<item id="6324" chance="820" /><!-- cream cake -->
+		<item name="mastermind potion" chance="130" />
+		<item name="health potion" chance="19000" />
+		<item name="mana potion" chance="19000" />
+		<item name="small enchanted amethyst" chance="470" />
+	</loot>
+</monster>

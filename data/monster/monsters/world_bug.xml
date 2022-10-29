@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="World Bug" namedescription="a world bug" race="venom" experience="50" speed="240">
+	<health now="270" max="270" />
+	<look type="45" corpse="5990" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-35" />
+		<attack name="energy" interval="1000" chance="13" length="4" spread="0" min="-5" max="-35">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="4000" chance="27" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<summons maxSummons="10">
+		<summon name="world bug" interval="1000" chance="15" />
+	</summons>
+	<voices interval="2000" chance="7">
+		<voice sentence="My father was a year 2k bug." />
+		<voice sentence="Psst, I'll make you rich." />
+		<voice sentence="You are bugged ... by me!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="11" chance="100000" />
+		<item id="6570" chance="6000" /><!-- surprise bag (blue) -->
+		<item id="6571" chance="800" /><!-- surprise bag (red) -->
+	</loot>
+</monster>

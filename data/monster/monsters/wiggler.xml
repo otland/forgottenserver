@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Wiggler" namedescription="a wiggler" race="venom" experience="900" speed="220">
+	<health now="1200" max="1200" />
+	<look type="510" corpse="18483" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="1" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="0" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="359" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" poison="500" />
+		<attack name="earth" interval="2000" chance="10" target="0" length="4" spread="3" min="-180" max="-270" />
+		<attack name="poisoncondition" interval="2000" chance="10" range="7" min="-160" max="-200">
+			<attribute key="shootEffect" value="poisonarrow" />
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="0" length="3" spread="2" speedchange="-700" duration="30000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="speed" interval="2000" chance="15" speedchange="510" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element deathPercent="10" />
+		<element energyPercent="5" />
+		<element firePercent="-5" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Zzzrp!" />
+		<voice sentence="Crick! Crick!" />
+	</voices>
+	<loot>
+		<item name="gold coin" countmax="100" chance="100000" />
+		<item name="platinum coin" chance="14790" />
+		<item name="terra rod" chance="850" />
+		<item name="serpent sword" chance="1360" />
+		<item name="black shield" chance="1320" />
+		<item name="white mushroom" countmax="5" chance="7142" />
+		<item name="blue piece of cloth" chance="2080" />
+		<item name="yellow piece of cloth" chance="2160" />
+		<item name="strong health potion" chance="4930" />
+		<item name="strong mana potion" chance="5250" />
+		<item name="crystalline arrow" countmax="5" chance="15540" />
+		<item name="green crystal splinter" chance="3600" />
+		<item name="green crystal fragment" chance="2070" />
+		<item name="drill bolt" countmax="5" chance="15260" />
+	</loot>
+</monster>
