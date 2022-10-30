@@ -211,6 +211,7 @@ class Creature : virtual public Thing
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
+		bool isDead() const { return health <= 0; }
 
 		void setDrunkenness(uint8_t newDrunkenness) {
 			drunkenness = newDrunkenness;
