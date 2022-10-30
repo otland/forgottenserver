@@ -323,7 +323,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 			}
 		}
 
-		if (displayEffect && player->isAlive() && !player->isInGhostMode()) {
+		if (displayEffect && !player->isDead() && !player->isInGhostMode()) {
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		}
 	}

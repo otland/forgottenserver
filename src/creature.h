@@ -157,7 +157,6 @@ public:
 
 	int32_t getHealth() const { return health; }
 	virtual int32_t getMaxHealth() const { return healthMax; }
-	bool isAlive() const { return health > 0; }
 	bool isDead() const { return health <= 0; }
 
 	void setDrunkenness(uint8_t newDrunkenness) { drunkenness = newDrunkenness; }
