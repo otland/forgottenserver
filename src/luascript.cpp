@@ -2176,6 +2176,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "getSpectators", LuaScriptInterface::luaGameGetSpectators);
 	registerMethod("Game", "getPlayers", LuaScriptInterface::luaGameGetPlayers);
+	registerMethod("Game", "getNpcs", LuaScriptInterface::luaGameGetNpcs);
+	registerMethod("Game", "getMonsters", LuaScriptInterface::luaGameGetMonsters);
 	registerMethod("Game", "loadMap", LuaScriptInterface::luaGameLoadMap);
 
 	registerMethod("Game", "getExperienceStage", LuaScriptInterface::luaGameGetExperienceStage);
@@ -3664,14 +3666,15 @@ int LuaScriptInterface::luaDoAreaCombat(lua_State* L)
 		CombatParams params;
 		params.combatType = combatType;
 		params.impactEffect = getNumber<uint8_t>(L, 7);
-		params.blockedByArmor = getBoolean(L, 8, false);
-		params.blockedByShield = getBoolean(L, 9, false);
-		params.ignoreResistances = getBoolean(L, 10, false);
+
+		params.blockedByArmor = getBoolean(L, 9, false);
+		params.blockedByShield = getBoolean(L, 10, false);
+		params.ignoreResistances = getBoolean(L, 11, false);
 
 		CombatDamage damage;
 		damage.origin = getNumber<CombatOrigin>(L, 8, ORIGIN_SPELL);
 		damage.primary.type = combatType;
-		damage.primary.value = normal_random(getNumber<int32_t>(L, 6), getNumber<int32_t>(L, 5));
+		damage.primary.value = normal_random(getNumber<int32_t>(L, 5), getNumber<int32_t>(L, 6));
 
 		Combat::doAreaCombat(creature, getPosition(L, 3), area, damage, params);
 		pushBoolean(L, true);
@@ -4471,6 +4474,34 @@ int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
+{
+	// Game.getNpcs()
+	lua_createtable(L, g_game.getNpcsOnline(), 0);
+
+	int index = 0;
+	for (const auto& npcEntry : g_game.getNpcs()) {
+		pushUserdata<Npc>(L, npcEntry.second);
+		setMetatable(L, -1, "Npc");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetMonsters(lua_State* L)
+{
+	// Game.getMonsters()
+	lua_createtable(L, g_game.getMonstersOnline(), 0);
+
+	int index = 0;
+	for (const auto& monsterEntry : g_game.getMonsters()) {
+		pushUserdata<Monster>(L, monsterEntry.second);
+		setMetatable(L, -1, "Monster");
+		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 {
 	// Game.loadMap(path)
@@ -5221,6 +5252,10 @@ int LuaScriptInterface::luaTileRemove(lua_State* L)
 	if (!tile) {
 		lua_pushnil(L);
 		return 1;
+	}
+
+	if (g_game.isTileInCleanList(tile)) {
+		g_game.removeTileToClean(tile);
 	}
 
 	g_game.map.removeTile(tile->getPosition());
@@ -8661,7 +8696,7 @@ int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 	// player:getIp()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getIP());
+		pushString(L, player->getIP().to_string());
 	} else {
 		lua_pushnil(L);
 	}
@@ -10378,8 +10413,7 @@ int LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
 		return 1;
 	}
 
-	const auto& vocMap = spell->getVocMap();
-	if (vocMap.count(player->getVocationId()) == 0) {
+	if (!spell->hasVocationSpellMap(player->getVocationId())) {
 		pushBoolean(L, false);
 	} else if (player->getLevel() < spell->getLevel()) {
 		pushBoolean(L, false);
@@ -16079,8 +16113,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 	if (lua_gettop(L) == 1) {
 		lua_createtable(L, 0, 0);
 		int i = 0;
-		for (auto& voc : spell->getVocMap()) {
-			std::string name = g_vocations.getVocation(voc.first)->getVocName();
+		for (auto& vocation : spell->getVocationSpellMap()) {
+			std::string name = g_vocations.getVocation(vocation.first)->getVocName();
 			pushString(L, name);
 			lua_rawseti(L, -2, ++i);
 		}
@@ -16088,8 +16122,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		for (int i = 0; i < parameters; ++i) {
 			std::vector<std::string> vocList = explodeString(getString(L, 2 + i), ";");
-			spell->addVocMap(g_vocations.getVocationId(vocList[0]),
-			                 vocList.size() > 1 ? booleanString(vocList[1]) : false);
+			spell->addVocationSpellMap(vocList[0], vocList.size() > 1 ? booleanString(vocList[1]) : false);
 		}
 		pushBoolean(L, true);
 	}
@@ -16952,7 +16985,7 @@ int LuaScriptInterface::luaMoveEventVocation(lua_State* L)
 	// moveevent:vocation(vocName[, showInDescription = false, lastVoc = false])
 	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
 	if (moveevent) {
-		moveevent->addVocEquipMap(getString(L, 2));
+		moveevent->addVocationEquipSet(getString(L, 2));
 		moveevent->setWieldInfo(WIELDINFO_VOCREQ);
 		std::string tmp;
 		bool showInDescription = false;
@@ -17567,7 +17600,7 @@ int LuaScriptInterface::luaWeaponVocation(lua_State* L)
 	// weapon:vocation(vocName[, showInDescription = false, lastVoc = false])
 	Weapon* weapon = getUserdata<Weapon>(L, 1);
 	if (weapon) {
-		weapon->addVocWeaponMap(getString(L, 2));
+		weapon->addVocationWeaponSet(getString(L, 2));
 		weapon->setWieldInfo(WIELDINFO_VOCREQ);
 		std::string tmp;
 		bool showInDescription = getBoolean(L, 3, false);

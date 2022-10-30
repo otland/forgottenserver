@@ -15,7 +15,6 @@
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
-extern Vocations g_vocations;
 extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
@@ -510,7 +509,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
 			attr = vocationNode.attribute("showInDescription");
-			vocSpellMap[vocationId] = !attr || attr.as_bool();
+			vocationSpellMap[vocationId] = !attr || attr.as_bool();
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
@@ -592,7 +591,7 @@ bool Spell::playerSpellCheck(Player* player) const
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
 		}
-	} else if (!vocSpellMap.empty() && vocSpellMap.find(player->getVocationId()) == vocSpellMap.end()) {
+	} else if (!hasVocationSpellMap(player->getVocationId())) {
 		player->sendCancelMessage(RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -850,7 +849,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 
 			target = playerTarget;
-			if (!target || target->getHealth() <= 0) {
+			if (!target || target->isDead()) {
 				if (!casterTargetOrDirection) {
 					if (cooldown > 0) {
 						Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
@@ -884,7 +883,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 		} else {
 			target = player->getAttackedCreature();
-			if (!target || target->getHealth() <= 0) {
+			if (!target || target->isDead()) {
 				if (!casterTargetOrDirection) {
 					player->sendCancelMessage(RETURNVALUE_YOUCANONLYUSEITONCREATURES);
 					g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -984,7 +983,7 @@ bool InstantSpell::castSpell(Creature* creature)
 
 	if (casterTargetOrDirection) {
 		Creature* target = creature->getAttackedCreature();
-		if (target && target->getHealth() > 0) {
+		if (target && !target->isDead()) {
 			if (!canThrowSpell(creature, target)) {
 				return false;
 			}
@@ -1056,7 +1055,7 @@ bool InstantSpell::canCast(const Player* player) const
 			return true;
 		}
 	} else {
-		if (vocSpellMap.empty() || vocSpellMap.find(player->getVocationId()) != vocSpellMap.end()) {
+		if (vocationSpellMap.empty() || hasVocationSpellMap(player->getVocationId())) {
 			return true;
 		}
 	}

@@ -3838,7 +3838,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 void Game::checkCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->getHealth() > 0) {
+	if (creature && !creature->isDead()) {
 		creature->onWalk();
 		cleanup();
 	}
@@ -3847,7 +3847,7 @@ void Game::checkCreatureWalk(uint32_t creatureId)
 void Game::updateCreatureWalk(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->getHealth() > 0) {
+	if (creature && !creature->isDead()) {
 		creature->goToFollowCreature();
 	}
 }
@@ -3855,7 +3855,7 @@ void Game::updateCreatureWalk(uint32_t creatureId)
 void Game::checkCreatureAttack(uint32_t creatureId)
 {
 	Creature* creature = getCreatureByID(creatureId);
-	if (creature && creature->getHealth() > 0) {
+	if (creature && !creature->isDead()) {
 		creature->onAttacking(0);
 	}
 }
@@ -3891,7 +3891,7 @@ void Game::checkCreatures(size_t index)
 	while (it != end) {
 		Creature* creature = *it;
 		if (creature->creatureCheck) {
-			if (creature->getHealth() > 0) {
+			if (!creature->isDead()) {
 				creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
 				creature->onAttacking(EVENT_CREATURE_THINK_INTERVAL);
 				creature->executeConditions(EVENT_CREATURE_THINK_INTERVAL);
@@ -4150,7 +4150,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 {
 	const Position& targetPos = target->getPosition();
 	if (damage.primary.value > 0) {
-		if (target->getHealth() <= 0) {
+		if (target->isDead()) {
 			return false;
 		}
 
@@ -5184,7 +5184,7 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
 		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(),
-		        convertIPToString(player->getIP()).c_str());
+		        player->getIP().to_string().c_str());
 		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
 		fclose(file);
 	}

@@ -241,7 +241,7 @@ public:
 			client->disconnect();
 		}
 	}
-	uint32_t getIP() const;
+	Connection::Address getIP() const;
 
 	void addContainer(uint8_t cid, Container* container);
 	void closeContainer(uint8_t cid);
@@ -1231,6 +1231,7 @@ private:
 	int64_t nextAction = 0;
 
 	ProtocolGame_ptr client;
+	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
 	Guild* guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
@@ -1260,7 +1261,6 @@ private:
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
 	uint32_t MessageBufferTicks = 0;
-	uint32_t lastIP = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;
 	uint32_t windowTextId = 0;

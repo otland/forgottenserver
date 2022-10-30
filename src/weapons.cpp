@@ -189,10 +189,10 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
-			vocWeaponMap[vocationId] = true;
+			vocationWeaponSet.insert(vocationId);
 			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
 			if (promotedVocation != VOCATION_NONE) {
-				vocWeaponMap[promotedVocation] = true;
+				vocationWeaponSet.insert(promotedVocation);
 			}
 
 			if (vocationNode.attribute("showInDescription").as_bool(true)) {
@@ -262,61 +262,83 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck)) {
-		if (!enabled) {
-			return 0;
-		}
-
-		if (player->getMana() < getManaCost(player)) {
-			return 0;
-		}
-
-		if (player->getHealth() < getHealthCost(player)) {
-			return 0;
-		}
-
-		if (player->getSoul() < soul) {
-			return 0;
-		}
-
-		if (isPremium() && !player->isPremium()) {
-			return 0;
-		}
-
-		if (!vocWeaponMap.empty()) {
-			if (vocWeaponMap.find(player->getVocationId()) == vocWeaponMap.end()) {
-				return 0;
-			}
-		}
-
-		int32_t damageModifier = 100;
-		if (player->getLevel() < getReqLevel()) {
-			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
-		}
-
-		if (player->getMagicLevel() < getReqMagLv()) {
-			damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
-		}
-		return damageModifier;
+	if (player->hasFlag(PlayerFlag_IgnoreWeaponCheck)) {
+		return 100;
 	}
 
-	return 100;
+	if (!enabled) {
+		return 0;
+	}
+
+	if (player->getMana() < getManaCost(player)) {
+		return 0;
+	}
+
+	if (player->getHealth() < getHealthCost(player)) {
+		return 0;
+	}
+
+	if (player->getSoul() < soul) {
+		return 0;
+	}
+
+	if (isPremium() && !player->isPremium()) {
+		return 0;
+	}
+
+	if (hasVocationWeaponSet(player->getVocationId())) {
+		return 0;
+	}
+
+	int32_t damageModifier = 100;
+
+	if (player->getLevel() < getReqLevel()) {
+		damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
+	}
+
+	if (player->getMagicLevel() < getReqMagLv()) {
+		damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
+	}
+
+	return damageModifier;
 }
 
 bool Weapon::ammoCheck(const Player* player) const
 {
-	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck)) {
-		if (!enabled || player->getMana() < getManaCost(player) || player->getHealth() < getHealthCost(player) ||
-		    (isPremium() && !player->isPremium()) || player->getLevel() < getReqLevel() ||
-		    player->getMagicLevel() < getReqMagLv() || player->getSoul() < soul) {
-			return false;
-		}
+	if (player->hasFlag(PlayerFlag_IgnoreWeaponCheck)) {
+		return true;
+	}
 
-		if (!vocWeaponMap.empty()) {
-			if (vocWeaponMap.find(player->getVocationId()) == vocWeaponMap.end()) {
-				return false;
-			}
-		}
+	if (!enabled) {
+		return false;
+	}
+
+	if (player->getMana() < getManaCost(player)) {
+		return false;
+	}
+
+	if (player->getHealth() < getHealthCost(player)) {
+		return false;
+	}
+
+	if (isPremium() && !player->isPremium()) {
+		return false;
+	}
+
+	if (player->getLevel() < getReqLevel()) {
+		return false;
+	}
+
+	if (player->getMagicLevel() < getReqMagLv()) {
+		return false;
+	}
+
+	if (player->getSoul() < soul) {
+		return false;
+	}
+
+	if (hasVocationWeaponSet(player->getVocationId())) {
+		return false;
 	}
 
 	return true;
