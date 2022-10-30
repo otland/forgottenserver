@@ -6,8 +6,8 @@
 #include "chat.h"
 
 #include "game.h"
-#include "pugicast.h"
 #include "game_scheduler.h"
+#include "pugicast.h"
 
 extern Chat* g_chat;
 extern Game g_game;

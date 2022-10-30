@@ -6,10 +6,10 @@
 #include "connection.h"
 
 #include "configmanager.h"
+#include "network_scheduler.h"
 #include "outputmessage.h"
 #include "protocol.h"
 #include "server.h"
-#include "network_scheduler.h"
 
 extern ConfigManager g_config;
 

@@ -8,9 +8,9 @@
 #include "configmanager.h"
 #include "database_scheduler.h"
 #include "game.h"
+#include "game_scheduler.h"
 #include "inbox.h"
 #include "iologindata.h"
-#include "game_scheduler.h"
 
 extern ConfigManager g_config;
 extern Game g_game;

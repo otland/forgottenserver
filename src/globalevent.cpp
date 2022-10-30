@@ -6,8 +6,8 @@
 #include "globalevent.h"
 
 #include "configmanager.h"
-#include "pugicast.h"
 #include "game_scheduler.h"
+#include "pugicast.h"
 #include "tools.h"
 
 extern ConfigManager g_config;

@@ -15,12 +15,13 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/cylinder.cpp
 	${CMAKE_CURRENT_LIST_DIR}/database.cpp
 	${CMAKE_CURRENT_LIST_DIR}/databasemanager.cpp
-	${CMAKE_CURRENT_LIST_DIR}/databasetasks.cpp
+	${CMAKE_CURRENT_LIST_DIR}/database_scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotchest.cpp
 	${CMAKE_CURRENT_LIST_DIR}/depotlocker.cpp
 	${CMAKE_CURRENT_LIST_DIR}/events.cpp
 	${CMAKE_CURRENT_LIST_DIR}/fileloader.cpp
 	${CMAKE_CURRENT_LIST_DIR}/game.cpp
+	${CMAKE_CURRENT_LIST_DIR}/game_scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/globalevent.cpp
 	${CMAKE_CURRENT_LIST_DIR}/groups.cpp
 	${CMAKE_CURRENT_LIST_DIR}/guild.cpp
@@ -41,6 +42,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
+	${CMAKE_CURRENT_LIST_DIR}/network_scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
 	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
@@ -57,7 +59,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/quests.cpp
 	${CMAKE_CURRENT_LIST_DIR}/raids.cpp
 	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
-	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/script.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scriptmanager.cpp
 	${CMAKE_CURRENT_LIST_DIR}/server.cpp
@@ -66,7 +67,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/spells.cpp
 	${CMAKE_CURRENT_LIST_DIR}/storeinbox.cpp
 	${CMAKE_CURRENT_LIST_DIR}/talkaction.cpp
-	${CMAKE_CURRENT_LIST_DIR}/tasks.cpp
 	${CMAKE_CURRENT_LIST_DIR}/teleport.cpp
 	${CMAKE_CURRENT_LIST_DIR}/thing.cpp
 	${CMAKE_CURRENT_LIST_DIR}/tile.cpp
@@ -97,7 +97,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/cylinder.h
 	${CMAKE_CURRENT_LIST_DIR}/database.h
 	${CMAKE_CURRENT_LIST_DIR}/databasemanager.h
-	${CMAKE_CURRENT_LIST_DIR}/databasetasks.h
+	${CMAKE_CURRENT_LIST_DIR}/database_scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/definitions.h
 	${CMAKE_CURRENT_LIST_DIR}/depotchest.h
 	${CMAKE_CURRENT_LIST_DIR}/depotlocker.h
@@ -105,6 +105,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/events.h
 	${CMAKE_CURRENT_LIST_DIR}/fileloader.h
 	${CMAKE_CURRENT_LIST_DIR}/game.h
+	${CMAKE_CURRENT_LIST_DIR}/game_scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/globalevent.h
 	${CMAKE_CURRENT_LIST_DIR}/groups.h
 	${CMAKE_CURRENT_LIST_DIR}/guild.h
@@ -128,6 +129,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/mounts.h
 	${CMAKE_CURRENT_LIST_DIR}/movement.h
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.h
+	${CMAKE_CURRENT_LIST_DIR}/network_scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/npc.h
 	${CMAKE_CURRENT_LIST_DIR}/outfit.h
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.h
@@ -144,7 +146,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/quests.h
 	${CMAKE_CURRENT_LIST_DIR}/raids.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
-	${CMAKE_CURRENT_LIST_DIR}/scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/script.h
 	${CMAKE_CURRENT_LIST_DIR}/scriptmanager.h
 	${CMAKE_CURRENT_LIST_DIR}/server.h
@@ -154,7 +155,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/spells.h
 	${CMAKE_CURRENT_LIST_DIR}/storeinbox.h
 	${CMAKE_CURRENT_LIST_DIR}/talkaction.h
-	${CMAKE_CURRENT_LIST_DIR}/tasks.h
 	${CMAKE_CURRENT_LIST_DIR}/teleport.h
 	${CMAKE_CURRENT_LIST_DIR}/thing.h
 	${CMAKE_CURRENT_LIST_DIR}/thread_holder_base.h

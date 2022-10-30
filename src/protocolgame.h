@@ -6,8 +6,8 @@
 
 #include "chat.h"
 #include "creature.h"
-#include "protocol.h"
 #include "network_scheduler.h"
+#include "protocol.h"
 
 class Container;
 class Game;

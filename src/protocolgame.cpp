@@ -11,6 +11,7 @@
 #include "configmanager.h"
 #include "depotchest.h"
 #include "game.h"
+#include "game_scheduler.h"
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
@@ -19,7 +20,6 @@
 #include "outputmessage.h"
 #include "player.h"
 #include "podium.h"
-#include "game_scheduler.h"
 #include "storeinbox.h"
 
 extern ConfigManager g_config;

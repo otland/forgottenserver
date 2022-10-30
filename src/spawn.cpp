@@ -8,10 +8,10 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
+#include "game_scheduler.h"
 #include "monster.h"
 #include "npc.h"
 #include "pugicast.h"
-#include "game_scheduler.h"
 #include "spectators.h"
 
 extern ConfigManager g_config;

@@ -7,9 +7,9 @@
 
 #include "configmanager.h"
 #include "game.h"
+#include "game_scheduler.h"
 #include "monster.h"
 #include "pugicast.h"
-#include "game_scheduler.h"
 
 extern Game g_game;
 extern ConfigManager g_config;

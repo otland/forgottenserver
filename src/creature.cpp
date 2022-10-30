@@ -8,9 +8,9 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
+#include "game_scheduler.h"
 #include "monster.h"
 #include "party.h"
-#include "game_scheduler.h"
 #include "spectators.h"
 
 double Creature::speedA = 857.36;
