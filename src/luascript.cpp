@@ -3755,7 +3755,7 @@ int LuaScriptInterface::luaIsDepot(lua_State* L)
 {
 	// isDepot(uid)
 	Container* container = getScriptEnv()->getContainerByUID(getNumber<uint32_t>(L, -1));
-	pushBoolean(L, container && (container->getDepotLocker() != nullptr || container->getDepotChest() != nullptr));
+	pushBoolean(L, container && (container->getDepotLocker() || container->getDepotChest()));
 	return 1;
 }
 
