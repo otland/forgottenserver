@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TASKS_H
-#define FS_TASKS_H
+#ifndef FS_NETWORK_SCHEDULER_H
+#define FS_NETWORK_SCHEDULER_H
 
 #include "thread_holder_base.h"
 
@@ -70,4 +70,4 @@ private:
 
 extern NetworkScheduler g_networkScheduler;
 
-#endif // FS_TASKS_H
+#endif // FS_NETWORK_SCHEDULER_H

@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SCHEDULER_H
-#define FS_SCHEDULER_H
+#ifndef FS_GAME_SCHEDULER_H
+#define FS_GAME_SCHEDULER_H
 
 #include "network_scheduler.h"
 #include "thread_holder_base.h"
@@ -47,4 +47,4 @@ private:
 
 extern GameScheduler g_gameScheduler;
 
-#endif // FS_SCHEDULER_H
+#endif // FS_GAME_SCHEDULER_H
