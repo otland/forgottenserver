@@ -4,8 +4,8 @@
 #include "otpch.h"
 
 #include "configmanager.h"
-#include "databasemanager.h"
 #include "database_scheduler.h"
+#include "databasemanager.h"
 #include "game.h"
 #include "game_scheduler.h"
 #include "iomarket.h"

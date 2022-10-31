@@ -12,7 +12,10 @@ extern Game g_game;
 
 NetworkTask* createNetworkTask(NetworkTaskFunc&& f) { return new NetworkTask(std::move(f)); }
 
-NetworkTask* createNetworkTask(uint32_t expiration, NetworkTaskFunc&& f) { return new NetworkTask(expiration, std::move(f)); }
+NetworkTask* createNetworkTask(uint32_t expiration, NetworkTaskFunc&& f)
+{
+	return new NetworkTask(expiration, std::move(f));
+}
 
 void NetworkScheduler::run()
 {

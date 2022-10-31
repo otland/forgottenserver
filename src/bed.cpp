@@ -146,8 +146,8 @@ bool BedItem::sleep(Player* player)
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);
 
 	// kick player after he sees himself walk onto the bed and it change id
-	g_gameScheduler.addEvent(createGameTask(SCHEDULER_MINTICKS,
-	                                         [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
+	g_gameScheduler.addEvent(
+	    createGameTask(SCHEDULER_MINTICKS, [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
 
 	// change self and partner's appearance
 	updateAppearance(player);

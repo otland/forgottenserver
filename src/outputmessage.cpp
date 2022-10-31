@@ -5,9 +5,9 @@
 
 #include "outputmessage.h"
 
+#include "game_scheduler.h"
 #include "lockfree.h"
 #include "protocol.h"
-#include "game_scheduler.h"
 
 extern GameScheduler g_gameScheduler;
 
