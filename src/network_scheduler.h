@@ -4,7 +4,7 @@
 #ifndef FS_NETWORK_SCHEDULER_H
 #define FS_NETWORK_SCHEDULER_H
 
-#include "thread_holder_base.h"
+#include "scheduler_holder_base.h"
 
 using NetworkTaskFunc = std::function<void(void)>;
 const int NETWORKSCHEDULER_TASK_EXPIRATION = 2000;
@@ -45,7 +45,7 @@ private:
 NetworkTask* createNetworkTask(NetworkTaskFunc&& f);
 NetworkTask* createNetworkTask(uint32_t expiration, NetworkTaskFunc&& f);
 
-class NetworkScheduler : public ThreadHolder<NetworkScheduler>
+class NetworkScheduler final : virtual public SchedulerHolder
 {
 public:
 	void addTask(NetworkTask* task);
@@ -54,18 +54,15 @@ public:
 
 	void addTask(uint32_t expiration, NetworkTaskFunc&& f) { addTask(new NetworkTask(expiration, std::move(f))); }
 
-	void shutdown();
-
 	uint64_t getCycle() const { return cycle; }
 
-	void run();
+	void run() final;
+	void shutdown() final;
 
 private:
-	std::mutex taskLock;
-	std::condition_variable taskSignal;
-	std::vector<NetworkTask*> taskList;
-
 	uint64_t cycle = 0;
+
+	std::vector<NetworkTask*> taskList;
 };
 
 extern NetworkScheduler g_networkScheduler;

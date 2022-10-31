@@ -146,6 +146,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/quests.h
 	${CMAKE_CURRENT_LIST_DIR}/raids.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
+	${CMAKE_CURRENT_LIST_DIR}/scheduler_holder_base.h
 	${CMAKE_CURRENT_LIST_DIR}/script.h
 	${CMAKE_CURRENT_LIST_DIR}/scriptmanager.h
 	${CMAKE_CURRENT_LIST_DIR}/server.h

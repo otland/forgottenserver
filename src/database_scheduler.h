@@ -5,7 +5,7 @@
 #define FS_DATABASE_SCHEDULER_H
 
 #include "database.h"
-#include "thread_holder_base.h"
+#include "scheduler_holder_base.h"
 
 struct DatabaseTask
 {
@@ -18,25 +18,23 @@ struct DatabaseTask
 	bool store;
 };
 
-class DatabaseScheduler : public ThreadHolder<DatabaseScheduler>
+class DatabaseScheduler final : virtual public SchedulerHolder
 {
 public:
 	DatabaseScheduler() = default;
 	void start();
 	void flush();
-	void shutdown();
 
 	void addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback = nullptr, bool store = false);
 
-	void run();
+	void run() final;
+	void shutdown() final;
 
 private:
 	void runTask(const DatabaseTask& task);
 
 	Database db;
 
-	std::mutex taskLock;
-	std::condition_variable taskSignal;
 	std::list<DatabaseTask> taskList;
 };
 
