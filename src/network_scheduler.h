@@ -63,8 +63,8 @@ public:
 private:
 	std::mutex taskLock;
 	std::condition_variable taskSignal;
-
 	std::vector<NetworkTask*> taskList;
+
 	uint64_t cycle = 0;
 };
 

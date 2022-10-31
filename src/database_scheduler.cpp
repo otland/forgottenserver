@@ -20,13 +20,13 @@ void DatabaseScheduler::run()
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
 	while (getState() != THREAD_STATE_TERMINATED) {
 		taskLockUnique.lock();
-		if (tasks.empty()) {
+		if (taskList.empty()) {
 			taskSignal.wait(taskLockUnique);
 		}
 
-		if (!tasks.empty()) {
-			DatabaseTask task = std::move(tasks.front());
-			tasks.pop_front();
+		if (!taskList.empty()) {
+			DatabaseTask task = std::move(taskList.front());
+			taskList.pop_front();
 			taskLockUnique.unlock();
 			runTask(task);
 		} else {
@@ -41,8 +41,8 @@ void DatabaseScheduler::addTask(std::string query, std::function<void(DBResult_p
 	bool signal = false;
 	taskLock.lock();
 	if (getState() == THREAD_STATE_RUNNING) {
-		signal = tasks.empty();
-		tasks.emplace_back(std::move(query), std::move(callback), store);
+		signal = taskList.empty();
+		taskList.emplace_back(std::move(query), std::move(callback), store);
 	}
 	taskLock.unlock();
 
@@ -71,9 +71,9 @@ void DatabaseScheduler::runTask(const DatabaseTask& task)
 void DatabaseScheduler::flush()
 {
 	std::unique_lock<std::mutex> guard{taskLock};
-	while (!tasks.empty()) {
-		auto task = std::move(tasks.front());
-		tasks.pop_front();
+	while (!taskList.empty()) {
+		auto task = std::move(taskList.front());
+		taskList.pop_front();
 		guard.unlock();
 		runTask(task);
 		guard.lock();
