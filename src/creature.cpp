@@ -623,7 +623,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		} else {
 			if (hasExtraSwing()) {
 				// our target is moving lets see if we can get in hit
-				g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+				g_networkScheduler.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -809,7 +809,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 	}
 
 	if (isDead()) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
+		g_networkScheduler.addTask([id = getID()]() { g_game.executeDeath(id); });
 	}
 }
 

@@ -50,6 +50,10 @@ class NetworkScheduler : public ThreadHolder<NetworkScheduler>
 public:
 	void addTask(NetworkTask* task);
 
+	void addTask(NetworkTaskFunc&& f) { addTask(new NetworkTask(std::move(f))); }
+
+	void addTask(uint32_t expiration, NetworkTaskFunc&& f) { addTask(new NetworkTask(expiration, std::move(f))); }
+
 	void shutdown();
 
 	uint64_t getCycle() const { return cycle; }

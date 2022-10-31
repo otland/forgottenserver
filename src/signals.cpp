@@ -143,21 +143,21 @@ void dispatchSignalHandler(int signal)
 {
 	switch (signal) {
 		case SIGINT: // Shuts the server down
-			g_networkScheduler.addTask(createNetworkTask(sigintHandler));
+			g_networkScheduler.addTask(sigintHandler);
 			break;
 		case SIGTERM: // Shuts the server down
-			g_networkScheduler.addTask(createNetworkTask(sigtermHandler));
+			g_networkScheduler.addTask(sigtermHandler);
 			break;
 #ifndef _WIN32
 		case SIGHUP: // Reload config/data
-			g_networkScheduler.addTask(createNetworkTask(sighupHandler));
+			g_networkScheduler.addTask(sighupHandler);
 			break;
 		case SIGUSR1: // Saves game state
-			g_networkScheduler.addTask(createNetworkTask(sigusr1Handler));
+			g_networkScheduler.addTask(sigusr1Handler);
 			break;
 #else
 		case SIGBREAK: // Shuts the server down
-			g_networkScheduler.addTask(createNetworkTask(sigbreakHandler));
+			g_networkScheduler.addTask(sigbreakHandler);
 			// hold the thread until other threads end
 			g_gameScheduler.join();
 			g_databaseScheduler.join();

@@ -64,7 +64,7 @@ void DatabaseScheduler::runTask(const DatabaseTask& task)
 	}
 
 	if (task.callback) {
-		g_networkScheduler.addTask(createNetworkTask([=, callback = task.callback]() { callback(result, success); }));
+		g_networkScheduler.addTask([=, callback = task.callback]() { callback(result, success); });
 	}
 }
 

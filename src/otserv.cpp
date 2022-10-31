@@ -110,7 +110,7 @@ int main(int argc, char* argv[])
 	g_networkScheduler.start();
 	g_gameScheduler.start();
 
-	g_networkScheduler.addTask(createNetworkTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); }));
+	g_networkScheduler.addTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); });
 
 	g_loaderSignal.wait(g_loaderUniqueLock);
 

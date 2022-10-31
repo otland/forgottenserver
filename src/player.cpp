@@ -1393,7 +1393,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
 		isUpdatingPath = false;
-		g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		g_networkScheduler.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
 	if (creature != this) {
@@ -3397,7 +3397,7 @@ bool Player::setAttackedCreature(Creature* creature)
 	}
 
 	if (creature) {
-		g_networkScheduler.addTask(createNetworkTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+		g_networkScheduler.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 	}
 	return true;
 }
