@@ -4049,7 +4049,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 	time_t week = (now - (7 * 86400));
 
 	std::vector<time_t> killList = IOLoginData::getUnjustifiedDates(name, now, 30); // get kills from last month
-	killList.push_back(now); // add current kill to list
+	killList.push_back(now);                                                        // add current kill to list
 
 	int32_t todayKills = 0;
 	int32_t weekKills = 0;
@@ -4065,14 +4065,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		}
 	}
 
-	if (playerSkull < SKULL_RED) {
-		if (todayKills >= g_config.getNumber(ConfigManager::RED_DAILY_LIMIT) ||
-		    weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) ||
-		    monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
-			setSkull(SKULL_RED);
-			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
-		}
-	} else if (playerSkull == SKULL_RED) {
+	if (playerSkull == SKULL_RED) {
 		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) ||
 		    weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) ||
 		    monthKills >= g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT)) {
@@ -4083,7 +4076,15 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		}
 	} else if (playerSkull == SKULL_BLACK) {
 		setSkullTicks(g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH));
+	} else {
+		if (todayKills >= g_config.getNumber(ConfigManager::RED_DAILY_LIMIT) ||
+		    weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) ||
+		    monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
+			setSkull(SKULL_RED);
+			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
+		}
 	}
+}
 }
 
 void Player::checkSkullTicks(int64_t ticks)
