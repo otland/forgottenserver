@@ -4085,7 +4085,6 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		}
 	}
 }
-}
 
 void Player::checkSkullTicks(int64_t ticks)
 {
