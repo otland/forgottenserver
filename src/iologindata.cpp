@@ -1108,14 +1108,14 @@ void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 	    fmt::format("UPDATE `accounts` SET `premium_ends_at` = {:d} WHERE `id` = {:d}", endTime, accountId));
 }
 
-std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, time_t offsetTime)
+std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, time_t offsetTime, uint32_t days /*= 30*/)
 {
 	std::vector<time_t> killsList;
-	Database& db = Database::getInstance();
 
+	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(
 		fmt::format("SELECT `time` FROM `player_deaths` WHERE `killed_by` = {:s} AND `unjustified` = 1 AND `time` >= {:d}",
-		db.escapeString(name), offsetTime - 30 * 86400));
+	    db.escapeString(name), offsetTime - (days * 86400)));
 
 	if (result) {
 		do {

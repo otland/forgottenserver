@@ -49,7 +49,7 @@ public:
 	static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
-	static std::vector<time_t> getUnjustifiedDates(const std::string& name, time_t offsetTime);
+	static std::vector<time_t> getUnjustifiedDates(const std::string& name, time_t offsetTime, uint32_t days = 30);
 
 private:
 	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;

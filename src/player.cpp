@@ -4039,19 +4039,29 @@ void Player::addUnjustifiedDead(const Player* attacked)
 
 	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
 
-	time_t now = time(nullptr), today = (now - 84600), week = (now - (7 * 84600));
-	std::vector<time_t> killsList = IOLoginData::getUnjustifiedDates(name, now); // get kills from last month
-	killsList.push_back(now);                                                    // add current kill to list
-	int32_t todayKills = 0, weekKills = 0, monthKills = killsList.size();
 	Skulls_t playerSkull = getSkull();
+	if (playerSkull == SKULL_ORANGE) {
+		return;
+	}
 
-	for (const auto& it : killsList) {
-		if (it > week) {
-			++weekKills;
+	time_t now = time(nullptr);
+	time_t today = (now - 86400);
+	time_t week = (now - (7 * 86400));
+
+	std::vector<time_t> killList = IOLoginData::getUnjustifiedDates(name, now); // get time kills from last month
+	killList.push_back(now); // add current kill to list
+
+	int32_t todayKills = 0;
+	int32_t weekKills = 0;
+	int32_t monthKills = killList.size();
+
+	for (const auto& time : killList) {
+		if (time > today) {
+			++todayKills;
 		}
 
-		if (it > today) {
-			++todayKills;
+		if (time > week) {
+			++weekKills;
 		}
 	}
 
@@ -4060,19 +4070,19 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		    weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) ||
 		    monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
 			setSkull(SKULL_RED);
-			skullTicks = g_config.getNumber(ConfigManager::RED_SKULL_LENGTH);
+			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
 		}
 	} else if (playerSkull == SKULL_RED) {
 		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) ||
 		    weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) ||
 		    monthKills >= g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT)) {
 			setSkull(SKULL_BLACK);
-			skullTicks = g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH);
+			setSkullTicks(g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH));
 		} else {
-			skullTicks = g_config.getNumber(ConfigManager::RED_SKULL_LENGTH);
+			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
 		}
 	} else if (playerSkull == SKULL_BLACK) {
-		skullTicks = g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH);
+		setSkullTicks(g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH));
 	}
 }
 
