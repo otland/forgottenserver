@@ -1110,7 +1110,7 @@ void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 
 std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, time_t offsetTime, uint32_t days /*= 30*/)
 {
-	std::vector<time_t> killsList;
+	std::vector<time_t> killList;
 
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(
@@ -1119,9 +1119,9 @@ std::vector<time_t> IOLoginData::getUnjustifiedDates(const std::string& name, ti
 
 	if (result) {
 		do {
-			killsList.push_back(static_cast<time_t>(result->getNumber<uint32_t>("time")));
+			killList.push_back(static_cast<time_t>(result->getNumber<uint32_t>("time")));
 		} while (result->next());
 	}
 
-	return killsList;
+	return killList;
 }
