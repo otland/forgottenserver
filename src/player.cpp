@@ -4039,10 +4039,6 @@ void Player::addUnjustifiedDead(const Player* attacked)
 
 	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
 
-	Skulls_t playerSkull = getSkull();
-	if (playerSkull == SKULL_ORANGE) {
-		return;
-	}
 
 	time_t now = time(nullptr);
 	time_t today = (now - 86400);
@@ -4065,6 +4061,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		}
 	}
 
+	Skulls_t playerSkull = getSkull();
 	if (playerSkull == SKULL_RED) {
 		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) ||
 		    weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) ||
