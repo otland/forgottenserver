@@ -4,12 +4,23 @@
 #ifndef FS_QUESTS_H
 #define FS_QUESTS_H
 
+#include "baseevents.h"
+
 class Mission;
 class Quest;
 class Player;
+class Callback;
 
 using MissionsList = std::list<Mission>;
 using QuestsList = std::list<Quest>;
+
+// for luascript callback
+class MissionCallback final : public CallBack
+{
+public:
+	MissionCallback() = default;
+	std::string getDescription(Player* player) const;
+};
 
 class Mission
 {
@@ -36,12 +47,23 @@ public:
 	std::map<int32_t, std::string> descriptions;
 	std::string mainDescription;
 
+	MissionCallback* getCallback()
+	{
+		if (!callback) {
+			callback.reset(new MissionCallback());
+		}
+
+		return callback.get();
+	}
+
 private:
 	std::string name;
 	uint32_t storageID;
 	int32_t startValue, endValue;
 	bool ignoreEndValue;
 	uint16_t id;
+
+	std::unique_ptr<MissionCallback> callback;
 
 	friend class Quest;
 };
@@ -68,6 +90,11 @@ public:
 
 	bool isTracking(const uint32_t key, const int32_t value) const;
 
+	Mission& createMission(const uint16_t id, const std::string& name, const int32_t storageId,
+	                       const int32_t startValue, const int32_t endValue, const bool ignoreEndValue);
+
+	bool fromLua = false;
+
 private:
 	std::string name;
 
@@ -90,6 +117,12 @@ public:
 	bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
 	uint16_t getQuestsCount(Player* player) const;
 	bool reload();
+	void clear(bool fromLua);
+
+	void registerQuest(std::unique_ptr<Quest> quest);
+
+	static uint32_t questAutoID;
+	static uint32_t missionAutoID;
 
 private:
 	QuestsList quests;

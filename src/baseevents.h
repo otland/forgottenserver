@@ -63,6 +63,7 @@ public:
 	CallBack() = default;
 
 	bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
+	bool loadCallBack(LuaScriptInterface* interface);
 
 protected:
 	int32_t scriptId = 0;
