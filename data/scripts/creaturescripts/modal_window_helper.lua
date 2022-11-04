@@ -27,16 +27,21 @@ setmetatable(ModalWindow, {
 })
 
 function ModalWindow:setTitle(title)
-    self.title = title
+    self.title = tostring(title)
     return true
 end
 
 function ModalWindow:setMessage(message)
-    self.message = message
+    self.message = tostring(message)
     return true
 end
 
 function ModalWindow:addButton(name, callback)
+    if type(name) ~= "string" then
+        io.write("ModalWindow:addButton: name must be a string.")
+        name = tostring(name)
+    end
+
     if self.buttons[name] then
         io.write("ModalWindow: Button with name '" .. name .. "' already exists.")
         return false
@@ -50,6 +55,11 @@ function ModalWindow:addButton(name, callback)
 end
 
 function ModalWindow:removeButton(name)
+    if type(name) ~= "string" then
+        io.write("ModalWindow:removeButton: name must be a string.")
+        name = tostring(name)
+    end
+
     local button = self.buttons[name]
     if not button then
         io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
@@ -62,6 +72,11 @@ function ModalWindow:removeButton(name)
 end
 
 function ModalWindow:callButton(name, player, button, choice)
+    if type(name) ~= "string" then
+        io.write("ModalWindow:callButton: name must be a string.")
+        name = tostring(name)
+    end
+
     local button = self.buttons[name]
     if not button then
         io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
@@ -96,6 +111,11 @@ function ModalWindow:setDefaultCallback(callback)
 end
 
 function ModalWindow:addChoice(text, callback)
+    if type(text) ~= "string" then
+        io.write("ModalWindow:addChoice: text must be a string.")
+        text = tostring(text)
+    end
+
     local id = #self.choices + 1
     local choice = { id = id, text = text, callback = callback }
     self.choices[id] = choice
@@ -104,6 +124,11 @@ function ModalWindow:addChoice(text, callback)
 end
 
 function ModalWindow:removeChoice(text)
+    if type(text) ~= "string" then
+        io.write("ModalWindow:removeChoice: text must be a string.")
+        text = tostring(text)
+    end
+
     local choice = self.choices[text]
     if not choice then
         io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
@@ -116,6 +141,11 @@ function ModalWindow:removeChoice(text)
 end
 
 function ModalWindow:callChoice(text, player, button, choice)
+    if type(text) ~= "string" then
+        io.write("ModalWindow:callChoice: text must be a string.")
+        text = tostring(text)
+    end
+
     local choice = self.choices[text]
     if not choice then
         io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
