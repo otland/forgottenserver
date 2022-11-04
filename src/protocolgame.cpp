@@ -614,7 +614,14 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION,
 			                     [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_WEST); });
 			break;
-		// case 0x73: break; // map click(?)
+		case 0x73:
+			g_dispatcher.addTask([playerID = player->getID(), pos = msg.getPosition()]() {
+				Player* player = g_game.getPlayerByID(playerID);
+				if (player && player->isAccessPlayer()) {
+					g_game.internalTeleport(player, pos);
+				}
+			});
+			break;
 		case 0x77:
 			parseEquipObject(msg);
 			break;
