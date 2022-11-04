@@ -1,22 +1,19 @@
 FROM alpine:3.16.2 AS build
 # crypto++-dev is in edge/testing
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
-  binutils \
   boost-dev \
   build-base \
-  clang \
   crypto++-dev \
   gcc \
-  gmp-dev \
-  luajit-dev \
   mariadb-connector-c-dev \
   meson \
   ninja
 
 COPY src /usr/src/forgottenserver/src/
-COPY meson.build /usr/src/forgottenserver/
+COPY subprojects /usr/src/forgottenserver/subprojects/
+COPY meson.build meson_options.txt /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
-RUN meson build && ninja -C build
+RUN meson -D buildtype=release build && ninja -C build
 
 FROM alpine:3.16.2
 # crypto++ is in edge/testing
@@ -24,8 +21,6 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/te
   boost-iostreams \
   boost-system \
   crypto++ \
-  gmp \
-  luajit \
   mariadb-connector-c
 
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs

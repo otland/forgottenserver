@@ -9,14 +9,19 @@ boost_dep = dependency('boost',
 	version: '>=1.66.0',
 )
 
+# Debian installs libcrypto++, Arch Linux installs libcryptopp
 cryptopp_dep = dependency('libcrypto++', required: false)
 if not cryptopp_dep.found()
   cryptopp_dep = dependency('libcryptopp')
 endif
 
+# Debian installs mysqlclient, Alpine installs libmariadb, Arch Linux installs mariadb
 mysql_dep = dependency('mysqlclient', required: false)
 if not mysql_dep.found()
-	mysql_dep = dependency('mariadb')
+	mysql_dep = dependency('libmariadb', required: false)
+	if not mysql_dep.found()
+		mysql_dep = dependency('mariadb')
+	endif
 endif
 
 luajit_opt = get_option('luajit')
