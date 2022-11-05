@@ -5,7 +5,6 @@
 #define FS_DEPOTCHEST_H
 
 #include "container.h"
-#include "player.h"
 
 class DepotChest final : public Container
 {
