@@ -36,14 +36,9 @@ public:
 	Cylinder* getParent() const override;
 	Cylinder* getRealParent() const override { return parent; }
 
-	Player* getOwner() const { return owner; }
-	void setOwner(Player* owner) { this->owner = owner; }
-
 private:
 	uint32_t maxDepotItems = 0;
 	uint16_t depotId = 0;
-
-	Player* owner = nullptr;
 };
 
 #endif // FS_DEPOTCHEST_H
