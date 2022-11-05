@@ -9,7 +9,7 @@
 #include "pugicast.h"
 
 uint32_t Quests::questAutoID = 0;
-uint32_t Quests::missionAutoID = 0;
+uint32_t Quest::missionAutoID = 0;
 
 std::string Mission::getDescription(Player* player) const
 {
@@ -216,7 +216,7 @@ bool Quests::loadFromXml()
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
 
-			quest.missions.emplace_back(missionNode.attribute("name").as_string(), ++missionAutoID,
+			quest.missions.emplace_back(missionNode.attribute("name").as_string(), ++Quest::missionAutoID,
 			                            pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
 			                            pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
 			                            pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
@@ -257,6 +257,16 @@ uint16_t Quests::getQuestsCount(Player* player) const
 	return count;
 }
 
+const Mission* Quests::getMissionByID(uint16_t id)
+{
+	for (Quest& quest : quests) {
+		if (auto mission = quest.getMissionById(id)) {
+			return mission;
+		}
+	}
+	return nullptr;
+}
+
 bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const
 {
 	for (const Quest& quest : quests) {
@@ -273,44 +283,4 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32
 		}
 	}
 	return false;
-}
-
-void Quests::registerQuest(std::unique_ptr<Quest> quest)
-{
-	const uint16_t id = quest->getID();
-	auto it =
-	    std::find_if(quests.begin(), quests.end(), [id](const Quest& tmpQuest) { return tmpQuest.getID() == id; });
-
-	if (it != quests.end()) {
-		Quest& tmpQuest = *it;
-		tmpQuest.name = std::move(quest->name);
-		tmpQuest.startStorageID = quest->startStorageID;
-		tmpQuest.startStorageValue = quest->startStorageValue;
-		tmpQuest.missions = std::move(quest->missions);
-		return;
-	}
-
-	quests.push_back(std::move(*quest.release()));
-}
-
-Mission& Quest::createMission(const uint16_t id, const std::string& name, const int32_t storageId,
-                              const int32_t startValue, const int32_t endValue, const bool ignoreEndValue)
-{
-	auto it =
-	    std::find_if(missions.begin(), missions.end(), [id](const Mission& mission) { return mission.getID() == id; });
-
-	if (it != missions.end()) {
-		Mission& mission = *it;
-		mission.name = name;
-		mission.storageID = storageId;
-		mission.startValue = startValue;
-		mission.endValue = endValue;
-		mission.ignoreEndValue = ignoreEndValue;
-		mission.mainDescription.clear();
-		mission.descriptions.clear();
-		return mission;
-	}
-
-	missions.emplace_back(name, id, storageId, startValue, endValue, ignoreEndValue);
-	return missions.back();
 }

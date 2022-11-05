@@ -41,8 +41,13 @@ public:
 	std::string getDescription(Player* player) const;
 	uint16_t getID() const { return id; }
 	uint32_t getStorageId() const { return storageID; }
+	void setStorageId(uint32_t storageId) { storageID = storageId; }
 	int32_t getStartStorageValue() const { return startValue; }
+	void setStartStorageValue(int32_t startStorageValue) { startValue = startStorageValue; }
 	int32_t getEndStorageValue() const { return endValue; }
+	void setEndStorageValue(int32_t endStorageValue) { endValue = endStorageValue; }
+	bool getIgnoreEndValue() const { return ignoreEndValue; }
+	void setIgnoreEndValue(bool ignoreEndValue) { ignoreEndValue = ignoreEndValue; }
 
 	std::map<int32_t, std::string> descriptions;
 	std::string mainDescription;
@@ -82,7 +87,9 @@ public:
 	uint16_t getMissionsCount(Player* player) const;
 
 	uint32_t getStartStorageId() const { return startStorageID; }
+	void setStartStorageId(uint32_t key) { startStorageID = key; }
 	int32_t getStartStorageValue() const { return startStorageValue; }
+	void setStartStorageValue(int32_t value) { startStorageValue = value; }
 
 	const MissionsList& getMissions() const { return missions; }
 
@@ -90,8 +97,7 @@ public:
 
 	bool isTracking(const uint32_t key, const int32_t value) const;
 
-	Mission& createMission(const uint16_t id, const std::string& name, const int32_t storageId,
-	                       const int32_t startValue, const int32_t endValue, const bool ignoreEndValue);
+	Mission* createMission(const std::string& name) { return &missions.emplace_back(name, ++missionAutoID, 0, 0, 0, 0); }
 
 	bool fromLua = false;
 
@@ -104,6 +110,8 @@ private:
 
 	MissionsList missions;
 
+	static uint32_t missionAutoID;
+
 	friend class Quests;
 };
 
@@ -114,18 +122,18 @@ public:
 
 	bool loadFromXml();
 	Quest* getQuestByID(uint16_t id);
+	const Mission* getMissionByID(uint16_t id);
 	bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
 	uint16_t getQuestsCount(Player* player) const;
 	bool reload();
 	void clear(bool fromLua);
 
-	void registerQuest(std::unique_ptr<Quest> quest);
-
-	static uint32_t questAutoID;
-	static uint32_t missionAutoID;
+	Quest* createQuest(const std::string& name) { return &quests.emplace_back(name, ++questAutoID, 0, 0); }
 
 private:
 	QuestsList quests;
+
+	static uint32_t questAutoID;
 };
 
 class TrackedQuest

@@ -2195,6 +2195,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getOutfits", LuaScriptInterface::luaGameGetOutfits);
 	registerMethod("Game", "getMounts", LuaScriptInterface::luaGameGetMounts);
 
+	registerMethod("Game", "getQuests", LuaScriptInterface::luaGameGetQuests);
+
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
 
@@ -2989,9 +2991,19 @@ void LuaScriptInterface::registerFunctions()
 	// Quest
 	registerClass("Quest", "", LuaScriptInterface::luaQuestCreate);
 	registerMetaMethod("Quest", "__eq", LuaScriptInterface::luaQuestCompare);
-	registerMetaMethod("Quest", "__gc", LuaScriptInterface::luaQuestDelete);
+	registerMethod("Quest", "storageId", LuaScriptInterface::luaQuestStorageId);
+	registerMethod("Quest", "storageValue", LuaScriptInterface::luaQuestStorageValue);
 	registerMethod("Quest", "createMission", LuaScriptInterface::luaQuestCreateMission);
-	registerMethod("Quest", "register", LuaScriptInterface::luaQuestRegister);
+	registerMethod("Quest", "getMissions", LuaScriptInterface::luaQuestGetMissions);
+
+	// Mission
+	registerClass("Mission", "", LuaScriptInterface::luaMissionCreate);
+	registerMetaMethod("Mission", "__eq", LuaScriptInterface::luaMissionCompare);
+	registerMethod("Mission", "storageId", LuaScriptInterface::luaMissionStorageId);
+	registerMethod("Mission", "startValue", LuaScriptInterface::luaMissionStartValue);
+	registerMethod("Mission", "endValue", LuaScriptInterface::luaMissionEndValue);
+	registerMethod("Mission", "ignoreEndValue", LuaScriptInterface::luaMissionIgnoreEndValue);
+	registerMethod("Mission", "description", LuaScriptInterface::luaMissionDescription);
 
 	// MonsterType
 	registerClass("MonsterType", "", LuaScriptInterface::luaMonsterTypeCreate);
@@ -4698,6 +4710,22 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGameGetQuests(lua_State* L)
+{
+	// Game.getQuests()
+	const std::list<Quest>& quests = g_game.quests.getQuests();
+	lua_createtable(L, quests.size(), 0);
+
+	int index = 0;
+	for (const Quest& quest : quests) {
+		pushUserdata<const Quest>(L, &quest);
+		setMetatable(L, -1, "Quest");
+		lua_rawseti(L, -2, ++index);
+	}
+
+	return 1;
+}
+
 int LuaScriptInterface::luaGameGetGameState(lua_State* L)
 {
 	// Game.getGameState()
@@ -4954,7 +4982,7 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 
 int LuaScriptInterface::luaGameCreateQuest(lua_State* L)
 {
-	// Game.createQuest(name, storageId, storageValue)
+	// Game.createQuest(name)
 	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
 		reportErrorFunc(L, "Quests can only be registered in the Scripts interface.");
 		lua_pushnil(L);
@@ -4967,9 +4995,7 @@ int LuaScriptInterface::luaGameCreateQuest(lua_State* L)
 		return 1;
 	}
 
-	const int32_t storageId = getNumber<int32_t>(L, 2);
-	const int32_t storageValue = getNumber<int32_t>(L, 3);
-	Quest* quest = new Quest(name, ++g_game.quests.questAutoID, storageId, storageValue);
+	Quest* quest = g_game.quests.createQuest(name);
 	quest->fromLua = true;
 	pushUserdata<Quest>(L, quest);
 	setMetatable(L, -1, "Quest");
@@ -13824,8 +13850,8 @@ int LuaScriptInterface::luaQuestCreate(lua_State* L)
 int LuaScriptInterface::luaQuestCompare(lua_State* L)
 {
 	// quest == questEx
-	if (Quest* questEx = getUserdata<Quest>(L, 2)) {
-		if (Quest* quest = getUserdata<Quest>(L, 1)) {
+	if (const Quest* questEx = getUserdata<Quest>(L, 2)) {
+		if (const Quest* quest = getUserdata<Quest>(L, 1)) {
 			pushBoolean(L, quest->getID() == questEx->getID());
 			return 1;
 		}
@@ -13835,20 +13861,43 @@ int LuaScriptInterface::luaQuestCompare(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaQuestDelete(lua_State* L)
+int LuaScriptInterface::luaQuestStorageId(lua_State* L)
 {
-	// quest:delete()
-	Quest** questPtr = getRawUserdata<Quest>(L, 1);
-	if (questPtr && *questPtr) {
-		delete *questPtr;
-		*questPtr = nullptr;
+	// quest:storageId(key)
+	Quest* quest = getUserdata<Quest>(L, 1);
+	if (quest) {
+		if (lua_gettop(L) > 1) {
+			quest->setStartStorageId(getNumber<uint32_t>(L, 2));
+			pushBoolean(L, true);
+		} else {
+			lua_pushnumber(L, quest->getStartStorageId());
+		}
+	} else {
+		lua_pushnil(L);
 	}
-	return 0;
+	return 1;
+}
+
+int LuaScriptInterface::luaQuestStorageValue(lua_State* L)
+{
+	// quest:storageValue(value)
+	Quest* quest = getUserdata<Quest>(L, 1);
+	if (quest) {
+		if (lua_gettop(L) > 1) {
+			quest->setStartStorageValue(getNumber<int32_t>(L, 2));
+			pushBoolean(L, true);
+		} else {
+			lua_pushnumber(L, quest->getStartStorageValue());
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
 }
 
 int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
 {
-	// quest:createMission(name, key, value, endValue, ignoreEndValue, description)
+	// quest:createMission(name)
 	Quest* quest = getUserdata<Quest>(L, 1);
 	if (quest) {
 		const std::string& name = getString(L, 2);
@@ -13857,30 +13906,26 @@ int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
 			return 1;
 		}
 
-		const int32_t storageId = getNumber<int32_t>(L, 3);
-		const int32_t startValue = getNumber<int32_t>(L, 4);
-		const int32_t endValue = getNumber<int32_t>(L, 5);
-		const bool ignoreEndValue = getBoolean(L, 6);
-		Mission& mission =
-		    quest->createMission(++g_game.quests.missionAutoID, name, storageId, startValue, endValue, ignoreEndValue);
-		if (isTable(L, 7)) {
-			lua_pushnil(L);
-			while (lua_next(L, -2)) {
-				if (isTable(L, -1)) {
-					const int32_t missionId = getField<int32_t>(L, -1, "id");
-					const std::string& description = getFieldString(L, -1, "description");
-					lua_pop(L, 2);
-					mission.descriptions.emplace(missionId, description);
-				}
+		pushUserdata<Mission>(L, quest->createMission(name));
+		setMetatable(L, -1, "Mission");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
 
-				lua_pop(L, 1);
-			}
-
-			lua_pop(L, 1);
-		} else if (isFunction(L, 7)) {
-			mission.getCallback()->loadCallBack(&g_scripts->getScriptInterface());
-		} else if (isString(L, 7)) {
-			mission.mainDescription = std::move(getString(L, 7));
+int LuaScriptInterface::luaQuestGetMissions(lua_State* L)
+{
+	// quest:getMissions()
+	Quest* quest = getUserdata<Quest>(L, 1);
+	if (quest) {
+		const std::list<Mission>& missions = quest->getMissions();
+		lua_createtable(L, missions.size(), 0);
+		int index = 0;
+		for (const Mission& mission : missions) {
+			pushUserdata<const Mission>(L, &mission);
+			setMetatable(L, -1, "Mission");
+			lua_rawseti(L, -2, ++index);
 		}
 	} else {
 		lua_pushnil(L);
@@ -13888,13 +13933,136 @@ int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaQuestRegister(lua_State* L)
+// Mission
+int LuaScriptInterface::luaMissionCreate(lua_State* L)
 {
-	// quest:register()
-	Quest* quest = getUserdata<Quest>(L, 1);
-	if (quest) {
-		g_game.quests.registerQuest(std::unique_ptr<Quest>(quest));
-		pushBoolean(L, true);
+	// Mission(id)
+	const Mission* mission = g_game.quests.getMissionByID(getNumber<uint16_t>(L, 2));
+	if (mission) {
+		pushUserdata<const Mission>(L, mission);
+		setMetatable(L, -1, "Mission");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionCompare(lua_State* L)
+{
+	// mission == missionEx
+	if (const Mission* missionEx = getUserdata<Mission>(L, 2)) {
+		if (const Mission* mission = getUserdata<Mission>(L, 1)) {
+			pushBoolean(L, mission->getID() == missionEx->getID());
+			return 1;
+		}
+	}
+
+	lua_pushnil(L);
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionStorageId(lua_State* L)
+{
+	// mission:storageId(key)
+	Mission* mission = getUserdata<Mission>(L, 1);
+	if (mission) {
+		if (lua_gettop(L) > 1) {
+			mission->setStorageId(getNumber<uint32_t>(L, 2));
+			pushBoolean(L, true);
+		} else {
+			lua_pushnumber(L, mission->getStorageId());
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionStartValue(lua_State* L)
+{
+	// mission:startValue(value)
+	Mission* mission = getUserdata<Mission>(L, 1);
+	if (mission) {
+		if (lua_gettop(L) > 1) {
+			mission->setStartStorageValue(getNumber<int32_t>(L, 2));
+			pushBoolean(L, true);
+		} else {
+			lua_pushnumber(L, mission->getStartStorageValue());
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionEndValue(lua_State* L)
+{
+	// mission:endValue(value)
+	Mission* mission = getUserdata<Mission>(L, 1);
+	if (mission) {
+		if (lua_gettop(L) > 1) {
+			mission->setEndStorageValue(getNumber<int32_t>(L, 2));
+			pushBoolean(L, true);
+		} else {
+			lua_pushnumber(L, mission->getEndStorageValue());
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionIgnoreEndValue(lua_State* L)
+{
+	// mission:ignoreEndValue(value)
+	Mission* mission = getUserdata<Mission>(L, 1);
+	if (mission) {
+		if (lua_gettop(L) > 1) {
+			mission->setIgnoreEndValue(getBoolean(L, 2));
+			pushBoolean(L, true);
+		} else {
+			pushBoolean(L, mission->getIgnoreEndValue());
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMissionDescription(lua_State* L)
+{
+	// mission:description(value[, player])
+	Mission* mission = getUserdata<Mission>(L, 1);
+	if (mission) {
+		if (lua_gettop(L) > 1) {
+			if (isTable(L, 2)) {
+				lua_pushnil(L);
+				while (lua_next(L, -2)) {
+					if (isTable(L, -1)) {
+						const int32_t missionId = getField<int32_t>(L, -1, "id");
+						const std::string& description = getFieldString(L, -1, "description");
+						lua_pop(L, 2);
+						mission->descriptions.emplace(missionId, description);
+					}
+
+					lua_pop(L, 1);
+				}
+
+				lua_pop(L, 1);
+			} else if (isFunction(L, 2)) {
+				mission->getCallback()->loadCallBack(&g_scripts->getScriptInterface());
+			} else if (isString(L, 2)) {
+				mission->mainDescription = std::move(getString(L, 2));
+			}
+			pushBoolean(L, true);
+		} else {
+			if (Player* player = getPlayer(L, 3)) {
+				pushString(L, mission->getDescription(player));
+			} else {
+				reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+				pushBoolean(L, false);
+			}
+		}
 	} else {
 		lua_pushnil(L);
 	}

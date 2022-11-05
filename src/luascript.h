@@ -519,6 +519,8 @@ private:
 	static int luaGameGetOutfits(lua_State* L);
 	static int luaGameGetMounts(lua_State* L);
 
+	static int luaGameGetQuests(lua_State* L);
+
 	static int luaGameGetGameState(lua_State* L);
 	static int luaGameSetGameState(lua_State* L);
 
@@ -1290,9 +1292,19 @@ private:
 	// Quest
 	static int luaQuestCreate(lua_State* L);
 	static int luaQuestCompare(lua_State* L);
-	static int luaQuestDelete(lua_State* L);
+	static int luaQuestStorageId(lua_State* L);
+	static int luaQuestStorageValue(lua_State* L);
 	static int luaQuestCreateMission(lua_State* L);
-	static int luaQuestRegister(lua_State* L);
+	static int luaQuestGetMissions(lua_State* L);
+
+	// Mission
+	static int luaMissionCreate(lua_State* L);
+	static int luaMissionCompare(lua_State* L);
+	static int luaMissionStorageId(lua_State* L);
+	static int luaMissionStartValue(lua_State* L);
+	static int luaMissionEndValue(lua_State* L);
+	static int luaMissionIgnoreEndValue(lua_State* L);
+	static int luaMissionDescription(lua_State* L);
 
 	// MonsterType
 	static int luaMonsterTypeCreate(lua_State* L);
