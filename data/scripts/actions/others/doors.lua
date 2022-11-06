@@ -198,6 +198,9 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		target:transform(transformTo)
 		return true
 	elseif table.contains(lockedDoors, itemId) then
+		if player:getGroup():getAccess() then
+			player:teleportTo(toPosition, true)
+		end
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
 		return true
 	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
