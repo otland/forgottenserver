@@ -1001,23 +1001,15 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		}
 
 		if (!Position::areInRange<1, 1, 0>(playerPos, mapToPos)) {
-			Position walkPos = mapToPos;
-			if (vertical) {
-				walkPos.x++;
-			} else {
-				walkPos.y++;
-			}
-
 			Position itemPos = fromPos;
 			uint8_t itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1>(mapFromPos, playerPos) &&
-			    !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
+			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1>(mapFromPos, playerPos)) {
 				// need to pickup the item first
 				Item* moveItem = nullptr;
 
 				ReturnValue ret = internalMoveItem(fromCylinder, player, INDEX_WHEREEVER, item, count, &moveItem, 0,
-				                                   player, nullptr, &fromPos, &toPos);
+					                                player, nullptr, &fromPos, &toPos);
 				if (ret != RETURNVALUE_NOERROR) {
 					player->sendCancelMessage(ret);
 					return;
@@ -1025,7 +1017,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 
 				// changing the position since its now in the inventory of the player
 				internalGetPosition(moveItem, itemPos, itemStackPos);
-			}
+		}
 
 			std::vector<Direction> listDir;
 			if (player->getPathTo(mapToPos, listDir, 0, 1, true, true)) {
