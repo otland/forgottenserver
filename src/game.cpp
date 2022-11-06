@@ -1028,7 +1028,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 			}
 
 			std::vector<Direction> listDir;
-			if (player->getPathTo(walkPos, listDir, 0, 0, true, true)) {
+			if (player->getPathTo(mapToPos, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask([=, playerID = player->getID(), listDir = std::move(listDir)]() {
 					playerAutoWalk(playerID, listDir);
 				});
