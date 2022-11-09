@@ -49,7 +49,7 @@ private:
 	int_fast32_t closedNodes;
 };
 
-using SpectatorCache = std::map<Position, SpectatorVec>;
+using SpectatorCache = std::map<Position, Spectators>;
 
 static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
@@ -201,7 +201,7 @@ public:
 
 	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-	void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false,
+	void getSpectators(Spectators& spectators, const Position& centerPos, bool multifloor = false,
 	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
 	                   int32_t maxRangeY = 0);
 
@@ -268,7 +268,7 @@ private:
 	uint32_t height = 0;
 
 	// Actually scans the map for spectators
-	void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
+	void getSpectatorsInternal(Spectators& spectators, const Position& centerPos, int32_t minRangeX,
 	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
 	                           int32_t maxRangeZ, bool onlyPlayers) const;
 

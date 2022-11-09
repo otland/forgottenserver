@@ -12,7 +12,7 @@ class BedItem;
 class Creature;
 class MagicField;
 class Mailbox;
-class SpectatorVec;
+class Spectators;
 class Teleport;
 class TrashHolder;
 
@@ -238,8 +238,8 @@ public:
 private:
 	void onAddTileItem(Item* item);
 	void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
-	void onUpdateTile(const SpectatorVec& spectators);
+	void onRemoveTileItem(const Spectators& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
+	void onUpdateTile(const Spectators& spectators);
 
 	void setTileFlags(const Item* item);
 	void resetTileFlags(const Item* item);

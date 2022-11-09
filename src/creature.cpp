@@ -1150,8 +1150,9 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, position, false, true);
+
 	if (spectators.empty()) {
 		return;
 	}

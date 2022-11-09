@@ -532,8 +532,9 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		return false;
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true);
+
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
@@ -561,8 +562,9 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 
 	std::vector<int32_t> oldStackPosVector;
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, tile->getPosition(), true);
+
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
 			oldStackPosVector.push_back(
@@ -2037,8 +2039,9 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 		return;
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, player->getPosition());
+
 	for (Creature* spectator : spectators) {
 		if (Npc* npc = spectator->getNpc()) {
 			npc->onPlayerCloseChannel(player);
@@ -3652,7 +3655,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 
 void Game::playerWhisper(Player* player, const std::string& text)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, player->getPosition(), false, false, Map::maxClientViewportX, Map::maxClientViewportX,
 	                  Map::maxClientViewportY, Map::maxClientViewportY);
 
@@ -3756,8 +3759,9 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 
 void Game::playerSpeakToNpc(Player* player, const std::string& text)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, player->getPosition());
+
 	for (Creature* spectator : spectators) {
 		if (spectator->getNpc()) {
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
@@ -3787,8 +3791,9 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 	creature->setDirection(dir);
 
 	// send to client
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureTurn(creature);
 	}
@@ -3796,7 +3801,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
-                               SpectatorVec* spectatorsPtr /* = nullptr*/, const Position* pos /* = nullptr*/,
+                               Spectators* spectatorsPtr /* = nullptr*/, const Position* pos /* = nullptr*/,
                                bool echo /* = false*/)
 {
 	if (text.empty()) {
@@ -3807,10 +3812,10 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		pos = &creature->getPosition();
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 
 	if (!spectatorsPtr || spectatorsPtr->empty()) {
-		// This somewhat complex construct ensures that the cached SpectatorVec
+		// This somewhat complex construct ensures that the cached Spectators
 		// is used if available and if it can be used, else a local vector is
 		// used (hopefully the compiler will optimize away the construction of
 		// the temporary when it's not used).
@@ -3927,8 +3932,9 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 	creature->setSpeed(varSpeed);
 
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), false, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendChangeSpeed(creature, creature->getStepSpeed());
 	}
@@ -3947,8 +3953,9 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 	}
 
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureChangeOutfit(creature, outfit);
 	}
@@ -3957,8 +3964,9 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 {
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureChangeVisible(creature, visible);
 	}
@@ -3967,8 +3975,9 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 void Game::changeLight(const Creature* creature)
 {
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureLight(creature);
 	}
@@ -4223,8 +4232,9 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			message.primary.value = realHealthChange;
 			message.primary.color = TEXTCOLOR_PASTELRED;
 
-			SpectatorVec spectators;
+			Spectators spectators;
 			map.getSpectators(spectators, targetPos, false, true);
+
 			for (Creature* spectator : spectators) {
 				Player* tmpPlayer = spectator->getPlayer();
 				if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
@@ -4294,7 +4304,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		TextMessage message;
 		message.position = targetPos;
 
-		SpectatorVec spectators;
+		Spectators spectators;
 		if (targetPlayer && target->hasCondition(CONDITION_MANASHIELD) &&
 		    damage.primary.type != COMBAT_UNDEFINEDDAMAGE) {
 			int32_t manaDamage = std::min<int32_t>(targetPlayer->getMana(), healthChange);
@@ -4599,8 +4609,9 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		message.primary.value = manaLoss;
 		message.primary.color = TEXTCOLOR_BLUE;
 
-		SpectatorVec spectators;
+		Spectators spectators;
 		map.getSpectators(spectators, targetPos, false, true);
+
 		for (Creature* spectator : spectators) {
 			Player* tmpPlayer = spectator->getPlayer();
 			if (tmpPlayer == attackerPlayer && attackerPlayer != targetPlayer) {
@@ -4645,12 +4656,13 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 
 void Game::addCreatureHealth(const Creature* target)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, target->getPosition(), true, true);
+
 	addCreatureHealth(spectators, target);
 }
 
-void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* target)
+void Game::addCreatureHealth(const Spectators& spectators, const Creature* target)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -4661,12 +4673,13 @@ void Game::addCreatureHealth(const SpectatorVec& spectators, const Creature* tar
 
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, pos, true, true);
+
 	addMagicEffect(spectators, pos, effect);
 }
 
-void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect)
+void Game::addMagicEffect(const Spectators& spectators, const Position& pos, uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -4677,15 +4690,15 @@ void Game::addMagicEffect(const SpectatorVec& spectators, const Position& pos, u
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	SpectatorVec spectators, toPosSpectators;
+	Spectators spectators, toPosSpectators;
 	map.getSpectators(spectators, fromPos, true, true);
 	map.getSpectators(toPosSpectators, toPos, true, true);
-	spectators.addSpectators(toPosSpectators);
+	spectators.insert(toPosSpectators);
 
 	addDistanceEffect(spectators, fromPos, toPos, effect);
 }
 
-void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos,
+void Game::addDistanceEffect(const Spectators& spectators, const Position& fromPos, const Position& toPos,
                              uint8_t effect)
 {
 	for (Creature* spectator : spectators) {
@@ -4950,8 +4963,9 @@ void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 void Game::updateCreatureWalkthrough(const Creature* creature)
 {
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		Player* tmpPlayer = spectator->getPlayer();
 		tmpPlayer->sendCreatureWalkthrough(creature, tmpPlayer->canWalkthroughEx(creature));
@@ -4964,8 +4978,9 @@ void Game::updateCreatureSkull(const Creature* creature)
 		return;
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, creature->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureSkull(creature);
 	}
@@ -4973,8 +4988,9 @@ void Game::updateCreatureSkull(const Creature* creature)
 
 void Game::updatePlayerShield(Player* player)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendCreatureShield(player);
 	}
@@ -5849,8 +5865,9 @@ void Game::updatePodium(Item* item)
 	}
 
 	// send to clients
-	SpectatorVec spectators;
+	Spectators spectators;
 	map.getSpectators(spectators, item->getPosition(), true, true);
+
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateTileItem(tile, item->getPosition(), item);
 	}

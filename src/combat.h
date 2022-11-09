@@ -12,7 +12,7 @@
 class Creature;
 class Player;
 struct Position;
-class SpectatorVec;
+class Spectators;
 class Tile;
 
 // for luascript callback
@@ -159,7 +159,7 @@ public:
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile,
+	static void combatTileEffects(const Spectators& spectators, Creature* caster, Tile* tile,
 	                              const CombatParams& params);
 	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 
