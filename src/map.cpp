@@ -639,7 +639,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 		if (!tile) {
 			return nullptr;
 		}
-		
+
 		uint32_t flags = FLAG_PATHFINDING;
 		if (!creature.getPlayer()) {
 			flags |= FLAG_IGNOREFIELDDAMAGE;

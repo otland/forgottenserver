@@ -225,7 +225,7 @@ Thing* Game::internalGetThing(Player* player, const Position& pos, int32_t index
 				} else {
 					thing = tile->getTopVisibleCreature(player);
 				}
-				
+
 				if (player && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 					// do extra checks here if the thing is accessible
 					if (thing && thing->getItem()) {
