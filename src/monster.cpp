@@ -377,7 +377,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	Spectators& spectators = g_game.map.getSpectators(position, true);
+	Spectators spectators = g_game.map.getSpectators(position, true);
 	spectators.erase(this);
 
 	for (Creature* spectator : spectators) {
