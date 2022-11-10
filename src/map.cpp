@@ -257,12 +257,12 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
-	Spectators oldPosspectators = getSpectators(oldPos, true);
+	Spectators oldPosSpectators = getSpectators(oldPos, true);
 	Spectators newPosSpectators = getSpectators(newPos, true);
-	oldPosspectators.insert(newPosSpectators);
+	oldPosSpectators.insert(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
-	for (Creature* spectator : oldPosspectators) {
+	for (Creature* spectator : oldPosSpectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			if (tmpPlayer->canSeeCreature(&creature)) {
 				oldStackPosVector.push_back(oldTile.getClientIndexOfCreature(tmpPlayer, &creature));
@@ -303,7 +303,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 
 	// send to client
 	size_t i = 0;
-	for (Creature* spectator : oldPosspectators) {
+	for (Creature* spectator : oldPosSpectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
 			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
@@ -315,7 +315,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	}
 
 	// event method
-	for (Creature* spectator : oldPosspectators) {
+	for (Creature* spectator : oldPosSpectators) {
 		spectator->onCreatureMove(&creature, &newTile, newPos, &oldTile, oldPos, teleport);
 	}
 
