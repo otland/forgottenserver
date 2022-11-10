@@ -310,18 +310,8 @@ bool boolean_random(double probability /* = 0.5*/)
 
 std::string formatDate(time_t time)
 {
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[20];
-	int res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900,
-	                  tms->tm_hour, tms->tm_min, tms->tm_sec);
-	if (res < 0) {
-		return {};
-	}
-	return {buffer, 19};
+	const auto t = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(t));
 }
 
 std::string formatDateShort(time_t time)
