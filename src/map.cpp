@@ -257,8 +257,8 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 
 	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
 
-	Spectators oldPosSpectators = getSpectators(oldPos, true);
-	Spectators newPosSpectators = getSpectators(newPos, true);
+	Spectators& oldPosSpectators = getSpectators(oldPos, true);
+	const auto& newPosSpectators = getSpectators(newPos, true);
 	oldPosSpectators.insert(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
@@ -420,13 +420,13 @@ Spectators Map::getSpectators(const Position& centerPos, bool multifloor /*= fal
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
 					if (!spectators.empty()) {
-						const Spectators& cachedSpectators = it->second;
+						const auto& cachedSpectators = it->second;
 						spectators.insert(cachedSpectators);
 					} else {
 						spectators = it->second;
 					}
 				} else {
-					const Spectators& cachedSpectators = it->second;
+					const auto& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
 							spectators.emplace_back(spectator);

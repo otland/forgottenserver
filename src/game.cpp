@@ -532,7 +532,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		return false;
 	}
 
-	Spectators spectators = map.getSpectators(creature->getPosition(), true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		// send to client
 		if (Player* tmpPlayer = spectator->getPlayer()) {
@@ -561,7 +561,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /* = true*/)
 
 	std::vector<int32_t> oldStackPosVector;
 
-	Spectators spectators = map.getSpectators(tile->getPosition(), true);
+	const auto& spectators = map.getSpectators(tile->getPosition(), true);
 	for (Creature* spectator : spectators) {
 		if (Player* player = spectator->getPlayer()) {
 			oldStackPosVector.push_back(
@@ -2036,7 +2036,7 @@ void Game::playerCloseNpcChannel(uint32_t playerId)
 		return;
 	}
 
-	Spectators spectators = map.getSpectators(player->getPosition());
+	const auto& spectators = map.getSpectators(player->getPosition());
 	for (Creature* spectator : spectators) {
 		if (Npc* npc = spectator->getNpc()) {
 			npc->onPlayerCloseChannel(player);
@@ -3650,7 +3650,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 
 void Game::playerWhisper(Player* player, const std::string& text)
 {
-	Spectators spectators =
+	const auto& spectators =
 	    map.getSpectators(player->getPosition(), false, false, Map::maxClientViewportX, Map::maxClientViewportX,
 	                      Map::maxClientViewportY, Map::maxClientViewportY);
 
@@ -3754,7 +3754,7 @@ bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& r
 
 void Game::playerSpeakToNpc(Player* player, const std::string& text)
 {
-	Spectators spectators = map.getSpectators(player->getPosition());
+	const auto& spectators = map.getSpectators(player->getPosition());
 	for (Creature* spectator : spectators) {
 		if (spectator->getNpc()) {
 			spectator->onCreatureSay(player, TALKTYPE_PRIVATE_PN, text);
@@ -3783,7 +3783,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 
 	creature->setDirection(dir);
 
-	Spectators spectators = map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -3923,7 +3923,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 	creature->setSpeed(varSpeed);
 
-	Spectators spectators = map.getSpectators(creature->getPosition(), false, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), false, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -3943,7 +3943,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 		return;
 	}
 
-	Spectators spectators = map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -3953,7 +3953,7 @@ void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outf
 
 void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 {
-	Spectators spectators = map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -3963,7 +3963,7 @@ void Game::internalCreatureChangeVisible(Creature* creature, bool visible)
 
 void Game::changeLight(const Creature* creature)
 {
-	Spectators spectators = map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -4220,7 +4220,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			message.primary.value = realHealthChange;
 			message.primary.color = TEXTCOLOR_PASTELRED;
 
-			Spectators spectators = map.getSpectators(targetPos, false, true);
+			const auto& spectators = map.getSpectators(targetPos, false, true);
 
 			// send to client
 			for (Creature* spectator : spectators) {
@@ -4603,7 +4603,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		message.primary.value = manaLoss;
 		message.primary.color = TEXTCOLOR_BLUE;
 
-		Spectators spectators = map.getSpectators(targetPos, false, true);
+		const auto& spectators = map.getSpectators(targetPos, false, true);
 
 		// send to client
 		for (Creature* spectator : spectators) {
@@ -4650,7 +4650,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 
 void Game::addCreatureHealth(const Creature* target)
 {
-	Spectators spectators = map.getSpectators(target->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(target->getPosition(), true, true);
 
 	// send to client
 	addCreatureHealth(spectators, target);
@@ -4668,7 +4668,7 @@ void Game::addCreatureHealth(const Spectators& spectators, const Creature* targe
 
 void Game::addMagicEffect(const Position& pos, uint8_t effect)
 {
-	Spectators spectators = map.getSpectators(pos, true, true);
+	const auto& spectators = map.getSpectators(pos, true, true);
 
 	// send to client
 	addMagicEffect(spectators, pos, effect);
@@ -4686,8 +4686,8 @@ void Game::addMagicEffect(const Spectators& spectators, const Position& pos, uin
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	Spectators fromPosspectators = map.getSpectators(fromPos, true, true);
-	Spectators toPosSpectators = map.getSpectators(toPos, true, true);
+	Spectators& fromPosspectators = map.getSpectators(fromPos, true, true);
+	const auto& toPosSpectators = map.getSpectators(toPos, true, true);
 	fromPosspectators.insert(toPosSpectators);
 
 	// send to client
@@ -4959,7 +4959,7 @@ void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 
 void Game::updateCreatureWalkthrough(const Creature* creature)
 {
-	Spectators spectators=	map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -4974,7 +4974,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 		return;
 	}
 
-	Spectators spectators = map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -4984,7 +4984,7 @@ void Game::updateCreatureSkull(const Creature* creature)
 
 void Game::updatePlayerShield(Player* player)
 {
-	Spectators spectators = map.getSpectators(player->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(player->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -5860,7 +5860,7 @@ void Game::updatePodium(Item* item)
 		return;
 	}
 
-	Spectators spectators = map.getSpectators(item->getPosition(), true, true);
+	const auto& spectators = map.getSpectators(item->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {

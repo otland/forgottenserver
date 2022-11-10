@@ -78,7 +78,7 @@ void Monster::setName(const std::string& name)
 
 	// NOTE: Due to how client caches known creatures, it is not feasible to send creature update to everyone that has
 	// ever met it
-	Spectators spectators = g_game.map.getSpectators(position, true, true);
+	const auto& spectators = g_game.map.getSpectators(position, true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -377,7 +377,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	Spectators spectators = g_game.map.getSpectators(position, true);
+	Spectators& spectators = g_game.map.getSpectators(position, true);
 	spectators.erase(this);
 
 	for (Creature* spectator : spectators) {

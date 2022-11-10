@@ -4446,7 +4446,7 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	int32_t minRangeY = getNumber<int32_t>(L, 6, 0);
 	int32_t maxRangeY = getNumber<int32_t>(L, 7, 0);
 
-	Spectators spectators =
+	const auto& spectators =
 	    g_game.map.getSpectators(position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 	lua_createtable(L, spectators.size(), 0);
 
@@ -7967,7 +7967,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 
 	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
 
-	Spectators spectators = g_game.map.getSpectators(creature->getPosition(), true, true);
+	const auto& spectators = g_game.map.getSpectators(creature->getPosition(), true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {
@@ -10631,7 +10631,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const Position& position = player->getPosition();
 	const bool isInvisible = player->isInvisible();
 
-	Spectators spectators = g_game.map.getSpectators(position, true, true);
+	const auto& spectators = g_game.map.getSpectators(position, true, true);
 
 	// send to client
 	for (Creature* spectator : spectators) {

@@ -1809,7 +1809,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 		message.primary.color = TEXTCOLOR_WHITE_EXP;
 		sendTextMessage(message);
 
-		Spectators spectators = g_game.map.getSpectators(position, false, true);
+		Spectators& spectators = g_game.map.getSpectators(position, false, true);
 		spectators.erase(this);
 
 		if (!spectators.empty()) {
@@ -1902,7 +1902,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 		// send to client
 		sendTextMessage(message);
 
-		Spectators spectators = g_game.map.getSpectators(position, false, true);
+		Spectators& spectators = g_game.map.getSpectators(position, false, true);
 		spectators.erase(this);
 
 		if (!spectators.empty()) {

@@ -23,6 +23,12 @@ public:
 		}
 	}
 
+	void insert(Spectators& range)
+	{
+		for (Creature* spectator : range.spectators) {
+			insert(spectator);
+		}
+	}
 	void insert(const Spectators& range)
 	{
 		for (Creature* spectator : range.spectators) {
