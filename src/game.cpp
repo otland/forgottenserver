@@ -157,6 +157,9 @@ void Game::setGameState(GameState_t newState)
 	}
 }
 
+#if !defined(_MSC_VER)
+__attribute__((used))
+#endif
 void Game::saveGameState()
 {
 	if (gameState == GAME_STATE_NORMAL) {
