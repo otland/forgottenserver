@@ -8,6 +8,7 @@
 #include "configmanager.h"
 
 #include <chrono>
+#include <fmt/chrono.h>
 
 extern ConfigManager g_config;
 
@@ -315,17 +316,7 @@ std::string formatDate(time_t time)
 
 std::string formatDateShort(time_t time)
 {
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[12];
-	size_t res = strftime(buffer, 12, "%d %b %Y", tms);
-	if (res == 0) {
-		return {};
-	}
-	return {buffer, 11};
+    return fmt::format("{:%d %b %Y}", fmt::localtime(time));
 }
 
 Direction getDirection(const std::string& string)
