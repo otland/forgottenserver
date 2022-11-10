@@ -9,7 +9,7 @@
 class DepotChest final : public Container
 {
 public:
-	explicit DepotChest(uint16_t type, uint16_t depotId, bool paginated = true);
+	explicit DepotChest(uint16_t type, uint16_t depotId = 0, bool paginated = false);
 
 	DepotChest* getDepotChest() override { return this; }
 	const DepotChest* getDepotChest() const override { return this; }

@@ -7,7 +7,7 @@
 
 #include "tools.h"
 
-DepotChest::DepotChest(uint16_t type, uint16_t depotId, bool paginated /*= true*/) :
+DepotChest::DepotChest(uint16_t type, uint16_t depotId, bool paginated /*= false*/) :
     Container{type, items[type].maxItems, true, paginated}, depotId(depotId)
 {}
 
