@@ -215,12 +215,14 @@ void Container::onAddContainerItem(Item* item)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendAddContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendAddContainerItem(this, item);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onAddContainerItem(item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onAddContainerItem(item);
 	}
 }
 
@@ -231,12 +233,14 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
@@ -247,12 +251,14 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//send change to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendRemoveContainerItem(this, index);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onRemoveContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onRemoveContainerItem(this, item);
 	}
 }
 
