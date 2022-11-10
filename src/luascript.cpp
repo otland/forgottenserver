@@ -4446,15 +4446,14 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	int32_t minRangeY = getNumber<int32_t>(L, 6, 0);
 	int32_t maxRangeY = getNumber<int32_t>(L, 7, 0);
 
-	Spectators spectators;
-	g_game.map.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
-
+	Spectators spectators =
+	    g_game.map.getSpectators(position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 	lua_createtable(L, spectators.size(), 0);
 
 	int index = 0;
-	for (Creature* creature : spectators) {
-		pushUserdata<Creature>(L, creature);
-		setCreatureMetatable(L, -1, creature);
+	for (Creature* spectator : spectators) {
+		pushUserdata<Creature>(L, spectator);
+		setCreatureMetatable(L, -1, spectator);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -7968,10 +7967,9 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 
 	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
 
-	// update summon icon
-	Spectators spectators;
-	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
+	Spectators spectators = g_game.map.getSpectators(creature->getPosition(), true, true);
 
+	// send to client
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendUpdateTileCreature(creature);
 	}
@@ -10633,9 +10631,9 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const Position& position = player->getPosition();
 	const bool isInvisible = player->isInvisible();
 
-	Spectators spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
+	Spectators spectators = g_game.map.getSpectators(position, true, true);
 
+	// send to client
 	for (Creature* spectator : spectators) {
 		Player* tmpPlayer = spectator->getPlayer();
 		if (tmpPlayer != player && !tmpPlayer->isAccessPlayer()) {

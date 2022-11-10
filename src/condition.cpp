@@ -905,13 +905,14 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				message.primary.color = TEXTCOLOR_MAYABLUE;
 				player->sendTextMessage(message);
 
-				Spectators spectators;
-				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				Spectators spectators = g_game.map.getSpectators(player->getPosition(), false, true);
 				spectators.erase(player);
 
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " was healed for " + healString;
+
+					// send to client
 					for (Creature* spectator : spectators) {
 						spectator->getPlayer()->sendTextMessage(message);
 					}
@@ -937,13 +938,14 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 				message.primary.color = TEXTCOLOR_MAYABLUE;
 				player->sendTextMessage(message);
 
-				Spectators spectators;
-				g_game.map.getSpectators(spectators, player->getPosition(), false, true);
+				Spectators spectators = g_game.map.getSpectators(player->getPosition(), false, true);
 				spectators.erase(player);
 
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " gained " + manaGainString + " mana.";
+
+					// send to client
 					for (Creature* spectator : spectators) {
 						spectator->getPlayer()->sendTextMessage(message);
 					}

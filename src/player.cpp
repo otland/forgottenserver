@@ -1809,13 +1809,14 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 		message.primary.color = TEXTCOLOR_WHITE_EXP;
 		sendTextMessage(message);
 
-		Spectators spectators;
-		g_game.map.getSpectators(spectators, position, false, true);
+		Spectators spectators = g_game.map.getSpectators(position, false, true);
 		spectators.erase(this);
 
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
+
+			// send to client
 			for (Creature* spectator : spectators) {
 				spectator->getPlayer()->sendTextMessage(message);
 			}
@@ -1897,15 +1898,18 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 		message.position = position;
 		message.primary.value = lostExp;
 		message.primary.color = TEXTCOLOR_RED;
+
+		// send to client
 		sendTextMessage(message);
 
-		Spectators spectators;
-		g_game.map.getSpectators(spectators, position, false, true);
+		Spectators spectators = g_game.map.getSpectators(position, false, true);
 		spectators.erase(this);
 
 		if (!spectators.empty()) {
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
+
+			// send to client
 			for (Creature* spectator : spectators) {
 				spectator->getPlayer()->sendTextMessage(message);
 			}

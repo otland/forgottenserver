@@ -201,9 +201,9 @@ public:
 
 	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-	void getSpectators(Spectators& spectators, const Position& centerPos, bool multifloor = false,
-	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
-	                   int32_t maxRangeY = 0);
+	Spectators getSpectators(const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+	                         int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
+	                         int32_t maxRangeY = 0);
 
 	void clearSpectatorCache();
 	void clearPlayersSpectatorCache();
@@ -268,9 +268,9 @@ private:
 	uint32_t height = 0;
 
 	// Actually scans the map for spectators
-	void getSpectatorsInternal(Spectators& spectators, const Position& centerPos, int32_t minRangeX,
-	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
-	                           int32_t maxRangeZ, bool onlyPlayers) const;
+	void getSpectatorsInternal(Spectators& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX,
+	                           int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ,
+	                           bool onlyPlayers) const;
 
 	friend class Game;
 	friend class IOMap;

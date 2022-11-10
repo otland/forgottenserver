@@ -93,10 +93,9 @@ void Npc::reload()
 	reset();
 	load();
 
-	Spectators players;
-	g_game.map.getSpectators(players, getPosition(), true, true);
-	for (const auto& player : players) {
-		spectators.insert(player->getPlayer());
+	Spectators playerSpectators = g_game.map.getSpectators(getPosition(), true, true);
+	for (const auto& playerSpectator : playerSpectators) {
+		spectators.insert(playerSpectator->getPlayer());
 	}
 
 	const bool hasSpectators = !spectators.empty();
@@ -239,10 +238,9 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
-		Spectators players;
-		g_game.map.getSpectators(players, getPosition(), true, true);
-		for (const auto& player : players) {
-			spectators.insert(player->getPlayer());
+		Spectators playerSpectators = g_game.map.getSpectators(getPosition(), true, true);
+		for (const auto& playerSpectator : playerSpectators) {
+			spectators.insert(playerSpectator->getPlayer());
 		}
 
 		const bool hasSpectators = !spectators.empty();

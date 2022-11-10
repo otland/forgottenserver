@@ -640,6 +640,7 @@ void Combat::combatTileEffects(const Spectators& spectators, Creature* caster, T
 	}
 
 	if (params.impactEffect != CONST_ME_NONE) {
+		// send to client
 		Game::addMagicEffect(spectators, tile->getPosition(), params.impactEffect);
 	}
 }
@@ -701,8 +702,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 		}
 	} else {
 		if (!params.aggressive || (caster != target && Combat::canDoCombat(caster, target) == RETURNVALUE_NOERROR)) {
-			Spectators spectators;
-			g_game.map.getSpectators(spectators, target->getPosition(), true, true);
+			Spectators spectators = g_game.map.getSpectators(target->getPosition(), true, true);
 
 			if (params.origin != ORIGIN_MELEE) {
 				for (const auto& condition : params.conditionList) {
@@ -771,8 +771,7 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 		const int32_t rangeX = maxX + Map::maxViewportX;
 		const int32_t rangeY = maxY + Map::maxViewportY;
 
-		Spectators spectators;
-		g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
+		Spectators spectators = g_game.map.getSpectators(position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 		postCombatEffects(caster, position, params);
 
@@ -970,8 +969,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	const int32_t rangeX = maxX + Map::maxViewportX;
 	const int32_t rangeY = maxY + Map::maxViewportY;
 
-	Spectators spectators;
-	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
+	Spectators spectators = g_game.map.getSpectators(position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);
 

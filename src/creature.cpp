@@ -1150,9 +1150,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	gainExp /= 2;
 	master->onGainExperience(gainExp, target);
 
-	Spectators spectators;
-	g_game.map.getSpectators(spectators, position, false, true);
-
+	Spectators spectators = g_game.map.getSpectators(position, false, true);
 	if (spectators.empty()) {
 		return;
 	}
@@ -1164,6 +1162,7 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.color = TEXTCOLOR_WHITE_EXP;
 	message.primary.value = gainExp;
 
+	// send to client
 	for (Creature* spectator : spectators) {
 		spectator->getPlayer()->sendTextMessage(message);
 	}
