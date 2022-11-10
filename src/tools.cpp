@@ -316,7 +316,7 @@ std::string formatDate(time_t time)
 
 std::string formatDateShort(time_t time)
 {
-    return fmt::format("{:%d %b %Y}", fmt::localtime(time));
+	return fmt::format("{:%d %b %Y}", fmt::localtime(time));
 }
 
 Direction getDirection(const std::string& string)
