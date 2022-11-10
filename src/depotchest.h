@@ -9,7 +9,7 @@
 class DepotChest final : public Container
 {
 public:
-	explicit DepotChest(uint16_t type, bool paginated = true);
+	explicit DepotChest(uint16_t type, uint16_t depotId, bool paginated = true);
 
 	DepotChest* getDepotChest() override { return this; }
 	const DepotChest* getDepotChest() const override { return this; }
@@ -18,7 +18,6 @@ public:
 	void setMaxDepotItems(uint32_t maxitems) { maxDepotItems = maxitems; }
 
 	uint16_t getDepotId() const { return depotId; }
-	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,

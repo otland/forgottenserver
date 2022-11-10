@@ -24,7 +24,6 @@ public:
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
 	uint16_t getDepotId() const { return depotId; }
-	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,

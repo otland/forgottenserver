@@ -876,9 +876,8 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
+	it = depotChests.emplace(depotId, new DepotChest(depotItemId, depotId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
-	it->second->setDepotId(depotId);
 	return it->second;
 }
 
@@ -889,7 +888,7 @@ DepotLocker& Player::getDepotLocker()
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
 		depotLocker->internalAddThing(inbox);
 
-		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
+		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, 0, false);
 		if (depotChest) {
 			// adding in reverse to align them from first to last
 			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
