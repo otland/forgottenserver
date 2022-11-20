@@ -4686,12 +4686,12 @@ void Game::addMagicEffect(const Spectators& spectators, const Position& pos, uin
 
 void Game::addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect)
 {
-	Spectators fromPosspectators = map.getSpectators(fromPos, true, true);
+	auto fromPosSpectators = map.getSpectators(fromPos, true, true);
 	const auto& toPosSpectators = map.getSpectators(toPos, true, true);
-	fromPosspectators.insert(toPosSpectators);
+	fromPosSpectators.insert(toPosSpectators);
 
 	// send to client
-	addDistanceEffect(fromPosspectators, fromPos, toPos, effect);
+	addDistanceEffect(fromPosSpectators, fromPos, toPos, effect);
 }
 
 void Game::addDistanceEffect(const Spectators& spectators, const Position& fromPos, const Position& toPos,
