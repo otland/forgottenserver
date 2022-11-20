@@ -950,7 +950,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos,
 	}
 
 	const Position& playerPos = player->getPosition();
-	const Position& mapFromPos = static_cast<Tile*>(fromCylinder)->getPosition();
+	const Position& mapFromPos = fromCylinder->getTile()->getPosition();
 	if (playerPos.z != mapFromPos.z) {
 		player->sendCancelMessage(playerPos.z > mapFromPos.z ? RETURNVALUE_FIRSTGOUPSTAIRS : RETURNVALUE_FIRSTGODOWNSTAIRS);
 		return;
