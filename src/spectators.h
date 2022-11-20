@@ -8,18 +8,14 @@ class Creature;
 
 class Spectators final
 {
-	using Vec = std::vector<Creature*>;
-	using Iterator = Vec::iterator;
-	using ConstIterator = Vec::const_iterator;
-
 public:
 	Spectators() { spectators.reserve(32); }
 
 	void insert(Creature* spectator)
 	{
 		auto it = std::find(spectators.begin(), spectators.end(), spectator);
-		if (it == end()) {
-			spectators.emplace_back(spectator);
+		if (it == spectators.end()) {
+			spectators.insert(it, spectator);
 		}
 	}
 
@@ -39,11 +35,11 @@ public:
 	void erase(Creature* spectator)
 	{
 		auto it = std::find(spectators.begin(), spectators.end(), spectator);
-		if (it == end()) {
+		if (it == spectators.end()) {
 			return;
 		}
 
-		std::iter_swap(it, end() - 1);
+		std::iter_swap(it, spectators.end() - 1);
 		spectators.pop_back();
 	}
 
@@ -53,14 +49,14 @@ public:
 
 	void emplace_back(Creature* c) { spectators.emplace_back(c); }
 
-	Iterator begin() { return spectators.begin(); }
-	ConstIterator begin() const { return spectators.begin(); }
+	decltype(auto) begin() { return spectators.begin(); }
+	decltype(auto) begin() const { return spectators.begin(); }
 
-	Iterator end() { return spectators.end(); }
-	ConstIterator end() const { return spectators.end(); }
+	decltype(auto) end() { return spectators.end(); }
+	decltype(auto) end() const { return spectators.end(); }
 
 private:
-	Vec spectators;
+	std::vector<Creature*> spectators;
 };
 
 #endif // FS_SPECTATORS_H

@@ -429,7 +429,7 @@ Spectators Map::getSpectators(const Position& centerPos, bool multifloor /*= fal
 					const auto& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							spectators.emplace_back(spectator);
+							spectators.insert(spectator);
 						}
 					}
 				}
