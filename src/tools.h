@@ -71,4 +71,8 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
+const std::vector<uint16_t> getInvalidLookTypes();
+bool isInvalidLookType(uint16_t lookTypeId);
+uint16_t sizeOfInvalidLookTypes();
+
 #endif // FS_TOOLS_H

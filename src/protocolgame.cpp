@@ -3254,29 +3254,41 @@ void ProtocolGame::sendOutfitWindow()
 
 	msg.add<uint16_t>(0); // current familiar looktype
 
-	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
-		static const std::string gamemasterOutfitName = "Gamemaster";
-		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
-	}
+		static uint16_t looktypes = 1463;
+		msg.add<uint16_t>(looktypes - sizeOfInvalidLookTypes());
 
-	protocolOutfits.reserve(outfits.size());
-	for (const Outfit& outfit : outfits) {
-		uint8_t addons;
-		if (!player->getOutfitAddons(outfit, addons)) {
-			continue;
+		for (int i = 0; i < looktypes; i++) {
+			if (isInvalidLookType(i)) {
+				continue;
+			}
+
+			msg.add<uint16_t>(i);
+			msg.addString(fmt::format("Type {:d}", i));
+			msg.addByte(0);
+			msg.addByte(0x00);
+		}
+	} else {
+		std::vector<ProtocolOutfit> protocolOutfits;
+		protocolOutfits.reserve(outfits.size());
+
+		for (const Outfit& outfit : outfits) {
+			uint8_t addons;
+			if (!player->getOutfitAddons(outfit, addons)) {
+				continue;
+			}
+
+			protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
 		}
 
-		protocolOutfits.emplace_back(outfit.name, outfit.lookType, addons);
-	}
-
-	msg.add<uint16_t>(protocolOutfits.size());
-	for (const ProtocolOutfit& outfit : protocolOutfits) {
-		msg.add<uint16_t>(outfit.lookType);
-		msg.addString(outfit.name);
-		msg.addByte(outfit.addons);
-		msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit
-		                   // tooltip (hardcoded)
+		msg.add<uint16_t>(protocolOutfits.size());
+		for (const ProtocolOutfit& outfit : protocolOutfits) {
+			msg.add<uint16_t>(outfit.lookType);
+			msg.addString(outfit.name);
+			msg.addByte(outfit.addons);
+			msg.addByte(0x00); // mode: 0x00 - available, 0x01 store (requires U32 store offerId), 0x02 golden outfit
+			                   // tooltip (hardcoded)
+		}
 	}
 
 	std::vector<const Mount*> mounts;
