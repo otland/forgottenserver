@@ -17,26 +17,52 @@ Attr_ReadValue Podium::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			uint8_t flags;
-			propStream.read<uint8_t>(flags);
+			uint8_t flags = 0;
+			if (!propStream.read<uint8_t>(flags)) {
+				return ATTR_READ_ERROR;
+			}
 			setFlags(flags);
 
-			uint8_t newDirection;
-			propStream.read<uint8_t>(newDirection);
+			uint8_t newDirection = DIRECTION_NONE;
+			if (!propStream.read<uint8_t>(newDirection)) {
+				return ATTR_READ_ERROR;
+			}
 			setDirection(static_cast<Direction>(newDirection));
 
 			Outfit_t newOutfit;
-			propStream.read<uint16_t>(newOutfit.lookType);
-			propStream.read<uint8_t>(newOutfit.lookHead);
-			propStream.read<uint8_t>(newOutfit.lookBody);
-			propStream.read<uint8_t>(newOutfit.lookLegs);
-			propStream.read<uint8_t>(newOutfit.lookFeet);
-			propStream.read<uint8_t>(newOutfit.lookAddons);
-			propStream.read<uint16_t>(newOutfit.lookMount);
-			propStream.read<uint8_t>(newOutfit.lookMountHead);
-			propStream.read<uint8_t>(newOutfit.lookMountBody);
-			propStream.read<uint8_t>(newOutfit.lookMountLegs);
-			propStream.read<uint8_t>(newOutfit.lookMountFeet);
+			if (!propStream.read<uint16_t>(newOutfit.lookType)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookHead)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookBody)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookLegs)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookFeet)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookAddons)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint16_t>(newOutfit.lookMount)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookMountHead)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookMountBody)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookMountLegs)) {
+				return ATTR_READ_ERROR;
+			}
+			if (!propStream.read<uint8_t>(newOutfit.lookMountFeet)) {
+				return ATTR_READ_ERROR;
+			}
 			setOutfit(newOutfit);
 
 			g_game.updatePodium(this);
