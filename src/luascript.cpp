@@ -2162,7 +2162,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS);
 	registerEnumIn("configKeys", ConfigManager::TWO_FACTOR_AUTH);
 	registerEnumIn("configKeys", ConfigManager::MANASHIELD_BREAKABLE);
-	registerEnumIn("configKeys", ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL);
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);

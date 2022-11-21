@@ -46,10 +46,6 @@ public:
 
 	bool getMagicShield() const
 	{
-		if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL)) {
-			return true;
-		}
-
 		if (!g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
 			return false;
 		}

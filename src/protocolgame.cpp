@@ -3640,9 +3640,6 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	        dynamic_cast<ConditionManaShield*>(player->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
 		msg.add<uint16_t>(conditionManaShield->getManaShield());    // remaining mana shield
 		msg.add<uint16_t>(conditionManaShield->getMaxManaShield()); // total mana shield
-	} else if (g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE_FOR_ALL)) {
-		msg.add<uint16_t>(player->getManaShieldBar());    // remaining mana shield
-		msg.add<uint16_t>(player->getMaxManaShieldBar()); // total mana shield
 	} else {
 		msg.add<uint16_t>(0); // remaining mana shield
 		msg.add<uint16_t>(0); // total mana shield
