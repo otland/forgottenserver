@@ -2221,6 +2221,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
 	registerMethod("Game", "saveAccountStorageValues", LuaScriptInterface::luaGameSaveAccountStorageValues);
 
+	registerMethod("Game", "getValidLookTypes", LuaScriptInterface::luaGameGetValidLookTypes);
+	registerMethod("Game", "isValidLookType", LuaScriptInterface::luaGameIsValidLookType);
+
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
 
@@ -5021,6 +5024,29 @@ int LuaScriptInterface::luaGameSaveAccountStorageValues(lua_State* L)
 	// Game.saveAccountStorageValues()
 	lua_pushboolean(L, g_game.saveAccountStorageValues());
 
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetValidLookTypes(lua_State* L)
+{
+	// Game.getValidLookTypes()
+	const auto lookTypes = getValidLookTypes();
+	lua_createtable(L, 0, lookTypes.size());
+
+	int index = 0;
+	for (const auto lookType : lookTypes) {
+		lua_pushnumber(L, lookType);
+		lua_rawseti(L, -2, ++index);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGameIsValidLookType(lua_State* L)
+{
+	// Game.isValidLookType(lookType)
+	uint16_t lookType = getNumber<uint16_t>(L, 1, 0);
+	pushBoolean(L, isValidLookType(lookType));
 	return 1;
 }
 

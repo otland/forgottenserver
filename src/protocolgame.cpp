@@ -3255,16 +3255,12 @@ void ProtocolGame::sendOutfitWindow()
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	if (player->isAccessPlayer()) {
-		static uint16_t looktypes = 1463;
-		msg.add<uint16_t>(looktypes - sizeOfInvalidLookTypes());
+		auto lookTypes = getValidLookTypes();
+		msg.add<uint16_t>(lookTypes.size());
 
-		for (int i = 0; i < looktypes; i++) {
-			if (isInvalidLookType(i)) {
-				continue;
-			}
-
-			msg.add<uint16_t>(i);
-			msg.addString(fmt::format("Type {:d}", i));
+		for (const auto lookType : lookTypes) {
+			msg.add<uint16_t>(lookType);
+			msg.addString(fmt::format("LookType {:d}", lookType));
 			msg.addByte(0);
 			msg.addByte(0x00);
 		}

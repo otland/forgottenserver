@@ -545,6 +545,9 @@ private:
 	static int luaGameSetAccountStorageValue(lua_State* L);
 	static int luaGameSaveAccountStorageValues(lua_State* L);
 
+	static int luaGameGetValidLookTypes(lua_State* L);
+	static int luaGameIsValidLookType(lua_State* L);
+
 	// Variant
 	static int luaVariantCreate(lua_State* L);
 
