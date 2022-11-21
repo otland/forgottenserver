@@ -28,27 +28,28 @@
 			<attribute key="areaEffect" value="stun" />
 		</attack>
 	</attacks>
-	<defenses armor="15" defense="15" />
+	<defenses armor="17" defense="17" />
 	<elements>
-		<element firePercent="10" />
-		<element icePercent="-5" />
-		<element deathPercent="-5" />
+		<element energyPercent="25" />
+		<element earthPercent="-10" />
+		<element firePercent="25" />
+		<element holyPercent="20" />
+		<element deathPercent="-10" />
 	</elements>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity paralyze="1" />
 	</immunities>
-	<voices interval="5000" chance="10">
-		<voice sentence="Error. LOAD 'PROGRAM" />
-		<voice sentence="8,1" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Error. LOAD 'PROGRAM',8,1" />
 		<voice sentence="Remain. Obedient." />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="55" chance="82000" />
-		<item name="halberd" chance="1000" />
-		<item name="small health potion" chance="1980" />
-		<item name="gear wheel" chance="4840" />
-		<item id="9808" chance="200" /><!-- rusty armor (common) -->
-		<item name="slime mould" chance="310" />
+		<item id="2148" name="gold coin" chance="82109" countmax="55" />
+		<item id="9690" name="gear wheel" chance="4825" />
+		<item id="7618" name="health potion" chance="1964" />
+		<item id="2381" name="halberd" chance="1022" />
+		<item id="9808" name="heavily rusted armor" chance="504" />
+		<item id="13758" name="slime mould" chance="310" />
 	</loot>
 </monster>

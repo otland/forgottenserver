@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Redeemed Soul" nameDescription="a redeemed soul" race="undead" experience="0" speed="140">
+	<health now="250" max="250" />
+	<look type="714" corpse="24634" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+		<flag runonhealth="250" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="60" />
+		<element energyPercent="20" />
+		<element holyPercent="100" />
+	</elements>
+	<defenses armor="12" defense="12">
+		<defense name="healing" interval="2000" chance="20" min="0" max="250" />
+		<defense name="speed" interval="2000" chance="8" speedchange="240" duration="20000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ting-a-ling." />
+		<voice sentence="Free ... finally." />
+	</voices>
+</monster>

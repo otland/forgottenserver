@@ -308,18 +308,6 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-std::string convertIPToString(uint32_t ip)
-{
-	char buffer[17];
-
-	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
-	if (res < 0) {
-		return {};
-	}
-
-	return buffer;
-}
-
 std::string formatDate(time_t time)
 {
 	const tm* tms = localtime(&time);
@@ -606,6 +594,8 @@ MagicEffectNames magicEffectNames = {
     {"fatal", CONST_ME_FATAL},
     {"dodge", CONST_ME_DODGE},
     {"hourglass", CONST_ME_HOURGLASS},
+    {"fireworksstar", CONST_ME_FIREWORKSSTAR},
+    {"fireworkscircle", CONST_ME_FIREWORKSCIRCLE},
     {"ferumbras1", CONST_ME_FERUMBRAS_1},
     {"gazharagoth", CONST_ME_GAZHARAGOTH},
     {"madmage", CONST_ME_MAD_MAGE},

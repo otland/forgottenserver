@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Melting Frozen Horror" nameDescription="a melting frozen horror" race="undead" experience="0" speed="240">
+	<health now="70000" max="70000" />
+	<look type="261" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" />
+		<attack name="hirintror freeze" interval="2000" chance="15" />
+		<attack name="ice" interval="2000" chance="15" range="7" target="1" radius="3" min="-75" max="-150">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="11" length="8" spread="0" speedchange="-800" duration="20000">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="hirintror skill reducer" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<elements>
+		<element deathPercent="-50" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity ice="1" />
+		<immunity drunk="1" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="Chrrrrrk! Chrrrk!" />
+	</voices>
+</monster>

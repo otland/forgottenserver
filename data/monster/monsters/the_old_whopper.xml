@@ -13,7 +13,6 @@
 		<flag canpushitems="1" />
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
-		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
@@ -50,11 +49,11 @@
 		<item name="double axe" chance="880" />
 		<item name="battle hammer" chance="5200" />
 		<item name="heavy machete" chance="2000" />
-		<item name="dark helmet" chance="200" />
+		<item id="2490" name="dark helmet" chance="200" />
 		<item name="plate shield" chance="2000" />
 		<item name="battle shield" chance="6190" />
 		<item name="meat" chance="49950" />
-		<item id="7398" chance="5140" /><!-- cyclops trophy -->
+		<item id="7398" name="cyclops trophy" chance="75000" />
 		<item name="spiked squelcher" chance="5150" />
 		<item name="strong health potion" chance="390" />
 		<item name="cyclops toe" chance="10280" />

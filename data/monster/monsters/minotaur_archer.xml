@@ -37,16 +37,16 @@
 		<voice sentence="Kaplar!" />
 	</voices>
 	<loot>
-		<item name="bolt" countmax="20" chance="90450" />
-		<item name="gold coin" countmax="30" chance="75410" />
-		<item name="broken crossbow" chance="15400" />
-		<item name="piercing bolt" countmax="4" chance="12340" />
-		<item name="piece of archer armor" chance="8260" />
-		<item name="meat" chance="5000" />
-		<item name="minotaur horn" countmax="2" chance="2000" />
-		<item name="minotaur leather" chance="1900" />
-		<item name="crossbow" chance="830" />
-		<item name="scale armor" chance="530" />
-		<item name="brass armor" chance="530" />
+		<item id="2543" name="bolt" chance="90124" countmax="20" />
+		<item id="2148" name="gold coin" chance="75036" countmax="30" />
+		<item id="12407" name="broken crossbow" chance="15323" />
+		<item id="7363" name="piercing bolt" chance="12190" countmax="4" />
+		<item id="12439" name="piece of archer armor" chance="8034" />
+		<item id="2666" name="meat" chance="4952" />
+		<item id="12428" name="minotaur horn" chance="1973" countmax="2" />
+		<item id="5878" name="minotaur leather" chance="1925" />
+		<item id="2455" name="crossbow" chance="877" />
+		<item id="2483" name="scale armor" chance="539" />
+		<item id="2465" name="brass armor" chance="519" />
 	</loot>
 </monster>

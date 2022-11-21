@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Feroxa" nameDescription="Feroxa" race="blood" experience="0" speed="350">
+	<health now="150000" max="150000" />
+	<look type="731" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1800" />
+		<attack name="death" interval="2000" chance="20" radius="6" target="0" min="-700" max="-1050">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" length="9" spread="1" min="-700" max="-1250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="7" min="-450" max="-700">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="50" defense="55">
+		<defense name="speed" interval="2000" chance="12" speedchange="450" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="outfit" interval="2000" chance="20" monster="werewolf" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="30" />
+		<element firePercent="20" />
+		<element icePercent="20" />
+		<element holyPercent="-8" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity earth="1" />
+	</immunities>
+</monster>

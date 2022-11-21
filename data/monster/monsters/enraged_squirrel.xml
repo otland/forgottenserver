@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Enraged Squirrel" nameDescription="an enraged squirrel" race="blood" experience="15" speed="300" manacost="220">
+	<health now="35" max="35" />
+	<look type="274" corpse="7628" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag summonable="1" />
+		<flag convinceable="1" />
+		<flag illusionable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="1" defense="1" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Chchch" />
+	</voices>
+	<loot>
+		<item id="7909" name="walnut" chance="2564" />
+	</loot>
+</monster>

@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-120" poison="65" />
+		<attack name="melee" interval="2000" min="0" max="-120" poison="116" />
 		<attack name="lifedrain" interval="5000" chance="20" range="1" min="-100" max="-250" />
 		<attack name="earth" interval="2000" chance="20" min="-200" max="-500">
 			<attribute key="shootEffect" value="poisonarrow" />
@@ -67,19 +67,18 @@
 		<voice sentence="Die!" />
 	</voices>
 	<loot>
-		<item name="crystal arrow" chance="100000" />
-		<item name="gold coin" countmax="100" chance="43000" />
-		<item name="gold coin" countmax="60" chance="43000" />
-		<item name="red apple" countmax="2" chance="76000" />
-		<item name="poison arrow" countmax="20" chance="56000" />
-		<item name="burst arrow" countmax="15" chance="47000" />
-		<item name="onyx arrow" countmax="6" chance="32000" />
-		<item name="arrow" countmax="25" chance="23000" />
-		<item name="power bolt" countmax="5" chance="16000" />
-		<item name="great health potion" chance="11000" />
-		<item name="small diamond" countmax="3" chance="10000" />
-		<item name="mini mummy" chance="2250" />
-		<item name="stealth ring" chance="2250" />
-		<item name="boots of haste" chance="1100" />
+		<item id="2352" name="crystal arrow" chance="100000" />
+		<item id="2148" name="gold coin" chance="85417" countmax="211" />
+		<item id="2674" name="red apple" chance="78125" countmax="2" />
+		<item id="2545" name="poison arrow" chance="57292" countmax="19" />
+		<item id="2546" name="burst arrow" chance="47917" countmax="15" />
+		<item id="7365" name="onyx arrow" chance="33333" countmax="6" />
+		<item id="2544" name="arrow" chance="22917" countmax="25" />
+		<item id="2547" name="power bolt" chance="17708" countmax="5" />
+		<item id="7591" name="great health potion" chance="11458" />
+		<item id="2145" name="small diamond" chance="9375" countmax="3" />
+		<item id="2165" name="stealth ring" chance="3125" />
+		<item id="11207" name="mini mummy" chance="2083" />
+		<item id="2195" name="boots of haste" chance="1042" />
 	</loot>
 </monster>

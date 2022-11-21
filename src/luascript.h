@@ -500,6 +500,8 @@ private:
 	// Game
 	static int luaGameGetSpectators(lua_State* L);
 	static int luaGameGetPlayers(lua_State* L);
+	static int luaGameGetNpcs(lua_State* L);
+	static int luaGameGetMonsters(lua_State* L);
 	static int luaGameLoadMap(lua_State* L);
 
 	static int luaGameGetExperienceStage(lua_State* L);
@@ -1060,6 +1062,8 @@ private:
 
 	static int luaNpcGetSpeechBubble(lua_State* L);
 	static int luaNpcSetSpeechBubble(lua_State* L);
+
+	static int luaNpcGetSpectators(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);

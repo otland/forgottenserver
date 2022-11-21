@@ -59,14 +59,22 @@
 		<voice sentence="I bring your deathhh, mortalssss" />
 	</voices>
 	<loot>
-		<item name="platinum coin" countmax="5" chance="51850" />
-		<item name="platinum coin" countmax="95" chance="10750" />
-		<item name="life ring" chance="35000" />
-		<item name="power bolt" countmax="29" chance="36250" />
-		<item name="green mushroom" chance="11111" />
-		<item name="onyx arrow" chance="525" />
-		<item name="mercenary sword" chance="27750" />
-		<item name="noble axe" chance="37000" />
-		<item id="10309" chance="31500" /><!-- claw of the noxious spawn-->
+		<item id="10611" name="snake skin" chance="100000" />
+		<item id="11230" name="winged tail" chance="100000" />
+		<item id="2152" name="platinum coin" chance="80822" countmax="5" />
+		<item id="2149" name="small emerald" chance="71233" countmax="5" />
+		<item id="7590" name="great mana potion" chance="64384" countmax="4" />
+		<item id="10309" name="claw of 'the noxious spawn'" chance="45205" />
+		<item id="2528" name="tower shield" chance="43836" />
+		<item id="7456" name="noble axe" chance="42466" />
+		<item id="7386" name="mercenary sword" chance="36986" />
+		<item id="2033" name="golden mug" chance="32877" />
+		<item id="7368" name="assassin star" chance="31507" countmax="98" />
+		<item id="2487" name="crown armor" chance="30137" />
+		<item id="2796" name="green mushroom" chance="16438" />
+		<item id="8902" name="spellbook of mind control" chance="16438" />
+		<item id="2168" name="life ring" chance="12329" />
+		<item id="2498" name="royal helmet" chance="2740" />
+		<item id="8880" name="swamplair armor" chance="2740" />
 	</loot>
 </monster>

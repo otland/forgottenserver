@@ -64,7 +64,7 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 	}
 
 	if (task.callback) {
-		g_dispatcher.addTask(createTask([=, callback = task.callback]() { callback(result, success); }));
+		g_dispatcher.addTask([=, callback = task.callback]() { callback(result, success); });
 	}
 }
 

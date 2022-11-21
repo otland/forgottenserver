@@ -53,18 +53,18 @@
 		<voice sentence="Help me, boys!" />
 	</voices>
 	<loot>
-		<item name="nose ring" chance="100000" />
-		<item name="gold coin" countmax="99" chance="97000" />
-		<item name="minotaur leather" chance="97000" />
-		<item name="minotaur horn" countmax="2" chance="93000" />
-		<item name="piece of warrior armor" chance="81000" />
-		<item name="piercing bolt" countmax="14" chance="46000" />
-		<item name="brass armor" chance="28000" />
-		<item name="meat" chance="15000" />
-		<item name="battle shield" chance="12150" />
-		<item name="dwarven helmet" chance="9300" />
-		<item name="strong health potion" chance="9300" />
-		<item name="fishing rod" chance="6250" />
-		<item name="double axe" chance="3130" />
+		<item id="5804" name="nose ring" chance="100000" />
+		<item id="2148" name="gold coin" chance="96875" countmax="99" />
+		<item id="5878" name="minotaur leather" chance="96875" />
+		<item id="12428" name="minotaur horn" chance="93750" countmax="2" />
+		<item id="12438" name="piece of warrior armor" chance="81250" />
+		<item id="7363" name="piercing bolt" chance="46875" countmax="14" />
+		<item id="2465" name="brass armor" chance="28125" />
+		<item id="2666" name="meat" chance="15625" />
+		<item id="2513" name="battle shield" chance="12500" />
+		<item id="2502" name="dwarven helmet" chance="9375" />
+		<item id="7588" name="strong health potion" chance="9375" />
+		<item id="2580" name="fishing rod" chance="6250" />
+		<item id="2387" name="double axe" chance="3125" />
 	</loot>
 </monster>

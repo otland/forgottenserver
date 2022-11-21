@@ -227,6 +227,8 @@ private:
 	void sendTextWindow(uint32_t windowTextId, Item* item, uint16_t maxlen, bool canWrite);
 	void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 	void sendHouseWindow(uint32_t windowTextId, const std::string& text);
+	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
+	                        const std::string& target);
 	void sendOutfitWindow();
 
 	void sendPodiumWindow(const Item* item);
@@ -323,19 +325,6 @@ private:
 	void parseExtendedOpcode(NetworkMessage& msg);
 
 	friend class Player;
-
-	// Helpers so we don't need to bind every time
-	template <typename Callable>
-	void addGameTask(Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(std::forward<Callable>(function)));
-	}
-
-	template <typename Callable>
-	void addGameTaskTimed(uint32_t delay, Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(delay, std::forward<Callable>(function)));
-	}
 
 	std::unordered_set<uint32_t> knownCreatureSet;
 	Player* player = nullptr;

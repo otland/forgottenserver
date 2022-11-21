@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Unbound Blightwalker" nameDescription="an unbound blightwalker" race="undead" experience="5850" speed="350">
+	<health now="7900" max="7900" />
+	<look type="246" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-99" />
+		<attack name="earth" interval="2000" chance="9" range="1" target="1" min="-220" max="-405">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="blightwalker curse" interval="2000" chance="10" />
+		<attack name="lifedrain" interval="2000" chance="14" radius="4" target="0" min="-65" max="-135">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="12" duration="35000" radius="3" target="0">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" target="1" range="7" speedchange="-300" duration="30000">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<elements>
+		<element firePercent="50" />
+		<element energyPercent="20" />
+		<element icePercent="50" />
+		<element physicalPercent="-10" />
+		<element holyPercent="-30" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity earth="1" />
+		<immunity lifedrain="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity paralyze="1" />
+	</immunities>
+</monster>

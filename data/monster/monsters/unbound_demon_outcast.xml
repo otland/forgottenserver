@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Unbound Demon Outcast" nameDescription="an unbound demon outcast" race="fire" experience="6200" speed="300">
+	<health now="5900" max="5900" />
+	<look type="590" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="0" />
+		<attack name="energy" interval="2000" chance="10" length="6" spread="0" target="1" min="-200" max="-300">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" target="1" min="-250" max="-350">
+			<attribute key="areaEffect" value="yellowenergy" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="3" target="1" min="0" max="0">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="9" range="7" target="1" min="-50" max="-100">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="demon outcast skill reducer" range="5" interval="2000" chance="7" />
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="15" min="100" max="200">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="10" speedchange="468" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<summons maxSummons="2">
+		<summon name="energy elemental" interval="2000" chance="10" />
+	</summons>
+	<elements>
+		<element physicalPercent="20" />
+		<element deathPercent="5" />
+		<element energyPercent="-8" />
+		<element icePercent="5" />
+		<element earthPercent="40" />
+		<element holyPercent="-5" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

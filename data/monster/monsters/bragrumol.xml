@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <monster name="Bragrumol" nameDescription="Bragrumol" race="fire" experience="18000" speed="220">
 	<health now="38000" max="38000" />
 	<look type="856" corpse="13973" />

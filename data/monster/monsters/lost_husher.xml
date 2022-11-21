@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="220">
+<monster name="Lost Husher" nameDescription="a lost husher" race="blood" experience="1800" speed="250">
 	<health now="1600" max="1600" />
 	<look type="537" corpse="19964" />
 	<targetchange interval="4000" chance="10" />
@@ -38,7 +38,7 @@
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
+	<defenses armor="55" defense="55">
 		<defense name="healing" interval="2000" chance="15" min="75" max="92">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</defense>
@@ -47,12 +47,12 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element holyPercent="-5" />
-		<element icePercent="5" />
-		<element energyPercent="15" />
 		<element physicalPercent="5" />
-		<element firePercent="40" />
-		<element deathPercent="5" />
+		<element energyPercent="10" />
+		<element firePercent="25" />
+		<element icePercent="15" />
+		<element holyPercent="-10" />
+		<element deathPercent="20" />
 	</elements>
 	<immunities>
 		<immunity earth="1" />
@@ -63,32 +63,32 @@
 		<voice sentence="Arr far zwar!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="platinum coin" countmax="2" chance="58670" />
-		<item name="dwarven ring" chance="2870" />
-		<item name="fire axe" chance="330" />
-		<item name="skull staff" chance="280" />
-		<item name="guardian shield" chance="830" />
-		<item name="tower shield" chance="440" />
-		<item name="brown mushroom" countmax="2" chance="14920" />
-		<item name="spiked squelcher" chance="50" />
-		<item name="strong health potion" countmax="3" chance="11050" />
-		<item name="great mana potion" countmax="2" chance="10770" />
-		<item name="fiery knight axe" chance="770" />
-		<item name="terra legs" chance="50" />
-		<item name="terra boots" chance="880" />
-		<item name="small topaz" chance="9780" />
-		<item name="clay lump" chance="500" />
-		<item id="13757" chance="10930" /><!-- Coal -->
-		<item name="buckle" chance="8180" />
-		<item name="buckle" chance="770" />
-		<item name="bonecarving knife" chance="8510" />
-		<item name="leather harness" chance="11330" />
-		<item name="wimp tooth chain" chance="8950" />
-		<item name="lost husher's staff" chance="9280" />
-		<item name="skull shatterer" chance="12320" />
-		<item name="mad froth" chance="15580" />
-		<item name="red hair dye" chance="8510" />
-		<item name="basalt figurine" chance="8560" />
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="59669" countmax="2" />
+		<item id="20135" name="red hair dye" chance="15336" />
+		<item id="2789" name="brown mushroom" chance="15105" countmax="2" />
+		<item id="20127" name="wimp tooth chain" chance="12042" />
+		<item id="13757" name="coal" chance="11812" />
+		<item id="20130" name="holy ash" chance="11608" />
+		<item id="7588" name="strong health potion" chance="10466" countmax="3" />
+		<item id="7590" name="great mana potion" chance="10377" countmax="2" />
+		<item id="9970" name="small topaz" chance="9695" />
+		<item id="20128" name="lost husher's staff" chance="9217" />
+		<item id="20129" name="skull shatterer" chance="8996" />
+		<item id="20110" name="bonecarving knife" chance="8465" />
+		<item id="20137" name="basalt figurine" chance="7739" />
+		<item id="20111" name="bone fetish" chance="7677" />
+		<item id="20136" name="basalt fetish" chance="5932" />
+		<item id="2213" name="dwarven ring" chance="2656" />
+		<item id="2515" name="guardian shield" chance="965" />
+		<item id="11339" name="clay lump" chance="885" />
+		<item id="2430" name="knight axe" chance="744" />
+		<item id="20109" name="buckle" chance="726" />
+		<item id="7886" name="terra boots" chance="620" />
+		<item id="2436" name="skull staff" chance="469" />
+		<item id="7452" name="spiked squelcher" chance="283" />
+		<item id="2432" name="fire axe" chance="266" />
+		<item id="7885" name="terra legs" chance="221" />
+		<item id="2528" name="tower shield" chance="195" />
 	</loot>
 </monster>

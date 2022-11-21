@@ -56,7 +56,7 @@ void Connection::close(bool force)
 	connectionState = CONNECTION_STATE_DISCONNECTED;
 
 	if (protocol) {
-		g_dispatcher.addTask(createTask([protocol = protocol]() { protocol->release(); }));
+		g_dispatcher.addTask([protocol = protocol]() { protocol->release(); });
 	}
 
 	if (messageQueue.empty() || force) {
@@ -86,7 +86,7 @@ Connection::~Connection() { closeSocket(); }
 void Connection::accept(Protocol_ptr protocol)
 {
 	this->protocol = protocol;
-	g_dispatcher.addTask(createTask([=]() { protocol->onConnect(); }));
+	g_dispatcher.addTask([=]() { protocol->onConnect(); });
 	connectionState = CONNECTION_STATE_GAMEWORLD_AUTH;
 	accept();
 }
@@ -98,6 +98,12 @@ void Connection::accept()
 	}
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+
+	boost::system::error_code error;
+	if (auto endpoint = socket.remote_endpoint(error); !error) {
+		remoteAddress = endpoint.address();
+	}
+
 	try {
 		readTimer.expires_from_now(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(
@@ -135,7 +141,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 	uint32_t timePassed = std::max<uint32_t>(1, (time(nullptr) - timeConnected) + 1);
 	if ((++packetsSent / timePassed) >
 	    static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PACKETS_PER_SECOND))) {
-		std::cout << convertIPToString(getIP()) << " disconnected for exceeding packet per second limit." << std::endl;
+		std::cout << getIP() << " disconnected for exceeding packet per second limit." << std::endl;
 		close();
 		return;
 	}
@@ -289,20 +295,6 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 		std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;
 		close(FORCE_CLOSE);
 	}
-}
-
-uint32_t Connection::getIP()
-{
-	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
-
-	// IP-address is expressed in network byte order
-	boost::system::error_code error;
-	const boost::asio::ip::tcp::endpoint endpoint = socket.remote_endpoint(error);
-	if (error) {
-		return 0;
-	}
-
-	return htonl(endpoint.address().to_v4().to_ulong());
 }
 
 void Connection::onWriteOperation(const boost::system::error_code& error)

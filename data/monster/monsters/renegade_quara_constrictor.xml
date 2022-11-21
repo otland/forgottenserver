@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Renegade Quara Constrictor" nameDescription="a renegade quara constrictor" race="blood" experience="1250" speed="380">
+	<health now="1500" max="1500" />
+	<look type="46" corpse="6065" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag illusionable="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="quara constrictor freeze" interval="2000" chance="10" />
+		<attack name="quara constrictor electrify" range="1" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="3000" chance="35" min="150" max="300">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-25" />
+		<element earthPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="80782" countmax="3" />
+		<item id="12443" name="quara tentacle" chance="14621" />
+		<item id="2178" name="mind stone" chance="6667" />
+		<item id="7590" name="great mana potion" chance="6437" />
+		<item id="2214" name="ring of healing" chance="5149" />
+		<item id="2670" name="shrimp" chance="5103" />
+		<item id="2150" name="small amethyst" chance="4920" countmax="2" />
+		<item id="7368" name="assassin star" chance="4598" countmax="7" />
+		<item id="2147" name="small ruby" chance="4092" countmax="2" />
+		<item id="15649" name="vortex bolt" chance="3494" countmax="10" />
+		<item id="18414" name="violet crystal shard" chance="1149" />
+		<item id="8911" name="northwind rod" chance="874" />
+		<item id="5895" name="fish fin" chance="322" />
+		<item id="2114" name="piggy bank" chance="230" />
+	</loot>
+</monster>

@@ -33,8 +33,8 @@
 		<voice sentence="Groar" />
 	</voices>
 	<loot>
-		<item name="meat" countmax="4" chance="68000" />
-		<item name="ham" countmax="2" chance="36000" />
-		<item name="bamboo stick" chance="8600" />
+		<item id="2666" name="meat" chance="69144" />
+		<item id="2671" name="ham" chance="36695" />
+		<item id="12401" name="bamboo stick" chance="9423" />
 	</loot>
 </monster>

@@ -35,17 +35,17 @@
 		<voice sentence="Hail Durin!" />
 	</voices>
 	<loot>
-		<item name="white mushroom" countmax="2" chance="40000" />
-		<item name="bolt" countmax="7" chance="38000" />
-		<item name="gold coin" countmax="12" chance="28000" />
-		<item name="soldier helmet" chance="12000" />
-		<item id="2554" chance="10000" /><!-- shovel -->
-		<item name="chain armor" chance="8000" />
-		<item name="piercing bolt" countmax="3" chance="4000" />
-		<item name="dwarven shield" chance="3000" />
-		<item name="crossbow" chance="3000" />
-		<item name="battle axe" chance="2500" />
-		<item name="iron ore" chance="300" />
-		<item name="axe ring" chance="120" />
+		<item id="2787" name="white mushroom" chance="39924" countmax="2" />
+		<item id="2543" name="bolt" chance="37815" countmax="7" />
+		<item id="2148" name="gold coin" chance="28337" countmax="12" />
+		<item id="2481" name="soldier helmet" chance="11820" />
+		<item id="2554" name="shovel" chance="10026" />
+		<item id="2464" name="chain armor" chance="7525" />
+		<item id="7363" name="piercing bolt" chance="3822" countmax="3" />
+		<item id="2525" name="dwarven shield" chance="3056" />
+		<item id="2455" name="crossbow" chance="3023" />
+		<item id="2378" name="battle axe" chance="2481" />
+		<item id="5880" name="iron ore" chance="303" />
+		<item id="2208" name="axe ring" chance="121" />
 	</loot>
 </monster>

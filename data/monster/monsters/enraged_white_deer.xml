@@ -37,8 +37,8 @@
 		<event name="WhiteDeerScouts" />
 	</script>
 	<loot>
-		<item name="ham" countmax="3" chance="19850" />
-		<item name="white deer antlers" chance="19520" />
-		<item name="white deer skin" chance="20280" />
+		<item id="13534" name="white deer skin" chance="19968" />
+		<item id="2671" name="ham" chance="19727" />
+		<item id="13533" name="white deer antlers" chance="19647" />
 	</loot>
 </monster>
