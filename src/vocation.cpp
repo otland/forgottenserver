@@ -40,7 +40,7 @@ bool Vocations::loadFromXml()
 				voc.clientId = pugi::cast<uint16_t>(attrNode.value());
 			} else if (caseInsensitiveEqual(attrName, "description")) {
 				voc.description = attrNode.as_string();
-			} else if (caseInsensitiveEqual(attrName, "magicshield") == 0) {
+			} else if (caseInsensitiveEqual(attrName, "magicshield")) {
 				voc.magicShield = attrNode.as_bool();
 			} else if (caseInsensitiveEqual(attrName, "gaincap")) {
 				voc.gainCap = pugi::cast<uint32_t>(attrNode.value()) * 100;
