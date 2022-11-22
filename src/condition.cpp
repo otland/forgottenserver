@@ -2000,8 +2000,7 @@ void ConditionManaShield::addCondition(Creature* creature, const Condition* addC
 		endCondition(player);
 		setTicks(addCondition->getTicks());
 
-		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*addCondition);
-
+		const auto& conditionManaShield = static_cast<const ConditionManaShield&>(*addCondition);
 		manaShield = conditionManaShield.manaShield;
 		maxManaShield = conditionManaShield.manaShield;
 		player->sendStats();
