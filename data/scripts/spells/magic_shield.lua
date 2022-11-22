@@ -37,7 +37,7 @@ magicShield:mana(50)
 magicShield:group("support")
 magicShield:isAggressive(false)
 magicShield:isSelfTarget(true)
-if configManager.getBoolean(configKeys.MANASHIELD_BREAKABLE) == true then
+if configManager.getBoolean(configKeys.MANASHIELD_BREAKABLE) then
 	magicShield:cooldown(14000)
 else
 	magicShield:cooldown(2000)
