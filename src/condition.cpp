@@ -1978,8 +1978,7 @@ bool ConditionManaShield::startCondition(Creature* creature)
 	}
 
 	if (Player* player = creature->getPlayer()) {
-		const ConditionManaShield& conditionManaShield = static_cast<const ConditionManaShield&>(*this);
-
+		const auto& conditionManaShield = static_cast<const ConditionManaShield&>(*this);
 		manaShield = conditionManaShield.manaShield;
 		maxManaShield = conditionManaShield.manaShield;
 		player->sendStats();
