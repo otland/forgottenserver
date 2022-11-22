@@ -18,7 +18,7 @@ conditionBreakableManaShield:setParameter(CONDITION_PARAM_TICKS, 60 * 1000)
 local magicShield = Spell(SPELL_INSTANT)
 
 function magicShield.onCastSpell(creature, variant)
-	if configManager.getBoolean(configKeys.MANASHIELD_BREAKABLE) == true then
+	if configManager.getBoolean(configKeys.MANASHIELD_BREAKABLE) then
 		local player = creature:getPlayer()
 		if player then
 			conditionBreakableManaShield:setParameter(CONDITION_PARAM_MANASHIELD_BREAKABLE, math.min(player:getMaxMana(), 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel()))
