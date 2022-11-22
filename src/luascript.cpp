@@ -9036,7 +9036,6 @@ int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
 		player->setManaShieldBar(getNumber<uint16_t>(L, 3));
 		player->sendStats();
 		pushBoolean(L, true);
-		return 1;
 	} else {
 		lua_pushnil(L);
 	}
