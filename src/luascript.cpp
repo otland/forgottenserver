@@ -11322,10 +11322,13 @@ int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 		return 1;
 	}
 
+	const auto& spectators = npc->getSpectators();
+	lua_createtable(L, spectators.size(), 0);
+
 	int index = 0;
-	for (Creature* spectator : npc->getSpectators()) {
-		pushUserdata<Creature>(L, spectator);
-		setCreatureMetatable(L, -1, spectator);
+	for (const auto& spectatorPlayer : npc->getSpectators()) {
+		pushUserdata<const Player>(L, spectatorPlayer);
+		setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
