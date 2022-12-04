@@ -3316,47 +3316,47 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("PropStream", "skip", LuaScriptInterface::luaPropStreamSkip);
 	registerMethod("PropStream", "size", LuaScriptInterface::luaPropStreamSize);
 
-	registerMethod("PropStream", "read_string", LuaScriptInterface::luaPropStreamReadString);
+	registerMethod("PropStream", "readString", LuaScriptInterface::luaPropStreamReadString);
 
-	registerMethod("PropStream", "read_float", LuaScriptInterface::luaPropStreamReadFloat);
-	registerMethod("PropStream", "read_double", LuaScriptInterface::luaPropStreamReadDouble);
+	registerMethod("PropStream", "readFloat", LuaScriptInterface::luaPropStreamReadFloat);
+	registerMethod("PropStream", "readDouble", LuaScriptInterface::luaPropStreamReadDouble);
 
-	registerMethod("PropStream", "read_i8", LuaScriptInterface::luaPropStreamReadI8);
-	registerMethod("PropStream", "read_u8", LuaScriptInterface::luaPropStreamReadU8);
+	registerMethod("PropStream", "readI8", LuaScriptInterface::luaPropStreamReadI8);
+	registerMethod("PropStream", "readU8", LuaScriptInterface::luaPropStreamReadU8);
 
-	registerMethod("PropStream", "read_i16", LuaScriptInterface::luaPropStreamReadI16);
-	registerMethod("PropStream", "read_u16", LuaScriptInterface::luaPropStreamReadU16);
+	registerMethod("PropStream", "readI16", LuaScriptInterface::luaPropStreamReadI16);
+	registerMethod("PropStream", "readU16", LuaScriptInterface::luaPropStreamReadU16);
 
-	registerMethod("PropStream", "read_i32", LuaScriptInterface::luaPropStreamReadI32);
-	registerMethod("PropStream", "read_u32", LuaScriptInterface::luaPropStreamReadU32);
+	registerMethod("PropStream", "readI32", LuaScriptInterface::luaPropStreamReadI32);
+	registerMethod("PropStream", "readU32", LuaScriptInterface::luaPropStreamReadU32);
 
-	registerMethod("PropStream", "read_i64", LuaScriptInterface::luaPropStreamReadI64);
-	registerMethod("PropStream", "read_u64", LuaScriptInterface::luaPropStreamReadU64);
+	registerMethod("PropStream", "readI64", LuaScriptInterface::luaPropStreamReadI64);
+	registerMethod("PropStream", "readU64", LuaScriptInterface::luaPropStreamReadU64);
 
 	// PropWriteStream
 	registerClass("PropWriteStream", "", LuaScriptInterface::luaPropWriteStreamCreate);
 	registerMetaMethod("PropWriteStream", "__eq", LuaScriptInterface::luaPropWriteStreamCompare);
 
-	registerMethod("PropWriteStream", "get_stream", LuaScriptInterface::luaPropWriteStreamGetStream);
+	registerMethod("PropWriteStream", "getStream", LuaScriptInterface::luaPropWriteStreamGetStream);
 
 	registerMethod("PropWriteStream", "clear", LuaScriptInterface::luaPropWriteStreamClear);
 
-	registerMethod("PropWriteStream", "write_string", LuaScriptInterface::luaPropWriteStreamWriteString);
+	registerMethod("PropWriteStream", "writeString", LuaScriptInterface::luaPropWriteStreamWriteString);
 
-	registerMethod("PropWriteStream", "write_float", LuaScriptInterface::luaPropWriteStreamWriteFloat);
-	registerMethod("PropWriteStream", "write_double", LuaScriptInterface::luaPropWriteStreamWriteDouble);
+	registerMethod("PropWriteStream", "writeFloat", LuaScriptInterface::luaPropWriteStreamWriteFloat);
+	registerMethod("PropWriteStream", "writeDouble", LuaScriptInterface::luaPropWriteStreamWriteDouble);
 
-	registerMethod("PropWriteStream", "write_i8", LuaScriptInterface::luaPropWriteStreamWriteI8);
-	registerMethod("PropWriteStream", "write_u8", LuaScriptInterface::luaPropWriteStreamWriteU8);
+	registerMethod("PropWriteStream", "writeI8", LuaScriptInterface::luaPropWriteStreamWriteI8);
+	registerMethod("PropWriteStream", "writeU8", LuaScriptInterface::luaPropWriteStreamWriteU8);
 
-	registerMethod("PropWriteStream", "write_i16", LuaScriptInterface::luaPropWriteStreamWriteI16);
-	registerMethod("PropWriteStream", "write_u16", LuaScriptInterface::luaPropWriteStreamWriteU16);
+	registerMethod("PropWriteStream", "writeI16", LuaScriptInterface::luaPropWriteStreamWriteI16);
+	registerMethod("PropWriteStream", "writeU16", LuaScriptInterface::luaPropWriteStreamWriteU16);
 
-	registerMethod("PropWriteStream", "write_i32", LuaScriptInterface::luaPropWriteStreamWriteI32);
-	registerMethod("PropWriteStream", "write_u32", LuaScriptInterface::luaPropWriteStreamWriteU32);
+	registerMethod("PropWriteStream", "writeI32", LuaScriptInterface::luaPropWriteStreamWriteI32);
+	registerMethod("PropWriteStream", "writeU32", LuaScriptInterface::luaPropWriteStreamWriteU32);
 
-	registerMethod("PropWriteStream", "write_i64", LuaScriptInterface::luaPropWriteStreamWriteI64);
-	registerMethod("PropWriteStream", "write_u64", LuaScriptInterface::luaPropWriteStreamWriteU64);
+	registerMethod("PropWriteStream", "writeI64", LuaScriptInterface::luaPropWriteStreamWriteI64);
+	registerMethod("PropWriteStream", "writeU64", LuaScriptInterface::luaPropWriteStreamWriteU64);
 }
 
 #undef registerEnum
@@ -18173,7 +18173,7 @@ int LuaScriptInterface::luaPropStreamSkip(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadString(lua_State* L)
 {
-	// propStream:read_string(ret)
+	// propStream:readString(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		std::string& ret = getString(L, 2);
@@ -18186,7 +18186,7 @@ int LuaScriptInterface::luaPropStreamReadString(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadFloat(lua_State* L)
 {
-	// propStream:read_float(ret)
+	// propStream:readFloat(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		float ret = getNumber<float>(L, 2);
@@ -18199,7 +18199,7 @@ int LuaScriptInterface::luaPropStreamReadFloat(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadDouble(lua_State* L)
 {
-	// propStream:read_double(ret)
+	// propStream:readDouble(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		double ret = getNumber<double>(L, 2);
@@ -18212,7 +18212,7 @@ int LuaScriptInterface::luaPropStreamReadDouble(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadI8(lua_State* L)
 {
-	// propStream:read_i8(ret)
+	// propStream:readI8(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		int8_t ret = getNumber<int8_t>(L, 2);
@@ -18225,7 +18225,7 @@ int LuaScriptInterface::luaPropStreamReadI8(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadU8(lua_State* L)
 {
-	// propStream:read_u8(ret)
+	// propStream:readU8(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		uint8_t ret = getNumber<uint8_t>(L, 2);
@@ -18238,7 +18238,7 @@ int LuaScriptInterface::luaPropStreamReadU8(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadI16(lua_State* L)
 {
-	// propStream:read_i16(ret)
+	// propStream:readI16(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		int16_t ret = getNumber<int16_t>(L, 2);
@@ -18251,7 +18251,7 @@ int LuaScriptInterface::luaPropStreamReadI16(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadU16(lua_State* L)
 {
-	// propStream:read_u16(ret)
+	// propStream:readU16(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		uint16_t ret = getNumber<uint16_t>(L, 2);
@@ -18264,7 +18264,7 @@ int LuaScriptInterface::luaPropStreamReadU16(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadI32(lua_State* L)
 {
-	// propStream:read_i32(ret)
+	// propStream:readI32(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		int32_t ret = getNumber<int32_t>(L, 2);
@@ -18277,7 +18277,7 @@ int LuaScriptInterface::luaPropStreamReadI32(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadU32(lua_State* L)
 {
-	// propStream:read_u32(ret)
+	// propStream:readU32(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		uint32_t ret = getNumber<uint32_t>(L, 2);
@@ -18290,7 +18290,7 @@ int LuaScriptInterface::luaPropStreamReadU32(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadI64(lua_State* L)
 {
-	// propStream:read_i64(ret)
+	// propStream:readI64(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		int64_t ret = getNumber<int64_t>(L, 2);
@@ -18303,7 +18303,7 @@ int LuaScriptInterface::luaPropStreamReadI64(lua_State* L)
 
 int LuaScriptInterface::luaPropStreamReadU64(lua_State* L)
 {
-	// propStream:read_u64(ret)
+	// propStream:readU64(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
 		uint64_t ret = getNumber<uint64_t>(L, 2);
@@ -18349,7 +18349,7 @@ int LuaScriptInterface::luaPropWriteStreamCompare(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamGetStream(lua_State* L)
 {
-	// propWriteStream:get_stream()
+	// propWriteStream:getStream()
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (!propWriteStream) {
 		lua_pushnil(L);
@@ -18378,7 +18378,7 @@ int LuaScriptInterface::luaPropWriteStreamClear(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteString(lua_State* L)
 {
-	// propWriteStream:write_string(s)
+	// propWriteStream:writeString(s)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->writeString(getString(L, 2));
@@ -18391,7 +18391,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteString(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteFloat(lua_State* L)
 {
-	// propWriteStream:write_float(f)
+	// propWriteStream:writeFloat(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<float>(getNumber<float>(L, 2));
@@ -18404,7 +18404,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteFloat(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteDouble(lua_State* L)
 {
-	// propWriteStream:write_double(f)
+	// propWriteStream:writeDouble(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<double>(getNumber<double>(L, 2));
@@ -18417,7 +18417,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteDouble(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteI8(lua_State* L)
 {
-	// propWriteStream:write_i8(f)
+	// propWriteStream:writeI8(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<int8_t>(getNumber<int8_t>(L, 2));
@@ -18430,7 +18430,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteI8(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteU8(lua_State* L)
 {
-	// propWriteStream:write_u8(f)
+	// propWriteStream:writeU8(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<uint8_t>(getNumber<uint8_t>(L, 2));
@@ -18443,7 +18443,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteU8(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteI16(lua_State* L)
 {
-	// propWriteStream:write_i16(f)
+	// propWriteStream:writeI16(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<int16_t>(getNumber<int16_t>(L, 2));
@@ -18456,7 +18456,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteI16(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteU16(lua_State* L)
 {
-	// propWriteStream:write_u16(f)
+	// propWriteStream:writeU16(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<uint16_t>(getNumber<uint16_t>(L, 2));
@@ -18469,7 +18469,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteU16(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteI32(lua_State* L)
 {
-	// propWriteStream:write_i32(f)
+	// propWriteStream:writeI32(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<int32_t>(getNumber<int32_t>(L, 2));
@@ -18482,7 +18482,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteI32(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteU32(lua_State* L)
 {
-	// propWriteStream:write_u32(f)
+	// propWriteStream:writeU32(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<uint32_t>(getNumber<uint32_t>(L, 2));
@@ -18495,7 +18495,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteU32(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteI64(lua_State* L)
 {
-	// propWriteStream:write_i64(f)
+	// propWriteStream:writeI64(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<int64_t>(getNumber<int64_t>(L, 2));
@@ -18508,7 +18508,7 @@ int LuaScriptInterface::luaPropWriteStreamWriteI64(lua_State* L)
 
 int LuaScriptInterface::luaPropWriteStreamWriteU64(lua_State* L)
 {
-	// propWriteStream:write_u64(f)
+	// propWriteStream:writeU64(f)
 	PropWriteStream* propWriteStream = getUserdata<PropWriteStream>(L, 1);
 	if (propWriteStream) {
 		propWriteStream->write<uint64_t>(getNumber<uint64_t>(L, 2));
