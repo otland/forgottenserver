@@ -18176,7 +18176,8 @@ int LuaScriptInterface::luaPropStreamReadString(lua_State* L)
 	// propStream:read_string(ret)
 	PropStream* propStream = getUserdata<PropStream>(L, 1);
 	if (propStream) {
-		lua_pushboolean(L, propStream->readString(getString(L, 2)));
+		std::string& ret = getString(L, 2);
+		lua_pushboolean(L, propStream->readString(ret));
 	} else {
 		lua_pushnil(L);
 	}
