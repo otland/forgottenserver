@@ -984,9 +984,11 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 
 	const Tile* toCylinderTile = toCylinder->getTile();
 	const Position& mapToPos = toCylinderTile->getPosition();
+	const Item* toCylinderTopItem = dynamic_cast<Item*>(toCylinderTile->getTopVisibleThing(player));
 
 	// hangable item specific code
-	if (item->isHangable() && toCylinderTile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+	bool hangableThrow = item->isHangable() && toCylinderTopItem && toCylinderTopItem->hasProperty(CONST_PROP_SUPPORTHANGABLE);
+	if (hangableThrow) {
 		// destination supports hangable objects so need to move there first
 		bool vertical = toCylinderTile->hasProperty(CONST_PROP_ISVERTICAL);
 		if (vertical) {
@@ -1058,7 +1060,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		return;
 	}
 
-	if (!canThrowObjectTo(mapFromPos, mapToPos, true, false, throwRange, throwRange)) {
+	if (!canThrowObjectTo(mapFromPos, mapToPos, !hangableThrow, false, throwRange, throwRange)) {
 		player->sendCancelMessage(RETURNVALUE_CANNOTTHROW);
 		return;
 	}
