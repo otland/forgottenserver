@@ -1569,6 +1569,56 @@ private:
 	static int luaXmlNodeFirstChild(lua_State* L);
 	static int luaXmlNodeNextSibling(lua_State* L);
 
+	// PropStream
+	static int luaPropStreamCreate(lua_State* L);
+	static int luaPropStreamCompare(lua_State* L);
+
+	static int luaPropStreamInit(lua_State* L);
+	static int luaPropStreamSkip(lua_State* L);
+	static int luaPropStreamSize(lua_State* L);
+
+	static int luaPropStreamReadString(lua_State* L);
+
+	static int luaPropStreamReadFloat(lua_State* L);
+	static int luaPropStreamReadDouble(lua_State* L);
+
+	static int luaPropStreamReadI8(lua_State* L);
+	static int luaPropStreamReadU8(lua_State* L);
+
+	static int luaPropStreamReadI16(lua_State* L);
+	static int luaPropStreamReadU16(lua_State* L);
+
+	static int luaPropStreamReadI32(lua_State* L);
+	static int luaPropStreamReadU32(lua_State* L);
+
+	static int luaPropStreamReadI64(lua_State* L);
+	static int luaPropStreamReadU64(lua_State* L);
+
+	// PropWriteStream
+	static int luaPropWriteStreamCreate(lua_State* L);
+	static int luaPropWriteStreamCompare(lua_State* L);
+
+	static int luaPropWriteStreamGetStream(lua_State* L);
+
+	static int luaPropWriteStreamClear(lua_State* L);
+
+	static int luaPropWriteStreamWriteString(lua_State* L);
+
+	static int luaPropWriteStreamWriteFloat(lua_State* L);
+	static int luaPropWriteStreamWriteDouble(lua_State* L);
+
+	static int luaPropWriteStreamWriteI8(lua_State* L);
+	static int luaPropWriteStreamWriteU8(lua_State* L);
+
+	static int luaPropWriteStreamWriteI16(lua_State* L);
+	static int luaPropWriteStreamWriteU16(lua_State* L);
+
+	static int luaPropWriteStreamWriteI32(lua_State* L);
+	static int luaPropWriteStreamWriteU32(lua_State* L);
+
+	static int luaPropWriteStreamWriteI64(lua_State* L);
+	static int luaPropWriteStreamWriteU64(lua_State* L);
+
 	//
 	std::string lastLuaError;
 
