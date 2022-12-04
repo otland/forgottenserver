@@ -6,6 +6,9 @@
 
 #include "account.h"
 #include "database.h"
+#include "fileloader.h"
+#include "container.h"
+#include "player.h"
 
 class Item;
 class Player;
@@ -53,9 +56,20 @@ public:
 private:
 	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
-	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-	static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
-	                      PropWriteStream& propWriteStream);
+	static void getOpenContainers(Container* container, std::map<uint8_t, Container*> list);
+	static void verifyOpenContainers(Container* container, const std::map<uint8_t, OpenContainer>& list);
+
+	static void loadInventoryItems(DBResult_ptr& result, Player* player);
+	static void loadDepotItems(DBResult_ptr& result, Player* player);
+	static void loadInboxItems(DBResult_ptr& result, Player* player);
+	static void loadStoreInboxItems(DBResult_ptr& result, Player* player);
+	static Item* loadBinaryItem(PropStream& propStream, Container* parent);
+
+	static std::string saveInventoryItems(Database& db, const Player* player);
+	static std::string saveDepotItems(Database& db, const Player* player);
+	static std::string saveInboxItems(Database& db, const Player* player);
+	static std::string saveStoreInboxItems(Database& db, const Player* player);
+	static void saveBinaryItem(Item* item, PropWriteStream& itemsStream);
 };
 
 #endif // FS_IOLOGINDATA_H

@@ -1259,3 +1259,17 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
+
+PropStream createPropStream(DBResult_ptr& result, const std::string& s)
+{
+	PropStream propStream;
+	if (!result) {
+		return propStream;
+	}
+
+	unsigned long size;
+	const char* c = result->getStream(s, size);
+
+	propStream.init(c, size);
+	return propStream;
+}

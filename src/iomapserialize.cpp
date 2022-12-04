@@ -21,11 +21,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 	}
 
 	do {
-		unsigned long attrSize;
-		const char* attr = result->getStream("data", attrSize);
-
-		PropStream propStream;
-		propStream.init(attr, attrSize);
+		PropStream propStream = createPropStream(result, "data");
 
 		uint16_t x, y;
 		uint8_t z;

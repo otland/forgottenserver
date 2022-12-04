@@ -7,6 +7,8 @@
 #include "const.h"
 #include "enums.h"
 #include "position.h"
+#include "database.h"
+#include "fileloader.h"
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 
@@ -70,5 +72,7 @@ const char* getReturnMessage(ReturnValue value);
 int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
+
+PropStream createPropStream(DBResult_ptr& result, const std::string& s);
 
 #endif // FS_TOOLS_H
