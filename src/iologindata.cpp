@@ -309,7 +309,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->blessings = result->getNumber<uint16_t>("blessings");
 
 	// load conditions
-	PropStream& propStream = createPropStream(result, "conditions");
+	PropStream propStream = createPropStream(result, "conditions");
 
 	Condition* condition = Condition::createCondition(propStream);
 	while (condition) {
@@ -541,7 +541,7 @@ void IOLoginData::getOpenContainers(Container* container, std::map<uint8_t, Cont
 
 void IOLoginData::loadInventoryItems(DBResult_ptr& result, Player* player)
 {
-	PropStream& propStream = createPropStream(result, "inventory_items");
+	PropStream propStream = createPropStream(result, "inventory_items");
 
 	uint32_t slotId;
 	while (propStream.read<uint32_t>(slotId)) {
@@ -551,7 +551,7 @@ void IOLoginData::loadInventoryItems(DBResult_ptr& result, Player* player)
 
 void IOLoginData::loadDepotItems(DBResult_ptr& result, Player* player)
 {
-	PropStream& propStream = createPropStream(result, "depot_items");
+	PropStream propStream = createPropStream(result, "depot_items");
 
 	uint32_t depotId;
 	while (propStream.read<uint32_t>(depotId)) {
@@ -573,7 +573,7 @@ void IOLoginData::loadDepotItems(DBResult_ptr& result, Player* player)
 
 void IOLoginData::loadInboxItems(DBResult_ptr& result, Player* player)
 {
-	PropStream& propStream = createPropStream(result, "inbox_items");
+	PropStream propStream = createPropStream(result, "inbox_items");
 
 	uint32_t count = 0;
 	if (!propStream.read<uint32_t>(count)) {
@@ -587,7 +587,7 @@ void IOLoginData::loadInboxItems(DBResult_ptr& result, Player* player)
 
 void IOLoginData::loadStoreInboxItems(DBResult_ptr& result, Player* player)
 {
-	PropStream& propStream = createPropStream(result, "storeinbox_items");
+	PropStream propStream = createPropStream(result, "storeinbox_items");
 
 	uint32_t count = 0;
 	if (!propStream.read<uint32_t>(count)) {
