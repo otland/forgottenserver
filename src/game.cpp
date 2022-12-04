@@ -982,7 +982,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		return;
 	}
 
-	const Tile* toCylinderTile = toCylinder->getTile();
+	Tile* toCylinderTile = toCylinder->getTile();
 	const Position& mapToPos = toCylinderTile->getPosition();
 	const Item* toCylinderTopItem = dynamic_cast<Item*>(toCylinderTile->getTopVisibleThing(player));
 
