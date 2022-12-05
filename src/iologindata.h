@@ -54,8 +54,6 @@ public:
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 private:
-	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
-
 	static void getOpenContainers(Container* container, std::map<uint8_t, Container*> list);
 	static void verifyOpenContainers(Container* container, const std::map<uint8_t, OpenContainer>& list);
 
