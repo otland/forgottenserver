@@ -2072,6 +2072,30 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
+	registerEnum(BESTIARY_RACE_NONE);
+	registerEnum(BESTIARY_RACE_FIRST);
+	registerEnum(BESTIARY_RACE_AMPHIBIC);
+	registerEnum(BESTIARY_RACE_AQUATIC);
+	registerEnum(BESTIARY_RACE_BIRD);
+	registerEnum(BESTIARY_RACE_CONSTRUCT);
+	registerEnum(BESTIARY_RACE_DEMON);
+	registerEnum(BESTIARY_RACE_DRAGON);
+	registerEnum(BESTIARY_RACE_ELEMENTAL);
+	registerEnum(BESTIARY_RACE_EXTRA_DIMENSIONAL);
+	registerEnum(BESTIARY_RACE_FEY);
+	registerEnum(BESTIARY_RACE_GIANT);
+	registerEnum(BESTIARY_RACE_HUMAN);
+	registerEnum(BESTIARY_RACE_HUMANOID);
+	registerEnum(BESTIARY_RACE_LYCANTHROPE);
+	registerEnum(BESTIARY_RACE_MAGICAL);
+	registerEnum(BESTIARY_RACE_MAMMAL);
+	registerEnum(BESTIARY_RACE_PLANT);
+	registerEnum(BESTIARY_RACE_REPTILE);
+	registerEnum(BESTIARY_RACE_SLIME);
+	registerEnum(BESTIARY_RACE_UNDEAD);
+	registerEnum(BESTIARY_RACE_VERMIN);
+	registerEnum(BESTIARY_RACE_LAST);
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -3066,6 +3090,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterType", "yellSpeedTicks", LuaScriptInterface::luaMonsterTypeYellSpeedTicks);
 	registerMethod("MonsterType", "changeTargetChance", LuaScriptInterface::luaMonsterTypeChangeTargetChance);
 	registerMethod("MonsterType", "changeTargetSpeed", LuaScriptInterface::luaMonsterTypeChangeTargetSpeed);
+
+	registerMethod("MonsterType", "getBestiaryData", LuaScriptInterface::luaMonsterTypeGetBestiaryData);
 
 	// Loot
 	registerClass("Loot", "", LuaScriptInterface::luaCreateLoot);
@@ -14883,6 +14909,30 @@ int LuaScriptInterface::luaMonsterTypeChangeTargetSpeed(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterTypeGetBestiaryData(lua_State* L)
+{
+	// monsterType:getElementList()
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (!monsterType) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_createtable(L, 0, 0);
+	setField(L, "class", monsterType->info.bestiary.className);
+	setField(L, "race", monsterType->info.bestiary.race);
+	setField(L, "raceId", monsterType->info.bestiary.raceId);
+	setField(L, "firstUnlock", monsterType->info.bestiary.finishUnlock);
+	setField(L, "secondUnlock", monsterType->info.bestiary.secondUnlock);
+	setField(L, "finishUnlock", monsterType->info.bestiary.finishUnlock);
+	setField(L, "charmPoints", monsterType->info.bestiary.charmPoints);
+	setField(L, "stars", monsterType->info.bestiary.stars);
+	setField(L, "occurrence", monsterType->info.bestiary.occurrence);
+	setField(L, "locations", monsterType->info.bestiary.locations);
+
 	return 1;
 }
 

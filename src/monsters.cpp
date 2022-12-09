@@ -974,6 +974,40 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.pushable = false;
 		}
 	}
+
+	if ((node = monsterNode.child("bestiary"))) {
+		for (auto bestiaryNode : node.children()) {
+			attr = bestiaryNode.first_attribute();
+			const char* attrName = attr.name();
+			if (caseInsensitiveEqual(attrName, "class")) {
+				mType->info.bestiary.className = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+			} else if (caseInsensitiveEqual(attrName, "attackable")) {
+				mType->info.bestiary.race =
+				    getBestiaryType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+			} else if (caseInsensitiveEqual(attrName, "raceId")) {
+				mType->info.bestiary.raceId = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "firstUnlock")) {
+				mType->info.bestiary.firstUnlock = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "secondUnlock")) {
+				mType->info.bestiary.secondUnlock = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "finishUnlock")) {
+				mType->info.bestiary.finishUnlock = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "charmPoints")) {
+				mType->info.bestiary.charmPoints = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "stars")) {
+				mType->info.bestiary.stars = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "occurrence")) {
+				mType->info.bestiary.occurrence = attr.as_uint();
+			} else if (caseInsensitiveEqual(attrName, "locations")) {
+				mType->info.bestiary.locations = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+			}
+		}
+		if (!isValidBestiaryRecord(mType->info.bestiary)) {
+			// if invalid reset bestiary data
+			mType->info.bestiary = {0};
+		}
+	}
+
 	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
 		std::cout
 		    << "[Warning - Monsters::loadMonster] manaCost missing or zero on monster with summonable and/or convinceable flags: "

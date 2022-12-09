@@ -9,6 +9,7 @@
 #include "chat.h"
 #include "combat.h"
 #include "configmanager.h"
+#include "const.h"
 #include "creatureevent.h"
 #include "depotchest.h"
 #include "events.h"
@@ -4864,5 +4865,24 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
+	}
+}
+
+void Player::updateBestiaryKill(uint32_t raceId, int32_t count)
+{
+	if (raceId == 0) {
+		return;
+	}
+
+	int storageValue = 0;
+	if (getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue)) {
+		if (storageValue < 0) {
+			storageValue = count;
+		} else {
+			storageValue += count;
+		}
+		this->addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, count);
+	} else {
+		this->addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, count);
 	}
 }

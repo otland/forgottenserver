@@ -1134,6 +1134,8 @@ public:
 
 	void updateRegeneration();
 
+	void updateBestiaryKill(uint32_t raceId, int32_t count);
+
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
 private:

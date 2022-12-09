@@ -309,15 +309,9 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-std::string formatDate(time_t time)
-{
-	return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time));
-}
+std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
-std::string formatDateShort(time_t time)
-{
-	return fmt::format("{:%d %b %Y}", fmt::localtime(time));
-}
+std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
 
 Direction getDirection(const std::string& string)
 {
@@ -1258,4 +1252,92 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	}
 
 	return SPELLGROUP_NONE;
+}
+
+bool isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
+{
+	const int maxBestiaryStars = 5;
+	const int maxBestiaryOccurrence = 4;
+
+	if (bestiaryBlock.className.size() == 0) {
+		std::cout << "[Warning - Monsters::loadMonster] invalid class name." << std::endl;
+		return false;
+	}
+
+	if (bestiaryBlock.race == BESTIARY_RACE_NONE) {
+		std::cout << "[Warning - Monsters::loadMonster] invalid race." << std::endl;
+		return false;
+	}
+
+	if (bestiaryBlock.firstUnlock == 0 || bestiaryBlock.secondUnlock == 0 || bestiaryBlock.finishUnlock == 0) {
+		std::cout << "[Warning - Monsters::loadMonster] unlock data value can't be 0." << std::endl;
+		return false;
+	}
+
+	if (bestiaryBlock.firstUnlock >= bestiaryBlock.secondUnlock &&
+	    bestiaryBlock.finishUnlock >= bestiaryBlock.secondUnlock) {
+		std::cout << "[Warning - Monsters::loadMonster] invalid unlock data value." << std::endl;
+		return false;
+	}
+
+	if (bestiaryBlock.stars == 0 || bestiaryBlock.stars > maxBestiaryStars) {
+		std::cout << "[Warning - Monsters::loadMonster] invalid stars value ." << std::endl;
+		return false;
+	}
+
+	if (bestiaryBlock.occurrence == 0 || bestiaryBlock.occurrence > maxBestiaryOccurrence) {
+		std::cout << "[Warning - Monsters::loadMonster] invalid occurrence value ." << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+BestiaryType_t getBestiaryType(std::string race)
+{
+	if (caseInsensitiveEqual(race, "amphibic")) {
+		return BESTIARY_RACE_AMPHIBIC;
+	} else if (caseInsensitiveEqual(race, "amphibic")) {
+		return BESTIARY_RACE_AMPHIBIC;
+	} else if (caseInsensitiveEqual(race, "aquatic")) {
+		return BESTIARY_RACE_AQUATIC;
+	} else if (caseInsensitiveEqual(race, "bird")) {
+		return BESTIARY_RACE_BIRD;
+	} else if (caseInsensitiveEqual(race, "construct")) {
+		return BESTIARY_RACE_CONSTRUCT;
+	} else if (caseInsensitiveEqual(race, "demon")) {
+		return BESTIARY_RACE_DEMON;
+	} else if (caseInsensitiveEqual(race, "dragon")) {
+		return BESTIARY_RACE_DRAGON;
+	} else if (caseInsensitiveEqual(race, "elemental")) {
+		return BESTIARY_RACE_ELEMENTAL;
+	} else if (caseInsensitiveEqual(race, "extradimensional")) {
+		return BESTIARY_RACE_EXTRA_DIMENSIONAL;
+	} else if (caseInsensitiveEqual(race, "fey")) {
+		return BESTIARY_RACE_FEY;
+	} else if (caseInsensitiveEqual(race, "giant")) {
+		return BESTIARY_RACE_GIANT;
+	} else if (caseInsensitiveEqual(race, "human")) {
+		return BESTIARY_RACE_HUMAN;
+	} else if (caseInsensitiveEqual(race, "humanoid")) {
+		return BESTIARY_RACE_HUMANOID;
+	} else if (caseInsensitiveEqual(race, "lycantrophe")) {
+		return BESTIARY_RACE_LYCANTHROPE;
+	} else if (caseInsensitiveEqual(race, "magical")) {
+		return BESTIARY_RACE_MAGICAL;
+	} else if (caseInsensitiveEqual(race, "mammal")) {
+		return BESTIARY_RACE_MAMMAL;
+	} else if (caseInsensitiveEqual(race, "plant")) {
+		return BESTIARY_RACE_PLANT;
+	} else if (caseInsensitiveEqual(race, "reptile")) {
+		return BESTIARY_RACE_REPTILE;
+	} else if (caseInsensitiveEqual(race, "slime")) {
+		return BESTIARY_RACE_SLIME;
+	} else if (caseInsensitiveEqual(race, "undead")) {
+		return BESTIARY_RACE_UNDEAD;
+	} else if (caseInsensitiveEqual(race, "vermin")) {
+		return BESTIARY_RACE_VERMIN;
+	}
+
+	return BESTIARY_RACE_NONE;
 }

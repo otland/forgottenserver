@@ -7,6 +7,7 @@
 #include "const.h"
 #include "enums.h"
 #include "position.h"
+#include "monsters.h"
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 
@@ -71,4 +72,7 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
+bool isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock);
+
+BestiaryType_t getBestiaryType(std::string race);
 #endif // FS_TOOLS_H
