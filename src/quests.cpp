@@ -257,9 +257,9 @@ uint16_t Quests::getQuestsCount(Player* player) const
 	return count;
 }
 
-const Mission* Quests::getMissionByID(uint16_t id)
+const Mission* Quests::getMissionByID(uint16_t id) const
 {
-	for (Quest& quest : quests) {
+	for (const Quest& quest : quests) {
 		if (auto mission = quest.getMissionById(id)) {
 			return mission;
 		}

@@ -4713,11 +4713,11 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 int LuaScriptInterface::luaGameGetQuests(lua_State* L)
 {
 	// Game.getQuests()
-	const std::list<Quest>& quests = g_game.quests.getQuests();
+	const auto& quests = g_game.quests.getQuests();
 	lua_createtable(L, quests.size(), 0);
 
 	int index = 0;
-	for (const Quest& quest : quests) {
+	for (const auto& quest : quests) {
 		pushUserdata<const Quest>(L, &quest);
 		setMetatable(L, -1, "Quest");
 		lua_rawseti(L, -2, ++index);
@@ -4995,9 +4995,9 @@ int LuaScriptInterface::luaGameCreateQuest(lua_State* L)
 		return 1;
 	}
 
-	Quest* quest = g_game.quests.createQuest(name);
-	quest->fromLua = true;
-	pushUserdata<Quest>(L, quest);
+	Quest& quest = g_game.quests.createQuest(name);
+	quest.fromLua = true;
+	pushUserdata<Quest>(L, &quest);
 	setMetatable(L, -1, "Quest");
 	return 1;
 }
@@ -13906,7 +13906,7 @@ int LuaScriptInterface::luaQuestCreateMission(lua_State* L)
 			return 1;
 		}
 
-		pushUserdata<Mission>(L, quest->createMission(name));
+		pushUserdata<Mission>(L, &quest->createMission(name));
 		setMetatable(L, -1, "Mission");
 	} else {
 		lua_pushnil(L);
@@ -13919,10 +13919,10 @@ int LuaScriptInterface::luaQuestGetMissions(lua_State* L)
 	// quest:getMissions()
 	Quest* quest = getUserdata<Quest>(L, 1);
 	if (quest) {
-		const std::list<Mission>& missions = quest->getMissions();
+		const auto& missions = quest->getMissions();
 		lua_createtable(L, missions.size(), 0);
 		int index = 0;
-		for (const Mission& mission : missions) {
+		for (const auto& mission : missions) {
 			pushUserdata<const Mission>(L, &mission);
 			setMetatable(L, -1, "Mission");
 			lua_rawseti(L, -2, ++index);
@@ -14031,41 +14031,44 @@ int LuaScriptInterface::luaMissionIgnoreEndValue(lua_State* L)
 
 int LuaScriptInterface::luaMissionDescription(lua_State* L)
 {
-	// mission:description(value[, player])
+	// get: mission:description(player) set: mission:description(description)
 	Mission* mission = getUserdata<Mission>(L, 1);
-	if (mission) {
-		if (lua_gettop(L) > 1) {
-			if (isTable(L, 2)) {
-				lua_pushnil(L);
-				while (lua_next(L, -2)) {
-					if (isTable(L, -1)) {
-						const int32_t missionId = getField<int32_t>(L, -1, "id");
-						const std::string& description = getFieldString(L, -1, "description");
-						lua_pop(L, 2);
-						mission->descriptions.emplace(missionId, description);
-					}
-
-					lua_pop(L, 1);
-				}
-
-				lua_pop(L, 1);
-			} else if (isFunction(L, 2)) {
-				mission->getCallback()->loadCallBack(&g_scripts->getScriptInterface());
-			} else if (isString(L, 2)) {
-				mission->mainDescription = std::move(getString(L, 2));
-			}
-			pushBoolean(L, true);
-		} else {
-			if (Player* player = getPlayer(L, 3)) {
-				pushString(L, mission->getDescription(player));
-			} else {
-				reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-				pushBoolean(L, false);
-			}
-		}
-	} else {
+	if (!mission) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	if (isUserdata(L, 2)) {
+		Player* player = getUserdata<Player>(L, 2);
+		if (!player) {
+			reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+			pushBoolean(L, false);
+			return 1;
+		}
+
+		pushString(L, mission->getDescription(player));
+		return 1;
+	} else if (isTable(L, 2)) {
+		lua_pushnil(L);
+		while (lua_next(L, -2)) {
+			if (isTable(L, -1)) {
+				const int32_t missionId = getField<int32_t>(L, -1, "id");
+				const std::string& description = getFieldString(L, -1, "description");
+				lua_pop(L, 2);
+				mission->descriptions.emplace(missionId, description);
+			}
+
+			lua_pop(L, 1);
+		}
+
+		lua_pop(L, 1);
+	} else if (isFunction(L, 2)) {
+		mission->getCallback()->loadCallBack(&g_scripts->getScriptInterface());
+	} else if (isString(L, 2)) {
+		mission->mainDescription = std::move(getString(L, 2));
+	}
+
+	pushBoolean(L, true);
 	return 1;
 }
 

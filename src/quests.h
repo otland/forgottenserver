@@ -97,7 +97,7 @@ public:
 
 	bool isTracking(const uint32_t key, const int32_t value) const;
 
-	Mission* createMission(const std::string& name) { return &missions.emplace_back(name, ++missionAutoID, 0, 0, 0, 0); }
+	Mission& createMission(const std::string& name) { return missions.emplace_back(name, ++missionAutoID, 0, 0, 0, 0); }
 
 	bool fromLua = false;
 
@@ -122,13 +122,13 @@ public:
 
 	bool loadFromXml();
 	Quest* getQuestByID(uint16_t id);
-	const Mission* getMissionByID(uint16_t id);
+	const Mission* getMissionByID(uint16_t id) const;
 	bool isQuestStorage(const uint32_t key, const int32_t value, const int32_t oldValue) const;
 	uint16_t getQuestsCount(Player* player) const;
 	bool reload();
 	void clear(bool fromLua);
 
-	Quest* createQuest(const std::string& name) { return &quests.emplace_back(name, ++questAutoID, 0, 0); }
+	Quest& createQuest(const std::string& name) { return quests.emplace_back(name, ++questAutoID, 0, 0); }
 
 private:
 	QuestsList quests;
