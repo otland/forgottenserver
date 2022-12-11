@@ -10646,7 +10646,8 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		Player* spectatorPlayer = static_cast<Player*>(spectator);
 		if (spectatorPlayer != player && !spectatorPlayer->isAccessPlayer()) {
 			if (enabled) {
-				spectatorPlayer->sendRemoveTileCreature(player, position, tile->getClientIndexOfCreature(spectatorPlayer, player));
+				spectatorPlayer->sendRemoveTileCreature(player, position,
+				                                        tile->getClientIndexOfCreature(spectatorPlayer, player));
 			} else {
 				spectatorPlayer->sendCreatureAppear(player, position, magicEffect);
 			}

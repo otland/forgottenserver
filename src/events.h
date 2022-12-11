@@ -113,7 +113,8 @@ public:
 	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
-	void eventPlayerOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin);
+	void eventPlayerOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
+	                                bool isLogin);
 	void eventPlayerOnQuestTracker(Player* player, const std::vector<uint16_t>& missionsId);
 	void eventPlayerOnQuestLog(Player* player);
 	void eventPlayerOnQuestLine(Player* player, const uint16_t questId);

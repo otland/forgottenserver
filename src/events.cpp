@@ -1125,7 +1125,8 @@ void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t sl
 	scriptInterface.callVoidFunction(4);
 }
 
-void Events::eventPlayerOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin)
+void Events::eventPlayerOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
+                                        bool isLogin)
 {
 	// Player:onStorageUpdate(key, value, oldValue, isLogin)
 	if (info.playerOnStorageUpdate == -1) {
