@@ -35,6 +35,10 @@
 	<event class="Player" method="onGainSkillTries" enabled="1" />
 	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onInventoryUpdate" enabled="1" />
+	<event class="Player" method="onStorageUpdate" enabled="1" />
+	<event class="Player" method="onQuestTracker" enabled="1" />
+	<event class="Player" method="onQuestLog" enabled="1" />
+	<event class="Player" method="onQuestLine" enabled="1" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />

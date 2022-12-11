@@ -186,11 +186,6 @@ private:
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
 
-	void sendQuestLog();
-	void sendQuestLine(const Quest* quest);
-	void sendQuestTracker();
-	void sendUpdateQuestTracker(const TrackedQuest& trackedQuest);
-
 	void sendCancelWalk();
 	void sendChangeSpeed(const Creature* creature, uint32_t speed);
 	void sendCancelTarget();

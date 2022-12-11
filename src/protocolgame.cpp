@@ -1563,21 +1563,21 @@ void ProtocolGame::parseEnableSharedPartyExperience(NetworkMessage& msg)
 
 void ProtocolGame::parseQuestLine(NetworkMessage& msg)
 {
-	uint16_t questID = msg.get<uint16_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerShowQuestLine(playerID, questID); });
+	uint16_t questId = msg.get<uint16_t>();
+	g_dispatcher.addTask([=, playerId = player->getID()]() { g_game.playerShowQuestLine(playerId, questId); });
 }
 
 void ProtocolGame::parseQuestTracker(NetworkMessage& msg)
 {
 	uint8_t missions = msg.getByte();
-	std::vector<uint16_t> missionIDs;
-	missionIDs.reserve(missions);
+	std::vector<uint16_t> missionsId;
+	missionsId.reserve(missions);
 	for (uint8_t i = 0; i < missions; i++) {
-		missionIDs.push_back(msg.get<uint16_t>());
+		missionsId.push_back(msg.get<uint16_t>());
 	}
 
-	g_dispatcher.addTask([playerID = player->getID(), missionIDs = std::move(missionIDs)]() {
-		g_game.playerResetQuestTracker(playerID, missionIDs);
+	g_dispatcher.addTask([playerID = player->getID(), missionsId = std::move(missionsId)]() {
+		g_game.playerResetQuestTracker(playerID, missionsId);
 	});
 }
 
@@ -2440,77 +2440,6 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 		msg.add<uint64_t>(it->price);
 		msg.addByte(it->state);
 	}
-
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendQuestLog()
-{
-	NetworkMessage msg;
-	msg.addByte(0xF0);
-	msg.add<uint16_t>(g_game.quests.getQuestsCount(player));
-
-	for (const Quest& quest : g_game.quests.getQuests()) {
-		if (quest.isStarted(player)) {
-			msg.add<uint16_t>(quest.getID());
-			msg.addString(quest.getName());
-			msg.addByte(quest.isCompleted(player));
-		}
-	}
-
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendQuestLine(const Quest* quest)
-{
-	NetworkMessage msg;
-	msg.addByte(0xF1);
-	msg.add<uint16_t>(quest->getID());
-	msg.addByte(quest->getMissionsCount(player));
-
-	for (const Mission& mission : quest->getMissions()) {
-		if (mission.isStarted(player)) {
-			msg.add<uint16_t>(mission.getID());
-			msg.addString(mission.getName(player));
-			msg.addString(mission.getDescription(player));
-		}
-	}
-
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendQuestTracker()
-{
-	NetworkMessage msg;
-	msg.addByte(0xD0);
-	msg.addByte(1);
-	size_t trackeds = player->trackedQuests.size();
-	msg.addByte(player->getMaxTrackedQuests() - trackeds);
-	msg.addByte(trackeds);
-
-	for (const TrackedQuest& trackedQuest : player->trackedQuests) {
-		const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
-		const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
-		msg.add<uint16_t>(trackedQuest.getMissionId());
-		msg.addString(quest->getName());
-		msg.addString(mission->getName(player));
-		msg.addString(mission->getDescription(player));
-	}
-
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
-{
-	NetworkMessage msg;
-	msg.addByte(0xD0);
-	msg.addByte(0);
-
-	const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId());
-	const Mission* mission = quest->getMissionById(trackedQuest.getMissionId());
-	msg.add<uint16_t>(trackedQuest.getMissionId());
-	msg.addString(mission->getName(player));
-	msg.addString(mission->getDescription(player));
 
 	writeToOutputBuffer(msg);
 }

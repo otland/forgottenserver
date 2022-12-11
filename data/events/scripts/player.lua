@@ -327,3 +327,27 @@ function Player:onInventoryUpdate(item, slot, equip)
 		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
 end
+
+function Player:onStorageUpdate(key, value, oldValue, isLogin)
+	if EventCallback.onStorageUpdate then
+		EventCallback.onStorageUpdate(self, key, value, oldValue, isLogin)
+	end
+end
+
+function Player:onQuestTracker(missionsId)
+	if EventCallback.onQuestTracker then
+		EventCallback.onQuestTracker(self, missionsId)
+	end
+end
+
+function Player:onQuestLog()
+	if EventCallback.onQuestLog then
+		EventCallback.onQuestLog(self)
+	end
+end
+
+function Player:onQuestLine(questId)
+	if EventCallback.onQuestLine then
+		EventCallback.onQuestLine(self, questId)
+	end
+end

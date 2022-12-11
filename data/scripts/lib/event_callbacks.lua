@@ -54,6 +54,10 @@ ec.onLoseExperience = {[2] = 1}
 ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
+ec.onStorageUpdate = {}
+ec.onQuestTracker = {}
+ec.onQuestLog = {}
+ec.onQuestLine = {}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}

@@ -9,7 +9,6 @@
 #include "mounts.h"
 #include "player.h"
 #include "position.h"
-#include "quests.h"
 #include "raids.h"
 #include "wildcardtree.h"
 
@@ -507,7 +506,6 @@ public:
 	Map map;
 	Mounts mounts;
 	Raids raids;
-	Quests quests;
 
 	std::forward_list<Item*> toDecayItems;
 

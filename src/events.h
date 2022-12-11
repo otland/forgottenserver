@@ -56,6 +56,10 @@ class Events
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
+		int32_t playerOnStorageUpdate = -1;
+		int32_t playerOnQuestTracker = -1;
+		int32_t playerOnQuestLog = -1;
+		int32_t playerOnQuestLine = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -109,6 +113,10 @@ public:
 	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
+	void eventPlayerOnStorageUpdate(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin);
+	void eventPlayerOnQuestTracker(Player* player, const std::vector<uint16_t>& missionsId);
+	void eventPlayerOnQuestLog(Player* player);
+	void eventPlayerOnQuestLine(Player* player, const uint16_t questId);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
