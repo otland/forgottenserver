@@ -309,15 +309,9 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-std::string formatDate(time_t time)
-{
-	return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time));
-}
+std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
-std::string formatDateShort(time_t time)
-{
-	return fmt::format("{:%d %b %Y}", fmt::localtime(time));
-}
+std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
 
 Direction getDirection(const std::string& string)
 {
