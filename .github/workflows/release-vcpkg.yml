@@ -35,12 +35,9 @@ jobs:
               lua libmariadb pugixml cryptopp fmt
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          submodules: true
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
+          fetch-depth: 0
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -126,12 +123,9 @@ jobs:
               lua luajit libmariadb pugixml cryptopp fmt
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          submodules: true
-
-      - name: Unshallow
-        run: git fetch --prune --unshallow
+          fetch-depth: 0
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
