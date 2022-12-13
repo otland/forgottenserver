@@ -56,8 +56,10 @@ public:
 	uint8_t getPreviousByte() { return buffer[--info.position]; }
 
 	template <typename T>
-	T get()
+	std::enable_if_t<std::is_trivially_copyable_v<T>, T> get() noexcept
 	{
+		static_assert(std::is_trivially_constructible_v<T>, "Destination type must be trivially constructible");
+
 		if (!canRead(sizeof(T))) {
 			return 0;
 		}
