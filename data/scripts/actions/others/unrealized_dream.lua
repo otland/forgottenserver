@@ -26,28 +26,23 @@ local config = {
 local unrealizedDream = Action()
 
 function unrealizedDream.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-    local chance = math.random(0, 2200)
-    for i = 1, #config do
-        local randomItem = config[i]
-        if chance >= randomItem.chanceFrom and chance <= randomItem.chanceTo then
-            if randomItem.itemId then
-                local gift = randomItem.itemId
-                local count = randomItem.count or 1
-                local msg = randomItem.message
-                if type(count) == "table" then
-                    count = math.random(count[1], count[2])
-                end
+	local chance = math.random(0, 2200)
+	for i = 1, #config do
+		local randomItem = config[i]
+		if chance >= randomItem.chanceFrom and chance <= randomItem.chanceTo then
+			if randomItem.itemId then
+				local gift = randomItem.itemId
+				local msg = randomItem.message
 
-                player:addItem(gift, count)
-                player:say(msg, TALKTYPE_MONSTER_SAY)
-            end
+				player:addItem(gift, 1)
+				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, msg)
+			end
 
-            item:getPosition():sendMagicEffect(CONST_ME_GIFT_WRAPS)
-            item:remove(1)
-            return true
-        end
-    end
-    return false
+			item:remove(1)
+			return true
+		end
+	end
+	return false
 end
 
 unrealizedDream:id(22598)
