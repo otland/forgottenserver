@@ -580,12 +580,10 @@ function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p 
 function isPlayerGhost(cid) local p = Player(cid) return p and p:isInGhostMode() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked() or false end
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
-function getPlayersByIPAddress(ip, mask)
-	if not mask then mask = 0xFFFFFFFF end
-	local masked = bit.band(ip, mask)
+function getPlayersByIPAddress(ip)
 	local result = {}
 	for _, player in ipairs(Game.getPlayers()) do
-		if bit.band(player:getIp(), mask) == masked then
+		if player:getIp() == masked then
 			result[#result + 1] = player:getId()
 		end
 	end
@@ -1290,6 +1288,23 @@ end
 
 function doExecuteRaid(raidName)
 	return Game.startRaid(raidName)
+end
+
+function Game.convertIpToString(ip)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
+
+	if type(ip) == "string" then
+		return ip
+	end
+
+	local band = bit.band
+	local rshift = bit.rshift
+	return string.format("%d.%d.%d.%d",
+		band(ip, 0xFF),
+		band(rshift(ip, 8), 0xFF),
+		band(rshift(ip, 16), 0xFF),
+		rshift(ip, 24)
+	)
 end
 
 numberToVariant = Variant
