@@ -29,6 +29,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
 		end
 	else
+		player:addAchievementProgress('Interior Decorator', 1000)
 		player:sendTextMessage(MESSAGE_STATUS_SMALL, "You may construct this only inside a house.")
 	end
 	return true
