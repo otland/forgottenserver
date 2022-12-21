@@ -24,7 +24,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if fromPosition.x ~= CONTAINER_POSITION or item:getParent():getId() == ITEM_BROWSEFIELD then
 			item:transform(kit)
 			fromPosition:sendMagicEffect(CONST_ME_POFF)
-			player:addAchievementProgress('Interior Decorator', 1000)
+			player:addAchievementProgress("Interior Decorator", 1000)
 		else
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "Put the construction kit on the floor first.")
 		end
