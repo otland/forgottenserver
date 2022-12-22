@@ -849,6 +849,8 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 		g_game.startDecay(item);
 	}
 
+	player->setItemAbility(slot, false);
+
 	if (!it.abilities) {
 		return RETURNVALUE_NOERROR;
 	}
