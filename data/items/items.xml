@@ -8015,7 +8015,67 @@
 	<item fromid="4580" toid="4594" name="mossy spots" />
 	<item id="4595" name="gravel" />
 	<item fromid="4596" toid="4607" name="sand" />
-	<item fromid="4608" toid="4616" name="shallow water">
+	<item id="4608" name="shallow water">
+		<attribute key="description" value="You see the silvery movement of fish." />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4609" name="shallow water">
+		<attribute key="decayTo" value="4608" />
+		<attribute key="duration" value="2200" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4610" name="shallow water">
+		<attribute key="description" value="You see the silvery movement of fish." />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4611" name="shallow water">
+		<attribute key="decayTo" value="4610" />
+		<attribute key="duration" value="2200" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4612" name="shallow water">
+		<attribute key="description" value="You see the silvery movement of fish." />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4613" name="shallow water">
+		<attribute key="decayTo" value="4612" />
+		<attribute key="duration" value="2200" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4614" name="shallow water">
+		<attribute key="description" value="You see the silvery movement of fish." />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4615" name="shallow water">
+		<attribute key="decayTo" value="4614" />
+		<attribute key="duration" value="2200" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="4616" name="shallow water">
 		<attribute key="description" value="You see the silvery movement of fish." />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
@@ -8023,24 +8083,23 @@
 		<attribute key="fluidSource" value="water" />
 	</item>
 	<item id="4617" name="shallow water">
-		<attribute key="decayTo" value="4608" />
-		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="4616" />
+		<attribute key="duration" value="2200" />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="true" />
 		<attribute key="fluidSource" value="water" />
 	</item>
 	<item id="4618" name="shallow water">
-		<attribute key="decayTo" value="4609" />
-		<attribute key="duration" value="1200" />
+		<attribute key="description" value="You see the silvery movement of fish." />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="true" />
 		<attribute key="fluidSource" value="water" />
 	</item>
 	<item id="4619" name="shallow water">
-		<attribute key="decayTo" value="4610" />
-		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="4618" />
+		<attribute key="duration" value="2200" />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="allowpickupable" value="true" />
@@ -12096,11 +12155,11 @@
 	<item id="7236" article="an" name="ice hole">
 		<attribute key="description" value="You can see the movement of fish." />
 		<attribute key="decayTo" value="7200" />
-		<attribute key="duration" value="300" />
+		<attribute key="duration" value="900" />
 	</item>
 	<item id="7237" article="an" name="ice hole">
 		<attribute key="decayTo" value="7236" />
-		<attribute key="duration" value="300" />
+		<attribute key="duration" value="900" />
 	</item>
 	<item fromid="7238" toid="7241" article="a" name="shield" />
 	<item id="7242" article="a" name="resonance crystal">
@@ -24703,7 +24762,21 @@
 		<attribute key="weaponType" value="club" />
 		<attribute key="slotType" value="two-handed" />
 	</item>
-	<item fromid="15401" toid="15402" name="shallow water" />
+	<item id="15401" name="shallow water">
+		<attribute key="description" value="You see the silvery movement of fish." />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
+	<item id="15402" name="shallow water">
+		<attribute key="decayTo" value="15401" />
+		<attribute key="duration" value="2200" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="allowpickupable" value="true" />
+		<attribute key="fluidSource" value="water" />
+	</item>
 	<item id="15403" article="a" name="necklace of the deep">
 		<attribute key="weight" value="500" />
 		<attribute key="charges" value="50" />
