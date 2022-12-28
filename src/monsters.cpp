@@ -74,6 +74,9 @@ bool Monsters::reload()
 
 	scriptInterface.reset();
 
+	for (size_t i = 0; i < BESTIARY_RACE_LAST; i++) {
+		bestiaryMonsters[i].clear();
+	}
 	return loadFromXml(true);
 }
 
@@ -980,8 +983,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			attr = bestiaryNode.first_attribute();
 			const char* attrName = attr.name();
 			if (caseInsensitiveEqual(attrName, "class")) {
-				mType->info.bestiary.className = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-			} else if (caseInsensitiveEqual(attrName, "attackable")) {
+				mType->info.bestiary.className = attr.as_string();
+			} else if (caseInsensitiveEqual(attrName, "race")) {
 				mType->info.bestiary.race =
 				    getBestiaryType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 			} else if (caseInsensitiveEqual(attrName, "raceId")) {
@@ -1003,8 +1006,10 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			}
 		}
 		if (!isValidBestiaryRecord(mType->info.bestiary)) {
-			// if invalid reset bestiary data
-			mType->info.bestiary = {0};
+			// if invalid reset bestiary data to avoid invalid calls in future
+			mType->info.bestiary = BestiaryBlock_t();
+		} else {
+			bestiaryMonsters[mType->info.bestiary.race].insert({mType->name, mType});
 		}
 	}
 
@@ -1546,4 +1551,8 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
+}
+
+bestiaryList& Monsters::getBestiaryMonsterType() {
+	return bestiaryMonsters;
 }

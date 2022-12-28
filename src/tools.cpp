@@ -1295,48 +1295,50 @@ bool isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 
 BestiaryType_t getBestiaryType(std::string race)
 {
-	if (caseInsensitiveEqual(race, "amphibic")) {
+	if (caseInsensitiveEqual(race, "Amphibic")) {
 		return BESTIARY_RACE_AMPHIBIC;
-	} else if (caseInsensitiveEqual(race, "amphibic")) {
+	} else if (caseInsensitiveEqual(race, "Amphibic")) {
 		return BESTIARY_RACE_AMPHIBIC;
-	} else if (caseInsensitiveEqual(race, "aquatic")) {
+	} else if (caseInsensitiveEqual(race, "Aquatic")) {
 		return BESTIARY_RACE_AQUATIC;
-	} else if (caseInsensitiveEqual(race, "bird")) {
+	} else if (caseInsensitiveEqual(race, "Bird")) {
 		return BESTIARY_RACE_BIRD;
-	} else if (caseInsensitiveEqual(race, "construct")) {
+	} else if (caseInsensitiveEqual(race, "Construct")) {
 		return BESTIARY_RACE_CONSTRUCT;
-	} else if (caseInsensitiveEqual(race, "demon")) {
+	} else if (caseInsensitiveEqual(race, "Demon")) {
 		return BESTIARY_RACE_DEMON;
-	} else if (caseInsensitiveEqual(race, "dragon")) {
+	} else if (caseInsensitiveEqual(race, "Dragon")) {
 		return BESTIARY_RACE_DRAGON;
-	} else if (caseInsensitiveEqual(race, "elemental")) {
+	} else if (caseInsensitiveEqual(race, "Elemental")) {
 		return BESTIARY_RACE_ELEMENTAL;
-	} else if (caseInsensitiveEqual(race, "extradimensional")) {
+	} else if (caseInsensitiveEqual(race, "Extradimensional")) {
 		return BESTIARY_RACE_EXTRA_DIMENSIONAL;
-	} else if (caseInsensitiveEqual(race, "fey")) {
+	} else if (caseInsensitiveEqual(race, "Fey")) {
 		return BESTIARY_RACE_FEY;
-	} else if (caseInsensitiveEqual(race, "giant")) {
+	} else if (caseInsensitiveEqual(race, "Giant")) {
 		return BESTIARY_RACE_GIANT;
-	} else if (caseInsensitiveEqual(race, "human")) {
+	} else if (caseInsensitiveEqual(race, "Human")) {
 		return BESTIARY_RACE_HUMAN;
-	} else if (caseInsensitiveEqual(race, "humanoid")) {
+	} else if (caseInsensitiveEqual(race, "Humanoid")) {
 		return BESTIARY_RACE_HUMANOID;
-	} else if (caseInsensitiveEqual(race, "lycantrophe")) {
+	} else if (caseInsensitiveEqual(race, "Lycantrophe")) {
 		return BESTIARY_RACE_LYCANTHROPE;
-	} else if (caseInsensitiveEqual(race, "magical")) {
+	} else if (caseInsensitiveEqual(race, "Magical")) {
 		return BESTIARY_RACE_MAGICAL;
-	} else if (caseInsensitiveEqual(race, "mammal")) {
+	} else if (caseInsensitiveEqual(race, "Mammal")) {
 		return BESTIARY_RACE_MAMMAL;
-	} else if (caseInsensitiveEqual(race, "plant")) {
+	} else if (caseInsensitiveEqual(race, "Plant")) {
 		return BESTIARY_RACE_PLANT;
-	} else if (caseInsensitiveEqual(race, "reptile")) {
+	} else if (caseInsensitiveEqual(race, "Reptile")) {
 		return BESTIARY_RACE_REPTILE;
-	} else if (caseInsensitiveEqual(race, "slime")) {
+	} else if (caseInsensitiveEqual(race, "Slime")) {
 		return BESTIARY_RACE_SLIME;
-	} else if (caseInsensitiveEqual(race, "undead")) {
+	} else if (caseInsensitiveEqual(race, "Undead")) {
 		return BESTIARY_RACE_UNDEAD;
-	} else if (caseInsensitiveEqual(race, "vermin")) {
+	} else if (caseInsensitiveEqual(race, "Vermin")) {
 		return BESTIARY_RACE_VERMIN;
+	} else if (caseInsensitiveEqual(race, "Unknown")) {
+		return BESTIARY_RACE_UNKNOWN;
 	}
 
 	return BESTIARY_RACE_NONE;

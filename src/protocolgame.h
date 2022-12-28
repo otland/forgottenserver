@@ -321,8 +321,12 @@ private:
 	// shop
 	void AddShopItem(NetworkMessage& msg, const ShopInfo& item);
 
+	// bestiary
+	void parseBestiarySendRaces();
+
 	// otclient
 	void parseExtendedOpcode(NetworkMessage& msg);
+
 
 	friend class Player;
 

@@ -21,11 +21,13 @@
 #include "podium.h"
 #include "scheduler.h"
 #include "storeinbox.h"
+#include "monsters.h"
 
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
+extern Monsters g_monsters;
 
 namespace {
 
@@ -134,6 +136,21 @@ ClientDamageType getClientDamageType(CombatType_t combatType)
 		default:
 			return CLIENT_DAMAGETYPE_UNDEFINED;
 	}
+}
+
+uint16_t getUnlockedBestiary(Player *player, std::map<std::string, MonsterType*> bestiaryRaceList) {
+	uint16_t count = 0;
+	int32_t storageValue = 0;
+	for (auto const& iter : bestiaryRaceList) {
+		if (iter.second && iter.second->info.bestiary.raceId != 0) {
+			player->getStorageValue(PSTRG_BESTIARY_RANGE_START + iter.second->info.bestiary.raceId, storageValue);
+			if (storageValue >= iter.second->info.bestiary.firstUnlock) {
+				count++;
+			}
+
+		}
+	}
+	return count;
 }
 
 } // namespace
@@ -3939,4 +3956,42 @@ void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 	g_dispatcher.addTask([=, playerID = player->getID(), buffer = std::move(buffer)]() {
 		g_game.parsePlayerExtendedOpcode(playerID, opcode, buffer);
 	});
+}
+
+void ProtocolGame::parseBestiarySendRaces()
+{
+	NetworkMessage msg;
+	msg.addByte(0xd5);
+	bestiaryList bestiaryMonsters = g_monsters.getBestiaryMonsterType();
+	uint16_t raceCount = 0;
+	for (uint8_t i = BESTIARY_RACE_FIRST; i < BESTIARY_RACE_LAST; i++) {
+		if (bestiaryMonsters[i].size() > 0) {
+			raceCount++;
+		}
+	}
+	msg.add<uint16_t>(raceCount);
+
+	for (uint8_t i = BESTIARY_RACE_FIRST; i < BESTIARY_RACE_LAST; i++) {
+		std::string BestClass = "";
+		if (bestiaryMonsters[i].size() > 0) {
+			for (auto mTypeMapItem : bestiaryMonsters[i]) {
+				const MonsterType* mtype = mTypeMapItem.second;
+				if (!mtype) {
+					return;
+				}
+				if (mtype->info.bestiary.race == static_cast<BestiaryType_t>(i)) {
+					BestClass = mtype->info.bestiary.className;
+				}
+			}
+
+			msg.addString(BestClass);
+			auto bestiarySize = bestiaryMonsters[i].size();
+			msg.add<uint16_t>(bestiarySize);
+			uint16_t unlockedCount = getUnlockedBestiary(player, bestiaryMonsters[i]);
+			msg.add<uint16_t>(unlockedCount);
+		}
+	}
+	writeToOutputBuffer(msg);
+
+	// probaly here we sghould send charm data ETC 
 }
