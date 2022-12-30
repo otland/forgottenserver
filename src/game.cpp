@@ -4048,7 +4048,7 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		                                      field, ignoreResistances);
 
 		if (damage.secondary.type != COMBAT_HEALING) {
-			damage.secondary.value = -damage.primary.value;
+			damage.secondary.value = -damage.secondary.value;
 		}
 
 		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
