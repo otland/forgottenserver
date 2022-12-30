@@ -3990,10 +3990,6 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 		return true;
 	}
 
-	if (damage.primary.value > 0) {
-		return false;
-	}
-
 	static const auto sendBlockEffect = [this](BlockType_t blockType, CombatType_t combatType,
 	                                           const Position& targetPos) {
 		if (blockType == BLOCK_DEFENSE) {
@@ -4033,21 +4029,28 @@ bool Game::combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* ta
 
 	BlockType_t primaryBlockType, secondaryBlockType;
 	if (damage.primary.type != COMBAT_NONE) {
-		damage.primary.value = -damage.primary.value;
+		damage.primary.value = std::abs(damage.primary.value);
 		primaryBlockType = target->blockHit(attacker, damage.primary.type, damage.primary.value, checkDefense,
 		                                    checkArmor, field, ignoreResistances);
 
-		damage.primary.value = -damage.primary.value;
+		if (damage.primary.type != COMBAT_HEALING) {
+			damage.primary.value = -damage.primary.value;
+		}
+
 		sendBlockEffect(primaryBlockType, damage.primary.type, target->getPosition());
 	} else {
 		primaryBlockType = BLOCK_NONE;
 	}
 
 	if (damage.secondary.type != COMBAT_NONE) {
-		damage.secondary.value = -damage.secondary.value;
+		damage.secondary.value = std::abs(damage.secondary.value);
 		secondaryBlockType = target->blockHit(attacker, damage.secondary.type, damage.secondary.value, false, false,
 		                                      field, ignoreResistances);
-		damage.secondary.value = -damage.secondary.value;
+
+		if (damage.secondary.type != COMBAT_HEALING) {
+			damage.secondary.value = -damage.primary.value;
+		}
+
 		sendBlockEffect(secondaryBlockType, damage.secondary.type, target->getPosition());
 	} else {
 		secondaryBlockType = BLOCK_NONE;
