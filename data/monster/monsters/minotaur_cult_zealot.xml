@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Cult Zealot" nameDescription="a minotaur cult zealot" race="blood" experience="1350" speed="250">
+	<health now="1800" max="1800" />
+	<look type="29" corpse="5983" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="-180" max="-230">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="-180" max="-250">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35" />
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="20" />
+		<element icePercent="-10" />
+		<element holyPercent="10" />
+		<element deathPercent="-10" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="150" />
+		<item id="2152" name="platinum coin" chance="39292" countmax="3" />
+		<item id="12429" name="purple robe" chance="16608" />
+		<item id="2182" name="snakebite rod" chance="12128" />
+		<item id="7589" name="strong mana potion" chance="11776" countmax="3" />
+		<item id="10556" name="cultish robe" chance="9782" />
+		<item id="7425" name="taurus mace" chance="6474" />
+		<item id="5878" name="minotaur leather" chance="5114" />
+		<item id="2150" name="small amethyst" chance="2979" countmax="2" />
+		<item id="2149" name="small emerald" chance="2815" countmax="2" />
+		<item id="12428" name="minotaur horn" chance="2745" countmax="2" />
+		<item id="2146" name="small sapphire" chance="2651" countmax="2" />
+		<item id="2145" name="small diamond" chance="2322" countmax="2" />
+		<item id="9970" name="small topaz" chance="2275" countmax="2" />
+		<item id="5911" name="red piece of cloth" chance="2064" />
+		<item id="2147" name="small ruby" chance="2064" countmax="2" />
+		<item id="2156" name="red gem" chance="516" />
+		<item id="2154" name="yellow gem" chance="446" />
+		<item id="7401" name="minotaur trophy" chance="94" />
+	</loot>
+</monster>

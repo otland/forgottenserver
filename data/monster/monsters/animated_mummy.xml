@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Mummy" nameDescription="an animated mummy" race="undead" experience="150" speed="150">
+	<health now="240" max="240" />
+	<look type="65" corpse="6004" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-85" poison="4" />
+		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-30" max="-40">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" target="1" speedchange="-226" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="33099" countmax="77" />
+		<item id="3976" name="worm" chance="19014" countmax="3" />
+		<item id="12422" name="flask of embalming fluid" chance="13380" />
+		<item id="2162" name="magic light wand" chance="9859" />
+		<item id="2134" name="silver brooch" chance="4930" />
+		<item id="2161" name="strange talisman" chance="4225" />
+		<item id="10566" name="gauze bandage" chance="3521" />
+		<item id="2144" name="black pearl" chance="1408" />
+		<item id="5914" name="yellow piece of cloth" chance="1408" />
+		<item id="2124" name="crystal ring" chance="704" />
+	</loot>
+</monster>

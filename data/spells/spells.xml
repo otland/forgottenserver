@@ -836,4 +836,10 @@
 	<instant name="ferumbras soulfire" words="###66" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/ferumbras_soulfire.lua" />
 	<instant name="glooth fairy skill reducer" words="###67" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/glooth_fairy_skill_reducer.lua" />
 	<instant name="physical explosion" words="###68" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/physical_explosion.lua" />
+	<instant name="freed soul spell" words="###69" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/freed_soul_spell.lua" />
+	<instant name="heal monster 9x9" words="###70" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/heal_monsters_9x9.lua" />
+	<instant name="heal monster" words="###71" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/heal_monsters.lua" />
+	<instant name="pixie skill reducer" words="###72" blockwalls="1" aggressive="1" needtarget="0" needlearn="1" script="monster/pixie_skill_reducer.lua" />
+	<instant name="remorseless wave" words="###73" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/remorseless_wave.lua" />
+	<instant name="source of corruption wave" words="###74" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/source_of_corruption_wave.lua" />
 </spells>
