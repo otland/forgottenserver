@@ -23,7 +23,7 @@ function spellCallback(param)
 			tile:getTopCreature():addHealth(-math.random(0, 600))
 		elseif tile:getTopCreature() and tile:getTopCreature():isMonster() then
 			if tile:getTopCreature():getName():lower() == "stolen soul" then
-				tile:getTopCreature():addHealth( - math.random(700, 1500))
+				tile:getTopCreature():addHealth(-math.random(700, 1500))
 			end
 		end
 	end
