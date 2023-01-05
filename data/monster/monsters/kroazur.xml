@@ -15,8 +15,8 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="200" chance="20" skill="153"  min="0" max="-650" />
-		<attack name="death" interval="200" chance="20" skill="153"  min="-300" max="-500" />
+		<attack name="melee" interval="2000" min="0" max="-650" />
+		<attack name="death" interval="2000" chance="20" min="-300" max="-500" />
 		<attack name="death" interval="500" chance="10" length="8" spread="0" target="1" min="-200" max="-300">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>

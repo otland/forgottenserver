@@ -14,13 +14,13 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-269" fire="6" />
+		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-100">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" range="7">
 			<attribute key="shooteffect" value="energy" />
-			<attribute key="areaeffect" value="teleport" />
+			<attribute key="areaEffect" value="teleport" />
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="30">

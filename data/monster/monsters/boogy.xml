@@ -15,7 +15,7 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
-		<attack name="physicalcondition" interval="3000" chance="11" radius="6" target="1" min="-100" max="-300">
+		<attack name="physical" interval="3000" chance="11" radius="6" target="1" min="-100" max="-300">
 			<attribute key="areaEffect" value="redspark" />
 			<attribute key="shootEffect" value="whirlwindclub" />
 		</attack>

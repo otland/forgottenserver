@@ -66,7 +66,7 @@
 		<item id="2664" name="wood cape" chance="1697" />
 		<item id="9928" name="leaf legs" chance="524" />
 		<item id="28355" name="wooden spellbook" chance="374" />
-		<item name="die" chance="125" />
+		<item id="5792" name="die" chance="125" />
 		<item id="5015" name="mandrake" chance="62" />
 	</loot>
 </monster>

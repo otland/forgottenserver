@@ -14,12 +14,11 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-269" fire="6" />
 		<attack name="fire" interval="2000" chance="15" range="7" min="-70" max="-180">
 			<attribute key="shootEffect" value="poison" />
 		</attack>
 		<attack name="outfit" interval="2000" chance="8" range="7" monster="chicken" duration="4000">
-			<attribute key="areaeffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
 		<attack name="earth" interval="2000" chance="20" length="8" spread="3" min="-15" max="-120">
 			<attribute key="areaEffect" value="carniphila" />

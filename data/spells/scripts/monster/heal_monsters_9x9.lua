@@ -23,6 +23,6 @@ combat:setParameter(COMBAT_PARAM_DISPEL, CONDITION_PARALYZE)
 combat:setArea(createCombatArea(AREA_CIRCLE6X6))
 combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

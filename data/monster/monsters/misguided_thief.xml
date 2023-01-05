@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Misguided Thief" nameDescription="a misguided thief" race="blood" experience="1200" speed="260">
 	<health now="1800" max="1800" />
-	<look type="684" head="58" body="40" legs="60" feet="116" corpse="0" />
+	<look type="684" head="58" body="40" legs="60" feet="116" corpse="28781" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -35,7 +35,6 @@
 		<element earthPercent="30" />
 		<element icePercent="10" />
 		<element holyPercent="-30" />
-		<element deathPercent="0" />
 	</elements>
 	<loot>
 		<item id="2148" name="gold coin" chance="74932" countmax="80" />

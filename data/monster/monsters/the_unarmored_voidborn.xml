@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="The Unarmored Voidborn" nameDescription="The Unarmored Voidborn" race="undead" experience="15000" speed="250">
 	<health now="250000" max="250000" />
-	<look type="987" corpse="0" />
+	<look type="987" corpse="28789" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

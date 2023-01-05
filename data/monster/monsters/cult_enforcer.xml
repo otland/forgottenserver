@@ -20,7 +20,6 @@
 	</immunities>
 	<elements>
 		<element physicalPercent="10" />
-		<element deathPercent="0" />
 	</elements>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-250" />

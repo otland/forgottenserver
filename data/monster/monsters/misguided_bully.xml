@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Misguided Bully" nameDescription="a misguided bully" race="blood" experience="1200" speed="180">
 	<health now="2000" max="2000" />
-	<look type="159" head="58" body="21" legs="41" feet="76" corpse="0" />
+	<look type="159" head="58" body="21" legs="41" feet="76" corpse="28781" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -32,7 +32,6 @@
 		<element earthPercent="30" />
 		<element icePercent="10" />
 		<element holyPercent="-30" />
-		<element deathPercent="0" />
 	</elements>
 	<loot>
 		<item id="2148" name="gold coin" chance="81581" countmax="173" />

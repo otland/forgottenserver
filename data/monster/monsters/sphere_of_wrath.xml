@@ -28,6 +28,5 @@
 	<elements>
 		<element physicalPercent="-1" />
 		<element holyPercent="1" />
-		<element deathPercent="0" />
 	</elements>
 </monster>

@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<defenses armor="10" defense="5">
-		<defense name="healing" interval="2000" chance="20" min="0" max="0" />
+		<defense name="healing" interval="2000" chance="20" min="300" max="320" />
 	</defenses>
 	<immunities>
 		<immunity paralyze="1" />

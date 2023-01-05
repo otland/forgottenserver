@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="30" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="300" />
 		<attack name="manadrain" interval="2000" chance="20" range="6" radius="4" target="1" min="-100" max="-400">
 			<attribute key="areaEffect" value="bluebubble" />
 		</attack>

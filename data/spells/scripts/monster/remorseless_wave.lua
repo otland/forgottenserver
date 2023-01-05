@@ -20,7 +20,7 @@ function spellCallback(param)
 	local tile = Tile(Position(param.pos))
 	if tile then
 		if tile:getTopCreature() and tile:getTopCreature():isPlayer() then
-			tile:getTopCreature():addHealth( - math.random(0, 600))
+			tile:getTopCreature():addHealth(-math.random(0, 600))
 		elseif tile:getTopCreature() and tile:getTopCreature():isMonster() then
 			if tile:getTopCreature():getName():lower() == "stolen soul" then
 				tile:getTopCreature():addHealth( - math.random(700, 1500))
@@ -39,6 +39,6 @@ end
 
 setCombatCallback(combat, CALLBACK_PARAM_TARGETTILE, "onTargetTile")
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end
