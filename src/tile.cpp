@@ -576,9 +576,11 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
-			MagicField* field = getFieldItem();
-			if (!hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags) && field && field->getDamage() != 0) {
-				return RETURNVALUE_NOTPOSSIBLE;
+			if (MagicField* field = getFieldItem()) {
+				if (field->getDamage() != 0 && hasBitSet(FLAG_PATHFINDING, flags) &&
+				    !hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
+					return RETURNVALUE_NOTPOSSIBLE;
+				}
 			}
 
 			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
