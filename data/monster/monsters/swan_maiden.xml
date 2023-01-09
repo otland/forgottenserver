@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Swan Maiden" nameDescription="a swan maiden" race="blood" experience="700" speed="234">
+	<health now="800" max="800" />
+	<look type="138" head="0" body="0" legs="114" feet="78" corpse="28487" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-215" />
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-60" max="-115">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="11" range="7" target="1" min="-82" max="-215">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="11" radius="6" speedchange="-450" duration="5000">
+			<attribute key="areaEffect" value="faeexplosion" />
+		</attack>
+	</attacks>
+	<defenses armor="54" defense="54">
+		<defense name="healing" interval="2000" chance="15" min="85" max="105">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element earthPercent="30" />
+		<element firePercent="-10" />
+		<element holyPercent="30" />
+		<element deathPercent="50" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="Nightmarish monster! This dream is not meant for you!" />
+		<voice sentence="You won't steal my robe! Back off!" />
+		<voice sentence="You are not allowed to lay eyes on me in this shape!" />
+		<voice sentence="Are you stalking me? You will bitterly regret this!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="60417" countmax="90" />
+		<item id="28347" name="wild flowers" chance="20530" />
+		<item id="28352" name="colourful snail shell" chance="14460" />
+		<item id="2803" name="powder herb" chance="5250" />
+		<item id="7590" name="great mana potion" chance="3117" />
+		<item id="2134" name="silver brooch" chance="2836" />
+		<item id="7761" name="small enchanted emerald" chance="2648" countmax="2" />
+		<item id="24850" name="opal" chance="1945" countmax="2" />
+		<item id="2143" name="white pearl" chance="1828" countmax="2" />
+		<item id="27047" name="coral brooch" chance="1664" />
+		<item id="2796" name="green mushroom" chance="1312" />
+		<item id="2423" name="clerical mace" chance="1172" />
+		<item id="2195" name="boots of haste" chance="867" />
+		<item id="7589" name="strong mana potion" chance="797" />
+		<item id="28354" name="butterfly ring" chance="727" />
+		<item id="8874" name="summer dress" chance="469" />
+		<item id="9927" name="flower wreath" chance="375" />
+		<item id="7387" name="diamond sceptre" chance="328" />
+	</loot>
+</monster>

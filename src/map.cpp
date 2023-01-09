@@ -201,7 +201,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 
 	if (!foundTile) {
 		static std::vector<std::pair<int32_t, int32_t>> extendedRelList{
-		    {0, -2}, {-1, -1}, {0, -1}, {1, -1}, {-2, 0}, {-1, 0}, {1, 0}, {2, 0}, {-1, 1}, {0, 1}, {1, 1}, {0, 2}};
+		    {0, -2}, {2, 0}, {0, 2}, {-2, 0}, {-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 		static std::vector<std::pair<int32_t, int32_t>> normalRelList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0},
 		                                                              {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
@@ -636,7 +636,16 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	// used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
+		if (!tile) {
+			return nullptr;
+		}
+
+		uint32_t flags = FLAG_PATHFINDING;
+		if (!creature.getPlayer()) {
+			flags |= FLAG_IGNOREFIELDDAMAGE;
+		}
+
+		if (tile->queryAdd(0, creature, 1, flags) != RETURNVALUE_NOERROR) {
 			return nullptr;
 		}
 	}

@@ -101,6 +101,9 @@ bool Player::setVocation(uint16_t vocId)
 	vocation = voc;
 
 	updateRegeneration();
+	setBaseSpeed(voc->getBaseSpeed());
+	updateBaseSpeed();
+	g_game.changeSpeed(this, 0);
 	return true;
 }
 
@@ -1390,7 +1393,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
 		isUpdatingPath = false;
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
 	if (creature != this) {
@@ -1813,7 +1816,8 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -1902,7 +1906,8 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -2106,13 +2111,13 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	return blockType;
 }
 
-uint32_t Player::getIP() const
+Connection::Address Player::getIP() const
 {
 	if (client) {
 		return client->getIP();
 	}
 
-	return 0;
+	return {};
 }
 
 void Player::death(Creature* lastHitCreature)
@@ -3193,7 +3198,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = oldParent != this;
 		}
@@ -3250,7 +3255,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = newParent != this;
 		}
@@ -3394,7 +3399,7 @@ bool Player::setAttackedCreature(Creature* creature)
 	}
 
 	if (creature) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+		g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 	}
 	return true;
 }

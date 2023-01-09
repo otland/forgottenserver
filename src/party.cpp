@@ -65,10 +65,10 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 	if (player->getParty() != this && leader != player) {
 		return false;
 	}
-	
+
 	bool canRemove = g_events->eventPartyOnLeave(this, player);
 	if (!forceRemove && !canRemove) {
-	    return false;
+		return false;
 	}
 
 	bool missingLeader = false;

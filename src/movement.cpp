@@ -642,7 +642,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 			int32_t vocationId = g_vocations.getVocationId(vocationNameAttribute.as_string());
 			if (vocationId != -1) {
-				vocEquipMap[vocationId] = true;
+				vocationEquipSet.insert(vocationId);
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {
 					vocStringList.push_back(
 					    boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string()));
@@ -650,7 +650,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			}
 		}
 
-		if (!vocEquipMap.empty()) {
+		if (!vocationEquipSet.empty()) {
 			wieldInfo |= WIELDINFO_VOCREQ;
 		}
 
@@ -703,8 +703,7 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&) { return 1; }
 ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
-		const VocEquipMap& vocEquipMap = moveEvent->getVocEquipMap();
-		if (!vocEquipMap.empty() && vocEquipMap.find(player->getVocationId()) == vocEquipMap.end()) {
+		if (!moveEvent->hasVocationEquipSet(player->getVocationId())) {
 			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
 		}
 
@@ -994,16 +993,14 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 
 ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	if (scripted) {
-		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == RETURNVALUE_NOERROR) {
-			if (executeEquip(player, item, slot, isCheck)) {
-				return RETURNVALUE_NOERROR;
-			}
-			return RETURNVALUE_CANNOTBEDRESSED;
-		}
-		return equipFunction(this, player, item, slot, isCheck);
+	ReturnValue ret = RETURNVALUE_NOERROR;
+	if (equipFunction) {
+		ret = equipFunction(this, player, item, slot, isCheck);
 	}
-	return equipFunction(this, player, item, slot, isCheck);
+	if (scripted && (ret == RETURNVALUE_NOERROR) && !executeEquip(player, item, slot, isCheck)) {
+		ret = RETURNVALUE_CANNOTBEDRESSED;
+	}
+	return ret;
 }
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Moohtant" nameDescription="an animated moohtant" race="blood" experience="2600" speed="260">
+	<health now="3200" max="3200" />
+	<look type="607" corpse="23367" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="physical" interval="2000" chance="13" length="3" spread="0" min="-100" max="-230">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="physical" interval="2000" chance="12" radius="3" target="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="19" radius="5" target="0" min="-50" max="-225">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" range="7" target="1" radius="4" min="-150" max="-235">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="9" min="50" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="189" />
+		<item id="2152" name="platinum coin" chance="63158" countmax="2" />
+		<item id="23570" name="giant pacifier" chance="31579" />
+		<item id="7590" name="great mana potion" chance="26316" countmax="3" />
+		<item id="2147" name="small ruby" chance="15789" countmax="2" />
+		<item id="7591" name="great health potion" chance="10526" countmax="2" />
+		<item id="2214" name="ring of healing" chance="10526" />
+		<item id="2666" name="meat" chance="5263" />
+		<item id="5878" name="minotaur leather" chance="5263" />
+		<item id="5911" name="red piece of cloth" chance="5263" />
+		<item id="2145" name="small diamond" chance="5263" countmax="2" />
+	</loot>
+</monster>

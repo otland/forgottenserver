@@ -174,7 +174,7 @@ void Creature::onAttacking(uint32_t interval)
 
 void Creature::onIdleStatus()
 {
-	if (getHealth() > 0) {
+	if (!isDead()) {
 		damageMap.clear();
 		lastHitCreatureId = 0;
 	}
@@ -623,7 +623,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		} else {
 			if (hasExtraSwing()) {
 				// our target is moving lets see if we can get in hit
-				g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -808,8 +808,8 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 		g_game.addCreatureHealth(this);
 	}
 
-	if (health <= 0) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
+	if (isDead()) {
+		g_dispatcher.addTask([id = getID()]() { g_game.executeDeath(id); });
 	}
 }
 
@@ -1164,7 +1164,8 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendTextMessage(message);
 	}
 }
 
