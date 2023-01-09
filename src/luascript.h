@@ -1329,6 +1329,9 @@ private:
 
 	static int luaMonsterTypeGetElementList(lua_State* L);
 	static int luaMonsterTypeAddElement(lua_State* L);
+	
+	static int luaMonsterTypeGetWeaponWeaknessList(lua_State* L);
+	static int luaMonsterTypeAddWeaponWeakness(lua_State* L);
 
 	static int luaMonsterTypeGetVoices(lua_State* L);
 	static int luaMonsterTypeAddVoice(lua_State* L);
