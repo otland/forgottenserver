@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Cult Follower" nameDescription="a minotaur cult follower" race="blood" experience="950" speed="230">
+	<health now="1600" max="1600" />
+	<look type="25" corpse="5969" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="-180" max="-250">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="32" defense="32">
+		<defense name="healing" interval="1000" chance="20" min="200" max="450">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="20" />
+		<element icePercent="-10" />
+		<element holyPercent="10" />
+		<element deathPercent="-10" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="We will rule!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="155" />
+		<item id="2152" name="platinum coin" chance="65104" countmax="3" />
+		<item id="2671" name="ham" chance="59356" />
+		<item id="23575" name="cowbell" chance="22228" />
+		<item id="2510" name="plate shield" chance="20071" />
+		<item id="10556" name="cultish robe" chance="15197" />
+		<item id="2172" name="bronze amulet" chance="15039" />
+		<item id="12428" name="minotaur horn" chance="14202" countmax="2" />
+		<item id="23546" name="mino shield" chance="12370" />
+		<item id="5878" name="minotaur leather" chance="11784" />
+		<item id="7591" name="great health potion" chance="11775" />
+		<item id="2666" name="meat" chance="7701" />
+		<item id="2214" name="ring of healing" chance="3274" />
+		<item id="2149" name="small emerald" chance="3153" countmax="2" />
+		<item id="2147" name="small ruby" chance="3125" countmax="2" />
+		<item id="2150" name="small amethyst" chance="2958" countmax="2" />
+		<item id="9970" name="small topaz" chance="2734" countmax="2" />
+		<item id="23545" name="mino lance" chance="1897" />
+		<item id="9971" name="gold ingot" chance="977" />
+		<item id="5911" name="red piece of cloth" chance="902" />
+		<item id="2475" name="warrior helmet" chance="530" />
+		<item id="2154" name="yellow gem" chance="223" />
+		<item id="7401" name="minotaur trophy" chance="205" />
+		<item id="2156" name="red gem" chance="149" />
+	</loot>
+</monster>

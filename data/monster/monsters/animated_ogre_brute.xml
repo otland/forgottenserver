@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Ogre Brute" nameDescription="an animated ogre brute" race="blood" experience="800" speed="210">
+	<health now="1000" max="1000" />
+	<look type="857" corpse="24799" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-100">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7">
+			<attribute key="shooteffect" value="energy" />
+			<attribute key="areaEffect" value="teleport" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="98" />
+		<item id="2666" name="meat" chance="23529" />
+		<item id="24845" name="ogre nose ring" chance="23529" />
+		<item id="24844" name="ogre ear stud" chance="17647" />
+		<item id="12403" name="battle stone" chance="11765" />
+		<item id="7588" name="strong health potion" chance="11765" />
+		<item id="2143" name="white pearl" chance="11765" />
+		<item id="2687" name="cookie" chance="5882" countmax="4" />
+		<item id="24849" name="onyx chip" chance="5882" countmax="2" />
+		<item id="2147" name="small ruby" chance="5882" />
+		<item id="1294" name="small stone" chance="5882" countmax="3" />
+	</loot>
+</monster>
