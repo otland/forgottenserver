@@ -326,19 +326,6 @@ private:
 
 	friend class Player;
 
-	// Helpers so we don't need to bind every time
-	template <typename Callable>
-	void addGameTask(Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(std::forward<Callable>(function)));
-	}
-
-	template <typename Callable>
-	void addGameTaskTimed(uint32_t delay, Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(delay, std::forward<Callable>(function)));
-	}
-
 	std::unordered_set<uint32_t> knownCreatureSet;
 	Player* player = nullptr;
 

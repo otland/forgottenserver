@@ -105,12 +105,17 @@ public:
 	uint32_t getWieldInfo() const { return wieldInfo; }
 	void setWieldInfo(uint32_t info) { wieldInfo |= info; }
 
-	void addVocWeaponMap(std::string vocName)
+	const auto& getVocationWeaponSet() const { return vocationWeaponSet; }
+	void addVocationWeaponSet(const std::string& vocationName)
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocName);
+		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
-			vocWeaponMap[vocationId] = true;
+			vocationWeaponSet.insert(vocationId);
 		}
+	}
+	bool hasVocationWeaponSet(uint16_t vocationId) const
+	{
+		return vocationWeaponSet.empty() || vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();
 	}
 
 	const std::string& getVocationString() const { return vocationString; }
@@ -119,7 +124,7 @@ public:
 	WeaponAction_t action = WEAPONACTION_NONE;
 	CombatParams params;
 	WeaponType_t weaponType;
-	std::map<uint16_t, bool> vocWeaponMap;
+	std::unordered_set<uint16_t> vocationWeaponSet;
 
 protected:
 	void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;

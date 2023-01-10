@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Museum Stone Golem" nameDescription="a museum stone golem" race="undead" experience="160" speed="180">
+	<health now="270" max="270" />
+	<look type="67" corpse="6005" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag illusionable="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="35" />
+		<item id="5880" name="iron ore" chance="3571" />
+		<item id="2166" name="power ring" chance="3571" />
+		<item id="1294" name="small stone" chance="3571" countmax="2" />
+	</loot>
+</monster>
