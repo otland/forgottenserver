@@ -191,4 +191,25 @@ if not KeywordHandler then
 		end
 		return self.lastNode[cid]
 	end
+
+	-- Adds a keyword which acts as a spell word
+	function KeywordHandler:addSpellKeyword(keys, parameters)
+		local keys = keys
+		keys.callback = FocusModule.messageMatcherDefault
+
+		local npcHandler, spellName, price, vocationId = parameters.npcHandler, parameters.spellName, parameters.price, parameters.vocation
+		local spellKeyword = self:addKeyword(keys, StdModule.say, {npcHandler = npcHandler, text = string.format("Do you want to learn the spell '%s' for %s?", spellName, price > 0 and price .. " gold" or "free")},
+			function(player)
+				local baseVocationId = player:getVocation():getBase():getId()
+				if type(vocationId) == 'table' then
+					return table.contains(vocationId, baseVocationId)
+				else
+					return vocationId == baseVocationId
+				end
+			end
+		)
+
+		spellKeyword:addChildKeyword({"yes"}, StdModule.learnSpell, {npcHandler = npcHandler, spellName = spellName, level = parameters.level, price = price})
+		spellKeyword:addChildKeyword({"no"}, StdModule.say, {npcHandler = npcHandler, text = "Maybe next time.", reset = true})
+	end
 end
