@@ -769,7 +769,7 @@
 	<monster name="Roaring Lion" file="monsters/roaring_lion.xml" />
 	<monster name="Roaring Water Elemental" file="monsters/roaring_water_elemental.xml" />
 	<monster name="Roast Pork" file="monsters/roast_pork.xml" />
-	<monster name="Robby the Reckless" file="monsters/robby_the_reckless.xml" />
+	<monster name="Robby The Reckless" file="monsters/robby_the_reckless.xml" />
 	<monster name="Rocko" file="monsters/rocko.xml" />
 	<monster name="Rocky" file="monsters/rocky.xml" />
 	<monster name="Ron The Ripper" file="monsters/ron_the_ripper.xml" />
