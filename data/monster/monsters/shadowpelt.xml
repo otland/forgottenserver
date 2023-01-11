@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="50" attack="50" />
+		<attack name="melee" interval="2000" min="0" max="200" />
 		<attack name="physical" interval="100" chance="22" radius="3" min="-200" max="-310">
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
