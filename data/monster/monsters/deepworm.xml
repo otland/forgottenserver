@@ -19,7 +19,7 @@
 		<attack name="earth" interval="2000" chance="15" range="7" length="6" spread="2" min="-190" max="-300">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
-		<attack name="earth" interval="2000" chance="15"  length="3" spread="3" min="-200" max="-400">
+		<attack name="earth" interval="2000" chance="15" length="3" spread="3" min="-200" max="-400">
 			<attribute key="areaEffect" value="poison" />
 		</attack>
 	</attacks>
