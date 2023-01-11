@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ancient Spawn Of Morgathla" nameDescription="Ancient Spawn Of Morgathla" race="vermin" experience="2400" speed="270">
+<monster name="Ancient Spawn Of Morgathla" nameDescription="Ancient Spawn Of Morgathla" race="venom" experience="2400" speed="270">
 	<health now="50000" max="50000" />
 	<look type="1067" corpse="23375" />
 	<targetchange interval="2000" chance="5" />
