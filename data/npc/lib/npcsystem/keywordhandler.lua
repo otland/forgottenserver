@@ -192,7 +192,8 @@ if not KeywordHandler then
 		return self.lastNode[cid]
 	end
 
-	-- Adds a keyword which acts as a spell word
+	-- Adds a keyword which acts as a spell word.
+	-- Example: keywordHandler:addSpellKeyword({"find person"}, {npcHandler = npcHandler, spellName = "Find Person", price = 80, level = 8, vocation = VOCATION_KNIGHT})
 	function KeywordHandler:addSpellKeyword(keys, parameters)
 		local keys = keys
 		keys.callback = FocusModule.messageMatcherDefault
