@@ -198,7 +198,7 @@ if not KeywordHandler then
 		keys.callback = FocusModule.messageMatcherDefault
 
 		local npcHandler, spellName, price, vocationId = parameters.npcHandler, parameters.spellName, parameters.price, parameters.vocation
-		local spellKeyword = self:addKeyword(keys, StdModule.say, {npcHandler = npcHandler, text = string.format("Do you want to learn the spell '%s' for %s?", spellName, price > 0 and price .. " gold" or "free")},
+		local spellKeyword = self:addKeyword(keys, StdModule.say, {npcHandler = npcHandler, text = string.format("Do you want to learn the spell %s for %s?", spellName, price > 0 and price .. " gold" or "free")},
 			function(player)
 				local baseVocationId = player:getVocation():getBase():getId()
 				if type(vocationId) == 'table' then
