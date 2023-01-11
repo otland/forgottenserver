@@ -5,7 +5,7 @@
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag attackable="1" />
-		<flag hostile="1" />
+		<flag hostile="0" />
 		<flag summonable="0" />
 		<flag convinceable="0" />
 		<flag illusionable="0" />
