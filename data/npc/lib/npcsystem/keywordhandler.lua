@@ -192,9 +192,20 @@ if not KeywordHandler then
 		return self.lastNode[cid]
 	end
 
-	-- Adds a keyword which acts as a spell word.
-	-- Example: keywordHandler:addSpellKeyword({"find person"}, {npcHandler = npcHandler, spellName = "Find Person", price = 80, level = 8, vocation = VOCATION_KNIGHT})
 	function KeywordHandler:addSpellKeyword(keys, parameters)
+		-- This function adds a new spell to a character.
+		-- It checks if the character meets the vocation requirements before allowing them to buy the spell.
+		-- It also checks if the player wants to learn the spell or not.
+		--
+		-- @param keys - table of keywords that will trigger the function.
+		-- @param parameters - table containing the spellName, price, level and vocation.
+		-- @param parameters.npcHandler - NpcHandler object that the spellKeyword will be added to.
+		-- @param parameters.spellName - string name of the spell to be added.
+		-- @param parameters.price - integer cost of the spell.
+		-- @param parameters.level - integer level required to learn the spell.
+		-- @param parameters.vocation - integer or table of integers representing the vocation(s) allowed to learn the spell.
+		-- Example: keywordHandler:addSpellKeyword({"find person"}, {npcHandler = npcHandler, spellName = "Find Person", price = 80, level = 8, vocation = VOCATION_KNIGHT})
+
 		local keys = keys
 		keys.callback = FocusModule.messageMatcherDefault
 
@@ -203,13 +214,15 @@ if not KeywordHandler then
 			function(player)
 				local baseVocationId = player:getVocation():getBase():getId()
 				if type(vocationId) == 'table' then
-					return table.contains(vocationId, baseVocationId)
+					-- Using a more efficient way to check if the player meets the vocation requirements
+					return table.find(vocationId, baseVocationId) ~= nil
 				else
 					return vocationId == baseVocationId
 				end
 			end
 		)
 
+		-- It is not necessary to check if the player already has the spell, the check is done in modules.lua
 		spellKeyword:addChildKeyword({"yes"}, StdModule.learnSpell, {npcHandler = npcHandler, spellName = spellName, level = parameters.level, price = price})
 		spellKeyword:addChildKeyword({"no"}, StdModule.say, {npcHandler = npcHandler, text = "Maybe next time.", reset = true})
 	end
