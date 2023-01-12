@@ -177,7 +177,7 @@ if not KeywordHandler then
 		return self:getRoot():addAliasKeyword(keys)
 	end
 
-	-- Moves the current position in the keyword hierarchy steps upwards. Steps defalut value = 1.
+	-- Moves the current position in the keyword hierarchy steps upwards. Steps default value = 1.
 	function KeywordHandler:moveUp(cid, steps)
 		if not steps or type(steps) ~= "number" then
 			steps = 1
