@@ -194,8 +194,6 @@ if not KeywordHandler then
 
 	function KeywordHandler:addSpellKeyword(keys, parameters)
 		-- This function adds a new spell to a character.
-		-- It checks if the character meets the vocation requirements before allowing them to buy the spell.
-		-- It also checks if the player wants to learn the spell or not.
 		--
 		-- @param keys - table of keywords that will trigger the function.
 		-- @param parameters - table containing the spellName, price, level and vocation.
