@@ -20,7 +20,7 @@
 		<attack name="lifedrain" interval="2000" chance="15" radius="8" target="0" min="-100" max="-300">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
-		<attack name="physical" interval="2000" chance="18" radius="3" min="200" max="340">
+		<attack name="physical" interval="2000" chance="18" radius="3" min="-200" max="-340">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>
 			<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="20000">
