@@ -16,7 +16,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="ember beast area" interval="1000" chance="20" min="-200" max="-450" />
-		<attack name="ember beast hur" interval="2000" chance="10" min="-200" max="-450" />
+		<attack name="ember beast beam" interval="2000" chance="10" min="-200" max="-450" />
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<immunities>
