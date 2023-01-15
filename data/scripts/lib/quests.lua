@@ -51,34 +51,27 @@ function Quest.clear()
 	TrackedQuests.__list = {}
 end
 
-function Game.createQuest(name)
+function Game.createQuest(name, quest)
 	if not isScriptsInterface() then
 		return
+	elseif type(quest) == "table" then
+		setmetatable(quest, Quest)
+		quest.id = -1
+		quest.name = name
+		if type(quest.missions) ~= "table" then
+			quest.missions = {}
+		end
+
+		return quest
 	end
 
-	local quest = {}
-	setmetatable(quest, Quest)
+	quest = setmetatable({}, Quest)
 	quest.id = -1
 	quest.name = name
 	quest.storageId = 0
 	quest.storageValue = 0
 	quest.missions = {}
 	return quest
-end
-
-function Quest:createMission(name)
-	local mission = {}
-	setmetatable(mission, Mission)
-	mission.id = -1
-	mission.questId = -1
-	mission.name = name
-	mission.storageId = 0
-	mission.startValue = 0
-	mission.endValue = 0
-	mission.ignoreEndValue = false
-	mission.description = ""
-	self.missions[#self.missions + 1] = mission
-	return mission
 end
 
 function Quest:register()
@@ -88,7 +81,7 @@ function Quest:register()
 		mission.id = Mission.__count
 		Mission.__count = Mission.__count + 1
 		mission.questId = self.id
-		Mission.__list[mission.id] = mission
+		Mission.__list[mission.id] = setmetatable(mission, Mission)
 	end
 	Quest.__list[self.id] = self
 	return true

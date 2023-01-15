@@ -2,14 +2,14 @@ local lastQuestUpdate = {}
 
 local ec = EventCallback
 
-function ec.onStorageUpdate(player, key, value, oldValue, isLogin)
+ec.onStorageUpdate = function(player, key, value, oldValue, isLogin)
 	if value == -1 or isLogin then
 		return
 	end
 
 	local playerId = player:getId()
 	if not lastQuestUpdate[playerId] and Quest.isQuestStorage(key, value, oldValue) then
-		lastQuestUpdate[playerId] = true
+		lastQuestUpdate[playerId] = os.mtime()
 		addEvent(function(playerId) lastQuestUpdate[playerId] = nil end, 100, playerId)
 		player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.")
 	end
@@ -24,19 +24,19 @@ end
 
 ec:register()
 
-function ec.onQuestTracker(player, missionsId)
+ec.onQuestTracker = function(player, missionsId)
 	player:sendQuestTracker(missionsId)
 end
 
 ec:register()
 
-function ec.onQuestLog(player)
+ec.onQuestLog = function(player)
 	player:sendQuestLog()
 end
 
 ec:register()
 
-function ec.onQuestLine(player, questId)
+ec.onQuestLine = function(player, questId)
 	local quest = Quest(questId)
 	if quest then
 		player:sendQuestLine(quest)
