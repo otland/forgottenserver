@@ -2109,7 +2109,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 			int8_t subtype = -1;
 
 			const ItemType& itemType = Item::items[shopInfo.itemId];
-			if (itemType.hasSubType() && !itemType.stackable) {
+			if (itemType.hasSubType() && !itemType.stackable && itemType.charges == 0) {
 				subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
 			}
 
@@ -2134,7 +2134,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 			int8_t subtype = -1;
 
 			const ItemType& itemType = Item::items[shopInfo.itemId];
-			if (itemType.hasSubType() && !itemType.stackable) {
+			if (itemType.hasSubType() && !itemType.stackable && itemType.charges == 0) {
 				subtype = (shopInfo.subType == 0 ? -1 : shopInfo.subType);
 			}
 
