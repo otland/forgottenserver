@@ -38028,21 +38028,27 @@
 	<item id="27702" name="lush meadow" />
 	<item fromid="27703" toid="27704" article="a" name="death portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item fromid="27705" toid="27706" article="an" name="earth portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item fromid="27707" toid="27708" article="an" name="energy portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item fromid="27709" toid="27710" article="a" name="fire portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item fromid="27711" toid="27712" article="a" name="holy portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item fromid="27713" toid="27714" article="an" name="ice portal">
 		<attribute key="type" value="teleport" />
+		<attribute key="effect" value="teleport"/>
 	</item>
 	<item id="27715" article="an" name="inert astral shaper rune" />
 	<item fromid="27716" toid="27717" article="an" name="imbuing shrine" />
@@ -39141,7 +39147,22 @@
 	<item fromid="30994" toid="31003" article="a" name="stone wall" />
 	<item fromid="31004" toid="31007" article="an" name="archway" />
 	<item fromid="31008" toid="31011" article="a" name="railing" />
-	<item fromid="31012" toid="31019" article="a" name="ramp" />
+	<item id="31012" article="a" name="ramp"/>
+	<item id="31013" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="31014" article="a" name="ramp"/>
+	<item id="31015" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="31016" article="a" name="ramp"/>
+	<item id="31017" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="31018" article="a" name="ramp"/>
+	<item id="31019" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item id="31020" article="a" name="closed door">
 		<attribute key="type" value="door" />
 		<attribute key="blockprojectile" value="true" />
@@ -39439,12 +39460,42 @@
 	<item fromid="31754" toid="31757" article="an" name="archway" />
 	<item fromid="31758" toid="31761" article="a" name="railing" />
 	<item fromid="31762" toid="31763" article="a" name="window" />
-	<item fromid="31764" toid="31771" article="a" name="ramp" />
+	<item id="31764" article="a" name="ramp"/>
+	<item id="31765" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="31766" article="a" name="ramp"/>
+	<item id="31767" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="31768" article="a" name="ramp"/>
+	<item id="31769" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="31770" article="a" name="ramp"/>
+	<item id="31771" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="31772" toid="31781" article="a" name="frozen wall" />
 	<item fromid="31782" toid="31785" article="an" name="archway" />
 	<item fromid="31786" toid="31789" article="a" name="railing" />
 	<item fromid="31790" toid="31791" article="a" name="window" />
-	<item fromid="31792" toid="31799" article="a" name="ramp" />
+	<item id="31792" article="a" name="ramp"/>
+	<item id="31793" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="31794" article="a" name="ramp"/>
+	<item id="31795" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="31796" article="a" name="ramp"/>
+	<item id="31797" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="31798" article="a" name="ramp"/>
+	<item id="31799" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="31800" toid="31801" article="an" name="ornamented wall" />
 	<item fromid="31802" toid="31803" article="a" name="frozen wall" />
 	<item fromid="31804" toid="31808" article="an" name="overgrown column" />
@@ -39927,7 +39978,22 @@
 	<item fromid="33402" toid="33405" article="an" name="archway" />
 	<item fromid="33406" toid="33409" article="a" name="railing" />
 	<item fromid="33410" toid="33411" article="a" name="window" />
-	<item fromid="33412" toid="33419" article="a" name="ramp" />
+	<item id="33412" article="a" name="ramp"/>
+	<item id="33413" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="33414" article="a" name="ramp"/>
+	<item id="33415" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="33416" article="a" name="ramp"/>
+	<item id="33417" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="33418" article="a" name="ramp"/>
+	<item id="33419" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="33420" toid="33427" article="a" name="broken wall" />
 	<item id="33428" article="a" name="closed door">
 		<attribute key="type" value="door" />
@@ -39957,7 +40023,22 @@
 	<item fromid="33463" toid="33466" article="an" name="archway" />
 	<item fromid="33467" toid="33472" article="a" name="railing" />
 	<item fromid="33473" toid="33474" article="a" name="window" />
-	<item fromid="33475" toid="33482" article="a" name="ramp" />
+	<item id="33475" article="a" name="ramp"/>
+	<item id="33476" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="33477" article="a" name="ramp"/>
+	<item id="33478" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="33479" article="a" name="ramp"/>
+	<item id="33480" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="33481" article="a" name="ramp"/>
+	<item id="33482" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="33483" toid="33488" article="a" name="broken wall" />
 	<item id="33489" article="a" name="closed door">
 		<attribute key="type" value="door" />
@@ -39993,7 +40074,22 @@
 	<item fromid="33523" toid="33528" article="an" name="archway" />
 	<item fromid="33529" toid="33534" article="a" name="window" />
 	<item fromid="33535" toid="33558" name="stone floor" />
-	<item fromid="33559" toid="33574" article="a" name="ramp" />
+	<item id="33559" article="a" name="ramp"/>
+	<item id="33560" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="33561" article="a" name="ramp"/>
+	<item id="33562" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="33563" article="a" name="ramp"/>
+	<item id="33564" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="33565" article="a" name="ramp"/>
+	<item id="33566" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="33575" toid="33582" article="a" name="sphinx statue" />
 	<item id="33583" article="an" name="amphora" />
 	<item fromid="33584" toid="33587" article="a" name="mosaic" />
@@ -40990,18 +41086,78 @@
 	<item id="35806" article="a" name="smooth surface" />
 	<item fromid="35810" toid="35825" article="a" name="wall" />
 	<item fromid="35826" toid="35829" article="an" name="archway" />
-	<item fromid="35830" toid="35837" article="a" name="ramp" />
+	<item id="35830" article="a" name="ramp"/>
+	<item id="35831" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="35832" article="a" name="ramp"/>
+	<item id="35833" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="35834" article="a" name="ramp"/>
+	<item id="35835" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="35836" article="a" name="ramp"/>
+	<item id="35837" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="35838" toid="35854" article="a" name="wall" />
 	<item fromid="35855" toid="35858" article="an" name="archway" />
-	<item fromid="35859" toid="35866" article="a" name="ramp" />
+	<item id="35859" article="a" name="ramp"/>
+	<item id="35860" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="35861" article="a" name="ramp"/>
+	<item id="35862" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="35863" article="a" name="ramp"/>
+	<item id="35864" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="35865" article="a" name="ramp"/>
+	<item id="35866" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item id="35867" article="a" name="pillar" />
 	<item fromid="35868" toid="35883" article="a" name="wall" />
 	<item fromid="35884" toid="35887" article="an" name="archway" />
-	<item fromid="35888" toid="35895" article="a" name="ramp" />
+	<item id="35888" article="a" name="ramp"/>
+	<item id="35889" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="35890" article="a" name="ramp"/>
+	<item id="35891" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="35892" article="a" name="ramp"/>
+	<item id="35893" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="35894" article="a" name="ramp"/>
+	<item id="35895" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item id="35896" article="a" name="pillar" />
 	<item fromid="35897" toid="35906" article="a" name="wall" />
 	<item fromid="35907" toid="35910" article="an" name="archway" />
-	<item fromid="35911" toid="35918" article="a" name="ramp" />
+	<item id="35911" article="a" name="ramp"/>
+	<item id="35912" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="35913" article="a" name="ramp"/>
+	<item id="35914" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="35915" article="a" name="ramp"/>
+	<item id="35916" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="35917" article="a" name="ramp"/>
+	<item id="35918" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item id="35920" article="a" name="pillar" />
 	<item fromid="35921" toid="35922" article="a" name="framework window" />
 	<item fromid="35923" toid="35926" article="a" name="buttress" />
@@ -41838,7 +41994,22 @@
 	<item fromid="39087" toid="39090" article="an" name="archway" />
 	<item fromid="39091" toid="39096" article="a" name="railing" />
 	<item fromid="39097" toid="39098" article="a" name="window" />
-	<item fromid="39099" toid="39106" article="a" name="ramp" />
+	<item id="39099" article="a" name="ramp"/>
+	<item id="39100" article="a" name="ramp">
+		<attribute key="floorchange" value="north"/>
+	</item>
+	<item id="39101" article="a" name="ramp"/>
+	<item id="39102" article="a" name="ramp">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="39103" article="a" name="ramp"/>
+	<item id="39104" article="a" name="ramp">
+		<attribute key="floorchange" value="east"/>
+	</item>
+	<item id="39105" article="a" name="ramp"/>
+	<item id="39106" article="a" name="ramp">
+		<attribute key="floorchange" value="south"/>
+	</item>
 	<item fromid="39107" toid="39114" article="a" name="broken wall" />
 	<item id="39115" article="a" name="closed door">
 		<attribute key="type" value="door" />
