@@ -142,10 +142,13 @@ rateSpawn = 1
 -- despawnRadius is how many tiles away it can be from its spawn position
 -- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
 -- walkToSpawnRadius is the allowed distance that the monster will stay away from spawn position when left with no targets, 0 to disable
+-- monsterOverspawn can be used instead of removeOnDespawn option, this will start respawn process of the monster when it goes out of deSpawn* boundaries.
+-- Setting both removeOnDespawn and monsterOverspawn to true prioritizes the latter.
 deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
 walkToSpawnRadius = 15
+monsterOverspawn = false
 
 -- Stamina
 staminaSystem = true
