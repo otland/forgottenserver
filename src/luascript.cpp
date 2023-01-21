@@ -2433,6 +2433,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getBankBalance", LuaScriptInterface::luaPlayerGetBankBalance);
 	registerMethod("Player", "setBankBalance", LuaScriptInterface::luaPlayerSetBankBalance);
 
+	registerMethod("Player", "hasStorage", LuaScriptInterface::luaPlayerHasStorage);
+	registerMethod("Player", "clearStorage", LuaScriptInterface::luaPlayerClearStorage);
+
 	registerMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
 	registerMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
 
@@ -9159,9 +9162,37 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerHasStorage(lua_State* L)
+{
+	// player:hasStorage(key)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	lua_pushboolean(L, player->storageMap.find(getNumber<uint32_t>(L, 2)) != player->storageMap.end());
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerClearStorage(lua_State* L)
+{
+	// player:clearStorage(key)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	player->addStorageValue(getNumber<uint32_t>(L, 2), -1, false);
+
+	lua_pushboolean(L, true);
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 {
-	// player:getStorageValue(key)
+	// player:getStorageValue(key[, default = -1])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9173,7 +9204,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
 	} else {
-		lua_pushnumber(L, -1);
+		lua_pushnumber(L, getNumber<int32_t>(L, 3, -1));
 	}
 	return 1;
 }
@@ -16358,13 +16389,13 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		if (globalevent->getEventType() == GLOBALEVENT_NONE && globalevent->getInterval() == 0) {
 			std::cout << "[Error - LuaScriptInterface::luaGlobalEventRegister] No interval for globalevent with name " << globalevent->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
-		
+
 		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
 	} else {
 		lua_pushnil(L);
