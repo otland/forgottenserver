@@ -29,7 +29,7 @@ function onSay(player, words, param)
 	local count = tonumber(split[2])
 	local subType = 1
 	if not itemType:isStackable() and split[3] then
-		subType = math.max(1, split[3] and tonumber(split[3]) or 1)
+		subType = math.max(1, tonumber(split[3]) or 1)
 	end
 
 	if count then
