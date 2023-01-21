@@ -70,6 +70,13 @@ function Player:onReportBug(message, position, category)
 	return true
 end
 
+function Player:onRotateItem(item)
+	if hasEventCallback(EVENT_CALLBACK_ONROTATEITEM) then
+		return EventCallback(EVENT_CALLBACK_ONROTATEITEM, self, item)
+	end
+	return true
+end
+
 function Player:onTurn(direction)
 	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
 		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
