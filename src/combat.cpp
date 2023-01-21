@@ -1444,6 +1444,19 @@ void MagicField::onStepInField(Creature* creature)
 		return;
 	}
 
+	//no-pvp fields must not damage players
+	if (creature->getPlayer() && (
+		id == ITEM_FIREFIELD_NOPVP
+		|| id == ITEM_FIREFIELD_NOPVP_MEDIUM
+		|| id == ITEM_POISONFIELD_NOPVP
+		|| ITEM_ENERGYFIELD_NOPVP
+	)) {
+		if (!creature->isInGhostMode()) {
+			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
+		}
+		return;
+	}
+
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
@@ -1461,7 +1474,7 @@ void MagicField::onStepInField(Creature* creature)
 			}
 
 			Player* targetPlayer = creature->getPlayer();
-			if (targetPlayer) {
+			if (!harmfulField && targetPlayer) {
 				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
