@@ -580,13 +580,31 @@ function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p 
 function isPlayerGhost(cid) local p = Player(cid) return p and p:isInGhostMode() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked() or false end
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
-function getPlayersByIPAddress(ip)
+function getPlayersByIPAddress(ip, mask)
 	local result = {}
+
+	if type(ip) == "string" then
+		for _, player in ipairs(Game.getPlayers()) do
+			if player:getIp() == ip then
+				result[#result + 1] = player:getId()
+			end
+		end
+
+		return result
+	end
+
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking getPlayersByIPAddress with a numeric IP is deprecated and will be removed in the future. Please use the string representation of the IP.")
+
+	if not mask then mask = 0xFFFFFFFF end
+	local masked = bit.band(ip, mask)
+	local lshift = bit.lshift
 	for _, player in ipairs(Game.getPlayers()) do
-		if player:getIp() == masked then
-			result[#result + 1] = player:getId()
+		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
+		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
+			players[#players + 1] = player:getId()
 		end
 	end
+
 	return result
 end
 getPlayersByIp = getPlayersByIPAddress
