@@ -1449,7 +1449,7 @@ void MagicField::onStepInField(Creature* creature)
 		id == ITEM_FIREFIELD_NOPVP
 		|| id == ITEM_FIREFIELD_NOPVP_MEDIUM
 		|| id == ITEM_POISONFIELD_NOPVP
-		|| ITEM_ENERGYFIELD_NOPVP
+		|| id == ITEM_ENERGYFIELD_NOPVP
 	)) {
 		if (!creature->isInGhostMode()) {
 			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
