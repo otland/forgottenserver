@@ -1445,7 +1445,7 @@ void MagicField::onStepInField(Creature* creature)
 	}
 
 	//no-pvp fields must not damage players
-	if (creature->getPlayer() && (
+	if (!isLoadedFromMap() && creature->getPlayer() && (
 		id == ITEM_FIREFIELD_NOPVP
 		|| id == ITEM_FIREFIELD_NOPVP_MEDIUM
 		|| id == ITEM_POISONFIELD_NOPVP
