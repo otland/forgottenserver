@@ -1,6 +1,6 @@
-local moveevent = MoveEvent()
+local transformSeeds = MoveEvent()
 
-function moveevent.onAddItem(moveitem, tileitem, position)
+function transformSeeds.onAddItem(moveitem, tileitem, position)
 	if moveitem:getId() == 7732 then -- seeds
 		tileitem:transform(7665) -- flower pot
 		tileitem:decay()
@@ -15,5 +15,6 @@ function moveevent.onAddItem(moveitem, tileitem, position)
 	return true
 end
 
-moveevent:id(7655) -- empty flower pot
-moveevent:register()
+transformSeeds:type("additem")
+transformSeeds:id(7655) -- empty flower pot
+transformSeeds:register()
