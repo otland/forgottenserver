@@ -9171,7 +9171,7 @@ int LuaScriptInterface::luaPlayerHasStorage(lua_State* L)
 		return 1;
 	}
 
-	lua_pushboolean(L, player->storageMap.find(getNumber<uint32_t>(L, 2)) != player->storageMap.end());
+	pushBoolean(L, player->storageMap.find(getNumber<uint32_t>(L, 2)) != player->storageMap.end());
 	return 1;
 }
 
