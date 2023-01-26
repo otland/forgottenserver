@@ -15,6 +15,5 @@ function transformSeeds.onAddItem(moveitem, tileitem, position)
 	return true
 end
 
-transformSeeds:type("additem")
 transformSeeds:id(7655) -- empty flower pot
 transformSeeds:register()
