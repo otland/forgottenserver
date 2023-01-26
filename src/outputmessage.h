@@ -35,7 +35,7 @@ public:
 	void append(const NetworkMessage& msg)
 	{
 		auto msgLen = msg.getLength();
-		std::copy_n(msg.getBuffer() + 8, msgLen, buffer.begin() + info.position);
+		std::memcpy(buffer.data() + info.position, msg.getBuffer() + 8, msgLen);
 		info.length += msgLen;
 		info.position += msgLen;
 	}
@@ -43,7 +43,7 @@ public:
 	void append(const OutputMessage_ptr& msg)
 	{
 		auto msgLen = msg->getLength();
-		std::copy_n(msg->getBuffer() + 8, msgLen, buffer.begin() + info.position);
+		std::memcpy(buffer.data() + info.position, msg->getBuffer() + 8, msgLen);
 		info.length += msgLen;
 		info.position += msgLen;
 	}
@@ -54,7 +54,7 @@ private:
 	{
 		assert(outputBufferStart >= sizeof(T));
 		outputBufferStart -= sizeof(T);
-		std::copy_n(&add, sizeof(T), buffer.begin() + outputBufferStart);
+		std::memcpy(buffer.data() + outputBufferStart, &add, sizeof(T));
 		// added header size to the message size
 		info.length += sizeof(T);
 	}
