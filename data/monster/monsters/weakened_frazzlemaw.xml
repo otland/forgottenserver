@@ -59,7 +59,7 @@
 		<item id="2148" name="gold coin" chance="100000" countmax="100" />
 		<item id="2152" name="platinum coin" chance="60501" />
 		<item id="28350" name="fairy wings" chance="15066" />
-		<item id="2229" name="skull (item)" chance="12013" />
+		<item id="2229" name="skull" chance="12013" />
 		<item id="22532" name="frazzle tongue" chance="11712" />
 		<item id="22533" name="frazzle skin" chance="10220" />
 		<item id="2230" name="bone" chance="9994" />

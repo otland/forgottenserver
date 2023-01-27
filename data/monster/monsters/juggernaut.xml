@@ -65,7 +65,7 @@
 		<item id="2145" name="small diamond" chance="12387" countmax="5" />
 		<item id="7365" name="onyx arrow" chance="10286" countmax="15" />
 		<item id="2156" name="red gem" chance="9381" />
-		<item id="7632" name="giant shimmering pearl (green)" chance="6918" />
+		<item id="7632" name="giant shimmering pearl" chance="6918" />
 		<item id="9971" name="gold ingot" chance="5179" countmax="2" />
 		<item id="7413" name="titan axe" chance="4745" />
 		<item id="2476" name="knight armor" chance="4382" />

@@ -53,7 +53,7 @@
 		<item id="2672" name="dragon ham" chance="79757" />
 		<item id="2796" name="green mushroom" chance="12120" />
 		<item id="7378" name="royal spear" chance="9139" countmax="3" />
-		<item id="1976" name="book (gemmed)" chance="9090" />
+		<item id="1976" name="book" chance="9090" />
 		<item id="2547" name="power bolt" chance="6565" countmax="7" />
 		<item id="2167" name="energy ring" chance="5072" />
 		<item id="2146" name="small sapphire" chance="4968" />

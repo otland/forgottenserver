@@ -83,7 +83,7 @@
 		<item id="2145" name="small diamond" chance="15385" countmax="10" />
 		<item id="2154" name="yellow gem" chance="15385" />
 		<item id="7897" name="glacier robe" chance="7692" />
-		<item id="27612" name="part of a rune (three)" chance="7692" />
+		<item id="27612" name="part of a rune" chance="7692" />
 		<item id="2149" name="small emerald" chance="7692" countmax="10" />
 		<item id="2147" name="small ruby" chance="7692" countmax="10" />
 		<item id="8904" name="spellscroll of prophecies" chance="7692" />

@@ -43,7 +43,7 @@
 		<item id="2467" name="leather armor" chance="10817" />
 		<item id="2568" name="cleaver" chance="8991" />
 		<item id="2050" name="torch" chance="5553" />
-		<item id="2229" name="skull (item)" chance="3027" countmax="3" />
+		<item id="2229" name="skull" chance="3027" countmax="3" />
 		<item id="2411" name="poison dagger" chance="2061" />
 		<item id="3965" name="hunting spear" chance="1950" />
 		<item id="2541" name="bone shield" chance="1035" />

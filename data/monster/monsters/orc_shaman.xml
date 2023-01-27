@@ -60,6 +60,6 @@
 		<item id="26642" name="heavy old tome" chance="2397" />
 		<item id="11113" name="orc tooth" chance="2182" />
 		<item id="2188" name="wand of decay" chance="966" />
-		<item id="1958" name="book (grey)" chance="465" />
+		<item id="1958" name="book" chance="465" />
 	</loot>
 </monster>

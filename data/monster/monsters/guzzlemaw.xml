@@ -64,7 +64,7 @@
 		<item id="7590" name="great mana potion" chance="15261" countmax="3" />
 		<item id="7591" name="great health potion" chance="11968" countmax="2" />
 		<item id="22532" name="frazzle tongue" chance="10281" />
-		<item id="2229" name="skull (item)" chance="9719" />
+		<item id="2229" name="skull" chance="9719" />
 		<item id="22533" name="frazzle skin" chance="9157" />
 		<item id="2226" name="fishbone" chance="8353" />
 		<item id="5951" name="fish tail" chance="7952" />

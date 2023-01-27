@@ -100,7 +100,7 @@
 		<item id="27623" name="dragon crown" chance="2326" />
 		<item id="12646" name="draken boots" chance="2326" />
 		<item id="11305" name="drakinata" chance="2326" />
-		<item id="27611" name="part of a rune (two)" chance="2326" />
+		<item id="27611" name="part of a rune" chance="2326" />
 		<item id="12648" name="snake god's sceptre" chance="2326" />
 	</loot>
 </monster>

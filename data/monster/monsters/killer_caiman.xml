@@ -43,7 +43,7 @@
 		<item id="2149" name="small emerald" chance="9963" countmax="5" />
 		<item id="2425" name="obsidian lance" chance="4982" />
 		<item id="11245" name="bunch of ripe rice" chance="4828" countmax="2" />
-		<item id="7632" name="giant shimmering pearl (green)" chance="974" />
+		<item id="7632" name="giant shimmering pearl" chance="974" />
 		<item id="3982" name="crocodile boots" chance="486" />
 	</loot>
 </monster>

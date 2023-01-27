@@ -71,7 +71,7 @@
 		<item id="2230" name="bone" chance="5812" />
 		<item id="2050" name="torch" chance="5547" />
 		<item id="2231" name="big bone" chance="3066" />
-		<item id="2229" name="skull (item)" chance="1973" countmax="3" />
+		<item id="2229" name="skull" chance="1973" countmax="3" />
 		<item id="2411" name="poison dagger" chance="1009" />
 		<item id="7618" name="health potion" chance="586" />
 		<item id="2174" name="strange symbol" chance="503" />

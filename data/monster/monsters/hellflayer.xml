@@ -76,7 +76,7 @@
 		<item id="2149" name="small emerald" chance="6819" countmax="5" />
 		<item id="2150" name="small amethyst" chance="6713" countmax="5" />
 		<item id="9971" name="gold ingot" chance="5890" countmax="2" />
-		<item id="7632" name="giant shimmering pearl (green)" chance="3779" />
+		<item id="7632" name="giant shimmering pearl" chance="3779" />
 		<item id="2156" name="red gem" chance="2111" />
 		<item id="2153" name="violet gem" chance="1182" />
 		<item id="25383" name="rift lance" chance="908" />

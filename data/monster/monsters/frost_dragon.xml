@@ -71,7 +71,7 @@
 		<item id="2148" name="gold coin" chance="95017" countmax="243" />
 		<item id="2672" name="dragon ham" chance="79868" />
 		<item id="2796" name="green mushroom" chance="12151" />
-		<item id="1976" name="book (gemmed)" chance="8835" />
+		<item id="1976" name="book" chance="8835" />
 		<item id="2547" name="power bolt" chance="5895" countmax="6" />
 		<item id="2146" name="small sapphire" chance="5092" />
 		<item id="2167" name="energy ring" chance="4952" />

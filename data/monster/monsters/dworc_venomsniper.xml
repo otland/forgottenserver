@@ -46,7 +46,7 @@
 		<item id="2050" name="torch" chance="5486" />
 		<item id="2545" name="poison arrow" chance="4957" countmax="3" />
 		<item id="2411" name="poison dagger" chance="1500" />
-		<item id="2229" name="skull (item)" chance="983" countmax="2" />
+		<item id="2229" name="skull" chance="983" countmax="2" />
 		<item id="3967" name="tribal mask" chance="502" />
 		<item id="7732" name="seeds" chance="193" />
 		<item id="3983" name="bast skirt" chance="99" />
