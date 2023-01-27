@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Makeshift Home" nameDescription="a makeshift home" race="blood" experience="1800" speed="0">
+	<health now="6900" max="6900" />
+	<look typeex="30022" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag hidehealth="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="2000" chance="60" range="3" target="1" min="-70" max="-230">
+			<attribute key="shootEffect" value="arrow" />
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element firePercent="-50" />
+		<element icePercent="50" />
+	</elements>
+	<defenses armor="30" defense="30" />
+</monster>

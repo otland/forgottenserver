@@ -842,4 +842,7 @@
 	<instant name="pixie skill reducer" words="###72" blockwalls="1" aggressive="1" needtarget="0" needlearn="1" script="monster/pixie_skill_reducer.lua" />
 	<instant name="remorseless wave" words="###73" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/remorseless_wave.lua" />
 	<instant name="source of corruption wave" words="###74" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/source_of_corruption_wave.lua" />
+	<instant name="aggresive lava bomb" words="###75" selftarget="1" needlearn="1" script="monster/aggresive_lava_bomb.lua" />
+	<instant name="ember beast area" words="###76" selftarget="1" needlearn="1" script="monster/ember_beast_area.lua" />
+	<instant name="ember beast beam" words="###77" direction="1" selftarget="1" needlearn="1" script="monster/ember_beast_beam.lua" />
 </spells>

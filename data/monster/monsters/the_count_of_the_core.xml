@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Count Of The Core" nameDescription="The Count Of The Core" race="blood" experience="40000" speed="270">
+	<health now="50000" max="50000" />
+	<look type="1046" corpse="30293" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1500" />
+		<attack name="death" interval="2000" chance="20" range="3" length="9" spread="3" min="0" max="-1500">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" range="3" length="9" spread="4" min="0" max="-1500">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="8" min="0" max="-1500">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" radius="8" min="0" max="-1500">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="25" />
+	</elements>
+	<loot>
+		<item id="30165" name="heavy crystal fragment" chance="100000" />
+		<item id="7440" name="mastermind potion" chance="100000" countmax="3" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="78" />
+		<item id="2197" name="stone skin amulet" chance="100000" />
+		<item id="2392" name="fire sword" chance="83333" />
+		<item id="8472" name="great spirit potion" chance="83333" countmax="21" />
+		<item id="7426" name="amber staff" chance="66667" />
+		<item id="7590" name="great mana potion" chance="66667" countmax="13" />
+		<item id="18415" name="green crystal shard" chance="66667" countmax="3" />
+		<item id="2187" name="wand of inferno" chance="66667" />
+		<item id="9822" name="slightly rusted helmet" chance="50000" />
+		<item id="2154" name="yellow gem" chance="50000" />
+		<item id="2158" name="blue gem" chance="33333" />
+		<item id="30282" name="chitinous mouth (count of the core)" chance="33333" />
+		<item id="25377" name="gold token" chance="33333" />
+		<item id="5892" name="huge chunk of crude iron" chance="33333" countmax="3" />
+		<item id="5904" name="magic sulphur" chance="33333" />
+		<item id="2150" name="small amethyst" chance="33333" countmax="20" />
+		<item id="9970" name="small topaz" chance="33333" countmax="20" />
+		<item id="8878" name="crystalline armor" chance="16667" />
+		<item id="30283" name="huge spiky snail shell" chance="16667" />
+		<item id="12410" name="luminous orb" chance="16667" />
+		<item id="2156" name="red gem" chance="16667" />
+		<item id="25172" name="silver token" chance="16667" />
+		<item id="9816" name="slightly rusted shield" chance="16667" />
+		<item id="2145" name="small diamond" chance="16667" countmax="13" />
+		<item id="2147" name="small ruby" chance="16667" />
+		<item id="8473" name="ultimate health potion" chance="16667" countmax="8" />
+	</loot>
+</monster>

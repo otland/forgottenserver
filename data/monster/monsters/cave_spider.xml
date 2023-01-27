@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cave Spider" nameDescription="a cave spider" race="venom" experience="2000" speed="120">
+	<health now="1800" max="1800" />
+	<look type="38" corpse="30363" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" poison="160" />
+		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" range="7" radius="1" target="1" min="-40" max="-70">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="390" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-30" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="56" />
+		<item id="7588" name="strong health potion" chance="45455" />
+		<item id="2144" name="black pearl" chance="27273" />
+		<item id="2145" name="small diamond" chance="27273" countmax="3" />
+		<item id="2152" name="platinum coin" chance="9091" />
+		<item id="5879" name="spider silk" chance="9091" />
+	</loot>
+</monster>
