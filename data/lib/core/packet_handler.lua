@@ -12,12 +12,12 @@ local function register(self)
 			return
 		end
 
-		PacketHandlers[packetType] = self.onReceive
+		PacketHandlers[self.packetType] = self.onReceive
 	end
 end
 
 local function clear(self)
-	PacketHandlers[packetType] = nil
+	PacketHandlers[self.packetType] = nil
 end
 
 function PacketHandler(packetType)
