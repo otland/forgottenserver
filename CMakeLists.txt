@@ -63,6 +63,13 @@ endif ()
 
 find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system filesystem iostreams)
 
+if (NOT DEFINED DISABLE_STATS OR NOT DISABLE_STATS)
+    message(STATUS "OTS stats enabled. Run 'cmake -DDISABLE_STATS=1 ..' to disable")
+    ADD_DEFINITIONS(-DSTATS_ENABLED)
+else ()
+    message(STATUS "OTS stats disabled. Run 'cmake -DDISABLE_STATS=0 ..' to enable")
+endif ()
+
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 target_link_libraries(tfs PRIVATE
         Boost::date_time

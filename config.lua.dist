@@ -165,3 +165,11 @@ ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
 location = "Sweden"
+
+-- Server Statistics
+-- time in seconds: 30 = 30 seconds, 0 = disabled
+statsDumpInterval = 30
+-- time in milliseconds: 10 = 0.01 sec, 0 = disabled
+statsSlowLogTime = 10
+-- time in milliseconds: 50 = 0.05 sec, 0 = disabled
+statsVerySlowLogTime = 50

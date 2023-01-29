@@ -118,6 +118,9 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			STATS_DUMP_INTERVAL,
+			STATS_SLOW_LOG_TIME,
+			STATS_VERY_SLOW_LOG_TIME,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
