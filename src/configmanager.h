@@ -51,6 +51,7 @@ public:
 		REMOVE_ON_DESPAWN,
 		PLAYER_CONSOLE_LOGS,
 		TWO_FACTOR_AUTH,
+		BLOCK_LOGIN,
 
 		LAST_BOOLEAN_CONFIG /* this must be the last one */
 	};
@@ -74,6 +75,7 @@ public:
 		DEFAULT_PRIORITY,
 		MAP_AUTHOR,
 		CONFIG_FILE,
+		BLOCK_LOGIN_TEXT,
 
 		LAST_STRING_CONFIG /* this must be the last one */
 	};

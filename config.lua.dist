@@ -167,6 +167,8 @@ convertUnsafeScripts = true
 -- priority, valid values are: "normal", "above-normal", "high"
 defaultPriority = "high"
 startupDatabaseOptimization = false
+blockLogin = false
+blockLoginText = "Server is closed for bug fixing."
 
 -- Status Server Information
 ownerName = ""
