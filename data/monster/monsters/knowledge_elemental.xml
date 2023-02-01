@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Knowledge Elemental" nameDescription="a knowledge elemental" experience="10603" speed="460">
 	<health now="10500" max="10500" />
-	<look type="1065" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="1065" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,16 +13,6 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
-	<elements>
-		<element energyPercent="100" />
-		<element holyPercent="50" />
-		<element deathPercent="-20" />
-	</elements>
 	<attacks>
 		<attack name="energy" interval="2000" chance="15" min="-600" max="-900" range="3" radius="1" target="1">
 			<attribute key="shootEffect" value="energyball" />
@@ -42,6 +32,16 @@
 		</attack>
 	</attacks>
 	<defenses armor="76" defense="76" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="100" />
+		<element holyPercent="50" />
+		<element deathPercent="-20" />
+	</elements>
 	<loot>
 		<item id="2150" name="small amethyst" chance="75087" countmax="6" />
 		<item id="2152" name="platinum coin" chance="67971" countmax="15" />

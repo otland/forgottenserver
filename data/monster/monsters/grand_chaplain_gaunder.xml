@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grand Chaplain Gaunder" nameDescription="" experience="14" speed="0">
-	<health now="18" max="18" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+<monster name="Grand Chaplain Gaunder" nameDescription="Grand Chaplain Gaunder" race="blood" experience="14" speed="210">
+	<health now="15000" max="15000" />
+	<look type="1071" head="57" body="75" legs="38" feet="86" addons="1" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,6 +14,29 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="-150" max="-700" />
+		<attack name="lifedrain" interval="1500" chance="15" range="4" radius="4" min="-200" max="-890">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" range="7" min="-200" max="-720">
+			<attribute key="shootEffect" value="etherealspear" />
+		</attack>
+		<attack name="holy" interval="1500" chance="14" length="8" spread="0" min="-300" max="-1000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" range="5" radius="3" min="-200" max="-700">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="200" max="550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="10" speedchange="220" duration="5000">
+			<attribute key="areaEffect" value="poff" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -27,7 +50,6 @@
 		<element icePercent="50" />
 		<element deathPercent="50" />
 	</elements>
-	<defenses armor="30" defense="30" />
 	<loot>
 		<item id="2671" name="ham" chance="72152" />
 		<item id="7590" name="great mana potion" chance="34810" countmax="3" />

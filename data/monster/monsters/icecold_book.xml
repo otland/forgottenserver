@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Icecold Book" nameDescription="an icecold book" experience="12750" speed="440">
+<monster name="Icecold Book" nameDescription="an icecold book" race="undead" experience="12750" speed="440">
 	<health now="21000" max="21000" />
 	<look type="1061" head="87" body="85" legs="79" feet="0" addons="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -13,15 +13,6 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
-	<elements>
-		<element firePercent="-10" />
-		<element icePercent="100" />
-	</elements>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-850" />
 		<attack name="ice" interval="2000" chance="15" min="-600" max="-800" range="2" radius="1" target="1">
@@ -35,6 +26,15 @@
 	<defenses armor="82" defense="82">
 		<defense name="healing" interval="2000" chance="20" min="200" max="350" />
 	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-10" />
+		<element icePercent="100" />
+	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="91012" countmax="5" />
 		<item id="31225" name="book page" chance="62200" />

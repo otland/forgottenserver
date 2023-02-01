@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ink Blob" nameDescription="an ink blob" experience="14450" speed="380">
+<monster name="Ink Blob" nameDescription="an ink blob" race="undead" experience="14450" speed="380">
 	<health now="9500" max="9500" />
-	<look type="1064" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="1064" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,15 +13,6 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
-	<elements>
-		<element energyPercent="-8" />
-		<element earthPercent="100" />
-	</elements>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-550" />
 		<attack name="earth" interval="2000" chance="15" min="-600" max="-900" radius="3" target="1">
@@ -39,6 +30,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="70" defense="70" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-8" />
+		<element earthPercent="100" />
+	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="74759" countmax="25" />
 		<item id="18437" name="envenomed arrow" chance="69720" countmax="50" />
