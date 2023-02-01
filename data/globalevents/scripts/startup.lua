@@ -1,5 +1,4 @@
 function onStartup()
-
 	db.query("TRUNCATE TABLE `players_online`")
 	db.asyncQuery("DELETE FROM `guild_wars` WHERE `status` = 0")
 	db.asyncQuery("DELETE FROM `players` WHERE `deletion` != 0 AND `deletion` < " .. os.time())
@@ -41,5 +40,17 @@ function onStartup()
 	for i, town in ipairs(Game.getTowns()) do
 		local position = town:getTemplePosition()
 		db.query("INSERT INTO `towns` (`id`, `name`, `posx`, `posy`, `posz`) VALUES (" .. town:getId() .. ", " .. db.escapeString(town:getName()) .. ", " .. position.x .. ", " .. position.y .. ", " .. position.z .. ")")
+	end
+
+	if configManager.getBoolean(configKeys.CHECK_DUPLICATES_VALUES) then
+		-- List of table names to be checked for duplicates
+		local variableNames = {"AccountStorageKeys", "PlayerStorageKeys", "GlobalStorageKeys", "actionIds", "uniqueIds"}
+		-- Loop through the list of table names
+		for _, variableName in ipairs(variableNames) do
+			-- Call the checkDuplicatesValues function for each table
+			local hasDuplicates, message = checkDuplicatesValues(variableName)
+			-- Print the result of the check for each table
+			print(">> Checking " .. variableName .. ": " .. message)
+		end
 	end
 end
