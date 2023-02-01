@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Raxias" nameDescription="" experience="900" speed="0">
+	<health now="1100" max="1100" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-5" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="This is a nightmare and you won't wake up!" />
+		<voice sentence="This was your last chance!" />
+		<voice sentence="Blood, fight and rage!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="139" />
+		<item id="28350" name="fairy wings" chance="14286" />
+		<item id="2760" name="goat grass" chance="14286" />
+		<item id="28391" name="leaf star" chance="14286" countmax="6" />
+		<item id="2792" name="dark mushroom" chance="11429" countmax="2" />
+		<item id="27039" name="cave turnip" chance="8571" countmax="2" />
+		<item id="28349" name="shimmering beetles" chance="8571" />
+		<item id="7588" name="strong health potion" chance="8571" countmax="2" />
+		<item id="1294" name="small stone" chance="5714" countmax="4" />
+		<item id="7591" name="great health potion" chance="2857" countmax="2" />
+		<item id="2074" name="panpipes" chance="2857" />
+		<item id="27618" name="prismatic quartz" chance="2857" />
+		<item id="7759" name="small enchanted sapphire" chance="2857" />
+		<item id="2664" name="wood cape" chance="2857" />
+	</loot>
+</monster>

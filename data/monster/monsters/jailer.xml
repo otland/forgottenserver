@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Jailer" nameDescription="" experience="45" speed="0">
+	<health now="65" max="65" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="2230" name="bone" chance="49554" />
+		<item id="2148" name="gold coin" chance="45089" countmax="10" />
+		<item id="2787" name="white mushroom" chance="21429" />
+		<item id="12437" name="pelvis bone" chance="9821" />
+		<item id="2376" name="sword" chance="3125" />
+		<item id="2789" name="brown mushroom" chance="2679" />
+		<item id="2398" name="mace" chance="893" />
+	</loot>
+</monster>

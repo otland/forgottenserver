@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Blazing Rose" nameDescription="" experience="0" speed="0">
+	<health now="0" max="0" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="331" />
+		<item id="24630" name="golden lotus brooch" chance="100000" />
+		<item id="24631" name="peacock feather fan" chance="100000" />
+		<item id="31151" name="perfume flacon" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="7368" name="assassin star" chance="60000" countmax="12" />
+		<item id="8472" name="great spirit potion" chance="40000" />
+		<item id="5944" name="soul orb" chance="40000" />
+		<item id="2124" name="crystal ring" chance="20000" />
+		<item id="6500" name="demonic essence" chance="20000" />
+		<item id="6558" name="flask of demonic blood" chance="20000" />
+		<item id="24637" name="oriental shoes" chance="20000" />
+		<item id="2156" name="red gem" chance="20000" />
+		<item id="2150" name="small amethyst" chance="20000" countmax="3" />
+	</loot>
+</monster>
