@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Knowledge Raider" nameDescription="a knowledge raider" experience="0" speed="0">
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+<monster name="Knowledge Raider" nameDescription="a knowledge raider" race="undead" experience="0" speed="220">
+	<health now="10000" max="10000"/>
+	<look type="878" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,6 +13,16 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200"/>
+		<attack name="melee" interval="2000" chance="20" radius="3" target="1" min="-300" max="-490">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+			<attack name="melee" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -23,5 +33,4 @@
 		<element firePercent="-15" />
 		<element icePercent="-15" />
 	</elements>
-	<defenses armor="30" defense="30" />
 </monster>

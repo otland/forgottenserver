@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rage Squid" nameDescription="a rage squid" experience="14820" speed="430">
+<monster name="Rage Squid" nameDescription="a rage squid" race="undead" experience="14820" speed="430">
 	<health now="17000" max="17000" />
 	<look type="1059" head="94" body="78" legs="79" feet="57" addons="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -13,15 +13,6 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
-	<elements>
-		<element firePercent="100" />
-		<element icePercent="-15" />
-	</elements>
 	<attacks>
 		<attack name="fire" interval="2000" chance="15" min="-700" max="-100" radius="2" target="0">
 			<attribute key="areaEffect" value="firearea" />
@@ -33,8 +24,20 @@
 		<attack name="fire" interval="2000" chance="15" min="-500" max="-700" radius="3" target="0">
 			<attribute key="areaEffect" value="fire" />
 		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="5" spread="0" min="-175" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
 	</attacks>
 	<defenses armor="78" defense="78" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="100" />
+		<element icePercent="-15" />
+	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="74842" countmax="29" />
 		<item id="8473" name="ultimate health potion" chance="29792" countmax="5" />

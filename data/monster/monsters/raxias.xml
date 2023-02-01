@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Raxias" nameDescription="" experience="900" speed="0">
+<monster name="Raxias" nameDescription="Raxias" race="blood" experience="900" speed="50">
 	<health now="1100" max="1100" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="980" head="79" body="114" legs="82" feet="79" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,6 +14,17 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />
@@ -21,7 +32,6 @@
 	<elements>
 		<element firePercent="-5" />
 	</elements>
-	<defenses armor="30" defense="30" />
 	<voices interval="1000" chance="5">
 		<voice sentence="This is a nightmare and you won't wake up!" />
 		<voice sentence="This was your last chance!" />

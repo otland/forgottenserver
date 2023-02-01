@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mazzinor" nameDescription="" experience="0" speed="0">
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+<monster name="Mazzinor" nameDescription="Mazzinor" race="blood" experience="100000" speed="250">
+	<health now="300000" max="300000"/>
+	<look type="1062" head="85" body="27" legs="0" feet="0" addons="3" corpse="25151"/>
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,6 +14,21 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="90" attack="80"/>
+		<attack name="divine missile" interval="2000" chance="10" target="1" min="-135" max="-700"/>
+		<attack name="berserk" interval="2000" chance="20" range="7" target="1" min="-90" max="-500"/>
+		<attack name="lifedrain" interval="2000" chance="10" range="7" radius="5" target="1" min="-135" max="-280">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="10" length="8" spread="0" min="-210" max="-600">
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="holy" interval="2000" chance="10" length="8" spread="3" min="-210" max="-700">
+			<attribute key="areaEffect" value="holyarea"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -22,7 +37,6 @@
 	<elements>
 		<element energyPercent="5" />
 	</elements>
-	<defenses armor="30" defense="30" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="74" />
 		<item id="25172" name="silver token" chance="100000" countmax="11" />
