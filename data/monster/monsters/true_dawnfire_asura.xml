@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="True Dawnfire Asura" nameDescription="a true dawnfire asura" race="blood" experience="7475" speed="360">
 	<health now="8500" max="8500" />
-	<look type="1068" head="114" body="94" legs="79" feet="121" addons="1" corpse="0" />
+	<look type="1068" head="114" body="94" legs="79" feet="121" addons="1" corpse="31322" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag ignorespawnblock="1" />

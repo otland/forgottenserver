@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Falcon Knight" nameDescription="a falcon knight" race="blood" experience="5985" speed="220">
 	<health now="9000" max="9000" />
-	<look type="1071" head="57" body="96" legs="38" feet="105" addons="1" corpse="0" />
+	<look type="1071" head="57" body="96" legs="38" feet="105" addons="1" corpse="31278" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag ignorespawnblock="1" />

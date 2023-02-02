@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dazed Leaf Golem" nameDescription="a dazed leaf golem" race="undead" experience="8000" speed="350">
 	<health now="10000" max="10000" />
-	<look type="567" corpse="21358" />
+	<look type="567" corpse="21434" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag ignorespawnblock="1" />

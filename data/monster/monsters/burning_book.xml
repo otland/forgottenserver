@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Burning Book" nameDescription="a burning book" race="fire" experience="11934" speed="440">
+<monster name="Burning Book" nameDescription="a burning book" race="ink" experience="11934" speed="440">
 	<health now="18000" max="18000" />
-	<look type="1061" head="79" body="113" legs="78" feet="112" addons="0" corpse="0" />
+	<look type="1061" head="79" body="113" legs="78" feet="112" addons="0" corpse="31410" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

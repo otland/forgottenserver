@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Deathling Spellsinger" nameDescription="a deathling spellsinger" race="blood" experience="6400" speed="310">
 	<health now="7200" max="7200" />
-	<look type="1088" corpse="0" />
+	<look type="1088" corpse="31507" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

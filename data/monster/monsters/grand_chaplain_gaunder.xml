@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Grand Chaplain Gaunder" nameDescription="Grand Chaplain Gaunder" race="blood" experience="14" speed="210">
 	<health now="15000" max="15000" />
-	<look type="1071" head="57" body="75" legs="38" feet="86" addons="1" corpse="0" />
+	<look type="1071" head="57" body="75" legs="38" feet="86" addons="1" corpse="31389" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="True Frost Flower Asura" nameDescription="a true frost flower asura" race="blood" experience="7069" speed="300">
 	<health now="4000" max="4000" />
-	<look type="1068" head="9" body="0" legs="86" feet="9" addons="0" corpse="0" />
+	<look type="1068" head="9" body="0" legs="86" feet="9" addons="0" corpse="31465" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag ignorespawnblock="1" />

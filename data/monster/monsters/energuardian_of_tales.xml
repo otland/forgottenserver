@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Energuardian Of Tales" nameDescription="an energuardian of tales" race="undead" experience="11361" speed="420">
 	<health now="14000" max="14000" />
-	<look type="1063" head="86" body="85" legs="82" feet="93" addons="3" corpse="0" />
+	<look type="1063" head="86" body="85" legs="82" feet="93" addons="3" corpse="31529" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

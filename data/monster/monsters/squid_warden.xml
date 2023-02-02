@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Squid Warden" nameDescription="a squid warden" race="undead" experience="15300" speed="430">
 	<health now="16500" max="16500" />
-	<look type="1059" head="9" body="21" legs="3" feet="57" corpse="0" />
+	<look type="1059" head="9" body="21" legs="3" feet="57" corpse="31442" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

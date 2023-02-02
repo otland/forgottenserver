@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Brain Squid" nameDescription="a brain squid" race="undead" experience="17672" speed="430">
 	<health now="18000" max="18000" />
-	<look type="1059" head="17" body="41" legs="77" feet="57" addons="0" corpse="0" />
+	<look type="1059" head="17" body="41" legs="77" feet="57" addons="0" corpse="31238" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

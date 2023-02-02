@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Guardian Of Tales" nameDescription="a guardian of tales" race="undead" experience="9204" speed="420">
+<monster name="Guardian Of Tales" nameDescription="a guardian of tales" race="ink" experience="9204" speed="420">
 	<health now="15000" max="15000" />
-	<look type="1063" head="92" body="52" legs="0" feet="79" addons="3" corpse="0" />
+	<look type="1063" head="92" body="52" legs="0" feet="79" addons="3" corpse="31426" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

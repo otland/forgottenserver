@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Icecold Book" nameDescription="an icecold book" race="undead" experience="12750" speed="440">
+<monster name="Icecold Book" nameDescription="an icecold book" race="ink" experience="12750" speed="440">
 	<health now="21000" max="21000" />
-	<look type="1061" head="87" body="85" legs="79" feet="0" addons="0" corpse="0" />
+	<look type="1061" head="87" body="85" legs="79" feet="0" addons="0" corpse="31430" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

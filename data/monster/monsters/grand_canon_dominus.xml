@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grand Canon Dominus" nameDescription="Grand Canon Dominus" race="blood" experience="11000" speed="0">
+<monster name="Grand Canon Dominus" nameDescription="Grand Canon Dominus" race="blood" experience="11000" speed="210">
 	<health now="15000" max="15000" />
-	<look type="1071" head="57" body="75" legs="77" feet="86" corpse="0" />
+	<look type="1071" head="57" body="75" legs="77" feet="86" corpse="31393" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

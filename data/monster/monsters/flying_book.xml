@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Flying Book" nameDescription="a flying book" race="undead" experience="200" speed="240">
+<monster name="Flying Book" nameDescription="a flying book" race="ink" experience="200" speed="240">
 	<health now="500" max="500" />
-	<look type="1060" corpse="0" />
+	<look type="1060" corpse="31242" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

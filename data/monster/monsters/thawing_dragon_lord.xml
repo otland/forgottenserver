@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Thawing Dragon Lord" nameDescription="a thawing dragon lord" race="fire" experience="2100" speed="230">
 	<health now="25000" max="25000" />
-	<look type="1077" corpse="0" />
+	<look type="1077" corpse="31296" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag illusionable="1" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Librarian" nameDescription="a librarian" experience="0" speed="250">
+<monster name="Librarian" nameDescription="a librarian" race="ink" experience="0" speed="250">
 	<health now="11000" max="11000" />
 	<look type="1067" corpse="0" />
 	<targetchange interval="2000" chance="5" />

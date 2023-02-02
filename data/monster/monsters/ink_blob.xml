@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ink Blob" nameDescription="an ink blob" race="undead" experience="14450" speed="380">
+<monster name="Ink Blob" nameDescription="an ink blob" race="ink" experience="14450" speed="380">
 	<health now="9500" max="9500" />
-	<look type="1064" corpse="0" />
+	<look type="1064" corpse="31258" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

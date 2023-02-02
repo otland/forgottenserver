@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Energetic Book" nameDescription="an energetic book" race="undead" experience="12034" speed="440">
 	<health now="18500" max="18500" />
-	<look type="1061" head="15" body="91" legs="85" feet="0" addons="0" corpse="0" />
+	<look type="1061" head="15" body="91" legs="85" feet="0" addons="0" corpse="31434" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Biting Book" nameDescription="a biting book" race="undead" experience="9350" speed="480">
+<monster name="Biting Book" nameDescription="a biting book" race="ink" experience="9350" speed="480">
 	<health now="6500" max="6500" />
-	<look type="1066" corpse="0" />
+	<look type="1066" corpse="31265" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />

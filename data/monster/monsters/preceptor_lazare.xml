@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Preceptor Lazare" nameDescription="Preceptor Lazare" race="blood" experience="9200" speed="210">
 	<health now="15000" max="15000" />
-	<look type="1078" corpse="0" />
+	<look type="1078" corpse="31299" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

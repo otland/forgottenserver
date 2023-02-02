@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Falcon Paladin" nameDescription="a falcon paladin" experience="6544" speed="220">
 	<health now="8500" max="8500" />
-	<look type="1071" head="57" body="96" legs="38" feet="105" addons="2" corpse="0" />
+	<look type="1071" head="57" body="96" legs="38" feet="105" addons="2" corpse="31385" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag ignorespawnblock="1" />
