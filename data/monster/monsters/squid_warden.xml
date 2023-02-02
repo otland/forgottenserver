@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Squid Warden" nameDescription="a squid warden" experience="15300" speed="430">
+<monster name="Squid Warden" nameDescription="a squid warden" race="undead" experience="15300" speed="430">
 	<health now="16500" max="16500" />
-	<look type="1059" head="9" body="21" legs="3" feet="57" addons="0" corpse="0" />
+	<look type="1059" head="9" body="21" legs="3" feet="57" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,15 +13,6 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<immunities>
-		<immunity paralyze="1" />
-		<immunity invisible="1" />
-		<immunity drunk="1" />
-	</immunities>
-	<elements>
-		<element firePercent="-15" />
-		<element icePercent="100" />
-	</elements>
 	<attacks>
 		<attack name="ice" interval="2000" chance="15" min="-600" max="-900" range="2" radius="1" target="1">
 			<attribute key="shootEffect" value="ice" />
@@ -38,6 +29,15 @@
 		</attack>
 	</attacks>
 	<defenses armor="78" defense="78" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-15" />
+		<element icePercent="100" />
+	</elements>
 	<loot>
 		<item id="2146" name="small sapphire" chance="67990" countmax="3" />
 		<item id="2152" name="platinum coin" chance="50734" countmax="50" />

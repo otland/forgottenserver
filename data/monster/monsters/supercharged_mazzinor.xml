@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Supercharged_Mazzinor" nameDescription="" experience="0" speed="0">
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+<monster name="Supercharged Mazzinor" nameDescription="Supercharged Mazzinor" race="undead" experience="0" speed="120">
+	<health now="300000" max="300000" />
+	<look type="979" corpse="25151"/>
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,10 +14,13 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+	</attacks>
+	<defenses armor="30" defense="30" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="30" defense="30" />
 </monster>

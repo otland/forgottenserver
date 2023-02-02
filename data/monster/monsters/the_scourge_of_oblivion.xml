@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Scourge Of Oblivion" nameDescription="" experience="75000" speed="0">
-	<health now="0" max="0" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+<monster name="The Scourge Of Oblivion" nameDescription="The Scourge Of Oblivion" race="energy" experience="75000" speed="450">
+	<health now="800000" max="800000"/>
+	<look type="875" head="79" body="79" legs="60" feet="79" addons="3" corpse="26217"/>
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,12 +14,77 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" skill="250" attack="350"/>
+		<attack name="manadrain" interval="1000" chance="7" range="7" min="-900" max="-1500">
+			<attribute key="shootEffect" value="energy"/>
+			<attribute key="areaEffect" value="poff"/>
+		</attack>
+		<attack name="drunk" interval="2000" chance="20" target="0" radius="5" duration="9000">
+			<attribute key="areaEffect" value="smallclouds"/>
+		</attack>
+		<attack name="strength" interval="1000" chance="9" range="7">
+			<attribute key="shootEffect" value="largerock"/>
+			<attribute key="areaEffect" value="energyarea"/>
+		</attack>
+		<attack name="energy strike" interval="2000" chance="30" range="1" min="-2000" max="-2700">
+		</attack>
+		<attack name="fire" interval="2000" chance="8" range="7" radius="7" target="1" min="-1550" max="-2550">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-1075" max="-2405">
+			<attribute key="shootEffect" value="energyball"/>
+			<attribute key="areaEffect" value="energy"/>
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="20" radius="8" target="0" min="-600" max="-1500">
+			<attribute key="areaEffect" value="bluebubble"/>
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-750" max="-1200">
+			<attribute key="areaEffect" value="purpleenergy"/>
+		</attack>
+		<attack name="renegade knight" interval="2000" chance="30"/>
+		<attack name="choking fear drown" interval="2000" chance="20"/>
+		<attack name="death" interval="2000" chance="20" radius="4" target="1" min="-450" max="-1400">
+			<attribute key="shootEffect" value="suddendeath"/>
+			<attribute key="areaEffect" value="mortarea"/>
+		</attack>
+		<attack name="manadrain" interval="1000" chance="10" radius="8" target="0" min="-800" max="-2300">
+			<attribute key="areaEffect" value="greenshimmer"/>
+		</attack>
+		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-1900" duration="60000">
+			<attribute key="areaEffect" value="poison"/>
+		</attack>
+		<attack name="strength" interval="1000" chance="8" radius="5" target="0">
+			<attribute key="areaEffect" value="blackspark"/>
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="7" target="1" min="-100" max="-700">
+			<attribute key="shootEffect" value="fire"/>
+			<attribute key="areaEffect" value="firearea"/>
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" length="8" spread="0" min="-300" max="-950">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="6000" chance="25" min="2000" max="5000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="speed" interval="1000" chance="8" speedchange="1901" duration="5000">
+			<attribute key="areaEffect" value="redshimmer"/>
+		</defense>
+		<defense name="invisible" interval="1000" chance="4" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+		<defense name="invisible" interval="1000" chance="17" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer"/>
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="30" defense="30" />
 	<voices interval="1000" chance="5">
 		<voice sentence="The Scourge Of Oblivion prepares a devestating attack!" />
 		<voice sentence="The Scourge Of Oblivion activates its reflective shields!" />

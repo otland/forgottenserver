@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="True Dawnfire Asura" nameDescription="a true dawnfire asura" experience="7475" speed="360">
+<monster name="True Dawnfire Asura" nameDescription="a true dawnfire asura" race="blood" experience="7475" speed="360">
 	<health now="8500" max="8500" />
 	<look type="1068" head="114" body="94" legs="79" feet="121" addons="1" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -29,8 +29,31 @@
 	</elements>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-700" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-100" />
+		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="2" min="-50" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="1000" chance="15" length="1" min="120" max="450">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="1000" chance="10" radius="3" target="1" min="150" max="350">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" radius="4" min="100" max="300">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-100" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
 	</attacks>
-	<defenses armor="77" defense="77" />
+	<defenses armor="77" defense="77">
+		<defense name="healing" interval="2000" chance="15" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="12" />
 		<item id="6558" name="flask of demonic blood" chance="30588" />

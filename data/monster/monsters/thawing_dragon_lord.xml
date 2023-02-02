@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thawing Dragon Lord" nameDescription="a thawing dragon lord" experience="2100" speed="0">
+<monster name="Thawing Dragon Lord" nameDescription="a thawing dragon lord" race="fire" experience="2100" speed="230">
 	<health now="25000" max="25000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="1077" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag illusionable="1" />
@@ -14,12 +14,23 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="Ice Crystal Bomb" chance="30" interval="2000" target="1" min="-600" max="-700" />
+		<attack name="Fire Wave" chance="30" interval="2000" length="1" spread="0" target="1" min="-800" max="-1200" />
+		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-250" duration="60000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="10" range="7" radius="4" target="1">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<defenses armor="30" defense="30" />
 	<loot>
 		<item id="9971" name="gold ingot" chance="41905" countmax="5" />
 		<item id="15515" name="bar of gold" chance="4762" />

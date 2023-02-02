@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Elite Gladiator" nameDescription="an undead elite gladiator" experience="4740" speed="300">
+<monster name="Undead Elite Gladiator" nameDescription="an undead elite gladiator" race="undead" experience="4740" speed="300">
 	<health now="8000" max="8000" />
-	<look type="306" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="306" corpse="9823" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,6 +13,20 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="100" max="550" />
+		<attack name="physical" interval="1500" chance="20" range="7" min="300" max="550">
+			<attribute key="shootEffect" value="whirlwindsword" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" range="5" radius="3" min="300" max="500">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="85" defense="85">
+		<defense name="invisible" interval="2000" chance="15" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />
@@ -24,7 +38,6 @@
 		<element holyPercent="10" />
 		<element deathPercent="-5" />
 	</elements>
-	<defenses armor="85" defense="85" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="40" />
 		<item id="8872" name="belted cape" chance="24463" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Skeleton Elite Warrior" nameDescription="a skeleton elite warrior" experience="4500" speed="310">
+<monster name="Skeleton Elite Warrior" nameDescription="a skeleton elite warrior" race="undead" experience="4500" speed="310">
 	<health now="7800" max="7800" />
-	<look type="298" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="298" corpse="5972" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,6 +13,16 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-300" max="-450">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="physical" interval="1500" chance="20" range="7" min="-300" max="-450">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />

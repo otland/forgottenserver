@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="True Frost Flower Asura" nameDescription="a true frost flower asura" experience="7069" speed="300">
+<monster name="True Frost Flower Asura" nameDescription="a true frost flower asura" race="blood" experience="7069" speed="300">
 	<health now="4000" max="4000" />
 	<look type="1068" head="9" body="0" legs="86" feet="9" addons="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />
@@ -14,6 +14,27 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-269" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-70" />
+		<attack name="lifedrain" interval="1000" chance="10" length="8" spread="0" min="100" max="400">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="100" max="300">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-100" duration="30000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="72" defense="72">
+		<defense name="healing" interval="2000" chance="15" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -27,7 +48,6 @@
 		<element holyPercent="30" />
 		<element deathPercent="20" />
 	</elements>
-	<defenses armor="72" defense="72" />
 	<loot>
 		<item id="2152" name="platinum coin" chance="100000" countmax="8" />
 		<item id="24630" name="golden lotus brooch" chance="23438" />
