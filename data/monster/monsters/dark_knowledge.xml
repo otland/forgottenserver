@@ -16,7 +16,6 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200"/>
 		<attack name="melee" interval="2000" min="0" max="-400"/>
-		<attack name="earth" interval="2000" min="0" max="-400"/>
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<immunities>

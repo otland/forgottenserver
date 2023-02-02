@@ -9,7 +9,7 @@
 		<flag canpushcreatures="0" />
 		<flag staticattack="90" />
 		<flag targetdistance="1" />
-		<flag healthhidden="1" />
+		<flag hidehealth="1" />
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
@@ -29,12 +29,5 @@
 		<immunity outfit="1" />
 		<immunity invisible="1" />
 	</immunities>
-	<elements>
-		<element energyPercent="25" />
-		<element earthPercent="25" />
-		<element firePercent="25" />
-		<element icePercent="25" />
-		<element deathPercent="90" />
-	</elements>
 	<defenses armor="30" defense="30" />
 </monster>

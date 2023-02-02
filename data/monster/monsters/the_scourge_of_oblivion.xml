@@ -43,7 +43,6 @@
 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-750" max="-1200">
 			<attribute key="areaEffect" value="purpleenergy"/>
 		</attack>
-		<attack name="renegade knight" interval="2000" chance="30"/>
 		<attack name="choking fear drown" interval="2000" chance="20"/>
 		<attack name="death" interval="2000" chance="20" radius="4" target="1" min="-450" max="-1400">
 			<attribute key="shootEffect" value="suddendeath"/>
@@ -51,9 +50,6 @@
 		</attack>
 		<attack name="manadrain" interval="1000" chance="10" radius="8" target="0" min="-800" max="-2300">
 			<attribute key="areaEffect" value="greenshimmer"/>
-		</attack>
-		<attack name="speed" interval="1000" chance="12" radius="6" target="0" speedchange="-1900" duration="60000">
-			<attribute key="areaEffect" value="poison"/>
 		</attack>
 		<attack name="strength" interval="1000" chance="8" radius="5" target="0">
 			<attribute key="areaEffect" value="blackspark"/>
@@ -69,9 +65,6 @@
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="6000" chance="25" min="2000" max="5000">
 			<attribute key="areaEffect" value="blueshimmer"/>
-		</defense>
-		<defense name="speed" interval="1000" chance="8" speedchange="1901" duration="5000">
-			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 		<defense name="invisible" interval="1000" chance="4" duration="5000">
 			<attribute key="areaEffect" value="blueshimmer"/>
