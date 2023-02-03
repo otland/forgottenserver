@@ -43,6 +43,7 @@ std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 void startupErrorMessage(const std::string& errorStr)
 {
 	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
+	getchar();
 	g_loaderSignal.notify_all();
 }
 

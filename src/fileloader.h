@@ -35,7 +35,8 @@ enum OTBMExceptionType : uint8_t
 
 struct OTBMException final : std::exception
 {
-	OTBMException(OTBMExceptionType t) {
+	OTBMException(OTBMExceptionType t)
+	{
 		switch (t) {
 			case INVALID_FILE_FORMAT: {
 				w = "Invalid OTBM file format";
