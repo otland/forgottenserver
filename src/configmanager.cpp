@@ -277,6 +277,7 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
 	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
+	integer[CORPSE_OWNER_DURATION] = getGlobalNumber(L, "corpseOwnerDuration", 10);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

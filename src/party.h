@@ -47,7 +47,7 @@ public:
 	void updateAllPartyIcons();
 	void broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations = false);
 	bool empty() const { return memberList.empty() && inviteList.empty(); }
-	bool canOpenCorpse(uint32_t ownerId) const;
+	bool canOpenCorpse(uint32_t ownerGuid) const;
 
 	void shareExperience(uint64_t experience, Creature* source = nullptr);
 	bool setSharedExperience(Player* player, bool sharedExpActive);

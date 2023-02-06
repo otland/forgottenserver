@@ -689,9 +689,18 @@ uint16_t Player::getContainerIndex(uint8_t cid) const
 	return it->second.index;
 }
 
-bool Player::canOpenCorpse(uint32_t ownerId) const
+bool Player::canOpenCorpse(Container* corpse) const
 {
-	return getID() == ownerId || (party && party->canOpenCorpse(ownerId));
+	uint32_t ownerGuid = corpse->getCorpseOwner();
+	if (ownerGuid == 0) {
+		return true;
+	}
+
+	int64_t ownerTime = corpse->getCorpseOwnerTime();
+	if (ownerTime <= 0 || (time(nullptr) - ownerTime) > g_config.getNumber(ConfigManager::CORPSE_OWNER_DURATION)) {
+		return true;
+	}
+	return getGUID() == ownerGuid || (party && party->canOpenCorpse(ownerGuid));
 }
 
 uint16_t Player::getLookCorpse() const

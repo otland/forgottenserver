@@ -1624,6 +1624,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_STOREITEM);
 	registerEnum(ITEM_ATTRIBUTE_ATTACK_SPEED);
 	registerEnum(ITEM_ATTRIBUTE_OPENCONTAINER);
+	registerEnum(ITEM_ATTRIBUTE_CORPSEOWNERTIME);
 
 	registerEnum(ITEM_TYPE_DEPOT);
 	registerEnum(ITEM_TYPE_MAILBOX);
@@ -2421,6 +2422,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Container", "addItem", LuaScriptInterface::luaContainerAddItem);
 	registerMethod("Container", "addItemEx", LuaScriptInterface::luaContainerAddItemEx);
 	registerMethod("Container", "getCorpseOwner", LuaScriptInterface::luaContainerGetCorpseOwner);
+	registerMethod("Container", "getCorpseOwnerTime", LuaScriptInterface::luaContainerGetCorpseOwnerTime);
 
 	// Teleport
 	registerClass("Teleport", "Item", LuaScriptInterface::luaTeleportCreate);
@@ -7447,6 +7449,18 @@ int LuaScriptInterface::luaContainerGetCorpseOwner(lua_State* L)
 	Container* container = getUserdata<Container>(L, 1);
 	if (container) {
 		lua_pushnumber(L, container->getCorpseOwner());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaContainerGetCorpseOwnerTime(lua_State* L)
+{
+	// container:getCorpseOwnerTime()
+	Container* container = getUserdata<Container>(L, 1);
+	if (container) {
+		lua_pushnumber(L, container->getCorpseOwnerTime());
 	} else {
 		lua_pushnil(L);
 	}

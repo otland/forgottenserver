@@ -137,9 +137,6 @@ public:
 	void setOwner(uint32_t owner) { setIntAttr(ITEM_ATTRIBUTE_OWNER, owner); }
 	uint32_t getOwner() const { return getIntAttr(ITEM_ATTRIBUTE_OWNER); }
 
-	void setCorpseOwner(uint32_t corpseOwner) { setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER, corpseOwner); }
-	uint32_t getCorpseOwner() const { return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER); }
-
 	void setDuration(int32_t time) { setIntAttr(ITEM_ATTRIBUTE_DURATION, time); }
 	void decreaseDuration(int32_t time) { increaseIntAttr(ITEM_ATTRIBUTE_DURATION, -time); }
 	uint32_t getDuration() const { return getIntAttr(ITEM_ATTRIBUTE_DURATION); }
@@ -464,7 +461,7 @@ private:
 	    ITEM_ATTRIBUTE_HITCHANCE | ITEM_ATTRIBUTE_SHOOTRANGE | ITEM_ATTRIBUTE_OWNER | ITEM_ATTRIBUTE_DURATION |
 	    ITEM_ATTRIBUTE_DECAYSTATE | ITEM_ATTRIBUTE_CORPSEOWNER | ITEM_ATTRIBUTE_CHARGES | ITEM_ATTRIBUTE_FLUIDTYPE |
 	    ITEM_ATTRIBUTE_DOORID | ITEM_ATTRIBUTE_DECAYTO | ITEM_ATTRIBUTE_WRAPID | ITEM_ATTRIBUTE_STOREITEM |
-	    ITEM_ATTRIBUTE_ATTACK_SPEED | ITEM_ATTRIBUTE_OPENCONTAINER;
+	    ITEM_ATTRIBUTE_ATTACK_SPEED | ITEM_ATTRIBUTE_OPENCONTAINER | ITEM_ATTRIBUTE_CORPSEOWNERTIME;
 	const static uint32_t stringAttributeTypes = ITEM_ATTRIBUTE_DESCRIPTION | ITEM_ATTRIBUTE_TEXT |
 	                                             ITEM_ATTRIBUTE_WRITER | ITEM_ATTRIBUTE_NAME | ITEM_ATTRIBUTE_ARTICLE |
 	                                             ITEM_ATTRIBUTE_PLURALNAME;
@@ -666,6 +663,15 @@ public:
 			return 0;
 		}
 		return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNER);
+	}
+
+	void setCorpseOwnerTime(int64_t time) { setIntAttr(ITEM_ATTRIBUTE_CORPSEOWNERTIME, time); }
+	int64_t getCorpseOwnerTime() const
+	{
+		if (!attributes) {
+			return 0;
+		}
+		return getIntAttr(ITEM_ATTRIBUTE_CORPSEOWNERTIME);
 	}
 
 	void setDuration(int32_t time) { setIntAttr(ITEM_ATTRIBUTE_DURATION, time); }

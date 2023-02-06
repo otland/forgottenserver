@@ -736,8 +736,12 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	if (!item->isMoveable() && !hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
-		return RETURNVALUE_NOTMOVEABLE;
+	if (!hasBitSet(FLAG_IGNORENOTMOVEABLE, flags)) {
+		int64_t ownerTime = item->getCorpseOwnerTime();
+		if ((ownerTime > 0 && (time(nullptr) - ownerTime) <= g_config.getNumber(ConfigManager::CORPSE_OWNER_DURATION))
+			|| !item->isMoveable()) {
+			return RETURNVALUE_NOTMOVEABLE;
+		}
 	}
 
 	return RETURNVALUE_NOERROR;

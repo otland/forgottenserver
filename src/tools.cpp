@@ -996,6 +996,8 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 		return ITEM_ATTRIBUTE_STOREITEM;
 	} else if (str == "attackspeed") {
 		return ITEM_ATTRIBUTE_ATTACK_SPEED;
+	} else if (str == "corpseownertime") {
+		return ITEM_ATTRIBUTE_CORPSEOWNERTIME;
 	}
 	return ITEM_ATTRIBUTE_NONE;
 }

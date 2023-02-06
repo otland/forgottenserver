@@ -1850,13 +1850,16 @@ Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse) {
 		if (mostDamageCreature) {
-			if (mostDamageCreature->getPlayer()) {
-				corpse->setCorpseOwner(mostDamageCreature->getID());
-			} else {
-				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
-					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
+			Player* mostDamagePlayer = mostDamageCreature->getPlayer();
+			if (!mostDamagePlayer) {
+				if (Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster()) {
+					mostDamagePlayer = mostDamageCreatureMaster->getPlayer();
 				}
+			}
+
+			if (mostDamagePlayer) {
+				corpse->setCorpseOwner(mostDamagePlayer->getGUID());
+				corpse->setCorpseOwnerTime(time(nullptr));
 			}
 		}
 	}
