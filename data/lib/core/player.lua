@@ -384,6 +384,6 @@ function Player.setSpecialContainersAvailable(self, available)
 	return true
 end
 
-function Player.addBankMoney(self, amount)
+function Player.addBankBalance(self, amount)
 	self:setBankBalance(self:getBankBalance() + amount)
 end
