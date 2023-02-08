@@ -383,3 +383,7 @@ function Player.setSpecialContainersAvailable(self, available)
 	msg:delete()
 	return true
 end
+
+function Player.addBankMoney(self, amount)
+	self:setBankBalance(self:getBankBalance() + amount)
+end
