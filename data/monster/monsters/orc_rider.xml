@@ -38,16 +38,16 @@
 		<voice sentence="Orc arga Huummmak!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="81" chance="48000" />
-		<item name="meat" countmax="3" chance="24000" />
-		<item name="wolf tooth chain" chance="10210" />
-		<item name="orc leather" chance="10000" />
-		<item name="warwolf fur" chance="9610" />
-		<item name="orcish axe" chance="7000" />
-		<item name="orc tooth" chance="2000" />
-		<item name="battle shield" chance="1000" />
-		<item id="2050" chance="1000" /><!-- torch-->
-		<item name="obsidian lance" chance="1000" />
-		<item name="scale armor" chance="610" />
+		<item id="2148" name="gold coin" chance="48261" countmax="81" />
+		<item id="2666" name="meat" chance="24151" />
+		<item id="2129" name="wolf tooth chain" chance="10159" />
+		<item id="12435" name="orc leather" chance="9984" />
+		<item id="11235" name="warwolf fur" chance="9718" />
+		<item id="2428" name="orcish axe" chance="6969" countmax="2" />
+		<item id="11113" name="orc tooth" chance="2110" />
+		<item id="2050" name="torch" chance="1049" />
+		<item id="2513" name="battle shield" chance="1019" />
+		<item id="2425" name="obsidian lance" chance="1007" />
+		<item id="2483" name="scale armor" chance="615" />
 	</loot>
 </monster>

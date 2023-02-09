@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Kroazur" nameDescription="Kroazur" race="undead" experience="2700" speed="500">
+	<health now="3000" max="3000" />
+	<look type="842" lookhead="0" lookbody="114" looklegs="94" lookfeet="80" addons="2" corpse="6325" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-650" />
+		<attack name="death" interval="2000" chance="20" min="-300" max="-500" />
+		<attack name="death" interval="500" chance="10" length="8" spread="0" target="1" min="-200" max="-300">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="500" chance="10" radius="8" min="-250" max="-300">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="3000" chance="35" min="400" max="500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="320" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="28350" name="fairy wings" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="365" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="7588" name="strong health potion" chance="91104" countmax="2" />
+		<item id="7591" name="great health potion" chance="76936" countmax="3" />
+		<item id="7762" name="small enchanted amethyst" chance="51565" countmax="5" />
+		<item id="27046" name="ancient coin" chance="46952" countmax="3" />
+		<item id="27048" name="gemmed figurine" chance="32125" />
+		<item id="7761" name="small enchanted emerald" chance="26524" countmax="5" />
+		<item id="7760" name="small enchanted ruby" chance="12850" countmax="5" />
+		<item id="22396" name="cluster of solace" chance="9885" />
+		<item id="25172" name="silver token" chance="9885" />
+		<item id="18420" name="red crystal fragment" chance="9720" countmax="3" />
+		<item id="7759" name="small enchanted sapphire" chance="9061" countmax="5" />
+		<item id="7368" name="assassin star" chance="8402" countmax="8" />
+		<item id="25377" name="gold token" chance="6425" />
+		<item id="9971" name="gold ingot" chance="6096" />
+		<item id="7418" name="nightmare blade" chance="2801" />
+	</loot>
+</monster>

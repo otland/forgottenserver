@@ -66,29 +66,29 @@
 		<voice sentence="We don't like intruders!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="80" chance="30000" />
-		<item name="cherry" countmax="4" chance="19000" />
-		<item name="bread" chance="9000" />
-		<item name="poison dagger" chance="7600" />
-		<item name="skull staff" chance="6370" />
-		<item name="great health potion" chance="5000" />
-		<item name="great mana potion" chance="5000" />
-		<item name="assassin star" countmax="4" chance="3500" />
-		<item name="dark mushroom" chance="3000" />
-		<item name="mind stone" chance="2000" />
-		<item name="energy ring" chance="2000" />
-		<item name="blue robe" chance="1500" />
-		<item name="candlestick" chance="1500" />
-		<item name="small sapphire" chance="1200" />
-		<item name="talon" chance="1150" />
-		<item name="lightning robe" chance="1000" />
-		<item id="2600" chance="1000" /><!-- inkwell -->
-		<item id="2124" chance="730" /><!-- crystal ring -->
-		<item name="luminous orb" chance="450" />
-		<item name="ring of the sky" chance="380" />
-		<item name="stone skin amulet" chance="330" />
-		<item name="red tome" chance="240" />
-		<item name="golden armor" chance="210" />
-		<item name="piggy bank" chance="60" />
+		<item id="2148" name="gold coin" chance="30006" countmax="80" />
+		<item id="2679" name="cherry" chance="19630" countmax="4" />
+		<item id="2689" name="bread" chance="8925" />
+		<item id="2411" name="poison dagger" chance="7693" />
+		<item id="2436" name="skull staff" chance="6088" />
+		<item id="7591" name="great health potion" chance="5094" />
+		<item id="7590" name="great mana potion" chance="5017" />
+		<item id="7368" name="assassin star" chance="3289" countmax="4" />
+		<item id="2792" name="dark mushroom" chance="2934" />
+		<item id="2178" name="mind stone" chance="2128" />
+		<item id="2167" name="energy ring" chance="1967" />
+		<item id="2047" name="candlestick" chance="1573" />
+		<item id="2656" name="blue robe" chance="1561" />
+		<item id="2146" name="small sapphire" chance="1283" />
+		<item id="2151" name="talon" chance="1051" />
+		<item id="7898" name="lightning robe" chance="1006" />
+		<item id="2600" name="inkwell" chance="935" />
+		<item id="2124" name="crystal ring" chance="742" />
+		<item id="12410" name="luminous orb" chance="477" />
+		<item id="2123" name="ring of the sky" chance="406" />
+		<item id="2197" name="stone skin amulet" chance="355" />
+		<item id="1986" name="red tome" chance="239" />
+		<item id="2466" name="golden armor" chance="206" />
+		<item id="2114" name="piggy bank" chance="77" />
 	</loot>
 </monster>

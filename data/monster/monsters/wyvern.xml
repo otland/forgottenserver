@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wyvern" nameDescription="a wyvern" race="blood" experience="515" speed="200">
+<monster name="Wyvern" nameDescription="a wyvern" race="blood" experience="515" speed="186">
 	<health now="795" max="795" />
 	<look type="239" corpse="6302" />
 	<targetchange interval="4000" chance="10" />
@@ -48,14 +48,14 @@
 		<voice sentence="Shriiiek" yell="1" />
 	</voices>
 	<loot>
-		<item name="emerald bangle" chance="540" />
-		<item name="small sapphire" chance="5000" />
-		<item name="gold coin" countmax="90" chance="100000" />
-		<item name="wand of inferno" chance="810" />
-		<item name="power bolt" countmax="2" chance="3400" />
-		<item name="dragon ham" countmax="3" chance="60500" />
-		<item name="wyvern fang" chance="410" />
-		<item name="strong health potion" chance="2500" />
-		<item name="wyvern talisman" chance="12300" />
+		<item id="2148" name="gold coin" chance="99981" countmax="90" />
+		<item id="2672" name="dragon ham" chance="60229" />
+		<item id="10561" name="wyvern talisman" chance="11990" />
+		<item id="2146" name="small sapphire" chance="4949" />
+		<item id="2547" name="power bolt" chance="3380" />
+		<item id="7588" name="strong health potion" chance="2473" />
+		<item id="2187" name="wand of inferno" chance="784" />
+		<item id="2127" name="emerald bangle" chance="590" />
+		<item id="7408" name="wyvern fang" chance="459" />
 	</loot>
 </monster>

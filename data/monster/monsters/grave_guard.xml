@@ -23,22 +23,24 @@
 			<attribute key="areaEffect" value="bluenote" />
 		</attack>
 	</attacks>
-	<defenses armor="20" defense="20" />
+	<defenses armor="35" defense="35" />
 	<elements>
-		<element energyPercent="20" />
+		<element energyPercent="30" />
+		<element earthPercent="90" />
 		<element icePercent="-10" />
+		<element holyPercent="-10" />
+		<element deathPercent="10" />
 	</elements>
 	<immunities>
 		<immunity fire="1" />
 	</immunities>
 	<loot>
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="30" chance="50000" />
-		<item name="scarab coin" chance="4166" />
-		<item name="daramian waraxe" chance="1170" />
-		<item name="grave flower" chance="70000" />
-		<item id="6300" chance="1754" /><!-- death ring -->
-		<item name="health potion" chance="20000" />
-		<item name="mana potion" chance="20000" />
+		<item id="2148" name="gold coin" chance="95445" countmax="129" />
+		<item id="2747" name="grave flower" chance="69968" />
+		<item id="7620" name="mana potion" chance="20318" />
+		<item id="7618" name="health potion" chance="19920" />
+		<item id="2159" name="scarab coin" chance="4802" />
+		<item id="6300" name="death ring" chance="2181" />
+		<item id="2440" name="daramian waraxe" chance="933" />
 	</loot>
 </monster>

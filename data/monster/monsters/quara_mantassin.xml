@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Mantassin" nameDescription="a quara mantassin" race="blood" experience="400" speed="260" manacost="480">
+<monster name="Quara Mantassin" nameDescription="a quara mantassin" race="blood" experience="400" speed="590" manacost="480">
 	<health now="800" max="800" />
 	<look type="72" corpse="6064" />
 	<targetchange interval="4000" chance="10" />
@@ -19,9 +19,9 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-138" />
+		<attack name="melee" interval="2000" min="0" max="-140" />
 	</attacks>
-	<defenses armor="15" defense="15">
+	<defenses armor="16" defense="16">
 		<defense name="invisible" interval="2000" chance="20" duration="3000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
@@ -44,17 +44,16 @@
 		<voice sentence="Shrrrr" />
 	</voices>
 	<loot>
-		<item name="small sapphire" chance="1000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="29" chance="50000" />
-		<item name="stealth ring" chance="960" />
-		<item name="two handed sword" chance="1010" />
-		<item name="halberd" chance="5000" />
-		<item name="strange helmet" chance="100" />
-		<item name="cape" chance="1050" />
-		<item name="blue robe" chance="50" />
-		<item name="shrimp" countmax="5" chance="5000" />
-		<item name="fish fin" chance="630" />
-		<item name="mantassin tail" chance="11600" />
+		<item id="2148" name="gold coin" chance="79873" countmax="130" />
+		<item id="12445" name="mantassin tail" chance="12746" />
+		<item id="2670" name="shrimp" chance="5121" />
+		<item id="2381" name="halberd" chance="4984" />
+		<item id="2165" name="stealth ring" chance="1100" />
+		<item id="2146" name="small sapphire" chance="1092" />
+		<item id="2654" name="cape" chance="1055" />
+		<item id="2377" name="two handed sword" chance="1017" />
+		<item id="5895" name="fish fin" chance="622" />
+		<item id="2479" name="strange helmet" chance="91" />
+		<item id="2656" name="blue robe" chance="83" />
 	</loot>
 </monster>

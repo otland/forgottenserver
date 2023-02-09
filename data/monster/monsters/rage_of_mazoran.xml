@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Rage of Mazoran" nameDescription="Rage of Mazoran" race="fire" experience="300" speed="330">
+	<health now="4500" max="4500" />
+	<look type="243" corpse="6324" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-520" />
+		<attack name="firefield" interval="2000" chance="11" range="7" radius="3" target="0">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="2000" chance="9" length="8" spread="0" min="-390" max="-1500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="12" range="7" radius="3" target="0" min="-65" max="-330">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="hellfire fighter soulfire" interval="2000" chance="10" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="-25" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

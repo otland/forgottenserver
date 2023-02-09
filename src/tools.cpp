@@ -8,6 +8,7 @@
 #include "configmanager.h"
 
 #include <chrono>
+#include <fmt/chrono.h>
 
 extern ConfigManager g_config;
 
@@ -308,48 +309,9 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-std::string convertIPToString(uint32_t ip)
-{
-	char buffer[17];
+std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
-	int res = sprintf(buffer, "%u.%u.%u.%u", ip & 0xFF, (ip >> 8) & 0xFF, (ip >> 16) & 0xFF, (ip >> 24));
-	if (res < 0) {
-		return {};
-	}
-
-	return buffer;
-}
-
-std::string formatDate(time_t time)
-{
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[20];
-	int res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900,
-	                  tms->tm_hour, tms->tm_min, tms->tm_sec);
-	if (res < 0) {
-		return {};
-	}
-	return {buffer, 19};
-}
-
-std::string formatDateShort(time_t time)
-{
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[12];
-	size_t res = strftime(buffer, 12, "%d %b %Y", tms);
-	if (res == 0) {
-		return {};
-	}
-	return {buffer, 11};
-}
+std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
 
 Direction getDirection(const std::string& string)
 {
@@ -606,6 +568,8 @@ MagicEffectNames magicEffectNames = {
     {"fatal", CONST_ME_FATAL},
     {"dodge", CONST_ME_DODGE},
     {"hourglass", CONST_ME_HOURGLASS},
+    {"fireworksstar", CONST_ME_FIREWORKSSTAR},
+    {"fireworkscircle", CONST_ME_FIREWORKSCIRCLE},
     {"ferumbras1", CONST_ME_FERUMBRAS_1},
     {"gazharagoth", CONST_ME_GAZHARAGOTH},
     {"madmage", CONST_ME_MAD_MAGE},

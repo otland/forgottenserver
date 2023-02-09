@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tarbaz" nameDescription="Tarbaz" race="undead" experience="20000" speed="320">
+	<health now="290000" max="290000" />
+	<look type="842" head="0" body="21" legs="19" feet="3" addons="2" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2000" />
+		<attack name="fire" interval="3000" chance="20" length="10" spread="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" radius="7" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" radius="5" min="-300" max="-700">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" length="10" spread="0" min="-500" max="-800">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" length="8" spread="3" min="-500" max="-800">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="900" max="3500">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="speed" interval="3000" chance="30" speedchange="460" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="18413" name="blue crystal shard" chance="100000" countmax="3" />
+		<item id="6500" name="demonic essence" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="318" />
+		<item id="7590" name="great mana potion" chance="100000" countmax="8" />
+		<item id="8472" name="great spirit potion" chance="100000" countmax="3" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="23" />
+		<item id="25172" name="silver token" chance="100000" />
+		<item id="2158" name="blue gem" chance="50000" />
+		<item id="2167" name="energy ring" chance="50000" />
+		<item id="7896" name="glacier kilt" chance="50000" />
+		<item id="18415" name="green crystal shard" chance="50000" />
+		<item id="2149" name="small emerald" chance="50000" countmax="9" />
+	</loot>
+</monster>

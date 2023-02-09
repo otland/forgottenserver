@@ -215,7 +215,7 @@ local function creatureSayCallback(cid, type, msg)
 				end
 
 				if transfer[cid] then
-					if transfer[cid].vocation == VOCATION_NONE and Player(cid):getVocation() ~= 0 then
+					if transfer[cid].vocation == VOCATION_NONE and Player(cid):getVocation() ~= VOCATION_NONE then
 						npcHandler:say("I'm afraid this character only holds a junior account at our bank. Do not worry, though. Once he has chosen his vocation, his account will be upgraded.", cid)
 						npcHandler.topic[cid] = topicList.NONE
 						return true
@@ -266,7 +266,7 @@ local function creatureSayCallback(cid, type, msg)
 		end
 
 		if transfer[cid] then
-			if transfer[cid].vocation == VOCATION_NONE and Player(cid):getVocation() ~= 0 then
+			if transfer[cid].vocation == VOCATION_NONE and Player(cid):getVocation() ~= VOCATION_NONE then
 				npcHandler:say("I'm afraid this character only holds a junior account at our bank. Do not worry, though. Once he has chosen his vocation, his account will be upgraded.", cid)
 				npcHandler.topic[cid] = topicList.NONE
 				return true

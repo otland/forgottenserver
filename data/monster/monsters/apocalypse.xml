@@ -14,11 +14,11 @@
 		<flag canpushcreatures="1" />
 		<flag targetdistance="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
+		<flag runonhealth="3000" />
 		<flag isboss="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-2520" />
+		<attack name="melee" interval="2000" min="0" max="-3500" />
 		<attack name="death" interval="1000" chance="8" radius="9" target="0" min="-800" max="-1900">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
@@ -46,13 +46,20 @@
 		</attack>
 	</attacks>
 	<defenses armor="188" defense="145">
-		<defense name="healing" interval="1000" chance="15" min="1000" max="3000">
+		<defense name="healing" interval="2000" chance="15" min="2000" max="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="5" min="6000" max="10000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="speed" interval="2000" chance="8" speedchange="480" duration="6000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 	</defenses>
+	<elements>
+		<element icePercent="-10" />
+		<element deathPercent="-2" />
+	</elements>
 	<immunities>
 		<immunity energy="1" />
 		<immunity fire="1" />
@@ -74,23 +81,20 @@
 		<item name="golden mug" chance="7500" />
 		<item name="teddy bear" chance="14500" />
 		<item name="ring of the sky" chance="3500" />
-		<item id="2124" chance="5500" /><!-- crystal ring -->
+		<item id="2124" name="crystal ring" chance="5500" />
 		<item name="crystal necklace" chance="1500" />
-		<item id="2142" chance="3500" /><!-- ancient amulet -->
+		<item id="2142" name="ancient amulet" chance="3500" />
 		<item name="white pearl" countmax="15" chance="12500" />
 		<item name="black pearl" countmax="15" chance="15000" />
 		<item name="small diamond" countmax="5" chance="9500" />
 		<item name="small sapphire" countmax="10" chance="13500" />
-		<item name="gold coin" countmax="100" chance="99900" />
-		<item name="gold coin" countmax="100" chance="88800" />
-		<item name="gold coin" countmax="100" chance="77700" />
-		<item name="gold coin" countmax="100" chance="66600" />
+		<item name="gold coin" countmax="400" chance="99900" />
 		<item name="small emerald" countmax="10" chance="15500" />
 		<item name="small amethyst" countmax="20" chance="13500" />
 		<item name="talon" countmax="7" chance="14000" />
 		<item name="green gem" chance="1500" />
 		<item name="blue gem" chance="1500" />
-		<item id="2162" chance="11500" /><!-- magic lightwand -->
+		<item id="2162" name="magic lightwand" chance="11500" />
 		<item name="might ring" chance="5000" />
 		<item name="stealth ring" chance="9500" />
 		<item name="energy ring" chance="13500" />
@@ -99,18 +103,18 @@
 		<item name="strange symbol" chance="2500" />
 		<item name="orb" chance="12000" />
 		<item name="life crystal" chance="1000" />
-		<item name="mind stone" chance="4000" />
+		<item id="2178" name="mind stone" chance="4000" />
 		<item name="gold ring" chance="8000" />
 		<item name="snakebite rod" chance="3500" />
 		<item name="necrotic rod" chance="3500" />
 		<item name="moonlight rod" chance="3500" />
 		<item name="wand of decay" chance="2500" />
-		<item id="2192" chance="2500" /><!-- crystal ball -->
+		<item id="2192" name="crystal ball" chance="2500" />
 		<item name="boots of haste" chance="4000" />
 		<item name="stone skin amulet" chance="4000" />
 		<item name="protection amulet" chance="4500" />
 		<item name="ring of healing" chance="13000" />
-		<item id="2231" chance="9000" /><!-- big bone -->
+		<item id="2231" name="big bone" chance="9000" />
 		<item name="two handed sword" chance="20000" />
 		<item name="double axe" chance="20000" />
 		<item name="giant sword" chance="12500" />
@@ -124,8 +128,8 @@
 		<item name="devil helmet" chance="11000" />
 		<item name="golden legs" chance="5000" />
 		<item name="magic plate armor" chance="3000" />
-		<item name="mastermind shield" chance="7500" />
+		<item id="2514" name="mastermind shield" chance="7500" />
 		<item name="demon shield" chance="15500" />
-		<item id="3955" chance="100" /><!-- voodoo doll-->
+		<item id="3955" name="voodoo doll" chance="100" />
 	</loot>
 </monster>

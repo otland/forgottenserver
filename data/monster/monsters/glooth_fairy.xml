@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Fairy" nameDescription="Glooth Fairy" race="venom" experience="19000" speed="600">
+	<health now="59000" max="59000" />
+	<look type="600" corpse="23363" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1900" />
+		<attack name="firecondition" interval="1000" chance="7" range="2" min="-200" max="-1000">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="physical" interval="1000" chance="7" radius="6" target="0" min="-50" max="-150">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="50" radius="5" target="0" min="-20" max="-100">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="firefield" interval="1000" chance="4" radius="8" target="0">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="7" target="1" min="-50" max="-150">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="1000" chance="13" length="8" spread="0" min="-50" max="-100">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="1000" chance="10" length="8" spread="3" min="-30" max="-100">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="1000" chance="15" min="500" max="1000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="healing" interval="1000" chance="25" min="200" max="300">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="10" speedchange="670" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="5" />
+		<element firePercent="-5" />
+		<element holyPercent="15" />
+		<element deathPercent="30" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="23474" name="glooth injection tube" chance="100000" countmax="3" />
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="8472" name="great spirit potion" chance="39167" countmax="5" />
+		<item id="7591" name="great health potion" chance="32500" countmax="5" />
+		<item id="7590" name="great mana potion" chance="28333" countmax="5" />
+		<item id="23514" name="glooth sandwich" chance="27500" countmax="5" />
+		<item id="23554" name="glooth amulet" chance="23333" />
+		<item id="23515" name="bowl of glooth soup" chance="22500" countmax="5" />
+		<item id="23550" name="glooth blade" chance="21667" />
+		<item id="23517" name="glooth steak" chance="21667" countmax="5" />
+		<item id="5880" name="iron ore" chance="20833" />
+		<item id="23549" name="glooth club" chance="20000" />
+		<item id="2149" name="small emerald" chance="20000" countmax="5" />
+		<item id="23529" name="glooth spear" chance="19167" countmax="5" />
+		<item id="9690" name="gear wheel" chance="17500" />
+		<item id="23551" name="glooth axe" chance="15833" />
+		<item id="2145" name="small diamond" chance="15833" countmax="5" />
+		<item id="2147" name="small ruby" chance="16667" countmax="5" />
+		<item id="9970" name="small topaz" chance="14167" countmax="5" />
+		<item id="2146" name="small sapphire" chance="12500" countmax="5" />
+		<item id="2150" name="small amethyst" chance="10833" countmax="5" />
+		<item id="23535" name="glooth cape" chance="7500" />
+		<item id="23536" name="rubber cap" chance="7500" />
+		<item id="23538" name="heat core" chance="5000" />
+		<item id="2158" name="blue gem" chance="4167" />
+		<item id="2156" name="red gem" chance="3333" />
+		<item id="2154" name="yellow gem" chance="2500" />
+		<item id="23663" name="feedbag" chance="1667" />
+	</loot>
+</monster>
