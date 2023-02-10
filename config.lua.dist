@@ -1,72 +1,137 @@
--- Combat settings
--- NOTE: valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced"
-worldType = "pvp"
-hotkeyAimbotEnabled = true
-protectionLevel = 1
-killsToRedSkull = 3
-killsToBlackSkull = 6
-pzLocked = 60000
-removeChargesFromRunes = true
-removeChargesFromPotions = true
-removeWeaponAmmunition = true
-removeWeaponCharges = true
-timeToDecreaseFrags = 24 * 60 * 60
-whiteSkullTime = 15 * 60
-stairJumpExhaustion = 2000
+-- Combat settings section
+-- In this section, the following settings are defined for the server's combat settings:
+
+-- expFromPlayersLevelRange: the level range for players to gain experience from killing other players.
+-- experienceByKillingPlayers: determines if players can gain experience by killing other players.
+-- hotkeyAimbotEnabled: determines if hotkey aimbot is enabled or not.
+-- killsToBlackSkull: the number of player kills needed before a player's skull changes color to black.
+-- killsToRedSkull: the number of player kills needed before a player's skull changes color to red.
+-- pzLocked: the time in milliseconds that a player must stay in a protection zone.
+-- protectionLevel: the level of protection for players.
+-- removeChargesFromPotions: determines if charges will be removed from potions.
+-- removeChargesFromRunes: determines if charges will be removed from runes.
+-- removeWeaponAmmunition: determines if charges will be removed from ammunition.
+-- removeWeaponCharges: determines if charges will be removed from weapons.
+-- stairJumpExhaustion: the time in milliseconds for a player to become exhausted after jumping up stairs.
+-- timeToDecreaseFrags: the time in seconds for a player's frags to decrease.
+-- whiteSkullTime: the time in seconds for a player's skull to turn white.
+-- worldType: the type of PvP allowed on the server (valid values for worldType are: "pvp", "no-pvp" and "pvp-enforced").
+
 experienceByKillingPlayers = false
 expFromPlayersLevelRange = 75
+hotkeyAimbotEnabled = true
+killsToBlackSkull = 6
+killsToRedSkull = 3
+pzLocked = 60000
+protectionLevel = 1
+removeChargesFromPotions = true
+removeChargesFromRunes = true
+removeWeaponAmmunition = true
+removeWeaponCharges = true
+stairJumpExhaustion = 2000
+timeToDecreaseFrags = 24 * 60 * 60
+whiteSkullTime = 15 * 60
+worldType = "pvp"
 
--- Connection Config
--- NOTE: maxPlayers set to 0 means no limit
--- NOTE: allowWalkthrough is only applicable to players
--- NOTE: two-factor auth requires token and timestamp in session key
-ip = "127.0.0.1"
-bindOnlyGlobalAddress = false
-loginProtocolPort = 7171
-gameProtocolPort = 7172
-statusProtocolPort = 7171
-maxPlayers = 0
-onePlayerOnlinePerAccount = true
+-- Connection Config section
+-- In this section, the following settings are defined for the server's connection configuration:
+
+-- allowClones: determines if multiple players from the same IP address are allowed to connect.
+-- allowWalkthrough: determines if players can walk through each other.
+-- bindOnlyGlobalAddress: determines if the server should bind only to its global IP address.
+-- enableTwoFactorAuth: determines if two-factor authentication is enabled.
+-- gameProtocolPort: the port number used for the game protocol.
+-- ip: the IP address the server will bind to.
+-- loginProtocolPort: the port number used for the login protocol.
+-- maxPacketsPerSecond: the maximum number of packets that can be sent per second.
+-- maxPlayers: the maximum number of players allowed to connect to the server (maxPlayers set to 0 means no limit).
+-- onePlayerOnlinePerAccount: determines if only one player per account is allowed to be online at a time.
+-- replaceKickOnLogin: determines if a player will be kicked if they try to log in while already logged in.
+-- serverName: the name of the server.
+-- statusProtocolPort: the port number used for the status protocol.
+-- statusTimeout: the time in milliseconds for the status protocol to time out.
+
 allowClones = false
 allowWalkthrough = true
-serverName = "Forgotten"
-statusTimeout = 5000
-replaceKickOnLogin = true
-maxPacketsPerSecond = 25
+bindOnlyGlobalAddress = false
 enableTwoFactorAuth = true
+gameProtocolPort = 7172
+ip = "127.0.0.1"
+loginProtocolPort = 7171
+maxPacketsPerSecond = 25
+maxPlayers = 0
+onePlayerOnlinePerAccount = true
+replaceKickOnLogin = true
+serverName = "Forgotten"
+statusProtocolPort = 7171
+statusTimeout = 5000
 
--- Deaths
--- NOTE: Leave deathLosePercent as -1 if you want to use the default
--- death penalty formula. For the old formula, set it to 10. For
--- no skill/experience loss, set it to 0.
+-- Deaths section
+-- In this section, the setting for death penalty is defined:
+
+-- deathLosePercent: determines the percentage of skill/experience loss on death.
+-- If deathLosePercent is set to -1, the default death penalty formula will be used.
+-- If it is set to 10, the old formula will be used.
+-- If it is set to 0, there will be no skill/experience loss on death.
+
 deathLosePercent = -1
 
--- Houses
--- NOTE: set housePriceEachSQM to -1 to disable the ingame buy house functionality
--- NOTE: valid values for houseRentPeriod are: "daily", "weekly", "monthly", "yearly"
--- use any other value to disable the rent system
+-- Houses section
+-- This section defines the settings related to houses:
+
+-- housePriceEachSQM: the cost of buying a house per square meter (set housePriceEachSQM to -1 to disable the ingame buy house functionality).
+-- houseRentPeriod: the period of rent payment (daily, weekly, monthly, yearly or "never" to disable the rent system).
+-- houseOwnedByAccount: determines if the house ownership is tied to an account or to a character.
+-- houseDoorShowPrice: determines if the price of the house is displayed when you hover over its door.
+-- onlyInvitedCanMoveHouseItems: if true, only players who are invited can move items inside the house.
+
 housePriceEachSQM = 1000
 houseRentPeriod = "never"
 houseOwnedByAccount = false
 houseDoorShowPrice = true
 onlyInvitedCanMoveHouseItems = true
 
--- Item Usage
+-- Item Usage section
+-- This section defines the settings related to the usage of items:
+
+-- timeBetweenActions: the time (in milliseconds) between two actions with items.
+-- timeBetweenExActions: the time (in milliseconds) between two extended actions with items.
+
 timeBetweenActions = 200
 timeBetweenExActions = 1000
 
--- Map
--- NOTE: set mapName WITHOUT .otbm at the end
+-- Map section
+-- This section defines the settings related to the map:
+
+-- mapName: the name of the map file (without the .otbm extension).
+-- mapAuthor: the author of the map.
+
 mapName = "forgotten"
 mapAuthor = "Komic"
 
--- Market
+-- Market section
+-- This section defines the settings related to the market:
+
+-- marketOfferDuration: the duration (in seconds) of a market offer.
+-- premiumToCreateMarketOffer: whether only premium players can create market offers or not.
+-- checkExpiredMarketOffersEachMinutes: the frequency (in minutes) to check for expired market offers.
+-- maxMarketOffersAtATimePerPlayer: the maximum number of market offers a player can have at the same time.
+
 marketOfferDuration = 30 * 24 * 60 * 60
 premiumToCreateMarketOffer = true
 checkExpiredMarketOffersEachMinutes = 60
 maxMarketOffersAtATimePerPlayer = 100
 
--- MySQL
+-- MySQL Section
+-- This section defines the settings related to the MySQL database:
+
+-- mysqlHost: the hostname or IP address of the MySQL server.
+-- mysqlUser: the username used to connect to the MySQL server.
+-- mysqlPass: the password used to connect to the MySQL server.
+-- mysqlDatabase: the name of the database to use.
+-- mysqlPort: the port used to connect to the MySQL server.
+-- mysqlSock: the socket file used to connect to the MySQL server.
+
 mysqlHost = "127.0.0.1"
 mysqlUser = "forgottenserver"
 mysqlPass = ""
@@ -74,59 +139,97 @@ mysqlDatabase = "forgottenserver"
 mysqlPort = 3306
 mysqlSock = ""
 
--- Misc.
--- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
--- intervals regardless of other actions such as item (potion) use. This setting
--- may cause high CPU usage with many players and potentially affect performance!
--- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
--- You can disable it to save some memory if you don't see any errors at startup.
+-- Misc. Section
+-- This section defines miscellaneous settings:
+
+-- allowChangeOutfit: allows players to change their outfit.
+-- freePremium: allows players to have premium features for free.
+-- kickIdlePlayerAfterMinutes: number of minutes after which an idle player will be kicked from the server.
+-- maxMessageBuffer: maximum number of messages that can be stored in the message buffer.
+-- emoteSpells: enables or disables emotes for spells.
+-- classicEquipmentSlots: uses the classic equipment slot layout.
+-- classicAttackSpeed: makes players constantly attack at regular intervals regardless of other actions, such as item use.
+-- showScriptsLogInConsole: displays the scripts log in the console.
+-- showOnlineStatusInCharlist: displays the online status of players in the character list.
+-- yellMinimumLevel: minimum level required to use the yell feature.
+-- yellAlwaysAllowPremium: allows premium players to always use the yell feature, regardless of level.
+-- minimumLevelToSendPrivate: minimum level required to send private messages.
+-- premiumToSendPrivate: requires premium status to send private messages.
+-- forceMonsterTypesOnLoad: loads all monster types on startup to validate them.
+-- cleanProtectionZones: removes players from protection zones when they leave the game.
+-- showPlayerLogInConsole: displays player log in the console.
+
 allowChangeOutfit = true
+classicAttackSpeed = false
+classicEquipmentSlots = false
+cleanProtectionZones = false
+emoteSpells = false
+forceMonsterTypesOnLoad = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
 maxMessageBuffer = 4
-emoteSpells = false
-classicEquipmentSlots = false
-classicAttackSpeed = false
-showScriptsLogInConsole = false
-showOnlineStatusInCharlist = false
-yellMinimumLevel = 2
-yellAlwaysAllowPremium = false
 minimumLevelToSendPrivate = 1
 premiumToSendPrivate = false
-forceMonsterTypesOnLoad = true
-cleanProtectionZones = false
+showOnlineStatusInCharlist = false
 showPlayerLogInConsole = true
+showScriptsLogInConsole = false
+yellAlwaysAllowPremium = false
+yellMinimumLevel = 2
 
--- VIP and Depot limits
--- NOTE: you can set custom limits per group in data/XML/groups.xml
-vipFreeLimit = 20
-vipPremiumLimit = 100
+-- VIP and Depot Limits Configuration
+-- This section defines the storage limits for VIP and depot accounts:
+
+-- depotFreeLimit: storage limit for free depot accounts.
+-- depotPremiumLimit: storage limit for premium depot accounts (you can set custom limits per group in data/XML/groups.xml.).
+-- vipFreeLimit: storage limit for free VIP accounts.
+-- vipPremiumLimit: storage limit for premium VIP accounts.
+
 depotFreeLimit = 2000
 depotPremiumLimit = 15000
+vipFreeLimit = 20
+vipPremiumLimit = 100
 
--- Quest Tracker limits
+-- Quest Tracker Limits Configuration
+-- This section defines the limit for the number of active quests for players:
+
+-- questTrackerFreeLimit: limit for free accounts.
+-- questTrackerPremiumLimit: limit for premium accounts.
+
 questTrackerFreeLimit = 10
 questTrackerPremiumLimit = 15
 
--- World Light
--- NOTE: if defaultWorldLight is set to true the world light algorithm will
--- be handled in the sources. set it to false to avoid conflicts if you wish
--- to make use of the function setWorldLight(level, color)
+-- World Light Configuration
+-- This section defines the setting for the world light:
+
+-- defaultWorldLight: determines whether the world light algorithm is handled in the sources.
+-- If set to true, the world light algorithm will be handled in the sources.
+-- If set to false, the function setWorldLight(level, color) will not be used to avoid conflicts.
+
 defaultWorldLight = true
 
--- Server Save
--- NOTE: serverSaveNotifyDuration in minutes
+-- Server Save Configuration
+-- This section defines the settings for the server save process:
+
+-- serverSaveNotifyMessage: determines whether a message is displayed to notify players of a server save.
+-- serverSaveNotifyDuration: number of minutes before the server save during which the notification message will be displayed.
+-- serverSaveCleanMap: determines whether the map is cleaned during the server save.
+-- serverSaveClose: determines whether the server is closed after a server save.
+-- serverSaveShutdown: determines whether the server is shut down after a server save.
+
 serverSaveNotifyMessage = true
 serverSaveNotifyDuration = 5
 serverSaveCleanMap = false
 serverSaveClose = false
 serverSaveShutdown = true
 
--- Experience stages
--- NOTE: to use a flat experience multiplier, set experienceStages to nil
--- minlevel and multiplier are MANDATORY
--- maxlevel is OPTIONAL, but is considered infinite by default
--- to disable stages, create a stage with minlevel 1 and no maxlevel
+-- Experience Stages Configuration
+-- This section defines the settings for experience progression:
+
+-- experienceStages: a list of experience stages, each with a minimum level, maximum level (optional, considered infinite by default),
+-- and multiplier. If experienceStages is set to nil, a flat experience multiplier will be used.
+-- To disable experience stages, create a stage with a minimum level of 1 and no maximum level.
+-- minlevel and multiplier are mandatory, while maxlevel is optional.
+
 experienceStages = {
 	{ minlevel = 1, maxlevel = 8, multiplier = 7 },
 	{ minlevel = 9, maxlevel = 20, multiplier = 6 },
@@ -135,40 +238,69 @@ experienceStages = {
 	{ minlevel = 101, multiplier = 3 }
 }
 
--- Rates
--- NOTE: rateExp is not used if you have enabled stages above
+-- Rates Configuration
+-- This section defines the rate multipliers for various aspects of the game:
+
+-- rateExp: the rate multiplier for experience. This setting is not used if experience stages have been enabled.
+-- rateSkill: the rate multiplier for skill progression.
+-- rateLoot: the rate multiplier for loot dropped by creatures.
+-- rateMagic: the rate multiplier for magic damage dealt.
+-- rateSpawn: the rate multiplier for creature spawning.
+
 rateExp = 5
 rateSkill = 3
 rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
 
--- Monster Despawn Config
--- despawnRange is the amount of floors a monster can be from its spawn position
--- despawnRadius is how many tiles away it can be from its spawn position
--- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
--- walkToSpawnRadius is the allowed distance that the monster will stay away from spawn position when left with no targets, 0 to disable
+-- Monster Despawn Configuration
+-- This section defines the behavior of monsters when they are outside of a certain range from their spawn position:
+
+-- despawnRange: the number of floors away from its spawn position a monster can be and still be active.
+-- despawnRadius: the maximum number of tiles away from its spawn position a monster can be and still be active.
+-- removeOnDespawn: if true, the monster will be removed from the game when it is outside the despawn range. If false, the monster will be teleported back to its spawn position.
+-- walkToSpawnRadius: the allowed distance that the monster will stay away from its spawn position when left with no targets. Set to 0 to disable this behavior.
+
 deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
 walkToSpawnRadius = 15
 
--- Stamina
+-- Stamina Config
+-- This section defines the settings related to the stamina system:
+-- staminaSystem: toggles the use of the stamina system, set to true to enable.
+-- timeToRegenMinuteStamina: the time it takes for regular players to regenerate one stamina point in minutes.
+-- timeToRegenMinutePremiumStamina: the time it takes for premium players to regenerate one stamina point in minutes.
+
 staminaSystem = true
 timeToRegenMinuteStamina = 3 * 60
 timeToRegenMinutePremiumStamina = 10 * 60
 
--- Scripts
+-- Scripts section
+-- This section defines the settings related to server scripts:
+-- warnUnsafeScripts: If set to true, the server will warn the user about potentially dangerous scripts.
+-- convertUnsafeScripts: If set to true, the server will convert potentially dangerous scripts to a safer version.
+
 warnUnsafeScripts = true
 convertUnsafeScripts = true
 
--- Startup
--- NOTE: defaultPriority only works on Windows and sets process
--- priority, valid values are: "normal", "above-normal", "high"
+-- Startup Section
+-- This section defines the settings related to the server startup:
+-- defaultPriority: the priority of the process when starting the server, only works on Windows.
+-- Valid values are: "normal", "above-normal", "high".
+-- startupDatabaseOptimization: whether or not to optimize the database during server startup.
+
 defaultPriority = "high"
 startupDatabaseOptimization = false
 
--- Status Server Information
+-- Status Server Information Section
+-- This section defines the information that will be displayed on the status page of the server.
+
+-- ownerName: This setting specifies the name of the server's owner.
+-- ownerEmail: This setting specifies the email address of the server's owner.
+-- url: This setting specifies the URL of the server's website.
+-- location: This setting specifies the location of the server.
+
 ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
