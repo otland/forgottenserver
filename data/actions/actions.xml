@@ -181,5 +181,5 @@
 	<action fromid="9443" toid="9444" script="others/watch.lua" />
 	<action fromid="18488" toid="18492" script="others/skill_trainer.lua" />
 	<action itemid="20252" script="others/bed_modification_kits.lua" />
-	<action itemid="22846" script="others/teleport.lua" />
+	<action fromid="22845" toid="22846" script="others/teleport.lua" />
 </actions>
