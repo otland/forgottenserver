@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Brain Squid" nameDescription="a brain squid" race="undead" experience="17672" speed="430">
+<monster name="Brain Squid" nameDescription="a brain squid" race="ink" experience="17672" speed="430">
 	<health now="18000" max="18000" />
 	<look type="1059" head="17" body="41" legs="77" feet="57" addons="0" corpse="31238" />
 	<targetchange interval="2000" chance="5" />
@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="-100" max="-200" />
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-470">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
@@ -50,14 +50,14 @@
 		<item id="7901" name="lightning headband" chance="5168" countmax="2" />
 		<item id="2153" name="violet gem" chance="4679" />
 		<item id="18419" name="cyan crystal fragment" chance="4190" />
-		<item name="ring of red plasma" chance="2892" />
-		<item name="ring of green plasma" chance="2318" />
-		<item name="ring of blue plasma" chance="2127" />
+		<item id="26189" name="ring of red plasma" chance="2892" />
+		<item id="26187" name="ring of green plasma" chance="2318" />
+		<item id="26185"  name="ring of blue plasma" chance="2127" />
 		<item id="2164" name="might ring" chance="2084" />
 		<item id="7889" name="lightning pendant" chance="1893" />
 		<item id="26200" name="collar of red plasma" chance="1786" />
 		<item id="23565" name="slime heart" chance="1765" />
-		<item name="collar of blue plasma" chance="1361" />
+		<item id="26198" name="collar of blue plasma" chance="1361" />
 		<item id="10580" name="piece of dead brain" chance="1106" />
 		<item id="18390" name="wand of defiance" chance="1106" />
 		<item id="26199" name="collar of green plasma" chance="681" />

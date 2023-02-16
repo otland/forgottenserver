@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Knowledge Raider" nameDescription="a knowledge raider" race="undead" experience="0" speed="220">
-	<health now="10000" max="10000"/>
+	<health now="10000" max="10000" />
 	<look type="878" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-200"/>
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="melee" interval="2000" chance="20" radius="3" target="1" min="-300" max="-490">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>

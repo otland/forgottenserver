@@ -22,7 +22,6 @@
 		<element energyPercent="100" />
 		<element earthPercent="-10" />
 		<element holyPercent="100" />
-		<element deathPercent="0" />
 	</elements>
 	<attacks>
 		<attack name="energy" interval="2000" chance="15" min="-600" max="-750" range="3" radius="1" target="1">

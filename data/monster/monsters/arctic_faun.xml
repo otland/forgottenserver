@@ -59,7 +59,7 @@
 		<item id="7591" name="great health potion" chance="3570" />
 		<item id="2664" name="wood cape" chance="1024" />
 		<item id="9928" name="leaf legs" chance="341" />
-		<item name="die" chance="210" />
+		<item id="5792" name="die" chance="210" />
 		<item id="28355" name="wooden spellbook" chance="210" />
 	</loot>
 </monster>

@@ -34,6 +34,5 @@
 		<element earthPercent="100" />
 		<element icePercent="50" />
 		<element holyPercent="-15" />
-		<element deathPercent="0" />
 	</elements>
 </monster>

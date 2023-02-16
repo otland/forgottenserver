@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghulosh" nameDescription="Ghulosh" race="blood" experience="45000" speed="100">
-	<health now="300000" max="300000"/>
+	<health now="300000" max="300000" />
 	<look type="1062" head="79" body="94" legs="94" feet="94" addons="3" corpse="0"/>
 	<targetchange interval="2000" chance="5" />
 	<flags>

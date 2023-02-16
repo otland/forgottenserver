@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Stolen Knowledge Of Summoning" nameDescription="stolen knowledge of summoning" race="undead" experience="0" speed="150">
-	<health now="10000" max="10000"/>
+	<health now="10000" max="10000" />
 	<look type="1061" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-200"/>
+		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
 			<attribute key="shootEffect" value="snowball"/>
 			<attribute key="areaEffect" value="poff"/>

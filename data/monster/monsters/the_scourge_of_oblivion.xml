@@ -110,7 +110,7 @@
 		<item id="25523" name="rift crossbow" chance="18919" />
 		<item id="2436" name="skull staff" chance="18919" />
 		<item id="2149" name="small emerald" chance="18919" countmax="21" />
-		<item name="collar of blue plasma" chance="16216" />
+		<item id="26198" name="collar of blue plasma" chance="16216" />
 		<item id="7440" name="mastermind potion" chance="16216" countmax="19" />
 		<item id="9970" name="small topaz" chance="16216" countmax="19" />
 		<item id="2158" name="blue gem" chance="13514" />
@@ -119,19 +119,19 @@
 		<item id="7633" name="giant shimmering pearl (brown)" chance="10811" />
 		<item id="2155" name="green gem" chance="10811" />
 		<item id="25522" name="rift bow" chance="10811" />
-		<item name="void boots" chance="10811" />
+		<item id="26133" name="void boots" chance="10811" />
 		<item id="9971" name="gold ingot" chance="8108" />
 		<item id="5904" name="magic sulphur" chance="8108" />
 		<item id="25382" name="rift shield" chance="8108" />
-		<item name="ring of blue plasma" chance="8108" />
-		<item name="ring of green plasma" chance="8108" />
+		<item id="26185" name="ring of blue plasma" chance="8108" />
+		<item id="26187" name="ring of green plasma" chance="8108" />
 		<item id="2123" name="ring of the sky" chance="8108" />
 		<item id="5809" name="soul stone" chance="8108" />
 		<item id="8903" name="spellbook of lost souls" chance="8108" />
 		<item id="7427" name="chaos mace" chance="5405" />
 		<item id="26200" name="collar of red plasma" chance="5405" />
 		<item id="31447" name="library ticket" chance="5405" />
-		<item name="ring of red plasma" chance="5405" />
+		<item id="26189" name="ring of red plasma" chance="5405" />
 		<item id="7414" name="abyss hammer" chance="2703" />
 		<item id="5480" name="cat's paw" chance="2703" />
 		<item id="2153" name="violet gem" chance="2703" />

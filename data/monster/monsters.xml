@@ -410,7 +410,7 @@
 	<monster name="Ghost" file="monsters/ghost.xml" />
 	<monster name="Ghoul" file="monsters/ghoul.xml" />
 	<monster name="Ghoulish Hyaena" file="monsters/ghoulish_hyaena.xml" />
-	<monster name="Ghulosh' Deathgaze" file="monsters/ghulosh'_deathgaze.xml" />
+	<monster name="Ghulosh' Deathgaze" file="monsters/ghulosh_deathgaze.xml" />
 	<monster name="Ghulosh" file="monsters/ghulosh.xml" />
 	<monster name="Giant Spider Wyda" file="monsters/giant_spider_wyda.xml" />
 	<monster name="Giant Spider" file="monsters/giant_spider.xml" />
@@ -797,7 +797,6 @@
 	<monster name="Rahemos" file="monsters/rahemos.xml" />
 	<monster name="Rat" file="monsters/rat.xml" />
 	<monster name="Ravenous Beyondling" file="monsters/ravenous_beyondling.xml" />
-	<monster name="Ravenous Hunger" file="monsters/ravenous_hunger.xml" />
 	<monster name="Ravenous Hunger" file="monsters/ravenous_hunger.xml" />
 	<monster name="Raxias" file="monsters/raxias.xml" />
 	<monster name="Razzagorn" file="monsters/razzagorn.xml" />

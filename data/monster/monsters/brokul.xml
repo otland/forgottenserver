@@ -19,7 +19,7 @@
 		<attack name="holy" interval="2000" chance="14" length="8" spread="0" min="-100" max="-700">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="physical" interval="2000" chance="18" radius="4"  min="-300" max="-700">
+		<attack name="physical" interval="2000" chance="18" radius="4" min="-300" max="-700">
 			<attribute key="areaEffect" value="explosionarea" />
 		</attack>
 		<attack name="fire" interval="2000" chance="14" length="8" spread="0" min="-300" max="-840">

@@ -33,7 +33,6 @@
 	</immunities>
 	<elements>
 		<element physicalPercent="50" />
-		<element deathPercent="0" />
 	</elements>
 	<loot>
 		<item id="2152" name="platinum coin" chance="75075" countmax="55" />

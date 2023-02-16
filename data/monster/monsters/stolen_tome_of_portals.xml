@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Stolen Tome Of Portals" nameDescription="stolen tome of portals" race="undead" experience="0" speed="150">
-	<health now="10000" max="10000"/>
+	<health now="10000" max="10000" />
 	<look typeex="26653" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>

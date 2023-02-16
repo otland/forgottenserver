@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghulosh' Deathgaze" nameDescription="Ghulosh' Deathgaze" race="undead" experience="0" speed="30">
-	<health now="300000" max="300000"/>
+	<health now="300000" max="300000" />
 	<look type="1063" body="57" feet="57" head="57" legs="57" addons="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-200"/>
+		<attack name="melee" interval="2000" min="0" max="-200" />
 	</attacks>
 	<defenses armor="30" defense="30" />
 	<immunities>

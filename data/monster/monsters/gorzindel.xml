@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Gorzindel" nameDescription="Gorzindel" race="blood" experience="100000" speed="230">
-	<health now="300000" max="300000"/>
+	<health now="300000" max="300000" />
 	<look type="1062" head="94" body="100" legs="0" feet="0" addons="1" corpse="25151"/>
 	<targetchange interval="2000" chance="5" />
 	<flags>
