@@ -27,7 +27,7 @@ function Position:moveUpstairs()
 
 	self.z = self.z - 1
 
-	local defaultPosition = self + Position.directionOffset[DIRECTION_SOUTH]
+	local position = Position(self.x + Position.directionOffset[direction].x, self.y + Position.directionOffset[direction].y, self.z)
 	local toTile = Tile(defaultPosition)
 	if not toTile or not toTile:isWalkable() then
 		for direction = DIRECTION_NORTH, DIRECTION_NORTHEAST do
