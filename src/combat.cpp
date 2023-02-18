@@ -1491,13 +1491,10 @@ void MagicField::onStepInField(Creature* creature)
 		return;
 	}
 
-	//no-pvp fields must not damage players
-	if (!isLoadedFromMap() && creature->getPlayer() && (
-		id == ITEM_FIREFIELD_NOPVP
-		|| id == ITEM_FIREFIELD_NOPVP_MEDIUM
-		|| id == ITEM_POISONFIELD_NOPVP
-		|| id == ITEM_ENERGYFIELD_NOPVP
-	)) {
+	// no-pvp fields must not damage players
+	if (!isLoadedFromMap() && creature->getPlayer() &&
+	    (id == ITEM_FIREFIELD_NOPVP || id == ITEM_FIREFIELD_NOPVP_MEDIUM || id == ITEM_POISONFIELD_NOPVP ||
+	     id == ITEM_ENERGYFIELD_NOPVP)) {
 		if (!creature->isInGhostMode()) {
 			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
 		}
