@@ -933,7 +933,6 @@
 	<monster name="Stolen Knowledge Of Spells" file="monsters/stolen_knowledge_of_spells.xml" />
 	<monster name="Stolen Knowledge Of Summoning" file="monsters/stolen_knowledge_of_summoning.xml" />
 	<monster name="Stolen Soul" file="monsters/stolen_soul.xml" />
-	<monster name="Stolen Soul" file="monsters/stolen_soul.xml" />
 	<monster name="Stolen Tome Of Portals" file="monsters/stolen_tome_of_portals.xml" />
 	<monster name="Stone Devourer" file="monsters/stone_devourer.xml" />
 	<monster name="Stone Golem" file="monsters/stone_golem.xml" />
