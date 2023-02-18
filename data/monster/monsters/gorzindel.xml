@@ -23,7 +23,7 @@
 		<attack name="melee" interval="1000" chance="15" length="6" spread="0" target="0" min="-800" max="-1300">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
-		<attack name="melee" interval="1000" chance="15" radius="3" target="0" min="-800" max="-1000">
+		<attack name="lifedrain" interval="1000" chance="15" radius="3" target="0" min="-800" max="-1000">
 			<attribute key="areaEffect" value="redspark" />
 		</attack>
 		<attack name="lifedrain" interval="1000" chance="15" radius="9" target="0" min="-200" max="-800">
