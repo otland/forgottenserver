@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Blazing Rose" nameDescription="the blazing rose" race="undead" experience="0" speed="350">
+<monster name="The Blazing Rose" nameDescription="the blazing rose" race="undead" experience="9000" speed="350">
 	<health now="10000" max="10000" />
 	<look type="1068" head="95" body="94" legs="57" feet="79" addons="2" corpse="31453" />
 	<targetchange interval="2000" chance="5" />

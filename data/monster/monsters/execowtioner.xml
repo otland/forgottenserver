@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="90" attack="80" />
+		<attack name="melee" interval="2000" min="0" max="-900" />
 		<attack name="lifedrain" interval="2000" chance="8" range="7" radius="5" target="1" min="-135" max="-280">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 			<attribute key="areaEffect" value="redspark" />

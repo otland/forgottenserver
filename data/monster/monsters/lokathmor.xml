@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Lokathmor" nameDescription="Lokathmor" race="blood" experience="100000" speed="230">
-	<health now="0" max="0" />
+	<health now="300000" max="300000" />
 	<look type="1062" head="22" body="22" legs="79" feet="97" corpse="8721" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="150" attack="250" />
+		<attack name="melee" interval="2000" min="0" max="-1200" />
 		<attack name="lifedrain" interval="2000" chance="8" range="7" radius="5" target="1" min="-1100" max="-2800">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 			<attribute key="areaEffect" value="redspark" />

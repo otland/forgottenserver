@@ -15,7 +15,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" skill="100" attack="100" />
+		<attack name="melee" interval="2000" min="0" max="-1000" />
 		<attack name="melee" interval="2000" chance="15" length="8" min="-600" max="-2800">
 			<attribute key="shootEffect" value="whirlwindaxe" />
 			<attribute key="areaEffect" value="groundshaker" />

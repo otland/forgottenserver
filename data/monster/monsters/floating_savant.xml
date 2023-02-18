@@ -44,7 +44,7 @@
 		<voice sentence="We didn't stop the fire!" />
 	</voices>
 	<summons maxSummons="1">
-		<voice name="Lava Lurker Attendant" interval="2000" chance="15" max="1" />
+		<summon name="Lava Lurker Attendant" interval="2000" chance="15" />
 	</summons>
 	<loot>
 		<item id="2156" name="red gem" chance="71588" countmax="4" />

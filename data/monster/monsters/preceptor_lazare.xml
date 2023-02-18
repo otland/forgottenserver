@@ -30,7 +30,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="10" defense="5">
-		<defense name="speed" interval="2000" chance="15" minspeedchange="300" maxspeedchange="300" duration="7000">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="7000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 		<defense name="healing" interval="2000" chance="20" min="500" max="800" />

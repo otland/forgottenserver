@@ -17,10 +17,10 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-269" />
 		<attack name="manadrain" interval="2000" chance="10" range="7" min="0" max="-70" />
-		<attack name="lifedrain" interval="1000" chance="10" length="8" spread="0" min="100" max="400">
+		<attack name="lifedrain" interval="1000" chance="10" length="8" spread="0" min="-100" max="-400">
 			<attribute key="areaEffect" value="icetornado" />
 		</attack>
-		 		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="100" max="300">
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="100" max="300">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
 		<attack name="speed" interval="2000" chance="15" radius="1" target="1" speedchange="-100" duration="30000">

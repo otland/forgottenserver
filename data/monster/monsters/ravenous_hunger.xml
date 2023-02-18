@@ -28,6 +28,6 @@
 		<element deathPercent="100" />
 	</elements>
 	<summons maxSummons="4">
-		<voice name="Mutated Bat" interval="2000" chance="15" />
+		<summon name="Mutated Bat" interval="2000" chance="15" />
 	</summons>
 </monster>
