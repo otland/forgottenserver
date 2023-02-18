@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Raxias" nameDescription="Raxias" race="blood" experience="900" speed="50">
+<monster name="Raxias" nameDescription="Raxias" race="blood" experience="900" speed="210">
 	<health now="1100" max="1100" />
 	<look type="980" head="79" body="114" legs="82" feet="79" corpse="31473" />
 	<targetchange interval="2000" chance="5" />
