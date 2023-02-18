@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Flying Book" nameDescription="a flying book" race="ink" experience="200" speed="240">
+	<health now="500" max="500" />
+	<look type="1060" corpse="31242" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="ice" interval="1000" chance="15" range="7" min="-100" max="-180">
+			<attribute key="shootEffect" value="ice" />
+		</attack>
+	</attacks>
+	<defenses armor="45" defense="45" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="5" />
+		<element earthPercent="50" />
+		<element firePercent="15" />
+		<element icePercent="30" />
+		<element holyPercent="90" />
+		<element deathPercent="20" />
+	</elements>
+</monster>

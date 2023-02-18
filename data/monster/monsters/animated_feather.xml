@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Animated Feather" nameDescription="an animated feather" race="undead" experience="9860" speed="420">
+<monster name="Animated Feather" nameDescription="an animated feather" race="ink" experience="9860" speed="420">
 	<health now="13000" max="13000" />
 	<look type="1058" corpse="31234" />
 	<targetchange interval="2000" chance="5" />

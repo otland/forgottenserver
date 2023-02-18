@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deathling Spellsinger" nameDescription="a deathling spellsinger" race="blood" experience="6400" speed="310">
+	<health now="7200" max="7200" />
+	<look type="1088" corpse="31507" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-10" />
+		<element earthPercent="-10" />
+		<element firePercent="100" />
+		<element icePercent="100" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="physical" interval="2000" chance="15" min="-200" max="-400" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="huntingspear" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-150" max="-300" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="holy" interval="2000" chance="15" min="-400" max="-700" length="6" spread="0">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="72" defense="72" />
+	<voices interval="1000" chance="5">
+		<voice sentence="BOQOL&quot;°" />
+		<voice sentence="QOL&quot; VBOXCL°" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="85682" countmax="14" />
+		<item id="18304" name="crystalline arrow" chance="25142" countmax="25" />
+		<item id="2149" name="small emerald" chance="13388" countmax="14" />
+		<item id="15426" name="deeptags" chance="13047" />
+		<item id="15488" name="deepling filet" chance="12934" />
+		<item id="15452" name="deepling ridge" chance="9508" />
+		<item id="7591" name="great health potion" chance="8373" />
+		<item id="15425" name="deepling warts" chance="8260" />
+		<item id="7590" name="great mana potion" chance="7919" />
+		<item id="15649" name="vortex bolt" chance="5423" countmax="25" />
+		<item id="13870" name="eye of a deepling" chance="4924" />
+		<item id="13838" name="heavy trident" chance="3404" />
+		<item id="15453" name="warrior's shield" chance="3222" />
+		<item id="5895" name="fish fin" chance="3109" />
+		<item id="15451" name="warrior's axe" chance="2973" />
+		<item id="7759" name="small enchanted sapphire" chance="2269" countmax="4" />
+		<item id="2168" name="life ring" chance="2156" />
+		<item id="15403" name="necklace of the deep" chance="295" />
+	</loot>
+</monster>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grand Commander Soeren" nameDescription="Grand Commander Soeren" race="blood" experience="10000" speed="210">
+	<health now="17000" max="17000" />
+	<look type="1071" head="38" body="94" legs="38" feet="86" addons="2" corpse="31382" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-700" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="-200" max="-720">
+			<attribute key="shootEffect" value="royalspear" />
+		</attack>
+		<attack name="holy" interval="1000" chance="14" length="8" spread="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="200" max="650">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="50" />
+		<element earthPercent="50" />
+		<element firePercent="50" />
+		<element icePercent="50" />
+		<element holyPercent="-25" />
+		<element deathPercent="50" />
+	</elements>
+	<loot>
+		<item id="7762" name="small enchanted amethyst" chance="100000" />
+		<item id="31477" name="patch of fine cloth" chance="1134" />
+	</loot>
+</monster>
