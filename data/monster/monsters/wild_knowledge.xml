@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Wild Knowledge" nameDescription="a wild knowledge" race="energy" experience="0" speed="50">
-	<health now="2000" max="2000"/>
+	<health now="2000" max="2000" />
 	<look type="293" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
@@ -16,7 +16,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="1000" chance="25" min="0" max="-705">
-			<attribute key="shootEffect" value="energyball"/>
+			<attribute key="shootEffect" value="energyball" />
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="30" />

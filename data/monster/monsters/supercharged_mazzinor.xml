@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Supercharged Mazzinor" nameDescription="Supercharged Mazzinor" race="undead" experience="0" speed="120">
 	<health now="300000" max="300000" />
-	<look type="979" corpse="25151"/>
+	<look type="979" corpse="25151" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

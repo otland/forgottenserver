@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Ghulosh" nameDescription="Ghulosh" race="blood" experience="45000" speed="100">
 	<health now="300000" max="300000" />
-	<look type="1062" head="79" body="94" legs="94" feet="94" addons="3" corpse="0"/>
+	<look type="1062" head="79" body="94" legs="94" feet="94" addons="3" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -17,17 +17,17 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-1000" />
 		<attack name="death" interval="2000" chance="12" target="0" length="8" spread="0" min="-900" max="-1500">
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="death" interval="2000" chance="12" length="8" spread="3" min="-210" max="-600">
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
 		<attack name="death" interval="2000" chance="12" range="7" radius="3" min="-210" max="-600">
-			<attribute key="areaEffect" value="mortarea"/>
+			<attribute key="areaEffect" value="mortarea" />
 		</attack>
-		<attack name="melee" interval="2000" skill="90" attack="250"/>
+		<attack name="melee" interval="2000" skill="90" attack="250" />
 		<attack name="lifedrain" interval="2000" chance="12" range="7" radius="3" min="-1500" max="-2000">
-			<attribute key="areaEffect" value="redspark"/>
+			<attribute key="areaEffect" value="redspark" />
 		</attack>
 	</attacks>
 	<defenses armor="30" defense="30" />
