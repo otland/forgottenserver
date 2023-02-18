@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Lily Of Night" nameDescription="The Lily Of Night" race="undead" experience="0" speed="350">
+<monster name="The Lily Of Night" nameDescription="The Lily Of Night" race="blood" experience="0" speed="350">
 	<health now="10000" max="10000" />
 	<look type="1068" head="90" body="38" legs="90" feet="79" addons="2" corpse="31458" />
 	<targetchange interval="2000" chance="5" />
