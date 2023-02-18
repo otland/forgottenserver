@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="The Diamond Blossom" nameDescription="The Diamond Blossom" race="undead" experience="10000" speed="350">
+<monster name="The Diamond Blossom" nameDescription="The Diamond Blossom" race="blood" experience="10000" speed="350">
 	<health now="25000" max="25000" />
 	<look type="1068" body="0" feet="79" head="85" legs="86" addons="3" corpse="31458" />
 	<targetchange interval="2000" chance="5" />
