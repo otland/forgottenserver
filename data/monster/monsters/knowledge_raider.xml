@@ -18,7 +18,7 @@
 		<attack name="energy" interval="2000" chance="20" radius="3" target="1" min="-300" max="-490">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
-			<attack name="melee" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
+		<attack name="energy" interval="2000" chance="10" length="8" spread="0" min="-300" max="-490">
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
 	</attacks>
