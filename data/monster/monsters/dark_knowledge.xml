@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Dark Knowledge" nameDescription="dark knowledge" race="ink" experience="0" speed="440">
 	<health now="10000" max="10000" />
-	<look type="1061" corpse="0" />
+	<look type="1061" corpse="31144" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
