@@ -13,7 +13,11 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<defenses armor="30" defense="30" />
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" target="0" radius="4" min="400" max="550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
