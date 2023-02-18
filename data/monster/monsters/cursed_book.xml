@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <monster name="Cursed Book" nameDescription="a cursed book" race="ink" experience="13345" speed="440">
 	<health now="20000" max="20000" />
-	<look type="1061" head="79" body="81" legs="93" feet="0" addons="0" corpse="28590" />
+	<look type="1061" head="79" body="81" legs="93" feet="0" addons="0" corpse="31246" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
