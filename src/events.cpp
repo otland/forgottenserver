@@ -405,7 +405,7 @@ bool Events::eventPartyOnInvite(Party* party, Player* player)
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
-} 
+}
 
 bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
 {
