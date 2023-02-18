@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Knowledge Raider" nameDescription="a knowledge raider" race="undead" experience="0" speed="220">
+<monster name="Knowledge Raider" nameDescription="a knowledge raider" race="energy" experience="0" speed="220">
 	<health now="10000" max="10000" />
 	<look type="878" corpse="0" />
 	<targetchange interval="2000" chance="5" />
