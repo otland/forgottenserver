@@ -1669,6 +1669,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_FIREFIELD_PERSISTENT_MEDIUM);
 	registerEnum(ITEM_FIREFIELD_PERSISTENT_SMALL);
 	registerEnum(ITEM_FIREFIELD_NOPVP);
+	registerEnum(ITEM_FIREFIELD_NOPVP_MEDIUM)
 	registerEnum(ITEM_POISONFIELD_PVP);
 	registerEnum(ITEM_POISONFIELD_PERSISTENT);
 	registerEnum(ITEM_POISONFIELD_NOPVP);
