@@ -14,7 +14,6 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="melee" interval="2000" min="0" max="-400" />
 	</attacks>
 	<defenses armor="30" defense="30" />
@@ -23,7 +22,4 @@
 		<immunity invisible="1" />
 		<immunity drunk="1" />
 	</immunities>
-	<loot>
-		<item id="31144" name="Parchment of Dark Knowledge" chance="20000" />
-	</loot>
 </monster>
