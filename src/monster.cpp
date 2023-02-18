@@ -741,12 +741,20 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
-		if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
-			g_game.removeCreature(this, false);
+		if (g_config.getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
+			if (spawn) {
+				spawn->removeMonster(this);
+				spawn->startSpawnCheck();
+				spawn = nullptr;
+			}
 		} else {
-			g_game.internalTeleport(this, masterPos);
-			setIdle(true);
+			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
+			if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+				g_game.removeCreature(this, false);
+			} else {
+				g_game.internalTeleport(this, masterPos);
+				setIdle(true);
+			}
 		}
 	} else {
 		updateIdleStatus();
