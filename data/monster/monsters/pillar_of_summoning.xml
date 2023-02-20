@@ -21,6 +21,6 @@
 		<immunity drunk="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<voice name="Dread Minion" interval="2000" chance="15" />
+		<summon name="Dread Minion" interval="2000" chance="15" />
 	</summons>
 </monster>

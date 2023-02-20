@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Icecold Book" nameDescription="an icecold book" race="ink" experience="12750" speed="440">
+	<health now="21000" max="21000" />
+	<look type="1061" head="87" body="85" legs="79" feet="0" addons="0" corpse="31430" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-850" />
+		<attack name="ice" interval="2000" chance="15" min="-600" max="-800" range="2" radius="1" target="1">
+			<attribute key="shootEffect" value="ice" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="-750" max="-1300" length="5" spread="0">
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="-650" max="-950" ring="2" target="0" />
+	</attacks>
+	<defenses armor="82" defense="82">
+		<defense name="healing" interval="2000" chance="20" min="200" max="350" />
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-10" />
+		<element icePercent="100" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="91012" countmax="5" />
+		<item id="31225" name="book page" chance="62200" />
+		<item id="2145" name="small diamond" chance="46152" />
+		<item id="2146" name="small sapphire" chance="27227" countmax="9" />
+		<item id="2396" name="ice rapier" chance="21188" />
+		<item id="26029" name="ultimate mana potion" chance="21157" />
+		<item id="8473" name="ultimate health potion" chance="18552" />
+		<item id="31223" name="quill" chance="18249" />
+		<item id="31222" name="silken bookmark" chance="17067" />
+		<item id="7902" name="glacier mask" chance="13250" />
+		<item id="10578" name="frosty heart" chance="12856" />
+		<item id="7387" name="diamond sceptre" chance="6372" />
+		<item id="7896" name="glacier kilt" chance="4848" />
+		<item id="7441" name="ice cube" chance="4706" />
+		<item id="7892" name="glacier shoes" chance="3403" />
+		<item id="2445" name="crystal mace" chance="2646" />
+		<item id="7897" name="glacier robe" chance="1777" />
+		<item id="2479" name="strange helmet" chance="1646" />
+		<item id="7437" name="sapphire hammer" chance="1616" />
+		<item id="8878" name="crystalline armor" chance="919" />
+		<item id="18412" name="glacial rod" chance="616" />
+		<item id="10220" name="leviathan's amulet" chance="131" />
+	</loot>
+</monster>

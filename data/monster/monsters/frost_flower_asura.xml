@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Frost Flower Asura" nameDescription="a frost flower asura" race="blood" experience="4200" speed="220">
+	<health now="3500" max="3500" />
+	<look type="150" head="0" body="0" legs="0" feet="86" addons="3" corpse="31462" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="holy" interval="1300" chance="14" length="8" spread="0" min="-185" max="-210">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+		<attack name="ice" interval="1000" chance="9" range="7" target="1" min="-120" max="-200">
+			<attribute key="shootEffect" value="smallice" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+	</attacks>
+	<defenses armor="56" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="90" max="150">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-5" />
+		<element earthPercent="-10" />
+		<element firePercent="-15" />
+		<element icePercent="100" />
+		<element holyPercent="30" />
+		<element deathPercent="20" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="6" />
+		<item id="24630" name="golden lotus brooch" chance="20240" />
+		<item id="6558" name="flask of demonic blood" chance="19605" />
+		<item id="5944" name="soul orb" chance="18688" />
+		<item id="24631" name="peacock feather fan" chance="17842" />
+		<item id="6500" name="demonic essence" chance="16784" />
+		<item id="7591" name="great health potion" chance="12412" countmax="2" />
+		<item id="7368" name="assassin star" chance="10155" countmax="5" />
+		<item id="2145" name="small diamond" chance="8251" countmax="3" />
+		<item id="2146" name="small sapphire" chance="7757" countmax="3" />
+		<item id="2143" name="white pearl" chance="7123" countmax="2" />
+		<item id="2144" name="black pearl" chance="5430" countmax="2" />
+		<item id="2134" name="silver brooch" chance="5219" />
+		<item id="2147" name="small ruby" chance="4443" countmax="2" />
+		<item id="9970" name="small topaz" chance="4020" countmax="2" />
+		<item id="2149" name="small emerald" chance="3949" countmax="2" />
+		<item id="3967" name="tribal mask" chance="3173" />
+		<item id="8911" name="northwind rod" chance="3032" />
+		<item id="2154" name="yellow gem" chance="2045" />
+		<item id="2183" name="hailstorm rod" chance="1128" />
+		<item id="2170" name="silver amulet" chance="987" />
+		<item id="2656" name="blue robe" chance="776" />
+		<item id="7404" name="assassin dagger" chance="705" />
+		<item id="9971" name="gold ingot" chance="423" />
+		<item id="2158" name="blue gem" chance="353" />
+		<item id="24637" name="oriental shoes" chance="353" />
+		<item id="8889" name="skullcracker armor" chance="282" />
+		<item id="8902" name="spellbook of mind control" chance="282" />
+		<item id="2124" name="crystal ring" chance="141" />
+	</loot>
+</monster>

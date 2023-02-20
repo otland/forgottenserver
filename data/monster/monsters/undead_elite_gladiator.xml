@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Undead Elite Gladiator" nameDescription="an undead elite gladiator" race="undead" experience="4740" speed="300">
+	<health now="8000" max="8000" />
+	<look type="306" corpse="9823" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-550" />
+		<attack name="physical" interval="1500" chance="20" range="7" min="-300" max="-550">
+			<attribute key="shootEffect" value="whirlwindsword" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" range="5" radius="3" min="-300" max="-500">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="85" defense="85">
+		<defense name="invisible" interval="2000" chance="15" duration="3000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="-10" />
+		<element firePercent="80" />
+		<element holyPercent="10" />
+		<element deathPercent="-5" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="40" />
+		<item id="8872" name="belted cape" chance="24463" />
+		<item id="2399" name="throwing star" chance="15123" countmax="18" />
+		<item id="2419" name="scimitar" chance="11349" />
+		<item id="2430" name="knight axe" chance="8802" />
+		<item id="8473" name="ultimate health potion" chance="8700" />
+		<item id="2647" name="plate legs" chance="5297" />
+		<item id="7591" name="great health potion" chance="5220" />
+		<item id="5885" name="flask of warrior's sweat" chance="5207" />
+		<item id="10573" name="broken gladiator shield" chance="5054" />
+		<item id="3965" name="hunting spear" chance="5015" />
+		<item id="2200" name="protection amulet" chance="2290" />
+		<item id="2463" name="plate armor" chance="2060" />
+		<item id="2377" name="two handed sword" chance="1919" />
+		<item id="2490" name="dark helmet" chance="1535" />
+		<item id="2165" name="stealth ring" chance="960" />
+		<item id="7383" name="relic sword" chance="192" />
+		<item id="2497" name="crusader helmet" chance="115" />
+	</loot>
+</monster>

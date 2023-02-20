@@ -231,3 +231,22 @@ function getPlayerDatabaseInfo(name_or_guid)
 	result.free(query)
 	return info
 end
+
+function checkDuplicateStorageKeys(varName)
+	local keys = _G[varName]
+	local seen = {}
+	local duplicates = {}
+	for k, v in pairs(keys) do
+		if seen[v] then
+			table.insert(duplicates, v)
+		else
+			seen[v] = true
+		end
+	end
+
+	if next(duplicates) == nil then
+		return false
+	else
+		return duplicates
+	end
+end
