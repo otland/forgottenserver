@@ -1107,6 +1107,9 @@ void LuaScriptInterface::registerFunctions()
 	// sendGuildChannelMessage(guildId, type, message)
 	lua_register(luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
+	//loadPlayer(id, guid or name)
+	lua_register(luaState, "loadPlayer", LuaScriptInterface::luaLoadPlayer);
+
 	// isScriptsInterface()
 	lua_register(luaState, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
@@ -4088,6 +4091,44 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
 	return 1;
+}
+
+int LuaScriptInterface::luaLoadPlayer(lua_State* L)
+{
+	// loadPlayer(id, guid or name)
+	Player* player;
+	bool player_found = true;
+	if (isNumber(L, 1)) {
+		const uint32_t playerId = getNumber<uint32_t>(L, 1);
+		if (playerId >= CREATURE_ID_MIN && playerId <= Player::playerIDLimit) {
+			player = g_game.getPlayerByID(playerId);
+		} else {
+			player = g_game.getPlayerByGUID(playerId);
+		}		
+		if(!player) {
+			player = new Player(nullptr);
+			if(!IOLoginData::loadPlayerById(player, playerId)){
+				player_found = false;
+			}
+		}
+	} else if (isString(L, 1)) {
+		const std::string playerName = getString(L, 1);
+		player = g_game.getPlayerByName(playerName);
+		if (!player) {
+			player = new Player(nullptr);
+			if(!IOLoginData::loadPlayerByName(player, playerName)){
+				player_found = false;
+			}
+		}
+	}
+
+	if (player_found) {
+		pushUserdata<Player>(L, player);
+		setMetatable(L, -1, "Player");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;	
 }
 
 int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)

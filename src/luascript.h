@@ -452,6 +452,7 @@ private:
 
 	static int luaSendChannelMessage(lua_State* L);
 	static int luaSendGuildChannelMessage(lua_State* L);
+	static int luaLoadPlayer(lua_State* L);
 
 	static int luaIsScriptsInterface(lua_State* L);
 
