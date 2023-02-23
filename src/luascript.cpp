@@ -2710,6 +2710,12 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
+	// TempPlayer
+	registerClass("TempPlayer", "Player", LuaScriptInterface::luaTempPlayerCreate);
+	registerMetaMethod("TempPlayer", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("TempPlayer", "__gc", LuaScriptInterface::luaTempPlayerDelete);
+	registerMethod("TempPlayer", "free", LuaScriptInterface::luaTempPlayerDelete);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10862,6 +10868,55 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	}
 
 	lua_pushnumber(L, player->getIdleTime());
+	return 1;
+}
+
+//	TempPlayer
+int LuaScriptInterface::luaTempPlayerCreate(lua_State* L)
+{
+	// TempPlayer(id or name)
+	Player* player = new Player(nullptr);
+	bool player_found = true;
+	if (isNumber(L, 2)) {
+		const uint32_t playerId = getNumber<uint32_t>(L, 2);
+		if(!IOLoginData::loadPlayerById(player, playerId)){
+			player_found = false;
+		}
+	} else if (isString(L, 2)) {
+		const std::string playerName = getString(L, 2);
+		if(!IOLoginData::loadPlayerByName(player, playerName)){
+			player_found = false;
+		}
+	}
+
+	if (player_found) {
+		pushUserdata<Player>(L, player);
+		setMetatable(L, -1, "TempPlayer");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaTempPlayerDelete(lua_State* L)
+{
+	// tempPlayer:free()
+	Creature** creaturePtr = getRawUserdata<Creature>(L, 1);
+	if (!creaturePtr) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Creature* creature = *creaturePtr;
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	delete creature;
+
+	*creaturePtr = nullptr;
+	pushBoolean(L, true);
 	return 1;
 }
 
