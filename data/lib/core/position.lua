@@ -35,7 +35,8 @@ function Position:moveUpstairs()
 				direction = DIRECTION_WEST
 			end
 
-			local position = Position(self.x + Position.directionOffset[direction].x, self.y + Position.directionOffset[direction].y, self.z)
+			local position = Position(self)
+			position:getNextPosition(direction)
 			toTile = Tile(position)
 			if toTile and toTile:isWalkable() then
 				swap(self, position)
