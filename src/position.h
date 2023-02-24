@@ -94,8 +94,6 @@ struct Position
 		return false;
 	}
 
-	bool operator>(const Position& p) const { return !(*this < p); }
-
 	bool operator==(const Position& p) const { return p.x == x && p.y == y && p.z == z; }
 
 	bool operator!=(const Position& p) const { return p.x != x || p.y != y || p.z != z; }
@@ -106,6 +104,5 @@ struct Position
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);
-std::ostream& operator<<(std::ostream&, const Direction&);
 
 #endif // FS_POSITION_H
