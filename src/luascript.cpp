@@ -15399,7 +15399,7 @@ int LuaScriptInterface::luaPartySetLeader(lua_State* L)
 	Player* player = getPlayer(L, 2);
 	Party* party = getUserdata<Party>(L, 1);
 	if (party && player) {
-		pushBoolean(L, party->passPartyLeadership(player));
+		pushBoolean(L, party->passPartyLeadership(player, true));
 	} else {
 		lua_pushnil(L);
 	}

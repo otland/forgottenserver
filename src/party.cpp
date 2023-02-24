@@ -77,7 +77,7 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 			if (memberList.size() == 1 && inviteList.empty()) {
 				missingLeader = true;
 			} else {
-				passPartyLeadership(memberList.front());
+				passPartyLeadership(memberList.front(), true);
 			}
 		} else {
 			missingLeader = true;
@@ -123,13 +123,13 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 	return true;
 }
 
-bool Party::passPartyLeadership(Player* player)
+bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 {
 	if (!player || leader == player || player->getParty() != this) {
 		return false;
 	}
 
-	if (!g_events->eventPartyOnPassLeadership(this, player)) {
+	if (!g_events->eventPartyOnPassLeadership(this, player) && !forceRemove) {
 		return false;
 	}
 
