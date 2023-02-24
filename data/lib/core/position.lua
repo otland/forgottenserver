@@ -1,3 +1,23 @@
+local mt = rawgetmetatable("Position")
+
+function mt.__add(lhs, rhs)
+	local stackpos = lhs.stackpos or rhs.stackpos
+	return Position(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z, stackpos)
+end
+
+function mt.__sub(lhs, rhs)
+	local stackpos = lhs.stackpos or rhs.stackpos
+	return Position(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z, stackpos)
+end
+
+function mt.__eq(lhs, rhs)
+	return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z
+end
+
+function mt.__tostring(self)
+	return string.format("Position(%d, %d, %d)", self.x, self.y, self.z)
+end
+
 Position.directionOffset = {
 	[DIRECTION_NORTH] = {x = 0, y = -1},
 	[DIRECTION_EAST] = {x = 1, y = 0},
@@ -8,6 +28,14 @@ Position.directionOffset = {
 	[DIRECTION_NORTHWEST] = {x = -1, y = -1},
 	[DIRECTION_NORTHEAST] = {x = 1, y = -1}
 }
+
+local abs, max = math.abs, math.max
+function Position:getDistance(positionEx)
+	local dx = abs(self.x - positionEx.x)
+	local dy = abs(self.y - positionEx.y)
+	local dz = abs(self.z - positionEx.z)
+	return max(dx, dy, dz)
+end
 
 function Position:getNextPosition(direction, steps)
 	local offset = Position.directionOffset[direction]
