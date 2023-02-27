@@ -1052,11 +1052,9 @@ bool InstantSpell::canCast(const Player* player) const
 
 	if (isLearnable()) {
 		return player->hasLearnedInstantSpell(getName());
-	} else {
-		return hasVocationSpellMap(player->getVocationId());
 	}
 
-	return false;
+	return hasVocationSpellMap(player->getVocationId());
 }
 
 std::string RuneSpell::getScriptEventName() const { return "onCastSpell"; }
