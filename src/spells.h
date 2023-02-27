@@ -143,7 +143,7 @@ public:
 	}
 	bool hasVocationSpellMap(uint16_t vocationId) const
 	{
-		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
+		return vocationSpellMap.empty() || vocationSpellMap.find(vocationId) != vocationSpellMap.end();
 	}
 
 	const SpellGroup_t getGroup() const { return group; }

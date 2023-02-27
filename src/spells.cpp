@@ -591,7 +591,7 @@ bool Spell::playerSpellCheck(Player* player) const
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
 		}
-	} else if (!vocationSpellMap.empty() && !hasVocationSpellMap(player->getVocationId())) {
+	} else if (!hasVocationSpellMap(player->getVocationId())) {
 		player->sendCancelMessage(RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -1051,13 +1051,9 @@ bool InstantSpell::canCast(const Player* player) const
 	}
 
 	if (isLearnable()) {
-		if (player->hasLearnedInstantSpell(getName())) {
-			return true;
-		}
+		return player->hasLearnedInstantSpell(getName());
 	} else {
-		if (vocationSpellMap.empty() || hasVocationSpellMap(player->getVocationId())) {
-			return true;
-		}
+		return hasVocationSpellMap(player->getVocationId());
 	}
 
 	return false;
