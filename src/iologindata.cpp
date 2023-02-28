@@ -491,6 +491,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 				if (cid > 0) {
 					openContainersList.emplace(cid, itemContainer);
 				}
+
+				for (const auto& category : itemContainer->getLootCategories()) {
+					player->setLootContainer(category, itemContainer);
+				}
 			}
 
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {

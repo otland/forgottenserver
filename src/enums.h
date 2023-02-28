@@ -714,4 +714,42 @@ enum DamageAnalyzerImpactType
 	RECEIVED = 2
 };
 
+enum class LootCategory : uint8_t
+{
+	NONE = 0,
+	ARMOR = 1,
+	AMULET = 2,
+	BOOTS = 3,
+	CONTAINER = 4,
+	DECORATION = 5,
+	FOOD = 6,
+	HELMET = 7,
+	LEGS = 8,
+	OTHERS = 9,
+	POTIONS = 10,
+	RINGS = 11,
+	RUNES = 12,
+	SHIELDS = 13,
+	TOOLS = 14,
+	VALUABLES = 15,
+	AMMO = 16,
+	AXE = 17,
+	CLUB = 18,
+	DISTANCE = 19,
+	SWORD = 20,
+	WAND = 21,
+	PREMSCROLL = 22,
+	STORECOIN = 23,
+	CREATURE_PRODUCT = 24,
+	QUIVER = 25,
+	UNKNOWN = 26,
+	STASH = 27,
+	UNSORTED = 28,
+	WEAPONS_ALL = 29,
+	GOLD = 30,
+	UNASSIGNED = 31,
+
+	LAST = UNASSIGNED
+};
+
 #endif // FS_ENUMS_H

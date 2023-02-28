@@ -56,6 +56,16 @@ Player::Player(ProtocolGame_ptr p) :
 
 Player::~Player()
 {
+	for (auto container : lootContainers) {
+		if (container) {
+			if (!container->getHoldingPlayer()) {
+				container->setLootCategory(0);
+			}
+
+			container->decrementReferenceCounter();
+		}
+	}
+
 	for (Item* item : inventory) {
 		if (item) {
 			item->setParent(nullptr);
@@ -709,6 +719,8 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 			outfits.emplace_back(value >> 16, value & 0xFF);
 			return;
 		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
+			// do nothing
+		} else if (key == FALLBACK_STORAGE_KEY) {
 			// do nothing
 		} else {
 			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
@@ -3203,6 +3215,13 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 			requireListUpdate = oldParent != this;
 		}
 
+		if (oldParent != this) {
+			if (auto container = thing->getContainer()) {
+				// we verify if it is a loot container abandoned to reset it
+				container->checkAbandonedLootContainer(this);
+			}
+		}
+
 		updateInventoryWeight();
 		updateItemsLight();
 		sendStats();
@@ -3734,6 +3753,9 @@ void Player::onPlacedCreature()
 	if (!g_creatureEvents->playerLogin(this)) {
 		kickPlayer(true);
 	}
+
+	// send loot containers
+	sendLootContainers();
 }
 
 void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
@@ -4864,5 +4886,43 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
+	}
+}
+
+void Player::setLootContainer(const LootCategory category, Container* container)
+{
+	const uint8_t categoryIndex = static_cast<uint8_t>(category);
+	Container* prevContainer = lootContainers[categoryIndex];
+	if (!container) {
+		lootContainers[categoryIndex] = nullptr;
+		if (prevContainer) {
+			prevContainer->removeLootCategory(category);
+			prevContainer->setOwner(0);
+			if (auto parent = prevContainer->getParent()) {
+				parent->updateThing(prevContainer, prevContainer->getID(), prevContainer->getItemCount());
+			}
+
+			prevContainer->decrementReferenceCounter();
+		}
+
+		return;
+	}
+
+	container->incrementReferenceCounter();
+	lootContainers[categoryIndex] = container;
+	container->addLootCategory(category);
+	container->setOwner(getGUID());
+	if (auto parent = container->getParent()) {
+		parent->updateThing(container, container->getID(), container->getItemCount());
+	}
+
+	if (prevContainer) {
+		if (prevContainer != container) {
+			if (auto parent = prevContainer->getParent()) {
+				parent->updateThing(prevContainer, prevContainer->getID(), prevContainer->getItemCount());
+			}
+		}
+
+		prevContainer->decrementReferenceCounter();
 	}
 }

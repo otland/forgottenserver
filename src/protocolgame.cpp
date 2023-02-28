@@ -2036,6 +2036,38 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendLootContainers()
+{
+	NetworkMessage msg;
+	msg.addByte(0xC0);
+
+	int32_t fallback;
+	if (player->getStorageValue(FALLBACK_STORAGE_KEY, fallback)) {
+		msg.addByte(0x01);
+	} else {
+		msg.addByte(0x00);
+	}
+
+	std::vector<std::pair<uint8_t, uint16_t>> lootContainerIds;
+	const auto& lootContainers = player->getLootContainers();
+	uint8_t categoryIndex = 0;
+	for (const auto& lootContainer : lootContainers) {
+		if (lootContainer) {
+			lootContainerIds.emplace_back(categoryIndex, lootContainer->getClientID());
+		}
+
+		++categoryIndex;
+	}
+
+	msg.addByte(lootContainerIds.size());
+	for (const auto& [category, clientId] : lootContainerIds) {
+		msg.addByte(category);
+		msg.add<uint16_t>(clientId);
+	}
+
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendEmptyContainer(uint8_t cid)
 {
 	NetworkMessage msg;
