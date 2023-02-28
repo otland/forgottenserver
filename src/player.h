@@ -1201,7 +1201,7 @@ private:
 	std::map<uint32_t, DepotChest*> depotChests;
 	std::map<uint32_t, int32_t> storageMap;
 
-	std::array<Container*, static_cast<uint8_t>(LootCategory::LAST) + 1> lootContainers = { nullptr };
+	std::array<Container*, static_cast<uint8_t>(LootCategory::LAST) + 1> lootContainers = {nullptr};
 
 	std::vector<OutfitEntry> outfits;
 	GuildWarVector guildWarVector;
