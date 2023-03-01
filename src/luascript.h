@@ -449,7 +449,6 @@ private:
 
 	static int luaSendChannelMessage(lua_State* L);
 	static int luaSendGuildChannelMessage(lua_State* L);
-	static int luaLoadPlayer(lua_State* L);
 
 	static int luaIsScriptsInterface(lua_State* L);
 
@@ -1015,9 +1014,9 @@ private:
 
 	static int luaPlayerGetIdleTime(lua_State* L);
 
-	// TempPlayer
-	static int luaTempPlayerCreate(lua_State* L);
-	static int luaTempPlayerDelete(lua_State* L);
+	// OfflinePlayer
+	static int luaOfflinePlayerCreate(lua_State* L);
+	static int luaOfflinePlayerDelete(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

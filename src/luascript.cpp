@@ -1107,9 +1107,6 @@ void LuaScriptInterface::registerFunctions()
 	// sendGuildChannelMessage(guildId, type, message)
 	lua_register(luaState, "sendGuildChannelMessage", LuaScriptInterface::luaSendGuildChannelMessage);
 
-	//loadPlayer(id, guid or name)
-	lua_register(luaState, "loadPlayer", LuaScriptInterface::luaLoadPlayer);
-
 	// isScriptsInterface()
 	lua_register(luaState, "isScriptsInterface", LuaScriptInterface::luaIsScriptsInterface);
 
@@ -2710,11 +2707,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
-	// TempPlayer
-	registerClass("TempPlayer", "Player", LuaScriptInterface::luaTempPlayerCreate);
-	registerMetaMethod("TempPlayer", "__eq", LuaScriptInterface::luaUserdataCompare);
-	registerMetaMethod("TempPlayer", "__gc", LuaScriptInterface::luaTempPlayerDelete);
-	registerMethod("TempPlayer", "free", LuaScriptInterface::luaTempPlayerDelete);
+	// OfflinePlayer
+	registerClass("OfflinePlayer", "Player", LuaScriptInterface::luaOfflinePlayerCreate);
+	registerMetaMethod("OfflinePlayer", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("OfflinePlayer", "__gc", LuaScriptInterface::luaOfflinePlayerDelete);
+	registerMethod("OfflinePlayer", "free", LuaScriptInterface::luaOfflinePlayerDelete);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -4032,44 +4029,6 @@ int LuaScriptInterface::luaSendGuildChannelMessage(lua_State* L)
 	channel->sendToAll(message, type);
 	pushBoolean(L, true);
 	return 1;
-}
-
-int LuaScriptInterface::luaLoadPlayer(lua_State* L)
-{
-	// loadPlayer(id, guid or name)
-	Player* player;
-	bool player_found = true;
-	if (isNumber(L, 1)) {
-		const uint32_t playerId = getNumber<uint32_t>(L, 1);
-		if (playerId >= CREATURE_ID_MIN && playerId <= Player::playerIDLimit) {
-			player = g_game.getPlayerByID(playerId);
-		} else {
-			player = g_game.getPlayerByGUID(playerId);
-		}		
-		if(!player) {
-			player = new Player(nullptr);
-			if(!IOLoginData::loadPlayerById(player, playerId)){
-				player_found = false;
-			}
-		}
-	} else if (isString(L, 1)) {
-		const std::string playerName = getString(L, 1);
-		player = g_game.getPlayerByName(playerName);
-		if (!player) {
-			player = new Player(nullptr);
-			if(!IOLoginData::loadPlayerByName(player, playerName)){
-				player_found = false;
-			}
-		}
-	}
-
-	if (player_found) {
-		pushUserdata<Player>(L, player);
-		setMetatable(L, -1, "Player");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;	
 }
 
 int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
@@ -10871,51 +10830,41 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	return 1;
 }
 
-//	TempPlayer
-int LuaScriptInterface::luaTempPlayerCreate(lua_State* L)
+// OfflinePlayer
+int LuaScriptInterface::luaOfflinePlayerCreate(lua_State* L)
 {
-	// TempPlayer(id or name)
-	Player* player = new Player(nullptr);
-	bool player_found = true;
+	// OfflinePlayer(id or name)
+	std::unique_ptr<Player> player_ptr = std::make_unique<Player>(nullptr);
 	if (isNumber(L, 2)) {
 		const uint32_t playerId = getNumber<uint32_t>(L, 2);
-		if(!IOLoginData::loadPlayerById(player, playerId)){
-			player_found = false;
+		if (!IOLoginData::loadPlayerById(player_ptr.get(), playerId)) {
+			lua_pushnil(L);
+			return 1;
 		}
 	} else if (isString(L, 2)) {
-		const std::string playerName = getString(L, 2);
-		if(!IOLoginData::loadPlayerByName(player, playerName)){
-			player_found = false;
+		const std::string& playerName = getString(L, 2);
+		if (!IOLoginData::loadPlayerByName(player_ptr.get(), playerName)) {
+			lua_pushnil(L);
+			return 1;
 		}
 	}
 
-	if (player_found) {
-		pushUserdata<Player>(L, player);
-		setMetatable(L, -1, "TempPlayer");
-	} else {
-		lua_pushnil(L);
-	}
+	pushUserdata<Player>(L, player_ptr.release());
+	setMetatable(L, -1, "OfflinePlayer");
 	return 1;
 }
 
-int LuaScriptInterface::luaTempPlayerDelete(lua_State* L)
+int LuaScriptInterface::luaOfflinePlayerDelete(lua_State* L)
 {
-	// tempPlayer:free()
-	Creature** creaturePtr = getRawUserdata<Creature>(L, 1);
-	if (!creaturePtr) {
-		lua_pushnil(L);
+	// offlinePlayer:free()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushBoolean(L, false);
 		return 1;
 	}
 
-	Creature* creature = *creaturePtr;
-	if (!creature) {
-		lua_pushnil(L);
-		return 1;
-	}
+	delete player;
 
-	delete creature;
-
-	*creaturePtr = nullptr;
 	pushBoolean(L, true);
 	return 1;
 }
