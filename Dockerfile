@@ -13,7 +13,7 @@ COPY src /usr/src/forgottenserver/src/
 COPY subprojects /usr/src/forgottenserver/subprojects/
 COPY meson.build meson_options.txt /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
-RUN meson -D buildtype=release build && ninja -C build
+RUN meson setup -D buildtype=release build && ninja -C build
 
 FROM alpine:3.16.2
 # crypto++ is in edge/testing

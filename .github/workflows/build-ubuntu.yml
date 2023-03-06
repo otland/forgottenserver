@@ -30,7 +30,7 @@ jobs:
             libcrypto++-dev
 
       - name: Build with meson
-        run: meson -D buildtype=release ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: meson setup -D buildtype=release ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: Upload binary
         uses: actions/upload-artifact@v2

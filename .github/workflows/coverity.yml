@@ -31,7 +31,7 @@ jobs:
           TOKEN: ${{ secrets.COVERITY_SCAN_TOKEN }}
 
       - name: Prepare build
-        run: meson build
+        run: meson setup build
 
       - name: Build with cov-build
         run: |
