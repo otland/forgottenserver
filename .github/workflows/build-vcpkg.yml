@@ -24,7 +24,7 @@ jobs:
       max-parallel: 10
       matrix:
         name: [ubuntu-gcc, ubuntu-clang, macos-clang]
-        buildtype: [Debug, Release]
+        buildtype: [debug, release]
         luajit: [enabled, disabled]
         include:
           - name: ubuntu-gcc
@@ -32,28 +32,22 @@ jobs:
             cxx: g++
             cc: gcc
             triplet: x64-linux
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              libmariadb cryptopp tool-meson
+
           - name: ubuntu-clang
             os: ubuntu
             cxx: clang++
             cc: clang
             triplet: x64-linux
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              libmariadb cryptopp tool-meson
+
           - name: macos-clang
             os: macos
             cxx: clang++
             cc: clang
             triplet: x64-osx
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              libmariadb cryptopp tool-meson
+
         exclude:
           - name: ubuntu-clang
-            buildtype: Release
+            buildtype: release
           - name: ubuntu-clang
             luajit: disabled
           - name: macos-clang
@@ -66,9 +60,9 @@ jobs:
 
       - name: Ubuntu - install luajit, remove libmysqlclient-dev
         run: |
-          sudo apt-get install libluajit-5.1-dev
-          sudo apt-get remove -y libmysqlclient-dev
-        if: contains( matrix.os, 'ubuntu')
+          sudo apt install libluajit-5.1-dev
+          sudo apt remove -y libmysqlclient-dev
+        if: contains(matrix.os, 'ubuntu')
 
       - name: MacOS - install luajit pkgconfig
         run: brew install luajit pkgconfig
@@ -82,14 +76,14 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v7
         with:
-          vcpkgArguments: ${{ matrix.packages }}
+          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit ninja tool-meson
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: meson setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -112,23 +106,22 @@ jobs:
           path: ${{ github.workspace }}
 
   windows:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=enabled
+    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       max-parallel: 8
       matrix:
         name: [windows-msvc]
-        buildtype: [Debug, Release]
+        buildtype: [debug, release]
+        luajit: [enabled, disabled]
         include:
           - name: windows-msvc
             os: windows
             cxx: cl.exe
             cc: cl.exe
             triplet: x64-windows
-            packages: >
-              boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              luajit libmariadb cryptopp tool-meson
+            packages: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit ninja tool-meson
 
     steps:
       - uses: actions/checkout@v3
@@ -153,7 +146,7 @@ jobs:
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: meson setup -D buildtype=${{ matrix.buildtype }} -D luajit=enabled ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=enabled ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
