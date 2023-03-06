@@ -34,7 +34,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb cryptopp tool-meson
+              libmariadb cryptopp tool-meson
           - name: ubuntu-clang
             os: ubuntu
             cxx: clang++
@@ -42,7 +42,7 @@ jobs:
             triplet: x64-linux
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb cryptopp tool-meson
+              libmariadb cryptopp tool-meson
           - name: macos-clang
             os: macos
             cxx: clang++
@@ -50,7 +50,7 @@ jobs:
             triplet: x64-osx
             packages: >
               boost-asio boost-iostreams boost-system boost-filesystem boost-variant boost-lockfree
-              lua libmariadb cryptopp tool-meson
+              libmariadb cryptopp tool-meson
         exclude:
           - name: ubuntu-clang
             buildtype: Release
