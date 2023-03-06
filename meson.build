@@ -2,7 +2,7 @@ project('tfs', 'cpp', license: ['gpl-2.0'], default_options: ['cpp_std=c++17'])
 
 boost_dep = dependency('boost', modules: ['date_time', 'iostreams', 'system'], version: '>=1.66.0')
 fmt_dep = dependency('fmt', version: '>=7.1.0', fallback: ['fmt', 'fmt_dep'], default_options: ['default_library=static'])
-pugixml_dep = dependency('pugixml', fallback: ['pugixml', 'pugixml_dep'], default_options: ['default_library=static'])
+pugixml_dep = dependency('pugixml', fallback: ['pugixml', 'pugixml_dep'], default_options: ['default_library=static', 'tests=false'])
 thread_dep = dependency('threads')
 
 # Debian installs libcrypto++, Arch Linux installs libcryptopp
@@ -22,11 +22,11 @@ endif
 
 luajit_opt = get_option('luajit')
 if luajit_opt.disabled()
-	lua_dep = dependency('lua', version: '>=5.1.0', fallback: ['lua', 'lua_dep'], default_options: ['default_library=static'])
+	lua_dep = dependency('lua', version: '>=5.1.0', fallback: ['lua', 'lua_dep'], default_options: ['default_library=static', 'interpreter=false'])
 else
 	lua_dep = dependency('luajit', required: luajit_opt.enabled())
 	if not lua_dep.found()
-		lua_dep = dependency('lua', version: '>=5.1.0', fallback: ['lua', 'lua_dep'], default_options: ['default_library=static'])
+		lua_dep = dependency('lua', version: '>=5.1.0', fallback: ['lua', 'lua_dep'], default_options: ['default_library=static', 'interpreter=false'])
 	endif
 endif
 
