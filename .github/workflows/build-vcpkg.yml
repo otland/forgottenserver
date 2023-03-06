@@ -86,7 +86,7 @@ jobs:
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+          vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
         run: meson setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
@@ -150,7 +150,7 @@ jobs:
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: 5568f110b509a9fd90711978a7cb76bae75bb092
+          vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
         run: meson setup -D buildtype=${{ matrix.buildtype }} -D luajit=enabled ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
