@@ -395,9 +395,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // Gamemaster flag
 
-	const auto sessionKey = msg.getString();
 	// acc name or email, password, token, timestamp divided by 30
-	auto sessionArgs = explodeString(sessionKey, "\n", 4);
+	auto sessionArgs = explodeString(msg.getString(), "\n", 4);
 	if (sessionArgs.size() < 2) {
 		disconnectClient("Malformed session key.");
 		return;
@@ -408,8 +407,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		msg.getString(); // OS version (?)
 	}
 
-	const auto accountName = sessionArgs[0];
-	const auto password = sessionArgs[1];
+	auto accountName = sessionArgs[0];
+	auto password = sessionArgs[1];
 	if (accountName.empty()) {
 		disconnectClient("You must enter your account name.");
 		return;
@@ -1312,7 +1311,7 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 			break;
 	}
 
-	const auto text = msg.getString();
+	auto text = msg.getString();
 	if (text.length() > 255) {
 		return;
 	}
@@ -1462,7 +1461,7 @@ void ProtocolGame::parseRemoveVip(NetworkMessage& msg)
 void ProtocolGame::parseEditVip(NetworkMessage& msg)
 {
 	uint32_t guid = msg.get<uint32_t>();
-	const auto description = msg.getString();
+	auto description = msg.getString();
 	uint32_t icon = std::min<uint32_t>(10, msg.get<uint32_t>()); // 10 is max icon in 9.63
 	bool notify = msg.getByte() != 0;
 	g_dispatcher.addTask([=, playerID = player->getID(), description = std::string{description}]() {
@@ -1484,8 +1483,8 @@ void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
 {
 	uint8_t reportType = msg.getByte();
 	uint8_t reportReason = msg.getByte();
-	const auto targetName = msg.getString();
-	const auto comment = msg.getString();
+	auto targetName = msg.getString();
+	auto comment = msg.getString();
 	std::string_view translation;
 	if (reportType == REPORT_TYPE_NAME) {
 		translation = msg.getString();
@@ -1503,7 +1502,7 @@ void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
 void ProtocolGame::parseBugReport(NetworkMessage& msg)
 {
 	uint8_t category = msg.getByte();
-	const auto message = msg.getString();
+	auto message = msg.getString();
 
 	Position position;
 	if (category == BUG_CATEGORY_MAP) {
@@ -3934,7 +3933,7 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 {
 	uint8_t opcode = msg.getByte();
-	const auto buffer = msg.getString();
+	auto buffer = msg.getString();
 
 	// process additional opcodes via lua script event
 	g_dispatcher.addTask([=, playerID = player->getID(), buffer = std::string{buffer}]() {
