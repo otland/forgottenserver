@@ -76,14 +76,14 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v7
         with:
-          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit ninja tool-meson
+          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit vcpkg-tool-ninja vcpkg-tool-meson
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.buildtype }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -121,7 +121,7 @@ jobs:
             cxx: cl.exe
             cc: cl.exe
             triplet: x64-windows
-            packages: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit ninja tool-meson
+            packages: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit vcpkg-tool-ninja vcpkg-tool-meson
 
     steps:
       - uses: actions/checkout@v3
@@ -146,7 +146,7 @@ jobs:
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=enabled ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
 
       - name: dir
         run: find $RUNNER_WORKSPACE
