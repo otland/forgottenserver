@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Kusuma" nameDescription="" race="blood" experience="9380" speed="0" manacost="0">
+	<health now="7650" max="7650" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-10" />
+		<element earthPercent="100" />
+		<element firePercent="-5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="24630" name="golden lotus brooch" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="259" />
+		<item id="24631" name="peacock feather fan" chance="100000" />
+		<item id="6558" name="flask of demonic blood" chance="28500" countmax="4" />
+		<item id="2149" name="small emerald" chance="24500" countmax="2" />
+		<item id="5944" name="soul orb" chance="19000" />
+		<item id="2124" name="crystal ring" chance="17500" />
+		<item id="8472" name="great spirit potion" chance="17000" countmax="2" />
+		<item id="8473" name="ultimate health potion" chance="13500" countmax="6" />
+		<item id="6500" name="demonic essence" chance="13000" />
+		<item id="2182" name="snakebite rod" chance="10500" />
+		<item id="18411" name="muck rod" chance="9000" />
+		<item id="5910" name="green piece of cloth" chance="9000" />
+		<item name="giant shimmering pearl" chance="8000" />
+		<item id="28391" name="leaf star" chance="7500" countmax="10" />
+		<item id="2155" name="green gem" chance="6500" />
+		<item id="2185" name="necrotic rod" chance="6000" />
+		<item id="2143" name="white pearl" chance="5000" countmax="3" />
+		<item id="2158" name="blue gem" chance="5000" />
+		<item id="9971" name="gold ingot" chance="3500" countmax="3" />
+		<item id="8880" name="swamplair armor" chance="2000" />
+		<item id="35425" name="white gem" chance="2000" />
+		<item id="24637" name="oriental shoes" chance="1000" />
+		<item id="7903" name="terra hood" chance="1000" />
+		<item id="32716" name="giant emerald" chance="500" />
+	</loot>
+</monster>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Hulking Carnisylvan" nameDescription="a hulking carnisylvan" race="blood" experience="4700" speed="220" manacost="0">
+	<health now="8600" max="8600" />
+	<look type="1418" head="21" body="3" legs="20" feet="57" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="15" />
+		<element earthPercent="20" />
+		<element firePercent="-20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="0" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+		<attack name="earth" interval="2000" chance="15" min="-350" max="-450" range="1" radius="1" target="1">
+			<attribute key="shootEffect" value="smallstone" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-600" max="-800" radius="4" target="0">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-350" max="-400" length="4" spread="0">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="51" defense="51" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="23" />
+		<item id="2230" name="bone" chance="28910" />
+		<item id="7591" name="great health potion" chance="14502" countmax="2" />
+		<item id="39462" name="carnisylvan bark" chance="13365" />
+		<item id="39461" name="carnisylvan finger" chance="10711" />
+		<item id="7903" name="terra hood" chance="7678" />
+		<item id="7886" name="terra boots" chance="5118" />
+		<item id="7430" name="dragonbone staff" chance="4739" />
+		<item id="2438" name="epee" chance="4455" />
+		<item id="7387" name="diamond sceptre" chance="4360" />
+		<item id="7901" name="lightning headband" chance="3981" />
+		<item id="2430" name="knight axe" chance="3791" />
+		<item id="2391" name="war hammer" chance="3318" />
+		<item id="39463" name="human teeth" chance="664" />
+	</loot>
+</monster>

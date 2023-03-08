@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Unaz The Mean" nameDescription="Unaz the Mean" race="blood" experience="22000" speed="0" manacost="0">
+	<health now="28000" max="28000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="50" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="35429" name="ivory comb" chance="50000" />
+		<item id="35427" name="moonstone" chance="38158" countmax="2" />
+		<item id="35426" name="diamond" chance="25000" />
+		<item id="2156" name="red gem" chance="20000" countmax="2" />
+		<item id="35275" name="pair of nightmare boots" chance="20000" />
+		<item id="35428" name="silver hand mirror" chance="20000" />
+		<item id="15451" name="warrior's axe" chance="20000" />
+		<item id="35239" name="skull coin" chance="7895" />
+		<item id="2420" name="machete" chance="5263" />
+		<item id="2436" name="skull staff" chance="3947" />
+		<item id="35359" name="death toll" chance="2632" />
+		<item id="7386" name="mercenary sword" chance="2632" />
+		<item id="2432" name="fire axe" chance="1316" />
+	</loot>
+</monster>

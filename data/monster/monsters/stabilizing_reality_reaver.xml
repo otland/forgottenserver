@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Stabilizing Reality Reaver" nameDescription="a stabilizing reality reaver" race="blood" experience="1950" speed="310" manacost="0">
+	<health now="2500" max="2500" />
+	<look type="879" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="70" />
+		<element earthPercent="-10" />
+		<element firePercent="15" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="20" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-278" />
+	</attacks>
+	<defenses armor="46" defense="46">
+		<defense name="healing" interval="2000" chance="20" min="0" max="209" />
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Ssshhh!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="98111" countmax="100" />
+		<item id="2152" name="platinum coin" chance="98111" countmax="4" />
+		<item id="7591" name="great health potion" chance="14710" />
+		<item id="8472" name="great spirit potion" chance="14477" />
+		<item id="7590" name="great mana potion" chance="13967" />
+		<item id="26157" name="condensed energy" chance="10146" />
+		<item id="26201" name="energy drink" chance="9573" />
+		<item id="26180" name="small energy ball" chance="9531" />
+		<item id="26191" name="energy bar" chance="9382" />
+		<item id="26162" name="plasma pearls" chance="9361" />
+		<item id="18414" name="violet crystal shard" chance="4203" />
+		<item id="18420" name="red crystal fragment" chance="3736" />
+		<item id="18418" name="blue crystal splinter" chance="3609" countmax="2" />
+		<item id="18413" name="blue crystal shard" chance="1698" />
+		<item id="2156" name="red gem" chance="1380" />
+		<item id="8920" name="wand of starstorm" chance="1210" />
+		<item id="7901" name="lightning headband" chance="149" />
+		<item id="8871" name="focus cape" chance="149" />
+	</loot>
+</monster>

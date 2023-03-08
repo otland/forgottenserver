@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Poisonous Carnisylvan" nameDescription="a poisonous carnisylvan" race="blood" experience="4400" speed="210" manacost="0">
+	<health now="8000" max="8000" />
+	<look type="1418" head="23" body="98" legs="22" feet="61" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="25" />
+		<element firePercent="-15" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-5" />
+		<element holyPercent="0" />
+		<element deathPercent="5" />
+	</elements>
+	<defenses armor="37" defense="37" />
+	<summons maxSummons="1">
+		<voice name="Carnisylvan Sapling" interval="2000" chance="15" max="1" />
+	</summons>
+	<loot>
+		<item id="2152" name="platinum coin" chance="94954" countmax="17" />
+		<item id="39462" name="carnisylvan bark" chance="12385" />
+		<item id="18397" name="mushroom pie" chance="9633" />
+		<item id="39461" name="carnisylvan finger" chance="8807" />
+		<item name="wooden trash" chance="8073" />
+		<item id="8472" name="great spirit potion" chance="7248" />
+		<item id="2127" name="emerald bangle" chance="6422" />
+		<item id="2427" name="guardian halberd" chance="6239" />
+		<item id="2181" name="terra rod" chance="5780" />
+		<item id="2430" name="knight axe" chance="5229" />
+		<item id="7387" name="diamond sceptre" chance="4771" />
+		<item id="8910" name="underworld rod" chance="4587" />
+		<item id="8920" name="wand of starstorm" chance="4587" />
+		<item name="collar of blue plasma" chance="4404" />
+		<item id="2795" name="fire mushroom" chance="3486" countmax="3" />
+		<item id="10219" name="sacred tree amulet" chance="2294" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="2110" />
+		<item id="27048" name="gemmed figurine" chance="1009" />
+		<item id="39463" name="human teeth" chance="275" />
+	</loot>
+</monster>

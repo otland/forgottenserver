@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Hatebreeder" nameDescription="" race="blood" experience="10000" speed="0" manacost="0">
+	<health now="18000" max="18000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element earthPercent="100" />
+		<element firePercent="30" />
+		<element lifedrainPercent="100" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="100" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-850" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="YOU ARE NOT WELCOME HERE!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="262" />
+		<item id="11367" name="undead heart" chance="100000" />
+		<item id="11368" name="jade hat" chance="95652" />
+		<item id="6500" name="demonic essence" chance="86957" />
+		<item id="11355" name="spellweaver's robe" chance="73913" />
+		<item id="11303" name="zaoan shoes" chance="73913" />
+		<item id="11366" name="ghastly dragon head" chance="60870" />
+		<item id="8473" name="ultimate health potion" chance="60870" countmax="5" />
+		<item id="11304" name="zaoan legs" chance="56522" />
+		<item id="11307" name="zaoan sword" chance="39130" />
+		<item id="8472" name="great spirit potion" chance="34783" countmax="5" />
+		<item id="11309" name="twin hooks" chance="30435" />
+		<item id="11305" name="drakinata" chance="30435" />
+		<item id="11323" name="zaoan halberd" chance="21739" />
+		<item id="2152" name="platinum coin" chance="21739" countmax="2" />
+		<item id="11240" name="guardian boots" chance="17391" />
+		<item id="11301" name="zaoan armor" chance="17391" />
+		<item id="12630" name="cobra crown" chance="8696" />
+		<item id="7591" name="great health potion" chance="4348" countmax="5" />
+		<item id="11302" name="zaoan helmet" chance="4348" />
+		<item id="12648" name="snake god's sceptre" chance="4348" />
+	</loot>
+</monster>

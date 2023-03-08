@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Sabretooth" nameDescription="a sabretooth" race="blood" experience="11931" speed="450" manacost="0">
+	<health now="17300" max="17300" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="10" />
+		<element earthPercent="-10" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="63" defense="63" />
+	<loot>
+		<item id="39378" name="sabretooth fur" chance="23678" />
+		<item id="2160" name="crystal coin" chance="23306" countmax="2" />
+		<item id="2198" name="elven amulet" chance="4996" />
+		<item id="2187" name="wand of inferno" chance="4730" />
+		<item id="2201" name="dragon necklace" chance="3853" />
+		<item id="7899" name="magma coat" chance="3827" />
+		<item id="10219" name="sacred tree amulet" chance="2737" />
+		<item id="2392" name="fire sword" chance="2657" />
+		<item id="2191" name="wand of dragonbreath" chance="2339" />
+		<item id="23540" name="metal spats" chance="2232" />
+	</loot>
+</monster>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Rupture" nameDescription="" race="blood" experience="112000" speed="0" manacost="0">
+	<health now="290000" max="290000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-783" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="25377" name="gold token" chance="100000" countmax="7" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="375" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="41" />
+		<item id="26162" name="plasma pearls" chance="100000" />
+		<item id="26166" name="odd organ" chance="100000" />
+		<item id="26191" name="energy bar" chance="100000" countmax="9" />
+		<item id="18415" name="green crystal shard" chance="72549" countmax="5" />
+		<item id="8472" name="great spirit potion" chance="64706" countmax="16" />
+		<item id="18414" name="violet crystal shard" chance="64706" countmax="5" />
+		<item id="18413" name="blue crystal shard" chance="56863" countmax="5" />
+		<item id="7590" name="great mana potion" chance="49020" countmax="14" />
+		<item id="8473" name="ultimate health potion" chance="45098" countmax="14" />
+		<item id="2149" name="small emerald" chance="25490" countmax="18" />
+		<item id="2146" name="small sapphire" chance="23529" countmax="19" />
+		<item id="2156" name="red gem" chance="21569" />
+		<item name="void boots" chance="19608" />
+		<item id="2154" name="yellow gem" chance="19608" />
+		<item id="2150" name="small amethyst" chance="19608" countmax="18" />
+		<item name="ring of blue plasma" chance="17647" />
+		<item id="2145" name="small diamond" chance="17647" countmax="19" />
+		<item id="2155" name="green gem" chance="17647" />
+		<item name="giant shimmering pearl" chance="15686" />
+		<item id="7451" name="shadow sceptre" chance="15686" />
+		<item id="7426" name="amber staff" chance="15686" />
+		<item id="2158" name="blue gem" chance="13725" />
+		<item id="9970" name="small topaz" chance="13725" countmax="19" />
+		<item name="ring of green plasma" chance="13725" />
+		<item name="collar of blue plasma" chance="13725" />
+		<item id="26199" name="collar of green plasma" chance="11765" />
+		<item id="2153" name="violet gem" chance="11765" />
+		<item id="7901" name="lightning headband" chance="11765" />
+		<item id="7427" name="chaos mace" chance="9804" />
+		<item id="26200" name="collar of red plasma" chance="9804" />
+		<item id="8878" name="crystalline armor" chance="7843" />
+		<item name="ring of red plasma" chance="5882" />
+		<item name="tiara of power" chance="1961" />
+		<item id="6553" name="ruthless axe" chance="1961" />
+		<item id="7895" name="lightning legs" chance="1961" />
+		<item id="7403" name="berserker" chance="1961" />
+	</loot>
+</monster>

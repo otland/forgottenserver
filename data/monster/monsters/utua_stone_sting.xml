@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Utua Stone Sting" nameDescription="Utua Stone Sting" race="blood" experience="5100" speed="0" manacost="0">
+	<health now="6400" max="6400" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="15" />
+		<element earthPercent="40" />
+		<element firePercent="25" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="17" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="5" />
+		<item id="10568" name="scorpion tail" chance="54098" countmax="5" />
+		<item id="7897" name="glacier robe" chance="20000" />
+		<item id="36434" name="raw watermelon tourmaline" chance="20000" />
+		<item id="2520" name="demon shield" chance="20000" />
+		<item id="2127" name="emerald bangle" chance="10929" />
+		<item id="27047" name="coral brooch" chance="8743" />
+		<item id="7895" name="lightning legs" chance="7650" />
+		<item id="36757" name="utua's poison" chance="4372" />
+		<item id="27048" name="gemmed figurine" chance="3279" />
+		<item id="2153" name="violet gem" chance="3279" />
+		<item id="5741" name="skull helmet" chance="2732" />
+		<item id="2155" name="green gem" chance="2732" />
+		<item id="9971" name="gold ingot" chance="2732" />
+		<item id="7427" name="chaos mace" chance="2732" />
+		<item id="7894" name="magma legs" chance="2186" />
+		<item id="7386" name="mercenary sword" chance="2186" />
+		<item id="15451" name="warrior's axe" chance="2186" />
+		<item id="2445" name="crystal mace" chance="2186" />
+		<item id="7896" name="glacier kilt" chance="1639" />
+		<item id="7456" name="noble axe" chance="1639" />
+		<item name="ring of green plasma" chance="1093" />
+		<item id="7440" name="mastermind potion" chance="1093" />
+		<item id="2472" name="magic plate armor" chance="546" />
+		<item id="36914" name="red silk flower" chance="546" />
+		<item id="11355" name="spellweaver's robe" chance="546" />
+		<item id="13535" name="fist on a stick" chance="546" />
+		<item id="15454" name="guardian axe" chance="546" />
+	</loot>
+</monster>

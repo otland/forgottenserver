@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Outburst" nameDescription="" race="blood" experience="50000" speed="0" manacost="0">
+	<health now="290000" max="290000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-10" />
+		<element earthPercent="0" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="50" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="376" />
+		<item id="26201" name="energy drink" chance="100000" countmax="9" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="25377" name="gold token" chance="100000" countmax="7" />
+		<item id="26179" name="energy ball" chance="100000" />
+		<item id="26172" name="instable proto matter" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="43" />
+		<item id="18413" name="blue crystal shard" chance="71942" countmax="5" />
+		<item id="18414" name="violet crystal shard" chance="67626" countmax="5" />
+		<item id="18415" name="green crystal shard" chance="66187" countmax="5" />
+		<item id="8472" name="great spirit potion" chance="64748" countmax="17" />
+		<item id="7590" name="great mana potion" chance="49640" countmax="17" />
+		<item id="8473" name="ultimate health potion" chance="48921" countmax="16" />
+		<item id="2156" name="red gem" chance="30216" />
+		<item id="9970" name="small topaz" chance="25899" countmax="19" />
+		<item id="2158" name="blue gem" chance="24460" />
+		<item id="2146" name="small sapphire" chance="21583" countmax="19" />
+		<item id="2154" name="yellow gem" chance="19424" />
+		<item id="2147" name="small ruby" chance="18705" countmax="19" />
+		<item name="ring of blue plasma" chance="18705" />
+		<item id="2149" name="small emerald" chance="17266" countmax="18" />
+		<item id="2150" name="small amethyst" chance="16547" countmax="19" />
+		<item id="7427" name="chaos mace" chance="15827" />
+		<item name="ring of green plasma" chance="15108" />
+		<item id="26200" name="collar of red plasma" chance="15108" />
+		<item name="ring of red plasma" chance="14388" />
+		<item id="2155" name="green gem" chance="13669" />
+		<item name="void boots" chance="13669" />
+		<item id="7901" name="lightning headband" chance="12950" />
+		<item name="giant shimmering pearl" chance="10791" />
+		<item name="collar of blue plasma" chance="10072" />
+		<item id="26199" name="collar of green plasma" chance="10072" />
+		<item id="7426" name="amber staff" chance="7914" />
+		<item id="7428" name="bonebreaker" chance="7914" />
+		<item name="tiara of power" chance="5755" />
+		<item id="8855" name="composite hornbow" chance="5036" />
+		<item id="7898" name="lightning robe" chance="5036" />
+		<item id="7895" name="lightning legs" chance="4317" />
+		<item id="2454" name="war axe" chance="4317" />
+		<item id="18450" name="crystalline sword" chance="4317" />
+		<item id="2153" name="violet gem" chance="1439" />
+	</loot>
+</monster>

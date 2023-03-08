@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Flimsy Lost Soul" nameDescription="a flimsy lost soul" race="undead" experience="4500" speed="480" manacost="0">
+	<health now="4000" max="4000" />
+	<look type="1268" head="0" body="6" legs="0" feet="116" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="20" />
+		<element earthPercent="20" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="-20" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+	</attacks>
+	<defenses armor="79" defense="79" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="34883" name="lost soul (item)" chance="30188" />
+		<item id="2189" name="wand of cosmic energy" chance="6708" />
+		<item id="8912" name="springsprout rod" chance="4654" />
+		<item id="35359" name="death toll" chance="3985" />
+		<item id="2181" name="terra rod" chance="3593" />
+		<item id="2183" name="hailstorm rod" chance="3282" />
+		<item id="35354" name="ensouled essence" chance="2612" />
+		<item id="15403" name="necklace of the deep" chance="2048" />
+		<item id="35430" name="cursed bone" chance="1776" />
+		<item id="8920" name="wand of starstorm" chance="1773" />
+		<item id="18412" name="glacial rod" chance="1126" />
+		<item id="8922" name="wand of voodoo" chance="325" />
+	</loot>
+</monster>

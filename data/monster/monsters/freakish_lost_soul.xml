@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Freakish Lost Soul" nameDescription="a freakish lost soul" race="undead" experience="7020" speed="520" manacost="0">
+	<health now="7000" max="7000" />
+	<look type="1268" head="0" body="74" legs="0" feet="83" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="60" />
+		<element energyPercent="35" />
+		<element earthPercent="70" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="-40" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="85" defense="85" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="34883" name="lost soul (item)" chance="45916" />
+		<item id="2127" name="emerald bangle" chance="7490" />
+		<item id="35359" name="death toll" chance="5570" />
+		<item id="27048" name="gemmed figurine" chance="5156" />
+		<item id="35354" name="ensouled essence" chance="3839" />
+		<item name="ring of blue plasma" chance="1618" />
+		<item id="35428" name="silver hand mirror" chance="1317" />
+		<item id="15644" name="ornate crossbow" chance="828" />
+		<item id="18453" name="crystal crossbow" chance="790" />
+	</loot>
+</monster>

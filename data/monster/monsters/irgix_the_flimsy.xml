@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Irgix The Flimsy" nameDescription="Irgix the Flimsy" race="blood" experience="18000" speed="0" manacost="0">
+	<health now="24000" max="24000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="100" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="15" />
+		<item id="35428" name="silver hand mirror" chance="53947" />
+		<item id="35426" name="diamond" chance="40789" countmax="2" />
+		<item id="35425" name="white gem" chance="23684" />
+		<item id="15403" name="necklace of the deep" chance="20000" />
+		<item id="2154" name="yellow gem" chance="20000" />
+		<item id="2156" name="red gem" chance="20000" />
+		<item id="35275" name="pair of nightmare boots" chance="20000" />
+		<item id="35239" name="skull coin" chance="6579" />
+		<item id="2189" name="wand of cosmic energy" chance="5263" />
+		<item id="2183" name="hailstorm rod" chance="5263" />
+		<item id="2181" name="terra rod" chance="2632" />
+		<item id="35359" name="death toll" chance="2632" />
+		<item id="8920" name="wand of starstorm" chance="1316" />
+		<item id="18412" name="glacial rod" chance="1316" />
+		<item id="8912" name="springsprout rod" chance="1316" />
+	</loot>
+</monster>

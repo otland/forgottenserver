@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Naga Archer" nameDescription="a naga archer" race="blood" experience="5150" speed="364" manacost="0">
+	<health now="4640" max="4640" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="-10" />
+		<element earthPercent="-15" />
+		<element firePercent="20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="20" />
+		<element holyPercent="-20" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="physical" interval="2000" chance="15" min="0" max="-171" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="explosion" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" min="0" max="-250">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" min="0" max="-70" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" min="0" max="-447">
+			<attribute key="areaEffect" value="greychain" />
+		</attack>
+	</attacks>
+	<defenses armor="63" defense="63" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Intruder! Don't violate this sanctuary!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="13" />
+		<item id="39413" name="naga archer scales" chance="16338" />
+		<item id="39412" name="naga earring" chance="12808" />
+		<item id="39411" name="naga armring" chance="7266" />
+		<item id="2124" name="crystal ring" chance="5829" />
+		<item id="2455" name="crossbow" chance="4064" />
+		<item id="3965" name="hunting spear" chance="3777" />
+		<item id="18413" name="blue crystal shard" chance="2053" />
+		<item id="2456" name="bow" chance="1929" />
+		<item id="2134" name="silver brooch" chance="780" />
+		<item id="7441" name="ice cube" chance="698" />
+		<item id="15644" name="ornate crossbow" chance="657" />
+		<item id="2127" name="emerald bangle" chance="493" />
+		<item id="7438" name="elvish bow" chance="411" />
+		<item id="18453" name="crystal crossbow" chance="328" />
+		<item id="27048" name="gemmed figurine" chance="205" />
+		<item id="7443" name="bullseye potion" chance="82" />
+	</loot>
+</monster>

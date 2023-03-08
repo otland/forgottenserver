@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Pirat Bombardier" nameDescription="a pirat bombardier" race="blood" experience="1700" speed="370" manacost="0">
+	<health now="2300" max="2300" />
+	<look type="1346" head="57" body="125" legs="86" feet="67" addons="2" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="10" />
+		<element earthPercent="-20" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+		<attack name="energy" interval="2000" chance="15" min="-80" max="-160" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="burstarrow" />
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-110" max="-160" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-70" max="-120">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="65" defense="65" />
+	<loot>
+		<item id="7590" name="great mana potion" chance="34555" countmax="2" />
+		<item id="38228" name="pirate coin" chance="7347" countmax="10" />
+		<item id="7886" name="terra boots" chance="6091" />
+		<item id="38229" name="pirat's tail" chance="4799" />
+		<item id="38252" name="mouldy powder" chance="4171" />
+		<item id="7891" name="magma boots" chance="3682" />
+		<item name="ring of blue plasma" chance="2234" />
+		<item id="2664" name="wood cape" chance="1675" />
+		<item id="7893" name="lightning boots" chance="1588" />
+	</loot>
+</monster>

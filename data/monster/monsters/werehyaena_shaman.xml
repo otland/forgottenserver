@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Werehyaena Shaman" nameDescription="a werehyaena shaman" race="blood" experience="2200" speed="220" manacost="0">
+	<health now="2500" max="2500" />
+	<look type="1300" head="0" body="0" legs="94" feet="95" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="40" />
+		<element firePercent="25" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-20" />
+		<element holyPercent="5" />
+		<element deathPercent="-5" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-260" />
+	</attacks>
+	<defenses armor="38" defense="38" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="7590" name="great mana potion" chance="16374" />
+		<item id="24739" name="moonlight crystals" chance="15000" />
+		<item id="36599" name="werehyaena nose" chance="11696" />
+		<item id="2150" name="small amethyst" chance="9942" countmax="2" />
+		<item id="18416" name="green crystal splinter" chance="8187" />
+		<item id="36600" name="werehyaena talisman" chance="7500" />
+		<item id="7761" name="small enchanted emerald" chance="5848" countmax="5" />
+		<item id="18417" name="brown crystal splinter" chance="5263" />
+		<item id="2207" name="sword ring" chance="4678" />
+		<item id="2183" name="hailstorm rod" chance="4094" />
+		<item id="8920" name="wand of starstorm" chance="4094" />
+		<item id="2485" name="doublet" chance="3509" />
+		<item id="2200" name="protection amulet" chance="2924" />
+		<item id="2529" name="black shield" chance="2339" />
+		<item id="8922" name="wand of voodoo" chance="2339" />
+		<item id="36875" name="werehyaena trophy" chance="585" />
+	</loot>
+</monster>

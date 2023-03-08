@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Headpecker" nameDescription="a headpecker" race="blood" experience="12026" speed="434" manacost="0">
+	<health now="14700" max="14700" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="10" />
+		<element earthPercent="10" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="100" />
+		<element deathPercent="-10" />
+	</elements>
+	<defenses armor="68" defense="68" />
+	<loot>
+		<item id="2160" name="crystal coin" chance="34638" />
+		<item id="39387" name="headpecker beak" chance="11546" />
+		<item id="39388" name="headpecker feather" chance="7948" countmax="5" />
+		<item id="7432" name="furry club" chance="5259" />
+		<item id="2684" name="carrot" chance="5259" />
+		<item id="2403" name="knife" chance="4310" />
+		<item id="2383" name="spike sword" chance="3717" />
+		<item id="2391" name="war hammer" chance="1938" />
+		<item id="7413" name="titan axe" chance="1542" />
+		<item id="2158" name="blue gem" chance="1226" />
+		<item id="8920" name="wand of starstorm" chance="1107" />
+		<item id="9971" name="gold ingot" chance="1107" />
+	</loot>
+</monster>

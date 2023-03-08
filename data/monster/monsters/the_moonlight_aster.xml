@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="The Moonlight Aster" nameDescription="The Moonlight Aster" race="blood" experience="9250" speed="0" manacost="0">
+	<health now="4500" max="4500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="0" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-10" />
+		<element earthPercent="-10" />
+		<element firePercent="10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="15" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-217" />
+		<attack name="manadrain" interval="2000" chance="15" min="-313" max="-345" length="6" spread="0">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" minspeedchange="-400" maxspeedchange="-400" duration="20000" radius="4" target="0">
+			<attribute key="areaEffect" value="blacksmoke" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="invisible" interval="2000" chance="15" duration="7500">
+			<attribute key="areaEffect" value="teleport" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="381" max="426" />
+	</defenses>
+	<loot>
+		<item id="24630" name="golden lotus brooch" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="10" />
+		<item id="2148" name="gold coin" chance="100000" countmax="297" />
+		<item id="24631" name="peacock feather fan" chance="100000" />
+		<item id="6558" name="flask of demonic blood" chance="43678" countmax="3" />
+		<item id="6500" name="demonic essence" chance="26437" />
+		<item id="2134" name="silver brooch" chance="25287" />
+		<item id="2146" name="small sapphire" chance="22989" countmax="3" />
+		<item id="18413" name="blue crystal shard" chance="20690" countmax="2" />
+		<item id="2656" name="blue robe" chance="20000" />
+		<item id="8473" name="ultimate health potion" chance="16092" countmax="3" />
+		<item id="2186" name="moonlight rod" chance="16092" />
+		<item id="8472" name="great spirit potion" chance="13793" countmax="6" />
+		<item id="2170" name="silver amulet" chance="12644" />
+		<item id="2158" name="blue gem" chance="10345" />
+		<item id="2185" name="necrotic rod" chance="9195" />
+		<item id="7590" name="great mana potion" chance="9195" countmax="3" />
+		<item id="2154" name="yellow gem" chance="8046" />
+		<item id="38633" name="peacock feather" chance="6897" />
+		<item id="9971" name="gold ingot" chance="5747" countmax="3" />
+		<item id="3967" name="tribal mask" chance="4598" />
+		<item id="24637" name="oriental shoes" chance="4598" />
+		<item id="2189" name="wand of cosmic energy" chance="4598" />
+		<item id="2144" name="black pearl" chance="2299" />
+		<item id="8889" name="skullcracker armor" chance="2299" />
+		<item id="35425" name="white gem" chance="2299" />
+		<item id="8902" name="spellbook of mind control" chance="1149" />
+	</loot>
+</monster>

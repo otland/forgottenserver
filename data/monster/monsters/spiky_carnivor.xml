@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Spiky Carnivor" nameDescription="a spiky carnivor" race="blood" experience="1650" speed="320" manacost="0">
+	<health now="2800" max="2800" />
+	<look type="1139" head="79" body="121" legs="23" feet="86" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="40" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="-30" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+	</attacks>
+	<defenses armor="71" defense="71" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="66232" countmax="6" />
+		<item id="2489" name="dark armor" chance="13654" />
+		<item id="32002" name="green glass plate" chance="10708" countmax="2" />
+		<item id="18418" name="blue crystal splinter" chance="8782" />
+		<item id="18417" name="brown crystal splinter" chance="7025" />
+		<item id="2515" name="guardian shield" chance="4589" />
+		<item id="2475" name="warrior helmet" chance="2833" />
+		<item id="28393" name="rainbow quartz" chance="2210" countmax="2" />
+		<item id="2151" name="talon" chance="2096" />
+		<item id="7888" name="glacier amulet" chance="1756" />
+		<item id="7887" name="terra amulet" chance="1643" />
+		<item id="2656" name="blue robe" chance="1586" />
+		<item id="27618" name="prismatic quartz" chance="1190" />
+		<item id="7889" name="lightning pendant" chance="963" />
+		<item id="7884" name="terra mantle" chance="283" />
+		<item id="2485" name="doublet" chance="283" />
+		<item id="20109" name="buckle" chance="170" />
+		<item id="10221" name="shockwave amulet" chance="113" />
+	</loot>
+</monster>

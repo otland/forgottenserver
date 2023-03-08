@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Turbulent Elemental" nameDescription="a turbulent elemental" race="blood" experience="19360" speed="360" manacost="0">
+	<health now="28000" max="28000" />
+	<look type="1314" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="-10" />
+		<element earthPercent="40" />
+		<element firePercent="-20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="30" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="105" defense="105" />
+	<loot>
+		<item id="2160" name="crystal coin" chance="56192" />
+		<item id="9971" name="gold ingot" chance="16053" />
+		<item id="8473" name="ultimate health potion" chance="14158" countmax="4" />
+		<item id="36765" name="bag you desire" chance="4000" />
+		<item id="10219" name="sacred tree amulet" chance="3759" />
+		<item id="8912" name="springsprout rod" chance="3653" />
+		<item id="2153" name="violet gem" chance="3456" />
+		<item id="2158" name="blue gem" chance="3335" />
+		<item id="8911" name="northwind rod" chance="2425" />
+		<item id="7888" name="glacier amulet" chance="2243" />
+		<item id="7897" name="glacier robe" chance="1304" />
+		<item id="2664" name="wood cape" chance="1046" />
+		<item id="2197" name="stone skin amulet" chance="879" />
+		<item id="23536" name="rubber cap" chance="773" />
+		<item id="24741" name="fur armor" chance="576" />
+		<item id="8878" name="crystalline armor" chance="440" />
+	</loot>
+</monster>

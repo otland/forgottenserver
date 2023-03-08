@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="The Primal Menace" nameDescription="The Primal Menace" race="blood" experience="0" speed="0" manacost="0">
+	<health now="0" max="0" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-5" />
+		<element earthPercent="100" />
+		<element firePercent="5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="50" />
+		<element holyPercent="40" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-763" />
+		<attack name="earth" interval="2000" chance="15" min="-1518" max="-2199" length="8" spread="3">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="0" max="-968" length="8" spread="3">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" min="-258" max="-276">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-1213" max="-1221" range="2" radius="1" target="1" />
+		<attack name="earth" interval="2000" chance="15" min="-626" max="-1811" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="0" max="0" />
+	</defenses>
+</monster>

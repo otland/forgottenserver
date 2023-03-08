@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Memory Of A Dwarf" nameDescription="a memory of a dwarf" race="blood" experience="1460" speed="0" manacost="0">
+	<health now="3730" max="3730" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2148" name="gold coin" chance="94330" countmax="80" />
+		<item id="2787" name="white mushroom" chance="56186" countmax="2" />
+		<item id="7618" name="health potion" chance="14948" />
+		<item id="2483" name="scale armor" chance="9278" />
+		<item id="2513" name="battle shield" chance="6186" />
+		<item id="2417" name="battle hammer" chance="4124" />
+		<item id="7902" name="glacier mask" chance="4124" />
+		<item id="2150" name="small amethyst" chance="3608" />
+		<item id="2387" name="double axe" chance="3093" />
+		<item id="2214" name="ring of healing" chance="2577" />
+		<item id="2208" name="axe ring" chance="1546" />
+		<item id="3351" name="steel helmet" chance="1546" />
+		<item id="7891" name="magma boots" chance="1546" />
+	</loot>
+</monster>

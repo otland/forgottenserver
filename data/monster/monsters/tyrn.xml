@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Tyrn" nameDescription="" race="blood" experience="6900" speed="0" manacost="0">
+	<health now="12000" max="12000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="100" />
+		<element earthPercent="80" />
+		<element firePercent="30" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="GRRR" yell="false" />
+		<voice sentence="GRROARR" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="150" />
+		<item id="10582" name="wyrm scale" chance="87500" countmax="2" />
+		<item id="2672" name="dragon ham" chance="75000" countmax="4" />
+		<item id="7589" name="strong mana potion" chance="62500" countmax="9" />
+		<item id="2152" name="platinum coin" chance="62500" countmax="21" />
+		<item id="2268" name="sudden death rune" chance="50000" countmax="10" />
+		<item id="7368" name="assassin star" chance="37500" countmax="9" />
+		<item id="21400" name="silver raid token" chance="33333" countmax="3" />
+		<item id="2147" name="small ruby" chance="33333" countmax="5" />
+		<item id="2150" name="small amethyst" chance="25000" countmax="3" />
+		<item id="7588" name="strong health potion" chance="25000" countmax="10" />
+		<item id="2149" name="small emerald" chance="25000" countmax="7" />
+		<item id="7901" name="lightning headband" chance="20000" />
+		<item id="2145" name="small diamond" chance="20000" />
+		<item id="8920" name="wand of starstorm" chance="20000" />
+		<item id="2156" name="red gem" chance="20000" />
+		<item id="2146" name="small sapphire" chance="20000" countmax="10" />
+		<item id="2153" name="violet gem" chance="20000" />
+		<item id="2515" name="guardian shield" chance="20000" />
+		<item id="7898" name="lightning robe" chance="20000" />
+		<item id="7895" name="lightning legs" chance="20000" />
+		<item id="9970" name="small topaz" chance="12500" countmax="6" />
+		<item id="2154" name="yellow gem" chance="12500" />
+		<item id="21695" name="sun mirror" chance="4000" />
+	</loot>
+</monster>

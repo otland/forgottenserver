@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Sulphur_Scuttler" nameDescription="" race="blood" experience="900" speed="0" manacost="0">
+	<health now="1300" max="1300" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-500" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="12658" name="brimstone fangs" chance="100000" />
+		<item id="12659" name="brimstone shell" chance="100000" />
+		<item id="2152" name="platinum coin" chance="98684" countmax="10" />
+		<item id="11232" name="sulphurous stone" chance="97368" />
+		<item id="5904" name="magic sulphur" chance="82895" />
+		<item id="7588" name="strong health potion" chance="78947" />
+		<item id="7589" name="strong mana potion" chance="73684" />
+		<item id="11222" name="lump of earth" chance="71053" />
+		<item id="2149" name="small emerald" chance="67105" countmax="4" />
+		<item id="10557" name="poisonous slime" chance="48684" />
+		<item id="2165" name="stealth ring" chance="43421" />
+		<item id="2171" name="platinum amulet" chance="18421" />
+	</loot>
+</monster>

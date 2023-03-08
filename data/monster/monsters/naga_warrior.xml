@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Naga Warrior" nameDescription="a naga warrior" race="blood" experience="5890" speed="360" manacost="0">
+	<health now="5530" max="5530" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="-5" />
+		<element earthPercent="-5" />
+		<element firePercent="10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="10" />
+		<element holyPercent="-20" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-330" />
+	</attacks>
+	<defenses armor="78" defense="78" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Fear the wrath of the wronged!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="12" />
+		<item id="2379" name="dagger" chance="34269" />
+		<item id="7588" name="strong health potion" chance="14186" countmax="2" />
+		<item id="39414" name="naga warrior scales" chance="12206" />
+		<item id="39412" name="naga earring" chance="7659" countmax="2" />
+		<item id="2419" name="scimitar" chance="4939" />
+		<item id="39411" name="naga armring" chance="2807" />
+		<item id="20139" name="spiky club" chance="2154" />
+		<item id="2409" name="serpent sword" chance="2045" />
+		<item id="2463" name="plate armor" chance="2002" />
+		<item id="18414" name="violet crystal shard" chance="1762" />
+		<item id="2412" name="katana" chance="1240" />
+		<item id="2476" name="knight armor" chance="1088" />
+		<item id="7441" name="ice cube" chance="979" />
+		<item id="7383" name="relic sword" chance="370" />
+	</loot>
+</monster>

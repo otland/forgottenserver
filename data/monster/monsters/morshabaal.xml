@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Morshabaal" nameDescription="Morshabaal" race="blood" experience="0" speed="0" manacost="0">
+	<health now="1000000" max="1000000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="5" />
+		<element earthPercent="0" />
+		<element firePercent="5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="ice" interval="2000" chance="15" min="-4000" max="-30000">
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Revenge for my little brother!" yell="false" />
+		<voice sentence="You are starting to annoy me!" yell="false" />
+		<voice sentence="I will restore our family honor!" yell="false" />
+	</voices>
+	<loot>
+		<item name="watermelon tourmaline" chance="100000" countmax="4" />
+		<item id="40958" name="morshabaal's extract" chance="100000" />
+		<item id="2160" name="crystal coin" chance="60000" countmax="135" />
+		<item id="35281" name="amber with a dragonfly" chance="40000" />
+		<item id="26029" name="ultimate mana potion" chance="40000" countmax="53" />
+		<item id="26030" name="ultimate spirit potion" chance="30000" countmax="53" />
+		<item id="8473" name="ultimate health potion" chance="30000" countmax="54" />
+		<item id="33979" name="sea horse figurine" chance="20000" />
+		<item id="32710" name="unicorn figurine" chance="20000" />
+		<item id="32709" name="dragon figurine" chance="20000" />
+		<item id="36435" name="watermelon tourmaline (slice)" chance="20000" />
+		<item id="36436" name="watermelon tourmaline (pear)" chance="20000" countmax="2" />
+		<item id="2152" name="platinum coin" chance="20000" />
+		<item id="40759" name="green demon slippers" chance="20000" />
+		<item id="40756" name="green demon legs" chance="20000" />
+		<item id="40758" name="green demon helmet" chance="20000" />
+		<item id="40757" name="green demon armor" chance="20000" />
+		<item id="2421" name="thunder hammer" chance="20000" />
+		<item id="40762" name="morshabaal's brain" chance="20000" />
+		<item id="32716" name="giant emerald" chance="10000" />
+		<item id="15515" name="bar of gold" chance="10000" />
+		<item id="40760" name="morshabaal's mask" chance="10000" />
+	</loot>
+</monster>

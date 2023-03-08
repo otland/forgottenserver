@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Bashmu" nameDescription="a bashmu" race="blood" experience="5000" speed="400" manacost="0">
+	<health now="8200" max="8200" />
+	<look type="1408" head="0" body="50" legs="42" feet="79" addons="3" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="5" />
+		<element earthPercent="20" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-5" />
+		<element holyPercent="-10" />
+		<element deathPercent="-10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-600" />
+	</attacks>
+	<defenses armor="72" defense="72" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="70082" countmax="19" />
+		<item id="2427" name="guardian halberd" chance="8940" />
+		<item id="39479" name="bashmu feather" chance="6069" />
+		<item id="10219" name="sacred tree amulet" chance="4600" />
+		<item id="39477" name="bashmu tongue" chance="4144" />
+		<item id="2145" name="small diamond" chance="4013" />
+		<item id="8472" name="great spirit potion" chance="3980" />
+		<item id="2153" name="violet gem" chance="3295" />
+		<item id="18415" name="green crystal shard" chance="3165" />
+		<item id="18413" name="blue crystal shard" chance="3067" />
+		<item id="39476" name="bashmu fang" chance="2219" />
+		<item id="28393" name="rainbow quartz" chance="1860" />
+		<item id="7887" name="terra amulet" chance="1599" />
+		<item id="7888" name="glacier amulet" chance="946" />
+		<item name="collar of blue plasma" chance="816" />
+		<item id="7890" name="magma amulet" chance="783" />
+		<item id="7454" name="glorious axe" chance="750" />
+		<item id="26200" name="collar of red plasma" chance="718" />
+		<item id="7407" name="haunted blade" chance="653" />
+	</loot>
+</monster>

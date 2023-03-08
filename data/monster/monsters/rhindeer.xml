@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Rhindeer" nameDescription="a rhindeer" race="blood" experience="5600" speed="320" manacost="0">
+	<health now="8650" max="8650" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="5" />
+		<element earthPercent="20" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="-5" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-471" />
+		<attack name="physical" interval="2000" chance="15" min="-265" max="-411" radius="4" target="1">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-327" max="-399" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="poisonarrow" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="0" max="-337" radius="4" target="0">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-200" max="-300" range="1" radius="1" target="1">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+	</attacks>
+	<defenses armor="68" defense="68" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Harrumph!" yell="false" />
+		<voice sentence="Destroy!" yell="false" />
+		<voice sentence="Snort!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="80799" countmax="31" />
+		<item id="18417" name="brown crystal splinter" chance="9989" countmax="7" />
+		<item id="28393" name="rainbow quartz" chance="6252" countmax="2" />
+		<item id="2153" name="violet gem" chance="6141" />
+		<item id="40587" name="rhindeer antlers" chance="5697" />
+		<item id="7590" name="great mana potion" chance="3626" countmax="4" />
+		<item id="2154" name="yellow gem" chance="2479" />
+		<item id="7413" name="titan axe" chance="2294" />
+		<item id="2476" name="knight armor" chance="1147" />
+		<item id="26199" name="collar of green plasma" chance="777" />
+		<item id="2169" name="time ring" chance="703" />
+		<item id="2452" name="heavy mace" chance="629" />
+		<item id="2514" name="mastermind shield" chance="407" />
+	</loot>
+</monster>

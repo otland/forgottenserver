@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Ahau" nameDescription="Ahau" race="blood" experience="17500" speed="0" manacost="0">
+	<health now="9000" max="9000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="5" />
+		<element earthPercent="100" />
+		<element firePercent="5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-456" poison="75" />
+		<attack name="earth" interval="2000" chance="15" min="-354" max="-422" range="1" radius="1" target="1">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-411" max="-511" length="5" spread="0">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-230" max="-275">
+			<attribute key="areaEffect" value="orangechain" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-419" max="-570" radius="4" target="0">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-468" max="-493">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="WAAAHNGH!!!" yell="false" />
+		<voice sentence="Awrrrgh!" yell="false" />
+		<voice sentence="IKSPUTUTU!!" yell="false" />
+		<voice sentence="Hwaaarrrh!!!" yell="false" />
+		<voice sentence="Wraaahgh?!" yell="false" />
+		<voice sentence="AAAAAH!!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="250" />
+		<item id="40527" name="rotten feather" chance="57143" countmax="3" />
+		<item id="7591" name="great health potion" chance="40000" countmax="5" />
+		<item id="7590" name="great mana potion" chance="32857" countmax="6" />
+		<item id="8472" name="great spirit potion" chance="27143" countmax="3" />
+		<item id="40528" name="ritual tooth" chance="27143" countmax="2" />
+		<item id="40533" name="broken iks cuirass" chance="20000" />
+		<item id="40531" name="broken iks faulds" chance="20000" />
+		<item id="40529" name="gold-brocaded cloth" chance="20000" />
+		<item id="40530" name="broken macuahuitl" chance="20000" />
+		<item id="15515" name="bar of gold" chance="18571" countmax="2" />
+		<item name="collar of blue plasma" chance="11429" />
+		<item id="40578" name="the living idol of tukh" chance="8571" />
+		<item id="35282" name="amber (item)" chance="5714" />
+		<item name="ring of red plasma" chance="4286" />
+		<item name="ring of green plasma" chance="4286" />
+		<item id="35426" name="diamond" chance="2857" countmax="8" />
+		<item id="35280" name="amber with a bug" chance="2857" />
+		<item id="26199" name="collar of green plasma" chance="2857" />
+		<item id="40532" name="broken iks headpiece" chance="1429" />
+		<item name="ring of blue plasma" chance="1429" />
+		<item id="26200" name="collar of red plasma" chance="1429" />
+	</loot>
+</monster>

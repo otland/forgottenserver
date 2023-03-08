@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Insane Siren" nameDescription="an insane siren" race="blood" experience="6000" speed="420" manacost="0">
+	<health now="6500" max="6500" />
+	<look type="1136" head="72" body="94" legs="79" feet="4" addons="3" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="55" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-20" />
+		<element holyPercent="25" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-450" />
+	</attacks>
+	<defenses armor="76" defense="76" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Dream or nightmare?" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="71609" countmax="12" />
+		<item id="8473" name="ultimate health potion" chance="12434" />
+		<item id="12430" name="miraculum" chance="10372" />
+		<item id="32661" name="dream essence egg" chance="9641" />
+		<item id="8921" name="wand of draconia" chance="5452" countmax="2" />
+		<item id="7890" name="magma amulet" chance="3590" />
+		<item id="5922" name="holy orchid" chance="3457" />
+		<item id="2187" name="wand of inferno" chance="2926" />
+		<item id="2432" name="fire axe" chance="2793" />
+		<item id="2191" name="wand of dragonbreath" chance="2460" />
+		<item id="7899" name="magma coat" chance="2061" />
+		<item id="32651" name="sun fruit" chance="1729" countmax="2" />
+		<item id="7894" name="magma legs" chance="665" />
+		<item id="7900" name="magma monocle" chance="465" />
+	</loot>
+</monster>

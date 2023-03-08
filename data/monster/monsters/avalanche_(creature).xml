@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Avalanche" nameDescription="Avalanche" race="blood" experience="305" speed="208" manacost="0">
+	<health now="550" max="550" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-10" />
+		<element earthPercent="100" />
+		<element firePercent="30" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="100" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-175" />
+		<attack name="ice" interval="2000" chance="15" min="-42" max="-60" range="7" radius="1" target="1">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="0" max="-45" length="8" spread="0">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" minspeedchange="-400" maxspeedchange="-400" duration="20000" radius="3" target="0">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="11" max="17" />
+		<defense name="speed" interval="2000" chance="15" minspeedchange="300" maxspeedchange="300" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Puny warmblood." yell="false" />
+		<voice sentence="You will pay for imprisoning me here." yell="false" />
+		<voice sentence="You're not cool." yell="false" />
+	</voices>
+</monster>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Bruise Payne" nameDescription="Bruise Payne" race="blood" experience="1000" speed="0" manacost="0">
+	<health now="1600" max="1600" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="65" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="20" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-240" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="99" />
+		<item id="5894" name="bat wing" chance="100000" countmax="2" />
+		<item id="2167" name="energy ring" chance="100000" />
+		<item id="10579" name="mutated bat ear" chance="100000" />
+		<item id="2150" name="small amethyst" chance="100000" countmax="5" />
+		<item id="2800" name="star herb" chance="100000" />
+		<item id="2529" name="black shield" chance="92500" />
+		<item id="2144" name="black pearl" chance="85000" countmax="5" />
+		<item id="7386" name="mercenary sword" chance="23750" />
+		<item id="10016" name="batwing hat" chance="17500" />
+	</loot>
+</monster>

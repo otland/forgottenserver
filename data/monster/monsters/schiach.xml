@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Schiach" nameDescription="a schiach" race="blood" experience="580" speed="280" manacost="0">
+	<health now="600" max="600" />
+	<look type="1162" head="0" body="10" legs="38" feet="57" addons="2" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="-20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="10" />
+		<element holyPercent="-20" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-34" />
+		<attack name="ice" interval="2000" chance="15" min="0" max="-70" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="0" max="-124" length="4" spread="0">
+			<attribute key="areaEffect" value="giantice" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="0" max="-60" radius="4" target="0">
+			<attribute key="areaEffect" value="icearea" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="0" max="-120" radius="3" target="1">
+			<attribute key="shootEffect" value="ice" />
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+	</attacks>
+	<defenses armor="43" defense="43" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Krik Krik!" yell="false" />
+		<voice sentence="Psh psh psh!!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="50" />
+		<item id="32864" name="fireworks capsule" chance="13573" />
+		<item id="32841" name="broken bell" chance="10053" />
+		<item id="32927" name="grainy fireworks powder" chance="7682" />
+		<item id="32843" name="versicolour fireworks powder" chance="4918" />
+		<item id="32842" name="percht horns" chance="4835" />
+		<item id="28393" name="rainbow quartz" chance="4131" countmax="2" />
+		<item id="32847" name="blue fireworks powder" chance="3530" />
+		<item id="32980" name="bright bell" chance="2816" />
+		<item id="32926" name="turquoise fireworks powder" chance="2816" />
+		<item id="32925" name="purple fireworks powder" chance="2619" />
+		<item id="32846" name="green fireworks powder" chance="2547" />
+		<item id="32845" name="yellow fireworks powder" chance="2423" />
+		<item id="32924" name="orange fireworks powder" chance="2226" />
+		<item id="32844" name="red fireworks powder" chance="1957" />
+		<item id="7896" name="glacier kilt" chance="1232" />
+		<item id="7897" name="glacier robe" chance="590" />
+		<item id="18412" name="glacial rod" chance="507" />
+	</loot>
+</monster>

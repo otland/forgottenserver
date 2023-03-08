@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Shadowstalker" nameDescription="" race="blood" experience="4000" speed="0" manacost="0">
+	<health now="6100" max="6100" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-300" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Chrssschrsss!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="204" />
+		<item id="15482" name="crawler head plating" chance="100000" />
+		<item id="2152" name="platinum coin" chance="89655" countmax="5" />
+		<item id="15486" name="compound eye" chance="70690" />
+		<item id="7591" name="great health potion" chance="53448" countmax="2" />
+		<item id="9970" name="small topaz" chance="50000" countmax="2" />
+		<item id="7590" name="great mana potion" chance="46552" countmax="2" />
+		<item id="16096" name="dung ball (quest)" chance="39655" countmax="2" />
+		<item id="2149" name="small emerald" chance="34483" countmax="2" />
+		<item id="2154" name="yellow gem" chance="15517" />
+		<item id="2391" name="war hammer" chance="3448" />
+	</loot>
+</monster>

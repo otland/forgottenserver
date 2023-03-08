@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="The Percht Queen" nameDescription="The Percht Queen" race="blood" experience="500" speed="0" manacost="0">
+	<health now="2300" max="2300" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="90" />
+		<element energyPercent="80" />
+		<element earthPercent="80" />
+		<element firePercent="70" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="80" />
+		<element deathPercent="90" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="26191" name="energy bar" chance="100000" />
+		<item id="2114" name="piggy bank" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="2155" name="green gem" chance="63636" />
+		<item id="26030" name="ultimate spirit potion" chance="59091" countmax="24" />
+		<item id="26031" name="supreme health potion" chance="54545" countmax="36" />
+		<item id="2154" name="yellow gem" chance="40909" countmax="2" />
+		<item id="26029" name="ultimate mana potion" chance="40909" countmax="25" />
+		<item id="5892" name="huge chunk of crude iron" chance="31818" />
+		<item id="28415" name="royal star" chance="27273" countmax="192" />
+		<item id="7440" name="mastermind potion" chance="22727" countmax="19" />
+		<item id="32848" name="percht skull" chance="22727" />
+		<item id="2436" name="skull staff" chance="22727" />
+		<item id="32936" name="percht queen's frozen heart" chance="20000" />
+		<item id="32978" name="small ladybug" chance="20000" />
+		<item id="32974" name="horseshoe" chance="20000" />
+		<item id="32976" name="lucky pig" chance="20000" />
+		<item id="32975" name="golden horseshoe" chance="20000" />
+		<item id="32932" name="the crown of the percht queen (ice)" chance="20000" />
+		<item id="32941" name="golden cotton reel" chance="20000" />
+		<item id="32931" name="the crown of the percht queen (fire)" chance="20000" />
+		<item id="2453" name="arcane staff" chance="20000" />
+		<item id="32939" name="ice hatchet" chance="20000" />
+		<item id="7414" name="abyss hammer" chance="20000" />
+		<item id="32940" name="percht handkerchief" chance="20000" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="20000" />
+		<item id="32935" name="frozen claw" chance="20000" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="20000" />
+		<item id="7427" name="chaos mace" chance="20000" />
+		<item id="5809" name="soul stone" chance="20000" />
+		<item id="26199" name="collar of green plasma" chance="20000" />
+		<item id="2160" name="crystal coin" chance="18182" countmax="3" />
+		<item id="2156" name="red gem" chance="13636" />
+		<item id="9971" name="gold ingot" chance="13636" />
+		<item name="collar of blue plasma" chance="13636" />
+		<item id="7443" name="bullseye potion" chance="13636" countmax="10" />
+		<item id="2153" name="violet gem" chance="13636" />
+		<item id="26200" name="collar of red plasma" chance="13636" />
+		<item id="2158" name="blue gem" chance="13636" />
+		<item id="35433" name="icicle (percht)" chance="9091" />
+		<item id="32977" name="fly agaric (item)" chance="9091" />
+		<item id="32934" name="flames of the percht queen" chance="9091" />
+		<item id="7439" name="berserk potion" chance="9091" countmax="19" />
+		<item id="2123" name="ring of the sky" chance="4545" />
+		<item id="32937" name="frozen chain" chance="4545" />
+		<item name="ring of red plasma" chance="4545" />
+		<item id="32851" name="golden bell" chance="4545" />
+		<item name="ring of green plasma" chance="4545" />
+		<item name="ring of blue plasma" chance="4545" />
+		<item id="5904" name="magic sulphur" chance="4545" />
+		<item id="32938" name="percht broom" chance="4545" />
+		<item name="giant shimmering pearl" chance="4545" />
+	</loot>
+</monster>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Piñata Dragon" nameDescription="a Piñata Dragon" race="blood" experience="50" speed="0" manacost="0">
+	<health now="10000" max="10000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="0" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-30" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="physical" interval="2000" chance="15" min="-6" max="-40" range="5" radius="1" target="1">
+			<attribute key="shootEffect" value="cake" />
+			<attribute key="areaEffect" value="cake" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="15" monster="Chicken" duration="5000" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="130" max="170" />
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="You can't have my treasures!" yell="false" />
+		<voice sentence="Hit me one more time!" yell="false" />
+		<voice sentence="Na Nana Naaa Naaa!" yell="false" />
+		<voice sentence="You'll never get my stuff!" yell="false" />
+		<voice sentence="Do you really want to hurt me?" yell="false" />
+		<voice sentence="Bring it on!" yell="false" />
+	</voices>
+	<loot>
+		<item id="6569" name="candy" chance="100000" countmax="5" />
+		<item name="surprise bag" chance="66176" countmax="2" />
+		<item id="2687" name="cookie" chance="51471" countmax="9" />
+		<item id="2114" name="piggy bank" chance="20000" />
+		<item id="6570" name="surprise bag (blue)" chance="20000" />
+		<item id="27604" name="bottle of tibian wine" chance="17647" />
+		<item id="32858" name="winterberry liquor" chance="16176" />
+		<item id="32854" name="meringue cake" chance="14706" />
+		<item id="27052" name="birthday cake" chance="14286" />
+		<item id="6574" name="bar of chocolate" chance="10294" />
+		<item id="32971" name="pinata" chance="10294" />
+		<item id="32853" name="festive backpack" chance="8824" />
+		<item id="6571" name="surprise bag (red)" chance="7500" />
+		<item id="6576" name="fireworks rocket" chance="7500" />
+		<item id="27051" name="birthday backpack" chance="6723" />
+		<item id="6280" name="party cake" chance="5882" />
+		<item id="2110" name="doll" chance="4000" />
+		<item name="stuffed dragon" chance="4000" />
+		<item id="27605" name="costume bag (retro)" chance="2941" />
+		<item id="27058" name="chocolatey dragon scale legs" chance="2941" />
+		<item id="27053" name="ferumbras' candy hat" chance="1471" />
+		<item id="32973" name="ferumbras puppet" chance="1471" />
+		<item id="7487" name="toy mouse" chance="840" />
+	</loot>
+</monster>

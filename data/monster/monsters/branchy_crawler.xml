@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Branchy Crawler" nameDescription="a branchy crawler" race="blood" experience="17860" speed="470" manacost="0">
+	<health now="27000" max="27000" />
+	<look type="1297" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-5" />
+		<element earthPercent="50" />
+		<element firePercent="-9" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="40" />
+		<element deathPercent="-15" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-600" />
+		<attack name="earth" interval="2000" chance="15" min="-1000" max="-1200" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="piercingbolt" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-1100" max="-1200" radius="4" target="1">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+		<attack name="holy" interval="2000" chance="15" min="-1100" max="-1300" radius="4" target="0">
+			<attribute key="areaEffect" value="holydamage" />
+		</attack>
+	</attacks>
+	<defenses armor="100" defense="100" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Bones are just sticks. They break easily." yell="false" />
+		<voice sentence="Decay!" yell="false" />
+		<voice sentence="I'll make you crawl, too!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2160" name="crystal coin" chance="55279" />
+		<item id="8473" name="ultimate health potion" chance="8772" countmax="8" />
+		<item id="9971" name="gold ingot" chance="8433" />
+		<item id="36594" name="roots" chance="5471" />
+		<item id="36765" name="bag you desire" chance="4000" />
+		<item id="2158" name="blue gem" chance="1831" />
+		<item id="7885" name="terra legs" chance="1266" />
+		<item id="36638" name="crawler's essence" chance="1266" />
+		<item id="2153" name="violet gem" chance="1063" />
+		<item id="2155" name="green gem" chance="882" />
+		<item id="12613" name="twiceslicer" chance="656" />
+		<item id="2444" name="hammer of wrath" chance="633" />
+		<item id="18453" name="crystal crossbow" chance="610" />
+		<item id="6553" name="ruthless axe" chance="588" />
+		<item id="7418" name="nightmare blade" chance="565" />
+		<item id="18450" name="crystalline sword" chance="407" />
+	</loot>
+</monster>

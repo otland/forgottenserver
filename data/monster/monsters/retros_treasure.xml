@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Retros Treasure" nameDescription="Retros Treasure" race="blood" experience="0" speed="0" manacost="0">
+	<health now="37500" max="37500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="118" />
+		<item id="40859" name="7197 theons" chance="35000" />
+		<item id="40860" name="200 theons" chance="35000" />
+		<item id="7590" name="great mana potion" chance="33962" countmax="9" />
+		<item id="8472" name="great spirit potion" chance="33019" countmax="9" />
+		<item id="7591" name="great health potion" chance="33019" countmax="9" />
+		<item id="2155" name="green gem" chance="27358" countmax="5" />
+		<item id="2156" name="red gem" chance="26415" countmax="5" />
+		<item id="2153" name="violet gem" chance="21698" countmax="5" />
+		<item id="36435" name="watermelon tourmaline (slice)" chance="20000" />
+		<item id="40686" name="changing backpack" chance="20000" />
+		<item id="40549" name="wind-up key" chance="20000" />
+		<item id="32717" name="giant sapphire" chance="6604" />
+		<item id="35280" name="amber with a bug" chance="6604" />
+		<item id="32716" name="giant emerald" chance="3774" />
+		<item id="35278" name="giant amethyst" chance="2830" />
+		<item id="32715" name="giant ruby" chance="2830" />
+		<item id="40754" name="decorative plume" chance="1887" />
+		<item id="35279" name="giant topaz" chance="1887" />
+		<item id="40753" name="brass button" chance="943" />
+	</loot>
+</monster>

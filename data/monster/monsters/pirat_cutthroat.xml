@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Pirat Cutthroat" nameDescription="a pirat cutthroat" race="blood" experience="1800" speed="320" manacost="0">
+	<health now="2600" max="2600" />
+	<look type="1346" head="2" body="96" legs="78" feet="96" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="20" />
+		<element earthPercent="-20" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-400" />
+		<attack name="physical" interval="2000" chance="15" min="-100" max="-140">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-120" max="-160" radius="3" target="0">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="72" defense="72" />
+	<loot>
+		<item id="7591" name="great health potion" chance="20192" countmax="4" />
+		<item id="2396" name="ice rapier" chance="12966" />
+		<item id="7449" name="crystal sword" chance="8371" />
+		<item id="38228" name="pirate coin" chance="7031" countmax="10" />
+		<item id="2430" name="knight axe" chance="4863" />
+		<item id="38229" name="pirat's tail" chance="4839" />
+		<item id="2416" name="crowbar" chance="4750" />
+		<item id="38230" name="shark fins" chance="3986" />
+		<item id="2476" name="knight armor" chance="2996" />
+		<item id="8871" name="focus cape" chance="2005" />
+	</loot>
+</monster>

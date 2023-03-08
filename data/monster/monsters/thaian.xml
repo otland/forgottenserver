@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Thaian" nameDescription="Thaian" race="blood" experience="9000" speed="0" manacost="0">
+	<health now="50000" max="50000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="90" />
+		<element energyPercent="90" />
+		<element earthPercent="90" />
+		<element firePercent="90" />
+		<element lifedrainPercent="90" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="90" />
+		<element holyPercent="90" />
+		<element deathPercent="85" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="The eye will be mine! MINE!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2155" name="green gem" chance="88235" />
+		<item id="35289" name="eye of the chasm" chance="29412" />
+		<item id="35361" name="pair of old bracers" chance="20000" />
+		<item id="35367" name="luminescent crystal pickaxe" chance="20000" />
+		<item id="35360" name="phantasmal hair" chance="20000" />
+		<item id="2154" name="yellow gem" chance="11765" />
+		<item id="35359" name="death toll" chance="11765" countmax="2" />
+		<item id="2158" name="blue gem" chance="11765" />
+		<item id="35282" name="amber (item)" chance="5882" />
+	</loot>
+</monster>

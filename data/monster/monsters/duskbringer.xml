@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Duskbringer" nameDescription="a duskbringer" race="blood" experience="2600" speed="370" manacost="0">
+	<health now="3550" max="3550" />
+	<look type="300" head="0" body="0" legs="0" feet="0" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element earthPercent="80" />
+		<element firePercent="40" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="30" />
+		<element deathPercent="-5" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+		<attack name="lifedrain" interval="2000" chance="15" min="-200" max="-250" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" min="-200" max="-300" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="42" defense="42" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Death!" yell="false" />
+		<voice sentence="Come a little closer!" yell="false" />
+		<voice sentence="The end is near!" yell="false" />
+	</voices>
+	<loot>
+		<item id="10531" name="midnight shard" chance="10222" />
+	</loot>
+</monster>

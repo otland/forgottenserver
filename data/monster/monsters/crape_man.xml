@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Crape Man" nameDescription="a crape man" race="blood" experience="5040" speed="310" manacost="0">
+	<health now="9150" max="9150" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="25" />
+		<element energyPercent="10" />
+		<element earthPercent="5" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-5" />
+		<element holyPercent="0" />
+		<element deathPercent="-15" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-271" />
+		<attack name="physical" interval="2000" chance="15" min="-116" max="-313" range="4" radius="1" target="1">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-331" max="-383" radius="4" target="1">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-314" max="-369">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="80" defense="80" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Ungh! Ungh!" yell="false" />
+		<voice sentence="Klack klack!" yell="false" />
+		<voice sentence="Hugah!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="79604" countmax="26" />
+		<item id="40582" name="crab man claws" chance="5514" countmax="2" />
+		<item id="2427" name="guardian halberd" chance="5009" />
+		<item id="2155" name="green gem" chance="2450" />
+		<item id="7591" name="great health potion" chance="2198" countmax="5" />
+		<item id="7899" name="magma coat" chance="2126" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="1982" />
+		<item id="7895" name="lightning legs" chance="1766" />
+		<item id="7896" name="glacier kilt" chance="1514" />
+		<item id="15453" name="warrior's shield" chance="1514" />
+		<item id="2444" name="hammer of wrath" chance="973" />
+		<item id="7456" name="noble axe" chance="721" />
+		<item id="2123" name="ring of the sky" chance="144" />
+	</loot>
+</monster>

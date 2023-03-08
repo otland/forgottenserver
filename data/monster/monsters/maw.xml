@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Maw" nameDescription="" race="blood" experience="6500" speed="0" manacost="0">
+	<health now="8200" max="8200" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="60" />
+		<element energyPercent="50" />
+		<element earthPercent="100" />
+		<element firePercent="50" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="50" />
+		<element holyPercent="0" />
+		<element deathPercent="40" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Kropp!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="196" />
+		<item id="15486" name="compound eye" chance="100000" />
+		<item id="15480" name="kollos shell" chance="100000" />
+		<item id="2152" name="platinum coin" chance="86275" countmax="6" />
+		<item id="7590" name="great mana potion" chance="70588" countmax="2" />
+		<item id="16096" name="dung ball (quest)" chance="60784" countmax="2" />
+		<item id="2147" name="small ruby" chance="33333" countmax="4" />
+		<item id="8473" name="ultimate health potion" chance="29412" />
+		<item id="2144" name="black pearl" chance="25490" countmax="4" />
+		<item id="2156" name="red gem" chance="23529" />
+		<item id="15572" name="gooey mass" chance="19608" countmax="2" />
+		<item name="giant shimmering pearl" chance="9804" />
+		<item id="9971" name="gold ingot" chance="7843" />
+		<item id="15643" name="hive bow" chance="1961" />
+	</loot>
+</monster>

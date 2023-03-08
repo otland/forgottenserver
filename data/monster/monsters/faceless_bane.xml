@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Faceless Bane" nameDescription="Faceless Bane" race="blood" experience="14000" speed="0" manacost="0">
+	<health now="17000" max="17000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="-20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="50" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-500" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="19" />
+		<item id="2379" name="dagger" chance="55556" />
+		<item id="2146" name="small sapphire" chance="38889" countmax="5" />
+		<item id="2404" name="combat knife" chance="35000" />
+		<item id="2181" name="terra rod" chance="22222" />
+		<item id="2389" name="spear" chance="20370" countmax="5" />
+		<item id="18419" name="cyan crystal fragment" chance="20370" />
+		<item id="2416" name="crowbar" chance="20370" />
+		<item id="2156" name="red gem" chance="20370" />
+		<item id="28356" name="dream blossom staff" chance="20000" />
+		<item id="7838" name="flash arrow" chance="20000" />
+		<item id="9971" name="gold ingot" chance="14815" />
+		<item id="2158" name="blue gem" chance="11111" />
+		<item id="2396" name="ice rapier" chance="11111" />
+		<item id="2403" name="knife" chance="9259" />
+		<item name="enchanted pendulet" chance="7500" />
+		<item id="31227" name="book backpack" chance="7500" />
+		<item id="32086" name="ectoplasmic shield" chance="7500" />
+		<item id="18414" name="violet crystal shard" chance="7407" />
+		<item id="2154" name="yellow gem" chance="7407" />
+		<item id="2177" name="life crystal" chance="5556" />
+		<item id="2155" name="green gem" chance="5556" />
+		<item id="18420" name="red crystal fragment" chance="5556" />
+		<item id="32836" name="hexagonal ruby" chance="5556" />
+		<item name="giant shimmering pearl" chance="5556" />
+		<item id="2161" name="strange talisman" chance="3704" />
+		<item id="2182" name="snakebite rod" chance="3704" />
+		<item id="2186" name="moonlight rod" chance="3704" />
+		<item id="7889" name="lightning pendant" chance="3704" />
+		<item id="2183" name="hailstorm rod" chance="3704" />
+		<item id="11309" name="twin hooks" chance="3704" />
+		<item id="18415" name="green crystal shard" chance="3704" />
+		<item id="2153" name="violet gem" chance="1852" />
+		<item id="8910" name="underworld rod" chance="1852" />
+		<item id="32087" name="spirit guide" chance="1852" />
+		<item id="2185" name="necrotic rod" chance="1852" />
+		<item id="8912" name="springsprout rod" chance="1852" />
+	</loot>
+</monster>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Usurper Commander" nameDescription="a usurper commander" race="blood" experience="7200" speed="0" manacost="0">
+	<health now="8500" max="8500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="1" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="1" />
+		<element deathPercent="-1" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-500" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<summons maxSummons="15">
+		<voice name="Hardened Usurper Archer" interval="2000" chance="15" max="5" />
+		<voice name="Hardened Usurper Knight" interval="2000" chance="15" max="5" />
+		<voice name="Hardened Usurper Warlock" interval="2000" chance="15" max="5" />
+	</summons>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="36820" name="fur shred" chance="15729" />
+		<item id="2386" name="axe" chance="15521" />
+		<item id="36818" name="lion cloak patch" chance="10286" />
+		<item id="36816" name="lion crest" chance="9297" />
+		<item id="9971" name="gold ingot" chance="8568" />
+		<item id="2456" name="bow" chance="8464" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="7995" />
+		<item id="8901" name="spellbook of warding" chance="5182" />
+		<item id="8912" name="springsprout rod" chance="4271" />
+		<item id="8922" name="wand of voodoo" chance="3932" />
+		<item id="2155" name="green gem" chance="2812" />
+		<item id="2153" name="violet gem" chance="2812" />
+		<item name="ring of blue plasma" chance="2292" />
+		<item name="ring of red plasma" chance="1979" />
+		<item id="18413" name="blue crystal shard" chance="1406" />
+		<item id="7443" name="bullseye potion" chance="417" />
+		<item name="giant shimmering pearl" chance="104" />
+	</loot>
+</monster>

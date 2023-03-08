@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Lavafungus" nameDescription="a lavafungus" race="blood" experience="6200" speed="230" manacost="0">
+	<health now="7200" max="7200" />
+	<look type="1405" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-20" />
+		<element holyPercent="0" />
+		<element deathPercent="20" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-810" />
+	</attacks>
+	<defenses armor="70" defense="70" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="21" />
+		<item id="2181" name="terra rod" chance="27976" />
+		<item id="39442" name="lavafungus ring" chance="15029" />
+		<item id="18413" name="blue crystal shard" chance="7515" />
+		<item id="2156" name="red gem" chance="6474" />
+		<item id="2183" name="hailstorm rod" chance="5749" />
+		<item id="2155" name="green gem" chance="5070" />
+		<item id="18419" name="cyan crystal fragment" chance="4482" />
+		<item id="2153" name="violet gem" chance="4210" />
+		<item id="2154" name="yellow gem" chance="4165" />
+		<item id="18420" name="red crystal fragment" chance="4120" />
+		<item id="18414" name="violet crystal shard" chance="3893" />
+		<item id="39441" name="lavafungus head" chance="3757" />
+		<item id="24849" name="onyx chip" chance="3576" />
+		<item id="2187" name="wand of inferno" chance="3531" />
+		<item id="18421" name="green crystal fragment" chance="3259" />
+		<item id="28393" name="rainbow quartz" chance="3214" />
+		<item id="7890" name="magma amulet" chance="2852" />
+		<item id="8871" name="focus cape" chance="2716" />
+		<item id="8901" name="spellbook of warding" chance="2716" />
+		<item id="23540" name="metal spats" chance="2399" />
+		<item id="2445" name="crystal mace" chance="2399" />
+		<item id="2213" name="dwarven ring" chance="2263" />
+		<item id="8920" name="wand of starstorm" chance="1584" />
+	</loot>
+</monster>

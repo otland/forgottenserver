@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Shrieking Cry-Stal" nameDescription="a shrieking cry-stal" race="undead" experience="13560" speed="414" manacost="0">
+	<health now="18700" max="18700" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="10" />
+		<element earthPercent="-5" />
+		<element firePercent="5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="5" />
+		<element holyPercent="100" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="energy" interval="2000" chance="15" min="-749" max="-1356">
+			<attribute key="areaEffect" value="purplechain" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="0" max="-1037" length="5" spread="2">
+			<attribute key="areaEffect" value="purplenote" />
+		</attack>
+	</attacks>
+	<defenses armor="95" defense="95" />
+	<voices interval="5000" chance="10">
+		<voice sentence="La-la-la..AAAHHHH!!!" yell="false" />
+		<voice sentence="SCREEECH..." yell="false" />
+	</voices>
+	<loot>
+		<item id="2160" name="crystal coin" chance="24158" countmax="2" />
+		<item id="8472" name="great spirit potion" chance="21683" />
+		<item id="39394" name="cry-stal" chance="20000" />
+		<item id="2145" name="small diamond" chance="6634" countmax="3" />
+		<item id="9809" name="rusted armor" chance="5842" />
+		<item id="18421" name="green crystal fragment" chance="5149" />
+		<item id="7886" name="terra boots" chance="4158" />
+		<item id="2200" name="protection amulet" chance="2079" />
+		<item id="2153" name="violet gem" chance="1188" />
+		<item id="2155" name="green gem" chance="297" />
+		<item id="2179" name="gold ring" chance="297" />
+		<item id="2123" name="ring of the sky" chance="99" />
+	</loot>
+</monster>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Percht" nameDescription="a percht" race="blood" experience="600" speed="270" manacost="0">
+	<health now="620" max="620" />
+	<look type="1161" head="95" body="42" legs="21" feet="20" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-20" />
+		<element holyPercent="10" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-69" />
+		<attack name="fire" interval="2000" chance="15" min="0" max="-90" length="4" spread="0">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="0" max="-130" radius="4" target="0">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="0" max="-193" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Krikik krikik!" yell="false" />
+		<voice sentence="Shzzzp shzzzp shzzp!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="60" />
+		<item id="32864" name="fireworks capsule" chance="12191" />
+		<item id="32842" name="percht horns" chance="9771" />
+		<item id="32927" name="grainy fireworks powder" chance="5991" />
+		<item id="32841" name="broken bell" chance="5069" />
+		<item id="32843" name="versicolour fireworks powder" chance="4166" />
+		<item id="32847" name="blue fireworks powder" chance="3115" />
+		<item id="32981" name="dark bell" chance="2966" />
+		<item id="32846" name="green fireworks powder" chance="2887" />
+		<item id="32926" name="turquoise fireworks powder" chance="2073" />
+		<item id="32925" name="purple fireworks powder" chance="2063" />
+		<item id="32924" name="orange fireworks powder" chance="1984" />
+		<item id="32844" name="red fireworks powder" chance="1914" />
+		<item id="32845" name="yellow fireworks powder" chance="1825" />
+		<item id="7890" name="magma amulet" chance="1478" />
+		<item id="7899" name="magma coat" chance="1290" />
+		<item id="7900" name="magma monocle" chance="1091" />
+		<item id="7894" name="magma legs" chance="605" />
+	</loot>
+</monster>

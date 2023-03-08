@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Salamander Trainer" nameDescription="a salamander trainer" race="blood" experience="70" speed="290" manacost="0">
+	<health now="220" max="220" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="15" />
+		<element earthPercent="15" />
+		<element firePercent="15" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-23" />
+	</attacks>
+	<defenses armor="7" defense="7">
+		<defense name="healing" interval="2000" chance="20" min="11" max="25" />
+	</defenses>
+	<summons maxSummons="1">
+		<voice name="Troll-Trained Salamander" interval="2000" chance="15" max="1" />
+	</summons>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="18" />
+		<item id="2666" name="meat" chance="35714" countmax="4" />
+		<item id="2406" name="short sword" chance="28571" />
+		<item id="2386" name="axe" chance="25000" />
+		<item id="10606" name="bunch of troll hair" chance="20000" />
+		<item id="2389" name="spear" chance="17857" countmax="3" />
+		<item id="2449" name="bone club" chance="7143" />
+		<item id="2120" name="rope" chance="3571" />
+	</loot>
+</monster>

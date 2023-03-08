@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Drume" nameDescription="Drume" race="blood" experience="25000" speed="0" manacost="0">
+	<health now="35000" max="35000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="35" />
+		<element energyPercent="-20" />
+		<element earthPercent="100" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="-20" />
+		<element deathPercent="50" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-600" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<voices interval="5000" chance="10">
+		<voice sentence="I've studied the Cobras - I wield the secrets of the snake!" yell="false" />
+		<voice sentence="I am a true knight of the lion, you will never defeat the true order!" yell="false" />
+		<voice sentence="The Falcons will come to my aid in need!" yell="false" />
+	</voices>
+	<summons maxSummons="3">
+		<voice name="Preceptor Lazare" interval="2000" chance="15" max="1" />
+		<voice name="Grand Commander Soeren" interval="2000" chance="15" max="1" />
+		<voice name="Grand Chaplain Gaunder" interval="2000" chance="15" max="1" />
+	</summons>
+	<loot>
+		<item id="26191" name="energy bar" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="26031" name="supreme health potion" chance="57321" countmax="37" />
+		<item id="26029" name="ultimate mana potion" chance="56429" countmax="37" />
+		<item id="2156" name="red gem" chance="37143" countmax="2" />
+		<item id="2154" name="yellow gem" chance="33036" countmax="2" />
+		<item id="26030" name="ultimate spirit potion" chance="31607" countmax="11" />
+		<item id="28415" name="royal star" chance="27143" countmax="199" />
+		<item id="7440" name="mastermind potion" chance="20179" countmax="19" />
+		<item id="36814" name="lion amulet" chance="20000" />
+		<item id="36808" name="lion wand" chance="20000" />
+		<item id="36812" name="lion spangenhelm" chance="20000" />
+		<item id="36806" name="lion longbow" chance="20000" />
+		<item id="36813" name="lion plate" chance="20000" />
+		<item id="2155" name="green gem" chance="18929" countmax="2" />
+		<item id="7443" name="bullseye potion" chance="18571" countmax="19" />
+		<item id="2158" name="blue gem" chance="17500" countmax="2" />
+		<item id="7439" name="berserk potion" chance="17321" countmax="19" />
+		<item name="giant shimmering pearl" chance="14286" />
+		<item id="2181" name="terra rod" chance="13750" />
+		<item id="9971" name="gold ingot" chance="13750" />
+		<item id="2160" name="crystal coin" chance="10714" />
+		<item id="2197" name="stone skin amulet" chance="9643" />
+		<item id="2153" name="violet gem" chance="9286" />
+		<item id="25172" name="silver token" chance="8571" countmax="6" />
+		<item id="7884" name="terra mantle" chance="7500" />
+		<item id="7885" name="terra legs" chance="7143" />
+		<item id="7903" name="terra hood" chance="6429" />
+		<item id="32717" name="giant sapphire" chance="5893" />
+		<item id="7887" name="terra amulet" chance="4821" />
+		<item id="36434" name="raw watermelon tourmaline" chance="4107" />
+		<item id="8922" name="wand of voodoo" chance="3214" />
+		<item id="8910" name="underworld rod" chance="2500" />
+		<item id="32715" name="giant ruby" chance="2143" />
+		<item id="36809" name="lion spellbook" chance="357" />
+		<item id="36811" name="lion longsword" chance="357" />
+		<item id="36807" name="lion rod" chance="179" />
+		<item id="36909" name="lion axe" chance="179" />
+		<item id="36910" name="lion hammer" chance="179" />
+		<item id="36810" name="lion shield" chance="179" />
+	</loot>
+</monster>

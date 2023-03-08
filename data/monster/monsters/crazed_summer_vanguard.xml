@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Crazed Summer Vanguard" nameDescription="a crazed summer vanguard" race="blood" experience="5000" speed="390" manacost="0">
+	<health now="5500" max="5500" />
+	<look type="1137" head="114" body="93" legs="3" feet="83" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="50" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-30" />
+		<element holyPercent="20" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-450" />
+	</attacks>
+	<defenses armor="77" defense="77" />
+	<voices interval="5000" chance="10">
+		<voice sentence="I see colours, all colours! Or are these just illusions?" yell="false" />
+		<voice sentence="La di da di doo!!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="85063" countmax="13" />
+		<item id="12421" name="elven astral observer" chance="29797" />
+		<item id="8872" name="belted cape" chance="9418" />
+		<item id="32661" name="dream essence egg" chance="8588" />
+		<item id="7732" name="seeds" chance="8569" />
+		<item id="2377" name="two handed sword" chance="7349" />
+		<item id="2201" name="dragon necklace" chance="7149" />
+		<item id="2419" name="scimitar" chance="6825" />
+		<item id="2403" name="knife" chance="6577" />
+		<item id="7890" name="magma amulet" chance="5509" />
+		<item id="8921" name="wand of draconia" chance="4795" />
+		<item id="2191" name="wand of dragonbreath" chance="4776" />
+		<item id="7891" name="magma boots" chance="2860" />
+		<item id="32651" name="sun fruit" chance="896" />
+		<item id="7443" name="bullseye potion" chance="315" />
+	</loot>
+</monster>

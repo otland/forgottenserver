@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Ripper Spectre" nameDescription="a ripper spectre" race="undead" experience="3500" speed="380" manacost="0">
+	<health now="3800" max="3800" />
+	<look type="1122" head="81" body="78" legs="61" feet="94" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="1" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="70" />
+		<element energyPercent="-10" />
+		<element earthPercent="20" />
+		<element firePercent="-20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+	</attacks>
+	<defenses armor="69" defense="69">
+		<defense name="healing" interval="2000" chance="20" min="140" max="180" />
+	</defenses>
+	<loot>
+		<item id="2152" name="platinum coin" chance="74436" countmax="4" />
+		<item id="8472" name="great spirit potion" chance="23187" countmax="2" />
+		<item id="2377" name="two handed sword" chance="12553" />
+		<item id="2181" name="terra rod" chance="6399" />
+		<item id="2134" name="silver brooch" chance="3687" />
+		<item id="2127" name="emerald bangle" chance="3616" />
+		<item id="11309" name="twin hooks" chance="3128" />
+		<item id="8912" name="springsprout rod" chance="2671" />
+		<item id="32860" name="green ectoplasm" chance="1940" />
+		<item id="27047" name="coral brooch" chance="1148" />
+		<item id="2409" name="serpent sword" chance="1117" />
+		<item id="7404" name="assassin dagger" chance="894" />
+		<item id="32836" name="hexagonal ruby" chance="782" />
+		<item id="2383" name="spike sword" chance="386" />
+		<item id="7408" name="wyvern fang" chance="152" />
+	</loot>
+</monster>

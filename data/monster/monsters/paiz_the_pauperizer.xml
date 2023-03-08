@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Paiz_The_Pauperizer" nameDescription="" race="blood" experience="6300" speed="0" manacost="0">
+	<health now="8500" max="8500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="40" />
+		<element earthPercent="0" />
+		<element firePercent="100" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-450" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="230" max="330" />
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="You will die zhouzandz deazhz!" yell="false" />
+		<voice sentence="For ze emperor!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="10" />
+		<item id="2666" name="meat" chance="100000" countmax="5" />
+		<item id="12616" name="broken draken mail" chance="100000" />
+		<item id="12617" name="broken slicer" chance="100000" />
+		<item id="12614" name="draken sulphur" chance="100000" />
+		<item id="12615" name="draken wristbands" chance="100000" />
+		<item id="5881" name="lizard scale" chance="100000" />
+		<item id="5904" name="magic sulphur" chance="40580" />
+		<item id="2154" name="yellow gem" chance="39130" />
+		<item id="7590" name="great mana potion" chance="39130" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="30435" countmax="3" />
+		<item id="7591" name="great health potion" chance="30435" countmax="3" />
+		<item id="2156" name="red gem" chance="28986" />
+		<item id="11306" name="sai" chance="26087" />
+		<item id="11301" name="zaoan armor" chance="20290" />
+		<item id="2155" name="green gem" chance="18841" />
+		<item id="11307" name="zaoan sword" chance="17391" />
+		<item id="8880" name="swamplair armor" chance="15942" />
+		<item id="2492" name="dragon scale mail" chance="10145" />
+		<item id="12613" name="twiceslicer" chance="10145" />
+		<item id="2158" name="blue gem" chance="7246" />
+		<item id="12607" name="elite draken mail" chance="7246" />
+		<item id="2149" name="small emerald" chance="5797" countmax="8" />
+		<item id="12649" name="blade of corruption" chance="4000" />
+		<item id="13294" name="harness" chance="2899" />
+	</loot>
+</monster>

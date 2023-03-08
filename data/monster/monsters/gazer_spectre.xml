@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Gazer Spectre" nameDescription="a gazer spectre" race="undead" experience="4200" speed="390" manacost="0">
+	<health now="4500" max="4500" />
+	<look type="1122" head="94" body="21" legs="77" feet="78" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="85" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="70" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-30" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+	</attacks>
+	<defenses armor="68" defense="68" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Deathhh... is... a.... doooor!!" yell="false" />
+		<voice sentence="Tiiimeee... is... a... windowww!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="74511" countmax="5" />
+		<item id="2145" name="small diamond" chance="13386" />
+		<item id="2146" name="small sapphire" chance="10931" />
+		<item id="18417" name="brown crystal splinter" chance="10588" />
+		<item id="2156" name="red gem" chance="9931" />
+		<item id="18420" name="red crystal fragment" chance="7760" />
+		<item id="7760" name="small enchanted ruby" chance="5342" />
+		<item name="golden idol of tukh" chance="5044" />
+		<item id="2154" name="yellow gem" chance="4507" />
+		<item id="8921" name="wand of draconia" chance="2940" />
+		<item id="2187" name="wand of inferno" chance="2373" />
+		<item id="32861" name="red ectoplasm" chance="2179" />
+		<item id="27618" name="prismatic quartz" chance="1365" />
+		<item id="7899" name="magma coat" chance="1343" />
+		<item id="7761" name="small enchanted emerald" chance="1261" countmax="3" />
+		<item id="24849" name="onyx chip" chance="1104" countmax="2" />
+		<item id="32836" name="hexagonal ruby" chance="791" />
+	</loot>
+</monster>

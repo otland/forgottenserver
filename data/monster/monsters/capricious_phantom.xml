@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Capricious Phantom" nameDescription="a capricious phantom" race="undead" experience="19360" speed="480" manacost="0">
+	<health now="30000" max="30000" />
+	<look type="1298" head="81" body="114" legs="85" feet="83" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="0" />
+		<element earthPercent="50" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="100" defense="100" />
+	<voices interval="5000" chance="10">
+		<voice sentence="I hope you can't swim." yell="false" />
+		<voice sentence="Troubled Water. Troubled you!" yell="false" />
+		<voice sentence="You should shiver!" yell="false" />
+		<voice sentence="You will leak blood." yell="false" />
+	</voices>
+	<loot>
+		<item id="2160" name="crystal coin" chance="60278" />
+		<item id="8472" name="great spirit potion" chance="47743" countmax="5" />
+		<item id="2158" name="blue gem" chance="6687" />
+		<item id="9971" name="gold ingot" chance="6358" />
+		<item id="36765" name="bag you desire" chance="4000" />
+		<item id="36794" name="capricious heart" chance="3855" />
+		<item id="2153" name="violet gem" chance="3325" />
+		<item id="36801" name="capricious robe" chance="2467" />
+		<item name="ring of blue plasma" chance="1425" />
+		<item id="24741" name="fur armor" chance="1352" />
+		<item id="2664" name="wood cape" chance="1206" />
+		<item id="18412" name="glacial rod" chance="932" />
+		<item id="15644" name="ornate crossbow" chance="895" />
+		<item name="collar of blue plasma" chance="822" />
+	</loot>
+</monster>

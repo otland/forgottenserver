@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Minotaur Bruiser" nameDescription="a minotaur bruiser" race="blood" experience="50" speed="168" manacost="330">
+	<health now="100" max="100" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="1" />
+		<flag convinceable="1" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="0" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="20" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-45" />
+	</attacks>
+	<defenses armor="11" defense="11" />
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="15" />
+		<item id="2510" name="plate shield" chance="18824" />
+		<item id="2484" name="studded armor" chance="18824" />
+		<item id="2386" name="axe" chance="14118" />
+		<item id="2460" name="brass helmet" chance="11765" />
+		<item id="2398" name="mace" chance="9412" />
+		<item id="2376" name="sword" chance="9412" />
+		<item id="2464" name="chain armor" chance="8235" />
+		<item id="2554" name="shovel" chance="7500" />
+		<item id="2666" name="meat" chance="2353" />
+	</loot>
+</monster>

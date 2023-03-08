@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Gorgo" nameDescription="Gorgo" race="blood" experience="7000" speed="0" manacost="0">
+	<health now="4500" max="4500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-10" />
+		<element earthPercent="100" />
+		<element firePercent="-5" />
+		<element lifedrainPercent="100" />
+		<element manadrainPercent="0" />
+		<element drownPercent="100" />
+		<element icePercent="20" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-450" poison="852" />
+	</attacks>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="20" />
+		<item id="2536" name="medusa shield" chance="100000" />
+		<item id="11226" name="strand of medusa hair" chance="100000" />
+		<item id="7590" name="great mana potion" chance="81081" countmax="2" />
+		<item id="8473" name="ultimate health potion" chance="64865" countmax="2" />
+		<item id="10219" name="sacred tree amulet" chance="56757" />
+		<item id="2149" name="small emerald" chance="54054" countmax="4" />
+		<item id="7887" name="terra amulet" chance="48649" />
+		<item id="7413" name="titan axe" chance="43243" />
+		<item id="7884" name="terra mantle" chance="35135" />
+		<item id="7885" name="terra legs" chance="29730" />
+	</loot>
+</monster>

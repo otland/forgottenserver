@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Cursed Prospector" nameDescription="a cursed prospector" race="undead" experience="5250" speed="420" manacost="0">
+	<health now="3900" max="3900" />
+	<look type="1268" head="0" body="19" legs="0" feet="38" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="60" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="50" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+	</attacks>
+	<defenses armor="85" defense="85" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="5" />
+		<item id="7838" name="flash arrow" chance="18321" countmax="20" />
+		<item id="8472" name="great spirit potion" chance="17293" countmax="2" />
+		<item id="35381" name="spectral silver nugget" chance="9794" />
+		<item id="35380" name="spectral gold nugget" chance="4657" />
+		<item id="2127" name="emerald bangle" chance="1771" />
+		<item id="35426" name="diamond" chance="1137" />
+		<item id="7895" name="lightning legs" chance="1071" />
+		<item id="7893" name="lightning boots" chance="1006" />
+		<item id="2198" name="elven amulet" chance="787" />
+		<item id="10221" name="shockwave amulet" chance="700" />
+		<item id="7898" name="lightning robe" chance="656" />
+	</loot>
+</monster>

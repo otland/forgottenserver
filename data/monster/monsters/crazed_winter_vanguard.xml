@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Crazed Winter Vanguard" nameDescription="a crazed winter vanguard" race="blood" experience="5400" speed="380" manacost="0">
+	<health now="5800" max="5800" />
+	<look type="1137" head="8" body="67" legs="8" feet="1" addons="1" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="-20" />
+		<element earthPercent="-15" />
+		<element firePercent="-30" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="50" />
+		<element holyPercent="0" />
+		<element deathPercent="15" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-400" />
+	</attacks>
+	<defenses armor="77" defense="77" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="86041" countmax="13" />
+		<item id="7760" name="small enchanted ruby" chance="13289" />
+		<item id="32714" name="ice flower (item)" chance="13099" />
+		<item id="12430" name="miraculum" chance="10132" />
+		<item id="8473" name="ultimate health potion" chance="9311" />
+		<item id="32661" name="dream essence egg" chance="8474" />
+		<item id="27617" name="tiger eye" chance="6899" />
+		<item id="2396" name="ice rapier" chance="6245" />
+		<item id="8911" name="northwind rod" chance="5949" />
+		<item id="7888" name="glacier amulet" chance="4990" />
+		<item id="7897" name="glacier robe" chance="2480" />
+		<item id="2198" name="elven amulet" chance="715" />
+		<item id="2158" name="blue gem" chance="190" />
+	</loot>
+</monster>

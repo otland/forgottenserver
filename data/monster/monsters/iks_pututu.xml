@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Iks Pututu" nameDescription="an Iks pututu" race="undead" experience="980" speed="220" manacost="0">
+	<health now="1310" max="1310" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="0" />
+		<element earthPercent="25" />
+		<element firePercent="5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-150" poison="75" />
+		<attack name="fire" interval="2000" chance="15" min="-81" max="-88" radius="4" target="0">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-50" max="-73">
+			<attribute key="areaEffect" value="orangechain" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-79" max="-91" length="5" spread="0">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-98" max="-114" range="1" radius="1" target="1">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="32" defense="32">
+		<defense name="healing" interval="2000" chance="20" min="51" max="71" />
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Attahch!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="380" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="10335" />
+		<item id="27617" name="tiger eye" chance="6564" />
+		<item id="7589" name="strong mana potion" chance="5587" countmax="2" />
+		<item id="2146" name="small sapphire" chance="5447" countmax="3" />
+		<item id="40531" name="broken iks faulds" chance="4000" />
+		<item id="40532" name="broken iks headpiece" chance="4000" />
+		<item id="40534" name="broken iks sandals" chance="4000" />
+		<item id="40529" name="gold-brocaded cloth" chance="2500" />
+		<item id="40527" name="rotten feather" chance="2374" />
+		<item id="24850" name="opal" chance="2235" />
+		<item id="8900" name="spellbook of enlightenment" chance="1816" />
+		<item id="9971" name="gold ingot" chance="1536" />
+		<item id="40528" name="ritual tooth" chance="698" />
+	</loot>
+</monster>

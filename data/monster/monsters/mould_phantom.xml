@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Mould Phantom" nameDescription="a mould phantom" race="undead" experience="18330" speed="480" manacost="0">
+	<health now="28000" max="28000" />
+	<look type="1298" head="106" body="60" legs="131" feet="116" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="0" />
+		<element earthPercent="50" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="holy" interval="2000" chance="15" min="-1000" max="-1250" range="2" radius="1" target="1">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="holy" interval="2000" chance="15" min="-1200" max="-1300" radius="3" target="1">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-900" max="-1050">
+			<attribute key="areaEffect" value="greenchain" />
+		</attack>
+		<attack name="holy" interval="2000" chance="15" min="-600" max="-900">
+			<attribute key="areaEffect" value="yellowchain" />
+		</attack>
+	</attacks>
+	<defenses armor="100" defense="100" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Everything decomposes." yell="false" />
+		<voice sentence="I love the smell of rotten flesh." yell="false" />
+		<voice sentence="The earth will take you back." yell="false" />
+	</voices>
+	<loot>
+		<item id="2160" name="crystal coin" chance="56859" />
+		<item id="9971" name="gold ingot" chance="11060" />
+		<item id="2155" name="green gem" chance="4052" />
+		<item id="36765" name="bag you desire" chance="4000" />
+		<item id="36797" name="mould heart" chance="3883" />
+		<item id="8920" name="wand of starstorm" chance="3757" />
+		<item id="2153" name="violet gem" chance="3419" />
+		<item id="18390" name="wand of defiance" chance="3039" countmax="2" />
+		<item id="8922" name="wand of voodoo" chance="2322" />
+		<item id="36804" name="mould robe" chance="2153" />
+		<item id="2158" name="blue gem" chance="2111" />
+		<item name="ring of blue plasma" chance="1055" />
+		<item id="18453" name="crystal crossbow" chance="844" />
+		<item name="collar of blue plasma" chance="802" />
+		<item id="15644" name="ornate crossbow" chance="760" />
+	</loot>
+</monster>

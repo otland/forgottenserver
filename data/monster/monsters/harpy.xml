@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Harpy" nameDescription="a harpy" race="blood" experience="5720" speed="350" manacost="0">
+	<health now="7700" max="7700" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="25" />
+		<element earthPercent="10" />
+		<element firePercent="-5" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="0" />
+		<element deathPercent="-5" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-344" />
+		<attack name="physical" interval="2000" chance="15" min="-296" max="-346" range="2" radius="1" target="1">
+			<attribute key="areaEffect" value="bigscratching" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-308" max="-405">
+			<attribute key="areaEffect" value="bluenote" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-319" max="-417" radius="4" target="1">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-155" max="-249">
+			<attribute key="areaEffect" value="purplechain" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-436" max="-546" range="3" radius="1" target="1">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="58" defense="58" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Blood will flow!" yell="false" />
+		<voice sentence="Shriek!" yell="false" />
+		<voice sentence="Screech!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="81047" countmax="30" />
+		<item id="40585" name="harpy feathers" chance="7171" />
+		<item id="18413" name="blue crystal shard" chance="6431" />
+		<item id="18414" name="violet crystal shard" chance="5521" />
+		<item id="2179" name="gold ring" chance="3017" />
+		<item id="8472" name="great spirit potion" chance="2675" countmax="3" />
+		<item id="2153" name="violet gem" chance="1992" />
+		<item id="18390" name="wand of defiance" chance="1878" />
+		<item id="15644" name="ornate crossbow" chance="1537" />
+		<item id="10221" name="shockwave amulet" chance="683" />
+		<item id="8871" name="focus cape" chance="512" />
+		<item id="2472" name="magic plate armor" chance="455" />
+		<item id="18450" name="crystalline sword" chance="285" />
+	</loot>
+</monster>

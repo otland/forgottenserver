@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Flameborn" nameDescription="Flameborn" race="blood" experience="2550" speed="0" manacost="0">
+	<health now="3500" max="3500" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="10" />
+		<element earthPercent="80" />
+		<element firePercent="40" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-10" />
+		<element holyPercent="30" />
+		<element deathPercent="-5" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-350" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="350" max="875" />
+		<defense name="speed" interval="2000" chance="15" minspeedchange="300" maxspeedchange="300" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<loot>
+		<item id="11221" name="hellspawn tail" chance="100000" />
+		<item id="2152" name="platinum coin" chance="98750" countmax="14" />
+		<item id="8473" name="ultimate health potion" chance="78750" />
+		<item id="7591" name="great health potion" chance="75000" />
+		<item id="2788" name="red mushroom" chance="67500" countmax="2" />
+		<item id="2477" name="knight legs" chance="60000" />
+		<item id="9970" name="small topaz" chance="43750" countmax="4" />
+		<item id="6500" name="demonic essence" chance="36250" />
+		<item id="7439" name="berserk potion" chance="32500" />
+		<item id="2519" name="crown shield" chance="27500" />
+		<item id="7368" name="assassin star" chance="23750" countmax="5" />
+		<item id="9969" name="black skull (item)" chance="20000" />
+		<item id="2475" name="warrior helmet" chance="20000" />
+		<item id="13298" name="carrot on a stick" chance="6250" />
+		<item id="7452" name="spiked squelcher" chance="5000" />
+		<item id="7421" name="onyx flail" chance="3750" />
+		<item name="dracoyle statue" chance="1250" />
+	</loot>
+</monster>

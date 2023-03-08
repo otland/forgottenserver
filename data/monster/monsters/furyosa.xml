@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Furyosa" nameDescription="Furyosa" race="blood" experience="11500" speed="0" manacost="0">
+	<health now="25000" max="25000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element earthPercent="0" />
+		<element firePercent="100" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="40" />
+		<element holyPercent="40" />
+		<element deathPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-625" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="0" max="10000" />
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="MUHAHA!" yell="false" />
+		<voice sentence="Back in black!" yell="false" />
+		<voice sentence="Die!" yell="false" />
+		<voice sentence="Dieeee!" yell="false" />
+		<voice sentence="Caaarnaaage!" yell="false" />
+		<voice sentence="Ahhhhrrrr!" yell="false" />
+	</voices>
+	<summons maxSummons="4">
+		<voice name="Fury" interval="2000" chance="15" max="4" />
+	</summons>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="8844" name="jalapeno pepper" chance="100000" countmax="5" />
+		<item id="2124" name="crystal ring" chance="100000" />
+		<item id="5944" name="soul orb" chance="100000" />
+		<item id="2152" name="platinum coin" chance="50000" countmax="25" />
+		<item id="7590" name="great mana potion" chance="50000" countmax="5" />
+		<item id="5914" name="yellow piece of cloth" chance="50000" />
+		<item id="9970" name="small topaz" chance="50000" countmax="9" />
+		<item id="8473" name="ultimate health potion" chance="50000" countmax="7" />
+		<item id="2145" name="small diamond" chance="50000" countmax="7" />
+		<item id="7404" name="assassin dagger" chance="20000" />
+		<item id="21725" name="furious frock" chance="20000" />
+		<item id="2539" name="phoenix shield" chance="20000" />
+		<item id="2147" name="small ruby" chance="20000" countmax="5" />
+		<item id="7894" name="magma legs" chance="20000" />
+		<item id="7899" name="magma coat" chance="20000" />
+		<item id="5909" name="white piece of cloth" chance="20000" />
+		<item id="6300" name="death ring" chance="20000" />
+		<item id="6558" name="flask of demonic blood" chance="20000" />
+		<item id="7456" name="noble axe" chance="20000" />
+		<item id="5911" name="red piece of cloth" chance="20000" />
+		<item id="8472" name="great spirit potion" chance="20000" countmax="5" />
+		<item id="9971" name="gold ingot" chance="20000" />
+		<item id="7368" name="assassin star" chance="20000" countmax="10" />
+		<item id="2146" name="small sapphire" chance="20000" countmax="5" />
+		<item id="21400" name="silver raid token" chance="20000" />
+		<item id="6500" name="demonic essence" chance="20000" />
+		<item id="18409" name="wand of everblazing" chance="20000" />
+	</loot>
+</monster>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Pirat Mate" nameDescription="a pirat mate" race="blood" experience="2400" speed="350" manacost="0">
+	<health now="3200" max="3200" />
+	<look type="1346" head="0" body="95" legs="95" feet="113" addons="3" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="0" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="30" />
+		<element earthPercent="-30" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-400" />
+		<attack name="energy" interval="2000" chance="15" min="-150" max="-210" length="5" spread="0">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-148" max="-180" radius="4" target="0">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="75" defense="75" />
+	<loot>
+		<item id="18419" name="cyan crystal fragment" chance="15829" />
+		<item id="38228" name="pirate coin" chance="11494" countmax="10" />
+		<item id="2145" name="small diamond" chance="11172" />
+		<item id="18420" name="red crystal fragment" chance="10379" />
+		<item id="38252" name="mouldy powder" chance="9636" />
+		<item id="38229" name="pirat's tail" chance="9165" />
+		<item id="2392" name="fire sword" chance="6738" />
+		<item id="2156" name="red gem" chance="6217" />
+		<item id="24849" name="onyx chip" chance="4929" />
+		<item id="2149" name="small emerald" chance="4855" />
+		<item id="38230" name="shark fins" chance="4062" />
+		<item id="2154" name="yellow gem" chance="3939" />
+		<item id="2396" name="ice rapier" chance="3369" />
+		<item id="18415" name="green crystal shard" chance="2799" />
+		<item id="38227" name="small treasure chest" chance="2477" />
+	</loot>
+</monster>

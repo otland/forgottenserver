@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Tormentor" nameDescription="" race="blood" experience="3200" speed="0" manacost="0">
+	<health now="4100" max="4100" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="20" />
+		<element earthPercent="100" />
+		<element firePercent="20" />
+		<element lifedrainPercent="100" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="10" />
+		<element holyPercent="0" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-150" />
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="60" max="100" />
+		<defense name="speed" interval="2000" chance="15" minspeedchange="300" maxspeedchange="300" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<voices interval="5000" chance="10">
+		<voice sentence="Take a ride with me." yell="false" />
+		<voice sentence="Pffffrrrrrrrrrrrr." yell="false" />
+		<voice sentence="Close your eyes... I have something for you." yell="false" />
+		<voice sentence="I will make you scream." yell="false" />
+	</voices>
+	<loot>
+		<item id="6558" name="flask of demonic blood" chance="100000" countmax="5" />
+		<item id="6300" name="death ring" chance="100000" />
+		<item id="6500" name="demonic essence" chance="100000" />
+		<item id="11223" name="essence of a bad dream" chance="100000" />
+		<item id="2671" name="ham" chance="100000" />
+		<item id="2152" name="platinum coin" chance="92647" countmax="10" />
+		<item id="11229" name="scythe leg" chance="86765" />
+		<item id="2477" name="knight legs" chance="72059" />
+		<item id="5669" name="mysterious voodoo skull" chance="42647" />
+		<item name="skeleton decoration" chance="32353" />
+		<item id="2454" name="war axe" chance="16176" />
+		<item id="2195" name="boots of haste" chance="11765" />
+		<item id="7418" name="nightmare blade" chance="10294" />
+	</loot>
+</monster>

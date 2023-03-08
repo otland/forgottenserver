@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Crazed Summer Rearguard" nameDescription="a crazed summer rearguard" race="blood" experience="4700" speed="400" manacost="0">
+	<health now="5300" max="5300" />
+	<look type="1136" head="114" body="94" legs="3" feet="121" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="40" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="-25" />
+		<element holyPercent="20" />
+		<element deathPercent="0" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-450" />
+	</attacks>
+	<defenses armor="76" defense="76" />
+	<voices interval="5000" chance="10">
+		<voice sentence="Is this real life?" yell="false" />
+		<voice sentence="Weeeuuu weeeuuu!!!" yell="false" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="85038" countmax="11" />
+		<item id="5921" name="heaven blossom" chance="10317" />
+		<item id="32661" name="dream essence egg" chance="8233" />
+		<item id="10552" name="elvish talisman" chance="7204" />
+		<item id="7760" name="small enchanted ruby" chance="6002" />
+		<item id="18420" name="red crystal fragment" chance="4532" />
+		<item id="18414" name="violet crystal shard" chance="4411" />
+		<item id="28391" name="leaf star" chance="4099" countmax="8" />
+		<item name="ring of blue plasma" chance="2422" />
+		<item id="2664" name="wood cape" chance="1263" />
+		<item id="2154" name="yellow gem" chance="1055" />
+		<item name="collar of blue plasma" chance="917" />
+		<item id="32651" name="sun fruit" chance="891" />
+		<item id="7759" name="small enchanted sapphire" chance="787" countmax="2" />
+		<item id="2145" name="small diamond" chance="579" />
+		<item id="18453" name="crystal crossbow" chance="476" />
+	</loot>
+</monster>

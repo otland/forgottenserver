@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Afflicted Strider" nameDescription="an afflicted strider" race="blood" experience="5700" speed="270" manacost="0">
+	<health now="10000" max="10000" />
+	<look type="1403" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="0" />
+		<element earthPercent="10" />
+		<element firePercent="-10" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="15" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" chance="100" min="0" max="-600" />
+		<attack name="death" interval="2000" chance="15" min="-650" max="-800" radius="5" target="0">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" min="-550" max="-650" range="2" radius="1" target="1">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="68" defense="68" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="15" />
+		<item id="39446" name="afflicted strider worms" chance="10047" />
+		<item id="2427" name="guardian halberd" chance="8693" />
+		<item id="7449" name="crystal sword" chance="8381" />
+		<item id="2153" name="violet gem" chance="6819" />
+		<item id="18415" name="green crystal shard" chance="6507" />
+		<item id="18414" name="violet crystal shard" chance="5986" />
+		<item id="39445" name="afflicted strider head" chance="5049" />
+		<item id="2485" name="doublet" chance="4997" />
+		<item id="8872" name="belted cape" chance="4217" />
+		<item id="2476" name="knight armor" chance="4060" />
+		<item id="2420" name="machete" chance="3592" />
+		<item id="8870" name="spirit cloak" chance="3019" />
+		<item id="8871" name="focus cape" chance="2499" />
+		<item id="7899" name="magma coat" chance="2134" />
+		<item id="2396" name="ice rapier" chance="2082" />
+		<item id="2413" name="broadsword" chance="2082" />
+		<item id="2409" name="serpent sword" chance="1978" />
+		<item id="7386" name="mercenary sword" chance="1458" />
+		<item id="7413" name="titan axe" chance="1458" />
+		<item id="2430" name="knight axe" chance="1249" />
+		<item id="7407" name="haunted blade" chance="1249" />
+	</loot>
+</monster>

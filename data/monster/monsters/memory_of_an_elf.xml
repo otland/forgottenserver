@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Memory Of An Elf" nameDescription="a memory of an elf" race="blood" experience="1440" speed="0" manacost="0">
+	<health now="3440" max="3440" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" mount="0" corpse="0" />
+	<targetchange interval="2000" chance="0" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag healthhidden="0" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity outfit="0" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+		<immunity bleed="0" />
+	</immunities>
+	<elements>
+		<element physicalPercent="0" />
+		<element energyPercent="0" />
+		<element earthPercent="0" />
+		<element firePercent="0" />
+		<element lifedrainPercent="0" />
+		<element manadrainPercent="0" />
+		<element drownPercent="0" />
+		<element icePercent="0" />
+		<element holyPercent="0" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="10" defense="5" />
+	<loot>
+		<item id="2148" name="gold coin" chance="97122" countmax="70" />
+		<item id="2260" name="blank rune" chance="38849" />
+		<item id="1949" name="scroll" chance="32374" />
+		<item id="2689" name="bread" chance="32374" />
+		<item id="2682" name="melon" chance="19424" />
+		<item id="2652" name="green tunic" chance="14388" />
+		<item id="2802" name="sling herb" chance="10791" />
+		<item id="2544" name="arrow" chance="8633" countmax="3" />
+		<item id="40681" name="candy floss (large)" chance="8633" />
+		<item id="7618" name="health potion" chance="7914" />
+		<item id="7589" name="strong mana potion" chance="5036" />
+		<item id="2642" name="sandals" chance="5036" />
+		<item name="candlestick" chance="4317" />
+		<item id="2747" name="grave flower" chance="3597" />
+		<item id="2600" name="inkwell" chance="2878" />
+		<item id="2189" name="wand of cosmic energy" chance="2158" />
+		<item id="2198" name="elven amulet" chance="2158" />
+		<item id="2177" name="life crystal" chance="1439" />
+	</loot>
+</monster>
