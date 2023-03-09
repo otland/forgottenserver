@@ -120,13 +120,10 @@ Vocation* Vocations::getVocation(uint16_t id)
 	return &it->second;
 }
 
-int32_t Vocations::getVocationId(const std::string& name) const
+int32_t Vocations::getVocationId(std::string_view name) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [&name](auto it) {
-		return name.size() == it.second.name.size() &&
-		       std::equal(name.begin(), name.end(), it.second.name.begin(),
-		                  [](char a, char b) { return std::tolower(a) == std::tolower(b); });
-	});
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
+	                       [=](auto it) { return caseInsensitiveEqual(name, it.second.name); });
 	return it != vocationsMap.end() ? it->first : -1;
 }
 

@@ -305,7 +305,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string GlobalEvent::getScriptEventName() const
+std::string_view GlobalEvent::getScriptEventName() const
 {
 	switch (eventType) {
 		case GLOBALEVENT_STARTUP:

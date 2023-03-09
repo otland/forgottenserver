@@ -51,7 +51,7 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
+void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
 {
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }

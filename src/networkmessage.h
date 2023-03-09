@@ -68,7 +68,7 @@ public:
 		return v;
 	}
 
-	std::string getString(uint16_t stringLen = 0);
+	std::string_view getString(uint16_t stringLen = 0);
 	Position getPosition();
 
 	// skips count unknown/unused bytes in an incoming message
@@ -100,7 +100,7 @@ public:
 	void addBytes(const char* bytes, size_t size);
 	void addPaddingBytes(size_t n);
 
-	void addString(const std::string& value);
+	void addString(std::string_view value);
 
 	void addDouble(double value, uint8_t precision = 2);
 

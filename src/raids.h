@@ -182,7 +182,7 @@ public:
 	bool executeEvent() override;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onRaid"; }
 };
 
 #endif // FS_RAIDS_H

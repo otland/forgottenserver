@@ -21,11 +21,9 @@ void IOMapSerialize::loadHouseItems(Map* map)
 	}
 
 	do {
-		unsigned long attrSize;
-		const char* attr = result->getStream("data", attrSize);
-
+		auto attr = result->getString("data");
 		PropStream propStream;
-		propStream.init(attr, attrSize);
+		propStream.init(attr.data(), attr.size());
 
 		uint16_t x, y;
 		uint8_t z;
@@ -75,11 +73,8 @@ bool IOMapSerialize::saveHouseItems()
 		for (HouseTile* tile : house->getTiles()) {
 			saveTile(stream, tile);
 
-			size_t attributesSize;
-			const char* attributes = stream.getStream(attributesSize);
-			if (attributesSize > 0) {
-				if (!stmt.addRow(
-				        fmt::format("{:d}, {:s}", house->getId(), db.escapeBlob(attributes, attributesSize)))) {
+			if (auto attributes = stream.getStream(); !attributes.empty()) {
+				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
 					return false;
 				}
 				stream.clear();
@@ -380,10 +375,8 @@ bool IOMapSerialize::saveHouse(House* house)
 	for (HouseTile* tile : house->getTiles()) {
 		saveTile(stream, tile);
 
-		size_t attributesSize;
-		const char* attributes = stream.getStream(attributesSize);
-		if (attributesSize > 0) {
-			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, db.escapeBlob(attributes, attributesSize)))) {
+		if (auto attributes = stream.getStream(); attributes.size() > 0) {
+			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, db.escapeString(attributes)))) {
 				return false;
 			}
 			stream.clear();

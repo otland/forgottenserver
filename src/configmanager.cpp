@@ -338,7 +338,7 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 	return std::get<2>(*it);
 }
 
-bool ConfigManager::setString(string_config_t what, const std::string& value)
+bool ConfigManager::setString(string_config_t what, std::string_view value)
 {
 	if (what >= LAST_STRING_CONFIG) {
 		std::cout << "[Warning - ConfigManager::setString] Accessing invalid index: " << what << std::endl;

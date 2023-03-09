@@ -104,8 +104,6 @@ void Spells::clear(bool fromLua)
 
 LuaScriptInterface& Spells::getScriptInterface() { return scriptInterface; }
 
-std::string Spells::getScriptBaseName() const { return "spells"; }
-
 Event_ptr Spells::getEvent(const std::string& nodeName)
 {
 	if (caseInsensitiveEqual(nodeName, "rune")) {
@@ -791,8 +789,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 	return 0;
 }
 
-std::string InstantSpell::getScriptEventName() const { return "onCastSpell"; }
-
 bool InstantSpell::configureEvent(const pugi::xml_node& node)
 {
 	if (!Spell::configureSpell(node)) {
@@ -1062,8 +1058,6 @@ bool InstantSpell::canCast(const Player* player) const
 
 	return false;
 }
-
-std::string RuneSpell::getScriptEventName() const { return "onCastSpell"; }
 
 bool RuneSpell::configureEvent(const pugi::xml_node& node)
 {

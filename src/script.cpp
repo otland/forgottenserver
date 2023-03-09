@@ -7,8 +7,6 @@
 
 #include "configmanager.h"
 
-#include <filesystem>
-
 extern LuaEnvironment g_luaEnvironment;
 extern ConfigManager g_config;
 

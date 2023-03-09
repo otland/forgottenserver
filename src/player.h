@@ -54,8 +54,8 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
-	    guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify)
+	VIPEntry(uint32_t guid, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
+	    guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t guid;

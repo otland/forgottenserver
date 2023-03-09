@@ -173,7 +173,7 @@ public:
 	int32_t loadFile(const std::string& file, Npc* npc = nullptr);
 
 	const std::string& getFileById(int32_t scriptId);
-	int32_t getEvent(const std::string& eventName);
+	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
@@ -208,7 +208,7 @@ public:
 	// push/pop common structures
 	static void pushThing(lua_State* L, Thing* thing);
 	static void pushVariant(lua_State* L, const LuaVariant& var);
-	static void pushString(lua_State* L, const std::string& value);
+	static void pushString(lua_State* L, std::string_view value);
 	static void pushCallback(lua_State* L, int32_t callback);
 	static void pushCylinder(lua_State* L, Cylinder* cylinder);
 
