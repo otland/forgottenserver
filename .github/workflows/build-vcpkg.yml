@@ -92,8 +92,8 @@ jobs:
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
-          BOOST_ROOT: ${{ runner.workspace }}/vcpkg_installed/${{ matrix.triplet }}
-          PKG_CONFIG_PATH: ${{ runner.workspace }}/vcpkg)installed/${{ matrix.triplet }}/lib/pkgconfig
+          BOOST_ROOT: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}
+          PKG_CONFIG_PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/lib/pkgconfig
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v2

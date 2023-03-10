@@ -5,10 +5,13 @@ fmt_dep = dependency('fmt', version: '>=7.1.0', fallback: ['fmt', 'fmt_dep'], de
 pugixml_dep = dependency('pugixml', fallback: ['pugixml', 'pugixml_dep'], default_options: ['default_library=static', 'tests=false'])
 thread_dep = dependency('threads')
 
-# Debian installs libcrypto++, Arch Linux installs libcryptopp
+# Debian installs libcrypto++, Arch Linux installs libcryptopp, vcpkg installs cryptopp
 cryptopp_dep = dependency('libcrypto++', required: false)
 if not cryptopp_dep.found()
-  cryptopp_dep = dependency('libcryptopp')
+  cryptopp_dep = dependency('libcryptopp', required: false)
+  if not cryptopp_dep.found()
+    cryptopp_dep = dependency('cryptopp')
+  endif
 endif
 
 # Debian installs mysqlclient, Alpine installs libmariadb, Arch Linux installs mariadb
