@@ -156,6 +156,16 @@ bool Event::loadCallback()
 	return true;
 }
 
+CallBack::~CallBack() { clearCallBack(); }
+
+void CallBack::clearCallBack()
+{
+	if (scriptInterface) {
+		scriptInterface->removeEvent(scriptId);
+		scriptId = -1;
+	}
+}
+
 bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)
 {
 	if (!interface) {
@@ -163,11 +173,35 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 		return false;
 	}
 
+	clearCallBack();
+
 	scriptInterface = interface;
 
 	int32_t id = scriptInterface->getEvent(name.c_str());
 	if (id == -1) {
 		std::cout << "[Warning - CallBack::loadCallBack] Event " << name << " not found." << std::endl;
+		return false;
+	}
+
+	scriptId = id;
+	loaded = true;
+	return true;
+}
+
+bool CallBack::loadCallBack(LuaScriptInterface* interface)
+{
+	if (!interface) {
+		std::cout << "Failure: [CallBack::loadCallBack] scriptInterface == nullptr" << std::endl;
+		return false;
+	}
+
+	clearCallBack();
+
+	scriptInterface = interface;
+
+	int32_t id = scriptInterface->getEvent();
+	if (id == -1) {
+		std::cout << "[Warning - CallBack::loadCallBack] Event not found. " << std::endl;
 		return false;
 	}
 

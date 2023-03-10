@@ -557,6 +557,19 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	return nullptr;
 }
 
+bool Combat::loadCallBack(CallBackParam_t key, LuaScriptInterface* scriptInterface)
+{
+	if (!setCallback(key)) {
+		return false;
+	}
+
+	if (auto callback = getCallback(key)) {
+		return callback->loadCallBack(scriptInterface);
+	}
+
+	return false;
+}
+
 void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {

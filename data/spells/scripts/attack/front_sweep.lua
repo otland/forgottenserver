@@ -5,13 +5,13 @@ combat:setParameter(COMBAT_PARAM_BLOCKARMOR, true)
 combat:setParameter(COMBAT_PARAM_USECHARGES, true)
 combat:setArea(createCombatArea(AREA_WAVE6, AREADIAGONAL_WAVE6))
 
-function onGetFormulaValues(player, skill, attack, factor)
+local function onGetFormulaValues(player, skill, attack, factor)
 	local min = (player:getLevel() / 5) + (skill * attack * 0.04) + 11
 	local max = (player:getLevel() / 5) + (skill * attack * 0.08) + 21
 	return -min, -max
 end
 
-combat:setCallback(CALLBACK_PARAM_SKILLVALUE, "onGetFormulaValues")
+combat:setCallback(CALLBACK_PARAM_SKILLVALUE, onGetFormulaValues)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

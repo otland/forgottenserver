@@ -423,6 +423,27 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	return runningEventId++;
 }
 
+void LuaScriptInterface::removeEvent(int32_t scriptId)
+{
+	if (scriptId == -1) {
+		return;
+	}
+
+	// get our events table
+	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
+	if (!isTable(luaState, -1)) {
+		lua_pop(luaState, 1);
+		return;
+	}
+
+	// remove event from table
+	lua_pushnil(luaState);
+	lua_rawseti(luaState, -2, scriptId);
+	lua_pop(luaState, 1);
+
+	cacheFiles.erase(scriptId);
+}
+
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 {
 	if (scriptId == EVENT_ID_LOADING) {
@@ -13413,7 +13434,7 @@ int LuaScriptInterface::luaCombatClearConditions(lua_State* L)
 
 int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 {
-	// combat:setCallback(key, function)
+	// combat:setCallback(key, callback)
 	const Combat_ptr& combat = getSharedPtr<Combat>(L, 1);
 	if (!combat) {
 		reportErrorFunc(L, getErrorDesc(LUA_ERROR_COMBAT_NOT_FOUND));
@@ -13421,20 +13442,12 @@ int LuaScriptInterface::luaCombatSetCallback(lua_State* L)
 		return 1;
 	}
 
-	CallBackParam_t key = getNumber<CallBackParam_t>(L, 2);
-	if (!combat->setCallback(key)) {
+	if (!combat->loadCallBack(getNumber<CallBackParam_t>(L, 2), getScriptEnv()->getScriptInterface())) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	CallBack* callback = combat->getCallback(key);
-	if (!callback) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	const std::string& function = getString(L, 3);
-	pushBoolean(L, callback->loadCallBack(getScriptEnv()->getScriptInterface(), function));
+	pushBoolean(L, true);
 	return 1;
 }
 

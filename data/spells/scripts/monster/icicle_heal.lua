@@ -3,7 +3,7 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, 0)
 combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 
-function onTargetCreature(creature, target)
+local function onTargetCreature(creature, target)
 	local min = 400
 	local max = 600
 	local master = target:getMaster()
@@ -15,7 +15,7 @@ function onTargetCreature(creature, target)
 	return true
 end
 
-combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+combat:setCallback(CALLBACK_PARAM_TARGETCREATURE, onTargetCreature)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

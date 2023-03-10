@@ -145,6 +145,7 @@ public:
 
 	bool setCallback(CallBackParam_t key);
 	CallBack* getCallback(CallBackParam_t key);
+	bool loadCallBack(CallBackParam_t key, LuaScriptInterface* scriptInterface);
 
 	bool setParam(CombatParam_t param, uint32_t value);
 	int32_t getParam(CombatParam_t param);

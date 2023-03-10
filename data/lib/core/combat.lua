@@ -1,21 +1,17 @@
 function Combat:getPositions(creature, variant)
 	local positions = {}
-	function onTargetTile(creature, position)
+	self:setCallback(CALLBACK_PARAM_TARGETTILE, function(creature, position)
 		positions[#positions + 1] = position
-	end
-
-	self:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
+	end)
 	self:execute(creature, variant)
 	return positions
 end
 
 function Combat:getTargets(creature, variant)
 	local targets = {}
-	function onTargetCreature(creature, target)
+	self:setCallback(CALLBACK_PARAM_TARGETCREATURE, function(creature, target)
 		targets[#targets + 1] = target
-	end
-
-	self:setCallback(CALLBACK_PARAM_TARGETCREATURE, "onTargetCreature")
+	end)
 	self:execute(creature, variant)
 	return targets
 end

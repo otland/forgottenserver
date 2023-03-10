@@ -176,6 +176,7 @@ public:
 	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
+	void removeEvent(int32_t scriptId);
 
 	static ScriptEnvironment* getScriptEnv()
 	{

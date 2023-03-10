@@ -61,10 +61,14 @@ class CallBack
 {
 public:
 	CallBack() = default;
+	~CallBack();
 
 	bool loadCallBack(LuaScriptInterface* interface, const std::string& name);
+	bool loadCallBack(LuaScriptInterface* interface);
 
 protected:
+	void clearCallBack();
+
 	int32_t scriptId = 0;
 	LuaScriptInterface* scriptInterface = nullptr;
 

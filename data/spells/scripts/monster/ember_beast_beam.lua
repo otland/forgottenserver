@@ -22,7 +22,7 @@ function spellCallback(param)
 	end
 end
 
-function onTargetTile(cid, pos)
+local function onTargetTile(cid, pos)
 	local param = {}
 	param.cid = cid
 	param.pos = pos
@@ -30,7 +30,7 @@ function onTargetTile(cid, pos)
 	spellCallback(param)
 end
 
-setCombatCallback(combat, CALLBACK_PARAM_TARGETTILE, "onTargetTile")
+setCombatCallback(combat, CALLBACK_PARAM_TARGETTILE, onTargetTile)
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)
