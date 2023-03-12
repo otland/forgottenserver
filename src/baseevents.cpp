@@ -156,13 +156,16 @@ bool Event::loadCallback()
 	return true;
 }
 
-CallBack::~CallBack() { clearCallBack(); }
-
-void CallBack::clearCallBack()
+CallBack::~CallBack()
 {
-	if (scriptInterface) {
+	if (!scriptInterface) {
+		std::cout << "CallBack::~CallBack(): It looks like we have a dangling scriptInterface in a combat callback."
+		          << std::endl;
+		return;
+	}
+
+	if (scriptId != -1) {
 		scriptInterface->removeEvent(scriptId);
-		scriptId = -1;
 	}
 }
 
@@ -173,7 +176,10 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 		return false;
 	}
 
-	clearCallBack();
+	if (scriptInterface && scriptId != -1) {
+		scriptInterface->removeEvent(scriptId);
+		scriptId = -1;
+	}
 
 	scriptInterface = interface;
 
@@ -195,7 +201,10 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface)
 		return false;
 	}
 
-	clearCallBack();
+	if (scriptInterface && scriptId != -1) {
+		scriptInterface->removeEvent(scriptId);
+		scriptId = -1;
+	}
 
 	scriptInterface = interface;
 

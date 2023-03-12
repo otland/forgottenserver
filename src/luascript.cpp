@@ -425,10 +425,6 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 
 void LuaScriptInterface::removeEvent(int32_t scriptId)
 {
-	if (scriptId == -1) {
-		return;
-	}
-
 	// get our events table
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
 	if (!isTable(luaState, -1)) {

@@ -67,8 +67,6 @@ public:
 	bool loadCallBack(LuaScriptInterface* interface);
 
 protected:
-	void clearCallBack();
-
 	int32_t scriptId = 0;
 	LuaScriptInterface* scriptInterface = nullptr;
 
