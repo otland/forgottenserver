@@ -16,7 +16,7 @@ on:
       - meson.build
 
 jobs:
-  unix:
+  build-vcpkg:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
