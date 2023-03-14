@@ -34,21 +34,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Ubuntu - install luajit, remove libmysqlclient-dev
-        run: |
-          sudo apt install libluajit-5.1-dev
-          sudo apt remove -y libmysqlclient-dev
-        if: contains(matrix.os, 'ubuntu')
-
-      - name: MacOS - install luajit pkgconfig
-        run: brew install luajit pkgconfig
-        if: contains(matrix.os, 'macos')
-
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v7
         with:
@@ -59,7 +44,13 @@ jobs:
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+          PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/:${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/ninja/:$PATH
+          BOOST_ROOT: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}
+          PKG_CONFIG_PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/lib/pkgconfig
 
       - name: dir
         run: find $RUNNER_WORKSPACE
@@ -111,14 +102,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Windows - remove C:/mysql*
-        run: rm -r -fo C:/mysql*
-
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v7
         with:
@@ -129,7 +112,13 @@ jobs:
           vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
 
       - name: Build with meson
-        run: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        env:
+          CC: ${{ matrix.cc }}
+          CXX: ${{ matrix.cxx }}
+          PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/:${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/ninja/:$PATH
+          BOOST_ROOT: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}
+          PKG_CONFIG_PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/lib/pkgconfig
 
       - name: dir
         run: find $RUNNER_WORKSPACE
