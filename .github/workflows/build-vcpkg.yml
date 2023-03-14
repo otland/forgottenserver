@@ -64,23 +64,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run vcpkg
-        uses: lukka/run-vcpkg@v7
-        with:
-          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit python3 vcpkg-tool-ninja vcpkg-tool-meson
-          vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
-          vcpkgTriplet: ${{ matrix.triplet }}
-          appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
-          vcpkgGitCommitId: a7b6122f6b6504d16d96117336a0562693579933
+      - run: vcpkg install
 
       - name: Build with meson
-        run: python3.10 ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
+        run: $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/tools/meson/meson.py setup -D buildtype=${{ matrix.buildtype }} -D luajit=${{ matrix.luajit }} ${{ runner.workspace }}/build && ninja -C ${{ runner.workspace }}/build
         env:
           CC: ${{ matrix.cc }}
           CXX: ${{ matrix.cxx }}
-          PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/ninja/:${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/tools/python3/:$PATH
-          BOOST_ROOT: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}
-          PKG_CONFIG_PATH: ${{ runner.workspace }}/vcpkg/installed/${{ matrix.triplet }}/lib/pkgconfig
+          PATH: $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/tools/ninja/:$VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/tools/python3/:$PATH
+          BOOST_ROOT: $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}
+          PKG_CONFIG_PATH: $VCPKG_INSTALLATION_ROOT/installed/${{ matrix.triplet }}/lib/pkgconfig
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v2
@@ -92,14 +85,14 @@ jobs:
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=enabled-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs.exe
         if: contains(matrix.os, 'windows')
 
       - name: Upload artifact binary (dlls)
         uses: actions/upload-artifact@v2
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=enabled-${{ github.sha }}
+          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ runner.workspace }}/build/*.dll
         if: contains(matrix.os, 'windows')
 

@@ -9,15 +9,8 @@
         "boost-variant",
         "cryptopp",
         "libmariadb",
-        "python3",
         "vcpkg-tool-meson",
         "vcpkg-tool-ninja"
-    ],
-    "overrides": [
-        {
-            "name": "python",
-            "version": "3.10"
-        }
     ],
     "features": {
         "luajit": {
