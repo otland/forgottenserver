@@ -105,7 +105,7 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v7
         with:
-          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit vcpkg-tool-ninja vcpkg-tool-meson
+          vcpkgArguments: boost-asio boost-filesystem boost-iostreams boost-lockfree boost-system boost-variant cryptopp libmariadb luajit python3 vcpkg-tool-ninja vcpkg-tool-meson
           vcpkgDirectory: ${{ runner.workspace }}/vcpkg/
           vcpkgTriplet: ${{ matrix.triplet }}
           appendedCacheKey: ${{ matrix.name }}${{ matrix.buildtype }}${{ matrix.luajit }}
