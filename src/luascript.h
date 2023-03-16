@@ -1013,6 +1013,8 @@ private:
 	static int luaPlayerIsNearDepotBox(lua_State* L);
 
 	static int luaPlayerGetIdleTime(lua_State* L);
+	
+	static int luaSendCreatureSquare(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

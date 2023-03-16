@@ -2707,6 +2707,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
+	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaSendCreatureSquare);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10822,6 +10824,28 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	}
 
 	lua_pushnumber(L, player->getIdleTime());
+	return 1;
+}
+
+int LuaScriptInterface::luaSendCreatureSquare(lua_State* L)
+{
+	// player:sendCreatureSquare(creature, color)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+    	lua_pushnil(L);
+    	return 1;
+	}
+
+	Creature* creature = getUserdata<Creature>(L, 2);
+	if (!creature) {
+    	lua_pushnil(L);
+    	return 1;
+	}
+
+	uint32_t color = getNumber<uint32_t>(L, 3, 0);
+
+	player->sendCreatureSquare(creature, static_cast <SquareColor_t>(color));
+	lua_pushboolean(L, true);
 	return 1;
 }
 
