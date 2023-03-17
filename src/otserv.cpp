@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -392,16 +392,16 @@ bool argumentsHandler(const StringVector& args)
 			return false;
 		}
 
-		StringVector tmp = explodeString(arg, "=");
+		auto tmp = explodeString(arg, "=");
 
 		if (tmp[0] == "--config")
 			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
 		else if (tmp[0] == "--ip")
 			g_config.setString(ConfigManager::IP, tmp[1]);
 		else if (tmp[0] == "--login-port")
-			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
+			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1].data()));
 		else if (tmp[0] == "--game-port")
-			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
+			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
 	}
 
 	return true;

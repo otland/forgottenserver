@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cave Devourer" nameDescription="a cave devourer" race="venom" experience="2380" speed="240">
+	<health now="4500" max="4500" />
+	<look type="1036" corpse="30215" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="death" interval="2000" chance="15" range="3" length="6" spread="3" min="-70" max="-160">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="3" length="6" spread="3" min="-90" max="-160">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-20" />
+	</elements>
+	<defenses armor="40" defense="40" />
+	<loot>
+		<item id="30255" name="cave devourer eyes" chance="18853" />
+		<item id="30256" name="cave devourer maw" chance="18432" />
+		<item id="30257" name="cave devourer legs" chance="14685" />
+		<item id="18304" name="crystalline arrow" chance="14379" countmax="40" />
+		<item id="23565" name="slime heart" chance="11434" countmax="4" />
+		<item id="18415" name="green crystal shard" chance="7419" />
+		<item id="7760" name="small enchanted ruby" chance="6883" />
+		<item id="18413" name="blue crystal shard" chance="6310" />
+		<item id="7759" name="small enchanted sapphire" chance="6157" />
+		<item id="18419" name="cyan crystal fragment" chance="5736" />
+		<item id="18414" name="violet crystal shard" chance="4283" />
+		<item id="2165" name="stealth ring" chance="1989" />
+		<item id="30309" name="suspicious device" chance="1338" />
+	</loot>
+</monster>

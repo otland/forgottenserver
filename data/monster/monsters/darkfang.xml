@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Darkfang" nameDescription="Darkfang" race="blood" experience="4000" speed="250">
+	<health now="4800" max="4800" />
+	<look type="308" corpse="20380" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-290" />
+		<attack name="werewolf skill reducer" interval="2000" range="1" chance="15" />
+		<attack name="lifedrain" interval="2000" chance="15" radius="8" target="0" min="-100" max="-300">
+			<attribute key="areaEffect" value="rednote" />
+		</attack>
+		<attack name="physical" interval="2000" chance="18" radius="3" min="-200" max="-340">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+			<attack name="speed" interval="2000" chance="15" range="7" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="4000" chance="15" min="150" max="345">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="20" />
+		<element earthPercent="70" />
+		<element firePercent="-5" />
+		<element icePercent="10" />
+		<element deathPercent="70" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="You are my next meal! Grrr!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="120" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="9" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="2" />
+		<item id="24708" name="werewolf fangs" chance="100000" />
+		<item id="11234" name="werewolf fur" chance="100000" />
+		<item id="5897" name="wolf paw" chance="100000" />
+		<item id="24849" name="onyx chip" chance="84167" countmax="3" />
+		<item id="7439" name="berserk potion" chance="83958" countmax="2" />
+		<item id="2144" name="black pearl" chance="80625" countmax="5" />
+		<item id="7759" name="small enchanted sapphire" chance="80000" countmax="2" />
+		<item id="2197" name="stone skin amulet" chance="25417" />
+		<item id="2805" name="troll green" chance="25208" />
+		<item id="7394" name="wolf trophy" chance="9792" />
+		<item id="7428" name="bonebreaker" chance="8958" />
+		<item id="7419" name="dreaded cleaver" chance="7292" />
+		<item id="2169" name="time ring" chance="6458" />
+		<item id="11306" name="sai" chance="5000" />
+		<item id="24739" name="moonlight crystals" chance="2917" />
+		<item id="24716" name="werewolf amulet" chance="2917" />
+		<item id="2171" name="platinum amulet" chance="2708" />
+		<item id="25172" name="silver token" chance="1250" />
+		<item id="24740" name="wolf backpack" chance="417" />
+	</loot>
+</monster>

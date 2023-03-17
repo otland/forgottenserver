@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Baron From Below" nameDescription="The Baron From Below" race="blood" experience="40000" speed="240">
+	<health now="50000" max="50000" />
+	<look type="1045" corpse="30289" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-550" />
+		<attack name="physical" interval="2000" chance="15" radius="8" min="0" max="-1000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" length="8" spread="5" min="0" max="-1000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" length="8" spread="9" min="0" max="-1000">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="death" interval="2000" chance="100" radius="3" min="0" max="-1000">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" radius="5" min="0" max="-1000">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="30165" name="heavy crystal fragment" chance="87500" />
+		<item id="7440" name="mastermind potion" chance="87500" countmax="3" />
+		<item id="2152" name="platinum coin" chance="87500" countmax="66" />
+		<item id="2197" name="stone skin amulet" chance="87500" />
+		<item id="2392" name="fire sword" chance="62500" />
+		<item id="7590" name="great mana potion" chance="62500" countmax="15" />
+		<item id="8472" name="great spirit potion" chance="62500" countmax="18" />
+		<item id="2155" name="green gem" chance="62500" />
+		<item id="18414" name="violet crystal shard" chance="62500" countmax="6" />
+		<item id="2187" name="wand of inferno" chance="62500" />
+		<item id="5904" name="magic sulphur" chance="50000" />
+		<item id="2150" name="small amethyst" chance="37500" countmax="16" />
+		<item id="8473" name="ultimate health potion" chance="37500" countmax="8" />
+		<item id="30280" name="longing eyes" chance="25000" />
+		<item id="24742" name="badger boots" chance="12500" />
+		<item id="30278" name="chitinous mouth (baron from below)" chance="12500" />
+		<item id="2445" name="crystal mace" chance="12500" />
+		<item id="30306" name="gnome shield" chance="12500" />
+		<item id="25377" name="gold token" chance="12500" />
+		<item id="5892" name="huge chunk of crude iron" chance="12500" countmax="2" />
+		<item id="2156" name="red gem" chance="12500" />
+		<item id="25172" name="silver token" chance="12500" />
+		<item id="9822" name="slightly rusted helmet" chance="12500" />
+		<item id="9816" name="slightly rusted shield" chance="12500" />
+		<item id="2145" name="small diamond" chance="12500" countmax="18" />
+		<item id="2149" name="small emerald" chance="12500" countmax="12" />
+		<item id="2147" name="small ruby" chance="12500" countmax="11" />
+		<item id="9970" name="small topaz" chance="12500" countmax="6" />
+		<item id="2154" name="yellow gem" chance="12500" />
+	</loot>
+</monster>

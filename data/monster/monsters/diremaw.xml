@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Diremaw" nameDescription="a diremaw" race="blood" experience="2500" speed="300">
+	<health now="3600" max="3600" />
+	<look type="1034" corpse="30150" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="earth" interval="2000" chance="25" range="7" min="-150" max="-200">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="25" range="7" radius="4" target="1" min="-150" max="-250">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="21" radius="4" target="0" min="-200" max="-310">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="71" defense="71" />
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="20" />
+		<element icePercent="-20" />
+	</elements>
+	<loot>
+		<item id="2671" name="ham" chance="41109" />
+		<item id="30253" name="diremaw brainpan" chance="24377" />
+		<item id="10557" name="poisonous slime" chance="11455" />
+		<item id="30254" name="diremaw legs" chance="9705" />
+		<item id="18413" name="blue crystal shard" chance="9409" />
+		<item id="24849" name="onyx chip" chance="8346" countmax="3" />
+		<item id="18414" name="violet crystal shard" chance="8332" />
+		<item id="18415" name="green crystal shard" chance="8023" />
+		<item id="2149" name="small emerald" chance="4671" countmax="2" />
+		<item id="7632" name="giant shimmering pearl (green)" chance="3096" />
+		<item id="9971" name="gold ingot" chance="3056" />
+		<item id="7761" name="small enchanted emerald" chance="3002" countmax="2" />
+		<item id="30309" name="suspicious device" chance="1548" />
+		<item id="18454" name="mycological bow" chance="81" />
+		<item id="18393" name="mushroom backpack" chance="54" />
+	</loot>
+</monster>

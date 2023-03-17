@@ -24,6 +24,6 @@
 		<immunity drunk="1" />
 	</immunities>
 	<summons maxSummons="1">
-		<voice name="Elder Mummy" interval="2000" chance="15" />
+		<summon name="Elder Mummy" interval="2000" chance="15" />
 	</summons>
 </monster>

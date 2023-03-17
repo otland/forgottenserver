@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -50,7 +50,7 @@ Tile* IOMap::createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8
 	return tile;
 }
 
-bool IOMap::loadMap(Map* map, const std::string& fileName)
+bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 {
 	int64_t start = OTSYS_TIME();
 	try {
@@ -146,7 +146,8 @@ bool IOMap::loadMap(Map* map, const std::string& fileName)
 	return true;
 }
 
-bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName)
+bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
+                                   const std::filesystem::path& fileName)
 {
 	PropStream propStream;
 	if (!loader.getProps(mapNode, propStream)) {
@@ -154,38 +155,39 @@ bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode
 		return false;
 	}
 
-	std::string mapDescription;
-	std::string tmp;
-
 	uint8_t attribute;
 	while (propStream.read<uint8_t>(attribute)) {
 		switch (attribute) {
-			case OTBM_ATTR_DESCRIPTION:
-				if (!propStream.readString(mapDescription)) {
+			case OTBM_ATTR_DESCRIPTION: {
+				auto [mapDescription, ok] = propStream.readString();
+				if (!ok) {
 					setLastErrorString("Invalid description tag.");
 					return false;
 				}
 				break;
+			}
 
-			case OTBM_ATTR_EXT_SPAWN_FILE:
-				if (!propStream.readString(tmp)) {
+			case OTBM_ATTR_EXT_SPAWN_FILE: {
+				auto [spawnFile, ok] = propStream.readString();
+				if (!ok) {
 					setLastErrorString("Invalid spawn tag.");
 					return false;
 				}
 
-				map.spawnfile = fileName.substr(0, fileName.rfind('/') + 1);
-				map.spawnfile += tmp;
+				map.spawnfile = fileName.parent_path() / spawnFile;
 				break;
+			}
 
-			case OTBM_ATTR_EXT_HOUSE_FILE:
-				if (!propStream.readString(tmp)) {
+			case OTBM_ATTR_EXT_HOUSE_FILE: {
+				auto [houseFile, ok] = propStream.readString();
+				if (!ok) {
 					setLastErrorString("Invalid house tag.");
 					return false;
 				}
 
-				map.housefile = fileName.substr(0, fileName.rfind('/') + 1);
-				map.housefile += tmp;
+				map.housefile = fileName.parent_path() / houseFile;
 				break;
+			}
 
 			default:
 				setLastErrorString("Unknown header node.");
@@ -411,8 +413,8 @@ bool IOMap::parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map
 			map.towns.addTown(townId, town);
 		}
 
-		std::string townName;
-		if (!propStream.readString(townName)) {
+		auto [townName, ok] = propStream.readString();
+		if (!ok) {
 			setLastErrorString("Could not read town name.");
 			return false;
 		}
@@ -444,8 +446,8 @@ bool IOMap::parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, 
 			return false;
 		}
 
-		std::string name;
-		if (!propStream.readString(name)) {
+		auto [name, ok] = propStream.readString();
+		if (!ok) {
 			setLastErrorString("Could not read waypoint name.");
 			return false;
 		}
@@ -456,7 +458,7 @@ bool IOMap::parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, 
 			return false;
 		}
 
-		map.waypoints[name] = Position(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z);
+		map.waypoints[std::string{name}] = Position(waypoint_coords.x, waypoint_coords.y, waypoint_coords.z);
 	}
 	return true;
 }

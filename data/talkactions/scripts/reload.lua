@@ -79,6 +79,11 @@ function onSay(player, words, param)
 	end
 
 	Game.reload(reloadType)
+	if reloadType == RELOAD_TYPE_GLOBAL then
+		-- we need to reload the scripts as well
+		Game.reload(RELOAD_TYPE_SCRIPTS)
+	end
+
 	player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Reloaded %s.", param:lower()))
 	return false
 end

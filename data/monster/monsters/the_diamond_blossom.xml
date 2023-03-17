@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Diamond Blossom" nameDescription="The Diamond Blossom" race="blood" experience="10000" speed="350">
+	<health now="25000" max="25000" />
+	<look type="1068" body="0" feet="79" head="85" legs="86" addons="3" corpse="31458" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="341" />
+		<item id="24630" name="golden lotus brooch" chance="100000" />
+		<item id="24631" name="peacock feather fan" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="8" />
+		<item id="7368" name="assassin star" chance="66667" countmax="6" />
+		<item id="6558" name="flask of demonic blood" chance="66667" />
+		<item id="2124" name="crystal ring" chance="33333" />
+		<item id="6500" name="demonic essence" chance="33333" />
+		<item id="8472" name="great spirit potion" chance="33333" countmax="2" />
+		<item id="5944" name="soul orb" chance="33333" />
+	</loot>
+</monster>

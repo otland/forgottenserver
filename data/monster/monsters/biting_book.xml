@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Biting Book" nameDescription="a biting book" race="ink" experience="9350" speed="480">
+	<health now="6500" max="6500" />
+	<look type="1066" corpse="31265" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1055" />
+		<attack name="physical" interval="2000" chance="15" min="0" max="-1210" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="smallearth" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-800" max="-1210">
+			<attribute key="areaEffect" value="bats" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" min="-800" max="-1200">
+			<attribute key="areaEffect" value="smoke" />
+		</attack>
+	</attacks>
+	<defenses armor="76" defense="76" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="75075" countmax="55" />
+		<item id="31225" name="book page" chance="61595" countmax="6" />
+		<item id="31226" name="glowing rune" chance="40340" countmax="9" />
+		<item id="31222" name="silken bookmark" chance="28929" />
+		<item id="2231" name="big bone" chance="7674" countmax="2" />
+		<item id="2666" name="meat" chance="3704" />
+		<item id="2133" name="ruby necklace" chance="1902" />
+	</loot>
+</monster>

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_TALKACTION_H
@@ -27,10 +27,10 @@ public:
 
 	const std::string& getWords() const { return words; }
 	const std::vector<std::string>& getWordsMap() const { return wordsMap; }
-	void setWords(std::string word)
+	void setWords(std::string_view word)
 	{
 		words = word;
-		wordsMap.push_back(word);
+		wordsMap.emplace_back(word);
 	}
 	std::string getSeparator() const { return separator; }
 	void setSeparator(std::string sep) { separator = sep; }
@@ -47,7 +47,7 @@ public:
 	void setNeedAccess(bool b) { needAccess = b; }
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onSay"; }
 
 	std::string words;
 	std::vector<std::string> wordsMap;
@@ -73,7 +73,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "talkactions"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 

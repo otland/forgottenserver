@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Blazing Rose" nameDescription="the blazing rose" race="blood" experience="9000" speed="350">
+	<health now="10000" max="10000" />
+	<look type="1068" head="95" body="94" legs="57" feet="79" addons="2" corpse="31453" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="331" />
+		<item id="24630" name="golden lotus brooch" chance="100000" />
+		<item id="24631" name="peacock feather fan" chance="100000" />
+		<item id="31151" name="perfume flacon" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="7368" name="assassin star" chance="60000" countmax="12" />
+		<item id="8472" name="great spirit potion" chance="40000" />
+		<item id="5944" name="soul orb" chance="40000" />
+		<item id="2124" name="crystal ring" chance="20000" />
+		<item id="6500" name="demonic essence" chance="20000" />
+		<item id="6558" name="flask of demonic blood" chance="20000" />
+		<item id="24637" name="oriental shoes" chance="20000" />
+		<item id="2156" name="red gem" chance="20000" />
+		<item id="2150" name="small amethyst" chance="20000" countmax="3" />
+	</loot>
+</monster>
