@@ -10838,7 +10838,8 @@ int LuaScriptInterface::luaSendCreatureSquare(lua_State* L)
 
 	Creature* creature = getUserdata<Creature>(L, 2);
 	if (!creature) {
-    	lua_pushnil(L);
+		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+    	lua_pushboolean(L, false);
     	return 1;
 	}
 
