@@ -393,3 +393,15 @@ function Player.isPromoted(self)
 	local fromVocId = vocation:getDemotion():getId()
 	return vocation:getId() ~= fromVocId
 end
+
+function Player.setExhaustion(self, value, time)
+	return self:setStorageValue(value, time + os.time())
+end
+
+function Player.getExhaustion(self, value)
+	local storage = self:getStorageValue(value)
+	if storage <= 0 then
+		return 0
+	end
+	return storage - os.time()
+end
