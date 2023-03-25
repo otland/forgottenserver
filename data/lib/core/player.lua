@@ -394,14 +394,10 @@ function Player.isPromoted(self)
 	return vocation:getId() ~= fromVocId
 end
 
-function Player.setExhaustion(self, value, time)
-	return self:setStorageValue(value, time + os.time())
+function Player.setExhaustion(self, key, seconds)
+	return self:setStorageValue(key, os.time() + seconds)
 end
 
-function Player.getExhaustion(self, value)
-	local storage = self:getStorageValue(value)
-	if storage <= 0 then
-		return 0
-	end
-	return storage - os.time()
+function Player.getExhaustion(self, key)
+	return math.max(self:getStorageValue(key) - os.time(), 0)
 end
