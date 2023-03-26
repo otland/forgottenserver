@@ -5,12 +5,14 @@
 
 #include "monsters.h"
 
+#include "bestiary.h"
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
 #include "pugicast.h"
 #include "spells.h"
 #include "weapons.h"
+#include "tools.h"
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -73,10 +75,7 @@ bool Monsters::reload()
 	loaded = false;
 
 	scriptInterface.reset();
-
-	for (size_t i = 0; i < BESTIARY_RACE_LAST; i++) {
-		bestiaryMonsters[i].clear();
-	}
+	bestiary.clear();
 	return loadFromXml(true);
 }
 
@@ -985,8 +984,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			if (caseInsensitiveEqual(attrName, "class")) {
 				mType->info.bestiary.className = attr.as_string();
 			} else if (caseInsensitiveEqual(attrName, "race")) {
-				mType->info.bestiary.race =
-				    getBestiaryType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+				mType->info.bestiary.race = attr.as_string();
 			} else if (caseInsensitiveEqual(attrName, "raceId")) {
 				mType->info.bestiary.raceId = attr.as_uint();
 			} else if (caseInsensitiveEqual(attrName, "firstUnlock")) {
@@ -1002,14 +1000,15 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			} else if (caseInsensitiveEqual(attrName, "occurrence")) {
 				mType->info.bestiary.occurrence = attr.as_uint();
 			} else if (caseInsensitiveEqual(attrName, "locations")) {
-				mType->info.bestiary.locations = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+				mType->info.bestiary.locations = attr.as_string();
 			}
 		}
-		if (!isValidBestiaryRecord(mType->info.bestiary)) {
-			// if invalid reset bestiary data to avoid invalid calls in future
+
+		if (!bestiary.isValidBestiaryRecord(mType->info.bestiary)) {
+			// if setup is invalid reset bestiary data to avoid invalid calls in future
 			mType->info.bestiary = BestiaryBlock_t();
 		} else {
-			bestiaryMonsters[mType->info.bestiary.race].insert({mType->name, mType});
+			bestiary.addBestiaryMonster(mType->info.bestiary.race, mType);
 		}
 	}
 
@@ -1551,8 +1550,4 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
-}
-
-bestiaryList& Monsters::getBestiaryMonsterType() {
-	return bestiaryMonsters;
 }

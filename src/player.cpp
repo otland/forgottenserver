@@ -711,6 +711,8 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 			return;
 		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
 			// do nothing
+		} else if (IS_IN_KEYRANGE(key, BESTIARY_RANGE)) {
+			// do nothing
 		} else {
 			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
 			return;
@@ -4868,7 +4870,7 @@ void Player::updateRegeneration()
 	}
 }
 
-void Player::updateBestiaryKill(uint32_t raceId, int32_t count)
+void Player::updateBestiaryKills(uint32_t raceId, int32_t count)
 {
 	if (raceId == 0) {
 		return;
@@ -4876,13 +4878,37 @@ void Player::updateBestiaryKill(uint32_t raceId, int32_t count)
 
 	int storageValue = 0;
 	if (getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue)) {
-		if (storageValue < 0) {
-			storageValue = count;
-		} else {
-			storageValue += count;
-		}
-		this->addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, count);
-	} else {
-		this->addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, count);
+		storageValue = std::max(0, storageValue);
+			storageValue += count; // TODO:: add config or some vay to change count value
 	}
+	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue, true);
+}
+
+int32_t Player::getBestiaryKills(uint32_t raceId)
+{
+	int storageValue = 0;
+	if (getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue)) {
+		storageValue = std::max(0, storageValue);
+		return storageValue;
+	}
+	return 0;
+}
+
+const int32_t Player::getBestiaryKills(uint32_t raceId) const
+{
+	int storageValue = 0;
+	if (getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue)) {
+		storageValue = std::max(0, storageValue);
+		return storageValue;
+	}
+	return 0;
+}
+
+void Player::setBestiaryKills(uint32_t raceId, int32_t value)
+{
+	if (raceId == 0) {
+		return;
+	}
+
+	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, value, true);
 }

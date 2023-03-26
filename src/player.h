@@ -1134,7 +1134,10 @@ public:
 
 	void updateRegeneration();
 
-	void updateBestiaryKill(uint32_t raceId, int32_t count);
+	void updateBestiaryKills(uint32_t raceId, int32_t count);
+	int32_t getBestiaryKills(uint32_t raceId);
+	const int32_t getBestiaryKills(uint32_t raceId) const;
+	void setBestiaryKills(uint32_t raceId, int32_t value);
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 

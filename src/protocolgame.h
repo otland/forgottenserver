@@ -323,6 +323,7 @@ private:
 
 	// bestiary
 	void parseBestiarySendRaces();
+	void parseBestiarySendCreatures(NetworkMessage& msg);
 
 	// otclient
 	void parseExtendedOpcode(NetworkMessage& msg);

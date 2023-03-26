@@ -2072,30 +2072,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
-	registerEnum(BESTIARY_RACE_NONE);
-	registerEnum(BESTIARY_RACE_FIRST);
-	registerEnum(BESTIARY_RACE_AMPHIBIC);
-	registerEnum(BESTIARY_RACE_AQUATIC);
-	registerEnum(BESTIARY_RACE_BIRD);
-	registerEnum(BESTIARY_RACE_CONSTRUCT);
-	registerEnum(BESTIARY_RACE_DEMON);
-	registerEnum(BESTIARY_RACE_DRAGON);
-	registerEnum(BESTIARY_RACE_ELEMENTAL);
-	registerEnum(BESTIARY_RACE_EXTRA_DIMENSIONAL);
-	registerEnum(BESTIARY_RACE_FEY);
-	registerEnum(BESTIARY_RACE_GIANT);
-	registerEnum(BESTIARY_RACE_HUMAN);
-	registerEnum(BESTIARY_RACE_HUMANOID);
-	registerEnum(BESTIARY_RACE_LYCANTHROPE);
-	registerEnum(BESTIARY_RACE_MAGICAL);
-	registerEnum(BESTIARY_RACE_MAMMAL);
-	registerEnum(BESTIARY_RACE_PLANT);
-	registerEnum(BESTIARY_RACE_REPTILE);
-	registerEnum(BESTIARY_RACE_SLIME);
-	registerEnum(BESTIARY_RACE_UNDEAD);
-	registerEnum(BESTIARY_RACE_VERMIN);
-	registerEnum(BESTIARY_RACE_LAST);
-
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2726,6 +2702,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "isNearDepotBox", LuaScriptInterface::luaPlayerIsNearDepotBox);
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
+
+	registerMethod("Player", "updateBestiaryKill", LuaScriptInterface::luaPlayerUpdateBestiaryKill);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10873,6 +10851,28 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerUpdateBestiaryKill(lua_State* L)
+{
+	// player:updateBestiaryKill(raceId, count)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	
+	if (!isNumber(L, 2) || !isNumber(L, 3)) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	size_t raceId = getNumber<size_t>(L, 2);
+	size_t count = getNumber<size_t>(L, 3);
+	player->updateBestiaryKills(raceId, count);
+
+	return 1;
+}
+
 // Monster
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
@@ -14915,7 +14915,7 @@ int LuaScriptInterface::luaMonsterTypeChangeTargetSpeed(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeGetBestiaryData(lua_State* L)
 {
-	// monsterType:getElementList()
+	// monsterType:getBestiaryData()
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (!monsterType) {
 		lua_pushnil(L);

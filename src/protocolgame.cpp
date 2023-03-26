@@ -23,6 +23,8 @@
 #include "storeinbox.h"
 #include "monsters.h"
 
+#include <iostream>
+
 extern ConfigManager g_config;
 extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
@@ -138,16 +140,17 @@ ClientDamageType getClientDamageType(CombatType_t combatType)
 	}
 }
 
-uint16_t getUnlockedBestiary(Player *player, std::map<std::string, MonsterType*> bestiaryRaceList) {
+uint16_t getUnlockedBestiary(Player *player, RaceMap &raceList) {
 	uint16_t count = 0;
 	int32_t storageValue = 0;
-	for (auto const& iter : bestiaryRaceList) {
+	bool isStorageGethered = false;
+	for (auto const& iter : raceList) {
 		if (iter.second && iter.second->info.bestiary.raceId != 0) {
-			player->getStorageValue(PSTRG_BESTIARY_RANGE_START + iter.second->info.bestiary.raceId, storageValue);
-			if (storageValue >= iter.second->info.bestiary.firstUnlock) {
+			isStorageGethered =
+			    player->getStorageValue(PSTRG_BESTIARY_RANGE_START + iter.second->info.bestiary.raceId, storageValue);
+			if (isStorageGethered == true && storageValue >= iter.second->info.bestiary.firstUnlock) {
 				count++;
 			}
-
 		}
 	}
 	return count;
@@ -808,11 +811,16 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		// case 0xDF: break; // premium shop (?)
 		// case 0xE0: break; // premium shop (?)
-		// case 0xE1: break; // bestiary 1
-		// case 0xE2: break; // bestiary 2
+		case 0xE1:
+			parseBestiarySendRaces();
+			break;
+		 case 0xE2:
+			parseBestiarySendCreatures(msg);
+			break;
 		// case 0xE3: break; // bestiary 3
 		// case 0xE4: break; // buy charm rune
 		// case 0xE5: break; // request character info (cyclopedia)
+			break;
 		case 0xE6:
 			parseBugReport(msg);
 			break;
@@ -3960,38 +3968,91 @@ void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 
 void ProtocolGame::parseBestiarySendRaces()
 {
+	Bestiary& bestiary = g_monsters.bestiary;
+
 	NetworkMessage msg;
 	msg.addByte(0xd5);
-	bestiaryList bestiaryMonsters = g_monsters.getBestiaryMonsterType();
-	uint16_t raceCount = 0;
-	for (uint8_t i = BESTIARY_RACE_FIRST; i < BESTIARY_RACE_LAST; i++) {
-		if (bestiaryMonsters[i].size() > 0) {
-			raceCount++;
-		}
-	}
+	uint16_t raceCount = bestiary.getRaceCount();
+	
+
+	g_monsters.bestiary.getRaceCount();
+
 	msg.add<uint16_t>(raceCount);
 
-	for (uint8_t i = BESTIARY_RACE_FIRST; i < BESTIARY_RACE_LAST; i++) {
+	for (auto it = bestiary.bestiaryMap.begin(); it != bestiary.bestiaryMap.end(); it++) {
 		std::string BestClass = "";
-		if (bestiaryMonsters[i].size() > 0) {
-			for (auto mTypeMapItem : bestiaryMonsters[i]) {
-				const MonsterType* mtype = mTypeMapItem.second;
-				if (!mtype) {
-					return;
-				}
-				if (mtype->info.bestiary.race == static_cast<BestiaryType_t>(i)) {
-					BestClass = mtype->info.bestiary.className;
-				}
+		for (auto mTypeMapItem : bestiary.bestiaryMap[it->first]) {
+			const MonsterType* mtype = mTypeMapItem.second;
+			if (!mtype) {
+				return;
 			}
-
-			msg.addString(BestClass);
-			auto bestiarySize = bestiaryMonsters[i].size();
-			msg.add<uint16_t>(bestiarySize);
-			uint16_t unlockedCount = getUnlockedBestiary(player, bestiaryMonsters[i]);
-			msg.add<uint16_t>(unlockedCount);
+			BestClass = mtype->info.bestiary.className;
 		}
+
+		msg.addString(it->first);
+		auto bestiarySize = it->second.size();
+		msg.add<uint16_t>(bestiarySize);
+		uint16_t unlockedCount = getUnlockedBestiary(player, it->second);
+		msg.add<uint16_t>(unlockedCount);
 	}
 	writeToOutputBuffer(msg);
-
 	// probaly here we sghould send charm data ETC 
+}
+
+
+void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
+{
+	Bestiary& bestiary = g_monsters.bestiary;
+
+	std::ostringstream ss;
+	RaceMap races = {};
+	std::string text = "";
+	uint8_t search = msg.getByte();
+
+	if (search == 1) {
+		/* TODO KRET
+		uint16_t monsterAmount = msg.get<uint16_t>();
+		std::map<uint16_t, std::string> mtype_list = g_game().getBestiaryList();
+		for (uint16_t monsterCount = 1; monsterCount <= monsterAmount; monsterCount++) {
+			uint16_t raceid = msg.get<uint16_t>();
+			if (player->getBestiaryKillCount(raceid) > 0) {
+				auto it = mtype_list.find(raceid);
+				if (it != mtype_list.end()) {
+					race.insert({raceid, it->second});
+				}
+			}
+		}
+		*/
+	} else {
+		std::string raceName = msg.getString();
+
+		try {
+			races = g_monsters.bestiary.bestiaryMap.at(raceName);
+
+		} catch (const std::out_of_range& oor) {
+			// do something else
+			// TODO KRET log
+		}
+
+		text = raceName;
+	}
+
+	NetworkMessage newmsg;
+	newmsg.addByte(0xd6);
+	newmsg.addString(text);
+	newmsg.add<uint16_t>(races.size());
+	//std::map<uint16_t, uint32_t> creaturesKilled = g_iobestiary().getBestiaryKillCountByMonsterIDs(player, race);
+
+	for (auto itRace : races) {
+		uint16_t raceid = itRace.second->info.bestiary.raceId;
+		newmsg.add<uint16_t>(raceid);
+
+		uint16_t progress = bestiary.getProgressStatus(player, itRace.second);
+		if (progress > 0) {
+			newmsg.add<uint16_t>(static_cast<uint16_t>(progress));
+		} else {
+			newmsg.addByte(0);
+		}
+	}
+	writeToOutputBuffer(newmsg);
 }

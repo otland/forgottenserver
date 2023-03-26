@@ -16,6 +16,18 @@
 		<flag staticattack="80" />
 		<flag runonhealth="300" />
 	</flags>
+	<bestiary>
+		<bestiary class="Dragon" />
+		<bestiary race="Dragon" /> <!-- or Demon etc-->
+		<bestiary raceId="34" />
+		<bestiary firstUnlock ="1" />
+		<bestiary secondUnlock ="500" />
+		<bestiary finishUnlock ="2500" />
+		<bestiary charmPoints ="50" />
+		<bestiary stars ="4" />
+		<bestiary occurrence ="1" />
+		<bestiary locations = "Test locations" />
+	</bestiary>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-60" max="-140">

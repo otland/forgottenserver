@@ -6,46 +6,14 @@
 
 #include "const.h"
 #include "enums.h"
+#include "bestiary.h"
 
-
+class Bestiary;
 class ConditionDamage;
 class LuaScriptInterface;
 class MonsterType;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
-
-enum BestiaryType_t : uint8_t
-{
-	//TODO: check if we can use any string value
-	BESTIARY_RACE_NONE = 0,
-
-	BESTIARY_RACE_AMPHIBIC = 1,
-	BESTIARY_RACE_AQUATIC = 2,
-	BESTIARY_RACE_BIRD = 3,
-	BESTIARY_RACE_CONSTRUCT = 4,
-	BESTIARY_RACE_DEMON = 5,
-	BESTIARY_RACE_DRAGON = 6,
-	BESTIARY_RACE_ELEMENTAL = 7,
-	BESTIARY_RACE_EXTRA_DIMENSIONAL = 8,
-	BESTIARY_RACE_FEY = 9,
-	BESTIARY_RACE_GIANT = 10,
-	BESTIARY_RACE_HUMAN = 11,
-	BESTIARY_RACE_HUMANOID = 12,
-	BESTIARY_RACE_LYCANTHROPE = 13,
-	BESTIARY_RACE_MAGICAL = 14,
-	BESTIARY_RACE_MAMMAL = 15,
-	BESTIARY_RACE_PLANT = 16,
-	BESTIARY_RACE_REPTILE = 17,
-	BESTIARY_RACE_SLIME = 18,
-	BESTIARY_RACE_UNDEAD = 19,
-	BESTIARY_RACE_VERMIN = 20,
-	BESTIARY_RACE_UNKNOWN = 21,
-
-	BESTIARY_RACE_FIRST = BESTIARY_RACE_AMPHIBIC,
-	BESTIARY_RACE_LAST = BESTIARY_RACE_UNKNOWN,
-};
-
-typedef std::array<std::map<std::string, MonsterType*>, BESTIARY_RACE_LAST> bestiaryList;
 
 struct LootBlock
 {
@@ -95,7 +63,7 @@ struct summonBlock_t
 struct BestiaryBlock_t
 {
 	std::string className;
-	BestiaryType_t race = BESTIARY_RACE_NONE;
+	std::string race;
 	uint32_t raceId = 0; // is required to trigger Bestiary
 	uint32_t firstUnlock = 0;
 	uint32_t secondUnlock = 0; 
@@ -292,7 +260,7 @@ public:
 
 	std::unique_ptr<LuaScriptInterface> scriptInterface;
 	std::map<std::string, MonsterType> monsters;
-	bestiaryList& getBestiaryMonsterType();
+	Bestiary bestiary;
 
 private:
 	ConditionDamage* getDamageCondition(ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage,
@@ -305,8 +273,6 @@ private:
 	bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 	std::map<std::string, std::string> unloadedMonsters;
-
-	bestiaryList bestiaryMonsters;
 
 	bool loaded = false;
 };
