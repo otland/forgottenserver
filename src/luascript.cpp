@@ -10836,17 +10836,15 @@ int LuaScriptInterface::luaSendCreatureSquare(lua_State* L)
     	return 1;
 	}
 
-	Creature* creature = getUserdata<Creature>(L, 2);
+	auto creature = getCreature(L, 2);
 	if (!creature) {
 		reportErrorFunc(L, getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
-    	lua_pushboolean(L, false);
+    	pushBoolean(L, false);
     	return 1;
 	}
 
-	uint32_t color = getNumber<uint32_t>(L, 3, 0);
-
-	player->sendCreatureSquare(creature, static_cast <SquareColor_t>(color));
-	lua_pushboolean(L, true);
+	player->sendCreatureSquare(creature, getNumber<SquareColor_t>(L, 3));
+	pushBoolean(L, true);
 	return 1;
 }
 
