@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_RAIDS_H
@@ -182,7 +182,7 @@ public:
 	bool executeEvent() override;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onRaid"; }
 };
 
 #endif // FS_RAIDS_H

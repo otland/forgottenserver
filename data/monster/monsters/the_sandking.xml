@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Sandking" nameDescription="The Sandking" race="venom" experience="0" speed="250">
+	<health now="50000" max="50000" />
+	<look type="1013" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="earth" interval="2000" chance="20" target="1" range="4" radius="4" min="0" max="-500">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="5" speedchange="-650" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="18413" name="blue crystal shard" chance="100000" countmax="3" />
+		<item id="7632" name="giant shimmering pearl" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="177" />
+		<item id="18415" name="green crystal shard" chance="100000" countmax="3" />
+		<item id="2183" name="hailstorm rod" chance="100000" />
+		<item id="5892" name="huge chunk of crude iron" chance="100000" />
+		<item id="7440" name="mastermind potion" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="11" />
+		<item id="2214" name="ring of healing" chance="100000" />
+		<item id="2436" name="skull staff" chance="100000" />
+		<item id="9970" name="small topaz" chance="100000" countmax="11" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="6" />
+		<item id="18414" name="violet crystal shard" chance="100000" countmax="4" />
+	</loot>
+</monster>

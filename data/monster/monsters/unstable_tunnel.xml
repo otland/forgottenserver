@@ -22,7 +22,7 @@
 		<immunity drunk="1" />
 	</immunities>
 	<summons maxSummons="4">
-		<voice name="Drillworm" interval="2000" chance="15" />
-		<voice name="Glooth Anemone" interval="2000" chance="15" />
+		<summon name="Drillworm" interval="2000" chance="15" />
+		<summon name="Glooth Anemone" interval="2000" chance="15" />
 	</summons>
 </monster>

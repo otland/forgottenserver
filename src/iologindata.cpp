@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -32,7 +32,7 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	return account;
 }
 
-std::string decodeSecret(const std::string& secret)
+std::string decodeSecret(std::string_view secret)
 {
 	// simple base32 decoding
 	std::string key;
@@ -86,21 +86,23 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", account.id));
 	if (result) {
 		do {
-			account.characters.push_back(result->getString("name"));
+			account.characters.emplace_back(result->getString("name"));
 		} while (result->next());
 	}
 	return true;
 }
 
-uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, const std::string& password,
-                                              std::string& characterName, std::string& token, uint32_t tokenTime)
+std::pair<uint32_t, std::string_view> IOLoginData::gameworldAuthentication(std::string_view accountName,
+                                                                           std::string_view password,
+                                                                           std::string_view characterName,
+                                                                           std::string_view token, uint32_t tokenTime)
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(
 	    fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
 	                db.escapeString(accountName), db.escapeString(accountName)));
 	if (!result) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
 	// two-factor auth
@@ -108,20 +110,20 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
-				return 0;
+				return std::make_pair(0, characterName);
 			}
 
 			bool tokenValid = token == generateToken(secret, tokenTime) ||
 			                  token == generateToken(secret, tokenTime - 1) ||
 			                  token == generateToken(secret, tokenTime + 1);
 			if (!tokenValid) {
-				return 0;
+				return std::make_pair(0, characterName);
 			}
 		}
 	}
 
 	if (transformToSHA1(password) != result->getString("password")) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
 	uint32_t accountId = result->getNumber<uint32_t>("id");
@@ -130,11 +132,10 @@ uint32_t IOLoginData::gameworldAuthentication(const std::string& accountName, co
 	    fmt::format("SELECT `name` FROM `players` WHERE `name` = {:s} AND `account_id` = {:d} AND `deletion` = 0",
 	                db.escapeString(characterName), accountId));
 	if (!result) {
-		return 0;
+		return std::make_pair(0, characterName);
 	}
 
-	characterName = result->getString("name");
-	return accountId;
+	return std::make_pair(accountId, result->getString("name"));
 }
 
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
@@ -308,10 +309,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->capacity = result->getNumber<uint32_t>("cap") * 100;
 	player->blessings = result->getNumber<uint16_t>("blessings");
 
-	unsigned long conditionsSize;
-	const char* conditions = result->getStream("conditions", conditionsSize);
+	auto conditions = result->getString("conditions");
 	PropStream propStream;
-	propStream.init(conditions, conditionsSize);
+	propStream.init(conditions.data(), conditions.size());
 
 	Condition* condition = Condition::createCondition(propStream);
 	while (condition) {
@@ -667,12 +667,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		propWriteStream.clear();
 		item->serializeAttr(propWriteStream);
 
-		size_t attributesSize;
-		const char* attributes = propWriteStream.getStream(attributesSize);
-
 		if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), pid, runningId,
 		                                     item->getID(), item->getSubType(),
-		                                     db.escapeBlob(attributes, attributesSize)))) {
+		                                     db.escapeString(propWriteStream.getStream())))) {
 			return false;
 		}
 	}
@@ -709,12 +706,9 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 			propWriteStream.clear();
 			item->serializeAttr(propWriteStream);
 
-			size_t attributesSize;
-			const char* attributes = propWriteStream.getStream(attributesSize);
-
 			if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), parentId,
 			                                     runningId, item->getID(), item->getSubType(),
-			                                     db.escapeBlob(attributes, attributesSize)))) {
+			                                     db.escapeString(propWriteStream.getStream())))) {
 				return false;
 			}
 		}
@@ -750,9 +744,6 @@ bool IOLoginData::savePlayer(Player* player)
 			propWriteStream.write<uint8_t>(CONDITIONATTR_END);
 		}
 	}
-
-	size_t conditionsSize;
-	const char* conditions = propWriteStream.getStream(conditionsSize);
 
 	// First, an UPDATE query to write the player itself
 	std::ostringstream query;
@@ -798,7 +789,7 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = INET6_ATON('" << player->lastIP.to_string() << "'),";
 	}
 
-	query << "`conditions` = " << db.escapeBlob(conditions, conditionsSize) << ',';
+	query << "`conditions` = " << db.escapeString(propWriteStream.getStream()) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int64_t skullTime = 0;
@@ -970,9 +961,11 @@ std::string IOLoginData::getNameByGuid(uint32_t guid)
 	DBResult_ptr result =
 	    Database::getInstance().storeQuery(fmt::format("SELECT `name` FROM `players` WHERE `id` = {:d}", guid));
 	if (!result) {
-		return std::string();
+		return {};
 	}
-	return result->getString("name");
+
+	auto name = result->getString("name");
+	return {name.data(), name.size()};
 }
 
 uint32_t IOLoginData::getGuidByName(const std::string& name)
@@ -1034,11 +1027,9 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		uint16_t type = result->getNumber<uint16_t>("itemtype");
 		uint16_t count = result->getNumber<uint16_t>("count");
 
-		unsigned long attrSize;
-		const char* attr = result->getStream("attributes", attrSize);
-
+		auto attr = result->getString("attributes");
 		PropStream propStream;
-		propStream.init(attr, attrSize);
+		propStream.init(attr.data(), attr.size());
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {

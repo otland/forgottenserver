@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_HOUSE_H
@@ -17,7 +17,7 @@ class Player;
 class AccessList
 {
 public:
-	void parseList(const std::string& list);
+	void parseList(std::string_view list);
 	void addPlayer(const std::string& name);
 	void addGuild(const std::string& name);
 	void addGuildRank(const std::string& name, const std::string& rankName);
@@ -56,7 +56,7 @@ public:
 
 	bool canUse(const Player* player);
 
-	void setAccessList(const std::string& textlist);
+	void setAccessList(std::string_view textlist);
 	bool getAccessList(std::string& list) const;
 
 	void onRemoved() override;
@@ -111,7 +111,7 @@ public:
 	// listId special values:
 	// GUEST_LIST	 guest list
 	// SUBOWNER_LIST subowner list
-	void setAccessList(uint32_t listId, const std::string& textlist);
+	void setAccessList(uint32_t listId, std::string_view textlist);
 	bool getAccessList(uint32_t listId, std::string& list) const;
 
 	bool isInvited(const Player* player) const;

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -47,8 +47,6 @@ void Weapons::clear(bool fromLua)
 }
 
 LuaScriptInterface& Weapons::getScriptInterface() { return scriptInterface; }
-
-std::string Weapons::getScriptBaseName() const { return "weapons"; }
 
 void Weapons::loadDefaults()
 {
@@ -247,8 +245,6 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 
 void Weapon::configureWeapon(const ItemType& it) { id = it.id; }
 
-std::string Weapon::getScriptEventName() const { return "onUseWeapon"; }
-
 int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shootRange) const
 {
 	const Position& playerPos = player->getPosition();
@@ -286,7 +282,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (hasVocationWeaponSet(player->getVocationId())) {
+	if (!hasVocationWeaponSet(player->getVocationId())) {
 		return 0;
 	}
 
@@ -337,7 +333,7 @@ bool Weapon::ammoCheck(const Player* player) const
 		return false;
 	}
 
-	if (hasVocationWeaponSet(player->getVocationId())) {
+	if (!hasVocationWeaponSet(player->getVocationId())) {
 		return false;
 	}
 

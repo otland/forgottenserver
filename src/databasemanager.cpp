@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -22,7 +22,7 @@ bool DatabaseManager::optimizeTables()
 	}
 
 	do {
-		std::string tableName = result->getString("TABLE_NAME");
+		const auto tableName = result->getString("TABLE_NAME");
 		std::cout << "> Optimizing table " << tableName << "..." << std::flush;
 
 		if (db.executeQuery(fmt::format("OPTIMIZE TABLE `{:s}`", tableName))) {
