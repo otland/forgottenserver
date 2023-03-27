@@ -327,3 +327,7 @@ function Player:onInventoryUpdate(item, slot, equip)
 		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
 end
+
+function Player:onUseItem(item)
+	return true
+end

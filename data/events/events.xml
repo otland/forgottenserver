@@ -35,6 +35,7 @@
 	<event class="Player" method="onGainSkillTries" enabled="1" />
 	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onInventoryUpdate" enabled="1" />
+	<event class="Player" method="onUseItem" enabled="0" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />
