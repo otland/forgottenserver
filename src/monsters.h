@@ -260,7 +260,7 @@ public:
 
 	std::unique_ptr<LuaScriptInterface> scriptInterface;
 	std::map<std::string, MonsterType> monsters;
-	Bestiary bestiary;
+	std::shared_ptr<Bestiary> bestiary = std::make_shared<Bestiary>();
 
 private:
 	ConditionDamage* getDamageCondition(ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage,

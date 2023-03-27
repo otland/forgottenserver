@@ -1830,7 +1830,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 	return false;
 }
 
-void Monster::death(Creature*)
+void Monster::death(Creature* creature)
 {
 	setAttackedCreature(nullptr);
 
@@ -1843,6 +1843,14 @@ void Monster::death(Creature*)
 	clearTargetList();
 	clearFriendList();
 	onIdleStatus();
+	if (mType->info.bestiary.raceId != 0) {
+		Player* player = creature->getPlayer();
+		if (player)
+		{
+			player->updateBestiaryKills(mType->info.bestiary.raceId,
+			                            g_config.getNumber(ConfigManager::BESTIARY_COUNT_PER_KILL));
+		}
+	}
 }
 
 Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)

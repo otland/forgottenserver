@@ -75,7 +75,9 @@ bool Monsters::reload()
 	loaded = false;
 
 	scriptInterface.reset();
-	bestiary.clear();
+	if (bestiary) {
+		bestiary->clear();
+	}
 	return loadFromXml(true);
 }
 
@@ -1004,11 +1006,11 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			}
 		}
 
-		if (!bestiary.isValidBestiaryRecord(mType->info.bestiary)) {
+		if (bestiary && !bestiary->isValidBestiaryRecord(mType->info.bestiary)) {
 			// if setup is invalid reset bestiary data to avoid invalid calls in future
 			mType->info.bestiary = BestiaryBlock_t();
-		} else {
-			bestiary.addBestiaryMonster(mType->info.bestiary.race, mType);
+		} else if (bestiary) {
+			bestiary->addBestiaryMonster(mType->info.bestiary.race, mType);
 		}
 	}
 

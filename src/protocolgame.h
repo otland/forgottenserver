@@ -324,6 +324,7 @@ private:
 	// bestiary
 	void parseBestiarySendRaces();
 	void parseBestiarySendCreatures(NetworkMessage& msg);
+	void parseBestiarySendMonsterData(NetworkMessage& msg);
 
 	// otclient
 	void parseExtendedOpcode(NetworkMessage& msg);

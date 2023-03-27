@@ -4877,10 +4877,8 @@ void Player::updateBestiaryKills(uint32_t raceId, int32_t count)
 	}
 
 	int storageValue = 0;
-	if (getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue)) {
-		storageValue = std::max(0, storageValue);
-			storageValue += count; // TODO:: add config or some vay to change count value
-	}
+	getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue);
+	storageValue = std::max(0, storageValue) + count; // TODO:: add config or some vay to change count value
 	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue, true);
 }
 

@@ -10,31 +10,23 @@
 #include "player.h"
 #include "monsters.h"
 
-void Bestiary::addBestiaryMonster(std::string race, const MonsterType* mType)
+void Bestiary::addBestiaryMonster(std::string race, MonsterType* mType)
 {
 	bestiaryMap[race][mType->name] = mType;
+	bestiaryMapRaceId[race][mType->info.bestiary.raceId] = mType;
 }
 
 RaceMap& Bestiary::getRaceBestiary(std::string race) { return bestiaryMap[race]; }
 
-const MonsterType* Bestiary::getBestiaryRecordData(const MonsterType* mType) const
+size_t Bestiary::getBestiaryMonsterCount()
 {
-	/*
-	if (!mType) {
-		return nullptr;
+	size_t monsterCount = 0;
+	for (auto& it = getBestiaryMapByRaceId().begin(); it != getBestiaryMapByRaceId().end(); it++) {
+		monsterCount += it->second.size();
 	}
-	MonsterType* mt = nullptr;
-
-	try {
-		mt = bestiaryMap.at(mType->info.bestiary.race).at(mType->name);
-		// do stuff
-	} catch (const std::out_of_range& oor) {
-	// TODO KRET 
-		std::cout << "[Warning - Monsters::getRaceBestiary] can't bind record on " << std::endl;
-	}
-	*/
-	return mType;
+	return monsterCount;
 }
+
 
 bool Bestiary::isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 {
@@ -75,8 +67,11 @@ bool Bestiary::isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 	return true;
 }
 
-void Bestiary::clear() { bestiaryMap.clear(); }
-
+void Bestiary::clear()
+{
+	bestiaryMap.clear();
+	bestiaryMapRaceId.clear();
+}
 
 bool Bestiary::isBestiaryFinished(const Player* player, const MonsterType* mType) {
 	if (!player || !mType || mType->info.bestiary.raceId == 0) {
@@ -110,9 +105,10 @@ uint16_t Bestiary::getProgressStatus(const Player* player, const MonsterType* mT
 	}
 
 	uint32_t killAmount = player->getBestiaryKills(mType->info.bestiary.raceId);
+
 	if (killAmount == 0) {
 		return 0;
-	} else if (killAmount < mType->info.bestiary.finishUnlock) {
+	} else if (killAmount < mType->info.bestiary.firstUnlock) {
 		return 1;
 	} else if (killAmount < mType->info.bestiary.secondUnlock) {
 		return 2;
@@ -120,4 +116,59 @@ uint16_t Bestiary::getProgressStatus(const Player* player, const MonsterType* mT
 		return 3;
 	}
 	return 4;
+}
+
+uint16_t Bestiary::calculateDifficult(uint32_t chance)
+{
+	double chanceInPercent = static_cast<double>(chance) / 1000;
+
+	if (chanceInPercent < 0.2) { // 0.2%
+		return 4;
+	} else if (chanceInPercent < 1) { // 1%
+		return 3;
+	} else if (chanceInPercent < 5) { // 5%
+		return 2;
+	} else if (chanceInPercent < 25) { // 25%
+		return 1;
+	}
+	return 0; 
+}
+
+std::map<uint8_t, int16_t> Bestiary::getMonsterElements(MonsterType* mtype) const
+{
+	std::map<uint8_t, int16_t> defaultMap = {};
+	for (uint8_t i = 0; i <= 7; i++) {
+		defaultMap[i] = 100;
+	}
+	for (const auto& elementEntry : mtype->info.elementMap) {
+		switch (elementEntry.first) {
+			case COMBAT_PHYSICALDAMAGE:
+				defaultMap[0] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_FIREDAMAGE:
+				defaultMap[1] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_EARTHDAMAGE:
+				defaultMap[2] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_ENERGYDAMAGE:
+				defaultMap[3] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_ICEDAMAGE:
+				defaultMap[4] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_HOLYDAMAGE:
+				defaultMap[5] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_DEATHDAMAGE:
+				defaultMap[6] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			case COMBAT_HEALING:
+				defaultMap[7] -= static_cast<int16_t>(elementEntry.second);
+				break;
+			default:
+				break;
+		}
+	}
+	return defaultMap;
 }
