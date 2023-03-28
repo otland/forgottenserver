@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Deepworm" nameDescription="a deepworm" race="blood" experience="2300" speed="204">
+	<health now="3500" max="3500" />
+	<look type="1033" corpse="30201" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="earth" interval="2000" chance="15" range="7" length="6" spread="2" min="-190" max="-300">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" length="3" spread="3" min="-200" max="-400">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="73" defense="73" />
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="20" />
+		<element firePercent="-20" />
+	</elements>
+	<loot>
+		<item id="30250" name="deepworm jaws" chance="23354" />
+		<item id="2791" name="wood mushroom" chance="22414" />
+		<item id="2666" name="meat" chance="19418" />
+		<item id="2671" name="ham" chance="19090" />
+		<item id="2796" name="green mushroom" chance="18522" />
+		<item id="2792" name="dark mushroom" chance="14476" />
+		<item id="30249" name="deepworm spike roots" chance="13186" />
+		<item id="30248" name="deepworm spikes" chance="10125" />
+		<item id="2168" name="life ring" chance="8353" />
+		<item id="18415" name="green crystal shard" chance="5904" />
+		<item id="7887" name="terra amulet" chance="4942" />
+		<item id="7762" name="small enchanted amethyst" chance="3477" countmax="2" />
+		<item id="10219" name="sacred tree amulet" chance="2187" />
+		<item id="30309" name="suspicious device" chance="1728" />
+		<item id="8912" name="springsprout rod" chance="1268" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="722" />
+	</loot>
+</monster>

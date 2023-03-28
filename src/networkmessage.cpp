@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -8,14 +8,14 @@
 #include "container.h"
 #include "podium.h"
 
-std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
+std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
 	}
 
 	if (!canRead(stringLen)) {
-		return std::string();
+		return {};
 	}
 
 	auto it = buffer.data() + info.position;
@@ -32,9 +32,9 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
-void NetworkMessage::addString(const std::string& value)
+void NetworkMessage::addString(std::string_view value)
 {
-	size_t stringLen = value.length();
+	size_t stringLen = value.size();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}

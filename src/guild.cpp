@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -51,7 +51,7 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-void Guild::addRank(uint32_t rankId, const std::string& rankName, uint8_t level)
+void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
 {
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }

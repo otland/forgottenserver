@@ -1,5 +1,5 @@
 function onUpdateDatabase()
-	print("> Updating database to version 29 (account storages)")
+	print("> Updating database to version 30 (account storages)")
 	db.query([[
 		CREATE TABLE IF NOT EXISTS `account_storage` (
 		  `account_id` int NOT NULL,
