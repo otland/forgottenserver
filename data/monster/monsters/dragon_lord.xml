@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dragon Lord" nameDescription="a dragon lord" race="blood" experience="2100" speed="200">
+<monster name="Dragon Lord" nameDescription="a dragon lord" race="blood" experience="2100" speed="200" raceId="39">
 	<health now="1900" max="1900" />
 	<look type="39" corpse="5984" />
 	<targetchange interval="4000" chance="10" />
@@ -16,18 +16,8 @@
 		<flag staticattack="80" />
 		<flag runonhealth="300" />
 	</flags>
-	<bestiary>
-		<bestiary class="Dragon" />
-		<bestiary race="Dragon" /> <!-- or Demon etc-->
-		<bestiary raceId="39" />
-		<bestiary firstUnlock ="1" />
-		<bestiary secondUnlock ="500" />
-		<bestiary finishUnlock ="2500" />
-		<bestiary charmPoints ="50" />
-		<bestiary stars ="4" />
-		<bestiary occurrence ="1" />
-		<bestiary locations = "Test locations" />
-	</bestiary>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000"
+			charmPoints="25" stars="3" occurrence="0" locations="Dragon Lord locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-230" />
 		<attack name="fire" interval="2000" chance="20" range="7" radius="4" target="1" min="-100" max="-200">
