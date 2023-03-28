@@ -21,7 +21,7 @@ RaceMap& Bestiary::getRaceBestiary(std::string race) { return bestiaryMap[race];
 size_t Bestiary::getBestiaryMonsterCount()
 {
 	size_t monsterCount = 0;
-	for (auto& it = getBestiaryMapByRaceId().begin(); it != getBestiaryMapByRaceId().end(); it++) {
+	for (auto it = getBestiaryMapByRaceId().begin(); it != getBestiaryMapByRaceId().end(); it++) {
 		monsterCount += it->second.size();
 	}
 	return monsterCount;
@@ -30,8 +30,8 @@ size_t Bestiary::getBestiaryMonsterCount()
 
 bool Bestiary::isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 {
-	const int maxBestiaryStars = 5;
-	const int maxBestiaryOccurrence = 4;
+	constexpr int maxBestiaryStars = 5;
+	constexpr int maxBestiaryOccurrence = 4;
 
 	if (bestiaryBlock.className.size() == 0) {
 		std::cout << "[Warning - Monsters::loadMonster] invalid class name." << std::endl;
@@ -120,55 +120,52 @@ uint16_t Bestiary::getProgressStatus(const Player* player, const MonsterType* mT
 
 uint16_t Bestiary::calculateDifficult(uint32_t chance)
 {
-	double chanceInPercent = static_cast<double>(chance) / 1000;
-
-	if (chanceInPercent < 0.2) { // 0.2%
+	if (chance < 200) { // 0.2%
 		return 4;
-	} else if (chanceInPercent < 1) { // 1%
+	} else if (chance < 1000) { // 1%
 		return 3;
-	} else if (chanceInPercent < 5) { // 5%
+	} else if (chance < 5000) { // 5%
 		return 2;
-	} else if (chanceInPercent < 25) { // 25%
+	} else if (chance < 25000) { // 25%
 		return 1;
 	}
 	return 0; 
 }
 
-std::map<uint8_t, int16_t> Bestiary::getMonsterElements(MonsterType* mtype) const
+std::array<int16_t, 8> Bestiary::getMonsterElements(MonsterType* mtype) const
 {
-	std::map<uint8_t, int16_t> defaultMap = {};
-	for (uint8_t i = 0; i <= 7; i++) {
-		defaultMap[i] = 100;
-	}
-	for (const auto& elementEntry : mtype->info.elementMap) {
-		switch (elementEntry.first) {
+	std::array<int16_t, 8> deffArray = {};
+	deffArray.fill(100);
+
+	for (const auto& [damageType, damaveValue] : mtype->info.elementMap) {
+		switch (damageType) {
 			case COMBAT_PHYSICALDAMAGE:
-				defaultMap[0] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[0] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_FIREDAMAGE:
-				defaultMap[1] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[1] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_EARTHDAMAGE:
-				defaultMap[2] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[2] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_ENERGYDAMAGE:
-				defaultMap[3] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[3] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_ICEDAMAGE:
-				defaultMap[4] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[4] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_HOLYDAMAGE:
-				defaultMap[5] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[5] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_DEATHDAMAGE:
-				defaultMap[6] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[6] -= static_cast<int16_t>(damaveValue);
 				break;
 			case COMBAT_HEALING:
-				defaultMap[7] -= static_cast<int16_t>(elementEntry.second);
+				deffArray[7] -= static_cast<int16_t>(damaveValue);
 				break;
 			default:
 				break;
 		}
 	}
-	return defaultMap;
+	return deffArray;
 }

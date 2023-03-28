@@ -11,10 +11,10 @@ class MonsterType;
 
 struct BestiaryBlock_t;
 
-typedef std::map<std::string, MonsterType*> RaceMap;
-typedef std::map<uint16_t, MonsterType*> RaceMapRaceId;
-typedef std::map<std::string, RaceMap> BestiaryMap;
-typedef std::map<std::string, RaceMapRaceId> BestiaryMapRaceId;
+using  RaceMap = std::map<std::string, MonsterType*>;
+using  RaceMapRaceId = std::map<uint16_t, MonsterType*>;
+using  BestiaryMap = std::map<std::string, RaceMap>;
+using  BestiaryMapRaceId = std::map<std::string, RaceMapRaceId>;
 
 class Bestiary
 {
@@ -25,7 +25,7 @@ public:
 
 	bool isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock);
 
-	size_t getRaceCount() { return bestiaryMap.size(); };
+	size_t getRaceCount() const { return bestiaryMap.size(); };
 
 	size_t getBestiaryMonsterCount();
 
@@ -37,7 +37,7 @@ public:
 
 	uint16_t calculateDifficult(uint32_t chance);
 
-	std::map<uint8_t, int16_t> getMonsterElements(MonsterType* mtype) const;
+	std::array<int16_t, 8> getMonsterElements(MonsterType* mtype) const;
 
 	void clear();
 

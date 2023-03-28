@@ -4020,7 +4020,7 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 		uint16_t monsterAmount = msg.get<uint16_t>();
 		for (uint16_t monsterCount = 1; monsterCount <= monsterAmount; monsterCount++) {
 			uint16_t raceId = msg.get<uint16_t>();
-			for (auto& it = bestiary->getBestiaryMapByRaceId().begin(); it != bestiary->getBestiaryMapByRaceId().end();
+			for (auto it = bestiary->getBestiaryMapByRaceId().begin(); it != bestiary->getBestiaryMapByRaceId().end();
 			     it++) {
 				auto itMType = it->second.find(raceId);
 				if (itMType != it->second.end()) {
@@ -4069,7 +4069,7 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	std::string className = "";
 	bool foundBestiary = false;
 	MonsterType* mType = nullptr;
-	for (auto& it = bestiary->getBestiaryMapByRaceId().begin(); it != bestiary->getBestiaryMapByRaceId().end(); it++) {
+	for (auto it = bestiary->getBestiaryMapByRaceId().begin(); it != bestiary->getBestiaryMapByRaceId().end(); it++) {
 		auto mtypeIter = it->second.find(raceId);
 
 		if (mtypeIter != it->second.end()) {
@@ -4156,12 +4156,12 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	}
 
 	if (progress > 2) {
-		std::map<uint8_t, int16_t> elements = bestiary->getMonsterElements(mType);
+		std::array<int16_t, 8> deffArray = bestiary->getMonsterElements(mType);
+		newMsg.addByte(deffArray.size());
 
-		newMsg.addByte(elements.size());
-		for (auto it = std::begin(elements), end = std::end(elements); it != end; it++) {
-			newMsg.addByte(it->first);
-			newMsg.add<uint16_t>(it->second);
+		for (uint8_t i = 0; i < deffArray.size(); i++) {
+			newMsg.addByte(i);
+			newMsg.add<uint16_t>(deffArray[i]);
 		}
 
 		newMsg.add<uint16_t>(1);
@@ -4177,7 +4177,6 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 		//	newmsg.addByte(0);
 		//	newmsg.addByte(1);
 		//}
-		
 		
 		// To remove
 		newMsg.addByte(0);
