@@ -18,9 +18,9 @@ std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 		return {};
 	}
 
-	char* v = reinterpret_cast<char*>(buffer) + info.position; // does not break strict aliasing
+	auto it = buffer.data() + info.position;
 	info.position += stringLen;
-	return {v, stringLen};
+	return {reinterpret_cast<char*>(it), stringLen};
 }
 
 Position NetworkMessage::getPosition()
@@ -40,7 +40,7 @@ void NetworkMessage::addString(std::string_view value)
 	}
 
 	add<uint16_t>(stringLen);
-	memcpy(buffer + info.position, value.data(), stringLen);
+	std::memcpy(buffer.data() + info.position, value.data(), stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
 }
@@ -58,7 +58,7 @@ void NetworkMessage::addBytes(const char* bytes, size_t size)
 		return;
 	}
 
-	memcpy(buffer + info.position, bytes, size);
+	std::memcpy(buffer.data() + info.position, bytes, size);
 	info.position += size;
 	info.length += size;
 }
@@ -69,7 +69,7 @@ void NetworkMessage::addPaddingBytes(size_t n)
 		return;
 	}
 
-	memset(buffer + info.position, 0x33, n);
+	std::fill_n(buffer.data() + info.position, n, 0x33);
 	info.length += n;
 }
 
