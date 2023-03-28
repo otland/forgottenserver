@@ -4012,7 +4012,6 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 
 	RaceMap races = {};
 
-	std::string text = "";
 	uint8_t search = msg.getByte();
 	std::string raceName;
 
@@ -4030,7 +4029,7 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 				}
 			}
 		}
-		raceName = "Search result";
+		raceName = "";
 	} else {
 		std::string raceName = msg.getString();
 		races = g_monsters.bestiary->getRaceMapByName(raceName);
@@ -4045,7 +4044,7 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 	newmsg.addString(raceName);
 	newmsg.add<uint16_t>(races.size());
 
-	for (auto itRace : races) {
+	for (auto& itRace : races) {
 		uint16_t raceid = itRace.second->info.bestiary.raceId;
 		newmsg.add<uint16_t>(raceid);
 
