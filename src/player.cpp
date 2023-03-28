@@ -9,7 +9,6 @@
 #include "chat.h"
 #include "combat.h"
 #include "configmanager.h"
-#include "const.h"
 #include "creatureevent.h"
 #include "depotchest.h"
 #include "events.h"

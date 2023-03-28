@@ -15,6 +15,7 @@
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
+#include "monsters.h"
 #include "npc.h"
 #include "outfit.h"
 #include "outputmessage.h"
@@ -22,7 +23,6 @@
 #include "podium.h"
 #include "scheduler.h"
 #include "storeinbox.h"
-#include "monsters.h"
 
 #include <iostream>
 
@@ -3998,7 +3998,7 @@ void ProtocolGame::parseBestiarySendRaces()
 		msg.add<uint16_t>(unlockedCount);
 	}
 	writeToOutputBuffer(msg);
-	// probaly here we sghould send charm data ETC 
+	// probaly here we should send charm data ETC...
 }
 
 void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
@@ -4029,7 +4029,7 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 		}
 		raceName = "";
 	} else {
-		std::string raceName = msg.getString();
+		std::string raceName = {msg.getString().begin(), msg.getString().end()};
 		races = g_monsters.bestiary->getRaceMapByName(raceName);
 	}
 

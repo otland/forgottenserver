@@ -8,7 +8,6 @@
 #include "enums.h"
 #include "bestiary.h"
 
-class Bestiary;
 class ConditionDamage;
 class LuaScriptInterface;
 class MonsterType;
