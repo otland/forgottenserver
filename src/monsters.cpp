@@ -870,6 +870,10 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		mType->info.skull = getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 	}
 
+	if ((attr = monsterNode.attribute("raceId"))) {
+		mType->info.bestiary.raceId = attr.as_uint();
+	}
+
 	if ((attr = monsterNode.attribute("script"))) {
 		if (!scriptInterface) {
 			scriptInterface.reset(new LuaScriptInterface("Monster Interface"));
@@ -980,37 +984,38 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if ((node = monsterNode.child("bestiary"))) {
-		for (auto bestiaryNode : node.children()) {
-			attr = bestiaryNode.first_attribute();
-			const char* attrName = attr.name();
-			if (caseInsensitiveEqual(attrName, "class")) {
-				mType->info.bestiary.className = attr.as_string();
-			} else if (caseInsensitiveEqual(attrName, "race")) {
-				mType->info.bestiary.race = attr.as_string();
-			} else if (caseInsensitiveEqual(attrName, "raceId")) {
-				mType->info.bestiary.raceId = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "firstUnlock")) {
-				mType->info.bestiary.firstUnlock = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "secondUnlock")) {
-				mType->info.bestiary.secondUnlock = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "finishUnlock")) {
-				mType->info.bestiary.finishUnlock = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "charmPoints")) {
-				mType->info.bestiary.charmPoints = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "stars")) {
-				mType->info.bestiary.stars = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "occurrence")) {
-				mType->info.bestiary.occurrence = attr.as_uint();
-			} else if (caseInsensitiveEqual(attrName, "locations")) {
-				mType->info.bestiary.locations = attr.as_string();
-			}
+		if ((attr = node.attribute("class"))) {
+			mType->info.bestiary.className = attr.as_string();
+		}
+		if ((attr = node.attribute("prowess"))) {
+			mType->info.bestiary.prowess = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("expertise"))) {
+			mType->info.bestiary.expertise = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("mastery"))) {
+			mType->info.bestiary.mastery = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("charmPoints"))) {
+			mType->info.bestiary.charmPoints = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("stars"))) {
+			mType->info.bestiary.stars = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("occurrence"))) {
+			mType->info.bestiary.occurrence = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("locations"))) {
+			mType->info.bestiary.locations = attr.as_string();
 		}
 
 		if (bestiary && !bestiary->isValidBestiaryRecord(mType->info.bestiary)) {
 			// if setup is invalid reset bestiary data to avoid invalid calls in future
 			mType->info.bestiary = BestiaryBlock_t();
+			std::cout << "[Warning - Monsters::loadMonster] invalid bestiary data for " << mType->name << "."
+			          << std::endl;
 		} else if (bestiary) {
-			bestiary->addBestiaryMonster(mType->info.bestiary.race, mType);
+			bestiary->addBestiaryMonster(mType->info.bestiary.className, mType);
 		}
 	}
 

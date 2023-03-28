@@ -63,11 +63,10 @@ struct summonBlock_t
 struct BestiaryBlock_t
 {
 	std::string className;
-	std::string race;
-	uint32_t raceId = 0; // is required to trigger Bestiary
-	uint32_t firstUnlock = 0;
-	uint32_t secondUnlock = 0; 
-	uint32_t finishUnlock = 0; 
+	uint32_t raceId = 0;
+	uint32_t prowess = 0;
+	uint32_t expertise = 0;
+	uint32_t mastery = 0;
 	uint32_t charmPoints = 0;
 	uint32_t stars = 0;
 	uint32_t occurrence = 0;

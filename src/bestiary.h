@@ -11,15 +11,15 @@ class MonsterType;
 
 struct BestiaryBlock_t;
 
-using  RaceMap = std::map<std::string, MonsterType*>;
-using  RaceMapRaceId = std::map<uint16_t, MonsterType*>;
-using  BestiaryMap = std::map<std::string, RaceMap>;
-using  BestiaryMapRaceId = std::map<std::string, RaceMapRaceId>;
+using RaceMap = std::map<std::string, MonsterType*>;
+using RaceMapRaceId = std::map<uint16_t, MonsterType*>;
+using BestiaryMap = std::map<std::string, RaceMap>;
+using BestiaryMapRaceId = std::map<std::string, RaceMapRaceId>;
 
 class Bestiary
 {
 public:
-	void addBestiaryMonster(std::string race, MonsterType* mType);
+	void addBestiaryMonster(std::string className, MonsterType* mType);
 
 	RaceMap& getRaceBestiary(std::string race);
 

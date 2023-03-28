@@ -14925,11 +14925,10 @@ int LuaScriptInterface::luaMonsterTypeGetBestiaryData(lua_State* L)
 
 	lua_createtable(L, 0, 0);
 	setField(L, "class", monsterType->info.bestiary.className);
-	setField(L, "race", monsterType->info.bestiary.race);
 	setField(L, "raceId", monsterType->info.bestiary.raceId);
-	setField(L, "firstUnlock", monsterType->info.bestiary.finishUnlock);
-	setField(L, "secondUnlock", monsterType->info.bestiary.secondUnlock);
-	setField(L, "finishUnlock", monsterType->info.bestiary.finishUnlock);
+	setField(L, "firstUnlock", monsterType->info.bestiary.prowess);
+	setField(L, "secondUnlock", monsterType->info.bestiary.expertise);
+	setField(L, "finishUnlock", monsterType->info.bestiary.mastery);
 	setField(L, "charmPoints", monsterType->info.bestiary.charmPoints);
 	setField(L, "stars", monsterType->info.bestiary.stars);
 	setField(L, "occurrence", monsterType->info.bestiary.occurrence);

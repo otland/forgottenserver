@@ -10,13 +10,13 @@
 #include "player.h"
 #include "monsters.h"
 
-void Bestiary::addBestiaryMonster(std::string race, MonsterType* mType)
+void Bestiary::addBestiaryMonster(std::string className, MonsterType* mType)
 {
-	bestiaryMap[race][mType->name] = mType;
-	bestiaryMapRaceId[race][mType->info.bestiary.raceId] = mType;
+	bestiaryMap[className][mType->name] = mType;
+	bestiaryMapRaceId[className][mType->info.bestiary.raceId] = mType;
 }
 
-RaceMap& Bestiary::getRaceBestiary(std::string race) { return bestiaryMap[race]; }
+RaceMap& Bestiary::getRaceBestiary(std::string className) { return bestiaryMap[className]; }
 
 size_t Bestiary::getBestiaryMonsterCount()
 {
@@ -27,40 +27,45 @@ size_t Bestiary::getBestiaryMonsterCount()
 	return monsterCount;
 }
 
-
 bool Bestiary::isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 {
 	constexpr int maxBestiaryStars = 5;
 	constexpr int maxBestiaryOccurrence = 4;
 
+	if (bestiaryBlock.raceId == 0) {
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] race id can't be 0." << std::endl;
+		return false;
+	}
+
 	if (bestiaryBlock.className.size() == 0) {
-		std::cout << "[Warning - Monsters::loadMonster] invalid class name." << std::endl;
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] class can't be empty string." << std::endl;
 		return false;
 	}
 
-	if (bestiaryBlock.race.size() == 0) {
-		std::cout << "[Warning - Monsters::loadMonster] invalid race." << std::endl;
+	if (bestiaryBlock.prowess == 0 || bestiaryBlock.expertise == 0 || bestiaryBlock.mastery == 0) {
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] unlock data value can't be 0." << std::endl;
 		return false;
 	}
 
-	if (bestiaryBlock.firstUnlock == 0 || bestiaryBlock.secondUnlock == 0 || bestiaryBlock.finishUnlock == 0) {
-		std::cout << "[Warning - Monsters::loadMonster] unlock data value can't be 0." << std::endl;
+	if (bestiaryBlock.prowess == 0  || bestiaryBlock.prowess >= bestiaryBlock.expertise ||
+	    bestiaryBlock.expertise >= bestiaryBlock.mastery) {
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] invalid unlock data value - "
+		          << "prowess == 0 or "
+		          << "prowess >= expertise (" << bestiaryBlock.prowess << ">=" << bestiaryBlock.expertise
+		          << ") or expertise >= expertise(" << bestiaryBlock.expertise << ">=" << bestiaryBlock.mastery << ")"
+		          << std::endl;
 		return false;
 	}
 
-	if (bestiaryBlock.firstUnlock >= bestiaryBlock.secondUnlock &&
-	    bestiaryBlock.finishUnlock >= bestiaryBlock.secondUnlock) {
-		std::cout << "[Warning - Monsters::loadMonster] invalid unlock data value." << std::endl;
+	if (bestiaryBlock.stars > maxBestiaryStars) {
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] invalid stars value: " << bestiaryBlock.stars << "."
+		          << std::endl;
 		return false;
 	}
 
-	if (bestiaryBlock.stars == 0 || bestiaryBlock.stars > maxBestiaryStars) {
-		std::cout << "[Warning - Monsters::loadMonster] invalid stars value ." << std::endl;
-		return false;
-	}
-
-	if (bestiaryBlock.occurrence == 0 || bestiaryBlock.occurrence > maxBestiaryOccurrence) {
-		std::cout << "[Warning - Monsters::loadMonster] invalid occurrence value ." << std::endl;
+	if (bestiaryBlock.occurrence > maxBestiaryOccurrence) {
+		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] invalid occurrence value: "
+		          << bestiaryBlock.occurrence << "." << std::endl;
 		return false;
 	}
 
@@ -79,7 +84,7 @@ bool Bestiary::isBestiaryFinished(const Player* player, const MonsterType* mType
 	}
 
 	uint32_t kills = player->getBestiaryKills(mType->info.bestiary.raceId);
-	if (kills >= mType->info.bestiary.finishUnlock) {
+	if (kills >= mType->info.bestiary.mastery) {
 		return true;
 	}
 	return false;
@@ -108,11 +113,11 @@ uint16_t Bestiary::getProgressStatus(const Player* player, const MonsterType* mT
 
 	if (killAmount == 0) {
 		return 0;
-	} else if (killAmount < mType->info.bestiary.firstUnlock) {
+	} else if (killAmount < mType->info.bestiary.prowess) {
 		return 1;
-	} else if (killAmount < mType->info.bestiary.secondUnlock) {
+	} else if (killAmount < mType->info.bestiary.expertise) {
 		return 2;
-	} else if (killAmount < mType->info.bestiary.finishUnlock) {
+	} else if (killAmount < mType->info.bestiary.mastery) {
 		return 3;
 	}
 	return 4;

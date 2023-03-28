@@ -149,7 +149,7 @@ uint16_t getUnlockedBestiary(Player *player, RaceMap &raceList) {
 		if (iter.second && iter.second->info.bestiary.raceId != 0) {
 			isStorageGethered =
 			    player->getStorageValue(PSTRG_BESTIARY_RANGE_START + iter.second->info.bestiary.raceId, storageValue);
-			if (isStorageGethered == true && static_cast<uint32_t>(storageValue) >= iter.second->info.bestiary.firstUnlock) {
+			if (isStorageGethered == true && static_cast<uint32_t>(storageValue) >= iter.second->info.bestiary.prowess) {
 				count++;
 			}
 		}
@@ -3984,13 +3984,11 @@ void ProtocolGame::parseBestiarySendRaces()
 	msg.add<uint16_t>(raceCount);
 
 	for (auto it = bestiary->getBestiaryMapByName().begin(); it != bestiary->getBestiaryMapByName().end(); it++) {
-		std::string bestiaryClass = "";
 		for (auto& mTypeBestiaryMap : bestiary->getBestiaryMapByName()[it->first]) {
 			const MonsterType* mtype = mTypeBestiaryMap.second;
 			if (!mtype) {
 				return;
 			}
-			bestiaryClass = mtype->info.bestiary.className;
 		}
 
 		msg.addString(it->first);
@@ -4095,9 +4093,9 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	newMsg.addByte(progress);
 	newMsg.add<uint32_t>(killCounter);
 
-	newMsg.add<uint16_t>(mType->info.bestiary.firstUnlock);
-	newMsg.add<uint16_t>(mType->info.bestiary.secondUnlock);
-	newMsg.add<uint16_t>(mType->info.bestiary.finishUnlock);
+	newMsg.add<uint16_t>(mType->info.bestiary.prowess);
+	newMsg.add<uint16_t>(mType->info.bestiary.expertise);
+	newMsg.add<uint16_t>(mType->info.bestiary.mastery);
 
 	newMsg.addByte(mType->info.bestiary.stars);
 	newMsg.addByte(mType->info.bestiary.occurrence);
