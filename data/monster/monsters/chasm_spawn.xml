@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Chasm Spawn" nameDescription="a chasm spawn" race="venom" experience="2700" speed="230">
+	<health now="4500" max="4500" />
+	<look type="1037" corpse="30219" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="earth" interval="2000" chance="15" range="7" target="1" min="-5" max="-16">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" range="7" target="1" min="-30" max="-60">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" range="3" length="3" spread="3" min="-70" max="-160">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-40" max="-60" />
+		<attack name="earth" interval="2000" chance="10" length="3" spread="3" min="-70" max="-140">
+			<attribute key="areaEffect" value="plantattack" />
+		</attack>
+	</attacks>
+	<defenses armor="74" defense="74" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-30" />
+	</elements>
+	<loot>
+		<item id="30260" name="chasm spawn tail" chance="64519" />
+		<item id="30258" name="chasm spawn head" chance="33638" />
+		<item id="2791" name="wood mushroom" chance="28022" countmax="4" />
+		<item id="30259" name="chasm spawn abdomen" chance="26237" />
+		<item id="2789" name="brown mushroom" chance="19242" countmax="5" />
+		<item id="2790" name="orange mushroom" chance="15179" countmax="3" />
+		<item id="7761" name="small enchanted emerald" chance="10898" />
+		<item id="18413" name="blue crystal shard" chance="8301" />
+		<item id="7762" name="small enchanted amethyst" chance="7952" countmax="3" />
+		<item id="18415" name="green crystal shard" chance="7256" />
+		<item id="18414" name="violet crystal shard" chance="4890" />
+		<item id="30309" name="suspicious device" chance="1451" />
+		<item id="18393" name="mushroom backpack" chance="464" />
+	</loot>
+</monster>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Scourge Of Oblivion" nameDescription="The Scourge Of Oblivion" race="energy" experience="75000" speed="450">
+	<health now="800000" max="800000" />
+	<look type="875" head="79" body="79" legs="60" feet="79" addons="3" corpse="26217" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1500" />
+		<attack name="manadrain" interval="1000" chance="7" range="7" min="-900" max="-1500">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="20" target="0" radius="5" duration="9000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="fire" interval="2000" chance="8" range="7" radius="7" target="1" min="-1550" max="-2550">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-1075" max="-2405">
+			<attribute key="shootEffect" value="energyball" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="20" radius="8" target="0" min="-600" max="-1500">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="-750" max="-1200">
+			<attribute key="areaEffect" value="purpleenergy" />
+		</attack>
+		<attack name="choking fear drown" interval="2000" chance="20" />
+		<attack name="death" interval="2000" chance="20" radius="4" target="1" min="-450" max="-1400">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="manadrain" interval="1000" chance="10" radius="8" target="0" min="-800" max="-2300">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="fire" interval="1000" chance="34" range="7" radius="7" target="1" min="-100" max="-700">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" length="8" spread="0" min="-300" max="-950">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="6000" chance="25" min="2000" max="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="1000" chance="4" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="1000" chance="17" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="The Scourge Of Oblivion prepares a devestating attack!" />
+		<voice sentence="The Scourge Of Oblivion activates its reflective shields!" />
+	</voices>
+	<loot>
+		<item id="2127" name="emerald bangle" chance="100000" />
+		<item id="26176" name="plasmatic lightning" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="25" />
+		<item id="25172" name="silver token" chance="100000" countmax="22" />
+		<item id="26174" name="spark sphere" chance="100000" />
+		<item id="2160" name="crystal coin" chance="94595" countmax="22" />
+		<item id="18413" name="blue crystal shard" chance="72973" countmax="5" />
+		<item id="18414" name="violet crystal shard" chance="54054" countmax="5" />
+		<item id="18415" name="green crystal shard" chance="51351" countmax="5" />
+		<item id="28415" name="royal star" chance="51351" countmax="179" />
+		<item id="32717" name="giant sapphire" chance="48649" />
+		<item id="5892" name="huge chunk of crude iron" chance="37838" />
+		<item id="25377" name="gold token" chance="35135" countmax="7" />
+		<item id="26031" name="supreme health potion" chance="35135" countmax="11" />
+		<item id="26029" name="ultimate mana potion" chance="35135" countmax="11" />
+		<item id="26030" name="ultimate spirit potion" chance="29730" countmax="8" />
+		<item id="2154" name="yellow gem" chance="27027" />
+		<item id="32715" name="giant ruby" chance="24324" />
+		<item id="2147" name="small ruby" chance="24324" countmax="21" />
+		<item id="32716" name="giant emerald" chance="21622" />
+		<item id="2156" name="red gem" chance="21622" />
+		<item id="2145" name="small diamond" chance="21622" countmax="20" />
+		<item id="7439" name="berserk potion" chance="18919" countmax="17" />
+		<item id="7443" name="bullseye potion" chance="18919" countmax="19" />
+		<item id="25523" name="rift crossbow" chance="18919" />
+		<item id="2436" name="skull staff" chance="18919" />
+		<item id="2149" name="small emerald" chance="18919" countmax="21" />
+		<item id="26198" name="collar of blue plasma" chance="16216" />
+		<item id="7440" name="mastermind potion" chance="16216" countmax="19" />
+		<item id="9970" name="small topaz" chance="16216" countmax="19" />
+		<item id="2158" name="blue gem" chance="13514" />
+		<item id="2150" name="small amethyst" chance="13514" countmax="23" />
+		<item id="26199" name="collar of green plasma" chance="10811" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="10811" />
+		<item id="2155" name="green gem" chance="10811" />
+		<item id="25522" name="rift bow" chance="10811" />
+		<item id="26133" name="void boots" chance="10811" />
+		<item id="9971" name="gold ingot" chance="8108" />
+		<item id="5904" name="magic sulphur" chance="8108" />
+		<item id="25382" name="rift shield" chance="8108" />
+		<item id="26185" name="ring of blue plasma" chance="8108" />
+		<item id="26187" name="ring of green plasma" chance="8108" />
+		<item id="2123" name="ring of the sky" chance="8108" />
+		<item id="5809" name="soul stone" chance="8108" />
+		<item id="8903" name="spellbook of lost souls" chance="8108" />
+		<item id="7427" name="chaos mace" chance="5405" />
+		<item id="26200" name="collar of red plasma" chance="5405" />
+		<item id="31447" name="library ticket" chance="5405" />
+		<item id="26189" name="ring of red plasma" chance="5405" />
+		<item id="7414" name="abyss hammer" chance="2703" />
+		<item id="5480" name="cat's paw" chance="2703" />
+		<item id="2153" name="violet gem" chance="2703" />
+	</loot>
+</monster>

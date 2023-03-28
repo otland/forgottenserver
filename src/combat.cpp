@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -1491,6 +1491,16 @@ void MagicField::onStepInField(Creature* creature)
 		return;
 	}
 
+	// no-pvp fields must not damage players
+	if (!isLoadedFromMap() && creature->getPlayer() &&
+	    (id == ITEM_FIREFIELD_NOPVP || id == ITEM_FIREFIELD_NOPVP_MEDIUM || id == ITEM_POISONFIELD_NOPVP ||
+	     id == ITEM_ENERGYFIELD_NOPVP)) {
+		if (!creature->isInGhostMode()) {
+			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
+		}
+		return;
+	}
+
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
@@ -1508,7 +1518,7 @@ void MagicField::onStepInField(Creature* creature)
 			}
 
 			Player* targetPlayer = creature->getPlayer();
-			if (targetPlayer) {
+			if (!harmfulField && targetPlayer) {
 				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {

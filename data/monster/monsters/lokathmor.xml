@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lokathmor" nameDescription="Lokathmor" race="blood" experience="100000" speed="230">
+	<health now="300000" max="300000" />
+	<look type="1062" head="22" body="22" legs="79" feet="97" corpse="8721" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1200" />
+		<attack name="lifedrain" interval="2000" chance="8" range="7" radius="5" target="1" min="-1100" max="-2800">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="death" interval="1000" chance="8" radius="9" target="0" min="-800" max="-1900">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="poisoncondition" interval="5000" chance="18" length="0" spread="0" min="-1100" max="-2500">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+		<attack name="poison" max="-255" chance="20" interval="1000" min="-1000" range="7" target="0" radius="6">
+			<attribute value="bluebubble" key="areaEffect" />
+		</attack>
+		<attack name="physical" interval="2000" chance="8" range="7" target="1" min="-90" max="-200">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-5" />
+		<element earthPercent="-15" />
+		<element firePercent="30" />
+		<element icePercent="10" />
+	</elements>
+	<loot>
+		<item id="2195" name="boots of haste" chance="100000" />
+		<item id="2160" name="crystal coin" chance="100000" countmax="4" />
+		<item id="5954" name="demon horn" chance="100000" />
+		<item id="7632" name="giant shimmering pearl" chance="100000" />
+		<item id="8472" name="great spirit potion" chance="100000" countmax="4" />
+		<item id="7440" name="mastermind potion" chance="100000" countmax="2" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="39" />
+		<item id="25172" name="silver token" chance="100000" countmax="6" />
+		<item id="9822" name="slightly rusted helmet" chance="100000" />
+		<item id="2150" name="small amethyst" chance="100000" countmax="12" />
+		<item id="2197" name="stone skin amulet" chance="100000" />
+		<item id="26029" name="ultimate mana potion" chance="100000" countmax="8" />
+	</loot>
+</monster>

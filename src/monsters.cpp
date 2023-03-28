@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -170,7 +170,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		}
 
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
+		if (!combatSpellPtr->loadScript("data/" + std::string{g_spells->getScriptBaseName()} + "/scripts/" +
+		                                scriptName)) {
 			return false;
 		}
 
@@ -586,7 +587,8 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 
 	if (spell->isScripted) {
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, spell->needTarget, spell->needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
+		if (!combatSpellPtr->loadScript("data/" + std::string{g_spells->getScriptBaseName()} + "/scripts/" +
+		                                spell->scriptName)) {
 			std::cout << "cannot find file" << std::endl;
 			return false;
 		}

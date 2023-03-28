@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Mole" nameDescription="a mole" race="blood" experience="100" speed="160">
+	<health now="200" max="200" />
+	<look type="1048" corpse="30302" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+	</attacks>
+	<defenses armor="20" defense="20" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="10" />
+		<element earthPercent="40" />
+		<element firePercent="-10" />
+		<element holyPercent="-10" />
+		<element deathPercent="40" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="80142" countmax="75" />
+	</loot>
+</monster>

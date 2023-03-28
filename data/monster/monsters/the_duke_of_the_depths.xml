@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Duke Of The Depths" nameDescription="The Duke Of The Depths" race="blood" experience="40000" speed="270">
+	<health now="50000" max="50000" />
+	<look type="1047" corpse="30297" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-800" />
+		<attack name="fire" interval="2000" chance="15" range="3" length="6" spread="8" min="0" max="-1000">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" range="3" length="9" spread="4" min="0" max="-1000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="2" min="-135" max="-1000">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="8" min="0" max="-1000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="30165" name="heavy crystal fragment" chance="100000" />
+		<item id="7440" name="mastermind potion" chance="100000" countmax="3" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="76" />
+		<item id="2197" name="stone skin amulet" chance="100000" />
+		<item id="2432" name="fire axe" chance="85714" />
+		<item id="2392" name="fire sword" chance="85714" />
+		<item id="7590" name="great mana potion" chance="71429" countmax="17" />
+		<item id="2158" name="blue gem" chance="57143" />
+		<item id="8472" name="great spirit potion" chance="57143" countmax="17" />
+		<item id="12410" name="luminous orb" chance="57143" />
+		<item id="18413" name="blue crystal shard" chance="42857" countmax="7" />
+		<item id="25377" name="gold token" chance="42857" />
+		<item id="9822" name="slightly rusted helmet" chance="42857" />
+		<item id="8473" name="ultimate health potion" chance="42857" countmax="16" />
+		<item id="2187" name="wand of inferno" chance="42857" />
+		<item id="30274" name="pristine worm head" chance="28571" />
+		<item id="2150" name="small amethyst" chance="28571" countmax="15" />
+		<item id="2147" name="small ruby" chance="28571" countmax="18" />
+		<item id="9970" name="small topaz" chance="28571" countmax="20" />
+		<item id="30276" name="damaged worm head" chance="14286" />
+		<item id="30275" name="giant tentacle" chance="14286" />
+		<item id="2155" name="green gem" chance="14286" />
+		<item id="5892" name="huge chunk of crude iron" chance="14286" />
+		<item id="5904" name="magic sulphur" chance="14286" />
+		<item id="2156" name="red gem" chance="14286" />
+		<item id="9816" name="slightly rusted shield" chance="14286" />
+		<item id="2149" name="small emerald" chance="14286" countmax="5" />
+		<item id="2153" name="violet gem" chance="14286" />
+	</loot>
+</monster>

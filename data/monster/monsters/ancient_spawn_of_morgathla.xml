@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ancient Spawn Of Morgathla" nameDescription="Ancient Spawn Of Morgathla" race="venom" experience="2400" speed="270">
+	<health now="50000" max="50000" />
+	<look type="1067" corpse="23375" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-410" />
+		<attack name="lifedrain" interval="2000" chance="8" range="7" radius="5" target="1" min="-135" max="-280">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="8" range="7" target="1" min="-90" max="-200">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="7440" name="mastermind potion" chance="100000" countmax="4" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="400" />
+		<item id="2214" name="ring of healing" chance="100000" />
+		<item id="10548" name="scarab pincers" chance="100000" />
+		<item id="2440" name="daramian waraxe" chance="76842" />
+		<item id="18415" name="green crystal shard" chance="72632" countmax="6" />
+		<item id="10549" name="ancient stone" chance="67368" countmax="3" />
+		<item id="8912" name="springsprout rod" chance="67368" />
+		<item id="18413" name="blue crystal shard" chance="64211" countmax="6" />
+		<item id="18414" name="violet crystal shard" chance="61053" countmax="6" />
+		<item id="8473" name="ultimate health potion" chance="57895" countmax="24" />
+		<item id="25377" name="gold token" chance="56842" countmax="2" />
+		<item id="24849" name="onyx chip" chance="56842" countmax="3" />
+		<item id="7590" name="great mana potion" chance="52632" countmax="24" />
+		<item id="8472" name="great spirit potion" chance="48421" countmax="24" />
+		<item id="25172" name="silver token" chance="44211" countmax="2" />
+		<item id="2159" name="scarab coin" chance="40000" countmax="50" />
+		<item id="5904" name="magic sulphur" chance="29474" />
+		<item id="5892" name="huge chunk of crude iron" chance="28421" countmax="6" />
+		<item id="12410" name="luminous orb" chance="27368" />
+		<item id="2147" name="small ruby" chance="22105" countmax="20" />
+		<item id="9970" name="small topaz" chance="22105" countmax="20" />
+		<item id="2155" name="green gem" chance="21053" countmax="2" />
+		<item id="2158" name="blue gem" chance="20000" countmax="2" />
+		<item id="2145" name="small diamond" chance="20000" countmax="20" />
+		<item id="2135" name="scarab amulet" chance="18947" />
+		<item id="2154" name="yellow gem" chance="17895" countmax="2" />
+		<item id="2160" name="crystal coin" chance="16842" countmax="2" />
+		<item id="7632" name="giant shimmering pearl" chance="15789" countmax="2" />
+		<item id="2149" name="small emerald" chance="15789" countmax="20" />
+		<item id="8910" name="underworld rod" chance="15789" />
+		<item id="2150" name="small amethyst" chance="14737" countmax="20" />
+		<item id="2156" name="red gem" chance="12632" countmax="2" />
+		<item id="7428" name="bonebreaker" chance="10526" />
+		<item id="2451" name="djinn blade" chance="10526" />
+		<item id="2162" name="magic light wand" chance="8421" />
+		<item id="7903" name="terra hood" chance="7368" />
+		<item id="2153" name="violet gem" chance="7368" countmax="2" />
+		<item id="2540" name="scarab shield" chance="6316" />
+		<item id="2142" name="ancient amulet" chance="5263" />
+		<item id="30313" name="crude wood planks" chance="3158" />
+		<item id="7885" name="terra legs" chance="3158" />
+		<item id="30312" name="tinged pot" chance="3158" />
+		<item id="15411" name="depth scutum" chance="2105" />
+		<item id="13291" name="maxilla maximus" chance="2105" />
+		<item id="7884" name="terra mantle" chance="2105" />
+		<item id="5891" name="enchanted chicken wing" chance="1053" />
+		<item id="24637" name="oriental shoes" chance="1053" />
+		<item id="15453" name="warrior's shield" chance="1053" />
+	</loot>
+</monster>
