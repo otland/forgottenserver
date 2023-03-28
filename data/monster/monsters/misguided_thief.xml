@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Misguided Thief" nameDescription="a misguided thief" race="blood" experience="1200" speed="260">
+	<health now="1800" max="1800" />
+	<look type="684" head="58" body="40" legs="60" feet="116" corpse="28781" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-225" />
+		<attack name="manadrain" interval="2000" chance="15" range="7" min="-30" max="-70" />
+		<attack name="fire" interval="2000" chance="20" range="7" target="1" min="-100" max="-150">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="1000" chance="20" min="200" max="450">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="20" />
+		<element earthPercent="30" />
+		<element icePercent="10" />
+		<element holyPercent="-30" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="74932" countmax="80" />
+		<item id="2671" name="ham" chance="54923" />
+		<item id="2666" name="meat" chance="44896" />
+		<item id="27952" name="rubbish amulet" chance="7588" />
+		<item id="7589" name="strong mana potion" chance="6640" />
+		<item id="2156" name="red gem" chance="6594" />
+		<item id="7588" name="strong health potion" chance="5736" />
+		<item id="2154" name="yellow gem" chance="5601" />
+		<item id="18418" name="blue crystal splinter" chance="903" />
+		<item id="2197" name="stone skin amulet" chance="903" />
+		<item id="2179" name="gold ring" chance="316" />
+	</loot>
+</monster>

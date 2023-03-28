@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Misguided Shadow" nameDescription="a misguided shadow" race="blood" experience="1500" speed="240">
+	<health now="3000" max="3000" />
+	<look type="985" corpse="28781" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="lifedrain" interval="2000" chance="15" range="7" min="-200" max="-250" />
+		<attack name="energy" interval="2000" chance="15" range="6" spread="7" length="6" min="-180" max="-220">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="35" defense="35">
+		<defense name="healing" interval="2000" chance="20" min="300" max="750">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="Yooooouuuuu..." />
+	</voices>
+	<loot>
+		<item id="7589" name="strong mana potion" chance="6522" />
+		<item id="24849" name="onyx chip" chance="4348" />
+		<item id="2156" name="red gem" chance="2174" />
+		<item id="7588" name="strong health potion" chance="2174" />
+	</loot>
+</monster>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Sinister Hermit" nameDescription="The Sinister Hermit" race="blood" experience="0" speed="250">
+	<health now="30000" max="30000" />
+	<look type="153" head="1" body="63" legs="1" feet="63" addons="3" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="earth" interval="2000" chance="25" length="7" spread="8" min="-120" max="-488">
+			<attribute key="areaEffect" value="smallplants" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="0" max="800">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="shock head skill reducer 2" interval="2000" radius="8" chance="30">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="100" />
+		<element energyPercent="85" />
+		<element earthPercent="85" />
+		<element firePercent="85" />
+		<element icePercent="85" />
+		<element holyPercent="85" />
+		<element deathPercent="85" />
+	</elements>
+</monster>
