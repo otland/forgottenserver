@@ -20,7 +20,7 @@ std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 
 	auto it = buffer.data() + info.position;
 	info.position += stringLen;
-	return {it, it + stringLen};
+	return {reinterpret_cast<char*>(it), stringLen};
 }
 
 Position NetworkMessage::getPosition()
