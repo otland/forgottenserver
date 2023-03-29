@@ -54,7 +54,7 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 {
 	int64_t start = OTSYS_TIME();
 	try {
-		OTB::Loader loader{fileName, OTB::Identifier{{'O', 'T', 'B', 'M'}}};
+		OTB::Loader loader{fileName.string(), OTB::Identifier{{'O', 'T', 'B', 'M'}}};
 		auto& root = loader.parseTree();
 
 		PropStream propStream;
