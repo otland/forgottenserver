@@ -4029,7 +4029,7 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 		}
 		raceName = "";
 	} else {
-		std::string raceName = {msg.getString().begin(), msg.getString().end()};
+		std::string_view raceName = msg.getString();
 		races = g_monsters.bestiary->getRaceMapByName(raceName);
 	}
 
@@ -4088,7 +4088,7 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	NetworkMessage newMsg;
 	newMsg.addByte(0xd7);
 	newMsg.add<uint16_t>(raceId);
-	newMsg.addString(className);
+	newMsg.addString(mType->info.bestiary.className); // it's used to navigate back to valid monster category 
 
 	newMsg.addByte(progress);
 	newMsg.add<uint32_t>(killCounter);

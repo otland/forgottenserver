@@ -19,9 +19,9 @@ using BestiaryMapRaceId = std::map<std::string, RaceMapRaceId>;
 class Bestiary
 {
 public:
-	void addBestiaryMonster(std::string className, MonsterType* mType);
+	void addBestiaryMonster(std::string_view className, MonsterType* mType);
 
-	RaceMap& getRaceBestiary(std::string race);
+	RaceMap& getRaceBestiary(std::string_view race);
 
 	bool isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock);
 
@@ -45,9 +45,9 @@ public:
 
 	BestiaryMapRaceId& getBestiaryMapByRaceId() { return bestiaryMapRaceId; };
 
-	RaceMap& getRaceMapByName(std::string race) { return bestiaryMap[race]; };
+	RaceMap& getRaceMapByName(std::string_view race) { return bestiaryMap[std::string(race)]; };
 
-	RaceMapRaceId& getRaceMapByRaceId(std::string race) { return bestiaryMapRaceId[race]; };
+	RaceMapRaceId& getRaceMapByRaceId(std::string_view race) { return bestiaryMapRaceId[std::string(race)]; };
 
 private:
 	BestiaryMap bestiaryMap;

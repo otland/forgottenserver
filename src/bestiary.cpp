@@ -10,13 +10,13 @@
 #include "player.h"
 #include "monsters.h"
 
-void Bestiary::addBestiaryMonster(std::string className, MonsterType* mType)
+void Bestiary::addBestiaryMonster(std::string_view className, MonsterType* mType)
 {
-	bestiaryMap[className][mType->name] = mType;
-	bestiaryMapRaceId[className][mType->info.bestiary.raceId] = mType;
+	bestiaryMap[std::string{className}][mType->name] = mType;
+	bestiaryMapRaceId[std::string{className}][mType->info.bestiary.raceId] = mType;
 }
 
-RaceMap& Bestiary::getRaceBestiary(std::string className) { return bestiaryMap[className]; }
+RaceMap& Bestiary::getRaceBestiary(std::string_view className) { return bestiaryMap[std::string{className}]; }
 
 size_t Bestiary::getBestiaryMonsterCount()
 {
