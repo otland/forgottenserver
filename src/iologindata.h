@@ -14,13 +14,19 @@ struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
+struct GameWorldAuthenticationData_t
+{
+	uint32_t accountId;
+	std::string characterName;
+};
+
 class IOLoginData
 {
 public:
 	static Account loadAccount(uint32_t accno);
 
 	static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
-	static std::pair<uint32_t, std::string_view> gameworldAuthentication(std::string_view accountName,
+	static GameWorldAuthenticationData_t gameworldAuthentication(std::string_view accountName,
 	                                                                     std::string_view password,
 	                                                                     std::string_view characterName,
 	                                                                     std::string_view token, uint32_t tokenTime);
