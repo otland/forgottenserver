@@ -1,6 +1,6 @@
 local handler = PacketHandler(0x73)
 
-handler.onReceive = function(player, msg)
+function handler.onReceive(player, msg)
 	if not player:getGroup():getAccess() then
 		return
 	end
