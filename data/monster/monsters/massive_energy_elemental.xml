@@ -26,7 +26,7 @@
 			<attribute key="shootEffect" value="energyball" />
 			<attribute key="areaEffect" value="energy" />
 		</attack>
-		<attack name="massive energy elemental electrify" interval="2000" chance="20">
+		<attack name="energycondition" interval="2000" chance="20" radius="4" min="-250" max="-250">
 			<attribute key="areaEffect" value="yellowspark" />
 		</attack>
 	</attacks>

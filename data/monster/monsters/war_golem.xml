@@ -22,8 +22,10 @@
 			<attribute key="shootEffect" value="energy" />
 		</attack>
 		<attack name="outfit" interval="2000" chance="1" range="7" monster="skeleton" duration="3000" />
-		<attack name="war golem electrify" range="1" interval="2000" chance="15" />
-		<attack name="war golem skill reducer" interval="2000" chance="10" />
+		<attack name="energycondition" interval="2000" chance="15" range="1" target="1" min="-175" max="-175">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="war golem skill reducer" interval="2000" chance="10"/>
 	</attacks>
 	<defenses armor="40" defense="40">
 		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="5000">

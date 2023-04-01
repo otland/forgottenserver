@@ -24,6 +24,10 @@
 			<attribute key="areaEffect" value="poff" />
 		</attack>
 		<attack name="death blob curse" interval="2000" range="5" chance="5" />
+		<attack name="cursecondition" interval="2000" range="5" chance="5" target="1" min="-280" max="-310">
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="shootEffect" value="death" />
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="healing" interval="2000" chance="5" min="20" max="30">

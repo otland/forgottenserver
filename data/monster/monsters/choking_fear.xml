@@ -33,7 +33,9 @@
 		<attack name="manadrain" interval="2000" chance="10" radius="4" target="0" min="-130" max="-300">
 			<attribute key="areaEffect" value="rednote" />
 		</attack>
-		<attack name="choking fear drown" interval="2000" chance="20" />
+		<attack name="drowncondition" interval="2000" chance="20" radius="7" min="-1000" max="-1000">
+			<attribute key="areaEffect" value="bubbles" />
+		</attack>
 		<attack name="death" interval="2000" chance="20" radius="4" target="1" min="-250" max="-500">
 			<attribute key="shootEffect" value="suddendeath" />
 			<attribute key="areaEffect" value="mortarea" />

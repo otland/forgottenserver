@@ -21,7 +21,7 @@
 			<attribute key="shootEffect" value="energy" />
 			<attribute key="areaEffect" value="purpleenergy" />
 		</attack>
-		<attack name="energycondition" interval="1000" chance="15" radius="3" target="0">
+		<attack name="energycondition" interval="1000" chance="15" radius="3" target="0" min="-100" max="-100">
 			<attribute key="areaEffect" value="yellowenergy" />
 		</attack>
 	</attacks>

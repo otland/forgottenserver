@@ -22,7 +22,10 @@
 		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-310" max="-630">
 			<attribute key="areaEffect" value="explosion" />
 		</attack>
-		<attack name="draken abomination curse" interval="2000" range="5" chance="10" />
+		<attack name="cursecondition" interval="2000" range="5" chance="5" target="1" min="-400" max="-450">
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="shootEffect" value="death" />
+		</attack>
 		<attack name="death" interval="2000" chance="15" length="4" spread="0" min="-170" max="-370">
 			<attribute key="areaEffect" value="mortarea" />
 		</attack>

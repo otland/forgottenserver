@@ -36,7 +36,10 @@
 		<attack name="outfit" interval="2000" chance="1" range="7" monster="rabbit" duration="4000">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
-		<attack name="djinn electrify" interval="2000" range="5" chance="15" />
+		<attack name="energycondition" interval="2000" range="5" chance="15" target="1" min="-75" max="-75">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
 		<attack name="energy" interval="2000" chance="15" radius="3" target="0" min="-30" max="-90">
 			<attribute key="areaEffect" value="energy" />
 		</attack>

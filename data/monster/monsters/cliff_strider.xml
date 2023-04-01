@@ -25,7 +25,9 @@
 			<attribute key="areaEffect" value="stones" />
 		</attack>
 		<attack name="cliff strider skill reducer" interval="2000" chance="10" />
-		<attack name="cliff strider electrify" range="1" interval="2000" chance="15" />
+		<attack name="energycondition" interval="2000" chance="15" range="1" target="1" min="-250" max="-250">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
 		<attack name="physical" interval="2000" chance="10" length="6" spread="0" target="0" min="0" max="-1000">
 			<attribute key="areaEffect" value="groundshaker" />
 		</attack>

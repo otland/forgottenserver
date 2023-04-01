@@ -19,7 +19,10 @@
 	</flags>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-60" />
-		<attack name="lizard magistratus curse" interval="2000" chance="10" range="5" />
+		<attack name="cursecondition" interval="2000" chance="10" range="5" target="1" min="-230" max="-250">
+			<attribute key="areaEffect" value="smallclouds" />
+			<attribute key="shootEffect" value="death" />
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="healing" interval="2000" chance="50" min="200" max="250">

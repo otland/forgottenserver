@@ -26,7 +26,9 @@
 			<attribute key="shootEffect" value="energyball" />
 			<attribute key="areaEffect" value="energy" />
 		</attack>
-		<attack name="energy elemental electrify" interval="2000" chance="20" />
+		<attack name="energycondition" interval="2000" chance="20" radius="4" min="-175" max="-175">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="healing" interval="2000" chance="10" min="90" max="150">
