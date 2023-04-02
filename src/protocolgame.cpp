@@ -151,18 +151,18 @@ void ProtocolGame::release()
 	Protocol::release();
 }
 
-void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
+void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	// dispatcher thread
-	Player* foundPlayer = g_game.getPlayerByName(name);
+	Player* foundPlayer = g_game.getPlayerByGUID(characterId);
 	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
-		player->setName(name);
 
 		player->incrementReferenceCounter();
 		player->setID();
+		player->setGUID(characterId);
 
-		if (!IOLoginData::preloadPlayer(player, name)) {
+		if (!IOLoginData::preloadPlayer(player)) {
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
@@ -468,17 +468,14 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId;
-	std::tie(accountId, characterName) =
+	auto [accountId, characterId] =
 	    IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::string{characterName}]() {
-		thisPtr->login(characterName, accountId, operatingSystem);
-	});
+	g_dispatcher.addTask([=, thisPtr = getThis()]() { thisPtr->login(characterId, accountId, operatingSystem); });
 }
 
 void ProtocolGame::onConnect()
