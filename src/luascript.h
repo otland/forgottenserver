@@ -966,6 +966,7 @@ private:
 	static int luaPlayerAddMount(lua_State* L);
 	static int luaPlayerRemoveMount(lua_State* L);
 	static int luaPlayerHasMount(lua_State* L);
+	static int luaPlayerToggleMount(lua_State* L);
 
 	static int luaPlayerGetPremiumEndsAt(lua_State* L);
 	static int luaPlayerSetPremiumEndsAt(lua_State* L);

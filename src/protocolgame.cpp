@@ -767,9 +767,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xD3:
 			parseSetOutfit(msg);
 			break;
-		case 0xD4:
-			parseToggleMount(msg);
-			break;
 		// case 0xD5: break; // apply imbuement
 		// case 0xD6: break; // clear imbuement
 		// case 0xD7: break; // close imbuing window
@@ -1189,12 +1186,6 @@ void ProtocolGame::parseEditPodiumRequest(NetworkMessage& msg)
 	g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerRequestEditPodium(playerID, pos, stackpos, spriteId);
 	});
-}
-
-void ProtocolGame::parseToggleMount(NetworkMessage& msg)
-{
-	bool mount = msg.getByte() != 0;
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerToggleMount(playerID, mount); });
 }
 
 void ProtocolGame::parseUseItem(NetworkMessage& msg)
