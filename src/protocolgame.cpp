@@ -476,7 +476,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::move(std::string{gameAuthData.characterName})]() {
-		thisPtr->login(characterName, gameAuthData.accountId, operatingSystem);
+		    thisPtr->login(characterName, gameAuthData.accountId, operatingSystem);
 	});
 }
 
