@@ -325,6 +325,7 @@ private:
 	void parseBestiarySendRaces();
 	void parseBestiarySendCreatures(NetworkMessage& msg);
 	void parseBestiarySendMonsterData(NetworkMessage& msg);
+	void sendBestiaryMilestoneReached(uint16_t raceid);
 
 	// otclient
 	void parseExtendedOpcode(NetworkMessage& msg);

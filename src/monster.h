@@ -125,6 +125,12 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	const bool isBestiaryMonster() { return mType->info.bestiary.raceId ? true : false; }
+	const uint32_t getBestiaryRaceId() { return mType->info.bestiary.raceId; }
+	const BestiaryBlock_t getBestiaryData() const { return mType->info.bestiary; }
+	const MonsterType* getMonsterType() const { return mType; }
+	MonsterType* getMonsterType() { return mType; }
+
 	static uint32_t monsterAutoID;
 
 private:

@@ -713,6 +713,27 @@ void Creature::onDeath()
 	bool droppedCorpse = dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 	death(lastHitCreature);
 
+	Monster* monster = getMonster();
+	Player* player = mostDamageCreature->getPlayer();
+	if (monster && player && monster->isBestiaryMonster()) {
+		Party* party = player->getParty();
+		uint32_t raceId = monster->getBestiaryRaceId();
+		int32_t count = std::max(1, g_config.getNumber(ConfigManager::BESTIARY_COUNT_PER_KILL));
+		BestiaryUpdate updateBestiaryData;
+		if (party && g_config.getBoolean(ConfigManager::BESTIARY_FOR_PARTY_MEMBERS)) {
+			for (Player* member : party->getMembers()) {
+				updateBestiaryData = member->updateBestiaryKills(raceId, count);
+				member->sendBestiaryUnlockDetails(monster->getMonsterType(), updateBestiaryData);
+			}
+
+			updateBestiaryData = party->getLeader()->updateBestiaryKills(raceId, count);
+			party->getLeader()->sendBestiaryUnlockDetails(monster->getMonsterType(), updateBestiaryData);
+		} else {
+			updateBestiaryData = player->updateBestiaryKills(raceId, count);
+			player->sendBestiaryUnlockDetails(monster->getMonsterType(), updateBestiaryData);
+		}
+	}
+
 	if (master) {
 		setMaster(nullptr);
 	}

@@ -4029,8 +4029,12 @@ void ProtocolGame::parseBestiarySendCreatures(NetworkMessage& msg)
 		}
 		raceName = "";
 	} else {
-		std::string_view raceName = msg.getString();
-		races = g_monsters.bestiary->getRaceMapByName(raceName);
+		auto raceName = msg.getString();
+		auto mMap = g_monsters.bestiary->getBestiaryMapByName();
+		auto raceMap = mMap.find(std::string{raceName});
+		if (raceMap != mMap.end()) {
+			races = raceMap->second;
+		}
 	}
 
 	if (races.size() == 0) {
@@ -4180,4 +4184,12 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 		newMsg.addByte(1);
 	}
 	writeToOutputBuffer(newMsg);
+}
+
+void ProtocolGame::sendBestiaryMilestoneReached(uint16_t raceId)
+{
+	NetworkMessage msg;
+	msg.addByte(0xd9);
+	msg.add<uint16_t>(raceId);
+	writeToOutputBuffer(msg);
 }

@@ -4869,16 +4869,45 @@ void Player::updateRegeneration()
 	}
 }
 
-void Player::updateBestiaryKills(uint32_t raceId, int32_t count)
+BestiaryUpdate Player::updateBestiaryKills(uint32_t raceId, int32_t count)
 {
 	if (raceId == 0) {
-		return;
+		return {0, 0};
 	}
 
 	int storageValue = 0;
+	int newValue = 0;
 	getStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue);
-	storageValue = std::max(0, storageValue) + count; // TODO:: add config or some vay to change count value
-	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, storageValue, true);
+
+	newValue = std::max(0, storageValue) + count; // TODO:: add config or some vay to change count value
+	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, newValue, true);
+	return {static_cast<uint32_t>(storageValue), static_cast<uint32_t>(newValue)};
+}
+
+void Player::sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestiaryUpdate)
+{
+	if (mType->info.bestiary.raceId == 0 || (bestiaryUpdate.oldCount == 0 && bestiaryUpdate.newCount == 0))
+	{
+		return;
+	}
+
+
+	BestiaryBlock_t& bb = mType->info.bestiary;
+
+	if ((bestiaryUpdate.oldCount == 0 && bestiaryUpdate.oldCount < bestiaryUpdate.newCount) ||
+	    (bestiaryUpdate.oldCount < bb.prowess && bestiaryUpdate.newCount >= bb.prowess) ||
+	    (bestiaryUpdate.oldCount < bb.expertise && bestiaryUpdate.newCount >= bb.expertise) ||
+	    (bestiaryUpdate.oldCount < bb.mastery && bestiaryUpdate.newCount >= bb.mastery)) {
+		sendTextMessage(MESSAGE_EVENT_DEFAULT, fmt::format("You unlocked details for the creature '{:s}'.", mType->name));
+		sendBestiaryMilestoneReached(mType->info.bestiary.raceId);
+	}
+}
+
+void Player::sendBestiaryMilestoneReached(uint32_t raceId)
+{
+	if (client) {
+		client->sendBestiaryMilestoneReached(raceId);
+	}
 }
 
 int32_t Player::getBestiaryKills(uint32_t raceId)

@@ -88,6 +88,12 @@ struct Skill
 	uint8_t percent = 0;
 };
 
+struct BestiaryUpdate
+{
+	uint32_t oldCount = 0;
+	uint32_t newCount = 0;
+};
+
 using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
@@ -1134,10 +1140,12 @@ public:
 
 	void updateRegeneration();
 
-	void updateBestiaryKills(uint32_t raceId, int32_t count);
+	BestiaryUpdate updateBestiaryKills(uint32_t raceId, int32_t count);
+	void sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestiaryUpdate);
 	int32_t getBestiaryKills(uint32_t raceId);
 	const int32_t getBestiaryKills(uint32_t raceId) const;
 	void setBestiaryKills(uint32_t raceId, int32_t value);
+	void sendBestiaryMilestoneReached(uint32_t raceid);
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
