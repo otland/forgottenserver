@@ -573,6 +573,12 @@ public:
 			                               creature->getTile()->getClientIndexOfCreature(this, creature), creature);
 		}
 	}
+	void sendUpdateCreatureIcons(const Creature* creature)
+	{
+		if (client) {
+			client->sendUpdateCreatureIcons(creature);
+		}
+	}
 	void sendRemoveTileCreature(const Creature* creature, const Position& pos, int32_t stackpos)
 	{
 		if (client) {

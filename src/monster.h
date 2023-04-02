@@ -125,6 +125,38 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	// monster icons
+	auto& getMonsterIcons() const { return monsterIcons; }
+
+	size_t getMonsterIconCount() const { return monsterIcons.size(); }
+
+	bool hasMonsterIcon(MonsterIcon_t iconId) { return monsterIcons.find(iconId) != monsterIcons.end(); }
+
+	uint16_t getMonsterIconValue(MonsterIcon_t iconId) { return hasMonsterIcon(iconId) ? monsterIcons[iconId] : 0; }
+
+	bool setMonsterIconValue(MonsterIcon_t iconId, uint16_t value)
+	{
+		if (iconId < MONSTER_ICON_LAST) {
+			monsterIcons[iconId] = value;
+			refreshCreatureIcons();
+			return true;
+		}
+
+		return false;
+	}
+
+	bool removeMonsterIcon(MonsterIcon_t iconId)
+	{
+		auto iter = monsterIcons.find(iconId);
+		if (iter == monsterIcons.end()) {
+			return false;
+		}
+
+		monsterIcons.erase(iter);
+		refreshCreatureIcons();
+		return true;
+	}
+
 	static uint32_t monsterAutoID;
 
 private:
@@ -157,6 +189,8 @@ private:
 	bool isMasterInRange = false;
 	bool randomStepping = false;
 	bool walkingToSpawn = false;
+
+	std::map<MonsterIcon_t, uint16_t> monsterIcons;
 
 	void onCreatureEnter(Creature* creature);
 	void onCreatureLeave(Creature* creature);

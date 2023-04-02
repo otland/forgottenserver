@@ -832,6 +832,11 @@ private:
 
 	static int luaCreatureGetZone(lua_State* L);
 
+	static int luaCreatureHasIcon(lua_State* L);
+	static int luaCreatureGetIconValue(lua_State* L);
+	static int luaCreatureSetIconValue(lua_State* L);
+	static int luaCreatureRemoveIcon(lua_State* L);
+
 	// Player
 	static int luaPlayerCreate(lua_State* L);
 
@@ -1046,6 +1051,11 @@ private:
 
 	static int luaMonsterIsWalkingToSpawn(lua_State* L);
 	static int luaMonsterWalkToSpawn(lua_State* L);
+
+	static int luaMonsterHasIcon(lua_State* L);
+	static int luaMonsterGetIconValue(lua_State* L);
+	static int luaMonsterSetIconValue(lua_State* L);
+	static int luaMonsterRemoveIcon(lua_State* L);
 
 	// Npc
 	static int luaNpcCreate(lua_State* L);

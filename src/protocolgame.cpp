@@ -15,6 +15,7 @@
 #include "iologindata.h"
 #include "iomarket.h"
 #include "npc.h"
+#include "monster.h"
 #include "outfit.h"
 #include "outputmessage.h"
 #include "player.h"
@@ -2840,6 +2841,21 @@ void ProtocolGame::sendUpdateTileCreature(const Position& pos, uint32_t stackpos
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendUpdateCreatureIcons(const Creature* creature)
+{
+	if (!canSee(creature->getPosition())) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x8B);
+	msg.add<uint32_t>(creature->getID());
+	msg.addByte(14); // event player icons
+
+	AddCreatureIcons(msg, creature);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
 {
 	if (stackpos < 10) {
@@ -3643,14 +3659,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
-	msg.addByte(0x00); // creature debuffs, to do
-	/*
-	if (icon != CREATUREICON_NONE) {
-	        msg.addByte(icon);
-	        msg.addByte(1);
-	        msg.add<uint16_t>(0);
-	}
-	*/
+	AddCreatureIcons(msg, creature);
 
 	msg.addByte(player->getSkullClient(creature));
 	msg.addByte(player->getPartyShield(otherPlayer));
@@ -3675,6 +3684,35 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.addByte(0x00); // inspection type (bool?)
 
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
+}
+
+void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const Creature* creature) {
+	size_t iconCount = 0;
+	const Monster* monster = creature->getMonster();
+	if (monster) {
+		iconCount += monster->getMonsterIconCount();
+	}
+
+	iconCount += creature->getCreatureIconCount();
+
+	// icon count
+	msg.addByte(iconCount);
+
+	// monster icons
+	if (monster) {
+		for (const auto& icon : monster->getMonsterIcons()) {
+			msg.addByte(icon.first);
+			msg.addByte(1);
+			msg.add<uint16_t>(icon.second);
+		}
+	}
+
+	// creature icons
+	for (const auto& icon : creature->getCreatureIcons()) {
+		msg.addByte(icon.first);
+		msg.addByte(0);
+		msg.add<uint16_t>(icon.second);
+	}
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
