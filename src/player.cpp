@@ -4881,7 +4881,7 @@ BestiaryUpdate Player::updateBestiaryKills(uint32_t raceId, int32_t count)
 
 	newValue = std::max(0, storageValue) + count; // TODO:: add config or some vay to change count value
 	addStorageValue(PSTRG_BESTIARY_RANGE_START + raceId, newValue, true);
-	return {static_cast<uint32_t>(storageValue), static_cast<uint32_t>(newValue)};
+	return {static_cast<uint32_t>(std::max(0, storageValue)), static_cast<uint32_t>(std::max(0, newValue))};
 }
 
 void Player::sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestiaryUpdate)
@@ -4894,7 +4894,7 @@ void Player::sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestia
 
 	BestiaryBlock_t& bb = mType->info.bestiary;
 
-	if ((bestiaryUpdate.oldCount == 0 && bestiaryUpdate.oldCount < bestiaryUpdate.newCount) ||
+	if ((bestiaryUpdate.oldCount <= 0 && bestiaryUpdate.oldCount < bestiaryUpdate.newCount) ||
 	    (bestiaryUpdate.oldCount < bb.prowess && bestiaryUpdate.newCount >= bb.prowess) ||
 	    (bestiaryUpdate.oldCount < bb.expertise && bestiaryUpdate.newCount >= bb.expertise) ||
 	    (bestiaryUpdate.oldCount < bb.mastery && bestiaryUpdate.newCount >= bb.mastery)) {
