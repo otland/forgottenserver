@@ -468,15 +468,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	GameWorldAuthenticationData_t gameAuthData =
+	uint32_t accountId;
+	std::tie(accountId, characterName) =
 	    IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (gameAuthData.accountId == 0) {
+	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::move(std::string{gameAuthData.characterName})]() {
-		    thisPtr->login(characterName, gameAuthData.accountId, operatingSystem);
+	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::string{characterName}]() {
+		thisPtr->login(characterName, accountId, operatingSystem);
 	});
 }
 
