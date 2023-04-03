@@ -794,10 +794,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xE8:
 			parseDebugAssert(msg);
 			break;
-		case 0xEE:
-			g_dispatcher.addTask(
-			    [playerID = player->getID()]() { g_game.playerSay(playerID, 0, TALKTYPE_SAY, "", "hi"); });
-			break;
 		// case 0xEF: break; // request store coins transfer
 		case 0xF0:
 			g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION,
