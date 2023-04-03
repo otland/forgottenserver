@@ -98,7 +98,6 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 showPlayerLogInConsole = true
 checkDuplicateStorageKeys = false
-hideUnknowPacketWarning = false
 
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
