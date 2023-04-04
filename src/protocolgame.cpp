@@ -141,7 +141,8 @@ ClientDamageType getClientDamageType(CombatType_t combatType)
 	}
 }
 
-uint16_t getUnlockedBestiary(Player *player, RaceMap &raceList) {
+uint16_t getUnlockedBestiary(Player* player, RaceMap& raceList)
+{
 	uint16_t count = 0;
 	int32_t storageValue = 0;
 	bool isStorageGethered = false;
@@ -149,7 +150,8 @@ uint16_t getUnlockedBestiary(Player *player, RaceMap &raceList) {
 		if (iter.second && iter.second->info.bestiary.raceId != 0) {
 			isStorageGethered =
 			    player->getStorageValue(PSTRG_BESTIARY_RANGE_START + iter.second->info.bestiary.raceId, storageValue);
-			if (isStorageGethered == true && static_cast<uint32_t>(storageValue) >= iter.second->info.bestiary.prowess) {
+			if (isStorageGethered == true &&
+			    static_cast<uint32_t>(storageValue) >= iter.second->info.bestiary.prowess) {
 				count++;
 			}
 		}
@@ -810,9 +812,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		case 0xE3:
 			parseBestiarySendMonsterData(msg);
-		// break;
-		// case 0xE4: break; // buy charm rune
-		// case 0xE5: break; // request character info (cyclopedia)
+			// break;
+			// case 0xE4: break; // buy charm rune
+			// case 0xE5: break; // request character info (cyclopedia)
 			break;
 		case 0xE6:
 			parseBugReport(msg);
@@ -3952,15 +3954,14 @@ void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 void ProtocolGame::parseBestiarySendRaces()
 {
 	std::shared_ptr<Bestiary> bestiary = g_monsters.bestiary;
-	if (!bestiary)
-	{
+	if (!bestiary) {
 		return;
 	}
 
 	NetworkMessage msg;
 	msg.addByte(0xd5);
 	uint16_t raceCount = bestiary->getRaceCount();
-	
+
 	msg.add<uint16_t>(raceCount);
 
 	for (auto it = bestiary->getBestiaryMapByName().begin(); it != bestiary->getBestiaryMapByName().end(); it++) {
@@ -4072,7 +4073,7 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	NetworkMessage newMsg;
 	newMsg.addByte(0xd7);
 	newMsg.add<uint16_t>(raceId);
-	newMsg.addString(mType->info.bestiary.className); // it's used to navigate back to valid monster category 
+	newMsg.addString(mType->info.bestiary.className); // it's used to navigate back to valid monster category
 
 	newMsg.addByte(progress);
 	newMsg.add<uint32_t>(killCounter);
@@ -4083,7 +4084,6 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 
 	newMsg.addByte(mType->info.bestiary.stars);
 	newMsg.addByte(mType->info.bestiary.occurrence);
-
 
 	std::vector<LootBlock>& lootList = mType->info.lootItems;
 	newMsg.addByte(lootList.size());
@@ -4150,15 +4150,15 @@ void ProtocolGame::parseBestiarySendMonsterData(NetworkMessage& msg)
 	}
 
 	if (progress > 3) {
-		//if (charmType != -1) {
+		// if (charmType != -1) {
 		//	newmsg.addByte(1); // charms byte 1
 		//	newmsg.addByte(charmType); // charms type
 		//	newmsg.add<uint32_t>(player->getLevel() * 100); // level/gold/something ??
-		//} else {
+		// } else {
 		//	newmsg.addByte(0);
 		//	newmsg.addByte(1);
-		//}
-		
+		// }
+
 		// To remove
 		newMsg.addByte(0);
 		newMsg.addByte(1);

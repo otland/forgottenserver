@@ -241,7 +241,6 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
 		bool canSeeNewPos = canSee(newPos);
 		bool canSeeOldPos = canSee(oldPos);
 
-
 		if (canSeeNewPos && !canSeeOldPos) {
 			onCreatureEnter(creature);
 		} else if (!canSeeNewPos && canSeeOldPos) {

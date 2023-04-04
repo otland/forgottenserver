@@ -3,6 +3,7 @@
 
 #ifndef FS_BESTIARY_H
 #define FS_BESTIARY_H
+
 #include <map>
 #include <string>
 

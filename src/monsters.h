@@ -4,9 +4,9 @@
 #ifndef FS_MONSTERS_H
 #define FS_MONSTERS_H
 
+#include "bestiary.h"
 #include "const.h"
 #include "enums.h"
-#include "bestiary.h"
 
 class ConditionDamage;
 class LuaScriptInterface;
@@ -57,7 +57,6 @@ struct summonBlock_t
 	uint32_t max;
 	bool force = false;
 };
-
 
 struct BestiaryBlock_t
 {

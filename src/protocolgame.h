@@ -328,7 +328,6 @@ private:
 	// otclient
 	void parseExtendedOpcode(NetworkMessage& msg);
 
-
 	friend class Player;
 
 	std::unordered_set<uint32_t> knownCreatureSet;

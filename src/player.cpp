@@ -4856,11 +4856,9 @@ BestiaryUpdate Player::updateBestiaryKills(uint32_t raceId, int32_t count)
 
 void Player::sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestiaryUpdate)
 {
-	if (mType->info.bestiary.raceId == 0 || (bestiaryUpdate.oldCount == 0 && bestiaryUpdate.newCount == 0))
-	{
+	if (mType->info.bestiary.raceId == 0 || (bestiaryUpdate.oldCount == 0 && bestiaryUpdate.newCount == 0)) {
 		return;
 	}
-
 
 	BestiaryBlock_t& bb = mType->info.bestiary;
 
@@ -4868,7 +4866,8 @@ void Player::sendBestiaryUnlockDetails(MonsterType* mType, BestiaryUpdate bestia
 	    (bestiaryUpdate.oldCount < bb.prowess && bestiaryUpdate.newCount >= bb.prowess) ||
 	    (bestiaryUpdate.oldCount < bb.expertise && bestiaryUpdate.newCount >= bb.expertise) ||
 	    (bestiaryUpdate.oldCount < bb.mastery && bestiaryUpdate.newCount >= bb.mastery)) {
-		sendTextMessage(MESSAGE_EVENT_DEFAULT, fmt::format("You unlocked details for the creature '{:s}'.", mType->name));
+		sendTextMessage(MESSAGE_EVENT_DEFAULT,
+		                fmt::format("You unlocked details for the creature '{:s}'.", mType->name));
 		sendBestiaryMilestoneReached(mType->info.bestiary.raceId);
 	}
 }

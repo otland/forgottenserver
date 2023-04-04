@@ -2167,7 +2167,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::STAMINA_REGEN_PREMIUM);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn("configKeys", ConfigManager::MONSTER_OVERSPAWN);
-  registerEnumIn("configKeys", ConfigManager::BESTIARY_COUNT_PER_KILL);
+	registerEnumIn("configKeys", ConfigManager::BESTIARY_COUNT_PER_KILL);
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
@@ -10865,11 +10865,10 @@ int LuaScriptInterface::luaPlayerSetBestiaryKill(lua_State* L)
 		}
 	}
 
-	if (raceId == 0)
-	{
+	if (raceId == 0) {
 		return 1;
 	}
-	
+
 	size_t count = getNumber<size_t>(L, 3);
 	player->setBestiaryKills(raceId, count);
 

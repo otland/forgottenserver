@@ -3,12 +3,13 @@
 
 #include "otpch.h"
 
-#include <stdexcept>
-#include <iostream>
-
 #include "bestiary.h"
-#include "player.h"
+
 #include "monsters.h"
+#include "player.h"
+
+#include <iostream>
+#include <stdexcept>
 
 void Bestiary::addBestiaryMonster(std::string_view className, MonsterType* mType)
 {
@@ -47,7 +48,7 @@ bool Bestiary::isValidBestiaryRecord(BestiaryBlock_t& bestiaryBlock)
 		return false;
 	}
 
-	if (bestiaryBlock.prowess == 0  || bestiaryBlock.prowess >= bestiaryBlock.expertise ||
+	if (bestiaryBlock.prowess == 0 || bestiaryBlock.prowess >= bestiaryBlock.expertise ||
 	    bestiaryBlock.expertise >= bestiaryBlock.mastery) {
 		std::cout << "[Warning - Bestiary::isValidBestiaryRecord] invalid unlock data value - "
 		          << "prowess == 0 or "
@@ -78,7 +79,8 @@ void Bestiary::clear()
 	bestiaryMapRaceId.clear();
 }
 
-bool Bestiary::isBestiaryFinished(const Player* player, const MonsterType* mType) {
+bool Bestiary::isBestiaryFinished(const Player* player, const MonsterType* mType)
+{
 	if (!player || !mType || mType->info.bestiary.raceId == 0) {
 		return false;
 	}
@@ -134,7 +136,7 @@ uint16_t Bestiary::calculateDifficult(uint32_t chance)
 	} else if (chance < 25000) { // 25%
 		return 1;
 	}
-	return 0; 
+	return 0;
 }
 
 std::array<int16_t, 8> Bestiary::getMonsterElements(MonsterType* mtype) const
