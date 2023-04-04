@@ -178,3 +178,12 @@ end
 function Creature.getMonster(self)
 	return self:isMonster() and self or nil
 end
+
+function Creature.isBestiaryMonster(self)
+	if not self:isMonster() then return false end
+	local type = self:getType():getBestiaryData().raceId
+	if raceId == 0 then
+		return false
+	end
+	return true
+end

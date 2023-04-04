@@ -2709,7 +2709,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
-	registerMethod("Player", "updateBestiaryKill", LuaScriptInterface::luaPlayerUpdateBestiaryKill);
+	registerMethod("Player", "setBestiaryKill", LuaScriptInterface::luaPlayerSetBestiaryKill);
+	registerMethod("Player", "getBestiaryKill", LuaScriptInterface::luaPlayerGetBestiaryKill);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10845,25 +10846,59 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerUpdateBestiaryKill(lua_State* L)
+int LuaScriptInterface::luaPlayerSetBestiaryKill(lua_State* L)
 {
-	// player:updateBestiaryKill(raceId, count)
+	// player:updateBestiaryKill(raceId or monsterName, count)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
+	size_t raceId = 0;
+	if (isNumber(L, 2)) {
+		raceId = getNumber<uint32_t>(L, 2);
+	} else {
+		MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 2));
+		if (monsterType) {
+			raceId = monsterType->info.bestiary.raceId;
+		}
+	}
+
+	if (raceId == 0)
+	{
+		return 1;
+	}
 	
-	if (!isNumber(L, 2) || !isNumber(L, 3)) {
+	size_t count = getNumber<size_t>(L, 3);
+	player->setBestiaryKills(raceId, count);
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetBestiaryKill(lua_State* L)
+{
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	size_t raceId = getNumber<size_t>(L, 2);
-	size_t count = getNumber<size_t>(L, 3);
-	player->updateBestiaryKills(raceId, count);
+	uint32_t raceId = 0;
+	if (isNumber(L, 2)) {
+		raceId = getNumber<uint32_t>(L, 2);
+	} else {
+		MonsterType* monsterType = g_monsters.getMonsterType(getString(L, 2));
+		if (monsterType) {
+			raceId = monsterType->info.bestiary.raceId;
+		}
+	}
 
+	if (raceId == 0) {
+		return 1;
+	}
+
+	lua_pushnumber(L, player->getBestiaryKills(raceId));
 	return 1;
 }
 
