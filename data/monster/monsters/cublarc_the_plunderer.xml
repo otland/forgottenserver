@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cublarc The Plunderer" nameDescription="" experience="400" speed="0">
+	<health now="400" max="400" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Orc arga Huummmak!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="53731" countmax="85" />
+		<item id="2666" name="meat" chance="25373" />
+		<item id="2428" name="orcish axe" chance="18657" />
+		<item id="11324" name="shaggy tail" chance="13433" />
+		<item id="11338" name="disgusting trophy" chance="5224" />
+		<item id="2456" name="bow" chance="4478" />
+		<item id="11113" name="orc tooth" chance="2239" />
+		<item id="8857" name="silkweaver bow" chance="2239" />
+		<item id="2455" name="crossbow" chance="1493" />
+	</loot>
+</monster>

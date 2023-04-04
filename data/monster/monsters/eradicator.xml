@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Eradicator" nameDescription="" experience="50000" speed="0">
+	<health now="290000" max="290000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="50" />
+		<element earthPercent="50" />
+		<element firePercent="50" />
+		<element icePercent="50" />
+		<element holyPercent="50" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="26191" name="energy bar" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="362" />
+		<item id="25377" name="gold token" chance="100000" countmax="7" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="26176" name="plasmatic lightning" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="46" />
+		<item id="26174" name="spark sphere" chance="100000" />
+		<item id="18415" name="green crystal shard" chance="78000" countmax="5" />
+		<item id="18414" name="violet crystal shard" chance="68000" countmax="5" />
+		<item id="18413" name="blue crystal shard" chance="66000" countmax="5" />
+		<item id="8473" name="ultimate health potion" chance="60000" countmax="17" />
+		<item id="8472" name="great spirit potion" chance="54000" countmax="17" />
+		<item id="7590" name="great mana potion" chance="52000" countmax="9" />
+		<item id="2149" name="small emerald" chance="34000" countmax="14" />
+		<item name="giant shimmering pearl" chance="28000" />
+		<item id="2150" name="small amethyst" chance="22000" countmax="19" />
+		<item id="2154" name="yellow gem" chance="22000" />
+		<item id="9970" name="small topaz" chance="20000" countmax="18" />
+		<item id="2147" name="small ruby" chance="18000" countmax="18" />
+		<item name="void boots" chance="18000" />
+		<item id="2158" name="blue gem" chance="16000" />
+		<item name="collar of blue plasma" chance="16000" />
+		<item name="ring of green plasma" chance="16000" />
+		<item name="ring of red plasma" chance="16000" />
+		<item id="7426" name="amber staff" chance="14000" />
+		<item id="2155" name="green gem" chance="14000" />
+		<item id="26200" name="collar of red plasma" chance="12000" />
+		<item id="2156" name="red gem" chance="12000" />
+		<item id="8901" name="spellbook of warding" chance="12000" />
+		<item id="26199" name="collar of green plasma" chance="10000" />
+		<item id="8903" name="spellbook of lost souls" chance="10000" />
+		<item id="2153" name="violet gem" chance="8000" />
+		<item id="2445" name="crystal mace" chance="6000" />
+		<item name="ring of blue plasma" chance="6000" />
+		<item id="2145" name="small diamond" chance="6000" countmax="14" />
+		<item id="8878" name="crystalline armor" chance="4000" />
+	</loot>
+</monster>

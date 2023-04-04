@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Flamecaller Zazrak" nameDescription="" experience="3031" speed="0">
+	<health now="2690" max="2690" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element icePercent="-10" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="11361" name="dragon priest's wandtip" chance="100000" />
+		<item id="2148" name="gold coin" chance="75000" countmax="51" />
+		<item id="11245" name="bunch of ripe rice" chance="12500" />
+		<item id="2168" name="life ring" chance="12500" />
+		<item id="5881" name="lizard scale" chance="12500" />
+	</loot>
+</monster>

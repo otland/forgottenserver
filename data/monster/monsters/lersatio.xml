@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lersatio" nameDescription="" experience="2500" speed="270">
+	<health now="1645" max="1645" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-1" />
+		<element holyPercent="-1" />
+		<element deathPercent="0" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="The monsters in the mirrors will come eat your dreams." />
+		<voice sentence="Your pitiful life has come to an end." />
+		<voice sentence="One day I will see my pretty face in a mirror again." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="100" />
+		<item id="12405" name="blood preservation" chance="89327" />
+		<item id="7588" name="strong health potion" chance="22368" />
+		<item id="2214" name="ring of healing" chance="11842" />
+		<item id="2152" name="platinum coin" chance="8918" countmax="5" />
+		<item id="2144" name="black pearl" chance="1754" />
+		<item id="2534" name="vampire shield" chance="585" />
+		<item id="7419" name="dreaded cleaver" chance="292" />
+	</loot>
+</monster>

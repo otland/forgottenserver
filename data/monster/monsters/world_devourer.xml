@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="World Devourer" nameDescription="" experience="77700" speed="0">
+	<health now="25000" max="25000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="26191" name="energy bar" chance="100000" countmax="9" />
+		<item id="26201" name="energy drink" chance="100000" countmax="9" />
+		<item id="2148" name="gold coin" chance="100000" countmax="353" />
+		<item id="25377" name="gold token" chance="100000" countmax="25" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="36" />
+		<item id="26163" name="crystallized anger" chance="98182" />
+		<item id="26164" name="energy vein" chance="98182" />
+		<item name="void boots" chance="78182" />
+		<item id="18415" name="green crystal shard" chance="67273" countmax="5" />
+		<item id="18413" name="blue crystal shard" chance="65455" countmax="5" />
+		<item name="tiara of power" chance="58182" />
+		<item id="18414" name="violet crystal shard" chance="58182" countmax="5" />
+		<item id="7590" name="great mana potion" chance="56364" countmax="18" />
+		<item id="8473" name="ultimate health potion" chance="56364" countmax="15" />
+		<item id="8472" name="great spirit potion" chance="50909" countmax="14" />
+		<item id="2147" name="small ruby" chance="23636" countmax="39" />
+		<item id="2155" name="green gem" chance="21818" />
+		<item id="2149" name="small emerald" chance="21818" countmax="39" />
+		<item id="2154" name="yellow gem" chance="21818" />
+		<item name="ring of red plasma" chance="18182" />
+		<item id="2146" name="small sapphire" chance="14545" countmax="33" />
+		<item name="collar of blue plasma" chance="12727" />
+		<item name="ring of green plasma" chance="12727" />
+		<item id="8878" name="crystalline armor" chance="10909" />
+		<item id="2156" name="red gem" chance="10909" />
+		<item id="2436" name="skull staff" chance="10909" />
+		<item id="2150" name="small amethyst" chance="10909" countmax="39" />
+		<item id="7426" name="amber staff" chance="9091" />
+		<item id="2158" name="blue gem" chance="9091" />
+		<item id="7428" name="bonebreaker" chance="9091" />
+		<item name="giant shimmering pearl" chance="9091" />
+		<item id="26200" name="collar of red plasma" chance="7273" />
+		<item name="ring of blue plasma" chance="7273" />
+		<item id="9970" name="small topaz" chance="7273" countmax="31" />
+		<item id="7901" name="lightning headband" chance="5455" />
+		<item id="2153" name="violet gem" chance="5455" />
+		<item id="26199" name="collar of green plasma" chance="3636" />
+		<item id="26342" name="devourer core" chance="1818" />
+	</loot>
+</monster>

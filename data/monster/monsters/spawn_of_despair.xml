@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Spawn Of Despair" nameDescription="a spawn of despair" experience="2550" speed="0">
+	<health now="35000" max="35000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="40" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Tibia will suffer and writhe today!" />
+		<voice sentence="Times of darkness are at hand" />
+		<voice sentence="The light weakens! The darkness grows stronger!" />
+		<voice sentence="YOU CALLED US! HERE WE ARE!" />
+		<voice sentence="The world will end today" />
+		<voice sentence="HRAAAAAAAAAAH" />
+		<voice sentence="OUR DAY HAS COME!" />
+		<voice sentence="HIDE YOU WEAKLINGS!" />
+		<voice sentence="Give it up. You fragile beings cannot have hope to defeat us demons." />
+	</voices>
+</monster>

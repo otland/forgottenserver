@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Stabilizing Reality Reaver" nameDescription="a stabilizing reality reaver" experience="1950" speed="310">
+	<health now="2500" max="2500" />
+	<look type="879" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="70" />
+		<element earthPercent="-10" />
+		<element firePercent="15" />
+		<element icePercent="20" />
+	</elements>
+	<defenses armor="46" defense="46" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Ssshhh!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="97253" countmax="100" />
+		<item id="2152" name="platinum coin" chance="97253" countmax="4" />
+		<item id="8472" name="great spirit potion" chance="14371" />
+		<item id="7591" name="great health potion" chance="13913" />
+		<item id="7590" name="great mana potion" chance="13737" />
+		<item id="26157" name="condensed energy" chance="10567" />
+		<item id="26191" name="energy bar" chance="9475" />
+		<item id="26201" name="energy drink" chance="9475" />
+		<item id="26180" name="small energy ball" chance="9123" />
+		<item id="26162" name="plasma pearls" chance="8806" />
+		<item id="18420" name="red crystal fragment" chance="3910" />
+		<item id="18414" name="violet crystal shard" chance="3522" />
+		<item id="18418" name="blue crystal splinter" chance="3381" countmax="2" />
+		<item id="18413" name="blue crystal shard" chance="1656" />
+		<item id="2156" name="red gem" chance="1409" />
+		<item id="8920" name="wand of starstorm" chance="1268" />
+		<item id="7901" name="lightning headband" chance="211" />
+		<item id="8871" name="focus cape" chance="70" />
+	</loot>
+</monster>

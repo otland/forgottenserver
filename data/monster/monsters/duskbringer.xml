@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Duskbringer" nameDescription="a duskbringer" experience="2600" speed="370">
+	<health now="3550" max="3550" />
+	<look type="300" head="0" body="0" legs="0" feet="0" addons="1" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element earthPercent="80" />
+		<element firePercent="40" />
+		<element icePercent="-10" />
+		<element holyPercent="30" />
+		<element deathPercent="-5" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="lifedrain" interval="2000" chance="15" min="-200" max="-250" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" min="-200" max="-300" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+	</attacks>
+	<defenses armor="42" defense="42" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Death!" />
+		<voice sentence="Come a little closer!" />
+		<voice sentence="The end is near!" />
+	</voices>
+	<loot>
+		<item id="10531" name="midnight shard" chance="10237" />
+	</loot>
+</monster>

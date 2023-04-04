@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Bride Of Night" nameDescription="a bride of night" experience="450" speed="250">
+	<health now="275" max="275" />
+	<look type="58" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="15" />
+		<element earthPercent="-10" />
+		<element holyPercent="10" />
+		<element deathPercent="-10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-43" />
+		<attack name="lifedrain" interval="2000" chance="15" min="-40" max="-60" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="suddendeath" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" min="0" max="-50" radius="3" target="1">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="20" min="27" max="68" />
+	</defenses>
+	<voices interval="1000" chance="5">
+		<voice sentence="The darkness is coming!" />
+		<voice sentence="The light will be extinguished!" />
+		<voice sentence="Embrace the night!" />
+	</voices>
+	<loot>
+		<item id="10531" name="midnight shard" chance="3955" />
+	</loot>
+</monster>

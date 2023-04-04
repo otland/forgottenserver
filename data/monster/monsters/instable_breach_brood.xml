@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Instable Breach Brood" nameDescription="an instable breach brood" experience="1100" speed="270">
+	<health now="2200" max="2200" />
+	<look type="878" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="75" />
+		<element earthPercent="-15" />
+		<element firePercent="40" />
+		<element icePercent="30" />
+		<element deathPercent="10" />
+	</elements>
+	<defenses armor="43" defense="43" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Hisss!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="98082" countmax="100" />
+		<item id="2152" name="platinum coin" chance="68821" countmax="2" />
+		<item id="26177" name="crystal bone" chance="10085" />
+		<item id="26162" name="plasma pearls" chance="10014" />
+		<item id="7590" name="great mana potion" chance="5824" />
+		<item id="26191" name="energy bar" chance="5433" />
+		<item id="26201" name="energy drink" chance="5078" />
+		<item id="8472" name="great spirit potion" chance="5043" />
+		<item id="7591" name="great health potion" chance="4723" />
+		<item id="18418" name="blue crystal splinter" chance="3374" />
+		<item id="18415" name="green crystal shard" chance="3374" />
+		<item id="18419" name="cyan crystal fragment" chance="3089" />
+		<item id="18413" name="blue crystal shard" chance="2131" />
+	</loot>
+</monster>

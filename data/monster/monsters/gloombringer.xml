@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gloombringer" nameDescription="a gloombringer" experience="6000" speed="0">
+	<health now="50000" max="50000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="2148" name="Gold Coin" chance="20000" countmax="56" />
+	</loot>
+</monster>

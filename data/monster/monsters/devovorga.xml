@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Devovorga" nameDescription="" experience="65000" speed="0">
+	<health now="500000" max="500000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="You can't kill me anyway - just give up and let the unavoidable happen." />
+		<voice sentence="Join me and together we can reign a new and cleansed world!" />
+		<voice sentence="I'm not evil. You don't need to fight me." />
+		<voice sentence="It's still time to change your mind." />
+		<voice sentence="I've been sent from the depths to purify this world." />
+		<voice sentence="I would never lie to you. Leave me in peace and we will all live." />
+		<voice sentence="The day of my ascension has come! Let's celebrate it together!" />
+		<voice sentence="Please reconsider and just don't fight me." />
+		<voice sentence="I don't want to hurt you but you're leaving me no choice!" />
+	</voices>
+</monster>

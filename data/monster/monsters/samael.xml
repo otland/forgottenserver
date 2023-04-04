@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Samael" nameDescription="" experience="0" speed="0">
+	<health now="0" max="0" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="AAARRRRRRRR! YOU WILL PAY SO DEARLY FOR THIS!" />
+		<voice sentence="ARE YOU INSANE TRYING TO TRAP ME HERE?!" />
+		<voice sentence="I'M THE LORD OF ALL LORDS! LET ME OUT OF HERE!" />
+		<voice sentence="I HATE YOU ALL!" />
+		<voice sentence="JUST YOU WAIT FOR ME." />
+		<voice sentence="RAHHHH!" />
+		<voice sentence="THIS PUNY PRISON WILL NEVER HOLD ME!" />
+		<voice sentence="WHEN I GET OUT OF HERE...." />
+		<voice sentence="YOU CALLED ME, NOW YOU WILL TAKE RESPONSIBILITY." />
+		<voice sentence="YOU HAVE NO IDEA WHAT YOU'VE DONE." />
+	</voices>
+</monster>

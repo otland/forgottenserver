@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Realityquake" nameDescription="" experience="0" speed="0">
+	<health now="110000" max="110000" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+	<loot>
+		<item id="26163" name="crystallized anger" chance="100000" />
+		<item id="26191" name="energy bar" chance="100000" countmax="9" />
+		<item id="26164" name="energy vein" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="371" />
+		<item id="25377" name="gold token" chance="100000" countmax="7" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="37" />
+		<item id="18413" name="blue crystal shard" chance="64286" countmax="5" />
+		<item id="8472" name="great spirit potion" chance="57143" countmax="18" />
+		<item id="7590" name="great mana potion" chance="50000" countmax="13" />
+		<item id="18415" name="green crystal shard" chance="50000" countmax="5" />
+		<item id="8473" name="ultimate health potion" chance="50000" countmax="6" />
+		<item id="18414" name="violet crystal shard" chance="50000" countmax="5" />
+		<item id="2147" name="small ruby" chance="35714" countmax="19" />
+		<item name="void boots" chance="35714" />
+		<item id="2158" name="blue gem" chance="28571" />
+		<item id="7901" name="lightning headband" chance="28571" />
+		<item name="ring of red plasma" chance="28571" />
+		<item id="26199" name="collar of green plasma" chance="21429" />
+		<item name="giant shimmering pearl" chance="21429" />
+		<item id="9970" name="small topaz" chance="21429" countmax="18" />
+		<item id="2189" name="wand of cosmic energy" chance="21429" />
+		<item name="collar of blue plasma" chance="14286" />
+		<item id="2445" name="crystal mace" chance="14286" />
+		<item id="2155" name="green gem" chance="14286" />
+		<item id="2156" name="red gem" chance="14286" />
+		<item id="2150" name="small amethyst" chance="14286" countmax="6" />
+		<item id="2149" name="small emerald" chance="14286" countmax="6" />
+		<item id="2146" name="small sapphire" chance="14286" countmax="2" />
+		<item id="2154" name="yellow gem" chance="14286" />
+		<item id="26200" name="collar of red plasma" chance="7143" />
+		<item id="7898" name="lightning robe" chance="7143" />
+		<item name="tiara of power" chance="7143" />
+		<item id="2153" name="violet gem" chance="7143" />
+	</loot>
+</monster>

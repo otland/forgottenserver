@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Servant Golem" nameDescription="a servant golem" experience="5" speed="0">
+	<health now="1400" max="1400" />
+	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="100" />
+		<element energyPercent="100" />
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element lifedrainPercent="100" />
+		<element drownPercent="100" />
+		<element icePercent="100" />
+		<element holyPercent="100" />
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Do you think I might become a real boy one day?" />
+		<voice sentence="How may I serve you, Sir or Ma'am?" />
+		<voice sentence="Washing procedure initiated!" />
+		<voice sentence="Can I help you?" />
+		<voice sentence="Scan result: dusty human! Cleansing initiated!" />
+		<voice sentence="I am listening!" />
+		<voice sentence="Awaiting orders!" />
+		<voice sentence="Where are we going, Sir or Ma'am?" />
+		<voice sentence="How are you, Sir or Ma'am?" />
+		<voice sentence="Praise the Yalahari!" />
+		<voice sentence="Is that love or do you have a magnet in your pocket?" />
+		<voice sentence="Move on! There's nothing to see!" />
+		<voice sentence="Do you want to taste a sample of the newest dish?" />
+		<voice sentence="I hope I am not annoying, Sir or Ma'am?" />
+		<voice sentence="WARNING: BAD HAIRCUT DETECTED! Initializing haircut procedure!" />
+		<voice sentence="Warning: This human is extremely handsome!" />
+		<voice sentence="Mommy?" />
+		<voice sentence="Everything is working as intended!" />
+		<voice sentence="Rrrtttarrrttarrrtta" />
+	</voices>
+</monster>

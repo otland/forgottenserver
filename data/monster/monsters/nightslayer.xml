@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nightslayer" nameDescription="a nightslayer" experience="250" speed="180">
+	<health now="400" max="400" />
+	<look type="152" head="95" body="95" legs="95" feet="95" addons="3" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element holyPercent="-25" />
+		<element deathPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-130" />
+		<attack name="physical" interval="2000" chance="15" min="0" max="-20" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="redstar" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<voices interval="1000" chance="5">
+		<voice sentence="We will stop you!" />
+		<voice sentence="Here is the darkness... and it's coming for you!" />
+	</voices>
+	<loot>
+		<item id="10531" name="midnight shard" chance="2026" />
+	</loot>
+</monster>

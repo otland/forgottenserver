@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Instable Sparkion" nameDescription="an instable sparkion" experience="1350" speed="280">
+	<health now="1900" max="1900" />
+	<look type="877" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="5" />
+		<element energyPercent="80" />
+		<element earthPercent="-15" />
+		<element firePercent="20" />
+		<element icePercent="60" />
+		<element holyPercent="5" />
+		<element deathPercent="5" />
+	</elements>
+	<defenses armor="37" defense="37" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Zzing!" />
+		<voice sentence="Frizzle!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="95837" countmax="100" />
+		<item id="2152" name="platinum coin" chance="86204" />
+		<item id="26160" name="sparkion legs" chance="8653" />
+		<item id="18418" name="blue crystal splinter" chance="8327" />
+		<item id="26159" name="sparkion tail" chance="7347" />
+		<item id="26161" name="sparkion stings" chance="7102" />
+		<item id="26158" name="sparkion claw" chance="6612" />
+		<item id="18419" name="cyan crystal fragment" chance="6204" />
+		<item id="18413" name="blue crystal shard" chance="5469" />
+		<item id="2146" name="small sapphire" chance="5469" countmax="2" />
+		<item id="7590" name="great mana potion" chance="5388" />
+		<item id="26201" name="energy drink" chance="4898" />
+		<item id="26191" name="energy bar" chance="4816" />
+		<item id="7591" name="great health potion" chance="4490" />
+		<item id="8472" name="great spirit potion" chance="4163" />
+		<item id="2189" name="wand of cosmic energy" chance="327" />
+	</loot>
+</monster>
