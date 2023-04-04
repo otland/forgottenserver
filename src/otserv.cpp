@@ -57,44 +57,6 @@ bool argumentsHandler(const StringVector& args);
 	exit(-1);
 }
 
-namespace anniversary {
-
-fmt::color paintA = fmt::color(0xFABC01);
-fmt::color paintB = fmt::color(0x955A26);
-fmt::color paintC = fmt::color(0x0000C0);
-fmt::color paintD = fmt::color(0x006500);
-
-std::string colorA(const std::string text) { return fmt::format(fg(paintA), text); }
-
-std::string colorB(const std::string text) { return fmt::format(fg(paintB), text); }
-
-std::string colorC(const std::string text) { return fmt::format(fg(paintC), text); }
-
-std::string colorD(const std::string text) { return fmt::format(fg(paintD), text); }
-
-void celebrate()
-{
-	// clang-format off
-	std::cout << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("   .  .  ,----.") << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("  /|_/| /      ',") << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("#`  ") << "                 ''+#.     " << colorB(" /") << ", ," << colorB(" )/  ,;'' .'") << std::endl;
-	std::cout << colorA("   .####. ") << "   .#.    " << colorA("#|  ") << "                    +#.    " << colorB("(y_ )  |  ;...;' ") << std::endl;
-	std::cout << colorA("  .##  ##.") << " ######'  " << colorA("#|  ") << "    _+  '##_###.    ,+##   " << colorB(" ") << "\"" << colorB("| |  \\. '.") << std::endl;
-	std::cout << colorA("  ##    ##") << "  ##'     " << colorA("#|  ") << "    ##.  ###''|#, .#'  '#, " << colorB("(") << colorC("#") << colorD("#") << colorB("(/   )  ;") << std::endl;
-	std::cout << colorA("  ##    ##") << "  ##      " << colorA("#|  ") << "   # #.  ##   .#' #'    #' " << colorB(" ") << colorD("#") << colorC("#") << colorB(" ..  |. .'") << std::endl;
-	std::cout << colorA("  `##  ##`") << "  `##  ,# " << colorA("#|  ") << "  #==#.  ##  .#'  '#   #'  " << colorB(" \\_(  ._|--'") << std::endl;
-	std::cout << colorA("   `####` ") << "   `###`  " << colorA("##==") << " #    #. ##  |##.  '###'   " << colorB(" '--'--'''") << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << "   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" Happy 15th anniversary! \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"" << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	// clang-format on
-}
-
-} // namespace anniversary
-
 int main(int argc, char* argv[])
 {
 	StringVector args = StringVector(argv, argv + argc);
@@ -115,7 +77,6 @@ int main(int argc, char* argv[])
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
-		anniversary::celebrate();
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
 		          << std::endl;
 		serviceManager.run();
