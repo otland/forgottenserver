@@ -139,16 +139,16 @@
 	<action itemid="5553" script="others/fluids.lua" />
 
 	<!-- Potions -->
-	<action itemid="6558" script="other/potions.lua" />
-	<action fromid="7439" toid="7440" script="other/potions.lua" />
-	<action itemid="7443" script="other/potions.lua" />
-	<action fromid="7588" toid="7591" script="other/potions.lua" />
-	<action itemid="7618" script="other/potions.lua" />
-	<action itemid="7620" script="other/potions.lua" />
-	<action fromid="8472" toid="8474" script="other/potions.lua" />
-	<action itemid="8704" script="other/potions.lua" />
-	<action fromid="26029" toid="26031" script="other/potions.lua" />
-	<action itemid="38219" script="other/potions.lua" />
+	<action itemid="6558" script="others/potions.lua" />
+	<action fromid="7439" toid="7440" script="others/potions.lua" />
+	<action itemid="7443" script="others/potions.lua" />
+	<action fromid="7588" toid="7591" script="others/potions.lua" />
+	<action itemid="7618" script="others/potions.lua" />
+	<action itemid="7620" script="others/potions.lua" />
+	<action fromid="8472" toid="8474" script="others/potions.lua" />
+	<action itemid="8704" script="others/potions.lua" />
+	<action fromid="26029" toid="26031" script="others/potions.lua" />
+	<action itemid="38219" script="others/potions.lua" />
 
 	<!-- Other -->
 	<action itemid="430" script="others/teleport.lua" />
