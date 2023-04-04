@@ -293,8 +293,6 @@ public:
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
 
-	uint16_t getHelpers() const;
-
 	bool setVocation(uint16_t vocId);
 	uint16_t getVocationId() const { return vocation->getId(); }
 

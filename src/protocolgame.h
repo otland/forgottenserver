@@ -130,8 +130,6 @@ private:
 	void parsePassPartyLeadership(NetworkMessage& msg);
 	void parseEnableSharedPartyExperience(NetworkMessage& msg);
 
-	void parseToggleMount(NetworkMessage& msg);
-
 	void parseModalWindowAnswer(NetworkMessage& msg);
 
 	void parseBrowseField(NetworkMessage& msg);

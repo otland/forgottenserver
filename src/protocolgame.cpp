@@ -490,14 +490,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	uint32_t accountId;
-	std::tie(accountId, characterName) =
+	std::string characterNameStr;
+	std::tie(accountId, characterNameStr) =
 	    IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::string{characterName}]() {
+	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = characterNameStr]() {
 		thisPtr->login(characterName, accountId, operatingSystem);
 	});
 }
@@ -635,14 +636,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0x72:
 			g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION,
 			                     [playerID = player->getID()]() { g_game.playerTurn(playerID, DIRECTION_WEST); });
-			break;
-		case 0x73:
-			g_dispatcher.addTask([playerID = player->getID(), pos = msg.getPosition()]() {
-				Player* player = g_game.getPlayerByID(playerID);
-				if (player && player->isAccessPlayer()) {
-					g_game.internalTeleport(player, pos);
-				}
-			});
 			break;
 		case 0x77:
 			parseEquipObject(msg);
@@ -796,9 +789,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xD3:
 			parseSetOutfit(msg);
 			break;
-		case 0xD4:
-			parseToggleMount(msg);
-			break;
 		// case 0xD5: break; // apply imbuement
 		// case 0xD6: break; // clear imbuement
 		// case 0xD7: break; // close imbuing window
@@ -832,10 +822,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		case 0xE8:
 			parseDebugAssert(msg);
-			break;
-		case 0xEE:
-			g_dispatcher.addTask(
-			    [playerID = player->getID()]() { g_game.playerSay(playerID, 0, TALKTYPE_SAY, "", "hi"); });
 			break;
 		// case 0xEF: break; // request store coins transfer
 		case 0xF0:
@@ -875,8 +861,9 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			// case 0xFE: break; // store window history 2
 
 		default:
-			// std::cout << "Player: " << player->getName() << " sent an unknown packet header: 0x" << std::hex <<
-			// static_cast<uint16_t>(recvbyte) << std::dec << "!" << std::endl;
+			g_dispatcher.addTask([=, playerID = player->getID(), msg = new NetworkMessage(msg)]() {
+				g_game.parsePlayerNetworkMessage(playerID, recvbyte, msg);
+			});
 			break;
 	}
 
@@ -1224,12 +1211,6 @@ void ProtocolGame::parseEditPodiumRequest(NetworkMessage& msg)
 	g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerRequestEditPodium(playerID, pos, stackpos, spriteId);
 	});
-}
-
-void ProtocolGame::parseToggleMount(NetworkMessage& msg)
-{
-	bool mount = msg.getByte() != 0;
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerToggleMount(playerID, mount); });
 }
 
 void ProtocolGame::parseUseItem(NetworkMessage& msg)

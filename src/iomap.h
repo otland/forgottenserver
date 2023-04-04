@@ -110,7 +110,7 @@ public:
 			map->spawnfile += "-spawn.xml";
 		}
 
-		return map->spawns.loadFromXml(map->spawnfile);
+		return map->spawns.loadFromXml(map->spawnfile.string());
 	}
 
 	/* Load the houses (not house tile-data)
@@ -125,7 +125,7 @@ public:
 			map->housefile += "-house.xml";
 		}
 
-		return map->houses.loadHousesXML(map->housefile);
+		return map->houses.loadHousesXML(map->housefile.string());
 	}
 
 	const std::string& getLastErrorString() const { return errorString; }
