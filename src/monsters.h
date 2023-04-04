@@ -173,7 +173,6 @@ class MonsterType
 		bool canWalkOnEnergy = true;
 		bool canWalkOnFire = true;
 		bool canWalkOnPoison = true;
-		bool isBestiaryMonster = false; // only true when loading bestiary block passed
 
 		MonstersEvent_t eventType = MONSTERS_EVENT_NONE;
 	};
