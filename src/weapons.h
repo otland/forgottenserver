@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_WEAPONS_H
@@ -37,7 +37,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "weapons"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
@@ -115,7 +115,7 @@ public:
 	}
 	bool hasVocationWeaponSet(uint16_t vocationId) const
 	{
-		return !vocationWeaponSet.empty() && vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();
+		return vocationWeaponSet.empty() || vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();
 	}
 
 	const std::string& getVocationString() const { return vocationString; }
@@ -152,7 +152,7 @@ private:
 	bool wieldUnproperly = false;
 	std::string vocationString = "";
 
-	std::string getScriptEventName() const override final;
+	std::string_view getScriptEventName() const override final { return "onUseWeapon"; }
 
 	bool executeUseWeapon(Player* player, const LuaVariant& var) const;
 	void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;

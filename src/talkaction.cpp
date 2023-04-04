@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -25,8 +25,6 @@ void TalkActions::clear(bool fromLua)
 }
 
 LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; }
-
-std::string TalkActions::getScriptBaseName() const { return "talkactions"; }
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
@@ -136,8 +134,6 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	}
 	return true;
 }
-
-std::string TalkAction::getScriptEventName() const { return "onSay"; }
 
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shadowpelt" nameDescription="Shadowpelt" race="blood" experience="4600" speed="230">
+	<health now="6000" max="6000" />
+	<look type="1040" corpse="30378" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="100" chance="22" radius="3" min="-200" max="-310">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="outfit" interval="1000" chance="1" target="1" radius="1" monster="Werebear" duration="2000" />
+		<attack name="lifedrain" interval="100" chance="15" radius="3" target="0" min="-100" max="-200">
+			<attribute key="areaEffect" value="whitenote" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="7" min="120" max="310">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="10" speedchange="520" duration="5000">
+			<attribute key="areaEffect" value="poff" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="15" />
+		<element firePercent="-5" />
+		<element icePercent="10" />
+	</elements>
+	<loot>
+		<item id="5896" name="bear paw" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="24713" name="werebear fur" chance="100000" />
+		<item id="24712" name="werebear skull" chance="100000" />
+		<item id="2148" name="gold coin" chance="80729" countmax="100" />
+		<item id="2144" name="black pearl" chance="53646" countmax="2" />
+		<item id="24850" name="opal" chance="46354" countmax="2" />
+		<item id="7591" name="great health potion" chance="34201" />
+		<item id="7432" name="furry club" chance="29167" />
+		<item id="27617" name="tiger eye" chance="28646" countmax="2" />
+		<item id="7759" name="small enchanted sapphire" chance="20833" countmax="2" />
+		<item id="5902" name="honeycomb" chance="16319" />
+		<item id="8473" name="ultimate health potion" chance="14062" />
+		<item id="2671" name="ham" chance="13194" />
+		<item id="7419" name="dreaded cleaver" chance="8160" />
+		<item id="7633" name="giant shimmering pearl (brown)" chance="7639" />
+		<item id="24741" name="fur armor" chance="6597" />
+		<item id="24759" name="werebear trophy" chance="5382" />
+		<item id="24716" name="werewolf amulet" chance="3819" />
+		<item id="24739" name="moonlight crystals" chance="3299" />
+		<item id="2214" name="ring of healing" chance="3299" />
+		<item id="7452" name="spiked squelcher" chance="3125" />
+		<item id="7383" name="relic sword" chance="1910" />
+		<item id="7439" name="berserk potion" chance="1736" />
+		<item id="25172" name="silver token" chance="1736" />
+		<item id="2197" name="stone skin amulet" chance="694" />
+	</loot>
+</monster>

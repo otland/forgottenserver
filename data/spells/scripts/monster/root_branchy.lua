@@ -6,6 +6,6 @@ local condition = Condition(CONDITION_ROOT)
 condition:setParameter(CONDITION_PARAM_TICKS, 3000)
 combat:addCondition(condition)
 
-function onCastSpell(creature, var)
-	return combat:execute(creature, var)
+function onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
 end

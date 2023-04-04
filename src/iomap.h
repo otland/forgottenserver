@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_IOMAP_H
@@ -96,7 +96,7 @@ class IOMap
 	static Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z);
 
 public:
-	bool loadMap(Map* map, const std::string& fileName);
+	bool loadMap(Map* map, const std::filesystem::path& fileName);
 
 	/* Load the spawns
 	 * \param map pointer to the Map class
@@ -110,7 +110,7 @@ public:
 			map->spawnfile += "-spawn.xml";
 		}
 
-		return map->spawns.loadFromXml(map->spawnfile);
+		return map->spawns.loadFromXml(map->spawnfile.string());
 	}
 
 	/* Load the houses (not house tile-data)
@@ -125,7 +125,7 @@ public:
 			map->housefile += "-house.xml";
 		}
 
-		return map->houses.loadHousesXML(map->housefile);
+		return map->houses.loadHousesXML(map->housefile.string());
 	}
 
 	const std::string& getLastErrorString() const { return errorString; }
@@ -133,7 +133,8 @@ public:
 	void setLastErrorString(std::string error) { errorString = error; }
 
 private:
-	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::string& fileName);
+	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
+	                            const std::filesystem::path& fileName);
 	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
 	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
 	bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -43,8 +43,6 @@ void Actions::clear(bool fromLua)
 }
 
 LuaScriptInterface& Actions::getScriptInterface() { return scriptInterface; }
-
-std::string Actions::getScriptBaseName() const { return "actions"; }
 
 Event_ptr Actions::getEvent(const std::string& nodeName)
 {
@@ -539,8 +537,6 @@ bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 	}
 	return true;
 }
-
-std::string Action::getScriptEventName() const { return "onUse"; }
 
 ReturnValue Action::canExecuteAction(const Player* player, const Position& toPos)
 {

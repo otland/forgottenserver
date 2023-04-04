@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Nymph" nameDescription="a nymph" experience="850" speed="228">
+	<health now="900" max="900" />
+	<look type="989" corpse="28463" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-205" />
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-85" max="-135">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" range="4" target="1" min="-85" max="-135">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="hearts" />
+		</attack>
+		<attack name="earth" interval="2000" chance="15" range="7" target="1" min="-85" max="-135">
+			<attribute key="areaEffect" value="hearts" />
+		</attack>
+	</attacks>
+	<defenses armor="60" defense="60">
+		<defense name="healing" interval="2000" chance="15" min="75" max="90">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-10" />
+		<element earthPercent="60" />
+		<element holyPercent="40" />
+		<element deathPercent="40" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="Looking at a nymph can blind you. Be careful, mortal being!" />
+		<voice sentence="Are you one of those evil nightmare creatures? Leave this realm alone!" />
+		<voice sentence="Come here, sweetheart! I won't hurt you! *giggle*" />
+		<voice sentence="I'm just protecting nature's beauty!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="65362" countmax="110" />
+		<item id="28347" name="wild flowers" chance="21834" />
+		<item id="28348" name="fresh fruit" chance="14822" />
+		<item id="28351" name="dandelion seeds" chance="12034" />
+		<item id="28352" name="colourful snail shell" chance="12015" />
+		<item id="7590" name="great mana potion" chance="3267" />
+		<item id="9970" name="small topaz" chance="2431" countmax="2" />
+		<item id="2127" name="emerald bangle" chance="1943" />
+		<item id="7762" name="small enchanted amethyst" chance="1896" countmax="2" />
+		<item id="10219" name="sacred tree amulet" chance="1136" />
+		<item id="7589" name="strong mana potion" chance="929" />
+		<item id="28354" name="butterfly ring" chance="845" />
+		<item id="28356" name="dream blossom staff" chance="723" />
+		<item id="9927" name="flower wreath" chance="573" />
+		<item id="2745" name="blue rose" chance="563" />
+		<item id="8873" name="hibiscus dress" chance="554" />
+		<item id="2195" name="boots of haste" chance="347" />
+	</loot>
+</monster>

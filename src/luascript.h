@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_LUASCRIPT_H
@@ -173,7 +173,7 @@ public:
 	int32_t loadFile(const std::string& file, Npc* npc = nullptr);
 
 	const std::string& getFileById(int32_t scriptId);
-	int32_t getEvent(const std::string& eventName);
+	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
@@ -208,7 +208,7 @@ public:
 	// push/pop common structures
 	static void pushThing(lua_State* L, Thing* thing);
 	static void pushVariant(lua_State* L, const LuaVariant& var);
-	static void pushString(lua_State* L, const std::string& value);
+	static void pushString(lua_State* L, std::string_view value);
 	static void pushCallback(lua_State* L, int32_t callback);
 	static void pushCylinder(lua_State* L, Cylinder* cylinder);
 
@@ -276,8 +276,7 @@ public:
 	template <typename T>
 	static T getNumber(lua_State* L, int32_t arg, T defaultValue)
 	{
-		const auto parameters = lua_gettop(L);
-		if (parameters == 0 || arg > parameters) {
+		if (lua_isnumber(L, arg) == 0) {
 			return defaultValue;
 		}
 		return getNumber<T>(L, arg);
@@ -305,8 +304,7 @@ public:
 	static bool getBoolean(lua_State* L, int32_t arg) { return lua_toboolean(L, arg) != 0; }
 	static bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
 	{
-		const auto parameters = lua_gettop(L);
-		if (parameters == 0 || arg > parameters) {
+		if (lua_isboolean(L, arg) == 0) {
 			return defaultValue;
 		}
 		return lua_toboolean(L, arg) != 0;
@@ -427,9 +425,6 @@ private:
 	static int luaIsDepot(lua_State* L);
 	static int luaIsMoveable(lua_State* L);
 	static int luaIsValidUID(lua_State* L);
-
-	// container
-	static int luaDoAddContainerItem(lua_State* L);
 
 	//
 	static int luaCreateCombatArea(lua_State* L);
@@ -972,6 +967,7 @@ private:
 	static int luaPlayerAddMount(lua_State* L);
 	static int luaPlayerRemoveMount(lua_State* L);
 	static int luaPlayerHasMount(lua_State* L);
+	static int luaPlayerToggleMount(lua_State* L);
 
 	static int luaPlayerGetPremiumEndsAt(lua_State* L);
 	static int luaPlayerSetPremiumEndsAt(lua_State* L);

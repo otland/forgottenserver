@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cursed Book" nameDescription="a cursed book" race="ink" experience="13345" speed="440">
+	<health now="20000" max="20000" />
+	<look type="1061" head="79" body="81" legs="93" feet="0" addons="0" corpse="31470" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="-400" max="-680">
+			<attribute key="shootEffect" value="eartharrow" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="10" length="5" spread="0" min="-400" max="-575">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+		<attack name="physical" interval="1000" chance="12" range="7" radius="3" min="-230" max="-880">
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="82" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-10" />
+		<element earthPercent="100" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="75498" countmax="15" />
+		<item id="31225" name="book page" chance="64750" countmax="4" />
+		<item id="2145" name="small diamond" chance="48563" countmax="6" />
+		<item id="31222" name="silken bookmark" chance="37373" />
+		<item id="9970" name="small topaz" chance="26891" countmax="5" />
+		<item id="1294" name="small stone" chance="19107" countmax="10" />
+		<item id="2200" name="protection amulet" chance="9288" />
+		<item id="7387" name="diamond sceptre" chance="6059" />
+		<item id="7886" name="terra boots" chance="5440" />
+		<item id="7903" name="terra hood" chance="4202" />
+		<item id="7887" name="terra amulet" chance="3981" />
+		<item id="2197" name="stone skin amulet" chance="1813" />
+		<item id="10219" name="sacred tree amulet" chance="1769" />
+		<item id="7885" name="terra legs" chance="1194" />
+		<item id="8912" name="springsprout rod" chance="663" />
+		<item id="7884" name="terra mantle" chance="663" />
+		<item id="8880" name="swamplair armor" chance="221" />
+	</loot>
+</monster>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Guardian Of Tales" nameDescription="a guardian of tales" race="ink" experience="9204" speed="420">
+	<health now="15000" max="15000" />
+	<look type="1063" head="92" body="52" legs="0" feet="79" addons="3" corpse="31426" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="death" interval="2000" chance="15" min="-1000" max="-1600" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="death" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-600" max="-800" radius="3" target="0">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-500" max="-650" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-400" max="-750" length="6" spread="0">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="77" defense="77" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="100" />
+		<element icePercent="-12" />
+		<element deathPercent="50" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="85439" countmax="32" />
+		<item id="2145" name="small diamond" chance="57661" countmax="5" />
+		<item id="31225" name="book page" chance="44041" countmax="4" />
+		<item id="31226" name="glowing rune" chance="38262" countmax="8" />
+		<item id="2239" name="burnt scroll" chance="37948" />
+		<item id="2187" name="wand of inferno" chance="9633" />
+		<item id="5944" name="soul orb" chance="9543" />
+		<item id="8901" name="spellbook of warding" chance="5466" />
+		<item id="10581" name="piece of hellfire armor" chance="5287" />
+		<item id="2432" name="fire axe" chance="3808" />
+		<item id="2392" name="fire sword" chance="1389" />
+		<item id="7894" name="magma legs" chance="896" />
+		<item id="7899" name="magma coat" chance="851" />
+		<item id="13757" name="coal" chance="269" />
+	</loot>
+</monster>

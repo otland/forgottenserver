@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_FILELOADER_H
@@ -74,24 +74,20 @@ public:
 		return true;
 	}
 
-	bool readString(std::string& ret)
+	std::pair<std::string_view, bool> readString()
 	{
 		uint16_t strLen;
 		if (!read<uint16_t>(strLen)) {
-			return false;
+			return {"", false};
 		}
 
 		if (size() < strLen) {
-			return false;
+			return {"", false};
 		}
 
-		char* str = new char[strLen + 1];
-		memcpy(str, p, strLen);
-		str[strLen] = 0;
-		ret.assign(str, strLen);
-		delete[] str;
+		std::string_view ret{p, strLen};
 		p += strLen;
-		return true;
+		return {ret, true};
 	}
 
 	bool skip(size_t n)
@@ -118,11 +114,7 @@ public:
 	PropWriteStream(const PropWriteStream&) = delete;
 	PropWriteStream& operator=(const PropWriteStream&) = delete;
 
-	const char* getStream(size_t& size) const
-	{
-		size = buffer.size();
-		return buffer.data();
-	}
+	std::string_view getStream() const { return {buffer.data(), buffer.size()}; }
 
 	void clear() { buffer.clear(); }
 

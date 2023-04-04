@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Raxias" nameDescription="Raxias" race="blood" experience="900" speed="210">
+	<health now="1100" max="1100" />
+	<look type="980" head="79" body="114" legs="82" feet="79" corpse="31473" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-5" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="This is a nightmare and you won't wake up!" />
+		<voice sentence="This was your last chance!" />
+		<voice sentence="Blood, fight and rage!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="139" />
+		<item id="28350" name="fairy wings" chance="14286" />
+		<item id="2760" name="goat grass" chance="14286" />
+		<item id="28391" name="leaf star" chance="14286" countmax="6" />
+		<item id="2792" name="dark mushroom" chance="11429" countmax="2" />
+		<item id="27039" name="cave turnip" chance="8571" countmax="2" />
+		<item id="28349" name="shimmering beetles" chance="8571" />
+		<item id="7588" name="strong health potion" chance="8571" countmax="2" />
+		<item id="1294" name="small stone" chance="5714" countmax="4" />
+		<item id="7591" name="great health potion" chance="2857" countmax="2" />
+		<item id="2074" name="panpipes" chance="2857" />
+		<item id="27618" name="prismatic quartz" chance="2857" />
+		<item id="7759" name="small enchanted sapphire" chance="2857" />
+		<item id="2664" name="wood cape" chance="2857" />
+	</loot>
+</monster>

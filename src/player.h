@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PLAYER_H
@@ -54,8 +54,8 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
-	    guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify)
+	VIPEntry(uint32_t guid, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
+	    guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t guid;
@@ -286,8 +286,6 @@ public:
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
-
-	uint16_t getHelpers() const;
 
 	bool setVocation(uint16_t vocId);
 	uint16_t getVocationId() const { return vocation->getId(); }

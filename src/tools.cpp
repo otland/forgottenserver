@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -8,6 +8,7 @@
 #include "configmanager.h"
 
 #include <chrono>
+#include <fmt/chrono.h>
 
 extern ConfigManager g_config;
 
@@ -120,7 +121,7 @@ static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	H[4] += E;
 }
 
-std::string transformToSHA1(const std::string& input)
+std::string transformToSHA1(std::string_view input)
 {
 	uint32_t H[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
 
@@ -239,12 +240,13 @@ bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 	                                                 [](char a, char b) { return tolower(a) == tolower(b); });
 }
 
-StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit /* = -1*/)
+std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
+                                            int32_t limit /* = -1*/)
 {
-	StringVector returnVector;
-	std::string::size_type start = 0, end = 0;
+	std::vector<std::string_view> returnVector;
+	std::string_view::size_type start = 0, end = 0;
 
-	while (--limit != -1 && (end = inString.find(separator, start)) != std::string::npos) {
+	while (--limit != -1 && (end = inString.find(separator, start)) != std::string_view::npos) {
 		returnVector.push_back(inString.substr(start, end - start));
 		start = end + separator.size();
 	}
@@ -253,11 +255,11 @@ StringVector explodeString(const std::string& inString, const std::string& separ
 	return returnVector;
 }
 
-IntegerVector vectorAtoi(const StringVector& stringVector)
+IntegerVector vectorAtoi(const std::vector<std::string_view>& stringVector)
 {
 	IntegerVector returnVector;
 	for (const auto& string : stringVector) {
-		returnVector.push_back(std::stoi(string));
+		returnVector.push_back(std::stoi(string.data()));
 	}
 	return returnVector;
 }
@@ -308,36 +310,9 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-std::string formatDate(time_t time)
-{
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
+std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
-	char buffer[20];
-	int res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900,
-	                  tms->tm_hour, tms->tm_min, tms->tm_sec);
-	if (res < 0) {
-		return {};
-	}
-	return {buffer, 19};
-}
-
-std::string formatDateShort(time_t time)
-{
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[12];
-	size_t res = strftime(buffer, 12, "%d %b %Y", tms);
-	if (res == 0) {
-		return {};
-	}
-	return {buffer, 11};
-}
+std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
 
 Direction getDirection(const std::string& string)
 {
@@ -902,7 +877,7 @@ std::string ucwords(std::string str)
 	return str;
 }
 
-bool booleanString(const std::string& str)
+bool booleanString(std::string_view str)
 {
 	if (str.empty()) {
 		return false;

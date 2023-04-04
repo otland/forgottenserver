@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Guzzlemaw" nameDescription="an animated guzzlemaw" race="blood" experience="5500" speed="270">
+	<health now="6400" max="6400" />
+	<look type="584" corpse="22485" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-499" />
+		<attack name="bleedcondition" interval="2000" chance="10" radius="3" target="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="10" length="8" spread="3" target="1" min="0" max="-900">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="2" target="1" min="0" max="-500">
+			<attribute key="shootEffect" value="largerock" />
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" radius="6" target="0" speedchange="-800" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+			<attack name="lifedrain" interval="2000" chance="10" length="8" spread="0" min="0" max="-800">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="250" max="425">
+			<attribute key="areaEffect" value="greenspark" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="99" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="6" />
+		<item id="22532" name="frazzle tongue" chance="20000" />
+		<item id="7590" name="great mana potion" chance="20000" countmax="3" />
+		<item id="5925" name="hardened bone" chance="20000" />
+		<item id="18554" name="crystal rubbish" chance="16000" />
+		<item id="22533" name="frazzle skin" chance="16000" />
+		<item id="2671" name="ham" chance="16000" />
+		<item id="18417" name="brown crystal splinter" chance="12000" countmax="2" />
+		<item id="2667" name="fish" chance="12000" countmax="3" />
+		<item id="2240" name="remains of a fish" chance="12000" />
+		<item id="5951" name="fish tail" chance="8000" />
+		<item id="7591" name="great health potion" chance="8000" countmax="2" />
+		<item id="7407" name="haunted blade" chance="8000" />
+		<item id="5880" name="iron ore" chance="8000" />
+		<item id="2225" name="piece of iron" chance="8000" />
+		<item id="18420" name="red crystal fragment" chance="8000" />
+		<item id="2229" name="skull (item)" chance="8000" />
+		<item id="18414" name="violet crystal shard" chance="8000" />
+		<item id="2219" name="banana skin" chance="4000" />
+		<item id="2231" name="big bone" chance="4000" />
+		<item id="2230" name="bone" chance="4000" />
+		<item id="5895" name="fish fin" chance="4000" />
+		<item id="2226" name="fishbone" chance="4000" />
+	</loot>
+</monster>

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_GAME_H
@@ -408,6 +408,7 @@ public:
 	void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 
 	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
+	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg);
 
 	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
 
