@@ -329,11 +329,8 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 float ConfigManager::getExperienceStage(uint32_t level) const
 {
 	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
-		if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
-			maxLevel = pugi::cast<uint32_t>(maxLevelAttribute.value());
-		} else {
-			maxLevel = std::numeric_limits<uint32_t>::max();
-		}
+		auto maxLevel = std::get<1>(stage);
+		return level >= std::get<0>(stage) && (level <= maxLevel || maxLevel == 0);
 	});
 
 	if (it == expStages.end()) {
