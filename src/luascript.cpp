@@ -2708,6 +2708,12 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
+	// OfflinePlayer
+	registerClass("OfflinePlayer", "Player", LuaScriptInterface::luaOfflinePlayerCreate);
+	registerMetaMethod("OfflinePlayer", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("OfflinePlayer", "__gc", LuaScriptInterface::luaOfflinePlayerDelete);
+	registerMethod("OfflinePlayer", "free", LuaScriptInterface::luaOfflinePlayerDelete);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10837,6 +10843,45 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	}
 
 	lua_pushnumber(L, player->getIdleTime());
+	return 1;
+}
+
+// OfflinePlayer
+int LuaScriptInterface::luaOfflinePlayerCreate(lua_State* L)
+{
+	// OfflinePlayer(id or name)
+	std::unique_ptr<Player> player_ptr = std::make_unique<Player>(nullptr);
+	if (isNumber(L, 2)) {
+		const uint32_t playerId = getNumber<uint32_t>(L, 2);
+		if (!IOLoginData::loadPlayerById(player_ptr.get(), playerId)) {
+			lua_pushnil(L);
+			return 1;
+		}
+	} else if (isString(L, 2)) {
+		const std::string& playerName = getString(L, 2);
+		if (!IOLoginData::loadPlayerByName(player_ptr.get(), playerName)) {
+			lua_pushnil(L);
+			return 1;
+		}
+	}
+
+	pushUserdata<Player>(L, player_ptr.release());
+	setMetatable(L, -1, "OfflinePlayer");
+	return 1;
+}
+
+int LuaScriptInterface::luaOfflinePlayerDelete(lua_State* L)
+{
+	// offlinePlayer:free()
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	delete player;
+
+	pushBoolean(L, true);
 	return 1;
 }
 
