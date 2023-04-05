@@ -8,6 +8,7 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
+#include "matrixarea.h"
 #include "spectators.h"
 #include "weapons.h"
 
@@ -15,41 +16,6 @@ extern Game g_game;
 extern Weapons* g_weapons;
 extern ConfigManager g_config;
 extern Events* g_events;
-
-namespace {
-
-MatrixArea createArea(const std::vector<uint32_t>& vec, uint32_t rows)
-{
-	uint32_t cols;
-	if (rows == 0) {
-		cols = 0;
-	} else {
-		cols = vec.size() / rows;
-	}
-
-	MatrixArea area{rows, cols};
-
-	uint32_t x = 0;
-	uint32_t y = 0;
-
-	for (uint32_t value : vec) {
-		if (value == 1 || value == 3) {
-			area(y, x) = true;
-		}
-
-		if (value == 2 || value == 3) {
-			area.setCenter(y, x);
-		}
-
-		++x;
-
-		if (cols == x) {
-			x = 0;
-			++y;
-		}
-	}
-	return area;
-}
 
 std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {
@@ -95,8 +61,6 @@ std::vector<Tile*> getCombatArea(const Position& centerPos, const Position& targ
 	}
 	return {tile};
 }
-
-} // namespace
 
 CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 {
@@ -511,6 +475,8 @@ int32_t Combat::getParam(CombatParam_t param)
 			return std::numeric_limits<int32_t>().max();
 	}
 }
+
+void Combat::setArea(AreaCombat* area) { this->area.reset(area); }
 
 bool Combat::setCallback(CallBackParam_t key)
 {
@@ -1261,60 +1227,6 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 	}
 
 	scriptInterface->resetScriptEnv();
-}
-
-//**********************************************************//
-
-MatrixArea MatrixArea::flip() const
-{
-	Container newArr(arr.size());
-	for (uint32_t i = 0; i < rows; ++i) {
-		// assign rows, top to bottom, to the current rows, bottom to top
-		newArr[std::slice(i * cols, cols, 1)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
-	}
-	return {{cols - center.first - 1, center.second}, rows, cols, std::move(newArr)};
-}
-
-MatrixArea MatrixArea::mirror() const
-{
-	Container newArr(arr.size());
-	for (uint32_t i = 0; i < cols; ++i) {
-		// assign cols, left to right, to the current rows, right to left
-		newArr[std::slice(i, cols, rows)] = arr[std::slice(cols - i - 1, cols, rows)];
-	}
-	return {{center.first, rows - center.second - 1}, rows, cols, std::move(newArr)};
-}
-
-MatrixArea MatrixArea::transpose() const
-{
-	return {{center.second, center.first}, rows, cols, arr[std::gslice(0, {cols, rows}, {1, cols})]};
-}
-
-MatrixArea MatrixArea::rotate90() const
-{
-	Container newArr(arr.size());
-	for (uint32_t i = 0; i < rows; ++i) {
-		// assign rows, top to bottom, to the current cols, right to left
-		newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
-	}
-	return {{rows - center.second - 1, center.first}, cols, rows, std::move(newArr)};
-}
-
-MatrixArea MatrixArea::rotate180() const
-{
-	Container newArr(arr.size());
-	std::reverse_copy(std::begin(arr), std::end(arr), std::begin(newArr));
-	return {{cols - center.first - 1, rows - center.second - 1}, rows, cols, std::move(newArr)};
-}
-
-MatrixArea MatrixArea::rotate270() const
-{
-	Container newArr(arr.size());
-	for (uint32_t i = 0; i < cols; ++i) {
-		// assign cols, left to right, to the current rows, bottom to top
-		newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
-	}
-	return {{center.second, cols - center.first - 1}, cols, rows, std::move(newArr)};
 }
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const
