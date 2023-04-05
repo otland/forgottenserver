@@ -583,10 +583,6 @@ private:
 
 	void updatePlayersRecord() const;
 	uint32_t playersRecord = 0;
-
-	uint32_t lastStageLevel = 0;
-	bool stagesEnabled = false;
-	bool useLastStageLevel = false;
 };
 
 #endif // FS_GAME_H
