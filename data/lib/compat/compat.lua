@@ -1498,4 +1498,16 @@ function showpos(v)
 end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
-if unpack == nil then unpack = table.unpack end
+if not unpack then unpack = table.unpack end
+
+if not loadstring then loadstring = load end
+
+function table.maxn(t)
+	local max = 0
+	for k in pairs(t) do
+		if type(k) == "number" and k > max then
+			max = k
+		end
+	end
+	return max
+end
