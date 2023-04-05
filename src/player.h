@@ -113,7 +113,7 @@ public:
 	static MuteCountMap muteCountMap;
 
 	const std::string& getName() const override { return name; }
-	void setName(const std::string& name) { this->name = name; }
+	void setName(std::string_view name) { this->name = name; }
 	const std::string& getNameDescription() const override { return name; }
 	std::string getDescription(int32_t lookDistance) const override;
 

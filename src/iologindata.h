@@ -20,17 +20,17 @@ public:
 	static Account loadAccount(uint32_t accno);
 
 	static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
-	static std::pair<uint32_t, std::string_view> gameworldAuthentication(std::string_view accountName,
-	                                                                     std::string_view password,
-	                                                                     std::string_view characterName,
-	                                                                     std::string_view token, uint32_t tokenTime);
+	static std::pair<uint32_t, uint32_t> gameworldAuthentication(std::string_view accountName,
+	                                                             std::string_view password,
+	                                                             std::string_view characterName, std::string_view token,
+	                                                             uint32_t tokenTime);
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 
 	static AccountType_t getAccountType(uint32_t accountId);
 	static void setAccountType(uint32_t accountId, AccountType_t accountType);
 	static void updateOnlineStatus(uint32_t guid, bool login);
-	static bool preloadPlayer(Player* player, const std::string& name);
+	static bool preloadPlayer(Player* player);
 
 	static bool loadPlayerById(Player* player, uint32_t id);
 	static bool loadPlayerByName(Player* player, const std::string& name);

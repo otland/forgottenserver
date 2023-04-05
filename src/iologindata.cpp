@@ -92,17 +92,17 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	return true;
 }
 
-std::pair<uint32_t, std::string_view> IOLoginData::gameworldAuthentication(std::string_view accountName,
-                                                                           std::string_view password,
-                                                                           std::string_view characterName,
-                                                                           std::string_view token, uint32_t tokenTime)
+std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_view accountName,
+                                                                   std::string_view password,
+                                                                   std::string_view characterName,
+                                                                   std::string_view token, uint32_t tokenTime)
 {
 	Database& db = Database::getInstance();
-	DBResult_ptr result = db.storeQuery(
-	    fmt::format("SELECT `id`, `password`, `secret` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
-	                db.escapeString(accountName), db.escapeString(accountName)));
+	DBResult_ptr result = db.storeQuery(fmt::format(
+	    "SELECT `a`.`id` AS `account_id`, `a`.`password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    db.escapeString(accountName), db.escapeString(accountName), db.escapeString(characterName)));
 	if (!result) {
-		return std::make_pair(0, characterName);
+		return {};
 	}
 
 	// two-factor auth
@@ -110,32 +110,26 @@ std::pair<uint32_t, std::string_view> IOLoginData::gameworldAuthentication(std::
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
-				return std::make_pair(0, characterName);
+				return {};
 			}
 
 			bool tokenValid = token == generateToken(secret, tokenTime) ||
 			                  token == generateToken(secret, tokenTime - 1) ||
 			                  token == generateToken(secret, tokenTime + 1);
 			if (!tokenValid) {
-				return std::make_pair(0, characterName);
+				return {};
 			}
 		}
 	}
 
 	if (transformToSHA1(password) != result->getString("password")) {
-		return std::make_pair(0, characterName);
+		return {};
 	}
 
-	uint32_t accountId = result->getNumber<uint32_t>("id");
+	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+	uint32_t characterId = result->getNumber<uint32_t>("character_id");
 
-	result = db.storeQuery(
-	    fmt::format("SELECT `name` FROM `players` WHERE `name` = {:s} AND `account_id` = {:d} AND `deletion` = 0",
-	                db.escapeString(characterName), accountId));
-	if (!result) {
-		return std::make_pair(0, characterName);
-	}
-
-	return std::make_pair(accountId, result->getString("name"));
+	return std::make_pair(accountId, characterId);
 }
 
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
@@ -191,18 +185,18 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	}
 }
 
-bool IOLoginData::preloadPlayer(Player* player, const std::string& name)
+bool IOLoginData::preloadPlayer(Player* player)
 {
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `p`.`id`, `p`.`account_id`, `p`.`group_id`, `a`.`type`, `a`.`premium_ends_at` FROM `players` as `p` JOIN `accounts` as `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(name)));
+	    "SELECT `p`.`name`, `p`.`account_id`, `p`.`group_id`, `a`.`type`, `a`.`premium_ends_at` FROM `players` AS `p` JOIN `accounts` AS `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`id` = {:d} AND `p`.`deletion` = 0",
+	    player->getGUID()));
 	if (!result) {
 		return false;
 	}
 
-	player->setGUID(result->getNumber<uint32_t>("id"));
+	player->setName(result->getString("name"));
 	Group* group = g_game.groups.getGroup(result->getNumber<uint16_t>("group_id"));
 	if (!group) {
 		std::cout << "[Error - IOLoginData::preloadPlayer] " << player->name << " has Group ID "
