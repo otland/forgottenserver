@@ -19,12 +19,12 @@ public:
 	uint32_t getRows() const { return rows; }
 	uint32_t getCols() const { return cols; }
 
-	MatrixArea flip() const;
-	MatrixArea mirror() const;
-	MatrixArea transpose() const;
-	MatrixArea rotate90() const;
-	MatrixArea rotate180() const;
-	MatrixArea rotate270() const;
+	[[nodiscard]] MatrixArea flip() const;
+	[[nodiscard]] MatrixArea mirror() const;
+	[[nodiscard]] MatrixArea transpose() const;
+	[[nodiscard]] MatrixArea rotate90() const;
+	[[nodiscard]] MatrixArea rotate180() const;
+	[[nodiscard]] MatrixArea rotate270() const;
 
 	operator bool() const { return rows == 0 || cols == 0; }
 
