@@ -10,7 +10,10 @@ function Player:onLook(thing, position, distance)
 	if EventCallback.onLook then
 		description = EventCallback.onLook(self, thing, position, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInBattleList(creature, distance)
@@ -18,7 +21,10 @@ function Player:onLookInBattleList(creature, distance)
 	if EventCallback.onLookInBattleList then
 		description = EventCallback.onLookInBattleList(self, creature, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInTrade(partner, item, distance)
@@ -26,7 +32,10 @@ function Player:onLookInTrade(partner, item, distance)
 	if EventCallback.onLookInTrade then
 		description = EventCallback.onLookInTrade(self, partner, item, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInShop(itemType, count)
@@ -34,7 +43,10 @@ function Player:onLookInShop(itemType, count)
 	if EventCallback.onLookInShop then
 		description = EventCallback.onLookInShop(self, itemType, count, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInMarket(itemType)
@@ -314,4 +326,14 @@ function Player:onInventoryUpdate(item, slot, equip)
 	if EventCallback.onInventoryUpdate then
 		EventCallback.onInventoryUpdate(self, item, slot, equip)
 	end
+end
+
+function Player:onNetworkMessage(recvByte, msg)
+	local handler = PacketHandlers[recvByte]
+	if not handler then
+		--io.write(string.format("Player: %s sent an unknown packet header: 0x%02X with %d bytes!\n", self:getName(), recvByte, msg:len()))
+		return
+	end
+
+	handler(self, msg)
 end

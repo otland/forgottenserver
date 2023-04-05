@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -56,7 +56,7 @@ void Party::disband()
 	delete this;
 }
 
-bool Party::leaveParty(Player* player)
+bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 {
 	if (!player) {
 		return false;
@@ -66,7 +66,8 @@ bool Party::leaveParty(Player* player)
 		return false;
 	}
 
-	if (!g_events->eventPartyOnLeave(this, player)) {
+	bool canRemove = g_events->eventPartyOnLeave(this, player);
+	if (!forceRemove && !canRemove) {
 		return false;
 	}
 

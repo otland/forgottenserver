@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lonely Scorpion" nameDescription="a lonely scorpion" race="venom" experience="45" speed="150">
+	<health now="45" max="45" />
+	<look type="43" corpse="5988" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1" />
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

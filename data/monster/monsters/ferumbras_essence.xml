@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ferumbras Essence" nameDescription="a ferumbras essence" race="undead" experience="0" speed="200">
+	<health now="115" max="115" />
+	<look type="294" corpse="10508" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="lifedrain" interval="2000" chance="15" range="1" target="1" min="-130" max="-270">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="15" radius="9" min="-110" max="-270">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="15">
+		<defense name="speed" interval="2000" chance="8" speedchange="240" duration="20000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="11" min="15" max="25">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity fire="1" />
+		<immunity ice="1" />
+		<immunity energy="1" />
+		<immunity earth="1" />
+		<immunity physical="1" />
+		<immunity holy="1" />
+		<immunity drown="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

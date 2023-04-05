@@ -1,8 +1,10 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_BAN_H
 #define FS_BAN_H
+
+#include "connection.h"
 
 struct BanInfo
 {
@@ -22,12 +24,12 @@ struct ConnectBlock
 	uint32_t count;
 };
 
-using IpConnectMap = std::map<uint32_t, ConnectBlock>;
+using IpConnectMap = std::map<Connection::Address, ConnectBlock>;
 
 class Ban
 {
 public:
-	bool acceptConnection(uint32_t clientIP);
+	bool acceptConnection(const Connection::Address& clientIP);
 
 private:
 	IpConnectMap ipConnectMap;
@@ -38,7 +40,7 @@ class IOBan
 {
 public:
 	static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-	static bool isIpBanned(uint32_t clientIP, BanInfo& banInfo);
+	static bool isIpBanned(const Connection::Address& clientIP, BanInfo& banInfo);
 	static bool isPlayerNamelocked(uint32_t playerId);
 };
 

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Orc Cultist" nameDescription="an orc cultist" race="blood" experience="950" speed="190">
+	<health now="1350" max="1350" />
+	<look type="7" corpse="5979" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-310">
+			<attribute key="shootEffect" value="energyball" />
+		</attack>
+		<attack name="fire" interval="2000" chance="5" range="7" radius="1" target="1" min="-200" max="-250">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="outfit" interval="4000" chance="15" target="1" monster="orc warlord" duration="30000" />
+		<attack name="outfit" interval="4000" chance="10" target="1" monster="orc shaman" duration="30000" />
+		<attack name="outfit" interval="4000" chance="20" target="1" monster="orc" duration="30000" />
+	</attacks>
+	<defenses armor="27" defense="27">
+		<defense name="heal monster" interval="2000" chance="20">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="30" />
+		<element earthPercent="-10" />
+		<element holyPercent="10" />
+		<element deathPercent="-10" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="217" />
+		<item id="7588" name="strong health potion" chance="17346" />
+		<item id="2428" name="orcish axe" chance="8473" />
+		<item id="2671" name="ham" chance="8233" />
+		<item id="5910" name="green piece of cloth" chance="5755" />
+		<item id="9970" name="small topaz" chance="4237" countmax="2" />
+		<item id="10556" name="cultish robe" chance="3197" />
+		<item id="18417" name="brown crystal splinter" chance="2198" countmax="2" />
+		<item id="8614" name="orc tusk" chance="799" />
+		<item id="7439" name="berserk potion" chance="719" />
+	</loot>
+</monster>

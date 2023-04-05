@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_DEFINITIONS_H
@@ -9,8 +9,8 @@ static constexpr auto STATUS_SERVER_VERSION = "1.5";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "The Forgotten Server Team";
 
 static constexpr auto CLIENT_VERSION_MIN = 1280;
-static constexpr auto CLIENT_VERSION_MAX = 1286;
-static constexpr auto CLIENT_VERSION_STR = "12.86";
+static constexpr auto CLIENT_VERSION_MAX = 1288;
+static constexpr auto CLIENT_VERSION_STR = "12.87";
 
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;
 static constexpr auto AUTHENTICATOR_PERIOD = 30U;

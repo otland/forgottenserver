@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tunnel Tyrant" nameDescription="a tunnel tyrant" race="blood" experience="3400" speed="240">
+	<health now="5200" max="5200" />
+	<look type="1035" corpse="30211" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="death" interval="2000" chance="15" range="3" length="6" spread="3" min="-70" max="-160">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" range="3" length="6" spread="3" min="-90" max="-160">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="76" defense="76" />
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="20" />
+		<element icePercent="-30" />
+	</elements>
+	<loot>
+		<item id="30252" name="tunnel tyrant shell" chance="15862" />
+		<item id="30251" name="tunnel tyrant head" chance="11367" />
+		<item id="7759" name="small enchanted sapphire" chance="7949" />
+		<item id="10609" name="lump of dirt" chance="7615" />
+		<item id="7760" name="small enchanted ruby" chance="7169" />
+		<item id="2153" name="violet gem" chance="4235" />
+		<item id="26164" name="energy vein" chance="2415" />
+		<item id="2158" name="blue gem" chance="1857" />
+		<item id="2155" name="green gem" chance="1449" />
+		<item id="30309" name="suspicious device" chance="1077" />
+		<item id="2445" name="crystal mace" chance="892" />
+		<item id="8878" name="crystalline armor" chance="520" />
+	</loot>
+</monster>

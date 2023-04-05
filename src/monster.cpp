@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -81,9 +81,8 @@ void Monster::setName(const std::string& name)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendUpdateTileCreature(this);
-		}
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTileCreature(this);
 	}
 }
 
@@ -357,7 +356,7 @@ void Monster::updateTargetList()
 	auto friendIterator = friendList.begin();
 	while (friendIterator != friendList.end()) {
 		Creature* creature = *friendIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (creature->isDead() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			friendIterator = friendList.erase(friendIterator);
 		} else {
@@ -368,7 +367,7 @@ void Monster::updateTargetList()
 	auto targetIterator = targetList.begin();
 	while (targetIterator != targetList.end()) {
 		Creature* creature = *targetIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (creature->isDead() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			targetIterator = targetList.erase(targetIterator);
 		} else {
@@ -658,7 +657,7 @@ bool Monster::selectTarget(Creature* creature)
 
 	if (isHostile() || isSummon()) {
 		if (setAttackedCreature(creature) && !isSummon()) {
-			g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+			g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 		}
 	}
 	return setFollowCreature(creature);
@@ -666,7 +665,7 @@ bool Monster::selectTarget(Creature* creature)
 
 void Monster::setIdle(bool idle)
 {
-	if (isRemoved() || getHealth() <= 0) {
+	if (isRemoved() || isDead()) {
 		return;
 	}
 
@@ -742,12 +741,20 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
-		if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
-			g_game.removeCreature(this, false);
+		if (g_config.getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
+			if (spawn) {
+				spawn->removeMonster(this);
+				spawn->startSpawnCheck();
+				spawn = nullptr;
+			}
 		} else {
-			g_game.internalTeleport(this, masterPos);
-			setIdle(true);
+			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
+			if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+				g_game.removeCreature(this, false);
+			} else {
+				g_game.internalTeleport(this, masterPos);
+				setIdle(true);
+			}
 		}
 	} else {
 		updateIdleStatus();
@@ -1159,7 +1166,7 @@ void Monster::pushCreatures(Tile* tile)
 
 bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
-	if (!walkingToSpawn && (isIdle || getHealth() <= 0)) {
+	if (!walkingToSpawn && (isIdle || isDead())) {
 		// we don't have anyone watching, might as well stop walking
 		eventWalk = 0;
 		return false;

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Ghulosh' Deathgaze" nameDescription="Ghulosh' Deathgaze" race="undead" experience="0" speed="200">
+	<health now="300000" max="300000" />
+	<look type="1063" body="57" feet="57" head="57" legs="57" addons="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="death" interval="2000" chance="12" target="0" length="8" spread="0" min="-6000" max="-6000">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="100" />
+		<element energyPercent="100" />
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element lifedrainPercent="100" />
+		<element drownPercent="-40" />
+		<element icePercent="100" />
+		<element holyPercent="100" />
+		<element deathPercent="100" />
+	</elements>
+</monster>

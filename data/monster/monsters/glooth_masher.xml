@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Masher" nameDescription="a glooth masher" race="venom" experience="1650" speed="260">
+	<health now="25000" max="25000" />
+	<look type="600" corpse="23343" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-50" />
+		<attack name="melee" interval="2000" chance="2" min="0" max="-100" />
+		<attack name="energy" interval="2000" chance="25" range="7" min="-125" max="-245">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="war golem skill reducer" interval="2000" chance="16" />
+		<attack name="war golem electrify" interval="2000" chance="9" range="7" />
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="speed" interval="2000" chance="13" speedchange="404" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

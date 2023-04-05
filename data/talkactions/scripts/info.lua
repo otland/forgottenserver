@@ -21,7 +21,7 @@ function onSay(player, words, param)
 	player:sendTextMessage(MESSAGE_INFO_DESCR, "Magic Level: " .. target:getMagicLevel())
 	player:sendTextMessage(MESSAGE_INFO_DESCR, "Speed: " .. target:getSpeed())
 	player:sendTextMessage(MESSAGE_INFO_DESCR, "Position: " .. string.format("(%0.5d / %0.5d / %0.3d)", target:getPosition().x, target:getPosition().y, target:getPosition().z))
-	player:sendTextMessage(MESSAGE_INFO_DESCR, "IP: " .. Game.convertIpToString(targetIp))
+	player:sendTextMessage(MESSAGE_INFO_DESCR, "IP: " .. targetIp)
 
 	local players = {}
 	for _, targetPlayer in ipairs(Game.getPlayers()) do

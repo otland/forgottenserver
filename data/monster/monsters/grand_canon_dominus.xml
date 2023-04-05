@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grand Canon Dominus" nameDescription="Grand Canon Dominus" race="blood" experience="11000" speed="210">
+	<health now="15000" max="15000" />
+	<look type="1071" head="57" body="75" legs="77" feet="86" corpse="31393" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-700" />
+		<attack name="physical" interval="2000" chance="20" range="7" min="-100" max="-720">
+			<attribute key="shootEffect" value="etherealspear" />
+		</attack>
+		<attack name="holy" interval="2000" chance="14" length="8" spread="0" min="-100" max="-1000">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" range="5" radius="3" min="-200" max="-700">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" range="5" radius="3" min="-200" max="-700">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="200" max="550">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="1000" chance="10" speedchange="220" duration="5000">
+			<attribute key="areaEffect" value="poff" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="60" />
+		<element energyPercent="50" />
+		<element earthPercent="50" />
+		<element firePercent="50" />
+		<element icePercent="50" />
+		<element deathPercent="50" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="87285" countmax="5" />
+		<item id="7590" name="great mana potion" chance="31959" countmax="3" />
+		<item id="7591" name="great health potion" chance="30241" countmax="3" />
+		<item id="7368" name="assassin star" chance="26460" countmax="10" />
+		<item id="2150" name="small amethyst" chance="22680" countmax="2" />
+		<item id="2145" name="small diamond" chance="21306" countmax="2" />
+		<item id="2147" name="small ruby" chance="19931" countmax="2" />
+		<item id="9970" name="small topaz" chance="19931" countmax="2" />
+		<item id="2149" name="small emerald" chance="16151" countmax="2" />
+		<item id="7365" name="onyx arrow" chance="15808" countmax="15" />
+		<item id="2156" name="red gem" chance="2405" />
+		<item id="31479" name="falcon crest" chance="1718" />
+		<item id="7632" name="giant shimmering pearl" chance="1718" />
+		<item id="2153" name="violet gem" chance="1375" />
+		<item id="31478" name="damaged armor plates" chance="344" />
+		<item id="2466" name="golden armor" chance="344" />
+		<item id="2155" name="green gem" chance="344" />
+		<item id="2514" name="mastermind shield" chance="344" />
+	</loot>
+</monster>

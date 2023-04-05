@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -912,7 +912,8 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " was healed for " + healString;
 					for (Creature* spectator : spectators) {
-						spectator->getPlayer()->sendTextMessage(message);
+						assert(dynamic_cast<Player*>(spectator) != nullptr);
+						static_cast<Player*>(spectator)->sendTextMessage(message);
 					}
 				}
 			}
@@ -943,7 +944,8 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " gained " + manaGainString + " mana.";
 					for (Creature* spectator : spectators) {
-						spectator->getPlayer()->sendTextMessage(message);
+						assert(dynamic_cast<Player*>(spectator) != nullptr);
+						static_cast<Player*>(spectator)->sendTextMessage(message);
 					}
 				}
 			}

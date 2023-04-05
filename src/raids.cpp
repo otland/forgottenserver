@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -554,8 +554,6 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	}
 	return true;
 }
-
-std::string ScriptEvent::getScriptEventName() const { return "onRaid"; }
 
 bool ScriptEvent::executeEvent()
 {

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -174,7 +174,7 @@ void Creature::onAttacking(uint32_t interval)
 
 void Creature::onIdleStatus()
 {
-	if (getHealth() > 0) {
+	if (!isDead()) {
 		damageMap.clear();
 		lastHitCreatureId = 0;
 	}
@@ -623,7 +623,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		} else {
 			if (hasExtraSwing()) {
 				// our target is moving lets see if we can get in hit
-				g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 			}
 
 			if (newTile->getZone() != oldTile->getZone()) {
@@ -808,8 +808,8 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 		g_game.addCreatureHealth(this);
 	}
 
-	if (health <= 0) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.executeDeath(id); }));
+	if (isDead()) {
+		g_dispatcher.addTask([id = getID()]() { g_game.executeDeath(id); });
 	}
 }
 
@@ -841,7 +841,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	if (isImmune(combatType)) {
 		damage = 0;
 		blockType = BLOCK_IMMUNITY;
-	} else if (checkDefense || checkArmor) {
+	} else if (combatType != COMBAT_HEALING && (checkDefense || checkArmor)) {
 		bool hasDefense = false;
 
 		if (blockCount > 0) {
@@ -902,11 +902,15 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			blockType = BLOCK_ARMOR;
 		}
 
-		attacker->onAttackedCreature(this);
-		attacker->onAttackedCreatureBlockHit(blockType);
+		if (combatType != COMBAT_HEALING) {
+			attacker->onAttackedCreature(this);
+			attacker->onAttackedCreatureBlockHit(blockType);
+		}
 	}
 
-	onAttacked();
+	if (combatType != COMBAT_HEALING) {
+		onAttacked();
+	}
 	return blockType;
 }
 
@@ -1164,7 +1168,8 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendTextMessage(message);
 	}
 }
 

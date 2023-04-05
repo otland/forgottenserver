@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Oodok Witchmaster" nameDescription="Oodok Witchmaster" race="blood" experience="550" speed="150">
+	<health now="450" max="450" />
+	<look type="214" corpse="6055" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-20" />
+		<attack name="lifedrain" interval="2000" chance="10" range="1" min="0" max="-40">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" speedchange="-800" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7">
+			<attribute key="shooteffect" value="energy" />
+			<attribute key="areaEffect" value="teleport" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="10" range="7" monster="chicken" duration="5000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">
+			<attribute key="shooteffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10">
+		<defense name="healing" interval="2000" chance="20" min="3" max="9">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="7000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element earthPercent="100" />
+		<element firePercent="-5" />
+		<element icePercent="20" />
+		<element holyPercent="35" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="98" />
+		<item id="2152" name="platinum coin" chance="90909" countmax="2" />
+		<item id="7618" name="health potion" chance="52273" countmax="3" />
+		<item id="7620" name="mana potion" chance="47727" countmax="3" />
+		<item id="2144" name="black pearl" chance="13636" countmax="2" />
+		<item id="5910" name="green piece of cloth" chance="11364" />
+		<item id="2174" name="strange symbol" chance="6818" />
+		<item id="2467" name="leather armor" chance="4545" />
+		<item id="2411" name="poison dagger" chance="4545" />
+		<item id="2181" name="terra rod" chance="4545" />
+		<item id="2231" name="big bone" chance="2273" />
+		<item id="2230" name="bone" chance="2273" />
+		<item id="7440" name="mastermind potion" chance="2273" />
+		<item id="3967" name="tribal mask" chance="2273" />
+	</loot>
+</monster>

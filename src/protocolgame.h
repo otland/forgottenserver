@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PROTOCOLGAME_H
@@ -66,7 +66,7 @@ public:
 
 	explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
-	void login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem);
+	void login(uint32_t characterId, uint32_t accountId, OperatingSystem_t operatingSystem);
 	void logout(bool displayEffect, bool forced);
 
 	uint16_t getVersion() const { return version; }
@@ -129,8 +129,6 @@ private:
 	void parseRevokePartyInvite(NetworkMessage& msg);
 	void parsePassPartyLeadership(NetworkMessage& msg);
 	void parseEnableSharedPartyExperience(NetworkMessage& msg);
-
-	void parseToggleMount(NetworkMessage& msg);
 
 	void parseModalWindowAnswer(NetworkMessage& msg);
 
@@ -325,19 +323,6 @@ private:
 	void parseExtendedOpcode(NetworkMessage& msg);
 
 	friend class Player;
-
-	// Helpers so we don't need to bind every time
-	template <typename Callable>
-	void addGameTask(Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(std::forward<Callable>(function)));
-	}
-
-	template <typename Callable>
-	void addGameTaskTimed(uint32_t delay, Callable&& function)
-	{
-		g_dispatcher.addTask(createTask(delay, std::forward<Callable>(function)));
-	}
 
 	std::unordered_set<uint32_t> knownCreatureSet;
 	Player* player = nullptr;

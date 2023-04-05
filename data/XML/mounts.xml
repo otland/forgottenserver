@@ -197,4 +197,7 @@
 	<mount id="195" clientid="1491" name="Topaz Shrine" speed="20" premium="no" />
 	<mount id="196" clientid="1492" name="Jade Shrine" speed="20" premium="no" />
 	<mount id="197" clientid="1493" name="Obsidian Shrine" speed="20" premium="no" />
+	<mount id="198" clientid="1526" name="Poppy Ibex" speed="20" premium="no" />
+	<mount id="199" clientid="1527" name="Mint Ibex" speed="20" premium="no" />
+	<mount id="200" clientid="1528" name="Cinnamon Ibex" speed="20" premium="no" />
 </mounts>

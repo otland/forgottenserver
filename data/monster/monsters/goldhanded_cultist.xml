@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goldhanded Cultist" nameDescription="a goldhanded cultist" experience="2000" speed="300">
+	<health now="3000" max="3000" />
+	<look type="132" head="114" body="79" legs="62" feet="94" addons="2" corpse="3058" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="lifedrain" interval="3000" chance="15" radius="5" min="0" max="-150">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="manadrain" interval="3000" chance="10" target="1" min="0" max="-200">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" target="1" radius="2" lenght="1" range="5" min="0" max="-250">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="30" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="17" />
+		<element firePercent="10" />
+		<element icePercent="15" />
+		<element deathPercent="15" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="Money, money, money!" />
+		<voice sentence="You can't ever be rich enough!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="50130" countmax="250" />
+		<item id="28345" name="golden brush" chance="22637" />
+		<item id="27617" name="tiger eye" chance="16392" />
+		<item id="24850" name="opal" chance="10581" />
+		<item id="2154" name="yellow gem" chance="5551" />
+		<item id="2155" name="green gem" chance="4857" />
+		<item id="2004" name="golden backpack" chance="2949" />
+		<item id="1997" name="golden bag" chance="2862" />
+		<item id="9971" name="gold ingot" chance="1474" />
+		<item id="2152" name="platinum coin" chance="781" countmax="10" />
+	</loot>
+</monster>

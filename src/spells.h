@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_SPELLS_H
@@ -9,14 +9,16 @@
 #include "creature.h"
 #include "luascript.h"
 #include "talkaction.h"
+#include "vocation.h"
 
 class InstantSpell;
 class RuneSpell;
 class Spell;
 
-using VocSpellMap = std::map<uint16_t, bool>;
 using InstantSpell_ptr = std::unique_ptr<InstantSpell>;
 using RuneSpell_ptr = std::unique_ptr<RuneSpell>;
+
+extern Vocations g_vocations;
 
 class Spells final : public BaseEvents
 {
@@ -38,7 +40,7 @@ public:
 	TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 	static Position getCasterPosition(Creature* creature, Direction dir);
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "spells"; }
 
 	const std::map<std::string, InstantSpell>& getInstantSpells() const { return instants; };
 
@@ -89,7 +91,7 @@ public:
 	Combat_ptr getCombat() { return combat; }
 
 private:
-	std::string getScriptEventName() const override { return "onCastSpell"; }
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	Combat_ptr combat;
 
@@ -131,8 +133,18 @@ public:
 	bool isLearnable() const { return learnable; }
 	void setLearnable(bool l) { learnable = l; }
 
-	const VocSpellMap& getVocMap() const { return vocSpellMap; }
-	void addVocMap(uint16_t n, bool b) { vocSpellMap[n] = b; }
+	const auto& getVocationSpellMap() const { return vocationSpellMap; }
+	void addVocationSpellMap(std::string_view vocationName, bool showInDescription)
+	{
+		int32_t vocationId = g_vocations.getVocationId(vocationName);
+		if (vocationId != -1) {
+			vocationSpellMap[vocationId] = showInDescription;
+		}
+	}
+	bool hasVocationSpellMap(uint16_t vocationId) const
+	{
+		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
+	}
 
 	const SpellGroup_t getGroup() const { return group; }
 	void setGroup(SpellGroup_t g) { group = g; }
@@ -173,7 +185,7 @@ protected:
 	bool playerInstantSpellCheck(Player* player, const Position& toPos);
 	bool playerRuneSpellCheck(Player* player, const Position& toPos);
 
-	VocSpellMap vocSpellMap;
+	std::map<uint16_t, bool> vocationSpellMap;
 
 	SpellGroup_t group = SPELLGROUP_NONE;
 	SpellGroup_t secondaryGroup = SPELLGROUP_NONE;
@@ -237,7 +249,7 @@ public:
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
@@ -284,7 +296,7 @@ public:
 	}
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 

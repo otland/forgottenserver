@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Neutral Deepling Warrior" nameDescription="a neutral deepling warrior" race="blood" experience="1500" speed="290">
+	<health now="1600" max="1600" />
+	<look type="441" corpse="15175" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-280" />
+		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="0" max="-290">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" min="115" max="195" />
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-10" />
+		<element earthPercent="-10" />
+		<element firePercent="100" />
+		<element drownPercent="100" />
+		<element icePercent="100" />
+		<element deathPercent="10" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="145" />
+		<item id="15488" name="deepling filet" chance="30769" />
+		<item id="7591" name="great health potion" chance="23077" />
+		<item id="15426" name="deeptags" chance="15385" />
+		<item id="15425" name="deepling warts" chance="11538" />
+		<item id="2168" name="life ring" chance="7692" />
+	</loot>
+</monster>

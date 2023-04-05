@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Floating Savant" nameDescription="a floating savant" race="fire" experience="8000" speed="330">
+	<health now="8000" max="8000" />
+	<look type="1063" head="113" body="94" legs="78" feet="78" addons="0" corpse="31254" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="fire" interval="2000" chance="15" range="7" min="-390" max="-480">
+			<attribute key="shootEffect" value="fire" />
+		</attack>
+		<attack name="energy" interval="2000" chance="14" range="7" min="-390" max="-480">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="fire" interval="2000" chance="12" radius="3" min="-300" max="-400">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-490" max="-630">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="74" defense="74" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="100" />
+		<element icePercent="-10" />
+		<element deathPercent="50" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="tssooosh tsoooosh tssoooosh!" />
+		<voice sentence="We didn't stop the fire!" />
+	</voices>
+	<summons maxSummons="1">
+		<summon name="Lava Lurker Attendant" interval="2000" chance="15" />
+	</summons>
+	<loot>
+		<item id="2156" name="red gem" chance="71588" countmax="4" />
+		<item id="5911" name="red piece of cloth" chance="30501" countmax="3" />
+		<item id="6500" name="demonic essence" chance="23692" />
+		<item id="7760" name="small enchanted ruby" chance="20613" countmax="14" />
+		<item id="11237" name="book of necromantic rituals" chance="20009" />
+		<item id="18420" name="red crystal fragment" chance="19344" countmax="8" />
+		<item id="6558" name="flask of demonic blood" chance="15460" />
+		<item id="3456" name="pick" chance="5091" />
+		<item id="9969" name="black skull (item)" chance="263" />
+		<item id="30530" name="sample of monster blood" chance="108" />
+	</loot>
+</monster>

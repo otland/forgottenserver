@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CONFIGMANAGER_H
@@ -51,6 +51,8 @@ public:
 		REMOVE_ON_DESPAWN,
 		PLAYER_CONSOLE_LOGS,
 		TWO_FACTOR_AUTH,
+		CHECK_DUPLICATE_STORAGE_KEYS,
+		MONSTER_OVERSPAWN,
 
 		LAST_BOOLEAN_CONFIG /* this must be the last one */
 	};
@@ -121,6 +123,8 @@ public:
 		DEPOT_PREMIUM_LIMIT,
 		QUEST_TRACKER_FREE_LIMIT,
 		QUEST_TRACKER_PREMIUM_LIMIT,
+		STAMINA_REGEN_MINUTE,
+		STAMINA_REGEN_PREMIUM,
 
 		LAST_INTEGER_CONFIG /* this must be the last one */
 	};
@@ -132,7 +136,7 @@ public:
 	bool getBoolean(boolean_config_t what) const;
 	float getExperienceStage(uint32_t level) const;
 
-	bool setString(string_config_t what, const std::string& value);
+	bool setString(string_config_t what, std::string_view value);
 	bool setNumber(integer_config_t what, int32_t value);
 	bool setBoolean(boolean_config_t what, bool value);
 

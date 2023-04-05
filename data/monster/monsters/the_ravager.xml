@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Ravager" nameDescription="The Ravager" race="undead" experience="14980" speed="340">
+	<health now="53500" max="53500" />
+	<look type="87" corpse="6031" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" poison="320" />
+		<attack name="death" interval="2000" chance="12" range="7" min="-200" max="-750">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="9" length="8" spread="3" min="-700" max="-880">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="18" length="7" spread="0" min="-400" max="-500">
+			<attribute key="areaEffect" value="smoke" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="200" max="400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="10" />
+		<element earthPercent="1" />
+		<element icePercent="50" />
+	</elements>
+	<immunities>
+		<immunity death="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2144" name="black pearl" chance="100000" countmax="5" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="15" />
+		<item id="2159" name="scarab coin" chance="100000" countmax="4" />
+		<item id="2142" name="ancient amulet" chance="33871" />
+		<item id="7591" name="great health potion" chance="29032" countmax="4" />
+		<item id="7590" name="great mana potion" chance="17742" countmax="4" />
+		<item id="2440" name="daramian waraxe" chance="6452" />
+		<item id="2540" name="scarab shield" chance="4839" />
+		<item id="2134" name="silver brooch" chance="4839" />
+		<item id="9808" name="heavily rusted armor" chance="1613" />
+	</loot>
+</monster>

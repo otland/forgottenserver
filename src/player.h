@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PLAYER_H
@@ -54,8 +54,8 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
-	    guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify)
+	VIPEntry(uint32_t guid, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
+	    guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t guid;
@@ -113,12 +113,13 @@ public:
 	static MuteCountMap muteCountMap;
 
 	const std::string& getName() const override { return name; }
-	void setName(const std::string& name) { this->name = name; }
+	void setName(std::string_view name) { this->name = name; }
 	const std::string& getNameDescription() const override { return name; }
 	std::string getDescription(int32_t lookDistance) const override;
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
+	uint8_t getRandomMount() const;
 	uint8_t getCurrentMount() const;
 	void setCurrentMount(uint8_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
@@ -126,6 +127,7 @@ public:
 	bool tameMount(uint8_t mountId);
 	bool untameMount(uint8_t mountId);
 	bool hasMount(const Mount* mount) const;
+	bool hasMounts() const;
 	void dismount();
 
 	void sendFYIBox(const std::string& message)
@@ -239,7 +241,7 @@ public:
 			client->disconnect();
 		}
 	}
-	uint32_t getIP() const;
+	Connection::Address getIP() const;
 
 	void addContainer(uint8_t cid, Container* container);
 	void closeContainer(uint8_t cid);
@@ -284,8 +286,6 @@ public:
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
-
-	uint16_t getHelpers() const;
 
 	bool setVocation(uint16_t vocId);
 	uint16_t getVocationId() const { return vocation->getId(); }
@@ -1229,6 +1229,7 @@ private:
 	int64_t nextAction = 0;
 
 	ProtocolGame_ptr client;
+	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
 	Guild* guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
@@ -1258,7 +1259,6 @@ private:
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
 	uint32_t MessageBufferTicks = 0;
-	uint32_t lastIP = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;
 	uint32_t windowTextId = 0;
@@ -1303,6 +1303,7 @@ private:
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
+	bool randomizeMount = false;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;
