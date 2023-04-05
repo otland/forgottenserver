@@ -10,12 +10,16 @@ on:
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - CMakePresets.json
+      - vcpkg.json
 
   pull_request:
     paths:
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - CMakePresets.json
+      - vcpkg.json
 
 jobs:
   build-vcpkg:
