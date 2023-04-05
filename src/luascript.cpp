@@ -8658,13 +8658,16 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 int LuaScriptInterface::luaCreatureHasIcon(lua_State* L)
 {
 	// creature:hasIcon(iconId)
-	Creature* monster = getUserdata<Creature>(L, 1);
-	if (monster) {
-		CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
-		if (iconId < CREATURE_ICON_LAST) {
-			pushBoolean(L, monster->hasCreatureIcon(iconId));
-			return 1;
-		}
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
+	if (iconId < CREATURE_ICON_LAST) {
+		pushBoolean(L, creature->hasCreatureIcon(iconId));
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -8674,13 +8677,16 @@ int LuaScriptInterface::luaCreatureHasIcon(lua_State* L)
 int LuaScriptInterface::luaCreatureGetIconValue(lua_State* L)
 {
 	// creature:getIconValue(iconId)
-	Creature* monster = getUserdata<Creature>(L, 1);
-	if (monster) {
-		CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
-		if (iconId < CREATURE_ICON_LAST) {
-			lua_pushnumber(L, monster->getCreatureIconValue(iconId));
-			return 1;
-		}
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
+	if (iconId < CREATURE_ICON_LAST) {
+		lua_pushnumber(L, creature->getCreatureIconValue(iconId));
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -8690,14 +8696,18 @@ int LuaScriptInterface::luaCreatureGetIconValue(lua_State* L)
 int LuaScriptInterface::luaCreatureSetIconValue(lua_State* L)
 {
 	// creature:setIconValue(iconId, value)
-	Creature* monster = getUserdata<Creature>(L, 1);
-	if (monster) {
-		CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
-		if (iconId < CREATURE_ICON_LAST) {
-			uint16_t value = getNumber<uint16_t>(L, 3);
-			lua_pushnumber(L, monster->setCreatureIconValue(iconId, value));
-			return 1;
-		}
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
+	if (iconId < CREATURE_ICON_LAST) {
+		uint16_t value = getNumber<uint16_t>(L, 3);
+		creature->setCreatureIconValue(iconId, value);
+		pushBoolean(L, true);
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -8707,13 +8717,17 @@ int LuaScriptInterface::luaCreatureSetIconValue(lua_State* L)
 int LuaScriptInterface::luaCreatureRemoveIcon(lua_State* L)
 {
 	// creature:removeIcon(iconId)
-	Creature* monster = getUserdata<Creature>(L, 1);
-	if (monster) {
-		CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
-		if (iconId < CREATURE_ICON_LAST) {
-			pushBoolean(L, monster->removeCreatureIcon(iconId));
-			return 1;
-		}
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	CreatureIcon_t iconId = getNumber<CreatureIcon_t>(L, 2);
+	if (iconId < CREATURE_ICON_LAST) {
+		creature->removeCreatureIcon(iconId);
+		pushBoolean(L, true);
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -11311,11 +11325,14 @@ int LuaScriptInterface::luaMonsterHasIcon(lua_State* L)
 	// monster:hasMonsterIcon(iconId)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
-		MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
-		if (iconId < MONSTER_ICON_LAST) {
-			pushBoolean(L, monster->hasMonsterIcon(iconId));
-			return 1;
-		}
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
+	if (iconId < MONSTER_ICON_LAST) {
+		pushBoolean(L, monster->hasMonsterIcon(iconId));
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -11327,11 +11344,14 @@ int LuaScriptInterface::luaMonsterGetIconValue(lua_State* L)
 	// monster:getMonsterIconValue(iconId)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
-		MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
-		if (iconId < MONSTER_ICON_LAST) {
-			lua_pushnumber(L, monster->getMonsterIconValue(iconId));
-			return 1;
-		}
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
+	if (iconId < MONSTER_ICON_LAST) {
+		lua_pushnumber(L, monster->getMonsterIconValue(iconId));
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -11343,12 +11363,16 @@ int LuaScriptInterface::luaMonsterSetIconValue(lua_State* L)
 	// monster:setMonsterIconValue(iconId, value)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
-		MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
-		if (iconId < MONSTER_ICON_LAST) {
-			uint16_t value = getNumber<uint16_t>(L, 3);
-			lua_pushnumber(L, monster->setMonsterIconValue(iconId, value));
-			return 1;
-		}
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
+	if (iconId < MONSTER_ICON_LAST) {
+		uint16_t value = getNumber<uint16_t>(L, 3);
+		monster->setMonsterIconValue(iconId, value);
+		pushBoolean(L, true);
+		return 1;
 	}
 
 	lua_pushnil(L);
@@ -11360,14 +11384,18 @@ int LuaScriptInterface::luaMonsterRemoveIcon(lua_State* L)
 	// monster:removeMonsterIcon(iconId)
 	Monster* monster = getUserdata<Monster>(L, 1);
 	if (monster) {
-		MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
-		if (iconId < MONSTER_ICON_LAST) {
-			pushBoolean(L, monster->removeMonsterIcon(iconId));
-			return 1;
-		}
+		lua_pushnil(L);
+		return 1;
 	}
 
+	MonsterIcon_t iconId = getNumber<MonsterIcon_t>(L, 2);
+	if (iconId < MONSTER_ICON_LAST) {
+		monster->removeMonsterIcon(iconId);
+		pushBoolean(L, true);
+		return 1;
+	}
 	lua_pushnil(L);
+
 	return 1;
 }
 
