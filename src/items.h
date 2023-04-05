@@ -381,6 +381,7 @@ public:
 	uint8_t lightColor = 0;
 	uint8_t shootRange = 1;
 	uint8_t classification = 0;
+	LootCategory category = LootCategory::NONE;
 	int8_t hitChance = 0;
 
 	bool storeItem = false;

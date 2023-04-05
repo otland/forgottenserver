@@ -6,6 +6,7 @@
 #include "networkmessage.h"
 
 #include "container.h"
+#include "player.h"
 #include "podium.h"
 
 std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
@@ -120,10 +121,21 @@ void NetworkMessage::addItem(const Item* item)
 	}
 
 	if (it.isContainer()) {
-		addByte(0x00); // assigned loot container icon
-		// quiver ammo count
 		const Container* container = item->getContainer();
-		if (container && it.weaponType == WEAPON_QUIVER) {
+		// assigned loot container icon
+		if (const Player* player = container->getHoldingPlayer()) {
+			if (const auto lootCategory = container->getLootCategory()) {
+				addByte(0x01);
+				add<uint32_t>(lootCategory);
+			} else {
+				addByte(0x00);
+			}
+		} else {
+			addByte(0x00);
+		}
+
+		// quiver ammo count
+		if (it.weaponType == WEAPON_QUIVER) {
 			addByte(0x01);
 			add<uint32_t>(container->getAmmoCount());
 		} else {

@@ -93,6 +93,7 @@ enum AttrTypes_t
 	// ATTR_TIER = 41, // mapeditor
 	ATTR_REFLECT = 42,
 	ATTR_BOOST = 43,
+	ATTR_LOOT_CATEGORY = 44,
 };
 
 enum Attr_ReadValue

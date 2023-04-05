@@ -727,6 +727,12 @@ public:
 			client->sendContainer(cid, container, hasParent, firstIndex);
 		}
 	}
+	void sendLootContainers()
+	{
+		if (client) {
+			client->sendLootContainers();
+		}
+	}
 
 	// inventory
 	void sendInventoryItem(slots_t slot, const Item* item)
@@ -1134,6 +1140,10 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
+	const auto& getLootContainers() const { return lootContainers; }
+	auto getLootContainer(const LootCategory category) const { return lootContainers[static_cast<uint8_t>(category)]; }
+	void setLootContainer(const LootCategory category, Container* container);
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1188,6 +1198,8 @@ private:
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
 	std::map<uint32_t, int32_t> storageMap;
+
+	std::array<Container*, static_cast<uint8_t>(LootCategory::LAST) + 1> lootContainers = {nullptr};
 
 	std::vector<OutfitEntry> outfits;
 	GuildWarVector guildWarVector;

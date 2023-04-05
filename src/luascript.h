@@ -1013,6 +1013,10 @@ private:
 
 	static int luaPlayerGetIdleTime(lua_State* L);
 
+	static int luaPlayerGetLootContainers(lua_State* L);
+	static int luaPlayerGetLootContainer(lua_State* L);
+	static int luaPlayerSetLootContainer(lua_State* L);
+
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
 
@@ -1192,6 +1196,7 @@ private:
 	static int luaItemTypeGetArticle(lua_State* L);
 	static int luaItemTypeGetDescription(lua_State* L);
 	static int luaItemTypeGetSlotPosition(lua_State* L);
+	static int luaItemTypeGetCategory(lua_State* L);
 
 	static int luaItemTypeGetCharges(lua_State* L);
 	static int luaItemTypeGetFluidSource(lua_State* L);

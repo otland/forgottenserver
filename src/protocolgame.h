@@ -275,6 +275,7 @@ private:
 	void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
 
 	void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex);
+	void sendLootContainers();
 	void sendEmptyContainer(uint8_t cid);
 	void sendCloseContainer(uint8_t cid);
 

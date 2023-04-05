@@ -114,6 +114,13 @@ public:
 	void internalAddThing(uint32_t index, Thing* thing) override final;
 	void startDecaying() override final;
 
+	void addLootCategory(const LootCategory category) { lootCategory |= 1 << static_cast<uint8_t>(category); }
+	void removeLootCategory(const LootCategory category) { lootCategory &= ~(1 << static_cast<uint8_t>(category)); }
+	void setLootCategory(const uint32_t category) { lootCategory = category; }
+	uint32_t getLootCategory() const { return lootCategory; }
+	std::vector<LootCategory> getLootCategories() const;
+	void checkAbandonedLootContainer(const Player* player);
+
 protected:
 	ItemDeque itemlist;
 
@@ -122,6 +129,7 @@ private:
 	uint32_t totalWeight = 0;
 	uint32_t serializationCount = 0;
 	uint32_t ammoCount = 0;
+	uint32_t lootCategory = 0;
 
 	bool unlocked;
 	bool pagination;

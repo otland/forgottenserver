@@ -92,7 +92,12 @@ Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 		if (!propStream.read<uint32_t>(serializationCount)) {
 			return ATTR_READ_ERROR;
 		}
-		return ATTR_READ_END;
+		return ATTR_READ_CONTINUE;
+	} else if (attr == ATTR_LOOT_CATEGORY) {
+		if (!propStream.read<uint32_t>(lootCategory)) {
+			return ATTR_READ_ERROR;
+		}
+		return ATTR_READ_CONTINUE;
 	}
 	return Item::readAttr(attr, propStream);
 }
@@ -733,4 +738,38 @@ void ContainerIterator::advance()
 			cur = over.front()->itemlist.begin();
 		}
 	}
+}
+
+std::vector<LootCategory> Container::getLootCategories() const
+{
+	if (lootCategory) {
+		std::vector<LootCategory> categories;
+		for (uint8_t category = 0; category <= static_cast<uint8_t>(LootCategory::LAST); ++category) {
+			if (hasBitSet(lootCategory, 1 << category)) {
+				categories.push_back(static_cast<LootCategory>(category));
+			}
+		}
+		return categories;
+	}
+	return {};
+}
+
+void Container::checkAbandonedLootContainer(const Player* player)
+{
+	const auto& lootContainers = player->getLootContainers();
+	for (const auto& category : getLootCategories()) {
+		if (const auto lootContainer = lootContainers[static_cast<uint8_t>(category)]; lootContainer == this) {
+			return;
+		}
+	}
+
+	if (auto lastOwner = g_game.getPlayerByGUID(getOwner())) {
+		for (const auto& category : getLootCategories()) {
+			lastOwner->setLootContainer(category, nullptr);
+		}
+
+		lastOwner->sendLootContainers();
+	}
+
+	setLootCategory(0);
 }

@@ -909,6 +909,13 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 			}
 		}
 	}
+
+	if (auto container = getContainer()) {
+		if (const auto lootCategory = container->getLootCategory()) {
+			propWriteStream.write<uint8_t>(ATTR_LOOT_CATEGORY);
+			propWriteStream.write<uint32_t>(lootCategory);
+		}
+	}
 }
 
 bool Item::hasProperty(ITEMPROPERTY prop) const

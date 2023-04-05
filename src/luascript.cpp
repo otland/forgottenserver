@@ -2708,6 +2708,10 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getIdleTime", LuaScriptInterface::luaPlayerGetIdleTime);
 
+	registerMethod("Player", "getLootContainers", LuaScriptInterface::luaPlayerGetLootContainers);
+	registerMethod("Player", "getLootContainer", LuaScriptInterface::luaPlayerGetLootContainer);
+	registerMethod("Player", "setLootContainer", LuaScriptInterface::luaPlayerSetLootContainer);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2895,6 +2899,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
 	registerMethod("ItemType", "getDescription", LuaScriptInterface::luaItemTypeGetDescription);
 	registerMethod("ItemType", "getSlotPosition", LuaScriptInterface::luaItemTypeGetSlotPosition);
+	registerMethod("ItemType", "getCategory", LuaScriptInterface::luaItemTypeGetCategory);
 
 	registerMethod("ItemType", "getCharges", LuaScriptInterface::luaItemTypeGetCharges);
 	registerMethod("ItemType", "getFluidSource", LuaScriptInterface::luaItemTypeGetFluidSource);
@@ -10840,6 +10845,79 @@ int LuaScriptInterface::luaPlayerGetIdleTime(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerGetLootContainers(lua_State* L)
+{
+	// player:getLootContainers()
+	const Player* const player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto& lootContainers = player->getLootContainers();
+	lua_newtable(L);
+
+	uint8_t category = 0;
+	for (const auto& container : lootContainers) {
+		if (container) {
+			pushUserdata<const Container>(L, container);
+			setMetatable(L, -1, "Container");
+			lua_rawseti(L, -2, category);
+		}
+
+		++category;
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLootContainer(lua_State* L)
+{
+	// player:getLootContainer(category)
+	const Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const LootCategory category = getNumber<const LootCategory>(L, 2);
+	if (category > LootCategory::LAST) {
+		reportErrorFunc(L, "Loot category out of range");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto container = player->getLootContainer(category);
+	if (container) {
+		pushUserdata<const Container>(L, container);
+		setMetatable(L, -1, "Container");
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetLootContainer(lua_State* L)
+{
+	// player:setLootContainer(category, container)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const LootCategory category = getNumber<const LootCategory>(L, 2);
+	if (category > LootCategory::LAST) {
+		reportErrorFunc(L, "Loot category out of range");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	player->setLootContainer(category, getUserdata<Container>(L, 3));
+	return 1;
+}
+
 // Monster
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
@@ -12667,6 +12745,18 @@ int LuaScriptInterface::luaItemTypeGetSlotPosition(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushnumber(L, itemType->slotPosition);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetCategory(lua_State* L)
+{
+	// itemType:getCategory()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, static_cast<uint8_t>(itemType->category));
 	} else {
 		lua_pushnil(L);
 	}
