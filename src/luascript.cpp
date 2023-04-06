@@ -1217,6 +1217,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_INVISIBLE);
 	registerEnum(CONDITION_LIGHT);
 	registerEnum(CONDITION_MANASHIELD);
+	registerEnum(CONDITION_MANASHIELD_BREAKABLE);
 	registerEnum(CONDITION_INFIGHT);
 	registerEnum(CONDITION_DRUNK);
 	registerEnum(CONDITION_EXHAUST_WEAPON);
@@ -1295,6 +1296,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SUBID);
 	registerEnum(CONDITION_PARAM_FIELD);
 	registerEnum(CONDITION_PARAM_DISABLE_DEFENSE);
+	registerEnum(CONDITION_PARAM_MANASHIELD_BREAKABLE);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT);
 	registerEnum(CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE);
@@ -2163,6 +2165,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::MAX_PACKETS_PER_SECOND);
 	registerEnumIn("configKeys", ConfigManager::PLAYER_CONSOLE_LOGS);
 	registerEnumIn("configKeys", ConfigManager::TWO_FACTOR_AUTH);
+	registerEnumIn("configKeys", ConfigManager::MANASHIELD_BREAKABLE);
 	registerEnumIn("configKeys", ConfigManager::STAMINA_REGEN_MINUTE);
 	registerEnumIn("configKeys", ConfigManager::STAMINA_REGEN_PREMIUM);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
@@ -2565,6 +2568,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addMana", LuaScriptInterface::luaPlayerAddMana);
 	registerMethod("Player", "getMaxMana", LuaScriptInterface::luaPlayerGetMaxMana);
 	registerMethod("Player", "setMaxMana", LuaScriptInterface::luaPlayerSetMaxMana);
+	registerMethod("Player", "setManaShieldBar", LuaScriptInterface::luaPlayerSetManaShieldBar);
 	registerMethod("Player", "getManaSpent", LuaScriptInterface::luaPlayerGetManaSpent);
 	registerMethod("Player", "addManaSpent", LuaScriptInterface::luaPlayerAddManaSpent);
 	registerMethod("Player", "removeManaSpent", LuaScriptInterface::luaPlayerRemoveManaSpent);
@@ -8996,6 +9000,21 @@ int LuaScriptInterface::luaPlayerSetMaxMana(lua_State* L)
 	if (player) {
 		player->manaMax = getNumber<int32_t>(L, 2);
 		player->mana = std::min<int32_t>(player->mana, player->manaMax);
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetManaShieldBar(lua_State* L)
+{
+	// player:setManaShieldBar(capacity, value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setMaxManaShieldBar(getNumber<uint16_t>(L, 2));
+		player->setManaShieldBar(getNumber<uint16_t>(L, 3));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
@@ -16164,7 +16183,8 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 	} else {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		for (int i = 0; i < parameters; ++i) {
-			auto vocList = explodeString(getString(L, 2 + i), ";");
+			std::string vocStr = getString(L, 2 + i);
+			auto vocList = explodeString(vocStr, ";");
 			spell->addVocationSpellMap(vocList[0], vocList.size() > 1 ? booleanString(vocList[1]) : false);
 		}
 		pushBoolean(L, true);
