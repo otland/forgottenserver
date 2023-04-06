@@ -4,7 +4,7 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 local condition = Condition(CONDITION_MANASHIELD)
-condition:setParameter(CONDITION_PARAM_TICKS, 60 * 1000)
+condition:setParameter(CONDITION_PARAM_TICKS, 200 * 1000)
 combat:addCondition(condition)
 
 -- New mana shield
@@ -13,7 +13,7 @@ combatBreakableManaShield:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_MAGIC_BLUE)
 combatBreakableManaShield:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 local conditionBreakableManaShield = Condition(CONDITION_MANASHIELD_BREAKABLE)
-conditionBreakableManaShield:setParameter(CONDITION_PARAM_TICKS, 60 * 1000)
+conditionBreakableManaShield:setParameter(CONDITION_PARAM_TICKS, 180 * 1000)
 
 local magicShield = Spell(SPELL_INSTANT)
 

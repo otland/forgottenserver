@@ -61,7 +61,12 @@ local potions = {
 	},
 	[38219] = { -- magic shield potion
 		condition = manaShield,
-		vocations = {1, 2, 5, 6},
+		vocations = {
+			VOCATION_SORCERER,
+			VOCATION_DRUID,
+			VOCATION_MASTER_SORCERER,
+			VOCATION_ELDER_DRUID
+		},
 		level = 14,
 		effect = CONST_ME_ENERGYAREA,
 		description = "Only sorcerers and druids of level 14 or above may drink this potion.",
