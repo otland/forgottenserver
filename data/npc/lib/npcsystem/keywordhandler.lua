@@ -177,7 +177,7 @@ if not KeywordHandler then
 		return self:getRoot():addAliasKeyword(keys)
 	end
 
-	-- Moves the current position in the keyword hierarchy steps upwards. Steps defalut value = 1.
+	-- Moves the current position in the keyword hierarchy steps upwards. Steps default value = 1.
 	function KeywordHandler:moveUp(cid, steps)
 		if not steps or type(steps) ~= "number" then
 			steps = 1
@@ -190,5 +190,38 @@ if not KeywordHandler then
 			self.lastNode[cid] = self.lastNode[cid]:getParent() or self:getRoot()
 		end
 		return self.lastNode[cid]
+	end
+
+	function KeywordHandler:addSpellKeyword(keys, parameters)
+		-- This function adds a new spell to a character.
+		--
+		-- @param keys - table of keywords that will trigger the function.
+		-- @param parameters - table containing the spellName, price, level and vocation.
+		-- @param parameters.npcHandler - NpcHandler object that the spellKeyword will be added to.
+		-- @param parameters.spellName - string name of the spell to be added.
+		-- @param parameters.price - integer cost of the spell.
+		-- @param parameters.level - integer level required to learn the spell.
+		-- @param parameters.vocation - integer or table of integers representing the vocation(s) allowed to learn the spell.
+		-- Example: keywordHandler:addSpellKeyword({"find person"}, {npcHandler = npcHandler, spellName = "Find Person", price = 80, level = 8, vocation = VOCATION_KNIGHT})
+
+		local keys = keys
+		keys.callback = FocusModule.messageMatcherDefault
+
+		local npcHandler, spellName, price, vocationId = parameters.npcHandler, parameters.spellName, parameters.price, parameters.vocation
+		local spellKeyword = self:addKeyword(keys, StdModule.say, {npcHandler = npcHandler, text = string.format("Do you want to learn the spell %s for %s?", spellName, price > 0 and price .. " gold" or "free")},
+			function(player)
+				local baseVocationId = player:getVocation():getBase():getId()
+				if type(vocationId) == 'table' then
+					-- Using a more efficient way to check if the player meets the vocation requirements
+					return table.find(vocationId, baseVocationId) ~= nil
+				else
+					return vocationId == baseVocationId
+				end
+			end
+		)
+
+		-- It is not necessary to check if the player already has the spell, the check is done in modules.lua
+		spellKeyword:addChildKeyword({"yes"}, StdModule.learnSpell, {npcHandler = npcHandler, spellName = spellName, level = parameters.level, price = price})
+		spellKeyword:addChildKeyword({"no"}, StdModule.say, {npcHandler = npcHandler, text = "Maybe next time.", reset = true})
 	end
 end

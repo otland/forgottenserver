@@ -29,7 +29,6 @@
 		<attack name="lifedrain" interval="2000" chance="25" range="7" radius="7" target="0" min="-300" max="-420">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
-		<attack name="mutated rat paralyze" interval="2000" chance="20" range="7" />
 	</attacks>
 	<defenses armor="30" defense="30">
 		<defense name="healing" interval="2000" chance="9" min="250" max="550">
