@@ -64,11 +64,11 @@
 		<item id="18413" name="blue crystal shard" chance="4661" />
 		<item id="2158" name="blue gem" chance="977" />
 		<item id="2189" name="wand of cosmic energy" chance="725" />
-		<item name="ring of green plasma" chance="377" />
-		<item name="ring of blue plasma" chance="326" />
-		<item name="ring of red plasma" chance="326" />
+		<item id="26187" name="ring of green plasma" chance="377" />
+		<item id="26185" name="ring of blue plasma" chance="326" />
+		<item id="26189" name="ring of red plasma" chance="326" />
 		<item id="26199" name="collar of green plasma" chance="259" />
-		<item name="collar of blue plasma" chance="200" />
+		<item id="26198" name="collar of blue plasma" chance="200" />
 		<item id="26200" name="collar of red plasma" chance="163" />
 	</loot>
 </monster>
