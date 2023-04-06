@@ -40,23 +40,23 @@
 		<item name="void boots" chance="25000" />
 		<item id="2158" name="blue gem" chance="18750" />
 		<item id="2156" name="red gem" chance="18750" />
-		<item name="ring of blue plasma" chance="18750" />
+		<item id="26185" name="ring of blue plasma" chance="18750" />
 		<item id="2145" name="small diamond" chance="18750" countmax="19" />
 		<item id="2146" name="small sapphire" chance="18750" countmax="15" />
 		<item id="7427" name="chaos mace" chance="12500" />
 		<item id="26199" name="collar of green plasma" chance="12500" />
 		<item name="giant shimmering pearl" chance="12500" />
-		<item name="ring of red plasma" chance="12500" />
+		<item id="26189" name="ring of red plasma" chance="12500" />
 		<item id="7451" name="shadow sceptre" chance="12500" />
 		<item id="2150" name="small amethyst" chance="12500" countmax="18" />
 		<item id="2153" name="violet gem" chance="12500" />
 		<item id="2154" name="yellow gem" chance="12500" />
-		<item name="collar of blue plasma" chance="6250" />
+		<item id="26198" name="collar of blue plasma" chance="6250" />
 		<item id="26200" name="collar of red plasma" chance="6250" />
 		<item id="8878" name="crystalline armor" chance="6250" />
 		<item id="7901" name="lightning headband" chance="6250" />
 		<item id="7895" name="lightning legs" chance="6250" />
-		<item name="ring of green plasma" chance="6250" />
+		<item id="26187" name="ring of green plasma" chance="6250" />
 		<item id="6553" name="ruthless axe" chance="6250" />
 		<item id="9970" name="small topaz" chance="6250" countmax="6" />
 	</loot>

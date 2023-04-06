@@ -41,10 +41,10 @@
 		<item id="2155" name="green gem" chance="21818" />
 		<item id="2149" name="small emerald" chance="21818" countmax="39" />
 		<item id="2154" name="yellow gem" chance="21818" />
-		<item name="ring of red plasma" chance="18182" />
+		<item id="26189" name="ring of red plasma" chance="18182" />
 		<item id="2146" name="small sapphire" chance="14545" countmax="33" />
-		<item name="collar of blue plasma" chance="12727" />
-		<item name="ring of green plasma" chance="12727" />
+		<item id="26198" name="collar of blue plasma" chance="12727" />
+		<item id="26187" name="ring of green plasma" chance="12727" />
 		<item id="8878" name="crystalline armor" chance="10909" />
 		<item id="2156" name="red gem" chance="10909" />
 		<item id="2436" name="skull staff" chance="10909" />
@@ -54,7 +54,7 @@
 		<item id="7428" name="bonebreaker" chance="9091" />
 		<item name="giant shimmering pearl" chance="9091" />
 		<item id="26200" name="collar of red plasma" chance="7273" />
-		<item name="ring of blue plasma" chance="7273" />
+		<item id="26185" name="ring of blue plasma" chance="7273" />
 		<item id="9970" name="small topaz" chance="7273" countmax="31" />
 		<item id="7901" name="lightning headband" chance="5455" />
 		<item id="2153" name="violet gem" chance="5455" />

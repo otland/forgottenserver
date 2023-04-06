@@ -47,11 +47,11 @@
 		<item id="2150" name="small amethyst" chance="4439" countmax="2" />
 		<item id="18414" name="violet crystal shard" chance="4424" />
 		<item id="2153" name="violet gem" chance="1025" />
-		<item name="ring of blue plasma" chance="285" />
-		<item name="ring of red plasma" chance="285" />
+		<item id="26185" name="ring of blue plasma" chance="285" />
+		<item id="26189" name="ring of red plasma" chance="285" />
 		<item id="26199" name="collar of green plasma" chance="270" />
-		<item name="ring of green plasma" chance="254" />
-		<item name="collar of blue plasma" chance="247" />
+		<item id="26187" name="ring of green plasma" chance="254" />
+		<item id="26198" name="collar of blue plasma" chance="247" />
 		<item id="26200" name="collar of red plasma" chance="231" />
 	</loot>
 </monster>

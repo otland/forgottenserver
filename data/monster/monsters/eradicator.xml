@@ -51,9 +51,9 @@
 		<item id="2147" name="small ruby" chance="18000" countmax="18" />
 		<item name="void boots" chance="18000" />
 		<item id="2158" name="blue gem" chance="16000" />
-		<item name="collar of blue plasma" chance="16000" />
-		<item name="ring of green plasma" chance="16000" />
-		<item name="ring of red plasma" chance="16000" />
+		<item id="26198" name="collar of blue plasma" chance="16000" />
+		<item id="26187" name="ring of green plasma" chance="16000" />
+		<item id="26189" name="ring of red plasma" chance="16000" />
 		<item id="7426" name="amber staff" chance="14000" />
 		<item id="2155" name="green gem" chance="14000" />
 		<item id="26200" name="collar of red plasma" chance="12000" />
@@ -63,7 +63,7 @@
 		<item id="8903" name="spellbook of lost souls" chance="10000" />
 		<item id="2153" name="violet gem" chance="8000" />
 		<item id="2445" name="crystal mace" chance="6000" />
-		<item name="ring of blue plasma" chance="6000" />
+		<item id="26185" name="ring of blue plasma" chance="6000" />
 		<item id="2145" name="small diamond" chance="6000" countmax="14" />
 		<item id="8878" name="crystalline armor" chance="4000" />
 	</loot>

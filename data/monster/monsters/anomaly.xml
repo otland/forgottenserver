@@ -52,19 +52,19 @@
 		<item id="2147" name="small ruby" chance="20000" countmax="19" />
 		<item id="8901" name="spellbook of warding" chance="20000" />
 		<item id="26199" name="collar of green plasma" chance="18000" />
-		<item name="ring of blue plasma" chance="18000" />
-		<item name="ring of green plasma" chance="16000" />
+		<item id="26185" name="ring of blue plasma" chance="18000" />
+		<item id="26187" name="ring of green plasma" chance="16000" />
 		<item id="2149" name="small emerald" chance="16000" countmax="18" />
 		<item id="7901" name="lightning headband" chance="12000" />
 		<item id="2156" name="red gem" chance="12000" />
 		<item id="2150" name="small amethyst" chance="12000" countmax="19" />
 		<item id="2158" name="blue gem" chance="10000" />
 		<item id="7427" name="chaos mace" chance="10000" />
-		<item name="collar of blue plasma" chance="10000" />
+		<item id="26198" name="collar of blue plasma" chance="10000" />
 		<item id="7451" name="shadow sceptre" chance="10000" />
 		<item name="void boots" chance="10000" />
 		<item id="26200" name="collar of red plasma" chance="8000" />
-		<item name="ring of red plasma" chance="8000" />
+		<item id="26189" name="ring of red plasma" chance="8000" />
 		<item id="2153" name="violet gem" chance="8000" />
 		<item id="7895" name="lightning legs" chance="6000" />
 		<item id="7898" name="lightning robe" chance="2000" />

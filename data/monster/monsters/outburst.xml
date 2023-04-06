@@ -43,15 +43,15 @@
 		<item id="2150" name="small amethyst" chance="28000" countmax="19" />
 		<item id="2146" name="small sapphire" chance="26000" countmax="19" />
 		<item id="2156" name="red gem" chance="24000" />
-		<item name="ring of blue plasma" chance="24000" />
+		<item id="26185" name="ring of blue plasma" chance="24000" />
 		<item id="7427" name="chaos mace" chance="20000" />
 		<item id="2149" name="small emerald" chance="20000" countmax="14" />
 		<item id="2154" name="yellow gem" chance="20000" />
 		<item id="26200" name="collar of red plasma" chance="16000" />
 		<item name="giant shimmering pearl" chance="16000" />
-		<item name="ring of red plasma" chance="16000" />
+		<item id="26189" name="ring of red plasma" chance="16000" />
 		<item id="2147" name="small ruby" chance="16000" countmax="19" />
-		<item name="ring of green plasma" chance="14000" />
+		<item id="26187" name="ring of green plasma" chance="14000" />
 		<item name="void boots" chance="14000" />
 		<item id="7901" name="lightning headband" chance="12000" />
 		<item id="7898" name="lightning robe" chance="12000" />
@@ -60,7 +60,7 @@
 		<item id="7428" name="bonebreaker" chance="8000" />
 		<item id="26199" name="collar of green plasma" chance="8000" />
 		<item id="2155" name="green gem" chance="8000" />
-		<item name="collar of blue plasma" chance="6000" />
+		<item id="26198" name="collar of blue plasma" chance="6000" />
 		<item id="7895" name="lightning legs" chance="6000" />
 		<item name="tiara of power" chance="6000" />
 		<item id="2454" name="war axe" chance="6000" />

@@ -49,11 +49,11 @@
 		<item id="8920" name="wand of starstorm" chance="1077" />
 		<item id="7901" name="lightning headband" chance="492" />
 		<item id="8871" name="focus cape" chance="406" />
-		<item name="ring of blue plasma" chance="366" />
-		<item name="ring of green plasma" chance="366" />
+		<item id="26185" name="ring of blue plasma" chance="366" />
+		<item id="26187" name="ring of green plasma" chance="366" />
 		<item id="2153" name="violet gem" chance="352" />
-		<item name="collar of blue plasma" chance="293" />
-		<item name="ring of red plasma" chance="293" />
+		<item id="26198" name="collar of blue plasma" chance="293" />
+		<item id="26189" name="ring of red plasma" chance="293" />
 		<item id="26199" name="collar of green plasma" chance="273" />
 		<item id="26200" name="collar of red plasma" chance="213" />
 	</loot>
