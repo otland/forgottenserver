@@ -100,7 +100,6 @@ local function sendGeneralStats(player)
 	msg:addU32(player:getCapacity())
 	msg:addU32(player:getFreeCapacity())
 
-
 	msg:addByte(8) -- ??
 	msg:addByte(1) -- ??
 	msg:addU16(player:getMagicLevel())
@@ -143,7 +142,7 @@ local function sendItems(player) -- or better name
 
 end
 
-local function sendOutfitsAndMounts(player) -- or better name
+local function sendOutfitsAndMounts(player)
 
 end
 
@@ -151,7 +150,7 @@ local function sendStore(player) -- or better name
 
 end
 
-local function sendInspection(player) -- or better name
+local function sendInspection(player)
 
 end
 
