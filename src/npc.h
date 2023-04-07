@@ -123,6 +123,9 @@ public:
 	uint8_t getSpeechBubble() const override { return speechBubble; }
 	void setSpeechBubble(const uint8_t bubble) { speechBubble = bubble; }
 
+	uint16_t getCurrencyTrading() const { return currencyClientId; }
+	uint16_t getCurrency() const { return currencyServerId; }
+
 	void doSay(const std::string& text);
 	void doSayToPlayer(Player* player, const std::string& text);
 
@@ -199,6 +202,9 @@ private:
 	int32_t masterRadius;
 
 	uint8_t speechBubble;
+
+	uint16_t currencyServerId;
+	uint16_t currencyClientId;
 
 	bool floorChange;
 	bool attackable;
