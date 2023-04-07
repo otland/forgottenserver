@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CONST_H
@@ -528,6 +528,7 @@ enum item_t : uint16_t
 	ITEM_FIREFIELD_PERSISTENT_MEDIUM = 1493,
 	ITEM_FIREFIELD_PERSISTENT_SMALL = 1494,
 	ITEM_FIREFIELD_NOPVP = 1500,
+	ITEM_FIREFIELD_NOPVP_MEDIUM = 1501,
 
 	ITEM_POISONFIELD_PVP = 1490,
 	ITEM_POISONFIELD_PERSISTENT = 1496,

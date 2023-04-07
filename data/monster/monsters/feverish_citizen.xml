@@ -27,7 +27,7 @@
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="outfit" interval="2000" chance="1" target="0" radius="3" monster="bog raider" duration="5000">
-			<attribute key="areaeffect" value="greenbubble" />
+			<attribute key="areaEffect" value="greenbubble" />
 		</defense>
 	</defenses>
 	<elements>

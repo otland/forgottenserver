@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_SERVER_H
@@ -40,7 +40,6 @@ public:
 	ServicePort(const ServicePort&) = delete;
 	ServicePort& operator=(const ServicePort&) = delete;
 
-	static void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port);
 	void open(uint16_t port);
 	void close();
 	bool is_single_socket() const;

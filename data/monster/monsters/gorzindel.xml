@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Gorzindel" nameDescription="Gorzindel" race="blood" experience="100000" speed="230">
+	<health now="300000" max="300000" />
+	<look type="1062" head="94" body="100" legs="0" feet="0" addons="1" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="physical" interval="2000" chance="15" length="8" min="-600" max="-2800">
+			<attribute key="shootEffect" value="whirlwindaxe" />
+			<attribute key="areaEffect" value="groundshaker" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" length="6" spread="0" target="0" min="-800" max="-1300">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" radius="3" target="0" min="-800" max="-1000">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" radius="9" target="0" min="-200" max="-800">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="death" interval="1000" chance="15" radius="9" target="0" min="-200" max="-600">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="5" />
+	</elements>
+	<loot>
+		<item id="7439" name="berserk potion" chance="100000" countmax="2" />
+		<item id="2160" name="crystal coin" chance="100000" countmax="8" />
+		<item id="7419" name="dreaded cleaver" chance="100000" />
+		<item id="24849" name="onyx chip" chance="100000" countmax="12" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="58" />
+		<item id="25172" name="silver token" chance="100000" countmax="6" />
+		<item id="2197" name="stone skin amulet" chance="100000" />
+		<item id="26029" name="ultimate mana potion" chance="100000" countmax="8" />
+		<item id="26030" name="ultimate spirit potion" chance="100000" countmax="8" />
+		<item id="2189" name="wand of cosmic energy" chance="100000" />
+		<item id="7427" name="chaos mace" chance="50000" />
+		<item id="5954" name="demon horn" chance="50000" />
+		<item id="2155" name="green gem" chance="50000" />
+		<item id="7440" name="mastermind potion" chance="50000" countmax="2" />
+		<item id="9816" name="slightly rusted shield" chance="50000" />
+		<item id="2145" name="small diamond" chance="50000" countmax="12" />
+		<item id="9970" name="small topaz" chance="50000" countmax="12" />
+		<item id="2154" name="yellow gem" chance="50000" />
+	</loot>
+</monster>

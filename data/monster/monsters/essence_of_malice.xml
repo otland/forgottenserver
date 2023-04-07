@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Essence Of Malice" nameDescription="Essence Of Malice" race="undead" experience="150000" speed="320">
+	<health now="250000" max="250000" />
+	<look type="351" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-603" />
+		<attack name="ghastly dragon curse" interval="2000" chance="5" range="5" />
+		<attack name="poisoncondition" interval="2000" chance="10" target="1" range="5" min="-520" max="-780">
+			<attribute key="areaEffect" value="bats" />
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" target="1" min="-80" max="-230">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="death" interval="2000" chance="10" length="8" spread="3" min="-120" max="-250">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="death" interval="2000" chance="15" radius="4" target="0" min="-110" max="-180">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" range="7" target="1" speedchange="-800" duration="30000">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-50" />
+		<element earthPercent="-50" />
+		<element firePercent="-50" />
+		<element icePercent="50" />
+		<element holyPercent="-50" />
+		<element deathPercent="100" />
+	</elements>
+</monster>

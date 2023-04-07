@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -31,8 +31,6 @@ void CreatureEvents::removeInvalidEvents()
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface() { return scriptInterface; }
-
-std::string CreatureEvents::getScriptBaseName() const { return "creaturescripts"; }
 
 Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 {
@@ -196,7 +194,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string CreatureEvent::getScriptEventName() const
+std::string_view CreatureEvent::getScriptEventName() const
 {
 	// Depending on the type script event name is different
 	switch (type) {
@@ -238,7 +236,7 @@ std::string CreatureEvent::getScriptEventName() const
 
 		case CREATURE_EVENT_NONE:
 		default:
-			return std::string();
+			return "";
 	}
 }
 

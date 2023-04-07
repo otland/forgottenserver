@@ -23,20 +23,20 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="lifedrain" interval="2000" chance="10" range="1" min="0" max="-40">
-			<attribute key="areaeffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="speed" interval="2000" chance="10" range="7" speedchange="-800" duration="5000">
-			<attribute key="areaeffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 		<attack name="drunk" interval="2000" chance="10" range="7">
 			<attribute key="shooteffect" value="energy" />
-			<attribute key="areaeffect" value="teleport" />
+			<attribute key="areaEffect" value="teleport" />
 		</attack>
 		<attack name="outfit" interval="2000" chance="10" range="7" monster="chicken" duration="5000">
-			<attribute key="areaeffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer" />
 		</attack>
 		<attack name="earth" interval="2000" chance="10" radius="6" target="0" min="-6" max="-18">
-			<attribute key="areaeffect" value="greenbubble" />
+			<attribute key="areaEffect" value="greenbubble" />
 		</attack>
 		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">
 			<attribute key="shooteffect" value="poison" />
@@ -44,13 +44,13 @@
 	</attacks>
 	<defenses armor="10" defense="10">
 		<defense name="healing" interval="2000" chance="20" min="3" max="9">
-			<attribute key="areaeffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="4000">
-			<attribute key="areaeffect" value="redshimmer" />
+			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
 		<defense name="invisible" interval="2000" chance="15" duration="7000">
-			<attribute key="areaeffect" value="blueshimmer" />
+			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
 	<immunities>

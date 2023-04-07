@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PLAYER_H
@@ -54,8 +54,8 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t guid, std::string name, std::string description, uint32_t icon, bool notify) :
-	    guid(guid), name(std::move(name)), description(std::move(description)), icon(icon), notify(notify)
+	VIPEntry(uint32_t guid, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
+	    guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t guid;
@@ -105,7 +105,7 @@ public:
 	static MuteCountMap muteCountMap;
 
 	const std::string& getName() const override { return name; }
-	void setName(const std::string& name) { this->name = name; }
+	void setName(std::string_view name) { this->name = name; }
 	const std::string& getNameDescription() const override { return name; }
 	std::string getDescription(int32_t lookDistance) const override;
 
@@ -233,7 +233,7 @@ public:
 			client->disconnect();
 		}
 	}
-	uint32_t getIP() const;
+	Connection::Address getIP() const;
 
 	void addContainer(uint8_t cid, Container* container);
 	void closeContainer(uint8_t cid);
@@ -277,8 +277,6 @@ public:
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
-
-	uint16_t getHelpers() const;
 
 	bool setVocation(uint16_t vocId);
 	uint16_t getVocationId() const { return vocation->getId(); }
@@ -330,6 +328,10 @@ public:
 	int32_t getMaxHealth() const override { return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]); }
 	uint32_t getMana() const { return mana; }
 	uint32_t getMaxMana() const { return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]); }
+	uint16_t getManaShieldBar() const { return manaShieldBar; }
+	void setManaShieldBar(uint16_t value) { manaShieldBar = value; }
+	uint16_t getMaxManaShieldBar() const { return maxManaShieldBar; }
+	void setMaxManaShieldBar(uint16_t value) { maxManaShieldBar = value; }
 
 	Item* getInventoryItem(slots_t slot) const;
 
@@ -1223,6 +1225,7 @@ private:
 	int64_t nextAction = 0;
 
 	ProtocolGame_ptr client;
+	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
 	Guild* guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
@@ -1252,13 +1255,14 @@ private:
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
 	uint32_t MessageBufferTicks = 0;
-	uint32_t lastIP = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;
 	uint32_t windowTextId = 0;
 	uint32_t editListId = 0;
 	uint32_t mana = 0;
 	uint32_t manaMax = 0;
+	uint16_t manaShieldBar = 0;
+	uint16_t maxManaShieldBar = 0;
 	int32_t varSkills[SKILL_LAST + 1] = {};
 	int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 	int32_t varStats[STAT_LAST + 1] = {};

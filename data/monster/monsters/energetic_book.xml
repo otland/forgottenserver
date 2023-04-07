@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Energetic Book" nameDescription="an energetic book" race="ink" experience="12034" speed="440">
+	<health now="18500" max="18500" />
+	<look type="1061" head="15" body="91" legs="85" feet="0" addons="0" corpse="31434" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="100" />
+		<element earthPercent="-10" />
+		<element holyPercent="100" />
+	</elements>
+	<attacks>
+		<attack name="energy" interval="2000" chance="15" min="-600" max="-750" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="15" min="-800" max="-1000" radius="3" target="0">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="holy" interval="2000" chance="15" min="-650" max="-800" length="6" spread="0">
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="82" />
+	<loot>
+		<item id="2152" name="platinum coin" chance="75436" countmax="35" />
+		<item id="31226" name="glowing rune" chance="60117" countmax="6" />
+		<item id="31225" name="book page" chance="45164" countmax="8" />
+		<item id="26029" name="ultimate mana potion" chance="15343" />
+		<item id="31222" name="silken bookmark" chance="12733" />
+		<item id="8473" name="ultimate health potion" chance="11318" />
+		<item id="26179" name="energy ball" chance="10965" />
+		<item id="7901" name="lightning headband" chance="3122" />
+		<item id="7889" name="lightning pendant" chance="2659" />
+		<item id="2164" name="might ring" chance="1732" />
+		<item id="18390" name="wand of defiance" chance="1683" />
+		<item id="7895" name="lightning legs" chance="1659" />
+		<item id="7893" name="lightning boots" chance="1512" />
+		<item id="11355" name="spellweaver's robe" chance="878" />
+		<item id="7407" name="haunted blade" chance="610" />
+	</loot>
+</monster>

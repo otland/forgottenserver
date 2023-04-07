@@ -383,3 +383,13 @@ function Player.setSpecialContainersAvailable(self, available)
 	msg:delete()
 	return true
 end
+
+function Player.addBankBalance(self, amount)
+	self:setBankBalance(self:getBankBalance() + amount)
+end
+
+function Player.isPromoted(self)
+	local vocation = self:getVocation()
+	local fromVocId = vocation:getDemotion():getId()
+	return vocation:getId() ~= fromVocId
+end
