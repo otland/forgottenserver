@@ -20,9 +20,14 @@ on:
 jobs:
   build-ubuntu:
     runs-on: ubuntu-20.04
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
 
       - name: Install dependencies
         run: >

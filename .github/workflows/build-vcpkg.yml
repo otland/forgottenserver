@@ -26,7 +26,6 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
-      fail-fast: false
       matrix:
         name: [ubuntu-gcc, ubuntu-clang, macos-clang, windows-msvc]
         buildtype: [Debug, Release]
