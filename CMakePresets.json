@@ -1,38 +1,50 @@
 {
-    "version": 2,
-    "cmakeMinimumRequired": {
-      "major": 3,
-      "minor": 20,
-      "patch": 2
+  "version": 2,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 2
+  },
+  "configurePresets": [
+    {
+      "name": "ninja",
+      "displayName": "Ninja",
+      "description": "Generate Ninja project files",
+      "binaryDir": "${sourceDir}/build",
+      "generator": "Ninja"
     },
-    "configurePresets": [
-      {
-        "name": "ninja-vcpkg",
-        "displayName": "Ninja",
-        "description": "Configure with vcpkg toolchain and generate Ninja project files",
-        "binaryDir": "${sourceDir}/build",
-        "generator": "Ninja",
-        "cacheVariables": {
-          "CMAKE_TOOLCHAIN_FILE": {
-            "type": "FILEPATH",
-            "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-          }
+    {
+      "name": "ninja-vcpkg",
+      "displayName": "Ninja",
+      "description": "Configure with vcpkg toolchain and generate Ninja project files",
+      "binaryDir": "${sourceDir}/build",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
         }
       }
-    ],
-    "buildPresets": [
-      {
-        "name": "ninja-vcpkg",
-        "configurePreset": "ninja-vcpkg",
-        "displayName": "Build ninja-vcpkg",
-        "description": "Build with Ninja the configuration specified with --config"
-      }
-    ],
-    "testPresets": [
-      {
-        "name": "ninja-vcpkg",
-        "configurePreset": "ninja-vcpkg",
-        "description": "Test with Ninja the provided configuration with --config"
-      }
-    ]
-  }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja",
+      "configurePreset": "ninja"
+    },
+    {
+      "name": "ninja-vcpkg",
+      "configurePreset": "ninja-vcpkg"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "ninja",
+      "configurePreset": "ninja"
+    },
+    {
+      "name": "ninja-vcpkg",
+      "configurePreset": "ninja-vcpkg"
+    }
+  ]
+}

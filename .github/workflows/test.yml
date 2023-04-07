@@ -15,15 +15,10 @@ jobs:
           libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
           libboost-test-dev libpugixml-dev libcrypto++-dev libfmt-dev
 
-      - name: Build with cmake
-        uses: ashutoshvarma/action-cmake-build@master
+      - name: Build with CMake
+        uses: lukka/run-cmake@v10
         with:
-          build-dir: ${{ runner.workspace }}/build
-          # will set the CC & CXX for cmake
-          cc: gcc
-          cxx: g++
-          # Extra options pass to cmake while configuring project
-          configure-options: -DENABLE_TESTING=ON -DUSE_LUAJIT=on
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
-          run-test: true
+          buildPreset: ninja
+          configurePreset: ninja
+          configurePresetAdditionalArgs: "['-DENABLE_TESTING=ON']"
+          testPreset: ninja
