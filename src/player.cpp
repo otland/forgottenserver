@@ -942,6 +942,10 @@ void Player::sendPing()
 			return;
 		}
 
+		if (isConnecting || getTile()->hasFlag(TILESTATE_NOLOGOUT) || pzLocked) {
+			return;
+		}
+
 		if (!g_creatureEvents->playerLogout(this)) {
 			return;
 		}
