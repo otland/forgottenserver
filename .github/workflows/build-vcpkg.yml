@@ -23,30 +23,22 @@ on:
 
 jobs:
   build-vcpkg:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        name: [ubuntu-gcc, ubuntu-clang, macos-clang, windows-msvc]
+        name: [ubuntu, ubuntu-clang, macos-clang, windows]
         buildtype: [Debug, Release]
         luajit: [on, off]
         include:
-          - name: ubuntu-gcc
+          - name: ubuntu
             os: ubuntu
-            cxx: g++
-            cc: gcc
           - name: ubuntu-clang
             os: ubuntu
-            cxx: clang++
-            cc: clang
           - name: macos-clang
             os: macos
-            cxx: clang++
-            cc: clang
           - name: windows-msvc
             os: windows
-            cxx: cl.exe
-            cc: cl.exe
         exclude:
           - name: ubuntu-clang
             buildtype: Release
@@ -54,17 +46,11 @@ jobs:
             luajit: off
           - name: macos-clang
             luajit: off
-          - name: windows-msvc
+          - name: windows
             luajit: off
-
-    env:
-      CXX: ${{ matrix.cxx }}
-      CC: ${{ matrix.cc }}
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -73,6 +59,12 @@ jobs:
       - name: Enable LuaJIT
         if: ${{ matrix.luajit }} == "on"
         run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
+
+      - name: Set clang as compiler
+        if: ${{ endsWith(matrix.name, 'clang') }}
+        run: |
+          echo "CC=clang" >> $GITHUB_ENV
+          echo "CXX=clang++" >> $GITHUB_ENV
 
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
@@ -106,7 +98,7 @@ jobs:
         shell: bash
 
       - name: Upload datapack contents
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}
