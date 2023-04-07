@@ -7,107 +7,107 @@ function Quest:register()
 
     self.id = #quests + 1
 
-	for _, mission in pairs(self.missions) do
-		mission.id = #missions + 1
-		mission.questId = self.id
-		missions[mission.id] = setmetatable(mission, Mission)
-	end
+    for _, mission in pairs(self.missions) do
+        mission.id = #missions + 1
+        mission.questId = self.id
+        missions[mission.id] = setmetatable(mission, Mission)
+    end
 
-	quests[self.id] = self
-	return true
+    quests[self.id] = self
+    return true
 end
 
 function Quest:isStarted(player)
-	return player:getStorageValue(self.storageId) >= self.storageValue
+    return player:getStorageValue(self.storageId) >= self.storageValue
 end
 
 function Quest:isCompleted(player)
-	for _, mission in pairs(self.missions) do
-		if not mission:isCompleted(player) then
-			return false
-		end
-	end
-	return true
+    for _, mission in pairs(self.missions) do
+        if not mission:isCompleted(player) then
+            return false
+        end
+    end
+    return true
 end
 
 function Quest:getMissions(player)
-	local missions = {}
-	for _, mission in pairs(self.missions) do
-		if mission:isStarted(player) then
-			missions[#missions + 1] = mission
-		end
-	end
-	return missions
+    local missions = {}
+    for _, mission in pairs(self.missions) do
+        if mission:isStarted(player) then
+            missions[#missions + 1] = mission
+        end
+    end
+    return missions
 end
 
 function Quest:isTracking(key, value)
-	if self.storageId == key and value == self.storageValue then
-		return true
-	end
+    if self.storageId == key and value == self.storageValue then
+        return true
+    end
 
-	for _, mission in pairs(self.missions) do
-		if mission.storageId == key and value >= mission.startValue and value <= mission.endValue then
-			return true
-		end
-	end
-	return false
+    for _, mission in pairs(self.missions) do
+        if mission.storageId == key and value >= mission.startValue and value <= mission.endValue then
+            return true
+        end
+    end
+    return false
 end
 
 Mission = {}
 Mission.__index = Mission
 
 function Mission:isStarted(player)
-	local value = player:getStorageValue(self.storageId)
-	if value < self.startValue then
-		return false
-	end
+    local value = player:getStorageValue(self.storageId)
+    if value < self.startValue then
+        return false
+    end
 
-	if not self.ignoreEndValue and value > self.endValue then
-		return false
-	end
+    if not self.ignoreEndValue and value > self.endValue then
+        return false
+    end
 
-	return true
+    return true
 end
 
 function Mission:isCompleted(player)
-	if self.ignoreEndValue then
-		return player:getStorageValue(self.storageId) >= self.endValue
-	end
-	return player:getStorageValue(self.storageId) == self.endValue
+    if self.ignoreEndValue then
+        return player:getStorageValue(self.storageId) >= self.endValue
+    end
+    return player:getStorageValue(self.storageId) == self.endValue
 end
 
 function Mission:getName(player)
-	if self:isCompleted(player) then
-		return string.format("%s (Completed)", self.name)
-	end
-	return self.name
+    if self:isCompleted(player) then
+        return string.format("%s (Completed)", self.name)
+    end
+    return self.name
 end
 
 function Mission:getDescription(player)
-	if type(self.description) == "function" then
-		return self.description(player)
-	end
+    if type(self.description) == "function" then
+        return self.description(player)
+    end
 
-	local value = player:getStorageValue(self.storageId)
-	if self.mainDescription then
-		local description = self.mainDescription:gsub("|STATE|", value)
-		description = self.mainDescription:gsub("\\n", "\n")
-		return description
-	end
+    local value = player:getStorageValue(self.storageId)
+    if self.mainDescription then
+        local description = self.mainDescription:gsub("|STATE|", value)
+        description = self.mainDescription:gsub("\\n", "\n")
+        return description
+    end
 
-	if self.ignoreEndValue then
-		for current = self.endValue, self.startValue, -1 do
-			if value >= current then
-				return self.descriptions[current]
-			end
-		end
-	else
-		for current = self.endValue, self.startValue, -1 do
-			if value == current then
-				return self.descriptions[current]
-			end
-		end
-	end
+    if self.ignoreEndValue then
+        for current = self.endValue, self.startValue, -1 do
+            if value >= current then
+                return self.descriptions[current]
+            end
+        end
+    else
+        for current = self.endValue, self.startValue, -1 do
+            if value == current then
+                return self.descriptions[current]
+            end
+        end
+    end
 
-	return "An error has occurred, please contact a gamemaster."
+    return "An error has occurred, please contact a gamemaster."
 end

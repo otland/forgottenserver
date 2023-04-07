@@ -10,9 +10,9 @@ local line = PacketHandler(0xF1)
 
 function line.onReceive(player, msg)
     local quest = Game.getQuestById(msg:getU16())
-	if quest then
-		player:sendQuestLine(quest)
-	end
+    if quest then
+        player:sendQuestLine(quest)
+    end
 end
 
 line:register()
