@@ -14,9 +14,7 @@ class Game;
 class NetworkMessage;
 class Player;
 class ProtocolGame;
-class Quest;
 class Tile;
-class TrackedQuest;
 
 enum SessionEndTypes_t : uint8_t
 {
@@ -121,9 +119,6 @@ private:
 	void parsePlayerPurchase(NetworkMessage& msg);
 	void parsePlayerSale(NetworkMessage& msg);
 
-	void parseQuestLine(NetworkMessage& msg);
-	void parseQuestTracker(NetworkMessage& msg);
-
 	void parseInviteToParty(NetworkMessage& msg);
 	void parseJoinParty(NetworkMessage& msg);
 	void parseRevokePartyInvite(NetworkMessage& msg);
@@ -183,11 +178,6 @@ private:
 	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
-
-	void sendQuestLog();
-	void sendQuestLine(const Quest* quest);
-	void sendQuestTracker();
-	void sendUpdateQuestTracker(const TrackedQuest& trackedQuest);
 
 	void sendCancelWalk();
 	void sendChangeSpeed(const Creature* creature, uint32_t speed);

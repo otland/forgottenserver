@@ -39,6 +39,7 @@
 	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onInventoryUpdate" enabled="1" />
 	<event class="Player" method="onNetworkMessage" enabled="1" />
+	<event class="Player" method="onUpdateStorage" enabled="1" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />
