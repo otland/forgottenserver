@@ -27,7 +27,6 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
-      max-parallel: 10
       matrix:
         name: [ubuntu-gcc, ubuntu-clang, macos-clang, windows-msvc]
         buildtype: [Debug, Release]
@@ -59,6 +58,10 @@ jobs:
           - name: windows-msvc
             luajit: off
 
+    env:
+      CXX: ${{ matrix.cxx }}
+      CC: ${{ matrix.cc }}
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -68,10 +71,9 @@ jobs:
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Enable LuaJIT
+        if: ${{ matrix.luajit }} == "on"
+        run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
 
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
@@ -80,6 +82,9 @@ jobs:
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
+        with:
+          buildPreset: ninja-vcpkg
+          configurePreset: ninja-vcpkg
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3
