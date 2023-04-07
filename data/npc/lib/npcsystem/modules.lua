@@ -229,9 +229,8 @@ if not Modules then
 		if parameters.module.npcHandler:isFocused(cid) then
 			parameters.module.npcHandler:onFarewell(cid)
 			return true
-		else
-			return false
 		end
+		return false
 	end
 
 	-- Custom message matching callback function for greeting messages.
@@ -371,7 +370,7 @@ if not Modules then
 			end
 
 			if name and x and y and z and cost then
-				self:addDestination(name, {x=x, y=y, z=z}, cost, premium)
+				self:addDestination(name, {x = x, y = y, z = z}, cost, premium)
 			else
 				print("[Warning : " .. Npc():getName() .. "] NpcSystem:", "Parameter(s) missing for travel destination:", name, x, y, z, cost, premium)
 			end
@@ -816,10 +815,10 @@ if not Modules then
 			if it:getId() ~= 0 then
 				local shopItem = self:getShopItem(itemid, itemSubType)
 				if not shopItem then
-					self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = -1, subType = itemSubType, name = realName or it:getName()}
+					self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = cost, sell = 0, subType = itemSubType, name = realName or it:getName()}
 				else
 					if cost < shopItem.sell then
-						print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (".. shopItem.name ..")")
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem: Buy price lower than sell price: (" .. shopItem.name .. ")")
 					end
 					shopItem.buy = cost
 				end
@@ -916,10 +915,10 @@ if not Modules then
 			if it:getId() ~= 0 then
 				local shopItem = self:getShopItem(itemid, itemSubType)
 				if not shopItem then
-					self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = -1, sell = cost, subType = itemSubType, name = realName or it:getName()}
+					self.npcHandler.shopItems[#self.npcHandler.shopItems + 1] = {id = itemid, buy = 0, sell = cost, subType = itemSubType, name = realName or it:getName()}
 				else
-					if shopItem.buy > -1 and cost > shopItem.buy then
-						print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (".. shopItem.name ..")")
+					if shopItem.buy > 0 and cost > shopItem.buy then
+						print("[Warning : " .. Npc():getName() .. "] NpcSystem: Sell price higher than buy price: (" .. shopItem.name .. ")")
 					end
 					shopItem.sell = cost
 				end
@@ -961,7 +960,7 @@ if not Modules then
 			return false
 		end
 
-		if shopItem.buy == -1 then
+		if shopItem.buy == 0 then
 			error("[ShopModule.onSell] attempt to buy a non-buyable item")
 			return false
 		end
@@ -1028,7 +1027,7 @@ if not Modules then
 			return false
 		end
 
-		if shopItem.sell == -1 then
+		if shopItem.sell == 0 then
 			error("[ShopModule.onSell] attempt to sell a non-sellable item")
 			return false
 		end
@@ -1052,13 +1051,13 @@ if not Modules then
 			player:addMoney(amount * shopItem.sell)
 			self.npcHandler.talkStart[cid] = os.time()
 			return true
-		else
-			local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
-			msg = self.npcHandler:parseMessage(msg, parseInfo)
-			player:sendCancelMessage(msg)
-			self.npcHandler.talkStart[cid] = os.time()
-			return false
 		end
+
+		local msg = self.npcHandler:getMessage(MESSAGE_NEEDITEM)
+		msg = self.npcHandler:parseMessage(msg, parseInfo)
+		player:sendCancelMessage(msg)
+		self.npcHandler.talkStart[cid] = os.time()
+		return false
 	end
 
 	-- Callback for requesting a trade window with the NPC.

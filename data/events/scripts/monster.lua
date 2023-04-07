@@ -3,15 +3,16 @@ function Monster:onDropLoot(corpse)
 	if player then
 		player:updateKillTracker(self, corpse)
 	end
-	if EventCallback.onDropLoot then
-		EventCallback.onDropLoot(self, corpse)
+	local onDropLoot = EventCallback.onDropLoot
+	if onDropLoot then
+		onDropLoot(self, corpse)
 	end
 end
 
 function Monster:onSpawn(position, startup, artificial)
-	if EventCallback.onSpawn then
-		return EventCallback.onSpawn(self, position, startup, artificial)
-	else
-		return true
+	local onSpawn = EventCallback.onSpawn
+	if onSpawn then
+		return onSpawn(self, position, startup, artificial)
 	end
+	return true
 end

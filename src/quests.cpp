@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -127,9 +127,8 @@ bool Quest::isStarted(Player* player) const
 
 const Mission* Quest::getMissionById(uint16_t missionId) const
 {
-	auto it = std::find_if(missions.cbegin(), missions.cend(), [missionId](const Mission& mission) {
-		return mission.id == missionId;
-	});
+	auto it = std::find_if(missions.cbegin(), missions.cend(),
+	                       [missionId](const Mission& mission) { return mission.id == missionId; });
 
 	return it != missions.cend() ? &*it : nullptr;
 }
@@ -141,7 +140,8 @@ bool Quest::isTracking(const uint32_t key, const int32_t value) const
 	}
 
 	for (const Mission& mission : missions) {
-		if (mission.getStorageId() == key && value >= mission.getStartStorageValue() && value <= mission.getEndStorageValue()) {
+		if (mission.getStorageId() == key && value >= mission.getStartStorageValue() &&
+		    value <= mission.getEndStorageValue()) {
 			return true;
 		}
 	}
@@ -165,26 +165,20 @@ bool Quests::loadFromXml()
 
 	uint16_t id = 0;
 	for (auto questNode : doc.child("quests").children()) {
-		quests.emplace_back(
-			questNode.attribute("name").as_string(),
-			++id,
-			pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
-			pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value())
-		);
+		quests.emplace_back(questNode.attribute("name").as_string(), ++id,
+		                    pugi::cast<int32_t>(questNode.attribute("startstorageid").value()),
+		                    pugi::cast<int32_t>(questNode.attribute("startstoragevalue").value()));
 		Quest& quest = quests.back();
 
 		uint16_t missionAutoId = 0;
 		for (auto missionNode : questNode.children()) {
 			std::string mainDescription = missionNode.attribute("description").as_string();
 
-			quest.missions.emplace_back(
-				missionNode.attribute("name").as_string(),
-				++missionAutoId,
-				pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
-				pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
-				pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
-				missionNode.attribute("ignoreendvalue").as_bool()
-			);
+			quest.missions.emplace_back(missionNode.attribute("name").as_string(), ++missionAutoId,
+			                            pugi::cast<int32_t>(missionNode.attribute("storageid").value()),
+			                            pugi::cast<int32_t>(missionNode.attribute("startvalue").value()),
+			                            pugi::cast<int32_t>(missionNode.attribute("endvalue").value()),
+			                            missionNode.attribute("ignoreendvalue").as_bool());
 			Mission& mission = quest.missions.back();
 
 			if (mainDescription.empty()) {
@@ -229,8 +223,10 @@ bool Quests::isQuestStorage(const uint32_t key, const int32_t value, const int32
 		}
 
 		for (const Mission& mission : quest.getMissions()) {
-			if (mission.getStorageId() == key && value >= mission.getStartStorageValue() && value <= mission.getEndStorageValue()) {
-				return mission.mainDescription.empty() || oldValue < mission.getStartStorageValue() || oldValue > mission.getEndStorageValue();
+			if (mission.getStorageId() == key && value >= mission.getStartStorageValue() &&
+			    value <= mission.getEndStorageValue()) {
+				return mission.mainDescription.empty() || oldValue < mission.getStartStorageValue() ||
+				       oldValue > mission.getEndStorageValue();
 			}
 		}
 	}

@@ -1,9 +1,11 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
-// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found
+// in the LICENSE file.
 
 #include "otpch.h"
 
 #include "configmanager.h"
+
 #include "game.h"
 #include "monster.h"
 #include "pugicast.h"
@@ -70,12 +72,9 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	return val != 0;
 }
 
-}
+} // namespace
 
-ConfigManager::ConfigManager()
-{
-	string[CONFIG_FILE] = "config.lua";
-}
+ConfigManager::ConfigManager() { string[CONFIG_FILE] = "config.lua"; }
 
 namespace {
 
@@ -145,7 +144,7 @@ ExperienceStages loadXMLStages()
 	return stages;
 }
 
-}
+} // namespace
 
 bool ConfigManager::load()
 {
@@ -162,8 +161,8 @@ bool ConfigManager::load()
 		return false;
 	}
 
-	//parse config
-	if (!loaded) { //info that must be loaded one time (unless we reset the modules involved)
+	// parse config
+	if (!loaded) { // info that must be loaded one time (unless we reset the modules involved)
 		boolean[BIND_ONLY_GLOBAL_ADDRESS] = getGlobalBoolean(L, "bindOnlyGlobalAddress", false);
 		boolean[OPTIMIZE_DATABASE] = getGlobalBoolean(L, "startupDatabaseOptimization", true);
 
@@ -230,7 +229,10 @@ bool ConfigManager::load()
 	boolean[ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS] = getGlobalBoolean(L, "onlyInvitedCanMoveHouseItems", true);
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
 	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
+	boolean[MANASHIELD_BREAKABLE] = getGlobalBoolean(L, "useBreakableManaShield", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
+	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
+	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -238,7 +240,6 @@ bool ConfigManager::load()
 	string[OWNER_EMAIL] = getGlobalString(L, "ownerEmail", "");
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
-	string[MOTD] = getGlobalString(L, "motd", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
@@ -277,12 +278,16 @@ bool ConfigManager::load()
 	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 15000);
 	integer[QUEST_TRACKER_FREE_LIMIT] = getGlobalNumber(L, "questTrackerFreeLimit", 10);
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
+	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
+	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
 		expStages = loadLuaStages(L);
 	} else {
-		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, consider moving to config.lua." << std::endl;
+		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, "
+		             "consider moving to config.lua."
+		          << std::endl;
 	}
 	expStages.shrink_to_fit();
 
@@ -290,15 +295,6 @@ bool ConfigManager::load()
 	lua_close(L);
 
 	return true;
-}
-
-bool ConfigManager::reload()
-{
-	bool result = load();
-	if (transformToSHA1(getString(ConfigManager::MOTD)) != g_game.getMotdHash()) {
-		g_game.incrementMotdNum();
-	}
-	return result;
 }
 
 static std::string dummyStr;
@@ -343,7 +339,7 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 	return std::get<2>(*it);
 }
 
-bool ConfigManager::setString(string_config_t what, const std::string& value)
+bool ConfigManager::setString(string_config_t what, std::string_view value)
 {
 	if (what >= LAST_STRING_CONFIG) {
 		std::cout << "[Warning - ConfigManager::setString] Accessing invalid index: " << what << std::endl;

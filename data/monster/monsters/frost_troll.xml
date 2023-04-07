@@ -35,13 +35,13 @@
 		<voice sentence="Broar!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="12" chance="50840" />
-		<item name="spear" chance="21500" />
-		<item id="2667" chance="18000" /><!-- fish -->
-		<item id="2512" chance="15850" /><!-- wooden shield -->
-		<item name="rapier" chance="15500" />
-		<item name="twigs" chance="8300" />
-		<item name="frosty ear of a troll" chance="2000" />
-		<item name="coat" chance="1200" />
+		<item id="2148" name="gold coin" chance="50404" countmax="12" />
+		<item id="2389" name="spear" chance="20343" />
+		<item id="2667" name="fish" chance="18162" />
+		<item id="2384" name="rapier" chance="15591" />
+		<item id="2512" name="wooden shield" chance="15508" />
+		<item id="2245" name="twigs" chance="8229" />
+		<item id="10565" name="frosty ear of a troll" chance="2011" />
+		<item id="2651" name="coat" chance="1126" />
 	</loot>
 </monster>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Urmahlullu The Weakened" nameDescription="Urmahlullu The Weakened" race="blood" experience="85000" speed="190">
+	<health now="130000" max="130000" />
+	<look type="1197" corpse="34069" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1100" />
+		<attack name="fire" interval="3000" chance="20" target="0" radius="4" min="-500" max="-800">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" target="0" radius="3" min="-550" max="-800">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="18" ring="3" target="0" min="-450" max="-600">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10" />
+	<elements>
+		<element energyPercent="40" />
+		<element firePercent="100" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="You will regret this!" />
+	</voices>
+	<loot>
+		<item id="26191" name="energy bar" chance="100000" />
+		<item id="2155" name="green gem" chance="100000" countmax="2" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="6" />
+		<item id="26029" name="ultimate mana potion" chance="100000" countmax="14" />
+		<item id="2160" name="crystal coin" chance="50000" countmax="4" />
+		<item id="7895" name="lightning legs" chance="50000" />
+		<item id="26031" name="supreme health potion" chance="50000" countmax="3" />
+		<item id="2154" name="yellow gem" chance="50000" countmax="2" />
+		<item id="7439" name="berserk potion" chance="25000" countmax="19" />
+		<item id="2158" name="blue gem" chance="25000" />
+		<item id="7838" name="flash arrow" chance="25000" countmax="94" />
+		<item id="7889" name="lightning pendant" chance="25000" />
+		<item id="2156" name="red gem" chance="25000" />
+		<item id="28415" name="royal star" chance="25000" countmax="48" />
+		<item id="26030" name="ultimate spirit potion" chance="25000" countmax="9" />
+		<item id="34279" name="urmahlullu's mane" chance="25000" />
+	</loot>
+</monster>

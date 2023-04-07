@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Goldhanded Cultist Bride" nameDescription="a goldhanded cultist bride" experience="2000" speed="300">
+	<health now="3000" max="3000" />
+	<look type="140" head="114" body="79" legs="62" feet="94" addons="2" corpse="3058" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="lifedrain" interval="3000" chance="15" radius="5" min="0" max="-150">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="manadrain" interval="3000" chance="10" target="1" min="0" max="-200">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="lifedrain" interval="1000" chance="15" target="1" radius="2" lenght="1" range="5" min="0" max="-250">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="30" speedchange="290" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="17" />
+		<element firePercent="10" />
+		<element icePercent="15" />
+		<element deathPercent="15" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="Your backpack looks very compelling!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="49129" countmax="250" />
+		<item id="28345" name="golden brush" chance="25174" />
+		<item id="27617" name="tiger eye" chance="17073" />
+		<item id="24850" name="opal" chance="9669" />
+		<item id="2154" name="yellow gem" chance="4878" />
+		<item id="1997" name="golden bag" chance="3310" />
+		<item id="2004" name="golden backpack" chance="3223" />
+		<item id="9971" name="gold ingot" chance="1481" />
+		<item id="2152" name="platinum coin" chance="1220" countmax="10" />
+	</loot>
+</monster>

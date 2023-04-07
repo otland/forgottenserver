@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Snowman" nameDescription="an animated snowman" race="energy" experience="400" speed="230">
+	<health now="450" max="450" />
+	<look type="1159" corpse="32991" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="-20" />
+		<element icePercent="20" />
+	</elements>
+	<attacks>
+		<attack name="ice" interval="2000" chance="15" min="0" max="-30" range="3" radius="1" target="1">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="iceattack" />
+		</attack>
+		<attack name="ice" interval="2000" chance="15" min="0" max="-120" radius="4" target="0">
+			<attribute key="areaEffect" value="icetornado" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25" />
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="50" />
+		<item id="32993" name="twig arms" chance="89418" />
+		<item id="7839" name="shiver arrow" chance="8289" countmax="5" />
+		<item id="2396" name="ice rapier" chance="5996" />
+		<item id="2111" name="snowball" chance="4233" countmax="5" />
+		<item id="7888" name="glacier amulet" chance="2822" />
+		<item id="2183" name="hailstorm rod" chance="2822" />
+		<item id="7902" name="glacier mask" chance="2646" />
+		<item id="2186" name="moonlight rod" chance="1940" />
+		<item id="7896" name="glacier kilt" chance="1235" />
+	</loot>
+</monster>

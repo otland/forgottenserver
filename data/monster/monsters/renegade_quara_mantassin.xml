@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Renegade Quara Mantassin" nameDescription="a renegade quara mantassin" race="blood" experience="1000" speed="590">
+	<health now="1200" max="1200" />
+	<look type="72" corpse="6064" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-140" />
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="invisible" interval="2000" chance="20" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-25" />
+		<element earthPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity fire="1" />
+		<immunity drown="1" />
+		<immunity ice="1" />
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="12445" name="mantassin tail" chance="13123" />
+		<item id="2178" name="mind stone" chance="9302" />
+		<item id="2670" name="shrimp" chance="4360" />
+		<item id="2146" name="small sapphire" chance="3322" countmax="3" />
+		<item id="2396" name="ice rapier" chance="2990" />
+		<item id="2165" name="stealth ring" chance="2658" />
+		<item id="2479" name="strange helmet" chance="1453" />
+		<item id="18413" name="blue crystal shard" chance="1329" />
+		<item id="2656" name="blue robe" chance="914" />
+		<item id="2167" name="energy ring" chance="914" />
+		<item id="5895" name="fish fin" chance="914" />
+		<item id="2377" name="two handed sword" chance="914" />
+	</loot>
+</monster>

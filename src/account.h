@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_ACCOUNT_H
@@ -6,7 +6,8 @@
 
 #include "enums.h"
 
-struct Account {
+struct Account
+{
 	std::vector<std::string> characters;
 	std::string name;
 	std::string key;

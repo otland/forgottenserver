@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -7,11 +7,12 @@
 
 #include "tools.h"
 
-DepotChest::DepotChest(uint16_t type) :
-	Container(type), maxDepotItems(2000) {}
+DepotChest::DepotChest(uint16_t type, bool paginated /*= true*/) :
+    Container{type, items[type].maxItems, true, paginated}
+{}
 
-ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count,
-		uint32_t flags, Creature* actor/* = nullptr*/) const
+ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
+                                 Creature* actor /* = nullptr*/) const
 {
 	const Item* item = thing.getItem();
 	if (!item) {

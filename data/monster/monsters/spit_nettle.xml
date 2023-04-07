@@ -28,7 +28,7 @@
 		</attack>
 	</attacks>
 	<defenses armor="12" defense="12">
-		<defense name="healing" interval="2000" chance="10" min="8" max="16">
+		<defense name="healing" interval="2000" chance="10" min="15" max="37">
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
@@ -43,12 +43,12 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="shadow herb" chance="11000" />
-		<item name="gold coin" countmax="5" chance="10800" />
-		<item name="nettle spit" chance="9500" />
-		<item name="sling herb" countmax="2" chance="5763" />
-		<item name="grave flower" chance="1010" />
-		<item name="nettle blossom" chance="980" />
-		<item name="seeds" chance="340" />
+		<item id="2804" name="shadow herb" chance="10954" />
+		<item id="2148" name="gold coin" chance="10703" countmax="5" />
+		<item id="12432" name="nettle spit" chance="9840" />
+		<item id="2802" name="sling herb" chance="5556" countmax="2" />
+		<item id="2747" name="grave flower" chance="989" />
+		<item id="11231" name="nettle blossom" chance="910" />
+		<item id="7732" name="seeds" chance="361" />
 	</loot>
 </monster>

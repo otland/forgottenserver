@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Rage Squid" nameDescription="a rage squid" race="ink" experience="14820" speed="430">
+	<health now="17000" max="17000" />
+	<look type="1059" head="94" body="78" legs="79" feet="57" addons="0" corpse="31438" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="fire" interval="2000" chance="15" min="-700" max="-100" radius="2" target="0">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-500" max="-700" radius="3" target="1">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" min="-500" max="-700" radius="3" target="0">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="10" length="5" spread="0" min="-175" max="-200">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="78" defense="78" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element firePercent="100" />
+		<element icePercent="-15" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="74842" countmax="29" />
+		<item id="8473" name="ultimate health potion" chance="29792" countmax="5" />
+		<item id="7590" name="great mana potion" chance="19273" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="18852" countmax="3" />
+		<item id="31226" name="glowing rune" chance="18569" countmax="3" />
+		<item id="2795" name="fire mushroom" chance="15069" countmax="6" />
+		<item id="31224" name="inkwell (black)" chance="11465" />
+		<item id="9970" name="small topaz" chance="7839" countmax="5" />
+		<item id="2149" name="small emerald" chance="7608" countmax="5" />
+		<item id="2147" name="small ruby" chance="7325" countmax="5" />
+		<item id="6500" name="demonic essence" chance="7177" />
+		<item id="2150" name="small amethyst" chance="7104" countmax="5" />
+		<item id="2432" name="fire axe" chance="5906" />
+		<item id="23565" name="slime heart" chance="2711" />
+		<item id="2151" name="talon" chance="2606" />
+		<item id="2393" name="giant sword" chance="2312" />
+		<item id="2156" name="red gem" chance="2207" />
+		<item id="2176" name="orb" chance="2154" />
+		<item id="2171" name="platinum amulet" chance="2028" />
+		<item id="2520" name="demon shield" chance="2018" />
+		<item id="2164" name="might ring" chance="1692" />
+		<item id="7382" name="demonrage sword" chance="1503" />
+		<item id="10580" name="piece of dead brain" chance="988" />
+		<item id="1982" name="purple tome" chance="893" />
+		<item id="2462" name="devil helmet" chance="799" />
+		<item id="2472" name="magic plate armor" chance="357" />
+		<item id="18409" name="wand of everblazing" chance="221" />
+		<item id="7393" name="demon trophy" chance="53" />
+	</loot>
+</monster>

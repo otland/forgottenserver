@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -25,15 +25,9 @@ ReturnValue TrashHolder::queryRemove(const Thing&, uint32_t, uint32_t, Creature*
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* TrashHolder::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
-{
-	return this;
-}
+Cylinder* TrashHolder::queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return this; }
 
-void TrashHolder::addThing(Thing* thing)
-{
-	return addThing(0, thing);
-}
+void TrashHolder::addThing(Thing* thing) { return addThing(0, thing); }
 
 void TrashHolder::addThing(int32_t, Thing* thing)
 {

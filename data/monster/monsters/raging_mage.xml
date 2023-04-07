@@ -51,25 +51,27 @@
 		<voice sentence="ENERGY!!" />
 	</voices>
 	<loot>
-		<item name="ring of the sky" chance="1830" />
-		<item name="small sapphire" countmax="5" chance="1830" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="69" chance="47000" />
-		<item name="platinum coin" countmax="8" chance="77400" />
-		<item name="stealth ring" chance="4880" />
-		<item name="mind stone" chance="9760" />
-		<item name="boots of haste" chance="610" />
-		<item name="dark mushroom" countmax="3" chance="3600" />
-		<item name="skull helmet" chance="610" />
-		<item name="red piece of cloth" chance="31100" />
-		<item name="assassin star" countmax="7" chance="1830" />
-		<item name="bullseye potion" chance="6710" />
-		<item name="great mana potion" countmax="5" chance="23170" />
-		<item name="great health potion" countmax="5" chance="26830" />
-		<item name="focus cape" chance="4880" />
-		<item name="spellbook of mind control" chance="610" />
-		<item name="royal tapestry" chance="1220" />
-		<item name="luminous orb" chance="4270" />
-		<item id="13940" chance="1220" /><!-- elemental spikes -->
+		<item id="2148" name="gold coin" chance="97633" countmax="250" />
+		<item id="2152" name="platinum coin" chance="78107" countmax="12" />
+		<item id="5911" name="red piece of cloth" chance="30769" />
+		<item id="7591" name="great health potion" chance="27219" countmax="5" />
+		<item id="7590" name="great mana potion" chance="23077" countmax="5" />
+		<item id="2178" name="mind stone" chance="10651" />
+		<item id="7443" name="bullseye potion" chance="6509" countmax="2" />
+		<item id="8871" name="focus cape" chance="4734" />
+		<item id="2165" name="stealth ring" chance="4734" />
+		<item id="12410" name="luminous orb" chance="4142" />
+		<item id="2792" name="dark mushroom" chance="3550" countmax="4" />
+		<item id="2124" name="crystal ring" chance="2367" />
+		<item id="2146" name="small sapphire" chance="2367" countmax="5" />
+		<item id="7368" name="assassin star" chance="2367" countmax="10" />
+		<item id="2123" name="ring of the sky" chance="1775" />
+		<item id="13940" name="elemental spikes" chance="1183" />
+		<item id="2114" name="piggy bank" chance="1183" />
+		<item id="9958" name="royal tapestry" chance="1183" />
+		<item id="2195" name="boots of haste" chance="592" />
+		<item id="9980" name="crystal of power" chance="592" />
+		<item id="5741" name="skull helmet" chance="592" />
+		<item id="8902" name="spellbook of mind control" chance="592" />
 	</loot>
 </monster>

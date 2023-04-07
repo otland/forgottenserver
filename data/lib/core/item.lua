@@ -60,14 +60,14 @@ do
 
 	function setAuxFunctions()
 		for name, def in pairs(aux) do
-			Item["get".. name] = function(self)
+			Item["get" .. name] = function(self)
 				local attr = self:getAttribute(def.key)
 				if def.cmp and def.cmp(attr) then
 					return attr
 				elseif not def.cmp and attr and attr ~= 0 then
 					return attr
 				end
-				local default = ItemType["get".. name]
+				local default = ItemType["get" .. name]
 				return default and default(self:getType()) or nil
 			end
 		end
@@ -86,7 +86,7 @@ do
 	})
 
 	function StringStream.append(self, str, ...)
-		self[#self+1] = string.format(str, ...)
+		self[#self + 1] = string.format(str, ...)
 	end
 
 	function StringStream.concat(self, sep)
@@ -99,7 +99,7 @@ do
 		local obj = item or it
 		local name = obj:getName()
 		if name ~= "" then
-			if it:isStackable() and subType >  1 then
+			if it:isStackable() and subType > 1 then
 				if it:hasShowCount() then
 					ss:append("%d ", subType)
 				end
@@ -243,12 +243,12 @@ do
 				descriptions[#descriptions + 1] = string.format("Range:%d", item:getShootRange())
 
 				if attack ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Atk:%+d", attack)
+					descriptions[#descriptions + 1] = string.format("Atk+%d", attack)
 				end
 
 				local hitPercent = item:getHitChance()
 				if hitPercent ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Hit%%:%+d", item:hitPercent())
+					descriptions[#descriptions + 1] = string.format("Hit%%+%d", hitPercent)
 				end
 
 			-- melee weapons and missiles

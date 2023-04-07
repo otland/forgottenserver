@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Priestess Of The Wild Sun" nameDescription="a priestess of the wild sun" race="blood" experience="6400" speed="320">
+	<health now="8500" max="8500" />
+	<look type="1199" head="95" body="78" legs="94" feet="3" corpse="34075" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+		<attack name="fire" interval="2000" chance="8" ring="2" target="0" min="-300" max="-500">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="14" radius="2" target="1" range="3" min="-350" max="-500">
+			<attribute key="shootEffect" value="fire" />
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="energy" interval="2000" chance="10" radius="3" min="-250" max="-400">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+		<attack name="energy" interval="2000" chance="12" length="4" spread="3" min="-250" max="-350">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="82" />
+	<elements>
+		<element energyPercent="85" />
+		<element firePercent="80" />
+		<element icePercent="-25" />
+	</elements>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="Fafnar will burn you!" />
+		<voice sentence="Fear the Wild Sun!" />
+		<voice sentence="There is only one true sun!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="34099" name="fafnar symbol" chance="8759" />
+		<item id="34089" name="secret instruction" chance="7183" />
+		<item id="33987" name="empty honey glass" chance="2927" />
+		<item id="2454" name="war axe" chance="2567" />
+		<item id="2188" name="wand of decay" chance="2499" />
+		<item id="2418" name="golden sickle" chance="1801" />
+		<item id="7383" name="relic sword" chance="1531" />
+		<item id="18409" name="wand of everblazing" chance="1283" />
+		<item id="33979" name="sea horse figurine" chance="653" />
+		<item id="33980" name="golden mask" chance="563" />
+	</loot>
+</monster>

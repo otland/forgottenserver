@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -14,10 +14,7 @@
 extern Game g_game;
 extern ConfigManager g_config;
 
-Raids::Raids()
-{
-	scriptInterface.initState();
-}
+Raids::Raids() { scriptInterface.initState(); }
 
 Raids::~Raids()
 {
@@ -55,12 +52,14 @@ bool Raids::loadFromXml()
 			file = attr.as_string();
 		} else {
 			file = fmt::format("raids/{:s}.xml", name);
-			std::cout << "[Warning - Raids::loadFromXml] File tag missing for raid " << name << ". Using default: " << file << std::endl;
+			std::cout << "[Warning - Raids::loadFromXml] File tag missing for raid " << name
+			          << ". Using default: " << file << std::endl;
 		}
 
 		interval = pugi::cast<uint32_t>(raidNode.attribute("interval2").value()) * 60;
 		if (interval == 0) {
-			std::cout << "[Error - Raids::loadFromXml] interval2 tag missing or zero (would divide by 0) for raid: " << name << std::endl;
+			std::cout << "[Error - Raids::loadFromXml] interval2 tag missing or zero (would divide by 0) for raid: "
+			          << name << std::endl;
 			continue;
 		}
 
@@ -101,7 +100,8 @@ bool Raids::startup()
 
 	setLastRaidEnd(OTSYS_TIME());
 
-	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
+	checkRaidsEvent =
+	    g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 
 	started = true;
 	return started;
@@ -115,7 +115,8 @@ void Raids::checkRaids()
 		for (auto it = raidList.begin(), end = raidList.end(); it != end; ++it) {
 			Raid* raid = *it;
 			if (now >= (getLastRaidEnd() + raid->getMargin())) {
-				if (((MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL) / raid->getInterval()) >= static_cast<uint32_t>(uniform_random(0, MAX_RAND_RANGE))) {
+				if (((MAX_RAND_RANGE * CHECK_RAIDS_INTERVAL) / raid->getInterval()) >=
+				    static_cast<uint32_t>(uniform_random(0, MAX_RAND_RANGE))) {
 					setRunning(raid);
 					raid->startRaid();
 
@@ -128,7 +129,8 @@ void Raids::checkRaids()
 		}
 	}
 
-	checkRaidsEvent = g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
+	checkRaidsEvent =
+	    g_scheduler.addEvent(createSchedulerTask(CHECK_RAIDS_INTERVAL * 1000, [this]() { checkRaids(); }));
 }
 
 void Raids::clear()
@@ -203,15 +205,15 @@ bool Raid::loadFromXml(const std::string& filename)
 		if (event->configureRaidEvent(eventNode)) {
 			raidEvents.push_back(event);
 		} else {
-			std::cout << "[Error - Raid::loadFromXml] In file (" << filename << "), eventNode: " << eventNode.name() << std::endl;
+			std::cout << "[Error - Raid::loadFromXml] In file (" << filename << "), eventNode: " << eventNode.name()
+			          << std::endl;
 			delete event;
 		}
 	}
 
-	//sort by delay time
-	std::sort(raidEvents.begin(), raidEvents.end(), [](const RaidEvent* lhs, const RaidEvent* rhs) {
-		return lhs->getDelay() < rhs->getDelay();
-	});
+	// sort by delay time
+	std::sort(raidEvents.begin(), raidEvents.end(),
+	          [](const RaidEvent* lhs, const RaidEvent* rhs) { return lhs->getDelay() < rhs->getDelay(); });
 
 	loaded = true;
 	return true;
@@ -222,7 +224,8 @@ void Raid::startRaid()
 	RaidEvent* raidEvent = getNextRaidEvent();
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
-		nextEventEvent = g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
+		nextEventEvent =
+		    g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
 	}
 }
 
@@ -233,8 +236,10 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 		RaidEvent* newRaidEvent = getNextRaidEvent();
 
 		if (newRaidEvent) {
-			uint32_t ticks = static_cast<uint32_t>(std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
-			nextEventEvent = g_scheduler.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
+			uint32_t ticks = static_cast<uint32_t>(
+			    std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
+			nextEventEvent =
+			    g_scheduler.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
 		} else {
 			resetRaid();
 		}
@@ -306,13 +311,16 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 		} else if (tmpStrValue == "smallstatus") {
 			messageType = MESSAGE_STATUS_SMALL;
 		} else if (tmpStrValue == "blueconsole" || tmpStrValue == "redconsole") {
-			std::cout << "[Notice] Raid: Deprecated type tag for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
+			std::cout << "[Notice] Raid: Deprecated type tag for announce event. Using default: "
+			          << static_cast<uint32_t>(messageType) << std::endl;
 		} else {
-			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
+			std::cout << "[Notice] Raid: Unknown type tag missing for announce event. Using default: "
+			          << static_cast<uint32_t>(messageType) << std::endl;
 		}
 	} else {
 		messageType = MESSAGE_EVENT_ADVANCE;
-		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: " << static_cast<uint32_t>(messageType) << std::endl;
+		std::cout << "[Notice] Raid: type tag missing for announce event. Using default: "
+		          << static_cast<uint32_t>(messageType) << std::endl;
 	}
 	return true;
 }
@@ -511,8 +519,10 @@ bool AreaSpawnEvent::executeEvent()
 
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
-				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
+				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y),
+				                                uniform_random(fromPos.z, toPos.z));
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) &&
+				    !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}
@@ -545,14 +555,9 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	return true;
 }
 
-std::string ScriptEvent::getScriptEventName() const
-{
-	return "onRaid";
-}
-
 bool ScriptEvent::executeEvent()
 {
-	//onRaid()
+	// onRaid()
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - ScriptEvent::onRaid] Call stack overflow" << std::endl;
 		return false;

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -35,7 +35,8 @@ void DatabaseTasks::threadMain()
 	}
 }
 
-void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback/* = nullptr*/, bool store/* = false*/)
+void DatabaseTasks::addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/,
+                            bool store /* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();
@@ -63,13 +64,13 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 	}
 
 	if (task.callback) {
-		g_dispatcher.addTask(createTask([=, callback = task.callback]() { callback(result, success); }));
+		g_dispatcher.addTask([=, callback = task.callback]() { callback(result, success); });
 	}
 }
 
 void DatabaseTasks::flush()
 {
-	std::unique_lock<std::mutex> guard{ taskLock };
+	std::unique_lock<std::mutex> guard{taskLock};
 	while (!tasks.empty()) {
 		auto task = std::move(tasks.front());
 		tasks.pop_front();

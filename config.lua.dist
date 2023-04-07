@@ -26,7 +26,6 @@ loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
 maxPlayers = 0
-motd = "Welcome to The Forgotten Server!"
 onePlayerOnlinePerAccount = true
 allowClones = false
 allowWalkthrough = true
@@ -81,6 +80,7 @@ mysqlSock = ""
 -- may cause high CPU usage with many players and potentially affect performance!
 -- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
 -- You can disable it to save some memory if you don't see any errors at startup.
+-- checkDuplicateStorageKeys checks the values stored in the variables for duplicates.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -97,6 +97,7 @@ premiumToSendPrivate = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 showPlayerLogInConsole = true
+checkDuplicateStorageKeys = false
 
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
@@ -144,18 +145,26 @@ rateLoot = 2
 rateMagic = 3
 rateSpawn = 1
 
+-- Breakable Mana Shield
+useBreakableManaShield = true
+
 -- Monster Despawn Config
 -- despawnRange is the amount of floors a monster can be from its spawn position
 -- despawnRadius is how many tiles away it can be from its spawn position
 -- removeOnDespawn will remove the monster if true or teleport it back to its spawn position if false
 -- walkToSpawnRadius is the allowed distance that the monster will stay away from spawn position when left with no targets, 0 to disable
+-- monsterOverspawn can be used instead of removeOnDespawn option, this will start respawn process of the monster when it goes out of deSpawn* boundaries.
+-- Setting both removeOnDespawn and monsterOverspawn to true prioritizes the latter.
 deSpawnRange = 2
 deSpawnRadius = 50
 removeOnDespawn = true
 walkToSpawnRadius = 15
+monsterOverspawn = false
 
 -- Stamina
 staminaSystem = true
+timeToRegenMinuteStamina = 3 * 60
+timeToRegenMinutePremiumStamina = 10 * 60
 
 -- Scripts
 warnUnsafeScripts = true

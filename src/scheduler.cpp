@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -62,7 +62,4 @@ void Scheduler::shutdown()
 	});
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f)
-{
-	return new SchedulerTask(delay, std::move(f));
-}
+SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f) { return new SchedulerTask(delay, std::move(f)); }

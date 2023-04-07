@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -12,10 +12,7 @@
 
 extern Game g_game;
 
-BedItem::BedItem(uint16_t id) : Item(id)
-{
-	internalRemoveSleeper();
-}
+BedItem::BedItem(uint16_t id) : Item(id) { internalRemoveSleeper(); }
 
 Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
@@ -149,7 +146,8 @@ bool BedItem::sleep(Player* player)
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);
 
 	// kick player after he sees himself walk onto the bed and it change id
-	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
+	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
+	                                         [playerID = player->getID()]() { g_game.kickPlayer(playerID, false); }));
 
 	// change self and partner's appearance
 	updateAppearance(player);

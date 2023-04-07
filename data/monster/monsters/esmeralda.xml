@@ -49,16 +49,16 @@
 		<voice sentence="Fcccccchhhhhh" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="100" chance="58775" />
-		<item name="gold coin" countmax="19" chance="58775" />
-		<item name="platinum coin" countmax="4" chance="68125" />
-		<item name="ring of healing" chance="100000" />
-		<item name="halberd" chance="30050" />
-		<item name="epee" chance="14150" />
-		<item name="knight armor" chance="45950" />
-		<item name="tower shield" chance="41400" />
-		<item name="stone herb" chance="9600" />
-		<item name="terra mantle" chance="2775" />
-		<item name="mutated rat tail" chance="100000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="170" />
+		<item id="10585" name="mutated rat tail" chance="100000" />
+		<item id="2214" name="ring of healing" chance="100000" />
+		<item id="2152" name="platinum coin" chance="94872" countmax="4" />
+		<item id="2147" name="small ruby" chance="71795" countmax="3" />
+		<item id="2476" name="knight armor" chance="52564" />
+		<item id="2528" name="tower shield" chance="43590" />
+		<item id="2381" name="halberd" chance="28205" />
+		<item id="2438" name="epee" chance="25641" />
+		<item id="7884" name="terra mantle" chance="10256" />
+		<item id="2799" name="stone herb" chance="5128" />
 	</loot>
 </monster>

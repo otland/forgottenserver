@@ -13,11 +13,12 @@ end
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
 	local amount = amount or 1
 	local subType = subType or 0
-	local item = 0
+
 	if ItemType(itemid):isStackable() then
+		local stuff
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			item = stuff:addItem(itemid, math.min(100, amount))
+			stuff:addItem(itemid, math.min(100, amount))
 		else
 			stuff = Game.createItem(itemid, math.min(100, amount))
 		end
@@ -104,7 +105,7 @@ function getCount(string)
 	local b, e = string:find("%d+")
 	local tonumber = tonumber(string:sub(b, e))
 	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+		print("Warning: Casting value to 32bit to prevent crash\n" .. debug.traceback())
 	end
 	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
 end
@@ -117,7 +118,7 @@ function getMoneyCount(string)
 	local b, e = string:find("%d+")
 	local tonumber = tonumber(string:sub(b, e))
 	if tonumber > 2 ^ 32 - 1 then
-		print("Warning: Casting value to 32bit to prevent crash\n"..debug.traceback())
+		print("Warning: Casting value to 32bit to prevent crash\n" .. debug.traceback())
 	end
 	local money = b and e and math.min(2 ^ 32 - 1, tonumber) or -1
 	if isValidMoney(money) then

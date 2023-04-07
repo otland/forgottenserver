@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -48,20 +48,20 @@ namespace {
 #ifndef _WIN32
 void sigusr1Handler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
 	g_game.saveGameState();
 }
 
 void sighupHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGHUP received, reloading config files..." << std::endl;
 
 	g_actions->reload();
 	std::cout << "Reloaded actions." << std::endl;
 
-	g_config.reload();
+	g_config.load();
 	std::cout << "Reloaded config." << std::endl;
 
 	g_creatureEvents->reload();
@@ -116,7 +116,7 @@ void sighupHandler()
 #else
 void sigbreakHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
@@ -124,14 +124,14 @@ void sigbreakHandler()
 
 void sigtermHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
 
 void sigintHandler()
 {
-	//Dispatcher thread
+	// Dispatcher thread
 	std::cout << "SIGINT received, shutting game server down..." << std::endl;
 	g_game.setGameState(GAME_STATE_SHUTDOWN);
 }
@@ -142,22 +142,22 @@ void sigintHandler()
 void dispatchSignalHandler(int signal)
 {
 	switch (signal) {
-		case SIGINT: //Shuts the server down
-			g_dispatcher.addTask(createTask(sigintHandler));
+		case SIGINT: // Shuts the server down
+			g_dispatcher.addTask(sigintHandler);
 			break;
-		case SIGTERM: //Shuts the server down
-			g_dispatcher.addTask(createTask(sigtermHandler));
+		case SIGTERM: // Shuts the server down
+			g_dispatcher.addTask(sigtermHandler);
 			break;
 #ifndef _WIN32
-		case SIGHUP: //Reload config/data
-			g_dispatcher.addTask(createTask(sighupHandler));
+		case SIGHUP: // Reload config/data
+			g_dispatcher.addTask(sighupHandler);
 			break;
-		case SIGUSR1: //Saves game state
-			g_dispatcher.addTask(createTask(sigusr1Handler));
+		case SIGUSR1: // Saves game state
+			g_dispatcher.addTask(sigusr1Handler);
 			break;
 #else
-		case SIGBREAK: //Shuts the server down
-			g_dispatcher.addTask(createTask(sigbreakHandler));
+		case SIGBREAK: // Shuts the server down
+			g_dispatcher.addTask(sigbreakHandler);
 			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();
@@ -169,9 +169,9 @@ void dispatchSignalHandler(int signal)
 	}
 }
 
-}
+} // namespace
 
-Signals::Signals(boost::asio::io_service& service): set(service)
+Signals::Signals(boost::asio::io_service& service) : set(service)
 {
 	set.add(SIGINT);
 	set.add(SIGTERM);
@@ -179,9 +179,8 @@ Signals::Signals(boost::asio::io_service& service): set(service)
 	set.add(SIGUSR1);
 	set.add(SIGHUP);
 #else
-	// This must be a blocking call as Windows calls it in a new thread and terminates
-	// the process when the handler returns (or after 5 seconds, whichever is earlier).
-	// On Windows it is called in a new thread.
+	// This must be a blocking call as Windows calls it in a new thread and terminates the process when the handler
+	// returns (or after 5 seconds, whichever is earlier). On Windows it is called in a new thread.
 	signal(SIGBREAK, dispatchSignalHandler);
 #endif
 
@@ -192,7 +191,7 @@ void Signals::asyncWait()
 {
 	set.async_wait([this](const boost::system::error_code& err, int signal) {
 		if (err) {
-			std::cerr << "Signal handling error: "  << err.message() << std::endl;
+			std::cerr << "Signal handling error: " << err.message() << std::endl;
 			return;
 		}
 		dispatchSignalHandler(signal);

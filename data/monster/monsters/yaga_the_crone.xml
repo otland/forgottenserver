@@ -53,14 +53,16 @@
 		<voice sentence="Hexipooh, bewitched are you!" />
 	</voices>
 	<loot>
-		<item name="wolf tooth chain" chance="10000" />
-		<item name="necrotic rod" chance="2500" />
-		<item name="garlic necklace" chance="8000" />
-		<item id="2324" chance="15000" /><!-- witchesbroom -->
-		<item name="coat" chance="25000" />
-		<item name="cape" chance="15000" />
-		<item name="cookie" countmax="8" chance="30000" />
-		<item name="star herb" chance="20000" />
-		<item name="spellbook of mind control" chance="2000" />
+		<item id="2654" name="cape" chance="68000" />
+		<item id="2324" name="broom" chance="64000" />
+		<item id="2687" name="cookie" chance="64000" countmax="8" />
+		<item id="2148" name="gold coin" chance="32000" countmax="74" />
+		<item id="2129" name="wolf tooth chain" chance="24000" />
+		<item id="2800" name="star herb" chance="20000" />
+		<item id="2651" name="coat" chance="8000" />
+		<item id="2199" name="garlic necklace" chance="8000" />
+		<item id="8902" name="spellbook of mind control" chance="8000" />
+		<item id="2185" name="necrotic rod" chance="4000" />
+		<item id="2402" name="silver dagger" chance="4000" />
 	</loot>
 </monster>

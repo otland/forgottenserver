@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Wereboar" nameDescription="a wereboar" race="blood" experience="2000" speed="300">
+	<health now="2200" max="2200" />
+	<look type="721" corpse="24722" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+		<flag runonhealth="300" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="speed" interval="4000" chance="20" radius="7" target="1" speedchange="-100">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="32" defense="32">
+		<defense name="healing" interval="2000" chance="25" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="20" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="15" />
+		<element earthPercent="50" />
+		<element firePercent="-5" />
+		<element icePercent="5" />
+		<element holyPercent="-5" />
+		<element deathPercent="50" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="GRUNT" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="2148" name="gold coin" chance="79553" countmax="75" />
+		<item id="24710" name="wereboar tusks" chance="15649" />
+		<item id="24709" name="wereboar hooves" chance="15408" />
+		<item id="2789" name="brown mushroom" chance="7360" countmax="2" />
+		<item id="7588" name="strong health potion" chance="5004" />
+		<item id="8473" name="ultimate health potion" chance="2064" />
+		<item id="24739" name="moonlight crystals" chance="1788" />
+		<item id="24743" name="wereboar loincloth" chance="1651" />
+		<item id="7760" name="small enchanted ruby" chance="1307" countmax="2" />
+		<item id="2197" name="stone skin amulet" chance="1169" />
+		<item id="7439" name="berserk potion" chance="980" />
+		<item id="7432" name="furry club" chance="722" />
+		<item id="24716" name="werewolf amulet" chance="688" />
+		<item id="24741" name="fur armor" chance="447" />
+		<item id="24758" name="wereboar trophy" chance="155" />
+		<item id="7419" name="dreaded cleaver" chance="69" />
+	</loot>
+</monster>

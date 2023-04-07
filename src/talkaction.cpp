@@ -1,21 +1,15 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
-#include "player.h"
 #include "talkaction.h"
 
-TalkActions::TalkActions()
-	: scriptInterface("TalkAction Interface")
-{
-	scriptInterface.initState();
-}
+#include "player.h"
 
-TalkActions::~TalkActions()
-{
-	clear(false);
-}
+TalkActions::TalkActions() : scriptInterface("TalkAction Interface") { scriptInterface.initState(); }
+
+TalkActions::~TalkActions() { clear(false); }
 
 void TalkActions::clear(bool fromLua)
 {
@@ -30,15 +24,7 @@ void TalkActions::clear(bool fromLua)
 	reInitState(fromLua);
 }
 
-LuaScriptInterface& TalkActions::getScriptInterface()
-{
-	return scriptInterface;
-}
-
-std::string TalkActions::getScriptBaseName() const
-{
-	return "talkactions";
-}
+LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; }
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
@@ -66,7 +52,7 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 
 bool TalkActions::registerLuaEvent(TalkAction* event)
 {
-	TalkAction_ptr talkAction{ event };
+	TalkAction_ptr talkAction{event};
 	std::vector<std::string> words = talkAction->getWordsMap();
 
 	for (size_t i = 0; i < words.size(); i++) {
@@ -124,9 +110,8 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 
 		if (it->second.executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
-		} else {
-			return TALKACTION_BREAK;
 		}
+		return TALKACTION_BREAK;
 	}
 	return TALKACTION_CONTINUE;
 }
@@ -150,14 +135,9 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string TalkAction::getScriptEventName() const
-{
-	return "onSay";
-}
-
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const
 {
-	//onSay(player, words, param, type)
+	// onSay(player, words, param, type)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - TalkAction::executeSay] Call stack overflow" << std::endl;
 		return false;

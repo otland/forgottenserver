@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -9,8 +9,7 @@
 
 Inbox::Inbox(uint16_t type) : Container(type, 30, false, true) {}
 
-ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t,
-		uint32_t flags, Creature*) const
+ReturnValue Inbox::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		return RETURNVALUE_CONTAINERNOTENOUGHROOM;

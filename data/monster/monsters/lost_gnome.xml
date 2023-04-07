@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lost Gnome" nameDescription="a lost gnome" race="blood" experience="0" speed="200">
+	<health now="10000" max="10000" />
+	<look type="493" head="10" body="32" legs="15" feet="7" corpse="33011" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="1" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element deathPercent="100" />
+	</elements>
+	<defenses armor="30" defense="30" />
+	<voices interval="1000" chance="5">
+		<voice sentence="Are we there yet?" />
+		<voice sentence="Think I saw a nice gem back there, I need to..." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="62500" countmax="10" />
+		<item id="2050" name="torch" chance="12500" />
+	</loot>
+</monster>

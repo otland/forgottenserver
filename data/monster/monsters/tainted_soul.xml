@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monster name="Tainted Soul" nameDescription="a tainted soul" race="undead" experience="0" speed="170">
+	<health now="250" max="250" />
+	<look type="712" corpse="24633" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" />
+		<attack name="lifedrain" interval="3000" chance="7" range="1" min="-22" max="-48" />
+		<attack name="manadrain" interval="2000" chance="20" radius="6" min="-15" max="-25">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="10" defense="10">
+		<defense name="healing" interval="1000" chance="1" min="20" max="30">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="Tainted Soul" interval="2000" chance="40" />
+	</summons>
+	<elements>
+		<element physicalPercent="50" />
+		<element energyPercent="20" />
+		<element holyPercent="-10" />
+		<element deathPercent="100" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="*Crinkle*" />
+		<voice sentence="*Sizzle*" />
+	</voices>
+	<loot>
+		<item id="2147" name="small ruby" chance="1256" />
+	</loot>
+</monster>
