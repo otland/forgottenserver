@@ -4371,7 +4371,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		uint8_t currentMountId = getCurrentMount();
+		uint16_t currentMountId = getCurrentMount();
 		if (currentMountId == 0) {
 			sendOutfitWindow();
 			return false;
