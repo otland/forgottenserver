@@ -337,9 +337,9 @@ local function AbilityTableToSpell(ability)
 			if outfit then
 				spell:setOutfit(outfit)
 			end
-      if ability.drunkenness then
-        spell:setConditionDrunkenness(ability.drunkenness)
-      end
+			if ability.drunkenness then
+				spell:setConditionDrunkenness(ability.drunkenness)
+			end
 		end
 		if ability.condition then
 			if ability.condition.type then
