@@ -23,21 +23,24 @@ function Party:onDisband()
 end
 
 function Party:onInvite(player)
-	if EventCallback.onInvite then
+	local onInvite = EventCallback.onInvite
+	if onInvite then
 		return EventCallback.onInvite(self, player)
 	end
 	return true
 end
 
 function Party:onRevokeInvitation(player)
-	if EventCallback.onRevokeInvitation then
+	local onRevokeInvitation = EventCallback.onRevokeInvitation
+	if onRevokeInvitation then
 		return EventCallback.onRevokeInvitation(self, player)
 	end
 	return true
 end
 
 function Party:onPassLeadership(player)
-	if EventCallback.onPassLeadership then
+	local onPassLeadership = EventCallback.onPassLeadership
+	if onPassLeadership then
 		return EventCallback.onPassLeadership(self, player)
 	end
 	return true
