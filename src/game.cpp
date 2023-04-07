@@ -5078,6 +5078,14 @@ void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 		return;
 	}
 
+	if (!g_events->eventPartyOnInvite(party, invitedPlayer)) {
+		if (party->empty()) {
+			player->setParty(nullptr);
+			delete party;
+		}
+		return;
+	}
+
 	party->invitePlayer(*invitedPlayer);
 }
 
