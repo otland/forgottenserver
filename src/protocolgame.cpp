@@ -2041,8 +2041,8 @@ void ProtocolGame::sendShop(Npc* npc, const ShopInfoList& itemList)
 	msg.addByte(0x7A);
 	msg.addString(npc->getName());
 
-	// currency displayed in trade window if item other than gold coin is sent, the shop
-	// window takes information about currency amount from player items packet (the one that updates action bars)
+	// currency displayed in trade window if item other than gold coin is sent, the shop window takes information about
+	// currency amount from player items packet (the one that updates action bars)
 	msg.add<uint16_t>(npc->getCurrencyTrading());
 	msg.addString(""); // doesn't show anywhere, could be used in otclient for currency name
 
