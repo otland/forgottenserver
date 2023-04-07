@@ -25,7 +25,7 @@ end
 function Party:onInvite(player)
 	local onInvite = EventCallback.onInvite
 	if onInvite then
-		return EventCallback.onInvite(self, player)
+		return onInvite(self, player)
 	end
 	return true
 end
@@ -33,7 +33,7 @@ end
 function Party:onRevokeInvitation(player)
 	local onRevokeInvitation = EventCallback.onRevokeInvitation
 	if onRevokeInvitation then
-		return EventCallback.onRevokeInvitation(self, player)
+		return onRevokeInvitation(self, player)
 	end
 	return true
 end
@@ -41,7 +41,7 @@ end
 function Party:onPassLeadership(player)
 	local onPassLeadership = EventCallback.onPassLeadership
 	if onPassLeadership then
-		return EventCallback.onPassLeadership(self, player)
+		return onPassLeadership(self, player)
 	end
 	return true
 end
