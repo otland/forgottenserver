@@ -1376,9 +1376,9 @@ void AreaCombat::setupExtArea(const std::vector<uint32_t>& vec, uint32_t rows)
 	hasExtArea = true;
 	auto area = createArea(vec, rows);
 	areas.resize(8);
-	areas[DIRECTION_NORTHEAST] = area.mirror();
-	areas[DIRECTION_SOUTHWEST] = area.flip();
-	areas[DIRECTION_SOUTHEAST] = area.transpose();
+	areas[DIRECTION_NORTHEAST] = area.rotate90();
+	areas[DIRECTION_SOUTHEAST] = area.rotate180();
+	areas[DIRECTION_SOUTHWEST] = area.rotate270();
 	areas[DIRECTION_NORTHWEST] = std::move(area);
 }
 

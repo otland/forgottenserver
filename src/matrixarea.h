@@ -19,9 +19,6 @@ public:
 	uint32_t getRows() const { return rows; }
 	uint32_t getCols() const { return cols; }
 
-	[[nodiscard]] MatrixArea flip() const;
-	[[nodiscard]] MatrixArea mirror() const;
-	[[nodiscard]] MatrixArea transpose() const;
 	[[nodiscard]] MatrixArea rotate90() const;
 	[[nodiscard]] MatrixArea rotate180() const;
 	[[nodiscard]] MatrixArea rotate270() const;
