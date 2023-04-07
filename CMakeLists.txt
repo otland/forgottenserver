@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 
+# Ensure to pick up the default triplet from the environment if any. This helps
+# driving the vcpkg triplet in the same way either when starting vcpkg directly,
+# or when letting CMake start vcpkg at configure/generate time.
+# Note: this logic must happen before PROJECT command.
+if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
+  set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
+endif()
+
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -18,25 +26,33 @@ if (CMAKE_COMPILER_IS_GNUCXX)
 endif ()
 
 # Find packages.
-find_package(CryptoPP QUIET)
+find_package(cryptopp CONFIG)
 if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
-    set(Crypto++_LIBRARIES "cryptopp-static")
+    set(Crypto++_LIBRARIES "cryptopp::cryptopp")
 else()
     find_package(Crypto++ REQUIRED)
 endif ()
-find_package(fmt 6.1.2 REQUIRED)
+
+find_package(fmt CONFIG)
+if (NOT fmt_FOUND)
+    find_package(fmt 6.1.2 REQUIRED)
+endif()
 
 # Look for vcpkg-provided libmariadb first
 # If we link to the file directly, we might miss its dependencies from vcpkg
-find_package(unofficial-libmariadb CONFIG QUIET)
+find_package(unofficial-libmariadb CONFIG)
 if (unofficial-libmariadb_FOUND)
-    set(MYSQL_CLIENT_LIBS "libmariadb")
+    set(MYSQL_CLIENT_LIBS "unofficial::libmariadb")
 else ()
     find_package(MySQL REQUIRED)
 endif ()
 
 find_package(Threads REQUIRED)
-find_package(PugiXML REQUIRED)
+
+find_package(pugixml CONFIG)
+if (NOT pugixml_FOUND)
+    find_package(PugiXML REQUIRED)
+endif()
 
 # Selects LuaJIT if user defines or auto-detected
 if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)
