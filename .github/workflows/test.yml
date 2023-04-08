@@ -21,8 +21,8 @@ jobs:
         run: >
           sudo apt update -q &&
           sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-          libboost-test-dev libpugixml-dev libcrypto++-dev libfmt-dev
+          libboost-system-dev libboost-iostreams-dev libboost-test-dev
+          libpugixml-dev libcrypto++-dev libfmt-dev
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
