@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -48,7 +48,7 @@ else ()
 endif ()
 
 find_package(Threads REQUIRED)
-find_package(PugiXML CONFIG)
+find_package(PugiXML CONFIG REQUIRED)
 
 # Selects LuaJIT if user defines or auto-detected
 if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)
@@ -108,13 +108,4 @@ if(NOT SKIP_GIT)
 endif()
 ### END  Git Version ###
 
-# Precompiled header
-# note: cotire() must be called last on a target
-if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-    target_precompile_headers(tfs PUBLIC src/otpch.h)
-else ()
-    include(cotire)
-    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
-    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-    cotire(tfs)
-endif ()
+target_precompile_headers(tfs PUBLIC src/otpch.h)
