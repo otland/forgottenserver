@@ -48,13 +48,7 @@ else ()
 endif ()
 
 find_package(Threads REQUIRED)
-
-find_package(pugixml CONFIG)
-if (pugixml_FOUND)
-    set(PUGIXML_LIBRARIES "pugixml::static")
-else ()
-    find_package(PugiXML REQUIRED)
-endif ()
+find_package(PugiXML CONFIG)
 
 # Selects LuaJIT if user defines or auto-detected
 if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)

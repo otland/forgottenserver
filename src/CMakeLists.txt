@@ -177,11 +177,11 @@ target_link_libraries(tfslib PRIVATE
 	Boost::system
 	Boost::iostreams
 	fmt::fmt
+	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
 	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
-	${PUGIXML_LIBRARIES}
 	)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
