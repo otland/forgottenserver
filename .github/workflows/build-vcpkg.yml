@@ -27,7 +27,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        name: [ubuntu, ubuntu-clang, macos-clang, windows]
+        name: [ubuntu, ubuntu-clang, macos-clang, windows-msvc]
         buildtype: [Debug, Release]
         luajit: [on, off]
         include:
@@ -46,7 +46,7 @@ jobs:
             luajit: off
           - name: macos-clang
             luajit: off
-          - name: windows
+          - name: windows-msvc
             luajit: off
 
     steps:
