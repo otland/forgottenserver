@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Tzumrah The Dazzler" nameDescription="Tzumrah The Dazzler" race="blood" experience="1700" speed="200">
+	<health now="1700" max="1700" />
+	<look type="193" corpse="20391" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" poison="4" />
+		<attack name="lifedrain" interval="2000" chance="25" range="1" radius="1" target="1" min="-70" max="-185">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="5000">
+			<attribute key="shootEffect" value="holy" />
+			<attribute key="areaEffect" value="holydamage" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" range="7" target="1" speedchange="-360" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="25" defense="25">
+		<defense name="healing" interval="2000" chance="25" min="60" max="90">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="15" duration="4000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="-5" />
+		<element firePercent="20" />
+	</elements>
+	<voices interval="5000" chance="10">
+		<voice sentence="Your beating heart will burst into flames!" />
+		<voice sentence="Your reeking carcass will feed the sharks!" />
+		<voice sentence="Your living soul will serve my master!" />
+		<voice sentence="Your warm blood will quench my thirst!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="122" />
+		<item id="12411" name="cultish symbol" chance="33333" />
+	</loot>
+</monster>

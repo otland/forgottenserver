@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Shatterer" nameDescription="The Shatterer" race="fire" experience="58000" speed="320">
+	<health now="80000" max="80000" />
+	<look type="842" head="77" body="113" legs="21" feet="94" addons="0" corpse="6068" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-3000" />
+		<attack name="manadrain" interval="2000" chance="10" range="7" min="-200" max="-1000" />
+		<attack name="physical" interval="3000" chance="44" range="7" min="-400" max="-2000">
+			<attribute key="shootEffect" value="whirlwindsword" />
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="7" speedchange="-400" duration="15000">
+			<attribute key="shootEffect" value="throwingknife" />
+		</attack>
+		<attack name="ice" interval="2000" chance="20" range="7" radius="7" target="0" min="0" max="-800">
+			<attribute key="areaEffect" value="bigplants" />
+		</attack>
+	</attacks>
+	<defenses armor="55" defense="65">
+		<defense name="healing" interval="3000" chance="35" min="400" max="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="4000" chance="80" speedchange="440" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="STOMP! SHAKE! SHATTER!!" />
+		<voice sentence="FIRE! BURN! BREAK!" />
+		<voice sentence="YOU WILL TREMBLE! YOU WILL BREAK! YOU WILL SHATTER INTO PIECES!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="109" />
+		<item id="7590" name="great mana potion" chance="100000" countmax="11" />
+		<item id="8472" name="great spirit potion" chance="100000" countmax="8" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="17" />
+		<item id="2145" name="small diamond" chance="100000" countmax="6" />
+		<item id="2147" name="small ruby" chance="100000" countmax="13" />
+		<item id="8473" name="ultimate health potion" chance="100000" countmax="10" />
+		<item id="2444" name="hammer of wrath" chance="50000" />
+	</loot>
+</monster>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Burrowing Beetle" nameDescription="a burrowing beetle" race="venom" experience="165" speed="170">
+	<health now="450" max="450" />
+	<look type="83" corpse="6024" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-95" />
+		<attack name="earth" interval="2000" chance="10" range="1" min="0" max="-45">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="poisonfield" interval="2000" chance="10" radius="1" target="0" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="15" speedchange="200" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity drunk="1" />
+	</immunities>
+</monster>

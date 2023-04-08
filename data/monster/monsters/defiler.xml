@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Defiler" nameDescription="a defiler" race="venom" experience="3700" speed="230">
+<monster name="Defiler" nameDescription="a defiler" race="venom" experience="3700" speed="160">
 	<health now="3650" max="3650" />
 	<look type="238" corpse="6532" />
 	<targetchange interval="4000" chance="10" />
@@ -56,22 +56,20 @@
 		<voice sentence="Blubb Blubb" />
 	</voices>
 	<loot>
-		<item name="small diamond" countmax="2" chance="2439" />
-		<item name="small ruby" countmax="2" chance="3000" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="100" chance="100000" />
-		<item name="gold coin" countmax="72" chance="100000" />
-		<item name="small emerald" countmax="3" chance="5366" />
-		<item name="talon" chance="5710" />
-		<item name="platinum coin" countmax="6" chance="95000" />
-		<item name="yellow gem" chance="1219" />
-		<item name="green gem" chance="613" />
-		<item name="red gem" chance="1538" />
-		<item name="blue gem" chance="300" />
-		<item name="soul orb" chance="20000" />
-		<item id="6300" chance="3030" /><!-- death ring-->
-		<item name="demonic essence" chance="20320" />
-		<item name="glob of acid slime" chance="14210" />
-		<item name="glob of tar" chance="12000" />
+		<item id="2148" name="gold coin" chance="100000" countmax="272" />
+		<item id="2152" name="platinum coin" chance="96687" countmax="6" />
+		<item id="5944" name="soul orb" chance="19478" />
+		<item id="6500" name="demonic essence" chance="19157" />
+		<item id="9967" name="glob of acid slime" chance="11586" />
+		<item id="9968" name="glob of tar" chance="11245" />
+		<item id="2149" name="small emerald" chance="5723" countmax="3" />
+		<item id="2151" name="talon" chance="4357" />
+		<item id="2147" name="small ruby" chance="3695" countmax="2" />
+		<item id="6300" name="death ring" chance="2831" />
+		<item id="2145" name="small diamond" chance="2490" countmax="2" />
+		<item id="2154" name="yellow gem" chance="1787" />
+		<item id="2156" name="red gem" chance="1165" />
+		<item id="2158" name="blue gem" chance="843" />
+		<item id="2155" name="green gem" chance="723" />
 	</loot>
 </monster>

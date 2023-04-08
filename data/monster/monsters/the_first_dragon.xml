@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The First Dragon" nameDescription="The First Dragon" race="blood" experience="9000" speed="350">
+	<health now="50000" max="50000" />
+	<look type="947" head="94" body="80" legs="120" feet="60" addons="3" corpse="27787" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="1" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1200" />
+		<attack name="fire" interval="2000" chance="20" radius="5" target="1" range="5" min="-410" max="-695">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="7" speedchange="-600" duration="10000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" length="9" spread="3" min="-1010" max="-1995">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" radius="7" min="-410" max="-595">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="20" radius="6" min="-150" max="-280">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="52" defense="64">
+		<defense name="healing" interval="2000" chance="15" min="1500" max="4500">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+</monster>

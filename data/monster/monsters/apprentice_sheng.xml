@@ -4,21 +4,19 @@
 	<look type="23" corpse="5981" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
-		<flag summonable="0" />
-		<flag attackable="1" />
-		<flag hostile="1" />
-		<flag illusionable="1" />
-		<flag convinceable="0" />
+		<flag isboss="1" />
 		<flag pushable="0" />
 		<flag canpushitems="1" />
-		<flag canpushcreatures="0" />
-		<flag targetdistance="4" />
+		<flag canpushcreatures="1" />
 		<flag staticattack="90" />
-		<flag runonhealth="0" />
-		<flag isboss="1" />
+		<flag targetdistance="4" />
+		<flag runonhealth="20" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
 	</flags>
 	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-13" />
+		<attack name="melee" interval="2000" min="0" max="-10" />
 		<attack name="energy" interval="1000" chance="14" range="7" min="-15" max="-25">
 			<attribute key="shootEffect" value="energyball" />
 			<attribute key="areaEffect" value="energyarea" />
@@ -30,33 +28,31 @@
 		<attack name="energyfield" interval="1000" chance="8" range="7" radius="1" target="1">
 			<attribute key="shootEffect" value="energy" />
 		</attack>
-		<attack name="effect" interval="10500" chance="100" radius="3" target="0">
+		<attack name="effect" interval="1050" chance="100" radius="3" target="0">
 			<attribute key="areaEffect" value="redshimmer" />
 		</attack>
 	</attacks>
-	<defenses armor="12" defense="13" />
+	<defenses armor="18" defense="18" />
 	<immunities>
 		<immunity energy="1" />
 	</immunities>
 	<summons maxSummons="2">
-		<summon name="Hyena" interval="10500" chance="100" />
+		<summon name="Hyaena" interval="1050" chance="100" />
 	</summons>
-	<voices interval="5000" chance="10">
+	<voices interval="1000" chance="5">
 		<voice sentence="I will protect the secrets of my master!" />
-		<voice sentence="This isle will become ours alone!" />
 		<voice sentence="Kaplar!" />
+		<voice sentence="This isle will become ours alone" />
+		<voice sentence="You already know too much." />
 	</voices>
 	<loot>
-		<item id="2050" chance="10000" /><!-- torch -->
-		<item name="gold coin" countmax="20" chance="100000" />
-		<item name="heavy magic missile rune" chance="2857" />
-		<item name="the carrot of doom" countmax="5" chance="20000" />
-		<item name="combat knife" chance="10000" />
-		<item name="leather helmet" chance="8000" />
-		<item name="leather legs" chance="8000" />
-		<item id="2817" chance="10000" /><!-- dead snake -->
-		<item name="worm" countmax="10" chance="50000" />
-		<item name="minotaur leather" chance="100000" />
-		<item name="taurus mace" chance="1000" />
+		<item id="5878" name="minotaur leather" chance="100000" />
+		<item id="2162" name="magic light wand" chance="82222" />
+		<item id="2148" name="gold coin" chance="71111" countmax="10" />
+		<item id="2050" name="torch" chance="24444" countmax="2" />
+		<item id="2649" name="leather legs" chance="13333" />
+		<item id="2403" name="knife" chance="11111" />
+		<item id="2684" name="carrot" chance="6667" countmax="7" />
+		<item id="2461" name="leather helmet" chance="6667" />
 	</loot>
 </monster>

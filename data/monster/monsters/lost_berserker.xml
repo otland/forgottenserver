@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lost Berserker" nameDescription="a lost berserker" race="blood" experience="4400" speed="250">
+<monster name="Lost Berserker" nameDescription="a lost berserker" race="blood" experience="4400" speed="300">
 	<health now="5900" max="5900" />
 	<look type="496" corpse="17416" />
 	<targetchange interval="4000" chance="15" />
@@ -37,18 +37,20 @@
 			<attribute key="areaEffect" value="stun" />
 		</attack>
 	</attacks>
-	<defenses armor="40" defense="40">
+	<defenses armor="80" defense="80">
 		<defense name="invisible" interval="2000" chance="5" duration="3000">
 			<attribute key="areaEffect" value="teleport" />
 		</defense>
 	</defenses>
 	<elements>
+		<element physicalPercent="20" />
+		<element energyPercent="17" />
 		<element firePercent="10" />
-		<element physicalPercent="40" />
-		<element deathPercent="10" />
 		<element icePercent="40" />
+		<element deathPercent="15" />
 	</elements>
 	<immunities>
+		<immunity earth="1" />
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
 	</immunities>
@@ -57,32 +59,31 @@
 		<voice sentence="Death! Death! Death!" />
 	</voices>
 	<loot>
-		<item name="piggy bank" chance="3920" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="platinum coin" countmax="9" chance="100000" />
-		<item name="dwarven ring" chance="2280" />
-		<item name="knight axe" chance="2070" />
-		<item name="fire axe" chance="380" />
-		<item name="royal helmet" chance="150" />
-		<item name="guardian shield" chance="1400" />
-		<item name="tower shield" chance="1002" />
-		<item name="black shield" chance="640" />
-		<item name="brown mushroom" countmax="2" chance="15190" />
-		<item name="iron ore" chance="8490" />
-		<item name="magic sulphur" chance="720" />
-		<item name="chaos mace" chance="550" />
-		<item name="spiked squelcher" chance="810" />
-		<item name="great mana potion" chance="13650" />
-		<item name="great health potion" chance="13650" />
-		<item name="terra boots" chance="640" />
-		<item name="small topaz" countmax="2" chance="7970" />
-		<item name="clay lump" chance="930" />
-		<item id="13757" chance="2050" /><!-- coal -->
-		<item name="violet crystal shard" chance="3500" />
-		<item name="brown crystal splinter" countmax="2" chance="7540" />
-		<item name="blue crystal splinter" chance="4610" />
-		<item name="green crystal fragment" chance="6870" />
-		<item name="drill bolt" countmax="10" chance="8210" />
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="2152" name="platinum coin" chance="99965" countmax="9" />
+		<item id="2789" name="brown mushroom" chance="15482" countmax="2" />
+		<item id="7590" name="great mana potion" chance="14232" />
+		<item id="7591" name="great health potion" chance="13497" />
+		<item id="5880" name="iron ore" chance="8663" />
+		<item id="9970" name="small topaz" chance="8033" countmax="2" />
+		<item id="18436" name="drill bolt" chance="7974" countmax="10" />
+		<item id="18417" name="brown crystal splinter" chance="7542" countmax="2" />
+		<item id="18421" name="green crystal fragment" chance="6667" />
+		<item id="18418" name="blue crystal splinter" chance="4752" />
+		<item id="2114" name="piggy bank" chance="3783" />
+		<item id="18414" name="violet crystal shard" chance="3596" />
+		<item id="2213" name="dwarven ring" chance="2347" />
+		<item id="2430" name="knight axe" chance="2113" />
+		<item id="13757" name="coal" chance="1880" />
+		<item id="2515" name="guardian shield" chance="1296" />
+		<item id="11339" name="clay lump" chance="992" />
+		<item id="2528" name="tower shield" chance="899" />
+		<item id="7452" name="spiked squelcher" chance="794" />
+		<item id="5904" name="magic sulphur" chance="724" />
+		<item id="2529" name="black shield" chance="630" />
+		<item id="7886" name="terra boots" chance="619" />
+		<item id="7427" name="chaos mace" chance="479" />
+		<item id="2432" name="fire axe" chance="409" />
+		<item id="2498" name="royal helmet" chance="198" />
 	</loot>
 </monster>

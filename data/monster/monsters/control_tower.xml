@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Control Tower" nameDescription="a control tower" race="energy" experience="3000" speed="0">
+	<health now="7500" max="7500" />
+	<look typeex="23265" corpse="24309" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element energyPercent="55" />
+		<element earthPercent="55" />
+		<element firePercent="55" />
+		<element holyPercent="55" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="68000" countmax="5" />
+		<item id="7591" name="great health potion" chance="8000" />
+		<item id="7590" name="great mana potion" chance="5333" />
+		<item id="9930" name="flask of rust remover" chance="4000" />
+		<item id="9690" name="gear wheel" chance="2667" />
+		<item id="23541" name="gearwheel chain" chance="2667" />
+		<item id="23538" name="heat core" chance="2667" />
+		<item id="23539" name="alloy legs" chance="1333" />
+		<item name="crystal pedestal" chance="1333" />
+		<item id="5880" name="iron ore" chance="1333" />
+		<item id="2645" name="steel boots" chance="1333" />
+		<item id="10571" name="war crystal" chance="1333" />
+	</loot>
+</monster>

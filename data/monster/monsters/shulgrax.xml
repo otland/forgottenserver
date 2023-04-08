@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Shulgrax" nameDescription="Shulgrax" race="undead" experience="50000" speed="320">
+	<health now="290000" max="290000" />
+	<look type="842" head="0" body="62" legs="22" feet="87" addons="1" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-2500" />
+		<attack name="fire" interval="3000" chance="20" length="10" spread="0" min="-500" max="-1000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="speed" interval="2000" chance="25" radius="7" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+		<attack name="fire" interval="2000" chance="15" radius="5" min="-300" max="-700">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" length="10" spread="0" min="-500" max="-800">
+			<attribute key="areaEffect" value="explosion" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" length="8" spread="3" min="-500" max="-800">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="3000" chance="35" min="400" max="6000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="speed" interval="4000" chance="80" speedchange="440" duration="6000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-10" />
+		<element firePercent="-10" />
+		<element icePercent="10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="YOUR SOULS WILL BE MINE!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="315" />
+		<item id="24850" name="opal" chance="100000" countmax="7" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="29" />
+		<item id="25172" name="silver token" chance="100000" />
+		<item id="2158" name="blue gem" chance="66667" />
+		<item id="7590" name="great mana potion" chance="66667" countmax="7" />
+		<item id="8472" name="great spirit potion" chance="66667" countmax="6" />
+		<item id="24849" name="onyx chip" chance="66667" countmax="9" />
+		<item id="6500" name="demonic essence" chance="33333" />
+		<item id="6558" name="flask of demonic blood" chance="33333" countmax="3" />
+		<item id="20108" name="pair of iron fists" chance="33333" />
+		<item id="2149" name="small emerald" chance="33333" />
+		<item id="2147" name="small ruby" chance="33333" countmax="4" />
+		<item id="8473" name="ultimate health potion" chance="33333" />
+		<item id="8910" name="underworld rod" chance="33333" />
+	</loot>
+</monster>

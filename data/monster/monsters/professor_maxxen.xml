@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Professor Maxxen" nameDescription="Professor Maxxen" race="energy" experience="15500" speed="340">
+	<health now="90000" max="90000" />
+	<look type="679" corpse="24279" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1000" />
+		<attack name="energy" interval="2000" chance="11" radius="8" min="-250" max="-500">
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="20" length="8" spread="0" min="-450" max="-1500">
+			<attribute key="areaEffect" value="teleport" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" length="8" spread="0" min="-450" max="-500">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="war golem skill reducer" interval="2000" chance="22" />
+		<attack name="war golem electrify" interval="2000" range="2" chance="16" />
+		<attack name="glooth fairy skill reducer" interval="2000" chance="20" />
+		<attack name="speed" interval="2000" chance="9" range="7" radius="4" target="1" minspeedchange="-600" maxspeedchange="-800" duration="20000">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="speed" interval="2000" chance="13" speedchange="460" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="20" min="200" max="250">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="55130" countmax="10" />
+		<item id="2152" name="platinum coin" chance="71279" countmax="4" />
+		<item id="23574" name="glooth bag" chance="100000" countmax="3" />
+		<item id="24270" name="glooth glider casing" chance="55130" countmax="10" />
+		<item id="9809" name="rusted armor" chance="12500" />
+		<item id="9971" name="gold ingot" chance="1914" />
+	</loot>
+</monster>

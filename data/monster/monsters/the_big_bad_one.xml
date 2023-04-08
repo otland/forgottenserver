@@ -42,8 +42,8 @@
 		<voice sentence="Yoooohhuuuu!" yell="1" />
 	</voices>
 	<loot>
-		<item id="7394" chance="50000" /><!-- wolf trophy -->
-		<item name="ham" countmax="2" chance="25000" />
+		<item id="7394" name="wolf trophy" chance="50000" />
+		<item id="2671" name="ham" chance="25000" />
 		<item name="meat" countmax="4" chance="25000" />
 		<item name="wolf paw" countmax="2" chance="15000" />
 		<item name="warwolf fur" chance="5000" />

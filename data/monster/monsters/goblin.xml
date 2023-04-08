@@ -40,17 +40,17 @@
 		<voice sentence="Me green, me mean!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="9" chance="50320" />
-		<item name="small stone" chance="15290" />
-		<item id="2667" chance="12750" /><!-- fish -->
-		<item name="small axe" chance="9700" />
-		<item name="short sword" chance="8870" />
-		<item name="bone club" chance="4900" />
-		<item name="leather armor" chance="2510" />
-		<item name="leather helmet" chance="1940" />
-		<item name="dagger" chance="1800" />
-		<item id="2230" chance="1130" /><!-- bone -->
-		<item name="mouldy cheese" chance="1000" />
-		<item name="goblin ear" chance="940" />
+		<item id="2148" name="gold coin" chance="50250" countmax="9" />
+		<item id="1294" name="small stone" chance="15265" />
+		<item id="2667" name="fish" chance="13004" />
+		<item id="2559" name="small axe" chance="9863" />
+		<item id="2406" name="short sword" chance="8832" />
+		<item id="2449" name="bone club" chance="4934" />
+		<item id="2467" name="leather armor" chance="2514" />
+		<item id="2461" name="leather helmet" chance="1947" />
+		<item id="2379" name="dagger" chance="1795" />
+		<item id="2230" name="bone" chance="1065" />
+		<item id="2235" name="mouldy cheese" chance="999" />
+		<item id="12495" name="goblin ear" chance="951" />
 	</loot>
 </monster>

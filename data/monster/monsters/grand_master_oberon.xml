@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grand Master Oberon" nameDescription="Grand Master Oberon" race="blood" experience="20000" speed="230">
+	<health now="30000" max="30000" />
+	<look type="1072" head="57" body="75" legs="38" feet="86" addons="1" corpse="31282" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-1200" />
+		<attack name="holy" interval="6000" chance="80" length="8" spread="0" min="-1000" max="-2250">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="earth" interval="1000" chance="20" target="0" radius="5" min="-700" max="-1450">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" range="7" min="-800" max="-1500">
+			<attribute key="shootEffect" value="suddendeath" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="60">
+		<defense name="speed" interval="1000" chance="10" speedchange="160" duration="4000">
+			<attribute key="areaEffect" value="poff" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element holyPercent="-20" />
+		<element deathPercent="50" />
+	</elements>
+	<loot>
+		<item id="31509" name="the spatial warp almanac" chance="100000" />
+		<item id="31480" name="grant of arms" chance="690" />
+	</loot>
+</monster>

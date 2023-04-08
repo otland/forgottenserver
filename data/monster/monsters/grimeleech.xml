@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Grimeleech" nameDescription="a grimeleech" race="undead" experience="7216" speed="340">
+	<health now="9500" max="9500" />
+	<look type="855" corpse="25436" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-450" />
+		<attack name="physical" interval="2000" chance="14" range="7" target="1" min="100" max="-565">
+			<attribute key="shootEffect" value="death" />
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="death" interval="2000" chance="12" length="8" spread="0" min="-150" max="-220">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="death" interval="2000" chance="13" radius="4" target="0" min="-225" max="-375">
+			<attribute key="areaEffect" value="redspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="9" length="8" spread="3" min="0" max="-300">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+	</attacks>
+	<defenses armor="65" defense="65">
+		<defense name="healing" interval="2000" chance="20" min="200" max="300">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="effect" interval="2000" chance="9">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+		<defense name="effect" interval="2000" chance="10">
+			<attribute key="areaEffect" value="redspark" />
+		</defense>
+		<defense name="speed" interval="2000" chance="12" speedchange="532" duration="4000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="-5" />
+		<element earthPercent="40" />
+		<element firePercent="20" />
+		<element deathPercent="60" />
+	</elements>
+	<immunities>
+		<immunity drown="1" />
+		<immunity lifedrain="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="Death... Taste!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="93518" countmax="199" />
+		<item id="2152" name="platinum coin" chance="90421" countmax="8" />
+		<item id="7591" name="great health potion" chance="25007" countmax="3" />
+		<item id="8472" name="great spirit potion" chance="24503" countmax="3" />
+		<item id="7590" name="great mana potion" chance="24431" countmax="3" />
+		<item id="6558" name="flask of demonic blood" chance="18352" />
+		<item id="6500" name="demonic essence" chance="14808" />
+		<item id="25386" name="some grimeleech wings" chance="14059" />
+		<item id="2795" name="fire mushroom" chance="11538" countmax="5" />
+		<item id="2796" name="green mushroom" chance="11150" countmax="5" />
+		<item id="2150" name="small amethyst" chance="7995" countmax="5" />
+		<item id="2147" name="small ruby" chance="7750" countmax="5" />
+		<item id="9970" name="small topaz" chance="7534" countmax="5" />
+		<item id="2145" name="small diamond" chance="7102" countmax="5" />
+		<item id="8910" name="underworld rod" chance="5762" />
+		<item id="8922" name="wand of voodoo" chance="3572" />
+		<item id="2154" name="yellow gem" chance="2708" />
+		<item id="2156" name="red gem" chance="2233" />
+		<item id="7894" name="magma legs" chance="850" />
+		<item id="2158" name="blue gem" chance="720" />
+		<item id="2520" name="demon shield" chance="706" />
+		<item id="2462" name="devil helmet" chance="576" />
+		<item id="25383" name="rift lance" chance="547" />
+		<item id="7418" name="nightmare blade" chance="519" />
+		<item id="25382" name="rift shield" chance="346" />
+		<item id="25522" name="rift bow" chance="331" />
+		<item id="25523" name="rift crossbow" chance="317" />
+		<item id="7414" name="abyss hammer" chance="173" />
+		<item id="2645" name="steel boots" chance="173" />
+		<item id="2472" name="magic plate armor" chance="115" />
+		<item id="7388" name="vile axe" chance="101" />
+	</loot>
+</monster>

@@ -2,10 +2,10 @@ local keywordHandler = KeywordHandler:new()
 local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
-function onCreatureAppear(cid)              npcHandler:onCreatureAppear(cid)            end
-function onCreatureDisappear(cid)           npcHandler:onCreatureDisappear(cid)         end
-function onCreatureSay(cid, type, msg)      npcHandler:onCreatureSay(cid, type, msg)    end
-function onThink()                          npcHandler:onThink()                        end
+function onCreatureAppear(cid)				npcHandler:onCreatureAppear(cid)			end
+function onCreatureDisappear(cid)			npcHandler:onCreatureDisappear(cid)			end
+function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)	end
+function onThink()							npcHandler:onThink()						end
 
 local voices = { {text = "Runes, wands, rods, health and mana potions! Have a look!"} }
 npcHandler:addModule(VoiceModule:new(voices))
@@ -88,7 +88,7 @@ shopModule:addSellableItem({'wand of inferno', 'inferno'}, 2187, 7500, 'wand of 
 shopModule:addSellableItem({'wand of starstorm', 'starstorm'}, 8920, 9000, 'wand of starstorm')
 shopModule:addSellableItem({'wand of voodoo', 'voodoo'}, 8922, 11000, 'wand of voodoo')
 
-shopModule:addSellableItem({'snakebite rod', 'snakebite'}, 2182, 250,'snakebite rod')
+shopModule:addSellableItem({'snakebite rod', 'snakebite'}, 2182, 250, 'snakebite rod')
 shopModule:addSellableItem({'moonlight rod', 'moonlight'}, 2186, 500, 'moonlight rod')
 shopModule:addSellableItem({'necrotic rod', 'necrotic'}, 2185, 2500, 'necrotic rod')
 shopModule:addSellableItem({'northwind rod', 'northwind'}, 8911, 3750, 'northwind rod')
@@ -105,14 +105,14 @@ function creatureSayCallback(cid, type, msg)
 	local player = Player(cid)
 	local vocationId = player:getVocation():getId()
 	local items = {
-		[1] = 2190,
-		[2] = 2182,
-		[5] = 2190,
-		[6] = 2182
+		[VOCATION_SORCERER] = 2190,
+		[VOCATION_DRUID] = 2182,
+		[VOCATION_MASTER_SORCERER] = 2190,
+		[VOCATION_ELDER_DRUID] = 2182
 	}
 
 	if msgcontains(msg, 'first rod') or msgcontains(msg, 'first wand') then
-		if table.contains({1, 2, 5, 6}, vocationId) then
+		if items[vocationId] then
 			if player:getStorageValue(PlayerStorageKeys.firstRod) == -1 then
 				selfSay('So you ask me for a {' .. ItemType(items[vocationId]):getName() .. '} to begin your adventure?', cid)
 				npcHandler.topic[cid] = 1

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Brain Squid" nameDescription="a brain squid" race="ink" experience="17672" speed="430">
+	<health now="18000" max="18000" />
+	<look type="1059" head="17" body="41" legs="77" feet="57" addons="0" corpse="31238" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-470">
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="energy" interval="2000" chance="13" radius="3" min="-200" max="-505">
+			<attribute key="areaEffect" value="energyarea" />
+		</attack>
+	</attacks>
+	<defenses armor="78" defense="78" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="100" />
+		<element holyPercent="100" />
+		<element deathPercent="-15" />
+	</elements>
+	<loot>
+		<item id="2152" name="platinum coin" chance="75181" countmax="20" />
+		<item id="18414" name="violet crystal shard" chance="34219" countmax="4" />
+		<item id="31226" name="glowing rune" chance="23458" countmax="4" />
+		<item id="26179" name="energy ball" chance="19056" />
+		<item id="26172" name="instable proto matter" chance="18460" />
+		<item id="26201" name="energy drink" chance="14994" />
+		<item id="26191" name="energy bar" chance="14760" />
+		<item id="26175" name="frozen lightning" chance="12399" />
+		<item id="26029" name="ultimate mana potion" chance="11952" />
+		<item id="31224" name="inkwell (black)" chance="11059" />
+		<item id="26166" name="odd organ" chance="7720" />
+		<item id="18418" name="blue crystal splinter" chance="7316" />
+		<item id="2147" name="small ruby" chance="6104" countmax="6" />
+		<item id="7901" name="lightning headband" chance="5168" countmax="2" />
+		<item id="2153" name="violet gem" chance="4679" />
+		<item id="18419" name="cyan crystal fragment" chance="4190" />
+		<item id="26189" name="ring of red plasma" chance="2892" />
+		<item id="26187" name="ring of green plasma" chance="2318" />
+		<item id="26185"  name="ring of blue plasma" chance="2127" />
+		<item id="2164" name="might ring" chance="2084" />
+		<item id="7889" name="lightning pendant" chance="1893" />
+		<item id="26200" name="collar of red plasma" chance="1786" />
+		<item id="23565" name="slime heart" chance="1765" />
+		<item id="26198" name="collar of blue plasma" chance="1361" />
+		<item id="10580" name="piece of dead brain" chance="1106" />
+		<item id="18390" name="wand of defiance" chance="1106" />
+		<item id="26199" name="collar of green plasma" chance="681" />
+		<item id="11355" name="spellweaver's robe" chance="489" />
+	</loot>
+</monster>

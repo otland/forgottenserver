@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Remorseless Corruptor" nameDescription="The Remorseless Corruptor" race="energy" experience="0" speed="400">
+	<health now="290000" max="290000" />
+	<look type="875" head="77" body="98" legs="3" feet="85" addons="3" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="energy" interval="2000" chance="25" length="9" spread="0" min="0" max="-500">
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="remorseless wave" interval="2000" chance="25" />
+		<attack name="physical" interval="2000" chance="25" radius="7" min="0" max="-500">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="physical" interval="2000" chance="25" length="9" spread="0" min="0" max="-500">
+			<attribute key="areaEffect" value="stun" />
+		</attack>
+		<attack name="death" interval="2000" chance="25" length="9" spread="0" min="0" max="-500">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="100" />
+		<element energyPercent="100" />
+		<element earthPercent="100" />
+		<element firePercent="100" />
+		<element icePercent="100" />
+		<element holyPercent="100" />
+		<element deathPercent="100" />
+	</elements>
+</monster>

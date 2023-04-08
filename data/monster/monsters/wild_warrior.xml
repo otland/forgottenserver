@@ -37,15 +37,15 @@
 		<voice sentence="Gimme your money!" />
 	</voices>
 	<loot>
-		<item name="gold coin" countmax="30" chance="64000" />
-		<item name="axe" chance="21000" />
-		<item name="brass shield" chance="17000" />
-		<item name="mace" chance="13000" />
-		<item id="2695" countmax="2" chance="12000" /><!-- egg -->
-		<item name="chain helmet" chance="5250" />
-		<item name="brass armor" chance="2800" />
-		<item name="steel shield" chance="1330" />
-		<item name="iron helmet" chance="1000" />
-		<item id="2110" chance="520" /><!-- doll -->
+		<item id="2148" name="gold coin" chance="65608" countmax="30" />
+		<item id="2386" name="axe" chance="20940" />
+		<item id="2511" name="brass shield" chance="17483" />
+		<item id="2398" name="mace" chance="13081" />
+		<item id="3606" name="egg" chance="12596" countmax="2" />
+		<item id="2458" name="chain helmet" chance="5204" />
+		<item id="2465" name="brass armor" chance="2779" />
+		<item id="2509" name="steel shield" chance="1314" />
+		<item id="2459" name="iron helmet" chance="1032" />
+		<item id="2110" name="doll" chance="529" />
 	</loot>
 </monster>

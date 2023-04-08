@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cobra Vizier" nameDescription="a cobra vizier" race="blood" experience="7650" speed="320">
+	<health now="8500" max="8500" />
+	<look type="1217" head="19" body="19" legs="67" feet="78" corpse="34295" />
+	<targetchange interval="4000" chance="10" />
+	<flags>
+		<flag summonable="0" />
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag illusionable="0" />
+		<flag convinceable="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag targetdistance="1" />
+		<flag staticattack="90" />
+		<flag runonhealth="0" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-480" />
+		<attack name="explosion wave" interval="2000" chance="15" min="-280" max="-400" />
+		<attack name="earth" interval="2000" chance="12" radius="4" range="4" target="1" min="-350" max="-520">
+			<attribute key="areaEffect" value="greenbubble" />
+			<attribute key="shootEffect" value="smallearth" />
+		</attack>
+	</attacks>
+	<defenses armor="82" defense="82">
+		<defense name="speed" interval="2000" chance="8" speedchange="340" duration="5000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="10" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+	</immunities>
+	<voices interval="5000" chance="10">
+		<voice sentence="COMBINE FORCES MY BRETHEN!" />
+		<voice sentence="Feel the cobras wrath!" />
+		<voice sentence="OH NO, YOU WON'T!" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="71279" countmax="4" />
+		<item id="2181" name="terra rod" chance="32193" />
+		<item id="34334" name="cobra crest" chance="14817" />
+		<item id="7886" name="terra boots" chance="14169" />
+		<item id="7903" name="terra hood" chance="13073" />
+		<item id="2182" name="snakebite rod" chance="12375" />
+		<item id="18419" name="cyan crystal fragment" chance="11279" />
+		<item id="2156" name="red gem" chance="7458" />
+		<item id="7633" name="giant shimmering pearl" chance="6512" />
+		<item id="18421" name="green crystal fragment" chance="5017" />
+		<item id="27048" name="gemmed figurine" chance="4485" />
+		<item id="18414" name="violet crystal shard" chance="3754" />
+		<item id="2127" name="emerald bangle" chance="3306" />
+		<item id="2155" name="green gem" chance="3189" />
+		<item id="18420" name="red crystal fragment" chance="2807" />
+		<item id="2409" name="serpent sword" chance="2542" />
+		<item id="24849" name="onyx chip" chance="897" countmax="3" />
+	</loot>
+</monster>

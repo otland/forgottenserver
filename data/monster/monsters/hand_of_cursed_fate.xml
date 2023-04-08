@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Hand of Cursed Fate" nameDescription="a hand of cursed fate" race="blood" experience="5000" speed="260">
+<monster name="Hand Of Cursed Fate" nameDescription="a hand of cursed fate" race="blood" experience="5000" speed="260">
 	<health now="7500" max="7500" />
 	<look type="230" corpse="6312" />
 	<targetchange interval="4000" chance="10" />
@@ -26,7 +26,7 @@
 			<attribute key="areaEffect" value="smallclouds" />
 		</attack>
 	</attacks>
-	<defenses armor="25" defense="25">
+	<defenses armor="53" defense="53">
 		<defense name="speed" interval="2000" chance="15" speedchange="1000" duration="5000">
 			<attribute key="areaEffect" value="redshimmer" />
 		</defense>
@@ -50,35 +50,33 @@
 		<immunity invisible="1" />
 	</immunities>
 	<loot>
-		<item name="emerald bangle" chance="3500" />
-		<item name="small sapphire" countmax="4" chance="11000" />
-		<item name="gold coin" countmax="100" chance="60000" />
-		<item name="gold coin" countmax="100" chance="60000" />
-		<item name="gold coin" countmax="67" chance="50000" />
-		<item name="platinum coin" countmax="7" chance="100000" />
-		<item name="violet gem" chance="700" />
-		<item name="yellow gem" chance="5940" />
-		<item name="energy ring" chance="3150" />
-		<item name="platinum amulet" chance="1005" />
-		<item name="mind stone" chance="9090" />
-		<item name="wand of inferno" chance="5590" />
-		<item name="boots of haste" chance="540" />
-		<item name="protection amulet" chance="8740" />
-		<item name="sudden death rune" countmax="8" chance="4200" />
-		<item name="skull staff" chance="700" />
-		<item name="knight armor" chance="4550" />
-		<item name="crown armor" chance="1400" />
-		<item name="mysterious voodoo skull" chance="247" />
-		<item name="golden figurine" chance="195" />
-		<item name="soul orb" chance="31111" />
-		<item id="6300" chance="1750" /><!-- death ring -->
-		<item name="demonic essence" chance="12000" />
-		<item name="concentrated demonic blood" countmax="4" chance="30000" />
-		<item name="onyx arrow" countmax="3" chance="8333" />
-		<item name="assassin star" countmax="5" chance="7692" />
-		<item name="abyss hammer" chance="495" />
-		<item name="great mana potion" countmax="2" chance="19990" />
-		<item name="ultimate health potion" chance="18000" />
-		<item name="gold ingot" chance="700" />
+		<item id="2148" name="gold coin" chance="100000" countmax="267" />
+		<item id="2152" name="platinum coin" chance="98310" countmax="7" />
+		<item id="5944" name="soul orb" chance="30516" />
+		<item id="6558" name="flask of demonic blood" chance="29935" />
+		<item id="7590" name="great mana potion" chance="19632" countmax="2" />
+		<item id="8473" name="ultimate health potion" chance="18835" />
+		<item id="2178" name="mind stone" chance="15373" />
+		<item id="7368" name="assassin star" chance="15116" countmax="5" />
+		<item id="2146" name="small sapphire" chance="14413" countmax="4" />
+		<item id="6500" name="demonic essence" chance="11696" />
+		<item id="2200" name="protection amulet" chance="10249" />
+		<item id="2154" name="yellow gem" chance="5773" />
+		<item id="2127" name="emerald bangle" chance="5219" />
+		<item id="2187" name="wand of inferno" chance="4800" />
+		<item id="2268" name="sudden death rune" chance="4381" countmax="8" />
+		<item id="2476" name="knight armor" chance="3921" />
+		<item id="2167" name="energy ring" chance="2177" />
+		<item id="2158" name="blue gem" chance="1690" />
+		<item id="6300" name="death ring" chance="1312" />
+		<item id="2153" name="violet gem" chance="1001" />
+		<item id="2171" name="platinum amulet" chance="960" />
+		<item id="2436" name="skull staff" chance="933" />
+		<item id="1962" name="book (orange)" chance="879" />
+		<item id="2487" name="crown armor" chance="879" />
+		<item id="9971" name="gold ingot" chance="568" />
+		<item id="2195" name="boots of haste" chance="135" />
+		<item id="5669" name="mysterious voodoo skull" chance="108" />
+		<item id="7414" name="abyss hammer" chance="68" />
 	</loot>
 </monster>

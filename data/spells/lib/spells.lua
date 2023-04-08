@@ -20,6 +20,14 @@ AREA_WAVE6 = {
 	{0, 0, 0, 0, 0}
 }
 
+AREA_WAVE7 = {
+	{1, 1, 1, 1, 1},
+	{1, 1, 1, 1, 1},
+	{0, 1, 1, 1, 0},
+	{0, 1, 1, 1, 0},
+	{0, 0, 3, 0, 0}
+}
+
 AREA_SQUAREWAVE5 = {
 	{1, 1, 1},
 	{1, 1, 1},
@@ -79,6 +87,16 @@ AREADIAGONAL_WAVE6 = {
 	{0, 0, 1},
 	{0, 3, 0},
 	{1, 0, 0}
+}
+
+AREADIAGONAL_WAVE7 = {
+	{0, 0, 0, 0, 0, 1, 0},
+	{0, 0, 0, 0, 1, 1, 0},
+	{0, 0, 0, 1, 1, 1, 0},
+	{0, 0, 1, 1, 1, 1, 0},
+	{0, 1, 1, 1, 1, 1, 0},
+	{1, 1, 1, 1, 1, 1, 0},
+	{0, 0, 0, 0, 0, 0, 3}
 }
 
 --Beams
@@ -211,7 +229,7 @@ AREADIAGONAL_WALLFIELD = {
 }
 
 -- This array contains all destroyable field items
-FIELDS = {1487,1488,1489,1490,1491,1492,1493,1494,1495,1496,1500,1501,1502,1503,1504}
+FIELDS = {1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1500, 1501, 1502, 1503, 1504}
 
 function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()

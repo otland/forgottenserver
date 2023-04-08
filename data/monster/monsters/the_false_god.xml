@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The False God" nameDescription="The False God" race="blood" experience="50000" speed="230">
+	<health now="300000" max="300000" />
+	<look type="984" corpse="25151" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-400" />
+		<attack name="earth" interval="2000" chance="20" target="1" range="4" radius="4" min="0" max="-500">
+			<attribute key="areaEffect" value="stones" />
+		</attack>
+		<attack name="speed" interval="2000" chance="20" radius="5" speedchange="-650" duration="5000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+		<element energyPercent="10" />
+		<element firePercent="10" />
+		<element deathPercent="50" />
+	</elements>
+	<loot>
+		<item id="26191" name="energy bar" chance="100000" countmax="9" />
+		<item id="2148" name="gold coin" chance="100000" countmax="275" />
+		<item id="5880" name="iron ore" chance="100000" />
+		<item id="26165" name="mysterious remains" chance="100000" />
+		<item id="23567" name="necromantic rust" chance="100000" />
+		<item id="5888" name="piece of hell steel" chance="100000" countmax="7" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="24" />
+		<item id="7632" name="giant shimmering pearl" chance="50000" />
+		<item id="2393" name="giant sword" chance="50000" />
+		<item id="25377" name="gold token" chance="50000" />
+		<item id="7590" name="great mana potion" chance="50000" countmax="9" />
+		<item id="8472" name="great spirit potion" chance="50000" />
+		<item id="23546" name="mino shield" chance="50000" />
+		<item id="5889" name="piece of draconian steel" chance="50000" countmax="2" />
+		<item id="2150" name="small amethyst" chance="50000" countmax="12" />
+		<item id="8473" name="ultimate health potion" chance="50000" countmax="7" />
+	</loot>
+</monster>

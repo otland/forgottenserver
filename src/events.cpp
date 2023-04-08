@@ -1,36 +1,14 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "events.h"
-#include "tools.h"
+
 #include "item.h"
 #include "player.h"
 
-#include <set>
-
-Events::Events() :
-	scriptInterface("Event Interface")
-{
-	scriptInterface.initState();
-}
+Events::Events() : scriptInterface("Event Interface") { scriptInterface.initState(); }
 
 bool Events::load()
 {
@@ -52,7 +30,7 @@ bool Events::load()
 		const std::string& className = eventNode.attribute("class").as_string();
 		auto res = classes.insert(className);
 		if (res.second) {
-			const std::string& lowercase = asLowerCaseString(className);
+			const std::string& lowercase = boost::algorithm::to_lower_copy(className);
 			if (scriptInterface.loadFile("data/events/scripts/" + lowercase + ".lua") != 0) {
 				std::cout << "[Warning - Events::load] Can not load script: " << lowercase << ".lua" << std::endl;
 				std::cout << scriptInterface.getLastLuaError() << std::endl;
@@ -82,6 +60,12 @@ bool Events::load()
 				info.partyOnDisband = event;
 			} else if (methodName == "onShareExperience") {
 				info.partyOnShareExperience = event;
+			} else if (methodName == "onInvite") {
+				info.partyOnInvite = event;
+			} else if (methodName == "onRevokeInvitation") {
+				info.partyOnRevokeInvitation = event;
+			} else if (methodName == "onPassLeadership") {
+				info.partyOnPassLeadership = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
@@ -96,12 +80,18 @@ bool Events::load()
 				info.playerOnLookInTrade = event;
 			} else if (methodName == "onLookInShop") {
 				info.playerOnLookInShop = event;
+			} else if (methodName == "onLookInMarket") {
+				info.playerOnLookInMarket = event;
 			} else if (methodName == "onTradeRequest") {
 				info.playerOnTradeRequest = event;
 			} else if (methodName == "onTradeAccept") {
 				info.playerOnTradeAccept = event;
 			} else if (methodName == "onTradeCompleted") {
 				info.playerOnTradeCompleted = event;
+			} else if (methodName == "onPodiumRequest") {
+				info.playerOnPodiumRequest = event;
+			} else if (methodName == "onPodiumEdit") {
+				info.playerOnPodiumEdit = event;
 			} else if (methodName == "onMoveItem") {
 				info.playerOnMoveItem = event;
 			} else if (methodName == "onItemMoved") {
@@ -122,6 +112,10 @@ bool Events::load()
 				info.playerOnGainSkillTries = event;
 			} else if (methodName == "onWrapItem") {
 				info.playerOnWrapItem = event;
+			} else if (methodName == "onInventoryUpdate") {
+				info.playerOnInventoryUpdate = event;
+			} else if (methodName == "onNetworkMessage") {
+				info.playerOnNetworkMessage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -388,6 +382,87 @@ bool Events::eventPartyOnDisband(Party* party)
 	return scriptInterface.callFunction(1);
 }
 
+bool Events::eventPartyOnInvite(Party* party, Player* player)
+{
+	// Party:onInvite(player) or Party.onInvite(self, player)
+	if (info.partyOnInvite == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnInvite] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnInvite, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnInvite);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
+{
+	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
+	if (info.partyOnRevokeInvitation == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnRevokeInvitation] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnRevokeInvitation, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnRevokeInvitation);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
+{
+	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
+	if (info.partyOnPassLeadership == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnPassLeadership] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnPassLeadership, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnPassLeadership);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
 void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
 {
 	// Party:onShareExperience(exp) or Party.onShareExperience(self, exp)
@@ -448,7 +523,8 @@ bool Events::eventPlayerOnBrowseField(Player* player, const Position& position)
 	return scriptInterface.callFunction(2);
 }
 
-void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
+void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos,
+                               int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
 	if (info.playerOnLook == -1) {
@@ -487,7 +563,8 @@ void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* 
 
 void Events::eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance)
 {
-	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position, distance)
+	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position,
+	// distance)
 	if (info.playerOnLookInBattleList == -1) {
 		return;
 	}
@@ -546,9 +623,9 @@ void Events::eventPlayerOnLookInTrade(Player* player, Player* partner, Item* ite
 	scriptInterface.callVoidFunction(4);
 }
 
-bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count, const std::string& description)
+bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 {
-	// Player:onLookInShop(itemType, count, description) or Player.onLookInShop(self, itemType, count, description)
+	// Player:onLookInShop(itemType, count) or Player.onLookInShop(self, itemType, count)
 	if (info.playerOnLookInShop == -1) {
 		return true;
 	}
@@ -571,21 +648,49 @@ bool Events::eventPlayerOnLookInShop(Player* player, const ItemType* itemType, u
 	LuaScriptInterface::setMetatable(L, -1, "ItemType");
 
 	lua_pushnumber(L, count);
-	lua_pushstring(L, description.c_str());
 
-	return scriptInterface.callFunction(4);
+	return scriptInterface.callFunction(3);
 }
 
-bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+bool Events::eventPlayerOnLookInMarket(Player* player, const ItemType* itemType)
 {
-	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if (info.playerOnMoveItem == -1) {
+	// Player:onLookInMarket(itemType) or Player.onLookInMarket(self, itemType)
+	if (info.playerOnLookInMarket == -1) {
 		return true;
 	}
 
 	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnMoveItem] Call stack overflow" << std::endl;
+		std::cout << "[Error - Events::eventPlayerOnLookInMarket] Call stack overflow" << std::endl;
 		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnLookInMarket, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnLookInMarket);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<const ItemType>(L, itemType);
+	LuaScriptInterface::setMetatable(L, -1, "ItemType");
+
+	return scriptInterface.callFunction(2);
+}
+
+ReturnValue Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
+                                          const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+{
+	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
+	// toPosition, fromCylinder, toCylinder)
+	if (info.playerOnMoveItem == -1) {
+		return RETURNVALUE_NOERROR;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnMoveItem] Call stack overflow" << std::endl;
+		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
 	ScriptEnvironment* env = scriptInterface.getScriptEnv();
@@ -607,12 +712,24 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 	LuaScriptInterface::pushCylinder(L, fromCylinder);
 	LuaScriptInterface::pushCylinder(L, toCylinder);
 
-	return scriptInterface.callFunction(7);
+	ReturnValue returnValue;
+	if (scriptInterface.protectedCall(L, 7, 1) != 0) {
+		returnValue = RETURNVALUE_NOTPOSSIBLE;
+		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+	} else {
+		returnValue = LuaScriptInterface::getNumber<ReturnValue>(L, -1);
+		lua_pop(L, 1);
+	}
+
+	scriptInterface.resetScriptEnv();
+	return returnValue;
 }
 
-void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition,
+                                    const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
 {
-	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
+	// toPosition, fromCylinder, toCylinder)
 	if (info.playerOnItemMoved == -1) {
 		return;
 	}
@@ -644,9 +761,11 @@ void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, 
 	scriptInterface.callVoidFunction(7);
 }
 
-bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition)
+bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition,
+                                       const Position& toPosition)
 {
-	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition, toPosition)
+	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
+	// toPosition)
 	if (info.playerOnMoveCreature == -1) {
 		return true;
 	}
@@ -674,7 +793,9 @@ bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const
 	return scriptInterface.callFunction(4);
 }
 
-void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment, const std::string& translation)
+void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType,
+                                              uint8_t reportReason, const std::string& comment,
+                                              const std::string& translation)
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
 	if (info.playerOnReportRuleViolation == -1) {
@@ -706,7 +827,8 @@ void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string&
 	scriptInterface.callVoidFunction(6);
 }
 
-bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category)
+bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position,
+                                    uint8_t category)
 {
 	// Player:onReportBug(message, position, category)
 	if (info.playerOnReportBug == -1) {
@@ -858,10 +980,70 @@ void Events::eventPlayerOnTradeCompleted(Player* player, Player* target, Item* i
 	return scriptInterface.callVoidFunction(5);
 }
 
+void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
+{
+	// Player:onPodiumRequest(item) or Player.onPodiumRequest(self, item)
+	if (info.playerOnPodiumRequest == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnPodiumRequest] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnPodiumRequest, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnPodiumRequest);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callFunction(2);
+}
+
+void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible,
+                                     Direction direction)
+{
+	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
+	// isVisible)
+	if (info.playerOnPodiumEdit == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnPodiumEdit] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnPodiumEdit, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnPodiumEdit);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	LuaScriptInterface::pushOutfit(L, outfit);
+
+	lua_pushnumber(L, direction);
+	lua_pushboolean(L, podiumVisible);
+
+	scriptInterface.callFunction(5);
+}
+
 void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
 {
-	// Player:onGainExperience(source, exp, rawExp)
-	// rawExp gives the original exp which is not multiplied
+	// Player:onGainExperience(source, exp, rawExp) rawExp gives the original exp which is not multiplied
 	if (info.playerOnGainExperience == -1) {
 		return;
 	}
@@ -994,6 +1176,65 @@ void Events::eventPlayerOnWrapItem(Player* player, Item* item)
 	scriptInterface.callVoidFunction(2);
 }
 
+void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
+{
+	// Player:onInventoryUpdate(item, slot, equip)
+	if (info.playerOnInventoryUpdate == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnInventoryUpdate] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnInventoryUpdate, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnInventoryUpdate);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	lua_pushnumber(L, slot);
+	LuaScriptInterface::pushBoolean(L, equip);
+
+	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
+{
+	// Player:onNetworkMessage(recvByte, msg)
+	if (info.playerOnNetworkMessage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnNetworkMessage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnNetworkMessage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnNetworkMessage);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvByte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, msg);
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
+
+	scriptInterface.callVoidFunction(3);
+}
+
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 {
 	// Monster:onDropLoot(corpse)
@@ -1020,4 +1261,3 @@ void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
 
 	return scriptInterface.callVoidFunction(2);
 }
-

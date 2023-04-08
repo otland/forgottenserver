@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Manticore" nameDescription="a manticore" race="blood" experience="5100" speed="300">
+	<health now="6700" max="6700" />
+	<look type="1189" head="116" body="97" legs="113" feet="20" addons="1" corpse="34046" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-500" />
+		<attack name="fire" interval="2000" chance="13" length="8" spread="0" min="-350" max="-450">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="poison" interval="4000" chance="15" radius="3" target="1" min="-300" max="-400">
+			<attribute key="areaEffect" value="greenbubble" />
+			<attribute key="shootEffect" value="envenomedarrow" />
+		</attack>
+		<attack name="fire" interval="2000" chance="22" target="1" range="4" min="-300" max="-500">
+			<attribute key="shootEffect" value="burstarrow" />
+		</attack>
+	</attacks>
+	<defenses armor="78" defense="78" />
+	<elements>
+		<element firePercent="80" />
+		<element icePercent="-20" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="2000" chance="5">
+		<voice sentence="I'm spotting my next meal" />
+	</voices>
+	<loot>
+		<item id="2152" name="platinum coin" chance="100000" countmax="3" />
+		<item id="34095" name="manticore tail" chance="9280" />
+		<item id="34096" name="manticore ear" chance="7723" />
+		<item id="2149" name="small emerald" chance="5706" />
+		<item id="18421" name="green crystal fragment" chance="4957" />
+		<item id="7840" name="flaming arrow" chance="4265" countmax="9" />
+		<item id="2153" name="violet gem" chance="2882" />
+		<item id="7899" name="magma coat" chance="2824" />
+		<item id="28393" name="rainbow quartz" chance="2824" countmax="3" />
+		<item id="27618" name="prismatic quartz" chance="2594" />
+		<item id="7891" name="magma boots" chance="2248" />
+		<item id="2191" name="wand of dragonbreath" chance="1844" />
+		<item id="7900" name="magma monocle" chance="1787" />
+		<item id="28415" name="royal star" chance="1268" countmax="3" />
+		<item id="7894" name="magma legs" chance="1153" />
+		<item id="8921" name="wand of draconia" chance="865" />
+		<item id="18409" name="wand of everblazing" chance="807" />
+	</loot>
+</monster>

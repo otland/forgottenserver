@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Owin" nameDescription="Owin" race="blood" experience="5000" speed="300">
+	<health now="9600" max="9600" />
+	<look type="721" corpse="24722" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="1" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-385" />
+		<attack name="speed" interval="4000" chance="20" radius="7" target="1" speedchange="-100">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="25" min="50" max="100">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="20" duration="2000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="117" />
+		<item id="24739" name="moonlight crystals" chance="100000" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="24709" name="wereboar hooves" chance="100000" />
+		<item id="24710" name="wereboar tusks" chance="100000" />
+		<item id="2789" name="brown mushroom" chance="90000" countmax="2" />
+		<item id="7588" name="strong health potion" chance="80000" countmax="5" />
+		<item id="7432" name="furry club" chance="70000" />
+		<item id="24743" name="wereboar loincloth" chance="30000" />
+		<item id="8473" name="ultimate health potion" chance="20000" countmax="2" />
+		<item id="2197" name="stone skin amulet" chance="10000" />
+		<item id="24758" name="wereboar trophy" chance="10000" />
+	</loot>
+</monster>

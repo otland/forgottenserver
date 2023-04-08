@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Omnivora" nameDescription="an omnivora" race="venom" experience="750" speed="210">
+	<health now="1200" max="1200" />
+	<look type="717" corpse="24651" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag attackable="1" />
+		<flag hostile="1" />
+		<flag summonable="0" />
+		<flag convinceable="0" />
+		<flag illusionable="0" />
+		<flag isboss="0" />
+		<flag ignorespawnblock="0" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-150" />
+		<attack name="speed" interval="4000" chance="20" range="7" target="1" speedchange="-350" duration="12000">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" range="7" min="-80" max="-100">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="earth" interval="2000" chance="10" length="8" spread="3" min="-50" max="-100">
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="38" defense="38">
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="7000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element energyPercent="10" />
+		<element earthPercent="100" />
+		<element firePercent="-10" />
+		<element icePercent="20" />
+		<element deathPercent="20" />
+	</elements>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="145" />
+		<item id="2667" name="fish" chance="10209" />
+		<item id="2787" name="white mushroom" chance="9612" countmax="3" />
+		<item id="2671" name="ham" chance="9347" />
+		<item id="2168" name="life ring" chance="1790" />
+		<item id="2185" name="necrotic rod" chance="1028" />
+		<item id="18417" name="brown crystal splinter" chance="762" />
+		<item id="18418" name="blue crystal splinter" chance="597" />
+		<item id="18416" name="green crystal splinter" chance="497" />
+		<item id="2409" name="serpent sword" chance="497" />
+		<item id="8900" name="spellbook of enlightenment" chance="431" />
+		<item id="7887" name="terra amulet" chance="365" />
+		<item id="7886" name="terra boots" chance="265" />
+		<item id="6300" name="death ring" chance="232" />
+		<item id="13298" name="carrot on a stick" chance="166" />
+	</loot>
+</monster>

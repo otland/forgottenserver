@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Demon Blood" nameDescription="a demon blood" race="undead" experience="0" speed="350">
+	<health now="10000" max="10000" />
+	<look type="1041" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-200" />
+		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">
+			<attribute key="shootEffect" value="snowball" />
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+		<attack name="energy" interval="1000" chance="12" length="3" spread="3" min="0" max="-175">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element icePercent="-25" />
+	</elements>
+</monster>

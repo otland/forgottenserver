@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Battery" nameDescription="a glooth battery" race="blood" experience="3000" speed="0">
+	<health now="8000" max="8000" />
+	<look typeex="23081" corpse="24309" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="poison" interval="2000" chance="10" radius="6" target="0" min="-206" max="-252">
+			<attribute key="areaEffect" value="greenbubble" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="4000" chance="15" min="133" max="454">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element energyPercent="25" />
+		<element earthPercent="1" />
+		<element firePercent="25" />
+		<element icePercent="25" />
+		<element holyPercent="25" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2152" name="platinum coin" chance="75000" countmax="5" />
+		<item id="7590" name="great mana potion" chance="13462" />
+		<item id="9930" name="flask of rust remover" chance="9615" />
+		<item id="7591" name="great health potion" chance="9615" />
+		<item id="23541" name="gearwheel chain" chance="7692" />
+		<item id="9690" name="gear wheel" chance="3846" />
+		<item id="2645" name="steel boots" chance="3846" />
+		<item id="9978" name="crystal pedestal" chance="1923" />
+		<item id="5880" name="iron ore" chance="1923" />
+		<item id="7440" name="mastermind potion" chance="1923" />
+		<item id="23540" name="metal spats" chance="1923" />
+	</loot>
+</monster>

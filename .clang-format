@@ -1,0 +1,28 @@
+---
+Language:        Cpp
+BasedOnStyle:    Google
+AccessModifierOffset: -4
+AlignEscapedNewlines: DontAlign
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass:      true
+  AfterEnum:       true
+  AfterFunction:   true
+  AfterStruct:     true
+  AfterUnion:      true
+  SplitEmptyFunction: false
+BreakConstructorInitializers: AfterColon
+BreakStringLiterals: false
+ColumnLimit:     120
+IncludeCategories:
+  - Regex:           'otpch\.h"$'
+    Priority:        -1
+  - Regex:           '^".*"$'
+    Priority:        1
+  - Regex:           '^<.*>$'
+    Priority:        2
+IndentWidth:     4
+SpacesBeforeTrailingComments: 1
+TabWidth:        4
+UseTab:          ForIndentation
+...

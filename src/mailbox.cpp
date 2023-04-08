@@ -1,26 +1,12 @@
-/**
- * The Forgotten Server - a free and open-source MMORPG server emulator
- * Copyright (C) 2019  Mark Samman <mark.samman@gmail.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
- */
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
 
 #include "mailbox.h"
+
 #include "game.h"
+#include "inbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
@@ -45,15 +31,9 @@ ReturnValue Mailbox::queryRemove(const Thing&, uint32_t, uint32_t, Creature* /*=
 	return RETURNVALUE_NOTPOSSIBLE;
 }
 
-Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item**, uint32_t&)
-{
-	return this;
-}
+Cylinder* Mailbox::queryDestination(int32_t&, const Thing&, Item**, uint32_t&) { return this; }
 
-void Mailbox::addThing(Thing* thing)
-{
-	return addThing(0, thing);
-}
+void Mailbox::addThing(Thing* thing) { return addThing(0, thing); }
 
 void Mailbox::addThing(int32_t, Thing* thing)
 {
@@ -102,8 +82,8 @@ bool Mailbox::sendItem(Item* item) const
 
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
+		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
@@ -114,8 +94,8 @@ bool Mailbox::sendItem(Item* item) const
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER,
-		                            item, item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER, item,
+		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			IOLoginData::savePlayer(&tmpPlayer);
 			return true;
@@ -142,11 +122,8 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 	}
 
 	name = getFirstLine(text);
-	trimString(name);
+	boost::algorithm::trim(name);
 	return true;
 }
 
-bool Mailbox::canSend(const Item* item)
-{
-	return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER;
-}
+bool Mailbox::canSend(const Item* item) { return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER; }

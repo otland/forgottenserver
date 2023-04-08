@@ -1,100 +1,221 @@
 function Player:onBrowseField(position)
-	if hasEventCallback(EVENT_CALLBACK_ONBROWSEFIELD) then
-		return EventCallback(EVENT_CALLBACK_ONBROWSEFIELD, self, position)
+	local onBrowseField = EventCallback.onBrowseField
+	if onBrowseField then
+		return onBrowseField(self, position)
 	end
 	return true
 end
 
 function Player:onLook(thing, position, distance)
 	local description = ""
-	if hasEventCallback(EVENT_CALLBACK_ONLOOK) then
-		description = EventCallback(EVENT_CALLBACK_ONLOOK, self, thing, position, distance, description)
+	local onLook = EventCallback.onLook
+	if onLook then
+		description = onLook(self, thing, position, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInBattleList(creature, distance)
 	local description = ""
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST) then
-		description = EventCallback(EVENT_CALLBACK_ONLOOKINBATTLELIST, self, creature, distance, description)
+	local onLookInBattleList = EventCallback.onLookInBattleList
+	if onLookInBattleList then
+		description = onLookInBattleList(self, creature, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
 function Player:onLookInTrade(partner, item, distance)
 	local description = "You see " .. item:getDescription(distance)
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINTRADE) then
-		description = EventCallback(EVENT_CALLBACK_ONLOOKINTRADE, self, partner, item, distance, description)
+	local onLookInTrade = EventCallback.onLookInTrade
+	if onLookInTrade then
+		description = onLookInTrade(self, partner, item, distance, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
 end
 
-function Player:onLookInShop(itemType, count, description)
-	local description = "You see " .. description
-	if hasEventCallback(EVENT_CALLBACK_ONLOOKINSHOP) then
-		description = EventCallback(EVENT_CALLBACK_ONLOOKINSHOP, self, itemType, count, description)
+function Player:onLookInShop(itemType, count)
+	local description = "You see "
+	local onLookInShop = EventCallback.onLookInShop
+	if onLookInShop then
+		description = onLookInShop(self, itemType, count, description)
 	end
-	self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+
+	if description ~= "" then
+		self:sendTextMessage(MESSAGE_INFO_DESCR, description)
+	end
+end
+
+function Player:onLookInMarket(itemType)
+	local onLookInMarket = EventCallback.onLookInMarket
+	if onLookInMarket then
+		onLookInMarket(self, itemType)
+	end
 end
 
 function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if hasEventCallback(EVENT_CALLBACK_ONMOVEITEM) then
-		return EventCallback(EVENT_CALLBACK_ONMOVEITEM, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	local onMoveItem = EventCallback.onMoveItem
+	if onMoveItem then
+		return onMoveItem(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
-	return true
+	return RETURNVALUE_NOERROR
 end
 
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
-	if hasEventCallback(EVENT_CALLBACK_ONITEMMOVED) then
-		EventCallback(EVENT_CALLBACK_ONITEMMOVED, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+	local onItemMoved = EventCallback.onItemMoved
+	if onItemMoved then
+		onItemMoved(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	end
 end
 
 function Player:onMoveCreature(creature, fromPosition, toPosition)
-	if hasEventCallback(EVENT_CALLBACK_ONMOVECREATURE) then
-		return EventCallback(EVENT_CALLBACK_ONMOVECREATURE, self, creature, fromPosition, toPosition)
+	local onMoveCreature = EventCallback.onMoveCreature
+	if onMoveCreature then
+		return onMoveCreature(self, creature, fromPosition, toPosition)
 	end
 	return true
 end
 
 function Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
-	if hasEventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION) then
-		EventCallback(EVENT_CALLBACK_ONREPORTRULEVIOLATION, self, targetName, reportType, reportReason, comment, translation)
+	local onReportRuleViolation = EventCallback.onReportRuleViolation
+	if onReportRuleViolation then
+		onReportRuleViolation(self, targetName, reportType, reportReason, comment, translation)
 	end
 end
 
 function Player:onReportBug(message, position, category)
-	if hasEventCallback(EVENT_CALLBACK_ONREPORTBUG) then
-		return EventCallback(EVENT_CALLBACK_ONREPORTBUG, self, message, position, category)
+	local onReportBug = EventCallback.onReportBug
+	if onReportBug then
+		return onReportBug(self, message, position, category)
 	end
 	return true
 end
 
 function Player:onTurn(direction)
-	if hasEventCallback(EVENT_CALLBACK_ONTURN) then
-		return EventCallback(EVENT_CALLBACK_ONTURN, self, direction)
+	local onTurn = EventCallback.onTurn
+	if onTurn then
+		return onTurn(self, direction)
 	end
 	return true
 end
 
 function Player:onTradeRequest(target, item)
-	if hasEventCallback(EVENT_CALLBACK_ONTRADEREQUEST) then
-		return EventCallback(EVENT_CALLBACK_ONTRADEREQUEST, self, target, item)
+	local onTradeRequest = EventCallback.onTradeRequest
+	if onTradeRequest then
+		return onTradeRequest(self, target, item)
 	end
 	return true
 end
 
 function Player:onTradeAccept(target, item, targetItem)
-	if hasEventCallback(EVENT_CALLBACK_ONTRADEACCEPT) then
-		return EventCallback(EVENT_CALLBACK_ONTRADEACCEPT, self, target, item, targetItem)
+	local onTradeAccept = EventCallback.onTradeAccept
+	if onTradeAccept then
+		return onTradeAccept(self, target, item, targetItem)
 	end
 	return true
 end
 
 function Player:onTradeCompleted(target, item, targetItem, isSuccess)
-	if hasEventCallback(EVENT_CALLBACK_ONTRADECOMPLETED) then
-		EventCallback(EVENT_CALLBACK_ONTRADECOMPLETED, self, target, item, targetItem, isSuccess)
+	local onTradeCompleted = EventCallback.onTradeCompleted
+	if onTradeCompleted then
+		onTradeCompleted(self, target, item, targetItem, isSuccess)
 	end
+end
+
+function Player:onPodiumRequest(item)
+	if not item:isPodium() then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return
+	end
+
+	self:sendEditPodium(item)
+end
+
+function Player:onPodiumEdit(item, outfit, direction, isVisible)
+	if not item:isPodium() then
+		self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+		return
+	end
+
+	if not self:getGroup():getAccess() then
+		-- check if the player is in melee range
+		if getDistanceBetween(self:getPosition(), item:getPosition()) > 1 then
+			self:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)
+			return
+		end
+
+		-- reset outfit if unable to wear
+		if not self:canWearOutfit(outfit.lookType, outfit.lookAddons) then
+			outfit.lookType = 0
+		end
+
+		-- reset mount if unable to ride
+		local mount = Game.getMountIdByLookType(outfit.lookMount)
+		if not (mount and self:hasMount(mount)) then
+			outfit.lookMount = 0
+		end
+	end
+
+	local podiumOutfit = item:getOutfit()
+	local playerOutfit = self:getOutfit()
+
+	-- use player outfit if podium is empty
+	if podiumOutfit.lookType == 0 then
+		podiumOutfit.lookType = playerOutfit.lookType
+		podiumOutfit.lookHead = playerOutfit.lookHead
+		podiumOutfit.lookBody = playerOutfit.lookBody
+		podiumOutfit.lookLegs = playerOutfit.lookLegs
+		podiumOutfit.lookFeet = playerOutfit.lookFeet
+		podiumOutfit.lookAddons = playerOutfit.lookAddons
+	end
+
+	-- set player mount colors podium is empty
+	if podiumOutfit.lookMount == 0 then
+		podiumOutfit.lookMount = playerOutfit.lookMount
+		podiumOutfit.lookMountHead = playerOutfit.lookMountHead
+		podiumOutfit.lookMountBody = playerOutfit.lookMountBody
+		podiumOutfit.lookMountLegs = playerOutfit.lookMountLegs
+		podiumOutfit.lookMountFeet = playerOutfit.lookMountFeet
+	end
+
+	-- "outfit" box checked
+	if outfit.lookType ~= 0 then
+		podiumOutfit.lookType = outfit.lookType
+		podiumOutfit.lookHead = outfit.lookHead
+		podiumOutfit.lookBody = outfit.lookBody
+		podiumOutfit.lookLegs = outfit.lookLegs
+		podiumOutfit.lookFeet = outfit.lookFeet
+		podiumOutfit.lookAddons = outfit.lookAddons
+	end
+
+	-- "mount" box checked
+	if outfit.lookMount ~= 0 then
+		podiumOutfit.lookMount = outfit.lookMount
+		podiumOutfit.lookMountHead = outfit.lookMountHead
+		podiumOutfit.lookMountBody = outfit.lookMountBody
+		podiumOutfit.lookMountLegs = outfit.lookMountLegs
+		podiumOutfit.lookMountFeet = outfit.lookMountFeet
+	end
+
+	-- prevent invisible podium state
+	if outfit.lookType == 0 and outfit.lookMount == 0 then
+		isVisible = true
+	end
+
+	-- save player choices
+	item:setFlag(PODIUM_SHOW_PLATFORM, isVisible)
+	item:setFlag(PODIUM_SHOW_OUTFIT, outfit.lookType ~= 0)
+	item:setFlag(PODIUM_SHOW_MOUNT, outfit.lookMount ~= 0)
+	item:setDirection(direction < DIRECTION_NORTHEAST and direction or DIRECTION_SOUTH)
+	item:setOutfit(podiumOutfit)
 end
 
 local soulCondition = Condition(CONDITION_SOUL, CONDITIONID_DEFAULT)
@@ -108,6 +229,10 @@ local function useStamina(player)
 	end
 
 	local playerId = player:getId()
+	if not nextUseStaminaTime[playerId] then
+		nextUseStaminaTime[playerId] = 0
+	end
+
 	local currentTime = os.time()
 	local timePassed = currentTime - nextUseStaminaTime[playerId]
 	if timePassed <= 0 then
@@ -148,31 +273,34 @@ function Player:onGainExperience(source, exp, rawExp)
 		useStamina(self)
 
 		local staminaMinutes = self:getStamina()
-		if staminaMinutes > 2400 and self:isPremium() then
+		if staminaMinutes > 2340 and self:isPremium() then
 			exp = exp * 1.5
 		elseif staminaMinutes <= 840 then
 			exp = exp * 0.5
 		end
 	end
 
-	return hasEventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONGAINEXPERIENCE, self, source, exp, rawExp) or exp
+	local onGainExperience = EventCallback.onGainExperience
+	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp
 end
 
 function Player:onLoseExperience(exp)
-	return hasEventCallback(EVENT_CALLBACK_ONLOSEEXPERIENCE) and EventCallback(EVENT_CALLBACK_ONLOSEEXPERIENCE, self, exp) or exp
+	local onLoseExperience = EventCallback.onLoseExperience
+	return onLoseExperience and onLoseExperience(self, exp) or exp
 end
 
 function Player:onGainSkillTries(skill, tries)
-	if APPLY_SKILL_MULTIPLIER == false then
-		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
+	local onGainSkillTries = EventCallback.onGainSkillTries
+	if not APPLY_SKILL_MULTIPLIER then
+		return onGainSkillTries and onGainSkillTries(self, skill, tries) or tries
 	end
 
 	if skill == SKILL_MAGLEVEL then
 		tries = tries * configManager.getNumber(configKeys.RATE_MAGIC)
-		return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
+		return onGainSkillTries and onGainSkillTries(self, skill, tries) or tries
 	end
 	tries = tries * configManager.getNumber(configKeys.RATE_SKILL)
-	return hasEventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES) and EventCallback(EVENT_CALLBACK_ONGAINSKILLTRIES, self, skill, tries) or tries
+	return onGainSkillTries and onGainSkillTries(self, skill, tries) or tries
 end
 
 function Player:onWrapItem(item)
@@ -202,7 +330,8 @@ function Player:onWrapItem(item)
 		return
 	end
 
-	if not hasEventCallback(EVENT_CALLBACK_ONWRAPITEM) or EventCallback(EVENT_CALLBACK_ONWRAPITEM, self, item) then
+	local onWrapItem = EventCallback.onWrapItem
+	if not onWrapItem or onWrapItem(self, item) then
 		local oldId = item:getId()
 		item:remove(1)
 		local item = tile:addItem(wrapId)
@@ -210,4 +339,21 @@ function Player:onWrapItem(item)
 			item:setAttribute("wrapid", oldId)
 		end
 	end
+end
+
+function Player:onInventoryUpdate(item, slot, equip)
+	local onInventoryUpdate = EventCallback.onInventoryUpdate
+	if onInventoryUpdate then
+		onInventoryUpdate(self, item, slot, equip)
+	end
+end
+
+function Player:onNetworkMessage(recvByte, msg)
+	local handler = PacketHandlers[recvByte]
+	if not handler then
+		--io.write(string.format("Player: %s sent an unknown packet header: 0x%02X with %d bytes!\n", self:getName(), recvByte, msg:len()))
+		return
+	end
+
+	handler(self, msg)
 end
