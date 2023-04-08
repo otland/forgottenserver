@@ -3509,8 +3509,12 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 
 		changeSpeed(player, speedChange);
 		player->setCurrentMount(mount->id);
-	} else if (player->isMounted()) {
-		player->dismount();
+	} else {
+		if (player->isMounted()) {
+			player->dismount();
+		}
+
+		player->wasMounted = false;
 	}
 
 	if (player->canWear(outfit.lookType, outfit.lookAddons)) {
@@ -3526,6 +3530,10 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 		}
 
 		internalCreatureChangeOutfit(player, outfit);
+	}
+
+	if (player->isMounted()) {
+		player->onChangeZone(player->getZone());
 	}
 }
 
