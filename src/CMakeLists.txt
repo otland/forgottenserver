@@ -173,9 +173,8 @@ set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp PARENT_SCOPE)
 
 add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
-	Boost::date_time
-	Boost::system
 	Boost::iostreams
+	Boost::system
 	fmt::fmt
 	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
