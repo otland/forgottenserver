@@ -7,31 +7,14 @@ on:
 
 jobs:
   unix:
-    name: ${{ matrix.os }}-${{ matrix.cxx }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
-        name: [ubuntu-gcc, macos-clang, windows-msvc]
-        buildtype: [Release]
-        luajit: [on]
-        include:
-          - name: ubuntu-gcc
-            os: ubuntu
-            cxx: g++
-            cc: gcc
-          - name: macos-clang
-            os: macos
-            cxx: clang++
-            cc: clang
-          - name: windows-msvc
-            os: windows
-            cxx: cl.exe
-            cc: cl.exe
+        os: [ubuntu, macos, windows]
 
     env:
-      CXX: ${{ matrix.cxx }}
-      CC: ${{ matrix.cc }}
+      VCPKG_FEATURE_FLAGS: luajit
 
     steps:
       - uses: actions/checkout@v3
@@ -39,15 +22,6 @@ jobs:
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
-
-      - name: Enable LuaJIT
-        if: ${{ matrix.luajit }} == "on"
-        run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
-
-      - name: Set Environment vars
-        run: |
-          echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
-          echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
 
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
@@ -71,32 +45,15 @@ jobs:
       - name: Zip the release files
         uses: thedoctor0/zip-release@master
         with:
-          type: tar
-          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
-          path: forgottenserver
-          directory: ../
-
-      - name: Upload release artifact
-        uses: ncipollo/release-action@v3
-        with:
-          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.tar.gz
-          generateReleaseNotes: true
-          allowUpdates: true
-          token: ${{ secrets.GITHUB_TOKEN }}
-        shell: bash
-
-      - name: Zip the release files
-        uses: thedoctor0/zip-release@master
-        with:
           type: zip
-          filename: tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          filename: tfs-${{ github.ref_name }}-${{ matrix.os }}.zip
           path: forgottenserver
           directory: ../
 
       - name: Upload release artifact
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.name }}.zip
+          artifacts: ../tfs-${{ github.ref_name }}-${{ matrix.os }}.zip
           generateReleaseNotes: true
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
