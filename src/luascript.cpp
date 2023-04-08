@@ -20,6 +20,7 @@
 #include "iomapserialize.h"
 #include "iomarket.h"
 #include "luavariant.h"
+#include "matrixarea.h"
 #include "monster.h"
 #include "movement.h"
 #include "npc.h"
