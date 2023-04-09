@@ -329,6 +329,13 @@ public:
 		return getNumber<T>(L, -1);
 	}
 
+	template <typename T, typename... Args>
+	static T getField(lua_State* L, int32_t arg, const std::string& key, T&& defaultValue)
+	{
+		lua_getfield(L, arg, key.c_str());
+		return getNumber<T>(L, -1, std::forward<T>(defaultValue));
+	}
+
 	static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
 
 	static LuaDataType getUserdataType(lua_State* L, int32_t arg);
