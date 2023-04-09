@@ -173,15 +173,14 @@ set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp PARENT_SCOPE)
 
 add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
-	Boost::date_time
-	Boost::system
 	Boost::iostreams
+	Boost::system
 	fmt::fmt
+	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
 	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
-	${PUGIXML_LIBRARIES}
 	)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
