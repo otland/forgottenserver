@@ -517,9 +517,10 @@ if NpcHandler == nil then
 		if self:isInRange(cid) then
 			if not self:isFocused(cid) then
 				self:greet(cid)
-				return
+				return true
 			end
 		end
+		return false
 	end
 
 	-- Simply calls the underlying unGreet function.
