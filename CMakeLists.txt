@@ -10,7 +10,7 @@ add_executable(tfs ${tfs_SRC})
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-set_target_properties(tfs PROPERTIES CXX_STANDARD 17)
+set_target_properties(tfs PROPERTIES CXX_STANDARD 20)
 set_target_properties(tfs PROPERTIES CXX_STANDARD_REQUIRED ON)
 
 if (NOT WIN32)
