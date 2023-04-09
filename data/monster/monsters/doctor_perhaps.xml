@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Doctor Perhaps" nameDescription="Doctor Perhaps" race="blood" experience="325" speed="200">
+	<health now="475" max="475" />
+	<look type="133" head="95" body="0" legs="94" feet="114" addons="1" corpse="20439" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-43" />
+		<attack name="drown" interval="2000" chance="15" range="5" radius="3" target="1" min="-17" max="-55">
+			<attribute key="shootEffect" value="smallearth" />
+			<attribute key="areaEffect" value="bluebubble" />
+		</attack>
+		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-20" max="-40">
+			<attribute key="shooteffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="15">
+		<defense name="healing" interval="2000" chance="15" min="10" max="30">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="-5" />
+		<element energyPercent="20" />
+		<element earthPercent="20" />
+		<element firePercent="10" />
+		<element icePercent="20" />
+		<element holyPercent="20" />
+	</elements>
+	<immunities>
+		<immunity drown="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="I might use some parts of you in my next creation!" />
+		<voice sentence="You're only a testsubject to me!" />
+		<voice sentence="My creations will kill you!" />
+		<voice sentence="You can't beat what you can't comprehend!" />
+	</voices>
+	<loot>
+		<item id="10290" name="glutton's mace" chance="40000" />
+		<item id="10300" name="trousers of the ancients" chance="20000" />
+		<item id="10289" name="meat shield" chance="40000" />
+	</loot>
+</monster>

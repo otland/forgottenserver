@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Powered Minotaur" nameDescription="a glooth powered minotaur" race="blood" experience="2600" speed="200">
+	<health now="3200" max="3200" />
+	<look type="607" corpse="23367" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-290" />
+		<attack name="physical" interval="2000" chance="15" radius="3" min="0" max="-200">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" range="7" radius="4" target="1" min="-100" max="-225">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="45">
+		<defense name="healing" interval="4000" chance="15" min="50" max="145">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<elements>
+		<element physicalPercent="95" />
+		<element energyPercent="95" />
+		<element earthPercent="95" />
+		<element firePercent="95" />
+		<element icePercent="95" />
+		<element holyPercent="95" />
+		<element deathPercent="95" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="POOOWEEER!" />
+	</voices>
+</monster>

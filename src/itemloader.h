@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_ITEMLOADER_H
@@ -95,8 +95,9 @@ enum clientVersion_t
 	CLIENT_VERSION_1281 = 60,
 	CLIENT_VERSION_1285 = 61,
 	CLIENT_VERSION_1286 = 62,
+	CLIENT_VERSION_1287 = 63,
 
-	CLIENT_VERSION_LAST = CLIENT_VERSION_1286
+	CLIENT_VERSION_LAST = CLIENT_VERSION_1287
 };
 
 enum rootattrib_

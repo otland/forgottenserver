@@ -371,3 +371,25 @@ function Player.addAllMounts(self)
 		self:addMount(mounts[mount].id)
 	end
 end
+
+function Player.setSpecialContainersAvailable(self, available)
+	local msg = NetworkMessage()
+	msg:addByte(0x2A)
+
+	msg:addByte(0x00) -- stash
+	msg:addByte(available and 0x01 or 0x00) -- market
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.addBankBalance(self, amount)
+	self:setBankBalance(self:getBankBalance() + amount)
+end
+
+function Player.isPromoted(self)
+	local vocation = self:getVocation()
+	local fromVocId = vocation:getDemotion():getId()
+	return vocation:getId() ~= fromVocId
+end

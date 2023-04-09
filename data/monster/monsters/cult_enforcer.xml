@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Cult Enforcer" nameDescription="a cult enforcer" race="blood" experience="1000" speed="260">
+	<health now="1150" max="1150" />
+	<look type="134" head="95" body="19" legs="57" feet="76" addons="1" corpse="24673" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="10" />
+	</elements>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="physical" interval="2000" chance="15" min="-50" max="-100" range="5" radius="1" target="1">
+			<attribute key="shootEffect" value="spear" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="20" min="150" max="200" />
+	</defenses>
+	<voices interval="1000" chance="5">
+		<voice sentence="No one will stop us!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="70" />
+		<item id="2666" name="meat" chance="11045" />
+		<item id="7591" name="great health potion" chance="6422" />
+		<item id="10556" name="cultish robe" chance="4983" />
+		<item id="2381" name="halberd" chance="2980" />
+		<item id="2145" name="small diamond" chance="2826" />
+		<item id="2149" name="small emerald" chance="2749" />
+		<item id="2150" name="small amethyst" chance="2081" />
+		<item id="2391" name="war hammer" chance="719" />
+		<item id="2164" name="might ring" chance="591" />
+		<item id="2661" name="scarf" chance="488" />
+		<item id="2515" name="guardian shield" chance="437" />
+		<item id="2477" name="knight legs" chance="180" />
+		<item id="2475" name="warrior helmet" chance="180" />
+		<item id="2114" name="piggy bank" chance="51" />
+	</loot>
+</monster>

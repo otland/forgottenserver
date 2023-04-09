@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CONST_H
@@ -145,7 +145,7 @@ enum MagicEffectClasses : uint8_t
 	CONST_ME_FLOATINGBLOCK = 208,
 	CONST_ME_BLOCK = 209,
 	CONST_ME_ROOTING = 210,
-	// 211-212 are empty
+	// 211-212 were removed from the client
 	CONST_ME_GHOSTLYSCRATCH = 213,
 	CONST_ME_GHOSTLYBITE = 214,
 	CONST_ME_BIGSCRATCHING = 215,
@@ -164,7 +164,8 @@ enum MagicEffectClasses : uint8_t
 	CONST_ME_FATAL = 230,
 	CONST_ME_DODGE = 231,
 	CONST_ME_HOURGLASS = 232,
-	// 233-234 are empty
+	CONST_ME_FIREWORKSSTAR = 233,
+	CONST_ME_FIREWORKSCIRCLE = 234,
 	CONST_ME_FERUMBRAS_1 = 235,
 	CONST_ME_GAZHARAGOTH = 236,
 	CONST_ME_MAD_MAGE = 237,
@@ -527,6 +528,7 @@ enum item_t : uint16_t
 	ITEM_FIREFIELD_PERSISTENT_MEDIUM = 1493,
 	ITEM_FIREFIELD_PERSISTENT_SMALL = 1494,
 	ITEM_FIREFIELD_NOPVP = 1500,
+	ITEM_FIREFIELD_NOPVP_MEDIUM = 1501,
 
 	ITEM_POISONFIELD_PVP = 1490,
 	ITEM_POISONFIELD_PERSISTENT = 1496,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="250" manacost="775">
+<monster name="Pirate Corsair" nameDescription="a pirate corsair" race="blood" experience="350" speed="238" manacost="775">
 	<health now="675" max="675" />
 	<look type="98" corpse="20475" />
 	<targetchange interval="4000" chance="15" />
@@ -26,7 +26,7 @@
 		</attack>
 		<attack name="pirate corsair skill reducer" interval="2000" chance="5" />
 	</attacks>
-	<defenses armor="35" defense="35" />
+	<defenses armor="20" defense="20" />
 	<elements>
 		<element earthPercent="20" />
 		<element holyPercent="10" />
@@ -43,23 +43,21 @@
 		<voice sentence="Plundeeeeer!" />
 	</voices>
 	<loot>
-		<item name="piggy bank" chance="150" />
-		<item name="gold coin" countmax="88" chance="50000" />
-		<item id="2376" chance="3000" /><!-- sword -->
-		<item name="sabre" chance="10000" />
-		<item name="throwing star" countmax="12" chance="8400" />
-		<item name="dark armor" chance="1650" />
-		<item name="dark shield" chance="1000" />
-		<item name="pirate boots" chance="220" />
-		<item name="rum flask" chance="130" />
-		<item id="5813" chance="130" /><!-- skull candle -->
-		<item name="pirate backpack" chance="930" />
-		<item name="pirate hat" chance="1150" />
-		<item name="hook" chance="600" />
-		<item name="eye patch" chance="500" />
-		<item name="peg leg" chance="600" />
-		<item name="strong health potion" chance="820" />
-		<item name="compass" chance="11050" />
-		<item name="compass" chance="11020" />
+		<item id="2148" name="gold coin" chance="55352" countmax="86" />
+		<item id="11219" name="compass" chance="10163" />
+		<item id="2385" name="sabre" chance="9816" />
+		<item id="2399" name="throwing star" chance="8104" countmax="12" />
+		<item id="2489" name="dark armor" chance="1874" />
+		<item id="2521" name="dark shield" chance="1105" />
+		<item id="6096" name="pirate hat" chance="1094" />
+		<item id="5926" name="pirate backpack" chance="1029" />
+		<item id="7588" name="strong health potion" chance="802" />
+		<item id="6097" name="hook" chance="574" />
+		<item id="6126" name="peg leg" chance="553" />
+		<item id="6098" name="eye patch" chance="488" />
+		<item id="5462" name="pirate boots" chance="325" />
+		<item id="5813" name="skull candle" chance="119" />
+		<item id="5553" name="rum flask" chance="98" />
+		<item id="2114" name="piggy bank" chance="87" />
 	</loot>
 </monster>

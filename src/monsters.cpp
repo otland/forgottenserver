@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -8,6 +8,7 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
+#include "matrixarea.h"
 #include "pugicast.h"
 #include "spells.h"
 #include "weapons.h"
@@ -60,7 +61,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
 
 	for (auto it : unloadedMonsters) {
-		if ((forceLoad || reloading) && monsters.find(it.first) != monsters.end()) {
+		if (forceLoad || (reloading && monsters.find(it.first) != monsters.end())) {
 			loadMonster(it.second, it.first, reloading);
 		}
 	}
@@ -166,7 +167,8 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		}
 
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, needTarget, needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + scriptName)) {
+		if (!combatSpellPtr->loadScript("data/" + std::string{g_spells->getScriptBaseName()} + "/scripts/" +
+		                                scriptName)) {
 			return false;
 		}
 
@@ -582,7 +584,8 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 
 	if (spell->isScripted) {
 		std::unique_ptr<CombatSpell> combatSpellPtr(new CombatSpell(nullptr, spell->needTarget, spell->needDirection));
-		if (!combatSpellPtr->loadScript("data/" + g_spells->getScriptBaseName() + "/scripts/" + spell->scriptName)) {
+		if (!combatSpellPtr->loadScript("data/" + std::string{g_spells->getScriptBaseName()} + "/scripts/" +
+		                                spell->scriptName)) {
 			std::cout << "cannot find file" << std::endl;
 			return false;
 		}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Ogre Savage" nameDescription="an animated ogre savage" race="blood" experience="950" speed="240">
+	<health now="1400" max="1400" />
+	<look type="858" corpse="24803" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-300" />
+		<attack name="fire" interval="2000" chance="15" range="7" min="-70" max="-180">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="20" defense="20">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="116" />
+		<item id="24844" name="ogre ear stud" chance="26667" />
+		<item id="2194" name="mysterious fetish" chance="13333" />
+		<item id="24845" name="ogre nose ring" chance="13333" />
+		<item id="7588" name="strong health potion" chance="13333" />
+		<item id="8844" name="jalapeno pepper" chance="6667" countmax="2" />
+		<item id="24849" name="onyx chip" chance="6667" />
+	</loot>
+</monster>

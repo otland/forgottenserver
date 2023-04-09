@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Animated Ogre Shaman" nameDescription="an animated ogre shaman" race="blood" experience="625" speed="240">
+	<health now="800" max="800" />
+	<look type="859" corpse="24795" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="fire" interval="2000" chance="15" range="7" min="-70" max="-180">
+			<attribute key="shootEffect" value="poison" />
+		</attack>
+		<attack name="outfit" interval="2000" chance="8" range="7" monster="chicken" duration="4000">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="earth" interval="2000" chance="20" length="8" spread="3" min="-15" max="-120">
+			<attribute key="areaEffect" value="carniphila" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="10" min="80" max="95">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="90" />
+		<item id="24844" name="ogre ear stud" chance="20000" />
+		<item id="2229" name="skull (item)" chance="20000" />
+		<item id="24845" name="ogre nose ring" chance="13333" />
+		<item id="20111" name="bone fetish" chance="6667" />
+		<item id="12408" name="broken shamanic staff" chance="6667" />
+		<item id="2185" name="necrotic rod" chance="6667" />
+		<item id="24841" name="prickly pear" chance="6667" countmax="2" />
+		<item id="24840" name="shamanic talisman" chance="6667" />
+		<item id="24847" name="skull fetish" chance="6667" />
+		<item id="7589" name="strong mana potion" chance="6667" />
+	</loot>
+</monster>

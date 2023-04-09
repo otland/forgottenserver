@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CONDITION_H
@@ -43,6 +43,8 @@ enum ConditionAttr_t
 	CONDITIONATTR_ISAGGRESSIVE,
 	CONDITIONATTR_DISABLEDEFENSE,
 	CONDITIONATTR_SPECIALSKILLS,
+	CONDITIONATTR_MANASHIELD_BREAKABLE_MANA,
+	CONDITIONATTR_MANASHIELD_BREAKABLE_MAXMANA,
 
 	// reserved for serialization
 	CONDITIONATTR_END = 254,
@@ -438,6 +440,36 @@ private:
 	uint8_t drunkenness = 25;
 
 	bool updateCondition(const Condition* addCondition) override;
+};
+
+class ConditionManaShield final : public Condition
+{
+public:
+	ConditionManaShield(ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false,
+	                    uint32_t initSubId = 0) :
+	    Condition(initId, initType, iniTicks, initBuff, initSubId)
+	{}
+
+	bool startCondition(Creature* creature) override;
+	void endCondition(Creature* creature) override;
+	void addCondition(Creature* creature, const Condition* addCondition) override;
+	uint32_t getIcons() const override;
+
+	bool setParam(ConditionParam_t param, int32_t value) override;
+
+	ConditionManaShield* clone() const override { return new ConditionManaShield(*this); }
+
+	// serialization
+	void serialize(PropWriteStream& propWriteStream) override;
+	bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
+	int32_t onDamageTaken(Player* player, int32_t manaChange);
+
+	uint16_t getManaShield() { return manaShield; }
+	uint16_t getMaxManaShield() { return maxManaShield; }
+
+private:
+	uint16_t manaShield = 0;
+	uint16_t maxManaShield = 0;
 };
 
 #endif // FS_CONDITION_H

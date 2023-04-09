@@ -46,27 +46,27 @@
 		<voice sentence="Futchi maruk buta!" />
 	</voices>
 	<loot>
-		<item name="broken helmet" chance="24350" />
-		<item name="orc leather" chance="20620" />
-		<item name="gold coin" countmax="45" chance="18000" />
-		<item name="throwing star" countmax="18" chance="14000" />
-		<item id="2667" countmax="2" chance="10800" /><!-- fish -->
-		<item name="orc tooth" chance="9140" />
-		<item name="orcish axe" chance="5400" />
-		<item name="plate armor" chance="5210" />
-		<item name="skull belt" chance="5000" />
-		<item name="hunting spear" chance="4700" />
-		<item name="plate legs" chance="3800" />
-		<item id="2419" chance="3450" /><!-- scimitar -->
-		<item name="two handed sword" chance="1980" />
-		<item name="protection amulet" chance="1800" />
-		<item name="dark helmet" chance="1260" />
-		<item name="brass armor" chance="860" />
-		<item name="health potion" chance="380" />
-		<item name="crusader helmet" chance="330" />
-		<item name="magma boots" chance="280" />
-		<item name="dragon hammer" chance="230" />
-		<item id="7395" chance="130" /><!-- orc trophy -->
-		<item name="stealth ring" chance="130" />
+		<item id="12409" name="broken helmet" chance="25259" />
+		<item id="12435" name="orc leather" chance="20351" />
+		<item id="2148" name="gold coin" chance="18998" countmax="45" />
+		<item id="2399" name="throwing star" chance="14658" countmax="18" />
+		<item id="2667" name="fish" chance="10484" countmax="2" />
+		<item id="11113" name="orc tooth" chance="10033" />
+		<item id="2463" name="plate armor" chance="5526" />
+		<item id="2428" name="orcish axe" chance="5426" />
+		<item id="12436" name="skull belt" chance="4958" />
+		<item id="3965" name="hunting spear" chance="4825" />
+		<item id="2647" name="plate legs" chance="3907" />
+		<item id="2419" name="scimitar" chance="2972" />
+		<item id="2377" name="two handed sword" chance="1953" />
+		<item id="2200" name="protection amulet" chance="1853" />
+		<item id="2490" name="dark helmet" chance="1285" />
+		<item id="2465" name="brass armor" chance="935" />
+		<item id="7618" name="health potion" chance="384" />
+		<item id="2497" name="crusader helmet" chance="301" />
+		<item id="2434" name="dragon hammer" chance="234" />
+		<item id="7891" name="magma boots" chance="184" />
+		<item id="7395" name="orc trophy" chance="134" />
+		<item id="2165" name="stealth ring" chance="117" />
 	</loot>
 </monster>

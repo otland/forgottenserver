@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_MOVEMENT_H
@@ -35,8 +35,6 @@ struct MoveEventList
 	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
 };
 
-using VocEquipMap = std::map<uint16_t, bool>;
-
 class MoveEvents final : public BaseEvents
 {
 public:
@@ -65,7 +63,7 @@ private:
 	void clearPosMap(MovePosListMap& map, bool fromLua);
 
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "movements"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
@@ -119,13 +117,17 @@ public:
 	const std::string& getVocationString() const { return vocationString; }
 	void setVocationString(const std::string& str) { vocationString = str; }
 	uint32_t getWieldInfo() const { return wieldInfo; }
-	const VocEquipMap& getVocEquipMap() const { return vocEquipMap; }
-	void addVocEquipMap(std::string vocName)
+	const auto& getVocationEquipSet() const { return vocationEquipSet; }
+	void addVocationEquipSet(const std::string& vocationName)
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocName);
+		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
-			vocEquipMap[vocationId] = true;
+			vocationEquipSet.insert(vocationId);
 		}
+	}
+	bool hasVocationEquipSet(uint16_t vocationId) const
+	{
+		return !vocationEquipSet.empty() && vocationEquipSet.find(vocationId) != vocationEquipSet.end();
 	}
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }
@@ -166,7 +168,7 @@ public:
 	EquipFunction equipFunction;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override;
 
 	uint32_t slot = SLOTP_WHEREEVER;
 
@@ -176,7 +178,7 @@ private:
 	bool premium = false;
 	std::string vocationString;
 	uint32_t wieldInfo = 0;
-	VocEquipMap vocEquipMap;
+	std::unordered_set<uint16_t> vocationEquipSet;
 	bool tileItem = false;
 
 	std::vector<uint32_t> itemIdRange;

@@ -36,13 +36,13 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/luascript.cpp
 	${CMAKE_CURRENT_LIST_DIR}/mailbox.cpp
 	${CMAKE_CURRENT_LIST_DIR}/map.cpp
+	${CMAKE_CURRENT_LIST_DIR}/matrixarea.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monster.cpp
 	${CMAKE_CURRENT_LIST_DIR}/monsters.cpp
 	${CMAKE_CURRENT_LIST_DIR}/mounts.cpp
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
-	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/party.cpp
@@ -76,7 +76,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/weapons.cpp
 	${CMAKE_CURRENT_LIST_DIR}/wildcardtree.cpp
 	${CMAKE_CURRENT_LIST_DIR}/xtea.cpp
-	PARENT_SCOPE)
+	)
 
 set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/otpch.h
@@ -123,6 +123,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/luavariant.h
 	${CMAKE_CURRENT_LIST_DIR}/mailbox.h
 	${CMAKE_CURRENT_LIST_DIR}/map.h
+	${CMAKE_CURRENT_LIST_DIR}/matrixarea.h
 	${CMAKE_CURRENT_LIST_DIR}/monster.h
 	${CMAKE_CURRENT_LIST_DIR}/monsters.h
 	${CMAKE_CURRENT_LIST_DIR}/mounts.h
@@ -168,4 +169,19 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/xtea.h
 	)
 
-add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC})
+set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp PARENT_SCOPE)
+
+add_library(tfslib ${tfs_SRC})
+target_link_libraries(tfslib PRIVATE
+	Boost::date_time
+	Boost::system
+	Boost::iostreams
+	fmt::fmt
+	${CMAKE_THREAD_LIBS_INIT}
+	${Crypto++_LIBRARIES}
+	${LUA_LIBRARIES}
+	${MYSQL_CLIENT_LIBS}
+	${PUGIXML_LIBRARIES}
+	)
+
+add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})

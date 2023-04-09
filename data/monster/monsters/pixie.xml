@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Pixie" nameDescription="a pixie" race="blood" experience="700" speed="240">
+	<health now="770" max="770" />
+	<look type="982" corpse="28467" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="4" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-250" />
+		<attack name="energy" interval="2000" chance="15" range="7" target="1" min="-85" max="-135">
+			<attribute key="shootEffect" value="energy" />
+			<attribute key="areaEffect" value="energy" />
+		</attack>
+		<attack name="speed" interval="2000" chance="11" length="4" spread="2" target="0" speedchange="-440" duration="7000">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</attack>
+		<attack name="energy" interval="2000" chance="30" range="4" min="0" max="-100">
+			<attribute key="shootEffect" value="leafstar" />
+		</attack>
+		<attack name="pixie skill reducer" interval="2000" chance="20" />
+	</attacks>
+	<defenses armor="52" defense="52">
+		<defense name="healing" interval="2000" chance="25" min="40" max="75">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<elements>
+		<element physicalPercent="-5" />
+		<element earthPercent="60" />
+		<element firePercent="-10" />
+		<element icePercent="-5" />
+		<element holyPercent="60" />
+		<element deathPercent="30" />
+	</elements>
+	<voices interval="1000" chance="5">
+		<voice sentence="Sweet dreams!" />
+		<voice sentence="Let's try a step or two!" />
+		<voice sentence="Glamour, glitter, glistering things! Do you have any of those?" />
+		<voice sentence="You might be a threat! I'm sorry but I can't allow you to linger here." />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="60240" countmax="166" />
+		<item id="28347" name="wild flowers" chance="17849" />
+		<item id="28351" name="dandelion seeds" chance="14862" />
+		<item id="28348" name="fresh fruit" chance="9771" />
+		<item id="28352" name="colourful snail shell" chance="9653" />
+		<item id="28391" name="leaf star" chance="8925" countmax="5" />
+		<item id="2800" name="star herb" chance="5036" />
+		<item id="2162" name="magic light wand" chance="4635" />
+		<item id="7590" name="great mana potion" chance="3342" />
+		<item id="2744" name="red rose" chance="3087" />
+		<item id="28393" name="rainbow quartz" chance="3078" countmax="3" />
+		<item id="7762" name="small enchanted amethyst" chance="2195" countmax="2" />
+		<item id="2796" name="green mushroom" chance="1794" />
+		<item id="7589" name="strong mana potion" chance="847" />
+		<item id="28354" name="butterfly ring" chance="601" />
+		<item id="28356" name="dream blossom staff" chance="537" />
+		<item id="28355" name="wooden spellbook" chance="355" />
+	</loot>
+</monster>

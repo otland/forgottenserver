@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Sin Devourer" nameDescription="a sin devourer" race="undead" experience="0" speed="0">
+	<health now="2700" max="2700" />
+	<look type="320" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-30" poison="80" />
+		<attack name="speed" interval="2000" chance="15" target="1" speedchange="-600" duration="15000">
+			<attribute key="areaEffect" value="sleep" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="12" range="1" target="1" min="-360" max="-470">
+			<attribute key="areaEffect" value="holyarea" />
+		</attack>
+		<attack name="speed" range="6" interval="2000" target="1" chance="40" speedchange="-600" duration="20000">
+			<attribute key="areaEffect" value="icearea" />
+			<attribute key="shootEffect" value="snowball" />
+		</attack>
+		<attack name="silencer skill reducer" range="4" interval="2000" chance="30">
+			<attribute key="areaEffect" value="poff" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="13" min="60" max="130">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+		<defense name="invisible" interval="2000" chance="10" duration="4000">
+			<attribute key="areaEffect" value="yellowbubble" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity energy="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

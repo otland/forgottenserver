@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="220">
+<monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="380">
 	<health now="5800" max="5800" />
 	<look type="232" corpse="6310" />
 	<targetchange interval="4000" chance="15" />
@@ -30,7 +30,7 @@
 	<elements>
 		<element icePercent="50" />
 		<element energyPercent="10" />
-		<element holyPercent="-20" />
+		<element holyPercent="-25" />
 	</elements>
 	<immunities>
 		<immunity fire="1" />
@@ -46,29 +46,25 @@
 		<voice sentence="Help meeee!" />
 	</voices>
 	<loot>
-		<item name="ruby necklace" chance="1500" />
-		<item name="white pearl" countmax="3" chance="10000" />
-		<item name="black pearl" countmax="3" chance="12000" />
-		<item name="gold coin" countmax="100" chance="50000" />
-		<item name="gold coin" countmax="98" chance="49000" />
-		<item name="platinum coin" countmax="7" chance="100000" />
-		<item name="red gem" chance="15000" />
-		<item name="stone skin amulet" chance="2780" />
-		<item name="blank rune" countmax="3" chance="35250" />
-		<item name="skull staff" chance="850" />
-		<item name="tower shield" chance="740" />
-		<item name="skull helmet" chance="170" />
-		<item name="silver goblet" chance="4950" />
-		<item name="soul orb" chance="15000" />
-		<item id="6300" chance="2170" /><!-- death ring -->
-		<item name="demonic essence" chance="7500" />
-		<item name="skeleton decoration" chance="1250" />
-		<item name="haunted blade" chance="740" />
-		<item name="titan axe" chance="1000" />
-		<item name="great mana potion" countmax="2" chance="14200" />
-		<item name="great health potion" countmax="2" chance="8800" />
-		<item id="9809" chance="3500" /><!-- rusty armor (semi-rare) -->
-		<item id="9810" chance="3500" /><!-- rusty armor (rare) -->
-		<item name="unholy bone" chance="33010" />
+		<item id="2148" name="gold coin" chance="100000" countmax="196" />
+		<item id="2152" name="platinum coin" chance="100000" countmax="7" />
+		<item id="2260" name="blank rune" chance="36842" countmax="3" />
+		<item id="11233" name="unholy bone" chance="33684" />
+		<item id="7590" name="great mana potion" chance="17193" countmax="2" />
+		<item id="2144" name="black pearl" chance="15439" countmax="3" />
+		<item id="5944" name="soul orb" chance="15439" />
+		<item id="2143" name="white pearl" chance="14035" countmax="3" />
+		<item id="7591" name="great health potion" chance="8421" countmax="2" />
+		<item id="6500" name="demonic essence" chance="5614" />
+		<item id="5806" name="silver goblet" chance="3860" />
+		<item id="9810" name="slightly rusted armor" chance="3158" />
+		<item id="2197" name="stone skin amulet" chance="2807" />
+		<item id="6300" name="death ring" chance="2456" />
+		<item id="2133" name="ruby necklace" chance="1404" />
+		<item id="6526" name="skeleton decoration" chance="1404" />
+		<item id="2156" name="red gem" chance="1053" />
+		<item id="7407" name="haunted blade" chance="702" />
+		<item id="2436" name="skull staff" chance="702" />
+		<item id="7413" name="titan axe" chance="351" />
 	</loot>
 </monster>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minion Of Versperoth" nameDescription="a minion of Versperoth" race="fire" experience="0" speed="310">
+	<health now="9000" max="9000" />
+	<look type="491" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-390" />
+		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-350" max="-700">
+			<attribute key="areaEffect" value="fireattack" />
+		</attack>
+		<attack name="manadrain" interval="2000" chance="10" length="8" spread="0" min="-600" max="-1300">
+			<attribute key="areaEffect" value="mortarea" />
+		</attack>
+		<attack name="lava golem soulfire" interval="2000" chance="15" />
+		<attack name="fire" interval="2000" chance="15" radius="4" target="1" min="-220" max="-350">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="speed" interval="2000" chance="10" target="0" length="5" spread="3" speedchange="-300" duration="10000">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="fire" interval="2000" chance="30" target="0" radius="3" min="-280" max="-350">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<elements>
+		<element physicalPercent="30" />
+		<element energyPercent="30" />
+		<element icePercent="-5" />
+		<element deathPercent="35" />
+	</elements>
+	<immunities>
+		<immunity earth="1" />
+		<immunity fire="1" />
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="Grrrrunt" />
+	</voices>
+</monster>

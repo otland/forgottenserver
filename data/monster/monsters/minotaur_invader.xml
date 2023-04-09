@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Minotaur Invader" nameDescription="a minotaur invader" race="blood" experience="1600" speed="240">
+	<health now="1850" max="1850" />
+	<look type="29" corpse="5983" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag ignorespawnblock="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-350" />
+	</attacks>
+	<defenses armor="40" defense="40" />
+	<elements>
+		<element firePercent="20" />
+		<element icePercent="-10" />
+		<element holyPercent="10" />
+		<element deathPercent="-10" />
+	</elements>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<voices interval="1000" chance="5">
+		<voice sentence="For the victory!" />
+		<voice sentence="We will crush the enemy!" />
+	</voices>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="200" />
+		<item id="2152" name="platinum coin" chance="49284" countmax="4" />
+		<item id="12438" name="piece of warrior armor" chance="14792" />
+		<item id="9970" name="small topaz" chance="10395" countmax="2" />
+		<item id="12428" name="minotaur horn" chance="8248" countmax="2" />
+		<item id="5878" name="minotaur leather" chance="5521" />
+		<item id="2150" name="small amethyst" chance="5249" />
+		<item id="2147" name="small ruby" chance="4618" />
+		<item id="23537" name="mooh'tah plate" chance="937" />
+		<item id="5912" name="blue piece of cloth" chance="801" />
+		<item id="2156" name="red gem" chance="784" />
+		<item id="2430" name="knight axe" chance="750" />
+		<item id="2515" name="guardian shield" chance="699" />
+		<item id="5911" name="red piece of cloth" chance="682" />
+		<item id="2475" name="warrior helmet" chance="596" />
+		<item id="7413" name="titan axe" chance="204" />
+		<item id="2158" name="blue gem" chance="187" />
+		<item id="7401" name="minotaur trophy" chance="187" />
+	</loot>
+</monster>

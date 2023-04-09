@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_WEAPONS_H
@@ -37,7 +37,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "weapons"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 
@@ -105,12 +105,17 @@ public:
 	uint32_t getWieldInfo() const { return wieldInfo; }
 	void setWieldInfo(uint32_t info) { wieldInfo |= info; }
 
-	void addVocWeaponMap(std::string vocName)
+	const auto& getVocationWeaponSet() const { return vocationWeaponSet; }
+	void addVocationWeaponSet(const std::string& vocationName)
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocName);
+		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
-			vocWeaponMap[vocationId] = true;
+			vocationWeaponSet.insert(vocationId);
 		}
+	}
+	bool hasVocationWeaponSet(uint16_t vocationId) const
+	{
+		return vocationWeaponSet.empty() || vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();
 	}
 
 	const std::string& getVocationString() const { return vocationString; }
@@ -119,7 +124,7 @@ public:
 	WeaponAction_t action = WEAPONACTION_NONE;
 	CombatParams params;
 	WeaponType_t weaponType;
-	std::map<uint16_t, bool> vocWeaponMap;
+	std::unordered_set<uint16_t> vocationWeaponSet;
 
 protected:
 	void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
@@ -147,7 +152,7 @@ private:
 	bool wieldUnproperly = false;
 	std::string vocationString = "";
 
-	std::string getScriptEventName() const override final;
+	std::string_view getScriptEventName() const override final { return "onUseWeapon"; }
 
 	bool executeUseWeapon(Player* player, const LuaVariant& var) const;
 	void onUsedWeapon(Player* player, Item* item, Tile* destTile) const;
