@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Blood Hand" nameDescription="a blood hand" race="blood" experience="750" speed="220">
+<monster name="Blood Hand" nameDescription="a blood hand" race="blood" experience="750" speed="220" raceId="974">
 	<health now="700" max="700" />
 	<look type="552" corpse="21257" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000"
+		charmPoints="25" stars="3" occurrence="0" locations="Blood Hand locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-158" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="20" target="0" radius="4" min="-50" max="-100">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Betrayed Wraith" nameDescription="a betrayed wraith" race="undead" experience="3500" speed="346">
+<monster name="Betrayed Wraith" nameDescription="a betrayed wraith" race="undead" experience="3500" speed="346" raceId="284">
 	<health now="4200" max="4200" />
 	<look type="233" corpse="6316" />
 	<targetchange interval="4000" chance="15" />
@@ -16,6 +16,8 @@
 		<flag staticattack="90" />
 		<flag runonhealth="300" />
 	</flags>
+	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Betrayed Wraith locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="betrayed wraith skill reducer" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Biting Book" nameDescription="a biting book" race="ink" experience="9350" speed="480">
+<monster name="Biting Book" nameDescription="a biting book" race="ink" experience="9350" speed="480" raceId="1656">
 	<health now="6500" max="6500" />
 	<look type="1066" corpse="31265" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,8 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Construct" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Biting Book locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-1055" />
 		<attack name="physical" interval="2000" chance="15" min="0" max="-1210" range="3" radius="1" target="1">

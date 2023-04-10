@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210">
+<monster name="Blood Priest" nameDescription="a blood priest" race="blood" experience="900" speed="210" raceId="961">
 	<health now="820" max="820" />
 	<look type="553" corpse="21262" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000"
+		charmPoints="25" stars="3" occurrence="0" locations="Blood Priest locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" poison="100" />
 		<attack name="death" interval="2000" chance="20" range="7" target="1" min="-60" max="-100">

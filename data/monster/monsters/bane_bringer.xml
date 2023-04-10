@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bane Bringer" nameDescription="a bane bringer" experience="400" speed="260" race="undead">
+<monster name="Bane Bringer" nameDescription="a bane bringer" experience="400" speed="260" race="undead" raceId="679">
 	<health now="2500" max="2500" />
 	<look type="310" corpse="9867" />
 	<targetchange speed="0" chance="8" />
@@ -16,6 +16,8 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Plant" prowess="2" expertise="3" mastery="5"
+		charmPoints="50" stars="3" occurrence="3" locations="Bane Bringer locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 	</attacks>

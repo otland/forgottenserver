@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bear" nameDescription="a bear" race="blood" experience="23" speed="156" manacost="300">
+<monster name="Bear" nameDescription="a bear" race="blood" experience="23" speed="156" manacost="300" raceId="16">
 	<health now="80" max="80" />
 	<look type="16" corpse="5975" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Bear locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>

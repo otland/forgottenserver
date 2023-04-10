@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Blood Crab" nameDescription="a blood crab" race="blood" experience="160" speed="160" manacost="505">
+<monster name="Blood Crab" nameDescription="a blood crab" race="blood" experience="160" speed="160" manacost="505" raceId="261">
 	<health now="290" max="290" />
 	<look type="200" corpse="6075" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Blood Crab locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>

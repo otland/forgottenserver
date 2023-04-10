@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bonebeast" nameDescription="a bonebeast" race="undead" experience="580" speed="218">
+<monster name="Bonebeast" nameDescription="a bonebeast" race="undead" experience="580" speed="218" raceId="101">
 	<health now="515" max="515" />
 	<look type="101" corpse="6030" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000"
+		charmPoints="25" stars="3" occurrence="0" locations="Bonebeast locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" poison="100" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-50" max="-90">

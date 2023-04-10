@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Acid Blob" nameDescription="an acid blob" race="venom" experience="250" speed="180">
+<monster name="Acid Blob" nameDescription="an acid blob" race="venom" experience="250" speed="180" raceId="513">
 	<health now="250" max="250" />
 	<look type="314" corpse="9962" />
 	<targetchange interval="5000" chance="0" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Slime" prowess="50" expertise="500" mastery="1000"
+		charmPoints="25" stars="3" occurrence="0" locations="Acid Blob locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" target="0" chance="30" radius="4" min="-10" max="-20">

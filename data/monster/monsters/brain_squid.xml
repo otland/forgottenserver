@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Brain Squid" nameDescription="a brain squid" race="ink" experience="17672" speed="430">
+<monster name="Brain Squid" nameDescription="a brain squid" race="ink" experience="17672" speed="430" raceId="1653">
 	<health now="18000" max="18000" />
 	<look type="1059" head="17" body="41" legs="77" feet="57" addons="0" corpse="31238" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,8 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Brain Squid locations"/>	
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-470">

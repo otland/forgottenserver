@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="168" manacost="450">
+<monster name="Barbarian Headsplitter" nameDescription="a barbarian headsplitter" race="blood" experience="85" speed="168" manacost="450" raceId="333">
 	<health now="100" max="100" />
 	<look type="253" head="115" body="86" legs="119" feet="113" corpse="20343" />
 	<targetchange interval="60000" chance="0" />
@@ -18,6 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Barbarian Headsplitter locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="0" max="-60">

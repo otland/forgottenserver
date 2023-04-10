@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bonelord" nameDescription="a bonelord" race="venom" experience="170" speed="150">
+<monster name="Bonelord" nameDescription="a bonelord" race="venom" experience="170" speed="150" raceId="17">
 	<health now="260" max="260" />
 	<look type="17" corpse="5992" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Bonelord locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-5" />
 		<attack name="energy" interval="2000" chance="5" range="7" min="-15" max="-45">

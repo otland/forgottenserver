@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="140" manacost="200">
+<monster name="Badger" namedescription="a badger" race="blood" experience="5" speed="140" manacost="200" raceId="105">
 	<health now="23" max="23" />
 	<look type="105" corpse="6034" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="1" occurrence="0" locations="Badger locations"/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-12" />
 	</attacks>
