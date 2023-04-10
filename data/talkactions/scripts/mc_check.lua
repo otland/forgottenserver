@@ -28,7 +28,7 @@ function onSay(player, words, param)
 		local listLength = #list
 		if listLength > 1 then
 			local tmpPlayer = list[1]
-			local message = ("%s: %s [%d]"):format(Game.convertIpToString(ip), tmpPlayer:getName(), tmpPlayer:getLevel())
+			local message = ("%s: %s [%d]"):format(ip, tmpPlayer:getName(), tmpPlayer:getLevel())
 			for i = 2, listLength do
 				tmpPlayer = list[i]
 				message = ("%s, %s [%d]"):format(message, tmpPlayer:getName(), tmpPlayer:getLevel())

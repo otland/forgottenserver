@@ -329,6 +329,13 @@ public:
 		return getNumber<T>(L, -1);
 	}
 
+	template <typename T, typename... Args>
+	static T getField(lua_State* L, int32_t arg, const std::string& key, T&& defaultValue)
+	{
+		lua_getfield(L, arg, key.c_str());
+		return getNumber<T>(L, -1, std::forward<T>(defaultValue));
+	}
+
 	static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
 
 	static LuaDataType getUserdataType(lua_State* L, int32_t arg);
@@ -869,6 +876,7 @@ private:
 	static int luaPlayerAddMana(lua_State* L);
 	static int luaPlayerGetMaxMana(lua_State* L);
 	static int luaPlayerSetMaxMana(lua_State* L);
+	static int luaPlayerSetManaShieldBar(lua_State* L);
 	static int luaPlayerGetManaSpent(lua_State* L);
 	static int luaPlayerAddManaSpent(lua_State* L);
 	static int luaPlayerRemoveManaSpent(lua_State* L);
@@ -1015,6 +1023,8 @@ private:
 
 	static int luaPlayerSetBestiaryKill(lua_State* L);
 	static int luaPlayerGetBestiaryKill(lua_State* L);
+
+	static int luaPlayerSendCreatureSquare(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

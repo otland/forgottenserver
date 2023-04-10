@@ -9,6 +9,7 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
+#include "matrixarea.h"
 #include "pugicast.h"
 #include "spells.h"
 #include "tools.h"
@@ -62,7 +63,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
 
 	for (auto it : unloadedMonsters) {
-		if ((forceLoad || reloading) && monsters.find(it.first) != monsters.end()) {
+		if (forceLoad || (reloading && monsters.find(it.first) != monsters.end())) {
 			loadMonster(it.second, it.first, reloading);
 		}
 	}

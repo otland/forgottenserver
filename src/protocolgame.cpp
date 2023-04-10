@@ -174,18 +174,18 @@ void ProtocolGame::release()
 	Protocol::release();
 }
 
-void ProtocolGame::login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem)
+void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	// dispatcher thread
-	Player* foundPlayer = g_game.getPlayerByName(name);
+	Player* foundPlayer = g_game.getPlayerByGUID(characterId);
 	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
-		player->setName(name);
 
 		player->incrementReferenceCounter();
 		player->setID();
+		player->setGUID(characterId);
 
-		if (!IOLoginData::preloadPlayer(player, name)) {
+		if (!IOLoginData::preloadPlayer(player)) {
 			disconnectClient("Your character could not be loaded.");
 			return;
 		}
@@ -491,17 +491,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	uint32_t accountId;
-	std::tie(accountId, characterName) =
-	    IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (accountId == 0) {
+	// TODO: use structured binding when C++20 is adopted
+	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
+	if (authIds.first == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask([=, thisPtr = getThis(), characterName = std::string{characterName}]() {
-		thisPtr->login(characterName, accountId, operatingSystem);
-	});
+	g_dispatcher.addTask(
+	    [=, thisPtr = getThis()]() { thisPtr->login(authIds.second, authIds.first, operatingSystem); });
 }
 
 void ProtocolGame::onConnect()
@@ -1881,8 +1879,7 @@ void ProtocolGame::sendBasicData()
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.addByte(spellId);
 	}
-
-	msg.addByte(0x00); // is magic shield active (bool)
+	msg.addByte(player->getVocation()->getMagicShield()); // is magic shield active (bool)
 	writeToOutputBuffer(msg);
 }
 
@@ -3241,7 +3238,6 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
-	bool mounted = currentOutfit.lookMount != 0;
 
 	if (currentOutfit.lookType == 0) {
 		Outfit_t newOutfit;
@@ -3253,6 +3249,8 @@ void ProtocolGame::sendOutfitWindow()
 	if (currentMount) {
 		currentOutfit.lookMount = currentMount->clientId;
 	}
+
+	bool mounted = currentOutfit.lookMount != 0;
 
 	AddOutfit(msg, currentOutfit);
 
@@ -3267,11 +3265,11 @@ void ProtocolGame::sendOutfitWindow()
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
+	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
 		protocolOutfits.emplace_back("Gamemaster", 75, 0);
 	}
 
-	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
 		if (!player->getOutfitAddons(outfit, addons)) {
@@ -3719,8 +3717,14 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(0); // xp boost time (seconds)
 	msg.addByte(0x00);    // enables exp boost in the store
 
-	msg.add<uint16_t>(0); // remaining mana shield
-	msg.add<uint16_t>(0); // total mana shield
+	if (ConditionManaShield* conditionManaShield =
+	        dynamic_cast<ConditionManaShield*>(player->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
+		msg.add<uint16_t>(conditionManaShield->getManaShield());    // remaining mana shield
+		msg.add<uint16_t>(conditionManaShield->getMaxManaShield()); // total mana shield
+	} else {
+		msg.add<uint16_t>(0); // remaining mana shield
+		msg.add<uint16_t>(0); // total mana shield
+	}
 }
 
 void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)

@@ -33,6 +33,9 @@ ec.onJoin = {}
 ec.onLeave = {}
 ec.onDisband = {}
 ec.onShareExperience = {}
+ec.onInvite = {}
+ec.onRevokeInvitation = {}
+ec.onPassLeadership = {}
 -- Player
 ec.onBrowseField = {}
 ec.onLook = {[5] = 1}
@@ -43,7 +46,7 @@ ec.onLookInMarket = {}
 ec.onTradeRequest = {}
 ec.onTradeAccept = {}
 ec.onTradeCompleted = {}
-ec.onMoveItem = {}
+ec.onMoveItem = {returnValue=true}
 ec.onItemMoved = {}
 ec.onMoveCreature = {}
 ec.onReportRuleViolation = {}
@@ -120,16 +123,16 @@ setmetatable(EventCallback, {
 		end
 
 		local eventData = EventCallbackData[callback]
-		if eventData.maxn == 0 then
+		local maxn = eventData.maxn
+		if maxn == 0 then
 			return
 		end
 
 		return function(...)
 			local results, args, info = {}, pack(...), callbacks[callback]
-			for index = 1, eventData.maxn do
-				local event = eventData[index]
+			for index = 1, maxn do
 				repeat
-					results = {event.callback(unpack(args))}
+					results = {eventData[index].callback(unpack(args))}
 					local output = results[1]
 					-- If the call returns nil then we continue with the next call
 					if output == nil then

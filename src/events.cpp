@@ -60,6 +60,12 @@ bool Events::load()
 				info.partyOnDisband = event;
 			} else if (methodName == "onShareExperience") {
 				info.partyOnShareExperience = event;
+			} else if (methodName == "onInvite") {
+				info.partyOnInvite = event;
+			} else if (methodName == "onRevokeInvitation") {
+				info.partyOnRevokeInvitation = event;
+			} else if (methodName == "onPassLeadership") {
+				info.partyOnPassLeadership = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
@@ -374,6 +380,87 @@ bool Events::eventPartyOnDisband(Party* party)
 	LuaScriptInterface::setMetatable(L, -1, "Party");
 
 	return scriptInterface.callFunction(1);
+}
+
+bool Events::eventPartyOnInvite(Party* party, Player* player)
+{
+	// Party:onInvite(player) or Party.onInvite(self, player)
+	if (info.partyOnInvite == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnInvite] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnInvite, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnInvite);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
+{
+	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
+	if (info.partyOnRevokeInvitation == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnRevokeInvitation] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnRevokeInvitation, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnRevokeInvitation);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
+{
+	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
+	if (info.partyOnPassLeadership == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnPassLeadership] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnPassLeadership, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnPassLeadership);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
 }
 
 void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
