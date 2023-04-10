@@ -21,7 +21,7 @@
 		<immunity drunk="1" />
 	</immunities>
 	<elements>
-		<element firePercent="100" />1
+		<element firePercent="100" />
 		<element icePercent="-10" />
 	</elements>
 	<attacks>
