@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500"
-		charmPoints="50" stars="4" occurrence="0" locations="Brain Squid locations"/>	
+		charmPoints="50" stars="4" occurrence="0" locations="Brain Squid locations" />	
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-470">

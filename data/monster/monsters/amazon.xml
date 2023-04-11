@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Human" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="2" occurrence="0" locations="Amazon locations"/>
+		charmPoints="15" stars="2" occurrence="0" locations="Amazon locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-45" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-40">

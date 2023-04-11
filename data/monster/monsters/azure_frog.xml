@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Amphibic" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="2" occurrence="0" locations="Azure Frog locations"/>
+		charmPoints="15" stars="2" occurrence="0" locations="Azure Frog locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-24" />
 	</attacks>

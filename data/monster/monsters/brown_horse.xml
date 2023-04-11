@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250"
-		charmPoints="5" stars="1" occurrence="1" locations="Horse locations"/>
+		charmPoints="5" stars="1" occurrence="1" locations="Horse locations" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Weeeeheeeeeee" />
 		<voice sentence="*snort*" />

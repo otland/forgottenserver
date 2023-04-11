@@ -17,5 +17,5 @@
 		<flag runonhealth="25" />
 	</flags>
 	<bestiary class="Amphibic" prowess="10" expertise="100" mastery="250"
-		charmPoints="5" stars="1" occurrence="0" locations="Bog Frog locations"/>
+		charmPoints="5" stars="1" occurrence="0" locations="Bog Frog locations" />
 </monster>

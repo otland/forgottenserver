@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<bestiary class="Human" prowess="100" expertise="1000" mastery="2500"
-		charmPoints="50" stars="4" occurrence="0" locations="Black Sphinx Acolyte locations"/>	
+		charmPoints="50" stars="4" occurrence="0" locations="Black Sphinx Acolyte locations" />	
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="earth" interval="2000" chance="10" radius="3" min="-300" max="-400">

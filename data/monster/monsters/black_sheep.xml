@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250"
-		charmPoints="5" stars="1" occurrence="0" locations="Black Sheep locations"/>
+		charmPoints="5" stars="1" occurrence="0" locations="Black Sheep locations" />
 	<defenses armor="1" defense="1" />
 	<elements>
 		<element firePercent="-5" />

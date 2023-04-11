@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 	</flags>
 	<bestiary class="Plant" prowess="2" expertise="3" mastery="5"
-		charmPoints="50" stars="3" occurrence="3" locations="Bane Bringer locations"/>
+		charmPoints="50" stars="3" occurrence="3" locations="Bane Bringer locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 	</attacks>

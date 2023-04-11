@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Reptile" prowess="100" expertise="1000" mastery="2500"
-		charmPoints="50" stars="4" occurrence="0" locations="Adult Goanna locations"/>
+		charmPoints="50" stars="4" occurrence="0" locations="Adult Goanna locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" poison="19" />
 		<attack name="wave t" interval="2000" chance="10" min="-250" max="-380" />

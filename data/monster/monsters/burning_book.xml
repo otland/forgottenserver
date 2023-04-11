@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="1" />
 	</flags>
 	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500"
-		charmPoints="50" stars="4" occurrence="0" locations="Burning Book locations"/>
+		charmPoints="50" stars="4" occurrence="0" locations="Burning Book locations" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

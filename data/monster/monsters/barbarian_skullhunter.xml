@@ -19,7 +19,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Human" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="2" occurrence="0" locations="Barbarian Skullhunter locations"/>
+		charmPoints="15" stars="2" occurrence="0" locations="Barbarian Skullhunter locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-65" />
 	</attacks>

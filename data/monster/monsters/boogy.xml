@@ -14,7 +14,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Fey" prowess="50" expertise="500" mastery="1000"
-		charmPoints="25" stars="3" occurrence="0" locations="Boogy locations"/>
+		charmPoints="25" stars="3" occurrence="0" locations="Boogy locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="physical" interval="3000" chance="11" radius="6" target="1" min="-100" max="-300">

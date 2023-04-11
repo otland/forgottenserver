@@ -19,7 +19,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Human" prowess="50" expertise="500" mastery="1000"
-		charmPoints="25" stars="3" occurrence="0" locations="Barbarian Bloodwalker locations"/>
+		charmPoints="25" stars="3" occurrence="0" locations="Barbarian Bloodwalker locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-240" />
 	</attacks>

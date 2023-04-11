@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="1" occurrence="0" locations="Badger locations"/>
+		charmPoints="15" stars="1" occurrence="0" locations="Badger locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-12" />
 	</attacks>

@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 	</flags>
 	<bestiary class="Aquatic" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="2" occurrence="0" locations="Blood Crab locations"/>
+		charmPoints="15" stars="2" occurrence="0" locations="Blood Crab locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>

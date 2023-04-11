@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 	</flags>
 	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000"
-		charmPoints="25" stars="3" occurrence="0" locations="Banshee locations"/>
+		charmPoints="25" stars="3" occurrence="0" locations="Banshee locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" poison="3" />
 		<attack name="lifedrain" interval="2000" chance="15" radius="4" target="0" min="-100" max="-200">

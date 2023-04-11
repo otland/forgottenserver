@@ -20,5 +20,5 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Human" prowess="25" expertise="250" mastery="500"
-		charmPoints="15" stars="2" occurrence="0" locations="Adventurer locations"/>
+		charmPoints="15" stars="2" occurrence="0" locations="Adventurer locations" />
 </monster>

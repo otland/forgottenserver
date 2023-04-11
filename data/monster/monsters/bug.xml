@@ -20,7 +20,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Vermin" prowess="10" expertise="100" mastery="250"
-		charmPoints="5" stars="1" occurrence="0" locations="Bug locations"/>
+		charmPoints="5" stars="1" occurrence="0" locations="Bug locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-23" />
 	</attacks>

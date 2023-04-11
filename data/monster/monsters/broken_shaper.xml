@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 	</flags>
 	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000"
-		charmPoints="25" stars="3" occurrence="0" locations="Broken Shaper locations"/>
+		charmPoints="25" stars="3" occurrence="0" locations="Broken Shaper locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="physical" interval="2000" chance="35" range="7" target="1" min="0" max="-150">
