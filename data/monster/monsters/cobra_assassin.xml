@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cobra Assassin" nameDescription="a cobra assassin" race="blood" experience="6980" speed="280">
+<monster name="Cobra Assassin" nameDescription="a cobra assassin" race="blood" experience="6980" speed="280" raceId="1775">
 	<health now="8200" max="8200" />
 	<look type="1217" head="2" body="2" legs="77" feet="19" addons="1" corpse="34203" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,8 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Human" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Cobra Assassin locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="wave t" interval="2000" chance="10" min="-300" max="-380" />

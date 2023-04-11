@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Chakoya Windcaller" nameDescription="a chakoya windcaller" race="blood" experience="48" speed="200" manacost="305">
+<monster name="Chakoya Windcaller" nameDescription="a chakoya windcaller" race="blood" experience="48" speed="200" manacost="305" raceId="329">
 	<health now="84" max="84" />
 	<look type="260" corpse="7320" />
 	<targetchange interval="60000" chance="0" />
@@ -18,6 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Chakoya Windcaller locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-22" />
 		<attack name="ice" interval="2000" chance="15" range="7" min="-16" max="-32">

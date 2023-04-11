@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crypt Defiler" nameDescription="a crypt defiler" race="blood" experience="70" speed="205">
+<monster name="Crypt Defiler" nameDescription="a crypt defiler" race="blood" experience="70" speed="205" raceId="868">
 	<health now="180" max="180" />
 	<look type="146" head="62" body="132" legs="42" feet="75" addons="3" corpse="20359" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Crypt Defiler locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="physical" interval="2000" chance="15" range="7" radius="1" target="1" min="0" max="-40">

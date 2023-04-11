@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cobra" namedescription="a cobra" race="blood" experience="30" speed="120" manacost="275">
+<monster name="Cobra" namedescription="a cobra" race="blood" experience="30" speed="120" manacost="275" raceId="81">
 	<health now="65" max="65" />
 	<look type="81" corpse="3007" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Cobra locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="0" poison="100" />
 		<attack name="poisoncondition" interval="2000" chance="15" range="7" min="-20" max="-40">

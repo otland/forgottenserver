@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cliff Strider" nameDescription="a cliff strider" race="undead" experience="5700" speed="246">
+<monster name="Cliff Strider" nameDescription="a cliff strider" race="undead" experience="5700" speed="246" raceId="889">
 	<health now="9400" max="9400" />
 	<look type="497" corpse="17420" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Elemental" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Cliff Strider locations" />	
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-499" />
 		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-800">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cyclops" nameDescription="a cyclops" race="blood" experience="150" speed="190" manacost="490">
+<monster name="Cyclops" nameDescription="a cyclops" race="blood" experience="150" speed="190" manacost="490" raceId="22">
 	<health now="260" max="260" />
 	<look type="22" corpse="5962" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Giant" prowess="25" expertise="250" mastery="500"
+		charmPoints="15" stars="2" occurrence="0" locations="Cyclops locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-105" />
 	</attacks>

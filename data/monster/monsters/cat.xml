@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cat" nameDescription="a cat" race="blood" experience="0" speed="190" manacost="220">
+<monster name="Cat" nameDescription="a cat" race="blood" experience="0" speed="190" manacost="220" raceId="387">
 	<health now="20" max="20" />
 	<look type="276" corpse="7637" />
 	<targetchange interval="4000" chance="0" />
@@ -18,6 +18,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="5" expertise="10" mastery="25"
+		charmPoints="1" stars="0" occurrence="0" locations="Cat locations" />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="0" />
 	</attacks>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cult Scholar" nameDescription="a cult scholar" race="blood" experience="1100" speed="260">
+<monster name="Cult Scholar" nameDescription="a cult scholar" race="blood" experience="1100" speed="260" raceId="1514">
 	<health now="1650" max="1650" />
 	<look type="145" head="19" body="77" legs="3" feet="20" addons="1" corpse="24673" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,8 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000"
+		charmPoints="25" stars="3" occurrence="0" locations="Cult Scholar locations" />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cobra Scout" nameDescription="a cobra scout" race="blood" experience="7310" speed="300">
+<monster name="Cobra Scout" nameDescription="a cobra scout" race="blood" experience="7310" speed="300" raceId="1776">
 	<health now="8500" max="8500" />
 	<look type="1217" head="1" body="1" legs="102" feet="78" addons="2" corpse="34291" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,8 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Human" prowess="100" expertise="1000" mastery="2500"
+		charmPoints="50" stars="4" occurrence="0" locations="Cobra Scout locations" />	
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-500" />
 		<attack name="earth" interval="2000" chance="22" range="4" target="1" min="-350" max="-450">
