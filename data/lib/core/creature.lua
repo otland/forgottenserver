@@ -178,3 +178,29 @@ end
 function Creature.getMonster(self)
 	return self:isMonster() and self or nil
 end
+
+function Creature.getKillers(self)
+	local killers = {}
+	local inFightTicks = configManager.getNumber(configKeys.PZ_LOCKED)
+	local timeNow = os.mtime()
+	for cid, cb in pairs(self:getDamageMap()) do
+		local creature = Creature(cid)
+		if creature and creature ~= self and (timeNow - cb.ticks) <= inFightTicks then
+			killers[#killers + 1] = creature
+		end
+	end
+	return killers
+end
+
+function Creature.getMostDamagePlayer(self)
+	local mostDamagePlayer = nil
+	local mostDamage = 0
+	for cid, cb in pairs(self:getDamageMap()) do
+		local player = Player(cid)
+		if player and cb.total > mostDamage then
+			mostDamage = cb.total
+			mostDamagePlayer = player
+		end
+	end
+	return mostDamagePlayer
+end

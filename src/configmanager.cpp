@@ -230,6 +230,7 @@ bool ConfigManager::load()
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
 	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
 	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
+	boolean[BESTIARY_PARTY_KILL_SHARING] = getGlobalBoolean(L, "bestiaryPartyKillSharing", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -277,6 +278,7 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
 	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
+	integer[BESTIARY_KILLS_POINTS] = getGlobalNumber(L, "bestiaryKillsPoints", 1);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

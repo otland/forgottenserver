@@ -1434,6 +1434,7 @@ private:
 
 	static int luaPartyIsSharedExperienceActive(lua_State* L);
 	static int luaPartyIsSharedExperienceEnabled(lua_State* L);
+	static int luaPartyIsMemberSharingExp(lua_State* L);
 	static int luaPartyShareExperience(lua_State* L);
 	static int luaPartySetSharedExperience(lua_State* L);
 

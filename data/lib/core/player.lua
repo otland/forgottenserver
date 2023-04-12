@@ -398,10 +398,8 @@ function Player.getUnlockedBestiary(self, monsterTypes)
 	local count = 0
 	for _, monsterType in pairs(monsterTypes) do
 		local info = monsterType:getBestiaryInfo()
-		if info.raceId ~= 0 then
-			if self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
-				count = count + 1
-			end
+		if info.raceId ~= 0 and self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
+			count = count + 1
 		end
 	end
 	return count
@@ -411,8 +409,27 @@ function Player.getBestiaryKills(self, raceId)
 	return math.max(0, self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId))
 end
 
+function Player.setBestiaryKills(self, raceId, value)
+	return self:setStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId, value)
+end
+
 function Player.addBestiaryKills(self, raceId)
-	return self:setStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId, self:getBestiaryKills(raceId) + 1)
+	local monsterType = MonsterType(raceId)
+	if not monsterType then
+		return false
+	end
+
+	local kills = self:getBestiaryKills(raceId)
+	local newKills = kills + configManager.getNumber(configKeys.BESTIARY_KILLS_POINTS)
+	local bestiaryInfo = monsterType:getBestiaryInfo()
+	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
+		if kills == 0 or (kills < totalKills and newKills >= totalKills) then
+			self:sendTextMessage(MESSAGE_EVENT_DEFAULT, string.format("You unlocked details for the creature %s.", monsterType:getName()))
+			self:sendBestiaryMilestoneReached(raceId)
+			break
+		end
+	end
+	return self:setBestiaryKills(raceId, newKills)
 end
 
 function Player.sendBestiaryMilestoneReached(self, raceId)

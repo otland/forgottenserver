@@ -161,6 +161,10 @@ removeOnDespawn = true
 walkToSpawnRadius = 15
 monsterOverspawn = false
 
+-- Bestiary
+bestiaryPartyKillSharing = false
+bestiaryKillsPoints = 1
+
 -- Stamina
 staminaSystem = true
 timeToRegenMinuteStamina = 3 * 60

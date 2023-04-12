@@ -2200,6 +2200,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::STAMINA_REGEN_PREMIUM);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn("configKeys", ConfigManager::MONSTER_OVERSPAWN);
+	registerEnumIn("configKeys", ConfigManager::BESTIARY_PARTY_KILL_SHARING);
+	registerEnumIn("configKeys", ConfigManager::BESTIARY_KILLS_POINTS);
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
@@ -3179,6 +3181,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Party", "isSharedExperienceActive", LuaScriptInterface::luaPartyIsSharedExperienceActive);
 	registerMethod("Party", "isSharedExperienceEnabled", LuaScriptInterface::luaPartyIsSharedExperienceEnabled);
+	registerMethod("Party", "isMemberSharingExp", LuaScriptInterface::luaPartyIsMemberSharingExp);
 	registerMethod("Party", "shareExperience", LuaScriptInterface::luaPartyShareExperience);
 	registerMethod("Party", "setSharedExperience", LuaScriptInterface::luaPartySetSharedExperience);
 
@@ -15685,6 +15688,19 @@ int LuaScriptInterface::luaPartyIsSharedExperienceEnabled(lua_State* L)
 	Party* party = getUserdata<Party>(L, 1);
 	if (party) {
 		pushBoolean(L, party->isSharedExperienceEnabled());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPartyIsMemberSharingExp(lua_State* L)
+{
+	// party:isMemberSharingExp(player)
+	const Player* player = getUserdata<const Player>(L, 2);
+	Party* party = getUserdata<Party>(L, 1);
+	if (party && player) {
+		pushBoolean(L, party->getMemberSharedExperienceStatus(player) == SHAREDEXP_OK);
 	} else {
 		lua_pushnil(L);
 	}
