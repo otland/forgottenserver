@@ -171,7 +171,7 @@ do
 
 		for _, mission in pairs(missions) do
 			if mission.storageId == key and value >= mission.startValue and value <= mission.endValue then
-				return not mission.mainDescription or oldValue < mission.startValue or oldValue > mission.endValue
+				return not mission.description or oldValue < mission.startValue or oldValue > mission.endValue
 			end
 		end
 		return false
