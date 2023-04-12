@@ -84,27 +84,30 @@ function Mission:getName(player)
 end
 
 function Mission:getDescription(player)
-    if type(self.description) == "function" then
+    local descriptionType = type(self.description)
+    if descriptionType == "function" then
         return self.description(player)
     end
 
     local value = player:getStorageValue(self.storageId)
-    if self.mainDescription then
-        local description = self.mainDescription:gsub("|STATE|", value)
-        description = self.mainDescription:gsub("\\n", "\n")
+    if descriptionType == "string" then
+        local description = self.description:gsub("|STATE|", value)
+        description = self.description:gsub("\\n", "\n")
         return description
     end
 
-    if self.ignoreEndValue then
-        for current = self.endValue, self.startValue, -1 do
-            if value >= current then
-                return self.descriptions[current]
+    if descriptionType == "table" then
+        if self.ignoreEndValue then
+            for current = self.endValue, self.startValue, -1 do
+                if value >= current then
+                    return self.description[current]
+                end
             end
-        end
-    else
-        for current = self.endValue, self.startValue, -1 do
-            if value == current then
-                return self.descriptions[current]
+        else
+            for current = self.endValue, self.startValue, -1 do
+                if value == current then
+                    return self.description[current]
+                end
             end
         end
     end

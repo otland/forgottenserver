@@ -446,8 +446,9 @@ end
 function Player.getTrackedQuests(self, missionsId)
 	local playerId = self:getId()
 	local maxTrackedQuests = self:getMaxTrackedQuests()
-	local trackedsQuests = {}
-	Game.getTrackedQuests()[playerId] = trackedsQuests
+	local trackedQuests = {}
+	Game.getTrackedQuests()[playerId] = trackedQuests
+	local quests = Game.getQuests()
 	local missions = Game.getMissions()
 	local trackeds = 0
 	for _, missionId in pairs(missionsId) do

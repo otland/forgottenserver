@@ -3,7 +3,7 @@ local lastQuestUpdate = {}
 local ec = EventCallback
 
 ec.onUpdateStorage = function(player, key, value, oldValue, isLogin)
-    if value == -1 or isLogin then
+    if isLogin then
         return
     end
 
