@@ -12,6 +12,9 @@ class LuaScriptInterface;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
+static constexpr int32_t BESTIARY_MAX_STARS = 5;
+static constexpr int32_t BESTIARY_MAX_OCCURRENCE = 4;
+
 struct LootBlock
 {
 	uint16_t id;
@@ -90,6 +93,19 @@ struct voiceBlock_t
 {
 	std::string text;
 	bool yellText;
+};
+
+struct BestiaryInfo
+{
+	std::string className = "";
+	uint32_t raceId = 0;
+	uint32_t prowess = 0;
+	uint32_t expertise = 0;
+	uint32_t mastery = 0;
+	uint32_t charmPoints = 0;
+	uint32_t stars = 0;
+	uint32_t occurrence = 0;
+	std::string locations = "";
 };
 
 class MonsterType
@@ -172,6 +188,7 @@ public:
 	std::string nameDescription;
 
 	MonsterInfo info;
+	BestiaryInfo bestiaryInfo;
 
 	void loadLoot(MonsterType* monsterType, LootBlock lootBlock);
 };
@@ -237,8 +254,13 @@ public:
 	MonsterType* getMonsterType(const std::string& name, bool loadFromFile = true);
 	bool deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std::string& description = "");
 
+	MonsterType* getMonsterType(uint32_t raceId);
+	bool addBestiaryMonsterType(const MonsterType* monsterType);
+	bool isValidBestiaryInfo(const BestiaryInfo& bestiaryInfo) const;
+
 	std::unique_ptr<LuaScriptInterface> scriptInterface;
 	std::map<std::string, MonsterType> monsters;
+	std::map<std::string, std::set<std::string>> bestiary;
 
 private:
 	ConditionDamage* getDamageCondition(ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage,
@@ -251,6 +273,7 @@ private:
 	bool loadLootItem(const pugi::xml_node& node, LootBlock&);
 
 	std::map<std::string, std::string> unloadedMonsters;
+	std::unordered_map<uint32_t, std::string> bestiaryMonsters;
 
 	bool loaded = false;
 };
