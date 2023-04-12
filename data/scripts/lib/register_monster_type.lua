@@ -140,6 +140,11 @@ registerMonsterType.flags = function(mtype, mask)
 		end
 	end
 end
+registerMonsterType.bestiary = function(mtype, mask)
+	if mask.bestiary then
+		mtype:bestiaryInfo(mask.bestiary)
+	end
+end
 registerMonsterType.light = function(mtype, mask)
 	if mask.light then
 		mtype:light(mask.light.color or 0, mask.light.level or 0)
