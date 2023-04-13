@@ -2201,7 +2201,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn("configKeys", ConfigManager::MONSTER_OVERSPAWN);
 	registerEnumIn("configKeys", ConfigManager::BESTIARY_PARTY_KILL_SHARING);
-	registerEnumIn("configKeys", ConfigManager::BESTIARY_KILLS_POINTS);
+	registerEnumIn("configKeys", ConfigManager::BESTIARY_POINTS_PER_KILL);
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);

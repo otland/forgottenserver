@@ -420,7 +420,7 @@ function Player.addBestiaryKills(self, raceId)
 	end
 
 	local kills = self:getBestiaryKills(raceId)
-	local newKills = kills + configManager.getNumber(configKeys.BESTIARY_KILLS_POINTS)
+	local newKills = kills + configManager.getNumber(configKeys.BESTIARY_POINTS_PER_KILL)
 	local bestiaryInfo = monsterType:getBestiaryInfo()
 	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
 		if kills == 0 or (kills < totalKills and newKills >= totalKills) then

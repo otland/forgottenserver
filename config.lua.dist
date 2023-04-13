@@ -163,7 +163,7 @@ monsterOverspawn = false
 
 -- Bestiary
 bestiaryPartyKillSharing = false
-bestiaryKillsPoints = 1
+bestiaryPointsPerKill = 1
 
 -- Stamina
 staminaSystem = true
