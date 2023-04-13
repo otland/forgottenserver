@@ -131,9 +131,8 @@ Event = setmetatable({
 		return function(...)
 			local results, args, info = {}, pack(...), callbacks[callback]
 			for index = 1, eventsCount do
-				local event = events[index]
 				repeat
-					results = {event.callback(unpack(args))}
+					results = {events[index].callback(unpack(args))}
 					local output = results[1]
 					-- If the call returns nil then we continue with the next call
 					if output == nil then
