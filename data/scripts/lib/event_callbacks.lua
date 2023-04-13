@@ -172,3 +172,6 @@ hasEvent = setmetatable({}, {
 		end
 	end
 })
+
+-- For compatibility with the previous version.
+EventCallback = Event()
