@@ -96,6 +96,26 @@ local function getDifficulty(chance)
 	return 0
 end
 
+local bestiaryElements = {
+	COMBAT_PHYSICALDAMAGE,
+	COMBAT_FIREDAMAGE,
+	COMBAT_EARTHDAMAGE,
+	COMBAT_ENERGYDAMAGE,
+	COMBAT_ICEDAMAGE,
+	COMBAT_HOLYDAMAGE,
+	COMBAT_DEATHDAMAGE,
+	COMBAT_HEALING
+}
+
+local function getBestiaryElements(monsterType)
+	local elements = monsterType:getElementList()
+	local result = {}
+	for _, combatType in pairs(bestiaryElements) do
+		result[#result + 1] = 100 - (elements[combatType] or 0)
+	end
+	return result
+end
+
 local handler = PacketHandler(0xE3)
 
 function handler.onReceive(player, msg)
@@ -150,10 +170,10 @@ function handler.onReceive(player, msg)
 	end
 
 	if progress > 2 then
-		local elements = monsterType:getElementList()
+		local elements = getBestiaryElements(monsterType)
 		response:addByte(#elements)
-		for combatType, value in pairs(elements) do
-			response:addByte(combatType)
+		for index, value in pairs(elements) do
+			response:addByte(index - 1)
 			response:addU16(value)
 		end
 
