@@ -15,7 +15,7 @@ local function getKillersForBestiary(monster)
 					end
 				end
 			else
-				killers[killers + 1] = killer
+				killers[#killers + 1] = killer
 			end
 		end
 	end
