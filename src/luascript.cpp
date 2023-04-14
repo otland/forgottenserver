@@ -844,16 +844,16 @@ Reflect LuaScriptInterface::getReflect(lua_State* L, int32_t arg)
 BestiaryInfo LuaScriptInterface::getBestiaryInfo(lua_State* L, int32_t arg)
 {
 	std::string className = getFieldString(L, arg, "class");
-	uint16_t raceId = getField<uint16_t>(L, arg, "raceId");
-	uint16_t prowess = getField<uint16_t>(L, arg, "prowess");
-	uint16_t expertise = getField<uint16_t>(L, arg, "expertise");
-	uint16_t mastery = getField<uint16_t>(L, arg, "mastery");
-	uint16_t charmPoints = getField<uint16_t>(L, arg, "charmPoints");
-	uint16_t stars = getField<uint16_t>(L, arg, "stars");
-	uint16_t occurrence = getField<uint16_t>(L, arg, "occurrence");
+	uint32_t raceId = getField<uint32_t>(L, arg, "raceId");
+	uint32_t prowess = getField<uint32_t>(L, arg, "prowess");
+	uint32_t expertise = getField<uint32_t>(L, arg, "expertise");
+	uint32_t mastery = getField<uint32_t>(L, arg, "mastery");
+	uint32_t charmPoints = getField<uint32_t>(L, arg, "charmPoints");
+	uint32_t difficulty = getField<uint32_t>(L, arg, "difficulty");
+	uint32_t occurrence = getField<uint32_t>(L, arg, "occurrence");
 	std::string locations = getFieldString(L, arg, "locations");
 	lua_pop(L, 9);
-	return {className, raceId, prowess, expertise, mastery, charmPoints, stars, occurrence, locations};
+	return {className, raceId, prowess, expertise, mastery, charmPoints, difficulty, occurrence, locations};
 }
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
@@ -1043,7 +1043,7 @@ void LuaScriptInterface::pushBestiaryInfo(lua_State* L, const BestiaryInfo& info
 	setField(L, "expertise", info.expertise);
 	setField(L, "mastery", info.mastery);
 	setField(L, "charmPoints", info.charmPoints);
-	setField(L, "stars", info.stars);
+	setField(L, "difficulty", info.difficulty);
 	setField(L, "occurrence", info.occurrence);
 	setField(L, "locations", info.locations);
 }
@@ -2200,8 +2200,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::STAMINA_REGEN_PREMIUM);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn("configKeys", ConfigManager::MONSTER_OVERSPAWN);
-	registerEnumIn("configKeys", ConfigManager::BESTIARY_PARTY_KILL_SHARING);
-	registerEnumIn("configKeys", ConfigManager::BESTIARY_POINTS_PER_KILL);
 
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);

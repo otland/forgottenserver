@@ -394,17 +394,6 @@ function Player.isPromoted(self)
 	return vocation:getId() ~= fromVocId
 end
 
-function Player.getUnlockedBestiary(self, monsterTypes)
-	local count = 0
-	for _, monsterType in pairs(monsterTypes) do
-		local info = monsterType:getBestiaryInfo()
-		if info.raceId ~= 0 and self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
-			count = count + 1
-		end
-	end
-	return count
-end
-
 function Player.getBestiaryKills(self, raceId)
 	return math.max(0, self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId))
 end
@@ -420,7 +409,7 @@ function Player.addBestiaryKills(self, raceId)
 	end
 
 	local kills = self:getBestiaryKills(raceId)
-	local newKills = kills + configManager.getNumber(configKeys.BESTIARY_POINTS_PER_KILL)
+	local newKills = kills + 1
 	local bestiaryInfo = monsterType:getBestiaryInfo()
 	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
 		if kills == 0 or (kills < totalKills and newKills >= totalKills) then

@@ -1,22 +1,22 @@
+local BESTIARY_PARTY_KILL_SHARING = true
+
 local function getKillersForBestiary(monster)
-	if not configManager.getBoolean(configKeys.BESTIARY_PARTY_KILL_SHARING) then
-		local mostDamagePlayer = monster:getMostDamagePlayer()
-		return mostDamagePlayer and {mostDamagePlayer} or {}
+	local players = monster:getKillers(true)
+	if not BESTIARY_PARTY_KILL_SHARING then
+		return players[1] and {players[1]} or {}
 	end
 
 	local killers = {}
-	for _, killer in pairs(monster:getKillers()) do
-		if killer:isPlayer() then
-			local party = killer:getParty()
-			if party then
-				for _, member in pairs({party:getLeader(), unpack(party:getMembers())}) do
-					if party:isMemberSharingExp(member) then
-						killers[#killers + 1] = member
-					end
+	for _, killer in pairs(players) do
+		local party = killer:getParty()
+		if party then
+			for _, member in pairs({party:getLeader(), unpack(party:getMembers())}) do
+				if party:isMemberSharingExp(member) then
+					killers[#killers + 1] = member
 				end
-			else
-				killers[#killers + 1] = killer
 			end
+		else
+			killers[#killers + 1] = killer
 		end
 	end
 	return killers

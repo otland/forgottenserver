@@ -1000,8 +1000,24 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		if ((attr = node.attribute("charmPoints"))) {
 			mType->bestiaryInfo.charmPoints = pugi::cast<uint32_t>(attr.value());
 		}
-		if ((attr = node.attribute("stars"))) {
-			mType->bestiaryInfo.stars = pugi::cast<uint32_t>(attr.value());
+		if ((attr = node.attribute("difficulty"))) {
+			std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+			if (tmpStrValue == "harmless") {
+				mType->bestiaryInfo.difficulty = 0;
+			} else if (tmpStrValue == "trivial") {
+				mType->bestiaryInfo.difficulty = 1;
+			} else if (tmpStrValue == "easy") {
+				mType->bestiaryInfo.difficulty = 2;
+			} else if (tmpStrValue == "medium") {
+				mType->bestiaryInfo.difficulty = 3;
+			} else if (tmpStrValue == "hard") {
+				mType->bestiaryInfo.difficulty = 4;
+			} else if (tmpStrValue == "challenging") {
+				mType->bestiaryInfo.difficulty = 5;
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Unknown difficulty: " << attr.as_string() << ". "
+				          << file << std::endl;
+			}
 		}
 		if ((attr = node.attribute("occurrence"))) {
 			mType->bestiaryInfo.occurrence = pugi::cast<uint32_t>(attr.value());

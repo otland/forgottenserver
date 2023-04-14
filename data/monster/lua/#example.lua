@@ -39,7 +39,7 @@ monster.bestiary = {
 	expertise = 500,
 	mastery = 1000,
 	charmPoints = 25,
-	stars = 3,
+	difficulty = "medium", -- harmless, trivial, easy, medium, hard, challenging
 	occurrence = 0,
 	locations = "Example locations"
 }

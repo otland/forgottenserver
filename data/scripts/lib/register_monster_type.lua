@@ -140,9 +140,21 @@ registerMonsterType.flags = function(mtype, mask)
 		end
 	end
 end
-registerMonsterType.bestiary = function(mtype, mask)
-	if mask.bestiary then
-		mtype:bestiaryInfo(mask.bestiary)
+do
+	local difficulties = {
+		harmless = 0,
+		trivial = 1,
+		easy = 2,
+		medium = 3,
+		hard = 4,
+		challenging = 5
+	}
+
+	registerMonsterType.bestiary = function(mtype, mask)
+		if mask.bestiary then
+			mask.bestiary.difficulty = difficulties[mask.bestiary.difficulty:lower()]
+			mtype:bestiaryInfo(mask.bestiary)
+		end
 	end
 end
 registerMonsterType.light = function(mtype, mask)

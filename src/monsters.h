@@ -103,7 +103,7 @@ struct BestiaryInfo
 	uint32_t expertise = 0;
 	uint32_t mastery = 0;
 	uint32_t charmPoints = 0;
-	uint32_t stars = 0;
+	uint32_t difficulty = 0;
 	uint32_t occurrence = 0;
 	std::string locations = "";
 };
