@@ -1620,8 +1620,8 @@ bool Monsters::isValidBestiaryInfo(const BestiaryInfo& info) const
 		return false;
 	}
 
-	if (info.stars > BESTIARY_MAX_STARS) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] stars can't be higher than " << BESTIARY_MAX_STARS
+	if (info.difficulty > BESTIARY_MAX_DIFFICULTY) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] difficulty can't be higher than " << BESTIARY_MAX_DIFFICULTY
 		          << '.' << std::endl;
 		return false;
 	}
