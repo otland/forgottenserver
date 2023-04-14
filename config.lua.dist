@@ -162,7 +162,7 @@ walkToSpawnRadius = 15
 monsterOverspawn = false
 
 -- Bestiary
-bestiaryPartyKillSharing = false
+bestiaryPartyKillSharing = true
 bestiaryPointsPerKill = 1
 
 -- Stamina

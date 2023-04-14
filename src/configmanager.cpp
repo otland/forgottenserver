@@ -230,7 +230,7 @@ bool ConfigManager::load()
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
 	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
 	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
-	boolean[BESTIARY_PARTY_KILL_SHARING] = getGlobalBoolean(L, "bestiaryPartyKillSharing", false);
+	boolean[BESTIARY_PARTY_KILL_SHARING] = getGlobalBoolean(L, "bestiaryPartyKillSharing", true);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
