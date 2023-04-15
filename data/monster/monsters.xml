@@ -103,7 +103,7 @@
 	<monster name="Boogy" file="monsters/boogy.xml" />
 	<monster name="Bound Astral Power" file="monsters/bound_astral_power.xml" />
 	<monster name="Bovinus" file="monsters/bovinus.xml" />
-	<monster name="Bragrumol" file="monsters/Bragrumol.xml" />
+	<monster name="Bragrumol" file="monsters/bragrumol.xml" />
 	<monster name="Brain Squid" file="monsters/brain_squid.xml" />
 	<monster name="Braindeath" file="monsters/braindeath.xml" />
 	<monster name="Brimstone Bug" file="monsters/brimstone_bug.xml" />
