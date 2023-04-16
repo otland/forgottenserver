@@ -2648,7 +2648,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
 	registerMethod("Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
 	registerMethod("Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
-	registerMethod("Player", "closeChannel", LuaScriptInterface::luaPlayerCloseChannel);
+	registerMethod("Player", "leaveChannel", LuaScriptInterface::luaPlayerLeaveChannel);
 
 	registerMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
@@ -10087,9 +10087,9 @@ int LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerCloseChannel(lua_State* L)
+int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
 {
-	// player:closeChannel(channelId)
+	// player:leaveChannel(channelId)
 	uint16_t channelId = getNumber<uint16_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
