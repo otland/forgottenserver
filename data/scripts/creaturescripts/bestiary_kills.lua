@@ -1,22 +1,21 @@
 local BESTIARY_PARTY_KILL_SHARING = true
 
 local function getKillersForBestiary(monster)
-	local players = monster:getKillers(true)
 	if not BESTIARY_PARTY_KILL_SHARING then
-		return players[1] and {players[1]} or {}
+		return monster:getKillers(true)
 	end
 
 	local killers = {}
-	for _, killer in pairs(players) do
+	for _, killer in pairs(monster:getKillers(true)) do
 		local party = killer:getParty()
 		if party then
 			for _, member in pairs({party:getLeader(), unpack(party:getMembers())}) do
 				if party:isMemberSharingExp(member) then
-					killers[#killers + 1] = member
+					killers[member:getId()] = member
 				end
 			end
 		else
-			killers[#killers + 1] = killer
+			killers[killer:getId()] = killer
 		end
 	end
 	return killers
