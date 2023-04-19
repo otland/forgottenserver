@@ -1,6 +1,6 @@
-local ec = EventCallback
+local event = Event()
 
-ec.onLookInShop = function(self, itemType, count, description)
+event.onLookInShop = function(self, itemType, count, description)
 	local description = "You see " .. itemType:getItemDescription()
 	if self:getGroup():getAccess() then
 		description = string.format("%s\nItem ID: %d", description, itemType:getId())
@@ -22,4 +22,4 @@ ec.onLookInShop = function(self, itemType, count, description)
 	return description
 end
 
-ec:register()
+event:register()

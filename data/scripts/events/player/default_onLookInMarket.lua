@@ -1,9 +1,9 @@
 local showAtkWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE}
 local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD}
 
-local ec = EventCallback
+local event = Event()
 
-ec.onLookInMarket = function(self, itemType)
+event.onLookInMarket = function(self, itemType)
 	local response = NetworkMessage()
 	response:addByte(0xF8)
 	response:addU16(itemType:getClientId())
@@ -308,4 +308,4 @@ ec.onLookInMarket = function(self, itemType)
 	response:sendToPlayer(self)
 end
 
-ec:register()
+event:register()

@@ -1,6 +1,6 @@
-local ec = EventCallback
+local event = Event()
 
-ec.onLookInBattleList = function(self, creature, distance)
+event.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 	if self:getGroup():getAccess() then
 		local str = "%s\nHealth: %d / %d"
@@ -23,4 +23,4 @@ ec.onLookInBattleList = function(self, creature, distance)
 	return description
 end
 
-ec:register()
+event:register()
