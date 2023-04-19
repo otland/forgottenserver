@@ -394,6 +394,111 @@ function Player.isPromoted(self)
 	return vocation:getId() ~= fromVocId
 end
 
+function Player.getMaxTrackedQuests(self)
+	return configManager.getNumber(self:isPremium() and configKeys.QUEST_TRACKER_PREMIUM_LIMIT or configKeys.QUEST_TRACKER_FREE_LIMIT)
+end
+
+function Player.getQuests(self)
+	local quests = {}
+	for _, quest in pairs(Game.getQuests()) do
+		if quest:isStarted(self) then
+			quests[#quests + 1] = quest
+		end
+	end
+	return quests
+end
+
+function Player.sendQuestLog(self)
+	local msg = NetworkMessage()
+	msg:addByte(0xF0)
+	local quests = self:getQuests()
+	msg:addU16(#quests)
+
+	for _, quest in pairs(quests) do
+		msg:addU16(quest.id)
+		msg:addString(quest.name)
+		msg:addByte(quest:isCompleted(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendQuestLine(self, quest)
+	local msg = NetworkMessage()
+	msg:addByte(0xF1)
+	msg:addU16(quest.id)
+	local missions = quest:getMissions(self)
+	msg:addByte(#missions)
+
+	for _, mission in pairs(missions) do
+		msg:addU16(mission.id)
+		msg:addString(mission:getName(self))
+		msg:addString(mission:getDescription(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.getTrackedQuests(self, missionsId)
+	local playerId = self:getId()
+	local maxTrackedQuests = self:getMaxTrackedQuests()
+	local trackedQuests = {}
+	Game.getTrackedQuests()[playerId] = trackedQuests
+	local quests = Game.getQuests()
+	local missions = Game.getMissions()
+	local trackeds = 0
+	for _, missionId in pairs(missionsId) do
+		local mission = missions[missionId]
+		if mission and mission:isStarted(self) then
+			trackedQuests[mission] = quests[mission.questId]
+			trackeds = trackeds + 1
+			if trackeds >= maxTrackedQuests then
+				break
+			end
+		end
+	end
+	return trackedQuests, trackeds
+end
+
+function Player.sendQuestTracker(self, missionsId)
+	local msg = NetworkMessage()
+	msg:addByte(0xD0)
+	msg:addByte(1)
+
+	local trackedQuests, trackeds = self:getTrackedQuests(missionsId)
+	msg:addByte(self:getMaxTrackedQuests() - trackeds)
+	msg:addByte(trackeds)
+
+	for mission, quest in pairs(trackedQuests or {}) do
+		msg:addU16(mission.id)
+		msg:addString(quest.name)
+		msg:addString(mission:getName(self))
+		msg:addString(mission:getDescription(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendUpdateQuestTracker(self, mission)
+	local msg = NetworkMessage()
+	msg:addByte(0xD0)
+	msg:addByte(0)
+
+	msg:addU16(mission.id)
+	msg:addString(mission:getName(self))
+	msg:addString(mission:getDescription(self))
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
 function Player.getBestiaryKills(self, raceId)
 	return math.max(0, self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId))
 end

@@ -9,7 +9,6 @@
 #include "mounts.h"
 #include "player.h"
 #include "position.h"
-#include "quests.h"
 #include "raids.h"
 #include "wildcardtree.h"
 
@@ -385,9 +384,6 @@ public:
 	                             const uint16_t spriteId);
 	void playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos,
 	                      const uint16_t spriteId, bool podiumVisible, Direction direction);
-	void playerShowQuestLog(uint32_t playerId);
-	void playerShowQuestLine(uint32_t playerId, uint16_t questId);
-	void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);
 	void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, const std::string& receiver,
 	               const std::string& text);
 	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount = false);
@@ -508,7 +504,6 @@ public:
 	Map map;
 	Mounts mounts;
 	Raids raids;
-	Quests quests;
 
 	std::forward_list<Item*> toDecayItems;
 

@@ -2201,6 +2201,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn("configKeys", ConfigManager::MONSTER_OVERSPAWN);
 
+	registerEnumIn("configKeys", ConfigManager::QUEST_TRACKER_FREE_LIMIT);
+	registerEnumIn("configKeys", ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT);
+
 	// os
 	registerMethod("os", "mtime", LuaScriptInterface::luaSystemTime);
 
