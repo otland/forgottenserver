@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crab" namedescription="a crab" race="blood" experience="30" speed="144" manacost="305">
+<monster name="Crab" namedescription="a crab" race="blood" experience="30" speed="144" manacost="305" raceId="112">
 	<health now="55" max="55" />
 	<look type="112" corpse="6039" />
 	<targetchange interval="4000" chance="0" />

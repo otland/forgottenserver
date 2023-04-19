@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="High Voltage Elemental" nameDescription="a high voltage elemental" race="energy" experience="1500" speed="278">
+<monster name="High Voltage Elemental" nameDescription="a high voltage elemental" race="energy" experience="1500" speed="278" raceId="1116">
 	<health now="1500" max="1500" />
 	<look type="293" corpse="8966" />
 	<targetchange interval="2000" chance="5" />

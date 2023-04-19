@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Black Sphinx Acolyte" nameDescription="a black sphinx acolyte" race="blood" experience="7200" speed="310">
+<monster name="Black Sphinx Acolyte" nameDescription="a black sphinx acolyte" race="blood" experience="7200" speed="310" raceId="1800">
 	<health now="8100" max="8100" />
 	<look type="1200" head="95" body="95" legs="94" feet="95" corpse="34079" />
 	<targetchange interval="2000" chance="5" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wyrm" nameDescription="a wyrm" race="blood" experience="1550" speed="280">
+<monster name="Wyrm" nameDescription="a wyrm" race="blood" experience="1550" speed="280" raceId="461">
 	<health now="1825" max="1825" />
 	<look type="291" corpse="8941" />
 	<targetchange interval="4000" chance="10" />

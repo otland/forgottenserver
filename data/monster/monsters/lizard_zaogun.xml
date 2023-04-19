@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lizard Zaogun" nameDescription="a lizard zaogun" race="blood" experience="1700" speed="276">
+<monster name="Lizard Zaogun" nameDescription="a lizard zaogun" race="blood" experience="1700" speed="276" raceId="616">
 	<health now="2955" max="2955" />
 	<look type="343" corpse="11284" />
 	<targetchange interval="4000" chance="10" />

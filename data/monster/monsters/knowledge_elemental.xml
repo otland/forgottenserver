@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Knowledge Elemental" nameDescription="a knowledge elemental" race="ink" experience="10603" speed="460">
+<monster name="Knowledge Elemental" nameDescription="a knowledge elemental" race="ink" experience="10603" speed="460" raceId="1670">
 	<health now="10500" max="10500" />
 	<look type="1065" corpse="31262" />
 	<targetchange interval="2000" chance="5" />

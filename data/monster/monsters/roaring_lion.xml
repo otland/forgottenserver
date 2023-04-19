@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Roaring Lion" nameDescription="a roaring lion" race="blood" experience="800" speed="210">
+<monster name="Roaring Lion" nameDescription="a roaring lion" race="blood" experience="800" speed="210" raceId="981">
 	<health now="1000" max="1000" />
 	<look type="570" corpse="21420" />
 	<targetchange interval="4000" chance="10" />

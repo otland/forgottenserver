@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cliff Strider" nameDescription="a cliff strider" race="undead" experience="5700" speed="246">
+<monster name="Cliff Strider" nameDescription="a cliff strider" race="undead" experience="5700" speed="246" raceId="889">
 	<health now="9400" max="9400" />
 	<look type="497" corpse="17420" />
 	<targetchange interval="4000" chance="10" />

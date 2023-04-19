@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Swan Maiden" nameDescription="a swan maiden" race="blood" experience="700" speed="234">
+<monster name="Swan Maiden" nameDescription="a swan maiden" race="blood" experience="700" speed="234" raceId="1437">
 	<health now="800" max="800" />
 	<look type="138" head="0" body="0" legs="114" feet="78" corpse="28487" />
 	<targetchange interval="2000" chance="5" />

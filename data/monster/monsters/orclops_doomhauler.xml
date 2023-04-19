@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orclops Doomhauler" nameDescription="an orclops doomhauler" race="blood" experience="1200" speed="240">
+<monster name="Orclops Doomhauler" nameDescription="an orclops doomhauler" race="blood" experience="1200" speed="240" raceId="1314">
 	<health now="1700" max="1700" />
 	<look type="934" corpse="27734" />
 	<targetchange interval="2000" chance="5" />

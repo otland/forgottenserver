@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Manticore" nameDescription="a manticore" race="blood" experience="5100" speed="300">
+<monster name="Manticore" nameDescription="a manticore" race="blood" experience="5100" speed="300" raceId="1816">
 	<health now="6700" max="6700" />
 	<look type="1189" head="116" body="97" legs="113" feet="20" addons="1" corpse="34046" />
 	<targetchange interval="2000" chance="5" />

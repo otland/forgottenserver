@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Floating Savant" nameDescription="a floating savant" race="fire" experience="8000" speed="330">
+<monster name="Floating Savant" nameDescription="a floating savant" race="fire" experience="8000" speed="330" raceId="1637">
 	<health now="8000" max="8000" />
 	<look type="1063" head="113" body="94" legs="78" feet="78" addons="0" corpse="31254" />
 	<targetchange interval="2000" chance="5" />

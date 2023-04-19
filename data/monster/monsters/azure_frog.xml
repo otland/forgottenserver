@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Azure Frog" nameDescription="an azure frog" race="blood" experience="20" speed="200" manacost="305">
+<monster name="Azure Frog" nameDescription="an azure frog" race="blood" experience="20" speed="200" manacost="305" raceId="268">
 	<health now="60" max="60" />
 	<look type="226" head="87" body="85" legs="85" feet="87" corpse="6079" />
 	<targetchange interval="4000" chance="0" />
