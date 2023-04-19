@@ -468,14 +468,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	auto [accountId, characterId] =
-	    IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (accountId == 0) {
+	// TODO: use structured binding when C++20 is adopted
+	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
+	if (authIds.first == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask([=, thisPtr = getThis()]() { thisPtr->login(characterId, accountId, operatingSystem); });
+	g_dispatcher.addTask(
+	    [=, thisPtr = getThis()]() { thisPtr->login(authIds.second, authIds.first, operatingSystem); });
 }
 
 void ProtocolGame::onConnect()
@@ -775,9 +776,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		// case 0xDF: break; // premium shop (?)
 		// case 0xE0: break; // premium shop (?)
-		// case 0xE1: break; // bestiary 1
-		// case 0xE2: break; // bestiary 2
-		// case 0xE3: break; // bestiary 3
 		// case 0xE4: break; // buy charm rune
 		// case 0xE5: break; // request character info (cyclopedia)
 		case 0xE6:
@@ -3106,7 +3104,6 @@ void ProtocolGame::sendOutfitWindow()
 	msg.addByte(0xC8);
 
 	Outfit_t currentOutfit = player->getDefaultOutfit();
-	bool mounted = currentOutfit.lookMount != 0;
 
 	if (currentOutfit.lookType == 0) {
 		Outfit_t newOutfit;
@@ -3118,6 +3115,8 @@ void ProtocolGame::sendOutfitWindow()
 	if (currentMount) {
 		currentOutfit.lookMount = currentMount->clientId;
 	}
+
+	bool mounted = currentOutfit.lookMount != 0;
 
 	AddOutfit(msg, currentOutfit);
 
@@ -3132,11 +3131,11 @@ void ProtocolGame::sendOutfitWindow()
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
+	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
 		protocolOutfits.emplace_back("Gamemaster", 75, 0);
 	}
 
-	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
 		if (!player->getOutfitAddons(outfit, addons)) {
@@ -3444,8 +3443,8 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 		msg.addByte(it.second);
 	}
 
-	msg.addByte(modalWindow.defaultEnterButton);
 	msg.addByte(modalWindow.defaultEscapeButton);
+	msg.addByte(modalWindow.defaultEnterButton);
 	msg.addByte(modalWindow.priority ? 0x01 : 0x00);
 
 	writeToOutputBuffer(msg);

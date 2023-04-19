@@ -193,9 +193,9 @@ function ModalWindow:create()
 		local name = self.buttons[id].name
 		modalWindow:addButton(id, name)
 		if id == self.defaultEnterButton or name == self.defaultEnterButton then
-			modalWindow:setDefaultEnterButton(id)
+			modalWindow:setDefaultEnterButton(id - 1)
 		elseif id == self.defaultEscapeButton or name == self.defaultEscapeButton then
-			modalWindow:setDefaultEscapeButton(id)
+			modalWindow:setDefaultEscapeButton(id - 1)
 		end
 	end
 

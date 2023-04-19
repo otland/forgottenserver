@@ -498,3 +498,39 @@ function Player.sendUpdateQuestTracker(self, mission)
 	msg:delete()
 	return true
 end
+
+function Player.getBestiaryKills(self, raceId)
+	return math.max(0, self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId))
+end
+
+function Player.setBestiaryKills(self, raceId, value)
+	return self:setStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId, value)
+end
+
+function Player.addBestiaryKills(self, raceId)
+	local monsterType = MonsterType(raceId)
+	if not monsterType then
+		return false
+	end
+
+	local kills = self:getBestiaryKills(raceId)
+	local newKills = kills + 1
+	local bestiaryInfo = monsterType:getBestiaryInfo()
+	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
+		if kills == 0 or (kills < totalKills and newKills >= totalKills) then
+			self:sendTextMessage(MESSAGE_EVENT_DEFAULT, string.format("You unlocked details for the creature %s.", monsterType:getName()))
+			self:sendBestiaryMilestoneReached(raceId)
+			break
+		end
+	end
+	return self:setBestiaryKills(raceId, newKills)
+end
+
+function Player.sendBestiaryMilestoneReached(self, raceId)
+	local msg = NetworkMessage()
+	msg:addByte(0xD9)
+	msg:addU16(raceId)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end

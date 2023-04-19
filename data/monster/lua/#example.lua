@@ -32,6 +32,18 @@ monster.flags = {
 	staticAttackChance = 70
 }
 
+monster.bestiary = {
+	class = "Dragon",
+	raceId = 39,
+	prowess = 50,
+	expertise = 500,
+	mastery = 1000,
+	charmPoints = 25,
+	difficulty = "medium", -- harmless, trivial, easy, medium, hard, challenging
+	occurrence = 0,
+	locations = "Example locations"
+}
+
 monster.summons = {
 	{name = "demon", chance = 10, interval = 2 * 1000}
 }
