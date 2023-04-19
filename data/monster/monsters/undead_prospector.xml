@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Prospector" nameDescription="an undead prospector" race="blood" experience="85" speed="170" raceId="595" manacost="440">
+<monster name="Undead Prospector" nameDescription="an undead prospector" race="blood" experience="85" speed="170" manacost="440" raceId="595">
 	<health now="100" max="100" />
 	<look type="18" corpse="5976" />
 	<targetchange interval="4000" chance="0" />

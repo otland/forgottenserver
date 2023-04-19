@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sea Serpent" nameDescription="a sea serpent" race="blood" experience="2300" speed="350" raceId="438" manacost="390">
+<monster name="Sea Serpent" nameDescription="a sea serpent" race="blood" experience="2300" speed="350" manacost="390" raceId="438">
 	<health now="1950" max="1950" />
 	<look type="275" corpse="8307" />
 	<targetchange interval="4000" chance="10" />

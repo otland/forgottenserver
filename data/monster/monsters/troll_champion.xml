@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="40" speed="190" raceId="392" manacost="340">
+<monster name="Troll Champion" nameDescription="a troll champion" race="blood" experience="40" speed="190" manacost="340" raceId="392">
 	<health now="75" max="75" />
 	<look type="281" corpse="7926" />
 	<targetchange interval="4000" chance="0" />

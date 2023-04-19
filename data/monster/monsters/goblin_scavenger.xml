@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Goblin Scavenger" nameDescription="a goblin scavenger" race="blood" experience="37" speed="132" raceId="464" manacost="310">
+<monster name="Goblin Scavenger" nameDescription="a goblin scavenger" race="blood" experience="37" speed="132" manacost="310" raceId="464">
 	<health now="60" max="60" />
 	<look type="297" corpse="6002" />
 	<targetchange interval="4000" chance="10" />

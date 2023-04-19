@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Berserker Chicken" namedescription="a berserker chicken" race="blood" experience="220" speed="300" raceId="561" manacost="220">
+<monster name="Berserker Chicken" namedescription="a berserker chicken" race="blood" experience="220" speed="300" manacost="220" raceId="561">
 	<health now="465" max="465" />
 	<look type="111" corpse="6042" />
 	<targetchange interval="5000" chance="8" />

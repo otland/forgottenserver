@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Killer Rabbit" nameDescription="a killer rabbit" race="blood" experience="160" speed="300" raceId="560" manacost="220">
+<monster name="Killer Rabbit" nameDescription="a killer rabbit" race="blood" experience="160" speed="300" manacost="220" raceId="560">
 	<health now="205" max="205" />
 	<look type="74" corpse="6017" />
 	<targetchange interval="5000" chance="20" />

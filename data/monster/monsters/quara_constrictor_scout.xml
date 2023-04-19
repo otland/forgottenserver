@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Constrictor Scout" nameDescription="a quara constrictor scout" race="blood" experience="200" speed="150" raceId="240" manacost="670">
+<monster name="Quara Constrictor Scout" nameDescription="a quara constrictor scout" race="blood" experience="200" speed="150" manacost="670" raceId="240">
 	<health now="450" max="450" />
 	<look type="46" corpse="6065" />
 	<targetchange interval="4000" chance="10" />
