@@ -779,9 +779,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		// case 0xDF: break; // premium shop (?)
 		// case 0xE0: break; // premium shop (?)
-		// case 0xE1: break; // bestiary 1
-		// case 0xE2: break; // bestiary 2
-		// case 0xE3: break; // bestiary 3
 		// case 0xE4: break; // buy charm rune
 		// case 0xE5: break; // request character info (cyclopedia)
 		case 0xE6:

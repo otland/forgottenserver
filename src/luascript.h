@@ -30,6 +30,7 @@ class LuaVariant;
 class Npc;
 class Player;
 class Thing;
+struct BestiaryInfo;
 struct LootBlock;
 struct Mount;
 struct Outfit;
@@ -317,6 +318,7 @@ public:
 	static Outfit getOutfitClass(lua_State* L, int32_t arg);
 	static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
 	static Reflect getReflect(lua_State* L, int32_t arg);
+	static BestiaryInfo getBestiaryInfo(lua_State* L, int32_t arg);
 
 	static Thing* getThing(lua_State* L, int32_t arg);
 	static Creature* getCreature(lua_State* L, int32_t arg);
@@ -358,6 +360,7 @@ public:
 	static void pushMount(lua_State* L, const Mount* mount);
 	static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList);
 	static void pushReflect(lua_State* L, const Reflect& reflect);
+	static void pushBestiaryInfo(lua_State* L, const BestiaryInfo& info);
 
 	//
 	static void setField(lua_State* L, const char* index, lua_Number value)
@@ -512,6 +515,7 @@ private:
 	static int luaGameGetPlayerCount(lua_State* L);
 	static int luaGameGetNpcCount(lua_State* L);
 	static int luaGameGetMonsterTypes(lua_State* L);
+	static int luaGameGetBestiary(lua_State* L);
 	static int luaGameGetCurrencyItems(lua_State* L);
 	static int luaGameGetItemTypeByClientId(lua_State* L);
 	static int luaGameGetMountIdByLookType(lua_State* L);
@@ -1369,6 +1373,8 @@ private:
 	static int luaMonsterTypeChangeTargetChance(lua_State* L);
 	static int luaMonsterTypeChangeTargetSpeed(lua_State* L);
 
+	static int luaMonsterTypeBestiaryInfo(lua_State* L);
+
 	// Loot
 	static int luaCreateLoot(lua_State* L);
 	static int luaDeleteLoot(lua_State* L);
@@ -1428,6 +1434,7 @@ private:
 
 	static int luaPartyIsSharedExperienceActive(lua_State* L);
 	static int luaPartyIsSharedExperienceEnabled(lua_State* L);
+	static int luaPartyIsMemberSharingExp(lua_State* L);
 	static int luaPartyShareExperience(lua_State* L);
 	static int luaPartySetSharedExperience(lua_State* L);
 
