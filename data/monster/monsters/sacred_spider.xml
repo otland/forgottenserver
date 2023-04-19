@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485">
+<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485" raceId="709">
 	<health now="550" max="550" />
 	<look type="219" corpse="6060" />
 	<targetchange interval="4000" chance="10" />

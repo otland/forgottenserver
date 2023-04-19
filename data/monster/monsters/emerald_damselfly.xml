@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Emerald Damselfly" nameDescription="an emerald damselfly" race="venom" experience="35" speed="200">
+<monster name="Emerald Damselfly" nameDescription="an emerald damselfly" race="venom" experience="35" speed="200" raceId="912">
 	<health now="90" max="90" />
 	<look type="528" corpse="19706" />
 	<targetchange interval="5000" chance="0" />

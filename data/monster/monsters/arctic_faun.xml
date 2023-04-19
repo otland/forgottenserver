@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Arctic Faun" nameDescription="an arctic faun" race="blood" experience="300" speed="210">
+<monster name="Arctic Faun" nameDescription="an arctic faun" race="blood" experience="300" speed="210" raceId="1626">
 	<health now="300" max="300" />
 	<look type="980" head="85" body="0" legs="0" feet="85" addons="0" corpse="31467" />
 	<targetchange interval="2000" chance="5" />

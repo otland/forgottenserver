@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Animated Snowman" nameDescription="an animated snowman" race="energy" experience="400" speed="230">
+<monster name="Animated Snowman" nameDescription="an animated snowman" race="energy" experience="400" speed="230" raceId="1751">
 	<health now="450" max="450" />
 	<look type="1159" corpse="32991" />
 	<targetchange interval="2000" chance="5" />

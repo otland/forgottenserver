@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Coral Frog" namedescription="a coral frog" race="blood" experience="20" speed="200" manacost="305">
+<monster name="Coral Frog" namedescription="a coral frog" race="blood" experience="20" speed="200" manacost="305" raceId="269">
 	<health now="60" max="60" />
 	<look type="226" head="114" body="79" legs="78" feet="114" corpse="6079" />
 	<targetchange interval="4000" chance="0" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cult Believer" nameDescription="a cult believer" race="blood" experience="850" speed="260">
+<monster name="Cult Believer" nameDescription="a cult believer" race="blood" experience="850" speed="260" raceId="1512">
 	<health now="975" max="975" />
 	<look type="132" head="98" body="96" legs="39" feet="38" addons="1" corpse="24673" />
 	<targetchange interval="2000" chance="5" />
