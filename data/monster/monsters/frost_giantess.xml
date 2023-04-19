@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="194" manacost="490">
+<monster name="Frost Giantess" nameDescription="a frost giantess" race="blood" experience="150" speed="194" raceId="334" manacost="490">
 	<health now="275" max="275" />
 	<look type="265" corpse="7330" />
 	<targetchange interval="4000" chance="10" />

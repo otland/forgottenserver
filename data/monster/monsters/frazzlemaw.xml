@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="400">
+<monster name="Frazzlemaw" nameDescription="a frazzlemaw" race="blood" experience="3400" speed="400" raceId="1022">
 	<health now="4100" max="4100" />
 	<look type="594" corpse="22567" />
 	<targetchange interval="4000" chance="10" />

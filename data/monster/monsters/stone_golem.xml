@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Stone Golem" nameDescription="a stone golem" race="undead" experience="160" speed="180" manacost="590">
+<monster name="Stone Golem" nameDescription="a stone golem" race="undead" experience="160" speed="180" raceId="67" manacost="590">
 	<health now="270" max="270" />
 	<look type="67" corpse="6005" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="214" manacost="485">
+<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="214" raceId="219" manacost="485">
 	<health now="225" max="225" />
 	<look type="219" corpse="6060" />
 	<targetchange interval="4000" chance="10" />

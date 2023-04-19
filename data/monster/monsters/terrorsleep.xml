@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Terrorsleep" nameDescription="a terrorsleep" race="venom" experience="5900" speed="360">
+<monster name="Terrorsleep" nameDescription="a terrorsleep" race="venom" experience="5900" speed="360" raceId="1016">
 	<health now="7200" max="7200" />
 	<look type="593" corpse="22497" />
 	<targetchange interval="4000" chance="10" />

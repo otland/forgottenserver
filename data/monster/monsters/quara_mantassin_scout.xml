@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Mantassin Scout" nameDescription="a quara mantassin scout" race="blood" experience="100" speed="140" manacost="480">
+<monster name="Quara Mantassin Scout" nameDescription="a quara mantassin scout" race="blood" experience="100" speed="140" raceId="242" manacost="480">
 	<health now="220" max="220" />
 	<look type="72" corpse="6064" />
 	<targetchange interval="4000" chance="10" />

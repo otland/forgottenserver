@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wereboar" nameDescription="a wereboar" race="blood" experience="2000" speed="300">
+<monster name="Wereboar" nameDescription="a wereboar" race="blood" experience="2000" speed="300" raceId="1143">
 	<health now="2200" max="2200" />
 	<look type="721" corpse="24722" />
 	<targetchange interval="2000" chance="5" />

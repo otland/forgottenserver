@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="154" manacost="300">
+<monster name="Crazed Beggar" nameDescription="a crazed beggar" race="blood" experience="35" speed="154" raceId="525" manacost="300">
 	<health now="100" max="100" />
 	<look type="153" head="40" body="19" legs="21" feet="97" addons="3" corpse="20351" />
 	<targetchange interval="4000" chance="0" />

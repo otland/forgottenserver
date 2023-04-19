@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190">
+<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190" raceId="540">
 	<health now="245" max="245" />
 	<look type="15" corpse="5960" />
 	<targetchange interval="2000" chance="5" />

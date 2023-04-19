@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Polar Bear" nameDescription="a polar bear" race="blood" experience="28" speed="156" manacost="315">
+<monster name="Polar Bear" nameDescription="a polar bear" race="blood" experience="28" speed="156" raceId="42" manacost="315">
 	<health now="85" max="85" />
 	<look type="42" corpse="5987" />
 	<targetchange interval="4000" chance="0" />

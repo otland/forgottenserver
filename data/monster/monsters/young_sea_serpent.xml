@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Young Sea Serpent" nameDescription="a young sea serpent" race="blood" experience="1000" speed="320">
+<monster name="Young Sea Serpent" nameDescription="a young sea serpent" race="blood" experience="1000" speed="320" raceId="439">
 	<health now="1050" max="1050" />
 	<look type="317" corpse="9879" />
 	<targetchange interval="4000" chance="10" />

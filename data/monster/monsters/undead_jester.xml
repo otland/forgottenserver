@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Jester" nameDescription="an undead jester" race="blood" experience="5" speed="224">
+<monster name="Undead Jester" nameDescription="an undead jester" race="blood" experience="5" speed="224" raceId="388">
 	<health now="355" max="355" />
 	<look type="273" head="0" body="0" legs="114" feet="0" addons="2" corpse="20522" />
 	<targetchange interval="2000" chance="5" />

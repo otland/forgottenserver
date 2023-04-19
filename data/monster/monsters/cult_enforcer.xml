@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cult Enforcer" nameDescription="a cult enforcer" race="blood" experience="1000" speed="260">
+<monster name="Cult Enforcer" nameDescription="a cult enforcer" race="blood" experience="1000" speed="260" raceId="1513">
 	<health now="1150" max="1150" />
 	<look type="134" head="95" body="19" legs="57" feet="76" addons="1" corpse="24673" />
 	<targetchange interval="2000" chance="5" />
