@@ -844,16 +844,11 @@ Reflect LuaScriptInterface::getReflect(lua_State* L, int32_t arg)
 BestiaryInfo LuaScriptInterface::getBestiaryInfo(lua_State* L, int32_t arg)
 {
 	std::string className = getFieldString(L, arg, "class");
-	uint32_t raceId = getField<uint32_t>(L, arg, "raceId");
-	uint32_t prowess = getField<uint32_t>(L, arg, "prowess");
-	uint32_t expertise = getField<uint32_t>(L, arg, "expertise");
-	uint32_t mastery = getField<uint32_t>(L, arg, "mastery");
-	uint32_t charmPoints = getField<uint32_t>(L, arg, "charmPoints");
-	uint32_t difficulty = getField<uint32_t>(L, arg, "difficulty");
-	uint32_t occurrence = getField<uint32_t>(L, arg, "occurrence");
+	uint8_t difficulty = getField<uint8_t>(L, arg, "difficulty");
+	uint8_t occurrence = getField<uint8_t>(L, arg, "occurrence");
 	std::string locations = getFieldString(L, arg, "locations");
-	lua_pop(L, 9);
-	return {className, raceId, prowess, expertise, mastery, charmPoints, difficulty, occurrence, locations};
+	lua_pop(L, 4);
+	return {className, difficulty, occurrence, locations};
 }
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
@@ -1036,13 +1031,8 @@ void LuaScriptInterface::pushReflect(lua_State* L, const Reflect& reflect)
 
 void LuaScriptInterface::pushBestiaryInfo(lua_State* L, const BestiaryInfo& info)
 {
-	lua_createtable(L, 0, 9);
+	lua_createtable(L, 0, 4);
 	setField(L, "class", info.className);
-	setField(L, "raceId", info.raceId);
-	setField(L, "prowess", info.prowess);
-	setField(L, "expertise", info.expertise);
-	setField(L, "mastery", info.mastery);
-	setField(L, "charmPoints", info.charmPoints);
 	setField(L, "difficulty", info.difficulty);
 	setField(L, "occurrence", info.occurrence);
 	setField(L, "locations", info.locations);
@@ -2226,7 +2216,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getPlayerCount", LuaScriptInterface::luaGameGetPlayerCount);
 	registerMethod("Game", "getNpcCount", LuaScriptInterface::luaGameGetNpcCount);
 	registerMethod("Game", "getMonsterTypes", LuaScriptInterface::luaGameGetMonsterTypes);
-	registerMethod("Game", "getBestiary", LuaScriptInterface::luaGameGetBestiary);
+	registerMethod("Game", "getBestiaryClasses", LuaScriptInterface::luaGameGetBestiaryClasses);
 	registerMethod("Game", "getCurrencyItems", LuaScriptInterface::luaGameGetCurrencyItems);
 	registerMethod("Game", "getItemTypeByClientId", LuaScriptInterface::luaGameGetItemTypeByClientId);
 	registerMethod("Game", "getMountIdByLookType", LuaScriptInterface::luaGameGetMountIdByLookType);
@@ -3056,6 +3046,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("MonsterType", "name", LuaScriptInterface::luaMonsterTypeName);
 	registerMethod("MonsterType", "nameDescription", LuaScriptInterface::luaMonsterTypeNameDescription);
+	registerMethod("MonsterType", "raceId", LuaScriptInterface::luaMonsterTypeRaceId);
 
 	registerMethod("MonsterType", "health", LuaScriptInterface::luaMonsterTypeHealth);
 	registerMethod("MonsterType", "maxHealth", LuaScriptInterface::luaMonsterTypeMaxHealth);
@@ -4556,17 +4547,17 @@ int LuaScriptInterface::luaGameGetMonsterTypes(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameGetBestiary(lua_State* L)
+int LuaScriptInterface::luaGameGetBestiaryClasses(lua_State* L)
 {
-	// Game.getBestiary()
-	lua_createtable(L, 0, g_monsters.bestiary.size());
+	// Game.getBestiaryClasses()
+	lua_createtable(L, g_monsters.bestiary.size(), 0);
 	int classIndex = 0;
 	for (const auto& [className, monsters] : g_monsters.bestiary) {
 		lua_createtable(L, 0, 2);
 		pushString(L, className);
 		lua_setfield(L, -2, "name");
 
-		lua_createtable(L, 0, monsters.size());
+		lua_createtable(L, monsters.size(), 0);
 		int index = 0;
 		for (const auto& monsterName : monsters) {
 			pushUserdata<const MonsterType>(L, g_monsters.getMonsterType(monsterName));
@@ -14207,6 +14198,23 @@ int LuaScriptInterface::luaMonsterTypeNameDescription(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterTypeRaceId(lua_State* L)
+{
+	// get: monsterType:raceId() set: monsterType:raceId(id)
+	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
+	if (monsterType) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, monsterType->raceId);
+		} else {
+			monsterType->raceId = getNumber<uint32_t>(L, 2);
+			pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaMonsterTypeHealth(lua_State* L)
 {
 	// get: monsterType:health() set: monsterType:health(health)
@@ -14998,7 +15006,7 @@ int LuaScriptInterface::luaMonsterTypeBestiaryInfo(lua_State* L)
 			pushBestiaryInfo(L, monsterType->bestiaryInfo);
 		} else if (isTable(L, 2)) {
 			auto info = getBestiaryInfo(L, 2);
-			if (g_monsters.isValidBestiaryInfo(info)) {
+			if (!info.className.empty()) {
 				monsterType->bestiaryInfo = std::move(info);
 				pushBoolean(L, g_monsters.addBestiaryMonsterType(monsterType));
 			} else {

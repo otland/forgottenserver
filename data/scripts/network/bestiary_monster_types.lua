@@ -3,9 +3,8 @@ local handler = PacketHandler(0xE2)
 function handler.onReceive(player, msg)
 	local monsterTypes = {}
 	local className = ""
-	if msg:getByte() == 1 then -- search
-		local amount = msg:getU16()
-		for i = 1, amount do
+	if msg:getByte() == 1 then -- Search Mode
+		for i = 1, msg:getU16() do
 			local raceId = msg:getU16()
 			local monsterType = MonsterType(raceId)
 			if monsterType and player:getBestiaryKills(raceId) > 0 then
@@ -14,8 +13,7 @@ function handler.onReceive(player, msg)
 		end
 	else
 		className = msg:getString()
-		local bestiaryClasses = Game.getBestiary()
-		for _, class in pairs(bestiaryClasses) do
+		for _, class in pairs(Game.getBestiaryClasses()) do
 			if class.name == className then
 				monsterTypes = class.monsterTypes
 				break
@@ -39,14 +37,11 @@ function handler.onReceive(player, msg)
 		if kills == 0 then
 			response:addByte(0)
 		else
-			local progress = 4
-			for i, amount in pairs({info.prowess, info.expertise, info.mastery}) do
-				if kills < amount then
-					progress = i
-					break
-				end
+			local step = 0
+			for i, amount in pairs({0, unpack(monsterType:getBestiaryKills())}) do
+				step = kills >= amount and i or step
 			end
-			response:addU16(progress)
+			response:addU16(step)
 		end
 	end
 

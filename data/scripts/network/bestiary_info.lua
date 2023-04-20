@@ -1,14 +1,9 @@
 local function getLootDifficulty(chance)
-	if chance < 200 then
-		return 4
-	elseif chance < 1000 then
-		return 3
-	elseif chance < 5000 then
-		return 2
-	elseif chance < 25000 then
-		return 1
+	for i = 0, 4 do
+		if chance < 200 * 5 ^ i then
+			return 4 - i
+		end
 	end
-	return 0
 end
 
 local bestiaryElements = {
@@ -42,14 +37,11 @@ function handler.onReceive(player, msg)
 
 	local info = monsterType:getBestiaryInfo()
 	local kills = player:getBestiaryKills(raceId)
-	local progress = 0
+	local monsterKills = monsterType:getBestiaryKills()
+	local step = kills == 0 and 0 or 4
 	if kills ~= 0 then
-		progress = 4
-		for i, amount in pairs({info.prowess, info.expertise, info.mastery}) do
-			if kills < amount then
-				progress = i
-				break
-			end
+		for i, amount in pairs({0, unpack(monsterKills)}) do
+			step = kills >= amount and i or step
 		end
 	end
 
@@ -57,12 +49,12 @@ function handler.onReceive(player, msg)
 	response:addByte(0xD7)
 	response:addU16(raceId)
 	response:addString(info.class)
-	response:addByte(progress)
+	response:addByte(step)
 	response:addU32(kills)
 
-	response:addU16(info.prowess)
-	response:addU16(info.expertise)
-	response:addU16(info.mastery)
+	for _, amount in pairs(monsterKills) do
+		response:addU16(amount)
+	end
 
 	response:addByte(info.difficulty)
 	response:addByte(info.occurrence)
@@ -72,7 +64,7 @@ function handler.onReceive(player, msg)
 
 	for _, lootItem in pairs(loot) do
 		local lootDifficulty = getLootDifficulty(lootItem.chance)
-		local knowLoot = lootDifficulty <= progress
+		local knowLoot = lootDifficulty <= step
 		local itemType = ItemType(lootItem.itemId)
 		response:addU16(knowLoot and itemType:getClientId() or 0)
 		response:addByte(lootDifficulty)
@@ -83,8 +75,8 @@ function handler.onReceive(player, msg)
 		end
 	end
 
-	if progress > 1 then
-		response:addU16(info.charmPoints)
+	if step > 1 then
+		response:addU16(monsterType:getBestiaryCharmPoints())
 		response:addByte(monsterType:isHostile() and 2 or 1)
 		response:addByte(2)
 		response:addU32(monsterType:getMaxHealth())
@@ -93,7 +85,7 @@ function handler.onReceive(player, msg)
 		response:addU16(monsterType:getArmor())
 	end
 
-	if progress > 2 then
+	if step > 2 then
 		local elements = getBestiaryElements(monsterType)
 		response:addByte(#elements)
 		for index, value in pairs(elements) do
@@ -105,7 +97,7 @@ function handler.onReceive(player, msg)
 		response:addString(info.locations)
 	end
 
-	if progress > 3 then
+	if step > 3 then
 		response:addByte(0)
 		response:addByte(1)
 	end

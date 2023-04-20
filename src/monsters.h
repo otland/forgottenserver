@@ -12,9 +12,6 @@ class LuaScriptInterface;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
-static constexpr int32_t BESTIARY_MAX_DIFFICULTY = 5;
-static constexpr int32_t BESTIARY_MAX_OCCURRENCE = 4;
-
 struct LootBlock
 {
 	uint16_t id;
@@ -98,13 +95,8 @@ struct voiceBlock_t
 struct BestiaryInfo
 {
 	std::string className = "";
-	uint32_t raceId = 0;
-	uint32_t prowess = 0;
-	uint32_t expertise = 0;
-	uint32_t mastery = 0;
-	uint32_t charmPoints = 0;
-	uint32_t difficulty = 0;
-	uint32_t occurrence = 0;
+	uint8_t difficulty = 0;
+	uint8_t occurrence = 0;
 	std::string locations = "";
 };
 
@@ -186,6 +178,7 @@ public:
 
 	std::string name;
 	std::string nameDescription;
+	uint32_t raceId = 0;
 
 	MonsterInfo info;
 	BestiaryInfo bestiaryInfo;
@@ -256,7 +249,6 @@ public:
 
 	MonsterType* getMonsterType(uint32_t raceId);
 	bool addBestiaryMonsterType(const MonsterType* monsterType);
-	bool isValidBestiaryInfo(const BestiaryInfo& bestiaryInfo) const;
 
 	std::unique_ptr<LuaScriptInterface> scriptInterface;
 	std::map<std::string, MonsterType> monsters;

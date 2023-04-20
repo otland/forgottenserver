@@ -872,7 +872,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if ((attr = monsterNode.attribute("raceId"))) {
-		mType->bestiaryInfo.raceId = attr.as_uint();
+		mType->raceId = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
@@ -985,52 +985,52 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 	}
 
 	if ((node = monsterNode.child("bestiary"))) {
+		BestiaryInfo info;
 		if ((attr = node.attribute("class"))) {
-			mType->bestiaryInfo.className = attr.as_string();
-		}
-		if ((attr = node.attribute("prowess"))) {
-			mType->bestiaryInfo.prowess = pugi::cast<uint32_t>(attr.value());
-		}
-		if ((attr = node.attribute("expertise"))) {
-			mType->bestiaryInfo.expertise = pugi::cast<uint32_t>(attr.value());
-		}
-		if ((attr = node.attribute("mastery"))) {
-			mType->bestiaryInfo.mastery = pugi::cast<uint32_t>(attr.value());
-		}
-		if ((attr = node.attribute("charmPoints"))) {
-			mType->bestiaryInfo.charmPoints = pugi::cast<uint32_t>(attr.value());
+			info.className = attr.as_string();
 		}
 		if ((attr = node.attribute("difficulty"))) {
 			std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 			if (tmpStrValue == "harmless") {
-				mType->bestiaryInfo.difficulty = 0;
+				info.difficulty = 0;
 			} else if (tmpStrValue == "trivial") {
-				mType->bestiaryInfo.difficulty = 1;
+				info.difficulty = 1;
 			} else if (tmpStrValue == "easy") {
-				mType->bestiaryInfo.difficulty = 2;
+				info.difficulty = 2;
 			} else if (tmpStrValue == "medium") {
-				mType->bestiaryInfo.difficulty = 3;
+				info.difficulty = 3;
 			} else if (tmpStrValue == "hard") {
-				mType->bestiaryInfo.difficulty = 4;
+				info.difficulty = 4;
 			} else if (tmpStrValue == "challenging") {
-				mType->bestiaryInfo.difficulty = 5;
+				info.difficulty = 5;
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown difficulty: " << attr.as_string() << ". "
 				          << file << std::endl;
 			}
 		}
 		if ((attr = node.attribute("occurrence"))) {
-			mType->bestiaryInfo.occurrence = pugi::cast<uint32_t>(attr.value());
+			std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+			if (tmpStrValue == "common") {
+				info.occurrence = 0;
+			} else if (tmpStrValue == "uncommon") {
+				info.occurrence = 1;
+			} else if (tmpStrValue == "rare") {
+				info.occurrence = 2;
+			} else if (tmpStrValue == "very rare") {
+				info.occurrence = 3;
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Unknown occurrence: " << attr.as_string() << ". "
+				          << file << std::endl;
+			}
 		}
 		if ((attr = node.attribute("locations"))) {
-			mType->bestiaryInfo.locations = attr.as_string();
+			info.locations = attr.as_string();
 		}
 
-		if (!isValidBestiaryInfo(mType->bestiaryInfo)) {
-			mType->bestiaryInfo = {};
-			std::cout << "[Warning - Monsters::loadMonster] invalid bestiary info for " << mType->name << "."
-			          << std::endl;
+		if (info.className.empty()) {
+			std::cout << "[Warning - Monsters::loadMonster] Missing bestiary class. " << file << std::endl;
 		} else {
+			mType->bestiaryInfo = std::move(info);
 			addBestiaryMonsterType(mType);
 		}
 	}
@@ -1586,51 +1586,7 @@ MonsterType* Monsters::getMonsterType(uint32_t raceId)
 
 bool Monsters::addBestiaryMonsterType(const MonsterType* monsterType)
 {
-	if (!isValidBestiaryInfo(monsterType->bestiaryInfo)) {
-		return false;
-	}
-
 	bestiary[monsterType->bestiaryInfo.className].emplace(monsterType->name);
-	bestiaryMonsters[monsterType->bestiaryInfo.raceId] = monsterType->name;
-	return true;
-}
-
-bool Monsters::isValidBestiaryInfo(const BestiaryInfo& info) const
-{
-	if (info.raceId == 0) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] race id can't be 0." << std::endl;
-		return false;
-	}
-
-	if (info.className.empty()) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] class name can't be empty." << std::endl;
-		return false;
-	}
-
-	if (info.prowess == 0 || info.expertise == 0 || info.mastery == 0) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] prowess, expertise and mastery can't be 0."
-		          << std::endl;
-		return false;
-	}
-
-	if (info.prowess >= info.expertise || info.expertise >= info.mastery) {
-		std::cout
-		    << "[Warning - Monsters::isValidBestiaryInfo] prowess must be lower than expertise and expertise must be lower than mastery."
-		    << std::endl;
-		return false;
-	}
-
-	if (info.difficulty > BESTIARY_MAX_DIFFICULTY) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] difficulty can't be higher than "
-		          << BESTIARY_MAX_DIFFICULTY << '.' << std::endl;
-		return false;
-	}
-
-	if (info.occurrence > BESTIARY_MAX_OCCURRENCE) {
-		std::cout << "[Warning - Monsters::isValidBestiaryInfo] occurrence can't be higher than "
-		          << BESTIARY_MAX_OCCURRENCE << '.' << std::endl;
-		return false;
-	}
-
+	bestiaryMonsters[monsterType->raceId] = monsterType->name;
 	return true;
 }

@@ -1,18 +1,18 @@
 local function getUnlockedBestiary(player, monsterTypes)
-	local count = 0
-	for _, monsterType in pairs(monsterTypes) do
-		local info = monsterType:getBestiaryInfo()
-		if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
-			count = count + 1
+	local unlocked = 0
+	for _, mType in pairs(monsterTypes) do
+		local amount = mType:getBestiaryKills()[1]
+		if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + mType:raceId()) >= amount then
+			unlocked = unlocked + 1
 		end
 	end
-	return count
+	return unlocked
 end
 
 local handler = PacketHandler(0xE1)
 
 function handler.onReceive(player)
-	local bestiaryClasses = Game.getBestiary()
+	local bestiaryClasses = Game.getBestiaryClasses()
 	local msg = NetworkMessage()
 	msg:addByte(0xD5)
 	msg:addU16(#bestiaryClasses)

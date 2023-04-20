@@ -515,7 +515,7 @@ private:
 	static int luaGameGetPlayerCount(lua_State* L);
 	static int luaGameGetNpcCount(lua_State* L);
 	static int luaGameGetMonsterTypes(lua_State* L);
-	static int luaGameGetBestiary(lua_State* L);
+	static int luaGameGetBestiaryClasses(lua_State* L);
 	static int luaGameGetCurrencyItems(lua_State* L);
 	static int luaGameGetItemTypeByClientId(lua_State* L);
 	static int luaGameGetMountIdByLookType(lua_State* L);
@@ -1321,6 +1321,7 @@ private:
 
 	static int luaMonsterTypeName(lua_State* L);
 	static int luaMonsterTypeNameDescription(lua_State* L);
+	static int luaMonsterTypeRaceId(lua_State* L);
 
 	static int luaMonsterTypeHealth(lua_State* L);
 	static int luaMonsterTypeMaxHealth(lua_State* L);
