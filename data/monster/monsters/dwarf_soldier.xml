@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="176" manacost="360">
+<monster name="Dwarf Soldier" nameDescription="a dwarf soldier" race="blood" experience="70" speed="176" manacost="360" raceId="71">
 	<health now="135" max="135" />
 	<look type="71" corpse="6014" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Acolyte of the Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="200">
+<monster name="Acolyte of the Cult" nameDescription="an acolyte of the cult" race="blood" experience="300" speed="200" raceId="253">
 	<health now="390" max="390" />
 	<look type="194" head="95" body="100" legs="100" feet="19" corpse="20319" />
 	<targetchange interval="4000" chance="10" />

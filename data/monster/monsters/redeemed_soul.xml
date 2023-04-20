@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Redeemed Soul" nameDescription="a redeemed soul" race="undead" experience="0" speed="140">
+<monster name="Redeemed Soul" nameDescription="a redeemed soul" race="undead" experience="0" speed="140" raceId="1138">
 	<health now="250" max="250" />
 	<look type="714" corpse="24634" />
 	<targetchange interval="2000" chance="5" />

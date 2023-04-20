@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nightfiend" nameDescription="a nightfiend" race="blood" experience="2100" speed="210">
+<monster name="Nightfiend" nameDescription="a nightfiend" race="blood" experience="2100" speed="210" raceId="973">
 	<health now="2700" max="2700" />
-	<look type="568" corpse="2669" />
+	<look type="556" corpse="2669" />
 	<targetchange interval="5000" chance="8" />
 	<flags>
 		<flag summonable="0" />

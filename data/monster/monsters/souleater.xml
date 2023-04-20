@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200">
+<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200" raceId="675">
 	<health now="1100" max="1100" />
 	<look type="355" corpse="12631" />
 	<targetchange interval="4000" chance="10" />

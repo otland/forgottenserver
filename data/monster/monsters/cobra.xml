@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cobra" namedescription="a cobra" race="blood" experience="30" speed="120" manacost="275">
+<monster name="Cobra" namedescription="a cobra" race="blood" experience="30" speed="120" manacost="275" raceId="81">
 	<health now="65" max="65" />
 	<look type="81" corpse="3007" />
 	<targetchange interval="4000" chance="10" />

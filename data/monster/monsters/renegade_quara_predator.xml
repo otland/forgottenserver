@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Renegade Quara Predator" nameDescription="a renegade quara predator" race="blood" experience="2700" speed="450">
+<monster name="Renegade Quara Predator" nameDescription="a renegade quara predator" race="blood" experience="2700" speed="450" raceId="1101">
 	<health now="3250" max="3250" />
 	<look type="20" corpse="6067" />
 	<targetchange interval="2000" chance="5" />

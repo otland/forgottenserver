@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Adult Goanna" nameDescription="an adult goanna" race="blood" experience="6650" speed="420">
+<monster name="Adult Goanna" nameDescription="an adult goanna" race="blood" experience="6650" speed="420" raceId="1818">
 	<health now="8300" max="8300" />
 	<look type="1195" corpse="34061" />
 	<targetchange interval="2000" chance="5" />

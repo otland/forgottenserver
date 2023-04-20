@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ghost Wolf" nameDescription="a ghost wolf" race="undead" experience="65" speed="135">
+<monster name="Ghost Wolf" nameDescription="a ghost wolf" race="undead" experience="65" speed="135" raceId="1148">
 	<health now="160" max="160" />
 	<look type="730" corpse="24737" />
 	<targetchange interval="4000" chance="0" />

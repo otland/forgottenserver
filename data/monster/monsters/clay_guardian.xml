@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210">
+<monster name="Clay Guardian" nameDescription="a clay guardian" race="undead" experience="400" speed="210" raceId="706">
 	<health now="625" max="625" />
 	<look type="333" corpse="13972" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Pincher" nameDescription="a quara pincher" race="blood" experience="1200" speed="396">
+<monster name="Quara Pincher" nameDescription="a quara pincher" race="blood" experience="1200" speed="396" raceId="245">
 	<health now="1800" max="1800" />
 	<look type="77" corpse="6063" />
 	<targetchange interval="4000" chance="10" />

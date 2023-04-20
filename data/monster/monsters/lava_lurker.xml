@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lava Lurker" nameDescription="a lava lurker" race="fire" experience="4000" speed="116">
+<monster name="Lava Lurker" nameDescription="a lava lurker" race="fire" experience="4000" speed="116" raceId="1563">
 	<health now="5900" max="5900" />
 	<look type="1041" corpse="30242" />
 	<targetchange interval="2000" chance="5" />

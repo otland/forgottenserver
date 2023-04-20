@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Skeleton Elite Warrior" nameDescription="a skeleton elite warrior" race="undead" experience="4500" speed="310">
+<monster name="Skeleton Elite Warrior" nameDescription="a skeleton elite warrior" race="undead" experience="4500" speed="310" raceId="1674">
 	<health now="7800" max="7800" />
 	<look type="298" corpse="5972" />
 	<targetchange interval="2000" chance="5" />

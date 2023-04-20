@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Poison Spider" nameDescription="a poison spider" race="venom" experience="22" speed="160" manacost="270">
+<monster name="Poison Spider" nameDescription="a poison spider" race="venom" experience="22" speed="160" manacost="270" raceId="36">
 	<health now="26" max="26" />
 	<look type="36" corpse="5974" />
 	<targetchange interval="4000" chance="0" />

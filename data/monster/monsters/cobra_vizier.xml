@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cobra Vizier" nameDescription="a cobra vizier" race="blood" experience="7650" speed="320">
+<monster name="Cobra Vizier" nameDescription="a cobra vizier" race="blood" experience="7650" speed="320" raceId="1824">
 	<health now="8500" max="8500" />
 	<look type="1217" head="19" body="19" legs="67" feet="78" corpse="34295" />
 	<targetchange interval="4000" chance="10" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190">
+<monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190" raceId="732">
 	<health now="230" max="230" />
 	<look type="403" corpse="13514" />
 	<targetchange interval="5000" chance="0" />
