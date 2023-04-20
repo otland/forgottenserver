@@ -29,7 +29,7 @@ function creatureEvent.onKill(player, target)
 		return true
 	end
 
-	local raceId = monster:getType():getBestiaryInfo().raceId
+	local raceId = monster:getType():raceId()
 	if raceId == 0 then
 		return true
 	end
