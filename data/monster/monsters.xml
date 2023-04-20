@@ -93,7 +93,6 @@
 	<monster name="Boar" file="monsters/boar.xml" />
 	<monster name="Bog Frog" file="monsters/bog_frog.xml" />
 	<monster name="Bog Raider" file="monsters/bog_raider.xml" />
-	<monster name="Bone Beast" file="monsters/bonebeast.xml" />
 	<monster name="Bone Capsule" file="monsters/bone_capsule.xml" />
 	<monster name="Bone Jaw" file="monsters/bone_jaw.xml" />
 	<monster name="Bonebeast" file="monsters/bonebeast.xml" />
