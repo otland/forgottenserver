@@ -30,15 +30,15 @@ function handler.onReceive(player, msg)
 	response:addString(className)
 	response:addU16(#monsterTypes)
 
-	for _, monsterType in pairs(monsterTypes) do
-		local info = monsterType:getBestiaryInfo()
-		response:addU16(info.raceId)
-		local kills = player:getBestiaryKills(info.raceId)
+	for _, mType in pairs(monsterTypes) do
+		local raceId = mType:raceId()
+		response:addU16(raceId)
+		local kills = player:getBestiaryKills(raceId)
 		if kills == 0 then
 			response:addByte(0)
 		else
 			local step = 0
-			for i, amount in pairs({0, unpack(monsterType:getBestiaryKills())}) do
+			for i, amount in pairs({0, unpack(mType:getBestiaryKills())}) do
 				step = kills >= amount and i or step
 			end
 			response:addU16(step)
