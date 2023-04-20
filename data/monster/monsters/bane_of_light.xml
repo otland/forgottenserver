@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bane Of Light" nameDescription="a bane of light" experience="750" speed="230">
+<monster name="Bane Of Light" nameDescription="a bane of light" race="blood" experience="750" speed="230">
 	<health now="1100" max="1100" />
-	<look type="68" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="68" corpse="6006" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag pushable="0" />
@@ -13,6 +13,24 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-366" />
+		<attack name="lifedrain" interval="2000" chance="20" target="1" range="1" min="-50" max="-200">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="speed" interval="2000" chance="15" range="1" target="1" speedchange="-400" duration="60000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</attack>
+	</attacks>
+	<defenses armor="38" defense="38">
+		<defense name="outfit" interval="4000" chance="10" monster="bat" duration="5000">
+			<attribute key="areaEffect" value="groundshaker" />
+		</defense>
+		<defense name="speed" interval="2000" chance="15" speedchange="300" duration="3000">
+			<attribute key="areaEffect" value="redshimmer" />
+		</defense>
+		<defense name="healing" interval="2000" chance="15" min="15" max="25" />
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -26,16 +44,6 @@
 		<element drownPercent="100" />
 		<element icePercent="100" />
 	</elements>
-	<attacks>
-		<attack name="melee" interval="2000" min="0" max="-366" />
-		<attack name="death" interval="2000" chance="15" min="-50" max="-250" range="3" radius="1" target="1">
-			<attribute key="shootEffect" value="death" />
-		</attack>
-		<attack name="physical" interval="2000" chance="15" radius="7" target="0">
-			<attribute key="areaEffect" value="smallclouds" />
-		</attack>
-	</attacks>
-	<defenses armor="38" defense="38" />
 	<loot>
 		<item id="10531" name="midnight shard" chance="6844" />
 	</loot>

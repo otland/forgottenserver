@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Arthei" nameDescription="" experience="4000" speed="270">
+<monster name="Arthei" nameDescription="Arthei" experience="4000" speed="270">
 	<health now="4200" max="4200" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="287" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Aftershock" nameDescription="" experience="0" speed="0">
+<monster name="Aftershock" nameDescription="Aftershock" race="energy" experience="20000" speed="380">
 	<health now="105000" max="105000" />
-	<look type="0" head="0" body="0" legs="0" feet="0" addons="0" corpse="0" />
+	<look type="875" head="114" body="114" legs="0" feet="0" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag isboss="1" />
@@ -14,6 +14,32 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-800" />
+		<attack name="energy" interval="2000" chance="20" length="10" spread="0" min="-350" max="-900">
+			<attribute key="areaEffect" value="bigclouds" />
+		</attack>
+		<attack name="death" interval="2000" chance="20" target="1" radius="4" min="-250" max="-500">
+			<attribute key="areaEffect" value="smallclouds" />
+		</attack>
+		<attack name="physical" interval="2000" chance="20" radius="8" target="0" min="-250" max="-750">
+			<attribute key="areaEffect" value="yellowspark" />
+		</attack>
+		<attack name="lifedrain" interval="2000" chance="15" target="1" radius="5" min="-150" max="-400">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</attack>
+		<attack name="energy" interval="2000" chance="25" target="1" radius="4" min="-350" max="-600">
+			<attribute key="areaEffect" value="energy" />
+			<attribute key="shootEffect" value="energy" />
+		</attack>
+		<attack name="aftershock wave" interval="2000" chance="15" min="-100" max="-900" />
+		<attack name="anomaly break" interval="2000" chance="40" />
+	</attacks>
+	<defenses armor="30" defense="30">
+		<defense name="healing" interval="2000" chance="15" min="300" max="600">
+			<attribute key="areaEffect" value="blueshimmer" />
+		</defense>
+	</defenses>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />
@@ -25,5 +51,4 @@
 		<element firePercent="100" />
 		<element icePercent="100" />
 	</elements>
-	<defenses armor="30" defense="30" />
 </monster>
