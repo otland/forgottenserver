@@ -4,8 +4,6 @@
 #ifndef FS_PLAYER_H
 #define FS_PLAYER_H
 
-#include <optional>
-
 #include "creature.h"
 #include "cylinder.h"
 #include "depotlocker.h"
@@ -15,6 +13,8 @@
 #include "protocolgame.h"
 #include "town.h"
 #include "vocation.h"
+
+#include <optional>
 
 class DepotChest;
 class House;
