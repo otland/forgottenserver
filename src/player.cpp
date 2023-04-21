@@ -702,8 +702,9 @@ uint16_t Player::getLookCorpse() const
 	return ITEM_MALE_CORPSE;
 }
 
-void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin /* = false*/)
+void Player::addStorageValue(const uint32_t key, const std::optional<int32_t> data, const bool isLogin /* = false*/)
 {
+	int32_t value = data ? data.value() : -1;
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
 		if (IS_IN_KEYRANGE(key, OUTFITS_RANGE)) {
 			outfits.emplace_back(value >> 16, value & 0xFF);
@@ -719,7 +720,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 	int32_t oldValue;
 	getStorageValue(key, oldValue);
 
-	if (value != -1) {
+	if (data) {
 		storageMap[key] = value;
 	} else {
 		storageMap.erase(key);

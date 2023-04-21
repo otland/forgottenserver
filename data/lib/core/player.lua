@@ -304,6 +304,14 @@ function Player.addSkill(self, skillId, value, round)
 	return self:addSkillLevel(skillId, value)
 end
 
+function Player.hasStorageKey(self, key)
+	return self:getStorageValue(self, key, 1) ~= self:getStorageValue(self, key)
+end
+
+function Player.clearStorageValue(self, key)
+	return self:setStorageValue(key, nil)
+end
+
 function Player.getWeaponType(self)
 	local weapon = self:getSlotItem(CONST_SLOT_LEFT)
 	if weapon then

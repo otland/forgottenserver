@@ -2664,7 +2664,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
 	registerMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
-	registerMethod("Player", "hasStorageKey", LuaScriptInterface::luaPlayerHasStorageKey);
 	registerMethod("Player", "clearStorageValues", LuaScriptInterface::luaPlayerClearStorageValues);
 
 	registerMethod("Player", "addItem", LuaScriptInterface::luaPlayerAddItem);
@@ -9741,7 +9740,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
 	} else {
-		lua_pushnumber(L, getNumber<int32_t>(L, 3, -1));
+		lua_pushnumber(L, getNumber<int32_t>(L, 3, value));
 	}
 	return 1;
 }
@@ -9749,7 +9748,6 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 {
 	// player:setStorageValue(key, value)
-	int32_t value = getNumber<int32_t>(L, 3);
 	uint32_t key = getNumber<uint32_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
@@ -9759,21 +9757,9 @@ int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 	}
 
 	if (player) {
+		auto value = lua_isnil(L, 3) ? std::nullopt : std::make_optional(getNumber<int32_t>(L, 3));
 		player->addStorageValue(key, value);
 		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerHasStorageKey(lua_State* L)
-{
-	// player:hasStorageKey(key)
-	uint32_t key = getNumber<uint32_t>(L, 2);
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushBoolean(L, player->hasStorageKey(key));
 	} else {
 		lua_pushnil(L);
 	}
