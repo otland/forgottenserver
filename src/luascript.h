@@ -942,6 +942,8 @@ private:
 
 	static int luaPlayerGetStorageValue(lua_State* L);
 	static int luaPlayerSetStorageValue(lua_State* L);
+	static int luaPlayerHasStorageKey(lua_State* L);
+	static int luaPlayerClearStorageValues(lua_State* L);
 
 	static int luaPlayerAddItem(lua_State* L);
 	static int luaPlayerAddItemEx(lua_State* L);

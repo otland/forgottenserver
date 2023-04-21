@@ -2664,6 +2664,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
 	registerMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
+	registerMethod("Player", "hasStorageKey", LuaScriptInterface::luaPlayerHasStorageKey);
+	registerMethod("Player", "clearStorageValues", LuaScriptInterface::luaPlayerClearStorageValues);
 
 	registerMethod("Player", "addItem", LuaScriptInterface::luaPlayerAddItem);
 	registerMethod("Player", "addItemEx", LuaScriptInterface::luaPlayerAddItemEx);
@@ -9727,7 +9729,7 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 
 int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 {
-	// player:getStorageValue(key)
+	// player:getStorageValue(key[, default = -1])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9739,7 +9741,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
 	} else {
-		lua_pushnumber(L, -1);
+		lua_pushnumber(L, getNumber<int32_t>(L, 3, -1));
 	}
 	return 1;
 }
@@ -9758,6 +9760,32 @@ int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
 
 	if (player) {
 		player->addStorageValue(key, value);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerHasStorageKey(lua_State* L)
+{
+	// player:hasStorageKey(key)
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		pushBoolean(L, player->hasStorageKey(key));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerClearStorageValues(lua_State* L)
+{
+	// player:clearStorageValues()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->clearStorageValues();
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
