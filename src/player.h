@@ -4,6 +4,8 @@
 #ifndef FS_PLAYER_H
 #define FS_PLAYER_H
 
+#include <optional>
+
 #include "creature.h"
 #include "cylinder.h"
 #include "depotlocker.h"
