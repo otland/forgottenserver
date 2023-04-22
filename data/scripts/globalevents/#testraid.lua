@@ -1,5 +1,4 @@
 local raid = GlobalEvent("Testraid")
-raid:type("timer")
 raid:interval(1800)
 
 local function event0()

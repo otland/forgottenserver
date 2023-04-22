@@ -217,7 +217,6 @@ local function configureRaidEvent(node)
 end
 
 local event = GlobalEvent("load raids.xml")
-event:type("startup")
 
 function event.onStartup()
     local doc = XMLDocument("data/raids/raids.xml")
