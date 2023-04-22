@@ -305,7 +305,7 @@ function Player.addSkill(self, skillId, value, round)
 end
 
 function Player.hasStorageKey(self, key)
-	return self:getStorageValue(self, key, 1) ~= self:getStorageValue(self, key)
+	return self:getStorageValue(self, key, nil) ~= nil
 end
 
 function Player.clearStorageValue(self, key)

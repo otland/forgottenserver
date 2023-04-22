@@ -9739,6 +9739,8 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	int32_t value;
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
+	} else if (lua_isnil(L, 3)) {
+		lua_pushnil(L);
 	} else {
 		lua_pushnumber(L, getNumber<int32_t>(L, 3, value));
 	}
