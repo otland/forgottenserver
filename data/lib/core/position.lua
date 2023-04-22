@@ -10,6 +10,7 @@ function mt.__sub(lhs, rhs)
 	return Position(lhs.x - (rhs.x or 0), lhs.y - (rhs.y or 0), lhs.z - (rhs.z or 0), stackpos)
 end
 
+function mt.__concat(lhs, rhs) return tostring(lhs) .. tostring(rhs) end
 function mt.__eq(lhs, rhs) return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z end
 function mt.__tostring(self) return string.format("Position(%d, %d, %d)", self.x, self.y, self.z) end
 
