@@ -425,7 +425,7 @@ if NpcHandler == nil then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_ENDTRADE)
 		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid) then
 				if self:isFocused(cid) then
 					local player = Player(cid)
 					local playerName = player and player:getName() or -1
@@ -442,7 +442,7 @@ if NpcHandler == nil then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_CLOSECHANNEL)
 		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid) then
 				if self:isFocused(cid) then
 					self:unGreet(cid)
 				end
