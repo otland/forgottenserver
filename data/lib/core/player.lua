@@ -534,3 +534,79 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	msg:delete()
 	return true
 end
+
+function Player.getMaxTrackedBestiary(self)
+	return 50 -- client sided
+end
+
+function Player.setTrackedBestiary(self, raceId, checked)
+	local trackedBestiary = self:getTrackedBestiary()
+	if checked and #trackedBestiary >= self:getMaxTrackedBestiary() then
+		self:sendTextMessage(MESSAGE_STATUS_WARNING, "You have reached the maximum number of trackable creatures.\nYou have to remove one of your currently tracked creatures before you can add another one.")
+		return false
+	end
+	
+	local index = table.indexOf(trackedBestiary, raceId)
+	if not checked then
+		if index ~= nil then table.remove(trackedBestiary, index) end
+	else
+		if index == nil then table.insert(trackedBestiary, raceId) end
+	end
+
+	for k = 1, self:getMaxTrackedBestiary() do
+		self:setStorageValue(PlayerStorageKeys.bestiaryTrackerBase + k, -1)
+	end
+
+	for k = 1, #trackedBestiary do
+		self:setStorageValue(PlayerStorageKeys.bestiaryTrackerBase + k, trackedBestiary[k])
+	end
+
+	Game.getTrackedBestiary()[self:getId()] = trackedBestiary
+
+	return true
+end
+
+function Player.getTrackedBestiary(self, isLogin)
+	if isLogin == nil then isLogin = false end
+	if not isLogin then
+		return Game.getTrackedBestiary()[self:getId()]
+	end
+
+	local trackedBestiary = {}
+	for k = 1, self:getMaxTrackedBestiary() do
+		local raceId = self:getStorageValue(PlayerStorageKeys.bestiaryTrackerBase + k)
+		if raceId > 0 then
+			table.insert(trackedBestiary, raceId)
+		end
+	end
+
+	Game.getTrackedBestiary()[self:getId()] = trackedBestiary
+
+	return trackedBestiary
+end
+
+function Player.sendBestiaryTracker(self)
+	local msg = NetworkMessage()
+	msg:addByte(0xB9)
+
+	local trackedBestiary = self:getTrackedBestiary()
+	msg:addByte(#trackedBestiary)
+
+	for _, raceId in ipairs(trackedBestiary) do
+		msg:addU16(raceId)
+
+		local kills = self:getBestiaryKills(raceId)
+		msg:addU32(kills)
+
+		local monsterType = MonsterType(raceId)
+		local info = monsterType and monsterType:getBestiaryInfo() or {prowess = 1, expertise = 2, mastery = 3}
+		msg:addU16(info.prowess)
+		msg:addU16(info.expertise)
+		msg:addU16(info.mastery)
+		msg:addByte(kills >= info.mastery and 0x01 or 0x00)
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end

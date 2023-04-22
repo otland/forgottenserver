@@ -177,3 +177,9 @@ do
 		return false
 	end
 end
+
+do
+	local trackedBestiary = {}
+
+	function Game.getTrackedBestiary() return trackedBestiary end
+end
