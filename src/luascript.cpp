@@ -9728,7 +9728,7 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 
 int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 {
-	// player:getStorageValue(key[, default = -1])
+	// player:getStorageValue(key[, defaultValue = -1])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9739,7 +9739,7 @@ int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
 	int32_t value;
 	if (player->getStorageValue(key, value)) {
 		lua_pushnumber(L, value);
-	} else if (lua_isnil(L, 3)) {
+	} else if (lua_gettop(L) >= 3 && lua_isnil(L, 3)) {
 		lua_pushnil(L);
 	} else {
 		lua_pushnumber(L, getNumber<int32_t>(L, 3, value));
