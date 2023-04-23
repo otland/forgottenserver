@@ -297,7 +297,6 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	} else if ((attr = node.attribute("interval"))) {
 		interval = std::max<int32_t>(SCHEDULER_MINTICKS, pugi::cast<int32_t>(attr.value()));
 		nextExecution = OTSYS_TIME() + interval;
-		eventType = GLOBALEVENT_TIMER;
 	} else {
 		std::cout << "[Error - GlobalEvent::configureEvent] No interval for globalevent with name " << name
 		          << std::endl;

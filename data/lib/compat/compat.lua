@@ -237,6 +237,7 @@ do
 			self:onThink(value)
 			return
 		elseif key == "onTime" then
+			self:type("timer")
 			self:onTime(value)
 			return
 		elseif key == "onStartup" then
