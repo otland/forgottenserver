@@ -10,10 +10,10 @@ function onSay(player, words, param)
 	logCommand(player, words, param)
 
 	local returnValue = Game.startEvent(param)
-	if returnValue ~= RETURNVALUE_NOERROR then
-		player:sendTextMessage(MESSAGE_INFO_DESCR, Game.getReturnMessage(returnValue))
-	else
+	if returnValue then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "Event started.")
+	else
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "No such event exists.")
 	end
-	return true
+	return returnValue
 end

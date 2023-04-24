@@ -4987,9 +4987,10 @@ int LuaScriptInterface::luaGameStartEvent(lua_State* L)
 
 	const auto& eventMap = g_globalEvents->getEventMap(GLOBALEVENT_TIMER);
 	if (auto it = eventMap.find(eventName); it != eventMap.end()) {
-		pushBoolean(L, it->execute());
+		it->execute();
+		pushBoolean(L, true);
 	} else {
-		lua_pushnil(L);
+		pushBoolean(L, false);
 	}
 	return 1;
 }
