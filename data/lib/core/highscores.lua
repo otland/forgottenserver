@@ -1,3 +1,13 @@
+function Vocation.getRelated(self)
+	local vocations = {}
+	local related = self
+	repeat
+		vocations[#vocations + 1] = related
+		related = related:getPromotion()
+	until not related
+	return vocations
+end
+
 highscoresMaxResults = 100
 highscoresPageSize = 20
 highscoresCacheTime = 30 * 60 -- time in seconds
@@ -207,8 +217,7 @@ local function fetch(self)
 				points = result.getNumber(resultId, "points")
 			})
 			rank = rank + 1
-		until not result.next(resultId)
-		
+		until not result.next(resultId)		
 		result.free(resultId)
 	end
 	

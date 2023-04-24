@@ -5,13 +5,3 @@ function Vocation.getBase(self)
 	end
 	return base
 end
-
-function Vocation.getRelated(self)
-	local vocations = {}
-	local related = self
-	repeat
-		vocations[#vocations + 1] = related
-		related = related:getPromotion()
-	until not related
-	return vocations
-end
