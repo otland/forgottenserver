@@ -3136,7 +3136,6 @@ void ProtocolGame::sendOutfitWindow()
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
-	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
 		protocolOutfits.emplace_back("Gamemaster", 75, 0);
 	}
@@ -3241,7 +3240,6 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 	}
 
 	// fetch player addons info
-	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
 		if (!player->getOutfitAddons(outfit, addons)) {
