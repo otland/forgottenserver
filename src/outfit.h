@@ -26,11 +26,11 @@ struct Outfit
 
 struct ProtocolOutfit
 {
-	ProtocolOutfit(const std::string& name, uint16_t lookType, uint8_t addons) :
-	    name(name), lookType(lookType), addons(addons)
+	ProtocolOutfit(std::string_view name, uint16_t lookType, uint8_t addons) :
+	    name{name}, lookType{lookType}, addons{addons}
 	{}
 
-	const std::string& name;
+	std::string name;
 	uint16_t lookType;
 	uint8_t addons;
 };

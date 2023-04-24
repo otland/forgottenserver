@@ -3236,12 +3236,12 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 
 	// add GM outfit for staff members
 	std::vector<ProtocolOutfit> protocolOutfits;
+	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
 		protocolOutfits.emplace_back("Gamemaster", 75, 0);
 	}
 
 	// fetch player addons info
-	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
 		if (!player->getOutfitAddons(outfit, addons)) {
