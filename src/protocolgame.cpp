@@ -3138,7 +3138,8 @@ void ProtocolGame::sendOutfitWindow()
 	std::vector<ProtocolOutfit> protocolOutfits;
 	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
-		protocolOutfits.emplace_back("Gamemaster", 75, 0);
+		static const std::string gamemasterOutfitName = "Gamemaster";
+		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
 	}
 
 	for (const Outfit& outfit : outfits) {
@@ -3237,7 +3238,8 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 	// add GM outfit for staff members
 	std::vector<ProtocolOutfit> protocolOutfits;
 	if (player->isAccessPlayer()) {
-		protocolOutfits.emplace_back("Gamemaster", 75, 0);
+		static const std::string gamemasterOutfitName = "Gamemaster";
+		protocolOutfits.emplace_back(gamemasterOutfitName, 75, 0);
 	}
 
 	// fetch player addons info
