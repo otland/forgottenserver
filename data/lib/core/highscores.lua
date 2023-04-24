@@ -3,24 +3,23 @@ highscoresPageSize = 20
 highscoresCacheTime = 30 * 60 -- time in seconds
 highscoresCache = {}
 
-clientIdsVocation = {
-	[VOCATION_NONE] = 0,
-    [VOCATION_SORCERER] = 3,
-    [VOCATION_DRUID] = 4,
-    [VOCATION_PALADIN] = 2,
-    [VOCATION_KNIGHT] = 1,
-    [VOCATION_MASTER_SORCERER] = 13,
-    [VOCATION_ELDER_DRUID] = 14,
-    [VOCATION_ROYAL_PALADIN] = 12,
-    [VOCATION_ELITE_KNIGHT] = 11
-}
+do
+	clientIdsVocation = {}
+	for _, vocation in pairs(Game.getVocations()) do
+		clientIdsVocation[vocation:getId()] = vocation:getClientId()
+	end
 
-relatedIdsVocation = {
-	[VOCATION_SORCERER] = {VOCATION_SORCERER,VOCATION_MASTER_SORCERER},
-	[VOCATION_DRUID] = {VOCATION_DRUID,VOCATION_ELDER_DRUID},
-	[VOCATION_PALADIN] = {VOCATION_PALADIN,VOCATION_ROYAL_PALADIN},
-	[VOCATION_KNIGHT] = {VOCATION_KNIGHT,VOCATION_ELITE_KNIGHT}
-}
+	relatedIdsVocation = {}
+	for _, vocation in pairs(Game.getUnpromotedVocations()) do
+		if vocation:getId() ~= VOCATION_NONE then
+			local relatedIds = {}
+			for _, related in pairs(vocation:getRelated()) do
+				relatedIds[#relatedIds + 1] = related:getId()
+			end
+			relatedIdsVocation[vocation:getId()] = relatedIds
+		end
+	end
+end
 
 highscoresExcludedGroups = {4, 5, 6}
 
@@ -202,7 +201,7 @@ local function fetch(self)
 				rank = rank,
 				name = result.getString(resultId, "name"),
 				title = "", -- TODO: loyalty system
-				vocation = clientIdsVocation[result.getNumber(resultId, "vocation")],
+				vocation = clientIdsVocation[result.getNumber(resultId, "vocation")] or VOCATION_NONE,
 				world = world,
 				level = result.getNumber(resultId, "level"),
 				points = result.getNumber(resultId, "points")
@@ -210,10 +209,10 @@ local function fetch(self)
 			rank = rank + 1
 		until not result.next(resultId)
 		
-		result.free(resultId)		
-		self.params.ts = os.time()
+		result.free(resultId)
 	end
 	
+	self.params.ts = os.time()
 	return { data = entries, ts = self.params.ts }
 end
 

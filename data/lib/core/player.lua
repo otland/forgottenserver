@@ -548,20 +548,21 @@ function Player.sendHighscores(self, entries, params)
 	msg:addByte(params.worldType)
 	msg:addByte(params.battlEye)
 
-	msg:addByte(#VOCATIONS + 1)
+	local vocations = Game.getUnpromotedVocations()
+	msg:addByte(#vocations + 1)
 
 	msg:addU32(0xFFFFFFFF)
 	msg:addString("All vocations")
 
-	for _, vocation in pairs(VOCATIONS) do
-		msg:addU32(vocation.id)
-		msg:addString(vocation.name)
+	for _, vocation in ipairs(vocations) do
+		msg:addU32(vocation:getId())
+		msg:addString(vocation:getName())
 	end
 
 	msg:addU32(params.vocation)
 
 	msg:addByte(#HIGHSCORES_CATEGORIES)
-	for id, category in pairs(HIGHSCORES_CATEGORIES) do
+	for id, category in ipairs(HIGHSCORES_CATEGORIES) do
 		msg:addByte(id)
 		msg:addString(category.name)
 	end
