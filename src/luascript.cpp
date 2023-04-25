@@ -4989,7 +4989,7 @@ int LuaScriptInterface::luaGameStartEvent(lua_State* L)
 	if (auto it = eventMap.find(eventName); it != eventMap.end()) {
 		pushBoolean(L, it->second.executeEvent());
 	} else {
-		pushBoolean(L, false);
+		lua_pushnil(L);
 	}
 	return 1;
 }
