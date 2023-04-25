@@ -107,8 +107,26 @@
 	<movevent event="StepOut" fromid="4620" toid="4625" script="swimming.lua" />
 	<movevent event="StepIn" fromid="4820" toid="4825" script="swimming.lua" />
 	<movevent event="StepOut" fromid="4820" toid="4825" script="swimming.lua" />
-	<movevent event="StepIn" itemid="5405" script="drowning.lua" />
-	<movevent event="StepOut" itemid="5405" script="drowning.lua" />
+
+	<!-- Drowning -->
+	<movevent event="StepIn" fromid="5405" toid="5410" script="drowning.lua" />
+	<movevent event="StepOut" itemid="5405" toid="5410" script="drowning.lua" />
+	<movevent event="StepIn" fromid="5427" toid="5438" script="drowning.lua" />
+	<movevent event="StepOut" itemid="5427" toid="5438" script="drowning.lua" />
+	<movevent event="StepIn" fromid="5743" toid="5744" script="drowning.lua" />
+	<movevent event="StepOut" itemid="5743" toid="5744" script="drowning.lua" />
+	<movevent event="StepIn" fromid="5763" toid="5764" script="drowning.lua" />
+	<movevent event="StepOut" itemid="5763" toid="5764" script="drowning.lua" />
+	<movevent event="StepIn" fromid="9671" toid="9673" script="drowning.lua" />
+	<movevent event="StepOut" itemid="9671" toid="9673" script="drowning.lua" />
+	<movevent event="StepIn" itemid="10019" script="drowning.lua" />
+	<movevent event="StepOut" itemid="10019" script="drowning.lua" />
+	<movevent event="StepIn" itemid="13885" script="drowning.lua" />
+	<movevent event="StepOut" itemid="13885" script="drowning.lua" />
+	<movevent event="StepIn" fromid="23944" toid="23966" script="drowning.lua" />
+	<movevent event="StepOut" itemid="23944" toid="23966" script="drowning.lua" />
+	<movevent event="StepIn" itemid="24624" script="drowning.lua" />
+	<movevent event="StepOut" itemid="24624" script="drowning.lua" />
 
 	<!-- Boots -->
 	<movevent event="Equip" itemid="2195" slot="feet" function="onEquipItem" />
