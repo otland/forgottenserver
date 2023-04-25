@@ -121,8 +121,6 @@
 	<movevent event="StepOut" itemid="9671" toid="9673" script="drowning.lua" />
 	<movevent event="StepIn" itemid="10019" script="drowning.lua" />
 	<movevent event="StepOut" itemid="10019" script="drowning.lua" />
-	<movevent event="StepIn" itemid="13885" script="drowning.lua" />
-	<movevent event="StepOut" itemid="13885" script="drowning.lua" />
 	<movevent event="StepIn" fromid="23944" toid="23966" script="drowning.lua" />
 	<movevent event="StepOut" itemid="23944" toid="23966" script="drowning.lua" />
 	<movevent event="StepIn" itemid="24624" script="drowning.lua" />
