@@ -1,6 +1,7 @@
 local condition = Condition(CONDITION_DROWN)
-condition:setParameter(CONDITION_PARAM_DELAYED, 1)
-condition:addDamage(5, 4000, -20)
+condition:setParameter(CONDITION_PARAM_PERIODICDAMAGE, -20)
+condition:setParameter(CONDITION_PARAM_TICKS, -1)
+condition:setParameter(CONDITION_PARAM_TICKINTERVAL, 2000)
 
 function onStepIn(creature, item, position, fromPosition)
 	if creature:isPlayer() then
