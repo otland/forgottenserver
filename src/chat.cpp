@@ -29,9 +29,12 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 		return;
 	}
 
-	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR,
-	                             fmt::format("{:s} invites you to {:s} private chat channel.", player.getName(),
-	                                         player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
+	invitePlayer.sendTextMessage(
+	    MESSAGE_INFO_DESCR, fmt::format(
+	                            "{:s} invites you to {:s} private chat channel.", player.getName(),
+	                            player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"
+	                        )
+	);
 
 	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
 
@@ -78,8 +81,9 @@ bool ChatChannel::addUser(Player& player)
 	if (id == CHANNEL_GUILD) {
 		Guild* guild = player.getGuild();
 		if (guild && !guild->getMotd().empty()) {
-			g_scheduler.addEvent(
-			    createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
+			g_scheduler.addEvent(createSchedulerTask(150, [playerID = player.getID()]() {
+				g_game.sendGuildMotd(playerID);
+			}));
 		}
 	}
 

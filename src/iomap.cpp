@@ -75,7 +75,8 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 			// attributes instead, this solves a lot of problems with items that are changed
 			// (stackable/charges/fluidcontainer/splash) during an update.
 			setLastErrorString(
-			    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
+			    "This map need to be upgraded by using the latest map editor version to be able to load correctly."
+			);
 			return false;
 		}
 
@@ -86,13 +87,15 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 
 		if (root_header.majorVersionItems < 3) {
 			setLastErrorString(
-			    "This map need to be upgraded by using the latest map editor version to be able to load correctly.");
+			    "This map need to be upgraded by using the latest map editor version to be able to load correctly."
+			);
 			return false;
 		}
 
 		if (root_header.majorVersionItems > Item::items.majorVersion) {
 			setLastErrorString(
-			    "The map was saved with a different items.otb version, an upgraded items.otb is required.");
+			    "The map was saved with a different items.otb version, an upgraded items.otb is required."
+			);
 			return false;
 		}
 
@@ -146,8 +149,9 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	return true;
 }
 
-bool IOMap::parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
-                                   const std::filesystem::path& fileName)
+bool IOMap::parseMapDataAttributes(
+    OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::filesystem::path& fileName
+)
 {
 	PropStream propStream;
 	if (!loader.getProps(mapNode, propStream)) {
@@ -251,7 +255,8 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 			house = map.houses.addHouse(houseId);
 			if (!house) {
 				setLastErrorString(
-				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Could not create house id: {:d}", x, y, z, houseId));
+				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Could not create house id: {:d}", x, y, z, houseId)
+				);
 				return false;
 			}
 
@@ -345,7 +350,8 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 
 			if (!item->unserializeItemNode(loader, itemNode, stream)) {
 				setLastErrorString(
-				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to load item {:d}.", x, y, z, item->getID()));
+				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to load item {:d}.", x, y, z, item->getID())
+				);
 				delete item;
 				return false;
 			}

@@ -100,8 +100,9 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	return true;
 }
 
-void ScriptEnvironment::getEventInfo(int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId,
-                                     bool& timerEvent) const
+void ScriptEnvironment::getEventInfo(
+    int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent
+) const
 {
 	scriptId = this->scriptId;
 	scriptInterface = interface;
@@ -444,8 +445,9 @@ std::string LuaScriptInterface::getStackTrace(lua_State* L, const std::string& e
 	return popString(L);
 }
 
-void LuaScriptInterface::reportError(const char* function, const std::string& error_desc, lua_State* L /*= nullptr*/,
-                                     bool stack_trace /*= false*/)
+void LuaScriptInterface::reportError(
+    const char* function, const std::string& error_desc, lua_State* L /*= nullptr*/, bool stack_trace /*= false*/
+)
 {
 	int32_t scriptId;
 	int32_t callbackId;
@@ -3148,13 +3150,16 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("MonsterSpell", "setCombatRing", LuaScriptInterface::luaMonsterSpellSetCombatRing);
 	registerMethod("MonsterSpell", "setConditionType", LuaScriptInterface::luaMonsterSpellSetConditionType);
 	registerMethod("MonsterSpell", "setConditionDamage", LuaScriptInterface::luaMonsterSpellSetConditionDamage);
-	registerMethod("MonsterSpell", "setConditionSpeedChange",
-	               LuaScriptInterface::luaMonsterSpellSetConditionSpeedChange);
+	registerMethod(
+	    "MonsterSpell", "setConditionSpeedChange", LuaScriptInterface::luaMonsterSpellSetConditionSpeedChange
+	);
 	registerMethod("MonsterSpell", "setConditionDuration", LuaScriptInterface::luaMonsterSpellSetConditionDuration);
-	registerMethod("MonsterSpell", "setConditionDrunkenness",
-	               LuaScriptInterface::luaMonsterSpellSetConditionDrunkenness);
-	registerMethod("MonsterSpell", "setConditionTickInterval",
-	               LuaScriptInterface::luaMonsterSpellSetConditionTickInterval);
+	registerMethod(
+	    "MonsterSpell", "setConditionDrunkenness", LuaScriptInterface::luaMonsterSpellSetConditionDrunkenness
+	);
+	registerMethod(
+	    "MonsterSpell", "setConditionTickInterval", LuaScriptInterface::luaMonsterSpellSetConditionTickInterval
+	);
 	registerMethod("MonsterSpell", "setCombatShootEffect", LuaScriptInterface::luaMonsterSpellSetCombatShootEffect);
 	registerMethod("MonsterSpell", "setCombatEffect", LuaScriptInterface::luaMonsterSpellSetCombatEffect);
 	registerMethod("MonsterSpell", "setOutfit", LuaScriptInterface::luaMonsterSpellSetOutfit);
@@ -3360,8 +3365,8 @@ void LuaScriptInterface::registerFunctions()
 #undef registerEnum
 #undef registerEnumIn
 
-void LuaScriptInterface::registerClass(const std::string& className, const std::string& baseClass,
-                                       lua_CFunction newFunction /* = nullptr*/)
+void LuaScriptInterface::
+    registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction /* = nullptr*/)
 {
 	// className = {}
 	lua_newtable(luaState);
@@ -3444,8 +3449,9 @@ void LuaScriptInterface::registerTable(const std::string& tableName)
 	lua_setglobal(luaState, tableName.c_str());
 }
 
-void LuaScriptInterface::registerMethod(const std::string& globalName, const std::string& methodName,
-                                        lua_CFunction func)
+void LuaScriptInterface::registerMethod(
+    const std::string& globalName, const std::string& methodName, lua_CFunction func
+)
 {
 	// globalName.methodName = func
 	lua_getglobal(luaState, globalName.c_str());
@@ -3456,8 +3462,9 @@ void LuaScriptInterface::registerMethod(const std::string& globalName, const std
 	lua_pop(luaState, 1);
 }
 
-void LuaScriptInterface::registerMetaMethod(const std::string& className, const std::string& methodName,
-                                            lua_CFunction func)
+void LuaScriptInterface::registerMetaMethod(
+    const std::string& className, const std::string& methodName, lua_CFunction func
+)
 {
 	// className.metatable.methodName = func
 	luaL_getmetatable(luaState, className.c_str());
@@ -3940,8 +3947,9 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	}
 
 	LuaTimerEventDesc eventDesc;
-	eventDesc.parameters.reserve(parameters -
-	                             2); // safe to use -2 since we garanteed that there is at least two parameters
+	eventDesc.parameters.reserve(
+	    parameters - 2
+	); // safe to use -2 since we garanteed that there is at least two parameters
 	for (int i = 0; i < parameters - 2; ++i) {
 		eventDesc.parameters.push_back(luaL_ref(L, LUA_REGISTRYINDEX));
 	}
@@ -3953,8 +3961,9 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	eventDesc.scriptId = getScriptEnv()->getScriptId();
 
 	auto& lastTimerEventId = g_luaEnvironment.lastEventTimerId;
-	eventDesc.eventId = g_scheduler.addEvent(
-	    createSchedulerTask(delay, [=]() { g_luaEnvironment.executeTimerEvent(lastTimerEventId); }));
+	eventDesc.eventId =
+	    g_scheduler.addEvent(createSchedulerTask(delay, [=]() { g_luaEnvironment.executeTimerEvent(lastTimerEventId); })
+	    );
 
 	g_luaEnvironment.timerEvents.emplace(lastTimerEventId, std::move(eventDesc));
 	lua_pushnumber(L, lastTimerEventId++);
@@ -5163,9 +5172,15 @@ int LuaScriptInterface::luaPositionGetDistance(lua_State* L)
 	// position:getDistance(positionEx)
 	const Position& positionEx = getPosition(L, 2);
 	const Position& position = getPosition(L, 1);
-	lua_pushnumber(L, std::max<int32_t>(std::max<int32_t>(std::abs(Position::getDistanceX(position, positionEx)),
-	                                                      std::abs(Position::getDistanceY(position, positionEx))),
-	                                    std::abs(Position::getDistanceZ(position, positionEx))));
+	lua_pushnumber(
+	    L, std::max<int32_t>(
+	           std::max<int32_t>(
+	               std::abs(Position::getDistanceX(position, positionEx)),
+	               std::abs(Position::getDistanceY(position, positionEx))
+	           ),
+	           std::abs(Position::getDistanceZ(position, positionEx))
+	       )
+	);
 	return 1;
 }
 
@@ -7064,14 +7079,16 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	uint32_t flags = getNumber<uint32_t>(
-	    L, 3, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
+	    L, 3, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE
+	);
 
 	if (item->getParent() == VirtualCylinder::virtualCylinder) {
 		pushBoolean(L, g_game.internalAddItem(toCylinder, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
 	} else {
 		Item* moveItem = nullptr;
-		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item,
-		                                          item->getItemCount(), &moveItem, flags);
+		ReturnValue ret = g_game.internalMoveItem(
+		    item->getParent(), toCylinder, INDEX_WHEREEVER, item, item->getItemCount(), &moveItem, flags
+		);
 		if (moveItem) {
 			*itemPtr = moveItem;
 		}
@@ -10719,8 +10736,9 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		Player* spectatorPlayer = static_cast<Player*>(spectator);
 		if (spectatorPlayer != player && !spectatorPlayer->isAccessPlayer()) {
 			if (enabled) {
-				spectatorPlayer->sendRemoveTileCreature(player, position,
-				                                        tile->getClientIndexOfCreature(spectatorPlayer, player));
+				spectatorPlayer->sendRemoveTileCreature(
+				    player, position, tile->getClientIndexOfCreature(spectatorPlayer, player)
+				);
 			} else {
 				spectatorPlayer->sendCreatureAppear(player, position, magicEffect);
 			}

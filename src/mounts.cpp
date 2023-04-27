@@ -36,10 +36,11 @@ bool Mounts::loadFromXml()
 			continue;
 		}
 
-		mounts.emplace_back(static_cast<uint8_t>(nodeId), pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
-		                    mountNode.attribute("name").as_string(),
-		                    pugi::cast<int32_t>(mountNode.attribute("speed").value()),
-		                    mountNode.attribute("premium").as_bool());
+		mounts.emplace_back(
+		    static_cast<uint8_t>(nodeId), pugi::cast<uint16_t>(mountNode.attribute("clientid").value()),
+		    mountNode.attribute("name").as_string(), pugi::cast<int32_t>(mountNode.attribute("speed").value()),
+		    mountNode.attribute("premium").as_bool()
+		);
 	}
 	mounts.shrink_to_fit();
 	return true;
@@ -66,8 +67,9 @@ Mount* Mounts::getMountByName(const std::string& name)
 
 Mount* Mounts::getMountByClientID(uint16_t clientId)
 {
-	auto it = std::find_if(mounts.begin(), mounts.end(),
-	                       [clientId](const Mount& mount) { return mount.clientId == clientId; });
+	auto it = std::find_if(mounts.begin(), mounts.end(), [clientId](const Mount& mount) {
+		return mount.clientId == clientId;
+	});
 
 	return it != mounts.end() ? &*it : nullptr;
 }

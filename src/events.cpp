@@ -525,8 +525,9 @@ bool Events::eventPlayerOnBrowseField(Player* player, const Position& position)
 	return scriptInterface.callFunction(2);
 }
 
-void Events::eventPlayerOnLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos,
-                               int32_t lookDistance)
+void Events::eventPlayerOnLook(
+    Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance
+)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
 	if (info.playerOnLook == -1) {
@@ -681,8 +682,10 @@ bool Events::eventPlayerOnLookInMarket(Player* player, const ItemType* itemType)
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
-                                          const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+ReturnValue Events::eventPlayerOnMoveItem(
+    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+    Cylinder* fromCylinder, Cylinder* toCylinder
+)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
@@ -727,8 +730,10 @@ ReturnValue Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t c
 	return returnValue;
 }
 
-void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition,
-                                    const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+void Events::eventPlayerOnItemMoved(
+    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+    Cylinder* fromCylinder, Cylinder* toCylinder
+)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
@@ -763,8 +768,9 @@ void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, 
 	scriptInterface.callVoidFunction(7);
 }
 
-bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const Position& fromPosition,
-                                       const Position& toPosition)
+bool Events::eventPlayerOnMoveCreature(
+    Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition
+)
 {
 	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
 	// toPosition)
@@ -795,9 +801,10 @@ bool Events::eventPlayerOnMoveCreature(Player* player, Creature* creature, const
 	return scriptInterface.callFunction(4);
 }
 
-void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType,
-                                              uint8_t reportReason, const std::string& comment,
-                                              const std::string& translation)
+void Events::eventPlayerOnReportRuleViolation(
+    Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment,
+    const std::string& translation
+)
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
 	if (info.playerOnReportRuleViolation == -1) {
@@ -829,8 +836,9 @@ void Events::eventPlayerOnReportRuleViolation(Player* player, const std::string&
 	scriptInterface.callVoidFunction(6);
 }
 
-bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position,
-                                    uint8_t category)
+bool Events::eventPlayerOnReportBug(
+    Player* player, const std::string& message, const Position& position, uint8_t category
+)
 {
 	// Player:onReportBug(message, position, category)
 	if (info.playerOnReportBug == -1) {
@@ -1009,8 +1017,9 @@ void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
 	scriptInterface.callFunction(2);
 }
 
-void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible,
-                                     Direction direction)
+void Events::eventPlayerOnPodiumEdit(
+    Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction
+)
 {
 	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
 	// isVisible)
@@ -1237,8 +1246,9 @@ void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, Netwo
 	scriptInterface.callVoidFunction(3);
 }
 
-void Events::eventPlayerOnUpdateStorage(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
-                                        bool isLogin)
+void Events::eventPlayerOnUpdateStorage(
+    Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin
+)
 {
 	// Player:onUpdateStorage(key, value, oldValue, isLogin)
 	if (info.playerOnUpdateStorage == -1) {

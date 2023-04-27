@@ -20,10 +20,10 @@ public:
 	static Account loadAccount(uint32_t accno);
 
 	static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
-	static std::pair<uint32_t, uint32_t> gameworldAuthentication(std::string_view accountName,
-	                                                             std::string_view password,
-	                                                             std::string_view characterName, std::string_view token,
-	                                                             uint32_t tokenTime);
+	static std::pair<uint32_t, uint32_t> gameworldAuthentication(
+	    std::string_view accountName, std::string_view password, std::string_view characterName, std::string_view token,
+	    uint32_t tokenTime
+	);
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 
@@ -44,10 +44,12 @@ public:
 	static bool hasBiddedOnHouse(uint32_t guid);
 
 	static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
-	static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
-	                        bool notify);
-	static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
-	                         bool notify);
+	static void addVIPEntry(
+	    uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify
+	);
+	static void editVIPEntry(
+	    uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon, bool notify
+	);
 	static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
@@ -56,8 +58,9 @@ private:
 	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
 	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-	static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
-	                      PropWriteStream& propWriteStream);
+	static bool saveItems(
+	    const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream
+	);
 };
 
 #endif // FS_IOLOGINDATA_H

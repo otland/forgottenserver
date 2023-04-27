@@ -124,15 +124,17 @@ Vocation* Vocations::getVocation(uint16_t id)
 
 int32_t Vocations::getVocationId(std::string_view name) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
-	                       [=](auto it) { return caseInsensitiveEqual(name, it.second.name); });
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [=](auto it) {
+		return caseInsensitiveEqual(name, it.second.name);
+	});
 	return it != vocationsMap.end() ? it->first : -1;
 }
 
 uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
-	                       [id](auto it) { return it.second.fromVocation == id && it.first != id; });
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](auto it) {
+		return it.second.fromVocation == id && it.first != id;
+	});
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 

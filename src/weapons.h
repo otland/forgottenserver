@@ -61,8 +61,9 @@ public:
 	static bool useFist(Player* player, Creature* target);
 	virtual bool useWeapon(Player* player, Item* item, Creature* target) const;
 
-	virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
-	                                bool maxDamage = false) const = 0;
+	virtual int32_t getWeaponDamage(
+	    const Player* player, const Creature* target, const Item* item, bool maxDamage = false
+	) const = 0;
 	virtual int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const = 0;
 	virtual CombatType_t getElementType() const = 0;
 
@@ -171,8 +172,8 @@ public:
 
 	bool useWeapon(Player* player, Item* item, Creature* target) const override;
 
-	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
-	                        bool maxDamage = false) const override;
+	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false)
+	    const override;
 	int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const override;
 	CombatType_t getElementType() const override { return elementType; }
 
@@ -193,8 +194,8 @@ public:
 
 	bool useWeapon(Player* player, Item* item, Creature* target) const override;
 
-	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
-	                        bool maxDamage = false) const override;
+	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false)
+	    const override;
 	int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const override;
 	CombatType_t getElementType() const override { return elementType; }
 
@@ -213,8 +214,8 @@ public:
 	bool configureEvent(const pugi::xml_node& node) override;
 	void configureWeapon(const ItemType& it) override;
 
-	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
-	                        bool maxDamage = false) const override;
+	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage = false)
+	    const override;
 	int32_t getElementDamage(const Player*, const Creature*, const Item*) const override { return 0; }
 	CombatType_t getElementType() const override { return COMBAT_NONE; }
 

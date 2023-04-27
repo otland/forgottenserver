@@ -196,14 +196,16 @@ public:
 	 * tiles away \param forceLogin If true, placing the creature will not fail
 	 * because of obstacles (creatures/chests)
 	 */
-	bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false,
-	                   bool forceLogin = false);
+	bool placeCreature(
+	    const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false
+	);
 
 	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 
-	void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false,
-	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
-	                   int32_t maxRangeY = 0);
+	void getSpectators(
+	    SpectatorVec& spectators, const Position& centerPos, bool multifloor = false, bool onlyPlayers = false,
+	    int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0, int32_t maxRangeY = 0
+	);
 
 	void clearSpectatorCache();
 	void clearPlayersSpectatorCache();
@@ -218,9 +220,10 @@ public:
 	 *way \param sameFloor checks if the destination is on same floor \returns
 	 *The result if you can throw there or not
 	 */
-	bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-	                      bool sameFloor = false, int32_t rangex = Map::maxClientViewportX,
-	                      int32_t rangey = Map::maxClientViewportY) const;
+	bool canThrowObjectTo(
+	    const Position& fromPos, const Position& toPos, bool checkLineOfSight = true, bool sameFloor = false,
+	    int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY
+	) const;
 
 	/**
 	 * Checks if there are no obstacles on that position
@@ -241,8 +244,10 @@ public:
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-	bool getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
-	                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
+	bool getPathMatching(
+	    const Creature& creature, std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
+	    const FindPathParams& fpp
+	) const;
 
 	std::map<std::string, Position> waypoints;
 
@@ -268,9 +273,10 @@ private:
 	uint32_t height = 0;
 
 	// Actually scans the map for spectators
-	void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
-	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
-	                           int32_t maxRangeZ, bool onlyPlayers) const;
+	void getSpectatorsInternal(
+	    SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY,
+	    int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers
+	) const;
 
 	friend class Game;
 	friend class IOMap;

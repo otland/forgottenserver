@@ -959,8 +959,9 @@ std::string Item::getDescription(int32_t) const
 	return "";
 }
 
-std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nullptr*/, int32_t subType /*= -1*/,
-                                     bool addArticle /*= true*/)
+std::string Item::getNameDescription(
+    const ItemType& it, const Item* item /*= nullptr*/, int32_t subType /*= -1*/, bool addArticle /*= true*/
+)
 {
 	if (item) {
 		subType = item->getSubType();

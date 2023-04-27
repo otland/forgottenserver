@@ -1332,8 +1332,8 @@ Thing* Tile::getThing(size_t index) const
 	return nullptr;
 }
 
-void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-                               cylinderlink_t link /*= LINK_OWNER*/)
+void Tile::
+    postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);

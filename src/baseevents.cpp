@@ -82,8 +82,8 @@ void BaseEvents::reInitState(bool fromLua)
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}
 
-bool Event::checkScript(const std::string& basePath, const std::string& scriptsName,
-                        const std::string& scriptFile) const
+bool Event::checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile)
+    const
 {
 	LuaScriptInterface* testInterface = g_luaEnvironment.getTestInterface();
 	testInterface->reInitState();

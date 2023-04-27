@@ -63,9 +63,10 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			if (requestedInfo & REQUEST_PLAYER_STATUS_INFO) {
 				characterName = msg.getString();
 			}
-			g_dispatcher.addTask(
-			    [=, thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
-			     characterName = std::move(characterName)]() { thisPtr->sendInfo(requestedInfo, characterName); });
+			g_dispatcher.addTask([=, thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
+			                      characterName = std::move(characterName)]() {
+				thisPtr->sendInfo(requestedInfo, characterName);
+			});
 			return;
 		}
 

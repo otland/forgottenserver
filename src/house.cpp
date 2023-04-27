@@ -30,7 +30,8 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* pla
 		Database& db = Database::getInstance();
 		db.executeQuery(fmt::format(
 		    "UPDATE `houses` SET `owner` = {:d}, `bid` = 0, `bid_end` = 0, `last_bid` = 0, `highest_bidder` = 0  WHERE `id` = {:d}",
-		    guid, id));
+		    guid, id
+		));
 	}
 
 	if (isLoaded && owner == guid) {
@@ -231,8 +232,9 @@ bool House::transferToDepot(Player* player) const
 	}
 
 	for (Item* item : moveItemList) {
-		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                        nullptr, FLAG_NOLIMIT);
+		g_game.internalMoveItem(
+		    item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT
+		);
 	}
 	return true;
 }
@@ -409,8 +411,7 @@ void AccessList::parseList(std::string_view list)
 			}
 		} else if (line == "*") {
 			allowEveryone = true;
-		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos ||
-		           line.find("?") != std::string::npos) {
+		} else if (line.find("!") != std::string::npos || line.find("*") != std::string::npos || line.find("?") != std::string::npos) {
 			continue; // regexp no longer supported
 		} else {
 			addPlayer(line);
@@ -593,9 +594,11 @@ bool Houses::loadHousesXML(const std::string& filename)
 
 		house->setName(houseNode.attribute("name").as_string());
 
-		Position entryPos(pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
-		                  pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
-		                  pugi::cast<uint16_t>(houseNode.attribute("entryz").value()));
+		Position entryPos(
+		    pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
+		    pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+		    pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
+		);
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
 			          << " - Name: " << house->getName() << " - House id: " << houseId << std::endl;
@@ -694,7 +697,8 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 
 				letter->setText(fmt::format(
 				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
-				    period, house->getRent(), house->getName(), daysLeft));
+				    period, house->getRent(), house->getName(), daysLeft
+				));
 				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {

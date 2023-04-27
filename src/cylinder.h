@@ -45,8 +45,9 @@ public:
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                             Creature* actor = nullptr) const = 0;
+	virtual ReturnValue queryAdd(
+	    int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr
+	) const = 0;
 
 	/**
 	 * Query the cylinder how much it can accept
@@ -57,8 +58,9 @@ public:
 	 * that the cylinder can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                                  uint32_t flags) const = 0;
+	virtual ReturnValue queryMaxCount(
+	    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+	) const = 0;
 
 	/**
 	 * Query if the cylinder can remove an object
@@ -121,8 +123,9 @@ public:
 	 * \param index is the objects new index value
 	 * \param link holds the relation the object has to the cylinder
 	 */
-	virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                                 cylinderlink_t link = LINK_OWNER) = 0;
+	virtual void postAddNotification(
+	    Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER
+	) = 0;
 
 	/**
 	 * Is sent after an operation (move/remove) to update internal values
@@ -130,8 +133,9 @@ public:
 	 * \param index is the previous index of the removed object
 	 * \param link holds the relation the object has to the cylinder
 	 */
-	virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                                    cylinderlink_t link = LINK_OWNER) = 0;
+	virtual void postRemoveNotification(
+	    Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
+	) = 0;
 
 	/**
 	 * Gets the index of an object

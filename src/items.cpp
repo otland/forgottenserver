@@ -198,17 +198,18 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
     {"supply", ITEM_PARSE_SUPPLY},
 };
 
-const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {{"key", ITEM_TYPE_KEY},
-                                                                   {"magicfield", ITEM_TYPE_MAGICFIELD},
-                                                                   {"container", ITEM_TYPE_CONTAINER},
-                                                                   {"depot", ITEM_TYPE_DEPOT},
-                                                                   {"mailbox", ITEM_TYPE_MAILBOX},
-                                                                   {"trashholder", ITEM_TYPE_TRASHHOLDER},
-                                                                   {"teleport", ITEM_TYPE_TELEPORT},
-                                                                   {"door", ITEM_TYPE_DOOR},
-                                                                   {"bed", ITEM_TYPE_BED},
-                                                                   {"rune", ITEM_TYPE_RUNE},
-                                                                   {"podium", ITEM_TYPE_PODIUM}};
+const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {
+    {"key", ITEM_TYPE_KEY},
+    {"magicfield", ITEM_TYPE_MAGICFIELD},
+    {"container", ITEM_TYPE_CONTAINER},
+    {"depot", ITEM_TYPE_DEPOT},
+    {"mailbox", ITEM_TYPE_MAILBOX},
+    {"trashholder", ITEM_TYPE_TRASHHOLDER},
+    {"teleport", ITEM_TYPE_TELEPORT},
+    {"door", ITEM_TYPE_DOOR},
+    {"bed", ITEM_TYPE_BED},
+    {"rune", ITEM_TYPE_RUNE},
+    {"podium", ITEM_TYPE_PODIUM}};
 
 const std::unordered_map<std::string, tileflags_t> TileStatesMap = {
     {"down", TILESTATE_FLOORCHANGE_DOWN},        {"north", TILESTATE_FLOORCHANGE_NORTH},

@@ -48,8 +48,9 @@ void NetworkMessage::addString(std::string_view value)
 void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
 {
 	addByte(precision);
-	add<uint32_t>(static_cast<uint32_t>((value * std::pow(static_cast<float>(10), precision)) +
-	                                    std::numeric_limits<int32_t>::max()));
+	add<uint32_t>(static_cast<uint32_t>(
+	    (value * std::pow(static_cast<float>(10), precision)) + std::numeric_limits<int32_t>::max()
+	));
 }
 
 void NetworkMessage::addBytes(const char* bytes, size_t size)

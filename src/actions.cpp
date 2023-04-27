@@ -396,8 +396,9 @@ static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t coun
 	} else if (count == 1) {
 		player->sendTextMessage(MESSAGE_HOTKEY_PRESSED, fmt::format("Using the last {:s}...", item->getName()));
 	} else {
-		player->sendTextMessage(MESSAGE_HOTKEY_PRESSED,
-		                        fmt::format("Using one of {:d} {:s}...", count, item->getPluralName()));
+		player->sendTextMessage(
+		    MESSAGE_HOTKEY_PRESSED, fmt::format("Using one of {:d} {:s}...", count, item->getPluralName())
+		);
 	}
 }
 
@@ -412,8 +413,9 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 
 	if (isHotkey) {
 		uint16_t subType = item->getSubType();
-		showUseHotkeyMessage(player, item,
-		                     player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1));
+		showUseHotkeyMessage(
+		    player, item, player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1)
+		);
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
@@ -439,8 +441,10 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index, Item* 
 	return true;
 }
 
-bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item,
-                        bool isHotkey, Creature* creature /* = nullptr*/)
+bool Actions::useItemEx(
+    Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey,
+    Creature* creature /* = nullptr*/
+)
 {
 	int32_t cooldown = g_config.getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
@@ -460,8 +464,9 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 
 	if (isHotkey) {
 		uint16_t subType = item->getSubType();
-		showUseHotkeyMessage(player, item,
-		                     player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1));
+		showUseHotkeyMessage(
+		    player, item, player->getItemTypeCount(item->getID(), subType != item->getItemCount() ? subType : -1)
+		);
 	}
 
 	if (g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
@@ -473,8 +478,9 @@ bool Actions::useItemEx(Player* player, const Position& fromPos, const Position&
 		}
 	}
 
-	if (action->executeUse(player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos,
-	                       isHotkey)) {
+	if (action->executeUse(
+	        player, item, fromPos, action->getTarget(player, creature, toPos, toStackPos), toPos, isHotkey
+	    )) {
 		return true;
 	}
 
@@ -554,8 +560,9 @@ Thing* Action::getTarget(Player* player, Creature* targetCreature, const Positio
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 
-bool Action::executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target,
-                        const Position& toPosition, bool isHotkey)
+bool Action::executeUse(
+    Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey
+)
 {
 	// onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if (!scriptInterface->reserveScriptEnv()) {

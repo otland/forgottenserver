@@ -263,8 +263,9 @@ public:
 	std::map<std::string, std::set<std::string>> bestiary;
 
 private:
-	ConditionDamage* getDamageCondition(ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage,
-	                                    int32_t startDamage, uint32_t tickInterval);
+	ConditionDamage* getDamageCondition(
+	    ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval
+	);
 	bool deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description = "");
 
 	MonsterType* loadMonster(const std::string& file, const std::string& monsterName, bool reloading = false);

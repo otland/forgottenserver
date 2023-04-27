@@ -20,8 +20,9 @@ void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols);
 
 void scheduleSendAll(const std::vector<Protocol_ptr>& bufferedProtocols)
 {
-	g_scheduler.addEvent(
-	    createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(bufferedProtocols); }));
+	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() {
+		sendAll(bufferedProtocols);
+	}));
 }
 
 void sendAll(const std::vector<Protocol_ptr>& bufferedProtocols)

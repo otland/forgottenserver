@@ -26,8 +26,9 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 	disconnect();
 }
 
-void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
-                                     const std::string& token, uint16_t version)
+void ProtocolLogin::getCharacterList(
+    const std::string& accountName, const std::string& password, const std::string& token, uint16_t version
+)
 {
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
@@ -177,9 +178,13 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 			banInfo.reason = "(none)";
 		}
 
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
-		                 version);
+		disconnectClient(
+		    fmt::format(
+		        "Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+		        formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason
+		    ),
+		    version
+		);
 		return;
 	}
 

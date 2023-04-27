@@ -62,8 +62,9 @@ class FrozenPathingConditionCall
 public:
 	explicit FrozenPathingConditionCall(Position targetPos) : targetPos(std::move(targetPos)) {}
 
-	bool operator()(const Position& startPos, const Position& testPos, const FindPathParams& fpp,
-	                int32_t& bestMatchDist) const;
+	bool operator()(
+	    const Position& startPos, const Position& testPos, const FindPathParams& fpp, int32_t& bestMatchDist
+	) const;
 
 	bool isInRange(const Position& startPos, const Position& testPos, const FindPathParams& fpp) const;
 
@@ -192,9 +193,10 @@ public:
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
 	virtual bool setAttackedCreature(Creature* creature);
-	virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
-	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
-	                             bool ignoreResistances = false);
+	virtual BlockType_t blockHit(
+	    Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
+	    bool checkArmor = false, bool field = false, bool ignoreResistances = false
+	);
 
 	bool setMaster(Creature* newMaster);
 
@@ -277,14 +279,18 @@ public:
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
 	void onAddTileItem(const Tile* tile, const Position& pos);
-	virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
-	                              const Item* newItem, const ItemType& newType);
+	virtual void onUpdateTileItem(
+	    const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType, const Item* newItem,
+	    const ItemType& newType
+	);
 	virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item);
 
 	virtual void onCreatureAppear(Creature* creature, bool isLogin);
 	virtual void onRemoveCreature(Creature* creature, bool isLogout);
-	virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
-	                            const Position& oldPos, bool teleport);
+	virtual void onCreatureMove(
+	    Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+	    bool teleport
+	);
 
 	virtual void onAttackedCreatureDisappear(bool) {}
 	virtual void onFollowCreatureDisappear(bool) {}
@@ -332,9 +338,10 @@ public:
 	double getDamageRatio(Creature* attacker) const;
 
 	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const;
-	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist,
-	               int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true,
-	               int32_t maxSearchDist = 0) const;
+	bool getPathTo(
+	    const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist, int32_t maxTargetDist,
+	    bool fullPathSearch = true, bool clearSight = true, int32_t maxSearchDist = 0
+	) const;
 
 	void incrementReferenceCounter() { ++referenceCounter; }
 	void decrementReferenceCounter()
@@ -433,8 +440,9 @@ protected:
 	virtual uint16_t getLookCorpse() const { return 0; }
 	virtual void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const;
 	virtual void death(Creature*) {}
-	virtual bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified,
-	                        bool mostDamageUnjustified);
+	virtual bool dropCorpse(
+	    Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified
+	);
 	virtual Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature);
 
 	friend class Game;

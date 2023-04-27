@@ -343,8 +343,10 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 	return scriptInterface->callFunction(2);
 }
 
-bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller,
-                                   bool lastHitUnjustified, bool mostDamageUnjustified)
+bool CreatureEvent::executeOnDeath(
+    Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified,
+    bool mostDamageUnjustified
+)
 {
 	// onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if (!scriptInterface->reserveScriptEnv()) {

@@ -203,7 +203,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	if (!DatabaseManager::isDatabaseSetup()) {
 		startupErrorMessage(
-		    "The database you have specified in config.lua is empty, please import the schema.sql to your database.");
+		    "The database you have specified in config.lua is empty, please import the schema.sql to your database."
+		);
 		return;
 	}
 	g_databaseTasks.start();
@@ -227,8 +228,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
-	std::cout << fmt::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion,
-	                         Item::items.buildNumber)
+	std::cout << fmt::format(
+	                 "OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber
+	             )
 	          << std::endl;
 
 	if (!Item::items.loadFromXml()) {
@@ -276,9 +278,10 @@ void mainLoader(int, char*[], ServiceManager* services)
 		g_game.setWorldType(WORLD_TYPE_PVP_ENFORCED);
 	} else {
 		std::cout << std::endl;
-		startupErrorMessage(
-		    fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
-		                g_config.getString(ConfigManager::WORLD_TYPE)));
+		startupErrorMessage(fmt::format(
+		    "Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
+		    g_config.getString(ConfigManager::WORLD_TYPE)
+		));
 		return;
 	}
 	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;

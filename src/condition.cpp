@@ -165,8 +165,10 @@ bool Condition::executeCondition(Creature*, int32_t interval)
 	return getEndTime() >= OTSYS_TIME();
 }
 
-Condition* Condition::createCondition(ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param /* = 0*/,
-                                      bool buff /* = false*/, uint32_t subId /* = 0*/, bool aggressive /* = false */)
+Condition* Condition::createCondition(
+    ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param /* = 0*/, bool buff /* = false*/,
+    uint32_t subId /* = 0*/, bool aggressive /* = false */
+)
 {
 	switch (type) {
 		case CONDITION_POISON:
@@ -287,8 +289,9 @@ Condition* Condition::createCondition(PropStream& propStream)
 		return nullptr;
 	}
 
-	return createCondition(static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0,
-	                       subId, aggressive);
+	return createCondition(
+	    static_cast<ConditionId_t>(id), static_cast<ConditionType_t>(type), ticks, 0, buff != 0, subId, aggressive
+	);
 }
 
 bool Condition::startCondition(Creature*)

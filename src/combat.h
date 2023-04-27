@@ -104,8 +104,10 @@ public:
 	void doCombat(Creature* caster, const Position& position) const;
 
 	static void doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
-	static void doAreaCombat(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
-	                         const CombatParams& params);
+	static void doAreaCombat(
+	    Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
+	    const CombatParams& params
+	);
 
 	bool setCallback(CallBackParam_t key);
 	CallBack* getCallback(CallBackParam_t key);
@@ -123,8 +125,9 @@ public:
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile,
-	                              const CombatParams& params);
+	static void combatTileEffects(
+	    const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params
+	);
 	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 
 	// configurable

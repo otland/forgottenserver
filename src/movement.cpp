@@ -643,7 +643,8 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 				vocationEquipSet.insert(vocationId);
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {
 					vocStringList.push_back(
-					    boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string()));
+					    boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string())
+					);
 				}
 			}
 		}
@@ -819,9 +820,12 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
-			player->setVarStats(static_cast<stats_t>(s),
-			                    static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) *
-			                                         ((it.abilities->statsPercent[s] - 100) / 100.f)));
+			player->setVarStats(
+			    static_cast<stats_t>(s),
+			    static_cast<int32_t>(
+			        player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
+			    )
+			);
 		}
 	}
 
@@ -910,9 +914,12 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
-			player->setVarStats(static_cast<stats_t>(s),
-			                    -static_cast<int32_t>(player->getDefaultStats(static_cast<stats_t>(s)) *
-			                                          ((it.abilities->statsPercent[s] - 100) / 100.f)));
+			player->setVarStats(
+			    static_cast<stats_t>(s),
+			    -static_cast<int32_t>(
+			        player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
+			    )
+			);
 		}
 	}
 

@@ -63,10 +63,12 @@ Guild* IOGuild::loadGuild(uint32_t guildId)
 		Guild* guild = new Guild(guildId, result->getString("name"));
 
 		if ((result = db.storeQuery(
-		         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
+		         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)
+		     ))) {
 			do {
-				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
-				               result->getNumber<uint16_t>("level"));
+				guild->addRank(
+				    result->getNumber<uint32_t>("id"), result->getString("name"), result->getNumber<uint16_t>("level")
+				);
 			} while (result->next());
 		}
 		return guild;

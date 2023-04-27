@@ -124,7 +124,8 @@ int32_t Weapons::getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue)
 int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor)
 {
 	return static_cast<int32_t>(
-	    std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
+	    std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor))
+	);
 }
 
 bool Weapon::configureEvent(const pugi::xml_node& node)
@@ -612,16 +613,17 @@ int32_t WeaponMelee::getElementDamage(const Player* player, const Creature*, con
 	return -normal_random(0, static_cast<int32_t>(maxValue * player->getVocation()->meleeDamageMultiplier));
 }
 
-int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature*, const Item* item,
-                                     bool maxDamage /*= false*/) const
+int32_t
+WeaponMelee::getWeaponDamage(const Player* player, const Creature*, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackSkill = player->getWeaponSkill(item);
 	int32_t attackValue = std::max<int32_t>(0, item->getAttack());
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue =
-	    static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
-	                         player->getVocation()->meleeDamageMultiplier);
+	int32_t maxValue = static_cast<int32_t>(
+	    Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
+	    player->getVocation()->meleeDamageMultiplier
+	);
 	if (maxDamage) {
 		return -maxValue;
 	}
@@ -678,8 +680,9 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		uint32_t skill = player->getSkillLevel(SKILL_DISTANCE);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
-		uint32_t distance = std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos),
-		                                       Position::getDistanceY(playerPos, targetPos));
+		uint32_t distance = std::max<uint32_t>(
+		    Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)
+		);
 
 		uint32_t maxHitChance;
 		if (it.maxHitChance != -1) {
@@ -839,8 +842,8 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 	return -normal_random(minValue, static_cast<int32_t>(maxValue * player->getVocation()->distDamageMultiplier));
 }
 
-int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item,
-                                        bool maxDamage /*= false*/) const
+int32_t WeaponDistance::
+    getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const
 {
 	int32_t attackValue = item->getAttack();
 
@@ -854,9 +857,10 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	int32_t attackSkill = player->getSkillLevel(SKILL_DISTANCE);
 	float attackFactor = player->getAttackFactor();
 
-	int32_t maxValue =
-	    static_cast<int32_t>(Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
-	                         player->getVocation()->distDamageMultiplier);
+	int32_t maxValue = static_cast<int32_t>(
+	    Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor) *
+	    player->getVocation()->distDamageMultiplier
+	);
 	if (maxDamage) {
 		return -maxValue;
 	}

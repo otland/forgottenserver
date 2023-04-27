@@ -15,12 +15,13 @@ public:
 	const TrashHolder* getTrashHolder() const override { return this; }
 
 	// cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
-	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                          uint32_t flags) const override;
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
+	    const override;
+	ReturnValue queryMaxCount(
+	    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+	) const override;
+	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
+	    const override;
 	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
 	void addThing(Thing* thing) override;
@@ -31,10 +32,11 @@ public:
 
 	void removeThing(Thing* thing, uint32_t count) override;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER)
+	    override;
+	void postRemoveNotification(
+	    Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
+	) override;
 };
 
 #endif // FS_TRASHHOLDER_H

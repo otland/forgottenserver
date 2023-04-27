@@ -212,8 +212,9 @@ bool Raid::loadFromXml(const std::string& filename)
 	}
 
 	// sort by delay time
-	std::sort(raidEvents.begin(), raidEvents.end(),
-	          [](const RaidEvent* lhs, const RaidEvent* rhs) { return lhs->getDelay() < rhs->getDelay(); });
+	std::sort(raidEvents.begin(), raidEvents.end(), [](const RaidEvent* lhs, const RaidEvent* rhs) {
+		return lhs->getDelay() < rhs->getDelay();
+	});
 
 	loaded = true;
 	return true;
@@ -224,8 +225,9 @@ void Raid::startRaid()
 	RaidEvent* raidEvent = getNextRaidEvent();
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
-		nextEventEvent = g_scheduler.addEvent(
-		    createSchedulerTask(raidEvent->getDelay(), [=, this]() { executeRaidEvent(raidEvent); }));
+		nextEventEvent = g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=, this]() {
+			executeRaidEvent(raidEvent);
+		}));
 	}
 }
 
@@ -236,8 +238,9 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 		RaidEvent* newRaidEvent = getNextRaidEvent();
 
 		if (newRaidEvent) {
-			uint32_t ticks = static_cast<uint32_t>(
-			    std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
+			uint32_t ticks =
+			    static_cast<uint32_t>(std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay())
+			    );
 			nextEventEvent =
 			    g_scheduler.addEvent(createSchedulerTask(ticks, [=, this]() { executeRaidEvent(newRaidEvent); }));
 		} else {
@@ -519,8 +522,10 @@ bool AreaSpawnEvent::executeEvent()
 
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
-				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y),
-				                                uniform_random(fromPos.z, toPos.z));
+				Tile* tile = g_game.map.getTile(
+				    uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y),
+				    uniform_random(fromPos.z, toPos.z)
+				);
 				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) &&
 				    !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;

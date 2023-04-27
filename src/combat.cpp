@@ -312,8 +312,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 			const Tile* targetPlayerTile = targetPlayer->getTile();
 			if (targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE)) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
-			} else if (attackerPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE) &&
-			           !targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE | TILESTATE_PROTECTIONZONE)) {
+			} else if (attackerPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE) && !targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE | TILESTATE_PROTECTIONZONE)) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
 		}
@@ -581,8 +580,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 					} else if (itemId == ITEM_WILDGROWTH) {
 						itemId = ITEM_WILDGROWTH_NOPVP;
 					}
-				} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP ||
-				           itemId == ITEM_ENERGYFIELD_PVP) {
+				} else if (itemId == ITEM_FIREFIELD_PVP_FULL || itemId == ITEM_POISONFIELD_PVP || itemId == ITEM_ENERGYFIELD_PVP) {
 					casterPlayer->addInFightTicks();
 				}
 			}
@@ -805,8 +803,10 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 
 	bool success = false;
 	if (damage.primary.type != COMBAT_MANADRAIN) {
-		if (g_game.combatBlockHit(damage, caster, target, params.blockedByShield, params.blockedByArmor,
-		                          params.itemId != 0, params.ignoreResistances)) {
+		if (g_game.combatBlockHit(
+		        damage, caster, target, params.blockedByShield, params.blockedByArmor, params.itemId != 0,
+		        params.ignoreResistances
+		    )) {
 			return;
 		}
 
@@ -894,8 +894,9 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 	}
 }
 
-void Combat::doAreaCombat(Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
-                          const CombatParams& params)
+void Combat::doAreaCombat(
+    Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage, const CombatParams& params
+)
 {
 	auto tiles =
 	    caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
@@ -1001,8 +1002,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 
 		bool success = false;
 		if (damageCopy.primary.type != COMBAT_MANADRAIN) {
-			if (g_game.combatBlockHit(damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor,
-			                          params.itemId != 0, params.ignoreResistances)) {
+			if (g_game.combatBlockHit(
+			        damageCopy, caster, creature, params.blockedByShield, params.blockedByArmor, params.itemId != 0,
+			        params.ignoreResistances
+			    )) {
 				continue;
 			}
 			success = g_game.combatChangeHealth(caster, creature, damageCopy);
@@ -1035,9 +1038,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
+						    targetsCount
+						);
 						g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
 					}
@@ -1047,9 +1051,10 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
+						    targetsCount
+						);
 						g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
 					}

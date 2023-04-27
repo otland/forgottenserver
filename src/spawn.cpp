@@ -39,9 +39,11 @@ bool Spawns::loadFromXml(const std::string& filename)
 	loaded = true;
 
 	for (auto spawnNode : doc.child("spawns").children()) {
-		Position centerPos(pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
-		                   pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
-		                   pugi::cast<uint16_t>(spawnNode.attribute("centerz").value()));
+		Position centerPos(
+		    pugi::cast<uint16_t>(spawnNode.attribute("centerx").value()),
+		    pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
+		    pugi::cast<uint16_t>(spawnNode.attribute("centerz").value())
+		);
 
 		int32_t radius;
 		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
@@ -67,8 +69,10 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 		for (auto childNode : spawnNode.children()) {
 			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
-				Position pos(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z);
+				Position pos(
+				    centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+				    centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z
+				);
 
 				int32_t interval = pugi::cast<int32_t>(childNode.attribute("spawntime").value()) * 1000;
 				if (interval < MINSPAWN_INTERVAL) {
@@ -132,10 +136,12 @@ bool Spawns::loadFromXml(const std::string& filename)
 
 				sb.mTypes.shrink_to_fit();
 				if (sb.mTypes.size() > 1) {
-					std::sort(sb.mTypes.begin(), sb.mTypes.end(),
-					          [](std::pair<MonsterType*, uint16_t> a, std::pair<MonsterType*, uint16_t> b) {
-						          return a.second > b.second;
-					          });
+					std::sort(
+					    sb.mTypes.begin(), sb.mTypes.end(),
+					    [](std::pair<MonsterType*, uint16_t> a, std::pair<MonsterType*, uint16_t> b) {
+						    return a.second > b.second;
+					    }
+					);
 				}
 
 				spawn.addBlock(sb);
@@ -154,8 +160,10 @@ bool Spawns::loadFromXml(const std::string& filename)
 					dir = DIRECTION_NORTH;
 				}
 
-				Position pos(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z);
+				Position pos(
+				    centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+				    centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z
+				);
 				int32_t interval = pugi::cast<int32_t>(childNode.attribute("spawntime").value()) * 1000;
 				if (interval >= MINSPAWN_INTERVAL && interval <= MAXSPAWN_INTERVAL) {
 					spawn.addMonster(nameAttribute.as_string(), pos, dir, static_cast<uint32_t>(interval));
@@ -187,9 +195,12 @@ bool Spawns::loadFromXml(const std::string& filename)
 				}
 
 				npc->setMasterPos(
-				    Position(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
-				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z),
-				    radius);
+				    Position(
+				        centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
+				        centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z
+				    ),
+				    radius
+				);
 				npcList.push_front(npc);
 			}
 		}
@@ -237,8 +248,10 @@ bool Spawns::isInZone(const Position& centerPos, int32_t radius, const Position&
 		return true;
 	}
 
-	return ((pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) &&
-	        (pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius));
+	return (
+	    (pos.getX() >= centerPos.getX() - radius) && (pos.getX() <= centerPos.getX() + radius) &&
+	    (pos.getY() >= centerPos.getY() - radius) && (pos.getY() <= centerPos.getY() + radius)
+	);
 }
 
 void Spawn::startSpawnCheck()
@@ -313,8 +326,8 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = fa
 	return spawnFunc(false);
 }
 
-bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir,
-                         bool startup /*= false*/)
+bool Spawn::
+    spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir, bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
 	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {

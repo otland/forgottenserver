@@ -236,12 +236,13 @@ bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 
 bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 {
-	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(),
-	                                                 [](char a, char b) { return tolower(a) == tolower(b); });
+	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
+		       return tolower(a) == tolower(b);
+	       });
 }
 
-std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
-                                            int32_t limit /* = -1*/)
+std::vector<std::string_view>
+explodeString(std::string_view inString, const std::string& separator, int32_t limit /* = -1*/)
 {
 	std::vector<std::string_view> returnVector;
 	std::string_view::size_type start = 0, end = 0;
@@ -326,17 +327,13 @@ Direction getDirection(const std::string& string)
 		direction = DIRECTION_SOUTH;
 	} else if (string == "west" || string == "w" || string == "3") {
 		direction = DIRECTION_WEST;
-	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" ||
-	           string == "4") {
+	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" || string == "4") {
 		direction = DIRECTION_SOUTHWEST;
-	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" ||
-	           string == "5") {
+	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" || string == "5") {
 		direction = DIRECTION_SOUTHEAST;
-	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" ||
-	           string == "6") {
+	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" || string == "6") {
 		direction = DIRECTION_NORTHWEST;
-	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" ||
-	           string == "7") {
+	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" || string == "7") {
 		direction = DIRECTION_NORTHEAST;
 	}
 

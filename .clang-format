@@ -2,6 +2,7 @@
 Language:        Cpp
 BasedOnStyle:    Google
 AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent
 AlignEscapedNewlines: DontAlign
 BreakBeforeBraces: Custom
 BraceWrapping:

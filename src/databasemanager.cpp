@@ -16,7 +16,8 @@ bool DatabaseManager::optimizeTables()
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
 	    "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0",
-	    db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))));
+	    db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))
+	));
 	if (!result) {
 		return false;
 	}
@@ -40,7 +41,8 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 	return db
 	    .storeQuery(fmt::format(
 	        "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s} AND `TABLE_NAME` = {:s} LIMIT 1",
-	        db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName)))
+	        db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName)
+	    ))
 	    .get();
 }
 
@@ -48,8 +50,10 @@ bool DatabaseManager::isDatabaseSetup()
 {
 	Database& db = Database::getInstance();
 	return db
-	    .storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}",
-	                            db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))))
+	    .storeQuery(fmt::format(
+	        "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}",
+	        db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))
+	    ))
 	    .get();
 }
 
@@ -58,7 +62,8 @@ int32_t DatabaseManager::getDatabaseVersion()
 	if (!tableExists("server_config")) {
 		Database& db = Database::getInstance();
 		db.executeQuery(
-		    "CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB");
+		    "CREATE TABLE `server_config` (`config` VARCHAR(50) NOT NULL, `value` VARCHAR(256) NOT NULL DEFAULT '', UNIQUE(`config`)) ENGINE = InnoDB"
+		);
 		db.executeQuery("INSERT INTO `server_config` VALUES ('db_version', 0)");
 		return 0;
 	}
@@ -129,8 +134,9 @@ bool DatabaseManager::getDatabaseConfig(const std::string& config, int32_t& valu
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(
-	    fmt::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config)));
+	DBResult_ptr result =
+	    db.storeQuery(fmt::format("SELECT `value` FROM `server_config` WHERE `config` = {:s}", db.escapeString(config))
+	    );
 	if (!result) {
 		return false;
 	}
@@ -146,10 +152,11 @@ void DatabaseManager::registerDatabaseConfig(const std::string& config, int32_t 
 	int32_t tmp;
 
 	if (!getDatabaseConfig(config, tmp)) {
-		db.executeQuery(
-		    fmt::format("INSERT INTO `server_config` VALUES ({:s}, '{:d}')", db.escapeString(config), value));
+		db.executeQuery(fmt::format("INSERT INTO `server_config` VALUES ({:s}, '{:d}')", db.escapeString(config), value)
+		);
 	} else {
-		db.executeQuery(fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = {:s}", value,
-		                            db.escapeString(config)));
+		db.executeQuery(fmt::format(
+		    "UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = {:s}", value, db.escapeString(config)
+		));
 	}
 }

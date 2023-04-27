@@ -133,8 +133,9 @@ public:
 	void setLastErrorString(std::string error) { errorString = error; }
 
 private:
-	bool parseMapDataAttributes(OTB::Loader& loader, const OTB::Node& mapNode, Map& map,
-	                            const std::filesystem::path& fileName);
+	bool parseMapDataAttributes(
+	    OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::filesystem::path& fileName
+	);
 	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
 	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);
 	bool parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Map& map);

@@ -301,13 +301,15 @@ bool IOMapSerialize::saveHouseInfo()
 			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
 			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount(), house->getId()));
+			    house->getBedCount(), house->getId()
+			));
 		} else {
 			db.executeQuery(fmt::format(
 			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
 			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
 			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount()));
+			    house->getBedCount()
+			));
 		}
 	}
 
@@ -335,8 +337,9 @@ bool IOMapSerialize::saveHouseInfo()
 
 		for (Door* door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
-				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
-				                             db.escapeString(listText)))) {
+				if (!stmt.addRow(
+				        fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(), db.escapeString(listText))
+				    )) {
 					return false;
 				}
 
