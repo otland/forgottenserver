@@ -568,7 +568,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 		eventType = MOVE_EVENT_REMOVE_ITEM;
 	} else {
 		std::cout << "Error: [MoveEvent::configureMoveEvent] No valid event name " << eventAttr.as_string()
-		          << std::endl;
+				  << std::endl;
 		return false;
 	}
 
@@ -600,7 +600,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 				slot = SLOTP_AMMO;
 			} else {
 				std::cout << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: "
-				          << slotAttribute.as_string() << std::endl;
+						  << slotAttribute.as_string() << std::endl;
 			}
 		}
 
@@ -643,7 +643,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 				vocationEquipSet.insert(vocationId);
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {
 					vocStringList.push_back(
-					    boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string())
+						boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string())
 					);
 				}
 			}
@@ -746,7 +746,7 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 
 	if (it.abilities->manaShield) {
 		Condition* condition =
-		    Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_MANASHIELD, -1, 0);
+			Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_MANASHIELD, -1, 0);
 		player->addCondition(condition);
 	}
 
@@ -761,7 +761,7 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 
 	if (it.abilities->regeneration) {
 		Condition* condition =
-		    Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_REGENERATION, -1, 0);
+			Condition::createCondition(static_cast<ConditionId_t>(slot), CONDITION_REGENERATION, -1, 0);
 
 		if (it.abilities->healthGain != 0) {
 			condition->setParam(CONDITION_PARAM_HEALTHGAIN, it.abilities->healthGain);
@@ -821,10 +821,10 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* ite
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
 			player->setVarStats(
-			    static_cast<stats_t>(s),
-			    static_cast<int32_t>(
-			        player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
-			    )
+				static_cast<stats_t>(s),
+				static_cast<int32_t>(
+					player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
+				)
 			);
 		}
 	}
@@ -915,10 +915,10 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 		if (it.abilities->statsPercent[s]) {
 			needUpdateStats = true;
 			player->setVarStats(
-			    static_cast<stats_t>(s),
-			    -static_cast<int32_t>(
-			        player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
-			    )
+				static_cast<stats_t>(s),
+				-static_cast<int32_t>(
+					player->getDefaultStats(static_cast<stats_t>(s)) * ((it.abilities->statsPercent[s] - 100) / 100.f)
+				)
 			);
 		}
 	}
@@ -949,7 +949,7 @@ bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 	} else {
 		if (!isScripted) {
 			std::cout << "[Warning - MoveEvent::loadFunction] Function \"" << functionName << "\" does not exist."
-			          << std::endl;
+					  << std::endl;
 			return false;
 		}
 	}

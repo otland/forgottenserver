@@ -15,12 +15,12 @@ public:
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
-	    const override;
+		const override;
 
 	Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
 	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
-	    const override;
+		const override;
 
 	void addThing(int32_t index, Thing* thing) override;
 	void internalAddThing(uint32_t index, Thing* thing) override;

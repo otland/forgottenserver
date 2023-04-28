@@ -62,16 +62,16 @@ class Condition
 public:
 	Condition() = default;
 	Condition(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    endTime(ticks == -1 ? std::numeric_limits<int64_t>::max() : 0),
-	    subId(subId),
-	    ticks(ticks),
-	    conditionType(type),
-	    isBuff(buff),
-	    aggressive(aggressive),
-	    id(id)
+		endTime(ticks == -1 ? std::numeric_limits<int64_t>::max() : 0),
+		subId(subId),
+		ticks(ticks),
+		conditionType(type),
+		isBuff(buff),
+		aggressive(aggressive),
+		id(id)
 	{}
 	virtual ~Condition() = default;
 
@@ -92,8 +92,8 @@ public:
 	bool isAggressive() const { return aggressive; }
 
 	static Condition* createCondition(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param = 0, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, int32_t param = 0, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	);
 	static Condition* createCondition(PropStream& propStream);
 
@@ -125,10 +125,10 @@ class ConditionGeneric : public Condition
 {
 public:
 	ConditionGeneric(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    Condition(id, type, ticks, buff, subId, aggressive)
+		Condition(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -144,10 +144,10 @@ class ConditionAttributes final : public ConditionGeneric
 {
 public:
 	ConditionAttributes(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -186,10 +186,10 @@ class ConditionRegeneration final : public ConditionGeneric
 {
 public:
 	ConditionRegeneration(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	void addCondition(Creature* creature, const Condition* condition) override;
@@ -218,10 +218,10 @@ class ConditionSoul final : public ConditionGeneric
 {
 public:
 	ConditionSoul(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	void addCondition(Creature* creature, const Condition* condition) override;
@@ -246,10 +246,10 @@ class ConditionInvisible final : public ConditionGeneric
 {
 public:
 	ConditionInvisible(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -263,9 +263,9 @@ class ConditionDamage final : public Condition
 public:
 	ConditionDamage() = default;
 	ConditionDamage(
-	    ConditionId_t id, ConditionType_t type, bool buff = false, uint32_t subId = 0, bool aggressive = true
+		ConditionId_t id, ConditionType_t type, bool buff = false, uint32_t subId = 0, bool aggressive = true
 	) :
-	    Condition(id, type, 0, buff, subId, aggressive)
+		Condition(id, type, 0, buff, subId, aggressive)
 	{}
 
 	static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
@@ -319,10 +319,10 @@ class ConditionSpeed final : public Condition
 {
 public:
 	ConditionSpeed(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, int32_t changeSpeed,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, int32_t changeSpeed,
+		bool aggressive = false
 	) :
-	    Condition(id, type, ticks, buff, subId, aggressive), speedDelta(changeSpeed)
+		Condition(id, type, ticks, buff, subId, aggressive), speedDelta(changeSpeed)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -356,10 +356,10 @@ class ConditionOutfit final : public Condition
 {
 public:
 	ConditionOutfit(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    Condition(id, type, ticks, buff, subId, aggressive)
+		Condition(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -383,10 +383,10 @@ class ConditionLight final : public Condition
 {
 public:
 	ConditionLight(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t lightlevel,
-	    uint8_t lightcolor, bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t lightlevel,
+		uint8_t lightcolor, bool aggressive = false
 	) :
-	    Condition(id, type, ticks, buff, subId, aggressive), lightInfo(lightlevel, lightcolor)
+		Condition(id, type, ticks, buff, subId, aggressive), lightInfo(lightlevel, lightcolor)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -413,10 +413,10 @@ class ConditionSpellCooldown final : public ConditionGeneric
 {
 public:
 	ConditionSpellCooldown(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -429,10 +429,10 @@ class ConditionSpellGroupCooldown final : public ConditionGeneric
 {
 public:
 	ConditionSpellGroupCooldown(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff = false, uint32_t subId = 0,
+		bool aggressive = false
 	) :
-	    ConditionGeneric(id, type, ticks, buff, subId, aggressive)
+		ConditionGeneric(id, type, ticks, buff, subId, aggressive)
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -445,10 +445,10 @@ class ConditionDrunk final : public Condition
 {
 public:
 	ConditionDrunk(
-	    ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t drunkenness,
-	    bool aggressive = false
+		ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t drunkenness,
+		bool aggressive = false
 	) :
-	    Condition(id, type, ticks, buff, subId, aggressive)
+		Condition(id, type, ticks, buff, subId, aggressive)
 	{
 		if (drunkenness != 0) {
 			this->drunkenness = drunkenness;
@@ -473,9 +473,9 @@ class ConditionManaShield final : public Condition
 {
 public:
 	ConditionManaShield(
-	    ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false, uint32_t initSubId = 0
+		ConditionId_t initId, ConditionType_t initType, int32_t iniTicks, bool initBuff = false, uint32_t initSubId = 0
 	) :
-	    Condition(initId, initType, iniTicks, initBuff, initSubId)
+		Condition(initId, initType, iniTicks, initBuff, initSubId)
 	{}
 
 	bool startCondition(Creature* creature) override;

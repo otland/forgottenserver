@@ -7,7 +7,7 @@
 struct Mount
 {
 	Mount(uint8_t id, uint16_t clientId, std::string name, int32_t speed, bool premium) :
-	    name(std::move(name)), speed(speed), clientId(clientId), id(id), premium(premium)
+		name(std::move(name)), speed(speed), clientId(clientId), id(id), premium(premium)
 	{}
 
 	std::string name;

@@ -16,7 +16,7 @@ public:
 	// DO NOT allocate this class on the stack
 	explicit Task(TaskFunc&& f) : func(std::move(f)) {}
 	Task(uint32_t ms, TaskFunc&& f) :
-	    expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f))
+		expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f))
 	{}
 
 	virtual ~Task() = default;

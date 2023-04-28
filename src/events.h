@@ -91,26 +91,26 @@ public:
 	// Player
 	bool eventPlayerOnBrowseField(Player* player, const Position& position);
 	void eventPlayerOnLook(
-	    Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance
+		Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance
 	);
 	void eventPlayerOnLookInBattleList(Player* player, Creature* creature, int32_t lookDistance);
 	void eventPlayerOnLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance);
 	bool eventPlayerOnLookInShop(Player* player, const ItemType* itemType, uint8_t count);
 	bool eventPlayerOnLookInMarket(Player* player, const ItemType* itemType);
 	ReturnValue eventPlayerOnMoveItem(
-	    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-	    Cylinder* fromCylinder, Cylinder* toCylinder
+		Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+		Cylinder* fromCylinder, Cylinder* toCylinder
 	);
 	void eventPlayerOnItemMoved(
-	    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-	    Cylinder* fromCylinder, Cylinder* toCylinder
+		Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+		Cylinder* fromCylinder, Cylinder* toCylinder
 	);
 	bool eventPlayerOnMoveCreature(
-	    Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition
+		Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition
 	);
 	void eventPlayerOnReportRuleViolation(
-	    Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
-	    const std::string& comment, const std::string& translation
+		Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
+		const std::string& comment, const std::string& translation
 	);
 	bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
 	bool eventPlayerOnTurn(Player* player, Direction direction);
@@ -119,7 +119,7 @@ public:
 	void eventPlayerOnTradeCompleted(Player* player, Player* target, Item* item, Item* targetItem, bool isSuccess);
 	void eventPlayerOnPodiumRequest(Player* player, Item* item);
 	void eventPlayerOnPodiumEdit(
-	    Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction
+		Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction
 	);
 	void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
 	void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
@@ -128,7 +128,7 @@ public:
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
 	void eventPlayerOnUpdateStorage(
-	    Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin
+		Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin
 	);
 
 	// Monster

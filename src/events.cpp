@@ -526,7 +526,7 @@ bool Events::eventPlayerOnBrowseField(Player* player, const Position& position)
 }
 
 void Events::eventPlayerOnLook(
-    Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance
+	Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance
 )
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
@@ -683,8 +683,8 @@ bool Events::eventPlayerOnLookInMarket(Player* player, const ItemType* itemType)
 }
 
 ReturnValue Events::eventPlayerOnMoveItem(
-    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-    Cylinder* fromCylinder, Cylinder* toCylinder
+	Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+	Cylinder* fromCylinder, Cylinder* toCylinder
 )
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
@@ -731,8 +731,8 @@ ReturnValue Events::eventPlayerOnMoveItem(
 }
 
 void Events::eventPlayerOnItemMoved(
-    Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-    Cylinder* fromCylinder, Cylinder* toCylinder
+	Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
+	Cylinder* fromCylinder, Cylinder* toCylinder
 )
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
@@ -769,7 +769,7 @@ void Events::eventPlayerOnItemMoved(
 }
 
 bool Events::eventPlayerOnMoveCreature(
-    Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition
+	Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition
 )
 {
 	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
@@ -802,8 +802,8 @@ bool Events::eventPlayerOnMoveCreature(
 }
 
 void Events::eventPlayerOnReportRuleViolation(
-    Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment,
-    const std::string& translation
+	Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason, const std::string& comment,
+	const std::string& translation
 )
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
@@ -837,7 +837,7 @@ void Events::eventPlayerOnReportRuleViolation(
 }
 
 bool Events::eventPlayerOnReportBug(
-    Player* player, const std::string& message, const Position& position, uint8_t category
+	Player* player, const std::string& message, const Position& position, uint8_t category
 )
 {
 	// Player:onReportBug(message, position, category)
@@ -1018,7 +1018,7 @@ void Events::eventPlayerOnPodiumRequest(Player* player, Item* item)
 }
 
 void Events::eventPlayerOnPodiumEdit(
-    Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction
+	Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction
 )
 {
 	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
@@ -1247,7 +1247,7 @@ void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, Netwo
 }
 
 void Events::eventPlayerOnUpdateStorage(
-    Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin
+	Player* player, const uint32_t key, const int32_t value, const int32_t oldValue, bool isLogin
 )
 {
 	// Player:onUpdateStorage(key, value, oldValue, isLogin)

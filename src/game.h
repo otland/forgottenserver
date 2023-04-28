@@ -100,7 +100,7 @@ public:
 
 	Cylinder* internalGetCylinder(Player* player, const Position& pos) const;
 	Thing* internalGetThing(Player* player, const Position& pos, int32_t index, uint32_t spriteId, stackPosType_t type)
-	    const;
+		const;
 	static void internalGetPosition(Item* item, Position& pos, uint8_t& stackpos);
 
 	static std::string getTradeErrorDescription(ReturnValue ret, Item* item);
@@ -192,8 +192,8 @@ public:
 	 * \param force If true, placing the creature will not fail because of obstacles (creatures/items)
 	 */
 	bool placeCreature(
-	    Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false,
-	    MagicEffectClasses magicEffect = CONST_ME_TELEPORT
+		Creature* creature, const Position& pos, bool extendedPos = false, bool forced = false,
+		MagicEffectClasses magicEffect = CONST_ME_TELEPORT
 	);
 
 	/**
@@ -227,21 +227,21 @@ public:
 	ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
 
 	ReturnValue internalMoveItem(
-	    Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index, Item* item, uint32_t count, Item** _moveItem,
-	    uint32_t flags = 0, Creature* actor = nullptr, Item* tradeItem = nullptr, const Position* fromPos = nullptr,
-	    const Position* toPos = nullptr
+		Cylinder* fromCylinder, Cylinder* toCylinder, int32_t index, Item* item, uint32_t count, Item** _moveItem,
+		uint32_t flags = 0, Creature* actor = nullptr, Item* tradeItem = nullptr, const Position* fromPos = nullptr,
+		const Position* toPos = nullptr
 	);
 
 	ReturnValue internalAddItem(
-	    Cylinder* toCylinder, Item* item, int32_t index = INDEX_WHEREEVER, uint32_t flags = 0, bool test = false
+		Cylinder* toCylinder, Item* item, int32_t index = INDEX_WHEREEVER, uint32_t flags = 0, bool test = false
 	);
 	ReturnValue internalAddItem(
-	    Cylinder* toCylinder, Item* item, int32_t index, uint32_t flags, bool test, uint32_t& remainderCount
+		Cylinder* toCylinder, Item* item, int32_t index, uint32_t flags, bool test, uint32_t& remainderCount
 	);
 	ReturnValue internalRemoveItem(Item* item, int32_t count = -1, bool test = false, uint32_t flags = 0);
 
 	ReturnValue internalPlayerAddItem(
-	    Player* player, Item* item, bool dropOnMap = true, slots_t slot = CONST_SLOT_WHEREEVER
+		Player* player, Item* item, bool dropOnMap = true, slots_t slot = CONST_SLOT_WHEREEVER
 	);
 
 	/**
@@ -305,8 +305,8 @@ public:
 	 * \param text The text to say
 	 */
 	bool internalCreatureSay(
-	    Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
-	    SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr, bool echo = false
+		Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
+		SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr, bool echo = false
 	);
 
 	void loadPlayersRecord();
@@ -316,13 +316,13 @@ public:
 	void kickPlayer(uint32_t playerId, bool displayEffect);
 	void playerReportBug(uint32_t playerId, const std::string& message, const Position& position, uint8_t category);
 	void playerDebugAssert(
-	    uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description,
-	    const std::string& comment
+		uint32_t playerId, const std::string& assertLine, const std::string& date, const std::string& description,
+		const std::string& comment
 	);
 	void playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, uint8_t button, uint8_t choice);
 	void playerReportRuleViolation(
-	    uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
-	    const std::string& comment, const std::string& translation
+		uint32_t playerId, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
+		const std::string& comment, const std::string& translation
 	);
 
 	bool internalStartTrade(Player* player, Player* tradePartner, Item* tradeItem);
@@ -332,22 +332,22 @@ public:
 
 	// Implementation of player invoked events
 	void playerMoveThing(
-	    uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
-	    uint8_t count
+		uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
+		uint8_t count
 	);
 	void playerMoveCreatureByID(
-	    uint32_t playerId, uint32_t movingCreatureId, const Position& movingCreatureOrigPos, const Position& toPos
+		uint32_t playerId, uint32_t movingCreatureId, const Position& movingCreatureOrigPos, const Position& toPos
 	);
 	void playerMoveCreature(
-	    Player* player, Creature* movingCreature, const Position& movingCreatureOrigPos, Tile* toTile
+		Player* player, Creature* movingCreature, const Position& movingCreatureOrigPos, Tile* toTile
 	);
 	void playerMoveItemByPlayerID(
-	    uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
-	    uint8_t count
+		uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
+		uint8_t count
 	);
 	void playerMoveItem(
-	    Player* player, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
-	    uint8_t count, Item* item, Cylinder* toCylinder
+		Player* player, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos,
+		uint8_t count, Item* item, Cylinder* toCylinder
 	);
 	void playerEquipItem(uint32_t playerId, uint16_t spriteId);
 	void playerMove(uint32_t playerId, Direction direction);
@@ -364,12 +364,12 @@ public:
 	void playerAutoWalk(uint32_t playerId, const std::vector<Direction>& listDir);
 	void playerStopAutoWalk(uint32_t playerId);
 	void playerUseItemEx(
-	    uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint16_t fromSpriteId, const Position& toPos,
-	    uint8_t toStackPos, uint16_t toSpriteId
+		uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint16_t fromSpriteId, const Position& toPos,
+		uint8_t toStackPos, uint16_t toSpriteId
 	);
 	void playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos, uint8_t index, uint16_t spriteId);
 	void playerUseWithCreature(
-	    uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint32_t creatureId, uint16_t spriteId
+		uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint32_t creatureId, uint16_t spriteId
 	);
 	void playerCloseContainer(uint32_t playerId, uint8_t cid);
 	void playerMoveUpContainer(uint32_t playerId, uint8_t cid);
@@ -381,16 +381,16 @@ public:
 	void playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
 	void playerWrapItem(uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId);
 	void playerRequestTrade(
-	    uint32_t playerId, const Position& pos, uint8_t stackPos, uint32_t tradePlayerId, uint16_t spriteId
+		uint32_t playerId, const Position& pos, uint8_t stackPos, uint32_t tradePlayerId, uint16_t spriteId
 	);
 	void playerAcceptTrade(uint32_t playerId);
 	void playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t index);
 	void playerPurchaseItem(
-	    uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreCap = false,
-	    bool inBackpacks = false
+		uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreCap = false,
+		bool inBackpacks = false
 	);
 	void playerSellItem(
-	    uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreEquipped = false
+		uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreEquipped = false
 	);
 	void playerCloseShop(uint32_t playerId);
 	void playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count);
@@ -404,19 +404,19 @@ public:
 	void playerRequestAddVip(uint32_t playerId, const std::string& name);
 	void playerRequestRemoveVip(uint32_t playerId, uint32_t guid);
 	void playerRequestEditVip(
-	    uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify
+		uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon, bool notify
 	);
 	void playerTurn(uint32_t playerId, Direction dir);
 	void playerRequestOutfit(uint32_t playerId);
 	void playerRequestEditPodium(
-	    uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId
+		uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId
 	);
 	void playerEditPodium(
-	    uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos, const uint16_t spriteId,
-	    bool podiumVisible, Direction direction
+		uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos, const uint16_t spriteId,
+		bool podiumVisible, Direction direction
 	);
 	void playerSay(
-	    uint32_t playerId, uint16_t channelId, SpeakClasses type, const std::string& receiver, const std::string& text
+		uint32_t playerId, uint16_t channelId, SpeakClasses type, const std::string& receiver, const std::string& text
 	);
 	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount = false);
 	void playerInviteToParty(uint32_t playerId, uint32_t invitedId);
@@ -431,7 +431,7 @@ public:
 	void playerBrowseMarketOwnOffers(uint32_t playerId);
 	void playerBrowseMarketOwnHistory(uint32_t playerId);
 	void playerCreateMarketOffer(
-	    uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint64_t price, bool anonymous
+		uint32_t playerId, uint8_t type, uint16_t spriteId, uint16_t amount, uint64_t price, bool anonymous
 	);
 	void playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter);
 	void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
@@ -447,8 +447,8 @@ public:
 	void ReleaseItem(Item* item);
 
 	bool canThrowObjectTo(
-	    const Position& fromPos, const Position& toPos, bool checkLineOfSight = true, bool sameFloor = false,
-	    int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY
+		const Position& fromPos, const Position& toPos, bool checkLineOfSight = true, bool sameFloor = false,
+		int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY
 	) const;
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
 
@@ -472,8 +472,8 @@ public:
 	void checkLight();
 
 	bool combatBlockHit(
-	    CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field,
-	    bool ignoreResistances = false
+		CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor, bool field,
+		bool ignoreResistances = false
 	);
 
 	void combatGetTypeInfo(CombatType_t combatType, Creature* target, TextColor_t& color, uint8_t& effect);
@@ -488,7 +488,7 @@ public:
 	static void addMagicEffect(const SpectatorVec& spectators, const Position& pos, uint8_t effect);
 	void addDistanceEffect(const Position& fromPos, const Position& toPos, uint8_t effect);
 	static void addDistanceEffect(
-	    const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect
+		const SpectatorVec& spectators, const Position& fromPos, const Position& toPos, uint8_t effect
 	);
 
 	void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
@@ -600,9 +600,9 @@ private:
 	static constexpr int16_t GAME_SUNSET = 1080;
 	static constexpr int16_t GAME_NIGHTTIME = 1200;
 	static constexpr float LIGHT_CHANGE_SUNRISE =
-	    static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_DAYTIME - GAME_SUNRISE)) * 100) / 100.0f;
+		static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_DAYTIME - GAME_SUNRISE)) * 100) / 100.0f;
 	static constexpr float LIGHT_CHANGE_SUNSET =
-	    static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_NIGHTTIME - GAME_SUNSET)) * 100) / 100.0f;
+		static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_NIGHTTIME - GAME_SUNSET)) * 100) / 100.0f;
 
 	uint8_t lightLevel = LIGHT_DAY;
 	uint8_t lightColor = 215;

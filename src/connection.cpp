@@ -14,7 +14,7 @@
 extern ConfigManager g_config;
 
 Connection_ptr ConnectionManager::createConnection(
-    boost::asio::io_service& io_service, ConstServicePort_ptr servicePort
+	boost::asio::io_service& io_service, ConstServicePort_ptr servicePort
 )
 {
 	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
@@ -116,10 +116,10 @@ void Connection::accept()
 		                        ? 1
 		                        : NetworkMessage::HEADER_LENGTH;
 		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBuffer(), bufferLength),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parseHeader(error);
-		    }
+			socket, boost::asio::buffer(msg.getBuffer(), bufferLength),
+			[thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+				thisPtr->parseHeader(error);
+			}
 		);
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::accept] " << e.what() << std::endl;
@@ -193,10 +193,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		// Read packet content
 		msg.setLength(size + NetworkMessage::HEADER_LENGTH);
 		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBodyBuffer(), size),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parsePacket(error);
-		    }
+			socket, boost::asio::buffer(msg.getBodyBuffer(), size),
+			[thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+				thisPtr->parsePacket(error);
+			}
 		);
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::parseHeader] " << e.what() << std::endl;
@@ -252,10 +252,10 @@ void Connection::parsePacket(const boost::system::error_code& error)
 
 		// Wait to the next packet
 		boost::asio::async_read(
-		    socket, boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->parseHeader(error);
-		    }
+			socket, boost::asio::buffer(msg.getBuffer(), NetworkMessage::HEADER_LENGTH),
+			[thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+				thisPtr->parseHeader(error);
+			}
 		);
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::parsePacket] " << e.what() << std::endl;
@@ -287,10 +287,10 @@ void Connection::internalSend(const OutputMessage_ptr& msg)
 		                      ) { Connection::handleTimeout(thisPtr, error); });
 
 		boost::asio::async_write(
-		    socket, boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
-		    [thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
-			    thisPtr->onWriteOperation(error);
-		    }
+			socket, boost::asio::buffer(msg->getOutputBuffer(), msg->getLength()),
+			[thisPtr = shared_from_this()](const boost::system::error_code& error, auto /*bytes_transferred*/) {
+				thisPtr->onWriteOperation(error);
+			}
 		);
 	} catch (boost::system::system_error& e) {
 		std::cout << "[Network error - Connection::internalSend] " << e.what() << std::endl;

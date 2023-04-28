@@ -55,7 +55,7 @@ enum tradestate_t : uint8_t
 struct VIPEntry
 {
 	VIPEntry(uint32_t guid, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
-	    guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
+		guid{guid}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t guid;
@@ -448,8 +448,8 @@ public:
 
 	bool isPzLocked() const { return pzLocked; }
 	BlockType_t blockHit(
-	    Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
-	    bool checkArmor = false, bool field = false, bool ignoreResistances = false
+		Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
+		bool checkArmor = false, bool field = false, bool ignoreResistances = false
 	) override;
 	void doAttacking(uint32_t interval) override;
 	bool hasExtraSwing() override { return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed()); }
@@ -570,7 +570,7 @@ public:
 	{
 		if (client) {
 			client->sendUpdateTileCreature(
-			    creature->getPosition(), creature->getTile()->getClientIndexOfCreature(this, creature), creature
+				creature->getPosition(), creature->getTile()->getClientIndexOfCreature(this, creature), creature
 			);
 		}
 	}
@@ -600,18 +600,18 @@ public:
 		}
 	}
 	void sendCreatureAppear(
-	    const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE
+		const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE
 	)
 	{
 		if (client) {
 			client->sendAddCreature(
-			    creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), magicEffect
+				creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature), magicEffect
 			);
 		}
 	}
 	void sendCreatureMove(
-	    const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
-	    int32_t oldStackPos, bool teleport
+		const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
+		int32_t oldStackPos, bool teleport
 	)
 	{
 		if (client) {
@@ -628,7 +628,7 @@ public:
 		}
 	}
 	void sendCreatureSay(
-	    const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr
+		const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr
 	)
 	{
 		if (client) {
@@ -778,16 +778,16 @@ public:
 
 	// event methods
 	void onUpdateTileItem(
-	    const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType, const Item* newItem,
-	    const ItemType& newType
+		const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType, const Item* newItem,
+		const ItemType& newType
 	) override;
 	void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) override;
 
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(
-	    Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
-	    bool teleport
+		Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+		bool teleport
 	) override;
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
@@ -959,7 +959,7 @@ public:
 		}
 	}
 	void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers)
-	    const
+		const
 	{
 		if (client) {
 			client->sendMarketBrowseItem(itemId, buyOffers, sellOffers);
@@ -972,7 +972,7 @@ public:
 		}
 	}
 	void sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyOffers, const HistoryMarketOfferList& sellOffers)
-	    const
+		const
 	{
 		if (client) {
 			client->sendMarketBrowseOwnHistory(buyOffers, sellOffers);
@@ -1046,7 +1046,7 @@ public:
 	}
 
 	void sendChannel(
-	    uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers
+		uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers
 	)
 	{
 		if (client) {
@@ -1084,7 +1084,7 @@ public:
 		}
 	}
 	void sendCombatAnalyzer(
-	    CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string& target
+		CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string& target
 	)
 	{
 		if (client) {
@@ -1097,9 +1097,9 @@ public:
 	void onThink(uint32_t interval) override;
 
 	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER)
-	    override;
+		override;
 	void postRemoveNotification(
-	    Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
+		Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
 	) override;
 
 	void setNextAction(int64_t time)
@@ -1143,18 +1143,18 @@ private:
 
 	void death(Creature* lastHitCreature) override;
 	bool dropCorpse(
-	    Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified
+		Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified
 	) override;
 	Item* getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature) override;
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
-	    const override;
+		const override;
 	ReturnValue queryMaxCount(
-	    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+		int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
 	) const override;
 	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
-	    const override;
+		const override;
 	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
 
 	void addThing(Thing*) override {}
@@ -1191,7 +1191,7 @@ private:
 	std::forward_list<uint32_t> modalWindows;
 	std::forward_list<std::string> learnedInstantSpellList;
 	std::forward_list<Condition*>
-	    storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
+		storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
 	std::string name;
 	std::string guildNick;

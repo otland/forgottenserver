@@ -41,12 +41,12 @@ uint32_t Player::playerAutoID = 0x10000000;
 uint32_t Player::playerIDLimit = 0x20000000;
 
 Player::Player(ProtocolGame_ptr p) :
-    Creature(),
-    lastPing(OTSYS_TIME()),
-    lastPong(lastPing),
-    client(std::move(p)),
-    inbox(new Inbox(ITEM_INBOX)),
-    storeInbox(new StoreInbox(ITEM_STORE_INBOX))
+	Creature(),
+	lastPing(OTSYS_TIME()),
+	lastPong(lastPing),
+	client(std::move(p)),
+	inbox(new Inbox(ITEM_INBOX)),
+	storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
 	inbox->incrementReferenceCounter();
 
@@ -498,8 +498,8 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 		skills[skill].percent = 0;
 
 		sendTextMessage(
-		    MESSAGE_EVENT_ADVANCE,
-		    fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
+			MESSAGE_EVENT_ADVANCE,
+			fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
 		);
 
 		g_creatureEvents->playerAdvance(this, skill, (skills[skill].level - 1), skills[skill].level);
@@ -553,14 +553,14 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 
 	skills[skill].tries = std::max<int32_t>(0, skills[skill].tries - count);
 	skills[skill].percent =
-	    Player::getPercentLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
+		Player::getPercentLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
 
 	if (notify) {
 		bool sendUpdateSkills = false;
 		if (oldLevel != skills[skill].level) {
 			sendTextMessage(
-			    MESSAGE_EVENT_ADVANCE,
-			    fmt::format("You were downgraded to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
+				MESSAGE_EVENT_ADVANCE,
+				fmt::format("You were downgraded to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
 			);
 			sendUpdateSkills = true;
 		}
@@ -1072,8 +1072,8 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 		}
 
 		client->sendRemoveContainerItem(
-		    it.first, std::max<uint16_t>(slot, firstIndex),
-		    container->getItemByIndex(container->capacity() + firstIndex)
+			it.first, std::max<uint16_t>(slot, firstIndex),
+			container->getItemByIndex(container->capacity() + firstIndex)
 		);
 	}
 }
@@ -1120,8 +1120,8 @@ void Player::openSavedContainers()
 }
 
 void Player::onUpdateTileItem(
-    const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType, const Item* newItem,
-    const ItemType& newType
+	const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType, const Item* newItem,
+	const ItemType& newType
 )
 {
 	Creature::onUpdateTileItem(tile, pos, oldItem, oldType, newItem, newType);
@@ -1381,8 +1381,8 @@ void Player::onWalk(Direction& dir)
 }
 
 void Player::onCreatureMove(
-    Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
-    bool teleport
+	Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+	bool teleport
 )
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -1600,11 +1600,11 @@ void Player::onThink(uint32_t interval)
 			kickPlayer(true);
 		} else if (client && idleTime == 60000 * kickAfterMinutes) {
 			client->sendTextMessage(TextMessage(
-			    MESSAGE_STATUS_WARNING,
-			    fmt::format(
-			        "There was no variation in your behaviour for {:d} minutes. You will be disconnected in one minute if there is no change in your actions until then.",
-			        kickAfterMinutes
-			    )
+				MESSAGE_STATUS_WARNING,
+				fmt::format(
+					"There was no variation in your behaviour for {:d} minutes. You will be disconnected in one minute if there is no change in your actions until then.",
+					kickAfterMinutes
+				)
 			));
 		}
 	}
@@ -1859,7 +1859,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 		g_creatureEvents->playerAdvance(this, SKILL_LEVEL, prevLevel, level);
 
 		sendTextMessage(
-		    MESSAGE_EVENT_ADVANCE, fmt::format("You advanced from Level {:d} to Level {:d}.", prevLevel, level)
+			MESSAGE_EVENT_ADVANCE, fmt::format("You advanced from Level {:d} to Level {:d}.", prevLevel, level)
 		);
 	}
 
@@ -1942,7 +1942,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 		}
 
 		sendTextMessage(
-		    MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level)
+			MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level)
 		);
 	}
 
@@ -2027,12 +2027,12 @@ bool Player::hasShield() const
 }
 
 BlockType_t Player::blockHit(
-    Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense /* = false*/,
-    bool checkArmor /* = false*/, bool field /* = false*/, bool ignoreResistances /* = false*/
+	Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense /* = false*/,
+	bool checkArmor /* = false*/, bool field /* = false*/, bool ignoreResistances /* = false*/
 )
 {
 	BlockType_t blockType =
-	    Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
+		Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
 
 	if (attacker && combatType != COMBAT_HEALING) {
 		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
@@ -2190,8 +2190,8 @@ void Player::death(Creature* lastHitCreature)
 
 			if (oldLevel != level) {
 				sendTextMessage(
-				    MESSAGE_EVENT_ADVANCE,
-				    fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level)
+					MESSAGE_EVENT_ADVANCE,
+					fmt::format("You were downgraded from Level {:d} to Level {:d}.", oldLevel, level)
 				);
 			}
 
@@ -2267,7 +2267,7 @@ void Player::death(Creature* lastHitCreature)
 }
 
 bool Player::dropCorpse(
-    Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified
+	Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified, bool mostDamageUnjustified
 )
 {
 	if (getZone() != ZONE_PVP || !Player::lastHitIsPlayer(lastHitCreature)) {
@@ -2290,38 +2290,38 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 		if (lastHitCreature) {
 			if (!mostDamageCreature) {
 				corpse->setSpecialDescription(fmt::format(
-				    "You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
-				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(),
-				    names.size() > 1 ? " and others." : "."
+					"You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
+					getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(),
+					names.size() > 1 ? " and others." : "."
 				));
 			} else if (lastHitCreature != mostDamageCreature && names[lastHitCreature->getName()] == 1) {
 				corpse->setSpecialDescription(fmt::format(
-				    "You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
-				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(),
-				    lastHitCreature->getNameDescription(), names.size() > 2 ? " and others." : "."
+					"You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
+					getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(),
+					lastHitCreature->getNameDescription(), names.size() > 2 ? " and others." : "."
 				));
 			} else {
 				corpse->setSpecialDescription(fmt::format(
-				    "You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
-				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
+					"You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
+					getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
 				));
 			}
 		} else if (mostDamageCreature) {
 			if (names.size() > 1) {
 				corpse->setSpecialDescription(fmt::format(
-				    "You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(),
-				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
+					"You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(),
+					getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
 				));
 			} else {
 				corpse->setSpecialDescription(fmt::format(
-				    "You recognize {:s}. {:s} was killed by something evil and others", getNameDescription(),
-				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
+					"You recognize {:s}. {:s} was killed by something evil and others", getNameDescription(),
+					getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()
 				));
 			}
 		} else {
 			corpse->setSpecialDescription(fmt::format(
-			    "You recognize {:s}. {:s} was killed by something evil {:s}", getNameDescription(),
-			    getSex() == PLAYERSEX_FEMALE ? "She" : "He", names.size() ? " and others." : "."
+				"You recognize {:s}. {:s} was killed by something evil {:s}", getNameDescription(),
+				getSex() == PLAYERSEX_FEMALE ? "She" : "He", names.size() ? " and others." : "."
 			));
 		}
 	}
@@ -2339,7 +2339,7 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 	}
 
 	Condition* condition = Condition::createCondition(
-	    CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::PZ_LOCKED), 0
+		CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::PZ_LOCKED), 0
 	);
 	addCondition(condition);
 }
@@ -2711,7 +2711,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 
 	if (index != CONST_SLOT_WHEREEVER && index != -1) { // we don't try to equip whereever call
 		ret = g_moveEvents->onPlayerEquip(
-		    const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true
+			const_cast<Player*>(this), const_cast<Item*>(item), static_cast<slots_t>(index), true
 		);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
@@ -2735,7 +2735,7 @@ ReturnValue Player::queryAdd(int32_t index, const Thing& thing, uint32_t count, 
 }
 
 ReturnValue Player::queryMaxCount(
-    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+	int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
 ) const
 {
 	const Item* item = thing.getItem();
@@ -2759,7 +2759,7 @@ ReturnValue Player::queryMaxCount(
 						if (Container* tmpContainer = (*it)->getContainer()) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(
-							    INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags
+								INDEX_WHEREEVER, *item, item->getItemCount(), queryCount, flags
 							);
 							n += queryCount;
 						}
@@ -3189,7 +3189,7 @@ Thing* Player::getThing(size_t index) const
 }
 
 void Player::
-    postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+	postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3246,7 +3246,7 @@ void Player::
 }
 
 void Player::
-    postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+	postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3810,8 +3810,8 @@ bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
 				pzLocked = true;
 				Condition* condition = Condition::createCondition(
-				    CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000,
-				    0
+					CONDITIONID_DEFAULT, CONDITION_INFIGHT, g_config.getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000,
+					0
 				);
 				addCondition(condition);
 			}
@@ -4156,7 +4156,7 @@ double Player::getLostPercent() const
 	if (level >= 25) {
 		double tmpLevel = level + (levelPercent / 100.);
 		lossPercent =
-		    static_cast<double>((tmpLevel + 50) * 50 * ((tmpLevel * tmpLevel) - (5 * tmpLevel) + 8)) / experience;
+			static_cast<double>((tmpLevel + 50) * 50 * ((tmpLevel * tmpLevel) - (5 * tmpLevel) + 8)) / experience;
 	} else {
 		lossPercent = 10;
 	}
@@ -4644,8 +4644,8 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		if (currSkillLevel != skills[skill].level) {
 			sendTextMessage(
-			    MESSAGE_EVENT_ADVANCE,
-			    fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
+				MESSAGE_EVENT_ADVANCE,
+				fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level)
 			);
 		}
 
@@ -4671,12 +4671,12 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 	}
 
 	sendTextMessage(
-	    MESSAGE_EVENT_ADVANCE,
-	    fmt::format(
-	        "Your {:s} skill changed from level {:d} (with {:.2f}% progress towards level {:d}) to level {:d} (with {:.2f}% progress towards level {:d})",
-	        ucwords(getSkillName(skill)), oldSkillValue, oldPercentToNextLevel, (oldSkillValue + 1), newSkillValue,
-	        newPercentToNextLevel, (newSkillValue + 1)
-	    )
+		MESSAGE_EVENT_ADVANCE,
+		fmt::format(
+			"Your {:s} skill changed from level {:d} (with {:.2f}% progress towards level {:d}) to level {:d} (with {:.2f}% progress towards level {:d})",
+			ucwords(getSkillName(skill)), oldSkillValue, oldPercentToNextLevel, (oldSkillValue + 1), newSkillValue,
+			newPercentToNextLevel, (newSkillValue + 1)
+		)
 	);
 	return sendUpdate;
 }

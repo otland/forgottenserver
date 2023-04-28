@@ -198,8 +198,8 @@ void Monster::onRemoveCreature(Creature* creature, bool isLogout)
 }
 
 void Monster::onCreatureMove(
-    Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
-    bool teleport
+	Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+	bool teleport
 )
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -528,7 +528,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 				if (++it != resultList.end()) {
 					const Position& targetPosition = target->getPosition();
 					int32_t minRange =
-					    Position::getDistanceX(myPos, targetPosition) + Position::getDistanceY(myPos, targetPosition);
+						Position::getDistanceX(myPos, targetPosition) + Position::getDistanceY(myPos, targetPosition);
 					do {
 						const Position& pos = (*it)->getPosition();
 
@@ -608,8 +608,8 @@ void Monster::onFollowCreatureComplete(const Creature* creature)
 }
 
 BlockType_t Monster::blockHit(
-    Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense /* = false*/,
-    bool checkArmor /* = false*/, bool /* field = false */, bool /* ignoreResistances = false */
+	Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense /* = false*/,
+	bool checkArmor /* = false*/, bool /* field = false */, bool /* ignoreResistances = false */
 )
 {
 	BlockType_t blockType = Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor);
@@ -690,8 +690,8 @@ void Monster::updateIdleStatus()
 	if (!isSummon() && targetList.empty()) {
 		// check if there are aggressive conditions
 		idle = std::find_if(conditions.begin(), conditions.end(), [](Condition* condition) {
-			       return condition->isAggressive();
-		       }) == conditions.end();
+				   return condition->isAggressive();
+			   }) == conditions.end();
 	}
 
 	setIdle(idle);
@@ -856,7 +856,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 	if (isHostile()) {
 		const Position& targetPos = target->getPosition();
 		uint32_t distance =
-		    std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos));
+			std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos));
 		for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 			if (spellBlock.range != 0 && distance <= spellBlock.range) {
 				return g_game.isSightClear(pos, targetPos, true);
@@ -868,8 +868,8 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 }
 
 bool Monster::canUseSpell(
-    const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval, bool& inRange,
-    bool& resetTicks
+	const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval, bool& inRange,
+	bool& resetTicks
 )
 {
 	inRange = true;
@@ -1051,7 +1051,7 @@ bool Monster::walkToSpawn()
 	}
 
 	int32_t distance =
-	    std::max<int32_t>(Position::getDistanceX(position, masterPos), Position::getDistanceY(position, masterPos));
+		std::max<int32_t>(Position::getDistanceX(position, masterPos), Position::getDistanceY(position, masterPos));
 	if (distance == 0) {
 		return false;
 	}
@@ -1091,8 +1091,8 @@ bool Monster::pushItem(Item* item)
 		Tile* tile = g_game.map.getTile(tryPos);
 		if (tile && g_game.canThrowObjectTo(centerPos, tryPos, true, true)) {
 			if (g_game.internalMoveItem(
-			        item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr
-			    ) == RETURNVALUE_NOERROR) {
+					item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(), nullptr
+				) == RETURNVALUE_NOERROR) {
 				return true;
 			}
 		}
@@ -1240,7 +1240,7 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) c
 }
 
 bool Monster::getDanceStep(
-    const Position& creaturePos, Direction& direction, bool keepAttack /*= true*/, bool keepDistance /*= true*/
+	const Position& creaturePos, Direction& direction, bool keepAttack /*= true*/, bool keepDistance /*= true*/
 )
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
@@ -1266,7 +1266,7 @@ bool Monster::getDanceStep(
 
 			if (keepAttack) {
 				result =
-				    (!canDoAttackNow ||
+					(!canDoAttackNow ||
 				     canUseAttack(Position(creaturePos.x, creaturePos.y - 1, creaturePos.z), attackedCreature));
 			}
 
@@ -1283,7 +1283,7 @@ bool Monster::getDanceStep(
 
 			if (keepAttack) {
 				result =
-				    (!canDoAttackNow ||
+					(!canDoAttackNow ||
 				     canUseAttack(Position(creaturePos.x, creaturePos.y + 1, creaturePos.z), attackedCreature));
 			}
 
@@ -1300,7 +1300,7 @@ bool Monster::getDanceStep(
 
 			if (keepAttack) {
 				result =
-				    (!canDoAttackNow ||
+					(!canDoAttackNow ||
 				     canUseAttack(Position(creaturePos.x + 1, creaturePos.y, creaturePos.z), attackedCreature));
 			}
 
@@ -1317,7 +1317,7 @@ bool Monster::getDanceStep(
 
 			if (keepAttack) {
 				result =
-				    (!canDoAttackNow ||
+					(!canDoAttackNow ||
 				     canUseAttack(Position(creaturePos.x - 1, creaturePos.y, creaturePos.z), attackedCreature));
 			}
 
@@ -1365,8 +1365,8 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 
 	if (offsetx == 0 && offsety == 0) {
 		return getRandomStep(
-		    creaturePos,
-		    direction
+			creaturePos,
+			direction
 		); // player is "on" the monster so let's get some random step and rest will be taken care later.
 	}
 

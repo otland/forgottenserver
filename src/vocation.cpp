@@ -72,7 +72,7 @@ bool Vocations::loadFromXml()
 				voc.noPongKickTime = pugi::cast<uint32_t>(attrNode.value()) * 1000;
 			} else {
 				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName
-				          << "\" for vocation: " << voc.id << std::endl;
+						  << "\" for vocation: " << voc.id << std::endl;
 			}
 		}
 
@@ -84,11 +84,11 @@ bool Vocations::loadFromXml()
 						voc.skillMultipliers[skillId] = pugi::cast<double>(childNode.attribute("multiplier").value());
 					} else {
 						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skillId
-						          << " for vocation: " << voc.id << std::endl;
+								  << " for vocation: " << voc.id << std::endl;
 					}
 				} else {
 					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id
-					          << std::endl;
+							  << std::endl;
 				}
 			} else if (caseInsensitiveEqual(childNode.name(), "formula")) {
 				if ((attr = childNode.attribute("meleeDamage"))) {

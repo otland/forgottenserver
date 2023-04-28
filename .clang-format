@@ -25,5 +25,5 @@ IncludeCategories:
 IndentWidth:     4
 SpacesBeforeTrailingComments: 1
 TabWidth:        4
-UseTab:          ForIndentation
+UseTab:          AlignWithSpaces
 ...

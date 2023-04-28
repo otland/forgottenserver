@@ -11,7 +11,7 @@
 class Action;
 using Action_ptr = std::unique_ptr<Action>;
 using ActionFunction = std::function<bool(
-    Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey
+	Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition, bool isHotkey
 )>;
 
 class Action : public Event
@@ -24,8 +24,8 @@ public:
 
 	// scripting
 	virtual bool executeUse(
-	    Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition,
-	    bool isHotkey
+		Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition,
+		bool isHotkey
 	);
 
 	bool getAllowFarUse() const { return allowFarUse; }
@@ -52,7 +52,7 @@ public:
 	virtual ReturnValue canExecuteAction(const Player* player, const Position& toPos);
 	virtual bool hasOwnErrorHandler() { return false; }
 	virtual Thing* getTarget(Player* player, Creature* targetCreature, const Position& toPosition, uint8_t toStackPos)
-	    const;
+		const;
 
 	ActionFunction function;
 
@@ -79,8 +79,8 @@ public:
 
 	bool useItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 	bool useItemEx(
-	    Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey,
-	    Creature* creature = nullptr
+		Player* player, const Position& fromPos, const Position& toPos, uint8_t toStackPos, Item* item, bool isHotkey,
+		Creature* creature = nullptr
 	);
 
 	ReturnValue canUse(const Player* player, const Position& pos);

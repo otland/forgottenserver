@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
 
 	if (serviceManager.is_running()) {
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
-		          << std::endl;
+				  << std::endl;
 		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
@@ -203,7 +203,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 
 	if (!DatabaseManager::isDatabaseSetup()) {
 		startupErrorMessage(
-		    "The database you have specified in config.lua is empty, please import the schema.sql to your database."
+			"The database you have specified in config.lua is empty, please import the schema.sql to your database."
 		);
 		return;
 	}
@@ -229,9 +229,9 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 	std::cout << fmt::format(
-	                 "OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber
-	             )
-	          << std::endl;
+					 "OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber
+				 )
+			  << std::endl;
 
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
@@ -279,8 +279,8 @@ void mainLoader(int, char*[], ServiceManager* services)
 	} else {
 		std::cout << std::endl;
 		startupErrorMessage(fmt::format(
-		    "Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
-		    g_config.getString(ConfigManager::WORLD_TYPE)
+			"Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
+			g_config.getString(ConfigManager::WORLD_TYPE)
 		));
 		return;
 	}
@@ -330,7 +330,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 #ifndef _WIN32
 	if (getuid() == 0 || geteuid() == 0) {
 		std::cout << "> Warning: " << STATUS_SERVER_NAME
-		          << " has been executed as root user, please consider running it as a normal user." << std::endl;
+				  << " has been executed as root user, please consider running it as a normal user." << std::endl;
 	}
 #endif
 
@@ -344,12 +344,12 @@ bool argumentsHandler(const StringVector& args)
 	for (const auto& arg : args) {
 		if (arg == "--help") {
 			std::clog << "Usage:\n"
-			             "\n"
-			             "\t--config=$1\t\tAlternate configuration file path.\n"
-			             "\t--ip=$1\t\t\tIP address of the server.\n"
-			             "\t\t\t\tShould be equal to the global IP.\n"
-			             "\t--login-port=$1\tPort for login server to listen on.\n"
-			             "\t--game-port=$1\tPort for game server to listen on.\n";
+						 "\n"
+						 "\t--config=$1\t\tAlternate configuration file path.\n"
+						 "\t--ip=$1\t\t\tIP address of the server.\n"
+						 "\t\t\t\tShould be equal to the global IP.\n"
+						 "\t--login-port=$1\tPort for login server to listen on.\n"
+						 "\t--game-port=$1\tPort for game server to listen on.\n";
 			return false;
 		} else if (arg == "--version") {
 			printServerVersion();

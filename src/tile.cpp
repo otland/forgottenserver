@@ -1121,7 +1121,7 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 
 		if (itemType.stackable && count != item->getItemCount()) {
 			uint8_t newCount =
-			    static_cast<uint8_t>(std::max<int32_t>(0, static_cast<int32_t>(item->getItemCount() - count)));
+				static_cast<uint8_t>(std::max<int32_t>(0, static_cast<int32_t>(item->getItemCount() - count)));
 			item->setItemCount(newCount);
 			onUpdateTileItem(item, itemType, item, itemType);
 		} else {
@@ -1333,7 +1333,7 @@ Thing* Tile::getThing(size_t index) const
 }
 
 void Tile::
-    postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+	postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);

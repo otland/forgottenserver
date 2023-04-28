@@ -43,7 +43,7 @@ Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
 {
 	CreatureEvent_ptr creatureEvent{
-	    static_cast<CreatureEvent*>(event.release())}; // event is guaranteed to be a CreatureEvent
+		static_cast<CreatureEvent*>(event.release())}; // event is guaranteed to be a CreatureEvent
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerEvent] Trying to register event without type!" << std::endl;
 		return false;
@@ -155,7 +155,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	pugi::xml_attribute typeAttribute = node.attribute("type");
 	if (!typeAttribute) {
 		std::cout << "[Error - CreatureEvent::configureEvent] Missing type for creature event: " << eventName
-		          << std::endl;
+				  << std::endl;
 		return false;
 	}
 
@@ -186,7 +186,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		type = CREATURE_EVENT_EXTENDED_OPCODE;
 	} else {
 		std::cout << "[Error - CreatureEvent::configureEvent] Invalid type for creature event: " << eventName
-		          << std::endl;
+				  << std::endl;
 		return false;
 	}
 
@@ -344,8 +344,8 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 }
 
 bool CreatureEvent::executeOnDeath(
-    Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified,
-    bool mostDamageUnjustified
+	Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller, bool lastHitUnjustified,
+	bool mostDamageUnjustified
 )
 {
 	// onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)

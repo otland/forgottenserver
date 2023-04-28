@@ -16,12 +16,12 @@ public:
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr)
-	    const override;
+		const override;
 
 	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER)
-	    override;
+		override;
 	void postRemoveNotification(
-	    Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
+		Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
 	) override;
 
 	// overrides

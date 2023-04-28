@@ -93,7 +93,7 @@ public:
 	void setTimerEvent() { timerEvent = true; }
 
 	void getEventInfo(int32_t& scriptId, LuaScriptInterface*& scriptInterface, int32_t& callbackId, bool& timerEvent)
-	    const;
+		const;
 
 	void addTempItem(Item* item);
 	static void removeTempItem(Item* item);
@@ -193,7 +193,7 @@ public:
 	}
 
 	static void reportError(
-	    const char* function, const std::string& error_desc, lua_State* L = nullptr, bool stack_trace = false
+		const char* function, const std::string& error_desc, lua_State* L = nullptr, bool stack_trace = false
 	);
 
 	const std::string& getInterfaceName() const { return interfaceName; }
@@ -248,14 +248,14 @@ public:
 
 	template <typename T>
 	static typename std::enable_if<std::is_integral<T>::value && std::is_unsigned<T>::value, T>::type getNumber(
-	    lua_State* L, int32_t arg
+		lua_State* L, int32_t arg
 	)
 	{
 		double num = lua_tonumber(L, arg);
 		if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
 		    num > static_cast<double>(std::numeric_limits<T>::max())) {
 			reportErrorFunc(
-			    L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num)
+				L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num)
 			);
 		}
 
@@ -264,14 +264,14 @@ public:
 
 	template <typename T>
 	static typename std::enable_if<
-	    (std::is_integral<T>::value && std::is_signed<T>::value) || std::is_floating_point<T>::value, T>::type
+		(std::is_integral<T>::value && std::is_signed<T>::value) || std::is_floating_point<T>::value, T>::type
 	getNumber(lua_State* L, int32_t arg)
 	{
 		double num = lua_tonumber(L, arg);
 		if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
 		    num > static_cast<double>(std::numeric_limits<T>::max())) {
 			reportErrorFunc(
-			    L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num)
+				L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num)
 			);
 		}
 

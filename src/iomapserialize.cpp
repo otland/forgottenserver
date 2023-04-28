@@ -97,7 +97,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	while (container->serializationCount > 0) {
 		if (!loadItem(propStream, container)) {
 			std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
-			          << container->getID() << std::endl;
+					  << container->getID() << std::endl;
 			return false;
 		}
 		container->serializationCount--;
@@ -106,7 +106,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	uint8_t endAttr;
 	if (!propStream.read<uint8_t>(endAttr) || endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
-		          << container->getID() << std::endl;
+				  << container->getID() << std::endl;
 		return false;
 	}
 	return true;
@@ -298,17 +298,17 @@ bool IOMapSerialize::saveHouseInfo()
 		DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
 		if (result) {
 			db.executeQuery(fmt::format(
-			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
-			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
-			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount(), house->getId()
+				"UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
+				house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
+				db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
+				house->getBedCount(), house->getId()
 			));
 		} else {
 			db.executeQuery(fmt::format(
-			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
-			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
-			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount()
+				"INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
+				house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
+				db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
+				house->getBedCount()
 			));
 		}
 	}
@@ -338,8 +338,8 @@ bool IOMapSerialize::saveHouseInfo()
 		for (Door* door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
 				if (!stmt.addRow(
-				        fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(), db.escapeString(listText))
-				    )) {
+						fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(), db.escapeString(listText))
+					)) {
 					return false;
 				}
 

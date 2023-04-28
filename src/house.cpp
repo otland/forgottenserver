@@ -29,8 +29,8 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* pla
 	if (updateDatabase && owner != guid) {
 		Database& db = Database::getInstance();
 		db.executeQuery(fmt::format(
-		    "UPDATE `houses` SET `owner` = {:d}, `bid` = 0, `bid_end` = 0, `last_bid` = 0, `highest_bidder` = 0  WHERE `id` = {:d}",
-		    guid, id
+			"UPDATE `houses` SET `owner` = {:d}, `bid` = 0, `bid_end` = 0, `last_bid` = 0, `highest_bidder` = 0  WHERE `id` = {:d}",
+			guid, id
 		));
 	}
 
@@ -74,7 +74,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* pla
 		}
 	} else {
 		std::string strRentPeriod =
-		    boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+			boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
 			currentTime += 24 * 60 * 60 * 365;
@@ -233,7 +233,7 @@ bool House::transferToDepot(Player* player) const
 
 	for (Item* item : moveItemList) {
 		g_game.internalMoveItem(
-		    item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT
+			item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr, FLAG_NOLIMIT
 		);
 	}
 	return true;
@@ -595,13 +595,13 @@ bool Houses::loadHousesXML(const std::string& filename)
 		house->setName(houseNode.attribute("name").as_string());
 
 		Position entryPos(
-		    pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
-		    pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
-		    pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
+			pugi::cast<uint16_t>(houseNode.attribute("entryx").value()),
+			pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
+			pugi::cast<uint16_t>(houseNode.attribute("entryz").value())
 		);
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
 			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
-			          << " - Name: " << house->getName() << " - House id: " << houseId << std::endl;
+					  << " - Name: " << house->getName() << " - House id: " << houseId << std::endl;
 		}
 		house->setEntryPos(entryPos);
 
@@ -696,8 +696,8 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				}
 
 				letter->setText(fmt::format(
-				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
-				    period, house->getRent(), house->getName(), daysLeft
+					"Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
+					period, house->getRent(), house->getName(), daysLeft
 				));
 				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);

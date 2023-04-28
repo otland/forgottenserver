@@ -46,7 +46,7 @@ public:
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
 	virtual ReturnValue queryAdd(
-	    int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr
+		int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor = nullptr
 	) const = 0;
 
 	/**
@@ -59,7 +59,7 @@ public:
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
 	virtual ReturnValue queryMaxCount(
-	    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+		int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
 	) const = 0;
 
 	/**
@@ -124,7 +124,7 @@ public:
 	 * \param link holds the relation the object has to the cylinder
 	 */
 	virtual void postAddNotification(
-	    Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER
+		Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER
 	) = 0;
 
 	/**
@@ -134,7 +134,7 @@ public:
 	 * \param link holds the relation the object has to the cylinder
 	 */
 	virtual void postRemoveNotification(
-	    Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
+		Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t link = LINK_OWNER
 	) = 0;
 
 	/**

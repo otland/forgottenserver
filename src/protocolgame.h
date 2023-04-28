@@ -162,7 +162,7 @@ private:
 	void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName);
 	void sendChannelsDialog();
 	void sendChannel(
-	    uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers
+		uint16_t channelId, const std::string& channelName, const UsersMap* channelUsers, const InvitedMap* invitedUsers
 	);
 	void sendOpenPrivateChannel(const std::string& receiver);
 	void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId);
@@ -178,7 +178,7 @@ private:
 	void sendPingBack();
 	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
 	void sendCreatureSay(
-	    const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr
+		const Creature* creature, SpeakClasses type, const std::string& text, const Position* pos = nullptr
 	);
 
 	void sendCancelWalk();
@@ -218,7 +218,7 @@ private:
 	void sendTextWindow(uint32_t windowTextId, uint32_t itemId, const std::string& text);
 	void sendHouseWindow(uint32_t windowTextId, const std::string& text);
 	void sendCombatAnalyzer(
-	    CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string& target
+		CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType, const std::string& target
 	);
 	void sendOutfitWindow();
 
@@ -226,8 +226,8 @@ private:
 
 	void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
 	void sendVIP(
-	    uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify,
-	    VipStatus_t status
+		uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify,
+		VipStatus_t status
 	);
 	void sendVIPEntries();
 
@@ -260,11 +260,11 @@ private:
 	void sendUpdateTile(const Tile* tile, const Position& pos);
 
 	void sendAddCreature(
-	    const Creature* creature, const Position& pos, int32_t stackpos, MagicEffectClasses magicEffect = CONST_ME_NONE
+		const Creature* creature, const Position& pos, int32_t stackpos, MagicEffectClasses magicEffect = CONST_ME_NONE
 	);
 	void sendMoveCreature(
-	    const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
-	    int32_t oldStackPos, bool teleport
+		const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
+		int32_t oldStackPos, bool teleport
 	);
 
 	// containers
@@ -293,8 +293,8 @@ private:
 
 	// translate a floor to client-readable format
 	void GetFloorDescription(
-	    NetworkMessage& msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, int32_t offset,
-	    int32_t& skip
+		NetworkMessage& msg, int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, int32_t offset,
+		int32_t& skip
 	);
 
 	// translate a map area to client-readable format
@@ -310,12 +310,12 @@ private:
 	// tiles
 	static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);
 	static void RemoveTileCreature(
-	    NetworkMessage& msg, const Creature* creature, const Position& pos, uint32_t stackpos
+		NetworkMessage& msg, const Creature* creature, const Position& pos, uint32_t stackpos
 	);
 
 	void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 	void MoveDownCreature(
-	    NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos
+		NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos
 	);
 
 	// shop

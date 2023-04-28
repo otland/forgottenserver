@@ -83,8 +83,8 @@ public:
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(
-	    Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
-	    bool teleport
+		Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+		bool teleport
 	) override;
 	void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) override;
 
@@ -125,8 +125,8 @@ public:
 	bool isIgnoringFieldDamage() const { return ignoreFieldDamage; }
 
 	BlockType_t blockHit(
-	    Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
-	    bool checkArmor = false, bool field = false, bool ignoreResistances = false
+		Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
+		bool checkArmor = false, bool field = false, bool ignoreResistances = false
 	) override;
 
 	static uint32_t monsterAutoID;
@@ -189,12 +189,12 @@ private:
 
 	bool canUseAttack(const Position& pos, const Creature* target) const;
 	bool canUseSpell(
-	    const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval, bool& inRange,
-	    bool& resetTicks
+		const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval, bool& inRange,
+		bool& resetTicks
 	);
 	bool getRandomStep(const Position& creaturePos, Direction& direction) const;
 	bool getDanceStep(
-	    const Position& creaturePos, Direction& direction, bool keepAttack = true, bool keepDistance = true
+		const Position& creaturePos, Direction& direction, bool keepAttack = true, bool keepDistance = true
 	);
 	bool isInSpawnRange(const Position& pos) const;
 	bool canWalkTo(Position pos, Direction direction) const;

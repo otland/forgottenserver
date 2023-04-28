@@ -33,11 +33,11 @@ bool Database::connect()
 
 	// connects to database
 	if (!mysql_real_connect(
-	        handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(),
-	        g_config.getString(ConfigManager::MYSQL_USER).c_str(),
-	        g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(),
-	        g_config.getNumber(ConfigManager::SQL_PORT), g_config.getString(ConfigManager::MYSQL_SOCK).c_str(), 0
-	    )) {
+			handle, g_config.getString(ConfigManager::MYSQL_HOST).c_str(),
+			g_config.getString(ConfigManager::MYSQL_USER).c_str(),
+			g_config.getString(ConfigManager::MYSQL_PASS).c_str(), g_config.getString(ConfigManager::MYSQL_DB).c_str(),
+			g_config.getNumber(ConfigManager::SQL_PORT), g_config.getString(ConfigManager::MYSQL_SOCK).c_str(), 0
+		)) {
 		std::cout << std::endl << "MySQL Error Message: " << mysql_error(handle) << std::endl;
 		return false;
 	}
@@ -92,7 +92,7 @@ bool Database::executeQuery(const std::string& query)
 
 	while (mysql_real_query(handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl
-		          << "Message: " << mysql_error(handle) << std::endl;
+				  << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
 		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR &&
 		    error != 1053 /*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
@@ -119,7 +119,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 retry:
 	while (mysql_real_query(handle, query.c_str(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query << std::endl
-		          << "Message: " << mysql_error(handle) << std::endl;
+				  << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
 		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR &&
 		    error != 1053 /*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
@@ -133,7 +133,7 @@ retry:
 	MYSQL_RES* res = mysql_store_result(handle);
 	if (!res) {
 		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl
-		          << "Message: " << mysql_error(handle) << std::endl;
+				  << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
 		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR &&
 		    error != 1053 /*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
@@ -194,7 +194,7 @@ std::string_view DBResult::getString(std::string_view column) const
 	auto it = listNames.find(column);
 	if (it == listNames.end()) {
 		std::cout << "[Error - DBResult::getString] Column '" << column << "' does not exist in result set."
-		          << std::endl;
+				  << std::endl;
 		return {};
 	}
 

@@ -83,9 +83,9 @@ bool Mailbox::sendItem(Item* item) const
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
 		if (g_game.internalMoveItem(
-		        item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
-		        FLAG_NOLIMIT
-		    ) == RETURNVALUE_NOERROR) {
+				item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+				FLAG_NOLIMIT
+			) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
 			return true;
@@ -97,9 +97,9 @@ bool Mailbox::sendItem(Item* item) const
 		}
 
 		if (g_game.internalMoveItem(
-		        item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
-		        FLAG_NOLIMIT
-		    ) == RETURNVALUE_NOERROR) {
+				item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+				FLAG_NOLIMIT
+			) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			IOLoginData::savePlayer(&tmpPlayer);
 			return true;

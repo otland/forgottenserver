@@ -91,7 +91,7 @@ void ServicePort::accept()
 
 	auto connection = ConnectionManager::getInstance().createConnection(io_service, shared_from_this());
 	acceptor->async_accept(
-	    connection->getSocket(), [=, thisPtr = shared_from_this()](const boost::system::error_code& error
+		connection->getSocket(), [=, thisPtr = shared_from_this()](const boost::system::error_code& error
 	                             ) { thisPtr->onAccept(connection, error); }
 	);
 }
@@ -121,8 +121,8 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 			close();
 			pendingStart = true;
 			g_scheduler.addEvent(createSchedulerTask(
-			    15000, [serverPort = this->serverPort, service = std::weak_ptr<ServicePort>(shared_from_this())](
-			           ) { openAcceptor(service, serverPort); }
+				15000, [serverPort = this->serverPort, service = std::weak_ptr<ServicePort>(shared_from_this())](
+					   ) { openAcceptor(service, serverPort); }
 			));
 		}
 	}
@@ -163,7 +163,7 @@ void ServicePort::open(uint16_t port)
 				acceptor->set_option(ip::v6_only{false}, err);
 				if (err) {
 					std::cout << "[Warning - ServicePort::open] Enabling IPv4 support failed: " << err.message()
-					          << std::endl;
+							  << std::endl;
 				}
 			}
 		}
@@ -175,7 +175,7 @@ void ServicePort::open(uint16_t port)
 
 		pendingStart = true;
 		g_scheduler.addEvent(createSchedulerTask(
-		    15000, [port, service = std::weak_ptr<ServicePort>(shared_from_this())]() { openAcceptor(service, port); }
+			15000, [port, service = std::weak_ptr<ServicePort>(shared_from_this())]() { openAcceptor(service, port); }
 		));
 	}
 }

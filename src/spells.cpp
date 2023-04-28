@@ -121,7 +121,7 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = instants.emplace(instant->getWords(), std::move(*instant));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: "
-			          << instant->getWords() << std::endl;
+					  << instant->getWords() << std::endl;
 		}
 		return result.second;
 	}
@@ -131,7 +131,7 @@ bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
 		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: "
-			          << rune->getRuneItemId() << std::endl;
+					  << rune->getRuneItemId() << std::endl;
 		}
 		return result.second;
 	}
@@ -147,7 +147,7 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 		auto result = instants.emplace(instant->getWords(), std::move(*instant));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: "
-			          << words << std::endl;
+					  << words << std::endl;
 		}
 		return result.second;
 	}
@@ -163,7 +163,7 @@ bool Spells::registerRuneLuaEvent(RuneSpell* event)
 		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerRuneLuaEvent] Duplicate registered rune with id: " << id
-			          << std::endl;
+					  << std::endl;
 		}
 		return result.second;
 	}
@@ -255,7 +255,7 @@ Position Spells::getCasterPosition(Creature* creature, Direction dir)
 }
 
 CombatSpell::CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection) :
-    Event(&g_spells->getScriptInterface()), combat(combat), needDirection(needDirection), needTarget(needTarget)
+	Event(&g_spells->getScriptInterface()), combat(combat), needDirection(needDirection), needTarget(needTarget)
 {}
 
 bool CombatSpell::loadScriptCombat()
@@ -354,10 +354,10 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	name = nameAttribute.as_string();
 
 	static const char* reservedList[] = {
-	    "melee",           "physical",       "poison",          "fire",           "energy",         "drown",
-	    "lifedrain",       "manadrain",      "healing",         "speed",          "outfit",         "invisible",
-	    "drunk",           "firefield",      "poisonfield",     "energyfield",    "firecondition",  "poisoncondition",
-	    "energycondition", "drowncondition", "freezecondition", "cursecondition", "dazzlecondition"};
+		"melee",           "physical",       "poison",          "fire",           "energy",         "drown",
+		"lifedrain",       "manadrain",      "healing",         "speed",          "outfit",         "invisible",
+		"drunk",           "firefield",      "poisonfield",     "energyfield",    "firecondition",  "poisoncondition",
+		"energycondition", "drowncondition", "freezecondition", "cursecondition", "dazzlecondition"};
 
 	// static size_t size = sizeof(reservedList) / sizeof(const char*);
 	// for (size_t i = 0; i < size; ++i) {
@@ -483,7 +483,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			blockingCreature = true;
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" << attr.as_string() << "\" does not exist."
-			          << std::endl;
+					  << std::endl;
 		}
 	}
 
@@ -733,21 +733,21 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 		if (!player->hasFlag(PlayerFlag_HasNoExhaustion)) {
 			if (cooldown > 0) {
 				Condition* condition = Condition::createCondition(
-				    CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
+					CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
 				);
 				player->addCondition(condition);
 			}
 
 			if (groupCooldown > 0) {
 				Condition* condition = Condition::createCondition(
-				    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
+					CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
 				);
 				player->addCondition(condition);
 			}
 
 			if (secondaryGroupCooldown > 0) {
 				Condition* condition = Condition::createCondition(
-				    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup
+					CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup
 				);
 				player->addCondition(condition);
 			}
@@ -852,22 +852,22 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 				if (!casterTargetOrDirection) {
 					if (cooldown > 0) {
 						Condition* condition = Condition::createCondition(
-						    CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
+							CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
 						);
 						player->addCondition(condition);
 					}
 
 					if (groupCooldown > 0) {
 						Condition* condition = Condition::createCondition(
-						    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
+							CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
 						);
 						player->addCondition(condition);
 					}
 
 					if (secondaryGroupCooldown > 0) {
 						Condition* condition = Condition::createCondition(
-						    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false,
-						    secondaryGroup
+							CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false,
+							secondaryGroup
 						);
 						player->addCondition(condition);
 					}
@@ -919,22 +919,22 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			if (ret != RETURNVALUE_NOERROR) {
 				if (cooldown > 0) {
 					Condition* condition = Condition::createCondition(
-					    CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
+						CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId
 					);
 					player->addCondition(condition);
 				}
 
 				if (groupCooldown > 0) {
 					Condition* condition = Condition::createCondition(
-					    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
+						CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group
 					);
 					player->addCondition(condition);
 				}
 
 				if (secondaryGroupCooldown > 0) {
 					Condition* condition = Condition::createCondition(
-					    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false,
-					    secondaryGroup
+						CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false,
+						secondaryGroup
 					);
 					player->addCondition(condition);
 				}
@@ -977,8 +977,8 @@ bool InstantSpell::canThrowSpell(const Creature* creature, const Creature* targe
 	if (fromPos.z != toPos.z ||
 	    (range == -1 &&
 	     !g_game.canThrowObjectTo(
-	         fromPos, toPos, checkLineOfSight, true, Map::maxClientViewportX - 1, Map::maxClientViewportY - 1
-	     )) ||
+			 fromPos, toPos, checkLineOfSight, true, Map::maxClientViewportX - 1, Map::maxClientViewportY - 1
+		 )) ||
 	    (range != -1 && !g_game.canThrowObjectTo(fromPos, toPos, checkLineOfSight, true, range, range))) {
 		return false;
 	}
@@ -1131,7 +1131,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 }
 
 bool RuneSpell::executeUse(
-    Player* player, Item* item, const Position&, Thing* target, const Position& toPosition, bool isHotkey
+	Player* player, Item* item, const Position&, Thing* target, const Position& toPosition, bool isHotkey
 )
 {
 	if (!playerRuneSpellCheck(player, toPosition)) {

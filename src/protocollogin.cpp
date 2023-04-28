@@ -27,7 +27,7 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 }
 
 void ProtocolLogin::getCharacterList(
-    const std::string& accountName, const std::string& password, const std::string& token, uint16_t version
+	const std::string& accountName, const std::string& password, const std::string& token, uint16_t version
 )
 {
 	Account account;
@@ -179,11 +179,11 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		}
 
 		disconnectClient(
-		    fmt::format(
-		        "Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		        formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason
-		    ),
-		    version
+			fmt::format(
+				"Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+				formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason
+			),
+			version
 		);
 		return;
 	}

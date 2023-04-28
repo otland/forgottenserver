@@ -36,7 +36,7 @@ void DatabaseTasks::threadMain()
 }
 
 void DatabaseTasks::
-    addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/, bool store /* = false*/)
+	addTask(std::string query, std::function<void(DBResult_ptr, bool)> callback /* = nullptr*/, bool store /* = false*/)
 {
 	bool signal = false;
 	taskLock.lock();

@@ -134,7 +134,7 @@ public:
 
 private:
 	bool parseMapDataAttributes(
-	    OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::filesystem::path& fileName
+		OTB::Loader& loader, const OTB::Node& mapNode, Map& map, const std::filesystem::path& fileName
 	);
 	bool parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map);
 	bool parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map);

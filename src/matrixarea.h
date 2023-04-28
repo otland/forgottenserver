@@ -27,7 +27,7 @@ public:
 
 private:
 	MatrixArea(Center center, uint32_t rows, uint32_t cols, Container&& arr) :
-	    arr{std::move(arr)}, center{std::move(center)}, rows{rows}, cols{cols}
+		arr{std::move(arr)}, center{std::move(center)}, rows{rows}, cols{cols}
 	{}
 
 	Container arr = {};

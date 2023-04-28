@@ -67,14 +67,14 @@ struct spellBlock_t
 	spellBlock_t(const spellBlock_t& other) = delete;
 	spellBlock_t& operator=(const spellBlock_t& other) = delete;
 	spellBlock_t(spellBlock_t&& other) :
-	    spell(other.spell),
-	    chance(other.chance),
-	    speed(other.speed),
-	    range(other.range),
-	    minCombatValue(other.minCombatValue),
-	    maxCombatValue(other.maxCombatValue),
-	    combatSpell(other.combatSpell),
-	    isMelee(other.isMelee)
+		spell(other.spell),
+		chance(other.chance),
+		speed(other.speed),
+		range(other.range),
+		minCombatValue(other.minCombatValue),
+		maxCombatValue(other.maxCombatValue),
+		combatSpell(other.combatSpell),
+		isMelee(other.isMelee)
 	{
 		other.spell = nullptr;
 	}
@@ -264,7 +264,7 @@ public:
 
 private:
 	ConditionDamage* getDamageCondition(
-	    ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval
+		ConditionType_t conditionType, int32_t maxDamage, int32_t minDamage, int32_t startDamage, uint32_t tickInterval
 	);
 	bool deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, const std::string& description = "");
 

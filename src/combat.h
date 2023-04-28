@@ -105,8 +105,8 @@ public:
 
 	static void doTargetCombat(Creature* caster, Creature* target, CombatDamage& damage, const CombatParams& params);
 	static void doAreaCombat(
-	    Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
-	    const CombatParams& params
+		Creature* caster, const Position& position, const AreaCombat* area, CombatDamage& damage,
+		const CombatParams& params
 	);
 
 	bool setCallback(CallBackParam_t key);
@@ -126,7 +126,7 @@ public:
 
 private:
 	static void combatTileEffects(
-	    const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params
+		const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params
 	);
 	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 

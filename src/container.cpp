@@ -18,7 +18,7 @@ extern Game g_game;
 Container::Container(uint16_t type) : Container(type, items[type].maxItems) {}
 
 Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
-    Item(type), maxSize(size), unlocked(unlocked), pagination(pagination)
+	Item(type), maxSize(size), unlocked(unlocked), pagination(pagination)
 {}
 
 Container::Container(Tile* tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
@@ -224,7 +224,7 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 ReturnValue
 Container::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /* = nullptr*/)
-    const
+	const
 {
 	bool childIsOwner = hasBitSet(FLAG_CHILDISOWNER, flags);
 	if (childIsOwner) {
@@ -313,7 +313,7 @@ Container::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t 
 }
 
 ReturnValue Container::queryMaxCount(
-    int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
+	int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount, uint32_t flags
 ) const
 {
 	const Item* item = thing.getItem();
@@ -365,7 +365,7 @@ ReturnValue Container::queryMaxCount(
 }
 
 ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* actor /*= nullptr */)
-    const
+	const
 {
 	int32_t index = getThingIndex(&thing);
 	if (index == -1) {

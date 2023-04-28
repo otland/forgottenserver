@@ -30,10 +30,10 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 	}
 
 	invitePlayer.sendTextMessage(
-	    MESSAGE_INFO_DESCR, fmt::format(
-	                            "{:s} invites you to {:s} private chat channel.", player.getName(),
-	                            player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"
-	                        )
+		MESSAGE_INFO_DESCR, fmt::format(
+								"{:s} invites you to {:s} private chat channel.", player.getName(),
+								player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"
+							)
 	);
 
 	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
@@ -294,7 +294,7 @@ bool Chat::load()
 					channel.onLeaveEvent = scriptInterface.getEvent("onLeave");
 				} else {
 					std::cout << "[Warning - Chat::load] Can not load script: " << scriptAttribute.as_string()
-					          << std::endl;
+							  << std::endl;
 				}
 			}
 
@@ -336,7 +336,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			Guild* guild = player.getGuild();
 			if (guild) {
 				auto ret =
-				    guildChannels.emplace(std::make_pair(guild->getId(), ChatChannel(channelId, guild->getName())));
+					guildChannels.emplace(std::make_pair(guild->getId(), ChatChannel(channelId, guild->getName())));
 				return &ret.first->second;
 			}
 			break;
@@ -360,7 +360,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 			// find a free private channel slot
 			for (uint16_t i = 100; i < 10000; ++i) {
 				auto ret =
-				    privateChannels.emplace(std::make_pair(i, PrivateChatChannel(i, player.getName() + "'s Channel")));
+					privateChannels.emplace(std::make_pair(i, PrivateChatChannel(i, player.getName() + "'s Channel")));
 				if (ret.second) { // second is a bool that indicates that a new channel has been placed in the map
 					auto& newChannel = (*ret.first).second;
 					newChannel.setOwner(player.getGUID());

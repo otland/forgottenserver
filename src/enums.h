@@ -568,9 +568,9 @@ struct ShopInfo
 
 	ShopInfo() = default;
 	ShopInfo(
-	    uint16_t itemId, int32_t subType = 0, int64_t buyPrice = 0, int64_t sellPrice = 0, std::string realName = ""
+		uint16_t itemId, int32_t subType = 0, int64_t buyPrice = 0, int64_t sellPrice = 0, std::string realName = ""
 	) :
-	    itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName))
+		itemId(itemId), subType(subType), buyPrice(buyPrice), sellPrice(sellPrice), realName(std::move(realName))
 	{}
 };
 
@@ -588,15 +588,15 @@ struct MarketOfferEx
 {
 	MarketOfferEx() = default;
 	MarketOfferEx(MarketOfferEx&& other) :
-	    id(other.id),
-	    playerId(other.playerId),
-	    timestamp(other.timestamp),
-	    price(other.price),
-	    amount(other.amount),
-	    counter(other.counter),
-	    itemId(other.itemId),
-	    type(other.type),
-	    playerName(std::move(other.playerName))
+		id(other.id),
+		playerId(other.playerId),
+		timestamp(other.timestamp),
+		price(other.price),
+		amount(other.amount),
+		counter(other.counter),
+		itemId(other.itemId),
+		type(other.type),
+		playerName(std::move(other.playerName))
 	{}
 
 	uint32_t id;
@@ -636,7 +636,7 @@ struct ModalWindow
 	bool priority = false;
 
 	ModalWindow(uint32_t id, std::string title, std::string message) :
-	    title(std::move(title)), message(std::move(message)), id(id)
+		title(std::move(title)), message(std::move(message)), id(id)
 	{}
 };
 
