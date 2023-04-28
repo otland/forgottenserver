@@ -1,7 +1,7 @@
 local deathListEnabled = true
 local maxDeathRecords = 5
 
-local function getKiller()
+local function getKiller(killer)
 	if not killer then
 		return false, "field item"
 	end
