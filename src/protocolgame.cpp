@@ -886,9 +886,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 	}
 }
 
-void ProtocolGame::GetMapDescription(
-	int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg
-)
+void ProtocolGame::GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg)
 {
 	int32_t skip = -1;
 	int32_t startz, endz, zstep;

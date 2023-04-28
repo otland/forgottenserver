@@ -408,9 +408,7 @@ public:
 	);
 	void playerTurn(uint32_t playerId, Direction dir);
 	void playerRequestOutfit(uint32_t playerId);
-	void playerRequestEditPodium(
-		uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId
-	);
+	void playerRequestEditPodium(uint32_t playerId, const Position& position, uint8_t stackPos, const uint16_t spriteId);
 	void playerEditPodium(
 		uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos, const uint16_t spriteId,
 		bool podiumVisible, Direction direction

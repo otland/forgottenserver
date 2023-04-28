@@ -314,9 +314,7 @@ private:
 	);
 
 	void MoveUpCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
-	void MoveDownCreature(
-		NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos
-	);
+	void MoveDownCreature(NetworkMessage& msg, const Creature* creature, const Position& newPos, const Position& oldPos);
 
 	// shop
 	void AddShopItem(NetworkMessage& msg, const ShopInfo& item);

@@ -3449,9 +3449,7 @@ void LuaScriptInterface::registerTable(const std::string& tableName)
 	lua_setglobal(luaState, tableName.c_str());
 }
 
-void LuaScriptInterface::registerMethod(
-	const std::string& globalName, const std::string& methodName, lua_CFunction func
-)
+void LuaScriptInterface::registerMethod(const std::string& globalName, const std::string& methodName, lua_CFunction func)
 {
 	// globalName.methodName = func
 	lua_getglobal(luaState, globalName.c_str());

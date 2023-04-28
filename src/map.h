@@ -196,9 +196,7 @@ public:
 	 * tiles away \param forceLogin If true, placing the creature will not fail
 	 * because of obstacles (creatures/chests)
 	 */
-	bool placeCreature(
-		const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false
-	);
+	bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false, bool forceLogin = false);
 
 	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
 

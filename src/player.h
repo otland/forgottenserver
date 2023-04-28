@@ -958,8 +958,7 @@ public:
 			client->sendMarketLeave();
 		}
 	}
-	void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers)
-		const
+	void sendMarketBrowseItem(uint16_t itemId, const MarketOfferList& buyOffers, const MarketOfferList& sellOffers) const
 	{
 		if (client) {
 			client->sendMarketBrowseItem(itemId, buyOffers, sellOffers);
