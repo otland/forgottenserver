@@ -28,7 +28,7 @@ jobs:
     strategy:
       matrix:
         name: [ubuntu, ubuntu-clang, macos-clang, windows-msvc]
-        buildtype: [Debug, Release]
+        buildtype: [default, debug, release]
         luajit: [on, off]
         include:
           - name: ubuntu
@@ -40,8 +40,6 @@ jobs:
           - name: windows-msvc
             os: windows
         exclude:
-          - name: ubuntu-clang
-            buildtype: Release
           - name: ubuntu-clang
             luajit: off
           - name: macos-clang
@@ -74,8 +72,8 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ninja-vcpkg
-          configurePreset: ninja-vcpkg
+          buildPreset: vcpkg-${{ matrix.buildtype }}
+          configurePreset: vcpkg
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3

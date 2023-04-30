@@ -1,50 +1,65 @@
 {
-  "version": 2,
+  "version": 3,
   "cmakeMinimumRequired": {
     "major": 3,
-    "minor": 20,
-    "patch": 2
+    "minor": 22,
+    "patch": 1
   },
   "configurePresets": [
     {
-      "name": "ninja",
-      "displayName": "Ninja",
+      "name": "default",
       "description": "Generate Ninja project files",
-      "binaryDir": "${sourceDir}/build",
-      "generator": "Ninja"
+      "binaryDir": "${sourceDir}/build"
     },
     {
-      "name": "ninja-vcpkg",
-      "displayName": "Ninja",
+      "name": "vcpkg",
+      "inherits": [
+        "default"
+      ],
       "description": "Configure with vcpkg toolchain and generate Ninja project files",
-      "binaryDir": "${sourceDir}/build",
-      "generator": "Ninja",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-        }
-      }
+      "toolchainFile": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
     }
   ],
   "buildPresets": [
     {
-      "name": "ninja",
-      "configurePreset": "ninja"
+      "name": "default",
+      "configurePreset": "default",
+      "configuration": "RelWithDebInfo"
     },
     {
-      "name": "ninja-vcpkg",
-      "configurePreset": "ninja-vcpkg"
+      "name": "vcpkg-default",
+      "configurePreset": "vcpkg",
+      "configuration": "RelWithDebInfo"
+    },
+    {
+      "name": "debug",
+      "configurePreset": "default",
+      "configuration": "Debug"
+    },
+    {
+      "name": "vcpkg-debug",
+      "configurePreset": "vcpkg",
+      "configuration": "Debug"
+    },
+    {
+      "name": "release",
+      "configurePreset": "default",
+      "configuration": "Release"
+    },
+    {
+      "name": "vcpkg-release",
+      "configurePreset": "vcpkg",
+      "configuration": "Release"
     }
   ],
   "testPresets": [
     {
-      "name": "ninja",
-      "configurePreset": "ninja"
+      "name": "default",
+      "configurePreset": "default"
     },
     {
-      "name": "ninja-vcpkg",
-      "configurePreset": "ninja-vcpkg"
+      "name": "vcpkg",
+      "configurePreset": "vcpkg"
     }
   ]
 }
