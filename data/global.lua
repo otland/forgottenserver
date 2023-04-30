@@ -112,6 +112,15 @@ table.contains = function(array, value)
 	return false
 end
 
+table.indexOf = function(array, value)
+	for i, targetColumn in pairs(array) do
+		if targetColumn == value then
+			return i
+		end
+	end
+	return nil
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do

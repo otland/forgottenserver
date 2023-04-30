@@ -22,6 +22,11 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
+	local trackedBestiary = player:getTrackedBestiary(true)
+	if #trackedBestiary > 0 then
+		player:sendBestiaryTracker()
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
