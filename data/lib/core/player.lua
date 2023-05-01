@@ -553,8 +553,7 @@ function Player.updateClientXpGainRate(self)
 	-- low level bonus
 	-- TODO: The bonus system for low level is not written.
 	local level = self:getLevel()
-	if level > 1 and level <= 50 then
-		self:setGrindingXpBoost(50)
-	end
+	local levelBonus = (level > 1 and level <= 50) and 50 or 0
+	self:setGrindingXpBoost(levelBonus)
 	return true
 end
