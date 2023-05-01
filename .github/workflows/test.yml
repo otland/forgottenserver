@@ -29,5 +29,5 @@ jobs:
         with:
           buildPreset: default
           configurePreset: default
-          configurePresetAdditionalArgs: "['-DENABLE_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-G Ninja', '-DENABLE_TESTING=ON']"
           testPreset: default

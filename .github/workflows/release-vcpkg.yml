@@ -32,8 +32,9 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config Release']"
+          buildPresetAdditionalArgs: "['--config Release', '--clean-first']"
           configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-G Ninja']"
 
       - name: Prepare datapack contents
         run: |
