@@ -281,7 +281,7 @@ function Player:onGainExperience(source, exp, rawExp)
 	end
 
 	-- Update client xp gain rate
-	self:setClientXpGainRate()
+	self:updateClientXpGainRate()
 
 	local onGainExperience = EventCallback.onGainExperience
 	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp

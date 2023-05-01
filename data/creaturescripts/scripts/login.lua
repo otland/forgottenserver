@@ -22,8 +22,8 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
-	-- Set client xp gain rate
-	player:setClientXpGainRate()
+	-- Update client xp gain rate
+	player:updateClientXpGainRate()
 
 	-- Events
 	player:registerEvent("PlayerDeath")
