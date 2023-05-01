@@ -16,9 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: leafo/gh-actions-lua@v8.0.0
+      - uses: leafo/gh-actions-lua@v10
         with:
-           luaVersion: "5.3.5"
+           luaVersion: "5.4"
 
       - name: Test Lua syntax
         run: find data/ -name '*.lua' -print0 | xargs -0 -n1 luac -p
