@@ -1110,19 +1110,22 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
-	uint16_t getBaseXpGain() const { return baseXpGain; }
-	void setBaseXpGain(uint16_t value) { baseXpGain = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value); }
-
-	uint16_t getStaminaXpBoost() const { return staminaXpBoost; }
-	void setStaminaXpBoost(uint16_t value)
+	uint16_t getBaseExpGain() const { return baseExpGain; }
+	void setBaseExpGain(uint16_t value)
 	{
-		staminaXpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+		baseExpGain = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
 	}
 
-	uint16_t getGrindingXpBoost() const { return grindingXpBoost; }
-	void setGrindingXpBoost(uint16_t value)
+	uint16_t getStaminaExpBoost() const { return staminaExpBoost; }
+	void setStaminaExpBoost(uint16_t value)
 	{
-		grindingXpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+		staminaExpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+	}
+
+	uint16_t getGrindingExpBoost() const { return grindingExpBoost; }
+	void setGrindingExpBoost(uint16_t value)
+	{
+		grindingExpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
 	}
 
 private:
@@ -1270,9 +1273,9 @@ private:
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;
 	uint16_t maxWriteLen = 0;
-	uint16_t baseXpGain = 100;
-	uint16_t staminaXpBoost = 100;
-	uint16_t grindingXpBoost = 0;
+	uint16_t baseExpGain = 100;
+	uint16_t staminaExpBoost = 100;
+	uint16_t grindingExpBoost = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;

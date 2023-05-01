@@ -543,17 +543,17 @@ function Player.updateClientExpGainRate(self)
 		xpGainRate = 100
 	end
 
-	self:setBaseXpGain(xpGainRate)
+	self:setBaseExpGain(xpGainRate)
 
 	-- Stamina display
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = (staminaMinutes > 2340) and 150 or ((staminaMinutes < 840) and 50 or 100)
-	self:setStaminaXpBoost(staminaBonus)
+	self:setStaminaExpBoost(staminaBonus)
 
 	-- low level bonus
 	-- TODO: The bonus system for low level is not written.
 	local level = self:getLevel()
 	local levelBonus = (level > 1 and level <= 50) and 50 or 0
-	self:setGrindingXpBoost(levelBonus)
+	self:setGrindingExpBoost(levelBonus)
 	return true
 end

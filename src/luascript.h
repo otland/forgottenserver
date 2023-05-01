@@ -1027,14 +1027,14 @@ private:
 
 	static int luaPlayerSendCreatureSquare(lua_State* L);
 
-	static int luaPlayerGetBaseXpGain(lua_State* L);
-	static int luaPlayerSetBaseXpGain(lua_State* L);
+	static int luaPlayerGetBaseExpGain(lua_State* L);
+	static int luaPlayerSetBaseExpGain(lua_State* L);
 
-	static int luaPlayerGetStaminaXpBoost(lua_State* L);
-	static int luaPlayerSetStaminaXpBoost(lua_State* L);
+	static int luaPlayerGetStaminaExpBoost(lua_State* L);
+	static int luaPlayerSetStaminaExpBoost(lua_State* L);
 
-	static int luaPlayerGetGrindingXpBoost(lua_State* L);
-	static int luaPlayerSetGrindingXpBoost(lua_State* L);
+	static int luaPlayerGetGrindingExpBoost(lua_State* L);
+	static int luaPlayerSetGrindingExpBoost(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

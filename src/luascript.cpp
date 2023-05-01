@@ -2749,14 +2749,14 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
 
-	registerMethod("Player", "getBaseXpGain", LuaScriptInterface::luaPlayerGetBaseXpGain);
-	registerMethod("Player", "setBaseXpGain", LuaScriptInterface::luaPlayerSetBaseXpGain);
+	registerMethod("Player", "getBaseExpGain", LuaScriptInterface::luaPlayerGetBaseExpGain);
+	registerMethod("Player", "setBaseExpGain", LuaScriptInterface::luaPlayerSetBaseExpGain);
 
-	registerMethod("Player", "getStaminaXpBoost", LuaScriptInterface::luaPlayerGetStaminaXpBoost);
-	registerMethod("Player", "setStaminaXpBoost", LuaScriptInterface::luaPlayerSetStaminaXpBoost);
+	registerMethod("Player", "getStaminaExpBoost", LuaScriptInterface::luaPlayerGetStaminaExpBoost);
+	registerMethod("Player", "setStaminaExpBoost", LuaScriptInterface::luaPlayerSetStaminaExpBoost);
 
-	registerMethod("Player", "getGrindingXpBoost", LuaScriptInterface::luaPlayerGetGrindingXpBoost);
-	registerMethod("Player", "setGrindingXpBoost", LuaScriptInterface::luaPlayerSetGrindingXpBoost);
+	registerMethod("Player", "getGrindingExpBoost", LuaScriptInterface::luaPlayerGetGrindingExpBoost);
+	registerMethod("Player", "setGrindingExpBoost", LuaScriptInterface::luaPlayerSetGrindingExpBoost);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10953,24 +10953,24 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetBaseXpGain(lua_State* L)
+int LuaScriptInterface::luaPlayerGetBaseExpGain(lua_State* L)
 {
-	// player:getBaseXpGain()
+	// player:getBaseExpGain()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getBaseXpGain());
+		lua_pushnumber(L, player->getBaseExpGain());
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerSetBaseXpGain(lua_State* L)
+int LuaScriptInterface::luaPlayerSetBaseExpGain(lua_State* L)
 {
-	// player:setBaseXpGain(value)
+	// player:setBaseExpGain(value)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setBaseXpGain(getNumber<uint16_t>(L, 2));
+		player->setBaseExpGain(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
@@ -10979,24 +10979,24 @@ int LuaScriptInterface::luaPlayerSetBaseXpGain(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetStaminaXpBoost(lua_State* L)
+int LuaScriptInterface::luaPlayerGetStaminaExpBoost(lua_State* L)
 {
-	// player:getStaminaXpBoost()
+	// player:getStaminaExpBoost()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getStaminaXpBoost());
+		lua_pushnumber(L, player->getStaminaExpBoost());
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerSetStaminaXpBoost(lua_State* L)
+int LuaScriptInterface::luaPlayerSetStaminaExpBoost(lua_State* L)
 {
-	// player:setStaminaXpBoost(value)
+	// player:setStaminaExpBoost(value)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setStaminaXpBoost(getNumber<uint16_t>(L, 2));
+		player->setStaminaExpBoost(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
@@ -11005,24 +11005,24 @@ int LuaScriptInterface::luaPlayerSetStaminaXpBoost(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetGrindingXpBoost(lua_State* L)
+int LuaScriptInterface::luaPlayerGetGrindingExpBoost(lua_State* L)
 {
-	// player:getGrindingXpBoost()
+	// player:getGrindingExpBoost()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getGrindingXpBoost());
+		lua_pushnumber(L, player->getGrindingExpBoost());
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerSetGrindingXpBoost(lua_State* L)
+int LuaScriptInterface::luaPlayerSetGrindingExpBoost(lua_State* L)
 {
-	// player:setGrindingXpBoost(value)
+	// player:setGrindingExpBoost(value)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setGrindingXpBoost(getNumber<uint16_t>(L, 2));
+		player->setGrindingExpBoost(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
