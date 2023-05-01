@@ -1030,6 +1030,9 @@ private:
 	static int luaPlayerGetBaseXpGain(lua_State* L);
 	static int luaPlayerSetBaseXpGain(lua_State* L);
 
+	static int luaPlayerGetStaminaXpBoost(lua_State* L);
+	static int luaPlayerSetStaminaXpBoost(lua_State* L);
+
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
 

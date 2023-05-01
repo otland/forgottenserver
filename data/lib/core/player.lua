@@ -543,5 +543,9 @@ function Player.updateClientXpGainRate(self)
 	end
 
 	self:setBaseXpGain(xpGainRate)
+
+	local staminaMinutes = self:getStamina()
+	local staminaBonus = (staminaMinutes > 2340) and 150 or ((staminaMinutes < 840) and 50 or 100)
+	self:setStaminaXpBoost(staminaBonus)
 	return true
 end
