@@ -536,6 +536,7 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 end
 
 function Player.updateClientXpGainRate(self)
+	-- Experience display
 	if configManager.getBoolean(configKeys.XP_DISPLAY_MODE) then
 		xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
 	else
@@ -544,8 +545,16 @@ function Player.updateClientXpGainRate(self)
 
 	self:setBaseXpGain(xpGainRate)
 
+	-- Stamina display
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = (staminaMinutes > 2340) and 150 or ((staminaMinutes < 840) and 50 or 100)
 	self:setStaminaXpBoost(staminaBonus)
+
+	-- low level bonus
+	-- TODO: The bonus system for low level is not written.
+	local level = self:getLevel()
+	if level > 1 and level <= 50 then
+		self:setGrindingXpBoost(50)
+	end
 	return true
 end

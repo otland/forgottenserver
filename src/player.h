@@ -1119,6 +1119,12 @@ public:
 		staminaXpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
 	}
 
+	uint16_t getGrindingXpBoost() const { return grindingXpBoost; }
+	void setGrindingXpBoost(uint16_t value)
+	{
+		grindingXpBoost = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+	}
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1266,6 +1272,7 @@ private:
 	uint16_t maxWriteLen = 0;
 	uint16_t baseXpGain = 100;
 	uint16_t staminaXpBoost = 100;
+	uint16_t grindingXpBoost = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
