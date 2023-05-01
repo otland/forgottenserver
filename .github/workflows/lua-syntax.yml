@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: leafo/gh-actions-lua@v10.0.0
+      - uses: leafo/gh-actions-lua@v10
         with:
            luaVersion: "5.4"
 
