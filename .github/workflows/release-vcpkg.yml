@@ -31,8 +31,9 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ninja-vcpkg
-          configurePreset: ninja-vcpkg
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config Release']"
+          configurePreset: vcpkg
 
       - name: Prepare datapack contents
         run: |

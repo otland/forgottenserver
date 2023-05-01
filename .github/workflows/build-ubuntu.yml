@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        buildtype: [default, debug, release]
+        buildtype: [Debug, Release]
         luajit: [on, off]
 
     steps:
@@ -45,7 +45,8 @@ jobs:
       - name: Build with cmake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ${{ matrix.buildtype }}
+          buildPreset: default
+          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
           configurePreset: default
 
       - name: Upload artifact binary

@@ -9,7 +9,7 @@
     {
       "name": "default",
       "description": "Generate Ninja project files",
-      "binaryDir": "${sourceDir}/build"
+      "binaryDir": "${sourceDir}/builds/${presetName}"
     },
     {
       "name": "vcpkg",
@@ -23,33 +23,11 @@
   "buildPresets": [
     {
       "name": "default",
-      "configurePreset": "default",
-      "configuration": "RelWithDebInfo"
+      "configurePreset": "default"
     },
     {
-      "name": "vcpkg-default",
-      "configurePreset": "vcpkg",
-      "configuration": "RelWithDebInfo"
-    },
-    {
-      "name": "debug",
-      "configurePreset": "default",
-      "configuration": "Debug"
-    },
-    {
-      "name": "vcpkg-debug",
-      "configurePreset": "vcpkg",
-      "configuration": "Debug"
-    },
-    {
-      "name": "release",
-      "configurePreset": "default",
-      "configuration": "Release"
-    },
-    {
-      "name": "vcpkg-release",
-      "configurePreset": "vcpkg",
-      "configuration": "Release"
+      "name": "vcpkg",
+      "configurePreset": "vcpkg"
     }
   ],
   "testPresets": [
