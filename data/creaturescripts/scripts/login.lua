@@ -22,12 +22,8 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
-	-- Set Client XP Gain Rate
-	if configManager.getBoolean(configKeys.XP_DISPLAY_MODE) then
-		player:setBaseXpGain(100 * Game.getExperienceStage(player:getLevel()))
-	else
-		player:setBaseXpGain(100)
-	end
+	-- Set client xp gain rate
+	player:setClientXpGainRate()
 
 	-- Events
 	player:registerEvent("PlayerDeath")

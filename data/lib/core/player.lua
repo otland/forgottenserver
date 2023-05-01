@@ -534,3 +534,14 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	msg:delete()
 	return true
 end
+
+function Player.setClientXpGainRate(self)
+	if configManager.getBoolean(configKeys.XP_DISPLAY_MODE) then
+		xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	else
+		xpGainRate = 100
+	end
+
+	self:setBaseXpGain(xpGainRate)
+	return true
+end
