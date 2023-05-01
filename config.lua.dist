@@ -81,6 +81,7 @@ mysqlSock = ""
 -- NOTE: forceMonsterTypesOnLoad loads all monster types on startup to validate them.
 -- You can disable it to save some memory if you don't see any errors at startup.
 -- checkDuplicateStorageKeys checks the values stored in the variables for duplicates.
+-- experienceDisplayRates: set to false to ignore exp rate or true to include exp rate.
 allowChangeOutfit = true
 freePremium = false
 kickIdlePlayerAfterMinutes = 15
@@ -98,6 +99,7 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 showPlayerLogInConsole = true
 checkDuplicateStorageKeys = false
+experienceDisplayRates = true
 
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
