@@ -4,7 +4,7 @@
     {
       "name": "default",
       "description": "Generate Ninja project files",
-      "binaryDir": "${sourceDir}/builds/${presetName}"
+      "binaryDir": "${sourceDir}/build"
     },
     {
       "name": "vcpkg",
