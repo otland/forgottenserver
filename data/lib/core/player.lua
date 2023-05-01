@@ -535,7 +535,7 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	return true
 end
 
-function Player.updateClientXpGainRate(self)
+function Player.updateClientExpGainRate(self)
 	-- Experience display
 	if configManager.getBoolean(configKeys.XP_DISPLAY_MODE) then
 		xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
