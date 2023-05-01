@@ -2748,6 +2748,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
 
+	registerMethod("Player", "getBaseXpGain", LuaScriptInterface::luaPlayerGetBaseXpGain);
+	registerMethod("Player", "setBaseXpGain", LuaScriptInterface::luaPlayerSetBaseXpGain);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10940,6 +10943,32 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 
 	player->sendCreatureSquare(creature, getNumber<SquareColor_t>(L, 3));
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetBaseXpGain(lua_State* L)
+{
+	// player:getBaseXpGain()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getBaseXpGain());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetBaseXpGain(lua_State* L)
+{
+	// player:setBaseXpGain(value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setBaseXpGain(getNumber<uint16_t>(L, 2));
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 

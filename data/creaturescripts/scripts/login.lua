@@ -22,6 +22,9 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
+	-- Set Client XP Gain Rate
+	player:setBaseXpGain(100 * Game.getExperienceStage(player:getLevel()))
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
