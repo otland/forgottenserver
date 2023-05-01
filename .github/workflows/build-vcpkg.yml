@@ -73,7 +73,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
+          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '--clean-first']"
           configurePreset: vcpkg
 
       - name: Upload artifact binary
