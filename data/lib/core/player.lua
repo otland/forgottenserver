@@ -536,23 +536,17 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 end
 
 function Player.updateClientExpGainRate(self)
-	-- Experience display
-	local xpGainRate = 0
-	if configManager.getBoolean(configKeys.EXP_DISPLAY_MODE) then
-		xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
-	else
-		xpGainRate = 100
-	end
-
+	-- Experience bonus (includes server rates)
+	local xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
 	self:setBaseExpGain(xpGainRate)
 
-	-- Stamina display
+	-- Stamina bonus
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = (staminaMinutes > 2340) and 150 or ((staminaMinutes < 840) and 50 or 100)
 	self:setStaminaExpBoost(staminaBonus)
 
-	-- low level bonus
-	-- TODO: The bonus system for low level is not written.
+	-- Low level grinding bonus
+	-- TODO: Implement bonus system for low levels
 	local level = self:getLevel()
 	local levelBonus = (level > 1 and level <= 50) and 50 or 0
 	self:setGrindingExpBoost(levelBonus)
