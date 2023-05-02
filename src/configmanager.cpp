@@ -92,7 +92,7 @@ ExperienceStages loadLuaStages(lua_State* L)
 		const auto tableIndex = lua_gettop(L);
 		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel", 1);
 		auto maxLevel =
-		    LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
+			LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
 		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier", 1);
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
@@ -283,8 +283,8 @@ bool ConfigManager::load()
 		expStages = loadLuaStages(L);
 	} else {
 		std::cout << "[Warning - ConfigManager::load] XML stages are deprecated, "
-		             "consider moving to config.lua."
-		          << std::endl;
+					 "consider moving to config.lua."
+				  << std::endl;
 	}
 	expStages.shrink_to_fit();
 

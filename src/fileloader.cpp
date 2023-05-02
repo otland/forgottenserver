@@ -98,10 +98,10 @@ bool Loader::getProps(const Node& node, PropStream& props)
 	bool lastEscaped = false;
 
 	auto escapedPropEnd =
-	    std::copy_if(node.propsBegin, node.propsEnd, propBuffer.begin(), [&lastEscaped](const char& byte) {
-		    lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
-		    return !lastEscaped;
-	    });
+		std::copy_if(node.propsBegin, node.propsEnd, propBuffer.begin(), [&lastEscaped](const char& byte) {
+			lastEscaped = byte == static_cast<char>(Node::ESCAPE) && !lastEscaped;
+			return !lastEscaped;
+		});
 	props.init(&propBuffer[0], std::distance(propBuffer.begin(), escapedPropEnd));
 	return true;
 }

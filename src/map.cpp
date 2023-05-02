@@ -183,8 +183,9 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	}
 }
 
-bool Map::placeCreature(const Position& centerPos, Creature* creature, bool extendedPos /* = false*/,
-                        bool forceLogin /* = false*/)
+bool Map::placeCreature(
+	const Position& centerPos, Creature* creature, bool extendedPos /* = false*/, bool forceLogin /* = false*/
+)
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -201,7 +202,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 
 	if (!foundTile) {
 		static std::vector<std::pair<int32_t, int32_t>> extendedRelList{
-		    {0, -2}, {2, 0}, {0, 2}, {-2, 0}, {-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+			{0, -2}, {2, 0}, {0, 2}, {-2, 0}, {-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 		static std::vector<std::pair<int32_t, int32_t>> normalRelList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0},
 		                                                              {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
@@ -309,8 +310,10 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
-				tmpPlayer->sendCreatureMove(&creature, newPos, newTile.getClientIndexOfCreature(tmpPlayer, &creature),
-				                            oldPos, stackpos, teleport);
+				tmpPlayer->sendCreatureMove(
+					&creature, newPos, newTile.getClientIndexOfCreature(tmpPlayer, &creature), oldPos, stackpos,
+					teleport
+				);
 			}
 		}
 	}
@@ -324,9 +327,10 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
-void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
-                                int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
-                                int32_t maxRangeZ, bool onlyPlayers) const
+void Map::getSpectatorsInternal(
+	SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX, int32_t minRangeY,
+	int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ, bool onlyPlayers
+) const
 {
 	auto min_y = centerPos.y + minRangeY;
 	auto min_x = centerPos.x + minRangeX;
@@ -347,7 +351,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 	int32_t endy2 = y2 - (y2 % FLOOR_SIZE);
 
 	const QTreeLeafNode* startLeaf =
-	    QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, startx1, starty1);
+		QTreeNode::getLeafStatic<const QTreeLeafNode*, const QTreeNode*>(&root, startx1, starty1);
 	const QTreeLeafNode* leafS = startLeaf;
 	const QTreeLeafNode* leafE;
 
@@ -384,9 +388,10 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 	}
 }
 
-void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor /*= false*/,
-                        bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/,
-                        int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
+void Map::getSpectators(
+	SpectatorVec& spectators, const Position& centerPos, bool multifloor /*= false*/, bool onlyPlayers /*= false*/,
+	int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/, int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/
+)
 {
 	if (centerPos.z >= MAP_MAX_LAYERS) {
 		return;
@@ -465,8 +470,9 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			maxRangeZ = centerPos.z;
 		}
 
-		getSpectatorsInternal(spectators, centerPos, minRangeX, maxRangeX, minRangeY, maxRangeY, minRangeZ, maxRangeZ,
-		                      onlyPlayers);
+		getSpectatorsInternal(
+			spectators, centerPos, minRangeX, maxRangeX, minRangeY, maxRangeY, minRangeZ, maxRangeZ, onlyPlayers
+		);
 
 		if (cacheResult) {
 			if (onlyPlayers) {
@@ -482,9 +488,10 @@ void Map::clearSpectatorCache() { spectatorCache.clear(); }
 
 void Map::clearPlayersSpectatorCache() { playersSpectatorCache.clear(); }
 
-bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-                           bool sameFloor /*= false*/, int32_t rangex /*= Map::maxClientViewportX*/,
-                           int32_t rangey /*= Map::maxClientViewportY*/) const
+bool Map::canThrowObjectTo(
+	const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/, bool sameFloor /*= false*/,
+	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/
+) const
 {
 	if (Position::getDistanceX(fromPos, toPos) > rangex || Position::getDistanceY(fromPos, toPos) > rangey) {
 		return false;
@@ -652,8 +659,10 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
-                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(
+	const Creature& creature, std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
+	const FindPathParams& fpp
+) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -663,10 +672,10 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 	int32_t bestMatch = 0;
 
 	static int_fast32_t dirNeighbors[8][5][2] = {
-	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
+		{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
+		{{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
+		{{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
+		{{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
 	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	const Position startPos = pos;
@@ -1062,6 +1071,6 @@ uint32_t Map::clean() const
 	}
 
 	std::cout << "> CLEAN: Removed " << count << " item" << (count != 1 ? "s" : "") << " from " << tiles << " tile"
-	          << (tiles != 1 ? "s" : "") << " in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
+			  << (tiles != 1 ? "s" : "") << " in " << (OTSYS_TIME() - start) / (1000.) << " seconds." << std::endl;
 	return count;
 }

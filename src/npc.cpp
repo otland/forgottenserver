@@ -40,7 +40,7 @@ Npc* Npc::createNpc(const std::string& name)
 }
 
 Npc::Npc(const std::string& name) :
-    Creature(), filename("data/npc/" + name + ".xml"), npcEventHandler(nullptr), masterRadius(-1), loaded(false)
+	Creature(), filename("data/npc/" + name + ".xml"), npcEventHandler(nullptr), masterRadius(-1), loaded(false)
 {
 	reset();
 }
@@ -179,7 +179,7 @@ bool Npc::loadFromXml()
 		if (health > healthMax) {
 			health = healthMax;
 			std::cout << "[Warning - Npc::loadFromXml] Health now is greater than health max in " << filename
-			          << std::endl;
+					  << std::endl;
 		}
 	}
 
@@ -284,8 +284,10 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 	}
 }
 
-void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
-                         const Position& oldPos, bool teleport)
+void Npc::onCreatureMove(
+	Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile, const Position& oldPos,
+	bool teleport
+)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
@@ -354,8 +356,10 @@ void Npc::doSayToPlayer(Player* player, const std::string& text)
 	}
 }
 
-void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount,
-                        bool ignore /* = false*/, bool inBackpacks /* = false*/)
+void Npc::onPlayerTrade(
+	Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount, bool ignore /* = false*/,
+	bool inBackpacks /* = false*/
+)
 {
 	if (npcEventHandler) {
 		npcEventHandler->onPlayerTrade(player, callback, itemId, count, amount, ignore, inBackpacks);
@@ -477,8 +481,10 @@ bool Npc::getRandomStep(Direction& dir) const
 	return true;
 }
 
-bool Npc::doMoveTo(const Position& pos, int32_t minTargetDist /* = 1*/, int32_t maxTargetDist /* = 1*/,
-                   bool fullPathSearch /* = true*/, bool clearSight /* = true*/, int32_t maxSearchDist /* = 0*/)
+bool Npc::doMoveTo(
+	const Position& pos, int32_t minTargetDist /* = 1*/, int32_t maxTargetDist /* = 1*/,
+	bool fullPathSearch /* = true*/, bool clearSight /* = true*/, int32_t maxSearchDist /* = 0*/
+)
 {
 	listWalkDir.clear();
 	if (getPathTo(pos, listWalkDir, minTargetDist, maxTargetDist, fullPathSearch, clearSight, maxSearchDist)) {
@@ -664,9 +670,13 @@ int NpcScriptInterface::luaActionMoveTo(lua_State* L)
 		argsStart = 4;
 	}
 
-	pushBoolean(L, npc->doMoveTo(position, getNumber<int32_t>(L, argsStart, 1), getNumber<int32_t>(L, argsStart + 1, 1),
-	                             getBoolean(L, argsStart + 2, true), getBoolean(L, argsStart + 3, true),
-	                             getNumber<int32_t>(L, argsStart + 4, 0)));
+	pushBoolean(
+		L, npc->doMoveTo(
+			   position, getNumber<int32_t>(L, argsStart, 1), getNumber<int32_t>(L, argsStart + 1, 1),
+			   getBoolean(L, argsStart + 2, true), getBoolean(L, argsStart + 3, true),
+			   getNumber<int32_t>(L, argsStart + 4, 0)
+		   )
+	);
 	return 1;
 }
 
@@ -720,7 +730,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 		lua_pushnumber(L, -1);
 	} else {
 		int32_t dist =
-		    std::max<int32_t>(Position::getDistanceX(npcPos, thingPos), Position::getDistanceY(npcPos, thingPos));
+			std::max<int32_t>(Position::getDistanceX(npcPos, thingPos), Position::getDistanceY(npcPos, thingPos));
 		lua_pushnumber(L, dist);
 	}
 	return 1;
@@ -1085,7 +1095,7 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 }
 
 NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
-    npc(npc), scriptInterface(npc->getScriptInterface())
+	npc(npc), scriptInterface(npc->getScriptInterface())
 {
 	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
@@ -1200,8 +1210,9 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	scriptInterface->callFunction(3);
 }
 
-void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount,
-                                     bool ignore, bool inBackpacks)
+void NpcEventsHandler::onPlayerTrade(
+	Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount, bool ignore, bool inBackpacks
+)
 {
 	if (callback == -1) {
 		return;

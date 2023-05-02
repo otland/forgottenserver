@@ -10,7 +10,7 @@
 struct DatabaseTask
 {
 	DatabaseTask(std::string&& query, std::function<void(DBResult_ptr, bool)>&& callback, bool store) :
-	    query(std::move(query)), callback(std::move(callback)), store(store)
+		query(std::move(query)), callback(std::move(callback)), store(store)
 	{}
 
 	std::string query;

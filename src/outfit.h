@@ -9,7 +9,7 @@
 struct Outfit
 {
 	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) :
-	    name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked)
+		name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked)
 	{}
 
 	bool operator==(const Outfit& otherOutfit) const
@@ -27,7 +27,7 @@ struct Outfit
 struct ProtocolOutfit
 {
 	ProtocolOutfit(std::string_view name, uint16_t lookType, uint8_t addons) :
-	    name{name}, lookType{lookType}, addons{addons}
+		name{name}, lookType{lookType}, addons{addons}
 	{}
 
 	std::string name;

@@ -2,6 +2,7 @@
 Language:        Cpp
 BasedOnStyle:    Google
 AccessModifierOffset: -4
+AlignAfterOpenBracket: BlockIndent
 AlignEscapedNewlines: DontAlign
 BreakBeforeBraces: Custom
 BraceWrapping:
@@ -22,7 +23,8 @@ IncludeCategories:
   - Regex:           '^<.*>$'
     Priority:        2
 IndentWidth:     4
+PenaltyExcessCharacter: 100
 SpacesBeforeTrailingComments: 1
 TabWidth:        4
-UseTab:          ForIndentation
+UseTab:          AlignWithSpaces
 ...

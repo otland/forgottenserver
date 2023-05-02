@@ -72,7 +72,7 @@ bool Vocations::loadFromXml()
 				voc.noPongKickTime = pugi::cast<uint32_t>(attrNode.value()) * 1000;
 			} else {
 				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName
-				          << "\" for vocation: " << voc.id << std::endl;
+						  << "\" for vocation: " << voc.id << std::endl;
 			}
 		}
 
@@ -84,11 +84,11 @@ bool Vocations::loadFromXml()
 						voc.skillMultipliers[skillId] = pugi::cast<double>(childNode.attribute("multiplier").value());
 					} else {
 						std::cout << "[Notice - Vocations::loadFromXml] No valid skill id: " << skillId
-						          << " for vocation: " << voc.id << std::endl;
+								  << " for vocation: " << voc.id << std::endl;
 					}
 				} else {
 					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id
-					          << std::endl;
+							  << std::endl;
 				}
 			} else if (caseInsensitiveEqual(childNode.name(), "formula")) {
 				if ((attr = childNode.attribute("meleeDamage"))) {
@@ -124,15 +124,17 @@ Vocation* Vocations::getVocation(uint16_t id)
 
 int32_t Vocations::getVocationId(std::string_view name) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
-	                       [=](auto it) { return caseInsensitiveEqual(name, it.second.name); });
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [=](auto it) {
+		return caseInsensitiveEqual(name, it.second.name);
+	});
 	return it != vocationsMap.end() ? it->first : -1;
 }
 
 uint16_t Vocations::getPromotedVocation(uint16_t id) const
 {
-	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
-	                       [id](auto it) { return it.second.fromVocation == id && it.first != id; });
+	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(), [id](auto it) {
+		return it.second.fromVocation == id && it.first != id;
+	});
 	return it != vocationsMap.end() ? it->first : VOCATION_NONE;
 }
 

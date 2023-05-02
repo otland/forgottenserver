@@ -85,7 +85,7 @@ private:
 using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
 using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
 using EquipFunction =
-    std::function<ReturnValue(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
+	std::function<ReturnValue(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {

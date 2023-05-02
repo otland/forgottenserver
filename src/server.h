@@ -96,7 +96,7 @@ bool ServiceManager::add(uint16_t port)
 {
 	if (port == 0) {
 		std::cout << "ERROR: No port provided for service " << ProtocolType::protocol_name() << ". Service disabled."
-		          << std::endl;
+				  << std::endl;
 		return false;
 	}
 
@@ -113,7 +113,7 @@ bool ServiceManager::add(uint16_t port)
 
 		if (service_port->is_single_socket() || ProtocolType::server_sends_first) {
 			std::cout << "ERROR: " << ProtocolType::protocol_name() << " and " << service_port->get_protocol_names()
-			          << " cannot use the same port " << port << '.' << std::endl;
+					  << " cannot use the same port " << port << '.' << std::endl;
 			return false;
 		}
 	}
