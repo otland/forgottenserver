@@ -537,8 +537,8 @@ end
 
 function Player.updateClientExpGainRate(self)
 	-- Experience bonus (includes server rates)
-	local xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
-	self:setBaseExpGain(xpGainRate)
+	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	self:setBaseExpGain(expGainRate)
 
 	-- Stamina bonus
 	local staminaMinutes = self:getStamina()
