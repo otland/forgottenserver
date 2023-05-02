@@ -1110,6 +1110,12 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
+	uint16_t getBaseExpGain() const { return baseExpGain; }
+	void setBaseExpGain(uint16_t value)
+	{
+		baseExpGain = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+	}
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1255,6 +1261,7 @@ private:
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;
 	uint16_t maxWriteLen = 0;
+	uint16_t baseExpGain = 100;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;

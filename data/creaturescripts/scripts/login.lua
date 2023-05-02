@@ -22,6 +22,9 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
+	-- Update client xp gain rate
+	player:updateClientExpGainRate()
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")

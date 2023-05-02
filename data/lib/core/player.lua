@@ -534,3 +534,10 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	msg:delete()
 	return true
 end
+
+function Player.updateClientExpGainRate(self)
+	-- Experience bonus (includes server rates)
+	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	self:setBaseExpGain(expGainRate)
+	return true
+end
