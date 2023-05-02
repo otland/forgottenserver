@@ -1126,8 +1126,6 @@ private:
 	static int luaVocationGetDemotion(lua_State* L);
 	static int luaVocationGetPromotion(lua_State* L);
 
-	static int luaVocationGetFromVocation(lua_State* L);
-
 	static int luaVocationAllowsPvp(lua_State* L);
 
 	// Town

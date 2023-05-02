@@ -181,7 +181,7 @@ end
 function Game.getUnpromotedVocations()
 	local vocations = {}
 	for _, vocation in ipairs(Game.getVocations()) do
-		if vocation:getId() == vocation:getFromVocation() then
+		if vocation == vocation:getFromVocation() then
 			vocations[#vocations + 1] = vocation
 		end
 	end

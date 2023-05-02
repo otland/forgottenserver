@@ -1,32 +1,26 @@
-function Vocation.getRelated(self)
-	local vocations = {}
-	local related = self
-	repeat
-		vocations[#vocations + 1] = related
-		related = related:getPromotion()
-	until not related
-	return vocations
-end
-
 highscoresMaxResults = 100
 highscoresPageSize = 20
 highscoresCacheTime = 30 * 60 -- time in seconds
 highscoresCache = {}
+clientIdsVocation = {}
+relatedIdsVocation = {}
 
-do
-	clientIdsVocation = {}
-	for _, vocation in pairs(Game.getVocations()) do
-		clientIdsVocation[vocation:getId()] = vocation:getClientId()
+function setUpHighscores()
+	local next = next
+	if next(clientIdsVocation) == nil then
+		for _, vocation in pairs(Game.getVocations()) do
+			clientIdsVocation[vocation:getId()] = vocation:getClientId()
+		end
 	end
-
-	relatedIdsVocation = {}
-	for _, vocation in pairs(Game.getUnpromotedVocations()) do
-		if vocation:getId() ~= VOCATION_NONE then
-			local relatedIds = {}
-			for _, related in pairs(vocation:getRelated()) do
-				relatedIds[#relatedIds + 1] = related:getId()
+	if next(relatedIdsVocation) == nil then
+		for _, vocation in pairs(Game.getUnpromotedVocations()) do
+			if vocation:getId() ~= VOCATION_NONE then
+				local relatedIds = {}
+				for _, related in pairs(vocation:getRelated()) do
+					relatedIds[#relatedIds + 1] = related:getId()
+				end
+				relatedIdsVocation[vocation:getId()] = relatedIds
 			end
-			relatedIdsVocation[vocation:getId()] = relatedIds
 		end
 	end
 end
@@ -117,18 +111,16 @@ HIGHSCORES_QUERIES = {
 		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults
 }
 
-do
-	function chunk(source, index, size)
-		local chunks = math.ceil(#source / size)
-		if index > chunks then
-			return source
-		end
-
-		local i = 1 + ((index * size) - size)
-		local j = index * size
-
-		return table.slice(source, i, j)
+local function chunk(source, index, size)
+	local chunks = math.ceil(#source / size)
+	if index > chunks then
+		return source
 	end
+
+	local i = 1 + ((index * size) - size)
+	local j = index * size
+
+	return table.slice(source, i, j)
 end
 
 local function get(self)
@@ -206,7 +198,7 @@ local function fetch(self)
 	local resultId = db.storeQuery(string.format(query, table.concat(extras, " ")))
 	if resultId then
 		repeat
-			table.insert(entries, {
+			entries[rank] = {
 				id = result.getNumber(resultId, "id"),
 				rank = rank,
 				name = result.getString(resultId, "name"),
@@ -215,7 +207,7 @@ local function fetch(self)
 				world = world,
 				level = result.getNumber(resultId, "level"),
 				points = result.getNumber(resultId, "points")
-			})
+			}
 			rank = rank + 1
 		until not result.next(resultId)		
 		result.free(resultId)
