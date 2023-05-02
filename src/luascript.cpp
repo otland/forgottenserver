@@ -2071,11 +2071,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// Position
 	registerClass("Position", "", LuaScriptInterface::luaPositionCreate);
-	registerMetaMethod("Position", "__add", LuaScriptInterface::luaPositionAdd);
-	registerMetaMethod("Position", "__sub", LuaScriptInterface::luaPositionSub);
-	registerMetaMethod("Position", "__eq", LuaScriptInterface::luaPositionCompare);
 
-	registerMethod("Position", "getDistance", LuaScriptInterface::luaPositionGetDistance);
 	registerMethod("Position", "isSightClear", LuaScriptInterface::luaPositionIsSightClear);
 
 	registerMethod("Position", "sendMagicEffect", LuaScriptInterface::luaPositionSendMagicEffect);
@@ -4731,64 +4727,6 @@ int LuaScriptInterface::luaPositionCreate(lua_State* L)
 
 		pushPosition(L, Position(x, y, z), stackpos);
 	}
-	return 1;
-}
-
-int LuaScriptInterface::luaPositionAdd(lua_State* L)
-{
-	// positionValue = position + positionEx
-	int32_t stackpos;
-	const Position& position = getPosition(L, 1, stackpos);
-
-	Position positionEx;
-	if (stackpos == 0) {
-		positionEx = getPosition(L, 2, stackpos);
-	} else {
-		positionEx = getPosition(L, 2);
-	}
-
-	pushPosition(L, position + positionEx, stackpos);
-	return 1;
-}
-
-int LuaScriptInterface::luaPositionSub(lua_State* L)
-{
-	// positionValue = position - positionEx
-	int32_t stackpos;
-	const Position& position = getPosition(L, 1, stackpos);
-
-	Position positionEx;
-	if (stackpos == 0) {
-		positionEx = getPosition(L, 2, stackpos);
-	} else {
-		positionEx = getPosition(L, 2);
-	}
-
-	pushPosition(L, position - positionEx, stackpos);
-	return 1;
-}
-
-int LuaScriptInterface::luaPositionCompare(lua_State* L)
-{
-	// position == positionEx
-	const Position& positionEx = getPosition(L, 2);
-	const Position& position = getPosition(L, 1);
-	pushBoolean(L, position == positionEx);
-	return 1;
-}
-
-int LuaScriptInterface::luaPositionGetDistance(lua_State* L)
-{
-	// position:getDistance(positionEx)
-	const Position& positionEx = getPosition(L, 2);
-	const Position& position = getPosition(L, 1);
-	lua_pushnumber(L, std::max<int32_t>(
-		std::max<int32_t>(
-			std::abs(Position::getDistanceX(position, positionEx)),
-			std::abs(Position::getDistanceY(position, positionEx))
-		),
-		std::abs(Position::getDistanceZ(position, positionEx))
-	));
 	return 1;
 }
 
