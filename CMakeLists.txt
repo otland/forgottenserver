@@ -19,8 +19,6 @@ if (NOT WIN32)
     add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
 endif ()
 
-set(CMAKE_CXX_FLAGS_PERFORMANCE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
-
 if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-fno-strict-aliasing)
 endif ()
