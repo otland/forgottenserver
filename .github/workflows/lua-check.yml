@@ -1,0 +1,50 @@
+name: Lua Lint and Format
+
+on:
+  push:
+    branches:
+      - master
+      - v*
+    paths:
+      - 'src/**.lua'
+  pull_request:
+    paths:
+      - 'src/**.lua'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Lua
+        uses: leafo/gh-actions-lua@v8
+        with:
+          luaVersion: "5.3"
+
+      - name: Install Luacheck
+        run: |
+          sudo apt-get install lua-filesystem
+          sudo luarocks install luacheck
+
+      - name: Run Luacheck
+        run: luacheck .
+
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Lua
+        uses: leafo/gh-actions-lua@v8
+        with:
+          luaVersion: "5.3"
+
+      - name: Install LuaFormatter
+        run: |
+          sudo luarocks install luaformatter
+
+      - name: Run LuaFormatter
+        run: |
+          find . -name "*.lua" -exec luaformatter -i {} \;
+          git diff --exit-code
