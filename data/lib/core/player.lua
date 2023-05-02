@@ -538,7 +538,7 @@ end
 function Player.updateClientExpGainRate(self)
 	-- Experience display
 	local xpGainRate = 0
-	if configManager.getBoolean(configKeys.XP_DISPLAY_MODE) then
+	if configManager.getBoolean(configKeys.EXP_DISPLAY_MODE) then
 		xpGainRate = 100 * Game.getExperienceStage(self:getLevel())
 	else
 		xpGainRate = 100
