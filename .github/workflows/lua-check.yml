@@ -1,4 +1,4 @@
-name: Lua Lint and Format
+name: Lua syntax check, lint, and format
 
 on:
   push:
@@ -6,21 +6,33 @@ on:
       - master
       - v*
     paths:
-      - 'src/**.lua'
+      - 'data/**.lua'
+      - 'config.lua.dist'
   pull_request:
     paths:
-      - 'src/**.lua'
+      - 'data/**.lua'
+      - 'config.lua.dist'
 
 jobs:
+  luac:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.5
+      - uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.4"
+
+      - name: Test Lua syntax
+        run: find data/ -name '*.lua' -print0 | xargs -0 -n1 luac -p
+
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
+      - uses: actions/checkout@v3.5
       - name: Set up Lua
-        uses: leafo/gh-actions-lua@v8
+        uses: leafo/gh-actions-lua@v10
         with:
-          luaVersion: "5.3"
+          luaVersion: "5.4"
 
       - name: Install Luacheck
         run: |
@@ -28,17 +40,16 @@ jobs:
           sudo luarocks install luacheck
 
       - name: Run Luacheck
-        run: luacheck .
+        run: luacheck data config.lua.dist
 
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
+      - uses: actions/checkout@v3.5
       - name: Set up Lua
-        uses: leafo/gh-actions-lua@v8
+        uses: leafo/gh-actions-lua@v10
         with:
-          luaVersion: "5.3"
+          luaVersion: "5.4"
 
       - name: Install LuaFormatter
         run: |
@@ -46,5 +57,5 @@ jobs:
 
       - name: Run LuaFormatter
         run: |
-          find . -name "*.lua" -exec luaformatter -i {} \;
+          find . -regex ".*\.lua.*" -exec luaformatter -i {} \;
           git diff --exit-code
