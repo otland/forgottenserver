@@ -1111,10 +1111,7 @@ public:
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
 	uint16_t getBaseExpGain() const { return baseExpGain; }
-	void setBaseExpGain(uint16_t value)
-	{
-		baseExpGain = value;
-	}
+	void setBaseExpGain(uint16_t value) { baseExpGain = value; }
 
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
