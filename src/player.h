@@ -1113,7 +1113,7 @@ public:
 	uint16_t getBaseExpGain() const { return baseExpGain; }
 	void setBaseExpGain(uint16_t value)
 	{
-		baseExpGain = std::min<uint16_t>(std::numeric_limits<uint16_t>::max(), value);
+		baseExpGain = value;
 	}
 
 private:
