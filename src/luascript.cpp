@@ -9976,7 +9976,7 @@ int LuaScriptInterface::luaPlayerShowTextDialog(lua_State* L)
 	player->writeItem = item;
 	player->maxWriteLen = length;
 	player->sendTextWindow(item, length, canWrite);
-	pushBoolean(L, true);
+	lua_pushinteger(L, player->windowTextId);
 	return 1;
 }
 

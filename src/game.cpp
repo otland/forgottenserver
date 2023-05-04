@@ -2449,7 +2449,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 	}
 }
 
-void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text)
+void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string_view text)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -2483,7 +2483,7 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::
 	}
 
 	for (auto creatureEvent : player->getCreatureEvents(CREATURE_EVENT_TEXTEDIT)) {
-		if (!creatureEvent->executeTextEdit(player, writeItem, text)) {
+		if (!creatureEvent->executeTextEdit(player, writeItem, text, windowTextId)) {
 			player->setWriteItem(nullptr);
 			return;
 		}

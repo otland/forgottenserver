@@ -55,7 +55,7 @@ public:
 	void executeOnKill(Creature* creature, Creature* target);
 	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-	bool executeTextEdit(Player* player, Item* item, const std::string& text);
+	bool executeTextEdit(Player* player, Item* item, std::string_view text, uint32_t windowTextId);
 	void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);

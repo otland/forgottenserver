@@ -1335,7 +1335,7 @@ void ProtocolGame::parseTextWindow(NetworkMessage& msg)
 {
 	uint32_t windowTextID = msg.get<uint32_t>();
 	auto newText = msg.getString();
-	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText = std::string{newText}]() {
+	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText]() {
 		g_game.playerWriteItem(playerID, windowTextID, newText);
 	});
 }
