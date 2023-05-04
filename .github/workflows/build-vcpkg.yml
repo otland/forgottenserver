@@ -23,31 +23,13 @@ on:
 
 jobs:
   build-vcpkg:
-    name: ${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        name: [ubuntu, ubuntu-clang, macos-clang, windows-msvc]
+        os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
         luajit: [on, off]
-        include:
-          - name: ubuntu
-            os: ubuntu
-          - name: ubuntu-clang
-            os: ubuntu
-          - name: macos-clang
-            os: macos
-          - name: windows-msvc
-            os: windows
-        exclude:
-          - name: ubuntu-clang
-            buildtype: Release
-          - name: ubuntu-clang
-            luajit: off
-          - name: macos-clang
-            luajit: off
-          - name: windows-msvc
-            luajit: off
 
     steps:
       - uses: actions/checkout@v3
@@ -60,12 +42,6 @@ jobs:
         if: ${{ matrix.luajit }} == "on"
         run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
 
-      - name: Set clang as compiler
-        if: ${{ endsWith(matrix.name, 'clang') }}
-        run: |
-          echo "CC=clang" >> $GITHUB_ENV
-          echo "CXX=clang++" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
         with:
@@ -74,8 +50,10 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ninja-vcpkg
-          configurePreset: ninja-vcpkg
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '--clean-first']"
+          configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-G Ninja']"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3
