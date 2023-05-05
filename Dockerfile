@@ -15,7 +15,7 @@ COPY cmake /usr/src/forgottenserver/cmake/
 COPY src /usr/src/forgottenserver/src/
 COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
-RUN cmake --preset ninja && cmake --build --config RelWithDebInfo --preset ninja
+RUN cmake --preset default && cmake --build --config RelWithDebInfo --preset default
 
 FROM alpine:3.17.3
 # crypto++ is in edge/community
