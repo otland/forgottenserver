@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: leafo/gh-actions-lua@v10
         with:
           luaVersion: "5.4"
@@ -29,15 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Lua
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "5.4"
+      - uses: leafo/gh-actions-lua@v10
+      - uses: leafo/gh-actions-luarocks@v4
 
       - name: Install Luacheck
-        run: |
-          sudo apt-get install lua-filesystem
-          sudo luarocks install luacheck
+        run: luarocks install luacheck
 
       - name: Run Luacheck
         run: luacheck data config.lua.dist
@@ -46,14 +43,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Lua
-        uses: leafo/gh-actions-lua@v10
-        with:
-          luaVersion: "5.4"
+      - uses: leafo/gh-actions-lua@v10
+      - uses: leafo/gh-actions-luarocks@v4
 
       - name: Install LuaFormatter
-        run: |
-          sudo luarocks install luaformatter
+        run: luarocks install luaformatter
 
       - name: Run LuaFormatter
         run: |
