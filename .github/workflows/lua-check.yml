@@ -5,13 +5,17 @@ on:
     branches:
       - master
       - v*
+
     paths:
-      - 'data/**.lua'
-      - 'config.lua.dist'
+      - .github/workflows/lua-check.yml
+      - config.lua.dist
+      - "data/**.lua"
+
   pull_request:
     paths:
-      - 'data/**.lua'
-      - 'config.lua.dist'
+      - .github/workflows/lua-check.yml
+      - config.lua.dist
+      - "data/**.lua"
 
 jobs:
   luac:
