@@ -27,7 +27,7 @@ jobs:
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ninja
-          configurePreset: ninja
-          configurePresetAdditionalArgs: "['-DENABLE_TESTING=ON']"
-          testPreset: ninja
+          buildPreset: default
+          configurePreset: default
+          configurePresetAdditionalArgs: "['-G Ninja', '-DENABLE_TESTING=ON']"
+          testPreset: default

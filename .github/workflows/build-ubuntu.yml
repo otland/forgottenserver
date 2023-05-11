@@ -21,7 +21,13 @@ on:
 
 jobs:
   build-ubuntu:
+    name: ubuntu-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+
     steps:
       - uses: actions/checkout@v3
 
@@ -39,8 +45,9 @@ jobs:
       - name: Build with cmake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: ninja
-          configurePreset: ninja
+          buildPreset: default
+          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
+          configurePreset: default
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3
