@@ -89,6 +89,8 @@ private:
 	bool magicShield = false;
 };
 
+using VocationMap = std::map<uint16_t, Vocation>;
+
 class Vocations
 {
 public:
@@ -97,9 +99,10 @@ public:
 	Vocation* getVocation(uint16_t id);
 	int32_t getVocationId(std::string_view name) const;
 	uint16_t getPromotedVocation(uint16_t vocationId) const;
+	const VocationMap& getVocations() const { return vocationsMap; }
 
 private:
-	std::map<uint16_t, Vocation> vocationsMap;
+	VocationMap vocationsMap;
 };
 
 #endif // FS_VOCATION_H
