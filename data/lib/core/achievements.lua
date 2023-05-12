@@ -702,6 +702,11 @@ function Player.addAchievement(self, ach, hideMsg)
 
 	if not self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
+		if achievement.points > 0 then
+			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
+			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value + achievement.points)
+		end
+
 		if not hideMsg then
 			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
 		end
@@ -723,6 +728,10 @@ function Player.removeAchievement(self, ach)
 
 	if self:hasAchievement(achievement.id) then
 		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, -1)
+		if achievement.points > 0 then
+			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
+			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value - achievement.points)
+		end
 	end
 	return true
 end

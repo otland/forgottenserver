@@ -2234,6 +2234,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getHouses", LuaScriptInterface::luaGameGetHouses);
 	registerMethod("Game", "getOutfits", LuaScriptInterface::luaGameGetOutfits);
 	registerMethod("Game", "getMounts", LuaScriptInterface::luaGameGetMounts);
+	registerMethod("Game", "getVocations", LuaScriptInterface::luaGameGetVocations);
 
 	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
 	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
@@ -4687,6 +4688,22 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 	int index = 0;
 	for (const auto& mount : mounts) {
 		pushMount(L, &mount);
+		lua_rawseti(L, -2, ++index);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetVocations(lua_State* L)
+{
+	// Game.getVocations()
+	const auto& vocations = g_vocations.getVocations();
+	lua_createtable(L, vocations.size(), 0);
+
+	int index = 0;
+	for (const auto& [id, vocation] : vocations) {
+		pushUserdata<const Vocation>(L, &vocation);
+		setMetatable(L, -1, "Vocation");
 		lua_rawseti(L, -2, ++index);
 	}
 

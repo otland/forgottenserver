@@ -524,6 +524,7 @@ private:
 	static int luaGameGetHouses(lua_State* L);
 	static int luaGameGetOutfits(lua_State* L);
 	static int luaGameGetMounts(lua_State* L);
+	static int luaGameGetVocations(lua_State* L);
 
 	static int luaGameGetGameState(lua_State* L);
 	static int luaGameSetGameState(lua_State* L);
