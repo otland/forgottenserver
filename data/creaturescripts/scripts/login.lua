@@ -22,7 +22,7 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
-	-- Update client xp gain rate
+	-- Update client exp display
 	player:updateClientExpDisplay()
 
 	-- Events
