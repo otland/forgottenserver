@@ -583,12 +583,12 @@ function Player.sendHighscores(self, entries, params)
 		msg:addByte(self:getGuid() == entry.id and 0x01 or 0x00)
 		msg:addU64(entry.points)
 	end
-	
-    msg:addByte(0xFF) -- unknown
-    msg:addByte(0x00) -- display loyalty title column
-    msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
 
-    msg:addU32(entries.ts)
+	msg:addByte(0xFF) -- unknown
+	msg:addByte(0x00) -- display loyalty title column
+	msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
+
+	msg:addU32(entries.ts)
 
 	msg:sendToPlayer(self)
 	msg:delete()
