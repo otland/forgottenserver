@@ -2744,8 +2744,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
 
-	registerMethod("Player", "getBaseExpGain", LuaScriptInterface::luaPlayerGetBaseExpGain);
-	registerMethod("Player", "setBaseExpGain", LuaScriptInterface::luaPlayerSetBaseExpGain);
+	registerMethod("Player", "getClientExpDisplay", LuaScriptInterface::luaPlayerGetClientExpDisplay);
+	registerMethod("Player", "setClientExpDisplay", LuaScriptInterface::luaPlayerSetClientExpDisplay);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -10888,24 +10888,24 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetBaseExpGain(lua_State* L)
+int LuaScriptInterface::luaPlayerGetClientExpDisplay(lua_State* L)
 {
-	// player:getBaseExpGain()
+	// player:getClientExpDisplay()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		lua_pushnumber(L, player->getBaseExpGain());
+		lua_pushnumber(L, player->getClientExpDisplay());
 	} else {
 		lua_pushnil(L);
 	}
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerSetBaseExpGain(lua_State* L)
+int LuaScriptInterface::luaPlayerSetClientExpDisplay(lua_State* L)
 {
-	// player:setBaseExpGain(value)
+	// player:setClientExpDisplay(value)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
-		player->setBaseExpGain(getNumber<uint16_t>(L, 2));
+		player->setClientExpDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {

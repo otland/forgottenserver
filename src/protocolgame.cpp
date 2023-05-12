@@ -3566,10 +3566,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getLevelPercent());
 
-	msg.add<uint16_t>(player->getBaseExpGain()); // base exp gain rate
-	msg.add<uint16_t>(0);                        // low level bonus
-	msg.add<uint16_t>(0);                        // store exp bonus
-	msg.add<uint16_t>(100);                      // stamina exp bonus
+	msg.add<uint16_t>(player->getClientExpDisplay()); // base exp gain rate
+	msg.add<uint16_t>(0);                             // low level bonus
+	msg.add<uint16_t>(0);                             // store exp bonus
+	msg.add<uint16_t>(100);                           // stamina exp bonus
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));

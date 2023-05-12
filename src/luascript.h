@@ -1023,8 +1023,8 @@ private:
 
 	static int luaPlayerSendCreatureSquare(lua_State* L);
 
-	static int luaPlayerGetBaseExpGain(lua_State* L);
-	static int luaPlayerSetBaseExpGain(lua_State* L);
+	static int luaPlayerGetClientExpDisplay(lua_State* L);
+	static int luaPlayerSetClientExpDisplay(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
