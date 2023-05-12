@@ -1,12 +1,12 @@
-local updateClientExpGainRate = CreatureEvent("Update Client Xp Gain Rate")
+local updateClientExpDisplay = CreatureEvent("Update Client Xp Gain Rate")
 
-function updateClientExpGainRate.onAdvance(player, skill, oldLevel, newLevel)
+function updateClientExpDisplay.onAdvance(player, skill, oldLevel, newLevel)
 	if skill ~= SKILL_LEVEL then
 		return true
 	end
 
-	player:updateClientExpGainRate()
+	player:updateClientExpDisplay()
 	return true
 end
 
-updateClientExpGainRate:register()
+updateClientExpDisplay:register()

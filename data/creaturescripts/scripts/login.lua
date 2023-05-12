@@ -23,7 +23,7 @@ function onLogin(player)
 	end
 
 	-- Update client xp gain rate
-	player:updateClientExpGainRate()
+	player:updateClientExpDisplay()
 
 	-- Events
 	player:registerEvent("PlayerDeath")
