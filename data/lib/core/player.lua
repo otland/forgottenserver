@@ -535,6 +535,13 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	return true
 end
 
+function Player.updateClientExpDisplay(self)
+	-- Experience bonus (includes server rates)
+	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	self:setClientExpDisplay(expGainRate)
+	return true
+end
+
 function Player.sendHighscores(self, entries, params)
 	local msg = NetworkMessage()
 	msg:addByte(0xB1)
@@ -583,7 +590,7 @@ function Player.sendHighscores(self, entries, params)
 		msg:addByte(self:getGuid() == entry.id and 0x01 or 0x00)
 		msg:addU64(entry.points)
 	end
-	
+
     msg:addByte(0xFF) -- unknown
     msg:addByte(0x00) -- display loyalty title column
     msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
