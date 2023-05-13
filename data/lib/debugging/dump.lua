@@ -3,7 +3,7 @@ function dumpLevel(input, level)
 	local indent = ''
 
 	for i = 1, level do
-		indent = indent .. '	'
+		indent = indent .. '    '
 	end
 
 	if type(input) == 'table' then
@@ -19,7 +19,7 @@ function dumpLevel(input, level)
 				v = '"' .. v .. '"'
 			end
 
-			table.insert(lines, indent .. '	[' .. k .. '] = ' .. dumpLevel(v, level + 1))
+			table.insert(lines, indent .. '    [' .. k .. '] = ' .. dumpLevel(v, level + 1))
 		end
 		return str .. table.concat(lines, ',\n') .. '\n' .. indent .. '}'
 	end
