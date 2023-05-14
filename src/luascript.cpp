@@ -2747,6 +2747,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getClientExpDisplay", LuaScriptInterface::luaPlayerGetClientExpDisplay);
 	registerMethod("Player", "setClientExpDisplay", LuaScriptInterface::luaPlayerSetClientExpDisplay);
 
+	registerMethod("Player", "getClientStaminaDisplay", LuaScriptInterface::luaPlayerGetClientStaminaDisplay);
+	registerMethod("Player", "setClientStaminaDisplay", LuaScriptInterface::luaPlayerSetClientStaminaDisplay);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10922,6 +10925,32 @@ int LuaScriptInterface::luaPlayerSetClientExpDisplay(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setClientExpDisplay(getNumber<uint16_t>(L, 2));
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetClientStaminaDisplay(lua_State* L)
+{
+	// player:getClientStaminaDisplay()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getClientStaminaDisplay());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetClientStaminaDisplay(lua_State* L)
+{
+	// player:setClientStaminaDisplay(value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setClientStaminaDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {

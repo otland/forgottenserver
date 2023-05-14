@@ -1027,6 +1027,9 @@ private:
 	static int luaPlayerGetClientExpDisplay(lua_State* L);
 	static int luaPlayerSetClientExpDisplay(lua_State* L);
 
+	static int luaPlayerGetClientStaminaDisplay(lua_State* L);
+	static int luaPlayerSetClientStaminaDisplay(lua_State* L);
+
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
 
