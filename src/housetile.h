@@ -23,6 +23,7 @@ public:
 	                        Creature* actor = nullptr) const override;
 
 	void addThing(int32_t index, Thing* thing) override;
+	using DynamicTile::internalAddThing;
 	void internalAddThing(uint32_t index, Thing* thing) override;
 
 	House* getHouse() const { return house; }

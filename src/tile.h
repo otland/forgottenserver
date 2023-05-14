@@ -277,6 +277,8 @@ public:
 	CreatureVector* getCreatures() override { return &creatures; }
 	const CreatureVector* getCreatures() const override { return &creatures; }
 	CreatureVector* makeCreatures() override { return &creatures; }
+
+	using Tile::internalAddThing;
 };
 
 // For blocking tiles, where we very rarely actually have items
@@ -320,6 +322,8 @@ public:
 		}
 		return creatures.get();
 	}
+
+	using Tile::internalAddThing;
 };
 
 #endif // FS_TILE_H

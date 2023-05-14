@@ -420,6 +420,7 @@ public:
 	void onFollowCreature(const Creature* creature) override;
 
 	// walk events
+	using Creature::onWalk;
 	void onWalk(Direction& dir) override;
 	void onWalkAborted() override;
 	void onWalkComplete() override;

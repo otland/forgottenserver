@@ -91,6 +91,7 @@ public:
 
 	bool isWalkingToSpawn() const { return walkingToSpawn; }
 	bool walkToSpawn();
+	using Creature::onWalk;
 	void onWalk() override;
 	void onWalkComplete() override;
 	bool getNextStep(Direction& direction, uint32_t& flags) override;

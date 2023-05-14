@@ -153,6 +153,8 @@ public:
 
 	const auto& getSpectators() { return spectators; }
 
+	using Creature::onWalk;
+
 private:
 	explicit Npc(const std::string& name);
 
