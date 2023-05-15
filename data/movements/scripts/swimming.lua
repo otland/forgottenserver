@@ -9,7 +9,7 @@ local conditions = {
 	CONDITION_BLEEDING
 }
 
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end
@@ -21,7 +21,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+function onStepOut(creature, item, toPosition, fromPosition)
 	if not creature:isPlayer() then
 		return false
 	end

@@ -21,7 +21,7 @@ local traps = {
 	}
 }
 
-function onStepIn(creature, item, position, fromPosition)
+function onStepIn(creature, item, toPosition, fromPosition)
 	local trap = traps[item.itemid]
 	if not trap then
 		return true
@@ -37,7 +37,7 @@ function onStepIn(creature, item, position, fromPosition)
 	return true
 end
 
-function onStepOut(creature, item, position, fromPosition)
+function onStepOut(creature, item, toPosition, fromPosition)
 	item:transform(item.itemid - 1)
 	return true
 end

@@ -829,6 +829,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, 
 	if (!toTile) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
+	creature->setNextPos(toTile->getPosition());
 	return internalMoveCreature(*creature, *toTile, flags);
 }
 

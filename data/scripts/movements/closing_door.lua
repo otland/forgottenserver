@@ -1,13 +1,13 @@
 local closingDoor = MoveEvent()
 closingDoor:type("stepout")
 
-function closingDoor.onStepOut(creature, item, position, fromPosition)
-	local tile = Tile(position)
+function closingDoor.onStepOut(creature, item, toPosition, fromPosition)
+	local tile = Tile(toPosition)
 	if tile:getCreatureCount() > 0 then
 		return true
 	end
 
-	local newPosition = {x = position.x + 1, y = position.y, z = position.z}
+	local newPosition = {x = fromPosition.x + 1, y = fromPosition.y, z = fromPosition.z}
 	local query = Tile(newPosition):queryAdd(creature)
 	if query ~= RETURNVALUE_NOERROR or query == RETURNVALUE_NOTENOUGHROOM then
 		newPosition.x = newPosition.x - 1
@@ -16,7 +16,7 @@ function closingDoor.onStepOut(creature, item, position, fromPosition)
 	end
 
 	if query == RETURNVALUE_NOERROR or query ~= RETURNVALUE_NOTENOUGHROOM then
-		doRelocate(position, newPosition)
+		doRelocate(fromPosition, newPosition)
 	end
 
 	local i, tileItem, tileCount = 1, true, tile:getThingCount()
