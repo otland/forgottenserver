@@ -101,6 +101,8 @@ public:
 	explicit Player(ProtocolGame_ptr p);
 	~Player();
 
+	using Creature::onWalk;
+
 	// non-copyable
 	Player(const Player&) = delete;
 	Player& operator=(const Player&) = delete;
@@ -420,7 +422,6 @@ public:
 	void onFollowCreature(const Creature* creature) override;
 
 	// walk events
-	using Creature::onWalk;
 	void onWalk(Direction& dir) override;
 	void onWalkAborted() override;
 	void onWalkComplete() override;

@@ -27,6 +27,9 @@ class Monster final : public Creature
 {
 public:
 	static Monster* createMonster(const std::string& name);
+
+	using Creature::onWalk;
+
 	static int32_t despawnRange;
 	static int32_t despawnRadius;
 
@@ -91,7 +94,6 @@ public:
 
 	bool isWalkingToSpawn() const { return walkingToSpawn; }
 	bool walkToSpawn();
-	using Creature::onWalk;
 	void onWalk() override;
 	void onWalkComplete() override;
 	bool getNextStep(Direction& direction, uint32_t& flags) override;

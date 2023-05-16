@@ -93,6 +93,8 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
+	using Creature::onWalk;
+
 	Npc* getNpc() override { return this; }
 	const Npc* getNpc() const override { return this; }
 
@@ -152,8 +154,6 @@ public:
 	static uint32_t npcAutoID;
 
 	const auto& getSpectators() { return spectators; }
-
-	using Creature::onWalk;
 
 private:
 	explicit Npc(const std::string& name);
