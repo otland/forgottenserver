@@ -535,6 +535,16 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	return true
 end
 
+local function getStaminaBonus(staminaMinutes)
+	if staminaMinutes > 2340 then
+		return 150
+	elseif staminaMinutes < 840 then
+		return 50
+	else
+		return 100
+	end
+end
+
 function Player.updateClientExpDisplay(self)
 	-- Experience bonus (includes server rates)
 	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
@@ -542,8 +552,8 @@ function Player.updateClientExpDisplay(self)
 
 	-- Stamina bonus
 	local staminaMinutes = self:getStamina()
-	local staminaBonus = (staminaMinutes > 2340) and 150 or ((staminaMinutes < 840) and 50 or 100)
-	self:setClientStaminaDisplay(staminaBonus)
+	local staminaBonus = getStaminaBonus(staminaMinutes)
+	self:setClientStaminaBonusDisplay(staminaBonus)
 	return true
 end
 
