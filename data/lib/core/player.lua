@@ -620,7 +620,7 @@ function Player.sendBasicInfo(self, msg)
 	end
 
 	msg:addByte(0) -- hide stamina
-	msg:addByte(0) -- enable store summary & character titles
+	msg:addByte(1) -- enable store summary & character titles
 	msg:addString("") -- character title
 
 	msg:sendToPlayer(self)

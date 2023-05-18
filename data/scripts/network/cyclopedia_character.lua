@@ -15,7 +15,7 @@ local BASIC_INFO = 0x00
 ]]--
 
 local methods = {
-    [BASIC_INFO] = "sendBasicInfo",
+	[BASIC_INFO] = "sendBasicInfo",
 	--[[
 		[GENERAL_STATS] = "sendGeneralStats",
 		[COMBAT_STATS] = "sendCombatStats",
@@ -34,16 +34,16 @@ local methods = {
 local handler = PacketHandler(0xE5)
 
 function handler.onReceive(player, msg)
-    msg:skipBytes(4)
-    local type = msg:getByte()
-    local method = Player[methods[type]]
-    if method then
-        local response = NetworkMessage()
-        response:addByte(0xDA)
-        response:addByte(type)
-        response:addByte(0x00)
-        method(player, response)
-    end
+	msg:skipBytes(4)
+	local type = msg:getByte()
+	local method = Player[methods[type]]
+	if method then
+		local response = NetworkMessage()
+		response:addByte(0xDA)
+		response:addByte(type)
+		response:addByte(0x00)
+		method(player, response)
+	end
 end
 
 handler:register()
