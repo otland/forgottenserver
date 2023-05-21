@@ -545,6 +545,14 @@ local function getStaminaBonus(staminaMinutes)
 	end
 end
 
+local function getLowLevelBonus(level)
+	if level > 1 and level <= 50 then
+		return 50
+	else
+		return 0
+	end
+end
+
 function Player.updateClientExpDisplay(self)
 	-- Experience bonus (includes server rates)
 	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
@@ -557,7 +565,7 @@ function Player.updateClientExpDisplay(self)
 
 	-- Low level bonus
 	local level = self:getLevel()
-	local levelBonus = (level > 1 and level <= 50) and 50 or 0
+	local levelBonus = getLowLevelBonus(level)
 	self:setClientLowLevelBonusDisplay(levelBonus)
 	return true
 end
