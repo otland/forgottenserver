@@ -601,29 +601,3 @@ function Player.sendHighscores(self, entries, params)
 	msg:delete()
 	return true
 end
-
-function Player.sendBasicInfo(self, msg)
-	msg:addString(self:getName())
-	msg:addString(self:getVocation():getName())
-	msg:addU16(self:getLevel())
-
-	local outfit = self:getOutfit()
-	if outfit.lookType ~= 0 then
-		msg:addU16(outfit.lookType)
-		msg:addByte(outfit.lookHead)
-		msg:addByte(outfit.lookBody)
-		msg:addByte(outfit.lookLegs)
-		msg:addByte(outfit.lookFeet)
-		msg:addByte(outfit.lookAddons)
-	else
-		msg:addU16(outfit.lookTypeEx)
-	end
-
-	msg:addByte(0) -- hide stamina
-	msg:addByte(1) -- enable store summary & character titles
-	msg:addString("") -- character title
-
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
-end

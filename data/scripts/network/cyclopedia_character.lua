@@ -1,3 +1,29 @@
+local function sendBasicInfo(self, msg)
+	msg:addString(self:getName())
+	msg:addString(self:getVocation():getName())
+	msg:addU16(self:getLevel())
+
+	local outfit = self:getOutfit()
+	if outfit.lookType ~= 0 then
+		msg:addU16(outfit.lookType)
+		msg:addByte(outfit.lookHead)
+		msg:addByte(outfit.lookBody)
+		msg:addByte(outfit.lookLegs)
+		msg:addByte(outfit.lookFeet)
+		msg:addByte(outfit.lookAddons)
+	else
+		msg:addU16(outfit.lookTypeEx)
+	end
+
+	msg:addByte(0) -- hide stamina
+	msg:addByte(1) -- enable store summary & character titles
+	msg:addString("") -- character title
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
 local BASIC_INFO = 0x00
 
 --[[
@@ -14,8 +40,8 @@ local BASIC_INFO = 0x00
 	local TITLES = 0x0B
 ]]--
 
-local methods = {
-	[BASIC_INFO] = "sendBasicInfo",
+local handlers = {
+	[BASIC_INFO] = sendBasicInfo,
 	--[[
 		[GENERAL_STATS] = "sendGeneralStats",
 		[COMBAT_STATS] = "sendCombatStats",
@@ -36,13 +62,13 @@ local handler = PacketHandler(0xE5)
 function handler.onReceive(player, msg)
 	msg:skipBytes(4)
 	local type = msg:getByte()
-	local method = Player[methods[type]]
+	local method = handlers[type]
 	if method then
-		local response = NetworkMessage()
-		response:addByte(0xDA)
-		response:addByte(type)
-		response:addByte(0x00)
-		method(player, response)
+		local msg = NetworkMessage()
+		msg:addByte(0xDA)
+		msg:addByte(type)
+		msg:addByte(0x00)
+		method(player, msg)
 	end
 end
 
