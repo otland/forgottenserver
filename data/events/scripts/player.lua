@@ -1,3 +1,12 @@
+-- low level experience bonus
+-- bonus is a floating percentage, use 1 for 100% bonus
+local expBonus = {
+	minlevel = 2,
+	maxlevel = 50,
+	bonus = 1
+}
+local expBonusDelta = expBonus.maxlevel - expBonus.minlevel -- don't touch
+
 function Player:onBrowseField(position)
 	local onBrowseField = EventCallback.onBrowseField
 	if onBrowseField then
@@ -258,9 +267,11 @@ function Player:onGainExperience(source, exp, rawExp)
 		return exp
 	end
 
+	local level = self:getLevel()
+
 	-- Soul regeneration
 	local vocation = self:getVocation()
-	if self:getSoul() < vocation:getMaxSoul() and exp >= self:getLevel() then
+	if self:getSoul() < vocation:getMaxSoul() and exp >= level then
 		soulCondition:setParameter(CONDITION_PARAM_SOULTICKS, vocation:getSoulGainTicks() * 1000)
 		self:addCondition(soulCondition)
 	end
@@ -279,6 +290,10 @@ function Player:onGainExperience(source, exp, rawExp)
 			exp = exp * 0.5
 		end
 	end
+
+	-- Apply low level bonus
+	local multiplier = expBonus.bonus * math.min(1, math.max(0, (expBonus.maxlevel - level) / (expBonusDelta))) + 1
+	exp = exp * multiplier
 
 	local onGainExperience = EventCallback.onGainExperience
 	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp

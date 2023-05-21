@@ -554,6 +554,11 @@ function Player.updateClientExpDisplay(self)
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = getStaminaBonus(staminaMinutes)
 	self:setClientStaminaBonusDisplay(staminaBonus)
+
+	-- Low level bonus
+	local level = self:getLevel()
+	local levelBonus = (level > 1 and level <= 50) and 50 or 0
+	self:setClientLowLevelBonusDisplay(levelBonus)
 	return true
 end
 

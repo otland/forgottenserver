@@ -1116,6 +1116,9 @@ public:
 	uint16_t getClientStaminaBonusDisplay() const { return clientStaminaBonusDisplay; }
 	void setClientStaminaBonusDisplay(uint16_t value) { clientStaminaBonusDisplay = value; }
 
+	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
+	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1263,6 +1266,7 @@ private:
 	uint16_t maxWriteLen = 0;
 	uint16_t clientExpDisplay = 100;
 	uint16_t clientStaminaBonusDisplay = 100;
+	uint16_t clientLowLevelBonusDisplay = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
