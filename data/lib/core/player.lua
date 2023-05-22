@@ -387,3 +387,232 @@ end
 function Player.addBankBalance(self, amount)
 	self:setBankBalance(self:getBankBalance() + amount)
 end
+
+function Player.isPromoted(self)
+	local vocation = self:getVocation()
+	local fromVocId = vocation:getDemotion():getId()
+	return vocation:getId() ~= fromVocId
+end
+
+function Player.getMaxTrackedQuests(self)
+	return configManager.getNumber(self:isPremium() and configKeys.QUEST_TRACKER_PREMIUM_LIMIT or configKeys.QUEST_TRACKER_FREE_LIMIT)
+end
+
+function Player.getQuests(self)
+	local quests = {}
+	for _, quest in pairs(Game.getQuests()) do
+		if quest:isStarted(self) then
+			quests[#quests + 1] = quest
+		end
+	end
+	return quests
+end
+
+function Player.sendQuestLog(self)
+	local msg = NetworkMessage()
+	msg:addByte(0xF0)
+	local quests = self:getQuests()
+	msg:addU16(#quests)
+
+	for _, quest in pairs(quests) do
+		msg:addU16(quest.id)
+		msg:addString(quest.name)
+		msg:addByte(quest:isCompleted(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendQuestLine(self, quest)
+	local msg = NetworkMessage()
+	msg:addByte(0xF1)
+	msg:addU16(quest.id)
+	local missions = quest:getMissions(self)
+	msg:addByte(#missions)
+
+	for _, mission in pairs(missions) do
+		msg:addU16(mission.id)
+		msg:addString(mission:getName(self))
+		msg:addString(mission:getDescription(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.getTrackedQuests(self, missionsId)
+	local playerId = self:getId()
+	local maxTrackedQuests = self:getMaxTrackedQuests()
+	local trackedQuests = {}
+	Game.getTrackedQuests()[playerId] = trackedQuests
+	local quests = Game.getQuests()
+	local missions = Game.getMissions()
+	local trackeds = 0
+	for _, missionId in pairs(missionsId) do
+		local mission = missions[missionId]
+		if mission and mission:isStarted(self) then
+			trackedQuests[mission] = quests[mission.questId]
+			trackeds = trackeds + 1
+			if trackeds >= maxTrackedQuests then
+				break
+			end
+		end
+	end
+	return trackedQuests, trackeds
+end
+
+function Player.sendQuestTracker(self, missionsId)
+	local msg = NetworkMessage()
+	msg:addByte(0xD0)
+	msg:addByte(1)
+
+	local trackedQuests, trackeds = self:getTrackedQuests(missionsId)
+	msg:addByte(self:getMaxTrackedQuests() - trackeds)
+	msg:addByte(trackeds)
+
+	for mission, quest in pairs(trackedQuests or {}) do
+		msg:addU16(mission.id)
+		msg:addString(quest.name)
+		msg:addString(mission:getName(self))
+		msg:addString(mission:getDescription(self))
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendUpdateQuestTracker(self, mission)
+	local msg = NetworkMessage()
+	msg:addByte(0xD0)
+	msg:addByte(0)
+
+	msg:addU16(mission.id)
+	msg:addString(mission:getName(self))
+	msg:addString(mission:getDescription(self))
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.getBestiaryKills(self, raceId)
+	return math.max(0, self:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId))
+end
+
+function Player.setBestiaryKills(self, raceId, value)
+	return self:setStorageValue(PlayerStorageKeys.bestiaryKillsBase + raceId, value)
+end
+
+function Player.addBestiaryKills(self, raceId)
+	local monsterType = MonsterType(raceId)
+	if not monsterType then
+		return false
+	end
+
+	local kills = self:getBestiaryKills(raceId)
+	local newKills = kills + 1
+	local bestiaryInfo = monsterType:getBestiaryInfo()
+	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
+		if kills == 0 or (kills < totalKills and newKills >= totalKills) then
+			self:sendTextMessage(MESSAGE_EVENT_DEFAULT, string.format("You unlocked details for the creature %s.", monsterType:getName()))
+			self:sendBestiaryMilestoneReached(raceId)
+			break
+		end
+	end
+	return self:setBestiaryKills(raceId, newKills)
+end
+
+function Player.sendBestiaryMilestoneReached(self, raceId)
+	local msg = NetworkMessage()
+	msg:addByte(0xD9)
+	msg:addU16(raceId)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+local function getStaminaBonus(staminaMinutes)
+	if staminaMinutes > 2340 then
+		return 150
+	elseif staminaMinutes < 840 then
+		return 50
+	else
+		return 100
+	end
+end
+
+function Player.updateClientExpDisplay(self)
+	-- Experience bonus (includes server rates)
+	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	self:setClientExpDisplay(expGainRate)
+
+	-- Stamina bonus
+	local staminaMinutes = self:getStamina()
+	local staminaBonus = getStaminaBonus(staminaMinutes)
+	self:setClientStaminaBonusDisplay(staminaBonus)
+	return true
+end
+
+function Player.sendHighscores(self, entries, params)
+	local msg = NetworkMessage()
+	msg:addByte(0xB1)
+
+	msg:addByte(params.action)
+
+	msg:addByte(0x01)
+	msg:addString(configManager.getString(configKeys.SERVER_NAME))
+	msg:addString(params.world)
+
+	msg:addByte(params.worldType)
+	msg:addByte(params.battlEye)
+
+	local vocations = Game.getUnpromotedVocations()
+	msg:addByte(#vocations + 1)
+
+	msg:addU32(0xFFFFFFFF)
+	msg:addString("All vocations")
+
+	for _, vocation in ipairs(vocations) do
+		msg:addU32(vocation:getId())
+		msg:addString(vocation:getName())
+	end
+
+	msg:addU32(params.vocation)
+
+	msg:addByte(#HIGHSCORES_CATEGORIES)
+	for id, category in ipairs(HIGHSCORES_CATEGORIES) do
+		msg:addByte(id)
+		msg:addString(category.name)
+	end
+
+	msg:addByte(params.category)
+
+	msg:addU16(params.page)
+	msg:addU16(params.totalPages)
+
+	msg:addByte(#entries.data)
+	for _, entry in pairs(entries.data) do
+		msg:addU32(entry.rank)
+		msg:addString(entry.name)
+		msg:addString(entry.title)
+		msg:addByte(entry.vocation)
+		msg:addString(entry.world)
+		msg:addU16(entry.level)
+		msg:addByte(self:getGuid() == entry.id and 0x01 or 0x00)
+		msg:addU64(entry.points)
+	end
+
+	msg:addByte(0xFF) -- unknown
+	msg:addByte(0x00) -- display loyalty title column
+	msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
+
+	msg:addU32(entries.ts)
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Cult Minion" nameDescription="an orc cult minion" race="blood" experience="850" speed="210">
+<monster name="Orc Cult Minion" nameDescription="an orc cult minion" race="blood" experience="850" speed="210" raceId="1507">
 	<health now="1000" max="1000" />
 	<look type="50" corpse="5996" />
 	<targetchange interval="2000" chance="5" />

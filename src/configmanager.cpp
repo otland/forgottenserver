@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found
 // in the LICENSE file.
 
@@ -90,9 +90,10 @@ ExperienceStages loadLuaStages(lua_State* L)
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
 		const auto tableIndex = lua_gettop(L);
-		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel");
-		auto maxLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel");
-		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier");
+		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel", 1);
+		auto maxLevel =
+		    LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
+		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier", 1);
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
 	}
@@ -118,12 +119,10 @@ ExperienceStages loadXMLStages()
 				return {};
 			}
 		} else {
-			uint32_t minLevel, maxLevel, multiplier;
+			uint32_t minLevel = 1, maxLevel = std::numeric_limits<uint32_t>::max(), multiplier = 1;
 
 			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
-			} else {
-				minLevel = 1;
 			}
 
 			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
@@ -132,8 +131,6 @@ ExperienceStages loadXMLStages()
 
 			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
 				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
-			} else {
-				multiplier = 1;
 			}
 
 			stages.emplace_back(minLevel, maxLevel, multiplier);
@@ -228,8 +225,10 @@ bool ConfigManager::load()
 	boolean[HOUSE_DOOR_SHOW_PRICE] = getGlobalBoolean(L, "houseDoorShowPrice", true);
 	boolean[ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS] = getGlobalBoolean(L, "onlyInvitedCanMoveHouseItems", true);
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
-	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
+	boolean[MANASHIELD_BREAKABLE] = getGlobalBoolean(L, "useBreakableManaShield", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
+	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
+	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -276,7 +275,7 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_FREE_LIMIT] = getGlobalNumber(L, "questTrackerFreeLimit", 10);
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
-	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
+	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
 	integer[VIPGROUP_FREE_LIMIT] = getGlobalNumber(L, "vipGroupFreeLimit", 3);
 	integer[VIPGROUP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipGroupPremiumLimit", 8);
 
@@ -327,8 +326,9 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 
 float ConfigManager::getExperienceStage(uint32_t level) const
 {
-	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
-		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
+	auto it = std::find_if(expStages.begin(), expStages.end(), [level](auto&& stage) {
+		auto&& [minLevel, maxLevel, _] = stage;
+		return level >= minLevel && level <= maxLevel;
 	});
 
 	if (it == expStages.end()) {
@@ -338,7 +338,7 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 	return std::get<2>(*it);
 }
 
-bool ConfigManager::setString(string_config_t what, const std::string& value)
+bool ConfigManager::setString(string_config_t what, std::string_view value)
 {
 	if (what >= LAST_STRING_CONFIG) {
 		std::cout << "[Warning - ConfigManager::setString] Accessing invalid index: " << what << std::endl;

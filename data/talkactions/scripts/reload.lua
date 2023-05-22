@@ -76,9 +76,15 @@ function onSay(player, words, param)
 	-- need to clear EventCallback.data or we end up having duplicated events on /reload scripts
 	if table.contains({RELOAD_TYPE_SCRIPTS, RELOAD_TYPE_ALL}, reloadType) then
 		EventCallback:clear()
+		Game.clearQuests()
 	end
 
 	Game.reload(reloadType)
+	if reloadType == RELOAD_TYPE_GLOBAL then
+		-- we need to reload the scripts as well
+		Game.reload(RELOAD_TYPE_SCRIPTS)
+	end
+
 	player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Reloaded %s.", param:lower()))
 	return false
 end

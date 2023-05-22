@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ogre Shaman" nameDescription="an ogre shaman" race="blood" experience="625" speed="105">
+<monster name="Ogre Shaman" nameDescription="an ogre shaman" race="blood" experience="625" speed="105" raceId="1163">
 	<health now="800" max="800" />
 	<look type="859" corpse="24795" />
 	<targetchange interval="2000" chance="20" />

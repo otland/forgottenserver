@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Assassin" nameDescription="an assassin" race="blood" experience="105" speed="224" manacost="450">
+<monster name="Assassin" nameDescription="an assassin" race="blood" experience="105" speed="224" manacost="450" raceId="224">
 	<health now="175" max="175" />
 	<look type="152" head="95" body="95" legs="95" feet="95" addons="3" corpse="20327" />
 	<targetchange interval="4000" chance="0" />

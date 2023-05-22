@@ -425,7 +425,7 @@ if not NpcHandler then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_ENDTRADE)
 		if not callback or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid) then
 				if self:isFocused(cid) then
 					local player = Player(cid)
 					local playerName = player and player:getName() or -1
@@ -442,7 +442,7 @@ if not NpcHandler then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_CLOSECHANNEL)
 		if not callback or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid) then
 				if self:isFocused(cid) then
 					self:unGreet(cid)
 				end
@@ -517,9 +517,10 @@ if not NpcHandler then
 		if self:isInRange(cid) then
 			if not self:isFocused(cid) then
 				self:greet(cid)
-				return
+				return true
 			end
 		end
+		return false
 	end
 
 	-- Simply calls the underlying unGreet function.

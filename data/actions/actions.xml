@@ -148,6 +148,7 @@
 	<action fromid="8472" toid="8474" script="others/potions.lua" />
 	<action itemid="8704" script="others/potions.lua" />
 	<action fromid="26029" toid="26031" script="others/potions.lua" />
+	<action itemid="38219" script="others/potions.lua" />
 
 	<!-- Other -->
 	<action itemid="430" script="others/teleport.lua" />

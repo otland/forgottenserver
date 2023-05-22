@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Adventurer" nameDescription="an adventurer" race="blood" experience="0" speed="106">
+<monster name="Adventurer" nameDescription="an adventurer" race="blood" experience="0" speed="106" raceId="922">
 	<health now="65" max="65" />
 	<look type="129" head="93" body="15" legs="72" feet="80" addons="0" corpse="20315" />
 	<targetchange interval="4000" chance="10" />

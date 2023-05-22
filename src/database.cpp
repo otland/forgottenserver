@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -151,8 +151,6 @@ retry:
 	return result;
 }
 
-std::string Database::escapeString(const std::string& s) const { return escapeBlob(s.c_str(), s.length()); }
-
 std::string Database::escapeBlob(const char* s, uint32_t length) const
 {
 	// the worst case is 2n + 1
@@ -190,37 +188,21 @@ DBResult::DBResult(MYSQL_RES* res)
 
 DBResult::~DBResult() { mysql_free_result(handle); }
 
-std::string DBResult::getString(const std::string& s) const
+std::string_view DBResult::getString(std::string_view column) const
 {
-	auto it = listNames.find(s);
+	auto it = listNames.find(column);
 	if (it == listNames.end()) {
-		std::cout << "[Error - DBResult::getString] Column '" << s << "' does not exist in result set." << std::endl;
-		return std::string();
+		std::cout << "[Error - DBResult::getString] Column '" << column << "' does not exist in result set."
+		          << std::endl;
+		return {};
 	}
 
 	if (!row[it->second]) {
-		return std::string();
+		return {};
 	}
 
-	return std::string(row[it->second]);
-}
-
-const char* DBResult::getStream(const std::string& s, unsigned long& size) const
-{
-	auto it = listNames.find(s);
-	if (it == listNames.end()) {
-		std::cout << "[Error - DBResult::getStream] Column '" << s << "' doesn't exist in the result set" << std::endl;
-		size = 0;
-		return nullptr;
-	}
-
-	if (!row[it->second]) {
-		size = 0;
-		return nullptr;
-	}
-
-	size = mysql_fetch_lengths(handle)[it->second];
-	return row[it->second];
+	auto size = mysql_fetch_lengths(handle)[it->second];
+	return {row[it->second], size};
 }
 
 bool DBResult::hasNext() const { return row; }

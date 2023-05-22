@@ -1,6 +1,23 @@
 local deathListEnabled = true
 local maxDeathRecords = 5
 
+local function getKiller(killer)
+	if not killer then
+		return false, "field item"
+	end
+
+	if killer:isPlayer() then
+		return true, killer:getName()
+	end
+
+	local master = killer:getMaster()
+	if master and master ~= killer and master:isPlayer() then
+		return true, master:getName()
+	end
+
+	return false, killer:getName()
+end
+
 function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	local playerId = player:getId()
 	if nextUseStaminaTime[playerId] then
@@ -12,42 +29,11 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 		return
 	end
 
-	local byPlayer = 0
-	local killerName
-	if killer then
-		if killer:isPlayer() then
-			byPlayer = 1
-		else
-			local master = killer:getMaster()
-			if master and master ~= killer and master:isPlayer() then
-				killer = master
-				byPlayer = 1
-			end
-		end
-		killerName = killer:getName()
-	else
-		killerName = "field item"
-	end
-
-	local byPlayerMostDamage = 0
-	local mostDamageKillerName
-	if mostDamageKiller then
-		if mostDamageKiller:isPlayer() then
-			byPlayerMostDamage = 1
-		else
-			local master = mostDamageKiller:getMaster()
-			if master and master ~= mostDamageKiller and master:isPlayer() then
-				mostDamageKiller = master
-				byPlayerMostDamage = 1
-			end
-		end
-		mostDamageName = mostDamageKiller:getName()
-	else
-		mostDamageName = "field item"
-	end
+	local byPlayer, killerName = getKiller(killer)
+	local byPlayerMostDamage, killerNameMostDamage = getKiller(mostDamageKiller)
 
 	local playerGuid = player:getGuid()
-	db.query("INSERT INTO `player_deaths` (`player_id`, `time`, `level`, `killed_by`, `is_player`, `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`) VALUES (" .. playerGuid .. ", " .. os.time() .. ", " .. player:getLevel() .. ", " .. db.escapeString(killerName) .. ", " .. byPlayer .. ", " .. db.escapeString(mostDamageName) .. ", " .. byPlayerMostDamage .. ", " .. (lastHitUnjustified and 1 or 0) .. ", " .. (mostDamageUnjustified and 1 or 0) .. ")")
+	db.query("INSERT INTO `player_deaths` (`player_id`, `time`, `level`, `killed_by`, `is_player`, `mostdamage_by`, `mostdamage_is_player`, `unjustified`, `mostdamage_unjustified`) VALUES (" .. playerGuid .. ", " .. os.time() .. ", " .. player:getLevel() .. ", " .. db.escapeString(killerName) .. ", " .. (byPlayer and 1 or 0) .. ", " .. db.escapeString(killerNameMostDamage) .. ", " .. (byPlayerMostDamage and 1 or 0) .. ", " .. (lastHitUnjustified and 1 or 0) .. ", " .. (mostDamageUnjustified and 1 or 0) .. ")")
 	local resultId = db.storeQuery("SELECT `player_id` FROM `player_deaths` WHERE `player_id` = " .. playerGuid)
 
 	local deathRecords = 0
@@ -66,7 +52,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 		db.asyncQuery("DELETE FROM `player_deaths` WHERE `player_id` = " .. playerGuid .. " ORDER BY `time` LIMIT " .. limit)
 	end
 
-	if byPlayer == 1 then
+	if byPlayer then
 		local targetGuild = player:getGuild()
 		targetGuild = targetGuild and targetGuild:getId() or 0
 		if targetGuild ~= 0 then

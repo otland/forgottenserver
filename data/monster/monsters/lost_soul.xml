@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="380">
+<monster name="Lost Soul" nameDescription="a lost soul" race="undead" experience="4000" speed="380" raceId="283">
 	<health now="5800" max="5800" />
 	<look type="232" corpse="6310" />
 	<targetchange interval="4000" chance="15" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Priestess Of The Wild Sun" nameDescription="a priestess of the wild sun" race="blood" experience="6400" speed="320">
+<monster name="Priestess Of The Wild Sun" nameDescription="a priestess of the wild sun" race="blood" experience="6400" speed="320" raceId="1799">
 	<health now="8500" max="8500" />
 	<look type="1199" head="95" body="78" legs="94" feet="3" corpse="34075" />
 	<targetchange interval="2000" chance="5" />

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -716,30 +716,16 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		}
 	}
 
+	int32_t oldValue;
+	getStorageValue(key, oldValue);
+
 	if (value != -1) {
-		int32_t oldValue;
-		getStorageValue(key, oldValue);
-
 		storageMap[key] = value;
-
-		if (!isLogin) {
-			auto currentFrameTime = g_dispatcher.getDispatcherCycle();
-			if (lastQuestlogUpdate != currentFrameTime && g_game.quests.isQuestStorage(key, value, oldValue)) {
-				lastQuestlogUpdate = currentFrameTime;
-				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
-			}
-
-			for (const TrackedQuest& trackedQuest : trackedQuests) {
-				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
-					if (quest->isTracking(key, value)) {
-						sendUpdateQuestTracker(trackedQuest);
-					}
-				}
-			}
-		}
 	} else {
 		storageMap.erase(key);
 	}
+
+	g_events->eventPlayerOnUpdateStorage(this, key, oldValue, value, isLogin);
 }
 
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const
@@ -1201,10 +1187,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << name << " has logged in." << std::endl;
-		}
-
 		if (guild) {
 			guild->addMember(this);
 		}
@@ -1324,10 +1306,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		g_chat->removeUserFromAllChannels(*this);
-
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << getName() << " has logged out." << std::endl;
-		}
 
 		if (guild) {
 			guild->removeMember(this);
@@ -2033,7 +2011,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	BlockType_t blockType =
 	    Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
 
-	if (attacker) {
+	if (attacker && combatType != COMBAT_HEALING) {
 		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
 	}
 
@@ -3418,7 +3396,7 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 {
 	const ItemType& itemType = Item::items[itemId];
 	return std::any_of(shopItemList.begin(), shopItemList.end(), [&](const ShopInfo& shopInfo) {
-		return shopInfo.itemId == itemId && shopInfo.buyPrice != 0 &&
+		return shopInfo.itemId == itemId && (shopInfo.buyPrice != 0 || shopInfo.sellPrice != 0) &&
 		       (!itemType.isFluidContainer() || shopInfo.subType == subType);
 	});
 }
@@ -4759,36 +4737,6 @@ void Player::sendModalWindow(const ModalWindow& modalWindow)
 
 void Player::clearModalWindows() { modalWindows.clear(); }
 
-uint16_t Player::getHelpers() const
-{
-	uint16_t helpers;
-
-	if (guild && party) {
-		std::unordered_set<Player*> helperSet;
-
-		const auto& guildMembers = guild->getMembersOnline();
-		helperSet.insert(guildMembers.begin(), guildMembers.end());
-
-		const auto& partyMembers = party->getMembers();
-		helperSet.insert(partyMembers.begin(), partyMembers.end());
-
-		const auto& partyInvitees = party->getInvitees();
-		helperSet.insert(partyInvitees.begin(), partyInvitees.end());
-
-		helperSet.insert(party->getLeader());
-
-		helpers = helperSet.size();
-	} else if (guild) {
-		helpers = guild->getMembersOnline().size();
-	} else if (party) {
-		helpers = party->getMemberCount() + party->getInvitationCount() + 1;
-	} else {
-		helpers = 0;
-	}
-
-	return helpers;
-}
-
 void Player::sendClosePrivate(uint16_t channelId)
 {
 	if (channelId == CHANNEL_GUILD || channelId == CHANNEL_PARTY) {
@@ -4859,35 +4807,6 @@ size_t Player::getMaxDepotItems() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
-}
-
-size_t Player::getMaxTrackedQuests() const
-{
-	return g_config.getNumber(isPremium() ? ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT
-	                                      : ConfigManager::QUEST_TRACKER_FREE_LIMIT);
-}
-
-void Player::resetQuestTracker(const std::vector<uint16_t>& missionIds)
-{
-	const size_t maxTrackedQuests = getMaxTrackedQuests();
-	trackedQuests.clear();
-	size_t index = 0;
-
-	const QuestsList& quests = g_game.quests.getQuests();
-	for (const uint8_t missionId : missionIds) {
-		for (const Quest& quest : quests) {
-			for (const Mission& mission : quest.getMissions()) {
-				if (mission.getID() == missionId && mission.isStarted(this)) {
-					trackedQuests.emplace_back(quest.getID(), missionId);
-					if (++index == maxTrackedQuests) {
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	sendQuestTracker();
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

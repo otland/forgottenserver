@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mooh'Tah Warrior" nameDescription="a mooh'tah warrior" race="blood" experience="900" speed="220">
+<monster name="Mooh'Tah Warrior" nameDescription="a mooh'tah warrior" race="blood" experience="900" speed="220" raceId="1051">
 	<health now="1200" max="1200" />
 	<look type="611" corpse="23462" />
 	<targetchange interval="2000" chance="4" />

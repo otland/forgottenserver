@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Minotaur Archer" nameDescription="a minotaur archer" race="blood" experience="65" speed="160" manacost="390">
+<monster name="Minotaur Archer" nameDescription="a minotaur archer" race="blood" experience="65" speed="160" manacost="390" raceId="24">
 	<health now="100" max="100" />
 	<look type="24" corpse="5982" />
 	<targetchange interval="4000" chance="10" />

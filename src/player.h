@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PLAYER_H
@@ -54,13 +54,13 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t id, uint32_t playerId, std::string name, std::string description, uint32_t icon, bool notify) :
-	    id(id),
-	    playerId(playerId),
-	    name(std::move(name)),
-	    description(std::move(description)),
-	    icon(icon),
-	    notify(notify)
+	VIPEntry(uint32_t id, uint32_t playerId, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
+	    id{id},
+	    playerId{playerId},
+	    name{name},
+	    description{description},
+	    icon{icon},
+	    notify{notify}
 	{}
 
 	uint32_t id;
@@ -129,7 +129,7 @@ public:
 	static MuteCountMap muteCountMap;
 
 	const std::string& getName() const override { return name; }
-	void setName(const std::string& name) { this->name = name; }
+	void setName(std::string_view name) { this->name = name; }
 	const std::string& getNameDescription() const override { return name; }
 	std::string getDescription(int32_t lookDistance) const override;
 
@@ -303,8 +303,6 @@ public:
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
 
-	uint16_t getHelpers() const;
-
 	bool setVocation(uint16_t vocId);
 	uint16_t getVocationId() const { return vocation->getId(); }
 
@@ -355,6 +353,10 @@ public:
 	int32_t getMaxHealth() const override { return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]); }
 	uint32_t getMana() const { return mana; }
 	uint32_t getMaxMana() const { return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]); }
+	uint16_t getManaShieldBar() const { return manaShieldBar; }
+	void setManaShieldBar(uint16_t value) { manaShieldBar = value; }
+	uint16_t getMaxManaShieldBar() const { return maxManaShieldBar; }
+	void setMaxManaShieldBar(uint16_t value) { maxManaShieldBar = value; }
 
 	Item* getInventoryItem(slots_t slot) const;
 
@@ -557,10 +559,6 @@ public:
 	size_t getMaxVIPEntries() const;
 	size_t getMaxVIPGroups() const;
 	size_t getMaxDepotItems() const;
-
-	// quest tracker
-	size_t getMaxTrackedQuests() const;
-	void resetQuestTracker(const std::vector<uint16_t>& missionIds);
 
 	// tile
 	// send methods
@@ -1076,30 +1074,6 @@ public:
 			client->sendAddMarker(pos, markType, desc);
 		}
 	}
-	void sendQuestLog()
-	{
-		if (client) {
-			client->sendQuestLog();
-		}
-	}
-	void sendQuestLine(const Quest* quest)
-	{
-		if (client) {
-			client->sendQuestLine(quest);
-		}
-	}
-	void sendQuestTracker()
-	{
-		if (client) {
-			client->sendQuestTracker();
-		}
-	}
-	void sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
-	{
-		if (client) {
-			client->sendUpdateQuestTracker(trackedQuest);
-		}
-	}
 	void sendEnterWorld()
 	{
 		if (client) {
@@ -1170,6 +1144,12 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
+	uint16_t getClientExpDisplay() const { return clientExpDisplay; }
+	void setClientExpDisplay(uint16_t value) { clientExpDisplay = value; }
+
+	uint16_t getClientStaminaBonusDisplay() const { return clientStaminaBonusDisplay; }
+	void setClientStaminaBonusDisplay(uint16_t value) { clientStaminaBonusDisplay = value; }
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1237,9 +1217,6 @@ private:
 	std::forward_list<Condition*>
 	    storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
-	// quest tracker
-	std::vector<TrackedQuest> trackedQuests;
-
 	std::string name;
 	std::string guildNick;
 
@@ -1256,7 +1233,6 @@ private:
 	uint64_t manaSpent = 0;
 	uint64_t lastAttack = 0;
 	uint64_t bankBalance = 0;
-	uint64_t lastQuestlogUpdate = 0;
 	int64_t lastFailedFollow = 0;
 	int64_t skullTicks = 0;
 	int64_t lastWalkthroughAttempt = 0;
@@ -1302,6 +1278,8 @@ private:
 	uint32_t editListId = 0;
 	uint32_t mana = 0;
 	uint32_t manaMax = 0;
+	uint16_t manaShieldBar = 0;
+	uint16_t maxManaShieldBar = 0;
 	int32_t varSkills[SKILL_LAST + 1] = {};
 	int32_t varSpecialSkills[SPECIALSKILL_LAST + 1] = {};
 	int32_t varStats[STAT_LAST + 1] = {};
@@ -1318,6 +1296,8 @@ private:
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;
 	uint16_t maxWriteLen = 0;
+	uint16_t clientExpDisplay = 100;
+	uint16_t clientStaminaBonusDisplay = 100;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;

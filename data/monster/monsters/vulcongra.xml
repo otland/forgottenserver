@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vulcongra" nameDescription="Vulcongra" race="fire" experience="1100" speed="320">
+<monster name="Vulcongra" nameDescription="Vulcongra" race="fire" experience="1100" speed="320" raceId="898">
 	<health now="1600" max="1600" />
 	<look type="509" corpse="18476" />
 	<targetchange interval="4000" chance="10" />

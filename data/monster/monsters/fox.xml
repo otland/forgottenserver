@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fox" nameDescription="a fox" race="blood" experience="15" speed="170" manacost="255">
+<monster name="Fox" nameDescription="a fox" race="blood" experience="15" speed="170" manacost="255" raceId="1548">
 	<health now="22" max="22" />
 	<look type="1029" corpse="30173" />
 	<targetchange interval="2000" chance="5" />
@@ -27,7 +27,6 @@
 		<element earthPercent="5" />
 		<element firePercent="-5" />
 		<element holyPercent="30" />
-		<element deathPercent="0" />
 	</elements>
 	<voices interval="1000" chance="5">
 		<voice sentence="Grrrrrrr" />

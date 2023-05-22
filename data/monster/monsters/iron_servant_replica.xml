@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Iron Servant Replica" nameDescription="an iron servant replica" race="energy" experience="210" speed="190">
+<monster name="Iron Servant Replica" nameDescription="an iron servant replica" race="energy" experience="210" speed="190" raceId="1325">
 	<health now="1000" max="1000" />
 	<look type="395" corpse="13483" />
 	<targetchange interval="2000" chance="5" />

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CREATUREEVENT_H
@@ -62,7 +62,7 @@ public:
 	//
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override;
 
 	std::string eventName;
 	CreatureEventType_t type;
@@ -92,7 +92,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "creaturescripts"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 

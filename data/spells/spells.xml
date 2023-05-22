@@ -141,7 +141,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="attack" spellid="167" name="Practice Fire Wave" words="exevo dis flam hur" level="1" mana="5" direction="1" cooldown="4000" groupcooldown="2000" needlearn="0" script="attack/practice_fire_wave.lua">
+	<instant group="attack" spellid="167" name="Practise Fire Wave" words="exevo dis flam hur" level="1" mana="5" direction="1" cooldown="4000" groupcooldown="2000" needlearn="0" script="attack/practise_fire_wave.lua">
 		<vocation name="None" />
 	</instant>
 	<instant group="attack" spellid="119" name="Rage of the Skies" words="exevo gran mas vis" level="55" mana="600" selftarget="1" premium="1" cooldown="40000" groupcooldown="4000" needlearn="0" script="attack/rage_of_the_skies.lua">
@@ -294,7 +294,7 @@
 		<vocation name="Druid" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="healing" spellid="166" name="Practice Healing" words="exura dis" level="1" mana="5" aggressive="0" selftarget="1" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/practice_healing.lua">
+	<instant group="healing" spellid="166" name="Practise Healing" words="exura dis" level="1" mana="5" aggressive="0" selftarget="1" cooldown="1000" groupcooldown="1000" needlearn="0" script="healing/practise_healing.lua">
 		<vocation name="None" />
 	</instant>
 	<instant group="healing" spellid="159" name="Recovery" words="utura" level="50" mana="75" premium="1" aggressive="0" selftarget="1" cooldown="60000" groupcooldown="1000" needlearn="0" script="healing/recovery.lua">
@@ -419,12 +419,6 @@
 		<vocation name="Elder Druid" />
 		<vocation name="Royal Paladin" />
 		<vocation name="Elite Knight" />
-	</instant>
-	<instant group="support" spellid="44" name="Magic Shield" words="utamo vita" level="14" mana="50" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/magic_shield.lua">
-		<vocation name="Sorcerer" />
-		<vocation name="Druid" />
-		<vocation name="Master Sorcerer" />
-		<vocation name="Elder Druid" />
 	</instant>
 	<instant group="support" spellid="132" name="Protector" words="utamo tempo" level="55" mana="200" premium="1" aggressive="0" selftarget="1" cooldown="2000" groupcooldown="2000" needlearn="0" script="support/protector.lua">
 		<vocation name="Knight" />
@@ -725,7 +719,7 @@
 		<vocation name="Master Sorcerer" />
 		<vocation name="Elder Druid" />
 	</instant>
-	<instant group="support" name="Practice Magic Missile Rune" words="adori dis min vis" level="1" mana="5" soul="0" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/practice_magic_missile_rune.lua">
+	<instant group="support" name="Practise Magic Missile Rune" words="adori dis min vis" level="1" mana="5" soul="0" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/practise_magic_missile_rune.lua">
 		<vocation name="None" />
 	</instant>
 	<instant group="support" name="Soulfire Rune" words="adevo res flam" level="27" mana="420" soul="3" premium="1" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/soulfire_rune.lua">

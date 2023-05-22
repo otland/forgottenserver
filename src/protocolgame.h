@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PROTOCOLGAME_H
@@ -14,9 +14,7 @@ class Game;
 class NetworkMessage;
 class Player;
 class ProtocolGame;
-class Quest;
 class Tile;
-class TrackedQuest;
 
 enum SessionEndTypes_t : uint8_t
 {
@@ -66,7 +64,7 @@ public:
 
 	explicit ProtocolGame(Connection_ptr connection) : Protocol(connection) {}
 
-	void login(const std::string& name, uint32_t accountId, OperatingSystem_t operatingSystem);
+	void login(uint32_t characterId, uint32_t accountId, OperatingSystem_t operatingSystem);
 	void logout(bool displayEffect, bool forced);
 
 	uint16_t getVersion() const { return version; }
@@ -121,16 +119,11 @@ private:
 	void parsePlayerPurchase(NetworkMessage& msg);
 	void parsePlayerSale(NetworkMessage& msg);
 
-	void parseQuestLine(NetworkMessage& msg);
-	void parseQuestTracker(NetworkMessage& msg);
-
 	void parseInviteToParty(NetworkMessage& msg);
 	void parseJoinParty(NetworkMessage& msg);
 	void parseRevokePartyInvite(NetworkMessage& msg);
 	void parsePassPartyLeadership(NetworkMessage& msg);
 	void parseEnableSharedPartyExperience(NetworkMessage& msg);
-
-	void parseToggleMount(NetworkMessage& msg);
 
 	void parseModalWindowAnswer(NetworkMessage& msg);
 
@@ -186,11 +179,6 @@ private:
 	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
-
-	void sendQuestLog();
-	void sendQuestLine(const Quest* quest);
-	void sendQuestTracker();
-	void sendUpdateQuestTracker(const TrackedQuest& trackedQuest);
 
 	void sendCancelWalk();
 	void sendChangeSpeed(const Creature* creature, uint32_t speed);
