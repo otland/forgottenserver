@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Werebadger" nameDescription="a werebadger" race="blood" experience="1600" speed="260">
+<monster name="Werebadger" nameDescription="a werebadger" race="blood" experience="1600" speed="260" raceId="1144">
 	<health now="1700" max="1700" />
 	<look type="729" corpse="24723" />
 	<targetchange interval="2000" chance="5" />
@@ -41,6 +41,9 @@
 			<attribute key="areaEffect" value="blueshimmer" />
 		</defense>
 	</defenses>
+	<summons maxSummons="2">
+		<summon name="Badger" interval="2000" chance="25" />
+	</summons>
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

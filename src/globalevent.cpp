@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -305,7 +305,7 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string GlobalEvent::getScriptEventName() const
+std::string_view GlobalEvent::getScriptEventName() const
 {
 	switch (eventType) {
 		case GLOBALEVENT_STARTUP:

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_GAME_H
@@ -9,7 +9,6 @@
 #include "mounts.h"
 #include "player.h"
 #include "position.h"
-#include "quests.h"
 #include "raids.h"
 #include "wildcardtree.h"
 
@@ -385,12 +384,9 @@ public:
 	                             const uint16_t spriteId);
 	void playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos,
 	                      const uint16_t spriteId, bool podiumVisible, Direction direction);
-	void playerShowQuestLog(uint32_t playerId);
-	void playerShowQuestLine(uint32_t playerId, uint16_t questId);
-	void playerResetQuestTracker(uint32_t playerId, const std::vector<uint16_t>& missionIds);
 	void playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, const std::string& receiver,
 	               const std::string& text);
-	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit);
+	void playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomizeMount = false);
 	void playerInviteToParty(uint32_t playerId, uint32_t invitedId);
 	void playerJoinParty(uint32_t playerId, uint32_t leaderId);
 	void playerRevokePartyInvitation(uint32_t playerId, uint32_t invitedId);
@@ -408,6 +404,7 @@ public:
 	void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 
 	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
+	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg);
 
 	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
 
@@ -471,6 +468,7 @@ public:
 
 	const std::unordered_map<uint32_t, Player*>& getPlayers() const { return players; }
 	const std::map<uint32_t, Npc*>& getNpcs() const { return npcs; }
+	const std::map<uint32_t, Monster*>& getMonsters() const { return monsters; }
 
 	void addPlayer(Player* player);
 	void removePlayer(Player* player);
@@ -506,11 +504,11 @@ public:
 	Map map;
 	Mounts mounts;
 	Raids raids;
-	Quests quests;
 
 	std::forward_list<Item*> toDecayItems;
 
 	std::unordered_set<Tile*> getTilesToClean() const { return tilesToClean; }
+	bool isTileInCleanList(Tile* tile) { return tilesToClean.find(tile) != tilesToClean.end(); }
 	void addTileToClean(Tile* tile) { tilesToClean.emplace(tile); }
 	void removeTileToClean(Tile* tile) { tilesToClean.erase(tile); }
 	void clearTilesToClean() { tilesToClean.clear(); }
@@ -580,10 +578,6 @@ private:
 
 	void updatePlayersRecord() const;
 	uint32_t playersRecord = 0;
-
-	uint32_t lastStageLevel = 0;
-	bool stagesEnabled = false;
-	bool useLastStageLevel = false;
 };
 
 #endif // FS_GAME_H

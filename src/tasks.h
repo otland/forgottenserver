@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_TASKS_H
@@ -48,6 +48,10 @@ class Dispatcher : public ThreadHolder<Dispatcher>
 {
 public:
 	void addTask(Task* task);
+
+	void addTask(TaskFunc&& f) { addTask(new Task(std::move(f))); }
+
+	void addTask(uint32_t expiration, TaskFunc&& f) { addTask(new Task(expiration, std::move(f))); }
 
 	void shutdown();
 

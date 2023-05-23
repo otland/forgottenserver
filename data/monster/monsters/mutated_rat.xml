@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mutated Rat" nameDescription="a mutated rat" race="blood" experience="450" speed="230">
+<monster name="Mutated Rat" nameDescription="a mutated rat" race="blood" experience="450" speed="230" raceId="502">
 	<health now="550" max="550" />
 	<look type="305" corpse="9871" />
 	<targetchange interval="4000" chance="10" />

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_EVENTS_H
@@ -9,6 +9,7 @@
 #include "luascript.h"
 
 class ItemType;
+class NetworkMessage;
 class Party;
 class Tile;
 
@@ -33,6 +34,9 @@ class Events
 		int32_t partyOnLeave = -1;
 		int32_t partyOnDisband = -1;
 		int32_t partyOnShareExperience = -1;
+		int32_t partyOnInvite = -1;
+		int32_t partyOnRevokeInvitation = -1;
+		int32_t partyOnPassLeadership = -1;
 
 		// Player
 		int32_t playerOnBrowseField = -1;
@@ -57,6 +61,8 @@ class Events
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
+		int32_t playerOnNetworkMessage = -1;
+		int32_t playerOnUpdateStorage = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -80,6 +86,9 @@ public:
 	bool eventPartyOnLeave(Party* party, Player* player);
 	bool eventPartyOnDisband(Party* party);
 	void eventPartyOnShareExperience(Party* party, uint64_t& exp);
+	bool eventPartyOnInvite(Party* party, Player* player);
+	bool eventPartyOnRevokeInvitation(Party* party, Player* player);
+	bool eventPartyOnPassLeadership(Party* party, Player* player);
 
 	// Player
 	bool eventPlayerOnBrowseField(Player* player, const Position& position);
@@ -111,6 +120,9 @@ public:
 	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
+	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
+	void eventPlayerOnUpdateStorage(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
+	                                bool isLogin);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);

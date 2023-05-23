@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -62,6 +62,12 @@ bool Events::load()
 				info.partyOnDisband = event;
 			} else if (methodName == "onShareExperience") {
 				info.partyOnShareExperience = event;
+			} else if (methodName == "onInvite") {
+				info.partyOnInvite = event;
+			} else if (methodName == "onRevokeInvitation") {
+				info.partyOnRevokeInvitation = event;
+			} else if (methodName == "onPassLeadership") {
+				info.partyOnPassLeadership = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
@@ -110,6 +116,10 @@ bool Events::load()
 				info.playerOnWrapItem = event;
 			} else if (methodName == "onInventoryUpdate") {
 				info.playerOnInventoryUpdate = event;
+			} else if (methodName == "onNetworkMessage") {
+				info.playerOnNetworkMessage = event;
+			} else if (methodName == "onUpdateStorage") {
+				info.playerOnUpdateStorage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -401,6 +411,87 @@ bool Events::eventPartyOnDisband(Party* party)
 	LuaScriptInterface::setMetatable(L, -1, "Party");
 
 	return scriptInterface.callFunction(1);
+}
+
+bool Events::eventPartyOnInvite(Party* party, Player* player)
+{
+	// Party:onInvite(player) or Party.onInvite(self, player)
+	if (info.partyOnInvite == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnInvite] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnInvite, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnInvite);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
+{
+	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
+	if (info.partyOnRevokeInvitation == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnRevokeInvitation] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnRevokeInvitation, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnRevokeInvitation);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
+{
+	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
+	if (info.partyOnPassLeadership == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnPassLeadership] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnPassLeadership, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnPassLeadership);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
 }
 
 void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
@@ -1144,6 +1235,65 @@ void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t sl
 	LuaScriptInterface::pushBoolean(L, equip);
 
 	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
+{
+	// Player:onNetworkMessage(recvByte, msg)
+	if (info.playerOnNetworkMessage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnNetworkMessage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnNetworkMessage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnNetworkMessage);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvByte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, msg);
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
+
+	scriptInterface.callVoidFunction(3);
+}
+
+void Events::eventPlayerOnUpdateStorage(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
+                                        bool isLogin)
+{
+	// Player:onUpdateStorage(key, value, oldValue, isLogin)
+	if (info.playerOnUpdateStorage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnUpdateStorage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnUpdateStorage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnUpdateStorage);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, key);
+	lua_pushnumber(L, value);
+	lua_pushnumber(L, oldValue);
+	LuaScriptInterface::pushBoolean(L, isLogin);
+
+	scriptInterface.callVoidFunction(5);
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)

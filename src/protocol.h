@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PROTOCOL_H
@@ -28,7 +28,7 @@ public:
 
 	Connection_ptr getConnection() const { return connection.lock(); }
 
-	uint32_t getIP() const;
+	Connection::Address getIP() const;
 
 	// Use this function for autosend messages only
 	OutputMessage_ptr getOutputBuffer(int32_t size);

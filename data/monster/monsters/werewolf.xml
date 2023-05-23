@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Werewolf" nameDescription="a werewolf" race="blood" experience="1900" speed="280">
+<monster name="Werewolf" nameDescription="a werewolf" race="blood" experience="1900" speed="280" raceId="510">
 	<health now="1955" max="1955" />
 	<look type="308" corpse="20380" />
 	<targetchange interval="4000" chance="10" />
@@ -20,7 +20,7 @@
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="outfit" interval="2000" chance="1" target="1" radius="1" monster="werewolf" duration="2000">
-			<attribute key="areaeffect" value="bluenote" />
+			<attribute key="areaEffect" value="bluenote" />
 		</attack>
 		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="2" target="0" min="-80" max="-200">
 			<attribute key="areaEffect" value="rednote" />

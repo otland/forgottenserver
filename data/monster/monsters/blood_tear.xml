@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Blood Tear" nameDescription="a blood tear" race="fire" experience="0" speed="116">
+	<health now="1000" max="1000" />
+	<look type="1041" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="1" />
+		<flag canpushcreatures="1" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="1" />
+		<flag canwalkonfire="1" />
+		<flag canwalkonpoison="1" />
+	</flags>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<defenses armor="30" defense="30" />
+</monster>

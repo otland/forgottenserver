@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -25,7 +25,7 @@ round_keys expand_key(const key& k)
 
 void encrypt(uint8_t* data, size_t length, const round_keys& k)
 {
-	for (int32_t i = 0; i < k.size(); i += 2) {
+	for (auto i = 0u; i < k.size(); i += 2) {
 		for (auto it = data, last = data + length; it < last; it += 8) {
 			uint32_t left, right;
 			std::memcpy(&left, it, 4);
@@ -42,14 +42,14 @@ void encrypt(uint8_t* data, size_t length, const round_keys& k)
 
 void decrypt(uint8_t* data, size_t length, const round_keys& k)
 {
-	for (int32_t i = k.size() - 1; i > 0; i -= 2) {
+	for (auto i = k.size(); i > 0; i -= 2) {
 		for (auto it = data, last = data + length; it < last; it += 8) {
 			uint32_t left, right;
 			std::memcpy(&left, it, 4);
 			std::memcpy(&right, it + 4, 4);
 
-			right -= ((left << 4 ^ left >> 5) + left) ^ k[i];
-			left -= ((right << 4 ^ right >> 5) + right) ^ k[i - 1];
+			right -= ((left << 4 ^ left >> 5) + left) ^ k[i - 1];
+			left -= ((right << 4 ^ right >> 5) + right) ^ k[i - 2];
 
 			std::memcpy(it, &left, 4);
 			std::memcpy(it + 4, &right, 4);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gladiator" nameDescription="a gladiator" race="blood" experience="90" speed="200" manacost="470">
+<monster name="Gladiator" nameDescription="a gladiator" race="blood" experience="90" speed="200" manacost="470" raceId="527">
 	<health now="185" max="185" />
 	<look type="131" head="78" body="3" legs="79" feet="114" corpse="20407" />
 	<targetchange interval="4000" chance="0" />

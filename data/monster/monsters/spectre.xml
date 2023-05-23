@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spectre" nameDescription="a spectre" race="undead" experience="2100" speed="230">
+<monster name="Spectre" nameDescription="a spectre" race="undead" experience="2100" speed="230" raceId="286">
 	<health now="1350" max="1350" />
-	<look type="235" head="20" corpse="6348" />
+	<look type="235" corpse="6348" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />

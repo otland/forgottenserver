@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -15,7 +15,6 @@
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
-extern Vocations g_vocations;
 extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
@@ -104,8 +103,6 @@ void Spells::clear(bool fromLua)
 }
 
 LuaScriptInterface& Spells::getScriptInterface() { return scriptInterface; }
-
-std::string Spells::getScriptBaseName() const { return "spells"; }
 
 Event_ptr Spells::getEvent(const std::string& nodeName)
 {
@@ -510,7 +507,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
 		if (vocationId != -1) {
 			attr = vocationNode.attribute("showInDescription");
-			vocSpellMap[vocationId] = !attr || attr.as_bool();
+			vocationSpellMap[vocationId] = !attr || attr.as_bool();
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
@@ -592,7 +589,7 @@ bool Spell::playerSpellCheck(Player* player) const
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
 		}
-	} else if (!vocSpellMap.empty() && vocSpellMap.find(player->getVocationId()) == vocSpellMap.end()) {
+	} else if (!hasVocationSpellMap(player->getVocationId())) {
 		player->sendCancelMessage(RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -792,8 +789,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 	return 0;
 }
 
-std::string InstantSpell::getScriptEventName() const { return "onCastSpell"; }
-
 bool InstantSpell::configureEvent(const pugi::xml_node& node)
 {
 	if (!Spell::configureSpell(node)) {
@@ -850,7 +845,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 
 			target = playerTarget;
-			if (!target || target->getHealth() <= 0) {
+			if (!target || target->isRemoved() || target->isDead()) {
 				if (!casterTargetOrDirection) {
 					if (cooldown > 0) {
 						Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
@@ -884,7 +879,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			}
 		} else {
 			target = player->getAttackedCreature();
-			if (!target || target->getHealth() <= 0) {
+			if (!target || target->isRemoved() || target->isDead()) {
 				if (!casterTargetOrDirection) {
 					player->sendCancelMessage(RETURNVALUE_YOUCANONLYUSEITONCREATURES);
 					g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -984,7 +979,7 @@ bool InstantSpell::castSpell(Creature* creature)
 
 	if (casterTargetOrDirection) {
 		Creature* target = creature->getAttackedCreature();
-		if (target && target->getHealth() > 0) {
+		if (target && !target->isDead()) {
 			if (!canThrowSpell(creature, target)) {
 				return false;
 			}
@@ -1056,15 +1051,13 @@ bool InstantSpell::canCast(const Player* player) const
 			return true;
 		}
 	} else {
-		if (vocSpellMap.empty() || vocSpellMap.find(player->getVocationId()) != vocSpellMap.end()) {
+		if (vocationSpellMap.empty() || hasVocationSpellMap(player->getVocationId())) {
 			return true;
 		}
 	}
 
 	return false;
 }
-
-std::string RuneSpell::getScriptEventName() const { return "onCastSpell"; }
 
 bool RuneSpell::configureEvent(const pugi::xml_node& node)
 {

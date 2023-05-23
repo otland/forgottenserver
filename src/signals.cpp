@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -15,7 +15,6 @@
 #include "mounts.h"
 #include "movement.h"
 #include "npc.h"
-#include "quests.h"
 #include "raids.h"
 #include "scheduler.h"
 #include "spells.h"
@@ -93,9 +92,6 @@ void sighupHandler()
 	g_weapons->loadDefaults();
 	std::cout << "Reloaded weapons." << std::endl;
 
-	g_game.quests.reload();
-	std::cout << "Reloaded quests." << std::endl;
-
 	g_game.mounts.reload();
 	std::cout << "Reloaded mounts." << std::endl;
 
@@ -143,21 +139,21 @@ void dispatchSignalHandler(int signal)
 {
 	switch (signal) {
 		case SIGINT: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigintHandler));
+			g_dispatcher.addTask(sigintHandler);
 			break;
 		case SIGTERM: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigtermHandler));
+			g_dispatcher.addTask(sigtermHandler);
 			break;
 #ifndef _WIN32
 		case SIGHUP: // Reload config/data
-			g_dispatcher.addTask(createTask(sighupHandler));
+			g_dispatcher.addTask(sighupHandler);
 			break;
 		case SIGUSR1: // Saves game state
-			g_dispatcher.addTask(createTask(sigusr1Handler));
+			g_dispatcher.addTask(sigusr1Handler);
 			break;
 #else
 		case SIGBREAK: // Shuts the server down
-			g_dispatcher.addTask(createTask(sigbreakHandler));
+			g_dispatcher.addTask(sigbreakHandler);
 			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();

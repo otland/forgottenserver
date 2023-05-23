@@ -94,7 +94,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(VcpkgRoot)include\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -109,7 +109,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(VcpkgRoot)include\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -127,7 +127,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(VcpkgRoot)include\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -149,7 +149,7 @@
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
       <AdditionalIncludeDirectories>$(VcpkgRoot)include\luajit;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -195,6 +195,7 @@
     <ClCompile Include="..\src\luascript.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\map.cpp" />
+    <ClCompile Include="..\src\matrixarea.cpp" />
     <ClCompile Include="..\src\monster.cpp" />
     <ClCompile Include="..\src\monsters.cpp" />
     <ClCompile Include="..\src\mounts.cpp" />
@@ -219,7 +220,6 @@
     <ClCompile Include="..\src\protocolgame.cpp" />
     <ClCompile Include="..\src\protocollogin.cpp" />
     <ClCompile Include="..\src\protocolold.cpp" />
-    <ClCompile Include="..\src\quests.cpp" />
     <ClCompile Include="..\src\raids.cpp" />
     <ClCompile Include="..\src\rsa.cpp" />
     <ClCompile Include="..\src\scheduler.cpp" />
@@ -286,6 +286,7 @@
     <ClInclude Include="..\src\luascript.h" />
     <ClInclude Include="..\src\mailbox.h" />
     <ClInclude Include="..\src\map.h" />
+    <ClInclude Include="..\src\matrixarea.h" />
     <ClInclude Include="..\src\monster.h" />
     <ClInclude Include="..\src\monsters.h" />
     <ClInclude Include="..\src\mounts.h" />
@@ -304,7 +305,6 @@
     <ClInclude Include="..\src\protocollogin.h" />
     <ClInclude Include="..\src\protocolold.h" />
     <ClInclude Include="..\src\pugicast.h" />
-    <ClInclude Include="..\src\quests.h" />
     <ClInclude Include="..\src\raids.h" />
     <ClInclude Include="..\src\rsa.h" />
     <ClInclude Include="..\src\scheduler.h" />

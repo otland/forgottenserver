@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Omnivora" nameDescription="an omnivora" race="venom" experience="750" speed="210">
+<monster name="Omnivora" nameDescription="an omnivora" race="venom" experience="750" speed="210" raceId="1141">
 	<health now="1200" max="1200" />
 	<look type="717" corpse="24651" />
 	<targetchange interval="2000" chance="5" />

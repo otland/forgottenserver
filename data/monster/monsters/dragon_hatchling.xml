@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dragon Hatchling" nameDescription="a dragon hatchling" race="blood" experience="185" speed="170">
+<monster name="Dragon Hatchling" nameDescription="a dragon hatchling" race="blood" experience="185" speed="170" raceId="385">
 	<health now="380" max="380" />
 	<look type="271" corpse="7621" />
 	<targetchange interval="4000" chance="10" />

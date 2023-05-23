@@ -52,7 +52,7 @@ local config = {
 		[2931] = {chance = 10000, newItem = 5893, after = 2932},
 		[5999] = {chance = 10000, newItem = 5893, after = 2932}, -- after being killed
 
-		-- Bone Beast
+		-- Bonebeast
 		[3031] = {chance = 6000, newItem = 5925, after = 3032},
 		[6030] = {chance = 6000, newItem = 5925, after = 3032}, -- after being killed
 

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_ENUMS_H
@@ -293,6 +293,7 @@ enum ConditionParam_t
 	CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT = 53,
 	CONDITION_PARAM_AGGRESSIVE = 54,
 	CONDITION_PARAM_DRUNKENNESS = 55,
+	CONDITION_PARAM_MANASHIELD_BREAKABLE = 56,
 };
 
 enum BlockType_t : uint8_t
@@ -385,6 +386,7 @@ enum ConditionType_t
 	CONDITION_SPELLCOOLDOWN = 1 << 26,
 	CONDITION_SPELLGROUPCOOLDOWN = 1 << 27,
 	CONDITION_ROOT = 1 << 28,
+	CONDITION_MANASHIELD_BREAKABLE = 1 << 29,
 };
 
 enum ConditionId_t : int8_t
@@ -551,7 +553,7 @@ struct Outfit_t
 struct LightInfo
 {
 	uint8_t level = 0;
-	uint8_t color = 0;
+	uint8_t color = 215;
 	constexpr LightInfo() = default;
 	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
