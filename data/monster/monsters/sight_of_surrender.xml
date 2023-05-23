@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sight Of Surrender" nameDescription="a sight of surrender" race="undead" experience="17000" speed="340">
+<monster name="Sight Of Surrender" nameDescription="a sight of surrender" race="undead" experience="17000" speed="340" raceId="1012">
 	<health now="28000" max="28000" />
 	<look type="583" corpse="22478" />
 	<targetchange interval="4000" chance="20" />

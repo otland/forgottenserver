@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Greater Canopic Jar" nameDescription="a greater canopic jar" race="undead" experience="0" speed="0">
+	<health now="7000" max="7000" />
+	<look type="599" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<defenses armor="10" defense="5">
+		<defense name="healing" interval="2000" chance="20" radius="7" min="1000" max="1500">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<summons maxSummons="1">
+		<summon name="Elder Mummy" interval="2000" chance="15" />
+	</summons>
+</monster>

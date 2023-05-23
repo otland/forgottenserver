@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="190" manacost="420">
+<monster name="Gang Member" nameDescription="a gang member" race="blood" experience="70" speed="190" manacost="420" raceId="526">
 	<health now="295" max="295" />
 	<look type="151" head="114" body="19" legs="23" feet="40" corpse="20403" />
 	<targetchange interval="4000" chance="0" />

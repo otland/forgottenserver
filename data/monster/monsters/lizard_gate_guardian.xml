@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Lizard Gate Guardian" nameDescription="a lizard gate guardian" race="blood" experience="2500" speed="276">
+	<health now="5000" max="5000" />
+	<look type="343" corpse="11284" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-349" />
+		<attack name="earth" interval="2000" chance="15" range="7" radius="1" target="1" min="-220" max="-375">
+			<attribute key="shootEffect" value="poison" />
+			<attribute key="areaEffect" value="poison" />
+		</attack>
+	</attacks>
+	<defenses armor="40" defense="40">
+		<defense name="healing" interval="2000" chance="10" min="175" max="275">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+	<loot>
+		<item id="2148" name="gold coin" chance="100000" countmax="130" />
+		<item id="8473" name="ultimate health potion" chance="57143" />
+		<item id="5876" name="lizard leather" chance="14286" />
+		<item id="5881" name="lizard scale" chance="14286" />
+		<item id="2152" name="platinum coin" chance="14286" countmax="4" />
+		<item id="11303" name="zaoan shoes" chance="14286" />
+		<item id="11301" name="zaoan armor" chance="4762" />
+		<item id="11304" name="zaoan legs" chance="4762" />
+	</loot>
+</monster>

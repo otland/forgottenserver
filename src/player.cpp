@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -101,6 +101,9 @@ bool Player::setVocation(uint16_t vocId)
 	vocation = voc;
 
 	updateRegeneration();
+	setBaseSpeed(voc->getBaseSpeed());
+	updateBaseSpeed();
+	g_game.changeSpeed(this, 0);
 	return true;
 }
 
@@ -713,30 +716,16 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		}
 	}
 
+	int32_t oldValue;
+	getStorageValue(key, oldValue);
+
 	if (value != -1) {
-		int32_t oldValue;
-		getStorageValue(key, oldValue);
-
 		storageMap[key] = value;
-
-		if (!isLogin) {
-			auto currentFrameTime = g_dispatcher.getDispatcherCycle();
-			if (lastQuestlogUpdate != currentFrameTime && g_game.quests.isQuestStorage(key, value, oldValue)) {
-				lastQuestlogUpdate = currentFrameTime;
-				sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your questlog has been updated.");
-			}
-
-			for (const TrackedQuest& trackedQuest : trackedQuests) {
-				if (const Quest* quest = g_game.quests.getQuestByID(trackedQuest.getQuestId())) {
-					if (quest->isTracking(key, value)) {
-						sendUpdateQuestTracker(trackedQuest);
-					}
-				}
-			}
-		}
 	} else {
 		storageMap.erase(key);
 	}
+
+	g_events->eventPlayerOnUpdateStorage(this, key, oldValue, value, isLogin);
 }
 
 bool Player::getStorageValue(const uint32_t key, int32_t& value) const
@@ -1198,10 +1187,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << name << " has logged in." << std::endl;
-		}
-
 		if (guild) {
 			guild->addMember(this);
 		}
@@ -1317,14 +1302,10 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		clearPartyInvitations();
 
 		if (party) {
-			party->leaveParty(this);
+			party->leaveParty(this, true);
 		}
 
 		g_chat->removeUserFromAllChannels(*this);
-
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << getName() << " has logged out." << std::endl;
-		}
 
 		if (guild) {
 			guild->removeMember(this);
@@ -1390,7 +1371,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
 		isUpdatingPath = false;
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
 	if (creature != this) {
@@ -1813,7 +1794,8 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " gained " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -1902,7 +1884,8 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 			message.type = MESSAGE_EXPERIENCE_OTHERS;
 			message.text = getName() + " lost " + expString;
 			for (Creature* spectator : spectators) {
-				spectator->getPlayer()->sendTextMessage(message);
+				assert(dynamic_cast<Player*>(spectator) != nullptr);
+				static_cast<Player*>(spectator)->sendTextMessage(message);
 			}
 		}
 	}
@@ -2028,7 +2011,7 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	BlockType_t blockType =
 	    Creature::blockHit(attacker, combatType, damage, checkDefense, checkArmor, field, ignoreResistances);
 
-	if (attacker) {
+	if (attacker && combatType != COMBAT_HEALING) {
 		sendCreatureSquare(attacker, SQ_COLOR_BLACK);
 	}
 
@@ -2106,13 +2089,13 @@ BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_
 	return blockType;
 }
 
-uint32_t Player::getIP() const
+Connection::Address Player::getIP() const
 {
 	if (client) {
 		return client->getIP();
 	}
 
-	return 0;
+	return {};
 }
 
 void Player::death(Creature* lastHitCreature)
@@ -3193,7 +3176,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = oldParent != this;
 		}
@@ -3250,7 +3233,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		assert(i ? i->getContainer() != nullptr : true);
 
 		if (i) {
-			requireListUpdate = i->getContainer()->getHoldingPlayer() != this;
+			requireListUpdate = static_cast<const Container*>(i)->getHoldingPlayer() != this;
 		} else {
 			requireListUpdate = newParent != this;
 		}
@@ -3338,7 +3321,7 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 {
 	const ItemType& itemType = Item::items[itemId];
 	return std::any_of(shopItemList.begin(), shopItemList.end(), [&](const ShopInfo& shopInfo) {
-		return shopInfo.itemId == itemId && shopInfo.buyPrice != 0 &&
+		return shopInfo.itemId == itemId && (shopInfo.buyPrice != 0 || shopInfo.sellPrice != 0) &&
 		       (!itemType.isFluidContainer() || shopInfo.subType == subType);
 	});
 }
@@ -3394,7 +3377,7 @@ bool Player::setAttackedCreature(Creature* creature)
 	}
 
 	if (creature) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.checkCreatureAttack(id); }));
+		g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 	}
 	return true;
 }
@@ -4345,6 +4328,18 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	return GUILDEMBLEM_NEUTRAL;
 }
 
+uint8_t Player::getRandomMount() const
+{
+	std::vector<uint8_t> mountsId;
+	for (const Mount& mount : g_game.mounts.getMounts()) {
+		if (hasMount(&mount)) {
+			mountsId.push_back(mount.id);
+		}
+	}
+
+	return mountsId[uniform_random(0, mountsId.size() - 1)];
+}
+
 uint8_t Player::getCurrentMount() const
 {
 	int32_t value;
@@ -4382,6 +4377,10 @@ bool Player::toggleMount(bool mount)
 		if (currentMountId == 0) {
 			sendOutfitWindow();
 			return false;
+		}
+
+		if (randomizeMount) {
+			currentMountId = getRandomMount();
 		}
 
 		Mount* currentMount = g_game.mounts.getMountByID(currentMountId);
@@ -4490,6 +4489,16 @@ bool Player::hasMount(const Mount* mount) const
 	}
 
 	return ((1 << (tmpMountId % 31)) & value) != 0;
+}
+
+bool Player::hasMounts() const
+{
+	for (const Mount& mount : g_game.mounts.getMounts()) {
+		if (hasMount(&mount)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void Player::dismount()
@@ -4653,36 +4662,6 @@ void Player::sendModalWindow(const ModalWindow& modalWindow)
 
 void Player::clearModalWindows() { modalWindows.clear(); }
 
-uint16_t Player::getHelpers() const
-{
-	uint16_t helpers;
-
-	if (guild && party) {
-		std::unordered_set<Player*> helperSet;
-
-		const auto& guildMembers = guild->getMembersOnline();
-		helperSet.insert(guildMembers.begin(), guildMembers.end());
-
-		const auto& partyMembers = party->getMembers();
-		helperSet.insert(partyMembers.begin(), partyMembers.end());
-
-		const auto& partyInvitees = party->getInvitees();
-		helperSet.insert(partyInvitees.begin(), partyInvitees.end());
-
-		helperSet.insert(party->getLeader());
-
-		helpers = helperSet.size();
-	} else if (guild) {
-		helpers = guild->getMembersOnline().size();
-	} else if (party) {
-		helpers = party->getMemberCount() + party->getInvitationCount() + 1;
-	} else {
-		helpers = 0;
-	}
-
-	return helpers;
-}
-
 void Player::sendClosePrivate(uint16_t channelId)
 {
 	if (channelId == CHANNEL_GUILD || channelId == CHANNEL_PARTY) {
@@ -4744,35 +4723,6 @@ size_t Player::getMaxDepotItems() const
 	}
 
 	return g_config.getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
-}
-
-size_t Player::getMaxTrackedQuests() const
-{
-	return g_config.getNumber(isPremium() ? ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT
-	                                      : ConfigManager::QUEST_TRACKER_FREE_LIMIT);
-}
-
-void Player::resetQuestTracker(const std::vector<uint16_t>& missionIds)
-{
-	const size_t maxTrackedQuests = getMaxTrackedQuests();
-	trackedQuests.clear();
-	size_t index = 0;
-
-	const QuestsList& quests = g_game.quests.getQuests();
-	for (const uint8_t missionId : missionIds) {
-		for (const Quest& quest : quests) {
-			for (const Mission& mission : quest.getMissions()) {
-				if (mission.getID() == missionId && mission.isStarted(this)) {
-					trackedQuests.emplace_back(quest.getID(), missionId);
-					if (++index == maxTrackedQuests) {
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	sendQuestTracker();
 }
 
 std::forward_list<Condition*> Player::getMuteConditions() const

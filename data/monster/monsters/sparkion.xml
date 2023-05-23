@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sparkion" nameDescription="a sparkion" race="energy" experience="1520" speed="302">
+<monster name="Sparkion" nameDescription="a sparkion" race="energy" experience="1520" speed="302" raceId="1234">
 	<health now="2700" max="2700" />
 	<look type="877" corpse="26044" />
 	<targetchange interval="5000" chance="5" />

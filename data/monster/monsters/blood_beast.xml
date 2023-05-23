@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Blood Beast" nameDescription="a blood beast" race="venom" experience="1000" speed="220">
+<monster name="Blood Beast" nameDescription="a blood beast" race="venom" experience="1000" speed="220" raceId="1040">
 	<health now="1600" max="1600" />
 	<look type="602" corpse="23351" />
 	<targetchange interval="2000" chance="4" />

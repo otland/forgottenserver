@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185">
+<monster name="Feverish Citizen" nameDescription="a feverish citizen" race="blood" experience="30" speed="185" raceId="719">
 	<health now="125" max="125" />
 	<look type="425" addons="2" corpse="20395" />
 	<targetchange interval="4000" chance="0" />
@@ -27,7 +27,7 @@
 	</attacks>
 	<defenses armor="15" defense="15">
 		<defense name="outfit" interval="2000" chance="1" target="0" radius="3" monster="bog raider" duration="5000">
-			<attribute key="areaeffect" value="greenbubble" />
+			<attribute key="areaEffect" value="greenbubble" />
 		</defense>
 	</defenses>
 	<elements>

@@ -25,10 +25,10 @@
 		<attack name="fire" interval="3000" chance="20" target="0" radius="4" min="-500" max="-800">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
-		<attack name="fire" interval="2000" chance="15" needtarget="0" radius="3" min="-550" max="-800">
+		<attack name="fire" interval="2000" chance="15" target="0" radius="3" min="-550" max="-800">
 			<attribute key="areaEffect" value="firearea" />
 		</attack>
-		<attack name="energy" interval="2000" chance="20" needtarget="0" radius="3" min="-550" max="-800">
+		<attack name="energy" interval="2000" chance="20" target="0" radius="3" min="-550" max="-800">
 			<attribute key="shootEffect" value="energyball" />
 			<attribute key="areaEffect" value="energy" />
 		</attack>

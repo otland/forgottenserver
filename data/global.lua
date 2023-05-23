@@ -58,7 +58,7 @@ openQuestDoors = {
 	1224, 1226, 1242, 1244, 1256, 1258, 3543, 3552, 5106, 5115, 5124, 5133, 5289, 5291, 5746, 5749, 6203,
 	6205, 6260, 6262, 6899, 6908, 7041, 7050, 8552, 8554, 9176, 9178, 9278, 9280, 10279, 10281, 10476, 10485,
 	10783, 10792, 12098, 12105, 12194, 12203, 14639, 14646, 19848, 19857, 19988, 19997, 20281, 20290, 22822,
-	22831, 25163, 25165, 25289, 25296, 32698, 32700, 32702, 32704, 34320, 34322, 34225, 34227 
+	22831, 25163, 25165, 25289, 25296, 32698, 32700, 32702, 32704, 34320, 34322, 34225, 34227
 }
 closedQuestDoors = {
 	1223, 1225, 1241, 1243, 1255, 1257, 3542, 3551, 5105, 5114, 5123, 5132, 5288, 5290, 5745, 5748, 6202,
@@ -110,6 +110,10 @@ table.contains = function(array, value)
 		end
 	end
 	return false
+end
+
+table.slice = function(array, from, to)
+	return {unpack(array, from or 1, to or #array)}
 end
 
 string.split = function(str, sep)
@@ -230,4 +234,23 @@ function getPlayerDatabaseInfo(name_or_guid)
 
 	result.free(query)
 	return info
+end
+
+function checkDuplicateStorageKeys(varName)
+	local keys = _G[varName]
+	local seen = {}
+	local duplicates = {}
+	for k, v in pairs(keys) do
+		if seen[v] then
+			table.insert(duplicates, v)
+		else
+			seen[v] = true
+		end
+	end
+
+	if next(duplicates) == nil then
+		return false
+	else
+		return duplicates
+	end
 end

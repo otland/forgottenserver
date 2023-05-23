@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thornback Tortoise" nameDescription="a thornback tortoise" race="blood" experience="150" speed="200" manacost="490">
+<monster name="Thornback Tortoise" nameDescription="a thornback tortoise" race="blood" experience="150" speed="200" manacost="490" raceId="259">
 	<health now="300" max="300" />
 	<look type="198" corpse="6073" />
 	<targetchange interval="5000" chance="0" />

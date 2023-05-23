@@ -1,0 +1,33 @@
+name: Unit tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      CC: gcc
+      CXX: g++
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
+
+      - name: Install dependencies
+        run: >
+          sudo apt update -q &&
+          sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
+          libboost-system-dev libboost-iostreams-dev libboost-test-dev
+          libpugixml-dev libcrypto++-dev libfmt-dev
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v10
+        with:
+          buildPreset: default
+          configurePreset: default
+          configurePresetAdditionalArgs: "['-G Ninja', '-DENABLE_TESTING=ON']"
+          testPreset: default

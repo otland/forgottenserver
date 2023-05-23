@@ -5,10 +5,7 @@ function onLogin(player)
 		loginStr = loginStr .. " Please choose your outfit."
 		player:sendOutfitWindow()
 	else
-		if loginStr ~= "" then
-			player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
-		end
-
+		player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
 		loginStr = string.format("Your last visit in %s: %s.", serverName, os.date("%d %b %Y %X", player:getLastLoginSaved()))
 	end
 	player:sendTextMessage(MESSAGE_STATUS_DEFAULT, loginStr)
@@ -25,8 +22,17 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
+	-- Update client exp display
+	player:updateClientExpDisplay()
+
+	-- achievements points for highscores
+	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == -1 then
+		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("BestiaryKills")
 	return true
 end

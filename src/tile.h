@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_TILE_H
@@ -180,6 +180,8 @@ public:
 			return ZONE_NOPVP;
 		} else if (hasFlag(TILESTATE_PVPZONE)) {
 			return ZONE_PVP;
+		} else if (hasFlag(TILESTATE_NOLOGOUT)) {
+			return ZONE_NOLOGOUT;
 		}
 		return ZONE_NORMAL;
 	}

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -156,7 +156,7 @@ bool House::kickPlayer(Player* player, Player* target)
 	return true;
 }
 
-void House::setAccessList(uint32_t listId, const std::string& textlist)
+void House::setAccessList(uint32_t listId, std::string_view textlist)
 {
 	if (listId == GUEST_LIST) {
 		guestList.parseList(textlist);
@@ -373,7 +373,7 @@ bool House::executeTransfer(HouseTransferItem* item, Player* newOwner)
 	return true;
 }
 
-void AccessList::parseList(const std::string& list)
+void AccessList::parseList(std::string_view list)
 {
 	playerList.clear();
 	guildRankList.clear();
@@ -383,7 +383,7 @@ void AccessList::parseList(const std::string& list)
 		return;
 	}
 
-	std::istringstream listStream(list);
+	std::istringstream listStream{this->list};
 	std::string line;
 
 	uint16_t lineNo = 1;
@@ -530,7 +530,7 @@ bool Door::canUse(const Player* player)
 	return accessList->isInList(player);
 }
 
-void Door::setAccessList(const std::string& textlist)
+void Door::setAccessList(std::string_view textlist)
 {
 	if (!accessList) {
 		accessList.reset(new AccessList());
@@ -663,6 +663,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 			}
 
 			house->setPaidUntil(paidUntil);
+			house->setPayRentWarnings(0);
 		} else {
 			if (house->getPayRentWarnings() < 7) {
 				int32_t daysLeft = 7 - house->getPayRentWarnings();

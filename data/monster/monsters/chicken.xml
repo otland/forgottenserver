@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="128" manacost="220">
+<monster name="Chicken" namedescription="a chicken" race="blood" experience="0" speed="128" manacost="220" raceId="111">
 	<health now="15" max="15" />
 	<look type="111" corpse="6042" />
 	<targetchange interval="4000" chance="0" />

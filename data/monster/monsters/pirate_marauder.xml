@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490">
+<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490" raceId="247">
 	<health now="210" max="210" />
 	<look type="93" corpse="20483" />
 	<targetchange interval="4000" chance="15" />

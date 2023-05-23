@@ -10,42 +10,47 @@ on:
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - CMakePresets.json
 
   pull_request:
     paths:
       - cmake/**
       - src/**
       - CMakeLists.txt
+      - CMakePresets.json
 
 jobs:
   build-ubuntu:
-    runs-on: ubuntu-20.04
-    if: github.event_name == 'push'
+    name: ubuntu-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        buildtype: [Debug, Release]
+        luajit: [on, off]
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
 
       - name: Install dependencies
         run: >
-          sudo apt-get update &&
-          sudo apt-get install git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
+          sudo apt update -q &&
+          sudo apt install -yq build-essential libluajit-5.1-dev libmysqlclient-dev
+          libboost-system-dev libboost-iostreams-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
       - name: Build with cmake
-        uses: ashutoshvarma/action-cmake-build@master
+        uses: lukka/run-cmake@v10
         with:
-          build-dir: ${{ runner.workspace }}/build
-          # will set the CC & CXX for cmake
-          cc: gcc
-          cxx: g++
-          build-type: Release
-          # Extra options pass to cmake while configuring project
-          configure-options: -DUSE_LUAJIT=on
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
+          buildPreset: default
+          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
+          configurePreset: default
 
-      - name: Upload binary
-        uses: actions/upload-artifact@v2
+      - name: Upload artifact binary
+        uses: actions/upload-artifact@v3
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs

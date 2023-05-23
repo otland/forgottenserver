@@ -23,11 +23,11 @@ local openOddDoors = {
 	[36292] = { locked = 36289, closed = 36288 },
 	[36293] = { locked = 36291, closed = 36290 },
 	[37596] = { locked = 37593, closed = 37592 },
-	[37597] = { locked = 37595, closed = 37594 },	
+	[37597] = { locked = 37595, closed = 37594 },
 	[39119] = { locked = 39116, closed = 39115 },
 	[39120] = { locked = 39118, closed = 39117 }
 }
-local closedOddDoors = {	
+local closedOddDoors = {
 	[12692] = { locked = 13237, open = 12695 },
 	[12701] = { locked = 13236, open = 12703 },
 	[14633] = { locked = 14634, open = 14635 },
@@ -63,7 +63,7 @@ local lockedOddDoors = {
 	[14641] = { closed = 14640, open = 17435 },
 	[26530] = { closed = 26529, open = 26533 },
 	[26532] = { closed = 26531, open = 26534 },
-	[31175] = { closed = 27559, open = 31176 },	
+	[31175] = { closed = 27559, open = 31176 },
 	[31021] = { closed = 31020, open = 31024 },
 	[31023] = { closed = 31022, open = 31025 },
 	[32705] = { closed = 32689, open = 32691 },

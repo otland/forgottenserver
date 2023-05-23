@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -367,8 +367,8 @@ void Tile::onAddTileItem(Item* item)
 
 	// send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendAddTileItem(this, cylinderMapPos, item);
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendAddTileItem(this, cylinderMapPos, item);
 		}
 	}
 
@@ -412,8 +412,8 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 	// send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
 		}
 	}
 
@@ -477,7 +477,8 @@ void Tile::onUpdateTile(const SpectatorVec& spectators)
 
 	// send to clients
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTile(this, cylinderMapPos);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
 	}
 }
 
@@ -572,6 +573,13 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 					if (!player->canWalkthrough(tileCreature)) {
 						return RETURNVALUE_NOTPOSSIBLE;
 					}
+				}
+			}
+
+			if (MagicField* field = getFieldItem()) {
+				if (field->getDamage() != 0 && hasBitSet(FLAG_PATHFINDING, flags) &&
+				    !hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
+					return RETURNVALUE_NOTPOSSIBLE;
 				}
 			}
 
@@ -1097,8 +1105,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, getPosition(), true);
 		for (Creature* spectator : spectators) {
-			if (Player* tmpPlayer = spectator->getPlayer()) {
-				oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
+			if (Player* spectatorPlayer = spectator->getPlayer()) {
+				oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 			}
 		}
 
@@ -1122,8 +1130,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 			SpectatorVec spectators;
 			g_game.map.getSpectators(spectators, getPosition(), true);
 			for (Creature* spectator : spectators) {
-				if (Player* tmpPlayer = spectator->getPlayer()) {
-					oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
+				if (Player* spectatorPlayer = spectator->getPlayer()) {
+					oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 				}
 			}
 
@@ -1330,7 +1338,8 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
 	// add a reference to this item, it may be deleted after being added (mailbox for example)
@@ -1390,7 +1399,8 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
 	// calling movement scripts

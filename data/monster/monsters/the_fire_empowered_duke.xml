@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="The Fire Empowered Duke" nameDescription="The Fire Empowered Duke" race="blood" experience="40000" speed="270">
+	<health now="50000" max="50000" />
+	<look type="1047" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag isboss="1" />
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-800" />
+		<attack name="fire" interval="2000" chance="15" range="3" length="6" spread="8" min="0" max="-1000">
+			<attribute key="areaEffect" value="firearea" />
+		</attack>
+		<attack name="fire" interval="2000" chance="20" range="3" length="9" spread="4" min="0" max="-1000">
+			<attribute key="areaEffect" value="fire" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="2" min="-135" max="-1000">
+			<attribute key="areaEffect" value="explosionarea" />
+		</attack>
+		<attack name="physical" interval="2000" chance="15" radius="8" min="0" max="-1000">
+			<attribute key="areaEffect" value="blackspark" />
+		</attack>
+	</attacks>
+	<defenses armor="30" defense="30" />
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>

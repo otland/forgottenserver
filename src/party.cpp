@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -56,7 +56,7 @@ void Party::disband()
 	delete this;
 }
 
-bool Party::leaveParty(Player* player)
+bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 {
 	if (!player) {
 		return false;
@@ -66,7 +66,8 @@ bool Party::leaveParty(Player* player)
 		return false;
 	}
 
-	if (!g_events->eventPartyOnLeave(this, player)) {
+	bool canRemove = g_events->eventPartyOnLeave(this, player);
+	if (!forceRemove && !canRemove) {
 		return false;
 	}
 
@@ -76,7 +77,7 @@ bool Party::leaveParty(Player* player)
 			if (memberList.size() == 1 && inviteList.empty()) {
 				missingLeader = true;
 			} else {
-				passPartyLeadership(memberList.front());
+				passPartyLeadership(memberList.front(), true);
 			}
 		} else {
 			missingLeader = true;
@@ -122,9 +123,13 @@ bool Party::leaveParty(Player* player)
 	return true;
 }
 
-bool Party::passPartyLeadership(Player* player)
+bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 {
 	if (!player || leader == player || player->getParty() != this) {
+		return false;
+	}
+
+	if (!g_events->eventPartyOnPassLeadership(this, player) && !forceRemove) {
 		return false;
 	}
 
@@ -238,6 +243,10 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer /* = true*/)
 
 void Party::revokeInvitation(Player& player)
 {
+	if (!g_events->eventPartyOnRevokeInvitation(this, &player)) {
+		return;
+	}
+
 	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has revoked {:s} invitation.", leader->getName(),
 	                                                       leader->getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
 	leader->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("Invitation for {:s} has been revoked.", player.getName()));

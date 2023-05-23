@@ -1,5 +1,5 @@
 function onUpdateDatabase()
-	print("> Updating database to version 30 (mount colors)")
+	print("> Updating database to version 31 (mount colors)")
 	db.query([[
 		ALTER TABLE `players`
 			ADD COLUMN `lookmount` int DEFAULT 0 NOT NULL AFTER `lookaddons`,

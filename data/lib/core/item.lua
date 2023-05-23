@@ -243,12 +243,12 @@ do
 				descriptions[#descriptions + 1] = string.format("Range:%d", item:getShootRange())
 
 				if attack ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Atk:%+d", attack)
+					descriptions[#descriptions + 1] = string.format("Atk+%d", attack)
 				end
 
 				local hitPercent = item:getHitChance()
 				if hitPercent ~= 0 then
-					descriptions[#descriptions + 1] = string.format("Hit%%:%+d", item:hitPercent())
+					descriptions[#descriptions + 1] = string.format("Hit%%+%d", hitPercent)
 				end
 
 			-- melee weapons and missiles

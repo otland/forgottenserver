@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="Glooth Horror" nameDescription="Glooth Horror" race="venom" experience="900" speed="200">
+	<health now="15000" max="15000" />
+	<look type="677" corpse="0" />
+	<targetchange interval="2000" chance="5" />
+	<flags>
+		<flag pushable="0" />
+		<flag canpushitems="0" />
+		<flag canpushcreatures="0" />
+		<flag staticattack="90" />
+		<flag targetdistance="1" />
+		<flag canwalkonenergy="0" />
+		<flag canwalkonfire="0" />
+		<flag canwalkonpoison="0" />
+	</flags>
+	<attacks>
+		<attack name="melee" interval="2000" min="0" max="-100" />
+		<attack name="death" interval="2000" chance="9" length="8" spread="3" min="-300" max="-700" />
+		<attack name="drunk" interval="2000" chance="8" radius="8" target="0" duration="15000">
+			<attribute key="areaEffect" value="greenspark" />
+		</attack>
+	</attacks>
+	<defenses armor="15" defense="25">
+		<defense name="healing" interval="2000" chance="15" min="400" max="700">
+			<attribute key="areaEffect" value="greenshimmer" />
+		</defense>
+	</defenses>
+	<immunities>
+		<immunity paralyze="1" />
+		<immunity invisible="1" />
+		<immunity drunk="1" />
+	</immunities>
+</monster>
