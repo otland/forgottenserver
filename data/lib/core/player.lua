@@ -617,8 +617,8 @@ function Player.sendHighscores(self, entries, params)
 	return true
 end
 
-function Player.takeScreenshot(screenshotType, ignoreConfig)
-	if not ignoreConfig and (screenshotType < SCREENSHOT_TYPE_FIRST or screenshotType >= SCREENSHOT_TYPE_LAST) then
+function Player.takeScreenshot(self, screenshotType, ignoreConfig)
+	if not ignoreConfig and (screenshotType < SCREENSHOT_TYPE_FIRST or screenshotType > SCREENSHOT_TYPE_LAST) then
 		return false
 	end
 
