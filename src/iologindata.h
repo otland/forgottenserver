@@ -1,12 +1,16 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
-#define FS_IOLOGINDATA_H_28B0440BEC594654AC0F4E1A5E42B2EF
+#ifndef FS_IOLOGINDATA_H
+#define FS_IOLOGINDATA_H
 
 #include "account.h"
-#include "player.h"
 #include "database.h"
+
+class Item;
+class Player;
+class PropWriteStream;
+struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
@@ -50,4 +54,4 @@ class IOLoginData
 		static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert, PropWriteStream& propWriteStream);
 };
 
-#endif
+#endif // FS_IOLOGINDATA_H

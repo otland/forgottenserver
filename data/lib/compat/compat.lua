@@ -645,9 +645,8 @@ function doPlayerRemOutfit(cid, lookType, addons)
 	end
 	if addons == 255 then
 		return player:removeOutfit(lookType)
-	else
-		return player:removeOutfitAddon(lookType, addons)
 	end
+	return player:removeOutfitAddon(lookType, addons)
 end
 doPlayerRemoveOutfit = doPlayerRemOutfit
 function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return p and p:hasOutfit(lookType, addons) or false end
@@ -866,6 +865,15 @@ function doAddContainerItemEx(uid, virtualId)
 	return res
 end
 
+function doAddContainerItem(uid, itemid, count)
+	local container = Container(uid)
+	if not container then
+		return false
+	end
+
+	return container:addItem(itemid, count)
+end
+
 function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
 function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end
 function isSightClear(fromPos, toPos, floorCheck) return Position(fromPos):isSightClear(toPos, floorCheck) end
@@ -968,9 +976,8 @@ function hasProperty(uid, prop)
 	local parent = item:getParent()
 	if parent:isTile() and item == parent:getGround() then
 		return parent:hasProperty(prop)
-	else
-		return item:hasProperty(prop)
 	end
+	return item:hasProperty(prop)
 end
 
 function doSetItemText(uid, text)
@@ -1491,4 +1498,16 @@ function showpos(v)
 end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
-if unpack == nil then unpack = table.unpack end
+if not unpack then unpack = table.unpack end
+
+if not loadstring then loadstring = load end
+
+function table.maxn(t)
+	local max = 0
+	for k in pairs(t) do
+		if type(k) == "number" and k > max then
+			max = k
+		end
+	end
+	return max
+end

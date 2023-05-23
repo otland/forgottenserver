@@ -1,14 +1,12 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_QUESTS_H_16E44051F23547BE8097F8EA9FCAACA0
-#define FS_QUESTS_H_16E44051F23547BE8097F8EA9FCAACA0
-
-#include "player.h"
-#include "networkmessage.h"
+#ifndef FS_QUESTS_H
+#define FS_QUESTS_H
 
 class Mission;
 class Quest;
+class Player;
 
 using MissionsList = std::list<Mission>;
 using QuestsList = std::list<Quest>;
@@ -100,4 +98,4 @@ class Quests
 		QuestsList quests;
 };
 
-#endif
+#endif // FS_QUESTS_H

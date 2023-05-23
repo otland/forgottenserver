@@ -1,24 +1,20 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_WEAPONS_H_69D1993478AA42948E24C0B90B8F5BF5
-#define FS_WEAPONS_H_69D1993478AA42948E24C0B90B8F5BF5
+#ifndef FS_WEAPONS_H
+#define FS_WEAPONS_H
 
-#include "luascript.h"
-#include "player.h"
 #include "baseevents.h"
 #include "combat.h"
 #include "const.h"
+#include "luascript.h"
 #include "vocation.h"
 
-extern Vocations g_vocations;
-
 class Weapon;
-class WeaponMelee;
-class WeaponDistance;
-class WeaponWand;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
+
+extern Vocations g_vocations;
 
 class Weapons final : public BaseEvents
 {
@@ -292,4 +288,4 @@ class WeaponWand final : public Weapon
 		int32_t maxChange = 0;
 };
 
-#endif
+#endif // FS_WEAPONS_H

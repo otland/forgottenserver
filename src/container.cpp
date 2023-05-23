@@ -4,8 +4,14 @@
 #include "otpch.h"
 
 #include "container.h"
-#include "iomap.h"
+
+#include "depotchest.h"
 #include "game.h"
+#include "housetile.h"
+#include "inbox.h"
+#include "iomap.h"
+#include "spectators.h"
+#include "storeinbox.h"
 
 extern Game g_game;
 
@@ -76,7 +82,7 @@ std::string Container::getName(bool addArticle /* = false*/) const {
 
 bool Container::hasParent() const
 {
-	return getID() != ITEM_BROWSEFIELD && dynamic_cast<const Player*>(getParent()) == nullptr;
+	return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent());
 }
 
 void Container::addItem(Item* item)
@@ -209,12 +215,14 @@ void Container::onAddContainerItem(Item* item)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendAddContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendAddContainerItem(this, item);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onAddContainerItem(item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onAddContainerItem(item);
 	}
 }
 
@@ -225,12 +233,14 @@ void Container::onUpdateContainerItem(uint32_t index, Item* oldItem, Item* newIt
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateContainerItem(this, index, newItem);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateContainerItem(this, index, newItem);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onUpdateContainerItem(this, oldItem, newItem);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onUpdateContainerItem(this, oldItem, newItem);
 	}
 }
 
@@ -241,12 +251,14 @@ void Container::onRemoveContainerItem(uint32_t index, Item* item)
 
 	//send change to client
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendRemoveContainerItem(this, index);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendRemoveContainerItem(this, index);
 	}
 
 	//event methods
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->onRemoveContainerItem(this, item);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->onRemoveContainerItem(this, item);
 	}
 }
 
@@ -265,7 +277,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -339,7 +351,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 		uint32_t& maxQueryCount, uint32_t flags) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -394,7 +406,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -503,7 +515,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -536,7 +548,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -578,7 +590,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 void Container::removeThing(Thing* thing, uint32_t count)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -709,7 +721,7 @@ void Container::internalAddThing(Thing* thing)
 void Container::internalAddThing(uint32_t, Thing* thing)
 {
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return;
 	}
 

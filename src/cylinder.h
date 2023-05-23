@@ -1,14 +1,14 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CYLINDER_H_54BBCEB2A5B7415DAD837E4D58115150
-#define FS_CYLINDER_H_54BBCEB2A5B7415DAD837E4D58115150
+#ifndef FS_CYLINDER_H
+#define FS_CYLINDER_H
 
 #include "enums.h"
 #include "thing.h"
 
-class Item;
 class Creature;
+class Item;
 
 static constexpr int32_t INDEX_WHEREEVER = -1;
 
@@ -230,4 +230,4 @@ class VirtualCylinder final : public Cylinder
 		}
 };
 
-#endif
+#endif // FS_CYLINDER_H

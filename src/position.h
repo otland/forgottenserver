@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
-#define FS_POSITION_H_5B684192F7034FB8857C8280D2CC6C75
+#ifndef FS_POSITION_H
+#define FS_POSITION_H
 
 enum Direction : uint8_t {
 	DIRECTION_NORTH = 0,
@@ -56,7 +56,7 @@ struct Position
 		return std::abs(Position::getOffsetY(p1, p2));
 	}
 	static int16_t getDistanceZ(const Position& p1, const Position& p2) {
-		return std::abs(Position::getOffsetZ(p1, p2));
+		return static_cast<int16_t>(std::abs(Position::getOffsetZ(p1, p2)));
 	}
 
 	uint16_t x = 0;
@@ -91,24 +91,10 @@ struct Position
 		return false;
 	}
 
-	bool operator>(const Position& p) const {
-		return ! (*this < p);
-	}
-
-	bool operator==(const Position& p) const {
-		return p.x == x && p.y == y && p.z == z;
-	}
+	bool operator==(const Position& p) const { return p.x == x && p.y == y && p.z == z; }
 
 	bool operator!=(const Position& p) const {
 		return p.x != x || p.y != y || p.z != z;
-	}
-
-	Position operator+(const Position& p1) const {
-		return Position(x + p1.x, y + p1.y, z + p1.z);
-	}
-
-	Position operator-(const Position& p1) const {
-		return Position(x - p1.x, y - p1.y, z - p1.z);
 	}
 
 	int_fast32_t getX() const { return x; }
@@ -117,6 +103,5 @@ struct Position
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);
-std::ostream& operator<<(std::ostream&, const Direction&);
 
-#endif
+#endif // FS_POSITION_H

@@ -4,7 +4,11 @@
 #include "otpch.h"
 
 #include "tools.h"
+
 #include "configmanager.h"
+
+#include <chrono>
+#include <fmt/chrono.h>
 
 extern ConfigManager g_config;
 
@@ -215,44 +219,18 @@ std::string generateToken(const std::string& key, uint32_t ticks)
 	return message;
 }
 
-void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
+bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 {
-	size_t pos = 0;
-	size_t start = 0;
-	size_t soughtLen = sought.length();
-	size_t replaceLen = replacement.length();
-
-	while ((pos = str.find(sought, start)) != std::string::npos) {
-		str = str.substr(0, pos) + replacement + str.substr(pos + soughtLen);
-		start = pos + replaceLen;
-	}
+	return str1.size() == str2.size() && std::equal(str1.begin(), str1.end(), str2.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
 }
 
-void trim_right(std::string& source, char t)
+bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 {
-	source.erase(source.find_last_not_of(t) + 1);
-}
-
-void trim_left(std::string& source, char t)
-{
-	source.erase(0, source.find_first_not_of(t));
-}
-
-void toLowerCaseString(std::string& source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), tolower);
-}
-
-std::string asLowerCaseString(std::string source)
-{
-	toLowerCaseString(source);
-	return source;
-}
-
-std::string asUpperCaseString(std::string source)
-{
-	std::transform(source.begin(), source.end(), source.begin(), toupper);
-	return source;
+	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(), [](char a, char b) {
+		return tolower(a) == tolower(b);
+	});
 }
 
 StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit/* = -1*/)
@@ -324,12 +302,6 @@ bool boolean_random(double probability/* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
-void trimString(std::string& str)
-{
-	str.erase(str.find_last_not_of(' ') + 1);
-	str.erase(0, str.find_first_not_of(' '));
-}
-
 std::string convertIPToString(uint32_t ip)
 {
 	char buffer[17];
@@ -344,32 +316,12 @@ std::string convertIPToString(uint32_t ip)
 
 std::string formatDate(time_t time)
 {
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[20];
-	int res = sprintf(buffer, "%02d/%02d/%04d %02d:%02d:%02d", tms->tm_mday, tms->tm_mon + 1, tms->tm_year + 1900, tms->tm_hour, tms->tm_min, tms->tm_sec);
-	if (res < 0) {
-		return {};
-	}
-	return {buffer, 19};
+	return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time));
 }
 
 std::string formatDateShort(time_t time)
 {
-	const tm* tms = localtime(&time);
-	if (!tms) {
-		return {};
-	}
-
-	char buffer[12];
-	size_t res = strftime(buffer, 12, "%d %b %Y", tms);
-	if (res == 0) {
-		return {};
-	}
-	return {buffer, 11};
+	return fmt::format("{:%d %b %Y}", fmt::localtime(time));
 }
 
 Direction getDirection(const std::string& string)
@@ -1174,12 +1126,6 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL:
 			return "You need a magic item to cast this spell.";
 
-		case RETURNVALUE_CANNOTCONJUREITEMHERE:
-			return "You cannot conjure items here.";
-
-		case RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS:
-			return "You need to split your spears first.";
-
 		case RETURNVALUE_NAMEISTOOAMBIGUOUS:
 			return "Player name is ambiguous.";
 
@@ -1237,7 +1183,7 @@ int64_t OTSYS_TIME()
 
 SpellGroup_t stringToSpellGroup(const std::string& value)
 {
-	std::string tmpStr = asLowerCaseString(value);
+	std::string tmpStr = boost::algorithm::to_lower_copy(value);
 	if (tmpStr == "attack" || tmpStr == "1") {
 		return SPELLGROUP_ATTACK;
 	} else if (tmpStr == "healing" || tmpStr == "2") {

@@ -1,6 +1,6 @@
 function onUpdateDatabase()
 	print("> Updating database to version 9 (global inbox)")
-	db.query("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int NOT NULL, `sid` int NOT NULL, `pid` int NOT NULL DEFAULT '0', `itemtype` smallint NOT NULL, `count` smallint NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`,`sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	db.query("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int NOT NULL, `sid` int NOT NULL, `pid` int NOT NULL DEFAULT '0', `itemtype` smallint NOT NULL, `count` smallint NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`, `sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1")
 
 	-- Delete "market" item
 	db.query("DELETE FROM `player_depotitems` WHERE `itemtype` = 14405")
@@ -43,7 +43,7 @@ function onUpdateDatabase()
 							repeat
 								local attr, attrSize = result.getStream(resultId3, "attributes")
 								runningId = runningId + 1
-								stmt = stmt .. "(" .. playerId .. "," .. runningId .. ",0," .. result.getNumber(resultId3, "itemtype") .. "," .. result.getNumber(resultId3, "count") .. "," .. db.escapeBlob(attr, attrSize) .. "),"
+								stmt = stmt .. "(" .. playerId .. ", " .. runningId .. ", 0, " .. result.getNumber(resultId3, "itemtype") .. ", " .. result.getNumber(resultId3, "count") .. ", " .. db.escapeBlob(attr, attrSize) .. "),"
 								sids[#sids + 1] = result.getNumber(resultId3, "sid")
 
 								db.query("DELETE FROM `player_depotitems` WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `sid` = " .. result.getNumber(resultId3, "sid"))

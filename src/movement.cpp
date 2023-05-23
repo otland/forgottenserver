@@ -3,11 +3,11 @@
 
 #include "otpch.h"
 
-#include "game.h"
-
-#include "pugicast.h"
-
 #include "movement.h"
+
+#include "combat.h"
+#include "game.h"
+#include "pugicast.h"
 
 extern Game g_game;
 extern Vocations g_vocations;
@@ -77,7 +77,7 @@ std::string MoveEvents::getScriptBaseName() const
 
 Event_ptr MoveEvents::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "movevent") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "movevent")) {
 		return nullptr;
 	}
 	return Event_ptr(new MoveEvent(&scriptInterface));
@@ -540,7 +540,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 		return false;
 	}
 
-	std::string tmpStr = asLowerCaseString(eventAttr.as_string());
+	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(eventAttr.as_string());
 	if (tmpStr == "stepin") {
 		eventType = MOVE_EVENT_STEP_IN;
 	} else if (tmpStr == "stepout") {
@@ -561,7 +561,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	if (eventType == MOVE_EVENT_EQUIP || eventType == MOVE_EVENT_DEEQUIP) {
 		pugi::xml_attribute slotAttribute = node.attribute("slot");
 		if (slotAttribute) {
-			tmpStr = asLowerCaseString(slotAttribute.as_string());
+			tmpStr = boost::algorithm::to_lower_copy<std::string>(slotAttribute.as_string());
 			if (tmpStr == "head") {
 				slot = SLOTP_HEAD;
 			} else if (tmpStr == "necklace") {
@@ -627,7 +627,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			if (vocationId != -1) {
 				vocEquipMap[vocationId] = true;
 				if (vocationNode.attribute("showInDescription").as_bool(true)) {
-					vocStringList.push_back(asLowerCaseString(vocationNameAttribute.as_string()));
+					vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string()));
 				}
 			}
 		}
@@ -898,17 +898,17 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "onstepinfield") == 0) {
+	if (caseInsensitiveEqual(functionName, "onstepinfield")) {
 		stepFunction = StepInField;
-	} else if (strcasecmp(functionName, "onstepoutfield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onstepoutfield")) {
 		stepFunction = StepOutField;
-	} else if (strcasecmp(functionName, "onaddfield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onaddfield")) {
 		moveFunction = AddItemField;
-	} else if (strcasecmp(functionName, "onremovefield") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onremovefield")) {
 		moveFunction = RemoveItemField;
-	} else if (strcasecmp(functionName, "onequipitem") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "onequipitem")) {
 		equipFunction = EquipItem;
-	} else if (strcasecmp(functionName, "ondeequipitem") == 0) {
+	} else if (caseInsensitiveEqual(functionName, "ondeequipitem")) {
 		equipFunction = DeEquipItem;
 	} else {
 		if (!isScripted) {
@@ -968,17 +968,14 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 
 ReturnValue MoveEvent::fireEquip(Player* player, Item* item, slots_t slot, bool isCheck)
 {
-	if (scripted) {
-		if (!equipFunction || equipFunction(this, player, item, slot, isCheck) == RETURNVALUE_NOERROR) {
-			if (executeEquip(player, item, slot, isCheck)) {
-				return RETURNVALUE_NOERROR;
-			}
-			return RETURNVALUE_CANNOTBEDRESSED;
-		}
-		return equipFunction(this, player, item, slot, isCheck);
-	} else {
-		return equipFunction(this, player, item, slot, isCheck);
+	ReturnValue ret = RETURNVALUE_NOERROR;
+	if (equipFunction) {
+		ret = equipFunction(this, player, item, slot, isCheck);
 	}
+	if (scripted && (ret == RETURNVALUE_NOERROR) && !executeEquip(player, item, slot, isCheck)) {
+		ret = RETURNVALUE_CANNOTBEDRESSED;
+	}
+	return ret;
 }
 
 bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCheck)

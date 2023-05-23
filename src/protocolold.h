@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
-#define FS_PROTOCOLOLD_H_5487B862FE144AE0904D098A3238E161
+#ifndef FS_PROTOCOLOLD_H
+#define FS_PROTOCOLOLD_H
 
 #include "protocol.h"
 
@@ -27,4 +27,4 @@ class ProtocolOld final : public Protocol
 		void disconnectClient(const std::string& message);
 };
 
-#endif
+#endif // FS_PROTOCOLOLD_H

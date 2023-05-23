@@ -17,7 +17,7 @@ ec.onDropLoot = function(self, corpse)
 		end
 
 		if player then
-			local text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
+			local text = ("Loot of %s: %s."):format(mType:getNameDescription(), corpse:getContentDescription())
 			local party = player:getParty()
 			if party then
 				party:broadcastPartyLoot(text)
@@ -26,7 +26,7 @@ ec.onDropLoot = function(self, corpse)
 			end
 		end
 	else
-		local text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
+		local text = ("Loot of %s: nothing (due to low stamina)."):format(mType:getNameDescription())
 		local party = player:getParty()
 		if party then
 			party:broadcastPartyLoot(text)

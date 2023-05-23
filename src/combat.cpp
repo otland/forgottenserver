@@ -5,10 +5,11 @@
 
 #include "combat.h"
 
-#include "game.h"
-#include "weapons.h"
 #include "configmanager.h"
 #include "events.h"
+#include "game.h"
+#include "spectators.h"
+#include "weapons.h"
 
 extern Game g_game;
 extern Weapons* g_weapons;
@@ -1444,6 +1445,19 @@ void MagicField::onStepInField(Creature* creature)
 		return;
 	}
 
+	//no-pvp fields must not damage players
+	if (!isLoadedFromMap() && creature->getPlayer() && (
+		id == ITEM_FIREFIELD_NOPVP
+		|| id == ITEM_FIREFIELD_NOPVP_MEDIUM
+		|| id == ITEM_POISONFIELD_NOPVP
+		|| id == ITEM_ENERGYFIELD_NOPVP
+	)) {
+		if (!creature->isInGhostMode()) {
+			g_game.addMagicEffect(creature->getPosition(), CONST_ME_POFF);
+		}
+		return;
+	}
+
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
@@ -1461,7 +1475,7 @@ void MagicField::onStepInField(Creature* creature)
 			}
 
 			Player* targetPlayer = creature->getPlayer();
-			if (targetPlayer) {
+			if (!harmfulField && targetPlayer) {
 				Player* attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {

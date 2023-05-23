@@ -1,11 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
-#define FS_CONFIGMANAGER_H_6BDD23BD0B8344F4B7C40E8BE6AF6F39
-
-#include <utility>
-#include <vector>
+#ifndef FS_CONFIGMANAGER_H
+#define FS_CONFIGMANAGER_H
 
 using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
 
@@ -118,6 +115,8 @@ class ConfigManager
 			VIP_PREMIUM_LIMIT,
 			DEPOT_FREE_LIMIT,
 			DEPOT_PREMIUM_LIMIT,
+			STAMINA_REGEN_MINUTE,
+			STAMINA_REGEN_PREMIUM,
 
 			LAST_INTEGER_CONFIG /* this must be the last one */
 		};
@@ -144,4 +143,4 @@ class ConfigManager
 		bool loaded = false;
 };
 
-#endif
+#endif // FS_CONFIGMANAGER_H

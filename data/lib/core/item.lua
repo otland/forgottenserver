@@ -65,14 +65,14 @@ local aux = {
 
 function setAuxFunctions()
 	for name, def in pairs(aux) do
-		Item['get'.. name] = function(self)
+		Item['get' .. name] = function(self)
 			local attr = self:getAttribute(def.key)
 			if def.cmp and def.cmp(attr) then
 				return attr
 			elseif not def.cmp and attr and attr ~= 0 then
 				return attr
 			end
-			local default = ItemType['get'.. name]
+			local default = ItemType['get' .. name]
 			return default and default(self:getType()) or nil
 		end
 	end
@@ -86,8 +86,8 @@ do
 		local ss = StringStream()
 		local obj = item or it
 		local name = obj:getName()
-		if name ~= '' then
-			if it:isStackable() and subType >  1 then
+		if name ~= "" then
+			if it:isStackable() and subType > 1 then
 				if it:hasShowCount() then
 					ss:append('%d ', subType)
 				end

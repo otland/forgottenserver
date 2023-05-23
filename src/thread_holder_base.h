@@ -1,11 +1,9 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_THREAD_HOLDER_H_BEB56FC46748E71D15A5BF0773ED2E67
-#define FS_THREAD_HOLDER_H_BEB56FC46748E71D15A5BF0773ED2E67
+#ifndef FS_THREAD_HOLDER_BASE_H
+#define FS_THREAD_HOLDER_BASE_H
 
-#include <thread>
-#include <atomic>
 #include "enums.h"
 
 template <typename Derived>
@@ -40,4 +38,4 @@ class ThreadHolder
 		std::thread thread;
 };
 
-#endif
+#endif // FS_THREAD_HOLDER_BASE_H

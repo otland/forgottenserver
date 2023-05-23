@@ -1,24 +1,15 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MAP_H_E3953D57C058461F856F5221D359DAFA
-#define FS_MAP_H_E3953D57C058461F856F5221D359DAFA
+#ifndef FS_MAP_H
+#define FS_MAP_H
 
-#include "position.h"
-#include "item.h"
-#include "fileloader.h"
-
-#include "tools.h"
-#include "tile.h"
-#include "town.h"
 #include "house.h"
+#include "position.h"
 #include "spawn.h"
+#include "town.h"
 
 class Creature;
-class Player;
-class Game;
-class Tile;
-class Map;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
@@ -287,4 +278,4 @@ class Map
 		friend class IOMap;
 };
 
-#endif
+#endif // FS_MAP_H

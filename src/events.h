@@ -1,14 +1,15 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
-#define FS_EVENTS_H_BD444CC0EE167E5777E4C90C766B36DC
+#ifndef FS_EVENTS_H
+#define FS_EVENTS_H
 
-#include "luascript.h"
 #include "const.h"
+#include "creature.h"
+#include "luascript.h"
 
-class Party;
 class ItemType;
+class Party;
 class Tile;
 
 enum class EventInfoId {
@@ -49,6 +50,7 @@ class Events
 		int32_t playerOnLoseExperience = -1;
 		int32_t playerOnGainSkillTries = -1;
 		int32_t playerOnWrapItem = -1;
+		int32_t playerOnInventoryUpdate = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -91,6 +93,7 @@ class Events
 		void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 		void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 		void eventPlayerOnWrapItem(Player* player, Item* item);
+		void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 
 		// Monster
 		void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
@@ -111,4 +114,4 @@ class Events
 		EventsInfo info;
 };
 
-#endif
+#endif // FS_EVENTS_H

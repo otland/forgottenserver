@@ -1,11 +1,15 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
-#define FS_GLOBALEVENT_H_B3FB9B848EA3474B9AFC326873947E3C
-#include "baseevents.h"
+#ifndef FS_GLOBALEVENT_H
+#define FS_GLOBALEVENT_H
 
-#include "const.h"
+#include "baseevents.h"
+#include "luascript.h"
+
+class GlobalEvent;
+using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
+using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 enum GlobalEvent_t {
 	GLOBALEVENT_NONE,
@@ -15,10 +19,6 @@ enum GlobalEvent_t {
 	GLOBALEVENT_SHUTDOWN,
 	GLOBALEVENT_RECORD,
 };
-
-class GlobalEvent;
-using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
-using GlobalEventMap = std::map<std::string, GlobalEvent>;
 
 class GlobalEvents final : public BaseEvents
 {
@@ -107,4 +107,4 @@ class GlobalEvent final : public Event
 		uint32_t interval = 0;
 };
 
-#endif
+#endif // FS_GLOBALEVENT_H

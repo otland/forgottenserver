@@ -5,7 +5,6 @@
 
 #include "player.h"
 #include "talkaction.h"
-#include "pugicast.h"
 
 TalkActions::TalkActions()
 	: scriptInterface("TalkAction Interface")
@@ -43,7 +42,7 @@ std::string TalkActions::getScriptBaseName() const
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "talkaction") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "talkaction")) {
 		return nullptr;
 	}
 	return Event_ptr(new TalkAction(&scriptInterface));
@@ -86,20 +85,19 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end(); ) {
 		const std::string& talkactionWords = it->first;
-		size_t talkactionLength = talkactionWords.length();
-		if (wordsLength < talkactionLength || strncasecmp(words.c_str(), talkactionWords.c_str(), talkactionLength) != 0) {
+		if (!caseInsensitiveStartsWith(words, talkactionWords)) {
 			++it;
 			continue;
 		}
 
 		std::string param;
-		if (wordsLength != talkactionLength) {
-			param = words.substr(talkactionLength);
+		if (wordsLength != talkactionWords.size()) {
+			param = words.substr(talkactionWords.size());
 			if (param.front() != ' ') {
 				++it;
 				continue;
 			}
-			trim_left(param, ' ');
+			boost::algorithm::trim_left(param);
 
 			std::string separator = it->second.getSeparator();
 			if (separator != " ") {
@@ -126,9 +124,8 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 
 		if (it->second.executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
-		} else {
-			return TALKACTION_BREAK;
 		}
+		return TALKACTION_BREAK;
 	}
 	return TALKACTION_CONTINUE;
 }
@@ -143,7 +140,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 
 	pugi::xml_attribute separatorAttribute = node.attribute("separator");
 	if (separatorAttribute) {
-		separator = pugi::cast<char>(separatorAttribute.value());
+		separator = separatorAttribute.as_string();
 	}
 
 	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {

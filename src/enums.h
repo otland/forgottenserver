@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
-#define FS_ENUMS_H_003445999FEE4A67BCECBE918B0124CE
+#ifndef FS_ENUMS_H
+#define FS_ENUMS_H
 
 enum RuleViolationType_t : uint8_t {
 	REPORT_TYPE_NAME = 0,
@@ -432,8 +432,6 @@ enum ReturnValue {
 	RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE,
 	RETURNVALUE_YOUCANNOTLOGOUTHERE,
 	RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL,
-	RETURNVALUE_CANNOTCONJUREITEMHERE,
-	RETURNVALUE_YOUNEEDTOSPLITYOURSPEARS,
 	RETURNVALUE_NAMEISTOOAMBIGUOUS,
 	RETURNVALUE_CANONLYUSEONESHIELD,
 	RETURNVALUE_NOPARTYMEMBERSINRANGE,
@@ -458,6 +456,8 @@ enum SpeechBubble_t
 	SPEECHBUBBLE_TRADE = 2,
 	SPEECHBUBBLE_QUEST = 3,
 	SPEECHBUBBLE_QUESTTRADER = 4,
+
+	SPEECHBUBBLE_LAST = SPEECHBUBBLE_QUESTTRADER
 };
 
 enum MapMark_t
@@ -497,7 +497,7 @@ struct Outfit_t {
 
 struct LightInfo {
 	uint8_t level = 0;
-	uint8_t color = 0;
+	uint8_t color = 215;
 	constexpr LightInfo() = default;
 	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
@@ -602,4 +602,4 @@ enum MonstersEvent_t : uint8_t {
 	MONSTERS_EVENT_SAY = 5,
 };
 
-#endif
+#endif // FS_ENUMS_H

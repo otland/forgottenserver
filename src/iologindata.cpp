@@ -4,10 +4,13 @@
 #include "otpch.h"
 
 #include "iologindata.h"
-#include "configmanager.h"
-#include "game.h"
 
-#include <fmt/format.h>
+#include "condition.h"
+#include "configmanager.h"
+#include "depotchest.h"
+#include "game.h"
+#include "inbox.h"
+#include "storeinbox.h"
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -220,7 +223,7 @@ static GuildWarVector getWarList(uint32_t guildId)
 			guildWarVector.push_back(result->getNumber<uint32_t>("guild2"));
 		}
 	} while (result->next());
-	return std::move(guildWarVector);
+	return guildWarVector;
 }
 
 bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
@@ -431,6 +434,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			int32_t pid = pair.second;
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
+				player->postAddNotification(item, nullptr, pid);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
@@ -609,7 +613,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 bool IOLoginData::savePlayer(Player* player)
 {
-	if (player->getHealth() <= 0) {
+	if (player->isDead()) {
 		player->changeHealth(1);
 	}
 
@@ -929,7 +933,7 @@ void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 {
 	Database& db = Database::getInstance();
-	return db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid)).get() != nullptr;
+	return db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid)).get();
 }
 
 std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)

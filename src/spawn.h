@@ -1,14 +1,10 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_SPAWN_H_1A86089E080846A9AE53ED12E7AE863B
-#define FS_SPAWN_H_1A86089E080846A9AE53ED12E7AE863B
+#ifndef FS_SPAWN_H
+#define FS_SPAWN_H
 
-#include "tile.h"
 #include "position.h"
-
-#include <utility>
-#include <vector>
 
 class Monster;
 class MonsterType;
@@ -88,4 +84,4 @@ class Spawns
 		bool started = false;
 };
 
-#endif
+#endif // FS_SPAWN_H

@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "depotchest.h"
+
 #include "tools.h"
 
 DepotChest::DepotChest(uint16_t type) :
@@ -13,7 +14,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 		uint32_t flags, Creature* actor/* = nullptr*/) const
 {
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -44,7 +45,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t cou
 void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* parent = getParent();
-	if (parent != nullptr) {
+	if (parent) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
@@ -52,7 +53,7 @@ void DepotChest::postAddNotification(Thing* thing, const Cylinder* oldParent, in
 void DepotChest::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
 	Cylinder* parent = getParent();
-	if (parent != nullptr) {
+	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }

@@ -3,17 +3,16 @@
 
 #include "otpch.h"
 
-#include <algorithm>
+#include "configmanager.h"
+#include "game.h"
+#include "monster.h"
+#include "pugicast.h"
+
 #if __has_include("luajit/lua.hpp")
 #include <luajit/lua.hpp>
 #else
 #include <lua.hpp>
 #endif
-
-#include "configmanager.h"
-#include "game.h"
-#include "monster.h"
-#include "pugicast.h"
 
 #if LUA_VERSION_NUM >= 502
 #undef lua_strlen
@@ -92,9 +91,10 @@ ExperienceStages loadLuaStages(lua_State* L)
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
 		const auto tableIndex = lua_gettop(L);
-		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel");
-		auto maxLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel");
-		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier");
+		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel", 1);
+		auto maxLevel =
+		    LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
+		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier", 1);
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
 	}
@@ -115,17 +115,15 @@ ExperienceStages loadXMLStages()
 
 	ExperienceStages stages;
 	for (auto stageNode : doc.child("stages").children()) {
-		if (strcasecmp(stageNode.name(), "config") == 0) {
+		if (caseInsensitiveEqual(stageNode.name(), "config")) {
 			if (!stageNode.attribute("enabled").as_bool()) {
 				return {};
 			}
 		} else {
-			uint32_t minLevel, maxLevel, multiplier;
+			uint32_t minLevel = 1, maxLevel = std::numeric_limits<uint32_t>::max(), multiplier = 1;
 
 			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
-			} else {
-				minLevel = 1;
 			}
 
 			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
@@ -134,8 +132,6 @@ ExperienceStages loadXMLStages()
 
 			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
 				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
-			} else {
-				multiplier = 1;
 			}
 
 			stages.emplace_back(minLevel, maxLevel, multiplier);
@@ -274,6 +270,8 @@ bool ConfigManager::load()
 	integer[VIP_PREMIUM_LIMIT] = getGlobalNumber(L, "vipPremiumLimit", 100);
 	integer[DEPOT_FREE_LIMIT] = getGlobalNumber(L, "depotFreeLimit", 2000);
 	integer[DEPOT_PREMIUM_LIMIT] = getGlobalNumber(L, "depotPremiumLimit", 10000);
+	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
+	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
@@ -329,8 +327,9 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 
 float ConfigManager::getExperienceStage(uint32_t level) const
 {
-	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
-		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
+	auto it = std::find_if(expStages.begin(), expStages.end(), [level](auto&& stage) {
+		auto&& [minLevel, maxLevel, _] = stage;
+		return level >= minLevel && level <= maxLevel;
 	});
 
 	if (it == expStages.end()) {

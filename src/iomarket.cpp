@@ -7,11 +7,10 @@
 
 #include "configmanager.h"
 #include "databasetasks.h"
-#include "iologindata.h"
 #include "game.h"
+#include "inbox.h"
+#include "iologindata.h"
 #include "scheduler.h"
-
-#include <fmt/format.h>
 
 extern ConfigManager g_config;
 extern Game g_game;
@@ -33,6 +32,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		offer.price = result->getNumber<uint32_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
 		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
+		offer.itemId = itemId;
 		if (result->getNumber<uint16_t>("anonymous") == 0) {
 			offer.playerName = result->getString("player_name");
 		} else {

@@ -1,14 +1,12 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
-#define FS_LUASCRIPT_H_5344B2BC907E46E3943EA78574A212D8
+#ifndef FS_LUASCRIPT_H
+#define FS_LUASCRIPT_H
 
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
+#include "database.h"
+#include "enums.h"
+#include "position.h"
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -20,37 +18,27 @@
 #endif
 #endif
 
-#include "database.h"
-#include "enums.h"
-#include "position.h"
-#include "outfit.h"
-#include <fmt/format.h>
-
-class Thing;
-class Creature;
-class Player;
-class Item;
-class Container;
 class AreaCombat;
 class Combat;
-using Combat_ptr = std::shared_ptr<Combat>;
-class Condition;
-class Npc;
-class Monster;
+class Container;
+class Creature;
+class Cylinder;
 class InstantSpell;
+class Item;
+class LuaScriptInterface;
+class LuaVariant;
+class Npc;
+class Player;
+class Thing;
+struct LootBlock;
+struct Mount;
+struct Outfit;
+
+using Combat_ptr = std::shared_ptr<Combat>;
 
 enum {
 	EVENT_ID_LOADING = 1,
 	EVENT_ID_USER = 1000,
-};
-
-enum LuaVariantType_t {
-	VARIANT_NONE,
-
-	VARIANT_NUMBER,
-	VARIANT_POSITION,
-	VARIANT_TARGETPOSITION,
-	VARIANT_STRING,
 };
 
 enum LuaDataType {
@@ -65,13 +53,6 @@ enum LuaDataType {
 	LuaData_Tile,
 };
 
-struct LuaVariant {
-	LuaVariantType_t type = VARIANT_NONE;
-	std::string text;
-	Position pos;
-	uint32_t number = 0;
-};
-
 struct LuaTimerEventDesc {
 	int32_t scriptId = -1;
 	int32_t function = -1;
@@ -81,12 +62,6 @@ struct LuaTimerEventDesc {
 	LuaTimerEventDesc() = default;
 	LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
 };
-
-class LuaScriptInterface;
-class Cylinder;
-class Game;
-
-struct LootBlock;
 
 class ScriptEnvironment
 {
@@ -291,7 +266,7 @@ class LuaScriptInterface
 		}
 
 		template<typename T>
-		static typename std::enable_if<(std::is_integral<T>::value && (std::is_signed<T>::value) || std::is_floating_point<T>::value), T>::type
+		static typename std::enable_if<(std::is_integral<T>::value && std::is_signed<T>::value) || std::is_floating_point<T>::value, T>::type
 			getNumber(lua_State* L, int32_t arg)
 		{
 			double num = lua_tonumber(L, arg);
@@ -305,8 +280,7 @@ class LuaScriptInterface
 		template<typename T>
 		static T getNumber(lua_State *L, int32_t arg, T defaultValue)
 		{
-			const auto parameters = lua_gettop(L);
-			if (parameters == 0 || arg > parameters) {
+			if (lua_isnumber(L, arg) == 0) {
 				return defaultValue;
 			}
 			return getNumber<T>(L, arg);
@@ -337,8 +311,7 @@ class LuaScriptInterface
 		}
 		static bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
 		{
-			const auto parameters = lua_gettop(L);
-			if (parameters == 0 || arg > parameters) {
+			if (lua_isboolean(L, arg) == 0) {
 				return defaultValue;
 			}
 			return lua_toboolean(L, arg) != 0;
@@ -349,7 +322,6 @@ class LuaScriptInterface
 		static Position getPosition(lua_State* L, int32_t arg);
 		static Outfit_t getOutfit(lua_State* L, int32_t arg);
 		static Outfit getOutfitClass(lua_State* L, int32_t arg);
-		static LuaVariant getVariant(lua_State* L, int32_t arg);
 		static InstantSpell* getInstantSpell(lua_State* L, int32_t arg);
 
 		static Thing* getThing(lua_State* L, int32_t arg);
@@ -361,6 +333,13 @@ class LuaScriptInterface
 		{
 			lua_getfield(L, arg, key.c_str());
 			return getNumber<T>(L, -1);
+		}
+
+		template <typename T, typename... Args>
+		static T getField(lua_State* L, int32_t arg, const std::string& key, T&& defaultValue)
+		{
+			lua_getfield(L, arg, key.c_str());
+			return getNumber<T>(L, -1, std::forward<T>(defaultValue));
 		}
 
 		static std::string getFieldString(lua_State* L, int32_t arg, const std::string& key);
@@ -415,7 +394,7 @@ class LuaScriptInterface
 			lua_setfield(L, -2, index);
 		}
 
-		static std::string escapeString(const std::string& string);
+		static std::string escapeString(std::string string);
 
 #ifndef LUAJIT_VERSION
 		static const luaL_Reg luaBitReg[7];
@@ -475,9 +454,6 @@ class LuaScriptInterface
 		static int luaIsDepot(lua_State* L);
 		static int luaIsMoveable(lua_State* L);
 		static int luaIsValidUID(lua_State* L);
-
-		//container
-		static int luaDoAddContainerItem(lua_State* L);
 
 		//
 		static int luaCreateCombatArea(lua_State* L);
@@ -548,6 +524,8 @@ class LuaScriptInterface
 		// Game
 		static int luaGameGetSpectators(lua_State* L);
 		static int luaGameGetPlayers(lua_State* L);
+		static int luaGameGetNpcs(lua_State* L);
+		static int luaGameGetMonsters(lua_State* L);
 		static int luaGameLoadMap(lua_State* L);
 
 		static int luaGameGetExperienceStage(lua_State* L);
@@ -595,11 +573,7 @@ class LuaScriptInterface
 
 		// Position
 		static int luaPositionCreate(lua_State* L);
-		static int luaPositionAdd(lua_State* L);
-		static int luaPositionSub(lua_State* L);
-		static int luaPositionCompare(lua_State* L);
 
-		static int luaPositionGetDistance(lua_State* L);
 		static int luaPositionIsSightClear(lua_State* L);
 
 		static int luaPositionSendMagicEffect(lua_State* L);
@@ -1400,6 +1374,7 @@ class LuaScriptInterface
 		static int luaMonsterSpellSetConditionTickInterval(lua_State* L);
 		static int luaMonsterSpellSetCombatShootEffect(lua_State* L);
 		static int luaMonsterSpellSetCombatEffect(lua_State* L);
+		static int luaMonsterSpellSetOutfit(lua_State* L);
 
 		// Party
 		static int luaPartyCreate(lua_State* L);
@@ -1613,4 +1588,4 @@ class LuaEnvironment : public LuaScriptInterface
 		friend class CombatSpell;
 };
 
-#endif
+#endif // FS_LUASCRIPT_H

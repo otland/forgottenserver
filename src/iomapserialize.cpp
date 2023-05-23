@@ -4,10 +4,10 @@
 #include "otpch.h"
 
 #include "iomapserialize.h"
-#include "game.h"
-#include "bed.h"
 
-#include <fmt/format.h>
+#include "bed.h"
+#include "game.h"
+#include "housetile.h"
 
 extern Game g_game;
 
@@ -123,7 +123,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	}
 
 	Tile* tile = nullptr;
-	if (parent->getParent() == nullptr) {
+	if (!parent->getParent()) {
 		tile = parent->getTile();
 	}
 

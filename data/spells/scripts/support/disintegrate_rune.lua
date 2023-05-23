@@ -5,6 +5,10 @@ function onCastSpell(creature, variant, isHotkey)
 	local position = variant:getPosition()
 	local tile = Tile(position)
 	if tile then
+		if tile:getHouse() then
+			position:sendMagicEffect(CONST_ME_POFF)
+			return true
+		end
 		local items = tile:getItems()
 		if items then
 			for i, item in ipairs(items) do

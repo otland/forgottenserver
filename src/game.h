@@ -1,27 +1,21 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
-#define FS_GAME_H_3EC96D67DD024E6093B3BAC29B7A6D7F
+#ifndef FS_GAME_H
+#define FS_GAME_H
 
-#include "account.h"
-#include "combat.h"
 #include "groups.h"
 #include "map.h"
-#include "position.h"
-#include "item.h"
-#include "container.h"
+#include "mounts.h"
 #include "player.h"
-#include "raids.h"
-#include "npc.h"
-#include "wildcardtree.h"
+#include "position.h"
 #include "quests.h"
+#include "raids.h"
+#include "wildcardtree.h"
 
-class ServiceManager;
-class Creature;
 class Monster;
 class Npc;
-class CombatInfo;
+class ServiceManager;
 
 enum stackPosType_t {
 	STACKPOS_MOVE,
@@ -47,10 +41,23 @@ enum GameState_t {
 	GAME_STATE_MAINTAIN,
 };
 
+static constexpr int32_t PLAYER_NAME_LENGTH = 25;
+
 static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
 static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
+
+static constexpr int32_t MOVE_CREATURE_INTERVAL = 1000;
+static constexpr int32_t RANGE_MOVE_CREATURE_INTERVAL = 1500;
+static constexpr int32_t RANGE_MOVE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_ITEM_EX_INTERVAL = 400;
+static constexpr int32_t RANGE_USE_WITH_CREATURE_INTERVAL = 400;
+static constexpr int32_t RANGE_ROTATE_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
+static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
+static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
 
 /**
   * Main Game class.
@@ -460,6 +467,7 @@ class Game
 
 		const std::unordered_map<uint32_t, Player*>& getPlayers() const { return players; }
 		const std::map<uint32_t, Npc*>& getNpcs() const { return npcs; }
+		const std::map<uint32_t, Monster*>& getMonsters() const { return monsters; }
 
 		void addPlayer(Player* player);
 		void removePlayer(Player* player);
@@ -497,6 +505,7 @@ class Game
 
 		std::forward_list<Item*> toDecayItems;
 
+		bool isTileInCleanList(Tile* tile) { return tilesToClean.find(tile) != tilesToClean.end(); }
 		std::unordered_set<Tile*> getTilesToClean() const {
 			return tilesToClean;
 		}
@@ -582,4 +591,4 @@ class Game
 		bool useLastStageLevel = false;
 };
 
-#endif
+#endif // FS_GAME_H

@@ -1,14 +1,13 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_IOMAP_H_8085D4B1037A44288494A52FDBB775E4
-#define FS_IOMAP_H_8085D4B1037A44288494A52FDBB775E4
+#ifndef FS_IOMAP_H
+#define FS_IOMAP_H
 
-#include "item.h"
-#include "map.h"
-#include "house.h"
-#include "spawn.h"
 #include "configmanager.h"
+#include "house.h"
+#include "map.h"
+#include "spawn.h"
 
 extern ConfigManager g_config;
 
@@ -105,7 +104,7 @@ class IOMap
 				map->spawnfile += "-spawn.xml";
 			}
 
-			return map->spawns.loadFromXml(map->spawnfile);
+			return map->spawns.loadFromXml(map->spawnfile.string());
 		}
 
 		/* Load the houses (not house tile-data)
@@ -120,7 +119,7 @@ class IOMap
 				map->housefile += "-house.xml";
 			}
 
-			return map->houses.loadHousesXML(map->housefile);
+			return map->houses.loadHousesXML(map->housefile.string());
 		}
 
 		const std::string& getLastErrorString() const {
@@ -139,4 +138,4 @@ class IOMap
 		std::string errorString;
 };
 
-#endif
+#endif // FS_IOMAP_H

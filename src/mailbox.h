@@ -1,12 +1,11 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MAILBOX_H_D231C6BE8D384CAAA3AE410C1323F9DB
-#define FS_MAILBOX_H_D231C6BE8D384CAAA3AE410C1323F9DB
+#ifndef FS_MAILBOX_H
+#define FS_MAILBOX_H
 
-#include "item.h"
 #include "cylinder.h"
-#include "const.h"
+#include "item.h"
 
 class Mailbox final : public Item, public Cylinder
 {
@@ -47,4 +46,4 @@ class Mailbox final : public Item, public Cylinder
 		static bool canSend(const Item* item);
 };
 
-#endif
+#endif // FS_MAILBOX_H

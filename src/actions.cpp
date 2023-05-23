@@ -8,9 +8,9 @@
 #include "configmanager.h"
 #include "container.h"
 #include "game.h"
+#include "housetile.h"
 #include "pugicast.h"
 #include "spells.h"
-#include <fmt/format.h>
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -60,7 +60,7 @@ std::string Actions::getScriptBaseName() const
 
 Event_ptr Actions::getEvent(const std::string& nodeName)
 {
-	if (strcasecmp(nodeName.c_str(), "action") != 0) {
+	if (!caseInsensitiveEqual(nodeName, "action")) {
 		return nullptr;
 	}
 	return Event_ptr(new Action(&scriptInterface));
@@ -389,7 +389,6 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
-
 static void showUseHotkeyMessage(Player* player, const Item* item, uint32_t count)
 {
 	const ItemType& it = Item::items[item->getID()];
@@ -516,7 +515,7 @@ bool enterMarket(Player* player, Item*, const Position&, Thing*, const Position&
 bool Action::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (strcasecmp(functionName, "market") == 0) {
+	if (caseInsensitiveEqual(functionName, "market")) {
 		function = enterMarket;
 	} else {
 		if (!isScripted) {

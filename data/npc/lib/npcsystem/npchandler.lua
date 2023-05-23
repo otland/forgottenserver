@@ -152,7 +152,7 @@ if NpcHandler == nil then
 
 	-- Function used to verify if npc is focused to certain player
 	function NpcHandler:isFocused(focus)
-		for k,v in pairs(self.focuses) do
+		for k, v in pairs(self.focuses) do
 			if v == focus then
 				return true
 			end
@@ -196,7 +196,7 @@ if NpcHandler == nil then
 		end
 
 		local pos = nil
-		for k,v in pairs(self.focuses) do
+		for k, v in pairs(self.focuses) do
 			if v == focus then
 				pos = k
 			end
@@ -425,7 +425,7 @@ if NpcHandler == nil then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_ENDTRADE)
 		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_ENDTRADE, cid) then
 				if self:isFocused(cid) then
 					local player = Player(cid)
 					local playerName = player and player:getName() or -1
@@ -442,7 +442,7 @@ if NpcHandler == nil then
 		local cid = creature:getId()
 		local callback = self:getCallback(CALLBACK_PLAYER_CLOSECHANNEL)
 		if callback == nil or callback(cid) then
-			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid, msgtype, msg) then
+			if self:processModuleCallback(CALLBACK_PLAYER_CLOSECHANNEL, cid) then
 				if self:isFocused(cid) then
 					self:unGreet(cid)
 				end
@@ -517,9 +517,10 @@ if NpcHandler == nil then
 		if self:isInRange(cid) then
 			if not self:isFocused(cid) then
 				self:greet(cid)
-				return
+				return true
 			end
 		end
+		return false
 	end
 
 	-- Simply calls the underlying unGreet function.
@@ -596,7 +597,7 @@ if NpcHandler == nil then
 		local ret = {}
 		for aux = 1, #msgs do
 			self.eventDelayedSay[pcid][aux] = {}
-			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux-1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
+			doCreatureSayWithDelay(getNpcCid(), msgs[aux], TALKTYPE_PRIVATE_NP, ((aux - 1) * (interval or 4000)) + 700, self.eventDelayedSay[pcid][aux], pcid)
 			ret[#ret + 1] = self.eventDelayedSay[pcid][aux]
 		end
 		return(ret)

@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
-#define FS_DEFINITIONS_H_877452FEC245450C9F96B8FD268D8963
+#ifndef FS_DEFINITIONS_H
+#define FS_DEFINITIONS_H
 
 static constexpr auto STATUS_SERVER_NAME = "The Forgotten Server";
 static constexpr auto STATUS_SERVER_VERSION = "1.4.2";
@@ -27,8 +27,6 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #define _USE_MATH_DEFINES
 #endif
 
-#include <cmath>
-
 #ifdef _WIN32
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -51,13 +49,10 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #pragma warning(disable:4458) // declaration hides class member
 #endif
 
-#define strcasecmp _stricmp
-#define strncasecmp _strnicmp
-
 #ifndef _WIN32_WINNT
 // 0x0602: Windows 7
 #define _WIN32_WINNT 0x0602
 #endif
 #endif
 
-#endif
+#endif // FS_DEFINITIONS_H

@@ -3,12 +3,15 @@
 
 #include "otpch.h"
 
-#include "iomap.h"
-#include "iomapserialize.h"
+#include "map.h"
+
 #include "combat.h"
 #include "creature.h"
 #include "game.h"
+#include "iomap.h"
+#include "iomapserialize.h"
 #include "monster.h"
+#include "spectators.h"
 
 extern Game g_game;
 
@@ -196,13 +199,8 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	}
 
 	if (!foundTile) {
-		static std::vector<std::pair<int32_t, int32_t>> extendedRelList {
-			                   {0, -2},
-			         {-1, -1}, {0, -1}, {1, -1},
-			{-2, 0}, {-1,  0},          {1,  0}, {2, 0},
-			         {-1,  1}, {0,  1}, {1,  1},
-			                   {0,  2}
-		};
+		static std::vector<std::pair<int32_t, int32_t>> extendedRelList{
+		    {0, -2}, {2, 0}, {0, 2}, {-2, 0}, {-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 		static std::vector<std::pair<int32_t, int32_t>> normalRelList {
 			{-1, -1}, {0, -1}, {1, -1},
@@ -596,7 +594,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 	}
 
 	//skip checks for sight line in case fromPos and toPos cross the ground floor
-	if (fromPos.z < 8 && toPos.z > 7 || fromPos.z > 7 && toPos.z < 8) {
+	if ((fromPos.z < 8 && toPos.z > 7) || (fromPos.z > 7 && toPos.z < 8)) {
 		return false;
 	}
 
@@ -635,7 +633,16 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	//used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
-		if (!tile || tile->queryAdd(0, creature, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) != RETURNVALUE_NOERROR) {
+		if (!tile) {
+			return nullptr;
+		}
+		
+		uint32_t flags = FLAG_PATHFINDING;
+		if (!creature.getPlayer()) {
+			flags |= FLAG_IGNOREFIELDDAMAGE;
+		}
+
+		if (tile->queryAdd(0, creature, 1, flags) != RETURNVALUE_NOERROR) {
 			return nullptr;
 		}
 	}
@@ -917,7 +924,7 @@ int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighbo
 int_fast32_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
 	int_fast32_t cost = 0;
-	if (tile->getTopVisibleCreature(&creature) != nullptr) {
+	if (tile->getTopVisibleCreature(&creature)) {
 		//destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}

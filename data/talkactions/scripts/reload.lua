@@ -43,7 +43,7 @@ local reloadTypes = {
 	["raids"] = RELOAD_TYPE_RAIDS,
 
 	["spell"] = RELOAD_TYPE_SPELLS,
-	["spells"] =  RELOAD_TYPE_SPELLS,
+	["spells"] = RELOAD_TYPE_SPELLS,
 
 	["talk"] = RELOAD_TYPE_TALKACTIONS,
 	["talkaction"] = RELOAD_TYPE_TALKACTIONS,
@@ -79,6 +79,11 @@ function onSay(player, words, param)
 	end
 
 	Game.reload(reloadType)
+	if reloadType == RELOAD_TYPE_GLOBAL then
+		-- we need to reload the scripts as well
+		Game.reload(RELOAD_TYPE_SCRIPTS)
+	end
+
 	player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, string.format("Reloaded %s.", param:lower()))
 	return false
 end

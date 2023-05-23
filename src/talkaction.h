@@ -1,12 +1,12 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TALKACTION_H_E6AABAC0F89843469526ADF310F3131C
-#define FS_TALKACTION_H_E6AABAC0F89843469526ADF310F3131C
+#ifndef FS_TALKACTION_H
+#define FS_TALKACTION_H
 
-#include "luascript.h"
 #include "baseevents.h"
 #include "const.h"
+#include "luascript.h"
 
 class TalkAction;
 using TalkAction_ptr = std::unique_ptr<TalkAction>;
@@ -96,4 +96,4 @@ class TalkActions final : public BaseEvents
 		LuaScriptInterface scriptInterface;
 };
 
-#endif
+#endif // FS_TALKACTION_H

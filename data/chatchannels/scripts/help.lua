@@ -16,6 +16,7 @@ function onSpeak(player, type, message)
 		return false
 	end
 
+	local playerAccountType = player:getAccountType()
 	if playerAccountType >= ACCOUNT_TYPE_TUTOR then
 		if string.sub(message, 1, 6) == "!mute " then
 			local targetName = string.sub(message, 7)

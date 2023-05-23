@@ -1,8 +1,8 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_DEPOTCHEST_H_6538526014684E3DBC92CC12815B6766
-#define FS_DEPOTCHEST_H_6538526014684E3DBC92CC12815B6766
+#ifndef FS_DEPOTCHEST_H
+#define FS_DEPOTCHEST_H
 
 #include "container.h"
 
@@ -37,5 +37,4 @@ class DepotChest final : public Container
 		uint32_t maxDepotItems;
 };
 
-#endif
-
+#endif // FS_DEPOTCHEST_H

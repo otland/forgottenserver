@@ -1,11 +1,12 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_DEPOTLOCKER_H_53AD8E0606A34070B87F792611F4F3F8
-#define FS_DEPOTLOCKER_H_53AD8E0606A34070B87F792611F4F3F8
+#ifndef FS_DEPOTLOCKER_H
+#define FS_DEPOTLOCKER_H
 
 #include "container.h"
-#include "inbox.h"
+
+class Inbox;
 
 using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 
@@ -48,5 +49,4 @@ class DepotLocker final : public Container
 		uint16_t depotId;
 };
 
-#endif
-
+#endif // FS_DEPOTLOCKER_H

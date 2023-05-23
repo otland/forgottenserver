@@ -1,16 +1,22 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_CREATURE_H_5363C04015254E298F84E6D59A139508
-#define FS_CREATURE_H_5363C04015254E298F84E6D59A139508
+#ifndef FS_CREATURE_H
+#define FS_CREATURE_H
 
+#include "const.h"
+#include "creatureevent.h"
+#include "enums.h"
 #include "map.h"
 #include "position.h"
-#include "condition.h"
-#include "const.h"
 #include "tile.h"
-#include "enums.h"
-#include "creatureevent.h"
+
+class Condition;
+class Container;
+class Item;
+class Monster;
+class Npc;
+class Player;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
@@ -42,15 +48,6 @@ struct FindPathParams {
 	int32_t minTargetDist = -1;
 	int32_t maxTargetDist = -1;
 };
-
-class Map;
-class Thing;
-class Container;
-class Player;
-class Monster;
-class Npc;
-class Item;
-class Tile;
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
@@ -214,6 +211,7 @@ class Creature : virtual public Thing
 		virtual int32_t getMaxHealth() const {
 			return healthMax;
 		}
+		bool isDead() const { return health <= 0; }
 
 		void setDrunkenness(uint8_t newDrunkenness) {
 			drunkenness = newDrunkenness;
@@ -565,4 +563,4 @@ class Creature : virtual public Thing
 		friend class LuaScriptInterface;
 };
 
-#endif
+#endif // FS_CREATURE_H

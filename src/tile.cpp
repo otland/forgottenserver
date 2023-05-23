@@ -7,15 +7,17 @@
 
 #include "tile.h"
 
-#include "creature.h"
 #include "combat.h"
+#include "configmanager.h"
+#include "creature.h"
 #include "game.h"
+#include "housetile.h"
 #include "mailbox.h"
 #include "monster.h"
 #include "movement.h"
+#include "spectators.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "configmanager.h"
 
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
@@ -365,8 +367,8 @@ void Tile::onAddTileItem(Item* item)
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendAddTileItem(this, cylinderMapPos, item);
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendAddTileItem(this, cylinderMapPos, item);
 		}
 	}
 
@@ -409,8 +411,8 @@ void Tile::onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newIte
 
 	//send to client
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
+		if (Player* spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendUpdateTileItem(this, cylinderMapPos, newItem);
 		}
 	}
 
@@ -474,7 +476,8 @@ void Tile::onUpdateTile(const SpectatorVec& spectators)
 
 	//send to clients
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendUpdateTile(this, cylinderMapPos);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
 	}
 }
 
@@ -489,7 +492,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
-		if (ground == nullptr) {
+		if (!ground) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -569,7 +572,14 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
-			if (player->getParent() == nullptr && hasFlag(TILESTATE_NOLOGOUT)) {
+			if (MagicField* field = getFieldItem()) {
+				if (field->getDamage() != 0 && hasBitSet(FLAG_PATHFINDING, flags) &&
+				    !hasBitSet(FLAG_IGNOREFIELDDAMAGE, flags)) {
+					return RETURNVALUE_NOTPOSSIBLE;
+				}
+			}
+
+			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
 				//player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -638,7 +648,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 		}
 
 		bool itemIsHangable = item->isHangable();
-		if (ground == nullptr && !itemIsHangable) {
+		if (!ground && !itemIsHangable) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
 
@@ -714,7 +724,7 @@ ReturnValue Tile::queryRemove(const Thing& thing, uint32_t count, uint32_t flags
 	}
 
 	const Item* item = thing.getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
@@ -811,7 +821,7 @@ Tile* Tile::queryDestination(int32_t&, const Thing&, Item** destItem, uint32_t& 
 		destTile = g_game.map.getTile(dx, dy, dz);
 	}
 
-	if (destTile == nullptr) {
+	if (!destTile) {
 		destTile = this;
 	} else {
 		flags |= FLAG_NOLIMIT; //Will ignore that there is blocking items/creatures
@@ -845,7 +855,7 @@ void Tile::addThing(int32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return /*RETURNVALUE_NOTPOSSIBLE*/;
 		}
 
@@ -858,7 +868,7 @@ void Tile::addThing(int32_t, Thing* thing)
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				onAddTileItem(item);
 			} else {
@@ -951,7 +961,7 @@ void Tile::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	}
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -969,7 +979,7 @@ void Tile::replaceThing(uint32_t index, Thing* thing)
 	int32_t pos = index;
 
 	Item* item = thing->getItem();
-	if (item == nullptr) {
+	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
@@ -1092,8 +1102,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 		SpectatorVec spectators;
 		g_game.map.getSpectators(spectators, getPosition(), true);
 		for (Creature* spectator : spectators) {
-			if (Player* tmpPlayer = spectator->getPlayer()) {
-				oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
+			if (Player* spectatorPlayer = spectator->getPlayer()) {
+				oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 			}
 		}
 
@@ -1116,8 +1126,8 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 			SpectatorVec spectators;
 			g_game.map.getSpectators(spectators, getPosition(), true);
 			for (Creature* spectator : spectators) {
-				if (Player* tmpPlayer = spectator->getPlayer()) {
-					oldStackPosVector.push_back(getStackposOfItem(tmpPlayer, item));
+				if (Player* spectatorPlayer = spectator->getPlayer()) {
+					oldStackPosVector.push_back(getStackposOfItem(spectatorPlayer, item));
 				}
 			}
 
@@ -1328,7 +1338,8 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postAddNotification(thing, oldParent, index, LINK_NEAR);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
 	//add a reference to this item, it may be deleted after being added (mailbox for example)
@@ -1388,7 +1399,8 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 	}
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
 	//calling movement scripts
@@ -1423,13 +1435,13 @@ void Tile::internalAddThing(uint32_t, Thing* thing)
 		creatures->insert(creatures->begin(), creature);
 	} else {
 		Item* item = thing->getItem();
-		if (item == nullptr) {
+		if (!item) {
 			return;
 		}
 
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
-			if (ground == nullptr) {
+			if (!ground) {
 				ground = item;
 				setTileFlags(item);
 			}

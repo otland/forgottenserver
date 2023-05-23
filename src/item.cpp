@@ -4,16 +4,17 @@
 #include "otpch.h"
 
 #include "item.h"
+
+#include "bed.h"
+#include "combat.h"
 #include "container.h"
+#include "game.h"
+#include "house.h"
+#include "mailbox.h"
 #include "teleport.h"
 #include "trashholder.h"
-#include "mailbox.h"
-#include "house.h"
-#include "game.h"
-#include "bed.h"
 
-#include "actions.h"
-#include "spells.h"
+class Spells;
 
 extern Game g_game;
 extern Spells* g_spells;
@@ -51,18 +52,6 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 			newItem = new Mailbox(type);
 		} else if (it.isBed()) {
 			newItem = new BedItem(type);
-		} else if (it.id >= 2210 && it.id <= 2212) { // magic rings
-			newItem = new Item(type - 3, count);
-		} else if (it.id == 2215 || it.id == 2216) { // magic rings
-			newItem = new Item(type - 2, count);
-		} else if (it.id >= 2202 && it.id <= 2206) { // magic rings
-			newItem = new Item(type - 37, count);
-		} else if (it.id == 2640) { // soft boots
-			newItem = new Item(6132, count);
-		} else if (it.id == 6301) { // death ring
-			newItem = new Item(6300, count);
-		} else if (it.id == 18528) { // prismatic ring
-			newItem = new Item(18408, count);
 		} else {
 			newItem = new Item(type, count);
 		}
@@ -270,7 +259,7 @@ Cylinder* Item::getTopParent()
 		return prevaux;
 	}
 
-	while (aux->getParent() != nullptr) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -289,7 +278,7 @@ const Cylinder* Item::getTopParent() const
 		return prevaux;
 	}
 
-	while (aux->getParent() != nullptr) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -333,17 +322,9 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-Player* Item::getHoldingPlayer() const
+const Player* Item::getHoldingPlayer() const
 {
-	Cylinder* p = getParent();
-	while (p) {
-		if (p->getCreature()) {
-			return p->getCreature()->getPlayer();
-		}
-
-		p = p->getParent();
-	}
-	return nullptr;
+	return dynamic_cast<const Player*>(getTopParent());
 }
 
 void Item::setSubType(uint16_t n)
@@ -1629,8 +1610,7 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	const ItemType& it = Item::items[id];
-	if (getDecayTo() < 0 || it.decayTime == 0) {
+	if (getDecayTo() < 0 || getDecayTime() == 0) {
 		return false;
 	}
 
@@ -1784,7 +1764,7 @@ void Item::startDecaying()
 
 bool Item::hasMarketAttributes() const
 {
-	if (attributes == nullptr) {
+	if (!attributes) {
 		return true;
 	}
 

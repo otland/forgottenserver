@@ -1,21 +1,20 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
-#define FS_TILE_H_96C7EE7CF8CD48E59D5D554A181F0C56
+#ifndef FS_TILE_H
+#define FS_TILE_H
 
 #include "cylinder.h"
 #include "item.h"
 #include "tools.h"
-#include "spectators.h"
 
+class BedItem;
 class Creature;
+class MagicField;
+class Mailbox;
+class SpectatorVec;
 class Teleport;
 class TrashHolder;
-class Mailbox;
-class MagicField;
-class QTreeLeafNode;
-class BedItem;
 
 using CreatureVector = std::vector<Creature*>;
 using ItemVector = std::vector<Item*>;
@@ -122,7 +121,7 @@ class TileItemVector : private ItemVector
 			}
 			return *getBeginDownItem();
 		}
-		void addDownItemCount(int32_t increment) {
+		void addDownItemCount(uint16_t increment) {
 			downItemCount += increment;
 		}
 
@@ -207,6 +206,8 @@ class Tile : public Cylinder
 				return ZONE_NOPVP;
 			} else if (hasFlag(TILESTATE_PVPZONE)) {
 				return ZONE_PVP;
+			} else if (hasFlag(TILESTATE_NOLOGOUT)) {
+				return ZONE_NOLOGOUT;
 			} else {
 				return ZONE_NORMAL;
 			}
@@ -369,4 +370,4 @@ class StaticTile final : public Tile
 		}
 };
 
-#endif
+#endif // FS_TILE_H

@@ -28,9 +28,10 @@ EVENT_CALLBACK_ONGAINEXPERIENCE = 24
 EVENT_CALLBACK_ONLOSEEXPERIENCE = 25
 EVENT_CALLBACK_ONGAINSKILLTRIES = 26
 EVENT_CALLBACK_ONWRAPITEM = 27
+EVENT_CALLBACK_ONINVENTORYUPDATE = 28
 -- Monster
-EVENT_CALLBACK_ONDROPLOOT = 28
-EVENT_CALLBACK_ONSPAWN = 29
+EVENT_CALLBACK_ONDROPLOOT = 29
+EVENT_CALLBACK_ONSPAWN = 30
 -- last (for correct table counting)
 EVENT_CALLBACK_LAST = EVENT_CALLBACK_ONSPAWN
 
@@ -65,6 +66,7 @@ local callbacks = {
 	["onLoseExperience"] = EVENT_CALLBACK_ONLOSEEXPERIENCE,
 	["onGainSkillTries"] = EVENT_CALLBACK_ONGAINSKILLTRIES,
 	["onWrapItem"] = EVENT_CALLBACK_ONWRAPITEM,
+	["onInventoryUpdate"] = EVENT_CALLBACK_ONINVENTORYUPDATE,
 	-- Monster
 	["onDropLoot"] = EVENT_CALLBACK_ONDROPLOOT,
 	["onSpawn"] = EVENT_CALLBACK_ONSPAWN
@@ -81,23 +83,23 @@ local auxargs = {
 }
 
 EventCallbackData = {}
-hasEventCallback = function (type)
+hasEventCallback = function(type)
 	return #EventCallbackData[type] > 0
 end
 
 EventCallback = {
-	register = function (self, index)
+	register = function(self, index)
 		if isScriptsInterface() then
 			local type, call = rawget(self, "type"), rawget(self, "call")
 			if type and call then
 				EventCallbackData[type][#EventCallbackData[type] + 1] = {call, tonumber(index) or 0}
-				table.sort(EventCallbackData[type], function (a, b) return a[2] < b[2] end)
+				table.sort(EventCallbackData[type], function(a, b) return a[2] < b[2] end)
 				return rawset(self, "type", nil) and rawset(self, "call", nil)
 			end
 			debugPrint("[Warning - EventCallback::register] is need to set up a callback before register.")
 		end
 	end,
-	clear = function (self)
+	clear = function(self)
 		EventCallbackData = {}
 		for i = 1, EVENT_CALLBACK_LAST do
 			EventCallbackData[i] = {}
@@ -106,8 +108,8 @@ EventCallback = {
 }
 
 setmetatable(EventCallback, {
-	__index = function (self) return self end,
-	__newindex = function (self, k, v)
+	__index = function(self) return self end,
+	__newindex = function(self, k, v)
 		if isScriptsInterface() then
 			local ecType = callbacks[k]
 			if ecType then
@@ -120,7 +122,7 @@ setmetatable(EventCallback, {
 			end
 		end
 	end,
-	__call = function (self, type, ...)
+	__call = function(self, type, ...)
 		local eventTable, ret = EventCallbackData[type]
 		local args, events = table.pack(...), #eventTable
 		for k, ev in pairs(eventTable) do

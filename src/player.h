@@ -1,37 +1,25 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
-#define FS_PLAYER_H_4083D3D3A05B4EDE891B31BB720CD06F
+#ifndef FS_PLAYER_H
+#define FS_PLAYER_H
 
 #include "creature.h"
-#include "container.h"
 #include "cylinder.h"
-#include "outfit.h"
-#include "enums.h"
-#include "vocation.h"
-#include "protocolgame.h"
-#include "party.h"
-#include "inbox.h"
-#include "depotchest.h"
 #include "depotlocker.h"
-#include "guild.h"
+#include "enums.h"
 #include "groups.h"
+#include "guild.h"
+#include "protocolgame.h"
 #include "town.h"
-#include "mounts.h"
-#include "storeinbox.h"
+#include "vocation.h"
 
-#include <bitset>
-
+class DepotChest;
 class House;
 class NetworkMessage;
-class Weapon;
-class ProtocolGame;
 class Npc;
 class Party;
 class SchedulerTask;
-class Bed;
-class Guild;
 
 enum skillsid_t {
 	SKILLVALUE_LEVEL = 0,
@@ -95,6 +83,8 @@ using MuteCountMap = std::map<uint32_t, uint32_t>;
 
 static constexpr int32_t PLAYER_MAX_SPEED = 1500;
 static constexpr int32_t PLAYER_MIN_SPEED = 10;
+
+static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
 class Player final : public Creature, public Cylinder
 {
@@ -599,10 +589,10 @@ class Player final : public Creature, public Cylinder
 		}
 
 		uint16_t getSpecialSkill(uint8_t skill) const {
-			return std::max<int32_t>(0, varSpecialSkills[skill]);
+			return std::max<uint16_t>(0, varSpecialSkills[skill]);
 		}
 		uint16_t getSkillLevel(uint8_t skill) const {
-			return std::max<int32_t>(0, skills[skill].level + varSkills[skill]);
+			return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 		}
 		uint16_t getBaseSkill(uint8_t skill) const {
 			return skills[skill].level;
@@ -1237,6 +1227,7 @@ class Player final : public Creature, public Cylinder
 		int64_t lastPong;
 		int64_t nextAction = 0;
 
+		ProtocolGame_ptr client;
 		BedItem* bedItem = nullptr;
 		Guild* guild = nullptr;
 		GuildRank_ptr guildRank = nullptr;
@@ -1249,7 +1240,6 @@ class Player final : public Creature, public Cylinder
 		Npc* shopOwner = nullptr;
 		Party* party = nullptr;
 		Player* tradePartner = nullptr;
-		ProtocolGame_ptr client;
 		SchedulerTask* walkTask = nullptr;
 		Town* town = nullptr;
 		Vocation* vocation = nullptr;
@@ -1356,4 +1346,4 @@ class Player final : public Creature, public Cylinder
 		friend class ProtocolGame;
 };
 
-#endif
+#endif // FS_PLAYER_H

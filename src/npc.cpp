@@ -4,8 +4,10 @@
 #include "otpch.h"
 
 #include "npc.h"
+
 #include "game.h"
 #include "pugicast.h"
+#include "spectators.h"
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
@@ -170,7 +172,7 @@ bool Npc::loadFromXml()
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
-		setSkull(getSkullType(asLowerCaseString(attr.as_string())));
+		setSkull(getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string())));
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
@@ -422,7 +424,7 @@ void Npc::setIdle(const bool idle)
 		return;
 	}
 
-	if (isRemoved() || getHealth() <= 0) {
+	if (isRemoved() || isDead()) {
 		return;
 	}
 

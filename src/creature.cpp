@@ -4,10 +4,14 @@
 #include "otpch.h"
 
 #include "creature.h"
+
+#include "combat.h"
+#include "configmanager.h"
 #include "game.h"
 #include "monster.h"
-#include "configmanager.h"
+#include "party.h"
 #include "scheduler.h"
+#include "spectators.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -173,7 +177,7 @@ void Creature::onAttacking(uint32_t interval)
 
 void Creature::onIdleStatus()
 {
-	if (getHealth() > 0) {
+	if (!isDead()) {
 		damageMap.clear();
 		lastHitCreatureId = 0;
 	}
@@ -693,7 +697,7 @@ void Creature::onDeath()
 	if (mostDamageCreature) {
 		if (mostDamageCreature != lastHitCreature && mostDamageCreature != lastHitCreatureMaster) {
 			Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-			if (lastHitCreature != mostDamageCreatureMaster && (lastHitCreatureMaster == nullptr || mostDamageCreatureMaster != lastHitCreatureMaster)) {
+			if (lastHitCreature != mostDamageCreatureMaster && (!lastHitCreatureMaster || mostDamageCreatureMaster != lastHitCreatureMaster)) {
 				mostDamageUnjustified = mostDamageCreature->onKilledCreature(this, false);
 			}
 		}
@@ -793,7 +797,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange/* = true
 		g_game.addCreatureHealth(this);
 	}
 
-	if (health <= 0) {
+	if (isDead()) {
 		g_dispatcher.addTask(createTask(std::bind(&Game::executeDeath, &g_game, getID())));
 	}
 }
@@ -825,7 +829,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	if (isImmune(combatType)) {
 		damage = 0;
 		blockType = BLOCK_IMMUNITY;
-	} else if (checkDefense || checkArmor) {
+	} else if (combatType != COMBAT_HEALING && (checkDefense || checkArmor)) {
 		bool hasDefense = false;
 
 		if (blockCount > 0) {
@@ -867,7 +871,9 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		attacker->onAttackedCreatureBlockHit(blockType);
 	}
 
-	onAttacked();
+	if (combatType != COMBAT_HEALING) {
+		onAttacked();
+	}
 	return blockType;
 }
 
@@ -1013,16 +1019,9 @@ void Creature::addDamagePoints(Creature* attacker, int32_t damagePoints)
 
 	uint32_t attackerId = attacker->id;
 
-	auto it = damageMap.find(attackerId);
-	if (it == damageMap.end()) {
-		CountBlock_t cb;
-		cb.ticks = OTSYS_TIME();
-		cb.total = damagePoints;
-		damageMap[attackerId] = cb;
-	} else {
-		it->second.total += damagePoints;
-		it->second.ticks = OTSYS_TIME();
-	}
+	auto& cb = damageMap[attackerId];
+	cb.ticks = OTSYS_TIME();
+	cb.total += damagePoints;
 
 	lastHitCreatureId = attackerId;
 }
@@ -1133,7 +1132,8 @@ void Creature::onGainExperience(uint64_t gainExp, Creature* target)
 	message.primary.value = gainExp;
 
 	for (Creature* spectator : spectators) {
-		spectator->getPlayer()->sendTextMessage(message);
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendTextMessage(message);
 	}
 }
 
@@ -1162,7 +1162,7 @@ bool Creature::setMaster(Creature* newMaster) {
 
 bool Creature::addCondition(Condition* condition, bool force/* = false*/)
 {
-	if (condition == nullptr) {
+	if (!condition) {
 		return false;
 	}
 

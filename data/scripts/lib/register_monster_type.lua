@@ -3,7 +3,7 @@ setmetatable(registerMonsterType,
 {
 	__call =
 	function(self, mtype, mask)
-		for _,parse in pairs(self) do
+		for _, parse in pairs(self) do
 			parse(mtype, mask)
 		end
 	end
@@ -202,8 +202,11 @@ registerMonsterType.loot = function(mtype, mask)
 			if loot.aid or loot.actionId then
 				parent:setActionId(loot.aid or loot.actionId)
 			end
+			local charges = loot.charges or ItemType(loot.id):getCharges()
 			if loot.subType or loot.charges then
-				parent:setSubType(loot.subType or loot.charges)
+				parent:setSubType(loot.subType or charges)
+			else
+				parent:setSubType(charges)
 			end
 			if loot.text or loot.description then
 				parent:setDescription(loot.text or loot.description)
@@ -223,8 +226,11 @@ registerMonsterType.loot = function(mtype, mask)
 					if children.aid or children.actionId then
 						child:setActionId(children.aid or children.actionId)
 					end
+					local charges = children.charges or ItemType(children.id):getCharges()
 					if children.subType or children.charges then
-						child:setSubType(children.subType or children.charges)
+						child:setSubType(children.subType or charges)
+					else
+						child:setSubType(charges)
 					end
 					if children.text or children.description then
 						child:setDescription(children.text or children.description)
@@ -235,7 +241,7 @@ registerMonsterType.loot = function(mtype, mask)
 			mtype:addLoot(parent)
 		end
 		if lootError then
-			print("[Warning - end] Monster: \"".. mtype:name() .. "\" loot could not correctly be load.")
+			print("[Warning - end] Monster: \"" .. mtype:name() .. "\" loot could not correctly be load.")
 		end
 	end
 end
@@ -355,6 +361,10 @@ registerMonsterType.attacks = function(mtype, mask)
 					end
 					if attack.shootEffect then
 						spell:setCombatShootEffect(attack.shootEffect)
+					end
+					local outfit = attack.outfit or attack.monster or attack.item
+					if outfit then
+						spell:setOutfit(outfit)
 					end
 					if attack.name == "drunk" then
 						spell:setConditionType(CONDITION_DRUNK)

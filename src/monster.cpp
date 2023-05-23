@@ -4,10 +4,13 @@
 #include "otpch.h"
 
 #include "monster.h"
-#include "game.h"
-#include "spells.h"
-#include "events.h"
+
+#include "condition.h"
 #include "configmanager.h"
+#include "events.h"
+#include "game.h"
+#include "spectators.h"
+#include "spells.h"
 
 extern Game g_game;
 extern Monsters g_monsters;
@@ -87,9 +90,8 @@ void Monster::setName(const std::string& name)
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
-		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendUpdateTileCreature(this);
-		}
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTileCreature(this);
 	}
 }
 
@@ -366,7 +368,7 @@ void Monster::updateTargetList()
 	auto friendIterator = friendList.begin();
 	while (friendIterator != friendList.end()) {
 		Creature* creature = *friendIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (creature->isDead() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			friendIterator = friendList.erase(friendIterator);
 		} else {
@@ -377,7 +379,7 @@ void Monster::updateTargetList()
 	auto targetIterator = targetList.begin();
 	while (targetIterator != targetList.end()) {
 		Creature* creature = *targetIterator;
-		if (creature->getHealth() <= 0 || !canSee(creature->getPosition())) {
+		if (creature->isDead() || !canSee(creature->getPosition())) {
 			creature->decrementReferenceCounter();
 			targetIterator = targetList.erase(targetIterator);
 		} else {
@@ -672,7 +674,7 @@ bool Monster::selectTarget(Creature* creature)
 
 void Monster::setIdle(bool idle)
 {
-	if (isRemoved() || getHealth() <= 0) {
+	if (isRemoved() || isDead()) {
 		return;
 	}
 
@@ -800,7 +802,7 @@ void Monster::doAttacking(uint32_t interval)
 		return;
 	}
 
-	bool updateLook = true;
+	bool lookUpdated = false;
 	bool resetTicks = interval != 0;
 	attackTicks += interval;
 
@@ -810,15 +812,15 @@ void Monster::doAttacking(uint32_t interval)
 	for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
 		bool inRange = false;
 
-		if (attackedCreature == nullptr) {
+		if (!attackedCreature) {
 			break;
 		}
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
-				if (updateLook) {
+				if (!lookUpdated) {
 					updateLookDirection();
-					updateLook = false;
+					lookUpdated = true;
 				}
 
 				minCombatValue = spellBlock.minCombatValue;
@@ -837,7 +839,8 @@ void Monster::doAttacking(uint32_t interval)
 		}
 	}
 
-	if (updateLook) {
+	// ensure ranged creatures turn to player
+	if (!lookUpdated && lastMeleeAttack == 0) {
 		updateLookDirection();
 	}
 
@@ -1174,8 +1177,8 @@ void Monster::pushCreatures(Tile* tile)
 
 bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 {
-	if (!walkingToSpawn && (isIdle || getHealth() <= 0)) {
-		//we don't have anyone watching, might as well stop walking
+	if (!walkingToSpawn && (isIdle || isDead())) {
+		// we don't have anyone watching, might as well stop walking
 		eventWalk = 0;
 		return false;
 	}
@@ -1248,7 +1251,7 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction,
 {
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
-	assert(attackedCreature != nullptr);
+	assert(attackedCreature);
 	const Position& centerPos = attackedCreature->getPosition();
 
 	int_fast32_t offset_x = Position::getOffsetX(creaturePos, centerPos);
@@ -1834,7 +1837,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 		}
 
 		Tile* tile = g_game.map.getTile(pos);
-		if (tile && tile->getTopVisibleCreature(this) == nullptr && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
+		if (tile && !tile->getTopVisibleCreature(this) && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}
 	}
@@ -1936,41 +1939,18 @@ void Monster::updateLookDirection()
 			} else {
 				newDir = DIRECTION_SOUTH;
 			}
+		} else if (offsetx < 0 && offsety < 0) {
+			// target to north-west
+			newDir = DIRECTION_WEST;
+		} else if (offsetx < 0 && offsety > 0) {
+			// target to south-west
+			newDir = DIRECTION_WEST;
+		} else if (offsetx > 0 && offsety < 0) {
+			// target to north-east
+			newDir = DIRECTION_EAST;
 		} else {
-			Direction dir = getDirection();
-			if (offsetx < 0 && offsety < 0) {
-				if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_EAST) {
-					newDir = DIRECTION_NORTH;
-				}
-			} else if (offsetx < 0 && offsety > 0) {
-				if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_EAST) {
-					newDir = DIRECTION_SOUTH;
-				}
-			} else if (offsetx > 0 && offsety < 0) {
-				if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_WEST) {
-					newDir = DIRECTION_NORTH;
-				}
-			} else {
-				if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_WEST) {
-					newDir = DIRECTION_SOUTH;
-				}
-			}
+			// target to south-east
+			newDir = DIRECTION_EAST;
 		}
 	}
 

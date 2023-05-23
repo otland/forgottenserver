@@ -7,10 +7,7 @@
 
 #include <cryptopp/base64.h>
 #include <cryptopp/osrng.h>
-#include <fmt/color.h>
-
 #include <fstream>
-#include <sstream>
 
 static CryptoPP::AutoSeededRandomPool prng;
 

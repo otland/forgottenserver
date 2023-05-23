@@ -1,10 +1,14 @@
 // Copyright 2022 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-#ifndef FS_MONSTERS_H_776E8327BCE2450EB7C4A260785E6C0D
-#define FS_MONSTERS_H_776E8327BCE2450EB7C4A260785E6C0D
+#ifndef FS_MONSTERS_H
+#define FS_MONSTERS_H
 
-#include "creature.h"
+#include "const.h"
+#include "enums.h"
+
+class ConditionDamage;
+class LuaScriptInterface;
 
 const uint32_t MAX_LOOTCHANCE = 100000;
 
@@ -244,4 +248,4 @@ class Monsters
 		bool loaded = false;
 };
 
-#endif
+#endif // FS_MONSTERS_H

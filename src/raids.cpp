@@ -5,14 +5,11 @@
 
 #include "raids.h"
 
-#include "pugicast.h"
-
-#include "game.h"
 #include "configmanager.h"
-#include "scheduler.h"
+#include "game.h"
 #include "monster.h"
-
-#include <fmt/format.h>
+#include "pugicast.h"
+#include "scheduler.h"
 
 extern Game g_game;
 extern ConfigManager g_config;
@@ -162,7 +159,7 @@ bool Raids::reload()
 Raid* Raids::getRaidByName(const std::string& name)
 {
 	for (Raid* raid : raidList) {
-		if (strcasecmp(raid->getName().c_str(), name.c_str()) == 0) {
+		if (caseInsensitiveEqual(raid->getName(), name)) {
 			return raid;
 		}
 	}
@@ -191,13 +188,13 @@ bool Raid::loadFromXml(const std::string& filename)
 
 	for (auto eventNode : doc.child("raid").children()) {
 		RaidEvent* event;
-		if (strcasecmp(eventNode.name(), "announce") == 0) {
+		if (caseInsensitiveEqual(eventNode.name(), "announce")) {
 			event = new AnnounceEvent();
-		} else if (strcasecmp(eventNode.name(), "singlespawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "singlespawn")) {
 			event = new SingleSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "areaspawn") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "areaspawn")) {
 			event = new AreaSpawnEvent();
-		} else if (strcasecmp(eventNode.name(), "script") == 0) {
+		} else if (caseInsensitiveEqual(eventNode.name(), "script")) {
 			event = new ScriptEvent(&g_game.raids.getScriptInterface());
 		} else {
 			continue;
@@ -298,7 +295,7 @@ bool AnnounceEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 
 	pugi::xml_attribute typeAttribute = eventNode.attribute("type");
 	if (typeAttribute) {
-		std::string tmpStrValue = asLowerCaseString(typeAttribute.as_string());
+		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(typeAttribute.as_string());
 		if (tmpStrValue == "warning") {
 			messageType = MESSAGE_STATUS_WARNING;
 		} else if (tmpStrValue == "event") {
@@ -518,7 +515,7 @@ bool AreaSpawnEvent::executeEvent()
 			bool success = false;
 			for (int32_t tries = 0; tries < MAXIMUM_TRIES_PER_MONSTER; tries++) {
 				Tile* tile = g_game.map.getTile(uniform_random(fromPos.x, toPos.x), uniform_random(fromPos.y, toPos.y), uniform_random(fromPos.z, toPos.z));
-				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && tile->getTopCreature() == nullptr && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
+				if (tile && !tile->isMoveableBlocking() && !tile->hasFlag(TILESTATE_PROTECTIONZONE) && !tile->getTopCreature() && g_game.placeCreature(monster, tile->getPosition(), false, true)) {
 					success = true;
 					break;
 				}

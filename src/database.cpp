@@ -3,8 +3,9 @@
 
 #include "otpch.h"
 
-#include "configmanager.h"
 #include "database.h"
+
+#include "configmanager.h"
 
 #include <mysql/errmsg.h>
 
@@ -12,7 +13,7 @@ extern ConfigManager g_config;
 
 Database::~Database()
 {
-	if (handle != nullptr) {
+	if (handle) {
 		mysql_close(handle);
 	}
 }
@@ -121,7 +122,7 @@ DBResult_ptr Database::storeQuery(const std::string& query)
 	// we should call that every time as someone would call executeQuery('SELECT...')
 	// as it is described in MySQL manual: "it doesn't hurt" :P
 	MYSQL_RES* res = mysql_store_result(handle);
-	if (res == nullptr) {
+	if (!res) {
 		std::cout << "[Error - mysql_store_result] Query: " << query << std::endl << "Message: " << mysql_error(handle) << std::endl;
 		auto error = mysql_errno(handle);
 		if (error != CR_SERVER_LOST && error != CR_SERVER_GONE_ERROR && error != CR_CONN_HOST_ERROR && error != 1053/*ER_SERVER_SHUTDOWN*/ && error != CR_CONNECTION_ERROR) {
@@ -193,7 +194,7 @@ std::string DBResult::getString(const std::string& s) const
 		return std::string();
 	}
 
-	if (row[it->second] == nullptr) {
+	if (!row[it->second]) {
 		return std::string();
 	}
 
@@ -209,7 +210,7 @@ const char* DBResult::getStream(const std::string& s, unsigned long& size) const
 		return nullptr;
 	}
 
-	if (row[it->second] == nullptr) {
+	if (!row[it->second]) {
 		size = 0;
 		return nullptr;
 	}
@@ -220,13 +221,13 @@ const char* DBResult::getStream(const std::string& s, unsigned long& size) const
 
 bool DBResult::hasNext() const
 {
-	return row != nullptr;
+	return row;
 }
 
 bool DBResult::next()
 {
 	row = mysql_fetch_row(handle);
-	return row != nullptr;
+	return row;
 }
 
 DBInsert::DBInsert(std::string query) : query(std::move(query))

@@ -1,3 +1,22 @@
+local openOddDoors = {
+	[12695] = { locked = 13237, closed = 12692 },
+	[12703] = { locked = 13236, closed = 12701 },
+	[14635] = { locked = 14634, closed = 14633 },
+	[17435] = { locked = 14641, closed = 14640 },
+}
+local closedOddDoors = {	
+	[12692] = { locked = 13237, open = 12695 },
+	[12701] = { locked = 13236, open = 12703 },
+	[14633] = { locked = 14634, open = 14635 },
+	[14640] = { locked = 14641, open = 17435 },
+}
+local lockedOddDoors = {
+	[13237] = { closed = 12692, open = 12695 },
+	[13236] = { closed = 12701, open = 12703 },
+	[14634] = { closed = 14633, open = 14635 },
+	[14641] = { closed = 14640, open = 17435 },
+}
+
 local positionOffsets = {
 	{x = 1, y = 0}, -- east
 	{x = 0, y = 1}, -- south
@@ -57,6 +76,7 @@ local door = Action()
 
 function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemId = item:getId()
+	local transformTo = 0
 	if table.contains(closedQuestDoors, itemId) then
 		if player:getStorageValue(item.actionid) ~= -1 then
 			item:transform(itemId + 1)
@@ -92,11 +112,23 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "The key does not match.")
 			return true
 		end
-		local transformTo = target.itemid + 2
+		if lockedOddDoors[target.itemid] then
+			transformTo = lockedOddDoors[target.itemid].open
+		else
+			transformTo = target.itemid + 2
+		end
 		if table.contains(openDoors, target.itemid) then
-			transformTo = target.itemid - 2
+			if openOddDoors[target.itemid] then
+				transformTo = openOddDoors[target.itemid].locked
+			else
+				transformTo = target.itemid - 2
+			end
 		elseif table.contains(closedDoors, target.itemid) then
-			transformTo = target.itemid - 1
+			if closedOddDoors[target.itemid] then
+				transformTo = closedOddDoors[target.itemid].locked
+			else
+				transformTo = target.itemid - 1
+			end
 		end
 		target:transform(transformTo)
 		return true
@@ -119,11 +151,20 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				tableCreature.creature:teleportTo(tableCreature.position, true)
 			end
 		end
-	
-		item:transform(itemId - 1)
-		return true	
+		if openOddDoors[itemId] then
+			transformTo = openOddDoors[itemId].closed
+		else
+			transformTo = itemId - 1
+		end
+		item:transform(transformTo)
+		return true
 	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
-		item:transform(itemId + 1)
+		if closedOddDoors[itemId] then
+			transformTo = closedOddDoors[itemId].open
+		else
+			transformTo = itemId + 1
+		end
+		item:transform(transformTo)
 		return true
 	end
 	return false
