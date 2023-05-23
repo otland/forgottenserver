@@ -54,13 +54,9 @@ enum tradestate_t : uint8_t
 
 struct VIPEntry
 {
-	VIPEntry(uint32_t id, uint32_t playerId, std::string_view name, std::string_view description, uint32_t icon, bool notify) :
-	    id{id},
-	    playerId{playerId},
-	    name{name},
-	    description{description},
-	    icon{icon},
-	    notify{notify}
+	VIPEntry(uint32_t id, uint32_t playerId, std::string_view name, std::string_view description, uint32_t icon,
+	         bool notify) :
+	    id{id}, playerId{playerId}, name{name}, description{description}, icon{icon}, notify{notify}
 	{}
 
 	uint32_t id;
@@ -74,7 +70,7 @@ struct VIPEntry
 
 struct VIPGroup
 {
-	VIPGroup(uint16_t id, std::string name, bool isEditable) : id(id), name(std::move(name)), isEditable(isEditable) {}
+	VIPGroup(uint16_t id, std::string_view name, bool isEditable) : id{id}, name{name}, isEditable{isEditable} {}
 
 	uint16_t id;
 	std::string name;

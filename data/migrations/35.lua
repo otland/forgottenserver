@@ -1,5 +1,5 @@
 function onUpdateDatabase()
-	print("> Updating database to version 35 (vipgroups)")
+	print("> Updating database to version 36 (vipgroups)")
 	db.query("CREATE TABLE IF NOT EXISTS `account_vipgroups` (`id` int NOT NULL AUTO_INCREMENT, `account_id` int NOT NULL, `name` varchar(128) NOT NULL DEFAULT '', `editable` tinyint NOT NULL DEFAULT '1', PRIMARY KEY (`id`), FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB;")
 	db.query("ALTER TABLE `account_viplist` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST")
 	db.query("CREATE TABLE IF NOT EXISTS `account_vipgroup_entry` (`group_id` int NOT NULL, `entry_id` int NOT NULL, UNIQUE KEY `group_entry_index` (`group_id`, `entry_id`), FOREIGN KEY (`group_id`) REFERENCES `account_vipgroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`entry_id`) REFERENCES `account_viplist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB;")

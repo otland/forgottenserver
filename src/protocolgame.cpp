@@ -1438,7 +1438,7 @@ void ProtocolGame::parseEditVip(NetworkMessage& msg)
 		groupIds.push_back(msg.getByte());
 	}
 	g_dispatcher.addTask(
-	    [=, playerID = player->getID(), description = std::string{description}, groupIds = std::string{groupIds}]() {
+	    [=, playerID = player->getID(), description = std::string{description}, groupIds = std::move(groupIds)]() {
 		    g_game.playerRequestEditVip(playerID, guid, description, icon, notify, groupIds);
 	    });
 }
@@ -1449,7 +1449,7 @@ void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
 
 	switch (action) {
 		case VIPGROUPACTION_CREATE: {
-			std::string name = msg.getString();
+			std::string_view name = msg.getString();
 			g_dispatcher.addTask([=, playerID = player->getID(), name = std::string{name}]() {
 				g_game.playerRequestAddVipGroup(playerID, name);
 			});
@@ -1457,7 +1457,7 @@ void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
 		}
 		case VIPGROUPACTION_EDIT: {
 			uint8_t id = msg.getByte();
-			std::string name = msg.getString();
+			std::string_view name = msg.getString();
 			g_dispatcher.addTask([=, playerID = player->getID(), name = std::string{name}]() {
 				g_game.playerRequestEditVipGroup(playerID, id, name);
 			});
