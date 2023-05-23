@@ -9,7 +9,7 @@ function talk.onSay(player, words, param)
 	if screenshotType then
 		player:takeScreenshot(screenshotType)
 	else
-		player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "Invalid screenshot type.")
+		player:sendTextMessage(MESSAGE_INFO_DESCR, "Invalid screenshot type.")
 	end
 	return false
 end
