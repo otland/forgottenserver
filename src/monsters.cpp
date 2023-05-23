@@ -1386,9 +1386,9 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			int32_t chance = 100;
 			int32_t speed = 1000;
 			int32_t max = mType->info.maxSummons;
-			bool force = false;
-			MagicEffectClasses masterEffect = CONST_ME_NONE;
 			MagicEffectClasses effect = CONST_ME_TELEPORT;
+			MagicEffectClasses masterEffect = CONST_ME_NONE;
+			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
 				speed = std::max<int32_t>(1, pugi::cast<int32_t>(attr.value()));
@@ -1405,10 +1405,6 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 			if ((attr = summonNode.attribute("max"))) {
 				max = pugi::cast<uint32_t>(attr.value());
-			}
-
-			if ((attr = summonNode.attribute("force"))) {
-				force = attr.as_bool();
 			}
 
 			for (const auto& attributeNode : summonNode.children()) {
@@ -1440,15 +1436,19 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				}
 			}
 
+			if ((attr = summonNode.attribute("force"))) {
+				force = attr.as_bool();
+			}
+
 			if ((attr = summonNode.attribute("name"))) {
 				summonBlock_t sb;
 				sb.name = attr.as_string();
 				sb.speed = speed;
 				sb.chance = chance;
 				sb.max = max;
-				sb.force = force;
-				sb.masterEffect = masterEffect;
 				sb.effect = effect;
+				sb.masterEffect = masterEffect;
+				sb.force = force;
 				mType->info.summons.emplace_back(sb);
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Missing summon name. " << file << std::endl;
