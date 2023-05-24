@@ -24,14 +24,39 @@ local function sendBasicInfo(self, msg)
 	return true
 end
 
+local function sendAchievements(self, msg)
+	local achievementIds = self:getAchievements()
+	msg:addU16(self:getAchievementPoints()) -- achievement points
+	msg:addU16(secretAchievementsCount) -- secret achievements amount
+	msg:addU16(#achievementIds) -- achievements count
+
+	for i = 1, #achievementIds do
+		local achievement = achievements[achievementIds[i]]
+		local secret = achievement.secret
+		msg:addU16(achievement.clientId) -- achievement id (will show hardcoded values if byte after timestamp is disabled)
+		msg:addU32(0) -- unlocked at timestamp
+		msg:addByte(secret and 0x01 or 0x00)
+
+		if secret then
+			msg:addString(achievement.name)
+			msg:addString(achievement.description)
+			msg:addByte(achievement.grade)
+		end
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
 local BASIC_INFO = 0x00
+local ACHIEVEMENTS = 0x05
 
 --[[
 	local GENERAL_STATS = 0x01
 	local COMBAT_STATS = 0x02
 	local RECENT_DEATHS = 0x03
 	local RECENT_PVP_KILLS = 0x04
-	local ACHIEVEMENTS = 0x05
 	local ITEM_SUMMARY = 0x06
 	local APPEARANCES = 0x07
 	local STORE = 0x08
@@ -42,12 +67,13 @@ local BASIC_INFO = 0x00
 
 local handlers = {
 	[BASIC_INFO] = sendBasicInfo,
+	[ACHIEVEMENTS] = sendAchievements,
+
 	--[[
 		[GENERAL_STATS] = "sendGeneralStats",
 		[COMBAT_STATS] = "sendCombatStats",
 		[RECENT_DEATHS] = "sendRecentDeaths",
 		[RECENT_PVP_KILLS] = "sendRecentPvpKills",
-		[ACHIEVEMENTS] = "sendAchievements",
 		[ITEM_SUMMARY] = "sendItemSummary",
 		[APPEARANCES] = "sendAppearances",
 		[STORE] = "sendStore",
