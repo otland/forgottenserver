@@ -27,13 +27,13 @@ end
 local function sendAchievements(self, msg)
 	local achievementIds = self:getAchievements()
 	msg:addU16(self:getAchievementPoints()) -- achievement points
-	msg:addU16(secretAchievementsCount) -- secret achievements amount
+	msg:addU16(#getSecretAchievements()) -- secret achievements amount
 	msg:addU16(#achievementIds) -- achievements count
 
 	for i = 1, #achievementIds do
 		local achievement = achievements[achievementIds[i]]
 		local secret = achievement.secret
-		msg:addU16(achievement.clientId) -- achievement id (will show hardcoded values if byte after timestamp is disabled)
+		msg:addU16(0) -- achievement id (will show hardcoded values if byte after timestamp is disabled)
 		msg:addU32(0) -- unlocked at timestamp
 		msg:addByte(secret and 0x01 or 0x00)
 
