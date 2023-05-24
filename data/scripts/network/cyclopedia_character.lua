@@ -25,6 +25,7 @@ local function sendBasicInfo(self, msg)
 end
 
 local function sendCombatStats(self, msg)
+	local msg = NetworkMessage()
 	for skillId = SPECIALSKILL_CRITICALHITCHANCE, SPECIALSKILL_MANALEECHAMOUNT do
 		msg:addU16(self:getSpecialSkill(skillId))
 		msg:addU16(0)
