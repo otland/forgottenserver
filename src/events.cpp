@@ -48,7 +48,7 @@ bool Events::load()
 				info.creatureOnTargetCombat = event;
 			} else if (methodName == "onHear") {
 				info.creatureOnHear = event;
-			} else  if (methodName == "onChangeZone") {
+			} else if (methodName == "onChangeZone") {
 				info.creatureOnChangeZone = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;

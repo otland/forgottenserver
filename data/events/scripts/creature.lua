@@ -36,7 +36,8 @@ function Creature:onHear(speaker, words, type)
 end
 
 function Creature:onChangeZone(fromZone, toZone)
-	if EventCallback.onChangeZone then
-		EventCallback.onChangeZone(self, fromZone, toZone)
+	local onChangeZone = EventCallback.onChangeZone
+	if onChangeZone then
+		onChangeZone(self, fromZone, toZone)
 	end
 end
