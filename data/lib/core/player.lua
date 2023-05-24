@@ -616,3 +616,13 @@ function Player.sendHighscores(self, entries, params)
 	msg:delete()
 	return true
 end
+
+function Player.getBlessings(self)
+	local blessings = 0
+	for i = 1, 6 do
+		if self:hasBlessing(i) then
+			blessings = blessings + 1
+		end
+	end
+	return blessings
+end

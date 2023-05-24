@@ -24,11 +24,61 @@ local function sendBasicInfo(self, msg)
 	return true
 end
 
+local function sendCombatStats(self, msg)
+	for skillId = SPECIALSKILL_CRITICALHITCHANCE, SPECIALSKILL_MANALEECHAMOUNT do
+		msg:addU16(self:getSpecialSkill(skillId))
+		msg:addU16(0)
+	end
+
+	-- fatal, dodge, momentum
+	for i = 1, 3 do
+		msg:addU16(0)
+		msg:addU16(0)
+	end
+
+	msg:addU16(0) -- cleave (bonus percent damage to nearby enemies)
+	msg:addU16(0) -- bonus magic shield capacity (flat)
+	msg:addU16(0) -- bonus magic shield capacity (percent)
+
+	-- perfect shot flat damage bonus at 1-5 range
+	for i = 1, 5 do
+		msg:addU16(0)
+	end
+
+	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
+	msg:addByte(self:getBlessings()) -- blessings used
+	msg:addByte(8) -- blessings count
+
+	-- weapon
+	msg:addU16(0) -- base max damage
+	msg:addByte(CLIENT_COMBAT_PHYSICAL) -- base element type
+	msg:addByte(0) -- percent damage conversion
+	msg:addByte(CLIENT_COMBAT_PHYSICAL) -- conversion element type
+
+	msg:addU16(0) -- armor
+	msg:addU16(0) -- defense
+
+	-- element resistances count
+	msg:addByte(0)
+	-- structure:
+	-- u8 clientcombat
+	-- u8 value
+
+	-- active potions count
+	msg:addByte(0)
+	-- structure:
+	-- item clientId
+	-- u16 duration
+
+	msg:sendToPlayer(self)
+	msg:delete()
+end
+
 local BASIC_INFO = 0x00
+local COMBAT_STATS = 0x02
 
 --[[
 	local GENERAL_STATS = 0x01
-	local COMBAT_STATS = 0x02
 	local RECENT_DEATHS = 0x03
 	local RECENT_PVP_KILLS = 0x04
 	local ACHIEVEMENTS = 0x05
@@ -42,18 +92,19 @@ local BASIC_INFO = 0x00
 
 local handlers = {
 	[BASIC_INFO] = sendBasicInfo,
+	[COMBAT_STATS] = sendCombatStats,
+
 	--[[
-		[GENERAL_STATS] = "sendGeneralStats",
-		[COMBAT_STATS] = "sendCombatStats",
-		[RECENT_DEATHS] = "sendRecentDeaths",
-		[RECENT_PVP_KILLS] = "sendRecentPvpKills",
-		[ACHIEVEMENTS] = "sendAchievements",
-		[ITEM_SUMMARY] = "sendItemSummary",
-		[APPEARANCES] = "sendAppearances",
-		[STORE] = "sendStore",
-		[INSPECTION] = "sendInspection",
-		[BADGES] = "sendBadges",
-		[TITLES] = "sendTitles"
+		[GENERAL_STATS] = sendGeneralStats,
+		[RECENT_DEATHS] = sendRecentDeaths,
+		[RECENT_PVP_KILLS] = sendRecentPvpKills,
+		[ACHIEVEMENTS] = sendAchievements,
+		[ITEM_SUMMARY] = sendItemSummary,
+		[APPEARANCES] = sendAppearances,
+		[STORE] = sendStore,
+		[INSPECTION] = sendInspection,
+		[BADGES] = sendBadges,
+		[TITLES] = sendTitles
 	]]--
 }
 
