@@ -695,13 +695,15 @@ function Player.addAchievement(self, ach, hideMsg)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
 
 	if not self:hasAchievement(achievement.id) then
-		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, 1)
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, os.time())
+
 		if achievement.points > 0 then
 			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
 			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value + achievement.points)
