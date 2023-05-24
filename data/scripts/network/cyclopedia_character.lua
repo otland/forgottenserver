@@ -34,7 +34,7 @@ local function sendAchievements(self, msg)
 		local achievement = achievements[achievementIds[i]]
 		local secret = achievement.secret
 		msg:addU16(achievement.clientId)
-		msg:addU32(os.time()) -- TODO: a new function is needed to add the time the achievement is earned and access it here.
+		msg:addU32(achievement)
 		msg:addByte(secret and 0x01 or 0x00)
 
 		if secret then
