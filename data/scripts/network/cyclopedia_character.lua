@@ -30,11 +30,11 @@ local function sendAchievements(self, msg)
 	msg:addU16(#getSecretAchievements())
 	msg:addU16(#achievementIds)
 
-	for i = 1, #achievementIds do
-		local achievement = achievements[achievementIds[i]]
+	for _, id in pairs(achievementIds) do
+		local achievement = achievements[id]
 		local secret = achievement.secret
 		msg:addU16(achievement.clientId)
-		msg:addU32(achievement)
+		msg:addU32(self:getStorageValue(PlayerStorageKeys.achievementsBase + id))
 		msg:addByte(secret and 0x01 or 0x00)
 
 		if secret then
@@ -70,16 +70,16 @@ local handlers = {
 	[ACHIEVEMENTS] = sendAchievements,
 
 	--[[
-		[GENERAL_STATS] = "sendGeneralStats",
-		[COMBAT_STATS] = "sendCombatStats",
-		[RECENT_DEATHS] = "sendRecentDeaths",
-		[RECENT_PVP_KILLS] = "sendRecentPvpKills",
-		[ITEM_SUMMARY] = "sendItemSummary",
-		[APPEARANCES] = "sendAppearances",
-		[STORE] = "sendStore",
-		[INSPECTION] = "sendInspection",
-		[BADGES] = "sendBadges",
-		[TITLES] = "sendTitles"
+		[GENERAL_STATS] = sendGeneralStats,
+		[COMBAT_STATS] = sendCombatStats,
+		[RECENT_DEATHS] = sendRecentDeaths,
+		[RECENT_PVP_KILLS] = sendRecentPvpKills,
+		[ITEM_SUMMARY] = sendItemSummary,
+		[APPEARANCES] = sendAppearances,
+		[STORE] = sendStore,
+		[INSPECTION] = sendInspection,
+		[BADGES] = sendBadges,
+		[TITLES] = sendTitles
 	]]--
 }
 
