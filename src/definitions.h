@@ -44,10 +44,10 @@ static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 #pragma warning(disable : 4244) // 'argument' : conversion from 'type1' to 'type2', possible loss of data
 #pragma warning(disable : 4250) // 'class1' : inherits 'class2::member' via dominance
 #pragma warning(disable : 4267) // 'var' : conversion from 'size_t' to 'type', possible loss of data
+#pragma warning(disable : 4275) // can be ignored in Visual C++ if you are deriving from a type in the C++ STL
 #pragma warning(disable : 4319) // '~': zero extending 'unsigned int' to 'lua_Number' of greater size
 #pragma warning(disable : 4351) // new behavior: elements of array will be default initialized
 #pragma warning(disable : 4458) // declaration hides class member
-#pragma warning(disable : 4275) // can be ignored in Visual C++ if you are deriving from a type in the C++ STL
 #endif
 
 #ifndef _WIN32_WINNT
