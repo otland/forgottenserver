@@ -17885,7 +17885,7 @@ int LuaScriptInterface::luaWeaponCharges(lua_State* L)
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
 
-		it.charges = getNumber<uint8_t>(L, 2);
+		it.charges = getNumber<uint32_t>(L, 2);
 		it.showCharges = showCharges;
 		pushBoolean(L, true);
 	} else {
