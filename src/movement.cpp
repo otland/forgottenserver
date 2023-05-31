@@ -476,9 +476,6 @@ ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
-		// If the item does not have an event, we make sure to reset the slot, since some items transform into items
-		// without events.
-		player->setItemAbility(slot, false);
 		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, false);

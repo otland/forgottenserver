@@ -1,47 +1,53 @@
--- If you don't intend to use quests.xml, you can delete this file.
-local xmlQuest = GlobalEvent("Load XML Quests")
+--If you don't intend to use quests.xml, you can delete this file.
+local globalEvent = GlobalEvent("LoadQuestsXml")
 
-function xmlQuest.onStartup()
-	local questDoc = XMLDocument("data/XML/quests.xml")
-	if not questDoc then
-		io.write(
-			"[Warning - GlobalEvent::onStartup] Could not load quests.xml.\n")
+function globalEvent.onStartup()
+	local questXml = XMLDocument("data/XML/quests.xml")
+	if not questXml then
+		io.write("[Warning - GlobalEvent::onStartup] Cannot load quests.xml!")
 		return true
 	end
 
-	local quests = questDoc:child("quests")
-	for questNode in quests:children() do
+	local child = questXml:child("quests")
+	local firstChild = child:firstChild()
+
+	while firstChild do
+		local missionNode = firstChild:firstChild()
 		local missions = {}
-		for missionNode in questNode:children() do
+		while missionNode do
 			local mission = {
-				name = missionNode:attribute("name") or "",
+				name = tostring(missionNode:attribute("name")),
 				storageId = tonumber(missionNode:attribute("storageid")),
 				startValue = tonumber(missionNode:attribute("startvalue")),
 				endValue = tonumber(missionNode:attribute("endvalue")),
-				ignoreEndValue = tobool(missionNode:attribute("ignoreendvalue")),
+				ignoreEndValue = table.contains({'1', 'y', 't'}, tostring(missionNode:attribute("ignoreendvalue"):sub(1, 1):lower())),
 				description = missionNode:attribute("description")
 			}
 
 			if not mission.description then
+				local missionState = missionNode:firstChild()
 				local description = {}
-				for missionState in missionNode:children() do
-					description[tonumber(missionState:attribute("id"))] =
-						missionState:attribute("description") or ""
+				while missionState do
+					description[tonumber(missionState:attribute("id"))] = missionState:attribute("description") or ""
+					missionState = missionState:nextSibling()
 				end
 
 				mission.description = description
 			end
 
 			missions[#missions + 1] = mission
+			missionNode = missionNode:nextSibling()
 		end
 
-		Game.createQuest(questNode:attribute("name"), {
-			storageId = tonumber(questNode:attribute("startstorageid")),
-			storageValue = tonumber(questNode:attribute("startstoragevalue")),
+		Game.createQuest(firstChild:attribute("name"), {
+			storageId = tonumber(firstChild:attribute("startstorageid")),
+			storageValue = tonumber(firstChild:attribute("startstoragevalue")),
 			missions = missions
 		}):register()
+
+		firstChild = firstChild:nextSibling()
 	end
 	return true
 end
 
-xmlQuest:register()
+globalEvent:register()

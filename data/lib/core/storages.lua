@@ -13,7 +13,6 @@ GlobalStorageKeys = {
 }
 
 PlayerStorageKeys = {
-	-- Misc:
 	annihilatorReward = 30015,
 	goldenOutfit = 30016,
 	-- empty: 30017
@@ -36,11 +35,9 @@ PlayerStorageKeys = {
 	vortexTamer = 30034,
 	mutatedPumpkin = 30035,
 
-	-- Achievements:
-	achievementsTotal = 19999,
-	achievementsCounter = 20000,
 	achievementsBase = 300000,
+	achievementsCounter = 20000,
+	achievementsTotal = 19999,
 
-	-- Bestiary:
 	bestiaryKillsBase = 400000,
 }

@@ -78,7 +78,12 @@ void Monster::setName(const std::string& name)
 
 	// NOTE: Due to how client caches known creatures, it is not feasible to send creature update to everyone that has
 	// ever met it
-	g_game.updateKnownCreature(this);
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, position, true, true);
+	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTileCreature(this);
+	}
 }
 
 const std::string& Monster::getNameDescription() const

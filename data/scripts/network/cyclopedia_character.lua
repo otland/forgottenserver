@@ -27,7 +27,7 @@ end
 local function sendCombatStats(self, msg)
 	for skillId = SPECIALSKILL_CRITICALHITCHANCE, SPECIALSKILL_MANALEECHAMOUNT do
 		msg:addU16(self:getSpecialSkill(skillId))
-		msg:addU16(0) -- base special skill
+		msg:addU16(0)
 	end
 
 	-- fatal, dodge, momentum
@@ -46,14 +46,14 @@ local function sendCombatStats(self, msg)
 	end
 
 	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
-	msg:addByte(self:getBlessings())
+	msg:addByte(self:getBlessings()) -- blessings used
 	msg:addByte(8) -- blessings count
 
 	-- weapon
 	msg:addU16(0) -- base max damage
-	msg:addByte(0) -- base element type
+	msg:addByte(CLIENT_COMBAT_PHYSICAL) -- base element type
 	msg:addByte(0) -- percent damage conversion
-	msg:addByte(0) -- conversion element type
+	msg:addByte(CLIENT_COMBAT_PHYSICAL) -- conversion element type
 
 	msg:addU16(0) -- armor
 	msg:addU16(0) -- defense
@@ -75,39 +75,14 @@ local function sendCombatStats(self, msg)
 	return true
 end
 
-local function sendAchievements(self, msg)
-	local achievementIds = self:getAchievements()
-	msg:addU16(self:getAchievementPoints())
-	msg:addU16(#getSecretAchievements())
-	msg:addU16(#achievementIds)
-
-	for _, id in pairs(achievementIds) do
-		local achievement = achievements[id]
-		local secret = achievement.secret
-		msg:addU16(achievement.clientId)
-		msg:addU32(self:getStorageValue(PlayerStorageKeys.achievementsBase + id))
-		msg:addByte(secret and 0x01 or 0x00)
-
-		if secret then
-			msg:addString(achievement.name)
-			msg:addString(achievement.description)
-			msg:addByte(achievement.grade)
-		end
-	end
-
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
-end
-
 local BASIC_INFO = 0x00
 local COMBAT_STATS = 0x02
-local ACHIEVEMENTS = 0x05
 
 --[[
 	local GENERAL_STATS = 0x01
 	local RECENT_DEATHS = 0x03
 	local RECENT_PVP_KILLS = 0x04
+	local ACHIEVEMENTS = 0x05
 	local ITEM_SUMMARY = 0x06
 	local APPEARANCES = 0x07
 	local STORE = 0x08
@@ -119,12 +94,12 @@ local ACHIEVEMENTS = 0x05
 local handlers = {
 	[BASIC_INFO] = sendBasicInfo,
 	[COMBAT_STATS] = sendCombatStats,
-	[ACHIEVEMENTS] = sendAchievements,
 
 	--[[
 		[GENERAL_STATS] = sendGeneralStats,
 		[RECENT_DEATHS] = sendRecentDeaths,
 		[RECENT_PVP_KILLS] = sendRecentPvpKills,
+		[ACHIEVEMENTS] = sendAchievements,
 		[ITEM_SUMMARY] = sendItemSummary,
 		[APPEARANCES] = sendAppearances,
 		[STORE] = sendStore,
