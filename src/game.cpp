@@ -4971,6 +4971,17 @@ void Game::updateCreatureWalkthrough(const Creature* creature)
 	}
 }
 
+void Game::updateKnownCreature(const Creature* creature)
+{
+	// send to clients
+	SpectatorVec spectators;
+	map.getSpectators(spectators, creature->getPosition(), true, true);
+	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateTileCreature(creature);
+	}
+}
+
 void Game::updateCreatureSkull(const Creature* creature)
 {
 	if (getWorldType() != WORLD_TYPE_PVP) {
