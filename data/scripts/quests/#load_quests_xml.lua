@@ -20,9 +20,13 @@ function globalEvent.onStartup()
 				storageId = tonumber(missionNode:attribute("storageid")),
 				startValue = tonumber(missionNode:attribute("startvalue")),
 				endValue = tonumber(missionNode:attribute("endvalue")),
-				ignoreEndValue = table.contains({'1', 'y', 't'}, tostring(missionNode:attribute("ignoreendvalue"):sub(1, 1):lower())),
 				description = missionNode:attribute("description")
 			}
+
+			local ignoreEndValueAttr = missionNode:attribute("ignoreendvalue")
+			if ignoreEndValueAttr ~= nil then
+				mission.ignoreEndValue = table.contains({'1', 'y', 't'}, tostring(ignoreEndValueAttr:sub(1, 1):lower()))
+			end
 
 			if not mission.description then
 				local missionState = missionNode:firstChild()
