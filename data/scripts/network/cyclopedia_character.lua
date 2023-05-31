@@ -63,7 +63,7 @@ local function sendGeneralStats(self, msg)
 	msg:addU16(self:getBaseSpeed() / 2)
 	msg:addU32(self:getCapacity()) -- cap + boost
 	msg:addU32(self:getCapacity())
-	msg:addU32(self:getFreeCapacity())
+	msg:addU32(self:hasFlag(PlayerFlag_HasInfiniteCapacity) and 1000000 or self:getFreeCapacity())
 
 	msg:addByte(8) -- ??
 	msg:addByte(1) -- ??
