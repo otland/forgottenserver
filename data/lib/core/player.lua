@@ -652,9 +652,9 @@ function Player.updateClientBlessStatus(self)
 
 	local blessCount = self:getBlessingCount()
 	local flag = 0
-    for i = 1, blessCount do
-        flag = bit.bor(flag, blessingFlags[i] or 0)
-    end
+	for i = 1, blessCount do
+		flag = bit.bor(flag, blessingFlags[i] or 0)
+	end
 
 	local glowingEffect = (blessCount >= 5) and (flag or 1) or flag
 	local blessingStatus = blessCount >= 5 and 3 or (blessCount > 0 and 2 or 1)
