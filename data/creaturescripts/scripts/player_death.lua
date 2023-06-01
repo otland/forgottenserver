@@ -25,6 +25,8 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 	end
 
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
+	player:updateClientBlessStatus()
+
 	if not deathListEnabled then
 		return
 	end
