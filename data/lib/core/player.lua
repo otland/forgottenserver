@@ -39,12 +39,19 @@ end
 function Player.getLossPercent(self)
 	local blessings = 0
 	local lossPercent = {
-		[0] = 100,
-		[1] = 70,
-		[2] = 45,
-		[3] = 25,
-		[4] = 10,
-		[5] = 0
+		-- probaly invalid values for TFS - need to be check
+		[0] = { container = 100, other = 10, skills = 0},
+		[1] = { container = 70,	other = 7, skills = 8},
+		[2] = { container = 45,	other = 4.5, skills = 16},
+		[3] = { container = 25,	other = 2.5, skills = 24},
+		[4] = { container = 10, other = 1, skills = 32},
+		[5] = { container = 0, other = 0, skills = 40},
+
+		--[[ not suppported
+			[6] = { container = 0, other = 0, skills = 0},
+			[7] = { container = 0, other = 0, skills = 0},
+			[8] = { container = 0, other = 0, skills = 0},
+		]]
 	}
 
 	for i = 1, 5 do
@@ -390,7 +397,10 @@ end
 
 function Player.isPromoted(self)
 	local vocation = self:getVocation()
-	local fromVocId = vocation:getDemotion():getId()
+	local fromVocId = vocation:getId()
+	if vocation:getDemotion() then
+		fromVocId = vocation:getDemotion():getId()
+	end
 	return vocation:getId() ~= fromVocId
 end
 
