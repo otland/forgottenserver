@@ -620,11 +620,11 @@ end
 local blessStatusBits = {
 	-- [-1] = 1 -- adventurer blessing, not supported
 	-- [0] = 2 -- twist of fate, not supported
-	[1] = 4, -- wisdom of solit
+	[1] = 4, -- wisdom of solitude
 	[2] = 8, -- spark of phoenix
 	[3] = 16, -- fire of the suns
 	[4] = 32, -- spiritual shield
-	[5] = 64, -- the embrace of tibia
+	[5] = 64, -- the embrace of the world
 	-- [6] = 128, -- heart of mountain, not supported
 	-- [7] = 256 -- blood of mountain, not supported
 }
