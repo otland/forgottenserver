@@ -627,13 +627,38 @@ function Player.getBlessingCount(self)
 	return blessings
 end
 
+local blessingFlags = {
+	[0] = 1,
+	[1] = 2,
+	[2] = 4,
+	[3] = 8,
+	[4] = 16,
+	[5] = 32,
+	[6] = 64,
+	[7] = 128,
+	[8] = 256,
+	[9] = 512,
+	[10] = 1024,
+	[11] = 2048,
+	[12] = 4096,
+	[13] = 8192,
+	[14] = 16384,
+	[15] = 32768
+}
+
 function Player.updateClientBlessStatus(self)
 	local msg = NetworkMessage()
 	msg:addByte(0x9C)
 
 	local blessCount = self:getBlessingCount()
+	local flag = 0
+    for i = 1, blessCount do
+        flag = bit.bor(flag, blessingFlags[i] or 0)
+    end
+
+	local glowingEffect = (blessCount >= 5) and (flag or 1) or flag
 	local blessingStatus = blessCount >= 5 and 3 or (blessCount > 0 and 2 or 1)
-	msg:addU16(0) -- Show up the glowing effect in items if have adventurer's blessing
+	msg:addU16(glowingEffect)
 	msg:addByte(blessingStatus)
 
 	msg:sendToPlayer(self)
