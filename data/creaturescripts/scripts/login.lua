@@ -22,16 +22,14 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
-	-- Update client exp display
+	-- Update client stats
 	player:updateClientExpDisplay()
+	player:updateClientBlessStatus()
 
 	-- achievements points for highscores
 	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == -1 then
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
-
-	-- Update client bless status
-	player:updateClientBlessStatus()
 
 	-- Events
 	player:registerEvent("PlayerDeath")
