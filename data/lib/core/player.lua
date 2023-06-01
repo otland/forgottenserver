@@ -627,12 +627,22 @@ function Player.getBlessingCount(self)
 	return blessings
 end
 
+local function blessStatus(blessCount)
+	if blessCount >= 5 then
+		return 3
+	elseif blessCount > 0 then
+		return 2
+	else
+		return 1
+	end
+end
+
 function Player.updateClientBlessStatus(self)
 	local msg = NetworkMessage()
 	msg:addByte(0x9C)
 
 	local blessCount = self:getBlessingCount()
-	local blessingStatus = blessCount >= 5 and 3 or (blessCount > 0 and 2 or 1)
+	local blessingStatus = blessStatus(blessCount)
 	msg:addU16(0) -- Show up the glowing effect in items if have adventurer's blessing
 	msg:addByte(blessingStatus)
 
