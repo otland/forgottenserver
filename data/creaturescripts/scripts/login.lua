@@ -30,6 +30,9 @@ function onLogin(player)
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
 
+	-- Update client bless status
+	player:updateClientBlessStatus()
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")

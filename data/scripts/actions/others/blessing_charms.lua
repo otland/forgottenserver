@@ -15,7 +15,9 @@ function blessingCharms.onUse(player, item, fromPosition, target, toPosition, is
 			player:say("You already possess this blessing.", TALKTYPE_MONSTER_SAY)
 			return true
 		end
+
 		player:addBlessing(blessItem.id)
+		player:updateClientBlessStatus()
 		player:say(blessItem.text, TALKTYPE_MONSTER_SAY)
 		player:getPosition():sendMagicEffect(blessItem.effect)
 		player:sendSupplyUsed(item)
