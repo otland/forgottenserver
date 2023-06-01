@@ -80,10 +80,11 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(8) -- ??
 	msg:addByte(1) -- ??
 
+	-- magic level
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
 
-	-- magic level
+	-- loyalty bonus
 	msg:addU16(self:getBaseMagicLevel())
 	msg:addU16(self:getMagicLevelPercent() * 100)
 
@@ -97,7 +98,7 @@ local function sendGeneralStats(self, msg)
 		msg:addU16(self:getSkillPercent(i) * 100)
 	end
 
-	msg:addByte(0)
+	msg:addByte(0) -- ??
 
 	msg:sendToPlayer(self)
 	msg:delete()
