@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lost Husher Locations..."/>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lost Husher Locations..." />
 	<attacks>
 		<attack name="death" interval="2000" chance="10" length="6" spread="0" min="-150" max="-300">
 			<attribute key="areaEffect" value="blacksmoke" />

@@ -20,7 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<bestiary class="Lycanthrope" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Werebear Locations..."/>
+	<bestiary class="Lycanthrope" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Werebear Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="speed" interval="4000" chance="20" radius="7" target="1" speedchange="-100">

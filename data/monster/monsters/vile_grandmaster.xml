@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Vile Grandmaster Locations..."/>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Vile Grandmaster Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="94" attack="50" />
 		<attack name="physical" interval="2000" chance="22" range="7" min="0" max="-225">

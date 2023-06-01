@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Mammal" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Water Buffalo Locations..."/>
+	<bestiary class="Mammal" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Water Buffalo Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>

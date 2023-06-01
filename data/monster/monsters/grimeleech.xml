@@ -13,7 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Grimeleech Locations..."/>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Grimeleech Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="physical" interval="2000" chance="14" range="7" target="1" min="100" max="-565">

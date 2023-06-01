@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Mammal" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Yeti Locations..."/>
+	<bestiary class="Mammal" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Yeti Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="physical" interval="1000" chance="15" range="7" min="0" max="-180">

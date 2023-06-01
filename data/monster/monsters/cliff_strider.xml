@@ -18,7 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Elemental" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Cliff Strider Locations..."/>
+	<bestiary class="Elemental" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Cliff Strider Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-499" />
 		<attack name="physical" interval="2000" chance="20" radius="4" target="1" min="0" max="-800">

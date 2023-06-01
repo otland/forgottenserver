@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Goblin Leader Locations..."/>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Goblin Leader Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-45">

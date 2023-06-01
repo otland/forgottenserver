@@ -17,7 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
-	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lizard Magistratus Locations..."/>
+	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lizard Magistratus Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-60" />
 		<attack name="lizard magistratus curse" interval="2000" chance="10" range="5" />

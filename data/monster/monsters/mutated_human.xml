@@ -17,7 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Mutated Human Locations..."/>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Mutated Human Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" poison="60" />
 		<attack name="death" interval="2000" chance="15" length="3" spread="1" target="0" min="-50" max="-60">

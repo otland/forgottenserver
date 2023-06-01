@@ -18,7 +18,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hellhound Locations..."/>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hellhound Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-520" poison="800" />
 		<attack name="earth" interval="2000" chance="5" length="8" spread="3" min="-300" max="-700">

@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Worm Priestess Locations..."/>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Worm Priestess Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="50" attack="50" />
 		<attack name="lifedrain" interval="2000" chance="9" range="7" target="1" min="-50" max="-130">

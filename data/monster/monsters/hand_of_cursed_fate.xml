@@ -16,7 +16,7 @@
 		<flag staticattack="20" />
 		<flag runonhealth="3500" />
 	</flags>
-	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hand of Cursed Fate Locations..."/>
+	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hand of Cursed Fate Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-520" poison="380" />
 		<attack name="manadrain" interval="2000" chance="15" range="1" min="0" max="-920" />

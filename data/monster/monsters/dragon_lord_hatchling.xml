@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Dragon Lord Hatchling Locations..."/>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Dragon Lord Hatchling Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="fire" interval="2000" chance="10" length="5" spread="2" min="-90" max="-125">

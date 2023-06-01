@@ -15,7 +15,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="60" />
 	</flags>
-	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Ladybug Locations..."/>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Ladybug Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-4" />
 		<attack name="earth" interval="2000" chance="15" range="1" min="0" max="-20">

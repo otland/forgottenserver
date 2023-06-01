@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Centipede Locations..."/>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Centipede Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-45" poison="20" />
 	</attacks>

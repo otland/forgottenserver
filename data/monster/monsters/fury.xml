@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Fury Locations..."/>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Fury Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-510" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-200" max="-300">

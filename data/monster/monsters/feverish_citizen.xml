@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Feverish Citizen Locations..."/>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Feverish Citizen Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-18" />
 		<attack name="drunk" interval="2000" chance="15" target="0" length="3" spread="2" duration="3000">

@@ -17,7 +17,7 @@
 		<flag runonhealth="800" />
 		<flag canwalkonenergy="0" />
 	</flags>
-	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Blightwalker Locations..."/>
+	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Blightwalker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-490" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="1" min="-220" max="-405">

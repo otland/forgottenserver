@@ -17,7 +17,7 @@
 		<flag runonhealth="350" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Reptile" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Draptor Locations..."/>
+	<bestiary class="Reptile" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Draptor Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="energy" interval="3000" chance="30" radius="3" min="-130" max="-310">

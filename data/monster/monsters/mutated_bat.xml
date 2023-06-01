@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Mutated Bat Locations..."/>
+	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Mutated Bat Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-168" poison="120" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-70" max="-180">

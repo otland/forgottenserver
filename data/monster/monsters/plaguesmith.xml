@@ -17,7 +17,7 @@
 		<flag runonhealth="500" />
 		<flag canwalkonenergy="0" />
 	</flags>
-	<bestiary class="Demon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Plaguesmith Locations..."/>
+	<bestiary class="Demon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Plaguesmith Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-539" poison="200" />
 		<attack name="earth" interval="2000" chance="15" radius="4" target="0" min="-60" max="-114">

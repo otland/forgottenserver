@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Scarab Locations..."/>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Scarab Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-75" />
 		<attack name="earth" interval="2000" chance="10" range="1" min="0" max="-35">

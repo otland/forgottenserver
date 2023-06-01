@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Fey" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Dryad Locations..."/>
+	<bestiary class="Fey" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Dryad Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="earth" interval="2500" chance="9" radius="4" min="-20" max="-30">

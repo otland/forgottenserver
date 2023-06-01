@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Frazzlemaw Locations..."/>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Frazzlemaw Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="bleedcondition" interval="2000" chance="10" radius="3" target="0" min="-300" max="-400">

@@ -13,7 +13,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Guardian of Tales Locations..."/>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Guardian of Tales Locations..." />
 	<attacks>
 		<attack name="death" interval="2000" chance="15" min="-1000" max="-1600" range="3" radius="1" target="1">
 			<attribute key="shootEffect" value="death" />

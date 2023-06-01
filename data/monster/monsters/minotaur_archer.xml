@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Minotaur Archer Locations..."/>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Minotaur Archer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-25" />
 		<attack name="physical" interval="2000" chance="40" range="7" target="1" min="0" max="-80">

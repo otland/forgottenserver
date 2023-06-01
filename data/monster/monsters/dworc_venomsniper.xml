@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Dworc Venomsniper Locations..."/>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Dworc Venomsniper Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="poisoncondition" interval="2000" chance="15" range="5" min="-20" max="-40">

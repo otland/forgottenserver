@@ -18,7 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Giant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Cyclops Locations..."/>
+	<bestiary class="Giant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Cyclops Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-105" />
 	</attacks>

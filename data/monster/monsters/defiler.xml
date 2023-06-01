@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Slime" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Defiler Locations..."/>
+	<bestiary class="Slime" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Defiler Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-240" poison="150" />
 		<attack name="earth" interval="2000" chance="20" range="7" min="-160" max="-270">

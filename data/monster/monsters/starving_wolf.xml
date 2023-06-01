@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="8" />
 	</flags>
-	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Starving Wolf Locations..."/>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Starving Wolf Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>

@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Gazer Locations..."/>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Gazer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="lifedrain" interval="2000" chance="15" range="7" min="-25" max="-35">

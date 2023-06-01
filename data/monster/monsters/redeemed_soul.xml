@@ -21,7 +21,7 @@
 		<flag canwalkonpoison="0" />
 		<flag runonhealth="250" />
 	</flags>
-	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Redeemed Soul Locations..."/>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Redeemed Soul Locations..." />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity drunk="1" />

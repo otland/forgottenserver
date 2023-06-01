@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Mummy Locations..."/>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Mummy Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-85" poison="4" />
 		<attack name="death" interval="2000" chance="20" range="1" target="1" min="-30" max="-40">

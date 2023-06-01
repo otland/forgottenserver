@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag canwalkonenergy="0" />
 	</flags>
-	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Demon Skeleton Locations..."/>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Demon Skeleton Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-185" />
 		<attack name="death" interval="2000" chance="10" radius="1" target="1" range="1" min="-30" max="-50">

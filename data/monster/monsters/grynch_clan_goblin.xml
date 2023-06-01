@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="80" />
 	</flags>
-	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="25" difficulty="trivial" occurrence="very rare" locations="Grynch Clan Goblin Locations..."/>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="25" difficulty="trivial" occurrence="very rare" locations="Grynch Clan Goblin Locations..." />
 	<attacks>
 	</attacks>
 	<defenses armor="5" defense="5">

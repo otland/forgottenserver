@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Orc Warlord Locations..."/>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Orc Warlord Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-250" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-200">

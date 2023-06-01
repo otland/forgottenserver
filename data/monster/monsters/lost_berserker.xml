@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Lost Berserker Locations..."/>
+	<bestiary class="Humanoid" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Lost Berserker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-501" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-300">

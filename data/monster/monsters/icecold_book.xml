@@ -13,7 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
-	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Icecold Book Locations..."/>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Icecold Book Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-850" />
 		<attack name="ice" interval="2000" chance="15" min="-600" max="-800" range="2" radius="1" target="1">

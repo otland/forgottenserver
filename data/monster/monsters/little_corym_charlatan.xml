@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Little Corym Charlatan Locations..."/>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Little Corym Charlatan Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-14" />
 	</attacks>

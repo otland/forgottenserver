@@ -18,7 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Doom Deer Locations..."/>
+	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Doom Deer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="energy" interval="4000" chance="30" length="5" min="-35" max="-55">

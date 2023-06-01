@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Magical" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Crystal Wolf Locations..."/>
+	<bestiary class="Magical" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Crystal Wolf Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" chance="15" length="3" spread="2" min="-60" max="-130">

@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Mammal" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="uncommon" locations="Modified Gnarlhound Locations..."/>
+	<bestiary class="Mammal" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="uncommon" locations="Modified Gnarlhound Locations..." />
 	<defenses armor="200" defense="200" />
 	<elements>
 		<element physicalPercent="90" />

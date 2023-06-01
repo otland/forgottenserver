@@ -16,7 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Moohtant Locations..."/>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Moohtant Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="110" attack="50" />
 		<attack name="physical" interval="2000" chance="13" length="3" spread="0" min="-100" max="-230">

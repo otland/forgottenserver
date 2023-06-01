@@ -19,7 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Stampor Locations..."/>
+	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Stampor Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-130" />
 		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-150" max="-280">

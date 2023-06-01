@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
-	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Pirate Ghost Locations..."/>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Pirate Ghost Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" poison="40" />
 		<attack name="lifedrain" interval="2000" chance="15" radius="1" target="0" min="-40" max="-80">

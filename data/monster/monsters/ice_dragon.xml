@@ -20,7 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Ice Dragon Locations..."/>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Ice Dragon Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="speed" interval="2000" chance="18" range="7" radius="4" target="1" duration="20000" max="-400">

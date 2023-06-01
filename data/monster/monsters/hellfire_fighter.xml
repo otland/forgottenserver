@@ -18,7 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
-	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hellfire Fighter Locations..."/>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hellfire Fighter Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-520" />
 		<attack name="firefield" interval="2000" chance="10" range="7" radius="3" target="0">

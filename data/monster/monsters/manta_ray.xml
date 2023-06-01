@@ -15,7 +15,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
-	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Manta Ray Locations..."/>
+	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Manta Ray Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-99" poison="120" />
 		<attack name="energy" interval="2000" chance="10" range="7" min="-15" max="-75">

@@ -16,5 +16,5 @@
 		<flag staticattack="90" />
 		<flag runonhealth="500" />
 	</flags>
-	<bestiary class="Construct" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Damaged Crystal Golem Locations..."/>
+	<bestiary class="Construct" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Damaged Crystal Golem Locations..." />
 </monster>
