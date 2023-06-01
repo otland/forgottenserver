@@ -533,3 +533,85 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	msg:delete()
 	return true
 end
+
+local function getStaminaBonus(staminaMinutes)
+	if staminaMinutes > 2340 then
+		return 150
+	elseif staminaMinutes < 840 then
+		return 50
+	else
+		return 100
+	end
+end
+
+function Player.updateClientExpDisplay(self)
+	-- Experience bonus (includes server rates)
+	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	self:setClientExpDisplay(expGainRate)
+
+	-- Stamina bonus
+	local staminaMinutes = self:getStamina()
+	local staminaBonus = getStaminaBonus(staminaMinutes)
+	self:setClientStaminaBonusDisplay(staminaBonus)
+	return true
+end
+
+function Player.sendHighscores(self, entries, params)
+	local msg = NetworkMessage()
+	msg:addByte(0xB1)
+
+	msg:addByte(params.action)
+
+	msg:addByte(0x01)
+	msg:addString(configManager.getString(configKeys.SERVER_NAME))
+	msg:addString(params.world)
+
+	msg:addByte(params.worldType)
+	msg:addByte(params.battlEye)
+
+	local vocations = Game.getUnpromotedVocations()
+	msg:addByte(#vocations + 1)
+
+	msg:addU32(0xFFFFFFFF)
+	msg:addString("All vocations")
+
+	for _, vocation in ipairs(vocations) do
+		msg:addU32(vocation:getId())
+		msg:addString(vocation:getName())
+	end
+
+	msg:addU32(params.vocation)
+
+	msg:addByte(#HIGHSCORES_CATEGORIES)
+	for id, category in ipairs(HIGHSCORES_CATEGORIES) do
+		msg:addByte(id)
+		msg:addString(category.name)
+	end
+
+	msg:addByte(params.category)
+
+	msg:addU16(params.page)
+	msg:addU16(params.totalPages)
+
+	msg:addByte(#entries.data)
+	for _, entry in pairs(entries.data) do
+		msg:addU32(entry.rank)
+		msg:addString(entry.name)
+		msg:addString(entry.title)
+		msg:addByte(entry.vocation)
+		msg:addString(entry.world)
+		msg:addU16(entry.level)
+		msg:addByte(self:getGuid() == entry.id and 0x01 or 0x00)
+		msg:addU64(entry.points)
+	end
+
+	msg:addByte(0xFF) -- unknown
+	msg:addByte(0x00) -- display loyalty title column
+	msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
+
+	msg:addU32(entries.ts)
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end

@@ -105,7 +105,7 @@ if not globalStorageTable then
 end
 
 function Game.getStorageValue(key)
-	return globalStorageTable[key]
+	return globalStorageTable[key] or -1
 end
 
 function Game.setStorageValue(key, value)
@@ -176,4 +176,14 @@ do
 		end
 		return false
 	end
+end
+
+function Game.getUnpromotedVocations()
+	local vocations = {}
+	for _, vocation in ipairs(Game.getVocations()) do
+		if vocation == vocation:getFromVocation() then
+			vocations[#vocations + 1] = vocation
+		end
+	end
+	return vocations
 end

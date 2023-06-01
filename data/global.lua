@@ -112,6 +112,10 @@ table.contains = function(array, value)
 	return false
 end
 
+table.slice = function(array, from, to)
+	return {unpack(array, from or 1, to or #array)}
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do

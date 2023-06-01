@@ -3116,7 +3116,12 @@ void ProtocolGame::sendOutfitWindow()
 		currentOutfit.lookMount = currentMount->clientId;
 	}
 
-	bool mounted = currentOutfit.lookMount != 0;
+	bool mounted;
+	if (player->wasMounted) {
+		mounted = currentOutfit.lookMount != 0;
+	} else {
+		mounted = player->isMounted();
+	}
 
 	AddOutfit(msg, currentOutfit);
 
@@ -3131,7 +3136,6 @@ void ProtocolGame::sendOutfitWindow()
 	msg.add<uint16_t>(0); // current familiar looktype
 
 	std::vector<ProtocolOutfit> protocolOutfits;
-	protocolOutfits.reserve(outfits.size());
 	if (player->isAccessPlayer()) {
 		protocolOutfits.emplace_back("Gamemaster", 75, 0);
 	}
@@ -3236,7 +3240,6 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 	}
 
 	// fetch player addons info
-	protocolOutfits.reserve(outfits.size());
 	for (const Outfit& outfit : outfits) {
 		uint8_t addons;
 		if (!player->getOutfitAddons(outfit, addons)) {
@@ -3563,10 +3566,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getLevelPercent());
 
-	msg.add<uint16_t>(100); // base xp gain rate
-	msg.add<uint16_t>(0);   // low level bonus
-	msg.add<uint16_t>(0);   // xp boost
-	msg.add<uint16_t>(100); // stamina multiplier (100 = x1.0)
+	msg.add<uint16_t>(player->getClientExpDisplay());          // base exp gain rate
+	msg.add<uint16_t>(0);                                      // low level bonus
+	msg.add<uint16_t>(0);                                      // store exp bonus
+	msg.add<uint16_t>(player->getClientStaminaBonusDisplay()); // stamina exp bonus
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));

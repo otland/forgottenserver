@@ -1187,10 +1187,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << name << " has logged in." << std::endl;
-		}
-
 		if (guild) {
 			guild->addMember(this);
 		}
@@ -1310,10 +1306,6 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		}
 
 		g_chat->removeUserFromAllChannels(*this);
-
-		if (g_config.getBoolean(ConfigManager::PLAYER_CONSOLE_LOGS)) {
-			std::cout << getName() << " has logged out." << std::endl;
-		}
 
 		if (guild) {
 			guild->removeMember(this);

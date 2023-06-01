@@ -1110,6 +1110,12 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
+	uint16_t getClientExpDisplay() const { return clientExpDisplay; }
+	void setClientExpDisplay(uint16_t value) { clientExpDisplay = value; }
+
+	uint16_t getClientStaminaBonusDisplay() const { return clientStaminaBonusDisplay; }
+	void setClientStaminaBonusDisplay(uint16_t value) { clientStaminaBonusDisplay = value; }
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1255,6 +1261,8 @@ private:
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;
 	uint16_t maxWriteLen = 0;
+	uint16_t clientExpDisplay = 100;
+	uint16_t clientStaminaBonusDisplay = 100;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
