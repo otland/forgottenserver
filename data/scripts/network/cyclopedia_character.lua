@@ -55,8 +55,8 @@ local function sendCombatStats(self, msg)
 	msg:addByte(0) -- percent damage conversion
 	msg:addByte(0) -- conversion element type
 
-	msg:addU16(0) -- armor
-	msg:addU16(0) -- defense
+	msg:addU16(self:getTotalArmor())
+	msg:addU16(self:getTotalDefense())
 
 	-- element resistances count
 	msg:addByte(0)
