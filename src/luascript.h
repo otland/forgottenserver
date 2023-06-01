@@ -873,6 +873,7 @@ private:
 
 	static int luaPlayerGetMagicLevel(lua_State* L);
 	static int luaPlayerGetBaseMagicLevel(lua_State* L);
+	static int luaPlayerGetMagicLevelPercent(lua_State* L);
 	static int luaPlayerGetMana(lua_State* L);
 	static int luaPlayerAddMana(lua_State* L);
 	static int luaPlayerGetMaxMana(lua_State* L);

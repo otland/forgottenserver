@@ -31,6 +31,16 @@ local function getLevelPercent(player)
 	return (playerExp - currentLevelExp) * 100 / (nextLvlExp - currentLevelExp)
 end
 
+local clientSkillsId = {
+	[0] = 11,
+	[1] = 9,
+	[2] = 8,
+	[3] = 10,
+	[4] = 7,
+	[5] = 6,
+	[6] = 13
+}
+
 local function sendGeneralStats(self, msg)
 	msg:addU64(self:getExperience())
 	msg:addU16(self:getLevel())
@@ -61,9 +71,11 @@ local function sendGeneralStats(self, msg)
 	msg:addU16(self:getOfflineTrainingTime() / 60 / 1000)
 	msg:addU16(self:getSpeed() / 2)
 	msg:addU16(self:getBaseSpeed() / 2)
-	msg:addU32(self:getCapacity()) -- cap + boost
-	msg:addU32(self:getCapacity())
-	msg:addU32(self:hasFlag(PlayerFlag_HasInfiniteCapacity) and 1000000 or self:getFreeCapacity())
+
+	local infiniteCapacity = self:hasFlag(PlayerFlag_HasInfiniteCapacity) and 1000000
+	msg:addU32(infiniteCapacity or self:getCapacity()) -- base + bonus capacity
+	msg:addU32(infiniteCapacity or self:getCapacity())
+	msg:addU32(infiniteCapacity or self:getFreeCapacity())
 
 	msg:addByte(8) -- ??
 	msg:addByte(1) -- ??
@@ -71,12 +83,12 @@ local function sendGeneralStats(self, msg)
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
 
-	-- loyalty bonus
+	-- magic level
 	msg:addU16(self:getBaseMagicLevel())
-	msg:addU16(self:getSkillPercent(SKILL_MAGLEVEL))
+	msg:addU16(self:getMagicLevelPercent() * 100)
 
 	for i = SKILL_FIST, SKILL_FISHING, 1 do
-		msg:addByte(cyclopediaSkillMap[skillId])
+		msg:addByte(clientSkillsId[i])
 		msg:addU16(self:getEffectiveSkillLevel(i))
 		msg:addU16(self:getSkillLevel(i))
 
