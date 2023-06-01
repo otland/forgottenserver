@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Rot Elemental Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" skill="58" attack="50" poison="280" />
 		<attack name="earth" interval="2000" chance="13" range="7" target="1" radius="3" min="-150" max="-250">

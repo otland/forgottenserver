@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Rustheap Golem Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" skill="118" attack="50" />
 		<attack name="war golem electrify" range="1" interval="2000" chance="15" />

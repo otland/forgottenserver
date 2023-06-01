@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Minotaur Cult Follower Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="physical" interval="2000" chance="20" range="7" target="1" min="-180" max="-250">

@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="uncommon" locations="Pigeon Locations..."/>
 	<defenses armor="5" defense="5" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Coooo! Cooo!" />

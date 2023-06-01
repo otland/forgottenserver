@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="250" />
 	</flags>
+	<bestiary class="Dragon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Elder Wyrm Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="energy" interval="2000" chance="15" radius="4" target="1" min="-90" max="-150">

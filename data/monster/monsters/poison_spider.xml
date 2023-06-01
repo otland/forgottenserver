@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Poison Spider Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" poison="30" />
 	</attacks>

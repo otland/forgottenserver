@@ -16,6 +16,7 @@
 		<flag staticattack="80" />
 		<flag runonhealth="300" />
 	</flags>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Dragon Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="fire" interval="2000" chance="15" range="7" radius="4" target="1" min="-60" max="-140">

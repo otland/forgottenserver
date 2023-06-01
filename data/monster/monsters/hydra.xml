@@ -19,6 +19,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Hydra Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-270" />
 		<attack name="speed" interval="2000" chance="25" range="7" radius="4" target="1" speedchange="-700" duration="15000">

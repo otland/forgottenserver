@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="300" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Betrayed Wraith Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="betrayed wraith skill reducer" chance="10" />

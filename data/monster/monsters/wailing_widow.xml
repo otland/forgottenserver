@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Wailing Widow Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" poison="160" />
 		<attack name="drunk" interval="2000" chance="20" range="7" radius="4" target="0" duration="4000">

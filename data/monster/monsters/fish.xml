@@ -16,6 +16,7 @@
 		<flag runonhealth="25" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Fish (Creature) Locations..."/>
 	<defenses armor="5" defense="5" />
 	<immunities>
 		<immunity fire="1" />

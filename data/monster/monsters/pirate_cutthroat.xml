@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Pirate Cutthroat Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-170" poison="10" />
 		<attack name="physical" interval="2000" chance="20" range="7" radius="1" target="1" min="0" max="-95">

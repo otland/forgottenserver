@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Giant Spider Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" poison="160" />
 		<attack name="poisonfield" interval="2000" chance="10" range="7" radius="1" target="1">

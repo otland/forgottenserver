@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Golden Servant Replica Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-220" />
 		<attack name="fire" interval="2000" chance="11" length="5" spread="1" min="-80" max="-110">

@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Spidris Elite Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-349" />
 	</attacks>

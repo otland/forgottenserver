@@ -13,6 +13,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Deathling Spellsinger Locations..."/>
 	<immunities>
 		<immunity invisible="1" />
 		<immunity drunk="1" />

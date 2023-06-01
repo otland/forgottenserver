@@ -15,6 +15,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Dwarf Henchman Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" poison="20" />
 		<attack name="drowncondition" interval="2000" chance="20" target="1" />

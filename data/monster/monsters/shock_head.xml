@@ -16,6 +16,7 @@
 		<flag staticattack="80" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Shock Head Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-798" />
 		<attack name="death" interval="2000" chance="15" length="5" spread="2" target="1" min="-200" max="-300">

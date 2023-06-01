@@ -14,6 +14,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Renegade Quara Mantassin Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />
 	</attacks>

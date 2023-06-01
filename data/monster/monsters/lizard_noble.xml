@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Lizard Noble Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 		<attack name="earth" interval="2000" chance="25" range="7" min="-120" max="-250">

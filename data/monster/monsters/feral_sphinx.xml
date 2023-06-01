@@ -20,6 +20,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Feral Sphinx Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="fire" interval="2000" chance="15" length="1" spread="2" min="-350" max="-500">

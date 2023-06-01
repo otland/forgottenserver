@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lost Exile Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="death" interval="2000" chance="15" range="3" length="6" spread="3" min="-150" max="-350">

@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Grave Guard Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-147" />
 		<attack name="physical" interval="2000" chance="5" target="0" radius="1">

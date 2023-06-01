@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Dire Penguin Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="physical" interval="2000" chance="15" target="1" radius="1" range="7" min="0" max="-35">

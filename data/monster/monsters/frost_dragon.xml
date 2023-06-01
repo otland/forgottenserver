@@ -17,6 +17,7 @@
 		<flag runonhealth="250" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Frost Dragon Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-225" />
 		<attack name="lifedrain" interval="2000" chance="10" target="0" length="8" spread="3" min="-175" max="-380">

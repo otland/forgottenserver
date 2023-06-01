@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="rare" locations="White Deer Locations..."/>
 	<voices interval="5000" chance="10">
 		<voice sentence="*wheeze*" />
 		<voice sentence="ROOOAAARR!!" />

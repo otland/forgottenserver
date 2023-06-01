@@ -13,6 +13,7 @@
 		<flag staticattack="90" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Construct" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Lava Golem Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-350" max="-700">

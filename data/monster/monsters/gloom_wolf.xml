@@ -19,6 +19,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Gloom Wolf Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-92" />
 		<attack name="bleedcondition" interval="2000" chance="15" target="0" radius="2" min="-12" max="-26">

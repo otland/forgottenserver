@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Nightmare Scion Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="4" min="-115" max="-180">

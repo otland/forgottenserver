@@ -18,6 +18,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Braindeath Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="energy" interval="2000" chance="10" range="7" min="-93" max="-170">

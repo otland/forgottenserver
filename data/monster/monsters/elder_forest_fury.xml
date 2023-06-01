@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Elder Forest Fury Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-53" poison="5" />
 		<attack name="physical" interval="1500" chance="40" radius="4" target="1" range="5" min="0" max="-100">

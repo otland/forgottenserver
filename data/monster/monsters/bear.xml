@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Bear Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-25" />
 	</attacks>

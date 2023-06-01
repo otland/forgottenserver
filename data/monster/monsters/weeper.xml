@@ -17,6 +17,7 @@
 		<flag runonhealth="570" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Construct" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Weeper Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="fire" interval="2000" chance="15" length="8" spread="0" min="-400" max="-1000">

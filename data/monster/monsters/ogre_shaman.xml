@@ -16,6 +16,7 @@
 		<flag targetdistance="5" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Giant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Ogre Shaman Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" skill="50" attack="50" />
 		<attack name="earth" interval="2000" chance="11" range="7" radius="1" target="1" min="-80" max="-110">

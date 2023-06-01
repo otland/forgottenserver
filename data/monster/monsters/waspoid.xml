@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Waspoid Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-248" poison="400" />
 		<attack name="earth" interval="2000" chance="15" target="1" radius="3" min="-110" max="-180">

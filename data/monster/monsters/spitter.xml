@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Spitter Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" poison="240" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="3" min="-100" max="-160">

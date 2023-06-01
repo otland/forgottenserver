@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Elemental" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Massive Fire Elemental Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="firefield" interval="2000" chance="10" range="7" target="0" radius="3">

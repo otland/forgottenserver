@@ -17,6 +17,7 @@
 		<flag runonhealth="220" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Vulcongra Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-235" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="0" min="-195" max="-340">

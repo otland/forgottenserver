@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Firestarter Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="fire" interval="2000" chance="15" radius="1" target="1" min="0" max="-21">

@@ -15,6 +15,7 @@
 		<flag canwalkonpoison="1" />
 		<flag runonhealth="89" />
 	</flags>
+	<bestiary class="Aquatic" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Abyssal Calamary Locations..."/>
 	<attacks>
 		<attack name="drunk" interval="2000" chance="10" range="2" duration="5000" />
 	</attacks>

@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Plant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Omnivora Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="speed" interval="4000" chance="20" range="7" target="1" speedchange="-350" duration="12000">

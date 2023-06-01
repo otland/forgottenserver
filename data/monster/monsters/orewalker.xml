@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Construct" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="uncommon" locations="Orewalker Locations..."/>
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="manadrain" interval="2000" chance="15" length="4" spread="3" min="-296" max="-700">

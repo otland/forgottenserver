@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Extra Dimensional" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Yielothax Locations..."/>
 	<attacks>
 		<attack name="melee" interval="1000" min="0" max="-203" />
 		<attack name="lifedrain" interval="2000" chance="10" length="4" spread="0" min="-100" max="-130">
