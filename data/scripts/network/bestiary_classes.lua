@@ -1,10 +1,9 @@
 local function getUnlockedBestiary(player, monsterTypes)
 	local unlocked = 0
 	for _, mType in pairs(monsterTypes) do
-		local amount = mType:getBestiaryKills()[1]
-		if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + mType:raceId()) >= amount then
-			unlocked = unlocked + 1
-		end
+		if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase +
+									  mType:raceId()) >=
+			mType:getBestiaryInfo().prowess then unlocked = unlocked + 1 end
 	end
 	return unlocked
 end

@@ -37,6 +37,10 @@ monster.bestiary = {
 	raceId = 39,
 	difficulty = "medium", -- harmless, trivial, easy, medium, hard, challenging
 	occurrence = "common", -- common, uncommon, rare, very rare
+	prowess = 100,
+	expertise = 250,
+	mastery = 500,
+	charmPoints = 25,
 	locations = "Example locations"
 }
 

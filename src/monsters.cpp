@@ -1024,13 +1024,23 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				          << file << std::endl;
 			}
 		}
+		if ((attr = node.attribute("prowess"))) {
+			std::get<0>(info.totalKills) = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("expertise"))) {
+			std::get<1>(info.totalKills) = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("mastery"))) {
+			std::get<2>(info.totalKills) = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("charmPoints"))) {
+			info.charmPoints = pugi::cast<uint32_t>(attr.value());
+		}
 		if ((attr = node.attribute("locations"))) {
 			info.locations = attr.as_string();
 		}
 
-		if (info.className.empty()) {
-			std::cout << "[Warning - Monsters::loadMonster] Missing bestiary class. " << file << std::endl;
-		} else {
+		if (info.isValid()) {
 			mType->bestiaryInfo = std::move(info);
 			addBestiaryMonsterType(mType);
 		}
@@ -1578,16 +1588,39 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 
 MonsterType* Monsters::getMonsterType(uint32_t raceId)
 {
-	if (bestiaryMonsters.contains(raceId)) {
-		return getMonsterType(bestiaryMonsters[raceId]);
+	auto it = bestiaryMonsters.find(raceId);
+	if (it == bestiaryMonsters.end()) {
+		return nullptr;
 	}
-
-	return nullptr;
+	return getMonsterType(it->second);
 }
 
 bool Monsters::addBestiaryMonsterType(const MonsterType* monsterType)
 {
-	bestiary[monsterType->bestiaryInfo.className].emplace(monsterType->name);
+	auto result = bestiary[monsterType->bestiaryInfo.className].emplace(monsterType->name);
+	if (!result.second) {
+		std::cout << "[Warning - Monsters::addBestiaryMonsterType] Monster " << monsterType->name
+		          << " already exists in bestiary class " << monsterType->bestiaryInfo.className << ". " << std::endl;
+		return false;
+	}
+
 	bestiaryMonsters[monsterType->raceId] = monsterType->name;
+	return true;
+}
+
+const bool BestiaryInfo::isValid() const
+{
+	if (className.empty()) {
+		std::cout << "[Warning - BestiaryInfo::isValid] Missing bestiary class. " << std::endl;
+		return false;
+	}
+
+	if (std::get<0>(totalKills) > std::get<1>(totalKills) || std::get<1>(totalKills) > std::get<2>(totalKills)) {
+		std::cout
+		    << "[Warning - BestiaryInfo::isValid] Invalid totalKills. The order should be prowess >= expertise >= "
+		       "mastery. "
+		    << std::endl;
+		return false;
+	}
 	return true;
 }

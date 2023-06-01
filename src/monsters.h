@@ -97,7 +97,11 @@ struct BestiaryInfo
 	std::string className = "";
 	uint8_t difficulty = 0;
 	uint8_t occurrence = 0;
+	std::tuple<uint32_t, uint32_t, uint32_t> totalKills;
+	uint32_t charmPoints = 0;
 	std::string locations = "";
+
+	const bool isValid() const;
 };
 
 class MonsterType

@@ -1,20 +1,11 @@
 local function getLootDifficulty(chance)
-	for i = 0, 4 do
-		if chance < 200 * 5 ^ i then
-			return 4 - i
-		end
-	end
+	for i = 0, 4 do if chance < 200 * 5 ^ i then return 4 - i end end
 end
 
 local bestiaryElements = {
-	COMBAT_PHYSICALDAMAGE,
-	COMBAT_FIREDAMAGE,
-	COMBAT_EARTHDAMAGE,
-	COMBAT_ENERGYDAMAGE,
-	COMBAT_ICEDAMAGE,
-	COMBAT_HOLYDAMAGE,
-	COMBAT_DEATHDAMAGE,
-	COMBAT_HEALING
+	COMBAT_PHYSICALDAMAGE, COMBAT_FIREDAMAGE, COMBAT_EARTHDAMAGE,
+	COMBAT_ENERGYDAMAGE, COMBAT_ICEDAMAGE, COMBAT_HOLYDAMAGE,
+	COMBAT_DEATHDAMAGE, COMBAT_HEALING
 }
 
 local function getBestiaryElements(monsterType)
@@ -31,16 +22,14 @@ local handler = PacketHandler(0xE3)
 function handler.onReceive(player, msg)
 	local raceId = msg:getU16()
 	local monsterType = MonsterType(raceId)
-	if not monsterType then
-		return
-	end
+	if not monsterType then return end
 
 	local info = monsterType:getBestiaryInfo()
 	local kills = player:getBestiaryKills(raceId)
-	local monsterKills = monsterType:getBestiaryKills()
+	local monsterKills = {0, info.prowess, info.expertise, info.mastery}
 	local step = kills == 0 and 0 or 4
 	if kills ~= 0 then
-		for i, amount in pairs({0, unpack(monsterKills)}) do
+		for i, amount in ipairs(monsterKills) do
 			step = kills >= amount and i or step
 		end
 	end
@@ -52,9 +41,7 @@ function handler.onReceive(player, msg)
 	response:addByte(step)
 	response:addU32(kills)
 
-	for _, amount in pairs(monsterKills) do
-		response:addU16(amount)
-	end
+	for i = 2, 4 do response:addU16(monsterKills[i]) end
 
 	response:addByte(info.difficulty)
 	response:addByte(info.occurrence)
@@ -76,7 +63,7 @@ function handler.onReceive(player, msg)
 	end
 
 	if step > 1 then
-		response:addU16(monsterType:getBestiaryCharmPoints())
+		response:addU16(info.charmPoints)
 		response:addByte(monsterType:isHostile() and 2 or 1)
 		response:addByte(2)
 		response:addU32(monsterType:getMaxHealth())

@@ -846,9 +846,13 @@ BestiaryInfo LuaScriptInterface::getBestiaryInfo(lua_State* L, int32_t arg)
 	std::string className = getFieldString(L, arg, "class");
 	uint8_t difficulty = getField<uint8_t>(L, arg, "difficulty");
 	uint8_t occurrence = getField<uint8_t>(L, arg, "occurrence");
+	uint32_t prowess = getField<uint32_t>(L, arg, "prowess");
+	uint32_t expertise = getField<uint32_t>(L, arg, "expertise");
+	uint32_t mastery = getField<uint32_t>(L, arg, "mastery");
+	uint32_t charmPoints = getField<uint32_t>(L, arg, "charmPoints");
 	std::string locations = getFieldString(L, arg, "locations");
-	lua_pop(L, 4);
-	return {className, difficulty, occurrence, locations};
+	lua_pop(L, 8);
+	return {className, difficulty, occurrence, {prowess, expertise, mastery}, charmPoints, locations};
 }
 
 Thing* LuaScriptInterface::getThing(lua_State* L, int32_t arg)
@@ -1031,10 +1035,14 @@ void LuaScriptInterface::pushReflect(lua_State* L, const Reflect& reflect)
 
 void LuaScriptInterface::pushBestiaryInfo(lua_State* L, const BestiaryInfo& info)
 {
-	lua_createtable(L, 0, 4);
+	lua_createtable(L, 0, 8);
 	setField(L, "class", info.className);
 	setField(L, "difficulty", info.difficulty);
 	setField(L, "occurrence", info.occurrence);
+	setField(L, "prowess", std::get<0>(info.totalKills));
+	setField(L, "expertise", std::get<1>(info.totalKills));
+	setField(L, "mastery", std::get<2>(info.totalKills));
+	setField(L, "charmPoints", info.charmPoints);
 	setField(L, "locations", info.locations);
 }
 
@@ -15019,7 +15027,7 @@ int LuaScriptInterface::luaMonsterTypeBestiaryInfo(lua_State* L)
 			pushBestiaryInfo(L, monsterType->bestiaryInfo);
 		} else if (isTable(L, 2)) {
 			auto info = getBestiaryInfo(L, 2);
-			if (!info.className.empty()) {
+			if (info.isValid()) {
 				monsterType->bestiaryInfo = std::move(info);
 				pushBoolean(L, g_monsters.addBestiaryMonsterType(monsterType));
 			} else {

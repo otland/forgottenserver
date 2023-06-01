@@ -21,9 +21,7 @@ function handler.onReceive(player, msg)
 		end
 	end
 
-	if #monsterTypes == 0 then
-		return
-	end
+	if #monsterTypes == 0 then return end
 
 	local response = NetworkMessage()
 	response:addByte(0xD6)
@@ -37,10 +35,11 @@ function handler.onReceive(player, msg)
 		if kills == 0 then
 			response:addByte(0)
 		else
+			local info = mType:getBestiaryInfo()
 			local step = 0
-			for i, amount in pairs({0, unpack(mType:getBestiaryKills())}) do
-				step = kills >= amount and i or step
-			end
+			for i, amount in pairs({
+				0, info.prowess, info.expertise, info.mastery
+			}) do step = kills >= amount and i or step end
 			response:addU16(step)
 		end
 	end

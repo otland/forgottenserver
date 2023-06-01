@@ -513,9 +513,10 @@ function Player.addBestiaryKills(self, raceId)
 		return false
 	end
 
+	local info = monsterType:getBestiaryInfo()
 	local kills = self:getBestiaryKills(raceId)
 	local newKills = kills + 1
-	for _, amount in pairs(monsterType:getBestiaryKills()) do
+	for _, amount in pairs({info.prowess, info.expertise, info.mastery}) do
 		if kills == 0 or (kills < amount and newKills >= amount) then
 			self:sendTextMessage(MESSAGE_EVENT_DEFAULT, string.format("You unlocked details for the creature %s.", monsterType:getName()))
 			self:sendBestiaryMilestoneReached(raceId)
