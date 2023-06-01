@@ -617,14 +617,28 @@ function Player.sendHighscores(self, entries, params)
 	return true
 end
 
+local blessStatusBits = {
+	-- [-1] = 1 -- adventurer blessing, not supported
+	-- [0] = 2 -- twist of fate, not supported
+	[1] = 4, -- wisdom of solit
+	[2] = 8, -- spark of phoenix
+	[3] = 16, -- fire of the suns
+	[4] = 32, -- spiritual shield
+	[5] = 64, -- the embrace of tibia
+	-- [6] = 128, -- heart of mountain, not supported
+	-- [7] = 256 -- blood of mountain, not supported
+}
+
 function Player.getBlessingCount(self)
 	local blessings = 0
+	local bits = 0
 	for i = 1, 6 do
 		if self:hasBlessing(i) then
 			blessings = blessings + 1
+			bits = bits + blessStatusBits[i]
 		end
 	end
-	return blessings
+	return blessings, bits
 end
 
 local function blessStatus(blessCount)
@@ -641,9 +655,9 @@ function Player.updateClientBlessStatus(self)
 	local msg = NetworkMessage()
 	msg:addByte(0x9C)
 
-	local blessCount = self:getBlessingCount()
+	local blessCount, bits = self:getBlessingCount()
 	local blessingStatus = blessStatus(blessCount)
-	msg:addU16(0) -- Show up the glowing effect in items if have adventurer's blessing
+	msg:addU16(bits)
 	msg:addByte(blessingStatus)
 
 	msg:sendToPlayer(self)
