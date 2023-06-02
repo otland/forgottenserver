@@ -7981,13 +7981,7 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 	pushBoolean(L, creature->setMaster(getCreature(L, 2)));
 
 	// update summon icon
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, creature->getPosition(), true, true);
-
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTileCreature(creature);
-	}
+	g_game.updateKnownCreature(creature);
 	return 1;
 }
 
@@ -11421,6 +11415,9 @@ int LuaScriptInterface::luaNpcSetSpeechBubble(lua_State* L)
 		lua_pushnil(L);
 	} else {
 		npc->setSpeechBubble(speechBubble);
+
+		// update creature speech bubble
+		g_game.updateKnownCreature(npc);
 		pushBoolean(L, true);
 	}
 	return 1;
@@ -17885,7 +17882,7 @@ int LuaScriptInterface::luaWeaponCharges(lua_State* L)
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
 
-		it.charges = getNumber<uint8_t>(L, 2);
+		it.charges = getNumber<uint32_t>(L, 2);
 		it.showCharges = showCharges;
 		pushBoolean(L, true);
 	} else {
