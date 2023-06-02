@@ -32,13 +32,13 @@ local function getLevelPercent(player)
 end
 
 local clientSkillsId = {
-	[0] = 11,
-	[1] = 9,
-	[2] = 8,
-	[3] = 10,
-	[4] = 7,
-	[5] = 6,
-	[6] = 13
+	[0] = CYCLOPEDIA_SKILL_FIST,
+	[1] = CYCLOPEDIA_SKILL_CLUB,
+	[2] = CYCLOPEDIA_SKILL_SWORD,
+	[3] = CYCLOPEDIA_SKILL_AXE,
+	[4] = CYCLOPEDIA_SKILL_DISTANCE,
+	[5] = CYCLOPEDIA_SKILL_SHIELDING,
+	[6] = CYCLOPEDIA_SKILL_FISHING
 }
 
 local function sendGeneralStats(self, msg)
