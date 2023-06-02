@@ -617,6 +617,19 @@ function Player.sendHighscores(self, entries, params)
 	return true
 end
 
+function Player.takeScreenshot(self, screenshotType, ignoreConfig)
+	if not ignoreConfig and (screenshotType < SCREENSHOT_TYPE_FIRST or screenshotType > SCREENSHOT_TYPE_LAST) then
+		return false
+	end
+
+	local msg = NetworkMessage()
+	msg:addByte(0x75)
+	msg:addByte(screenshotType)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
 function Player.getBlessings(self)
 	local blessings = 0
 	for i = 1, 6 do
