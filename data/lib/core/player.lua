@@ -666,15 +666,11 @@ function Player.getTotalDefense(self)
 end
 
 local blessStatusBits = {
-	-- [-1] = 1 -- adventurer blessing, not supported
-	-- [0] = 2 -- twist of fate, not supported
-	[1] = 4, -- wisdom of solitude
-	[2] = 8, -- spark of phoenix
-	[3] = 16, -- fire of the suns
-	[4] = 32, -- spiritual shield
-	[5] = 64, -- the embrace of the world
-	-- [6] = 128, -- heart of mountain, not supported
-	-- [7] = 256 -- blood of mountain, not supported
+	[1] = BLESS_TYPE_WISDOM_OF_SOLITUDE,
+	[2] = BLESS_TYPE_SPARK_OF_PHOENIX,
+	[3] = BLESS_TYPE_FIRE_OF_THE_SUNS,
+	[4] = BLESS_TYPE_SPIRITUAL_SHIELD,
+	[5] = BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
 }
 
 function Player.getBlessingCount(self)
