@@ -630,16 +630,6 @@ function Player.takeScreenshot(self, screenshotType, ignoreConfig)
 	return true
 end
 
-function Player.getBlessings(self)
-	local blessings = 0
-	for i = 1, 6 do
-		if self:hasBlessing(i) then
-			blessings = blessings + 1
-		end
-	end
-	return blessings
-end
-
 local slots = {
 	CONST_SLOT_RIGHT,
 	CONST_SLOT_LEFT,
