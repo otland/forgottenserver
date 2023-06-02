@@ -47,7 +47,7 @@ local function sendCombatStats(self, msg)
 
 	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
 	msg:addByte(self:getBlessingCount())
-	msg:addByte(8) -- blessings count
+	msg:addByte(SERVER_BLESSINGS_COUNT)
 
 	-- weapon
 	msg:addU16(0) -- base max damage
