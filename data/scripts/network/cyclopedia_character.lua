@@ -46,7 +46,7 @@ local function sendCombatStats(self, msg)
 	end
 
 	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
-	msg:addByte(self:getBlessings())
+	msg:addByte(self:getBlessingCount())
 	msg:addByte(8) -- blessings count
 
 	-- weapon
