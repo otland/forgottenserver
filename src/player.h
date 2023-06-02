@@ -230,9 +230,11 @@ public:
 	BedItem* getBedItem() { return bedItem; }
 	void setBedItem(BedItem* b) { bedItem = b; }
 
-	void addBlessing(uint8_t blessing) { blessings.set(blessing); }
-	void removeBlessing(uint8_t blessing) { blessings.reset(blessing); }
-	bool hasBlessing(uint8_t blessing) const { return blessings.test(blessing); }
+	void addBlessing(uint8_t blessingId, const int32_t value = 1);
+	void removeBlessing(uint8_t blessingId, const int32_t value = 1);
+	bool hasBlessing(uint8_t blessingId) const;
+	uint8_t getBlessing(uint8_t blessingId) const;
+	std::vector<uint8_t> getBlessings(bool excludeSpecialBlessings = false) const;
 
 	bool isOffline() const { return (getID() == 0); }
 	void disconnect()
@@ -1265,7 +1267,6 @@ private:
 	uint16_t clientStaminaBonusDisplay = 100;
 
 	uint8_t soul = 0;
-	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
 	uint8_t magLevelPercent = 0;
 

@@ -980,9 +980,9 @@ private:
 	static int luaPlayerGetPremiumEndsAt(lua_State* L);
 	static int luaPlayerSetPremiumEndsAt(lua_State* L);
 
-	static int luaPlayerHasBlessing(lua_State* L);
 	static int luaPlayerAddBlessing(lua_State* L);
 	static int luaPlayerRemoveBlessing(lua_State* L);
+	static int luaPlayerGetBlessing(lua_State* L);
 
 	static int luaPlayerCanLearnSpell(lua_State* L);
 	static int luaPlayerLearnSpell(lua_State* L);

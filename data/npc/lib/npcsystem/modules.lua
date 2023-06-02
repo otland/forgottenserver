@@ -123,6 +123,17 @@ if not Modules then
 		return true
 	end
 
+	local blessings = {
+		[BLESSING_TWIST_OF_FATE] = {name = "Twist of Fate"},
+		[BLESSING_WISDOM_OF_SOLITUDE] = {name = "Wisdom of Solitude"},
+		[BLESSING_SPARK_OF_THE_PHOENIX] = {name = "Spark of the Phoenix"},
+		[BLESSING_FIRE_OF_THE_SUNS] = {name = "Fire of the Suns"},
+		[BLESSING_SPIRITUAL_SHIELDING] = {name = "Spiritual Shielding"},
+		[BLESSING_EMBRACE_OF_THE_WORLD] = {name = "Embrace of the World"},
+		[BLESSING_HEART_OF_THE_MOUNTAIN] = {name = "Heart of the Mountain"},
+		[BLESSING_BLOOD_OF_THE_MOUNTAIN] = {name = "Blood of the Mountain"}
+	}
+
 	function StdModule.bless(cid, message, keywords, parameters, node)
 		local npcHandler = parameters.npcHandler
 		if not npcHandler then
@@ -140,6 +151,10 @@ if not Modules then
 			elseif not player:removeTotalMoney(parameters.cost) then
 				npcHandler:say("You don't have enough money for blessing.", cid)
 			else
+				local blessing = blessings[parameters.bless]
+				if blessing then
+					player:addBlessingsHistory("\"" .. blessing.name .. "\" purchased from " .. Npc():getName() .. ".", 1)
+				end
 				player:addBlessing(parameters.bless)
 				npcHandler:say("You have been blessed by one of the five gods!", cid)
 			end
