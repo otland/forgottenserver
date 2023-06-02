@@ -1,5 +1,6 @@
+local totalBlessings = SERVER_BLESSINGS_COUNT
+
 local handler = PacketHandler(0xCF)
-local totalBlessings = 5
 
 function handler.onReceive(player)
 	local msg = NetworkMessage()
@@ -9,6 +10,7 @@ function handler.onReceive(player)
 
 	for bless = 1, totalBlessings do
 		msg:addU16(2 ^ bless)
+
 		if player:hasBlessing(bless) then
 			msg:addByte(1)
 		else

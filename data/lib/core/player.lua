@@ -39,22 +39,15 @@ end
 function Player.getLossPercent(self)
 	local blessings = 0
 	local lossPercent = {
-		-- probaly invalid values for TFS - need to be check
 		[0] = { container = 100, other = 10, skills = 0},
 		[1] = { container = 70,	other = 7, skills = 8},
 		[2] = { container = 45,	other = 4.5, skills = 16},
 		[3] = { container = 25,	other = 2.5, skills = 24},
 		[4] = { container = 10, other = 1, skills = 32},
-		[5] = { container = 0, other = 0, skills = 40},
-
-		--[[ not suppported
-			[6] = { container = 0, other = 0, skills = 0},
-			[7] = { container = 0, other = 0, skills = 0},
-			[8] = { container = 0, other = 0, skills = 0},
-		]]
+		[5] = { container = 0, other = 0, skills = 40}
 	}
 
-	for i = 1, 5 do
+	for i = 1, SERVER_BLESSINGS_COUNT do
 		if self:hasBlessing(i) then
 			blessings = blessings + 1
 		end

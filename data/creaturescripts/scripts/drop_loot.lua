@@ -33,8 +33,6 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 					chanceToLostItem = lossPercent.other
 				end
 
-				-- TODO: need testing if it's true for TFS
-				-- chanceToLostItem multiplet by 10 to correct calculation for float values
 				if isRedOrBlack or (math.random(0, 1000) <= chanceToLostItem * 10) then
 					if not item:moveTo(corpse) then
 						item:remove()
