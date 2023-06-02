@@ -77,7 +77,7 @@ end
 
 local function getLevelPercent(player)
 	local currentLevelExp = Game.getExperienceForLevel(player:getLevel())
-	local nextLvlExp = Game.getExperienceForLevel(player:getLevel() +1)
+	local nextLvlExp = Game.getExperienceForLevel(player:getLevel() + 1)
 	local playerExp = player:getExperience()
 	return (playerExp - currentLevelExp) * 100 / (nextLvlExp - currentLevelExp)
 end
