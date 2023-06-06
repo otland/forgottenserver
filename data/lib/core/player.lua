@@ -665,7 +665,7 @@ function Player.getTotalDefense(self)
 	return total
 end
 
-local blessStatusBits = {
+local blessFlags = {
 	[1] = BLESS_TYPE_WISDOM_OF_SOLITUDE,
 	[2] = BLESS_TYPE_SPARK_OF_PHOENIX,
 	[3] = BLESS_TYPE_FIRE_OF_THE_SUNS,
@@ -675,14 +675,14 @@ local blessStatusBits = {
 
 function Player.getBlessingCount(self)
 	local blessings = 0
-	local bits = 0
+	local flags = 0
 	for i = 1, SERVER_BLESSINGS_COUNT do
 		if self:hasBlessing(i) then
 			blessings = blessings + 1
-			bits = bits + blessStatusBits[i]
+			flags = flags + blessFlags[i]
 		end
 	end
-	return blessings, bits
+	return blessings, flags
 end
 
 local function blessStatus(blessCount)
@@ -695,13 +695,13 @@ local function blessStatus(blessCount)
 	end
 end
 
-function Player.updateClientBlessStatus(self)
+function Player.updateClientBlessDisplay(self)
 	local msg = NetworkMessage()
 	msg:addByte(0x9C)
 
-	local blessCount, bits = self:getBlessingCount()
+	local blessCount, flags = self:getBlessingCount()
 	local blessingStatus = blessStatus(blessCount)
-	msg:addU16(bits)
+	msg:addU16(flags)
 	msg:addByte(blessingStatus)
 
 	msg:sendToPlayer(self)

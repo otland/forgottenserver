@@ -141,7 +141,7 @@ if not Modules then
 				npcHandler:say("You don't have enough money for blessing.", cid)
 			else
 				player:addBlessing(parameters.bless)
-				player:updateClientBlessStatus()
+				player:updateClientBlessDisplay()
 				npcHandler:say("You have been blessed by one of the five gods!", cid)
 			end
 		else

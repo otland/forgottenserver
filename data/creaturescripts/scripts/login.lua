@@ -24,7 +24,7 @@ function onLogin(player)
 
 	-- Update client stats
 	player:updateClientExpDisplay()
-	player:updateClientBlessStatus()
+	player:updateClientBlessDisplay()
 
 	-- achievements points for highscores
 	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == -1 then
