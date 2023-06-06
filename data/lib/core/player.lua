@@ -676,7 +676,7 @@ local blessStatusBits = {
 function Player.getBlessingCount(self)
 	local blessings = 0
 	local bits = 0
-	for i = 1, SERVER_BLESSINGS_COUNT, 1 do
+	for i = 1, SERVER_BLESSINGS_COUNT do
 		if self:hasBlessing(i) then
 			blessings = blessings + 1
 			bits = bits + blessStatusBits[i]
