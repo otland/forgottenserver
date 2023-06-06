@@ -666,17 +666,17 @@ function Player.getTotalDefense(self)
 end
 
 local blessStatusBits = {
-	[1] = CLIENT_BLESS_TYPE_WISDOM_OF_SOLITUDE,
-	[2] = CLIENT_BLESS_TYPE_SPARK_OF_PHOENIX,
-	[3] = CLIENT_BLESS_TYPE_FIRE_OF_THE_SUNS,
-	[4] = CLIENT_BLESS_TYPE_SPIRITUAL_SHIELD,
-	[5] = CLIENT_BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
+	[1] = BLESS_TYPE_WISDOM_OF_SOLITUDE,
+	[2] = BLESS_TYPE_SPARK_OF_PHOENIX,
+	[3] = BLESS_TYPE_FIRE_OF_THE_SUNS,
+	[4] = BLESS_TYPE_SPIRITUAL_SHIELD,
+	[5] = BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
 }
 
 function Player.getBlessingCount(self)
 	local blessings = 0
 	local bits = 0
-	for i = 1, SERVER_BLESSINGS_COUNT + 1 do
+	for i = 1, SERVER_BLESSINGS_COUNT, 1 do
 		if self:hasBlessing(i) then
 			blessings = blessings + 1
 			bits = bits + blessStatusBits[i]
