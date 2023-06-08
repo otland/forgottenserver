@@ -24,57 +24,6 @@ local function sendBasicInfo(self, msg)
 	return true
 end
 
-local function sendCombatStats(self, msg)
-	for skillId = SPECIALSKILL_CRITICALHITCHANCE, SPECIALSKILL_MANALEECHAMOUNT do
-		msg:addU16(self:getSpecialSkill(skillId))
-		msg:addU16(0) -- base special skill
-	end
-
-	-- fatal, dodge, momentum
-	for i = 1, 3 do
-		msg:addU16(0)
-		msg:addU16(0)
-	end
-
-	msg:addU16(0) -- cleave (bonus percent damage to nearby enemies)
-	msg:addU16(0) -- bonus magic shield capacity (flat)
-	msg:addU16(0) -- bonus magic shield capacity (percent)
-
-	-- perfect shot flat damage bonus at 1-5 range
-	for i = 1, 5 do
-		msg:addU16(0)
-	end
-
-	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
-	msg:addByte(self:getBlessings())
-	msg:addByte(8) -- blessings count
-
-	-- weapon
-	msg:addU16(0) -- base max damage
-	msg:addByte(0) -- base element type
-	msg:addByte(0) -- percent damage conversion
-	msg:addByte(0) -- conversion element type
-
-	msg:addU16(self:getTotalArmor())
-	msg:addU16(self:getTotalDefense())
-
-	-- element resistances count
-	msg:addByte(0)
-	-- structure:
-	-- u8 clientcombat
-	-- u8 value
-
-	-- active potions count
-	msg:addByte(0)
-	-- structure:
-	-- item clientId
-	-- u16 duration
-
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
-end
-
 local function getLevelPercent(player)
 	local currentLevelExp = Game.getExperienceForLevel(player:getLevel())
 	local nextLvlExp = Game.getExperienceForLevel(player:getLevel() + 1)
@@ -150,6 +99,57 @@ local function sendGeneralStats(self, msg)
 	end
 
 	msg:addByte(0) -- ??
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+local function sendCombatStats(self, msg)
+	for skillId = SPECIALSKILL_CRITICALHITCHANCE, SPECIALSKILL_MANALEECHAMOUNT do
+		msg:addU16(self:getSpecialSkill(skillId))
+		msg:addU16(0) -- base special skill
+	end
+
+	-- fatal, dodge, momentum
+	for i = 1, 3 do
+		msg:addU16(0)
+		msg:addU16(0)
+	end
+
+	msg:addU16(0) -- cleave (bonus percent damage to nearby enemies)
+	msg:addU16(0) -- bonus magic shield capacity (flat)
+	msg:addU16(0) -- bonus magic shield capacity (percent)
+
+	-- perfect shot flat damage bonus at 1-5 range
+	for i = 1, 5 do
+		msg:addU16(0)
+	end
+
+	msg:addU16(0) -- damage reflection (flat, one value for all combat types)
+	msg:addByte(self:getBlessings())
+	msg:addByte(8) -- blessings count
+
+	-- weapon
+	msg:addU16(0) -- base max damage
+	msg:addByte(0) -- base element type
+	msg:addByte(0) -- percent damage conversion
+	msg:addByte(0) -- conversion element type
+
+	msg:addU16(self:getTotalArmor())
+	msg:addU16(self:getTotalDefense())
+
+	-- element resistances count
+	msg:addByte(0)
+	-- structure:
+	-- u8 clientcombat
+	-- u8 value
+
+	-- active potions count
+	msg:addByte(0)
+	-- structure:
+	-- item clientId
+	-- u16 duration
 
 	msg:sendToPlayer(self)
 	msg:delete()
