@@ -142,17 +142,27 @@ registerMonsterType.flags = function(mtype, mask)
 end
 do
 	local difficulties = {
-		harmless = 0,
-		trivial = 1,
-		easy = 2,
-		medium = 3,
-		hard = 4,
-		challenging = 5
+		["harmless"] = 0,
+		["trivial"] = 1,
+		["easy"] = 2,
+		["medium"] = 3,
+		["hard"] = 4,
+		["challenging"] = 5
+	}
+
+	local occurrences = {
+		["common"] = 0,
+		["uncommon"] = 1,
+		["rare"] = 2,
+		["very rare"] = 3
 	}
 
 	registerMonsterType.bestiary = function(mtype, mask)
 		if mask.bestiary then
-			mask.bestiary.difficulty = difficulties[mask.bestiary.difficulty:lower()]
+			mask.bestiary.difficulty =
+				difficulties[mask.bestiary.difficulty:lower()]
+			mask.bestiary.occurrence =
+				occurrences[mask.bestiary.occurrence:lower()]
 			mtype:bestiaryInfo(mask.bestiary)
 		end
 	end

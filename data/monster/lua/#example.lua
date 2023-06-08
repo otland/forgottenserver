@@ -35,12 +35,12 @@ monster.flags = {
 monster.bestiary = {
 	class = "Dragon",
 	raceId = 39,
-	prowess = 50,
-	expertise = 500,
-	mastery = 1000,
-	charmPoints = 25,
 	difficulty = "medium", -- harmless, trivial, easy, medium, hard, challenging
-	occurrence = 0,
+	occurrence = "common", -- common, uncommon, rare, very rare
+	prowess = 100,
+	expertise = 250,
+	mastery = 500,
+	charmPoints = 25,
 	locations = "Example locations"
 }
 
