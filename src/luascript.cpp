@@ -424,27 +424,6 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 	return runningEventId++;
 }
 
-void LuaScriptInterface::removeEvent(int32_t scriptId)
-{
-	if (scriptId == -1) {
-		return;
-	}
-
-	// get our events table
-	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
-	if (!isTable(luaState, -1)) {
-		lua_pop(luaState, 1);
-		return;
-	}
-
-	// remove event from table
-	lua_pushnil(luaState);
-	lua_rawseti(luaState, -2, scriptId);
-	lua_pop(luaState, 1);
-
-	cacheFiles.erase(scriptId);
-}
-
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 {
 	if (scriptId == EVENT_ID_LOADING) {
