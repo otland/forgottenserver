@@ -2,8 +2,10 @@ local function getUnlockedBestiary(player, monsterTypes)
 	local count = 0
 	for _, monsterType in pairs(monsterTypes) do
 		local info = monsterType:getBestiaryInfo()
-		if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
-			count = count + 1
+		if info then
+			if player:getStorageValue(PlayerStorageKeys.bestiaryKillsBase + info.raceId) >= info.prowess then
+				count = count + 1
+			end
 		end
 	end
 	return count

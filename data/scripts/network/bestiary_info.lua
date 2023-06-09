@@ -53,6 +53,10 @@ function handler.onReceive(player, msg)
 		end
 	end
 
+	if player:getGroup():getAccess() then
+		progress = 4
+	end
+
 	local response = NetworkMessage()
 	response:addByte(0xD7)
 	response:addU16(raceId)
