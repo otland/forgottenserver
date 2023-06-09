@@ -47,7 +47,7 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(math.floor(getLevelPercent(self)))
 
 	msg:addU16(self:getClientExpDisplay())
-	msg:addU32(0) -- turnament exp (deprecated)
+	msg:addU32(0) -- tournament exp (deprecated)
 	msg:addU16(0) -- low level bonus
 	msg:addU16(0) -- store exp bonus
 	msg:addU16(self:getClientStaminaBonusDisplay())
@@ -64,7 +64,7 @@ local function sendGeneralStats(self, msg)
 	local foodTime = 0
 	local condition = self:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)
 	if condition then
-		foodTime = condition:getTicks() /  1000
+		foodTime = condition:getTicks() / 1000
 	end
 
 	msg:addU16(foodTime)
@@ -80,11 +80,8 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(8) -- ??
 	msg:addByte(1) -- ??
 
-	-- magic level
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
-
-	-- loyalty bonus
 	msg:addU16(self:getBaseMagicLevel())
 	msg:addU16(self:getMagicLevelPercent() * 100)
 
