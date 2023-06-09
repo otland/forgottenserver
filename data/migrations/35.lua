@@ -7,22 +7,21 @@ function onUpdateDatabase()
 
 	local resultId = db.storeQuery("SELECT `id`, `blessings` FROM `players`")
 	if resultId then
-		local stmt = "INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES "
+		local rows = {}
 		repeat
 			local blessings = result.getNumber(resultId, "blessings")
 			local playerId = result.getNumber(resultId, "id")
 			for id = 0, 4 do
 				if bit.band(blessings, 2 ^ id) ~= 0 then
-					stmt = stmt .. "(" .. playerId .. ", " .. (storageRange + id) .. ", 1),"
+					rows[#rows + 1] = "(" .. playerId .. ", " .. (storageRange + id) .. ", 1)"
 				end
 			end
 		until not result.next(resultId)
 		result.free(resultId)
-
-		local stmtLen = string.len(stmt)
-		if stmtLen > 66 then
-			stmt = string.sub(stmt, 1, stmtLen - 1)
-			db.query(stmt)
+		
+		local stmt = "INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES "
+		if #rows > 0 then
+			db.query(stmt .. table.concat(rows, ","))
 		end
 	end
 

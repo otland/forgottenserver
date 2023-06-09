@@ -693,18 +693,21 @@ function Player.addBlessingsHistory(self, event, type)
 end
 
 function Player.getBlessingsHistory(self)
-	local history = {}
 	local resultId = db.storeQuery("SELECT `type`, `event`, `created_at` FROM `blessings_history` WHERE `player_id` = " .. self:getGuid() .. " ORDER BY `created_at` DESC")
-	if resultId then
-		repeat
-			history[#history + 1] = {
-				type = result.getNumber(resultId, "type"),
-				event = result.getString(resultId, "event"),
-				ts = result.getString(resultId, "created_at")
-			}
-		until not result.next(resultId)		
-		result.free(resultId)
+	if not resultId then
+		return {}
 	end
+	
+	local history = {}
+	repeat
+		history[#history + 1] = {
+			type = result.getNumber(resultId, "type"),
+			event = result.getString(resultId, "event"),
+			ts = result.getString(resultId, "created_at")
+		}
+	until not result.next(resultId)		
+	result.free(resultId)
+
 	return history
 end
 

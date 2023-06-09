@@ -44,15 +44,17 @@ local function sendBlessingsWindow(player)
 	local equipmentLoss = {100, 70, 45, 25, 10, 0, 0, 0}
 	local equipmentPercent = equipmentLoss[#blessings + 1]
 
+	local playerSkull = player:getSkull()
+	playerSkull = (playerSkull == SKULL_RED or playerSkull == SKULL_BLACK)
+
+	if playerSkull then
+		equipmentPercent = 100
+	end
+
 	msg:addByte(equipmentPercent) -- loss container death pvp & 10% for pve (100pvp => 10pve)
 	msg:addByte(equipmentPercent) -- loss equipment death pvp & 10% for pve (100pvp => 10pve)
 
-	local playerSkull = player:getSkull() 
-	if playerSkull == SKULL_RED or playerSkull == SKULL_BLACK then
-		msg:addByte(0x01)
-	else
-		msg:addByte(0x00)
-	end
+	msg:addByte(playerSkull and 0x01 or 0x00)
 
 	local amulet = player:getSlotItem(CONST_SLOT_NECKLACE)
 	if amulet and amulet:getId() == ITEM_AMULETOFLOSS then
