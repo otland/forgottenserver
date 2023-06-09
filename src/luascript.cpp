@@ -10891,7 +10891,6 @@ int LuaScriptInterface::luaPlayerResetIdleTime(lua_State* L)
 	}
 
 	player->resetIdleTime();
-
 	pushBoolean(L, true);
 	return 1;
 }
