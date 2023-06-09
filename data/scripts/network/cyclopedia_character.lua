@@ -82,7 +82,7 @@ local function sendGeneralStats(self, msg)
 
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
-	msg:addU16(self:getBaseMagicLevel())
+	msg:addU16(self:getBaseMagicLevel()) -- base + loyalty bonus
 	msg:addU16(self:getMagicLevelPercent() * 100)
 
 	for i = SKILL_FIST, SKILL_FISHING, 1 do
@@ -90,7 +90,7 @@ local function sendGeneralStats(self, msg)
 		msg:addU16(self:getEffectiveSkillLevel(i))
 		msg:addU16(self:getSkillLevel(i))
 
-		-- loyalty bonus
+		-- base + loyalty bonus
 		msg:addU16(self:getSkillLevel(i))
 		msg:addU16(self:getSkillPercent(i) * 100)
 	end
