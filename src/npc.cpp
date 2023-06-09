@@ -54,11 +54,6 @@ bool Npc::load()
 
 	reset();
 
-	if (!scriptInterface) {
-		scriptInterface.reset(new NpcScriptInterface());
-		scriptInterface->loadNpcLib("data/npc/lib/npc.lua");
-	}
-
 	loaded = loadFromXml();
 	return loaded;
 }
@@ -1078,8 +1073,14 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 }
 
 NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
-    npc(npc), scriptInterface(npc->getScriptInterface())
+    npc(npc), scriptInterface(std::make_unique<NpcScriptInterface>())
 {
+	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
+		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		return;
+	}
+
 	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;

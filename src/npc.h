@@ -72,7 +72,7 @@ public:
 
 private:
 	Npc* npc;
-	std::shared_ptr<NpcScriptInterface> scriptInterface;
+	std::unique_ptr<NpcScriptInterface> scriptInterface;
 
 	int32_t creatureAppearEvent = -1;
 	int32_t creatureDisappearEvent = -1;
@@ -82,6 +82,8 @@ private:
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
 	bool loaded = false;
+
+	friend class Npc;
 };
 
 class Npc final : public Creature
@@ -147,7 +149,7 @@ public:
 	void turnToCreature(Creature* creature);
 	void setCreatureFocus(Creature* creature);
 
-	auto getScriptInterface() { return scriptInterface; }
+	auto& getScriptInterface() { return npcEventHandler->scriptInterface; }
 
 	static uint32_t npcAutoID;
 
@@ -207,9 +209,8 @@ private:
 	bool isIdle;
 	bool pushable;
 
-	std::shared_ptr<NpcScriptInterface> scriptInterface;
-
 	friend class Npcs;
+	friend class NpcEventHandler;
 	friend class NpcScriptInterface;
 };
 
