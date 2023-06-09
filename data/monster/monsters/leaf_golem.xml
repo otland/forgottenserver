@@ -17,6 +17,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Plant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Leaf Golem Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="0" max="-15">

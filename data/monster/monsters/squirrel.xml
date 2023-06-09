@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Squirrel Locations..." />
 	<defenses armor="1" defense="1" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Chchch" />

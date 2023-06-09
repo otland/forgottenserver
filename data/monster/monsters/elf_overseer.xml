@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Elf Overseer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-75" />
 		<attack name="drown" interval="2000" chance="10" length="6" spread="0" min="-50" max="-90">

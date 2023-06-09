@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Tomb Servant Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-130" />
 		<attack name="lifedrain" interval="2000" chance="20" target="1" range="7" min="-40" max="-55">

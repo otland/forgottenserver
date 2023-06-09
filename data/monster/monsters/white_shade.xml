@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="30" />
 	</flags>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="White Shade Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-8" />
 		<attack name="lifedrain" interval="2000" chance="20" range="7" min="-4" max="-6">

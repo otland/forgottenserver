@@ -13,6 +13,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Hellflayer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-1000" />
 		<attack name="fire" interval="2000" chance="15" range="7" min="-170" max="-300">
