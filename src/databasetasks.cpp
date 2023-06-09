@@ -11,7 +11,7 @@ extern Dispatcher g_dispatcher;
 
 void DatabaseTasks::start()
 {
-	Database::getInstance().connect();
+	db.connect();
 	ThreadHolder::start();
 }
 
@@ -56,11 +56,11 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 	bool success;
 	DBResult_ptr result;
 	if (task.store) {
-		result = Database::getInstance().storeQuery(task.query);
+		result = db.storeQuery(task.query);
 		success = true;
 	} else {
 		result = nullptr;
-		success = Database::getInstance().executeQuery(task.query);
+		success = db.executeQuery(task.query);
 	}
 
 	if (task.callback) {
