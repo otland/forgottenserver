@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Silver Rabbit Locations..." />
 	<defenses armor="1" defense="1" />
 	<loot>
 		<item name="meat" countmax="2" chance="85000" />

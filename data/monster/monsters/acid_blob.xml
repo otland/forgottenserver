@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Slime" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Acid Blob Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" target="0" chance="30" radius="4" min="-10" max="-20">

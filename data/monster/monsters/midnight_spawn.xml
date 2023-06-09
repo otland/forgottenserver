@@ -16,6 +16,7 @@
 		<flag staticattack="85" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Slime" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Midnight Spawn Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 	</attacks>

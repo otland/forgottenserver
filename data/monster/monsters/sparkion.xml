@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Extra Dimensional" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Sparkion Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="lifedrain" interval="2000" chance="20" length="6" spread="0" min="-350" max="-700">

@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Flamingo Locations..." />
 	<defenses armor="1" defense="1" />
 	<loot>
 		<item name="downy feather" chance="1000" />

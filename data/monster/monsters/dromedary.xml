@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Dromedary Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-8" />
 		<attack name="drunk" interval="4000" chance="5" range="1" target="1" duration="6000">
