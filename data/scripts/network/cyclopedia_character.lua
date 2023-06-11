@@ -100,9 +100,26 @@ local function sendAchievements(self, msg)
 	return true
 end
 
+local function sendBadges(self, msg)
+	msg:addByte(0x01) -- show account info
+	msg:addByte(0x01) -- account online
+	msg:addByte(self:isPremium() and 1 or 0)
+	msg:addString("") -- loyalty title
+
+	msg:addByte(0) -- badges count
+	-- structure:
+	-- u32 badge id
+	-- string badge name
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
 local BASIC_INFO = 0x00
 local COMBAT_STATS = 0x02
 local ACHIEVEMENTS = 0x05
+local BADGES = 0x0A
 
 --[[
 	local GENERAL_STATS = 0x01
@@ -112,7 +129,6 @@ local ACHIEVEMENTS = 0x05
 	local APPEARANCES = 0x07
 	local STORE = 0x08
 	local INSPECTION = 0x09
-	local BADGES = 0x0A
 	local TITLES = 0x0B
 ]]--
 
@@ -120,6 +136,7 @@ local handlers = {
 	[BASIC_INFO] = sendBasicInfo,
 	[COMBAT_STATS] = sendCombatStats,
 	[ACHIEVEMENTS] = sendAchievements,
+	[BADGES] = sendBadges,
 
 	--[[
 		[GENERAL_STATS] = sendGeneralStats,
@@ -129,7 +146,6 @@ local handlers = {
 		[APPEARANCES] = sendAppearances,
 		[STORE] = sendStore,
 		[INSPECTION] = sendInspection,
-		[BADGES] = sendBadges,
 		[TITLES] = sendTitles
 	]]--
 }
