@@ -870,10 +870,11 @@ private:
 	static int luaPlayerAddExperience(lua_State* L);
 	static int luaPlayerRemoveExperience(lua_State* L);
 	static int luaPlayerGetLevel(lua_State* L);
+	static int luaPlayerGetLevelPercent(lua_State* L);
 
 	static int luaPlayerGetMagicLevel(lua_State* L);
-	static int luaPlayerGetBaseMagicLevel(lua_State* L);
 	static int luaPlayerGetMagicLevelPercent(lua_State* L);
+	static int luaPlayerGetBaseMagicLevel(lua_State* L);
 	static int luaPlayerGetMana(lua_State* L);
 	static int luaPlayerAddMana(lua_State* L);
 	static int luaPlayerGetMaxMana(lua_State* L);

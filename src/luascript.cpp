@@ -2591,10 +2591,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
 	registerMethod("Player", "removeExperience", LuaScriptInterface::luaPlayerRemoveExperience);
 	registerMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
+	registerMethod("Player", "getLevelPercent", LuaScriptInterface::luaPlayerGetLevelPercent);
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
-	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
 	registerMethod("Player", "getMagicLevelPercent", LuaScriptInterface::luaPlayerGetMagicLevelPercent);
+	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
 	registerMethod("Player", "getMana", LuaScriptInterface::luaPlayerGetMana);
 	registerMethod("Player", "addMana", LuaScriptInterface::luaPlayerAddMana);
 	registerMethod("Player", "getMaxMana", LuaScriptInterface::luaPlayerGetMaxMana);
@@ -8942,6 +8943,18 @@ int LuaScriptInterface::luaPlayerGetLevel(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerGetLevelPercent(lua_State* L)
+{
+	// player:getLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLevelPercent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 {
 	// player:getMagicLevel()
@@ -8954,24 +8967,24 @@ int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
-{
-	// player:getBaseMagicLevel()
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		lua_pushnumber(L, player->getBaseMagicLevel());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaPlayerGetMagicLevelPercent(lua_State* L)
 {
 	// player:getMagicLevelPercent()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->getMagicLevelPercent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetBaseMagicLevel(lua_State* L)
+{
+	// player:getBaseMagicLevel()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getBaseMagicLevel());
 	} else {
 		lua_pushnil(L);
 	}

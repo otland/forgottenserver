@@ -24,13 +24,6 @@ local function sendBasicInfo(self, msg)
 	return true
 end
 
-local function getLevelPercent(player)
-	local currentLevelExp = Game.getExperienceForLevel(player:getLevel())
-	local nextLvlExp = Game.getExperienceForLevel(player:getLevel() + 1)
-	local playerExp = player:getExperience()
-	return (playerExp - currentLevelExp) * 100 / (nextLvlExp - currentLevelExp)
-end
-
 local clientSkillsId = {
 	[0] = CYCLOPEDIA_SKILL_FIST,
 	[1] = CYCLOPEDIA_SKILL_CLUB,
@@ -44,7 +37,7 @@ local clientSkillsId = {
 local function sendGeneralStats(self, msg)
 	msg:addU64(self:getExperience())
 	msg:addU16(self:getLevel())
-	msg:addByte(math.floor(getLevelPercent(self)))
+	msg:addByte(self:getLevelPercent())
 
 	msg:addU16(self:getClientExpDisplay())
 	msg:addU32(0) -- tournament exp (deprecated)
@@ -77,9 +70,9 @@ local function sendGeneralStats(self, msg)
 	msg:addU32(infiniteCapacity or self:getCapacity())
 	msg:addU32(infiniteCapacity or self:getFreeCapacity())
 
-	msg:addByte(8) -- ??
-	msg:addByte(1) -- ??
+	msg:addByte(8) -- skills amount
 
+	msg:addByte(CYCLOPEDIA_SKILL_MAGIC)
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
 	msg:addU16(self:getBaseMagicLevel()) -- base + loyalty bonus
@@ -95,7 +88,7 @@ local function sendGeneralStats(self, msg)
 		msg:addU16(self:getSkillPercent(i) * 100)
 	end
 
-	msg:addByte(0) -- ??
+	msg:addByte(0) -- magic boost (elemend and value)
 
 	msg:sendToPlayer(self)
 	msg:delete()
