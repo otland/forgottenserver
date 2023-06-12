@@ -88,7 +88,7 @@ local function sendGeneralStats(self, msg)
 		msg:addU16(self:getSkillPercent(i) * 100)
 	end
 
-	msg:addByte(0) -- magic boost (elemend and value)
+	msg:addByte(0) -- magic boost (element and value)
 
 	msg:sendToPlayer(self)
 	msg:delete()
