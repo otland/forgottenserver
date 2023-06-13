@@ -674,3 +674,11 @@ function Player.getTotalDefense(self)
 	end
 	return total
 end
+
+function Player.setAccountStorageValue(key, value)
+	return Game.setAccountStorageValue(self:getAccountId(), key, value)
+end
+
+function Player.getAccountStorageValue(key)
+	return Game.getAccountStorageValue(self:getAccountId(), key)
+end
