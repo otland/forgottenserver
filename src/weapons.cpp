@@ -253,8 +253,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos), Position::getDistanceY(playerPos, targetPos)) >
-	    shootRange) {
+	if (std::max(playerPos.getDistanceX(targetPos), targetPos.getDistanceY(playerPos)) > shootRange) {
 		return 0;
 	}
 
@@ -353,7 +352,7 @@ bool Weapon::useWeapon(Player* player, Item* item, Creature* target) const
 
 bool Weapon::useFist(Player* player, Creature* target)
 {
-	if (!Position::areInRange<1, 1>(player->getPosition(), target->getPosition())) {
+	if (!player->getPosition().isInRange(target->getPosition(), 1, 1)) {
 		return false;
 	}
 
@@ -678,8 +677,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		uint32_t skill = player->getSkillLevel(SKILL_DISTANCE);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
-		uint32_t distance = std::max<uint32_t>(Position::getDistanceX(playerPos, targetPos),
-		                                       Position::getDistanceY(playerPos, targetPos));
+		int32_t distance = std::max(playerPos.getDistanceX(targetPos), playerPos.getDistanceY(targetPos));
 
 		uint32_t maxHitChance;
 		if (it.maxHitChance != -1) {
@@ -787,7 +785,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		// miss target
 		Tile* destTile = target->getTile();
 
-		if (!Position::areInRange<1, 1, 0>(player->getPosition(), target->getPosition())) {
+		if (!player->getPosition().isInRange(target->getPosition(), 1, 1, 0)) {
 			static std::vector<std::pair<int32_t, int32_t>> destList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {0, 0},
 			                                                         {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
 			std::shuffle(destList.begin(), destList.end(), getRandomGenerator());

@@ -54,12 +54,12 @@ bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRa
 		}
 
 		// view is +/- 2 from the floor we stand on
-		if (Position::getDistanceZ(myPos, pos) > 2) {
+		if (myPos.getDistanceZ(pos) > 2) {
 			return false;
 		}
 	}
 
-	const int_fast32_t offsetz = myPos.getZ() - pos.getZ();
+	int32_t offsetz = myPos.getOffsetZ(pos);
 	return (pos.getX() >= myPos.getX() - viewRangeX + offsetz) && (pos.getX() <= myPos.getX() + viewRangeX + offsetz) &&
 	       (pos.getY() >= myPos.getY() - viewRangeY + offsetz) && (pos.getY() <= myPos.getY() + viewRangeY + offsetz);
 }
@@ -346,8 +346,8 @@ void Creature::updateTileCache(const Tile* tile, const Position& pos)
 {
 	const Position& myPos = getPosition();
 	if (pos.z == myPos.z) {
-		int32_t dx = Position::getOffsetX(pos, myPos);
-		int32_t dy = Position::getOffsetY(pos, myPos);
+		int32_t dx = myPos.getOffsetX(pos);
+		int32_t dy = myPos.getOffsetY(pos);
 		updateTileCache(tile, dx, dy);
 	}
 }
@@ -367,10 +367,8 @@ int32_t Creature::getWalkCache(const Position& pos) const
 		return 1;
 	}
 
-	int32_t dx = Position::getOffsetX(pos, myPos);
-	if (std::abs(dx) <= maxWalkCacheWidth) {
-		int32_t dy = Position::getOffsetY(pos, myPos);
-		if (std::abs(dy) <= maxWalkCacheHeight) {
+	if (int32_t dx = myPos.getOffsetX(pos); std::abs(dx) <= maxWalkCacheWidth) {
+		if (int32_t dy = myPos.getOffsetY(pos); std::abs(dy) <= maxWalkCacheHeight) {
 			if (localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
 				return 1;
 			}
@@ -482,7 +480,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			if (oldPos.z != newPos.z) {
 				// floor change extra cost
 				lastStepCost = 2;
-			} else if (Position::getDistanceX(newPos, oldPos) >= 1 && Position::getDistanceY(newPos, oldPos) >= 1) {
+			} else if (newPos.getDistanceX(oldPos) >= 1 && oldPos.getDistanceY(newPos) >= 1) {
 				// diagonal extra cost
 				lastStepCost = 3;
 			}
@@ -495,9 +493,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			std::forward_list<Creature*> despawnList;
 			for (Creature* summon : summons) {
 				const Position& pos = summon->getPosition();
-				if (Position::getDistanceZ(newPos, pos) > 2 ||
-				    (std::max<int32_t>(Position::getDistanceX(newPos, pos), Position::getDistanceY(newPos, pos)) >
-				     30)) {
+				if (newPos.getDistanceZ(pos) > 2 || std::max(newPos.getDistanceX(pos), pos.getDistanceY(newPos)) > 30) {
 					despawnList.push_front(summon);
 				}
 			}
@@ -549,7 +545,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 					// shift y west
 					int32_t starty = 0;
 					int32_t endy = mapWalkHeight - 1;
-					int32_t dy = Position::getDistanceY(oldPos, newPos);
+					int32_t dy = oldPos.getDistanceY(newPos);
 
 					if (dy < 0) {
 						endy += dy;
@@ -572,7 +568,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 					// shift y east
 					int32_t starty = 0;
 					int32_t endy = mapWalkHeight - 1;
-					int32_t dy = Position::getDistanceY(oldPos, newPos);
+					int32_t dy = oldPos.getDistanceY(newPos);
 
 					if (dy < 0) {
 						endy += dy;
@@ -1584,7 +1580,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 	} else {
-		int_fast32_t dx = Position::getOffsetX(startPos, targetPos);
+		int32_t dx = targetPos.getOffsetX(startPos);
 
 		int32_t dxMax = (dx >= 0 ? fpp.maxTargetDist : 0);
 		if (testPos.x > targetPos.x + dxMax) {
@@ -1596,7 +1592,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 
-		int_fast32_t dy = Position::getOffsetY(startPos, targetPos);
+		int32_t dy = targetPos.getOffsetY(startPos);
 
 		int32_t dyMax = (dy >= 0 ? fpp.maxTargetDist : 0);
 		if (testPos.y > targetPos.y + dyMax) {
@@ -1622,8 +1618,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 		return false;
 	}
 
-	int32_t testDist =
-	    std::max<int32_t>(Position::getDistanceX(targetPos, testPos), Position::getDistanceY(targetPos, testPos));
+	int32_t testDist = std::max(targetPos.getDistanceX(testPos), testPos.getDistanceY(targetPos));
 	if (fpp.maxTargetDist == 1) {
 		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {
 			return false;
