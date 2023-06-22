@@ -70,9 +70,10 @@ public:
 
 	bool isLoaded() const;
 
+	std::unique_ptr<NpcScriptInterface> scriptInterface;
+
 private:
 	Npc* npc;
-	std::unique_ptr<NpcScriptInterface> scriptInterface;
 
 	int32_t creatureAppearEvent = -1;
 	int32_t creatureDisappearEvent = -1;
@@ -82,8 +83,6 @@ private:
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
 	bool loaded = false;
-
-	friend class Npc;
 };
 
 class Npc final : public Creature
@@ -210,7 +209,6 @@ private:
 	bool pushable;
 
 	friend class Npcs;
-	friend class NpcEventHandler;
 	friend class NpcScriptInterface;
 };
 

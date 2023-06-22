@@ -201,7 +201,7 @@ bool Npc::loadFromXml()
 		if (!handler->isLoaded()) {
 			return false;
 		}
-		npcEventHandler.reset(handler.release());
+		npcEventHandler = std::move(handler);
 	}
 	return true;
 }
