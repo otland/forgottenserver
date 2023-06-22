@@ -1073,7 +1073,7 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 }
 
 NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
-    npc(npc), scriptInterface(std::make_unique<NpcScriptInterface>())
+    scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
 {
 	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
 		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
