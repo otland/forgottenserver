@@ -254,6 +254,8 @@ private:
 	void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 	void sendUpdateTile(const Tile* tile, const Position& pos);
 
+	void sendUpdateCreatureIcons(const Creature* creature);
+
 	void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos,
 	                     MagicEffectClasses magicEffect = CONST_ME_NONE);
 	void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
@@ -291,6 +293,7 @@ private:
 	void GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg);
 
 	void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
+	void AddCreatureIcons(NetworkMessage& msg, const Creature* creature);
 	void AddPlayerStats(NetworkMessage& msg);
 	void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 	void AddPlayerSkills(NetworkMessage& msg);
