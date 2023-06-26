@@ -357,10 +357,3 @@ function Player:onNetworkMessage(recvByte, msg)
 
 	handler(self, msg)
 end
-
-function Player:onUpdateStorage(key, value, oldValue, isLogin)
-	local onUpdateStorage = EventCallback.onUpdateStorage
-	if onUpdateStorage then
-		onUpdateStorage(self, key, value, oldValue, isLogin)
-	end
-end

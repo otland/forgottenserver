@@ -48,6 +48,8 @@ bool Events::load()
 				info.creatureOnTargetCombat = event;
 			} else if (methodName == "onHear") {
 				info.creatureOnHear = event;
+			} else if (methodName == "onUpdateStorage") {
+				info.creatureOnUpdateStorage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 			}
@@ -116,8 +118,6 @@ bool Events::load()
 				info.playerOnInventoryUpdate = event;
 			} else if (methodName == "onNetworkMessage") {
 				info.playerOnNetworkMessage = event;
-			} else if (methodName == "onUpdateStorage") {
-				info.playerOnUpdateStorage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -303,6 +303,47 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 	lua_pushnumber(L, type);
 
 	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
+                                          std::optional<int32_t> oldValue, bool isSpawn)
+{
+	// Creature:onUpdateStorage(key, value, oldValue, isSpawn)
+	if (info.creatureOnUpdateStorage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnUpdateStorage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.creatureOnUpdateStorage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.creatureOnUpdateStorage);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setMetatable(L, -1, "Creature");
+
+	lua_pushnumber(L, key);
+
+	if (value) {
+		lua_pushnumber(L, value.value());
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (oldValue) {
+		lua_pushnumber(L, oldValue.value());
+	} else {
+		lua_pushnil(L);
+	}
+
+	LuaScriptInterface::pushBoolean(L, isSpawn);
+
+	scriptInterface.callVoidFunction(5);
 }
 
 // Party
@@ -1235,36 +1276,6 @@ void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, Netwo
 	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
 
 	scriptInterface.callVoidFunction(3);
-}
-
-void Events::eventPlayerOnUpdateStorage(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
-                                        bool isLogin)
-{
-	// Player:onUpdateStorage(key, value, oldValue, isLogin)
-	if (info.playerOnUpdateStorage == -1) {
-		return;
-	}
-
-	if (!scriptInterface.reserveScriptEnv()) {
-		std::cout << "[Error - Events::eventPlayerOnUpdateStorage] Call stack overflow" << std::endl;
-		return;
-	}
-
-	ScriptEnvironment* env = scriptInterface.getScriptEnv();
-	env->setScriptId(info.playerOnUpdateStorage, &scriptInterface);
-
-	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(info.playerOnUpdateStorage);
-
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-
-	lua_pushnumber(L, key);
-	lua_pushnumber(L, value);
-	lua_pushnumber(L, oldValue);
-	LuaScriptInterface::pushBoolean(L, isLogin);
-
-	scriptInterface.callVoidFunction(5);
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
