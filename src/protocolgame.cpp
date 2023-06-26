@@ -5,7 +5,6 @@
 
 #include "protocolgame.h"
 
-#include "actions.h"
 #include "ban.h"
 #include "condition.h"
 #include "configmanager.h"
