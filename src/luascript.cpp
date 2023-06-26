@@ -2105,6 +2105,18 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
+	registerEnum(BLESSING_ADVENTURERS_BLESSING);
+	registerEnum(BLESSING_TWIST_OF_FATE);
+	registerEnum(BLESSING_WISDOM_OF_SOLITUDE);
+	registerEnum(BLESSING_SPARK_OF_THE_PHOENIX);
+	registerEnum(BLESSING_FIRE_OF_THE_SUNS);
+	registerEnum(BLESSING_SPIRITUAL_SHIELDING);
+	registerEnum(BLESSING_EMBRACE_OF_THE_WORLD);
+	registerEnum(BLESSING_HEART_OF_THE_MOUNTAIN);
+	registerEnum(BLESSING_BLOOD_OF_THE_MOUNTAIN);
+	registerEnum(BLESSING_FIRST);
+	registerEnum(BLESSING_LAST);
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2700,9 +2712,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getPremiumEndsAt", LuaScriptInterface::luaPlayerGetPremiumEndsAt);
 	registerMethod("Player", "setPremiumEndsAt", LuaScriptInterface::luaPlayerSetPremiumEndsAt);
 
-	registerMethod("Player", "hasBlessing", LuaScriptInterface::luaPlayerHasBlessing);
 	registerMethod("Player", "addBlessing", LuaScriptInterface::luaPlayerAddBlessing);
 	registerMethod("Player", "removeBlessing", LuaScriptInterface::luaPlayerRemoveBlessing);
+	registerMethod("Player", "getBlessing", LuaScriptInterface::luaPlayerGetBlessing);
 
 	registerMethod("Player", "canLearnSpell", LuaScriptInterface::luaPlayerCanLearnSpell);
 	registerMethod("Player", "learnSpell", LuaScriptInterface::luaPlayerLearnSpell);
@@ -10375,56 +10387,56 @@ int LuaScriptInterface::luaPlayerSetPremiumEndsAt(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerHasBlessing(lua_State* L)
-{
-	// player:hasBlessing(blessing)
-	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		pushBoolean(L, player->hasBlessing(blessing));
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 int LuaScriptInterface::luaPlayerAddBlessing(lua_State* L)
 {
-	// player:addBlessing(blessing)
+	// player:addBlessing(blessingId[, count = 1])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
-	if (player->hasBlessing(blessing)) {
-		pushBoolean(L, false);
-		return 1;
-	}
+	uint8_t blessingId = getNumber<uint8_t>(L, 2);
+	int32_t count = getNumber<uint8_t>(L, 3, 1);
 
-	player->addBlessing(blessing);
+	player->addBlessing(blessingId, count);
 	pushBoolean(L, true);
 	return 1;
 }
 
 int LuaScriptInterface::luaPlayerRemoveBlessing(lua_State* L)
 {
-	// player:removeBlessing(blessing)
+	// player:removeBlessing(blessingId[, count = 1])
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint8_t blessing = getNumber<uint8_t>(L, 2) - 1;
-	if (!player->hasBlessing(blessing)) {
+	uint8_t blessingId = getNumber<uint8_t>(L, 2);
+	if (player->getBlessing(blessingId) > 0) {
 		pushBoolean(L, false);
 		return 1;
 	}
 
-	player->removeBlessing(blessing);
+	int32_t count = getNumber<int32_t>(L, 3, 1);
+	player->removeBlessing(blessingId, count);
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetBlessing(lua_State* L)
+{
+	// player:getBlessing(blessingId)
+	Player* player = getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint8_t blessingId = getNumber<uint8_t>(L, 2);
+	lua_pushnumber(L, player->getBlessing(blessingId));
+
 	return 1;
 }
 

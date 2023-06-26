@@ -710,6 +710,11 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 			return;
 		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
 			// do nothing
+		} else if (IS_IN_KEYRANGE(key, BLESSINGS_RANGE)) {
+			if (value == 0) {
+				storageMap.erase(key);
+				return;
+			}
 		} else {
 			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
 			return;
@@ -2102,6 +2107,10 @@ void Player::death(Creature* lastHitCreature)
 {
 	loginPosition = town->getTemplePosition();
 
+	if (getBlessing(BLESSING_ADVENTURERS_BLESSING) && Player::lastHitIsPlayer(lastHitCreature)) {
+		setSkillLoss(false);
+	}
+
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;
 		bool lastHitPlayer = Player::lastHitIsPlayer(lastHitCreature);
@@ -2179,15 +2188,12 @@ void Player::death(Creature* lastHitCreature)
 			}
 		}
 
-		if (blessings.test(5)) {
-			if (lastHitPlayer) {
-				blessings.reset(5);
-			} else {
-				blessings.reset();
-				blessings.set(5);
-			}
+		if (lastHitPlayer && getBlessing(BLESSING_TWIST_OF_FATE)) {
+			removeBlessing(BLESSING_TWIST_OF_FATE);
 		} else {
-			blessings.reset();
+			for (auto& blessingId : getBlessings(true)) {
+				removeBlessing(blessingId);
+			}
 		}
 
 		sendStats();
@@ -4114,7 +4120,8 @@ double Player::getLostPercent() const
 			deathLosePercent -= 3;
 		}
 
-		deathLosePercent -= blessings.count();
+		uint8_t blessings = std::max<uint8_t>(7, getBlessings().size());
+		deathLosePercent -= blessings;
 		return std::max<int32_t>(0, deathLosePercent) / 100.;
 	}
 
@@ -4131,7 +4138,9 @@ double Player::getLostPercent() const
 	if (isPromoted()) {
 		percentReduction += 30;
 	}
-	percentReduction += blessings.count() * 8;
+
+	uint8_t blessings = std::max<uint8_t>(7, getBlessings().size());
+	percentReduction += blessings * 8;
 	return lossPercent * (1 - (percentReduction / 100.)) / 100.;
 }
 
@@ -4784,4 +4793,46 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
+}
+
+void Player::addBlessing(uint8_t blessingId, const int32_t count /* = 1*/)
+{
+	const uint32_t key = PSTRG_BLESSINGS_RANGE_START + blessingId;
+
+	int32_t oldValue;
+	getStorageValue(key, oldValue);
+	if (oldValue == -1) { // storage doesn't exists
+		oldValue = 0;
+	}
+
+	addStorageValue(key, oldValue + count);
+}
+
+void Player::removeBlessing(uint8_t blessingId, int32_t count /* = 1*/) { addBlessing(blessingId, count * -1); }
+
+uint8_t Player::getBlessing(uint8_t blessingId) const
+{
+	int32_t value;
+	getStorageValue(PSTRG_BLESSINGS_RANGE_START + blessingId, value);
+	if (value < 0) {
+		return 0;
+	}
+
+	return value;
+}
+
+std::vector<uint8_t> Player::getBlessings(bool excludeSpecialBlessings /* = false*/) const
+{
+	std::vector<uint8_t> blessings;
+	for (uint8_t blessingId = 0; blessingId <= BLESSING_LAST; blessingId++) {
+		if (excludeSpecialBlessings &&
+		    (blessingId == BLESSING_ADVENTURERS_BLESSING || blessingId == BLESSING_TWIST_OF_FATE)) {
+			continue;
+		}
+
+		if (getBlessing(blessingId) > 0) {
+			blessings.emplace_back(blessingId);
+		}
+	}
+	return blessings;
 }

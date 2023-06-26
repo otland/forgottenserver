@@ -25,6 +25,8 @@ function onLogin(player)
 	-- Update client exp display
 	player:updateClientExpDisplay()
 
+	player:sendBlessings()
+
 	-- achievements points for highscores
 	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == -1 then
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())

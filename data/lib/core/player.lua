@@ -630,16 +630,6 @@ function Player.takeScreenshot(self, screenshotType, ignoreConfig)
 	return true
 end
 
-function Player.getBlessings(self)
-	local blessings = 0
-	for i = 1, 6 do
-		if self:hasBlessing(i) then
-			blessings = blessings + 1
-		end
-	end
-	return blessings
-end
-
 local slots = {
 	CONST_SLOT_RIGHT,
 	CONST_SLOT_LEFT,
@@ -673,4 +663,76 @@ function Player.getTotalDefense(self)
 		end
 	end
 	return total
+end
+
+function Player.isPromoted(self)
+	return not self:getVocation():getPromotion() and true or false
+end
+
+function Player.hasBlessing(self, blessingId)
+	return self:getBlessing(blessingId) > 0
+end
+
+function Player.getBlessings(self, excludeSpecial)
+	local first = BLESSING_FIRST	
+	if excludeSpecial then
+		first = BLESSING_WISDOM_OF_SOLITUDE -- skip first two blessings
+	end
+	
+	local blessings = {}
+	for blessingId = first, BLESSING_LAST, 1 do
+		if self:hasBlessing(blessingId) then
+			blessings[#blessings + 1] = blessingId
+		end
+	end
+	return blessings
+end
+
+function Player.addBlessingsHistory(self, event, type)
+	return db.query("INSERT INTO `blessings_history` (`player_id`, `type`, `event`, `created_at`) VALUES (" .. self:getGuid() .. ", " .. type .. ", " .. db.escapeString(event) .. ", " .. os.time() .. ")")
+end
+
+function Player.getBlessingsHistory(self)
+	local resultId = db.storeQuery("SELECT `type`, `event`, `created_at` FROM `blessings_history` WHERE `player_id` = " .. self:getGuid() .. " ORDER BY `created_at` DESC")
+	if not resultId then
+		return {}
+	end
+	
+	local history = {}
+	repeat
+		history[#history + 1] = {
+			type = result.getNumber(resultId, "type"),
+			event = result.getString(resultId, "event"),
+			ts = result.getString(resultId, "created_at")
+		}
+	until not result.next(resultId)		
+	result.free(resultId)
+
+	return history
+end
+
+function Player.sendBlessings(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x9C)
+
+	local bits = 0
+
+	local blessings = self:getBlessings(false)
+	for _, blessing in ipairs(blessings) do
+		bits = bit.bor(bits, 2 ^ blessing)
+	end
+
+	msg:addU16(bits)
+	if #blessings >= 8 then
+		msg:addByte(0x03)
+	elseif #blessings > 0 then
+		msg:addByte(0x02)
+	else
+		msg:addByte(0x01)
+	end
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	
+	return true
 end
