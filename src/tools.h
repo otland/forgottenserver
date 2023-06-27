@@ -72,4 +72,18 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
+namespace tfs {
+
+#if __has_cpp_attribute(__cpp_lib_to_underlying)
+
+inline constexpr auto to_underlying(auto e) noexcept { return std::to_underlying(e); }
+
+#else
+
+inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
+
+#endif
+
+} // namespace tfs
+
 #endif // FS_TOOLS_H
