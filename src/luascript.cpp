@@ -2105,7 +2105,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
-	registerEnum(CREATURE_ICON_NONE);
 	registerEnum(CREATURE_ICON_CROSS_WHITE);
 	registerEnum(CREATURE_ICON_CROSS_WHITE_RED);
 	registerEnum(CREATURE_ICON_ORB_RED);
@@ -2128,7 +2127,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURE_ICON_QUESTION);
 	registerEnum(CREATURE_ICON_CROSS_RED);
 
-	registerEnum(MONSTER_ICON_NONE);
 	registerEnum(MONSTER_ICON_VULNERABLE);
 	registerEnum(MONSTER_ICON_WEAKENED);
 	registerEnum(MONSTER_ICON_MELEE);
