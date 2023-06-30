@@ -1,3 +1,11 @@
+-- low level experience bonus
+-- bonus is a floating percentage, use 1 for 100% bonus
+local expBonus = {
+	minlevel = 2,
+	maxlevel = 50,
+	bonus = 1
+}
+
 function Player:onBrowseField(position)
 	local onBrowseField = EventCallback.onBrowseField
 	if onBrowseField then
@@ -253,16 +261,6 @@ local function useStamina(player)
 	player:setStamina(staminaMinutes)
 end
 
--- low level experience bonus
--- bonus is a floating percentage, use 1 for 100% bonus
-local expBonus = {
-	minlevel = 2,
-	maxlevel = 50,
-	bonus = 1
-}
-
-local expBonusDelta = expBonus.maxlevel - expBonus.minlevel -- don't touch
-
 function Player:onGainExperience(source, exp, rawExp)
 	if not source or source:isPlayer() then
 		return exp
@@ -293,7 +291,7 @@ function Player:onGainExperience(source, exp, rawExp)
 	end
 
 	-- Apply low level bonus
-	local multiplier = expBonus.bonus * math.min(1, math.max(0, (expBonus.maxlevel - level) / (expBonusDelta))) + 1
+	local multiplier = expBonus.bonus * math.min(1, math.max(0, (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel))) + 1
 	exp = exp * multiplier
 
 	local onGainExperience = EventCallback.onGainExperience
