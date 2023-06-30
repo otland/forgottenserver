@@ -554,8 +554,10 @@ local function getLowLevelBonus(level)
 end
 
 function Player.updateClientExpDisplay(self)
+	local level = self:getLevel()
+
 	-- Experience bonus (includes server rates)
-	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	local expGainRate = 100 * Game.getExperienceStage(level)
 	self:setClientExpDisplay(expGainRate)
 
 	-- Stamina bonus
@@ -564,7 +566,6 @@ function Player.updateClientExpDisplay(self)
 	self:setClientStaminaBonusDisplay(staminaBonus)
 
 	-- Low level bonus
-	local level = self:getLevel()
 	local levelBonus = getLowLevelBonus(level)
 	self:setClientLowLevelBonusDisplay(levelBonus)
 	return true
