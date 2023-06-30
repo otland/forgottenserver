@@ -1,5 +1,4 @@
--- low level experience bonus
--- bonus is a floating percentage, use 1 for 100% bonus
+-- low level experience bonus (bonus is a floating percentage, use 1 for 100% bonus).
 local expBonus = {
 	minlevel = 2,
 	maxlevel = 50,
