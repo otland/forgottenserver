@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Young Goanna Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-230" poison="15" />
 		<attack name="earth" interval="2000" chance="15" range="3" radius="1" target="1" min="-300" max="-490">

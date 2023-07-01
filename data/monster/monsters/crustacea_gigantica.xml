@@ -16,6 +16,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Crustacea Gigantica Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-600" />
 	</attacks>

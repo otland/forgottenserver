@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Demon Outcast Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="energy" interval="2000" chance="10" length="6" spread="0" target="1" min="-250" max="-450">

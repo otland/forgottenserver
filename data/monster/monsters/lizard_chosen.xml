@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lizard Chosen Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-360" />
 		<attack name="poisoncondition" interval="2000" chance="15" length="3" spread="2" min="-240" max="-320">

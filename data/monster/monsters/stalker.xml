@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Stalker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-70" />
 		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-20" max="-30">

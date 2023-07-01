@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="17" />
 	</flags>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Troll Guard Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 	</attacks>

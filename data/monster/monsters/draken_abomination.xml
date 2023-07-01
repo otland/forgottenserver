@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Dragon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Draken Abomination Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-420" />
 		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-310" max="-630">
