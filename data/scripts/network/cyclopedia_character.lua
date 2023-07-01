@@ -41,7 +41,7 @@ local function sendGeneralStats(self, msg)
 
 	msg:addU16(self:getClientExpDisplay())
 	msg:addU32(0) -- tournament exp (deprecated)
-	msg:addU16(0) -- low level bonus
+	msg:addU16(self:getClientLowLevelBonusDisplay())
 	msg:addU16(0) -- store exp bonus
 	msg:addU16(self:getClientStaminaBonusDisplay())
 	msg:addU16(0) -- exp boost remaining time
