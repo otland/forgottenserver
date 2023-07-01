@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="common" locations="Cat Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="0" />
 	</attacks>

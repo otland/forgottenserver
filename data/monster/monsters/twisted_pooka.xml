@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Fey" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Twisted Pooka Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" />
 		<attack name="earth" interval="2000" chance="15" range="4" target="1" min="0" max="-50">

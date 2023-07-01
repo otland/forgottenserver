@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Undead" prowess="2" expertise="3" mastery="5" charmPoints="25" difficulty="trivial" occurrence="very rare" locations="Undead Jester Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-3" />
 		<attack name="drunk" interval="1000" chance="20" range="7">

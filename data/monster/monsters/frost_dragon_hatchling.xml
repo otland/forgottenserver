@@ -17,6 +17,7 @@
 		<flag runonhealth="80" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Dragon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Frost Dragon Hatchling Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-160" />
 		<attack name="ice" interval="2000" chance="10" length="5" spread="2" min="-60" max="-110">
