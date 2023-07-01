@@ -547,7 +547,9 @@ end
 
 local function getLowLevelBonus(level)
 	if level > 1 and level <= 50 then
-		return 50
+		local expBonus = {minlevel = 2, maxlevel = 50, bonus = 1}
+		local bonusPercentage = (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel)
+		return expBonus.bonus * 100 * bonusPercentage
 	else
 		return 0
 	end
