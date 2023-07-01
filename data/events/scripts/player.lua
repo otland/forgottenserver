@@ -258,15 +258,17 @@ function Player:onGainExperience(source, exp, rawExp)
 		return exp
 	end
 
+	local level = self:getLevel()
+
 	-- Soul regeneration
 	local vocation = self:getVocation()
-	if self:getSoul() < vocation:getMaxSoul() and exp >= self:getLevel() then
+	if self:getSoul() < vocation:getMaxSoul() and exp >= level then
 		soulCondition:setParameter(CONDITION_PARAM_SOULTICKS, vocation:getSoulGainTicks() * 1000)
 		self:addCondition(soulCondition)
 	end
 
 	-- Apply experience stage multiplier
-	exp = exp * Game.getExperienceStage(self:getLevel())
+	exp = exp * Game.getExperienceStage(level)
 
 	-- Stamina modifier
 	if configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
@@ -279,6 +281,9 @@ function Player:onGainExperience(source, exp, rawExp)
 			exp = exp * 0.5
 		end
 	end
+
+	-- Apply low level bonus
+	exp = exp * (1 + self:calculateLowLevelBonus(level) / 100)
 
 	local onGainExperience = EventCallback.onGainExperience
 	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp
