@@ -16,7 +16,7 @@ project(tfs CXX)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if (NOT WIN32)
-    add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
+    add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -pedantic -Werror -pipe -fvisibility=hidden)
 endif ()
 
 if (CMAKE_COMPILER_IS_GNUCXX)
