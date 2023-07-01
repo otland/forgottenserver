@@ -2751,6 +2751,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getClientStaminaBonusDisplay", LuaScriptInterface::luaPlayerGetClientStaminaBonusDisplay);
 	registerMethod("Player", "setClientStaminaBonusDisplay", LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay);
 
+	registerMethod("Player", "getClientLowLevelBonusDisplay",
+	               LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay);
+	registerMethod("Player", "setClientLowLevelBonusDisplay",
+	               LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -10960,6 +10965,32 @@ int LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setClientStaminaBonusDisplay(getNumber<uint16_t>(L, 2));
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay(lua_State* L)
+{
+	// player:getClientLowLevelBonusDisplay()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getClientLowLevelBonusDisplay());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
+{
+	// player:setClientLowLevelBonusDisplay(value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setClientLowLevelBonusDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
