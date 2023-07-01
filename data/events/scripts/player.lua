@@ -1,10 +1,3 @@
--- low level experience bonus (bonus is a floating percentage, use 1 for 100% bonus).
-local expBonus = {
-	minlevel = 2,
-	maxlevel = 50,
-	bonus = 1
-}
-
 function Player:onBrowseField(position)
 	local onBrowseField = EventCallback.onBrowseField
 	if onBrowseField then
@@ -290,8 +283,7 @@ function Player:onGainExperience(source, exp, rawExp)
 	end
 
 	-- Apply low level bonus
-	local multiplier = expBonus.bonus * math.min(1, math.max(0, (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel))) + 1
-	exp = exp * multiplier
+	exp = exp * (1 + self:calculateLowLevelBonus(level) / 100)
 
 	local onGainExperience = EventCallback.onGainExperience
 	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp
