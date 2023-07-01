@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="common" locations="Dog Locations..." />
 	<defenses armor="1" defense="1" />
 	<voices interval="5000" chance="10">
 		<voice sentence="Wuff wuff" />

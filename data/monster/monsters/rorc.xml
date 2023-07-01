@@ -15,6 +15,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Rorc Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 	</attacks>

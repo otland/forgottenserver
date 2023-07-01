@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Dragon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Ghastly Dragon Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-603" />
 		<attack name="ghastly dragon curse" interval="2000" chance="5" range="5" />

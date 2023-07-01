@@ -5,7 +5,6 @@
 
 #include "protocolgame.h"
 
-#include "actions.h"
 #include "ban.h"
 #include "condition.h"
 #include "configmanager.h"
@@ -23,7 +22,6 @@
 #include "storeinbox.h"
 
 extern ConfigManager g_config;
-extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 

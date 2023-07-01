@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Giant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Orclops Ravager Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-132" />
 		<attack name="physical" interval="2000" chance="35" range="7" target="1" min="-180" max="-220">

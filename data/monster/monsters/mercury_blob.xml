@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Slime" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Mercury Blob Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-75" />
 		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="3000">

@@ -31,7 +31,7 @@ public:
 	}
 	void setFlags(uint8_t newFlags) { flags = newFlags; }
 
-	const Direction getDirection() const { return direction; }
+	Direction getDirection() const { return direction; }
 	void setDirection(Direction newDirection) { direction = newDirection; }
 
 protected:

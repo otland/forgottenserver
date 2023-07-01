@@ -16,6 +16,7 @@
 		<flag runonhealth="95" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="uncommon" locations="Northern Pike (Creature) Locations..." />
 	<defenses armor="9" defense="9" />
 	<elements>
 		<element physicalPercent="-5" />

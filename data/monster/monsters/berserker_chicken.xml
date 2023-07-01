@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Berserker Chicken Locations..." />
 	<attacks>
 		<attack name="melee" interval="1200" min="0" max="-200" />
 		<attack name="physical" interval="2000" chance="30" range="1" min="0" max="-100" />
