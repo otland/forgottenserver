@@ -34,3 +34,10 @@ function Creature:onHear(speaker, words, type)
 		onHear(self, speaker, words, type)
 	end
 end
+
+function Creature:onUpdateStorage(key, value, oldValue, isSpawn)
+	local onUpdateStorage = EventCallback.onUpdateStorage
+	if onUpdateStorage then
+		onUpdateStorage(self, key, value, oldValue, isSpawn)
+	end
+end

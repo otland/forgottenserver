@@ -2,8 +2,13 @@ local lastQuestUpdate = {}
 
 local ec = EventCallback
 
-ec.onUpdateStorage = function(player, key, value, oldValue, isLogin)
-	if isLogin then
+ec.onUpdateStorage = function(creature, key, value, oldValue, isSpawn)
+	if isSpawn then
+		return
+	end
+
+	local player = Player(creature)
+	if not player then
 		return
 	end
 
