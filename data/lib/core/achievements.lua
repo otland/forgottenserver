@@ -729,7 +729,7 @@ function Player.removeAchievement(self, ach)
 	end
 
 	if self:hasAchievement(achievement.id) then
-		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, -1)
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, nil)
 		if achievement.points > 0 then
 			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
 			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value - achievement.points)

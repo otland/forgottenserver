@@ -2560,6 +2560,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getZone", LuaScriptInterface::luaCreatureGetZone);
 
+	registerMethod("Creature", "getStorageValue", LuaScriptInterface::luaCreatureGetStorageValue);
+	registerMethod("Creature", "setStorageValue", LuaScriptInterface::luaCreatureSetStorageValue);
+
 	// Player
 	registerClass("Player", "Creature", LuaScriptInterface::luaPlayerCreate);
 	registerMetaMethod("Player", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -2658,9 +2661,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getBankBalance", LuaScriptInterface::luaPlayerGetBankBalance);
 	registerMethod("Player", "setBankBalance", LuaScriptInterface::luaPlayerSetBankBalance);
 
-	registerMethod("Player", "getStorageValue", LuaScriptInterface::luaPlayerGetStorageValue);
-	registerMethod("Player", "setStorageValue", LuaScriptInterface::luaPlayerSetStorageValue);
-
 	registerMethod("Player", "addItem", LuaScriptInterface::luaPlayerAddItem);
 	registerMethod("Player", "addItemEx", LuaScriptInterface::luaPlayerAddItemEx);
 	registerMethod("Player", "removeItem", LuaScriptInterface::luaPlayerRemoveItem);
@@ -2750,6 +2750,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "getClientStaminaBonusDisplay", LuaScriptInterface::luaPlayerGetClientStaminaBonusDisplay);
 	registerMethod("Player", "setClientStaminaBonusDisplay", LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay);
+
+	registerMethod("Player", "getClientLowLevelBonusDisplay",
+	               LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay);
+	registerMethod("Player", "setClientLowLevelBonusDisplay",
+	               LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -8642,6 +8647,46 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureGetStorageValue(lua_State* L)
+{
+	// creature:getStorageValue(key)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	if (auto storage = creature->getStorageValue(key)) {
+		lua_pushnumber(L, storage.value());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
+{
+	// creature:setStorageValue(key, value)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint32_t key = getNumber<uint32_t>(L, 2);
+	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
+		reportErrorFunc(L, fmt::format("Accessing reserved range: {:d}", key));
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	int32_t value = getNumber<int32_t>(L, 3);
+	creature->setStorageValue(key, value);
+	pushBoolean(L, true);
+	return 1;
+}
+
 // Player
 int LuaScriptInterface::luaPlayerCreate(lua_State* L)
 {
@@ -9681,46 +9726,6 @@ int LuaScriptInterface::luaPlayerSetBankBalance(lua_State* L)
 
 	player->setBankBalance(balance);
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerGetStorageValue(lua_State* L)
-{
-	// player:getStorageValue(key)
-	Player* player = getUserdata<Player>(L, 1);
-	if (!player) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	uint32_t key = getNumber<uint32_t>(L, 2);
-	int32_t value;
-	if (player->getStorageValue(key, value)) {
-		lua_pushnumber(L, value);
-	} else {
-		lua_pushnumber(L, -1);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerSetStorageValue(lua_State* L)
-{
-	// player:setStorageValue(key, value)
-	int32_t value = getNumber<int32_t>(L, 3);
-	uint32_t key = getNumber<uint32_t>(L, 2);
-	Player* player = getUserdata<Player>(L, 1);
-	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
-		reportErrorFunc(L, fmt::format("Accessing reserved range: {:d}", key));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	if (player) {
-		player->addStorageValue(key, value);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
 	return 1;
 }
 
@@ -10960,6 +10965,32 @@ int LuaScriptInterface::luaPlayerSetClientStaminaBonusDisplay(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		player->setClientStaminaBonusDisplay(getNumber<uint16_t>(L, 2));
+		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay(lua_State* L)
+{
+	// player:getClientLowLevelBonusDisplay()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getClientLowLevelBonusDisplay());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
+{
+	// player:setClientLowLevelBonusDisplay(value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setClientLowLevelBonusDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
 	} else {
