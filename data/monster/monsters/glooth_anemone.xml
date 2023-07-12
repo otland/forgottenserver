@@ -16,6 +16,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Plant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Glooth Anemone Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="60" attack="50" />
 		<attack name="earth" interval="2000" chance="9" range="7" target="1" radius="4" min="-100" max="-200">

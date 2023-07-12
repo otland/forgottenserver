@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="100" />
 	</flags>
+	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Mutated Tiger Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="physical" interval="2000" chance="20" length="5" spread="3" min="0" max="-200">

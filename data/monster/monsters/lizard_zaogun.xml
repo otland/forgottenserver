@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lizard Zaogun Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-349" />
 		<attack name="earth" interval="2000" chance="15" range="7" radius="1" target="1" min="-220" max="-375">

@@ -413,10 +413,7 @@ enum PlayerSex_t : uint8_t
 	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
-enum Vocation_t : uint16_t
-{
-	VOCATION_NONE = 0
-};
+inline constexpr uint16_t VOCATION_NONE = 0;
 
 enum ReturnValue
 {

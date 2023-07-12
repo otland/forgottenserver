@@ -840,6 +840,9 @@ private:
 
 	static int luaCreatureGetZone(lua_State* L);
 
+	static int luaCreatureGetStorageValue(lua_State* L);
+	static int luaCreatureSetStorageValue(lua_State* L);
+
 	// Player
 	static int luaPlayerCreate(lua_State* L);
 
@@ -937,9 +940,6 @@ private:
 	static int luaPlayerGetBankBalance(lua_State* L);
 	static int luaPlayerSetBankBalance(lua_State* L);
 
-	static int luaPlayerGetStorageValue(lua_State* L);
-	static int luaPlayerSetStorageValue(lua_State* L);
-
 	static int luaPlayerAddItem(lua_State* L);
 	static int luaPlayerAddItemEx(lua_State* L);
 	static int luaPlayerRemoveItem(lua_State* L);
@@ -1021,6 +1021,7 @@ private:
 	static int luaPlayerIsNearDepotBox(lua_State* L);
 
 	static int luaPlayerGetIdleTime(lua_State* L);
+	static int luaPlayerResetIdleTime(lua_State* L);
 
 	static int luaPlayerSendCreatureSquare(lua_State* L);
 
@@ -1029,6 +1030,9 @@ private:
 
 	static int luaPlayerGetClientStaminaBonusDisplay(lua_State* L);
 	static int luaPlayerSetClientStaminaBonusDisplay(lua_State* L);
+
+	static int luaPlayerGetClientLowLevelBonusDisplay(lua_State* L);
+	static int luaPlayerSetClientLowLevelBonusDisplay(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

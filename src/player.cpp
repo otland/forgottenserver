@@ -702,11 +702,11 @@ uint16_t Player::getLookCorpse() const
 	return ITEM_MALE_CORPSE;
 }
 
-void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin /* = false*/)
+void Player::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn /* = false*/)
 {
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
 		if (IS_IN_KEYRANGE(key, OUTFITS_RANGE)) {
-			outfits.emplace_back(value >> 16, value & 0xFF);
+			outfits.emplace_back(value.value_or(0) >> 16, value.value_or(0) & 0xFF);
 			return;
 		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
 			// do nothing
@@ -716,28 +716,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		}
 	}
 
-	int32_t oldValue;
-	getStorageValue(key, oldValue);
-
-	if (value != -1) {
-		storageMap[key] = value;
-	} else {
-		storageMap.erase(key);
-	}
-
-	g_events->eventPlayerOnUpdateStorage(this, key, oldValue, value, isLogin);
-}
-
-bool Player::getStorageValue(const uint32_t key, int32_t& value) const
-{
-	auto it = storageMap.find(key);
-	if (it == storageMap.end()) {
-		value = -1;
-		return false;
-	}
-
-	value = it->second;
-	return true;
+	Creature::setStorageValue(key, value, isSpawn);
 }
 
 bool Player::canSee(const Position& pos) const
@@ -3934,7 +3913,7 @@ void Player::genReservedStorageRange()
 	// generate outfits range
 	uint32_t base_key = PSTRG_OUTFITS_RANGE_START;
 	for (const OutfitEntry& entry : outfits) {
-		storageMap[++base_key] = (entry.lookType << 16) | entry.addons;
+		Creature::setStorageValue(++base_key, (entry.lookType << 16) | entry.addons, true);
 	}
 }
 
@@ -4342,14 +4321,11 @@ uint16_t Player::getRandomMount() const
 
 uint16_t Player::getCurrentMount() const
 {
-	int32_t value;
-	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, value)) {
-		return value;
-	}
-	return 0;
+	auto storage = getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT);
+	return storage.value_or(0);
 }
 
-void Player::setCurrentMount(uint16_t mountId) { addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
+void Player::setCurrentMount(uint16_t mountId) { setStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
 
 bool Player::toggleMount(bool mount)
 {
@@ -4431,14 +4407,7 @@ bool Player::tameMount(uint16_t mountId)
 	const uint8_t tmpMountId = mountId - 1;
 	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (getStorageValue(key, value)) {
-		value |= (1 << (tmpMountId % 31));
-	} else {
-		value = (1 << (tmpMountId % 31));
-	}
-
-	addStorageValue(key, value);
+	setStorageValue(key, getStorageValue(key).value_or(0) | (1 << (tmpMountId % 31)));
 	return true;
 }
 
@@ -4448,16 +4417,10 @@ bool Player::untameMount(uint16_t mountId)
 		return false;
 	}
 
-	const uint16_t tmpMountId = mountId - 1;
-	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
+	uint16_t tmpMountId = mountId - 1;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (!getStorageValue(key, value)) {
-		return true;
-	}
-
-	value &= ~(1 << (tmpMountId % 31));
-	addStorageValue(key, value);
+	setStorageValue(key, getStorageValue(key).value_or(0) & ~(1 << (tmpMountId % 31)));
 
 	if (getCurrentMount() == mountId) {
 		if (isMounted()) {
@@ -4481,14 +4444,10 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	const uint16_t tmpMountId = mount->id - 1;
+	uint16_t tmpMountId = mount->id - 1;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
-		return false;
-	}
-
-	return ((1 << (tmpMountId % 31)) & value) != 0;
+	return ((1 << (tmpMountId % 31)) & getStorageValue(key).value_or(0)) != 0;
 }
 
 bool Player::hasMounts() const
