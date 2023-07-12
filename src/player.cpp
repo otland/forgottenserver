@@ -4328,9 +4328,9 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	return GUILDEMBLEM_NEUTRAL;
 }
 
-uint8_t Player::getRandomMount() const
+uint16_t Player::getRandomMount() const
 {
-	std::vector<uint8_t> mountsId;
+	std::vector<uint16_t> mountsId;
 	for (const Mount& mount : g_game.mounts.getMounts()) {
 		if (hasMount(&mount)) {
 			mountsId.push_back(mount.id);
@@ -4340,7 +4340,7 @@ uint8_t Player::getRandomMount() const
 	return mountsId[uniform_random(0, mountsId.size() - 1)];
 }
 
-uint8_t Player::getCurrentMount() const
+uint16_t Player::getCurrentMount() const
 {
 	int32_t value;
 	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, value)) {
@@ -4349,7 +4349,7 @@ uint8_t Player::getCurrentMount() const
 	return 0;
 }
 
-void Player::setCurrentMount(uint8_t mountId) { addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
+void Player::setCurrentMount(uint16_t mountId) { addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
 
 bool Player::toggleMount(bool mount)
 {
@@ -4422,7 +4422,7 @@ bool Player::toggleMount(bool mount)
 	return true;
 }
 
-bool Player::tameMount(uint8_t mountId)
+bool Player::tameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
@@ -4442,13 +4442,13 @@ bool Player::tameMount(uint8_t mountId)
 	return true;
 }
 
-bool Player::untameMount(uint8_t mountId)
+bool Player::untameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
 	}
 
-	const uint8_t tmpMountId = mountId - 1;
+	const uint16_t tmpMountId = mountId - 1;
 	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
 	int32_t value;
@@ -4481,7 +4481,7 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	const uint8_t tmpMountId = mount->id - 1;
+	const uint16_t tmpMountId = mount->id - 1;
 
 	int32_t value;
 	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
