@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  forgottenserver_db:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: forgottenserver
+      MYSQL_DATABASE: forgottenserver
+      MYSQL_USER: forgottenserver
+      MYSQL_PASSWORD: forgottenserver
+    ports:
+      - "3306:3306"
+
+  db_setup:
+    image: mysql:8.0
+    volumes:
+      - ./schema.sql:/scripts/schema.sql
+    depends_on:
+      - forgottenserver_db
+    command: bash -c "sleep 10 && mysql --host=forgottenserver_db --user=root --password=forgottenserver --database=forgottenserver < /scripts/schema.sql"
