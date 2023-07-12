@@ -26,7 +26,7 @@ function onLogin(player)
 	player:updateClientExpDisplay()
 
 	-- achievements points for highscores
-	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == -1 then
+	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == nil then
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
 
