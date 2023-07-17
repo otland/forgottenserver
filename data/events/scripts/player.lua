@@ -253,7 +253,7 @@ local function useStamina(player)
 	player:setStamina(staminaMinutes)
 end
 
-function Player:onGainExperience(source, exp, rawExp)
+function Player:onGainExperience(source, exp, rawExp, sendText)
 	if not source or source:isPlayer() then
 		return exp
 	end
@@ -285,8 +285,21 @@ function Player:onGainExperience(source, exp, rawExp)
 	-- Apply low level bonus
 	exp = exp * (1 + self:calculateLowLevelBonus(level) / 100)
 
+	if sendText then
+		local pos = self:getPosition()
+		local expString = exp .. (exp ~= 1 and " experience points." or " experience point.")
+		self:sendTextMessage(MESSAGE_EXPERIENCE, "You gained " .. expString, pos, exp, TEXTCOLOR_WHITE_EXP)
+
+		local spectators = Game.getSpectators(pos, false, true)
+		for _, spectator in ipairs(spectators) do
+			if spectator ~= self then
+				spectator:sendTextMessage(MESSAGE_EXPERIENCE_OTHERS, self:getName() .. " gained " .. expString)
+			end
+		end
+	end
+
 	local onGainExperience = EventCallback.onGainExperience
-	return onGainExperience and onGainExperience(self, source, exp, rawExp) or exp
+	return onGainExperience and onGainExperience(self, source, exp, rawExp, sendText) or exp
 end
 
 function Player:onLoseExperience(exp)
