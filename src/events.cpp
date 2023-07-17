@@ -1084,7 +1084,8 @@ void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t&
 	scriptInterface.callFunction(5);
 }
 
-void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp, bool sendText)
+void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp,
+                                         bool sendText)
 {
 	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
 	if (info.playerOnGainExperience == -1) {
