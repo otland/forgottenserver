@@ -979,6 +979,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 					abilities.skills[SKILL_FISHING] = pugi::cast<int32_t>(valueAttribute.value());
 					break;
 				}
+				
+				case ITEM_PARSE_SKILLRUNECRAFT: {
+					abilities.skills[SKILL_RUNECRAFT] = pugi::cast<int32_t>(valueAttribute.value());
+					break;
+				}
 
 				case ITEM_PARSE_SKILLSHIELD: {
 					abilities.skills[SKILL_SHIELD] = pugi::cast<int32_t>(valueAttribute.value());

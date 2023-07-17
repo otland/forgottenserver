@@ -73,6 +73,8 @@ CREATE TABLE IF NOT EXISTS `players` (
   `skill_shielding_tries` bigint unsigned NOT NULL DEFAULT 0,
   `skill_fishing` int unsigned NOT NULL DEFAULT 10,
   `skill_fishing_tries` bigint unsigned NOT NULL DEFAULT 0,
+  `skill_runecraft` int unsigned NOT NULL DEFAULT 10,
+  `skill_runecraft_tries` bigint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE,
@@ -363,7 +365,7 @@ CREATE TABLE IF NOT EXISTS `towns` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '35'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '36'), ('players_record', '0');
 
 DROP TRIGGER IF EXISTS `ondelete_players`;
 DROP TRIGGER IF EXISTS `oncreate_guilds`;

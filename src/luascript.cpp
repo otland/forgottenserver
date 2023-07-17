@@ -1307,6 +1307,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SKILL_DISTANCE);
 	registerEnum(CONDITION_PARAM_SKILL_SHIELD);
 	registerEnum(CONDITION_PARAM_SKILL_FISHING);
+	registerEnum(CONDITION_PARAM_SKILL_RUNECRAFT);
 	registerEnum(CONDITION_PARAM_STAT_MAXHITPOINTS);
 	registerEnum(CONDITION_PARAM_STAT_MAXMANAPOINTS);
 	registerEnum(CONDITION_PARAM_STAT_MAGICPOINTS);
@@ -1322,6 +1323,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONDITION_PARAM_SKILL_DISTANCEPERCENT);
 	registerEnum(CONDITION_PARAM_SKILL_SHIELDPERCENT);
 	registerEnum(CONDITION_PARAM_SKILL_FISHINGPERCENT);
+	registerEnum(CONDITION_PARAM_SKILL_RUNECRAFTPERCENT);
 	registerEnum(CONDITION_PARAM_BUFF_SPELL);
 	registerEnum(CONDITION_PARAM_SUBID);
 	registerEnum(CONDITION_PARAM_FIELD);
@@ -1804,6 +1806,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(SKILL_DISTANCE);
 	registerEnum(SKILL_SHIELD);
 	registerEnum(SKILL_FISHING);
+	registerEnum(SKILL_RUNECRAFT);
 	registerEnum(SKILL_MAGLEVEL);
 	registerEnum(SKILL_LEVEL);
 

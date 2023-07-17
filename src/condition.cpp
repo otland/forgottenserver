@@ -667,6 +667,16 @@ bool ConditionAttributes::setParam(ConditionParam_t param, int32_t value)
 			skillsPercent[SKILL_FISHING] = value;
 			return true;
 		}
+		
+		case CONDITION_PARAM_SKILL_RUNECRAFT: {
+			skills[SKILL_RUNECRAFT] = value;
+			return true;
+		}
+
+		case CONDITION_PARAM_SKILL_RUNECRAFTPERCENT: {
+			skillsPercent[SKILL_RUNECRAFT] = value;
+			return true;
+		}
 
 		case CONDITION_PARAM_STAT_MAXHITPOINTS: {
 			stats[STAT_MAXHITPOINTS] = value;
@@ -787,6 +797,12 @@ int32_t ConditionAttributes::getParam(ConditionParam_t param)
 
 		case CONDITION_PARAM_SKILL_FISHINGPERCENT:
 			return skillsPercent[SKILL_FISHING];
+		
+		case CONDITION_PARAM_SKILL_RUNECRAFT:
+			return skills[SKILL_RUNECRAFT];
+
+		case CONDITION_PARAM_SKILL_RUNECRAFTPERCENT:
+			return skillsPercent[SKILL_RUNECRAFT];
 
 		case CONDITION_PARAM_STAT_MAXHITPOINTS:
 			return stats[STAT_MAXHITPOINTS];

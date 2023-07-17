@@ -63,7 +63,7 @@ private:
 	std::string name = "none";
 	std::string description;
 
-	double skillMultipliers[SKILL_LAST + 1] = {1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1};
+	double skillMultipliers[SKILL_LAST + 1] = {1.5, 2.0, 2.0, 2.0, 2.0, 1.5, 1.1, 1.1};
 	float manaMultiplier = 4.0f;
 
 	uint32_t gainHealthTicks = 6;

@@ -5,6 +5,8 @@ local function getSkillId(skillName)
 		return SKILL_SWORD
 	elseif skillName == "axe" then
 		return SKILL_AXE
+	elseif skillName == "runecraft" then
+		return SKILL_RUNECRAFT
 	elseif skillName:sub(1, 4) == "dist" then
 		return SKILL_DISTANCE
 	elseif skillName:sub(1, 6) == "shield" then
