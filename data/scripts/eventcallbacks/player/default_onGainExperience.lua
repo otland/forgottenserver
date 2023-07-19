@@ -52,6 +52,9 @@ function default.onGainExperience(player, source, exp, rawExp, sendText)
 	-- Apply experience stage multiplier
 	exp = exp * Game.getExperienceStage(level)
 
+	-- Apply low level bonus
+	exp = exp * (1 + player:calculateLowLevelBonus(level) / 100)
+
 	-- Stamina modifier
 	if configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
 		useStamina(player)
@@ -63,9 +66,6 @@ function default.onGainExperience(player, source, exp, rawExp, sendText)
 			exp = exp * 0.5
 		end
 	end
-
-	-- Apply low level bonus
-	exp = exp * (1 + player:calculateLowLevelBonus(level) / 100)
 	return exp
 end
 
