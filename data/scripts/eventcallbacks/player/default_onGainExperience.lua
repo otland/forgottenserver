@@ -77,7 +77,7 @@ default:register()
 local message = EventCallback
 
 function message.onGainExperience(player, source, exp, rawExp, sendText)
-	if sendText then
+	if sendText and exp ~= 0 then
 		local pos = player:getPosition()
 		local expString = exp .. (exp ~= 1 and " experience points." or " experience point.")
 		player:sendTextMessage(MESSAGE_EXPERIENCE, "You gained " .. expString, pos, exp, TEXTCOLOR_WHITE_EXP)
