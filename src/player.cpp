@@ -829,7 +829,7 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
-		return it->second;
+		return it->second.get();
 	}
 
 	if (!autoCreate) {
@@ -841,9 +841,9 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
+	it = depotChests.emplace(depotId, std::make_shared<DepotChest>(depotItemId)).first;
 	it->second->setMaxDepotItems(getMaxDepotItems());
-	return it->second;
+	return it->second.get();
 }
 
 DepotLocker& Player::getDepotLocker()
@@ -3218,7 +3218,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second == depotChest) {
+						if (it.second.get() == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
