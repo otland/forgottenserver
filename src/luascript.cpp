@@ -16893,7 +16893,7 @@ int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 	// talkAction:separator(sep)
 	TalkAction* talk = getUserdata<TalkAction>(L, 1);
 	if (talk) {
-		talk->setSeparator(getString(L, 2).c_str());
+		talk->setSeparator(getString(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
