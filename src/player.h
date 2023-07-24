@@ -21,8 +21,6 @@ class Npc;
 class Party;
 class SchedulerTask;
 
-using DepotChest_ptr = std::shared_ptr<DepotChest>;
-
 enum skillsid_t
 {
 	SKILLVALUE_LEVEL = 0,
@@ -1172,7 +1170,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, DepotChest_ptr> depotChests;
+	std::map<uint32_t, std::shared_ptr<DepotChest>> depotChests;
 
 	std::vector<OutfitEntry> outfits;
 	GuildWarVector guildWarVector;
