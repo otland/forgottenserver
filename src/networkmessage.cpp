@@ -95,6 +95,12 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(0x00); // quiver ammo count
 	} else if (it.classification > 0) {
 		addByte(0x00); // item tier (0-10)
+	} else if (it.showClientCharges || it.showCharges) {
+		add<uint32_t>(it.charges);
+		addByte(0x00);
+	} else if (it.showClientDuration || it.showDuration) {
+		add<uint32_t>(it.decayTime);
+		addByte(0x00);
 	}
 
 	if (it.isPodium()) {
@@ -117,6 +123,14 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(fluidMap[item->getFluidType() & 7]);
 	} else if (it.classification > 0) {
 		addByte(0x00); // item tier (0-10)
+	}
+
+	if (it.showClientCharges || it.showCharges) {
+		add<uint32_t>(item->getCharges());
+		addByte(0);
+	} else if (it.showClientDuration || it.showDuration) {
+		add<uint32_t>(item->getDuration() / 1000);
+		addByte(0);
 	}
 
 	if (it.isContainer()) {
