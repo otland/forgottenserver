@@ -1084,9 +1084,10 @@ void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t&
 	scriptInterface.callFunction(5);
 }
 
-void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
+void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp,
+                                         bool sendText)
 {
-	// Player:onGainExperience(source, exp, rawExp) rawExp gives the original exp which is not multiplied
+	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
 	if (info.playerOnGainExperience == -1) {
 		return;
 	}
@@ -1114,8 +1115,9 @@ void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint6
 
 	lua_pushnumber(L, exp);
 	lua_pushnumber(L, rawExp);
+	LuaScriptInterface::pushBoolean(L, sendText);
 
-	if (scriptInterface.protectedCall(L, 4, 1) != 0) {
+	if (scriptInterface.protectedCall(L, 5, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
