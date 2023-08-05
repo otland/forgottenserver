@@ -1,6 +1,19 @@
 name: Unit tests
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - CMakePresets.json
+
+  pull_request:
+    paths:
+      - cmake/**
+      - src/**
+      - CMakeLists.txt
+      - CMakePresets.json
 
 jobs:
   test:
