@@ -97,10 +97,10 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(0x00); // item tier (0-10)
 	} else if (it.showClientCharges) {
 		add<uint32_t>(it.charges);
-		addByte(0x00); // ??
+		addByte(0x00); // boolean (is brand new)
 	} else if (it.showClientDuration) {
 		add<uint32_t>(it.decayTime);
-		addByte(0x00); // ??
+		addByte(0x00); // boolean (is brand new)
 	}
 
 	if (it.isPodium()) {
@@ -127,10 +127,10 @@ void NetworkMessage::addItem(const Item* item)
 
 	if (it.showClientCharges) {
 		add<uint32_t>(item->getCharges());
-		addByte(0); // ??
+		addByte(0); // boolean (is brand new)
 	} else if (it.showClientDuration) {
 		add<uint32_t>(item->getDuration() / 1000);
-		addByte(0); // ??
+		addByte(0); // boolean (is brand new)
 	}
 
 	if (it.isContainer()) {
