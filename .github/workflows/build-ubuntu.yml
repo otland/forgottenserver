@@ -61,7 +61,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: default
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: default
 
       - name: Perform CodeQL Analysis

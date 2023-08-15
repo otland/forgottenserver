@@ -6,10 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      CC: gcc
-      CXX: g++
-
     steps:
       - uses: actions/checkout@v3
 
@@ -29,5 +25,6 @@ jobs:
         with:
           buildPreset: default
           configurePreset: default
-          configurePresetAdditionalArgs: "['-G Ninja', '-DENABLE_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-DENABLE_TESTING=ON']"
           testPreset: default
+          testPresetAdditionalArgs: "['--build-config', 'Debug']"
