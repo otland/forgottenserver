@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quests>
+	<quest name="Example Quest I" startstorageid="1001" startstoragevalue="1">
+		<mission name="Example Mission 1" storageid="1001" startvalue="1" endvalue="3" ignoreendvalue="true">
+			<missionstate id="1" description="Example description 1" />
+			<missionstate id="2" description="Example description 2" />
+			<missionstate id="3" description="Example description 3" />
+		</mission>
+		<mission name="Example Mission 2" storageid="1001" startvalue="4" endvalue="5">
+			<missionstate id="4" description="Example description 1" />
+			<missionstate id="5" description="Example description 2" />
+		</mission>
+	</quest>
+</quests>
