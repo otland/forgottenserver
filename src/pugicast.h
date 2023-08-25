@@ -10,6 +10,11 @@ template <class T>
 T cast(const char* str);
 
 template <>
+inline const char* cast(const char* str)
+{
+	return str;
+}
+template <>
 inline float cast(const char* str)
 {
 	return std::strtof(str, nullptr);
