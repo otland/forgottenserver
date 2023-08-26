@@ -520,13 +520,13 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// g_game.addMagicEffect(Position(std::floor(yi + 0.1),x,z), CONST_ME_POFF); // debugging
-		//0.1 is necessary to avoid loss of precision during calculation
+		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
 		}
 		yi += slope;
 	}
-	
+
 	return true;
 }
 
@@ -541,7 +541,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// g_game.addMagicEffect(Position(x,std::floor(yi + 0.1),z), CONST_ME_EXPLOSIONHIT); // debugging
-		//0.1 is necessary to avoid loss of precision during calculation
+		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
 			return false;
 		}
