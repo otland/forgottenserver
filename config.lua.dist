@@ -89,6 +89,7 @@ premiumToSendPrivate = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 checkDuplicateStorageKeys = false
+originalSightCalculation = true
 
 -- VIP and Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
