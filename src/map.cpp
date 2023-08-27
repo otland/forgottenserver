@@ -565,7 +565,6 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 		return true;
 	}
 
-
 	// from top to bottom
 	float modifier = 0;
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
