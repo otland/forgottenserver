@@ -705,11 +705,11 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 	const Position& thingPos = thing->getPosition();
 	const Position& npcPos = npc->getPosition();
 	if (npcPos.z != thingPos.z) {
-		lua_pushnumber(L, -1);
+		lua_pushinteger(L, -1);
 	} else {
 		int32_t dist =
 		    std::max<int32_t>(Position::getDistanceX(npcPos, thingPos), Position::getDistanceY(npcPos, thingPos));
-		lua_pushnumber(L, dist);
+		lua_pushinteger(L, dist);
 	}
 	return 1;
 }
@@ -729,7 +729,7 @@ int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 	// getNpcCid()
 	Npc* npc = getScriptEnv()->getNpc();
 	if (npc) {
-		lua_pushnumber(L, npc->getID());
+		lua_pushinteger(L, npc->getID());
 	} else {
 		lua_pushnil(L);
 	}
@@ -907,7 +907,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
-				lua_pushnumber(L, sellCount);
+				lua_pushinteger(L, sellCount);
 				return 1;
 			}
 
@@ -923,7 +923,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
-				lua_pushnumber(L, sellCount);
+				lua_pushinteger(L, sellCount);
 				return 1;
 			}
 
@@ -931,7 +931,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 		}
 	}
 
-	lua_pushnumber(L, sellCount);
+	lua_pushinteger(L, sellCount);
 	return 1;
 }
 
@@ -1189,7 +1189,7 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	scriptInterface->pushFunction(creatureSayEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, type);
+	lua_pushinteger(L, type);
 	LuaScriptInterface::pushString(L, text);
 	scriptInterface->callFunction(3);
 }
@@ -1215,9 +1215,9 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 	LuaScriptInterface::pushCallback(L, callback);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	lua_pushnumber(L, itemId);
-	lua_pushnumber(L, count);
-	lua_pushnumber(L, amount);
+	lua_pushinteger(L, itemId);
+	lua_pushinteger(L, count);
+	lua_pushinteger(L, amount);
 	LuaScriptInterface::pushBoolean(L, ignore);
 	LuaScriptInterface::pushBoolean(L, inBackpacks);
 	scriptInterface->callFunction(6);
