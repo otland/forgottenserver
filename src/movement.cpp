@@ -1022,7 +1022,7 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCh
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 	tfs::lua::pushThing(L, item);
-	lua_pushnumber(L, slot);
+	lua_pushinteger(L, slot);
 	tfs::lua::pushBoolean(L, isCheck);
 
 	return scriptInterface->callFunction(4);
