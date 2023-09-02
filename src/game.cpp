@@ -182,9 +182,12 @@ void Game::saveGameState()
 	}
 }
 
-bool Game::loadMainMap(const std::string& filename) { return map.loadMap("data/world/" + filename + ".otbm", true); }
+bool Game::loadMainMap(const std::string& filename)
+{
+	return map.loadMap("data/world/" + filename + ".otbm", true, false);
+}
 
-void Game::loadMap(const std::string& path) { map.loadMap(path, false); }
+void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {

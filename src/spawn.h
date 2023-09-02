@@ -67,7 +67,7 @@ class Spawns
 public:
 	static bool isInZone(const Position& centerPos, int32_t radius, const Position& pos);
 
-	bool loadFromXml(const std::string& filename);
+	bool loadFromXml(const std::string& filename, bool isLuaLoad = false);
 	void startup();
 	void clear();
 

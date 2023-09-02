@@ -102,7 +102,7 @@ public:
 	 * \param map pointer to the Map class
 	 * \returns Returns true if the spawns were loaded successfully
 	 */
-	static bool loadSpawns(Map* map)
+	static bool loadSpawns(Map* map, bool isCalledByLua)
 	{
 		if (map->spawnfile.empty()) {
 			// OTBM file doesn't tell us about the spawnfile, lets guess it is mapname-spawn.xml.
@@ -110,7 +110,7 @@ public:
 			map->spawnfile += "-spawn.xml";
 		}
 
-		return map->spawns.loadFromXml(map->spawnfile.string());
+		return map->spawns.loadFromXml(map->spawnfile.string(), isCalledByLua);
 	}
 
 	/* Load the houses (not house tile-data)
