@@ -294,7 +294,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->experience = experience;
 
 	if (currExpCount < nextExpCount) {
-		player->levelPercent = static_cast<uint8_t>(Player::getPercentLevel(player->experience - currExpCount, nextExpCount - currExpCount) / 100);
+		player->levelPercent = static_cast<uint8_t>(
+		    Player::getPercentLevel(player->experience - currExpCount, nextExpCount - currExpCount) / 100);
 	} else {
 		player->levelPercent = 0;
 	}
