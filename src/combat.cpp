@@ -438,6 +438,18 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 	return false;
 }
 
+bool Combat::setParam(CombatParam_t param, std::string value)
+{
+	switch (param) {
+		case COMBAT_PARAM_DISABLECREATUREEVENT: {
+			params.disabledEvents.insert(value);
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int32_t Combat::getParam(CombatParam_t param)
 {
 	switch (param) {
@@ -829,9 +841,9 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 			}
 		}
 
-		success = g_game.combatChangeHealth(caster, target, damage);
+		success = g_game.combatChangeHealth(caster, target, damage, &params.disabledEvents);
 	} else {
-		success = g_game.combatChangeMana(caster, target, damage);
+		success = g_game.combatChangeMana(caster, target, damage, &params.disabledEvents);
 	}
 
 	if (success) {

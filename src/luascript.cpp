@@ -1235,6 +1235,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(COMBAT_PARAM_AGGRESSIVE);
 	registerEnum(COMBAT_PARAM_DISPEL);
 	registerEnum(COMBAT_PARAM_USECHARGES);
+	registerEnum(COMBAT_PARAM_DISABLECREATUREEVENT);
 
 	registerEnum(CONDITION_NONE);
 	registerEnum(CONDITION_POISON);
@@ -13477,11 +13478,19 @@ int LuaScriptInterface::luaCombatSetParameter(lua_State* L)
 	uint32_t value;
 	if (isBoolean(L, 3)) {
 		value = getBoolean(L, 3) ? 1 : 0;
-	} else {
+		combat->setParam(key, value);
+		pushBoolean(L, true);
+	} else if (isNumber(L, 3)) {
 		value = getNumber<uint32_t>(L, 3);
+		combat->setParam(key, value);
+		pushBoolean(L, true);
+	} else if (isString(L, 3)) {
+		std::string str = getString(L, 3);
+		combat->setParam(COMBAT_PARAM_DISABLECREATUREEVENT, str);
+		pushBoolean(L, true);
+	} else {
+		pushBoolean(L, false);
 	}
-	combat->setParam(key, value);
-	pushBoolean(L, true);
 	return 1;
 }
 

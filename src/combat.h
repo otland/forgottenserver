@@ -16,6 +16,8 @@ struct Position;
 class SpectatorVec;
 class Tile;
 
+using DisabledCreatureEventsSet = std::set<std::string>;
+
 // for luascript callback
 class ValueCallback final : public CallBack
 {
@@ -62,6 +64,7 @@ struct CombatParams
 	bool aggressive = true;
 	bool useCharges = false;
 	bool ignoreResistances = false;
+	DisabledCreatureEventsSet disabledEvents;
 };
 
 class AreaCombat
@@ -111,6 +114,7 @@ public:
 	CallBack* getCallback(CallBackParam_t key);
 
 	bool setParam(CombatParam_t param, uint32_t value);
+	bool setParam(CombatParam_t param, std::string value);
 	int32_t getParam(CombatParam_t param);
 
 	void setArea(AreaCombat* area);
