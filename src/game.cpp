@@ -4377,6 +4377,26 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 					damage.secondary.value = std::max<int32_t>(0, damage.secondary.value + damage.primary.value);
 					damage.primary.value = 0;
 				}
+
+				if (attackerPlayer) {
+					attackerPlayer->sendCombatAnalyzer(damage.primary.type, damage.primary.value,
+					                                   DamageAnalyzerImpactType::DEALT, target->getName());
+					if (damage.secondary.type != COMBAT_NONE) {
+						attackerPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+						                                   DamageAnalyzerImpactType::DEALT, target->getName());
+					}
+				}
+
+				if (targetPlayer) {
+					targetPlayer->sendCombatAnalyzer(damage.primary.type, manaDamage,
+					                                 DamageAnalyzerImpactType::RECEIVED,
+					                                 attacker ? attacker->getName() : "(other)");
+					if (damage.secondary.type != COMBAT_NONE) {
+						targetPlayer->sendCombatAnalyzer(damage.secondary.type, damage.secondary.value,
+						                                 DamageAnalyzerImpactType::RECEIVED,
+						                                 attacker ? attacker->getName() : "(other)");
+					}
+				}
 			}
 		}
 
