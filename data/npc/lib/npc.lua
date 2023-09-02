@@ -18,9 +18,9 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 		local stuff
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			stuff:addItem(itemid, math.min(100, amount))
+			stuff:addItem(itemid, math.min(Game.getMaxStackSize(), amount))
 		else
-			stuff = Game.createItem(itemid, math.min(100, amount))
+			stuff = Game.createItem(itemid, math.min(Game.getMaxStackSize(), amount))
 		end
 		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
 	end
