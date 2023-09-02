@@ -1892,14 +1892,15 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
-uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
+uint16_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 {
 	if (nextLevelCount == 0) {
 		return 0;
 	}
 
-	uint8_t result = (count * 100) / nextLevelCount;
-	if (result > 100) {
+	uint16_t result = ((count * 100.) / nextLevelCount * 100.);
+	if (result > 10000) {
+
 		return 0;
 	}
 	return result;
