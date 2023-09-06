@@ -94,6 +94,8 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
+	using Creature::onWalk;
+
 	Npc* getNpc() override { return this; }
 	const Npc* getNpc() const override { return this; }
 

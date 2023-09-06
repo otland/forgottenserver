@@ -27,6 +27,9 @@ class Monster final : public Creature
 {
 public:
 	static Monster* createMonster(const std::string& name);
+
+	using Creature::onWalk;
+
 	static int32_t despawnRange;
 	static int32_t despawnRadius;
 

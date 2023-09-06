@@ -101,6 +101,8 @@ public:
 	explicit Player(ProtocolGame_ptr p);
 	~Player();
 
+	using Creature::onWalk;
+
 	// non-copyable
 	Player(const Player&) = delete;
 	Player& operator=(const Player&) = delete;
