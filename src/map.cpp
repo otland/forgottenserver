@@ -519,7 +519,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.85 : 0.05));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		// g_game.addMagicEffect(Position(std::floor(yi + 0.1),x,z), CONST_ME_POFF); // debugging
+		// no debug logic :( TFS doesn't need debugging precompiler settings
 		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
@@ -540,7 +540,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.05 : 0.85));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		// g_game.addMagicEffect(Position(x,std::floor(yi + 0.1),z), CONST_ME_EXPLOSIONHIT); // debugging
+		// no debug logic :( TFS doesn't need debugging precompiler settings
 		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
 			return false;
