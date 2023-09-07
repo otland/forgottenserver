@@ -1055,6 +1055,18 @@ void Item::setUniqueId(uint16_t n)
 	}
 }
 
+void Item::setDefaultDuration()
+{
+	uint32_t duration = getDefaultDuration();
+	if (uint32_t durationMax = getDefaultDurationMax()) {
+		duration = normal_random(duration, durationMax);
+	}
+
+	if (duration != 0) {
+		setDuration(duration);
+	}
+}
+
 bool Item::canDecay() const
 {
 	if (isRemoved()) {
