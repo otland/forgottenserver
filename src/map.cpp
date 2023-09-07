@@ -509,17 +509,14 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 
 namespace {
 
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, float modifier = 0)
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
 	if (y1 < y0) {
 		slope *= -1;
 	}
-	float yi = y0 + slope;
-	if (modifier != 0) {
-		yi += modifier;
-	}
+	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.85 : 0.05));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// g_game.addMagicEffect(Position(std::floor(yi + 0.1),x,z), CONST_ME_POFF); // debugging
@@ -533,17 +530,14 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, float modifier = 0)
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
 	if (y1 < y0) {
 		slope *= -1;
 	}
-	float yi = y0 + slope;
-	if (modifier != 0) {
-		yi += modifier;
-	}
+	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.05 : 0.85));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// g_game.addMagicEffect(Position(x,std::floor(yi + 0.1),z), CONST_ME_EXPLOSIONHIT); // debugging
@@ -566,32 +560,19 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	}
 
 	// from top to bottom
-	float modifier = 0;
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && x0 != x1) {
-				modifier = ((x0 < x1) ? 0.85 : 0.05);
-			}
-			return checkSteepLine(y0, x0, y1, x1, z, modifier);
+			return checkSteepLine(y0, x0, y1, x1, z, true);
 		}
-		if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && x0 != x1) {
-			modifier = ((x1 < x0) ? 0.85 : 0.05);
-		}
-		return checkSteepLine(y1, x1, y0, x0, z, modifier);
+		return checkSteepLine(y1, x1, y0, x0, z, false);
 	}
 
 	// from left to right
 	if (x0 > x1) {
-		if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && y0 != y1) {
-			modifier = ((y0 < y1) ? 0.05 : 0.85);
-		}
-		return checkSlightLine(x1, y1, x0, y0, z, modifier);
+		return checkSlightLine(x1, y1, x0, y0, z, true);
 	}
 
-	if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && y0 != y1) {
-		modifier = ((y1 < y0) ? 0.05 : 0.85);
-	}
-	return checkSlightLine(x0, y0, x1, y1, z, modifier);
+	return checkSlightLine(x0, y0, x1, y1, z, false);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
