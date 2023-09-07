@@ -2981,6 +2981,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "hasAllowDistRead", LuaScriptInterface::luaItemTypeHasAllowDistRead);
 	registerMethod("ItemType", "getWieldInfo", LuaScriptInterface::luaItemTypeGetWieldInfo);
 	registerMethod("ItemType", "getDuration", LuaScriptInterface::luaItemTypeGetDuration);
+	registerMethod("ItemType", "getDurationMax", LuaScriptInterface::luaItemTypeGetDurationMax);
 	registerMethod("ItemType", "getLevelDoor", LuaScriptInterface::luaItemTypeGetLevelDoor);
 	registerMethod("ItemType", "getRuneSpellName", LuaScriptInterface::luaItemTypeGetRuneSpellName);
 	registerMethod("ItemType", "getVocationString", LuaScriptInterface::luaItemTypeGetVocationString);
@@ -13217,6 +13218,18 @@ int LuaScriptInterface::luaItemTypeGetDuration(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		lua_pushinteger(L, itemType->decayTime);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetDurationMax(lua_State* L)
+{
+	// itemType:getDurationMax()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->decayTimeMax);
 	} else {
 		lua_pushnil(L);
 	}

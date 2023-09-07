@@ -729,7 +729,7 @@
 	<item id="1497" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="duration" minvalue="14" maxvalue="20" />
 	</item>
 	<item id="1498" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
@@ -737,7 +737,7 @@
 	<item id="1499" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="duration" minvalue="38" maxvalue="45" />
 		<attribute key="blocking" value="true" />
 	</item>
 	<item id="1500" article="a" name="yellow flame">
@@ -19687,12 +19687,12 @@
 	<item id="11098" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="duration" minvalue="14" maxvalue="20" />
 	</item>
 	<item id="11099" article="a" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="duration" minvalue="38" maxvalue="45" />
 	</item>
 	<item id="11100" article="a" name="flask with beaver bait">
 		<attribute key="description" value="It smells like a mixture of wood and fish. Phew." />
@@ -30117,12 +30117,12 @@
 	<item id="20669" article="a" name="magic wall">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="20" />
+		<attribute key="duration" minvalue="14" maxvalue="20" />
 	</item>
 	<item id="20670" name="rush wood">
 		<attribute key="type" value="magicfield" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="45" />
+		<attribute key="duration" minvalue="38" maxvalue="45" />
 		<attribute key="blocking" value="true" />
 	</item>
 	<item fromid="20671" toid="20691" article="a" name="basalt crystal wall" />

@@ -1248,6 +1248,7 @@ private:
 	static int luaItemTypeHasAllowDistRead(lua_State* L);
 	static int luaItemTypeGetWieldInfo(lua_State* L);
 	static int luaItemTypeGetDuration(lua_State* L);
+	static int luaItemTypeGetDurationMax(lua_State* L);
 	static int luaItemTypeGetLevelDoor(lua_State* L);
 	static int luaItemTypeGetRuneSpellName(lua_State* L);
 	static int luaItemTypeGetVocationString(lua_State* L);
