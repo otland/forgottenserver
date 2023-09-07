@@ -569,12 +569,12 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	float modifier = 0;
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			if (!g_config.getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED) && x0 != x1) {
+			if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && x0 != x1) {
 				modifier = ((x0 < x1) ? 0.85 : 0.05);
 			}
 			return checkSteepLine(y0, x0, y1, x1, z, modifier);
 		}
-		if (!g_config.getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED) && x0 != x1) {
+		if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && x0 != x1) {
 			modifier = ((x1 < x0) ? 0.85 : 0.05);
 		}
 		return checkSteepLine(y1, x1, y0, x0, z, modifier);
@@ -582,13 +582,13 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 
 	// from left to right
 	if (x0 > x1) {
-		if (!g_config.getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED) && y0 != y1) {
+		if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && y0 != y1) {
 			modifier = ((y0 < y1) ? 0.05 : 0.85);
 		}
 		return checkSlightLine(x1, y1, x0, y0, z, modifier);
 	}
 
-	if (!g_config.getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED) && y0 != y1) {
+	if (!g_config.getBoolean(ConfigManager::ORIGINAL_SIGHT_CALCULATION) && y0 != y1) {
 		modifier = ((y1 < y0) ? 0.05 : 0.85);
 	}
 	return checkSlightLine(x0, y0, x1, y1, z, modifier);
