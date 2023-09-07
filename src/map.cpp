@@ -509,6 +509,15 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 
 bool Map::checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
+	bool reversed = false;
+	if (y1 < y0) {
+		uint16_t x = x0, y = y0;
+		x0 = x1;
+		y0 = y1;
+		x1 = x;
+		y1 = y;
+		reversed = true;
+	}
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
 	if (y1 < y0) {
@@ -527,8 +536,17 @@ bool Map::checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 	return true;
 }
 
-bool Map::checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed) const
+bool Map::checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
+	bool reversed = false;
+	if (x0 > x1) {
+		uint16_t x = x0, y = y0;
+		x0 = x1;
+		y0 = y1;
+		x1 = x;
+		y1 = y;
+		reversed = true;
+	}
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
 	if (y1 < y0) {
@@ -555,18 +573,9 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 
 	// from top to bottom
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
-		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z, true);
-		}
-		return checkSteepLine(y1, x1, y0, x0, z, false);
+		return checkSteepLine(y0, x0, y1, x1, z);
 	}
-
-	// from left to right
-	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z, true);
-	}
-
-	return checkSlightLine(x0, y0, x1, y1, z, false);
+	return checkSlightLine(x0, y0, x1, y1, z);
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
