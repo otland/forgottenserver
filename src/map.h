@@ -238,6 +238,8 @@ public:
 	 */
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
 	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+	bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed) const;
+	bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 

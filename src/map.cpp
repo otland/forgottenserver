@@ -507,9 +507,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
-namespace {
-
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed)
+bool Map::checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
@@ -519,7 +517,6 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.85 : 0.05));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		// no debug logic :( TFS doesn't need debugging precompiler settings
 		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
@@ -530,7 +527,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed)
+bool Map::checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool reversed) const
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
@@ -540,7 +537,6 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.05 : 0.85));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
-		// no debug logic :( TFS doesn't need debugging precompiler settings
 		// 0.1 is necessary to avoid loss of precision during calculation
 		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
 			return false;
@@ -550,8 +546,6 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 	return true;
 }
-
-} // namespace
 
 bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
