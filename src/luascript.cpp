@@ -15079,8 +15079,8 @@ int LuaScriptInterface::luaCreateLoot(lua_State* L)
 {
 	// Loot() will create a new loot item
 	Loot* loot = new Loot();
-    pushUserdata<Loot>(L, loot);
-    setMetatable(L, -1, "Loot");
+	pushUserdata<Loot>(L, loot);
+	setMetatable(L, -1, "Loot");
 	return 1;
 }
 
@@ -15209,8 +15209,8 @@ int LuaScriptInterface::luaCreateMonsterSpell(lua_State* L)
 {
 	// MonsterSpell() will create a new Monster Spell
 	MonsterSpell* spell = new MonsterSpell();
-    pushUserdata<MonsterSpell>(L, spell);
-    setMetatable(L, -1, "MonsterSpell");
+	pushUserdata<MonsterSpell>(L, spell);
+	setMetatable(L, -1, "MonsterSpell");
 	return 1;
 }
 
@@ -16680,9 +16680,9 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 	}
 
 	Action* action = new Action(getScriptEnv()->getScriptInterface());
-    action->fromLua = true;
-    pushUserdata<Action>(L, action);
-    setMetatable(L, -1, "Action");
+	action->fromLua = true;
+	pushUserdata<Action>(L, action);
+	setMetatable(L, -1, "Action");
 	return 1;
 }
 
@@ -16831,12 +16831,12 @@ int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 	}
 
 	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
-    for (int i = 2; i <= lua_gettop(L); i++) {
-        talk->setWords(getString(L, i));
-    }
-    talk->fromLua = true;
-    pushUserdata<TalkAction>(L, talk);
-    setMetatable(L, -1, "TalkAction");
+	for (int i = 2; i <= lua_gettop(L); i++) {
+		talk->setWords(getString(L, i));
+	}
+	talk->fromLua = true;
+	pushUserdata<TalkAction>(L, talk);
+	setMetatable(L, -1, "TalkAction");
 	return 1;
 }
 
@@ -16921,10 +16921,10 @@ int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 	}
 
 	CreatureEvent* creature = new CreatureEvent(getScriptEnv()->getScriptInterface());
-    creature->setName(getString(L, 2));
-    creature->fromLua = true;
-    pushUserdata<CreatureEvent>(L, creature);
-    setMetatable(L, -1, "CreatureEvent");
+	creature->setName(getString(L, 2));
+	creature->fromLua = true;
+	pushUserdata<CreatureEvent>(L, creature);
+	setMetatable(L, -1, "CreatureEvent");
 	return 1;
 }
 
@@ -17014,9 +17014,9 @@ int LuaScriptInterface::luaCreateMoveEvent(lua_State* L)
 	}
 
 	MoveEvent* moveevent = new MoveEvent(getScriptEnv()->getScriptInterface());
-    moveevent->fromLua = true;
-    pushUserdata<MoveEvent>(L, moveevent);
-    setMetatable(L, -1, "MoveEvent");
+	moveevent->fromLua = true;
+	pushUserdata<MoveEvent>(L, moveevent);
+	setMetatable(L, -1, "MoveEvent");
 	return 1;
 }
 
@@ -17327,11 +17327,11 @@ int LuaScriptInterface::luaCreateGlobalEvent(lua_State* L)
 	}
 
 	GlobalEvent* global = new GlobalEvent(getScriptEnv()->getScriptInterface());
-    global->setName(getString(L, 2));
-    global->setEventType(GLOBALEVENT_NONE);
-    global->fromLua = true;
-    pushUserdata<GlobalEvent>(L, global);
-    setMetatable(L, -1, "GlobalEvent");
+	global->setName(getString(L, 2));
+	global->setEventType(GLOBALEVENT_NONE);
+	global->fromLua = true;
+	pushUserdata<GlobalEvent>(L, global);
+	setMetatable(L, -1, "GlobalEvent");
 	return 1;
 }
 
@@ -17490,27 +17490,27 @@ int LuaScriptInterface::luaCreateWeapon(lua_State* L)
 		case WEAPON_AXE:
 		case WEAPON_CLUB: {
 			WeaponMelee* weapon = new WeaponMelee(getScriptEnv()->getScriptInterface());
-            pushUserdata<WeaponMelee>(L, weapon);
-            setMetatable(L, -1, "Weapon");
-            weapon->weaponType = type;
-            weapon->fromLua = true;
+			pushUserdata<WeaponMelee>(L, weapon);
+			setMetatable(L, -1, "Weapon");
+			weapon->weaponType = type;
+			weapon->fromLua = true;
 			break;
 		}
 		case WEAPON_DISTANCE:
 		case WEAPON_AMMO: {
 			WeaponDistance* weapon = new WeaponDistance(getScriptEnv()->getScriptInterface());
-            pushUserdata<WeaponDistance>(L, weapon);
-            setMetatable(L, -1, "Weapon");
-            weapon->weaponType = type;
-            weapon->fromLua = true;
+			pushUserdata<WeaponDistance>(L, weapon);
+			setMetatable(L, -1, "Weapon");
+			weapon->weaponType = type;
+			weapon->fromLua = true;
 			break;
 		}
 		case WEAPON_WAND: {
 			WeaponWand* weapon = new WeaponWand(getScriptEnv()->getScriptInterface());
-            pushUserdata<WeaponWand>(L, weapon);
-            setMetatable(L, -1, "Weapon");
-            weapon->weaponType = type;
-            weapon->fromLua = true;
+			pushUserdata<WeaponWand>(L, weapon);
+			setMetatable(L, -1, "Weapon");
+			weapon->weaponType = type;
+			weapon->fromLua = true;
 			break;
 		}
 		default: {
