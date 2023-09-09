@@ -20,7 +20,7 @@ function Container.createLootItem(self, item)
 	end
 
 	while itemCount > 0 do
-		local count = math.min(Game.getMaxStackSize(), itemCount)
+		local count = math.min(ITEM_STACK_SIZE, itemCount)
 
 		local subType = count
 		if itemType:isFluidContainer() then

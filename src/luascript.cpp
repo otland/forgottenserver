@@ -1581,6 +1581,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(GAME_STATE_CLOSING);
 	registerEnum(GAME_STATE_MAINTAIN);
 
+	registerEnum(ITEM_STACK_SIZE);
+
 	registerEnum(MESSAGE_STATUS_DEFAULT);
 	registerEnum(MESSAGE_STATUS_WARNING);
 	registerEnum(MESSAGE_EVENT_ADVANCE);
@@ -2261,8 +2263,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
 	registerMethod("Game", "saveAccountStorageValues", LuaScriptInterface::luaGameSaveAccountStorageValues);
-
-	registerMethod("Game", "getMaxStackSize", LuaScriptInterface::luaGameGetMaxStackSize);
 
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
@@ -5055,13 +5055,6 @@ int LuaScriptInterface::luaGameSaveAccountStorageValues(lua_State* L)
 	// Game.saveAccountStorageValues()
 	lua_pushboolean(L, g_game.saveAccountStorageValues());
 
-	return 1;
-}
-
-int LuaScriptInterface::luaGameGetMaxStackSize(lua_State* L)
-{
-	// Game.getMaxStackSize()
-	lua_pushnumber(L, ITEM_STACK_SIZE);
 	return 1;
 }
 

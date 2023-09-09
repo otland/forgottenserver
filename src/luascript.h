@@ -552,8 +552,6 @@ private:
 	static int luaGameSetAccountStorageValue(lua_State* L);
 	static int luaGameSaveAccountStorageValues(lua_State* L);
 
-	static int luaGameGetMaxStackSize(lua_State* L);
-
 	// Variant
 	static int luaVariantCreate(lua_State* L);
 

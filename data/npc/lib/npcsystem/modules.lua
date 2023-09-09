@@ -529,7 +529,7 @@ if not Modules then
 		yesNode = nil,
 		noNode = nil,
 		noText = "",
-		maxCount = Game.getMaxStackSize(),
+		maxCount = ITEM_STACK_SIZE,
 		amount = 0
 	}
 
