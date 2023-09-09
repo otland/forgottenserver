@@ -854,16 +854,14 @@ DepotLocker& Player::getDepotLocker()
 		depotLocker->internalAddThing(inbox);
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
-		if (depotChest) {
-			// adding in reverse to align them from first to last
-			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
-				if (DepotChest* box = getDepotChest(depotId, true)) {
-					depotChest->internalAddThing(box);
-				}
-			}
+        // adding in reverse to align them from first to last
+        for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
+            if (DepotChest* box = getDepotChest(depotId, true)) {
+                depotChest->internalAddThing(box);
+            }
+        }
 
-			depotLocker->internalAddThing(depotChest);
-		}
+        depotLocker->internalAddThing(depotChest);
 	}
 	return *depotLocker;
 }
