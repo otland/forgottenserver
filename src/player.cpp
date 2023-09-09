@@ -1898,7 +1898,7 @@ uint16_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
 		return 0;
 	}
 
-	uint16_t result = ((count * 100.) / nextLevelCount * 100.);
+	uint16_t result = ((count * 10000.) / nextLevelCount);
 	if (result > 10000) {
 		return 0;
 	}
