@@ -61,6 +61,8 @@ static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
 static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
 
+static constexpr uint8_t ITEM_STACK_SIZE = 100;
+
 /**
  * Main Game class.
  * This class is responsible to control everything that happens
