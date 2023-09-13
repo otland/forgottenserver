@@ -1310,7 +1310,7 @@ private:
 
 	uint32_t getAttackSpeed() const;
 
-	static uint16_t getBasicPointLevel(uint64_t count, uint64_t nextLevelCount);
+	static uint16_t getBasisPointLevel(uint64_t count, uint64_t nextLevelCount);
 	double getLostPercent() const;
 	uint64_t getLostExperience() const override
 	{
