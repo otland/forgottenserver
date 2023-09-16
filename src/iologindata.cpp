@@ -294,7 +294,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->experience = experience;
 
 	if (currExpCount < nextExpCount) {
-		player->levelPercent = Player::getPercentLevel(player->experience - currExpCount, nextExpCount - currExpCount);
+		player->levelPercent = static_cast<uint8_t>(
+		    Player::getBasisPointLevel(player->experience - currExpCount, nextExpCount - currExpCount) / 100);
 	} else {
 		player->levelPercent = 0;
 	}
@@ -334,7 +335,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	player->manaSpent = manaSpent;
-	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
+	player->magLevelPercent = Player::getBasisPointLevel(player->manaSpent, nextManaCount);
 
 	player->health = result->getNumber<int32_t>("health");
 	player->healthMax = result->getNumber<int32_t>("healthmax");
@@ -411,7 +412,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		player->skills[i].level = skillLevel;
 		player->skills[i].tries = skillTries;
-		player->skills[i].percent = Player::getPercentLevel(skillTries, nextSkillTries);
+		player->skills[i].percent = Player::getBasisPointLevel(skillTries, nextSkillTries);
 	}
 
 	if ((result = db.storeQuery(
