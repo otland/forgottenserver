@@ -1619,3 +1619,5 @@ function table.maxn(t)
 	end
 	return max
 end
+
+ItemType.getDuration = ItemType.getDurationMin

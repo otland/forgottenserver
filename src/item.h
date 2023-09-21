@@ -687,12 +687,19 @@ public:
 		return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 	}
 
-	int32_t getDecayTime() const
+	int32_t getDecayTimeMin() const
 	{
-		if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
-			return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+		if (hasAttribute(ITEM_ATTRIBUTE_DURATION_MIN)) {
+			return getIntAttr(ITEM_ATTRIBUTE_DURATION_MIN);
 		}
-		return items[id].decayTime;
+		return items[id].decayTimeMin;
+	}
+	int32_t getDecayTimeMax() const
+	{
+		if (hasAttribute(ITEM_ATTRIBUTE_DURATION_MAX)) {
+			return getIntAttr(ITEM_ATTRIBUTE_DURATION_MAX);
+		}
+		return items[id].decayTimeMax;
 	}
 
 	void setDecayTo(int32_t decayTo) { setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo); }
@@ -869,7 +876,7 @@ public:
 	void setUniqueId(uint16_t n);
 
 	void setDefaultDuration();
-	uint32_t getDefaultDuration() const { return items[id].decayTime * 1000; }
+	uint32_t getDefaultDurationMin() const { return items[id].decayTimeMin * 1000; }
 	uint32_t getDefaultDurationMax() const { return items[id].decayTimeMax * 1000; }
 	bool canDecay() const;
 

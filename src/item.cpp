@@ -239,10 +239,10 @@ void Item::setID(uint16_t newid)
 
 	const ItemType& it = Item::items[newid];
 	uint32_t newDuration;
-	if (it.decayTimeMax != 0) {
-		newDuration = normal_random(it.decayTime, it.decayTimeMax) * 1000;
+	if (it.decayTimeMin != 0 && it.decayTimeMax != 0) {
+		newDuration = normal_random(it.decayTimeMin, it.decayTimeMax) * 1000;
 	} else {
-		newDuration = it.decayTime * 1000;
+		newDuration = it.decayTimeMin * 1000;
 	}
 
 	if (newDuration == 0 && !it.stopTime && it.decayTo < 0) {
@@ -1057,7 +1057,7 @@ void Item::setUniqueId(uint16_t n)
 
 void Item::setDefaultDuration()
 {
-	uint32_t duration = getDefaultDuration();
+	uint32_t duration = getDefaultDurationMin();
 	if (uint32_t durationMax = getDefaultDurationMax()) {
 		duration = normal_random(duration, durationMax);
 	}
@@ -1073,7 +1073,7 @@ bool Item::canDecay() const
 		return false;
 	}
 
-	if (getDecayTo() < 0 || getDecayTime() == 0) {
+	if (getDecayTo() < 0 || (getDecayTimeMin() == 0 && getDecayTimeMax() == 0)) {
 		return false;
 	}
 
@@ -1264,7 +1264,7 @@ bool Item::hasMarketAttributes() const
 			}
 		} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
 			uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-			if (duration != getDefaultDuration()) {
+			if (duration <= getDefaultDurationMin()) {
 				return false;
 			}
 		} else {
