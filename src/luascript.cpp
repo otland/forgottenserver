@@ -1656,6 +1656,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_STOREITEM);
 	registerEnum(ITEM_ATTRIBUTE_ATTACK_SPEED);
 	registerEnum(ITEM_ATTRIBUTE_OPENCONTAINER);
+	registerEnum(ITEM_ATTRIBUTE_DURATION_MIN);
+	registerEnum(ITEM_ATTRIBUTE_DURATION_MAX);
 
 	registerEnum(ITEM_TYPE_DEPOT);
 	registerEnum(ITEM_TYPE_MAILBOX);
