@@ -2935,6 +2935,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "isMagicField", LuaScriptInterface::luaItemTypeIsMagicField);
 	registerMethod("ItemType", "isUseable", LuaScriptInterface::luaItemTypeIsUseable);
 	registerMethod("ItemType", "isPickupable", LuaScriptInterface::luaItemTypeIsPickupable);
+	registerMethod("ItemType", "isRotatable", LuaScriptInterface::luaItemTypeIsRotatable);
 
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerMethod("ItemType", "getGroup", LuaScriptInterface::luaItemTypeGetGroup);
@@ -2942,6 +2943,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getClientId", LuaScriptInterface::luaItemTypeGetClientId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
 	registerMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
+	registerMethod("ItemType", "getRotateTo", LuaScriptInterface::luaItemTypeGetRotateTo);
 	registerMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
 	registerMethod("ItemType", "getDescription", LuaScriptInterface::luaItemTypeGetDescription);
 	registerMethod("ItemType", "getSlotPosition", LuaScriptInterface::luaItemTypeGetSlotPosition);
@@ -12729,6 +12731,18 @@ int LuaScriptInterface::luaItemTypeIsPickupable(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemTypeIsRotatable(lua_State* L)
+{
+	// itemType:isRotatable()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->rotatable);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemTypeGetType(lua_State* L)
 {
 	// itemType:getType()
@@ -12795,6 +12809,18 @@ int LuaScriptInterface::luaItemTypeGetPluralName(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushString(L, itemType->getPluralName());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetRotateTo(lua_State* L)
+{
+	// itemType:getRotateTo()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->rotateTo);
 	} else {
 		lua_pushnil(L);
 	}

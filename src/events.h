@@ -50,6 +50,7 @@ class Events
 		int32_t playerOnMoveCreature = -1;
 		int32_t playerOnReportRuleViolation = -1;
 		int32_t playerOnReportBug = -1;
+		int32_t playerOnRotateItem = -1;
 		int32_t playerOnTurn = -1;
 		int32_t playerOnTradeRequest = -1;
 		int32_t playerOnTradeAccept = -1;
@@ -108,6 +109,7 @@ public:
 	                                      uint8_t reportReason, const std::string& comment,
 	                                      const std::string& translation);
 	bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
+	void eventPlayerOnRotateItem(Player* player, Item* item);
 	bool eventPlayerOnTurn(Player* player, Direction direction);
 	bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
 	bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);

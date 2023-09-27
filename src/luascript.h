@@ -1203,6 +1203,7 @@ private:
 	static int luaItemTypeIsMagicField(lua_State* L);
 	static int luaItemTypeIsUseable(lua_State* L);
 	static int luaItemTypeIsPickupable(lua_State* L);
+	static int luaItemTypeIsRotatable(lua_State* L);
 
 	static int luaItemTypeGetType(lua_State* L);
 	static int luaItemTypeGetGroup(lua_State* L);
@@ -1210,6 +1211,7 @@ private:
 	static int luaItemTypeGetClientId(lua_State* L);
 	static int luaItemTypeGetName(lua_State* L);
 	static int luaItemTypeGetPluralName(lua_State* L);
+	static int luaItemTypeGetRotateTo(lua_State* L);
 	static int luaItemTypeGetArticle(lua_State* L);
 	static int luaItemTypeGetDescription(lua_State* L);
 	static int luaItemTypeGetSlotPosition(lua_State* L);
