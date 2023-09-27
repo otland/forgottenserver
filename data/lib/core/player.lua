@@ -646,16 +646,6 @@ function Player.takeScreenshot(self, screenshotType, ignoreConfig)
 	return true
 end
 
-function Player.getBlessings(self)
-	local blessings = 0
-	for i = 1, 6 do
-		if self:hasBlessing(i) then
-			blessings = blessings + 1
-		end
-	end
-	return blessings
-end
-
 local slots = {
 	CONST_SLOT_RIGHT,
 	CONST_SLOT_LEFT,
@@ -697,4 +687,48 @@ end
 
 function Player.getAccountStorageValue(self, key)
 	return Game.getAccountStorageValue(self:getAccountId(), key)
+end
+
+local blessFlags = {
+	[1] = BLESS_TYPE_WISDOM_OF_SOLITUDE,
+	[2] = BLESS_TYPE_SPARK_OF_PHOENIX,
+	[3] = BLESS_TYPE_FIRE_OF_THE_SUNS,
+	[4] = BLESS_TYPE_SPIRITUAL_SHIELD,
+	[5] = BLESS_TYPE_THE_EMBRACE_OF_THE_WORLD
+}
+
+function Player.getBlessingCount(self)
+	local blessings = 0
+	local flags = 0
+	for i = 1, SERVER_BLESSINGS_COUNT do
+		if self:hasBlessing(i) then
+			blessings = blessings + 1
+			flags = flags + blessFlags[i]
+		end
+	end
+	return blessings, flags
+end
+
+local function blessStatus(blessCount)
+	if blessCount >= SERVER_BLESSINGS_COUNT then
+		return 3
+	elseif blessCount > 0 then
+		return 2
+	else
+		return 1
+	end
+end
+
+function Player.updateClientBlessDisplay(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x9C)
+
+	local blessCount, flags = self:getBlessingCount()
+	local blessingStatus = blessStatus(blessCount)
+	msg:addU16(flags)
+	msg:addByte(blessingStatus)
+
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
 end
