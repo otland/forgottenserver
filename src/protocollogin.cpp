@@ -196,7 +196,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	// read authenticator token and stay logged in flag from last 128 bytes
-	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
+	msg.skipBytes(msg.getRemainingBufferLength() - 128);
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnectClient("Invalid authentication token.", version);
 		return;

@@ -349,7 +349,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// String client version
 	if (version >= 1240) {
-		if (msg.getLength() - msg.getBufferPosition() > 132) {
+		if (msg.getRemainingBufferLength() > 132) {
 			msg.getString();
 		}
 	}
@@ -522,7 +522,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() == 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.isEmpty()) {
 		return;
 	}
 
