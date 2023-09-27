@@ -18,6 +18,7 @@ public:
 	// 4 bytes for checksum
 	// 2 bytes for encrypted message size
 	static constexpr MsgSize_t INITIAL_BUFFER_POSITION = 8;
+	static constexpr MsgSize_t DATA_REMAINING_MINSIZE = 128;
 	enum
 	{
 		HEADER_LENGTH = 2

@@ -80,7 +80,7 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	if (msg.getRemainingBufferLength() < 128) {
+	if (msg.getRemainingBufferLength() < NetworkMessage::DATA_REMAINING_MINSIZE) {
 		return false;
 	}
 
