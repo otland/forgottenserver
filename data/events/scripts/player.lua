@@ -99,6 +99,14 @@ function Player:onReportBug(message, position, category)
 	return true
 end
 
+function Player:onRotateItem(item)
+	local onRotateItem = EventCallback.onRotateItem
+	if onRotateItem then
+		return onRotateItem(self, item)
+	end
+	return true
+end
+
 function Player:onTurn(direction)
 	local onTurn = EventCallback.onTurn
 	if onTurn then
