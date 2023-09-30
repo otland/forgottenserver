@@ -44,7 +44,7 @@ bool Ban::acceptConnection(const Connection::Address& clientIP)
 	return true;
 }
 
-std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
+const std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
@@ -78,7 +78,7 @@ std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 	return banInfo;
 }
 
-std::shared_ptr<BanInfo> IOBan::isIpBanned(const Connection::Address& clientIP)
+const std::shared_ptr<BanInfo> IOBan::isIpBanned(const Connection::Address& clientIP)
 {
 	if (clientIP.is_unspecified()) {
 		return nullptr;
