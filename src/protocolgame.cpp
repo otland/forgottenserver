@@ -187,20 +187,15 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		}
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			BanInfo banInfo;
-			if (IOBan::isAccountBanned(accountId, banInfo)) {
-				if (banInfo.reason.empty()) {
-					banInfo.reason = "(none)";
-				}
-
-				if (banInfo.expiresAt > 0) {
+			if (const auto banInfo = IOBan::isAccountBanned(accountId)) {
+				if (banInfo->expiresAt > 0) {
 					disconnectClient(
 					    fmt::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-					                formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+					                formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 				} else {
 					disconnectClient(
 					    fmt::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}",
-					                banInfo.bannedBy, banInfo.reason));
+					                banInfo->bannedBy, banInfo->reason));
 				}
 				return;
 			}
@@ -455,14 +450,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	BanInfo banInfo;
-	if (IOBan::isIpBanned(getIP(), banInfo)) {
-		if (banInfo.reason.empty()) {
-			banInfo.reason = "(none)";
-		}
-
+	if (const auto banInfo = IOBan::isIpBanned(getIP())) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
 	}
 
