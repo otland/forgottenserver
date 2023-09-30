@@ -44,7 +44,7 @@ bool Ban::acceptConnection(const Connection::Address& clientIP)
 	return true;
 }
 
-const std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
+const std::optional<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
@@ -52,7 +52,7 @@ const std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 	    "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = {:d}",
 	    accountId));
 	if (!result) {
-		return nullptr;
+		return std::nullopt;
 	}
 
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
@@ -63,10 +63,10 @@ const std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 		    accountId, db.escapeString(result->getString("reason")), result->getNumber<time_t>("banned_at"), expiresAt,
 		    result->getNumber<uint32_t>("banned_by")));
 		g_databaseTasks.addTask(fmt::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
-		return nullptr;
+		return std::nullopt;
 	}
 
-	std::shared_ptr<BanInfo> banInfo = std::make_shared<BanInfo>();
+	auto banInfo = std::make_optional<BanInfo>();
 	banInfo->expiresAt = expiresAt;
 
 	banInfo->reason = result->getString("reason");
@@ -78,10 +78,10 @@ const std::shared_ptr<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 	return banInfo;
 }
 
-const std::shared_ptr<BanInfo> IOBan::isIpBanned(const Connection::Address& clientIP)
+const std::optional<BanInfo> IOBan::isIpBanned(const Connection::Address& clientIP)
 {
 	if (clientIP.is_unspecified()) {
-		return nullptr;
+		return std::nullopt;
 	}
 
 	Database& db = Database::getInstance();
@@ -90,17 +90,17 @@ const std::shared_ptr<BanInfo> IOBan::isIpBanned(const Connection::Address& clie
 	    "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')",
 	    clientIP.to_string()));
 	if (!result) {
-		return nullptr;
+		return std::nullopt;
 	}
 
 	int64_t expiresAt = result->getNumber<int64_t>("expires_at");
 	if (expiresAt != 0 && time(nullptr) > expiresAt) {
 		g_databaseTasks.addTask(
 		    fmt::format("DELETE FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')", clientIP.to_string()));
-		return nullptr;
+		return std::nullopt;
 	}
 
-	std::shared_ptr<BanInfo> banInfo = std::make_shared<BanInfo>();
+	auto banInfo = std::make_optional<BanInfo>();
 	banInfo->expiresAt = expiresAt;
 
 	banInfo->reason = result->getString("reason");
