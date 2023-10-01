@@ -28,13 +28,12 @@ public:
 
 	explicit ProtocolLogin(Connection_ptr connection) : Protocol(connection) {}
 
-	void onRecvFirstMessage(NetworkMessage& msg) override;
+	ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) override;
 
 private:
-	void disconnectClient(const std::string& message, uint16_t version);
+	void disconnectClient(const std::string& message) override;
 
-	void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token,
-	                      uint16_t version);
+	void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token);
 };
 
 #endif // FS_PROTOCOLLOGIN_H

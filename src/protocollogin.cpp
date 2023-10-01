@@ -15,7 +15,7 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
+void ProtocolLogin::disconnectClient(const std::string& message)
 {
 	auto output = OutputMessagePool::getOutputMessage();
 
@@ -27,11 +27,11 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 }
 
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
-                                     const std::string& token, uint16_t version)
+                                     const std::string& token)
 {
 	Account account;
 	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
-		disconnectClient("Account name or password is not correct.", version);
+		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
@@ -107,23 +107,21 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 }
 
 // Character list request
-void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
+ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		disconnect();
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_SHUTDOWN;
 	}
 
 	msg.skipBytes(2); // client OS
 
-	uint16_t version = msg.get<uint16_t>();
+	version = msg.get<uint16_t>();
 	if (version <= 822) {
 		setChecksumMode(CHECKSUM_DISABLED);
 	}
 
 	if (version <= 760) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
-		return;
+		return PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION;
 	}
 
 	if (version >= 971) {
@@ -139,8 +137,7 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnect();
-		return;
+		return PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE;
 	}
 
 	xtea::key key;
@@ -152,18 +149,15 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	setXTEAKey(std::move(key));
 
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR), version);
-		return;
+		return PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		disconnectClient("Gameworld is starting up. Please wait.", version);
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_STARTUP;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		disconnectClient("Gameworld is under maintenance.\nPlease re-connect in a while.", version);
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_MAINTAIN;
 	}
 
 	BanInfo banInfo;
@@ -178,27 +172,24 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		}
 
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
-		                 version);
+		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
 		return;
 	}
 
 	auto accountName = msg.getString();
 	if (accountName.empty()) {
-		disconnectClient("Invalid account name.", version);
-		return;
+		return PROTOCOLMESSAGE_EMPTY_ACCOUNT_NAME; 
 	}
 
 	auto password = msg.getString();
 	if (password.empty()) {
-		disconnectClient("Invalid password.", version);
-		return;
+		return PROTOCOLMESSAGE_EMPTY_PASSWORD;
 	}
 
 	// read authenticator token and stay logged in flag from last 128 bytes
 	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnectClient("Invalid authentication token.", version);
+		disconnectClient("Invalid authentication token.");
 		return;
 	}
 
@@ -207,6 +198,6 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	g_dispatcher.addTask([=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()),
 	                      accountName = std::string{accountName}, password = std::string{password},
 	                      authToken = std::string{authToken}]() {
-		thisPtr->getCharacterList(accountName, password, authToken, version);
+		thisPtr->getCharacterList(accountName, password, authToken);
 	});
 }

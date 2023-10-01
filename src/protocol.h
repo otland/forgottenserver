@@ -21,7 +21,8 @@ public:
 
 	virtual void onSendMessage(const OutputMessage_ptr& msg);
 	void onRecvMessage(NetworkMessage& msg);
-	virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
+	virtual ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) = 0;
+	virtual void disconnectClient(const std::string& message) = 0;
 	virtual void onConnect() {}
 
 	bool isConnectionExpired() const { return connection.expired(); }
@@ -58,6 +59,8 @@ protected:
 	void setRawMessages(bool value) { rawMessages = value; }
 
 	virtual void release() {}
+
+	uint16_t version = CLIENT_VERSION_MIN;
 
 private:
 	friend class Connection;

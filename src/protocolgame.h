@@ -72,7 +72,7 @@ public:
 private:
 	ProtocolGame_ptr getThis() { return std::static_pointer_cast<ProtocolGame>(shared_from_this()); }
 	void connect(uint32_t playerId, OperatingSystem_t operatingSystem);
-	void disconnectClient(const std::string& message) const;
+	void disconnectClient(const std::string& message) override;
 	void writeToOutputBuffer(const NetworkMessage& msg);
 
 	void release() override;
@@ -85,7 +85,7 @@ private:
 
 	// we have all the parse methods
 	void parsePacket(NetworkMessage& msg) override;
-	void onRecvFirstMessage(NetworkMessage& msg) override;
+	ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) override;
 	void onConnect() override;
 
 	// Parse methods
@@ -319,7 +319,6 @@ private:
 
 	uint32_t eventConnect = 0;
 	uint32_t challengeTimestamp = 0;
-	uint16_t version = CLIENT_VERSION_MIN;
 
 	uint8_t challengeRandom = 0;
 

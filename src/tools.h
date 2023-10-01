@@ -67,6 +67,7 @@ uint8_t clientFluidToServer(uint8_t clientFluid);
 itemAttrTypes stringToItemAttribute(const std::string& str);
 
 const char* getReturnMessage(ReturnValue value);
+std::optional<const char*> getProtocolMessage(ProtocolMessage msg);
 
 int64_t OTSYS_TIME();
 
