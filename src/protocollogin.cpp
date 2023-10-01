@@ -168,7 +168,7 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	auto accountName = msg.getString();
 	if (accountName.empty()) {
-		return PROTOCOLMESSAGE_EMPTY_ACCOUNT_NAME; 
+		return PROTOCOLMESSAGE_EMPTY_ACCOUNT_NAME;
 	}
 
 	auto password = msg.getString();
@@ -184,9 +184,8 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	auto authToken = msg.getString();
 
-	g_dispatcher.addTask([=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()),
-	                      accountName = std::string{accountName}, password = std::string{password},
-	                      authToken = std::string{authToken}]() {
-		thisPtr->getCharacterList(accountName, password, authToken);
-	});
+	g_dispatcher.addTask(
+	    [=, thisPtr = std::static_pointer_cast<ProtocolLogin>(shared_from_this()),
+	     accountName = std::string{accountName}, password = std::string{password},
+	     authToken = std::string{authToken}]() { thisPtr->getCharacterList(accountName, password, authToken); });
 }
