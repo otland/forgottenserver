@@ -61,7 +61,7 @@ protected:
 
 	virtual void release() {}
 
-	uint16_t version = CLIENT_VERSION_MIN;
+	uint16_t version = 0;
 
 private:
 	friend class Connection;
