@@ -6,6 +6,7 @@
 #include "connection.h"
 
 #include "configmanager.h"
+#include "enums.h"
 #include "outputmessage.h"
 #include "protocol.h"
 #include "server.h"
@@ -238,8 +239,9 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			msg.skipBytes(1); // Skip protocol ID
 		}
 
-		if (auto protocolMessage = getProtocolMessage(protocol->onRecvFirstMessage(msg))) {
-			if (protocolMessage.has_value()) {
+		auto result = protocol->onRecvFirstMessage(msg);
+		if (result != PROTOCOLMESSAGE_SUCCESS) {
+			if (auto protocolMessage = getProtocolMessage(result)) {
 				protocol->disconnectClient(protocolMessage.value());
 			} else {
 				protocol->disconnect();

@@ -7,38 +7,26 @@
 
 #include "game.h"
 #include "outputmessage.h"
+#include "tools.h"
 
 extern Game g_game;
 
-void ProtocolOld::disconnectClient(const std::string& message)
-{
-	auto output = OutputMessagePool::getOutputMessage();
-	output->addByte(0x0A);
-	output->addString(message);
-	send(output);
-
-	disconnect();
-}
-
-void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
+ProtocolMessage ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		disconnect();
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_SHUTDOWN;
 	}
 
 	/*uint16_t clientOS =*/msg.get<uint16_t>();
-	uint16_t version = msg.get<uint16_t>();
+	version = msg.get<uint16_t>();
 	msg.skipBytes(12);
 
 	if (version <= 760) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
-		return;
+		return PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION;
 	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnect();
-		return;
+		return PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE;
 	}
 
 	xtea::key key;
@@ -53,5 +41,5 @@ void ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 		setChecksumMode(CHECKSUM_DISABLED);
 	}
 
-	disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
+	return PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION;
 }

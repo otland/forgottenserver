@@ -31,8 +31,6 @@ public:
 	ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) override;
 
 private:
-	void disconnectClient(const std::string& message) override;
-
 	void getCharacterList(const std::string& accountName, const std::string& password, const std::string& token);
 };
 

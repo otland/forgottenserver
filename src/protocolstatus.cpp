@@ -27,7 +27,7 @@ enum RequestedInfo_t : uint16_t
 	REQUEST_SERVER_SOFTWARE_INFO = 1 << 7,
 };
 
-void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
+ProtocolMessage ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
 	const static auto acceptorAddress = Connection::Address::from_string(g_config.getString(ConfigManager::IP));
 

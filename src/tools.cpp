@@ -1233,11 +1233,11 @@ const char* getReturnMessage(ReturnValue value)
 	}
 }
 
-std::optional<const char*> getProtocolMessage(ProtocolMessage msg)
+std::optional<const std::string&> getProtocolMessage(ProtocolMessage msg)
 {
 	switch (msg) {
 		case PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION:
-			return std::make_optional(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR).c_str());
+			return std::make_optional(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
 		case PROTOCOLMESSAGE_MALFORMED_SESSION_KEY:
 			return std::make_optional("Malformed session key.");
 		case PROTOCOLMESSAGE_EMPTY_ACCOUNT_NAME:
@@ -1258,6 +1258,7 @@ std::optional<const char*> getProtocolMessage(ProtocolMessage msg)
 			return std::make_optional("Gameworld is under maintenance. Please re-connect in a while.");
 		case PROTOCOLMESSAGE_AUTHENTICATION_FAILURE:
 			return std::make_optional("Account name or password is not correct.");
+		case PROTOCOLMESSAGE_SUCCESS:
 		case PROTOCOLMESSAGE_GAME_IN_SHUTDOWN:
 		case PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE:
 		case PROTOCOLMESSAGE_INVALID_TIMESTAMP:

@@ -45,6 +45,16 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 
 } // namespace
 
+void Protocol::disconnectClient(const std::string& message)
+{
+	auto output = OutputMessagePool::getOutputMessage();
+	output->addByte(version >= 1076 ? 0x0B : 0x0A);
+	output->addString(message);
+	send(output);
+
+	disconnect();
+}
+
 void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {

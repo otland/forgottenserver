@@ -15,17 +15,6 @@
 extern ConfigManager g_config;
 extern Game g_game;
 
-void ProtocolLogin::disconnectClient(const std::string& message)
-{
-	auto output = OutputMessagePool::getOutputMessage();
-
-	output->addByte(version >= 1076 ? 0x0B : 0x0A);
-	output->addString(message);
-	send(output);
-
-	disconnect();
-}
-
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
                                      const std::string& token)
 {
@@ -129,10 +118,11 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	} else {
 		msg.skipBytes(12);
 	}
+
 	/*
 	 * Skipped bytes:
-	 * 4 bytes: protocolVersion
 	 * 12 bytes: dat, spr, pic signatures (4 bytes each)
+	 * 4 bytes: protocolVersion
 	 * 1 byte: 0
 	 */
 
@@ -189,8 +179,7 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	// read authenticator token and stay logged in flag from last 128 bytes
 	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnectClient("Invalid authentication token.");
-		return;
+		return PROTOCOLMESSAGE_INVALID_AUTHENTICATION_TOKEN;
 	}
 
 	auto authToken = msg.getString();
