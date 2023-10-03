@@ -285,23 +285,15 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
 	static std::normal_distribution<float> normalRand(0.5f, 0.25f);
-	if (minNumber == maxNumber) {
-		return minNumber;
-	} else if (minNumber > maxNumber) {
-		std::swap(minNumber, maxNumber);
-	}
 
-	int32_t increment;
+	float v;
+	do {
+		v = normalRand(getRandomGenerator());
+	} while (v < 0.0 || v > 1.0);
+
+	std::tie(minNumber, maxNumber) = std::minmax(minNumber, maxNumber);
 	const int32_t diff = maxNumber - minNumber;
-	const float v = normalRand(getRandomGenerator());
-	if (v < 0.0) {
-		increment = diff / 2;
-	} else if (v > 1.0) {
-		increment = (diff + 1) / 2;
-	} else {
-		increment = round(v * diff);
-	}
-	return minNumber + increment;
+	return minNumber + std::lround(v * diff);
 }
 
 bool boolean_random(double probability /* = 0.5*/)
