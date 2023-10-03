@@ -99,7 +99,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		return PROTOCOLMESSAGE_GAME_IN_SHUTDOWN;
+		throw std::exception("Server is shutting down...");
 	}
 
 	msg.skipBytes(2); // client OS
@@ -127,7 +127,7 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		return PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE;
+		throw std::exception("RSA decrypt fails...");
 	}
 
 	xtea::key key;

@@ -1259,9 +1259,6 @@ std::optional<const std::string&> getProtocolMessage(ProtocolMessage msg)
 		case PROTOCOLMESSAGE_AUTHENTICATION_FAILURE:
 			return std::make_optional("Account name or password is not correct.");
 		case PROTOCOLMESSAGE_SUCCESS:
-		case PROTOCOLMESSAGE_GAME_IN_SHUTDOWN:
-		case PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE:
-		case PROTOCOLMESSAGE_INVALID_TIMESTAMP:
 		default:
 			return std::nullopt;
 	}

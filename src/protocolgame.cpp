@@ -337,7 +337,7 @@ ProtocolMessage ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		return PROTOCOLMESSAGE_GAME_IN_SHUTDOWN;
+		throw std::exception("Server is shutting down...");
 	}
 
 	// Client type and OS used
@@ -357,7 +357,7 @@ ProtocolMessage ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
-		return PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE;
+		throw std::exception("RSA decrypt fails...");
 	}
 
 	// Get XTEA key
@@ -433,7 +433,7 @@ ProtocolMessage ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
-		return PROTOCOLMESSAGE_INVALID_TIMESTAMP;
+		throw std::exception("Invalid timestamp...");
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {

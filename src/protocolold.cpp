@@ -14,7 +14,7 @@ extern Game g_game;
 ProtocolMessage ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 {
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		return PROTOCOLMESSAGE_GAME_IN_SHUTDOWN;
+		throw std::exception("Server is shutting down...");
 	}
 
 	/*uint16_t clientOS =*/msg.get<uint16_t>();
@@ -26,7 +26,7 @@ ProtocolMessage ProtocolOld::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		return PROTOCOLMESSAGE_RSA_DECRYPT_FAILURE;
+		throw std::exception("RSA decrypt fails...");
 	}
 
 	xtea::key key;

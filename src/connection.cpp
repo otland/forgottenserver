@@ -239,13 +239,12 @@ void Connection::parsePacket(const boost::system::error_code& error)
 			msg.skipBytes(1); // Skip protocol ID
 		}
 
-		auto result = protocol->onRecvFirstMessage(msg);
-		if (result != PROTOCOLMESSAGE_SUCCESS) {
-			if (auto protocolMessage = getProtocolMessage(result)) {
-				protocol->disconnectClient(protocolMessage.value());
-			} else {
-				protocol->disconnect();
+		try {
+			if (auto message = getProtocolMessage(protocol->onRecvFirstMessage(msg))) {
+				protocol->disconnectClient(message.value());
 			}
+		} catch (const std::exception& e) {
+			protocol->disconnect();
 		}
 	} else {
 		protocol->onRecvMessage(msg); // Send the packet to the current protocol
