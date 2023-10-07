@@ -105,7 +105,10 @@ function Creature:addSummon(monster)
 	summon:setDropLoot(false)
 	summon:setSkillLoss(false)
 	summon:setMaster(self)
-	summon:getPosition():notifySummonAppear(summon)
+
+	if self:isPlayer() then
+		summon:getPosition():notifySummonAppear(summon)
+	end
 
 	return true
 end
