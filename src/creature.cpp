@@ -717,6 +717,10 @@ void Creature::onDeath()
 
 	if (master) {
 		setMaster(nullptr);
+
+		if (getMonster()) {
+			decrementReferenceCounter();
+		}
 	}
 
 	if (droppedCorpse) {
