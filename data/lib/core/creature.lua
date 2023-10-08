@@ -203,3 +203,7 @@ function Creature.getKillers(self, onlyPlayers)
 	end
 	return killers
 end
+
+function Creature.removeStorageValue(self, key)
+	return self:setStorageValue(key, nil)
+end

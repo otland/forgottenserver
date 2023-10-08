@@ -8685,8 +8685,13 @@ int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 		return 1;
 	}
 
-	int32_t value = getNumber<int32_t>(L, 3);
-	creature->setStorageValue(key, value);
+	if (lua_isnoneornil(L, 3)) {
+		creature->setStorageValue(key, std::nullopt);
+	} else {
+		int32_t value = getNumber<int32_t>(L, 3);
+		creature->setStorageValue(key, value);
+	}
+
 	pushBoolean(L, true);
 	return 1;
 }
