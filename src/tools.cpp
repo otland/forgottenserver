@@ -314,35 +314,6 @@ std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}",
 
 std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
 
-Direction getDirection(const std::string& string)
-{
-	Direction direction = DIRECTION_NORTH;
-
-	if (string == "north" || string == "n" || string == "0") {
-		direction = DIRECTION_NORTH;
-	} else if (string == "east" || string == "e" || string == "1") {
-		direction = DIRECTION_EAST;
-	} else if (string == "south" || string == "s" || string == "2") {
-		direction = DIRECTION_SOUTH;
-	} else if (string == "west" || string == "w" || string == "3") {
-		direction = DIRECTION_WEST;
-	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" ||
-	           string == "4") {
-		direction = DIRECTION_SOUTHWEST;
-	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" ||
-	           string == "5") {
-		direction = DIRECTION_SOUTHEAST;
-	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" ||
-	           string == "6") {
-		direction = DIRECTION_NORTHWEST;
-	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" ||
-	           string == "7") {
-		direction = DIRECTION_NORTHEAST;
-	}
-
-	return direction;
-}
-
 Position getNextPosition(Direction direction, Position pos)
 {
 	switch (direction) {
