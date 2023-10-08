@@ -44,7 +44,7 @@ bool Ban::acceptConnection(const Connection::Address& clientIP)
 	return true;
 }
 
-const std::optional<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
+const std::optional<BanInfo> IOBan::getAccountBanned(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
@@ -78,7 +78,7 @@ const std::optional<BanInfo> IOBan::isAccountBanned(uint32_t accountId)
 	return banInfo;
 }
 
-const std::optional<BanInfo> IOBan::isIpBanned(const Connection::Address& clientIP)
+const std::optional<BanInfo> IOBan::getIpBanned(const Connection::Address& clientIP)
 {
 	if (clientIP.is_unspecified()) {
 		return std::nullopt;
