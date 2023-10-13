@@ -187,7 +187,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		}
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			if (const auto& banInfo = IOBan::isAccountBanned(accountId)) {
+			if (const auto& banInfo = IOBan::getAccountBanInfo(accountId)) {
 				if (banInfo->expiresAt > 0) {
 					disconnectClient(
 					    fmt::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
@@ -450,7 +450,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (const auto& banInfo = IOBan::getIpBanned(getIP())) {
+	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
