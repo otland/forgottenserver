@@ -291,9 +291,8 @@ int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 		v = normalRand(getRandomGenerator());
 	} while (v < 0.0 || v > 1.0);
 
-	std::tie(minNumber, maxNumber) = std::minmax(minNumber, maxNumber);
-	const int32_t diff = maxNumber - minNumber;
-	return minNumber + std::lround(v * diff);
+	auto&& [a, b] = std::minmax(minNumber, maxNumber);
+	return a + std::lround(v * (b - a));
 }
 
 bool boolean_random(double probability /* = 0.5*/)
