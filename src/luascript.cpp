@@ -2764,6 +2764,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
 
+	registerMethod("Monster", "getId", LuaScriptInterface::luaMonsterGetId);
 	registerMethod("Monster", "getType", LuaScriptInterface::luaMonsterGetType);
 
 	registerMethod("Monster", "rename", LuaScriptInterface::luaMonsterRename);
@@ -11038,6 +11039,23 @@ int LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 {
 	// monster:isMonster()
 	pushBoolean(L, getUserdata<const Monster>(L, 1) != nullptr);
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterGetId(lua_State* L)
+{
+	// monster:getId()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		// Set monster id if it's not set yet (only for onSpawn event)
+		if (getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
+			monster->setID();
+		}
+
+		lua_pushinteger(L, monster->getID());
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
