@@ -15232,7 +15232,7 @@ int LuaScriptInterface::luaLootAddChildLoot(lua_State* L)
 	if (loot) {
 		Loot* childLoot = getUserdata<Loot>(L, 2);
 		if (childLoot) {
-			loot->lootBlock.childLoot.push_back(->lootBlock);
+			loot->lootBlock.childLoot.push_back(childLoot->lootBlock);
 			pushBoolean(L, true);
 		} else {
 			pushBoolean(L, false);
