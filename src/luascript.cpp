@@ -15230,8 +15230,13 @@ int LuaScriptInterface::luaLootAddChildLoot(lua_State* L)
 	// loot:addChildLoot(loot)
 	Loot* loot = getUserdata<Loot>(L, 1);
 	if (loot) {
-		loot->lootBlock.childLoot.push_back(getUserdata<Loot>(L, 2)->lootBlock);
-		pushBoolean(L, true);
+		Loot* childLoot = getUserdata<Loot>(L, 2);
+		if (childLoot) {
+			loot->lootBlock.childLoot.push_back(->lootBlock);
+			pushBoolean(L, true);
+		} else {
+			pushBoolean(L, false);
+		}
 	} else {
 		lua_pushnil(L);
 	}
