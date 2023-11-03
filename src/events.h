@@ -15,7 +15,11 @@ class Tile;
 
 enum class EventInfoId
 {
-	CREATURE_ONHEAR
+	// Creature
+	CREATURE_ONHEAR,
+
+	// Monster
+	MONSTER_ONSPAWN
 };
 
 class Events
@@ -133,6 +137,8 @@ public:
 		switch (eventInfoId) {
 			case EventInfoId::CREATURE_ONHEAR:
 				return info.creatureOnHear;
+			case EventInfoId::MONSTER_ONSPAWN:
+				return info.monsterOnSpawn;
 			default:
 				return -1;
 		}
