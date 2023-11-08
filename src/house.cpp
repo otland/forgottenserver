@@ -705,7 +705,13 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				letter->setText(fmt::format(
 				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
 				    period, house->getRent(), house->getName(), daysLeft));
-				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				if (!player.getInbox()) {
+					ItemBlockList inboxDelivery;
+					inboxDelivery.emplace_back(0, letter);
+					IOInbox::getInstance().pushDeliveryItems(player.getGUID(), inboxDelivery);
+				} else {
+					g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				}
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {
 				house->setOwner(0, true, &player);

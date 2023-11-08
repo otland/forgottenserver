@@ -5460,15 +5460,28 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = offer.amount;
-			while (tmpAmount > 0) {
-				int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!player->getInbox()) {
+				ItemBlockList inboxDelivery;
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+					tmpAmount -= stackCount;
 				}
-
-				tmpAmount -= stackCount;
+				IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
+			} else {
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+					tmpAmount -= stackCount;
+				}
 			}
 		} else {
 			int32_t subType;
@@ -5478,11 +5491,23 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				subType = -1;
 			}
 
-			for (uint16_t i = 0; i < offer.amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!player->getInbox()) {
+				ItemBlockList inboxDelivery;
+				for (uint16_t i = 0; i < offer.amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+				}
+				IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
+			} else {
+				for (uint16_t i = 0; i < offer.amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
 				}
 			}
 		}
@@ -5568,16 +5593,28 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-			while (tmpAmount > 0) {
-				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-				    RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!buyerPlayer->getInbox()) {
+				ItemBlockList inboxDelivery;
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+					tmpAmount -= stackCount;
 				}
-
-				tmpAmount -= stackCount;
+				IOInbox::getInstance().pushDeliveryItems(buyerPlayer->getGUID(), inboxDelivery);
+			} else {
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+					tmpAmount -= stackCount;
+				}
 			}
 		} else {
 			int32_t subType;
@@ -5587,12 +5624,23 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				subType = -1;
 			}
 
-			for (uint16_t i = 0; i < amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-				    RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!buyerPlayer->getInbox()) {
+				ItemBlockList inboxDelivery;
+				for (uint16_t i = 0; i < offer.amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+				}
+				IOInbox::getInstance().pushDeliveryItems(buyerPlayer->getGUID(), inboxDelivery);
+			} else {
+				for (uint16_t i = 0; i < amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
 				}
 			}
 		}
@@ -5615,15 +5663,28 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-			while (tmpAmount > 0) {
-				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!player->getInbox()) {
+				ItemBlockList inboxDelivery;
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+					tmpAmount -= stackCount;
 				}
-
-				tmpAmount -= stackCount;
+				IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
+			} else {
+				while (tmpAmount > 0) {
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					Item* item = Item::CreateItem(it.id, stackCount);
+					if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+					tmpAmount -= stackCount;
+				}
 			}
 		} else {
 			int32_t subType;
@@ -5633,11 +5694,23 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 				subType = -1;
 			}
 
-			for (uint16_t i = 0; i < amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
+			if (!player->getInbox()) {
+				ItemBlockList inboxDelivery;
+				for (uint16_t i = 0; i < offer.amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (item) {
+						inboxDelivery.emplace_back(0, item);
+					}
+				}
+				IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
+			} else {
+				for (uint16_t i = 0; i < amount; ++i) {
+					Item* item = Item::CreateItem(it.id, subType);
+					if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+					    RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
 				}
 			}
 		}

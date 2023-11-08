@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
@@ -81,7 +82,7 @@ bool Mailbox::sendItem(Item* item) const
 	}
 
 	Player* player = g_game.getPlayerByName(receiver);
-	if (player) {
+	if (player && player->getInbox()) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
 		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
@@ -89,16 +90,20 @@ bool Mailbox::sendItem(Item* item) const
 			return true;
 		}
 	} else {
-		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
+		uint32_t receiverGuid = player ? player->getGUID() : IOLoginData::getGuidByName(receiver);
+		if (!receiverGuid) {
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER, item,
-		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
-			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(&tmpPlayer);
+		ItemBlockList inboxDelivery;
+		Item* cloneItem = item->clone();
+		if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
+			cloneItem->setID(cloneItem->getID() + 1);
+			inboxDelivery.emplace_back(0, cloneItem);
+			IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
 			return true;
+		} else {
+			delete cloneItem;
 		}
 	}
 	return false;
