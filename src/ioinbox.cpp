@@ -10,18 +10,13 @@
 
 extern Game g_game;
 
-IOInbox::IOInbox()
-{
-	db.connect();
-}
+IOInbox::IOInbox() { db.connect(); }
 
 void IOInbox::savePlayer(Player* player)
 {
 	if (Inbox* inbox = player->getInbox()) {
 		saveInbox(player->getGUID(), inbox, player);
-		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() {
-			asyncSave(guid);
-		});
+		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { asyncSave(guid); });
 	}
 }
 
@@ -59,8 +54,7 @@ Inbox* IOInbox::loadInbox(uint32_t guid)
 		inboxPtr = std::make_shared<DBEntryList>();
 		DBResult_ptr result;
 		if ((result = db.storeQuery(fmt::format(
-		 "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
-		 guid)))) {
+		 "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC", guid)))) {
 			do {
 				inboxPtr->push_back(DBEntry{result->getNumber<int32_t>("pid"), result->getNumber<int32_t>("sid"), result->getNumber<uint16_t>("itemtype"), result->getNumber<uint16_t>("count"), std::string(result->getString("attributes"))});
 			} while (result->next());
@@ -241,9 +235,7 @@ void IOInbox::asyncLoad(uint32_t guid)
 		saveInbox(guid, inbox);
 		asyncSave(guid);
 	}
-	g_dispatcher.addTask([this, guid, inbox]() {
-		assignInbox(guid, inbox);
-	});
+	g_dispatcher.addTask([this, guid, inbox]() { assignInbox(guid, inbox); });
 }
 
 void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
@@ -255,9 +247,7 @@ void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
 
 	Player* player = g_game.getPlayerByGUID(guid);
 	if (!player) {
-		g_dispatcherInbox.addTask([inbox]() {
-			delete inbox;
-		});
+		g_dispatcherInbox.addTask([inbox]() { delete inbox; });
 		return;
 	}
 	deliverItems(guid, inbox);
@@ -301,9 +291,7 @@ void IOInbox::pushDeliveryItems(uint32_t guid, ItemBlockList& itemList)
 	std::unique_lock<std::recursive_mutex> lock(taskLock);
 	deliverItemsMap[guid].push_back(std::move(itemList));
 	if (loading.find(guid) == loading.end()) {
-		g_dispatcherInbox.addTask([this, guid]() {
-			asyncDeliverItems(guid);
-		});
+		g_dispatcherInbox.addTask([this, guid]() { asyncDeliverItems(guid); });
 	}
 }
 

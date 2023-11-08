@@ -870,7 +870,6 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-
 	// save store inbox items
 	if (!db.executeQuery(
 	        fmt::format("DELETE FROM `player_storeinboxitems` WHERE `player_id` = {:d}", player->getGUID()))) {

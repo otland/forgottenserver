@@ -128,9 +128,7 @@ void Game::setGameState(GameState_t newState)
 
 			saveGameState();
 
-			g_dispatcherInbox.addTask([] () {
-				IOInbox::getInstance().flushDeliverItems();
-			});
+			g_dispatcherInbox.addTask([]() { IOInbox::getInstance().flushDeliverItems(); });
 
 			g_dispatcher.addTask([this]() { shutdown(); });
 
