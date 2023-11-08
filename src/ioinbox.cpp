@@ -29,7 +29,7 @@ void IOInbox::saveInbox(uint32_t guid, Inbox* inbox, Player* player /* = nullptr
 	}
 	DBEntryListPtr inboxPtr = saveItems(player, itemList);
 	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	inboxCache[guid] = std::make_shared<PlayerDBEntry>(false, inboxPtr);
+	inboxCache[guid] = std::make_shared<PlayerDBEntry>(PlayerDBEntry{false, inboxPtr});
 }
 
 void IOInbox::loadInboxLogin(uint32_t guid)
