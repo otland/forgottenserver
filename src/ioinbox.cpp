@@ -305,7 +305,9 @@ void IOInbox::pushDeliveryItems(uint32_t guid, ItemBlockList& itemList)
 
 void IOInbox::flushDeliverItems()
 {
-	// dispatcherInbox thread - should be called as last task
+	// dispatcherInbox thread - only called as ultimate task on shutdown
+	std::lock_guard<std::recursive_mutex> lock(taskLock);
+	loading.clear();
 	while (!deliverItemsMap.empty()) {
 		auto it = deliverItemsMap.begin();
 		asyncDeliverItems(it->first);
