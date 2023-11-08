@@ -5701,8 +5701,9 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player)
 {
 	uint16_t count = 0;
+	std::list<Container*> containers;
 	if (Inbox* inbox = player.getInbox()) {
-		std::list<Container*> containers{inbox};
+		containers.push_front(inbox);
 	}
 
 	for (const auto& chest : player.depotChests) {
