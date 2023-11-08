@@ -26,6 +26,7 @@
 
 extern Scheduler g_scheduler;
 extern DatabaseTasks g_databaseTasks;
+extern Dispatcher g_dispatcherInbox;
 extern Dispatcher g_dispatcher;
 
 extern ConfigManager g_config;
