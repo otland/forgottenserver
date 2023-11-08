@@ -177,7 +177,7 @@ private:
 class DBTransaction
 {
 public:
-	constexpr DBTransaction(Database& db = Database::getInstance()) : db(db) {};
+	constexpr DBTransaction(Database& db = Database::getInstance()) : db(db){};
 
 	~DBTransaction()
 	{

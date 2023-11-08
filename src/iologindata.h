@@ -54,7 +54,6 @@ public:
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 private:
-
 	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 	static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
 	                      PropWriteStream& propWriteStream);

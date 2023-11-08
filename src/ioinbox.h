@@ -1,7 +1,6 @@
 // Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
-
 #ifndef FS_IOINBOX_H
 #define FS_IOINBOX_H
 
@@ -10,7 +9,8 @@
 #include "iologindata.h"
 #include "player.h"
 
-struct DBEntry {
+struct DBEntry
+{
 	int32_t pid;
 	int32_t sid;
 	uint16_t itemtype;
@@ -21,7 +21,8 @@ struct DBEntry {
 using DBEntryList = std::list<DBEntry>;
 using DBEntryListPtr = std::shared_ptr<DBEntryList>;
 
-struct PlayerDBEntry {
+struct PlayerDBEntry
+{
 	bool saved = false;
 	DBEntryListPtr items;
 };

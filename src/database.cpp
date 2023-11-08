@@ -213,7 +213,10 @@ bool DBResult::next()
 	return row;
 }
 
-DBInsert::DBInsert(std::string query, Database& db) : query(std::move(query)), db(db) { this->length = this->query.length(); }
+DBInsert::DBInsert(std::string query, Database& db) : query(std::move(query)), db(db)
+{
+	this->length = this->query.length();
+}
 
 bool DBInsert::addRow(const std::string& row)
 {

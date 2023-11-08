@@ -54,9 +54,13 @@ Inbox* IOInbox::loadInbox(uint32_t guid)
 		inboxPtr = std::make_shared<DBEntryList>();
 		DBResult_ptr result;
 		if ((result = db.storeQuery(fmt::format(
-		 "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC", guid)))) {
+		         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
+		         guid)))) {
 			do {
-				inboxPtr->push_back(DBEntry{result->getNumber<int32_t>("pid"), result->getNumber<int32_t>("sid"), result->getNumber<uint16_t>("itemtype"), result->getNumber<uint16_t>("count"), std::string(result->getString("attributes"))});
+				inboxPtr->push_back(DBEntry{result->getNumber<int32_t>("pid"), result->getNumber<int32_t>("sid"),
+				                            result->getNumber<uint16_t>("itemtype"),
+				                            result->getNumber<uint16_t>("count"),
+				                            std::string(result->getString("attributes"))});
 			} while (result->next());
 		}
 	}
@@ -147,7 +151,8 @@ DBEntryListPtr IOInbox::saveItems(Player* player, const ItemBlockList& itemList)
 		propWriteStream.clear();
 		item->serializeAttr(propWriteStream);
 
-		list->emplace_back(DBEntry{pid, runningId, item->getID(), item->getSubType(), std::string(propWriteStream.getStream())});
+		list->emplace_back(
+		    DBEntry{pid, runningId, item->getID(), item->getSubType(), std::string(propWriteStream.getStream())});
 	}
 
 	for (size_t i = 0; i < containers.size(); i++) {
@@ -184,7 +189,8 @@ DBEntryListPtr IOInbox::saveItems(Player* player, const ItemBlockList& itemList)
 			propWriteStream.clear();
 			item->serializeAttr(propWriteStream);
 
-			list->emplace_back(DBEntry{parentId, runningId, item->getID(), item->getSubType(), std::string(propWriteStream.getStream())});
+			list->emplace_back(DBEntry{parentId, runningId, item->getID(), item->getSubType(),
+			                           std::string(propWriteStream.getStream())});
 		}
 	}
 	return list;
@@ -209,10 +215,12 @@ void IOInbox::asyncSave(uint32_t guid)
 	DBTransaction transaction(db);
 	if (transaction.begin()) {
 		if (db.executeQuery(fmt::format("DELETE FROM `player_inboxitems` WHERE `player_id` = {:d}", guid))) {
-			DBInsert query_insert("INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ", db);
-			for(auto& itemEntry : *playerDBEntry->items) {
-				if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", guid, itemEntry.pid, itemEntry.sid,
-				                                     itemEntry.itemtype, itemEntry.count,
+			DBInsert query_insert(
+			    "INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ",
+			    db);
+			for (auto& itemEntry : *playerDBEntry->items) {
+				if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", guid, itemEntry.pid,
+				                                     itemEntry.sid, itemEntry.itemtype, itemEntry.count,
 				                                     db.escapeString(itemEntry.attributes)))) {
 					return;
 				}
