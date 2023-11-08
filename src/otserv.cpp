@@ -27,6 +27,7 @@
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
+Dispatcher g_dispatcherInbox;
 Scheduler g_scheduler;
 
 Game g_game;
@@ -70,6 +71,7 @@ int main(int argc, char* argv[])
 	ServiceManager serviceManager;
 
 	g_dispatcher.start();
+
 	g_scheduler.start();
 
 	g_dispatcher.addTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); });
@@ -84,11 +86,13 @@ int main(int argc, char* argv[])
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
+		g_dispatcherInbox.shutdown();
 		g_dispatcher.shutdown();
 	}
 
 	g_scheduler.join();
 	g_databaseTasks.join();
+	g_dispatcherInbox.join();
 	g_dispatcher.join();
 	return 0;
 }
@@ -207,6 +211,7 @@ void mainLoader(int, char*[], ServiceManager* services)
 		return;
 	}
 	g_databaseTasks.start();
+	g_dispatcherInbox.start();
 
 	DatabaseManager::updateDatabase();
 

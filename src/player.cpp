@@ -14,6 +14,7 @@
 #include "events.h"
 #include "game.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
@@ -45,11 +46,9 @@ Player::Player(ProtocolGame_ptr p) :
     lastPing(OTSYS_TIME()),
     lastPong(lastPing),
     client(std::move(p)),
-    inbox(new Inbox(ITEM_INBOX)),
+    inbox(nullptr),
     storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
-	inbox->incrementReferenceCounter();
-
 	storeInbox->setParent(this);
 	storeInbox->incrementReferenceCounter();
 }
@@ -63,11 +62,13 @@ Player::~Player()
 		}
 	}
 
-	if (depotLocker) {
+	if (depotLocker && inbox) {
 		depotLocker->removeInbox(inbox);
 	}
 
-	inbox->decrementReferenceCounter();
+	if (inbox) {
+		inbox->decrementReferenceCounter();
+	}
 
 	storeInbox->setParent(nullptr);
 	storeInbox->decrementReferenceCounter();
@@ -851,7 +852,9 @@ DepotLocker& Player::getDepotLocker()
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-		depotLocker->internalAddThing(inbox);
+		if (inbox) {
+			depotLocker->internalAddThing(inbox);
+		}
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
@@ -3666,7 +3669,9 @@ void Player::onPlacedCreature()
 	// scripting event - onLogin
 	if (!g_creatureEvents->playerLogin(this)) {
 		kickPlayer(true);
+		return;
 	}
+	IOInbox::getInstance().loadInboxLogin(guid);
 }
 
 void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
@@ -4134,6 +4139,15 @@ bool Player::isInWar(const Player* player) const
 bool Player::isInWarList(uint32_t guildId) const
 {
 	return std::find(guildWarVector.begin(), guildWarVector.end(), guildId) != guildWarVector.end();
+}
+
+void Player::setInbox(Inbox* _inbox)
+{
+	inbox = _inbox;
+	if (depotLocker) {
+		depotLocker->internalAddThing(2, inbox);
+		onSendContainer(depotLocker.get());
+	}
 }
 
 bool Player::isPremium() const

@@ -162,13 +162,14 @@ private:
 class DBInsert
 {
 public:
-	explicit DBInsert(std::string query);
+	explicit DBInsert(std::string query, Database& db = Database::getInstance());
 	bool addRow(const std::string& row);
 	bool addRow(std::ostringstream& row);
 	bool execute();
 
 private:
 	std::string query;
+	Database& db;
 	std::string values;
 	size_t length;
 };
@@ -176,12 +177,12 @@ private:
 class DBTransaction
 {
 public:
-	constexpr DBTransaction() = default;
+	constexpr DBTransaction(Database& db = Database::getInstance()) : db(db) {};
 
 	~DBTransaction()
 	{
 		if (state == STATE_START) {
-			Database::getInstance().rollback();
+			db.rollback();
 		}
 	}
 
@@ -192,7 +193,7 @@ public:
 	bool begin()
 	{
 		state = STATE_START;
-		return Database::getInstance().beginTransaction();
+		return db.beginTransaction();
 	}
 
 	bool commit()
@@ -202,10 +203,11 @@ public:
 		}
 
 		state = STATE_COMMIT;
-		return Database::getInstance().commit();
+		return db.commit();
 	}
 
 private:
+	Database& db;
 	enum TransactionStates_t
 	{
 		STATE_NO_START,

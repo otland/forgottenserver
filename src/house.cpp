@@ -10,6 +10,7 @@
 #include "game.h"
 #include "housetile.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "pugicast.h"
 
@@ -230,9 +231,18 @@ bool House::transferToDepot(Player* player) const
 		}
 	}
 
-	for (Item* item : moveItemList) {
-		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                        nullptr, FLAG_NOLIMIT);
+	if (!player->getInbox()) {
+		ItemBlockList itemList;
+		for (Item* item : moveItemList) {
+			itemList.emplace_back(0, item->clone());
+			g_game.internalRemoveItem(item);
+		}
+		IOInbox::getInstance().pushDeliveryItems(player->getGUID(), itemList);
+	} else {
+		for (Item* item : moveItemList) {
+			g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
+			                        nullptr, FLAG_NOLIMIT);
+		}
 	}
 	return true;
 }

@@ -189,6 +189,7 @@ public:
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }
 
+	void setInbox(Inbox* inbox);
 	Inbox* getInbox() const { return inbox; }
 
 	StoreInbox* getStoreInbox() const { return storeInbox; }

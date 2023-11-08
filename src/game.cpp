@@ -16,6 +16,7 @@
 #include "globalevent.h"
 #include "housetile.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
@@ -127,10 +128,15 @@ void Game::setGameState(GameState_t newState)
 
 			saveGameState();
 
+			g_dispatcherInbox.addTask([] () {
+				IOInbox::getInstance().flushDeliverItems();
+			});
+
 			g_dispatcher.addTask([this]() { shutdown(); });
 
 			g_scheduler.stop();
 			g_databaseTasks.stop();
+			g_dispatcherInbox.stop();
 			g_dispatcher.stop();
 			break;
 		}
