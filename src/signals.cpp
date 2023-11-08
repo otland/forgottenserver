@@ -157,7 +157,7 @@ void dispatchSignalHandler(int signal)
 			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();
-			g_databaseInbox.join();
+			g_dispatcherInbox.join();
 			g_dispatcher.join();
 			break;
 #endif
