@@ -76,7 +76,7 @@ Inbox* IOInbox::loadInbox(const uint32_t& guid)
 
 void IOInbox::saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player /* = nullptr */)
 {
-	// dispatcher thread
+	// any thread
 	ItemBlockList itemList;
 	for (Item* item : inbox->getItemList()) {
 		itemList.emplace_back(0, item);
