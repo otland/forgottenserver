@@ -277,7 +277,7 @@ void IOInbox::savePlayerAsync(const uint32_t& guid)
 		return;
 	}
 	PlayerDBEntryPtr playerDBEntry = it->second;
-	lock.unlock();
+	lockClass.unlock();
 
 	// disable foreign key checks to prevent locking of the players table during insert
 	// we do not except that the player is deleted while saving the inbox
@@ -312,7 +312,7 @@ void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
 	// dispatcher thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 	pendingPlayerSet.erase(guid);
-	lock.unlock();
+	lockClass.unlock();
 
 	Player* player = g_game.getPlayerByGUID(guid);
 	if (!player) {
