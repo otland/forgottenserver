@@ -62,11 +62,10 @@ Player::~Player()
 		}
 	}
 
-	if (depotLocker && inbox) {
-		depotLocker->removeInbox(inbox);
-	}
-
 	if (inbox) {
+		if (depotLocker) {
+			depotLocker->removeInbox(inbox);
+		}
 		inbox->decrementReferenceCounter();
 	}
 
@@ -3667,11 +3666,11 @@ void Player::onIdleStatus()
 void Player::onPlacedCreature()
 {
 	// scripting event - onLogin
-	if (!g_creatureEvents->playerLogin(this)) {
+	if (g_creatureEvents->playerLogin(this)) {
+		IOInbox::getInstance().loadPlayer(this);
+	} else {
 		kickPlayer(true);
-		return;
 	}
-	IOInbox::getInstance().loadInboxLogin(guid);
 }
 
 void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
@@ -4141,12 +4140,65 @@ bool Player::isInWarList(uint32_t guildId) const
 	return std::find(guildWarVector.begin(), guildWarVector.end(), guildId) != guildWarVector.end();
 }
 
-void Player::setInbox(Inbox* _inbox)
+void Player::setInbox(Inbox* inbox)
 {
-	inbox = _inbox;
+	this->inbox = inbox;
 	if (depotLocker) {
-		depotLocker->internalAddThing(2, inbox);
+		depotLocker->internalAddThing(INBOX_INDEX, inbox);
 		onSendContainer(depotLocker.get());
+	}
+}
+
+void Player::sendItemInbox(const ItemType& itemType, uint16_t amount)
+{
+	if (Inbox* inbox = getInbox()) {
+		if (itemType.stackable) {
+			while (amount > 0) {
+				uint16_t count = std::min<uint16_t>(ITEM_STACK_SIZE, amount);
+				if (Item* item = Item::CreateItem(itemType.id, count)) {
+					ReturnValue ret = g_game.internalAddItem(inbox, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+					if (ret != RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+				}
+				amount -= count;
+			}
+		} else {
+			uint16_t subType = itemType.charges != 0 ? itemType.charges : -1;
+
+			for (uint16_t i = 0; i < amount; ++i) {
+				if (Item* item = Item::CreateItem(itemType.id, subType)) {
+					ReturnValue ret = g_game.internalAddItem(inbox, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+					if (ret != RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+				}
+			}
+		}
+	} else {
+		ItemBlockList itemList;
+
+		if (itemType.stackable) {
+			while (amount > 0) {
+				uint16_t count = std::min<uint16_t>(ITEM_STACK_SIZE, amount);
+				if (Item* item = Item::CreateItem(itemType.id, count)) {
+					itemList.emplace_back(0, item);
+				}
+				amount -= count;
+			}
+		} else {
+			uint16_t subType = itemType.charges != 0 ? itemType.charges : -1;
+
+			for (uint16_t i = 0; i < amount; ++i) {
+				if (Item* item = Item::CreateItem(itemType.id, subType)) {
+					itemList.emplace_back(0, item);
+				}
+			}
+		}
+
+		IOInbox::getInstance().savePlayerItems(this, itemList);
 	}
 }
 

@@ -129,59 +129,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 				}
 			}
 
-			if (itemType.stackable) {
-				uint16_t tmpAmount = amount;
-				if (!player->getInbox()) {
-					ItemBlockList inboxDelivery;
-					while (tmpAmount > 0) {
-						uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-						Item* item = Item::CreateItem(itemType.id, stackCount);
-						if (item) {
-							inboxDelivery.emplace_back(0, item);
-						}
-						tmpAmount -= stackCount;
-					}
-					IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
-				} else {
-					while (tmpAmount > 0) {
-						uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-						Item* item = Item::CreateItem(itemType.id, stackCount);
-						if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-						    RETURNVALUE_NOERROR) {
-							delete item;
-							break;
-						}
-						tmpAmount -= stackCount;
-					}
-				}
-			} else {
-				int32_t subType;
-				if (itemType.charges != 0) {
-					subType = itemType.charges;
-				} else {
-					subType = -1;
-				}
-
-				if (!player->getInbox()) {
-					ItemBlockList inboxDelivery;
-					for (uint16_t i = 0; i < amount; ++i) {
-						Item* item = Item::CreateItem(itemType.id, subType);
-						if (item) {
-							inboxDelivery.emplace_back(0, item);
-						}
-					}
-					IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
-				} else {
-					for (uint16_t i = 0; i < amount; ++i) {
-						Item* item = Item::CreateItem(itemType.id, subType);
-						if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-						    RETURNVALUE_NOERROR) {
-							delete item;
-							break;
-						}
-					}
-				}
-			}
+			player->sendItemInbox(itemType, amount);
 
 			if (player->isOffline()) {
 				IOLoginData::savePlayer(player);

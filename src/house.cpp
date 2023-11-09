@@ -231,18 +231,24 @@ bool House::transferToDepot(Player* player) const
 		}
 	}
 
-	if (!player->getInbox()) {
-		ItemBlockList itemList;
+	if (Inbox* inbox = player->getInbox()) {
 		for (Item* item : moveItemList) {
-			itemList.emplace_back(0, item->clone());
-			g_game.internalRemoveItem(item);
-		}
-		IOInbox::getInstance().pushDeliveryItems(player->getGUID(), itemList);
-	} else {
-		for (Item* item : moveItemList) {
-			g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
+			g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item, item->getItemCount(),
 			                        nullptr, FLAG_NOLIMIT);
 		}
+	} else {
+		ItemBlockList itemList;
+		for (Item* item : moveItemList) {
+			Item* cloneItem = item->clone();
+
+			ReturnValue ret = g_game.internalRemoveItem(item);
+			if (ret == RETURNVALUE_NOERROR) {
+				itemList.emplace_back(0, cloneItem);
+			} else {
+				delete cloneItem;
+			}
+		}
+		IOInbox::getInstance().savePlayerItems(player, itemList);
 	}
 	return true;
 }
@@ -706,9 +712,9 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
 				    period, house->getRent(), house->getName(), daysLeft));
 				if (!player.getInbox()) {
-					ItemBlockList inboxDelivery;
-					inboxDelivery.emplace_back(0, letter);
-					IOInbox::getInstance().pushDeliveryItems(player.getGUID(), inboxDelivery);
+					ItemBlockList itemList;
+					itemList.emplace_back(0, letter);
+					IOInbox::getInstance().savePlayerItems(player.getGUID(), itemList);
 				} else {
 					g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				}

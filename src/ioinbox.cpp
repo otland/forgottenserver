@@ -12,61 +12,51 @@ extern Game g_game;
 
 IOInbox::IOInbox() { db.connect(); }
 
-void IOInbox::savePlayer(Player* player)
+void IOInbox::loadPlayer(const Player* player)
+{
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+	auto result = pendingPlayerSet.insert(player->getGUID());
+	if (result.second) {
+		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { loadPlayerAsync(guid); });
+	}
+}
+
+void IOInbox::savePlayer(const Player* player)
 {
 	if (Inbox* inbox = player->getInbox()) {
 		saveInbox(player->getGUID(), inbox, player);
-		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { asyncSave(guid); });
+		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { savePlayerAsync(guid); });
 	}
 }
 
-void IOInbox::saveInbox(uint32_t guid, Inbox* inbox, Player* player /* = nullptr */)
+void IOInbox::savePlayerItems(const Player* player, ItemBlockList& itemList)
+{
+	savePlayerItems(player->getGUID(), itemList);
+}
+
+void IOInbox::savePlayerItems(const uint32_t& guid, ItemBlockList& itemList)
 {
 	// dispatcher thread
-	ItemBlockList itemList;
-	for (Item* item : inbox->getItemList()) {
-		itemList.emplace_back(0, item);
-	}
-	DBEntryListPtr inboxPtr = saveItems(player, itemList);
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	inboxCache[guid] = std::make_shared<PlayerDBEntry>(PlayerDBEntry{false, inboxPtr});
-}
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+	pendingItemsToSave[guid].push_back(std::move(itemList));
 
-void IOInbox::loadInboxLogin(uint32_t guid)
-{
-	if (loading.insert(guid).second) {
-		g_dispatcherInbox.addTask([this, guid]() { asyncLoad(guid); });
+	auto it = pendingPlayerSet.find(guid);
+	if (it == pendingPlayerSet.end()) {
+		g_dispatcherInbox.addTask([this, guid]() { savePlayerItemsAsync(guid); });
 	}
 }
 
-Inbox* IOInbox::loadInbox(uint32_t guid)
+Inbox* IOInbox::loadInbox(const uint32_t& guid)
 {
 	// dispatcherInbox thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
 
-	DBEntryListPtr inboxPtr;
-	auto it = inboxCache.find(guid);
-	if (it != inboxCache.end()) {
-		inboxPtr = it->second->items;
-		lock.unlock();
-	} else {
-		lock.unlock();
-		inboxPtr = std::make_shared<DBEntryList>();
-		DBResult_ptr result;
-		if ((result = db.storeQuery(fmt::format(
-		         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
-		         guid)))) {
-			do {
-				inboxPtr->push_back(DBEntry{result->getNumber<int32_t>("pid"), result->getNumber<int32_t>("sid"),
-				                            result->getNumber<uint16_t>("itemtype"),
-				                            result->getNumber<uint16_t>("count"),
-				                            std::string(result->getString("attributes"))});
-			} while (result->next());
-		}
+	DBEntryListPtr tmpInbox = getPlayerInbox(guid);
+	if (!tmpInbox) {
+		tmpInbox = loadPlayerInbox(guid);
 	}
 
 	ItemMap itemMap;
-	for (auto& itemDBEntry : *inboxPtr) {
+	for (auto& itemDBEntry : *tmpInbox) {
 		PropStream propStream;
 		propStream.init(itemDBEntry.attributes.data(), itemDBEntry.attributes.size());
 
@@ -81,24 +71,39 @@ Inbox* IOInbox::loadInbox(uint32_t guid)
 		}
 	}
 
+	return createInboxItem(itemMap);
+}
+
+void IOInbox::saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player /* = nullptr */)
+{
+	// dispatcher thread
+	ItemBlockList itemList;
+	for (Item* item : inbox->getItemList()) {
+		itemList.emplace_back(0, item);
+	}
+	DBEntryListPtr inboxPtr = saveItems(player, itemList);
+	addPlayerInbox(guid, inboxPtr);
+}
+
+Inbox* IOInbox::createInboxItem(const ItemMap& items)
+{
 	Inbox* inbox = new Inbox(ITEM_INBOX);
 	inbox->incrementReferenceCounter();
-	for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
+
+	for (ItemMap::const_reverse_iterator it = items.rbegin(), end = items.rend(); it != end; ++it) {
 		const std::pair<Item*, int32_t>& pair = it->second;
+
 		Item* item = pair.first;
 		int32_t pid = pair.second;
-
 		if (pid >= 0 && pid < 100) {
 			inbox->internalAddThing(item);
 		} else {
-			ItemMap::const_iterator it2 = itemMap.find(pid);
-
-			if (it2 == itemMap.end()) {
+			ItemMap::const_iterator it2 = items.find(pid);
+			if (it2 == items.end()) {
 				continue;
 			}
 
-			Container* container = it2->second.first->getContainer();
-			if (container) {
+			if (Container* container = it2->second.first->getContainer()) {
 				container->internalAddThing(item);
 			}
 		}
@@ -107,7 +112,63 @@ Inbox* IOInbox::loadInbox(uint32_t guid)
 	return inbox;
 }
 
-DBEntryListPtr IOInbox::saveItems(Player* player, const ItemBlockList& itemList)
+bool IOInbox::canSavePlayerItems(const uint32_t& guid)
+{
+	// dispatcherInbox thread
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+
+	auto playerIt = pendingPlayerSet.find(guid);
+	if (playerIt != pendingPlayerSet.end()) {
+		return false;
+	}
+
+	auto itemIt = pendingItemsToSave.find(guid);
+	return itemIt != pendingItemsToSave.end();
+}
+
+DBEntryListPtr IOInbox::getPlayerInbox(const uint32_t& guid)
+{
+	// dispatcherInbox thread
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+
+	auto it = inboxCache.find(guid);
+	if (it == inboxCache.end()) {
+		return nullptr;
+	}
+	return it->second->items;
+}
+
+void IOInbox::addPlayerInbox(const uint32_t& guid, DBEntryListPtr inbox)
+{
+	// dispatcher thread
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+
+	inboxCache[guid] = std::make_shared<PlayerDBEntry>(PlayerDBEntry{false, inbox});
+}
+
+DBEntryListPtr IOInbox::loadPlayerInbox(const uint32_t& guid)
+{
+	auto inbox = std::make_shared<DBEntryList>();
+
+	DBResult_ptr result = db.storeQuery(fmt::format(
+	    "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
+	    guid));
+	if (result) {
+		do {
+			DBEntry entry;
+			entry.pid = result->getNumber<int32_t>("pid");
+			entry.sid = result->getNumber<int32_t>("sid");
+			entry.itemtype = result->getNumber<uint16_t>("itemtype");
+			entry.count = result->getNumber<uint16_t>("count");
+			entry.attributes = result->getString("attributes");
+			inbox->push_back(entry);
+		} while (result->next());
+	}
+
+	return inbox;
+}
+
+DBEntryListPtr IOInbox::saveItems(const Player* player, const ItemBlockList& itemList)
 {
 	DBEntryListPtr list = std::make_shared<DBEntryList>();
 	using ContainerBlock = std::pair<Container*, int32_t>;
@@ -196,10 +257,21 @@ DBEntryListPtr IOInbox::saveItems(Player* player, const ItemBlockList& itemList)
 	return list;
 }
 
-void IOInbox::asyncSave(uint32_t guid)
+void IOInbox::loadPlayerAsync(const uint32_t& guid)
 {
 	// dispatcherInbox thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
+	Inbox* inbox = loadInbox(guid);
+	if (deliverItems(guid, inbox)) {
+		saveInbox(guid, inbox);
+		savePlayerAsync(guid);
+	}
+	g_dispatcher.addTask([this, guid, inbox]() { assignInbox(guid, inbox); });
+}
+
+void IOInbox::savePlayerAsync(const uint32_t& guid)
+{
+	// dispatcherInbox thread
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
 	auto it = inboxCache.find(guid);
 	if (it == inboxCache.end() || it->second->saved) {
 		return;
@@ -235,22 +307,11 @@ void IOInbox::asyncSave(uint32_t guid)
 	}
 }
 
-void IOInbox::asyncLoad(uint32_t guid)
-{
-	// dispatcherInbox thread
-	Inbox* inbox = loadInbox(guid);
-	if (deliverItems(guid, inbox)) {
-		saveInbox(guid, inbox);
-		asyncSave(guid);
-	}
-	g_dispatcher.addTask([this, guid, inbox]() { assignInbox(guid, inbox); });
-}
-
 void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
 {
 	// dispatcher thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	loading.erase(guid);
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+	pendingPlayerSet.erase(guid);
 	lock.unlock();
 
 	Player* player = g_game.getPlayerByGUID(guid);
@@ -265,51 +326,41 @@ void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
 bool IOInbox::deliverItems(uint32_t guid, Inbox* inbox)
 {
 	// any thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	auto it = deliverItemsMap.find(guid);
-	if (it != deliverItemsMap.end()) {
+	std::unique_lock<std::recursive_mutex> lockClass(lock);
+	auto it = pendingItemsToSave.find(guid);
+	if (it != pendingItemsToSave.end()) {
 		for (auto& itemList : it->second) {
 			for (auto& itemBlock : itemList) {
 				inbox->internalAddThing(itemBlock.second);
 			}
 		}
-		deliverItemsMap.erase(it);
+		pendingItemsToSave.erase(it);
 		return true;
 	}
 	return false;
 }
 
-void IOInbox::asyncDeliverItems(uint32_t guid)
+void IOInbox::savePlayerItemsAsync(uint32_t guid)
 {
 	// dispatcherInbox thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	if (loading.find(guid) == loading.end() && deliverItemsMap.find(guid) != deliverItemsMap.end()) {
-		lock.unlock();
+	if (canSavePlayerItems(guid)) {
 		Inbox* inbox = loadInbox(guid);
 		deliverItems(guid, inbox);
 		saveInbox(guid, inbox);
-		asyncSave(guid);
+		savePlayerAsync(guid);
 		delete inbox;
 	}
 }
 
-void IOInbox::pushDeliveryItems(uint32_t guid, ItemBlockList& itemList)
-{
-	// dispatcher thread
-	std::unique_lock<std::recursive_mutex> lock(taskLock);
-	deliverItemsMap[guid].push_back(std::move(itemList));
-	if (loading.find(guid) == loading.end()) {
-		g_dispatcherInbox.addTask([this, guid]() { asyncDeliverItems(guid); });
-	}
-}
-
-void IOInbox::flushDeliverItems()
+void IOInbox::flush()
 {
 	// dispatcherInbox thread - only called as ultimate task on shutdown
-	std::lock_guard<std::recursive_mutex> lock(taskLock);
-	loading.clear();
-	while (!deliverItemsMap.empty()) {
-		auto it = deliverItemsMap.begin();
-		asyncDeliverItems(it->first);
+	std::lock_guard<std::recursive_mutex> lockClass(lock);
+
+	pendingPlayerSet.clear();
+
+	while (!pendingItemsToSave.empty()) {
+		auto it = pendingItemsToSave.begin();
+		savePlayerItemsAsync(it->first);
 	}
 }

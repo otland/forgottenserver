@@ -95,6 +95,8 @@ static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
+static constexpr uint32_t INBOX_INDEX = 2;
+
 class Player final : public Creature, public Cylinder
 {
 public:
@@ -191,6 +193,7 @@ public:
 
 	void setInbox(Inbox* inbox);
 	Inbox* getInbox() const { return inbox; }
+	void sendItemInbox(const ItemType& itemType, uint16_t amount);
 
 	StoreInbox* getStoreInbox() const { return storeInbox; }
 

@@ -38,29 +38,40 @@ public:
 		return instance;
 	}
 
-	void savePlayer(Player* player);
-	void loadInboxLogin(uint32_t guid);
-	void pushDeliveryItems(uint32_t guid, ItemBlockList& itemList);
-	void flushDeliverItems();
+	void savePlayer(const Player* player);
+	void loadPlayer(const Player* player);
+
+	void savePlayerItems(const Player* player, ItemBlockList& itemList);
+	void savePlayerItems(const uint32_t& guid, ItemBlockList& itemList);
+
+	void flush();
 
 private:
 	IOInbox();
 
-	static DBEntryListPtr saveItems(Player* player, const ItemBlockList& itemList);
+	static DBEntryListPtr saveItems(const Player* player, const ItemBlockList& itemList);
 
-	void saveInbox(uint32_t guid, Inbox* inbox, Player* player = nullptr);
-	Inbox* loadInbox(uint32_t guid);
-	void asyncSave(uint32_t guid);
-	void asyncLoad(uint32_t guid);
+	void savePlayerAsync(const uint32_t& guid);
+	void loadPlayerAsync(const uint32_t& guid);
+
+	Inbox* loadInbox(const uint32_t& guid);
+	void saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player = nullptr);
+	Inbox* createInboxItem(const ItemMap& items);
+
+	bool canSavePlayerItems(const uint32_t& guid);
+	DBEntryListPtr getPlayerInbox(const uint32_t& guid);
+	void addPlayerInbox(const uint32_t& guid, DBEntryListPtr inbox);
+	DBEntryListPtr loadPlayerInbox(const uint32_t& guid);
+
 	void assignInbox(uint32_t guid, Inbox* inbox);
 	bool deliverItems(uint32_t guid, Inbox* inbox);
-	void asyncDeliverItems(uint32_t guid);
+	void savePlayerItemsAsync(uint32_t guid);
 
 	Database db;
-	std::recursive_mutex taskLock;
+	std::recursive_mutex lock;
 	std::map<uint32_t, PlayerDBEntryPtr> inboxCache;
-	std::map<uint32_t, std::list<ItemBlockList>> deliverItemsMap;
-	std::set<uint32_t> loading;
+	std::map<uint32_t, std::list<ItemBlockList>> pendingItemsToSave;
+	std::set<uint32_t> pendingPlayerSet;
 };
 
 #endif // FS_IOINBOX_H
