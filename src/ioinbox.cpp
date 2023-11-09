@@ -316,7 +316,14 @@ void IOInbox::assignInbox(const uint32_t& guid, Inbox* inbox)
 
 	Player* player = g_game.getPlayerByGUID(guid);
 	if (!player) {
-		g_dispatcherInbox.addTask([inbox]() { delete inbox; });
+		g_dispatcherInbox.addTask([this, guid, inbox]() {
+			if (canSavePlayerItems(guid)) {
+				deliverItems(guid, inbox);
+				saveInbox(guid, inbox);
+				savePlayerAsync(guid);
+			}
+			delete inbox;
+		});
 		return;
 	}
 	deliverItems(guid, inbox);
