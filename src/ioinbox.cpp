@@ -307,7 +307,7 @@ void IOInbox::savePlayerAsync(const uint32_t& guid)
 	}
 }
 
-void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
+void IOInbox::assignInbox(const uint32_t& guid, Inbox* inbox)
 {
 	// dispatcher thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
@@ -323,7 +323,7 @@ void IOInbox::assignInbox(uint32_t guid, Inbox* inbox)
 	player->setInbox(inbox);
 }
 
-bool IOInbox::deliverItems(uint32_t guid, Inbox* inbox)
+bool IOInbox::deliverItems(const uint32_t& guid, Inbox* inbox)
 {
 	// any thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
@@ -340,7 +340,7 @@ bool IOInbox::deliverItems(uint32_t guid, Inbox* inbox)
 	return false;
 }
 
-void IOInbox::savePlayerItemsAsync(uint32_t guid)
+void IOInbox::savePlayerItemsAsync(const uint32_t& guid)
 {
 	// dispatcherInbox thread
 	if (canSavePlayerItems(guid)) {

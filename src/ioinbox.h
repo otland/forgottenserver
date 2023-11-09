@@ -63,9 +63,9 @@ private:
 	void addPlayerInbox(const uint32_t& guid, DBEntryListPtr inbox);
 	DBEntryListPtr loadPlayerInbox(const uint32_t& guid);
 
-	void assignInbox(uint32_t guid, Inbox* inbox);
-	bool deliverItems(uint32_t guid, Inbox* inbox);
-	void savePlayerItemsAsync(uint32_t guid);
+	void assignInbox(const uint32_t& guid, Inbox* inbox);
+	bool deliverItems(const uint32_t& guid, Inbox* inbox);
+	void savePlayerItemsAsync(const uint32_t& guid);
 
 	Database db;
 	std::recursive_mutex lock;
