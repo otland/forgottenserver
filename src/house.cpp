@@ -233,8 +233,8 @@ bool House::transferToDepot(Player* player) const
 
 	if (Inbox* inbox = player->getInbox()) {
 		for (Item* item : moveItemList) {
-			g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item, item->getItemCount(),
-			                        nullptr, FLAG_NOLIMIT);
+			g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+			                        FLAG_NOLIMIT);
 		}
 	} else {
 		ItemBlockList itemList;
