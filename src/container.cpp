@@ -689,14 +689,8 @@ void Container::internalAddThing(uint32_t index, Thing* thing)
 		return;
 	}
 
-	if (index == 0 || itemlist.empty()) {
-		itemlist.push_front(item);
-	} else {
-		size_t pos = std::min<size_t>(std::max<size_t>(0, itemlist.size() - 1), index);
-		auto it = itemlist.begin();
-		std::advance(it, pos);
-		itemlist.insert(it, item);
-	}
+	auto it = itemlist.begin() + index;
+	itemlist.insert(it, item);
 
 	item->setParent(this);
 	itemlist.push_front(item);
