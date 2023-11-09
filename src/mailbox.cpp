@@ -100,7 +100,7 @@ bool Mailbox::sendItem(Item* item) const
 		if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
 			cloneItem->setID(cloneItem->getID() + 1);
 			inboxDelivery.emplace_back(0, cloneItem);
-			IOInbox::getInstance().pushDeliveryItems(player->getGUID(), inboxDelivery);
+			IOInbox::getInstance().pushDeliveryItems(receiverGuid, inboxDelivery);
 			return true;
 		} else {
 			delete cloneItem;
