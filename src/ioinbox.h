@@ -50,13 +50,13 @@ private:
 	IOInbox();
 
 	static DBEntryListPtr saveItems(const Player* player, const ItemBlockList& itemList);
+	static Inbox* createInboxItem(const ItemMap& items);
 
 	void savePlayerAsync(const uint32_t& guid);
 	void loadPlayerAsync(const uint32_t& guid);
 
 	Inbox* loadInbox(const uint32_t& guid);
 	void saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player = nullptr);
-	Inbox* createInboxItem(const ItemMap& items);
 
 	bool canSavePlayerItems(const uint32_t& guid);
 	DBEntryListPtr getPlayerInbox(const uint32_t& guid);
