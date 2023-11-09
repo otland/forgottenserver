@@ -74,7 +74,7 @@ Inbox* IOInbox::loadInbox(const uint32_t& guid)
 	return createInboxItem(itemMap);
 }
 
-void IOInbox::saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player /* = nullptr */)
+void IOInbox::saveInbox(const uint32_t& guid, const Inbox* inbox, const Player* player /* = nullptr */)
 {
 	// any thread
 	ItemBlockList itemList;

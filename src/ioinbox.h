@@ -56,7 +56,7 @@ private:
 	void loadPlayerAsync(const uint32_t& guid);
 
 	Inbox* loadInbox(const uint32_t& guid);
-	void saveInbox(const uint32_t& guid, Inbox* inbox, const Player* player = nullptr);
+	void saveInbox(const uint32_t& guid, const Inbox* inbox, const Player* player = nullptr);
 
 	bool canSavePlayerItems(const uint32_t& guid);
 	DBEntryListPtr getPlayerInbox(const uint32_t& guid);
