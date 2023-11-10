@@ -1667,3 +1667,23 @@ bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirL
 	fpp.maxTargetDist = maxTargetDist;
 	return getPathTo(targetPos, dirList, fpp);
 }
+
+void Creature::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn)
+{
+	auto oldValue = getStorageValue(key);
+	if (value) {
+		storageMap.insert_or_assign(key, value.value());
+	} else {
+		storageMap.erase(key);
+	}
+	g_events->eventCreatureOnUpdateStorage(this, key, oldValue, value, isSpawn);
+}
+
+std::optional<int32_t> Creature::getStorageValue(uint32_t key) const
+{
+	auto it = storageMap.find(key);
+	if (it == storageMap.end()) {
+		return std::nullopt;
+	}
+	return std::make_optional(it->second);
+}

@@ -85,7 +85,7 @@ struct Skill
 {
 	uint64_t tries = 0;
 	uint16_t level = MINIMUM_SKILL_LEVEL;
-	uint8_t percent = 0;
+	uint16_t percent = 0;
 };
 
 using MuteCountMap = std::map<uint32_t, uint32_t>;
@@ -100,6 +100,8 @@ class Player final : public Creature, public Cylinder
 public:
 	explicit Player(ProtocolGame_ptr p);
 	~Player();
+
+	using Creature::onWalk;
 
 	// non-copyable
 	Player(const Player&) = delete;
@@ -253,8 +255,7 @@ public:
 
 	bool canOpenCorpse(uint32_t ownerId) const;
 
-	void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
-	bool getStorageValue(const uint32_t key, int32_t& value) const;
+	void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false) override;
 	void genReservedStorageRange();
 
 	void setGroup(Group* newGroup) { group = newGroup; }
@@ -281,7 +282,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint32_t getBaseMagicLevel() const { return magLevel; }
-	uint8_t getMagicLevelPercent() const { return magLevelPercent; }
+	uint16_t getMagicLevelPercent() const { return magLevelPercent; }
 	uint8_t getSoul() const { return soul; }
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
@@ -462,7 +463,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
-	uint8_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+	uint16_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -1116,6 +1117,9 @@ public:
 	uint16_t getClientStaminaBonusDisplay() const { return clientStaminaBonusDisplay; }
 	void setClientStaminaBonusDisplay(uint16_t value) { clientStaminaBonusDisplay = value; }
 
+	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
+	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1169,7 +1173,6 @@ private:
 
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
-	std::map<uint32_t, int32_t> storageMap;
 
 	std::vector<OutfitEntry> outfits;
 	GuildWarVector guildWarVector;
@@ -1263,11 +1266,12 @@ private:
 	uint16_t maxWriteLen = 0;
 	uint16_t clientExpDisplay = 100;
 	uint16_t clientStaminaBonusDisplay = 100;
+	uint16_t clientLowLevelBonusDisplay = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
-	uint8_t magLevelPercent = 0;
+	uint16_t magLevelPercent = 0;
 
 	PlayerSex_t sex = PLAYERSEX_FEMALE;
 	OperatingSystem_t operatingSystem = CLIENTOS_NONE;
@@ -1308,7 +1312,7 @@ private:
 
 	uint32_t getAttackSpeed() const;
 
-	static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
+	static uint16_t getBasisPointLevel(uint64_t count, uint64_t nextLevelCount);
 	double getLostPercent() const;
 	uint64_t getLostExperience() const override
 	{

@@ -545,15 +545,31 @@ local function getStaminaBonus(staminaMinutes)
 	end
 end
 
+function Player.calculateLowLevelBonus(self, level)
+	if level > 1 and level <= 50 then
+		local expBonus = {minlevel = 2, maxlevel = 50, bonus = 1}
+		local bonusPercentage = (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel)
+		return expBonus.bonus * 100 * bonusPercentage
+	else
+		return 0
+	end
+end
+
 function Player.updateClientExpDisplay(self)
+	local level = self:getLevel()
+
 	-- Experience bonus (includes server rates)
-	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	local expGainRate = 100 * Game.getExperienceStage(level)
 	self:setClientExpDisplay(expGainRate)
 
 	-- Stamina bonus
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = getStaminaBonus(staminaMinutes)
 	self:setClientStaminaBonusDisplay(staminaBonus)
+
+	-- Low level bonus
+	local levelBonus = self:calculateLowLevelBonus(level)
+	self:setClientLowLevelBonusDisplay(levelBonus)
 	return true
 end
 
@@ -615,4 +631,70 @@ function Player.sendHighscores(self, entries, params)
 	msg:sendToPlayer(self)
 	msg:delete()
 	return true
+end
+
+function Player.takeScreenshot(self, screenshotType, ignoreConfig)
+	if not ignoreConfig and (screenshotType < SCREENSHOT_TYPE_FIRST or screenshotType > SCREENSHOT_TYPE_LAST) then
+		return false
+	end
+
+	local msg = NetworkMessage()
+	msg:addByte(0x75)
+	msg:addByte(screenshotType)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.getBlessings(self)
+	local blessings = 0
+	for i = 1, 6 do
+		if self:hasBlessing(i) then
+			blessings = blessings + 1
+		end
+	end
+	return blessings
+end
+
+local slots = {
+	CONST_SLOT_RIGHT,
+	CONST_SLOT_LEFT,
+	CONST_SLOT_HEAD,
+	CONST_SLOT_NECKLACE,
+	CONST_SLOT_ARMOR,
+	CONST_SLOT_LEGS,
+	CONST_SLOT_FEET,
+	CONST_SLOT_RING
+}
+
+function Player.getTotalArmor(self)
+	local total = 0
+	local item
+	for i = 1, #slots do
+		item = self:getSlotItem(slots[i])
+		if item then
+			total = total + item:getType():getArmor()
+		end
+	end
+	return total
+end
+
+function Player.getTotalDefense(self)
+	local total = 0
+	local item
+	for i = 1, #slots do
+		item = self:getSlotItem(slots[i])
+		if item then
+			total = total + item:getType():getDefense()
+		end
+	end
+	return total
+end
+
+function Player.setAccountStorageValue(self, key, value)
+	return Game.setAccountStorageValue(self:getAccountId(), key, value)
+end
+
+function Player.getAccountStorageValue(self, key)
+	return Game.getAccountStorageValue(self:getAccountId(), key)
 end

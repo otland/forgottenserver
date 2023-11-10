@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Bug Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-23" />
 	</attacks>

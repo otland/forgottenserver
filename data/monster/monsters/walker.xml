@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Walker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-175" />
 		<attack name="fire" interval="2000" chance="17" length="8" spread="0" min="-125" max="-245">

@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Slime" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Glooth Blob Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="45" attack="40" poison="280" />
 		<attack name="poisoncondition" interval="2000" chance="13" radius="4" target="0" min="-400" max="-480">

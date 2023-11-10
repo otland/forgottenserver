@@ -17,6 +17,7 @@
 		<flag runonhealth="450" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Lost Soul Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-420" />
 		<attack name="death" interval="2000" chance="10" length="3" spread="0" target="0" min="-40" max="-210">

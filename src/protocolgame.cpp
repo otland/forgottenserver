@@ -5,7 +5,6 @@
 
 #include "protocolgame.h"
 
-#include "actions.h"
 #include "ban.h"
 #include "condition.h"
 #include "configmanager.h"
@@ -23,7 +22,6 @@
 #include "storeinbox.h"
 
 extern ConfigManager g_config;
-extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
@@ -1335,7 +1333,7 @@ void ProtocolGame::parseTextWindow(NetworkMessage& msg)
 {
 	uint32_t windowTextID = msg.get<uint32_t>();
 	auto newText = msg.getString();
-	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText = std::string{newText}]() {
+	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText]() {
 		g_game.playerWriteItem(playerID, windowTextID, newText);
 	});
 }
@@ -3566,10 +3564,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getLevelPercent());
 
-	msg.add<uint16_t>(player->getClientExpDisplay());          // base exp gain rate
-	msg.add<uint16_t>(0);                                      // low level bonus
-	msg.add<uint16_t>(0);                                      // store exp bonus
-	msg.add<uint16_t>(player->getClientStaminaBonusDisplay()); // stamina exp bonus
+	msg.add<uint16_t>(player->getClientExpDisplay());
+	msg.add<uint16_t>(player->getClientLowLevelBonusDisplay());
+	msg.add<uint16_t>(0); // store exp bonus
+	msg.add<uint16_t>(player->getClientStaminaBonusDisplay());
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));
@@ -3602,13 +3600,13 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getMagicLevel());
 	msg.add<uint16_t>(player->getBaseMagicLevel());
 	msg.add<uint16_t>(player->getBaseMagicLevel()); // base + loyalty bonus(?)
-	msg.add<uint16_t>(player->getMagicLevelPercent() * 100);
+	msg.add<uint16_t>(player->getMagicLevelPercent());
 
 	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
 		msg.add<uint16_t>(player->getBaseSkill(i));
 		msg.add<uint16_t>(player->getBaseSkill(i)); // base + loyalty bonus(?)
-		msg.add<uint16_t>(player->getSkillPercent(i) * 100);
+		msg.add<uint16_t>(player->getSkillPercent(i));
 	}
 
 	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {

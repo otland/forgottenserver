@@ -15,7 +15,11 @@ class Tile;
 
 enum class EventInfoId
 {
-	CREATURE_ONHEAR
+	// Creature
+	CREATURE_ONHEAR,
+
+	// Monster
+	MONSTER_ONSPAWN
 };
 
 class Events
@@ -28,6 +32,7 @@ class Events
 		int32_t creatureOnTargetCombat = -1;
 		int32_t creatureOnHear = -1;
 		int32_t creatureOnChangeZone = -1;
+		int32_t creatureOnUpdateStorage = -1;
 
 		// Party
 		int32_t partyOnJoin = -1;
@@ -50,6 +55,7 @@ class Events
 		int32_t playerOnMoveCreature = -1;
 		int32_t playerOnReportRuleViolation = -1;
 		int32_t playerOnReportBug = -1;
+		int32_t playerOnRotateItem = -1;
 		int32_t playerOnTurn = -1;
 		int32_t playerOnTradeRequest = -1;
 		int32_t playerOnTradeAccept = -1;
@@ -62,7 +68,6 @@ class Events
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
 		int32_t playerOnNetworkMessage = -1;
-		int32_t playerOnUpdateStorage = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -80,6 +85,8 @@ public:
 	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
 	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
+	void eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
+	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
 	// Party
 	bool eventPartyOnJoin(Party* party, Player* player);
@@ -108,6 +115,7 @@ public:
 	                                      uint8_t reportReason, const std::string& comment,
 	                                      const std::string& translation);
 	bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
+	void eventPlayerOnRotateItem(Player* player, Item* item);
 	bool eventPlayerOnTurn(Player* player, Direction direction);
 	bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
 	bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
@@ -115,14 +123,12 @@ public:
 	void eventPlayerOnPodiumRequest(Player* player, Item* item);
 	void eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible,
 	                             Direction direction);
-	void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp);
+	void eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp, bool sendText);
 	void eventPlayerOnLoseExperience(Player* player, uint64_t& exp);
 	void eventPlayerOnGainSkillTries(Player* player, skills_t skill, uint64_t& tries);
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
-	void eventPlayerOnUpdateStorage(Player* player, const uint32_t key, const int32_t value, const int32_t oldValue,
-	                                bool isLogin);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
@@ -133,6 +139,8 @@ public:
 		switch (eventInfoId) {
 			case EventInfoId::CREATURE_ONHEAR:
 				return info.creatureOnHear;
+			case EventInfoId::MONSTER_ONSPAWN:
+				return info.monsterOnSpawn;
 			default:
 				return -1;
 		}
