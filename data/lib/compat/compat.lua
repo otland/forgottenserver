@@ -1066,13 +1066,13 @@ function doSetItemText(uid, text, writer, date)
 		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
 	end
 
-	if writer ~= "" then
+	if writer then
 		item:setAttribute(ITEM_ATTRIBUTE_WRITER, tostring(writer))
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_WRITER)
 	end
 
-	if date ~= "" then
+	if date then
 		item:setAttribute(ITEM_ATTRIBUTE_DATE, tonumber(date))
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_DATE)
