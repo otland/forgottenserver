@@ -417,7 +417,7 @@ function Player.sendQuestLog(self)
 	for _, quest in pairs(quests) do
 		msg:addU16(quest.id)
 		msg:addString(quest.name)
-		msg:addByte(quest:isCompleted(self))
+		msg:addByte(quest:isCompleted(self) and 0x01 or 0x00)
 	end
 
 	msg:sendToPlayer(self)
