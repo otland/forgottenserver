@@ -1215,10 +1215,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) const
 {
-	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
-	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
-
-	for (Direction dir : dirList) {
+	for (Direction dir : getShuffleDirections()) {
 		if (canWalkTo(creaturePos, dir)) {
 			direction = dir;
 			return true;
