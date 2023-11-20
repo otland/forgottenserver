@@ -718,7 +718,7 @@ void Creature::onDeath()
 	if (master) {
 		setMaster(nullptr);
 
-		if (getMonster()) {
+		if (dynamic_cast<Monster*>(this) != nullptr) {
 			decrementReferenceCounter();
 		}
 	}
