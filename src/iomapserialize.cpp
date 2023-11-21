@@ -434,8 +434,9 @@ bool IOMapSerialize::saveHouse(House* house, bool async /* = false */)
 			saveHouseItems(houseId, tileList, Database::getAsyncInstance());
 		});
 	} else {
-		saveHouseInfo(house->getId(), houseInfo, Database::getInstance());
-		saveHouseItems(house->getId(), tileList, Database::getInstance());
+		bool saveInfo = saveHouseInfo(house->getId(), houseInfo, Database::getInstance());
+		bool saveItems = saveHouseItems(house->getId(), tileList, Database::getInstance());
+		return saveInfo && saveItems;
 	}
 	return true;
 }
