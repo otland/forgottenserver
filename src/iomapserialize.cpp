@@ -78,7 +78,8 @@ bool IOMapSerialize::saveHousesItems(bool async /* = false*/)
 		}
 	}
 
-	std::cout << "> Saved house items in: " << (OTSYS_TIME() - start) / (1000.) << " s" << (async ? " (async)" : " (sync)") << std::endl;
+	std::cout << "> Saved house items in: " << (OTSYS_TIME() - start) / (1000.) << " s"
+	          << (async ? " (async)" : " (sync)") << std::endl;
 	return success;
 }
 
@@ -343,8 +344,8 @@ bool IOMapSerialize::saveHouseInfo(const uint32_t& houseId, DBHouseInfoPtr house
 	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ", db);
 
 	for (const DBHouseList& houseList : houseInfo->lists) {
-		if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", houseId, houseList.listId,
-		                             db.escapeString(houseList.listText)))) {
+		if (!stmt.addRow(
+		        fmt::format("{:d}, {:d}, {:s}", houseId, houseList.listId, db.escapeString(houseList.listText)))) {
 			return false;
 		}
 	}
@@ -395,7 +396,6 @@ bool IOMapSerialize::saveHouse(House* house, bool async /* = false */)
 	    DBHouseInfo{house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(), house->getName(),
 	                house->getTownId(), house->getRent(), house->getTiles().size(), house->getBedCount()});
 
-
 	std::string listText;
 	if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 		houseInfo->lists.push_back(DBHouseList{tfs::to_underlying(GUEST_LIST), listText});
@@ -416,7 +416,6 @@ bool IOMapSerialize::saveHouse(House* house, bool async /* = false */)
 			listText.clear();
 		}
 	}
-
 
 	DBHouseTileListPtr tileList = std::make_shared<DBHouseTileList>();
 	PropWriteStream stream;
@@ -440,4 +439,3 @@ bool IOMapSerialize::saveHouse(House* house, bool async /* = false */)
 	}
 	return true;
 }
-

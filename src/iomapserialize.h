@@ -14,12 +14,14 @@ class PropStream;
 class PropWriteStream;
 class Tile;
 
-struct DBHouseList {
+struct DBHouseList
+{
 	uint32_t listId;
 	std::string listText;
 };
 
-struct DBHouseInfo {
+struct DBHouseInfo
+{
 	uint32_t owner;
 	time_t paidUntil;
 	uint32_t payrentWarnings;
@@ -28,7 +30,7 @@ struct DBHouseInfo {
 	uint32_t rent;
 	size_t size;
 	uint32_t bedCount;
-	std::list<DBHouseList> lists {};
+	std::list<DBHouseList> lists{};
 };
 
 using DBHouseInfoPtr = std::shared_ptr<DBHouseInfo>;
