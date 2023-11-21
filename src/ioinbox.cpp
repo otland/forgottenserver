@@ -10,14 +10,14 @@
 
 extern Game g_game;
 
-IOInbox::IOInbox() { db.connect(); }
+IOInbox::IOInbox() : db(Database::getAsyncInstance()) {}
 
 void IOInbox::loadPlayer(const Player* player)
 {
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 	auto result = pendingPlayerSet.insert(player->getGUID());
 	if (result.second) {
-		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { loadPlayerAsync(guid); });
+		g_asyncTasks.addTask([this, guid = player->getGUID()]() { loadPlayerAsync(guid); });
 	}
 }
 
@@ -25,7 +25,7 @@ void IOInbox::savePlayer(const Player* player)
 {
 	if (Inbox* inbox = player->getInbox()) {
 		saveInbox(player->getGUID(), inbox, player);
-		g_dispatcherInbox.addTask([this, guid = player->getGUID()]() { savePlayerAsync(guid); });
+		g_asyncTasks.addTask([this, guid = player->getGUID()]() { savePlayerAsync(guid); });
 	}
 }
 
@@ -36,19 +36,19 @@ void IOInbox::savePlayerItems(const Player* player, ItemBlockList& itemList)
 
 void IOInbox::savePlayerItems(const uint32_t& guid, ItemBlockList& itemList)
 {
-	// dispatcher thread
+	// any thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 	pendingItemsToSave[guid].push_back(std::move(itemList));
 
 	auto it = pendingPlayerSet.find(guid);
 	if (it == pendingPlayerSet.end()) {
-		g_dispatcherInbox.addTask([this, guid]() { savePlayerItemsAsync(guid); });
+		g_asyncTasks.addTask([this, guid]() { savePlayerItemsAsync(guid); });
 	}
 }
 
 Inbox* IOInbox::loadInbox(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// any thread
 
 	DBEntryListPtr tmpInbox = getPlayerInbox(guid);
 	if (!tmpInbox) {
@@ -114,7 +114,7 @@ Inbox* IOInbox::createInboxItem(const ItemMap& items)
 
 bool IOInbox::canSavePlayerItems(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// any thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 
 	auto playerIt = pendingPlayerSet.find(guid);
@@ -128,7 +128,7 @@ bool IOInbox::canSavePlayerItems(const uint32_t& guid)
 
 DBEntryListPtr IOInbox::getPlayerInbox(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// any thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 
 	auto it = inboxCache.find(guid);
@@ -259,7 +259,7 @@ DBEntryListPtr IOInbox::saveItems(const Player* player, const ItemBlockList& ite
 
 void IOInbox::loadPlayerAsync(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// asyncTasks thread
 	Inbox* inbox = loadInbox(guid);
 	if (deliverItems(guid, inbox)) {
 		saveInbox(guid, inbox);
@@ -270,7 +270,7 @@ void IOInbox::loadPlayerAsync(const uint32_t& guid)
 
 void IOInbox::savePlayerAsync(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// asyncTasks thread
 	std::unique_lock<std::recursive_mutex> lockClass(lock);
 	auto it = inboxCache.find(guid);
 	if (it == inboxCache.end() || it->second->saved) {
@@ -316,7 +316,7 @@ void IOInbox::assignInbox(const uint32_t& guid, Inbox* inbox)
 
 	Player* player = g_game.getPlayerByGUID(guid);
 	if (!player) {
-		g_dispatcherInbox.addTask([this, guid, inbox]() {
+		g_asyncTasks.addTask([this, guid, inbox]() {
 			if (canSavePlayerItems(guid)) {
 				deliverItems(guid, inbox);
 				saveInbox(guid, inbox);
@@ -349,7 +349,7 @@ bool IOInbox::deliverItems(const uint32_t& guid, Inbox* inbox)
 
 void IOInbox::savePlayerItemsAsync(const uint32_t& guid)
 {
-	// dispatcherInbox thread
+	// asyncTasks thread
 	if (canSavePlayerItems(guid)) {
 		Inbox* inbox = loadInbox(guid);
 		deliverItems(guid, inbox);
@@ -361,7 +361,7 @@ void IOInbox::savePlayerItemsAsync(const uint32_t& guid)
 
 void IOInbox::flush()
 {
-	// dispatcherInbox thread - only called as ultimate task on shutdown
+	// asyncTasks thread - only called as ultimate task on shutdown
 	std::lock_guard<std::recursive_mutex> lockClass(lock);
 
 	pendingPlayerSet.clear();

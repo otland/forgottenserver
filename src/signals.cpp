@@ -26,7 +26,7 @@
 
 extern Scheduler g_scheduler;
 extern DatabaseTasks g_databaseTasks;
-extern Dispatcher g_dispatcherInbox;
+extern Dispatcher g_asyncTasks;
 extern Dispatcher g_dispatcher;
 
 extern ConfigManager g_config;
@@ -158,7 +158,7 @@ void dispatchSignalHandler(int signal)
 			// hold the thread until other threads end
 			g_scheduler.join();
 			g_databaseTasks.join();
-			g_dispatcherInbox.join();
+			g_asyncTasks.join();
 			g_dispatcher.join();
 			break;
 #endif

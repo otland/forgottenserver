@@ -67,7 +67,7 @@ private:
 	bool deliverItems(const uint32_t& guid, Inbox* inbox);
 	void savePlayerItemsAsync(const uint32_t& guid);
 
-	Database db;
+	Database& db;
 	std::recursive_mutex lock;
 	std::map<uint32_t, PlayerDBEntryPtr> inboxCache;
 	std::map<uint32_t, std::list<ItemBlockList>> pendingItemsToSave;

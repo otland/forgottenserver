@@ -128,13 +128,13 @@ void Game::setGameState(GameState_t newState)
 
 			saveGameState();
 
-			g_dispatcherInbox.addTask([]() { IOInbox::getInstance().flush(); });
+			g_asyncTasks.addTask([]() { IOInbox::getInstance().flush(); });
 
 			g_dispatcher.addTask([this]() { shutdown(); });
 
 			g_scheduler.stop();
 			g_databaseTasks.stop();
-			g_dispatcherInbox.stop();
+			g_asyncTasks.stop();
 			g_dispatcher.stop();
 			break;
 		}

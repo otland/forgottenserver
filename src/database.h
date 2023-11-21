@@ -30,6 +30,12 @@ public:
 		return instance;
 	}
 
+	static Database& getAsyncInstance()
+	{
+		static Database asyncInstance;
+		return asyncInstance;
+	}
+
 	/**
 	 * Connects to the database
 	 *
