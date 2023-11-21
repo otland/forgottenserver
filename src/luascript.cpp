@@ -12561,8 +12561,9 @@ int LuaScriptInterface::luaHouseSave(lua_State* L)
 		lua_pushnil(L);
 		return 1;
 	}
+	bool async = getBoolean(L, 2, false);
 
-	pushBoolean(L, IOMapSerialize::saveHouse(house));
+	pushBoolean(L, IOMapSerialize::saveHouse(house, async));
 	return 1;
 }
 
