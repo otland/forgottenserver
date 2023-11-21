@@ -2789,7 +2789,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		// refresh the tile instead
 		// 1. this is a rare case, and is only triggered by forcing summon in a position
 		// 2. since no stackpos will be send to the client about that creature, removing it must be done with its id if
-		// its stackpos remains >= MAX_STACKPOS. this is done to add creatures to battle list instead of rendering on screen
+		// its stackpos remains >= MAX_STACKPOS. this is done to add creatures to battle list instead of rendering on
+		// screen
 		if (stackpos >= MAX_STACKPOS) {
 			// @todo: should we avoid this check?
 			if (const Tile* tile = creature->getTile()) {
@@ -3687,8 +3688,7 @@ void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uin
 void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos,
                                       uint32_t stackpos)
 {
-	if (stackpos < MAX_STACKPOS
-		) {
+	if (stackpos < MAX_STACKPOS) {
 		RemoveTileThing(msg, pos, stackpos);
 		return;
 	}
