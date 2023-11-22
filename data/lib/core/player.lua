@@ -711,7 +711,7 @@ local function updateGoldenOutfitCache()
 	goldenOutfitCache = {[1] = {}, [2] = {}, [3] = {}}
 
 	local resultId = db.storeQuery(string.format("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = %d AND `value` >= 1;", PlayerStorageKeys.goldenOutfit))
-	if resultId ~= 0 then
+	if resultId then
 		repeat
 			local addons = result.getNumber(resultId, "value")
 			local name = result.getString(resultId, "name")
@@ -727,7 +727,7 @@ local function updateGoldenOutfitCache()
 	lastUpdated = os.time()
 end
 
-function Player.showGoldenOutfitInfo(self)
+function Player.showMemorialInfo(self)
 	updateGoldenOutfitCache()
 
 	local msg = NetworkMessage()
@@ -749,8 +749,8 @@ function Player.showGoldenOutfitInfo(self)
 
 	-- royal costume
 	for i = 1, 3 do
-		msg:addU16(0) -- price in silver tokens
-		msg:addU16(0) -- price in golden tokens
+		msg:addU16(30000) -- price in silver tokens
+		msg:addU16(25000) -- price in golden tokens
 	end
 
 	for i = 1, 3 do
