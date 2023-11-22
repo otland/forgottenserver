@@ -698,3 +698,64 @@ end
 function Player.getAccountStorageValue(self, key)
 	return Game.getAccountStorageValue(self:getAccountId(), key)
 end
+
+local updateInterval = 10 * 60
+local goldenOutfitCache
+local lastUpdated = 0
+
+local function updateGoldenOutfitCache()
+	if os.time() < lastUpdated + updateInterval then
+		return
+	end
+
+	goldenOutfitCache = {[1] = {}, [2] = {}, [3] = {}}
+
+	local resultId = db.storeQuery(string.format("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = %d AND `value` >= 1;", PlayerStorageKeys.goldenOutfit))
+	if resultId ~= 0 then
+		repeat
+			local addons = result.getNumber(resultId, "value")
+			local name = result.getString(resultId, "name")
+			if not goldenOutfitCache[addons] then
+				goldenOutfitCache[addons] = {}
+			end
+
+			table.insert(goldenOutfitCache[addons], name)
+		until not result.next(resultId)
+		result.free(resultId)
+	end
+
+	lastUpdated = os.time()
+end
+
+function Player.showGoldenOutfitInfo(self)
+	updateGoldenOutfitCache()
+
+	local msg = NetworkMessage()
+	msg:addByte(0xB0)
+
+	-- golden outfit
+	local prices = {500000000, 750000000, 1000000000}
+	for i, price in ipairs(prices) do
+		msg:addU32(price)
+	end
+
+	for i = 1, 3 do
+		msg:addU16(#goldenOutfitCache[i])
+
+		for j = 1, #goldenOutfitCache[i] do
+			msg:addString(goldenOutfitCache[i][j])
+		end
+	end
+
+	-- royal costume
+	for i = 1, 3 do
+		msg:addU16(0) -- price in silver tokens
+		msg:addU16(0) -- price in golden tokens
+	end
+
+	for i = 1, 3 do
+		msg:addU16(0) -- list of spenders
+	end
+
+	msg:sendToPlayer(self)
+end
