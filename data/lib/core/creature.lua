@@ -105,7 +105,10 @@ function Creature:addSummon(monster)
 	summon:setDropLoot(false)
 	summon:setSkillLoss(false)
 	summon:setMaster(self)
-	summon:getPosition():notifySummonAppear(summon)
+
+	if self:isPlayer() then
+		summon:getPosition():notifySummonAppear(summon)
+	end
 
 	return true
 end
@@ -199,4 +202,8 @@ function Creature.getKillers(self, onlyPlayers)
 		killers[i] = killer.creature
 	end
 	return killers
+end
+
+function Creature.removeStorageValue(self, key)
+	return self:setStorageValue(key, nil)
 end
