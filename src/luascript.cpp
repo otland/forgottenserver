@@ -2764,6 +2764,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Monster", "isMonster", LuaScriptInterface::luaMonsterIsMonster);
 
+	registerMethod("Monster", "getId", LuaScriptInterface::luaMonsterGetId);
 	registerMethod("Monster", "getType", LuaScriptInterface::luaMonsterGetType);
 
 	registerMethod("Monster", "rename", LuaScriptInterface::luaMonsterRename);
@@ -2935,6 +2936,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "isMagicField", LuaScriptInterface::luaItemTypeIsMagicField);
 	registerMethod("ItemType", "isUseable", LuaScriptInterface::luaItemTypeIsUseable);
 	registerMethod("ItemType", "isPickupable", LuaScriptInterface::luaItemTypeIsPickupable);
+	registerMethod("ItemType", "isRotatable", LuaScriptInterface::luaItemTypeIsRotatable);
 
 	registerMethod("ItemType", "getType", LuaScriptInterface::luaItemTypeGetType);
 	registerMethod("ItemType", "getGroup", LuaScriptInterface::luaItemTypeGetGroup);
@@ -2942,6 +2944,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "getClientId", LuaScriptInterface::luaItemTypeGetClientId);
 	registerMethod("ItemType", "getName", LuaScriptInterface::luaItemTypeGetName);
 	registerMethod("ItemType", "getPluralName", LuaScriptInterface::luaItemTypeGetPluralName);
+	registerMethod("ItemType", "getRotateTo", LuaScriptInterface::luaItemTypeGetRotateTo);
 	registerMethod("ItemType", "getArticle", LuaScriptInterface::luaItemTypeGetArticle);
 	registerMethod("ItemType", "getDescription", LuaScriptInterface::luaItemTypeGetDescription);
 	registerMethod("ItemType", "getSlotPosition", LuaScriptInterface::luaItemTypeGetSlotPosition);
@@ -8683,8 +8686,13 @@ int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 		return 1;
 	}
 
-	int32_t value = getNumber<int32_t>(L, 3);
-	creature->setStorageValue(key, value);
+	if (lua_isnoneornil(L, 3)) {
+		creature->setStorageValue(key, std::nullopt);
+	} else {
+		int32_t value = getNumber<int32_t>(L, 3);
+		creature->setStorageValue(key, value);
+	}
+
 	pushBoolean(L, true);
 	return 1;
 }
@@ -11034,6 +11042,23 @@ int LuaScriptInterface::luaMonsterIsMonster(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterGetId(lua_State* L)
+{
+	// monster:getId()
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (monster) {
+		// Set monster id if it's not set yet (only for onSpawn event)
+		if (getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
+			monster->setID();
+		}
+
+		lua_pushinteger(L, monster->getID());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaMonsterGetType(lua_State* L)
 {
 	// monster:getType()
@@ -12729,6 +12754,18 @@ int LuaScriptInterface::luaItemTypeIsPickupable(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemTypeIsRotatable(lua_State* L)
+{
+	// itemType:isRotatable()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		pushBoolean(L, itemType->rotatable);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaItemTypeGetType(lua_State* L)
 {
 	// itemType:getType()
@@ -12795,6 +12832,18 @@ int LuaScriptInterface::luaItemTypeGetPluralName(lua_State* L)
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
 		pushString(L, itemType->getPluralName());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetRotateTo(lua_State* L)
+{
+	// itemType:getRotateTo()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushnumber(L, itemType->rotateTo);
 	} else {
 		lua_pushnil(L);
 	}
@@ -15199,7 +15248,13 @@ int LuaScriptInterface::luaLootAddChildLoot(lua_State* L)
 	// loot:addChildLoot(loot)
 	Loot* loot = getUserdata<Loot>(L, 1);
 	if (loot) {
-		loot->lootBlock.childLoot.push_back(getUserdata<Loot>(L, 2)->lootBlock);
+		Loot* childLoot = getUserdata<Loot>(L, 2);
+		if (childLoot) {
+			loot->lootBlock.childLoot.push_back(childLoot->lootBlock);
+			pushBoolean(L, true);
+		} else {
+			pushBoolean(L, false);
+		}
 	} else {
 		lua_pushnil(L);
 	}
