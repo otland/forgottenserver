@@ -36,6 +36,7 @@
 #include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
+#include "httpclient.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 
@@ -3368,6 +3369,21 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("XMLNode", "name", LuaScriptInterface::luaXmlNodeName);
 	registerMethod("XMLNode", "firstChild", LuaScriptInterface::luaXmlNodeFirstChild);
 	registerMethod("XMLNode", "nextSibling", LuaScriptInterface::luaXmlNodeNextSibling);
+
+	// HttpClientRequest
+	registerClass("HttpClientRequest", "", LuaScriptInterface::luaCreateHttpClientRequest);
+	registerMetaMethod("HttpClientRequest", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("HttpClientRequest", "__gc", LuaScriptInterface::luaDeleteHttpClientRequest);
+	registerMethod("HttpClientRequest", "setTimeout", LuaScriptInterface::luaHttpClientRequestSetTimeout);
+	registerMethod("HttpClientRequest", "connect", LuaScriptInterface::luaHttpClientRequestConnect);
+	registerMethod("HttpClientRequest", "trace", LuaScriptInterface::luaHttpClientRequestTrace);
+	registerMethod("HttpClientRequest", "options", LuaScriptInterface::luaHttpClientRequestOptions);
+	registerMethod("HttpClientRequest", "head", LuaScriptInterface::luaHttpClientRequestHead);
+	registerMethod("HttpClientRequest", "delete", LuaScriptInterface::luaHttpClientRequestDelete);
+	registerMethod("HttpClientRequest", "get", LuaScriptInterface::luaHttpClientRequestGet);
+	registerMethod("HttpClientRequest", "post", LuaScriptInterface::luaHttpClientRequestPost);
+	registerMethod("HttpClientRequest", "patch", LuaScriptInterface::luaHttpClientRequestPatch);
+	registerMethod("HttpClientRequest", "put", LuaScriptInterface::luaHttpClientRequestPut);
 }
 
 #undef registerEnum
@@ -18288,6 +18304,284 @@ int LuaScriptInterface::luaXmlNodeNextSibling(lua_State* L)
 	pushUserdata<pugi::xml_node>(L, newNode.release());
 	setMetatable(L, -1, "XMLNode");
 	return 1;
+}
+
+// HttpClient
+int LuaScriptInterface::luaCreateHttpClientRequest(lua_State* L)
+{
+	// HttpClientRequest()
+	HttpClientLib::HttpRequest_ptr httpRequest = std::make_shared<HttpClientLib::HttpRequest>();
+
+	pushSharedPtr(L, httpRequest);
+	setMetatable(L, -1, "HttpClientRequest");
+	return 1;
+}
+
+int LuaScriptInterface::luaDeleteHttpClientRequest(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (httpRequest) {
+		httpRequest.reset();
+	}
+	return 0;
+}
+
+int LuaScriptInterface::luaHttpClientRequestSetTimeout(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	httpRequest->timeout = getNumber<uint32_t>(L, -1);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestConnect(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_CONNECT;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestTrace(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_TRACE;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestOptions(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_OPTIONS;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestHead(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_HEAD;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestDelete(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_DELETE;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestGet(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_GET;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestPost(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_POST;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestPatch(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_PATCH;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaHttpClientRequestPut(lua_State* L)
+{
+	HttpClientLib::HttpRequest_ptr& httpRequest = getSharedPtr<HttpClientLib::HttpRequest>(L, 1);
+
+	if (!httpRequest) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	luaHttpClientBuildRequest(L, httpRequest);
+	httpRequest->method = HttpClientLib::HTTP_PUT;
+
+	g_http.addRequest(httpRequest);
+
+	pushBoolean(L, true);
+	return 1;
+}
+
+void LuaScriptInterface::luaHttpClientBuildRequest(lua_State* L, HttpClientLib::HttpRequest_ptr& httpRequest)
+{
+	std::string url;
+	uint32_t callbackId;
+	std::unordered_map<std::string, std::string> headerFields;
+	std::string data;
+
+	luaHttpClientRetrieveParameters(L, url, callbackId, headerFields, data);
+
+	httpRequest->url = url;
+	httpRequest->fields = headerFields;
+	httpRequest->data = data;
+
+	httpRequest->callbackData.scriptId = getScriptEnv()->getScriptId();
+	httpRequest->callbackData.callbackId = callbackId;
+}
+
+bool LuaScriptInterface::luaHttpClientRetrieveParameters(lua_State* L, std::string& url, uint32_t& callbackId,
+                                                         std::unordered_map<std::string, std::string>& headerFields,
+                                                         std::string& data)
+{
+	int parameters = lua_gettop(L);
+	if (parameters < 2) {
+		reportErrorFunc(L, "httpClient: expecting at least two arguments: url, callback");
+		pushBoolean(L, false);
+		return false;
+	}
+
+	if (!isString(L, 2)) {
+		reportErrorFunc(L, "httpClient: url parameter should be a string.");
+		pushBoolean(L, false);
+		return false;
+	}
+
+	if (!isFunction(L, 3)) {
+		reportErrorFunc(L, "httpClient: callback parameter should be a function.");
+		pushBoolean(L, false);
+		return false;
+	}
+
+	if (parameters >= 5) {
+		if (!isString(L, 5)) {
+			reportErrorFunc(L, "httpClient: data parameter should be a string.");
+			pushBoolean(L, false);
+			return false;
+		}
+
+		data = getString(L, 5);
+		lua_pop(L, 1);
+	}
+
+	if (parameters >= 4) {
+		if (!isTable(L, 4)) {
+			reportErrorFunc(L, "httpClient: Invalid fields table.");
+			pushBoolean(L, false);
+			return false;
+		}
+
+		lua_pushnil(L);
+		while (lua_next(L, 4) != 0) {
+			if (lua_isstring(L, -2) && lua_isstring(L, -1)) {
+				std::string key = getString(L, -2);
+				std::string value = getString(L, -1);
+				headerFields[key] = value;
+
+				// Removes the value, keeps the key for the next iteration
+				lua_pop(L, 1);
+			}
+		}
+		lua_pop(L, 1);
+	}
+
+	callbackId = luaL_ref(L, LUA_REGISTRYINDEX);
+
+	url = getString(L, 2);
+	lua_pop(L, 1);
+
+	return true;
 }
 
 //

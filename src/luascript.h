@@ -37,6 +37,11 @@ struct Outfit;
 
 using Combat_ptr = std::shared_ptr<Combat>;
 
+namespace HttpClientLib {
+class HttpRequest;
+using HttpRequest_ptr = std::shared_ptr<HttpRequest>;
+} // namespace HttpClientLib
+
 enum
 {
 	EVENT_ID_LOADING = 1,
@@ -1591,6 +1596,24 @@ private:
 	static int luaXmlNodeName(lua_State* L);
 	static int luaXmlNodeFirstChild(lua_State* L);
 	static int luaXmlNodeNextSibling(lua_State* L);
+
+	// http client
+	static int luaCreateHttpClientRequest(lua_State* L);
+	static int luaDeleteHttpClientRequest(lua_State* L);
+	static void luaHttpClientBuildRequest(lua_State* L, HttpClientLib::HttpRequest_ptr& httpRequest);
+	static bool luaHttpClientRetrieveParameters(lua_State* L, std::string& url, uint32_t& callbackId,
+	                                            std::unordered_map<std::string, std::string>& headerFields,
+	                                            std::string& data);
+	static int luaHttpClientRequestSetTimeout(lua_State* L);
+	static int luaHttpClientRequestConnect(lua_State* L);
+	static int luaHttpClientRequestTrace(lua_State* L);
+	static int luaHttpClientRequestOptions(lua_State* L);
+	static int luaHttpClientRequestHead(lua_State* L);
+	static int luaHttpClientRequestDelete(lua_State* L);
+	static int luaHttpClientRequestGet(lua_State* L);
+	static int luaHttpClientRequestPost(lua_State* L);
+	static int luaHttpClientRequestPatch(lua_State* L);
+	static int luaHttpClientRequestPut(lua_State* L);
 
 	//
 	std::string lastLuaError;
