@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_TOOLS_H
@@ -10,7 +10,7 @@
 
 void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
 
-std::string transformToSHA1(const std::string& input);
+std::string transformToSHA1(std::string_view input);
 std::string generateToken(const std::string& key, uint32_t ticks);
 
 // checks that str1 is equivalent to str2 ignoring letter case
@@ -22,8 +22,9 @@ bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix);
 using StringVector = std::vector<std::string>;
 using IntegerVector = std::vector<int32_t>;
 
-StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit = -1);
-IntegerVector vectorAtoi(const StringVector& stringVector);
+std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
+                                            int32_t limit = -1);
+IntegerVector vectorAtoi(const std::vector<std::string_view>& stringVector);
 constexpr bool hasBitSet(uint32_t flag, uint32_t flags) { return (flags & flag) != 0; }
 
 std::mt19937& getRandomGenerator();
@@ -31,7 +32,6 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 bool boolean_random(double probability = 0.5);
 
-Direction getDirection(const std::string& string);
 Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
 
@@ -55,7 +55,7 @@ uint32_t adlerChecksum(const uint8_t* data, size_t length);
 
 std::string ucfirst(std::string str);
 std::string ucwords(std::string str);
-bool booleanString(const std::string& str);
+bool booleanString(std::string_view str);
 
 size_t combatTypeToIndex(CombatType_t combatType);
 CombatType_t indexToCombatType(size_t v);
@@ -70,5 +70,19 @@ const char* getReturnMessage(ReturnValue value);
 int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
+
+namespace tfs {
+
+#if __has_cpp_attribute(__cpp_lib_to_underlying)
+
+inline constexpr auto to_underlying(auto e) noexcept { return std::to_underlying(e); }
+
+#else
+
+inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
+
+#endif
+
+} // namespace tfs
 
 #endif // FS_TOOLS_H

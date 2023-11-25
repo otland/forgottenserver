@@ -22,6 +22,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 				player:setStorageValue(PlayerStorageKeys.annihilatorReward, 1)
 				player:addAchievement("Annihilator")
+				player:takeScreenshot(SCREENSHOT_TYPE_TREASUREFOUND)
 			else
 				player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 			end
@@ -33,6 +34,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 			player:addItem(item.uid, 1)
 			player:setStorageValue(item.uid, 1)
+			player:takeScreenshot(SCREENSHOT_TYPE_TREASUREFOUND)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. ' weighing ' .. itemWeight .. ' oz it\'s too heavy.')
 		end

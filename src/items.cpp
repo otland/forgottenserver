@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -11,6 +11,8 @@
 
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
+
+namespace {
 
 const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributesMap = {
     {"type", ITEM_PARSE_TYPE},
@@ -249,6 +251,52 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
     {"mead", FLUID_MEAD},
     {"ink", FLUID_INK},
 };
+
+const std::unordered_map<std::string_view, Direction> DirectionsMap = {
+    {"north", DIRECTION_NORTH},
+    {"n", DIRECTION_NORTH},
+    {"0", DIRECTION_NORTH},
+    {"east", DIRECTION_EAST},
+    {"e", DIRECTION_EAST},
+    {"1", DIRECTION_EAST},
+    {"south", DIRECTION_SOUTH},
+    {"s", DIRECTION_SOUTH},
+    {"2", DIRECTION_SOUTH},
+    {"west", DIRECTION_WEST},
+    {"w", DIRECTION_WEST},
+    {"3", DIRECTION_WEST},
+    {"southwest", DIRECTION_SOUTHWEST},
+    {"south west", DIRECTION_SOUTHWEST},
+    {"south-west", DIRECTION_SOUTHWEST},
+    {"sw", DIRECTION_SOUTHWEST},
+    {"4", DIRECTION_SOUTHWEST},
+    {"southeast", DIRECTION_SOUTHEAST},
+    {"south east", DIRECTION_SOUTHEAST},
+    {"south-east", DIRECTION_SOUTHEAST},
+    {"se", DIRECTION_SOUTHEAST},
+    {"5", DIRECTION_SOUTHEAST},
+    {"northwest", DIRECTION_NORTHWEST},
+    {"north west", DIRECTION_NORTHWEST},
+    {"north-west", DIRECTION_NORTHWEST},
+    {"nw", DIRECTION_NORTHWEST},
+    {"6", DIRECTION_NORTHWEST},
+    {"northeast", DIRECTION_NORTHEAST},
+    {"north east", DIRECTION_NORTHEAST},
+    {"north-east", DIRECTION_NORTHEAST},
+    {"ne", DIRECTION_NORTHEAST},
+    {"7", DIRECTION_NORTHEAST},
+};
+
+Direction getDirection(std::string_view string)
+{
+	if (auto it = DirectionsMap.find(string); it != DirectionsMap.end()) {
+		return it->second;
+	}
+	fmt::print("[Warning - getDirection] Invalid direction: {}\n", string);
+	return DIRECTION_NORTH;
+}
+
+} // namespace
 
 Items::Items()
 {

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -21,7 +21,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `sale` = {:d} AND `itemtype` = {:d}",
-	    action, itemId));
+	    tfs::to_underlying(action), itemId));
 	if (!result) {
 		return offerList;
 	}
@@ -34,6 +34,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		offer.price = result->getNumber<uint64_t>("price");
 		offer.timestamp = result->getNumber<uint32_t>("created") + marketOfferDuration;
 		offer.counter = result->getNumber<uint32_t>("id") & 0xFFFF;
+		offer.itemId = itemId;
 		if (result->getNumber<uint16_t>("anonymous") == 0) {
 			offer.playerName = result->getString("player_name");
 		} else {
@@ -52,7 +53,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `itemtype` FROM `market_offers` WHERE `player_id` = {:d} AND `sale` = {:d}",
-	    playerId, action));
+	    playerId, tfs::to_underlying(action)));
 	if (!result) {
 		return offerList;
 	}
@@ -75,7 +76,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `itemtype`, `amount`, `price`, `expires_at`, `state` FROM `market_history` WHERE `player_id` = {:d} AND `sale` = {:d}",
-	    playerId, action));
+	    playerId, tfs::to_underlying(action)));
 	if (!result) {
 		return offerList;
 	}
@@ -130,7 +131,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 			if (itemType.stackable) {
 				uint16_t tmpAmount = amount;
 				while (tmpAmount > 0) {
-					uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 					Item* item = Item::CreateItem(itemType.id, stackCount);
 					if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 					    RETURNVALUE_NOERROR) {
@@ -241,7 +242,7 @@ void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t it
 {
 	Database::getInstance().executeQuery(fmt::format(
 	    "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
-	    playerId, action, itemId, amount, price, time(nullptr), anonymous));
+	    playerId, tfs::to_underlying(action), itemId, amount, price, time(nullptr), anonymous));
 }
 
 void IOMarket::acceptOffer(uint32_t offerId, uint16_t amount)
@@ -255,12 +256,13 @@ void IOMarket::deleteOffer(uint32_t offerId)
 	Database::getInstance().executeQuery(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId));
 }
 
-void IOMarket::appendHistory(uint32_t playerId, MarketAction_t type, uint16_t itemId, uint16_t amount, uint64_t price,
+void IOMarket::appendHistory(uint32_t playerId, MarketAction_t action, uint16_t itemId, uint16_t amount, uint64_t price,
                              time_t timestamp, MarketOfferState_t state)
 {
 	g_databaseTasks.addTask(fmt::format(
 	    "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
-	    playerId, type, itemId, amount, price, timestamp, time(nullptr), state));
+	    playerId, tfs::to_underlying(action), itemId, amount, price, timestamp, time(nullptr),
+	    tfs::to_underlying(state)));
 }
 
 bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
@@ -291,7 +293,7 @@ void IOMarket::updateStatistics()
 {
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = {:d} GROUP BY `itemtype`, `sale`",
-	    OFFERSTATE_ACCEPTED));
+	    tfs::to_underlying(OFFERSTATE_ACCEPTED)));
 	if (!result) {
 		return;
 	}

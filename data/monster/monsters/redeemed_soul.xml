@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Redeemed Soul" nameDescription="a redeemed soul" race="undead" experience="0" speed="140">
+<monster name="Redeemed Soul" nameDescription="a redeemed soul" race="undead" experience="0" speed="140" raceId="1138">
 	<health now="250" max="250" />
 	<look type="714" corpse="24634" />
 	<targetchange interval="2000" chance="5" />
@@ -21,6 +21,7 @@
 		<flag canwalkonpoison="0" />
 		<flag runonhealth="250" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Redeemed Soul Locations..." />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity drunk="1" />

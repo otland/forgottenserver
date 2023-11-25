@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -121,7 +121,7 @@ static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
 	H[4] += E;
 }
 
-std::string transformToSHA1(const std::string& input)
+std::string transformToSHA1(std::string_view input)
 {
 	uint32_t H[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
 
@@ -240,12 +240,13 @@ bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
 	                                                 [](char a, char b) { return tolower(a) == tolower(b); });
 }
 
-StringVector explodeString(const std::string& inString, const std::string& separator, int32_t limit /* = -1*/)
+std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
+                                            int32_t limit /* = -1*/)
 {
-	StringVector returnVector;
-	std::string::size_type start = 0, end = 0;
+	std::vector<std::string_view> returnVector;
+	std::string_view::size_type start = 0, end = 0;
 
-	while (--limit != -1 && (end = inString.find(separator, start)) != std::string::npos) {
+	while (--limit != -1 && (end = inString.find(separator, start)) != std::string_view::npos) {
 		returnVector.push_back(inString.substr(start, end - start));
 		start = end + separator.size();
 	}
@@ -254,11 +255,11 @@ StringVector explodeString(const std::string& inString, const std::string& separ
 	return returnVector;
 }
 
-IntegerVector vectorAtoi(const StringVector& stringVector)
+IntegerVector vectorAtoi(const std::vector<std::string_view>& stringVector)
 {
 	IntegerVector returnVector;
 	for (const auto& string : stringVector) {
-		returnVector.push_back(std::stoi(string));
+		returnVector.push_back(std::stoi(string.data()));
 	}
 	return returnVector;
 }
@@ -284,23 +285,14 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
 	static std::normal_distribution<float> normalRand(0.5f, 0.25f);
-	if (minNumber == maxNumber) {
-		return minNumber;
-	} else if (minNumber > maxNumber) {
-		std::swap(minNumber, maxNumber);
-	}
 
-	int32_t increment;
-	const int32_t diff = maxNumber - minNumber;
-	const float v = normalRand(getRandomGenerator());
-	if (v < 0.0) {
-		increment = diff / 2;
-	} else if (v > 1.0) {
-		increment = (diff + 1) / 2;
-	} else {
-		increment = round(v * diff);
-	}
-	return minNumber + increment;
+	float v;
+	do {
+		v = normalRand(getRandomGenerator());
+	} while (v < 0.0 || v > 1.0);
+
+	auto&& [a, b] = std::minmax(minNumber, maxNumber);
+	return a + std::lround(v * (b - a));
 }
 
 bool boolean_random(double probability /* = 0.5*/)
@@ -312,35 +304,6 @@ bool boolean_random(double probability /* = 0.5*/)
 std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
 std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
-
-Direction getDirection(const std::string& string)
-{
-	Direction direction = DIRECTION_NORTH;
-
-	if (string == "north" || string == "n" || string == "0") {
-		direction = DIRECTION_NORTH;
-	} else if (string == "east" || string == "e" || string == "1") {
-		direction = DIRECTION_EAST;
-	} else if (string == "south" || string == "s" || string == "2") {
-		direction = DIRECTION_SOUTH;
-	} else if (string == "west" || string == "w" || string == "3") {
-		direction = DIRECTION_WEST;
-	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" ||
-	           string == "4") {
-		direction = DIRECTION_SOUTHWEST;
-	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" ||
-	           string == "5") {
-		direction = DIRECTION_SOUTHEAST;
-	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" ||
-	           string == "6") {
-		direction = DIRECTION_NORTHWEST;
-	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" ||
-	           string == "7") {
-		direction = DIRECTION_NORTHEAST;
-	}
-
-	return direction;
-}
 
 Position getNextPosition(Direction direction, Position pos)
 {
@@ -876,7 +839,7 @@ std::string ucwords(std::string str)
 	return str;
 }
 
-bool booleanString(const std::string& str)
+bool booleanString(std::string_view str)
 {
 	if (str.empty()) {
 		return false;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Little Corym Charlatan" nameDescription="a little corym charlatan" race="blood" experience="40" speed="170">
+<monster name="Little Corym Charlatan" nameDescription="a little corym charlatan" race="blood" experience="40" speed="170" raceId="920">
 	<health now="90" max="90" />
 	<look type="532" head="0" body="79" legs="80" feet="0" corpse="19970" />
 	<targetchange interval="5000" chance="0" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Little Corym Charlatan Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-14" />
 	</attacks>

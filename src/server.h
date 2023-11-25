@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_SERVER_H
@@ -10,6 +10,8 @@
 class ServiceBase
 {
 public:
+	virtual ~ServiceBase() = default;
+
 	virtual bool is_single_socket() const = 0;
 	virtual bool is_checksummed() const = 0;
 	virtual uint8_t get_protocol_identifier() const = 0;

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_COMBAT_H
@@ -10,6 +10,7 @@
 #include "tools.h"
 
 class Creature;
+class MatrixArea;
 class Player;
 struct Position;
 class SpectatorVec;
@@ -63,43 +64,6 @@ struct CombatParams
 	bool ignoreResistances = false;
 };
 
-class MatrixArea
-{
-	using Center = std::pair<uint32_t, uint32_t>;
-	using Container = std::valarray<bool>;
-
-public:
-	MatrixArea() = default;
-	MatrixArea(uint32_t rows, uint32_t cols) : arr(rows * cols), rows{rows}, cols{cols} {}
-
-	bool operator()(uint32_t row, uint32_t col) const { return arr[row * cols + col]; }
-	bool& operator()(uint32_t row, uint32_t col) { return arr[row * cols + col]; }
-
-	void setCenter(uint32_t y, uint32_t x) { center = std::make_pair(x, y); }
-	const Center& getCenter() const { return center; }
-
-	uint32_t getRows() const { return rows; }
-	uint32_t getCols() const { return cols; }
-
-	MatrixArea flip() const;
-	MatrixArea mirror() const;
-	MatrixArea transpose() const;
-	MatrixArea rotate90() const;
-	MatrixArea rotate180() const;
-	MatrixArea rotate270() const;
-
-	operator bool() const { return rows == 0 || cols == 0; }
-
-private:
-	MatrixArea(Center center, uint32_t rows, uint32_t cols, Container&& arr) :
-	    arr{std::move(arr)}, center{std::move(center)}, rows{rows}, cols{cols}
-	{}
-
-	Container arr = {};
-	Center center = {};
-	uint32_t rows = 0, cols = 0;
-};
-
 class AreaCombat
 {
 public:
@@ -149,7 +113,7 @@ public:
 	bool setParam(CombatParam_t param, uint32_t value);
 	int32_t getParam(CombatParam_t param);
 
-	void setArea(AreaCombat* area) { this->area.reset(area); }
+	void setArea(AreaCombat* area);
 	bool hasArea() const { return area != nullptr; }
 	void addCondition(const Condition* condition) { params.conditionList.emplace_front(condition); }
 	void clearConditions() { params.conditionList.clear(); }

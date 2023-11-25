@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Minotaur Mage" nameDescription="a minotaur mage" race="blood" experience="150" speed="170">
+<monster name="Minotaur Mage" nameDescription="a minotaur mage" race="blood" experience="150" speed="170" raceId="23">
 	<health now="155" max="155" />
 	<look type="23" corpse="5981" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Minotaur Mage Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-20" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-20" max="-58">

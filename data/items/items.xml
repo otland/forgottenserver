@@ -1471,7 +1471,7 @@
 	<item id="1950" article="a" name="book">
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="1300" />
-		<attribute key="writeOnceItemId" value="1971" />
+		<attribute key="readable" value="true" />
 	</item>
 	<item id="1951" article="a" name="blank parchment">
 		<attribute key="weight" value="200" />
@@ -1486,12 +1486,15 @@
 		<attribute key="writeOnceItemId" value="1968" />
 	</item>
 	<item id="1953" article="a" name="parchment">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1954" article="a" name="sheet of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="50" />
 	</item>
 	<item id="1955" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1956" article="a" name="map">
@@ -1501,6 +1504,7 @@
 		<attribute key="weight" value="790" />
 	</item>
 	<item fromid="1958" toid="1966" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1967" article="a" name="parchment">
@@ -1509,7 +1513,7 @@
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1968" article="a" name="document">
-		<attribute key="writeable" value="true" />
+		<attribute key="readable" value="true" />
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="150" />
 	</item>
@@ -1519,6 +1523,7 @@
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1970" article="the" name="holy Tible">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1971" article="a" name="book">
@@ -17172,6 +17177,7 @@
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="9663" toid="9668" article="an" name="old piece of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item fromid="9669" toid="9670" article="a" name="wall mirror" />
@@ -18063,6 +18069,7 @@
 	</item>
 	<item id="10006" name="Jean Pierre's Cookbook I">
 		<attribute key="description" value="It was given to you by the djinn mantre and contains the collection of recipes you cooked." />
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="10007" article="a" name="dead mutated human">
@@ -21416,6 +21423,7 @@
 	<item id="12496" article="a" name="heavy crate" />
 	<item id="12497" name="Jean Pierre's Cookbook II">
 		<attribute key="description" value="It was given to you by the djinn maitre and contains new recipes you cooked." />
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="12498" article="a" name="fish tail">
@@ -22408,7 +22416,9 @@
 	<item id="13262" article="a" name="sugar">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="13263" article="a" name="book" />
+	<item id="13263" article="a" name="book">
+		<attribute key="readable" value="true" />
+	</item>
 	<item fromid="13264" toid="13268" name="pressed winterberries" />
 	<item fromid="13269" toid="13271" article="a" name="stone" />
 	<item id="13272" article="a" name="magic tile">
@@ -24834,12 +24844,15 @@
 		<attribute key="description" value="The identity of some deepling is written there." />
 	</item>
 	<item id="15427" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15428" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15429" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15430" name="deepling scales" plural="deepling scales">
@@ -34898,6 +34911,7 @@
 	</item>
 	<item id="24716" article="a" name="werewolf amulet">
 		<attribute key="weight" value="550" />
+		<attribute key="slotType" value="necklace" />
 	</item>
 	<item id="24717" article="an" name="enchanted werewolf amulet">
 		<attribute key="weight" value="550" />
@@ -34905,11 +34919,12 @@
 		<attribute key="transformEquipTo" value="24790" />
 		<attribute key="showduration" value="true" />
 		<attribute key="stopduration" value="true" />
-		<attribute key="armor" value="2" />
-		<attribute key="absorbPercentPhysical" value="3" />
+		<attribute key="armor" value="3" />
+		<attribute key="absorbPercentPhysical" value="6" />
 	</item>
 	<item id="24718" article="a" name="werewolf helmet">
 		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
 		<attribute key="speed" value="30" />
 	</item>
@@ -35030,6 +35045,10 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="transformEquipTo" value="24788" />
+		<attribute key="showduration" value="true" />
+		<attribute key="stopduration" value="true" />
 	</item>
 	<item id="24745" article="the" name="remains of Feroxa">
 		<attribute key="containerSize" value="28" />
@@ -35102,10 +35121,41 @@
 		<attribute key="duration" value="10" />
 		<attribute key="corpseType" value="undead" />
 	</item>
-	<item fromid="24769" toid="24772" article="an" name="enchanted werewolf helmet">
+	<item id="24769" article="an" name="enchanted werewolf helmet">
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="transformEquipTo" value="24783" />
+		<attribute key="showduration" value="true" />
+		<attribute key="stopduration" value="true" />
+	</item>
+	<item id="24770" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="transformEquipTo" value="24784" />
+		<attribute key="showduration" value="true" />
+		<attribute key="stopduration" value="true" />
+	</item>
+	<item id="24771" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="transformEquipTo" value="24785" />
+		<attribute key="showduration" value="true" />
+		<attribute key="stopduration" value="true" />
+	</item>
+	<item id="24772" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="transformEquipTo" value="24786" />
+		<attribute key="showduration" value="true" />
+		<attribute key="stopduration" value="true" />
 	</item>
 	<item id="24773" article="the" name="remains of Feroxa" />
 	<item id="24774" name="Store Coins">
@@ -35135,10 +35185,49 @@
 		<attribute key="duration" value="300" />
 		<attribute key="corpseType" value="undead" />
 	</item>
-	<item fromid="24783" toid="24786" article="an" name="enchanted werewolf helmet">
+	<item id="24783" article="an" name="enchanted werewolf helmet">
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="skillClub" value="1" />
+		<attribute key="decayTo" value="24718" />
+		<attribute key="transformDeEquipTo" value="24769" />
+		<attribute key="duration" value="3600" />
+		<attribute key="showduration" value="true" />
+	</item>
+	<item id="24784" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="skillSword" value="1" />
+		<attribute key="decayTo" value="24718" />
+		<attribute key="transformDeEquipTo" value="24770" />
+		<attribute key="duration" value="3600" />
+		<attribute key="showduration" value="true" />
+	</item>
+	<item id="24785" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="skillAxe" value="1" />
+		<attribute key="decayTo" value="24718" />
+		<attribute key="transformDeEquipTo" value="24771" />
+		<attribute key="duration" value="3600" />
+		<attribute key="showduration" value="true" />
+	</item>
+	<item id="24786" article="an" name="enchanted werewolf helmet">
+		<attribute key="weight" value="2500" />
+		<attribute key="slotType" value="head" />
+		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="skillDist" value="1" />
+		<attribute key="decayTo" value="24718" />
+		<attribute key="transformDeEquipTo" value="24772" />
+		<attribute key="duration" value="3600" />
+		<attribute key="showduration" value="true" />
 	</item>
 	<item id="24787" article="the" name="remains of Owin">
 		<attribute key="containerSize" value="24" />
@@ -35150,6 +35239,12 @@
 		<attribute key="weight" value="2500" />
 		<attribute key="slotType" value="head" />
 		<attribute key="armor" value="9" />
+		<attribute key="absorbPercentPhysical" value="4" />
+		<attribute key="magiclevelpoints" value="1" />
+		<attribute key="decayTo" value="24718" />
+		<attribute key="transformDeEquipTo" value="24744" />
+		<attribute key="duration" value="3600" />
+		<attribute key="showduration" value="true" />
 	</item>
 	<item id="24789" article="the" name="remains of Owin">
 		<attribute key="decayTo" value="0" />
@@ -35159,10 +35254,10 @@
 	<item id="24790" article="an" name="enchanted werewolf amulet">
 		<attribute key="weight" value="550" />
 		<attribute key="slotType" value="necklace" />
-		<attribute key="decayTo" value="0" />
+		<attribute key="decayTo" value="24716" />
 		<attribute key="transformDeEquipTo" value="24717" />
-		<attribute key="armor" value="2" />
-		<attribute key="absorbPercentPhysical" value="3" />
+		<attribute key="armor" value="3" />
+		<attribute key="absorbPercentPhysical" value="4" />
 		<attribute key="duration" value="3600" />
 		<attribute key="showduration" value="true" />
 	</item>

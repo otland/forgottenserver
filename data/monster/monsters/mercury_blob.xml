@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="180">
+<monster name="Mercury Blob" nameDescription="a mercury blob" race="undead" experience="180" speed="180" raceId="515">
 	<health now="150" max="150" />
 	<look type="316" corpse="9961" />
 	<targetchange interval="5000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Slime" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Mercury Blob Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-75" />
 		<attack name="drunk" interval="2000" chance="10" range="7" target="1" duration="3000">

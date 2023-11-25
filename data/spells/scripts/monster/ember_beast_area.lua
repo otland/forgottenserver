@@ -27,7 +27,7 @@ function onTargetTile(cid, pos)
 	spellCallback(param)
 end
 
-setCombatCallback(combat, CALLBACK_PARAM_TARGETTILE, "onTargetTile")
+combat:setCallback(CALLBACK_PARAM_TARGETTILE, "onTargetTile")
 
 function onCastSpell(creature, variant)
 	return combat:execute(creature, variant)

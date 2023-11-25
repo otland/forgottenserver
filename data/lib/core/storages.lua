@@ -1,11 +1,19 @@
 --[[
-Reserved storage ranges:
+Reserved player storage ranges:
 - 300000 to 301000+ reserved for achievements
 - 20000 to 21000+ reserved for achievement progress
 - 10000000 to 20000000 reserved for outfits and mounts on source
 ]]--
 
+AccountStorageKeys = {
+}
+
+GlobalStorageKeys = {
+	cobraBastionFlask = 30000,
+}
+
 PlayerStorageKeys = {
+	-- Misc:
 	annihilatorReward = 30015,
 	goldenOutfit = 30016,
 	-- empty: 30017
@@ -28,10 +36,11 @@ PlayerStorageKeys = {
 	vortexTamer = 30034,
 	mutatedPumpkin = 30035,
 
-	achievementsBase = 300000,
+	-- Achievements:
+	achievementsTotal = 19999,
 	achievementsCounter = 20000,
-}
+	achievementsBase = 300000,
 
-GlobalStorageKeys = {
-	cobraBastionFlask = 30000,
+	-- Bestiary:
+	bestiaryKillsBase = 400000,
 }

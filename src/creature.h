@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CREATURE_H
@@ -344,6 +344,10 @@ public:
 		}
 	}
 
+	virtual void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false);
+	virtual std::optional<int32_t> getStorageValue(uint32_t key) const;
+	decltype(auto) getStorageMap() const { return storageMap; }
+
 protected:
 	virtual bool useCacheMap() const { return false; }
 
@@ -440,6 +444,9 @@ protected:
 	friend class Game;
 	friend class Map;
 	friend class LuaScriptInterface;
+
+private:
+	std::map<uint32_t, int32_t> storageMap;
 };
 
 #endif // FS_CREATURE_H

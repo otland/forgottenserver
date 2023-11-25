@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -224,8 +224,8 @@ void Raid::startRaid()
 	RaidEvent* raidEvent = getNextRaidEvent();
 	if (raidEvent) {
 		state = RAIDSTATE_EXECUTING;
-		nextEventEvent =
-		    g_scheduler.addEvent(createSchedulerTask(raidEvent->getDelay(), [=]() { executeRaidEvent(raidEvent); }));
+		nextEventEvent = g_scheduler.addEvent(
+		    createSchedulerTask(raidEvent->getDelay(), [=, this]() { executeRaidEvent(raidEvent); }));
 	}
 }
 
@@ -239,7 +239,7 @@ void Raid::executeRaidEvent(RaidEvent* raidEvent)
 			uint32_t ticks = static_cast<uint32_t>(
 			    std::max<int32_t>(RAID_MINTICKS, newRaidEvent->getDelay() - raidEvent->getDelay()));
 			nextEventEvent =
-			    g_scheduler.addEvent(createSchedulerTask(ticks, [=]() { executeRaidEvent(newRaidEvent); }));
+			    g_scheduler.addEvent(createSchedulerTask(ticks, [=, this]() { executeRaidEvent(newRaidEvent); }));
 		} else {
 			resetRaid();
 		}
@@ -554,8 +554,6 @@ bool ScriptEvent::configureRaidEvent(const pugi::xml_node& eventNode)
 	}
 	return true;
 }
-
-std::string ScriptEvent::getScriptEventName() const { return "onRaid"; }
 
 bool ScriptEvent::executeEvent()
 {

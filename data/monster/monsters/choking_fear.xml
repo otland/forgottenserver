@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Choking Fear" nameDescription="a choking fear" race="undead" experience="4700" speed="260">
+<monster name="Choking Fear" nameDescription="a choking fear" race="undead" experience="4700" speed="260" raceId="1015">
 	<health now="5800" max="5800" />
 	<look type="586" corpse="22493" />
 	<targetchange interval="4000" chance="5" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Choking Fear Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-499" poison="600" />
 		<attack name="poisoncondition" interval="2000" chance="10" length="5" spread="3" target="0" min="-700" max="-900">

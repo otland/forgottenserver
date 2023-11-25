@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="440">
+<monster name="Nightmare Scion" nameDescription="a nightmare scion" race="blood" experience="1350" speed="440" raceId="518">
 	<health now="1400" max="1400" />
 	<look type="321" corpse="9919" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Nightmare Scion Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="4" min="-115" max="-180">

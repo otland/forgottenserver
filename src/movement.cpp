@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -59,8 +59,6 @@ void MoveEvents::clear(bool fromLua)
 }
 
 LuaScriptInterface& MoveEvents::getScriptInterface() { return scriptInterface; }
-
-std::string MoveEvents::getScriptBaseName() const { return "movements"; }
 
 Event_ptr MoveEvents::getEvent(const std::string& nodeName)
 {
@@ -478,6 +476,9 @@ ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
+		// If the item does not have an event, we make sure to reset the slot, since some items transform into items
+		// without events.
+		player->setItemAbility(slot, false);
 		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, false);
@@ -526,7 +527,7 @@ uint32_t MoveEvents::onItemMove(Item* item, Tile* tile, bool isAdd)
 
 MoveEvent::MoveEvent(LuaScriptInterface* interface) : Event(interface) {}
 
-std::string MoveEvent::getScriptEventName() const
+std::string_view MoveEvent::getScriptEventName() const
 {
 	switch (eventType) {
 		case MOVE_EVENT_STEP_IN:
@@ -543,7 +544,7 @@ std::string MoveEvent::getScriptEventName() const
 			return "onRemoveItem";
 		default:
 			std::cout << "[Error - MoveEvent::getScriptEventName] Invalid event type" << std::endl;
-			return std::string();
+			return "";
 	}
 }
 

@@ -112,6 +112,10 @@ table.contains = function(array, value)
 	return false
 end
 
+table.slice = function(array, from, to)
+	return {unpack(array, from or 1, to or #array)}
+end
+
 string.split = function(str, sep)
 	local res = {}
 	for v in str:gmatch("([^" .. sep .. "]+)") do
@@ -230,4 +234,23 @@ function getPlayerDatabaseInfo(name_or_guid)
 
 	result.free(query)
 	return info
+end
+
+function checkDuplicateStorageKeys(varName)
+	local keys = _G[varName]
+	local seen = {}
+	local duplicates = {}
+	for k, v in pairs(keys) do
+		if seen[v] then
+			table.insert(duplicates, v)
+		else
+			seen[v] = true
+		end
+	end
+
+	if next(duplicates) == nil then
+		return false
+	else
+		return duplicates
+	end
 end

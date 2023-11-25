@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_OTPCH_H
@@ -23,6 +23,7 @@
 #include <cstdint>
 #include <cstdlib>
 #include <deque>
+#include <filesystem>
 #include <fmt/color.h>
 #include <forward_list>
 #include <functional>
@@ -33,6 +34,7 @@
 #include <memory>
 #include <mutex>
 #include <mysql/mysql.h>
+#include <optional>
 #include <pugixml.hpp>
 #include <random>
 #include <set>

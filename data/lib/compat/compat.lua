@@ -580,15 +580,50 @@ function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p 
 function isPlayerGhost(cid) local p = Player(cid) return p and p:isInGhostMode() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked() or false end
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
+
+STORAGEVALUE_EMPTY = -1
+function Player:getStorageValue(key)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
+
+	local v = Creature.getStorageValue(self, key)
+	return v or STORAGEVALUE_EMPTY
+end
+
+function Player:setStorageValue(key, value)
+
+	if value == STORAGEVALUE_EMPTY then
+		print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.")
+		Creature.removeStorageValue(self, key)
+	else
+		Creature.setStorageValue(self, key, value)
+	end
+end
+
 function getPlayersByIPAddress(ip, mask)
+	local result = {}
+
+	if type(ip) == "string" then
+		for _, player in ipairs(Game.getPlayers()) do
+			if player:getIp() == ip then
+				result[#result + 1] = player:getId()
+			end
+		end
+
+		return result
+	end
+
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking getPlayersByIPAddress with a numeric IP is deprecated and will be removed in the future. Please use the string representation of the IP.")
+
 	if not mask then mask = 0xFFFFFFFF end
 	local masked = bit.band(ip, mask)
-	local result = {}
+	local lshift = bit.lshift
 	for _, player in ipairs(Game.getPlayers()) do
-		if bit.band(player:getIp(), mask) == masked then
-			result[#result + 1] = player:getId()
+		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
+		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
+			players[#players + 1] = player:getId()
 		end
 	end
+
 	return result
 end
 getPlayersByIp = getPlayersByIPAddress
@@ -904,6 +939,15 @@ function doAddContainerItemEx(uid, virtualId)
 	return res
 end
 
+function doAddContainerItem(uid, itemid, count)
+	local container = Container(uid)
+	if not container then
+		return false
+	end
+
+	return container:addItem(itemid, count)
+end
+
 function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
 function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end
 function isSightClear(fromPos, toPos, floorCheck) return Position(fromPos):isSightClear(toPos, floorCheck) end
@@ -1010,7 +1054,7 @@ function hasProperty(uid, prop)
 	return item:hasProperty(prop)
 end
 
-function doSetItemText(uid, text)
+function doSetItemText(uid, text, writer, date)
 	local item = Item(uid)
 	if not item then
 		return false
@@ -1021,6 +1065,19 @@ function doSetItemText(uid, text)
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
 	end
+
+	if writer then
+		item:setAttribute(ITEM_ATTRIBUTE_WRITER, tostring(writer))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_WRITER)
+	end
+
+	if date then
+		item:setAttribute(ITEM_ATTRIBUTE_DATE, tonumber(date))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_DATE)
+	end
+
 	return true
 end
 function doSetItemSpecialDescription(uid, desc)
@@ -1292,6 +1349,23 @@ function doExecuteRaid(raidName)
 	return Game.startRaid(raidName)
 end
 
+function Game.convertIpToString(ip)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
+
+	if type(ip) == "string" then
+		return ip
+	end
+
+	local band = bit.band
+	local rshift = bit.rshift
+	return string.format("%d.%d.%d.%d",
+		band(ip, 0xFF),
+		band(rshift(ip, 8), 0xFF),
+		band(rshift(ip, 16), 0xFF),
+		rshift(ip, 24)
+	)
+end
+
 numberToVariant = Variant
 stringToVariant = Variant
 positionToVariant = Variant
@@ -1546,3 +1620,15 @@ end
 
 -- this is a fix for lua52 or higher which has the function renamed to table.unpack, while luajit still uses unpack
 if not unpack then unpack = table.unpack end
+
+if not loadstring then loadstring = load end
+
+function table.maxn(t)
+	local max = 0
+	for k in pairs(t) do
+		if type(k) == "number" and k > max then
+			max = k
+		end
+	end
+	return max
+end

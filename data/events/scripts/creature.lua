@@ -1,31 +1,43 @@
 function Creature:onChangeOutfit(outfit)
-	if EventCallback.onChangeMount then
-		if not EventCallback.onChangeMount(self, outfit.lookMount) then
+	local onChangeMount = EventCallback.onChangeMount
+	if onChangeMount then
+		if not onChangeMount(self, outfit.lookMount) then
 			return false
 		end
 	end
-	if EventCallback.onChangeOutfit then
-		return EventCallback.onChangeOutfit(self, outfit)
+	local onChangeOutfit = EventCallback.onChangeOutfit
+	if onChangeOutfit then
+		return onChangeOutfit(self, outfit)
 	end
 	return true
 end
 
 function Creature:onAreaCombat(tile, isAggressive)
-	if EventCallback.onAreaCombat then
-		return EventCallback.onAreaCombat(self, tile, isAggressive)
+	local onAreaCombat = EventCallback.onAreaCombat
+	if onAreaCombat then
+		return onAreaCombat(self, tile, isAggressive)
 	end
 	return RETURNVALUE_NOERROR
 end
 
 function Creature:onTargetCombat(target)
-	if EventCallback.onTargetCombat then
-		return EventCallback.onTargetCombat(self, target)
+	local onTargetCombat = EventCallback.onTargetCombat
+	if onTargetCombat then
+		return onTargetCombat(self, target)
 	end
 	return RETURNVALUE_NOERROR
 end
 
 function Creature:onHear(speaker, words, type)
-	if EventCallback.onHear then
-		EventCallback.onHear(self, speaker, words, type)
+	local onHear = EventCallback.onHeard
+	if onHear then
+		onHear(self, speaker, words, type)
+	end
+end
+
+function Creature:onUpdateStorage(key, value, oldValue, isSpawn)
+	local onUpdateStorage = EventCallback.onUpdateStorage
+	if onUpdateStorage then
+		onUpdateStorage(self, key, value, oldValue, isSpawn)
 	end
 end

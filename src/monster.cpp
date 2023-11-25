@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -78,12 +78,7 @@ void Monster::setName(const std::string& name)
 
 	// NOTE: Due to how client caches known creatures, it is not feasible to send creature update to everyone that has
 	// ever met it
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTileCreature(this);
-	}
+	g_game.updateKnownCreature(this);
 }
 
 const std::string& Monster::getNameDescription() const
@@ -741,12 +736,20 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
-		if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
-			g_game.removeCreature(this, false);
+		if (g_config.getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
+			if (spawn) {
+				spawn->removeMonster(this);
+				spawn->startSpawnCheck();
+				spawn = nullptr;
+			}
 		} else {
-			g_game.internalTeleport(this, masterPos);
-			setIdle(true);
+			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
+			if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+				g_game.removeCreature(this, false);
+			} else {
+				g_game.internalTeleport(this, masterPos);
+				setIdle(true);
+			}
 		}
 	} else {
 		updateIdleStatus();
@@ -792,7 +795,7 @@ void Monster::doAttacking(uint32_t interval)
 		return;
 	}
 
-	bool updateLook = true;
+	bool lookUpdated = false;
 	bool resetTicks = interval != 0;
 	attackTicks += interval;
 
@@ -808,9 +811,9 @@ void Monster::doAttacking(uint32_t interval)
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
-				if (updateLook) {
+				if (!lookUpdated) {
 					updateLookDirection();
-					updateLook = false;
+					lookUpdated = true;
 				}
 
 				minCombatValue = spellBlock.minCombatValue;
@@ -829,7 +832,8 @@ void Monster::doAttacking(uint32_t interval)
 		}
 	}
 
-	if (updateLook) {
+	// ensure ranged creatures turn to player
+	if (!lookUpdated && lastMeleeAttack == 0) {
 		updateLookDirection();
 	}
 
@@ -1925,41 +1929,18 @@ void Monster::updateLookDirection()
 			} else {
 				newDir = DIRECTION_SOUTH;
 			}
+		} else if (offsetx < 0 && offsety < 0) {
+			// target to north-west
+			newDir = DIRECTION_WEST;
+		} else if (offsetx < 0 && offsety > 0) {
+			// target to south-west
+			newDir = DIRECTION_WEST;
+		} else if (offsetx > 0 && offsety < 0) {
+			// target to north-east
+			newDir = DIRECTION_EAST;
 		} else {
-			Direction dir = getDirection();
-			if (offsetx < 0 && offsety < 0) {
-				if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_EAST) {
-					newDir = DIRECTION_NORTH;
-				}
-			} else if (offsetx < 0 && offsety > 0) {
-				if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_WEST;
-				} else if (dir == DIRECTION_EAST) {
-					newDir = DIRECTION_SOUTH;
-				}
-			} else if (offsetx > 0 && offsety < 0) {
-				if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_WEST) {
-					newDir = DIRECTION_NORTH;
-				}
-			} else {
-				if (dir == DIRECTION_NORTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_SOUTH) {
-					newDir = DIRECTION_EAST;
-				} else if (dir == DIRECTION_WEST) {
-					newDir = DIRECTION_SOUTH;
-				}
-			}
+			// target to south-east
+			newDir = DIRECTION_EAST;
 		}
 	}
 

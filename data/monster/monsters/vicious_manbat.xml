@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220">
+<monster name="Vicious Manbat" nameDescription="a vicious manbat" race="blood" experience="1200" speed="220" raceId="959">
 	<health now="1700" max="1700" />
 	<look type="554" corpse="21266" />
 	<targetchange interval="4000" chance="10" />
@@ -16,6 +16,7 @@
 		<flag staticattack="70" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Undead" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Vicious Manbat Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-215" />
 		<attack name="physical" interval="2000" chance="15" radius="3" target="0" min="-100" max="-250">

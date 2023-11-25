@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485">
+<monster name="Sacred Spider" nameDescription="a sacred spider" race="venom" experience="330" speed="210" manacost="485" raceId="709">
 	<health now="550" max="550" />
 	<look type="219" corpse="6060" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Sacred Spider Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-160" poison="80" />
 		<attack name="earth" interval="2000" chance="20" range="7" min="-50" max="-80">

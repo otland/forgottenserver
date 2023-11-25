@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Insectoid Worker" nameDescription="an insectoid worker" race="venom" experience="650" speed="200">
+<monster name="Insectoid Worker" nameDescription="an insectoid worker" race="venom" experience="650" speed="200" raceId="796">
 	<health now="950" max="950" />
 	<look type="403" corpse="13514" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Insectoid Worker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-163" poison="160" />
 	</attacks>

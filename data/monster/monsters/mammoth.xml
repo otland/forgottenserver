@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="190" manacost="500">
+<monster name="Mammoth" nameDescription="a mammoth" race="blood" experience="160" speed="190" manacost="500" raceId="260">
 	<health now="320" max="320" />
 	<look type="199" corpse="6074" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Mammoth Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-110" />
 	</attacks>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Execowtioner" nameDescription="an execowtioner" race="blood" experience="2400" speed="270">
+<monster name="Execowtioner" nameDescription="an execowtioner" race="blood" experience="2400" speed="270" raceId="1046">
 	<health now="3500" max="3500" />
 	<look type="609" corpse="23375" />
 	<targetchange interval="2000" chance="4" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Execowtioner Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="90" attack="80" />
 		<attack name="lifedrain" interval="2000" chance="8" range="7" radius="5" target="1" min="-135" max="-280">

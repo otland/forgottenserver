@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Golden Servant Replica" nameDescription="a golden servant replica" race="energy" experience="450" speed="210">
+<monster name="Golden Servant Replica" nameDescription="a golden servant replica" race="energy" experience="450" speed="210" raceId="1327">
 	<health now="2000" max="2000" />
 	<look type="396" corpse="13484" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Golden Servant Replica Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-220" />
 		<attack name="fire" interval="2000" chance="11" length="5" spread="1" min="-80" max="-110">

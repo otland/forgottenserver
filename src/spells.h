@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_SPELLS_H
@@ -40,7 +40,7 @@ public:
 	TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 	static Position getCasterPosition(Creature* creature, Direction dir);
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "spells"; }
 
 	const std::map<std::string, InstantSpell>& getInstantSpells() const { return instants; };
 
@@ -91,7 +91,7 @@ public:
 	Combat_ptr getCombat() { return combat; }
 
 private:
-	std::string getScriptEventName() const override { return "onCastSpell"; }
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	Combat_ptr combat;
 
@@ -134,7 +134,7 @@ public:
 	void setLearnable(bool l) { learnable = l; }
 
 	const auto& getVocationSpellMap() const { return vocationSpellMap; }
-	void addVocationSpellMap(const std::string& vocationName, bool showInDescription)
+	void addVocationSpellMap(std::string_view vocationName, bool showInDescription)
 	{
 		int32_t vocationId = g_vocations.getVocationId(vocationName);
 		if (vocationId != -1) {
@@ -146,9 +146,9 @@ public:
 		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
 	}
 
-	const SpellGroup_t getGroup() const { return group; }
+	SpellGroup_t getGroup() const { return group; }
 	void setGroup(SpellGroup_t g) { group = g; }
-	const SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
+	SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
 	void setSecondaryGroup(SpellGroup_t g) { secondaryGroup = g; }
 
 	uint32_t getCooldown() const { return cooldown; }
@@ -249,7 +249,7 @@ public:
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var);
 
@@ -296,7 +296,7 @@ public:
 	}
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
 	bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
 

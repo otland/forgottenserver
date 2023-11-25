@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Renegade Quara Pincher" nameDescription="a renegade quara pincher" race="blood" experience="2200" speed="396">
+<monster name="Renegade Quara Pincher" nameDescription="a renegade quara pincher" race="blood" experience="2200" speed="396" raceId="1100">
 	<health now="2800" max="2800" />
 	<look type="77" corpse="6063" />
 	<targetchange interval="2000" chance="5" />
@@ -14,6 +14,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Renegade Quara Pincher Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-340" />
 		<attack name="speed" interval="2000" chance="20" range="1" speedchange="-300" duration="3000">

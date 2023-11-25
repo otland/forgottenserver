@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -57,44 +57,6 @@ bool argumentsHandler(const StringVector& args);
 	exit(-1);
 }
 
-namespace anniversary {
-
-fmt::color paintA = fmt::color(0xFABC01);
-fmt::color paintB = fmt::color(0x955A26);
-fmt::color paintC = fmt::color(0x0000C0);
-fmt::color paintD = fmt::color(0x006500);
-
-std::string colorA(const std::string text) { return fmt::format(fg(paintA), text); }
-
-std::string colorB(const std::string text) { return fmt::format(fg(paintB), text); }
-
-std::string colorC(const std::string text) { return fmt::format(fg(paintC), text); }
-
-std::string colorD(const std::string text) { return fmt::format(fg(paintD), text); }
-
-void celebrate()
-{
-	// clang-format off
-	std::cout << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("   .  .  ,----.") << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("    ") << "                           " << colorB("  /|_/| /      ',") << std::endl;
-	std::cout << colorA("          ") << "          " << colorA("#`  ") << "                 ''+#.     " << colorB(" /") << ", ," << colorB(" )/  ,;'' .'") << std::endl;
-	std::cout << colorA("   .####. ") << "   .#.    " << colorA("#|  ") << "                    +#.    " << colorB("(y_ )  |  ;...;' ") << std::endl;
-	std::cout << colorA("  .##  ##.") << " ######'  " << colorA("#|  ") << "    _+  '##_###.    ,+##   " << colorB(" ") << "\"" << colorB("| |  \\. '.") << std::endl;
-	std::cout << colorA("  ##    ##") << "  ##'     " << colorA("#|  ") << "    ##.  ###''|#, .#'  '#, " << colorB("(") << colorC("#") << colorD("#") << colorB("(/   )  ;") << std::endl;
-	std::cout << colorA("  ##    ##") << "  ##      " << colorA("#|  ") << "   # #.  ##   .#' #'    #' " << colorB(" ") << colorD("#") << colorC("#") << colorB(" ..  |. .'") << std::endl;
-	std::cout << colorA("  `##  ##`") << "  `##  ,# " << colorA("#|  ") << "  #==#.  ##  .#'  '#   #'  " << colorB(" \\_(  ._|--'") << std::endl;
-	std::cout << colorA("   `####` ") << "   `###`  " << colorA("##==") << " #    #. ##  |##.  '###'   " << colorB(" '--'--'''") << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	std::cout << "   \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\" Happy 15th anniversary! \"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"\"" << std::endl;
-	std::cout << std::endl;
-	std::cout << std::endl;
-	// clang-format on
-}
-
-} // namespace anniversary
-
 int main(int argc, char* argv[])
 {
 	StringVector args = StringVector(argv, argv + argc);
@@ -115,7 +77,6 @@ int main(int argc, char* argv[])
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
-		anniversary::celebrate();
 		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
 		          << std::endl;
 		serviceManager.run();
@@ -392,16 +353,16 @@ bool argumentsHandler(const StringVector& args)
 			return false;
 		}
 
-		StringVector tmp = explodeString(arg, "=");
+		auto tmp = explodeString(arg, "=");
 
 		if (tmp[0] == "--config")
 			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
 		else if (tmp[0] == "--ip")
 			g_config.setString(ConfigManager::IP, tmp[1]);
 		else if (tmp[0] == "--login-port")
-			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1]));
+			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1].data()));
 		else if (tmp[0] == "--game-port")
-			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1]));
+			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
 	}
 
 	return true;

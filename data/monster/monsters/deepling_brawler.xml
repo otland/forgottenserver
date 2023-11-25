@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Deepling Brawler" nameDescription="a deepling brawler" race="blood" experience="260" speed="190">
+<monster name="Deepling Brawler" nameDescription="a deepling brawler" race="blood" experience="260" speed="190" raceId="859">
 	<health now="380" max="380" />
 	<look type="470" corpse="13840" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Deepling Brawler Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="drown" interval="2000" chance="15" range="7" target="1" min="-60" max="-120">

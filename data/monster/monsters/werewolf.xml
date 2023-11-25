@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Werewolf" nameDescription="a werewolf" race="blood" experience="1900" speed="280">
+<monster name="Werewolf" nameDescription="a werewolf" race="blood" experience="1900" speed="280" raceId="510">
 	<health now="1955" max="1955" />
 	<look type="308" corpse="20380" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="300" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Lycanthrope" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Werewolf Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="outfit" interval="2000" chance="1" target="1" radius="1" monster="werewolf" duration="2000">

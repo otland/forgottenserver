@@ -148,6 +148,7 @@
 	<action fromid="8472" toid="8474" script="others/potions.lua" />
 	<action itemid="8704" script="others/potions.lua" />
 	<action fromid="26029" toid="26031" script="others/potions.lua" />
+	<action itemid="38219" script="others/potions.lua" />
 
 	<!-- Other -->
 	<action itemid="430" script="others/teleport.lua" />
@@ -181,4 +182,5 @@
 	<action fromid="9443" toid="9444" script="others/watch.lua" />
 	<action fromid="18488" toid="18492" script="others/skill_trainer.lua" />
 	<action itemid="20252" script="others/bed_modification_kits.lua" />
+	<action fromid="22845" toid="22846" script="others/teleport.lua" />
 </actions>

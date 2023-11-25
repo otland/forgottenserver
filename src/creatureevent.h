@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_CREATUREEVENT_H
@@ -55,14 +55,14 @@ public:
 	void executeOnKill(Creature* creature, Creature* target);
 	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-	bool executeTextEdit(Player* player, Item* item, const std::string& text);
+	bool executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId);
 	void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
 	//
 
 private:
-	std::string getScriptEventName() const override;
+	std::string_view getScriptEventName() const override;
 
 	std::string eventName;
 	CreatureEventType_t type;
@@ -92,7 +92,7 @@ public:
 
 private:
 	LuaScriptInterface& getScriptInterface() override;
-	std::string getScriptBaseName() const override;
+	std::string_view getScriptBaseName() const override { return "creaturescripts"; }
 	Event_ptr getEvent(const std::string& nodeName) override;
 	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
 

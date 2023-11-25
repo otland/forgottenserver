@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_NETWORKMESSAGE_H
@@ -56,19 +56,21 @@ public:
 	uint8_t getPreviousByte() { return buffer[--info.position]; }
 
 	template <typename T>
-	T get()
+	std::enable_if_t<std::is_trivially_copyable_v<T>, T> get() noexcept
 	{
+		static_assert(std::is_trivially_constructible_v<T>, "Destination type must be trivially constructible");
+
 		if (!canRead(sizeof(T))) {
 			return 0;
 		}
 
-		T v;
-		memcpy(&v, buffer + info.position, sizeof(T));
+		T value;
+		std::memcpy(&value, buffer.data() + info.position, sizeof(T));
 		info.position += sizeof(T);
-		return v;
+		return value;
 	}
 
-	std::string getString(uint16_t stringLen = 0);
+	std::string_view getString(uint16_t stringLen = 0);
 	Position getPosition();
 
 	// skips count unknown/unused bytes in an incoming message
@@ -92,7 +94,7 @@ public:
 			return;
 		}
 
-		memcpy(buffer + info.position, &value, sizeof(T));
+		std::memcpy(buffer.data() + info.position, &value, sizeof(T));
 		info.position += sizeof(T);
 		info.length += sizeof(T);
 	}
@@ -100,7 +102,7 @@ public:
 	void addBytes(const char* bytes, size_t size);
 	void addPaddingBytes(size_t n);
 
-	void addString(const std::string& value);
+	void addString(std::string_view value);
 
 	void addDouble(double value, uint8_t precision = 2);
 
@@ -129,14 +131,14 @@ public:
 
 	bool isOverrun() const { return info.overrun; }
 
-	uint8_t* getBuffer() { return buffer; }
+	uint8_t* getBuffer() { return &buffer[0]; }
 
-	const uint8_t* getBuffer() const { return buffer; }
+	const uint8_t* getBuffer() const { return &buffer[0]; }
 
 	uint8_t* getBodyBuffer()
 	{
 		info.position = 2;
-		return buffer + HEADER_LENGTH;
+		return &buffer[HEADER_LENGTH];
 	}
 
 protected:
@@ -148,7 +150,7 @@ protected:
 	};
 
 	NetworkMessageInfo info;
-	uint8_t buffer[NETWORKMESSAGE_MAXSIZE];
+	std::array<uint8_t, NETWORKMESSAGE_MAXSIZE> buffer;
 
 private:
 	bool canAdd(size_t size) const { return (size + info.position) < MAX_BODY_LENGTH; }

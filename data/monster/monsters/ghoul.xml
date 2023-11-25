@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ghoul" nameDescription="a ghoul" race="blood" experience="85" speed="144" manacost="450">
+<monster name="Ghoul" nameDescription="a ghoul" race="blood" experience="85" speed="144" manacost="450" raceId="18">
 	<health now="100" max="100" />
 	<look type="18" corpse="5976" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Ghoul Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-70" />
 		<attack name="lifedrain" interval="2000" chance="10" radius="1" target="1" range="1" min="-15" max="-27">

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -31,8 +31,6 @@ void CreatureEvents::removeInvalidEvents()
 }
 
 LuaScriptInterface& CreatureEvents::getScriptInterface() { return scriptInterface; }
-
-std::string CreatureEvents::getScriptBaseName() const { return "creaturescripts"; }
 
 Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 {
@@ -196,7 +194,7 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-std::string CreatureEvent::getScriptEventName() const
+std::string_view CreatureEvent::getScriptEventName() const
 {
 	// Depending on the type script event name is different
 	switch (type) {
@@ -238,7 +236,7 @@ std::string CreatureEvent::getScriptEventName() const
 
 		case CREATURE_EVENT_NONE:
 		default:
-			return std::string();
+			return "";
 	}
 }
 
@@ -453,9 +451,9 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	scriptInterface->callVoidFunction(4);
 }
 
-bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::string& text)
+bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId)
 {
-	// onTextEdit(player, item, text)
+	// onTextEdit(player, item, text, windowTextId)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeTextEdit] Call stack overflow" << std::endl;
 		return false;
@@ -473,7 +471,9 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushThing(L, item);
 	LuaScriptInterface::pushString(L, text);
 
-	return scriptInterface->callFunction(3);
+	lua_pushinteger(L, windowTextId);
+
+	return scriptInterface->callFunction(4);
 }
 
 void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Chakoya Tribewarden" nameDescription="a chakoya tribewarden" race="blood" experience="40" speed="200" manacost="305">
+<monster name="Chakoya Tribewarden" nameDescription="a chakoya tribewarden" race="blood" experience="40" speed="200" manacost="305" raceId="319">
 	<health now="68" max="68" />
-	<look type="259" corpse="7320" />
+	<look type="249" corpse="7320" />
 	<targetchange interval="60000" chance="0" />
 	<flags>
 		<flag summonable="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Chakoya Tribewarden Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>

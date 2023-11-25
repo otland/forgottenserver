@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gargoyle" nameDescription="a gargoyle" race="undead" experience="150" speed="200">
+<monster name="Gargoyle" nameDescription="a gargoyle" race="undead" experience="150" speed="200" raceId="95">
 	<health now="250" max="250" />
 	<look type="95" corpse="6027" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Gargoyle Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-65" />
 	</attacks>

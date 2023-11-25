@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Wilting Leaf Golem" nameDescription="a wilting leaf golem" race="blood" experience="145" speed="145" manacost="390">
+<monster name="Wilting Leaf Golem" nameDescription="a wilting leaf golem" race="blood" experience="145" speed="145" manacost="390" raceId="982">
 	<health now="380" max="380" />
 	<look type="573" corpse="21434" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Plant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Wilting Leaf Golem Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" poison="300" />
 		<attack name="physical" interval="2000" chance="20" radius="1" range="7" target="1" min="0" max="-50">

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_PODIUM_H
@@ -31,7 +31,7 @@ public:
 	}
 	void setFlags(uint8_t newFlags) { flags = newFlags; }
 
-	const Direction getDirection() const { return direction; }
+	Direction getDirection() const { return direction; }
 	void setDirection(Direction newDirection) { direction = newDirection; }
 
 protected:

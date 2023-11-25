@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="264" manacost="420">
+<monster name="War Wolf" nameDescription="a war wolf" race="blood" experience="55" speed="264" manacost="420" raceId="3">
 	<health now="140" max="140" />
 	<look type="3" corpse="6009" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="War Wolf Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" />
 	</attacks>

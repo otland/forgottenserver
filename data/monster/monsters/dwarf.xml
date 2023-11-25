@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="170" manacost="320">
+<monster name="Dwarf" nameDescription="a dwarf" race="blood" experience="45" speed="170" manacost="320" raceId="69">
 	<health now="90" max="90" />
 	<look type="69" corpse="6007" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Dwarf Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>

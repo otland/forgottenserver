@@ -4,7 +4,7 @@
 	<look typeex="1491" corpse="0" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
-		<flag convinceable="1" />
+		<flag convinceable="0" />
 		<flag pushable="0" />
 		<flag canpushitems="0" />
 		<flag canpushcreatures="0" />

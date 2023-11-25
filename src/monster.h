@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_MONSTER_H
@@ -27,6 +27,9 @@ class Monster final : public Creature
 {
 public:
 	static Monster* createMonster(const std::string& name);
+
+	using Creature::onWalk;
+
 	static int32_t despawnRange;
 	static int32_t despawnRadius;
 
@@ -140,7 +143,6 @@ private:
 	int64_t lastMeleeAttack = 0;
 
 	uint32_t attackTicks = 0;
-	uint32_t targetTicks = 0;
 	uint32_t targetChangeTicks = 0;
 	uint32_t defenseTicks = 0;
 	uint32_t yellTicks = 0;

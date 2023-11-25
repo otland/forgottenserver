@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="140">
+<monster name="Gazer" nameDescription="a gazer" race="venom" experience="90" speed="140" raceId="109">
 	<health now="120" max="120" />
 	<look type="109" corpse="6036" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Gazer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="lifedrain" interval="2000" chance="15" range="7" min="-25" max="-35">

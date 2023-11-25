@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
 #include "party.h"
@@ -20,6 +21,7 @@ double Creature::speedC = -4795.01;
 extern Game g_game;
 extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 Creature::Creature() { onIdleStatus(); }
 
@@ -841,7 +843,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	if (isImmune(combatType)) {
 		damage = 0;
 		blockType = BLOCK_IMMUNITY;
-	} else if (checkDefense || checkArmor) {
+	} else if (combatType != COMBAT_HEALING && (checkDefense || checkArmor)) {
 		bool hasDefense = false;
 
 		if (blockCount > 0) {
@@ -902,11 +904,15 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 			blockType = BLOCK_ARMOR;
 		}
 
-		attacker->onAttackedCreature(this);
-		attacker->onAttackedCreatureBlockHit(blockType);
+		if (combatType != COMBAT_HEALING) {
+			attacker->onAttackedCreature(this);
+			attacker->onAttackedCreatureBlockHit(blockType);
+		}
 	}
 
-	onAttacked();
+	if (combatType != COMBAT_HEALING) {
+		onAttacked();
+	}
 	return blockType;
 }
 
@@ -1659,4 +1665,24 @@ bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirL
 	fpp.minTargetDist = minTargetDist;
 	fpp.maxTargetDist = maxTargetDist;
 	return getPathTo(targetPos, dirList, fpp);
+}
+
+void Creature::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn)
+{
+	auto oldValue = getStorageValue(key);
+	if (value) {
+		storageMap.insert_or_assign(key, value.value());
+	} else {
+		storageMap.erase(key);
+	}
+	g_events->eventCreatureOnUpdateStorage(this, key, oldValue, value, isSpawn);
+}
+
+std::optional<int32_t> Creature::getStorageValue(uint32_t key) const
+{
+	auto it = storageMap.find(key);
+	if (it == storageMap.end()) {
+		return std::nullopt;
+	}
+	return std::make_optional(it->second);
 }

@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_HOUSETILE_H
@@ -12,6 +12,8 @@ class HouseTile final : public DynamicTile
 {
 public:
 	HouseTile(int32_t x, int32_t y, int32_t z, House* house);
+
+	using DynamicTile::internalAddThing;
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,

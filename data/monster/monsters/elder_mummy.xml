@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Elder Mummy" nameDescription="an elder mummy" race="undead" experience="560" speed="180">
+<monster name="Elder Mummy" nameDescription="an elder mummy" race="undead" experience="560" speed="180" raceId="711">
 	<health now="850" max="850" />
-	<look type="65" head="20" body="30" legs="40" feet="50" corpse="6004" />
+	<look type="65" corpse="6004" />
 	<targetchange interval="4000" chance="10" />
 	<flags>
 		<flag summonable="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Elder Mummy Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-120" poison="3" />
 		<attack name="death" interval="2000" chance="20" target="1" range="1" min="0" max="-130">

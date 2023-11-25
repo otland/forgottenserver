@@ -1,4 +1,4 @@
-// Copyright 2022 The Forgotten Server Authors. All rights reserved.
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -48,6 +48,8 @@ bool Events::load()
 				info.creatureOnTargetCombat = event;
 			} else if (methodName == "onHear") {
 				info.creatureOnHear = event;
+			} else if (methodName == "onUpdateStorage") {
+				info.creatureOnUpdateStorage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown creature method: " << methodName << std::endl;
 			}
@@ -60,6 +62,12 @@ bool Events::load()
 				info.partyOnDisband = event;
 			} else if (methodName == "onShareExperience") {
 				info.partyOnShareExperience = event;
+			} else if (methodName == "onInvite") {
+				info.partyOnInvite = event;
+			} else if (methodName == "onRevokeInvitation") {
+				info.partyOnRevokeInvitation = event;
+			} else if (methodName == "onPassLeadership") {
+				info.partyOnPassLeadership = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown party method: " << methodName << std::endl;
 			}
@@ -96,6 +104,8 @@ bool Events::load()
 				info.playerOnReportRuleViolation = event;
 			} else if (methodName == "onReportBug") {
 				info.playerOnReportBug = event;
+			} else if (methodName == "onRotateItem") {
+				info.playerOnRotateItem = event;
 			} else if (methodName == "onTurn") {
 				info.playerOnTurn = event;
 			} else if (methodName == "onGainExperience") {
@@ -108,6 +118,8 @@ bool Events::load()
 				info.playerOnWrapItem = event;
 			} else if (methodName == "onInventoryUpdate") {
 				info.playerOnInventoryUpdate = event;
+			} else if (methodName == "onNetworkMessage") {
+				info.playerOnNetworkMessage = event;
 			} else {
 				std::cout << "[Warning - Events::load] Unknown player method: " << methodName << std::endl;
 			}
@@ -295,6 +307,47 @@ void Events::eventCreatureOnHear(Creature* creature, Creature* speaker, const st
 	scriptInterface.callVoidFunction(4);
 }
 
+void Events::eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
+                                          std::optional<int32_t> oldValue, bool isSpawn)
+{
+	// Creature:onUpdateStorage(key, value, oldValue, isSpawn)
+	if (info.creatureOnUpdateStorage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventCreatureOnUpdateStorage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.creatureOnUpdateStorage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.creatureOnUpdateStorage);
+
+	LuaScriptInterface::pushUserdata<Creature>(L, creature);
+	LuaScriptInterface::setMetatable(L, -1, "Creature");
+
+	lua_pushnumber(L, key);
+
+	if (value) {
+		lua_pushnumber(L, value.value());
+	} else {
+		lua_pushnil(L);
+	}
+
+	if (oldValue) {
+		lua_pushnumber(L, oldValue.value());
+	} else {
+		lua_pushnil(L);
+	}
+
+	LuaScriptInterface::pushBoolean(L, isSpawn);
+
+	scriptInterface.callVoidFunction(5);
+}
+
 // Party
 bool Events::eventPartyOnJoin(Party* party, Player* player)
 {
@@ -372,6 +425,87 @@ bool Events::eventPartyOnDisband(Party* party)
 	LuaScriptInterface::setMetatable(L, -1, "Party");
 
 	return scriptInterface.callFunction(1);
+}
+
+bool Events::eventPartyOnInvite(Party* party, Player* player)
+{
+	// Party:onInvite(player) or Party.onInvite(self, player)
+	if (info.partyOnInvite == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnInvite] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnInvite, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnInvite);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
+{
+	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
+	if (info.partyOnRevokeInvitation == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnRevokeInvitation] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnRevokeInvitation, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnRevokeInvitation);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
+}
+
+bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
+{
+	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
+	if (info.partyOnPassLeadership == -1) {
+		return true;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPartyOnPassLeadership] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.partyOnPassLeadership, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.partyOnPassLeadership);
+
+	LuaScriptInterface::pushUserdata<Party>(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	return scriptInterface.callFunction(2);
 }
 
 void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
@@ -767,6 +901,33 @@ bool Events::eventPlayerOnReportBug(Player* player, const std::string& message, 
 	return scriptInterface.callFunction(4);
 }
 
+void Events::eventPlayerOnRotateItem(Player* player, Item* item)
+{
+	// Player:onRotateItem(item)
+	if (info.playerOnRotateItem == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnRotateItem] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnRotateItem, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnRotateItem);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushUserdata<Item>(L, item);
+	LuaScriptInterface::setItemMetatable(L, -1, item);
+
+	scriptInterface.callFunction(2);
+}
+
 bool Events::eventPlayerOnTurn(Player* player, Direction direction)
 {
 	// Player:onTurn(direction) or Player.onTurn(self, direction)
@@ -952,9 +1113,10 @@ void Events::eventPlayerOnPodiumEdit(Player* player, Item* item, const Outfit_t&
 	scriptInterface.callFunction(5);
 }
 
-void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp)
+void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp,
+                                         bool sendText)
 {
-	// Player:onGainExperience(source, exp, rawExp) rawExp gives the original exp which is not multiplied
+	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
 	if (info.playerOnGainExperience == -1) {
 		return;
 	}
@@ -982,8 +1144,9 @@ void Events::eventPlayerOnGainExperience(Player* player, Creature* source, uint6
 
 	lua_pushnumber(L, exp);
 	lua_pushnumber(L, rawExp);
+	LuaScriptInterface::pushBoolean(L, sendText);
 
-	if (scriptInterface.protectedCall(L, 4, 1) != 0) {
+	if (scriptInterface.protectedCall(L, 5, 1) != 0) {
 		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
 	} else {
 		exp = LuaScriptInterface::getNumber<uint64_t>(L, -1);
@@ -1115,6 +1278,35 @@ void Events::eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t sl
 	LuaScriptInterface::pushBoolean(L, equip);
 
 	scriptInterface.callVoidFunction(4);
+}
+
+void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
+{
+	// Player:onNetworkMessage(recvByte, msg)
+	if (info.playerOnNetworkMessage == -1) {
+		return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+		std::cout << "[Error - Events::eventPlayerOnNetworkMessage] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnNetworkMessage, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnNetworkMessage);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	lua_pushnumber(L, recvByte);
+
+	LuaScriptInterface::pushUserdata<NetworkMessage>(L, msg);
+	LuaScriptInterface::setMetatable(L, -1, "NetworkMessage");
+
+	scriptInterface.callVoidFunction(3);
 }
 
 void Events::eventMonsterOnDropLoot(Monster* monster, Container* corpse)
