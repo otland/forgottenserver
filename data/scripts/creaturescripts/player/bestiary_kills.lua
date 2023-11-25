@@ -25,7 +25,7 @@ local creatureEvent = CreatureEvent("BestiaryKills")
 
 function creatureEvent.onKill(player, target)
 	local monster = target:getMonster()
-	if not monster then
+	if not monster or monster:getMaster() then
 		return true
 	end
 

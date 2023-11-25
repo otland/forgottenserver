@@ -5,6 +5,7 @@
 	<event class="Creature" method="onAreaCombat" enabled="0" />
 	<event class="Creature" method="onTargetCombat" enabled="0" />
 	<event class="Creature" method="onHear" enabled="0" />
+	<event class="Creature" method="onUpdateStorage" enabled="1" />
 
 	<!-- Party methods -->
 	<event class="Party" method="onJoin" enabled="0" />
@@ -27,6 +28,7 @@
 	<event class="Player" method="onMoveCreature" enabled="0" />
 	<event class="Player" method="onReportBug" enabled="1" />
 	<event class="Player" method="onReportRuleViolation" enabled="1" />
+	<event class="Player" method="onRotateItem" enabled="1" />
 	<event class="Player" method="onTurn" enabled="0" />
 	<event class="Player" method="onTradeRequest" enabled="0" />
 	<event class="Player" method="onTradeAccept" enabled="0" />
@@ -39,7 +41,6 @@
 	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onInventoryUpdate" enabled="1" />
 	<event class="Player" method="onNetworkMessage" enabled="1" />
-	<event class="Player" method="onUpdateStorage" enabled="1" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />

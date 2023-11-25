@@ -5,7 +5,6 @@
 
 #include "protocolgame.h"
 
-#include "actions.h"
 #include "ban.h"
 #include "condition.h"
 #include "configmanager.h"
@@ -23,7 +22,6 @@
 #include "storeinbox.h"
 
 extern ConfigManager g_config;
-extern Actions actions;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
@@ -846,7 +844,7 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 		for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
 			msg.addItem(*it);
 
-			if (++count == 10) {
+			if (++count == MAX_STACKPOS) {
 				break;
 			}
 		}
@@ -868,11 +866,11 @@ void ProtocolGame::GetTileDescription(const Tile* tile, NetworkMessage& msg)
 		}
 	}
 
-	if (items && count < 10) {
+	if (items && count < MAX_STACKPOS) {
 		for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
 			msg.addItem(*it);
 
-			if (++count == 10) {
+			if (++count == MAX_STACKPOS) {
 				return;
 			}
 		}
@@ -1337,7 +1335,7 @@ void ProtocolGame::parseTextWindow(NetworkMessage& msg)
 {
 	uint32_t windowTextID = msg.get<uint32_t>();
 	auto newText = msg.getString();
-	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText = std::string{newText}]() {
+	g_dispatcher.addTask([playerID = player->getID(), windowTextID, newText]() {
 		g_game.playerWriteItem(playerID, windowTextID, newText);
 	});
 }
@@ -2482,7 +2480,7 @@ void ProtocolGame::sendCloseContainer(uint8_t cid)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
+void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackpos)
 {
 	if (!canSee(creature)) {
 		return;
@@ -2490,12 +2488,12 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackPos)
 
 	NetworkMessage msg;
 	msg.addByte(0x6B);
-	if (stackPos >= 10) {
+	if (stackpos >= MAX_STACKPOS) {
 		msg.add<uint16_t>(0xFFFF);
 		msg.add<uint32_t>(creature->getID());
 	} else {
 		msg.addPosition(creature->getPosition());
-		msg.addByte(stackPos);
+		msg.addByte(stackpos);
 	}
 
 	msg.add<uint16_t>(0x63);
@@ -2752,7 +2750,7 @@ void ProtocolGame::sendUpdateTileCreature(const Position& pos, uint32_t stackpos
 
 void ProtocolGame::sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos)
 {
-	if (stackpos < 10) {
+	if (stackpos < MAX_STACKPOS) {
 		if (!canSee(pos)) {
 			return;
 		}
@@ -2829,8 +2827,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 		// refresh the tile instead
 		// 1. this is a rare case, and is only triggered by forcing summon in a position
 		// 2. since no stackpos will be send to the client about that creature, removing it must be done with its id if
-		// its stackpos remains >= 10. this is done to add creatures to battle list instead of rendering on screen
-		if (stackpos >= 10) {
+		// its stackpos remains >= MAX_STACKPOS. this is done to add creatures to battle list instead of rendering on
+		// screen
+		if (stackpos >= MAX_STACKPOS) {
 			// @todo: should we avoid this check?
 			if (const Tile* tile = creature->getTile()) {
 				sendUpdateTile(tile, pos);
@@ -2916,7 +2915,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 				RemoveTileCreature(msg, creature, oldPos, oldStackPos);
 			} else {
 				msg.addByte(0x6D);
-				if (oldStackPos < 10) {
+				if (oldStackPos < MAX_STACKPOS) {
 					msg.addPosition(oldPos);
 					msg.addByte(oldStackPos);
 				} else {
@@ -2960,7 +2959,7 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& ne
 		} else {
 			NetworkMessage msg;
 			msg.addByte(0x6D);
-			if (oldStackPos < 10) {
+			if (oldStackPos < MAX_STACKPOS) {
 				msg.addPosition(oldPos);
 				msg.addByte(oldStackPos);
 			} else {
@@ -3633,10 +3632,10 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getLevel());
 	msg.addByte(player->getLevelPercent());
 
-	msg.add<uint16_t>(player->getClientExpDisplay());          // base exp gain rate
-	msg.add<uint16_t>(0);                                      // low level bonus
-	msg.add<uint16_t>(0);                                      // store exp bonus
-	msg.add<uint16_t>(player->getClientStaminaBonusDisplay()); // stamina exp bonus
+	msg.add<uint16_t>(player->getClientExpDisplay());
+	msg.add<uint16_t>(player->getClientLowLevelBonusDisplay());
+	msg.add<uint16_t>(0); // store exp bonus
+	msg.add<uint16_t>(player->getClientStaminaBonusDisplay());
 
 	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
 	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));
@@ -3669,13 +3668,13 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	msg.add<uint16_t>(player->getMagicLevel());
 	msg.add<uint16_t>(player->getBaseMagicLevel());
 	msg.add<uint16_t>(player->getBaseMagicLevel()); // base + loyalty bonus(?)
-	msg.add<uint16_t>(player->getMagicLevelPercent() * 100);
+	msg.add<uint16_t>(player->getMagicLevelPercent());
 
 	for (uint8_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
 		msg.add<uint16_t>(std::min<int32_t>(player->getSkillLevel(i), std::numeric_limits<uint16_t>::max()));
 		msg.add<uint16_t>(player->getBaseSkill(i));
 		msg.add<uint16_t>(player->getBaseSkill(i)); // base + loyalty bonus(?)
-		msg.add<uint16_t>(player->getSkillPercent(i) * 100);
+		msg.add<uint16_t>(player->getSkillPercent(i));
 	}
 
 	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
@@ -3744,7 +3743,7 @@ void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creatur
 // tile
 void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos)
 {
-	if (stackpos >= 10) {
+	if (stackpos >= MAX_STACKPOS) {
 		return;
 	}
 
@@ -3756,7 +3755,7 @@ void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uin
 void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, const Creature* creature, const Position& pos,
                                       uint32_t stackpos)
 {
-	if (stackpos < 10) {
+	if (stackpos < MAX_STACKPOS) {
 		RemoveTileThing(msg, pos, stackpos);
 		return;
 	}

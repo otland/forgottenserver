@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Adept of the Cult Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" poison="2" />
 		<attack name="lifedrain" interval="2000" chance="20" range="7" target="1" min="-70" max="-150">

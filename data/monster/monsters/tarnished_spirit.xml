@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Tarnished Spirit Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">

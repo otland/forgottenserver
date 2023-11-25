@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Undead" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Skeleton Elite Warrior Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-300" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-300" max="-450">

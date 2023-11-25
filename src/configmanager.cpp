@@ -25,6 +25,15 @@ extern Game g_game;
 
 namespace {
 
+template <typename T>
+auto getEnv(const char* envVar, T&& defaultValue)
+{
+	if (auto value = std::getenv(envVar)) {
+		return pugi::cast<std::decay_t<T>>(value);
+	}
+	return defaultValue;
+}
+
 std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue)
 {
 	lua_getglobal(L, identifier);
@@ -170,13 +179,13 @@ bool ConfigManager::load()
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
 		string[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "never");
-		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "127.0.0.1");
-		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", "forgottenserver");
-		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
-		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
-		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", getEnv("MYSQL_HOST", "127.0.0.1"));
+		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", getEnv("MYSQL_USER", "forgottenserver"));
+		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", getEnv("MYSQL_PASSWORD", ""));
+		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", getEnv("MYSQL_DATABASE", "forgottenserver"));
+		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", getEnv("MYSQL_SOCK", ""));
 
-		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
+		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", getEnv<uint16_t>("MYSQL_PORT", 3306));
 
 		if (integer[GAME_PORT] == 0) {
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);

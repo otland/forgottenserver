@@ -515,7 +515,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 
 	uint32_t newPercent;
 	if (nextReqTries > currReqTries) {
-		newPercent = Player::getPercentLevel(skills[skill].tries, nextReqTries);
+		newPercent = Player::getBasisPointLevel(skills[skill].tries, nextReqTries);
 	} else {
 		newPercent = 0;
 	}
@@ -551,7 +551,7 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 
 	skills[skill].tries = std::max<int32_t>(0, skills[skill].tries - count);
 	skills[skill].percent =
-	    Player::getPercentLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
+	    Player::getBasisPointLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
 
 	if (notify) {
 		bool sendUpdateSkills = false;
@@ -702,11 +702,11 @@ uint16_t Player::getLookCorpse() const
 	return ITEM_MALE_CORPSE;
 }
 
-void Player::addStorageValue(const uint32_t key, const int32_t value, const bool isLogin /* = false*/)
+void Player::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn /* = false*/)
 {
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
 		if (IS_IN_KEYRANGE(key, OUTFITS_RANGE)) {
-			outfits.emplace_back(value >> 16, value & 0xFF);
+			outfits.emplace_back(value.value_or(0) >> 16, value.value_or(0) & 0xFF);
 			return;
 		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
 			// do nothing
@@ -716,28 +716,7 @@ void Player::addStorageValue(const uint32_t key, const int32_t value, const bool
 		}
 	}
 
-	int32_t oldValue;
-	getStorageValue(key, oldValue);
-
-	if (value != -1) {
-		storageMap[key] = value;
-	} else {
-		storageMap.erase(key);
-	}
-
-	g_events->eventPlayerOnUpdateStorage(this, key, oldValue, value, isLogin);
-}
-
-bool Player::getStorageValue(const uint32_t key, int32_t& value) const
-{
-	auto it = storageMap.find(key);
-	if (it == storageMap.end()) {
-		value = -1;
-		return false;
-	}
-
-	value = it->second;
-	return true;
+	Creature::setStorageValue(key, value, isSpawn);
 }
 
 bool Player::canSee(const Position& pos) const
@@ -875,16 +854,14 @@ DepotLocker& Player::getDepotLocker()
 		depotLocker->internalAddThing(inbox);
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
-		if (depotChest) {
-			// adding in reverse to align them from first to last
-			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
-				if (DepotChest* box = getDepotChest(depotId, true)) {
-					depotChest->internalAddThing(box);
-				}
+		// adding in reverse to align them from first to last
+		for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
+			if (DepotChest* box = getDepotChest(depotId, true)) {
+				depotChest->internalAddThing(box);
 			}
-
-			depotLocker->internalAddThing(depotChest);
 		}
+
+		depotLocker->internalAddThing(depotChest);
 	}
 	return *depotLocker;
 }
@@ -1706,7 +1683,7 @@ void Player::addManaSpent(uint64_t amount)
 
 	uint8_t oldPercent = magLevelPercent;
 	if (nextReqMana > currReqMana) {
-		magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 	} else {
 		magLevelPercent = 0;
 	}
@@ -1740,7 +1717,7 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
 	if (nextReqMana > vocation->getReqMana(magLevel)) {
-		magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 	} else {
 		magLevelPercent = 0;
 	}
@@ -1771,34 +1748,12 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 		return;
 	}
 
-	g_events->eventPlayerOnGainExperience(this, source, exp, rawExp);
+	g_events->eventPlayerOnGainExperience(this, source, exp, rawExp, sendText);
 	if (exp == 0) {
 		return;
 	}
 
 	experience += exp;
-
-	if (sendText) {
-		std::string expString = std::to_string(exp) + (exp != 1 ? " experience points." : " experience point.");
-
-		TextMessage message(MESSAGE_EXPERIENCE, "You gained " + expString);
-		message.position = position;
-		message.primary.value = exp;
-		message.primary.color = TEXTCOLOR_WHITE_EXP;
-		sendTextMessage(message);
-
-		SpectatorVec spectators;
-		g_game.map.getSpectators(spectators, position, false, true);
-		spectators.erase(this);
-		if (!spectators.empty()) {
-			message.type = MESSAGE_EXPERIENCE_OTHERS;
-			message.text = getName() + " gained " + expString;
-			for (Creature* spectator : spectators) {
-				assert(dynamic_cast<Player*>(spectator) != nullptr);
-				static_cast<Player*>(spectator)->sendTextMessage(message);
-			}
-		}
-	}
 
 	uint32_t prevLevel = level;
 	while (experience >= nextLevelExp) {
@@ -1843,7 +1798,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 	}
 
 	if (nextLevelExp > currLevelExp) {
-		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+		levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 	} else {
 		levelPercent = 0;
 	}
@@ -1926,7 +1881,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 	if (nextLevelExp > currLevelExp) {
-		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+		levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 	} else {
 		levelPercent = 0;
 	}
@@ -1935,14 +1890,14 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
-uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
+uint16_t Player::getBasisPointLevel(uint64_t count, uint64_t nextLevelCount)
 {
 	if (nextLevelCount == 0) {
 		return 0;
 	}
 
-	uint8_t result = (count * 100) / nextLevelCount;
-	if (result > 100) {
+	uint16_t result = ((count * 10000.) / nextLevelCount);
+	if (result > 10000) {
 		return 0;
 	}
 	return result;
@@ -2173,7 +2128,7 @@ void Player::death(Creature* lastHitCreature)
 			uint64_t currLevelExp = Player::getExpForLevel(level);
 			uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 			if (nextLevelExp > currLevelExp) {
-				levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+				levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 			} else {
 				levelPercent = 0;
 			}
@@ -2808,7 +2763,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 						}
 					}
 				} else if (inventoryItem->isStackable() && item->equals(inventoryItem) &&
-				           inventoryItem->getItemCount() < 100) {
+				           inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
 					uint32_t remainder = (100 - inventoryItem->getItemCount());
 
 					if (queryAdd(slotIndex, *item, remainder, flags) == RETURNVALUE_NOERROR) {
@@ -2834,7 +2789,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		}
 
 		if (destItem) {
-			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < 100) {
+			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				maxQueryCount = 100 - destItem->getItemCount();
 			} else {
 				maxQueryCount = 0;
@@ -2908,7 +2863,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				if (autoStack && isStackable) {
 					// try find an already existing item to stack with
 					if (queryAdd(slotIndex, *item, item->getItemCount(), 0) == RETURNVALUE_NOERROR) {
-						if (inventoryItem->equals(item) && inventoryItem->getItemCount() < 100) {
+						if (inventoryItem->equals(item) && inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
 							index = slotIndex;
 							*destItem = inventoryItem;
 							return this;
@@ -2967,7 +2922,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				}
 
 				// try find an already existing item to stack with
-				if (tmpItem->equals(item) && tmpItem->getItemCount() < 100) {
+				if (tmpItem->equals(item) && tmpItem->getItemCount() < ITEM_STACK_SIZE) {
 					index = n;
 					*destItem = tmpItem;
 					return tmpContainer;
@@ -4009,7 +3964,7 @@ void Player::genReservedStorageRange()
 	// generate outfits range
 	uint32_t base_key = PSTRG_OUTFITS_RANGE_START;
 	for (const OutfitEntry& entry : outfits) {
-		storageMap[++base_key] = (entry.lookType << 16) | entry.addons;
+		Creature::setStorageValue(++base_key, (entry.lookType << 16) | entry.addons, true);
 	}
 }
 
@@ -4417,14 +4372,11 @@ uint8_t Player::getRandomMount() const
 
 uint8_t Player::getCurrentMount() const
 {
-	int32_t value;
-	if (getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, value)) {
-		return value;
-	}
-	return 0;
+	auto storage = getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT);
+	return storage.value_or(0);
 }
 
-void Player::setCurrentMount(uint8_t mountId) { addStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
+void Player::setCurrentMount(uint8_t mountId) { setStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
 
 bool Player::toggleMount(bool mount)
 {
@@ -4506,14 +4458,7 @@ bool Player::tameMount(uint8_t mountId)
 	const uint8_t tmpMountId = mountId - 1;
 	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (getStorageValue(key, value)) {
-		value |= (1 << (tmpMountId % 31));
-	} else {
-		value = (1 << (tmpMountId % 31));
-	}
-
-	addStorageValue(key, value);
+	setStorageValue(key, getStorageValue(key).value_or(0) | (1 << (tmpMountId % 31)));
 	return true;
 }
 
@@ -4523,16 +4468,10 @@ bool Player::untameMount(uint8_t mountId)
 		return false;
 	}
 
-	const uint8_t tmpMountId = mountId - 1;
-	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
+	uint8_t tmpMountId = mountId - 1;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (!getStorageValue(key, value)) {
-		return true;
-	}
-
-	value &= ~(1 << (tmpMountId % 31));
-	addStorageValue(key, value);
+	setStorageValue(key, getStorageValue(key).value_or(0) & ~(1 << (tmpMountId % 31)));
 
 	if (getCurrentMount() == mountId) {
 		if (isMounted()) {
@@ -4556,14 +4495,10 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	const uint8_t tmpMountId = mount->id - 1;
+	uint8_t tmpMountId = mount->id - 1;
+	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
 
-	int32_t value;
-	if (!getStorageValue(PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31), value)) {
-		return false;
-	}
-
-	return ((1 << (tmpMountId % 31)) & value) != 0;
+	return ((1 << (tmpMountId % 31)) & getStorageValue(key).value_or(0)) != 0;
 }
 
 bool Player::hasMounts() const
@@ -4636,7 +4571,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		uint8_t newPercent;
 		if (nextReqMana > currReqMana) {
-			newPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+			newPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 			newPercentToNextLevel = static_cast<long double>(manaSpent * 100) / nextReqMana;
 		} else {
 			newPercent = 0;
@@ -4690,7 +4625,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		uint8_t newPercent;
 		if (nextReqTries > currReqTries) {
-			newPercent = Player::getPercentLevel(skills[skill].tries, nextReqTries);
+			newPercent = Player::getBasisPointLevel(skills[skill].tries, nextReqTries);
 			newPercentToNextLevel = static_cast<long double>(skills[skill].tries * 100) / nextReqTries;
 		} else {
 			newPercent = 0;

@@ -176,7 +176,7 @@ private:
 	void sendSkills();
 	void sendPing();
 	void sendPingBack();
-	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
+	void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
 

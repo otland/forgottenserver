@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Gryphon Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="350" />
 		<attack name="holy" interval="2000" chance="13" radius="3" target="0" min="-250" max="-450">

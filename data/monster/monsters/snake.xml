@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Snake Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-8" poison="15" />
 	</attacks>
