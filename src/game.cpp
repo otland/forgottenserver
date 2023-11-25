@@ -33,6 +33,7 @@
 #include "storeinbox.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "httpclient.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
@@ -132,6 +133,7 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+			g_http.stop();
 			break;
 		}
 
@@ -4926,6 +4928,7 @@ void Game::shutdown()
 	g_scheduler.shutdown();
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
+	g_http.shutdown();
 	map.spawns.clear();
 	raids.clear();
 

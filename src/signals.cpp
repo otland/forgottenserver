@@ -21,6 +21,7 @@
 #include "talkaction.h"
 #include "tasks.h"
 #include "weapons.h"
+#include "httpclient.h"
 
 #include <csignal>
 
@@ -41,6 +42,7 @@ extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
 extern Chat* g_chat;
 extern LuaEnvironment g_luaEnvironment;
+extern HttpClient g_http;
 
 namespace {
 
@@ -158,6 +160,7 @@ void dispatchSignalHandler(int signal)
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
+			g_http.join();
 			break;
 #endif
 		default:
