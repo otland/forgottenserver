@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Demon Parrot Locations..." />
 	<attacks>
 		<attack name="melee" interval="1200" min="0" max="-100" />
 		<attack name="drunk" interval="1000" chance="30" length="5" spread="0">

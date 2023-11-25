@@ -17,6 +17,7 @@
 		<flag runonhealth="50" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Construct" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Iron Servant Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-45" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-60">

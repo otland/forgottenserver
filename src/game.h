@@ -61,6 +61,10 @@ static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
 static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
 
+static constexpr int32_t MAX_STACKPOS = 10;
+
+static constexpr uint8_t ITEM_STACK_SIZE = 100;
+
 /**
  * Main Game class.
  * This class is responsible to control everything that happens
@@ -352,7 +356,7 @@ public:
 	void playerMoveUpContainer(uint32_t playerId, uint8_t cid);
 	void playerUpdateContainer(uint32_t playerId, uint8_t cid);
 	void playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId);
-	void playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
+	void playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string_view text);
 	void playerBrowseField(uint32_t playerId, const Position& pos);
 	void playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index);
 	void playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
@@ -425,6 +429,7 @@ public:
 	void updateCreatureSkull(const Creature* creature);
 	void updatePlayerShield(Player* player);
 	void updateCreatureWalkthrough(const Creature* creature);
+	void updateKnownCreature(const Creature* creature);
 
 	GameState_t getGameState() const;
 	void setGameState(GameState_t newState);

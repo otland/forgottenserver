@@ -580,6 +580,25 @@ function getPlayerLearnedInstantSpell(cid, name) local p = Player(cid) return p 
 function isPlayerGhost(cid) local p = Player(cid) return p and p:isInGhostMode() or false end
 function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked() or false end
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
+
+STORAGEVALUE_EMPTY = -1
+function Player:getStorageValue(key)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
+
+	local v = Creature.getStorageValue(self, key)
+	return v or STORAGEVALUE_EMPTY
+end
+
+function Player:setStorageValue(key, value)
+
+	if value == STORAGEVALUE_EMPTY then
+		print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.")
+		Creature.removeStorageValue(self, key)
+	else
+		Creature.setStorageValue(self, key, value)
+	end
+end
+
 function getPlayersByIPAddress(ip, mask)
 	local result = {}
 
@@ -1035,7 +1054,7 @@ function hasProperty(uid, prop)
 	return item:hasProperty(prop)
 end
 
-function doSetItemText(uid, text)
+function doSetItemText(uid, text, writer, date)
 	local item = Item(uid)
 	if not item then
 		return false
@@ -1046,6 +1065,19 @@ function doSetItemText(uid, text)
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
 	end
+
+	if writer then
+		item:setAttribute(ITEM_ATTRIBUTE_WRITER, tostring(writer))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_WRITER)
+	end
+
+	if date then
+		item:setAttribute(ITEM_ATTRIBUTE_DATE, tonumber(date))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_DATE)
+	end
+
 	return true
 end
 function doSetItemSpecialDescription(uid, desc)

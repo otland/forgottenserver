@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Renegade Knight Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="60" attack="70" />
 		<attack name="physical" interval="2000" chance="15" radius="3" min="-25" max="-125">
