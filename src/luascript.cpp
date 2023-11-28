@@ -14799,10 +14799,13 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 	int index = 0;
 	lua_createtable(L, monsterType->info.summons.size(), 0);
 	for (const auto& summonBlock : monsterType->info.summons) {
-		lua_createtable(L, 0, 3);
+		lua_createtable(L, 0, 6);
 		setField(L, "name", summonBlock.name);
 		setField(L, "speed", summonBlock.speed);
 		setField(L, "chance", summonBlock.chance);
+		setField(L, "max", summonBlock.max);
+		setField(L, "effect", summonBlock.effect);
+		setField(L, "masterEffect", summonBlock.masterEffect);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -14810,7 +14813,8 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 {
-	// monsterType:addSummon(name, interval, chance[, max = -1])
+	// monsterType:addSummon(name, interval, chance[, max = -1[, effect = CONST_ME_TELEPORT[, masterEffect =
+	// CONST_ME_NONE]]])
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		summonBlock_t summon;
@@ -14818,6 +14822,8 @@ int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 		summon.speed = getNumber<int32_t>(L, 3);
 		summon.chance = getNumber<int32_t>(L, 4);
 		summon.max = getNumber<int32_t>(L, 5, -1);
+		summon.effect = getNumber<MagicEffectClasses>(L, 6, CONST_ME_TELEPORT);
+		summon.masterEffect = getNumber<MagicEffectClasses>(L, 7, CONST_ME_NONE);
 		monsterType->info.summons.push_back(summon);
 		pushBoolean(L, true);
 	} else {
