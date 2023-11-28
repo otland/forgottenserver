@@ -3,35 +3,31 @@
 // in the LICENSE file.
 
 #include "otpch.h"
-#include "httpclientlib.h"
+
 #include "httpclient.h"
 
-HttpClient::HttpClient() :
-	scriptInterface("HttpScript Interface")
-{
-	scriptInterface.initState();
-}
+#include "httpclientlib.h"
+
+HttpClient::HttpClient() : scriptInterface("HttpScript Interface") { scriptInterface.initState(); }
 
 void HttpClient::threadMain()
 {
-
-	HttpClientLib::Request requestsHandler (
-		[this](const HttpClientLib::HttpResponse_ptr& response) { clientRequestSuccessCallback(response); },
-		[this](const HttpClientLib::HttpResponse_ptr& response) { clientRequestFailureCallback(response); }
-	);
+	HttpClientLib::Request requestsHandler(
+	    [this](const HttpClientLib::HttpResponse_ptr& response) { clientRequestSuccessCallback(response); },
+	    [this](const HttpClientLib::HttpResponse_ptr& response) { clientRequestFailureCallback(response); });
 
 	std::unique_lock<std::mutex> requestLockUnique(requestLock, std::defer_lock);
 	while (getState() != THREAD_STATE_TERMINATED) {
 		requestLockUnique.lock();
 
-		if(pendingRequests.empty() && pendingResponses.empty()) {
+		if (pendingRequests.empty() && pendingResponses.empty()) {
 			requestSignal.wait(requestLockUnique);
 		}
 
-		if(!pendingRequests.empty() || !pendingResponses.empty()) {
+		if (!pendingRequests.empty() || !pendingResponses.empty()) {
 			bool shouldUnlock = false;
 
-			if(!pendingRequests.empty()) {
+			if (!pendingRequests.empty()) {
 				HttpClientLib::HttpRequest_ptr pendingRequest = std::move(pendingRequests.front());
 				pendingRequests.pop_front();
 
@@ -39,7 +35,7 @@ void HttpClient::threadMain()
 				dispatchRequest(requestsHandler, pendingRequest);
 			}
 
-			if(!pendingResponses.empty()) {
+			if (!pendingResponses.empty()) {
 				HttpClientLib::HttpResponse_ptr pendingResponse = std::move(pendingResponses.front());
 				pendingResponses.pop_front();
 
@@ -48,11 +44,10 @@ void HttpClient::threadMain()
 				processResponse(pendingResponse);
 			}
 
-			if(shouldUnlock) {
+			if (shouldUnlock) {
 				requestLockUnique.unlock();
 			}
-		}
-		else {
+		} else {
 			requestLockUnique.unlock();
 		}
 	}
@@ -61,8 +56,7 @@ void HttpClient::threadMain()
 void HttpClient::dispatchRequest(HttpClientLib::Request& requestsHandler, HttpClientLib::HttpRequest_ptr& request)
 {
 	bool succesfullyDispatched = false;
-	switch(request->method)
-	{
+	switch (request->method) {
 		case HttpClientLib::HttpMethod::HTTP_CONNECT:
 			requestsHandler.setTimeout(request->timeout);
 			succesfullyDispatched = requestsHandler.connect(request->url, request->fields);
@@ -113,22 +107,23 @@ void HttpClient::dispatchRequest(HttpClientLib::Request& requestsHandler, HttpCl
 			break;
 	}
 
-	if(request->method != HttpClientLib::HTTP_NONE && succesfullyDispatched) {
+	if (request->method != HttpClientLib::HTTP_NONE && succesfullyDispatched) {
 		requests.emplace(std::make_pair(requestsHandler.getRequestId(), std::move(request)));
 	}
 }
 
 void HttpClient::clientRequestSuccessCallback(const HttpClientLib::HttpResponse_ptr& response)
 {
-	//std::cout << std::string("HTTP Response received: " + std::to_string(response->statusCode) + " (" + std::to_string(response->responseTimeMs) + "ms) id " + std::to_string(response->requestId)) << std::endl;
+	// std::cout << std::string("HTTP Response received: " + std::to_string(response->statusCode) + " (" +
+	// std::to_string(response->responseTimeMs) + "ms) id " + std::to_string(response->requestId)) << std::endl;
 	addResponse(response);
 
 	std::string headerStr(reinterpret_cast<char*>(response->headerData.data()), response->headerData.size());
 	std::string bodyStr(reinterpret_cast<char*>(response->bodyData.data()), response->bodyData.size());
 
 	// Print the string to the console
-	//std::cout << headerStr << std::endl;
-	//std::cout << bodyStr << std::endl;
+	// std::cout << headerStr << std::endl;
+	// std::cout << bodyStr << std::endl;
 }
 
 void HttpClient::clientRequestFailureCallback(const HttpClientLib::HttpResponse_ptr& response)
@@ -140,30 +135,30 @@ void HttpClient::clientRequestFailureCallback(const HttpClientLib::HttpResponse_
 void HttpClient::processResponse(const HttpClientLib::HttpResponse_ptr& response)
 {
 	auto httpRequestIt = requests.find(response->requestId);
-	if(httpRequestIt == requests.end()) {
+	if (httpRequestIt == requests.end()) {
 		return;
 	}
 
 	HttpClientLib::HttpRequest_ptr& httpRequest = httpRequestIt->second;
 
-	if(httpRequest->callbackData.isLuaCallback()) {
+	if (httpRequest->callbackData.isLuaCallback()) {
 		luaClientRequestCallback(httpRequest->callbackData.scriptId, httpRequest->callbackData.callbackId, response);
-	}
-	else if(httpRequest->callbackData.callbackFunction) {
+	} else if (httpRequest->callbackData.callbackFunction) {
 		httpRequest->callbackData.callbackFunction(response);
 	}
 
 	requests.erase(response->requestId);
 }
 
-void HttpClient::luaClientRequestCallback(int32_t scriptId, int32_t callbackId, const HttpClientLib::HttpResponse_ptr& response)
+void HttpClient::luaClientRequestCallback(int32_t scriptId, int32_t callbackId,
+                                          const HttpClientLib::HttpResponse_ptr& response)
 {
 	lua_State* luaState = scriptInterface.getLuaState();
 
-	//push function
+	// push function
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, callbackId);
 
-	//push parameters
+	// push parameters
 	lua_createtable(luaState, 0, 11);
 
 	scriptInterface.setField(luaState, "requestId", response->requestId);
@@ -180,17 +175,16 @@ void HttpClient::luaClientRequestCallback(int32_t scriptId, int32_t callbackId, 
 
 	scriptInterface.setMetatable(luaState, -1, "HttpResponse");
 
-	//call the function
+	// call the function
 	if (scriptInterface.reserveScriptEnv()) {
 		ScriptEnvironment* env = scriptInterface.getScriptEnv();
 		env->setScriptId(scriptId, &scriptInterface);
-		scriptInterface.callFunction(1); //callFunction already reset the reserved script env (resetScriptEnv)
-	}
-	else {
+		scriptInterface.callFunction(1); // callFunction already reset the reserved script env (resetScriptEnv)
+	} else {
 		std::cout << "[Error - HttpClient::luaClientRequestCallback] Call stack overflow" << std::endl;
 	}
 
-	//free resources
+	// free resources
 	luaL_unref(luaState, LUA_REGISTRYINDEX, callbackId);
 }
 
@@ -198,13 +192,13 @@ void HttpClient::addResponse(const HttpClientLib::HttpResponse_ptr& response)
 {
 	bool signal = false;
 	requestLock.lock();
-	if(getState() == THREAD_STATE_RUNNING) {
+	if (getState() == THREAD_STATE_RUNNING) {
 		signal = pendingResponses.empty();
 		pendingResponses.emplace_back(response);
 	}
 	requestLock.unlock();
 
-	if(signal) {
+	if (signal) {
 		requestSignal.notify_one();
 	}
 }
@@ -213,13 +207,13 @@ void HttpClient::addRequest(const HttpClientLib::HttpRequest_ptr& request)
 {
 	bool signal = false;
 	requestLock.lock();
-	if(getState() == THREAD_STATE_RUNNING) {
+	if (getState() == THREAD_STATE_RUNNING) {
 		signal = pendingRequests.empty();
 		pendingRequests.emplace_back(request);
 	}
 	requestLock.unlock();
 
-	if(signal) {
+	if (signal) {
 		requestSignal.notify_one();
 	}
 }
