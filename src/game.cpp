@@ -15,6 +15,7 @@
 #include "events.h"
 #include "globalevent.h"
 #include "housetile.h"
+#include "httpclient.h"
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
@@ -33,7 +34,6 @@
 #include "storeinbox.h"
 #include "talkaction.h"
 #include "weapons.h"
-#include "httpclient.h"
 
 extern ConfigManager g_config;
 extern Actions* g_actions;
