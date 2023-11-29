@@ -15,6 +15,7 @@
 #include "game.h"
 #include "globalevent.h"
 #include "housetile.h"
+#include "httpclient.h"
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomapserialize.h"
@@ -36,7 +37,6 @@
 #include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
-#include "httpclient.h"
 
 #include <boost/range/adaptor/reversed.hpp>
 

@@ -11,6 +11,7 @@
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
+#include "httpclient.h"
 #include "monsters.h"
 #include "mounts.h"
 #include "movement.h"
@@ -21,7 +22,6 @@
 #include "talkaction.h"
 #include "tasks.h"
 #include "weapons.h"
-#include "httpclient.h"
 
 #include <csignal>
 

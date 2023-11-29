@@ -7,6 +7,7 @@
 #include "databasemanager.h"
 #include "databasetasks.h"
 #include "game.h"
+#include "httpclient.h"
 #include "iomarket.h"
 #include "monsters.h"
 #include "outfit.h"
@@ -18,7 +19,6 @@
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"
-#include "httpclient.h"
 
 #include <fstream>
 
