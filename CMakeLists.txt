@@ -11,6 +11,18 @@ if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
     set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
 endif()
 
+option(BUILD_TESTING "Build unit tests" OFF)
+if (BUILD_TESTING)
+    list(APPEND VCPKG_MANIFEST_FEATURES "tests")
+endif()
+
+option(USE_LUAJIT "Use LuaJIT" OFF)
+if (USE_LUAJIT)
+    list(APPEND VCPKG_MANIFEST_FEATURES "luajit")
+else()
+    list(APPEND VCPKG_MANIFEST_FEATURES "lua")
+endif()
+
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -53,21 +65,13 @@ find_package(Threads REQUIRED)
 find_package(PugiXML CONFIG REQUIRED)
 
 # Selects LuaJIT if user defines or auto-detected
-if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)
-    set(FORCE_LUAJIT ${USE_LUAJIT})
+if (USE_LUAJIT)
+    find_package(LuaJIT REQUIRED)
 else ()
-    find_package(LuaJIT)
-    set(FORCE_LUAJIT ${LuaJIT_FOUND})
-endif ()
-option(USE_LUAJIT "Use LuaJIT" ${FORCE_LUAJIT})
-
-if (NOT FORCE_LUAJIT)
     find_package(Lua REQUIRED)
 endif ()
 
 find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams)
-
-option(ENABLE_TESTING "Build unit tests" OFF)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
@@ -78,7 +82,7 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
-if (ENABLE_TESTING)
+if (BUILD_TESTING)
     enable_testing()
     add_subdirectory(src/tests)
 endif()

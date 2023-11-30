@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: >
           sudo apt update -q &&
-          sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
+          sudo apt install -yq git build-essential libmysqlclient-dev
           libboost-system-dev libboost-iostreams-dev libboost-test-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
@@ -29,5 +29,5 @@ jobs:
         with:
           buildPreset: default
           configurePreset: default
-          configurePresetAdditionalArgs: "['-DENABLE_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
           testPreset: default

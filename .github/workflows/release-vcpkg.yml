@@ -13,9 +13,6 @@ jobs:
       matrix:
         os: [ubuntu, macos, windows]
 
-    env:
-      VCPKG_FEATURE_FLAGS: luajit
-
     steps:
       - uses: actions/checkout@v3
 
@@ -26,13 +23,13 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgGitCommitId: 501db0f17ef6df184fcdbfbe0f87cde2313b6ab1
+          vcpkgGitCommitId: a42af01b72c28a8e1d7b48107b33e4f286a55ef6
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config RelWithDebInfo', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config RelWithDebInfo', '-DUSE_LUAJIT=on']"
           configurePreset: vcpkg
 
       - name: Prepare datapack contents
