@@ -20,7 +20,7 @@ jobs:
       - name: Install dependencies
         run: >
           sudo apt update -q &&
-          sudo apt install -yq git build-essential libmysqlclient-dev
+          sudo apt install -yq git build-essential liblua5.4-dev libmysqlclient-dev
           libboost-system-dev libboost-iostreams-dev libboost-test-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
