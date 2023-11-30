@@ -10,11 +10,16 @@
     "boost-variant",
     "fmt",
     "libmariadb",
-    "lua",
     "openssl",
     "pugixml"
   ],
   "features": {
+    "lua": {
+      "description": "Use Lua instead of LuaJIT",
+      "dependencies": [
+        "lua"
+      ]
+    },
     "luajit": {
       "description": "Use LuaJIT instead of Lua",
       "dependencies": [

@@ -43,10 +43,6 @@ jobs:
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Enable LuaJIT
-        if: ${{ matrix.luajit }} == "on"
-        run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
 
@@ -54,7 +50,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
           configurePreset: vcpkg
 
       - name: Upload artifact binary

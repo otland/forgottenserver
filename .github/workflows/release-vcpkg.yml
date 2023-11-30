@@ -15,7 +15,6 @@ jobs:
 
     env:
       VCPKG_BUILD_TYPE: release
-      VCPKG_FEATURE_FLAGS: luajit
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +30,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo', '--clean-first', '-DUSE_LUAJIT=ON']"
           configurePreset: vcpkg
 
       - name: Prepare datapack contents
