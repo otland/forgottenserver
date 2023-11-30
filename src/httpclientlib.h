@@ -50,6 +50,12 @@
 #include <thread>
 #include <unordered_map>
 
+// Disable old-style-cast warnings for this file
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#endif
+
 namespace HttpClientLib {
 class HttpConnection;
 class HttpResponse;
@@ -303,13 +309,12 @@ public:
 
 	virtual void connect(const boost::asio::ip::tcp::resolver::results_type& results)
 	{
-		boost::asio::async_connect(stream, results.begin(), results.end(),
-		                           std::bind(&HttpConnectionBase::onConnect, this->shared_from_this(),
-		                                     std::placeholders::_1, std::placeholders::_2));
+		boost::asio::async_connect(
+		    stream, results.begin(), results.end(),
+		    std::bind(&HttpConnectionBase::onConnect, this->shared_from_this(), std::placeholders::_1));
 	}
 
-	virtual void onConnect(const boost::system::error_code& error,
-	                       boost::asio::ip::tcp::resolver::results_type::iterator i)
+	virtual void onConnect(const boost::system::error_code& error)
 	{
 		if (!error) {
 			writeRequest();
@@ -320,12 +325,12 @@ public:
 
 	virtual void writeRequest()
 	{
-		boost::beast::http::async_write(stream, request,
-		                                std::bind(&HttpConnectionBase::onRequestWrite, this->shared_from_this(),
-		                                          std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_write(
+		    stream, request,
+		    std::bind(&HttpConnectionBase::onRequestWrite, this->shared_from_this(), std::placeholders::_1));
 	}
 
-	virtual void onRequestWrite(const boost::beast::error_code& error, std::size_t bytes_transferred)
+	virtual void onRequestWrite(const boost::beast::error_code& error)
 	{
 		if (!error) {
 			readHeader();
@@ -338,12 +343,12 @@ public:
 	virtual void readHeader()
 	{
 		buffer.max_size(MAX_HEADER_CHUNCK_SIZE);
-		boost::beast::http::async_read_header(stream, buffer, response,
-		                                      std::bind(&HttpConnectionBase::onReadHeader, this->shared_from_this(),
-		                                                std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_read_header(
+		    stream, buffer, response,
+		    std::bind(&HttpConnectionBase::onReadHeader, this->shared_from_this(), std::placeholders::_1));
 	}
 
-	virtual void onReadHeader(const boost::beast::error_code& error, std::size_t bytes_transferred)
+	virtual void onReadHeader(const boost::beast::error_code& error)
 	{
 		if (!error || response.is_header_done()) {
 			responseData->setRequestId(id);
@@ -359,12 +364,12 @@ public:
 	{
 		timer.expires_after(std::chrono::milliseconds(timeout));
 		buffer.max_size(MAX_BODY_CHUNCK_SIZE);
-		boost::beast::http::async_read_some(stream, buffer, response,
-		                                    std::bind(&HttpConnectionBase::onReadBody, this->shared_from_this(),
-		                                              std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_read_some(
+		    stream, buffer, response,
+		    std::bind(&HttpConnectionBase::onReadBody, this->shared_from_this(), std::placeholders::_1));
 	}
 
-	virtual void onReadBody(const boost::beast::error_code& error, std::size_t bytes_transferred)
+	virtual void onReadBody(const boost::beast::error_code& error)
 	{
 		if (error && error != boost::beast::http::error::end_of_stream) {
 			close();
@@ -392,7 +397,7 @@ public:
 		stream.close(ec);
 	}
 
-	virtual void onShutdown(boost::system::error_code error) {}
+	virtual void onShutdown() {}
 
 	void onTimeout(const boost::system::error_code& error)
 	{
@@ -424,12 +429,13 @@ public:
 	}
 
 protected:
-	int timeout;
-	uint32_t id;
 	boost::asio::ip::tcp::resolver resolver;
 	boost::asio::ip::tcp::socket stream;
 
 	boost::asio::steady_timer timer;
+
+	int timeout;
+	uint32_t id;
 
 	boost::beast::flat_buffer buffer;
 	boost::beast::http::request<boost::beast::http::string_body> request;
@@ -491,8 +497,7 @@ public:
 		resolve(url, port);
 	}
 
-	void onConnect(const boost::system::error_code& error,
-	               boost::asio::ip::tcp::resolver::results_type::iterator i) override
+	void onConnect(const boost::system::error_code& error) override
 	{
 		if (!error) {
 			handshake();
@@ -516,36 +521,35 @@ public:
 
 	void writeRequest() override
 	{
-		boost::beast::http::async_write(sslStream, request,
-		                                std::bind(&HttpConnectionBase::onRequestWrite, this->shared_from_this(),
-		                                          std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_write(
+		    sslStream, request,
+		    std::bind(&HttpConnectionBase::onRequestWrite, this->shared_from_this(), std::placeholders::_1));
 	}
 
 	void readHeader() override
 	{
 		buffer.max_size(MAX_HEADER_CHUNCK_SIZE);
-		boost::beast::http::async_read_header(sslStream, buffer, response,
-		                                      std::bind(&HttpConnectionBase::onReadHeader, this->shared_from_this(),
-		                                                std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_read_header(
+		    sslStream, buffer, response,
+		    std::bind(&HttpConnectionBase::onReadHeader, this->shared_from_this(), std::placeholders::_1));
 	}
 
 	void readBody() override
 	{
 		timer.expires_after(std::chrono::milliseconds(timeout));
 		buffer.max_size(MAX_BODY_CHUNCK_SIZE);
-		boost::beast::http::async_read_some(sslStream, buffer, response,
-		                                    std::bind(&HttpConnectionBase::onReadBody, this->shared_from_this(),
-		                                              std::placeholders::_1, std::placeholders::_2));
+		boost::beast::http::async_read_some(
+		    sslStream, buffer, response,
+		    std::bind(&HttpConnectionBase::onReadBody, this->shared_from_this(), std::placeholders::_1));
 	}
 
 	void close() override
 	{
 		timer.cancel();
-		sslStream.async_shutdown(
-		    std::bind(&HttpConnectionBase::onShutdown, this->shared_from_this(), std::placeholders::_1));
+		sslStream.async_shutdown(std::bind(&HttpConnectionBase::onShutdown, this->shared_from_this()));
 	}
 
-	void onShutdown(boost::system::error_code error) override
+	void onShutdown() override
 	{
 		boost::system::error_code ec;
 		stream.close(ec);
@@ -610,7 +614,7 @@ public:
 			request.method(boost::beast::http::verb::connect);
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request CONNECT (" + url + "): " + e.what());
 			return false;
 		}
@@ -635,7 +639,7 @@ public:
 			request.method(boost::beast::http::verb::trace);
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request TRACE (" + url + "): " + e.what());
 			return false;
 		}
@@ -660,7 +664,7 @@ public:
 			request.method(boost::beast::http::verb::options);
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request OPTIONS (" + url + "): " + e.what());
 			return false;
 		}
@@ -686,7 +690,7 @@ public:
 			const bool skipBody = true;
 
 			doRequest(httpUrl, request, skipBody);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request HEAD (" + url + "): " + e.what());
 			return false;
 		}
@@ -711,7 +715,7 @@ public:
 			request.method(boost::beast::http::verb::delete_);
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request DELETE (" + url + "): " + e.what());
 			return false;
 		}
@@ -736,7 +740,7 @@ public:
 			request.method(boost::beast::http::verb::get);
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request GET (" + url + "): " + e.what());
 			return false;
 		}
@@ -763,7 +767,7 @@ public:
 			request.prepare_payload();
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request POST (" + url + "): " + e.what());
 			return false;
 		}
@@ -791,7 +795,7 @@ public:
 			request.prepare_payload();
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request PATCH (" + url + "): " + e.what());
 			return false;
 		}
@@ -818,7 +822,7 @@ public:
 			request.prepare_payload();
 
 			doRequest(httpUrl, request);
-		} catch (std::exception e) {
+		} catch (std::exception& e) {
 			onError("error during HTTP request PUT (" + url + "): " + e.what());
 			return false;
 		}
@@ -911,5 +915,10 @@ private:
 };
 
 } // namespace HttpClientLib
+
+// Restore the warning settings to their previous state
+#if defined(__clang__) || defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
 
 #endif // HTTPCLIENT_H
