@@ -182,6 +182,7 @@ target_link_libraries(tfslib PRIVATE
 	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
+	${OPENSSL_LIBRARIES}
 	)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
