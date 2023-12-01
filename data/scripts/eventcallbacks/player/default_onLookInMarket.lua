@@ -239,6 +239,45 @@ ec.onLookInMarket = function(self, itemType)
 			end
 		end
 
+		-- damage boost
+		local damageBoosts = {}
+		local allElements = true
+
+		local identicalAmount = true
+		local currentAmount = -1
+
+		for combatType, value in pairs(abilities.boostPercent) do
+			if value ~= 0 then
+				damageBoosts[#damageBoosts + 1] = {element = getCombatName(2^(combatType-1)), value = value}
+
+				if currentAmount == -1 then
+					currentAmount = value
+				elseif currentAmount ~= value then
+					identicalAmount = false
+				end
+			else
+				allElements = false
+			end
+		end
+
+
+		if #damageBoosts > 0 then
+			if allElements and identicalAmount then
+				-- all elements upped by same amount
+				-- display single value
+				skillBoosts[#skillBoosts + 1] = string.format("damage and healing %+d%%", damageBoosts[1].value)
+			else
+				-- incomplete elements list or all elements but different chances
+				-- display full info
+				local boostValues = {}
+				for i = 1, #damageBoosts do
+					boostValues[#boostValues + 1] = string.format("%s %+d%%", damageBoosts[i].element, damageBoosts[i].value)
+				end
+
+				skillBoosts[#skillBoosts + 1] = string.format("damage %s", table.concat(boostValues, ", "))
+			end
+		end
+
 		-- add to response
 		if #skillBoosts > 0 then
 			response:addString(table.concat(skillBoosts, ", "))
@@ -272,7 +311,66 @@ ec.onLookInMarket = function(self, itemType)
 	response:addU16(0) -- Imbuement Slots
 	response:addU16(0) -- Magic Shield Capacity
 	response:addU16(0) -- Cleave
-	response:addU16(0) -- Damage Reflection
+	-- damage reflection
+	do
+		local reflects = {}
+
+		local allElements = true
+
+		local identicalChance = true
+		local currentChance = -1
+
+		for combatId, chance in pairs(abilities.reflectChance) do
+			local amount = abilities.reflectPercent[combatId]
+			if chance > 0 and amount > 0 then
+				reflects[#reflects + 1] = {element = getCombatName(2^(combatId-1)), amount = amount, chance = chance}
+
+				if currentChance == -1 then
+					currentChance = chance
+				elseif currentChance ~= chance then
+					identicalChance = false
+				end
+			else
+				allElements = false
+			end
+		end
+
+		if #reflects > 0 then
+			local reflectResponse = ""
+			if allElements and identicalChance then
+				-- chance and amount are identical
+				-- display single values for chance and amount
+				local chanceInfo = reflects[1].chance ~= 100 and string.format(" (%d%% chance)", reflects[1].chance) or ""
+				reflectResponse = string.format("%+d%%%s", reflects[1].amount, chanceInfo)
+
+			elseif identicalChance then
+				-- incomplete elements list (chances still identical)
+				-- display single value for chance only
+				local reflectValues = {}
+				for i = 1, #reflects do
+					reflectValues[#reflectValues + 1] = string.format("%s %+d%%", reflects[i].element, reflects[i].amount)
+				end
+
+				local chanceInfo = reflects[1].chance ~= 100 and string.format(" (%d%% chance)", reflects[1].chance) or ""
+				reflectResponse = string.format("%s%s", table.concat(reflectValues, ", "), chanceInfo)
+			else
+				-- chances or amounts are different
+				-- display full info
+				local reflectValues = {}
+				for i = 1, #reflects do
+					reflectValues[#reflectValues + 1] = string.format("%s %+d%% (%d%% chance)", reflects[i].element, reflects[i].amount, reflects[i].chance)
+				end
+
+				reflectResponse = table.concat(reflectValues, ", ")
+			end
+
+			-- display reflect stats
+			response:addString(reflectResponse)
+		else
+			-- no stats to display
+			response:addU16(0)
+		end
+	end
 	response:addU16(0) -- Perfect Shot
 	response:addU16(0) -- Classification
 	response:addU16(0) -- Tier
