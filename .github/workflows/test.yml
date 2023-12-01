@@ -31,4 +31,4 @@ jobs:
           configurePreset: default
           configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
           testPreset: default
-          testPresetAdditionalArgs: "['-C Debug']"
+          testPresetAdditionalArgs: "['-C', 'Debug']"

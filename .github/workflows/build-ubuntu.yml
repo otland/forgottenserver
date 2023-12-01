@@ -53,7 +53,7 @@ jobs:
       - name: Install dependencies
         run: >
           sudo apt update -q &&
-          sudo apt install -yq build-essential liblua5.4-dev libmysqlclient-dev
+          sudo apt install -yq build-essential liblua5.4-dev libluajit-5.1-dev libmysqlclient-dev
           libboost-system-dev libboost-iostreams-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
@@ -61,7 +61,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: default
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
           configurePreset: default
 
       - name: Perform CodeQL Analysis
@@ -74,4 +74,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs

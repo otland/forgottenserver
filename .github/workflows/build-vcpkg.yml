@@ -48,7 +48,7 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
           configurePreset: vcpkg
 
       - name: Upload artifact binary
@@ -56,7 +56,7 @@ jobs:
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v3
@@ -64,8 +64,8 @@ jobs:
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: |
-            ${{ runner.workspace }}/build/tfs.exe
-            ${{ runner.workspace }}/build/*.dll
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
