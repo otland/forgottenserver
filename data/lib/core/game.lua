@@ -105,7 +105,7 @@ if not globalStorageTable then
 end
 
 function Game.getStorageValue(key)
-	return globalStorageTable[key] or -1
+	return globalStorageTable[key] or nil
 end
 
 function Game.setStorageValue(key, value)
