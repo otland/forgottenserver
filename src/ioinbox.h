@@ -47,7 +47,6 @@ public:
 	void flush();
 
 private:
-	IOInbox();
 
 	static DBEntryListPtr saveItems(const Player* player, const ItemBlockList& itemList);
 	static Inbox* createInboxItem(const ItemMap& items);
@@ -67,11 +66,7 @@ private:
 	bool deliverItems(const uint32_t& guid, Inbox* inbox);
 	void savePlayerItemsAsync(const uint32_t& guid);
 
-	Database& db;
 	std::recursive_mutex lock;
-	std::map<uint32_t, PlayerDBEntryPtr> inboxCache;
-	std::map<uint32_t, std::list<ItemBlockList>> pendingItemsToSave;
-	std::set<uint32_t> pendingPlayerSet;
 };
 
 #endif // FS_IOINBOX_H

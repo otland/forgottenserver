@@ -10,7 +10,11 @@
 
 extern Game g_game;
 
-IOInbox::IOInbox() : db(Database::getAsyncInstance()) {}
+namespace {
+std::map<uint32_t, PlayerDBEntryPtr> inboxCache;
+std::map<uint32_t, std::list<ItemBlockList>> pendingItemsToSave;
+std::set<uint32_t> pendingPlayerSet;
+} // namespace
 
 void IOInbox::loadPlayer(const Player* player)
 {
@@ -48,7 +52,7 @@ void IOInbox::savePlayerItems(const uint32_t& guid, ItemBlockList& itemList)
 
 Inbox* IOInbox::loadInbox(const uint32_t& guid)
 {
-	// any thread
+	// asyncTasks thread
 
 	DBEntryListPtr tmpInbox = getPlayerInbox(guid);
 	if (!tmpInbox) {
@@ -149,6 +153,8 @@ void IOInbox::addPlayerInbox(const uint32_t& guid, DBEntryListPtr inbox)
 DBEntryListPtr IOInbox::loadPlayerInbox(const uint32_t& guid)
 {
 	auto inbox = std::make_shared<DBEntryList>();
+
+	Database& db = Database::getAsyncInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
 	    "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
@@ -278,6 +284,8 @@ void IOInbox::savePlayerAsync(const uint32_t& guid)
 	}
 	PlayerDBEntryPtr playerDBEntry = it->second;
 	lockClass.unlock();
+
+	Database& db = Database::getAsyncInstance();
 
 	// disable foreign key checks to prevent locking of the players table during insert
 	// we do not except that the player is deleted while saving the inbox
