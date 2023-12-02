@@ -47,7 +47,6 @@ public:
 	void flush();
 
 private:
-
 	static DBEntryListPtr saveItems(const Player* player, const ItemBlockList& itemList);
 	static Inbox* createInboxItem(const ItemMap& items);
 
