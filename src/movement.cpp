@@ -1022,7 +1022,7 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCh
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 	LuaScriptInterface::pushThing(L, item);
-	lua_pushnumber(L, slot);
+	lua_pushinteger(L, slot);
 	LuaScriptInterface::pushBoolean(L, isCheck);
 
 	return scriptInterface->callFunction(4);

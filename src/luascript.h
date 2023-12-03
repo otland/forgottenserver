@@ -363,9 +363,9 @@ public:
 	static void pushBestiaryInfo(lua_State* L, const BestiaryInfo& info);
 
 	//
-	static void setField(lua_State* L, const char* index, lua_Number value)
+	static void setField(lua_State* L, const char* index, lua_Integer value)
 	{
-		lua_pushnumber(L, value);
+		lua_pushinteger(L, value);
 		lua_setfield(L, -2, index);
 	}
 

@@ -230,7 +230,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	LuaScriptInterface::pushUserdata(L, &player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, type);
+	lua_pushinteger(L, type);
 	LuaScriptInterface::pushString(L, message);
 
 	bool result = false;

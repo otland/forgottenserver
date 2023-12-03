@@ -310,7 +310,7 @@ bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	scriptInterface->pushFunction(scriptId);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, interval);
+	lua_pushinteger(L, interval);
 
 	return scriptInterface->callFunction(2);
 }
@@ -399,9 +399,9 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	scriptInterface->pushFunction(scriptId);
 	LuaScriptInterface::pushUserdata(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	lua_pushnumber(L, static_cast<uint32_t>(skill));
-	lua_pushnumber(L, oldLevel);
-	lua_pushnumber(L, newLevel);
+	lua_pushinteger(L, static_cast<uint32_t>(skill));
+	lua_pushinteger(L, oldLevel);
+	lua_pushinteger(L, newLevel);
 
 	return scriptInterface->callFunction(4);
 }
@@ -444,9 +444,9 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	LuaScriptInterface::pushUserdata(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, modalWindowId);
-	lua_pushnumber(L, buttonId);
-	lua_pushnumber(L, choiceId);
+	lua_pushinteger(L, modalWindowId);
+	lua_pushinteger(L, buttonId);
+	lua_pushinteger(L, choiceId);
 
 	scriptInterface->callVoidFunction(4);
 }
@@ -575,7 +575,7 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, opcode);
+	lua_pushinteger(L, opcode);
 	LuaScriptInterface::pushString(L, buffer);
 
 	scriptInterface->callVoidFunction(3);
