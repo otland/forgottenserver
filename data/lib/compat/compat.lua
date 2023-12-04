@@ -588,7 +588,7 @@ function Player:getStorageValue(key)
 	local source = debug.getinfo(2).source:match("@?(.*)")
 	local v = Creature.getStorageValue(self, key)
 
-	if v == nil then
+	if v == STORAGEVALUE_EMPTY then
 		print(string.format("[Warning - %s:%d] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.", source, line))
 	end
 
