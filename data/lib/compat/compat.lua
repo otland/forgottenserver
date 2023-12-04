@@ -582,17 +582,25 @@ function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked()
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
 
 STORAGEVALUE_EMPTY = -1
-function Player:getStorageValue(key)
-	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
 
+function Player:getStorageValue(key)
+	local line = debug.getinfo(2).currentline
+	local source = debug.getinfo(2).source:match("@?(.*)")
 	local v = Creature.getStorageValue(self, key)
+
+	if v == nil then
+		print(string.format("[Warning - %s:%d] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.", source, line))
+	end
+
 	return v or STORAGEVALUE_EMPTY
 end
 
 function Player:setStorageValue(key, value)
+	local line = debug.getinfo(2).currentline
+	local source = debug.getinfo(2).source:match("@?(.*)")
 
 	if value == STORAGEVALUE_EMPTY then
-		print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.")
+		print(string.format("[Warning - %s:%d] Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.", source, line))
 		Creature.removeStorageValue(self, key)
 	else
 		Creature.setStorageValue(self, key, value)
