@@ -6,7 +6,7 @@ function questDoor.onStepIn(creature, item, position, fromPosition)
 		return false
 	end
 
-	if creature:getStorageValue(item.actionid) == nil and not creature:getGroup():getAccess() then
+	if not creature:getStorageValue(item.actionid) and not creature:getGroup():getAccess() then
 		creature:sendTextMessage(MESSAGE_EVENT_ADVANCE, "The door seems to be sealed against unwanted intruders.")
 		creature:teleportTo(fromPosition, true)
 		return false

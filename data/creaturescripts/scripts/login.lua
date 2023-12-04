@@ -13,12 +13,9 @@ function onLogin(player)
 	-- Promotion
 	local vocation = player:getVocation()
 	local promotion = vocation:getPromotion()
-	if player:isPremium() then
-		local value = player:getStorageValue(PlayerStorageKeys.promotion)
-		if value == 1 then
-			player:setVocation(promotion)
-		end
-	elseif not promotion then
+	if player:isPremium() and player:getStorageValue(PlayerStorageKeys.promotion) == 1 then
+		player:setVocation(promotion)
+	elseif not player:isPremium() and promotion then
 		player:setVocation(vocation:getDemotion())
 	end
 
@@ -26,7 +23,7 @@ function onLogin(player)
 	player:updateClientExpDisplay()
 
 	-- achievements points for highscores
-	if player:getStorageValue(PlayerStorageKeys.achievementsTotal) == nil then
+	if not player:getStorageValue(PlayerStorageKeys.achievementsTotal) then
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
 
