@@ -698,16 +698,3 @@ end
 function Player.getAccountStorageValue(self, key)
 	return Game.getAccountStorageValue(self:getAccountId(), key)
 end
-
-function Player.getStorageValue(self, key)
-	return Creature.getStorageValue(self, key) or STORAGEVALUE_EMPTY
-end
-
-function Player.setStorageValue(self, key, value)
-	-- Use STORAGEVALUE_EMPTY to indicate removal of the storage value
-	if value == STORAGEVALUE_EMPTY then
-		Creature.removeStorageValue(self, key)
-	else
-		Creature.setStorageValue(self, key, value)
-	end
-end
