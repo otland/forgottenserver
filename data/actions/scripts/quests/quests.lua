@@ -12,7 +12,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local itemWeight = itemType:getWeight()
 	local playerCap = player:getFreeCapacity()
 	if table.contains(annihilatorReward, item.uid) then
-		if player:getStorageValue(PlayerStorageKeys.annihilatorReward) == -1 then
+		if not player:getStorageValue(PlayerStorageKeys.annihilatorReward) then
 			if playerCap >= itemWeight then
 				if item.uid == 1990 then
 					player:addItem(1990, 1):addItem(2326, 1)
@@ -29,7 +29,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		else
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "It is empty.")
 		end
-	elseif player:getStorageValue(item.uid) == -1 then
+	elseif not player:getStorageValue(item.uid) then
 		if playerCap >= itemWeight then
 			player:sendTextMessage(MESSAGE_EVENT_ADVANCE, 'You have found a ' .. itemType:getName() .. '.')
 			player:addItem(item.uid, 1)
