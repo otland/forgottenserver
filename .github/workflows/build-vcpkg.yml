@@ -26,6 +26,7 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
@@ -38,29 +39,24 @@ jobs:
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Enable LuaJIT
-        if: ${{ matrix.luajit }} == "on"
-        run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
         with:
-          vcpkgGitCommitId: 501db0f17ef6df184fcdbfbe0f87cde2313b6ab1
+          vcpkgGitCommitId: a42af01b72c28a8e1d7b48107b33e4f286a55ef6
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-G Ninja']"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v3
@@ -68,8 +64,8 @@ jobs:
         with:
           name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: |
-            ${{ runner.workspace }}/build/tfs.exe
-            ${{ runner.workspace }}/build/*.dll
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
