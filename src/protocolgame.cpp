@@ -2429,7 +2429,7 @@ void ProtocolGame::sendCreatureTurn(const Creature* creature, uint32_t stackpos)
 		msg.addByte(stackpos);
 	}
 
-	msg.add<uint16_t>(0x63);
+	msg.addByte(GAME_SERVER_SEND_CLIENT_CHECK);
 	msg.add<uint32_t>(creature->getID());
 	msg.addByte(creature->getDirection());
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
