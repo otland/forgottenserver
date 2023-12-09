@@ -59,7 +59,7 @@ enum GameServerOpcodes_t : uint8_t
 	// otclient ONLY
 	GAME_SERVER_EXTENDED_OPCODE = 50,
 
-	// NOTE: add any custom opcodes in this range 51 - 99
+	// NOTE: add any custom opcodes in this range (51 - 99)
 	GAME_SERVER_CHANGE_MAP_AWARE_RANGE = 51,
 	GAME_SERVER_ATTCHED_EFFECT = 52,
 	GAME_SERVER_DETACH_EFFECT = 53,
@@ -215,7 +215,7 @@ enum ClientOpcodes : uint8_t
 	CLIENT_EXTENDED_OPCODE = 50,
 	CLIENT_CHANGE_MAP_AWARE_RANGE = 51,
 
-	// NOTE: add any custom opcodes in this range 51 - 99
+	// NOTE: add any custom opcodes in this range (51 - 99)
 
 	// original tibia ONLY
 	CLIENT_AUTO_WALK = 100,
