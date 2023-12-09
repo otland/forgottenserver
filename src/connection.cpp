@@ -159,7 +159,7 @@ void Connection::parseHeader(const boost::system::error_code& error)
 				return;
 			}
 
-			if (msgBuffer[0] == 0x0A) {
+			if (msgBuffer[0] == CLIENT_PENDING_GAME) {
 				receivedLastChar = true;
 			}
 
