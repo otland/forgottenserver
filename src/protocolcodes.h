@@ -218,7 +218,7 @@ enum ClientOpcodes : uint8_t
 
 	// NOTE: add any custom opcodes in this range (51 - 99)
 
-	// original tibia ONLY
+	// official client ONLY
 	CLIENT_AUTO_WALK = 100,
 	CLIENT_WALK_NORTH = 101,
 	CLIENT_WALK_EAST = 102,
