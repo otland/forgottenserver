@@ -101,6 +101,12 @@ enum MarketAction_t
 	MARKETACTION_SELL = 1,
 };
 
+enum MarketOfferCount_t
+{
+	MARKETOFFER_SELL = 0,
+	MARKETOFFER_BUY = 1,
+};
+
 enum MarketRequest_t
 {
 	MARKETREQUEST_OWN_HISTORY = 1,

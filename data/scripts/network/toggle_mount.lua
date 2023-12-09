@@ -1,4 +1,4 @@
-local handler = PacketHandler(0xD4)
+local handler = PacketHandler(CLIENT_MOUNT)
 
 function handler.onReceive(player, msg)
 	local mount = msg:getByte() ~= 0

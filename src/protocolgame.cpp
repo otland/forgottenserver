@@ -784,6 +784,35 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			parseModalWindowAnswer(msg);
 			break;
 
+			// case CLIENT_STASH_WITHDRAW: break;
+			// case CLIENT_RETRIEVE_DEPOT_SEARCH: break;
+			// case CLIENT_CYCLOPEDIA_MONSTER_TRACKER: break;
+			// case CLIENT_PARTY_ANALYZER_ACTION: break;
+			// case CLIENT_LEADER_FINDER_WINDOW: break;
+			// case CLIENT_MEMBER_FINDER_WINDOW: break;
+			// case CLIENT_JOIN_AGGRESSION: break;
+			// case CLIENT_QUICK_LOOT: break;
+			// case CLIENT_LOOT_CONTAINER: break;
+			// case CLIENT_UPDATE_LOOT_WHITELIST: break;
+			// case CLIENT_REQUEST_LOCKER_ITEMS: break;
+			// case CLIENT_REQUEST_TOURNAMENT_LEADERBOARD: break;
+			// case CLIENT_UPDATE_TILE: break;
+			// case CLIENT_REQUEST_INSPECT_WINDOW: break;
+			// case CLIENT_APPLY_IMBUEMENT: break;
+			// case CLIENT_CLEAR_IMBUEMENT: break;
+			// case CLIENT_CLOSE_IMBUING_WINDOW: break;
+			// case CLIENT_PREMIUM_SHOP_UNKNOWN_1: break;
+			// case CLIENT_PREMIUM_SHOP_UNKNOWN_2: break;
+			// case CLIENT_BUY_CHARM_RUNE: break;
+			// case CLIENT_REQUEST_CYCLOPEDIA_CHARACTER_INFO: break;
+			// case CLIENT_RULE_VIOLATION: break;
+			// case CLIENT_REQUEST_TRANSFER_COINS: break;
+			// case CLIENT_OPEN_STORE: break;
+			// case CLIENT_REQUEST_STORE_OFFERS: break;
+			// case CLIENT_BUY_STORE_OFFER: break;
+			// case CLIENT_OPEN_TRANSACTION_HISTORY: break;
+			// case CLIENT_REQUEST_TRANSACTION_HISTORY: break;
+
 		default:
 			g_dispatcher.addTask([=, playerID = player->getID(), msg = new NetworkMessage(msg)]() {
 				g_game.parsePlayerNetworkMessage(playerID, recvbyte, msg);

@@ -1,4 +1,4 @@
-local handler = PacketHandler(0xB1)
+local handler = PacketHandler(CLIENT_REQUEST_HIGHSCORES)
 
 function handler.onReceive(player, msg)
 	local params = {}

@@ -134,7 +134,7 @@ local handlers = {
 	]]--
 }
 
-local handler = PacketHandler(0xE5)
+local handler = PacketHandler(CLIENT_REQUEST_CYCLOPEDIA_CHARACTER_INFO)
 
 function handler.onReceive(player, msg)
 	msg:skipBytes(4)
