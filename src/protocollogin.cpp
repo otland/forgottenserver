@@ -19,7 +19,7 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 {
 	auto output = OutputMessagePool::getOutputMessage();
 
-	output->addByte(version >= 1076 ? 0x0B : 0x0A);
+	output->addByte(version >= 1076 ? LOGIN_SERVER_ERROR_NEW : LOGIN_SERVER_ERROR);
 	output->addString(message);
 	send(output);
 
@@ -42,22 +42,22 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		if (token.empty() ||
 		    !(token == generateToken(account.key, ticks) || token == generateToken(account.key, ticks - 1) ||
 		      token == generateToken(account.key, ticks + 1))) {
-			output->addByte(0x0D);
+			output->addByte(LOGIN_SERVER_TOKEN_ERROR);
 			output->addByte(0);
 			send(output);
 			disconnect();
 			return;
 		}
-		output->addByte(0x0C);
+		output->addByte(LOGIN_SERVER_TOKEN_SUCCESS);
 		output->addByte(0);
 	}
 
 	// Add session key
-	output->addByte(0x28);
+	output->addByte(LOGIN_SERVER_SESSION_KEY);
 	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));
 
 	// Add char list
-	output->addByte(0x64);
+	output->addByte(LOGIN_SERVER_CHARACTER_LIST);
 
 	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
 

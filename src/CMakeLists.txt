@@ -137,6 +137,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/position.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolgame.h
 	${CMAKE_CURRENT_LIST_DIR}/protocol.h
+    ${CMAKE_CURRENT_LIST_DIR}/protocolcodes.h
 	${CMAKE_CURRENT_LIST_DIR}/protocollogin.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.h

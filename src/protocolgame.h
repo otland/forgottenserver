@@ -8,6 +8,7 @@
 #include "creature.h"
 #include "protocol.h"
 #include "tasks.h"
+#include "protocolcodes.h"
 
 class Container;
 class Game;

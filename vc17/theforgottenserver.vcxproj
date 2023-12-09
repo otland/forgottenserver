@@ -301,6 +301,7 @@
     <ClInclude Include="..\src\podium.h" />
     <ClInclude Include="..\src\position.h" />
     <ClInclude Include="..\src\protocol.h" />
+    <ClInclude Include="..\src\protocolcodes.h" />
     <ClInclude Include="..\src\protocolgame.h" />
     <ClInclude Include="..\src\protocollogin.h" />
     <ClInclude Include="..\src\protocolold.h" />

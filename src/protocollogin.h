@@ -5,6 +5,7 @@
 #define FS_PROTOCOLLOGIN_H
 
 #include "protocol.h"
+#include "protocolcodes.h"
 
 class NetworkMessage;
 
