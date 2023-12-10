@@ -253,11 +253,9 @@ do
 	end
 
 	function Game.setAccountStorageValue(accountId, key, value)
-		local accountStorage = accountsStorage[accountId]
-		if not accountStorage then
-			accountStorage = {}
+		if not accountsStorage[accountId] then
+			accountsStorage[accountId] = {}
 		end
-
-		accountStorage[key] = value
+		accountsStorage[accountId][key] = value
 	end
 end

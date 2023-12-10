@@ -33,9 +33,21 @@ local function trySaveAccountsStorage()
 	end
 
 	local accountsStorage = Game.getAccountsStorage()
-	for _, accountStorage in pairs(accountsStorage) do
-		
+	for accountId, accountStorage in pairs(accountsStorage) do
+		local query = DBInsert("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES")
+		for key, value in pairs(accountStorage) do
+			local success = query.addRow(accountId .. ", " .. key .. ", " .. value)
+			if not success then
+				return false
+			end
+		end
+
+		if not query.execute() then
+			return false
+		end
 	end
+
+	return transaction.commit()
 end
 
 local save = GlobalEvent("SaveAccountStorage")
