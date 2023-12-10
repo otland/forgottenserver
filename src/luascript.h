@@ -1022,9 +1022,6 @@ private:
 
 	static int luaPlayerSendCreatureSquare(lua_State* L);
 
-	static int luaPlayerSendWorldLight(lua_State* L);
-	static int luaPlayerSendWorldTime(lua_State* L);
-
 	static int luaPlayerGetClientExpDisplay(lua_State* L);
 	static int luaPlayerSetClientExpDisplay(lua_State* L);
 

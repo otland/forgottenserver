@@ -2738,9 +2738,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
 
-	registerMethod("Player", "sendWorldLight", LuaScriptInterface::luaPlayerSendWorldLight);
-	registerMethod("Player", "sendWorldTime", LuaScriptInterface::luaPlayerSendWorldTime);
-
 	registerMethod("Player", "getClientExpDisplay", LuaScriptInterface::luaPlayerGetClientExpDisplay);
 	registerMethod("Player", "setClientExpDisplay", LuaScriptInterface::luaPlayerSetClientExpDisplay);
 
@@ -10889,35 +10886,6 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 
 	player->sendCreatureSquare(creature, getNumber<SquareColor_t>(L, 3));
 	pushBoolean(L, true);
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerSendWorldLight(lua_State* L)
-{
-	// player:sendWorldLight(color, level)
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		LightInfo light;
-		light.color = getNumber<uint8_t>(L, 2);
-		light.level = getNumber<uint8_t>(L, 3);
-		player->sendWorldLight(light);
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaPlayerSendWorldTime(lua_State* L)
-{
-	// player:sendWorldTime(time)
-	Player* player = getUserdata<Player>(L, 1);
-	if (player) {
-		player->sendWorldTime(getNumber<int16_t>(L, 2));
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
 	return 1;
 }
 

@@ -1649,22 +1649,6 @@ void ProtocolGame::sendCreatureLight(const Creature* creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendWorldLight(LightInfo lightInfo)
-{
-	NetworkMessage msg;
-	AddWorldLight(msg, lightInfo);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendWorldTime(int16_t time)
-{
-	NetworkMessage msg;
-	msg.addByte(0xEF);
-	msg.addByte(time / 60); // hour
-	msg.addByte(time % 60); // min
-	writeToOutputBuffer(msg);
-}
-
 void ProtocolGame::sendCreatureWalkthrough(const Creature* creature, bool walkthrough)
 {
 	if (!canSee(creature)) {
