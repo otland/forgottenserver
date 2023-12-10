@@ -7,6 +7,7 @@
 #include "databasemanager.h"
 #include "databasetasks.h"
 #include "game.h"
+#include "httpclient.h"
 #include "iomarket.h"
 #include "monsters.h"
 #include "outfit.h"
@@ -28,6 +29,7 @@
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
+HttpClient g_http;
 
 Game g_game;
 ConfigManager g_config;
@@ -71,6 +73,7 @@ int main(int argc, char* argv[])
 
 	g_dispatcher.start();
 	g_scheduler.start();
+	g_http.start();
 
 	g_dispatcher.addTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); });
 
@@ -85,11 +88,13 @@ int main(int argc, char* argv[])
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
 		g_dispatcher.shutdown();
+		g_http.shutdown();
 	}
 
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
+	g_http.join();
 	return 0;
 }
 

@@ -6,6 +6,7 @@
     "boost-lockfree",
     "boost-system",
     "boost-variant",
+    "boost-beast",
     "cryptopp",
     "fmt",
     "libmariadb",

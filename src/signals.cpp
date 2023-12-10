@@ -11,6 +11,7 @@
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
+#include "httpclient.h"
 #include "monsters.h"
 #include "mounts.h"
 #include "movement.h"
@@ -41,6 +42,7 @@ extern GlobalEvents* g_globalEvents;
 extern Events* g_events;
 extern Chat* g_chat;
 extern LuaEnvironment g_luaEnvironment;
+extern HttpClient g_http;
 
 namespace {
 
@@ -158,6 +160,7 @@ void dispatchSignalHandler(int signal)
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
+			g_http.join();
 			break;
 #endif
 		default:

@@ -26,6 +26,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/guild.cpp
 	${CMAKE_CURRENT_LIST_DIR}/house.cpp
 	${CMAKE_CURRENT_LIST_DIR}/housetile.cpp
+	${CMAKE_CURRENT_LIST_DIR}/httpclient.cpp
 	${CMAKE_CURRENT_LIST_DIR}/inbox.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iologindata.cpp
 	${CMAKE_CURRENT_LIST_DIR}/iomap.cpp
@@ -109,6 +110,8 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/guild.h
 	${CMAKE_CURRENT_LIST_DIR}/house.h
 	${CMAKE_CURRENT_LIST_DIR}/housetile.h
+	${CMAKE_CURRENT_LIST_DIR}/httpclient.h
+	${CMAKE_CURRENT_LIST_DIR}/httpclientlib.h
 	${CMAKE_CURRENT_LIST_DIR}/inbox.h
 	${CMAKE_CURRENT_LIST_DIR}/iologindata.h
 	${CMAKE_CURRENT_LIST_DIR}/iomap.h
@@ -179,6 +182,7 @@ target_link_libraries(tfslib PRIVATE
 	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
+	${OPENSSL_LIBRARIES}
 	)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})

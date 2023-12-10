@@ -15,6 +15,7 @@
 #include "events.h"
 #include "globalevent.h"
 #include "housetile.h"
+#include "httpclient.h"
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
@@ -128,6 +129,7 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+			g_http.stop();
 			break;
 		}
 
@@ -4878,6 +4880,7 @@ void Game::shutdown()
 	g_scheduler.shutdown();
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
+	g_http.shutdown();
 	map.spawns.clear();
 	raids.clear();
 
