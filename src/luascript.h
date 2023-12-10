@@ -499,6 +499,12 @@ private:
 	static int luaTableCreate(lua_State* L);
 	static int luaTablePack(lua_State* L);
 
+	// DB Transaction
+	static int luaDBTransactionCreate(lua_State* L);
+	static int luaDBTransactionDelete(lua_State* L);
+	static int luaDBTransactionBegin(lua_State* L);
+	static int luaDBTransactionCommit(lua_State* L);
+
 	// Game
 	static int luaGameGetSpectators(lua_State* L);
 	static int luaGameGetPlayers(lua_State* L);

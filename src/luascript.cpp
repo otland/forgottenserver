@@ -2203,6 +2203,15 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
+	// DBTransaction
+	registerClass("DBTransaction", "", LuaScriptInterface::luaDBTransactionCreate);
+	registerMetaMethod("DBTransaction", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("DBTransaction", "__gc", LuaScriptInterface::luaDBTransactionDelete);
+
+	registerMethod("DBTransaction", "begin", LuaScriptInterface::luaDBTransactionBegin);
+	registerMethod("DBTransaction", "commit", LuaScriptInterface::luaDBTransactionCommit);
+	registerMethod("DBTransaction", "rollback", LuaScriptInterface::luaDBTransactionDelete);
+
 	// Game
 	registerTable("Game");
 
@@ -4386,6 +4395,49 @@ int LuaScriptInterface::luaTablePack(lua_State* L)
 	lua_pushinteger(L, n);
 	lua_setfield(L, 1, "n"); /* t.n = number of elements */
 	return 1;                /* return table */
+}
+
+// DBTransaction
+int LuaScriptInterface::luaDBTransactionCreate(lua_State* L)
+{
+	// DBTransaction()
+	pushUserdata<DBTransaction>(L, new DBTransaction);
+	setMetatable(L, -1, "DBTransaction");
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionBegin(lua_State* L)
+{
+	// transaction:begin()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->begin());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionCommit(lua_State* L)
+{
+	// transaction:commit()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->commit());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionDelete(lua_State* L)
+{
+	DBTransaction** transactionPtr = getRawUserdata<DBTransaction>(L, 1);
+	if (transactionPtr && *transactionPtr) {
+		delete *transactionPtr;
+		*transactionPtr = nullptr;
+	}
+	return 0;
 }
 
 // Game
