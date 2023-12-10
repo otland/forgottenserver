@@ -2203,13 +2203,13 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
-	// DBInsert
+	// DB Insert
 	registerClass("DBInsert", "", LuaScriptInterface::luaDBInsertCreate);
 
 	registerMethod("DBInsert", "addRow", LuaScriptInterface::luaDBInsertAddRow);
 	registerMethod("DBInsert", "execute", LuaScriptInterface::luaDBInsertExecute);
 
-	// DBTransaction
+	// DB Transaction
 	registerClass("DBTransaction", "", LuaScriptInterface::luaDBTransactionCreate);
 	registerMetaMethod("DBTransaction", "__eq", LuaScriptInterface::luaUserdataCompare);
 	registerMetaMethod("DBTransaction", "__gc", LuaScriptInterface::luaDBTransactionDelete);
