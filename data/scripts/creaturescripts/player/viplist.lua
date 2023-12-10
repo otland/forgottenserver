@@ -1,7 +1,7 @@
 local function notifyAllPlayers(guid, status)
 	for _, player in ipairs(Game.getPlayers()) do
 		if player:getGuid() ~= guid then
-			player:sendUpdatedVIPStatus(guid, status)
+			player:notifyVIPStatusChange(guid, status)
 		end
 	end
 end
