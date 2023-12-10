@@ -406,13 +406,6 @@ public:
 		return shopOwner;
 	}
 
-	// V.I.P. functions
-	void notifyStatusChange(Player* loginPlayer, VipStatus_t status);
-	bool removeVIP(uint32_t vipGuid);
-	bool addVIP(uint32_t vipGuid, const std::string& vipName, VipStatus_t status);
-	bool addVIPInternal(uint32_t vipGuid);
-	bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
-
 	// follow functions
 	bool setFollowCreature(Creature* creature) override;
 	void goToFollowCreature() override;
@@ -536,7 +529,6 @@ public:
 	bool removeOutfitAddon(uint16_t lookType, uint8_t addons);
 	bool getOutfitAddons(const Outfit& outfit, uint8_t& addons) const;
 
-	size_t getMaxVIPEntries() const;
 	size_t getMaxDepotItems() const;
 
 	// tile
@@ -1169,7 +1161,6 @@ private:
 	void internalAddThing(uint32_t index, Thing* thing) override;
 
 	std::unordered_set<uint32_t> attackedSet;
-	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
