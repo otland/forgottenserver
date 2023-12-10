@@ -40,96 +40,15 @@ std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
+namespace {
+
 void startupErrorMessage(const std::string& errorStr)
 {
 	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
 	g_loaderSignal.notify_all();
 }
 
-void mainLoader(int argc, char* argv[], ServiceManager* services);
-bool argumentsHandler(const StringVector& args);
-
-[[noreturn]] void badAllocationHandler()
-{
-	// Use functions that only use stack allocation
-	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
-	getchar();
-	exit(-1);
-}
-
-int main(int argc, char* argv[])
-{
-	StringVector args = StringVector(argv, argv + argc);
-	if (argc > 1 && !argumentsHandler(args)) {
-		return 0;
-	}
-
-	// Setup bad allocation handler
-	std::set_new_handler(badAllocationHandler);
-
-	ServiceManager serviceManager;
-
-	g_dispatcher.start();
-	g_scheduler.start();
-
-	g_dispatcher.addTask([=, services = &serviceManager]() { mainLoader(argc, argv, services); });
-
-	g_loaderSignal.wait(g_loaderUniqueLock);
-
-	if (serviceManager.is_running()) {
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
-		          << std::endl;
-		serviceManager.run();
-	} else {
-		std::cout << ">> No services running. The server is NOT online." << std::endl;
-		g_scheduler.shutdown();
-		g_databaseTasks.shutdown();
-		g_dispatcher.shutdown();
-	}
-
-	g_scheduler.join();
-	g_databaseTasks.join();
-	g_dispatcher.join();
-	return 0;
-}
-
-void printServerVersion()
-{
-#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
-	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
-	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
-#if GIT_IS_DIRTY
-	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
-#endif
-#else
-	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
-#endif
-	std::cout << std::endl;
-
-	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
-	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
-#if defined(__amd64__) || defined(_M_X64)
-	std::cout << "x64" << std::endl;
-#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
-	std::cout << "x86" << std::endl;
-#elif defined(__arm__)
-	std::cout << "ARM" << std::endl;
-#else
-	std::cout << "unknown" << std::endl;
-#endif
-#if defined(LUAJIT_VERSION)
-	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
-#else
-	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
-#endif
-	std::cout << std::endl;
-
-	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
-	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
-	std::cout << std::endl;
-}
-
-void mainLoader(int, char*[], ServiceManager* services)
+void mainLoader(ServiceManager* services)
 {
 	// dispatcher thread
 	g_game.setGameState(GAME_STATE_STARTUP);
@@ -336,34 +255,78 @@ void mainLoader(int, char*[], ServiceManager* services)
 	g_loaderSignal.notify_all();
 }
 
-bool argumentsHandler(const StringVector& args)
+[[noreturn]] void badAllocationHandler()
 {
-	for (const auto& arg : args) {
-		if (arg == "--help") {
-			std::clog << "Usage:\n"
-			             "\n"
-			             "\t--config=$1\t\tAlternate configuration file path.\n"
-			             "\t--ip=$1\t\t\tIP address of the server.\n"
-			             "\t\t\t\tShould be equal to the global IP.\n"
-			             "\t--login-port=$1\tPort for login server to listen on.\n"
-			             "\t--game-port=$1\tPort for game server to listen on.\n";
-			return false;
-		} else if (arg == "--version") {
-			printServerVersion();
-			return false;
-		}
+	// Use functions that only use stack allocation
+	puts("Allocation failed, server out of memory.\nDecrease the size of your map or compile in 64 bits mode.\n");
+	getchar();
+	exit(-1);
+}
 
-		auto tmp = explodeString(arg, "=");
+} // namespace
 
-		if (tmp[0] == "--config")
-			g_config.setString(ConfigManager::CONFIG_FILE, tmp[1]);
-		else if (tmp[0] == "--ip")
-			g_config.setString(ConfigManager::IP, tmp[1]);
-		else if (tmp[0] == "--login-port")
-			g_config.setNumber(ConfigManager::LOGIN_PORT, std::stoi(tmp[1].data()));
-		else if (tmp[0] == "--game-port")
-			g_config.setNumber(ConfigManager::GAME_PORT, std::stoi(tmp[1].data()));
+void startServer()
+{
+	// Setup bad allocation handler
+	std::set_new_handler(badAllocationHandler);
+
+	ServiceManager serviceManager;
+
+	g_dispatcher.start();
+	g_scheduler.start();
+
+	g_dispatcher.addTask([services = &serviceManager]() { mainLoader(services); });
+
+	g_loaderSignal.wait(g_loaderUniqueLock);
+
+	if (serviceManager.is_running()) {
+		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
+		          << std::endl;
+		serviceManager.run();
+	} else {
+		std::cout << ">> No services running. The server is NOT online." << std::endl;
+		g_scheduler.shutdown();
+		g_databaseTasks.shutdown();
+		g_dispatcher.shutdown();
 	}
 
-	return true;
+	g_scheduler.join();
+	g_databaseTasks.join();
+	g_dispatcher.join();
+}
+
+void printServerVersion()
+{
+#if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
+	std::cout << STATUS_SERVER_NAME << " - Version " << GIT_DESCRIBE << std::endl;
+	std::cout << "Git SHA1 " << GIT_SHORT_SHA1 << " dated " << GIT_COMMIT_DATE_ISO8601 << std::endl;
+#if GIT_IS_DIRTY
+	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
+#endif
+#else
+	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
+#endif
+	std::cout << std::endl;
+
+	std::cout << "Compiled with " << BOOST_COMPILER << std::endl;
+	std::cout << "Compiled on " << __DATE__ << ' ' << __TIME__ << " for platform ";
+#if defined(__amd64__) || defined(_M_X64)
+	std::cout << "x64" << std::endl;
+#elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
+	std::cout << "x86" << std::endl;
+#elif defined(__arm__)
+	std::cout << "ARM" << std::endl;
+#else
+	std::cout << "unknown" << std::endl;
+#endif
+#if defined(LUAJIT_VERSION)
+	std::cout << "Linked with " << LUAJIT_VERSION << " for Lua support" << std::endl;
+#else
+	std::cout << "Linked with " << LUA_RELEASE << " for Lua support" << std::endl;
+#endif
+	std::cout << std::endl;
+
+	std::cout << "A server developed by " << STATUS_SERVER_DEVELOPERS << std::endl;
+	std::cout << "Visit our forum for updates, support, and resources: https://otland.net/." << std::endl;
+	std::cout << std::endl;
 }
