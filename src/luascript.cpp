@@ -10667,21 +10667,13 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		}
 	}
 
-	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				//it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), false);
-	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				//it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), true);
+	auto inGhostMode = player->isInGhostMode();
+	for (const auto& it : g_game.getPlayers()) {
+		notifyStatusChange(L, it.second, !inGhostMode);
 	}
+
+	IOLoginData::updateOnlineStatus(player->getGUID(), !inGhostMode);
+
 	pushBoolean(L, true);
 	return 1;
 }
@@ -18427,3 +18419,23 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 		luaL_unref(luaState, LUA_REGISTRYINDEX, parameter);
 	}
 }
+
+namespace {
+void notifyStatusChange(lua_State* L, Player* player, bool status)
+{
+	if (!player) {
+		return;
+	}
+
+	if (player->isAccessPlayer()) {
+		return;
+	}
+
+	lua_getglobal(L, "Player");
+	lua_getfield(L, -1, "notifyVIPStatusChange");
+	lua_pushvalue(L, 1);
+	lua_pushinteger(L, player->getGUID());
+	lua_pushinteger(L, status ? 1 : 0);
+	lua_call(L, 3, 1);
+}
+} // namespace
