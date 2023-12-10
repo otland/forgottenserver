@@ -708,7 +708,7 @@ function Player.getMaxVIPEntries(self)
 end
 
 function Player.addVIP(self, name)
-	if string.len(name) > PLAYER_NAME_LENGTH then
+	if name:len() > PLAYER_NAME_LENGTH then
 		return
 	end
 
