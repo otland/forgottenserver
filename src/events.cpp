@@ -1342,7 +1342,7 @@ void Events::eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, Netwo
 
 void Events::eventPlayerOnChangeGhostMode(Player* player)
 {
-	// Player:onChangeGhostMode(recvByte)
+	// Player:onChangeGhostMode()
 	if (info.playerOnChangeGhostMode == -1) {
 		return;
 	}
