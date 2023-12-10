@@ -32,9 +32,8 @@ local function calculateWorldLightLevel()
 		return lightConfig.day - ((worldTime - worldConfig.sunset) * lightChange.sunset)
 	elseif worldTime >= worldConfig.nightTime or worldTime < worldConfig.sunrise then
 		return lightConfig.night
-	else
-		return lightConfig.day
 	end
+	return lightConfig.day
 end
 
 function event.onTime(interval)
@@ -43,11 +42,8 @@ function event.onTime(interval)
 	end
 
 	local worldLightColor, worldLightLevel = Game.getWorldLight()
-
-	local lightLevel = calculateWorldLightLevel()
-	if lightLevel ~= worldLightLevel then
-		Game.setWorldLight(worldLightColor, lightLevel)
-	end
+	local level = calculateWorldLightLevel()
+	Game.setWorldLight(worldLightColor, level)
 	return true
 end
 
