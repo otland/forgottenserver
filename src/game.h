@@ -448,9 +448,6 @@ public:
 	static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos,
 	                              uint8_t effect);
 
-	void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
-	int32_t getAccountStorageValue(const uint32_t accountId, const uint32_t key) const;
-	void loadAccountStorageValues();
 	bool saveAccountStorageValues() const;
 
 	void startDecay(Item* item);

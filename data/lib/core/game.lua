@@ -232,3 +232,28 @@ do
 		end
 	end
 end
+
+do
+	local accountsStorage = {}
+
+	function Game.clearAccountStorageValue(accountId, key)
+		local accountStorage = accountsStorage[accountId]
+		if accountStorage then
+			accountStorage[key] = nil
+		end
+	end
+
+	function Game.getAccountStorageValue(accountId, key)
+		local accountStorage = accountsStorage[accountId]
+		return accountStorage and accountStorage[key] or nil
+	end
+
+	function Game.setAccountStorageValue(accountId, key, value)
+		local accountStorage = accountsStorage[accountId]
+		if not accountStorage then
+			accountStorage = {}
+		end
+
+		accountStorage[key] = value
+	end
+end
