@@ -235,7 +235,7 @@ private:
 
 	void sendCreatureLight(const Creature* creature);
 	void sendWorldLight(LightInfo lightInfo);
-	void sendWorldTime();
+	void sendWorldTime(int16_t time);
 
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 

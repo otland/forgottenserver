@@ -187,3 +187,45 @@ function Game.getUnpromotedVocations()
 	end
 	return vocations
 end
+
+do
+    local worldLightLevel = 0
+	local worldLightColor = 0
+    
+    function Game.getWorldLight()
+        return worldLightLevel, worldLightColor
+    end
+    
+    function Game.setWorldLight(color, level)
+        if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
+            return
+        end
+
+        local previousLevel = worldLightLevel
+        worldLightColor = color
+        worldLightLevel = level
+
+        if previousLevel ~= worldLightLevel then
+            for _, player in ipairs(Game.getPlayers()) do
+                player:sendWorldLight(worldLightColor, worldLightLevel)
+            end
+        end
+    end
+end
+
+do
+    local worldTime = 0
+
+    function Game.getWorldTime()
+        return worldTime
+    end
+
+    function Game.setWorldTime(time)
+        worldTime = time
+        if worldTime % 15 == 0 then
+            for _, player in ipairs(Game.getPlayers()) do
+                player:sendWorldTime(worldTime)
+            end
+        end
+    end
+end

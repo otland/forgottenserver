@@ -1656,9 +1656,8 @@ void ProtocolGame::sendWorldLight(LightInfo lightInfo)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendWorldTime()
+void ProtocolGame::sendWorldTime(int16_t time)
 {
-	int16_t time = g_game.getWorldTime();
 	NetworkMessage msg;
 	msg.addByte(0xEF);
 	msg.addByte(time / 60); // hour
@@ -2843,10 +2842,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 	// send store inbox
 	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
-
-	// gameworld time of the day
-	sendWorldLight(g_game.getWorldLightInfo());
-	sendWorldTime();
 
 	// player light level
 	sendCreatureLight(creature);

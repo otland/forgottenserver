@@ -997,10 +997,10 @@ public:
 			client->sendWorldLight(lightInfo);
 		}
 	}
-	void sendWorldTime()
+	void sendWorldTime(int16_t time)
 	{
 		if (client) {
-			client->sendWorldTime();
+			client->sendWorldTime(time);
 		}
 	}
 	void sendChannelsDialog()

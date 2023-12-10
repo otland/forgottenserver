@@ -1081,15 +1081,6 @@ void LuaScriptInterface::registerFunctions()
 	// getDepotId(uid)
 	lua_register(luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
-	// getWorldTime()
-	lua_register(luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
-
-	// getWorldLight()
-	lua_register(luaState, "getWorldLight", LuaScriptInterface::luaGetWorldLight);
-
-	// setWorldLight(level, color)
-	lua_register(luaState, "setWorldLight", LuaScriptInterface::luaSetWorldLight);
-
 	// getWorldUpTime()
 	lua_register(luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
@@ -2747,6 +2738,9 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Player", "sendCreatureSquare", LuaScriptInterface::luaPlayerSendCreatureSquare);
 
+	registerMethod("Player", "sendWorldLight", LuaScriptInterface::luaPlayerSendWorldLight);
+	registerMethod("Player", "sendWorldTime", LuaScriptInterface::luaPlayerSendWorldTime);
+
 	registerMethod("Player", "getClientExpDisplay", LuaScriptInterface::luaPlayerGetClientExpDisplay);
 	registerMethod("Player", "setClientExpDisplay", LuaScriptInterface::luaPlayerSetClientExpDisplay);
 
@@ -3593,39 +3587,6 @@ int LuaScriptInterface::luaDebugPrint(lua_State* L)
 	// debugPrint(text)
 	reportErrorFunc(L, getString(L, -1));
 	return 0;
-}
-
-int LuaScriptInterface::luaGetWorldTime(lua_State* L)
-{
-	// getWorldTime()
-	int16_t time = g_game.getWorldTime();
-	lua_pushnumber(L, time);
-	return 1;
-}
-
-int LuaScriptInterface::luaGetWorldLight(lua_State* L)
-{
-	// getWorldLight()
-	LightInfo lightInfo = g_game.getWorldLightInfo();
-	lua_pushnumber(L, lightInfo.level);
-	lua_pushnumber(L, lightInfo.color);
-	return 2;
-}
-
-int LuaScriptInterface::luaSetWorldLight(lua_State* L)
-{
-	// setWorldLight(level, color)
-	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	LightInfo lightInfo;
-	lightInfo.level = getNumber<uint8_t>(L, 1);
-	lightInfo.color = getNumber<uint8_t>(L, 2);
-	g_game.setWorldLightInfo(lightInfo);
-	pushBoolean(L, true);
-	return 1;
 }
 
 int LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
@@ -10928,6 +10889,35 @@ int LuaScriptInterface::luaPlayerSendCreatureSquare(lua_State* L)
 
 	player->sendCreatureSquare(creature, getNumber<SquareColor_t>(L, 3));
 	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendWorldLight(lua_State* L)
+{
+	// player:sendWorldLight(color, level)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		LightInfo light;
+		light.color = getNumber<uint8_t>(L, 2);
+		light.level = getNumber<uint8_t>(L, 3);
+		player->sendWorldLight(light);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendWorldTime(lua_State* L)
+{
+	// player:sendWorldTime(time)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendWorldTime(getNumber<int16_t>(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
