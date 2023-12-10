@@ -3,6 +3,8 @@
 
 #include "otpch.h"
 
+#include "otserv.h"
+
 #include "configmanager.h"
 #include "databasemanager.h"
 #include "databasetasks.h"
