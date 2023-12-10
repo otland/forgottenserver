@@ -1,8 +1,8 @@
 do
-	VIPList = {}
+	VIPs = {}
 
 	local function clear(self)
-		VIPList[self.guid] = nil
+		VIPs[self.guid] = nil
 	end
 
 	local function getList(self)
@@ -17,14 +17,14 @@ do
 		self.vips[vip] = nil
 	end
 
-	local function hasVIP(self, vip)
+	local function has(self, vip)
 		return self.vips[vip] ~= nil
 	end
 
 	local function canAdd(self)
 		local player = Player(self.guid)
 		if not player then
-			debugPrint("[Error - Player::canAdd] null player (" .. self.guid .. ") when check if can add vip.")
+			debugPrint("[Error - VIP::canAdd] null player (" .. self.guid .. ") when check if can add vip.")
 			return 0
 		end
 
@@ -32,18 +32,18 @@ do
 	end
 
 	function VIP(guid)
-		if not VIPList[guid] then
-			VIPList[guid] = {
+		if not VIPs[guid] then
+			VIPs[guid] = {
 				guid = guid,
 				clear = clear,
 				getList = getList,
 				add = add,
 				remove = remove,
-				hasVIP = hasVIP,
+				has = has,
 				canAdd = canAdd,
 				vips = {}
 			}
 		end
-		return VIPList[guid]
+		return VIPs[guid]
 	end
 end

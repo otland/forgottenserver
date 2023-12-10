@@ -758,7 +758,7 @@ function Player.addVIP(self, name)
 		return
 	end
 
-	if playerVIP:hasVIP(vipGuid) then
+	if playerVIP:has(vipGuid) then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "This player is already in your list.")
 		return
 	end
@@ -784,7 +784,7 @@ end
 
 function Player.editVIP(self, vipGuid, description, icon, notify)
 	local playerVIP = VIP(self:getGuid())
-	if not playerVIP:hasVIP(vipGuid) then
+	if not playerVIP:has(vipGuid) then
 		return
 	end
 	
@@ -798,7 +798,7 @@ function Player.notifyVIPStatusChange(self, vipGuid, status)
 	end
 
 	local playerVIP = VIP(self:getGuid())
-	if not playerVIP:hasVIP(vipGuid) then
+	if not playerVIP:has(vipGuid) then
 		return
 	end
 
