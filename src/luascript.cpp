@@ -2203,6 +2203,12 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
+	// DBInsert
+	registerClass("DBInsert", "", LuaScriptInterface::luaDBInsertCreate);
+
+	registerMethod("DBInsert", "addRow", LuaScriptInterface::luaDBInsertAddRow);
+	registerMethod("DBInsert", "execute", LuaScriptInterface::luaDBInsertExecute);
+
 	// DBTransaction
 	registerClass("DBTransaction", "", LuaScriptInterface::luaDBTransactionCreate);
 	registerMetaMethod("DBTransaction", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -4397,7 +4403,45 @@ int LuaScriptInterface::luaTablePack(lua_State* L)
 	return 1;                /* return table */
 }
 
-// DBTransaction
+// DB Insert
+int LuaScriptInterface::luaDBInsertCreate(lua_State* L)
+{
+	// DBInsert(query)
+	if (isString(L, 2)) {
+		pushUserdata<DBInsert>(L, new DBInsert(getString(L, 2)));
+		setMetatable(L, -1, "DBInsert");
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertAddRow(lua_State* L)
+{
+	// insert:addRow(row)
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->addRow(getString(L, 2)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertExecute(lua_State* L)
+{
+	// insert:execute()
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->execute());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// DB Transaction
 int LuaScriptInterface::luaDBTransactionCreate(lua_State* L)
 {
 	// DBTransaction()
