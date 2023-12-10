@@ -9,7 +9,8 @@ end
 local event = CreatureEvent("OnlineVIP")
 
 function event.onLogin(player)
-	notifyAllPlayers(player:getGuid(), VIPSTATUS_ONLINE)
+	local playerGUID = player:getGuid()
+	notifyAllPlayers(playerGUID, VIPSTATUS_ONLINE)
 
 	local accountId = player:getAccountId()
 	local resultId = db.storeQuery("SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = " .. accountId)
@@ -17,7 +18,7 @@ function event.onLogin(player)
 		return true
 	end
 	
-	local playerVIP = VIP(player:getGuid())
+	local playerVIP = VIP(playerGUID)
 	repeat
 		local vipGuid = result.getNumber(resultId, "player_id")
 		local vipName = result.getString(resultId, "name")
@@ -53,10 +54,10 @@ event = CreatureEvent("OfflineVIP")
 
 function event.onLogout(player)
 	local playerGUID = player:getGuid()
+	notifyAllPlayers(playerGUID, VIPSTATUS_OFFLINE)
+
 	local playerVIP = VIP(playerGUID)
 	playerVIP:clear()
-
-	notifyAllPlayers(playerGUID, VIPSTATUS_OFFLINE)
 	return true
 end
 
