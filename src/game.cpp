@@ -159,10 +159,6 @@ void Game::saveGameState()
 
 	std::cout << "Saving server..." << std::endl;
 
-	if (!saveAccountStorageValues()) {
-		std::cout << "[Error - Game::saveGameState] Failed to save account-level storage values." << std::endl;
-	}
-
 	for (const auto& it : players) {
 		it.second->loginPosition = it.second->getPosition();
 		IOLoginData::savePlayer(it.second);
@@ -4717,40 +4713,6 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 			tmpPlayer->sendDistanceShoot(fromPos, toPos, effect);
 		}
 	}
-}
-
-bool Game::saveAccountStorageValues() const
-{
-	DBTransaction transaction;
-	Database& db = Database::getInstance();
-
-	if (!transaction.begin()) {
-		return false;
-	}
-
-	if (!db.executeQuery("DELETE FROM `account_storage`")) {
-		return false;
-	}
-
-	for (const auto& accountIt : g_game.accountStorageMap) {
-		if (accountIt.second.empty()) {
-			continue;
-		}
-
-		DBInsert accountStorageQuery("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES");
-		for (const auto& storageIt : accountIt.second) {
-			if (!accountStorageQuery.addRow(
-			        fmt::format("{:d}, {:d}, {:d}", accountIt.first, storageIt.first, storageIt.second))) {
-				return false;
-			}
-		}
-
-		if (!accountStorageQuery.execute()) {
-			return false;
-		}
-	}
-
-	return transaction.commit();
 }
 
 void Game::startDecay(Item* item)

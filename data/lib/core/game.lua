@@ -236,6 +236,10 @@ end
 do
 	local accountsStorage = {}
 
+	function Game.getAccountsStorage()
+		return accountsStorage
+	end
+
 	function Game.clearAccountStorageValue(accountId, key)
 		local accountStorage = accountsStorage[accountId]
 		if accountStorage then
