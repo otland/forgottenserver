@@ -768,7 +768,7 @@ function Player.addVIP(self, name)
 	local notify = false
 
 	local accountId = self:getAccountId()
-	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" .. accountId .. ", " .. vipGuid .. ", " .. db.escapeString(description) .. ", " .. icon .. ", " .. (notify and 1 or 0) .. ")")
+	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" .. accountId .. ", " .. vipGuid .. ")")
 
 	playerVIP:add(vipGuid)
 	self:sendVIP(vipGuid, vipName, description, icon, notify, status)
