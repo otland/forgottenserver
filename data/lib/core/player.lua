@@ -768,10 +768,7 @@ function Player.addVIP(self, name)
 	local notify = false
 
 	local accountId = self:getAccountId()
-	local result = db.storeQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" .. accountId .. ", " .. vipGuid .. ", " .. db.escapeString(description) .. ", " .. icon .. ", " .. (notify and 1 or 0) .. ")")
-	if not result then
-		return
-	end
+	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES (" .. accountId .. ", " .. vipGuid .. ", " .. db.escapeString(description) .. ", " .. icon .. ", " .. (notify and 1 or 0) .. ")")
 
 	playerVIP:add(vipGuid)
 	self:sendVIP(vipGuid, vipName, description, icon, notify, status)
@@ -779,10 +776,7 @@ end
 
 function Player.removeVIP(self, vipGuid)
 	local accountId = self:getAccountId()
-	local result = db.storeQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid)
-	if not result then
-		debugPrint("[Warning - Player::removeVIP] failed to remove VIP " .. vipGuid .. " from account " .. accountId .. ".")
-	end
+	db.asyncQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid)
 	
 	local playerVIP = VIP(self:getGuid())
 	playerVIP:remove(vipGuid)
@@ -793,11 +787,8 @@ function Player.editVIP(self, vipGuid, description, icon, notify)
 	if not playerVIP:hasVIP(vipGuid) then
 		return
 	end
-
-	db.storeQuery("UPDATE `account_viplist` SET `description` = " .. db.escapeString(description) ..", `icon` = " .. icon .. ", `notify` = " .. notify and 1 or 0 .. " WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid .. "")
-	if not result then
-		debugPrint("[Warning - Player::editVIP] failed to edit VIP " .. vipGuid .. " from account " .. accountId .. ".")
-	end
+	
+	db.asyncQuery("UPDATE `account_viplist` SET `description` = " .. db.escapeString(description) ..", `icon` = " .. icon .. ", `notify` = " .. (notify and 1 or 0) .. " WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid .. "")
 end
 
 function Player.notifyVIPStatusChange(self, vipGuid, status)
