@@ -42934,4 +42934,10 @@
 	<item id="42854" article="a" name="box full of ballons" />
 	<item id="42855" article="a" name="Pan Amphora" />
 	<item id="42858" article="a" name="big reward box" />
+	<item id="44714" name="depot box XIX">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="44715" name="depot box XX">
+		<attribute key="containerSize" value="32" />
+	</item>
 </items>
