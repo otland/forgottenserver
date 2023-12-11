@@ -1217,3 +1217,10 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 
 	return SPELLGROUP_NONE;
 }
+
+const std::vector<Direction>& getShuffleDirections()
+{
+	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
+	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
+	return dirList;
+}
