@@ -42934,76 +42934,30 @@
 	<item id="42854" article="a" name="box full of ballons" />
 	<item id="42855" article="a" name="Pan Amphora" />
 	<item id="42858" article="a" name="big reward box" />
-	<item id="42971" name="clinker wall" />
-	<item id="42972" name="clinker wall" />
-	<item id="42973" name="clinker wall" />
-	<item id="42974" name="clinker wall" />
-	<item id="42975" name="clinker wall" />
-	<item id="42976" name="clinker wall" />
-	<item id="42977" name="clinker wall" />
-	<item id="42978" name="clinker wall" />
-	<item id="42979" name="clinker wall" />
-	<item id="42980" name="clinker wall" />
-	<item id="42981" name="clinker wall" />
-	<item id="42982" name="clinker wall" />
-	<item id="42983" name="clinker wall" />
-	<item id="42984" name="clinker wall" />
-	<item id="42985" name="clinker wall" />
-	<item id="42986" name="clinker wall" />
-	<item id="42987" name="clinker wall" />
-	<item id="42988" name="clinker wall" />
-	<item id="42989" name="clinker wall" />
-	<item id="42990" name="clinker wall" />
-	<item id="42991" name="clinker wall" />
-	<item id="42992" name="clinker wall" />
-	<item id="42993" name="archway" />
-	<item id="42994" name="archway" />
-	<item id="42995" name="archway" />
-	<item id="42996" name="archway" />
-	<item id="42997" name="railing" />
-	<item id="42998" name="railing" />
-	<item id="42999" name="railing" />
-	<item id="43000" name="railing" />
-	<item id="43001" name="railing" />
-	<item id="43002" name="railing" />
-	<item id="43003" name="window" />
-	<item id="43004" name="window" />
-	<item id="43005" name="ramp" />
-	<item id="43006" name="ramp" />
-	<item id="43007" name="ramp" />
-	<item id="43008" name="ramp" />
-	<item id="43009" name="ramp" />
-	<item id="43010" name="ramp" />
-	<item id="43011" name="ramp" />
-	<item id="43012" name="ramp" />
-	<item id="43013" name="broken wall" />
-	<item id="43014" name="broken wall" />
-	<item id="43015" name="broken wall" />
-	<item id="43016" name="broken wall" />
-	<item id="43017" name="broken wall" />
-	<item id="43018" name="broken wall" />
-	<item id="43019" name="broken wall" />
-	<item id="43020" name="broken wall" />
-	<item id="43021" name="broken wall" />
-	<item id="43022" name="broken wall" />
-	<item id="43023" name="closed door" />
-	<item id="43024" name="locked door" />
-	<item id="43025" name="closed door" />
-	<item id="43026" name="locked door" />
-	<item id="43027" name="open door" />
-	<item id="43028" name="open door" />
-	<item id="43029" name="wall" />
-	<item id="43030" name="clinker wall" />
-	<item id="43031" name="clinker wall" />
-	<item id="43032" name="clinker wall" />
-	<item id="43033" name="clinker wall" />
-	<item id="43034" name="railing" />
-	<item id="43035" name="railing" />
-	<item id="43036" name="railing" />
-	<item id="43037" name="pillar" />
-	<item id="43038" name="pillar" />
-	<item id="43039" name="pillar" />
-	<item id="43040" name="pillar" />
+	<item fromid="42971" toid="42992" article="a" name="clinker wall" />
+	<item fromid="42993" toid="42996" article="an" name="archway" />
+	<item fromid="42997" toid="43002" article="a" name="railing" />
+	<item id="43003" article="a" name="window" />
+	<item id="43004" article="a" name="window" />
+	<item id="43005" article="a" name="ramp" />
+	<item id="43006" article="a" name="ramp" />
+	<item id="43007" article="a" name="ramp" />
+	<item id="43008" article="a" name="ramp" />
+	<item id="43009" article="a" name="ramp" />
+	<item id="43010" article="a" name="ramp" />
+	<item id="43011" article="a" name="ramp" />
+	<item id="43012" article="a" name="ramp" />
+	<item fromid="43013" toid="43019" article="a" name="broken wall" />
+	<item id="43023" article="a" name="closed door" />
+	<item id="43024" article="a" name="locked door" />
+	<item id="43025" article="a" name="closed door" />
+	<item id="43026" article="a" name="locked door" />
+	<item id="43027" article="an" name="open door" />
+	<item id="43028" article="an" name="open door" />
+	<item id="43029" article="a" name="wall" />
+	<item fromid="43030" toid="43033" article="a" name="clinker wall" />
+	<item fromid="43034" toid="43036" article="a" name="railing" />
+	<item fromid="43037" toid="43040" article="a" name="pillar" />
 	<item id="43041" name="column" />
 	<item id="43042" name="column" />
 	<item id="43043" name="ruined column" />
