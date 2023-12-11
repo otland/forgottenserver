@@ -4413,7 +4413,6 @@ int LuaScriptInterface::luaDBInsertCreate(lua_State* L)
 	} else {
 		lua_pushnil(L);
 	}
-
 	return 1;
 }
 
