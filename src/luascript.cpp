@@ -1474,6 +1474,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_HORESTIS);
 	registerEnum(CONST_ME_DEVOVORGA);
 	registerEnum(CONST_ME_FERUMBRAS_2);
+	registerEnum(CONST_ME_FOAM);
 
 	registerEnum(CONST_ANI_NONE);
 	registerEnum(CONST_ANI_SPEAR);
