@@ -4420,7 +4420,7 @@
 		<attribute key="type" value="mailbox" />
 	</item>
 	<item id="2594" article="a" name="depot chest">
-		<attribute key="containerSize" value="18" />
+		<attribute key="containerSize" value="20" />
 	</item>
 	<item id="2595" article="a" name="parcel">
 		<attribute key="type" value="container" />
