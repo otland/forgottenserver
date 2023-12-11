@@ -56,6 +56,8 @@ struct summonBlock_t
 	uint32_t chance;
 	uint32_t speed;
 	uint32_t max;
+	MagicEffectClasses effect = CONST_ME_TELEPORT;
+	MagicEffectClasses masterEffect = CONST_ME_NONE;
 	bool force = false;
 };
 
