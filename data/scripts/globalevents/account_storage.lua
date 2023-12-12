@@ -2,7 +2,7 @@
 local load = GlobalEvent("LoadAccountStorage")
 
 function load.onStartup()
-	local resultId = db.asyncStoreQuery("SELECT `account_id`, `key`, `value` FROM `account_storage`")
+	local resultId = db.storeQuery("SELECT `account_id`, `key`, `value` FROM `account_storage`")
 	if not resultId then
 		return true
 	end
