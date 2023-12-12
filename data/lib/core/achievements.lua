@@ -683,18 +683,19 @@ function isAchievementSecret(ach)
 end
 
 function Player.hasAchievement(self, ach)
-	local achievement
-	if tonumber(ach) then
-		achievement = getAchievementInfoById(ach)
-	else
-		achievement = getAchievementInfoByName(ach)
-	end
+	local achievement = tonumber(ach) and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
 	if not achievement then
-		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+		print("[Warning - Player.hasAchievement] Attempt to check for an invalid achievement (ID or Name): " .. tostring(ach))
 		return false
 	end
 
-	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
+	local achievementId = achievement.id
+	if not achievementId then
+		print("[Error - Player.hasAchievement] Missing achievement ID for \"" .. tostring(ach) .. "\". This may indicate a problem in the achievements configuration.")
+		return false
+	end
+
+	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievementId) and true or false
 end
 
 function Player.getAchievements(self)
