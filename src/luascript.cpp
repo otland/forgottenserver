@@ -4142,12 +4142,14 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 
 int LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
+	// db.query(query)
 	pushBoolean(L, Database::getInstance().executeQuery(getString(L, -1)));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 {
+	// db.asyncQuery(query, callback)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
@@ -4178,6 +4180,7 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
+	// db.storeQuery(query)
 	if (DBResult_ptr res = Database::getInstance().storeQuery(getString(L, -1))) {
 		lua_pushnumber(L, ScriptEnvironment::addResult(res));
 	} else {
@@ -4188,6 +4191,7 @@ int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 {
+	// db.asyncStoreQuery(query, callback)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
@@ -4222,12 +4226,14 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 {
+	// db.escapeString(s)
 	pushString(L, Database::getInstance().escapeString(getString(L, -1)));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
+	// db.escapeBlob(s, length)
 	uint32_t length = getNumber<uint32_t>(L, 2);
 	pushString(L, Database::getInstance().escapeBlob(getString(L, 1).c_str(), length));
 	return 1;
@@ -4235,12 +4241,14 @@ int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
+	// db.lastInsertId()
 	lua_pushnumber(L, Database::getInstance().getLastInsertId());
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseTableExists(lua_State* L)
 {
+	// db.tableExists(tableName)
 	pushBoolean(L, DatabaseManager::tableExists(getString(L, -1)));
 	return 1;
 }
