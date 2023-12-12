@@ -354,9 +354,9 @@ public:
 	                        uint16_t spriteId);
 	void playerAcceptTrade(uint32_t playerId);
 	void playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t index);
-	void playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreCap = false,
-	                        bool inBackpacks = false);
-	void playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
+	void playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount,
+	                        bool ignoreCap = false, bool inBackpacks = false);
+	void playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount,
 	                    bool ignoreEquipped = false);
 	void playerCloseShop(uint32_t playerId);
 	void playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count);
