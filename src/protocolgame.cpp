@@ -3595,7 +3595,10 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 		msg.add<uint16_t>(0);                                                   // base special skill
 	}
 
-	msg.addByte(0); // mitigation(?)
+	msg.addByte(0); // element magic level
+	// structure:
+	// u8 client element id
+	// u16 bonus element ml
 
 	// fatal, dodge, momentum
 	for (int i = 0; i < 3; ++i) {
