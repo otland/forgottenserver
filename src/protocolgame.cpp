@@ -1789,14 +1789,16 @@ void ProtocolGame::sendBasicData()
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
 	}
+
 	msg.addByte(player->getVocation()->getClientId());
 	msg.addByte(0x00); // is prey system enabled (bool)
 
 	// unlock spells on action bar
 	msg.add<uint16_t>(0xFF);
 	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
-		msg.addByte(spellId);
+		msg.add<uint16_t>(spellId);
 	}
+
 	msg.addByte(player->getVocation()->getMagicShield()); // is magic shield active (bool)
 	writeToOutputBuffer(msg);
 }
@@ -3371,7 +3373,7 @@ void ProtocolGame::sendSpellCooldown(uint8_t spellId, uint32_t time)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA4);
-	msg.addByte(spellId);
+	msg.add<uint16_t>(static_cast<uint16_t>(spellId));
 	msg.add<uint32_t>(time);
 	writeToOutputBuffer(msg);
 }
@@ -3534,8 +3536,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 {
 	msg.addByte(0xA0);
 
-	msg.add<uint16_t>(std::min<int32_t>(player->getHealth(), std::numeric_limits<uint16_t>::max()));
-	msg.add<uint16_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<uint16_t>::max()));
+	msg.add<uint32_t>(std::min<int32_t>(player->getHealth(), std::numeric_limits<int32_t>::max()));
+	msg.add<uint32_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<int32_t>::max()));
 
 	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getFreeCapacity());
 	msg.add<uint64_t>(player->getExperience());
@@ -3548,8 +3550,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(0); // store exp bonus
 	msg.add<uint16_t>(player->getClientStaminaBonusDisplay());
 
-	msg.add<uint16_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<uint16_t>::max()));
-	msg.add<uint16_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<uint16_t>::max()));
+	msg.add<uint32_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<int32_t>::max()));
+	msg.add<uint32_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<int32_t>::max()));
 
 	msg.addByte(player->getSoul());
 	msg.add<uint16_t>(player->getStaminaMinutes());
@@ -3565,11 +3567,11 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 
 	if (ConditionManaShield* conditionManaShield =
 	        dynamic_cast<ConditionManaShield*>(player->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
-		msg.add<uint16_t>(conditionManaShield->getManaShield());    // remaining mana shield
-		msg.add<uint16_t>(conditionManaShield->getMaxManaShield()); // total mana shield
+		msg.add<uint32_t>(conditionManaShield->getManaShield());
+		msg.add<uint32_t>(conditionManaShield->getMaxManaShield());
 	} else {
-		msg.add<uint16_t>(0); // remaining mana shield
-		msg.add<uint16_t>(0); // total mana shield
+		msg.add<uint32_t>(0); // remaining mana shield
+		msg.add<uint32_t>(0); // total mana shield
 	}
 }
 
@@ -3593,21 +3595,18 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 		msg.add<uint16_t>(0);                                                   // base special skill
 	}
 
+	msg.addByte(0); // mitigation(?)
+
 	// fatal, dodge, momentum
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
-
-	msg.add<uint16_t>(0);
-	msg.add<uint16_t>(0);
+	for (int i = 0; i < 3; ++i) {
+		msg.add<uint16_t>(0);
+		msg.add<uint16_t>(0);
+	}
 
 	// to do: bonus cap
-	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000
-	                                                                  : player->getCapacity()); // base + bonus capacity
-	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000
-	                                                                  : player->getCapacity()); // base capacity
+	uint32_t capacityValue = player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getCapacity();
+	msg.add<uint32_t>(capacityValue); // base + bonus capacity
+	msg.add<uint32_t>(capacityValue); // base capacity
 }
 
 void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)

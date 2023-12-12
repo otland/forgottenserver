@@ -58,6 +58,8 @@ local function sendCombatStats(self, msg)
 	msg:addU16(self:getTotalArmor())
 	msg:addU16(self:getTotalDefense())
 
+	msg:addDouble(0) -- damage mitigation (in %)
+
 	-- element resistances count
 	msg:addByte(0)
 	-- structure:
