@@ -251,6 +251,10 @@ do
 			self:type("record")
 			self:onRecord(value)
 			return
+		elseif key == "onSave" then
+			self:type("save")
+			self:onSave(value)
+			return
 		end
 		rawset(self, key, value)
 	end

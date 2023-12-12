@@ -499,6 +499,17 @@ private:
 	static int luaTableCreate(lua_State* L);
 	static int luaTablePack(lua_State* L);
 
+	// DB Insert
+	static int luaDBInsertCreate(lua_State* L);
+	static int luaDBInsertAddRow(lua_State* L);
+	static int luaDBInsertExecute(lua_State* L);
+
+	// DB Transaction
+	static int luaDBTransactionCreate(lua_State* L);
+	static int luaDBTransactionDelete(lua_State* L);
+	static int luaDBTransactionBegin(lua_State* L);
+	static int luaDBTransactionCommit(lua_State* L);
+
 	// Game
 	static int luaGameGetSpectators(lua_State* L);
 	static int luaGameGetPlayers(lua_State* L);
@@ -866,8 +877,10 @@ private:
 	static int luaPlayerAddExperience(lua_State* L);
 	static int luaPlayerRemoveExperience(lua_State* L);
 	static int luaPlayerGetLevel(lua_State* L);
+	static int luaPlayerGetLevelPercent(lua_State* L);
 
 	static int luaPlayerGetMagicLevel(lua_State* L);
+	static int luaPlayerGetMagicLevelPercent(lua_State* L);
 	static int luaPlayerGetBaseMagicLevel(lua_State* L);
 	static int luaPlayerGetMana(lua_State* L);
 	static int luaPlayerAddMana(lua_State* L);

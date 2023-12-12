@@ -1465,6 +1465,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_HORESTIS);
 	registerEnum(CONST_ME_DEVOVORGA);
 	registerEnum(CONST_ME_FERUMBRAS_2);
+	registerEnum(CONST_ME_FOAM);
 
 	registerEnum(CONST_ANI_NONE);
 	registerEnum(CONST_ANI_SPEAR);
@@ -2203,6 +2204,21 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
+	// DB Insert
+	registerClass("DBInsert", "", LuaScriptInterface::luaDBInsertCreate);
+
+	registerMethod("DBInsert", "addRow", LuaScriptInterface::luaDBInsertAddRow);
+	registerMethod("DBInsert", "execute", LuaScriptInterface::luaDBInsertExecute);
+
+	// DB Transaction
+	registerClass("DBTransaction", "", LuaScriptInterface::luaDBTransactionCreate);
+	registerMetaMethod("DBTransaction", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("DBTransaction", "__gc", LuaScriptInterface::luaDBTransactionDelete);
+
+	registerMethod("DBTransaction", "begin", LuaScriptInterface::luaDBTransactionBegin);
+	registerMethod("DBTransaction", "commit", LuaScriptInterface::luaDBTransactionCommit);
+	registerMethod("DBTransaction", "rollback", LuaScriptInterface::luaDBTransactionDelete);
+
 	// Game
 	registerTable("Game");
 
@@ -2583,8 +2599,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
 	registerMethod("Player", "removeExperience", LuaScriptInterface::luaPlayerRemoveExperience);
 	registerMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
+	registerMethod("Player", "getLevelPercent", LuaScriptInterface::luaPlayerGetLevelPercent);
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
+	registerMethod("Player", "getMagicLevelPercent", LuaScriptInterface::luaPlayerGetMagicLevelPercent);
 	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
 	registerMethod("Player", "getMana", LuaScriptInterface::luaPlayerGetMana);
 	registerMethod("Player", "addMana", LuaScriptInterface::luaPlayerAddMana);
@@ -3956,6 +3974,7 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 
 int LuaScriptInterface::luaSaveServer(lua_State* L)
 {
+	g_globalEvents->save();
 	g_game.saveGameState();
 	pushBoolean(L, true);
 	return 1;
@@ -4390,6 +4409,86 @@ int LuaScriptInterface::luaTablePack(lua_State* L)
 	lua_pushinteger(L, n);
 	lua_setfield(L, 1, "n"); /* t.n = number of elements */
 	return 1;                /* return table */
+}
+
+// DB Insert
+int LuaScriptInterface::luaDBInsertCreate(lua_State* L)
+{
+	// DBInsert(query)
+	if (isString(L, 2)) {
+		pushUserdata<DBInsert>(L, new DBInsert(getString(L, 2)));
+		setMetatable(L, -1, "DBInsert");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertAddRow(lua_State* L)
+{
+	// insert:addRow(row)
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->addRow(getString(L, 2)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertExecute(lua_State* L)
+{
+	// insert:execute()
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->execute());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+// DB Transaction
+int LuaScriptInterface::luaDBTransactionCreate(lua_State* L)
+{
+	// DBTransaction()
+	pushUserdata<DBTransaction>(L, new DBTransaction);
+	setMetatable(L, -1, "DBTransaction");
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionBegin(lua_State* L)
+{
+	// transaction:begin()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->begin());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionCommit(lua_State* L)
+{
+	// transaction:commit()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->commit());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionDelete(lua_State* L)
+{
+	DBTransaction** transactionPtr = getRawUserdata<DBTransaction>(L, 1);
+	if (transactionPtr && *transactionPtr) {
+		delete *transactionPtr;
+		*transactionPtr = nullptr;
+	}
+	return 0;
 }
 
 // Game
@@ -8927,12 +9026,36 @@ int LuaScriptInterface::luaPlayerGetLevel(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerGetLevelPercent(lua_State* L)
+{
+	// player:getLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLevelPercent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 {
 	// player:getMagicLevel()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->getMagicLevel());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetMagicLevelPercent(lua_State* L)
+{
+	// player:getMagicLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getMagicLevelPercent());
 	} else {
 		lua_pushnil(L);
 	}
