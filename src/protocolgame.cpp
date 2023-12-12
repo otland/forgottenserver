@@ -3536,8 +3536,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 {
 	msg.addByte(0xA0);
 
-	msg.add<uint32_t>(std::min<int32_t>(player->getHealth(), std::numeric_limits<int32_t>::max()));
-	msg.add<uint32_t>(std::min<int32_t>(player->getMaxHealth(), std::numeric_limits<int32_t>::max()));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getHealth()));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getMaxHealth()));
 
 	msg.add<uint32_t>(player->hasFlag(PlayerFlag_HasInfiniteCapacity) ? 1000000 : player->getFreeCapacity());
 	msg.add<uint64_t>(player->getExperience());
@@ -3550,8 +3550,8 @@ void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 	msg.add<uint16_t>(0); // store exp bonus
 	msg.add<uint16_t>(player->getClientStaminaBonusDisplay());
 
-	msg.add<uint32_t>(std::min<int32_t>(player->getMana(), std::numeric_limits<int32_t>::max()));
-	msg.add<uint32_t>(std::min<int32_t>(player->getMaxMana(), std::numeric_limits<int32_t>::max()));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getMana()));
+	msg.add<uint32_t>(static_cast<uint32_t>(player->getMaxMana()));
 
 	msg.addByte(player->getSoul());
 	msg.add<uint16_t>(player->getStaminaMinutes());
