@@ -7,6 +7,8 @@
 class RSA
 {
 public:
+	static constexpr int8_t BUFFER_LENGTH = 128;
+
 	RSA() = default;
 
 	// non-copyable
