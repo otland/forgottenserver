@@ -100,10 +100,10 @@ local function sendGeneralStats(self, msg)
 	msg:addU16(0) -- exp boost remaining time
 	msg:addByte(0) -- enable exp boost store button
 
-	msg:addU16(self:getHealth())
-	msg:addU16(self:getMaxHealth())
-	msg:addU16(self:getMana())
-	msg:addU16(self:getMaxMana())
+	msg:addU32(self:getHealth())
+	msg:addU32(self:getMaxHealth())
+	msg:addU32(self:getMana())
+	msg:addU32(self:getMaxMana())
 	msg:addByte(self:getSoul())
 	msg:addU16(self:getStamina())
 
