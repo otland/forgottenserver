@@ -3963,6 +3963,7 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 
 int LuaScriptInterface::luaSaveServer(lua_State* L)
 {
+	g_globalEvents->save();
 	g_game.saveGameState();
 	pushBoolean(L, true);
 	return 1;
