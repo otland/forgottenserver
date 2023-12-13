@@ -166,19 +166,14 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	BanInfo banInfo;
 	auto connection = getConnection();
 	if (!connection) {
 		return;
 	}
 
-	if (IOBan::isIpBanned(connection->getIP(), banInfo)) {
-		if (banInfo.reason.empty()) {
-			banInfo.reason = "(none)";
-		}
-
+	if (const auto& banInfo = IOBan::getIpBanInfo(connection->getIP())) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
+		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason),
 		                 version);
 		return;
 	}

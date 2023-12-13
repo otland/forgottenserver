@@ -560,6 +560,8 @@ bool Items::loadFromOtb(const std::string& file)
 		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
 		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
 		iType.forceUse = hasBitSet(FLAG_FORCEUSE, flags);
+		iType.showClientCharges = hasBitSet(FLAG_CLIENTCHARGES, flags);
+		iType.showClientDuration = hasBitSet(FLAG_CLIENTDURATION, flags);
 
 		iType.id = serverId;
 		iType.clientId = clientId;
