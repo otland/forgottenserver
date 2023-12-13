@@ -9,10 +9,10 @@ function load.onStartup()
 
 	repeat
 		local accountId = result.getNumber(resultId, "account_id")
-        local key = result.getNumber(resultId, "key")
-        local value = result.getNumber(resultId, "value")
-        Game.setAccountStorageValue(accountId, key, value)
-    until not result.next(resultId)
+		local key = result.getNumber(resultId, "key")
+		local value = result.getNumber(resultId, "value")
+		Game.setAccountStorageValue(accountId, key, value)
+	until not result.next(resultId)
 	result.free(resultId)
 
 	return true
