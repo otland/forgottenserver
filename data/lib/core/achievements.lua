@@ -608,6 +608,11 @@ achievements = {
 	[507] = {clientId = 539, name = "Measuring the World", grade = 1, points = 3, description = "Step by step you discovered many of the secrets hidden in the world, thus gaining the right to wear the Discoverer outfit and hat. Made-to-measure for a brave traveller of the wilds."},
 	[508] = {clientId = 540, name = "Ripp-Ripp Hooray!", grade = 1, points = 3, description = "Don't get carried away by your success. Get carried away by your ripptor."},
 	[509] = {clientId = 531, name = "First Achievement", grade = 1, points = 1, secret = true, description = "Congratulations to your very first achievement! ... Well, not really. But imagine, it is. Because at this point during your journey into the past, achievements have been introduced."},
+
+	-- 13.10
+	[510] = {clientId = 542, name = "Mutagenius", grade = 1, points = 2, description = "You accomplished the impossible and created 16 mutagens of corresponding colours."},
+	[511] = {clientId = 543, name = "Strangest Thing", grade = 1, points = 3, description = "Only its rider can love this abomination of a mount."},
+	[512] = {clientId = 541, name = "Warrior of the Iks", grade = 1, points = 2, description = "Combining unabating courage in combat and respect for the traditions and culture of the ancient Iks earned you the honours of true Aucar."},
 }
 
 ACHIEVEMENT_FIRST = 1
