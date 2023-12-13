@@ -39,9 +39,6 @@ local reloadTypes = {
 	["quest"] = RELOAD_TYPE_QUESTS,
 	["quests"] = RELOAD_TYPE_QUESTS,
 
-	["raid"] = RELOAD_TYPE_RAIDS,
-	["raids"] = RELOAD_TYPE_RAIDS,
-
 	["spell"] = RELOAD_TYPE_SPELLS,
 	["spells"] = RELOAD_TYPE_SPELLS,
 

@@ -67,7 +67,7 @@ endif ()
 
 find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams)
 
-option(ENABLE_TESTING "Build unit tests" OFF)
+option(BUILD_TESTING "Build unit tests" OFF)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
@@ -78,7 +78,8 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
-if (ENABLE_TESTING)
+if (BUILD_TESTING)
+    message(STATUS "Building unit tests")
     enable_testing()
     add_subdirectory(src/tests)
 endif()
