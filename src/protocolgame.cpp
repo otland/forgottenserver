@@ -187,20 +187,15 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		}
 
 		if (!player->hasFlag(PlayerFlag_CannotBeBanned)) {
-			BanInfo banInfo;
-			if (IOBan::isAccountBanned(accountId, banInfo)) {
-				if (banInfo.reason.empty()) {
-					banInfo.reason = "(none)";
-				}
-
-				if (banInfo.expiresAt > 0) {
+			if (const auto& banInfo = IOBan::getAccountBanInfo(accountId)) {
+				if (banInfo->expiresAt > 0) {
 					disconnectClient(
 					    fmt::format("Your account has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-					                formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+					                formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 				} else {
 					disconnectClient(
 					    fmt::format("Your account has been permanently banned by {:s}.\n\nReason specified:\n{:s}",
-					                banInfo.bannedBy, banInfo.reason));
+					                banInfo->bannedBy, banInfo->reason));
 				}
 				return;
 			}
@@ -455,14 +450,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	BanInfo banInfo;
-	if (IOBan::isIpBanned(getIP(), banInfo)) {
-		if (banInfo.reason.empty()) {
-			banInfo.reason = "(none)";
-		}
-
+	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason));
+		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
 	}
 
@@ -1370,7 +1360,7 @@ void ProtocolGame::parsePlayerPurchase(NetworkMessage& msg)
 {
 	uint16_t id = msg.get<uint16_t>();
 	uint8_t count = msg.getByte();
-	uint8_t amount = msg.getByte();
+	uint16_t amount = msg.get<uint16_t>();
 	bool ignoreCap = msg.getByte() != 0;
 	bool inBackpacks = msg.getByte() != 0;
 	g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
@@ -1382,7 +1372,7 @@ void ProtocolGame::parsePlayerSale(NetworkMessage& msg)
 {
 	uint16_t id = msg.get<uint16_t>();
 	uint8_t count = msg.getByte();
-	uint8_t amount = msg.getByte();
+	uint16_t amount = msg.get<uint16_t>();
 	bool ignoreEquipped = msg.getByte() != 0;
 	g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerSellItem(playerID, id, count, amount, ignoreEquipped);
@@ -2022,7 +2012,6 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 
 	NetworkMessage msg;
 	msg.addByte(0x7B);
-	msg.add<uint64_t>(playerBank + playerMoney); // deprecated and ignored by QT client. OTClient still uses it.
 
 	std::map<uint16_t, uint32_t> saleMap;
 
@@ -2092,7 +2081,7 @@ void ProtocolGame::sendSaleItemList(const std::list<ShopInfo>& shop)
 	uint8_t i = 0;
 	for (std::map<uint16_t, uint32_t>::const_iterator it = saleMap.begin(); i < itemsToSend; ++it, ++i) {
 		msg.addItemId(it->first);
-		msg.addByte(std::min<uint32_t>(it->second, std::numeric_limits<uint8_t>::max()));
+		msg.add<uint16_t>(std::min<uint16_t>(it->second, std::numeric_limits<uint16_t>::max()));
 	}
 
 	writeToOutputBuffer(msg);
