@@ -417,7 +417,7 @@ function Player.sendQuestLog(self)
 	for _, quest in pairs(quests) do
 		msg:addU16(quest.id)
 		msg:addString(quest.name)
-		msg:addByte(quest:isCompleted(self))
+		msg:addByte(quest:isCompleted(self) and 0x01 or 0x00)
 	end
 
 	msg:sendToPlayer(self)
@@ -697,4 +697,24 @@ end
 
 function Player.getAccountStorageValue(self, key)
 	return Game.getAccountStorageValue(self:getAccountId(), key)
+end
+
+function Player.sendWorldLight(self, color, level)
+	local msg = NetworkMessage()
+	msg:addByte(0x82)
+	msg:addByte(self:getGroup():getAccess() and 0xFF or level)
+	msg:addByte(color)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendWorldTime(self, time)
+	local msg = NetworkMessage()
+	msg:addByte(0xEF)
+	msg:addByte(time / 60) -- hour
+	msg:addByte(time % 60) -- min
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
 end

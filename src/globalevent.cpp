@@ -112,6 +112,8 @@ bool GlobalEvents::registerLuaEvent(GlobalEvent* event)
 }
 
 void GlobalEvents::startup() const { execute(GLOBALEVENT_STARTUP); }
+void GlobalEvents::shutdown() const { execute(GLOBALEVENT_SHUTDOWN); }
+void GlobalEvents::save() const { execute(GLOBALEVENT_SAVE); }
 
 void GlobalEvents::timer()
 {
@@ -208,7 +210,8 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
-		case GLOBALEVENT_RECORD: {
+		case GLOBALEVENT_RECORD:
+		case GLOBALEVENT_SAVE: {
 			GlobalEventMap retMap;
 			for (const auto& it : serverMap) {
 				if (it.second.getEventType() == type) {
@@ -289,6 +292,8 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			eventType = GLOBALEVENT_SHUTDOWN;
 		} else if (caseInsensitiveEqual(value, "record")) {
 			eventType = GLOBALEVENT_RECORD;
+		} else if (caseInsensitiveEqual(value, "save")) {
+			eventType = GLOBALEVENT_SAVE;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string()
 			          << "\" for globalevent with name " << name << std::endl;
@@ -314,6 +319,8 @@ std::string_view GlobalEvent::getScriptEventName() const
 			return "onShutdown";
 		case GLOBALEVENT_RECORD:
 			return "onRecord";
+		case GLOBALEVENT_SAVE:
+			return "onSave";
 		case GLOBALEVENT_TIMER:
 			return "onTime";
 		default:

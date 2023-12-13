@@ -72,11 +72,7 @@ Game::~Game()
 void Game::start(ServiceManager* manager)
 {
 	serviceManager = manager;
-	updateWorldTime();
 
-	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
-		g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
-	}
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
@@ -113,7 +109,8 @@ void Game::setGameState(GameState_t newState)
 		}
 
 		case GAME_STATE_SHUTDOWN: {
-			g_globalEvents->execute(GLOBALEVENT_SHUTDOWN);
+			g_globalEvents->save();
+			g_globalEvents->shutdown();
 
 			// kick all players that are still online
 			auto it = players.begin();
@@ -133,6 +130,8 @@ void Game::setGameState(GameState_t newState)
 		}
 
 		case GAME_STATE_CLOSED: {
+			g_globalEvents->save();
+
 			/* kick all players without the CanAlwaysLogin flag */
 			auto it = players.begin();
 			while (it != players.end()) {
@@ -3046,7 +3045,7 @@ void Game::internalCloseTrade(Player* player, bool sendCancel /* = true*/)
 	}
 }
 
-void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
+void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount,
                               bool ignoreCap /* = false*/, bool inBackpacks /* = false*/)
 {
 	if (amount == 0 || amount > ITEM_STACK_SIZE) {
@@ -3084,7 +3083,7 @@ void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 	merchant->onPlayerTrade(player, onBuy, it.id, subType, amount, ignoreCap, inBackpacks);
 }
 
-void Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreEquipped)
+void Game::playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount, bool ignoreEquipped)
 {
 	if (amount == 0 || amount > ITEM_STACK_SIZE) {
 		return;
@@ -4870,50 +4869,6 @@ void Game::checkDecay()
 
 	lastBucket = bucket;
 	cleanup();
-}
-
-void Game::checkLight()
-{
-	g_scheduler.addEvent(createSchedulerTask(EVENT_LIGHTINTERVAL, [this]() { checkLight(); }));
-	uint8_t previousLightLevel = lightLevel;
-	updateWorldLightLevel();
-
-	if (previousLightLevel != lightLevel) {
-		LightInfo lightInfo = getWorldLightInfo();
-
-		for (const auto& it : players) {
-			it.second->sendWorldLight(lightInfo);
-		}
-	}
-}
-
-void Game::updateWorldLightLevel()
-{
-	if (getWorldTime() >= GAME_SUNRISE && getWorldTime() <= GAME_DAYTIME) {
-		lightLevel = ((GAME_DAYTIME - GAME_SUNRISE) - (GAME_DAYTIME - getWorldTime())) * float(LIGHT_CHANGE_SUNRISE) +
-		             LIGHT_NIGHT;
-	} else if (getWorldTime() >= GAME_SUNSET && getWorldTime() <= GAME_NIGHTTIME) {
-		lightLevel = LIGHT_DAY - ((getWorldTime() - GAME_SUNSET) * float(LIGHT_CHANGE_SUNSET));
-	} else if (getWorldTime() >= GAME_NIGHTTIME || getWorldTime() < GAME_SUNRISE) {
-		lightLevel = LIGHT_NIGHT;
-	} else {
-		lightLevel = LIGHT_DAY;
-	}
-}
-
-void Game::updateWorldTime()
-{
-	g_scheduler.addEvent(createSchedulerTask(EVENT_WORLDTIMEINTERVAL, [this]() { updateWorldTime(); }));
-	time_t osTime = time(nullptr);
-	tm* timeInfo = localtime(&osTime);
-	worldTime = (timeInfo->tm_sec + (timeInfo->tm_min * 60)) / 2.5f;
-
-	// quarter-hourly update to client clock near the minimap
-	if (worldTime % 15 == 0) {
-		for (const auto& it : players) {
-			it.second->sendWorldTime();
-		}
-	}
 }
 
 void Game::shutdown()

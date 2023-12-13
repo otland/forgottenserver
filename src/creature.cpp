@@ -508,6 +508,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		}
 
 		if (newTile->getZone() != oldTile->getZone()) {
+			g_events->eventCreatureOnChangeZone(this, oldTile->getZone(), newTile->getZone());
 			onChangeZone(getZone());
 		}
 
