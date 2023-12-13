@@ -167,9 +167,9 @@
 	<mount id="165" clientid="1285" name="Dusk Pryer" speed="20" premium="no" />
 	<mount id="166" clientid="1286" name="Dawn Strayer" speed="20" premium="no" />
 	<mount id="167" clientid="1321" name="Phantasmal Jade" speed="20" premium="yes" />
-	<mount id="168" clientid="1324" name="Benevolent Savanna Ostrich" speed="20" premium="no" />
-	<mount id="169" clientid="1325" name="Benevolent Coral Rhea" speed="20" premium="no" />
-	<mount id="170" clientid="1326" name="Benevolent Eventide Nandu" speed="20" premium="no" />
+	<mount id="168" clientid="1324" name="Savanna Ostrich" speed="20" premium="yes" />
+	<mount id="169" clientid="1325" name="Coral Rhea" speed="20" premium="yes" />
+	<mount id="170" clientid="1326" name="Eventide Nandu" speed="20" premium="yes" />
 	<mount id="171" clientid="1333" name="Voracious Hyaena" speed="20" premium="no" />
 	<mount id="172" clientid="1334" name="Cunning Hyaena" speed="20" premium="no" />
 	<mount id="173" clientid="1335" name="Scruffy Hyaena" speed="20" premium="no" />
