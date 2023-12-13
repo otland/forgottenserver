@@ -590,6 +590,15 @@ achievements = {
 	[495] = {clientId = 530, name = "Some Like It Hot", grade = 1, points = 2, description = "You have braved the searing heat in the tunnels deep below Kazordoon and vanquished the Brainstealer. The voices inside your head are finally silenced."},
 	[496] = {clientId = 427, name = "Woodcarver", grade = 1, points = 3, secret = true, description = "You defeated Megasylvan Yselda in the wake of the sleeping carnisylvan menace deep under Bounac."},
 
+	-- non-secret that were missed earlier
+	[497] = {clientId = 419, name = "Reason to Celebrate", grade = 1, points = 1, description = "You met the legendary First Dragon and survived. That's a reason to celebrate for sure."},
+	[498] = {clientId = 443, name = "Cobbled and Patched", grade = 2, points = 6, description = "Exploring the depths can be a dangerous task. Surprisingly, some crude wood planks, rusty nails and a tinged pot can offer a sufficient protection against the creatures lurking in the deep."},
+	[499] = {clientId = 495, name = "Inquisition's Arm", grade = 1, points = 2, description = "Your special garb, solely awarded to a dedicated hand of the Inquisition, is now complete."},
+
+	-- 12.80
+	[500] = {clientId = 532, name = "Sharp Dressed", grade = 1, points = 1, description = "Just everyone will be crazy about you if you are wearing this formal dress. They will come running, promise!"},
+	[501] = {clientId = 533, name = "Engine Driver", grade = 1, points = 1, description = "The glooth-driven locomotive will bring you to any party in the blink of an eye."},
+
 	-- 12.90
 	[502] = {clientId = 534, name = "Friendly Fire", grade = 1, points = 1, description = "You mastered the fire and tamed a supervulcano!"},
 	[503] = {clientId = 535, name = "Wedding Planner", grade = 1, points = 3, description = "Alas! What could be more beautiful and satisfying than bringing two loving hearts together? So romantic!"},
