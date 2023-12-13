@@ -99,9 +99,6 @@ void Game::setGameState(GameState_t newState)
 
 			map.spawns.startup();
 
-			raids.loadFromXml();
-			raids.startup();
-
 			mounts.loadFromXml();
 
 			loadPlayersRecord();
@@ -4882,7 +4879,6 @@ void Game::shutdown()
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
 	map.spawns.clear();
-	raids.clear();
 
 	cleanup();
 
@@ -5931,9 +5927,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 
-		case RELOAD_TYPE_RAIDS:
-			return raids.reload() && raids.startup();
-
 		case RELOAD_TYPE_SPELLS: {
 			if (!g_spells->reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
@@ -5968,7 +5961,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_creatureEvents->removeInvalidEvents();
 			/*
 			Npcs::reload();
-			raids.reload() && raids.startup();
 			Item::items.reload();
 			mounts.reload();
 			g_config.reload();
@@ -5993,7 +5985,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_monsters.reload();
 			g_moveEvents->reload();
 			Npcs::reload();
-			raids.reload() && raids.startup();
 			g_talkActions->reload();
 			Item::items.reload();
 			g_weapons->reload();

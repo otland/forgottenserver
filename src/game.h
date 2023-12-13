@@ -9,7 +9,6 @@
 #include "mounts.h"
 #include "player.h"
 #include "position.h"
-#include "raids.h"
 #include "wildcardtree.h"
 
 class Monster;
@@ -494,7 +493,6 @@ public:
 	Groups groups;
 	Map map;
 	Mounts mounts;
-	Raids raids;
 
 	std::forward_list<Item*> toDecayItems;
 
