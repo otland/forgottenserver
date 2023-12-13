@@ -503,6 +503,7 @@ private:
 	static int luaDBInsertCreate(lua_State* L);
 	static int luaDBInsertAddRow(lua_State* L);
 	static int luaDBInsertExecute(lua_State* L);
+	static int luaDBInsertDelete(lua_State* L);
 
 	// DB Transaction
 	static int luaDBTransactionCreate(lua_State* L);
