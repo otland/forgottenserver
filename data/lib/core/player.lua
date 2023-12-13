@@ -719,6 +719,14 @@ function Player.sendWorldTime(self, time)
 	return true
 end
 
+function Player.sendHotkeyPreset(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x9D)
+	msg:addU32(self:getVocation():getClientId())
+	msg:sendToPlayer(self)
+	return true
+end
+
 function Player.disableLoginMusic(self)
 	local msg = NetworkMessage()
 	msg:addByte(0x85)

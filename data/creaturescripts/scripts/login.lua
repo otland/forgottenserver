@@ -24,6 +24,7 @@ function onLogin(player)
 
 	-- Update client stats
 	player:updateClientExpDisplay()
+	player:sendHotkeyPreset()
 	player:disableLoginMusic()
 
 	-- achievements points for highscores
