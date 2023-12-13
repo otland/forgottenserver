@@ -718,6 +718,7 @@ function Player.sendWorldTime(self, time)
 	msg:delete()
 	return true
 end
+
 local updateInterval = 10 * 60
 local goldenOutfitCache
 local lastUpdated = 0
