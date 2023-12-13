@@ -237,6 +237,7 @@ do
 			self:onThink(value)
 			return
 		elseif key == "onTime" then
+			self:type("timer")
 			self:onTime(value)
 			return
 		elseif key == "onStartup" then
@@ -1350,8 +1351,10 @@ function doSetGameState(state)
 end
 
 function doExecuteRaid(raidName)
-	return Game.startRaid(raidName)
+	debugPrint("Deprecated function, use Game.startEvent('" .. raidName .. "') instead.")
+	return Game.startEvent(raidName)
 end
+Game.startRaid = doExecuteRaid
 
 function Game.convertIpToString(ip)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
