@@ -849,7 +849,7 @@ bool Monster::canUseAttack(const Position& pos, const Creature* target) const
 		uint32_t distance =
 		    std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos));
 		for (const spellBlock_t& spellBlock : mType->info.attackSpells) {
-			if (spellBlock.range != 0 && distance <= spellBlock.range) {
+			if (distance <= spellBlock.range) {
 				return g_game.isSightClear(pos, targetPos, true);
 			}
 		}
@@ -879,8 +879,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos, const 
 		}
 	}
 
-	if (sb.range != 0 &&
-	    std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos)) > sb.range) {
+	if (std::max<uint32_t>(Position::getDistanceX(pos, targetPos), Position::getDistanceY(pos, targetPos)) > sb.range) {
 		inRange = false;
 		return false;
 	}

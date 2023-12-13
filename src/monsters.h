@@ -6,6 +6,7 @@
 
 #include "const.h"
 #include "enums.h"
+#include "map.h"
 
 class ConditionDamage;
 class LuaScriptInterface;
@@ -207,7 +208,7 @@ public:
 	std::string scriptName = "";
 
 	uint8_t chance = 100;
-	uint8_t range = 0;
+	uint8_t range = std::max<uint8_t>(Map::maxClientViewportX + 1, Map::maxClientViewportY + 1);
 	uint8_t drunkenness = 0;
 
 	uint16_t interval = 2000;
