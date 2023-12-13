@@ -41,6 +41,7 @@
 
 extern Chat* g_chat;
 extern Game g_game;
+extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
 extern ConfigManager g_config;
 extern Vocations g_vocations;
@@ -1081,15 +1082,6 @@ void LuaScriptInterface::registerFunctions()
 	// getDepotId(uid)
 	lua_register(luaState, "getDepotId", LuaScriptInterface::luaGetDepotId);
 
-	// getWorldTime()
-	lua_register(luaState, "getWorldTime", LuaScriptInterface::luaGetWorldTime);
-
-	// getWorldLight()
-	lua_register(luaState, "getWorldLight", LuaScriptInterface::luaGetWorldLight);
-
-	// setWorldLight(level, color)
-	lua_register(luaState, "setWorldLight", LuaScriptInterface::luaSetWorldLight);
-
 	// getWorldUpTime()
 	lua_register(luaState, "getWorldUpTime", LuaScriptInterface::luaGetWorldUpTime);
 
@@ -1474,6 +1466,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CONST_ME_HORESTIS);
 	registerEnum(CONST_ME_DEVOVORGA);
 	registerEnum(CONST_ME_FERUMBRAS_2);
+	registerEnum(CONST_ME_FOAM);
 
 	registerEnum(CONST_ANI_NONE);
 	registerEnum(CONST_ANI_SPEAR);
@@ -2080,7 +2073,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RELOAD_TYPE_MOVEMENTS);
 	registerEnum(RELOAD_TYPE_NPCS);
 	registerEnum(RELOAD_TYPE_QUESTS);
-	registerEnum(RELOAD_TYPE_RAIDS);
 	registerEnum(RELOAD_TYPE_SCRIPTS);
 	registerEnum(RELOAD_TYPE_SPELLS);
 	registerEnum(RELOAD_TYPE_TALKACTIONS);
@@ -2212,6 +2204,22 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("table", "create", LuaScriptInterface::luaTableCreate);
 	registerMethod("table", "pack", LuaScriptInterface::luaTablePack);
 
+	// DB Insert
+	registerClass("DBInsert", "", LuaScriptInterface::luaDBInsertCreate);
+	registerMetaMethod("DBInsert", "__gc", LuaScriptInterface::luaDBInsertDelete);
+
+	registerMethod("DBInsert", "addRow", LuaScriptInterface::luaDBInsertAddRow);
+	registerMethod("DBInsert", "execute", LuaScriptInterface::luaDBInsertExecute);
+
+	// DB Transaction
+	registerClass("DBTransaction", "", LuaScriptInterface::luaDBTransactionCreate);
+	registerMetaMethod("DBTransaction", "__eq", LuaScriptInterface::luaUserdataCompare);
+	registerMetaMethod("DBTransaction", "__gc", LuaScriptInterface::luaDBTransactionDelete);
+
+	registerMethod("DBTransaction", "begin", LuaScriptInterface::luaDBTransactionBegin);
+	registerMethod("DBTransaction", "commit", LuaScriptInterface::luaDBTransactionCommit);
+	registerMethod("DBTransaction", "rollback", LuaScriptInterface::luaDBTransactionDelete);
+
 	// Game
 	registerTable("Game");
 
@@ -2254,7 +2262,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
 
-	registerMethod("Game", "startRaid", LuaScriptInterface::luaGameStartRaid);
+	registerMethod("Game", "startEvent", LuaScriptInterface::luaGameStartEvent);
 
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
@@ -2596,8 +2604,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "addExperience", LuaScriptInterface::luaPlayerAddExperience);
 	registerMethod("Player", "removeExperience", LuaScriptInterface::luaPlayerRemoveExperience);
 	registerMethod("Player", "getLevel", LuaScriptInterface::luaPlayerGetLevel);
+	registerMethod("Player", "getLevelPercent", LuaScriptInterface::luaPlayerGetLevelPercent);
 
 	registerMethod("Player", "getMagicLevel", LuaScriptInterface::luaPlayerGetMagicLevel);
+	registerMethod("Player", "getMagicLevelPercent", LuaScriptInterface::luaPlayerGetMagicLevelPercent);
 	registerMethod("Player", "getBaseMagicLevel", LuaScriptInterface::luaPlayerGetBaseMagicLevel);
 	registerMethod("Player", "getMana", LuaScriptInterface::luaPlayerGetMana);
 	registerMethod("Player", "addMana", LuaScriptInterface::luaPlayerAddMana);
@@ -3312,6 +3322,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("GlobalEvent", "onStartup", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod("GlobalEvent", "onShutdown", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod("GlobalEvent", "onRecord", LuaScriptInterface::luaGlobalEventOnCallback);
+	registerMethod("GlobalEvent", "onSave", LuaScriptInterface::luaGlobalEventOnCallback);
 
 	// Weapon
 	registerClass("Weapon", "", LuaScriptInterface::luaCreateWeapon);
@@ -3593,39 +3604,6 @@ int LuaScriptInterface::luaDebugPrint(lua_State* L)
 	// debugPrint(text)
 	reportErrorFunc(L, getString(L, -1));
 	return 0;
-}
-
-int LuaScriptInterface::luaGetWorldTime(lua_State* L)
-{
-	// getWorldTime()
-	int16_t time = g_game.getWorldTime();
-	lua_pushnumber(L, time);
-	return 1;
-}
-
-int LuaScriptInterface::luaGetWorldLight(lua_State* L)
-{
-	// getWorldLight()
-	LightInfo lightInfo = g_game.getWorldLightInfo();
-	lua_pushnumber(L, lightInfo.level);
-	lua_pushnumber(L, lightInfo.color);
-	return 2;
-}
-
-int LuaScriptInterface::luaSetWorldLight(lua_State* L)
-{
-	// setWorldLight(level, color)
-	if (g_config.getBoolean(ConfigManager::DEFAULT_WORLD_LIGHT)) {
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	LightInfo lightInfo;
-	lightInfo.level = getNumber<uint8_t>(L, 1);
-	lightInfo.color = getNumber<uint8_t>(L, 2);
-	g_game.setWorldLightInfo(lightInfo);
-	pushBoolean(L, true);
-	return 1;
 }
 
 int LuaScriptInterface::luaGetWorldUpTime(lua_State* L)
@@ -4002,6 +3980,7 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 
 int LuaScriptInterface::luaSaveServer(lua_State* L)
 {
+	g_globalEvents->save();
 	g_game.saveGameState();
 	pushBoolean(L, true);
 	return 1;
@@ -4428,6 +4407,96 @@ int LuaScriptInterface::luaTablePack(lua_State* L)
 	lua_pushinteger(L, n);
 	lua_setfield(L, 1, "n"); /* t.n = number of elements */
 	return 1;                /* return table */
+}
+
+// DB Insert
+int LuaScriptInterface::luaDBInsertCreate(lua_State* L)
+{
+	// DBInsert(query)
+	if (isString(L, 2)) {
+		pushUserdata<DBInsert>(L, new DBInsert(getString(L, 2)));
+		setMetatable(L, -1, "DBInsert");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertAddRow(lua_State* L)
+{
+	// insert:addRow(row)
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->addRow(getString(L, 2)));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertExecute(lua_State* L)
+{
+	// insert:execute()
+	DBInsert* insert = getUserdata<DBInsert>(L, 1);
+	if (insert) {
+		pushBoolean(L, insert->execute());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBInsertDelete(lua_State* L)
+{
+	DBInsert** insertPtr = getRawUserdata<DBInsert>(L, 1);
+	if (insertPtr && *insertPtr) {
+		delete *insertPtr;
+		*insertPtr = nullptr;
+	}
+	return 0;
+}
+
+// DB Transaction
+int LuaScriptInterface::luaDBTransactionCreate(lua_State* L)
+{
+	// DBTransaction()
+	pushUserdata<DBTransaction>(L, new DBTransaction);
+	setMetatable(L, -1, "DBTransaction");
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionBegin(lua_State* L)
+{
+	// transaction:begin()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->begin());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionCommit(lua_State* L)
+{
+	// transaction:commit()
+	DBTransaction* transaction = getUserdata<DBTransaction>(L, 1);
+	if (transaction) {
+		pushBoolean(L, transaction->commit());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDBTransactionDelete(lua_State* L)
+{
+	DBTransaction** transactionPtr = getRawUserdata<DBTransaction>(L, 1);
+	if (transactionPtr && *transactionPtr) {
+		delete *transactionPtr;
+		*transactionPtr = nullptr;
+	}
+	return 0;
 }
 
 // Game
@@ -4981,25 +5050,17 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameStartRaid(lua_State* L)
+int LuaScriptInterface::luaGameStartEvent(lua_State* L)
 {
-	// Game.startRaid(raidName)
-	const std::string& raidName = getString(L, 1);
+	// Game.startEvent(event)
+	const std::string& eventName = getString(L, 1);
 
-	Raid* raid = g_game.raids.getRaidByName(raidName);
-	if (!raid || !raid->isLoaded()) {
-		lua_pushnumber(L, RETURNVALUE_NOSUCHRAIDEXISTS);
-		return 1;
+	const auto& eventMap = g_globalEvents->getEventMap(GLOBALEVENT_TIMER);
+	if (auto it = eventMap.find(eventName); it != eventMap.end()) {
+		pushBoolean(L, it->second.executeEvent());
+	} else {
+		lua_pushnil(L);
 	}
-
-	if (g_game.raids.getRunning()) {
-		lua_pushnumber(L, RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING);
-		return 1;
-	}
-
-	g_game.raids.setRunning(raid);
-	raid->startRaid();
-	lua_pushnumber(L, RETURNVALUE_NOERROR);
 	return 1;
 }
 
@@ -8997,12 +9058,36 @@ int LuaScriptInterface::luaPlayerGetLevel(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerGetLevelPercent(lua_State* L)
+{
+	// player:getLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLevelPercent());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetMagicLevel(lua_State* L)
 {
 	// player:getMagicLevel()
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		lua_pushnumber(L, player->getMagicLevel());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetMagicLevelPercent(lua_State* L)
+{
+	// player:getMagicLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getMagicLevelPercent());
 	} else {
 		lua_pushnil(L);
 	}
@@ -14799,10 +14884,13 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 	int index = 0;
 	lua_createtable(L, monsterType->info.summons.size(), 0);
 	for (const auto& summonBlock : monsterType->info.summons) {
-		lua_createtable(L, 0, 3);
+		lua_createtable(L, 0, 6);
 		setField(L, "name", summonBlock.name);
 		setField(L, "speed", summonBlock.speed);
 		setField(L, "chance", summonBlock.chance);
+		setField(L, "max", summonBlock.max);
+		setField(L, "effect", summonBlock.effect);
+		setField(L, "masterEffect", summonBlock.masterEffect);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -14810,7 +14898,8 @@ int LuaScriptInterface::luaMonsterTypeGetSummonList(lua_State* L)
 
 int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 {
-	// monsterType:addSummon(name, interval, chance[, max = -1])
+	// monsterType:addSummon(name, interval, chance[, max = -1[, effect = CONST_ME_TELEPORT[, masterEffect =
+	// CONST_ME_NONE]]])
 	MonsterType* monsterType = getUserdata<MonsterType>(L, 1);
 	if (monsterType) {
 		summonBlock_t summon;
@@ -14818,6 +14907,8 @@ int LuaScriptInterface::luaMonsterTypeAddSummon(lua_State* L)
 		summon.speed = getNumber<int32_t>(L, 3);
 		summon.chance = getNumber<int32_t>(L, 4);
 		summon.max = getNumber<int32_t>(L, 5, -1);
+		summon.effect = getNumber<MagicEffectClasses>(L, 6, CONST_ME_TELEPORT);
+		summon.masterEffect = getNumber<MagicEffectClasses>(L, 7, CONST_ME_NONE);
 		monsterType->info.summons.push_back(summon);
 		pushBoolean(L, true);
 	} else {
@@ -17405,6 +17496,10 @@ int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 			global->setEventType(GLOBALEVENT_SHUTDOWN);
 		} else if (tmpStr == "record") {
 			global->setEventType(GLOBALEVENT_RECORD);
+		} else if (tmpStr == "timer") {
+			global->setEventType(GLOBALEVENT_TIMER);
+		} else if (tmpStr == "save") {
+			global->setEventType(GLOBALEVENT_SAVE);
 		} else {
 			std::cout << "[Error - CreatureEvent::configureLuaEvent] Invalid type for global event: " << typeName
 			          << std::endl;
