@@ -22,8 +22,9 @@ function onLogin(player)
 		player:setVocation(vocation:getDemotion())
 	end
 
-	-- Update client exp display
+	-- Update client stats
 	player:updateClientExpDisplay()
+	player:sendHotkeyPreset()
 
 	-- achievements points for highscores
 	if not player:getStorageValue(PlayerStorageKeys.achievementsTotal) then

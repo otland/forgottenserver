@@ -718,3 +718,11 @@ function Player.sendWorldTime(self, time)
 	msg:delete()
 	return true
 end
+
+function Player.sendHotkeyPreset(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x9D)
+	msg:addU32(self:getVocation():getClientId())
+	msg:sendToPlayer(self)
+	return true
+end
