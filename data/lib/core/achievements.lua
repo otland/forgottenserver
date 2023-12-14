@@ -589,6 +589,30 @@ achievements = {
 	[494] = {clientId = 528, name = "Shell we take a Ride", grade = 1, points = 3, description = "Equipped with the shell of a tortoise and claws of a lobster this insect like companion will help you through every hardship."},
 	[495] = {clientId = 530, name = "Some Like It Hot", grade = 1, points = 2, description = "You have braved the searing heat in the tunnels deep below Kazordoon and vanquished the Brainstealer. The voices inside your head are finally silenced."},
 	[496] = {clientId = 427, name = "Woodcarver", grade = 1, points = 3, secret = true, description = "You defeated Megasylvan Yselda in the wake of the sleeping carnisylvan menace deep under Bounac."},
+
+	-- non-secret that were missed earlier
+	[497] = {clientId = 419, name = "Reason to Celebrate", grade = 1, points = 1, description = "You met the legendary First Dragon and survived. That's a reason to celebrate for sure."},
+	[498] = {clientId = 443, name = "Cobbled and Patched", grade = 2, points = 6, description = "Exploring the depths can be a dangerous task. Surprisingly, some crude wood planks, rusty nails and a tinged pot can offer a sufficient protection against the creatures lurking in the deep."},
+	[499] = {clientId = 495, name = "Inquisition's Arm", grade = 1, points = 2, description = "Your special garb, solely awarded to a dedicated hand of the Inquisition, is now complete."},
+
+	-- 12.80
+	[500] = {clientId = 532, name = "Sharp Dressed", grade = 1, points = 1, description = "Just everyone will be crazy about you if you are wearing this formal dress. They will come running, promise!"},
+	[501] = {clientId = 533, name = "Engine Driver", grade = 1, points = 1, description = "The glooth-driven locomotive will bring you to any party in the blink of an eye."},
+
+	-- 12.90
+	[502] = {clientId = 534, name = "Friendly Fire", grade = 1, points = 1, description = "You mastered the fire and tamed a supervulcano!"},
+	[503] = {clientId = 535, name = "Wedding Planner", grade = 1, points = 3, description = "Alas! What could be more beautiful and satisfying than bringing two loving hearts together? So romantic!"},
+	[504] = {clientId = 536, name = "Beaver Away", grade = 1, points = 1, description = "You really were as busy as a beaver in order to help the nagas. Enjoy some eager company!"},
+	[505] = {clientId = 537, name = "Snake Pit", grade = 1, points = 1, description = "Mysterious nagas, a vibrant jungle and a sinking island - you really know every corner of Marapur now."},
+	[506] = {clientId = 538, name = "Royalty of Hazard", grade = 1, points = 1, description = "For some it can't be hazardous enough."},
+	[507] = {clientId = 539, name = "Measuring the World", grade = 1, points = 3, description = "Step by step you discovered many of the secrets hidden in the world, thus gaining the right to wear the Discoverer outfit and hat. Made-to-measure for a brave traveller of the wilds."},
+	[508] = {clientId = 540, name = "Ripp-Ripp Hooray!", grade = 1, points = 3, description = "Don't get carried away by your success. Get carried away by your ripptor."},
+	[509] = {clientId = 531, name = "First Achievement", grade = 1, points = 1, secret = true, description = "Congratulations to your very first achievement! ... Well, not really. But imagine, it is. Because at this point during your journey into the past, achievements have been introduced."},
+
+	-- 13.10
+	[510] = {clientId = 542, name = "Mutagenius", grade = 1, points = 2, description = "You accomplished the impossible and created 16 mutagens of corresponding colours."},
+	[511] = {clientId = 543, name = "Strangest Thing", grade = 1, points = 3, description = "Only its rider can love this abomination of a mount."},
+	[512] = {clientId = 541, name = "Warrior of the Iks", grade = 1, points = 2, description = "Combining unabating courage in combat and respect for the traditions and culture of the ancient Iks earned you the honours of true Aucar."},
 }
 
 ACHIEVEMENT_FIRST = 1
