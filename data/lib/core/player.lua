@@ -724,6 +724,7 @@ function Player.sendHotkeyPreset(self)
 	msg:addByte(0x9D)
 	msg:addU32(self:getVocation():getClientId())
 	msg:sendToPlayer(self)
+	msg:delete()
 	return true
 end
 
