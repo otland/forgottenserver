@@ -205,4 +205,8 @@
 	<mount id="203" clientid="1578" name="Parade Horse" speed="20" premium="no" />
 	<mount id="204" clientid="1579" name="Jousting Horse" speed="20" premium="no" />
 	<mount id="205" clientid="1580" name="Tourney Horse" speed="20" premium="no" />
+	<mount id="206" clientid="1599" name="Mutated Abomination" speed="20" premium="yes" />
+	<mount id="207" clientid="1608" name="Tangerine Flecked Koi" speed="20" premium="no" />
+	<mount id="208" clientid="1609" name="Brass Speckled Koi" speed="20" premium="no" />
+	<mount id="209" clientid="1610" name="Ink Spotted Koi" speed="20" premium="no" />
 </mounts>

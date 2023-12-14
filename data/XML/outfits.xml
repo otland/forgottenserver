@@ -109,6 +109,8 @@
 	<outfit type="0" looktype="1501" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1569" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1576" name="Fencer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1582" name="Shadowlotus Disciple" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1598" name="Ancient Aucar" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -219,4 +221,6 @@
 	<outfit type="1" looktype="1500" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1568" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1575" name="Fencer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1581" name="Shadowlotus Disciple" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1597" name="Ancient Aucar" premium="yes" unlocked="no" enabled="yes" />
 </outfits>
