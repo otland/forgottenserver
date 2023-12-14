@@ -694,12 +694,18 @@ function Player.hasAchievement(self, ach)
 	else
 		achievement = getAchievementInfoByName(ach)
 	end
+
 	if not achievement then
 		print("[!] -> Invalid achievement \"" .. ach .. "\".")
 		return false
 	end
 
-	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
+	local achievementValue = self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id)
+	if achievementValue ~= nil and achievementValue > 0 then
+		return true
+	end
+
+	return false
 end
 
 function Player.getAchievements(self)
