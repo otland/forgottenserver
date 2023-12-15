@@ -20,7 +20,6 @@ local function sendBasicInfo(self, msg)
 	msg:addString("") -- character title
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -73,7 +72,6 @@ local function sendCombatStats(self, msg)
 	-- u16 duration
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -144,7 +142,6 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(0) -- magic boost (element and value)
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -169,7 +166,6 @@ local function sendAchievements(self, msg)
 	end
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -185,7 +181,6 @@ local function sendBadges(self, msg)
 	-- string badge name
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 

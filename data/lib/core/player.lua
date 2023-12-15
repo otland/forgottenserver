@@ -348,7 +348,6 @@ function Player.updateKillTracker(self, monster, corpse)
 		msg:sendToPlayer(self)
 	end
 
-	msg:delete()
 	return true
 end
 
@@ -380,7 +379,6 @@ function Player.setSpecialContainersAvailable(self, available)
 	msg:addByte(available and 0x01 or 0x00) -- market
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -421,7 +419,6 @@ function Player.sendQuestLog(self)
 	end
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -439,7 +436,6 @@ function Player.sendQuestLine(self, quest)
 	end
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -481,7 +477,6 @@ function Player.sendQuestTracker(self, missionsId)
 	end
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -495,7 +490,6 @@ function Player.sendUpdateQuestTracker(self, mission)
 	msg:addString(mission:getDescription(self))
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -531,7 +525,6 @@ function Player.sendBestiaryMilestoneReached(self, raceId)
 	msg:addByte(0xD9)
 	msg:addU16(raceId)
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -629,7 +622,6 @@ function Player.sendHighscores(self, entries, params)
 	msg:addU32(entries.ts)
 
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -642,7 +634,6 @@ function Player.takeScreenshot(self, screenshotType, ignoreConfig)
 	msg:addByte(0x75)
 	msg:addByte(screenshotType)
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -705,7 +696,6 @@ function Player.sendWorldLight(self, color, level)
 	msg:addByte(self:getGroup():getAccess() and 0xFF or level)
 	msg:addByte(color)
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -715,7 +705,6 @@ function Player.sendWorldTime(self, time)
 	msg:addByte(time / 60) -- hour
 	msg:addByte(time % 60) -- min
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
 
@@ -734,6 +723,5 @@ function Player.disableLoginMusic(self)
 	msg:addByte(0x00)
 	msg:addByte(0x00)
 	msg:sendToPlayer(self)
-	msg:delete()
 	return true
 end
