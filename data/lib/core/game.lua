@@ -266,7 +266,7 @@ do
 				local player = Player(ownerGuid)
 				if not player then
 					offlinePlayer = true
-					player = Game.loadPlayer(ownerGuid)
+					player = Game.loadOfflinePlayer(ownerGuid)
 					if not player then
 						resetHouses = resetHouses + 1
 						house:setOwnerGuid(0)
@@ -298,7 +298,7 @@ do
 
 				player:save()
 				if offlinePlayer then
-					Game.unloadPlayer(player)
+					Game.unloadOfflinePlayer(player)
 				end
 			until true
 		end

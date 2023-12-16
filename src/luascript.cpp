@@ -2270,8 +2270,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
-	registerMethod("Game", "loadPlayer", LuaScriptInterface::luaGameLoadPlayer);
-	registerMethod("Game", "unloadPlayer", LuaScriptInterface::luaGameUnloadPlayer);
+	registerMethod("Game", "loadOfflinePlayer", LuaScriptInterface::luaGameLoadOfflinePlayer);
+	registerMethod("Game", "unloadOfflinePlayer", LuaScriptInterface::luaGameUnloadOfflinePlayer);
 
 	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
@@ -5095,9 +5095,9 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameLoadPlayer(lua_State* L)
+int LuaScriptInterface::luaGameLoadOfflinePlayer(lua_State* L)
 {
-	// Game.loadPlayer(guid or name)
+	// Game.loadOfflinePlayer(guid or name)
 	Player* player(nullptr);
 	if (isNumber(L, 2)) {
 		uint32_t playerId = getNumber<uint32_t>(L, 1);
@@ -5120,9 +5120,9 @@ int LuaScriptInterface::luaGameLoadPlayer(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameUnloadPlayer(lua_State* L)
+int LuaScriptInterface::luaGameUnloadOfflinePlayer(lua_State* L)
 {
-	// Game.unloadPlayer(player)
+	// Game.unloadOfflinePlayer(player)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		delete player;

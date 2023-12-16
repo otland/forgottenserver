@@ -557,8 +557,8 @@ private:
 
 	static int luaGameReload(lua_State* L);
 
-	static int luaGameLoadPlayer(lua_State* L);
-	static int luaGameUnloadPlayer(lua_State* L);
+	static int luaGameLoadOfflinePlayer(lua_State* L);
+	static int luaGameUnloadOfflinePlayer(lua_State* L);
 
 	static int luaGameGetAccountStorageValue(lua_State* L);
 	static int luaGameSetAccountStorageValue(lua_State* L);
