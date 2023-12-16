@@ -199,15 +199,6 @@ private:
 
 using HouseMap = std::map<uint32_t, House*>;
 
-enum RentPeriod_t
-{
-	RENTPERIOD_DAILY,
-	RENTPERIOD_WEEKLY,
-	RENTPERIOD_MONTHLY,
-	RENTPERIOD_YEARLY,
-	RENTPERIOD_NEVER,
-};
-
 class Houses
 {
 public:
