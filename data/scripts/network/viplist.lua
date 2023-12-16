@@ -26,7 +26,7 @@ function edit.onReceive(player, msg)
 	local description = msg:getString()
 	local icon = math.min(10, msg:getU32()) -- 10 is max icon in 9.63
 	local notify = msg:getByte() ~= 0
-	self:editVIP(vipGuid, description, icon, notify)
+	player:editVIP(vipGuid, description, icon, notify)
 end
 
 edit:register()
