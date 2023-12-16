@@ -229,6 +229,28 @@ do
 		return RENTPERIOD_NEVER
 	end
 
+	function Game.checkActionsHouses()
+		local resultId = db.storeQuery("SELECT `id`, `highest_bidder`, `last_bid`, (SELECT `balance` FROM `players` WHERE `players`.`id` = `highest_bidder`) AS `balance` FROM `houses` WHERE `owner` = 0 AND `bid_end` != 0 AND `bid_end` < " .. os.time())
+		if not resultId then
+			return
+		end
+
+		repeat
+			local house = House(result.getNumber(resultId, "id"))
+			if house then
+				local highestBidder = result.getNumber(resultId, "highest_bidder")
+				local balance = result.getNumber(resultId, "balance")
+				local lastBid = result.getNumber(resultId, "last_bid")
+				if balance >= lastBid then
+					db.query("UPDATE `players` SET `balance` = " .. (balance - lastBid) .. " WHERE `id` = " .. highestBidder)
+					house:setOwnerGuid(highestBidder)
+				end
+				db.asyncQuery("UPDATE `houses` SET `last_bid` = 0, `bid_end` = 0, `highest_bidder` = 0, `bid` = 0 WHERE `id` = " .. house:getId())
+			end
+		until not result.next(resultId)
+		result.free(resultId)
+	end
+
 	function Game.payHouses(rentPeriod)
 		if rentPeriod == RENTPERIOD_NEVER then
 			return
@@ -268,8 +290,8 @@ do
 					offlinePlayer = true
 					player = Game.loadOfflinePlayer(ownerGuid)
 					if not player then
-						resetHouses = resetHouses + 1
 						house:setOwnerGuid(0)
+						resetHouses = resetHouses + 1
 						break
 					end
 				end
@@ -292,11 +314,12 @@ do
 					house:setPayRentWarnings(payRentWarnings + 1)
 					paidHouses = paidHouses + 1
 				else
-					resetHouses = resetHouses + 1
 					house:setOwnerGuid(0)
+					resetHouses = resetHouses + 1
 				end
 
 				player:save()
+
 				if offlinePlayer then
 					Game.unloadOfflinePlayer(player)
 				end

@@ -16,25 +16,6 @@ function onStartup()
 		result.free(resultId)
 	end
 
-	-- Check house auctions
-	local resultId = db.storeQuery("SELECT `id`, `highest_bidder`, `last_bid`, (SELECT `balance` FROM `players` WHERE `players`.`id` = `highest_bidder`) AS `balance` FROM `houses` WHERE `owner` = 0 AND `bid_end` != 0 AND `bid_end` < " .. os.time())
-	if resultId then
-		repeat
-			local house = House(result.getNumber(resultId, "id"))
-			if house then
-				local highestBidder = result.getNumber(resultId, "highest_bidder")
-				local balance = result.getNumber(resultId, "balance")
-				local lastBid = result.getNumber(resultId, "last_bid")
-				if balance >= lastBid then
-					db.query("UPDATE `players` SET `balance` = " .. (balance - lastBid) .. " WHERE `id` = " .. highestBidder)
-					house:setOwnerGuid(highestBidder)
-				end
-				db.asyncQuery("UPDATE `houses` SET `last_bid` = 0, `bid_end` = 0, `highest_bidder` = 0, `bid` = 0 WHERE `id` = " .. house:getId())
-			end
-		until not result.next(resultId)
-		result.free(resultId)
-	end
-
 	-- store towns in database
 	db.query("TRUNCATE TABLE `towns`")
 	for i, town in ipairs(Game.getTowns()) do

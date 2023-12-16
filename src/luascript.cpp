@@ -5098,21 +5098,21 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 int LuaScriptInterface::luaGameLoadOfflinePlayer(lua_State* L)
 {
 	// Game.loadOfflinePlayer(guid or name)
-	Player* player(nullptr);
-	if (isNumber(L, 2)) {
+	Player player(nullptr);
+	if (isNumber(L, 1)) {
 		uint32_t playerId = getNumber<uint32_t>(L, 1);
 		if (playerId != 0) {
-			IOLoginData::loadPlayerById(player, playerId);
+			IOLoginData::loadPlayerById(&player, playerId);
 		}
-	} else if (isString(L, 2)) {
-		const auto& playerName = getString(L, 2);
+	} else if (isString(L, 1)) {
+		const auto& playerName = getString(L, 1);
 		if (!playerName.empty()) {
-			IOLoginData::loadPlayerByName(player, playerName);
+			IOLoginData::loadPlayerByName(&player, playerName);
 		}
 	}
 
-	if (player) {
-		pushUserdata<Player>(L, player);
+	if (&player) {
+		pushUserdata<Player>(L, &player);
 		setMetatable(L, -1, "Player");
 	} else {
 		lua_pushnil(L);
