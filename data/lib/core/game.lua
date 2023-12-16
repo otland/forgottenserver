@@ -249,6 +249,6 @@ do
 	end
 
 	function Game.saveDebugAssert(playerGuid, assertLine, date, description, comment)
-		db.asyncStoreQuery("INSERT INTO `player_debugasserts` (`player_id`, `assert_line`, `date`, `description`, `comment`) VALUES(" .. playerGuid .. ", " .. db.escapeString(assertLine) .. ", " .. db.escapeString(date) .. ", " .. db.escapeString(description) .. ", " .. db.escapeString(comment) .. ")")
+		db.asyncQuery("INSERT INTO `player_debugasserts` (`player_id`, `assert_line`, `date`, `description`, `comment`) VALUES(" .. playerGuid .. ", " .. db.escapeString(assertLine) .. ", " .. db.escapeString(date) .. ", " .. db.escapeString(description) .. ", " .. db.escapeString(comment) .. ")")
 	end
 end
