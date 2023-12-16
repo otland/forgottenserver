@@ -5123,10 +5123,9 @@ int LuaScriptInterface::luaGameLoadPlayer(lua_State* L)
 int LuaScriptInterface::luaGameUnloadPlayer(lua_State* L)
 {
 	// Game.unloadPlayer(player)
-	Player** playerPtr = getRawUserdata<Player>(L, 1);
-	if (playerPtr && *playerPtr) {
-		delete *playerPtr;
-		*playerPtr = nullptr;
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		delete player;
 	}
 	return 0;
 }
