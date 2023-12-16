@@ -248,8 +248,6 @@ public:
 
 	bool loadHousesXML(const std::string& filename);
 
-	void payHouses(RentPeriod_t rentPeriod) const;
-
 	const HouseMap& getHouses() const { return houseMap; }
 
 private:

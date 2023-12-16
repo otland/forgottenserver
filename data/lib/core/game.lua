@@ -188,6 +188,114 @@ function Game.getUnpromotedVocations()
 	return vocations
 end
 
+local function getHousePaidUntil(rentPeriod)
+	local day = 24 * 60 * 60
+	if rentPeriod == RENTPERIOD_DAILY then
+		return day
+	elseif rentPeriod == RENTPERIOD_WEEKLY then
+		return day * 7
+	elseif rentPeriod == RENTPERIOD_MONTHLY then
+		return day * 30
+	elseif rentPeriod == RENTPERIOD_YEARLY then
+		return day * 365
+	end
+	return 0
+end
+
+do
+	function Game.getNameRentPeriodHouse(rentPeriod)
+		if rentPeriod == RENTPERIOD_DAILY then
+			return "daily"
+		elseif rentPeriod == RENTPERIOD_WEEKLY then
+			return "weekly"
+		elseif rentPeriod == RENTPERIOD_MONTHLY then
+			return "monthly"
+		elseif rentPeriod == RENTPERIOD_YEARLY then
+			return "annual"
+		end
+		return nil
+	end
+
+	function Game.getRentPeriodHouse(s)
+		if s == "yearly" then
+			return RENTPERIOD_YEARLY
+		elseif s == "weekly" then
+			return RENTPERIOD_WEEKLY
+		elseif s == "monthly" then
+			return RENTPERIOD_MONTHLY
+		elseif s == "daily" then
+			return RENTPERIOD_DAILY
+		end
+		return RENTPERIOD_NEVER
+	end
+
+	function Game.payHouses(rentPeriod)
+		if rentPeriod == RENTPERIOD_NEVER then
+			return
+		end
+
+		local currentTime = os.time()
+		local paidUntil = currentTime + getHousePaidUntil(rentPeriod)
+		local nameRentPeriod = getHouseRentPeriod(rentPeriod)
+
+		for _, house in ipairs(Game.getHouses()) do
+			local ownerGuid = house:getOwnerGuid()
+			if ownerGuid == 0 then
+				goto next
+			end
+
+			local rent = house:getRent()
+			if rent == 0 or house:getPaidUntil() > currentTime then
+				goto next
+			end
+
+			if not house:getTown() then
+				goto next
+			end
+
+			local payRentWarnings = house:getPayRentWarnings()
+			local houseName = house:getName()
+
+			local offlinePlayer = false
+			local player = Player(ownerGuid)
+			if not player then
+				offlinePlayer = true
+				player = Game.loadPlayer(ownerGuid)
+				if not player then
+					house:setOwnerGuid(0)
+					goto next
+				end
+			end
+
+			local playerBalance = player:getBankBalance()
+			if playerBalance >= rent then
+				player:setBankBalance(playerBalance - rent)
+				house:setPaidUntil(paidUntil)
+				house:setPayRentWarnings(0)
+			elseif payRentWarnings < 7 then
+				local daysLeft = 7 - payRentWarnings
+				
+				local stampedLetter = Item(ITEM_LETTER_STAMPED)
+				stampedLetter:setAttribute(ITEM_ATTRIBUTE_TEXT, "Warning! \nThe " .. nameRentPeriod .. " rent of " .. rent .. " gold for your house \"" .. houseName .. "\" is payable. Have it within " .. daysLeft .. " days or you will lose this house.")
+				
+				local playerInbox = player:getInbox()
+				playerInbox:addItemEx(stampedLetter, INDEX_WHEREEVER, FLAG_NOLIMIT)
+
+				house:setPayRentWarnings(payRentWarnings + 1);
+			else
+				house:setOwnerGuid(0)
+			end
+
+			player:save()
+			if offlinePlayer then
+				Game.unloadPlayer(player)
+			end
+
+			::next::
+		end
+	end
+end
+
 do
 	local worldLightLevel = 0
 	local worldLightColor = 0
