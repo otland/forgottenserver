@@ -1688,6 +1688,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_CRYSTAL_COIN);
 	registerEnum(ITEM_AMULETOFLOSS);
 	registerEnum(ITEM_PARCEL);
+	registerEnum(ITEM_LETTER);
+	registerEnum(ITEM_LETTER_STAMPED);
 	registerEnum(ITEM_LABEL);
 	registerEnum(ITEM_FIREFIELD_PVP_FULL);
 	registerEnum(ITEM_FIREFIELD_PVP_MEDIUM);
@@ -2267,6 +2269,9 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getClientVersion", LuaScriptInterface::luaGameGetClientVersion);
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
+
+	registerMethod("Game", "loadOfflinePlayer", LuaScriptInterface::luaGameLoadOfflinePlayer);
+	registerMethod("Game", "unloadOfflinePlayer", LuaScriptInterface::luaGameUnloadOfflinePlayer);
 
 	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
 	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
@@ -5088,6 +5093,41 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	pushBoolean(L, g_game.reload(reloadType));
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 	return 1;
+}
+
+int LuaScriptInterface::luaGameLoadOfflinePlayer(lua_State* L)
+{
+	// Game.loadOfflinePlayer(guid or name)
+	Player player(nullptr);
+	if (isNumber(L, 1)) {
+		uint32_t playerId = getNumber<uint32_t>(L, 1);
+		if (playerId != 0) {
+			IOLoginData::loadPlayerById(&player, playerId);
+		}
+	} else if (isString(L, 1)) {
+		const auto& playerName = getString(L, 1);
+		if (!playerName.empty()) {
+			IOLoginData::loadPlayerByName(&player, playerName);
+		}
+	}
+
+	if (&player) {
+		pushUserdata<Player>(L, &player);
+		setMetatable(L, -1, "Player");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGameUnloadOfflinePlayer(lua_State* L)
+{
+	// Game.unloadOfflinePlayer(player)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		delete player;
+	}
+	return 0;
 }
 
 int LuaScriptInterface::luaGameGetAccountStorageValue(lua_State* L)
