@@ -188,21 +188,21 @@ function Game.getUnpromotedVocations()
 	return vocations
 end
 
-local function getHousePaidUntil(rentPeriod)
-	local day = 24 * 60 * 60
-	if rentPeriod == RENTPERIOD_DAILY then
-		return day
-	elseif rentPeriod == RENTPERIOD_WEEKLY then
-		return day * 7
-	elseif rentPeriod == RENTPERIOD_MONTHLY then
-		return day * 30
-	elseif rentPeriod == RENTPERIOD_YEARLY then
-		return day * 365
-	end
-	return 0
-end
-
 do
+	function Game.getPaidUntilHouse(rentPeriod)
+		local day = 24 * 60 * 60
+		if rentPeriod == RENTPERIOD_DAILY then
+			return day
+		elseif rentPeriod == RENTPERIOD_WEEKLY then
+			return day * 7
+		elseif rentPeriod == RENTPERIOD_MONTHLY then
+			return day * 30
+		elseif rentPeriod == RENTPERIOD_YEARLY then
+			return day * 365
+		end
+		return 0
+	end
+
 	function Game.getNameRentPeriodHouse(rentPeriod)
 		if rentPeriod == RENTPERIOD_DAILY then
 			return "daily"
@@ -235,10 +235,15 @@ do
 		end
 
 		local currentTime = os.time()
-		local paidUntil = currentTime + getHousePaidUntil(rentPeriod)
-		local nameRentPeriod = getHouseRentPeriod(rentPeriod)
+		local paidUntil = currentTime + Game.getPaidUntilHouse(rentPeriod)
+		local nameRentPeriod = Game.getNameRentPeriodHouse(rentPeriod)
 
-		for _, house in ipairs(Game.getHouses()) do
+		local paidHouses = 0
+		local resetHouses = 0
+
+		local houses = Game.getHouses()
+
+		for _, house in ipairs(houses) do
 			repeat
 				local ownerGuid = house:getOwnerGuid()
 				if ownerGuid == 0 then
@@ -263,6 +268,7 @@ do
 					offlinePlayer = true
 					player = Game.loadPlayer(ownerGuid)
 					if not player then
+						resetHouses = resetHouses + 1
 						house:setOwnerGuid(0)
 						break
 					end
@@ -273,17 +279,20 @@ do
 					player:setBankBalance(playerBalance - rent)
 					house:setPaidUntil(paidUntil)
 					house:setPayRentWarnings(0)
+					paidHouses = paidHouses + 1
 				elseif payRentWarnings < 7 then
 					local daysLeft = 7 - payRentWarnings
 					
-					local stampedLetter = Item(ITEM_LETTER_STAMPED)
+					local stampedLetter = Game.createItem(ITEM_LETTER_STAMPED)
 					stampedLetter:setAttribute(ITEM_ATTRIBUTE_TEXT, "Warning! \nThe " .. nameRentPeriod .. " rent of " .. rent .. " gold for your house \"" .. houseName .. "\" is payable. Have it within " .. daysLeft .. " days or you will lose this house.")
 					
 					local playerInbox = player:getInbox()
 					playerInbox:addItemEx(stampedLetter, INDEX_WHEREEVER, FLAG_NOLIMIT)
 
-					house:setPayRentWarnings(payRentWarnings + 1);
+					house:setPayRentWarnings(payRentWarnings + 1)
+					paidHouses = paidHouses + 1
 				else
+					resetHouses = resetHouses + 1
 					house:setOwnerGuid(0)
 				end
 
@@ -293,6 +302,10 @@ do
 				end
 			until true
 		end
+
+		print("> Houses loaded: " .. #houses)
+		print("> Houses to pay: " .. paidHouses)
+		print("> Houses to reset: " .. resetHouses)
 	end
 end
 
