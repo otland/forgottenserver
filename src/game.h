@@ -447,11 +447,6 @@ public:
 	static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos,
 	                              uint8_t effect);
 
-	void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
-	int32_t getAccountStorageValue(const uint32_t accountId, const uint32_t key) const;
-	void loadAccountStorageValues();
-	bool saveAccountStorageValues() const;
-
 	void startDecay(Item* item);
 
 	void sendOfflineTrainingDialog(Player* player);
@@ -518,7 +513,6 @@ private:
 	std::unordered_map<uint32_t, Guild*> guilds;
 	std::unordered_map<uint16_t, Item*> uniqueItems;
 	std::map<uint32_t, uint32_t> stages;
-	std::unordered_map<uint32_t, std::unordered_map<uint32_t, int32_t>> accountStorageMap;
 
 	std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 	std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
