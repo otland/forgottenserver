@@ -127,7 +127,7 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 	 */
 
 	if (!Protocol::RSA_decrypt(msg)) {
-		throw std::exception("RSA decrypt fails...");
+		throw std::exception("RSA decrypt fails.");
 	}
 
 	xtea::key key;
@@ -152,14 +152,16 @@ ProtocolMessage ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 
 	auto connection = getConnection();
 	if (!connection) {
-		return;
+		throw std::exception("Connection lost.");
 	}
 
+	/*
 	if (const auto& banInfo = IOBan::getIpBanInfo(connection->getIP())) {
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
-		return;
+	    disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+	                                 formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
+	    return;
 	}
+	*/
 
 	auto accountName = msg.getString();
 	if (accountName.empty()) {

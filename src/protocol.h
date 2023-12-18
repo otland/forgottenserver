@@ -5,8 +5,8 @@
 #define FS_PROTOCOL_H
 
 #include "connection.h"
-#include "xtea.h"
 #include "enums.h"
+#include "xtea.h"
 
 class Protocol : public std::enable_shared_from_this<Protocol>
 {
@@ -23,7 +23,7 @@ public:
 	virtual void onSendMessage(const OutputMessage_ptr& msg);
 	void onRecvMessage(NetworkMessage& msg);
 	virtual ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) = 0;
-	virtual void disconnectClient(const std::string& message) = 0;
+	virtual void disconnectClient(const std::string& message);
 	virtual void onConnect() {}
 
 	bool isConnectionExpired() const { return connection.expired(); }

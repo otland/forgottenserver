@@ -240,8 +240,9 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		}
 
 		try {
-			if (auto message = getProtocolMessage(protocol->onRecvFirstMessage(msg))) {
-				protocol->disconnectClient(message.value());
+			auto protocolMessage = protocol->onRecvFirstMessage(msg);
+			if (auto disconnectMessage = getProtocolMessage(protocolMessage)) {
+				protocol->disconnectClient(disconnectMessage.value());
 			}
 		} catch (const std::exception& e) {
 			protocol->disconnect();

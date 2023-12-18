@@ -439,11 +439,13 @@ ProtocolMessage ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return PROTOCOLMESSAGE_GAME_IN_MAINTAIN;
 	}
 
+	/*
 	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
-		return;
+	    disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+	                                 formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
+	    return;
 	}
+	*/
 
 	// TODO: use structured binding when C++20 is adopted
 	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);

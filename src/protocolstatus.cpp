@@ -32,13 +32,11 @@ ProtocolMessage ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 	const static auto acceptorAddress = Connection::Address::from_string(g_config.getString(ConfigManager::IP));
 
 	const auto& ip = getIP();
-
 	if (!ip.is_loopback() && ip != acceptorAddress) {
 		if (auto it = ipConnectMap.find(ip);
 		    it != ipConnectMap.end() &&
 		    (OTSYS_TIME() < (it->second + g_config.getNumber(ConfigManager::STATUSQUERY_TIMEOUT)))) {
-			disconnect();
-			return;
+			throw std::exception("Many status requests...");
 		}
 	}
 
@@ -51,7 +49,7 @@ ProtocolMessage ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 				g_dispatcher.addTask([thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this())]() {
 					thisPtr->sendStatusString();
 				});
-				return;
+				return PROTOCOLMESSAGE_SUCCESS;
 			}
 			break;
 		}
@@ -66,13 +64,14 @@ ProtocolMessage ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 			g_dispatcher.addTask(
 			    [=, thisPtr = std::static_pointer_cast<ProtocolStatus>(shared_from_this()),
 			     characterName = std::move(characterName)]() { thisPtr->sendInfo(requestedInfo, characterName); });
-			return;
+			return PROTOCOLMESSAGE_SUCCESS;
 		}
 
 		default:
 			break;
 	}
-	disconnect();
+
+	throw std::exception("Unkown info byte...");
 }
 
 void ProtocolStatus::sendStatusString()

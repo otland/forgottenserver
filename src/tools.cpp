@@ -1191,7 +1191,7 @@ const char* getReturnMessage(ReturnValue value)
 	}
 }
 
-std::optional<const std::string&> getProtocolMessage(ProtocolMessage msg)
+std::optional<std::string> getProtocolMessage(ProtocolMessage msg)
 {
 	switch (msg) {
 		case PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION:
