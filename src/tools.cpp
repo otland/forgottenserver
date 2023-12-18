@@ -285,23 +285,14 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
 	static std::normal_distribution<float> normalRand(0.5f, 0.25f);
-	if (minNumber == maxNumber) {
-		return minNumber;
-	} else if (minNumber > maxNumber) {
-		std::swap(minNumber, maxNumber);
-	}
 
-	int32_t increment;
-	const int32_t diff = maxNumber - minNumber;
-	const float v = normalRand(getRandomGenerator());
-	if (v < 0.0) {
-		increment = diff / 2;
-	} else if (v > 1.0) {
-		increment = (diff + 1) / 2;
-	} else {
-		increment = round(v * diff);
-	}
-	return minNumber + increment;
+	float v;
+	do {
+		v = normalRand(getRandomGenerator());
+	} while (v < 0.0 || v > 1.0);
+
+	auto&& [a, b] = std::minmax(minNumber, maxNumber);
+	return a + std::lround(v * (b - a));
 }
 
 bool boolean_random(double probability /* = 0.5*/)
@@ -313,35 +304,6 @@ bool boolean_random(double probability /* = 0.5*/)
 std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
 std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
-
-Direction getDirection(const std::string& string)
-{
-	Direction direction = DIRECTION_NORTH;
-
-	if (string == "north" || string == "n" || string == "0") {
-		direction = DIRECTION_NORTH;
-	} else if (string == "east" || string == "e" || string == "1") {
-		direction = DIRECTION_EAST;
-	} else if (string == "south" || string == "s" || string == "2") {
-		direction = DIRECTION_SOUTH;
-	} else if (string == "west" || string == "w" || string == "3") {
-		direction = DIRECTION_WEST;
-	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" ||
-	           string == "4") {
-		direction = DIRECTION_SOUTHWEST;
-	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" ||
-	           string == "5") {
-		direction = DIRECTION_SOUTHEAST;
-	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" ||
-	           string == "6") {
-		direction = DIRECTION_NORTHWEST;
-	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" ||
-	           string == "7") {
-		direction = DIRECTION_NORTHEAST;
-	}
-
-	return direction;
-}
 
 Position getNextPosition(Direction direction, Position pos)
 {
@@ -577,6 +539,7 @@ MagicEffectNames magicEffectNames = {
     {"horestis", CONST_ME_HORESTIS},
     {"devovorga", CONST_ME_DEVOVORGA},
     {"ferumbras2", CONST_ME_FERUMBRAS_2},
+    {"foam", CONST_ME_FOAM},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -694,11 +657,12 @@ SkullNames skullNames = {
     {"red", SKULL_RED},   {"black", SKULL_BLACK},   {"orange", SKULL_ORANGE},
 };
 
-std::vector<uint16_t> depotBoxes = {ITEM_DEPOT_BOX_I,    ITEM_DEPOT_BOX_II,   ITEM_DEPOT_BOX_III, ITEM_DEPOT_BOX_IV,
-                                    ITEM_DEPOT_BOX_V,    ITEM_DEPOT_BOX_VI,   ITEM_DEPOT_BOX_VII, ITEM_DEPOT_BOX_VIII,
-                                    ITEM_DEPOT_BOX_IX,   ITEM_DEPOT_BOX_X,    ITEM_DEPOT_BOX_XI,  ITEM_DEPOT_BOX_XII,
-                                    ITEM_DEPOT_BOX_XIII, ITEM_DEPOT_BOX_XIV,  ITEM_DEPOT_BOX_XV,  ITEM_DEPOT_BOX_XVI,
-                                    ITEM_DEPOT_BOX_XVII, ITEM_DEPOT_BOX_XVIII};
+std::vector<uint16_t> depotBoxes = {
+    ITEM_DEPOT_BOX_I,   ITEM_DEPOT_BOX_II,   ITEM_DEPOT_BOX_III,   ITEM_DEPOT_BOX_IV,  ITEM_DEPOT_BOX_V,
+    ITEM_DEPOT_BOX_VI,  ITEM_DEPOT_BOX_VII,  ITEM_DEPOT_BOX_VIII,  ITEM_DEPOT_BOX_IX,  ITEM_DEPOT_BOX_X,
+    ITEM_DEPOT_BOX_XI,  ITEM_DEPOT_BOX_XII,  ITEM_DEPOT_BOX_XIII,  ITEM_DEPOT_BOX_XIV, ITEM_DEPOT_BOX_XV,
+    ITEM_DEPOT_BOX_XVI, ITEM_DEPOT_BOX_XVII, ITEM_DEPOT_BOX_XVIII, ITEM_DEPOT_BOX_XIX, ITEM_DEPOT_BOX_XX,
+};
 
 uint16_t getDepotBoxId(uint16_t index)
 {
@@ -1192,12 +1156,6 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
-		case RETURNVALUE_NOSUCHRAIDEXISTS:
-			return "No such raid exists.";
-
-		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
-			return "Another raid is already executing.";
-
 		case RETURNVALUE_TRADEPLAYERFARAWAY:
 			return "Trade player is too far away.";
 
@@ -1284,4 +1242,11 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	}
 
 	return SPELLGROUP_NONE;
+}
+
+const std::vector<Direction>& getShuffleDirections()
+{
+	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
+	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
+	return dirList;
 }

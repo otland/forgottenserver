@@ -15,7 +15,11 @@ class Tile;
 
 enum class EventInfoId
 {
-	CREATURE_ONHEAR
+	// Creature
+	CREATURE_ONHEAR,
+
+	// Monster
+	MONSTER_ONSPAWN
 };
 
 class Events
@@ -27,6 +31,7 @@ class Events
 		int32_t creatureOnAreaCombat = -1;
 		int32_t creatureOnTargetCombat = -1;
 		int32_t creatureOnHear = -1;
+		int32_t creatureOnChangeZone = -1;
 		int32_t creatureOnUpdateStorage = -1;
 
 		// Party
@@ -79,6 +84,7 @@ public:
 	ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
+	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
 	void eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
@@ -133,6 +139,8 @@ public:
 		switch (eventInfoId) {
 			case EventInfoId::CREATURE_ONHEAR:
 				return info.creatureOnHear;
+			case EventInfoId::MONSTER_ONSPAWN:
+				return info.monsterOnSpawn;
 			default:
 				return -1;
 		}
