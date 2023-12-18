@@ -91,6 +91,7 @@ function handler.onReceive(player, msg)
 		response:addU32(monsterType:getExperience())
 		response:addU16(monsterType:getBaseSpeed())
 		response:addU16(monsterType:getArmor())
+		response:addDouble(0) -- damage mitigation
 	end
 
 	if progress > 2 then

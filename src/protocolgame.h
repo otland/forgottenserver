@@ -235,8 +235,6 @@ private:
 	void sendFightModes();
 
 	void sendCreatureLight(const Creature* creature);
-	void sendWorldLight(LightInfo lightInfo);
-	void sendWorldTime();
 
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
