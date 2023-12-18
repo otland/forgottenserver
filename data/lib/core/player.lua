@@ -719,7 +719,7 @@ function Player.sendWorldTime(self, time)
 	return true
 end
 
-function Player.getMaxVIPEntries(self)
+function Player.getMaxVipEntries(self)
 	local groupMaxVipEntries = self:getGroup():getMaxVipEntries()
 	if groupMaxVipEntries > 0 then
 		return groupMaxVipEntries
@@ -727,7 +727,7 @@ function Player.getMaxVIPEntries(self)
 	return configManager.getBoolean(self:isPremium() and configKeys.VIP_PREMIUM_LIMIT or configKeys.VIP_FREE_LIMIT)
 end
 
-function Player.addVIP(self, name)
+function Player.addVip(self, name)
 	if name:len() > PLAYER_NAME_LENGTH then
 		return
 	end
@@ -736,7 +736,7 @@ function Player.addVIP(self, name)
 	local vipName
 	local status
 
-	-- check if the VIP is online
+	-- check if the Vip is online
 	local vipPlayer = Player(name)
 	if vipPlayer then
 		if vipPlayer:hasFlag(PlayerFlag_SpecialVIP) and not self:hasFlag(PlayerFlag_SpecialVIP) then
@@ -755,7 +755,7 @@ function Player.addVIP(self, name)
 			return
 		end
 		
-		-- find vip group and check if exists
+		-- find Vip group and check if exists
 		local groupId = result.getNumber(resultId, "group_id")
 		local group = Group(groupId)
 		if not group then
@@ -772,13 +772,13 @@ function Player.addVIP(self, name)
 		status = VIPSTATUS_OFFLINE
 	end
 
-	local playerVIP = VIP(self:getGuid())
-	if not playerVIP:canAdd() then
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:canAdd() then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.")
 		return
 	end
 
-	if playerVIP:has(vipGuid) then
+	if playerVip:has(vipGuid) then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, "This player is already in your list.")
 		return
 	end
@@ -790,39 +790,39 @@ function Player.addVIP(self, name)
 	local accountId = self:getAccountId()
 	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" .. accountId .. ", " .. vipGuid .. ")")
 
-	playerVIP:add(vipGuid)
-	self:sendVIP(vipGuid, vipName, description, icon, notify, status)
+	playerVip:add(vipGuid)
+	self:sendVip(vipGuid, vipName, description, icon, notify, status)
 end
 
-function Player.removeVIP(self, vipGuid)
+function Player.removeVip(self, vipGuid)
 	local accountId = self:getAccountId()
 	db.asyncQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid)
 	
-	local playerVIP = VIP(self:getGuid())
-	playerVIP:remove(vipGuid)
+	local playerVip = Vip(self:getGuid())
+	playerVip:remove(vipGuid)
 end
 
-function Player.editVIP(self, vipGuid, description, icon, notify)
-	local playerVIP = VIP(self:getGuid())
-	if not playerVIP:has(vipGuid) then
+function Player.editVip(self, vipGuid, description, icon, notify)
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:has(vipGuid) then
 		return
 	end
 	
 	db.asyncQuery("UPDATE `account_viplist` SET `description` = " .. db.escapeString(description) ..", `icon` = " .. icon .. ", `notify` = " .. (notify and 1 or 0) .. " WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid .. "")
 end
 
-function Player.notifyVIPStatusChange(self, vipGuid, status)
+function Player.notifyVipStatusChange(self, vipGuid, status)
 	local vipPlayer = Player(vipGuid)
 	if not vipPlayer then
 		return
 	end
 
-	local playerVIP = VIP(self:getGuid())
-	if not playerVIP:has(vipGuid) then
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:has(vipGuid) then
 		return
 	end
 
-	self:sendUpdatedVIPStatus(vipGuid, status)
+	self:sendUpdatedVipStatus(vipGuid, status)
 
 	if status == VIPSTATUS_ONLINE then
 		self:sendTextMessage(MESSAGE_STATUS_SMALL, vipPlayer:getName() .. " has logged in.")
@@ -831,7 +831,7 @@ function Player.notifyVIPStatusChange(self, vipGuid, status)
 	end
 end
 
-function Player.sendVIP(self, guid, name, description, icon, notify, status)
+function Player.sendVip(self, guid, name, description, icon, notify, status)
 	local msg = NetworkMessage()
 	msg:addByte(0xD2)
 	msg:addU32(guid)
@@ -846,7 +846,7 @@ function Player.sendVIP(self, guid, name, description, icon, notify, status)
 	return true
 end
 
-function Player.sendUpdatedVIPStatus(self, guid, status)
+function Player.sendUpdatedVipStatus(self, guid, status)
 	local msg = NetworkMessage()
 	msg:addByte(0xD3)
 	msg:addU32(guid)

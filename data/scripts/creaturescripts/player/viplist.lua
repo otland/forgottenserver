@@ -1,12 +1,12 @@
 local function notifyAllPlayers(guid, status)
 	for _, player in ipairs(Game.getPlayers()) do
 		if player:getGuid() ~= guid then
-			player:notifyVIPStatusChange(guid, status)
+			player:notifyVipStatusChange(guid, status)
 		end
 	end
 end
 
-local event = CreatureEvent("OnlineVIP")
+local event = CreatureEvent("OnlineVip")
 
 function event.onLogin(player)
 	local playerGUID = player:getGuid()
@@ -18,7 +18,7 @@ function event.onLogin(player)
 		return true
 	end
 	
-	local playerVIP = VIP(playerGUID)
+	local playerVip = Vip(playerGUID)
 	repeat
 		local vipGuid = result.getNumber(resultId, "player_id")
 		local vipName = result.getString(resultId, "name")
@@ -26,10 +26,10 @@ function event.onLogin(player)
 		local icon = result.getNumber(resultId, "icon")
 		local notify = result.getNumber(resultId, "notify") ~= 0
 
-		-- add to player vip cache
-		playerVIP:add(vipGuid)
+		-- add to player Vip cache
+		playerVip:add(vipGuid)
 
-		-- calculate the vip status
+		-- calculate the Vip status
 		local status
 		local vipPlayer = Player(vipGuid)
 		if vipPlayer and player:canSeeCreature(vipPlayer) then
@@ -39,7 +39,7 @@ function event.onLogin(player)
 		end
 
 		-- send to client
-		player:sendVIP(vipGuid, vipName, description, icon, notify, status)
+		player:sendVip(vipGuid, vipName, description, icon, notify, status)
 	until not result.next(resultId)
 	result.free(resultId)
 
@@ -50,14 +50,14 @@ event:register()
 
 
 
-event = CreatureEvent("OfflineVIP")
+event = CreatureEvent("OfflineVip")
 
 function event.onLogout(player)
 	local playerGUID = player:getGuid()
 	notifyAllPlayers(playerGUID, VIPSTATUS_OFFLINE)
 
-	local playerVIP = VIP(playerGUID)
-	playerVIP:clear()
+	local playerVip = Vip(playerGUID)
+	playerVip:clear()
 	return true
 end
 
