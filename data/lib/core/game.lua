@@ -191,11 +191,11 @@ end
 do
 	local worldLightLevel = 0
 	local worldLightColor = 0
-	
+
 	function Game.getWorldLight()
 		return worldLightLevel, worldLightColor
 	end
-	
+
 	function Game.setWorldLight(color, level)
 		if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
 			return
@@ -231,6 +231,20 @@ do
 			end
 		end
 	end
+
+	function Game.getFormattedWorldTime()
+		local worldTime = Game.getWorldTime()
+		local hours = math.floor(worldTime / 60)
+	
+		local minutes = worldTime % 60
+		if minutes < 10 then
+			minutes = '0' .. minutes
+		end
+	
+		minutes = math.floor(minutes)
+	
+		return hours .. ':' .. minutes
+	end
 end
 
 do
@@ -264,12 +278,12 @@ do
 		if not transaction:begin() then
 			return false
 		end
-	
+
 		local result = db.query("DELETE FROM `account_storage`")
 		if not result then
 			return false
 		end
-	
+
 		local accountsStorage = Game.getAccountsStorage()
 		for accountId, accountStorage in pairs(accountsStorage) do
 			local query = DBInsert("INSERT INTO `account_storage` (`account_id`, `key`, `value`) VALUES")
@@ -279,12 +293,12 @@ do
 					return false
 				end
 			end
-	
+
 			if not query:execute() then
 				return false
 			end
 		end
-	
+
 		return transaction:commit()
 	end
 end
