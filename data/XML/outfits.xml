@@ -63,7 +63,7 @@
 	<outfit type="0" looktype="963" name="Retro Warrior" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="965" name="Retro Summoner" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="967" name="Retro Noblewoman" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="969" name="Retro Wizard" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="969" name="Retro Mage" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="971" name="Retro Knight" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="973" name="Retro Hunter" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="975" name="Retro Citizen" premium="no" unlocked="no" enabled="yes" />
@@ -83,13 +83,13 @@
 	<outfit type="0" looktype="1203" name="Void Master" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1205" name="Veteran Paladin" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1207" name="Lion of War" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="1211" name="Golden Outfit" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="1246" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1211" name="Golden Outfit" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1244" name="Hand of the Inquisition" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="1252" name="Traditionalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1246" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1252" name="Orcsoberfest Garb" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1271" name="Poltergeist" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1280" name="Herder" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="1283" name="Falconer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1283" name="Falconer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1289" name="Dragon Slayer" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1293" name="Trailblazer" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1323" name="Revenant" premium="yes" unlocked="no" enabled="yes" />
@@ -107,8 +107,10 @@
 	<outfit type="0" looktype="1461" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1490" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1501" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="0" looktype="1568" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1569" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="0" looktype="1576" name="Fencer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1582" name="Shadowlotus Disciple" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="0" looktype="1598" name="Ancient Aucar" premium="yes" unlocked="no" enabled="yes" />
 
 	<!-- Male outfits -->
 	<outfit type="1" looktype="128" name="Citizen" premium="no" unlocked="yes" enabled="yes" />
@@ -173,7 +175,7 @@
 	<outfit type="1" looktype="962" name="Retro Warrior" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="964" name="Retro Summoner" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="966" name="Retro Nobleman" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="968" name="Retro Wizard" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="968" name="Retro Mage" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="970" name="Retro Knight" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="972" name="Retro Hunter" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="974" name="Retro Citizen" premium="no" unlocked="no" enabled="yes" />
@@ -193,13 +195,13 @@
 	<outfit type="1" looktype="1202" name="Void Master" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1204" name="Veteran Paladin" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1206" name="Lion of War" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="1210" name="Golden Outfit" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="1245" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1210" name="Golden Outfit" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1243" name="Hand of the Inquisition" premium="yes" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="1251" name="Traditionalist" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1245" name="Breezy Garb" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1251" name="Orcsoberfest Garb" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1270" name="Poltergeist" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1279" name="Herder" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="1282" name="Falconer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1282" name="Falconer" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1288" name="Dragon Slayer" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1292" name="Trailblazer" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1322" name="Revenant" premium="yes" unlocked="no" enabled="yes" />
@@ -217,6 +219,8 @@
 	<outfit type="1" looktype="1460" name="Formal Dress" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1489" name="Ghost Blade" premium="no" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1500" name="Nordic Chieftain" premium="no" unlocked="no" enabled="yes" />
-	<outfit type="1" looktype="1569" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1568" name="Fire-Fighter" premium="yes" unlocked="no" enabled="yes" />
 	<outfit type="1" looktype="1575" name="Fencer" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1581" name="Shadowlotus Disciple" premium="no" unlocked="no" enabled="yes" />
+	<outfit type="1" looktype="1597" name="Ancient Aucar" premium="yes" unlocked="no" enabled="yes" />
 </outfits>
