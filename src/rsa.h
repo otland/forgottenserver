@@ -7,7 +7,7 @@
 class RSA
 {
 public:
-	static constexpr int8_t BUFFER_LENGTH = 128;
+	static constexpr int16_t BUFFER_LENGTH = 128;
 
 	RSA() = default;
 
