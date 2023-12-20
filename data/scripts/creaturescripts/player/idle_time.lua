@@ -3,7 +3,7 @@ local config = {
     kickAfterWarn = 1 * 60 * 1000 -- 1 minute
 }
 
--- register idle time event
+-- register player event
 local event = CreatureEvent("RegisterIdleTime")
 
 function event.onLogin(player)
@@ -15,7 +15,7 @@ end
 
 event:register()
 
--- check player idle time
+-- event to check player idle time
 event = CreatureEvent("IdleTime")
 
 function event.onThink(player, interval)
@@ -24,13 +24,13 @@ function event.onThink(player, interval)
 		return true
 	end
 
-	local time = player:getIdleTime() + interval
-	player:setIdleTime(time)
-	
-	if time > config.maxIdleTime + config.kickAfterWarn then
-		player:remove()
-	elseif player:hasClient() and time == config.maxIdleTime then
-		player:sendTextMessage(MESSAGE_STATUS_WARNING, "There was no variation in your behaviour for " .. kickAfterMinutes .. " minutes. You will be disconnected in one minute if there is no change in your actions until then.")
+	local idleTime = player:getIdleTime() + interval
+	player:setIdleTime(idleTime)
+
+    if idleTime == config.maxIdleTime then
+        player:sendTextMessage(MESSAGE_STATUS_WARNING, "There was no variation in your behaviour for " .. kickAfterMinutes .. " minutes. You will be disconnected in one minute if there is no change in your actions until then.")
+    elseif idleTime > (config.maxIdleTime + config.kickAfterWarn) then
+        player:remove()
 	end
 	return true
 end
