@@ -981,6 +981,7 @@ function getGuildId(guildName)
 	result.free(resultId)
 	return guildId
 end
+function isInWar(cid, target) local p = Player(cid) local t = Player(target) return p and t and p:isInWar(t) end
 
 function getHouseName(houseId) local h = House(houseId) return h and h:getName() or false end
 function getHouseOwner(houseId) local h = House(houseId) return h and h:getOwnerGuid() or false end

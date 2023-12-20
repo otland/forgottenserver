@@ -1117,9 +1117,6 @@ void LuaScriptInterface::registerFunctions()
 	// debugPrint(text)
 	lua_register(luaState, "debugPrint", LuaScriptInterface::luaDebugPrint);
 
-	// isInWar(cid, target)
-	lua_register(luaState, "isInWar", LuaScriptInterface::luaIsInWar);
-
 	// getWaypointPosition(name)
 	lua_register(luaState, "getWaypointPositionByName", LuaScriptInterface::luaGetWaypointPositionByName);
 
@@ -2167,8 +2164,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::RATE_MAGIC);
 	registerEnumIn("configKeys", ConfigManager::RATE_SPAWN);
 	registerEnumIn("configKeys", ConfigManager::HOUSE_PRICE);
-	registerEnumIn("configKeys", ConfigManager::KILLS_TO_RED);
-	registerEnumIn("configKeys", ConfigManager::KILLS_TO_BLACK);
 	registerEnumIn("configKeys", ConfigManager::MAX_MESSAGEBUFFER);
 	registerEnumIn("configKeys", ConfigManager::ACTIONS_DELAY_INTERVAL);
 	registerEnumIn("configKeys", ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
@@ -2176,8 +2171,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn("configKeys", ConfigManager::PROTECTION_LEVEL);
 	registerEnumIn("configKeys", ConfigManager::DEATH_LOSE_PERCENT);
 	registerEnumIn("configKeys", ConfigManager::STATUSQUERY_TIMEOUT);
-	registerEnumIn("configKeys", ConfigManager::FRAG_TIME);
-	registerEnumIn("configKeys", ConfigManager::WHITE_SKULL_TIME);
 	registerEnumIn("configKeys", ConfigManager::GAME_PORT);
 	registerEnumIn("configKeys", ConfigManager::LOGIN_PORT);
 	registerEnumIn("configKeys", ConfigManager::STATUS_PORT);
@@ -2219,6 +2212,11 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("DBTransaction", "begin", LuaScriptInterface::luaDBTransactionBegin);
 	registerMethod("DBTransaction", "commit", LuaScriptInterface::luaDBTransactionCommit);
 	registerMethod("DBTransaction", "rollback", LuaScriptInterface::luaDBTransactionDelete);
+
+	// Combat
+	registerTable("Combat");
+
+	registerMethod("Combat", "isInPvpZone", LuaScriptInterface::luaCombatIsInPvpZone);
 
 	// Game
 	registerTable("Game");
@@ -2656,6 +2654,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getGuildNick", LuaScriptInterface::luaPlayerGetGuildNick);
 	registerMethod("Player", "setGuildNick", LuaScriptInterface::luaPlayerSetGuildNick);
 
+	registerMethod("Player", "isInWar", LuaScriptInterface::luaPlayerIsInWar);
+
 	registerMethod("Player", "getGroup", LuaScriptInterface::luaPlayerGetGroup);
 	registerMethod("Player", "setGroup", LuaScriptInterface::luaPlayerSetGroup);
 
@@ -2689,6 +2689,10 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
 	registerMethod("Player", "getParty", LuaScriptInterface::luaPlayerGetParty);
+	registerMethod("Player", "isInviting", LuaScriptInterface::luaPlayerIsInviting);
+	registerMethod("Player", "isPartner", LuaScriptInterface::luaPlayerIsPartner);
+	registerMethod("Player", "isGuildMate", LuaScriptInterface::luaPlayerIsGuildMate);
+	registerMethod("Player", "hasAttacked", LuaScriptInterface::luaPlayerHasAttacked);
 
 	registerMethod("Player", "addOutfit", LuaScriptInterface::luaPlayerAddOutfit);
 	registerMethod("Player", "addOutfitAddon", LuaScriptInterface::luaPlayerAddOutfitAddon);
@@ -2724,6 +2728,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "popupFYI", LuaScriptInterface::luaPlayerPopupFYI);
 
 	registerMethod("Player", "isPzLocked", LuaScriptInterface::luaPlayerIsPzLocked);
+	registerMethod("Player", "setPzLocked", LuaScriptInterface::luaPlayerSetPzLocked);
 
 	registerMethod("Player", "getClient", LuaScriptInterface::luaPlayerGetClient);
 
@@ -3988,27 +3993,6 @@ int LuaScriptInterface::luaCleanMap(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaIsInWar(lua_State* L)
-{
-	// isInWar(cid, target)
-	Player* player = getPlayer(L, 1);
-	if (!player) {
-		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	Player* targetPlayer = getPlayer(L, 2);
-	if (!targetPlayer) {
-		reportErrorFunc(L, getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		pushBoolean(L, false);
-		return 1;
-	}
-
-	pushBoolean(L, player->isInWar(targetPlayer));
-	return 1;
-}
-
 int LuaScriptInterface::luaGetWaypointPositionByName(lua_State* L)
 {
 	// getWaypointPositionByName(name)
@@ -4501,6 +4485,20 @@ int LuaScriptInterface::luaDBTransactionDelete(lua_State* L)
 		*transactionPtr = nullptr;
 	}
 	return 0;
+}
+
+// Combat
+int LuaScriptInterface::luaCombatIsInPvpZone(lua_State* L)
+{
+	// Combat.isInPvpZone(attacker, target)
+	const Creature* attacker = getUserdata<const Creature>(L, 2);
+	const Creature* target = getUserdata<const Creature>(L, 3);
+	if (attacker && target) {
+		lua_pushboolean(L, Combat::isInPvpZone(attacker, target));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
 }
 
 // Game
@@ -9666,6 +9664,19 @@ int LuaScriptInterface::luaPlayerSetGuildNick(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerIsInWar(lua_State* L)
+{
+	// player:isInWar(anotherPlayer)
+	const Player* player = getUserdata<const Player>(L, 1);
+	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
+	if (player && anotherPlayer) {
+		pushBoolean(L, player->isInWar(anotherPlayer));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerGetGroup(lua_State* L)
 {
 	// player:getGroup()
@@ -10222,6 +10233,58 @@ int LuaScriptInterface::luaPlayerGetParty(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerIsInviting(lua_State* L)
+{
+	// player:isInviting(anotherPlayer)
+	const Player* player = getUserdata<const Player>(L, 1);
+	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
+	if (player && anotherPlayer) {
+		pushBoolean(L, player->isInviting(anotherPlayer));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsPartner(lua_State* L)
+{
+	// player:isPartner(anotherPlayer)
+	const Player* player = getUserdata<const Player>(L, 1);
+	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
+	if (player && anotherPlayer) {
+		pushBoolean(L, player->isPartner(anotherPlayer));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsGuildMate(lua_State* L)
+{
+	// player:isGuildMate(anotherPlayer)
+	const Player* player = getUserdata<const Player>(L, 1);
+	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
+	if (player && anotherPlayer) {
+		pushBoolean(L, player->isGuildMate(anotherPlayer));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerHasAttacked(lua_State* L)
+{
+	// player:hasAttacked(anotherPlayer)
+	const Player* player = getUserdata<const Player>(L, 1);
+	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
+	if (player && anotherPlayer) {
+		pushBoolean(L, player->hasAttacked(anotherPlayer));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaPlayerAddOutfit(lua_State* L)
 {
 	// player:addOutfit(lookType)
@@ -10638,6 +10701,19 @@ int LuaScriptInterface::luaPlayerIsPzLocked(lua_State* L)
 	Player* player = getUserdata<Player>(L, 1);
 	if (player) {
 		pushBoolean(L, player->isPzLocked());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetPzLocked(lua_State* L)
+{
+	// player:setPzLocked(value)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setPzLocked(getBoolean(L, 2));
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}

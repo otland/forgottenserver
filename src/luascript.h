@@ -448,8 +448,6 @@ private:
 	static int luaSaveServer(lua_State* L);
 	static int luaCleanMap(lua_State* L);
 
-	static int luaIsInWar(lua_State* L);
-
 	static int luaGetWaypointPositionByName(lua_State* L);
 
 	static int luaSendChannelMessage(lua_State* L);
@@ -510,6 +508,9 @@ private:
 	static int luaDBTransactionDelete(lua_State* L);
 	static int luaDBTransactionBegin(lua_State* L);
 	static int luaDBTransactionCommit(lua_State* L);
+
+	// Combat
+	static int luaCombatIsInPvpZone(lua_State* L);
 
 	// Game
 	static int luaGameGetSpectators(lua_State* L);
@@ -934,6 +935,8 @@ private:
 	static int luaPlayerGetGuildNick(lua_State* L);
 	static int luaPlayerSetGuildNick(lua_State* L);
 
+	static int luaPlayerIsInWar(lua_State* L);
+
 	static int luaPlayerGetGroup(lua_State* L);
 	static int luaPlayerSetGroup(lua_State* L);
 
@@ -969,6 +972,11 @@ private:
 
 	static int luaPlayerGetParty(lua_State* L);
 
+	static int luaPlayerIsInviting(lua_State* L);
+	static int luaPlayerIsPartner(lua_State* L);
+	static int luaPlayerIsGuildMate(lua_State* L);
+	static int luaPlayerHasAttacked(lua_State* L);
+
 	static int luaPlayerAddOutfit(lua_State* L);
 	static int luaPlayerAddOutfitAddon(lua_State* L);
 	static int luaPlayerRemoveOutfit(lua_State* L);
@@ -1003,6 +1011,7 @@ private:
 	static int luaPlayerPopupFYI(lua_State* L);
 
 	static int luaPlayerIsPzLocked(lua_State* L);
+	static int luaPlayerSetPzLocked(lua_State* L);
 
 	static int luaPlayerGetClient(lua_State* L);
 

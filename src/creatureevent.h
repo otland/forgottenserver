@@ -52,7 +52,7 @@ public:
 	bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 	bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller,
 	                    bool lastHitUnjustified, bool mostDamageUnjustified);
-	void executeOnKill(Creature* creature, Creature* target);
+	void executeOnKill(Creature* creature, Creature* target, bool lastHit);
 	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
 	bool executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId);
