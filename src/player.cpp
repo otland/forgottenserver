@@ -1552,20 +1552,6 @@ void Player::onThink(uint32_t interval)
 		addMessageBuffer();
 	}
 
-	if (!getTile()->hasFlag(TILESTATE_NOLOGOUT) && !isAccessPlayer()) {
-		idleTime += interval;
-		const int32_t kickAfterMinutes = g_config.getNumber(ConfigManager::KICK_AFTER_MINUTES);
-		if (idleTime > (kickAfterMinutes * 60000) + 60000) {
-			kickPlayer(true);
-		} else if (client && idleTime == 60000 * kickAfterMinutes) {
-			client->sendTextMessage(TextMessage(
-			    MESSAGE_STATUS_WARNING,
-			    fmt::format(
-			        "There was no variation in your behaviour for {:d} minutes. You will be disconnected in one minute if there is no change in your actions until then.",
-			        kickAfterMinutes)));
-		}
-	}
-
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		checkSkullTicks(interval / 1000);
 	}

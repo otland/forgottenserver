@@ -211,6 +211,8 @@ public:
 		return client->getVersion();
 	}
 
+	bool hasClient() const { return client != nullptr; };
+
 	bool hasSecureMode() const { return secureMode; }
 
 	void setParty(Party* party) { this->party = party; }
@@ -265,7 +267,7 @@ public:
 	bool isInMarket() const { return inMarket; }
 
 	int32_t getIdleTime() const { return idleTime; }
-
+	void setIdleTime(int32_t time) { idleTime = time; }
 	void resetIdleTime() { idleTime = 0; }
 
 	bool isInGhostMode() const override { return ghostMode; }
