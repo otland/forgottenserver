@@ -1,8 +1,25 @@
 local config = {
-	fragTime = 24 * 60 * 60, -- in seconds
-	whiteSkullTime = 15 * 60, -- in seconds
+	mode = "new", -- old or new
+	whiteSkullTime = 15 * 60 * 1000 -- 15 minutes
+}
+
+local newConfig = {
+	redDailyLimit = 3,
+	redWeeklyLimit = 5,
+	redMonthlyLimit = 10,
+	redSkullLength = 30 * 24 * 60 * 60, -- 30 days
+	blackDailyLimit = 6,
+	blackWeeklyLimit = 10,
+	blackMonthlyLimit = 20,
+	blackSkullLength = 45 * 24 * 60 * 60, -- 45 days
+	daysUnjustified = 30
+}
+
+local oldConfig = {
+	fragTime = 24 * 60 * 60, -- 24h
+	whiteSkullTime = 15 * 60, -- 15 min
 	killsToRed = 3,
-	killsToBlack = 6,
+	killsToBlack = 6
 }
 
 -- register event in player
@@ -20,33 +37,102 @@ event:register()
 event = CreatureEvent("SkullCheck")
 
 local inFight = Condition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
-inFight:setParameter(CONDITION_PARAM_TICKS, config.whiteSkullTime * 1000)
+inFight:setParameter(CONDITION_PARAM_TICKS, config.whiteSkullTime)
 
-local function updateAttackerSkull(attacker, skullTime)
-	local attackerSkull = attacker:getSkull()
-	if attackerSkull == SKULL_BLACK then
-		return
-	end
+-- New PVP system
+local function getUnjustifiedDates(player, offsetTime, days)
+    local kills = {}
 
-	if config.killsToBlack > 0 then
-		local time = (config.killsToBlack - 1) * config.fragTime
-		if skullTime > time then
-			attacker:setSkull(SKULL_BLACK)
-		end
-	elseif config.killsToRed > 0 then
-		if attackerSkull == SKULL_RED then
-			return
-		end
+    local resultId = db.storeQuery("SELECT `time` FROM `player_deaths` WHERE `killed_by` = " .. db.escapeString(player:getName()) .. " AND `unjustified` = 1 AND `time` >= " .. offsetTime - (days * 86400) .. "")
+    if resultId then
+        repeat
+            table.insert(kills, result.getNumber(resultId, "time"))
+        until not result.next(resultId)
+        result.free(resultId)
+    end
 
-		local time = (config.killsToRed - 1) * config.fragTime
-		if skullTime > time then
-			attacker:setSkull(SKULL_RED)
-		end
-	end
+    return kills
 end
 
+local function updateAttackerSkullNew(attacker, todayKills, weekKills, monthKills)
+    local attackerSkull = attacker:getSkull()
+    if attackerSkull == SKULL_BLACK then
+        attacker:setSkullTime(newConfig.blackSkullLength)
+    elseif attackerSkull == SKULL_RED then
+        local blackSkullLimitReached = newConfig.blackDailyLimit <= todayKills or newConfig.blackWeeklyLimit <= weekKills or newConfig.blackMonthlyLimit <= monthKills
+        if blackSkullLimitReached then
+            attacker:setSkull(SKULL_BLACK)
+            attacker:setSkullTime(newConfig.blackSkullLength)
+        else
+            attacker:setSkullTime(newConfig.redSkullLength)
+        end
+    else
+        local redSkullLimitReached = newConfig.redDailyLimit <= todayKills or newConfig.redWeeklyLimit <= weekKills or newConfig.redMonthlyLimit <= monthKills
+        if redSkullLimitReached then
+            attacker:setSkull(SKULL_RED)
+            attacker:setSkullTime(newConfig.redSkullLength)
+        end
+    end
+end
+
+local function updateAttackerNew(attacker)
+    local now = os.time()
+    local today = now - 86400
+    local week = now - (7 * 86400)
+
+    local kills = getUnjustifiedDates(attacker, now, newConfig.daysUnjustified)
+    table.insert(kills, now)
+
+    local todayKills = 0
+    local weekKills = 0
+    local monthKills = #kills
+
+    for _, time in pairs(kills) do
+        if time > today then
+            todayKills = todayKills + 1
+        end
+
+        if time > week then
+            weekKills = weekKills + 1
+        end
+    end
+
+    updateAttackerSkullNew(attacker, todayKills, weekKills, monthKills)
+end
+
+-- Old PVP system
+local function updateAttackerSkullOld(attacker, skullTime)
+    local attackerSkull = attacker:getSkull()
+    if attackerSkull == SKULL_BLACK then
+        return
+    end
+
+    if oldConfig.killsToBlack > 0 then
+        local time = (oldConfig.killsToBlack - 1) * oldConfig.fragTime
+        if skullTime > time then
+            attacker:setSkull(SKULL_BLACK)
+        end
+    elseif oldConfig.killsToRed > 0 then
+        if attackerSkull == SKULL_RED then
+            return
+        end
+
+        local time = (oldConfig.killsToRed - 1) * oldConfig.fragTime
+        if skullTime > time then
+            attacker:setSkull(SKULL_RED)
+        end
+    end
+end
+
+local function updateAttackerOld(attacker)
+    local skullTime = attacker:getSkullTime() + oldConfig.fragTime
+    attacker:setSkullTime(skullTime)
+    updateAttackerSkullOld(attacker, skullTime)
+end
+
+-- PVP system
 local function unjustifiedDead(attacker, target)
-	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+	if Game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
 		return
 	end
 
@@ -58,11 +144,13 @@ local function unjustifiedDead(attacker, target)
 		return
 	end
 
-	local skullTime = player:getSkullTime() + config.fragTime
-	player:setSkullTime(skullTime)
-	updateAttackerSkull(attacker, skullTime)
+	if config.mode == "new" then
+		updateAttackerNew(attacker)
+	elseif config.mode == "old" then
+		updateAttackerOld(attacker)
+	end
 
-	attacker:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " .. target:getName() .. " was not justified.");
+	attacker:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " .. target:getName() .. " was not justified.")
 end
 
 function event.onKill(player, target, lastHit)
@@ -129,7 +217,7 @@ local function updatePlayerSkull(player, skullTime)
 end
 
 function event.onThink(player, interval)
-	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+	if Game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
 		return true
 	end
 

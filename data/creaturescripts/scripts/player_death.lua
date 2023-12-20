@@ -19,7 +19,7 @@ local function getKiller(killer)
 	return false, killer:getName()
 end
 
-local function takeScreenShot(killedByPlayer, mostDamageKiller)
+local function takeScreenShot(player, killer, killedByPlayer, mostDamageKiller)
 	player:takeScreenshot(killedByPlayer and SCREENSHOT_TYPE_DEATHPVP or SCREENSHOT_TYPE_DEATHPVE)
 
 	if killedByPlayer then
@@ -105,7 +105,7 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 	local killedByPlayer, killerName = getKiller(killer)
 	local killedByPlayerMostDamage, killerNameMostDamage = getKiller(mostDamageKiller)
 
-	takeScreenShot(killedByPlayer, mostDamageKiller)
+	takeScreenShot(player, killer, killedByPlayer, mostDamageKiller)
 
 	updateStamina(player)
 	updateDeathList(player, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified, killedByPlayer, killerName, byPlayerMostDamage, killerNameMostDamage)
