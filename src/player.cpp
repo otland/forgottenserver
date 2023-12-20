@@ -3713,15 +3713,28 @@ bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 {
 	Creature::onKilledCreature(target, lastHit);
 
-	if (Player* targetPlayer = target->getPlayer()) {
-		if (!hasFlag(PlayerFlag_NotGainInFight) && !isPartner(targetPlayer)) {
-			if (!Combat::isInPvpZone(this, targetPlayer) && hasAttacked(targetPlayer) &&
-			    !targetPlayer->hasAttacked(this) && !isGuildMate(targetPlayer) && targetPlayer != this) {
-				if (targetPlayer->getSkull() == SKULL_NONE && !isInWar(targetPlayer)) {
-					return true;
-				}
-			}
+	if (const Player* targetPlayer = target->getPlayer()) {
+		if (targetPlayer == this) {
+			return false;
 		}
+
+		if (hasFlag(PlayerFlag_NotGainInFight)) {
+			return false;
+		}
+
+		if (targetPlayer->getSkull() != SKULL_NONE) {
+			return false;
+		}
+
+		if (isPartner(targetPlayer) || isGuildMate(targetPlayer)) {
+			return false;
+		}
+
+		if (!hasAttacked(targetPlayer) || targetPlayer->hasAttacked(this) || isInWar(targetPlayer)) {
+			return false;
+		}
+
+		return !Combat::isInPvpZone(this, targetPlayer);
 	}
 
 	return false;
