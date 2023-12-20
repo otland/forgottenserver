@@ -1,3 +1,6 @@
+local MAX_IDLE_TIME = 15 * 60000 -- 15 minutes
+local KICK_AFTER_WARN = 1 * 60000 -- 1 minute
+
 -- register idle time event
 local event = CreatureEvent("RegisterIdleTime")
 
@@ -22,10 +25,9 @@ function event.onThink(player, interval)
     local time = player:getIdleTime() + interval
     player:setIdleTime(time)
     
-    local kickAfterMinutes = configManager.getNumber(configKeys.KICK_AFTER_MINUTES)
-    if time > (kickAfterMinutes * 60000) + 60000 then
+    if time > MAX_IDLE_TIME + KICK_AFTER_WARN then
         player:remove()
-    elseif player:hasClient() and time == (60000 * kickAfterMinutes) then
+    elseif player:hasClient() and time == MAX_IDLE_TIME then
         player:sendTextMessage(MESSAGE_STATUS_WARNING, "There was no variation in your behaviour for " .. kickAfterMinutes .. " minutes. You will be disconnected in one minute if there is no change in your actions until then.")
     end
 	return true
