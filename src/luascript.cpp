@@ -2689,6 +2689,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
 	registerMethod("Player", "getParty", LuaScriptInterface::luaPlayerGetParty);
+
 	registerMethod("Player", "isInviting", LuaScriptInterface::luaPlayerIsInviting);
 	registerMethod("Player", "isPartner", LuaScriptInterface::luaPlayerIsPartner);
 	registerMethod("Player", "isGuildMate", LuaScriptInterface::luaPlayerIsGuildMate);

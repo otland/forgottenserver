@@ -3709,31 +3709,29 @@ bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 {
 	Creature::onKilledCreature(target, lastHit);
 
+	// check unjustified kill
 	if (const Player* targetPlayer = target->getPlayer()) {
-		if (targetPlayer == this) {
-			return false;
-		}
-
-		if (hasFlag(PlayerFlag_NotGainInFight)) {
-			return false;
-		}
-
-		if (targetPlayer->getSkull() != SKULL_NONE) {
-			return false;
-		}
-
-		if (isPartner(targetPlayer) || isGuildMate(targetPlayer)) {
-			return false;
-		}
-
-		if (!hasAttacked(targetPlayer) || targetPlayer->hasAttacked(this) || isAtWarAgainst(targetPlayer)) {
-			return false;
-		}
-
-		return !Combat::isInPvpZone(this, targetPlayer);
+		return isUnjustifiedKill(targetPlayer);
 	}
-
 	return false;
+}
+
+bool Player::isUnjustifiedKill(const Player* anotherPlayer) const
+{
+	if (anotherPlayer == this) {
+		return false;
+	} else if (hasFlag(PlayerFlag_NotGainInFight)) {
+		return false;
+	} else if (anotherPlayer->getSkull() != SKULL_NONE) {
+		return false;
+	} else if (isPartner(anotherPlayer) || isGuildMate(anotherPlayer)) {
+		return false;
+	} else if (!hasAttacked(anotherPlayer) || anotherPlayer->hasAttacked(this) || isAtWarAgainst(anotherPlayer)) {
+		return false;
+	} else if (Combat::isInPvpZone(this, anotherPlayer)) {
+		return false;
+	}
+	return true;
 }
 
 void Player::gainExperience(uint64_t gainExp, Creature* source)

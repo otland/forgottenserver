@@ -510,6 +510,7 @@ public:
 	void onAttackedCreatureChangeZone(ZoneType_t zone) override;
 	void onIdleStatus() override;
 	void onPlacedCreature() override;
+	bool isUnjustifiedKill(const Player* target) const;
 
 	LightInfo getCreatureLight() const override;
 
