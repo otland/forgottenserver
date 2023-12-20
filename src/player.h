@@ -183,8 +183,8 @@ public:
 	const std::string& getGuildNick() const { return guildNick; }
 	void setGuildNick(std::string nick) { guildNick = nick; }
 
-	bool isInWar(const Player* player) const;
-	bool isInWarList(uint32_t guildId) const;
+	bool isAtWarAgainst(const Player* player) const;
+	bool isAtWarAgainst(uint32_t guildId) const;
 
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }

@@ -3628,7 +3628,7 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 				sendIcons();
 			}
 
-			if (!Combat::isInPvpZone(this, targetPlayer) && !isInWar(targetPlayer)) {
+			if (!Combat::isInPvpZone(this, targetPlayer) && !isAtWarAgainst(targetPlayer)) {
 				addAttacked(targetPlayer);
 
 				if (targetPlayer->getSkull() == SKULL_NONE && getSkull() == SKULL_NONE) {
@@ -3726,7 +3726,7 @@ bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 			return false;
 		}
 
-		if (!hasAttacked(targetPlayer) || targetPlayer->hasAttacked(this) || isInWar(targetPlayer)) {
+		if (!hasAttacked(targetPlayer) || targetPlayer->hasAttacked(this) || isAtWarAgainst(targetPlayer)) {
 			return false;
 		}
 
@@ -4074,7 +4074,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	return false;
 }
 
-bool Player::isInWar(const Player* player) const
+bool Player::isAtWarAgainst(const Player* player) const
 {
 	if (!player || !guild) {
 		return false;
@@ -4085,10 +4085,10 @@ bool Player::isInWar(const Player* player) const
 		return false;
 	}
 
-	return isInWarList(playerGuild->getId()) && player->isInWarList(guild->getId());
+	return isAtWarAgainst(playerGuild->getId()) && player->isAtWarAgainst(guild->getId());
 }
 
-bool Player::isInWarList(uint32_t guildId) const
+bool Player::isAtWarAgainst(uint32_t guildId) const
 {
 	return std::find(guildWarVector.begin(), guildWarVector.end(), guildId) != guildWarVector.end();
 }
@@ -4233,7 +4233,7 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 		return GUILDEMBLEM_OTHER;
 	} else if (guild == playerGuild) {
 		return GUILDEMBLEM_ALLY;
-	} else if (isInWar(player)) {
+	} else if (isAtWarAgainst(player)) {
 		return GUILDEMBLEM_ENEMY;
 	}
 

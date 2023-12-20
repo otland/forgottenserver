@@ -97,7 +97,7 @@ function event.onKill(player, target, lastHit)
 		return true
 	end
 
-	if not player:isInWar(targetPlayer) then
+	if not player:IsAtWarAgainst(targetPlayer) then
 		unjustifiedDead(player, targetPlayer)
 	end
 

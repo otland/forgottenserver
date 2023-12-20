@@ -935,7 +935,7 @@ private:
 	static int luaPlayerGetGuildNick(lua_State* L);
 	static int luaPlayerSetGuildNick(lua_State* L);
 
-	static int luaPlayerIsInWar(lua_State* L);
+	static int luaPlayerIsAtWarAgainst(lua_State* L);
 
 	static int luaPlayerGetGroup(lua_State* L);
 	static int luaPlayerSetGroup(lua_State* L);

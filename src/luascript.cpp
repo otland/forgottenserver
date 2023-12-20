@@ -2654,7 +2654,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getGuildNick", LuaScriptInterface::luaPlayerGetGuildNick);
 	registerMethod("Player", "setGuildNick", LuaScriptInterface::luaPlayerSetGuildNick);
 
-	registerMethod("Player", "isInWar", LuaScriptInterface::luaPlayerIsInWar);
+	registerMethod("Player", "IsAtWarAgainst", LuaScriptInterface::luaPlayerIsAtWarAgainst);
 
 	registerMethod("Player", "getGroup", LuaScriptInterface::luaPlayerGetGroup);
 	registerMethod("Player", "setGroup", LuaScriptInterface::luaPlayerSetGroup);
@@ -9664,13 +9664,19 @@ int LuaScriptInterface::luaPlayerSetGuildNick(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaPlayerIsInWar(lua_State* L)
+int LuaScriptInterface::luaPlayerIsAtWarAgainst(lua_State* L)
 {
-	// player:isInWar(anotherPlayer)
+	// player:isAtWarAgainst(guildId or anotherPlayer)
 	const Player* player = getUserdata<const Player>(L, 1);
-	const Player* anotherPlayer = getUserdata<const Player>(L, 2);
-	if (player && anotherPlayer) {
-		pushBoolean(L, player->isInWar(anotherPlayer));
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (isNumber(L, 2)) {
+		pushBoolean(L, player->isAtWarAgainst(getNumber<uint32_t>(L, 2)));
+	} else if (const Player* anotherPlayer = getUserdata<const Player>(L, 2)) {
+		pushBoolean(L, player->isAtWarAgainst(anotherPlayer));
 	} else {
 		lua_pushnil(L);
 	}
