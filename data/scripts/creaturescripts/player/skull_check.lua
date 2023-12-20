@@ -1,8 +1,8 @@
 local config = {
 	fragTime = 24 * 60 * 60, -- in seconds
 	whiteSkullTime = 15 * 60, -- in seconds
-    killsToRed = 3,
-    killsToBlack = 6,
+	killsToRed = 3,
+	killsToBlack = 6,
 }
 
 -- register event in player
@@ -46,9 +46,9 @@ local function updateAttackerSkull(attacker, skullTime)
 end
 
 local function unjustifiedDead(attacker, target)
-    if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
-        return
-    end
+	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+		return
+	end
 
 	if target:getSkull() ~= SKULL_NONE then
 		return
@@ -114,28 +114,28 @@ event:register()
 event = CreatureEvent("SkullTick")
 
 local function updatePlayerSkull(player, skullTime)
-    if skullTime > 0 then
-        return
-    end
+	if skullTime > 0 then
+		return
+	end
 
-    if player:hasCondition(CONDITION_INFIGHT) then
-        return
-    end
+	if player:hasCondition(CONDITION_INFIGHT) then
+		return
+	end
 
-    local playerSkull = player:getSkull()
-    if playerSkull == SKULL_BLACK or playerSkull == SKULL_RED then
-        player:setSkull(SKULL_NONE)
-    end
+	local playerSkull = player:getSkull()
+	if playerSkull == SKULL_BLACK or playerSkull == SKULL_RED then
+		player:setSkull(SKULL_NONE)
+	end
 end
 
 function event.onThink(player, interval)
 	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
-        return true
-    end
+		return true
+	end
 
-    local skullTime = player:getSkullTime() - (interval / 1000)
-    player:setSkullTime(skullTime > 0 and skullTime or 0)
-    updatePlayerSkull(player, skullTime)
+	local skullTime = player:getSkullTime() - (interval / 1000)
+	player:setSkullTime(skullTime > 0 and skullTime or 0)
+	updatePlayerSkull(player, skullTime)
 	return true
 end
 
