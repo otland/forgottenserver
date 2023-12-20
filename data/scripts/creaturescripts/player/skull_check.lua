@@ -17,7 +17,6 @@ local newConfig = {
 
 local oldConfig = {
 	fragTime = 24 * 60 * 60, -- 24h
-	whiteSkullTime = 15 * 60, -- 15 min
 	killsToRed = 3,
 	killsToBlack = 6
 }
