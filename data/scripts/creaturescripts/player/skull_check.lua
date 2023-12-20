@@ -6,10 +6,11 @@ local config = {
 }
 
 -- register event in player
-local event = CreatureEvent("RegisterSkullCheck")
+local event = CreatureEvent("RegisterSkulls")
 
 function event.onLogin(player)
 	player:registerEvent("SkullCheck")
+	player:registerEvent("SkullTick")
 	return true
 end
 
@@ -104,6 +105,37 @@ function event.onKill(player, target, lastHit)
 		player:setPzLocked(true)
 		player:addCondition(inFight)
 	end
+	return true
+end
+
+event:register()
+
+-- event to check skull ticks
+event = CreatureEvent("SkullTick")
+
+local function updatePlayerSkull(player, skullTime)
+    if skullTime > 0 then
+        return
+    end
+
+    if player:hasCondition(CONDITION_INFIGHT) then
+        return
+    end
+
+    local playerSkull = player:getSkull()
+    if playerSkull == SKULL_BLACK or playerSkull == SKULL_RED then
+        player:setSkull(SKULL_NONE)
+    end
+end
+
+function event.onThink(player, interval)
+	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+        return true
+    end
+
+    local skullTime = player:getSkullTime() - (interval / 1000)
+    player:setSkullTime(skullTime > 0 and skullTime or 0)
+    updatePlayerSkull(player, skullTime)
 	return true
 end
 
