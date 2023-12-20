@@ -1,9 +1,9 @@
-local FRAG_TIME = 24 * 60 * 60
-local WHITE_SKULL_TIME = 15 * 60
-
-local KILLS_TO_RED = 3
-local KILLS_TO_BLACK = 6
-
+local config = {
+	fragTime = 24 * 60 * 60, -- in seconds
+	whiteSkullTime = 15 * 60, -- in seconds
+    killsToRed = 3,
+    killsToBlack = 6,
+}
 
 -- register event in player
 local event = CreatureEvent("RegisterSkullCheck")
@@ -19,7 +19,7 @@ event:register()
 event = CreatureEvent("SkullCheck")
 
 local inFight = Condition(CONDITION_INFIGHT, CONDITIONID_DEFAULT)
-inFight:setParameter(CONDITION_PARAM_TICKS, WHITE_SKULL_TIME * 1000)
+inFight:setParameter(CONDITION_PARAM_TICKS, config.whiteSkullTime * 1000)
 
 local function updateAttackerSkull(attacker, skullTime)
 	local attackerSkull = attacker:getSkull()
@@ -27,17 +27,17 @@ local function updateAttackerSkull(attacker, skullTime)
 		return
 	end
 
-	if KILLS_TO_BLACK > 0 then
-		local time = (KILLS_TO_BLACK - 1) * FRAG_TIME
+	if config.killsToBlack > 0 then
+		local time = (config.killsToBlack - 1) * config.fragTime
 		if skullTime > time then
 			attacker:setSkull(SKULL_BLACK)
 		end
-	elseif KILLS_TO_RED > 0 then
+	elseif config.killsToRed > 0 then
 		if attackerSkull == SKULL_RED then
 			return
 		end
 
-		local time = (KILLS_TO_RED - 1) * FRAG_TIME
+		local time = (config.killsToRed - 1) * config.fragTime
 		if skullTime > time then
 			attacker:setSkull(SKULL_RED)
 		end
@@ -45,11 +45,11 @@ local function updateAttackerSkull(attacker, skullTime)
 end
 
 local function unjustifiedDead(attacker, target)
-	if target:getSkull() ~= SKULL_NONE then
-		return
-	end
+    if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+        return
+    end
 
-	if g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED then
+	if target:getSkull() ~= SKULL_NONE then
 		return
 	end
 
@@ -57,7 +57,7 @@ local function unjustifiedDead(attacker, target)
 		return
 	end
 
-	local skullTime = player:getSkullTime() + FRAG_TIME
+	local skullTime = player:getSkullTime() + config.fragTime
 	player:setSkullTime(skullTime)
 	updateAttackerSkull(attacker, skullTime)
 
