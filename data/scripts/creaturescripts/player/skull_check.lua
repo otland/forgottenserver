@@ -40,93 +40,93 @@ inFight:setParameter(CONDITION_PARAM_TICKS, config.whiteSkullTime)
 
 -- New PVP system
 local function getUnjustifiedDates(player, offsetTime, days)
-    local kills = {}
+	local kills = {}
 
-    local resultId = db.storeQuery("SELECT `time` FROM `player_deaths` WHERE `killed_by` = " .. db.escapeString(player:getName()) .. " AND `unjustified` = 1 AND `time` >= " .. offsetTime - (days * 86400) .. "")
-    if resultId then
-        repeat
-            table.insert(kills, result.getNumber(resultId, "time"))
-        until not result.next(resultId)
-        result.free(resultId)
-    end
+	local resultId = db.storeQuery("SELECT `time` FROM `player_deaths` WHERE `killed_by` = " .. db.escapeString(player:getName()) .. " AND `unjustified` = 1 AND `time` >= " .. offsetTime - (days * 86400) .. "")
+	if resultId then
+		repeat
+			table.insert(kills, result.getNumber(resultId, "time"))
+		until not result.next(resultId)
+		result.free(resultId)
+	end
 
-    return kills
+	return kills
 end
 
 local function updateAttackerSkullNew(attacker, todayKills, weekKills, monthKills)
-    local attackerSkull = attacker:getSkull()
-    if attackerSkull == SKULL_BLACK then
-        attacker:setSkullTime(newConfig.blackSkullLength)
-    elseif attackerSkull == SKULL_RED then
-        local blackSkullLimitReached = newConfig.blackDailyLimit <= todayKills or newConfig.blackWeeklyLimit <= weekKills or newConfig.blackMonthlyLimit <= monthKills
-        if blackSkullLimitReached then
-            attacker:setSkull(SKULL_BLACK)
-            attacker:setSkullTime(newConfig.blackSkullLength)
-        else
-            attacker:setSkullTime(newConfig.redSkullLength)
-        end
-    else
-        local redSkullLimitReached = newConfig.redDailyLimit <= todayKills or newConfig.redWeeklyLimit <= weekKills or newConfig.redMonthlyLimit <= monthKills
-        if redSkullLimitReached then
-            attacker:setSkull(SKULL_RED)
-            attacker:setSkullTime(newConfig.redSkullLength)
-        end
-    end
+	local attackerSkull = attacker:getSkull()
+	if attackerSkull == SKULL_BLACK then
+		attacker:setSkullTime(newConfig.blackSkullLength)
+	elseif attackerSkull == SKULL_RED then
+		local blackSkullLimitReached = newConfig.blackDailyLimit <= todayKills or newConfig.blackWeeklyLimit <= weekKills or newConfig.blackMonthlyLimit <= monthKills
+		if blackSkullLimitReached then
+			attacker:setSkull(SKULL_BLACK)
+			attacker:setSkullTime(newConfig.blackSkullLength)
+		else
+			attacker:setSkullTime(newConfig.redSkullLength)
+		end
+	else
+		local redSkullLimitReached = newConfig.redDailyLimit <= todayKills or newConfig.redWeeklyLimit <= weekKills or newConfig.redMonthlyLimit <= monthKills
+		if redSkullLimitReached then
+			attacker:setSkull(SKULL_RED)
+			attacker:setSkullTime(newConfig.redSkullLength)
+		end
+	end
 end
 
 local function updateAttackerNew(attacker)
-    local now = os.time()
-    local today = now - 86400
-    local week = now - (7 * 86400)
+	local now = os.time()
+	local today = now - 86400
+	local week = now - (7 * 86400)
 
-    local kills = getUnjustifiedDates(attacker, now, newConfig.daysUnjustified)
-    table.insert(kills, now)
+	local kills = getUnjustifiedDates(attacker, now, newConfig.daysUnjustified)
+	table.insert(kills, now)
 
-    local todayKills = 0
-    local weekKills = 0
-    local monthKills = #kills
+	local todayKills = 0
+	local weekKills = 0
+	local monthKills = #kills
 
-    for _, time in pairs(kills) do
-        if time > today then
-            todayKills = todayKills + 1
-        end
+	for _, time in pairs(kills) do
+		if time > today then
+			todayKills = todayKills + 1
+		end
 
-        if time > week then
-            weekKills = weekKills + 1
-        end
-    end
+		if time > week then
+			weekKills = weekKills + 1
+		end
+	end
 
-    updateAttackerSkullNew(attacker, todayKills, weekKills, monthKills)
+	updateAttackerSkullNew(attacker, todayKills, weekKills, monthKills)
 end
 
 -- Old PVP system
 local function updateAttackerSkullOld(attacker, skullTime)
-    local attackerSkull = attacker:getSkull()
-    if attackerSkull == SKULL_BLACK then
-        return
-    end
+	local attackerSkull = attacker:getSkull()
+	if attackerSkull == SKULL_BLACK then
+		return
+	end
 
-    if oldConfig.killsToBlack > 0 then
-        local time = (oldConfig.killsToBlack - 1) * oldConfig.fragTime
-        if skullTime > time then
-            attacker:setSkull(SKULL_BLACK)
-        end
-    elseif oldConfig.killsToRed > 0 then
-        if attackerSkull == SKULL_RED then
-            return
-        end
+	if oldConfig.killsToBlack > 0 then
+		local time = (oldConfig.killsToBlack - 1) * oldConfig.fragTime
+		if skullTime > time then
+			attacker:setSkull(SKULL_BLACK)
+		end
+	elseif oldConfig.killsToRed > 0 then
+		if attackerSkull == SKULL_RED then
+			return
+		end
 
-        local time = (oldConfig.killsToRed - 1) * oldConfig.fragTime
-        if skullTime > time then
-            attacker:setSkull(SKULL_RED)
-        end
-    end
+		local time = (oldConfig.killsToRed - 1) * oldConfig.fragTime
+		if skullTime > time then
+			attacker:setSkull(SKULL_RED)
+		end
+	end
 end
 
 local function updateAttackerOld(attacker)
-    local skullTime = attacker:getSkullTime() + oldConfig.fragTime
-    attacker:setSkullTime(skullTime)
-    updateAttackerSkullOld(attacker, skullTime)
+	local skullTime = attacker:getSkullTime() + oldConfig.fragTime
+	attacker:setSkullTime(skullTime)
+	updateAttackerSkullOld(attacker, skullTime)
 end
 
 -- PVP system
