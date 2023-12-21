@@ -1,6 +1,6 @@
 local config = {
-    maxIdleTime = 15 * 60 * 1000, -- 15 minutes
-    kickAfterWarn = 1 * 60 * 1000 -- 1 minute
+	maxIdleTime = 15 * 60 * 1000, -- 15 minutes
+	kickAfterWarn = 1 * 60 * 1000 -- 1 minute
 }
 
 -- register player event
@@ -27,10 +27,10 @@ function event.onThink(player, interval)
 	local idleTime = player:getIdleTime() + interval
 	player:setIdleTime(idleTime)
 
-    if idleTime == config.maxIdleTime then
-        player:sendTextMessage(MESSAGE_STATUS_WARNING, "There was no variation in your behaviour for " .. (config.maxIdleTime / (60 * 1000)) .. " minutes. You will be disconnected in one minute if there is no change in your actions until then.")
-    elseif idleTime > (config.maxIdleTime + config.kickAfterWarn) then
-        player:remove()
+	if idleTime == config.maxIdleTime then
+		player:sendTextMessage(MESSAGE_STATUS_WARNING, "There was no variation in your behaviour for " .. (config.maxIdleTime / (60 * 1000)) .. " minutes. You will be disconnected in one minute if there is no change in your actions until then.")
+	elseif idleTime > (config.maxIdleTime + config.kickAfterWarn) then
+		player:remove()
 	end
 	return true
 end
