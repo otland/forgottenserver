@@ -10,6 +10,7 @@
 #include "game.h"
 #include "iologindata.h"
 #include "outputmessage.h"
+#include "rsa.h"
 #include "tasks.h"
 
 extern ConfigManager g_config;
@@ -190,8 +191,8 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	// read authenticator token and stay logged in flag from last 128 bytes
-	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
+	// read authenticator token and stay logged in flag from last bytes
+	msg.skipBytes(msg.getRemainingBufferLength() - RSA::BUFFER_LENGTH);
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnectClient("Invalid authentication token.", version);
 		return;
