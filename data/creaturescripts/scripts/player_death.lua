@@ -27,10 +27,6 @@ function onDeath(player, corpse, killer, mostDamageKiller, lastHitUnjustified, m
 	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, "You are dead.")
 	player:updateClientBlessDisplay()
 
-	if not deathListEnabled then
-		return
-	end
-
 	local byPlayer, killerName = getKiller(killer)
 	local byPlayerMostDamage, killerNameMostDamage = getKiller(mostDamageKiller)
 
