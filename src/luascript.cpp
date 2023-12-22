@@ -2788,10 +2788,6 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Game", "reload", LuaScriptInterface::luaGameReload);
 
-	registerMethod("Game", "getAccountStorageValue", LuaScriptInterface::luaGameGetAccountStorageValue);
-	registerMethod("Game", "setAccountStorageValue", LuaScriptInterface::luaGameSetAccountStorageValue);
-	registerMethod("Game", "saveAccountStorageValues", LuaScriptInterface::luaGameSaveAccountStorageValues);
-
 	// Variant
 	registerClass("Variant", "", LuaScriptInterface::luaVariantCreate);
 
@@ -4687,12 +4683,14 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 
 int LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
+	// db.query(query)
 	pushBoolean(L, Database::getInstance().executeQuery(getString(L, -1)));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 {
+	// db.asyncQuery(query, callback)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
@@ -4723,6 +4721,7 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
+	// db.storeQuery(query)
 	if (DBResult_ptr res = Database::getInstance().storeQuery(getString(L, -1))) {
 		lua_pushnumber(L, ScriptEnvironment::addResult(res));
 	} else {
@@ -4733,6 +4732,7 @@ int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 {
+	// db.asyncStoreQuery(query, callback)
 	std::function<void(DBResult_ptr, bool)> callback;
 	if (lua_gettop(L) > 1) {
 		int32_t ref = luaL_ref(L, LUA_REGISTRYINDEX);
@@ -4767,12 +4767,14 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 {
+	// db.escapeString(s)
 	pushString(L, Database::getInstance().escapeString(getString(L, -1)));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
+	// db.escapeBlob(s, length)
 	uint32_t length = getNumber<uint32_t>(L, 2);
 	pushString(L, Database::getInstance().escapeBlob(getString(L, 1).c_str(), length));
 	return 1;
@@ -4780,12 +4782,14 @@ int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 
 int LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
+	// db.lastInsertId()
 	lua_pushnumber(L, Database::getInstance().getLastInsertId());
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseTableExists(lua_State* L)
 {
+	// db.tableExists(tableName)
 	pushBoolean(L, DatabaseManager::tableExists(getString(L, -1)));
 	return 1;
 }
@@ -5607,38 +5611,6 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 
 	pushBoolean(L, g_game.reload(reloadType));
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
-	return 1;
-}
-
-int LuaScriptInterface::luaGameGetAccountStorageValue(lua_State* L)
-{
-	// Game.getAccountStorageValue(accountId, key)
-	uint32_t accountId = getNumber<uint32_t>(L, 1);
-	uint32_t key = getNumber<uint32_t>(L, 2);
-
-	lua_pushnumber(L, g_game.getAccountStorageValue(accountId, key));
-
-	return 1;
-}
-
-int LuaScriptInterface::luaGameSetAccountStorageValue(lua_State* L)
-{
-	// Game.setAccountStorageValue(accountId, key, value)
-	uint32_t accountId = getNumber<uint32_t>(L, 1);
-	uint32_t key = getNumber<uint32_t>(L, 2);
-	int32_t value = getNumber<int32_t>(L, 3);
-
-	g_game.setAccountStorageValue(accountId, key, value);
-	lua_pushboolean(L, true);
-
-	return 1;
-}
-
-int LuaScriptInterface::luaGameSaveAccountStorageValues(lua_State* L)
-{
-	// Game.saveAccountStorageValues()
-	lua_pushboolean(L, g_game.saveAccountStorageValues());
-
 	return 1;
 }
 
