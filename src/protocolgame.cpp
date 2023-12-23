@@ -3582,7 +3582,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 
 	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
 		msg.add<uint16_t>(std::min<int32_t>(10000, player->varSpecialSkills[i])); // base + bonus special skill
-		msg.add<uint16_t>(0);                                                   // base special skill
+		msg.add<uint16_t>(0);                                                     // base special skill
 	}
 
 	msg.addByte(0); // element magic level
