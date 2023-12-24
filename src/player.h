@@ -692,6 +692,12 @@ public:
 			client->sendCreatureShield(creature);
 		}
 	}
+	void sendResourceBalance(ResourceTypes_t resourceType, uint64_t amount)
+	{
+		if (client) {
+			client->sendResourceBalance(resourceType, amount);
+		}
+	}
 	void sendSpellCooldown(uint8_t spellId, uint32_t time)
 	{
 		if (client) {

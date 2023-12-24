@@ -523,6 +523,11 @@ function Player.addBestiaryKills(self, raceId)
 			break
 		end
 	end
+
+	if kills < bestiaryInfo.mastery and newKills >= bestiaryInfo.mastery then
+		self:addCharmPoints(bestiaryInfo.charmPoints)
+	end
+
 	return self:setBestiaryKills(raceId, newKills)
 end
 
@@ -736,4 +741,38 @@ function Player.disableLoginMusic(self)
 	msg:sendToPlayer(self)
 	msg:delete()
 	return true
+end
+
+function Player.isCharmUnlocked(self, charmId)
+	if self:getStorageValue(PlayerStorageKeys.charmsUnlocked + charmId) == 1 then
+		return 1
+	end
+	return 0
+end
+
+function Player.addCharmPoints(self, value)
+	return self:setStorageValue(PlayerStorageKeys.charmPoints, self:getCharmPoints() + value)
+end
+
+function Player.removeCharmPoints(self, value)
+	local points = self:getCharmPoints()
+	if points < value then
+		return false
+	end
+	return self:setStorageValue(PlayerStorageKeys.charmPoints, points - value)
+end
+
+function Player.unlockCharm(self, charmId)
+	self:setStorageValue(PlayerStorageKeys.charmsUnlocked + charmId, 1)
+end
+
+function Player.setCharmMonster(self, charmId, raceId)
+	return self:setStorageValue(PlayerStorageKeys.charmsMonster + charmId, raceId)
+end
+
+function Player.getCharmPoints(self)
+	return math.max(0, self:getStorageValue(PlayerStorageKeys.charmPoints))
+end
+function Player.getCharmMonster(self, charmId)
+	return math.max(0, self:getStorageValue(PlayerStorageKeys.charmsMonster + charmId))
 end
