@@ -117,7 +117,7 @@ CHARMS_DATA = {
     },
 }
 
-local function getCharmMonsterRemoveCost(player)
+local function getCharmRemoveCost(player)
     if player:isPremium() then
         return config.charmCostPerLevel * player:getLevel() * config.premiumDiscount
     end
@@ -169,20 +169,21 @@ function sendCharmData(player)
     msg:addByte(config.charmDataSize) -- charm count
     -- charm block
     for i = 0, CHARMS_TYPE.LAST, 1 do
-        if CHARMS_DATA[i] then
-            msg:addByte(CHARMS_DATA[i].id) -- charmId
-            msg:addString(CHARMS_DATA[i].name)
-            msg:addString(CHARMS_DATA[i].description)
+        local charmData = CHARMS_DATA[i]
+        if charmData then
+            msg:addByte(charmData.id) -- charmId
+            msg:addString(charmData.name)
+            msg:addString(charmData.description)
             msg:addByte(2) -- charm level (0-2)
-            msg:addU16(CHARMS_DATA[i].cost) -- cost in charm points
-            msg:addByte(player:isCharmUnlocked(CHARMS_DATA[i].id)) -- is unlocked
-            local raceIdAssigned = player:getCharmMonster(CHARMS_DATA[i].id)
+            msg:addU16(charmData.cost) -- cost in charm points
+            msg:addByte(player:isCharmUnlocked(charmData.id)) -- is unlocked
+            local raceIdAssigned = player:getCharmMonster(charmData.id)
             if raceIdAssigned == 0 then
                 msg:addByte(0) -- is monster assigned
             else
                 msg:addByte(1) -- is monster assigned
                 msg:addU16(raceIdAssigned) -- raceId
-                msg:addU32(getCharmMonsterRemoveCost(player)) -- remove cost
+                msg:addU32(getCharmRemoveCost(player)) -- remove cost
             end
         end
     end
@@ -277,13 +278,13 @@ local function removeCharmCreature(player, runeId)
         return
     end
 
-    if player:getTotalMoney() < getCharmMonsterRemoveCost(player) then
+    if player:getTotalMoney() < getCharmRemoveCost(player) then
         player:popupFYI("You don't have enough money.")
         return
     end
 
     player:popupFYI("Charm '" .. CHARMS_DATA[runeId].name .. "' has been successfully cleared.")
-    player:removeTotalMoney(getCharmMonsterRemoveCost(player))
+    player:removeTotalMoney(getCharmRemoveCost(player))
     player:setCharmMonster(runeId, 0)
 end
 
