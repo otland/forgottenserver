@@ -1,11 +1,13 @@
 local updateClientOnAdvanceSkill = CreatureEvent("Update Client On Advance Skill")
 
 function updateClientOnAdvanceSkill.onAdvance(player, skill, oldLevel, newLevel)
-	if skill == SKILL_LEVEL and newLevel > oldLevel then
+	if skill == SKILL_LEVEL then
 		return true
 	end
 
-	player:takeScreenshot(SCREENSHOT_TYPE_SKILLUP)
+	if newLevel > oldLevel then
+		player:takeScreenshot(SCREENSHOT_TYPE_SKILLUP)
+	end
 	return true
 end
 
