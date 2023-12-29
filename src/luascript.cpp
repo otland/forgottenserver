@@ -10738,6 +10738,8 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 
 	player->switchGhostMode();
 
+	g_events->eventPlayerOnChangeGhostMode(player);
+
 	Tile* tile = player->getTile();
 	const Position& position = player->getPosition();
 	const bool isInvisible = player->isInvisible();

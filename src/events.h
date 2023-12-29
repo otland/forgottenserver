@@ -68,6 +68,7 @@ class Events
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
 		int32_t playerOnNetworkMessage = -1;
+		int32_t playerOnChangeGhostMode = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -129,6 +130,7 @@ public:
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
+	void eventPlayerOnChangeGhostMode(Player* player);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);

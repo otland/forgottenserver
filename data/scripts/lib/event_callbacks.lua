@@ -60,6 +60,7 @@ ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
 ec.onUpdateStorage = {}
+ec.onChangeGhostMode = {}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}

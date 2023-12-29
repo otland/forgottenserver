@@ -304,3 +304,10 @@ function Player:onNetworkMessage(recvByte, msg)
 
 	handler(self, msg)
 end
+
+function Player:onChangeGhostMode()
+	local onChangeGhostMode = EventCallback.onChangeGhostMode
+	if onChangeGhostMode then
+		onChangeGhostMode(self)
+	end
+end
