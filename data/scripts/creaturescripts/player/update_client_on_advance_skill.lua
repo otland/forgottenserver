@@ -5,7 +5,9 @@ function updateClientOnAdvanceSkill.onAdvance(player, skill, oldLevel, newLevel)
 		return true
 	end
 
-	player:takeScreenshot(SCREENSHOT_TYPE_SKILLUP)
+	if newLevel > oldLevel then
+		player:takeScreenshot(SCREENSHOT_TYPE_SKILLUP)
+	end
 	return true
 end
 
