@@ -656,39 +656,41 @@ function Player.getBlessings(self)
 	return blessings
 end
 
-local slots = {
-	CONST_SLOT_RIGHT,
-	CONST_SLOT_LEFT,
-	CONST_SLOT_HEAD,
-	CONST_SLOT_NECKLACE,
-	CONST_SLOT_ARMOR,
-	CONST_SLOT_LEGS,
-	CONST_SLOT_FEET,
-	CONST_SLOT_RING
-}
+do
+	local slots = {
+		CONST_SLOT_RIGHT,
+		CONST_SLOT_LEFT,
+		CONST_SLOT_HEAD,
+		CONST_SLOT_NECKLACE,
+		CONST_SLOT_ARMOR,
+		CONST_SLOT_LEGS,
+		CONST_SLOT_FEET,
+		CONST_SLOT_RING
+	}
 
-function Player.getTotalArmor(self)
-	local total = 0
-	local item
-	for i = 1, #slots do
-		item = self:getSlotItem(slots[i])
-		if item then
-			total = total + item:getType():getArmor()
+	function Player.getTotalArmor(self)
+		local total = 0
+		local item
+		for i = 1, #slots do
+			item = self:getSlotItem(slots[i])
+			if item then
+				total = total + item:getType():getArmor()
+			end
 		end
+		return total
 	end
-	return total
-end
 
-function Player.getTotalDefense(self)
-	local total = 0
-	local item
-	for i = 1, #slots do
-		item = self:getSlotItem(slots[i])
-		if item then
-			total = total + item:getType():getDefense()
+	function Player.getTotalDefense(self)
+		local total = 0
+		local item
+		for i = 1, #slots do
+			item = self:getSlotItem(slots[i])
+			if item then
+				total = total + item:getType():getDefense()
+			end
 		end
+		return total
 	end
-	return total
 end
 
 function Player.setAccountStorageValue(self, key, value)
@@ -719,67 +721,70 @@ function Player.sendWorldTime(self, time)
 	return true
 end
 
-local updateInterval = 10 * 60
-local goldenOutfitCache
-local lastUpdated = 0
+do
 
-local function updateGoldenOutfitCache()
-	if os.time() < lastUpdated + updateInterval then
-		return
-	end
+	local updateInterval = 10 * 60
+	local goldenOutfitCache
+	local lastUpdated = 0
 
-	goldenOutfitCache = {[1] = {}, [2] = {}, [3] = {}}
-
-	local resultId = db.storeQuery(string.format("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = %d AND `value` >= 1;", PlayerStorageKeys.goldenOutfit))
-	if resultId then
-		repeat
-			local addons = result.getNumber(resultId, "value")
-			local name = result.getString(resultId, "name")
-			if not goldenOutfitCache[addons] then
-				goldenOutfitCache[addons] = {}
-			end
-
-			table.insert(goldenOutfitCache[addons], name)
-		until not result.next(resultId)
-		result.free(resultId)
-	end
-
-	lastUpdated = os.time()
-end
-
-function Player.showMemorialInfo(self)
-	updateGoldenOutfitCache()
-
-	local msg = NetworkMessage()
-	msg:addByte(0xB0)
-
-	-- golden outfit
-	local prices = {500000000, 750000000, 1000000000}
-	for i, price in ipairs(prices) do
-		msg:addU32(price)
-	end
-
-	for i = 1, 3 do
-		msg:addU16(#goldenOutfitCache[i])
-
-		for j = 1, #goldenOutfitCache[i] do
-			msg:addString(goldenOutfitCache[i][j])
+	local function updateGoldenOutfitCache()
+		if os.time() < lastUpdated + updateInterval then
+			return
 		end
+
+		goldenOutfitCache = {[1] = {}, [2] = {}, [3] = {}}
+
+		local resultId = db.storeQuery(string.format("SELECT `name`, `value` FROM `player_storage` INNER JOIN `players` as `p` ON `p`.`id` = `player_id` WHERE `key` = %d AND `value` >= 1;", PlayerStorageKeys.goldenOutfit))
+		if resultId then
+			repeat
+				local addons = result.getNumber(resultId, "value")
+				local name = result.getString(resultId, "name")
+				if not goldenOutfitCache[addons] then
+					goldenOutfitCache[addons] = {}
+				end
+
+				table.insert(goldenOutfitCache[addons], name)
+			until not result.next(resultId)
+			result.free(resultId)
+		end
+
+		lastUpdated = os.time()
 	end
 
-	-- royal costume
-	for i = 1, 3 do
-		msg:addU16(30000) -- price in silver tokens
-		msg:addU16(25000) -- price in golden tokens
-	end
+	function Player.showMemorialInfo(self)
+		updateGoldenOutfitCache()
 
-	for i = 1, 3 do
-		msg:addU16(0) -- list of spenders
-	end
+		local msg = NetworkMessage()
+		msg:addByte(0xB0)
 
-	msg:sendToPlayer(self)
-	msg:delete()
-	return true
+		-- golden outfit
+		local prices = {500000000, 750000000, 1000000000}
+		for i, price in ipairs(prices) do
+			msg:addU32(price)
+		end
+
+		for i = 1, 3 do
+			msg:addU16(#goldenOutfitCache[i])
+
+			for j = 1, #goldenOutfitCache[i] do
+				msg:addString(goldenOutfitCache[i][j])
+			end
+		end
+
+		-- royal costume
+		for i = 1, 3 do
+			msg:addU16(30000) -- price in silver tokens
+			msg:addU16(25000) -- price in golden tokens
+		end
+
+		for i = 1, 3 do
+			msg:addU16(0) -- list of spenders
+		end
+
+		msg:sendToPlayer(self)
+		msg:delete()
+		return true
+	end
 end
 
 function Player.sendHotkeyPreset(self)
@@ -787,6 +792,7 @@ function Player.sendHotkeyPreset(self)
 	msg:addByte(0x9D)
 	msg:addU32(self:getVocation():getClientId())
 	msg:sendToPlayer(self)
+	msg:delete()
 	return true
 end
 
