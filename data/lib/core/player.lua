@@ -722,7 +722,6 @@ function Player.sendWorldTime(self, time)
 end
 
 do
-
 	local updateInterval = 10 * 60
 	local goldenOutfitCache
 	local lastUpdated = 0
