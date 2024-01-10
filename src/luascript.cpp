@@ -18312,6 +18312,7 @@ int LuaScriptInterface::luaCreateHttpClientRequest(lua_State* L)
 	// HttpClientRequest()
 	HttpClientLib::HttpRequest_ptr httpRequest = std::make_shared<HttpClientLib::HttpRequest>();
 
+	httpRequest->callbackData.scriptInterface = getScriptEnv()->getScriptInterface();
 	pushSharedPtr(L, httpRequest);
 	setMetatable(L, -1, "HttpClientRequest");
 	return 1;
@@ -18507,7 +18508,7 @@ int LuaScriptInterface::luaHttpClientRequestPut(lua_State* L)
 void LuaScriptInterface::luaHttpClientBuildRequest(lua_State* L, HttpClientLib::HttpRequest_ptr& httpRequest)
 {
 	std::string url;
-	uint32_t callbackId;
+	int32_t callbackId = -1;
 	std::unordered_map<std::string, std::string> headerFields;
 	std::string data;
 
@@ -18521,7 +18522,7 @@ void LuaScriptInterface::luaHttpClientBuildRequest(lua_State* L, HttpClientLib::
 	httpRequest->callbackData.callbackId = callbackId;
 }
 
-bool LuaScriptInterface::luaHttpClientRetrieveParameters(lua_State* L, std::string& url, uint32_t& callbackId,
+bool LuaScriptInterface::luaHttpClientRetrieveParameters(lua_State* L, std::string& url, int32_t& callbackId,
                                                          std::unordered_map<std::string, std::string>& headerFields,
                                                          std::string& data)
 {

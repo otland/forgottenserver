@@ -8,8 +8,6 @@
 
 #include "httpclientlib.h"
 
-HttpClient::HttpClient() : scriptInterface("HttpScript Interface") { scriptInterface.initState(); }
-
 void HttpClient::threadMain()
 {
 	HttpClientLib::Request requestsHandler(
@@ -142,7 +140,8 @@ void HttpClient::processResponse(const HttpClientLib::HttpResponse_ptr& response
 	HttpClientLib::HttpRequest_ptr& httpRequest = httpRequestIt->second;
 
 	if (httpRequest->callbackData.isLuaCallback()) {
-		luaClientRequestCallback(httpRequest->callbackData.scriptId, httpRequest->callbackData.callbackId, response);
+		luaClientRequestCallback(httpRequest->callbackData.scriptInterface, httpRequest->callbackData.scriptId,
+		                         httpRequest->callbackData.callbackId, response);
 	} else if (httpRequest->callbackData.callbackFunction) {
 		httpRequest->callbackData.callbackFunction(response);
 	}
@@ -150,10 +149,10 @@ void HttpClient::processResponse(const HttpClientLib::HttpResponse_ptr& response
 	requests.erase(response->requestId);
 }
 
-void HttpClient::luaClientRequestCallback(int32_t scriptId, int32_t callbackId,
+void HttpClient::luaClientRequestCallback(LuaScriptInterface* scriptInterface, int32_t scriptId, int32_t callbackId,
                                           const HttpClientLib::HttpResponse_ptr& response)
 {
-	lua_State* luaState = scriptInterface.getLuaState();
+	lua_State* luaState = scriptInterface->getLuaState();
 
 	// push function
 	lua_rawgeti(luaState, LUA_REGISTRYINDEX, callbackId);
@@ -161,25 +160,25 @@ void HttpClient::luaClientRequestCallback(int32_t scriptId, int32_t callbackId,
 	// push parameters
 	lua_createtable(luaState, 0, 11);
 
-	scriptInterface.setField(luaState, "requestId", response->requestId);
-	scriptInterface.setField(luaState, "version", response->version);
-	scriptInterface.setField(luaState, "statusCode", response->statusCode);
-	scriptInterface.setField(luaState, "location", response->location);
-	scriptInterface.setField(luaState, "contentType", response->contentType);
-	scriptInterface.setField(luaState, "responseTimeMs", response->responseTimeMs);
-	scriptInterface.setField(luaState, "headerData", response->headerData);
-	scriptInterface.setField(luaState, "bodySize", response->bodySize);
-	scriptInterface.setField(luaState, "bodyData", response->bodyData);
-	scriptInterface.setField(luaState, "success", response->success);
-	scriptInterface.setField(luaState, "errorMessage", response->errorMessage);
+	scriptInterface->setField(luaState, "requestId", response->requestId);
+	scriptInterface->setField(luaState, "version", response->version);
+	scriptInterface->setField(luaState, "statusCode", response->statusCode);
+	scriptInterface->setField(luaState, "location", response->location);
+	scriptInterface->setField(luaState, "contentType", response->contentType);
+	scriptInterface->setField(luaState, "responseTimeMs", response->responseTimeMs);
+	scriptInterface->setField(luaState, "headerData", response->headerData);
+	scriptInterface->setField(luaState, "bodySize", response->bodySize);
+	scriptInterface->setField(luaState, "bodyData", response->bodyData);
+	scriptInterface->setField(luaState, "success", response->success);
+	scriptInterface->setField(luaState, "errorMessage", response->errorMessage);
 
-	scriptInterface.setMetatable(luaState, -1, "HttpResponse");
+	scriptInterface->setMetatable(luaState, -1, "HttpResponse");
 
 	// call the function
-	if (scriptInterface.reserveScriptEnv()) {
-		ScriptEnvironment* env = scriptInterface.getScriptEnv();
-		env->setScriptId(scriptId, &scriptInterface);
-		scriptInterface.callFunction(1); // callFunction already reset the reserved script env (resetScriptEnv)
+	if (scriptInterface->reserveScriptEnv()) {
+		ScriptEnvironment* env = scriptInterface->getScriptEnv();
+		env->setScriptId(scriptId, scriptInterface);
+		scriptInterface->callFunction(1); // callFunction already reset the reserved script env (resetScriptEnv)
 	} else {
 		std::cout << "[Error - HttpClient::luaClientRequestCallback] Call stack overflow" << std::endl;
 	}

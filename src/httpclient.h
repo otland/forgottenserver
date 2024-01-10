@@ -33,6 +33,7 @@ public:
 	std::function<void(const HttpResponse_ptr&)> callbackFunction;
 	int32_t scriptId = -1;
 	int32_t callbackId = -1;
+	LuaScriptInterface* scriptInterface;
 
 	bool isLuaCallback() { return scriptId != -1 && callbackId != -1; }
 };
@@ -57,7 +58,7 @@ using HttpRequest_ptr = std::shared_ptr<HttpRequest>;
 class HttpClient : public ThreadHolder<HttpClient>
 {
 public:
-	HttpClient();
+	HttpClient() {}
 	void threadMain();
 	void shutdown();
 
@@ -65,7 +66,7 @@ public:
 
 private:
 	void clientRequestSuccessCallback(const HttpClientLib::HttpResponse_ptr& response);
-	void luaClientRequestCallback(int32_t scriptId, int32_t callbackId,
+	void luaClientRequestCallback(LuaScriptInterface* scriptInterface, int32_t scriptId, int32_t callbackId,
 	                              const HttpClientLib::HttpResponse_ptr& response);
 
 	void clientRequestFailureCallback(const HttpClientLib::HttpResponse_ptr& response);
@@ -82,8 +83,6 @@ private:
 	std::condition_variable requestSignal;
 
 	std::map<uint32_t, HttpClientLib::HttpRequest_ptr> requests;
-
-	LuaScriptInterface scriptInterface;
 };
 
 extern HttpClient g_http;

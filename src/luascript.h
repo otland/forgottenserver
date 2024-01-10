@@ -1601,7 +1601,7 @@ private:
 	static int luaCreateHttpClientRequest(lua_State* L);
 	static int luaDeleteHttpClientRequest(lua_State* L);
 	static void luaHttpClientBuildRequest(lua_State* L, HttpClientLib::HttpRequest_ptr& httpRequest);
-	static bool luaHttpClientRetrieveParameters(lua_State* L, std::string& url, uint32_t& callbackId,
+	static bool luaHttpClientRetrieveParameters(lua_State* L, std::string& url, int32_t& callbackId,
 	                                            std::unordered_map<std::string, std::string>& headerFields,
 	                                            std::string& data);
 	static int luaHttpClientRequestSetTimeout(lua_State* L);
