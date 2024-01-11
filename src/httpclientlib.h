@@ -69,7 +69,6 @@ class HttpUrl
 public:
 	HttpUrl(const std::string& url_) : url(url_)
 	{
-		boost::algorithm::to_lower(url);
 		parseUrl(url);
 	};
 
@@ -149,6 +148,7 @@ private:
 	{
 		if (match.matched) {
 			protocol = match.str();
+			boost::algorithm::to_lower(protocol);
 		} else {
 			protocol = "http://";
 		}
