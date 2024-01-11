@@ -14,13 +14,13 @@ Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.init
 
 Scripts::~Scripts() { scriptInterface.reInitState(); }
 
-bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
+bool Scripts::loadScripts(bool reload)
 {
 	namespace fs = std::filesystem;
 
-	const auto dir = fs::current_path() / "data" / folderName;
+	const fs::path dir = "data/scripts";
 	if (!fs::exists(dir) || !fs::is_directory(dir)) {
-		std::cout << "[Warning - Scripts::loadScripts] Can not load folder '" << folderName << "'." << std::endl;
+		std::cout << "[Warning - Scripts::loadScripts] Can not load scripts folder." << std::endl;
 		return false;
 	}
 
@@ -28,10 +28,6 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 	std::vector<fs::path> v;
 	std::string disable = ("#");
 	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
-		auto fn = it->path().parent_path().filename();
-		if ((fn == "lib" && !isLib) || fn == "events") {
-			continue;
-		}
 		if (fs::is_regular_file(*it) && it->path().extension() == ".lua") {
 			size_t found = it->path().filename().string().find(disable);
 			if (found != std::string::npos) {
@@ -40,34 +36,81 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 				}
 				continue;
 			}
-			v.push_back(it->path());
-		}
-	}
-	sort(v.begin(), v.end());
-	std::string redir;
-	for (auto it = v.begin(); it != v.end(); ++it) {
-		const std::string scriptFile = it->string();
-		if (!isLib) {
-			if (redir.empty() || redir != it->parent_path().string()) {
-				auto p = fs::path(it->relative_path());
-				if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-					std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
+
+			if (scriptInterface.loadFile(it->path().string()) == -1) {
+				std::cout << "> " << it->path().string() << " [error]" << std::endl;
+				std::cout << "^ " << scriptInterface.getLastLuaError() << std::endl;
+				continue;
+			}
+
+			if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
+				if (!reload) {
+					std::cout << "> " << it->path().string() << " [loaded]" << std::endl;
+				} else {
+					std::cout << "> " << it->path().string() << " [reloaded]" << std::endl;
 				}
-				redir = it->parent_path().string();
 			}
 		}
+	}
 
-		if (scriptInterface.loadFile(scriptFile) == -1) {
-			std::cout << "> " << it->filename().string() << " [error]" << std::endl;
-			std::cout << "^ " << scriptInterface.getLastLuaError() << std::endl;
-			continue;
+	return true;
+}
+
+bool Scripts::loadMonsters()
+{
+	namespace fs = std::filesystem;
+
+	const fs::path dir = "data/monster/lua";
+	if (!fs::exists(dir) || !fs::is_directory(dir)) {
+		std::cout << "[Warning - Scripts::loadMonsters] Can not load monster/lua folder." << std::endl;
+		return false;
+	}
+
+	fs::recursive_directory_iterator endit;
+	std::vector<fs::path> v;
+	std::string disable = ("#");
+	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
+		if (fs::is_regular_file(*it) && it->path().extension() == ".lua") {
+			size_t found = it->path().filename().string().find(disable);
+			if (found != std::string::npos) {
+				continue;
+			}
+
+			if (scriptInterface.loadFile(it->path().string()) == -1) {
+				std::cout << "> " << it->path().string() << " [error]" << std::endl;
+				std::cout << "^ " << scriptInterface.getLastLuaError() << std::endl;
+				continue;
+			}
 		}
+	}
 
-		if (g_config.getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-			if (!reload) {
-				std::cout << "> " << it->filename().string() << " [loaded]" << std::endl;
-			} else {
-				std::cout << "> " << it->filename().string() << " [reloaded]" << std::endl;
+	return true;
+}
+
+bool Scripts::loadLibs()
+{
+	namespace fs = std::filesystem;
+
+	const fs::path dir = "data/lib";
+	if (!fs::exists(dir) || !fs::is_directory(dir)) {
+		std::cout << "[Warning - Scripts::loadlibs] Can not load lib folder." << std::endl;
+		return false;
+	}
+
+	fs::recursive_directory_iterator endit;
+	std::vector<fs::path> v;
+	std::string disable = ("#");
+	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
+		if (fs::is_regular_file(*it) && it->path().extension() == ".lua") {
+			size_t found = it->path().filename().string().find(disable);
+			if (found != std::string::npos) {
+				continue;
+			}
+
+			if (scriptInterface.loadFile(it->path().string()) == -1) {
+				std::cout << "> " << it->path().string() << " [error]" << std::endl;
+				std::cout << "^ " << scriptInterface.getLastLuaError() << std::endl;
+				continue;
 			}
 		}
 	}

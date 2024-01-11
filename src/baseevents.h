@@ -20,6 +20,7 @@ public:
 	bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const;
 	bool loadScript(const std::string& scriptFile);
 	bool loadCallback();
+	bool loadCallback(const std::string& name, bool fileName);
 	virtual bool loadFunction(const pugi::xml_attribute&, bool) { return false; }
 
 	bool isScripted() const { return scripted; }

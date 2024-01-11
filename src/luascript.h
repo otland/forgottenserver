@@ -176,6 +176,7 @@ public:
 	const std::string& getFileById(int32_t scriptId);
 	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
+	int32_t getEventCallback(std::string name, bool fileName, int32_t oldId);
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 	static ScriptEnvironment* getScriptEnv()
@@ -386,6 +387,11 @@ public:
 
 	static int protectedCall(lua_State* L, int nargs, int nresults);
 
+	// script file cache
+	std::map<int32_t, std::string> cacheFiles;
+
+	std::string loadingFile;
+
 protected:
 	virtual bool closeState();
 
@@ -399,9 +405,6 @@ protected:
 
 	int32_t eventTableRef = -1;
 	int32_t runningEventId = EVENT_ID_USER;
-
-	// script file cache
-	std::map<int32_t, std::string> cacheFiles;
 
 private:
 	void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);

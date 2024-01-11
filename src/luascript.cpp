@@ -394,6 +394,33 @@ int32_t LuaScriptInterface::getEvent()
 	return runningEventId++;
 }
 
+int32_t LuaScriptInterface::getEventCallback(std::string name, bool fileName, int32_t id)
+{
+	// check if function is on the stack
+	if (!isFunction(luaState, -1)) {
+		return -1;
+	}
+
+	// get our events table
+	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
+	if (!isTable(luaState, -1)) {
+		lua_pop(luaState, 1);
+		return -1;
+	}
+
+	// save in our events table
+	lua_pushvalue(luaState, -2);
+	lua_rawseti(luaState, -2, id == 0 ? runningEventId : id);
+	lua_pop(luaState, 2);
+
+	if (fileName) {
+		cacheFiles[id == 0 ? runningEventId : id] = loadingFile + ":" + name;
+	} else {
+		cacheFiles[id == 0 ? runningEventId : id] = ">> " + name + " <<";
+	}
+	return id == 0 ? runningEventId++ : id;
+}
+
 int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const std::string& eventName)
 {
 	// get our events table
@@ -2065,7 +2092,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(RELOAD_TYPE_CONFIG);
 	registerEnum(RELOAD_TYPE_CREATURESCRIPTS);
 	registerEnum(RELOAD_TYPE_EVENTS);
-	registerEnum(RELOAD_TYPE_GLOBAL);
+	registerEnum(RELOAD_TYPE_LIBRARY);
 	registerEnum(RELOAD_TYPE_GLOBALEVENTS);
 	registerEnum(RELOAD_TYPE_ITEMS);
 	registerEnum(RELOAD_TYPE_MONSTERS);
@@ -5082,14 +5109,11 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 {
 	// Game.reload(reloadType)
 	ReloadTypes_t reloadType = getNumber<ReloadTypes_t>(L, 1);
-	if (reloadType == RELOAD_TYPE_GLOBAL) {
-		pushBoolean(L, g_luaEnvironment.loadFile("data/global.lua") == 0);
-		pushBoolean(L, g_scripts->loadScripts("scripts/lib", true, true));
-		lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
-		return 2;
+	if (reloadType == RELOAD_TYPE_LIBRARY) {
+		pushBoolean(L, g_scripts->loadLibs());
+	} else {
+		pushBoolean(L, g_game.reload(reloadType));
 	}
-
-	pushBoolean(L, g_game.reload(reloadType));
 	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 	return 1;
 }
