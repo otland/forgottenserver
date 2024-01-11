@@ -5118,6 +5118,29 @@ int LuaScriptInterface::luaGameReload(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaGameGetAction(lua_State* L)
+{
+	// Game.getAction(id, eventType)
+	if (LuaScriptInterface::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+		reportErrorFunc(L, "Game.getAction can only be called in the Scripts interface.");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint16_t id = getNumber<uint16_t>(L, 1);
+	const std::string& eventType = getString(L, 2);
+
+	Action_shared_ptr action = g_actions->getActionEvent(eventType, id);
+	if (action) {
+		pushSharedPtr<Action_shared_ptr>(L, action);
+		setMetatable(L, -1, "Action");
+	} else {
+		lua_pushnil(L);
+	}
+
+	return 1;
+}
+
 // Variant
 int LuaScriptInterface::luaVariantCreate(lua_State* L)
 {
@@ -16823,9 +16846,9 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 		return 1;
 	}
 
-	Action* action = new Action(getScriptEnv()->getScriptInterface());
+	auto action = std::make_shared<Action>(getScriptEnv()->getScriptInterface());
 	action->fromLua = true;
-	pushUserdata<Action>(L, action);
+	pushSharedPtr<Action_shared_ptr>(L, action);
 	setMetatable(L, -1, "Action");
 	return 1;
 }
@@ -16833,9 +16856,11 @@ int LuaScriptInterface::luaCreateAction(lua_State* L)
 int LuaScriptInterface::luaActionOnUse(lua_State* L)
 {
 	// action:onUse(callback)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
-		if (!action->loadCallback()) {
+		const std::string& functionName = getString(L, 2);
+		bool fileName = functionName == "onUse" ? true : false;
+		if (!action->loadCallback(functionName, fileName)) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -16850,16 +16875,13 @@ int LuaScriptInterface::luaActionOnUse(lua_State* L)
 int LuaScriptInterface::luaActionRegister(lua_State* L)
 {
 	// action:register()
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		if (!action->isScripted()) {
 			pushBoolean(L, false);
 			return 1;
 		}
 		pushBoolean(L, g_actions->registerLuaEvent(action));
-		action->clearActionIdRange();
-		action->clearItemIdRange();
-		action->clearUniqueIdRange();
 	} else {
 		lua_pushnil(L);
 	}
@@ -16869,7 +16891,7 @@ int LuaScriptInterface::luaActionRegister(lua_State* L)
 int LuaScriptInterface::luaActionItemId(lua_State* L)
 {
 	// action:id(ids)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -16889,7 +16911,7 @@ int LuaScriptInterface::luaActionItemId(lua_State* L)
 int LuaScriptInterface::luaActionActionId(lua_State* L)
 {
 	// action:aid(aids)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -16909,7 +16931,7 @@ int LuaScriptInterface::luaActionActionId(lua_State* L)
 int LuaScriptInterface::luaActionUniqueId(lua_State* L)
 {
 	// action:uid(uids)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -16929,7 +16951,7 @@ int LuaScriptInterface::luaActionUniqueId(lua_State* L)
 int LuaScriptInterface::luaActionAllowFarUse(lua_State* L)
 {
 	// action:allowFarUse(bool)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		action->setAllowFarUse(getBoolean(L, 2));
 		pushBoolean(L, true);
@@ -16942,7 +16964,7 @@ int LuaScriptInterface::luaActionAllowFarUse(lua_State* L)
 int LuaScriptInterface::luaActionBlockWalls(lua_State* L)
 {
 	// action:blockWalls(bool)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		action->setCheckLineOfSight(getBoolean(L, 2));
 		pushBoolean(L, true);
@@ -16955,7 +16977,7 @@ int LuaScriptInterface::luaActionBlockWalls(lua_State* L)
 int LuaScriptInterface::luaActionCheckFloor(lua_State* L)
 {
 	// action:checkFloor(bool)
-	Action* action = getUserdata<Action>(L, 1);
+	Action_shared_ptr action = getSharedPtr<Action>(L, 1);
 	if (action) {
 		action->setCheckFloor(getBoolean(L, 2));
 		pushBoolean(L, true);
