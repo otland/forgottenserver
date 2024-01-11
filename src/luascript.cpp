@@ -18582,6 +18582,9 @@ bool LuaScriptInterface::luaHttpClientRetrieveParameters(lua_State* L, std::stri
 	url = getString(L, 2);
 	lua_pop(L, 1);
 
+	// pop HttpClientRequest class
+	lua_pop(L, 1);
+
 	return true;
 }
 
