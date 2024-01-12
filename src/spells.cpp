@@ -20,7 +20,7 @@ extern LuaEnvironment g_luaEnvironment;
 
 Spells::Spells() { scriptInterface.initState(); }
 
-Spells::~Spells() { clear(false); }
+Spells::~Spells() { clear(); }
 
 TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 {
@@ -29,7 +29,7 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	// strip trailing spaces
 	boost::algorithm::trim(str_words);
 
-	InstantSpell* instantSpell = getInstantSpell(str_words);
+	InstantSpell_shared_ptr instantSpell = getInstantSpell(str_words);
 	if (!instantSpell) {
 		return TALKACTION_CONTINUE;
 	}
@@ -76,75 +76,19 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, std::string& words)
 	return TALKACTION_FAILED;
 }
 
-void Spells::clearMaps(bool fromLua)
+void Spells::clear()
 {
-	for (auto instant = instants.begin(); instant != instants.end();) {
-		if (fromLua == instant->second.fromLua) {
-			instant = instants.erase(instant);
-		} else {
-			++instant;
-		}
-	}
+	instants.clear();
+	runes.clear();
 
-	for (auto rune = runes.begin(); rune != runes.end();) {
-		if (fromLua == rune->second.fromLua) {
-			rune = runes.erase(rune);
-		} else {
-			++rune;
-		}
-	}
+	scriptInterface.reInitState();
 }
 
-void Spells::clear(bool fromLua)
+bool Spells::registerInstantLuaEvent(InstantSpell_shared_ptr instant)
 {
-	clearMaps(fromLua);
-
-	reInitState(fromLua);
-}
-
-LuaScriptInterface& Spells::getScriptInterface() { return scriptInterface; }
-
-Event_ptr Spells::getEvent(const std::string& nodeName)
-{
-	if (caseInsensitiveEqual(nodeName, "rune")) {
-		return Event_ptr(new RuneSpell(&scriptInterface));
-	} else if (caseInsensitiveEqual(nodeName, "instant")) {
-		return Event_ptr(new InstantSpell(&scriptInterface));
-	}
-	return nullptr;
-}
-
-bool Spells::registerEvent(Event_ptr event, const pugi::xml_node&)
-{
-	InstantSpell* instant = dynamic_cast<InstantSpell*>(event.get());
-	if (instant) {
-		auto result = instants.emplace(instant->getWords(), std::move(*instant));
-		if (!result.second) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: "
-			          << instant->getWords() << std::endl;
-		}
-		return result.second;
-	}
-
-	RuneSpell* rune = dynamic_cast<RuneSpell*>(event.get());
-	if (rune) {
-		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
-		if (!result.second) {
-			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: "
-			          << rune->getRuneItemId() << std::endl;
-		}
-		return result.second;
-	}
-
-	return false;
-}
-
-bool Spells::registerInstantLuaEvent(InstantSpell* event)
-{
-	InstantSpell_ptr instant{event};
 	if (instant) {
 		std::string words = instant->getWords();
-		auto result = instants.emplace(instant->getWords(), std::move(*instant));
+		auto result = instants.emplace(instant->getWords(), instant);
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerInstantLuaEvent] Duplicate registered instant spell with words: "
 			          << words << std::endl;
@@ -155,12 +99,11 @@ bool Spells::registerInstantLuaEvent(InstantSpell* event)
 	return false;
 }
 
-bool Spells::registerRuneLuaEvent(RuneSpell* event)
+bool Spells::registerRuneLuaEvent(RuneSpell_shared_ptr rune)
 {
-	RuneSpell_ptr rune{event};
 	if (rune) {
 		uint16_t id = rune->getRuneItemId();
-		auto result = runes.emplace(rune->getRuneItemId(), std::move(*rune));
+		auto result = runes.emplace(rune->getRuneItemId(), rune);
 		if (!result.second) {
 			std::cout << "[Warning - Spells::registerRuneLuaEvent] Duplicate registered rune with id: " << id
 			          << std::endl;
@@ -171,49 +114,49 @@ bool Spells::registerRuneLuaEvent(RuneSpell* event)
 	return false;
 }
 
-Spell* Spells::getSpellByName(const std::string& name)
+Spell_shared_ptr Spells::getSpellByName(const std::string& name)
 {
-	Spell* spell = getRuneSpellByName(name);
+	Spell_shared_ptr spell = getRuneSpellByName(name);
 	if (!spell) {
 		spell = getInstantSpellByName(name);
 	}
 	return spell;
 }
 
-RuneSpell* Spells::getRuneSpell(uint32_t id)
+RuneSpell_shared_ptr Spells::getRuneSpell(uint32_t id)
 {
 	auto it = runes.find(id);
 	if (it == runes.end()) {
 		for (auto& rune : runes) {
-			if (rune.second.getId() == id) {
-				return &rune.second;
+			if (rune.second->getId() == id) {
+				return rune.second;
 			}
 		}
 		return nullptr;
 	}
-	return &it->second;
+	return it->second;
 }
 
-RuneSpell* Spells::getRuneSpellByName(const std::string& name)
+RuneSpell_shared_ptr Spells::getRuneSpellByName(const std::string& name)
 {
 	for (auto& it : runes) {
-		if (caseInsensitiveEqual(it.second.getName(), name)) {
-			return &it.second;
+		if (caseInsensitiveEqual(it.second->getName(), name)) {
+			return it.second;
 		}
 	}
 	return nullptr;
 }
 
-InstantSpell* Spells::getInstantSpell(const std::string& words)
+InstantSpell_shared_ptr Spells::getInstantSpell(const std::string& words)
 {
-	InstantSpell* result = nullptr;
+	InstantSpell_shared_ptr result = nullptr;
 
 	for (auto& it : instants) {
-		const std::string& instantSpellWords = it.second.getWords();
+		const std::string& instantSpellWords = it.second->getWords();
 		size_t spellLen = instantSpellWords.length();
 		if (caseInsensitiveStartsWith(words, instantSpellWords)) {
 			if (!result || spellLen > result->getWords().size()) {
-				result = &it.second;
+				result = it.second;
 				if (words.length() == spellLen) {
 					break;
 				}
@@ -239,11 +182,11 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
 	return nullptr;
 }
 
-InstantSpell* Spells::getInstantSpellByName(const std::string& name)
+InstantSpell_shared_ptr Spells::getInstantSpellByName(const std::string& name)
 {
 	for (auto& it : instants) {
-		if (caseInsensitiveEqual(it.second.getName(), name)) {
-			return &it.second;
+		if (caseInsensitiveEqual(it.second->getName(), name)) {
+			return it.second;
 		}
 	}
 	return nullptr;
@@ -255,7 +198,7 @@ Position Spells::getCasterPosition(Creature* creature, Direction dir)
 }
 
 CombatSpell::CombatSpell(Combat_ptr combat, bool needTarget, bool needDirection) :
-    Event(&g_spells->getScriptInterface()), combat(combat), needDirection(needDirection), needTarget(needTarget)
+    Event(&g_spells->scriptInterface), combat(combat), needDirection(needDirection), needTarget(needTarget)
 {}
 
 bool CombatSpell::loadScriptCombat()
@@ -341,178 +284,6 @@ bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 	LuaScriptInterface::pushVariant(L, var);
 
 	return scriptInterface->callFunction(2);
-}
-
-bool Spell::configureSpell(const pugi::xml_node& node)
-{
-	pugi::xml_attribute nameAttribute = node.attribute("name");
-	if (!nameAttribute) {
-		std::cout << "[Error - Spell::configureSpell] Spell without name" << std::endl;
-		return false;
-	}
-
-	name = nameAttribute.as_string();
-
-	static const char* reservedList[] = {
-	    "melee",           "physical",       "poison",          "fire",           "energy",         "drown",
-	    "lifedrain",       "manadrain",      "healing",         "speed",          "outfit",         "invisible",
-	    "drunk",           "firefield",      "poisonfield",     "energyfield",    "firecondition",  "poisoncondition",
-	    "energycondition", "drowncondition", "freezecondition", "cursecondition", "dazzlecondition"};
-
-	// static size_t size = sizeof(reservedList) / sizeof(const char*);
-	// for (size_t i = 0; i < size; ++i) {
-	for (const char* reserved : reservedList) {
-		if (caseInsensitiveEqual(reserved, name)) {
-			std::cout << "[Error - Spell::configureSpell] Spell is using a reserved name: " << reserved << std::endl;
-			return false;
-		}
-	}
-
-	pugi::xml_attribute attr;
-	if ((attr = node.attribute("spellid"))) {
-		spellId = pugi::cast<uint16_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("group"))) {
-		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-		if (tmpStr == "none" || tmpStr == "0") {
-			group = SPELLGROUP_NONE;
-		} else if (tmpStr == "attack" || tmpStr == "1") {
-			group = SPELLGROUP_ATTACK;
-		} else if (tmpStr == "healing" || tmpStr == "2") {
-			group = SPELLGROUP_HEALING;
-		} else if (tmpStr == "support" || tmpStr == "3") {
-			group = SPELLGROUP_SUPPORT;
-		} else if (tmpStr == "special" || tmpStr == "4") {
-			group = SPELLGROUP_SPECIAL;
-		} else {
-			std::cout << "[Warning - Spell::configureSpell] Unknown group: " << attr.as_string() << std::endl;
-		}
-	}
-
-	if ((attr = node.attribute("groupcooldown"))) {
-		groupCooldown = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("secondarygroup"))) {
-		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-		if (tmpStr == "none" || tmpStr == "0") {
-			secondaryGroup = SPELLGROUP_NONE;
-		} else if (tmpStr == "attack" || tmpStr == "1") {
-			secondaryGroup = SPELLGROUP_ATTACK;
-		} else if (tmpStr == "healing" || tmpStr == "2") {
-			secondaryGroup = SPELLGROUP_HEALING;
-		} else if (tmpStr == "support" || tmpStr == "3") {
-			secondaryGroup = SPELLGROUP_SUPPORT;
-		} else if (tmpStr == "special" || tmpStr == "4") {
-			secondaryGroup = SPELLGROUP_SPECIAL;
-		} else {
-			std::cout << "[Warning - Spell::configureSpell] Unknown secondarygroup: " << attr.as_string() << std::endl;
-		}
-	}
-
-	if ((attr = node.attribute("secondarygroupcooldown"))) {
-		secondaryGroupCooldown = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("level")) || (attr = node.attribute("lvl"))) {
-		level = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("magiclevel")) || (attr = node.attribute("maglv"))) {
-		magLevel = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("mana"))) {
-		mana = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("manapercent"))) {
-		manaPercent = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("soul"))) {
-		soul = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("range"))) {
-		range = pugi::cast<int32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("cooldown")) || (attr = node.attribute("exhaustion"))) {
-		cooldown = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("premium")) || (attr = node.attribute("prem"))) {
-		premium = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("enabled"))) {
-		enabled = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("needtarget"))) {
-		needTarget = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("needweapon"))) {
-		needWeapon = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("selftarget"))) {
-		selfTarget = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("needlearn"))) {
-		learnable = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("blocking"))) {
-		blockingSolid = attr.as_bool();
-		blockingCreature = blockingSolid;
-	}
-
-	if ((attr = node.attribute("blocktype"))) {
-		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-		if (tmpStrValue == "all") {
-			blockingSolid = true;
-			blockingCreature = true;
-		} else if (tmpStrValue == "solid") {
-			blockingSolid = true;
-		} else if (tmpStrValue == "creature") {
-			blockingCreature = true;
-		} else {
-			std::cout << "[Warning - Spell::configureSpell] Blocktype \"" << attr.as_string() << "\" does not exist."
-			          << std::endl;
-		}
-	}
-
-	if ((attr = node.attribute("pzlock"))) {
-		pzLock = booleanString(attr.as_string());
-	}
-
-	if ((attr = node.attribute("aggressive"))) {
-		aggressive = booleanString(attr.as_string());
-	}
-
-	if (group == SPELLGROUP_NONE) {
-		group = (aggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
-	}
-
-	for (auto vocationNode : node.children()) {
-		if (!(attr = vocationNode.attribute("name"))) {
-			continue;
-		}
-
-		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
-			attr = vocationNode.attribute("showInDescription");
-			vocationSpellMap[vocationId] = !attr || attr.as_bool();
-		} else {
-			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
-		}
-	}
-	return true;
 }
 
 bool Spell::playerSpellCheck(Player* player) const

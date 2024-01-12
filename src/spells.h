@@ -15,12 +15,13 @@ class InstantSpell;
 class RuneSpell;
 class Spell;
 
-using InstantSpell_ptr = std::unique_ptr<InstantSpell>;
-using RuneSpell_ptr = std::unique_ptr<RuneSpell>;
+using Spell_shared_ptr = std::shared_ptr<Spell>;
+using InstantSpell_shared_ptr = std::shared_ptr<InstantSpell>;
+using RuneSpell_shared_ptr = std::shared_ptr<RuneSpell>;
 
 extern Vocations g_vocations;
 
-class Spells final : public BaseEvents
+class Spells
 {
 public:
 	Spells();
@@ -30,32 +31,26 @@ public:
 	Spells(const Spells&) = delete;
 	Spells& operator=(const Spells&) = delete;
 
-	Spell* getSpellByName(const std::string& name);
-	RuneSpell* getRuneSpell(uint32_t id);
-	RuneSpell* getRuneSpellByName(const std::string& name);
+	Spell_shared_ptr getSpellByName(const std::string& name);
+	RuneSpell_shared_ptr getRuneSpell(uint32_t id);
+	RuneSpell_shared_ptr getRuneSpellByName(const std::string& name);
 
-	InstantSpell* getInstantSpell(const std::string& words);
-	InstantSpell* getInstantSpellByName(const std::string& name);
+	InstantSpell_shared_ptr getInstantSpell(const std::string& words);
+	InstantSpell_shared_ptr getInstantSpellByName(const std::string& name);
 
 	TalkActionResult_t playerSaySpell(Player* player, std::string& words);
 
 	static Position getCasterPosition(Creature* creature, Direction dir);
-	std::string_view getScriptBaseName() const override { return "spells"; }
 
-	const std::map<std::string, InstantSpell>& getInstantSpells() const { return instants; };
+	const std::map<std::string, InstantSpell_shared_ptr>& getInstantSpells() const { return instants; };
 
-	void clearMaps(bool fromLua);
-	void clear(bool fromLua) override final;
-	bool registerInstantLuaEvent(InstantSpell* event);
-	bool registerRuneLuaEvent(RuneSpell* event);
+	void clear();
+	bool registerInstantLuaEvent(InstantSpell_shared_ptr event);
+	bool registerRuneLuaEvent(RuneSpell_shared_ptr event);
 
 private:
-	LuaScriptInterface& getScriptInterface() override;
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-
-	std::map<uint16_t, RuneSpell> runes;
-	std::map<std::string, InstantSpell> instants;
+	std::map<uint16_t, RuneSpell_shared_ptr> runes;
+	std::map<std::string, InstantSpell_shared_ptr> instants;
 
 	friend class CombatSpell;
 	LuaScriptInterface scriptInterface{"Spell Interface"};
@@ -103,7 +98,6 @@ class Spell : public BaseSpell
 public:
 	Spell() = default;
 
-	bool configureSpell(const pugi::xml_node& node);
 	const std::string& getName() const { return name; }
 	void setName(std::string n) { name = n; }
 	uint8_t getId() const { return spellId; }

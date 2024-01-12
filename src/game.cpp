@@ -5851,7 +5851,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_globalEvents->clear(true);
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
-			g_spells->clear(true);
+			g_spells->clear();
 			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			/*
@@ -5886,7 +5886,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_moveEvents->clear(true);
 			g_talkActions->clear(true);
 			g_globalEvents->clear(true);
-			g_spells->clear(true);
+			g_spells->clear();
 			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			return true;
