@@ -42,6 +42,7 @@
 	<event class="Player" method="onWrapItem" enabled="1" />
 	<event class="Player" method="onInventoryUpdate" enabled="1" />
 	<event class="Player" method="onNetworkMessage" enabled="1" />
+	<event class="Player" method="onSpellCheck" enabled="0" />
 
 	<!-- Monster methods -->
 	<event class="Monster" method="onDropLoot" enabled="1" />
