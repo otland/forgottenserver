@@ -23,6 +23,7 @@ class Combat;
 class Container;
 class Creature;
 class Cylinder;
+class Spell;
 class InstantSpell;
 class Item;
 class LuaScriptInterface;
