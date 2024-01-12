@@ -76,6 +76,7 @@ function onSay(player, words, param)
 	-- need to clear Event.data or we end up having duplicated events on /reload scripts
 	if table.contains({RELOAD_TYPE_SCRIPTS, RELOAD_TYPE_ALL}, reloadType) then
 		Event:clear()
+		Game.clearQuests()
 	end
 
 	Game.reload(reloadType)
