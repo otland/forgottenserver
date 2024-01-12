@@ -15,8 +15,6 @@ public:
 	explicit Event(LuaScriptInterface* interface);
 	virtual ~Event() = default;
 
-	virtual bool configureEvent(const pugi::xml_node& node) = 0;
-
 	bool checkScript(const std::string& basePath, const std::string& scriptsName, const std::string& scriptFile) const;
 	bool loadScript(const std::string& scriptFile);
 	bool loadCallback();

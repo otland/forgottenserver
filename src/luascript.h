@@ -1611,8 +1611,6 @@ private:
 
 	static ScriptEnvironment scriptEnv[16];
 	static int32_t scriptEnvIndex;
-
-	std::string loadingFile;
 };
 
 class LuaEnvironment : public LuaScriptInterface

@@ -5845,14 +5845,14 @@ bool Game::reload(ReloadTypes_t reloadType)
 		case RELOAD_TYPE_SCRIPTS: {
 			// commented out stuff is TODO, once we approach further in revscriptsys
 			g_actions->clear();
-			g_creatureEvents->clear();
-			g_moveEvents->clear();
-			g_talkActions->clear();
-			g_globalEvents->clear();
-			g_weapons->clear();
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
-			g_spells->clear();
-			g_scripts->loadScripts();
+			g_spells->clear(true);
+			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			/*
 			Npcs::reload();
@@ -5875,22 +5875,21 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_monsters.reload();
 			Npcs::reload();
 			Item::items.reload();
-			g_weapons->clear();
+			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			mounts.reload();
 			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
 			g_actions->clear();
-			g_creatureEvents->clear();
-			g_moveEvents->clear();
-			g_talkActions->clear();
-			g_globalEvents->clear();
-			g_spells->clear();
+			g_creatureEvents->clear(true);
+			g_moveEvents->clear(true);
+			g_talkActions->clear(true);
+			g_globalEvents->clear(true);
+			g_spells->clear(true);
 			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			return true;
 		}
 	}
-	return true;
 }

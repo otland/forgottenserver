@@ -33,8 +33,6 @@ class CreatureEvent final : public Event
 public:
 	explicit CreatureEvent(LuaScriptInterface* interface);
 
-	bool configureEvent(const pugi::xml_node& node) override;
-
 	CreatureEventType_t getEventType() const { return type; }
 	void setEventType(CreatureEventType_t eventType) { type = eventType; }
 	const std::string& getName() const { return eventName; }

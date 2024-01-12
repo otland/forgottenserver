@@ -789,39 +789,6 @@ uint32_t Spell::getManaCost(const Player* player) const
 	return 0;
 }
 
-bool InstantSpell::configureEvent(const pugi::xml_node& node)
-{
-	if (!Spell::configureSpell(node)) {
-		return false;
-	}
-
-	if (!TalkAction::configureEvent(node)) {
-		return false;
-	}
-
-	spellType = SPELL_INSTANT;
-
-	pugi::xml_attribute attr;
-	if ((attr = node.attribute("params"))) {
-		hasParam = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("playernameparam"))) {
-		hasPlayerNameParam = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("direction"))) {
-		needDirection = attr.as_bool();
-	} else if ((attr = node.attribute("casterTargetOrDirection"))) {
-		casterTargetOrDirection = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("blockwalls"))) {
-		checkLineOfSight = attr.as_bool();
-	}
-	return true;
-}
-
 bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 {
 	if (!playerSpellCheck(player)) {
@@ -1057,43 +1024,6 @@ bool InstantSpell::canCast(const Player* player) const
 	}
 
 	return false;
-}
-
-bool RuneSpell::configureEvent(const pugi::xml_node& node)
-{
-	if (!Spell::configureSpell(node)) {
-		return false;
-	}
-
-	if (!Action::configureEvent(node)) {
-		return false;
-	}
-
-	spellType = SPELL_RUNE;
-
-	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("id"))) {
-		std::cout << "[Error - RuneSpell::configureSpell] Rune spell without id." << std::endl;
-		return false;
-	}
-	runeId = pugi::cast<uint16_t>(attr.value());
-
-	if ((attr = node.attribute("charges"))) {
-		charges = pugi::cast<uint32_t>(attr.value());
-	} else {
-		charges = 0;
-	}
-
-	hasCharges = (charges > 0);
-	if (magLevel != 0 || level != 0) {
-		// Change information in the ItemType to get accurate description
-		ItemType& iType = Item::items.getItemType(runeId);
-		iType.runeMagLevel = magLevel;
-		iType.runeLevel = level;
-		iType.charges = charges;
-	}
-
-	return true;
 }
 
 ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& toPos)

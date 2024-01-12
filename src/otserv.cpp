@@ -164,7 +164,7 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua scripts" << std::endl;
-	if (!g_scripts->loadScripts("scripts", false, false)) {
+	if (!g_scripts->loadScripts(false)) {
 		startupErrorMessage("Failed to load lua scripts");
 		return;
 	}
@@ -176,7 +176,7 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua monsters" << std::endl;
-	if (!g_scripts->loadScripts("monster", false, false)) {
+	if (!g_scripts->loadMonsters()) {
 		startupErrorMessage("Failed to load lua monsters");
 		return;
 	}
@@ -306,7 +306,8 @@ void printServerVersion()
 	std::cout << "*** DIRTY - NOT OFFICIAL RELEASE ***" << std::endl;
 #endif
 #else
-	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << std::endl;
+	std::cout << STATUS_SERVER_NAME << " - Version " << STATUS_SERVER_VERSION << " - Revscriptsys "
+	          << STATUS_REVSCRIPTSYS_VERSION << std::endl;
 #endif
 	std::cout << std::endl;
 

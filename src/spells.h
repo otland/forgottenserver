@@ -82,7 +82,6 @@ public:
 
 	bool castSpell(Creature* creature) override;
 	bool castSpell(Creature* creature, Creature* target) override;
-	bool configureEvent(const pugi::xml_node&) override { return true; }
 
 	// scripting
 	bool executeCastSpell(Creature* creature, const LuaVariant& var);
@@ -224,8 +223,6 @@ class InstantSpell final : public TalkAction, public Spell
 public:
 	explicit InstantSpell(LuaScriptInterface* interface) : TalkAction(interface) {}
 
-	bool configureEvent(const pugi::xml_node& node) override;
-
 	virtual bool playerCastInstant(Player* player, std::string& param);
 
 	bool castSpell(Creature* creature) override;
@@ -264,8 +261,6 @@ class RuneSpell final : public Action, public Spell
 {
 public:
 	explicit RuneSpell(LuaScriptInterface* interface) : Action(interface) {}
-
-	bool configureEvent(const pugi::xml_node& node) override;
 
 	ReturnValue canExecuteAction(const Player* player, const Position& toPos) override;
 	bool hasOwnErrorHandler() override { return true; }

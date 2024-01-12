@@ -41,11 +41,6 @@ bool BaseEvents::loadFromXml()
 			continue;
 		}
 
-		if (!event->configureEvent(node)) {
-			std::cout << "[Warning - BaseEvents::loadFromXml] Failed to configure event" << std::endl;
-			continue;
-		}
-
 		bool success;
 
 		pugi::xml_attribute scriptAttribute = node.attribute("script");

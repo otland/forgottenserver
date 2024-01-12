@@ -64,8 +64,6 @@ class GlobalEvent final : public Event
 public:
 	explicit GlobalEvent(LuaScriptInterface* interface);
 
-	bool configureEvent(const pugi::xml_node& node) override;
-
 	bool executeRecord(uint32_t current, uint32_t old);
 	bool executeEvent() const;
 

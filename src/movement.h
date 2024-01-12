@@ -95,7 +95,6 @@ public:
 	MoveEvent_t getEventType() const;
 	void setEventType(MoveEvent_t type);
 
-	bool configureEvent(const pugi::xml_node& node) override;
 	bool loadFunction(const pugi::xml_attribute& attr, bool isScripted) override;
 
 	uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);

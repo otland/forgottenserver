@@ -51,7 +51,6 @@ class Weapon : public Event
 public:
 	explicit Weapon(LuaScriptInterface* interface) : Event(interface) {}
 
-	bool configureEvent(const pugi::xml_node& node) override;
 	bool loadFunction(const pugi::xml_attribute&, bool) final { return true; }
 	virtual void configureWeapon(const ItemType& it);
 	virtual bool interruptSwing() const { return false; }
@@ -210,7 +209,6 @@ class WeaponWand final : public Weapon
 public:
 	explicit WeaponWand(LuaScriptInterface* interface) : Weapon(interface) {}
 
-	bool configureEvent(const pugi::xml_node& node) override;
 	void configureWeapon(const ItemType& it) override;
 
 	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
