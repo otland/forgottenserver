@@ -995,18 +995,6 @@ public:
 			client->sendCloseTrade();
 		}
 	}
-	void sendWorldLight(LightInfo lightInfo)
-	{
-		if (client) {
-			client->sendWorldLight(lightInfo);
-		}
-	}
-	void sendWorldTime()
-	{
-		if (client) {
-			client->sendWorldTime();
-		}
-	}
 	void sendChannelsDialog()
 	{
 		if (client) {

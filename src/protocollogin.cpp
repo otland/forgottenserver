@@ -10,6 +10,7 @@
 #include "game.h"
 #include "iologindata.h"
 #include "outputmessage.h"
+#include "rsa.h"
 #include "tasks.h"
 
 extern ConfigManager g_config;
@@ -166,19 +167,14 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	BanInfo banInfo;
 	auto connection = getConnection();
 	if (!connection) {
 		return;
 	}
 
-	if (IOBan::isIpBanned(connection->getIP(), banInfo)) {
-		if (banInfo.reason.empty()) {
-			banInfo.reason = "(none)";
-		}
-
+	if (const auto& banInfo = IOBan::getIpBanInfo(connection->getIP())) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo.expiresAt), banInfo.bannedBy, banInfo.reason),
+		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason),
 		                 version);
 		return;
 	}
@@ -195,8 +191,8 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	// read authenticator token and stay logged in flag from last 128 bytes
-	msg.skipBytes((msg.getLength() - 128) - msg.getBufferPosition());
+	// read authenticator token and stay logged in flag from last bytes
+	msg.skipBytes(msg.getRemainingBufferLength() - RSA::BUFFER_LENGTH);
 	if (!Protocol::RSA_decrypt(msg)) {
 		disconnectClient("Invalid authentication token.", version);
 		return;

@@ -44,6 +44,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
+	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/party.cpp
@@ -55,7 +56,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.cpp
-	${CMAKE_CURRENT_LIST_DIR}/raids.cpp
 	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/script.cpp
@@ -131,6 +131,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/movement.h
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/npc.h
+	${CMAKE_CURRENT_LIST_DIR}/otserv.h
 	${CMAKE_CURRENT_LIST_DIR}/outfit.h
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/party.h
@@ -143,7 +144,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.h
 	${CMAKE_CURRENT_LIST_DIR}/pugicast.h
-	${CMAKE_CURRENT_LIST_DIR}/raids.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/script.h
@@ -169,7 +169,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/xtea.h
 	)
 
-set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp PARENT_SCOPE)
+set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/main.cpp PARENT_SCOPE)
 
 add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
@@ -182,5 +182,6 @@ target_link_libraries(tfslib PRIVATE
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
+set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
