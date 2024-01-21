@@ -18539,8 +18539,8 @@ bool LuaScriptInterface::luaHttpClientRetrieveParameters(lua_State* L, std::stri
 		return false;
 	}
 
-	if (!isFunction(L, 3)) {
-		reportErrorFunc(L, "httpClient: callback parameter should be a function.");
+    if (!isFunction(L, 3) && !isNil(L, 3)) {
+        reportErrorFunc(L, "httpClient: callback parameter should be a function or a nil value.");
 		pushBoolean(L, false);
 		return false;
 	}

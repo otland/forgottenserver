@@ -66,8 +66,7 @@ public:
 
 private:
 	void clientRequestSuccessCallback(const HttpClientLib::HttpResponse_ptr& response);
-	void luaClientRequestCallback(LuaScriptInterface* scriptInterface, int32_t scriptId, int32_t callbackId,
-	                              const HttpClientLib::HttpResponse_ptr& response);
+	void luaClientRequestCallback(HttpClientLib::HttpRequestCallbackData &callbackData);
 
 	void clientRequestFailureCallback(const HttpClientLib::HttpResponse_ptr& response);
 

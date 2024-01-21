@@ -140,51 +140,74 @@ void HttpClient::processResponse(const HttpClientLib::HttpResponse_ptr& response
 	HttpClientLib::HttpRequest_ptr& httpRequest = httpRequestIt->second;
 
 	if (httpRequest->callbackData.isLuaCallback()) {
-		luaClientRequestCallback(httpRequest->callbackData.scriptInterface, httpRequest->callbackData.scriptId,
-		                         httpRequest->callbackData.callbackId, response);
-	} else if (httpRequest->callbackData.callbackFunction) {
+		luaClientRequestCallback(httpRequest->callbackData);
+	}
+	
+	if (httpRequest->callbackData.callbackFunction) {
 		httpRequest->callbackData.callbackFunction(response);
 	}
 
 	requests.erase(response->requestId);
 }
 
-void HttpClient::luaClientRequestCallback(LuaScriptInterface* scriptInterface, int32_t scriptId, int32_t callbackId,
-                                          const HttpClientLib::HttpResponse_ptr& response)
+void HttpClient::luaClientRequestCallback(HttpClientLib::HttpRequestCallbackData &callbackData)
 {
-	lua_State* luaState = scriptInterface->getLuaState();
+	LuaScriptInterface *scriptInterface = callbackData.scriptInterface;
+	int32_t callbackId = callbackData.callbackId;
 
-	// push function
-	lua_rawgeti(luaState, LUA_REGISTRYINDEX, callbackId);
-
-	// push parameters
-	lua_createtable(luaState, 0, 11);
-
-	scriptInterface->setField(luaState, "requestId", response->requestId);
-	scriptInterface->setField(luaState, "version", response->version);
-	scriptInterface->setField(luaState, "statusCode", response->statusCode);
-	scriptInterface->setField(luaState, "location", response->location);
-	scriptInterface->setField(luaState, "contentType", response->contentType);
-	scriptInterface->setField(luaState, "responseTimeMs", response->responseTimeMs);
-	scriptInterface->setField(luaState, "headerData", response->headerData);
-	scriptInterface->setField(luaState, "bodySize", response->bodySize);
-	scriptInterface->setField(luaState, "bodyData", response->bodyData);
-	scriptInterface->setField(luaState, "success", response->success);
-	scriptInterface->setField(luaState, "errorMessage", response->errorMessage);
-
-	scriptInterface->setMetatable(luaState, -1, "HttpResponse");
-
-	// call the function
-	if (scriptInterface->reserveScriptEnv()) {
-		ScriptEnvironment* env = scriptInterface->getScriptEnv();
-		env->setScriptId(scriptId, scriptInterface);
-		scriptInterface->callFunction(1); // callFunction already reset the reserved script env (resetScriptEnv)
-	} else {
-		std::cout << "[Error - HttpClient::luaClientRequestCallback] Call stack overflow" << std::endl;
+	lua_State *luaState = scriptInterface->getLuaState();
+	if (!luaState) {
+		return;
 	}
 
-	// free resources
-	luaL_unref(luaState, LUA_REGISTRYINDEX, callbackId);
+	if (callbackId > 0) {
+		callbackData.callbackFunction = [callbackId, scriptInterface](const HttpClientLib::HttpResponse_ptr &response) {
+			lua_State *luaState = scriptInterface->getLuaState();
+			if (!luaState) {
+				return;
+			}
+
+			if (!LuaScriptInterface::reserveScriptEnv()) {
+				luaL_unref(luaState, LUA_REGISTRYINDEX, callbackId);
+				std::cout << "[Error - HttpClient::luaClientRequestCallback] Call stack overflow" << std::endl;
+				return;
+			}
+
+			// push function
+			lua_rawgeti(luaState, LUA_REGISTRYINDEX, callbackId);
+
+			// push parameters
+			lua_createtable(luaState, 0, 11);
+
+			LuaScriptInterface::setField(luaState, "requestId", response->requestId);
+			LuaScriptInterface::setField(luaState, "version", response->version);
+			LuaScriptInterface::setField(luaState, "statusCode", response->statusCode);
+			LuaScriptInterface::setField(luaState, "location", response->location);
+			LuaScriptInterface::setField(luaState, "contentType", response->contentType);
+			LuaScriptInterface::setField(luaState, "responseTimeMs", response->responseTimeMs);
+			LuaScriptInterface::setField(luaState, "headerData", response->headerData);
+			LuaScriptInterface::setField(luaState, "bodySize", response->bodySize);
+			LuaScriptInterface::setField(luaState, "bodyData", response->bodyData);
+			LuaScriptInterface::setField(luaState, "success", response->success);
+			LuaScriptInterface::setField(luaState, "errorMessage", response->errorMessage);
+
+			LuaScriptInterface::setMetatable(luaState, -1, "HttpResponse");
+
+			int parameter = luaL_ref(luaState, LUA_REGISTRYINDEX);
+			lua_rawgeti(luaState, LUA_REGISTRYINDEX, parameter);
+
+			ScriptEnvironment *env = scriptInterface->getScriptEnv();
+			auto scriptId = env->getScriptId();
+			env->setScriptId(scriptId, scriptInterface);
+
+			scriptInterface->callFunction(1); // callFunction already reset the reserved
+			                                  // script env (resetScriptEnv)
+
+			// free resources
+			luaL_unref(luaState, LUA_REGISTRYINDEX, callbackId);
+			luaL_unref(luaState, LUA_REGISTRYINDEX, parameter);
+		};
+	}
 }
 
 void HttpClient::addResponse(const HttpClientLib::HttpResponse_ptr& response)

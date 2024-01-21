@@ -354,6 +354,7 @@ public:
 	static bool isTable(lua_State* L, int32_t arg) { return lua_istable(L, arg); }
 	static bool isFunction(lua_State* L, int32_t arg) { return lua_isfunction(L, arg); }
 	static bool isUserdata(lua_State* L, int32_t arg) { return lua_isuserdata(L, arg) != 0; }
+	static bool isNil(lua_State* L, int32_t arg) { return lua_isnil(L, arg) != 0; }
 
 	// Push
 	static void pushBoolean(lua_State* L, bool value);
