@@ -8,6 +8,9 @@
 
 #include "httpclientlib.h"
 
+#include "tasks.h"
+extern Dispatcher g_dispatcher;
+
 void HttpClient::threadMain()
 {
 	HttpClientLib::Request requestsHandler(
@@ -144,7 +147,7 @@ void HttpClient::processResponse(const HttpClientLib::HttpResponse_ptr& response
 	}
 	
 	if (httpRequest->callbackData.callbackFunction) {
-		httpRequest->callbackData.callbackFunction(response);
+		g_dispatcher.addTask(createTask(std::bind(httpRequest->callbackData.callbackFunction, response)));
 	}
 
 	requests.erase(response->requestId);
