@@ -173,6 +173,7 @@ add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
 	Boost::iostreams
 	Boost::system
+	Boost::locale
 	fmt::fmt
 	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
