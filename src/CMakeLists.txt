@@ -180,6 +180,5 @@ target_link_libraries(tfslib PRIVATE
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
-set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
