@@ -322,8 +322,6 @@ bool Items::reload()
 		return false;
 	}
 
-	g_weapons->reload();
-	g_weapons->loadDefaults();
 	return true;
 }
 

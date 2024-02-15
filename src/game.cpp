@@ -5849,7 +5849,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_moveEvents->clear();
 			g_talkActions->clear();
 			g_globalEvents->clear();
-			g_weapons->clear(true);
+			g_weapons->clear();
 			g_weapons->loadDefaults();
 			g_spells->clear();
 			g_scripts->loadScripts(true);
@@ -5875,7 +5875,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_monsters.reload();
 			Npcs::reload();
 			Item::items.reload();
-			g_weapons->clear(true);
+			g_weapons->clear();
 			g_weapons->loadDefaults();
 			mounts.reload();
 			g_events->load();

@@ -12,11 +12,11 @@
 
 class Weapon;
 
-using Weapon_ptr = std::unique_ptr<Weapon>;
+using Weapon_shared_ptr = std::shared_ptr<Weapon>;
 
 extern Vocations g_vocations;
 
-class Weapons final : public BaseEvents
+class Weapons
 {
 public:
 	Weapons();
@@ -27,21 +27,17 @@ public:
 	Weapons& operator=(const Weapons&) = delete;
 
 	void loadDefaults();
-	const Weapon* getWeapon(const Item* item) const;
+	const Weapon_shared_ptr getWeapon(const Item* item) const;
+	Weapon_shared_ptr getWeapon(uint16_t id);
 
 	static int32_t getMaxMeleeDamage(int32_t attackSkill, int32_t attackValue);
 	static int32_t getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t attackValue, float attackFactor);
 
-	bool registerLuaEvent(Weapon* event);
-	void clear(bool fromLua) override final;
+	bool registerLuaEvent(Weapon_shared_ptr event);
+	void clear();
 
 private:
-	LuaScriptInterface& getScriptInterface() override;
-	std::string_view getScriptBaseName() const override { return "weapons"; }
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-
-	std::map<uint32_t, Weapon*> weapons;
+	std::map<uint32_t, Weapon_shared_ptr> weapons;
 
 	LuaScriptInterface scriptInterface{"Weapon Interface"};
 };

@@ -1558,6 +1558,7 @@ private:
 
 	// Weapon
 	static int luaCreateWeapon(lua_State* L);
+	static int luaWeaponType(lua_State* L);
 	static int luaWeaponId(lua_State* L);
 	static int luaWeaponLevel(lua_State* L);
 	static int luaWeaponMagicLevel(lua_State* L);
