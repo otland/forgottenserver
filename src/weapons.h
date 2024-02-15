@@ -108,6 +108,7 @@ public:
 			vocationWeaponSet.insert(vocationId);
 		}
 	}
+	// If the set is empty, it is considered to be for all vocations.
 	bool hasVocationWeaponSet(uint16_t vocationId) const
 	{
 		return vocationWeaponSet.empty() || vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();

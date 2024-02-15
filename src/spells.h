@@ -134,9 +134,10 @@ public:
 			vocationSpellMap[vocationId] = showInDescription;
 		}
 	}
+	// If the set is empty, it is considered to be for all vocations.
 	bool hasVocationSpellMap(uint16_t vocationId) const
 	{
-		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
+		return vocationSpellMap.empty() || vocationSpellMap.find(vocationId) != vocationSpellMap.end();
 	}
 
 	SpellGroup_t getGroup() const { return group; }
