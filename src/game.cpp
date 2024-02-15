@@ -5846,7 +5846,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			// commented out stuff is TODO, once we approach further in revscriptsys
 			g_actions->clear();
 			g_creatureEvents->clear();
-			g_moveEvents->clear(true);
+			g_moveEvents->clear();
 			g_talkActions->clear(true);
 			g_globalEvents->clear();
 			g_weapons->clear(true);
@@ -5882,7 +5882,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_chat->load();
 			g_actions->clear();
 			g_creatureEvents->clear();
-			g_moveEvents->clear(true);
+			g_moveEvents->clear();
 			g_talkActions->clear(true);
 			g_globalEvents->clear();
 			g_spells->clear();

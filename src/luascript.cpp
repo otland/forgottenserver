@@ -17201,23 +17201,26 @@ int LuaScriptInterface::luaCreatureEventOnCallback(lua_State* L)
 int LuaScriptInterface::luaCreateMoveEvent(lua_State* L)
 {
 	// MoveEvent()
-	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+	if (LuaScriptInterface::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
 		reportErrorFunc(L, "MoveEvents can only be registered in the Scripts interface.");
 		lua_pushnil(L);
 		return 1;
 	}
 
-	MoveEvent* moveevent = new MoveEvent(getScriptEnv()->getScriptInterface());
-	moveevent->fromLua = true;
-	pushUserdata<MoveEvent>(L, moveevent);
-	setMetatable(L, -1, "MoveEvent");
+	auto moveevent = std::make_shared<MoveEvent>(LuaScriptInterface::getScriptEnv()->getScriptInterface());
+	if (moveevent) {
+		pushSharedPtr<MoveEvent_shared_ptr>(L, moveevent);
+		setMetatable(L, -1, "MoveEvent");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaMoveEventType(lua_State* L)
 {
 	// moveevent:type(callback)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		std::string typeName = getString(L, 2);
 		std::string tmpStr = boost::algorithm::to_lower_copy(typeName);
@@ -17253,7 +17256,7 @@ int LuaScriptInterface::luaMoveEventType(lua_State* L)
 int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 {
 	// moveevent:register()
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		if ((moveevent->getEventType() == MOVE_EVENT_EQUIP || moveevent->getEventType() == MOVE_EVENT_DEEQUIP) &&
 		    moveevent->getSlot() == SLOTP_WHEREEVER) {
@@ -17266,10 +17269,6 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 			return 1;
 		}
 		pushBoolean(L, g_moveEvents->registerLuaEvent(moveevent));
-		moveevent->clearItemIdRange();
-		moveevent->clearActionIdRange();
-		moveevent->clearUniqueIdRange();
-		moveevent->clearPosList();
 	} else {
 		lua_pushnil(L);
 	}
@@ -17279,7 +17278,7 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 int LuaScriptInterface::luaMoveEventOnCallback(lua_State* L)
 {
 	// moveevent:onEquip / deEquip / etc. (callback)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		if (!moveevent->loadCallback()) {
 			pushBoolean(L, false);
@@ -17295,7 +17294,7 @@ int LuaScriptInterface::luaMoveEventOnCallback(lua_State* L)
 int LuaScriptInterface::luaMoveEventSlot(lua_State* L)
 {
 	// moveevent:slot(slot)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (!moveevent) {
 		lua_pushnil(L);
 		return 1;
@@ -17339,7 +17338,7 @@ int LuaScriptInterface::luaMoveEventSlot(lua_State* L)
 int LuaScriptInterface::luaMoveEventLevel(lua_State* L)
 {
 	// moveevent:level(lvl)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		moveevent->setRequiredLevel(getNumber<uint32_t>(L, 2));
 		moveevent->setWieldInfo(WIELDINFO_LEVEL);
@@ -17353,7 +17352,7 @@ int LuaScriptInterface::luaMoveEventLevel(lua_State* L)
 int LuaScriptInterface::luaMoveEventMagLevel(lua_State* L)
 {
 	// moveevent:magicLevel(lvl)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		moveevent->setRequiredMagLevel(getNumber<uint32_t>(L, 2));
 		moveevent->setWieldInfo(WIELDINFO_MAGLV);
@@ -17367,7 +17366,7 @@ int LuaScriptInterface::luaMoveEventMagLevel(lua_State* L)
 int LuaScriptInterface::luaMoveEventPremium(lua_State* L)
 {
 	// moveevent:premium(bool)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		moveevent->setNeedPremium(getBoolean(L, 2));
 		moveevent->setWieldInfo(WIELDINFO_PREMIUM);
@@ -17381,7 +17380,7 @@ int LuaScriptInterface::luaMoveEventPremium(lua_State* L)
 int LuaScriptInterface::luaMoveEventVocation(lua_State* L)
 {
 	// moveevent:vocation(vocName[, showInDescription = false, lastVoc = false])
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		moveevent->addVocationEquipSet(getString(L, 2));
 		moveevent->setWieldInfo(WIELDINFO_VOCREQ);
@@ -17421,7 +17420,7 @@ int LuaScriptInterface::luaMoveEventVocation(lua_State* L)
 int LuaScriptInterface::luaMoveEventTileItem(lua_State* L)
 {
 	// moveevent:tileItem(bool)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		moveevent->setTileItem(getBoolean(L, 2));
 		pushBoolean(L, true);
@@ -17434,7 +17433,7 @@ int LuaScriptInterface::luaMoveEventTileItem(lua_State* L)
 int LuaScriptInterface::luaMoveEventItemId(lua_State* L)
 {
 	// moveevent:id(ids)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -17454,7 +17453,7 @@ int LuaScriptInterface::luaMoveEventItemId(lua_State* L)
 int LuaScriptInterface::luaMoveEventActionId(lua_State* L)
 {
 	// moveevent:aid(ids)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -17474,7 +17473,7 @@ int LuaScriptInterface::luaMoveEventActionId(lua_State* L)
 int LuaScriptInterface::luaMoveEventUniqueId(lua_State* L)
 {
 	// moveevent:uid(ids)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
@@ -17494,7 +17493,7 @@ int LuaScriptInterface::luaMoveEventUniqueId(lua_State* L)
 int LuaScriptInterface::luaMoveEventPosition(lua_State* L)
 {
 	// moveevent:position(positions)
-	MoveEvent* moveevent = getUserdata<MoveEvent>(L, 1);
+	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
