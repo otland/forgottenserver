@@ -1517,6 +1517,7 @@ private:
 
 	// Talkactions
 	static int luaCreateTalkaction(lua_State* L);
+	static int luaTalkactionWord(lua_State* L);
 	static int luaTalkactionOnSay(lua_State* L);
 	static int luaTalkactionRegister(lua_State* L);
 	static int luaTalkactionSeparator(lua_State* L);

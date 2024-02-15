@@ -5847,7 +5847,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_actions->clear();
 			g_creatureEvents->clear();
 			g_moveEvents->clear();
-			g_talkActions->clear(true);
+			g_talkActions->clear();
 			g_globalEvents->clear();
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
@@ -5883,7 +5883,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_actions->clear();
 			g_creatureEvents->clear();
 			g_moveEvents->clear();
-			g_talkActions->clear(true);
+			g_talkActions->clear();
 			g_globalEvents->clear();
 			g_spells->clear();
 			g_scripts->loadScripts(true);

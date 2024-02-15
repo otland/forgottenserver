@@ -16997,29 +16997,52 @@ int LuaScriptInterface::luaActionCheckFloor(lua_State* L)
 
 int LuaScriptInterface::luaCreateTalkaction(lua_State* L)
 {
-	// TalkAction(words)
-	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+	// TalkAction()
+	if (LuaScriptInterface::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
 		reportErrorFunc(L, "TalkActions can only be registered in the Scripts interface.");
 		lua_pushnil(L);
 		return 1;
 	}
 
-	TalkAction* talk = new TalkAction(getScriptEnv()->getScriptInterface());
-	for (int i = 2; i <= lua_gettop(L); i++) {
-		talk->setWords(getString(L, i));
+	auto talk = std::make_shared<TalkAction>(LuaScriptInterface::getScriptEnv()->getScriptInterface());
+	if (talk) {
+		// classic revscriptsys registering
+		if (isString(L, 2)) {
+			for (int i = 2; i <= lua_gettop(L); i++) {
+				talk->setWords(getString(L, i));
+			}
+		}
+		pushSharedPtr<TalkAction_shared_ptr>(L, talk);
+		setMetatable(L, -1, "TalkAction");
+	} else {
+		lua_pushnil(L);
 	}
-	talk->fromLua = true;
-	pushUserdata<TalkAction>(L, talk);
-	setMetatable(L, -1, "TalkAction");
+	return 1;
+}
+
+int LuaScriptInterface::luaTalkactionWord(lua_State* L)
+{
+	// talkAction:word(word)
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
+	if (talk) {
+		for (int i = 2; i <= lua_gettop(L); i++) {
+			talk->setWords(getString(L, i));
+		}
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaTalkactionOnSay(lua_State* L)
 {
 	// talkAction:onSay(callback)
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
 	if (talk) {
-		if (!talk->loadCallback()) {
+		const std::string& functionName = getString(L, 2);
+		bool fileName = functionName == "onSay" ? true : false;
+		if (!talk->loadCallback(functionName, fileName)) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -17033,7 +17056,7 @@ int LuaScriptInterface::luaTalkactionOnSay(lua_State* L)
 int LuaScriptInterface::luaTalkactionRegister(lua_State* L)
 {
 	// talkAction:register()
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
 	if (talk) {
 		if (!talk->isScripted()) {
 			pushBoolean(L, false);
@@ -17049,7 +17072,7 @@ int LuaScriptInterface::luaTalkactionRegister(lua_State* L)
 int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 {
 	// talkAction:separator(sep)
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
 	if (talk) {
 		talk->setSeparator(getString(L, 2));
 		pushBoolean(L, true);
@@ -17062,7 +17085,7 @@ int LuaScriptInterface::luaTalkactionSeparator(lua_State* L)
 int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
 {
 	// talkAction:access(needAccess = false)
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
 	if (talk) {
 		talk->setNeedAccess(getBoolean(L, 2));
 		pushBoolean(L, true);
@@ -17075,7 +17098,7 @@ int LuaScriptInterface::luaTalkactionAccess(lua_State* L)
 int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 {
 	// talkAction:accountType(AccountType_t = ACCOUNT_TYPE_NORMAL)
-	TalkAction* talk = getUserdata<TalkAction>(L, 1);
+	TalkAction_shared_ptr talk = getSharedPtr<TalkAction>(L, 1);
 	if (talk) {
 		talk->setRequiredAccountType(getNumber<AccountType_t>(L, 2));
 		pushBoolean(L, true);
@@ -17187,7 +17210,18 @@ int LuaScriptInterface::luaCreatureEventOnCallback(lua_State* L)
 	// creatureevent:onLogin / logout / etc. (callback)
 	CreatureEvent_shared_ptr creature = getSharedPtr<CreatureEvent>(L, 1);
 	if (creature) {
-		if (!creature->loadCallback()) {
+		const std::string& functionName = getString(L, 2);
+		bool fileName = false;
+		const static std::vector<std::string> tmp = {
+		    "onLogin",   "onLogout",      "onThink",    "onPrepareDeath", "onDeath",      "onKill",
+		    "onAdvance", "onModalWindow", "onTextEdit", "onHealthChange", "onManaChange", "onExtendedOpcode"};
+		for (auto& it : tmp) {
+			if (it == functionName) {
+				fileName = true;
+				break;
+			}
+		}
+		if (!creature->loadCallback(functionName, fileName)) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -17280,7 +17314,17 @@ int LuaScriptInterface::luaMoveEventOnCallback(lua_State* L)
 	// moveevent:onEquip / deEquip / etc. (callback)
 	MoveEvent_shared_ptr moveevent = getSharedPtr<MoveEvent>(L, 1);
 	if (moveevent) {
-		if (!moveevent->loadCallback()) {
+		const std::string& functionName = getString(L, 2);
+		bool fileName = false;
+		const static std::vector<std::string> tmp = {"onEquip",   "onDeequip", "onStepIn",
+		                                             "onStepOut", "onAddItem", "onRemoveItem"};
+		for (auto& it : tmp) {
+			if (it == functionName) {
+				fileName = true;
+				break;
+			}
+		}
+		if (!moveevent->loadCallback(functionName, fileName)) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -17606,7 +17650,16 @@ int LuaScriptInterface::luaGlobalEventOnCallback(lua_State* L)
 	// globalevent:onThink / record / etc. (callback)
 	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
 	if (global) {
-		if (!global->loadCallback()) {
+		const std::string& functionName = getString(L, 2);
+		bool fileName = false;
+		const static std::vector<std::string> tmp = {"onThink", "onTime", "onStartup", "onShutdown", "onRecord"};
+		for (auto& it : tmp) {
+			if (it == functionName) {
+				fileName = true;
+				break;
+			}
+		}
+		if (!global->loadCallback(functionName, fileName)) {
 			pushBoolean(L, false);
 			return 1;
 		}
