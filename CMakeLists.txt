@@ -111,4 +111,10 @@ if(NOT SKIP_GIT)
 endif()
 ### END  Git Version ###
 
+# Option to disable unity builds
+option(ENABLE_UNITY_BUILD "Enable unity build" ON)
+if(ENABLE_UNITY_BUILD)
+    set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
+endif()
+
 target_precompile_headers(tfs PUBLIC src/otpch.h)
