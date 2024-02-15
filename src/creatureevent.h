@@ -9,7 +9,7 @@
 #include "luascript.h"
 
 class CreatureEvent;
-using CreatureEvent_ptr = std::unique_ptr<CreatureEvent>;
+using CreatureEvent_shared_ptr = std::shared_ptr<CreatureEvent>;
 
 enum CreatureEventType_t
 {
@@ -67,7 +67,7 @@ private:
 	bool loaded;
 };
 
-class CreatureEvents final : public BaseEvents
+class CreatureEvents
 {
 public:
 	CreatureEvents();
@@ -81,21 +81,16 @@ public:
 	bool playerLogout(Player* player) const;
 	bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
 
-	CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);
+	CreatureEvent_shared_ptr getEventByName(const std::string& name, bool forceLoaded = true);
 
-	bool registerLuaEvent(CreatureEvent* event);
-	void clear(bool fromLua) override final;
+	bool registerLuaEvent(CreatureEvent_shared_ptr event);
+	void clear();
 
 	void removeInvalidEvents();
 
 private:
-	LuaScriptInterface& getScriptInterface() override;
-	std::string_view getScriptBaseName() const override { return "creaturescripts"; }
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-
 	// creature events
-	using CreatureEventMap = std::map<std::string, CreatureEvent>;
+	using CreatureEventMap = std::map<std::string, CreatureEvent_shared_ptr>;
 	CreatureEventMap creatureEvents;
 
 	LuaScriptInterface scriptInterface;

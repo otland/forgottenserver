@@ -10,69 +10,30 @@
 
 CreatureEvents::CreatureEvents() : scriptInterface("CreatureScript Interface") { scriptInterface.initState(); }
 
-void CreatureEvents::clear(bool fromLua)
+void CreatureEvents::clear()
 {
-	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
-		if (fromLua == it->second.fromLua) {
-			it->second.clearEvent();
-		}
-	}
+	creatureEvents.clear();
 
-	reInitState(fromLua);
+	scriptInterface.reInitState();
 }
 
 void CreatureEvents::removeInvalidEvents()
 {
 	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ++it) {
-		if (it->second.getScriptId() == 0) {
-			creatureEvents.erase(it->second.getName());
+		if (it->second->getScriptId() == 0) {
+			creatureEvents.erase(it->second->getName());
 		}
 	}
 }
 
-LuaScriptInterface& CreatureEvents::getScriptInterface() { return scriptInterface; }
-
-Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
+bool CreatureEvents::registerLuaEvent(CreatureEvent_shared_ptr creatureEvent)
 {
-	if (!caseInsensitiveEqual(nodeName, "event")) {
-		return nullptr;
-	}
-	return Event_ptr(new CreatureEvent(&scriptInterface));
-}
-
-bool CreatureEvents::registerEvent(Event_ptr event, const pugi::xml_node&)
-{
-	CreatureEvent_ptr creatureEvent{
-	    static_cast<CreatureEvent*>(event.release())}; // event is guaranteed to be a CreatureEvent
-	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
-		std::cout << "Error: [CreatureEvents::registerEvent] Trying to register event without type!" << std::endl;
-		return false;
-	}
-
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
-	if (oldEvent) {
-		// if there was an event with the same that is not loaded
-		//(happens when reloading), it is reused
-		if (!oldEvent->isLoaded() && oldEvent->getEventType() == creatureEvent->getEventType()) {
-			oldEvent->copyEvent(creatureEvent.get());
-		}
-		return false;
-	}
-
-	// if not, register it normally
-	creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
-	return true;
-}
-
-bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
-{
-	CreatureEvent_ptr creatureEvent{event};
 	if (creatureEvent->getEventType() == CREATURE_EVENT_NONE) {
 		std::cout << "Error: [CreatureEvents::registerLuaEvent] Trying to register event without type!" << std::endl;
 		return false;
 	}
 
-	CreatureEvent* oldEvent = getEventByName(creatureEvent->getName(), false);
+	CreatureEvent_shared_ptr oldEvent = getEventByName(creatureEvent->getName(), false);
 	if (oldEvent) {
 		// if there was an event with the same that is not loaded
 		//(happens when reloading), it is reused
@@ -83,16 +44,16 @@ bool CreatureEvents::registerLuaEvent(CreatureEvent* event)
 	}
 
 	// if not, register it normally
-	creatureEvents.emplace(creatureEvent->getName(), std::move(*creatureEvent));
+	creatureEvents.emplace(creatureEvent->getName(), creatureEvent);
 	return true;
 }
 
-CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
+CreatureEvent_shared_ptr CreatureEvents::getEventByName(const std::string& name, bool forceLoaded /*= true*/)
 {
 	auto it = creatureEvents.find(name);
 	if (it != creatureEvents.end()) {
-		if (!forceLoaded || it->second.isLoaded()) {
-			return &it->second;
+		if (!forceLoaded || it->second->isLoaded()) {
+			return it->second;
 		}
 	}
 	return nullptr;
@@ -102,8 +63,8 @@ bool CreatureEvents::playerLogin(Player* player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
-		if (it.second.getEventType() == CREATURE_EVENT_LOGIN) {
-			if (!it.second.executeOnLogin(player)) {
+		if (it.second->getEventType() == CREATURE_EVENT_LOGIN) {
+			if (!it.second->executeOnLogin(player)) {
 				return false;
 			}
 		}
@@ -115,8 +76,8 @@ bool CreatureEvents::playerLogout(Player* player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
-		if (it.second.getEventType() == CREATURE_EVENT_LOGOUT) {
-			if (!it.second.executeOnLogout(player)) {
+		if (it.second->getEventType() == CREATURE_EVENT_LOGOUT) {
+			if (!it.second->executeOnLogout(player)) {
 				return false;
 			}
 		}
@@ -127,8 +88,8 @@ bool CreatureEvents::playerLogout(Player* player) const
 bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
 {
 	for (auto& it : creatureEvents) {
-		if (it.second.getEventType() == CREATURE_EVENT_ADVANCE) {
-			if (!it.second.executeAdvance(player, skill, oldLevel, newLevel)) {
+		if (it.second->getEventType() == CREATURE_EVENT_ADVANCE) {
+			if (!it.second->executeAdvance(player, skill, oldLevel, newLevel)) {
 				return false;
 			}
 		}

@@ -7784,7 +7784,7 @@ int LuaScriptInterface::luaCreatureGetEvents(lua_State* L)
 	lua_createtable(L, eventList.size(), 0);
 
 	int index = 0;
-	for (CreatureEvent* event : eventList) {
+	for (auto& event : eventList) {
 		pushString(L, event->getName());
 		lua_rawseti(L, -2, ++index);
 	}
@@ -17085,25 +17085,31 @@ int LuaScriptInterface::luaTalkactionAccountType(lua_State* L)
 
 int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 {
-	// CreatureEvent(eventName)
-	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+	// CreatureEvent({event = "login", name = "test"})
+	if (LuaScriptInterface::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
 		reportErrorFunc(L, "CreatureEvents can only be registered in the Scripts interface.");
 		lua_pushnil(L);
 		return 1;
 	}
 
-	CreatureEvent* creature = new CreatureEvent(getScriptEnv()->getScriptInterface());
-	creature->setName(getString(L, 2));
-	creature->fromLua = true;
-	pushUserdata<CreatureEvent>(L, creature);
-	setMetatable(L, -1, "CreatureEvent");
+	auto creature = std::make_shared<CreatureEvent>(LuaScriptInterface::getScriptEnv()->getScriptInterface());
+	if (creature) {
+		// checking if it's old revscriptsys
+		if (isString(L, 2)) {
+			creature->setName(getString(L, 2));
+		}
+		pushSharedPtr<CreatureEvent_shared_ptr>(L, creature);
+		setMetatable(L, -1, "CreatureEvent");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 {
 	// creatureevent:type(callback)
-	CreatureEvent* creature = getUserdata<CreatureEvent>(L, 1);
+	CreatureEvent_shared_ptr creature = getSharedPtr<CreatureEvent>(L, 1);
 	if (creature) {
 		std::string typeName = getString(L, 2);
 		std::string tmpStr = boost::algorithm::to_lower_copy(typeName);
@@ -17147,7 +17153,7 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 int LuaScriptInterface::luaCreatureEventRegister(lua_State* L)
 {
 	// creatureevent:register()
-	CreatureEvent* creature = getUserdata<CreatureEvent>(L, 1);
+	CreatureEvent_shared_ptr creature = getSharedPtr<CreatureEvent>(L, 1);
 	if (creature) {
 		if (!creature->isScripted()) {
 			pushBoolean(L, false);
@@ -17163,7 +17169,7 @@ int LuaScriptInterface::luaCreatureEventRegister(lua_State* L)
 int LuaScriptInterface::luaCreatureEventOnCallback(lua_State* L)
 {
 	// creatureevent:onLogin / logout / etc. (callback)
-	CreatureEvent* creature = getUserdata<CreatureEvent>(L, 1);
+	CreatureEvent_shared_ptr creature = getSharedPtr<CreatureEvent>(L, 1);
 	if (creature) {
 		if (!creature->loadCallback()) {
 			pushBoolean(L, false);
