@@ -4909,7 +4909,7 @@ void Game::checkPlayersRecord()
 		playersRecord = playersOnline;
 
 		for (auto& it : g_globalEvents->getEventMap(GLOBALEVENT_RECORD)) {
-			it.second.executeRecord(playersRecord, previousRecord);
+			it.second->executeRecord(playersRecord, previousRecord);
 		}
 		updatePlayersRecord();
 	}
@@ -5848,7 +5848,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_creatureEvents->clear();
 			g_moveEvents->clear(true);
 			g_talkActions->clear(true);
-			g_globalEvents->clear(true);
+			g_globalEvents->clear();
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			g_spells->clear();
@@ -5878,14 +5878,13 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_weapons->clear(true);
 			g_weapons->loadDefaults();
 			mounts.reload();
-			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
 			g_actions->clear();
 			g_creatureEvents->clear();
 			g_moveEvents->clear(true);
 			g_talkActions->clear(true);
-			g_globalEvents->clear(true);
+			g_globalEvents->clear();
 			g_spells->clear();
 			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();

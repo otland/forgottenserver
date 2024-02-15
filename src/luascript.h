@@ -1525,6 +1525,7 @@ private:
 
 	// CreatureEvents
 	static int luaCreateCreatureEvent(lua_State* L);
+	static int luaCreatureEventName(lua_State* L);
 	static int luaCreatureEventType(lua_State* L);
 	static int luaCreatureEventRegister(lua_State* L);
 	static int luaCreatureEventOnCallback(lua_State* L);
@@ -1547,6 +1548,7 @@ private:
 
 	// GlobalEvents
 	static int luaCreateGlobalEvent(lua_State* L);
+	static int luaGlobalEventName(lua_State* L);
 	static int luaGlobalEventType(lua_State* L);
 	static int luaGlobalEventRegister(lua_State* L);
 	static int luaGlobalEventOnCallback(lua_State* L);

@@ -3298,6 +3298,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// CreatureEvent
 	registerClass("CreatureEvent", "", LuaScriptInterface::luaCreateCreatureEvent);
+	registerMethod("CreatureEvent", "name", LuaScriptInterface::luaCreatureEventName);
 	registerMethod("CreatureEvent", "type", LuaScriptInterface::luaCreatureEventType);
 	registerMethod("CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
 	registerMethod("CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -3336,6 +3337,7 @@ void LuaScriptInterface::registerFunctions()
 
 	// GlobalEvent
 	registerClass("GlobalEvent", "", LuaScriptInterface::luaCreateGlobalEvent);
+	registerMethod("GlobalEvent", "name", LuaScriptInterface::luaGlobalEventName);
 	registerMethod("GlobalEvent", "type", LuaScriptInterface::luaGlobalEventType);
 	registerMethod("GlobalEvent", "register", LuaScriptInterface::luaGlobalEventRegister);
 	registerMethod("GlobalEvent", "time", LuaScriptInterface::luaGlobalEventTime);
@@ -5088,7 +5090,7 @@ int LuaScriptInterface::luaGameStartEvent(lua_State* L)
 
 	const auto& eventMap = g_globalEvents->getEventMap(GLOBALEVENT_TIMER);
 	if (auto it = eventMap.find(eventName); it != eventMap.end()) {
-		pushBoolean(L, it->second.executeEvent());
+		pushBoolean(L, it->second->executeEvent());
 	} else {
 		lua_pushnil(L);
 	}
@@ -17106,6 +17108,20 @@ int LuaScriptInterface::luaCreateCreatureEvent(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureEventName(lua_State* L)
+{
+	// creatureevent:name(name)
+	CreatureEvent_shared_ptr creature = getSharedPtr<CreatureEvent>(L, 1);
+	if (creature) {
+		const std::string& name = getString(L, 2);
+		creature->setName(name);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 {
 	// creatureevent:type(callback)
@@ -17497,26 +17513,46 @@ int LuaScriptInterface::luaMoveEventPosition(lua_State* L)
 
 int LuaScriptInterface::luaCreateGlobalEvent(lua_State* L)
 {
-	// GlobalEvent(eventName)
-	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+	// GlobalEvent({event = "think", name = "test"})
+	if (LuaScriptInterface::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
 		reportErrorFunc(L, "GlobalEvents can only be registered in the Scripts interface.");
 		lua_pushnil(L);
 		return 1;
 	}
 
-	GlobalEvent* global = new GlobalEvent(getScriptEnv()->getScriptInterface());
-	global->setName(getString(L, 2));
-	global->setEventType(GLOBALEVENT_NONE);
-	global->fromLua = true;
-	pushUserdata<GlobalEvent>(L, global);
-	setMetatable(L, -1, "GlobalEvent");
+	auto global = std::make_shared<GlobalEvent>(LuaScriptInterface::getScriptEnv()->getScriptInterface());
+	if (global) {
+		// checking for old revscriptsys
+		if (isString(L, 2)) {
+			global->setName(getString(L, 2));
+		}
+		global->setEventType(GLOBALEVENT_NONE);
+		pushSharedPtr<GlobalEvent_shared_ptr>(L, global);
+		setMetatable(L, -1, "GlobalEvent");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaGlobalEventName(lua_State* L)
+{
+	// globalevent:name(name)
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
+	if (global) {
+		const std::string& name = getString(L, 2);
+		global->setName(name);
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
 int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 {
 	// globalevent:type(callback)
-	GlobalEvent* global = getUserdata<GlobalEvent>(L, 1);
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
 	if (global) {
 		std::string typeName = getString(L, 2);
 		std::string tmpStr = boost::algorithm::to_lower_copy(typeName);
@@ -17545,21 +17581,21 @@ int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 {
 	// globalevent:register()
-	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
-		if (!globalevent->isScripted()) {
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
+	if (global) {
+		if (!global->isScripted()) {
 			pushBoolean(L, false);
 			return 1;
 		}
 
-		if (globalevent->getEventType() == GLOBALEVENT_NONE && globalevent->getInterval() == 0) {
+		if (global->getEventType() == GLOBALEVENT_NONE && global->getInterval() == 0) {
 			std::cout << "[Error - LuaScriptInterface::luaGlobalEventRegister] No interval for globalevent with name "
-			          << globalevent->getName() << std::endl;
+			          << global->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
 
-		pushBoolean(L, g_globalEvents->registerLuaEvent(globalevent));
+		pushBoolean(L, g_globalEvents->registerLuaEvent(global));
 	} else {
 		lua_pushnil(L);
 	}
@@ -17569,9 +17605,9 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 int LuaScriptInterface::luaGlobalEventOnCallback(lua_State* L)
 {
 	// globalevent:onThink / record / etc. (callback)
-	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
-		if (!globalevent->loadCallback()) {
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
+	if (global) {
+		if (!global->loadCallback()) {
 			pushBoolean(L, false);
 			return 1;
 		}
@@ -17585,20 +17621,20 @@ int LuaScriptInterface::luaGlobalEventOnCallback(lua_State* L)
 int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 {
 	// globalevent:time(time)
-	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
+	if (global) {
 		std::string timer = getString(L, 2);
 		std::vector<int32_t> params = vectorAtoi(explodeString(timer, ":"));
 
 		int32_t hour = params.front();
 		if (hour < 0 || hour > 23) {
 			std::cout << "[Error - GlobalEvent::configureEvent] Invalid hour \"" << timer
-			          << "\" for globalevent with name: " << globalevent->getName() << std::endl;
+			          << "\" for globalevent with name: " << global->getName() << std::endl;
 			pushBoolean(L, false);
 			return 1;
 		}
 
-		globalevent->setInterval(hour << 16);
+		global->setInterval(hour << 16);
 
 		int32_t min = 0;
 		int32_t sec = 0;
@@ -17606,7 +17642,7 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 			min = params[1];
 			if (min < 0 || min > 59) {
 				std::cout << "[Error - GlobalEvent::configureEvent] Invalid minute \"" << timer
-				          << "\" for globalevent with name: " << globalevent->getName() << std::endl;
+				          << "\" for globalevent with name: " << global->getName() << std::endl;
 				pushBoolean(L, false);
 				return 1;
 			}
@@ -17615,7 +17651,7 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 				sec = params[2];
 				if (sec < 0 || sec > 59) {
 					std::cout << "[Error - GlobalEvent::configureEvent] Invalid second \"" << timer
-					          << "\" for globalevent with name: " << globalevent->getName() << std::endl;
+					          << "\" for globalevent with name: " << global->getName() << std::endl;
 					pushBoolean(L, false);
 					return 1;
 				}
@@ -17633,8 +17669,8 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 			difference += 86400;
 		}
 
-		globalevent->setNextExecution(current_time + difference);
-		globalevent->setEventType(GLOBALEVENT_TIMER);
+		global->setNextExecution(current_time + difference);
+		global->setEventType(GLOBALEVENT_TIMER);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -17645,10 +17681,10 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 int LuaScriptInterface::luaGlobalEventInterval(lua_State* L)
 {
 	// globalevent:interval(interval)
-	GlobalEvent* globalevent = getUserdata<GlobalEvent>(L, 1);
-	if (globalevent) {
-		globalevent->setInterval(getNumber<uint32_t>(L, 2));
-		globalevent->setNextExecution(OTSYS_TIME() + getNumber<uint32_t>(L, 2));
+	GlobalEvent_shared_ptr global = getSharedPtr<GlobalEvent>(L, 1);
+	if (global) {
+		global->setInterval(getNumber<uint32_t>(L, 2));
+		global->setNextExecution(OTSYS_TIME() + getNumber<uint32_t>(L, 2));
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
