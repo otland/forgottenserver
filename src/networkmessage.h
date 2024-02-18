@@ -70,7 +70,7 @@ public:
 		return value;
 	}
 
-	std::string_view getString(uint16_t stringLen = 0);
+	std::string getString(uint16_t stringLen = 0);
 	Position getPosition();
 
 	// skips count unknown/unused bytes in an incoming message

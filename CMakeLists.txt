@@ -65,7 +65,11 @@ if (NOT FORCE_LUAJIT)
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams)
+if (APPLE)
+    find_package(Iconv REQUIRED)
+endif()
+
+find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams locale)
 
 option(BUILD_TESTING "Build unit tests" OFF)
 
