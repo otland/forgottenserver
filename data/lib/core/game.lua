@@ -302,3 +302,23 @@ do
 		return transaction:commit()
 	end
 end
+
+do
+	local debugAsserts = {}
+
+	function Game.hasDebugAssert(playerGuid)
+		return debugAsserts[playerGuid] ~= nil
+	end
+
+	function Game.addDebugAssert(playerGuid)
+		debugAsserts[playerGuid] = os.time()
+	end
+
+	function Game.removeDebugAssert(playerGuid)
+		debugAsserts[playerGuid] = nil
+	end
+
+	function Game.saveDebugAssert(playerGuid, assertLine, date, description, comment)
+		db.asyncQuery("INSERT INTO `player_debugasserts` (`player_id`, `assert_line`, `date`, `description`, `comment`) VALUES(" .. playerGuid .. ", " .. db.escapeString(assertLine) .. ", " .. db.escapeString(date) .. ", " .. db.escapeString(description) .. ", " .. db.escapeString(comment) .. ")")
+	end
+end

@@ -771,9 +771,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			break;
 		case 0xE7: /* thank you */
 			break;
-		case 0xE8:
-			parseDebugAssert(msg);
-			break;
 		// case 0xEF: break; // request store coins transfer
 		case 0xF2:
 			parseRuleViolationReport(msg);
@@ -1464,24 +1461,6 @@ void ProtocolGame::parseBugReport(NetworkMessage& msg)
 
 	g_dispatcher.addTask([=, playerID = player->getID(), message = std::string{message}]() {
 		g_game.playerReportBug(playerID, message, position, category);
-	});
-}
-
-void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
-{
-	if (debugAssertSent) {
-		return;
-	}
-
-	debugAssertSent = true;
-
-	auto assertLine = msg.getString();
-	auto date = msg.getString();
-	auto description = msg.getString();
-	auto comment = msg.getString();
-	g_dispatcher.addTask([playerID = player->getID(), assertLine = std::string{assertLine}, date = std::string{date},
-	                      description = std::string{description}, comment = std::string{comment}]() {
-		g_game.playerDebugAssert(playerID, assertLine, date, description, comment);
 	});
 }
 
