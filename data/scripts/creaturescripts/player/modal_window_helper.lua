@@ -38,12 +38,12 @@ end
 
 function ModalWindow:addButton(name, callback)
 	if type(name) ~= "string" then
-		io.write("ModalWindow:addButton: name must be a string.")
+		io.write("ModalWindow:addButton: name must be a string.\n")
 		name = tostring(name)
 	end
 
 	if self.buttons[name] then
-		io.write("ModalWindow: Button with name '" .. name .. "' already exists.")
+		io.write("ModalWindow: Button with name '" .. name .. "' already exists.\n")
 		return false
 	end
 
@@ -51,18 +51,18 @@ function ModalWindow:addButton(name, callback)
 	local button = { id = id, name = name, callback = callback }
 	self.buttons[id] = button
 	self.buttons[name] = button
-	return true
+	return button
 end
 
 function ModalWindow:removeButton(name)
 	if type(name) ~= "string" then
-		io.write("ModalWindow:removeButton: name must be a string.")
+		io.write("ModalWindow:removeButton: name must be a string.\n")
 		name = tostring(name)
 	end
 
 	local button = self.buttons[name]
 	if not button then
-		io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
+		io.write("ModalWindow: Button with name '" .. name .. "' does not exist.\n")
 		return false
 	end
 
@@ -73,18 +73,18 @@ end
 
 function ModalWindow:callButton(name, player, button, choice)
 	if type(name) ~= "string" then
-		io.write("ModalWindow:callButton: name must be a string.")
+		io.write("ModalWindow:callButton: name must be a string.\n")
 		name = tostring(name)
 	end
 
 	local button = self.buttons[name]
 	if not button then
-		io.write("ModalWindow: Button with name '" .. name .. "' does not exist.")
+		io.write("ModalWindow: Button with name '" .. name .. "' does not exist.\n")
 		return false
 	end
 
 	if not button.callback then
-		io.write("ModalWindow: Button with name '" .. name .. "' has no callback.")
+		io.write("ModalWindow: Button with name '" .. name .. "' has no callback.\n")
 		return false
 	end
 	return button.callback(player, button, choice)
@@ -112,7 +112,7 @@ end
 
 function ModalWindow:addChoice(text, callback)
 	if type(text) ~= "string" then
-		io.write("ModalWindow:addChoice: text must be a string.")
+		io.write("ModalWindow:addChoice: text must be a string.\n")
 		text = tostring(text)
 	end
 
@@ -120,18 +120,18 @@ function ModalWindow:addChoice(text, callback)
 	local choice = { id = id, text = text, callback = callback }
 	self.choices[id] = choice
 	self.choices[text] = choice
-	return true
+	return choice
 end
 
 function ModalWindow:removeChoice(text)
 	if type(text) ~= "string" then
-		io.write("ModalWindow:removeChoice: text must be a string.")
+		io.write("ModalWindow:removeChoice: text must be a string.\n")
 		text = tostring(text)
 	end
 
 	local choice = self.choices[text]
 	if not choice then
-		io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
+		io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.\n")
 		return false
 	end
 
@@ -142,18 +142,18 @@ end
 
 function ModalWindow:callChoice(text, player, button, choice)
 	if type(text) ~= "string" then
-		io.write("ModalWindow:callChoice: text must be a string.")
+		io.write("ModalWindow:callChoice: text must be a string.\n")
 		text = tostring(text)
 	end
 
 	local choice = self.choices[text]
 	if not choice then
-		io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.")
+		io.write("ModalWindow: Choice with text '" .. text .. "' does not exist.\n")
 		return false
 	end
 
 	if not choice.callback then
-		io.write("ModalWindow: Choice with text '" .. text .. "' has no callback.")
+		io.write("ModalWindow: Choice with text '" .. text .. "' has no callback.\n")
 		return false
 	end
 	return choice.callback(player, button, choice)
@@ -193,9 +193,9 @@ function ModalWindow:create()
 		local name = self.buttons[id].name
 		modalWindow:addButton(id, name)
 		if id == self.defaultEnterButton or name == self.defaultEnterButton then
-			modalWindow:setDefaultEnterButton(id)
+			modalWindow:setDefaultEnterButton(id - 1)
 		elseif id == self.defaultEscapeButton or name == self.defaultEscapeButton then
-			modalWindow:setDefaultEscapeButton(id)
+			modalWindow:setDefaultEscapeButton(id - 1)
 		end
 	end
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Abyssal Calamary" nameDescription="an abyssal calamary" race="blood" experience="200" speed="280">
+<monster name="Abyssal Calamary" nameDescription="an abyssal calamary" race="blood" experience="200" speed="280" raceId="1105">
 	<health now="300" max="300" />
 	<look type="451" corpse="15280" />
 	<targetchange interval="2000" chance="5" />
@@ -15,6 +15,7 @@
 		<flag canwalkonpoison="1" />
 		<flag runonhealth="89" />
 	</flags>
+	<bestiary class="Aquatic" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Abyssal Calamary Locations..." />
 	<attacks>
 		<attack name="drunk" interval="2000" chance="10" range="2" duration="5000" />
 	</attacks>

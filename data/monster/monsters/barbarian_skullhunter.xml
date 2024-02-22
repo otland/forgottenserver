@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="168" manacost="450">
+<monster name="Barbarian Skullhunter" nameDescription="a barbarian skullhunter" race="blood" experience="85" speed="168" manacost="450" raceId="322">
 	<health now="135" max="135" />
 	<look type="254" head="0" body="77" legs="96" feet="114" corpse="20347" />
 	<targetchange interval="60000" chance="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Barbarian Skullhunter Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-65" />
 	</attacks>

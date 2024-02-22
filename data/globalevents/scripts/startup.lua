@@ -55,4 +55,7 @@ function onStartup()
 			end
 		end
 	end
+	
+	-- setup highscores variables
+	setUpHighscores()
 end

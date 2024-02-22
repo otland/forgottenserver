@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Northern Pike" nameDescription="a northern pike" race="blood" experience="0" speed="210">
+<monster name="Northern Pike" nameDescription="a northern pike" race="blood" experience="0" speed="210" raceId="783">
 	<health now="95" max="95" />
 	<look type="454" corpse="0" />
 	<targetchange interval="4000" chance="0" />
@@ -16,6 +16,7 @@
 		<flag runonhealth="95" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="5" expertise="10" mastery="25" charmPoints="2" difficulty="harmless" occurrence="uncommon" locations="Northern Pike (Creature) Locations..." />
 	<defenses armor="9" defense="9" />
 	<elements>
 		<element physicalPercent="-5" />

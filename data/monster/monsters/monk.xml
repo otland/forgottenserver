@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Monk" nameDescription="a monk" race="blood" experience="200" speed="240" manacost="600">
+<monster name="Monk" nameDescription="a monk" race="blood" experience="200" speed="240" manacost="600" raceId="57">
 	<health now="240" max="240" />
 	<look type="57" corpse="20371" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Monk Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-130" />
 	</attacks>

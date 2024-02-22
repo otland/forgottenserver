@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Clomp" nameDescription="a clomp" race="blood" experience="475" speed="430">
+<monster name="Clomp" nameDescription="a clomp" race="blood" experience="475" speed="430" raceId="1174">
 	<health now="900" max="900" />
 	<look type="860" corpse="25398" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Mammal" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Clomp Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-260" />
 	</attacks>

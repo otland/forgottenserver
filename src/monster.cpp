@@ -78,12 +78,7 @@ void Monster::setName(const std::string& name)
 
 	// NOTE: Due to how client caches known creatures, it is not feasible to send creature update to everyone that has
 	// ever met it
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, position, true, true);
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTileCreature(this);
-	}
+	g_game.updateKnownCreature(this);
 }
 
 const std::string& Monster::getNameDescription() const
@@ -997,11 +992,13 @@ void Monster::onThinkDefense(uint32_t interval)
 
 			Monster* summon = Monster::createMonster(summonBlock.name);
 			if (summon) {
-				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force)) {
+				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force, summonBlock.effect)) {
 					summon->setDropLoot(false);
 					summon->setSkillLoss(false);
 					summon->setMaster(this);
-					g_game.addMagicEffect(getPosition(), CONST_ME_MAGIC_BLUE);
+					if (summonBlock.masterEffect != CONST_ME_NONE) {
+						g_game.addMagicEffect(getPosition(), summonBlock.masterEffect);
+					}
 				} else {
 					delete summon;
 				}
@@ -1220,10 +1217,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) const
 {
-	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
-	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
-
-	for (Direction dir : dirList) {
+	for (Direction dir : getShuffleDirections()) {
 		if (canWalkTo(creaturePos, dir)) {
 			direction = dir;
 			return true;

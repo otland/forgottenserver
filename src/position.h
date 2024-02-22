@@ -94,15 +94,9 @@ struct Position
 		return false;
 	}
 
-	bool operator>(const Position& p) const { return !(*this < p); }
-
 	bool operator==(const Position& p) const { return p.x == x && p.y == y && p.z == z; }
 
 	bool operator!=(const Position& p) const { return p.x != x || p.y != y || p.z != z; }
-
-	Position operator+(const Position& p1) const { return Position(x + p1.x, y + p1.y, z + p1.z); }
-
-	Position operator-(const Position& p1) const { return Position(x - p1.x, y - p1.y, z - p1.z); }
 
 	int_fast32_t getX() const { return x; }
 	int_fast32_t getY() const { return y; }
@@ -110,6 +104,5 @@ struct Position
 };
 
 std::ostream& operator<<(std::ostream&, const Position&);
-std::ostream& operator<<(std::ostream&, const Direction&);
 
 #endif // FS_POSITION_H

@@ -1471,7 +1471,7 @@
 	<item id="1950" article="a" name="book">
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="1300" />
-		<attribute key="writeOnceItemId" value="1971" />
+		<attribute key="readable" value="true" />
 	</item>
 	<item id="1951" article="a" name="blank parchment">
 		<attribute key="weight" value="200" />
@@ -1486,12 +1486,15 @@
 		<attribute key="writeOnceItemId" value="1968" />
 	</item>
 	<item id="1953" article="a" name="parchment">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1954" article="a" name="sheet of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="50" />
 	</item>
 	<item id="1955" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1956" article="a" name="map">
@@ -1501,6 +1504,7 @@
 		<attribute key="weight" value="790" />
 	</item>
 	<item fromid="1958" toid="1966" article="a" name="book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1967" article="a" name="parchment">
@@ -1509,7 +1513,7 @@
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1968" article="a" name="document">
-		<attribute key="writeable" value="true" />
+		<attribute key="readable" value="true" />
 		<attribute key="maxTextLen" value="1023" />
 		<attribute key="weight" value="150" />
 	</item>
@@ -1519,6 +1523,7 @@
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="1970" article="the" name="holy Tible">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="1971" article="a" name="book">
@@ -4415,7 +4420,7 @@
 		<attribute key="type" value="mailbox" />
 	</item>
 	<item id="2594" article="a" name="depot chest">
-		<attribute key="containerSize" value="18" />
+		<attribute key="containerSize" value="20" />
 	</item>
 	<item id="2595" article="a" name="parcel">
 		<attribute key="type" value="container" />
@@ -17172,6 +17177,7 @@
 		<attribute key="weight" value="1000" />
 	</item>
 	<item fromid="9663" toid="9668" article="an" name="old piece of paper">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item fromid="9669" toid="9670" article="a" name="wall mirror" />
@@ -18063,6 +18069,7 @@
 	</item>
 	<item id="10006" name="Jean Pierre's Cookbook I">
 		<attribute key="description" value="It was given to you by the djinn mantre and contains the collection of recipes you cooked." />
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="10007" article="a" name="dead mutated human">
@@ -21416,6 +21423,7 @@
 	<item id="12496" article="a" name="heavy crate" />
 	<item id="12497" name="Jean Pierre's Cookbook II">
 		<attribute key="description" value="It was given to you by the djinn maitre and contains new recipes you cooked." />
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item id="12498" article="a" name="fish tail">
@@ -22408,7 +22416,9 @@
 	<item id="13262" article="a" name="sugar">
 		<attribute key="weight" value="500" />
 	</item>
-	<item id="13263" article="a" name="book" />
+	<item id="13263" article="a" name="book">
+		<attribute key="readable" value="true" />
+	</item>
 	<item fromid="13264" toid="13268" name="pressed winterberries" />
 	<item fromid="13269" toid="13271" article="a" name="stone" />
 	<item id="13272" article="a" name="magic tile">
@@ -24834,12 +24844,15 @@
 		<attribute key="description" value="The identity of some deepling is written there." />
 	</item>
 	<item id="15427" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15428" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15429" article="a" name="seashell book">
+		<attribute key="readable" value="true" />
 		<attribute key="weight" value="1300" />
 	</item>
 	<item id="15430" name="deepling scales" plural="deepling scales">
@@ -42921,4 +42934,10 @@
 	<item id="42854" article="a" name="box full of ballons" />
 	<item id="42855" article="a" name="Pan Amphora" />
 	<item id="42858" article="a" name="big reward box" />
+	<item id="44714" name="depot box XIX">
+		<attribute key="containerSize" value="32" />
+	</item>
+	<item id="44715" name="depot box XX">
+		<attribute key="containerSize" value="32" />
+	</item>
 </items>

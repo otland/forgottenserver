@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grynch Clan Goblin" nameDescription="Grynch Clan Goblin" race="blood" experience="4" speed="200">
+<monster name="Grynch Clan Goblin" nameDescription="Grynch Clan Goblin" race="blood" experience="4" speed="200" raceId="393">
 	<health now="80" max="80" />
 	<look type="61" corpse="6002" />
 	<targetchange interval="5000" chance="0" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="80" />
 	</flags>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="25" difficulty="trivial" occurrence="very rare" locations="Grynch Clan Goblin Locations..." />
 	<attacks>
 	</attacks>
 	<defenses armor="5" defense="5">

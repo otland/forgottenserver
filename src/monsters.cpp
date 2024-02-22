@@ -8,6 +8,7 @@
 #include "combat.h"
 #include "configmanager.h"
 #include "game.h"
+#include "matrixarea.h"
 #include "pugicast.h"
 #include "spells.h"
 #include "weapons.h"
@@ -73,6 +74,8 @@ bool Monsters::reload()
 	loaded = false;
 
 	scriptInterface.reset();
+	bestiary.clear();
+	bestiaryMonsters.clear();
 
 	return loadFromXml(true);
 }
@@ -821,6 +824,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 	if (!mType) {
 		mType = &monsters[boost::algorithm::to_lower_copy(monsterName)];
+		mType->info = {};
 	}
 
 	mType->name = attr.as_string();
@@ -866,6 +870,10 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 
 	if ((attr = monsterNode.attribute("skull"))) {
 		mType->info.skull = getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+	}
+
+	if ((attr = monsterNode.attribute("raceId"))) {
+		mType->bestiaryInfo.raceId = attr.as_uint();
 	}
 
 	if ((attr = monsterNode.attribute("script"))) {
@@ -976,6 +984,58 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			mType->info.pushable = false;
 		}
 	}
+
+	if ((node = monsterNode.child("bestiary"))) {
+		if ((attr = node.attribute("class"))) {
+			mType->bestiaryInfo.className = attr.as_string();
+		}
+		if ((attr = node.attribute("prowess"))) {
+			mType->bestiaryInfo.prowess = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("expertise"))) {
+			mType->bestiaryInfo.expertise = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("mastery"))) {
+			mType->bestiaryInfo.mastery = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("charmPoints"))) {
+			mType->bestiaryInfo.charmPoints = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("difficulty"))) {
+			std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
+			if (tmpStrValue == "harmless") {
+				mType->bestiaryInfo.difficulty = 0;
+			} else if (tmpStrValue == "trivial") {
+				mType->bestiaryInfo.difficulty = 1;
+			} else if (tmpStrValue == "easy") {
+				mType->bestiaryInfo.difficulty = 2;
+			} else if (tmpStrValue == "medium") {
+				mType->bestiaryInfo.difficulty = 3;
+			} else if (tmpStrValue == "hard") {
+				mType->bestiaryInfo.difficulty = 4;
+			} else if (tmpStrValue == "challenging") {
+				mType->bestiaryInfo.difficulty = 5;
+			} else {
+				std::cout << "[Warning - Monsters::loadMonster] Unknown difficulty: " << attr.as_string() << ". "
+				          << file << std::endl;
+			}
+		}
+		if ((attr = node.attribute("occurrence"))) {
+			mType->bestiaryInfo.occurrence = pugi::cast<uint32_t>(attr.value());
+		}
+		if ((attr = node.attribute("locations"))) {
+			mType->bestiaryInfo.locations = attr.as_string();
+		}
+
+		if (!isValidBestiaryInfo(mType->bestiaryInfo)) {
+			mType->bestiaryInfo = {};
+			std::cout << "[Warning - Monsters::loadMonster] invalid bestiary info for " << mType->name << "."
+			          << std::endl;
+		} else {
+			addBestiaryMonsterType(mType);
+		}
+	}
+
 	if (mType->info.manaCost == 0 && (mType->info.isSummonable || mType->info.isConvinceable)) {
 		std::cout
 		    << "[Warning - Monsters::loadMonster] manaCost missing or zero on monster with summonable and/or convinceable flags: "
@@ -1326,6 +1386,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			int32_t chance = 100;
 			int32_t speed = 1000;
 			int32_t max = mType->info.maxSummons;
+			MagicEffectClasses effect = CONST_ME_TELEPORT;
+			MagicEffectClasses masterEffect = CONST_ME_NONE;
 			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
@@ -1345,6 +1407,35 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				max = pugi::cast<uint32_t>(attr.value());
 			}
 
+			for (const auto& attributeNode : summonNode.children()) {
+				if ((attr = attributeNode.attribute("key"))) {
+					const char* value = attr.value();
+					if (caseInsensitiveEqual(value, "mastereffect")) {
+						if ((attr = attributeNode.attribute("value"))) {
+							masterEffect =
+							    getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+							if (masterEffect == CONST_ME_NONE) {
+								std::cout
+								    << "[Warning - Monsters::loadMonster] Summon master effect - Unknown masterEffect: "
+								    << attr.as_string() << std::endl;
+							}
+						}
+					} else if (caseInsensitiveEqual(value, "effect")) {
+						if ((attr = attributeNode.attribute("value"))) {
+							effect = getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+							if (effect == CONST_ME_NONE) {
+								effect = CONST_ME_TELEPORT;
+								std::cout << "[Warning - Monsters::loadMonster] Summon effect - Unknown effect: "
+								          << attr.as_string() << std::endl;
+							}
+						}
+					} else {
+						std::cout << "[Warning - Monsters::loadMonster] Summon effect type \"" << attr.as_string()
+						          << "\" does not exist." << std::endl;
+					}
+				}
+			}
+
 			if ((attr = summonNode.attribute("force"))) {
 				force = attr.as_bool();
 			}
@@ -1355,6 +1446,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				sb.speed = speed;
 				sb.chance = chance;
 				sb.max = max;
+				sb.effect = effect;
+				sb.masterEffect = masterEffect;
 				sb.force = force;
 				mType->info.summons.emplace_back(sb);
 			} else {
@@ -1514,4 +1607,64 @@ MonsterType* Monsters::getMonsterType(const std::string& name, bool loadFromFile
 		return loadMonster(it2->second, name);
 	}
 	return &it->second;
+}
+
+MonsterType* Monsters::getMonsterType(uint32_t raceId)
+{
+	if (bestiaryMonsters.contains(raceId)) {
+		return getMonsterType(bestiaryMonsters[raceId]);
+	}
+
+	return nullptr;
+}
+
+bool Monsters::addBestiaryMonsterType(const MonsterType* monsterType)
+{
+	if (!isValidBestiaryInfo(monsterType->bestiaryInfo)) {
+		return false;
+	}
+
+	bestiary[monsterType->bestiaryInfo.className].emplace(monsterType->name);
+	bestiaryMonsters[monsterType->bestiaryInfo.raceId] = monsterType->name;
+	return true;
+}
+
+bool Monsters::isValidBestiaryInfo(const BestiaryInfo& info) const
+{
+	if (info.raceId == 0) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] race id can't be 0." << std::endl;
+		return false;
+	}
+
+	if (info.className.empty()) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] class name can't be empty." << std::endl;
+		return false;
+	}
+
+	if (info.prowess == 0 || info.expertise == 0 || info.mastery == 0) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] prowess, expertise and mastery can't be 0."
+		          << std::endl;
+		return false;
+	}
+
+	if (info.prowess >= info.expertise || info.expertise >= info.mastery) {
+		std::cout
+		    << "[Warning - Monsters::isValidBestiaryInfo] prowess must be lower than expertise and expertise must be lower than mastery."
+		    << std::endl;
+		return false;
+	}
+
+	if (info.difficulty > BESTIARY_MAX_DIFFICULTY) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] difficulty can't be higher than "
+		          << BESTIARY_MAX_DIFFICULTY << '.' << std::endl;
+		return false;
+	}
+
+	if (info.occurrence > BESTIARY_MAX_OCCURRENCE) {
+		std::cout << "[Warning - Monsters::isValidBestiaryInfo] occurrence can't be higher than "
+		          << BESTIARY_MAX_OCCURRENCE << '.' << std::endl;
+		return false;
+	}
+
+	return true;
 }

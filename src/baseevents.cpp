@@ -165,7 +165,7 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 
 	scriptInterface = interface;
 
-	int32_t id = scriptInterface->getEvent(name.c_str());
+	int32_t id = scriptInterface->getEvent(name);
 	if (id == -1) {
 		std::cout << "[Warning - CallBack::loadCallBack] Event " << name << " not found." << std::endl;
 		return false;

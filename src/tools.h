@@ -32,7 +32,6 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 bool boolean_random(double probability = 0.5);
 
-Direction getDirection(const std::string& string);
 Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
 
@@ -71,5 +70,21 @@ const char* getReturnMessage(ReturnValue value);
 int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
+
+const std::vector<Direction>& getShuffleDirections();
+
+namespace tfs {
+
+#if __has_cpp_attribute(__cpp_lib_to_underlying)
+
+inline constexpr auto to_underlying(auto e) noexcept { return std::to_underlying(e); }
+
+#else
+
+inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
+
+#endif
+
+} // namespace tfs
 
 #endif // FS_TOOLS_H

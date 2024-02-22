@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Rider" nameDescription="an orc rider" race="blood" experience="110" speed="260" manacost="490">
+<monster name="Orc Rider" nameDescription="an orc rider" race="blood" experience="110" speed="260" manacost="490" raceId="4">
 	<health now="180" max="180" />
 	<look type="4" corpse="6010" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Orc Rider Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-130" />
 	</attacks>

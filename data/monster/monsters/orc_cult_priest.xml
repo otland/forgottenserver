@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc Cult Priest" nameDescription="an orc cult priest" race="blood" experience="1000" speed="140">
+<monster name="Orc Cult Priest" nameDescription="an orc cult priest" race="blood" experience="1000" speed="140" raceId="1504">
 	<health now="1300" max="1300" />
 	<look type="6" corpse="5978" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Orc Cult Priest Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="energy" interval="2000" chance="15" range="7" min="-200" max="-310">

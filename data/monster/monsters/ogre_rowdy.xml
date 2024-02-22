@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ogre Rowdy" nameDescription="an ogre rowdy" race="blood" experience="4200" speed="420">
+<monster name="Ogre Rowdy" nameDescription="an ogre rowdy" race="blood" experience="4200" speed="420" raceId="1821">
 	<health now="4500" max="4500" />
 	<look type="1213" corpse="34187" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Giant" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Ogre Rowdy Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="fire" interval="2000" chance="13" range="5" radius="4" target="1" min="-250" max="-400">

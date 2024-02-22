@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<monster name="Tainted Soul" nameDescription="a tainted soul" race="undead" experience="0" speed="170">
+<monster name="Tainted Soul" nameDescription="a tainted soul" race="undead" experience="0" speed="170" raceId="1137">
 	<health now="250" max="250" />
 	<look type="712" corpse="24633" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Tainted Soul Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 		<attack name="lifedrain" interval="3000" chance="7" range="1" min="-22" max="-48" />

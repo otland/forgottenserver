@@ -140,6 +140,23 @@ registerMonsterType.flags = function(mtype, mask)
 		end
 	end
 end
+do
+	local difficulties = {
+		harmless = 0,
+		trivial = 1,
+		easy = 2,
+		medium = 3,
+		hard = 4,
+		challenging = 5
+	}
+
+	registerMonsterType.bestiary = function(mtype, mask)
+		if mask.bestiary then
+			mask.bestiary.difficulty = difficulties[mask.bestiary.difficulty:lower()]
+			mtype:bestiaryInfo(mask.bestiary)
+		end
+	end
+end
 registerMonsterType.light = function(mtype, mask)
 	if mask.light then
 		mtype:light(mask.light.color or 0, mask.light.level or 0)
@@ -174,7 +191,7 @@ end
 registerMonsterType.summons = function(mtype, mask)
 	if type(mask.summons) == "table" then
 		for k, v in pairs(mask.summons) do
-			mtype:addSummon(v.name, v.interval, v.chance, v.max or -1)
+			mtype:addSummon(v.name, v.interval, v.chance, v.max or -1, v.effect or CONST_ME_TELEPORT, v.masterEffect or CONST_ME_NONE)
 		end
 	end
 end
@@ -337,11 +354,8 @@ local function AbilityTableToSpell(ability)
 			if outfit then
 				spell:setOutfit(outfit)
 			end
-			if ability.name == "drunk" then
-				spell:setConditionType(CONDITION_DRUNK)
-				if ability.drunkenness then
-					spell:setConditionDrunkenness(ability.drunkenness)
-				end
+			if ability.drunkenness then
+				spell:setConditionDrunkenness(ability.drunkenness)
 			end
 		end
 		if ability.condition then

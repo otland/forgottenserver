@@ -39,8 +39,8 @@ private:
 class IOBan
 {
 public:
-	static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-	static bool isIpBanned(const Connection::Address& clientIP, BanInfo& banInfo);
+	static const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId);
+	static const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP);
 	static bool isPlayerNamelocked(uint32_t playerId);
 };
 

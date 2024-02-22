@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300">
+<monster name="Orc" nameDescription="an orc" race="blood" experience="25" speed="150" manacost="300" raceId="5">
 	<health now="70" max="70" />
 	<look type="5" corpse="5966" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Orc Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-35" />
 	</attacks>

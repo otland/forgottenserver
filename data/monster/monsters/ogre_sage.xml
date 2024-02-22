@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ogre Sage" nameDescription="an ogre sage" race="blood" experience="5500" speed="460">
+<monster name="Ogre Sage" nameDescription="an ogre sage" race="blood" experience="5500" speed="460" raceId="1822">
 	<health now="4800" max="4800" />
 	<look type="1214" corpse="34191" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Giant" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Ogre Sage Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="lifedrain" interval="2000" chance="24" range="7" target="1" min="-50" max="-130">
