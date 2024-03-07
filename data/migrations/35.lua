@@ -35,7 +35,7 @@ function onUpdateDatabase()
 		result.free(resultId)
 	end
 
-	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` < %d", mountRange, mountRange + 10))
+	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` <= %d", mountRange, mountRange + 10))
 	if resultId then
 		repeat
 			for i = 1, 200 do
