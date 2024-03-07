@@ -24,7 +24,7 @@ bool Mounts::loadFromXml()
 	}
 
 	for (auto mountNode : doc.child("mounts").children()) {
-		uint16_t nodeId = pugi::cast<uint16_t>(mountNode.attribute("id").value());
+		uint32_t nodeId = pugi::cast<uint32_t>(mountNode.attribute("id").value());
 		if (nodeId == 0 || nodeId > std::numeric_limits<uint16_t>::max()) {
 			std::cout << "[Notice - Mounts::loadFromXml] Mount id \"" << nodeId << "\" is not within 1 and 65535 range"
 			          << std::endl;
