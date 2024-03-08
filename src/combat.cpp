@@ -84,7 +84,7 @@ CombatDamage Combat::getCombatDamage(Creature* creature, Creature* target) const
 				    normal_random(std::fma(levelFormula, mina, minb), std::fma(levelFormula, maxa, maxb));
 			} else if (formulaType == COMBAT_FORMULA_SKILL) {
 				Item* tool = player->getWeapon();
-				const Weapon* weapon = g_weapons->getWeapon(tool);
+				const Weapon_shared_ptr weapon = g_weapons->getWeapon(tool);
 				if (weapon) {
 					damage.primary.value =
 					    normal_random(minb, std::fma(weapon->getWeaponDamage(player, target, tool, true), maxa, maxb));
@@ -1105,7 +1105,7 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 		case COMBAT_FORMULA_SKILL: {
 			// onGetPlayerMinMaxValues(player, attackSkill, attackValue, attackFactor)
 			Item* tool = player->getWeapon();
-			const Weapon* weapon = g_weapons->getWeapon(tool);
+			const Weapon_shared_ptr weapon = g_weapons->getWeapon(tool);
 			Item* item = nullptr;
 
 			int32_t attackValue = 7;

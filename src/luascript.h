@@ -177,6 +177,7 @@ public:
 	const std::string& getFileById(int32_t scriptId);
 	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
+	int32_t getEventCallback(std::string name, bool fileName, int32_t oldId);
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
 
 	static ScriptEnvironment* getScriptEnv()
@@ -388,6 +389,11 @@ public:
 
 	static int protectedCall(lua_State* L, int nargs, int nresults);
 
+	// script file cache
+	std::map<int32_t, std::string> cacheFiles;
+
+	std::string loadingFile;
+
 protected:
 	virtual bool closeState();
 
@@ -401,9 +407,6 @@ protected:
 
 	int32_t eventTableRef = -1;
 	int32_t runningEventId = EVENT_ID_USER;
-
-	// script file cache
-	std::map<int32_t, std::string> cacheFiles;
 
 private:
 	void registerClass(const std::string& className, const std::string& baseClass, lua_CFunction newFunction = nullptr);
@@ -558,6 +561,8 @@ private:
 	static int luaGameGetClientVersion(lua_State* L);
 
 	static int luaGameReload(lua_State* L);
+
+	static int luaGameGetAction(lua_State* L);
 
 	// Variant
 	static int luaVariantCreate(lua_State* L);
@@ -1514,6 +1519,7 @@ private:
 
 	// Talkactions
 	static int luaCreateTalkaction(lua_State* L);
+	static int luaTalkactionWord(lua_State* L);
 	static int luaTalkactionOnSay(lua_State* L);
 	static int luaTalkactionRegister(lua_State* L);
 	static int luaTalkactionSeparator(lua_State* L);
@@ -1522,6 +1528,7 @@ private:
 
 	// CreatureEvents
 	static int luaCreateCreatureEvent(lua_State* L);
+	static int luaCreatureEventName(lua_State* L);
 	static int luaCreatureEventType(lua_State* L);
 	static int luaCreatureEventRegister(lua_State* L);
 	static int luaCreatureEventOnCallback(lua_State* L);
@@ -1544,6 +1551,7 @@ private:
 
 	// GlobalEvents
 	static int luaCreateGlobalEvent(lua_State* L);
+	static int luaGlobalEventName(lua_State* L);
 	static int luaGlobalEventType(lua_State* L);
 	static int luaGlobalEventRegister(lua_State* L);
 	static int luaGlobalEventOnCallback(lua_State* L);
@@ -1552,6 +1560,7 @@ private:
 
 	// Weapon
 	static int luaCreateWeapon(lua_State* L);
+	static int luaWeaponType(lua_State* L);
 	static int luaWeaponId(lua_State* L);
 	static int luaWeaponLevel(lua_State* L);
 	static int luaWeaponMagicLevel(lua_State* L);
@@ -1608,8 +1617,6 @@ private:
 
 	static ScriptEnvironment scriptEnv[16];
 	static int32_t scriptEnvIndex;
-
-	std::string loadingFile;
 };
 
 class LuaEnvironment : public LuaScriptInterface

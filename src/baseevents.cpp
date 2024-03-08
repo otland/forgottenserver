@@ -41,11 +41,6 @@ bool BaseEvents::loadFromXml()
 			continue;
 		}
 
-		if (!event->configureEvent(node)) {
-			std::cout << "[Warning - BaseEvents::loadFromXml] Failed to configure event" << std::endl;
-			continue;
-		}
-
 		bool success;
 
 		pugi::xml_attribute scriptAttribute = node.attribute("script");
@@ -173,5 +168,41 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 
 	scriptId = id;
 	loaded = true;
+	return true;
+}
+
+bool Event::loadCallback(const std::string& name, bool fileName)
+{
+	// we are looking if that event already exists, if yes we re use the event instead of giving it a new one
+	int32_t oldId = 0;
+	if (scriptInterface) {
+		for (auto& it : scriptInterface->cacheFiles) {
+			if (fileName) {
+				if (it.second == scriptInterface->loadingFile + ":" + name) {
+					oldId = it.first;
+					break;
+				}
+			} else {
+				if (it.second == ">> " + name + " <<") {
+					oldId = it.first;
+					break;
+				}
+			}
+		}
+	}
+
+	if (!scriptInterface || scriptId != 0) {
+		std::cout << "Failure: [Event::loadCallback] scriptInterface == nullptr. scriptid = " << scriptId << std::endl;
+		return false;
+	}
+
+	int32_t id = scriptInterface->getEventCallback(name, fileName, oldId);
+	if (id == -1) {
+		std::cout << "[Warning - Event::loadCallback] Event " << getScriptEventName() << " not found. " << std::endl;
+		return false;
+	}
+
+	scripted = true;
+	scriptId = id;
 	return true;
 }

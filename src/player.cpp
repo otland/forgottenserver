@@ -241,7 +241,7 @@ Item* Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 				for (ContainerIterator containerItem = quiver->iterator(); containerItem.hasNext();
 				     containerItem.advance()) {
 					if (itemType.ammoType == (*containerItem)->getAmmoType()) {
-						const Weapon* weapon = g_weapons->getWeapon(*containerItem);
+						const Weapon_shared_ptr weapon = g_weapons->getWeapon(*containerItem);
 						if (weapon && weapon->ammoCheck(this)) {
 							return *containerItem;
 						}
@@ -3371,7 +3371,7 @@ void Player::doAttacking(uint32_t)
 		bool result = false;
 
 		Item* tool = getWeapon();
-		const Weapon* weapon = g_weapons->getWeapon(tool);
+		const Weapon_shared_ptr weapon = g_weapons->getWeapon(tool);
 		uint32_t delay = getAttackSpeed();
 		bool classicSpeed = g_config.getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED);
 

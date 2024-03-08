@@ -9,61 +9,42 @@
 
 TalkActions::TalkActions() : scriptInterface("TalkAction Interface") { scriptInterface.initState(); }
 
-TalkActions::~TalkActions() { clear(false); }
+TalkActions::~TalkActions() { clear(); }
 
-void TalkActions::clear(bool fromLua)
+void TalkActions::clear()
 {
-	for (auto it = talkActions.begin(); it != talkActions.end();) {
-		if (fromLua == it->second.fromLua) {
-			it = talkActions.erase(it);
-		} else {
-			++it;
-		}
-	}
+	talkActions.clear();
 
-	reInitState(fromLua);
+	scriptInterface.reInitState();
 }
 
-LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; }
-
-Event_ptr TalkActions::getEvent(const std::string& nodeName)
+bool TalkActions::registerLuaEvent(TalkAction_shared_ptr talkAction)
 {
-	if (!caseInsensitiveEqual(nodeName, "talkaction")) {
-		return nullptr;
-	}
-	return Event_ptr(new TalkAction(&scriptInterface));
-}
-
-bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
-{
-	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
-	std::vector<std::string> words = talkAction->getWordsMap();
-
-	for (size_t i = 0; i < words.size(); i++) {
-		if (i == words.size() - 1) {
-			talkActions.emplace(words[i], std::move(*talkAction));
-		} else {
-			talkActions.emplace(words[i], *talkAction);
+	if (!talkAction->getWordsMap().empty()) {
+		const auto& words = talkAction->getWordsMap();
+		for (auto& word : words) {
+			auto result = talkActions.emplace(word, talkAction);
+			if (!result.second) {
+				std::cout << "[Warning - Talkctions::registerLuaEvent] Duplicate registered word: " << word
+				          << std::endl;
+			}
 		}
+		talkAction->clearWords();
+	} else {
+		return false;
 	}
 
 	return true;
 }
 
-bool TalkActions::registerLuaEvent(TalkAction* event)
+TalkAction_shared_ptr TalkActions::getTalkActionEvent(const std::string& word)
 {
-	TalkAction_ptr talkAction{event};
-	std::vector<std::string> words = talkAction->getWordsMap();
-
-	for (size_t i = 0; i < words.size(); i++) {
-		if (i == words.size() - 1) {
-			talkActions.emplace(words[i], std::move(*talkAction));
-		} else {
-			talkActions.emplace(words[i], *talkAction);
-		}
+	auto it = talkActions.find(word);
+	if (it != talkActions.end()) {
+		return it->second;
 	}
 
-	return true;
+	return nullptr;
 }
 
 TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type, const std::string& words) const
@@ -85,7 +66,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 			boost::algorithm::trim_left(param);
 
-			std::string separator = it->second.getSeparator();
+			std::string separator = it->second->getSeparator();
 			if (separator != " ") {
 				if (!param.empty()) {
 					if (param != separator) {
@@ -98,41 +79,20 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (it->second.fromLua) {
-			if (it->second.getNeedAccess() && !player->getGroup()->access) {
-				return TALKACTION_CONTINUE;
-			}
-
-			if (player->getAccountType() < it->second.getRequiredAccountType()) {
-				return TALKACTION_CONTINUE;
-			}
+		if (it->second->getNeedAccess() && !player->getGroup()->access) {
+			return TALKACTION_CONTINUE;
 		}
 
-		if (it->second.executeSay(player, talkactionWords, param, type)) {
+		if (player->getAccountType() < it->second->getRequiredAccountType()) {
+			return TALKACTION_CONTINUE;
+		}
+
+		if (it->second->executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
 		}
 		return TALKACTION_BREAK;
 	}
 	return TALKACTION_CONTINUE;
-}
-
-bool TalkAction::configureEvent(const pugi::xml_node& node)
-{
-	pugi::xml_attribute wordsAttribute = node.attribute("words");
-	if (!wordsAttribute) {
-		std::cout << "[Error - TalkAction::configureEvent] Missing words for talk action or spell" << std::endl;
-		return false;
-	}
-
-	pugi::xml_attribute separatorAttribute = node.attribute("separator");
-	if (separatorAttribute) {
-		separator = separatorAttribute.as_string();
-	}
-
-	for (auto word : explodeString(wordsAttribute.as_string(), ";")) {
-		setWords(word);
-	}
-	return true;
 }
 
 bool TalkAction::executeSay(Player* player, const std::string& words, const std::string& param, SpeakClasses type) const

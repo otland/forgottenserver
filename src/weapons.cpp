@@ -18,9 +18,9 @@ extern Weapons* g_weapons;
 
 Weapons::Weapons() { scriptInterface.initState(); }
 
-Weapons::~Weapons() { clear(false); }
+Weapons::~Weapons() { clear(); }
 
-const Weapon* Weapons::getWeapon(const Item* item) const
+const Weapon_shared_ptr Weapons::getWeapon(const Item* item) const
 {
 	if (!item) {
 		return nullptr;
@@ -33,20 +33,21 @@ const Weapon* Weapons::getWeapon(const Item* item) const
 	return it->second;
 }
 
-void Weapons::clear(bool fromLua)
+Weapon_shared_ptr Weapons::getWeapon(uint16_t id)
 {
-	for (auto it = weapons.begin(); it != weapons.end();) {
-		if (fromLua == it->second->fromLua) {
-			it = weapons.erase(it);
-		} else {
-			++it;
-		}
+	auto it = weapons.find(id);
+	if (it != weapons.end()) {
+		return it->second;
 	}
-
-	reInitState(fromLua);
+	return nullptr;
 }
 
-LuaScriptInterface& Weapons::getScriptInterface() { return scriptInterface; }
+void Weapons::clear()
+{
+	weapons.clear();
+
+	scriptInterface.reInitState();
+}
 
 void Weapons::loadDefaults()
 {
@@ -60,7 +61,7 @@ void Weapons::loadDefaults()
 			case WEAPON_AXE:
 			case WEAPON_SWORD:
 			case WEAPON_CLUB: {
-				WeaponMelee* weapon = new WeaponMelee(&scriptInterface);
+				auto weapon = std::make_shared<WeaponMelee>(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -72,7 +73,7 @@ void Weapons::loadDefaults()
 					continue;
 				}
 
-				WeaponDistance* weapon = new WeaponDistance(&scriptInterface);
+				auto weapon = std::make_shared<WeaponDistance>(&scriptInterface);
 				weapon->configureWeapon(it);
 				weapons[i] = weapon;
 				break;
@@ -84,34 +85,18 @@ void Weapons::loadDefaults()
 	}
 }
 
-Event_ptr Weapons::getEvent(const std::string& nodeName)
+bool Weapons::registerLuaEvent(Weapon_shared_ptr weapon)
 {
-	if (caseInsensitiveEqual(nodeName, "melee")) {
-		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (caseInsensitiveEqual(nodeName, "distance")) {
-		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (caseInsensitiveEqual(nodeName, "wand")) {
-		return Event_ptr(new WeaponWand(&scriptInterface));
+	auto it = weapons.find(weapon->getID());
+	if (it == weapons.end()) {
+		weapons.emplace(weapon->getID(), weapon);
+		return true;
+	} else {
+		weapons[weapon->getID()] = weapon;
+		return true;
 	}
-	return nullptr;
-}
 
-bool Weapons::registerEvent(Event_ptr event, const pugi::xml_node&)
-{
-	Weapon* weapon = static_cast<Weapon*>(event.release()); // event is guaranteed to be a Weapon
-
-	auto result = weapons.emplace(weapon->getID(), weapon);
-	if (!result.second) {
-		std::cout << "[Warning - Weapons::registerEvent] Duplicate registered item with id: " << weapon->getID()
-		          << std::endl;
-	}
-	return result.second;
-}
-
-bool Weapons::registerLuaEvent(Weapon* weapon)
-{
-	weapons[weapon->getID()] = weapon;
-	return true;
+	return false;
 }
 
 // monsters
@@ -125,122 +110,6 @@ int32_t Weapons::getMaxWeaponDamage(uint32_t level, int32_t attackSkill, int32_t
 {
 	return static_cast<int32_t>(
 	    std::round((level / 5) + (((((attackSkill / 4.) + 1) * (attackValue / 3.)) * 1.03) / attackFactor)));
-}
-
-bool Weapon::configureEvent(const pugi::xml_node& node)
-{
-	pugi::xml_attribute attr;
-	if (!(attr = node.attribute("id"))) {
-		std::cout << "[Error - Weapon::configureEvent] Weapon without id." << std::endl;
-		return false;
-	}
-	id = pugi::cast<uint16_t>(attr.value());
-
-	if ((attr = node.attribute("level"))) {
-		level = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("maglv")) || (attr = node.attribute("maglevel"))) {
-		magLevel = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("mana"))) {
-		mana = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("manapercent"))) {
-		manaPercent = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("soul"))) {
-		soul = pugi::cast<uint32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("prem"))) {
-		premium = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("breakchance"))) {
-		breakChance = std::min<uint8_t>(100, pugi::cast<uint16_t>(attr.value()));
-	}
-
-	if ((attr = node.attribute("action"))) {
-		action = getWeaponAction(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
-		if (action == WEAPONACTION_NONE) {
-			std::cout << "[Warning - Weapon::configureEvent] Unknown action " << attr.as_string() << std::endl;
-		}
-	}
-
-	if ((attr = node.attribute("enabled"))) {
-		enabled = attr.as_bool();
-	}
-
-	if ((attr = node.attribute("unproperly"))) {
-		wieldUnproperly = attr.as_bool();
-	}
-
-	std::list<std::string> vocStringList;
-	for (auto vocationNode : node.children()) {
-		if (!(attr = vocationNode.attribute("name"))) {
-			continue;
-		}
-
-		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
-			vocationWeaponSet.insert(vocationId);
-			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != VOCATION_NONE) {
-				vocationWeaponSet.insert(promotedVocation);
-			}
-
-			if (vocationNode.attribute("showInDescription").as_bool(true)) {
-				vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
-			}
-		}
-	}
-
-	std::string vocationString;
-	for (const std::string& str : vocStringList) {
-		if (!vocationString.empty()) {
-			if (str != vocStringList.back()) {
-				vocationString.push_back(',');
-				vocationString.push_back(' ');
-			} else {
-				vocationString += " and ";
-			}
-		}
-
-		vocationString += str;
-		vocationString.push_back('s');
-	}
-
-	uint32_t wieldInfo = 0;
-	if (getReqLevel() > 0) {
-		wieldInfo |= WIELDINFO_LEVEL;
-	}
-
-	if (getReqMagLv() > 0) {
-		wieldInfo |= WIELDINFO_MAGLV;
-	}
-
-	if (!vocationString.empty()) {
-		wieldInfo |= WIELDINFO_VOCREQ;
-	}
-
-	if (isPremium()) {
-		wieldInfo |= WIELDINFO_PREMIUM;
-	}
-
-	if (wieldInfo != 0) {
-		ItemType& it = Item::items.getItemType(id);
-		it.wieldInfo = wieldInfo;
-		it.vocationString = vocationString;
-		it.minReqLevel = getReqLevel();
-		it.minReqMagicLevel = getReqMagLv();
-	}
-
-	configureWeapon(Item::items[id]);
-	return true;
 }
 
 void Weapon::configureWeapon(const ItemType& it) { id = it.id; }
@@ -658,7 +527,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
 		Item* mainWeaponItem = player->getWeapon(true);
-		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
+		const Weapon_shared_ptr mainWeapon = g_weapons->getWeapon(mainWeaponItem);
 		if (mainWeapon) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
 		} else if (mainWeaponItem) {
@@ -897,46 +766,6 @@ bool WeaponDistance::getSkillType(const Player* player, const Item*, skills_t& s
 		}
 	} else {
 		skillpoint = 0;
-	}
-	return true;
-}
-
-bool WeaponWand::configureEvent(const pugi::xml_node& node)
-{
-	if (!Weapon::configureEvent(node)) {
-		return false;
-	}
-
-	pugi::xml_attribute attr;
-	if ((attr = node.attribute("min"))) {
-		minChange = pugi::cast<int32_t>(attr.value());
-	}
-
-	if ((attr = node.attribute("max"))) {
-		maxChange = pugi::cast<int32_t>(attr.value());
-	}
-
-	attr = node.attribute("type");
-	if (!attr) {
-		return true;
-	}
-
-	std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
-	if (tmpStrValue == "earth") {
-		params.combatType = COMBAT_EARTHDAMAGE;
-	} else if (tmpStrValue == "ice") {
-		params.combatType = COMBAT_ICEDAMAGE;
-	} else if (tmpStrValue == "energy") {
-		params.combatType = COMBAT_ENERGYDAMAGE;
-	} else if (tmpStrValue == "fire") {
-		params.combatType = COMBAT_FIREDAMAGE;
-	} else if (tmpStrValue == "death") {
-		params.combatType = COMBAT_DEATHDAMAGE;
-	} else if (tmpStrValue == "holy") {
-		params.combatType = COMBAT_HOLYDAMAGE;
-	} else {
-		std::cout << "[Warning - WeaponWand::configureEvent] Type \"" << attr.as_string() << "\" does not exist."
-		          << std::endl;
 	}
 	return true;
 }

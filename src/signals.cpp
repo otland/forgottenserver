@@ -57,17 +57,8 @@ void sighupHandler()
 	// Dispatcher thread
 	std::cout << "SIGHUP received, reloading config files..." << std::endl;
 
-	g_actions->reload();
-	std::cout << "Reloaded actions." << std::endl;
-
 	g_config.load();
 	std::cout << "Reloaded config." << std::endl;
-
-	g_creatureEvents->reload();
-	std::cout << "Reloaded creature scripts." << std::endl;
-
-	g_moveEvents->reload();
-	std::cout << "Reloaded movements." << std::endl;
 
 	Npcs::reload();
 	std::cout << "Reloaded npcs." << std::endl;
@@ -75,35 +66,17 @@ void sighupHandler()
 	g_monsters.reload();
 	std::cout << "Reloaded monsters." << std::endl;
 
-	g_spells->reload();
-	std::cout << "Reloaded spells." << std::endl;
-
-	g_talkActions->reload();
-	std::cout << "Reloaded talk actions." << std::endl;
-
 	Item::items.reload();
 	std::cout << "Reloaded items." << std::endl;
 
-	g_weapons->reload();
-	g_weapons->loadDefaults();
-	std::cout << "Reloaded weapons." << std::endl;
-
 	g_game.mounts.reload();
 	std::cout << "Reloaded mounts." << std::endl;
-
-	g_globalEvents->reload();
-	std::cout << "Reloaded globalevents." << std::endl;
 
 	g_events->load();
 	std::cout << "Reloaded events." << std::endl;
 
 	g_chat->load();
 	std::cout << "Reloaded chatchannels." << std::endl;
-
-	g_luaEnvironment.loadFile("data/global.lua");
-	std::cout << "Reloaded global.lua." << std::endl;
-
-	lua_gc(g_luaEnvironment.getLuaState(), LUA_GCCOLLECT, 0);
 }
 #else
 void sigbreakHandler()

@@ -9,7 +9,7 @@
 #include "luascript.h"
 
 class Action;
-using Action_ptr = std::unique_ptr<Action>;
+using Action_shared_ptr = std::shared_ptr<Action>;
 using ActionFunction = std::function<bool(Player* player, Item* item, const Position& fromPosition, Thing* target,
                                           const Position& toPosition, bool isHotkey)>;
 
@@ -17,9 +17,6 @@ class Action : public Event
 {
 public:
 	explicit Action(LuaScriptInterface* interface);
-
-	bool configureEvent(const pugi::xml_node& node) override;
-	bool loadFunction(const pugi::xml_attribute& attr, bool isScripted) override;
 
 	// scripting
 	virtual bool executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target,
@@ -64,7 +61,7 @@ private:
 	std::vector<uint16_t> aids;
 };
 
-class Actions final : public BaseEvents
+class Actions
 {
 public:
 	Actions();
@@ -82,24 +79,19 @@ public:
 	ReturnValue canUse(const Player* player, const Position& pos, const Item* item);
 	ReturnValue canUseFar(const Creature* creature, const Position& toPos, bool checkLineOfSight, bool checkFloor);
 
-	bool registerLuaEvent(Action* event);
-	void clear(bool fromLua) override final;
+	bool registerLuaEvent(Action_shared_ptr action);
+	Action_shared_ptr getActionEvent(const std::string& type, uint16_t id);
+	void clear();
 
 private:
 	ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
 
-	LuaScriptInterface& getScriptInterface() override;
-	std::string_view getScriptBaseName() const override { return "actions"; }
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-
-	using ActionUseMap = std::map<uint16_t, Action>;
+	using ActionUseMap = std::map<uint16_t, Action_shared_ptr>;
 	ActionUseMap useItemMap;
 	ActionUseMap uniqueItemMap;
 	ActionUseMap actionItemMap;
 
-	Action* getAction(const Item* item);
-	void clearMap(ActionUseMap& map, bool fromLua);
+	Action_shared_ptr getAction(const Item* item);
 
 	LuaScriptInterface scriptInterface;
 };

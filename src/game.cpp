@@ -4158,7 +4158,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_HEALTHCHANGE);
 			if (!events.empty()) {
-				for (CreatureEvent* creatureEvent : events) {
+				for (auto& creatureEvent : events) {
 					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
@@ -4280,7 +4280,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			if (damage.origin != ORIGIN_NONE) {
 				const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 				if (!events.empty()) {
-					for (CreatureEvent* creatureEvent : events) {
+					for (auto& creatureEvent : events) {
 						creatureEvent->executeManaChange(target, attacker, damage);
 					}
 					healthChange = damage.primary.value + damage.secondary.value;
@@ -4397,7 +4397,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_HEALTHCHANGE);
 			if (!events.empty()) {
-				for (CreatureEvent* creatureEvent : events) {
+				for (auto& creatureEvent : events) {
 					creatureEvent->executeHealthChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
@@ -4512,7 +4512,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 		}
 
 		if (realDamage >= targetHealth) {
-			for (CreatureEvent* creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
+			for (auto& creatureEvent : target->getCreatureEvents(CREATURE_EVENT_PREPAREDEATH)) {
 				if (!creatureEvent->executeOnPrepareDeath(target, attacker)) {
 					return false;
 				}
@@ -4546,7 +4546,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
-				for (CreatureEvent* creatureEvent : events) {
+				for (auto& creatureEvent : events) {
 					creatureEvent->executeManaChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
@@ -4600,7 +4600,7 @@ bool Game::combatChangeMana(Creature* attacker, Creature* target, CombatDamage& 
 		if (damage.origin != ORIGIN_NONE) {
 			const auto& events = target->getCreatureEvents(CREATURE_EVENT_MANACHANGE);
 			if (!events.empty()) {
-				for (CreatureEvent* creatureEvent : events) {
+				for (auto& creatureEvent : events) {
 					creatureEvent->executeManaChange(target, attacker, damage);
 				}
 				damage.origin = ORIGIN_NONE;
@@ -4909,7 +4909,7 @@ void Game::checkPlayersRecord()
 		playersRecord = playersOnline;
 
 		for (auto& it : g_globalEvents->getEventMap(GLOBALEVENT_RECORD)) {
-			it.second.executeRecord(playersRecord, previousRecord);
+			it.second->executeRecord(playersRecord, previousRecord);
 		}
 		updatePlayersRecord();
 	}
@@ -5554,7 +5554,7 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 		return;
 	}
 
-	for (CreatureEvent* creatureEvent : player->getCreatureEvents(CREATURE_EVENT_EXTENDED_OPCODE)) {
+	for (auto& creatureEvent : player->getCreatureEvents(CREATURE_EVENT_EXTENDED_OPCODE)) {
 		creatureEvent->executeExtendedOpcode(player, opcode, buffer);
 	}
 }
@@ -5825,65 +5825,34 @@ void Game::removeUniqueItem(uint16_t uniqueId)
 bool Game::reload(ReloadTypes_t reloadType)
 {
 	switch (reloadType) {
-		case RELOAD_TYPE_ACTIONS:
-			return g_actions->reload();
 		case RELOAD_TYPE_CHAT:
 			return g_chat->load();
 		case RELOAD_TYPE_CONFIG:
 			return g_config.load();
-		case RELOAD_TYPE_CREATURESCRIPTS: {
-			g_creatureEvents->reload();
-			g_creatureEvents->removeInvalidEvents();
-			return true;
-		}
 		case RELOAD_TYPE_EVENTS:
 			return g_events->load();
-		case RELOAD_TYPE_GLOBALEVENTS:
-			return g_globalEvents->reload();
 		case RELOAD_TYPE_ITEMS:
 			return Item::items.reload();
 		case RELOAD_TYPE_MONSTERS:
 			return g_monsters.reload();
 		case RELOAD_TYPE_MOUNTS:
 			return mounts.reload();
-		case RELOAD_TYPE_MOVEMENTS:
-			return g_moveEvents->reload();
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
 			return true;
 		}
 
-		case RELOAD_TYPE_SPELLS: {
-			if (!g_spells->reload()) {
-				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
-				std::terminate();
-			} else if (!g_monsters.reload()) {
-				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
-				std::terminate();
-			}
-			return true;
-		}
-
-		case RELOAD_TYPE_TALKACTIONS:
-			return g_talkActions->reload();
-
-		case RELOAD_TYPE_WEAPONS: {
-			bool results = g_weapons->reload();
-			g_weapons->loadDefaults();
-			return results;
-		}
-
 		case RELOAD_TYPE_SCRIPTS: {
 			// commented out stuff is TODO, once we approach further in revscriptsys
-			g_actions->clear(true);
-			g_creatureEvents->clear(true);
-			g_moveEvents->clear(true);
-			g_talkActions->clear(true);
-			g_globalEvents->clear(true);
-			g_weapons->clear(true);
+			g_actions->clear();
+			g_creatureEvents->clear();
+			g_moveEvents->clear();
+			g_talkActions->clear();
+			g_globalEvents->clear();
+			g_weapons->clear();
 			g_weapons->loadDefaults();
-			g_spells->clear(true);
-			g_scripts->loadScripts("scripts", false, true);
+			g_spells->clear();
+			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			/*
 			Npcs::reload();
@@ -5897,39 +5866,29 @@ bool Game::reload(ReloadTypes_t reloadType)
 		}
 
 		default: {
-			if (!g_spells->reload()) {
-				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
-				std::terminate();
-			} else if (!g_monsters.reload()) {
+			if (!g_monsters.reload()) {
 				std::cout << "[Error - Game::reload] Failed to reload monsters." << std::endl;
 				std::terminate();
 			}
 
-			g_actions->reload();
 			g_config.load();
-			g_creatureEvents->reload();
 			g_monsters.reload();
-			g_moveEvents->reload();
 			Npcs::reload();
-			g_talkActions->reload();
 			Item::items.reload();
-			g_weapons->reload();
-			g_weapons->clear(true);
+			g_weapons->clear();
 			g_weapons->loadDefaults();
 			mounts.reload();
-			g_globalEvents->reload();
 			g_events->load();
 			g_chat->load();
-			g_actions->clear(true);
-			g_creatureEvents->clear(true);
-			g_moveEvents->clear(true);
-			g_talkActions->clear(true);
-			g_globalEvents->clear(true);
-			g_spells->clear(true);
-			g_scripts->loadScripts("scripts", false, true);
+			g_actions->clear();
+			g_creatureEvents->clear();
+			g_moveEvents->clear();
+			g_talkActions->clear();
+			g_globalEvents->clear();
+			g_spells->clear();
+			g_scripts->loadScripts(true);
 			g_creatureEvents->removeInvalidEvents();
 			return true;
 		}
 	}
-	return true;
 }

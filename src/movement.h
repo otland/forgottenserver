@@ -28,14 +28,14 @@ enum MoveEvent_t
 	MOVE_EVENT_NONE
 };
 
-using MoveEvent_ptr = std::unique_ptr<MoveEvent>;
+using MoveEvent_shared_ptr = std::shared_ptr<MoveEvent>;
 
 struct MoveEventList
 {
-	std::list<MoveEvent> moveEvent[MOVE_EVENT_LAST];
+	std::list<MoveEvent_shared_ptr> moveEvent[MOVE_EVENT_LAST];
 };
 
-class MoveEvents final : public BaseEvents
+class MoveEvents
 {
 public:
 	MoveEvents();
@@ -50,29 +50,24 @@ public:
 	ReturnValue onPlayerDeEquip(Player* player, Item* item, slots_t slot);
 	uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
 
-	MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
+	MoveEvent_shared_ptr getEvent(Item* item, MoveEvent_t eventType);
 
-	bool registerLuaEvent(MoveEvent* event);
-	bool registerLuaFunction(MoveEvent* event);
-	void clear(bool fromLua) override final;
+	bool registerLuaEvent(MoveEvent_shared_ptr event);
+	bool registerLuaFunction(MoveEvent_shared_ptr event);
+	MoveEvent_shared_ptr getMoveEvent(uint16_t id, MoveEvent_t eventType, const std::string& stringType);
+	MoveEvent_shared_ptr getMoveEvent(const Position& pos, MoveEvent_t eventType);
+	void clear();
 
 private:
 	using MoveListMap = std::map<int32_t, MoveEventList>;
 	using MovePosListMap = std::map<Position, MoveEventList>;
-	void clearMap(MoveListMap& map, bool fromLua);
-	void clearPosMap(MovePosListMap& map, bool fromLua);
 
-	LuaScriptInterface& getScriptInterface() override;
-	std::string_view getScriptBaseName() const override { return "movements"; }
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
+	void addEvent(MoveEvent_shared_ptr moveEvent, int32_t id, MoveListMap& map);
 
-	void addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map);
+	void addEvent(MoveEvent_shared_ptr moveEvent, const Position& pos, MovePosListMap& map);
+	MoveEvent_shared_ptr getEvent(const Tile* tile, MoveEvent_t eventType);
 
-	void addEvent(MoveEvent moveEvent, const Position& pos, MovePosListMap& map);
-	MoveEvent* getEvent(const Tile* tile, MoveEvent_t eventType);
-
-	MoveEvent* getEvent(Item* item, MoveEvent_t eventType, slots_t slot);
+	MoveEvent_shared_ptr getEvent(Item* item, MoveEvent_t eventType, slots_t slot);
 
 	MoveListMap uniqueIdMap;
 	MoveListMap actionIdMap;
@@ -95,7 +90,6 @@ public:
 	MoveEvent_t getEventType() const;
 	void setEventType(MoveEvent_t type);
 
-	bool configureEvent(const pugi::xml_node& node) override;
 	bool loadFunction(const pugi::xml_attribute& attr, bool isScripted) override;
 
 	uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);

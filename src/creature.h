@@ -19,7 +19,7 @@ class Npc;
 class Player;
 
 using ConditionList = std::list<Condition*>;
-using CreatureEventList = std::list<CreatureEvent*>;
+using CreatureEventList = std::list<CreatureEvent_shared_ptr>;
 
 enum slots_t : uint8_t
 {

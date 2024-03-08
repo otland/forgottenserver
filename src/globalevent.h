@@ -8,8 +8,8 @@
 #include "luascript.h"
 
 class GlobalEvent;
-using GlobalEvent_ptr = std::unique_ptr<GlobalEvent>;
-using GlobalEventMap = std::map<std::string, GlobalEvent>;
+using GlobalEvent_shared_ptr = std::shared_ptr<GlobalEvent>;
+using GlobalEventMap = std::map<std::string, GlobalEvent_shared_ptr>;
 
 enum GlobalEvent_t
 {
@@ -22,7 +22,7 @@ enum GlobalEvent_t
 	GLOBALEVENT_SAVE,
 };
 
-class GlobalEvents final : public BaseEvents
+class GlobalEvents
 {
 public:
 	GlobalEvents();
@@ -41,18 +41,12 @@ public:
 	void execute(GlobalEvent_t type) const;
 
 	GlobalEventMap getEventMap(GlobalEvent_t type);
-	static void clearMap(GlobalEventMap& map, bool fromLua);
 
-	bool registerLuaEvent(GlobalEvent* event);
-	void clear(bool fromLua) override final;
+	bool registerLuaEvent(GlobalEvent_shared_ptr event);
+	GlobalEvent_shared_ptr getGlobalEvent(const std::string& name);
+	void clear();
 
 private:
-	std::string_view getScriptBaseName() const override { return "globalevents"; }
-
-	Event_ptr getEvent(const std::string& nodeName) override;
-	bool registerEvent(Event_ptr event, const pugi::xml_node& node) override;
-
-	LuaScriptInterface& getScriptInterface() override { return scriptInterface; }
 	LuaScriptInterface scriptInterface;
 
 	GlobalEventMap thinkMap, serverMap, timerMap;
@@ -63,8 +57,6 @@ class GlobalEvent final : public Event
 {
 public:
 	explicit GlobalEvent(LuaScriptInterface* interface);
-
-	bool configureEvent(const pugi::xml_node& node) override;
 
 	bool executeRecord(uint32_t current, uint32_t old);
 	bool executeEvent() const;
