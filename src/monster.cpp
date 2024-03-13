@@ -615,10 +615,10 @@ void Monster::goToFollowCreature()
 		}
 	}
 
-	onFollowCreatureComplete(followCreature);
+	onGoToFollowCreatureComplete(followCreature);
 }
 
-void Monster::onFollowCreatureComplete(const Creature* creature)
+void Monster::onGoToFollowCreatureComplete(const Creature* creature)
 {
 	if (creature) {
 		auto it = std::find(targetList.begin(), targetList.end(), creature);

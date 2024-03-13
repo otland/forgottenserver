@@ -959,7 +959,7 @@ void Creature::goToFollowCreature()
 		}
 	}
 
-	onFollowCreatureComplete(followCreature);
+	onGoToFollowCreatureComplete(followCreature);
 }
 
 bool Creature::updateFollowPath(FindPathParams& findPathParams)

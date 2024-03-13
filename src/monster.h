@@ -99,7 +99,7 @@ public:
 	bool getNextStep(Direction& direction, uint32_t& flags) override;
 
 	void goToFollowCreature() override;
-	void onFollowCreatureComplete(const Creature* creature) override;
+	void onGoToFollowCreatureComplete(const Creature* creature) override;
 
 	void onThink(uint32_t interval) override;
 

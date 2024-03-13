@@ -188,7 +188,7 @@ public:
 
 	// follow events
 	virtual void onFollowCreature(const Creature*) {}
-	virtual void onFollowCreatureComplete(const Creature*) {}
+	virtual void onGoToFollowCreatureComplete(const Creature*) {}
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
