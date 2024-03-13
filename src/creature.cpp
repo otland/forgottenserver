@@ -967,7 +967,6 @@ bool Creature::updateFollowPath(FindPathParams& findPathParams)
 	listWalkDir.clear();
 	if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
 		hasFollowPath = true;
-		startAutoWalk();
 	} else {
 		hasFollowPath = false;
 	}
