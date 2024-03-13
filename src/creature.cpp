@@ -954,16 +954,25 @@ void Creature::goToFollowCreature()
 		FindPathParams findPathParams;
 		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
 
-		listWalkDir.clear();
-		if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
-			hasFollowPath = true;
+		if (updateFollowPath(findPathParams)) {
 			startAutoWalk();
-		} else {
-			hasFollowPath = false;
 		}
 	}
 
 	onFollowCreatureComplete(followCreature);
+}
+
+bool Creature::updateFollowPath(FindPathParams& findPathParams)
+{
+	listWalkDir.clear();
+	if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
+		hasFollowPath = true;
+		startAutoWalk();
+	} else {
+		hasFollowPath = false;
+	}
+
+	return hasFollowPath;
 }
 
 bool Creature::setFollowCreature(Creature* creature)
