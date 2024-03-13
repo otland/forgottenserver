@@ -939,9 +939,9 @@ bool Creature::setAttackedCreature(Creature* creature)
 	return true;
 }
 
-void Creature::buildFindPathParams(const Creature*, FindPathParams& findPathParams) const
+void Creature::buildFindPathParams(const Creature*, FindPathParams& findPathParams, bool fullPathSearch) const
 {
-	findPathParams.fullPathSearch = !hasFollowPath;
+	findPathParams.fullPathSearch = fullPathSearch;
 	findPathParams.clearSight = true;
 	findPathParams.maxSearchDist = 12;
 	findPathParams.minTargetDist = 1;
@@ -952,7 +952,7 @@ void Creature::goToFollowCreature()
 {
 	if (followCreature) {
 		FindPathParams findPathParams;
-		buildFindPathParams(followCreature, findPathParams);
+		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
 
 		Monster* monster = getMonster();
 		if (monster && !monster->getMaster() && (monster->isFleeing() || findPathParams.maxTargetDist > 1)) {

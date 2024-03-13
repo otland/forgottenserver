@@ -1995,9 +1995,9 @@ bool Monster::challengeCreature(Creature* creature, bool force /* = false*/)
 	return result;
 }
 
-void Monster::buildFindPathParams(const Creature* creature, FindPathParams& findPathParams) const
+void Monster::buildFindPathParams(const Creature* creature, FindPathParams& findPathParams, bool fullPathSearch) const
 {
-	Creature::buildFindPathParams(creature, findPathParams);
+	Creature::buildFindPathParams(creature, findPathParams, fullPathSearch);
 
 	findPathParams.minTargetDist = 1;
 	findPathParams.maxTargetDist = mType->info.targetDistance;

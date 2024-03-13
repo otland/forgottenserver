@@ -3351,9 +3351,9 @@ void Player::goToFollowCreature()
 	}
 }
 
-void Player::buildFindPathParams(const Creature* creature, FindPathParams& findPathParams) const
+void Player::buildFindPathParams(const Creature* creature, FindPathParams& findPathParams, bool fullPathSearch) const
 {
-	Creature::buildFindPathParams(creature, findPathParams);
+	Creature::buildFindPathParams(creature, findPathParams, fullPathSearch);
 	findPathParams.fullPathSearch = true;
 }
 
