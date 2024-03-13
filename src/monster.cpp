@@ -581,6 +581,53 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	return false;
 }
 
+void Monster::goToFollowCreature()
+{
+	if (followCreature) {
+		FindPathParams findPathParams;
+		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
+
+		Monster* monster = getMonster();
+		if (monster && !monster->getMaster() && (monster->isFleeing() || findPathParams.maxTargetDist > 1)) {
+			Direction dir = DIRECTION_NONE;
+
+			if (monster->isFleeing()) {
+				monster->getDistanceStep(followCreature->getPosition(), dir, true);
+			} else { // maxTargetDist > 1
+				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
+					// if we can't get anything then let the A* calculate
+					listWalkDir.clear();
+					if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
+						hasFollowPath = true;
+						startAutoWalk();
+					} else {
+						hasFollowPath = false;
+					}
+					return;
+				}
+			}
+
+			if (dir != DIRECTION_NONE) {
+				listWalkDir.clear();
+				listWalkDir.push_back(dir);
+
+				hasFollowPath = true;
+				startAutoWalk();
+			}
+		} else {
+			listWalkDir.clear();
+			if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
+				hasFollowPath = true;
+				startAutoWalk();
+			} else {
+				hasFollowPath = false;
+			}
+		}
+	}
+
+	onFollowCreatureComplete(followCreature);
+}
+
 void Monster::onFollowCreatureComplete(const Creature* creature)
 {
 	if (creature) {
