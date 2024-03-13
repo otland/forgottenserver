@@ -436,7 +436,7 @@ protected:
 	virtual uint64_t getLostExperience() const { return 0; }
 	virtual void dropLoot(Container*, Creature*) {}
 	virtual uint16_t getLookCorpse() const { return 0; }
-	virtual void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const;
+	virtual void buildFindPathParams(const Creature* creature, FindPathParams& findPathParams) const;
 	virtual void death(Creature*) {}
 	virtual bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified,
 	                        bool mostDamageUnjustified);

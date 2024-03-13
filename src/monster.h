@@ -211,7 +211,7 @@ private:
 	void dropLoot(Container* corpse, Creature* lastHitCreature) override;
 	uint32_t getDamageImmunities() const override { return mType->info.damageImmunities; }
 	uint32_t getConditionImmunities() const override { return mType->info.conditionImmunities; }
-	void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
+	void buildFindPathParams(const Creature*, FindPathParams& findPathParams) const override;
 	bool useCacheMap() const override { return !randomStepping; }
 
 	friend class LuaScriptInterface;

@@ -1995,32 +1995,32 @@ bool Monster::challengeCreature(Creature* creature, bool force /* = false*/)
 	return result;
 }
 
-void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp) const
+void Monster::buildFindPathParams(const Creature* creature, FindPathParams& findPathParams) const
 {
-	Creature::getPathSearchParams(creature, fpp);
+	Creature::buildFindPathParams(creature, findPathParams);
 
-	fpp.minTargetDist = 1;
-	fpp.maxTargetDist = mType->info.targetDistance;
+	findPathParams.minTargetDist = 1;
+	findPathParams.maxTargetDist = mType->info.targetDistance;
 
 	if (isSummon()) {
 		if (getMaster() == creature) {
-			fpp.maxTargetDist = 2;
-			fpp.fullPathSearch = true;
+			findPathParams.maxTargetDist = 2;
+			findPathParams.fullPathSearch = true;
 		} else if (mType->info.targetDistance <= 1) {
-			fpp.fullPathSearch = true;
+			findPathParams.fullPathSearch = true;
 		} else {
-			fpp.fullPathSearch = !canUseAttack(getPosition(), creature);
+			findPathParams.fullPathSearch = !canUseAttack(getPosition(), creature);
 		}
 	} else if (isFleeing()) {
 		// Distance should be higher than the client view range (Map::maxClientViewportX/Map::maxClientViewportY)
-		fpp.maxTargetDist = Map::maxViewportX;
-		fpp.clearSight = false;
-		fpp.keepDistance = true;
-		fpp.fullPathSearch = false;
+		findPathParams.maxTargetDist = Map::maxViewportX;
+		findPathParams.clearSight = false;
+		findPathParams.keepDistance = true;
+		findPathParams.fullPathSearch = false;
 	} else if (mType->info.targetDistance <= 1) {
-		fpp.fullPathSearch = true;
+		findPathParams.fullPathSearch = true;
 	} else {
-		fpp.fullPathSearch = !canUseAttack(getPosition(), creature);
+		findPathParams.fullPathSearch = !canUseAttack(getPosition(), creature);
 	}
 }
 
