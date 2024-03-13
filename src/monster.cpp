@@ -587,14 +587,13 @@ void Monster::goToFollowCreature()
 		FindPathParams findPathParams;
 		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
 
-		Monster* monster = getMonster();
-		if (monster && !monster->getMaster() && (monster->isFleeing() || findPathParams.maxTargetDist > 1)) {
+		if (!getMaster() && (isFleeing() || findPathParams.maxTargetDist > 1)) {
 			Direction dir = DIRECTION_NONE;
 
-			if (monster->isFleeing()) {
-				monster->getDistanceStep(followCreature->getPosition(), dir, true);
+			if (isFleeing()) {
+				getDistanceStep(followCreature->getPosition(), dir, true);
 			} else { // maxTargetDist > 1
-				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
+				if (!getDistanceStep(followCreature->getPosition(), dir)) {
 					// if we can't get anything then let the A* calculate
 					listWalkDir.clear();
 					if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
@@ -615,13 +614,8 @@ void Monster::goToFollowCreature()
 				startAutoWalk();
 			}
 		} else {
-			listWalkDir.clear();
-			if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
-				hasFollowPath = true;
-				startAutoWalk();
-			} else {
-				hasFollowPath = false;
-			}
+			Creature::goToFollowCreature();
+			return;
 		}
 	}
 
