@@ -21,6 +21,7 @@ FROM alpine:3.17.3
 # crypto++ is in edge/community
 RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
   boost-iostreams \
+  boost-locale \
   boost-system \
   crypto++ \
   fmt \

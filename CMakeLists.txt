@@ -65,9 +65,13 @@ if (NOT FORCE_LUAJIT)
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams)
+if (APPLE)
+    find_package(Iconv REQUIRED)
+endif()
 
-option(ENABLE_TESTING "Build unit tests" OFF)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams locale)
+
+option(BUILD_TESTING "Build unit tests" OFF)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
@@ -78,7 +82,8 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
-if (ENABLE_TESTING)
+if (BUILD_TESTING)
+    message(STATUS "Building unit tests")
     enable_testing()
     add_subdirectory(src/tests)
 endif()
@@ -109,5 +114,11 @@ if(NOT SKIP_GIT)
 	endif()
 endif()
 ### END  Git Version ###
+
+# Option to disable unity builds
+option(ENABLE_UNITY_BUILD "Enable unity build" ON)
+if(ENABLE_UNITY_BUILD)
+    set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
+endif()
 
 target_precompile_headers(tfs PUBLIC src/otpch.h)
