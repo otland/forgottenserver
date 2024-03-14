@@ -99,6 +99,14 @@ function Player:onReportBug(message, position, category)
 	return true
 end
 
+function Player:onRotateItem(item)
+	local onRotateItem = EventCallback.onRotateItem
+	if onRotateItem then
+		return onRotateItem(self, item)
+	end
+	return true
+end
+
 function Player:onTurn(direction)
 	local onTurn = EventCallback.onTurn
 	if onTurn then
@@ -295,4 +303,12 @@ function Player:onNetworkMessage(recvByte, msg)
 	end
 
 	handler(self, msg)
+end
+
+function Player:onSpellCheck(spell)
+	local onSpellCheck = EventCallback.onSpellCheck
+	if onSpellCheck then
+		return onSpellCheck(self, spell)
+	end
+	return true
 end

@@ -334,22 +334,23 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			// Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
-				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
+				if (containerItem != item && containerItem->equals(item) &&
+				    containerItem->getItemCount() < ITEM_STACK_SIZE) {
 					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
-						n += 100 - containerItem->getItemCount();
+						n += ITEM_STACK_SIZE - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
-			if (item->equals(destItem) && destItem->getItemCount() < 100) {
+			if (item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
-					n = 100 - destItem->getItemCount();
+					n = ITEM_STACK_SIZE - destItem->getItemCount();
 				}
 			}
 		}
 
-		maxQueryCount = freeSlots * 100 + n;
+		maxQueryCount = freeSlots * ITEM_STACK_SIZE + n;
 		if (maxQueryCount < count) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
@@ -449,14 +450,14 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
-		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < 100) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < ITEM_STACK_SIZE) {
 			return this;
 		}
 
 		// try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
-			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < 100) {
+			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < ITEM_STACK_SIZE) {
 				*destItem = listItem;
 				index = n;
 				return this;

@@ -413,6 +413,8 @@ public:
 	bool stopTime = false;
 	bool showCount = true;
 	bool supply = false;
+	bool showClientCharges = false;
+	bool showClientDuration = false;
 };
 
 class Items

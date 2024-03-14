@@ -6,10 +6,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    env:
-      CC: gcc
-      CXX: g++
-
     steps:
       - uses: actions/checkout@v3
 
@@ -21,7 +17,7 @@ jobs:
         run: >
           sudo apt update -q &&
           sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-system-dev libboost-iostreams-dev libboost-test-dev
+          libboost-system-dev libboost-iostreams-dev libboost-locale-dev libboost-test-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
       - name: Build with CMake
@@ -29,5 +25,5 @@ jobs:
         with:
           buildPreset: default
           configurePreset: default
-          configurePresetAdditionalArgs: "['-G Ninja', '-DENABLE_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-G Ninja', '-DBUILD_TESTING=ON']"
           testPreset: default

@@ -71,21 +71,13 @@ struct OpenContainer
 	uint16_t index;
 };
 
-struct OutfitEntry
-{
-	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
-
-	uint16_t lookType;
-	uint8_t addons;
-};
-
 static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
 
 struct Skill
 {
 	uint64_t tries = 0;
 	uint16_t level = MINIMUM_SKILL_LEVEL;
-	uint8_t percent = 0;
+	uint16_t percent = 0;
 };
 
 using MuteCountMap = std::map<uint32_t, uint32_t>;
@@ -121,13 +113,13 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
-	uint8_t getRandomMount() const;
-	uint8_t getCurrentMount() const;
-	void setCurrentMount(uint8_t mountId);
+	uint16_t getRandomMount() const;
+	uint16_t getCurrentMount() const;
+	void setCurrentMount(uint16_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
 	bool toggleMount(bool mount);
-	bool tameMount(uint8_t mountId);
-	bool untameMount(uint8_t mountId);
+	bool tameMount(uint16_t mountId);
+	bool untameMount(uint16_t mountId);
 	bool hasMount(const Mount* mount) const;
 	bool hasMounts() const;
 	void dismount();
@@ -256,7 +248,6 @@ public:
 	bool canOpenCorpse(uint32_t ownerId) const;
 
 	void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false) override;
-	void genReservedStorageRange();
 
 	void setGroup(Group* newGroup) { group = newGroup; }
 	Group* getGroup() const { return group; }
@@ -282,7 +273,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint32_t getBaseMagicLevel() const { return magLevel; }
-	uint8_t getMagicLevelPercent() const { return magLevelPercent; }
+	uint16_t getMagicLevelPercent() const { return magLevelPercent; }
 	uint8_t getSoul() const { return soul; }
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
@@ -463,7 +454,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
-	uint8_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+	uint16_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -991,18 +982,6 @@ public:
 			client->sendCloseTrade();
 		}
 	}
-	void sendWorldLight(LightInfo lightInfo)
-	{
-		if (client) {
-			client->sendWorldLight(lightInfo);
-		}
-	}
-	void sendWorldTime()
-	{
-		if (client) {
-			client->sendWorldTime();
-		}
-	}
 	void sendChannelsDialog()
 	{
 		if (client) {
@@ -1133,7 +1112,6 @@ private:
 	void updateInventoryWeight();
 
 	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextWalkTask(SchedulerTask* task);
 	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
 
 	void death(Creature* lastHitCreature) override;
@@ -1174,7 +1152,8 @@ private:
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
 
-	std::vector<OutfitEntry> outfits;
+	std::map<uint16_t, uint8_t> outfits;
+	std::unordered_set<uint16_t> mounts;
 	GuildWarVector guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
@@ -1237,7 +1216,6 @@ private:
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
 	uint32_t actionTaskEvent = 0;
-	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
 	uint32_t MessageBufferTicks = 0;
 	uint32_t accountNumber = 0;
@@ -1271,7 +1249,7 @@ private:
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
-	uint8_t magLevelPercent = 0;
+	uint16_t magLevelPercent = 0;
 
 	PlayerSex_t sex = PLAYERSEX_FEMALE;
 	OperatingSystem_t operatingSystem = CLIENTOS_NONE;
@@ -1312,7 +1290,7 @@ private:
 
 	uint32_t getAttackSpeed() const;
 
-	static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
+	static uint16_t getBasisPointLevel(uint64_t count, uint64_t nextLevelCount);
 	double getLostPercent() const;
 	uint64_t getLostExperience() const override
 	{

@@ -515,7 +515,7 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 
 	uint32_t newPercent;
 	if (nextReqTries > currReqTries) {
-		newPercent = Player::getPercentLevel(skills[skill].tries, nextReqTries);
+		newPercent = Player::getBasisPointLevel(skills[skill].tries, nextReqTries);
 	} else {
 		newPercent = 0;
 	}
@@ -551,7 +551,7 @@ void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = f
 
 	skills[skill].tries = std::max<int32_t>(0, skills[skill].tries - count);
 	skills[skill].percent =
-	    Player::getPercentLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
+	    Player::getBasisPointLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
 
 	if (notify) {
 		bool sendUpdateSkills = false;
@@ -705,15 +705,8 @@ uint16_t Player::getLookCorpse() const
 void Player::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn /* = false*/)
 {
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
-		if (IS_IN_KEYRANGE(key, OUTFITS_RANGE)) {
-			outfits.emplace_back(value.value_or(0) >> 16, value.value_or(0) & 0xFF);
-			return;
-		} else if (IS_IN_KEYRANGE(key, MOUNTS_RANGE)) {
-			// do nothing
-		} else {
-			std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
-			return;
-		}
+		std::cout << "Warning: unknown reserved key: " << key << " player: " << getName() << std::endl;
+		return;
 	}
 
 	Creature::setStorageValue(key, value, isSpawn);
@@ -854,16 +847,14 @@ DepotLocker& Player::getDepotLocker()
 		depotLocker->internalAddThing(inbox);
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
-		if (depotChest) {
-			// adding in reverse to align them from first to last
-			for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
-				if (DepotChest* box = getDepotChest(depotId, true)) {
-					depotChest->internalAddThing(box);
-				}
+		// adding in reverse to align them from first to last
+		for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
+			if (DepotChest* box = getDepotChest(depotId, true)) {
+				depotChest->internalAddThing(box);
 			}
-
-			depotLocker->internalAddThing(depotChest);
 		}
+
+		depotLocker->internalAddThing(depotChest);
 	}
 	return *depotLocker;
 }
@@ -1512,19 +1503,6 @@ void Player::setNextWalkActionTask(SchedulerTask* task)
 	walkTask = task;
 }
 
-void Player::setNextWalkTask(SchedulerTask* task)
-{
-	if (nextStepEvent != 0) {
-		g_scheduler.stopEvent(nextStepEvent);
-		nextStepEvent = 0;
-	}
-
-	if (task) {
-		nextStepEvent = g_scheduler.addEvent(task);
-		resetIdleTime();
-	}
-}
-
 void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true */)
 {
 	if (actionTaskEvent != 0) {
@@ -1685,7 +1663,7 @@ void Player::addManaSpent(uint64_t amount)
 
 	uint8_t oldPercent = magLevelPercent;
 	if (nextReqMana > currReqMana) {
-		magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 	} else {
 		magLevelPercent = 0;
 	}
@@ -1719,7 +1697,7 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 
 	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
 	if (nextReqMana > vocation->getReqMana(magLevel)) {
-		magLevelPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 	} else {
 		magLevelPercent = 0;
 	}
@@ -1800,7 +1778,7 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 	}
 
 	if (nextLevelExp > currLevelExp) {
-		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+		levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 	} else {
 		levelPercent = 0;
 	}
@@ -1883,7 +1861,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 	if (nextLevelExp > currLevelExp) {
-		levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+		levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 	} else {
 		levelPercent = 0;
 	}
@@ -1892,14 +1870,14 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 	sendExperienceTracker(0, -static_cast<int64_t>(exp));
 }
 
-uint8_t Player::getPercentLevel(uint64_t count, uint64_t nextLevelCount)
+uint16_t Player::getBasisPointLevel(uint64_t count, uint64_t nextLevelCount)
 {
 	if (nextLevelCount == 0) {
 		return 0;
 	}
 
-	uint8_t result = (count * 100) / nextLevelCount;
-	if (result > 100) {
+	uint16_t result = ((count * 10000.) / nextLevelCount);
+	if (result > 10000) {
 		return 0;
 	}
 	return result;
@@ -2130,7 +2108,7 @@ void Player::death(Creature* lastHitCreature)
 			uint64_t currLevelExp = Player::getExpForLevel(level);
 			uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
 			if (nextLevelExp > currLevelExp) {
-				levelPercent = Player::getPercentLevel(experience - currLevelExp, nextLevelExp - currLevelExp);
+				levelPercent = Player::getBasisPointLevel(experience - currLevelExp, nextLevelExp - currLevelExp) / 100;
 			} else {
 				levelPercent = 0;
 			}
@@ -2690,7 +2668,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 						}
 					}
 				} else if (inventoryItem->isStackable() && item->equals(inventoryItem) &&
-				           inventoryItem->getItemCount() < 100) {
+				           inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
 					uint32_t remainder = (100 - inventoryItem->getItemCount());
 
 					if (queryAdd(slotIndex, *item, remainder, flags) == RETURNVALUE_NOERROR) {
@@ -2716,7 +2694,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		}
 
 		if (destItem) {
-			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < 100) {
+			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				maxQueryCount = 100 - destItem->getItemCount();
 			} else {
 				maxQueryCount = 0;
@@ -2790,7 +2768,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				if (autoStack && isStackable) {
 					// try find an already existing item to stack with
 					if (queryAdd(slotIndex, *item, item->getItemCount(), 0) == RETURNVALUE_NOERROR) {
-						if (inventoryItem->equals(item) && inventoryItem->getItemCount() < 100) {
+						if (inventoryItem->equals(item) && inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
 							index = slotIndex;
 							*destItem = inventoryItem;
 							return this;
@@ -2849,7 +2827,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				}
 
 				// try find an already existing item to stack with
-				if (tmpItem->equals(item) && tmpItem->getItemCount() < 100) {
+				if (tmpItem->equals(item) && tmpItem->getItemCount() < ITEM_STACK_SIZE) {
 					index = n;
 					*destItem = tmpItem;
 					return tmpContainer;
@@ -3225,6 +3203,12 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					}
 
 					if (!isOwner) {
+						autoCloseContainers(container);
+					}
+				} else if (const Inbox* inboxContainer = dynamic_cast<const Inbox*>(topContainer)) {
+					if (inboxContainer == inbox) {
+						onSendContainer(container);
+					} else {
 						autoCloseContainers(container);
 					}
 				} else {
@@ -3853,9 +3837,9 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 		return true;
 	}
 
-	for (const OutfitEntry& outfitEntry : outfits) {
-		if (outfitEntry.lookType == lookType) {
-			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
 			return false; // have lookType on list and addons don't match
@@ -3875,9 +3859,9 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 		return true;
 	}
 
-	for (const OutfitEntry& outfitEntry : outfits) {
-		if (outfitEntry.lookType == lookType) {
-			if (outfitEntry.addons == addons || outfitEntry.addons == 3 || addons == 0) {
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
 			return false; // have lookType on list and addons don't match
@@ -3886,32 +3870,22 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 	return false;
 }
 
-void Player::genReservedStorageRange()
-{
-	// generate outfits range
-	uint32_t base_key = PSTRG_OUTFITS_RANGE_START;
-	for (const OutfitEntry& entry : outfits) {
-		Creature::setStorageValue(++base_key, (entry.lookType << 16) | entry.addons, true);
-	}
-}
-
 void Player::addOutfit(uint16_t lookType, uint8_t addons)
 {
-	for (OutfitEntry& outfitEntry : outfits) {
-		if (outfitEntry.lookType == lookType) {
-			outfitEntry.addons |= addons;
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			addon |= addons;
 			return;
 		}
 	}
-	outfits.emplace_back(lookType, addons);
+	outfits.insert(std::pair(lookType, addons));
 }
 
 bool Player::removeOutfit(uint16_t lookType)
 {
-	for (auto it = outfits.begin(), end = outfits.end(); it != end; ++it) {
-		OutfitEntry& entry = *it;
-		if (entry.lookType == lookType) {
-			outfits.erase(it);
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			outfits.erase(outfit);
 			return true;
 		}
 	}
@@ -3920,9 +3894,9 @@ bool Player::removeOutfit(uint16_t lookType)
 
 bool Player::removeOutfitAddon(uint16_t lookType, uint8_t addons)
 {
-	for (OutfitEntry& outfitEntry : outfits) {
-		if (outfitEntry.lookType == lookType) {
-			outfitEntry.addons &= ~addons;
+	for (auto& [outfit, addon] : outfits) {
+		if (outfit == lookType) {
+			addon &= ~addons;
 			return true;
 		}
 	}
@@ -3940,12 +3914,12 @@ bool Player::getOutfitAddons(const Outfit& outfit, uint8_t& addons) const
 		return false;
 	}
 
-	for (const OutfitEntry& outfitEntry : outfits) {
-		if (outfitEntry.lookType != outfit.lookType) {
+	for (auto& [lookType, addon] : outfits) {
+		if (lookType != outfit.lookType) {
 			continue;
 		}
 
-		addons = outfitEntry.addons;
+		addons = addon;
 		return true;
 	}
 
@@ -4285,9 +4259,9 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 	return GUILDEMBLEM_NEUTRAL;
 }
 
-uint8_t Player::getRandomMount() const
+uint16_t Player::getRandomMount() const
 {
-	std::vector<uint8_t> mountsId;
+	std::vector<uint16_t> mountsId;
 	for (const Mount& mount : g_game.mounts.getMounts()) {
 		if (hasMount(&mount)) {
 			mountsId.push_back(mount.id);
@@ -4297,13 +4271,9 @@ uint8_t Player::getRandomMount() const
 	return mountsId[uniform_random(0, mountsId.size() - 1)];
 }
 
-uint8_t Player::getCurrentMount() const
-{
-	auto storage = getStorageValue(PSTRG_MOUNTS_CURRENTMOUNT);
-	return storage.value_or(0);
-}
+uint16_t Player::getCurrentMount() const { return currentMount; }
 
-void Player::setCurrentMount(uint8_t mountId) { setStorageValue(PSTRG_MOUNTS_CURRENTMOUNT, mountId); }
+void Player::setCurrentMount(uint16_t mountId) { currentMount = mountId; }
 
 bool Player::toggleMount(bool mount)
 {
@@ -4327,7 +4297,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		uint8_t currentMountId = getCurrentMount();
+		uint16_t currentMountId = getCurrentMount();
 		if (currentMountId == 0) {
 			sendOutfitWindow();
 			return false;
@@ -4376,29 +4346,33 @@ bool Player::toggleMount(bool mount)
 	return true;
 }
 
-bool Player::tameMount(uint8_t mountId)
+bool Player::tameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
 	}
 
-	const uint8_t tmpMountId = mountId - 1;
-	const uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
+	Mount* mount = g_game.mounts.getMountByID(mountId);
+	if (hasMount(mount)) {
+		return false;
+	}
 
-	setStorageValue(key, getStorageValue(key).value_or(0) | (1 << (tmpMountId % 31)));
+	mounts.insert(mountId);
 	return true;
 }
 
-bool Player::untameMount(uint8_t mountId)
+bool Player::untameMount(uint16_t mountId)
 {
 	if (!g_game.mounts.getMountByID(mountId)) {
 		return false;
 	}
 
-	uint8_t tmpMountId = mountId - 1;
-	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
+	Mount* mount = g_game.mounts.getMountByID(mountId);
+	if (!hasMount(mount)) {
+		return false;
+	}
 
-	setStorageValue(key, getStorageValue(key).value_or(0) & ~(1 << (tmpMountId % 31)));
+	mounts.erase(mountId);
 
 	if (getCurrentMount() == mountId) {
 		if (isMounted()) {
@@ -4422,10 +4396,7 @@ bool Player::hasMount(const Mount* mount) const
 		return false;
 	}
 
-	uint8_t tmpMountId = mount->id - 1;
-	uint32_t key = PSTRG_MOUNTS_RANGE_START + (tmpMountId / 31);
-
-	return ((1 << (tmpMountId % 31)) & getStorageValue(key).value_or(0)) != 0;
+	return mounts.find(mount->id) != mounts.end();
 }
 
 bool Player::hasMounts() const
@@ -4498,7 +4469,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		uint8_t newPercent;
 		if (nextReqMana > currReqMana) {
-			newPercent = Player::getPercentLevel(manaSpent, nextReqMana);
+			newPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
 			newPercentToNextLevel = static_cast<long double>(manaSpent * 100) / nextReqMana;
 		} else {
 			newPercent = 0;
@@ -4552,7 +4523,7 @@ bool Player::addOfflineTrainingTries(skills_t skill, uint64_t tries)
 
 		uint8_t newPercent;
 		if (nextReqTries > currReqTries) {
-			newPercent = Player::getPercentLevel(skills[skill].tries, nextReqTries);
+			newPercent = Player::getBasisPointLevel(skills[skill].tries, nextReqTries);
 			newPercentToNextLevel = static_cast<long double>(skills[skill].tries * 100) / nextReqTries;
 		} else {
 			newPercent = 0;

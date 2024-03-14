@@ -11,11 +11,16 @@
 class ItemType;
 class NetworkMessage;
 class Party;
+class Spell;
 class Tile;
 
 enum class EventInfoId
 {
-	CREATURE_ONHEAR
+	// Creature
+	CREATURE_ONHEAR,
+
+	// Monster
+	MONSTER_ONSPAWN
 };
 
 class Events
@@ -27,6 +32,7 @@ class Events
 		int32_t creatureOnAreaCombat = -1;
 		int32_t creatureOnTargetCombat = -1;
 		int32_t creatureOnHear = -1;
+		int32_t creatureOnChangeZone = -1;
 		int32_t creatureOnUpdateStorage = -1;
 
 		// Party
@@ -50,6 +56,7 @@ class Events
 		int32_t playerOnMoveCreature = -1;
 		int32_t playerOnReportRuleViolation = -1;
 		int32_t playerOnReportBug = -1;
+		int32_t playerOnRotateItem = -1;
 		int32_t playerOnTurn = -1;
 		int32_t playerOnTradeRequest = -1;
 		int32_t playerOnTradeAccept = -1;
@@ -62,6 +69,7 @@ class Events
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
 		int32_t playerOnNetworkMessage = -1;
+		int32_t playerOnSpellCheck = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -78,6 +86,7 @@ public:
 	ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
+	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
 	void eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
@@ -108,6 +117,7 @@ public:
 	                                      uint8_t reportReason, const std::string& comment,
 	                                      const std::string& translation);
 	bool eventPlayerOnReportBug(Player* player, const std::string& message, const Position& position, uint8_t category);
+	void eventPlayerOnRotateItem(Player* player, Item* item);
 	bool eventPlayerOnTurn(Player* player, Direction direction);
 	bool eventPlayerOnTradeRequest(Player* player, Player* target, Item* item);
 	bool eventPlayerOnTradeAccept(Player* player, Player* target, Item* item, Item* targetItem);
@@ -121,6 +131,7 @@ public:
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
+	bool eventPlayerOnSpellCheck(Player* player, const Spell* spell);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);
@@ -131,6 +142,8 @@ public:
 		switch (eventInfoId) {
 			case EventInfoId::CREATURE_ONHEAR:
 				return info.creatureOnHear;
+			case EventInfoId::MONSTER_ONSPAWN:
+				return info.monsterOnSpawn;
 			default:
 				return -1;
 		}

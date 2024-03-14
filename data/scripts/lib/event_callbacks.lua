@@ -28,6 +28,7 @@ ec.onChangeMount = {}
 ec.onAreaCombat = {returnValue=true}
 ec.onTargetCombat = {returnValue=true}
 ec.onHear = {}
+ec.onChangeZone = {}
 -- Party
 ec.onJoin = {}
 ec.onLeave = {}
@@ -52,12 +53,14 @@ ec.onMoveCreature = {}
 ec.onReportRuleViolation = {}
 ec.onReportBug = {}
 ec.onTurn = {}
+ec.onRotateItem = {}
 ec.onGainExperience = {[3] = 1}
 ec.onLoseExperience = {[2] = 1}
 ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
 ec.onUpdateStorage = {}
+ec.onSpellCheck = {}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}
