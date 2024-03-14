@@ -1639,17 +1639,19 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 	accumulatedManaSpent = vocation->getAccumulatedReqMana(magLevel) + manaSpent;
 	setLoyaltyBonusMagicLevel();
 
-	bool sendUpdateStats = false;
-	if (oldLevel != loyaltyMagLevel) {
-		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You were downgraded to magic level {:d}.", loyaltyMagLevel));
-		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, oldLevel, loyaltyMagLevel);
-		sendUpdateStats = true;
-	}
+	if (notify) {
+		bool sendUpdateStats = false;
+		if (oldLevel != loyaltyMagLevel) {
+			sendTextMessage(MESSAGE_EVENT_ADVANCE,
+			                fmt::format("You were downgraded to magic level {:d}.", loyaltyMagLevel));
+			g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, oldLevel, loyaltyMagLevel);
+			sendUpdateStats = true;
+		}
 
-	if (sendUpdateStats || oldPercent != loyaltyMagLevelPercent) {
-		sendStats();
-		sendSkills();
+		if (sendUpdateStats || oldPercent != loyaltyMagLevelPercent) {
+			sendStats();
+			sendSkills();
+		}
 	}
 }
 

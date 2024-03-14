@@ -268,7 +268,8 @@ public:
 	AccountType_t getAccountType() const { return accountType; }
 	uint32_t getLevel() const { return level; }
 	uint8_t getLevelPercent() const { return levelPercent; }
-	uint32_t getMagicLevel() const {
+	uint32_t getMagicLevel() const
+	{
 		if (loyaltyBonus > 0) {
 			return std::max<int32_t>(0, loyaltyMagLevel + varStats[STAT_MAGICPOINTS]);
 		}
