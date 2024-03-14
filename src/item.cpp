@@ -238,12 +238,7 @@ void Item::setID(uint16_t newid)
 	id = newid;
 
 	const ItemType& it = Item::items[newid];
-	uint32_t newDuration;
-	if (it.decayTimeMin != 0 && it.decayTimeMax != 0) {
-		newDuration = normal_random(it.decayTimeMin, it.decayTimeMax) * 1000;
-	} else {
-		newDuration = it.decayTimeMin * 1000;
-	}
+	uint32_t newDuration = normal_random(it.decayTimeMin, it.decayTimeMax) * 1000;
 
 	if (newDuration == 0 && !it.stopTime && it.decayTo < 0) {
 		removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
