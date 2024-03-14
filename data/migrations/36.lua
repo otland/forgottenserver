@@ -1,3 +1,7 @@
 function onUpdateDatabase()
-	return false
+	print("> Updating database to version 37 (loyalty system)")
+	db.query("ALTER TABLE `accounts` ADD COLUMN `loyalty_points` SMALLINT UNSIGNED NOT NULL DEFAULT 0 AFTER `premium_ends_at`")
+	db.query("ALTER TABLE `players` ADD COLUMN `main_character` TINYINT(1) NOT NULL DEFAULT 0 AFTER `account_id`")
+	db.query("INSERT INTO `server_config` (`config`, `value`) VALUES ('loyalty_updated', '0')")
+	return true
 end

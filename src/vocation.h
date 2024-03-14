@@ -9,6 +9,8 @@
 
 extern ConfigManager g_config;
 
+struct Skill;
+
 class Vocation
 {
 public:
@@ -16,8 +18,13 @@ public:
 
 	const std::string& getVocName() const { return name; }
 	const std::string& getVocDescription() const { return description; }
+
 	uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
 	uint64_t getReqMana(uint32_t magLevel);
+	uint64_t getAccumulatedReqSkillTries(uint8_t skill, uint16_t level);
+	Skill getSkillByAccumulatedTries(uint8_t skill, uint64_t tries);
+	uint64_t getAccumulatedReqMana(uint32_t magLevel);
+	std::pair<uint32_t, uint64_t> getMagLevelByAccumulatedMana(uint64_t mana);
 
 	uint16_t getId() const { return id; }
 

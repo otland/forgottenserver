@@ -76,6 +76,7 @@ static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
 struct Skill
 {
 	uint64_t tries = 0;
+	uint64_t accumulatedTries = 0;
 	uint16_t level = MINIMUM_SKILL_LEVEL;
 	uint16_t percent = 0;
 };
@@ -267,7 +268,13 @@ public:
 	AccountType_t getAccountType() const { return accountType; }
 	uint32_t getLevel() const { return level; }
 	uint8_t getLevelPercent() const { return levelPercent; }
-	uint32_t getMagicLevel() const { return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]); }
+	uint32_t getMagicLevel() const {
+		if (loyaltyBonus > 0) {
+			return std::max<int32_t>(0, loyaltyMagLevel + varStats[STAT_MAGICPOINTS]);
+		}
+
+		return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]);
+	}
 	uint32_t getSpecialMagicLevel(CombatType_t type) const
 	{
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
@@ -447,6 +454,9 @@ public:
 	uint16_t getSpecialSkill(uint8_t skill) const { return std::max<uint16_t>(0, varSpecialSkills[skill]); }
 	uint16_t getSkillLevel(uint8_t skill) const
 	{
+		if (loyaltyBonus > 0) {
+			return std::max<uint16_t>(0, loyaltySkills[skill].level + varSkills[skill]);
+		}
 		return std::max<uint16_t>(0, skills[skill].level + varSkills[skill]);
 	}
 	uint16_t getSpecialMagicLevelSkill(CombatType_t type) const
@@ -455,6 +465,18 @@ public:
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
 	uint16_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+
+	void setLoyaltyBonusSkill(uint8_t skill);
+	uint16_t getLoyaltySkill(uint8_t skill) const { return std::max<uint16_t>(0, loyaltySkills[skill].level); }
+	uint16_t getLoyaltySkillPercent(uint8_t skill) const { return loyaltySkills[skill].percent; }
+
+	void setLoyaltyBonusMagicLevel();
+	uint32_t getLoyaltyMagicLevel() const { return std::max<uint32_t>(0, loyaltyMagLevel); }
+	uint16_t getLoyaltyMagicLevelPercent() const { return loyaltyMagLevelPercent; }
+
+	void setLoyaltyPoints(uint16_t points) { loyaltyPoints = points; }
+	uint16_t getLoyaltyPoints() const { return loyaltyPoints; }
+	float getLoyaltyBonus() const { return loyaltyBonus; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -1169,6 +1191,7 @@ private:
 	std::string guildNick;
 
 	Skill skills[SKILL_LAST + 1];
+	Skill loyaltySkills[SKILL_LAST + 1];
 	LightInfo itemsLight;
 	Position loginPosition;
 	Position lastWalkthroughPosition;
@@ -1179,6 +1202,8 @@ private:
 
 	uint64_t experience = 0;
 	uint64_t manaSpent = 0;
+	uint64_t accumulatedManaSpent = 0;
+	uint64_t loyaltyManaSpent = 0;
 	uint64_t lastAttack = 0;
 	uint64_t bankBalance = 0;
 	int64_t lastFailedFollow = 0;
@@ -1216,6 +1241,7 @@ private:
 	uint32_t conditionSuppressions = 0;
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
+	uint32_t loyaltyMagLevel = 0;
 	uint32_t actionTaskEvent = 0;
 	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
@@ -1252,6 +1278,7 @@ private:
 	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
 	uint16_t magLevelPercent = 0;
+	uint16_t loyaltyMagLevelPercent = 0;
 
 	PlayerSex_t sex = PLAYERSEX_FEMALE;
 	OperatingSystem_t operatingSystem = CLIENTOS_NONE;
@@ -1270,6 +1297,9 @@ private:
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 	bool randomizeMount = false;
+
+	uint16_t loyaltyPoints = 0;
+	float loyaltyBonus = 0.f;
 
 	static uint32_t playerAutoID;
 	static uint32_t playerIDLimit;

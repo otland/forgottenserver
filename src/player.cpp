@@ -490,78 +490,43 @@ void Player::addSkillAdvance(skills_t skill, uint64_t count)
 		return;
 	}
 
+	uint16_t oldLevel = loyaltySkills[skill].level;
+	uint16_t oldPercent = loyaltySkills[skill].percent;
+
+	skills[skill] = vocation->getSkillByAccumulatedTries(skill, skills[skill].accumulatedTries + count);
+	setLoyaltyBonusSkill(skill);
+
 	bool sendUpdateSkills = false;
-	while ((skills[skill].tries + count) >= nextReqTries) {
-		count -= nextReqTries - skills[skill].tries;
-		skills[skill].level++;
-		skills[skill].tries = 0;
-		skills[skill].percent = 0;
-
-		sendTextMessage(MESSAGE_EVENT_ADVANCE,
-		                fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill), skills[skill].level));
-
-		g_creatureEvents->playerAdvance(this, skill, (skills[skill].level - 1), skills[skill].level);
-
-		sendUpdateSkills = true;
-		currReqTries = nextReqTries;
-		nextReqTries = vocation->getReqSkillTries(skill, skills[skill].level + 1);
-		if (currReqTries >= nextReqTries) {
-			count = 0;
-			break;
-		}
-	}
-
-	skills[skill].tries += count;
-
-	uint32_t newPercent;
-	if (nextReqTries > currReqTries) {
-		newPercent = Player::getBasisPointLevel(skills[skill].tries, nextReqTries);
-	} else {
-		newPercent = 0;
-	}
-
-	if (skills[skill].percent != newPercent) {
-		skills[skill].percent = newPercent;
+	if (oldLevel != loyaltySkills[skill].level) {
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to {:s} level {:d}.", getSkillName(skill),
+		                                                   loyaltySkills[skill].level));
+		g_creatureEvents->playerAdvance(this, skill, oldLevel, loyaltySkills[skill].level);
 		sendUpdateSkills = true;
 	}
 
-	if (sendUpdateSkills) {
+	if (sendUpdateSkills || oldPercent != loyaltySkills[skill].percent) {
 		sendSkills();
 	}
 }
 
 void Player::removeSkillTries(skills_t skill, uint64_t count, bool notify /* = false*/)
 {
-	uint16_t oldLevel = skills[skill].level;
-	uint8_t oldPercent = skills[skill].percent;
+	uint16_t oldLevel = loyaltySkills[skill].level;
+	uint16_t oldPercent = loyaltySkills[skill].percent;
 
-	while (count > skills[skill].tries) {
-		count -= skills[skill].tries;
-
-		if (skills[skill].level <= MINIMUM_SKILL_LEVEL) {
-			skills[skill].level = MINIMUM_SKILL_LEVEL;
-			skills[skill].tries = 0;
-			count = 0;
-			break;
-		}
-
-		skills[skill].tries = vocation->getReqSkillTries(skill, skills[skill].level);
-		skills[skill].level--;
-	}
-
-	skills[skill].tries = std::max<int32_t>(0, skills[skill].tries - count);
-	skills[skill].percent =
-	    Player::getBasisPointLevel(skills[skill].tries, vocation->getReqSkillTries(skill, skills[skill].level));
+	skills[skill] =
+	    vocation->getSkillByAccumulatedTries(skill, std::max<uint64_t>(count, skills[skill].accumulatedTries) - count);
+	setLoyaltyBonusSkill(skill);
 
 	if (notify) {
 		bool sendUpdateSkills = false;
-		if (oldLevel != skills[skill].level) {
+		if (oldLevel != loyaltySkills[skill].level) {
 			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to {:s} level {:d}.",
-			                                                   getSkillName(skill), skills[skill].level));
+			                                                   getSkillName(skill), loyaltySkills[skill].level));
 			sendUpdateSkills = true;
 		}
 
-		if (sendUpdateSkills || oldPercent != skills[skill].percent) {
+		if (sendUpdateSkills || oldPercent != loyaltySkills[skill].percent) {
 			sendSkills();
 		}
 	}
@@ -1648,44 +1613,26 @@ void Player::addManaSpent(uint64_t amount)
 		return;
 	}
 
+	uint32_t oldLevel = loyaltyMagLevel;
+	uint16_t oldPercent = loyaltyMagLevelPercent;
+
 	g_events->eventPlayerOnGainSkillTries(this, SKILL_MAGLEVEL, amount);
 	if (amount == 0) {
 		return;
 	}
 
+	std::tie(magLevel, manaSpent) = vocation->getMagLevelByAccumulatedMana(manaSpent + amount);
+	accumulatedManaSpent = vocation->getAccumulatedReqMana(magLevel) + manaSpent;
+	setLoyaltyBonusMagicLevel();
+
 	bool sendUpdateStats = false;
-	while ((manaSpent + amount) >= nextReqMana) {
-		amount -= nextReqMana - manaSpent;
-
-		magLevel++;
-		manaSpent = 0;
-
-		sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", magLevel));
-
-		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, magLevel - 1, magLevel);
-
-		sendUpdateStats = true;
-		currReqMana = nextReqMana;
-		nextReqMana = vocation->getReqMana(magLevel + 1);
-		if (currReqMana >= nextReqMana) {
-			return;
-		}
-	}
-
-	manaSpent += amount;
-
-	uint8_t oldPercent = magLevelPercent;
-	if (nextReqMana > currReqMana) {
-		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
-	} else {
-		magLevelPercent = 0;
-	}
-
-	if (oldPercent != magLevelPercent) {
+	if (oldLevel != loyaltyMagLevel) {
+		sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You advanced to magic level {:d}.", loyaltyMagLevel));
+		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, oldLevel, loyaltyMagLevel);
 		sendUpdateStats = true;
 	}
 
-	if (sendUpdateStats) {
+	if (sendUpdateStats || oldPercent != loyaltyMagLevelPercent) {
 		sendStats();
 		sendSkills();
 	}
@@ -1697,35 +1644,25 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 		return;
 	}
 
-	uint32_t oldLevel = magLevel;
-	uint8_t oldPercent = magLevelPercent;
+	uint32_t oldLevel = loyaltyMagLevel;
+	uint16_t oldPercent = loyaltyMagLevelPercent;
 
-	while (amount > manaSpent && magLevel > 0) {
-		amount -= manaSpent;
-		manaSpent = vocation->getReqMana(magLevel);
-		magLevel--;
+	std::tie(magLevel, manaSpent) =
+	    vocation->getMagLevelByAccumulatedMana(std::max<uint64_t>(amount, manaSpent) - amount);
+	accumulatedManaSpent = vocation->getAccumulatedReqMana(magLevel) + manaSpent;
+	setLoyaltyBonusMagicLevel();
+
+	bool sendUpdateStats = false;
+	if (oldLevel != loyaltyMagLevel) {
+		sendTextMessage(MESSAGE_EVENT_ADVANCE,
+		                fmt::format("You were downgraded to magic level {:d}.", loyaltyMagLevel));
+		g_creatureEvents->playerAdvance(this, SKILL_MAGLEVEL, oldLevel, loyaltyMagLevel);
+		sendUpdateStats = true;
 	}
 
-	manaSpent -= amount;
-
-	uint64_t nextReqMana = vocation->getReqMana(magLevel + 1);
-	if (nextReqMana > vocation->getReqMana(magLevel)) {
-		magLevelPercent = Player::getBasisPointLevel(manaSpent, nextReqMana);
-	} else {
-		magLevelPercent = 0;
-	}
-
-	if (notify) {
-		bool sendUpdateStats = false;
-		if (oldLevel != magLevel) {
-			sendTextMessage(MESSAGE_EVENT_ADVANCE, fmt::format("You were downgraded to magic level {:d}.", magLevel));
-			sendUpdateStats = true;
-		}
-
-		if (sendUpdateStats || oldPercent != magLevelPercent) {
-			sendStats();
-			sendSkills();
-		}
+	if (sendUpdateStats || oldPercent != loyaltyMagLevelPercent) {
+		sendStats();
+		sendSkills();
 	}
 }
 
@@ -4705,4 +4642,22 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
+}
+
+void Player::setLoyaltyBonusSkill(uint8_t skill)
+{
+	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
+		return;
+	}
+	loyaltySkills[skill] = vocation->getSkillByAccumulatedTries(
+	    skill, std::ceil<uint64_t>(skills[skill].accumulatedTries * (1 + loyaltyBonus)));
+	loyaltySkills[skill].percent = getBasisPointLevel(
+	    loyaltySkills[skill].tries, vocation->getReqSkillTries(skill, loyaltySkills[skill].level + 1));
+}
+
+void Player::setLoyaltyBonusMagicLevel()
+{
+	std::tie(loyaltyMagLevel, loyaltyManaSpent) =
+	    vocation->getMagLevelByAccumulatedMana(std::ceil<uint64_t>(accumulatedManaSpent * (1 + loyaltyBonus)));
+	loyaltyMagLevelPercent = getBasisPointLevel(loyaltyManaSpent, vocation->getReqMana(loyaltyMagLevel + 1));
 }

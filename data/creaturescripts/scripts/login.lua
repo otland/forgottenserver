@@ -32,6 +32,12 @@ function onLogin(player)
 		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
 	end
 
+	local loyaltyBonus = player:getLoyaltyBonus()
+	if loyaltyBonus > 0 then
+		loginStr = string.format("Due to your long-term loyalty to %s, you currently benefit from a %d%% bonus on all of your skills.", serverName, loyaltyBonus * 100)
+		player:sendTextMessage(MESSAGE_EVENT_DEFAULT, loginStr)
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")

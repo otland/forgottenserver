@@ -1,3 +1,17 @@
+local function updateLoyaltyPoints()
+	local updatedAt = 0
+	local resultId = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'loyalty_updated'")
+	if resultId then
+		updatedAt = result.getNumber(resultId, "value")
+		result.free(resultId)
+	end
+	local now = os.time()
+	if (now - updatedAt) >= 24 * 60 * 60 then
+		db.asyncQuery("UPDATE `accounts` SET `loyalty_points` = `loyalty_points` + 1 WHERE `premium_ends_at` > " .. now)
+		db.query("UPDATE `server_config` SET `value` = " .. now .. " WHERE `config` = 'loyalty_updated'")
+	end
+end
+
 function onStartup()
 	db.query("TRUNCATE TABLE `players_online`")
 	db.asyncQuery("DELETE FROM `guild_wars` WHERE `status` = 0")
@@ -56,6 +70,9 @@ function onStartup()
 		end
 	end
 	
+	-- update loyalty points
+	updateLoyaltyPoints()
+
 	-- setup highscores variables
 	setUpHighscores()
 end

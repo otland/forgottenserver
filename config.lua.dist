@@ -128,6 +128,21 @@ experienceStages = {
 	{ minlevel = 101, multiplier = 3 }
 }
 
+-- Loyalty system
+loyaltyBonuses = {
+	{ min = 0, max = 360, bonus = 0 },
+	{ min = 360, max = 720, bonus = 0.05 },
+	{ min = 720, max = 1080, bonus = 0.1 },
+	{ min = 1080, max = 1440, bonus = 0.15 },
+	{ min = 1440, max = 1800, bonus = 0.2 },
+	{ min = 1800, max = 2160, bonus = 0.25 },
+	{ min = 2160, max = 2520, bonus = 0.3 },
+	{ min = 2520, max = 2880, bonus = 0.35 },
+	{ min = 2880, max = 3240, bonus = 0.4 },
+	{ min = 3240, max = 3600, bonus = 0.45 },
+	{ min = 3600, bonus = 0.5 }
+}
+
 -- Rates
 -- NOTE: rateExp is not used if you have enabled stages above
 rateExp = 5

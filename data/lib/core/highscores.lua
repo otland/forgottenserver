@@ -44,6 +44,7 @@ HIGHSCORES_CATEGORY_DISTANCE_FIGHTING = 7
 HIGHSCORES_CATEGORY_SHIELDING = 8
 HIGHSCORES_CATEGORY_FISHING = 9
 HIGHSCORES_CATEGORY_ACHIEVEMENTS = 10
+HIGHSCORES_CATEGORY_LOYALTY = 11
 
 HIGHSCORES_ACTION_BROWSE = 0
 HIGHSCORES_ACTION_OWN = 1
@@ -62,7 +63,8 @@ HIGHSCORES_CATEGORIES = {
 	[HIGHSCORES_CATEGORY_DISTANCE_FIGHTING] = { name = "Distance Fighting", type = HIGHSCORES_TYPE_SKILLS },
 	[HIGHSCORES_CATEGORY_SHIELDING] = { name = "Shielding", type = HIGHSCORES_TYPE_SKILLS },
 	[HIGHSCORES_CATEGORY_FISHING] = { name = "Fishing", type = HIGHSCORES_TYPE_SKILLS },
-	[HIGHSCORES_CATEGORY_ACHIEVEMENTS] = { name = "Achievement Points", type = HIGHSCORES_TYPE_POINTS }
+	[HIGHSCORES_CATEGORY_ACHIEVEMENTS] = { name = "Achievement Points", type = HIGHSCORES_TYPE_POINTS },
+	[HIGHSCORES_CATEGORY_LOYALTY] = { name = "Loyalty Points", type = HIGHSCORES_TYPE_POINTS }
 }
 
 HIGHSCORES_QUERIES = {
@@ -108,6 +110,12 @@ HIGHSCORES_QUERIES = {
 		LEFT JOIN `players` ON `players`.`id` = `storages`.`player_id`
 		WHERE `storages`.`key` = ]] .. PlayerStorageKeys.achievementsTotal .. [[
 		AND `deletion` = 0 %s
+		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults,
+	[HIGHSCORES_CATEGORY_LOYALTY] = [[
+		SELECT `accounts`.`id`, `players`.`name`, `vocation`, `level`, `accounts`.`loyalty_points` AS `points`
+		FROM `accounts`
+		INNER JOIN `players` ON `players`.`account_id` = `accounts`.`id` AND `players`.`main_character` = 1
+		AND `players`.`deletion` = 0 %s
 		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults
 }
 
@@ -163,7 +171,7 @@ local function render(self, player)
 	end
 
 	if self.params.action == HIGHSCORES_ACTION_OWN then
-		self.params.page = self:findPlayer(player:getGuid())
+		self.params.page = self:findPlayer(self.params.category == HIGHSCORES_CATEGORY_LOYALTY and player:getAccountId() or player:getGuid())
 		self.params.action = HIGHSCORES_ACTION_BROWSE
 	end
 	
@@ -202,14 +210,14 @@ local function fetch(self)
 				id = result.getNumber(resultId, "id"),
 				rank = rank,
 				name = result.getString(resultId, "name"),
-				title = "", -- TODO: loyalty system
+				title = "",
 				vocation = clientIdsVocation[result.getNumber(resultId, "vocation")] or VOCATION_NONE,
 				world = world,
 				level = result.getNumber(resultId, "level"),
 				points = result.getNumber(resultId, "points")
 			}
 			rank = rank + 1
-		until not result.next(resultId)		
+		until not result.next(resultId)
 		result.free(resultId)
 	end
 	

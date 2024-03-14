@@ -2,6 +2,14 @@ local ec = EventCallback
 
 ec.onLook = function(self, thing, position, distance, description)
 	local description = "You see " .. thing:getDescription(distance)
+
+	if thing:isPlayer() then
+		local loyaltyDescription = thing:getLoyaltyTitleDescription(distance)
+		if loyaltyDescription ~= "" then
+			description = description .. "\n" .. loyaltyDescription
+		end
+	end
+
 	if self:getGroup():getAccess() then
 		if thing:isItem() then
 			description = string.format("%s\nItem ID: %d", description, thing:getId())
