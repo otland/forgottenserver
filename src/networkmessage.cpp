@@ -106,7 +106,7 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		add<uint32_t>(it.charges);
 		addByte(0x00); // boolean (is brand new)
 	} else if (it.showClientDuration) {
-		add<uint32_t>(it.decayTime);
+		add<uint32_t>(it.decayTimeMin);
 		addByte(0x00); // boolean (is brand new)
 	}
 
