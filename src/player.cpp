@@ -1468,19 +1468,6 @@ void Player::setNextWalkActionTask(SchedulerTask* task)
 	walkTask = task;
 }
 
-void Player::setNextWalkTask(SchedulerTask* task)
-{
-	if (nextStepEvent != 0) {
-		g_scheduler.stopEvent(nextStepEvent);
-		nextStepEvent = 0;
-	}
-
-	if (task) {
-		nextStepEvent = g_scheduler.addEvent(task);
-		resetIdleTime();
-	}
-}
-
 void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true */)
 {
 	if (actionTaskEvent != 0) {
