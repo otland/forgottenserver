@@ -661,8 +661,17 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		}
 
 		pugi::xml_attribute valueAttribute = attributeNode.attribute("value");
+		pugi::xml_attribute maxValueAttr;
 		if (!valueAttribute) {
-			continue;
+			valueAttribute = attributeNode.attribute("minvalue");
+			if (!valueAttribute) {
+				continue;
+			}
+
+			maxValueAttr = attributeNode.attribute("maxvalue");
+			if (!maxValueAttr) {
+				continue;
+			}
 		}
 
 		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(keyAttribute.as_string());
@@ -931,7 +940,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_DURATION: {
-					it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					it.decayTimeMin = pugi::cast<uint32_t>(valueAttribute.value());
+
+					if (maxValueAttr) {
+						it.decayTimeMax = pugi::cast<uint32_t>(maxValueAttr.value());
+					}
 					break;
 				}
 

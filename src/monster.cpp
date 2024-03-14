@@ -1839,7 +1839,6 @@ void Monster::death(Creature*)
 
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
-		summon->removeMaster();
 	}
 	summons.clear();
 

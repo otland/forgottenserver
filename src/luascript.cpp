@@ -1664,6 +1664,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(ITEM_ATTRIBUTE_STOREITEM);
 	registerEnum(ITEM_ATTRIBUTE_ATTACK_SPEED);
 	registerEnum(ITEM_ATTRIBUTE_OPENCONTAINER);
+	registerEnum(ITEM_ATTRIBUTE_DURATION_MIN);
+	registerEnum(ITEM_ATTRIBUTE_DURATION_MAX);
 
 	registerEnum(ITEM_TYPE_DEPOT);
 	registerEnum(ITEM_TYPE_MAILBOX);
@@ -3012,7 +3014,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("ItemType", "hasShowDuration", LuaScriptInterface::luaItemTypeHasShowDuration);
 	registerMethod("ItemType", "hasAllowDistRead", LuaScriptInterface::luaItemTypeHasAllowDistRead);
 	registerMethod("ItemType", "getWieldInfo", LuaScriptInterface::luaItemTypeGetWieldInfo);
-	registerMethod("ItemType", "getDuration", LuaScriptInterface::luaItemTypeGetDuration);
+	registerMethod("ItemType", "getDurationMin", LuaScriptInterface::luaItemTypeGetDurationMin);
+	registerMethod("ItemType", "getDurationMax", LuaScriptInterface::luaItemTypeGetDurationMax);
 	registerMethod("ItemType", "getLevelDoor", LuaScriptInterface::luaItemTypeGetLevelDoor);
 	registerMethod("ItemType", "getRuneSpellName", LuaScriptInterface::luaItemTypeGetRuneSpellName);
 	registerMethod("ItemType", "getVocationString", LuaScriptInterface::luaItemTypeGetVocationString);
@@ -13427,12 +13430,24 @@ int LuaScriptInterface::luaItemTypeGetWieldInfo(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaItemTypeGetDuration(lua_State* L)
+int LuaScriptInterface::luaItemTypeGetDurationMin(lua_State* L)
 {
-	// itemType:getDuration()
+	// itemType:getDurationMin()
 	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		lua_pushinteger(L, itemType->decayTime);
+		lua_pushinteger(L, itemType->decayTimeMin);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetDurationMax(lua_State* L)
+{
+	// itemType:getDurationMax()
+	const ItemType* itemType = getUserdata<const ItemType>(L, 1);
+	if (itemType) {
+		lua_pushinteger(L, itemType->decayTimeMax);
 	} else {
 		lua_pushnil(L);
 	}
@@ -18138,7 +18153,13 @@ int LuaScriptInterface::luaWeaponDuration(lua_State* L)
 		uint16_t id = weapon->getID();
 		ItemType& it = Item::items.getItemType(id);
 
-		it.decayTime = getNumber<uint32_t>(L, 2);
+		if (isTable(L, 2)) {
+			it.decayTimeMin = getField<uint32_t>(L, 2, "min");
+			it.decayTimeMax = getField<uint32_t>(L, 2, "max");
+		} else {
+			it.decayTimeMin = getNumber<uint32_t>(L, 2);
+		}
+
 		it.showDuration = showDuration;
 		pushBoolean(L, true);
 	} else {

@@ -1640,6 +1640,8 @@ function table.maxn(t)
 	return max
 end
 
+ItemType.getDuration = ItemType.getDurationMin
+
 function getFormattedWorldTime()
 	return Game.getFormattedWorldTime()
 end
