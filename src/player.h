@@ -1302,7 +1302,8 @@ private:
 	uint32_t getConditionImmunities() const override { return conditionImmunities; }
 	uint32_t getConditionSuppressions() const override { return conditionSuppressions; }
 	uint16_t getLookCorpse() const override;
-	void buildFindPathParams(const Creature* creature, FindPathParams& findPathParams, bool fullPathSearch) const override;
+	void buildFindPathParams(const Creature* creature, FindPathParams& findPathParams,
+	                         bool fullPathSearch) const override;
 
 	friend class Game;
 	friend class Npc;
