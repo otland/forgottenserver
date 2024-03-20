@@ -14,6 +14,7 @@
 #include "events.h"
 #include "game.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
@@ -45,11 +46,9 @@ Player::Player(ProtocolGame_ptr p) :
     lastPing(OTSYS_TIME()),
     lastPong(lastPing),
     client(std::move(p)),
-    inbox(new Inbox(ITEM_INBOX)),
+    inbox(nullptr),
     storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
-	inbox->incrementReferenceCounter();
-
 	storeInbox->setParent(this);
 	storeInbox->incrementReferenceCounter();
 }
@@ -63,11 +62,12 @@ Player::~Player()
 		}
 	}
 
-	if (depotLocker) {
-		depotLocker->removeInbox(inbox);
+	if (inbox) {
+		if (depotLocker) {
+			depotLocker->removeInbox(inbox);
+		}
+		inbox->decrementReferenceCounter();
 	}
-
-	inbox->decrementReferenceCounter();
 
 	storeInbox->setParent(nullptr);
 	storeInbox->decrementReferenceCounter();
@@ -844,7 +844,9 @@ DepotLocker& Player::getDepotLocker()
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-		depotLocker->internalAddThing(inbox);
+		if (inbox) {
+			depotLocker->internalAddThing(inbox);
+		}
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
@@ -3650,7 +3652,9 @@ void Player::onIdleStatus()
 void Player::onPlacedCreature()
 {
 	// scripting event - onLogin
-	if (!g_creatureEvents->playerLogin(this)) {
+	if (g_creatureEvents->playerLogin(this)) {
+		IOInbox::getInstance().loadPlayer(this);
+	} else {
 		kickPlayer(true);
 	}
 }
@@ -4110,6 +4114,68 @@ bool Player::isInWar(const Player* player) const
 bool Player::isInWarList(uint32_t guildId) const
 {
 	return std::find(guildWarVector.begin(), guildWarVector.end(), guildId) != guildWarVector.end();
+}
+
+void Player::setInbox(Inbox* inbox)
+{
+	this->inbox = inbox;
+	if (depotLocker) {
+		depotLocker->internalAddThing(INBOX_INDEX, inbox);
+		onSendContainer(depotLocker.get());
+	}
+}
+
+void Player::sendItemInbox(const ItemType& itemType, uint16_t amount)
+{
+	if (Inbox* inbox = getInbox()) {
+		if (itemType.stackable) {
+			while (amount > 0) {
+				uint16_t count = std::min<uint16_t>(ITEM_STACK_SIZE, amount);
+				if (Item* item = Item::CreateItem(itemType.id, count)) {
+					ReturnValue ret = g_game.internalAddItem(inbox, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+					if (ret != RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+				}
+				amount -= count;
+			}
+		} else {
+			uint16_t subType = itemType.charges != 0 ? itemType.charges : -1;
+
+			for (uint16_t i = 0; i < amount; ++i) {
+				if (Item* item = Item::CreateItem(itemType.id, subType)) {
+					ReturnValue ret = g_game.internalAddItem(inbox, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
+					if (ret != RETURNVALUE_NOERROR) {
+						delete item;
+						break;
+					}
+				}
+			}
+		}
+	} else {
+		ItemBlockList itemList;
+
+		if (itemType.stackable) {
+			while (amount > 0) {
+				uint16_t count = std::min<uint16_t>(ITEM_STACK_SIZE, amount);
+				if (Item* item = Item::CreateItem(itemType.id, count)) {
+					itemList.emplace_back(0, item);
+				}
+				amount -= count;
+			}
+		} else {
+			uint16_t subType = itemType.charges != 0 ? itemType.charges : -1;
+
+			for (uint16_t i = 0; i < amount; ++i) {
+				if (Item* item = Item::CreateItem(itemType.id, subType)) {
+					itemList.emplace_back(0, item);
+				}
+			}
+		}
+
+		IOInbox::getInstance().savePlayerItems(this, itemList);
+	}
 }
 
 bool Player::isPremium() const

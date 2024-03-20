@@ -13,6 +13,7 @@ class PropWriteStream;
 struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
+using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
 
 class IOLoginData
 {
@@ -53,8 +54,6 @@ public:
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 private:
-	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
-
 	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
 	static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
 	                      PropWriteStream& propWriteStream);

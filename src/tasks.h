@@ -68,5 +68,6 @@ private:
 };
 
 extern Dispatcher g_dispatcher;
+extern Dispatcher g_asyncTasks;
 
 #endif // FS_TASKS_H

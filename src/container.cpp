@@ -682,12 +682,15 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 
 void Container::internalAddThing(Thing* thing) { internalAddThing(0, thing); }
 
-void Container::internalAddThing(uint32_t, Thing* thing)
+void Container::internalAddThing(uint32_t index, Thing* thing)
 {
 	Item* item = thing->getItem();
 	if (!item) {
 		return;
 	}
+
+	auto it = itemlist.begin() + index;
+	itemlist.insert(it, item);
 
 	item->setParent(this);
 	itemlist.push_front(item);

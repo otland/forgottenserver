@@ -29,6 +29,7 @@
 
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
+Dispatcher g_asyncTasks;
 Scheduler g_scheduler;
 
 Game g_game;
@@ -128,8 +129,11 @@ void mainLoader(ServiceManager* services)
 		return;
 	}
 	g_databaseTasks.start();
+	g_asyncTasks.start();
 
 	DatabaseManager::updateDatabase();
+
+	g_asyncTasks.addTask([]() { Database::getAsyncInstance().connect(); });
 
 	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
@@ -289,11 +293,13 @@ void startServer()
 		std::cout << ">> No services running. The server is NOT online." << std::endl;
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
+		g_asyncTasks.shutdown();
 		g_dispatcher.shutdown();
 	}
 
 	g_scheduler.join();
 	g_databaseTasks.join();
+	g_asyncTasks.join();
 	g_dispatcher.join();
 }
 
