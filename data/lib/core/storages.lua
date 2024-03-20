@@ -41,6 +41,9 @@ PlayerStorageKeys = {
 	achievementsCounter = 20000,
 	achievementsBase = 300000,
 
-	-- Bestiary:
+	-- Bestiary: 400000 - 410101
 	bestiaryKillsBase = 400000,
+	charmPoints = 410000,
+	charmsMonster = 410001,
+    charmsUnlocked = 410101,
 }
