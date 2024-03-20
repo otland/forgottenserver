@@ -9,7 +9,7 @@ local function getUnlockedBestiary(player, monsterTypes)
 	return count
 end
 
-local handler = PacketHandler(0xE1)
+local handler = PacketHandler(CLIENT_REQUEST_BESTIARY_CLASSES)
 
 function handler.onReceive(player)
 	local bestiaryClasses = Game.getBestiary()

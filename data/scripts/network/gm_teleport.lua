@@ -1,4 +1,4 @@
-local handler = PacketHandler(0x73)
+local handler = PacketHandler(CLIENT_MAP_CLICK)
 
 function handler.onReceive(player, msg)
 	if not player:getGroup():getAccess() then

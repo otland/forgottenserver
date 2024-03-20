@@ -13,7 +13,7 @@ extern Game g_game;
 void ProtocolOld::disconnectClient(const std::string& message)
 {
 	auto output = OutputMessagePool::getOutputMessage();
-	output->addByte(0x0A);
+	output->addByte(LOGIN_SERVER_ERROR);
 	output->addString(message);
 	send(output);
 

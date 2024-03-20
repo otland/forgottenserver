@@ -31,7 +31,7 @@ local function getBestiaryElements(monsterType)
 	return result
 end
 
-local handler = PacketHandler(0xE3)
+local handler = PacketHandler(CLIENT_REQUEST_BESTIARY_INFO)
 
 function handler.onReceive(player, msg)
 	local raceId = msg:getU16()

@@ -5,6 +5,7 @@
 #define FS_CONNECTION_H
 
 #include "networkmessage.h"
+#include "protocolcodes.h"
 
 enum ConnectionState_t
 {

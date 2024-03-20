@@ -1,4 +1,4 @@
-local handler = PacketHandler(0xE2)
+local handler = PacketHandler(CLIENT_REQUEST_BESTIARY_MONSTERS)
 
 function handler.onReceive(player, msg)
 	local monsterTypes = {}

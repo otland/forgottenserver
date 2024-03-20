@@ -1,4 +1,4 @@
-local log = PacketHandler(0xF0)
+local log = PacketHandler(CLIENT_REQUEST_QUEST_LOG)
 
 function log.onReceive(player, msg)
 	player:sendQuestLog()
@@ -6,7 +6,7 @@ end
 
 log:register()
 
-local line = PacketHandler(0xF1)
+local line = PacketHandler(CLIENT_REQUEST_QUEST_LINE)
 
 function line.onReceive(player, msg)
 	local quest = Game.getQuestById(msg:getU16())
@@ -17,7 +17,7 @@ end
 
 line:register()
 
-local tracker = PacketHandler(0xD0)
+local tracker = PacketHandler(CLIENT_REQUEST_QUEST_TRACKER)
 
 function tracker.onReceive(player, msg)
 	local missionsId = {}
