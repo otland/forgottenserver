@@ -328,12 +328,11 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 }
 
 // Login to the game world request
-void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
+ProtocolMessage ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
-		disconnect();
-		return;
+		throw std::exception("Server is shutting down...");
 	}
 
 	// Client type and OS used
@@ -353,8 +352,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
-		disconnect();
-		return;
+		throw std::exception("RSA decrypt fails...");
 	}
 
 	// Get XTEA key
@@ -382,8 +380,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// Web login skips the character list request so we need to check the client version again
 	if (version < CLIENT_VERSION_MIN || version > CLIENT_VERSION_MAX) {
-		disconnectClient(fmt::format("Only clients with protocol {:s} allowed!", CLIENT_VERSION_STR));
-		return;
+		return PROTOCOLMESSAGE_INVALID_PROTOCOL_VERSION;
 	}
 
 	msg.skipBytes(1); // Gamemaster flag
@@ -391,8 +388,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	// acc name or email, password, token, timestamp divided by 30
 	auto sessionArgs = explodeString(msg.getString(), "\n", 4);
 	if (sessionArgs.size() < 2) {
-		disconnectClient("Malformed session key.");
-		return;
+		return PROTOCOLMESSAGE_MALFORMED_SESSION_KEY;
 	}
 
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
@@ -403,8 +399,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	auto accountName = sessionArgs[0];
 	auto password = sessionArgs[1];
 	if (accountName.empty()) {
-		disconnectClient("You must enter your account name.");
-		return;
+		return PROTOCOLMESSAGE_EMPTY_ACCOUNT_NAME;
 	}
 
 	std::string_view token;
@@ -413,8 +408,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	// two-factor auth
 	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		if (sessionArgs.size() < 4) {
-			disconnectClient("Authentication failed. Incomplete session key.");
-			return;
+			return PROTOCOLMESSAGE_INCOMPLETE_SESSION_KEY;
 		}
 
 		token = sessionArgs[2];
@@ -422,11 +416,9 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		try {
 			tokenTime = std::stoul(sessionArgs[3].data());
 		} catch (const std::invalid_argument&) {
-			disconnectClient("Malformed token packet.");
-			return;
+			return PROTOCOLMESSAGE_MALFORMED_TOKEN_PACKET;
 		} catch (const std::out_of_range&) {
-			disconnectClient("Token time is too long.");
-			return;
+			return PROTOCOLMESSAGE_TOKEN_TIME_TOO_LONG;
 		}
 	} else {
 		tokenTime = std::floor(challengeTimestamp / 30);
@@ -436,31 +428,29 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
-		disconnect();
-		return;
+		throw std::exception("Invalid timestamp...");
 	}
 
 	if (g_game.getGameState() == GAME_STATE_STARTUP) {
-		disconnectClient("Gameworld is starting up. Please wait.");
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_STARTUP;
 	}
 
 	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
-		disconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
-		return;
+		return PROTOCOLMESSAGE_GAME_IN_MAINTAIN;
 	}
 
+	/*
 	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
-		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
-		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
-		return;
+	    disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
+	                                 formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
+	    return;
 	}
+	*/
 
 	// TODO: use structured binding when C++20 is adopted
 	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
 	if (authIds.first == 0) {
-		disconnectClient("Account name or password is not correct.");
-		return;
+		return PROTOCOLMESSAGE_AUTHENTICATION_FAILURE;
 	}
 
 	g_dispatcher.addTask(
@@ -495,7 +485,7 @@ void ProtocolGame::onConnect()
 	send(output);
 }
 
-void ProtocolGame::disconnectClient(const std::string& message) const
+void ProtocolGame::disconnectClient(const std::string& message)
 {
 	auto output = OutputMessagePool::getOutputMessage();
 	output->addByte(0x14);

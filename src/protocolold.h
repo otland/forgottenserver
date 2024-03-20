@@ -28,10 +28,7 @@ public:
 
 	explicit ProtocolOld(Connection_ptr connection) : Protocol(connection) {}
 
-	void onRecvFirstMessage(NetworkMessage& msg) override;
-
-private:
-	void disconnectClient(const std::string& message);
+	ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) override;
 };
 
 #endif // FS_PROTOCOLOLD_H

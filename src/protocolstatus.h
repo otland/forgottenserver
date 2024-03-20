@@ -28,7 +28,7 @@ public:
 
 	explicit ProtocolStatus(Connection_ptr connection) : Protocol(connection) {}
 
-	void onRecvFirstMessage(NetworkMessage& msg) override;
+	ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) override;
 
 	void sendStatusString();
 	void sendInfo(uint16_t requestedInfo, const std::string& characterName);

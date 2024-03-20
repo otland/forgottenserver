@@ -5,6 +5,7 @@
 #define FS_PROTOCOL_H
 
 #include "connection.h"
+#include "enums.h"
 #include "xtea.h"
 
 class Protocol : public std::enable_shared_from_this<Protocol>
@@ -21,7 +22,8 @@ public:
 
 	virtual void onSendMessage(const OutputMessage_ptr& msg);
 	void onRecvMessage(NetworkMessage& msg);
-	virtual void onRecvFirstMessage(NetworkMessage& msg) = 0;
+	virtual ProtocolMessage onRecvFirstMessage(NetworkMessage& msg) = 0;
+	virtual void disconnectClient(const std::string& message);
 	virtual void onConnect() {}
 
 	bool isConnectionExpired() const { return connection.expired(); }
@@ -58,6 +60,8 @@ protected:
 	void setRawMessages(bool value) { rawMessages = value; }
 
 	virtual void release() {}
+
+	uint16_t version = 0;
 
 private:
 	friend class Connection;
