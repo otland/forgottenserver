@@ -4002,17 +4002,46 @@ void Player::addUnjustifiedDead(const Player* attacked)
 
 	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
 
-	skullTicks += g_config.getNumber(ConfigManager::FRAG_TIME);
 
-	if (getSkull() != SKULL_BLACK) {
-		if (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) != 0 &&
-		    skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_BLACK) - 1) *
-		                     static_cast<int64_t>(g_config.getNumber(ConfigManager::FRAG_TIME))) {
+	time_t now = time(nullptr);
+	time_t today = (now - 86400);
+	time_t week = (now - (7 * 86400));
+
+	std::vector<time_t> killList = IOLoginData::getUnjustifiedDates(name, now, 30); // get kills from last month
+	killList.push_back(now);                                                        // add current kill to list
+
+	int32_t todayKills = 0;
+	int32_t weekKills = 0;
+	int32_t monthKills = killList.size();
+
+	for (const auto& time : killList) {
+		if (time > today) {
+			++todayKills;
+		}
+
+		if (time > week) {
+			++weekKills;
+		}
+	}
+
+	Skulls_t playerSkull = getSkull();
+	if (playerSkull == SKULL_RED) {
+		if (todayKills >= g_config.getNumber(ConfigManager::BLACK_DAILY_LIMIT) ||
+		    weekKills >= g_config.getNumber(ConfigManager::BLACK_WEEKLY_LIMIT) ||
+		    monthKills >= g_config.getNumber(ConfigManager::BLACK_MONTHLY_LIMIT)) {
 			setSkull(SKULL_BLACK);
-		} else if (getSkull() != SKULL_RED && g_config.getNumber(ConfigManager::KILLS_TO_RED) != 0 &&
-		           skullTicks > (g_config.getNumber(ConfigManager::KILLS_TO_RED) - 1) *
-		                            static_cast<int64_t>(g_config.getNumber(ConfigManager::FRAG_TIME))) {
+			setSkullTicks(g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH));
+		} else {
+			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
+		}
+	} else if (playerSkull == SKULL_BLACK) {
+		setSkullTicks(g_config.getNumber(ConfigManager::BLACK_SKULL_LENGTH));
+	} else {
+		if (todayKills >= g_config.getNumber(ConfigManager::RED_DAILY_LIMIT) ||
+		    weekKills >= g_config.getNumber(ConfigManager::RED_WEEKLY_LIMIT) ||
+		    monthKills >= g_config.getNumber(ConfigManager::RED_MONTHLY_LIMIT)) {
 			setSkull(SKULL_RED);
+			setSkullTicks(g_config.getNumber(ConfigManager::RED_SKULL_LENGTH));
 		}
 	}
 }
