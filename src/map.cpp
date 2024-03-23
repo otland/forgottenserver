@@ -805,20 +805,20 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t distEnd = Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
 			const int_fast32_t distStart = Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
-			const int_fast32_t f = distEnd + distStart + (walkCost + speedCost);
+			const int_fast32_t newf = distEnd + distStart + (walkCost + speedCost);
 
 			if (neighborNode) {
-				if (neighborNode->f <= f) {
+				if (neighborNode->f <= newf) {
 					//The node on the closed/open list is cheaper than this one
 					continue;
 				}
 
-				neighborNode->f = f;
+				neighborNode->f = newf;
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
 			} else {
 				//Does not exist in the open/closed list, create a new node
-				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, f);
+				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighborNode) {
 					if (found) {
 						break;
