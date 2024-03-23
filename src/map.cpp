@@ -764,7 +764,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// Sight is clear.
-			if (sightClear && (!creature.isSummon() && !creature.attackedCreature)) {
+			if (sightClear && ((!creature.isSummon() && !creature.attackedCreature) || (fpp.keepDistance && fpp.keepDistance > 1))) {
 
 				if (startPos.x == targetPos.x) {
 					// Don't check nodes if start and end pos X are the same and node X is different.
