@@ -809,7 +809,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
-					//The node on the closed/open list is cheaper than this one
+					// The node on the closed/open list is cheaper than this one
 					continue;
 				}
 
@@ -817,7 +817,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
 			} else {
-				//Does not exist in the open/closed list, create a new node
+				// Does not exist in the open/closed list, create a new node
 				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
 				if (!neighborNode) {
 					if (found) {
