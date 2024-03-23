@@ -22,12 +22,8 @@ extern Events* g_events;
 static constexpr int32_t MINSPAWN_INTERVAL = 10 * 1000;           // 10 seconds to match RME
 static constexpr int32_t MAXSPAWN_INTERVAL = 24 * 60 * 60 * 1000; // 1 day
 
-bool Spawns::loadFromXml(const std::string& filename)
+bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 {
-	if (loaded) {
-		return true;
-	}
-
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
@@ -192,6 +188,10 @@ bool Spawns::loadFromXml(const std::string& filename)
 				    radius);
 				npcList.push_front(npc);
 			}
+		}
+
+		if (isCalledByLua) {
+			spawn.startup();
 		}
 	}
 	return true;
