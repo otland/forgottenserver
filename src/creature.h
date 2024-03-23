@@ -415,8 +415,8 @@ protected:
 	bool skillLoss = true;
 	bool lootDrop = true;
 	bool cancelNextWalk = false;
-	bool forceUpdateFollowPath = false;
 	bool hasFollowPath = false;
+	bool forceUpdateFollowPath = false;
 	bool hiddenHealth = false;
 	bool canUseDefense = true;
 	bool movementBlocked = false;
