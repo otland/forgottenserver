@@ -151,12 +151,10 @@ void Creature::onThink(uint32_t interval)
 void Creature::checkPath()
 {
 	if (attackedCreature || followCreature) {
-
 		Position targetPos;
 		if (attackedCreature) {
 			targetPos = attackedCreature->getPosition();
-		}
-		else {
+		} else {
 			targetPos = followCreature->getPosition();
 		}
 
@@ -166,8 +164,7 @@ void Creature::checkPath()
 
 			if (attackedCreature) {
 				getPathSearchParams(attackedCreature, fpp);
-			}
-			else {
+			} else {
 				getPathSearchParams(followCreature, fpp);
 			}
 
@@ -180,8 +177,7 @@ void Creature::checkPath()
 
 			if (attackedCreature) {
 				followPosition = attackedCreature->getPosition();
-			}
-			else {
+			} else {
 				followPosition = followCreature->getPosition();
 			}
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));

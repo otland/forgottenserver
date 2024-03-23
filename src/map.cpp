@@ -668,7 +668,8 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
+						  const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -716,46 +717,40 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			if (offset_y == 0) {
 				if (offset_x == -1) {
 					neighbors = *dirNeighbors[DIRECTION_WEST];
-				}
-				else {
+				} else {
 					neighbors = *dirNeighbors[DIRECTION_EAST];
 				}
 			}
 			else if (!fpp.allowDiagonal || offset_x == 0) {
 				if (offset_y == -1) {
 					neighbors = *dirNeighbors[DIRECTION_NORTH];
-				}
-				else {
+				} else {
 					neighbors = *dirNeighbors[DIRECTION_SOUTH];
 				}
 			}
 			else if (offset_y == -1) {
 				if (offset_x == -1) {
 					neighbors = *dirNeighbors[DIRECTION_NORTHWEST];
-				}
-				else {
+				} else {
 					neighbors = *dirNeighbors[DIRECTION_NORTHEAST];
 				}
-			}
-			else if (offset_x == -1) {
+			} else if (offset_x == -1) {
 				neighbors = *dirNeighbors[DIRECTION_SOUTHWEST];
-			}
-			else {
+			} else {
 				neighbors = *dirNeighbors[DIRECTION_SOUTHEAST];
 			}
 			dirCount = fpp.allowDiagonal ? 5 : 3;
-		}
-		else {
+		} else {
 			dirCount = 8;
 			neighbors = *allNeighbors;
 		}
-
 
 		for (uint_fast32_t i = 0; i < dirCount; ++i) {
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
 
-			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist || Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
+										   Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -803,8 +798,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
 			if (neighborNode) {
 				tile = getTile(pos.x, pos.y, pos.z);
-			}
-			else {
+			} else {
 				tile = canWalkTo(creature, pos);
 				if (!tile) {
 					continue;
@@ -827,8 +821,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				neighborNode->f = f;
 				neighborNode->parent = n;
 				nodes.openNode(neighborNode);
-			}
-			else {
+			} else {
 				//Does not exist in the open/closed list, create a new node
 				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, f);
 				if (!neighborNode) {
@@ -863,26 +856,19 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		if (dx == 1 && dy == 1) {
 			dirList.push_back(DIRECTION_NORTHWEST);
-		}
-		else if (dx == -1 && dy == 1) {
+		} else if (dx == -1 && dy == 1) {
 			dirList.push_back(DIRECTION_NORTHEAST);
-		}
-		else if (dx == 1 && dy == -1) {
+		} else if (dx == 1 && dy == -1) {
 			dirList.push_back(DIRECTION_SOUTHWEST);
-		}
-		else if (dx == -1 && dy == -1) {
+		} else if (dx == -1 && dy == -1) {
 			dirList.push_back(DIRECTION_SOUTHEAST);
-		}
-		else if (dx == 1) {
+		} else if (dx == 1) {
 			dirList.push_back(DIRECTION_WEST);
-		}
-		else if (dx == -1) {
+		} else if (dx == -1) {
 			dirList.push_back(DIRECTION_EAST);
-		}
-		else if (dy == 1) {
+		} else if (dy == 1) {
 			dirList.push_back(DIRECTION_NORTH);
-		}
-		else if (dy == -1) {
+		} else if (dy == -1) {
 			dirList.push_back(DIRECTION_SOUTH);
 		}
 
