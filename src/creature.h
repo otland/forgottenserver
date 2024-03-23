@@ -53,6 +53,7 @@ struct FindPathParams
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
+static constexpr int32_t EVENT_CREATURE_PATH_INTERVAL = 20;
 static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_INTERVAL / EVENT_CREATURECOUNT);
 static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
 static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
@@ -272,6 +273,7 @@ public:
 	void setCreatureLight(LightInfo lightInfo);
 
 	virtual void onThink(uint32_t interval);
+	virtual void checkPath();
 	void onAttacking(uint32_t interval);
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
@@ -375,6 +377,7 @@ protected:
 
 	Tile* tile = nullptr;
 	Creature* attackedCreature = nullptr;
+	Position followPosition;
 	Creature* master = nullptr;
 	Creature* followCreature = nullptr;
 
@@ -407,14 +410,13 @@ protected:
 	bool localMapCache[mapWalkHeight][mapWalkWidth] = {{false}};
 	bool isInternalRemoved = false;
 	bool isMapLoaded = false;
-	bool isUpdatingPath = false;
 	bool creatureCheck = false;
 	bool inCheckCreaturesVector = false;
 	bool skillLoss = true;
 	bool lootDrop = true;
 	bool cancelNextWalk = false;
-	bool hasFollowPath = false;
 	bool forceUpdateFollowPath = false;
+	bool hasFollowPath = false;
 	bool hiddenHealth = false;
 	bool canUseDefense = true;
 	bool movementBlocked = false;
