@@ -720,15 +720,13 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				} else {
 					neighbors = *dirNeighbors[DIRECTION_EAST];
 				}
-			}
-			else if (!fpp.allowDiagonal || offset_x == 0) {
+			} else if (!fpp.allowDiagonal || offset_x == 0) {
 				if (offset_y == -1) {
 					neighbors = *dirNeighbors[DIRECTION_NORTH];
 				} else {
 					neighbors = *dirNeighbors[DIRECTION_SOUTH];
 				}
-			}
-			else if (offset_y == -1) {
+			} else if (offset_y == -1) {
 				if (offset_x == -1) {
 					neighbors = *dirNeighbors[DIRECTION_NORTHWEST];
 				} else {
@@ -760,14 +758,12 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			// Sight is clear.
 			if (sightClear && ((!creature.isSummon() && !creature.attackedCreature) || (fpp.keepDistance && fpp.keepDistance > 1))) {
-
 				if (startPos.x == targetPos.x) {
 					// Don't check nodes if start and end pos X are the same and node X is different.
 					if (pos.x != targetPos.x) {
 						continue;
 					}
-				}
-				else if (startPos.y == targetPos.y) {
+				} else if (startPos.y == targetPos.y) {
 					// Don't check nodes if start and end pos Y are the same and node Y is different.
 					if (pos.y != targetPos.y) {
 						continue;
@@ -781,8 +777,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				// We shouldn't check past the targets X or Y
 				if (startDistXtarget < startDistXNode) {
 					continue;
-				}
-				else if (startDistYtarget < startDistYNode) {
+				} else if (startDistYtarget < startDistYNode) {
 					continue;
 				}
 
@@ -874,7 +869,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		found = found->parent;
 	}
-
 	return true;
 }
 
