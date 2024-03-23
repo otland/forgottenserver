@@ -965,13 +965,8 @@ void Creature::goToFollowCreature()
 bool Creature::updateFollowPath(FindPathParams& findPathParams)
 {
 	listWalkDir.clear();
-	if (getPathTo(followCreature->getPosition(), listWalkDir, findPathParams)) {
-		hasFollowPath = true;
-	} else {
-		hasFollowPath = false;
-	}
 
-	return hasFollowPath;
+	return hasFollowPath = getPathTo(followCreature->getPosition(), listWalkDir, findPathParams);
 }
 
 bool Creature::setFollowCreature(Creature* creature)
