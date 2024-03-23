@@ -503,8 +503,8 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 
 	if (isPathfinding) {
 		const Creature* creature = tile->getTopCreature();
-		if (creature && tile->getTopVisibleCreature(creature) || tile->hasProperty(CONST_PROP_BLOCKPATH) ||
-			tile->hasProperty(CONST_PROP_BLOCKSOLID)) {
+		if (creature && (tile->getTopVisibleCreature(creature) || tile->hasProperty(CONST_PROP_BLOCKPATH) ||
+			tile->hasProperty(CONST_PROP_BLOCKSOLID))) {
 			return false;
 		}
 	}
@@ -764,7 +764,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// Sight is clear.
-			if (sightClear && ((!creature.isSummon() && !creature.attackedCreature) || (fpp.keepDistance && fpp.keepDistance > 1))) {
+			if (sightClear && ((!creature.isSummon() && !creature.attackedCreature) || fpp.keepDistance)) {
 				if (startPos.x == targetPos.x) {
 					// Don't check nodes if start and end pos X are the same and node X is different.
 					if (pos.x != targetPos.x) {
