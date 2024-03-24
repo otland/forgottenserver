@@ -113,8 +113,10 @@ HIGHSCORES_QUERIES = {
 		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults,
 	[HIGHSCORES_CATEGORY_LOYALTY] = [[
 		SELECT `accounts`.`id`, `players`.`name`, `vocation`, `level`, `accounts`.`loyalty_points` AS `points`
-		FROM `accounts`
-		INNER JOIN `players` ON `players`.`account_id` = `accounts`.`id` AND `players`.`main_character` = 1
+		FROM `account_storage`
+		INNER JOIN `accounts` ON `accounts`.`id` = `account_storage`.`account_id`
+		INNER JOIN `players` ON `players`.`id` = `account_storage`.`value`
+		WHERE `account_storage`.`key` = ]] .. AccountStorageKeys.mainCharacter .. [[
 		AND `players`.`deletion` = 0 %s
 		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults
 }

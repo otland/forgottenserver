@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS `players` (
   `name` varchar(255) NOT NULL,
   `group_id` int NOT NULL DEFAULT '1',
   `account_id` int NOT NULL DEFAULT '0',
-  `main_character` tinyint NOT NULL DEFAULT '0',
   `level` int NOT NULL DEFAULT '1',
   `vocation` int NOT NULL DEFAULT '0',
   `health` int NOT NULL DEFAULT '150',
