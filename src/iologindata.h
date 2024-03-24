@@ -27,6 +27,8 @@ public:
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 
+	static void updateLoyalty(uint32_t accountId, uint16_t points);
+
 	static AccountType_t getAccountType(uint32_t accountId);
 	static void setAccountType(uint32_t accountId, AccountType_t accountType);
 	static void updateOnlineStatus(uint32_t guid, bool login);

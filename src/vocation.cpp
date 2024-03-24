@@ -140,7 +140,7 @@ static const uint32_t skillBase[SKILL_LAST + 1] = {50, 50, 50, 50, 30, 100, 20};
 
 uint64_t Vocation::getReqSkillTries(uint8_t skill, uint16_t level)
 {
-	if (skill > SKILL_LAST) {
+	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
 		return 0;
 	}
 	return skillBase[skill] *
@@ -153,4 +153,45 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 		return 0;
 	}
 	return 1600 * std::pow(manaMultiplier, static_cast<int32_t>(magLevel - 1));
+}
+
+uint64_t Vocation::getAccumulatedReqSkillTries(uint8_t skill, uint16_t level)
+{
+	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
+		return 0;
+	}
+	return std::ceil(skillBase[skill] *
+	                 ((std::pow(skillMultipliers[skill], static_cast<int32_t>(level - MINIMUM_SKILL_LEVEL)) - 1) /
+	                  (skillMultipliers[skill] - 1)));
+}
+
+Skill Vocation::getSkillByAccumulatedTries(uint8_t skill, uint64_t tries)
+{
+	if (skill < SKILL_FIRST || skill > SKILL_LAST) {
+		return {};
+	}
+	uint16_t level =
+	    std::log(tries * ((skillMultipliers[skill] - 1) / skillBase[skill]) + 1) / std::log(skillMultipliers[skill]) +
+	    MINIMUM_SKILL_LEVEL;
+	uint64_t remainderTries = tries - getAccumulatedReqSkillTries(skill, level);
+
+	return {remainderTries, tries, level, 0};
+}
+
+uint64_t Vocation::getAccumulatedReqMana(uint32_t magLevel)
+{
+	if (magLevel == 0) {
+		return 0;
+	}
+	return std::ceil(1600 * ((std::pow(manaMultiplier, magLevel) - 1) / (manaMultiplier - 1)));
+}
+
+std::pair<uint32_t, uint64_t> Vocation::getMagLevelByAccumulatedMana(uint64_t mana)
+{
+	if (mana == 0) {
+		return std::make_pair(0, 0);
+	}
+	uint32_t level = std::log(mana * ((manaMultiplier - 1) / 1600) + 1) / std::log(manaMultiplier);
+	mana -= getAccumulatedReqMana(level);
+	return std::make_pair(level, mana);
 }

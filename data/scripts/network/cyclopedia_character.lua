@@ -128,17 +128,15 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(CYCLOPEDIA_SKILL_MAGIC)
 	msg:addU16(self:getMagicLevel())
 	msg:addU16(self:getBaseMagicLevel())
-	msg:addU16(self:getBaseMagicLevel()) -- base + loyalty bonus
-	msg:addU16(self:getMagicLevelPercent() * 100)
+	msg:addU16(self:getLoyaltyMagicLevel())
+	msg:addU16(self:getLoyaltyMagicLevelPercent())
 
 	for i = SKILL_FIST, SKILL_FISHING, 1 do
 		msg:addByte(clientSkillsId[i])
 		msg:addU16(self:getEffectiveSkillLevel(i))
 		msg:addU16(self:getSkillLevel(i))
-
-		-- base + loyalty bonus
-		msg:addU16(self:getSkillLevel(i))
-		msg:addU16(self:getSkillPercent(i) * 100)
+		msg:addU16(self:getLoyaltySkillLevel(i))
+		msg:addU16(self:getLoyaltySkillPercent(i))
 	end
 
 	msg:addByte(0) -- magic boost (element and value)
@@ -177,7 +175,7 @@ local function sendBadges(self, msg)
 	msg:addByte(0x01) -- show account info
 	msg:addByte(0x01) -- account online
 	msg:addByte(self:isPremium() and 1 or 0)
-	msg:addString("") -- loyalty title
+	msg:addString(self:getLoyaltyTitle() .. " of " .. configManager.getString(configKeys.SERVER_NAME))
 
 	msg:addByte(0) -- badges count
 	-- structure:

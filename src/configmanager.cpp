@@ -150,6 +150,30 @@ ExperienceStages loadXMLStages()
 	return stages;
 }
 
+LoyaltyBonuses loadLuaLoyaltyBonuses(lua_State* L)
+{
+	LoyaltyBonuses bonuses;
+
+	lua_getglobal(L, "loyaltyBonuses");
+	if (!lua_istable(L, -1)) {
+		return {};
+	}
+
+	lua_pushnil(L);
+	while (lua_next(L, -2) != 0) {
+		const auto tableIndex = lua_gettop(L);
+		auto min = LuaScriptInterface::getField<uint16_t>(L, tableIndex, "min", 0);
+		auto max = LuaScriptInterface::getField<uint16_t>(L, tableIndex, "max", std::numeric_limits<uint16_t>::max());
+		auto bonus = LuaScriptInterface::getField<float>(L, tableIndex, "bonus", 0.f);
+		bonuses.emplace_back(min, max, bonus);
+		lua_pop(L, 4);
+	}
+	lua_pop(L, 1);
+
+	std::sort(bonuses.begin(), bonuses.end());
+	return bonuses;
+}
+
 } // namespace
 
 bool ConfigManager::load()
@@ -296,6 +320,9 @@ bool ConfigManager::load()
 	}
 	expStages.shrink_to_fit();
 
+	loyaltyBonuses = loadLuaLoyaltyBonuses(L);
+	loyaltyBonuses.shrink_to_fit();
+
 	loaded = true;
 	lua_close(L);
 
@@ -340,6 +367,20 @@ float ConfigManager::getExperienceStage(uint32_t level) const
 
 	if (it == expStages.end()) {
 		return getNumber(ConfigManager::RATE_EXPERIENCE);
+	}
+
+	return std::get<2>(*it);
+}
+
+float ConfigManager::getLoyaltyBonus(uint16_t points) const
+{
+	auto it = std::find_if(loyaltyBonuses.begin(), loyaltyBonuses.end(), [points](auto&& bonus) {
+		auto&& [minPoints, maxPoints, _] = bonus;
+		return points >= minPoints && points <= maxPoints;
+	});
+
+	if (it == loyaltyBonuses.end()) {
+		return 0.f;
 	}
 
 	return std::get<2>(*it);

@@ -6,6 +6,7 @@ Reserved player storage ranges:
 ]]--
 
 AccountStorageKeys = {
+	mainCharacter = 1,
 }
 
 GlobalStorageKeys = {

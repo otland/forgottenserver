@@ -1043,6 +1043,14 @@ private:
 	static int luaPlayerGetClientLowLevelBonusDisplay(lua_State* L);
 	static int luaPlayerSetClientLowLevelBonusDisplay(lua_State* L);
 
+	static int luaPlayerGetLoyaltyMagicLevel(lua_State* L);
+	static int luaPlayerGetLoyaltyMagicLevelPercent(lua_State* L);
+	static int luaPlayerGetLoyaltySkillLevel(lua_State* L);
+	static int luaPlayerGetLoyaltySkillPercent(lua_State* L);
+	static int luaPlayerGetLoyaltyPoints(lua_State* L);
+	static int luaPlayerSetLoyaltyPoints(lua_State* L);
+	static int luaPlayerGetLoyaltyBonus(lua_State* L);
+
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
 
