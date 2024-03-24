@@ -31,6 +31,7 @@ jobs:
       security-events: write
 
     strategy:
+      fail-fast: false
       matrix:
         buildtype: [Debug, Release]
         luajit: [on, off]
@@ -74,4 +75,46 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          path: build/tfs
+
+      - name: Build package version
+        id: version
+        uses: paulhatch/semantic-version@v5.0.3
+        with:
+          version_format: "${major}.${minor}.${patch}-pre${increment}"
+        if: ${{ matrix.buildtype }} == "Release"
+
+      - name: Compute variables
+        id: vars
+        run: |
+          echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+          echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+        if: ${{ matrix.buildtype }} == "Release"
+
+      - name: Prepare package contents
+        run: |
+          mkdir -p .debpkg/usr/bin
+          mkdir -p .debpkg/usr/share/tfs-${{ steps.vars.outputs.branch }}
+          cp build/tfs .debpkg/usr/bin/tfs-${{ steps.vars.outputs.branch }}
+          cp -r data/ LICENSE config.lua.dist key.pem schema.sql .debpkg/usr/share/tfs-${{ steps.vars.outputs.branch }}/
+        if: ${{ matrix.buildtype }} == "Release"
+
+      - name: Build deb package
+        id: build-deb
+        uses: jiro4989/build-deb-action@v3
+        with:
+          package: tfs-${{ steps.vars.outputs.branch }}
+          package_root: .debpkg
+          maintainer: Otland
+          version: ${{ steps.version.outputs.version }}~${{ steps.vars.outputs.sha_short }}-0
+          arch: 'amd64'
+          depends: 'libluajit-5.1-2, libmysqlclient21, libboost-filesystem1.74.0, libboost-iostreams1.74.0, libpugixml1v5, libcrypto++8, libfmt8'
+          desc: 'See: https://github.com/otland/forgottenserver'
+        if: ${{ matrix.buildtype }} == "Release"
+
+      - name: Upload deb package
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{steps.build-deb.outputs.file_name}}
+          path: ${{steps.build-deb.outputs.file_name}}
+        if: ${{ matrix.buildtype }} == "Release"
