@@ -939,22 +939,22 @@ bool Creature::setAttackedCreature(Creature* creature)
 	return true;
 }
 
-void Creature::buildFindPathParams(const Creature*, FindPathParams& findPathParams, bool fullPathSearch) const
+void Creature::buildFindPathParams(const Creature*, FindPathParams& fpp, bool fullPathSearch) const
 {
-	findPathParams.fullPathSearch = fullPathSearch;
-	findPathParams.clearSight = true;
-	findPathParams.maxSearchDist = 12;
-	findPathParams.minTargetDist = 1;
-	findPathParams.maxTargetDist = 1;
+	fpp.fullPathSearch = fullPathSearch;
+	fpp.clearSight = true;
+	fpp.maxSearchDist = 12;
+	fpp.minTargetDist = 1;
+	fpp.maxTargetDist = 1;
 }
 
 void Creature::goToFollowCreature()
 {
 	if (followCreature) {
-		FindPathParams findPathParams;
-		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
+		FindPathParams fpp;
+		buildFindPathParams(followCreature, fpp, !hasFollowPath);
 
-		if (updateFollowPath(findPathParams)) {
+		if (updateFollowPath(fpp)) {
 			startAutoWalk();
 		}
 	}
@@ -962,11 +962,11 @@ void Creature::goToFollowCreature()
 	onGoToFollowCreatureComplete(followCreature);
 }
 
-bool Creature::updateFollowPath(FindPathParams& findPathParams)
+bool Creature::updateFollowPath(FindPathParams& fpp)
 {
 	listWalkDir.clear();
 
-	return hasFollowPath = getPathTo(followCreature->getPosition(), listWalkDir, findPathParams);
+	return hasFollowPath = getPathTo(followCreature->getPosition(), listWalkDir, fpp);
 }
 
 bool Creature::setFollowCreature(Creature* creature)
