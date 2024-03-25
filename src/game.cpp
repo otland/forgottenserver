@@ -3891,7 +3891,7 @@ void Game::checkCreatures(size_t index)
 void Game::checkCreaturesPath(size_t index)
 {
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_PATH_INTERVAL,
-	                                         [=, this]() { checkCreatures((index + 1) % EVENT_CREATURECOUNT); }));
+	                                         [=, this]() { checkCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
 
 	auto& checkCreatureList = checkCreatureLists[index];
 	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
