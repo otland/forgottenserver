@@ -3897,8 +3897,10 @@ void Game::checkCreaturesPath(size_t index)
 	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
 	while (it != end) {
 		Creature* creature = *it;
-		if (creature->getHealth() > 0) {
-			creature->checkPath();
+		if (creature->creatureCheck) {
+			if (!creature->isDead()) {
+				creature->checkPath();
+			}
 		}
 		++it;
 	}
