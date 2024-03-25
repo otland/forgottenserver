@@ -504,7 +504,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	if (isPathfinding) {
 		const Creature* creature = tile->getTopCreature();
 		if (creature && (tile->getTopVisibleCreature(creature) || tile->hasProperty(CONST_PROP_BLOCKPATH) ||
-			tile->hasProperty(CONST_PROP_BLOCKSOLID))) {
+		                 tile->hasProperty(CONST_PROP_BLOCKSOLID))) {
 			return false;
 		}
 	}
@@ -555,7 +555,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 } // namespace
 
 bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-	bool isPathfinding /*= false*/) const
+                         bool isPathfinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
@@ -576,7 +576,7 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 }
 
 bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/,
-	bool isPathfinding /*= false*/) const
+                       bool isPathfinding /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
@@ -677,7 +677,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 	// Don't update path if the target is too far away
 	if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
-		Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+	    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
 		return false;
 	}
 
@@ -688,11 +688,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	bool sightClear = isSightClear(startPos, targetPos, true, true);
 
 	static int_fast32_t dirNeighbors[8][5][2] = {
-	{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	{{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	{{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	{{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}} };
-	static int_fast32_t allNeighbors[8][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1} };
+	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
+	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
+	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
+	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
+	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	AStarNode* found = nullptr;
 	while (fpp.maxSearchDist != 0 || nodes.getClosedNodes() < 100) {
@@ -810,8 +810,10 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			// The cost to walk to this neighbor
 			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t distEnd = Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
-			const int_fast32_t distStart = Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
+			const int_fast32_t distEnd =
+			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
+			const int_fast32_t distStart =
+			    Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
 			const int_fast32_t newf = distEnd + distStart + (walkCost + speedCost);
 
 			if (neighborNode) {
