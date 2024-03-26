@@ -676,9 +676,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	const Position startPos = pos;
 
 	// Don't update path if the target is too far away
-	if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
-	    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
-		return false;
+	if (fpp.maxSearchDist) {
+		if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
+		    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+			return false;
+		}
 	}
 
 	int32_t bestMatch = 0;

@@ -1042,6 +1042,7 @@ bool Creature::setFollowCreature(Creature* creature)
 
 		hasFollowPath = false;
 		followCreature = creature;
+		followPosition = creaturePos;
 	} else {
 		followCreature = nullptr;
 	}
