@@ -833,7 +833,7 @@ void Monster::doAttacking(uint32_t interval)
 	}
 
 	// ensure ranged creatures turn to player
-	if (!lookUpdated && lastMeleeAttack == 0) {
+	if (!lookUpdated && lastMeleeAttack == 0 && !isFleeing()) {
 		updateLookDirection();
 	}
 
