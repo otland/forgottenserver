@@ -169,7 +169,8 @@ void Creature::checkPath()
 			}
 
 			const Position& pos = getPosition();
-			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist || Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
+			if (Position::getDistanceX(pos, targetPos) > fpp.maxSearchDist ||
+			    Position::getDistanceY(pos, targetPos) > fpp.maxSearchDist) {
 				// Follow Creature has gone too far. Stop trying to get a path.
 				listWalkDir.clear();
 				return;

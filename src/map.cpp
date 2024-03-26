@@ -494,7 +494,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 }
 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
-	bool isPathfinding /*= false*/) const
+                      bool isPathfinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
