@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.17)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -9,6 +9,10 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 # Note: this logic must happen before PROJECT command.
 if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
     set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
+endif()
+
+if (ENABLE_TESTING)
+    list(APPEND VCPKG_MANIFEST_FEATURES "tests")
 endif()
 
 project(tfs CXX)

@@ -25,5 +25,6 @@ jobs:
         with:
           buildPreset: default
           configurePreset: default
-          configurePresetAdditionalArgs: "['-G Ninja', '-DBUILD_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
           testPreset: default
+          testPresetAdditionalArgs: "['--build-config', 'Debug']"

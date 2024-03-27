@@ -51,9 +51,8 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '--clean-first']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-G Ninja']"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3
