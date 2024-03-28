@@ -1141,7 +1141,7 @@ void Monster::pushCreatures(Tile* tile)
 		uint32_t removeCount = 0;
 		Monster* lastPushedMonster = nullptr;
 
-		for (size_t i = 0; i < creatures->size();) {
+		for (size_t i = 0, n = creatures->size(); i < n;) {
 			Monster* monster = creatures->at(i)->getMonster();
 			if (monster && monster->isPushable()) {
 				if (monster != lastPushedMonster && Monster::pushCreature(monster)) {

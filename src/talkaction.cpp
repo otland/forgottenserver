@@ -39,8 +39,8 @@ bool TalkActions::registerEvent(Event_ptr event, const pugi::xml_node&)
 	TalkAction_ptr talkAction{static_cast<TalkAction*>(event.release())}; // event is guaranteed to be a TalkAction
 	std::vector<std::string> words = talkAction->getWordsMap();
 
-	for (size_t i = 0; i < words.size(); i++) {
-		if (i == words.size() - 1) {
+	for (size_t i = 0, n = words.size(); i < n; i++) {
+		if (i == n - 1) {
 			talkActions.emplace(words[i], std::move(*talkAction));
 		} else {
 			talkActions.emplace(words[i], *talkAction);
@@ -55,8 +55,8 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 	TalkAction_ptr talkAction{event};
 	std::vector<std::string> words = talkAction->getWordsMap();
 
-	for (size_t i = 0; i < words.size(); i++) {
-		if (i == words.size() - 1) {
+	for (size_t i = 0, n = words.size(); i < n; i++) {
+		if (i == n - 1) {
 			talkActions.emplace(words[i], std::move(*talkAction));
 		} else {
 			talkActions.emplace(words[i], *talkAction);
