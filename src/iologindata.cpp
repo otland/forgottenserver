@@ -687,7 +687,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		}
 	}
 
-	for (size_t i = 0; i < containers.size(); i++) {
+	for (size_t i = 0, n = containers.size(); i < n; i++) {
 		const ContainerBlock& cb = containers[i];
 		Container* container = cb.first;
 		int32_t parentId = cb.second;
