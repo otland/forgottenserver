@@ -669,7 +669,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-	const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
@@ -678,7 +678,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	// Don't update path. The target is too far away.
 	if (fpp.maxSearchDist) {
 		if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
-			Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+		    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
 			return false;
 		}
 	}
@@ -689,11 +689,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	}
 
 	static int_fast32_t dirNeighbors[8][5][2] = {
-	{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	{{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	{{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	{{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}} };
-	static int_fast32_t allNeighbors[8][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1} };
+	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
+	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
+	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
+	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
+	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	// Create a vector for storing and sorting nodes.
 	// Create a node map to easily find nodes using x and y
@@ -730,7 +730,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	while (fpp.maxSearchDist != 0 || iterations < 100) {
 		iterations++;
 
-		std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) {return left->f > right->f; });
+		std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
 
 		AStarNode* n = nodes.back();
 		if (!n) {
@@ -794,7 +794,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			pos.y = y + *neighbors++;
 
 			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-				Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+			                               Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -850,9 +850,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t distEnd =
-				Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
+			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
 			const int_fast32_t distStart =
-				Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
+			    Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
 			const int_fast32_t newf = distStart + distEnd + (walkCost + speedCost);
 
 			if (neighborNode) {
