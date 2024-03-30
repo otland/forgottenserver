@@ -669,42 +669,78 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+	const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	Position endPos;
 	const Position startPos = pos;
 
-	// Don't update path if the target is too far away
+	// Don't update path. The target is too far away.
 	if (fpp.maxSearchDist) {
 		if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
-		    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+			Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
 			return false;
 		}
 	}
 
-	int32_t bestMatch = 0;
-
-	AStarNodes nodes(pos.x, pos.y);
-
-	bool sightClear = isSightClear(startPos, targetPos, true, true);
+	// Dont update path. We are at the same position we want to go to.
+	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
+		return false;
+	}
 
 	static int_fast32_t dirNeighbors[8][5][2] = {
-	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
-	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+	{{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
+	{{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
+	{{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
+	{{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}} };
+	static int_fast32_t allNeighbors[8][2] = { {-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1} };
+
+	// Create a vector for storing and sorting nodes.
+	// Create a node map to easily find nodes using x and y
+	std::vector<AStarNode*> nodes;
+	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
+
+	// Check if our path to the target is clear
+	bool sightClear = isSightClear(startPos, targetPos, true, true);
+
+	// If sight is blocked we want to allocate more memory than if it isn't to increase efficiency.
+	int_fast32_t reserveSize;
+	if (sightClear) {
+		reserveSize = Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos) * 3;
+	} else {
+		reserveSize = (Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos)) * 10;
+	}
+	// Reserve some memory so we don't have to keep moving our nodes to different memory locations
+	nodes.reserve(reserveSize);
+
+	// Create our first node to check.
+	AStarNode* firstNode = new AStarNode;
+	firstNode->parent = nullptr;
+	firstNode->x = pos.x;
+	firstNode->y = pos.y;
+	firstNode->f = 0;
+
+	// Add node to node vector and map
+	nodes.push_back(firstNode);
+	nodeMap[pos.x][pos.y] = firstNode;
 
 	AStarNode* found = nullptr;
-	while (fpp.maxSearchDist != 0 || nodes.getClosedNodes() < 100) {
-		AStarNode* n = nodes.getBestNode();
+	int32_t bestMatch = 0;
+	int_fast32_t iterations = 0;
+	while (fpp.maxSearchDist != 0 || iterations < 100) {
+		iterations++;
+
+		std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) {return left->f > right->f; });
+
+		AStarNode* n = nodes.back();
 		if (!n) {
 			if (found) {
 				break;
 			}
 			return false;
 		}
+
+		nodes.pop_back();
 
 		const int_fast32_t x = n->x;
 		const int_fast32_t y = n->y;
@@ -752,12 +788,13 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			neighbors = *allNeighbors;
 		}
 
+
 		for (uint_fast32_t i = 0; i < dirCount; ++i) {
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
 
 			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-			                               Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+				Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -765,8 +802,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				continue;
 			}
 
-			// Sight is clear.
-			if (sightClear && ((!creature.isSummon() && !creature.attackedCreature) || fpp.keepDistance)) {
+			// Sight is clear. We shouldn't have to move backwards.
+			if (sightClear && (!creature.isSummon() || fpp.keepDistance)) {
 				if (startPos.x == targetPos.x) {
 					// Don't check nodes if start and end pos X are the same and node X is different.
 					if (pos.x != targetPos.x) {
@@ -799,7 +836,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			const Tile* tile;
-			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
+			AStarNode* neighborNode = nodeMap[pos.x][pos.y];
 			if (neighborNode) {
 				tile = getTile(pos.x, pos.y, pos.z);
 			} else {
@@ -813,10 +850,10 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t distEnd =
-			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
+				Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
 			const int_fast32_t distStart =
-			    Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
-			const int_fast32_t newf = distEnd + distStart + (walkCost + speedCost);
+				Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
+			const int_fast32_t newf = distStart + distEnd + (walkCost + speedCost);
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -826,20 +863,26 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 				neighborNode->f = newf;
 				neighborNode->parent = n;
-				nodes.openNode(neighborNode);
+				nodes.push_back(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
-				neighborNode = nodes.createOpenNode(n, pos.x, pos.y, newf);
-				if (!neighborNode) {
+				AStarNode* newNode = new AStarNode;
+				newNode->parent = n;
+				newNode->x = pos.x;
+				newNode->y = pos.y;
+				newNode->f = newf;
+
+				if (!newNode) {
 					if (found) {
 						break;
 					}
 					return false;
 				}
+
+				nodes.push_back(newNode);
+				nodeMap[pos.x][pos.y] = newNode;
 			}
 		}
-
-		nodes.closeNode(n);
 	}
 
 	if (!found) {
@@ -884,88 +927,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 }
 
 // AStarNodes
-
-AStarNodes::AStarNodes(uint32_t x, uint32_t y) : nodes(), openNodes()
-{
-	curNode = 1;
-	closedNodes = 0;
-	openNodes[0] = true;
-
-	AStarNode& startNode = nodes[0];
-	startNode.parent = nullptr;
-	startNode.x = x;
-	startNode.y = y;
-	startNode.f = 0;
-	nodeTable[(x << 16) | y] = nodes;
-}
-
-AStarNode* AStarNodes::createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f)
-{
-	if (curNode >= MAX_NODES) {
-		return nullptr;
-	}
-
-	size_t retNode = curNode++;
-	openNodes[retNode] = true;
-
-	AStarNode* node = nodes + retNode;
-	nodeTable[(x << 16) | y] = node;
-	node->parent = parent;
-	node->x = x;
-	node->y = y;
-	node->f = f;
-	return node;
-}
-
-AStarNode* AStarNodes::getBestNode()
-{
-	if (curNode == 0) {
-		return nullptr;
-	}
-
-	int32_t best_node_f = std::numeric_limits<int32_t>::max();
-	int32_t best_node = -1;
-	for (size_t i = 0; i < curNode; i++) {
-		if (openNodes[i] && nodes[i].f < best_node_f) {
-			best_node_f = nodes[i].f;
-			best_node = i;
-		}
-	}
-
-	if (best_node >= 0) {
-		return nodes + best_node;
-	}
-	return nullptr;
-}
-
-void AStarNodes::closeNode(AStarNode* node)
-{
-	size_t index = node - nodes;
-	assert(index < MAX_NODES);
-	openNodes[index] = false;
-	++closedNodes;
-}
-
-void AStarNodes::openNode(AStarNode* node)
-{
-	size_t index = node - nodes;
-	assert(index < MAX_NODES);
-	if (!openNodes[index]) {
-		openNodes[index] = true;
-		--closedNodes;
-	}
-}
-
-int_fast32_t AStarNodes::getClosedNodes() const { return closedNodes; }
-
-AStarNode* AStarNodes::getNodeByPosition(uint32_t x, uint32_t y)
-{
-	auto it = nodeTable.find((x << 16) | y);
-	if (it == nodeTable.end()) {
-		return nullptr;
-	}
-	return it->second;
-}
 
 int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
