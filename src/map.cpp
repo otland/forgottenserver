@@ -871,13 +871,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				newNode->y = pos.y;
 				newNode->f = newf;
 
-				if (!newNode) {
-					if (found) {
-						break;
-					}
-					return false;
-				}
-
 				nodes.push_back(newNode);
 				nodeMap[pos.x][pos.y] = newNode;
 			}
