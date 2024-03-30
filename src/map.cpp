@@ -788,7 +788,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			neighbors = *allNeighbors;
 		}
 
-
 		for (uint_fast32_t i = 0; i < dirCount; ++i) {
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
@@ -923,6 +922,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		found = found->parent;
 	}
+
 	return true;
 }
 
