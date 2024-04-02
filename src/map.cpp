@@ -493,20 +493,11 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
-                      bool isPathfinding /*= false*/) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
 		return true;
-	}
-
-	if (isPathfinding) {
-		const Creature* creature = tile->getTopCreature();
-		if (creature && (tile->getTopVisibleCreature(creature) || tile->hasProperty(CONST_PROP_BLOCKPATH) ||
-		                 tile->hasProperty(CONST_PROP_BLOCKSOLID))) {
-			return false;
-		}
 	}
 
 	if (blockFloor && tile->getGround()) {
@@ -518,7 +509,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 
 namespace {
 
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding)
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
@@ -526,7 +517,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z, false, isPathfinding)) {
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
 			return false;
 		}
 		yi += slope;
@@ -535,7 +526,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool isPathfinding)
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
@@ -543,7 +534,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z, false, isPathfinding)) {
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
 			return false;
 		}
 		yi += slope;
@@ -554,8 +545,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-                         bool isPathfinding /*= false*/) const
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
@@ -563,31 +553,25 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z, isPathfinding);
+			return checkSteepLine(y0, x0, y1, x1, z);
 		}
-		return checkSteepLine(y1, x1, y0, x0, z, isPathfinding);
+		return checkSteepLine(y1, x1, y0, x0, z);
 	}
 
 	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z, isPathfinding);
+		return checkSlightLine(x1, y1, x0, y0, z);
 	}
 
-	return checkSlightLine(x0, y0, x1, y1, z, isPathfinding);
+	return checkSlightLine(x0, y0, x1, y1, z);
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/,
-                       bool isPathfinding /*= false*/) const
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
 		// skip checks if toPos is next to us
 		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
 			return true;
-		}
-
-		// Path finding line is clear
-		if (isPathfinding) {
-			return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
 		}
 
 		// sight is clear or sameFloor is enabled
@@ -683,64 +667,28 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		}
 	}
 
-	// Dont update path. We are at the same position we want to go to.
+	// Dont update path. We are on top of our target position. Let dance step decide.
 	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
 		return false;
 	}
 
-	static int_fast32_t dirNeighbors[8][5][2] = {
-	    {{-1, 0}, {0, 1}, {1, 0}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {0, -1}, {-1, -1}, {-1, 1}},
-	    {{-1, 0}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}}, {{0, 1}, {1, 0}, {0, -1}, {1, -1}, {1, 1}},
-	    {{1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}},  {{-1, 0}, {0, -1}, {-1, -1}, {1, -1}, {-1, 1}},
-	    {{0, 1}, {1, 0}, {1, -1}, {1, 1}, {-1, 1}},    {{-1, 0}, {0, 1}, {-1, -1}, {1, 1}, {-1, 1}}};
 	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
-	// Create a vector for storing and sorting nodes.
-	// Create a node map to easily find nodes using x and y
-	std::vector<AStarNode*> nodes;
-	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
-
-	// Check if our path to the target is clear
-	bool sightClear = isSightClear(startPos, targetPos, true, true);
-
-	// If sight is blocked we want to allocate more memory than if it isn't to increase efficiency.
-	int_fast32_t reserveSize;
-	if (sightClear) {
-		reserveSize = Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos) * 3;
-	} else {
-		reserveSize = (Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos)) * 10;
-	}
-	// Reserve some memory so we don't have to keep moving our nodes to different memory locations
-	nodes.reserve(reserveSize);
-
-	// Create our first node to check.
-	AStarNode* firstNode = new AStarNode;
-	firstNode->parent = nullptr;
-	firstNode->x = pos.x;
-	firstNode->y = pos.y;
-	firstNode->f = 0;
-
-	// Add node to node vector and map
-	nodes.push_back(firstNode);
-	nodeMap[pos.x][pos.y] = firstNode;
+	AStarNodes nodes(pos.x, pos.y);
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
-	int_fast32_t iterations = 0;
+	int32_t iterations = 0;
 	while (fpp.maxSearchDist != 0 || iterations < 100) {
 		iterations++;
 
-		std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
-
-		AStarNode* n = nodes.back();
+		AStarNode* n = nodes.getBestNode();
 		if (!n) {
 			if (found) {
 				break;
 			}
 			return false;
 		}
-
-		nodes.pop_back();
 
 		const int_fast32_t x = n->x;
 		const int_fast32_t y = n->y;
@@ -754,43 +702,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 		}
 
-		uint_fast32_t dirCount;
-		int_fast32_t* neighbors;
-		if (n->parent) {
-			const int_fast32_t offset_x = n->parent->x - x;
-			const int_fast32_t offset_y = n->parent->y - y;
-			if (offset_y == 0) {
-				if (offset_x == -1) {
-					neighbors = *dirNeighbors[DIRECTION_WEST];
-				} else {
-					neighbors = *dirNeighbors[DIRECTION_EAST];
-				}
-			} else if (!fpp.allowDiagonal || offset_x == 0) {
-				if (offset_y == -1) {
-					neighbors = *dirNeighbors[DIRECTION_NORTH];
-				} else {
-					neighbors = *dirNeighbors[DIRECTION_SOUTH];
-				}
-			} else if (offset_y == -1) {
-				if (offset_x == -1) {
-					neighbors = *dirNeighbors[DIRECTION_NORTHWEST];
-				} else {
-					neighbors = *dirNeighbors[DIRECTION_NORTHEAST];
-				}
-			} else if (offset_x == -1) {
-				neighbors = *dirNeighbors[DIRECTION_SOUTHWEST];
-			} else {
-				neighbors = *dirNeighbors[DIRECTION_SOUTHEAST];
-			}
-			dirCount = fpp.allowDiagonal ? 5 : 3;
-		} else {
-			dirCount = 8;
-			neighbors = *allNeighbors;
-		}
-
-		for (uint_fast32_t i = 0; i < dirCount; ++i) {
-			pos.x = x + *neighbors++;
-			pos.y = y + *neighbors++;
+		for (uint_fast32_t i = 0; i < 8; ++i) {
+			pos.x = x + allNeighbors[i][0];
+			pos.y = y + allNeighbors[i][1];
 
 			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
 			                               Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
@@ -801,41 +715,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				continue;
 			}
 
-			// Sight is clear. We shouldn't have to move backwards.
-			if (sightClear && (!creature.isSummon() || fpp.keepDistance)) {
-				if (startPos.x == targetPos.x) {
-					// Don't check nodes if start and end pos X are the same and node X is different.
-					if (pos.x != targetPos.x) {
-						continue;
-					}
-				} else if (startPos.y == targetPos.y) {
-					// Don't check nodes if start and end pos Y are the same and node Y is different.
-					if (pos.y != targetPos.y) {
-						continue;
-					}
-				}
-
-				const int_fast32_t startDistXtarget = std::abs(startPos.x - targetPos.x);
-				const int_fast32_t startDistYtarget = std::abs(startPos.y - targetPos.y);
-				const int_fast32_t startDistXNode = std::abs(startPos.x - pos.x);
-				const int_fast32_t startDistYNode = std::abs(startPos.y - pos.y);
-				// We shouldn't check past the targets X or Y
-				if (startDistXtarget < startDistXNode) {
-					continue;
-				} else if (startDistYtarget < startDistYNode) {
-					continue;
-				}
-
-				// We don't need to check behind us. The sight is clear to go forward.
-				const int_fast32_t nodeDistXtarget = std::abs(pos.x - targetPos.x);
-				const int_fast32_t nodeDistYtarget = std::abs(pos.y - targetPos.y);
-				if (startDistXtarget < nodeDistXtarget || startDistYtarget < nodeDistYtarget) {
-					continue;
-				}
-			}
-
 			const Tile* tile;
-			AStarNode* neighborNode = nodeMap[pos.x][pos.y];
+			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
 			if (neighborNode) {
 				tile = getTile(pos.x, pos.y, pos.z);
 			} else {
@@ -850,9 +731,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
 			const int_fast32_t distEnd =
 			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
-			const int_fast32_t distStart =
-			    Position::getDistanceX(pos, startPos) + Position::getDistanceY(pos, startPos);
-			const int_fast32_t newf = distStart + distEnd + (walkCost + speedCost);
+			const int_fast32_t newf = distEnd + (walkCost + speedCost);
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -862,17 +741,10 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 				neighborNode->f = newf;
 				neighborNode->parent = n;
-				nodes.push_back(neighborNode);
+				nodes.addNode(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
-				AStarNode* newNode = new AStarNode;
-				newNode->parent = n;
-				newNode->x = pos.x;
-				newNode->y = pos.y;
-				newNode->f = newf;
-
-				nodes.push_back(newNode);
-				nodeMap[pos.x][pos.y] = newNode;
+				nodes.createNewNode(n, pos.x, pos.y, newf);
 			}
 		}
 	}
@@ -915,11 +787,45 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		found = found->parent;
 	}
-
 	return true;
 }
 
 // AStarNodes
+
+AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
+{
+	// Create our first node to check.
+	AStarNode* firstNode = new AStarNode;
+	firstNode->parent = nullptr;
+	firstNode->x = x;
+	firstNode->y = y;
+	firstNode->f = 0;
+
+	// Add node to node vector and map
+	nodes.reserve(50);
+	nodes.push_back(firstNode);
+	nodeMap[x][y] = firstNode;
+}
+
+void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f)
+{
+	AStarNode* newNode = new AStarNode;
+	newNode->parent = parent;
+	newNode->x = x;
+	newNode->y = y;
+	newNode->f = f;
+
+	nodes.push_back(newNode);
+	nodeMap[x][y] = newNode;
+}
+
+AStarNode* AStarNodes::getBestNode()
+{
+	std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
+	AStarNode* retNode = nodes.back();
+	nodes.pop_back();
+	return retNode;
+}
 
 int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {

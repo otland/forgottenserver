@@ -27,8 +27,20 @@ static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
 class AStarNodes
 {
 public:
+	AStarNodes(uint16_t x, uint16_t y);
+
+	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f);
+	void addNode(AStarNode* node) { nodes.push_back(node); };
+
+	AStarNode* getBestNode();
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
+
 	static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
+
+private:
+	std::vector<AStarNode*> nodes;
+	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
@@ -209,7 +221,7 @@ public:
 	 *	\param blockFloor counts the ground tile as an obstacle
 	 *	\returns The result if there is an obstacle or not
 	 */
-	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false, bool isPathfinding = false) const;
+	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) const;
 
 	/**
 	 * Checks if path is clear from fromPos to toPos
@@ -218,10 +230,8 @@ public:
 	 *Destination point \param sameFloor checks if the destination is on same
 	 *floor \returns The result if there is no obstacles
 	 */
-	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false,
-	                  bool isPathfinding = false) const;
-	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
-	                    bool isPathfinding = false) const;
+	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
+	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
