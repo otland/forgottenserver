@@ -568,6 +568,8 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 
 bool Spell::playerSpellCheck(Player* player) const
 {
+	return true; // Ignore Spell Check
+
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
 		return false;
 	}
