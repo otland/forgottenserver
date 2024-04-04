@@ -17,7 +17,7 @@ struct FindPathParams;
 struct AStarNode
 {
 	AStarNode* parent;
-	int_fast32_t f;
+	float f;
 	uint16_t x, y;
 };
 
@@ -29,12 +29,13 @@ class AStarNodes
 public:
 	AStarNodes(uint16_t x, uint16_t y);
 
-	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f);
+	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, float f);
 	void addNode(AStarNode* node) { nodes.push_back(node); };
 
 	AStarNode* getBestNode();
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
 
+	static float calculateEuclidean(const Position& p1, const Position& p2);
 	static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
 

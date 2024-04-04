@@ -667,6 +667,13 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		}
 	}
 
+	// We are at the target where we should be. Don't update path.
+	if (fpp.maxTargetDist == 1) {
+		if (Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos) <= 2) {
+			return true;
+		}
+	}
+
 	// Dont update path. We are on top of our target position. Let dance step decide.
 	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
 		return false;
@@ -679,8 +686,12 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
 	int32_t iterations = 0;
-	while (fpp.maxSearchDist != 0 || iterations < 100) {
+	while (fpp.maxSearchDist != 0) {
 		iterations++;
+
+		if (iterations >= 150) {
+			return false;
+		}
 
 		AStarNode* n = nodes.getBestNode();
 		if (!n) {
@@ -715,6 +726,10 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				continue;
 			}
 
+			if (Position::getDistanceX(pos, startPos) >= 20 || Position::getDistanceY(pos, startPos) >= 20) {
+				return false;
+			}
+
 			const Tile* tile;
 			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
 			if (neighborNode) {
@@ -727,11 +742,17 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// The cost to walk to this neighbor
-			const int_fast32_t walkCost = AStarNodes::getMapWalkCost(n, pos);
-			const int_fast32_t speedCost = AStarNodes::getTileWalkCost(creature, tile);
-			const int_fast32_t distEnd =
-			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos);
-			const int_fast32_t newf = distEnd + (walkCost + speedCost);
+			const int_fast32_t g = AStarNodes::getMapWalkCost(n, pos) + AStarNodes::getTileWalkCost(creature, tile);
+			const float h = AStarNodes::calculateEuclidean(pos, targetPos);
+			float newf = h + g;
+
+			if (creature.isSummon() &&
+			    (!creature.attackedCreature && creature.followCreature == creature.getMaster())) {
+				if (Position::getDistanceX(pos, targetPos) < Position::getDistanceX(startPos, targetPos) ||
+				    Position::getDistanceY(pos, targetPos) < Position::getDistanceY(startPos, targetPos)) {
+					newf += g;
+				}
+			}
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -787,6 +808,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		found = found->parent;
 	}
+
 	return true;
 }
 
@@ -807,7 +829,7 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	nodeMap[x][y] = firstNode;
 }
 
-void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, int_fast32_t f)
+void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, float f)
 {
 	AStarNode* newNode = new AStarNode;
 	newNode->parent = parent;
@@ -825,6 +847,15 @@ AStarNode* AStarNodes::getBestNode()
 	AStarNode* retNode = nodes.back();
 	nodes.pop_back();
 	return retNode;
+}
+
+float AStarNodes::calculateEuclidean(const Position& p1, const Position& p2)
+{
+	uint16_t dx = std::abs(p1.x - p2.x);
+	uint16_t dy = std::abs(p1.y - p2.y);
+	uint16_t aspbs = (dx * dx) + (dy * dy);
+	float f = std::sqrt(aspbs);
+	return f;
 }
 
 int_fast32_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
