@@ -667,13 +667,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		}
 	}
 
-	// We are at the target where we should be. Don't update path.
-	if (fpp.maxTargetDist == 1) {
-		if (Position::getDistanceX(startPos, targetPos) + Position::getDistanceY(startPos, targetPos) <= 2) {
-			return true;
-		}
-	}
-
 	// Dont update path. We are on top of our target position. Let dance step decide.
 	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
 		return false;
