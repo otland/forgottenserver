@@ -17,27 +17,27 @@ struct FindPathParams;
 struct AStarNode
 {
 	AStarNode* parent;
+	float h;
 	float f;
 	uint16_t x, y;
 };
 
-static constexpr int32_t MAP_NORMALWALKCOST = 10;
-static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
+static constexpr float MAP_NORMALWALKCOST = 1.0f;
+static constexpr float MAP_DIAGONALWALKCOST = 2.5f;
 
 class AStarNodes
 {
 public:
 	AStarNodes(uint16_t x, uint16_t y);
 
-	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, float f);
+	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, float h, float f);
 	void addNode(AStarNode* node) { nodes.push_back(node); };
 
 	AStarNode* getBestNode();
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
 
-	static float calculateEuclidean(const Position& p1, const Position& p2);
-	static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
+	static float getMapWalkCost(AStarNode* node, const Position& neighborPos);
+	static float getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
 	std::vector<AStarNode*> nodes;
