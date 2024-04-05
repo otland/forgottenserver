@@ -271,7 +271,9 @@ private:
 	void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
 	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
 	                           int32_t maxRangeZ, bool onlyPlayers) const;
+	bool getPathMatchingSight(const Creature& creature, const Position& targetPos, const FindPathParams& fpp) const;
 
+	friend class Creature;
 	friend class Game;
 	friend class IOMap;
 };

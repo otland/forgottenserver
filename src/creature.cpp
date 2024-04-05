@@ -172,7 +172,12 @@ void Creature::onAttacking(uint32_t interval)
 	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
 		doAttacking(interval);
 	} else if (getMonster()) {
-		getMonster()->updateLookDirection();
+		FindPathParams fpp;
+		getPathSearchParams(attackedCreature, fpp);
+
+		if (g_game.map.getPathMatchingSight(*this, attackedCreature->getPosition(), fpp)) {
+			getMonster()->updateLookDirection();
+		}
 	}
 }
 
