@@ -679,18 +679,12 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
 	int32_t iterations = 0;
-	while (fpp.maxSearchDist != 0) {
+
+	AStarNode* n = nodes.getBestNode();
+	while (n) {
 		iterations++;
 
-		if (iterations >= 150) {
-			return false;
-		}
-
-		AStarNode* n = nodes.getBestNode();
-		if (!n) {
-			if (found) {
-				break;
-			}
+		if (iterations >= 250) {
 			return false;
 		}
 
@@ -741,14 +735,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			const float distEnd =
 			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos) + newf;
 
-			if (creature.isSummon() &&
-			    (!creature.attackedCreature && creature.followCreature == creature.getMaster())) {
-				if (Position::getDistanceX(pos, targetPos) < Position::getDistanceX(startPos, targetPos) ||
-				    Position::getDistanceY(pos, targetPos) < Position::getDistanceY(startPos, targetPos)) {
-					newf += g;
-				}
-			}
-
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
 					// The node on the closed/open list is cheaper than this one
@@ -764,6 +750,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				nodes.createNewNode(n, pos.x, pos.y, distEnd, newf);
 			}
 		}
+
+		n = nodes.getBestNode();
 	}
 
 	if (!found) {
