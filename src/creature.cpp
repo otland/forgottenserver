@@ -171,6 +171,8 @@ void Creature::onAttacking(uint32_t interval)
 
 	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
 		doAttacking(interval);
+	} else if (getMonster()) {
+		getMonster()->updateLookDirection();
 	}
 }
 

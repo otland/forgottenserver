@@ -128,6 +128,8 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	void updateLookDirection();
+
 	static uint32_t monsterAutoID;
 
 private:
@@ -163,8 +165,6 @@ private:
 	void onCreatureEnter(Creature* creature);
 	void onCreatureLeave(Creature* creature);
 	void onCreatureFound(Creature* creature, bool pushFront = false);
-
-	void updateLookDirection();
 
 	void addFriend(Creature* creature);
 	void removeFriend(Creature* creature);
