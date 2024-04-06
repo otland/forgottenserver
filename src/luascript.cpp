@@ -17214,9 +17214,15 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 	if (moveevent) {
 		if ((moveevent->getEventType() == MOVE_EVENT_EQUIP || moveevent->getEventType() == MOVE_EVENT_DEEQUIP) &&
 		    moveevent->getSlot() == SLOTP_WHEREEVER) {
+			std::vector<uint16_t> slots;
 			for (const auto id : moveevent->getItemIdRange()) {
 				ItemType& it = Item::items.getItemType(id);
-				moveevent->setSlot(it.slotPosition);
+				uint16_t itemSlot = it.slotPosition;
+
+				if (std::find(slots.begin(), slots.end(), itemSlot) != slots.end()) {
+					moveevent->setSlot(itemSlot);
+					slots.push_back(itemSlot);
+				}
 			}
 		}
 		if (!moveevent->isScripted()) {
