@@ -1178,7 +1178,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || followCreature || walkingToSpawn) {
-		if (!hasFollowPath && !getMaster()->getPlayer()) {
+		if (!hasFollowPath && getMaster() && !getMaster()->getPlayer()) {
 			randomStepping = true;
 			result = getRandomStep(getPosition(), direction);
 		} else {
