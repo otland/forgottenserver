@@ -2114,6 +2114,12 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
+	registerEnum(RESOURCE_BANK_BALANCE);
+	registerEnum(RESOURCE_GOLD_EQUIPPED);
+	registerEnum(RESOURCE_PREY_WILDCARDS);
+	registerEnum(RESOURCE_DAILYREWARD_STREAK);
+	registerEnum(RESOURCE_DAILYREWARD_JOKERS);
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2778,6 +2784,8 @@ void LuaScriptInterface::registerFunctions()
 	               LuaScriptInterface::luaPlayerGetClientLowLevelBonusDisplay);
 	registerMethod("Player", "setClientLowLevelBonusDisplay",
 	               LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay);
+
+	registerMethod("Player", "sendResourceBalance", LuaScriptInterface::luaPlayerSendResourceBalance);
 
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
@@ -11078,6 +11086,21 @@ int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
 	if (player) {
 		player->setClientLowLevelBonusDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
+{
+	// player:sendResourceBalance(resource, amount)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		const ResourceTypes_t resourceType = getNumber<ResourceTypes_t>(L, 2);
+		uint64_t amount = getNumber<uint64_t>(L, 3);
+		player->sendResourceBalance(resourceType, amount);
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
