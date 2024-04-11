@@ -678,7 +678,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
-	int8_t iterations = 0;
+	int16_t iterations = 0;
 	AStarNode* n = nodes.getBestNode();
 	while (n) {
 		iterations++;
