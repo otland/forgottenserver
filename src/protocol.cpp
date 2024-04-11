@@ -9,7 +9,7 @@
 #include "rsa.h"
 #include "xtea.h"
 
-extern RSA g_RSA;
+extern tfs::RSA g_RSA;
 
 namespace {
 
@@ -80,11 +80,11 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	if (msg.getRemainingBufferLength() < RSA::BUFFER_LENGTH) {
+	if (msg.getRemainingBufferLength() < tfs::RSA::BUFFER_LENGTH) {
 		return false;
 	}
 
-	g_RSA.decrypt(reinterpret_cast<char*>(msg.getRemainingBuffer())); // does not break strict aliasing
+	g_RSA.decrypt(msg.getRemainingBuffer());
 	return msg.getByte() == 0;
 }
 

@@ -55,7 +55,7 @@ jobs:
           sudo apt update -q &&
           sudo apt install -yq build-essential libluajit-5.1-dev libmysqlclient-dev
           libboost-system-dev libboost-iostreams-dev libboost-locale-dev
-          libpugixml-dev libcrypto++-dev libfmt-dev
+          libpugixml-dev libfmt-dev
 
       - name: Build with cmake
         uses: lukka/run-cmake@v10

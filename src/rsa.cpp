@@ -5,59 +5,38 @@
 
 #include "rsa.h"
 
-#include <cryptopp/base64.h>
-#include <cryptopp/osrng.h>
 #include <fstream>
+#include <openssl/err.h>
+#include <openssl/pem.h>
 
-static CryptoPP::AutoSeededRandomPool prng;
+namespace tfs {
 
-void RSA::decrypt(char* msg) const
+void RSA::decrypt(uint8_t* msg) const
 {
-	try {
-		CryptoPP::Integer m{reinterpret_cast<uint8_t*>(msg), RSA::BUFFER_LENGTH};
-		auto c = pk.CalculateInverse(prng, m);
-		c.Encode(reinterpret_cast<uint8_t*>(msg), RSA::BUFFER_LENGTH);
-	} catch (const CryptoPP::Exception& e) {
-		fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, e.what(), "\n");
-	}
+	std::unique_ptr<EVP_PKEY_CTX, decltype(&EVP_PKEY_CTX_free)> pctx{
+	    EVP_PKEY_CTX_new_from_pkey(nullptr, pkey.get(), nullptr), EVP_PKEY_CTX_free};
+	EVP_PKEY_decrypt_init(pctx.get());
+
+	size_t len = tfs::RSA::BUFFER_LENGTH;
+	EVP_PKEY_decrypt(pctx.get(), msg, &len, msg, len);
+
+	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "\n");
 }
 
-static const std::string header = "-----BEGIN RSA PRIVATE KEY-----";
-static const std::string footer = "-----END RSA PRIVATE KEY-----";
-
-void RSA::loadPEM(const std::string& filename)
+void RSA::loadPEM(std::string_view filename)
 {
-	std::ifstream file{filename};
-
-	if (!file.is_open()) {
-		throw std::runtime_error("Missing file " + filename + ".");
+	std::unique_ptr<FILE, decltype(&fclose)> fp{fopen(filename.data(), "r"), fclose};
+	if (!fp) {
+		throw std::runtime_error(fmt::format("Error while reading {}: {}", filename, strerror(errno)));
 	}
 
-	std::ostringstream oss;
-	for (std::string line; std::getline(file, line); oss << line);
-	std::string key = oss.str();
-
-	auto headerIndex = key.find(header);
-	if (headerIndex == std::string::npos) {
-		throw std::runtime_error("Missing RSA private key PEM header.");
+	EVP_PKEY* pkey;
+	if (!PEM_read_PrivateKey(fp.get(), &pkey, nullptr, nullptr)) {
+		throw std::runtime_error(
+		    fmt::format("Error while reading private key: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
-	auto footerIndex = key.find(footer, headerIndex + 1);
-	if (footerIndex == std::string::npos) {
-		throw std::runtime_error("Missing RSA private key PEM footer.");
-	}
-
-	key = key.substr(headerIndex + header.size(), footerIndex - headerIndex - header.size());
-
-	CryptoPP::ByteQueue queue;
-	CryptoPP::Base64Decoder decoder;
-	decoder.Attach(new CryptoPP::Redirector(queue));
-	decoder.Put(reinterpret_cast<const uint8_t*>(key.c_str()), key.size());
-	decoder.MessageEnd();
-
-	pk.BERDecodePrivateKey(queue, false, queue.MaxRetrievable());
-
-	if (!pk.Validate(prng, 3)) {
-		throw std::runtime_error("RSA private key is not valid.");
-	}
+	this->pkey.reset(pkey);
 }
+
+} // namespace tfs

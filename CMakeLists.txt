@@ -28,12 +28,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif ()
 
 # Find packages.
-find_package(cryptopp CONFIG)
-if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
-    set(Crypto++_LIBRARIES "cryptopp::cryptopp")
-else()
-    find_package(Crypto++ REQUIRED)
-endif ()
+find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 
 find_package(fmt CONFIG)
 if (NOT fmt_FOUND)
@@ -73,7 +68,7 @@ find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams locale)
 
 option(BUILD_TESTING "Build unit tests" OFF)
 
-include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
