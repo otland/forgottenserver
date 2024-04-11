@@ -9,7 +9,7 @@ function handler.onReceive(player, msg)
 	local resource = msg:getByte()
 	local callback = callbacks[resource]
 	if not callback then
-		-- print("[Warning] Unknown resource type " .. string.format("%x", resource))
+		-- print("[Warning - network/request_resource_balance.lua] Unknown resource type " .. string.format("0x%02X", resource))
 		return
 	end
 
