@@ -1037,10 +1037,6 @@ void Creature::updateFollowingCreaturesPath()
 
 	std::list<Creature*> newFollowedByList;
 	for (Creature* followedByCreature : followedByCreatures) {
-		if (followedByCreature == nullptr) {
-			continue;
-		}
-
 		if (!canSee(followedByCreature->getPosition())) {
 			continue;
 		}
