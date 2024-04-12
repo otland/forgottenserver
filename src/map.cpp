@@ -728,11 +728,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// The cost to walk to this neighbor
-			const float walkCost = AStarNodes::getMapWalkCost(n, pos);
-			const float tileCost = AStarNodes::getTileWalkCost(creature, tile);
-			const float newf = n->f + walkCost + tileCost;
-			const float distEnd =
-			    Position::getDistanceX(pos, targetPos) + Position::getDistanceY(pos, targetPos) + newf;
+			const double g = n->g + AStarNodes::getMapWalkCost(n, pos) + AStarNodes::getTileWalkCost(creature, tile);
+			const double h = AStarNodes::calculateHeuristic(pos, targetPos);
+			const double newf = h + g;
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -740,13 +738,13 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 					continue;
 				}
 
+				neighborNode->g = g;
 				neighborNode->f = newf;
 				neighborNode->parent = n;
-				neighborNode->h = distEnd;
 				nodes.addNode(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
-				nodes.createNewNode(n, pos.x, pos.y, distEnd, newf);
+				nodes.createNewNode(n, pos.x, pos.y, g, newf);
 			}
 		}
 
@@ -803,7 +801,7 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	firstNode->parent = nullptr;
 	firstNode->x = x;
 	firstNode->y = y;
-	firstNode->h = 0;
+	firstNode->g = 0;
 	firstNode->f = 0;
 
 	// Add node to node vector and map
@@ -812,13 +810,13 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	nodeMap[x][y] = firstNode;
 }
 
-void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, float h, float f)
+void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, double g, double f)
 {
 	AStarNode* newNode = new AStarNode;
 	newNode->parent = parent;
 	newNode->x = x;
 	newNode->y = y;
-	newNode->h = h;
+	newNode->g = g;
 	newNode->f = f;
 
 	nodes.push_back(newNode);
@@ -831,13 +829,21 @@ AStarNode* AStarNodes::getBestNode()
 		return nullptr;
 	}
 
-	std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->h > right->h; });
+	std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
 	AStarNode* retNode = nodes.back();
 	nodes.pop_back();
 	return retNode;
 }
 
-float AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
+double AStarNodes::calculateHeuristic(const Position& p1, const Position& p2)
+{
+	uint16_t dx = std::abs(p1.x - p2.x);
+	uint16_t dy = std::abs(p1.y - p2.y);
+
+	return std::sqrt((dx * dx) + (dy * dy));
+}
+
+double AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
 	if (std::abs(node->x - neighborPos.x) == std::abs(node->y - neighborPos.y)) {
 		// diagonal movement extra cost
@@ -846,9 +852,9 @@ float AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 	return MAP_NORMALWALKCOST;
 }
 
-float AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
+double AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
-	float cost = 0;
+	double cost = 0;
 	if (tile->getTopVisibleCreature(&creature)) {
 		// destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;

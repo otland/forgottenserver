@@ -922,9 +922,10 @@ bool Creature::setAttackedCreature(Creature* creature)
 		}
 
 		attackedCreature = creature;
-		creature:addFollowedByCreature(this);
+		creature->addFollowedByCreature(this);
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	} else {
 		attackedCreature = nullptr;
 	}
@@ -1010,8 +1011,9 @@ bool Creature::setFollowCreature(Creature* creature)
 		}
 
 		followCreature = creature;
-		creature:addFollowedByCreature(this);
+		creature->addFollowedByCreature(this);
 		hasFollowPath = false;
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	} else {
 		followCreature = nullptr;
 	}
@@ -1048,10 +1050,6 @@ void Creature::updateFollowingCreaturesPath()
 	followedByCreatures.clear();
 
 	for (Creature* newFollowCreature : newFollowedByList) {
-		if (newFollowCreature == nullptr) {
-			continue;
-		}
-
 		addFollowedByCreature(newFollowCreature);
 	}
 }
