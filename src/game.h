@@ -429,7 +429,7 @@ public:
 	void checkCreatureAttack(uint32_t creatureId);
 	void checkCreatures(size_t index);
 	void updateCreaturesPath(size_t index);
-	// void checkLight();
+	void checkLight();
 
 	bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor,
 	                    bool field, bool ignoreResistances = false);
