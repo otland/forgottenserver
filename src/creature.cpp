@@ -1037,20 +1037,12 @@ void Creature::updateFollowingCreaturesPath()
 		return;
 	}
 
-	std::list<Creature*> newFollowedByList;
 	for (Creature* followedByCreature : followedByCreatures) {
 		if (!canSee(followedByCreature->getPosition())) {
 			continue;
 		}
 
-		newFollowedByList.push_back(followedByCreature);
 		g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
-	}
-
-	followedByCreatures.clear();
-
-	for (Creature* newFollowCreature : newFollowedByList) {
-		addFollowedByCreature(newFollowCreature);
 	}
 }
 
