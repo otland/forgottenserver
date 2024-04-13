@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Frost Flower Asura" nameDescription="a frost flower asura" race="blood" experience="4200" speed="220">
+<monster name="Frost Flower Asura" nameDescription="a frost flower asura" race="blood" experience="4200" speed="220" raceId="1619">
 	<health now="3500" max="3500" />
 	<look type="150" head="0" body="0" legs="0" feet="86" addons="3" corpse="31462" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Demon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Frost Flower Asura Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="holy" interval="1300" chance="14" length="8" spread="0" min="-185" max="-210">

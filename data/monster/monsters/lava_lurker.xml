@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lava Lurker" nameDescription="a lava lurker" race="fire" experience="4000" speed="116">
+<monster name="Lava Lurker" nameDescription="a lava lurker" race="fire" experience="4000" speed="116" raceId="1563">
 	<health now="5900" max="5900" />
 	<look type="1041" corpse="30242" />
 	<targetchange interval="2000" chance="5" />
@@ -14,6 +14,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Elemental" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Lava Lurker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-200" />
 		<attack name="fire" interval="1000" chance="15" range="7" length="3" spread="3" min="-70" max="-300">

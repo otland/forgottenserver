@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gryphon" nameDescription="a gryphon" race="blood" experience="1000" speed="320">
+<monster name="Gryphon" nameDescription="a gryphon" race="blood" experience="1000" speed="320" raceId="1819">
 	<health now="3200" max="3200" />
 	<look type="1220" corpse="34054" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="uncommon" locations="Gryphon Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="350" />
 		<attack name="holy" interval="2000" chance="13" radius="3" target="0" min="-250" max="-450">

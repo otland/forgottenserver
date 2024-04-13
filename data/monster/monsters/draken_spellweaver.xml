@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Draken Spellweaver" nameDescription="a draken spellweaver" race="blood" experience="3100" speed="210">
+<monster name="Draken Spellweaver" nameDescription="a draken spellweaver" race="blood" experience="3100" speed="210" raceId="618">
 	<health now="5000" max="5000" />
 	<look type="340" corpse="11316" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Dragon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Draken Spellweaver Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-252" />
 		<attack name="fire" interval="2000" chance="10" length="4" spread="3" min="-240" max="-480">

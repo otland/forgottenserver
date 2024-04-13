@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Cave Parrot" nameDescription="a cave parrot" race="blood" experience="0" speed="320">
+<monster name="Cave Parrot" nameDescription="a cave parrot" race="blood" experience="0" speed="320" raceId="1307">
 	<health now="30" max="30" />
 	<look type="217" corpse="6056" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Bird" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Cave Parrot Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-5" />
 	</attacks>

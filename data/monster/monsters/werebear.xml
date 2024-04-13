@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Werebear" nameDescription="a werebear" race="blood" experience="2100" speed="220">
+<monster name="Werebear" nameDescription="a werebear" race="blood" experience="2100" speed="220" raceId="1142">
 	<health now="2400" max="2400" />
 	<look type="720" corpse="24666" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Lycanthrope" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Werebear Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-400" />
 		<attack name="speed" interval="4000" chance="20" radius="7" target="1" speedchange="-100">

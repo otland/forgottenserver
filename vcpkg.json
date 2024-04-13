@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "dependencies": [
+    "libiconv",
+    "boost-asio",
+    "boost-iostreams",
+    "boost-locale",
+    "boost-lockfree",
+    "boost-system",
+    "boost-variant",
+    "cryptopp",
+    "fmt",
+    "libmariadb",
+    "lua",
+    "pugixml"
+  ],
+  "features": {
+    "luajit": {
+      "description": "Use LuaJIT instead of Lua",
+      "dependencies": [
+        "luajit"
+      ]
+    }
+  },
+  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
+}

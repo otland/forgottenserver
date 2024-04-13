@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ancient Scarab" nameDescription="an ancient scarab" race="venom" experience="720" speed="218">
+<monster name="Ancient Scarab" nameDescription="an ancient scarab" race="venom" experience="720" speed="218" raceId="79">
 	<health now="1000" max="1000" />
 	<look type="79" corpse="6021" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Ancient Scarab Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-210" poison="56" />
 		<attack name="earth" interval="2000" chance="20" range="7" min="-15" max="-145">

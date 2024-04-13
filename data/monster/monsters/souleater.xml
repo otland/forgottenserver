@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200">
+<monster name="Souleater" nameDescription="a souleater" race="undead" experience="1300" speed="200" raceId="675">
 	<health now="1100" max="1100" />
 	<look type="355" corpse="12631" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Souleater Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-210" />
 		<attack name="ice" interval="2000" chance="100" range="7" target="1" min="-50" max="-100">

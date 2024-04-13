@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gravedigger" nameDescription="a gravedigger" race="blood" experience="950" speed="230">
+<monster name="Gravedigger" nameDescription="a gravedigger" race="blood" experience="950" speed="230" raceId="975">
 	<health now="1500" max="1500" />
 	<look type="558" corpse="21279" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Gravedigger Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-320" poison="180" />
 		<attack name="manadrain" interval="2000" chance="10" range="1" min="-40" max="-250">

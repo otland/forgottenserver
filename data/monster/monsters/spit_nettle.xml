@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0">
+<monster name="Spit Nettle" nameDescription="a spit nettle" race="venom" experience="20" speed="0" raceId="221">
 	<health now="150" max="150" />
 	<look type="221" corpse="6062" />
 	<targetchange interval="4000" chance="20" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Plant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Spit Nettle Locations..." />
 	<attacks>
 		<attack name="earth" interval="1000" chance="20" range="7" target="1" min="-15" max="-40">
 			<attribute key="shootEffect" value="poison" />

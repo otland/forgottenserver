@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Haunted Treeling" nameDescription="a haunted treeling" race="undead" experience="310" speed="230">
+<monster name="Haunted Treeling" nameDescription="a haunted treeling" race="undead" experience="310" speed="230" raceId="511">
 	<health now="450" max="450" />
 	<look type="310" corpse="9867" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Plant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Haunted Treeling Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-150" />
 		<attack name="manadrain" interval="2000" chance="5" min="-30" max="-100" radius="4" target="0">

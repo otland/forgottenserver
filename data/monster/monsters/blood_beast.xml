@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Blood Beast" nameDescription="a blood beast" race="venom" experience="1000" speed="220">
+<monster name="Blood Beast" nameDescription="a blood beast" race="venom" experience="1000" speed="220" raceId="1040">
 	<health now="1600" max="1600" />
 	<look type="602" corpse="23351" />
 	<targetchange interval="2000" chance="4" />
@@ -16,6 +16,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Blood Beast Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="82" attack="50" poison="260" />
 		<attack name="poison" interval="2000" chance="13" range="5" min="-65" max="-105" target="1">

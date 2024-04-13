@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Feral Sphinx" nameDescription="a feral sphinx" race="blood" experience="8800" speed="320">
+<monster name="Feral Sphinx" nameDescription="a feral sphinx" race="blood" experience="8800" speed="320" raceId="1807">
 	<health now="9800" max="9800" />
 	<look type="1188" head="76" body="75" legs="57" feet="0" addons="2" corpse="34314" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Feral Sphinx Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="fire" interval="2000" chance="15" length="1" spread="2" min="-350" max="-500">

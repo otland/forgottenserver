@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Burning Gladiator" nameDescription="a burning gladiator" race="blood" experience="7350" speed="290">
+<monster name="Burning Gladiator" nameDescription="a burning gladiator" race="blood" experience="7350" speed="290" raceId="1798">
 	<health now="10000" max="10000" />
 	<look type="541" head="95" body="113" legs="3" feet="3" addons="1" corpse="34302" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Human" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Burning Gladiator Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-550" />
 		<attack name="fire" interval="2000" chance="10" ring="3" target="0" min="-300" max="-500">

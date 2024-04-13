@@ -23,6 +23,7 @@ IncludeCategories:
     Priority:        2
 IndentWidth:     4
 SpacesBeforeTrailingComments: 1
+Standard:        c++20
 TabWidth:        4
 UseTab:          ForIndentation
 ...

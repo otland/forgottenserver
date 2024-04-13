@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Energuardian Of Tales" nameDescription="an energuardian of tales" race="energy" experience="11361" speed="420">
+<monster name="Energuardian Of Tales" nameDescription="an energuardian of tales" race="energy" experience="11361" speed="420" raceId="1666">
 	<health now="14000" max="14000" />
 	<look type="1063" head="86" body="85" legs="82" feet="93" addons="3" corpse="31529" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Energuardian of Tales Locations..." />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

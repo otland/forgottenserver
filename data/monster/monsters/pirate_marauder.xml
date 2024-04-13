@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490">
+<monster name="Pirate Marauder" nameDescription="a pirate marauder" race="blood" experience="125" speed="200" manacost="490" raceId="247">
 	<health now="210" max="210" />
 	<look type="93" corpse="20483" />
 	<targetchange interval="4000" chance="15" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Pirate Marauder Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-140" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-40">

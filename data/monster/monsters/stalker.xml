@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="260">
+<monster name="Stalker" nameDescription="a stalker" race="blood" experience="90" speed="260" raceId="72">
 	<health now="120" max="120" />
 	<look type="128" head="97" body="116" legs="95" feet="95" corpse="20511" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Human" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Stalker Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-70" />
 		<attack name="lifedrain" interval="1000" chance="15" range="1" min="-20" max="-30">

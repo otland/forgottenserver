@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ice Golem" nameDescription="an ice golem" race="undead" experience="295" speed="195">
+<monster name="Ice Golem" nameDescription="an ice golem" race="undead" experience="295" speed="195" raceId="326">
 	<health now="385" max="385" />
 	<look type="261" corpse="7282" />
 	<targetchange interval="2000" chance="5" />
@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Ice Golem Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-220" />
 		<attack name="speed" interval="1000" chance="13" length="8" spread="0" speedchange="-800" duration="20000">

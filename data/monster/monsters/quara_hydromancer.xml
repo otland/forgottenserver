@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Quara Hydromancer" nameDescription="a quara hydromancer" race="blood" experience="800" speed="490">
+<monster name="Quara Hydromancer" nameDescription="a quara hydromancer" race="blood" experience="800" speed="490" raceId="243">
 	<health now="1100" max="1100" />
 	<look type="47" corpse="6066" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Aquatic" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Quara Hydromancer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" poison="100" />
 		<attack name="ice" interval="2000" chance="10" length="8" spread="0" min="-100" max="-180">

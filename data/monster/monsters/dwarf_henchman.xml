@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dwarf Henchman" nameDescription="a dwarf henchman" race="blood" experience="15" speed="210">
+<monster name="Dwarf Henchman" nameDescription="a dwarf henchman" race="blood" experience="15" speed="210" raceId="379">
 	<health now="350" max="350" />
 	<look type="160" head="115" body="77" legs="93" feet="114" corpse="6007" />
 	<flags>
@@ -15,6 +15,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Dwarf Henchman Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-50" poison="20" />
 		<attack name="drowncondition" interval="2000" chance="20" target="1" />

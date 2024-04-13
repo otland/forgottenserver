@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="680" speed="230">
+<monster name="Sandstone Scorpion" nameDescription="a sandstone scorpion" race="undead" experience="680" speed="230" raceId="705">
 	<health now="900" max="900" />
 	<look type="398" corpse="13501" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Sandstone Scorpion Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-193" poison="1000" />
 	</attacks>

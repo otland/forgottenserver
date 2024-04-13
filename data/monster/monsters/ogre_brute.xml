@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ogre Brute" nameDescription="an ogre brute" race="blood" experience="800" speed="102">
+<monster name="Ogre Brute" nameDescription="an ogre brute" race="blood" experience="800" speed="102" raceId="1161">
 	<health now="1000" max="1000" />
 	<look type="857" corpse="24799" />
 	<targetchange interval="2000" chance="5" />
@@ -16,6 +16,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Giant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Ogre Brute Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="60" attack="60" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-100">

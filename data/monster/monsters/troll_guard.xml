@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Troll Guard" nameDescription="a troll guard" race="blood" experience="25" speed="180">
+<monster name="Troll Guard" nameDescription="a troll guard" race="blood" experience="25" speed="180" raceId="745">
 	<health now="60" max="60" />
 	<look type="281" corpse="7926" />
 	<targetchange interval="5000" chance="20" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="17" />
 	</flags>
+	<bestiary class="Humanoid" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Troll Guard Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 	</attacks>

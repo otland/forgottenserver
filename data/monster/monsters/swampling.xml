@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Swampling" nameDescription="a swampling" race="venom" experience="45" speed="190">
+<monster name="Swampling" nameDescription="a swampling" race="venom" experience="45" speed="190" raceId="919">
 	<health now="80" max="80" />
 	<look type="535" corpse="19902" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Plant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Swampling Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="earth" interval="2000" chance="15" range="7" min="-2" max="-15">

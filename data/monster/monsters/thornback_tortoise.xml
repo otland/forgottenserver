@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Thornback Tortoise" nameDescription="a thornback tortoise" race="blood" experience="150" speed="200" manacost="490">
+<monster name="Thornback Tortoise" nameDescription="a thornback tortoise" race="blood" experience="150" speed="200" manacost="490" raceId="259">
 	<health now="300" max="300" />
 	<look type="198" corpse="6073" />
 	<targetchange interval="5000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Thornback Tortoise Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-110" poison="40" />
 	</attacks>

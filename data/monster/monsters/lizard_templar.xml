@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="174">
+<monster name="Lizard Templar" nameDescription="a lizard templar" race="blood" experience="155" speed="174" raceId="113">
 	<health now="410" max="410" />
 	<look type="113" corpse="4251" />
 	<targetchange interval="5000" chance="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Reptile" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Lizard Templar Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-70" />
 	</attacks>

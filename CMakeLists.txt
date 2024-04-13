@@ -1,42 +1,56 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
+
+# Ensure to pick up the default triplet from the environment if any. This helps
+# driving the vcpkg triplet in the same way either when starting vcpkg directly,
+# or when letting CMake start vcpkg at configure/generate time.
+# Note: this logic must happen before PROJECT command.
+if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
+    set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
+endif()
 
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 if (NOT WIN32)
-    add_compile_options(-Wall -Werror -pipe -fvisibility=hidden)
+    add_compile_options(-Wall -Wextra -Wnon-virtual-dtor -Wold-style-cast -pedantic -Werror -pipe -fvisibility=hidden)
 endif ()
 
-set(CMAKE_CXX_FLAGS_PERFORMANCE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
-
-if (CMAKE_COMPILER_IS_GNUCXX)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     add_compile_options(-fno-strict-aliasing)
 endif ()
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_compile_options(-Wimplicit-fallthrough -Wmove)
+endif ()
+
 # Find packages.
-find_package(CryptoPP QUIET)
+find_package(cryptopp CONFIG)
 if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
-    set(Crypto++_LIBRARIES "cryptopp-static")
+    set(Crypto++_LIBRARIES "cryptopp::cryptopp")
 else()
     find_package(Crypto++ REQUIRED)
 endif ()
-find_package(fmt 6.1.2 REQUIRED)
+
+find_package(fmt CONFIG)
+if (NOT fmt_FOUND)
+    find_package(fmt 6.1.2 REQUIRED)
+endif()
 
 # Look for vcpkg-provided libmariadb first
 # If we link to the file directly, we might miss its dependencies from vcpkg
-find_package(unofficial-libmariadb CONFIG QUIET)
+find_package(unofficial-libmariadb CONFIG)
 if (unofficial-libmariadb_FOUND)
-    set(MYSQL_CLIENT_LIBS "libmariadb")
+    set(MYSQL_CLIENT_LIBS "unofficial::libmariadb")
 else ()
     find_package(MySQL REQUIRED)
 endif ()
 
 find_package(Threads REQUIRED)
-find_package(PugiXML REQUIRED)
+find_package(PugiXML CONFIG REQUIRED)
 
 # Selects LuaJIT if user defines or auto-detected
 if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)
@@ -51,20 +65,25 @@ if (NOT FORCE_LUAJIT)
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS date_time system iostreams)
+if (APPLE)
+    find_package(Iconv REQUIRED)
+endif()
 
-option(ENABLE_TESTING "Build unit tests" OFF)
+find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams locale)
+
+option(BUILD_TESTING "Build unit tests" OFF)
 
 include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
-if (ENABLE_TESTING)
+if (BUILD_TESTING)
+    message(STATUS "Building unit tests")
     enable_testing()
     add_subdirectory(src/tests)
 endif()
@@ -96,13 +115,10 @@ if(NOT SKIP_GIT)
 endif()
 ### END  Git Version ###
 
-# Precompiled header
-# note: cotire() must be called last on a target
-if (${CMAKE_VERSION} VERSION_GREATER "3.16.0")
-    target_precompile_headers(tfs PUBLIC src/otpch.h)
-else ()
-    include(cotire)
-    set_target_properties(tfs PROPERTIES COTIRE_CXX_PREFIX_HEADER_INIT "src/otpch.h")
-    set_target_properties(tfs PROPERTIES COTIRE_ADD_UNITY_BUILD FALSE)
-    cotire(tfs)
-endif ()
+# Option to disable unity builds
+option(ENABLE_UNITY_BUILD "Enable unity build" ON)
+if(ENABLE_UNITY_BUILD)
+    set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
+endif()
+
+target_precompile_headers(tfs PUBLIC src/otpch.h)

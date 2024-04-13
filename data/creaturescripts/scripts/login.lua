@@ -15,15 +15,26 @@ function onLogin(player)
 	local promotion = vocation:getPromotion()
 	if player:isPremium() then
 		local value = player:getStorageValue(PlayerStorageKeys.promotion)
-		if value == 1 then
+		if value and value == 1 then
 			player:setVocation(promotion)
 		end
 	elseif not promotion then
 		player:setVocation(vocation:getDemotion())
 	end
 
+	-- Update client stats
+	player:updateClientExpDisplay()
+	player:sendHotkeyPreset()
+	player:disableLoginMusic()
+
+	-- achievements points for highscores
+	if not player:getStorageValue(PlayerStorageKeys.achievementsTotal) then
+		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
+	end
+
 	-- Events
 	player:registerEvent("PlayerDeath")
 	player:registerEvent("DropLoot")
+	player:registerEvent("BestiaryKills")
 	return true
 end

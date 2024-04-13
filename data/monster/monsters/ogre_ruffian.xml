@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ogre Ruffian" nameDescription="an ogre ruffian" race="blood" experience="5000" speed="430">
+<monster name="Ogre Ruffian" nameDescription="an ogre ruffian" race="blood" experience="5000" speed="430" raceId="1820">
 	<health now="5500" max="5500" />
 	<look type="1212" corpse="34183" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Giant" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Ogre Ruffian Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" />
 		<attack name="physical" interval="2000" chance="13" radius="5" min="-250" max="-450">

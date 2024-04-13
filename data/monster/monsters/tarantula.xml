@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="214" manacost="485">
+<monster name="Tarantula" nameDescription="a tarantula" race="venom" experience="120" speed="214" manacost="485" raceId="219">
 	<health now="225" max="225" />
 	<look type="219" corpse="6060" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Tarantula Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" poison="40" />
 		<attack name="earth" interval="2000" chance="10" target="1" radius="1" range="1">

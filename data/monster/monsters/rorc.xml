@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200">
+<monster name="Rorc" nameDescription="a rorc" race="blood" experience="105" speed="200" raceId="978">
 	<health now="260" max="260" />
 	<look type="550" corpse="21223" />
 	<targetchange interval="5000" chance="0" />
@@ -15,6 +15,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Magical" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Rorc Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 	</attacks>

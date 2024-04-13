@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Medusa" nameDescription="a medusa" race="blood" experience="4050" speed="280">
+<monster name="Medusa" nameDescription="a medusa" race="blood" experience="4050" speed="280" raceId="570">
 	<health now="4500" max="4500" />
 	<look type="330" corpse="10524" />
 	<targetchange interval="4000" chance="20" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Medusa Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-450" poison="840" />
 		<attack name="lifedrain" interval="2000" chance="10" target="1" range="7" min="-75" max="-150">

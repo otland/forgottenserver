@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Fury" nameDescription="a fury" race="blood" experience="4500" speed="250">
+<monster name="Fury" nameDescription="a fury" race="blood" experience="4500" speed="250" raceId="291">
 	<health now="4100" max="4100" />
 	<look type="149" head="94" body="77" legs="78" feet="79" addons="1" corpse="20399" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Demon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Fury Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-510" />
 		<attack name="fire" interval="2000" chance="10" length="8" spread="3" min="-200" max="-300">

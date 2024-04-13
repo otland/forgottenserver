@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Ghost" nameDescription="a ghost" race="undead" experience="120" speed="160">
+<monster name="Ghost" nameDescription="a ghost" race="undead" experience="120" speed="160" raceId="48">
 	<health now="150" max="150" />
 	<look type="48" corpse="5993" />
 	<targetchange interval="4000" chance="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Ghost Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-80" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="-20" max="-45">

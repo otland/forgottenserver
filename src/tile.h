@@ -266,6 +266,8 @@ public:
 		}
 	}
 
+	using Tile::internalAddThing;
+
 	// non-copyable
 	DynamicTile(const DynamicTile&) = delete;
 	DynamicTile& operator=(const DynamicTile&) = delete;
@@ -296,6 +298,8 @@ public:
 			}
 		}
 	}
+
+	using Tile::internalAddThing;
 
 	// non-copyable
 	StaticTile(const StaticTile&) = delete;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="250">
+<monster name="Bog Raider" nameDescription="a bog raider" race="venom" experience="800" speed="250" raceId="460">
 	<health now="1300" max="1300" />
 	<look type="299" corpse="8951" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Bog Raider Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-180" poison="80" />
 		<attack name="lifedrain" interval="2000" chance="10" min="-90" max="-140" range="7" target="1">

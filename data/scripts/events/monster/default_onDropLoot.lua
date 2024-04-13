@@ -26,9 +26,9 @@ event.onDropLoot = function(self, corpse)
 	if player then
 		local text
 		if doCreateLoot then
-			text = ("Loot of %s: %s"):format(mType:getNameDescription(), corpse:getContentDescription())
+			text = ("Loot of %s: %s."):format(mType:getNameDescription(), corpse:getContentDescription())
 		else
-			text = ("Loot of %s: nothing (due to low stamina)"):format(mType:getNameDescription())
+			text = ("Loot of %s: nothing (due to low stamina)."):format(mType:getNameDescription())
 		end
 		local party = player:getParty()
 		if party then

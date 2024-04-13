@@ -66,14 +66,6 @@ premiumToCreateMarketOffer = true
 checkExpiredMarketOffersEachMinutes = 60
 maxMarketOffersAtATimePerPlayer = 100
 
--- MySQL
-mysqlHost = "127.0.0.1"
-mysqlUser = "forgottenserver"
-mysqlPass = ""
-mysqlDatabase = "forgottenserver"
-mysqlPort = 3306
-mysqlSock = ""
-
 -- Misc.
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
@@ -96,7 +88,6 @@ minimumLevelToSendPrivate = 1
 premiumToSendPrivate = false
 forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
-showPlayerLogInConsole = true
 checkDuplicateStorageKeys = false
 
 -- VIP and Depot limits
@@ -164,7 +155,7 @@ monsterOverspawn = false
 -- Stamina
 staminaSystem = true
 timeToRegenMinuteStamina = 3 * 60
-timeToRegenMinutePremiumStamina = 10 * 60
+timeToRegenMinutePremiumStamina = 6 * 60
 
 -- Scripts
 warnUnsafeScripts = true

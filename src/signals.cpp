@@ -15,8 +15,6 @@
 #include "mounts.h"
 #include "movement.h"
 #include "npc.h"
-#include "quests.h"
-#include "raids.h"
 #include "scheduler.h"
 #include "spells.h"
 #include "talkaction.h"
@@ -50,6 +48,7 @@ void sigusr1Handler()
 {
 	// Dispatcher thread
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
+	g_globalEvents->save();
 	g_game.saveGameState();
 }
 
@@ -73,10 +72,6 @@ void sighupHandler()
 	Npcs::reload();
 	std::cout << "Reloaded npcs." << std::endl;
 
-	g_game.raids.reload();
-	g_game.raids.startup();
-	std::cout << "Reloaded raids." << std::endl;
-
 	g_monsters.reload();
 	std::cout << "Reloaded monsters." << std::endl;
 
@@ -92,9 +87,6 @@ void sighupHandler()
 	g_weapons->reload();
 	g_weapons->loadDefaults();
 	std::cout << "Reloaded weapons." << std::endl;
-
-	g_game.quests.reload();
-	std::cout << "Reloaded quests." << std::endl;
 
 	g_game.mounts.reload();
 	std::cout << "Reloaded mounts." << std::endl;

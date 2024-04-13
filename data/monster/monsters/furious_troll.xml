@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190">
+<monster name="Furious Troll" nameDescription="a furious troll" race="blood" experience="185" speed="190" raceId="540">
 	<health now="245" max="245" />
-	<look type="15" corpse="5960" />
+	<look type="281" corpse="5960" />
 	<targetchange interval="2000" chance="5" />
 	<flags>
 		<flag summonable="0" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Furious Troll Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 	</attacks>

@@ -10,7 +10,7 @@ function event.onSpawn(monster, position, startup, artificial)
 				monster:setHealth(monster:getMaxHealth() * 0.75)
 				monster:getPosition():sendMagicEffect(CONST_ME_GREEN_RINGS)
 			else
-				Game.setStorageValue(GlobalStorageKeys.cobraBastionFlask, -1)
+				Game.setStorageValue(GlobalStorageKeys.cobraBastionFlask, nil)
 			end
 		end
 	end

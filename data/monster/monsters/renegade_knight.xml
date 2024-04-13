@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Renegade Knight" nameDescription="a renegade knight" race="blood" experience="1200" speed="210">
+<monster name="Renegade Knight" nameDescription="a renegade knight" race="blood" experience="1200" speed="210" raceId="1146">
 	<health now="1450" max="1450" />
 	<look type="268" head="97" body="113" legs="76" feet="98" addons="2" corpse="20418" />
 	<targetchange interval="2000" chance="5" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Renegade Knight Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="60" attack="70" />
 		<attack name="physical" interval="2000" chance="15" radius="3" min="-25" max="-125">
