@@ -211,6 +211,24 @@ void Creature::onWalk()
 		eventWalk = 0;
 		addEventWalk();
 	}
+
+	if (getTimeSinceLastMove() >= 500) {
+		const Position& position = getPosition();
+
+		if (attackedCreature) {
+			const Position& targetPosition = attackedCreature->getPosition();
+			if (Position::getDistanceX(position, targetPosition) <= Map::maxViewportX &&
+			    Position::getDistanceY(position, targetPosition) <= Map::maxViewportY) {
+				g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+			}
+		} else if (followCreature) {
+			const Position& targetPosition = followCreature->getPosition();
+			if (Position::getDistanceX(position, targetPosition) <= Map::maxViewportX &&
+			    Position::getDistanceY(position, targetPosition) <= Map::maxViewportY) {
+				g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+			}
+		}
+	}
 }
 
 void Creature::onWalk(Direction& dir)
