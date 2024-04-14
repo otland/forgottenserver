@@ -388,7 +388,7 @@ protected:
 	std::list<Creature*> followedByCreatures;
 
 	uint64_t lastStep = 0;
-	uint64_t lastPathUpdate = 0;
+	int64_t lastPathUpdate = 0;
 	uint32_t referenceCounter = 0;
 	uint32_t id = 0;
 	uint32_t scriptEventsBitField = 0;
