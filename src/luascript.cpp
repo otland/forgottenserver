@@ -3278,6 +3278,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("CreatureEvent", "type", LuaScriptInterface::luaCreatureEventType);
 	registerMethod("CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
 	registerMethod("CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
+	registerMethod("CreatureEvent", "onConnectionRestoration", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onLogout", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onThink", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod("CreatureEvent", "onPrepareDeath", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -17087,6 +17088,8 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 			creature->setEventType(CREATURE_EVENT_LOGIN);
 		} else if (tmpStr == "logout") {
 			creature->setEventType(CREATURE_EVENT_LOGOUT);
+		} else if (tmpStr == "connectionrestoration") {
+			creature->setEventType(CREATURE_EVENT_CONNECTIONRESTORATION);
 		} else if (tmpStr == "think") {
 			creature->setEventType(CREATURE_EVENT_THINK);
 		} else if (tmpStr == "preparedeath") {

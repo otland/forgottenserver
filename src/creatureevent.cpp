@@ -111,6 +111,18 @@ bool CreatureEvents::playerLogin(Player* player) const
 	return true;
 }
 
+bool CreatureEvents::playerConnectionRestoration(Player* player) const
+{
+	for (const auto& it : creatureEvents) {
+		if (it.second.getEventType() == CREATURE_EVENT_CONNECTIONRESTORATION) {
+			if (!it.second.executeOnConnectionRestoration(player)) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 bool CreatureEvents::playerLogout(Player* player) const
 {
 	// fire global event if is registered
@@ -164,6 +176,8 @@ bool CreatureEvent::configureEvent(const pugi::xml_node& node)
 		type = CREATURE_EVENT_LOGIN;
 	} else if (tmpStr == "logout") {
 		type = CREATURE_EVENT_LOGOUT;
+	} else if (tmpStr == "connectionrestoration") {
+		type = CREATURE_EVENT_CONNECTIONRESTORATION;
 	} else if (tmpStr == "think") {
 		type = CREATURE_EVENT_THINK;
 	} else if (tmpStr == "preparedeath") {
@@ -200,6 +214,9 @@ std::string_view CreatureEvent::getScriptEventName() const
 	switch (type) {
 		case CREATURE_EVENT_LOGIN:
 			return "onLogin";
+
+		case CREATURE_EVENT_CONNECTIONRESTORATION:
+			return "onConnectionRestoration";
 
 		case CREATURE_EVENT_LOGOUT:
 			return "onLogout";
@@ -261,6 +278,25 @@ bool CreatureEvent::executeOnLogin(Player* player) const
 	// onLogin(player)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeOnLogin] Call stack overflow" << std::endl;
+		return false;
+	}
+
+	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	env->setScriptId(scriptId, scriptInterface);
+
+	lua_State* L = scriptInterface->getLuaState();
+
+	scriptInterface->pushFunction(scriptId);
+	LuaScriptInterface::pushUserdata(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+	return scriptInterface->callFunction(1);
+}
+
+bool CreatureEvent::executeOnConnectionRestoration(Player* player) const
+{
+	// onConnectionRestoration(player)
+	if (!scriptInterface->reserveScriptEnv()) {
+		std::cout << "[Error - CreatureEvent::executeOnConnectionRestoration] Call stack overflow" << std::endl;
 		return false;
 	}
 

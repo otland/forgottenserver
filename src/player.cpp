@@ -3675,6 +3675,14 @@ void Player::onPlacedCreature()
 	}
 }
 
+void Player::onConnectionRestoration()
+{
+	// scripting event - onConnectionRestoration
+	if (!g_creatureEvents->playerConnectionRestoration(this)) {
+		kickPlayer(true);
+	}
+}
+
 void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);

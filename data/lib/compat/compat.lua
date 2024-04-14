@@ -149,6 +149,10 @@ do
 			self:type("login")
 			self:onLogin(value)
 			return
+		elseif key == "onConnectionRestoration" then
+			self:type("connectionrestoration")
+			self:onConnectionRestoration(value)
+			return
 		elseif key == "onLogout" then
 			self:type("logout")
 			self:onLogout(value)
