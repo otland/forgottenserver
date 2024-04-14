@@ -149,11 +149,15 @@ void Creature::onThink(uint32_t interval)
 void Creature::forceUpdatePath()
 {
 	if (attackedCreature || followCreature) {
+		const Position& thisPosition = getPosition();
 		const Position& position = attackedCreature ? attackedCreature->getPosition() : followCreature->getPosition();
 
-		if (g_game.isSightClear(getPosition(), position, true)) {
-			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		if (Position::getDistanceX(thisPosition, position) > Map::maxViewportX ||
+		    Position::getDistanceY(thisPosition, position) > Map::maxViewportY) {
+			return;
 		}
+
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 }
 
