@@ -152,6 +152,11 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
+	if (lastPathUpdate - OTSYS_TIME() > 0) {
+		return;
+	}
+
+	lastPathUpdate = OTSYS_TIME() + 200;
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
@@ -213,10 +218,7 @@ void Creature::onWalk()
 	}
 
 	if (attackedCreature || followCreature) {
-		if (lastPathUpdate - OTSYS_TIME() <= 0) {
-			lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_INTERVAL;
-			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-		}
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 }
 
@@ -1045,10 +1047,7 @@ void Creature::updateFollowingCreaturesPath()
 	}
 
 	for (Creature* followedByCreature : followedByCreatures) {
-		if (followedByCreature->lastPathUpdate - OTSYS_TIME() <= 0) {
-			followedByCreature->lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_INTERVAL;
-			g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
-		}
+		g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 }
 
