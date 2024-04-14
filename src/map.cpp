@@ -712,10 +712,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				continue;
 			}
 
-			if (Position::getDistanceX(pos, startPos) >= 20 || Position::getDistanceY(pos, startPos) >= 20) {
-				return false;
-			}
-
 			const Tile* tile;
 			AStarNode* neighborNode = nodes.getNodeByPosition(pos.x, pos.y);
 			if (neighborNode) {

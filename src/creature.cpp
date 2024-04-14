@@ -964,7 +964,7 @@ void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 {
 	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
-	fpp.maxSearchDist = 12;
+	fpp.maxSearchDist = Map::maxViewportX * 2;
 	fpp.minTargetDist = 1;
 	fpp.maxTargetDist = 1;
 }
