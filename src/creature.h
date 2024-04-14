@@ -4,6 +4,7 @@
 #ifndef FS_CREATURE_H
 #define FS_CREATURE_H
 
+#include "configmanager.h"
 #include "const.h"
 #include "creatureevent.h"
 #include "enums.h"
@@ -17,6 +18,8 @@ class Item;
 class Monster;
 class Npc;
 class Player;
+
+extern ConfigManager g_config;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
@@ -53,8 +56,11 @@ struct FindPathParams
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
-static constexpr int32_t EVENT_CREATURE_PATH_INTERVAL = 100;
 static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_INTERVAL / EVENT_CREATURECOUNT);
+
+static int32_t EVENT_CREATURE_PATH_INTERVAL = g_config.getNumber(ConfigManager::PATHFINDING_INTERVAL);
+static int32_t EVENT_CREATURE_PATH_DELAY = g_config.getNumber(ConfigManager::PATHFINDING_DELAY);
+
 static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
 static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
 
@@ -191,7 +197,7 @@ public:
 	virtual void onFollowCreatureComplete(const Creature*) {}
 
 	// Pathfinding functions
-	virtual void addFollowedByCreature(Creature* creature);
+	virtual void addFollowedByCreature(Creature* creature) { followedByCreatures.push_back(creature); };
 
 	// Pathfinding events
 	void updateFollowingCreaturesPath();

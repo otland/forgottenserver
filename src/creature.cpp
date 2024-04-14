@@ -156,7 +156,7 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	lastPathUpdate = OTSYS_TIME() + 200;
+	lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_DELAY;
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
@@ -1029,14 +1029,6 @@ bool Creature::setFollowCreature(Creature* creature)
 
 	onFollowCreature(creature);
 	return true;
-}
-
-// Pathfinding Functions
-void Creature::addFollowedByCreature(Creature* creature)
-{
-	if (creature) {
-		followedByCreatures.push_back(creature);
-	}
 }
 
 // Pathfinding Events
