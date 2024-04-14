@@ -667,6 +667,12 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		}
 	}
 
+	// Don't update path. Target in not in the viewport.
+	if (Position::getDistanceX(startPos, targetPos) > Map::maxViewportX + 1 ||
+	    Position::getDistanceY(startPos, targetPos) > Map::maxViewportY + 1) {
+		return false;
+	}
+
 	// Dont update path. We are on top of our target position. Let dance step decide.
 	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
 		return false;
