@@ -148,7 +148,7 @@ void Creature::onThink(uint32_t interval)
 
 void Creature::forceUpdatePath()
 {
-	if (!attackedCreature || !followCreature) {
+	if (!attackedCreature && !followCreature) {
 		return;
 	}
 
