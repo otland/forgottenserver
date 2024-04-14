@@ -1057,8 +1057,11 @@ void Creature::updateFollowingCreaturesPath()
 		return;
 	}
 
+	const Position& thisPosition = getPosition();
 	for (Creature* followedByCreature : followedByCreatures) {
-		if (!canSee(followedByCreature->getPosition())) {
+		const Position& followedCreaturePosition = followedByCreature->getPosition();
+		if (Position::getDistanceX(thisPosition, followedCreaturePosition) > Map::maxViewportX ||
+		    Position::getDistanceY(thisPosition, followedCreaturePosition) > Map::maxViewportY) {
 			continue;
 		}
 
