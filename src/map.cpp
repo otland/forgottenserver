@@ -683,7 +683,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	while (n) {
 		iterations++;
 
-		if (iterations >= 250) {
+		if (iterations >= 200) {
 			return false;
 		}
 

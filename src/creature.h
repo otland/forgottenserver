@@ -53,7 +53,7 @@ struct FindPathParams
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
-static constexpr int32_t EVENT_CREATURE_PATH_INTERVAL = 200;
+static constexpr int32_t EVENT_CREATURE_PATH_INTERVAL = 100;
 static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_INTERVAL / EVENT_CREATURECOUNT);
 static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
 static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
@@ -388,6 +388,7 @@ protected:
 	std::list<Creature*> followedByCreatures;
 
 	uint64_t lastStep = 0;
+	uint64_t lastPathUpdate = 0;
 	uint32_t referenceCounter = 0;
 	uint32_t id = 0;
 	uint32_t scriptEventsBitField = 0;

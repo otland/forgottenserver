@@ -148,17 +148,11 @@ void Creature::onThink(uint32_t interval)
 
 void Creature::forceUpdatePath()
 {
-	if (attackedCreature || followCreature) {
-		const Position& thisPosition = getPosition();
-		const Position& position = attackedCreature ? attackedCreature->getPosition() : followCreature->getPosition();
-
-		if (Position::getDistanceX(thisPosition, position) > Map::maxViewportX ||
-		    Position::getDistanceY(thisPosition, position) > Map::maxViewportY) {
-			return;
-		}
-
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+	if (!attackedCreature || !followCreature) {
+		return;
 	}
+
+	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
 void Creature::onAttacking(uint32_t interval)
@@ -218,21 +212,10 @@ void Creature::onWalk()
 		addEventWalk();
 	}
 
-	if (getTimeSinceLastMove() >= 500) {
-		const Position& position = getPosition();
-
-		if (attackedCreature) {
-			const Position& targetPosition = attackedCreature->getPosition();
-			if (Position::getDistanceX(position, targetPosition) <= Map::maxViewportX &&
-			    Position::getDistanceY(position, targetPosition) <= Map::maxViewportY) {
-				g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-			}
-		} else if (followCreature) {
-			const Position& targetPosition = followCreature->getPosition();
-			if (Position::getDistanceX(position, targetPosition) <= Map::maxViewportX &&
-			    Position::getDistanceY(position, targetPosition) <= Map::maxViewportY) {
-				g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-			}
+	if (attackedCreature || followCreature) {
+		if (lastPathUpdate - OTSYS_TIME() <= 0) {
+			lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_INTERVAL;
+			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 		}
 	}
 }
@@ -964,7 +947,7 @@ void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 {
 	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
-	fpp.maxSearchDist = Map::maxViewportX * 2;
+	fpp.maxSearchDist = Map::maxViewportX + Map::maxViewportY;
 	fpp.minTargetDist = 1;
 	fpp.maxTargetDist = 1;
 }
@@ -1061,15 +1044,11 @@ void Creature::updateFollowingCreaturesPath()
 		return;
 	}
 
-	const Position& thisPosition = getPosition();
 	for (Creature* followedByCreature : followedByCreatures) {
-		const Position& followedCreaturePosition = followedByCreature->getPosition();
-		if (Position::getDistanceX(thisPosition, followedCreaturePosition) > Map::maxViewportX ||
-		    Position::getDistanceY(thisPosition, followedCreaturePosition) > Map::maxViewportY) {
-			continue;
+		if (followedByCreature->lastPathUpdate - OTSYS_TIME() <= 0) {
+			followedByCreature->lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_INTERVAL;
+			g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
 		}
-
-		g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 }
 
