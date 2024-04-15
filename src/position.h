@@ -21,6 +21,12 @@ enum Direction : uint8_t
 	DIRECTION_NONE = 8,
 };
 
+namespace tfs {
+
+inline constexpr auto abs(std::integral auto num) { return num < 0 ? -num : num; }
+
+} // namespace tfs
+
 struct Position
 {
 	constexpr Position() = default;
@@ -40,9 +46,9 @@ struct Position
 	constexpr int32_t getOffsetY(const Position& p) const { return getY() - p.getY(); }
 	constexpr int16_t getOffsetZ(const Position& p) const { return getZ() - p.getZ(); }
 
-	constexpr int32_t getDistanceX(const Position& p) const { return std::abs(getOffsetX(p)); }
-	constexpr int32_t getDistanceY(const Position& p) const { return std::abs(getOffsetY(p)); }
-	constexpr int16_t getDistanceZ(const Position& p) const { return std::abs(getOffsetZ(p)); }
+	constexpr int32_t getDistanceX(const Position& p) const { return tfs::abs(getOffsetX(p)); }
+	constexpr int32_t getDistanceY(const Position& p) const { return tfs::abs(getOffsetY(p)); }
+	constexpr int16_t getDistanceZ(const Position& p) const { return tfs::abs(getOffsetZ(p)); }
 
 	uint16_t x = 0;
 	uint16_t y = 0;
