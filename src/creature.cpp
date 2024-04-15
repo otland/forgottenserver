@@ -156,7 +156,7 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	lastPathUpdate = OTSYS_TIME() + EVENT_CREATURE_PATH_DELAY;
+	lastPathUpdate = OTSYS_TIME() + g_config.getNumber(ConfigManager::PATHFINDING_DELAY);
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
