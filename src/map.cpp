@@ -753,6 +753,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		n = nodes.getBestNode();
 	}
 
+	nodes.clear();
+
 	if (!found) {
 		return false;
 	}
@@ -844,6 +846,12 @@ double AStarNodes::calculateHeuristic(const Position& p1, const Position& p2)
 
 	return std::sqrt((dx * dx) + (dy * dy));
 }
+
+void AStarNodes::clear()
+{
+	nodes.clear();
+	nodeMap.clear();
+};
 
 double AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {

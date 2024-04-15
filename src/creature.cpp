@@ -1038,9 +1038,27 @@ void Creature::updateFollowingCreaturesPath()
 		return;
 	}
 
-	for (Creature* followedByCreature : followedByCreatures) {
-		g_dispatcher.addTask(createTask([id = followedByCreature->getID()]() { g_game.updateCreatureWalk(id); }));
+	std::list<Creature*> newList;
+	newList.resize(followedByCreatures.size());
+	const Position& thisPosition = getPosition();
+	for (auto follower : followedByCreatures) {
+		const Position& followerPosition = follower->getPosition();
+		if (Position::getDistanceX(thisPosition, followerPosition) >= Map::maxViewportX + 2 ||
+		    Position::getDistanceY(thisPosition, followerPosition) >= Map::maxViewportY + 2) {
+			continue;
+		}
+
+		newList.push_back(follower);
+		g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
 	}
+
+	followedByCreatures.clear();
+
+	for (auto follower : followedByCreatures) {
+		followedByCreatures.push_back(follower);
+	}
+
+	newList.clear();
 }
 
 double Creature::getDamageRatio(Creature* attacker) const
