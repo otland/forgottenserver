@@ -451,9 +451,9 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	scriptInterface->callVoidFunction(4);
 }
 
-bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::string& text)
+bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId)
 {
-	// onTextEdit(player, item, text)
+	// onTextEdit(player, item, text, windowTextId)
 	if (!scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - CreatureEvent::executeTextEdit] Call stack overflow" << std::endl;
 		return false;
@@ -471,7 +471,9 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, const std::strin
 	LuaScriptInterface::pushThing(L, item);
 	LuaScriptInterface::pushString(L, text);
 
-	return scriptInterface->callFunction(3);
+	lua_pushinteger(L, windowTextId);
+
+	return scriptInterface->callFunction(4);
 }
 
 void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage)

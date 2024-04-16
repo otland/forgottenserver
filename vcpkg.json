@@ -1,8 +1,10 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "dependencies": [
+    "libiconv",
     "boost-asio",
     "boost-iostreams",
+    "boost-locale",
     "boost-lockfree",
     "boost-system",
     "boost-variant",
@@ -20,5 +22,5 @@
       ]
     }
   },
-  "builtin-baseline": "7f59e0013648f0dd80377330b770b414032233cb"
+  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
 }

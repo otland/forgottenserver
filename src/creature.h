@@ -350,6 +350,10 @@ public:
 		}
 	}
 
+	virtual void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false);
+	virtual std::optional<int32_t> getStorageValue(uint32_t key) const;
+	decltype(auto) getStorageMap() const { return storageMap; }
+
 protected:
 	virtual bool useCacheMap() const { return false; }
 
@@ -399,6 +403,7 @@ protected:
 
 	Outfit_t currentOutfit;
 	Outfit_t defaultOutfit;
+	uint16_t currentMount;
 
 	Position lastPosition;
 	LightInfo internalLight;
@@ -447,6 +452,9 @@ protected:
 	friend class Game;
 	friend class Map;
 	friend class LuaScriptInterface;
+
+private:
+	std::map<uint32_t, int32_t> storageMap;
 };
 
 #endif // FS_CREATURE_H

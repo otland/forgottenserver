@@ -125,9 +125,10 @@ public:
 			vocationEquipSet.insert(vocationId);
 		}
 	}
+	// If the set is empty, it is considered to be for all vocations.
 	bool hasVocationEquipSet(uint16_t vocationId) const
 	{
-		return !vocationEquipSet.empty() && vocationEquipSet.find(vocationId) != vocationEquipSet.end();
+		return vocationEquipSet.empty() || vocationEquipSet.find(vocationId) != vocationEquipSet.end();
 	}
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }

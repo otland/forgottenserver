@@ -141,14 +141,15 @@ public:
 			vocationSpellMap[vocationId] = showInDescription;
 		}
 	}
+	// If the set is empty, it is considered to be for all vocations.
 	bool hasVocationSpellMap(uint16_t vocationId) const
 	{
-		return !vocationSpellMap.empty() && vocationSpellMap.find(vocationId) != vocationSpellMap.end();
+		return vocationSpellMap.empty() || vocationSpellMap.find(vocationId) != vocationSpellMap.end();
 	}
 
-	const SpellGroup_t getGroup() const { return group; }
+	SpellGroup_t getGroup() const { return group; }
 	void setGroup(SpellGroup_t g) { group = g; }
-	const SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
+	SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
 	void setSecondaryGroup(SpellGroup_t g) { secondaryGroup = g; }
 
 	uint32_t getCooldown() const { return cooldown; }

@@ -19,10 +19,17 @@ on:
       - CMakeLists.txt
       - CMakePresets.json
 
+  workflow_dispatch:
+
 jobs:
   build-ubuntu:
     name: ubuntu-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
     strategy:
       matrix:
         buildtype: [Debug, Release]
@@ -30,6 +37,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: cpp
+          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          queries: +security-extended,security-and-quality
+        if: ${{ matrix.buildtype }} == "Debug"
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -39,7 +54,7 @@ jobs:
         run: >
           sudo apt update -q &&
           sudo apt install -yq build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-system-dev libboost-iostreams-dev
+          libboost-system-dev libboost-iostreams-dev libboost-locale-dev
           libpugixml-dev libcrypto++-dev libfmt-dev
 
       - name: Build with cmake
@@ -48,6 +63,12 @@ jobs:
           buildPreset: default
           buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}']"
           configurePreset: default
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:cpp"
+        if: ${{ matrix.buildtype }} == "Debug"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v3

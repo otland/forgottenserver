@@ -210,6 +210,7 @@ public:
 
 	void removeThing(Thing* thing, uint32_t count) override final;
 
+	bool hasCreature(Creature* creature) const;
 	void removeCreature(Creature* creature);
 
 	int32_t getThingIndex(const Thing* thing) const override final;
@@ -266,6 +267,8 @@ public:
 		}
 	}
 
+	using Tile::internalAddThing;
+
 	// non-copyable
 	DynamicTile(const DynamicTile&) = delete;
 	DynamicTile& operator=(const DynamicTile&) = delete;
@@ -296,6 +299,8 @@ public:
 			}
 		}
 	}
+
+	using Tile::internalAddThing;
 
 	// non-copyable
 	StaticTile(const StaticTile&) = delete;

@@ -29,7 +29,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 	std::string disable = ("#");
 	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
 		auto fn = it->path().parent_path().filename();
-		if ((fn == "lib" && !isLib) || fn == "events") {
+		if (fn == "lib" && !isLib) {
 			continue;
 		}
 		if (fs::is_regular_file(*it) && it->path().extension() == ".lua") {

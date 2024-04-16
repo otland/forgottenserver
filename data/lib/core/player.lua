@@ -417,7 +417,7 @@ function Player.sendQuestLog(self)
 	for _, quest in pairs(quests) do
 		msg:addU16(quest.id)
 		msg:addString(quest.name)
-		msg:addByte(quest:isCompleted(self))
+		msg:addByte(quest:isCompleted(self) and 0x01 or 0x00)
 	end
 
 	msg:sendToPlayer(self)
@@ -545,15 +545,31 @@ local function getStaminaBonus(staminaMinutes)
 	end
 end
 
+function Player.calculateLowLevelBonus(self, level)
+	if level > 1 and level <= 50 then
+		local expBonus = {minlevel = 2, maxlevel = 50, bonus = 1}
+		local bonusPercentage = (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel)
+		return expBonus.bonus * 100 * bonusPercentage
+	else
+		return 0
+	end
+end
+
 function Player.updateClientExpDisplay(self)
+	local level = self:getLevel()
+
 	-- Experience bonus (includes server rates)
-	local expGainRate = 100 * Game.getExperienceStage(self:getLevel())
+	local expGainRate = 100 * Game.getExperienceStage(level)
 	self:setClientExpDisplay(expGainRate)
 
 	-- Stamina bonus
 	local staminaMinutes = self:getStamina()
 	local staminaBonus = getStaminaBonus(staminaMinutes)
 	self:setClientStaminaBonusDisplay(staminaBonus)
+
+	-- Low level bonus
+	local levelBonus = self:calculateLowLevelBonus(level)
+	self:setClientLowLevelBonusDisplay(levelBonus)
 	return true
 end
 
@@ -673,4 +689,51 @@ function Player.getTotalDefense(self)
 		end
 	end
 	return total
+end
+
+function Player.setAccountStorageValue(self, key, value)
+	return Game.setAccountStorageValue(self:getAccountId(), key, value)
+end
+
+function Player.getAccountStorageValue(self, key)
+	return Game.getAccountStorageValue(self:getAccountId(), key)
+end
+
+function Player.sendWorldLight(self, color, level)
+	local msg = NetworkMessage()
+	msg:addByte(0x82)
+	msg:addByte(self:getGroup():getAccess() and 0xFF or level)
+	msg:addByte(color)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendWorldTime(self, time)
+	local msg = NetworkMessage()
+	msg:addByte(0xEF)
+	msg:addByte(time / 60) -- hour
+	msg:addByte(time % 60) -- min
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendHotkeyPreset(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x9D)
+	msg:addU32(self:getVocation():getClientId())
+	msg:sendToPlayer(self)
+	return true
+end
+
+function Player.disableLoginMusic(self)
+	local msg = NetworkMessage()
+	msg:addByte(0x85)
+	msg:addByte(0x01)
+	msg:addByte(0x00)
+	msg:addByte(0x00)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
 end

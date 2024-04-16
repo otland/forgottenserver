@@ -9,7 +9,6 @@
 #include "mounts.h"
 #include "player.h"
 #include "position.h"
-#include "raids.h"
 #include "wildcardtree.h"
 
 class Monster;
@@ -60,6 +59,10 @@ static constexpr int32_t RANGE_ROTATE_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_BROWSE_FIELD_INTERVAL = 400;
 static constexpr int32_t RANGE_WRAP_ITEM_INTERVAL = 400;
 static constexpr int32_t RANGE_REQUEST_TRADE_INTERVAL = 400;
+
+static constexpr int32_t MAX_STACKPOS = 10;
+
+static constexpr uint8_t ITEM_STACK_SIZE = 100;
 
 /**
  * Main Game class.
@@ -210,17 +213,6 @@ public:
 	size_t getNpcsOnline() const { return npcs.size(); }
 	uint32_t getPlayersRecord() const { return playersRecord; }
 
-	LightInfo getWorldLightInfo() const { return {lightLevel, lightColor}; }
-	void setWorldLightInfo(LightInfo lightInfo)
-	{
-		lightLevel = lightInfo.level;
-		lightColor = lightInfo.color;
-		for (const auto& it : players) {
-			it.second->sendWorldLight(lightInfo);
-		}
-	}
-	void updateWorldLightLevel();
-
 	ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 	ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
 
@@ -352,7 +344,7 @@ public:
 	void playerMoveUpContainer(uint32_t playerId, uint8_t cid);
 	void playerUpdateContainer(uint32_t playerId, uint8_t cid);
 	void playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId);
-	void playerWriteItem(uint32_t playerId, uint32_t windowTextId, const std::string& text);
+	void playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string_view text);
 	void playerBrowseField(uint32_t playerId, const Position& pos);
 	void playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index);
 	void playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text);
@@ -361,9 +353,9 @@ public:
 	                        uint16_t spriteId);
 	void playerAcceptTrade(uint32_t playerId);
 	void playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t index);
-	void playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount, bool ignoreCap = false,
-	                        bool inBackpacks = false);
-	void playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint8_t amount,
+	void playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount,
+	                        bool ignoreCap = false, bool inBackpacks = false);
+	void playerSellItem(uint32_t playerId, uint16_t spriteId, uint8_t count, uint16_t amount,
 	                    bool ignoreEquipped = false);
 	void playerCloseShop(uint32_t playerId);
 	void playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count);
@@ -455,15 +447,7 @@ public:
 	static void addDistanceEffect(const SpectatorVec& spectators, const Position& fromPos, const Position& toPos,
 	                              uint8_t effect);
 
-	void setAccountStorageValue(const uint32_t accountId, const uint32_t key, const int32_t value);
-	int32_t getAccountStorageValue(const uint32_t accountId, const uint32_t key) const;
-	void loadAccountStorageValues();
-	bool saveAccountStorageValues() const;
-
 	void startDecay(Item* item);
-
-	int16_t getWorldTime() { return worldTime; }
-	void updateWorldTime();
 
 	void sendOfflineTrainingDialog(Player* player);
 
@@ -504,7 +488,6 @@ public:
 	Groups groups;
 	Map map;
 	Mounts mounts;
-	Raids raids;
 
 	std::forward_list<Item*> toDecayItems;
 
@@ -529,8 +512,6 @@ private:
 	std::unordered_map<uint32_t, Player*> mappedPlayerGuids;
 	std::unordered_map<uint32_t, Guild*> guilds;
 	std::unordered_map<uint16_t, Item*> uniqueItems;
-	std::map<uint32_t, uint32_t> stages;
-	std::unordered_map<uint32_t, std::unordered_map<uint32_t, int32_t>> accountStorageMap;
 
 	std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];
 	std::list<Creature*> checkCreatureLists[EVENT_CREATURECOUNT];
@@ -553,24 +534,6 @@ private:
 	std::unordered_set<Tile*> tilesToClean;
 
 	ModalWindow offlineTrainingWindow{std::numeric_limits<uint32_t>::max(), "Choose a Skill", "Please choose a skill:"};
-
-	static constexpr uint8_t LIGHT_DAY = 250;
-	static constexpr uint8_t LIGHT_NIGHT = 40;
-	// 1h realtime = 1day worldtime
-	// 2.5s realtime = 1min worldtime
-	// worldTime is calculated in minutes
-	static constexpr int16_t GAME_SUNRISE = 360;
-	static constexpr int16_t GAME_DAYTIME = 480;
-	static constexpr int16_t GAME_SUNSET = 1080;
-	static constexpr int16_t GAME_NIGHTTIME = 1200;
-	static constexpr float LIGHT_CHANGE_SUNRISE =
-	    static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_DAYTIME - GAME_SUNRISE)) * 100) / 100.0f;
-	static constexpr float LIGHT_CHANGE_SUNSET =
-	    static_cast<int>(float(float(LIGHT_DAY - LIGHT_NIGHT) / float(GAME_NIGHTTIME - GAME_SUNSET)) * 100) / 100.0f;
-
-	uint8_t lightLevel = LIGHT_DAY;
-	uint8_t lightColor = 215;
-	int16_t worldTime = 0;
 
 	GameState_t gameState = GAME_STATE_NORMAL;
 	WorldType_t worldType = WORLD_TYPE_PVP;

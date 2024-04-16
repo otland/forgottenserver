@@ -344,7 +344,7 @@ void Npc::doSayToPlayer(Player* player, const std::string& text)
 	}
 }
 
-void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount,
+void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint16_t amount,
                         bool ignore /* = false*/, bool inBackpacks /* = false*/)
 {
 	if (npcEventHandler) {
@@ -437,34 +437,16 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	return true;
 }
 
-bool Npc::getRandomStep(Direction& dir) const
+bool Npc::getRandomStep(Direction& direction) const
 {
-	std::vector<Direction> dirList;
-	dirList.reserve(4);
-
 	const Position& creaturePos = getPosition();
-	if (canWalkTo(creaturePos, DIRECTION_NORTH)) {
-		dirList.push_back(DIRECTION_NORTH);
+	for (Direction dir : getShuffleDirections()) {
+		if (canWalkTo(creaturePos, dir)) {
+			direction = dir;
+			return true;
+		}
 	}
-
-	if (canWalkTo(creaturePos, DIRECTION_SOUTH)) {
-		dirList.push_back(DIRECTION_SOUTH);
-	}
-
-	if (canWalkTo(creaturePos, DIRECTION_EAST)) {
-		dirList.push_back(DIRECTION_EAST);
-	}
-
-	if (canWalkTo(creaturePos, DIRECTION_WEST)) {
-		dirList.push_back(DIRECTION_WEST);
-	}
-
-	if (dirList.empty()) {
-		return false;
-	}
-
-	dir = dirList[uniform_random(0, dirList.size() - 1)];
-	return true;
+	return false;
 }
 
 bool Npc::doMoveTo(const Position& pos, int32_t minTargetDist /* = 1*/, int32_t maxTargetDist /* = 1*/,
@@ -899,7 +881,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 	const ItemType& it = Item::items[itemId];
 	if (it.stackable) {
 		while (amount > 0) {
-			int32_t stackCount = std::min<int32_t>(100, amount);
+			int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, amount);
 			Item* item = Item::CreateItem(it.id, stackCount);
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
@@ -1194,7 +1176,7 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	scriptInterface->callFunction(3);
 }
 
-void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint8_t amount,
+void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint16_t amount,
                                      bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {

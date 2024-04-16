@@ -8,7 +8,9 @@
 #include "container.h"
 #include "podium.h"
 
-std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
+#include <boost/locale.hpp>
+
+std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
 		stringLen = get<uint16_t>();
@@ -20,7 +22,10 @@ std::string_view NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 
 	auto it = buffer.data() + info.position;
 	info.position += stringLen;
-	return {reinterpret_cast<char*>(it), stringLen};
+
+	std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
+	return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
+	                                         boost::locale::conv::skip);
 }
 
 Position NetworkMessage::getPosition()
@@ -34,13 +39,15 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	size_t stringLen = value.size();
+	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
+	                                                            boost::locale::conv::skip);
+	size_t stringLen = latin1Str.size();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
 	add<uint16_t>(stringLen);
-	std::memcpy(buffer.data() + info.position, value.data(), stringLen);
+	std::memcpy(buffer.data() + info.position, latin1Str.data(), stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
 }
@@ -95,6 +102,12 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 		addByte(0x00); // quiver ammo count
 	} else if (it.classification > 0) {
 		addByte(0x00); // item tier (0-10)
+	} else if (it.showClientCharges) {
+		add<uint32_t>(it.charges);
+		addByte(0x00); // boolean (is brand new)
+	} else if (it.showClientDuration) {
+		add<uint32_t>(it.decayTimeMin);
+		addByte(0x00); // boolean (is brand new)
 	}
 
 	if (it.isPodium()) {
@@ -117,6 +130,14 @@ void NetworkMessage::addItem(const Item* item)
 		addByte(fluidMap[item->getFluidType() & 7]);
 	} else if (it.classification > 0) {
 		addByte(0x00); // item tier (0-10)
+	}
+
+	if (it.showClientCharges) {
+		add<uint32_t>(item->getCharges());
+		addByte(0); // boolean (is brand new)
+	} else if (it.showClientDuration) {
+		add<uint32_t>(item->getDuration() / 1000);
+		addByte(0); // boolean (is brand new)
 	}
 
 	if (it.isContainer()) {

@@ -1,7 +1,7 @@
 local boolTrue = {"1", "y", "Y", "t", "T"}
 
 function tobool(str)
-	return str and table.contains(boolTrue, str[0])
+	return str and table.contains(boolTrue, str:sub(1, 1))
 end
 
 function XMLNode.children(self)
