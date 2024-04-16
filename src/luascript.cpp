@@ -4079,7 +4079,7 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	if (getScriptEnv()->getScriptInterface() == &g_scripts->getScriptInterface()) {
 		pushBoolean(L, true);
 	} else {
-		reportErrorFunc(L, "EventCallback: can only be called inside (data/scripts/)");
+		reportErrorFunc(L, "Event: can only be called inside (data/scripts/)");
 		pushBoolean(L, false);
 	}
 	return 1;
