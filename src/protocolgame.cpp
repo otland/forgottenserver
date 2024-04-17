@@ -13,6 +13,7 @@
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
+#include "monster.h"
 #include "npc.h"
 #include "outfit.h"
 #include "outputmessage.h"
@@ -2726,6 +2727,21 @@ void ProtocolGame::sendUpdateTile(const Tile* tile, const Position& pos)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendUpdateCreatureIcons(const Creature* creature)
+{
+	if (!canSee(creature->getPosition())) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x8B);
+	msg.add<uint32_t>(creature->getID());
+	msg.addByte(14); // event player icons
+
+	AddCreatureIcons(msg, creature);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendPendingStateEntered()
 {
 	NetworkMessage msg;
@@ -3520,6 +3536,28 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.addByte(0x00); // inspection type (bool?)
 
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
+}
+
+void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const Creature* creature)
+{
+	const auto& creatureIcons = creature->getIcons();
+	if (const Monster* monster = creature->getMonster()) {
+		const auto& monsterIcons = monster->getSpecialIcons();
+		msg.addByte(creatureIcons.size() + monsterIcons.size());
+		for (const auto& [iconId, level] : monsterIcons) {
+			msg.addByte(iconId);
+			msg.addByte(1);
+			msg.add<uint16_t>(level);
+		}
+	} else {
+		msg.addByte(creatureIcons.size());
+	}
+
+	for (const auto& [iconId, level] : creatureIcons) {
+		msg.addByte(iconId);
+		msg.addByte(0);
+		msg.add<uint16_t>(level);
+	}
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage& msg)

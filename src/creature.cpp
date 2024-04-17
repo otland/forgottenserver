@@ -318,6 +318,16 @@ void Creature::stopEventWalk()
 	}
 }
 
+void Creature::updateIcons() const
+{
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, position, true, true);
+	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateCreatureIcons(this);
+	}
+}
+
 void Creature::updateMapCache()
 {
 	Tile* tile;

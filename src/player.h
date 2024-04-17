@@ -575,6 +575,12 @@ public:
 			client->sendUpdateTile(tile, pos);
 		}
 	}
+	void sendUpdateCreatureIcons(const Creature* creature)
+	{
+		if (client) {
+			client->sendUpdateCreatureIcons(creature);
+		}
+	}
 
 	void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel)
 	{
