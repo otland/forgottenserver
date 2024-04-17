@@ -8769,7 +8769,7 @@ int LuaScriptInterface::luaCreatureSetIcon(lua_State* L)
 	}
 
 	auto iconId = getNumber<CreatureIcon_t>(L, 2);
-	if (iconId >= CREATURE_ICON_LAST) {
+	if (iconId > CREATURE_ICON_LAST) {
 		reportErrorFunc(L, "Invalid Creature Icon Id");
 		pushBoolean(L, false);
 		return 1;
@@ -11621,7 +11621,7 @@ int LuaScriptInterface::luaMonsterSetIcon(lua_State* L)
 	}
 
 	auto iconId = getNumber<MonsterIcon_t>(L, 2);
-	if (iconId >= MONSTER_ICON_LAST) {
+	if (iconId > MONSTER_ICON_LAST) {
 		reportErrorFunc(L, "Invalid Monster Icon Id");
 		pushBoolean(L, false);
 		return 1;
