@@ -2135,12 +2135,16 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(CREATURE_ICON_WARNING);
 	registerEnum(CREATURE_ICON_QUESTION);
 	registerEnum(CREATURE_ICON_CROSS_RED);
+	registerEnum(CREATURE_ICON_FIRST);
+	registerEnum(CREATURE_ICON_LAST);
 
 	registerEnum(MONSTER_ICON_VULNERABLE);
 	registerEnum(MONSTER_ICON_WEAKENED);
 	registerEnum(MONSTER_ICON_MELEE);
 	registerEnum(MONSTER_ICON_INFLUENCED);
 	registerEnum(MONSTER_ICON_FIENDISH);
+	registerEnum(MONSTER_ICON_FIRST);
+	registerEnum(MONSTER_ICON_LAST);
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
