@@ -13,7 +13,6 @@
 #include "rsa.h"
 #include "tasks.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
@@ -62,29 +61,29 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	uint8_t size = std::min<size_t>(std::numeric_limits<uint8_t>::max(), account.characters.size());
 
-	if (g_config.getBoolean(ConfigManager::ONLINE_OFFLINE_CHARLIST)) {
+	if (getBoolean(ConfigManager::ONLINE_OFFLINE_CHARLIST)) {
 		output->addByte(2); // number of worlds
 
 		for (uint8_t i = 0; i < 2; i++) {
 			output->addByte(i); // world id
 			output->addString(i == 0 ? "Offline" : "Online");
-			output->addString(g_config.getString(ConfigManager::IP));
-			output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+			output->addString(getString(ConfigManager::IP));
+			output->add<uint16_t>(getNumber(ConfigManager::GAME_PORT));
 			output->addByte(0);
 		}
 	} else {
 		output->addByte(1); // number of worlds
 		output->addByte(0); // world id
-		output->addString(g_config.getString(ConfigManager::SERVER_NAME));
-		output->addString(g_config.getString(ConfigManager::IP));
-		output->add<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT));
+		output->addString(getString(ConfigManager::SERVER_NAME));
+		output->addString(getString(ConfigManager::IP));
+		output->add<uint16_t>(getNumber(ConfigManager::GAME_PORT));
 		output->addByte(0);
 	}
 
 	output->addByte(size);
 	for (uint8_t i = 0; i < size; i++) {
 		const std::string& character = account.characters[i];
-		if (g_config.getBoolean(ConfigManager::ONLINE_OFFLINE_CHARLIST)) {
+		if (getBoolean(ConfigManager::ONLINE_OFFLINE_CHARLIST)) {
 			output->addByte(g_game.getPlayerByName(character) ? 1 : 0);
 		} else {
 			output->addByte(0);
@@ -94,7 +93,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	// Add premium days
 	output->addByte(0);
-	if (g_config.getBoolean(ConfigManager::FREE_PREMIUM)) {
+	if (getBoolean(ConfigManager::FREE_PREMIUM)) {
 		output->addByte(1);
 		output->add<uint32_t>(0);
 	} else {

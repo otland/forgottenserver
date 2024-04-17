@@ -12,7 +12,6 @@
 #include "inbox.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 Account IOLoginData::loadAccount(uint32_t accno)
@@ -106,7 +105,7 @@ std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_v
 	}
 
 	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
@@ -173,7 +172,7 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
-	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (getBoolean(ConfigManager::ALLOW_CLONES)) {
 		return;
 	}
 
