@@ -1049,8 +1049,8 @@ void Creature::updateFollowingCreaturesPath()
 	const Position& thisPosition = getPosition();
 	for (auto follower : followedByCreatures) {
 		const Position& followerPosition = follower->getPosition();
-		if (Position::getDistanceX(thisPosition, followerPosition) >= Map::maxViewportX + 2 ||
-		    Position::getDistanceY(thisPosition, followerPosition) >= Map::maxViewportY + 2) {
+		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX + 2 ||
+		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY + 2) {
 			continue;
 		}
 

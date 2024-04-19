@@ -666,15 +666,15 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 	// Don't update path. The target is too far away.
 	if (fpp.maxSearchDist) {
-		if (Position::getDistanceX(startPos, targetPos) > fpp.maxSearchDist ||
-		    Position::getDistanceY(startPos, targetPos) > fpp.maxSearchDist) {
+		if (startPos.getDistanceX(targetPos) > fpp.maxSearchDist ||
+		    startPos.getDistanceY(targetPos) > fpp.maxSearchDist) {
 			return false;
 		}
 	}
 
 	// Don't update path. Target in not in the viewport.
-	if (Position::getDistanceX(startPos, targetPos) > Map::maxViewportX + 1 ||
-	    Position::getDistanceY(startPos, targetPos) > Map::maxViewportY + 1) {
+	if (startPos.getDistanceX(targetPos) > Map::maxViewportX + 1 ||
+	    startPos.getDistanceY(targetPos) > Map::maxViewportY + 1) {
 		return false;
 	}
 
