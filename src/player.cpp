@@ -1349,11 +1349,11 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 
 	if (tradeState != TRADE_TRANSFER) {
 		// check if we should close trade
-		if (tradeItem && !Position::areInRange<1, 1, 0>(tradeItem->getPosition(), getPosition())) {
+		if (tradeItem && !tradeItem->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 			g_game.internalCloseTrade(this);
 		}
 
-		if (tradePartner && !Position::areInRange<2, 2, 0>(tradePartner->getPosition(), getPosition())) {
+		if (tradePartner && !tradePartner->getPosition().isInRange(getPosition(), 2, 2, 0)) {
 			g_game.internalCloseTrade(this);
 		}
 	}
@@ -3136,7 +3136,7 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 
 			for (const auto& it : openContainers) {
 				Container* container = it.second.container;
-				if (!Position::areInRange<1, 1, 0>(container->getPosition(), getPosition())) {
+				if (!container->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 					containers.push_back(container);
 				}
 			}
@@ -3186,7 +3186,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 		}
 
 		if (const Container* container = item->getContainer()) {
-			if (container->isRemoved() || !Position::areInRange<1, 1, 0>(getPosition(), container->getPosition())) {
+			if (container->isRemoved() || !getPosition().isInRange(container->getPosition(), 1, 1, 0)) {
 				autoCloseContainers(container);
 			} else if (container->getTopParent() == this) {
 				onSendContainer(container);

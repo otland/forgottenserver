@@ -1,6 +1,6 @@
-local ec = EventCallback
+local event = Event()
 
-ec.onLook = function(self, thing, position, distance, description)
+event.onLook = function(self, thing, position, distance, description)
 	local description = "You see " .. thing:getDescription(distance)
 	if self:getGroup():getAccess() then
 		if thing:isItem() then
@@ -54,4 +54,4 @@ ec.onLook = function(self, thing, position, distance, description)
 	return description
 end
 
-ec:register()
+event:register()

@@ -639,7 +639,7 @@ void Game::playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t 
 			return;
 		}
 
-		if (Position::areInRange<1, 1, 0>(movingCreature->getPosition(), player->getPosition())) {
+		if (movingCreature->getPosition().isInRange(player->getPosition(), 1, 1, 0)) {
 			SchedulerTask* task = createSchedulerTask(
 			    MOVE_CREATURE_INTERVAL, [=, this, playerID = player->getID(), creatureID = movingCreature->getID()]() {
 				    playerMoveCreatureByID(playerID, creatureID, fromPos, toPos);
@@ -702,7 +702,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 
 	player->setNextActionTask(nullptr);
 
-	if (!Position::areInRange<1, 1, 0>(movingCreatureOrigPos, player->getPosition())) {
+	if (!movingCreatureOrigPos.isInRange(player->getPosition(), 1, 1, 0)) {
 		// need to walk to the creature first before moving it
 		std::vector<Direction> listDir;
 		if (player->getPathTo(movingCreatureOrigPos, listDir, 0, 1, true, true)) {
@@ -731,14 +731,14 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 	// check throw distance
 	const Position& movingCreaturePos = movingCreature->getPosition();
 	const Position& toPos = toTile->getPosition();
-	if ((Position::getDistanceX(movingCreaturePos, toPos) > movingCreature->getThrowRange()) ||
-	    (Position::getDistanceY(movingCreaturePos, toPos) > movingCreature->getThrowRange()) ||
-	    (Position::getDistanceZ(movingCreaturePos, toPos) * 4 > movingCreature->getThrowRange())) {
+	if ((movingCreaturePos.getDistanceX(toPos) > movingCreature->getThrowRange()) ||
+	    (movingCreaturePos.getDistanceY(toPos) > movingCreature->getThrowRange()) ||
+	    (movingCreaturePos.getDistanceZ(toPos) * 4 > movingCreature->getThrowRange())) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
 
-	if (!Position::areInRange<1, 1, 0>(movingCreaturePos, player->getPosition())) {
+	if (!movingCreaturePos.isInRange(player->getPosition(), 1, 1, 0)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -959,7 +959,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 		return;
 	}
 
-	if (!Position::areInRange<1, 1>(playerPos, mapFromPos)) {
+	if (!playerPos.isInRange(mapFromPos, 1, 1)) {
 		// need to walk to the item first before using it
 		std::vector<Direction> listDir;
 		if (player->getPathTo(item->getPosition(), listDir, 0, 1, true, true)) {
@@ -996,7 +996,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 			}
 		}
 
-		if (!Position::areInRange<1, 1, 0>(playerPos, mapToPos)) {
+		if (!playerPos.isInRange(mapToPos, 1, 1, 0)) {
 			Position walkPos = mapToPos;
 			if (vertical) {
 				walkPos.x++;
@@ -1007,8 +1007,8 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 			Position itemPos = fromPos;
 			uint8_t itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1>(mapFromPos, playerPos) &&
-			    !Position::areInRange<1, 1, 0>(mapFromPos, walkPos)) {
+			if (fromPos.x != 0xFFFF && mapFromPos.isInRange(playerPos, 1, 1) &&
+			    !mapFromPos.isInRange(walkPos, 1, 1, 0)) {
 				// need to pickup the item first
 				Item* moveItem = nullptr;
 
@@ -1047,8 +1047,7 @@ void Game::playerMoveItem(Player* player, const Position& fromPos, uint16_t spri
 	}
 
 	int32_t throwRange = item->getThrowRange();
-	if ((Position::getDistanceX(playerPos, mapToPos) > throwRange) ||
-	    (Position::getDistanceY(playerPos, mapToPos) > throwRange)) {
+	if ((playerPos.getDistanceX(mapToPos) > throwRange) || (playerPos.getDistanceY(mapToPos) > throwRange)) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
@@ -2122,9 +2121,8 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 			Position itemPos = fromPos;
 			uint8_t itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && toPos.x != 0xFFFF &&
-			    Position::areInRange<1, 1, 0>(fromPos, player->getPosition()) &&
-			    !Position::areInRange<1, 1, 0>(fromPos, toPos)) {
+			if (fromPos.x != 0xFFFF && toPos.x != 0xFFFF && fromPos.isInRange(player->getPosition(), 1, 1, 0) &&
+			    !fromPos.isInRange(toPos, 1, 1, 0)) {
 				Item* moveItem = nullptr;
 
 				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(),
@@ -2244,8 +2242,8 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 		return;
 	}
 
-	if (!Position::areInRange<Map::maxClientViewportX - 1, Map::maxClientViewportY - 1, 0>(creature->getPosition(),
-	                                                                                       player->getPosition())) {
+	if (!creature->getPosition().isInRange(player->getPosition(), Map::maxClientViewportX - 1,
+	                                       Map::maxClientViewportY - 1, 0)) {
 		return;
 	}
 
@@ -2284,8 +2282,8 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 			Position itemPos = fromPos;
 			uint8_t itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && Position::areInRange<1, 1, 0>(fromPos, player->getPosition()) &&
-			    !Position::areInRange<1, 1, 0>(fromPos, toPos)) {
+			if (fromPos.x != 0xFFFF && fromPos.isInRange(player->getPosition(), 1, 1, 0) &&
+			    !fromPos.isInRange(toPos, 1, 1, 0)) {
 				Item* moveItem = nullptr;
 				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(),
 				                       &moveItem, 0, player, nullptr, &fromPos, &toPos);
@@ -2416,7 +2414,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		return;
 	}
 
-	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
+	if (pos.x != 0xFFFF && !pos.isInRange(player->getPosition(), 1, 1, 0)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
@@ -2467,7 +2465,7 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string
 		return;
 	}
 
-	if (!Position::areInRange<1, 1, 0>(writeItem->getPosition(), player->getPosition())) {
+	if (!writeItem->getPosition().isInRange(player->getPosition(), 1, 1, 0)) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -2512,7 +2510,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		return;
 	}
 
-	if (!Position::areInRange<1, 1>(playerPos, pos)) {
+	if (!playerPos.isInRange(pos, 1, 1)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
@@ -2618,7 +2616,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		return;
 	}
 
-	if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
+	if (position.x != 0xFFFF && !position.isInRange(player->getPosition(), 1, 1, 0)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(position, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
@@ -2650,7 +2648,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+	if (!tradePartner->getPosition().isInRange(player->getPosition(), 2, 2, 0)) {
 		player->sendCancelMessage(RETURNVALUE_DESTINATIONOUTOFREACH);
 		return;
 	}
@@ -2690,7 +2688,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	if (!Position::areInRange<1, 1>(tradeItemPosition, playerPosition)) {
+	if (!tradeItemPosition.isInRange(playerPosition, 1, 1)) {
 		std::vector<Direction> listDir;
 		if (player->getPathTo(pos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
@@ -2952,8 +2950,8 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 	const Position& playerPosition = player->getPosition();
 	const Position& tradeItemPosition = tradeItem->getPosition();
 
-	int32_t lookDistance = std::max<int32_t>(Position::getDistanceX(playerPosition, tradeItemPosition),
-	                                         Position::getDistanceY(playerPosition, tradeItemPosition));
+	int32_t lookDistance =
+	    std::max(playerPosition.getDistanceX(tradeItemPosition), playerPosition.getDistanceY(tradeItemPosition));
 	if (index == 0) {
 		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
 		return;
@@ -3176,15 +3174,12 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos
 
 	Position playerPos = player->getPosition();
 
-	int32_t lookDistance;
+	int32_t lookDistance = -1;
 	if (thing != player) {
-		lookDistance =
-		    std::max<int32_t>(Position::getDistanceX(playerPos, thingPos), Position::getDistanceY(playerPos, thingPos));
+		lookDistance = std::max(playerPos.getDistanceX(thingPos), thingPos.getDistanceY(playerPos));
 		if (playerPos.z != thingPos.z) {
 			lookDistance += 15;
 		}
-	} else {
-		lookDistance = -1;
 	}
 
 	g_events->eventPlayerOnLook(player, pos, thing, stackPos, lookDistance);
@@ -3211,16 +3206,13 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	int32_t lookDistance;
+	int32_t lookDistance = -1;
 	if (creature != player) {
 		const Position& playerPos = player->getPosition();
-		lookDistance = std::max<int32_t>(Position::getDistanceX(playerPos, creaturePos),
-		                                 Position::getDistanceY(playerPos, creaturePos));
+		lookDistance = std::max(playerPos.getDistanceX(creaturePos), playerPos.getDistanceY(creaturePos));
 		if (playerPos.z != creaturePos.z) {
 			lookDistance += 15;
 		}
-	} else {
-		lookDistance = -1;
 	}
 
 	g_events->eventPlayerOnLookInBattleList(player, creature, lookDistance);
@@ -3412,7 +3404,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 	// player has to walk to podium
 	// gm/god can edit instantly
 	if (!player->isAccessPlayer()) {
-		if (position.x != 0xFFFF && !Position::areInRange<1, 1, 0>(position, player->getPosition())) {
+		if (position.x != 0xFFFF && !position.isInRange(player->getPosition(), 1, 1, 0)) {
 			std::vector<Direction> listDir;
 			if (player->getPathTo(position, listDir, 0, 1, true, true)) {
 				g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
@@ -3628,7 +3620,7 @@ void Game::playerWhisper(Player* player, const std::string& text)
 	// send to client
 	for (Creature* spectator : spectators) {
 		if (Player* spectatorPlayer = spectator->getPlayer()) {
-			if (!Position::areInRange<1, 1>(player->getPosition(), spectatorPlayer->getPosition())) {
+			if (!player->getPosition().isInRange(spectatorPlayer->getPosition(), 1, 1)) {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, "pspsps");
 			} else {
 				spectatorPlayer->sendCreatureSay(player, TALKTYPE_WHISPER, text);

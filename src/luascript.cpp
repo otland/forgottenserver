@@ -2114,6 +2114,38 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(DECAYING_TRUE);
 	registerEnum(DECAYING_PENDING);
 
+	registerEnum(CREATURE_ICON_CROSS_WHITE);
+	registerEnum(CREATURE_ICON_CROSS_WHITE_RED);
+	registerEnum(CREATURE_ICON_ORB_RED);
+	registerEnum(CREATURE_ICON_ORB_GREEN);
+	registerEnum(CREATURE_ICON_ORB_RED_GREEN);
+	registerEnum(CREATURE_ICON_GEM_GREEN);
+	registerEnum(CREATURE_ICON_GEM_YELLOW);
+	registerEnum(CREATURE_ICON_GEM_BLUE);
+	registerEnum(CREATURE_ICON_GEM_PURPLE);
+	registerEnum(CREATURE_ICON_GEM_RED);
+	registerEnum(CREATURE_ICON_PIGEON);
+	registerEnum(CREATURE_ICON_ENERGY);
+	registerEnum(CREATURE_ICON_POISON);
+	registerEnum(CREATURE_ICON_WATER);
+	registerEnum(CREATURE_ICON_FIRE);
+	registerEnum(CREATURE_ICON_ICE);
+	registerEnum(CREATURE_ICON_ARROW_UP);
+	registerEnum(CREATURE_ICON_ARROW_DOWN);
+	registerEnum(CREATURE_ICON_WARNING);
+	registerEnum(CREATURE_ICON_QUESTION);
+	registerEnum(CREATURE_ICON_CROSS_RED);
+	registerEnum(CREATURE_ICON_FIRST);
+	registerEnum(CREATURE_ICON_LAST);
+
+	registerEnum(MONSTER_ICON_VULNERABLE);
+	registerEnum(MONSTER_ICON_WEAKENED);
+	registerEnum(MONSTER_ICON_MELEE);
+	registerEnum(MONSTER_ICON_INFLUENCED);
+	registerEnum(MONSTER_ICON_FIENDISH);
+	registerEnum(MONSTER_ICON_FIRST);
+	registerEnum(MONSTER_ICON_LAST);
+
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
@@ -2581,6 +2613,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Creature", "getZone", LuaScriptInterface::luaCreatureGetZone);
 
+	registerMethod("Creature", "hasIcon", LuaScriptInterface::luaCreatureHasIcon);
+	registerMethod("Creature", "setIcon", LuaScriptInterface::luaCreatureSetIcon);
+	registerMethod("Creature", "getIcon", LuaScriptInterface::luaCreatureGetIcon);
+	registerMethod("Creature", "removeIcon", LuaScriptInterface::luaCreatureRemoveIcon);
+
 	registerMethod("Creature", "getStorageValue", LuaScriptInterface::luaCreatureGetStorageValue);
 	registerMethod("Creature", "setStorageValue", LuaScriptInterface::luaCreatureSetStorageValue);
 
@@ -2815,6 +2852,11 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Monster", "isWalkingToSpawn", LuaScriptInterface::luaMonsterIsWalkingToSpawn);
 	registerMethod("Monster", "walkToSpawn", LuaScriptInterface::luaMonsterWalkToSpawn);
+
+	registerMethod("Monster", "hasSpecialIcon", LuaScriptInterface::luaMonsterHasIcon);
+	registerMethod("Monster", "setSpecialIcon", LuaScriptInterface::luaMonsterSetIcon);
+	registerMethod("Monster", "getSpecialIcon", LuaScriptInterface::luaMonsterGetIcon);
+	registerMethod("Monster", "removeSpecialIcon", LuaScriptInterface::luaMonsterRemoveIcon);
 
 	// Npc
 	registerClass("Npc", "Creature", LuaScriptInterface::luaNpcCreate);
@@ -4079,7 +4121,7 @@ int LuaScriptInterface::luaIsScriptsInterface(lua_State* L)
 	if (getScriptEnv()->getScriptInterface() == &g_scripts->getScriptInterface()) {
 		pushBoolean(L, true);
 	} else {
-		reportErrorFunc(L, "EventCallback: can only be called inside (data/scripts/)");
+		reportErrorFunc(L, "Event: can only be called inside (data/scripts/)");
 		pushBoolean(L, false);
 	}
 	return 1;
@@ -8704,6 +8746,84 @@ int LuaScriptInterface::luaCreatureGetZone(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureHasIcon(lua_State* L)
+{
+	// creature:hasIcon(iconId)
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (creature) {
+		auto iconId = getNumber<CreatureIcon_t>(L, 2);
+		pushBoolean(L, creature->getIcons().contains(iconId));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureSetIcon(lua_State* L)
+{
+	// creature:setIcon(iconId, value)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<CreatureIcon_t>(L, 2);
+	if (iconId > CREATURE_ICON_LAST) {
+		reportErrorFunc(L, "Invalid Creature Icon Id");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	creature->getIcons()[iconId] = getNumber<uint16_t>(L, 3);
+	creature->updateIcons();
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetIcon(lua_State* L)
+{
+	// creature:getIcon(iconId)
+	const Creature* creature = getUserdata<const Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<CreatureIcon_t>(L, 2);
+	const auto& icons = creature->getIcons();
+	auto it = icons.find(iconId);
+	if (it != icons.end()) {
+		lua_pushinteger(L, it->second);
+	} else {
+		lua_pushinteger(L, 0);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureRemoveIcon(lua_State* L)
+{
+	// creature:removeIcon(iconId)
+	Creature* creature = getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<CreatureIcon_t>(L, 2);
+	auto& icons = creature->getIcons();
+	auto it = icons.find(iconId);
+	if (it != icons.end()) {
+		icons.erase(it);
+		creature->updateIcons();
+		pushBoolean(L, true);
+	} else {
+		pushBoolean(L, false);
+	}
+
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureGetStorageValue(lua_State* L)
 {
 	// creature:getStorageValue(key)
@@ -11478,6 +11598,83 @@ int LuaScriptInterface::luaMonsterWalkToSpawn(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaMonsterHasIcon(lua_State* L)
+{
+	// monster:hasSpecialIcon(iconId)
+	const Monster* monster = getUserdata<const Monster>(L, 1);
+	if (monster) {
+		auto iconId = getNumber<MonsterIcon_t>(L, 2);
+		pushBoolean(L, monster->getSpecialIcons().contains(iconId));
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterSetIcon(lua_State* L)
+{
+	// monster:setSpecialIcon(iconId, value)
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (!monster) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<MonsterIcon_t>(L, 2);
+	if (iconId > MONSTER_ICON_LAST) {
+		reportErrorFunc(L, "Invalid Monster Icon Id");
+		pushBoolean(L, false);
+		return 1;
+	}
+
+	monster->getSpecialIcons()[iconId] = getNumber<uint16_t>(L, 3);
+	monster->updateIcons();
+	pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterGetIcon(lua_State* L)
+{
+	// monster:getSpecialIcon(iconId)
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (!monster) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<MonsterIcon_t>(L, 2);
+	const auto& icons = monster->getSpecialIcons();
+	auto it = icons.find(iconId);
+	if (it != icons.end()) {
+		lua_pushinteger(L, it->second);
+	} else {
+		lua_pushinteger(L, 0);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaMonsterRemoveIcon(lua_State* L)
+{
+	// monster:removeSpecialIcon(iconId)
+	Monster* monster = getUserdata<Monster>(L, 1);
+	if (!monster) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	auto iconId = getNumber<MonsterIcon_t>(L, 2);
+	auto& icons = monster->getSpecialIcons();
+	auto it = icons.find(iconId);
+	if (it != icons.end()) {
+		icons.erase(it);
+		monster->updateIcons();
+		pushBoolean(L, true);
+	} else {
+		pushBoolean(L, false);
+	}
+	return 1;
+}
+
 // Npc
 int LuaScriptInterface::luaNpcCreate(lua_State* L)
 {
@@ -12387,7 +12584,7 @@ int LuaScriptInterface::luaHouseStartTrade(lua_State* L)
 		return 1;
 	}
 
-	if (!Position::areInRange<2, 2, 0>(tradePartner->getPosition(), player->getPosition())) {
+	if (!tradePartner->getPosition().isInRange(player->getPosition(), 2, 2, 0)) {
 		lua_pushnumber(L, RETURNVALUE_TRADEPLAYERFARAWAY);
 		return 1;
 	}

@@ -14,6 +14,7 @@ class Tile;
 
 using CreatureHashSet = std::unordered_set<Creature*>;
 using CreatureList = std::list<Creature*>;
+using MonsterIconHashMap = std::unordered_map<MonsterIcon_t, uint16_t>;
 
 enum TargetSearchType_t
 {
@@ -128,11 +129,16 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	// monster icons
+	MonsterIconHashMap& getSpecialIcons() { return monsterIcons; }
+	const MonsterIconHashMap& getSpecialIcons() const { return monsterIcons; }
+
 	static uint32_t monsterAutoID;
 
 private:
 	CreatureHashSet friendList;
 	CreatureList targetList;
+	MonsterIconHashMap monsterIcons;
 
 	std::string name;
 	std::string nameDescription;

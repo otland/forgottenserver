@@ -20,6 +20,7 @@ class Player;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
+using CreatureIconHashMap = std::unordered_map<CreatureIcon_t, uint16_t>;
 
 enum slots_t : uint8_t
 {
@@ -168,6 +169,11 @@ public:
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
 	bool isInvisible() const;
 	ZoneType_t getZone() const { return getTile()->getZone(); }
+
+	// creature icons
+	CreatureIconHashMap& getIcons() { return creatureIcons; }
+	const CreatureIconHashMap& getIcons() const { return creatureIcons; }
+	void updateIcons() const;
 
 	// walk functions
 	void startAutoWalk();
@@ -378,6 +384,7 @@ protected:
 	std::list<Creature*> summons;
 	CreatureEventList eventsList;
 	ConditionList conditions;
+	CreatureIconHashMap creatureIcons;
 
 	std::vector<Direction> listWalkDir;
 
