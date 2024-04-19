@@ -1143,6 +1143,14 @@ void Tile::removeThing(Thing* thing, uint32_t count)
 	}
 }
 
+bool Tile::hasCreature(Creature* creature) const
+{
+	if (const CreatureVector* creatures = getCreatures()) {
+		return std::find(creatures->begin(), creatures->end(), creature) != creatures->end();
+	}
+	return false;
+}
+
 void Tile::removeCreature(Creature* creature)
 {
 	g_game.map.getQTNode(tilePos.x, tilePos.y)->removeCreature(creature);

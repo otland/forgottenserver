@@ -33,7 +33,7 @@ local function useStamina(player)
 	player:setStamina(staminaMinutes)
 end
 
-local default = EventCallback
+local default = Event()
 
 function default.onGainExperience(player, source, exp, rawExp, sendText)
 	if not source or source:isPlayer() then
@@ -74,7 +74,7 @@ default:register()
 -- For this event, we use the trigger index math.huge so that this event is called last, thus ensuring that the
 -- experience message is sent to the client with the correct value.
 
-local message = EventCallback
+local message = Event()
 
 function message.onGainExperience(player, source, exp, rawExp, sendText)
 	if sendText and exp ~= 0 then

@@ -7,9 +7,9 @@ local function hasPendingReport(name, targetName, reportType)
 	return false
 end
 
-local ec = EventCallback
+local event = Event()
 
-ec.onReportRuleViolation = function(self, targetName, reportType, reportReason, comment, translation)
+event.onReportRuleViolation = function(self, targetName, reportType, reportReason, comment, translation)
 	local name = self:getName()
 	if hasPendingReport(name, targetName, reportType) then
 		self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Your report is being processed.")
@@ -37,4 +37,4 @@ ec.onReportRuleViolation = function(self, targetName, reportType, reportReason, 
 	self:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("Thank you for reporting %s. Your report will be processed by %s team as soon as possible.", targetName, configManager.getString(configKeys.SERVER_NAME)))
 end
 
-ec:register()
+event:register()
