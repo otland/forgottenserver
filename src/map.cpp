@@ -849,7 +849,7 @@ double AStarNodes::calculateHeuristic(const Position& p1, const Position& p2)
 	uint16_t dx = std::abs(p1.x - p2.x);
 	uint16_t dy = std::abs(p1.y - p2.y);
 
-	return std::hypot(dx, dy);
+	return std::sqrtf(dx*dx + dy*dy);
 }
 
 void AStarNodes::clear()
