@@ -940,7 +940,12 @@ bool Creature::setAttackedCreature(Creature* creature)
 		creature->addFollowedByCreature(this);
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+
+		FindPathParams fpp;
+		getPathSearchParams(attackedCreature, fpp);
+		if (getPathTo(creaturePos, listWalkDir, fpp)) {
+			startAutoWalk();
+		}
 	} else {
 		attackedCreature = nullptr;
 	}
@@ -1027,8 +1032,15 @@ bool Creature::setFollowCreature(Creature* creature)
 
 		followCreature = creature;
 		creature->addFollowedByCreature(this);
-		hasFollowPath = false;
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+
+		FindPathParams fpp;
+		getPathSearchParams(followCreature, fpp);
+		if (getPathTo(creaturePos, listWalkDir, fpp)) {
+			hasFollowPath = true;
+			startAutoWalk();
+		} else {
+			hasFollowPath = false;
+		}
 	} else {
 		followCreature = nullptr;
 	}

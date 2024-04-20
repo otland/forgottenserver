@@ -764,16 +764,16 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	int32_t prevx = endPos.getX();
-	int32_t prevy = endPos.getY();
+	int_fast32_t prevx = endPos.getX();
+	int_fast32_t prevy = endPos.getY();
 
 	found = found->parent;
 	while (found) {
 		pos.x = found->x;
 		pos.y = found->y;
 
-		int32_t dx = pos.getX() - prevx;
-		int32_t dy = pos.getY() - prevy;
+		int_fast32_t dx = pos.getX() - prevx;
+		int_fast32_t dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;
