@@ -34,7 +34,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <math.h>
 #include <mysql/mysql.h>
 #include <optional>
 #include <pugixml.hpp>
