@@ -10,6 +10,7 @@
 #include "game.h"
 #include "housetile.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "pugicast.h"
 
@@ -230,9 +231,24 @@ bool House::transferToDepot(Player* player) const
 		}
 	}
 
-	for (Item* item : moveItemList) {
-		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                        nullptr, FLAG_NOLIMIT);
+	if (Inbox* inbox = player->getInbox()) {
+		for (Item* item : moveItemList) {
+			g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item, item->getItemCount(), nullptr,
+			                        FLAG_NOLIMIT);
+		}
+	} else {
+		ItemBlockList itemList;
+		for (Item* item : moveItemList) {
+			Item* cloneItem = item->clone();
+
+			ReturnValue ret = g_game.internalRemoveItem(item);
+			if (ret == RETURNVALUE_NOERROR) {
+				itemList.emplace_back(0, cloneItem);
+			} else {
+				delete cloneItem;
+			}
+		}
+		IOInbox::getInstance().savePlayerItems(player, itemList);
 	}
 	return true;
 }
@@ -695,7 +711,13 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				letter->setText(fmt::format(
 				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
 				    period, house->getRent(), house->getName(), daysLeft));
-				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				if (!player.getInbox()) {
+					ItemBlockList itemList;
+					itemList.emplace_back(0, letter);
+					IOInbox::getInstance().savePlayerItems(player.getGUID(), itemList);
+				} else {
+					g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				}
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {
 				house->setOwner(0, true, &player);

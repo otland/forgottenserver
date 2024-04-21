@@ -32,8 +32,8 @@ bool Map::loadMap(const std::string& identifier, bool loadHouses)
 			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 		}
 
-		IOMapSerialize::loadHouseInfo();
-		IOMapSerialize::loadHouseItems(this);
+		IOMapSerialize::loadHousesInfo();
+		IOMapSerialize::loadHousesItems(this);
 	}
 	return true;
 }
@@ -42,7 +42,7 @@ bool Map::save()
 {
 	bool saved = false;
 	for (uint32_t tries = 0; tries < 3; tries++) {
-		if (IOMapSerialize::saveHouseInfo()) {
+		if (IOMapSerialize::saveHousesInfo()) {
 			saved = true;
 			break;
 		}
@@ -54,7 +54,7 @@ bool Map::save()
 
 	saved = false;
 	for (uint32_t tries = 0; tries < 3; tries++) {
-		if (IOMapSerialize::saveHouseItems()) {
+		if (IOMapSerialize::saveHousesItems()) {
 			saved = true;
 			break;
 		}

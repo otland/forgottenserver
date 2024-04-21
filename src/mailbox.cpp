@@ -7,6 +7,7 @@
 
 #include "game.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
@@ -80,25 +81,43 @@ bool Mailbox::sendItem(Item* item) const
 		return false;
 	}
 
-	Player* player = g_game.getPlayerByName(receiver);
-	if (player) {
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
-			g_game.transformItem(item, item->getID() + 1);
-			player->onReceiveMail();
-			return true;
-		}
-	} else {
-		Player tmpPlayer(nullptr);
-		if (!IOLoginData::loadPlayerByName(&tmpPlayer, receiver)) {
-			return false;
-		}
+	if (Player* player = g_game.getPlayerByName(receiver)) {
+		if (Inbox* inbox = player->getInbox()) {
+			ReturnValue ret = g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item,
+			                                          item->getItemCount(), nullptr, FLAG_NOLIMIT);
+			if (ret == RETURNVALUE_NOERROR) {
+				g_game.transformItem(item, item->getID() + 1);
+				player->onReceiveMail();
+				return true;
+			}
+		} else {
+			Item* cloneItem = item->clone();
 
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox(), INDEX_WHEREEVER, item,
-		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
-			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(&tmpPlayer);
+			ReturnValue ret = g_game.internalRemoveItem(item);
+			if (ret == RETURNVALUE_NOERROR) {
+				cloneItem->setID(cloneItem->getID() + 1);
+
+				ItemBlockList itemList;
+				itemList.emplace_back(0, cloneItem);
+				IOInbox::getInstance().savePlayerItems(player, itemList);
+				return true;
+			} else {
+				delete cloneItem;
+			}
+		}
+	} else if (const uint32_t guid = IOLoginData::getGuidByName(receiver)) {
+		Item* cloneItem = item->clone();
+
+		ReturnValue ret = g_game.internalRemoveItem(item);
+		if (ret == RETURNVALUE_NOERROR) {
+			cloneItem->setID(cloneItem->getID() + 1);
+
+			ItemBlockList itemList;
+			itemList.emplace_back(0, cloneItem);
+			IOInbox::getInstance().savePlayerItems(guid, itemList);
 			return true;
+		} else {
+			delete cloneItem;
 		}
 	}
 	return false;

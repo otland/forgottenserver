@@ -16,6 +16,7 @@
 #include "globalevent.h"
 #include "housetile.h"
 #include "inbox.h"
+#include "ioinbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
@@ -120,10 +121,13 @@ void Game::setGameState(GameState_t newState)
 
 			saveGameState();
 
+			g_asyncTasks.addTask([]() { IOInbox::getInstance().flush(); });
+
 			g_dispatcher.addTask([this]() { shutdown(); });
 
 			g_scheduler.stop();
 			g_databaseTasks.stop();
+			g_asyncTasks.stop();
 			g_dispatcher.stop();
 			break;
 		}
@@ -5322,34 +5326,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			return;
 		}
 
-		if (it.stackable) {
-			uint16_t tmpAmount = offer.amount;
-			while (tmpAmount > 0) {
-				int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-
-				tmpAmount -= stackCount;
-			}
-		} else {
-			int32_t subType;
-			if (it.charges != 0) {
-				subType = it.charges;
-			} else {
-				subType = -1;
-			}
-
-			for (uint16_t i = 0; i < offer.amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-			}
-		}
+		player->sendItemInbox(it, offer.amount);
 	}
 
 	IOMarket::moveOfferToHistory(offer.id, OFFERSTATE_CANCELLED);
@@ -5430,36 +5407,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		player->bankBalance += totalPrice;
 
-		if (it.stackable) {
-			uint16_t tmpAmount = amount;
-			while (tmpAmount > 0) {
-				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-				    RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-
-				tmpAmount -= stackCount;
-			}
-		} else {
-			int32_t subType;
-			if (it.charges != 0) {
-				subType = it.charges;
-			} else {
-				subType = -1;
-			}
-
-			for (uint16_t i = 0; i < amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
-				    RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-			}
-		}
+		buyerPlayer->sendItemInbox(it, amount);
 
 		if (buyerPlayer->isOffline()) {
 			IOLoginData::savePlayer(buyerPlayer);
@@ -5477,34 +5425,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 
-		if (it.stackable) {
-			uint16_t tmpAmount = amount;
-			while (tmpAmount > 0) {
-				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
-				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-
-				tmpAmount -= stackCount;
-			}
-		} else {
-			int32_t subType;
-			if (it.charges != 0) {
-				subType = it.charges;
-			} else {
-				subType = -1;
-			}
-
-			for (uint16_t i = 0; i < amount; ++i) {
-				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
-					delete item;
-					break;
-				}
-			}
-		}
+		player->sendItemInbox(it, amount);
 
 		Player* sellerPlayer = getPlayerByGUID(offer.playerId);
 		if (sellerPlayer) {
@@ -5563,7 +5484,10 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player)
 {
 	uint16_t count = 0;
-	std::list<Container*> containers{player.getInbox()};
+	std::list<Container*> containers;
+	if (Inbox* inbox = player.getInbox()) {
+		containers.push_front(inbox);
+	}
 
 	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {
