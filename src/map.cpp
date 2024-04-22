@@ -664,6 +664,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	Position endPos;
 	const Position startPos = pos;
 
+	// We can't walk, no need to create path.
+	if (creature.getSpeed() <= 0) {
+		return false;
+	}
+
 	// Don't update path. The target is too far away.
 	if (fpp.maxSearchDist) {
 		if (startPos.getDistanceX(targetPos) > fpp.maxSearchDist ||

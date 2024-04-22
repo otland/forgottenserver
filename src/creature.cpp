@@ -940,12 +940,6 @@ bool Creature::setAttackedCreature(Creature* creature)
 		creature->addFollowedByCreature(this);
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
-
-		FindPathParams fpp;
-		getPathSearchParams(attackedCreature, fpp);
-		if (getPathTo(creaturePos, listWalkDir, fpp)) {
-			startAutoWalk();
-		}
 	} else {
 		attackedCreature = nullptr;
 	}
@@ -1032,15 +1026,7 @@ bool Creature::setFollowCreature(Creature* creature)
 
 		followCreature = creature;
 		creature->addFollowedByCreature(this);
-
-		FindPathParams fpp;
-		getPathSearchParams(followCreature, fpp);
-		if (getPathTo(creaturePos, listWalkDir, fpp)) {
-			hasFollowPath = true;
-			startAutoWalk();
-		} else {
-			hasFollowPath = false;
-		}
+		hasFollowPath = false;
 	} else {
 		followCreature = nullptr;
 	}
