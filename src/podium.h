@@ -9,7 +9,7 @@
 class Podium final : public Item
 {
 public:
-	explicit Podium(uint16_t type) : Item(type) {};
+	explicit Podium(uint16_t type) : Item(type){};
 
 	Podium* getPodium() override { return this; }
 	const Podium* getPodium() const override { return this; }
