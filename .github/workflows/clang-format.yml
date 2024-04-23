@@ -18,6 +18,10 @@ on:
 jobs:
   check-format:
     runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu:rolling
+
     steps:
       - uses: actions/checkout@v3
 
