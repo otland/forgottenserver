@@ -8,12 +8,16 @@ on:
 
     paths:
       - .clang-format
+      - .github/workflows/clang-format.yml
       - src/**
 
   pull_request:
     paths:
       - .clang-format
+      - .github/workflows/clang-format.yml
       - src/**
+
+  workflow_dispatch:
 
 jobs:
   check-format:
