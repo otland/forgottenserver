@@ -20,7 +20,8 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	Account account;
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
+	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at`, `loyalty_points` FROM `accounts` WHERE `id` = {:d}",
+	    accno));
 	if (!result) {
 		return account;
 	}
@@ -29,7 +30,14 @@ Account IOLoginData::loadAccount(uint32_t accno)
 	account.name = result->getString("name");
 	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
 	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
+	account.loyaltyPoints = result->getNumber<uint16_t>("loyalty_points");
 	return account;
+}
+
+void IOLoginData::updateLoyalty(uint32_t accountId, uint16_t points)
+{
+	Database::getInstance().executeQuery(
+	    fmt::format("UPDATE `accounts` SET `loyalty_points` = {:d} WHERE `id` = {:d}", points, accountId));
 }
 
 std::string decodeSecret(std::string_view secret)
@@ -270,6 +278,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	player->premiumEndsAt = acc.premiumEndsAt;
 
+	player->loyaltyPoints = acc.loyaltyPoints;
+	player->loyaltyBonus = g_config.getLoyaltyBonus(acc.loyaltyPoints);
+
 	Group* group = g_game.groups.getGroup(result->getNumber<uint16_t>("group_id"));
 	if (!group) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Group ID "
@@ -336,6 +347,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	player->manaSpent = manaSpent;
 	player->magLevelPercent = Player::getBasisPointLevel(player->manaSpent, nextManaCount);
+	player->accumulatedManaSpent = player->vocation->getAccumulatedReqMana(player->magLevel) + manaSpent;
+	player->setLoyaltyBonusMagicLevel();
 
 	player->health = result->getNumber<int32_t>("health");
 	player->healthMax = result->getNumber<int32_t>("healthmax");
@@ -413,7 +426,9 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		player->skills[i].level = skillLevel;
 		player->skills[i].tries = skillTries;
+		player->skills[i].accumulatedTries = player->vocation->getAccumulatedReqSkillTries(i, skillLevel) + skillTries;
 		player->skills[i].percent = Player::getBasisPointLevel(skillTries, nextSkillTries);
+		player->setLoyaltyBonusSkill(i);
 	}
 
 	if ((result = db.storeQuery(
@@ -998,6 +1013,8 @@ bool IOLoginData::savePlayer(Player* player)
 	if (!mountQuery.execute()) {
 		return false;
 	}
+
+	updateLoyalty(player->accountNumber, player->loyaltyPoints);
 
 	// End the transaction
 	return transaction.commit();

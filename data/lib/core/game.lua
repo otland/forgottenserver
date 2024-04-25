@@ -302,3 +302,36 @@ do
 		return transaction:commit()
 	end
 end
+
+do
+	LOYALTY_TITLES = {
+		{ points = 7000, article = "an ", title = "Enlightened" },
+		{ points = 6000, title = "Savant" },
+		{ points = 5000, title = "Sage" },
+		{ points = 4000, title = "Guardian" },
+		{ points = 3000, title = "Keeper" },
+		{ points = 2000, title = "Warrior" },
+		{ points = 1000, title = "Squire" },
+		{ points =  400, title = "Warden" },
+		{ points =  200, title = "Steward" },
+		{ points =  100, title = "Sentinel" },
+		{ points =   50, title = "Scout" }
+	}
+	
+	function Game.getLoyaltyTitle(points, article)
+		article = article or false
+		for i = 1, #LOYALTY_TITLES do
+			if points >= LOYALTY_TITLES[i].points then
+				local s = ""
+				if article then
+					if not LOYALTY_TITLES[i].article then
+						LOYALTY_TITLES[i].article = "a "
+					end
+					s = LOYALTY_TITLES[i].article
+				end
+				return s .. LOYALTY_TITLES[i].title
+			end
+		end
+		return ""
+	end
+end

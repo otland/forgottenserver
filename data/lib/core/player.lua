@@ -614,16 +614,16 @@ function Player.sendHighscores(self, entries, params)
 	for _, entry in pairs(entries.data) do
 		msg:addU32(entry.rank)
 		msg:addString(entry.name)
-		msg:addString(entry.title)
+		msg:addString(params.category == HIGHSCORES_CATEGORY_LOYALTY and (Game.getLoyaltyTitle(entry.points) .. " of " .. entry.world) or "")
 		msg:addByte(entry.vocation)
 		msg:addString(entry.world)
 		msg:addU16(entry.level)
-		msg:addByte(self:getGuid() == entry.id and 0x01 or 0x00)
+		msg:addByte(entry.id == (params.category == HIGHSCORES_CATEGORY_LOYALTY and self:getAccountId() or self:getGuid()) and 0x01 or 0x00)
 		msg:addU64(entry.points)
 	end
 
 	msg:addByte(0xFF) -- unknown
-	msg:addByte(0x00) -- display loyalty title column
+	msg:addByte(params.category == HIGHSCORES_CATEGORY_LOYALTY and 0x01 or 0x00)
 	msg:addByte(HIGHSCORES_CATEGORIES[params.category].type or 0x00)
 
 	msg:addU32(entries.ts)
@@ -736,4 +736,25 @@ function Player.disableLoginMusic(self)
 	msg:sendToPlayer(self)
 	msg:delete()
 	return true
+end
+
+function Player.addLoyaltyPoints(self, points)
+	self:setLoyaltyPoints(self:getLoyaltyPoints() + points)
+	return true
+end
+
+function Player.removeLoyaltyPoints(self, points)
+	return self:addLoyaltyPoints(-points)
+end
+
+function Player.getLoyaltyTitle(self, article)
+	return Game.getLoyaltyTitle(self:getLoyaltyPoints(), article or false)
+end
+
+function Player.getLoyaltyTitleDescription(self, distance)
+	local pronoun = (self:getSex() == PLAYERSEX_MALE and "He" or "She") .. " is "
+	if distance == -1 then
+		pronoun = "You are "
+	end	
+	return pronoun .. string.format("%s of %s.", self:getLoyaltyTitle(true), configManager.getString(configKeys.SERVER_NAME))
 end

@@ -2,6 +2,14 @@ local event = Event()
 
 event.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
+
+	if creature:isPlayer() then
+		local loyaltyDescription = creature:getLoyaltyTitleDescription(distance)
+		if loyaltyDescription ~= "" then
+			description = description .. "\n" .. loyaltyDescription
+		end
+	end
+
 	if self:getGroup():getAccess() then
 		local str = "%s\nHealth: %d / %d"
 		if creature:isPlayer() and creature:getMaxMana() > 0 then

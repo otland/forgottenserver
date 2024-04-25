@@ -2816,6 +2816,14 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "setClientLowLevelBonusDisplay",
 	               LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay);
 
+	registerMethod("Player", "getLoyaltyMagicLevel", LuaScriptInterface::luaPlayerGetLoyaltyMagicLevel);
+	registerMethod("Player", "getLoyaltyMagicLevelPercent", LuaScriptInterface::luaPlayerGetLoyaltyMagicLevelPercent);
+	registerMethod("Player", "getLoyaltySkillLevel", LuaScriptInterface::luaPlayerGetLoyaltySkillLevel);
+	registerMethod("Player", "getLoyaltySkillPercent", LuaScriptInterface::luaPlayerGetLoyaltySkillPercent);
+	registerMethod("Player", "getLoyaltyPoints", LuaScriptInterface::luaPlayerGetLoyaltyPoints);
+	registerMethod("Player", "setLoyaltyPoints", LuaScriptInterface::luaPlayerSetLoyaltyPoints);
+	registerMethod("Player", "getLoyaltyBonus", LuaScriptInterface::luaPlayerGetLoyaltyBonus);
+
 	// Monster
 	registerClass("Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod("Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -11199,6 +11207,93 @@ int LuaScriptInterface::luaPlayerSetClientLowLevelBonusDisplay(lua_State* L)
 		player->setClientLowLevelBonusDisplay(getNumber<uint16_t>(L, 2));
 		player->sendStats();
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltyMagicLevel(lua_State* L)
+{
+	// player:getLoyaltyMagicLevel()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->loyaltyMagLevel);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltyMagicLevelPercent(lua_State* L)
+{
+	// player:getLoyaltyMagicLevelPercent()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->loyaltyMagLevelPercent);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltySkillLevel(lua_State* L)
+{
+	// player:getLoyaltySkillLevel(skillType)
+	skills_t skillType = getNumber<skills_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player && skillType <= SKILL_LAST) {
+		lua_pushnumber(L, player->loyaltySkills[skillType].level);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltySkillPercent(lua_State* L)
+{
+	// player:getLoyaltySkillPercent(skillType)
+	skills_t skillType = getNumber<skills_t>(L, 2);
+	Player* player = getUserdata<Player>(L, 1);
+	if (player && skillType <= SKILL_LAST) {
+		lua_pushnumber(L, player->loyaltySkills[skillType].percent);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltyPoints(lua_State* L)
+{
+	// player:getLoyaltyPoints()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLoyaltyPoints());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSetLoyaltyPoints(lua_State* L)
+{
+	// player:setLoyaltyPoints(points)
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		player->setLoyaltyPoints(getNumber<uint16_t>(L, 2));
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetLoyaltyBonus(lua_State* L)
+{
+	// player:getLoyaltyBonus()
+	Player* player = getUserdata<Player>(L, 1);
+	if (player) {
+		lua_pushnumber(L, player->getLoyaltyBonus());
 	} else {
 		lua_pushnil(L);
 	}
