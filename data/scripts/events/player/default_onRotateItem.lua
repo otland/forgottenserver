@@ -1,4 +1,4 @@
-local ec = EventCallback
+local ec = Event()
 
 ec.onRotateItem = function(self, item)
 	local newId = item:getType():getRotateTo()

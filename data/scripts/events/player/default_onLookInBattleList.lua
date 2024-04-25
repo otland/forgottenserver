@@ -1,6 +1,6 @@
-local ec = EventCallback
+local event = Event()
 
-ec.onLookInBattleList = function(self, creature, distance)
+event.onLookInBattleList = function(self, creature, distance)
 	local description = "You see " .. creature:getDescription(distance)
 
 	if creature:isPlayer() then
@@ -31,4 +31,4 @@ ec.onLookInBattleList = function(self, creature, distance)
 	return description
 end
 
-ec:register()
+event:register()
