@@ -9,7 +9,7 @@
 class Teleport final : public Item, public Cylinder
 {
 public:
-	explicit Teleport(uint16_t type) : Item(type){};
+	explicit Teleport(uint16_t type) : Item(type) {};
 
 	Teleport* getTeleport() override { return this; }
 	const Teleport* getTeleport() const override { return this; }
