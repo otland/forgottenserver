@@ -35,6 +35,12 @@ replaceKickOnLogin = true
 maxPacketsPerSecond = 25
 enableTwoFactorAuth = true
 
+-- Pathfinding
+-- NOTE: pathfindingInterval how often paths are force drawn
+-- NOTE: pathfindingDelay delay recently force drawn paths from drawing again
+pathfindingInterval = 100
+pathfindingDelay = 200
+
 -- Deaths
 -- NOTE: Leave deathLosePercent as -1 if you want to use the default
 -- death penalty formula. For the old formula, set it to 10. For
