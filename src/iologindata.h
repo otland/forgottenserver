@@ -20,10 +20,6 @@ public:
 	static Account loadAccount(uint32_t accno);
 
 	static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
-	static std::pair<uint32_t, uint32_t> gameworldAuthentication(std::string_view accountName,
-	                                                             std::string_view password,
-	                                                             std::string_view characterName, std::string_view token,
-	                                                             uint32_t tokenTime);
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 

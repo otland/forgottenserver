@@ -388,9 +388,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // Gamemaster flag
 
-	// acc name or email, password, token, timestamp divided by 30
-	auto sessionArgs = explodeString(msg.getString(), "\n", 4);
-	if (sessionArgs.size() < 2) {
+	auto sessionToken = msg.getString();
+	if (sessionToken.empty()) {
 		disconnectClient("Malformed session key.");
 		return;
 	}
@@ -398,38 +397,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		msg.getString(); // OS name (?)
 		msg.getString(); // OS version (?)
-	}
-
-	auto accountName = sessionArgs[0];
-	auto password = sessionArgs[1];
-	if (accountName.empty()) {
-		disconnectClient("You must enter your account name.");
-		return;
-	}
-
-	std::string_view token;
-	uint32_t tokenTime = 0;
-
-	// two-factor auth
-	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
-		if (sessionArgs.size() < 4) {
-			disconnectClient("Authentication failed. Incomplete session key.");
-			return;
-		}
-
-		token = sessionArgs[2];
-
-		try {
-			tokenTime = std::stoul(sessionArgs[3].data());
-		} catch (const std::invalid_argument&) {
-			disconnectClient("Malformed token packet.");
-			return;
-		} catch (const std::out_of_range&) {
-			disconnectClient("Token time is too long.");
-			return;
-		}
-	} else {
-		tokenTime = std::floor(challengeTimestamp / 30);
 	}
 
 	auto characterName = msg.getString();
@@ -450,21 +417,37 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
+	auto ip = getIP();
+	if (const auto& banInfo = IOBan::getIpBanInfo(ip)) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
 	}
 
-	// TODO: use structured binding when C++20 is adopted
-	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (authIds.first == 0) {
+	Database& db = Database::getInstance();
+	auto result = db.storeQuery(fmt::format(
+	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`session_token` = FROM_BASE64({:s}) AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    db.escapeString(sessionToken), db.escapeString(characterName)));
+	if (!result) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask(
-	    [=, thisPtr = getThis()]() { thisPtr->login(authIds.second, authIds.first, operatingSystem); });
+	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+	if (accountId == 0) {
+		disconnectClient("Account name or password is not correct.");
+		return;
+	}
+
+	if (ip != boost::asio::ip::make_address(result->getString("session_ip"))) {
+		// TODO: get the correct message
+		disconnectClient("Session key is not valid.");
+		return;
+	}
+
+	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = result->getNumber<uint32_t>("character_id")]() {
+		thisPtr->login(characterId, accountId, operatingSystem);
+	});
 }
 
 void ProtocolGame::onConnect()
