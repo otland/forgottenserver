@@ -91,46 +91,6 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	return true;
 }
 
-std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_view accountName,
-                                                                   std::string_view password,
-                                                                   std::string_view characterName,
-                                                                   std::string_view token, uint32_t tokenTime)
-{
-	Database& db = Database::getInstance();
-	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, UNHEX(`a`.`password`) AS `password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(accountName), db.escapeString(accountName), db.escapeString(characterName)));
-	if (!result) {
-		return {};
-	}
-
-	// two-factor auth
-	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
-		std::string secret = decodeSecret(result->getString("secret"));
-		if (!secret.empty()) {
-			if (token.empty()) {
-				return {};
-			}
-
-			bool tokenValid = token == generateToken(secret, tokenTime) ||
-			                  token == generateToken(secret, tokenTime - 1) ||
-			                  token == generateToken(secret, tokenTime + 1);
-			if (!tokenValid) {
-				return {};
-			}
-		}
-	}
-
-	if (transformToSHA1(password) != result->getString("password")) {
-		return {};
-	}
-
-	uint32_t accountId = result->getNumber<uint32_t>("account_id");
-	uint32_t characterId = result->getNumber<uint32_t>("character_id");
-
-	return std::make_pair(accountId, characterId);
-}
-
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 {
 	Database& db = Database::getInstance();
