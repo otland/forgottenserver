@@ -4,24 +4,14 @@
 #ifndef FS_RSA_H
 #define FS_RSA_H
 
-#include <openssl/evp.h>
+struct evp_pkey_st;
+typedef struct evp_pkey_st EVP_PKEY;
 
-namespace tfs {
+namespace tfs::rsa {
 
-class RSA
-{
-public:
-	static constexpr int16_t BUFFER_LENGTH = 128;
+EVP_PKEY* loadPEM(std::string_view filename);
+void decrypt(uint8_t* msg, size_t len);
 
-	RSA() = default;
-
-	void loadPEM(std::string_view filename);
-	void decrypt(uint8_t* msg) const;
-
-private:
-	std::unique_ptr<EVP_PKEY, decltype(&EVP_PKEY_free)> pkey{nullptr, EVP_PKEY_free};
-};
-
-} // namespace tfs
+} // namespace tfs::rsa
 
 #endif // FS_RSA_H

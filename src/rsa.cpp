@@ -5,38 +5,53 @@
 
 #include "rsa.h"
 
-#include <fstream>
 #include <openssl/err.h>
+#include <openssl/evp.h>
 #include <openssl/pem.h>
+#include <openssl/rsa.h>
 
-namespace tfs {
+namespace {
 
-void RSA::decrypt(uint8_t* msg) const
+struct Deleter
 {
-	std::unique_ptr<EVP_PKEY_CTX, decltype(&EVP_PKEY_CTX_free)> pctx{
-	    EVP_PKEY_CTX_new_from_pkey(nullptr, pkey.get(), nullptr), EVP_PKEY_CTX_free};
+	void operator()(EVP_PKEY* pkey) const { EVP_PKEY_free(pkey); }
+	void operator()(EVP_PKEY_CTX* ctx) const { EVP_PKEY_CTX_free(ctx); }
+	void operator()(FILE* fp) const { fclose(fp); }
+};
+
+template <class T>
+using C_ptr = std::unique_ptr<T, Deleter>;
+
+C_ptr<EVP_PKEY> pkey = nullptr;
+
+} // namespace
+
+namespace tfs::rsa {
+
+void decrypt(uint8_t* msg, size_t len)
+{
+	C_ptr<EVP_PKEY_CTX> pctx{EVP_PKEY_CTX_new_from_pkey(nullptr, pkey.get(), nullptr)};
 	EVP_PKEY_decrypt_init(pctx.get());
+	EVP_PKEY_CTX_set_rsa_padding(pctx.get(), RSA_NO_PADDING);
 
-	size_t len = tfs::RSA::BUFFER_LENGTH;
 	EVP_PKEY_decrypt(pctx.get(), msg, &len, msg, len);
-
-	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "\n");
 }
 
-void RSA::loadPEM(std::string_view filename)
+EVP_PKEY* loadPEM(std::string_view filename)
 {
-	std::unique_ptr<FILE, decltype(&fclose)> fp{fopen(filename.data(), "r"), fclose};
+	C_ptr<FILE> fp{fopen(filename.data(), "r")};
 	if (!fp) {
 		throw std::runtime_error(fmt::format("Error while reading {}: {}", filename, strerror(errno)));
 	}
 
-	EVP_PKEY* pkey;
-	if (!PEM_read_PrivateKey(fp.get(), &pkey, nullptr, nullptr)) {
+	EVP_PKEY* pkey_ = nullptr;
+	if (!PEM_read_PrivateKey(fp.get(), &pkey_, nullptr, nullptr)) {
 		throw std::runtime_error(
 		    fmt::format("Error while reading private key: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
-	this->pkey.reset(pkey);
+	pkey.reset(pkey_);
+	return pkey_;
 }
 
-} // namespace tfs
+} // namespace tfs::rsa

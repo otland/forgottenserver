@@ -35,7 +35,6 @@ Game g_game;
 Monsters g_monsters;
 Vocations g_vocations;
 extern Scripts* g_scripts;
-tfs::RSA g_RSA;
 
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
@@ -103,7 +102,7 @@ void mainLoader(ServiceManager* services)
 	// set RSA key
 	std::cout << ">> Loading RSA key " << std::endl;
 	try {
-		g_RSA.loadPEM("key.pem");
+		tfs::rsa::loadPEM("key.pem");
 	} catch (const std::exception& e) {
 		startupErrorMessage(e.what());
 		return;
