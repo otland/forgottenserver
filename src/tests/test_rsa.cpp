@@ -5,11 +5,8 @@
 #include "../rsa.h"
 
 #include <boost/test/unit_test.hpp>
-#include <openssl/bn.h>
 #include <openssl/core_names.h>
-#include <openssl/crypto.h>
 #include <openssl/evp.h>
-#include <openssl/rsa.h>
 
 struct Deleter
 {

@@ -6,7 +6,6 @@
 #include "rsa.h"
 
 #include <openssl/err.h>
-#include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <openssl/rsa.h>
 
