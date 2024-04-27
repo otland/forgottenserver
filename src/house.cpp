@@ -13,7 +13,6 @@
 #include "iologindata.h"
 #include "pugicast.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 House::House(uint32_t houseId) : id(houseId) {}
@@ -72,8 +71,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* pla
 			door->setAccessList("");
 		}
 	} else {
-		std::string strRentPeriod =
-		    boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+		std::string strRentPeriod = boost::algorithm::to_lower_copy(getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
 			currentTime += 24 * 60 * 60 * 365;
@@ -108,7 +106,7 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player) const
 		return HOUSE_OWNER;
 	}
 
-	if (g_config.getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
+	if (getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
 		if (ownerAccountId == player->getAccount()) {
 			return HOUSE_OWNER;
 		}

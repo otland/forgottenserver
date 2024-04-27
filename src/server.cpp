@@ -9,15 +9,14 @@
 #include "configmanager.h"
 #include "scheduler.h"
 
-extern ConfigManager g_config;
 Ban g_bans;
 
 namespace {
 
 boost::asio::ip::address getListenAddress()
 {
-	if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-		return boost::asio::ip::address::from_string(g_config.getString(ConfigManager::IP));
+	if (getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
+		return boost::asio::ip::address::from_string(getString(ConfigManager::IP));
 	}
 	return boost::asio::ip::address_v6::any();
 }
