@@ -82,7 +82,7 @@ void Game::setWorldType(WorldType_t type) { worldType = type; }
 
 void Game::setState(GameState_t newState)
 {
-	if (inState<GAME_STATE_SHUTDOWN>()) {
+	if (inState(GAME_STATE_SHUTDOWN)) {
 		return; // this cannot be stopped
 	}
 
@@ -152,7 +152,7 @@ void Game::setState(GameState_t newState)
 
 void Game::saveState()
 {
-	if (inState<GAME_STATE_NORMAL>()) {
+	if (inState(GAME_STATE_NORMAL)) {
 		setState(GAME_STATE_MAINTAIN);
 	}
 
@@ -167,7 +167,7 @@ void Game::saveState()
 
 	g_databaseTasks.flush();
 
-	if (inState<GAME_STATE_MAINTAIN>()) {
+	if (inState(GAME_STATE_MAINTAIN)) {
 		setState(GAME_STATE_NORMAL);
 	}
 }

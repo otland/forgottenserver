@@ -2292,6 +2292,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getMounts", LuaScriptInterface::luaGameGetMounts);
 	registerMethod("Game", "getVocations", LuaScriptInterface::luaGameGetVocations);
 
+	registerMethod("Game", "inState", LuaScriptInterface::luaGameInState);
 	registerMethod("Game", "getState", LuaScriptInterface::luaGameGetState);
 	registerMethod("Game", "setState", LuaScriptInterface::luaGameSetState);
 
@@ -4854,6 +4855,14 @@ int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 		lua_rawseti(L, -2, ++index);
 	}
 
+	return 1;
+}
+
+int LuaScriptInterface::luaGameInState(lua_State* L)
+{
+	// Game.inState(state)
+	GameState_t state = getNumber<GameState_t>(L, 1);
+	lua_pushnumber(L, g_game.inState(state));
 	return 1;
 }
 

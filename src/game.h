@@ -419,10 +419,9 @@ public:
 	void updateCreatureWalkthrough(const Creature* creature);
 	void updateKnownCreature(const Creature* creature);
 
-	template <GameState_t S>
-	bool inState()
+	bool inState(GameState_t state) const
 	{
-		return gameState == S;
+		return gameState == state;
 	}
 	GameState_t getState() const;
 	void setState(GameState_t newState);

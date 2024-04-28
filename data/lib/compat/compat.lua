@@ -1350,6 +1350,10 @@ function doSetGameState(state)
 	return Game.setGameState(state)
 end
 
+function Game.inGameState(state)
+	return Game.inState(state)
+end
+
 function Game.getGameState()
 	return Game.getState()
 end

@@ -170,12 +170,12 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			return;
 		}
 
-		if (g_game.inState<GAME_STATE_CLOSING>() && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
+		if (g_game.inState(GAME_STATE_CLOSING) && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
 			disconnectClient("The game is just going down.\nPlease try again later.");
 			return;
 		}
 
-		if (g_game.inState<GAME_STATE_CLOSED>() && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
+		if (g_game.inState(GAME_STATE_CLOSED) && !player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
 			disconnectClient("Server is currently closed.\nPlease try again later.");
 			return;
 		}
@@ -331,7 +331,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
 	// Server is shutting down
-	if (g_game.inState<GAME_STATE_SHUTDOWN>()) {
+	if (g_game.inState(GAME_STATE_SHUTDOWN)) {
 		disconnect();
 		return;
 	}
@@ -440,12 +440,12 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (g_game.inState<GAME_STATE_STARTUP>()) {
+	if (g_game.inState(GAME_STATE_STARTUP)) {
 		disconnectClient("Gameworld is starting up. Please wait.");
 		return;
 	}
 
-	if (g_game.inState<GAME_STATE_MAINTAIN>()) {
+	if (g_game.inState(GAME_STATE_MAINTAIN)) {
 		disconnectClient("Gameworld is under maintenance. Please re-connect in a while.");
 		return;
 	}
@@ -512,7 +512,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.inState<GAME_STATE_SHUTDOWN>() || msg.isEmpty()) {
+	if (!acceptPackets || g_game.inState(GAME_STATE_SHUTDOWN) || msg.isEmpty()) {
 		return;
 	}
 

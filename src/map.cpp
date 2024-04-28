@@ -1034,7 +1034,7 @@ uint32_t Map::clean() const
 	uint64_t start = OTSYS_TIME();
 	size_t tiles = 0;
 
-	if (g_game.inState<GAME_STATE_NORMAL>()) {
+	if (g_game.inState(GAME_STATE_NORMAL)) {
 		g_game.setState(GAME_STATE_MAINTAIN);
 	}
 
@@ -1062,7 +1062,7 @@ uint32_t Map::clean() const
 	size_t count = toRemove.size();
 	g_game.clearTilesToClean();
 
-	if (g_game.inState<GAME_STATE_MAINTAIN>()) {
+	if (g_game.inState(GAME_STATE_MAINTAIN)) {
 		g_game.setState(GAME_STATE_NORMAL);
 	}
 
