@@ -8,6 +8,23 @@
 #include <openssl/core_names.h>
 #include <openssl/evp.h>
 
+struct PrivateKeyFixture
+{
+	// contains a private key copied from OpenSSL test suite:
+	// https://github.com/openssl/openssl/blob/10203a34725ec75136b03d64fd2126b321419ac1/test/testrsa.pem
+	std::string_view privateKey =
+	    "-----BEGIN PRIVATE KEY-----\n"
+	    "MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEAqtt6qS5GTxVxGZYW\n"
+	    "a0/4u+IwHf7p2LNZbcPBp9/OfIcYAXBQn8hO/Re1uwLKXdCjIoaGs4DLdG88rkzf\n"
+	    "yK5dPQIDAQABAkBndyfNodcz9vEZpHkJHVGsPWoUEBV+hAWI4f248mAxqgC6hASK\n"
+	    "w8dVxkMpw6/jASDr9MicAhcGcSKC2q9HO7KhAiEA9yBnNSrfJWigBqii/xRtc/Go\n"
+	    "eXCjoYEyqe/bTHOR/pkCIQCw/gGchpBMzxKa9ykdnBAl2Z0ceQYoCzfsN/GLrsdu\n"
+	    "RQIhAJ5kaWIdcVrTvUWnTpl5aVHYAOidNnOskGF1N7S/mkJ5AiEAhl+SIaAYFfhw\n"
+	    "i65yTMSbjeD1YxSPE//QaUrf28jKKHECIQCbKZ6EVFPQy+pbnEAoDHs+CS3wdUrB\n"
+	    "WFzYvAYocTQNkw==\n"
+	    "-----END PRIVATE KEY-----\n";
+};
+
 struct Deleter
 {
 	void operator()(char* ptr) const { OPENSSL_free(ptr); }
@@ -37,13 +54,9 @@ auto get_bignum_param_as_string(const EVP_PKEY* pkey, const char* key_name)
 	return bignum_as_string(bn);
 }
 
-BOOST_AUTO_TEST_CASE(test_rsa_load_pem)
+BOOST_FIXTURE_TEST_CASE(test_rsa_load_pem, PrivateKeyFixture)
 {
-	using namespace std::string_view_literals;
-
-	// fixtures/testrsa.pem contains a private key copied from OpenSSL test suite:
-	// https://github.com/openssl/openssl/blob/10203a34725ec75136b03d64fd2126b321419ac1/test/testrsa.pem
-	EVP_PKEY* pkey = tfs::rsa::loadPEM("src/tests/fixtures/testrsa.pem");
+	EVP_PKEY* pkey = tfs::rsa::loadPEM(privateKey);
 
 	// the expected values can be obtained with the following command:
 	// $ openssl pkey -in testrsa.pem -noout -text
@@ -87,7 +100,7 @@ BOOST_AUTO_TEST_CASE(test_rsa_load_pem)
 
 	auto actualModulus = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_N);
 	auto expectedModulus =
-	    "8948525014013601095744212848895545067646997190667198465354220334608418294695300148587980446548438816958344948457547931370590147748529646338631264220634429"sv;
+	    "8948525014013601095744212848895545067646997190667198465354220334608418294695300148587980446548438816958344948457547931370590147748529646338631264220634429";
 	BOOST_TEST(actualModulus == expectedModulus, "expected n = " << expectedModulus << ", got " << actualModulus);
 
 	size_t publicExponent;
@@ -96,41 +109,39 @@ BOOST_AUTO_TEST_CASE(test_rsa_load_pem)
 
 	auto actualPrivateExponent = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_D);
 	auto expectedPrivateExponent =
-	    "5418925373928586701966836677512206800734033866457254764400459929804603458528232352199600575306819650618162351643553279676157387691020051542771655878881953"sv;
+	    "5418925373928586701966836677512206800734033866457254764400459929804603458528232352199600575306819650618162351643553279676157387691020051542771655878881953";
 	BOOST_TEST(actualPrivateExponent == expectedPrivateExponent,
 	           "expected d = " << expectedPrivateExponent << ", got " << actualPrivateExponent);
 
 	auto actualPrime1 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_FACTOR1);
-	auto expectedPrime1 = "111778525019405512256411851490149734274088355291175375383640373933750116023961"sv;
+	auto expectedPrime1 = "111778525019405512256411851490149734274088355291175375383640373933750116023961";
 	BOOST_TEST(actualPrime1 == expectedPrime1, "expected p = " << expectedPrime1 << ", got " << actualPrime1);
 
 	auto actualPrime2 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_FACTOR2);
-	auto expectedPrime2 = "80055851626777829514240655963926657772512853373739498240341188860942649617989"sv;
+	auto expectedPrime2 = "80055851626777829514240655963926657772512853373739498240341188860942649617989";
 	BOOST_TEST(actualPrime2 == expectedPrime2, "expected q = " << expectedPrime2 << ", got " << actualPrime2);
 
 	auto actualExponent1 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_EXPONENT1);
-	auto expectedExponent1 = "71642842111175802101569797547091560312237077742432849275826081558313221898873"sv;
+	auto expectedExponent1 = "71642842111175802101569797547091560312237077742432849275826081558313221898873";
 	BOOST_TEST(actualExponent1 == expectedExponent1,
 	           "expected dmp1 = " << expectedExponent1 << ", got " << actualExponent1);
 
 	auto actualExponent2 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_EXPONENT2);
-	auto expectedExponent2 = "60778780742816388991112777181456807362698163365179707256151734027573164386417"sv;
+	auto expectedExponent2 = "60778780742816388991112777181456807362698163365179707256151734027573164386417";
 	BOOST_TEST(actualExponent2 == expectedExponent2,
 	           "expected dmq1 = " << expectedExponent2 << ", got " << actualExponent2);
 
 	// note: there is only one coefficient, but OSSL_PKEY_PARAM_RSA_COEFFICIENT is not a valid param, it must be
 	// OSSL_PKEY_PARAM_RSA_COEFFICIENT1
 	auto actualCoefficient = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_COEFFICIENT1);
-	auto expectedCoefficient = "70182026303578669171175542309639729186931571676068678104669900696511625563539"sv;
+	auto expectedCoefficient = "70182026303578669171175542309639729186931571676068678104669900696511625563539";
 	BOOST_TEST(actualCoefficient == expectedCoefficient,
 	           "expected iqmp = " << expectedCoefficient << ", got " << actualCoefficient);
 }
 
-BOOST_AUTO_TEST_CASE(test_rsa_decrypt)
+BOOST_FIXTURE_TEST_CASE(test_rsa_decrypt, PrivateKeyFixture)
 {
-	using namespace std::string_literals;
-
-	tfs::rsa::loadPEM("src/tests/fixtures/testrsa.pem");
+	tfs::rsa::loadPEM(privateKey);
 
 	// the public key can be extracted from the private key with the following command:
 	// $ openssl pkey -in testrsa.pem -pubout
@@ -144,9 +155,9 @@ BOOST_AUTO_TEST_CASE(test_rsa_decrypt)
 	// clang-format on
 
 	// then interleave with \x for every byte (2 digits)
-	auto plaintext = std::string(64, 'x');
-	auto encrypted =
-	    "\x45\xe2\x7e\xa7\x76\x2f\x98\xca\xe7\xef\xd9\x3e\xb6\x87\x3d\x03\xa1\x70\x04\x27\x99\xbd\xf7\x5c\x9a\x08\x46\x32\x0d\xcc\x36\xdb\x44\x31\xf0\xa4\x87\x7e\x37\x82\x88\x59\xc9\x9c\xf8\xad\x5c\xae\x1a\x2b\x79\x0c\xcc\x9c\xbc\xb0\xb9\xd6\x7c\x6e\x51\x96\xd9\x93"s;
+	std::string plaintext(64, 'x');
+	std::string encrypted =
+	    "\x45\xe2\x7e\xa7\x76\x2f\x98\xca\xe7\xef\xd9\x3e\xb6\x87\x3d\x03\xa1\x70\x04\x27\x99\xbd\xf7\x5c\x9a\x08\x46\x32\x0d\xcc\x36\xdb\x44\x31\xf0\xa4\x87\x7e\x37\x82\x88\x59\xc9\x9c\xf8\xad\x5c\xae\x1a\x2b\x79\x0c\xcc\x9c\xbc\xb0\xb9\xd6\x7c\x6e\x51\x96\xd9\x93";
 
 	tfs::rsa::decrypt(reinterpret_cast<uint8_t*>(encrypted.data()), encrypted.size());
 	BOOST_TEST(encrypted == plaintext, "expected '" << plaintext << "', got '" << encrypted << "'");

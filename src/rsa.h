@@ -9,7 +9,7 @@ typedef struct evp_pkey_st EVP_PKEY;
 
 namespace tfs::rsa {
 
-EVP_PKEY* loadPEM(std::string_view filename);
+EVP_PKEY* loadPEM(std::string_view pem);
 void decrypt(uint8_t* msg, size_t len);
 
 } // namespace tfs::rsa

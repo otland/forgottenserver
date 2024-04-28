@@ -13,9 +13,9 @@ namespace {
 
 struct Deleter
 {
+	void operator()(BIO* bio) const { BIO_free(bio); }
 	void operator()(EVP_PKEY* pkey) const { EVP_PKEY_free(pkey); }
 	void operator()(EVP_PKEY_CTX* ctx) const { EVP_PKEY_CTX_free(ctx); }
-	void operator()(FILE* fp) const { fclose(fp); }
 };
 
 template <class T>
@@ -36,15 +36,16 @@ void decrypt(uint8_t* msg, size_t len)
 	EVP_PKEY_decrypt(pctx.get(), msg, &len, msg, len);
 }
 
-EVP_PKEY* loadPEM(std::string_view filename)
+EVP_PKEY* loadPEM(std::string_view pem)
 {
-	C_ptr<FILE> fp{fopen(filename.data(), "r")};
-	if (!fp) {
-		throw std::runtime_error(fmt::format("Error while reading {}: {}", filename, strerror(errno)));
+	C_ptr<BIO> bio{BIO_new(BIO_s_mem())};
+	if (!BIO_write(bio.get(), pem.data(), pem.size())) {
+		throw std::runtime_error(
+		    fmt::format("Error while reading PEM data: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
 	EVP_PKEY* pkey_ = nullptr;
-	if (!PEM_read_PrivateKey(fp.get(), &pkey_, nullptr, nullptr)) {
+	if (!PEM_read_bio_PrivateKey(bio.get(), &pkey_, nullptr, nullptr)) {
 		throw std::runtime_error(
 		    fmt::format("Error while reading private key: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}

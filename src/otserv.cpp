@@ -102,7 +102,9 @@ void mainLoader(ServiceManager* services)
 	// set RSA key
 	std::cout << ">> Loading RSA key " << std::endl;
 	try {
-		tfs::rsa::loadPEM("key.pem");
+		std::ifstream key{"key.pem"};
+		std::string pem{std::istreambuf_iterator<char>{key}, std::istreambuf_iterator<char>{}};
+		tfs::rsa::loadPEM(pem);
 	} catch (const std::exception& e) {
 		startupErrorMessage(e.what());
 		return;

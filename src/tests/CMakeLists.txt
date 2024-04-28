@@ -8,5 +8,3 @@ foreach(test_src ${tests_SRC})
     target_link_libraries(${test_name} PRIVATE tfslib Boost::unit_test_framework)
     add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()
-
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/fixtures/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/fixtures/)
