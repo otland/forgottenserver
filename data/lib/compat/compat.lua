@@ -1350,6 +1350,14 @@ function doSetGameState(state)
 	return Game.setGameState(state)
 end
 
+function Game.getGameState()
+	return Game.getState()
+end
+
+function Game.setGameState(state)
+	return Game.setState(state)
+end
+
 function doExecuteRaid(raidName)
 	debugPrint("Deprecated function, use Game.startEvent('" .. raidName .. "') instead.")
 	return Game.startEvent(raidName)

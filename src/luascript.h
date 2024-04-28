@@ -537,8 +537,8 @@ private:
 	static int luaGameGetMounts(lua_State* L);
 	static int luaGameGetVocations(lua_State* L);
 
-	static int luaGameGetGameState(lua_State* L);
-	static int luaGameSetGameState(lua_State* L);
+	static int luaGameGetState(lua_State* L);
+	static int luaGameSetState(lua_State* L);
 
 	static int luaGameGetWorldType(lua_State* L);
 	static int luaGameSetWorldType(lua_State* L);

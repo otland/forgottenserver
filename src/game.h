@@ -419,16 +419,22 @@ public:
 	void updateCreatureWalkthrough(const Creature* creature);
 	void updateKnownCreature(const Creature* creature);
 
-	GameState_t getGameState() const;
-	void setGameState(GameState_t newState);
-	void saveGameState();
+	GameState_t getState() const;
+
+	template <GameState_t S>
+	bool inState()
+	{
+		return gameState == S;
+	}
+
+	void setState(GameState_t newState);
+	void saveState();
 
 	// Events
 	void checkCreatureWalk(uint32_t creatureId);
 	void updateCreatureWalk(uint32_t creatureId);
 	void checkCreatureAttack(uint32_t creatureId);
 	void checkCreatures(size_t index);
-	void checkLight();
 
 	bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor,
 	                    bool field, bool ignoreResistances = false);

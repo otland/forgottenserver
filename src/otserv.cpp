@@ -52,7 +52,7 @@ void startupErrorMessage(const std::string& errorStr)
 void mainLoader(ServiceManager* services)
 {
 	// dispatcher thread
-	g_game.setGameState(GAME_STATE_STARTUP);
+	g_game.setState(GAME_STATE_STARTUP);
 
 	srand(static_cast<unsigned int>(OTSYS_TIME()));
 #ifdef _WIN32
@@ -210,7 +210,7 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Initializing gamestate" << std::endl;
-	g_game.setGameState(GAME_STATE_INIT);
+	g_game.setState(GAME_STATE_INIT);
 
 	// Game client protocols
 	services->add<ProtocolGame>(static_cast<uint16_t>(getNumber(ConfigManager::GAME_PORT)));
@@ -252,7 +252,7 @@ void mainLoader(ServiceManager* services)
 #endif
 
 	g_game.start(services);
-	g_game.setGameState(GAME_STATE_NORMAL);
+	g_game.setState(GAME_STATE_NORMAL);
 	g_loaderSignal.notify_all();
 }
 

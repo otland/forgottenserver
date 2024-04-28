@@ -2292,8 +2292,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "getMounts", LuaScriptInterface::luaGameGetMounts);
 	registerMethod("Game", "getVocations", LuaScriptInterface::luaGameGetVocations);
 
-	registerMethod("Game", "getGameState", LuaScriptInterface::luaGameGetGameState);
-	registerMethod("Game", "setGameState", LuaScriptInterface::luaGameSetGameState);
+	registerMethod("Game", "getState", LuaScriptInterface::luaGameGetState);
+	registerMethod("Game", "setState", LuaScriptInterface::luaGameSetState);
 
 	registerMethod("Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod("Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
@@ -4034,7 +4034,7 @@ int LuaScriptInterface::luaStopEvent(lua_State* L)
 int LuaScriptInterface::luaSaveServer(lua_State* L)
 {
 	g_globalEvents->save();
-	g_game.saveGameState();
+	g_game.saveState();
 	pushBoolean(L, true);
 	return 1;
 }
@@ -4857,18 +4857,18 @@ int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaGameGetGameState(lua_State* L)
+int LuaScriptInterface::luaGameGetState(lua_State* L)
 {
 	// Game.getGameState()
-	lua_pushnumber(L, g_game.getGameState());
+	lua_pushnumber(L, g_game.getState());
 	return 1;
 }
 
-int LuaScriptInterface::luaGameSetGameState(lua_State* L)
+int LuaScriptInterface::luaGameSetState(lua_State* L)
 {
-	// Game.setGameState(state)
+	// Game.setState(state)
 	GameState_t state = getNumber<GameState_t>(L, 1);
-	g_game.setGameState(state);
+	g_game.setState(state);
 	pushBoolean(L, true);
 	return 1;
 }

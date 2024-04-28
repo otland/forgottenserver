@@ -7,7 +7,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	Game.setGameState(GAME_STATE_NORMAL)
+	Game.setState(GAME_STATE_NORMAL)
 	player:sendTextMessage(MESSAGE_INFO_DESCR, "Server is now open.")
 	return false
 end

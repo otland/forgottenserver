@@ -76,13 +76,13 @@ void Game::start(ServiceManager* manager)
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
-GameState_t Game::getGameState() const { return gameState; }
+GameState_t Game::getState() const { return gameState; }
 
 void Game::setWorldType(WorldType_t type) { worldType = type; }
 
-void Game::setGameState(GameState_t newState)
+void Game::setState(GameState_t newState)
 {
-	if (gameState == GAME_STATE_SHUTDOWN) {
+	if (inState<GAME_STATE_SHUTDOWN>()) {
 		return; // this cannot be stopped
 	}
 
@@ -117,7 +117,7 @@ void Game::setGameState(GameState_t newState)
 				it = players.begin();
 			}
 
-			saveGameState();
+			saveState();
 
 			g_dispatcher.addTask([this]() { shutdown(); });
 
@@ -141,7 +141,7 @@ void Game::setGameState(GameState_t newState)
 				}
 			}
 
-			saveGameState();
+			saveState();
 			break;
 		}
 
@@ -150,10 +150,10 @@ void Game::setGameState(GameState_t newState)
 	}
 }
 
-void Game::saveGameState()
+void Game::saveState()
 {
-	if (gameState == GAME_STATE_NORMAL) {
-		setGameState(GAME_STATE_MAINTAIN);
+	if (inState<GAME_STATE_NORMAL>()) {
+		setState(GAME_STATE_MAINTAIN);
 	}
 
 	std::cout << "Saving server..." << std::endl;
@@ -167,8 +167,8 @@ void Game::saveGameState()
 
 	g_databaseTasks.flush();
 
-	if (gameState == GAME_STATE_MAINTAIN) {
-		setGameState(GAME_STATE_NORMAL);
+	if (inState<GAME_STATE_MAINTAIN>()) {
+		setState(GAME_STATE_NORMAL);
 	}
 }
 

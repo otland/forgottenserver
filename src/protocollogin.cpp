@@ -109,7 +109,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 // Character list request
 void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 {
-	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
+	if (g_game.inState<GAME_STATE_SHUTDOWN>()) {
 		disconnect();
 		return;
 	}
@@ -156,12 +156,12 @@ void ProtocolLogin::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (g_game.getGameState() == GAME_STATE_STARTUP) {
+	if (g_game.inState<GAME_STATE_STARTUP>()) {
 		disconnectClient("Gameworld is starting up. Please wait.", version);
 		return;
 	}
 
-	if (g_game.getGameState() == GAME_STATE_MAINTAIN) {
+	if (g_game.inState<GAME_STATE_MAINTAIN>()) {
 		disconnectClient("Gameworld is under maintenance.\nPlease re-connect in a while.", version);
 		return;
 	}

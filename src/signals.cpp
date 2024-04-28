@@ -109,7 +109,7 @@ void sigbreakHandler()
 {
 	// Dispatcher thread
 	std::cout << "SIGBREAK received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
+	g_game.setState(GAME_STATE_SHUTDOWN);
 }
 #endif
 
@@ -117,14 +117,14 @@ void sigtermHandler()
 {
 	// Dispatcher thread
 	std::cout << "SIGTERM received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
+	g_game.setState(GAME_STATE_SHUTDOWN);
 }
 
 void sigintHandler()
 {
 	// Dispatcher thread
 	std::cout << "SIGINT received, shutting game server down..." << std::endl;
-	g_game.setGameState(GAME_STATE_SHUTDOWN);
+	g_game.setState(GAME_STATE_SHUTDOWN);
 }
 
 // On Windows this function does not need to be signal-safe,
