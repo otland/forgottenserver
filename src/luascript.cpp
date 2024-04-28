@@ -4859,7 +4859,7 @@ int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 
 int LuaScriptInterface::luaGameGetState(lua_State* L)
 {
-	// Game.getGameState()
+	// Game.getState()
 	lua_pushnumber(L, g_game.getState());
 	return 1;
 }
