@@ -1,5 +1,3 @@
-find_package(Boost 1.66.0 REQUIRED COMPONENTS unit_test_framework QUIET)
-
 file(GLOB tests_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp)
 
 foreach(test_src ${tests_SRC})

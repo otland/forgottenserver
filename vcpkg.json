@@ -20,6 +20,12 @@
       "dependencies": [
         "luajit"
       ]
+    },
+    "unit-tests": {
+      "description": "Build unit tests",
+      "dependencies": [
+        "boost-test"
+      ]
     }
   },
   "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
