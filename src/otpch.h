@@ -20,7 +20,6 @@
 #include <cassert>
 #include <concepts>
 #include <condition_variable>
-#include <cryptopp/rsa.h>
 #include <cstdint>
 #include <cstdlib>
 #include <deque>
