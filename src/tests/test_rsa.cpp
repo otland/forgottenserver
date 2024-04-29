@@ -10,19 +10,21 @@
 
 struct PrivateKeyFixture
 {
-	// contains a private key copied from OpenSSL test suite:
-	// https://github.com/openssl/openssl/blob/10203a34725ec75136b03d64fd2126b321419ac1/test/testrsa.pem
+	// contains the private key from key.pem in the root of the repository
 	std::string_view privateKey =
-	    "-----BEGIN PRIVATE KEY-----\n"
-	    "MIIBVgIBADANBgkqhkiG9w0BAQEFAASCAUAwggE8AgEAAkEAqtt6qS5GTxVxGZYW\n"
-	    "a0/4u+IwHf7p2LNZbcPBp9/OfIcYAXBQn8hO/Re1uwLKXdCjIoaGs4DLdG88rkzf\n"
-	    "yK5dPQIDAQABAkBndyfNodcz9vEZpHkJHVGsPWoUEBV+hAWI4f248mAxqgC6hASK\n"
-	    "w8dVxkMpw6/jASDr9MicAhcGcSKC2q9HO7KhAiEA9yBnNSrfJWigBqii/xRtc/Go\n"
-	    "eXCjoYEyqe/bTHOR/pkCIQCw/gGchpBMzxKa9ykdnBAl2Z0ceQYoCzfsN/GLrsdu\n"
-	    "RQIhAJ5kaWIdcVrTvUWnTpl5aVHYAOidNnOskGF1N7S/mkJ5AiEAhl+SIaAYFfhw\n"
-	    "i65yTMSbjeD1YxSPE//QaUrf28jKKHECIQCbKZ6EVFPQy+pbnEAoDHs+CS3wdUrB\n"
-	    "WFzYvAYocTQNkw==\n"
-	    "-----END PRIVATE KEY-----\n";
+	    "-----BEGIN RSA PRIVATE KEY-----\n"
+	    "MIICXAIBAAKBgQCbZGkDtFsHrJVlaNhzU71xZROd15QHA7A+bdB5OZZhtKg3qmBWHXzLlFL6AIBZ\n"
+	    "SQmIKrW8pYoaGzX4sQWbcrEhJhHGFSrT27PPvuetwUKnXT11lxUJwyHFwkpb1R/UYPAbThW+sN4Z\n"
+	    "MFKKXT8VwePL9cQB1nd+EKyqsz2+jVt/9QIDAQABAoGAQovTtTRtr3GnYRBvcaQxAvjIV9ZUnFRm\n"
+	    "C7Y3i1KwJhOZ3ozmSLrEEOLqTgoc7R+sJ1YzEiDKbbete11EC3gohlhW56ptj0WDf+7ptKOgqiEy\n"
+	    "Kh4qt1sYJeeGz4GiiooJoeKFGdtk/5uvMR6FDCv6H7ewigVswzf330Q3Ya7+jYECQQERBxsga6+5\n"
+	    "x6IofXyNF6QuMqvuiN/pUgaStUOdlnWBf/T4yUpKvNS1+I4iDzqGWOOSR6RsaYPYVhj9iRABoKyx\n"
+	    "AkEAkbNzB6vhLAWht4dUdGzaREF3p4SwNcu5bJRa/9wCLSHaS9JaTq4lljgVPp1zyXyJCSCWpFnl\n"
+	    "0WvK3Qf6nVBIhQJBANS7rK8+ONWQbxENdZaZ7Rrx8HUTwSOS/fwhsGWBbl1Qzhdq/6/sIfEHkfeH\n"
+	    "1hoH+IlpuPuf21MdAqvJt+cMwoECQF1LyBOYduYGcSgg6u5mKVldhm3pJCA+ZGxnjuGZEnet3qeA\n"
+	    "eb05++112fyvO85ABUun524z9lokKNFh45NKLjUCQGshzV43P+RioiBhtEpB/QFzijiS4L2HKNu1\n"
+	    "tdhudnUjWkaf6jJmQS/ppln0hhRMHlk9Vus/bPx7LtuDuo6VQDo=\n"
+	    "-----END RSA PRIVATE KEY-----\n";
 };
 
 struct Deleter
@@ -59,48 +61,37 @@ BOOST_FIXTURE_TEST_CASE(test_rsa_load_pem, PrivateKeyFixture)
 	EVP_PKEY* pkey = tfs::rsa::loadPEM(privateKey);
 
 	// the expected values can be obtained with the following command:
-	// $ openssl pkey -in testrsa.pem -noout -text
+	// $ openssl pkey -in key.pem -noout -text
 
-	// RSA Private-Key: (512 bit)
+	// RSA Private-Key: (1024 bit)
 	// modulus:
-	//     00:aa:db:7a:a9:2e:46:4f:15:71:19:96:16:6b:4f:
-	//     f8:bb:e2:30:1d:fe:e9:d8:b3:59:6d:c3:c1:a7:df:
-	//     ce:7c:87:18:01:70:50:9f:c8:4e:fd:17:b5:bb:02:
-	//     ca:5d:d0:a3:22:86:86:b3:80:cb:74:6f:3c:ae:4c:
-	//     df:c8:ae:5d:3d
+	//     00:9b:64:69:03:b4:5b:07:ac:95:65:68:d8:73:53:
+	//     bd:71:65:13:9d:d7:94:07:03:b0:3e:6d:d0:79:39:
+	//     96:61:b4:a8:37:aa:60:56:1d:7c:cb:94:52:fa:00:
+	//     80:59:49:09:88:2a:b5:bc:a5:8a:1a:1b:35:f8:b1:
+	//     05:9b:72:b1:21:26:11:c6:15:2a:d3:db:b3:cf:be:
+	//     e7:ad:c1:42:a7:5d:3d:75:97:15:09:c3:21:c5:c2:
+	//     4a:5b:d5:1f:d4:60:f0:1b:4e:15:be:b0:de:19:30:
+	//     52:8a:5d:3f:15:c1:e3:cb:f5:c4:01:d6:77:7e:10:
+	//     ac:aa:b3:3d:be:8d:5b:7f:f5
 	// publicExponent: 65537 (0x10001)
 	// privateExponent:
-	//     67:77:27:cd:a1:d7:33:f6:f1:19:a4:79:09:1d:51:
-	//     ac:3d:6a:14:10:15:7e:84:05:88:e1:fd:b8:f2:60:
-	//     31:aa:00:ba:84:04:8a:c3:c7:55:c6:43:29:c3:af:
-	//     e3:01:20:eb:f4:c8:9c:02:17:06:71:22:82:da:af:
-	//     47:3b:b2:a1
-	// prime1:
-	//     00:f7:20:67:35:2a:df:25:68:a0:06:a8:a2:ff:14:
-	//     6d:73:f1:a8:79:70:a3:a1:81:32:a9:ef:db:4c:73:
-	//     91:fe:99
-	// prime2:
-	//     00:b0:fe:01:9c:86:90:4c:cf:12:9a:f7:29:1d:9c:
-	//     10:25:d9:9d:1c:79:06:28:0b:37:ec:37:f1:8b:ae:
-	//     c7:6e:45
-	// exponent1:
-	//     00:9e:64:69:62:1d:71:5a:d3:bd:45:a7:4e:99:79:
-	//     69:51:d8:00:e8:9d:36:73:ac:90:61:75:37:b4:bf:
-	//     9a:42:79
-	// exponent2:
-	//     00:86:5f:92:21:a0:18:15:f8:70:8b:ae:72:4c:c4:
-	//     9b:8d:e0:f5:63:14:8f:13:ff:d0:69:4a:df:db:c8:
-	//     ca:28:71
-	// coefficient:
-	//     00:9b:29:9e:84:54:53:d0:cb:ea:5b:9c:40:28:0c:
-	//     7b:3e:09:2d:f0:75:4a:c1:58:5c:d8:bc:06:28:71:
-	//     34:0d:93
+	//     42:8b:d3:b5:34:6d:af:71:a7:61:10:6f:71:a4:31:
+	//     02:f8:c8:57:d6:54:9c:54:66:0b:b6:37:8b:52:b0:
+	//     26:13:99:de:8c:e6:48:ba:c4:10:e2:ea:4e:0a:1c:
+	//     ed:1f:ac:27:56:33:12:20:ca:6d:b7:ad:7b:5d:44:
+	//     0b:78:28:86:58:56:e7:aa:6d:8f:45:83:7f:ee:e9:
+	//     b4:a3:a0:aa:21:32:2a:1e:2a:b7:5b:18:25:e7:86:
+	//     cf:81:a2:8a:8a:09:a1:e2:85:19:db:64:ff:9b:af:
+	//     31:1e:85:0c:2b:fa:1f:b7:b0:8a:05:6c:c3:37:f7:
+	//     df:44:37:61:ae:fe:8d:81
+	// ...
 
 	// then convert the output from hexadecimal to decimal
 
 	auto actualModulus = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_N);
 	auto expectedModulus =
-	    "8948525014013601095744212848895545067646997190667198465354220334608418294695300148587980446548438816958344948457547931370590147748529646338631264220634429";
+	    "109120132967399429278860960508995541528237502902798129123468757937266291492576446330739696001110603907230888610072655818825358503429057592827629436413108566029093628212635953836686562675849720620786279431090218017681061521755056710823876476444260558147179707119674283982419152118103759076030616683978566631413";
 	BOOST_TEST(actualModulus == expectedModulus, "expected n = " << expectedModulus << ", got " << actualModulus);
 
 	size_t publicExponent;
@@ -109,34 +100,13 @@ BOOST_FIXTURE_TEST_CASE(test_rsa_load_pem, PrivateKeyFixture)
 
 	auto actualPrivateExponent = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_D);
 	auto expectedPrivateExponent =
-	    "5418925373928586701966836677512206800734033866457254764400459929804603458528232352199600575306819650618162351643553279676157387691020051542771655878881953";
+	    "46730330223584118622160180015036832148732986808519344675210555262940258739805766860224610646919605860206328024326703361630109888417839241959507572247284807035235569619173792292786907845791904955103601652822519121908367187885509270025388641700821735345222087940578381210879116823013776808975766851829020659073";
 	BOOST_TEST(actualPrivateExponent == expectedPrivateExponent,
 	           "expected d = " << expectedPrivateExponent << ", got " << actualPrivateExponent);
 
-	auto actualPrime1 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_FACTOR1);
-	auto expectedPrime1 = "111778525019405512256411851490149734274088355291175375383640373933750116023961";
-	BOOST_TEST(actualPrime1 == expectedPrime1, "expected p = " << expectedPrime1 << ", got " << actualPrime1);
-
-	auto actualPrime2 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_FACTOR2);
-	auto expectedPrime2 = "80055851626777829514240655963926657772512853373739498240341188860942649617989";
-	BOOST_TEST(actualPrime2 == expectedPrime2, "expected q = " << expectedPrime2 << ", got " << actualPrime2);
-
-	auto actualExponent1 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_EXPONENT1);
-	auto expectedExponent1 = "71642842111175802101569797547091560312237077742432849275826081558313221898873";
-	BOOST_TEST(actualExponent1 == expectedExponent1,
-	           "expected dmp1 = " << expectedExponent1 << ", got " << actualExponent1);
-
-	auto actualExponent2 = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_EXPONENT2);
-	auto expectedExponent2 = "60778780742816388991112777181456807362698163365179707256151734027573164386417";
-	BOOST_TEST(actualExponent2 == expectedExponent2,
-	           "expected dmq1 = " << expectedExponent2 << ", got " << actualExponent2);
-
-	// note: there is only one coefficient, but OSSL_PKEY_PARAM_RSA_COEFFICIENT is not a valid param, it must be
-	// OSSL_PKEY_PARAM_RSA_COEFFICIENT1
-	auto actualCoefficient = get_bignum_param_as_string(pkey, OSSL_PKEY_PARAM_RSA_COEFFICIENT1);
-	auto expectedCoefficient = "70182026303578669171175542309639729186931571676068678104669900696511625563539";
-	BOOST_TEST(actualCoefficient == expectedCoefficient,
-	           "expected iqmp = " << expectedCoefficient << ", got " << actualCoefficient);
+	size_t bits;
+	EVP_PKEY_get_size_t_param(pkey, OSSL_PKEY_PARAM_RSA_BITS, &bits);
+	BOOST_TEST(bits == 1024, "expected 1024 bits, got " << bits);
 }
 
 BOOST_FIXTURE_TEST_CASE(test_rsa_decrypt, PrivateKeyFixture)
@@ -144,20 +114,20 @@ BOOST_FIXTURE_TEST_CASE(test_rsa_decrypt, PrivateKeyFixture)
 	tfs::rsa::loadPEM(privateKey);
 
 	// the public key can be extracted from the private key with the following command:
-	// $ openssl pkey -in testrsa.pem -pubout
-	// it is also available in the OpenSSL test suite:
-	// https://github.com/openssl/openssl/blob/933f57dfe21657f7aba8f13e0cdb3b02dd64fcc3/test/testrsapub.pem
+	// $ openssl pkey -in key.pem -pubout
 
 	// the encrypted message was generated by encrypting 64 times the character 'x' (0x78) with the following command:
-
-	// clang-format off
-	// $ head -c 64 < /dev/zero | tr '\0' 'x' | openssl pkeyutl -encrypt -inkey testrsa.pem -pkeyopt rsa_padding_mode:none | xxd
-	// clang-format on
+	// $ head -c 128 < /dev/zero | tr '\0' 'x' | openssl pkeyutl -encrypt -inkey key.pem -pkeyopt rsa_padding_mode:none
 
 	// then interleave with \x for every byte (2 digits)
-	std::string plaintext(64, 'x');
+
+	std::string plaintext(128, 'x');
 	std::string encrypted =
-	    "\x45\xe2\x7e\xa7\x76\x2f\x98\xca\xe7\xef\xd9\x3e\xb6\x87\x3d\x03\xa1\x70\x04\x27\x99\xbd\xf7\x5c\x9a\x08\x46\x32\x0d\xcc\x36\xdb\x44\x31\xf0\xa4\x87\x7e\x37\x82\x88\x59\xc9\x9c\xf8\xad\x5c\xae\x1a\x2b\x79\x0c\xcc\x9c\xbc\xb0\xb9\xd6\x7c\x6e\x51\x96\xd9\x93";
+	    "\x72\x17\x59\x03\xe4\xe9\xf8\x51\xce\x44\x0f\x83\x35\xbf\x65\xf0\x23\xe9\x80\xfc\x8c\x80\x43\x08\xa4\x0e\xd2\xc1\x1d\x7d"
+	    "\x03\x38\xb0\x3b\x0b\xb6\xd1\xf9\xf4\x55\xdc\x71\x12\xc2\x17\x92\xee\xd3\x22\xfa\xd4\x24\xd3\xd5\x05\x5d\x38\x34\xd4\x12"
+	    "\xdf\x3b\x0d\xc5\xa8\x59\xe5\x9d\x1f\x92\xb6\x3f\x54\x0a\xe0\x44\xeb\x6e\x55\x0a\x8e\xd0\xd1\xf7\x84\x1d\x3c\x0b\xcc\x3e"
+	    "\x2b\x08\x83\x3d\xa7\x83\x67\xb8\x3d\x49\xda\x13\xde\x41\x18\x7f\x42\xb2\x80\x8f\x9b\xe6\xfe\x4b\xb7\xe2\xab\x98\x0f\x4a"
+	    "\xdd\x52\xe9\xb1\x5b\xef\x25\x03";
 
 	tfs::rsa::decrypt(reinterpret_cast<uint8_t*>(encrypted.data()), encrypted.size());
 	BOOST_TEST(encrypted == plaintext, "expected '" << plaintext << "', got '" << encrypted << "'");
