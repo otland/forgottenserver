@@ -441,7 +441,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	if (ip != boost::asio::ip::make_address(result->getString("session_ip"))) {
 		// TODO: get the correct message
-		disconnectClient("Session key is not valid.");
+		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
 		return;
 	}
 
