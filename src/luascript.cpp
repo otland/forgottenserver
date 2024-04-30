@@ -11732,6 +11732,12 @@ int LuaScriptInterface::luaNpcCreate(lua_State* L)
 			npc = g_game.getNpcByID(getNumber<uint32_t>(L, 2));
 		} else if (isString(L, 2)) {
 			npc = g_game.getNpcByName(getString(L, 2));
+			if (!npc) {
+				npc = g_npcs.getNpcs().find(getString(L, 2))->second;
+				if (!npc) {
+					npc = nullptr;
+				}
+			}
 		} else if (isUserdata(L, 2)) {
 			if (getUserdataType(L, 2) != LuaData_Npc) {
 				lua_pushnil(L);

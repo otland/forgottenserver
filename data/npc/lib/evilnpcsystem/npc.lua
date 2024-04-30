@@ -88,8 +88,8 @@ end
         self.onThink = function()
             local handler = NpcsHandler(self)
             local focus = NpcFocus(self)
-            local player = focus:getCurrentFocus()
             for playerid, releaseTime in pairs(focus.focus) do
+                local player = Player(playerid)
                 if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
                     focus:removeFocus(player)
                     closeShopWindow(player)
@@ -103,6 +103,7 @@ end
             if #focus.focus == 0 then
                 doNpcSetCreatureFocus(nil)
             else
+                local player = focus:getCurrentFocus()
                 if player then
                     if player:getPosition().y > self:getPosition().y and player:getPosition().x == self:getPosition().x then
                         selfTurn(DIRECTION_SOUTH)
@@ -118,7 +119,7 @@ end
             return true
         end
         -- The onSay function is called when the Player says something to the NPC
-        self.onSay = function(creature, type, message)
+        self.onSay = function(creature, messageType, message)
             local message = message:lower()
             -- Creates a new KeywordsHandler instance for the NPC
             local handler = NpcsHandler(self)
@@ -126,7 +127,7 @@ end
             local talkQueue = NpcTalkQueue(self)
 
             if not focus:isFocused(creature) then
-                -- If the player is not focused, the NPC will greet the player if the player is close enough
+                -- If the player is not focused, the NPC will greet the player if the player says a greeting word and is in range
                 if getDistanceTo(creature:getId()) > FOCUS.greetDistance then
                     return
                 end
@@ -137,11 +138,12 @@ end
                         doNpcSetCreatureFocus(creature:getId())
                         local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags(creature:getName())
                         talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        handler:setTopic(handler, creature)
                         return true
                     end
                 end
             else
-                -- If the player is focused, the NPC will say goodbye if the player is far enough
+                -- If the player is focused, the NPC will say goodbye if the player says a farewell word
                 for _, word in pairs(KEYWORDS_FAREWELL) do
                     if message == word then
                         focus:removeFocus(creature)
@@ -152,13 +154,14 @@ end
                     end
                 end
             end
+
             -- Checks if the NPC has a response for the given message
-            if handler:getKeywords()[message] then
+            if handler:getTopic(creature):isKeyword(message) then
                 -- renewing the focus for the player
                 focus:addFocus(creature)
                 -- If the NPC has a shop for the message, it opens the shop window
-                if handler:getShops(message)[handler:getTopic(creature)] then
-                    handler:setActiveShop(creature, handler:getTopic(creature))
+                if handler:getTopic(creature):getShop(message) then
+                    handler:setActiveShop(creature, handler:getTopic(creature):getShop(message))
                     local shop = NpcShop(self, handler:getActiveShop(creature))
                     local items = shop:getItems()
                     if shop:hasDiscount(creature) then
@@ -177,20 +180,18 @@ end
                     end
                 end
                 -- If the NPC has a response, it sets the topic to the one associated with the message
-                if not handler:getKeywords()[message].topicAfterResponse then
-                    handler:setTopic(handler:getKeywords()[message].topic, creature)
-                end
+                handler:setTopic(handler:getTopic(creature):isKeyword(message), creature)
                 -- If the NPC has a response for the current topic, it says the response
-                if handler:getResponses(message)[handler:getTopic(creature)] then
-                    local msg = handler:getResponses(message)[handler:getTopic(creature)].text:replaceTags(creature:getName())
+                if handler:getTopic(creature):getResponse() then
+                    local msg = handler:getTopic(creature):getResponse():replaceTags(creature:getName())
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                    --selfSay(msg, creature)
-                    if handler:getResponses(message)[handler:getTopic(creature)].newTopic > -1 then
-                        handler:setTopic(handler:getResponses(message)[handler:getTopic(creature)].newTopic, creature)
-                    end
+                end
+                -- If the NPC has a resetTopic, it resets the topic
+                if handler:getTopic(creature).resetTopic then
+                    handler:setTopic(handler, creature)
                 end
             else
-                -- If the NPC doesn'handler have a response, it says a default message
+                -- If the NPC doesn't have a response, it says a default message
                 selfSay("What do you want from me!?!", creature)
             end
         end
@@ -209,10 +210,11 @@ end
                         keywords = {},
                         topic = {},
                         shopActive = {},
-                        greetWords = MESSAGE_GRREET,
-                        farewellWords = MESSAGE_UNGREET
+                        greetWords = MESSAGES_GREET,
+                        farewellWords = MESSAGES_FAREWELL
                     }
                     setmetatable(self[npc:getName()], {__index = NpcsHandler})
+                    setmetatable(self[npc:getName()].keywords, {__index = NpcsHandler})
                 end
                 -- The KeywordsHandler is returned
                 return self[npc:getName()]
@@ -221,20 +223,15 @@ end
     end
     
     -- This function adds a keyword to the KeywordsHandler for the NPC
-    function NpcsHandler:keyword(word, topic, topicAfterResponse)
-        local topic = topic and topic or -1
-        -- If topicAfterResponse is not provided, it's set to false
-        local afterResponse = topicAfterResponse and topicAfterResponse or topic == -1 and true or false
+    function NpcsHandler:keyword(word)
         -- If the keyword doesn'handler exist, it's created
         if not self.keywords[word] then
             self.keywords[word] = {}
+            self.keywords[word].keywords = {}
             setmetatable(self.keywords[word], {__index = NpcsHandler})
-            self.keywords[word].responses = {}
-            self.keywords[word].shops = {}
+            setmetatable(self.keywords[word].keywords, {__index = NpcsHandler})
+            self.keywords[word].response = ""
         end
-        -- The topic and topicAfterResponse are set for the keyword
-        self.keywords[word].topic = topic
-        self.keywords[word].topicAfterResponse = afterResponse
         return self.keywords[word]
     end
     
@@ -242,10 +239,14 @@ end
     function NpcsHandler:getKeywords()
         return self.keywords
     end
+
+    function NpcsHandler:isKeyword(word)
+        return self.keywords[word] and self.keywords[word] or false
+    end
     
     -- This function returns the current topic of Player for the NPC
     function NpcsHandler:getTopic(player)
-        return self.topic[player:getGuid()] == nil and 0 or self.topic[player:getGuid()]
+        return self.topic[player:getGuid()] == nil and self or self.topic[player:getGuid()]
     end
     
     -- This function sets the current topic of Player for the NPC
@@ -254,31 +255,26 @@ end
     end
     
     -- This function adds a response to the KeywordsHandler for the NPC
-    function NpcsHandler:respond(text, topic, newTopic)
+    function NpcsHandler:respond(text)
         -- If topic is not provided, it's set to 1
-        local topic = topic and topic or self.topic
-        local newTopic = newTopic and newTopic or -1
-        self.responses[topic] = {
-            text = text,
-            newTopic = newTopic
-        }
+        self.response = text
     end
     
     -- This function returns the responses for the NPC
-    function NpcsHandler:getResponses(word)
-        return self.keywords[word].responses
+    function NpcsHandler:getResponse()
+        return self.response
     end
 
-    function NpcsHandler:shop(topic)
-        table.insert(self.shops, topic)
+    function NpcsHandler:shop(id)
+        self.openShop = id
     end
 
-    function NpcsHandler:getShops(word)
-        return self.keywords[word].shops
+    function NpcsHandler:getShop(word)
+        return not self.keywords[word].openShop and false or self.keywords[word].openShop
     end
 
-    function NpcsHandler:setActiveShop(player, topic)
-        self.shopActive[player:getGuid()] = topic
+    function NpcsHandler:setActiveShop(player, id)
+        self.shopActive[player:getGuid()] = id
     end
 
     function NpcsHandler:getActiveShop(player)
@@ -297,6 +293,10 @@ end
             texts = {texts}
         end
         self.farewellWords = texts
+    end
+
+    function NpcsHandler:resetTalkState()
+        self.resetTopic = true
     end
 
     
