@@ -22,7 +22,9 @@ void Npcs::reload()
 	}
 
 	for (const auto& it : npcs) {
-		it.second->reload();
+		if (!it.second->fromLua) {
+			it.second->reload();
+		}
 	}
 }
 
@@ -54,7 +56,11 @@ bool Npc::load()
 
 	reset();
 
-	loaded = loadFromXml();
+	if (!fromLua) {
+		loaded = loadFromXml();
+	} else {
+		loaded = true;
+	}
 	return loaded;
 }
 
@@ -253,6 +259,32 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		spectators.insert(player);
 		setIdle(false);
 	}
+}
+
+bool Npc::loadCallback(NpcScriptInterface* scriptInterface)
+{
+	int32_t id = scriptInterface->getEvent();
+	if (id == -1) {
+		std::cout << "[Warning - Npc::loadCallback] Event not found. " << std::endl;
+		return false;
+	}
+
+	if (eventType == "say") {
+		npcEventHandler->creatureSayEvent = id;
+	} else if (eventType == "disappear") {
+		npcEventHandler->creatureDisappearEvent = id;
+	} else if (eventType == "appear") {
+		npcEventHandler->creatureAppearEvent = id;
+	} else if (eventType == "move") {
+		npcEventHandler->creatureMoveEvent = id;
+	} else if (eventType == "closechannel") {
+		npcEventHandler->playerCloseChannelEvent = id;
+	} else if (eventType == "endtrade") {
+		npcEventHandler->playerEndTradeEvent = id;
+	} else if (eventType == "think") {
+		npcEventHandler->thinkEvent = id;
+	}
+	return true;
 }
 
 void Npc::onRemoveCreature(Creature* creature, bool isLogout)
@@ -1074,6 +1106,16 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
 		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
 		thinkEvent = scriptInterface->getEvent("onThink");
 	}
+}
+
+NpcEventsHandler::NpcEventsHandler(Npc* npc) : scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
+{
+	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib" << std::endl;
+		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		return;
+	}
+	loaded = true;
 }
 
 bool NpcEventsHandler::isLoaded() const { return loaded; }

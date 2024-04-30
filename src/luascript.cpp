@@ -60,6 +60,7 @@ uint32_t ScriptEnvironment::lastResultId = 0;
 std::multimap<ScriptEnvironment*, Item*> ScriptEnvironment::tempItems;
 
 LuaEnvironment g_luaEnvironment;
+Npcs g_npcs;
 
 ScriptEnvironment::ScriptEnvironment() { resetEnv(); }
 
@@ -2307,6 +2308,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
+	registerMethod("Game", "createNpcType", LuaScriptInterface::luaGameCreateNpcType);
 
 	registerMethod("Game", "startEvent", LuaScriptInterface::luaGameStartEvent);
 
@@ -2869,6 +2871,16 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Npc", "setSpeechBubble", LuaScriptInterface::luaNpcSetSpeechBubble);
 
 	registerMethod("Npc", "getSpectators", LuaScriptInterface::luaNpcGetSpectators);
+
+	registerMethod("Npc", "spawn", LuaScriptInterface::luaNpcSpawn);
+	registerMethod("Npc", "eventType", LuaScriptInterface::luaNpcEventType);
+	registerMethod("Npc", "onSay", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onDisappear", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onAppear", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onMove", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onPlayerCloseChannel", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onPlayerEndTrade", LuaScriptInterface::luaNpcOnCallback);
+	registerMethod("Npc", "onThink", LuaScriptInterface::luaNpcOnCallback);
 
 	// Guild
 	registerClass("Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -5108,6 +5120,42 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 
 	pushUserdata<MonsterType>(L, monsterType);
 	setMetatable(L, -1, "MonsterType");
+	return 1;
+}
+
+int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
+{
+	// Game.createNpcType(name)
+	if (getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
+		reportErrorFunc(L, "NpcTypes can only be registered in the Scripts interface.");
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const std::string& name = getString(L, 1);
+	if (name.length() == 0) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	Npc* npc = g_game.getNpcByName(name);
+	if (!npc) {
+		npc = new Npc(name);
+		npc->fromLua = true;
+		npc->load();
+		npc->setName(name);
+		auto handler = std::make_unique<NpcEventsHandler>(npc);
+		if (!handler->isLoaded()) {
+			delete npc;
+			lua_pushnil(L);
+			return 1;
+		}
+		npc->npcEventHandler = std::move(handler);
+		g_npcs.addNpc(name, npc);
+	}
+
+	pushUserdata<Npc>(L, npc);
+	setMetatable(L, -1, "Npc");
 	return 1;
 }
 
@@ -11785,6 +11833,78 @@ int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 		pushUserdata<const Player>(L, spectatorPlayer);
 		setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcSpawn(lua_State* L)
+{
+	// npc:spawn()
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (!npc) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	MagicEffectClasses magicEffect = CONST_ME_TELEPORT;
+	const Position& position = npc->getMasterPos();
+	if (g_game.placeCreature(npc, position, false, false, magicEffect)) {
+		pushUserdata<Npc>(L, npc);
+		setMetatable(L, -1, "Npc");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcEventType(lua_State* L)
+{
+	// get: npc:eventType() set: npc:eventType(string)
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		if (lua_gettop(L) == 1) {
+			pushString(L, npc->getEventType());
+		} else {
+			std::string type = getString(L, 2);
+			const static std::vector<std::string> tmp = {"say",          "disappear", "appear", "move",
+			                                             "closechannel", "endtrade",  "think"};
+
+			for (auto& it : tmp) {
+				if (it == type) {
+					npc->setEventType(type);
+					pushBoolean(L, true);
+					return 1;
+				}
+			}
+
+			std::cout << "[Warning - Npc::eventType] Unknown eventType name: " << type << " for npc: " << npc->getName()
+			          << std::endl;
+			lua_pushnil(L);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcOnCallback(lua_State* L)
+{
+	// npc:onSay(callback)
+	// npc:onDisappear(callback)
+	// npc:onAppear(callback)
+	// npc:onMove(callback)
+	// npc:onPlayerCloseChannel(callback)
+	// npc:onPlayerEndTrade(callback)
+	// npc:onThink(callback)
+	Npc* npc = getUserdata<Npc>(L, 1);
+	if (npc) {
+		if (npc->loadCallback(npc->getScriptInterface().get())) {
+			pushBoolean(L, true);
+			return 1;
+		}
+		pushBoolean(L, false);
+	} else {
+		lua_pushnil(L);
 	}
 	return 1;
 }

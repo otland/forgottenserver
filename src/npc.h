@@ -14,6 +14,12 @@ class Npcs
 {
 public:
 	static void reload();
+	void addNpc(const std::string& name, Npc* npc) { npcs.emplace(name, npc); }
+	void clearNpcs() { npcs.clear(); }
+	std::map<const std::string, Npc*> getNpcs() { return npcs; }
+
+private:
+	std::map<const std::string, Npc*> npcs;
 };
 
 class NpcScriptInterface final : public LuaScriptInterface
@@ -57,6 +63,7 @@ class NpcEventsHandler
 {
 public:
 	NpcEventsHandler(const std::string& file, Npc* npc);
+	NpcEventsHandler(Npc* npc);
 
 	void onCreatureAppear(Creature* creature);
 	void onCreatureDisappear(Creature* creature);
@@ -72,9 +79,6 @@ public:
 
 	std::unique_ptr<NpcScriptInterface> scriptInterface;
 
-private:
-	Npc* npc;
-
 	int32_t creatureAppearEvent = -1;
 	int32_t creatureDisappearEvent = -1;
 	int32_t creatureMoveEvent = -1;
@@ -82,12 +86,16 @@ private:
 	int32_t playerCloseChannelEvent = -1;
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
+
+private:
+	Npc* npc;
 	bool loaded = false;
 };
 
 class Npc final : public Creature
 {
 public:
+	explicit Npc(const std::string& name);
 	~Npc();
 
 	// non-copyable
@@ -117,9 +125,13 @@ public:
 
 	bool load();
 	void reload();
+	void reset();
 
 	const std::string& getName() const override { return name; }
+	void setName(const std::string& n) { name = n; }
 	const std::string& getNameDescription() const override { return name; }
+	const std::string& getEventType() { return eventType; }
+	void setEventType(const std::string& event) { eventType = event; }
 
 	CreatureType_t getType() const override { return CREATURETYPE_NPC; }
 
@@ -151,14 +163,16 @@ public:
 	void setCreatureFocus(Creature* creature);
 
 	auto& getScriptInterface() { return npcEventHandler->scriptInterface; }
+	bool loadCallback(NpcScriptInterface* scriptInterface);
 
 	static uint32_t npcAutoID;
 
 	const auto& getSpectators() { return spectators; }
 
-private:
-	explicit Npc(const std::string& name);
+	std::unique_ptr<NpcEventsHandler> npcEventHandler;
+	bool fromLua = false;
 
+private:
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
@@ -178,7 +192,6 @@ private:
 	bool canWalkTo(const Position& fromPos, Direction dir) const;
 	bool getRandomStep(Direction& direction) const;
 
-	void reset();
 	bool loadFromXml();
 
 	void addShopPlayer(Player* player);
@@ -192,8 +205,7 @@ private:
 
 	std::string name;
 	std::string filename;
-
-	std::unique_ptr<NpcEventsHandler> npcEventHandler;
+	std::string eventType;
 
 	Position masterPos;
 

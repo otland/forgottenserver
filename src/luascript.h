@@ -552,6 +552,7 @@ private:
 	static int luaGameCreateNpc(lua_State* L);
 	static int luaGameCreateTile(lua_State* L);
 	static int luaGameCreateMonsterType(lua_State* L);
+	static int luaGameCreateNpcType(lua_State* L);
 
 	static int luaGameStartEvent(lua_State* L);
 
@@ -1100,6 +1101,10 @@ private:
 	static int luaNpcSetSpeechBubble(lua_State* L);
 
 	static int luaNpcGetSpectators(lua_State* L);
+
+	static int luaNpcSpawn(lua_State* L);
+	static int luaNpcEventType(lua_State* L);
+	static int luaNpcOnCallback(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);
