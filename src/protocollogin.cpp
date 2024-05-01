@@ -52,9 +52,20 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	// Add session key
+	// Generate and add session key
+	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char> rbe;
+	std::array<char, 16> sessionKey;
+	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
+
 	output->addByte(0x28);
-	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));
+	output->addString({sessionKey.data(), sessionKey.size()});
+
+	if (Database& db = Database::getInstance(); !db.executeQuery(fmt::format(
+	        "INSERT INTO `sessions` (`session_token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	        db.escapeBlob(sessionKey.data(), sessionKey.size()), account.id, getConnection()->getIP().to_string()))) {
+		disconnectClient("Failed to create session.\nPlease try again later.", version);
+		return;
+	}
 
 	// Add char list
 	output->addByte(0x64);
