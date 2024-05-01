@@ -4,6 +4,7 @@
     {
       "name": "default",
       "description": "Generate Ninja project files",
+      "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/build"
     },
     {

@@ -1250,6 +1250,13 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 	Creature::onRemoveCreature(creature, isLogout);
 
 	if (creature == this) {
+		for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
+			Item* item = inventory[slot];
+			if (item) {
+				g_moveEvents->onPlayerDeEquip(this, item, static_cast<slots_t>(slot));
+			}
+		}
+
 		if (isLogout) {
 			loginPosition = getPosition();
 		}
