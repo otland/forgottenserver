@@ -67,160 +67,172 @@ function string:replaceTags(playerName, amount, total, itemName)
     return ret
 end
 
+function Npc:respond(message, player, delay)
+    delay = delay and delay or TALK.defaultDelay
+    local talkQueue = NpcTalkQueue(self)
+    talkQueue:addToQueue(player, message, delay)
+end
+
 -- This function sets the default Event behavior for a NPC
-    function Npc:defaultBehavior()
-        self.onAppear = function(creature)
+function Npc:defaultBehavior()
+    self.onAppear = function(creature)
+        return true
+    end
+    self.onDisappear = function(creature)
+        if not creature:isPlayer() then
             return true
         end
-        self.onDisappear = function(creature)
-            if not creature:isPlayer() then
-                return true
-            end
-            local focus = NpcFocus(self)
-            if focus:isFocused(creature) then
-                focus:removeFocus(creature)
-                local talkQueue = NpcTalkQueue(self)
-                talkQueue:clearQueue(creature)
-            end
-            return true
+        local focus = NpcFocus(self)
+        if focus:isFocused(creature) then
+            focus:removeFocus(creature)
+            local talkQueue = NpcTalkQueue(self)
+            talkQueue:clearQueue(creature)
         end
-        -- The onThink function is called when the NPC thinks
-        self.onThink = function()
-            local handler = NpcsHandler(self)
-            local focus = NpcFocus(self)
-            for playerid, releaseTime in pairs(focus.focus) do
-                local player = Player(playerid)
-                if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
-                    focus:removeFocus(player)
-                    closeShopWindow(player)
-                    selfSay(handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(player:getName()), player)
+        return true
+    end
+    -- The onThink function is called when the NPC thinks
+    self.onThink = function()
+        local handler = NpcsHandler(self)
+        local focus = NpcFocus(self)
+        for playerid, releaseTime in pairs(focus.focus) do
+            local player = Player(playerid)
+            if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
+                focus:removeFocus(player)
+                closeShopWindow(player)
+                selfSay(handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(player:getName()), player)
+            end
+        end
+
+        local talkQueue = NpcTalkQueue(self)
+        talkQueue:processQueue()
+
+        if #focus.focus == 0 then
+            doNpcSetCreatureFocus(nil)
+        else
+            local player = focus:getCurrentFocus()
+            if player then
+                if player:getPosition().y > self:getPosition().y and player:getPosition().x == self:getPosition().x then
+                    selfTurn(DIRECTION_SOUTH)
+                elseif player:getPosition().y < self:getPosition().y and player:getPosition().x == self:getPosition().x then
+                    selfTurn(DIRECTION_NORTH)
+                elseif player:getPosition().x > self:getPosition().x and player:getPosition().y == self:getPosition().y then
+                    selfTurn(DIRECTION_EAST)
+                elseif player:getPosition().x < self:getPosition().x and player:getPosition().y == self:getPosition().y then
+                    selfTurn(DIRECTION_WEST)
                 end
             end
+        end
+        return true
+    end
+    -- The onSay function is called when the Player says something to the NPC
+    self.onSay = function(creature, messageType, message)
+        local message = message:lower()
+        -- Creates a new KeywordsHandler instance for the NPC
+        local handler = NpcsHandler(self)
+        local focus = NpcFocus(self)
+        local talkQueue = NpcTalkQueue(self)
 
-            local talkQueue = NpcTalkQueue(self)
-            talkQueue:processQueue()
+        if not focus:isFocused(creature) then
+            -- If the player is not focused, the NPC will greet the player if the player says a greeting word and is in range
+            if getDistanceTo(creature:getId()) > FOCUS.greetDistance then
+                return
+            end
 
-            if #focus.focus == 0 then
-                doNpcSetCreatureFocus(nil)
-            else
-                local player = focus:getCurrentFocus()
-                if player then
-                    if player:getPosition().y > self:getPosition().y and player:getPosition().x == self:getPosition().x then
-                        selfTurn(DIRECTION_SOUTH)
-                    elseif player:getPosition().y < self:getPosition().y and player:getPosition().x == self:getPosition().x then
-                        selfTurn(DIRECTION_NORTH)
-                    elseif player:getPosition().x > self:getPosition().x and player:getPosition().y == self:getPosition().y then
-                        selfTurn(DIRECTION_EAST)
-                    elseif player:getPosition().x < self:getPosition().x and player:getPosition().y == self:getPosition().y then
-                        selfTurn(DIRECTION_WEST)
+            for _, word in pairs(KEYWORDS_GREET) do
+                if message == word then
+                    focus:addFocus(creature)
+                    doNpcSetCreatureFocus(creature:getId())
+                    local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags(creature:getName())
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                    handler:setTopic(handler, creature)
+                    return true
+                end
+            end
+        else
+            -- If the player is focused, the NPC will say goodbye if the player says a farewell word
+            for _, word in pairs(KEYWORDS_FAREWELL) do
+                if message == word then
+                    focus:removeFocus(creature)
+                    closeShopWindow(creature)
+                    local msg = handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(creature:getName())
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                    return true
+                end
+            end
+        end
+
+        -- Checks if the NPC has a response for the given message
+        if handler:getTopic(creature):isKeyword(message) then
+            -- renewing the focus for the player
+            focus:addFocus(creature)
+            -- If the NPC has a shop for the message, it opens the shop window
+            if handler:getTopic(creature):getShop(message) then
+                handler:setActiveShop(creature, handler:getTopic(creature):getShop(message))
+                local shop = NpcShop(self, handler:getActiveShop(creature))
+                local items = shop:getItems()
+                if shop:hasDiscount(creature) then
+                    local afterDiscount = {}
+                    for _, item in pairs(items) do
+                        table.insert(afterDiscount, {
+                            id = item.id, name = item.name, 
+                            buy = (item.buy - math.ceil(item.buy / 100 * (shop:hasDiscount(creature) and shop:hasDiscount(creature) or 0))),
+                            sell = item.sell,
+                            subtype = item.subtype == nil and nil or item.subtype
+                        })
                     end
+                    self:openShopWindow(creature, afterDiscount, shop.onBuy, shop.onSell)
+                else
+                    self:openShopWindow(creature, items, shop.onBuy, shop.onSell)
                 end
             end
-            return true
-        end
-        -- The onSay function is called when the Player says something to the NPC
-        self.onSay = function(creature, messageType, message)
-            local message = message:lower()
-            -- Creates a new KeywordsHandler instance for the NPC
-            local handler = NpcsHandler(self)
-            local focus = NpcFocus(self)
-            local talkQueue = NpcTalkQueue(self)
-
-            if not focus:isFocused(creature) then
-                -- If the player is not focused, the NPC will greet the player if the player says a greeting word and is in range
-                if getDistanceTo(creature:getId()) > FOCUS.greetDistance then
+            -- If the NPC has a response, it sets the topic to the one associated with the message
+            handler:setTopic(handler:getTopic(creature):isKeyword(message), creature)
+            -- check if we have a callback for this topic
+            if handler:getTopic(creature).callback then
+                if not handler:getTopic(creature):callback(Npc(getNpcCid()), creature) then
+                    handler:setTopic(handler, creature)
                     return
                 end
-
-                for _, word in pairs(KEYWORDS_GREET) do
-                    if message == word then
-                        focus:addFocus(creature)
-                        doNpcSetCreatureFocus(creature:getId())
-                        local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        handler:setTopic(handler, creature)
-                        return true
-                    end
-                end
-            else
-                -- If the player is focused, the NPC will say goodbye if the player says a farewell word
-                for _, word in pairs(KEYWORDS_FAREWELL) do
-                    if message == word then
-                        focus:removeFocus(creature)
-                        closeShopWindow(creature)
-                        local msg = handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        return true
-                    end
-                end
             end
-
-            -- Checks if the NPC has a response for the given message
-            if handler:getTopic(creature):isKeyword(message) then
-                -- renewing the focus for the player
-                focus:addFocus(creature)
-                -- If the NPC has a shop for the message, it opens the shop window
-                if handler:getTopic(creature):getShop(message) then
-                    handler:setActiveShop(creature, handler:getTopic(creature):getShop(message))
-                    local shop = NpcShop(self, handler:getActiveShop(creature))
-                    local items = shop:getItems()
-                    if shop:hasDiscount(creature) then
-                        local afterDiscount = {}
-                        for _, item in pairs(items) do
-                            table.insert(afterDiscount, {
-                                id = item.id, name = item.name, 
-                                buy = (item.buy - math.ceil(item.buy / 100 * (shop:hasDiscount(creature) and shop:hasDiscount(creature) or 0))),
-                                sell = item.sell,
-                                subtype = item.subtype == nil and nil or item.subtype
-                            })
-                        end
-                        self:openShopWindow(creature, afterDiscount, shop.onBuy, shop.onSell)
-                    else
-                        self:openShopWindow(creature, items, shop.onBuy, shop.onSell)
-                    end
-                end
-                -- If the NPC has a response, it sets the topic to the one associated with the message
-                handler:setTopic(handler:getTopic(creature):isKeyword(message), creature)
-                -- If the NPC has a response for the current topic, it says the response
-                if handler:getTopic(creature):getResponse() then
-                    local msg = handler:getTopic(creature):getResponse():replaceTags(creature:getName())
-                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                end
-                -- If the NPC has a resetTopic, it resets the topic
-                if handler:getTopic(creature).resetTopic then
-                    handler:setTopic(handler, creature)
-                end
-            else
-                -- If the NPC doesn't have a response, it says a default message
-                selfSay("What do you want from me!?!", creature)
+            -- If the NPC has a response for the current topic, it says the response
+            if handler:getTopic(creature):getResponse() then
+                local msg = handler:getTopic(creature):getResponse():replaceTags(creature:getName())
+                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
             end
+            -- If the NPC has a resetTopic, it resets the topic
+            if handler:getTopic(creature).resetTopic then
+                handler:setTopic(handler, creature)
+            end
+        else
+            -- If the NPC doesn't have a response, it says a default message
+            selfSay("What do you want from me!?!", creature)
         end
     end
+end
     
     -- This block of code creates a new metatable for the KeywordsHandler table
-    if not NpcsHandler then
-        -- If KeywordsHandler doesn'handler exist, it's created as an empty table
-        NpcsHandler = {}
-        -- The metatable is set up to call the function when KeywordsHandler is called
-        setmetatable(NpcsHandler, {
-            __call = function(self, npc)
-                -- If the NPC doesn'handler have a KeywordsHandler, one is created for it
-                if not self[npc:getName()] then
-                    self[npc:getName()] = {
-                        keywords = {},
-                        topic = {},
-                        shopActive = {},
-                        greetWords = MESSAGES_GREET,
-                        farewellWords = MESSAGES_FAREWELL
-                    }
-                    setmetatable(self[npc:getName()], {__index = NpcsHandler})
-                    setmetatable(self[npc:getName()].keywords, {__index = NpcsHandler})
-                end
-                -- The KeywordsHandler is returned
-                return self[npc:getName()]
+if not NpcsHandler then
+    -- If KeywordsHandler doesn'handler exist, it's created as an empty table
+    NpcsHandler = {}
+    -- The metatable is set up to call the function when KeywordsHandler is called
+    setmetatable(NpcsHandler, {
+        __call = function(self, npc)
+            -- If the NPC doesn'handler have a KeywordsHandler, one is created for it
+            if not self[npc:getName()] then
+                self[npc:getName()] = {
+                    keywords = {},
+                    topic = {},
+                    shopActive = {},
+                    greetWords = MESSAGES_GREET,
+                    farewellWords = MESSAGES_FAREWELL
+                }
+                setmetatable(self[npc:getName()], {__index = NpcsHandler})
+                setmetatable(self[npc:getName()].keywords, {__index = NpcsHandler})
             end
-        })
-    end
+            -- The KeywordsHandler is returned
+            return self[npc:getName()]
+        end
+    })
     
     -- This function adds a keyword to the KeywordsHandler for the NPC
     function NpcsHandler:keyword(word)
@@ -298,6 +310,7 @@ end
     function NpcsHandler:resetTalkState()
         self.resetTopic = true
     end
+end
 
     
 -- This block of code creates a new metatable for the KeywordsHandler table
@@ -322,10 +335,28 @@ if not NpcShop then
             return self[npc:getName()][topic]
         end
     })
-end
 
-function NpcShop:addItems(shop)
-    for id, items in pairs(shop) do
+    function NpcShop:addItems(shop)
+        for id, items in pairs(shop) do
+            local found = false
+            for _, item in pairs(self.items) do
+                if item.id == id then
+                    found = true
+                    break
+                end
+            end
+            if not found then
+                table.insert(self.items, {
+                    id = id, name = ItemType(id):getName(), buy = items.buyPrice, sell = items.sellPrice, subtype = items.subType == nil and nil or items.subType
+                })
+            end
+        end
+    end
+
+    function NpcShop:addItem(id, buyPrice, sellPrice, subType)
+        local buy = buyPrice and buyPrice or 0
+        local sell = sellPrice and sellPrice or 0
+        local sub = subType and subType or 1
         local found = false
         for _, item in pairs(self.items) do
             if item.id == id then
@@ -335,161 +366,143 @@ function NpcShop:addItems(shop)
         end
         if not found then
             table.insert(self.items, {
-                id = id, name = ItemType(id):getName(), buy = items.buyPrice, sell = items.sellPrice, subtype = items.subType == nil and nil or items.subType
+                id = id, name = ItemType(id):getName(), buy = buy, sell = sell, subtype = sub
             })
         end
     end
-end
 
-function NpcShop:addItem(id, buyPrice, sellPrice, subType)
-    local buy = buyPrice and buyPrice or 0
-    local sell = sellPrice and sellPrice or 0
-    local sub = subType and subType or 1
-    local found = false
-    for _, item in pairs(self.items) do
-        if item.id == id then
-            found = true
-            break
-        end
+
+    function NpcShop:addDiscount(storage, percent)
+        local percent = percent and percent or 0
+        self.discounts[storage] = percent
     end
-    if not found then
-        table.insert(self.items, {
-            id = id, name = ItemType(id):getName(), buy = buy, sell = sell, subtype = sub
-        })
-    end
-end
 
-
-function NpcShop:addDiscount(storage, percent)
-    local percent = percent and percent or 0
-    self.discounts[storage] = percent
-end
-
-function NpcShop:hasDiscount(creature)
-    for storage, percent in pairs(self.discounts) do
-        if percent == 0 then
+    function NpcShop:hasDiscount(creature)
+        for storage, percent in pairs(self.discounts) do
+            if percent == 0 then
+                if creature:getStorageValue(storage) > 0 then
+                    return creature:getStorageValue(storage)
+                end
+            end
             if creature:getStorageValue(storage) > 0 then
-                return creature:getStorageValue(storage)
+                return percent
             end
         end
-        if creature:getStorageValue(storage) > 0 then
-            return percent
-        end
+        return false
     end
-    return false
-end
 
-function NpcShop:getItems()
-    return self.items
-end
+    function NpcShop:getItems()
+        return self.items
+    end
 
-function NpcShop:getItem(itemid, subType)
-    for _, item in pairs(self.items) do
-        if item.id == itemid then
-            if item.subtype then
-                if item.subType == subType then
+    function NpcShop:getItem(itemid, subType)
+        for _, item in pairs(self.items) do
+            if item.id == itemid then
+                if item.subtype then
+                    if item.subType == subType then
+                        return item
+                    end
+                else
                     return item
                 end
-            else
-                return item
             end
         end
-    end
-    return false
-end
-
-NpcShop.onBuy = function(player, itemid, subType, amount, ignoreCap, inBackpacks)
-    local npc = Npc(getNpcCid())
-    local npcHandler = NpcsHandler(npc)
-    local shop = NpcShop(npc, npcHandler:getActiveShop(player))
-    local shopItem = shop:getItem(itemid, subType)
-    local focus = NpcFocus(npc)
-    local talkQueue = NpcTalkQueue(npc)
-    if not shopItem then
-        error("[NpcShop.onBuy] shopItem == nil")
-		return false
-    end
-
-    if shopItem.buy == 0 then
-        error("[NpcShop.onBuy] attempt to buy a non-buyable item")
         return false
     end
 
-    local discount = shop:hasDiscount(player) and shop:hasDiscount(player) or 0
-    local totalCost = amount * (shopItem.buy - math.ceil(shopItem.buy / 100 * discount))
-    if inBackpacks then
-        totalCost = ItemType(itemid):isStackable() and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
-    end
-
-    if player:getTotalMoney() < totalCost then
-        local msg = MESSAGE_LIST.needMoney:replaceTags(player:getName(), amount, totalCost, shopItem.name)
-        talkQueue:addToQueue(player, msg, TALK.defaultDelay)
-        player:sendCancelMessage(msg)
-        return false
-    end
-
-    local subType = shopItem.subType or 1
-    local a, b = doNpcSellItem(player, itemid, amount, subType, ignoreCap, inBackpacks, ITEM_SHOPPING_BAG)
-    if a < amount then
-        local msgId = MESSAGE_LIST.needMoreSpace
-        if a == 0 then
-            msgId = MESSAGE_LIST.needSpace
+    NpcShop.onBuy = function(player, itemid, subType, amount, ignoreCap, inBackpacks)
+        local npc = Npc(getNpcCid())
+        local npcHandler = NpcsHandler(npc)
+        local shop = NpcShop(npc, npcHandler:getActiveShop(player))
+        local shopItem = shop:getItem(itemid, subType)
+        local focus = NpcFocus(npc)
+        local talkQueue = NpcTalkQueue(npc)
+        if not shopItem then
+            error("[NpcShop.onBuy] shopItem == nil")
+            return false
         end
 
-        local msg = msgId:replaceTags(player:getName(), amount, totalCost, shopItem.name)
-        player:sendCancelMessage(msg)
-        focus:addFocus(player)
+        if shopItem.buy == 0 then
+            error("[NpcShop.onBuy] attempt to buy a non-buyable item")
+            return false
+        end
 
-        if a > 0 then
-            if not player:removeTotalMoney((a * (shopItem.buy - math.ceil(shopItem.buy / 100 * discount))) + (b * 20)) then
+        local discount = shop:hasDiscount(player) and shop:hasDiscount(player) or 0
+        local totalCost = amount * (shopItem.buy - math.ceil(shopItem.buy / 100 * discount))
+        if inBackpacks then
+            totalCost = ItemType(itemid):isStackable() and totalCost + 20 or totalCost + (math.max(1, math.floor(amount / ItemType(ITEM_SHOPPING_BAG):getCapacity())) * 20)
+        end
+
+        if player:getTotalMoney() < totalCost then
+            local msg = MESSAGE_LIST.needMoney:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            talkQueue:addToQueue(player, msg, TALK.defaultDelay)
+            player:sendCancelMessage(msg)
+            return false
+        end
+
+        local subType = shopItem.subType or 1
+        local a, b = doNpcSellItem(player, itemid, amount, subType, ignoreCap, inBackpacks, ITEM_SHOPPING_BAG)
+        if a < amount then
+            local msgId = MESSAGE_LIST.needMoreSpace
+            if a == 0 then
+                msgId = MESSAGE_LIST.needSpace
+            end
+
+            local msg = msgId:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            player:sendCancelMessage(msg)
+            focus:addFocus(player)
+
+            if a > 0 then
+                if not player:removeTotalMoney((a * (shopItem.buy - math.ceil(shopItem.buy / 100 * discount))) + (b * 20)) then
+                    return false
+                end
+                return true
+            end
+
+            return false
+        else
+            local msg = MESSAGE_LIST.bought:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            talkQueue:addToQueue(player, msg, TALK.defaultDelay)
+            if not player:removeTotalMoney(totalCost) then
                 return false
             end
+            focus:addFocus(player)
+            return true
+        end
+    end
+
+    NpcShop.onSell = function(player, itemid, subType, amount, ignoreEquipped, _)
+        local npc = Npc(getNpcCid())
+        local npcHandler = NpcsHandler(npc)
+        local shop = NpcShop(npc, npcHandler:getActiveShop(player))
+        local shopItem = shop:getItem(itemid, subType)
+        local focus = NpcFocus(npc)
+        local talkQueue = NpcTalkQueue(npc)
+        if not shopItem then
+            error("[NpcShop.onSell] items[itemid] == nil")
+            return false
+        end
+
+        if shopItem.sell == 0 then
+            error("[NpcShop.onSell] attempt to sell a non-sellable item")
+            return false
+        end
+
+        if not ItemType(itemid):isFluidContainer() then
+            subType = -1
+        end
+
+        if player:removeItem(itemid, amount, subType, true) then
+            local msg = MESSAGE_LIST.sold:replaceTags(player:getName(), amount, amount * shopItem.sell, shopItem.name)
+            talkQueue:addToQueue(player, msg, TALK.defaultDelay)
+            player:addMoney(amount * shopItem.sell)
+            focus:addFocus(player)
             return true
         end
 
-        return false
-    else
-        local msg = MESSAGE_LIST.bought:replaceTags(player:getName(), amount, totalCost, shopItem.name)
-        talkQueue:addToQueue(player, msg, TALK.defaultDelay)
-        if not player:removeTotalMoney(totalCost) then
-            return false
-        end
         focus:addFocus(player)
-        return true
-    end
-end
-
-NpcShop.onSell = function(player, itemid, subType, amount, ignoreEquipped, _)
-    local npc = Npc(getNpcCid())
-    local npcHandler = NpcsHandler(npc)
-    local shop = NpcShop(npc, npcHandler:getActiveShop(player))
-    local shopItem = shop:getItem(itemid, subType)
-    local focus = NpcFocus(npc)
-    local talkQueue = NpcTalkQueue(npc)
-    if not shopItem then
-        error("[NpcShop.onSell] items[itemid] == nil")
         return false
     end
-
-    if shopItem.sell == 0 then
-        error("[NpcShop.onSell] attempt to sell a non-sellable item")
-        return false
-    end
-
-    if not ItemType(itemid):isFluidContainer() then
-        subType = -1
-    end
-
-    if player:removeItem(itemid, amount, subType, true) then
-        local msg = MESSAGE_LIST.sold:replaceTags(player:getName(), amount, amount * shopItem.sell, shopItem.name)
-        talkQueue:addToQueue(player, msg, TALK.defaultDelay)
-        player:addMoney(amount * shopItem.sell)
-        focus:addFocus(player)
-        return true
-    end
-
-    focus:addFocus(player)
-    return false
 end
 
 if not NpcFocus then
