@@ -14,17 +14,46 @@ extern LuaEnvironment g_luaEnvironment;
 
 uint32_t Npc::npcAutoID = 0x20000000;
 
-void Npcs::reload()
+namespace Npcs {
+bool loaded = false;
+
+std::shared_ptr<NpcScriptInterface> scriptInterface = std::make_shared<NpcScriptInterface>();
+
+void load(bool reload /*= false*/)
+{
+	if (!reload && loaded) {
+		return;
+	}
+
+	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: data/npc/lib/npc.lua" << std::endl;
+		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		return;
+	}
+
+	loaded = true;
+
+	if (!reload) {
+		fmt::print(">> NpcLib loaded\n");
+	} else {
+		fmt::print(">> NpcLib reloaded\n");
+	}
+}
+
+void reload()
 {
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
 	for (const auto& it : npcs) {
 		it.second->closeAllShopWindows();
 	}
 
+	Npcs::load(true);
+
 	for (const auto& it : npcs) {
 		it.second->reload();
 	}
 }
+} // namespace Npcs
 
 Npc* Npc::createNpc(const std::string& name)
 {
@@ -1052,14 +1081,9 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	return 1;
 }
 
-NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
-    scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
+NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) : scriptInterface(Npcs::scriptInterface), npc(npc)
 {
-	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
-		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
-		std::cout << scriptInterface->getLastLuaError() << std::endl;
-		return;
-	}
+	Npcs::load();
 
 	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
@@ -1073,6 +1097,14 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
 		playerCloseChannelEvent = scriptInterface->getEvent("onPlayerCloseChannel");
 		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
 		thinkEvent = scriptInterface->getEvent("onThink");
+	}
+}
+
+NpcEventsHandler::~NpcEventsHandler()
+{
+	for (auto eventId : {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent,
+	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent}) {
+		scriptInterface->removeEvent(eventId);
 	}
 }
 

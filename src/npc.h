@@ -10,11 +10,11 @@
 class Npc;
 class Player;
 
-class Npcs
-{
-public:
-	static void reload();
-};
+namespace Npcs {
+void load(bool reload = false);
+
+void reload();
+} // namespace Npcs
 
 class NpcScriptInterface final : public LuaScriptInterface
 {
@@ -57,6 +57,7 @@ class NpcEventsHandler
 {
 public:
 	NpcEventsHandler(const std::string& file, Npc* npc);
+	~NpcEventsHandler();
 
 	void onCreatureAppear(Creature* creature);
 	void onCreatureDisappear(Creature* creature);
@@ -70,7 +71,7 @@ public:
 
 	bool isLoaded() const;
 
-	std::unique_ptr<NpcScriptInterface> scriptInterface;
+	std::shared_ptr<NpcScriptInterface> scriptInterface;
 
 private:
 	Npc* npc;
@@ -156,6 +157,8 @@ public:
 
 	const auto& getSpectators() { return spectators; }
 
+	void closeAllShopWindows();
+
 private:
 	explicit Npc(const std::string& name);
 
@@ -183,7 +186,6 @@ private:
 
 	void addShopPlayer(Player* player);
 	void removeShopPlayer(Player* player);
-	void closeAllShopWindows();
 
 	std::map<std::string, std::string> parameters;
 
@@ -210,7 +212,6 @@ private:
 	bool isIdle;
 	bool pushable;
 
-	friend class Npcs;
 	friend class NpcScriptInterface;
 };
 
