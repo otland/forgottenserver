@@ -81,7 +81,7 @@ std::string transformToSHA1(std::string_view input)
 	}
 
 	unsigned int len = EVP_MD_size(md.get());
-	std::string digest('\0', static_cast<size_t>(len));
+	std::string digest(static_cast<size_t>(len), '\0');
 	if (!EVP_DigestFinal_ex(ctx.get(), reinterpret_cast<unsigned char*>(digest.data()), &len)) {
 		throw std::runtime_error("Message digest finalization failed");
 	}
