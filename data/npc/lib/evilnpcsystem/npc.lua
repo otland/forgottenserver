@@ -194,6 +194,25 @@ function Npc:defaultBehavior()
                     return
                 end
             end
+            -- checking for requirements
+            if handler:getTopic(creature).requireStorageValue then
+                local storage = handler:getTopic(creature).requireStorageValue
+                if storage.equalOrAbove then
+                    if creature:getStorageValue(storage.storage) < storage.value then
+                        local msg = handler:getTopic(creature).requireFailureRespond:replaceTags(creature:getName())
+                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        handler:setTopic(handler, creature)
+                        return
+                    end
+                else
+                    if creature:getStorageValue(storage.storage) ~= storage.value then
+                        local msg = handler:getTopic(creature).requireFailureRespond:replaceTags(creature:getName())
+                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        handler:setTopic(handler, creature)
+                        return
+                    end
+                end
+            end
             -- If the NPC has a response for the current topic, it says the response
             if handler:getTopic(creature):getResponse() then
                 local msg = handler:getTopic(creature):getResponse():replaceTags(creature:getName())
@@ -309,6 +328,15 @@ if not NpcsHandler then
 
     function NpcsHandler:resetTalkState()
         self.resetTopic = true
+    end
+
+    function NpcsHandler:requireStorage(storage, value, equalOrAbove)
+        equalOrAbove = equalOrAbove and equalOrAbove or false
+        self.requireStorageValue = {storage = storage, value = value, equalOrAbove = equalOrAbove}
+    end
+
+    function NpcsHandler:requireFailureRespond(text)
+        self.requireFailureRespond = text
     end
 end
 
@@ -581,7 +609,7 @@ if not NpcTalkQueue then
             local player = Player(playerid)
             if player then
                 for id, data in pairs(queue) do
-                    if not Player(playerid) then
+                    if not player then
                         self.queue[playerid] = nil
                         break
                     end
