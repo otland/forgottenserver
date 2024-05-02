@@ -8,10 +8,10 @@
     The module is designed to be used in conjunction with other modules and scripts that define NPC behavior.
     If the NpcEvents module is not already defined, it will be created and initialized with the necessary functions.
     Functions:
-        - onAppear(npc: Npc, creature: Creature)
-        - onDisappear(npc: Npc, creature: Creature)
-        - onThink(npc: Npc)
-        - onSay(npc: Npc, creature: Creature, messageType: number, message: string)
+        - NpcEvents.onAppear(npc, creature)
+        - NpcEvents.onDisappear(npc, creature)
+        - NpcEvents.onThink(npc)
+        - NpcEvents.onSay(npc, creature, messageType, message)
 ]]
 
 -- Make sure we are not overloading on reload
@@ -23,9 +23,6 @@ if not NpcEvents then
     ---@param npc Npc The NPC that appeared.
     ---@param creature Creature The creature (player) that the NPC appeared to.
     function NpcEvents.onAppear(npc, creature)
-        if npc.onAppearCallback then
-            npc:onAppearCallback(creature)
-        end
     end
 
     -- onDisappear function is called when an NPC disappears from a creature (player) or when the creature disappears from the NPC.
@@ -41,9 +38,6 @@ if not NpcEvents then
             focus:removeFocus(creature)
             local talkQueue = NpcTalkQueue(npc)
             talkQueue:clearQueue(creature)
-        end
-        if npc.onDisappearCallback then
-            npc:onDisappearCallback(creature)
         end
     end
 
@@ -82,9 +76,6 @@ if not NpcEvents then
                     selfTurn(DIRECTION_WEST)
                 end
             end
-        end
-        if npc.onThinkCallback then
-            npc:onThinkCallback()
         end
     end
 
@@ -140,6 +131,40 @@ if not NpcEvents then
         if handler:getTalkState(creature):isKeyword(message) then
             -- renewing the focus for the player
             focus:addFocus(creature)
+            -- If the NPC has a response, it sets the talk state to the one associated with the message
+            handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
+            -- check if we have a callback for this talk state
+            if handler:getTalkState(creature).callback then
+                local result, failureMessage = handler:getTalkState(creature):callback(npc, creature)
+                if not result then
+                    local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
+                    if failureMessage then
+                        msg = failureMessage:replaceTags(creature:getName())
+                    end
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                    handler:setTalkState(handler, creature)
+                    return
+                end
+            end
+            -- checking for requirements
+            if handler:getTalkState(creature).requireStorageValue then
+                local storage = handler:getTalkState(creature).requireStorageValue
+                if storage.equalOrAbove then
+                    if creature:getStorageValue(storage.storage) < storage.value then
+                        local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
+                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        handler:setTalkState(handler, creature)
+                        return
+                    end
+                else
+                    if creature:getStorageValue(storage.storage) ~= storage.value then
+                        local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
+                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        handler:setTalkState(handler, creature)
+                        return
+                    end
+                end
+            end
             -- If the NPC has a shop for the message, it opens the shop window
             if handler:getTalkState(creature):getShop(message) then
                 handler:setActiveShop(creature, handler:getTalkState(creature):getShop(message))
@@ -160,40 +185,14 @@ if not NpcEvents then
                     npc:openShopWindow(creature, items, shop.onBuy, shop.onSell)
                 end
             end
-            -- If the NPC has a response, it sets the talk state to the one associated with the message
-            handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
-            -- check if we have a callback for this talk state
-            if handler:getTalkState(creature).callback then
-                if not handler:getTalkState(creature):callback(Npc(getNpcCid()), creature) then
-                    local msg = handler:getTalkState(creature).failureRespond:replaceTags(creature:getName())
-                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                    handler:setTalkState(handler, creature)
-                    return
-                end
-            end
-            -- checking for requirements
-            if handler:getTalkState(creature).requireStorageValue then
-                local storage = handler:getTalkState(creature).requireStorageValue
-                if storage.equalOrAbove then
-                    if creature:getStorageValue(storage.storage) < storage.value then
-                        local msg = handler:getTalkState(creature).failureRespond:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        handler:setTalkState(handler, creature)
-                        return
-                    end
-                else
-                    if creature:getStorageValue(storage.storage) ~= storage.value then
-                        local msg = handler:getTalkState(creature).failureRespond:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        handler:setTalkState(handler, creature)
-                        return
-                    end
-                end
-            end
             -- If the NPC has a response for the current topic, it says the response
             if handler:getTalkState(creature):getResponse() then
                 local msg = handler:getTalkState(creature):getResponse():replaceTags(creature:getName())
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+            end
+            -- if the NPC has reached the last keyword, it resets the talk state
+            if next(handler:getTalkState(creature).keywords) == nil then
+                handler:setTalkState(handler, creature)
             end
             -- If the NPC has a resetTalkstate, it resets the talk state
             if handler:getTalkState(creature).resetTalkstate then
@@ -202,9 +201,6 @@ if not NpcEvents then
         else
             -- If the message doesn't match any of the keywords, the NPC will respond with a default message
             selfSay("What do you want from me!?!", creature)
-        end
-        if npc.onSayCallback then
-            npc:onSayCallback(creature, messageType, message)
         end
     end
 end

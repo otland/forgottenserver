@@ -71,18 +71,30 @@ function Npc:defaultBehavior()
     -- The onAppear function is called when the NPC/Creature appears.
     self.onAppear = function(creature)
         NpcEvents.onAppear(self, creature)
+        if self.onAppearCallback then
+            self:onAppearCallback(creature)
+        end
     end
     -- The onDisappear function is called when the NPC/Creature disappears.
     self.onDisappear = function(creature)
         NpcEvents.onDisappear(self, creature)
+        if self.onDisappearCallback then
+            self:onDisappearCallback(creature)
+        end
     end
     -- The onThink function is called when the NPC thinks.
     self.onThink = function()
         NpcEvents.onThink(self)
+        if self.onThinkCallback then
+            self:onThinkCallback()
+        end
         return true
     end
     -- The onSay function is called when a player says something to the NPC.
     self.onSay = function(creature, messageType, message)
         NpcEvents.onSay(self, creature, messageType, message)
+        if self.onSayCallback then
+            self:onSayCallback(creature, messageType, message)
+        end
     end
 end

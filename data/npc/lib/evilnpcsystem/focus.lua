@@ -5,10 +5,10 @@
     The class provides methods to add, check, and remove focus on players, as well as retrieve the currently focused player.
     The focus duration and distance are defined in the FOCUS table in constants.lua.
     Functions:
-        NpcFocus:addFocus(player) - Adds focus on a player for a certain duration.
-        NpcFocus:isFocused(player) - Checks if a player is currently being focused by the NPC.
-        NpcFocus:removeFocus(player) - Removes focus from a player.
-        NpcFocus:getCurrentFocus() - Retrieves the currently focused player.
+        - NpcFocus:addFocus(player)
+        - NpcFocus:isFocused(player)
+        - NpcFocus:removeFocus(player)
+        - NpcFocus:getCurrentFocus()
 ]]
 
 -- Make sure we are not overloading on reload

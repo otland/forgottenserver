@@ -3,22 +3,23 @@
     This file contains the handler for the NPCs. It's used to store the keywords, responses and shops for the NPCs.
     The handler is created as a metatable, so it can be called as a function to get the NpcsHandler for the NPC.
     Functions:
-        - NpcsHandler(npc: Npc): NpcsHandler
-        - keyword(word: string): NpcsHandler
-        - isKeyword(word: string): boolean
-        - getTalkState(player: Player): NpcsHandler
-        - setTalkState(state: NpcsHandler, player: Player)
-        - respond(text: string)
-        - getResponse(): string
-        - shop(id: number)
-        - getShop(word: string): number or boolean
-        - setActiveShop(player: Player, id: number)
-        - getActiveShop(player: Player): number
-        - setGreetRespond(texts: string or table)
-        - setFarewellRespond(texts: string or table)
-        - resetTalkState()
-        - requireStorage(storage: number, value: number, equalOrAbove: boolean)
-        - failureRespond(text: string)
+        - NpcsHandler(npc): NpcsHandler
+        - NpcsHandler:keyword(word)
+        - NpcsHandler:isKeyword(word)
+        - NpcsHandler:getTalkState(player)
+        - NpcsHandler:setTalkState(state, player)
+        - NpcsHandler:respond(text)
+        - NpcsHandler:getResponse()
+        - NpcsHandler:shop(id)
+        - NpcsHandler:getShop(word)
+        - NpcsHandler:setActiveShop(player, id)
+        - NpcsHandler:getActiveShop(player)
+        - NpcsHandler:setGreetRespond(texts)
+        - NpcsHandler:setFarewellRespond(texts)
+        - NpcsHandler:resetTalkState()
+        - NpcsHandler:requireStorage(storage, value, equalOrAbove)
+        - NpcsHandler:failureRespond(text)
+        - NpcsHandler:callback(npc, player)
 ]]
 
 -- Make sure we are not overloading on reload
@@ -117,7 +118,7 @@ if not NpcsHandler then
     ---@param word string The keyword.
     ---@return number|boolean The shop ID if found, false otherwise.
     function NpcsHandler:getShop(word)
-        return not self.keywords[word].openShop and false or self.keywords[word].openShop
+        return not self.openShop and false or self.openShop
     end
 
     -- Sets the active shop for a player.
@@ -171,6 +172,24 @@ if not NpcsHandler then
     -- Sets the failure response text for the keyword.
     ---@param text string The failure response text.
     function NpcsHandler:failureRespond(text)
-        self.failureRespond = text
+        self.failureResponse = text
     end
+
+    -- Callback function for the keyword.
+    ---@param npc Npc The NPC object.
+    ---@param player Player The player object.
+    ---@return boolean Whether the callback was successful.
+    -- example:
+    --[[
+    function NpcsHandler:callback(npc, player)
+        if player:getStorageValue(9999) >= 1 then
+            -- we let all other checks run and let us gracefully advance in talk state.
+            return true
+        end
+        -- we return false which now triggers the default failureResponse to be sent to the player, resulting in a resetTalkState().
+        return false
+        -- we return false and a set string, which will be sent as the failure response to the player, resulting in a resetTalkState().
+        return false, "You need storage value 9999 to proceed."
+    end
+    ]]
 end

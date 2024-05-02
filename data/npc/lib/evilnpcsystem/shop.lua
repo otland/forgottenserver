@@ -3,14 +3,14 @@
     NpcShop is a table that stores the items and discounts for each NPC shop.
     It provides functions to add items and discounts to the shop, as well as to handle buying and selling items.
     Functions:
-        NpcShop:addItems(shop) - Adds items to the NpcShop.
-        NpcShop:addItem(id, buy, sell, subType) - Adds an item to the NPC shop.
-        NpcShop:addDiscount(storage, percent) - Adds a discount to the specified storage in the NpcShop.
-        NpcShop:hasDiscount(player) - Checks if a player has a discount in the NpcShop.
-        NpcShop:getItems() - Retrieves the items in the shop.
-        NpcShop:getItem(itemid, subType) - Retrieves an item from the shop based on its ID and subtype.
-        NpcShop.onBuy(player, itemid, subType, amount, ignoreCap, inBackpacks) - Handles the buying process when a player interacts with an NPC shop.
-        NpcShop.onSell(player, itemid, subType, amount, ignoreEquipped) - Handles the selling process when a player interacts with an NPC shop.
+        - NpcShop:addItems(shop)
+        - NpcShop:addItem(id, buy, sell, subType)
+        - NpcShop:addDiscount(storage, percent)
+        - NpcShop:hasDiscount(player)
+        - NpcShop:getItems()
+        - NpcShop:getItem(itemid, subType)
+        - NpcShop.onBuy(player, itemid, subType, amount, ignoreCap, inBackpacks)
+        - NpcShop.onSell(player, itemid, subType, amount, ignoreEquipped)
 ]]
 
 -- Make sure we are not overloading on reload
@@ -156,6 +156,7 @@ if not NpcShop then
     ---@param amount number The amount of the item to buy.
     ---@param ignoreCap boolean Whether to ignore the players capacity when buying the item.
     ---@param inBackpacks boolean Whether to buy the item in backpacks.
+    ---@return boolean True if the buying process was successful, false otherwise.
     NpcShop.onBuy = function(player, itemid, subType, amount, ignoreCap, inBackpacks)
         local npc = Npc(getNpcCid())
         local npcHandler = NpcsHandler(npc)
@@ -218,7 +219,7 @@ if not NpcShop then
     end
 
     -- Function: NpcShop.onSell
-    -- Description: Handles the selling of items to an NPC shop.
+    -- Description: Handles the selling process when a player interacts with an NPC shop.
     -- Notes:
     --   - This function removes the sold item from the player's inventory, adds money to the player's balance,
     --     and sends a message to the player confirming the sale.
@@ -231,6 +232,7 @@ if not NpcShop then
     ---@param subType number The subtype of the item to sell.
     ---@param amount number The amount of the item to sell.
     ---@param ignoreEquipped boolean Whether to ignore equipped items when selling.
+    ---@return boolean True if the sale was successful, false otherwise.
     NpcShop.onSell = function(player, itemid, subType, amount, ignoreEquipped, _)
         local npc = Npc(getNpcCid())
         local npcHandler = NpcsHandler(npc)

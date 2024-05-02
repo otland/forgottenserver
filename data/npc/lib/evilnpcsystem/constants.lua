@@ -9,8 +9,8 @@
 MESSAGE_TAGS = {
     playerName = { tag = "|PLAYERNAME|", func = function(playerName, amount, total, itemName) return playerName end },
     itemCount = { tag = "|ITEMCOUNT|", func = function(playerName, amount, total, itemName) return amount end },
-    totalCost = { tag = "|TOTALCOST|", func = function(playerName, amount, total, itemName) return total end},
-    itemName = { tag = "|ITEMNAME|", func = function(playerName, amount, total, itemName) return itemName end}
+    totalCost = { tag = "|TOTALCOST|", func = function(playerName, amount, total, itemName) return total end },
+    itemName = { tag = "|ITEMNAME|", func = function(playerName, amount, total, itemName) return itemName end }
 }
 
 -- MESSAGE_LIST

@@ -2,9 +2,9 @@
     >> NpcTalkQueue <<
     The NpcTalkQueue module provides a way to manage and process a queue of messages for NPCs to say to players.
     Functions:
-        - addToQueue(player: Player, message: string, delay: number)
-        - processQueue()
-        - clearQueue(player: Player)
+        - NpcTalkQueue:addToQueue(player: Player, message: string, delay: number)
+        - NpcTalkQueue:processQueue()
+        - NpcTalkQueue:clearQueue(player: Player)
 ]]
 
 -- Make sure we are not overloading on reload
