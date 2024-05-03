@@ -68,7 +68,7 @@ npc:defaultBehavior()
 -- The NpcsHandler class is used to handle the NPC's responses to player interactions.
 local handler = NpcsHandler(npc)
 
-handler:setGreetRespond("Hello |PLAYERNAME| I can {travel} you to wherever you want, just tell me your {destination}")
+handler:setGreetResponse("Hello |PLAYERNAME| I can {travel} you to wherever you want, just tell me your {destination}")
 
 local destinations = {
     ["temple"] = {position = Position(94, 129, 7), money = 100, level = 1, premium = false, storage = {key = 9999, value = 1, equalOrAbove = true}},

@@ -56,7 +56,7 @@ if not NpcEvents then
             if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
                 focus:removeFocus(player)
                 closeShopWindow(player)
-                selfSay(handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags({playerName = player:getName()}), player)
+                selfSay(handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = player:getName()}), player)
             end
         end
 
@@ -107,11 +107,11 @@ if not NpcEvents then
                 return
             end
 
-            for _, word in pairs(KEYWORDS_GREET) do
+            for _, word in pairs(handler.greetWords) do
                 if message == word then
                     focus:addFocus(creature)
                     doNpcSetCreatureFocus(creature:getId())
-                    local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags({playerName = creature:getName()})
+                    local msg = handler.greetResponses[math.random(1, #handler.greetResponses)]:replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
                     return
@@ -121,11 +121,11 @@ if not NpcEvents then
             return
         else
             -- If the player is focused, the NPC will say goodbye if the player says a farewell word
-            for _, word in pairs(KEYWORDS_FAREWELL) do
+            for _, word in pairs(handler.farewellWords) do
                 if message == word then
                     focus:removeFocus(creature)
                     closeShopWindow(creature)
-                    local msg = handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags({playerName = creature:getName()})
+                    local msg = handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     return
                 end

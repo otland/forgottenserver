@@ -20,10 +20,11 @@
         - NpcsHandler:getShop(word)
         - NpcsHandler:setActiveShop(player, id)
         - NpcsHandler:getActiveShop(player)
-        - NpcsHandler:setGreetRespond(texts)
-        - NpcsHandler:setFarewellRespond(texts)
+        - NpcsHandler:setGreetKeywords(words)
+        - NpcsHandler:setGreetResponse(texts)
+        - NpcsHandler:setFarewellKeywords(words)
+        - NpcsHandler:setFarewellResponse(texts)
         - NpcsHandler:resetTalkState()
-        - NpcsHandler:requireStorage(storage, value, equalOrAbove)
         - NpcsHandler:failureRespond(text)
         - NpcsHandler:teleport(position)
         - NpcsHandler:callback(npc, player)
@@ -44,8 +45,10 @@ if not NpcsHandler then
                     keywords = {},
                     talkState = {},
                     shopActive = {},
-                    greetWords = MESSAGES_GREET,
-                    farewellWords = MESSAGES_FAREWELL
+                    greetWords = KEYWORDS_GREET,
+                    greetResponses = MESSAGES_GREET,
+                    farewellWords = KEYWORDS_FAREWELL,
+                    farewellResponses = MESSAGES_FAREWELL
                 }
                 -- Sets the metatable for the NPC with the given name to the NpcsHandler table.
                 -- This allows the NPC to inherit functions and properties from the NpcsHandler table.
@@ -157,38 +160,45 @@ if not NpcsHandler then
         return self.shopActive[player:getGuid()]
     end
 
+    -- Sets the greet words for the NPC.
+    ---@param words string|table The greet words.
+    function NpcsHandler:setGreetKeywords(words)
+        if type(words) == "string" then
+            words = {words}
+        end
+        self.greetWords = words
+    end
+
     -- Sets the greet response texts for the NPC.
-    ---@param texts string or table The greet response texts.
-    ---@param texts table The greet response texts.
-    function NpcsHandler:setGreetRespond(texts)
+    ---@param texts string|table The greet response texts.
+    function NpcsHandler:setGreetResponse(texts)
         if type(texts) == "string" then
             texts = {texts}
         end
-        self.greetWords = texts
+        self.greetResponses = texts
+    end
+
+    -- Sets the farewell words for the NPC.
+    ---@param words string|table The farewell words.
+    function NpcsHandler:setFarewellKeywords(words)
+        if type(words) == "string" then
+            words = {words}
+        end
+        self.farewellWords = words
     end
 
     -- Sets the farewell response texts for the NPC.
-    ---@param texts string The farewell response texts.
-    ---@param texts table The farewell response texts.
-    function NpcsHandler:setFarewellRespond(texts)
+    ---@param texts string|table The farewell response texts.
+    function NpcsHandler:setFarewellResponse(texts)
         if type(texts) == "string" then
             texts = {texts}
         end
-        self.farewellWords = texts
+        self.farewellResponses = texts
     end
 
     -- Resets the talk state for the NPC of the interacting Player.
     function NpcsHandler:resetTalkState()
         self.resetTalkstate = true
-    end
-
-    -- Sets the required storage value for the keyword in order to advance talk state.
-    ---@param storage number The storage name.
-    ---@param value number The required value.
-    ---@param equalOrAbove boolean (optional) Whether the value should be equal or above.
-    function NpcsHandler:requireStorage(storage, value, equalOrAbove)
-        equalOrAbove = equalOrAbove and equalOrAbove or false
-        self.requireStorageValue = {storage = storage, value = value, equalOrAbove = equalOrAbove}
     end
 
     -- Sets the failure response text for the keyword.
