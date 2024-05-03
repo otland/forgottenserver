@@ -1,6 +1,9 @@
 --[[
     >> NpcTalkQueue <<
-    The NpcTalkQueue module provides a way to manage and process a queue of messages for NPCs to say to players.
+
+    Description:
+        - The NpcTalkQueue module provides a way to manage and process a queue of messages for NPCs to say to players.
+        
     Functions:
         - NpcTalkQueue:addToQueue(player: Player, message: string, delay: number)
         - NpcTalkQueue:processQueue()

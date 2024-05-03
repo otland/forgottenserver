@@ -1,7 +1,10 @@
 --[[
     >> NpcShop <<
-    NpcShop is a table that stores the items and discounts for each NPC shop.
-    It provides functions to add items and discounts to the shop, as well as to handle buying and selling items.
+
+    Description:
+        - NpcShop is a table that stores the items and discounts for each NPC shop.
+        - It provides functions to add items and discounts to the shop, as well as to handle buying and selling items.
+        
     Functions:
         - NpcShop:addItems(shop)
         - NpcShop:addItem(id, buy, sell, subType)
@@ -181,7 +184,7 @@ if not NpcShop then
         end
 
         if player:getTotalMoney() < totalCost then
-            local msg = MESSAGE_LIST.needMoney:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            local msg = MESSAGE_LIST.needMoney:replaceTags({playerName = player:getName(), total = totalCost, itemName = shopItem.name, amount = amount})
             talkQueue:addToQueue(player, msg, TALK.defaultDelay)
             player:sendCancelMessage(msg)
             return false
@@ -195,7 +198,7 @@ if not NpcShop then
                 msgId = MESSAGE_LIST.needSpace
             end
 
-            local msg = msgId:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            local msg = msgId:replaceTags({playerName = player:getName(), total = totalCost, itemName = shopItem.name, amount = amount})
             player:sendCancelMessage(msg)
             focus:addFocus(player)
 
@@ -208,7 +211,7 @@ if not NpcShop then
 
             return false
         else
-            local msg = MESSAGE_LIST.bought:replaceTags(player:getName(), amount, totalCost, shopItem.name)
+            local msg = MESSAGE_LIST.bought:replaceTags({playerName = player:getName(), total = totalCost, itemName = shopItem.name, amount = amount})
             talkQueue:addToQueue(player, msg, TALK.defaultDelay)
             if not player:removeTotalMoney(totalCost) then
                 return false
@@ -255,7 +258,7 @@ if not NpcShop then
         end
 
         if player:removeItem(itemid, amount, subType, true) then
-            local msg = MESSAGE_LIST.sold:replaceTags(player:getName(), amount, amount * shopItem.sell, shopItem.name)
+            local msg = MESSAGE_LIST.sold:replaceTags({playerName = player:getName(), amount = amount, itemName = shopItem.name, total = amount * shopItem.sell})
             talkQueue:addToQueue(player, msg, TALK.defaultDelay)
             player:addMoney(amount * shopItem.sell)
             focus:addFocus(player)

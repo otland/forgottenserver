@@ -1,12 +1,14 @@
 --[[
     >> NpcEvents <<
-    This module contains event functions related to NPCs.
-    These functions handle the behavior of NPCs when certain events occur, such as when a player appears, disappears, or says something.
-    The module provides functions for handling NPC appearances, disappearances, thinking, and speech.
-    The functions in this module are called by the NPC system to execute the corresponding behavior.
-    This module also includes callbacks that can be used to extend or modify the default behavior of NPCs.
-    The module is designed to be used in conjunction with other modules and scripts that define NPC behavior.
-    If the NpcEvents module is not already defined, it will be created and initialized with the necessary functions.
+
+    Description:
+        - This module contains event functions related to NPCs.
+        - These functions handle the behavior of NPCs when certain events occur, such as when a player appears, disappears, or says something.
+        - The module provides functions for handling NPC appearances, disappearances, thinking, and speech.
+        - The functions in this module are called by the NPC system to execute the corresponding behavior.
+        - This module also includes callbacks that can be used to extend or modify the default behavior of NPCs.
+        - The module is designed to be used in conjunction with other modules and scripts that define NPC behavior.
+
     Functions:
         - NpcEvents.onAppear(npc, creature)
         - NpcEvents.onDisappear(npc, creature)
@@ -54,7 +56,7 @@ if not NpcEvents then
             if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
                 focus:removeFocus(player)
                 closeShopWindow(player)
-                selfSay(handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(player:getName()), player)
+                selfSay(handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags({playerName = player:getName()}), player)
             end
         end
 
@@ -82,6 +84,7 @@ if not NpcEvents then
     -- onSay function is called when a creature (player) says something to an NPC.
     -- It handles the behavior of the NPC when a creature says something, such as greeting the player, responding to messages, opening shop windows, and executing callbacks.
     -- It executes the onSayCallback function of the NPC if it is defined.
+    -- It checks requirements and modules for the NPC's responses and adjusts the talk state accordingly.
     ---@param npc Npc The NPC that is being spoken to.
     ---@param creature Creature The creature (player) that is speaking.
     ---@param messageType number The type of the message.
@@ -108,19 +111,21 @@ if not NpcEvents then
                 if message == word then
                     focus:addFocus(creature)
                     doNpcSetCreatureFocus(creature:getId())
-                    local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags(creature:getName())
+                    local msg = handler.greetWords[math.random(1, #handler.greetWords)]:replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
                     return
                 end
             end
+            -- didn't greet yet, so we return
+            return
         else
             -- If the player is focused, the NPC will say goodbye if the player says a farewell word
             for _, word in pairs(KEYWORDS_FAREWELL) do
                 if message == word then
                     focus:removeFocus(creature)
                     closeShopWindow(creature)
-                    local msg = handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags(creature:getName())
+                    local msg = handler.farewellWords[math.random(1, #handler.farewellWords)]:replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     return
                 end
@@ -135,11 +140,11 @@ if not NpcEvents then
             handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
             -- check if we have a callback for this talk state
             if handler:getTalkState(creature).callback then
-                local result, failureMessage = handler:getTalkState(creature):callback(npc, creature)
-                if not result then
-                    local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
+                local ret, failureMessage = handler:getTalkState(creature):callback(npc, creature)
+                if not ret then
+                    local msg = handler:getTalkState(creature).failureResponse:replaceTags({playerName = creature:getName()})
                     if failureMessage then
-                        msg = failureMessage:replaceTags(creature:getName())
+                        msg = failureMessage:replaceTags({playerName = creature:getName()})
                     end
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
@@ -147,23 +152,22 @@ if not NpcEvents then
                 end
             end
             -- checking for requirements
-            if handler:getTalkState(creature).requireStorageValue then
-                local storage = handler:getTalkState(creature).requireStorageValue
-                if storage.equalOrAbove then
-                    if creature:getStorageValue(storage.storage) < storage.value then
-                        local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        handler:setTalkState(handler, creature)
-                        return
-                    end
-                else
-                    if creature:getStorageValue(storage.storage) ~= storage.value then
-                        local msg = handler:getTalkState(creature).failureResponse:replaceTags(creature:getName())
-                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                        handler:setTalkState(handler, creature)
-                        return
-                    end
-                end
+            local ret, msg = handler:getTalkState(creature):requirements():init(creature)
+            if not ret then
+                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                handler:setTalkState(handler, creature)
+                return
+            end
+            -- checking for modules
+            -- todo implement modules
+            if handler:getTalkState(creature).teleportPosition then
+                focus:removeFocus(creature)
+                closeShopWindow(creature)
+                local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
+                selfSay(msg, creature)
+                creature:teleportTo(handler:getTalkState(creature).teleportPosition)
+                handler:setTalkState(handler, creature)
+                return
             end
             -- If the NPC has a shop for the message, it opens the shop window
             if handler:getTalkState(creature):getShop(message) then
@@ -187,7 +191,7 @@ if not NpcEvents then
             end
             -- If the NPC has a response for the current topic, it says the response
             if handler:getTalkState(creature):getResponse() then
-                local msg = handler:getTalkState(creature):getResponse():replaceTags(creature:getName())
+                local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
             end
             -- if the NPC has reached the last keyword, it resets the talk state
@@ -198,9 +202,14 @@ if not NpcEvents then
             if handler:getTalkState(creature).resetTalkstate then
                 handler:setTalkState(handler, creature)
             end
-        else
-            -- If the message doesn't match any of the keywords, the NPC will respond with a default message
-            selfSay("What do you want from me!?!", creature)
+        elseif message == "help" then
+            -- If the player asks for help, the NPC will respond with the available keywords
+            local words = {}
+            for k, v in pairs(handler:getKeywords()) do
+                table.insert(words, "{".. k .."}")
+            end
+            local msg = "I only react to these words: " .. table.concat(words, ", ")
+            talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
         end
     end
 end

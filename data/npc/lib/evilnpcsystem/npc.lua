@@ -1,27 +1,33 @@
 --[[
-    >> NPC System <<
-    - Version: 1.0
+    NPC System:
+        - Version: 1.0
 
-    >> Credits <<
-    - Evil Hero (https://otland.net/members/evil-hero.4280/)
-    - EvilHero90 (https://github.com/EvilHero90)
-    - evilhero90 discord
+    Credits:
+        - Evil Hero (https://otland.net/members/evil-hero.4280/)
+        - EvilHero90 (https://github.com/EvilHero90)
+        - evilhero90 discord
 
-    >> Description <<
-    This system is designed to make it easier to create NPCs with complex interactions with players.
-    It includes a handler for the NPCs, a focus system, a talk queue, and a shop system.
-    The system is modular and can be expanded with additional features as needed.
+    Description:
+        - This system is designed to make it easier to create NPCs with complex interactions with players.
+        - It includes a handler for the NPCs, a focus system, a talk queue, and a shop system.
+        - The system is modular and can be expanded with additional features as needed.
 
-    >> Features <<
-    - NpcsHandler: Handles the keywords, responses, and shops for the NPCs.
-    - NpcFocus: Manages the focus of NPCs on players.
-    - NpcTalkQueue: Manages a queue of messages for NPCs to say to players.
-    - NpcShop: Handles the items available in the shops for the NPCs.
-    - NpcEvents: Handles the appearance, disappearance, thinking, and interaction with players for the NPCs.
-    - Constants: Contains the constants used by the system.
+    Features:
+        - NpcsHandler: Handles the keywords, responses, and shops for the NPCs.
+        - NpcFocus: Manages the focus of NPCs on players.
+        - NpcTalkQueue: Manages a queue of messages for NPCs to say to players.
+        - NpcShop: Handles the items available in the shops for the NPCs.
+        - NpcEvents: Handles the appearance, disappearance, thinking, and interaction with players for the NPCs.
+        - NpcRequirements: Stores the requirements for an NPC interaction.
+        - Constants: Contains the constants used by the system.
 
-    >> Example <<
-    an example of how to use the system is provided in the data/npc/lua/#test.lua file. 
+    Functions:
+        - string:replaceTags(playerName: string, amount: string, total: string, itemName: string)
+        - Npc:respond(message: string, player: Player, delay: number)
+        - Npc:defaultBehavior()
+
+    Example:
+        - An example of how to use the system is provided in the data/npc/lua/#test.lua file.
 ]]
 
 -- Load all the necessary files to create the NPC system
@@ -31,27 +37,29 @@ dofile('data/npc/lib/evilnpcsystem/events.lua')
 dofile('data/npc/lib/evilnpcsystem/focus.lua')
 dofile('data/npc/lib/evilnpcsystem/shop.lua')
 dofile('data/npc/lib/evilnpcsystem/talkqueue.lua')
+dofile('data/npc/lib/evilnpcsystem/requirements.lua')
+dofile('data/npc/lib/evilnpcsystem/modules.lua')
 
 ---@class Npc
 ---@class Player
 ---@class Creature
 ---@class Item
 ---@class NpcsHandler
+---@class NpcRequirements
+---@class Position
 
 -- Replaces tags in a string with corresponding values.
----@param playerName string The players name.
----@param amount string The amount.
----@param total string The total.
----@param itemName string The items name.
+---@param params table<string, string|number|table> The parameters to replace the tags with.
+---@field playerName string The players name.
+---@field level string The players level.
+---@field amount string The amount.
+---@field total string The total.
+---@field itemName string The items name.
 ---@return string The string with replaced tags.
-function string:replaceTags(playerName, amount, total, itemName)
-    local playerName = playerName and playerName or ""
-    local amount = amount and amount or ""
-    local total = total and total or ""
-    local itemName = itemName and itemName or ""
+function string:replaceTags(params)
     local ret = self
     for _, handler in pairs(MESSAGE_TAGS) do
-        ret = ret:gsub(handler.tag, handler.func(playerName, amount, total, itemName))
+        ret = ret:gsub(handler.tag, handler.func(params))
     end
     return ret
 end

@@ -1,9 +1,12 @@
 --[[
     >> NpcFocus <<
-    NpcFocus is a class that manages the focus of NPCs on players.
-    It keeps track of the players that are currently being focused by an NPC, as well as the duration of the focus.
-    The class provides methods to add, check, and remove focus on players, as well as retrieve the currently focused player.
-    The focus duration and distance are defined in the FOCUS table in constants.lua.
+
+    Description:
+        - The NpcFocus module provides a way to manage the focus of NPCs on players.
+        - It keeps track of the players that are currently being focused by an NPC, as well as the duration of the focus.
+        - The class provides methods to add, check, and remove focus on players, as well as retrieve the currently focused player.
+        - The focus duration and distance are defined in the FOCUS table in constants.lua.
+
     Functions:
         - NpcFocus:addFocus(player)
         - NpcFocus:isFocused(player)

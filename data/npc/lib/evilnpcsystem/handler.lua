@@ -1,11 +1,17 @@
 --[[
-    >> NpcsHandler << 
-    This file contains the handler for the NPCs. It's used to store the keywords, responses and shops for the NPCs.
-    The handler is created as a metatable, so it can be called as a function to get the NpcsHandler for the NPC.
+    >> NpcsHandler <<
+
+    Description:
+        - This file contains the handler for the NPCs. It's used to store the keywords, responses and shops for the NPCs.
+        - The handler is created as a metatable, so it can be called as a function to get the NpcsHandler for the NPC.
+        - The handler is also used to manage the talk state, greet and farewell responses, and requirements for the keywords.
+
     Functions:
         - NpcsHandler(npc): NpcsHandler
         - NpcsHandler:keyword(word)
+        - NpcsHandler:requirements()
         - NpcsHandler:isKeyword(word)
+        - NpcsHandler:getKeywords()
         - NpcsHandler:getTalkState(player)
         - NpcsHandler:setTalkState(state, player)
         - NpcsHandler:respond(text)
@@ -19,6 +25,7 @@
         - NpcsHandler:resetTalkState()
         - NpcsHandler:requireStorage(storage, value, equalOrAbove)
         - NpcsHandler:failureRespond(text)
+        - NpcsHandler:teleport(position)
         - NpcsHandler:callback(npc, player)
 ]]
 
@@ -72,6 +79,16 @@ if not NpcsHandler then
         return self.keywords[word]
     end
 
+    -- Retrieves the requirements for a keyword.
+    -- If the requirements have not been initialized, it creates a new table and sets the metatable to NpcRequirements.
+    ---@return NpcRequirements The requirements table for the NPC.
+    function NpcsHandler:requirements()
+        if not self.require then
+            self.require = {}
+            setmetatable(self.require, {__index = NpcRequirements})
+        end
+        return self.require
+    end
 
     -- Checks if a word is a keyword.
     ---@param word string The word to check.
@@ -79,7 +96,12 @@ if not NpcsHandler then
     function NpcsHandler:isKeyword(word)
         return self.keywords[word] and self.keywords[word] or false
     end
-    
+
+    -- Retrieves the keywords for the NPC.
+    ---@return table The keywords for the NPC.
+    function NpcsHandler:getKeywords()
+        return self.keywords
+    end
     
     -- Retrieves the talk state for a given player.
     -- If the talk state is not found, returns the handler itself.
@@ -175,10 +197,17 @@ if not NpcsHandler then
         self.failureResponse = text
     end
 
+    -- Sets the position to teleport the player to.
+    ---@param position Position The position to teleport the player to.
+    function NpcsHandler:teleport(position)
+        self.teleportPosition = position
+    end
+
     -- Callback function for the keyword.
     ---@param npc Npc The NPC object.
     ---@param player Player The player object.
     ---@return boolean Whether the callback was successful.
+    ---@return string (optional) The failure response text.
     -- example:
     --[[
     function NpcsHandler:callback(npc, player)
