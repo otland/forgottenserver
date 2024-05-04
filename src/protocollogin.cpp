@@ -53,7 +53,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	// Generate and add session key
-	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned char> rbe;
+	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned short> rbe;
 	std::array<char, 16> sessionKey;
 	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
 
