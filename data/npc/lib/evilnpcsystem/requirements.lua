@@ -19,6 +19,28 @@
         NpcRequirements:init(player)
 ]]
 
+---@class NpcRequirements
+---@field requireStorage table<string, any>
+---@field requireLevel table<string, any>
+---@field requirePremium boolean
+---@field requireMoney number
+---@field requireRemoveMoney number
+---@field requireItem table<string, any>
+---@field requireRemoveItem table<string, any>
+---@field requireInfight boolean
+---@field requirePzLocked boolean
+---@field init fun(player: Player): boolean, string
+---@field storage fun(self: NpcRequirements, key: string, value: number, equalOrAbove: boolean, equalOrBelow: boolean)
+---@field level fun(self: NpcRequirements, level: number, equalOrAbove: boolean?, equalOrBelow: boolean?)
+---@field premium fun(self: NpcRequirements, premium: boolean)
+---@field money fun(self: NpcRequirements, amount: number)
+---@field removeMoney fun(self: NpcRequirements, amount: number)
+---@field item fun(self: NpcRequirements, item: number, count: number)
+---@field removeItem fun(self: NpcRequirements, item: number, count: number, subType: number, ignoreEquipped: boolean)
+---@field isInfight fun(self: NpcRequirements, infight: boolean)
+---@field isPzLocked fun(self: NpcRequirements, pzLocked: boolean)
+---@type table<string, NpcRequirements>
+
 -- Make sure we are not overloading on reload
 if not NpcRequirements then
     NpcRequirements = {}
@@ -97,7 +119,7 @@ if not NpcRequirements then
     -- Initializes the requirements for a player.
     ---@param player Player: The player to check the requirements for.
     ---@return boolean: True if the player meets all requirements, false otherwise.
-    ---@return string: The message to send to the player if the requirements are not met.
+    ---@return nil|string (optional): The message to send to the player if the requirements are not met.
     function NpcRequirements:init(player)
         if self.requireStorage then
             local storageValue = player:getStorageValue(self.requireStorage.key)
@@ -190,5 +212,5 @@ if not NpcRequirements then
             end
         end
         return true
-    end    
+    end
 end

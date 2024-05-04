@@ -10,6 +10,14 @@
         - NpcTalkQueue:clearQueue(player: Player)
 ]]
 
+---@class NpcTalkQueue
+---@field queue table<number, table<number, table<string, number>>>
+---@field addToQueue fun(player: Player, message: string, delay: number)
+---@field processQueue fun()
+---@field clearQueue fun(player: Player)
+---@field __call fun(npc: Npc): NpcTalkQueue
+---@field __index NpcTalkQueue
+
 -- Make sure we are not overloading on reload
 if not NpcTalkQueue then
     -- If NpcTalkQueue doesn't exist, it's created as an empty table

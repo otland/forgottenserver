@@ -14,7 +14,21 @@
         - NpcEvents.onDisappear(npc, creature)
         - NpcEvents.onThink(npc)
         - NpcEvents.onSay(npc, creature, messageType, message)
+        - NpcEvents.onAppearCallback(creature)
+        - NpcEvents.onDisappearCallback(creature)
+        - NpcEvents.onThinkCallback()
+        - NpcEvents.onSayCallback(creature, messageType, message)
 ]]
+
+---@class NpcEvents
+---@field onAppear fun(npc: Npc, creature: Creature)
+---@field onDisappear fun(npc: Npc, creature: Creature)
+---@field onThink fun(npc: Npc): boolean
+---@field onSay fun(npc: Npc, creature: Creature, messageType: number, message: string)
+---@field onAppearCallback fun(creature: Creature)
+---@field onDisappearCallback fun(creature: Creature)
+---@field onThinkCallback fun()
+---@field onSayCallback fun(creature: Creature, messageType: number, message: string)
 
 -- Make sure we are not overloading on reload
 if not NpcEvents then

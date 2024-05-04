@@ -14,6 +14,14 @@
         - NpcFocus:getCurrentFocus()
 ]]
 
+---@class NpcFocus
+---@field focus table<number, number>
+---@field currentFocus Player
+---@field addFocus fun(player: Player)
+---@field isFocused fun(player: Player): boolean
+---@field removeFocus fun(player: Player)
+---@field getCurrentFocus fun(): nil|Player
+
 -- Make sure we are not overloading on reload
 if not NpcFocus then
     -- If NpcFocus doesn't exist, it's created as an empty table

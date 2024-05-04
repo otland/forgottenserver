@@ -10,6 +10,8 @@
         - NpcsHandler:travelTo(params)
 ]]
 
+---@alias travelTo fun(self: NpcsHandler, params: table<string, table>)
+
 -- This Module enables fast and easy creation of Travel NPCs
 ---@param params table<string, table>
 function NpcsHandler:travelTo(params)

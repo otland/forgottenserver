@@ -6,10 +6,8 @@
 ]]
 
 -- MESSAGE_TAGS
----@field tag string
----@field func function(params: table<string, string|number|table>)
----@field params table<string, string|number|table>
----@type table<string, table<string, string|function func(params: table<string, string|number|table>)>>
+---@class MESSAGE_TAGS
+---@type table<string, table<string|number, string|number|function>>
 MESSAGE_TAGS = {
     playerName = { tag = "|PLAYERNAME|", func = function(params) return params.playerName or "" end },
     playerLevel = { tag = "|PLAYERLEVEL|", func = function(params) return params.playerLevel or "" end },
@@ -21,6 +19,7 @@ MESSAGE_TAGS = {
 }
 
 -- MESSAGE_LIST
+---@class MESSAGE_LIST
 ---@field needMoney string
 ---@field needSpace string
 ---@field needMoreSpace string
@@ -99,6 +98,7 @@ MESSAGES_FAREWELL = {
 }
 
 -- FOCUS
+---@class FOCUS
 ---@field time number
 ---@field distance number
 ---@field greetDistance number
@@ -113,6 +113,7 @@ FOCUS = {
 }
 
 -- TALK
+---@class TALK
 ---@field defaultDelay number
 ---@type table<string, number|string|table|boolean>
 TALK = {

@@ -30,6 +30,44 @@
         - NpcsHandler:callback(npc, player)
 ]]
 
+---@class NpcsHandler
+---@field keywords table<string, NpcsHandler>
+---@field talkState table<number, NpcsHandler>
+---@field shopActive table<number, number>
+---@field greetWords string[]
+---@field greetResponses string[]
+---@field farewellWords string[]
+---@field farewellResponses string[]
+---@field response string
+---@field openShop number
+---@field resetTalkstate boolean
+---@field failureResponse string
+---@field teleportPosition Position
+---@field keyword fun(self: NpcsHandler, word: string): NpcsHandler
+---@field requirements fun(self: NpcsHandler): NpcRequirements
+---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
+---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
+---@field getTalkState fun(self: NpcsHandler, player: Player): NpcsHandler
+---@field setTalkState fun(self: NpcsHandler, state: NpcsHandler, player: Player)
+---@field respond fun(self: NpcsHandler, text: string)
+---@field getResponse fun(self: NpcsHandler): string
+---@field shop fun(self: NpcsHandler, id: number)
+---@field getShop fun(self: NpcsHandler, word: string): number|boolean
+---@field setActiveShop fun(self: NpcsHandler, player: Player, id: number)
+---@field getActiveShop fun(self: NpcsHandler, player: Player): number
+---@field setGreetKeywords fun(self: NpcsHandler, words: string|table)
+---@field setGreetResponse fun(self: NpcsHandler, texts: string|table)
+---@field setFarewellKeywords fun(self: NpcsHandler, words: string|table)
+---@field setFarewellResponse fun(self: NpcsHandler, texts: string|table)
+---@field resetTalkState fun(self: NpcsHandler)
+---@field failureRespond fun(self: NpcsHandler, text: string)
+---@field teleport fun(self: NpcsHandler, position: Position)
+---@field callback fun(self: NpcsHandler, npc: Npc, player: Player): boolean, string
+---@field require NpcRequirements
+---@field __call fun(npc: Npc): NpcsHandler
+---@field __index NpcsHandler
+-- Modules
+---@field travelTo fun(self: NpcsHandler, params: table<string, table>)
 -- Make sure we are not overloading on reload
 if not NpcsHandler then
     -- If NpcsHandler doesn't exist, it's created as an empty table
@@ -61,7 +99,7 @@ if not NpcsHandler then
             return self[npc:getName()]
         end
     })
-    
+ 
     -- This function adds a keyword to the NpcsHandler for the NPC and returns the NpcsHandler for the keyword
     ---@param word string
     ---@return NpcsHandler
@@ -212,23 +250,4 @@ if not NpcsHandler then
     function NpcsHandler:teleport(position)
         self.teleportPosition = position
     end
-
-    -- Callback function for the keyword.
-    ---@param npc Npc The NPC object.
-    ---@param player Player The player object.
-    ---@return boolean Whether the callback was successful.
-    ---@return string (optional) The failure response text.
-    -- example:
-    --[[
-    function NpcsHandler:callback(npc, player)
-        if player:getStorageValue(9999) >= 1 then
-            -- we let all other checks run and let us gracefully advance in talk state.
-            return true
-        end
-        -- we return false which now triggers the default failureResponse to be sent to the player, resulting in a resetTalkState().
-        return false
-        -- we return false and a set string, which will be sent as the failure response to the player, resulting in a resetTalkState().
-        return false, "You need storage value 9999 to proceed."
-    end
-    ]]
 end

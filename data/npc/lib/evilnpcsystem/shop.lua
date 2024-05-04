@@ -16,6 +16,19 @@
         - NpcShop.onSell(player, itemid, subType, amount, ignoreEquipped)
 ]]
 
+---@class NpcShop
+---@field items table
+---@field discounts table
+---@field addItems fun(shop: table)
+---@field addItem fun(id: number, buy: number, sell: number, subType: number)
+---@field addDiscount fun(storage: number, percent: number)
+---@field hasDiscount fun(player: Player): number|boolean
+---@field getItems fun(): table
+---@field getItem fun(itemid: number, subType: number): Item|boolean
+---@field onBuy fun(player: Player, itemid: number, subType: number, amount: number, ignoreCap: boolean, inBackpacks: boolean): boolean
+---@field onSell fun(player: Player, itemid: number, subType: number, amount: number, ignoreEquipped: boolean): boolean
+---@type table<string, table<string, NpcShop>>
+
 -- Make sure we are not overloading on reload
 if not NpcShop then
     -- If NpcShop doesn't exist, it's created as an empty table
@@ -39,18 +52,8 @@ if not NpcShop then
         end
     })
 
-    -- Adds items to the NpcShop
-    -- example usage:
-    -- NpcShop:addItems({
-    --     [ITEM_GOLD_COIN] = {buy = 100, sell = 50},
-    --     [ITEM_SHOVEL] = {buy = 50, sell = 25},
-    --     [ITEM_VIAL] = {buy = 200, sell = 100, subType = 2}
-    -- })
-    ---@param shop table containing the items to be added
-    ---@field id number The item ID.
-    ---@field buy number The buy price of the item.
-    ---@field sell number The sell price of the item.
-    ---@field subType number The subtype of the item or nil if there is no subtype.
+    -- Adds items to the NPC shop.
+    ---@param shop table<number, table<string, number>> The items to be added to the shop.
     function NpcShop:addItems(shop)
         for id, items in pairs(shop) do
             local found = false
@@ -69,7 +72,7 @@ if not NpcShop then
     end
 
     -- Adds an item to the NPC shop.
-    ---@param id number: The ID of the item to add.
+    ---@param id number The ID of the item to add.
     ---@param buy number (optional): The buy price of the item. Defaults to 0 if not provided.
     ---@param sell number (optional): The sell price of the item. Defaults to 0 if not provided.
     ---@param subType number (optional): The subtype of the item. Defaults to 1 if not provided.
@@ -102,7 +105,7 @@ if not NpcShop then
 
     --- Checks if a player has a discount in the NpcShop.
     ---@param player Player The player to check for discounts.
-    ---@return number|boolean If the player has a discount, returns the storage value or the discount percentage. Otherwise, returns false.
+    ---@return number|boolean ret If the player has a discount, returns the storage value or the discount percentage. Otherwise, returns false.
     function NpcShop:hasDiscount(player)
         for storage, percent in pairs(self.discounts) do
             if percent == 0 then
