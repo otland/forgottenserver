@@ -22,7 +22,6 @@
 #include "scheduler.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
@@ -68,7 +67,7 @@ std::size_t clientLogin(const Player& player)
 		return 0;
 	}
 
-	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+	uint32_t maxPlayers = static_cast<uint32_t>(getNumber(ConfigManager::MAX_PLAYERS));
 	if (maxPlayers == 0 || (waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return 0;
 	}
@@ -154,7 +153,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 {
 	// dispatcher thread
 	Player* foundPlayer = g_game.getPlayerByGUID(characterId);
-	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (!foundPlayer || getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
 
 		player->incrementReferenceCounter();
@@ -181,8 +180,8 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			return;
 		}
 
-		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) &&
-		    player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
+		if (getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER &&
+		    g_game.getPlayerByAccount(player->getAccount())) {
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
 		}
@@ -236,7 +235,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		acceptPackets = true;
 	} else {
-		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
+		if (eventConnect != 0 || !getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			// Already trying to connect
 			disconnectClient("You are already logged in.");
 			return;
@@ -412,7 +411,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t tokenTime = 0;
 
 	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		if (sessionArgs.size() < 4) {
 			disconnectClient("Authentication failed. Incomplete session key.");
 			return;
@@ -1775,7 +1774,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x9F);
 	if (player->isPremium()) {
 		msg.addByte(1);
-		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
+		msg.add<uint32_t>(getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
 	} else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);

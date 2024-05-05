@@ -1,25 +1,17 @@
-// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Copyright 2024 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #ifndef FS_RSA_H
 #define FS_RSA_H
 
-class RSA
-{
-public:
-	static constexpr int16_t BUFFER_LENGTH = 128;
+struct evp_pkey_st;
+typedef struct evp_pkey_st EVP_PKEY;
 
-	RSA() = default;
+namespace tfs::rsa {
 
-	// non-copyable
-	RSA(const RSA&) = delete;
-	RSA& operator=(const RSA&) = delete;
+EVP_PKEY* loadPEM(std::string_view pem);
+void decrypt(uint8_t* msg, size_t len);
 
-	void loadPEM(const std::string& filename);
-	void decrypt(char* msg) const;
-
-private:
-	CryptoPP::RSA::PrivateKey pk;
-};
+} // namespace tfs::rsa
 
 #endif // FS_RSA_H

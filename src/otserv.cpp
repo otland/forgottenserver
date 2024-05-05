@@ -32,11 +32,9 @@ Dispatcher g_dispatcher;
 Scheduler g_scheduler;
 
 Game g_game;
-ConfigManager g_config;
 Monsters g_monsters;
 Vocations g_vocations;
 extern Scripts* g_scripts;
-RSA g_RSA;
 
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
@@ -70,7 +68,7 @@ void mainLoader(ServiceManager* services)
 	printServerVersion();
 
 	// check if config.lua or config.lua.dist exist
-	const std::string& configFile = g_config.getString(ConfigManager::CONFIG_FILE);
+	const std::string& configFile = getString(ConfigManager::CONFIG_FILE);
 	std::ifstream c_test("./" + configFile);
 	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
@@ -87,13 +85,13 @@ void mainLoader(ServiceManager* services)
 
 	// read global config
 	std::cout << ">> Loading config" << std::endl;
-	if (!g_config.load()) {
+	if (!ConfigManager::load()) {
 		startupErrorMessage("Unable to load " + configFile + "!");
 		return;
 	}
 
 #ifdef _WIN32
-	const std::string& defaultPriority = g_config.getString(ConfigManager::DEFAULT_PRIORITY);
+	const std::string& defaultPriority = getString(ConfigManager::DEFAULT_PRIORITY);
 	if (caseInsensitiveEqual(defaultPriority, "high")) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
 	} else if (caseInsensitiveEqual(defaultPriority, "above-normal")) {
@@ -104,7 +102,9 @@ void mainLoader(ServiceManager* services)
 	// set RSA key
 	std::cout << ">> Loading RSA key " << std::endl;
 	try {
-		g_RSA.loadPEM("key.pem");
+		std::ifstream key{"key.pem"};
+		std::string pem{std::istreambuf_iterator<char>{key}, std::istreambuf_iterator<char>{}};
+		tfs::rsa::loadPEM(pem);
 	} catch (const std::exception& e) {
 		startupErrorMessage(e.what());
 		return;
@@ -131,7 +131,7 @@ void mainLoader(ServiceManager* services)
 
 	DatabaseManager::updateDatabase();
 
-	if (g_config.getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
+	if (getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
 		std::cout << "> No tables were optimized." << std::endl;
 	}
 
@@ -188,7 +188,7 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Checking world type... " << std::flush;
-	std::string worldType = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::WORLD_TYPE));
+	std::string worldType = boost::algorithm::to_lower_copy(getString(ConfigManager::WORLD_TYPE));
 	if (worldType == "pvp") {
 		g_game.setWorldType(WORLD_TYPE_PVP);
 	} else if (worldType == "no-pvp") {
@@ -199,13 +199,13 @@ void mainLoader(ServiceManager* services)
 		std::cout << std::endl;
 		startupErrorMessage(
 		    fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
-		                g_config.getString(ConfigManager::WORLD_TYPE)));
+		                getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
 	std::cout << boost::algorithm::to_upper_copy(worldType) << std::endl;
 
 	std::cout << ">> Loading map" << std::endl;
-	if (!g_game.loadMainMap(g_config.getString(ConfigManager::MAP_NAME))) {
+	if (!g_game.loadMainMap(getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
 		return;
 	}
@@ -214,17 +214,17 @@ void mainLoader(ServiceManager* services)
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
-	services->add<ProtocolGame>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::GAME_PORT)));
-	services->add<ProtocolLogin>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
+	services->add<ProtocolGame>(static_cast<uint16_t>(getNumber(ConfigManager::GAME_PORT)));
+	services->add<ProtocolLogin>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
 	// OT protocols
-	services->add<ProtocolStatus>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STATUS_PORT)));
+	services->add<ProtocolStatus>(static_cast<uint16_t>(getNumber(ConfigManager::STATUS_PORT)));
 
 	// Legacy login protocol
-	services->add<ProtocolOld>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::LOGIN_PORT)));
+	services->add<ProtocolOld>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
 	RentPeriod_t rentPeriod;
-	std::string strRentPeriod = boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+	std::string strRentPeriod = boost::algorithm::to_lower_copy(getString(ConfigManager::HOUSE_RENT_PERIOD));
 
 	if (strRentPeriod == "yearly") {
 		rentPeriod = RENTPERIOD_YEARLY;
@@ -282,8 +282,7 @@ void startServer()
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
-		std::cout << ">> " << g_config.getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl
-		          << std::endl;
+		std::cout << ">> " << getString(ConfigManager::SERVER_NAME) << " Server Online!" << std::endl << std::endl;
 		serviceManager.run();
 	} else {
 		std::cout << ">> No services running. The server is NOT online." << std::endl;

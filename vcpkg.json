@@ -8,10 +8,10 @@
     "boost-lockfree",
     "boost-system",
     "boost-variant",
-    "cryptopp",
     "fmt",
     "libmariadb",
     "lua",
+    "openssl",
     "pugixml"
   ],
   "features": {
@@ -19,6 +19,12 @@
       "description": "Use LuaJIT instead of Lua",
       "dependencies": [
         "luajit"
+      ]
+    },
+    "unit-tests": {
+      "description": "Build unit tests",
+      "dependencies": [
+        "boost-test"
       ]
     }
   },

@@ -15,7 +15,6 @@
 extern Game g_game;
 extern Monsters g_monsters;
 extern Events* g_events;
-extern ConfigManager g_config;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -489,7 +488,7 @@ void Monster::onCreatureLeave(Creature* creature)
 		updateIdleStatus();
 
 		if (!isSummon() && targetList.empty()) {
-			int32_t walkToSpawnRadius = g_config.getNumber(ConfigManager::DEFAULT_WALKTOSPAWNRADIUS);
+			int32_t walkToSpawnRadius = getNumber(ConfigManager::DEFAULT_WALKTOSPAWNRADIUS);
 			if (walkToSpawnRadius > 0 && !position.isInRange(masterPos, walkToSpawnRadius, walkToSpawnRadius)) {
 				walkToSpawn();
 			}
@@ -732,7 +731,7 @@ void Monster::onThink(uint32_t interval)
 	}
 
 	if (!isInSpawnRange(position)) {
-		if (g_config.getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
+		if (getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
 			if (spawn) {
 				spawn->removeMonster(this);
 				spawn->startSpawnCheck();
@@ -740,7 +739,7 @@ void Monster::onThink(uint32_t interval)
 			}
 		} else {
 			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
-			if (g_config.getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
+			if (getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
 				g_game.removeCreature(this, false);
 			} else {
 				g_game.internalTeleport(this, masterPos);
@@ -1171,21 +1170,26 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || followCreature || walkingToSpawn) {
-		randomStepping = false;
-		result = Creature::getNextStep(direction, flags);
-		if (result) {
-			flags |= FLAG_PATHFINDING;
+		if (!hasFollowPath && getMaster() && !getMaster()->getPlayer()) {
+			randomStepping = true;
+			result = getRandomStep(getPosition(), direction);
 		} else {
-			if (ignoreFieldDamage) {
-				ignoreFieldDamage = false;
-				updateMapCache();
-			}
-			// target dancing
-			if (attackedCreature && attackedCreature == followCreature) {
-				if (isFleeing()) {
-					result = getDanceStep(getPosition(), direction, false, false);
-				} else if (mType->info.staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
-					result = getDanceStep(getPosition(), direction);
+			randomStepping = false;
+			result = Creature::getNextStep(direction, flags);
+			if (result) {
+				flags |= FLAG_PATHFINDING;
+			} else {
+				if (ignoreFieldDamage) {
+					ignoreFieldDamage = false;
+					updateMapCache();
+				}
+				// target dancing
+				if (attackedCreature && attackedCreature == followCreature) {
+					if (isFleeing()) {
+						result = getDanceStep(getPosition(), direction, false, false);
+					} else if (mType->info.staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
+						result = getDanceStep(getPosition(), direction);
+					}
 				}
 			}
 		}

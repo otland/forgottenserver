@@ -7,8 +7,6 @@
 #include "configmanager.h"
 #include "enums.h"
 
-extern ConfigManager g_config;
-
 class Vocation
 {
 public:
@@ -46,7 +44,7 @@ public:
 
 	bool getMagicShield() const
 	{
-		if (!g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
+		if (!getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
 			return false;
 		}
 		return magicShield;

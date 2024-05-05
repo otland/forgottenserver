@@ -12,15 +12,14 @@
 #include "inbox.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 Account IOLoginData::loadAccount(uint32_t accno)
 {
 	Account account;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
+	DBResult_ptr result = Database::getInstance().storeQuery(
+	    fmt::format("SELECT `id`, `name`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
 	if (!result) {
 		return account;
 	}
@@ -66,7 +65,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
+	    "SELECT `id`, `name`, UNHEX(`password`) AS `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
 	    db.escapeString(name), db.escapeString(name)));
 	if (!result) {
 		return false;
@@ -99,14 +98,14 @@ std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_v
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, `a`.`password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    "SELECT `a`.`id` AS `account_id`, UNHEX(`a`.`password`) AS `password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
 	    db.escapeString(accountName), db.escapeString(accountName), db.escapeString(characterName)));
 	if (!result) {
 		return {};
 	}
 
 	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
@@ -173,7 +172,7 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
-	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (getBoolean(ConfigManager::ALLOW_CLONES)) {
 		return;
 	}
 
@@ -491,7 +490,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
-				player->postAddNotification(item, nullptr, pid);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
