@@ -30,13 +30,13 @@
 ---@field requireInfight boolean
 ---@field requirePzLocked boolean
 ---@field init fun(player: Player): boolean, string
----@field storage fun(self: NpcRequirements, key: string, value: number, equalOrAbove: boolean, equalOrBelow: boolean)
----@field level fun(self: NpcRequirements, level: number, equalOrAbove: boolean?, equalOrBelow: boolean?)
+---@field storage fun(self: NpcRequirements, key: string, value: number, equalOrAbove: boolean|nil, equalOrBelow: boolean|nil)
+---@field level fun(self: NpcRequirements, level: number, equalOrAbove: boolean|nil, equalOrBelow: boolean|nil)
 ---@field premium fun(self: NpcRequirements, premium: boolean)
 ---@field money fun(self: NpcRequirements, amount: number)
 ---@field removeMoney fun(self: NpcRequirements, amount: number)
 ---@field item fun(self: NpcRequirements, item: number, count: number)
----@field removeItem fun(self: NpcRequirements, item: number, count: number, subType: number, ignoreEquipped: boolean)
+---@field removeItem fun(self: NpcRequirements, item: number, count: number, subType: number|nil, ignoreEquipped: boolean|nil)
 ---@field isInfight fun(self: NpcRequirements, infight: boolean)
 ---@field isPzLocked fun(self: NpcRequirements, pzLocked: boolean)
 ---@type table<string, NpcRequirements>

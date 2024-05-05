@@ -13,7 +13,17 @@
 ---@alias travelTo fun(self: NpcsHandler, params: table<string, table>)
 
 -- This Module enables fast and easy creation of Travel NPCs
----@param params table<string, table>
+---@class travelParams
+---@field position Position
+---@field money number
+---@field level number
+---@field premium boolean
+---@field storage table<string, any>
+---@field item table<string, number>
+---@field removeItem table<string, any>
+---@field isPzLocked boolean
+---@field isInfight boolean
+---@param params table<string, travelParams>
 function NpcsHandler:travelTo(params)
     local traveling = self:keyword("travel")
     traveling:respond("Where do you want to travel?")

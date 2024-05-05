@@ -7,7 +7,7 @@
 
 -- MESSAGE_TAGS
 ---@class MESSAGE_TAGS
----@type table<string, table<string|number, string|number|function>>
+---@type table<string, table<string, string|number|function>>
 MESSAGE_TAGS = {
     playerName = { tag = "|PLAYERNAME|", func = function(params) return params.playerName or "" end },
     playerLevel = { tag = "|PLAYERLEVEL|", func = function(params) return params.playerLevel or "" end },
@@ -20,24 +20,6 @@ MESSAGE_TAGS = {
 
 -- MESSAGE_LIST
 ---@class MESSAGE_LIST
----@field needMoney string
----@field needSpace string
----@field needMoreSpace string
----@field bought string
----@field sold string
----@field storage string
----@field storageToLow string
----@field storageToHigh string
----@field level string
----@field levelToLow string
----@field levelToHigh string
----@field premium string
----@field money string
----@field item string
----@field infight string
----@field notInfight string
----@field pzLocked string
----@field notPzLocked string
 ---@type table<string, string>
 MESSAGE_LIST = {
     -- shop messages
@@ -99,10 +81,7 @@ MESSAGES_FAREWELL = {
 
 -- FOCUS
 ---@class FOCUS
----@field time number
----@field distance number
----@field greetDistance number
----@type table<string, number|string|table|boolean>
+---@type table<string, any>
 FOCUS = {
     -- how long the npc will focus the player in seconds
     time = 60,
@@ -114,8 +93,7 @@ FOCUS = {
 
 -- TALK
 ---@class TALK
----@field defaultDelay number
----@type table<string, number|string|table|boolean>
+---@type table<string, any>
 TALK = {
     -- how long in ms the npc will wait before responding
     defaultDelay = 1000

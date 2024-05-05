@@ -40,12 +40,6 @@ dofile('data/npc/lib/evilnpcsystem/talkqueue.lua')
 dofile('data/npc/lib/evilnpcsystem/requirements.lua')
 dofile('data/npc/lib/evilnpcsystem/modules.lua')
 
----@class Npc
----@class Player
----@class Creature
----@class Item
----@class Position
-
 -- Replaces tags in a string with corresponding values.
 ---@param params table<string, number|string|table<string|number, string|number>> The parameters to replace the tags with.
 ---@return string stringLib The string with the tags replaced.
