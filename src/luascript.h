@@ -377,6 +377,12 @@ public:
 		lua_setfield(L, -2, index);
 	}
 
+	static void setField(lua_State* L, const std::string index, std::string value)
+	{
+		pushString(L, value);
+		lua_setfield(L, -2, index.c_str());
+	}
+
 	static std::string escapeString(std::string string);
 
 #ifndef LUAJIT_VERSION
@@ -550,6 +556,7 @@ private:
 	static int luaGameCreateContainer(lua_State* L);
 	static int luaGameCreateMonster(lua_State* L);
 	static int luaGameCreateNpc(lua_State* L);
+	static int luaGameCreateLuaNpc(lua_State* L);
 	static int luaGameCreateTile(lua_State* L);
 	static int luaGameCreateMonsterType(lua_State* L);
 	static int luaGameCreateNpcType(lua_State* L);
@@ -1103,8 +1110,23 @@ private:
 	static int luaNpcGetSpectators(lua_State* L);
 
 	static int luaNpcSpawn(lua_State* L);
-	static int luaNpcEventType(lua_State* L);
-	static int luaNpcOnCallback(lua_State* L);
+
+	// NpcType
+	static int luaNpcTypeCreate(lua_State* L);
+	static int luaNpcTypeName(lua_State* L);
+	static int luaNpcTypeOnCallback(lua_State* L);
+	static int luaNpcTypeEventType(lua_State* L);
+	static int luaNpcTypeSpeechBubble(lua_State* L);
+	static int luaNpcTypeWalkTicks(lua_State* L);
+	static int luaNpcTypeBaseSpeed(lua_State* L);
+	static int luaNpcTypeMasterRadius(lua_State* L);
+	static int luaNpcTypeFloorChange(lua_State* L);
+	static int luaNpcTypeAttackable(lua_State* L);
+	static int luaNpcTypeIgnoreHeight(lua_State* L);
+	static int luaNpcTypeIsIdle(lua_State* L);
+	static int luaNpcTypePushable(lua_State* L);
+	static int luaNpcTypeDefaultOutfit(lua_State* L);
+	static int luaNpcTypeParameter(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);

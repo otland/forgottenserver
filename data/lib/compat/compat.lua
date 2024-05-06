@@ -133,7 +133,7 @@ do
 end
 
 do
-	local function NpcNewIndex(self, key, value)
+	local function NpcTypeNewIndex(self, key, value)
 		if key == "onSay" then
 			self:eventType("say")
 			self:onSay(value)
@@ -165,7 +165,7 @@ do
 		end
 		rawset(self, key, value)
 	end
-	rawgetmetatable("Npc").__newindex = NpcNewIndex
+	rawgetmetatable("NpcType").__newindex = NpcTypeNewIndex
 end
 
 do

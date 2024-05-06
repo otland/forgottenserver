@@ -10,18 +10,6 @@
 class Npc;
 class Player;
 
-class Npcs
-{
-public:
-	static void reload();
-	void addNpc(const std::string& name, Npc* npc) { npcs.emplace(name, npc); }
-	void clearNpcs() { npcs.clear(); }
-	std::map<const std::string, Npc*> getNpcs() { return npcs; }
-
-private:
-	std::map<const std::string, Npc*> npcs;
-};
-
 class NpcScriptInterface final : public LuaScriptInterface
 {
 public:
@@ -63,7 +51,7 @@ class NpcEventsHandler
 {
 public:
 	NpcEventsHandler(const std::string& file, Npc* npc);
-	NpcEventsHandler(Npc* npc);
+	NpcEventsHandler();
 
 	void onCreatureAppear(Creature* creature);
 	void onCreatureDisappear(Creature* creature);
@@ -75,9 +63,9 @@ public:
 	void onPlayerEndTrade(Player* player);
 	void onThink();
 
-	bool isLoaded() const;
+	void setNpc(Npc* n) { npc = n; };
 
-	std::unique_ptr<NpcScriptInterface> scriptInterface;
+	bool isLoaded() const;
 
 	int32_t creatureAppearEvent = -1;
 	int32_t creatureDisappearEvent = -1;
@@ -90,6 +78,91 @@ public:
 private:
 	Npc* npc;
 	bool loaded = false;
+};
+
+class NpcType
+{
+	struct NpcTypeInfo
+	{
+		uint8_t speechBubble = SPEECHBUBBLE_NONE;
+
+		uint32_t walkTicks = 1500;
+		uint32_t baseSpeed = 100;
+
+		int32_t masterRadius;
+
+		bool floorChange = false;
+		bool attackable = false;
+		bool ignoreHeight = false;
+		bool loaded = false;
+		bool isIdle = true;
+		bool pushable = true;
+
+		Outfit_t defaultOutfit;
+
+		std::map<std::string, std::string> parameters;
+	};
+
+public:
+	explicit NpcType();
+	~NpcType();
+
+	// non-copyable
+	NpcType(const NpcType&) = delete;
+	NpcType& operator=(const NpcType&) = delete;
+
+	auto& getScriptInterface() { return scriptInterface; }
+
+	bool loadCallback(NpcScriptInterface* scriptInterface);
+
+	void setSpeechBubble(uint8_t bubble) { info.speechBubble = bubble; };
+	uint8_t getSpeechBubble() { return info.speechBubble; };
+	void setWalkTicks(uint32_t ticks) { info.walkTicks = ticks; };
+	uint32_t getWalkTicks() { return info.walkTicks; };
+	void setBaseSpeed(uint32_t speed) { info.baseSpeed = speed; };
+	uint32_t getBaseSpeed() { return info.baseSpeed; };
+	void setMasterRadius(int32_t radius) { info.masterRadius = radius; };
+	int32_t getMasterRadius() { return info.masterRadius; };
+	void setFloorChange(bool b) { info.floorChange = b; };
+	bool getFloorChange() { return info.floorChange; };
+	void setAttackable(bool b) { info.attackable = b; };
+	bool getAttackable() { return info.attackable; };
+	void setIgnoreHeight(bool b) { info.ignoreHeight = b; };
+	bool getIgnoreHeight() { return info.ignoreHeight; };
+	void setIsIdle(bool b) { info.isIdle = b; };
+	bool getIsIdle() { return info.isIdle; };
+	void setPushable(bool b) { info.pushable = b; };
+	bool getPushable() { return info.pushable; };
+	void setDefaultOutfit(Outfit_t outfit) { info.defaultOutfit = outfit; };
+	Outfit_t getDefaultOutfit() { return info.defaultOutfit; };
+	void setParameter(std::string key, std::string value) { info.parameters[key] = value; };
+	std::map<std::string, std::string> getParameters() { return info.parameters; };
+	void setName(std::string n) { name = n; };
+	std::string getName() { return name; };
+
+	std::string name;
+	std::string filename;
+	std::string eventType;
+
+	NpcTypeInfo info;
+	std::unique_ptr<NpcScriptInterface> scriptInterface;
+	std::shared_ptr<NpcEventsHandler> npcEventHandler;
+
+	friend class NpcScriptInterface;
+};
+
+class Npcs
+{
+public:
+	static void reload();
+	void addNpcType(const std::string& name, NpcType* npcType) { npcTypes[name] = npcType; }
+	void clearNpcTypes() { npcTypes.clear(); }
+	std::map<const std::string, NpcType*> getNpcTypes() { return npcTypes; }
+	NpcType* getNpcType(std::string name);
+
+	std::map<const std::string, NpcType*> npcTypes;
+
+	friend class NpcType;
 };
 
 class Npc final : public Creature
@@ -162,15 +235,17 @@ public:
 	void turnToCreature(Creature* creature);
 	void setCreatureFocus(Creature* creature);
 
-	auto& getScriptInterface() { return npcEventHandler->scriptInterface; }
-	bool loadCallback(NpcScriptInterface* scriptInterface);
+	auto& getScriptInterface() { return npcType->scriptInterface; }
 
 	static uint32_t npcAutoID;
 
 	const auto& getSpectators() { return spectators; }
 
-	std::unique_ptr<NpcEventsHandler> npcEventHandler;
+	void loadNpcTypeInfo();
+
+	std::shared_ptr<NpcEventsHandler> npcEventHandler;
 	bool fromLua = false;
+	NpcType* npcType;
 
 private:
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
@@ -210,6 +285,7 @@ private:
 	Position masterPos;
 
 	uint32_t walkTicks;
+	uint32_t baseSpeed;
 	int32_t focusCreature;
 	int32_t masterRadius;
 
@@ -223,6 +299,7 @@ private:
 	bool pushable;
 
 	friend class Npcs;
+	friend class NpcType;
 	friend class NpcScriptInterface;
 };
 

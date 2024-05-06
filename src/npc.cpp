@@ -11,6 +11,7 @@
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
+extern Npcs g_npcs;
 
 uint32_t Npc::npcAutoID = 0x20000000;
 
@@ -28,9 +29,35 @@ void Npcs::reload()
 	}
 }
 
+NpcType* Npcs::getNpcType(std::string name)
+{
+	auto npcType = npcTypes[name];
+	if (npcType) {
+		return npcType;
+	}
+	return nullptr;
+}
+
+NpcType::NpcType() :
+    scriptInterface(std::make_unique<NpcScriptInterface>()), npcEventHandler(std::make_shared<NpcEventsHandler>())
+{
+	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib" << std::endl;
+		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		return;
+	}
+}
+NpcType::~NpcType() {}
+
 Npc* Npc::createNpc(const std::string& name)
 {
+	auto npcType = g_npcs.getNpcType(name);
+	if (!npcType) {
+		npcType = new NpcType();
+		g_npcs.addNpcType(name, npcType);
+	}
 	std::unique_ptr<Npc> npc(new Npc(name));
+	npc->npcType = npcType;
 	if (!npc->load()) {
 		return nullptr;
 	}
@@ -124,34 +151,44 @@ bool Npc::loadFromXml()
 	}
 
 	name = npcNode.attribute("name").as_string();
+	npcType->name = name;
 	attackable = npcNode.attribute("attackable").as_bool();
+	npcType->info.attackable = attackable;
 	floorChange = npcNode.attribute("floorchange").as_bool();
+	npcType->info.floorChange = floorChange;
 
 	pugi::xml_attribute attr;
 	if ((attr = npcNode.attribute("speed"))) {
 		baseSpeed = pugi::cast<uint32_t>(attr.value());
+		npcType->info.baseSpeed = baseSpeed;
 	} else {
 		baseSpeed = 100;
+		npcType->info.baseSpeed = baseSpeed;
 	}
 
 	if ((attr = npcNode.attribute("pushable"))) {
 		pushable = attr.as_bool();
+		npcType->info.pushable = pushable;
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
 		walkTicks = pugi::cast<uint32_t>(attr.value());
+		npcType->info.walkTicks = walkTicks;
 	}
 
 	if ((attr = npcNode.attribute("walkradius"))) {
 		masterRadius = pugi::cast<int32_t>(attr.value());
+		npcType->info.masterRadius = masterRadius;
 	}
 
 	if ((attr = npcNode.attribute("ignoreheight"))) {
 		ignoreHeight = attr.as_bool();
+		npcType->info.ignoreHeight = ignoreHeight;
 	}
 
 	if ((attr = npcNode.attribute("speechbubble"))) {
 		speechBubble = pugi::cast<uint32_t>(attr.value());
+		npcType->info.speechBubble = speechBubble;
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
@@ -193,6 +230,7 @@ bool Npc::loadFromXml()
 			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
 		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
+		npcType->info.defaultOutfit = defaultOutfit;
 
 		currentOutfit = defaultOutfit;
 	}
@@ -200,14 +238,16 @@ bool Npc::loadFromXml()
 	for (auto parameterNode : npcNode.child("parameters").children()) {
 		parameters[parameterNode.attribute("key").as_string()] = parameterNode.attribute("value").as_string();
 	}
+	npcType->info.parameters = parameters;
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
 	if (scriptFile) {
-		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), this);
+		auto handler = std::make_shared<NpcEventsHandler>(scriptFile.as_string(), this);
 		if (!handler->isLoaded()) {
 			return false;
 		}
-		npcEventHandler = std::move(handler);
+		npcEventHandler = handler;
+		npcType->npcEventHandler = handler;
 	}
 	return true;
 }
@@ -227,6 +267,22 @@ std::string Npc::getDescription(int32_t) const
 	descr.assign(name);
 	descr.push_back('.');
 	return descr;
+}
+
+void Npc::loadNpcTypeInfo()
+{
+	speechBubble = npcType->getSpeechBubble();
+	walkTicks = npcType->getWalkTicks();
+	baseSpeed = npcType->getBaseSpeed();
+	masterRadius = npcType->getMasterRadius();
+	floorChange = npcType->getFloorChange();
+	attackable = npcType->getAttackable();
+	ignoreHeight = npcType->getIgnoreHeight();
+	isIdle = npcType->getIsIdle();
+	pushable = npcType->getPushable();
+	defaultOutfit = npcType->getDefaultOutfit();
+	currentOutfit = defaultOutfit;
+	parameters = npcType->getParameters();
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
@@ -261,7 +317,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	}
 }
 
-bool Npc::loadCallback(NpcScriptInterface* scriptInterface)
+bool NpcType::loadCallback(NpcScriptInterface* scriptInterface)
 {
 	int32_t id = scriptInterface->getEvent();
 	if (id == -1) {
@@ -1084,39 +1140,37 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	return 1;
 }
 
-NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
-    scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
+NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) : npc(npc)
 {
-	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+	if (!npc->npcType->scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
 		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
-		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		std::cout << npc->npcType->scriptInterface->getLastLuaError() << std::endl;
 		return;
 	}
 
-	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
+	loaded = npc->npcType->scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
-		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		std::cout << npc->npcType->scriptInterface->getLastLuaError() << std::endl;
 	} else {
-		creatureSayEvent = scriptInterface->getEvent("onCreatureSay");
-		creatureDisappearEvent = scriptInterface->getEvent("onCreatureDisappear");
-		creatureAppearEvent = scriptInterface->getEvent("onCreatureAppear");
-		creatureMoveEvent = scriptInterface->getEvent("onCreatureMove");
-		playerCloseChannelEvent = scriptInterface->getEvent("onPlayerCloseChannel");
-		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
-		thinkEvent = scriptInterface->getEvent("onThink");
+		creatureSayEvent = npc->npcType->scriptInterface->getEvent("onCreatureSay");
+		npc->npcType->npcEventHandler->creatureSayEvent = creatureSayEvent;
+		creatureDisappearEvent = npc->npcType->scriptInterface->getEvent("onCreatureDisappear");
+		npc->npcType->npcEventHandler->creatureDisappearEvent = creatureDisappearEvent;
+		creatureAppearEvent = npc->npcType->scriptInterface->getEvent("onCreatureAppear");
+		npc->npcType->npcEventHandler->creatureAppearEvent = creatureAppearEvent;
+		creatureMoveEvent = npc->npcType->scriptInterface->getEvent("onCreatureMove");
+		npc->npcType->npcEventHandler->creatureMoveEvent = creatureMoveEvent;
+		playerCloseChannelEvent = npc->npcType->scriptInterface->getEvent("onPlayerCloseChannel");
+		npc->npcType->npcEventHandler->playerCloseChannelEvent = playerCloseChannelEvent;
+		playerEndTradeEvent = npc->npcType->scriptInterface->getEvent("onPlayerEndTrade");
+		npc->npcType->npcEventHandler->playerEndTradeEvent = playerEndTradeEvent;
+		thinkEvent = npc->npcType->scriptInterface->getEvent("onThink");
+		npc->npcType->npcEventHandler->thinkEvent = thinkEvent;
 	}
 }
 
-NpcEventsHandler::NpcEventsHandler(Npc* npc) : scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
-{
-	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
-		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib" << std::endl;
-		std::cout << scriptInterface->getLastLuaError() << std::endl;
-		return;
-	}
-	loaded = true;
-}
+NpcEventsHandler::NpcEventsHandler() {}
 
 bool NpcEventsHandler::isLoaded() const { return loaded; }
 
@@ -1127,20 +1181,20 @@ void NpcEventsHandler::onCreatureAppear(Creature* creature)
 	}
 
 	// onCreatureAppear(creature)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureAppear] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureAppearEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(creatureAppearEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureAppearEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(creatureAppearEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	scriptInterface->callFunction(1);
+	npc->npcType->scriptInterface->callFunction(1);
 }
 
 void NpcEventsHandler::onCreatureDisappear(Creature* creature)
@@ -1150,20 +1204,20 @@ void NpcEventsHandler::onCreatureDisappear(Creature* creature)
 	}
 
 	// onCreatureDisappear(creature)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureDisappear] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureDisappearEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(creatureDisappearEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureDisappearEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(creatureDisappearEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	scriptInterface->callFunction(1);
+	npc->npcType->scriptInterface->callFunction(1);
 }
 
 void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos)
@@ -1173,22 +1227,22 @@ void NpcEventsHandler::onCreatureMove(Creature* creature, const Position& oldPos
 	}
 
 	// onCreatureMove(creature, oldPos, newPos)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureMove] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureMoveEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(creatureMoveEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureMoveEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(creatureMoveEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushPosition(L, oldPos);
 	LuaScriptInterface::pushPosition(L, newPos);
-	scriptInterface->callFunction(3);
+	npc->npcType->scriptInterface->callFunction(3);
 }
 
 void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text)
@@ -1198,22 +1252,22 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	}
 
 	// onCreatureSay(creature, type, msg)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onCreatureSay] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(creatureSayEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(creatureSayEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(creatureSayEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(creatureSayEvent);
 	LuaScriptInterface::pushUserdata<Creature>(L, creature);
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	lua_pushnumber(L, type);
 	LuaScriptInterface::pushString(L, text);
-	scriptInterface->callFunction(3);
+	npc->npcType->scriptInterface->callFunction(3);
 }
 
 void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint16_t amount,
@@ -1224,16 +1278,16 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 	}
 
 	// onBuy(player, itemid, count, amount, ignore, inbackpacks)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerTrade] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(-1, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(-1, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
 	LuaScriptInterface::pushCallback(L, callback);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
@@ -1242,7 +1296,7 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 	lua_pushnumber(L, amount);
 	LuaScriptInterface::pushBoolean(L, ignore);
 	LuaScriptInterface::pushBoolean(L, inBackpacks);
-	scriptInterface->callFunction(6);
+	npc->npcType->scriptInterface->callFunction(6);
 }
 
 void NpcEventsHandler::onPlayerCloseChannel(Player* player)
@@ -1252,20 +1306,20 @@ void NpcEventsHandler::onPlayerCloseChannel(Player* player)
 	}
 
 	// onPlayerCloseChannel(player)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerCloseChannel] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(playerCloseChannelEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(playerCloseChannelEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(playerCloseChannelEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(playerCloseChannelEvent);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	scriptInterface->callFunction(1);
+	npc->npcType->scriptInterface->callFunction(1);
 }
 
 void NpcEventsHandler::onPlayerEndTrade(Player* player)
@@ -1275,20 +1329,20 @@ void NpcEventsHandler::onPlayerEndTrade(Player* player)
 	}
 
 	// onPlayerEndTrade(player)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onPlayerEndTrade] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(playerEndTradeEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(playerEndTradeEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(playerEndTradeEvent);
+	lua_State* L = npc->npcType->scriptInterface->getLuaState();
+	npc->npcType->scriptInterface->pushFunction(playerEndTradeEvent);
 	LuaScriptInterface::pushUserdata<Player>(L, player);
 	LuaScriptInterface::setMetatable(L, -1, "Player");
-	scriptInterface->callFunction(1);
+	npc->npcType->scriptInterface->callFunction(1);
 }
 
 void NpcEventsHandler::onThink()
@@ -1298,15 +1352,15 @@ void NpcEventsHandler::onThink()
 	}
 
 	// onThink()
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!npc->npcType->scriptInterface->reserveScriptEnv()) {
 		std::cout << "[Error - NpcScript::onThink] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
-	env->setScriptId(thinkEvent, scriptInterface.get());
+	ScriptEnvironment* env = npc->npcType->scriptInterface->getScriptEnv();
+	env->setScriptId(thinkEvent, npc->npcType->scriptInterface.get());
 	env->setNpc(npc);
 
-	scriptInterface->pushFunction(thinkEvent);
-	scriptInterface->callFunction(0);
+	npc->npcType->scriptInterface->pushFunction(thinkEvent);
+	npc->npcType->scriptInterface->callFunction(0);
 }
