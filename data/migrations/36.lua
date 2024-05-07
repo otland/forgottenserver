@@ -14,10 +14,5 @@ function onUpdateDatabase()
 			FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
 		) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 	]])
-
-	db.query([[
-		ALTER TABLE `players_online`
-			ADD COLUMN `session_id` int NOT NULL,
-			ADD FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE;
-	]])
+	return true
 end

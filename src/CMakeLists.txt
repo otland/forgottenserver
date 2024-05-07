@@ -183,8 +183,23 @@ target_link_libraries(tfslib PRIVATE
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
+set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
+
 if (APPLE)
 	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
 endif()
 
+if (ENABLE_IPO)
+	set_target_properties(tfslib PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
+endif()
+
+if (HTTP)
+	add_subdirectory(http)
+	target_link_libraries(tfslib PRIVATE http)
+endif ()
+
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

@@ -71,13 +71,7 @@ public:
 		FORCE_CLOSE = true
 	};
 
-	Connection(boost::asio::io_context& io_context, ConstServicePort_ptr service_port) :
-	    readTimer(io_context),
-	    writeTimer(io_context),
-	    service_port(std::move(service_port)),
-	    socket(io_context),
-	    timeConnected(time(nullptr))
-	{}
+	Connection(boost::asio::io_context& io_context, ConstServicePort_ptr service_port);
 	~Connection();
 
 	friend class ConnectionManager;

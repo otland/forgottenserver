@@ -19,7 +19,6 @@ class IOLoginData
 public:
 	static Account loadAccount(uint32_t accno);
 
-	static bool loginserverAuthentication(const std::string& name, const std::string& password, Account& account);
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 

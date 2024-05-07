@@ -266,9 +266,7 @@ CREATE TABLE IF NOT EXISTS `market_offers` (
 
 CREATE TABLE IF NOT EXISTS `players_online` (
   `player_id` int NOT NULL,
-  `session_id` int NOT NULL,
-  PRIMARY KEY (`player_id`),
-  FOREIGN KEY (`session_id`) REFERENCES `sessions` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`player_id`)
 ) ENGINE=MEMORY DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE IF NOT EXISTS `player_deaths` (
@@ -373,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `expired_at` timestamp,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`),
+  UNIQUE KEY `token` (`token`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 

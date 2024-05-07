@@ -92,7 +92,7 @@ using VocationMap = std::map<uint16_t, Vocation>;
 class Vocations
 {
 public:
-	bool loadFromXml();
+	bool loadFromXml(std::istream& is, std::string_view filename);
 
 	Vocation* getVocation(uint16_t id);
 	int32_t getVocationId(std::string_view name) const;

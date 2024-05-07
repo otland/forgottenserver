@@ -8,10 +8,13 @@
 #include "enums.h"
 #include "position.h"
 
-void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result);
+void printXMLError(const std::string& where, std::string_view fileName, const pugi::xml_parse_result& result);
 
 std::string transformToSHA1(std::string_view input);
-std::string generateToken(const std::string& key, uint32_t ticks);
+std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message);
+std::string generateToken(std::string_view key, uint64_t counter, size_t length = AUTHENTICATOR_DIGITS);
+std::string encodeBase64(std::string_view input);
+std::string decodeBase64(std::string_view input);
 
 // checks that str1 is equivalent to str2 ignoring letter case
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
@@ -31,6 +34,7 @@ std::mt19937& getRandomGenerator();
 int32_t uniform_random(int32_t minNumber, int32_t maxNumber);
 int32_t normal_random(int32_t minNumber, int32_t maxNumber);
 bool boolean_random(double probability = 0.5);
+std::string randomBytes(size_t length);
 
 Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
@@ -77,11 +81,32 @@ namespace tfs {
 
 #if __has_cpp_attribute(__cpp_lib_to_underlying)
 
-inline constexpr auto to_underlying(auto e) noexcept { return std::to_underlying(e); }
+template <class T>
+using std::to_underlying<T>;
 
 #else
 
 inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
+
+#endif
+
+#if __has_cpp_attribute(__cpp_lib_unreachable)
+
+using std::unreachable;
+
+#else
+
+[[noreturn]] inline void unreachable()
+{
+	// Uses compiler specific extensions if possible.
+	// Even if no extension is used, undefined behavior is still raised by
+	// an empty function body and the noreturn attribute.
+#if defined(_MSC_VER) && !defined(__clang__) // MSVC
+	__assume(false);
+#else                                        // GCC, Clang
+	__builtin_unreachable();
+#endif
+}
 
 #endif
 
