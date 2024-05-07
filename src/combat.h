@@ -41,11 +41,11 @@ public:
 
 struct CombatParams
 {
-	std::forward_list<std::unique_ptr<const Condition>> conditionList;
+	std::forward_list<std::unique_ptr<const Condition>> conditionList = {};
 
-	std::unique_ptr<ValueCallback> valueCallback;
-	std::unique_ptr<TileCallback> tileCallback;
-	std::unique_ptr<TargetCallback> targetCallback;
+	std::unique_ptr<ValueCallback> valueCallback = nullptr;
+	std::unique_ptr<TileCallback> tileCallback = nullptr;
+	std::unique_ptr<TargetCallback> targetCallback = nullptr;
 
 	uint16_t itemId = 0;
 
