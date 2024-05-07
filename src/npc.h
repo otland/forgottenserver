@@ -52,6 +52,7 @@ class NpcEventsHandler
 public:
 	NpcEventsHandler(const std::string& file, Npc* npc);
 	NpcEventsHandler();
+	~NpcEventsHandler();
 
 	void onCreatureAppear(Creature* creature);
 	void onCreatureDisappear(Creature* creature);
@@ -166,7 +167,7 @@ void clearNpcTypes();
 std::map<const std::string, NpcType*> getNpcTypes();
 NpcType* getNpcType(std::string name);
 NpcScriptInterface* getScriptInterface();
-}
+} // namespace Npcs
 
 class Npc final : public Creature
 {
