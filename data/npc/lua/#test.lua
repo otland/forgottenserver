@@ -5,7 +5,8 @@
 ]]
 
 local npc = Game.createNpcType("Merchant")
-npc:setMasterPos(Position(95, 123, 7))
+npc:speechBubble(SPEECHBUBBLE_TRADE)
+npc:outfit({lookType = 128, lookHead = 114, lookBody = 114, lookLegs = 114, lookFeet = 114})
 npc:defaultBehavior()
 
 -- This table defines the items available in the weapon shops.
@@ -18,11 +19,13 @@ local weaponShop = {
 local handler = NpcsHandler(npc)
 
 -- this handles the weapons shop
-local weapons = handler:keyword("weapons")
+-- example with 2 different keywords pointing to the same response
+local weapons = handler:keyword({"weapons", "weapon"})
 weapons:respond("I offer weapons, do you want to see them?")
 -- this happens when the player says yes
 local accept = weapons:keyword("yes")
-accept:respond("Here are the fancy Weapons!")
+-- this responds randomly with the messages provided
+accept:respond({"Here are the fancy Weapons!", "Hope you find something you like!"})
 -- this opens the shop with the id 1
 accept:shop(1)
 -- this happens when the player says no
@@ -62,7 +65,11 @@ shop2:addDiscount(9999)
 ]]
 
 local npc = Game.createNpcType("Traveler")
-npc:setMasterPos(Position(95, 123, 7))
+npc:speechBubble(SPEECHBUBBLE_COMPASS)
+npc:outfit({lookType = 128, lookHead = 114, lookBody = 114, lookLegs = 114, lookFeet = 114})
+npc:spawnRadius(2)
+npc:walkInterval(2000)
+npc:walkSpeed(100)
 npc:defaultBehavior()
 
 -- The NpcsHandler class is used to handle the NPC's responses to player interactions.

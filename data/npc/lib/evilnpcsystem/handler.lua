@@ -16,6 +16,7 @@
         - NpcsHandler:setTalkState(state, player)
         - NpcsHandler:respond(text)
         - NpcsHandler:getResponse()
+        - NpcsHandler:getResponses()
         - NpcsHandler:shop(id)
         - NpcsHandler:getShop(word)
         - NpcsHandler:setActiveShop(player, id)
@@ -38,19 +39,20 @@
 ---@field greetResponses string[]
 ---@field farewellWords string[]
 ---@field farewellResponses string[]
----@field response string
+---@field response table<number, string>
 ---@field openShop number
 ---@field resetTalkstate boolean
 ---@field failureResponse string
 ---@field teleportPosition Position
----@field keyword fun(self: NpcsHandler, word: string): NpcsHandler
+---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
 ---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
 ---@field getTalkState fun(self: NpcsHandler, player: Player): NpcsHandler
 ---@field setTalkState fun(self: NpcsHandler, state: NpcsHandler, player: Player)
----@field respond fun(self: NpcsHandler, text: string)
+---@field respond fun(self: NpcsHandler, responses: string|table)
 ---@field getResponse fun(self: NpcsHandler): string
+---@field getResponses fun(self: NpcsHandler): table
 ---@field shop fun(self: NpcsHandler, id: number)
 ---@field getShop fun(self: NpcsHandler, word: string): number|boolean
 ---@field setActiveShop fun(self: NpcsHandler, player: Player, id: number)
@@ -101,23 +103,40 @@ if not NpcsHandler then
     })
  
     -- This function adds a keyword to the NpcsHandler for the NPC and returns the NpcsHandler for the keyword
-    ---@param word string
+    ---@param words string|table The keyword or table containing keywords to be added.
     ---@return NpcsHandler
-    function NpcsHandler:keyword(word)
+    function NpcsHandler:keyword(words)
         -- Initializes a new keyword entry in the `self.keywords` table if it doesn't already exist.
-        -- The `word` parameter specifies the keyword to be added.
+        -- The `words` parameter specifies the keyword or table containing keywords to be added.
+        -- If words is a table it'll create multiple keywords, all pointing to the same metatable.
         -- The new entry contains an empty `keywords` table and an empty `response` string.
         -- The `self.keywords[word]` table is set as a metatable for both `self.keywords[word]` and `self.keywords[word].keywords`.
         -- This allows accessing methods and properties from the `NpcsHandler` class.
-        if not self.keywords[word] then
-            self.keywords[word] = {}
-            self.keywords[word].keywords = {}
-            setmetatable(self.keywords[word], {__index = NpcsHandler})
-            setmetatable(self.keywords[word].keywords, {__index = NpcsHandler})
-            self.keywords[word].response = ""
+        local ret = words
+        if type(words) == "string" then
+            if not self.keywords[words] then
+                self.keywords[words] = {}
+                self.keywords[words].keywords = {}
+                setmetatable(self.keywords[words], {__index = NpcsHandler})
+                setmetatable(self.keywords[words].keywords, {__index = NpcsHandler})
+                self.keywords[words].response = {}
+            end
+        elseif type(words) == "table" then
+            local root = {__index = NpcsHandler}
+            local keywords = {__index = NpcsHandler}
+            for _, word in ipairs(words) do
+                if not self.keywords[word] then
+                    self.keywords[word] = root
+                    self.keywords[word].keywords = keywords
+                    setmetatable(self.keywords[word], root)
+                    setmetatable(self.keywords[word].keywords, keywords)
+                    self.keywords[word].response = {}
+                end
+            end
+            _,ret = next(words)
         end
         -- The NpcsHandler for the keyword is returned
-        return self.keywords[word]
+        return self.keywords[ret]
     end
 
     -- Retrieves the requirements for a keyword.
@@ -160,14 +179,23 @@ if not NpcsHandler then
     end
 
     -- Sets the response text for the keyword.
-    ---@param text string The response text.
-    function NpcsHandler:respond(text)
-        self.response = text
+    ---@param responses string|table The response text.
+    function NpcsHandler:respond(responses)
+        if type(responses) == "string" then
+            responses = {responses}
+        end
+        self.response = responses
     end
 
     -- Retrieves the response text for the keyword.
-    ---@return string The response text.
+    ---@return string The responses.
     function NpcsHandler:getResponse()
+        return self.response[math.random(#self.response)]
+    end
+
+    -- Retrieves all of the responses
+    ---@return table The responses.
+    function NpcsHandler:getResponses()
         return self.response
     end
 
