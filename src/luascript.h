@@ -178,6 +178,7 @@ public:
 	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
+	void removeEvent(int32_t scriptId);
 
 	static ScriptEnvironment* getScriptEnv()
 	{
@@ -556,7 +557,6 @@ private:
 	static int luaGameCreateContainer(lua_State* L);
 	static int luaGameCreateMonster(lua_State* L);
 	static int luaGameCreateNpc(lua_State* L);
-	static int luaGameCreateLuaNpc(lua_State* L);
 	static int luaGameCreateTile(lua_State* L);
 	static int luaGameCreateMonsterType(lua_State* L);
 	static int luaGameCreateNpcType(lua_State* L);

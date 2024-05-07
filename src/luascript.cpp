@@ -60,7 +60,6 @@ uint32_t ScriptEnvironment::lastResultId = 0;
 std::multimap<ScriptEnvironment*, Item*> ScriptEnvironment::tempItems;
 
 LuaEnvironment g_luaEnvironment;
-Npcs g_npcs;
 
 ScriptEnvironment::ScriptEnvironment() { resetEnv(); }
 
@@ -423,6 +422,27 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 
 	cacheFiles[runningEventId] = loadingFile + ":" + globalName + "@" + eventName;
 	return runningEventId++;
+}
+
+void LuaScriptInterface::removeEvent(int32_t scriptId)
+{
+	if (scriptId == -1) {
+		return;
+	}
+
+	// get our events table
+	lua_rawgeti(luaState, LUA_REGISTRYINDEX, eventTableRef);
+	if (!isTable(luaState, -1)) {
+		lua_pop(luaState, 1);
+		return;
+	}
+
+	// remove event from table
+	lua_pushnil(luaState);
+	lua_rawseti(luaState, -2, scriptId);
+	lua_pop(luaState, 1);
+
+	cacheFiles.erase(scriptId);
 }
 
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
@@ -2306,7 +2326,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Game", "createContainer", LuaScriptInterface::luaGameCreateContainer);
 	registerMethod("Game", "createMonster", LuaScriptInterface::luaGameCreateMonster);
 	registerMethod("Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
-	registerMethod("Game", "createLuaNpc", LuaScriptInterface::luaGameCreateLuaNpc);
 	registerMethod("Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod("Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
 	registerMethod("Game", "createNpcType", LuaScriptInterface::luaGameCreateNpcType);
@@ -2888,15 +2907,15 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("NpcType", "onThink", LuaScriptInterface::luaNpcTypeOnCallback);
 
 	registerMethod("NpcType", "speechBubble", LuaScriptInterface::luaNpcTypeSpeechBubble);
-	registerMethod("NpcType", "walkTicks", LuaScriptInterface::luaNpcTypeWalkTicks);
-	registerMethod("NpcType", "baseSpeed", LuaScriptInterface::luaNpcTypeBaseSpeed);
-	registerMethod("NpcType", "masterRadius", LuaScriptInterface::luaNpcTypeMasterRadius);
+	registerMethod("NpcType", "walkInterval", LuaScriptInterface::luaNpcTypeWalkTicks);
+	registerMethod("NpcType", "walkSpeed", LuaScriptInterface::luaNpcTypeBaseSpeed);
+	registerMethod("NpcType", "spawnRadius", LuaScriptInterface::luaNpcTypeMasterRadius);
 	registerMethod("NpcType", "floorChange", LuaScriptInterface::luaNpcTypeFloorChange);
 	registerMethod("NpcType", "attackable", LuaScriptInterface::luaNpcTypeAttackable);
 	registerMethod("NpcType", "ignoreHeight", LuaScriptInterface::luaNpcTypeIgnoreHeight);
 	registerMethod("NpcType", "isIdle", LuaScriptInterface::luaNpcTypeIsIdle);
 	registerMethod("NpcType", "pushable", LuaScriptInterface::luaNpcTypePushable);
-	registerMethod("NpcType", "defaultOutfit", LuaScriptInterface::luaNpcTypeDefaultOutfit);
+	registerMethod("NpcType", "outfit", LuaScriptInterface::luaNpcTypeDefaultOutfit);
 	registerMethod("NpcType", "parameters", LuaScriptInterface::luaNpcTypeParameter);
 
 	// Guild
@@ -5058,38 +5077,6 @@ int LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 	}
 
 	const Position& position = getPosition(L, 2);
-	bool extended = getBoolean(L, 3, false);
-	bool force = getBoolean(L, 4, false);
-	MagicEffectClasses magicEffect = getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
-	if (g_game.placeCreature(npc, position, extended, force, magicEffect)) {
-		pushUserdata<Npc>(L, npc);
-		setMetatable(L, -1, "Npc");
-	} else {
-		delete npc;
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaGameCreateLuaNpc(lua_State* L)
-{
-	// Game.createLuaNpc(npcName, position[, extended = false[, force = false[, magicEffect = CONST_ME_TELEPORT]]])
-	const std::string& name = getString(L, 1);
-	NpcType* npcType = g_npcs.getNpcType(name);
-	if (!npcType) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	Npc* npc = new Npc(name);
-	npc->npcType = npcType;
-	npc->loadNpcTypeInfo();
-	npc->npcEventHandler = std::make_shared<NpcEventsHandler>(*npcType->npcEventHandler);
-	npc->npcEventHandler->setNpc(npc);
-	npc->setName(name);
-	npc->fromLua = true;
-
-	const Position& position = getPosition(L, 2);
 	npc->setMasterPos(position);
 	bool extended = getBoolean(L, 3, false);
 	bool force = getBoolean(L, 4, false);
@@ -5188,7 +5175,7 @@ int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
 		return 1;
 	}
 
-	NpcType* npcType = g_npcs.getNpcType(name);
+	NpcType* npcType = Npcs::getNpcType(name);
 	if (!npcType) {
 		npcType = new NpcType();
 		if (!npcType) {
@@ -5196,7 +5183,8 @@ int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
 			return 1;
 		}
 		npcType->name = name;
-		g_npcs.addNpcType(name, npcType);
+		npcType->fromLua = true;
+		Npcs::addNpcType(name, npcType);
 	}
 
 	pushUserdata<NpcType>(L, npcType);
@@ -11907,7 +11895,7 @@ int LuaScriptInterface::luaNpcTypeCreate(lua_State* L)
 {
 	// NpcType(name)
 	auto name = getString(L, 2);
-	auto npcType = g_npcs.getNpcType(name);
+	auto npcType = Npcs::getNpcType(name);
 	if (npcType) {
 		pushUserdata<NpcType>(L, npcType);
 		setMetatable(L, -1, "NpcType");
@@ -11958,7 +11946,7 @@ int LuaScriptInterface::luaNpcTypeOnCallback(lua_State* L)
 	// npcType:onThink(callback)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
-		if (npcType->loadCallback(npcType->getScriptInterface().get())) {
+		if (npcType->loadCallback(Npcs::getScriptInterface())) {
 			pushBoolean(L, true);
 			return 1;
 		}

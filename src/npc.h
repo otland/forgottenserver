@@ -75,6 +75,9 @@ public:
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
 
+	std::shared_ptr<NpcScriptInterface> scriptInterface;
+	friend class NpcScriptInterface;
+
 private:
 	Npc* npc;
 	bool loaded = false;
@@ -89,7 +92,9 @@ class NpcType
 		uint32_t walkTicks = 1500;
 		uint32_t baseSpeed = 100;
 
-		int32_t masterRadius;
+		int32_t masterRadius = 2;
+		int32_t health = 1000;
+		int32_t healthMax = 1000;
 
 		bool floorChange = false;
 		bool attackable = false;
@@ -99,6 +104,7 @@ class NpcType
 		bool pushable = true;
 
 		Outfit_t defaultOutfit;
+		Skulls_t skull = SKULL_NONE;
 
 		std::map<std::string, std::string> parameters;
 	};
@@ -111,59 +117,56 @@ public:
 	NpcType(const NpcType&) = delete;
 	NpcType& operator=(const NpcType&) = delete;
 
-	auto& getScriptInterface() { return scriptInterface; }
-
 	bool loadCallback(NpcScriptInterface* scriptInterface);
 
-	void setSpeechBubble(uint8_t bubble) { info.speechBubble = bubble; };
-	uint8_t getSpeechBubble() { return info.speechBubble; };
-	void setWalkTicks(uint32_t ticks) { info.walkTicks = ticks; };
-	uint32_t getWalkTicks() { return info.walkTicks; };
-	void setBaseSpeed(uint32_t speed) { info.baseSpeed = speed; };
-	uint32_t getBaseSpeed() { return info.baseSpeed; };
-	void setMasterRadius(int32_t radius) { info.masterRadius = radius; };
-	int32_t getMasterRadius() { return info.masterRadius; };
-	void setFloorChange(bool b) { info.floorChange = b; };
-	bool getFloorChange() { return info.floorChange; };
-	void setAttackable(bool b) { info.attackable = b; };
-	bool getAttackable() { return info.attackable; };
-	void setIgnoreHeight(bool b) { info.ignoreHeight = b; };
-	bool getIgnoreHeight() { return info.ignoreHeight; };
-	void setIsIdle(bool b) { info.isIdle = b; };
-	bool getIsIdle() { return info.isIdle; };
-	void setPushable(bool b) { info.pushable = b; };
-	bool getPushable() { return info.pushable; };
-	void setDefaultOutfit(Outfit_t outfit) { info.defaultOutfit = outfit; };
-	Outfit_t getDefaultOutfit() { return info.defaultOutfit; };
-	void setParameter(std::string key, std::string value) { info.parameters[key] = value; };
-	std::map<std::string, std::string> getParameters() { return info.parameters; };
-	void setName(std::string n) { name = n; };
-	std::string getName() { return name; };
+	void setSpeechBubble(uint8_t bubble) { info.speechBubble = bubble; }
+	uint8_t getSpeechBubble() { return info.speechBubble; }
+	void setWalkTicks(uint32_t ticks) { info.walkTicks = ticks; }
+	uint32_t getWalkTicks() { return info.walkTicks; }
+	void setBaseSpeed(uint32_t speed) { info.baseSpeed = speed; }
+	uint32_t getBaseSpeed() { return info.baseSpeed; }
+	void setMasterRadius(int32_t radius) { info.masterRadius = radius; }
+	int32_t getMasterRadius() { return info.masterRadius; }
+	void setFloorChange(bool b) { info.floorChange = b; }
+	bool getFloorChange() { return info.floorChange; }
+	void setAttackable(bool b) { info.attackable = b; }
+	bool getAttackable() { return info.attackable; }
+	void setIgnoreHeight(bool b) { info.ignoreHeight = b; }
+	bool getIgnoreHeight() { return info.ignoreHeight; }
+	void setIsIdle(bool b) { info.isIdle = b; }
+	bool getIsIdle() { return info.isIdle; }
+	void setPushable(bool b) { info.pushable = b; }
+	bool getPushable() { return info.pushable; }
+	void setDefaultOutfit(Outfit_t outfit) { info.defaultOutfit = outfit; }
+	Outfit_t getDefaultOutfit() { return info.defaultOutfit; }
+	void setParameter(std::string key, std::string value) { info.parameters[key] = value; }
+	std::map<std::string, std::string> getParameters() { return info.parameters; }
+	void setSkull(Skulls_t s) { info.skull = s; }
+	Skulls_t getSkull() { return info.skull; }
+	void setName(std::string n) { name = n; }
+	std::string getName() { return name; }
+
+	bool loadFromXml();
 
 	std::string name;
 	std::string filename;
+	std::string scriptFilename;
+	bool fromLua = false;
 	std::string eventType;
 
 	NpcTypeInfo info;
-	std::unique_ptr<NpcScriptInterface> scriptInterface;
 	std::shared_ptr<NpcEventsHandler> npcEventHandler;
-
-	friend class NpcScriptInterface;
 };
 
-class Npcs
-{
-public:
-	static void reload();
-	void addNpcType(const std::string& name, NpcType* npcType) { npcTypes[name] = npcType; }
-	void clearNpcTypes() { npcTypes.clear(); }
-	std::map<const std::string, NpcType*> getNpcTypes() { return npcTypes; }
-	NpcType* getNpcType(std::string name);
-
-	std::map<const std::string, NpcType*> npcTypes;
-
-	friend class NpcType;
-};
+namespace Npcs {
+void load(bool reload = false);
+void reload();
+void addNpcType(const std::string& name, NpcType* npcType);
+void clearNpcTypes();
+std::map<const std::string, NpcType*> getNpcTypes();
+NpcType* getNpcType(std::string name);
+NpcScriptInterface* getScriptInterface();
+}
 
 class Npc final : public Creature
 {
@@ -198,7 +201,7 @@ public:
 
 	bool load();
 	void reload();
-	void reset();
+	void reset(bool reload = false);
 
 	const std::string& getName() const override { return name; }
 	void setName(const std::string& n) { name = n; }
@@ -235,8 +238,6 @@ public:
 	void turnToCreature(Creature* creature);
 	void setCreatureFocus(Creature* creature);
 
-	auto& getScriptInterface() { return npcType->scriptInterface; }
-
 	static uint32_t npcAutoID;
 
 	const auto& getSpectators() { return spectators; }
@@ -246,6 +247,10 @@ public:
 	std::shared_ptr<NpcEventsHandler> npcEventHandler;
 	bool fromLua = false;
 	NpcType* npcType;
+	void closeAllShopWindows();
+	void addShopPlayer(Player* player);
+	void removeShopPlayer(Player* player);
+	std::map<std::string, std::string> parameters;
 
 private:
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
@@ -266,14 +271,6 @@ private:
 
 	bool canWalkTo(const Position& fromPos, Direction dir) const;
 	bool getRandomStep(Direction& direction) const;
-
-	bool loadFromXml();
-
-	void addShopPlayer(Player* player);
-	void removeShopPlayer(Player* player);
-	void closeAllShopWindows();
-
-	std::map<std::string, std::string> parameters;
 
 	std::set<Player*> shopPlayerSet;
 	std::set<Player*> spectators;
@@ -298,9 +295,7 @@ private:
 	bool isIdle;
 	bool pushable;
 
-	friend class Npcs;
 	friend class NpcType;
-	friend class NpcScriptInterface;
 };
 
 #endif // FS_NPC_H

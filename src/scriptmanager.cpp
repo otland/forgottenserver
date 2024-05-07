@@ -14,6 +14,7 @@
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
+#include "npc.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
@@ -54,6 +55,8 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "> ERROR: Unable to load lua libs!" << std::endl;
 		return false;
 	}
+
+	Npcs::load();
 
 	g_chat = new Chat();
 
