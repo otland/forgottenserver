@@ -5178,10 +5178,6 @@ int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
 	NpcType* npcType = Npcs::getNpcType(name);
 	if (!npcType) {
 		npcType = new NpcType();
-		if (!npcType) {
-			lua_pushnil(L);
-			return 1;
-		}
 		npcType->name = name;
 		npcType->fromLua = true;
 		Npcs::addNpcType(name, npcType);
