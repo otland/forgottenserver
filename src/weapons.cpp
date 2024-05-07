@@ -252,7 +252,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (std::max(playerPos.getDistanceX(targetPos), targetPos.getDistanceY(playerPos)) > shootRange) {
+	if (std::max(playerPos.getDistanceX(targetPos), playerPos.getDistanceY(targetPos)) > shootRange) {
 		return 0;
 	}
 
