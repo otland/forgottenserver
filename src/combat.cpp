@@ -1214,8 +1214,8 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const
 {
-	int32_t dx = centerPos.getOffsetX(targetPos);
-	int32_t dy = centerPos.getOffsetY(targetPos);
+	int32_t dx = targetPos.getOffsetX(centerPos);
+	int32_t dy = targetPos.getOffsetY(centerPos);
 
 	Direction dir;
 	if (dx < 0) {
