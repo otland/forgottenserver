@@ -23,7 +23,7 @@ void CreatureEvents::clear(bool fromLua)
 
 void CreatureEvents::removeInvalidEvents()
 {
-	for (auto it = creatureEvents.begin(); it != creatureEvents.end(); ) {
+	for (auto it = creatureEvents.begin(); it != creatureEvents.end();) {
 		if (it->second.getScriptId() == 0) {
 			it = creatureEvents.erase(it);
 		} else {
