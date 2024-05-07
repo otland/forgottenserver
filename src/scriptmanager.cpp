@@ -10,11 +10,11 @@
 #include "events.h"
 #include "globalevent.h"
 #include "movement.h"
+#include "npc.h"
 #include "script.h"
 #include "spells.h"
 #include "talkaction.h"
 #include "weapons.h"
-#include "npc.h"
 
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
