@@ -11,21 +11,26 @@
 
     Functions:
         - NpcEvents.onAppear(npc, creature)
+        - NpcEvents.onMove(npc, oldPos, newPos)
+        - NpcEvents.onPlayerCloseChannel(npc, creature)
+        - NpcEvents.onPlayerEndTrade(npc, creature)
         - NpcEvents.onDisappear(npc, creature)
         - NpcEvents.onThink(npc)
         - NpcEvents.onSay(npc, creature, messageType, message)
-        - NpcEvents.onAppearCallback(creature)
-        - NpcEvents.onDisappearCallback(creature)
-        - NpcEvents.onThinkCallback()
-        - NpcEvents.onSayCallback(creature, messageType, message)
 ]]
 
 ---@class NpcEvents
 ---@field onAppear fun(npc: Npc, creature: Creature)
+---@field onMove fun(npc: Npc, oldPos: Position, newPos: Position)
+---@field onPlayerCloseChannel fun(npc: Npc, creature: Creature)
+---@field onPlayerEndTrade fun(npc: Npc, creature: Creature)
 ---@field onDisappear fun(npc: Npc, creature: Creature)
 ---@field onThink fun(npc: Npc): boolean
 ---@field onSay fun(npc: Npc, creature: Creature, messageType: number, message: string)
 ---@field onAppearCallback fun(creature: Creature)
+---@field onMoveCallback fun(creature: Creature, oldPos: Position, newPos: Position)
+---@field onPlayerCloseChannelCallback fun(creature: Creature)
+---@field onPlayerEndTradeCallback fun(creature: Creature)
 ---@field onDisappearCallback fun(creature: Creature)
 ---@field onThinkCallback fun()
 ---@field onSayCallback fun(creature: Creature, messageType: number, message: string)
@@ -39,6 +44,28 @@ if not NpcEvents then
     ---@param npc Npc The NPC that appeared.
     ---@param creature Creature The creature (player) that the NPC appeared to.
     function NpcEvents.onAppear(npc, creature)
+    end
+
+    -- onMove function is called when an NPC moves.
+    -- It executes the onMoveCallback function of the NPC if it is defined.
+    ---@param npc Npc The NPC that moved.
+    ---@param oldPos Position The old position of the NPC.
+    ---@param newPos Position The new position of the NPC.
+    function NpcEvents.onMove(npc, oldPos, newPos)
+    end
+
+    -- onPlayerCloseChannel function is called when a player closes the channel with an NPC.
+    -- It executes the onPlayerCloseChannelCallback function of the NPC if it is defined.
+    ---@param npc Npc The NPC that the player closed the channel with.
+    ---@param creature Creature The creature (player) that closed the channel with the NPC.
+    function NpcEvents.onPlayerCloseChannel(npc, creature)
+    end
+
+    -- onPlayerEndTrade function is called when a player ends the trade with an NPC.
+    -- It executes the onPlayerEndTradeCallback function of the NPC if it is defined.
+    ---@param npc Npc The NPC that the player ended the trade with.
+    ---@param creature Creature The creature (player) that ended the trade with the NPC.
+    function NpcEvents.onPlayerEndTrade(npc, creature)
     end
 
     -- onDisappear function is called when an NPC disappears from a creature (player) or when the creature disappears from the NPC.

@@ -1190,7 +1190,9 @@ NpcEventsHandler::~NpcEventsHandler()
 {
 	for (auto eventId : {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent,
 	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent}) {
-		scriptInterface->removeEvent(eventId);
+		if (!npc->npcType->fromLua) {
+			scriptInterface->removeEvent(eventId);
+		}
 	}
 }
 

@@ -121,31 +121,31 @@ public:
 	bool loadCallback(NpcScriptInterface* scriptInterface);
 
 	void setSpeechBubble(uint8_t bubble) { info.speechBubble = bubble; }
-	uint8_t getSpeechBubble() { return info.speechBubble; }
+	uint8_t getSpeechBubble() const { return info.speechBubble; }
 	void setWalkTicks(uint32_t ticks) { info.walkTicks = ticks; }
-	uint32_t getWalkTicks() { return info.walkTicks; }
+	uint32_t getWalkTicks() const { return info.walkTicks; }
 	void setBaseSpeed(uint32_t speed) { info.baseSpeed = speed; }
-	uint32_t getBaseSpeed() { return info.baseSpeed; }
+	uint32_t getBaseSpeed() const { return info.baseSpeed; }
 	void setMasterRadius(int32_t radius) { info.masterRadius = radius; }
-	int32_t getMasterRadius() { return info.masterRadius; }
+	int32_t getMasterRadius() const { return info.masterRadius; }
 	void setFloorChange(bool b) { info.floorChange = b; }
-	bool getFloorChange() { return info.floorChange; }
+	bool getFloorChange() const { return info.floorChange; }
 	void setAttackable(bool b) { info.attackable = b; }
-	bool getAttackable() { return info.attackable; }
+	bool getAttackable() const { return info.attackable; }
 	void setIgnoreHeight(bool b) { info.ignoreHeight = b; }
-	bool getIgnoreHeight() { return info.ignoreHeight; }
+	bool getIgnoreHeight() const { return info.ignoreHeight; }
 	void setIsIdle(bool b) { info.isIdle = b; }
-	bool getIsIdle() { return info.isIdle; }
+	bool getIsIdle() const { return info.isIdle; }
 	void setPushable(bool b) { info.pushable = b; }
-	bool getPushable() { return info.pushable; }
+	bool getPushable() const { return info.pushable; }
 	void setDefaultOutfit(Outfit_t outfit) { info.defaultOutfit = outfit; }
-	Outfit_t getDefaultOutfit() { return info.defaultOutfit; }
+	Outfit_t getDefaultOutfit() const { return info.defaultOutfit; }
 	void setParameter(std::string key, std::string value) { info.parameters[key] = value; }
-	std::map<std::string, std::string> getParameters() { return info.parameters; }
+	std::map<std::string, std::string> getParameters() const { return info.parameters; }
 	void setSkull(Skulls_t s) { info.skull = s; }
-	Skulls_t getSkull() { return info.skull; }
+	Skulls_t getSkull() const { return info.skull; }
 	void setName(std::string n) { name = n; }
-	std::string getName() { return name; }
+	std::string getName() const { return name; }
 
 	bool loadFromXml();
 

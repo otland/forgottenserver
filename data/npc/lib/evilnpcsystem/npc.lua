@@ -23,12 +23,26 @@
 
     Functions:
         - string:replaceTags(playerName: string, amount: string, total: string, itemName: string)
-        - Npc:respond(message: string, player: Player, delay: number)
-        - Npc:defaultBehavior()
+        - NpcType:defaultBehavior()
+        - NpcType.onAppearCallback(creature)
+        - NpcType.onMoveCallback(creature, oldPos, newPos)
+        - NpcType.onPlayerCloseChannelCallback(creature)
+        - NpcType.onPlayerEndTradeCallback(creature)
+        - NpcType.onDisappearCallback(creature)
+        - NpcType.onThinkCallback()
+        - NpcType.onSayCallback(creature, messageType, message)
 
     Example:
         - An example of how to use the system is provided in the data/npc/lua/#test.lua file.
 ]]
+
+---@alias NpcType.onAppearCallback fun(creature: Creature)
+---@alias NpcType.onMoveCallback fun(creature: Creature, oldPos: Position, newPos: Position)
+---@alias NpcType.onPlayerCloseChannelCallback fun(creature: Creature)
+---@alias NpcType.onPlayerEndTradeCallback fun(creature: Creature)
+---@alias NpcType.onDisappearCallback fun(creature: Creature)
+---@alias NpcType.onThinkCallback fun()
+---@alias NpcType.onSayCallback fun(creature: Creature, messageType: number, message: string)
 
 -- Load all the necessary files to create the NPC system
 dofile('data/npc/lib/evilnpcsystem/constants.lua')
@@ -49,16 +63,6 @@ function string.replaceTags(string, params)
         ret = ret:gsub(handler.tag, handler.func(params))
     end
     return ret
-end
-
--- Responds to a message from a player.
----@param message string The message to respond to.
----@param player Player The player object.
----@param delay number (optional) The delay before responding. If not provided, the default delay will be used.
-function Npc:respond(message, player, delay)
-    delay = delay and delay or TALK.defaultDelay
-    local talkQueue = NpcTalkQueue(self)
-    talkQueue:addToQueue(player, message, delay)
 end
 
 -- This function assigns event handlers for the NPC's appearance, disappearance, thinking, and interaction with players.
@@ -90,6 +94,27 @@ function NpcType:defaultBehavior()
         NpcEvents.onSay(Npc(getNpcCid()), creature, messageType, message)
         if self.onSayCallback then
             self.onSayCallback(Npc(getNpcCid()), creature, messageType, message)
+        end
+    end
+    -- The onMove function is called when the NPC moves.
+    self.onMove = function(creature, oldPos, newPos)
+        NpcEvents.onMove(Npc(getNpcCid()), creature, oldPos, newPos)
+        if self.onMoveCallback then
+            self.onMoveCallback(Npc(getNpcCid()), creature, oldPos, newPos)
+        end
+    end
+    -- The onPlayerCloseChannel function is called when a player closes the channel with the NPC.
+    self.onPlayerCloseChannel = function(creature)
+        NpcEvents.onPlayerCloseChannel(Npc(getNpcCid()), creature)
+        if self.onPlayerCloseChannelCallback then
+            self.onPlayerCloseChannelCallback(Npc(getNpcCid()), creature)
+        end
+    end
+    -- The onPlayerEndTrade function is called when a player ends the trade with the NPC.
+    self.onPlayerEndTrade = function(creature)
+        NpcEvents.onPlayerEndTrade(Npc(getNpcCid()), creature)
+        if self.onPlayerEndTradeCallback then
+            self.onPlayerEndTradeCallback(Npc(getNpcCid()), creature)
         end
     end
 end
