@@ -7,11 +7,11 @@
         
     Functions:
         - NpcShop:addItems(shop)
-        - NpcShop:addItem(id, buy, sell, subType)
+        - NpcShop:addItem(id/name, buy, sell, subType)
         - NpcShop:addDiscount(storage, percent)
         - NpcShop:hasDiscount(player)
         - NpcShop:getItems()
-        - NpcShop:getItem(itemid, subType)
+        - NpcShop:getItem(itemid/name, subType)
         - NpcShop.onBuy(player, itemid, subType, amount, ignoreCap, inBackpacks)
         - NpcShop.onSell(player, itemid, subType, amount, ignoreEquipped)
 ]]
@@ -20,11 +20,11 @@
 ---@field items table
 ---@field discounts table
 ---@field addItems fun(shop: table)
----@field addItem fun(id: number, buy: number, sell: number, subType: number)
+---@field addItem fun(id: number|string, buy: number, sell: number, subType: number)
 ---@field addDiscount fun(storage: number, percent: number)
 ---@field hasDiscount fun(player: Player): number|boolean
 ---@field getItems fun(): table
----@field getItem fun(itemid: number, subType: number): Item|boolean
+---@field getItem fun(itemid: number|string, subType?: number): Item|boolean
 ---@field onBuy fun(player: Player, itemid: number, subType: number, amount: number, ignoreCap: boolean, inBackpacks: boolean): boolean
 ---@field onSell fun(player: Player, itemid: number, subType: number, amount: number, ignoreEquipped: boolean): boolean
 ---@type table<string, table<string, NpcShop>>
@@ -53,19 +53,24 @@ if not NpcShop then
     })
 
     -- Adds items to the NPC shop.
-    ---@param shop table<number, table<string, number>> The items to be added to the shop.
+    ---@param shop table<number|string, table<string, number>> The items to be added to the shop.
     function NpcShop:addItems(shop)
         for id, items in pairs(shop) do
             local found = false
             for _, item in pairs(self.items) do
-                if item.id == id then
+                if item.id == id or item.name == id then
                     found = true
                     break
                 end
             end
             if not found then
+                local name = ItemType(id):getName()
+                if type(id) == "string" then
+                    name = id
+                    id = ItemType(id):getId()
+                end
                 table.insert(self.items, {
-                    id = id, name = ItemType(id):getName(), buy = items.buy, sell = items.sell, subtype = items.subType == nil and nil or items.subType
+                    id = id, name = name, buy = items.buy, sell = items.sell, subtype = items.subType == nil and nil or items.subType
                 })
             end
         end
@@ -82,14 +87,19 @@ if not NpcShop then
         local sub = subType and subType or 1
         local found = false
         for _, item in pairs(self.items) do
-            if item.id == id then
+            if item.id == id or item.name == id then
                 found = true
                 break
             end
         end
         if not found then
+            local name = ItemType(id):getName()
+            if type(id) == "string" then
+                name = id
+                id = ItemType(id):getId()
+            end
             table.insert(self.items, {
-                id = id, name = ItemType(id):getName(), buy = buy, sell = sell, subtype = sub
+                id = id, name = name, buy = buy, sell = sell, subtype = sub
             })
         end
     end
