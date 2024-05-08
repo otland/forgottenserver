@@ -65,7 +65,7 @@ configManager = {}
 ---@field getNpcs fun(): table
 ---@field getMonsters fun(): table
 ---@field loadMap fun(path: string): boolean
----@field getExperienceStage fun(): number
+---@field getExperienceStage fun(level: number): number
 ---@field getExperienceForLevel fun(level: number): number
 ---@field getMonsterCount fun(): number
 ---@field getPlayerCount fun(): number
@@ -84,7 +84,7 @@ configManager = {}
 ---@field setGameState fun(state: string): boolean
 ---@field getWorldType fun(): string
 ---@field setWorldType fun(type: string): boolean
----@field getItemAttributeByName fun(item: Item, attributeName: string): any
+---@field getItemAttributeByName fun(attribute: string): any
 ---@field getReturnMessage fun(): string
 ---@field createItem fun(itemId: number, count: number, subtype: number|nil): Item
 ---@field createContainer fun(containerId: number, size: number): Container
@@ -94,7 +94,7 @@ configManager = {}
 ---@field createMonsterType fun(name: string): MonsterType
 ---@field startEvent fun(eventName: string): boolean
 ---@field getClientVersion fun(): string
----@field reload fun(): boolean
+---@field reload fun(reloadType: number): boolean
 Game = {}
 
 ---@class Variant
@@ -107,7 +107,7 @@ Variant = {}
 ---@class Position
 ---@field create fun(): Position
 ---@field isSightClear fun(self: Position, other: Position): boolean
----@field sendMagicEffect fun(self: Position, effectType: number): boolean
+---@field sendMagicEffect fun(self: Position, effectType: number, creature?: Creature): boolean
 ---@field sendDistanceEffect fun(self: Position, target: Position, effectType: number): boolean
 Position = {}
 
@@ -221,9 +221,9 @@ ModalWindow = {}
 ---@field getArticle fun(self: Item): string
 ---@field getPosition fun(self: Item): Position
 ---@field getTile fun(self: Item): Tile
----@field hasAttribute fun(self: Item, attribute: number): boolean
----@field getAttribute fun(self: Item, attribute: number): any
----@field setAttribute fun(self: Item, attribute: number, value: any)
+---@field hasAttribute fun(self: Item, attribute: number|string): boolean
+---@field getAttribute fun(self: Item, attribute: number|string): any
+---@field setAttribute fun(self: Item, attribute: number|string, value: any)
 ---@field removeAttribute fun(self: Item, attribute: number)
 ---@field getCustomAttribute fun(self: Item, key: string): any
 ---@field setCustomAttribute fun(self: Item, key: string, value: any)
@@ -240,6 +240,7 @@ ModalWindow = {}
 ---@field getReflect fun(self: Item): number
 ---@field setBoostPercent fun(self: Item, percent: number)
 ---@field getBoostPercent fun(self: Item): number
+---@field addItem fun(self: Item, id: number, subtype?: number): boolean
 Item = {}
 
 ---@class Container : Item
@@ -390,7 +391,7 @@ Creature = {}
 ---@field setOfflineTrainingSkill fun(self: Player, skill: number)
 ---@field getItemCount fun(self: Player, itemId: number): number
 ---@field getItemById fun(self: Player, itemId: number, subType?: number): Item
----@field getVocation fun(self: Player): number
+---@field getVocation fun(self: Player): Vocation
 ---@field setVocation fun(self: Player, vocationId: number)
 ---@field getSex fun(self: Player): number
 ---@field setSex fun(self: Player, sexId: number)
@@ -413,13 +414,13 @@ Creature = {}
 ---@field setBankBalance fun(self: Player, balance: number)
 ---@field addItem fun(self: Player, itemId: number, count?: number): Item
 ---@field addItemEx fun(self: Player, item: Item, copyItem?: boolean): boolean
----@field removeItem fun(self: Player, itemId: number, count?: number): boolean
+---@field removeItem fun(self: Player, itemId: number, count?: number, subtype?: number): boolean
 ---@field sendSupplyUsed fun(self: Player, item: Item)
 ---@field getMoney fun(self: Player): number
 ---@field addMoney fun(self: Player, amount: number)
 ---@field removeMoney fun(self: Player, amount: number)
 ---@field showTextDialog fun(self: Player, itemId: number, text: string)
----@field sendTextMessage fun(self: Player, messageType: number, message: string)
+---@field sendTextMessage fun(self: Player, messageType: number, message: string, position?: Position|number, primaryValue?: number, primaryColor?: number, secondaryValue?: number, secondaryColor?: number)
 ---@field sendChannelMessage fun(self: Player, author: string, message: string, type: number, channelId: number)
 ---@field sendPrivateMessage fun(self: Player, receiver: Player, message: string)
 ---@field channelSay fun(self: Player, channelId: number, message: string)
@@ -1053,12 +1054,12 @@ Weapon = {}
 ---@field onTradeRequest fun(player:Player, target:Player, item:Item):boolean
 ---@field onTradeAccept fun(player:Player, target:Player, item:Item, targetItem:Item):boolean
 ---@field onTradeCompleted fun(player:Player, target:Player, item:Item, targetItem:Item, isSuccess:boolean):nil
----@field onGainExperience fun(player:Player, source?:Creature, exp:integer, rawExp:integer):integer
+---@field onGainExperience fun(player:Player, source?:Creature, exp:integer, rawExp:integer, sendText:boolean):integer
 ---@field onLoseExperience fun(player:Player, exp:integer):integer
 ---@field onGainSkillTries fun(player:Player, skill:integer, tries:integer, artificial?:boolean):integer
 ---@field onNetworkMessage fun(player:Player, recvByte:integer, msg:NetworkMessage):nil
 ---@field onUpdateInventory fun(player:Player, item:Item, slot:integer, equip?:boolean):nil
----@field onRotateItem fun(player:Player, item:Item):boolean
+---@field onRotateItem fun(player:Player, item:Item)
 ---@field onSpellCheck fun(player:Player, spell:Spell):boolean
 ---@field onDropLoot fun(monster:Monster, corpse?:Container):nil
 ---@field onSpawn fun(monster:Monster, position:Position, startup:boolean, artificial:boolean):nil
@@ -1243,145 +1244,170 @@ function sendGuildChannelMessage(guildId, type, message) end
 function isScriptsInterface() end
 ---@alias isScriptsInterface fun(): boolean
 
-CREATURE_ID_MIN = 0x10000000
+function getNpcCid() end
+function selfSay(message, player) end
+function selfMove(direction) end
+function selfMoveTo(...) end
+function selfTurn(direction) end
+function selfFollow(creature) end
+function getDistanceTo(creature) end
+function doNpcSetCreatureFocus(creature) end
+function getNpcParameter(key) end
+function openShopWindow(shopWindow) end
+function closeShopWindow() end
+function doSellItem(item) end
 
-CONST_ME_THUNDER = 73
-CONST_ME_BIGCLOUDS = 41
-CONST_ME_MORTAREA = 18
-CONST_ME_YELLOW_RINGS = 8
-CONST_ANI_SMALLEARTH = 39
-CONST_ME_ICEATTACK = 44
-CONST_ME_SOUND_GREEN = 19
-CONST_ME_HITAREA = 10
-CONST_ME_TELEPORT = 11
-CONST_ME_SOUND_PURPLE = 23
-CONST_ANI_SNOWBALL = 13
-CONST_ANI_SHIVERARROW = 35
-CONST_PROP_NOFIELDBLOCKPATH = 10
-CONST_ME_YELLOWENERGY = 49
-CONST_ANI_ETHEREALSPEAR = 28
-CONST_PROP_ISVERTICAL = 4
-CONST_ME_SMALLPLANTS = 46
-CONST_ME_SOUND_YELLOW = 22
-CONST_ME_DRAGONHEAD = 70
-CONST_ME_STEPSHORIZONTAL = 63
-CONST_PROP_ISHORIZONTAL = 5
-CONST_ME_POISONAREA = 21
-CONST_ANI_REDSTAR = 19
-CONST_ANI_INFERNALBOLT = 16
-CONST_ME_ICETORNADO = 43
-CONST_ANI_ENERGY = 5
-CONST_PROP_IMMOVABLENOFIELDBLOCKPATH = 9
-CONST_ME_LOSEENERGY = 2
-CONST_ME_MAGIC_RED = 14
-CONST_ME_PLANTATTACK = 55
-CONST_ME_BLOCKHIT = 4
-CONST_ANI_SUDDENDEATH = 32
-CONST_ME_SLEEP = 33
-CONST_ME_ENERGYAREA = 38
-CONST_ME_SMOKE = 68
-CONST_ANI_FIRE = 4
-CONST_ME_BIGPLANTS = 51
-CONST_ANI_PIERCINGBOLT = 24
-CONST_ME_CRAPS = 27
-CONST_ANI_LARGEROCK = 12
-CONST_ME_POFF = 3
-CONST_ME_ICEAREA = 42
-CONST_ANI_BURSTARROW = 7
-CONST_ME_GREEN_RINGS = 9
-CONST_ANI_WHIRLWINDAXE = 26
+storages = {}
+
+CREATURE_ID_MIN = 0x10000000
+ITEM_STACK_SIZE = 100
+
+-- Constants: CONST_ANI
+CONST_ANI_NONE = 0
+CONST_ANI_SPEAR = 1
 CONST_ANI_BOLT = 2
-CONST_ME_NONE = 0
-CONST_ME_SKULLVERTICAL = 61
-CONST_SLOT_NECKLACE = 2
-CONST_ME_YALAHARIGHOST = 66
-CONST_ME_CARNIPHILA = 47
-CONST_ME_STONES = 45
-CONST_ANI_GREENSTAR = 20
-CONST_ME_SOUND_BLUE = 24
+CONST_ANI_DIAMONDARROW = 3
+CONST_ANI_FIRE = 4
+CONST_ANI_ENERGY = 5
+CONST_ANI_POISONARROW = 6
+CONST_ANI_BURSTARROW = 7
+CONST_ANI_BLOCKHIT = 8
+CONST_ANI_THROWINGSTAR = 9
+CONST_ANI_GREENSTAR = 10
 CONST_ANI_SMALLSTONE = 10
-CONST_ME_SOUND_WHITE = 25
-CONST_ME_HOLYAREA = 50
-CONST_ANI_HUNTINGSPEAR = 17
+CONST_ANI_LARGEROCK = 12
+CONST_ANI_SNOWBALL = 13
 CONST_ANI_POISON = 15
-CONST_ME_FIREATTACK = 37
-CONST_ANI_WHIRLWINDSWORD = 25
-CONST_ANI_EARTH = 30
-CONST_ME_STUN = 32
+CONST_ANI_INFERNALBOLT = 16
+CONST_ANI_HUNTINGSPEAR = 17
+CONST_ANI_ENCHANTEDSPEAR = 18
+CONST_ANI_REDSTAR = 19
+CONST_ANI_SOUND_RED = 20
+CONST_ANI_ROYALSPEAR = 21
+CONST_ANI_SNIPERARROW = 22
 CONST_ANI_ONYXARROW = 23
-CONST_PROP_BLOCKPATH = 3
-CONST_ME_SMALLCLOUDS = 39
-CONST_SLOT_RIGHT = 5
-CONST_PROP_IMMOVABLEBLOCKPATH = 8
-CONST_PROP_BLOCKPROJECTILE = 2
-CONST_ANI_EARTHARROW = 40
-CONST_ANI_ARROW = 3
+CONST_ANI_PIERCINGBOLT = 24
+CONST_ANI_WHIRLWINDSWORD = 25
+CONST_ANI_WHIRLWINDAXE = 26
+CONST_ANI_WHIRLWINDCLUB = 27
+CONST_ANI_ETHEREALSPEAR = 28
+CONST_ANI_ICE = 29
+CONST_ANI_HOLY = 31
+CONST_ANI_SUDDENDEATH = 32
+CONST_ANI_FLASHARROW = 33
+CONST_ANI_FLAMMINGARROW = 34
+CONST_ANI_SHIVERARROW = 35
+CONST_ANI_ENERGYBALL = 36
 CONST_ANI_SMALLICE = 37
 CONST_ANI_SMALLHOLY = 38
-CONST_SLOT_BACKPACK = 3
-CONST_ME_STEPSVERTICAL = 65
-CONST_ME_HEARTS = 36
-CONST_ME_GIFT_WRAPS = 28
-CONST_ME_WATERSPLASH = 54
-CONST_ME_SKULLHORIZONTAL = 60
-CONST_ANI_ENCHANTEDSPEAR = 18
-CONST_ANI_FLASHARROW = 33
-CONST_PROP_IMMOVABLEBLOCKSOLID = 7
-CONST_PROP_HASHEIGHT = 1
-CONST_ANI_THROWINGSTAR = 8
-CONST_ANI_HOLY = 31
-CONST_PROP_SUPPORTHANGABLE = 11
-CONST_ME_ENERGYHIT = 12
-CONST_ME_HOLYDAMAGE = 40
-CONST_ME_DRAWBLOOD = 1
-CONST_ME_BUBBLES = 26
-CONST_SLOT_HEAD = 1
-CONST_ANI_POWERBOLT = 14
-CONST_ME_ASSASSIN = 62
-CONST_ANI_SPEAR = 1
-CONST_ANI_SNIPERARROW = 22
-CONST_ME_MAGIC_GREEN = 15
+CONST_ANI_MAGIC_BLUE = 39
+CONST_ANI_HOLYDAMAGE = 40
+CONST_ANI_EARTHARROW = 40
 CONST_ANI_EXPLOSION = 41
-CONST_ME_TUTORIALSQUARE = 57
-CONST_ANI_POISONARROW = 6
-CONST_ANI_NONE = 0
-CONST_ME_MIRRORVERTICAL = 59
-CONST_ANI_ROYALSPEAR = 21
-CONST_ME_TUTORIALARROW = 56
-CONST_PROP_MOVEABLE = 6
+CONST_ANI_ICEATTACK = 44
+CONST_ANI_WEAPONTYPE = 45
+CONST_ANI_DEATH = 46
+CONST_ANI_EARTH = 47
+
+-- Constants: CONST_ME
+CONST_ME_NONE = 0
+CONST_ME_DRAWBLOOD = 1
+CONST_ME_LOSEENERGY = 2
+CONST_ME_POFF = 3
+CONST_ME_BLOCKHIT = 4
 CONST_ME_EXPLOSIONAREA = 5
-CONST_ME_SOUND_RED = 20
-CONST_SLOT_ARMOR = 4
-CONST_ME_GIANTICE = 53
 CONST_ME_EXPLOSIONHIT = 6
-CONST_ME_INSECTS = 69
+CONST_ME_FIREAREA = 7
+CONST_ME_YELLOW_RINGS = 8
+CONST_ME_GREEN_RINGS = 9
+CONST_ME_HITAREA = 10
+CONST_ME_TELEPORT = 11
+CONST_ME_ENERGYHIT = 12
+CONST_ME_MAGIC_BLUE = 13
+CONST_ME_MAGIC_RED = 14
+CONST_ME_MAGIC_GREEN = 15
 CONST_ME_HITBYFIRE = 16
 CONST_ME_HITBYPOISON = 17
-CONST_ME_CAKE = 52
-CONST_ANI_WHIRLWINDCLUB = 27
-CONST_PROP_BLOCKSOLID = 0
-CONST_SLOT_AMMO = 10
-CONST_ANI_ICE = 29
-CONST_ME_MAGIC_BLUE = 13
-CONST_ME_BLOODYSTEPS = 64
-CONST_ANI_DEATH = 11
-CONST_ME_FIREAREA = 7
-CONST_ME_GROUNDSHAKER = 35
-CONST_SLOT_RING = 9
-CONST_ANI_WEAPONTYPE = 254
-CONST_ANI_FLAMMINGARROW = 34
+CONST_ME_MORTAREA = 18
+CONST_ME_SOUND_GREEN = 19
+CONST_ME_SOUND_RED = 20
+CONST_ME_POISONAREA = 21
+CONST_ME_SOUND_YELLOW = 22
+CONST_ME_SOUND_PURPLE = 23
+CONST_ME_SOUND_BLUE = 24
+CONST_ME_SOUND_WHITE = 25
+CONST_ME_BUBBLES = 26
+CONST_ME_CRAPS = 27
+CONST_ME_GIFT_WRAPS = 28
+CONST_ME_FIREWORK_YELLOW = 29
+CONST_ME_FIREWORK_RED = 30
 CONST_ME_FIREWORK_BLUE = 31
-CONST_ANI_THROWINGKNIFE = 9
-CONST_ME_MIRRORHORIZONTAL = 58
+CONST_ME_STUN = 32
+CONST_ME_SLEEP = 33
+CONST_ME_WATERCREATURE = 34
+CONST_ME_GROUNDSHAKER = 35
+CONST_ME_HEARTS = 36
+CONST_ME_FIREATTACK = 37
+CONST_ME_ENERGYAREA = 38
+CONST_ME_SMALLCLOUDS = 39
+CONST_ME_HOLYDAMAGE = 40
+CONST_ME_BIGCLOUDS = 41
+CONST_ME_ICEAREA = 42
+CONST_ME_ICETORNADO = 43
+CONST_ME_SMALLPLANTS = 46
+CONST_ME_CARNIPHILA = 47
+CONST_ME_YELLOWENERGY = 49
+CONST_ME_HOLYAREA = 50
+CONST_ME_BIGPLANTS = 51
+CONST_ME_CAKE = 52
+CONST_ME_WATERSPLASH = 54
+CONST_ME_SMALLICE = 55
+CONST_ME_PLANTATTACK = 55
+CONST_ME_STONES = 45
+CONST_ME_GIANTICE = 53
+CONST_ME_YALAHARIGHOST = 66
+CONST_ME_BATS = 67
+CONST_ME_SMOKE = 68
+CONST_ME_INSECTS = 69
+CONST_ME_DRAGONHEAD = 70
+CONST_ME_EARLY_THUNDER = 71
+CONST_ME_THUNDER = 73
+CONST_ME_ICEATTACK = 74
+CONST_ANI_SMALLEARTH = 75
+CONST_ME_PURPLEENERGY = 76
+CONST_ME_ROOTING = 77
+CONST_ANI_LEAFSTAR = 78
+CONST_ME_BLACKSMOKE = 79
+CONST_ME_PIXIE_EXPLOSION = 80
+CONST_ME_PURPLECHAIN = 81
+
+-- Constants: CONST_PROP
+CONST_PROP_BLOCKSOLID = 0
+CONST_PROP_BLOCKPROJECTILE = 2
+CONST_PROP_BLOCKPATH = 3
+CONST_PROP_ISVERTICAL = 4
+CONST_PROP_ISHORIZONTAL = 5
+CONST_PROP_MOVEABLE = 6
+CONST_PROP_IMMOVABLEBLOCKSOLID = 7
+CONST_PROP_IMMOVABLEBLOCKPATH = 8
+CONST_PROP_IMMOVABLENOFIELDBLOCKPATH = 9
+CONST_PROP_NOFIELDBLOCKPATH = 10
+CONST_PROP_SUPPORTHANGABLE = 11
+CONST_PROP_HASHEIGHT = 1
+
+-- Constants: CONST_SLOT
+CONST_SLOT_HEAD = 1
+CONST_SLOT_NECKLACE = 2
+CONST_SLOT_BACKPACK = 3
+CONST_SLOT_ARMOR = 4
+CONST_SLOT_RIGHT = 5
 CONST_SLOT_LEFT = 6
 CONST_SLOT_LEGS = 7
-CONST_ME_FIREWORK_RED = 30
 CONST_SLOT_FEET = 8
-CONST_ANI_ENERGYBALL = 36
-CONST_ME_PURPLEENERGY = 48
-CONST_ME_BATS = 67
-CONST_ME_WATERCREATURE = 34
-CONST_ME_FIREWORK_YELLOW = 29
+CONST_SLOT_RING = 9
+CONST_SLOT_AMMO = 10
+CONST_SLOT_DEPOT = 11
+CONST_SLOT_LAST = 12
 
 TILESTATE_NONE = 0
 TILESTATE_FLOORCHANGE_DOWN = 1 * 2 ^ 0
@@ -1466,6 +1492,11 @@ CallBackParam = {
     TARGETTILE = 2,
     TARGETCREATURE = 3
 }
+
+CALLBACK_PARAM_LEVELMAGICVALUE = 0
+CALLBACK_PARAM_SKILLVALUE = 1
+CALLBACK_PARAM_TARGETTILE = 2
+CALLBACK_PARAM_TARGETCREATURE = 3
 
 ---@enum ExperienceRateType
 ExperienceRateType = {BASE = 1, LOW_LEVEL = 2, BONUS = 3, STAMINA = 4}
@@ -2199,6 +2230,7 @@ REPORT_TYPE_STATEMENT = 1
 REPORT_TYPE_BOT = 2
 
 TEXTCOLOR_BLACK = 0
+TEXTCOLOR_WHITE_EXP = 1
 TEXTCOLOR_BLUE = 5
 TEXTCOLOR_GREEN = 18
 TEXTCOLOR_LIGHTGREEN = 66
