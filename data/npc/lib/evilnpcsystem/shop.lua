@@ -64,14 +64,22 @@ if not NpcShop then
                 end
             end
             if not found then
-                local name = ItemType(id):getName()
-                if type(id) == "string" then
-                    name = id
-                    id = ItemType(id):getId()
+                if ItemType(id):getName() ~= "" then
+                    if ItemType(id):isPickupable() then
+                        local name = ItemType(id):getName()
+                        if type(id) == "string" then
+                            name = id
+                            id = ItemType(id):getId()
+                        end
+                        table.insert(self.items, {
+                            id = id, name = name, buy = items.buy, sell = items.sell, subtype = items.subType == nil and nil or items.subType
+                        })
+                    else
+                        print("[Warning - NpcShop:addItems] item: ".. id .." is not pickupable.\n".. debug.getinfo(2).source:match("@?(.*)"))
+                    end
+                else
+                    print("[Warning - NpcShop:addItems] item: ".. id .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
                 end
-                table.insert(self.items, {
-                    id = id, name = name, buy = items.buy, sell = items.sell, subtype = items.subType == nil and nil or items.subType
-                })
             end
         end
     end
@@ -93,14 +101,22 @@ if not NpcShop then
             end
         end
         if not found then
-            local name = ItemType(id):getName()
-            if type(id) == "string" then
-                name = id
-                id = ItemType(id):getId()
+            if ItemType(id):getName() ~= "" then
+                if ItemType(id):isPickupable() then
+                    local name = ItemType(id):getName()
+                    if type(id) == "string" then
+                        name = id
+                        id = ItemType(id):getId()
+                    end
+                    table.insert(self.items, {
+                        id = id, name = name, buy = buy, sell = sell, subtype = subType == nil and nil or subType
+                    })
+                else
+                    print("[Warning - NpcShop:addItems] item: ".. id .." is not pickupable.\n".. debug.getinfo(2).source:match("@?(.*)"))
+                end
+            else
+                print("[Warning - NpcShop:addItems] item: ".. id .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
             end
-            table.insert(self.items, {
-                id = id, name = name, buy = buy, sell = sell, subtype = sub
-            })
         end
     end
 
