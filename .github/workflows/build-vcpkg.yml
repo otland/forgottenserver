@@ -28,7 +28,6 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
