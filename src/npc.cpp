@@ -78,7 +78,7 @@ NpcType* getNpcType(std::string name)
 NpcScriptInterface* getScriptInterface() { return scriptInterface.get(); }
 } // namespace Npcs
 
-NpcType::NpcType() : npcEventHandler(std::make_shared<NpcEventsHandler>()) {}
+NpcType::NpcType() : npcEventHandler(std::make_unique<NpcEventsHandler>()) {}
 NpcType::~NpcType() {}
 
 Npc* Npc::createNpc(const std::string& name)
@@ -98,9 +98,9 @@ Npc* Npc::createNpc(const std::string& name)
 	npc->npcType = npcType;
 	npc->loadNpcTypeInfo();
 	if (npcType->fromLua) {
-		npc->npcEventHandler = std::make_shared<NpcEventsHandler>(*npcType->npcEventHandler);
+		npc->npcEventHandler = std::make_unique<NpcEventsHandler>(*npcType->npcEventHandler);
 	} else {
-		npc->npcEventHandler = std::make_shared<NpcEventsHandler>(npcType->scriptFilename, npc);
+		npc->npcEventHandler = std::make_unique<NpcEventsHandler>(npcType->scriptFilename, npc);
 	}
 	npc->npcEventHandler->setNpc(npc);
 	return npc;
@@ -124,7 +124,7 @@ bool Npc::load()
 	}
 
 	loadNpcTypeInfo();
-	npcEventHandler = std::make_shared<NpcEventsHandler>(npcType->scriptFilename, this);
+	npcEventHandler = std::make_unique<NpcEventsHandler>(npcType->scriptFilename, this);
 	npcEventHandler->setNpc(this);
 
 	loaded = true;

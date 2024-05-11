@@ -156,7 +156,7 @@ public:
 	std::string eventType;
 
 	NpcTypeInfo info;
-	std::shared_ptr<NpcEventsHandler> npcEventHandler;
+	std::unique_ptr<NpcEventsHandler> npcEventHandler;
 };
 
 namespace Npcs {
