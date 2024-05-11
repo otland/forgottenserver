@@ -179,6 +179,17 @@ if not NpcEvents then
             focus:addFocus(creature)
             -- If the NPC has a response, it sets the talk state to the one associated with the message
             handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
+            -- check if we want to release focus for this keyword
+            if handler:getTalkState(creature).removeFocus then
+                if handler:getTalkState(creature):getResponse() then
+                    local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                end
+                focus:removeFocus(creature)
+                closeShopWindow(creature)
+                handler:setTalkState(handler, creature)
+                return
+            end
             -- check if we have a callback for this talk state
             if handler:getTalkState(creature).callback then
                 local ret, failureMessage = handler:getTalkState(creature):callback(npc, creature)
@@ -189,6 +200,9 @@ if not NpcEvents then
                     end
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
+                    if msg == "" then
+                        print("[Warning - NpcEvents.onSay] There is no failureResponse set for keyword: ".. message ..".\n".. debug.getinfo(2).source:match("@?(.*)"))
+                    end
                     return
                 end
             end

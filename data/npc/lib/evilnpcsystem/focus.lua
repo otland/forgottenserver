@@ -33,7 +33,7 @@ if not NpcFocus then
             if not self[npc:getId()] then
                 self[npc:getId()] = {
                     focus = {},
-                    currentFocus = 0
+                    currentFocus = nil
                 }
                 setmetatable(self[npc:getId()], {__index = NpcFocus})
             end
@@ -64,7 +64,7 @@ if not NpcFocus then
     function NpcFocus:removeFocus(player)
         self.focus[player:getGuid()] = nil
         if self.currentFocus == player then
-            self.currentFocus = 0
+            self.currentFocus = nil
         end
     end
 

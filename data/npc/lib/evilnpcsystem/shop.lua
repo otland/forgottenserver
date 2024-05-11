@@ -112,10 +112,10 @@ if not NpcShop then
                         id = id, name = name, buy = buy, sell = sell, subtype = subType == nil and nil or subType
                     })
                 else
-                    print("[Warning - NpcShop:addItems] item: ".. id .." is not pickupable.\n".. debug.getinfo(2).source:match("@?(.*)"))
+                    print("[Warning - NpcShop:addItem] item: ".. id .." is not pickupable.\n".. debug.getinfo(2).source:match("@?(.*)"))
                 end
             else
-                print("[Warning - NpcShop:addItems] item: ".. id .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
+                print("[Warning - NpcShop:addItem] item: ".. id .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
             end
         end
     end

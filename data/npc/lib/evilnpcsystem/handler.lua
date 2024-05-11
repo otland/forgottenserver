@@ -120,6 +120,7 @@ if not NpcsHandler then
                 setmetatable(self.keywords[words], {__index = NpcsHandler})
                 setmetatable(self.keywords[words].keywords, {__index = NpcsHandler})
                 self.keywords[words].response = {}
+                self.keywords[words].failureResponse = ""
             end
         elseif type(words) == "table" then
             local root = {__index = NpcsHandler}
@@ -131,6 +132,7 @@ if not NpcsHandler then
                     setmetatable(self.keywords[word], root)
                     setmetatable(self.keywords[word].keywords, keywords)
                     self.keywords[word].response = {}
+                    self.keywords[words].failureResponse = ""
                 end
             end
             _,ret = next(words)
@@ -277,5 +279,10 @@ if not NpcsHandler then
     ---@param position Position The position to teleport the player to.
     function NpcsHandler:teleport(position)
         self.teleportPosition = position
+    end
+
+    -- Releases the focus of the player like we are saying goodbye.
+    function NpcsHandler:farewell()
+        self.releaseFocus = true
     end
 end
