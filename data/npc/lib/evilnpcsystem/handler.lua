@@ -132,7 +132,7 @@ if not NpcsHandler then
                     setmetatable(self.keywords[word], root)
                     setmetatable(self.keywords[word].keywords, keywords)
                     self.keywords[word].response = {}
-                    self.keywords[words].failureResponse = ""
+                    self.keywords[word].failureResponse = ""
                 end
             end
             _,ret = next(words)
