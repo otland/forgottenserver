@@ -35,7 +35,7 @@ bool boolean_random(double probability = 0.5);
 Position getNextPosition(Direction direction, Position pos);
 Direction getDirectionTo(const Position& from, const Position& to);
 
-std::string getFirstLine(const std::string& str);
+std::string getFirstLine(std::string_view str);
 
 std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
@@ -74,6 +74,13 @@ SpellGroup_t stringToSpellGroup(const std::string& value);
 const std::vector<Direction>& getShuffleDirections();
 
 namespace tfs {
+
+// helper type for variant visitors
+template <class... Ts>
+struct visitors : Ts...
+{
+	using Ts::operator()...;
+};
 
 #if __has_cpp_attribute(__cpp_lib_to_underlying)
 

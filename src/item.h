@@ -107,20 +107,20 @@ class ItemAttributes
 public:
 	ItemAttributes() = default;
 
-	void setSpecialDescription(const std::string& desc) { setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc); }
-	const std::string& getSpecialDescription() const { return getStrAttr(ITEM_ATTRIBUTE_DESCRIPTION); }
+	void setSpecialDescription(std::string_view desc) { setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc); }
+	std::string_view getSpecialDescription() const { return getStrAttr(ITEM_ATTRIBUTE_DESCRIPTION); }
 
-	void setText(const std::string& text) { setStrAttr(ITEM_ATTRIBUTE_TEXT, text); }
+	void setText(std::string_view text) { setStrAttr(ITEM_ATTRIBUTE_TEXT, text); }
 	void resetText() { removeAttribute(ITEM_ATTRIBUTE_TEXT); }
-	const std::string& getText() const { return getStrAttr(ITEM_ATTRIBUTE_TEXT); }
+	std::string_view getText() const { return getStrAttr(ITEM_ATTRIBUTE_TEXT); }
 
 	void setDate(int32_t n) { setIntAttr(ITEM_ATTRIBUTE_DATE, n); }
 	void resetDate() { removeAttribute(ITEM_ATTRIBUTE_DATE); }
 	time_t getDate() const { return static_cast<time_t>(getIntAttr(ITEM_ATTRIBUTE_DATE)); }
 
-	void setWriter(const std::string& writer) { setStrAttr(ITEM_ATTRIBUTE_WRITER, writer); }
+	void setWriter(std::string_view writer) { setStrAttr(ITEM_ATTRIBUTE_WRITER, writer); }
 	void resetWriter() { removeAttribute(ITEM_ATTRIBUTE_WRITER); }
-	const std::string& getWriter() const { return getStrAttr(ITEM_ATTRIBUTE_WRITER); }
+	std::string_view getWriter() const { return getStrAttr(ITEM_ATTRIBUTE_WRITER); }
 
 	void setActionId(uint16_t n) { setIntAttr(ITEM_ATTRIBUTE_ACTIONID, n); }
 	uint16_t getActionId() const { return static_cast<uint16_t>(getIntAttr(ITEM_ATTRIBUTE_ACTIONID)); }
@@ -150,137 +150,11 @@ public:
 		return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 	}
 
-	struct CustomAttribute
-	{
-		typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
-		VariantAttribute value;
-
-		CustomAttribute() : value(boost::blank()) {}
-
-		bool operator==(const CustomAttribute& otherAttr) const { return value == otherAttr.value; }
-
-		bool operator!=(const CustomAttribute& otherAttr) const { return value != otherAttr.value; }
-
-		template <typename T>
-		explicit CustomAttribute(const T& v) : value(v)
-		{}
-
-		template <typename T>
-		void set(const T& v)
-		{
-			value = v;
-		}
-
-		template <typename T>
-		const T& get();
-
-		struct PushLuaVisitor : public boost::static_visitor<>
-		{
-			lua_State* L;
-
-			explicit PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
-
-			void operator()(const boost::blank&) const { lua_pushnil(L); }
-
-			void operator()(const std::string& v) const { LuaScriptInterface::pushString(L, v); }
-
-			void operator()(bool v) const { LuaScriptInterface::pushBoolean(L, v); }
-
-			void operator()(const int64_t& v) const { lua_pushnumber(L, v); }
-
-			void operator()(const double& v) const { lua_pushnumber(L, v); }
-		};
-
-		void pushToLua(lua_State* L) const { boost::apply_visitor(PushLuaVisitor(L), value); }
-
-		struct SerializeVisitor : public boost::static_visitor<>
-		{
-			PropWriteStream& propWriteStream;
-
-			explicit SerializeVisitor(PropWriteStream& propWriteStream) :
-			    boost::static_visitor<>(), propWriteStream(propWriteStream)
-			{}
-
-			void operator()(const boost::blank&) const {}
-
-			void operator()(const std::string& v) const { propWriteStream.writeString(v); }
-
-			template <typename T>
-			void operator()(const T& v) const
-			{
-				propWriteStream.write<T>(v);
-			}
-		};
-
-		void serialize(PropWriteStream& propWriteStream) const
-		{
-			propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-			boost::apply_visitor(SerializeVisitor(propWriteStream), value);
-		}
-
-		bool unserialize(PropStream& propStream)
-		{
-			// This is hard-coded so it's not general, depends on the position of the variants.
-			uint8_t pos;
-			if (!propStream.read<uint8_t>(pos)) {
-				return false;
-			}
-
-			switch (pos) {
-				case 1: { // std::string
-					auto [str, ok] = propStream.readString();
-					if (!ok) {
-						return false;
-					}
-					value = std::string{str};
-					break;
-				}
-
-				case 2: { // int64_t
-					int64_t tmp;
-					if (!propStream.read<int64_t>(tmp)) {
-						return false;
-					}
-					value = tmp;
-					break;
-				}
-
-				case 3: { // double
-					double tmp;
-					if (!propStream.read<double>(tmp)) {
-						return false;
-					}
-					value = tmp;
-					break;
-				}
-
-				case 4: { // bool
-					bool tmp;
-					if (!propStream.read<bool>(tmp)) {
-						return false;
-					}
-					value = tmp;
-					break;
-				}
-
-				default: {
-					value = boost::blank();
-					return false;
-				}
-			}
-			return true;
-		}
-	};
+	using CustomAttribute = std::variant<std::monostate, std::string, int64_t, double, bool>;
 
 private:
 	bool hasAttribute(itemAttrTypes type) const { return (type & attributeBits) != 0; }
 	void removeAttribute(itemAttrTypes type);
-
-	static std::string emptyString;
-	static int64_t emptyInt;
-	static double emptyDouble;
-	static bool emptyBool;
-	static Reflect emptyReflect;
 
 	typedef std::unordered_map<std::string, CustomAttribute> CustomAttributeMap;
 
@@ -357,10 +231,12 @@ private:
 	std::map<CombatType_t, Reflect> reflect;
 	std::map<CombatType_t, uint16_t> boostPercent;
 
-	const Reflect& getReflect(CombatType_t combatType)
+	Reflect getReflect(CombatType_t combatType)
 	{
-		auto it = reflect.find(combatType);
-		return it != reflect.end() ? it->second : emptyReflect;
+		if (auto it = reflect.find(combatType); it != reflect.end()) {
+			return it->second;
+		}
+		return {};
 	}
 	int16_t getBoostPercent(CombatType_t combatType)
 	{
@@ -368,7 +244,7 @@ private:
 		return it != boostPercent.end() ? it->second : 0;
 	}
 
-	const std::string& getStrAttr(itemAttrTypes type) const;
+	std::string_view getStrAttr(itemAttrTypes type) const;
 	void setStrAttr(itemAttrTypes type, std::string_view value);
 
 	int64_t getIntAttr(itemAttrTypes type) const;
@@ -517,10 +393,10 @@ public:
 	virtual Podium* getPodium() { return nullptr; }
 	virtual const Podium* getPodium() const { return nullptr; }
 
-	const std::string& getStrAttr(itemAttrTypes type) const
+	std::string_view getStrAttr(itemAttrTypes type) const
 	{
 		if (!attributes) {
-			return ItemAttributes::emptyString;
+			return "";
 		}
 		return attributes->getStrAttr(type);
 	}
@@ -569,7 +445,7 @@ public:
 		return getAttributes()->getCustomAttribute(key);
 	}
 
-	const ItemAttributes::CustomAttribute* getCustomAttribute(const std::string& key)
+	const ItemAttributes::CustomAttribute* getCustomAttribute(std::string_view key)
 	{
 		if (!attributes) {
 			return nullptr;
@@ -594,11 +470,11 @@ public:
 	}
 
 	void setSpecialDescription(std::string_view desc) { setStrAttr(ITEM_ATTRIBUTE_DESCRIPTION, desc); }
-	const std::string& getSpecialDescription() const { return getStrAttr(ITEM_ATTRIBUTE_DESCRIPTION); }
+	std::string_view getSpecialDescription() const { return getStrAttr(ITEM_ATTRIBUTE_DESCRIPTION); }
 
 	void setText(std::string_view text) { setStrAttr(ITEM_ATTRIBUTE_TEXT, text); }
 	void resetText() { removeAttribute(ITEM_ATTRIBUTE_TEXT); }
-	const std::string& getText() const { return getStrAttr(ITEM_ATTRIBUTE_TEXT); }
+	std::string_view getText() const { return getStrAttr(ITEM_ATTRIBUTE_TEXT); }
 
 	void setDate(int32_t n) { setIntAttr(ITEM_ATTRIBUTE_DATE, n); }
 	void resetDate() { removeAttribute(ITEM_ATTRIBUTE_DATE); }
@@ -606,7 +482,7 @@ public:
 
 	void setWriter(std::string_view writer) { setStrAttr(ITEM_ATTRIBUTE_WRITER, writer); }
 	void resetWriter() { removeAttribute(ITEM_ATTRIBUTE_WRITER); }
-	const std::string& getWriter() const { return getStrAttr(ITEM_ATTRIBUTE_WRITER); }
+	std::string_view getWriter() const { return getStrAttr(ITEM_ATTRIBUTE_WRITER); }
 
 	void setActionId(uint16_t n)
 	{
@@ -834,21 +710,21 @@ public:
 		}
 		return items[id].storeItem;
 	}
-	const std::string& getName() const
+	std::string_view getName() const
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_NAME)) {
 			return getStrAttr(ITEM_ATTRIBUTE_NAME);
 		}
 		return items[id].name;
 	}
-	const std::string getPluralName() const
+	std::string_view getPluralName() const
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_PLURALNAME)) {
 			return getStrAttr(ITEM_ATTRIBUTE_PLURALNAME);
 		}
 		return items[id].getPluralName();
 	}
-	const std::string& getArticle() const
+	std::string_view getArticle() const
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_ARTICLE)) {
 			return getStrAttr(ITEM_ATTRIBUTE_ARTICLE);

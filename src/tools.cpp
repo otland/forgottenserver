@@ -872,7 +872,7 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 	return ITEM_ATTRIBUTE_NONE;
 }
 
-std::string getFirstLine(const std::string& str)
+std::string getFirstLine(std::string_view str)
 {
 	std::string firstLine;
 	firstLine.reserve(str.length());

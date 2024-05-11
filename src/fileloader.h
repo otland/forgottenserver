@@ -125,7 +125,7 @@ public:
 		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
 	}
 
-	void writeString(const std::string& str)
+	void writeString(std::string_view str)
 	{
 		size_t strLength = str.size();
 		if (strLength > std::numeric_limits<uint16_t>::max()) {

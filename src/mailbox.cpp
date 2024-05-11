@@ -116,7 +116,7 @@ bool Mailbox::getReceiver(Item* item, std::string& name) const
 		return false;
 	}
 
-	const std::string& text = item->getText();
+	std::string_view text = item->getText();
 	if (text.empty()) {
 		return false;
 	}

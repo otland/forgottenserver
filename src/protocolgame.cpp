@@ -3005,12 +3005,12 @@ void ProtocolGame::sendTextWindow(uint32_t windowTextId, Item* item, uint16_t ma
 		msg.add<uint16_t>(maxlen);
 		msg.addString(item->getText());
 	} else {
-		const std::string& text = item->getText();
+		std::string_view text = item->getText();
 		msg.add<uint16_t>(text.size());
 		msg.addString(text);
 	}
 
-	const std::string& writer = item->getWriter();
+	std::string_view writer = item->getWriter();
 	if (!writer.empty()) {
 		msg.addString(writer);
 	} else {

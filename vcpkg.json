@@ -7,7 +7,6 @@
     "boost-locale",
     "boost-lockfree",
     "boost-system",
-    "boost-variant",
     "fmt",
     "libmariadb",
     "lua",

@@ -7015,7 +7015,13 @@ int LuaScriptInterface::luaItemGetCustomAttribute(lua_State* L)
 	}
 
 	if (attr) {
-		attr->pushToLua(L);
+		std::visit(tfs::visitors{
+		               [L](std::monostate) { lua_pushnil(L); },
+		               [L](std::string_view v) { LuaScriptInterface::pushString(L, v); },
+		               [L](std::convertible_to<double> auto v) { lua_pushnumber(L, v); },
+		               [L](bool v) { LuaScriptInterface::pushBoolean(L, v); },
+		           },
+		           *attr);
 	} else {
 		lua_pushnil(L);
 	}
@@ -7045,14 +7051,14 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
 	if (isNumber(L, 3)) {
 		double tmp = getNumber<double>(L, 3);
 		if (std::floor(tmp) < tmp) {
-			val.set<double>(tmp);
+			val = tmp;
 		} else {
-			val.set<int64_t>(tmp);
+			val = static_cast<int64_t>(tmp);
 		}
 	} else if (isString(L, 3)) {
-		val.set<std::string>(getString(L, 3));
+		val = getString(L, 3);
 	} else if (isBoolean(L, 3)) {
-		val.set<bool>(getBoolean(L, 3));
+		val = getBoolean(L, 3);
 	} else {
 		lua_pushnil(L);
 		return 1;

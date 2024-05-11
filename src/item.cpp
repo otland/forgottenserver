@@ -703,13 +703,56 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 					return ATTR_READ_ERROR;
 				};
 
+				static auto unserialize = [](PropStream& propStream) -> ItemAttributes::CustomAttribute {
+					// This is hard-coded so it's not general, depends on the position of the variants.
+					uint8_t pos;
+					if (!propStream.read<uint8_t>(pos)) {
+						return {};
+					}
+
+					switch (pos) {
+						case 1: { // std::string
+							auto [str, ok] = propStream.readString();
+							if (!ok) {
+								return false;
+							}
+							return std::string{str};
+						}
+
+						case 2: { // int64_t
+							int64_t tmp;
+							if (!propStream.read<int64_t>(tmp)) {
+								return false;
+							}
+							return tmp;
+						}
+
+						case 3: { // double
+							double tmp;
+							if (!propStream.read<double>(tmp)) {
+								return false;
+							}
+							return tmp;
+						}
+
+						case 4: { // bool
+							bool tmp;
+							if (!propStream.read<bool>(tmp)) {
+								return false;
+							}
+							return tmp;
+						}
+					}
+
+					return {};
+				};
+
 				// Unserialize value type and value
-				ItemAttributes::CustomAttribute val;
-				if (!val.unserialize(propStream)) {
-					return ATTR_READ_ERROR;
+				if (auto val = unserialize(propStream); val.index() != 0) {
+					setCustomAttribute(key, val);
 				}
 
-				setCustomAttribute(key, val);
+				return ATTR_READ_ERROR;
 			}
 			break;
 		}
@@ -762,26 +805,22 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 		}
 	}
 
-	const std::string& text = getText();
-	if (!text.empty()) {
+	if (std::string_view text = getText(); !text.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_TEXT);
 		propWriteStream.writeString(text);
 	}
 
-	const time_t writtenDate = getDate();
-	if (writtenDate != 0) {
+	if (const time_t writtenDate = getDate(); writtenDate != 0) {
 		propWriteStream.write<uint8_t>(ATTR_WRITTENDATE);
 		propWriteStream.write<uint32_t>(writtenDate);
 	}
 
-	const std::string& writer = getWriter();
-	if (!writer.empty()) {
+	if (std::string_view writer = getWriter(); !writer.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_WRITTENBY);
 		propWriteStream.writeString(writer);
 	}
 
-	const std::string& specialDesc = getSpecialDescription();
-	if (!specialDesc.empty()) {
+	if (std::string_view specialDesc = getSpecialDescription(); !specialDesc.empty()) {
 		propWriteStream.write<uint8_t>(ATTR_DESC);
 		propWriteStream.writeString(specialDesc);
 	}
@@ -881,7 +920,17 @@ void Item::serializeAttr(PropWriteStream& propWriteStream) const
 			propWriteStream.writeString(entry.first);
 
 			// Serializing value type and value
-			entry.second.serialize(propWriteStream);
+			auto serialize = [](PropWriteStream& pws, auto value) {
+				pws.write<uint8_t>(static_cast<uint8_t>(value.index()));
+
+				std::visit(tfs::visitors{
+				               [](std::monostate) {},
+				               [&pws](const std::string& v) { pws.writeString(v); },
+				               [&pws](auto v) { pws.write(v); },
+				           },
+				           value);
+			};
+			serialize(propWriteStream, entry.second);
 		}
 	}
 
@@ -968,8 +1017,7 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 
 	std::ostringstream s;
 
-	const std::string& name = (item ? item->getName() : it.name);
-	if (!name.empty()) {
+	if (std::string_view name = (item ? item->getName() : it.name); !name.empty()) {
 		if (it.stackable && subType > 1) {
 			if (it.showCount) {
 				s << subType << ' ';
@@ -978,8 +1026,7 @@ std::string Item::getNameDescription(const ItemType& it, const Item* item /*= nu
 			s << (item ? item->getPluralName() : it.getPluralName());
 		} else {
 			if (addArticle) {
-				const std::string& article = (item ? item->getArticle() : it.article);
-				if (!article.empty()) {
+				if (std::string_view article = (item ? item->getArticle() : it.article); !article.empty()) {
 					s << article << ' ';
 				}
 			}
@@ -1119,21 +1166,15 @@ uint16_t Item::getBoostPercent(CombatType_t combatType, bool total /* = true */)
 	return boostPercent;
 }
 
-std::string ItemAttributes::emptyString;
-int64_t ItemAttributes::emptyInt;
-double ItemAttributes::emptyDouble;
-bool ItemAttributes::emptyBool;
-Reflect ItemAttributes::emptyReflect;
-
-const std::string& ItemAttributes::getStrAttr(itemAttrTypes type) const
+std::string_view ItemAttributes::getStrAttr(itemAttrTypes type) const
 {
 	if (!isStrAttrType(type)) {
-		return emptyString;
+		return "";
 	}
 
 	const Attribute* attr = getExistingAttr(type);
 	if (!attr) {
-		return emptyString;
+		return "";
 	}
 	return *attr->value.string;
 }
@@ -1267,44 +1308,4 @@ bool Item::hasMarketAttributes() const
 		}
 	}
 	return true;
-}
-
-template <>
-const std::string& ItemAttributes::CustomAttribute::get<std::string>()
-{
-	if (value.type() == typeid(std::string)) {
-		return boost::get<std::string>(value);
-	}
-
-	return emptyString;
-}
-
-template <>
-const int64_t& ItemAttributes::CustomAttribute::get<int64_t>()
-{
-	if (value.type() == typeid(int64_t)) {
-		return boost::get<int64_t>(value);
-	}
-
-	return emptyInt;
-}
-
-template <>
-const double& ItemAttributes::CustomAttribute::get<double>()
-{
-	if (value.type() == typeid(double)) {
-		return boost::get<double>(value);
-	}
-
-	return emptyDouble;
-}
-
-template <>
-const bool& ItemAttributes::CustomAttribute::get<bool>()
-{
-	if (value.type() == typeid(bool)) {
-		return boost::get<bool>(value);
-	}
-
-	return emptyBool;
 }
