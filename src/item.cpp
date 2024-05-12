@@ -1183,19 +1183,14 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 		return;
 	}
 
-	auto prev_it = attributes.rbegin();
-	if ((*prev_it).type == type) {
-		attributes.pop_back();
-	} else {
-		auto it = prev_it, end = attributes.rend();
-		while (++it != end) {
-			if ((*it).type == type) {
-				(*it) = std::move(attributes.back());
-				attributes.pop_back();
-				break;
-			}
-		}
+	auto it =
+	    std::find_if(attributes.begin(), attributes.end(), [type](const Attribute& attr) { return attr.type == type; });
+	if (it == attributes.end()) {
+		return;
 	}
+
+	std::iter_swap(it, attributes.rbegin()); // swap with last element (to avoid moving all elements
+	attributes.pop_back();
 	attributeBits &= ~type;
 }
 
