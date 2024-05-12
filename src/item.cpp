@@ -182,26 +182,10 @@ bool Item::equals(const Item* otherItem) const
 		return false;
 	}
 
-	const auto& attributeList = attributes->attributes;
-	const auto& otherAttributeList = otherAttributes->attributes;
-	for (const auto& attribute : attributeList) {
-		if (ItemAttributes::isIntAttrType(attribute.type)) {
-			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && attribute.value.integer != otherAttribute.value.integer) {
-					return false;
-				}
-			}
-		} else if (ItemAttributes::isStrAttrType(attribute.type)) {
-			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && *attribute.value.string != *otherAttribute.value.string) {
-					return false;
-				}
-			}
-		} else {
-			for (const auto& otherAttribute : otherAttributeList) {
-				if (attribute.type == otherAttribute.type && *attribute.value.custom != *otherAttribute.value.custom) {
-					return false;
-				}
+	for (const auto& attribute : attributes->attributes) {
+		for (const auto& otherAttribute : otherAttributes->attributes) {
+			if (attribute.type == otherAttribute.type && attribute.value != otherAttribute.value) {
+				return false;
 			}
 		}
 	}
@@ -1176,7 +1160,7 @@ std::string_view ItemAttributes::getStrAttr(itemAttrTypes type) const
 	if (!attr) {
 		return "";
 	}
-	return *attr->value.string;
+	return *std::get<std::unique_ptr<std::string>>(attr->value);
 }
 
 void ItemAttributes::setStrAttr(itemAttrTypes type, std::string_view value)
@@ -1190,8 +1174,7 @@ void ItemAttributes::setStrAttr(itemAttrTypes type, std::string_view value)
 	}
 
 	Attribute& attr = getAttr(type);
-	delete attr.value.string;
-	attr.value.string = new std::string(value);
+	attr.value = std::make_unique<std::string>(value);
 }
 
 void ItemAttributes::removeAttribute(itemAttrTypes type)
@@ -1207,7 +1190,7 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 		auto it = prev_it, end = attributes.rend();
 		while (++it != end) {
 			if ((*it).type == type) {
-				(*it) = attributes.back();
+				(*it) = std::move(attributes.back());
 				attributes.pop_back();
 				break;
 			}
@@ -1215,6 +1198,19 @@ void ItemAttributes::removeAttribute(itemAttrTypes type)
 	}
 	attributeBits &= ~type;
 }
+
+ItemAttributes::Attribute::Attribute(const ItemAttributes::Attribute& other) :
+    value{std::visit(
+        tfs::visitors{
+            [](int64_t v) -> decltype(value) { return v; },
+            [](const std::unique_ptr<std::string>& v) -> decltype(value) { return std::make_unique<std::string>(*v); },
+            [](const std::unique_ptr<CustomAttributeMap>& v) -> decltype(value) {
+	            return std::make_unique<CustomAttributeMap>(*v);
+            },
+        },
+        other.value)},
+    type(other.type)
+{}
 
 int64_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 {
@@ -1226,7 +1222,7 @@ int64_t ItemAttributes::getIntAttr(itemAttrTypes type) const
 	if (!attr) {
 		return 0;
 	}
-	return attr->value.integer;
+	return std::get<int64_t>(attr->value);
 }
 
 void ItemAttributes::setIntAttr(itemAttrTypes type, int64_t value)
@@ -1239,7 +1235,7 @@ void ItemAttributes::setIntAttr(itemAttrTypes type, int64_t value)
 		value = 100;
 	}
 
-	getAttr(type).value.integer = value;
+	getAttr(type).value = value;
 }
 
 void ItemAttributes::increaseIntAttr(itemAttrTypes type, int64_t value) { setIntAttr(type, getIntAttr(type) + value); }
@@ -1294,12 +1290,12 @@ bool Item::hasMarketAttributes() const
 	// discard items with other modified attributes
 	for (const auto& attr : attributes->getList()) {
 		if (attr.type == ITEM_ATTRIBUTE_CHARGES) {
-			uint16_t charges = static_cast<uint16_t>(attr.value.integer);
+			uint16_t charges = static_cast<uint16_t>(std::get<int64_t>(attr.value));
 			if (charges != items[id].charges) {
 				return false;
 			}
 		} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
-			uint32_t duration = static_cast<uint32_t>(attr.value.integer);
+			uint32_t duration = static_cast<uint32_t>(std::get<int64_t>(attr.value));
 			if (duration <= getDefaultDurationMin()) {
 				return false;
 			}
