@@ -53,6 +53,7 @@ dofile('data/npc/lib/evilnpcsystem/shop.lua')
 dofile('data/npc/lib/evilnpcsystem/talkqueue.lua')
 dofile('data/npc/lib/evilnpcsystem/requirements.lua')
 dofile('data/npc/lib/evilnpcsystem/modules.lua')
+dofile('data/npc/lib/evilnpcsystem/voices.lua')
 
 -- Replaces tags in a string with corresponding values.
 ---@param params table<string, number|string|table<string|number, string|number>> The parameters to replace the tags with.

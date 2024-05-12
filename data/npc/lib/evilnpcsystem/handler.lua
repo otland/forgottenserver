@@ -29,6 +29,8 @@
         - NpcsHandler:failureRespond(text)
         - NpcsHandler:teleport(position)
         - NpcsHandler:callback(npc, player)
+        - NpcsHandler:farewell()
+        - NpcsHandler:talk(table)
 ]]
 
 ---@class NpcsHandler
@@ -66,6 +68,8 @@
 ---@field teleport fun(self: NpcsHandler, position: Position)
 ---@field callback fun(self: NpcsHandler, npc: Npc, player: Player): boolean, string
 ---@field require NpcRequirements
+---@field farewell fun(self: NpcsHandler)
+---@field talk fun(self: NpcsHandler, params: table<number, table>)
 ---@field __call fun(npc: Npc): NpcsHandler
 ---@field __index NpcsHandler
 -- Modules
@@ -284,5 +288,11 @@ if not NpcsHandler then
     -- Releases the focus of the player like we are saying goodbye.
     function NpcsHandler:farewell()
         self.releaseFocus = true
+    end
+
+    -- Adds words which the npc will randomly say in public or yell.
+    ---@param params table<number, table> The words with interval, chance and TALKTYPE_SAY/TALKTYPE_YELL.
+    function NpcsHandler:talk(params)
+        self.voices = params
     end
 end

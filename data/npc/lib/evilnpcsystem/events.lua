@@ -92,6 +92,7 @@ if not NpcEvents then
     function NpcEvents.onThink(npc)
         local handler = NpcsHandler(npc)
         local focus = NpcFocus(npc)
+        local voices = NpcVoices(npc)
         for playerid, releaseTime in pairs(focus.focus) do
             local player = Player(playerid)
             if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
@@ -118,6 +119,13 @@ if not NpcEvents then
                 elseif player:getPosition().x < npc:getPosition().x and player:getPosition().y == npc:getPosition().y then
                     selfTurn(DIRECTION_WEST)
                 end
+            end
+        end
+
+        if handler.voices then
+            local canUse, voice = voices:canUseVoice(handler)
+            if canUse then
+                npc:say(voice.words, voice.talkType)
             end
         end
     end
@@ -180,7 +188,7 @@ if not NpcEvents then
             -- If the NPC has a response, it sets the talk state to the one associated with the message
             handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
             -- check if we want to release focus for this keyword
-            if handler:getTalkState(creature).removeFocus then
+            if handler:getTalkState(creature).releaseFocus then
                 if handler:getTalkState(creature):getResponse() then
                     local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
@@ -191,12 +199,13 @@ if not NpcEvents then
                 return
             end
             -- check if we have a callback for this talk state
+            local messageSent = false
             if handler:getTalkState(creature).callback then
-                local ret, failureMessage = handler:getTalkState(creature):callback(npc, creature)
+                local ret, retMessage = handler:getTalkState(creature):callback(npc, creature)
                 if not ret then
                     local msg = handler:getTalkState(creature).failureResponse:replaceTags({playerName = creature:getName()})
-                    if failureMessage then
-                        msg = failureMessage:replaceTags({playerName = creature:getName()})
+                    if retMessage then
+                        msg = retMessage:replaceTags({playerName = creature:getName()})
                     end
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
@@ -204,6 +213,10 @@ if not NpcEvents then
                         print("[Warning - NpcEvents.onSay] There is no failureResponse set for keyword: ".. message ..".\n".. debug.getinfo(2).source:match("@?(.*)"))
                     end
                     return
+                end
+                if retMessage then
+                    talkQueue:addToQueue(creature, retMessage:replaceTags({playerName = creature:getName()}), TALK.defaultDelay)
+                    messageSent = true
                 end
             end
             -- checking for requirements
@@ -245,7 +258,7 @@ if not NpcEvents then
                 end
             end
             -- If the NPC has a response for the current topic, it says the response
-            if handler:getTalkState(creature):getResponse() then
+            if handler:getTalkState(creature):getResponse() and not messageSent then
                 local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
             end
