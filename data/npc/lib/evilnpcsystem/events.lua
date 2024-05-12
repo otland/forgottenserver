@@ -187,6 +187,23 @@ if not NpcEvents then
             focus:addFocus(creature)
             -- If the NPC has a response, it sets the talk state to the one associated with the message
             handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
+            -- checking for requirements
+            local ret, msg = handler:getTalkState(creature):requirements():init(creature)
+            if not ret then
+                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                handler:setTalkState(handler, creature)
+                return
+            end
+            -- check if we have a sub-keyword for a storagevalue and set the talk state to it
+            if handler:getTalkState(creature).onStorage then
+                local state = handler:getTalkState(creature).onStorage
+                for i = 1, #state do
+                    if creature:getStorageValue(state[i].storage.key) == state[i].storage.value then
+                        handler:setTalkState(state[i], creature)
+                        break
+                    end
+                end
+            end
             -- check if we want to release focus for this keyword
             if handler:getTalkState(creature).releaseFocus then
                 if handler:getTalkState(creature):getResponse() then
@@ -218,13 +235,6 @@ if not NpcEvents then
                     talkQueue:addToQueue(creature, retMessage:replaceTags({playerName = creature:getName()}), TALK.defaultDelay)
                     messageSent = true
                 end
-            end
-            -- checking for requirements
-            local ret, msg = handler:getTalkState(creature):requirements():init(creature)
-            if not ret then
-                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                handler:setTalkState(handler, creature)
-                return
             end
             -- checking for modules
             -- todo implement modules

@@ -32,8 +32,7 @@ if not NpcVoices then
 
     -- Checks if a voice can be used.
     ---@param handler table The NpcsHandler to get the voices from.
-    ---@return boolean True if the voice can be used, false otherwise.
-    ---@return table|nil The voice to use.
+    ---@return boolean, table|nil if the voice can be used, false otherwise.
     function NpcVoices:canUseVoice(handler)
         local voices = {}
         for _,voice in pairs(handler.voices) do

@@ -9,6 +9,7 @@
     Functions:
         - NpcsHandler(npc): NpcsHandler
         - NpcsHandler:keyword(word)
+        - NpcsHandler:onStorageValue(key, value)
         - NpcsHandler:requirements()
         - NpcsHandler:isKeyword(word)
         - NpcsHandler:getKeywords()
@@ -47,6 +48,7 @@
 ---@field failureResponse string
 ---@field teleportPosition Position
 ---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
+---@field onStorageValue fun(self: NpcsHandler, key: number, value: number): NpcsHandler
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
 ---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
@@ -143,6 +145,25 @@ if not NpcsHandler then
         end
         -- The NpcsHandler for the keyword is returned
         return self.keywords[ret]
+    end
+
+    -- This function adds a sub-keyword to the NpcsHandler for the NPC and returns the NpcsHandler for the sub-keyword
+    ---@param key number The key to add the sub-keyword to.
+    ---@param value number The value to add the sub-keyword to.
+    ---@return NpcsHandler
+    function NpcsHandler:onStorageValue(key, value)
+        if not self.onStorage then
+            self.onStorage = {}
+        end
+        local index = #self.onStorage + 1
+        self.onStorage[index] = {}
+        self.onStorage[index].keywords = {}
+        setmetatable(self.onStorage[index], {__index = NpcsHandler})
+        setmetatable(self.onStorage[index].keywords, {__index = NpcsHandler})
+        self.onStorage[index].response = {}
+        self.onStorage[index].failureResponse = ""
+        self.onStorage[index].storage = {key = key, value = value}
+        return self.onStorage[index]
     end
 
     -- Retrieves the requirements for a keyword.
