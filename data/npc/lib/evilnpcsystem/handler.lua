@@ -10,6 +10,7 @@
         - NpcsHandler(npc): NpcsHandler
         - NpcsHandler:keyword(word)
         - NpcsHandler:onStorageValue(key, value)
+        - NpcsHandler:setStorageValue(key, value)
         - NpcsHandler:requirements()
         - NpcsHandler:isKeyword(word)
         - NpcsHandler:getKeywords()
