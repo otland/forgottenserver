@@ -30,9 +30,11 @@ MESSAGE_LIST = {
     sold = "You sold |ITEMCOUNT| |ITEMNAME|(s) for |TOTALCOST| gold.",
     -- requirement cancel messages
     storage = "You do not meet the storage requirement.",
+    storageNotEqual = "You do not meet the storage requirement.",
     storageToLow = "You do not meet the storage requirement.",
     storageToHigh = "You do not meet the storage requirement.",
     level = "You need to be exactly level |PLAYERLEVEL|.",
+    levelNotEqual = "You can't be exactly level |PLAYERLEVEL|.",
     levelToLow = "You need to be atleast level |PLAYERLEVEL|.",
     levelToHigh = "You need to be under level |PLAYERLEVEL|.",
     premium = "You need to be premium to do this.",
@@ -97,4 +99,15 @@ FOCUS = {
 TALK = {
     -- how long in ms the npc will wait before responding
     defaultDelay = 1000
+}
+
+REQUIREMENTS = {
+    storage = 1,
+    level = 2,
+    premium = 3,
+    money = 4,
+    item = 5,
+    inFight = 6,
+    pzLocked= 7,
+    removeItem = 8
 }

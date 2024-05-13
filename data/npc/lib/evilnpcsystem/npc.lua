@@ -23,6 +23,8 @@
 
     Functions:
         - string:replaceTags(playerName: string, amount: string, total: string, itemName: string)
+        - checkStorageValueWithOperator(player: Player, storage: table<string, string>)
+        - checkLevelWithOperator(player: Player, level: number, operator: string)
         - NpcType:defaultBehavior()
         - NpcType.onAppearCallback(creature)
         - NpcType.onMoveCallback(creature, oldPos, newPos)
@@ -64,6 +66,51 @@ function string.replaceTags(string, params)
         ret = ret:gsub(handler.tag, handler.func(params))
     end
     return ret
+end
+
+-- Uses the correct operator on storage values, depending on string.
+---@param player Player The player to check the storage value for.
+---@param storage table<string, string> The storage value to check.
+---@return boolean The result of the storage value check.
+function checkStorageValueWithOperator(player, storage)
+    if storage.operator == "==" then
+        return player:getStorageValue(storage.key) == storage.value
+    elseif storage.operator == "~=" then
+        return player:getStorageValue(storage.key) ~= storage.value
+    elseif storage.operator == "<" then
+        return player:getStorageValue(storage.key) < storage.value
+    elseif storage.operator == ">" then
+        return player:getStorageValue(storage.key) > storage.value
+    elseif storage.operator == "<=" then
+        return player:getStorageValue(storage.key) <= storage.value
+    elseif storage.operator == ">=" then
+        return player:getStorageValue(storage.key) >= storage.value
+    end
+    print("[Warning - checkStorageValueWithOperator] operator: ".. storage.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
+    return false
+end
+
+-- Uses the correct operator on level, depending on string.
+---@param player Player The player to check the storage value for.
+---@param level number The level to check.
+---@param operator string The operator to use for the check.
+---@return boolean The result of the storage value check.
+function checkLevelWithOperator(player, level, operator)
+    if operator == "==" then
+        return player:getLevel() == level
+    elseif operator == "~=" then
+        return player:getLevel() ~= level
+    elseif operator == "<" then
+        return player:getLevel() < level
+    elseif operator == ">" then
+        return player:getLevel() > level
+    elseif operator == "<=" then
+        return player:getLevel() <= level
+    elseif operator == ">=" then
+        return player:getLevel() >= level
+    end
+    print("[Warning - checkLevelWithOperator] operator: ".. operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
+    return false
 end
 
 -- This function assigns event handlers for the NPC's appearance, disappearance, thinking, and interaction with players.

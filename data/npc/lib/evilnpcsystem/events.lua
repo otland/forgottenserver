@@ -188,8 +188,11 @@ if not NpcEvents then
             -- If the NPC has a response, it sets the talk state to the one associated with the message
             handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
             -- checking for requirements
-            local ret, msg = handler:getTalkState(creature):requirements():init(creature)
+            local ret, msg, reqType = handler:getTalkState(creature):requirements():init(creature)
             if not ret then
+                if handler:getTalkState(creature):requirements():getFailureRespond(reqType) then
+                    msg = handler:getTalkState(creature):requirements():getFailureRespond(reqType):replaceTags({playerName = creature:getName()})
+                end
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                 handler:setTalkState(handler, creature)
                 return
@@ -198,7 +201,7 @@ if not NpcEvents then
             if handler:getTalkState(creature).onStorage then
                 local state = handler:getTalkState(creature).onStorage
                 for i = 1, #state do
-                    if creature:getStorageValue(state[i].storage.key) == state[i].storage.value then
+                    if checkStorageValueWithOperator(creature, state[i].storage) then
                         handler:setTalkState(state[i], creature)
                         break
                     end
@@ -266,6 +269,11 @@ if not NpcEvents then
                 else
                     npc:openShopWindow(creature, items, shop.onBuy, shop.onSell)
                 end
+            end
+            -- If the Player gets a storage value set
+            if handler:getTalkState(creature).setStorage then
+                local storage = handler:getTalkState(creature).setStorage
+                creature:setStorageValue(storage.key, storage.value)
             end
             -- If the NPC has a response for the current topic, it says the response
             if handler:getTalkState(creature):getResponse() and not messageSent then

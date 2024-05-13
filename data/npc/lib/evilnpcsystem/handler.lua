@@ -48,7 +48,8 @@
 ---@field failureResponse string
 ---@field teleportPosition Position
 ---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
----@field onStorageValue fun(self: NpcsHandler, key: number, value: number): NpcsHandler
+---@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator: string): NpcsHandler
+---@field setStorageValue fun(self: NpcsHandler, key: number, value: number)
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
 ---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
@@ -150,11 +151,13 @@ if not NpcsHandler then
     -- This function adds a sub-keyword to the NpcsHandler for the NPC and returns the NpcsHandler for the sub-keyword
     ---@param key number The key to add the sub-keyword to.
     ---@param value number The value to add the sub-keyword to.
+    ---@param operator string The operator to use for the sub-keyword.
     ---@return NpcsHandler
-    function NpcsHandler:onStorageValue(key, value)
+    function NpcsHandler:onStorageValue(key, value, operator)
         if not self.onStorage then
             self.onStorage = {}
         end
+        operator = operator or "=="
         local index = #self.onStorage + 1
         self.onStorage[index] = {}
         self.onStorage[index].keywords = {}
@@ -162,8 +165,15 @@ if not NpcsHandler then
         setmetatable(self.onStorage[index].keywords, {__index = NpcsHandler})
         self.onStorage[index].response = {}
         self.onStorage[index].failureResponse = ""
-        self.onStorage[index].storage = {key = key, value = value}
+        self.onStorage[index].storage = {key = key, value = value, operator = operator}
         return self.onStorage[index]
+    end
+
+    -- This function sets the storage value for the keyword.
+    ---@param key number The key to set the storage value for.
+    ---@param value number The value to set the storage value to.
+    function NpcsHandler:setStorageValue(key, value)
+        self.setStorage = {key = key, value = value}
     end
 
     -- Retrieves the requirements for a keyword.
