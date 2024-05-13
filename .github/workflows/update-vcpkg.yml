@@ -23,7 +23,7 @@ jobs:
           vcpkg/vcpkg x-update-baseline
           echo "changed-files=$(git diff --name-only)" > "$GITHUB_OUTPUT"
           echo "short=$(jq -r '.["builtin-baseline"][:7]' < vcpkg.json)" > "$GITHUB_OUTPUT"
-          echo "long=$(jq -r '.["builtin-baseline"][:7]' < vcpkg.json)" > "$GITHUB_OUTPUT"
+          echo "long=$(jq -r '.["builtin-baseline"]' < vcpkg.json)" > "$GITHUB_OUTPUT"
 
       - name: Commit updated vcpkg manifest
         if: contains(steps.update.outputs.changed-files, 'vcpkg.json')
