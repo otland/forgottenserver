@@ -9760,14 +9760,20 @@ int LuaScriptInterface::luaPlayerGetGuildLevel(lua_State* L)
 int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 {
 	// player:setGuildLevel(level)
-	uint8_t level = getNumber<uint8_t>(L, 2);
 	Player* player = getUserdata<Player>(L, 1);
-	if (!player || !player->getGuild()) {
+	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto rank = player->getGuild()->getRankByLevel(level);
+	auto guild = player->getGuild();
+	if (!guild) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	uint8_t level = getNumber<uint8_t>(L, 2);
+	auto rank = guild->getRankByLevel(level);
 	if (rank) {
 		player->setGuildRank(rank);
 		pushBoolean(L, true);

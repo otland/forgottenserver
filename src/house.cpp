@@ -450,7 +450,7 @@ const std::shared_ptr<Guild> getGuildByName(const std::string& name)
 void AccessList::addGuild(const std::string& name)
 {
 	if (const auto guild = getGuildByName(name)) {
-		for (auto rank : guild->getRanks()) {
+		for (const auto rank : guild->getRanks()) {
 			guildRankList.insert(rank->id);
 		}
 	}
