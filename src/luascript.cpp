@@ -9720,13 +9720,13 @@ int LuaScriptInterface::luaPlayerGetGuild(lua_State* L)
 		return 1;
 	}
 
-	Guild* guild = player->getGuild();
+	auto guild = player->getGuild();
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	pushUserdata<Guild>(L, guild);
+	pushSharedPtr(L, guild);
 	setMetatable(L, -1, "Guild");
 	return 1;
 }
@@ -9740,7 +9740,7 @@ int LuaScriptInterface::luaPlayerSetGuild(lua_State* L)
 		return 1;
 	}
 
-	player->setGuild(getUserdata<Guild>(L, 2));
+	player->setGuild(getSharedPtr<Guild>(L, 2));
 	pushBoolean(L, true);
 	return 1;
 }
@@ -9767,12 +9767,12 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 		return 1;
 	}
 
-	GuildRank_ptr rank = player->getGuild()->getRankByLevel(level);
-	if (!rank) {
-		pushBoolean(L, false);
-	} else {
+	auto rank = player->getGuild()->getRankByLevel(level);
+	if (rank) {
 		player->setGuildRank(rank);
 		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
 	}
 
 	return 1;
@@ -11795,9 +11795,9 @@ int LuaScriptInterface::luaGuildCreate(lua_State* L)
 	// Guild(id)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
-	Guild* guild = g_game.getGuild(id);
+	auto guild = g_game.getGuild(id);
 	if (guild) {
-		pushUserdata<Guild>(L, guild);
+		pushSharedPtr(L, guild);
 		setMetatable(L, -1, "Guild");
 	} else {
 		lua_pushnil(L);
@@ -11808,7 +11808,7 @@ int LuaScriptInterface::luaGuildCreate(lua_State* L)
 int LuaScriptInterface::luaGuildGetId(lua_State* L)
 {
 	// guild:getId()
-	Guild* guild = getUserdata<Guild>(L, 1);
+	auto& guild = getSharedPtr<Guild>(L, 1);
 	if (guild) {
 		lua_pushnumber(L, guild->getId());
 	} else {
@@ -11820,7 +11820,7 @@ int LuaScriptInterface::luaGuildGetId(lua_State* L)
 int LuaScriptInterface::luaGuildGetName(lua_State* L)
 {
 	// guild:getName()
-	Guild* guild = getUserdata<Guild>(L, 1);
+	auto& guild = getSharedPtr<Guild>(L, 1);
 	if (guild) {
 		pushString(L, guild->getName());
 	} else {
@@ -11832,7 +11832,7 @@ int LuaScriptInterface::luaGuildGetName(lua_State* L)
 int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 {
 	// guild:getMembersOnline()
-	const Guild* guild = getUserdata<const Guild>(L, 1);
+	const auto& guild = getSharedPtr<const Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
@@ -11853,7 +11853,7 @@ int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 int LuaScriptInterface::luaGuildAddRank(lua_State* L)
 {
 	// guild:addRank(id, name, level)
-	Guild* guild = getUserdata<Guild>(L, 1);
+	auto& guild = getSharedPtr<Guild>(L, 1);
 	if (guild) {
 		uint32_t id = getNumber<uint32_t>(L, 2);
 		const std::string& name = getString(L, 3);
@@ -11869,14 +11869,14 @@ int LuaScriptInterface::luaGuildAddRank(lua_State* L)
 int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 {
 	// guild:getRankById(id)
-	Guild* guild = getUserdata<Guild>(L, 1);
+	auto& guild = getSharedPtr<Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint32_t id = getNumber<uint32_t>(L, 2);
-	GuildRank_ptr rank = guild->getRankById(id);
+	auto rank = guild->getRankById(id);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -11891,14 +11891,14 @@ int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 {
 	// guild:getRankByLevel(level)
-	const Guild* guild = getUserdata<const Guild>(L, 1);
+	const auto& guild = getSharedPtr<const Guild>(L, 1);
 	if (!guild) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	uint8_t level = getNumber<uint8_t>(L, 2);
-	GuildRank_ptr rank = guild->getRankByLevel(level);
+	auto rank = guild->getRankByLevel(level);
 	if (rank) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
@@ -11913,7 +11913,7 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 int LuaScriptInterface::luaGuildGetMotd(lua_State* L)
 {
 	// guild:getMotd()
-	Guild* guild = getUserdata<Guild>(L, 1);
+	const auto& guild = getSharedPtr<Guild>(L, 1);
 	if (guild) {
 		pushString(L, guild->getMotd());
 	} else {
@@ -11926,7 +11926,7 @@ int LuaScriptInterface::luaGuildSetMotd(lua_State* L)
 {
 	// guild:setMotd(motd)
 	const std::string& motd = getString(L, 2);
-	Guild* guild = getUserdata<Guild>(L, 1);
+	auto& guild = getSharedPtr<Guild>(L, 1);
 	if (guild) {
 		guild->setMotd(motd);
 		pushBoolean(L, true);

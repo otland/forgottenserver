@@ -431,14 +431,14 @@ void AccessList::addPlayer(const std::string& name)
 
 namespace {
 
-const Guild* getGuildByName(const std::string& name)
+const std::shared_ptr<Guild> getGuildByName(const std::string& name)
 {
 	uint32_t guildId = IOGuild::getGuildIdByName(name);
 	if (guildId == 0) {
 		return nullptr;
 	}
 
-	const Guild* guild = g_game.getGuild(guildId);
+	const auto guild = g_game.getGuild(guildId);
 	if (guild) {
 		return guild;
 	}
@@ -450,7 +450,7 @@ const Guild* getGuildByName(const std::string& name)
 
 void AccessList::addGuild(const std::string& name)
 {
-	const Guild* guild = getGuildByName(name);
+	const auto guild = getGuildByName(name);
 	if (guild) {
 		for (auto rank : guild->getRanks()) {
 			guildRankList.insert(rank->id);
@@ -460,9 +460,9 @@ void AccessList::addGuild(const std::string& name)
 
 void AccessList::addGuildRank(const std::string& name, const std::string& rankName)
 {
-	const Guild* guild = getGuildByName(name);
+	const auto guild = getGuildByName(name);
 	if (guild) {
-		GuildRank_ptr rank = guild->getRankByName(rankName);
+		const auto rank = guild->getRankByName(rankName);
 		if (rank) {
 			guildRankList.insert(rank->id);
 		}
@@ -480,7 +480,7 @@ bool AccessList::isInList(const Player* player) const
 		return true;
 	}
 
-	GuildRank_ptr rank = player->getGuildRank();
+	const auto rank = player->getGuildRank();
 	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 

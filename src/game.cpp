@@ -61,12 +61,7 @@ Game::Game()
 	offlineTrainingWindow.priority = true;
 }
 
-Game::~Game()
-{
-	for (const auto& it : guilds) {
-		delete it.second;
-	}
-}
+Game::~Game() = default;
 
 void Game::start(ServiceManager* manager)
 {
@@ -5066,8 +5061,7 @@ void Game::sendGuildMotd(uint32_t playerId)
 		return;
 	}
 
-	Guild* guild = player->getGuild();
-	if (guild) {
+	if (const auto guild = player->getGuild()) {
 		player->sendChannelMessage("Message of the Day", guild->getMotd(), TALKTYPE_CHANNEL_R1, CHANNEL_GUILD);
 	}
 }
@@ -5702,7 +5696,7 @@ void Game::addMonster(Monster* monster) { monsters[monster->getID()] = monster; 
 
 void Game::removeMonster(Monster* monster) { monsters.erase(monster->getID()); }
 
-Guild* Game::getGuild(uint32_t id) const
+std::shared_ptr<Guild> Game::getGuild(uint32_t id) const
 {
 	auto it = guilds.find(id);
 	if (it == guilds.end()) {
@@ -5711,7 +5705,7 @@ Guild* Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(Guild* guild) { guilds[guild->getId()] = guild; }
+void Game::addGuild(std::shared_ptr<Guild> guild) { guilds[guild->getId()] = guild; }
 
 void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 

@@ -164,11 +164,11 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	Guild* getGuild() const { return guild; }
-	void setGuild(Guild* guild);
+	std::shared_ptr<Guild> getGuild() const { return guild; }
+	void setGuild(std::shared_ptr<Guild> guild);
 
-	GuildRank_ptr getGuildRank() const { return guildRank; }
-	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
+	std::shared_ptr<GuildRank> getGuildRank() const { return guildRank; }
+	void setGuildRank(std::shared_ptr<GuildRank> newGuildRank) { guildRank = newGuildRank; }
 
 	bool isGuildMate(const Player* player) const;
 
@@ -187,7 +187,7 @@ public:
 
 	uint32_t getClientIcons() const;
 
-	const GuildWarVector& getGuildWarVector() const { return guildWarVector; }
+	const std::vector<uint32_t>& getGuildWarVector() const { return guildWarVector; }
 
 	Vocation* getVocation() const { return vocation; }
 
@@ -1163,7 +1163,7 @@ private:
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;
-	GuildWarVector guildWarVector;
+	std::vector<uint32_t> guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
 
@@ -1200,8 +1200,8 @@ private:
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
-	Guild* guild = nullptr;
-	GuildRank_ptr guildRank = nullptr;
+	std::shared_ptr<Guild> guild = nullptr;
+	std::shared_ptr<GuildRank> guildRank = nullptr;
 	Group* group = nullptr;
 	Inbox* inbox;
 	Item* tradeItem = nullptr;
