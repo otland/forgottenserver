@@ -438,8 +438,7 @@ const std::shared_ptr<Guild> getGuildByName(const std::string& name)
 		return nullptr;
 	}
 
-	const auto guild = g_game.getGuild(guildId);
-	if (guild) {
+	if (const auto guild = g_game.getGuild(guildId)) {
 		return guild;
 	}
 
@@ -450,8 +449,7 @@ const std::shared_ptr<Guild> getGuildByName(const std::string& name)
 
 void AccessList::addGuild(const std::string& name)
 {
-	const auto guild = getGuildByName(name);
-	if (guild) {
+	if (const auto guild = getGuildByName(name)) {
 		for (auto rank : guild->getRanks()) {
 			guildRankList.insert(rank->id);
 		}
@@ -460,10 +458,8 @@ void AccessList::addGuild(const std::string& name)
 
 void AccessList::addGuildRank(const std::string& name, const std::string& rankName)
 {
-	const auto guild = getGuildByName(name);
-	if (guild) {
-		const auto rank = guild->getRankByName(rankName);
-		if (rank) {
+	if (const auto guild = getGuildByName(name)) {
+		if (const auto rank = guild->getRankByName(rankName)) {
 			guildRankList.insert(rank->id);
 		}
 	}

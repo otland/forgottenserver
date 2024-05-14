@@ -18,6 +18,8 @@ struct GuildRank
 class Guild
 {
 public:
+	static constexpr uint8_t MEMBER_RANK_LEVEL_DEFAULT = 1;
+
 	Guild(uint32_t id, std::string_view name) : name{name}, id{id} {}
 
 	uint32_t getId() const { return id; }

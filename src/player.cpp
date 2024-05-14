@@ -4679,7 +4679,7 @@ void Player::setGuild(std::shared_ptr<Guild> guild)
 	this->guildRank = nullptr;
 
 	if (guild) {
-		const auto rank = guild->getRankByLevel(1);
+		const auto rank = guild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);
 		if (!rank) {
 			return;
 		}
