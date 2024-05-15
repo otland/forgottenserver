@@ -174,16 +174,7 @@ if not NpcEvents then
                 end
                 -- If the NPC has a response, it sets the talk state to the one associated with the message
                 handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
-
-                if handler:getTalkState(creature).onStorage then
-                    local state = handler:getTalkState(creature).onStorage
-                    for i = 1, #state do
-                        if checkStorageValueWithOperator(creature, state[i].storage) then
-                            handler:setTalkState(state[i], creature)
-                            break
-                        end
-                    end
-                end
+                handler:getTalkState(creature):checkOnStorage(creature, handler)
 
                 for _, word in pairs(handler.greetWords) do
                     if message == word then
@@ -205,6 +196,8 @@ if not NpcEvents then
             if not greeted then
                 -- If the NPC has a response, it sets the talk state to the one associated with the message
                 handler:setTalkState(handler:getTalkState(creature):isKeyword(message), creature)
+                -- check if we have a sub-keyword and set the talk state to it
+                handler:getTalkState(creature):checkOnStorage(creature, handler)
             end
             -- checking for requirements
             local ret, msg, reqType = handler:getTalkState(creature):requirements():init(creature)
@@ -213,29 +206,10 @@ if not NpcEvents then
                     msg = handler:getTalkState(creature):requirements():getFailureRespond(reqType):replaceTags({playerName = creature:getName()})
                 end
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                handler:setTalkState(handler.keywords["hi"], creature)
-                if handler:getTalkState(creature).onStorage then
-                    local state = handler:getTalkState(creature).onStorage
-                    for i = 1, #state do
-                        if checkStorageValueWithOperator(creature, state[i].storage) then
-                            handler:setTalkState(state[i], creature)
-                            break
-                        end
-                    end
-                end
+                local _, start = next(handler.keywords)
+                handler:setTalkState(start, creature)
+                handler:getTalkState(creature):checkOnStorage(creature, handler)
                 return
-            end
-            if not greeted then
-                -- check if we have a sub-keyword and set the talk state to it
-                if handler:getTalkState(creature).onStorage then
-                    local state = handler:getTalkState(creature).onStorage
-                    for i = 1, #state do
-                        if checkStorageValueWithOperator(creature, state[i].storage) then
-                            handler:setTalkState(state[i], creature)
-                            break
-                        end
-                    end
-                end
             end
             -- check if we want to release focus for this keyword
             if handler:getTalkState(creature).releaseFocus then
@@ -258,16 +232,9 @@ if not NpcEvents then
                         msg = retMessage:replaceTags({playerName = creature:getName()})
                     end
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
-                    handler:setTalkState(handler.keywords["hi"], creature)
-                    if handler:getTalkState(creature).onStorage then
-                        local state = handler:getTalkState(creature).onStorage
-                        for i = 1, #state do
-                            if checkStorageValueWithOperator(creature, state[i].storage) then
-                                handler:setTalkState(state[i], creature)
-                                break
-                            end
-                        end
-                    end
+                    local _, start = next(handler.keywords)
+                    handler:setTalkState(start, creature)
+                    handler:getTalkState(creature):checkOnStorage(creature, handler)
                     if msg == "" then
                         print("[Warning - NpcEvents.onSay] There is no failureResponse set for keyword: ".. message ..".\n".. debug.getinfo(2).source:match("@?(.*)"))
                     end
@@ -323,38 +290,26 @@ if not NpcEvents then
             end
             -- if the NPC has reached the last keyword, it resets the talk state
             if next(handler:getTalkState(creature).keywords) == nil then
-                handler:setTalkState(handler.keywords["hi"], creature)
-                if handler:getTalkState(creature).onStorage then
-                    local state = handler:getTalkState(creature).onStorage
-                    for i = 1, #state do
-                        if checkStorageValueWithOperator(creature, state[i].storage) then
-                            handler:setTalkState(state[i], creature)
-                            break
-                        end
-                    end
-                end
+                local _, start = next(handler.keywords)
+                handler:setTalkState(start, creature)
+                handler:getTalkState(creature):checkOnStorage(creature, handler)
             end
             -- If the NPC has a resetTalkstate, it resets the talk state
             if handler:getTalkState(creature).resetTalkstate then
-                handler:setTalkState(handler.keywords["hi"], creature)
-                if handler:getTalkState(creature).onStorage then
-                    local state = handler:getTalkState(creature).onStorage
-                    for i = 1, #state do
-                        if checkStorageValueWithOperator(creature, state[i].storage) then
-                            handler:setTalkState(state[i], creature)
-                            break
-                        end
-                    end
-                end
+                local _, start = next(handler.keywords)
+                handler:setTalkState(start, creature)
+                handler:getTalkState(creature):checkOnStorage(creature, handler)
             end
         elseif message == "help" then
-            -- If the player asks for help, the NPC will respond with the available keywords
-            local words = {}
-            for k, v in pairs(handler:getKeywords()) do
-                table.insert(words, "{".. k .."}")
+            if focus:isFocused(creature) then
+                -- If the player asks for help, the NPC will respond with the available keywords
+                local words = {}
+                for k, v in pairs(handler:getTalkState(creature):getKeywords()) do
+                    table.insert(words, "{".. k .."}")
+                end
+                local msg = "I only react to these words: " .. table.concat(words, ", ")
+                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
             end
-            local msg = "I only react to these words: " .. table.concat(words, ", ")
-            talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
         end
     end
 end

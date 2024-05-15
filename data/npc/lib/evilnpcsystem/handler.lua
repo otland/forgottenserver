@@ -126,13 +126,13 @@ if not NpcsHandler then
                 self.keywords[words] = {}
                 self.keywords[words].keywords = {}
                 setmetatable(self.keywords[words], {__index = NpcsHandler})
-                setmetatable(self.keywords[words].keywords, {__index = NpcsHandler})
+                setmetatable(self.keywords[words].keywords, {})
                 self.keywords[words].response = {}
                 self.keywords[words].failureResponse = ""
             end
         elseif type(words) == "table" then
             local root = {__index = NpcsHandler}
-            local keywords = {__index = NpcsHandler}
+            local keywords = {}
             for _, word in ipairs(words) do
                 if not self.keywords[word] then
                     self.keywords[word] = root
@@ -163,7 +163,7 @@ if not NpcsHandler then
         self.onStorage[index] = {}
         self.onStorage[index].keywords = {}
         setmetatable(self.onStorage[index], {__index = NpcsHandler})
-        setmetatable(self.onStorage[index].keywords, {__index = NpcsHandler})
+        setmetatable(self.onStorage[index].keywords, {})
         self.onStorage[index].response = {}
         self.onStorage[index].failureResponse = ""
         self.onStorage[index].storage = {key = key, value = value, operator = operator}
@@ -326,5 +326,17 @@ if not NpcsHandler then
     ---@param params table<number, table> The words with interval, chance and TALKTYPE_SAY/TALKTYPE_YELL.
     function NpcsHandler:talk(params)
         self.voices = params
+    end
+
+    function NpcsHandler:checkOnStorage(creature, handler)
+        if self.onStorage then
+            local state = self.onStorage
+            for i = 1, #state do
+                if checkStorageValueWithOperator(creature, state[i].storage) then
+                    handler:setTalkState(state[i], creature)
+                    break
+                end
+            end
+        end
     end
 end
