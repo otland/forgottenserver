@@ -199,8 +199,9 @@ local function creatureSayCallback(cid, type, msg)
 			receiver = receiver:trim()
 
 			-- Immediate topicList.TRANSFER_PLAYER_GOLD simulation
-			if tonumber(parts[3]) then
-				npcHandler:say("I'm afraid there is no character with the name ".. parts[3] ..".", cid)
+			if not tonumber(parts[2]) then
+				npcHandler:say("Hmm, my ledgers have no records of anyone with the name " .. receiver .. ". Please ensure the name is correct.", cid)
+				npcHandler.topic[cid] = topicList.NONE
 				return true
 			end
 			count[cid] = getMoneyCount(parts[2])
@@ -212,6 +213,11 @@ local function creatureSayCallback(cid, type, msg)
 			if isValidMoney(count[cid]) then
 				-- Immediate topicList.TRANSFER_PLAYER_WHO simulation
 				transfer[cid] = getPlayerDatabaseInfo(receiver)
+				if not transfer[cid] then
+					npcHandler:say("Hmm, my ledgers have no records of anyone with the name " .. receiver .. ". Please ensure the name is correct.", cid)
+					npcHandler.topic[cid] = topicList.NONE
+					return true
+				end
 				if player:getName() == transfer[cid].name then
 					npcHandler:say("Why would you want to transfer money to yourself? You already have it!", cid)
 					npcHandler.topic[cid] = topicList.NONE
