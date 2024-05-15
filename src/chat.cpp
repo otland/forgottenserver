@@ -76,7 +76,7 @@ bool ChatChannel::addUser(Player& player)
 
 	// TODO: Move to script when guild channels can be scripted
 	if (id == CHANNEL_GUILD) {
-		if (const auto guild = player.getGuild()) {
+		if (const auto& guild = player.getGuild()) {
 			if (!guild->getMotd().empty()) {
 				g_scheduler.addEvent(
 				    createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
@@ -330,7 +330,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 
 	switch (channelId) {
 		case CHANNEL_GUILD: {
-			if (const auto guild = player.getGuild()) {
+			if (const auto& guild = player.getGuild()) {
 				auto ret =
 				    guildChannels.emplace(std::make_pair(guild->getId(), ChatChannel(channelId, guild->getName())));
 				return &ret.first->second;
@@ -553,7 +553,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 {
 	switch (channelId) {
 		case CHANNEL_GUILD: {
-			if (const auto guild = player.getGuild()) {
+			if (const auto& guild = player.getGuild()) {
 				auto it = guildChannels.find(guild->getId());
 				if (it != guildChannels.end()) {
 					return &it->second;

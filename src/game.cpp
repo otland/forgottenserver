@@ -5061,7 +5061,7 @@ void Game::sendGuildMotd(uint32_t playerId)
 		return;
 	}
 
-	if (const auto guild = player->getGuild()) {
+	if (const auto& guild = player->getGuild()) {
 		player->sendChannelMessage("Message of the Day", guild->getMotd(), TALKTYPE_CHANNEL_R1, CHANNEL_GUILD);
 	}
 }
