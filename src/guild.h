@@ -6,9 +6,6 @@
 
 class Player;
 
-using Guild_ptr = std::shared_ptr<Guild>;
-using GuildRank_ptr = std::shared_ptr<GuildRank>;
-
 struct GuildRank
 {
 	uint32_t id;
@@ -17,6 +14,8 @@ struct GuildRank
 
 	GuildRank(uint32_t id, std::string_view name, uint8_t level) : id{id}, name{name}, level{level} {}
 };
+
+using GuildRank_ptr = std::shared_ptr<GuildRank>;
 
 class Guild
 {
@@ -51,6 +50,8 @@ private:
 	uint32_t id;
 	uint32_t memberCount = 0;
 };
+
+using Guild_ptr = std::shared_ptr<Guild>;
 
 namespace IOGuild {
 Guild_ptr loadGuild(uint32_t guildId);
