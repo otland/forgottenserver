@@ -76,11 +76,9 @@ bool ChatChannel::addUser(Player& player)
 
 	// TODO: Move to script when guild channels can be scripted
 	if (id == CHANNEL_GUILD) {
-		if (const auto& guild = player.getGuild()) {
-			if (!guild->getMotd().empty()) {
-				g_scheduler.addEvent(
-				    createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
-			}
+		if (const auto& guild = player.getGuild(); !guild->getMotd().empty()) {
+			g_scheduler.addEvent(
+			    createSchedulerTask(150, [playerID = player.getID()]() { g_game.sendGuildMotd(playerID); }));
 		}
 	}
 

@@ -73,7 +73,6 @@ class Game
 {
 public:
 	Game();
-	~Game();
 
 	// non-copyable
 	Game(const Game&) = delete;

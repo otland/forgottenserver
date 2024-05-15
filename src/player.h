@@ -187,7 +187,7 @@ public:
 
 	uint32_t getClientIcons() const;
 
-	const std::vector<uint32_t>& getGuildWarVector() const { return guildWarVector; }
+	const GuildWarVector& getGuildWarVector() const { return guildWarVector; }
 
 	Vocation* getVocation() const { return vocation; }
 
@@ -1163,7 +1163,7 @@ private:
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;
-	std::vector<uint32_t> guildWarVector;
+	GuildWarVector guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
 

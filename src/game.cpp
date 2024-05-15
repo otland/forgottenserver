@@ -61,8 +61,6 @@ Game::Game()
 	offlineTrainingWindow.priority = true;
 }
 
-Game::~Game() = default;
-
 void Game::start(ServiceManager* manager)
 {
 	serviceManager = manager;

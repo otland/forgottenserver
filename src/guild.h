@@ -6,6 +6,8 @@
 
 class Player;
 
+using GuildWarVector = std::vector<uint32_t>;
+
 struct GuildRank
 {
 	uint32_t id;
