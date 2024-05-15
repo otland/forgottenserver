@@ -670,10 +670,11 @@ public:
 		}
 		return items[id].name;
 	}
-	std::string_view getPluralName() const
+	std::string getPluralName() const
 	{
 		if (hasAttribute(ITEM_ATTRIBUTE_PLURALNAME)) {
-			return getStrAttr(ITEM_ATTRIBUTE_PLURALNAME);
+			auto pluralName = getStrAttr(ITEM_ATTRIBUTE_PLURALNAME);
+			return {pluralName.data(), pluralName.size()};
 		}
 		return items[id].getPluralName();
 	}
