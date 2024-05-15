@@ -4114,7 +4114,7 @@ bool Player::isInWar(const Player* player) const
 		return false;
 	}
 
-	const auto playerGuild = player->getGuild();
+	const auto& playerGuild = player->getGuild();
 	if (!playerGuild) {
 		return false;
 	}
@@ -4255,7 +4255,7 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 		return GUILDEMBLEM_NONE;
 	}
 
-	const auto playerGuild = player->getGuild();
+	const auto& playerGuild = player->getGuild();
 	if (!playerGuild) {
 		return GUILDEMBLEM_NONE;
 	}
