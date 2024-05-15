@@ -145,6 +145,7 @@ if not NpcEvents then
             return
         end
 
+        local normalMessage = message
         local message = message:lower()
         -- initlialize the handler, focus and talkQueue
         local handler = NpcsHandler(npc)
@@ -225,7 +226,7 @@ if not NpcEvents then
             -- check if we have a callback for this talk state
             local messageSent = false
             if handler:getTalkState(creature).callback then
-                local ret, retMessage = handler:getTalkState(creature):callback(npc, creature)
+                local ret, retMessage = handler:getTalkState(creature):callback(npc, creature, normalMessage, handler)
                 if not ret then
                     local msg = handler:getTalkState(creature).failureResponse:replaceTags({playerName = creature:getName()})
                     if retMessage then
@@ -309,6 +310,65 @@ if not NpcEvents then
                 end
                 local msg = "I only react to these words: " .. table.concat(words, ", ")
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+            end
+        elseif handler:getTalkState(creature):hasAnswer() then
+            if focus:isFocused(creature) then
+                focus:addFocus(creature)
+                handler:setTalkState(handler:getTalkState(creature).answer, creature)
+
+                -- checking for requirements
+                local ret, msg, reqType = handler:getTalkState(creature):requirements():init(creature)
+                if not ret then
+                    if handler:getTalkState(creature):requirements():getFailureRespond(reqType) then
+                        msg = handler:getTalkState(creature):requirements():getFailureRespond(reqType):replaceTags({playerName = creature:getName()})
+                    end
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                    local _, start = next(handler.keywords)
+                    handler:setTalkState(start, creature)
+                    handler:getTalkState(creature):checkOnStorage(creature, handler)
+                    return
+                end
+
+                local messageSent = false
+                if handler:getTalkState(creature).callback then
+                    local ret, retMessage = handler:getTalkState(creature):callback(npc, creature, normalMessage, handler)
+                    if not ret then
+                        local msg = handler:getTalkState(creature).failureResponse:replaceTags({playerName = creature:getName()})
+                        if retMessage then
+                            msg = retMessage:replaceTags({playerName = creature:getName()})
+                        end
+                        talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                        local _, start = next(handler.keywords)
+                        handler:setTalkState(start, creature)
+                        handler:getTalkState(creature):checkOnStorage(creature, handler)
+                        if msg == "" then
+                            print("[Warning - NpcEvents.onSay] There is no failureResponse set for keyword: ".. message ..".\n".. debug.getinfo(2).source:match("@?(.*)"))
+                        end
+                        return
+                    end
+                    if retMessage then
+                        talkQueue:addToQueue(creature, retMessage:replaceTags({playerName = creature:getName()}), TALK.defaultDelay)
+                        messageSent = true
+                    end
+                else
+                    print("[Warning - NpcEvents.onSay] Npc: ".. npc:getName() .." has no callback set for onAnswer\n".. debug.getinfo(2).source:match("@?(.*)"))
+                    local _, start = next(handler.keywords)
+                    handler:setTalkState(start, creature)
+                    handler:getTalkState(creature):checkOnStorage(creature, handler)
+                    return
+                end
+
+                if handler:getTalkState(creature):getResponse() and not messageSent then
+                    local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                end
+
+                -- if the NPC has reached the last keyword, it resets the talk state
+                if next(handler:getTalkState(creature).keywords) == nil then
+                    local _, start = next(handler.keywords)
+                    handler:setTalkState(start, creature)
+                    handler:getTalkState(creature):checkOnStorage(creature, handler)
+                end
             end
         end
     end

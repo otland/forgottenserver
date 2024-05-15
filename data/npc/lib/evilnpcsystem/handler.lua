@@ -10,6 +10,12 @@
         - NpcsHandler(npc): NpcsHandler
         - NpcsHandler:keyword(word)
         - NpcsHandler:onStorageValue(key, value)
+        - NpcsHandler:onAnswer()
+        - NpcsHandler:hasAnswer()
+        - NpcsHandler:getAnswer(player)
+        - NpcsHandler:getAnswers(player)
+        - NpcsHandler:addAnswer(player, key, answer)
+        - NpcsHandler:resetAnswers(player)
         - NpcsHandler:setStorageValue(key, value)
         - NpcsHandler:requirements()
         - NpcsHandler:isKeyword(word)
@@ -30,9 +36,10 @@
         - NpcsHandler:resetTalkState()
         - NpcsHandler:failureRespond(text)
         - NpcsHandler:teleport(position)
-        - NpcsHandler:callback(npc, player)
+        - NpcsHandler:callback(npc, player, message)
         - NpcsHandler:farewell()
         - NpcsHandler:talk(table)
+        - NpcsHandler:checkOnStorage(creature, handler)
 ]]
 
 ---@class NpcsHandler
@@ -50,6 +57,12 @@
 ---@field teleportPosition Position
 ---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
 ---@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator: string): NpcsHandler
+---@field onAnswer fun(self: NpcsHandler): NpcsHandler
+---@field hasAnswer fun(self: NpcsHandler): boolean
+---@field getAnswer fun(self: NpcsHandler, player: Player, key: string): string
+---@field getAnswers fun(self: NpcsHandler, player: Player): table
+---@field addAnswer fun(self: NpcsHandler, player: Player, key: string, answer: string)
+---@field resetAnswers fun(self: NpcsHandler, player: Player)
 ---@field setStorageValue fun(self: NpcsHandler, key: number, value: number)
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
@@ -70,10 +83,11 @@
 ---@field resetTalkState fun(self: NpcsHandler)
 ---@field failureRespond fun(self: NpcsHandler, text: string)
 ---@field teleport fun(self: NpcsHandler, position: Position)
----@field callback fun(self: NpcsHandler, npc: Npc, player: Player): boolean, string
+---@field callback fun(self: NpcsHandler, npc: Npc, player: Player, message: string): boolean, string
 ---@field require NpcRequirements
 ---@field farewell fun(self: NpcsHandler)
 ---@field talk fun(self: NpcsHandler, params: table<number, table>)
+---@field checkOnStorage fun(self: NpcsHandler, creature: Creature, handler: NpcsHandler)
 ---@field __call fun(npc: Npc): NpcsHandler
 ---@field __index NpcsHandler
 -- Modules
@@ -92,6 +106,7 @@ if not NpcsHandler then
                 self[npc:getName()] = {
                     keywords = {},
                     talkState = {},
+                    answers = {},
                     shopActive = {},
                     greetWords = KEYWORDS_GREET,
                     greetResponses = MESSAGES_GREET,
@@ -103,7 +118,7 @@ if not NpcsHandler then
                 setmetatable(self[npc:getName()], {__index = NpcsHandler})
                 -- Sets the metatable for the keywords of the NPC with the given name to the NpcsHandler table.
                 -- This allows the keywords of the NPC to inherit functions and properties from the NpcsHandler table.
-                setmetatable(self[npc:getName()].keywords, {__index = NpcsHandler})
+                setmetatable(self[npc:getName()].keywords, {})
             end
             -- The NpcsHandler is returned
             return self[npc:getName()]
@@ -168,6 +183,56 @@ if not NpcsHandler then
         self.onStorage[index].failureResponse = ""
         self.onStorage[index].storage = {key = key, value = value, operator = operator}
         return self.onStorage[index]
+    end
+
+    -- This function expects the Player to give a response to the NPC.
+    ---@return NpcsHandler
+    function NpcsHandler:onAnswer()
+        if not self.answer then
+            self.answer = {}
+        end
+        self.answer.keywords = {}
+        setmetatable(self.answer, {__index = NpcsHandler})
+        setmetatable(self.answer.keywords, {})
+        self.answer.response = {}
+        self.answer.failureResponse = ""
+        return self.answer
+    end
+
+    -- This function checks if the NPC has an onAnswer.
+    ---@return boolean
+    function NpcsHandler:hasAnswer()
+        return self.answer and true or false
+    end
+
+    -- This function retrieves the answer for the player with a certain key.
+    ---@param player Player The player to get the answer for.
+    ---@param key string The key to get the answer for.
+    function NpcsHandler:getAnswer(player, key)
+        return self.answers[player:getGuid()][key] or nil
+    end
+
+    -- This function retrieves all of the answers for the player.
+    ---@param player Player The player to get the answers for.
+    function NpcsHandler:getAnswers(player)
+        return self.answers[player:getGuid()] or {}
+    end
+
+    -- This function adds an answer for the player with a certain key.
+    ---@param player Player The player to add the answer for.
+    ---@param key string The key to add the answer for.
+    ---@param answer string The answer to add.
+    function NpcsHandler:addAnswer(player, key, answer)
+        if not self.answers[player:getGuid()] then
+            self.answers[player:getGuid()] = {}
+        end
+        self.answers[player:getGuid()][key] = answer
+    end
+
+    -- This function resets the answers for the player.
+    ---@param player Player The player to reset the answers for.
+    function NpcsHandler:resetAnswers(player)
+        self.answers[player:getGuid()] = {}
     end
 
     -- This function sets the storage value for the keyword.
