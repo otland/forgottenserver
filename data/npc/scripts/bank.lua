@@ -199,6 +199,10 @@ local function creatureSayCallback(cid, type, msg)
 			receiver = receiver:trim()
 
 			-- Immediate topicList.TRANSFER_PLAYER_GOLD simulation
+			if tonumber(parts[3]) then
+				npcHandler:say("I'm afraid there is no character with the name ".. parts[3] ..".", cid)
+				return true
+			end
 			count[cid] = getMoneyCount(parts[2])
 			if player:getBankBalance() < count[cid] then
 				npcHandler:say("There is not enough gold in your account.", cid)
