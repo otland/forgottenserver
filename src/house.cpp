@@ -431,7 +431,7 @@ void AccessList::addPlayer(const std::string& name)
 
 namespace {
 
-const std::shared_ptr<Guild> getGuildByName(const std::string& name)
+const Guild_ptr getGuildByName(const std::string& name)
 {
 	uint32_t guildId = IOGuild::getGuildIdByName(name);
 	if (guildId == 0) {

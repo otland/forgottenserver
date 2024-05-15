@@ -26,7 +26,7 @@ void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
 
-std::shared_ptr<GuildRank> Guild::getRankById(uint32_t rankId)
+GuildRank_ptr Guild::getRankById(uint32_t rankId)
 {
 	for (auto rank : ranks) {
 		if (rank->id == rankId) {
@@ -36,7 +36,7 @@ std::shared_ptr<GuildRank> Guild::getRankById(uint32_t rankId)
 	return nullptr;
 }
 
-std::shared_ptr<GuildRank> Guild::getRankByName(const std::string& name) const
+GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
 	for (auto rank : ranks) {
 		if (rank->name == name) {
@@ -46,7 +46,7 @@ std::shared_ptr<GuildRank> Guild::getRankByName(const std::string& name) const
 	return nullptr;
 }
 
-std::shared_ptr<GuildRank> Guild::getRankByLevel(uint8_t level) const
+GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 {
 	for (auto rank : ranks) {
 		if (rank->level == level) {
@@ -56,7 +56,7 @@ std::shared_ptr<GuildRank> Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-std::shared_ptr<Guild> IOGuild::loadGuild(uint32_t guildId)
+Guild_ptr IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId));

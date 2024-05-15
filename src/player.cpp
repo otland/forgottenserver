@@ -4666,7 +4666,7 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	return muteConditions;
 }
 
-void Player::setGuild(std::shared_ptr<Guild> guild)
+void Player::setGuild(Guild_ptr guild)
 {
 	if (guild == this->guild) {
 		return;

@@ -464,8 +464,8 @@ public:
 	void addMonster(Monster* monster);
 	void removeMonster(Monster* monster);
 
-	std::shared_ptr<Guild> getGuild(uint32_t id) const;
-	void addGuild(std::shared_ptr<Guild> guild);
+	Guild_ptr getGuild(uint32_t id) const;
+	void addGuild(Guild_ptr guild);
 	void removeGuild(uint32_t guildId);
 	void decreaseBrowseFieldRef(const Position& pos);
 
@@ -510,7 +510,7 @@ private:
 	std::unordered_map<uint32_t, Player*> players;
 	std::unordered_map<std::string, Player*> mappedPlayerNames;
 	std::unordered_map<uint32_t, Player*> mappedPlayerGuids;
-	std::unordered_map<uint32_t, std::shared_ptr<Guild>> guilds;
+	std::unordered_map<uint32_t, Guild_ptr> guilds;
 	std::unordered_map<uint16_t, Item*> uniqueItems;
 
 	std::list<Item*> decayItems[EVENT_DECAY_BUCKETS];

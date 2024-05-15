@@ -164,11 +164,11 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	std::shared_ptr<Guild> getGuild() const { return guild; }
-	void setGuild(std::shared_ptr<Guild> guild);
+	Guild_ptr getGuild() const { return guild; }
+	void setGuild(Guild_ptr guild);
 
-	std::shared_ptr<GuildRank> getGuildRank() const { return guildRank; }
-	void setGuildRank(std::shared_ptr<GuildRank> newGuildRank) { guildRank = newGuildRank; }
+	GuildRank_ptr getGuildRank() const { return guildRank; }
+	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
 
 	bool isGuildMate(const Player* player) const;
 
@@ -1200,8 +1200,8 @@ private:
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
-	std::shared_ptr<Guild> guild = nullptr;
-	std::shared_ptr<GuildRank> guildRank = nullptr;
+	Guild_ptr guild = nullptr;
+	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
 	Inbox* inbox;
 	Item* tradeItem = nullptr;

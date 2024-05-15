@@ -5696,7 +5696,7 @@ void Game::addMonster(Monster* monster) { monsters[monster->getID()] = monster; 
 
 void Game::removeMonster(Monster* monster) { monsters.erase(monster->getID()); }
 
-std::shared_ptr<Guild> Game::getGuild(uint32_t id) const
+Guild_ptr Game::getGuild(uint32_t id) const
 {
 	auto it = guilds.find(id);
 	if (it == guilds.end()) {
@@ -5705,7 +5705,7 @@ std::shared_ptr<Guild> Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(std::shared_ptr<Guild> guild) { guilds[guild->getId()] = guild; }
+void Game::addGuild(Guild_ptr guild) { guilds[guild->getId()] = guild; }
 
 void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 

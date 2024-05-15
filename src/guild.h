@@ -6,6 +6,9 @@
 
 class Player;
 
+using Guild_ptr = std::shared_ptr<Guild>;
+using GuildRank_ptr = std::shared_ptr<GuildRank>;
+
 struct GuildRank
 {
 	uint32_t id;
@@ -32,17 +35,17 @@ public:
 	void setMemberCount(uint32_t count) { memberCount = count; }
 
 	void addRank(uint32_t rankId, std::string_view rankName, uint8_t level);
-	const std::vector<std::shared_ptr<GuildRank>>& getRanks() const { return ranks; }
-	std::shared_ptr<GuildRank> getRankById(uint32_t rankId);
-	std::shared_ptr<GuildRank> getRankByName(const std::string& name) const;
-	std::shared_ptr<GuildRank> getRankByLevel(uint8_t level) const;
+	const std::vector<GuildRank_ptr>& getRanks() const { return ranks; }
+	GuildRank_ptr getRankById(uint32_t rankId);
+	GuildRank_ptr getRankByName(const std::string& name) const;
+	GuildRank_ptr getRankByLevel(uint8_t level) const;
 
 	const std::string& getMotd() const { return motd; }
 	void setMotd(const std::string& motd) { this->motd = motd; }
 
 private:
 	std::list<Player*> membersOnline;
-	std::vector<std::shared_ptr<GuildRank>> ranks;
+	std::vector<GuildRank_ptr> ranks;
 	std::string name;
 	std::string motd;
 	uint32_t id;
@@ -50,7 +53,7 @@ private:
 };
 
 namespace IOGuild {
-std::shared_ptr<Guild> loadGuild(uint32_t guildId);
+Guild_ptr loadGuild(uint32_t guildId);
 uint32_t getGuildIdByName(const std::string& name);
 }; // namespace IOGuild
 
