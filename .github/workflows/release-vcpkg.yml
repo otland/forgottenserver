@@ -18,7 +18,7 @@ jobs:
       VCPKG_FEATURE_FLAGS: luajit
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: Zip the release files
-        uses: thedoctor0/zip-release@master
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: zip
           filename: tfs-${{ github.ref_name }}-${{ matrix.os }}.zip

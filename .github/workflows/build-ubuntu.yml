@@ -7,6 +7,7 @@ on:
       - v*
 
     paths:
+      - .github/workflows/build-ubuntu.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -14,6 +15,7 @@ on:
 
   pull_request:
     paths:
+      - .github/workflows/build-ubuntu.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -36,10 +38,10 @@ jobs:
         luajit: [on, off]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: cpp
           # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
@@ -65,13 +67,13 @@ jobs:
           configurePreset: default
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
         with:
           category: "/language:cpp"
         if: ${{ matrix.buildtype }} == "Debug"
 
       - name: Upload artifact binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ubuntu-tfs-amd64-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs
