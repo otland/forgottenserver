@@ -290,7 +290,7 @@ if not NpcEvents then
                 end
             end
             -- if the NPC has reached the last keyword, it resets the talk state
-            if next(handler:getTalkState(creature).keywords) == nil then
+            if next(handler:getTalkState(creature).keywords) == nil and not handler:getTalkState(creature).answer then
                 local _, start = next(handler.keywords)
                 handler:setTalkState(start, creature)
                 handler:getTalkState(creature):checkOnStorage(creature, handler)
