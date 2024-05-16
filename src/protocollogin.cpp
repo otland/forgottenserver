@@ -6,6 +6,7 @@
 #include "protocollogin.h"
 
 #include "ban.h"
+#include "base64.h"
 #include "configmanager.h"
 #include "game.h"
 #include "iologindata.h"
@@ -54,11 +55,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	// Generate and add session key
 	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned short> rbe;
-	std::array<char, 16> sessionKey;
+	std::string sessionKey(16, '\x00');
 	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
 
 	output->addByte(0x28);
-	output->addString({sessionKey.data(), sessionKey.size()});
+	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
 	if (Database& db = Database::getInstance(); !db.executeQuery(fmt::format(
 	        "INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
