@@ -2153,13 +2153,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTER_ICON_FIRST);
 	registerEnum(MONSTER_ICON_LAST);
 
-	// Logger
-	registerEnum(LINFO);
-	registerEnum(LWARNING);
-	registerEnum(LDEBUG);
-	registerEnum(LERROR);
-	registerEnum(LFATAL);
-
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean("VIRTUAL_PARENT", true);
