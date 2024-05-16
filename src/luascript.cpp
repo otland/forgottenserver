@@ -4373,22 +4373,26 @@ int LuaScriptInterface::luaLogDebug(lua_State* L)
 }
 
 int LuaScriptInterface::luaLogInfo(lua_State* L)
-{ // logI(msg)
+{
+	// logI(msg)
 	return luaLog(LINFO, L);
 }
 
 int LuaScriptInterface::luaLogWarning(lua_State* L)
-{ // logW(msg)
+{
+	// logW(msg)
 	return luaLog(LWARNING, L);
 }
 
 int LuaScriptInterface::luaLogError(lua_State* L)
-{ // logE(msg)
+{
+	// logE(msg)
 	return luaLog(LERROR, L);
 }
 
 int LuaScriptInterface::luaLogFatal(lua_State* L)
-{ // logF(msg)
+{
+	// logF(msg)
 	return luaLog(LFATAL, L);
 }
 
