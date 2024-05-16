@@ -11889,7 +11889,9 @@ int LuaScriptInterface::luaNpcTypeEventType(lua_State* L)
 			pushString(L, npcType->eventType);
 		} else {
 			std::string type = getString(L, 2);
-			const static auto tmp = std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think"};
+			const static auto tmp =
+			    std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think"};
+
 			const auto it = std::find(tmp.begin(), tmp.end(), type);
 			if (it != tmp.end()) {
 				npcType->eventType = type;
