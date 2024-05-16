@@ -463,7 +463,7 @@ private:
 	// Logger helper, not exposed
 	static int luaLog(LogSeverity logLevel, lua_State* L);
 
-	//Main logger functions
+	// Main logger functions
 	static int luaLogDebug(lua_State* L);
 	static int luaLogInfo(lua_State* L);
 	static int luaLogWarning(lua_State* L);
