@@ -25,20 +25,18 @@ public:
 	void threadMain();
 	void log(LogSeverity lvl, const char* message, const std::source_location loc = std::source_location::current());
 	void logLua(LogSeverity lvl, const char* message, const std::string& file, int line);
-	void setLogLevel(LogSeverity lvl);
-	void setFileNameMaxLenght(size_t fileNameMaxCharacter);
 	void shutdown();
 
 private:
 	struct Config
 	{
-		const uint16_t logSeveritySize = static_cast<uint16_t>(3);
-		const uint16_t fileNameMaxCharacter = static_cast<uint16_t>(35);
-		const uint16_t threadIdSize = static_cast<uint16_t>(6);
+		const uint8_t logSeveritySize = 3;
+		const uint8_t threadIdSize = 6;
 		std::string filename = "tfs";
 		LogSeverity minLogLevel = LogSeverity::LDEBUG;
-		uint16_t maxLogFiles = static_cast<uint16_t>(2);
-		uint16_t maxFileSize = static_cast<uint16_t>(1048576);
+		uint32_t maxLogFiles = static_cast<uint32_t>(2);
+		uint32_t maxFileSize = static_cast<uint32_t>(1048576);
+		uint32_t fileNameMaxCharacter = static_cast<uint32_t>(35);
 	};
 
 	std::string getSeverityString(LogSeverity lvl);

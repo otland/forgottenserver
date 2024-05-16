@@ -11,10 +11,6 @@
 #include <iostream>
 #include <sstream>
 
-void Logger::setLogLevel(LogSeverity lvl) { config.minLogLevel = lvl; }
-
-void Logger::setFileNameMaxLenght(size_t fileNameMaxCharacter) { fileNameMaxCharacter = fileNameMaxCharacter; }
-
 void Logger::log(LogSeverity lvl, const char *message, const std::source_location loc)
 {
 	bool do_signal = false;
@@ -233,7 +229,6 @@ void Logger::loadConfig()
 	while (std::getline(file, line)) {
 		// skip comments
 		if (line.empty() || line[0] == '#') {
-			printf(line.c_str());
 			continue;
 		}
 
@@ -289,9 +284,14 @@ void Logger::updateConfig(std::map<std::string, std::string> &configMap)
 			config.maxFileSize = std::stoi(itFileSize->second);
 		}
 
-		auto itLofFileName = configMap.find("log_file_name");
-		if (itLofFileName != configMap.end()) {
-			config.filename = itLofFileName->second;
+		auto itLogFileName = configMap.find("log_file_name");
+		if (itLogFileName != configMap.end()) {
+			config.filename = itLogFileName->second;
+		}
+
+		auto itLogFileAddressSize = configMap.find("file_adress_size");
+		if (itLogFileAddressSize != configMap.end() && std::stoi(itLogFileAddressSize->second)) {
+			config.fileNameMaxCharacter = std::stoi(itLogFileAddressSize->second);
 		}
 	} catch (const std::exception &ex) {
 		std::cout << "Fail when parsing config file: " << ex.what() << std::endl;
