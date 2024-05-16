@@ -11,6 +11,7 @@
 #include "events.h"
 #include "game.h"
 #include "globalevent.h"
+#include "logger.h"
 #include "monsters.h"
 #include "mounts.h"
 #include "movement.h"
@@ -24,6 +25,7 @@
 #include <csignal>
 
 extern Scheduler g_scheduler;
+extern Logger g_logger;
 extern DatabaseTasks g_databaseTasks;
 extern Dispatcher g_dispatcher;
 
@@ -154,6 +156,7 @@ void dispatchSignalHandler(int signal)
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
+			g_logger.join();
 			break;
 #endif
 		default:

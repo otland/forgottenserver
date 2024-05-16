@@ -19,6 +19,7 @@
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
+#include "logger.h"
 #include "monster.h"
 #include "movement.h"
 #include "npc.h"
@@ -126,6 +127,7 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+			g_logger.stop();
 			break;
 		}
 
@@ -4878,6 +4880,7 @@ void Game::shutdown()
 	g_scheduler.shutdown();
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
+	g_logger.shutdown();
 	map.spawns.clear();
 
 	cleanup();

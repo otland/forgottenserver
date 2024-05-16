@@ -10,6 +10,7 @@
 #include "databasetasks.h"
 #include "game.h"
 #include "iomarket.h"
+#include "logger.h"
 #include "monsters.h"
 #include "outfit.h"
 #include "protocollogin.h"
@@ -30,6 +31,7 @@
 DatabaseTasks g_databaseTasks;
 Dispatcher g_dispatcher;
 Scheduler g_scheduler;
+Logger g_logger;
 
 Game g_game;
 ConfigManager g_config;
@@ -274,6 +276,11 @@ void startServer()
 
 	ServiceManager serviceManager;
 
+	g_logger.start();
+	LOG_E("-=-= LOGGER INITALIZED =-=-");
+	for (int i = 0; i < 200; ++i) {
+		LOG_I(("KRET TEST LOG " + std::to_string(i)).c_str());
+	}
 	g_dispatcher.start();
 	g_scheduler.start();
 
@@ -290,11 +297,13 @@ void startServer()
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
 		g_dispatcher.shutdown();
+		g_logger.shutdown();
 	}
 
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
+	g_logger.join();
 }
 
 void printServerVersion()
