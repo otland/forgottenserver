@@ -380,7 +380,7 @@ void Events::eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std:
 }
 
 // Party
-bool Events::eventPartyOnJoin(Party* party, Player* player)
+bool Events::eventPartyOnJoin(Party_ptr party, Player* player)
 {
 	// Party:onJoin(player) or Party.onJoin(self, player)
 	if (info.partyOnJoin == -1) {
@@ -407,7 +407,7 @@ bool Events::eventPartyOnJoin(Party* party, Player* player)
 	return scriptInterface.callFunction(2);
 }
 
-bool Events::eventPartyOnLeave(Party* party, Player* player)
+bool Events::eventPartyOnLeave(Party_ptr party, Player* player)
 {
 	// Party:onLeave(player) or Party.onLeave(self, player)
 	if (info.partyOnLeave == -1) {
@@ -434,7 +434,7 @@ bool Events::eventPartyOnLeave(Party* party, Player* player)
 	return scriptInterface.callFunction(2);
 }
 
-bool Events::eventPartyOnDisband(Party* party)
+bool Events::eventPartyOnDisband(Party_ptr party)
 {
 	// Party:onDisband() or Party.onDisband(self)
 	if (info.partyOnDisband == -1) {
@@ -458,7 +458,7 @@ bool Events::eventPartyOnDisband(Party* party)
 	return scriptInterface.callFunction(1);
 }
 
-bool Events::eventPartyOnInvite(Party* party, Player* player)
+bool Events::eventPartyOnInvite(Party_ptr party, Player* player)
 {
 	// Party:onInvite(player) or Party.onInvite(self, player)
 	if (info.partyOnInvite == -1) {
@@ -485,7 +485,7 @@ bool Events::eventPartyOnInvite(Party* party, Player* player)
 	return scriptInterface.callFunction(2);
 }
 
-bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
+bool Events::eventPartyOnRevokeInvitation(Party_ptr party, Player* player)
 {
 	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
 	if (info.partyOnRevokeInvitation == -1) {
@@ -512,7 +512,7 @@ bool Events::eventPartyOnRevokeInvitation(Party* party, Player* player)
 	return scriptInterface.callFunction(2);
 }
 
-bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
+bool Events::eventPartyOnPassLeadership(Party_ptr party, Player* player)
 {
 	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
 	if (info.partyOnPassLeadership == -1) {
@@ -539,7 +539,7 @@ bool Events::eventPartyOnPassLeadership(Party* party, Player* player)
 	return scriptInterface.callFunction(2);
 }
 
-void Events::eventPartyOnShareExperience(Party* party, uint64_t& exp)
+void Events::eventPartyOnShareExperience(Party_ptr party, uint64_t& exp)
 {
 	// Party:onShareExperience(exp) or Party.onShareExperience(self, exp)
 	if (info.partyOnShareExperience == -1) {

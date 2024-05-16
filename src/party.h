@@ -23,7 +23,7 @@ enum SharedExpStatus_t : uint8_t
 	SHAREDEXP_EMPTYPARTY
 };
 
-class Party
+class Party : public std::enable_shared_from_this<Party>
 {
 public:
 	explicit Party(Player* leader);
@@ -73,5 +73,7 @@ private:
 	bool sharedExpActive = false;
 	bool sharedExpEnabled = false;
 };
+
+using Party_ptr = std::shared_ptr<Party>;
 
 #endif // FS_PARTY_H

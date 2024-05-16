@@ -4214,6 +4214,8 @@ PartyShields_t Player::getPartyShield(const Player* player) const
 	return SHIELD_NONE;
 }
 
+bool Player::isPartyLeader() const { return party ? party->getLeader() == this : false; }
+
 bool Player::isInviting(const Player* player) const
 {
 	if (!player || !party || party->getLeader() != this) {
@@ -4244,7 +4246,7 @@ void Player::sendPlayerPartyIcons(Player* player)
 	sendCreatureSkull(player);
 }
 
-bool Player::addPartyInvitation(Party* party)
+bool Player::addPartyInvitation(Party_ptr party)
 {
 	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
 	if (it != invitePartyList.end()) {
@@ -4255,11 +4257,11 @@ bool Player::addPartyInvitation(Party* party)
 	return true;
 }
 
-void Player::removePartyInvitation(Party* party) { invitePartyList.remove(party); }
+void Player::removePartyInvitation(Party_ptr party) { invitePartyList.remove(party); }
 
 void Player::clearPartyInvitations()
 {
-	for (Party* invitingParty : invitePartyList) {
+	for (const auto& invitingParty : invitePartyList) {
 		invitingParty->removeInvite(*this, false);
 	}
 	invitePartyList.clear();
