@@ -4230,7 +4230,7 @@ void Player::sendPlayerPartyIcons(Player* player)
 	sendCreatureSkull(player);
 }
 
-bool Player::addPartyInvitation(Party_ptr party)
+bool Player::addPartyInvitation(const Party_ptr& party)
 {
 	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
 	if (it != invitePartyList.end()) {
@@ -4241,7 +4241,7 @@ bool Player::addPartyInvitation(Party_ptr party)
 	return true;
 }
 
-void Player::removePartyInvitation(Party_ptr party) { invitePartyList.remove(party); }
+void Player::removePartyInvitation(const Party_ptr& party) { invitePartyList.remove(party); }
 
 void Player::clearPartyInvitations()
 {

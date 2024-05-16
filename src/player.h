@@ -211,8 +211,8 @@ public:
 	bool isInviting(const Player* player) const;
 	bool isPartner(const Player* player) const;
 	void sendPlayerPartyIcons(Player* player);
-	bool addPartyInvitation(Party_ptr party);
-	void removePartyInvitation(Party_ptr party);
+	bool addPartyInvitation(const Party_ptr& party);
+	void removePartyInvitation(const Party_ptr& party);
 	void clearPartyInvitations();
 
 	GuildEmblems_t getGuildEmblem(const Player* player) const;
