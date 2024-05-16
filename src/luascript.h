@@ -6,8 +6,8 @@
 
 #include "database.h"
 #include "enums.h"
-#include "position.h"
 #include "logger.h"
+#include "position.h"
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
