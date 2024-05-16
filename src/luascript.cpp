@@ -53,6 +53,7 @@ extern MoveEvents* g_moveEvents;
 extern GlobalEvents* g_globalEvents;
 extern Scripts* g_scripts;
 extern Weapons* g_weapons;
+extern Logger g_logger;
 
 ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
 uint32_t ScriptEnvironment::lastResultId = 0;
@@ -1163,6 +1164,13 @@ void LuaScriptInterface::registerFunctions()
 	luaL_register(luaState, "result", LuaScriptInterface::luaResultTable);
 	lua_pop(luaState, 1);
 
+	// logger
+	lua_register(luaState, "logD", LuaScriptInterface::luaLogDebug);
+	lua_register(luaState, "logI", LuaScriptInterface::luaLogInfo);
+	lua_register(luaState, "logW", LuaScriptInterface::luaLogWarning);
+	lua_register(luaState, "logE", LuaScriptInterface::luaLogError);
+	lua_register(luaState, "logF", LuaScriptInterface::luaLogFatal);
+
 	/* New functions */
 	// registerClass(className, baseClass, newFunction)
 	// registerTable(tableName)
@@ -2144,6 +2152,13 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(MONSTER_ICON_FIENDISH);
 	registerEnum(MONSTER_ICON_FIRST);
 	registerEnum(MONSTER_ICON_LAST);
+
+	// Logger
+	registerEnum(LINFO);
+	registerEnum(LWARNING);
+	registerEnum(LDEBUG);
+	registerEnum(LERROR);
+	registerEnum(LFATAL);
 
 	// _G
 	registerGlobalVariable("INDEX_WHEREEVER", INDEX_WHEREEVER);
@@ -4045,6 +4060,8 @@ int LuaScriptInterface::luaCleanMap(lua_State* L)
 	return 1;
 }
 
+// Wrapper function to be called from Lua
+
 int LuaScriptInterface::luaIsInWar(lua_State* L)
 {
 	// isInWar(cid, target)
@@ -4335,6 +4352,31 @@ const luaL_Reg LuaScriptInterface::luaResultTable[] = {
     {"getNumber", LuaScriptInterface::luaResultGetNumber}, {"getString", LuaScriptInterface::luaResultGetString},
     {"getStream", LuaScriptInterface::luaResultGetStream}, {"next", LuaScriptInterface::luaResultNext},
     {"free", LuaScriptInterface::luaResultFree},           {nullptr, nullptr}};
+
+int LuaScriptInterface::luaLog(LogSeverity logLevel, lua_State* L)
+{
+	const char* message = luaL_checkstring(L, 1);
+	// Retrieve debug info
+	lua_Debug debugInfo;
+	if (lua_getstack(L, 1, &debugInfo)) {
+		lua_getinfo(L, "Snl", &debugInfo);
+		const char* file = debugInfo.short_src;
+		int lineNumber = debugInfo.currentline;
+		g_logger.logLua(logLevel, message, file, lineNumber);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaLogDebug(lua_State* L) { return luaLog(LDEBUG, L); }
+
+int LuaScriptInterface::luaLogInfo(lua_State* L) { return luaLog(LINFO, L); }
+
+int LuaScriptInterface::luaLogWarning(lua_State* L) { return luaLog(LWARNING, L); }
+
+int LuaScriptInterface::luaLogError(lua_State* L) { return luaLog(LERROR, L); }
+
+int LuaScriptInterface::luaLogFatal(lua_State* L) { return luaLog(LFATAL, L); }
 
 int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {

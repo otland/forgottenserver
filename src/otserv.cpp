@@ -277,10 +277,8 @@ void startServer()
 	ServiceManager serviceManager;
 
 	g_logger.start();
-	LOG_E("-=-= LOGGER INITALIZED =-=-");
-	for (int i = 0; i < 200; ++i) {
-		LOG_I(("KRET TEST LOG " + std::to_string(i)).c_str());
-	}
+	LOG_E("LOGGER INITALIZED");
+
 	g_dispatcher.start();
 	g_scheduler.start();
 
@@ -302,6 +300,7 @@ void startServer()
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
+	LOG_E("-=-= LOGGER TERMINATED =-=-");
 	g_logger.join();
 }
 

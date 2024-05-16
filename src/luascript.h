@@ -7,6 +7,7 @@
 #include "database.h"
 #include "enums.h"
 #include "position.h"
+#include "logger.h"
 
 #if LUA_VERSION_NUM >= 502
 #ifndef LUA_COMPAT_ALL
@@ -458,6 +459,16 @@ private:
 	static int luaSendGuildChannelMessage(lua_State* L);
 
 	static int luaIsScriptsInterface(lua_State* L);
+
+	// Logger helper, not exposed
+	static int luaLog(LogSeverity logLevel, lua_State* L);
+
+	//Main logger functions
+	static int luaLogDebug(lua_State* L);
+	static int luaLogInfo(lua_State* L);
+	static int luaLogWarning(lua_State* L);
+	static int luaLogError(lua_State* L);
+	static int luaLogFatal(lua_State* L);
 
 #ifndef LUAJIT_VERSION
 	static int luaBitNot(lua_State* L);
