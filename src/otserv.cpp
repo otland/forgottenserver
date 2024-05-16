@@ -300,7 +300,6 @@ void startServer()
 	g_scheduler.join();
 	g_databaseTasks.join();
 	g_dispatcher.join();
-	LOG_E("-=-= LOGGER TERMINATED =-=-");
 	g_logger.join();
 }
 
