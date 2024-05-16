@@ -12,10 +12,10 @@
         - NpcsHandler:onStorageValue(key, value)
         - NpcsHandler:onAnswer()
         - NpcsHandler:hasAnswer()
-        - NpcsHandler:getAnswer(player)
-        - NpcsHandler:getAnswers(player)
-        - NpcsHandler:addAnswer(player, key, answer)
-        - NpcsHandler:resetAnswers(player)
+        - NpcsHandler:getData(player, key)
+        - NpcsHandler:getAllData(player)
+        - NpcsHandler:addData(player, key, data)
+        - NpcsHandler:resetData(player)
         - NpcsHandler:setStorageValue(key, value)
         - NpcsHandler:requirements()
         - NpcsHandler:isKeyword(word)
@@ -59,10 +59,10 @@
 ---@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator: string): NpcsHandler
 ---@field onAnswer fun(self: NpcsHandler): NpcsHandler
 ---@field hasAnswer fun(self: NpcsHandler): boolean
----@field getAnswer fun(self: NpcsHandler, player: Player, key: string): string
----@field getAnswers fun(self: NpcsHandler, player: Player): table
----@field addAnswer fun(self: NpcsHandler, player: Player, key: string, answer: string)
----@field resetAnswers fun(self: NpcsHandler, player: Player)
+---@field getData fun(self: NpcsHandler, player: Player, key: string): string
+---@field getAllData fun(self: NpcsHandler, player: Player): table
+---@field addData fun(self: NpcsHandler, player: Player, key: string, data: string)
+---@field resetAData fun(self: NpcsHandler, player: Player)
 ---@field setStorageValue fun(self: NpcsHandler, key: number, value: number)
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
@@ -106,7 +106,7 @@ if not NpcsHandler then
                 self[npc:getName()] = {
                     keywords = {},
                     talkState = {},
-                    answers = {},
+                    data = {},
                     shopActive = {},
                     greetWords = KEYWORDS_GREET,
                     greetResponses = MESSAGES_GREET,
@@ -205,34 +205,34 @@ if not NpcsHandler then
         return self.answer and true or false
     end
 
-    -- This function retrieves the answer for the player with a certain key.
-    ---@param player Player The player to get the answer for.
-    ---@param key string The key to get the answer for.
-    function NpcsHandler:getAnswer(player, key)
-        return self.answers[player:getGuid()][key] or nil
+    -- This function retrieves the data for the player with a certain key.
+    ---@param player Player The player to get the data for.
+    ---@param key string The key to get the data for.
+    function NpcsHandler:getData(player, key)
+        return self.data[player:getGuid()][key] or nil
     end
 
-    -- This function retrieves all of the answers for the player.
-    ---@param player Player The player to get the answers for.
-    function NpcsHandler:getAnswers(player)
-        return self.answers[player:getGuid()] or {}
+    -- This function retrieves all of the data for the player.
+    ---@param player Player The player to get the data for.
+    function NpcsHandler:getAllData(player)
+        return self.data[player:getGuid()] or {}
     end
 
-    -- This function adds an answer for the player with a certain key.
-    ---@param player Player The player to add the answer for.
-    ---@param key string The key to add the answer for.
-    ---@param answer string The answer to add.
-    function NpcsHandler:addAnswer(player, key, answer)
-        if not self.answers[player:getGuid()] then
-            self.answers[player:getGuid()] = {}
+    -- This function adds data for the player with a certain key.
+    ---@param player Player The player to add the data for.
+    ---@param key string The key to add the data for.
+    ---@param data string The data to add.
+    function NpcsHandler:addData(player, key, data)
+        if not self.data[player:getGuid()] then
+            self.data[player:getGuid()] = {}
         end
-        self.answers[player:getGuid()][key] = answer
+        self.data[player:getGuid()][key] = data
     end
 
-    -- This function resets the answers for the player.
-    ---@param player Player The player to reset the answers for.
-    function NpcsHandler:resetAnswers(player)
-        self.answers[player:getGuid()] = {}
+    -- This function resets the data for the player.
+    ---@param player Player The player to reset the data for.
+    function NpcsHandler:resetData(player)
+        self.data[player:getGuid()] = {}
     end
 
     -- This function sets the storage value for the keyword.

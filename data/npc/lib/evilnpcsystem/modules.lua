@@ -25,14 +25,16 @@
 ---@field isInfight boolean
 ---@param params table<string, travelParams>
 function NpcsHandler:travelTo(params)
-    local traveling = self:keyword("travel")
+    local greet = self:keyword(self.greetWords)
+    greet:setGreetResponse("Hello |PLAYERNAME| I can {travel} you to wherever you want, just tell me your {destination}")
+    local traveling = greet:keyword("travel")
     traveling:respond("Where do you want to travel?")
 
     for name, dest in pairs(params) do
         local toDest = traveling:keyword(name)
         toDest:respond(string.format("Do you want to travel to {%s} for {%d} gold?", name, dest.money and dest.money or 0))
 
-        local destinations = self:keyword("destination")
+        local destinations = greet:keyword("destination")
         local words = {}
         for k, v in pairs(traveling:getKeywords()) do
             if k ~= "destination" then
