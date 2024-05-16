@@ -173,13 +173,16 @@ add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
 	Boost::iostreams
 	Boost::system
+	Boost::locale
 	fmt::fmt
+	OpenSSL::Crypto
 	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
-	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
-set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
+if (APPLE)
+	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
+endif()
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})

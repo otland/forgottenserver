@@ -210,6 +210,7 @@ public:
 
 	void removeThing(Thing* thing, uint32_t count) override final;
 
+	bool hasCreature(Creature* creature) const;
 	void removeCreature(Creature* creature);
 
 	int32_t getThingIndex(const Thing* thing) const override final;

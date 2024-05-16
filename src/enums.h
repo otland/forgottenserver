@@ -83,6 +83,8 @@ enum itemAttrTypes : uint32_t
 	ITEM_ATTRIBUTE_STOREITEM = 1 << 25,
 	ITEM_ATTRIBUTE_ATTACK_SPEED = 1 << 26,
 	ITEM_ATTRIBUTE_OPENCONTAINER = 1 << 27,
+	ITEM_ATTRIBUTE_DURATION_MIN = ITEM_ATTRIBUTE_DURATION,
+	ITEM_ATTRIBUTE_DURATION_MAX = 1 << 28,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -676,7 +678,7 @@ enum MonstersEvent_t : uint8_t
 struct Reflect
 {
 	Reflect() = default;
-	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance){};
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
 
 	Reflect& operator+=(const Reflect& other)
 	{

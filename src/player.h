@@ -71,14 +71,6 @@ struct OpenContainer
 	uint16_t index;
 };
 
-struct OutfitEntry
-{
-	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
-
-	uint16_t lookType;
-	uint8_t addons;
-};
-
 static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
 
 struct Skill
@@ -121,13 +113,13 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
-	uint8_t getRandomMount() const;
-	uint8_t getCurrentMount() const;
-	void setCurrentMount(uint8_t mountId);
+	uint16_t getRandomMount() const;
+	uint16_t getCurrentMount() const;
+	void setCurrentMount(uint16_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
 	bool toggleMount(bool mount);
-	bool tameMount(uint8_t mountId);
-	bool untameMount(uint8_t mountId);
+	bool tameMount(uint16_t mountId);
+	bool untameMount(uint16_t mountId);
 	bool hasMount(const Mount* mount) const;
 	bool hasMounts() const;
 	void dismount();
@@ -256,7 +248,6 @@ public:
 	bool canOpenCorpse(uint32_t ownerId) const;
 
 	void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false) override;
-	void genReservedStorageRange();
 
 	void setGroup(Group* newGroup) { group = newGroup; }
 	Group* getGroup() const { return group; }
@@ -584,6 +575,12 @@ public:
 			client->sendUpdateTile(tile, pos);
 		}
 	}
+	void sendUpdateCreatureIcons(const Creature* creature)
+	{
+		if (client) {
+			client->sendUpdateCreatureIcons(creature);
+		}
+	}
 
 	void sendChannelMessage(const std::string& author, const std::string& text, SpeakClasses type, uint16_t channel)
 	{
@@ -778,6 +775,9 @@ public:
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                    const Position& oldPos, bool teleport) override;
+
+	void onEquipInventory();
+	void onDeEquipInventory();
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
 	void onFollowCreatureDisappear(bool isLogout) override;
@@ -1121,7 +1121,6 @@ private:
 	void updateInventoryWeight();
 
 	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextWalkTask(SchedulerTask* task);
 	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
 
 	void death(Creature* lastHitCreature) override;
@@ -1162,7 +1161,8 @@ private:
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
 
-	std::vector<OutfitEntry> outfits;
+	std::map<uint16_t, uint8_t> outfits;
+	std::unordered_set<uint16_t> mounts;
 	GuildWarVector guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
@@ -1225,8 +1225,8 @@ private:
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
 	uint32_t actionTaskEvent = 0;
-	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
+	uint32_t classicAttackEvent = 0;
 	uint32_t MessageBufferTicks = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;

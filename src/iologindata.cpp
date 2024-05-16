@@ -12,15 +12,14 @@
 #include "inbox.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 Account IOLoginData::loadAccount(uint32_t accno)
 {
 	Account account;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
+	DBResult_ptr result = Database::getInstance().storeQuery(
+	    fmt::format("SELECT `id`, `name`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
 	if (!result) {
 		return account;
 	}
@@ -66,7 +65,7 @@ bool IOLoginData::loginserverAuthentication(const std::string& name, const std::
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
+	    "SELECT `id`, `name`, UNHEX(`password`) AS `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
 	    db.escapeString(name), db.escapeString(name)));
 	if (!result) {
 		return false;
@@ -99,14 +98,14 @@ std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_v
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, `a`.`password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    "SELECT `a`.`id` AS `account_id`, UNHEX(`a`.`password`) AS `password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
 	    db.escapeString(accountName), db.escapeString(accountName), db.escapeString(characterName)));
 	if (!result) {
 		return {};
 	}
 
 	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		std::string secret = decodeSecret(result->getString("secret"));
 		if (!secret.empty()) {
 			if (token.empty()) {
@@ -173,7 +172,7 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
-	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (getBoolean(ConfigManager::ALLOW_CLONES)) {
 		return;
 	}
 
@@ -216,7 +215,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 	return loadPlayer(
 	    player,
 	    db.storeQuery(fmt::format(
-	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = {:d}",
+	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `currentmount`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = {:d}",
 	        id)));
 }
 
@@ -226,7 +225,7 @@ bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 	return loadPlayer(
 	    player,
 	    db.storeQuery(fmt::format(
-	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = {:s}",
+	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `currentmount`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = {:s}",
 	        db.escapeString(name))));
 }
 
@@ -352,6 +351,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->defaultOutfit.lookMountLegs = result->getNumber<uint16_t>("lookmountlegs");
 	player->defaultOutfit.lookMountFeet = result->getNumber<uint16_t>("lookmountfeet");
 	player->currentOutfit = player->defaultOutfit;
+	player->currentMount = result->getNumber<uint16_t>("currentmount");
 	player->direction = static_cast<Direction>(result->getNumber<uint16_t>("direction"));
 	player->randomizeMount = result->getNumber<uint8_t>("randomizemount") != 0;
 
@@ -490,7 +490,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
-				player->postAddNotification(item, nullptr, pid);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
@@ -615,6 +614,22 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	                                        player->getAccount())))) {
 		do {
 			player->addVIPInternal(result->getNumber<uint32_t>("player_id"));
+		} while (result->next());
+	}
+
+	// load outfits & addons
+	if ((result = db.storeQuery(fmt::format(
+	         "SELECT `outfit_id`, `addons` FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID())))) {
+		do {
+			player->addOutfit(result->getNumber<uint16_t>("outfit_id"), result->getNumber<uint8_t>("addons"));
+		} while (result->next());
+	}
+
+	// load mounts
+	if ((result = db.storeQuery(
+	         fmt::format("SELECT `mount_id` FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID())))) {
+		do {
+			player->tameMount(result->getNumber<uint16_t>("mount_id"));
 		} while (result->next());
 	}
 
@@ -761,6 +776,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`lookmountbody` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountBody) << ',';
 	query << "`lookmountlegs` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountLegs) << ',';
 	query << "`lookmountfeet` = " << static_cast<uint32_t>(player->defaultOutfit.lookMountFeet) << ',';
+	query << "`currentmount` = " << static_cast<uint16_t>(player->currentMount) << ',';
 	query << "`randomizemount` = " << player->randomizeMount << ",";
 	query << "`maglevel` = " << player->magLevel << ',';
 	query << "`mana` = " << player->mana << ',';
@@ -936,7 +952,6 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	DBInsert storageQuery("INSERT INTO `player_storage` (`player_id`, `key`, `value`) VALUES ");
-	player->genReservedStorageRange();
 
 	for (const auto& [key, value] : player->getStorageMap()) {
 		if (!storageQuery.addRow(fmt::format("{:d}, {:d}, {:d}", player->getGUID(), key, value))) {
@@ -945,6 +960,40 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!storageQuery.execute()) {
+		return false;
+	}
+
+	// save outfits & addons
+	if (!db.executeQuery(fmt::format("DELETE FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID()))) {
+		return false;
+	}
+
+	DBInsert outfitQuery("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES ");
+
+	for (const auto& it : player->outfits) {
+		if (!outfitQuery.addRow(fmt::format("{:d}, {:d}, {:d}", player->getGUID(), it.first, it.second))) {
+			return false;
+		}
+	}
+
+	if (!outfitQuery.execute()) {
+		return false;
+	}
+
+	// save mounts
+	if (!db.executeQuery(fmt::format("DELETE FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID()))) {
+		return false;
+	}
+
+	DBInsert mountQuery("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES ");
+
+	for (const auto& it : player->mounts) {
+		if (!mountQuery.addRow(fmt::format("{:d}, {:d}", player->getGUID(), it))) {
+			return false;
+		}
+	}
+
+	if (!mountQuery.execute()) {
 		return false;
 	}
 

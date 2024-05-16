@@ -13,6 +13,7 @@
 #include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
+#include "monster.h"
 #include "npc.h"
 #include "outfit.h"
 #include "outputmessage.h"
@@ -21,7 +22,6 @@
 #include "scheduler.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
@@ -67,7 +67,7 @@ std::size_t clientLogin(const Player& player)
 		return 0;
 	}
 
-	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+	uint32_t maxPlayers = static_cast<uint32_t>(getNumber(ConfigManager::MAX_PLAYERS));
 	if (maxPlayers == 0 || (waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return 0;
 	}
@@ -153,7 +153,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 {
 	// dispatcher thread
 	Player* foundPlayer = g_game.getPlayerByGUID(characterId);
-	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (!foundPlayer || getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
 
 		player->incrementReferenceCounter();
@@ -180,8 +180,8 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			return;
 		}
 
-		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) &&
-		    player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
+		if (getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER &&
+		    g_game.getPlayerByAccount(player->getAccount())) {
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
 		}
@@ -235,7 +235,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		acceptPackets = true;
 	} else {
-		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
+		if (eventConnect != 0 || !getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			// Already trying to connect
 			disconnectClient("You are already logged in.");
 			return;
@@ -344,7 +344,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	// String client version
 	if (version >= 1240) {
-		if (msg.getLength() - msg.getBufferPosition() > 132) {
+		if (msg.getRemainingBufferLength() > 132) {
 			msg.getString();
 		}
 	}
@@ -411,7 +411,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t tokenTime = 0;
 
 	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
+	if (getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
 		if (sessionArgs.size() < 4) {
 			disconnectClient("Authentication failed. Incomplete session key.");
 			return;
@@ -512,7 +512,7 @@ void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 
 void ProtocolGame::parsePacket(NetworkMessage& msg)
 {
-	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.getLength() == 0) {
+	if (!acceptPackets || g_game.getGameState() == GAME_STATE_SHUTDOWN || msg.isEmpty()) {
 		return;
 	}
 
@@ -1774,7 +1774,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x9F);
 	if (player->isPremium()) {
 		msg.addByte(1);
-		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
+		msg.add<uint32_t>(getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
 	} else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
@@ -2726,6 +2726,21 @@ void ProtocolGame::sendUpdateTile(const Tile* tile, const Position& pos)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendUpdateCreatureIcons(const Creature* creature)
+{
+	if (!canSee(creature->getPosition())) {
+		return;
+	}
+
+	NetworkMessage msg;
+	msg.addByte(0x8B);
+	msg.add<uint32_t>(creature->getID());
+	msg.addByte(14); // event player icons
+
+	AddCreatureIcons(msg, creature);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendPendingStateEntered()
 {
 	NetworkMessage msg;
@@ -3522,6 +3537,28 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }
 
+void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const Creature* creature)
+{
+	const auto& creatureIcons = creature->getIcons();
+	if (const Monster* monster = creature->getMonster()) {
+		const auto& monsterIcons = monster->getSpecialIcons();
+		msg.addByte(creatureIcons.size() + monsterIcons.size());
+		for (const auto& [iconId, level] : monsterIcons) {
+			msg.addByte(iconId);
+			msg.addByte(1);
+			msg.add<uint16_t>(level);
+		}
+	} else {
+		msg.addByte(creatureIcons.size());
+	}
+
+	for (const auto& [iconId, level] : creatureIcons) {
+		msg.addByte(iconId);
+		msg.addByte(0);
+		msg.add<uint16_t>(level);
+	}
+}
+
 void ProtocolGame::AddPlayerStats(NetworkMessage& msg)
 {
 	msg.addByte(0xA0);
@@ -3581,8 +3618,8 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	}
 
 	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
-		msg.add<uint16_t>(std::min<int32_t>(100, player->varSpecialSkills[i])); // base + bonus special skill
-		msg.add<uint16_t>(0);                                                   // base special skill
+		msg.add<uint16_t>(std::min<int32_t>(10000, player->varSpecialSkills[i])); // base + bonus special skill
+		msg.add<uint16_t>(0);                                                     // base special skill
 	}
 
 	msg.addByte(0); // element magic level

@@ -1639,3 +1639,15 @@ function table.maxn(t)
 	end
 	return max
 end
+
+ItemType.getDuration = ItemType.getDurationMin
+
+function getFormattedWorldTime()
+	return Game.getFormattedWorldTime()
+end
+
+do
+	local getmetatable = getmetatable
+
+	function isClass(obj, class) return getmetatable(obj) == class end
+end

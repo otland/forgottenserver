@@ -15,6 +15,8 @@ static constexpr auto CLIENT_VERSION_STR = "13.10";
 static constexpr auto AUTHENTICATOR_DIGITS = 6U;
 static constexpr auto AUTHENTICATOR_PERIOD = 30U;
 
+#define OPENSSL_NO_DEPRECATED
+
 #ifndef __FUNCTION__
 #define __FUNCTION__ __func__
 #endif

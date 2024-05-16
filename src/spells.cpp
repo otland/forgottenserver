@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "luavariant.h"
 #include "monsters.h"
@@ -14,8 +15,8 @@
 
 extern Game g_game;
 extern Spells* g_spells;
+extern Events* g_events;
 extern Monsters g_monsters;
-extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
 Spells::Spells() { scriptInterface.initState(); }
@@ -526,6 +527,10 @@ bool Spell::playerSpellCheck(Player* player) const
 	}
 
 	if (!enabled) {
+		return false;
+	}
+
+	if (!g_events->eventPlayerOnSpellCheck(player, this)) {
 		return false;
 	}
 
@@ -1160,7 +1165,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		}
 	}
 
-	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
+	if (hasCharges && item && getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		player->sendSupplyUsed(item->getClientID());
 		g_game.transformItem(item, item->getID(), newCount);

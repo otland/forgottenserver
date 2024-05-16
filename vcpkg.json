@@ -1,15 +1,17 @@
 {
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "dependencies": [
+    "libiconv",
     "boost-asio",
     "boost-iostreams",
+    "boost-locale",
     "boost-lockfree",
     "boost-system",
     "boost-variant",
-    "cryptopp",
     "fmt",
     "libmariadb",
     "lua",
+    "openssl",
     "pugixml"
   ],
   "features": {
@@ -18,7 +20,13 @@
       "dependencies": [
         "luajit"
       ]
+    },
+    "unit-tests": {
+      "description": "Build unit tests",
+      "dependencies": [
+        "boost-test"
+      ]
     }
   },
-  "builtin-baseline": "a42af01b72c28a8e1d7b48107b33e4f286a55ef6"
+  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
 }

@@ -14,7 +14,6 @@
 
 extern Game g_game;
 extern Weapons* g_weapons;
-extern ConfigManager g_config;
 extern Events* g_events;
 
 std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
@@ -272,7 +271,7 @@ bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
 
 bool Combat::isProtected(const Player* attacker, const Player* target)
 {
-	uint32_t protectionLevel = g_config.getNumber(ConfigManager::PROTECTION_LEVEL);
+	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
 	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
 		return true;
 	}
@@ -717,22 +716,14 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 		                    : getCombatArea(position, position, area.get());
 
 		SpectatorVec spectators;
-		uint32_t maxX = 0;
-		uint32_t maxY = 0;
+		int32_t maxX = 0;
+		int32_t maxY = 0;
 
 		// calculate the max viewable range
 		for (Tile* tile : tiles) {
 			const Position& tilePos = tile->getPosition();
-
-			uint32_t diff = Position::getDistanceX(tilePos, position);
-			if (diff > maxX) {
-				maxX = diff;
-			}
-
-			diff = Position::getDistanceY(tilePos, position);
-			if (diff > maxY) {
-				maxY = diff;
-			}
+			maxX = std::max(maxX, tilePos.getDistanceX(position));
+			maxY = std::max(maxY, tilePos.getDistanceY(position));
 		}
 
 		const int32_t rangeX = maxX + Map::maxViewportX;
@@ -865,7 +856,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-					leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+					leechCombat.primary.value = std::round(totalDamage * (skill / 10000.));
 					g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
 					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
 				}
@@ -875,7 +866,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-					leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+					leechCombat.primary.value = std::round(totalDamage * (skill / 10000.));
 					g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
 					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
 				}
@@ -908,28 +899,20 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 		uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 		if (chance > 0 && skill > 0 && uniform_random(1, 100) <= chance) {
-			criticalPrimary = std::round(damage.primary.value * (skill / 100.));
-			criticalSecondary = std::round(damage.secondary.value * (skill / 100.));
+			criticalPrimary = std::round(damage.primary.value * (skill / 10000.));
+			criticalSecondary = std::round(damage.secondary.value * (skill / 10000.));
 			damage.critical = true;
 		}
 	}
 
-	uint32_t maxX = 0;
-	uint32_t maxY = 0;
+	int32_t maxX = 0;
+	int32_t maxY = 0;
 
 	// calculate the max viewable range
 	for (Tile* tile : tiles) {
 		const Position& tilePos = tile->getPosition();
-
-		uint32_t diff = Position::getDistanceX(tilePos, position);
-		if (diff > maxX) {
-			maxX = diff;
-		}
-
-		diff = Position::getDistanceY(tilePos, position);
-		if (diff > maxY) {
-			maxY = diff;
-		}
+		maxX = std::max(maxX, tilePos.getDistanceX(position));
+		maxY = std::max(maxY, tilePos.getDistanceY(position));
 	}
 
 	const int32_t rangeX = maxX + Map::maxViewportX;
@@ -1035,9 +1018,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 10000.) + ((targetsCount - 1) * ((skill / 10000.) / 10.))) /
+						    targetsCount);
 						g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
 					}
@@ -1047,9 +1030,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 10000.) + ((targetsCount - 1) * ((skill / 10000.) / 10.))) /
+						    targetsCount);
 						g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
 					}
@@ -1231,8 +1214,8 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const
 {
-	int32_t dx = Position::getOffsetX(targetPos, centerPos);
-	int32_t dy = Position::getOffsetY(targetPos, centerPos);
+	int32_t dx = targetPos.getOffsetX(centerPos);
+	int32_t dy = targetPos.getOffsetY(centerPos);
 
 	Direction dir;
 	if (dx < 0) {

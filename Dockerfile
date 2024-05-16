@@ -1,13 +1,12 @@
-FROM alpine:3.17.3 AS build
-# crypto++-dev is in edge/community
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+FROM alpine:3.19 AS build
+RUN apk add --no-cache \
   build-base \
   boost-dev \
   cmake \
-  crypto++-dev \
   fmt-dev \
   luajit-dev \
   mariadb-connector-c-dev \
+  openssl-dev \
   pugixml-dev \
   samurai
 
@@ -17,15 +16,15 @@ COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
 RUN cmake --preset default && cmake --build --config RelWithDebInfo --preset default
 
-FROM alpine:3.17.3
-# crypto++ is in edge/community
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+FROM alpine:3.19
+RUN apk add --no-cache \
   boost-iostreams \
+  boost-locale \
   boost-system \
-  crypto++ \
   fmt \
   luajit \
   mariadb-connector-c \
+  openssl \
   pugixml
 
 COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs

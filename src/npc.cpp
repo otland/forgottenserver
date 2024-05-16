@@ -464,8 +464,8 @@ void Npc::turnToCreature(Creature* creature)
 {
 	const Position& creaturePos = creature->getPosition();
 	const Position& myPos = getPosition();
-	const auto dx = Position::getOffsetX(myPos, creaturePos);
-	const auto dy = Position::getOffsetY(myPos, creaturePos);
+	const auto dx = myPos.getOffsetX(creaturePos);
+	const auto dy = myPos.getOffsetY(creaturePos);
 
 	float tan;
 	if (dx != 0) {
@@ -689,9 +689,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 	if (npcPos.z != thingPos.z) {
 		lua_pushnumber(L, -1);
 	} else {
-		int32_t dist =
-		    std::max<int32_t>(Position::getDistanceX(npcPos, thingPos), Position::getDistanceY(npcPos, thingPos));
-		lua_pushnumber(L, dist);
+		lua_pushnumber(L, std::max(npcPos.getDistanceX(thingPos), npcPos.getDistanceY(thingPos)));
 	}
 	return 1;
 }

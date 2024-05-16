@@ -1,6 +1,6 @@
-local ec = EventCallback
+local event = Event()
 
-ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
+event.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if item:getAttribute("wrapid") ~= 0 then
 		local tile = Tile(toPosition)
 		if (fromPosition.x ~= CONTAINER_POSITION and toPosition.x ~= CONTAINER_POSITION) or tile and not tile:getHouse() then
@@ -45,4 +45,4 @@ ec.onMoveItem = function(self, item, count, fromPosition, toPosition, fromCylind
 	return RETURNVALUE_NOERROR
 end
 
-ec:register()
+event:register()

@@ -10,8 +10,6 @@
 #include "scheduler.h"
 #include "tools.h"
 
-extern ConfigManager g_config;
-
 GlobalEvents::GlobalEvents() : scriptInterface("GlobalEvent Interface") { scriptInterface.initState(); }
 
 GlobalEvents::~GlobalEvents() { clear(false); }

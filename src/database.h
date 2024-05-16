@@ -111,6 +111,8 @@ private:
 	MYSQL* handle = nullptr;
 	std::recursive_mutex databaseLock;
 	uint64_t maxPacketSize = 1048576;
+	// Do not retry queries if we are in the middle of a transaction
+	bool retryQueries = true;
 
 	friend class DBTransaction;
 };

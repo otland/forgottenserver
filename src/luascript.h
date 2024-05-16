@@ -23,6 +23,7 @@ class Combat;
 class Container;
 class Creature;
 class Cylinder;
+class Spell;
 class InstantSpell;
 class Item;
 class LuaScriptInterface;
@@ -354,6 +355,7 @@ public:
 	static void pushBoolean(lua_State* L, bool value);
 	static void pushCombatDamage(lua_State* L, const CombatDamage& damage);
 	static void pushInstantSpell(lua_State* L, const InstantSpell& spell);
+	static void pushSpell(lua_State* L, const Spell& spell);
 	static void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 	static void pushOutfit(lua_State* L, const Outfit_t& outfit);
 	static void pushOutfit(lua_State* L, const Outfit* outfit);
@@ -556,10 +558,6 @@ private:
 	static int luaGameGetClientVersion(lua_State* L);
 
 	static int luaGameReload(lua_State* L);
-
-	static int luaGameGetAccountStorageValue(lua_State* L);
-	static int luaGameSetAccountStorageValue(lua_State* L);
-	static int luaGameSaveAccountStorageValues(lua_State* L);
 
 	// Variant
 	static int luaVariantCreate(lua_State* L);
@@ -849,6 +847,11 @@ private:
 
 	static int luaCreatureGetZone(lua_State* L);
 
+	static int luaCreatureHasIcon(lua_State* L);
+	static int luaCreatureSetIcon(lua_State* L);
+	static int luaCreatureGetIcon(lua_State* L);
+	static int luaCreatureRemoveIcon(lua_State* L);
+
 	static int luaCreatureGetStorageValue(lua_State* L);
 	static int luaCreatureSetStorageValue(lua_State* L);
 
@@ -1081,6 +1084,11 @@ private:
 	static int luaMonsterIsWalkingToSpawn(lua_State* L);
 	static int luaMonsterWalkToSpawn(lua_State* L);
 
+	static int luaMonsterHasIcon(lua_State* L);
+	static int luaMonsterSetIcon(lua_State* L);
+	static int luaMonsterGetIcon(lua_State* L);
+	static int luaMonsterRemoveIcon(lua_State* L);
+
 	// Npc
 	static int luaNpcCreate(lua_State* L);
 
@@ -1261,7 +1269,8 @@ private:
 	static int luaItemTypeHasShowDuration(lua_State* L);
 	static int luaItemTypeHasAllowDistRead(lua_State* L);
 	static int luaItemTypeGetWieldInfo(lua_State* L);
-	static int luaItemTypeGetDuration(lua_State* L);
+	static int luaItemTypeGetDurationMin(lua_State* L);
+	static int luaItemTypeGetDurationMax(lua_State* L);
 	static int luaItemTypeGetLevelDoor(lua_State* L);
 	static int luaItemTypeGetRuneSpellName(lua_State* L);
 	static int luaItemTypeGetVocationString(lua_State* L);
