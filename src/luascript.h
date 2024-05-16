@@ -1109,8 +1109,6 @@ private:
 
 	static int luaNpcGetSpectators(lua_State* L);
 
-	static int luaNpcSpawn(lua_State* L);
-
 	// NpcType
 	static int luaNpcTypeCreate(lua_State* L);
 	static int luaNpcTypeName(lua_State* L);

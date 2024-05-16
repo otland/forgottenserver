@@ -207,8 +207,6 @@ public:
 	const std::string& getName() const override { return name; }
 	void setName(const std::string& n) { name = n; }
 	const std::string& getNameDescription() const override { return name; }
-	const std::string& getEventType() { return eventType; }
-	void setEventType(const std::string& event) { eventType = event; }
 
 	CreatureType_t getType() const override { return CREATURETYPE_NPC; }
 
@@ -245,7 +243,7 @@ public:
 
 	void loadNpcTypeInfo();
 
-	std::shared_ptr<NpcEventsHandler> npcEventHandler;
+	std::unique_ptr<NpcEventsHandler> npcEventHandler;
 	bool fromLua = false;
 	NpcType* npcType;
 	void closeAllShopWindows();
@@ -278,7 +276,6 @@ private:
 
 	std::string name;
 	std::string filename;
-	std::string eventType;
 
 	Position masterPos;
 

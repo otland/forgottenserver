@@ -2892,8 +2892,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Npc", "getSpectators", LuaScriptInterface::luaNpcGetSpectators);
 
-	registerMethod("Npc", "spawn", LuaScriptInterface::luaNpcSpawn);
-
+	// NpcType
 	registerClass("NpcType", "", LuaScriptInterface::luaNpcTypeCreate);
 	registerMethod("NpcType", "name", LuaScriptInterface::luaNpcTypeName);
 
@@ -11866,26 +11865,6 @@ int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaNpcSpawn(lua_State* L)
-{
-	// npc:spawn()
-	Npc* npc = getUserdata<Npc>(L, 1);
-	if (!npc) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	MagicEffectClasses magicEffect = CONST_ME_TELEPORT;
-	const Position& position = npc->getMasterPos();
-	if (g_game.placeCreature(npc, position, false, false, magicEffect)) {
-		pushUserdata<Npc>(L, npc);
-		setMetatable(L, -1, "Npc");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 // NpcType
 int LuaScriptInterface::luaNpcTypeCreate(lua_State* L)
 {
@@ -11910,15 +11889,12 @@ int LuaScriptInterface::luaNpcTypeEventType(lua_State* L)
 			pushString(L, npcType->eventType);
 		} else {
 			std::string type = getString(L, 2);
-			const static std::vector<std::string> tmp = {"say",          "disappear", "appear", "move",
-			                                             "closechannel", "endtrade",  "think"};
-
-			for (auto& it : tmp) {
-				if (it == type) {
-					npcType->eventType = type;
-					pushBoolean(L, true);
-					return 1;
-				}
+			const static auto tmp = std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think"};
+			const auto it = std::find(tmp.begin(), tmp.end(), type);
+			if (it != tmp.end()) {
+				npcType->eventType = type;
+				pushBoolean(L, true);
+				return 1;
 			}
 
 			std::cout << "[Warning - Npc::eventType] Unknown eventType name: " << type << " for npc: " << npcType->name
