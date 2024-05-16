@@ -75,5 +75,5 @@ jobs:
       - name: Upload artifact binary
         uses: actions/upload-artifact@v4
         with:
-          name: ubuntu-tfs-amd64-${{ github.sha }}
+          name: tfs-ubuntu-${{ matrix.buildtype }}-luajit=on-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs
