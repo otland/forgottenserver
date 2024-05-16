@@ -15925,15 +15925,15 @@ int LuaScriptInterface::luaPartyDisband(lua_State* L)
 int LuaScriptInterface::luaPartyGetLeader(lua_State* L)
 {
 	// party:getLeader()
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
 	if (Player* leader = party->getLeader()) {
-		pushUserdata<Player>(L, leader);
-		setMetatable(L, -1, "Player");
+		tfs::lua::pushUserdata<Player>(L, leader);
+		tfs::lua::setMetatable(L, -1, "Player");
 	} else {
 		lua_pushnil(L);
 	}
@@ -15949,9 +15949,9 @@ int LuaScriptInterface::luaPartySetLeader(lua_State* L)
 		return 1;
 	}
 
-	if (Player* player = getPlayer(L, 2)) {
+	if (Player* player = tfs::lua::getPlayer(L, 2)) {
 		bool success = party->passPartyLeadership(player, true);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -15961,12 +15961,12 @@ int LuaScriptInterface::luaPartySetLeader(lua_State* L)
 int LuaScriptInterface::luaPartyGetMembers(lua_State* L)
 {
 	// party:getMembers()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
 		int index = 0;
 		lua_createtable(L, party->getMemberCount(), 0);
 		for (Player* player : party->getMembers()) {
-			pushUserdata<Player>(L, player);
-			setMetatable(L, -1, "Player");
+			tfs::lua::pushUserdata<Player>(L, player);
+			tfs::lua::setMetatable(L, -1, "Player");
 			lua_rawseti(L, -2, ++index);
 		}
 	} else {
@@ -15978,7 +15978,7 @@ int LuaScriptInterface::luaPartyGetMembers(lua_State* L)
 int LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
 {
 	// party:getMemberCount()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
 		lua_pushnumber(L, party->getMemberCount());
 	} else {
 		lua_pushnil(L);
@@ -15989,7 +15989,7 @@ int LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
 int LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 {
 	// party:getInvitees()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
 		lua_createtable(L, party->getInvitationCount(), 0);
 
 		int index = 0;
@@ -16007,7 +16007,7 @@ int LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 {
 	// party:getInviteeCount()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
 		lua_pushnumber(L, party->getInvitationCount());
 	} else {
 		lua_pushnil(L);
@@ -16018,15 +16018,15 @@ int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 int LuaScriptInterface::luaPartyAddInvite(lua_State* L)
 {
 	// party:addInvite(player)
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Player* player = getPlayer(L, 2)) {
+	if (Player* player = tfs::lua::getPlayer(L, 2)) {
 		bool success = party->invitePlayer(*player);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -16036,15 +16036,15 @@ int LuaScriptInterface::luaPartyAddInvite(lua_State* L)
 int LuaScriptInterface::luaPartyRemoveInvite(lua_State* L)
 {
 	// party:removeInvite(player)
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Player* player = getPlayer(L, 2)) {
+	if (Player* player = tfs::lua::getPlayer(L, 2)) {
 		bool success = party->removeInvite(*player);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -16054,15 +16054,15 @@ int LuaScriptInterface::luaPartyRemoveInvite(lua_State* L)
 int LuaScriptInterface::luaPartyAddMember(lua_State* L)
 {
 	// party:addMember(player)
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Player* player = getPlayer(L, 2)) {
+	if (Player* player = tfs::lua::getPlayer(L, 2)) {
 		bool success = party->joinParty(*player);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -16072,15 +16072,15 @@ int LuaScriptInterface::luaPartyAddMember(lua_State* L)
 int LuaScriptInterface::luaPartyRemoveMember(lua_State* L)
 {
 	// party:removeMember(player)
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (Player* player = getPlayer(L, 2)) {
+	if (Player* player = tfs::lua::getPlayer(L, 2)) {
 		bool success = party->leaveParty(player);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -16090,8 +16090,8 @@ int LuaScriptInterface::luaPartyRemoveMember(lua_State* L)
 int LuaScriptInterface::luaPartyIsSharedExperienceActive(lua_State* L)
 {
 	// party:isSharedExperienceActive()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
-		pushBoolean(L, party->isSharedExperienceActive());
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
+		tfs::lua::pushBoolean(L, party->isSharedExperienceActive());
 	} else {
 		lua_pushnil(L);
 	}
@@ -16101,8 +16101,8 @@ int LuaScriptInterface::luaPartyIsSharedExperienceActive(lua_State* L)
 int LuaScriptInterface::luaPartyIsSharedExperienceEnabled(lua_State* L)
 {
 	// party:isSharedExperienceEnabled()
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
-		pushBoolean(L, party->isSharedExperienceEnabled());
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
+		tfs::lua::pushBoolean(L, party->isSharedExperienceEnabled());
 	} else {
 		lua_pushnil(L);
 	}
@@ -16112,15 +16112,15 @@ int LuaScriptInterface::luaPartyIsSharedExperienceEnabled(lua_State* L)
 int LuaScriptInterface::luaPartyIsMemberSharingExp(lua_State* L)
 {
 	// party:isMemberSharingExp(player)
-	const auto& party = getSharedPtr<Party>(L, 1);
+	const auto& party = tfs::lua::getSharedPtr<Party>(L, 1);
 	if (!party) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (const Player* player = getUserdata<const Player>(L, 2)) {
+	if (const Player* player = tfs::lua::getUserdata<const Player>(L, 2)) {
 		bool success = party->getMemberSharedExperienceStatus(player) == SHAREDEXP_OK;
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
@@ -16130,8 +16130,8 @@ int LuaScriptInterface::luaPartyIsMemberSharingExp(lua_State* L)
 int LuaScriptInterface::luaPartyShareExperience(lua_State* L)
 {
 	// party:shareExperience(experience)
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
-		uint64_t experience = getNumber<uint64_t>(L, 2);
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
+		uint64_t experience = tfs::lua::getNumber<uint64_t>(L, 2);
 		party->shareExperience(experience);
 		pushBoolean(L, true);
 	} else {
@@ -16143,10 +16143,10 @@ int LuaScriptInterface::luaPartyShareExperience(lua_State* L)
 int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 {
 	// party:setSharedExperience(active)
-	if (const auto& party = getSharedPtr<Party>(L, 1)) {
-		bool active = getBoolean(L, 2);
+	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
+		bool active = tfs::lua::getBoolean(L, 2);
 		bool success = party->setSharedExperience(party->getLeader(), active);
-		pushBoolean(L, success);
+		tfs::lua::pushBoolean(L, success);
 	} else {
 		lua_pushnil(L);
 	}
