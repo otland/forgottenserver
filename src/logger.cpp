@@ -113,6 +113,7 @@ std::string Logger::getSeverityString(LogSeverity lvl)
 		case LogSeverity::LDEBUG:
 			return "_D_";
 		default:
+			// undefinied
 			return "_U_";
 	}
 }
