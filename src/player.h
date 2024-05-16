@@ -18,7 +18,6 @@ class DepotChest;
 class House;
 class NetworkMessage;
 class Npc;
-class Party;
 class SchedulerTask;
 
 enum skillsid_t
@@ -205,14 +204,15 @@ public:
 
 	bool hasSecureMode() const { return secureMode; }
 
-	void setParty(Party* party) { this->party = party; }
-	Party* getParty() const { return party; }
+	void setParty(Party_ptr party) { this->party = party; }
+	Party_ptr getParty() const { return party; }
 	PartyShields_t getPartyShield(const Player* player) const;
+	bool isPartyLeader() const;
 	bool isInviting(const Player* player) const;
 	bool isPartner(const Player* player) const;
 	void sendPlayerPartyIcons(Player* player);
-	bool addPartyInvitation(Party* party);
-	void removePartyInvitation(Party* party);
+	bool addPartyInvitation(Party_ptr party);
+	void removePartyInvitation(Party_ptr party);
 	void clearPartyInvitations();
 
 	GuildEmblems_t getGuildEmblem(const Player* player) const;
@@ -1167,7 +1167,7 @@ private:
 
 	std::list<ShopInfo> shopItemList;
 
-	std::forward_list<Party*> invitePartyList;
+	std::forward_list<Party_ptr> invitePartyList;
 	std::forward_list<uint32_t> modalWindows;
 	std::forward_list<std::string> learnedInstantSpellList;
 	std::forward_list<Condition*>
@@ -1209,7 +1209,7 @@ private:
 	Item* writeItem = nullptr;
 	House* editHouse = nullptr;
 	Npc* shopOwner = nullptr;
-	Party* party = nullptr;
+	Party_ptr party = nullptr;
 	Player* tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;
 	Town* town = nullptr;
