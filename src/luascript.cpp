@@ -4060,8 +4060,6 @@ int LuaScriptInterface::luaCleanMap(lua_State* L)
 	return 1;
 }
 
-// Wrapper function to be called from Lua
-
 int LuaScriptInterface::luaIsInWar(lua_State* L)
 {
 	// isInWar(cid, target)
@@ -4368,15 +4366,31 @@ int LuaScriptInterface::luaLog(LogSeverity logLevel, lua_State* L)
 	return 1;
 }
 
-int LuaScriptInterface::luaLogDebug(lua_State* L) { return luaLog(LDEBUG, L); }
+int LuaScriptInterface::luaLogDebug(lua_State* L)
+{
+	// logD(msg)
+	return luaLog(LDEBUG, L);
+}
 
-int LuaScriptInterface::luaLogInfo(lua_State* L) { return luaLog(LINFO, L); }
+int LuaScriptInterface::luaLogInfo(lua_State* L)
+{ // logI(msg)
+	return luaLog(LINFO, L);
+}
 
-int LuaScriptInterface::luaLogWarning(lua_State* L) { return luaLog(LWARNING, L); }
+int LuaScriptInterface::luaLogWarning(lua_State* L)
+{ // logW(msg)
+	return luaLog(LWARNING, L);
+}
 
-int LuaScriptInterface::luaLogError(lua_State* L) { return luaLog(LERROR, L); }
+int LuaScriptInterface::luaLogError(lua_State* L)
+{ // logE(msg)
+	return luaLog(LERROR, L);
+}
 
-int LuaScriptInterface::luaLogFatal(lua_State* L) { return luaLog(LFATAL, L); }
+int LuaScriptInterface::luaLogFatal(lua_State* L)
+{ // logF(msg)
+	return luaLog(LFATAL, L);
+}
 
 int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {
