@@ -1,6 +1,6 @@
 #include "otpch.h"
 
-#include "Logger.h"
+#include "logger.h"
 
 #include <algorithm>
 #include <cctype>
