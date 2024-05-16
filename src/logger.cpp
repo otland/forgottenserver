@@ -294,6 +294,6 @@ void Logger::updateConfig(std::map<std::string, std::string> &configMap)
 			config.fileNameMaxCharacter = std::stoi(itLogFileAddressSize->second);
 		}
 	} catch (const std::exception &ex) {
-		std::cout << "Fail when parsing config file: " << ex.what() << std::endl;
+		std::cout << "Fail during config file parsing: " << ex.what() << std::endl;
 	}
 }
