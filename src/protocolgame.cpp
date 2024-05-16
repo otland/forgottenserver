@@ -6,6 +6,7 @@
 #include "protocolgame.h"
 
 #include "ban.h"
+#include "base64.h"
 #include "condition.h"
 #include "configmanager.h"
 #include "depotchest.h"
@@ -388,7 +389,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // Gamemaster flag
 
-	auto sessionToken = msg.getString();
+	auto sessionToken = tfs::base64::decode(msg.getString());
 	if (sessionToken.empty()) {
 		disconnectClient("Malformed session key.");
 		return;
@@ -426,7 +427,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	Database& db = Database::getInstance();
 	auto result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`session_token` = FROM_BASE64({:s}) AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
 	    db.escapeString(sessionToken), db.escapeString(characterName)));
 	if (!result) {
 		disconnectClient("Account name or password is not correct.");
