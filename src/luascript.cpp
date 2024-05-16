@@ -16583,7 +16583,7 @@ int LuaScriptInterface::luaPartyIsMemberSharingExp(lua_State* L)
 		return 1;
 	}
 
-	if (const Player* player = getUserdata<const Player>(L, 2)) {
+	if (const Player* player = tfs::lua::getUserdata<const Player>(L, 2)) {
 		bool success = party->getMemberSharedExperienceStatus(player) == SHAREDEXP_OK;
 		tfs::lua::pushBoolean(L, success);
 	} else {
@@ -16596,7 +16596,7 @@ int LuaScriptInterface::luaPartyShareExperience(lua_State* L)
 {
 	// party:shareExperience(experience)
 	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
-		uint64_t experience = getNumber<uint64_t>(L, 2);
+		uint64_t experience = tfs::lua::getNumber<uint64_t>(L, 2);
 		party->shareExperience(experience);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -16609,7 +16609,7 @@ int LuaScriptInterface::luaPartySetSharedExperience(lua_State* L)
 {
 	// party:setSharedExperience(active)
 	if (const auto& party = tfs::lua::getSharedPtr<Party>(L, 1)) {
-		bool active = getBoolean(L, 2);
+		bool active = tfs::lua::getBoolean(L, 2);
 		bool success = party->setSharedExperience(party->getLeader(), active);
 		tfs::lua::pushBoolean(L, success);
 	} else {
