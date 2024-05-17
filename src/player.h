@@ -1066,6 +1066,12 @@ public:
 			client->sendCombatAnalyzer(type, amount, impactType, target);
 		}
 	}
+	void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+	{
+		if (client) {
+			client->sendResourceBalance(resourceType, amount);
+		}
+	}
 
 	void receivePing() { lastPong = OTSYS_TIME(); }
 
