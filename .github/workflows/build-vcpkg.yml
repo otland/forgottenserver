@@ -7,6 +7,7 @@ on:
       - v*
 
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -15,6 +16,7 @@ on:
 
   pull_request:
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -35,7 +37,7 @@ jobs:
       VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -56,17 +58,17 @@ jobs:
           configurePreset: vcpkg
 
       - name: Upload artifact binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ runner.workspace }}/build/tfs
 
       - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: |
             ${{ runner.workspace }}/build/tfs.exe
             ${{ runner.workspace }}/build/*.dll
@@ -76,7 +78,7 @@ jobs:
         shell: bash
 
       - name: Upload datapack contents
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}
