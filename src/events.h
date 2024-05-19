@@ -91,13 +91,13 @@ public:
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
 	// Party
-	bool eventPartyOnJoin(const Party_ptr& party, Player* player);
-	bool eventPartyOnLeave(const Party_ptr& party, Player* player);
+	bool eventPartyOnJoin(Party_ptr party, Player* player);
+	bool eventPartyOnLeave(Party_ptr party, Player* player);
 	bool eventPartyOnDisband(Party_ptr party);
-	void eventPartyOnShareExperience(const Party_ptr& party, uint64_t& exp);
-	bool eventPartyOnInvite(const Party_ptr& party, Player* player);
-	bool eventPartyOnRevokeInvitation(const Party_ptr& party, Player* player);
-	bool eventPartyOnPassLeadership(const Party_ptr& party, Player* player);
+	void eventPartyOnShareExperience(Party_ptr party, uint64_t& exp);
+	bool eventPartyOnInvite(Party_ptr party, Player* player);
+	bool eventPartyOnRevokeInvitation(Party_ptr party, Player* player);
+	bool eventPartyOnPassLeadership(Party_ptr party, Player* player);
 
 	// Player
 	bool eventPlayerOnBrowseField(Player* player, const Position& position);
