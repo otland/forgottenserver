@@ -8,6 +8,7 @@
 #include "enums.h"
 
 namespace tfs::io::market {
+
 MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId);
 MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId);
 HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId);
@@ -31,6 +32,7 @@ void updateStatistics();
 
 MarketStatistics* getPurchaseStatistics(uint16_t itemId);
 MarketStatistics* getSaleStatistics(uint16_t itemId);
+
 } // namespace tfs::io::market
 
 #endif // FS_IOMARKET_H
