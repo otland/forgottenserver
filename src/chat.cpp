@@ -374,7 +374,7 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 {
 	switch (channelId) {
 		case CHANNEL_GUILD: {
-			const auto guild = player.getGuild();
+			const auto& guild = player.getGuild();
 			if (!guild) {
 				return false;
 			}

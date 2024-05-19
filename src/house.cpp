@@ -438,7 +438,7 @@ const Guild_ptr getGuildByName(const std::string& name)
 		return nullptr;
 	}
 
-	if (const auto guild = g_game.getGuild(guildId)) {
+	if (const auto& guild = g_game.getGuild(guildId)) {
 		return guild;
 	}
 

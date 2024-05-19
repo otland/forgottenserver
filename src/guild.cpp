@@ -63,7 +63,7 @@ Guild_ptr IOGuild::loadGuild(uint32_t guildId)
 		return nullptr;
 	}
 
-	const auto guild = std::make_shared<Guild>(guildId, result->getString("name"));
+	const auto& guild = std::make_shared<Guild>(guildId, result->getString("name"));
 	if ((result = db.storeQuery(
 	         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
 		do {

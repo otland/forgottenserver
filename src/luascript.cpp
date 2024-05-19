@@ -11798,7 +11798,7 @@ int LuaScriptInterface::luaGuildCreate(lua_State* L)
 	// Guild(id)
 	uint32_t id = getNumber<uint32_t>(L, 2);
 
-	if (const auto guild = g_game.getGuild(id)) {
+	if (const auto& guild = g_game.getGuild(id)) {
 		pushSharedPtr(L, guild);
 		setMetatable(L, -1, "Guild");
 	} else {
