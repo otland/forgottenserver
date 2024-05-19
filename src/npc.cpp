@@ -317,17 +317,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
-		SpectatorVec players;
-		g_game.map.getSpectators(players, getPosition(), true, true);
-		for (const auto& player : players) {
-			assert(dynamic_cast<Player*>(player) != nullptr);
-			spectators.insert(static_cast<Player*>(player));
-		}
-
-		const bool hasSpectators = !spectators.empty();
-		setIdle(!hasSpectators);
-
-		if (hasSpectators && walkTicks > 0) {
+		if (walkTicks > 0) {
 			addEventWalk();
 		}
 
@@ -338,9 +328,6 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-
-		spectators.insert(player);
-		setIdle(false);
 	}
 }
 
@@ -383,9 +370,6 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-
-		spectators.erase(player);
-		setIdle(spectators.empty());
 	}
 }
 
@@ -397,19 +381,6 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 	if (creature == this || creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
-		}
-
-		if (creature != this) {
-			Player* player = creature->getPlayer();
-
-			// if player is now in range, add to spectators list, otherwise erase
-			if (player->canSee(position)) {
-				spectators.insert(player);
-			} else {
-				spectators.erase(player);
-			}
-
-			setIdle(spectators.empty());
 		}
 	}
 }
@@ -438,15 +409,31 @@ void Npc::onPlayerCloseChannel(Player* player)
 
 void Npc::onThink(uint32_t interval)
 {
+	SpectatorVec players;
+	g_game.map.getSpectators(players, getPosition(), true, true, 0, Map::maxClientViewportX * 2 + 2, 0,
+	                         Map::maxClientViewportY * 2 + 2);
+	for (const auto& player : players) {
+		assert(dynamic_cast<Player*>(player) != nullptr);
+		spectators.insert(static_cast<Player*>(player));
+	}
+
+	setIdle(spectators.empty());
+
+	if (isIdle) {
+		return;
+	}
+
 	Creature::onThink(interval);
 
 	if (npcEventHandler) {
 		npcEventHandler->onThink();
 	}
 
-	if (!isIdle && getTimeSinceLastMove() >= walkTicks) {
+	if (getTimeSinceLastMove() >= walkTicks) {
 		addEventWalk();
 	}
+
+	spectators.clear();
 }
 
 void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(this, TALKTYPE_SAY, text, false); }
