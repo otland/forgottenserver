@@ -14,6 +14,10 @@ struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
+namespace tfs::io::logindata {
+Account loadAccount(uint32_t accno);
+}
+
 class IOLoginData
 {
 public:
