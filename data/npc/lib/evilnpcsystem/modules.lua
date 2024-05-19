@@ -53,7 +53,7 @@ function NpcsHandler:travelTo(params)
         if dest.money then require:removeMoney(dest.money) end
         if dest.level then require:level(dest.level) end
         if dest.premium ~= nil then require:premium(dest.premium) end
-        if dest.storage then require:storage(dest.storage.key, dest.storage.value, dest.storage.equalOrAbove ~= nil and dest.storage.equalOrAbove, dest.storage.equalOrBelow ~= nil and dest.storage.equalOrBelow) end
+        if dest.storage then require:storage(dest.storage.key, dest.storage.value, dest.storage.operator ~= nil and dest.storage.operator) end
         if dest.item then require:item(dest.item.item, dest.item.count) end
         if dest.removeItem then require:removeItem(dest.removeItem.item, dest.removeItem.count, dest.removeItem.subType and dest.removeItem.subType or -1, dest.removeItem.ignoreEquipped and dest.removeItem.ignoreEquipped or true) end
 
