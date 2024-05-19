@@ -17,7 +17,6 @@ void Guild::removeMember(Player* player)
 
 	if (membersOnline.empty()) {
 		g_game.removeGuild(id);
-		delete this;
 	}
 }
 
