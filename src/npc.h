@@ -167,6 +167,8 @@ void clearNpcTypes();
 std::map<const std::string, NpcType*> getNpcTypes();
 NpcType* getNpcType(std::string name);
 NpcScriptInterface* getScriptInterface();
+inline constexpr int32_t ViewportX = Map::maxClientViewportX * 2 + 2;
+inline constexpr int32_t ViewportY = Map::maxClientViewportY * 2 + 2;
 } // namespace Npcs
 
 class Npc final : public Creature

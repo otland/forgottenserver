@@ -324,7 +324,7 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (Player* player = creature->getPlayer()) {
+	} else if (creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
@@ -366,7 +366,7 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (Player* player = creature->getPlayer()) {
+	} else if (creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -410,8 +410,8 @@ void Npc::onPlayerCloseChannel(Player* player)
 void Npc::onThink(uint32_t interval)
 {
 	SpectatorVec players;
-	g_game.map.getSpectators(players, getPosition(), true, true, 0, Map::maxClientViewportX * 2 + 2, 0,
-	                         Map::maxClientViewportY * 2 + 2);
+	g_game.map.getSpectators(players, getPosition(), true, true, Npcs::ViewportX, Npcs::ViewportX, Npcs::ViewportY,
+	                         Npcs::ViewportY);
 	for (const auto& player : players) {
 		assert(dynamic_cast<Player*>(player) != nullptr);
 		spectators.insert(static_cast<Player*>(player));
