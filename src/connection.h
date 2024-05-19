@@ -38,25 +38,13 @@ class ServicePort;
 using ServicePort_ptr = std::shared_ptr<ServicePort>;
 using ConstServicePort_ptr = std::shared_ptr<const ServicePort>;
 
-class ConnectionManager
-{
-public:
-	static ConnectionManager& getInstance()
-	{
-		static ConnectionManager instance;
-		return instance;
-	}
+namespace tfs::io::connection {
 
-	Connection_ptr createConnection(boost::asio::io_context& io_context, ConstServicePort_ptr servicePort);
-	void releaseConnection(const Connection_ptr& connection);
-	void closeAll();
+Connection_ptr create(boost::asio::io_context& io_context, ConstServicePort_ptr servicePort);
+void release(const Connection_ptr& connection);
+void closeAll();
 
-private:
-	ConnectionManager() = default;
-
-	std::unordered_set<Connection_ptr> connections;
-	std::mutex connectionManagerLock;
-};
+} // namespace tfs::io::connection
 
 class Connection : public std::enable_shared_from_this<Connection>
 {
@@ -80,8 +68,7 @@ public:
 	{}
 	~Connection();
 
-	friend class ConnectionManager;
-
+	void shutdownAndClose();
 	void close(bool force = false);
 	// Used by protocols that require server to send first
 	void accept(Protocol_ptr protocol);

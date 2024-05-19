@@ -11,44 +11,57 @@
 #include "server.h"
 #include "tasks.h"
 
-Connection_ptr ConnectionManager::createConnection(boost::asio::io_context& io_context,
-                                                   ConstServicePort_ptr servicePort)
+namespace {
+
+std::mutex connectionsLock;
+std::unordered_set<Connection_ptr> connections;
+
+} // namespace
+
+namespace tfs::io::connection {
+
+Connection_ptr create(boost::asio::io_context& io_context, ConstServicePort_ptr servicePort)
 {
-	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
+	std::lock_guard<std::mutex> lockClass(connectionsLock);
 
 	auto connection = std::make_shared<Connection>(io_context, servicePort);
 	connections.insert(connection);
 	return connection;
 }
 
-void ConnectionManager::releaseConnection(const Connection_ptr& connection)
+void release(const Connection_ptr& connection)
 {
-	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
+	std::lock_guard<std::mutex> lockClass(connectionsLock);
 
 	connections.erase(connection);
 }
 
-void ConnectionManager::closeAll()
+void closeAll()
 {
-	std::lock_guard<std::mutex> lockClass(connectionManagerLock);
+	std::lock_guard<std::mutex> lockClass(connectionsLock);
 
 	for (const auto& connection : connections) {
 		try {
-			boost::system::error_code error;
-			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			connection->socket.close(error);
+			connection->shutdownAndClose();
 		} catch (boost::system::system_error&) {
 		}
 	}
 	connections.clear();
 }
 
-// Connection
+} // namespace tfs::io::connection
+
+void Connection::shutdownAndClose()
+{
+	boost::system::error_code error;
+	socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
+	socket.close(error);
+}
 
 void Connection::close(bool force)
 {
 	// any thread
-	ConnectionManager::getInstance().releaseConnection(shared_from_this());
+	tfs::io::connection::release(shared_from_this());
 
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
 	connectionState = CONNECTION_STATE_DISCONNECTED;

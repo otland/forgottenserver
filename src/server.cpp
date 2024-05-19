@@ -88,7 +88,7 @@ void ServicePort::accept()
 		return;
 	}
 
-	auto connection = ConnectionManager::getInstance().createConnection(io_context, shared_from_this());
+	auto connection = tfs::io::connection::create(io_context, shared_from_this());
 	acceptor->async_accept(connection->getSocket(),
 	                       [=, thisPtr = shared_from_this()](const boost::system::error_code& error) {
 		                       thisPtr->onAccept(connection, error);

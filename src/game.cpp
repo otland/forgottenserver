@@ -4802,7 +4802,7 @@ void Game::shutdown()
 		serviceManager->stop();
 	}
 
-	ConnectionManager::getInstance().closeAll();
+	tfs::io::connection::closeAll();
 
 	std::cout << " done!" << std::endl;
 }
