@@ -74,7 +74,7 @@ namespace tfs::events {
 
 bool load()
 {
-	scriptInterface.initState();
+	scriptInterface.reInitState();
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/events/events.xml");
