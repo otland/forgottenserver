@@ -11,61 +11,15 @@
 
 class Creature;
 
-static constexpr int32_t MAP_MAX_LAYERS = 16;
+inline constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
-struct AStarNode
-{
-	AStarNode* parent;
-	int_fast32_t f;
-	uint16_t x, y;
-};
-
-static constexpr int32_t MAX_NODES = 512;
-
-static constexpr int32_t MAP_NORMALWALKCOST = 10;
-static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
-
-class AStarNodes
-{
-public:
-	AStarNodes(uint32_t x, uint32_t y);
-
-	AStarNode* createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f);
-	AStarNode* getBestNode();
-	void closeNode(AStarNode* node);
-	void openNode(AStarNode* node);
-	int_fast32_t getClosedNodes() const;
-	AStarNode* getNodeByPosition(uint32_t x, uint32_t y);
-
-	static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
-
-private:
-	AStarNode nodes[MAX_NODES];
-	bool openNodes[MAX_NODES];
-	std::unordered_map<uint32_t, AStarNode*> nodeTable;
-	size_t curNode;
-	int_fast32_t closedNodes;
-};
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
 
-static constexpr int32_t FLOOR_BITS = 3;
-static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
-static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
-
-struct Floor
-{
-	constexpr Floor() = default;
-	~Floor();
-
-	// non-copyable
-	Floor(const Floor&) = delete;
-	Floor& operator=(const Floor&) = delete;
-
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
-};
+inline constexpr int32_t FLOOR_BITS = 3;
+inline constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
+using Floor = std::array<std::array<std::unique_ptr<Tile>, FLOOR_SIZE>, FLOOR_SIZE>;
 
 class FrozenPathingConditionCall;
 class QTreeLeafNode;
@@ -74,67 +28,42 @@ class QTreeNode
 {
 public:
 	constexpr QTreeNode() = default;
-	virtual ~QTreeNode();
+	virtual ~QTreeNode() = default;
 
-	// non-copyable
-	QTreeNode(const QTreeNode&) = delete;
-	QTreeNode& operator=(const QTreeNode&) = delete;
-
-	bool isLeaf() const { return leaf; }
+	virtual constexpr bool isLeaf() const { return false; }
 
 	QTreeLeafNode* getLeaf(uint32_t x, uint32_t y);
-
-	template <typename Leaf, typename Node>
-	static Leaf getLeafStatic(Node node, uint32_t x, uint32_t y)
-	{
-		do {
-			node = node->child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
-			if (!node) {
-				return nullptr;
-			}
-
-			x <<= 1;
-			y <<= 1;
-		} while (!node->leaf);
-		return static_cast<Leaf>(node);
-	}
-
 	QTreeLeafNode* createLeaf(uint32_t x, uint32_t y, uint32_t level);
-
-protected:
-	bool leaf = false;
+	constexpr auto& operator[](uint32_t index) const { return child[index]; }
 
 private:
-	QTreeNode* child[4] = {};
-
-	friend class Map;
+	std::array<std::unique_ptr<QTreeNode>, 4> child = {};
 };
 
 class QTreeLeafNode final : public QTreeNode
 {
 public:
-	QTreeLeafNode()
+	QTreeLeafNode();
+
+	constexpr bool isLeaf() const override { return true; }
+
+	auto& createFloor(uint32_t z)
 	{
-		leaf = true;
-		newLeaf = true;
+		if (!array[z]) {
+			array[z] = std::make_unique<Floor>();
+		}
+		return array[z];
 	}
-	~QTreeLeafNode();
 
-	// non-copyable
-	QTreeLeafNode(const QTreeLeafNode&) = delete;
-	QTreeLeafNode& operator=(const QTreeLeafNode&) = delete;
-
-	Floor* createFloor(uint32_t z);
-	Floor* getFloor(uint8_t z) const { return array[z]; }
+	const auto& getFloor(uint8_t z) const { return array[z]; }
 
 	void addCreature(Creature* c);
 	void removeCreature(Creature* c);
 
 private:
-	static bool newLeaf;
 	QTreeLeafNode* leafS = nullptr;
 	QTreeLeafNode* leafE = nullptr;
-	Floor* array[MAP_MAX_LAYERS] = {};
+	std::array<std::unique_ptr<Floor>, MAP_MAX_LAYERS> array = {};
 	CreatureVector creature_list;
 	CreatureVector player_list;
 
@@ -155,7 +84,7 @@ public:
 	static constexpr int32_t maxClientViewportX = 8;
 	static constexpr int32_t maxClientViewportY = 6;
 
-	uint32_t clean() const;
+	static uint32_t clean();
 
 	/**
 	 * Load a map.
@@ -237,7 +166,6 @@ public:
 	 *floor \returns The result if there is no obstacles
 	 */
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
-	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
@@ -246,10 +174,7 @@ public:
 
 	std::map<std::string, Position> waypoints;
 
-	QTreeLeafNode* getQTNode(uint16_t x, uint16_t y)
-	{
-		return QTreeNode::getLeafStatic<QTreeLeafNode*, QTreeNode*>(&root, x, y);
-	}
+	QTreeLeafNode* getQTNode(uint16_t x, uint16_t y);
 
 	Spawns spawns;
 	Towns towns;
