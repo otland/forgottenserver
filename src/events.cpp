@@ -20,7 +20,7 @@ struct CreatureHandlers
 	int32_t onHear = -1;
 	int32_t onChangeZone = -1;
 	int32_t onUpdateStorage = -1;
-};
+} creatureHandlers;
 
 struct PartyHandlers
 {
@@ -31,7 +31,7 @@ struct PartyHandlers
 	int32_t onInvite = -1;
 	int32_t onRevokeInvitation = -1;
 	int32_t onPassLeadership = -1;
-};
+} partyHandlers;
 
 struct PlayerHandlers
 {
@@ -60,18 +60,13 @@ struct PlayerHandlers
 	int32_t onInventoryUpdate = -1;
 	int32_t onNetworkMessage = -1;
 	int32_t onSpellCheck = -1;
-};
+} playerHandlers;
 
 struct MonsterHandlers
 {
 	int32_t onDropLoot = -1;
 	int32_t onSpawn = -1;
-};
-
-CreatureHandlers creatureHandlers;
-PartyHandlers partyHandlers;
-PlayerHandlers playerHandlers;
-MonsterHandlers monsterHandlers;
+} monsterHandlers;
 
 } // namespace
 
@@ -79,7 +74,7 @@ namespace tfs::events {
 
 bool load()
 {
-	scriptInterface.initState();
+	scriptInterface.reInitState();
 
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("data/events/events.xml");
