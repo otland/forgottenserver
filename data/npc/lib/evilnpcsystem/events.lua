@@ -80,7 +80,10 @@ if not NpcEvents then
         if focus:isFocused(creature) then
             focus:removeFocus(creature)
             local talkQueue = NpcTalkQueue(npc)
+            local handler = NpcsHandler(npc)
             talkQueue:clearQueue(creature)
+            handler:setTalkState(handler, creature)
+            handler:resetData(creature)
         end
     end
 
@@ -100,6 +103,7 @@ if not NpcEvents then
                 closeShopWindow(player)
                 selfSay(handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = player:getName()}), player)
                 handler:setTalkState(handler, player)
+                handler:resetData(player)
             end
         end
 
@@ -161,6 +165,7 @@ if not NpcEvents then
                     local msg = handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = creature:getName()})
                     talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                     handler:setTalkState(handler, creature)
+                    handler:resetData(creature)
                     return
                 end
             end
@@ -221,6 +226,7 @@ if not NpcEvents then
                 focus:removeFocus(creature)
                 closeShopWindow(creature)
                 handler:setTalkState(handler, creature)
+                handler:resetData(creature)
                 return
             end
             -- check if we have a callback for this talk state
@@ -255,6 +261,7 @@ if not NpcEvents then
                 selfSay(msg, creature)
                 creature:teleportTo(handler:getTalkState(creature).teleportPosition)
                 handler:setTalkState(handler, creature)
+                handler:resetData(creature)
                 return
             end
             -- If the NPC has a shop for the message, it opens the shop window
@@ -294,12 +301,14 @@ if not NpcEvents then
                 local _, start = next(handler.keywords)
                 handler:setTalkState(start, creature)
                 handler:getTalkState(creature):checkOnStorage(creature, handler)
+                handler:resetData(creature)
             end
             -- If the NPC has a resetTalkstate, it resets the talk state
             if handler:getTalkState(creature).resetTalkstate then
                 local _, start = next(handler.keywords)
                 handler:setTalkState(start, creature)
                 handler:getTalkState(creature):checkOnStorage(creature, handler)
+                handler:resetData(creature)
             end
         elseif message == "help" then
             if focus:isFocused(creature) then
@@ -326,6 +335,7 @@ if not NpcEvents then
                     local _, start = next(handler.keywords)
                     handler:setTalkState(start, creature)
                     handler:getTalkState(creature):checkOnStorage(creature, handler)
+                    handler:resetData(creature)
                     return
                 end
 
@@ -344,6 +354,7 @@ if not NpcEvents then
                         if msg == "" then
                             print("[Warning - NpcEvents.onSay] There is no failureResponse set for keyword: ".. message ..".\n".. debug.getinfo(2).source:match("@?(.*)"))
                         end
+                        handler:resetData(creature)
                         return
                     end
                     if retMessage then
@@ -355,6 +366,7 @@ if not NpcEvents then
                     local _, start = next(handler.keywords)
                     handler:setTalkState(start, creature)
                     handler:getTalkState(creature):checkOnStorage(creature, handler)
+                    handler:resetData(creature)
                     return
                 end
 
@@ -368,6 +380,7 @@ if not NpcEvents then
                     local _, start = next(handler.keywords)
                     handler:setTalkState(start, creature)
                     handler:getTalkState(creature):checkOnStorage(creature, handler)
+                    handler:resetData(creature)
                 end
             end
         end

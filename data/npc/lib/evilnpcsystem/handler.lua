@@ -124,7 +124,7 @@ if not NpcsHandler then
             return self[npc:getName()]
         end
     })
- 
+
     -- This function adds a keyword to the NpcsHandler for the NPC and returns the NpcsHandler for the keyword
     ---@param words string|table The keyword or table containing keywords to be added.
     ---@return NpcsHandler
@@ -265,7 +265,7 @@ if not NpcsHandler then
     function NpcsHandler:getKeywords()
         return self.keywords
     end
-    
+
     -- Retrieves the talk state for a given player.
     -- If the talk state is not found, returns the handler itself.
     ---@param player Player The player object.
@@ -273,7 +273,7 @@ if not NpcsHandler then
     function NpcsHandler:getTalkState(player)
         return self.talkState[player:getGuid()] == nil and self or self.talkState[player:getGuid()]
     end
-    
+
     -- Sets the talk state for a player.
     ---@param state NpcsHandler The talk state to set.
     ---@param player Player The player object.
@@ -393,6 +393,9 @@ if not NpcsHandler then
         self.voices = params
     end
 
+    -- Checks if the player has a storage value and sets the talk state accordingly.
+    ---@param creature Creature The creature to check the storage value for.
+    ---@param handler NpcsHandler The handler to set the talk state for.
     function NpcsHandler:checkOnStorage(creature, handler)
         if self.onStorage then
             local state = self.onStorage
