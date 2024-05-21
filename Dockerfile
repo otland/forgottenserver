@@ -27,7 +27,7 @@ RUN apk add --no-cache \
   openssl \
   pugixml
 
-COPY --from=build /usr/src/forgottenserver/build/tfs /bin/tfs
+COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/
 
