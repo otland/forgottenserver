@@ -25,11 +25,11 @@ if (NOT WIN32)
 endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_compile_options(-fno-strict-aliasing --param=max-vartrack-size=200000)
+    add_compile_options(-fno-strict-aliasing --param=max-vartrack-size=75000000)
 endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    add_compile_options(-Wimplicit-fallthrough -Wmove --param=max-vartrack-size=200000)
+    add_compile_options(-Wimplicit-fallthrough -Wmove --param=max-vartrack-size=75000000)
 endif ()
 
 # Find packages.
