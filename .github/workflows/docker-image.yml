@@ -41,11 +41,11 @@ jobs:
         if: github.ref_type == 'tag'
         with:
           push: true
-          tags: forgottenserver:${{ github.ref_name }}
+          tags: ghcr.io/forgottenserver:${{ github.ref_name }}
 
       - name: Build and push
         uses: docker/build-push-action@v5
         if: github.event_name == 'pull_request' || github.ref_type == 'branch'
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: forgottenserver:latest
+          tags: ghcr.io/forgottenserver:latest
