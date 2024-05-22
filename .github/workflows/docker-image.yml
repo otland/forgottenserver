@@ -10,6 +10,10 @@ on:
     tags:
       - v*
 
+  pull_request:
+    branches:
+      - master
+
 env:
   IMAGE_NAME: forgottenserver
 
@@ -18,32 +22,30 @@ jobs:
   # See also https://docs.docker.com/docker-hub/builds/
   docker-image:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build image
-        run: docker build . --file Dockerfile --tag image
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push image
-        run: |
-          IMAGE_ID=$(echo "docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME" | awk '{print tolower($0)}')
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        if: github.ref_type == 'tag'
+        with:
+          push: true
+          tags: forgottenserver:${{ github.ref_name }}
 
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
-
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          docker tag image $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        if: github.event_name == 'pull_request' || github.ref_type == 'branch'
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: forgottenserver:latest
