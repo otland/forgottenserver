@@ -54,27 +54,18 @@ extern GlobalEvents* g_globalEvents;
 extern Scripts* g_scripts;
 extern Weapons* g_weapons;
 
-ScriptEnvironment::DBResultMap ScriptEnvironment::tempResults;
-uint32_t ScriptEnvironment::lastResultId = 0;
-
-std::multimap<ScriptEnvironment*, Item*> ScriptEnvironment::tempItems;
-
 LuaEnvironment g_luaEnvironment;
 
 namespace {
 
-std::string getStackTrace(lua_State* L, std::string_view error_desc)
-{
-	luaL_traceback(L, L, error_desc.data(), 1);
-	return tfs::lua::popString(L);
-}
+// temporary item list
+std::multimap<ScriptEnvironment*, Item*> tempItems = {};
 
-int luaErrorHandler(lua_State* L)
-{
-	std::string errorMessage = tfs::lua::popString(L);
-	tfs::lua::pushString(L, getStackTrace(L, errorMessage));
-	return 1;
-}
+// result map
+uint32_t lastResultId = 0;
+std::map<uint32_t, DBResult_ptr> tempResults = {};
+
+bool isNumber(lua_State* L, int32_t arg) { return lua_type(L, arg) == LUA_TNUMBER; }
 
 void setField(lua_State* L, const char* index, lua_Number value)
 {
@@ -214,7 +205,18 @@ void registerGlobalBoolean(lua_State* L, std::string_view name, bool value)
 	lua_setglobal(L, name.data());
 }
 
-bool isNumber(lua_State* L, int32_t arg) { return lua_type(L, arg) == LUA_TNUMBER; }
+std::string getStackTrace(lua_State* L, std::string_view error_desc)
+{
+	luaL_traceback(L, L, error_desc.data(), 1);
+	return tfs::lua::popString(L);
+}
+
+int luaErrorHandler(lua_State* L)
+{
+	std::string errorMessage = tfs::lua::popString(L);
+	tfs::lua::pushString(L, getStackTrace(L, errorMessage));
+	return 1;
+}
 
 bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows)
 {
@@ -381,25 +383,20 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 	}
 }
 
-void ScriptEnvironment::addTempItem(Item* item) { tempItems.emplace(this, item); }
+static void addTempItem(Item* item) { tempItems.emplace(tfs::lua::getScriptEnv(), item); }
 
-void ScriptEnvironment::removeTempItem(Item* item)
+void tfs::lua::removeTempItem(Item* item)
 {
-	for (auto it = tempItems.begin(), end = tempItems.end(); it != end; ++it) {
-		if (it->second == item) {
-			tempItems.erase(it);
-			break;
-		}
-	}
+	std::erase_if(tempItems, [item](const auto& pair) { return pair.second == item; });
 }
 
-uint32_t ScriptEnvironment::addResult(DBResult_ptr res)
+static uint32_t addResult(DBResult_ptr res)
 {
 	tempResults[++lastResultId] = std::move(res);
 	return lastResultId;
 }
 
-bool ScriptEnvironment::removeResult(uint32_t id)
+static bool removeResult(uint32_t id)
 {
 	auto it = tempResults.find(id);
 	if (it == tempResults.end()) {
@@ -410,7 +407,7 @@ bool ScriptEnvironment::removeResult(uint32_t id)
 	return true;
 }
 
-DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id)
+static DBResult_ptr getResultByID(uint32_t id)
 {
 	auto it = tempResults.find(id);
 	if (it == tempResults.end()) {
@@ -4221,7 +4218,7 @@ int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
 	// db.storeQuery(query)
 	if (DBResult_ptr res = Database::getInstance().storeQuery(tfs::lua::getString(L, -1))) {
-		lua_pushnumber(L, ScriptEnvironment::addResult(res));
+		lua_pushnumber(L, addResult(res));
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -4248,7 +4245,7 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 
 			lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
 			if (result) {
-				lua_pushnumber(L, ScriptEnvironment::addResult(result));
+				lua_pushnumber(L, addResult(result));
 			} else {
 				tfs::lua::pushBoolean(L, false);
 			}
@@ -4299,7 +4296,7 @@ const luaL_Reg LuaScriptInterface::luaResultTable[] = {
 
 int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {
-	DBResult_ptr res = ScriptEnvironment::getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
 	if (!res) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -4312,7 +4309,7 @@ int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 
 int LuaScriptInterface::luaResultGetString(lua_State* L)
 {
-	DBResult_ptr res = ScriptEnvironment::getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
 	if (!res) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -4325,7 +4322,7 @@ int LuaScriptInterface::luaResultGetString(lua_State* L)
 
 int LuaScriptInterface::luaResultGetStream(lua_State* L)
 {
-	DBResult_ptr res = ScriptEnvironment::getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
 	if (!res) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -4339,7 +4336,7 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 
 int LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult_ptr res = ScriptEnvironment::getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
+	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
 	if (!res) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -4351,7 +4348,7 @@ int LuaScriptInterface::luaResultNext(lua_State* L)
 
 int LuaScriptInterface::luaResultFree(lua_State* L)
 {
-	tfs::lua::pushBoolean(L, ScriptEnvironment::removeResult(tfs::lua::getNumber<uint32_t>(L, -1)));
+	tfs::lua::pushBoolean(L, removeResult(tfs::lua::getNumber<uint32_t>(L, -1)));
 	return 1;
 }
 
@@ -4908,7 +4905,7 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
-		tfs::lua::getScriptEnv()->addTempItem(item);
+		addTempItem(item);
 		item->setParent(VirtualCylinder::virtualCylinder);
 	}
 
@@ -4949,7 +4946,7 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 
 		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
 	} else {
-		tfs::lua::getScriptEnv()->addTempItem(container);
+		addTempItem(container);
 		container->setParent(VirtualCylinder::virtualCylinder);
 	}
 
@@ -5932,7 +5929,7 @@ int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 3, 0);
 	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
 	if (ret == RETURNVALUE_NOERROR) {
-		ScriptEnvironment::removeTempItem(item);
+		tfs::lua::removeTempItem(item);
 	}
 	lua_pushnumber(L, ret);
 	return 1;
@@ -6598,7 +6595,7 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::getScriptEnv()->addTempItem(clone);
+	addTempItem(clone);
 	clone->setParent(VirtualCylinder::virtualCylinder);
 
 	tfs::lua::pushUserdata(L, clone);
@@ -6647,7 +6644,7 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	*itemPtr = newItem;
 
 	splitItem->setParent(VirtualCylinder::virtualCylinder);
-	env->addTempItem(splitItem);
+	addTempItem(splitItem);
 
 	tfs::lua::pushUserdata(L, splitItem);
 	tfs::lua::setItemMetatable(L, -1, splitItem);
@@ -7526,7 +7523,7 @@ int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 4, 0);
 	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
 	if (ret == RETURNVALUE_NOERROR) {
-		ScriptEnvironment::removeTempItem(item);
+		tfs::lua::removeTempItem(item);
 	}
 	lua_pushnumber(L, ret);
 	return 1;
@@ -10037,7 +10034,7 @@ int LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 	}
 
 	if (returnValue == RETURNVALUE_NOERROR) {
-		ScriptEnvironment::removeTempItem(item);
+		tfs::lua::removeTempItem(item);
 	}
 	lua_pushnumber(L, returnValue);
 	return 1;

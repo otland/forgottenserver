@@ -24,16 +24,12 @@ class Container;
 class Creature;
 class Cylinder;
 class Spell;
-class InstantSpell;
 class Item;
 class LuaScriptInterface;
 class LuaVariant;
 class Npc;
 class Player;
 class Thing;
-struct BestiaryInfo;
-struct LootBlock;
-struct Mount;
 struct Outfit;
 
 using Combat_ptr = std::shared_ptr<Combat>;
@@ -65,8 +61,8 @@ struct LuaTimerEventDesc
 	std::vector<int32_t> parameters;
 	uint32_t eventId = 0;
 
-	LuaTimerEventDesc() = default;
-	LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
+	constexpr LuaTimerEventDesc() = default;
+	constexpr LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
 };
 
 class ScriptEnvironment
@@ -95,14 +91,8 @@ public:
 
 	auto getEventInfo() const { return std::make_tuple(scriptId, interface, callbackId, timerEvent); }
 
-	void addTempItem(Item* item);
-	static void removeTempItem(Item* item);
 	uint32_t addThing(Thing* thing);
 	void insertItem(uint32_t uid, Item* item);
-
-	static DBResult_ptr getResultByID(uint32_t id);
-	static uint32_t addResult(DBResult_ptr res);
-	static bool removeResult(uint32_t id);
 
 	void setNpc(Npc* npc) { curNpc = npc; }
 	Npc* getNpc() const { return curNpc; }
@@ -115,15 +105,11 @@ public:
 private:
 	using VariantVector = std::vector<const LuaVariant*>;
 	using StorageMap = std::map<uint32_t, int32_t>;
-	using DBResultMap = std::map<uint32_t, DBResult_ptr>;
 
 	LuaScriptInterface* interface;
 
 	// for npc scripts
 	Npc* curNpc = nullptr;
-
-	// temporary item list
-	static std::multimap<ScriptEnvironment*, Item*> tempItems;
 
 	// local item map
 	std::unordered_map<uint32_t, Item*> localMap;
@@ -133,10 +119,6 @@ private:
 	int32_t scriptId;
 	int32_t callbackId;
 	bool timerEvent;
-
-	// result map
-	static uint32_t lastResultId;
-	static DBResultMap tempResults;
 };
 
 enum ErrorCode_t
@@ -1455,35 +1437,27 @@ private:
 
 namespace tfs::lua {
 
-void reportError(std::string_view function, std::string_view error_desc, lua_State* L = nullptr,
-                 bool stack_trace = false);
-#define reportErrorFunc(L, a) tfs::lua::reportError(__FUNCTION__, a, L, true)
+void removeTempItem(Item* item);
 
 ScriptEnvironment* getScriptEnv();
 bool reserveScriptEnv();
 void resetScriptEnv();
 
-// Metatables
-void setItemMetatable(lua_State* L, int32_t index, const Item* item);
-void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature);
+void reportError(std::string_view function, std::string_view error_desc, lua_State* L = nullptr,
+                 bool stack_trace = false);
+#define reportErrorFunc(L, a) tfs::lua::reportError(__FUNCTION__, a, L, true)
+
+// push/pop common structures
+void pushThing(lua_State* L, Thing* thing);
+void pushVariant(lua_State* L, const LuaVariant& var);
+void pushString(lua_State* L, std::string_view value);
+void pushCallback(lua_State* L, int32_t callback);
+void pushCylinder(lua_State* L, Cylinder* cylinder);
+
+std::string popString(lua_State* L);
+int32_t popCallback(lua_State* L);
 
 // Userdata
-template <class T>
-T** getRawUserdata(lua_State* L, int32_t arg)
-{
-	return static_cast<T**>(lua_touserdata(L, arg));
-}
-
-template <class T>
-T* getUserdata(lua_State* L, int32_t arg)
-{
-	T** userdata = getRawUserdata<T>(L, arg);
-	if (!userdata) {
-		return nullptr;
-	}
-	return *userdata;
-}
-
 template <class T>
 void pushUserdata(lua_State* L, T* value)
 {
@@ -1491,7 +1465,12 @@ void pushUserdata(lua_State* L, T* value)
 	*userdata = value;
 }
 
-// Get/Push/Pop
+// Metatables
+void setMetatable(lua_State* L, int32_t index, std::string_view name);
+void setItemMetatable(lua_State* L, int32_t index, const Item* item);
+void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature);
+
+// Get
 template <typename T>
 typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t arg)
 {
@@ -1532,6 +1511,31 @@ T getNumber(lua_State* L, int32_t arg, T defaultValue)
 	return getNumber<T>(L, arg);
 }
 
+template <class T>
+T** getRawUserdata(lua_State* L, int32_t arg)
+{
+	return static_cast<T**>(lua_touserdata(L, arg));
+}
+
+template <class T>
+T* getUserdata(lua_State* L, int32_t arg)
+{
+	T** userdata = getRawUserdata<T>(L, arg);
+	if (!userdata) {
+		return nullptr;
+	}
+	return *userdata;
+}
+
+bool getBoolean(lua_State* L, int32_t arg);
+bool getBoolean(lua_State* L, int32_t arg, bool defaultValue);
+std::string getString(lua_State* L, int32_t arg);
+Position getPosition(lua_State* L, int32_t arg);
+Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
+Thing* getThing(lua_State* L, int32_t arg);
+Creature* getCreature(lua_State* L, int32_t arg);
+Player* getPlayer(lua_State* L, int32_t arg);
+
 template <typename T>
 T getField(lua_State* L, int32_t arg, std::string_view key)
 {
@@ -1546,35 +1550,19 @@ T getField(lua_State* L, int32_t arg, std::string_view key, T&& defaultValue)
 	return getNumber<T>(L, -1, std::forward<T>(defaultValue));
 }
 
-bool getBoolean(lua_State* L, int32_t arg);
-bool getBoolean(lua_State* L, int32_t arg, bool defaultValue);
-Creature* getCreature(lua_State* L, int32_t arg);
 std::string getFieldString(lua_State* L, int32_t arg, std::string_view key);
-Player* getPlayer(lua_State* L, int32_t arg);
-Position getPosition(lua_State* L, int32_t arg);
-Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos);
-std::string getString(lua_State* L, int32_t arg);
-Thing* getThing(lua_State* L, int32_t arg);
 
+// Push
 void pushBoolean(lua_State* L, bool value);
-void pushCallback(lua_State* L, int32_t callback);
-void pushCylinder(lua_State* L, Cylinder* cylinder);
+void pushSpell(lua_State* L, const Spell& spell);
+void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
 void pushOutfit(lua_State* L, const Outfit_t& outfit);
 void pushOutfit(lua_State* L, const Outfit* outfit);
-void pushPosition(lua_State* L, const Position& position, int32_t stackpos = 0);
-void pushSpell(lua_State* L, const Spell& spell);
-void pushString(lua_State* L, std::string_view value);
-void pushThing(lua_State* L, Thing* thing);
-void pushVariant(lua_State* L, const LuaVariant& var);
 
-int32_t popCallback(lua_State* L);
-std::string popString(lua_State* L);
-
-void setMetatable(lua_State* L, int32_t index, std::string_view name);
-void registerMethod(lua_State* L, std::string_view globalName, std::string_view methodName, lua_CFunction func);
-
-std::string getErrorDesc(ErrorCode_t code);
+//
 int protectedCall(lua_State* L, int nargs, int nresults);
+void registerMethod(lua_State* L, std::string_view globalName, std::string_view methodName, lua_CFunction func);
+std::string getErrorDesc(ErrorCode_t code);
 
 } // namespace tfs::lua
 
