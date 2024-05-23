@@ -34,6 +34,8 @@ struct Outfit;
 
 using Combat_ptr = std::shared_ptr<Combat>;
 
+inline constexpr int32_t EVENT_ID_LOADING = 1;
+
 struct LuaTimerEventDesc
 {
 	int32_t scriptId = -1;
@@ -41,8 +43,8 @@ struct LuaTimerEventDesc
 	std::vector<int32_t> parameters;
 	uint32_t eventId = 0;
 
-	constexpr LuaTimerEventDesc() = default;
-	constexpr LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
+	LuaTimerEventDesc() = default;
+	LuaTimerEventDesc(LuaTimerEventDesc&& other) = default;
 };
 
 class ScriptEnvironment

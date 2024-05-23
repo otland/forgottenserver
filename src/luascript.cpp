@@ -58,7 +58,6 @@ LuaEnvironment g_luaEnvironment;
 
 namespace {
 
-constexpr int32_t EVENT_ID_LOADING = 1;
 constexpr int32_t EVENT_ID_USER = 1000;
 
 enum LuaDataType
