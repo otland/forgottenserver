@@ -58,6 +58,23 @@ LuaEnvironment g_luaEnvironment;
 
 namespace {
 
+constexpr int32_t EVENT_ID_LOADING = 1;
+constexpr int32_t EVENT_ID_USER = 1000;
+
+enum LuaDataType
+{
+	LuaData_Unknown,
+
+	LuaData_Item,
+	LuaData_Container,
+	LuaData_Teleport,
+	LuaData_Podium,
+	LuaData_Player,
+	LuaData_Monster,
+	LuaData_Npc,
+	LuaData_Tile,
+};
+
 // temporary item list
 std::multimap<ScriptEnvironment*, Item*> tempItems = {};
 

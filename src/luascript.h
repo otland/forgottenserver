@@ -34,26 +34,6 @@ struct Outfit;
 
 using Combat_ptr = std::shared_ptr<Combat>;
 
-enum
-{
-	EVENT_ID_LOADING = 1,
-	EVENT_ID_USER = 1000,
-};
-
-enum LuaDataType
-{
-	LuaData_Unknown,
-
-	LuaData_Item,
-	LuaData_Container,
-	LuaData_Teleport,
-	LuaData_Podium,
-	LuaData_Player,
-	LuaData_Monster,
-	LuaData_Npc,
-	LuaData_Tile,
-};
-
 struct LuaTimerEventDesc
 {
 	int32_t scriptId = -1;
@@ -103,9 +83,6 @@ public:
 	void removeItemByUID(uint32_t uid);
 
 private:
-	using VariantVector = std::vector<const LuaVariant*>;
-	using StorageMap = std::map<uint32_t, int32_t>;
-
 	LuaScriptInterface* interface;
 
 	// for npc scripts
