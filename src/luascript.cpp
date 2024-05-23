@@ -11937,10 +11937,10 @@ int LuaScriptInterface::luaNpcTypeName(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushString(L, npcType->getName());
+			pushString(L, npcType->name);
 		} else {
 			std::string name = getString(L, 2);
-			npcType->setName(name);
+			npcType->name = name;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -11955,10 +11955,10 @@ int LuaScriptInterface::luaNpcTypeSpeechBubble(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->getSpeechBubble());
+			lua_pushnumber(L, npcType->speechBubble);
 		} else {
 			uint8_t bubble = getNumber<uint8_t>(L, 2);
-			npcType->setSpeechBubble(bubble);
+			npcType->speechBubble = bubble;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -11973,10 +11973,10 @@ int LuaScriptInterface::luaNpcTypeWalkTicks(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->getWalkTicks());
+			lua_pushnumber(L, npcType->walkTicks);
 		} else {
 			uint32_t ticks = getNumber<uint32_t>(L, 2);
-			npcType->setWalkTicks(ticks);
+			npcType->walkTicks = ticks;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -11991,10 +11991,10 @@ int LuaScriptInterface::luaNpcTypeBaseSpeed(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->getBaseSpeed());
+			lua_pushnumber(L, npcType->baseSpeed);
 		} else {
 			uint32_t speed = getNumber<uint32_t>(L, 2);
-			npcType->setBaseSpeed(speed);
+			npcType->baseSpeed = speed;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12009,10 +12009,10 @@ int LuaScriptInterface::luaNpcTypeMasterRadius(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->getMasterRadius());
+			lua_pushnumber(L, npcType->masterRadius);
 		} else {
 			int32_t radius = getNumber<int32_t>(L, 2);
-			npcType->setMasterRadius(radius);
+			npcType->masterRadius = radius;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12027,10 +12027,10 @@ int LuaScriptInterface::luaNpcTypeFloorChange(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, npcType->getFloorChange());
+			pushBoolean(L, npcType->floorChange);
 		} else {
 			bool b = getBoolean(L, 2);
-			npcType->setMasterRadius(b);
+			npcType->floorChange = b;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12045,10 +12045,10 @@ int LuaScriptInterface::luaNpcTypeAttackable(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, npcType->getAttackable());
+			pushBoolean(L, npcType->attackable);
 		} else {
 			bool b = getBoolean(L, 2);
-			npcType->setAttackable(b);
+			npcType->attackable = b;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12063,10 +12063,10 @@ int LuaScriptInterface::luaNpcTypeIgnoreHeight(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, npcType->getIgnoreHeight());
+			pushBoolean(L, npcType->ignoreHeight);
 		} else {
 			bool b = getBoolean(L, 2);
-			npcType->setIgnoreHeight(b);
+			npcType->ignoreHeight = b;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12081,10 +12081,10 @@ int LuaScriptInterface::luaNpcTypeIsIdle(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, npcType->getIsIdle());
+			pushBoolean(L, npcType->isIdle);
 		} else {
 			bool b = getBoolean(L, 2);
-			npcType->setIsIdle(b);
+			npcType->isIdle = b;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12099,10 +12099,10 @@ int LuaScriptInterface::luaNpcTypePushable(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushBoolean(L, npcType->getPushable());
+			pushBoolean(L, npcType->pushable);
 		} else {
 			bool b = getBoolean(L, 2);
-			npcType->setPushable(b);
+			npcType->pushable = b;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12117,10 +12117,10 @@ int LuaScriptInterface::luaNpcTypeDefaultOutfit(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			pushOutfit(L, npcType->getDefaultOutfit());
+			pushOutfit(L, npcType->defaultOutfit);
 		} else {
 			auto outfit = getOutfit(L, 2);
-			npcType->setDefaultOutfit(outfit);
+			npcType->defaultOutfit = outfit;
 			pushBoolean(L, true);
 		}
 	} else {
@@ -12135,14 +12135,14 @@ int LuaScriptInterface::luaNpcTypeParameter(lua_State* L)
 	NpcType* npcType = getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (lua_gettop(L) == 1) {
-			lua_createtable(L, npcType->getParameters().size(), 0);
-			for (auto i : npcType->getParameters()) {
+			lua_createtable(L, npcType->parameters.size(), 0);
+			for (auto i : npcType->parameters) {
 				setField(L, i.first, i.second);
 			}
 		} else {
 			std::string key = getString(L, 2);
 			std::string value = getString(L, 3);
-			npcType->setParameter(key, value);
+			npcType->parameters[key] = value;
 			pushBoolean(L, true);
 		}
 	} else {

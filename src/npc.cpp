@@ -78,9 +78,6 @@ NpcType* getNpcType(std::string name)
 NpcScriptInterface* getScriptInterface() { return scriptInterface.get(); }
 } // namespace Npcs
 
-NpcType::NpcType() : npcEventHandler(std::make_unique<NpcEventsHandler>()) {}
-NpcType::~NpcType() {}
-
 Npc* Npc::createNpc(const std::string& name)
 {
 	auto npcType = Npcs::getNpcType(name);
@@ -196,56 +193,56 @@ bool NpcType::loadFromXml()
 	}
 
 	name = npcNode.attribute("name").as_string();
-	info.attackable = npcNode.attribute("attackable").as_bool();
-	info.floorChange = npcNode.attribute("floorchange").as_bool();
+	attackable = npcNode.attribute("attackable").as_bool();
+	floorChange = npcNode.attribute("floorchange").as_bool();
 
 	pugi::xml_attribute attr;
 	if ((attr = npcNode.attribute("speed"))) {
-		info.baseSpeed = pugi::cast<uint32_t>(attr.value());
+		baseSpeed = pugi::cast<uint32_t>(attr.value());
 	} else {
-		info.baseSpeed = 100;
+		baseSpeed = 100;
 	}
 
 	if ((attr = npcNode.attribute("pushable"))) {
-		info.pushable = attr.as_bool();
+		pushable = attr.as_bool();
 	}
 
 	if ((attr = npcNode.attribute("walkinterval"))) {
-		info.walkTicks = pugi::cast<uint32_t>(attr.value());
+		walkTicks = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("walkradius"))) {
-		info.masterRadius = pugi::cast<int32_t>(attr.value());
+		masterRadius = pugi::cast<int32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("ignoreheight"))) {
-		info.ignoreHeight = attr.as_bool();
+		ignoreHeight = attr.as_bool();
 	}
 
 	if ((attr = npcNode.attribute("speechbubble"))) {
-		info.speechBubble = pugi::cast<uint32_t>(attr.value());
+		speechBubble = pugi::cast<uint32_t>(attr.value());
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
-		setSkull(getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string())));
+		skull = getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
 	if (healthNode) {
 		if ((attr = healthNode.attribute("now"))) {
-			info.health = pugi::cast<int32_t>(attr.value());
+			health = pugi::cast<int32_t>(attr.value());
 		} else {
-			info.health = 100;
+			health = 100;
 		}
 
 		if ((attr = healthNode.attribute("max"))) {
-			info.healthMax = pugi::cast<int32_t>(attr.value());
+			healthMax = pugi::cast<int32_t>(attr.value());
 		} else {
-			info.healthMax = 100;
+			healthMax = 100;
 		}
 
-		if (info.health > info.healthMax) {
-			info.health = info.healthMax;
+		if (health > healthMax) {
+			health = healthMax;
 			std::cout << "[Warning - Npc::loadFromXml] Health now is greater than health max in " << filename
 			          << std::endl;
 		}
@@ -255,20 +252,20 @@ bool NpcType::loadFromXml()
 	if (lookNode) {
 		pugi::xml_attribute lookTypeAttribute = lookNode.attribute("type");
 		if (lookTypeAttribute) {
-			info.defaultOutfit.lookType = pugi::cast<uint16_t>(lookTypeAttribute.value());
-			info.defaultOutfit.lookHead = pugi::cast<uint16_t>(lookNode.attribute("head").value());
-			info.defaultOutfit.lookBody = pugi::cast<uint16_t>(lookNode.attribute("body").value());
-			info.defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
-			info.defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
-			info.defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
+			defaultOutfit.lookType = pugi::cast<uint16_t>(lookTypeAttribute.value());
+			defaultOutfit.lookHead = pugi::cast<uint16_t>(lookNode.attribute("head").value());
+			defaultOutfit.lookBody = pugi::cast<uint16_t>(lookNode.attribute("body").value());
+			defaultOutfit.lookLegs = pugi::cast<uint16_t>(lookNode.attribute("legs").value());
+			defaultOutfit.lookFeet = pugi::cast<uint16_t>(lookNode.attribute("feet").value());
+			defaultOutfit.lookAddons = pugi::cast<uint16_t>(lookNode.attribute("addons").value());
 		} else if ((attr = lookNode.attribute("typeex"))) {
-			info.defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
+			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
-		info.defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
+		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
 	}
 
 	for (auto parameterNode : npcNode.child("parameters").children()) {
-		info.parameters[parameterNode.attribute("key").as_string()] = parameterNode.attribute("value").as_string();
+		parameters[parameterNode.attribute("key").as_string()] = parameterNode.attribute("value").as_string();
 	}
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
@@ -298,18 +295,18 @@ std::string Npc::getDescription(int32_t) const
 
 void Npc::loadNpcTypeInfo()
 {
-	speechBubble = npcType->getSpeechBubble();
-	walkTicks = npcType->getWalkTicks();
-	baseSpeed = npcType->getBaseSpeed();
-	masterRadius = npcType->getMasterRadius();
-	floorChange = npcType->getFloorChange();
-	attackable = npcType->getAttackable();
-	ignoreHeight = npcType->getIgnoreHeight();
-	isIdle = npcType->getIsIdle();
-	pushable = npcType->getPushable();
-	defaultOutfit = npcType->getDefaultOutfit();
+	speechBubble = npcType->speechBubble;
+	walkTicks = npcType->walkTicks;
+	baseSpeed = npcType->baseSpeed;
+	masterRadius = npcType->masterRadius;
+	floorChange = npcType->floorChange;
+	attackable = npcType->attackable;
+	ignoreHeight = npcType->ignoreHeight;
+	isIdle = npcType->isIdle;
+	pushable = npcType->pushable;
+	defaultOutfit = npcType->defaultOutfit;
 	currentOutfit = defaultOutfit;
-	parameters = npcType->getParameters();
+	parameters = npcType->parameters;
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)

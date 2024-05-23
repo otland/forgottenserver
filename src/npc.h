@@ -86,33 +86,8 @@ private:
 
 class NpcType
 {
-	struct NpcTypeInfo
-	{
-		uint8_t speechBubble = SPEECHBUBBLE_NONE;
-
-		uint32_t walkTicks = 1500;
-		uint32_t baseSpeed = 100;
-
-		int32_t masterRadius = 2;
-		int32_t health = 1000;
-		int32_t healthMax = 1000;
-
-		bool floorChange = false;
-		bool attackable = false;
-		bool ignoreHeight = false;
-		bool loaded = false;
-		bool isIdle = true;
-		bool pushable = true;
-
-		Outfit_t defaultOutfit;
-		Skulls_t skull = SKULL_NONE;
-
-		std::map<std::string, std::string> parameters;
-	};
-
 public:
-	explicit NpcType();
-	~NpcType();
+	NpcType() = default;
 
 	// non-copyable
 	NpcType(const NpcType&) = delete;
@@ -120,32 +95,26 @@ public:
 
 	bool loadCallback(NpcScriptInterface* scriptInterface);
 
-	void setSpeechBubble(uint8_t bubble) { info.speechBubble = bubble; }
-	uint8_t getSpeechBubble() const { return info.speechBubble; }
-	void setWalkTicks(uint32_t ticks) { info.walkTicks = ticks; }
-	uint32_t getWalkTicks() const { return info.walkTicks; }
-	void setBaseSpeed(uint32_t speed) { info.baseSpeed = speed; }
-	uint32_t getBaseSpeed() const { return info.baseSpeed; }
-	void setMasterRadius(int32_t radius) { info.masterRadius = radius; }
-	int32_t getMasterRadius() const { return info.masterRadius; }
-	void setFloorChange(bool b) { info.floorChange = b; }
-	bool getFloorChange() const { return info.floorChange; }
-	void setAttackable(bool b) { info.attackable = b; }
-	bool getAttackable() const { return info.attackable; }
-	void setIgnoreHeight(bool b) { info.ignoreHeight = b; }
-	bool getIgnoreHeight() const { return info.ignoreHeight; }
-	void setIsIdle(bool b) { info.isIdle = b; }
-	bool getIsIdle() const { return info.isIdle; }
-	void setPushable(bool b) { info.pushable = b; }
-	bool getPushable() const { return info.pushable; }
-	void setDefaultOutfit(Outfit_t outfit) { info.defaultOutfit = outfit; }
-	Outfit_t getDefaultOutfit() const { return info.defaultOutfit; }
-	void setParameter(std::string key, std::string value) { info.parameters[key] = value; }
-	std::map<std::string, std::string> getParameters() const { return info.parameters; }
-	void setSkull(Skulls_t s) { info.skull = s; }
-	Skulls_t getSkull() const { return info.skull; }
-	void setName(std::string n) { name = n; }
-	std::string getName() const { return name; }
+	uint8_t speechBubble = SPEECHBUBBLE_NONE;
+
+	uint32_t walkTicks = 1500;
+	uint32_t baseSpeed = 100;
+
+	int32_t masterRadius = 2;
+	int32_t health = 1000;
+	int32_t healthMax = 1000;
+
+	bool floorChange = false;
+	bool attackable = false;
+	bool ignoreHeight = false;
+	bool loaded = false;
+	bool isIdle = true;
+	bool pushable = true;
+
+	Outfit_t defaultOutfit;
+	Skulls_t skull = SKULL_NONE;
+
+	std::map<std::string, std::string> parameters;
 
 	bool loadFromXml();
 
@@ -155,8 +124,7 @@ public:
 	bool fromLua = false;
 	std::string eventType;
 
-	NpcTypeInfo info;
-	std::unique_ptr<NpcEventsHandler> npcEventHandler;
+	std::unique_ptr<NpcEventsHandler> npcEventHandler = std::make_unique<NpcEventsHandler>();
 };
 
 namespace Npcs {

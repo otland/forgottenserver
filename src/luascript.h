@@ -372,16 +372,10 @@ public:
 		lua_setfield(L, -2, index);
 	}
 
-	static void setField(lua_State* L, const char* index, const std::string& value)
+	static void setField(lua_State* L, std::string_view index, std::string_view value)
 	{
 		pushString(L, value);
-		lua_setfield(L, -2, index);
-	}
-
-	static void setField(lua_State* L, const std::string index, std::string value)
-	{
-		pushString(L, value);
-		lua_setfield(L, -2, index.c_str());
+		lua_setfield(L, -2, index.data());
 	}
 
 	static std::string escapeString(std::string string);
