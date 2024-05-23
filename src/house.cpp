@@ -476,7 +476,7 @@ bool AccessList::isInList(const Player* player) const
 		return true;
 	}
 
-	const auto rank = player->getGuildRank();
+	const auto& rank = player->getGuildRank();
 	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 
