@@ -35,17 +35,32 @@ if not NpcVoices then
     ---@return boolean, table|nil if the voice can be used, false otherwise.
     function NpcVoices:canUseVoice(handler)
         local voices = {}
+
+        if self.lastVoiceTime >= os.mtime() then
+            return false
+        end
+
         for _,voice in pairs(handler.voices) do
-            if voice.delay + self.lastVoiceTime < os.mtime() and math.random(1, 100) <= voice.chance then
+            if math.random(1, 100) <= voice.chance then
                 table.insert(voices, voice)
             end
         end
+
+        self.lastVoiceTime = os.mtime() + handler.voicesDelay
+
         if #voices == 0 then
             return false
         end
+
         local voice = voices[math.random(1, #voices)]
+        if voice == self.lastVoice and #voices > 1 then
+            -- rolling again until we get another voice, we only do this if there is more than one voice to choose from
+            repeat
+                voice = voices[math.random(1, #voices)]
+            until voice ~= self.lastVoice
+        end
+
         self.lastVoice = voice
-        self.lastVoiceTime = os.mtime()
         return true, voice
     end
 end

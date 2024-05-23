@@ -389,8 +389,10 @@ if not NpcsHandler then
 
     -- Adds words which the npc will randomly say in public or yell.
     ---@param params table<number, table> The words with interval, chance and TALKTYPE_SAY/TALKTYPE_YELL.
-    function NpcsHandler:talk(params)
+    ---@param delay number The delay between the words, default is 30000ms (30s).
+    function NpcsHandler:talk(params, delay)
         self.voices = params
+        self.voicesDelay = delay or 30000
     end
 
     -- Checks if the player has a storage value and sets the talk state accordingly.
