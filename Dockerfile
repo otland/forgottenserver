@@ -14,7 +14,7 @@ COPY cmake /usr/src/forgottenserver/cmake/
 COPY src /usr/src/forgottenserver/src/
 COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
-RUN cmake --preset default && cmake --build --config RelWithDebInfo --preset default
+RUN cmake --preset default -DUSE_LUAJIT=ON && cmake --build --config RelWithDebInfo --preset default
 
 FROM alpine:3.19
 RUN apk add --no-cache \
