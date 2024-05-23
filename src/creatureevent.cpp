@@ -478,7 +478,9 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view
 	return scriptInterface->callFunction(4);
 }
 
-static void pushCombatDamage(lua_State* L, const CombatDamage& damage)
+namespace {
+
+void pushCombatDamage(lua_State* L, const CombatDamage& damage)
 {
 	lua_pushnumber(L, damage.primary.value);
 	lua_pushnumber(L, damage.primary.type);
@@ -486,6 +488,8 @@ static void pushCombatDamage(lua_State* L, const CombatDamage& damage)
 	lua_pushnumber(L, damage.secondary.type);
 	lua_pushnumber(L, damage.origin);
 }
+
+} // namespace
 
 void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage)
 {

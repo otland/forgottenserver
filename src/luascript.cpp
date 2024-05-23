@@ -37,7 +37,7 @@
 #include "teleport.h"
 #include "weapons.h"
 
-#include <boost/range/adaptor/reversed.hpp>
+#include <ranges>
 
 extern Chat* g_chat;
 extern Game g_game;
@@ -63,9 +63,6 @@ LuaEnvironment g_luaEnvironment;
 
 namespace {
 
-std::array<ScriptEnvironment, 16> scriptEnv = {};
-int32_t scriptEnvIndex = -1;
-
 std::string getStackTrace(lua_State* L, std::string_view error_desc)
 {
 	luaL_traceback(L, L, error_desc.data(), 1);
@@ -89,160 +86,6 @@ void setField(lua_State* L, const char* index, std::string_view value)
 {
 	tfs::lua::pushString(L, value);
 	lua_setfield(L, -2, index);
-}
-
-void setWeakMetatable(lua_State* L, int32_t index, const std::string& name)
-{
-	static std::set<std::string> weakObjectTypes;
-	const std::string& weakName = name + "_weak";
-
-	auto result = weakObjectTypes.emplace(name);
-	if (result.second) {
-		luaL_getmetatable(L, name.data());
-		int childMetatable = lua_gettop(L);
-
-		luaL_newmetatable(L, weakName.data());
-		int metatable = lua_gettop(L);
-
-		static const std::vector<std::string> methodKeys = {"__index", "__metatable", "__eq"};
-		for (const std::string& metaKey : methodKeys) {
-			lua_getfield(L, childMetatable, metaKey.data());
-			lua_setfield(L, metatable, metaKey.data());
-		}
-
-		static const std::vector<int> methodIndexes = {'h', 'p', 't'};
-		for (int metaIndex : methodIndexes) {
-			lua_rawgeti(L, childMetatable, metaIndex);
-			lua_rawseti(L, metatable, metaIndex);
-		}
-
-		lua_pushnil(L);
-		lua_setfield(L, metatable, "__gc");
-
-		lua_remove(L, childMetatable);
-	} else {
-		luaL_getmetatable(L, weakName.data());
-	}
-	lua_setmetatable(L, index - 1);
-}
-
-Outfit_t getOutfit(lua_State* L, int32_t arg)
-{
-	Outfit_t outfit{
-	    .lookType = tfs::lua::getField<uint16_t>(L, arg, "lookType"),
-	    .lookTypeEx = tfs::lua::getField<uint16_t>(L, arg, "lookTypeEx"),
-
-	    .lookHead = tfs::lua::getField<uint8_t>(L, arg, "lookHead"),
-	    .lookBody = tfs::lua::getField<uint8_t>(L, arg, "lookBody"),
-	    .lookLegs = tfs::lua::getField<uint8_t>(L, arg, "lookLegs"),
-	    .lookFeet = tfs::lua::getField<uint8_t>(L, arg, "lookFeet"),
-	    .lookAddons = tfs::lua::getField<uint8_t>(L, arg, "lookAddons"),
-
-	    .lookMount = tfs::lua::getField<uint16_t>(L, arg, "lookMount"),
-	    .lookMountHead = tfs::lua::getField<uint8_t>(L, arg, "lookMountHead"),
-	    .lookMountBody = tfs::lua::getField<uint8_t>(L, arg, "lookMountBody"),
-	    .lookMountLegs = tfs::lua::getField<uint8_t>(L, arg, "lookMountLegs"),
-	    .lookMountFeet = tfs::lua::getField<uint8_t>(L, arg, "lookMountFeet"),
-	};
-
-	lua_pop(L, 12);
-	return outfit;
-}
-
-Outfit getOutfitClass(lua_State* L, int32_t arg)
-{
-	Outfit outfit{
-	    .name = tfs::lua::getFieldString(L, arg, "name"),
-	    .lookType = tfs::lua::getField<uint16_t>(L, arg, "lookType"),
-	    .premium = tfs::lua::getField<uint8_t>(L, arg, "premium") == 1,
-	    .unlocked = tfs::lua::getField<uint8_t>(L, arg, "unlocked") == 1,
-	};
-
-	lua_pop(L, 4);
-	return outfit;
-}
-
-LuaVariant getVariant(lua_State* L, int32_t arg)
-{
-	LuaVariant var;
-	switch (tfs::lua::getField<LuaVariantType_t>(L, arg, "type")) {
-		case VARIANT_NUMBER: {
-			var.setNumber(tfs::lua::getField<uint32_t>(L, arg, "number"));
-			lua_pop(L, 2);
-			break;
-		}
-
-		case VARIANT_STRING: {
-			var.setString(tfs::lua::getFieldString(L, arg, "string"));
-			lua_pop(L, 2);
-			break;
-		}
-
-		case VARIANT_POSITION:
-			lua_getfield(L, arg, "pos");
-			var.setPosition(tfs::lua::getPosition(L, lua_gettop(L)));
-			lua_pop(L, 2);
-			break;
-
-		case VARIANT_TARGETPOSITION: {
-			lua_getfield(L, arg, "pos");
-			var.setTargetPosition(tfs::lua::getPosition(L, lua_gettop(L)));
-			lua_pop(L, 2);
-			break;
-		}
-
-		default: {
-			var = {};
-			lua_pop(L, 1);
-			break;
-		}
-	}
-	return var;
-}
-
-Reflect getReflect(lua_State* L, int32_t arg)
-{
-	Reflect reflect{
-	    tfs::lua::getField<uint16_t>(L, arg, "percent"),
-	    tfs::lua::getField<uint16_t>(L, arg, "chance"),
-	};
-	lua_pop(L, 2);
-	return reflect;
-}
-
-LuaDataType getUserdataType(lua_State* L, int32_t arg)
-{
-	if (lua_getmetatable(L, arg) == 0) {
-		return LuaData_Unknown;
-	}
-	lua_rawgeti(L, -1, 't');
-
-	LuaDataType type = tfs::lua::getNumber<LuaDataType>(L, -1);
-	lua_pop(L, 2);
-
-	return type;
-}
-
-void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
-{
-	lua_createtable(L, lootList.size(), 0);
-
-	int index = 0;
-	for (const auto& lootBlock : lootList) {
-		lua_createtable(L, 0, 7);
-
-		setField(L, "itemId", lootBlock.id);
-		setField(L, "chance", lootBlock.chance);
-		setField(L, "subType", lootBlock.subType);
-		setField(L, "maxCount", lootBlock.countmax);
-		setField(L, "actionId", lootBlock.actionId);
-		setField(L, "text", lootBlock.text);
-
-		pushLoot(L, lootBlock.childLoot);
-		lua_setfield(L, -2, "childLoot");
-
-		lua_rawseti(L, -2, ++index);
-	}
 }
 
 void registerClass(lua_State* L, std::string_view className, std::string_view baseClass,
@@ -322,6 +165,55 @@ void registerClass(lua_State* L, std::string_view className, std::string_view ba
 	lua_pop(L, 2);
 }
 
+void registerTable(lua_State* L, std::string_view tableName)
+{
+	// _G[tableName] = {}
+	lua_newtable(L);
+	lua_setglobal(L, tableName.data());
+}
+
+void registerMetaMethod(lua_State* L, std::string_view className, std::string_view methodName, lua_CFunction func)
+{
+	// className.metatable.methodName = func
+	luaL_getmetatable(L, className.data());
+	lua_pushcfunction(L, func);
+	lua_setfield(L, -2, methodName.data());
+
+	// pop className.metatable
+	lua_pop(L, 1);
+}
+
+void registerGlobalMethod(lua_State* L, std::string_view functionName, lua_CFunction func)
+{
+	// _G[functionName] = func
+	lua_pushcfunction(L, func);
+	lua_setglobal(L, functionName.data());
+}
+
+void registerVariable(lua_State* L, std::string_view tableName, std::string_view name, lua_Number value)
+{
+	// tableName.name = value
+	lua_getglobal(L, tableName.data());
+	setField(L, name.data(), value);
+
+	// pop tableName
+	lua_pop(L, 1);
+}
+
+void registerGlobalVariable(lua_State* L, std::string_view name, lua_Number value)
+{
+	// _G[name] = value
+	lua_pushnumber(L, value);
+	lua_setglobal(L, name.data());
+}
+
+void registerGlobalBoolean(lua_State* L, std::string_view name, bool value)
+{
+	// _G[name] = value
+	tfs::lua::pushBoolean(L, value);
+	lua_setglobal(L, name.data());
+}
+
 bool isNumber(lua_State* L, int32_t arg) { return lua_type(L, arg) == LUA_TNUMBER; }
 
 bool getArea(lua_State* L, std::vector<uint32_t>& vec, uint32_t& rows)
@@ -398,11 +290,6 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	this->callbackId = callbackId;
 	interface = scriptInterface;
 	return true;
-}
-
-std::tuple<int32_t, LuaScriptInterface*, int32_t, bool> ScriptEnvironment::getEventInfo() const
-{
-	return std::make_tuple(scriptId, interface, callbackId, timerEvent);
 }
 
 uint32_t ScriptEnvironment::addThing(Thing* thing)
@@ -532,6 +419,43 @@ DBResult_ptr ScriptEnvironment::getResultByID(uint32_t id)
 	return it->second;
 }
 
+std::string tfs::lua::getErrorDesc(ErrorCode_t code)
+{
+	switch (code) {
+		case LUA_ERROR_PLAYER_NOT_FOUND:
+			return "Player not found";
+		case LUA_ERROR_CREATURE_NOT_FOUND:
+			return "Creature not found";
+		case LUA_ERROR_ITEM_NOT_FOUND:
+			return "Item not found";
+		case LUA_ERROR_THING_NOT_FOUND:
+			return "Thing not found";
+		case LUA_ERROR_TILE_NOT_FOUND:
+			return "Tile not found";
+		case LUA_ERROR_HOUSE_NOT_FOUND:
+			return "House not found";
+		case LUA_ERROR_COMBAT_NOT_FOUND:
+			return "Combat not found";
+		case LUA_ERROR_CONDITION_NOT_FOUND:
+			return "Condition not found";
+		case LUA_ERROR_AREA_NOT_FOUND:
+			return "Area not found";
+		case LUA_ERROR_CONTAINER_NOT_FOUND:
+			return "Container not found";
+		case LUA_ERROR_VARIANT_NOT_FOUND:
+			return "Variant not found";
+		case LUA_ERROR_VARIANT_UNKNOWN:
+			return "Unknown variant type";
+		case LUA_ERROR_SPELL_NOT_FOUND:
+			return "Spell not found";
+		default:
+			return "Bad error code";
+	}
+}
+
+static std::array<ScriptEnvironment, 16> scriptEnv = {};
+static int32_t scriptEnvIndex = -1;
+
 LuaScriptInterface::LuaScriptInterface(std::string interfaceName) : interfaceName(std::move(interfaceName))
 {
 	if (!g_luaEnvironment.getLuaState()) {
@@ -548,6 +472,18 @@ bool LuaScriptInterface::reInitState()
 
 	closeState();
 	return initState();
+}
+
+/// Same as lua_pcall, but adds stack trace to error strings in called function.
+int tfs::lua::protectedCall(lua_State* L, int nargs, int nresults)
+{
+	int error_index = lua_gettop(L) - nargs;
+	lua_pushcfunction(L, luaErrorHandler);
+	lua_insert(L, error_index);
+
+	int ret = lua_pcall(L, nargs, nresults, error_index);
+	lua_remove(L, error_index);
+	return ret;
 }
 
 int32_t LuaScriptInterface::loadFile(const std::string& file, Npc* npc /* = nullptr*/)
@@ -685,6 +621,38 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 	return it->second;
 }
 
+void tfs::lua::reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
+                           bool stack_trace /*= false*/)
+{
+	auto [scriptId, scriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
+
+	std::cout << std::endl << "Lua Script Error: ";
+
+	if (scriptInterface) {
+		std::cout << '[' << scriptInterface->getInterfaceName() << "] " << std::endl;
+
+		if (timerEvent) {
+			std::cout << "in a timer event called from: " << std::endl;
+		}
+
+		if (callbackId) {
+			std::cout << "in callback: " << scriptInterface->getFileById(callbackId) << std::endl;
+		}
+
+		std::cout << scriptInterface->getFileById(scriptId) << std::endl;
+	}
+
+	if (!function.empty()) {
+		std::cout << function << "(). ";
+	}
+
+	if (L && stack_trace) {
+		std::cout << getStackTrace(L, error_desc) << std::endl;
+	} else {
+		std::cout << error_desc << std::endl;
+	}
+}
+
 bool LuaScriptInterface::pushFunction(int32_t functionId)
 {
 	lua_rawgeti(L, LUA_REGISTRYINDEX, eventTableRef);
@@ -758,53 +726,415 @@ void LuaScriptInterface::callVoidFunction(int params)
 	tfs::lua::resetScriptEnv();
 }
 
-void registerTable(lua_State* L, std::string_view tableName)
+void tfs::lua::pushVariant(lua_State* L, const LuaVariant& var)
 {
-	// _G[tableName] = {}
-	lua_newtable(L);
-	lua_setglobal(L, tableName.data());
+	lua_createtable(L, 0, 2);
+	setField(L, "type", var.type());
+	switch (var.type()) {
+		case VARIANT_NUMBER:
+			setField(L, "number", var.getNumber());
+			break;
+		case VARIANT_STRING:
+			setField(L, "string", var.getString());
+			break;
+		case VARIANT_TARGETPOSITION:
+			pushPosition(L, var.getTargetPosition());
+			lua_setfield(L, -2, "pos");
+			break;
+		case VARIANT_POSITION: {
+			pushPosition(L, var.getPosition());
+			lua_setfield(L, -2, "pos");
+			break;
+		}
+		default:
+			break;
+	}
+	setMetatable(L, -1, "Variant");
 }
 
-void registerMetaMethod(lua_State* L, std::string_view className, std::string_view methodName, lua_CFunction func)
+void tfs::lua::pushThing(lua_State* L, Thing* thing)
 {
-	// className.metatable.methodName = func
-	luaL_getmetatable(L, className.data());
-	lua_pushcfunction(L, func);
-	lua_setfield(L, -2, methodName.data());
+	if (!thing) {
+		lua_createtable(L, 0, 4);
+		setField(L, "uid", 0);
+		setField(L, "itemid", 0);
+		setField(L, "actionid", 0);
+		setField(L, "type", 0);
+		return;
+	}
 
-	// pop className.metatable
+	if (Item* item = thing->getItem()) {
+		pushUserdata(L, item);
+		setItemMetatable(L, -1, item);
+	} else if (Creature* creature = thing->getCreature()) {
+		pushUserdata(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else {
+		lua_pushnil(L);
+	}
+}
+
+void tfs::lua::pushCylinder(lua_State* L, Cylinder* cylinder)
+{
+	if (Creature* creature = cylinder->getCreature()) {
+		pushUserdata(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (Item* parentItem = cylinder->getItem()) {
+		pushUserdata(L, parentItem);
+		setItemMetatable(L, -1, parentItem);
+	} else if (Tile* tile = cylinder->getTile()) {
+		pushUserdata(L, tile);
+		setMetatable(L, -1, "Tile");
+	} else if (cylinder == VirtualCylinder::virtualCylinder) {
+		pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+}
+
+void tfs::lua::pushString(lua_State* L, std::string_view value) { lua_pushlstring(L, value.data(), value.size()); }
+void tfs::lua::pushCallback(lua_State* L, int32_t callback) { lua_rawgeti(L, LUA_REGISTRYINDEX, callback); }
+
+std::string tfs::lua::popString(lua_State* L)
+{
+	if (lua_gettop(L) == 0) {
+		return std::string();
+	}
+
+	std::string str = getString(L, -1);
 	lua_pop(L, 1);
+	return str;
 }
 
-void registerGlobalMethod(lua_State* L, std::string_view functionName, lua_CFunction func)
+int32_t tfs::lua::popCallback(lua_State* L) { return luaL_ref(L, LUA_REGISTRYINDEX); }
+
+// Metatables
+void tfs::lua::setMetatable(lua_State* L, int32_t index, std::string_view name)
 {
-	// _G[functionName] = func
-	lua_pushcfunction(L, func);
-	lua_setglobal(L, functionName.data());
+	luaL_getmetatable(L, name.data());
+	lua_setmetatable(L, index - 1);
 }
 
-void registerGlobalVariable(lua_State* L, std::string_view name, lua_Number value)
+static void setWeakMetatable(lua_State* L, int32_t index, const std::string& name)
 {
-	// _G[name] = value
-	lua_pushnumber(L, value);
-	lua_setglobal(L, name.data());
+	static std::set<std::string> weakObjectTypes;
+	const std::string& weakName = name + "_weak";
+
+	auto result = weakObjectTypes.emplace(name);
+	if (result.second) {
+		luaL_getmetatable(L, name.data());
+		int childMetatable = lua_gettop(L);
+
+		luaL_newmetatable(L, weakName.data());
+		int metatable = lua_gettop(L);
+
+		static const std::vector<std::string> methodKeys = {"__index", "__metatable", "__eq"};
+		for (const std::string& metaKey : methodKeys) {
+			lua_getfield(L, childMetatable, metaKey.data());
+			lua_setfield(L, metatable, metaKey.data());
+		}
+
+		static const std::vector<int> methodIndexes = {'h', 'p', 't'};
+		for (int metaIndex : methodIndexes) {
+			lua_rawgeti(L, childMetatable, metaIndex);
+			lua_rawseti(L, metatable, metaIndex);
+		}
+
+		lua_pushnil(L);
+		lua_setfield(L, metatable, "__gc");
+
+		lua_remove(L, childMetatable);
+	} else {
+		luaL_getmetatable(L, weakName.data());
+	}
+	lua_setmetatable(L, index - 1);
 }
 
-void registerVariable(lua_State* L, std::string_view tableName, std::string_view name, lua_Number value)
+void tfs::lua::setItemMetatable(lua_State* L, int32_t index, const Item* item)
 {
-	// tableName.name = value
-	lua_getglobal(L, tableName.data());
-	setField(L, name.data(), value);
-
-	// pop tableName
-	lua_pop(L, 1);
+	if (item->getContainer()) {
+		luaL_getmetatable(L, "Container");
+	} else if (item->getTeleport()) {
+		luaL_getmetatable(L, "Teleport");
+	} else if (item->getPodium()) {
+		luaL_getmetatable(L, "Podium");
+	} else {
+		luaL_getmetatable(L, "Item");
+	}
+	lua_setmetatable(L, index - 1);
 }
 
-void registerGlobalBoolean(lua_State* L, std::string_view name, bool value)
+void tfs::lua::setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 {
-	// _G[name] = value
-	tfs::lua::pushBoolean(L, value);
-	lua_setglobal(L, name.data());
+	if (creature->getPlayer()) {
+		luaL_getmetatable(L, "Player");
+	} else if (creature->getMonster()) {
+		luaL_getmetatable(L, "Monster");
+	} else {
+		luaL_getmetatable(L, "Npc");
+	}
+	lua_setmetatable(L, index - 1);
+}
+
+// Get
+std::string tfs::lua::getString(lua_State* L, int32_t arg)
+{
+	size_t len;
+	const char* data = lua_tolstring(L, arg, &len);
+	if (!data || len == 0) {
+		return {};
+	}
+	return {data, len};
+}
+
+Position tfs::lua::getPosition(lua_State* L, int32_t arg, int32_t& stackpos)
+{
+	Position position{
+	    getField<uint16_t>(L, arg, "x"),
+	    getField<uint16_t>(L, arg, "y"),
+	    getField<uint8_t>(L, arg, "z"),
+	};
+
+	lua_getfield(L, arg, "stackpos");
+	if (lua_isnil(L, -1) == 1) {
+		stackpos = 0;
+	} else {
+		stackpos = getNumber<int32_t>(L, -1);
+	}
+
+	lua_pop(L, 4);
+	return position;
+}
+
+Position tfs::lua::getPosition(lua_State* L, int32_t arg)
+{
+	Position position{
+	    getField<uint16_t>(L, arg, "x"),
+	    getField<uint16_t>(L, arg, "y"),
+	    getField<uint8_t>(L, arg, "z"),
+	};
+
+	lua_pop(L, 3);
+	return position;
+}
+
+static Outfit_t getOutfit(lua_State* L, int32_t arg)
+{
+	Outfit_t outfit{
+	    .lookType = tfs::lua::getField<uint16_t>(L, arg, "lookType"),
+	    .lookTypeEx = tfs::lua::getField<uint16_t>(L, arg, "lookTypeEx"),
+
+	    .lookHead = tfs::lua::getField<uint8_t>(L, arg, "lookHead"),
+	    .lookBody = tfs::lua::getField<uint8_t>(L, arg, "lookBody"),
+	    .lookLegs = tfs::lua::getField<uint8_t>(L, arg, "lookLegs"),
+	    .lookFeet = tfs::lua::getField<uint8_t>(L, arg, "lookFeet"),
+	    .lookAddons = tfs::lua::getField<uint8_t>(L, arg, "lookAddons"),
+
+	    .lookMount = tfs::lua::getField<uint16_t>(L, arg, "lookMount"),
+	    .lookMountHead = tfs::lua::getField<uint8_t>(L, arg, "lookMountHead"),
+	    .lookMountBody = tfs::lua::getField<uint8_t>(L, arg, "lookMountBody"),
+	    .lookMountLegs = tfs::lua::getField<uint8_t>(L, arg, "lookMountLegs"),
+	    .lookMountFeet = tfs::lua::getField<uint8_t>(L, arg, "lookMountFeet"),
+	};
+
+	lua_pop(L, 12);
+	return outfit;
+}
+
+static Outfit getOutfitClass(lua_State* L, int32_t arg)
+{
+	Outfit outfit{
+	    .name = tfs::lua::getFieldString(L, arg, "name"),
+	    .lookType = tfs::lua::getField<uint16_t>(L, arg, "lookType"),
+	    .premium = tfs::lua::getField<uint8_t>(L, arg, "premium") == 1,
+	    .unlocked = tfs::lua::getField<uint8_t>(L, arg, "unlocked") == 1,
+	};
+
+	lua_pop(L, 4);
+	return outfit;
+}
+
+static LuaVariant getVariant(lua_State* L, int32_t arg)
+{
+	LuaVariant var;
+	switch (tfs::lua::getField<LuaVariantType_t>(L, arg, "type")) {
+		case VARIANT_NUMBER: {
+			var.setNumber(tfs::lua::getField<uint32_t>(L, arg, "number"));
+			lua_pop(L, 2);
+			break;
+		}
+
+		case VARIANT_STRING: {
+			var.setString(tfs::lua::getFieldString(L, arg, "string"));
+			lua_pop(L, 2);
+			break;
+		}
+
+		case VARIANT_POSITION:
+			lua_getfield(L, arg, "pos");
+			var.setPosition(tfs::lua::getPosition(L, lua_gettop(L)));
+			lua_pop(L, 2);
+			break;
+
+		case VARIANT_TARGETPOSITION: {
+			lua_getfield(L, arg, "pos");
+			var.setTargetPosition(tfs::lua::getPosition(L, lua_gettop(L)));
+			lua_pop(L, 2);
+			break;
+		}
+
+		default: {
+			var = {};
+			lua_pop(L, 1);
+			break;
+		}
+	}
+	return var;
+}
+
+Thing* tfs::lua::getThing(lua_State* L, int32_t arg)
+{
+	Thing* thing;
+	if (lua_getmetatable(L, arg) != 0) {
+		lua_rawgeti(L, -1, 't');
+		switch (getNumber<uint32_t>(L, -1)) {
+			case LuaData_Item:
+				thing = getUserdata<Item>(L, arg);
+				break;
+			case LuaData_Container:
+				thing = getUserdata<Container>(L, arg);
+				break;
+			case LuaData_Teleport:
+				thing = getUserdata<Teleport>(L, arg);
+				break;
+			case LuaData_Podium:
+				thing = getUserdata<Podium>(L, arg);
+				break;
+			case LuaData_Player:
+				thing = getUserdata<Player>(L, arg);
+				break;
+			case LuaData_Monster:
+				thing = getUserdata<Monster>(L, arg);
+				break;
+			case LuaData_Npc:
+				thing = getUserdata<Npc>(L, arg);
+				break;
+			default:
+				thing = nullptr;
+				break;
+		}
+		lua_pop(L, 2);
+	} else {
+		thing = getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
+	}
+	return thing;
+}
+
+Creature* tfs::lua::getCreature(lua_State* L, int32_t arg)
+{
+	if (lua_isuserdata(L, arg)) {
+		return getUserdata<Creature>(L, arg);
+	}
+	return g_game.getCreatureByID(getNumber<uint32_t>(L, arg));
+}
+
+Player* tfs::lua::getPlayer(lua_State* L, int32_t arg)
+{
+	if (lua_isuserdata(L, arg)) {
+		return getUserdata<Player>(L, arg);
+	}
+	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
+}
+
+std::string tfs::lua::getFieldString(lua_State* L, int32_t arg, const std::string_view key)
+{
+	lua_getfield(L, arg, key.data());
+	return getString(L, -1);
+}
+
+static LuaDataType getUserdataType(lua_State* L, int32_t arg)
+{
+	if (lua_getmetatable(L, arg) == 0) {
+		return LuaData_Unknown;
+	}
+	lua_rawgeti(L, -1, 't');
+
+	LuaDataType type = tfs::lua::getNumber<LuaDataType>(L, -1);
+	lua_pop(L, 2);
+
+	return type;
+}
+
+void tfs::lua::pushBoolean(lua_State* L, bool value) { lua_pushboolean(L, value ? 1 : 0); }
+
+void tfs::lua::pushSpell(lua_State* L, const Spell& spell)
+{
+	lua_createtable(L, 0, 5);
+	setField(L, "name", spell.getName());
+	setField(L, "level", spell.getLevel());
+	setField(L, "mlevel", spell.getMagicLevel());
+	setField(L, "mana", spell.getMana());
+	setField(L, "manapercent", spell.getManaPercent());
+	setMetatable(L, -1, "Spell");
+}
+
+void tfs::lua::pushPosition(lua_State* L, const Position& position, int32_t stackpos /* = 0*/)
+{
+	lua_createtable(L, 0, 4);
+	setField(L, "x", position.x);
+	setField(L, "y", position.y);
+	setField(L, "z", position.z);
+	setField(L, "stackpos", stackpos);
+	setMetatable(L, -1, "Position");
+}
+
+void tfs::lua::pushOutfit(lua_State* L, const Outfit_t& outfit)
+{
+	lua_createtable(L, 0, 12);
+	setField(L, "lookType", outfit.lookType);
+	setField(L, "lookTypeEx", outfit.lookTypeEx);
+	setField(L, "lookHead", outfit.lookHead);
+	setField(L, "lookBody", outfit.lookBody);
+	setField(L, "lookLegs", outfit.lookLegs);
+	setField(L, "lookFeet", outfit.lookFeet);
+	setField(L, "lookAddons", outfit.lookAddons);
+	setField(L, "lookMount", outfit.lookMount);
+	setField(L, "lookMountHead", outfit.lookMountHead);
+	setField(L, "lookMountBody", outfit.lookMountBody);
+	setField(L, "lookMountLegs", outfit.lookMountLegs);
+	setField(L, "lookMountFeet", outfit.lookMountFeet);
+}
+
+void tfs::lua::pushOutfit(lua_State* L, const Outfit* outfit)
+{
+	lua_createtable(L, 0, 4);
+	setField(L, "lookType", outfit->lookType);
+	setField(L, "name", outfit->name);
+	setField(L, "premium", outfit->premium);
+	setField(L, "unlocked", outfit->unlocked);
+	setMetatable(L, -1, "Outfit");
+}
+
+static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
+{
+	lua_createtable(L, lootList.size(), 0);
+
+	int index = 0;
+	for (const auto& lootBlock : lootList) {
+		lua_createtable(L, 0, 7);
+
+		setField(L, "itemId", lootBlock.id);
+		setField(L, "chance", lootBlock.chance);
+		setField(L, "subType", lootBlock.subType);
+		setField(L, "maxCount", lootBlock.countmax);
+		setField(L, "actionId", lootBlock.actionId);
+		setField(L, "text", lootBlock.text);
+
+		pushLoot(L, lootBlock.childLoot);
+		lua_setfield(L, -2, "childLoot");
+
+		lua_rawseti(L, -2, ++index);
+	}
 }
 
 #define registerEnum(L, value) \
@@ -3197,367 +3527,23 @@ void LuaScriptInterface::registerFunctions()
 #undef registerEnum
 #undef registerEnumIn
 
-namespace tfs::lua {
-
-std::string getErrorDesc(ErrorCode_t code)
-{
-	switch (code) {
-		case LUA_ERROR_PLAYER_NOT_FOUND:
-			return "Player not found";
-		case LUA_ERROR_CREATURE_NOT_FOUND:
-			return "Creature not found";
-		case LUA_ERROR_ITEM_NOT_FOUND:
-			return "Item not found";
-		case LUA_ERROR_THING_NOT_FOUND:
-			return "Thing not found";
-		case LUA_ERROR_TILE_NOT_FOUND:
-			return "Tile not found";
-		case LUA_ERROR_HOUSE_NOT_FOUND:
-			return "House not found";
-		case LUA_ERROR_COMBAT_NOT_FOUND:
-			return "Combat not found";
-		case LUA_ERROR_CONDITION_NOT_FOUND:
-			return "Condition not found";
-		case LUA_ERROR_AREA_NOT_FOUND:
-			return "Area not found";
-		case LUA_ERROR_CONTAINER_NOT_FOUND:
-			return "Container not found";
-		case LUA_ERROR_VARIANT_NOT_FOUND:
-			return "Variant not found";
-		case LUA_ERROR_VARIANT_UNKNOWN:
-			return "Unknown variant type";
-		case LUA_ERROR_SPELL_NOT_FOUND:
-			return "Spell not found";
-		default:
-			return "Bad error code";
-	}
-}
-
-/// Same as lua_pcall, but adds stack trace to error strings in called function.
-int protectedCall(lua_State* L, int nargs, int nresults)
-{
-	int error_index = lua_gettop(L) - nargs;
-	lua_pushcfunction(L, luaErrorHandler);
-	lua_insert(L, error_index);
-
-	int ret = lua_pcall(L, nargs, nresults, error_index);
-	lua_remove(L, error_index);
-	return ret;
-}
-
-void reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
-                 bool stack_trace /*= false*/)
-{
-	auto [scriptId, scriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
-
-	std::cout << std::endl << "Lua Script Error: ";
-
-	if (scriptInterface) {
-		std::cout << '[' << scriptInterface->getInterfaceName() << "] " << std::endl;
-
-		if (timerEvent) {
-			std::cout << "in a timer event called from: " << std::endl;
-		}
-
-		if (callbackId) {
-			std::cout << "in callback: " << scriptInterface->getFileById(callbackId) << std::endl;
-		}
-
-		std::cout << scriptInterface->getFileById(scriptId) << std::endl;
-	}
-
-	if (!function.empty()) {
-		std::cout << function << "(). ";
-	}
-
-	if (L && stack_trace) {
-		std::cout << getStackTrace(L, error_desc) << std::endl;
-	} else {
-		std::cout << error_desc << std::endl;
-	}
-}
-
-void pushVariant(lua_State* L, const LuaVariant& var)
-{
-	lua_createtable(L, 0, 2);
-	setField(L, "type", var.type());
-	switch (var.type()) {
-		case VARIANT_NUMBER:
-			setField(L, "number", var.getNumber());
-			break;
-		case VARIANT_STRING:
-			setField(L, "string", var.getString());
-			break;
-		case VARIANT_TARGETPOSITION:
-			pushPosition(L, var.getTargetPosition());
-			lua_setfield(L, -2, "pos");
-			break;
-		case VARIANT_POSITION: {
-			pushPosition(L, var.getPosition());
-			lua_setfield(L, -2, "pos");
-			break;
-		}
-		default:
-			break;
-	}
-	setMetatable(L, -1, "Variant");
-}
-
-void pushThing(lua_State* L, Thing* thing)
-{
-	if (!thing) {
-		lua_createtable(L, 0, 4);
-		setField(L, "uid", 0);
-		setField(L, "itemid", 0);
-		setField(L, "actionid", 0);
-		setField(L, "type", 0);
-		return;
-	}
-
-	if (Item* item = thing->getItem()) {
-		pushUserdata(L, item);
-		setItemMetatable(L, -1, item);
-	} else if (Creature* creature = thing->getCreature()) {
-		pushUserdata(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else {
-		lua_pushnil(L);
-	}
-}
-
-void pushCylinder(lua_State* L, Cylinder* cylinder)
-{
-	if (Creature* creature = cylinder->getCreature()) {
-		pushUserdata(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (Item* parentItem = cylinder->getItem()) {
-		pushUserdata(L, parentItem);
-		setItemMetatable(L, -1, parentItem);
-	} else if (Tile* tile = cylinder->getTile()) {
-		pushUserdata(L, tile);
-		setMetatable(L, -1, "Tile");
-	} else if (cylinder == VirtualCylinder::virtualCylinder) {
-		pushBoolean(L, true);
-	} else {
-		lua_pushnil(L);
-	}
-}
-
-void pushCallback(lua_State* L, int32_t callback) { lua_rawgeti(L, LUA_REGISTRYINDEX, callback); }
-
-std::string popString(lua_State* L)
-{
-	if (lua_gettop(L) == 0) {
-		return std::string();
-	}
-
-	std::string str = getString(L, -1);
-	lua_pop(L, 1);
-	return str;
-}
-
-int32_t popCallback(lua_State* L) { return luaL_ref(L, LUA_REGISTRYINDEX); }
-
-// Metatables
-void setMetatable(lua_State* L, int32_t index, std::string_view name)
-{
-	luaL_getmetatable(L, name.data());
-	lua_setmetatable(L, index - 1);
-}
-
-void setItemMetatable(lua_State* L, int32_t index, const Item* item)
-{
-	if (item->getContainer()) {
-		luaL_getmetatable(L, "Container");
-	} else if (item->getTeleport()) {
-		luaL_getmetatable(L, "Teleport");
-	} else if (item->getPodium()) {
-		luaL_getmetatable(L, "Podium");
-	} else {
-		luaL_getmetatable(L, "Item");
-	}
-	lua_setmetatable(L, index - 1);
-}
-
-void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
-{
-	if (creature->getPlayer()) {
-		luaL_getmetatable(L, "Player");
-	} else if (creature->getMonster()) {
-		luaL_getmetatable(L, "Monster");
-	} else {
-		luaL_getmetatable(L, "Npc");
-	}
-	lua_setmetatable(L, index - 1);
-}
-
-// Get
-std::string getString(lua_State* L, int32_t arg)
-{
-	size_t len;
-	const char* data = lua_tolstring(L, arg, &len);
-	if (!data || len == 0) {
-		return {};
-	}
-	return {data, len};
-}
-
-Position getPosition(lua_State* L, int32_t arg, int32_t& stackpos)
-{
-	Position position{
-	    getField<uint16_t>(L, arg, "x"),
-	    getField<uint16_t>(L, arg, "y"),
-	    getField<uint8_t>(L, arg, "z"),
-	};
-
-	lua_getfield(L, arg, "stackpos");
-	if (lua_isnil(L, -1) == 1) {
-		stackpos = 0;
-	} else {
-		stackpos = getNumber<int32_t>(L, -1);
-	}
-
-	lua_pop(L, 4);
-	return position;
-}
-
-Position getPosition(lua_State* L, int32_t arg)
-{
-	Position position{
-	    getField<uint16_t>(L, arg, "x"),
-	    getField<uint16_t>(L, arg, "y"),
-	    getField<uint8_t>(L, arg, "z"),
-	};
-
-	lua_pop(L, 3);
-	return position;
-}
-
-Thing* getThing(lua_State* L, int32_t arg)
-{
-	Thing* thing;
-	if (lua_getmetatable(L, arg) != 0) {
-		lua_rawgeti(L, -1, 't');
-		switch (getNumber<uint32_t>(L, -1)) {
-			case LuaData_Item:
-				thing = getUserdata<Item>(L, arg);
-				break;
-			case LuaData_Container:
-				thing = getUserdata<Container>(L, arg);
-				break;
-			case LuaData_Teleport:
-				thing = getUserdata<Teleport>(L, arg);
-				break;
-			case LuaData_Podium:
-				thing = getUserdata<Podium>(L, arg);
-				break;
-			case LuaData_Player:
-				thing = getUserdata<Player>(L, arg);
-				break;
-			case LuaData_Monster:
-				thing = getUserdata<Monster>(L, arg);
-				break;
-			case LuaData_Npc:
-				thing = getUserdata<Npc>(L, arg);
-				break;
-			default:
-				thing = nullptr;
-				break;
-		}
-		lua_pop(L, 2);
-	} else {
-		thing = getScriptEnv()->getThingByUID(getNumber<uint32_t>(L, arg));
-	}
-	return thing;
-}
-
-Creature* getCreature(lua_State* L, int32_t arg)
-{
-	if (lua_isuserdata(L, arg)) {
-		return getUserdata<Creature>(L, arg);
-	}
-	return g_game.getCreatureByID(getNumber<uint32_t>(L, arg));
-}
-
-Player* getPlayer(lua_State* L, int32_t arg)
-{
-	if (lua_isuserdata(L, arg)) {
-		return getUserdata<Player>(L, arg);
-	}
-	return g_game.getPlayerByID(getNumber<uint32_t>(L, arg));
-}
-
-std::string getFieldString(lua_State* L, int32_t arg, const std::string_view key)
-{
-	lua_getfield(L, arg, key.data());
-	return getString(L, -1);
-}
-
-void pushSpell(lua_State* L, const Spell& spell)
-{
-	lua_createtable(L, 0, 5);
-	setField(L, "name", spell.getName());
-	setField(L, "level", spell.getLevel());
-	setField(L, "mlevel", spell.getMagicLevel());
-	setField(L, "mana", spell.getMana());
-	setField(L, "manapercent", spell.getManaPercent());
-	setMetatable(L, -1, "Spell");
-}
-
-void pushPosition(lua_State* L, const Position& position, int32_t stackpos /* = 0*/)
-{
-	lua_createtable(L, 0, 4);
-	setField(L, "x", position.x);
-	setField(L, "y", position.y);
-	setField(L, "z", position.z);
-	setField(L, "stackpos", stackpos);
-	setMetatable(L, -1, "Position");
-}
-
-void pushOutfit(lua_State* L, const Outfit_t& outfit)
-{
-	lua_createtable(L, 0, 12);
-	setField(L, "lookType", outfit.lookType);
-	setField(L, "lookTypeEx", outfit.lookTypeEx);
-	setField(L, "lookHead", outfit.lookHead);
-	setField(L, "lookBody", outfit.lookBody);
-	setField(L, "lookLegs", outfit.lookLegs);
-	setField(L, "lookFeet", outfit.lookFeet);
-	setField(L, "lookAddons", outfit.lookAddons);
-	setField(L, "lookMount", outfit.lookMount);
-	setField(L, "lookMountHead", outfit.lookMountHead);
-	setField(L, "lookMountBody", outfit.lookMountBody);
-	setField(L, "lookMountLegs", outfit.lookMountLegs);
-	setField(L, "lookMountFeet", outfit.lookMountFeet);
-}
-
-void pushOutfit(lua_State* L, const Outfit* outfit)
-{
-	lua_createtable(L, 0, 4);
-	setField(L, "lookType", outfit->lookType);
-	setField(L, "name", outfit->name);
-	setField(L, "premium", outfit->premium);
-	setField(L, "unlocked", outfit->unlocked);
-	setMetatable(L, -1, "Outfit");
-}
-
-ScriptEnvironment* getScriptEnv()
+ScriptEnvironment* tfs::lua::getScriptEnv()
 {
 	assert(scriptEnvIndex >= 0 && scriptEnvIndex < static_cast<int32_t>(scriptEnv.size()));
 	return &scriptEnv[scriptEnvIndex];
 }
 
-bool reserveScriptEnv() { return ++scriptEnvIndex < static_cast<int32_t>(scriptEnv.size()); }
+bool tfs::lua::reserveScriptEnv() { return ++scriptEnvIndex < static_cast<int32_t>(scriptEnv.size()); }
 
-void resetScriptEnv()
+void tfs::lua::resetScriptEnv()
 {
 	assert(scriptEnvIndex >= 0);
 	scriptEnv[scriptEnvIndex--].resetEnv();
 }
 
 // Get
-bool getBoolean(lua_State* L, int32_t arg) { return lua_toboolean(L, arg) != 0; }
-bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
+bool tfs::lua::getBoolean(lua_State* L, int32_t arg) { return lua_toboolean(L, arg) != 0; }
+bool tfs::lua::getBoolean(lua_State* L, int32_t arg, bool defaultValue)
 {
 	if (lua_isboolean(L, arg) == 0) {
 		return defaultValue;
@@ -3566,9 +3552,9 @@ bool getBoolean(lua_State* L, int32_t arg, bool defaultValue)
 }
 
 // Push
-void pushBoolean(lua_State* L, bool value) { lua_pushboolean(L, value ? 1 : 0); }
-void pushString(lua_State* L, std::string_view value) { lua_pushlstring(L, value.data(), value.size()); }
-void registerMethod(lua_State* L, std::string_view globalName, std::string_view methodName, lua_CFunction func)
+
+void tfs::lua::registerMethod(lua_State* L, std::string_view globalName, std::string_view methodName,
+                              lua_CFunction func)
 {
 	// globalName.methodName = func
 	lua_getglobal(L, globalName.data());
@@ -3578,8 +3564,6 @@ void registerMethod(lua_State* L, std::string_view globalName, std::string_view 
 	// pop globalName
 	lua_pop(L, 1);
 }
-
-} // namespace tfs::lua
 
 int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 {
@@ -7271,7 +7255,13 @@ int LuaScriptInterface::luaItemSetReflect(lua_State* L)
 		return 1;
 	}
 
-	item->setReflect(tfs::lua::getNumber<CombatType_t>(L, 2), getReflect(L, 3));
+	Reflect reflect{
+	    tfs::lua::getField<uint16_t>(L, 3, "percent"),
+	    tfs::lua::getField<uint16_t>(L, 3, "chance"),
+	};
+	lua_pop(L, 2);
+
+	item->setReflect(tfs::lua::getNumber<CombatType_t>(L, 2), reflect);
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
@@ -18780,7 +18770,7 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 	lua_rawgeti(L, LUA_REGISTRYINDEX, timerEventDesc.function);
 
 	// push parameters
-	for (auto parameter : boost::adaptors::reverse(timerEventDesc.parameters)) {
+	for (auto parameter : std::views::reverse(timerEventDesc.parameters)) {
 		lua_rawgeti(L, LUA_REGISTRYINDEX, parameter);
 	}
 

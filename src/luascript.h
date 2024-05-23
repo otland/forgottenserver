@@ -93,7 +93,7 @@ public:
 
 	void setTimerEvent() { timerEvent = true; }
 
-	std::tuple<int32_t, LuaScriptInterface*, int32_t, bool> getEventInfo() const;
+	auto getEventInfo() const { return std::make_tuple(scriptId, interface, callbackId, timerEvent); }
 
 	void addTempItem(Item* item);
 	static void removeTempItem(Item* item);
