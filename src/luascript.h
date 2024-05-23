@@ -34,7 +34,7 @@ struct Outfit;
 
 using Combat_ptr = std::shared_ptr<Combat>;
 
-inline constexpr int32_t EVENT_ID_LOADING = 1;
+inline constexpr int32_t EVENT_ID_USER = 1000;
 
 struct LuaTimerEventDesc
 {
