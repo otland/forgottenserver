@@ -153,13 +153,14 @@ function Player.transferMoneyTo(self, target, amount)
 	local targetPlayer = Player(target.guid)
 	if targetPlayer then
 		targetPlayer:setBankBalance(targetPlayer:getBankBalance() + amount)
+		db.query("UPDATE `players` SET `balance` = " .. targetPlayer:getBankBalance() .. " WHERE `id` = '" .. targetPlayer:getGuid() .. "'")
 	else
 		db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `id` = '" .. target.guid .. "'")
 	end
 
 	self:setBankBalance(self:getBankBalance() - amount)
 	-- incase server crashes that we do not duplicate money
-	db.query("UPDATE `players` SET `balance` = " .. self:getBankBalance() .. " WHERE `id` = '" .. self:getGuid() .. "'")
+	self:save()
 	return true
 end
 
