@@ -953,6 +953,7 @@ private:
 
 	static int luaPlayerGetBankBalance(lua_State* L);
 	static int luaPlayerSetBankBalance(lua_State* L);
+	static int luaPlayerSendResourceBalance(lua_State* L);
 
 	static int luaPlayerAddItem(lua_State* L);
 	static int luaPlayerAddItemEx(lua_State* L);
