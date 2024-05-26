@@ -15,7 +15,6 @@
 
 extern Game g_game;
 extern Spells* g_spells;
-extern Events* g_events;
 extern Monsters g_monsters;
 extern LuaEnvironment g_luaEnvironment;
 
@@ -530,7 +529,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (!g_events->eventPlayerOnSpellCheck(player, this)) {
+	if (!tfs::events::player::onSpellCheck(player, this)) {
 		return false;
 	}
 

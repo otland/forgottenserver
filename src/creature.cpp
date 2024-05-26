@@ -20,7 +20,6 @@ double Creature::speedC = -4795.01;
 
 extern Game g_game;
 extern CreatureEvents* g_creatureEvents;
-extern Events* g_events;
 
 Creature::Creature() { onIdleStatus(); }
 
@@ -513,7 +512,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		}
 
 		if (newTile->getZone() != oldTile->getZone()) {
-			g_events->eventCreatureOnChangeZone(this, oldTile->getZone(), newTile->getZone());
+			tfs::events::creature::onChangeZone(this, oldTile->getZone(), newTile->getZone());
 			onChangeZone(getZone());
 		}
 
@@ -1684,7 +1683,8 @@ void Creature::setStorageValue(uint32_t key, std::optional<int32_t> value, bool 
 	} else {
 		storageMap.erase(key);
 	}
-	g_events->eventCreatureOnUpdateStorage(this, key, oldValue, value, isSpawn);
+
+	tfs::events::creature::onUpdateStorage(this, key, oldValue, value, isSpawn);
 }
 
 std::optional<int32_t> Creature::getStorageValue(uint32_t key) const
