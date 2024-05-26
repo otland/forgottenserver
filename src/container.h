@@ -56,6 +56,7 @@ public:
 	size_t size() const { return itemlist.size(); }
 	bool empty() const { return itemlist.empty(); }
 	uint32_t capacity() const { return maxSize; }
+	void setCapacity(uint32_t capacity) { maxSize = capacity; }
 	uint32_t getAmmoCount() const { return ammoCount; }
 
 	ContainerIterator iterator() const;

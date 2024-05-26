@@ -738,6 +738,7 @@ private:
 
 	static int luaContainerGetSize(lua_State* L);
 	static int luaContainerGetCapacity(lua_State* L);
+	static int luaContainerSetCapacity(lua_State* L);
 	static int luaContainerGetEmptySlots(lua_State* L);
 	static int luaContainerGetItems(lua_State* L);
 	static int luaContainerGetItemHoldingCount(lua_State* L);

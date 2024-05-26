@@ -2506,6 +2506,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod("Container", "getSize", LuaScriptInterface::luaContainerGetSize);
 	registerMethod("Container", "getCapacity", LuaScriptInterface::luaContainerGetCapacity);
+	registerMethod("Container", "setCapacity", LuaScriptInterface::luaContainerSetCapacity);
 	registerMethod("Container", "getEmptySlots", LuaScriptInterface::luaContainerGetEmptySlots);
 	registerMethod("Container", "getItems", LuaScriptInterface::luaContainerGetItems);
 	registerMethod("Container", "getItemHoldingCount", LuaScriptInterface::luaContainerGetItemHoldingCount);
@@ -7372,6 +7373,20 @@ int LuaScriptInterface::luaContainerGetCapacity(lua_State* L)
 	Container* container = getUserdata<Container>(L, 1);
 	if (container) {
 		lua_pushnumber(L, container->capacity());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaContainerSetCapacity(lua_State* L)
+{
+	// container:setCapacity(capacity)
+	Container* container = getUserdata<Container>(L, 1);
+	if (container) {
+		uint32_t capacity = getNumber<uint32_t>(L, 2);
+		container->setCapacity(capacity);
+		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
