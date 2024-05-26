@@ -422,7 +422,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		uint32_t playerRankId = result->getNumber<uint32_t>("rank_id");
 		player->guildNick = result->getString("nick");
 
-		Guild* guild = g_game.getGuild(guildId);
+		auto guild = g_game.getGuild(guildId);
 		if (!guild) {
 			guild = IOGuild::loadGuild(guildId);
 			if (guild) {
@@ -435,7 +435,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		if (guild) {
 			player->guild = guild;
-			GuildRank_ptr rank = guild->getRankById(playerRankId);
+			auto rank = guild->getRankById(playerRankId);
 			if (!rank) {
 				if ((result = db.storeQuery(fmt::format(
 				         "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = {:d}", playerRankId)))) {
