@@ -3703,6 +3703,12 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 
 bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 {
+	if (hasFlag(PlayerFlag_NotGenerateLoot)) {
+		target->setDropLoot(false);
+	}
+
+	Creature::onKilledCreature(target, lastHit);
+
 	// check unjustified kill
 	if (const Player* targetPlayer = target->getPlayer()) {
 		return isUnjustifiedKill(targetPlayer);
