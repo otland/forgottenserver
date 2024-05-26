@@ -50,8 +50,9 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}', '-DUSE_LUAJIT=${{ matrix.luajit }}']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v4
