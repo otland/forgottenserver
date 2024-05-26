@@ -12,11 +12,11 @@
 extern Game g_game;
 extern Events* g_events;
 
-Party::Party(Player* leader) : leader(leader) { leader->setParty(this); }
+Party::Party(Player* leader) : leader(leader) { leader->setParty(shared_from_this()); }
 
 void Party::disband()
 {
-	if (!g_events->eventPartyOnDisband(this)) {
+	if (!g_events->eventPartyOnDisband(shared_from_this())) {
 		return;
 	}
 
@@ -30,7 +30,7 @@ void Party::disband()
 	currentLeader->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
 
 	for (Player* invitee : inviteList) {
-		invitee->removePartyInvitation(this);
+		invitee->removePartyInvitation(shared_from_this());
 		currentLeader->sendCreatureShield(invitee);
 	}
 	inviteList.clear();
@@ -52,7 +52,6 @@ void Party::disband()
 		currentLeader->sendCreatureSkull(member);
 	}
 	memberList.clear();
-	delete this;
 }
 
 bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
@@ -61,11 +60,11 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 		return false;
 	}
 
-	if (player->getParty() != this && leader != player) {
+	if (player->getParty() != shared_from_this() && leader != player) {
 		return false;
 	}
 
-	bool canRemove = g_events->eventPartyOnLeave(this, player);
+	bool canRemove = g_events->eventPartyOnLeave(shared_from_this(), player);
 	if (!forceRemove && !canRemove) {
 		return false;
 	}
@@ -124,11 +123,11 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 
 bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 {
-	if (!player || leader == player || player->getParty() != this) {
+	if (!player || leader == player || player->getParty() != shared_from_this()) {
 		return false;
 	}
 
-	if (!g_events->eventPartyOnPassLeadership(this, player) && !forceRemove) {
+	if (!g_events->eventPartyOnPassLeadership(shared_from_this(), player) && !forceRemove) {
 		return false;
 	}
 
@@ -168,7 +167,7 @@ bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 bool Party::joinParty(Player& player)
 {
 	// check if lua scripts allow the player to join
-	if (!g_events->eventPartyOnJoin(this, &player)) {
+	if (!g_events->eventPartyOnJoin(shared_from_this(), &player)) {
 		return false;
 	}
 
@@ -180,7 +179,7 @@ bool Party::joinParty(Player& player)
 
 	// add player to the party
 	memberList.push_back(&player);
-	player.setParty(this);
+	player.setParty(shared_from_this());
 	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has joined the party.", player.getName()));
 
 	// remove player pending invitations to this and other parties
@@ -230,7 +229,7 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer /* = true*/)
 	player.sendCreatureShield(leader);
 
 	if (removeFromPlayer) {
-		player.removePartyInvitation(this);
+		player.removePartyInvitation(shared_from_this());
 	}
 
 	if (empty()) {
@@ -242,7 +241,7 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer /* = true*/)
 
 void Party::revokeInvitation(Player& player)
 {
-	if (!g_events->eventPartyOnRevokeInvitation(this, &player)) {
+	if (!g_events->eventPartyOnRevokeInvitation(shared_from_this(), &player)) {
 		return;
 	}
 
@@ -271,7 +270,7 @@ bool Party::invitePlayer(Player& player)
 
 	// add player to invite lists
 	inviteList.push_back(&player);
-	player.addPartyInvitation(this);
+	player.addPartyInvitation(shared_from_this());
 
 	// update leader-invitee party status
 	leader->sendCreatureShield(&player);
@@ -380,7 +379,7 @@ bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 void Party::shareExperience(uint64_t experience, Creature* source /* = nullptr*/)
 {
 	uint64_t shareExperience = experience;
-	g_events->eventPartyOnShareExperience(this, shareExperience);
+	g_events->eventPartyOnShareExperience(shared_from_this(), shareExperience);
 
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
@@ -466,8 +465,8 @@ void Party::clearPlayerPoints(Player* player)
 
 bool Party::canOpenCorpse(uint32_t ownerId) const
 {
-	if (Player* player = g_game.getPlayerByID(ownerId)) {
-		return leader->getID() == ownerId || player->getParty() == this;
+	if (const Player* player = g_game.getPlayerByID(ownerId)) {
+		return leader->getID() == ownerId || player->getParty() == shared_from_this();
 	}
 	return false;
 }

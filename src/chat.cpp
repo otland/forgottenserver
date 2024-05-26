@@ -337,8 +337,7 @@ ChatChannel* Chat::createChannel(const Player& player, uint16_t channelId)
 		}
 
 		case CHANNEL_PARTY: {
-			Party* party = player.getParty();
-			if (party) {
+			if (const auto& party = player.getParty()) {
 				auto ret = partyChannels.emplace(std::make_pair(party, ChatChannel(channelId, "Party")));
 				return &ret.first->second;
 			}
@@ -389,7 +388,7 @@ bool Chat::deleteChannel(const Player& player, uint16_t channelId)
 		}
 
 		case CHANNEL_PARTY: {
-			Party* party = player.getParty();
+			const auto& party = player.getParty();
 			if (!party) {
 				return false;
 			}
@@ -561,8 +560,7 @@ ChatChannel* Chat::getChannel(const Player& player, uint16_t channelId)
 		}
 
 		case CHANNEL_PARTY: {
-			Party* party = player.getParty();
-			if (party) {
+			if (const auto& party = player.getParty()) {
 				auto it = partyChannels.find(party);
 				if (it != partyChannels.end()) {
 					return &it->second;

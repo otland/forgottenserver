@@ -7,10 +7,10 @@
 #include "const.h"
 #include "creature.h"
 #include "luascript.h"
+#include "party.h"
 
 class ItemType;
 class NetworkMessage;
-class Party;
 class Spell;
 class Tile;
 
@@ -91,13 +91,13 @@ public:
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
 	// Party
-	bool eventPartyOnJoin(Party* party, Player* player);
-	bool eventPartyOnLeave(Party* party, Player* player);
-	bool eventPartyOnDisband(Party* party);
-	void eventPartyOnShareExperience(Party* party, uint64_t& exp);
-	bool eventPartyOnInvite(Party* party, Player* player);
-	bool eventPartyOnRevokeInvitation(Party* party, Player* player);
-	bool eventPartyOnPassLeadership(Party* party, Player* player);
+	bool eventPartyOnJoin(Party_ptr party, Player* player);
+	bool eventPartyOnLeave(Party_ptr party, Player* player);
+	bool eventPartyOnDisband(Party_ptr party);
+	void eventPartyOnShareExperience(Party_ptr party, uint64_t& exp);
+	bool eventPartyOnInvite(Party_ptr party, Player* player);
+	bool eventPartyOnRevokeInvitation(Party_ptr party, Player* player);
+	bool eventPartyOnPassLeadership(Party_ptr party, Player* player);
 
 	// Player
 	bool eventPlayerOnBrowseField(Player* player, const Position& position);

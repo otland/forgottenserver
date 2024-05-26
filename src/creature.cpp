@@ -687,9 +687,8 @@ void Creature::onDeath()
 				if (Player* attackerPlayer = attacker->getPlayer()) {
 					attackerPlayer->removeAttacked(getPlayer());
 
-					Party* party = attackerPlayer->getParty();
-					if (party && party->getLeader() && party->isSharedExperienceActive() &&
-					    party->isSharedExperienceEnabled()) {
+					if (const auto& party = attackerPlayer->getParty();
+					    party->getLeader() && party->isSharedExperienceActive() && party->isSharedExperienceEnabled()) {
 						attacker = party->getLeader();
 					}
 				}
