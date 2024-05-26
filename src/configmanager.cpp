@@ -262,8 +262,6 @@ bool ConfigManager::load()
 	integer[RATE_MAGIC] = getGlobalNumber(L, "rateMagic", 3);
 	integer[RATE_SPAWN] = getGlobalNumber(L, "rateSpawn", 1);
 	integer[HOUSE_PRICE] = getGlobalNumber(L, "housePriceEachSQM", 1000);
-	integer[KILLS_TO_RED] = getGlobalNumber(L, "killsToRedSkull", 3);
-	integer[KILLS_TO_BLACK] = getGlobalNumber(L, "killsToBlackSkull", 6);
 	integer[ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenActions", 200);
 	integer[EX_ACTIONS_DELAY_INTERVAL] = getGlobalNumber(L, "timeBetweenExActions", 1000);
 	integer[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxMessageBuffer", 4);
@@ -271,8 +269,6 @@ bool ConfigManager::load()
 	integer[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	integer[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
 	integer[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
-	integer[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60);
-	integer[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60);
 	integer[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
 	integer[EXP_FROM_PLAYERS_LEVEL_RANGE] = getGlobalNumber(L, "expFromPlayersLevelRange", 75);
 	integer[CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES] = getGlobalNumber(L, "checkExpiredMarketOffersEachMinutes", 60);

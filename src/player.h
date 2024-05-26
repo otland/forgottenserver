@@ -175,8 +175,8 @@ public:
 	const std::string& getGuildNick() const { return guildNick; }
 	void setGuildNick(std::string nick) { guildNick = nick; }
 
-	bool isInWar(const Player* player) const;
-	bool isInWarList(uint32_t guildId) const;
+	bool isAtWarAgainst(const Player* player) const;
+	bool isAtWarAgainst(uint32_t guildId) const;
 
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }
@@ -439,6 +439,8 @@ public:
 	void changeSoul(int32_t soulChange);
 
 	bool isPzLocked() const { return pzLocked; }
+	void setPzLocked(bool v) { pzLocked = v; }
+
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 	void doAttacking(uint32_t interval) override;
@@ -499,6 +501,7 @@ public:
 	void onAttackedCreatureChangeZone(ZoneType_t zone) override;
 	void onIdleStatus() override;
 	void onPlacedCreature() override;
+	bool isUnjustifiedKill(const Player* target) const;
 
 	LightInfo getCreatureLight() const override;
 
@@ -511,14 +514,13 @@ public:
 	void addAttacked(const Player* attacked);
 	void removeAttacked(const Player* attacked);
 	void clearAttacked();
-	void addUnjustifiedDead(const Player* attacked);
 	void sendCreatureSkull(const Creature* creature) const
 	{
 		if (client) {
 			client->sendCreatureSkull(creature);
 		}
 	}
-	void checkSkullTicks(int64_t ticks);
+	
 
 	bool canWear(uint32_t lookType, uint8_t addons) const;
 	bool hasOutfit(uint32_t lookType, uint8_t addons);

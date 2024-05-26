@@ -408,7 +408,7 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	return scriptInterface->callFunction(4);
 }
 
-void CreatureEvent::executeOnKill(Creature* creature, Creature* target)
+void CreatureEvent::executeOnKill(Creature* creature, Creature* target, bool lastHit)
 {
 	// onKill(creature, target)
 	if (!scriptInterface->reserveScriptEnv()) {
@@ -426,7 +426,8 @@ void CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
 	LuaScriptInterface::pushUserdata<Creature>(L, target);
 	LuaScriptInterface::setCreatureMetatable(L, -1, target);
-	scriptInterface->callVoidFunction(2);
+	lua_pushboolean(L, lastHit);
+	scriptInterface->callVoidFunction(3);
 }
 
 void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId)

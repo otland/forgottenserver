@@ -1561,10 +1561,6 @@ void Player::onThink(uint32_t interval)
 		}
 	}
 
-	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
-		checkSkullTicks(interval / 1000);
-	}
-
 	addOfflineTrainingTime(interval);
 	if (lastStatsTrainingTime != getOfflineTrainingTime() / 60 / 1000) {
 		sendStats();
@@ -3628,7 +3624,7 @@ void Player::onAttackedCreature(Creature* target, bool addFightTicks /* = true *
 				sendIcons();
 			}
 
-			if (!Combat::isInPvpZone(this, targetPlayer) && !isInWar(targetPlayer)) {
+			if (!Combat::isInPvpZone(this, targetPlayer) && !isAtWarAgainst(targetPlayer)) {
 				addAttacked(targetPlayer);
 
 				if (targetPlayer->getSkull() == SKULL_NONE && getSkull() == SKULL_NONE) {
@@ -3707,40 +3703,29 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 
 bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 {
-	bool unjustified = false;
-
-	if (hasFlag(PlayerFlag_NotGenerateLoot)) {
-		target->setDropLoot(false);
+	// check unjustified kill
+	if (const Player* targetPlayer = target->getPlayer()) {
+		return isUnjustifiedKill(targetPlayer);
 	}
+	return false;
+}
 
-	Creature::onKilledCreature(target, lastHit);
-
-	Player* targetPlayer = target->getPlayer();
-	if (!targetPlayer) {
+bool Player::isUnjustifiedKill(const Player* anotherPlayer) const
+{
+	if (anotherPlayer == this) {
+		return false;
+	} else if (hasFlag(PlayerFlag_NotGainInFight)) {
+		return false;
+	} else if (anotherPlayer->getSkull() != SKULL_NONE) {
+		return false;
+	} else if (isPartner(anotherPlayer) || isGuildMate(anotherPlayer)) {
+		return false;
+	} else if (!hasAttacked(anotherPlayer) || anotherPlayer->hasAttacked(this) || isAtWarAgainst(anotherPlayer)) {
+		return false;
+	} else if (Combat::isInPvpZone(this, anotherPlayer)) {
 		return false;
 	}
-
-	if (targetPlayer->getZone() == ZONE_PVP) {
-		targetPlayer->setDropLoot(false);
-		targetPlayer->setSkillLoss(false);
-	} else if (!hasFlag(PlayerFlag_NotGainInFight) && !isPartner(targetPlayer)) {
-		if (!Combat::isInPvpZone(this, targetPlayer) && hasAttacked(targetPlayer) && !targetPlayer->hasAttacked(this) &&
-		    !isGuildMate(targetPlayer) && targetPlayer != this) {
-			if (targetPlayer->getSkull() == SKULL_NONE && !isInWar(targetPlayer)) {
-				unjustified = true;
-				addUnjustifiedDead(targetPlayer);
-			}
-
-			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
-				pzLocked = true;
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT,
-				                                                  getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000, 0);
-				addCondition(condition);
-			}
-		}
-	}
-
-	return unjustified;
+	return true;
 }
 
 void Player::gainExperience(uint64_t gainExp, Creature* source)
@@ -4009,43 +3994,6 @@ void Player::removeAttacked(const Player* attacked)
 
 void Player::clearAttacked() { attackedSet.clear(); }
 
-void Player::addUnjustifiedDead(const Player* attacked)
-{
-	if (hasFlag(PlayerFlag_NotGainInFight) || attacked == this || g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
-		return;
-	}
-
-	sendTextMessage(MESSAGE_EVENT_ADVANCE, "Warning! The murder of " + attacked->getName() + " was not justified.");
-
-	skullTicks += getNumber(ConfigManager::FRAG_TIME);
-
-	if (getSkull() != SKULL_BLACK) {
-		if (getNumber(ConfigManager::KILLS_TO_BLACK) != 0 &&
-		    skullTicks > (getNumber(ConfigManager::KILLS_TO_BLACK) - 1) *
-		                     static_cast<int64_t>(getNumber(ConfigManager::FRAG_TIME))) {
-			setSkull(SKULL_BLACK);
-		} else if (getSkull() != SKULL_RED && getNumber(ConfigManager::KILLS_TO_RED) != 0 &&
-		           skullTicks > (getNumber(ConfigManager::KILLS_TO_RED) - 1) *
-		                            static_cast<int64_t>(getNumber(ConfigManager::FRAG_TIME))) {
-			setSkull(SKULL_RED);
-		}
-	}
-}
-
-void Player::checkSkullTicks(int64_t ticks)
-{
-	int64_t newTicks = skullTicks - ticks;
-	if (newTicks < 0) {
-		skullTicks = 0;
-	} else {
-		skullTicks = newTicks;
-	}
-
-	if ((skull == SKULL_RED || skull == SKULL_BLACK) && skullTicks < 1 && !hasCondition(CONDITION_INFIGHT)) {
-		setSkull(SKULL_NONE);
-	}
-}
-
 bool Player::isPromoted() const
 {
 	uint16_t promotedVocation = g_vocations.getPromotedVocation(vocation->getId());
@@ -4108,7 +4056,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	return false;
 }
 
-bool Player::isInWar(const Player* player) const
+bool Player::isAtWarAgainst(const Player* player) const
 {
 	if (!player || !guild) {
 		return false;
@@ -4119,10 +4067,10 @@ bool Player::isInWar(const Player* player) const
 		return false;
 	}
 
-	return isInWarList(playerGuild->getId()) && player->isInWarList(guild->getId());
+	return isAtWarAgainst(playerGuild->getId()) && player->isAtWarAgainst(guild->getId());
 }
 
-bool Player::isInWarList(uint32_t guildId) const
+bool Player::isAtWarAgainst(uint32_t guildId) const
 {
 	return std::find(guildWarVector.begin(), guildWarVector.end(), guildId) != guildWarVector.end();
 }
@@ -4267,7 +4215,7 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 		return GUILDEMBLEM_OTHER;
 	} else if (guild == playerGuild) {
 		return GUILDEMBLEM_ALLY;
-	} else if (isInWar(player)) {
+	} else if (isAtWarAgainst(player)) {
 		return GUILDEMBLEM_ENEMY;
 	}
 
