@@ -942,7 +942,7 @@ TalkAction = {}
 ---@field onPrepareDeath fun(creature:Creature, killer:Creature):boolean
 ---@field onDeath fun(creature:Creature, corpse:Item, killer:Creature, mostDamageKiller:Creature, lastHitUnjustified:boolean, mostDamageUnjustified:boolean):boolean
 ---@field onAdvance fun(player:Player, skill:integer, oldLevel:integer, newLevel:integer):boolean
----@field onKill fun(player:Player, target:Creature):boolean
+---@field onKill fun(player:Player, target:Creature, lastHit:boolean):boolean
 ---@field onTextEdit fun(player:Player, item:Item, text:string, windowTextId:integer):boolean
 ---@field onHealthChange fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
 ---@field onManaChange fun(creature:Creature, attacker:Creature, primaryDamage:integer, primaryType:integer, secondaryDamage:integer, secondaryType:integer, origin:integer):integer, integer, integer, integer
