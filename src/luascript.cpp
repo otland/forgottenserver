@@ -9771,8 +9771,7 @@ int LuaScriptInterface::luaPlayerSetGuildLevel(lua_State* L)
 	}
 
 	uint8_t level = getNumber<uint8_t>(L, 2);
-	auto rank = guild->getRankByLevel(level);
-	if (rank) {
+	if (auto rank = guild->getRankByLevel(level)) {
 		player->setGuildRank(rank);
 		pushBoolean(L, true);
 	} else {
@@ -11875,8 +11874,7 @@ int LuaScriptInterface::luaGuildGetRankById(lua_State* L)
 	}
 
 	uint32_t id = getNumber<uint32_t>(L, 2);
-	auto rank = guild->getRankById(id);
-	if (rank) {
+	if (auto rank = guild->getRankById(id)) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
 		setField(L, "name", rank->name);
@@ -11897,8 +11895,7 @@ int LuaScriptInterface::luaGuildGetRankByLevel(lua_State* L)
 	}
 
 	uint8_t level = getNumber<uint8_t>(L, 2);
-	auto rank = guild->getRankByLevel(level);
-	if (rank) {
+	if (auto rank = guild->getRankByLevel(level)) {
 		lua_createtable(L, 0, 3);
 		setField(L, "id", rank->id);
 		setField(L, "name", rank->name);
