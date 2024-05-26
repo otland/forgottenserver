@@ -2265,7 +2265,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("DBTransaction", "commit", LuaScriptInterface::luaDBTransactionCommit);
 	registerMethod("DBTransaction", "rollback", LuaScriptInterface::luaDBTransactionDelete);
 
-// Combat
+	// Combat
 	registerTable("Combat");
 
 	registerMethod("Combat", "isInPvpZone", LuaScriptInterface::luaCombatIsInPvpZone);
@@ -2711,7 +2711,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod("Player", "getGuildNick", LuaScriptInterface::luaPlayerGetGuildNick);
 	registerMethod("Player", "setGuildNick", LuaScriptInterface::luaPlayerSetGuildNick);
 
-registerMethod("Player", "IsAtWarAgainst", LuaScriptInterface::luaPlayerIsAtWarAgainst);
+	registerMethod("Player", "IsAtWarAgainst", LuaScriptInterface::luaPlayerIsAtWarAgainst);
 
 	registerMethod("Player", "getGroup", LuaScriptInterface::luaPlayerGetGroup);
 	registerMethod("Player", "setGroup", LuaScriptInterface::luaPlayerSetGroup);
@@ -2747,7 +2747,7 @@ registerMethod("Player", "IsAtWarAgainst", LuaScriptInterface::luaPlayerIsAtWarA
 
 	registerMethod("Player", "getParty", LuaScriptInterface::luaPlayerGetParty);
 
-registerMethod("Player", "isInviting", LuaScriptInterface::luaPlayerIsInviting);
+	registerMethod("Player", "isInviting", LuaScriptInterface::luaPlayerIsInviting);
 	registerMethod("Player", "isPartner", LuaScriptInterface::luaPlayerIsPartner);
 	registerMethod("Player", "isGuildMate", LuaScriptInterface::luaPlayerIsGuildMate);
 	registerMethod("Player", "hasAttacked", LuaScriptInterface::luaPlayerHasAttacked);
