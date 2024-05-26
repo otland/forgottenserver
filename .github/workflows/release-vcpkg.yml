@@ -30,8 +30,9 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo', '--clean-first', '-DUSE_LUAJIT=ON']"
+          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo']"
           configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=ON']"
 
       - name: Prepare datapack contents
         run: |
