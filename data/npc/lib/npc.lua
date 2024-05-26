@@ -1,6 +1,6 @@
 -- Including the Advanced NPC System
 dofile('data/npc/lib/npcsystem/npcsystem.lua')
-dofile("data/npc/lib/evilnpcsystem/npc.lua")
+dofile("data/npc/lib/revnpcsys/npc.lua")
 
 function msgcontains(message, keyword)
 	local message, keyword = message:lower(), keyword:lower()
