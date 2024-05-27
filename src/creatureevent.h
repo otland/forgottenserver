@@ -15,6 +15,7 @@ enum CreatureEventType_t
 {
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
+	CREATURE_EVENT_CONNECTIONRESTORATION,
 	CREATURE_EVENT_LOGOUT,
 	CREATURE_EVENT_THINK,
 	CREATURE_EVENT_PREPAREDEATH,
@@ -47,6 +48,7 @@ public:
 
 	// scripting
 	bool executeOnLogin(Player* player) const;
+	bool executeOnConnectionRestoration(Player* player) const;
 	bool executeOnLogout(Player* player) const;
 	bool executeOnThink(Creature* creature, uint32_t interval);
 	bool executeOnPrepareDeath(Creature* creature, Creature* killer);
@@ -80,6 +82,7 @@ public:
 
 	// global events
 	bool playerLogin(Player* player) const;
+	bool playerConnectionRestoration(Player* player) const;
 	bool playerLogout(Player* player) const;
 	bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
 

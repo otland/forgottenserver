@@ -248,6 +248,10 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			eventConnect = g_scheduler.addEvent(
 			    createSchedulerTask(1000, [=, thisPtr = getThis(), playerID = foundPlayer->getID()]() {
 				    thisPtr->connect(playerID, operatingSystem);
+				    Player* player = g_game.getPlayerByID(playerID);
+				    if (player) {
+					    player->onConnectionRestoration();
+				    }
 			    }));
 		} else {
 			connect(foundPlayer->getID(), operatingSystem);
