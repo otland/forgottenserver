@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.17)
 
 set(CMAKE_DISABLE_SOURCE_CHANGES ON)
 set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
@@ -9,6 +9,18 @@ set(CMAKE_DISABLE_IN_SOURCE_BUILD ON)
 # Note: this logic must happen before PROJECT command.
 if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
     set(VCPKG_TARGET_TRIPLET "$ENV{VCPKG_DEFAULT_TRIPLET}" CACHE STRING "The vcpkg triplet")
+endif()
+
+option(BUILD_TESTING "Build unit tests" OFF)
+if (BUILD_TESTING)
+    list(APPEND VCPKG_MANIFEST_FEATURES "unit-tests")
+endif()
+
+option(USE_LUAJIT "Use LuaJIT" OFF)
+if (USE_LUAJIT)
+    list(APPEND VCPKG_MANIFEST_FEATURES "luajit")
+else()
+    list(APPEND VCPKG_MANIFEST_FEATURES "lua")
 endif()
 
 project(tfs CXX)
@@ -28,12 +40,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif ()
 
 # Find packages.
-find_package(cryptopp CONFIG)
-if (CryptoPP_FOUND)  # vcpkg-provided cmake package called CryptoPP
-    set(Crypto++_LIBRARIES "cryptopp::cryptopp")
-else()
-    find_package(Crypto++ REQUIRED)
-endif ()
+find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 
 find_package(fmt CONFIG)
 if (NOT fmt_FOUND)
@@ -53,23 +60,23 @@ find_package(Threads REQUIRED)
 find_package(PugiXML CONFIG REQUIRED)
 
 # Selects LuaJIT if user defines or auto-detected
-if (DEFINED USE_LUAJIT AND NOT USE_LUAJIT)
-    set(FORCE_LUAJIT ${USE_LUAJIT})
+if (USE_LUAJIT)
+    find_package(LuaJIT REQUIRED)
 else ()
-    find_package(LuaJIT)
-    set(FORCE_LUAJIT ${LuaJIT_FOUND})
-endif ()
-option(USE_LUAJIT "Use LuaJIT" ${FORCE_LUAJIT})
-
-if (NOT FORCE_LUAJIT)
     find_package(Lua REQUIRED)
 endif ()
 
-find_package(Boost 1.66.0 REQUIRED COMPONENTS system iostreams)
+if (APPLE)
+    find_package(Iconv REQUIRED)
+endif()
 
-option(ENABLE_TESTING "Build unit tests" OFF)
+set(BOOST_REQUIRED_COMPONENTS system iostreams locale)
+if (BUILD_TESTING)
+    list(APPEND BOOST_REQUIRED_COMPONENTS unit_test_framework)
+endif ()
+find_package(Boost 1.71.0 REQUIRED COMPONENTS ${BOOST_REQUIRED_COMPONENTS})
 
-include_directories(${Boost_INCLUDE_DIRS} ${Crypto++_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
+include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -78,7 +85,8 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
-if (ENABLE_TESTING)
+if (BUILD_TESTING)
+    message(STATUS "Building unit tests")
     enable_testing()
     add_subdirectory(src/tests)
 endif()
@@ -109,5 +117,11 @@ if(NOT SKIP_GIT)
 	endif()
 endif()
 ### END  Git Version ###
+
+# Option to disable unity builds
+option(ENABLE_UNITY_BUILD "Enable unity build" ON)
+if(ENABLE_UNITY_BUILD)
+    set_target_properties(tfslib PROPERTIES UNITY_BUILD ON)
+endif()
 
 target_precompile_headers(tfs PUBLIC src/otpch.h)

@@ -1,26 +1,60 @@
 function onUpdateDatabase()
-	print("> Updating database to version 36 (vipgroups)")
-	db.query("CREATE TABLE IF NOT EXISTS `account_vipgroups` (`id` int NOT NULL AUTO_INCREMENT, `account_id` int NOT NULL, `name` varchar(128) NOT NULL DEFAULT '', `editable` tinyint NOT NULL DEFAULT '1', PRIMARY KEY (`id`), FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB;")
-	db.query("ALTER TABLE `account_viplist` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST")
-	db.query("CREATE TABLE IF NOT EXISTS `account_vipgroup_entry` (`group_id` int NOT NULL, `entry_id` int NOT NULL, UNIQUE KEY `group_entry_index` (`group_id`, `entry_id`), FOREIGN KEY (`group_id`) REFERENCES `account_vipgroups` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`entry_id`) REFERENCES `account_viplist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE=InnoDB;")
+	print("> Updating database to version 36 (rework on outfits(addons) & mount saving/loading)")
 
-	local resultId = db.storeQuery("SELECT `accounts`.`id` AS `account_id` FROM `accounts`")
-	if resultId ~= false then
-		local stmt = "INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES "
+	db.query([[
+		CREATE TABLE IF NOT EXISTS `player_outfits` (`player_id` int DEFAULT 0 NOT NULL,`outfit_id` smallint unsigned DEFAULT 0 NOT NULL,`addons` tinyint unsigned DEFAULT 0 NOT NULL,
+		PRIMARY KEY (`player_id`,`outfit_id`),
+		FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE)
+		ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+	]])
+
+	db.query([[
+		CREATE TABLE IF NOT EXISTS `player_mounts` (`player_id` int DEFAULT 0 NOT NULL,`mount_id` smallint unsigned DEFAULT 0 NOT NULL,
+		PRIMARY KEY (`player_id`,`mount_id`),
+		FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE)
+		ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
+	]])
+
+	db.query([[
+		ALTER TABLE `players`
+    	ADD `currentmount` smallint unsigned NOT NULL DEFAULT 0 AFTER `lookmountfeet`;
+	]])
+
+	local outfitRange = 10001000
+	local mountRange = 10002001
+
+	local resultId = db.storeQuery(string.format("SELECT `player_id`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500))
+	if resultId then
 		repeat
-			stmt = stmt .. "(" .. result.getNumber(resultId, "account_id") .. ", 'Enemies', 0),"
-			stmt = stmt .. "(" .. result.getNumber(resultId, "account_id") .. ", 'Friends', 0),"
-			stmt = stmt .. "(" .. result.getNumber(resultId, "account_id") .. ", 'Trading Partners', 0),"
+			local playerId = result.getNumber(resultId, "player_id")
+			local outfitId = bit.rshift(result.getNumber(resultId, "value"), 16)
+			local addons = bit.band(result.getNumber(resultId, "value"), 0xFF)
+
+			db.query(string.format("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES (%d, %d, %d)", playerId, outfitId, addons))
 		until not result.next(resultId)
 		result.free(resultId)
-
-		local stmtLen = string.len(stmt)
-		if stmtLen > 74 then
-			stmt = string.sub(stmt, 1, stmtLen - 1)
-			db.query(stmt)
-		end
 	end
 
-	db.query("CREATE TRIGGER `oncreate_accounts` AFTER INSERT ON `accounts` FOR EACH ROW BEGIN INSERT INTO `account_vipgroups` (`account_id`, `name`, `editable`) VALUES (NEW.id, 'Enemies', 0), (NEW.id, 'Friends', 0), (NEW.id, 'Trading Partners', 0); END")
+	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` <= %d", mountRange, mountRange + 10))
+	if resultId then
+		repeat
+			for i = 1, 200 do
+				local key = mountRange + ((i-1) / 31)
+				if key == result.getNumber(resultId, "key") then
+					local playerId = result.getNumber(resultId, "player_id")
+					local lshift = bit.lshift(1, ((i-1) % 31))
+					local mount = bit.band(lshift, result.getNumber(resultId, "value"))
+
+					if mount ~= 0 then
+						db.query(string.format("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)", playerId, i))
+					end
+				end
+			end
+		until not result.next(resultId)
+		result.free(resultId)
+	end
+
+	-- deleting all outfit & mount storages at once
+	db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d OR `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500, mountRange, mountRange + 10))
 	return true
 end

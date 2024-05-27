@@ -11,6 +11,7 @@
 class ItemType;
 class NetworkMessage;
 class Party;
+class Spell;
 class Tile;
 
 enum class EventInfoId
@@ -31,6 +32,7 @@ class Events
 		int32_t creatureOnAreaCombat = -1;
 		int32_t creatureOnTargetCombat = -1;
 		int32_t creatureOnHear = -1;
+		int32_t creatureOnChangeZone = -1;
 		int32_t creatureOnUpdateStorage = -1;
 
 		// Party
@@ -67,6 +69,7 @@ class Events
 		int32_t playerOnWrapItem = -1;
 		int32_t playerOnInventoryUpdate = -1;
 		int32_t playerOnNetworkMessage = -1;
+		int32_t playerOnSpellCheck = -1;
 
 		// Monster
 		int32_t monsterOnDropLoot = -1;
@@ -83,6 +86,7 @@ public:
 	ReturnValue eventCreatureOnAreaCombat(Creature* creature, Tile* tile, bool aggressive);
 	ReturnValue eventCreatureOnTargetCombat(Creature* creature, Creature* target);
 	void eventCreatureOnHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type);
+	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
 	void eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
 
@@ -127,6 +131,7 @@ public:
 	void eventPlayerOnWrapItem(Player* player, Item* item);
 	void eventPlayerOnInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 	void eventPlayerOnNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg);
+	bool eventPlayerOnSpellCheck(Player* player, const Spell* spell);
 
 	// Monster
 	void eventMonsterOnDropLoot(Monster* monster, Container* corpse);

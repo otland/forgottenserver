@@ -13,7 +13,6 @@
 #include "iologindata.h"
 #include "pugicast.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 House::House(uint32_t houseId) : id(houseId) {}
@@ -72,8 +71,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, Player* pla
 			door->setAccessList("");
 		}
 	} else {
-		std::string strRentPeriod =
-		    boost::algorithm::to_lower_copy(g_config.getString(ConfigManager::HOUSE_RENT_PERIOD));
+		std::string strRentPeriod = boost::algorithm::to_lower_copy(getString(ConfigManager::HOUSE_RENT_PERIOD));
 		time_t currentTime = time(nullptr);
 		if (strRentPeriod == "yearly") {
 			currentTime += 24 * 60 * 60 * 365;
@@ -108,7 +106,7 @@ AccessHouseLevel_t House::getHouseAccessLevel(const Player* player) const
 		return HOUSE_OWNER;
 	}
 
-	if (g_config.getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
+	if (getBoolean(ConfigManager::HOUSE_OWNED_BY_ACCOUNT)) {
 		if (ownerAccountId == player->getAccount()) {
 			return HOUSE_OWNER;
 		}
@@ -433,15 +431,14 @@ void AccessList::addPlayer(const std::string& name)
 
 namespace {
 
-const Guild* getGuildByName(const std::string& name)
+const Guild_ptr getGuildByName(const std::string& name)
 {
 	uint32_t guildId = IOGuild::getGuildIdByName(name);
 	if (guildId == 0) {
 		return nullptr;
 	}
 
-	const Guild* guild = g_game.getGuild(guildId);
-	if (guild) {
+	if (const auto& guild = g_game.getGuild(guildId)) {
 		return guild;
 	}
 
@@ -452,9 +449,8 @@ const Guild* getGuildByName(const std::string& name)
 
 void AccessList::addGuild(const std::string& name)
 {
-	const Guild* guild = getGuildByName(name);
-	if (guild) {
-		for (auto rank : guild->getRanks()) {
+	if (const auto& guild = getGuildByName(name)) {
+		for (const auto& rank : guild->getRanks()) {
 			guildRankList.insert(rank->id);
 		}
 	}
@@ -462,10 +458,8 @@ void AccessList::addGuild(const std::string& name)
 
 void AccessList::addGuildRank(const std::string& name, const std::string& rankName)
 {
-	const Guild* guild = getGuildByName(name);
-	if (guild) {
-		GuildRank_ptr rank = guild->getRankByName(rankName);
-		if (rank) {
+	if (const auto& guild = getGuildByName(name)) {
+		if (const auto& rank = guild->getRankByName(rankName)) {
 			guildRankList.insert(rank->id);
 		}
 	}
@@ -482,7 +476,7 @@ bool AccessList::isInList(const Player* player) const
 		return true;
 	}
 
-	GuildRank_ptr rank = player->getGuildRank();
+	const auto& rank = player->getGuildRank();
 	return rank && guildRankList.find(rank->id) != guildRankList.end();
 }
 
@@ -597,8 +591,8 @@ bool Houses::loadHousesXML(const std::string& filename)
 		                  pugi::cast<uint16_t>(houseNode.attribute("entryy").value()),
 		                  pugi::cast<uint16_t>(houseNode.attribute("entryz").value()));
 		if (entryPos.x == 0 && entryPos.y == 0 && entryPos.z == 0) {
-			std::cout << "[Warning - Houses::loadHousesXML] House entry not set"
-			          << " - Name: " << house->getName() << " - House id: " << houseId << std::endl;
+			std::cout << "[Warning - Houses::loadHousesXML] House entry not set - Name: " << house->getName()
+			          << " - House id: " << houseId << std::endl;
 		}
 		house->setEntryPos(entryPos);
 

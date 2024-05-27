@@ -237,6 +237,7 @@ do
 			self:onThink(value)
 			return
 		elseif key == "onTime" then
+			self:type("timer")
 			self:onTime(value)
 			return
 		elseif key == "onStartup" then
@@ -250,6 +251,10 @@ do
 		elseif key == "onRecord" then
 			self:type("record")
 			self:onRecord(value)
+			return
+		elseif key == "onSave" then
+			self:type("save")
+			self:onSave(value)
 			return
 		end
 		rawset(self, key, value)
@@ -1346,8 +1351,10 @@ function doSetGameState(state)
 end
 
 function doExecuteRaid(raidName)
-	return Game.startRaid(raidName)
+	debugPrint("Deprecated function, use Game.startEvent('" .. raidName .. "') instead.")
+	return Game.startEvent(raidName)
 end
+Game.startRaid = doExecuteRaid
 
 function Game.convertIpToString(ip)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
@@ -1631,4 +1638,16 @@ function table.maxn(t)
 		end
 	end
 	return max
+end
+
+ItemType.getDuration = ItemType.getDurationMin
+
+function getFormattedWorldTime()
+	return Game.getFormattedWorldTime()
+end
+
+do
+	local getmetatable = getmetatable
+
+	function isClass(obj, class) return getmetatable(obj) == class end
 end

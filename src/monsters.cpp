@@ -16,7 +16,6 @@
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
-extern ConfigManager g_config;
 
 spellBlock_t::~spellBlock_t()
 {
@@ -58,7 +57,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 		unloadedMonsters.emplace(name, file);
 	}
 
-	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+	bool forceLoad = getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
 
 	for (auto it : unloadedMonsters) {
 		if (forceLoad || (reloading && monsters.find(it.first) != monsters.end())) {
@@ -1386,6 +1385,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			int32_t chance = 100;
 			int32_t speed = 1000;
 			int32_t max = mType->info.maxSummons;
+			MagicEffectClasses effect = CONST_ME_TELEPORT;
+			MagicEffectClasses masterEffect = CONST_ME_NONE;
 			bool force = false;
 
 			if ((attr = summonNode.attribute("speed")) || (attr = summonNode.attribute("interval"))) {
@@ -1405,6 +1406,35 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				max = pugi::cast<uint32_t>(attr.value());
 			}
 
+			for (const auto& attributeNode : summonNode.children()) {
+				if ((attr = attributeNode.attribute("key"))) {
+					const char* value = attr.value();
+					if (caseInsensitiveEqual(value, "mastereffect")) {
+						if ((attr = attributeNode.attribute("value"))) {
+							masterEffect =
+							    getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+							if (masterEffect == CONST_ME_NONE) {
+								std::cout
+								    << "[Warning - Monsters::loadMonster] Summon master effect - Unknown masterEffect: "
+								    << attr.as_string() << std::endl;
+							}
+						}
+					} else if (caseInsensitiveEqual(value, "effect")) {
+						if ((attr = attributeNode.attribute("value"))) {
+							effect = getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+							if (effect == CONST_ME_NONE) {
+								effect = CONST_ME_TELEPORT;
+								std::cout << "[Warning - Monsters::loadMonster] Summon effect - Unknown effect: "
+								          << attr.as_string() << std::endl;
+							}
+						}
+					} else {
+						std::cout << "[Warning - Monsters::loadMonster] Summon effect type \"" << attr.as_string()
+						          << "\" does not exist." << std::endl;
+					}
+				}
+			}
+
 			if ((attr = summonNode.attribute("force"))) {
 				force = attr.as_bool();
 			}
@@ -1415,6 +1445,8 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				sb.speed = speed;
 				sb.chance = chance;
 				sb.max = max;
+				sb.effect = effect;
+				sb.masterEffect = masterEffect;
 				sb.force = force;
 				mType->info.summons.emplace_back(sb);
 			} else {

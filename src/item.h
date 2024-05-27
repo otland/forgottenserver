@@ -182,9 +182,9 @@ public:
 
 			void operator()(const boost::blank&) const { lua_pushnil(L); }
 
-			void operator()(const std::string& v) const { LuaScriptInterface::pushString(L, v); }
+			void operator()(std::string_view v) const { tfs::lua::pushString(L, v); }
 
-			void operator()(bool v) const { LuaScriptInterface::pushBoolean(L, v); }
+			void operator()(bool v) const { tfs::lua::pushBoolean(L, v); }
 
 			void operator()(const int64_t& v) const { lua_pushnumber(L, v); }
 
@@ -687,12 +687,19 @@ public:
 		return static_cast<ItemDecayState_t>(getIntAttr(ITEM_ATTRIBUTE_DECAYSTATE));
 	}
 
-	int32_t getDecayTime() const
+	int32_t getDecayTimeMin() const
 	{
-		if (hasAttribute(ITEM_ATTRIBUTE_DURATION)) {
-			return getIntAttr(ITEM_ATTRIBUTE_DURATION);
+		if (hasAttribute(ITEM_ATTRIBUTE_DURATION_MIN)) {
+			return getIntAttr(ITEM_ATTRIBUTE_DURATION_MIN);
 		}
-		return items[id].decayTime;
+		return items[id].decayTimeMin;
+	}
+	int32_t getDecayTimeMax() const
+	{
+		if (hasAttribute(ITEM_ATTRIBUTE_DURATION_MAX)) {
+			return getIntAttr(ITEM_ATTRIBUTE_DURATION_MAX);
+		}
+		return items[id].decayTimeMax;
 	}
 
 	void setDecayTo(int32_t decayTo) { setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo); }
@@ -868,14 +875,9 @@ public:
 
 	void setUniqueId(uint16_t n);
 
-	void setDefaultDuration()
-	{
-		uint32_t duration = getDefaultDuration();
-		if (duration != 0) {
-			setDuration(duration);
-		}
-	}
-	uint32_t getDefaultDuration() const { return items[id].decayTime * 1000; }
+	void setDefaultDuration();
+	uint32_t getDefaultDurationMin() const { return items[id].decayTimeMin * 1000; }
+	uint32_t getDefaultDurationMax() const { return items[id].decayTimeMax * 1000; }
 	bool canDecay() const;
 
 	virtual bool canRemove() const { return true; }
