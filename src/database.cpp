@@ -50,7 +50,7 @@ static bool isLostConnectionError(const unsigned error)
 	       error == 1053 /*ER_SERVER_SHUTDOWN*/ || error == CR_CONNECTION_ERROR;
 }
 
-static bool executeQuery(MYSQL*& handle, const std::string_view query, const bool retryIfLostConnection)
+static bool executeQuery(MYSQL*& handle, std::string_view query, const bool retryIfLostConnection)
 {
 	while (mysql_real_query(handle, query.data(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl
@@ -111,7 +111,7 @@ bool Database::executeQuery(const std::string& query)
 	return ::executeQuery(handle, query, retryQueries);
 }
 
-DBResult_ptr Database::storeQuery(const std::string& query)
+DBResult_ptr Database::storeQuery(std::string_view query)
 {
 	std::lock_guard<std::recursive_mutex> lockGuard(databaseLock);
 

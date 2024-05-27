@@ -17,7 +17,7 @@ uint32_t Scheduler::addEvent(SchedulerTask* task)
 		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
 		auto& timer = it.first->second;
 
-		timer.expires_from_now(std::chrono::milliseconds(task->getDelay()));
+		timer.expires_after(std::chrono::milliseconds(task->getDelay()));
 		timer.async_wait([this, task](const boost::system::error_code& error) {
 			eventIdTimerMap.erase(task->getEventId());
 

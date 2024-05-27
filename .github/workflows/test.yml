@@ -7,24 +7,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Install dependencies
-        run: >
-          sudo apt update -q &&
-          sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-system-dev libboost-iostreams-dev libboost-locale-dev libboost-test-dev
-          libpugixml-dev libfmt-dev
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v11
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: default
-          configurePreset: default
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config', 'Debug']"
+          configurePreset: vcpkg
           configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
-          testPreset: default
+          testPreset: vcpkg
           testPresetAdditionalArgs: "['--build-config', 'Debug']"

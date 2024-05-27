@@ -16,6 +16,7 @@
 
 class DepotChest;
 class House;
+struct Mount;
 class NetworkMessage;
 class Npc;
 class Party;
@@ -164,8 +165,8 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	Guild* getGuild() const { return guild; }
-	void setGuild(Guild* guild);
+	Guild_ptr getGuild() const { return guild; }
+	void setGuild(Guild_ptr guild);
 
 	GuildRank_ptr getGuildRank() const { return guildRank; }
 	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
@@ -1066,6 +1067,12 @@ public:
 			client->sendCombatAnalyzer(type, amount, impactType, target);
 		}
 	}
+	void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+	{
+		if (client) {
+			client->sendResourceBalance(resourceType, amount);
+		}
+	}
 
 	void receivePing() { lastPong = OTSYS_TIME(); }
 
@@ -1200,7 +1207,7 @@ private:
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
-	Guild* guild = nullptr;
+	Guild_ptr guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
 	Inbox* inbox;
@@ -1226,6 +1233,7 @@ private:
 	uint32_t magLevel = 0;
 	uint32_t actionTaskEvent = 0;
 	uint32_t walkTaskEvent = 0;
+	uint32_t classicAttackEvent = 0;
 	uint32_t MessageBufferTicks = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;

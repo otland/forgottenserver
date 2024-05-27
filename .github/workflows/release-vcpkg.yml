@@ -15,10 +15,9 @@ jobs:
 
     env:
       VCPKG_BUILD_TYPE: release
-      VCPKG_FEATURE_FLAGS: luajit
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -31,8 +30,9 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo']"
           configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=ON']"
 
       - name: Prepare datapack contents
         run: |
@@ -43,7 +43,7 @@ jobs:
         shell: bash
 
       - name: Zip the release files
-        uses: thedoctor0/zip-release@master
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: zip
           filename: tfs-${{ github.ref_name }}-${{ matrix.os }}.zip

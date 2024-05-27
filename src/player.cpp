@@ -3394,7 +3394,8 @@ void Player::doAttacking(uint32_t)
 		if (!classicSpeed) {
 			setNextActionTask(task, false);
 		} else {
-			g_scheduler.addEvent(task);
+			g_scheduler.stopEvent(classicAttackEvent);
+			classicAttackEvent = g_scheduler.addEvent(task);
 		}
 
 		if (result) {
@@ -4113,7 +4114,7 @@ bool Player::isInWar(const Player* player) const
 		return false;
 	}
 
-	const Guild* playerGuild = player->getGuild();
+	const auto& playerGuild = player->getGuild();
 	if (!playerGuild) {
 		return false;
 	}
@@ -4254,7 +4255,7 @@ GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 		return GUILDEMBLEM_NONE;
 	}
 
-	const Guild* playerGuild = player->getGuild();
+	const auto& playerGuild = player->getGuild();
 	if (!playerGuild) {
 		return GUILDEMBLEM_NONE;
 	}
@@ -4665,20 +4666,20 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	return muteConditions;
 }
 
-void Player::setGuild(Guild* guild)
+void Player::setGuild(Guild_ptr guild)
 {
 	if (guild == this->guild) {
 		return;
 	}
 
-	Guild* oldGuild = this->guild;
+	auto oldGuild = this->guild;
 
 	this->guildNick.clear();
 	this->guild = nullptr;
 	this->guildRank = nullptr;
 
 	if (guild) {
-		GuildRank_ptr rank = guild->getRankByLevel(1);
+		const auto& rank = guild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);
 		if (!rank) {
 			return;
 		}

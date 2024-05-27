@@ -28,7 +28,7 @@ enum RequestedInfo_t : uint16_t
 
 void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 {
-	const static auto acceptorAddress = Connection::Address::from_string(getString(ConfigManager::IP));
+	const static auto acceptorAddress = boost::asio::ip::make_address(getString(ConfigManager::IP));
 
 	const auto& ip = getIP();
 
