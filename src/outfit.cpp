@@ -40,9 +40,10 @@ bool Outfits::loadFromXml()
 			continue;
 		}
 
-		outfits[type].emplace_back(
-		    outfitNode.attribute("name").as_string(), pugi::cast<uint16_t>(lookTypeAttribute.value()),
-		    outfitNode.attribute("premium").as_bool(), outfitNode.attribute("unlocked").as_bool(true));
+		outfits[type].push_back({.name = outfitNode.attribute("name").as_string(),
+		                         .lookType = pugi::cast<uint16_t>(lookTypeAttribute.value()),
+		                         .premium = outfitNode.attribute("premium").as_bool(),
+		                         .unlocked = outfitNode.attribute("unlocked").as_bool(true)});
 	}
 	return true;
 }

@@ -97,20 +97,20 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
-		if (!LuaScriptInterface::reserveScriptEnv()) {
+		if (!tfs::lua::reserveScriptEnv()) {
 			break;
 		}
 
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
-			LuaScriptInterface::resetScriptEnv();
+			tfs::lua::resetScriptEnv();
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
 			          << lua_tostring(L, -1) << std::endl;
 			break;
 		}
 
-		if (!LuaScriptInterface::getBoolean(L, -1, false)) {
-			LuaScriptInterface::resetScriptEnv();
+		if (!tfs::lua::getBoolean(L, -1, false)) {
+			tfs::lua::resetScriptEnv();
 			break;
 		}
 
@@ -118,7 +118,7 @@ void DatabaseManager::updateDatabase()
 		std::cout << "> Database has been updated to version " << version << '.' << std::endl;
 		registerDatabaseConfig("db_version", version);
 
-		LuaScriptInterface::resetScriptEnv();
+		tfs::lua::resetScriptEnv();
 	} while (true);
 	lua_close(L);
 }

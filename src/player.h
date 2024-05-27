@@ -16,6 +16,7 @@
 
 class DepotChest;
 class House;
+struct Mount;
 class NetworkMessage;
 class Npc;
 class Party;
