@@ -2431,6 +2431,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod(L, "Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod(L, "Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
+	registerMethod(L, "Game", "createNpcType", LuaScriptInterface::luaGameCreateNpcType);
 
 	registerMethod(L, "Game", "startEvent", LuaScriptInterface::luaGameStartEvent);
 
