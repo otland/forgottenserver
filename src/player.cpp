@@ -4720,7 +4720,7 @@ size_t Player::getMaxVIPGroups() const
 		return group->maxVipGroups;
 	}
 
-	return g_config.getNumber(isPremium() ? ConfigManager::VIPGROUP_PREMIUM_LIMIT : ConfigManager::VIPGROUP_FREE_LIMIT);
+	return getNumber(isPremium() ? ConfigManager::VIPGROUP_PREMIUM_LIMIT : ConfigManager::VIPGROUP_FREE_LIMIT);
 }
 
 size_t Player::getMaxDepotItems() const

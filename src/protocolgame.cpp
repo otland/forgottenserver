@@ -1437,7 +1437,7 @@ void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
 
 	switch (action) {
 		case VIPGROUPACTION_CREATE: {
-			std::string_view name = msg.getString();
+			auto name = msg.getString();
 			g_dispatcher.addTask([=, playerID = player->getID(), name = std::string{name}]() {
 				g_game.playerRequestAddVipGroup(playerID, name);
 			});
@@ -1445,7 +1445,7 @@ void ProtocolGame::parseVipGroupAction(NetworkMessage& msg)
 		}
 		case VIPGROUPACTION_EDIT: {
 			uint8_t id = msg.getByte();
-			std::string_view name = msg.getString();
+			auto name = msg.getString();
 			g_dispatcher.addTask([=, playerID = player->getID(), name = std::string{name}]() {
 				g_game.playerRequestEditVipGroup(playerID, id, name);
 			});

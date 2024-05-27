@@ -12040,7 +12040,7 @@ int LuaScriptInterface::luaGroupGetMaxVipEntries(lua_State* L)
 int LuaScriptInterface::luaGroupGetMaxVipGroups(lua_State* L)
 {
 	// group:getMaxVipGroups()
-	Group* group = getUserdata<Group>(L, 1);
+	Group* group = tfs::lua::getUserdata<Group>(L, 1);
 	if (group) {
 		lua_pushnumber(L, group->maxVipGroups);
 	} else {
