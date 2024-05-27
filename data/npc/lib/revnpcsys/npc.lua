@@ -146,9 +146,9 @@ function NpcType:defaultBehavior()
     end
     -- The onMove function is called when the NPC moves.
     self.onMove = function(creature, oldPos, newPos)
-        NpcEvents.onMove(Npc(getNpcCid()), creature, oldPos, newPos)
+        NpcEvents.onMove(Npc(getNpcCid()), oldPos, newPos)
         if self.onMoveCallback then
-            self.onMoveCallback(Npc(getNpcCid()), creature, oldPos, newPos)
+            self.onMoveCallback(Npc(getNpcCid()), oldPos, newPos)
         end
     end
     -- The onPlayerCloseChannel function is called when a player closes the channel with the NPC.
