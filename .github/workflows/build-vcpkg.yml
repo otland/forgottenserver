@@ -39,6 +39,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: cpp
+          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          queries: +security-extended,security-and-quality
+        if: ${{ matrix.os }} == "ubuntu" && ${{ matrix.buildtype }} == "Debug"
+
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
@@ -53,6 +61,12 @@ jobs:
           buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
           configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:cpp"
+        if: ${{ matrix.os }} == "ubuntu" && ${{ matrix.buildtype }} == "Debug"
 
       - name: Upload artifact binary
         uses: actions/upload-artifact@v4
