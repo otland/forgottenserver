@@ -2,7 +2,7 @@
 
 #include "../../otpch.h"
 
-#include "../../configmanager.h"
+#include "../../base64.h"
 #include "../../database.h"
 #include "../../tools.h"
 #include "../../vocation.h"
@@ -246,7 +246,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	result = db.storeQuery(
 	    fmt::format("SELECT `token`, INET6_NTOA(`ip`) AS `ip` FROM `sessions` WHERE `account_id` = {:d}", id));
 	BOOST_TEST(result, "Session not found in database.");
-	BOOST_TEST(result->getString("token") == decodeBase64(session.at("sessionkey").as_string()));
+	BOOST_TEST(result->getString("token") == tfs::base64::decode(session.at("sessionkey").as_string()));
 	BOOST_TEST(result->getString("ip") == ip);
 
 	auto& worlds = body.at("playdata").at("worlds").as_array();

@@ -5,12 +5,7 @@
 #include "listener.h"
 
 #include <fmt/core.h>
-
-#if __has_include("luajit/lua.hpp")
-#include <luajit/lua.hpp>
-#else
-#include <lua.hpp>
-#endif
+#include <thread>
 
 namespace {
 

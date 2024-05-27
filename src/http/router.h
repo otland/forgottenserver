@@ -6,7 +6,7 @@
 
 namespace tfs::http {
 
-using Request = boost::beast::http::request<boost::beast::http::string_body>;
-boost::beast::http::message_generator handle_request(const Request& req, std::string_view ip);
+boost::beast::http::message_generator handle_request(
+    const boost::beast::http::request<boost::beast::http::string_body>& req, std::string_view ip);
 
 } // namespace tfs::http

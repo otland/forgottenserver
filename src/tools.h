@@ -13,8 +13,6 @@ void printXMLError(const std::string& where, std::string_view fileName, const pu
 std::string transformToSHA1(std::string_view input);
 std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message);
 std::string generateToken(std::string_view key, uint64_t counter, size_t length = AUTHENTICATOR_DIGITS);
-std::string encodeBase64(std::string_view input);
-std::string decodeBase64(std::string_view input);
 
 // checks that str1 is equivalent to str2 ignoring letter case
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);

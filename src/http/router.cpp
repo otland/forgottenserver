@@ -29,7 +29,8 @@ thread_local boost::json::monotonic_resource mr;
 
 } // namespace
 
-boost::beast::http::message_generator tfs::http::handle_request(const Request& req, std::string_view ip)
+boost::beast::http::message_generator tfs::http::handle_request(
+    const boost::beast::http::request<boost::beast::http::string_body>& req, std::string_view ip)
 {
 	auto&& [status, responseBody] = [&req, ip]() {
 		boost::json::error_code ec;

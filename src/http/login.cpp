@@ -2,11 +2,8 @@
 
 #include "login.h"
 
-#include "../configmanager.h"
-#include "../database.h"
+#include "../base64.h"
 #include "../game.h"
-#include "../tools.h"
-#include "../vocation.h"
 #include "error.h"
 
 #include <fmt/format.h>
@@ -143,7 +140,7 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_logi
 	    {
 	        {"session",
 	         {
-	             {"sessionkey", encodeBase64(sessionKey)},
+	             {"sessionkey", tfs::base64::encode(sessionKey)},
 	             {"lastlogintime", lastLogin},
 	             {"ispremium", premiumEndsAt >= now},
 	             {"premiumuntil", premiumEndsAt},

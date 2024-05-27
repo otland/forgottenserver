@@ -23,10 +23,9 @@ void Session::read()
 	stream.expires_after(30s);
 
 	// Read a request
-	boost::beast::http::async_read(stream, buffer, req,
-	                               [self = shared_from_this()](boost::beast::error_code ec, size_t bytes_transferred) {
-		                               self->on_read(ec, bytes_transferred);
-	                               });
+	async_read(stream, buffer, req, [self = shared_from_this()](boost::beast::error_code ec, size_t bytes_transferred) {
+		self->on_read(ec, bytes_transferred);
+	});
 }
 
 void Session::write(boost::beast::http::message_generator&& msg)
@@ -34,11 +33,10 @@ void Session::write(boost::beast::http::message_generator&& msg)
 	bool keep_alive = msg.keep_alive();
 
 	// Write the response
-	boost::beast::async_write(
-	    stream, std::move(msg),
-	    [self = shared_from_this(), keep_alive](boost::beast::error_code ec, size_t bytes_transferred) {
-		    self->on_write(ec, bytes_transferred, keep_alive);
-	    });
+	async_write(stream, std::move(msg),
+	            [self = shared_from_this(), keep_alive](boost::beast::error_code ec, size_t bytes_transferred) {
+		            self->on_write(ec, bytes_transferred, keep_alive);
+	            });
 }
 
 void Session::close()
@@ -56,7 +54,7 @@ void Session::run()
 	// on the I/O objects in this session. Although not strictly necessary
 	// for single-threaded contexts, this example code is written to be
 	// thread-safe by default.
-	boost::asio::dispatch(stream.get_executor(), [self = shared_from_this()] { self->read(); });
+	dispatch(stream.get_executor(), [self = shared_from_this()] { self->read(); });
 }
 
 void Session::on_read(boost::beast::error_code ec, size_t /*bytes_transferred*/)
