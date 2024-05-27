@@ -110,7 +110,7 @@ if not NpcEvents then
         local talkQueue = NpcTalkQueue(npc)
         talkQueue:processQueue()
 
-        if #focus.focus == 0 then
+        if not next(focus.focus) then
             doNpcSetCreatureFocus(nil)
         else
             local player = focus:getCurrentFocus()
@@ -124,6 +124,9 @@ if not NpcEvents then
                 elseif player:getPosition().x < npc:getPosition().x and player:getPosition().y == npc:getPosition().y then
                     selfTurn(DIRECTION_WEST)
                 end
+            else
+                local playerGuid,_ = next(focus.focus)
+                focus.currentFocus = playerGuid
             end
         end
 

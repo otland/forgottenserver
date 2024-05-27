@@ -46,7 +46,7 @@ if not NpcFocus then
     ---@param player Player The player to add focus on.
     function NpcFocus:addFocus(player)
         self.focus[player:getGuid()] = os.time() + FOCUS.time
-        self.currentFocus = player
+        self.currentFocus = player:getGuid()
     end
 
     -- Checks if a player is currently being focused by the NPC.
@@ -63,7 +63,7 @@ if not NpcFocus then
     ---@param player Player The player to remove focus from.
     function NpcFocus:removeFocus(player)
         self.focus[player:getGuid()] = nil
-        if self.currentFocus == player then
+        if self.currentFocus == player:getGuid() then
             self.currentFocus = nil
         end
     end
@@ -71,6 +71,6 @@ if not NpcFocus then
     -- Retrieves the currently focused player.
     ---@return nil|Player The currently focused player or nil if there is no focus.
     function NpcFocus:getCurrentFocus()
-        return self.currentFocus
+        return not self.currentFocus and nil or Player(self.currentFocus)
     end
 end
