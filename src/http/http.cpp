@@ -7,9 +7,11 @@
 #include <fmt/core.h>
 #include <thread>
 
+namespace asio = boost::asio;
+
 namespace {
 
-boost::asio::io_context ioc;
+asio::io_context ioc;
 
 std::vector<std::thread> workers = {};
 
@@ -19,7 +21,7 @@ void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, 
 {
 	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
 
-	auto listener = make_listener(ioc, {boost::asio::ip::make_address(address), port});
+	auto listener = make_listener(ioc, {asio::ip::make_address(address), port});
 	listener->run();
 
 	workers.reserve(threads);

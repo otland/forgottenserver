@@ -8,10 +8,12 @@
 #include <boost/json/parse.hpp>
 #include <boost/json/serialize.hpp>
 
+namespace beast = boost::beast;
+namespace json = boost::json;
+
 namespace {
 
-std::pair<boost::beast::http::status, boost::json::value> router(std::string_view type, const boost::json::object& body,
-                                                                 std::string_view ip)
+auto router(std::string_view type, const json::object& body, std::string_view ip)
 {
 	using namespace tfs::http;
 
@@ -25,16 +27,16 @@ std::pair<boost::beast::http::status, boost::json::value> router(std::string_vie
 	return make_error_response();
 }
 
-thread_local boost::json::monotonic_resource mr;
+thread_local json::monotonic_resource mr;
 
 } // namespace
 
-boost::beast::http::message_generator tfs::http::handle_request(
-    const boost::beast::http::request<boost::beast::http::string_body>& req, std::string_view ip)
+beast::http::message_generator tfs::http::handle_request(const beast::http::request<beast::http::string_body>& req,
+                                                         std::string_view ip)
 {
 	auto&& [status, responseBody] = [&req, ip]() {
-		boost::json::error_code ec;
-		auto requestBody = boost::json::parse(req.body(), ec, &mr);
+		json::error_code ec;
+		auto requestBody = json::parse(req.body(), ec, &mr);
 		if (ec || !requestBody.is_object()) {
 			return make_error_response({.code = 2, .message = "Invalid request body."});
 		}
@@ -48,8 +50,8 @@ boost::beast::http::message_generator tfs::http::handle_request(
 		return router(typeField->get_string(), requestBodyObj, ip);
 	}();
 
-	boost::beast::http::response<boost::beast::http::string_body> res{status, req.version()};
-	res.body() = boost::json::serialize(responseBody);
+	beast::http::response<beast::http::string_body> res{status, req.version()};
+	res.body() = json::serialize(responseBody);
 	res.keep_alive(req.keep_alive());
 	res.prepare_payload();
 	return res;

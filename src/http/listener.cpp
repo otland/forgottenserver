@@ -1,30 +1,31 @@
 #include "listener.h"
 
-#include "fail.h"
 #include "session.h"
 
 #include <boost/asio/strand.hpp>
+#include <fmt/core.h>
+
+namespace asio = boost::asio;
+namespace beast = boost::beast;
 
 namespace tfs::http {
 
-Listener::Listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::acceptor&& acceptor) :
-    ioc{ioc}, acceptor{std::move(acceptor)}
+Listener::Listener(asio::io_context& ioc, asio::ip::tcp::acceptor&& acceptor) : ioc{ioc}, acceptor{std::move(acceptor)}
 {}
 
 void Listener::accept()
 {
 	// The new connection gets its own strand
-	acceptor.async_accept(
-	    boost::asio::make_strand(ioc),
-	    [self = shared_from_this()](boost::beast::error_code ec, boost::asio::ip::tcp::socket socket) {
-		    self->on_accept(ec, std::move(socket));
-	    });
+	acceptor.async_accept(asio::make_strand(ioc),
+	                      [self = shared_from_this()](beast::error_code ec, asio::ip::tcp::socket socket) {
+		                      self->on_accept(ec, std::move(socket));
+	                      });
 }
 
-void Listener::on_accept(boost::beast::error_code ec, boost::asio::ip::tcp::socket socket)
+void Listener::on_accept(beast::error_code ec, asio::ip::tcp::socket socket)
 {
 	if (ec) {
-		fail(ec, __FUNCTION__);
+		fmt::print(stderr, "{}: {}\n", __FUNCTION__, ec.message());
 		return;
 	}
 
@@ -36,21 +37,21 @@ void Listener::on_accept(boost::beast::error_code ec, boost::asio::ip::tcp::sock
 	accept();
 }
 
-std::shared_ptr<Listener> make_listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::endpoint endpoint)
+std::shared_ptr<Listener> make_listener(asio::io_context& ioc, asio::ip::tcp::endpoint endpoint)
 {
-	boost::asio::ip::tcp::acceptor acceptor{boost::asio::make_strand(ioc)};
+	asio::ip::tcp::acceptor acceptor{asio::make_strand(ioc)};
 
-	boost::beast::error_code ec;
+	beast::error_code ec;
 	if (acceptor.open(endpoint.protocol(), ec); ec) {
 		throw std::runtime_error(ec.message());
 	}
-	if (acceptor.set_option(boost::asio::socket_base::reuse_address(true), ec); ec) {
+	if (acceptor.set_option(asio::socket_base::reuse_address(true), ec); ec) {
 		throw std::runtime_error(ec.message());
 	}
 	if (acceptor.bind(endpoint, ec); ec) {
 		throw std::runtime_error(ec.message());
 	}
-	if (acceptor.listen(boost::asio::socket_base::max_listen_connections, ec); ec) {
+	if (acceptor.listen(asio::socket_base::max_listen_connections, ec); ec) {
 		throw std::runtime_error(ec.message());
 	}
 

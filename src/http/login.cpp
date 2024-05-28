@@ -11,6 +11,10 @@
 extern Game g_game;
 extern Vocations g_vocations;
 
+namespace beast = boost::beast;
+namespace json = boost::json;
+using boost::beast::http::status;
+
 namespace {
 
 int getPvpType()
@@ -29,9 +33,10 @@ int getPvpType()
 
 } // namespace
 
-std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_login(const boost::json::object& body,
-                                                                                  std::string_view ip)
+std::pair<status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip)
 {
+	using namespace std::chrono;
+
 	auto emailField = body.if_contains("email");
 	if (!emailField || !emailField->is_string()) {
 		return make_error_response(
@@ -59,7 +64,7 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_logi
 		    {.code = 3, .message = "Tibia account email address or Tibia password is not correct."});
 	}
 
-	auto now = duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
 
 	auto secret = result->getString("secret");
 	if (!secret.empty()) {
@@ -90,7 +95,7 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_logi
 	    "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
 	    accountId));
 
-	boost::json::array characters;
+	json::array characters;
 	uint32_t lastLogin = 0;
 	if (result) {
 		do {
@@ -120,7 +125,7 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_logi
 		} while (result->next());
 	}
 
-	boost::json::array worlds{
+	json::array worlds{
 	    {
 	        {"id", 0}, // not implemented
 	        {"name", getString(ConfigManager::SERVER_NAME)},
@@ -136,7 +141,7 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_logi
 	};
 
 	return {
-	    boost::beast::http::status::ok,
+	    status::ok,
 	    {
 	        {"session",
 	         {

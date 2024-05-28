@@ -8,6 +8,8 @@
 
 #include <boost/test/unit_test.hpp>
 
+using namespace std::chrono;
+
 struct CacheInfoFixture
 {
 	CacheInfoFixture()
@@ -26,7 +28,7 @@ struct CacheInfoFixture
 	DBTransaction transaction;
 
 	std::string_view ip = "74.125.224.72";
-	std::chrono::seconds now = duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
+	seconds now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 };
 
 using status = boost::beast::http::status;

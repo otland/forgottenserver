@@ -5,8 +5,11 @@
 #include "../database.h"
 #include "error.h"
 
-std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_cacheinfo(const boost::json::object&,
-                                                                                      std::string_view)
+namespace beast = boost::beast;
+namespace json = boost::json;
+using boost::beast::http::status;
+
+std::pair<status, json::value> tfs::http::handle_cacheinfo(const json::object&, std::string_view)
 {
 	thread_local auto& db = Database::getInstance();
 	auto result = db.storeQuery("SELECT COUNT(*) AS `count` FROM `players_online`");
@@ -14,5 +17,5 @@ std::pair<boost::beast::http::status, boost::json::value> tfs::http::handle_cach
 		return make_error_response();
 	}
 
-	return {boost::beast::http::status::ok, {{"playersonline", result->getNumber<uint32_t>("count")}}};
+	return {status::ok, {{"playersonline", result->getNumber<uint32_t>("count")}}};
 }

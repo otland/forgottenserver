@@ -108,6 +108,8 @@ auto vocationsXml = []() {
 </vocations>)"};
 };
 
+using namespace std::chrono;
+
 struct LoginFixture
 {
 	LoginFixture()
@@ -142,7 +144,7 @@ struct LoginFixture
 	DBTransaction transaction;
 
 	std::string_view ip = "74.125.224.72";
-	std::chrono::seconds now = duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
+	seconds now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 };
 
 using status = boost::beast::http::status;
@@ -189,7 +191,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 	BOOST_TEST(db.executeQuery(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('', 'foo@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
 
-	auto now = duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch());
+	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 
 	auto&& [status, body] = tfs::http::handle_login(
 	    {
@@ -220,7 +222,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_no_players, LoginFixture)
 
 BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 {
-	auto premiumEndsAt = now + std::chrono::days(30);
+	auto premiumEndsAt = now + days(30);
 
 	auto result = db.storeQuery(fmt::format(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('', 'foo@example.com', SHA1('bar'), {:d}) RETURNING `id`",
