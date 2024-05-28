@@ -7,7 +7,7 @@ ec.onUpdateStorage = function(creature, key, value, oldValue, isSpawn)
 		return
 	end
 
-	local player = Player(creature)
+	local player = Player(creature:getId())
 	if not player then
 		return
 	end
