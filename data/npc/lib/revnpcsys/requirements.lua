@@ -10,6 +10,7 @@
         NpcRequirements:storage(key, value, operator)
         NpcRequirements:level(level, operator)
         NpcRequirements:premium(premium)
+        NpcRequirements:vocation(vocation)
         NpcRequirements:money(amount)
         NpcRequirements:removeMoney(amount)
         NpcRequirements:item(item, count)
@@ -36,6 +37,7 @@
 ---@field storage fun(self: NpcRequirements, key: string, value: number, operator?: string)
 ---@field level fun(self: NpcRequirements, level: number, operator?: string)
 ---@field premium fun(self: NpcRequirements, premium: boolean)
+---@field vocation fun(self: NpcRequirements, vocation: string|table<number, string>)
 ---@field money fun(self: NpcRequirements, amount: number)
 ---@field removeMoney fun(self: NpcRequirements, amount: number)
 ---@field item fun(self: NpcRequirements, item: number, count: number)
@@ -73,6 +75,15 @@ if not NpcRequirements then
     ---@param premium boolean: If true, the player must be premium to advance the talk state.
     function NpcRequirements:premium(premium)
         self.requirePremium = premium
+    end
+
+    -- Sets the vocation requirement for a keyword.
+    ---@param vocation string|table<number, string>: The required vocation name.
+    function NpcRequirements:vocation(vocation)
+        if type(vocation) == "string" then
+            vocation = {vocation}
+        end
+        self.requireVocation = vocation
     end
 
     -- Sets the money requirement for a keyword.
@@ -206,6 +217,12 @@ if not NpcRequirements then
         if self.requirePremium then
             if not player:isPremium() then
                 return false, MESSAGE_LIST.premium, REQUIREMENTS.premium
+            end
+        end
+
+        if self.requireVocation then
+            if not table.contains(self.requireVocation, player:getVocation():getName():lower()) and not table.contains(self.requireVocation, player:getVocation():getBase():getName():lower()) then
+                return false, MESSAGE_LIST.vocation:replaceTags({vocation = table.concat(self.requireVocation, ", ")}), REQUIREMENTS.vocation
             end
         end
 

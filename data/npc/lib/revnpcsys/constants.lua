@@ -15,7 +15,8 @@ MESSAGE_TAGS = {
     totalCost = { tag = "|TOTALCOST|", func = function(params) return params.total or "" end },
     itemName = { tag = "|ITEMNAME|", func = function(params) return params.itemName or "" end },
     storageKey = { tag = "|STORAGEKEY|", func = function(params) return params.storage and params.storage.key or "" end },
-    storageValue = { tag = "|STORAGEVALUE|", func = function(params) return params.storage and params.storage.value or "" end }
+    storageValue = { tag = "|STORAGEVALUE|", func = function(params) return params.storage and params.storage.value or "" end },
+    vocationName = { tag = "|VOCATIONNAME|", func = function(params) return params.vocation or "" end }
 }
 
 -- MESSAGE_LIST
@@ -38,6 +39,7 @@ MESSAGE_LIST = {
     levelToLow = "You need to be atleast level |PLAYERLEVEL|.",
     levelToHigh = "You need to be under level |PLAYERLEVEL|.",
     premium = "You need to be premium to do this.",
+    vocation = "You need to be a |VOCATIONNAME| to do this.",
     money = "You do not have enough money, it costs |TOTALCOST| gold.",
     item = "You do not have atleast |ITEMCOUNT| |ITEMNAME|(s).",
     infight = "You need to be in fight.",
@@ -105,9 +107,10 @@ REQUIREMENTS = {
     storage = 1,
     level = 2,
     premium = 3,
-    money = 4,
-    item = 5,
-    inFight = 6,
-    pzLocked= 7,
-    removeItem = 8
+    vocation = 4,
+    money = 5,
+    item = 6,
+    inFight = 7,
+    pzLocked = 8,
+    removeItem = 9
 }
