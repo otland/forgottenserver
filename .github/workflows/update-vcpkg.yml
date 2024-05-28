@@ -1,0 +1,43 @@
+name: Updates vcpkg baseline on a schedule
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # Every Monday at 00:00 UTC
+  workflow_dispatch:
+
+jobs:
+  vcpkg-update-baseline:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install vcpkg
+        run: |
+          git clone --single-branch https://github.com/microsoft/vcpkg.git
+          vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+      - name: Update vcpkg baseline
+        id: update
+        run: |
+          vcpkg/vcpkg x-update-baseline
+          echo "changed-files=$(git diff --name-only)" > "$GITHUB_OUTPUT"
+          echo "short=$(jq -r '.["builtin-baseline"][:7]' < vcpkg.json)" > "$GITHUB_OUTPUT"
+          echo "long=$(jq -r '.["builtin-baseline"]' < vcpkg.json)" > "$GITHUB_OUTPUT"
+
+      - name: Commit updated vcpkg manifest
+        if: contains(steps.update.outputs.changed-files, 'vcpkg.json')
+        run: |
+          git checkout -b vcpkg-update-baseline-${{ steps.update.output.short }}
+          git add vcpkg.json
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Update vcpkg baseline to ${{ steps.update.output.short }}"
+          git push origin vcpkg-update-baseline-${{ steps.update.output.short }}
+
+      - name: Create pull request
+        if: contains(steps.update.outputs.changed-files, 'vcpkg.json')
+        run: |
+          gh pr create --title "Update vcpkg baseline to ${{ steps.update.output.short }}" --body "This PR updates the vcpkg baseline to [${{ steps.update.output.long }}](https://github.com/microsoft/vcpkg/tree/${{ steps.update.output.long }})." --base master --head vcpkg-update-baseline-${{ steps.update.output.short }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
