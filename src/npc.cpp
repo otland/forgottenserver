@@ -307,6 +307,8 @@ void Npc::loadNpcTypeInfo()
 	defaultOutfit = npcType->defaultOutfit;
 	currentOutfit = defaultOutfit;
 	parameters = npcType->parameters;
+	health = npcType->health;
+	healthMax = npcType->healthMax;
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)

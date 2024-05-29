@@ -3025,6 +3025,8 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "NpcType", "pushable", LuaScriptInterface::luaNpcTypePushable);
 	registerMethod(L, "NpcType", "outfit", LuaScriptInterface::luaNpcTypeDefaultOutfit);
 	registerMethod(L, "NpcType", "parameters", LuaScriptInterface::luaNpcTypeParameter);
+	registerMethod(L, "NpcType", "health", LuaScriptInterface::luaNpcTypeHealth);
+	registerMethod(L, "NpcType", "maxHealth", LuaScriptInterface::luaNpcTypeMaxHealth);
 
 	// Guild
 	registerClass(L, "Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -9630,7 +9632,7 @@ int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
 
 int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 {
-	// player:getItemCount(itemId[, subType = -1])
+	// player:getItemCount(itemId[[, subType = -1], ignoreEquipped = false])
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9649,7 +9651,8 @@ int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 	}
 
 	int32_t subType = tfs::lua::getNumber<int32_t>(L, 3, -1);
-	lua_pushnumber(L, player->getItemTypeCount(itemId, subType));
+	bool ignoreEquipped = tfs::lua::getBoolean(L, 4, false);
+	lua_pushnumber(L, player->getItemTypeCount(itemId, subType, ignoreEquipped));
 	return 1;
 }
 
@@ -12170,6 +12173,42 @@ int LuaScriptInterface::luaNpcTypeParameter(lua_State* L)
 			std::string key = tfs::lua::getString(L, 2);
 			std::string value = tfs::lua::getString(L, 3);
 			npcType->parameters[key] = value;
+			tfs::lua::pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcTypeHealth(lua_State* L)
+{
+	// get: npcType:health() set: npcType:health(health)
+	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
+	if (npcType) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, npcType->health);
+		} else {
+			int32_t health = tfs::lua::getNumber<int32_t>(L, 2);
+			npcType->health = health;
+			tfs::lua::pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcTypeMaxHealth(lua_State* L)
+{
+	// get: npcType:maxHealth() set: npcType:maxHealth(health)
+	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
+	if (npcType) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, npcType->healthMax);
+		} else {
+			int32_t health = tfs::lua::getNumber<int32_t>(L, 2);
+			npcType->healthMax = health;
 			tfs::lua::pushBoolean(L, true);
 		}
 	} else {

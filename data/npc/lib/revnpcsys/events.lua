@@ -262,7 +262,9 @@ if not NpcEvents then
                 closeShopWindow(creature)
                 local msg = handler:getTalkState(creature):getResponse():replaceTags({playerName = creature:getName()})
                 selfSay(msg, creature)
-                creature:teleportTo(handler:getTalkState(creature).teleportPosition)
+                Position(creature:getPosition()):sendMagicEffect(handler:getTalkState(creature).teleportPosition.magicEffectFromPos)
+                creature:teleportTo(handler:getTalkState(creature).teleportPosition.position)
+                Position(creature:getPosition()):sendMagicEffect(handler:getTalkState(creature).teleportPosition.magicEffectToPos)
                 handler:setTalkState(handler, creature)
                 handler:resetData(creature)
                 return
@@ -291,6 +293,46 @@ if not NpcEvents then
             if handler:getTalkState(creature).setStorage then
                 local storage = handler:getTalkState(creature).setStorage
                 creature:setStorageValue(storage.key, storage.value)
+            end
+            -- If the Player gets items added (goes into the backpack by default but if there is no space/capacity it goes into inbox)
+            if handler:getTalkState(creature).items then
+                local weight = 0
+                for _, item in pairs(handler:getTalkState(creature).items.items) do
+                    -- checking how much all items would weight
+                    weight = weight + ItemType(item.item):getWeight(item.count)
+                end
+                local backpack = creature:getSlotItem(CONST_SLOT_BACKPACK) and Container(creature:getSlotItem(CONST_SLOT_BACKPACK).uid) or nil
+                -- checking if the player has enough capacity or has a backpack
+                if creature:getFreeCapacity() < weight or not backpack then
+                    local containerId = handler:getTalkState(creature).items.container or ITEM_SHOPPING_BAG
+                    creature:sendInboxItems(handler:getTalkState(creature).items.items, containerId)
+                    local msg = "The items are to heavy for you to carry. I've sent them to your inbox."
+                    creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg)
+                -- checking if the player has enough space in the backpack
+                elseif backpack and backpack:getEmptySlots(true) < #handler:getTalkState(creature).items.items then
+                    local containerId = handler:getTalkState(creature).items.container or ITEM_SHOPPING_BAG
+                    creature:sendInboxItems(handler:getTalkState(creature).items.items, containerId)
+                    local msg = "You don't have enough space in your backpack. I've sent the items to your inbox."
+                    creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg)
+                -- checking if we should add the items by default into inbox
+                elseif handler:getTalkState(creature).items.inbox then
+                    local containerId = handler:getTalkState(creature).items.container or ITEM_SHOPPING_BAG
+                    creature:sendInboxItems(handler:getTalkState(creature).items.items, containerId)
+                    local msg = "Your items are waiting for you in your inbox."
+                    creature:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, msg)
+                else
+                    if handler:getTalkState(creature).items.container then
+                        local container = Game.createItem(handler:getTalkState(creature).items.container, 1)
+                        for _, item in pairs(handler:getTalkState(creature).items.items) do
+                            container:addItem(item.item, item.count)
+                        end
+                        container:moveTo(creature)
+                    else
+                        for _, item in pairs(handler:getTalkState(creature).items.items) do
+                            creature:addItem(item.item, item.count)
+                        end
+                    end
+                end
             end
             if not greeted then
                 -- If the NPC has a response for the current topic, it says the response

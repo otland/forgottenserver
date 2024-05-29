@@ -871,6 +871,8 @@ private:
 	static int luaNpcTypePushable(lua_State* L);
 	static int luaNpcTypeDefaultOutfit(lua_State* L);
 	static int luaNpcTypeParameter(lua_State* L);
+	static int luaNpcTypeHealth(lua_State* L);
+	static int luaNpcTypeMaxHealth(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);

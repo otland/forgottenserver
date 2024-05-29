@@ -78,12 +78,32 @@ function checkStorageValueWithOperator(player, storage)
     elseif storage.operator == "~=" then
         return player:getStorageValue(storage.key) ~= storage.value
     elseif storage.operator == "<" then
+        if storage.value2 and storage.operator2 == ">" then
+            return player:getStorageValue(storage.key) < storage.value and player:getStorageValue(storage.key) > storage.value2
+        elseif storage.value2 and storage.operator2 == ">=" then
+            return player:getStorageValue(storage.key) < storage.value and player:getStorageValue(storage.key) >= storage.value2
+        end
         return player:getStorageValue(storage.key) < storage.value
     elseif storage.operator == ">" then
+        if storage.value2 and storage.operator2 == "<" then
+            return player:getStorageValue(storage.key) > storage.value and player:getStorageValue(storage.key) < storage.value2
+        elseif storage.value2 and storage.operator2 == "<=" then
+            return player:getStorageValue(storage.key) > storage.value and player:getStorageValue(storage.key) <= storage.value2
+        end
         return player:getStorageValue(storage.key) > storage.value
     elseif storage.operator == "<=" then
+        if storage.value2 and storage.operator2 == ">" then
+            return player:getStorageValue(storage.key) <= storage.value and player:getStorageValue(storage.key) > storage.value2
+        elseif storage.value2 and storage.operator2 == ">=" then
+            return player:getStorageValue(storage.key) <= storage.value and player:getStorageValue(storage.key) >= storage.value2
+        end
         return player:getStorageValue(storage.key) <= storage.value
     elseif storage.operator == ">=" then
+        if storage.value2 and storage.operator2 == "<" then
+            return player:getStorageValue(storage.key) >= storage.value and player:getStorageValue(storage.key) < storage.value2
+        elseif storage.value2 and storage.operator2 == "<=" then
+            return player:getStorageValue(storage.key) >= storage.value and player:getStorageValue(storage.key) <= storage.value2
+        end
         return player:getStorageValue(storage.key) >= storage.value
     end
     print("[Warning - checkStorageValueWithOperator] operator: ".. storage.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))

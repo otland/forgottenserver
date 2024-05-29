@@ -7,14 +7,16 @@
         The init function checks if the player meets all the requirements specified and returns true if all requirements are met, otherwise false.
 
     Functions:
-        NpcRequirements:storage(key, value, operator)
-        NpcRequirements:level(level, operator)
+        NpcRequirements:storage(key, value, operator, value2, operator2)
+        NpcRequirements:level(level, operator, level2, operator2)
         NpcRequirements:premium(premium)
         NpcRequirements:vocation(vocation)
         NpcRequirements:money(amount)
         NpcRequirements:removeMoney(amount)
         NpcRequirements:item(item, count)
-        NpcRequirements:removeItem(item, count, subType, ignoreEquipped)
+        NpcRequirements:items(table)
+        NpcRequirements:removeItem(item, count, subType, ignoreEquipped = true)
+        NpcRequirements:removeItems(table)
         NpcRequirements:isInfight(infight)
         NpcRequirements:isPzLocked(pzLocked)
         NpcRequirements:failureRespond(message, requirementType)
@@ -34,14 +36,16 @@
 ---@field requireInfight boolean
 ---@field requirePzLocked boolean
 ---@field init fun(player: Player): boolean, string?, number?
----@field storage fun(self: NpcRequirements, key: string, value: number, operator?: string)
----@field level fun(self: NpcRequirements, level: number, operator?: string)
+---@field storage fun(self: NpcRequirements, key: string, value: number, operator?: string, value2?: number, operator2?: string)
+---@field level fun(self: NpcRequirements, level: number, operator?: string, level2?: number, operator2?: string)
 ---@field premium fun(self: NpcRequirements, premium: boolean)
 ---@field vocation fun(self: NpcRequirements, vocation: string|table<number, string>)
 ---@field money fun(self: NpcRequirements, amount: number)
 ---@field removeMoney fun(self: NpcRequirements, amount: number)
----@field item fun(self: NpcRequirements, item: number, count: number)
+---@field item fun(self: NpcRequirements, item: number, count: number, subType?: number)
+---@field items fun(self: NpcRequirements, table: table<number, table>)
 ---@field removeItem fun(self: NpcRequirements, item: number, count: number, subType: number|nil, ignoreEquipped: boolean|nil)
+---@field removeItems fun(self: NpcRequirements, table: table<number, table>)
 ---@field isInfight fun(self: NpcRequirements, infight: boolean)
 ---@field isPzLocked fun(self: NpcRequirements, pzLocked: boolean)
 ---@field failureRespond fun(self: NpcRequirements, message: string, requirementType: number)
@@ -58,17 +62,25 @@ if not NpcRequirements then
     ---@param key string: The key of the storage value.
     ---@param value number: The required value of the storage.
     ---@param operator string (optional): The operator to use for the check. Defaults to "==". Possible values are "==", "~=", "<", ">", "<=", ">=".
-    function NpcRequirements:storage(key, value, operator)
-       operator = operator or "=="
-        self.requireStorage = {key = key, value = value, operator = operator}
+    ---@param value2 number (optional): The second value to check for if you want to do a ranged check.
+    ---@param operator2 string (optional): The operator to use for the second check range. "<", ">", "<=", ">=".
+    function NpcRequirements:storage(key, value, operator, value2, operator2)
+        operator = operator or "=="
+        value2 = value2 or nil
+        operator2 = operator2 or nil
+        self.requireStorage = {key = key, value = value, operator = operator, value2 = value2, operator2 = operator2}
     end
 
     -- Sets the level requirement for a keyword.
     ---@param level number: The required level.
     ---@param operator string (optional): The operator to use for the check. Defaults to ">=". Possible values are "==", "~=", "<", ">", "<=", ">=".
-    function NpcRequirements:level(level, operator)
+    ---@param level2 number (optional): The second level to check for if you want to do a ranged check.
+    ---@param operator2 string (optional): The operator to use for the second check range. "<", ">", "<=", ">=".
+    function NpcRequirements:level(level, operator, level2, operator2)
         operator = operator or ">="
-        self.requireLevel = {level = level, operator = operator}
+        level2 = level2 or nil
+        operator2 = operator2 or nil
+        self.requireLevel = {level = level, operator = operator, level2 = level2, operator2 = operator2}
     end
 
     -- Sets the premium requirement for a keyword.
@@ -101,21 +113,38 @@ if not NpcRequirements then
     -- Sets the item requirement for a keyword.
     ---@param item number: The item ID.
     ---@param count number (optional): The required amount of the item. Defaults to 1.
-    function NpcRequirements:item(item, count)
+    ---@param subType number (optional): The subtype of the item. Defaults to -1.
+    function NpcRequirements:item(item, count, subType)
         local count = count or 1
-        self.requireItem = {item = item, count = count}
+        local subType = subType or -1
+        self.requireItem = {{item = item, count = count, subType = subType}}
+    end
+
+    -- Sets the items requirement for a keyword.
+    ---@param table table<number, table>: The table of items to require.
+    function NpcRequirements:items(table)
+        self.requireItem = table
     end
 
     -- Sets the item to remove for a keyword.
     ---@param item number: The item ID.
     ---@param count number (optional): The amount of the item to remove. Defaults to 1.
     ---@param subType number (optional): The subtype of the item to remove. Defaults to -1.
-    ---@param ignoreEquipped boolean (optional): If true, the item will not be removed even if it is equipped. Defaults to true.
+    ---@param ignoreEquipped boolean (optional): If true, the item will not be removed even if it is equipped. Defaults to false.
     function NpcRequirements:removeItem(item, count, subType, ignoreEquipped)
         local count = count or 1
         local subType = subType or -1
         local ignoreEquipped = ignoreEquipped or true
-        self.requireRemoveItem = {item = item, count = count, subType = subType, ignoreEquipped = ignoreEquipped}
+        self.requireRemoveItem = {{item = item, count = count, subType = subType, ignoreEquipped = ignoreEquipped}}
+    end
+
+    -- Sets the items to remove for a keyword.
+    ---@param table table<number, table>: The table of items to remove.
+    function NpcRequirements:removeItems(table)
+        self.requireRemoveItem = table
+        for k, v in pairs(table) do
+            table[k].ignoreEquipped = table[k].ignoreEquipped or true
+        end
     end
 
     -- Sets the infight requirement for a keyword.
@@ -159,12 +188,32 @@ if not NpcRequirements then
         elseif storage.operator == "~=" then
             return player:getStorageValue(storage.key) ~= storage.value, MESSAGE_LIST.storageNotEqual:replaceTags({storage = {key = storage.key, value = storage.value}})
         elseif storage.operator == "<" then
+            if storage.value2 and storage.operator2 == ">" then
+                return player:getStorageValue(storage.key) < storage.value and player:getStorageValue(storage.key) > storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            elseif storage.value2 and storage.operator2 == ">=" then
+                return player:getStorageValue(storage.key) < storage.value and player:getStorageValue(storage.key) >= storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            end
             return player:getStorageValue(storage.key) < storage.value, MESSAGE_LIST.storageToLow:replaceTags({storage = {key = storage.key, value = storage.value}})
         elseif storage.operator == ">" then
+            if storage.value2 and storage.operator2 == "<" then
+                return player:getStorageValue(storage.key) > storage.value and player:getStorageValue(storage.key) < storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            elseif storage.value2 and storage.operator2 == "<=" then
+                return player:getStorageValue(storage.key) > storage.value and player:getStorageValue(storage.key) <= storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            end
             return player:getStorageValue(storage.key) > storage.value, MESSAGE_LIST.storageToHigh:replaceTags({storage = {key = storage.key, value = storage.value}})
         elseif storage.operator == "<=" then
+            if storage.value2 and storage.operator2 == ">" then
+                return player:getStorageValue(storage.key) <= storage.value and player:getStorageValue(storage.key) > storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            elseif storage.value2 and storage.operator2 == ">=" then
+                return player:getStorageValue(storage.key) <= storage.value and player:getStorageValue(storage.key) >= storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            end
             return player:getStorageValue(storage.key) <= storage.value, MESSAGE_LIST.storageToLow:replaceTags({storage = {key = storage.key, value = storage.value}})
         elseif storage.operator == ">=" then
+            if storage.value2 and storage.operator2 == "<" then
+                return player:getStorageValue(storage.key) >= storage.value and player:getStorageValue(storage.key) < storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            elseif storage.value2 and storage.operator2 == "<=" then
+                return player:getStorageValue(storage.key) >= storage.value and player:getStorageValue(storage.key) <= storage.value2, MESSAGE_LIST.storageRange:replaceTags({storage = {key = storage.key, value = storage.value, value2 = storage.value2}})
+            end
             return player:getStorageValue(storage.key) >= storage.value, MESSAGE_LIST.storageToHigh:replaceTags({storage = {key = storage.key, value = storage.value}})
         end
         print("[Warning - NpcRequirements:checkStorageValue] operator: ".. storage.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
@@ -182,12 +231,32 @@ if not NpcRequirements then
         elseif params.operator == "~=" then
             return player:getLevel() ~= params.level, MESSAGE_LIST.levelNotEqual:replaceTags({playerLevel = params.level})
         elseif params.operator == "<" then
+            if params.level2 and params.operator2 == ">" then
+                return player:getLevel() < params.level and player:getLevel() > params.level2, MESSAGE_LIST.levelRange1:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            elseif params.level2 and params.operator2 == ">=" then
+                return player:getLevel() < params.level and player:getLevel() >= params.level2, MESSAGE_LIST.levelRange2:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            end
             return player:getLevel() < params.level, MESSAGE_LIST.levelToLow:replaceTags({playerLevel = params.level})
         elseif params.operator == ">" then
+            if params.level2 and params.operator2 == "<" then
+                return player:getLevel() > params.level and player:getLevel() < params.level2, MESSAGE_LIST.levelRange1:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            elseif params.level2 and params.operator2 == "<=" then
+                return player:getLevel() > params.level and player:getLevel() <= params.level2, MESSAGE_LIST.levelRange3:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            end
             return player:getLevel() > params.level, MESSAGE_LIST.levelToHigh:replaceTags({playerLevel = params.level})
         elseif params.operator == "<=" then
+            if params.level2 and params.operator2 == ">" then
+                return player:getLevel() <= params.level and player:getLevel() > params.level2, MESSAGE_LIST.levelRange3:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            elseif params.level2 and params.operator2 == ">=" then
+                return player:getLevel() <= params.level and player:getLevel() >= params.level2, MESSAGE_LIST.levelRange4:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            end
             return player:getLevel() <= params.level, MESSAGE_LIST.levelToLow:replaceTags({playerLevel = params.level})
         elseif params.operator == ">=" then
+            if params.level2 and params.operator2 == "<" then
+                return player:getLevel() >= params.level and player:getLevel() < params.level2, MESSAGE_LIST.levelRange2:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            elseif params.level2 and params.operator2 == "<=" then
+                return player:getLevel() >= params.level and player:getLevel() <= params.level2, MESSAGE_LIST.levelRange4:replaceTags({playerLevel = params.level, playerLevel2 = params.level2})
+            end
             return player:getLevel() >= params.level, MESSAGE_LIST.levelToHigh:replaceTags({playerLevel = params.level})
         end
         print("[Warning - NpcRequirements:checkLevel] operator: ".. params.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
@@ -233,8 +302,13 @@ if not NpcRequirements then
         end
 
         if self.requireItem then
-            if player:getItemCount(self.requireItem.item) < self.requireItem.count then
-                return false, MESSAGE_LIST.item:replaceTags({itemName = self.requireItem.item, amount = self.requireItem.count}), REQUIREMENTS.item
+            for i = 1, #self.requireItem do
+                local index = self.requireItem[i]
+                local id = ItemType(index.item):getId()
+                local name = ItemType(index.item):getName()
+                if player:getItemCount(id, index.subType, index.ignoreEquipped) < index.count then
+                    return false, MESSAGE_LIST.item:replaceTags({itemName = name, amount = index.count}), REQUIREMENTS.item
+                end
             end
         end
 
@@ -257,8 +331,13 @@ if not NpcRequirements then
         end
 
         if self.requireRemoveMoney and self.requireRemoveItem then
-            if player:getItemCount(self.requireRemoveItem.item) < self.requireRemoveItem.count then
-                return false, MESSAGE_LIST.item:replaceTags({itemName = self.requireItem.item, amount = self.requireItem.count}), REQUIREMENTS.item
+            for i = 1, #self.requireRemoveItem do
+                local index = self.requireRemoveItem[i]
+                local id = ItemType(index.item):getId()
+                local name = ItemType(index.item):getName()
+                if player:getItemCount(id, index.subType, index.ignoreEquipped) < index.count then
+                    return false, MESSAGE_LIST.item:replaceTags({itemName = name, amount = index.count}), REQUIREMENTS.item
+                end
             end
             if player:getMoney() < self.requireRemoveMoney then
                 return false, MESSAGE_LIST.money:replaceTags({total = self.requireRemoveMoney}), REQUIREMENTS.money
@@ -272,8 +351,21 @@ if not NpcRequirements then
         end
 
         if self.requireRemoveItem then
-            if not player:removeItem(self.requireRemoveItem.item, self.requireRemoveItem.count, self.requireRemoveItem.subType, self.requireRemoveItem.ignoreEquipped) then
-                return false, MESSAGE_LIST.item:replaceTags({itemName = self.requireItem.item, amount = self.requireItem.count}), REQUIREMENTS.removeItem
+            for i = 1, #self.requireRemoveItem do
+                local index = self.requireRemoveItem[i]
+                local id = ItemType(index.item):getId()
+                local name = ItemType(index.item):getName()
+                if player:getItemCount(id, index.subType, index.ignoreEquipped) < index.count then
+                    return false, MESSAGE_LIST.item:replaceTags({itemName = name, amount = index.count}), REQUIREMENTS.removeItem
+                end
+            end
+            for i = 1, #self.requireRemoveItem do
+                local index = self.requireRemoveItem[i]
+                local id = ItemType(index.item):getId()
+                local name = ItemType(index.item):getName()
+                if not player:removeItem(id, index.count, index.subType, index.ignoreEquipped) then
+                    return false, MESSAGE_LIST.item:replaceTags({itemName = name, amount = index.count}), REQUIREMENTS.removeItem
+                end
             end
         end
         return true

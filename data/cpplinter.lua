@@ -1,7 +1,11 @@
----@alias os.mtime fun(): number
+---@class os
+---@field mtime fun(): number
+os = {}
 
----@alias table.create fun(arrayLength: number, keyLength: number): table
----@alias table.pack fun(...): table
+---@class table
+---@field create fun(arrayLength: number, keyLength: number): table
+---@field pack fun(...): table
+table = {}
 
 ---@class rawgetmetatable
 ---@field __index fun(self: table, key: any): any
@@ -390,7 +394,7 @@ Creature = {}
 ---@field addOfflineTrainingTries fun(self: Player, skill: number, amount: number)
 ---@field getOfflineTrainingSkill fun(self: Player): number
 ---@field setOfflineTrainingSkill fun(self: Player, skill: number)
----@field getItemCount fun(self: Player, itemId: number): number
+---@field getItemCount fun(self: Player, itemId: number, subType?: number, ignoreEquipped?: boolean): number
 ---@field getItemById fun(self: Player, itemId: number, subType?: number): Item
 ---@field getVocation fun(self: Player): Vocation
 ---@field setVocation fun(self: Player, vocationId: number)
@@ -415,7 +419,7 @@ Creature = {}
 ---@field setBankBalance fun(self: Player, balance: number)
 ---@field addItem fun(self: Player, itemId: number, count?: number): Item
 ---@field addItemEx fun(self: Player, item: Item, copyItem?: boolean): boolean
----@field removeItem fun(self: Player, itemId: number, count?: number, subtype?: number): boolean
+---@field removeItem fun(self: Player, itemId: number, count?: number, subtype?: number, ignoreEquipped?: boolean): boolean
 ---@field sendSupplyUsed fun(self: Player, item: Item)
 ---@field getMoney fun(self: Player): number
 ---@field addMoney fun(self: Player, amount: number)
@@ -563,6 +567,12 @@ Npc = {}
 ---@field parameters fun(self: NpcType, key?: any, value?: any): any
 ---@field setParameters fun(self: NpcType, key: any, value: any): boolean
 ---@field getParameters fun(self: NpcType, key: any): table
+---@field health fun(self: NpcType, health?: number): any
+---@field setHealth fun(self: NpcType, health: number): boolean
+---@field getHealth fun(self: NpcType): number
+---@field maxHealth fun(self: NpcType, maxHealth?: number): any
+---@field setMaxHealth fun(self: NpcType, maxHealth: number): boolean
+---@field getMaxHealth fun(self: NpcType): number
 ---@field onSay fun(self: NpcType, callback: function): boolean
 ---@field onDisappear fun(self: NpcType, callback: function): boolean
 ---@field onAppear fun(self: NpcType, callback: function): boolean

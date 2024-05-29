@@ -11,6 +11,7 @@
 MESSAGE_TAGS = {
     playerName = { tag = "|PLAYERNAME|", func = function(params) return params.playerName or "" end },
     playerLevel = { tag = "|PLAYERLEVEL|", func = function(params) return params.playerLevel or "" end },
+    playerLevel2 = { tag = "|PLAYERLEVEL2|", func = function(params) return params.playerLevel2 or "" end },
     itemCount = { tag = "|ITEMCOUNT|", func = function(params) return params.amount or "" end },
     totalCost = { tag = "|TOTALCOST|", func = function(params) return params.total or "" end },
     itemName = { tag = "|ITEMNAME|", func = function(params) return params.itemName or "" end },
@@ -31,13 +32,19 @@ MESSAGE_LIST = {
     sold = "You sold |ITEMCOUNT| |ITEMNAME|(s) for |TOTALCOST| gold.",
     -- requirement cancel messages
     storage = "You do not meet the storage requirement.",
+    -- bla
+    storageRange = "You do not meet the storage requirement.",
     storageNotEqual = "You do not meet the storage requirement.",
     storageToLow = "You do not meet the storage requirement.",
     storageToHigh = "You do not meet the storage requirement.",
     level = "You need to be exactly level |PLAYERLEVEL|.",
+    levelRange1 = "You need to be higher then level |PLAYERLEVEL| and below |PLAYERLEVEL2|.", -- > <
+    levelRange2 = "You need to be level |PLAYERLEVEL| or higher and below |PLAYERLEVEL2|.", -- >= <
+    levelRange3 = "You need to be higher then level |PLAYERLEVEL| and below or equal |PLAYERLEVEL2|.", -- > <=
+    levelRange4 = "You need to be between level |PLAYERLEVEL| and |PLAYERLEVEL2|.", -- >= <=
     levelNotEqual = "You can't be exactly level |PLAYERLEVEL|.",
     levelToLow = "You need to be atleast level |PLAYERLEVEL|.",
-    levelToHigh = "You need to be under level |PLAYERLEVEL|.",
+    levelToHigh = "You need to be below level |PLAYERLEVEL|.",
     premium = "You need to be premium to do this.",
     vocation = "You need to be a |VOCATIONNAME| to do this.",
     money = "You do not have enough money, it costs |TOTALCOST| gold.",

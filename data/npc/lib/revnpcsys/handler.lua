@@ -9,7 +9,7 @@
     Functions:
         - NpcsHandler(npc): NpcsHandler
         - NpcsHandler:keyword(word)
-        - NpcsHandler:onStorageValue(key, value)
+        - NpcsHandler:onStorageValue(key, value, operator, value2, operator2)
         - NpcsHandler:onAnswer()
         - NpcsHandler:hasAnswer()
         - NpcsHandler:getData(player, key)
@@ -56,7 +56,7 @@
 ---@field failureResponse string
 ---@field teleportPosition Position
 ---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
----@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator: string): NpcsHandler
+---@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator?: string, value2?: number, operator2?: string): NpcsHandler
 ---@field onAnswer fun(self: NpcsHandler): NpcsHandler
 ---@field hasAnswer fun(self: NpcsHandler): boolean
 ---@field getData fun(self: NpcsHandler, player: Player, key: string): string
@@ -64,6 +64,7 @@
 ---@field addData fun(self: NpcsHandler, player: Player, key: string, data: string)
 ---@field resetAData fun(self: NpcsHandler, player: Player)
 ---@field setStorageValue fun(self: NpcsHandler, key: number, value: number)
+---@field addItems fun(self: NpcsHandler, items: table, container?: number|string, inbox?: boolean)
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
 ---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
@@ -169,11 +170,13 @@ if not NpcsHandler then
     ---@param value number The value to add the sub-keyword to.
     ---@param operator string The operator to use for the sub-keyword.
     ---@return NpcsHandler
-    function NpcsHandler:onStorageValue(key, value, operator)
+    function NpcsHandler:onStorageValue(key, value, operator, value2, operator2)
         if not self.onStorage then
             self.onStorage = {}
         end
         operator = operator or "=="
+        value2 = value2 or nil
+        operator2 = operator2 or nil
         local index = #self.onStorage + 1
         self.onStorage[index] = {}
         self.onStorage[index].keywords = {}
@@ -181,7 +184,7 @@ if not NpcsHandler then
         setmetatable(self.onStorage[index].keywords, {})
         self.onStorage[index].response = {}
         self.onStorage[index].failureResponse = ""
-        self.onStorage[index].storage = {key = key, value = value, operator = operator}
+        self.onStorage[index].storage = {key = key, value = value, operator = operator, value2 = value2, operator2 = operator2}
         return self.onStorage[index]
     end
 
@@ -240,6 +243,17 @@ if not NpcsHandler then
     ---@param value number The value to set the storage value to.
     function NpcsHandler:setStorageValue(key, value)
         self.setStorage = {key = key, value = value}
+    end
+
+    -- This function adds items to the player, if the player does not have storage it goes into the players inbox.
+    ---@param items table The items to add to the player.
+    ---@param container number|string The container to add the items to.
+    ---@param inbox boolean Whether to add the items to the player's inbox.
+    function NpcsHandler:addItems(items, container, inbox)
+        self.items = {}
+        self.items.items = items
+        self.items.container = container or nil
+        self.items.inbox = inbox or false
     end
 
     -- Retrieves the requirements for a keyword.
@@ -378,8 +392,11 @@ if not NpcsHandler then
 
     -- Sets the position to teleport the player to.
     ---@param position Position The position to teleport the player to.
-    function NpcsHandler:teleport(position)
-        self.teleportPosition = position
+    function NpcsHandler:teleport(position, magicEffectFromPos, magicEffectToPos)
+        self.teleportPosition = {}
+        self.teleportPosition.position = position
+        self.teleportPosition.magicEffectFromPos = magicEffectFromPos or CONST_ME_TELEPORT
+        self.teleportPosition.magicEffectToPos = magicEffectToPos or CONST_ME_TELEPORT
     end
 
     -- Releases the focus of the player like we are saying goodbye.

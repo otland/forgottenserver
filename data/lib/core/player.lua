@@ -740,3 +740,12 @@ function Player.disableLoginMusic(self)
 	msg:delete()
 	return true
 end
+
+function Player.sendInboxItems(self, items, containerId)
+	local inbox = self:getInbox()
+	local container = Game.createItem(containerId, 1)
+	for _, item in pairs(items) do
+		container:addItem(item.item, item.count)
+	end
+	container:moveTo(inbox)
+end
