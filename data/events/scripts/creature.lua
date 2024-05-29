@@ -31,15 +31,13 @@ function Creature:onHear(speaker, words, type)
 end
 
 function Creature:onChangeZone(fromZone, toZone)
-	local onChangeZone = EventCallback.onChangeZone
-	if onChangeZone then
-		onChangeZone(self, fromZone, toZone)
+	if hasEvent.onChangeZone then
+		Event.onChangeZone(self, fromZone, toZone)
 	end
 end
 
 function Creature:onUpdateStorage(key, value, oldValue, isSpawn)
-	local onUpdateStorage = EventCallback.onUpdateStorage
-	if onUpdateStorage then
-		onUpdateStorage(self, key, value, oldValue, isSpawn)
+	if hasEvent.onUpdateStorage then
+		Event.onUpdateStorage(self, key, value, oldValue, isSpawn)
 	end
 end

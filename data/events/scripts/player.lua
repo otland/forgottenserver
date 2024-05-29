@@ -286,9 +286,8 @@ function Player:onNetworkMessage(recvByte, msg)
 end
 
 function Player:onSpellCheck(spell)
-	local onSpellCheck = EventCallback.onSpellCheck
-	if onSpellCheck then
-		return onSpellCheck(self, spell)
+	if hasEvent.onSpellCheck then
+		return Event.onSpellCheck(self, spell)
 	end
 	return true
 end
