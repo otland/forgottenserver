@@ -101,6 +101,10 @@ depotPremiumLimit = 15000
 questTrackerFreeLimit = 10
 questTrackerPremiumLimit = 15
 
+-- VIP Group limits
+vipGroupFreeLimit = 3
+vipGroupPremiumLimit = 8
+
 -- World Light
 -- NOTE: if defaultWorldLight is set to true the world light algorithm will
 -- be handled in the sources. set it to false to avoid conflicts if you wish

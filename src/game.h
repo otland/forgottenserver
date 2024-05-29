@@ -368,7 +368,10 @@ public:
 	void playerRequestAddVip(uint32_t playerId, const std::string& name);
 	void playerRequestRemoveVip(uint32_t playerId, uint32_t guid);
 	void playerRequestEditVip(uint32_t playerId, uint32_t guid, const std::string& description, uint32_t icon,
-	                          bool notify);
+	                          bool notify, const std::vector<uint16_t>& groupIds);
+	void playerRequestAddVipGroup(uint32_t playerId, const std::string& name);
+	void playerRequestEditVipGroup(uint32_t playerId, uint16_t vipGroupId, const std::string& name);
+	void playerRequestRemoveVipGroup(uint32_t playerId, uint16_t vipGroupId);
 	void playerTurn(uint32_t playerId, Direction dir);
 	void playerRequestOutfit(uint32_t playerId);
 	void playerRequestEditPodium(uint32_t playerId, const Position& position, uint8_t stackPos,
