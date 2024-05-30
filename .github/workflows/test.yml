@@ -34,6 +34,7 @@ jobs:
 
       - name: Setup database
         run: |
+          sudo apt update -qq
           sudo apt install -yqq mariadb-client
           mysql -h 0.0.0.0 -u forgottenserver -pforgottenserver forgottenserver < schema.sql
 
@@ -45,4 +46,4 @@ jobs:
           configurePreset: vcpkg
           configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
           testPreset: vcpkg
-          testPresetAdditionalArgs: "['--build-config', 'Debug']"
+          testPresetAdditionalArgs: "['--build-config', 'Debug', '--output-on-failure']"
