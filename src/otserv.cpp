@@ -176,8 +176,14 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua monsters" << std::endl;
-	if (!g_scripts->loadScripts("monster", false, false)) {
+	if (!g_scripts->loadScripts("monster/lua", false, false)) {
 		startupErrorMessage("Failed to load lua monsters");
+		return;
+	}
+
+	std::cout << ">> Loading lua npcs" << std::endl;
+	if (!g_scripts->loadScripts("npc/lua", false, false)) {
+		startupErrorMessage("Failed to load lua npcs");
 		return;
 	}
 
