@@ -1,6 +1,7 @@
 ---
 name: Bug Report
-about: Reporting a bug reproducible using unmodified engine
+about: Reporting a bug reproducible using unmodified engine (latest release or master)
+labels: "bug,needs-confirmation"
 ---
 <!-- Welcome to the issues section if it's your first time! -->
 
@@ -8,6 +9,8 @@ about: Reporting a bug reproducible using unmodified engine
 - [ ] This is a bug in the software that resides in this repository, and not a
       support matter (use https://otland.net/forums/support.16/ for support)
 - [ ] This issue is reproducible without changes to the C++ code in this repository
+- [ ] Tests where made with 1.4.x (latest release)
+- [ ] Tests where made with 1.5 (master branch)
 
 ### Steps to reproduce (include any configuration/script required to reproduce)
 1.
