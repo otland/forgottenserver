@@ -137,7 +137,7 @@ struct LoginFixture
 	{
 		// `players_online` is a memory table and does not support transactions, so we need to clear it manually
 		// do NOT run this test against a running server's database
-		db.executeQuery("DELETE FROM `players_online`");
+		db.executeQuery("TRUNCATE `players_online`");
 	}
 
 	Database& db = Database::getInstance();
