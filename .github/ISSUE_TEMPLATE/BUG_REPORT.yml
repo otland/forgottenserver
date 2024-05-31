@@ -15,6 +15,8 @@ body:
           required: true
         - label: This bug has not been resolved in master branch
           required: true
+        - label: There is no existing issue for this bug already
+          required: true
   - type: dropdown
     id: crash
     attributes:
@@ -55,10 +57,16 @@ body:
         - Ubuntu 24.04
         - Debian 12
         - MacOS
-        - other (not listed)
+        - other (specify in the description)
       default: 0
     validations:
       required: true
+  - type: input
+    id: os-description
+    attributes:
+      label: OS Description
+      description: If you picked 'other' in Operation System, please specify here
+      placeholder: "Example: Fedora 35"
   - type: input
     id: title
     attributes:
@@ -75,11 +83,11 @@ body:
         If you suspect a PR caused this bug, please provide the PR number (you can insert several)
         Delete everything inside if you don't suspect any
       placeholder: |
-        - [x] #pr1
-        - [x] #pr2
+        - [ ] #pr1
+        - [ ] #pr2
       value: |
-        - [x] #
-        - [x] #
+        - [ ] #
+        - [ ] #
   - type: textarea
     id: steps
     attributes:
