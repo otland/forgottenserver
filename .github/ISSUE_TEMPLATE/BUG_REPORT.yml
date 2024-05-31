@@ -1,0 +1,144 @@
+name: Bug Report
+description: Reporting a bug reproducible using unmodified engine
+title: "[Bug]: "
+labels: ["bug", "needs-confirmation"]
+
+body:
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: By submitting this bug issue, you agree to the following.
+      options:
+        - label: This is a bug in the software that resides in this repository, 
+            and not a support matter (use https://otland.net/forums/support.16/ for support)
+          required: true
+        - label: This issue is reproducible without changes to the C++ code in this repository
+          required: true
+        - label: This bug has not been resolved in master branch
+          required: true
+        - label: There is no existing issue for this bug already
+          required: true
+  
+  - type: dropdown
+    id: crash
+    attributes:
+      label: Does this bug crash tfs?
+      description: Make sure you pick the right one
+      options:
+        - "not sure"
+        - "no"
+        - "yes"
+        - "yes (not always)"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: server-version
+    attributes:
+      label: Server Version
+      description: Which version was this tested on?
+      multiple: true
+      options:
+        - 1.7 (Master)
+        - 1.6 (Release)
+        - 1.5 (Development)
+        - 1.4.x (Release)
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operation System
+      description: On which OS does this bug appear?
+      multiple: true
+      options:
+        - all (listed below)
+        - Windows
+        - Ubuntu 20.04
+        - Ubuntu 22.04
+        - Ubuntu 24.04
+        - Debian 12
+        - MacOS
+        - other (specify in the description)
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: os-description
+    attributes:
+      label: OS Description
+      description: If you picked 'other' in Operation System, please specify here
+      placeholder: "Example: Fedora 35"
+  
+  - type: input
+    id: title
+    attributes:
+      label: Bug description
+      description: A clear and concise title that describes the bug
+      placeholder: "Example: Server crashes when using X spell"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: pr-cause
+    attributes:
+      label: Possible Pull Requests which are to blame
+      description: |
+        If you suspect a PR caused this bug, please provide the PR number (you can insert several)
+        Delete everything inside if you don't suspect any
+      placeholder: |
+        - [ ] #pr1
+        - [ ] #pr2
+      value: |
+        - [ ] #
+        - [ ] #
+  
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Tell us step by step how to reproduce this bug
+      value: |
+        1.
+        2.
+        3.
+        **Code to reproduce the issue:**
+        ```lua
+        -- paste your script here
+        ```
+    validations:
+      required: true
+  
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual Behavior
+      description: This is what happens right now
+      placeholder: Please include videos/screenshots (if possible)
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: This is what actually should happen
+      placeholder: Please include videos/screenshots (if possible)
+    validations:
+      required: true
+  
+  - type: textarea
+    id: backtrace
+    attributes:
+      label: Backtrace
+      placeholder: Please provide a backtrace of your debugger if this bug crashes tfs.
+      description: This will be automatically formatted into code, no need for backticks.
+      render: cpp
+  
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
