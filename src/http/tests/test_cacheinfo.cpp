@@ -43,7 +43,7 @@ using status = boost::beast::http::status;
 BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 {
 	auto result = db.storeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('foo', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insertSession("INSERT INTO `sessions` (`account_id`, `token`, `expire_at`) VALUES");
