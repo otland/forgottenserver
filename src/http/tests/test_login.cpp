@@ -160,7 +160,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_email, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_account_does_not_exist, LoginFixture)
 {
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "k@example.com"}, {"password", "bar"}}, ip);
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 3);
@@ -189,17 +189,15 @@ BOOST_FIXTURE_TEST_CASE(test_login_invalid_password, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 {
 	BOOST_TEST(db.executeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('abcd', 'foo@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('abcd', 'fooba@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
 
 	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 
 	auto&& [status, body] = tfs::http::handle_login(
 	    {
 	        {"type", "login"},
-	        {"email", "foo@example.com"},
+	        {"email", "fooba@example.com"},
 	        {"password", "bar"},
-	        // token too old, guaranteed to be wrong
-	        {"token", generateToken("", (now.count() / AUTHENTICATOR_PERIOD) - 2)},
 	    },
 	    ip);
 
@@ -210,10 +208,10 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_success_no_players, LoginFixture)
 {
 	BOOST_TEST(db.executeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('defg', 'foo@example.com', SHA1('bar'))"));
+	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('defg', 'foobar@example.com', SHA1('bar'))"));
 
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "foobar@example.com"}, {"password", "bar"}}, ip);
 
 	BOOST_TEST(status == status::ok);
 	auto& characters = body.at("playdata").at("characters").as_array();
@@ -225,18 +223,18 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	auto premiumEndsAt = now + days(30);
 
 	auto result = db.storeQuery(fmt::format(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('ghij', 'foo@example.com', SHA1('bar'), {:d}) RETURNING `id`",
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('ghij', 'ghij@example.com', SHA1('bar'), {:d}) RETURNING `id`",
 	    premiumEndsAt.count()));
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insert(
 	    "INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons`) VALUES");
 	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id,
-	                          "Dejairzin", 2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
+	                          "Test", 2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
 	BOOST_TEST(insert.execute());
 
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "ghij@example.com"}, {"password", "bar"}}, ip);
 
 	BOOST_TEST(status == status::ok);
 
@@ -264,7 +262,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 
 	auto& characters = body.at("playdata").at("characters").as_array();
 	BOOST_TEST(characters.size() == 1);
-	BOOST_TEST(characters[0].at("name").as_string() == "Dejairzin");
+	BOOST_TEST(characters[0].at("name").as_string() == "Test");
 	BOOST_TEST(characters[0].at("level").as_uint64() == 2597);
 	BOOST_TEST(characters[0].at("vocation").as_string() == "Elder Druid");
 	BOOST_TEST(characters[0].at("lastlogin").as_uint64() == 1715719401);
@@ -280,17 +278,17 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, LoginFixture)
 {
 	auto result = db.storeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('nbdj', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('nbdj', 'nbdj@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insert("INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`) VALUES");
-	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}", id, "Dejairzin", 2597, 6, 1715719401));
+	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}", id, "Testtoken", 2597, 6, 1715719401));
 	BOOST_TEST(insert.execute());
 
 	auto&& [status, body] = tfs::http::handle_login(
 	    {
 	        {"type", "login"},
-	        {"email", "foo@example.com"},
+	        {"email", "nbdj@example.com"},
 	        {"password", "bar"},
 	        {"token", generateToken("", now.count() / AUTHENTICATOR_PERIOD)},
 	    },
