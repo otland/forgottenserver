@@ -2,6 +2,7 @@ name: Bug Report
 description: Reporting a bug reproducible using unmodified engine
 title: "[Bug]: "
 labels: ["bug", "needs-confirmation"]
+
 body:
   - type: checkboxes
     id: terms
@@ -17,6 +18,7 @@ body:
           required: true
         - label: There is no existing issue for this bug already
           required: true
+  
   - type: dropdown
     id: crash
     attributes:
@@ -29,6 +31,7 @@ body:
         - "yes (not always)"
     validations:
       required: true
+  
   - type: dropdown
     id: server-version
     attributes:
@@ -43,6 +46,7 @@ body:
       default: 0
     validations:
       required: true
+  
   - type: dropdown
     id: os
     attributes:
@@ -61,12 +65,14 @@ body:
       default: 0
     validations:
       required: true
+  
   - type: input
     id: os-description
     attributes:
       label: OS Description
       description: If you picked 'other' in Operation System, please specify here
       placeholder: "Example: Fedora 35"
+  
   - type: input
     id: title
     attributes:
@@ -75,6 +81,7 @@ body:
       placeholder: "Example: Server crashes when using X spell"
     validations:
       required: true
+  
   - type: textarea
     id: pr-cause
     attributes:
@@ -88,6 +95,7 @@ body:
       value: |
         - [ ] #
         - [ ] #
+  
   - type: textarea
     id: steps
     attributes:
@@ -103,6 +111,7 @@ body:
         ```
     validations:
       required: true
+  
   - type: textarea
     id: actual-behavior
     attributes:
@@ -111,6 +120,7 @@ body:
       placeholder: Please include videos/screenshots (if possible)
     validations:
       required: true
+  
   - type: textarea
     id: expected-behavior
     attributes:
@@ -119,6 +129,7 @@ body:
       placeholder: Please include videos/screenshots (if possible)
     validations:
       required: true
+  
   - type: textarea
     id: backtrace
     attributes:
@@ -126,6 +137,7 @@ body:
       placeholder: Please provide a backtrace of your debugger if this bug crashes tfs.
       description: This will be automatically formatted into code, no need for backticks.
       render: cpp
+  
   - type: markdown
     attributes:
       value: |

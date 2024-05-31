@@ -2,6 +2,7 @@ name: Feature Request
 description: Requesting a new feature for the engine or data pack
 title: "[Feature]: "
 labels: ["feature"]
+
 body:
   - type: checkboxes
     id: terms
@@ -10,6 +11,7 @@ body:
       options:
         - label: There is no existing issue for this feature (or similar) already
           required: true
+  
   - type: textarea
     id: pr
     attributes:
@@ -24,6 +26,7 @@ body:
       value: |
         - #
         - link to Wiki/Forum/other
+  
   - type: textarea
     id: request
     attributes:
@@ -38,6 +41,7 @@ body:
         ```
     validations:
       required: true
+  
   - type: textarea
     id: solution
     attributes:

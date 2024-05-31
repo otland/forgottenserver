@@ -2,6 +2,7 @@ name: Compilation Problem Report
 description: Reporting a compilation problem reproducible using unmodified engine
 title: "[Compilation]: "
 labels: ["compilation-error", "needs-confirmation"]
+
 body:
   - type: checkboxes
     id: terms
@@ -19,6 +20,7 @@ body:
           required: true
         - label: I have tried to compile the software using the provided instructions in the Wiki page
           required: true
+  
   - type: dropdown
     id: server-version
     attributes:
@@ -33,6 +35,7 @@ body:
       default: 0
     validations:
       required: true
+  
   - type: dropdown
     id: os
     attributes:
@@ -51,12 +54,14 @@ body:
       default: 0
     validations:
       required: true
+  
   - type: input
     id: os-description
     attributes:
       label: OS Description
       description: If you selected 'other' in the Operation System, please specify the OS you used
       placeholder: "Example: Fedora 35"
+  
   - type: dropdown
     id: compiler
     attributes:
@@ -70,12 +75,14 @@ body:
       default: 0
     validations:
       required: true
+  
   - type: input
     id: compiler-description
     attributes:
       label: Compiler Description
       description: If you selected 'other' in the Compiler, please specify the compiler you used
       placeholder: "Example: GCC 12.0.0"
+  
   - type: textarea
     id: pr-cause
     attributes:
@@ -89,6 +96,7 @@ body:
       value: |
         - [ ] #
         - [ ] #
+  
   - type: textarea
     id: error
     attributes:
@@ -98,6 +106,7 @@ body:
       render: cpp
     validations:
       required: true
+  
   - type: markdown
     attributes:
       value: |
