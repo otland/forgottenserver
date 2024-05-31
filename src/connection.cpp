@@ -45,6 +45,14 @@ void ConnectionManager::closeAll()
 
 // Connection
 
+Connection::Connection(boost::asio::io_context& io_context, ConstServicePort_ptr service_port) :
+    readTimer(io_context),
+    writeTimer(io_context),
+    service_port(std::move(service_port)),
+    socket(io_context),
+    timeConnected(time(nullptr))
+{}
+
 void Connection::close(bool force)
 {
 	// any thread

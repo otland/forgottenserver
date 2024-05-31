@@ -6,6 +6,7 @@
 #include "protocollogin.h"
 
 #include "ban.h"
+#include "base64.h"
 #include "configmanager.h"
 #include "game.h"
 #include "iologindata.h"
@@ -14,6 +15,39 @@
 #include "tasks.h"
 
 extern Game g_game;
+
+namespace {
+
+std::string decodeSecret(std::string_view secret)
+{
+	// simple base32 decoding
+	std::string key;
+	key.reserve(10);
+
+	uint32_t buffer = 0, left = 0;
+	for (const auto& ch : secret) {
+		buffer <<= 5;
+		if (ch >= 'A' && ch <= 'Z') {
+			buffer |= (ch & 0x1F) - 1;
+		} else if (ch >= '2' && ch <= '7') {
+			buffer |= ch - 24;
+		} else {
+			// if a key is broken, return empty and the comparison will always be false since the token must not be
+			// empty
+			return {};
+		}
+
+		left += 5;
+		if (left >= 8) {
+			left -= 8;
+			key.push_back(static_cast<char>(buffer >> left));
+		}
+	}
+
+	return key;
+}
+
+} // namespace
 
 void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
 {
@@ -30,12 +64,38 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
                                      const std::string& token, uint16_t version)
 {
 	Account account;
-	if (!IOLoginData::loginserverAuthentication(accountName, password, account)) {
+
+	Database& db = Database::getInstance();
+
+	DBResult_ptr result = db.storeQuery(fmt::format(
+	    "SELECT `id`, `name`, UNHEX(`password`) AS `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
+	    db.escapeString(accountName), db.escapeString(accountName)));
+	if (!result) {
 		disconnectClient("Account name or password is not correct.", version);
 		return;
 	}
 
-	uint32_t ticks = time(nullptr) / AUTHENTICATOR_PERIOD;
+	if (transformToSHA1(password) != result->getString("password")) {
+		disconnectClient("Account name or password is not correct.", version);
+		return;
+	}
+
+	account.id = result->getNumber<uint32_t>("id");
+	account.name = result->getString("name");
+	account.key = decodeSecret(result->getString("secret"));
+	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
+	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
+
+	result = db.storeQuery(fmt::format(
+	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", account.id));
+	if (result) {
+		do {
+			account.characters.emplace_back(result->getString("name"));
+		} while (result->next());
+	}
+
+	uint32_t ticks = duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count() /
+	                 AUTHENTICATOR_PERIOD;
 
 	auto output = OutputMessagePool::getOutputMessage();
 	if (!account.key.empty()) {
@@ -52,9 +112,20 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(0);
 	}
 
-	// Add session key
+	// Generate and add session key
+	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned short> rbe;
+	std::string sessionKey(16, '\x00');
+	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
+
 	output->addByte(0x28);
-	output->addString(accountName + "\n" + password + "\n" + token + "\n" + std::to_string(ticks));
+	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
+
+	if (!db.executeQuery(fmt::format(
+	        "INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	        db.escapeBlob(sessionKey.data(), sessionKey.size()), account.id, getConnection()->getIP().to_string()))) {
+		disconnectClient("Failed to create session.\nPlease try again later.", version);
+		return;
+	}
 
 	// Add char list
 	output->addByte(0x64);

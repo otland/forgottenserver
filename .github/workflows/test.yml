@@ -6,6 +6,22 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: mariadb
+
+        env:
+          MARIADB_USER: forgottenserver
+          MARIADB_PASSWORD: forgottenserver
+          MARIADB_DATABASE: forgottenserver
+          MARIADB_INITDB_SKIP_TZINFO: "yes"
+          MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        ports:
+          - 3306:3306
+
     steps:
       - uses: actions/checkout@v4
 
@@ -16,6 +32,12 @@ jobs:
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
 
+      - name: Setup database
+        run: |
+          sudo apt update -qq
+          sudo apt install -yqq mariadb-client
+          mysql -h 0.0.0.0 -u forgottenserver -pforgottenserver forgottenserver < schema.sql
+
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
@@ -24,4 +46,4 @@ jobs:
           configurePreset: vcpkg
           configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
           testPreset: vcpkg
-          testPresetAdditionalArgs: "['--build-config', 'Debug']"
+          testPresetAdditionalArgs: "['--build-config', 'Debug', '--output-on-failure']"
