@@ -19,6 +19,10 @@ std::vector<std::thread> workers = {};
 
 void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, int threads /*= 1*/)
 {
+	if (port == 0 || threads < 1) {
+		return;
+	}
+
 	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
 
 	auto listener = make_listener(ioc, {asio::ip::make_address(address), port});
@@ -32,6 +36,10 @@ void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, 
 
 void tfs::http::stop()
 {
+	if (workers.empty()) {
+		return;
+	}
+
 	fmt::print(">> Stopping HTTP server...\n");
 
 	ioc.stop();
