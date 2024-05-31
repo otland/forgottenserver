@@ -177,7 +177,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_password, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_invalid_password, LoginFixture)
 {
 	BOOST_TEST(db.executeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('', 'foo@example.com', SHA1('bar'))"));
+	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('abc', 'foo@example.com', SHA1('bar'))"));
 
 	auto&& [status, body] =
 	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "baz"}}, ip);
@@ -189,7 +189,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_invalid_password, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 {
 	BOOST_TEST(db.executeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('', 'foo@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('abcd', 'foo@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
 
 	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 
@@ -210,7 +210,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_success_no_players, LoginFixture)
 {
 	BOOST_TEST(db.executeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('', 'foo@example.com', SHA1('bar'))"));
+	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('defg', 'foo@example.com', SHA1('bar'))"));
 
 	auto&& [status, body] =
 	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "bar"}}, ip);
@@ -225,7 +225,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	auto premiumEndsAt = now + days(30);
 
 	auto result = db.storeQuery(fmt::format(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('', 'foo@example.com', SHA1('bar'), {:d}) RETURNING `id`",
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('ghij', 'foo@example.com', SHA1('bar'), {:d}) RETURNING `id`",
 	    premiumEndsAt.count()));
 	auto id = result->getNumber<uint64_t>("id");
 
@@ -280,7 +280,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, LoginFixture)
 {
 	auto result = db.storeQuery(
-	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
+	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('nbdj', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insert("INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`) VALUES");
