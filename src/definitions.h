@@ -5,7 +5,7 @@
 #define FS_DEFINITIONS_H
 
 static constexpr auto STATUS_SERVER_NAME = "The Forgotten Server";
-static constexpr auto STATUS_SERVER_VERSION = "1.5";
+static constexpr auto STATUS_SERVER_VERSION = "1.6";
 static constexpr auto STATUS_SERVER_DEVELOPERS = "The Forgotten Server Team";
 
 static constexpr auto CLIENT_VERSION_MIN = 1310;
