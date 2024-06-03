@@ -269,6 +269,7 @@ if not NpcRequirements then
     ---@return nil|string (optional): The message to send to the player if the requirements are not met.
     ---@return nil|number (optional): The REQUIREMENT constant which type of requirement we didn't met.
     function NpcRequirements:init(player)
+        -- TODO outfit
         if self.requireStorage then
             local ret, msg = self:checkStorageValue(player)
             if not ret then
