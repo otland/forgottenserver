@@ -85,7 +85,7 @@ if not NpcEvents then
             handler:resetData(creature)
         end
 
-        -- Npc is beeing removed we clear all the data which is specific to it's npc id he holds to not leak memory
+        -- Npc is being removed we clear all the data which is specific to it's npc id he holds to not leak memory
         if npc == creature then
             focus:clear()
             talkQueue:clear()
@@ -231,11 +231,8 @@ if not NpcEvents then
                 handler:getTalkState(creature):checkOnStorage(creature, handler)
             end
             -- checking for requirements
-            local ret, msg, reqType = handler:getTalkState(creature):requirements():init(creature)
+            local ret, msg = handler:getTalkState(creature):requirements():init(creature)
             if not ret then
-                if handler:getTalkState(creature):requirements():getFailureRespond(reqType) then
-                    msg = handler:getTalkState(creature):requirements():getFailureRespond(reqType):replaceTags({playerName = creature:getName()})
-                end
                 talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
                 local _, start = next(handler.keywords)
                 handler:setTalkState(start, creature)
@@ -268,7 +265,7 @@ if not NpcEvents then
             end
             -- checking for modules
             if handler:getTalkState(creature).modules then
-                if not handler:getTalkState(creature).modules:init(npc, creature) then
+                if handler:getTalkState(creature).modules:init(npc, creature) == false then
                     -- need to do that because of teleport
                     return
                 end

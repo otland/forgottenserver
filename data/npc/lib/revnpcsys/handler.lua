@@ -81,6 +81,7 @@
 ---@field failureRespond fun(self: NpcsHandler, text: string)
 ---@field callback fun(self: NpcsHandler, npc: Npc, player: Player, message: string): boolean, string
 ---@field require NpcRequirements
+---@field player NpcModules
 ---@field farewell fun(self: NpcsHandler)
 ---@field talk fun(self: NpcsHandler, params: table<number, table>)
 ---@field checkOnStorage fun(self: NpcsHandler, creature: Creature, handler: NpcsHandler)

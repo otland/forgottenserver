@@ -322,7 +322,7 @@ Podium = {}
 ---@field setSkull fun(self: Creature, skullType: number)
 ---@field getOutfit fun(self: Creature): Outfit
 ---@field setOutfit fun(self: Creature, outfit: Outfit)
----@field getCondition fun(self: Creature, conditionType: number): Condition
+---@field getCondition fun(self: Creature, conditionType: number, conditionId?: number, subId?: number): Condition
 ---@field addCondition fun(self: Creature, condition: Condition)
 ---@field removeCondition fun(self: Creature, conditionType: number)
 ---@field hasCondition fun(self: Creature, conditionType: number): boolean
@@ -400,7 +400,7 @@ Creature = {}
 ---@field setVocation fun(self: Player, vocationId: number)
 ---@field getSex fun(self: Player): number
 ---@field setSex fun(self: Player, sexId: number)
----@field getTown fun(self: Player): number
+---@field getTown fun(self: Player): Town
 ---@field setTown fun(self: Player, townId: number)
 ---@field getGuild fun(self: Player): Guild
 ---@field setGuild fun(self: Player, guild: Guild)
@@ -449,10 +449,10 @@ Creature = {}
 ---@field hasBlessing fun(self: Player, blessingId: number): boolean
 ---@field addBlessing fun(self: Player, blessingId: number)
 ---@field removeBlessing fun(self: Player, blessingId: number)
----@field canLearnSpell fun(self: Player, spellId: number): boolean
----@field learnSpell fun(self: Player, spellId: number)
----@field forgetSpell fun(self: Player, spellId: number)
----@field hasLearnedSpell fun(self: Player, spellId: number): boolean
+---@field canLearnSpell fun(self: Player, name: string): boolean
+---@field learnSpell fun(self: Player, name: string)
+---@field forgetSpell fun(self: Player, name: string)
+---@field hasLearnedSpell fun(self: Player, name: string): boolean
 ---@field sendTutorial fun(self: Player, tutorialId: number)
 ---@field addMapMark fun(self: Player, position: Position, type: number, description?: string)
 ---@field save fun(self: Player)

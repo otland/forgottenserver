@@ -16,7 +16,7 @@
         - NpcModules:items(items: table<string, any>, container?: number|string, inbox?: boolean)
         - NpcModules:teleport(position: Position, magicEffectFromPos?: MagicEffect_t, magicEffectToPos?: MagicEffect_t)
         - NpcModules:blessing(blessing: number)
-        - NpcModules:outfit(outfit: number, addon?: number)
+        - NpcModules:outfit(outfit1: number, outfit2: number, addon: number)
         - NpcModules:mount(mount: number)
         - NpcModules:vocation(vocation: string)
         - NpcModules:learnSpell(spell: string)
@@ -64,13 +64,20 @@ function NpcsHandler:travelTo(params)
         doPlayer:teleport(dest.position)
 
         local require = accept:requirements()
+        -- TODO fix this part
         if dest.isPzLocked then require:isPzLocked(dest.isPzLocked) else require:isPzLocked(false) end
         if dest.isInfight then require:isInfight(dest.isInfight) else require:isInfight(false) end
         if dest.money then require:removeMoney(dest.money) end
         if dest.level then require:level(dest.level) end
         if dest.premium ~= nil then require:premium(dest.premium) end
-        if dest.storage then require:storage(dest.storage.key, dest.storage.value, dest.storage.operator ~= nil and dest.storage.operator) end
-        if dest.item then require:item(dest.item.item, dest.item.count) end
+        if dest.storage then
+            if dest.storage.value2 then
+                require:storage(dest.storage.key, dest.storage.value, dest.storage.operator, dest.storage.value2, dest.storage.operator2, dest.storage.failResponse, dest.storage.failResponse2)
+            else
+                require:storage(dest.storage.key, dest.storage.value, dest.storage.operator, dest.storage.failResponse)
+            end
+        end
+        if dest.item then require:item(dest.item.item, dest.item.count, dest.item.check, dest.item.failResponse) end
         if dest.removeItem then require:removeItem(dest.removeItem.item, dest.removeItem.count, dest.removeItem.subType and dest.removeItem.subType or -1, dest.removeItem.ignoreEquipped and dest.removeItem.ignoreEquipped or true) end
 
         local decline = toDest:keyword("no")
@@ -138,7 +145,7 @@ if not NpcModules then
 
     -- This function adds items to the player, if the player does not have storage it goes into the players inbox.
     ---@param items table The items to add to the player.
-    ---@param container number|string The container to add the items to.
+    ---@param container number The container to add the items to.
     ---@param inbox boolean Whether to add the items to the player's inbox.
     function NpcModules:items(items, container, inbox)
         self.modItems = {}
@@ -165,11 +172,13 @@ if not NpcModules then
     end
 
     -- Gives the player the outfit
-    ---@param outfit number The outfit to give the player.
+    ---@param outfit1 number The outfit to give the player (female,male).
+    ---@param outfit2 number The second outfit to give the player (female,male).
     ---@param addon number The outfit addon to give the player.
-    function NpcModules:outfit(outfit, addon)
+    function NpcModules:outfit(outfit1, outfit2, addon)
         self.modOutfit = {}
-        self.modOutfit.outfit = outfit
+        self.modOutfit.outfit1 = outfit1
+        self.modOutfit.outfit2 = outfit2
         self.modOutfit.addon = addon or 0
     end
 
@@ -282,9 +291,11 @@ if not NpcModules then
 
         if self.modOutfit then
             if self.modOutfit.addon then
-                player:addOutfitAddon(self.modOutfit.outfit, self.modOutfit.addon)
+                player:addOutfitAddon(self.modOutfit.outfit1, self.modOutfit.addon)
+                player:addOutfitAddon(self.modOutfit.outfit2, self.modOutfit.addon)
             else
-                player:addOutfit(self.modOutfit.outfit, self.modOutfit.addon)
+                player:addOutfit(self.modOutfit.outfit1, self.modOutfit.addon)
+                player:addOutfit(self.modOutfit.outfit2, self.modOutfit.addon)
             end
         end
 
