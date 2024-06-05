@@ -80,8 +80,35 @@ body:
     id: compiler-description
     attributes:
       label: Compiler Description
-      description: If you selected 'other' in the Compiler, please specify the compiler you used
+      description: If you selected 'other' in the 'Compiler', please specify the compiler you used
       placeholder: "Example: GCC 12.0.0"
+
+  - type: dropdown
+    id: compiler-flags
+    attributes:
+      label: Compiler Flags
+      description: Which compiler flags are included?
+      options:
+        - http
+        - luajit
+        - none
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: build-type
+    attributes:
+      label: Buildtype
+      description: Which Buildtype did this happen on?
+      options:
+        - Release
+        - Release (RelWithDebInfo)
+        - Debug
+        - all (listed above)
+      default: 0
+    validations:
+      required: true
   
   - type: textarea
     id: pr-cause
