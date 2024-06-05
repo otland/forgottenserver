@@ -40,18 +40,13 @@
 ---@field isInfight boolean
 ---@param params table<string, travelParams>
 function NpcsHandler:travelTo(params)
-    local greet = self:keyword(self.greetWords)
-    greet:setGreetResponse("Hello |PLAYERNAME| I can {travel} you to wherever you want, just tell me your {destination}")
-    local traveling = greet:keyword("travel")
-    traveling:respond("Where do you want to travel?")
-
     for name, dest in pairs(params) do
-        local toDest = traveling:keyword(name)
-        toDest:respond(string.format("Do you want to travel to {%s} for {%d} gold?", name, dest.money and dest.money or 0))
+        local toDest = self:keyword(name)
+        toDest:respond(string.format("Do you want to travel to {%s} for {%d} gold?", name, dest.money and dest.money[1] or 0))
 
-        local destinations = greet:keyword("destination")
+        local destinations = self:keyword("destination")
         local words = {}
-        for k, v in pairs(traveling:getKeywords()) do
+        for k, v in pairs(self:getKeywords()) do
             if k ~= "destination" then
                 table.insert(words, "{".. k .."}")
             end
@@ -64,21 +59,14 @@ function NpcsHandler:travelTo(params)
         doPlayer:teleport(dest.position)
 
         local require = accept:requirements()
-        -- TODO fix this part
-        if dest.isPzLocked then require:isPzLocked(dest.isPzLocked) else require:isPzLocked(false) end
-        if dest.isInfight then require:isInfight(dest.isInfight) else require:isInfight(false) end
-        if dest.money then require:removeMoney(dest.money) end
-        if dest.level then require:level(dest.level) end
-        if dest.premium ~= nil then require:premium(dest.premium) end
-        if dest.storage then
-            if dest.storage.value2 then
-                require:storage(dest.storage.key, dest.storage.value, dest.storage.operator, dest.storage.value2, dest.storage.operator2, dest.storage.failResponse, dest.storage.failResponse2)
-            else
-                require:storage(dest.storage.key, dest.storage.value, dest.storage.operator, dest.storage.failResponse)
+        for func, parameters in pairs(dest) do
+            if require[func] and func ~= "position" then
+                if func == "money" then
+                    func = "removeMoney"
+                end
+                require[func](require, unpack(parameters))
             end
         end
-        if dest.item then require:item(dest.item.item, dest.item.count, dest.item.check, dest.item.failResponse) end
-        if dest.removeItem then require:removeItem(dest.removeItem.item, dest.removeItem.count, dest.removeItem.subType and dest.removeItem.subType or -1, dest.removeItem.ignoreEquipped and dest.removeItem.ignoreEquipped or true) end
 
         local decline = toDest:keyword("no")
         decline:respond("Ok, maybe next time.")

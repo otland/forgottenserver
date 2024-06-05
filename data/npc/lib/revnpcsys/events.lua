@@ -221,6 +221,8 @@ if not NpcEvents then
                     return
                 end
             end
+            -- incase shop is open and the player swaps the talk state, then we need to close the shop
+            closeShopWindow(creature)
             -- renewing the focus for the player
             focus:addFocus(creature)
 
