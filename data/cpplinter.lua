@@ -580,6 +580,13 @@ Npc = {}
 ---@field onPlayerCloseChannel fun(self: NpcType, callback: function): boolean
 ---@field onPlayerEndTrade fun(self: NpcType, callback: function): boolean
 ---@field onThink fun(self: NpcType, callback: function): boolean
+---@field onSayCallback fun(self: NpcType, callback: function): boolean
+---@field onDisappearCallback fun(self: NpcType, callback: function): boolean
+---@field onAppearCallback fun(self: NpcType, callback: function): boolean
+---@field onMoveCallback fun(self: NpcType, callback: function): boolean
+---@field onPlayerCloseChannelCallback fun(self: NpcType, callback: function): boolean
+---@field onPlayerEndTradeCallback fun(self: NpcType, callback: function): boolean
+---@field onThinkCallback fun(self: NpcType, callback: function): boolean
 NpcType = {}
 
 ---@class Guild
@@ -1314,7 +1321,7 @@ function getDistanceTo(creature) end
 function doNpcSetCreatureFocus(creature) end
 function getNpcParameter(key) end
 function openShopWindow(shopWindow) end
-function closeShopWindow() end
+function closeShopWindow(player) end
 function doSellItem(item) end
 
 storages = {}

@@ -82,8 +82,8 @@
 ---@field learnedSpell fun(self: NpcRequirements, spell: string, check: boolean, failResponse: string)
 ---@field blessing fun(self: NpcRequirements, blessing: number, check: boolean, failResponse: string)
 ---@field sex fun(self: NpcRequirements, sex: number, check: boolean, failResponse: string)
----@field party fun(self: NpcRequirements, party: boolean, check: boolean, failResponse: string)
----@field guild fun(self: NpcRequirements, guild: boolean, check: boolean, failResponse: string)
+---@field party fun(self: NpcRequirements, check: boolean, failResponse: string)
+---@field guild fun(self: NpcRequirements, check: boolean, failResponse: string)
 ---@field town fun(self: NpcRequirements, town: number, check: boolean, failResponse: string)
 ---@field checkStorageValue fun(self: NpcRequirements, player: Player): boolean, string|nil
 ---@field checkLevel fun(self: NpcRequirements, player: Player): boolean, string|nil
@@ -323,19 +323,17 @@ if not NpcRequirements then
     end
 
     -- Sets the party requirement for a keyword.
-    ---@param party boolean: If true, the player must be in a party.
     ---@param check boolean: If true, the player must be in a party. If false, the player must not be in a party.
     ---@param failResponse string: The message to send to the player if the requirements are not met.
-    function NpcRequirements:party(party, check, failResponse)
-        self.requireParty = {party = party, check = check, failResponse = failResponse}
+    function NpcRequirements:party(check, failResponse)
+        self.requireParty = {check = check, failResponse = failResponse}
     end
 
     -- Sets the guild requirement for a keyword.
-    ---@param guild boolean: If true player has to have a guild, If false he's not allowed to have a guild.
     ---@param check boolean: If true, the player must have a guild. If false, the player must not have a guild.
     ---@param failResponse string: The message to send to the player if the requirements are not met.
-    function NpcRequirements:guild(guild, check, failResponse)
-        self.requireGuild = {guild = guild, check = check, failResponse = failResponse}
+    function NpcRequirements:guild(check, failResponse)
+        self.requireGuild = {check = check, failResponse = failResponse}
     end
 
     -- Sets the town requirement for a keyword.
@@ -505,7 +503,7 @@ if not NpcRequirements then
 
         if self.requireSex then
             local sex = self.requireSex
-            if sex.check and not player:getSex() == sex.sex then
+            if sex.check and player:getSex() ~= sex.sex then
                 return false, sex.failResponse
             elseif not sex.check and player:getSex() == sex.sex then
                 return false, sex.failResponse
@@ -572,7 +570,7 @@ if not NpcRequirements then
         if self.requireMoney then
             if self.requireMoney.check and player:getMoney() < self.requireMoney.amount then
                 return false, self.requireMoney.failResponse:replaceTags({total = self.requireMoney.amount})
-            elseif not self.requireMoney and player:getMoney() >= self.requireMoney.amount then
+            elseif not self.requireMoney.check and player:getMoney() >= self.requireMoney.amount then
                 return false, self.requireMoney.failResponse:replaceTags({total = self.requireMoney.amount})
             end
         end
