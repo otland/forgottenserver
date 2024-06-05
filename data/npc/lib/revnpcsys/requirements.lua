@@ -123,7 +123,7 @@ if not NpcRequirements then
         elseif args == 7 then
             storage2(self, ...)
         else
-            print("[Warning - NpcRequirements:storage] invalid number of arguments: ".. args ..", expected 4 or 7 arguments.\n".. debug.getinfo(2).source:match("@?(.*)"))
+            print(debug.traceback("[Warning - NpcRequirements:storage] invalid number of arguments: [".. args .."] Function expected 4 or 7 arguments.", 1) .."\n")
             return false
         end
         return true
@@ -156,7 +156,7 @@ if not NpcRequirements then
         elseif args == 6 then
             level2(self, ...)
         else
-            print("[Warning - NpcRequirements:level] invalid number of arguments: ".. args ..", expected 3 or 6 arguments.\n".. debug.getinfo(2).source:match("@?(.*)"))
+            print(debug.traceback("[Warning - NpcRequirements:level] invalid number of arguments: [".. args .."] Function expected 3 or 6 arguments.", 1) .."\n")
             return false
         end
         return true
@@ -215,7 +215,7 @@ if not NpcRequirements then
         elseif args == 5 then
             item3(self, ...)
         else
-            print("[Warning - NpcRequirements:item] invalid number of arguments: ".. args ..", expected 3, 4 or 5 arguments.\n".. debug.getinfo(2).source:match("@?(.*)"))
+            print(debug.traceback("[Warning - NpcRequirements:item] invalid number of arguments: [".. args .."] Function expected 3, 4 or 5 arguments.", 1) .."\n")
             return false
         end
         return true
@@ -250,7 +250,7 @@ if not NpcRequirements then
         elseif args == 5 then
             removeItem3(self, ...)
         else
-            print("[Warning - NpcRequirements:removeItem] invalid number of arguments: ".. args ..", expected 3, 4 or 5 arguments.\n".. debug.getinfo(2).source:match("@?(.*)"))
+            print(debug.traceback("[Warning - NpcRequirements:removeItem] invalid number of arguments: [".. args .."] Function expected 3, 4 or 5 arguments.", 1) .."\n")
             return false
         end
         return true
@@ -399,7 +399,7 @@ if not NpcRequirements then
             end
             return player:getStorageValue(storage.key) >= storage.value, storage.failResponse:replaceTags({storage = {key = storage.key, value = storage.value}})
         end
-        print("[Warning - NpcRequirements:checkStorageValue] operator: ".. storage.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
+        print(debug.traceback("[Warning - NpcRequirements:checkStorageValue] Npc: ".. Npc(getNpcCid()):getName() .." has operator: ".. storage.operator .." which does not exist.", 1) .."\n")
         return false
     end
 
@@ -456,7 +456,7 @@ if not NpcRequirements then
             end
             return player:getLevel() >= params.level, params.failResponse:replaceTags({playerLevel = params.level})
         end
-        print("[Warning - NpcRequirements:checkLevel] operator: ".. params.operator .." does not exist.\n".. debug.getinfo(2).source:match("@?(.*)"))
+        print(debug.traceback("[Warning - NpcRequirements:checkLevel] Npc: ".. Npc(getNpcCid()):getName() .." has operator: ".. params.operator .." which does not exist.", 1) .."\n")
         return false
     end
 

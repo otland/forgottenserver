@@ -60,11 +60,12 @@ function NpcsHandler:travelTo(params)
 
         local require = accept:requirements()
         for func, parameters in pairs(dest) do
-            if require[func] and func ~= "position" then
-                if func == "money" then
-                    func = "removeMoney"
+            if func ~= "position" then
+                if require[func] then
+                    require[func](require, unpack(parameters))
+                else
+                    print(debug.traceback("[Warning - NpcsHandler:travelTo] There is no requirement function with the name: ".. func.. "\n".. dump(dest), 1) .."\n")
                 end
-                require[func](require, unpack(parameters))
             end
         end
 

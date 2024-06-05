@@ -235,7 +235,9 @@ if not NpcEvents then
             -- checking for requirements
             local ret, msg = handler:getTalkState(creature):requirements():init(creature)
             if not ret then
-                talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                if msg then
+                    talkQueue:addToQueue(creature, msg, TALK.defaultDelay)
+                end
                 local _, start = next(handler.keywords)
                 handler:setTalkState(start, creature)
                 handler:getTalkState(creature):checkOnStorage(creature, handler)
