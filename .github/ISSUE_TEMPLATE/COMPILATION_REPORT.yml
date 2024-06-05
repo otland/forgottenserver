@@ -102,9 +102,9 @@ body:
       label: Buildtype
       description: Which Buildtype did this happen on?
       options:
-        - Release
-        - Release (RelWithDebInfo)
+        - RelWithDebInfo (default if downloaded from releases or artifacts)
         - Debug
+        - Release
         - all (listed above)
       default: 0
     validations:
