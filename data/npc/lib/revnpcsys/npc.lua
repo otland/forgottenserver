@@ -1,6 +1,6 @@
 --[[
     Revisioned NPC System:
-        - Version: 1.0
+        - Version: 1.1
 
     Credits:
         - Evil Hero (https://otland.net/members/evil-hero.4280/)

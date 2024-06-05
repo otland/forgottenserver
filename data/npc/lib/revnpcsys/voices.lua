@@ -7,9 +7,15 @@
         - The class provides methods to check if a voice can be used and to get the voice to use.
 
     Functions:
+        - NpcVoices:clear()
         - NpcVoices:canUseVoice(handler)
 ]]
 
+---@class NpcVoices
+---@field lastVoice table<string, any>
+---@field lastVoiceTime number
+---@field clear fun()
+---@field canUseVoice fun(handler: table): boolean, table|nil
 
 if not NpcVoices then
     -- If NpcVoices doesn't exist, it's created as an empty table
@@ -29,6 +35,11 @@ if not NpcVoices then
             return self[npc:getId()]
         end
     })
+
+    -- Clears all NpcVoices data for an NPC.
+    function NpcVoices:clear()
+        self = nil
+    end
 
     -- Checks if a voice can be used.
     ---@param handler table The NpcsHandler to get the voices from.
