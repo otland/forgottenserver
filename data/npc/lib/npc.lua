@@ -101,7 +101,6 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	end
 	return true
 end
-
 function getCount(string)
 	local b, e = string:find("%d+")
 	if not b then
