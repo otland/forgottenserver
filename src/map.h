@@ -7,8 +7,8 @@
 #include "house.h"
 #include "position.h"
 #include "spawn.h"
-#include "town.h"
 #include "spectators.h"
+#include "town.h"
 
 class Creature;
 
