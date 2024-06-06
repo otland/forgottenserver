@@ -12,6 +12,7 @@
 #include "http/http.h"
 #include "iomarket.h"
 #include "monsters.h"
+#include "npc.h"
 #include "outfit.h"
 #include "protocollogin.h"
 #include "protocolold.h"
@@ -21,7 +22,6 @@
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"
-#include "npc.h"
 
 #include <fstream>
 
