@@ -2022,13 +2022,13 @@ PlayerFlag_SetMaxSpeed = 1 * 2 ^ 29
 PlayerFlag_SpecialVIP = 1 * 2 ^ 30
 PlayerFlag_NotGenerateLoot = 1 * 2 ^ 31
 -- PlayerFlag with exponent 32 existed but was deprecated (feature dropped from client).
-PlayerFlag_IgnoreProtectionZone = 1 << 33
-PlayerFlag_IgnoreSpellCheck = 1 << 34
-PlayerFlag_IgnoreWeaponCheck = 1 << 35
-PlayerFlag_CannotBeMuted = 1 << 36
-PlayerFlag_IsAlwaysPremium = 1 << 37
-PlayerFlag_IgnoreYellCheck = 1 << 38
-PlayerFlag_IgnoreSendPrivateCheck = 1 << 39
+PlayerFlag_IgnoreProtectionZone = 1 * 2 ^ 33
+PlayerFlag_IgnoreSpellCheck = 1 * 2 ^ 34
+PlayerFlag_IgnoreWeaponCheck = 1 * 2 ^ 35
+PlayerFlag_CannotBeMuted = 1 * 2 ^ 36
+PlayerFlag_IsAlwaysPremium = 1 * 2 ^ 37
+PlayerFlag_IgnoreYellCheck = 1 * 2 ^ 38
+PlayerFlag_IgnoreSendPrivateCheck = 1 * 2 ^ 39
 
 ITEM_ATTRIBUTE_NONE = 0
 
