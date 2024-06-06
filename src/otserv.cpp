@@ -21,6 +21,7 @@
 #include "script.h"
 #include "scriptmanager.h"
 #include "server.h"
+#include "npc.h"
 
 #include <fstream>
 
@@ -183,7 +184,7 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua npcs" << std::endl;
-	if (!g_scripts->loadScripts("npc/lua", false, false)) {
+	if (!Npcs::loadNpcs(false)) {
 		startupErrorMessage("Failed to load lua npcs");
 		return;
 	}

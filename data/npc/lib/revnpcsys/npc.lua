@@ -1,6 +1,6 @@
 --[[
     Revisioned NPC System:
-        - Version: 1.1
+        - Version: 1.2
 
     Credits:
         - Evil Hero (https://otland.net/members/evil-hero.4280/)
@@ -56,6 +56,11 @@ dofile('data/npc/lib/revnpcsys/talkqueue.lua')
 dofile('data/npc/lib/revnpcsys/requirements.lua')
 dofile('data/npc/lib/revnpcsys/modules.lua')
 dofile('data/npc/lib/revnpcsys/voices.lua')
+
+-- had to move this due to loading order
+NpcType.getName = function(self)
+    return self:name()
+end
 
 -- Replaces tags in a string with corresponding values.
 ---@param params table<string, number|string|table<string|number, string|number>> The parameters to replace the tags with.
