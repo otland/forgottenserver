@@ -11,7 +11,7 @@ local lastRaidEnd = 0
 function event.onTime(interval)
 	io.write(">> Executing raids event...\n")
 	if running then
-		return
+		return true
 	end
 
 	local now = os.mtime()
@@ -31,6 +31,7 @@ function event.onTime(interval)
 			break
 		end
 	end
+	return true
 end
 
 event:register()

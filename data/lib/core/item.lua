@@ -54,8 +54,7 @@ do
 		["Duration"] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
 		["Text"] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= "" end},
 		["Date"] = {key = ITEM_ATTRIBUTE_DATE},
-		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end},
-		["Tier"] = {key = ITEM_ATTRIBUTE_TIER}
+		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end}
 	}
 
 	function setAuxFunctions()

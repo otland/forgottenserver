@@ -22,6 +22,7 @@ function juiceSquizer.onUse(player, item, fromPosition, target, toPosition, isHo
 		player:addItem(2006, target.itemid == 2678 and 14 or 21) -- if target is a coconut, create coconut milk, otherwise create fruit juice
 		return true
 	end
+	return false
 end
 
 juiceSquizer:id(5865)

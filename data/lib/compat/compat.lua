@@ -656,6 +656,7 @@ function getPlayersByIPAddress(ip, mask)
 	if not mask then mask = 0xFFFFFFFF end
 	local masked = bit.band(ip, mask)
 	local lshift = bit.lshift
+	local players = {}
 	for _, player in ipairs(Game.getPlayers()) do
 		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
 		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
@@ -1175,7 +1176,6 @@ function getTileInfo(position)
 	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
 	ret.nopz = ret.protection
 	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
-	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
 	ret.house = t:getHouse()
 	ret.bed = t:hasFlag(TILESTATE_BED)
 	ret.depot = t:hasFlag(TILESTATE_DEPOT)
@@ -1673,28 +1673,6 @@ function table.maxn(t)
 	end
 	return max
 end
-
-function dump(t, indent, done)
-    done = done or {}
-    indent = indent or 0
-
-    done[t] = true
-
-    for key, value in pairs(t) do
-        print(string.rep("\t", indent))
-
-        if type(value) == "table" and not done[value] then
-            done[value] = true
-            print(key, ":\n")
-
-            dump(value, indent + 2, done)
-            done[value] = nil
-        else
-            print(key, "\t=\t", value, "\n")
-        end
-    end
-end
-
 
 ItemType.getDuration = ItemType.getDurationMin
 
