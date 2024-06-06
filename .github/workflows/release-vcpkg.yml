@@ -39,7 +39,7 @@ jobs:
           pwd
           ls -al
           find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
-          mv ../build/tfs ../build/tfs.exe* ../build/*.dll .
+          mv ../build/RelWithDebInfo/tfs ../build/RelWithDebInfo/tfs.exe* ../build/RelWithDebInfo/*.dll .
         shell: bash
 
       - name: Zip the release files
