@@ -17,7 +17,6 @@ area = {
 local combat = Combat()
 combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_ENERGYHIT)
-combat:addCondition(condition)
 combat:setArea(createCombatArea(area))
 
 local condition = Condition(CONDITION_ENERGY)

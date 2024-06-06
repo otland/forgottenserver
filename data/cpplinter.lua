@@ -81,7 +81,7 @@ configManager = {}
 ---@field getMountIdByLookType fun(lookType: number): number
 ---@field getTowns fun(): table
 ---@field getHouses fun(): table
----@field getOutfits fun(): table
+---@field getOutfits fun(sex: number): table
 ---@field getMounts fun(): table
 ---@field getVocations fun(): table
 ---@field getGameState fun(): string
@@ -89,7 +89,7 @@ configManager = {}
 ---@field getWorldType fun(): string
 ---@field setWorldType fun(type: string): boolean
 ---@field getItemAttributeByName fun(attribute: string): any
----@field getReturnMessage fun(): string
+---@field getReturnMessage fun(value: number): string
 ---@field createItem fun(itemId: number, count: number, subtype: number|nil): Item
 ---@field createContainer fun(containerId: number, size: number): Container
 ---@field createMonster fun(name: string, position: Position, extended?: boolean, force?: boolean, magicEffect?: MagicEffect_t): Monster
@@ -233,8 +233,8 @@ ModalWindow = {}
 ---@field getCustomAttribute fun(self: Item, key: string): any
 ---@field setCustomAttribute fun(self: Item, key: string, value: any)
 ---@field removeCustomAttribute fun(self: Item, key: string)
----@field moveTo fun(self: Item, destination: Position)
----@field transform fun(self: Item, newItemId: number)
+---@field moveTo fun(self: Item, destination: Position|Thing)
+---@field transform fun(self: Item, newItemId: number, count?: number|string)
 ---@field decay fun(self: Item)
 ---@field getSpecialDescription fun(self: Item): string
 ---@field hasProperty fun(self: Item, property: number): boolean
@@ -357,7 +357,7 @@ Creature = {}
 ---@field getCapacity fun(self: Player): number
 ---@field setCapacity fun(self: Player, capacity: number)
 ---@field getFreeCapacity fun(self: Player): number
----@field getDepotChest fun(self: Player): Item
+---@field getDepotChest fun(self: Player, depotId: number, autoCreate?: boolean): Item
 ---@field getInbox fun(self: Player): Item
 ---@field getSkullTime fun(self: Player): number
 ---@field setSkullTime fun(self: Player, time: number)
@@ -385,7 +385,7 @@ Creature = {}
 ---@field getSkillPercent fun(self: Player, skill: number): number
 ---@field getSkillTries fun(self: Player, skill: number): number
 ---@field addSkillTries fun(self: Player, skill: number, amount: number)
----@field removeSkillTries fun(self: Player, skill: number, amount: number)
+---@field removeSkillTries fun(self: Player, skill: number, amount: number, notify?: boolean)
 ---@field getSpecialSkill fun(self: Player, skill: number): number
 ---@field addSpecialSkill fun(self: Player, skill: number, amount: number)
 ---@field addOfflineTrainingTime fun(self: Player, time: number)
@@ -621,8 +621,8 @@ Group = {}
 ---@field getClientId fun(self: Vocation): number
 ---@field getName fun(self: Vocation): string
 ---@field getDescription fun(self: Vocation): string
----@field getRequiredSkillTries fun(self: Vocation, skill: number): number
----@field getRequiredManaSpent fun(self: Vocation): number
+---@field getRequiredSkillTries fun(self: Vocation, skillType: number, skillLevel: number): number
+---@field getRequiredManaSpent fun(self: Vocation, magicLevel: number): number
 ---@field getCapacityGain fun(self: Vocation): number
 ---@field getHealthGain fun(self: Vocation): number
 ---@field getHealthGainTicks fun(self: Vocation): number
@@ -1333,23 +1333,24 @@ ITEM_STACK_SIZE = 100
 CONST_ANI_NONE = 0
 CONST_ANI_SPEAR = 1
 CONST_ANI_BOLT = 2
-CONST_ANI_DIAMONDARROW = 3
+CONST_ANI_ARROW = 3
 CONST_ANI_FIRE = 4
 CONST_ANI_ENERGY = 5
 CONST_ANI_POISONARROW = 6
 CONST_ANI_BURSTARROW = 7
-CONST_ANI_BLOCKHIT = 8
-CONST_ANI_THROWINGSTAR = 9
-CONST_ANI_GREENSTAR = 10
+CONST_ANI_THROWINGSTAR = 8
+CONST_ANI_THROWINGKNIFE = 9
 CONST_ANI_SMALLSTONE = 10
+CONST_ANI_DEATH = 11
 CONST_ANI_LARGEROCK = 12
 CONST_ANI_SNOWBALL = 13
+CONST_ANI_POWERBOLT = 14
 CONST_ANI_POISON = 15
 CONST_ANI_INFERNALBOLT = 16
 CONST_ANI_HUNTINGSPEAR = 17
 CONST_ANI_ENCHANTEDSPEAR = 18
 CONST_ANI_REDSTAR = 19
-CONST_ANI_SOUND_RED = 20
+CONST_ANI_GREENSTAR = 20
 CONST_ANI_ROYALSPEAR = 21
 CONST_ANI_SNIPERARROW = 22
 CONST_ANI_ONYXARROW = 23
@@ -1359,6 +1360,7 @@ CONST_ANI_WHIRLWINDAXE = 26
 CONST_ANI_WHIRLWINDCLUB = 27
 CONST_ANI_ETHEREALSPEAR = 28
 CONST_ANI_ICE = 29
+CONST_ANI_EARTH = 30
 CONST_ANI_HOLY = 31
 CONST_ANI_SUDDENDEATH = 32
 CONST_ANI_FLASHARROW = 33
@@ -1367,14 +1369,23 @@ CONST_ANI_SHIVERARROW = 35
 CONST_ANI_ENERGYBALL = 36
 CONST_ANI_SMALLICE = 37
 CONST_ANI_SMALLHOLY = 38
-CONST_ANI_MAGIC_BLUE = 39
-CONST_ANI_HOLYDAMAGE = 40
+CONST_ANI_SMALLEARTH = 39
 CONST_ANI_EARTHARROW = 40
 CONST_ANI_EXPLOSION = 41
-CONST_ANI_ICEATTACK = 44
-CONST_ANI_WEAPONTYPE = 45
-CONST_ANI_DEATH = 46
-CONST_ANI_EARTH = 47
+CONST_ANI_CAKE = 42
+CONST_ANI_TARSALARROW = 44
+CONST_ANI_VORTEXBOLT = 45
+CONST_ANI_PRISMATICBOLT = 48
+CONST_ANI_CRYSTALLINEARROW = 49
+CONST_ANI_DRILLBOLT = 50
+CONST_ANI_ENVENOMEDARROW = 51
+CONST_ANI_GLOOTHSPEAR = 53
+CONST_ANI_SIMPLEARROW = 54
+CONST_ANI_LEAFSTAR = 56
+CONST_ANI_DIAMONDARROW = 57
+CONST_ANI_SPECTRALBOLT = 58
+CONST_ANI_ROYALSTAR = 59
+CONST_ANI_WEAPONTYPE = 254
 
 -- Constants: CONST_ME
 CONST_ME_NONE = 0
@@ -1421,32 +1432,114 @@ CONST_ME_HOLYDAMAGE = 40
 CONST_ME_BIGCLOUDS = 41
 CONST_ME_ICEAREA = 42
 CONST_ME_ICETORNADO = 43
+CONST_ME_ICEATTACK = 44
+CONST_ME_STONES = 45
 CONST_ME_SMALLPLANTS = 46
 CONST_ME_CARNIPHILA = 47
+CONST_ME_PURPLEENERGY = 48
 CONST_ME_YELLOWENERGY = 49
 CONST_ME_HOLYAREA = 50
 CONST_ME_BIGPLANTS = 51
 CONST_ME_CAKE = 52
-CONST_ME_WATERSPLASH = 54
-CONST_ME_SMALLICE = 55
-CONST_ME_PLANTATTACK = 55
-CONST_ME_STONES = 45
 CONST_ME_GIANTICE = 53
+CONST_ME_WATERSPLASH = 54
+CONST_ME_PLANTATTACK = 55
+CONST_ME_TUTORIALARROW = 56
+CONST_ME_TUTORIALSQUARE = 57
+CONST_ME_MIRRORHORIZONTAL = 58
+CONST_ME_MIRRORVERTICAL = 59
+CONST_ME_SKULLHORIZONTAL = 60
+CONST_ME_SKULLVERTICAL = 61
+CONST_ME_ASSASSIN = 62
+CONST_ME_STEPSHORIZONTAL = 63
+CONST_ME_BLOODYSTEPS = 64
+CONST_ME_STEPSVERTICAL = 65
 CONST_ME_YALAHARIGHOST = 66
 CONST_ME_BATS = 67
 CONST_ME_SMOKE = 68
 CONST_ME_INSECTS = 69
 CONST_ME_DRAGONHEAD = 70
-CONST_ME_EARLY_THUNDER = 71
+CONST_ME_ORCSHAMAN = 71
+CONST_ME_ORCSHAMAN_FIRE = 72
 CONST_ME_THUNDER = 73
-CONST_ME_ICEATTACK = 74
-CONST_ANI_SMALLEARTH = 75
-CONST_ME_PURPLEENERGY = 76
-CONST_ME_ROOTING = 77
-CONST_ANI_LEAFSTAR = 78
-CONST_ME_BLACKSMOKE = 79
-CONST_ME_PIXIE_EXPLOSION = 80
-CONST_ME_PURPLECHAIN = 81
+CONST_ME_FERUMBRAS = 74
+CONST_ME_CONFETTI_HORIZONTAL = 75
+CONST_ME_CONFETTI_VERTICAL = 76
+-- 77-157 are empty
+CONST_ME_BLACKSMOKE = 158
+-- 159-166 are empty
+CONST_ME_REDSMOKE = 167
+CONST_ME_YELLOWSMOKE = 168
+CONST_ME_GREENSMOKE = 169
+CONST_ME_PURPLESMOKE = 170
+CONST_ME_EARLY_THUNDER = 171
+CONST_ME_RAGIAZ_BONECAPSULE = 172
+CONST_ME_CRITICAL_DAMAGE = 173
+-- 174 is empty
+CONST_ME_PLUNGING_FISH = 175
+CONST_ME_BLUECHAIN = 176
+CONST_ME_ORANGECHAIN = 177
+CONST_ME_GREENCHAIN = 178
+CONST_ME_PURPLECHAIN = 179
+CONST_ME_GREYCHAIN = 180
+CONST_ME_YELLOWCHAIN = 181
+CONST_ME_YELLOWSPARKLES = 182
+-- 183 is empty
+CONST_ME_FAEEXPLOSION = 184
+CONST_ME_FAECOMING = 185
+CONST_ME_FAEGOING = 186
+-- 187 is empty
+CONST_ME_BIGCLOUDSSINGLESPACE = 188
+CONST_ME_STONESSINGLESPACE = 189
+-- 190 is empty
+CONST_ME_BLUEGHOST = 191
+-- 192 is empty
+CONST_ME_POINTOFINTEREST = 193
+CONST_ME_MAPEFFECT = 194
+CONST_ME_PINKSPARK = 195
+CONST_ME_FIREWORK_GREEN = 196
+CONST_ME_FIREWORK_ORANGE = 197
+CONST_ME_FIREWORK_PURPLE = 198
+CONST_ME_FIREWORK_TURQUOISE = 199
+-- 200 is empty
+CONST_ME_THECUBE = 201
+CONST_ME_DRAWINK = 202
+CONST_ME_PRISMATICSPARKLES = 203
+CONST_ME_THAIAN = 204
+CONST_ME_THAIANGHOST = 205
+CONST_ME_GHOSTSMOKE = 206
+-- 207 is empty
+CONST_ME_FLOATINGBLOCK = 208
+CONST_ME_BLOCK = 209
+CONST_ME_ROOTING = 210
+-- 211-212 were removed from the client
+CONST_ME_GHOSTLYSCRATCH = 213
+CONST_ME_GHOSTLYBITE = 214
+CONST_ME_BIGSCRATCHING = 215
+CONST_ME_SLASH = 216
+CONST_ME_BITE = 217
+-- 218 is empty
+CONST_ME_CHIVALRIOUSCHALLENGE = 219
+CONST_ME_DIVINEDAZZLE = 220
+CONST_ME_ELECTRICALSPARK = 221
+CONST_ME_PURPLETELEPORT = 222
+CONST_ME_REDTELEPORT = 223
+CONST_ME_ORANGETELEPORT = 224
+CONST_ME_GREYTELEPORT = 225
+CONST_ME_LIGHTBLUETELEPORT = 226
+-- 227-229 are empty
+CONST_ME_FATAL = 230
+CONST_ME_DODGE = 231
+CONST_ME_HOURGLASS = 232
+CONST_ME_FIREWORKSSTAR = 233
+CONST_ME_FIREWORKSCIRCLE = 234
+CONST_ME_FERUMBRAS_1 = 235
+CONST_ME_GAZHARAGOTH = 236
+CONST_ME_MAD_MAGE = 237
+CONST_ME_HORESTIS = 238
+CONST_ME_DEVOVORGA = 239
+CONST_ME_FERUMBRAS_2 = 240
+CONST_ME_FOAM = 241
 
 -- Constants: CONST_PROP
 CONST_PROP_BLOCKSOLID = 0
@@ -1814,6 +1907,7 @@ WEAPON_SHIELD = 4
 WEAPON_DISTANCE = 5
 WEAPON_WAND = 6
 WEAPON_AMMO = 7
+WEAPON_QUIVER = 8
 
 SLOTP_WHEREEVER = 0xFFFFFFFF
 SLOTP_HEAD = 1 * 2 ^ 0
@@ -2006,6 +2100,12 @@ ITEM_LABEL = 2599
 ITEM_AMULETOFLOSS = 2173
 ITEM_DOCUMENT_RO = 1968
 
+RESOURCE_BANK_BALANCE = 0
+RESOURCE_GOLD_EQUIPPED = 1
+RESOURCE_PREY_WILDCARDS = 10
+RESOURCE_DAILYREWARD_STREAK = 20
+RESOURCE_DAILYREWARD_JOKERS = 21
+
 CLIENTOS_NONE = 0
 
 CLIENTOS_LINUX = 1
@@ -2160,6 +2260,7 @@ ITEM_GROUP_SPLASH = 11
 ITEM_GROUP_FLUID = 12
 ITEM_GROUP_DOOR = 13 -- deprecated
 ITEM_GROUP_DEPRECATED = 14
+ITEM_GROUP_PODIUM = 15
 
 AMMO_NONE = 0
 AMMO_BOLT = 1
