@@ -234,7 +234,7 @@ ModalWindow = {}
 ---@field setCustomAttribute fun(self: Item, key: string, value: any)
 ---@field removeCustomAttribute fun(self: Item, key: string)
 ---@field moveTo fun(self: Item, destination: Position|Thing)
----@field transform fun(self: Item, newItemId: number, count?: number|string)
+---@field transform fun(self: Item, newItem: number|string, count?: number)
 ---@field decay fun(self: Item)
 ---@field getSpecialDescription fun(self: Item): string
 ---@field hasProperty fun(self: Item, property: number): boolean
