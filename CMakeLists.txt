@@ -104,6 +104,8 @@ add_subdirectory(src)
 add_executable(tfs ${tfs_MAIN})
 target_link_libraries(tfs tfslib)
 
+set_directory_properties(PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}")
+
 ### INTERPROCEDURAL_OPTIMIZATION ###
 cmake_policy(SET CMP0069 NEW)
 include(CheckIPOSupported)
