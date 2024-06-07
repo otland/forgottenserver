@@ -17507,9 +17507,9 @@ int LuaScriptInterface::luaActionRegister(lua_State* L)
 			return 1;
 		}
 		tfs::lua::pushBoolean(L, g_actions->registerLuaEvent(action));
-		g_actions->clearItemIdRange();
-		g_actions->clearUniqueIdRange();
-		g_actions->clearActionIdRange();
+		g_actions->clearItemIdRange(action);
+		g_actions->clearUniqueIdRange(action);
+		g_actions->clearActionIdRange(action);
 	} else {
 		lua_pushnil(L);
 	}
@@ -17524,10 +17524,10 @@ int LuaScriptInterface::luaActionItemId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_actions->addItemId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_actions->addItemId(action, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_actions->addItemId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_actions->addItemId(action, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -17544,10 +17544,10 @@ int LuaScriptInterface::luaActionActionId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_actions->addActionId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_actions->addActionId(action, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_actions->addActionId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_actions->addActionId(action, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -17564,10 +17564,10 @@ int LuaScriptInterface::luaActionUniqueId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_actions->addUniqueId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_actions->addUniqueId(action, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_actions->addUniqueId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_actions->addUniqueId(action, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -17857,20 +17857,20 @@ int LuaScriptInterface::luaMoveEventRegister(lua_State* L)
 	if (moveevent) {
 		if ((moveevent->getEventType() == MOVE_EVENT_EQUIP || moveevent->getEventType() == MOVE_EVENT_DEEQUIP) &&
 		    moveevent->getSlot() == SLOTP_WHEREEVER) {
-			uint32_t id = g_moveEvents->getItemIdRange().at(0);
+			uint32_t id = g_moveEvents->getItemIdRange(moveevent).at(0);
 			ItemType& it = Item::items.getItemType(id);
 			moveevent->setSlot(it.slotPosition);
 		}
 		if (!moveevent->isScripted()) {
 			tfs::lua::pushBoolean(L, g_moveEvents->registerLuaFunction(moveevent));
-			g_actions->clearItemIdRange();
+			g_moveEvents->clearItemIdRange(moveevent);
 			return 1;
 		}
 		tfs::lua::pushBoolean(L, g_moveEvents->registerLuaEvent(moveevent));
-		g_moveEvents->clearItemIdRange();
-		g_moveEvents->clearActionIdRange();
-		g_moveEvents->clearUniqueIdRange();
-		g_moveEvents->clearPosList();
+		g_moveEvents->clearItemIdRange(moveevent);
+		g_moveEvents->clearActionIdRange(moveevent);
+		g_moveEvents->clearUniqueIdRange(moveevent);
+		g_moveEvents->clearPosList(moveevent);
 	} else {
 		lua_pushnil(L);
 	}
@@ -18040,10 +18040,10 @@ int LuaScriptInterface::luaMoveEventItemId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_moveEvents->addItemId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_moveEvents->addItemId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_moveEvents->addItemId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_moveEvents->addItemId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -18060,10 +18060,10 @@ int LuaScriptInterface::luaMoveEventActionId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_moveEvents->addActionId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_moveEvents->addActionId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_moveEvents->addActionId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_moveEvents->addActionId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -18080,10 +18080,10 @@ int LuaScriptInterface::luaMoveEventUniqueId(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_moveEvents->addUniqueId(tfs::lua::getNumber<uint32_t>(L, 2 + i));
+				g_moveEvents->addUniqueId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2 + i));
 			}
 		} else {
-			g_moveEvents->addUniqueId(tfs::lua::getNumber<uint32_t>(L, 2));
+			g_moveEvents->addUniqueId(moveevent, tfs::lua::getNumber<uint32_t>(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -18100,10 +18100,10 @@ int LuaScriptInterface::luaMoveEventPosition(lua_State* L)
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		if (parameters > 1) {
 			for (int i = 0; i < parameters; ++i) {
-				g_moveEvents->addPosList(tfs::lua::getPosition(L, 2 + i));
+				g_moveEvents->addPosList(moveevent, tfs::lua::getPosition(L, 2 + i));
 			}
 		} else {
-			g_moveEvents->addPosList(tfs::lua::getPosition(L, 2));
+			g_moveEvents->addPosList(moveevent, tfs::lua::getPosition(L, 2));
 		}
 		tfs::lua::pushBoolean(L, true);
 	} else {

@@ -190,9 +190,9 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 		}
 	}
 
-	if (!getItemIdRange().empty()) {
-		const auto& range = getItemIdRange();
-		for (auto id : range) {
+	if (!getItemIdRange(event).empty()) {
+		const auto& range = getItemIdRange(event);
+		for (auto& id : range) {
 			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 				ItemType& it = Item::items.getItemType(id);
 				it.wieldInfo = moveEvent->getWieldInfo();
@@ -228,9 +228,9 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 		}
 	}
 
-	if (!getItemIdRange().empty()) {
-		const auto& range = getItemIdRange();
-		for (auto id : range) {
+	if (!getItemIdRange(event).empty()) {
+		const auto& range = getItemIdRange(event);
+		for (auto& id : range) {
 			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 				ItemType& it = Item::items.getItemType(id);
 				it.wieldInfo = moveEvent->getWieldInfo();
@@ -240,18 +240,18 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 			}
 			addEvent(*moveEvent, id, itemIdMap);
 		}
-	} else if (!getActionIdRange().empty()) {
-		const auto& range = getActionIdRange();
-		for (auto id : range) {
+	} else if (!getActionIdRange(event).empty()) {
+		const auto& range = getActionIdRange(event);
+		for (auto& id : range) {
 			addEvent(*moveEvent, id, actionIdMap);
 		}
-	} else if (!getUniqueIdRange().empty()) {
-		const auto& range = getUniqueIdRange();
-		for (auto id : range) {
+	} else if (!getUniqueIdRange(event).empty()) {
+		const auto& range = getUniqueIdRange(event);
+		for (auto& id : range) {
 			addEvent(*moveEvent, id, uniqueIdMap);
 		}
-	} else if (!getPosList().empty()) {
-		const auto& range = getPosList();
+	} else if (!getPosList(event).empty()) {
+		const auto& range = getPosList(event);
 		for (auto& pos : range) {
 			addEvent(*moveEvent, pos, positionMap);
 		}

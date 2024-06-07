@@ -70,17 +70,29 @@ public:
 	bool registerLuaEvent(Action* event);
 	void clear(bool fromLua) override final;
 
-	void clearItemIdRange() { return ids.clear(); }
-	const std::vector<uint16_t>& getItemIdRange() const { return ids; }
-	void addItemId(uint16_t id) { ids.emplace_back(id); }
+	void clearItemIdRange(Action* action)
+	{
+		ids[action].clear();
+		ids.erase(action);
+	}
+	const std::vector<uint16_t>& getItemIdRange(Action* action) const { return ids.at(action); }
+	void addItemId(Action* action, uint16_t id) { ids[action].emplace_back(id); }
 
-	void clearUniqueIdRange() { return uids.clear(); }
-	const std::vector<uint16_t>& getUniqueIdRange() const { return uids; }
-	void addUniqueId(uint16_t id) { uids.emplace_back(id); }
+	void clearUniqueIdRange(Action* action)
+	{
+		uids[action].clear();
+		uids.erase(action);
+	}
+	const std::vector<uint16_t>& getUniqueIdRange(Action* action) const { return uids.at(action); }
+	void addUniqueId(Action* action, uint16_t id) { uids[action].emplace_back(id); }
 
-	void clearActionIdRange() { return aids.clear(); }
-	const std::vector<uint16_t>& getActionIdRange() const { return aids; }
-	void addActionId(uint16_t id) { aids.emplace_back(id); }
+	void clearActionIdRange(Action* action)
+	{
+		aids[action].clear();
+		aids.erase(action);
+	}
+	const std::vector<uint16_t>& getActionIdRange(Action* action) const { return aids.at(action); }
+	void addActionId(Action* action, uint16_t id) { aids[action].emplace_back(id); }
 
 private:
 	ReturnValue internalUseItem(Player* player, const Position& pos, uint8_t index, Item* item, bool isHotkey);
@@ -94,9 +106,9 @@ private:
 	ActionUseMap useItemMap;
 	ActionUseMap uniqueItemMap;
 	ActionUseMap actionItemMap;
-	std::vector<uint16_t> ids;
-	std::vector<uint16_t> uids;
-	std::vector<uint16_t> aids;
+	std::map<Action*, std::vector<uint16_t>> ids;
+	std::map<Action*, std::vector<uint16_t>> uids;
+	std::map<Action*, std::vector<uint16_t>> aids;
 
 	Action* getAction(const Item* item);
 	void clearMap(ActionUseMap& map, bool fromLua);
