@@ -70,27 +70,15 @@ public:
 	bool registerLuaEvent(Action* event);
 	void clear(bool fromLua) override final;
 
-	void clearItemIdRange(Action* action)
-	{
-		ids[action].clear();
-		ids.erase(action);
-	}
+	void clearItemIdRange(Action* action) { ids.erase(action); }
 	const std::vector<uint16_t>& getItemIdRange(Action* action) const { return ids.at(action); }
 	void addItemId(Action* action, uint16_t id) { ids[action].emplace_back(id); }
 
-	void clearUniqueIdRange(Action* action)
-	{
-		uids[action].clear();
-		uids.erase(action);
-	}
+	void clearUniqueIdRange(Action* action) { uids.erase(action); }
 	const std::vector<uint16_t>& getUniqueIdRange(Action* action) const { return uids.at(action); }
 	void addUniqueId(Action* action, uint16_t id) { uids[action].emplace_back(id); }
 
-	void clearActionIdRange(Action* action)
-	{
-		aids[action].clear();
-		aids.erase(action);
-	}
+	void clearActionIdRange(Action* action) { aids.erase(action); }
 	const std::vector<uint16_t>& getActionIdRange(Action* action) const { return aids.at(action); }
 	void addActionId(Action* action, uint16_t id) { aids[action].emplace_back(id); }
 

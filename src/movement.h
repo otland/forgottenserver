@@ -55,32 +55,20 @@ public:
 	bool registerLuaEvent(MoveEvent* event);
 	bool registerLuaFunction(MoveEvent* event);
 	void clear(bool fromLua) override final;
-	void clearItemIdRange(MoveEvent* event)
-	{
-		itemIdRange[event].clear();
-		itemIdRange.erase(event);
-	}
+
+	void clearItemIdRange(MoveEvent* event) { itemIdRange.erase(event); }
 	const std::vector<uint32_t>& getItemIdRange(MoveEvent* event) const { return itemIdRange.at(event); }
 	void addItemId(MoveEvent* event, uint32_t id) { itemIdRange[event].emplace_back(id); }
-	void clearActionIdRange(MoveEvent* event)
-	{
-		actionIdRange[event].clear();
-		actionIdRange.erase(event);
-	}
+
+	void clearActionIdRange(MoveEvent* event) { actionIdRange.erase(event); }
 	const std::vector<uint32_t>& getActionIdRange(MoveEvent* event) const { return actionIdRange.at(event); }
 	void addActionId(MoveEvent* event, uint32_t id) { actionIdRange[event].emplace_back(id); }
-	void clearUniqueIdRange(MoveEvent* event)
-	{
-		uniqueIdRange[event].clear();
-		uniqueIdRange.erase(event);
-	}
+
+	void clearUniqueIdRange(MoveEvent* event) { uniqueIdRange.erase(event); }
 	const std::vector<uint32_t>& getUniqueIdRange(MoveEvent* event) const { return uniqueIdRange.at(event); }
 	void addUniqueId(MoveEvent* event, uint32_t id) { uniqueIdRange[event].emplace_back(id); }
-	void clearPosList(MoveEvent* event)
-	{
-		posList[event].clear();
-		posList.erase(event);
-	}
+
+	void clearPosList(MoveEvent* event) { posList.erase(event); }
 	const std::vector<Position>& getPosList(MoveEvent* event) const { return posList.at(event); }
 	void addPosList(MoveEvent* event, Position pos) { posList[event].emplace_back(pos); }
 
