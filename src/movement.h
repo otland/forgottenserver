@@ -55,6 +55,18 @@ public:
 	bool registerLuaEvent(MoveEvent* event);
 	bool registerLuaFunction(MoveEvent* event);
 	void clear(bool fromLua) override final;
+	void clearItemIdRange() { return itemIdRange.clear(); }
+	const std::vector<uint32_t>& getItemIdRange() const { return itemIdRange; }
+	void addItemId(uint32_t id) { itemIdRange.emplace_back(id); }
+	void clearActionIdRange() { return actionIdRange.clear(); }
+	const std::vector<uint32_t>& getActionIdRange() const { return actionIdRange; }
+	void addActionId(uint32_t id) { actionIdRange.emplace_back(id); }
+	void clearUniqueIdRange() { return uniqueIdRange.clear(); }
+	const std::vector<uint32_t>& getUniqueIdRange() const { return uniqueIdRange; }
+	void addUniqueId(uint32_t id) { uniqueIdRange.emplace_back(id); }
+	void clearPosList() { return posList.clear(); }
+	const std::vector<Position>& getPosList() const { return posList; }
+	void addPosList(Position pos) { posList.emplace_back(pos); }
 
 private:
 	using MoveListMap = std::map<int32_t, MoveEventList>;
@@ -78,6 +90,10 @@ private:
 	MoveListMap actionIdMap;
 	MoveListMap itemIdMap;
 	MovePosListMap positionMap;
+	std::vector<uint32_t> itemIdRange;
+	std::vector<uint32_t> actionIdRange;
+	std::vector<uint32_t> uniqueIdRange;
+	std::vector<Position> posList;
 
 	LuaScriptInterface scriptInterface;
 };
@@ -132,18 +148,6 @@ public:
 	}
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }
-	void clearItemIdRange() { return itemIdRange.clear(); }
-	const std::vector<uint32_t>& getItemIdRange() const { return itemIdRange; }
-	void addItemId(uint32_t id) { itemIdRange.emplace_back(id); }
-	void clearActionIdRange() { return actionIdRange.clear(); }
-	const std::vector<uint32_t>& getActionIdRange() const { return actionIdRange; }
-	void addActionId(uint32_t id) { actionIdRange.emplace_back(id); }
-	void clearUniqueIdRange() { return uniqueIdRange.clear(); }
-	const std::vector<uint32_t>& getUniqueIdRange() const { return uniqueIdRange; }
-	void addUniqueId(uint32_t id) { uniqueIdRange.emplace_back(id); }
-	void clearPosList() { return posList.clear(); }
-	const std::vector<Position>& getPosList() const { return posList; }
-	void addPosList(Position pos) { posList.emplace_back(pos); }
 	void setSlot(uint32_t s) { slot = s; }
 	uint32_t getRequiredLevel() { return reqLevel; }
 	void setRequiredLevel(uint32_t level) { reqLevel = level; }
@@ -181,11 +185,6 @@ private:
 	uint32_t wieldInfo = 0;
 	std::unordered_set<uint16_t> vocationEquipSet;
 	bool tileItem = false;
-
-	std::vector<uint32_t> itemIdRange;
-	std::vector<uint32_t> actionIdRange;
-	std::vector<uint32_t> uniqueIdRange;
-	std::vector<Position> posList;
 };
 
 #endif // FS_MOVEMENT_H

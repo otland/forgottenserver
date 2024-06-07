@@ -191,8 +191,8 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool Actions::registerLuaEvent(Action* event)
 {
 	Action_ptr action{event};
-	if (!action->getItemIdRange().empty()) {
-		const auto& range = action->getItemIdRange();
+	if (!getItemIdRange().empty()) {
+		const auto& range = getItemIdRange();
 		for (auto id : range) {
 			auto result = useItemMap.emplace(id, *action);
 			if (!result.second) {
@@ -201,8 +201,8 @@ bool Actions::registerLuaEvent(Action* event)
 			}
 		}
 		return true;
-	} else if (!action->getUniqueIdRange().empty()) {
-		const auto& range = action->getUniqueIdRange();
+	} else if (!getUniqueIdRange().empty()) {
+		const auto& range = getUniqueIdRange();
 		for (auto id : range) {
 			auto result = uniqueItemMap.emplace(id, *action);
 			if (!result.second) {
@@ -211,8 +211,8 @@ bool Actions::registerLuaEvent(Action* event)
 			}
 		}
 		return true;
-	} else if (!action->getActionIdRange().empty()) {
-		const auto& range = action->getActionIdRange();
+	} else if (!getActionIdRange().empty()) {
+		const auto& range = getActionIdRange();
 		for (auto id : range) {
 			auto result = actionItemMap.emplace(id, *action);
 			if (!result.second) {
