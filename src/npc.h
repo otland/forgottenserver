@@ -16,6 +16,7 @@ public:
 	NpcScriptInterface();
 
 	bool loadNpcLib(const std::string& file);
+	int32_t loadFile(const std::string& file, Npc* npc = nullptr);
 
 private:
 	void registerFunctions();
@@ -135,8 +136,10 @@ void clearNpcTypes();
 std::map<const std::string, NpcType*> getNpcTypes();
 NpcType* getNpcType(std::string name);
 NpcScriptInterface* getScriptInterface();
+bool loadNpcs(bool reload);
 inline constexpr int32_t ViewportX = Map::maxClientViewportX * 2 + 2;
 inline constexpr int32_t ViewportY = Map::maxClientViewportY * 2 + 2;
+inline constexpr int32_t EVENT_ID_LOADING = 1;
 } // namespace Npcs
 
 class Npc final : public Creature

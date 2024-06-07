@@ -5834,7 +5834,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return g_moveEvents->reload();
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
-			g_scripts->loadScripts("npc/lua", false, true);
+			Npcs::loadNpcs(true);
 			return true;
 		}
 

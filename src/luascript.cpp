@@ -5150,8 +5150,8 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
 {
 	// Game.createNpcType(name)
-	if (tfs::lua::getScriptEnv()->getScriptInterface() != &g_scripts->getScriptInterface()) {
-		reportErrorFunc(L, "NpcTypes can only be registered in the Scripts interface.");
+	if (tfs::lua::getScriptEnv()->getScriptInterface() != Npcs::getScriptInterface()) {
+		reportErrorFunc(L, "NpcTypes can only be registered in the Npcs interface.");
 		lua_pushnil(L);
 		return 1;
 	}
