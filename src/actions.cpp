@@ -191,9 +191,9 @@ bool Actions::registerEvent(Event_ptr event, const pugi::xml_node& node)
 bool Actions::registerLuaEvent(Action* event)
 {
 	Action_ptr action{event};
-	if (!action->getItemIdRange().empty()) {
-		const auto& range = action->getItemIdRange();
-		for (auto id : range) {
+	if (!getItemIdRange(event).empty()) {
+		const auto& range = getItemIdRange(event);
+		for (auto& id : range) {
 			auto result = useItemMap.emplace(id, *action);
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with id: " << id
@@ -201,9 +201,9 @@ bool Actions::registerLuaEvent(Action* event)
 			}
 		}
 		return true;
-	} else if (!action->getUniqueIdRange().empty()) {
-		const auto& range = action->getUniqueIdRange();
-		for (auto id : range) {
+	} else if (!getUniqueIdRange(event).empty()) {
+		const auto& range = getUniqueIdRange(event);
+		for (auto& id : range) {
 			auto result = uniqueItemMap.emplace(id, *action);
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with uid: " << id
@@ -211,9 +211,9 @@ bool Actions::registerLuaEvent(Action* event)
 			}
 		}
 		return true;
-	} else if (!action->getActionIdRange().empty()) {
-		const auto& range = action->getActionIdRange();
-		for (auto id : range) {
+	} else if (!getActionIdRange(event).empty()) {
+		const auto& range = getActionIdRange(event);
+		for (auto& id : range) {
 			auto result = actionItemMap.emplace(id, *action);
 			if (!result.second) {
 				std::cout << "[Warning - Actions::registerLuaEvent] Duplicate registered item with aid: " << id
