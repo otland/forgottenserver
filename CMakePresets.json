@@ -11,11 +11,6 @@
           "type": "BOOL",
           "value": "ON"
         }
-      },
-      "condition": {
-        "type": "notEquals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
       }
     },
     {
