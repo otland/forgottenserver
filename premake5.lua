@@ -58,14 +58,14 @@ workspace "The Forgotten Server"
          -- Paths to vcpkg manifest installed dependencies
          libdirs { "vcpkg_installed/arm64-linux/lib" }
          includedirs { "vcpkg_installed/arm64-linux/include" }
-         links { "pugixml", "lua", "fmt", "ssl", "mariadb", "cryptopp", "crypto", "boost_iostreams", "zstd", "z" }
+         links { "pugixml", "lua", "fmt", "ssl", "mariadb", "openssl", "crypto", "boost_iostreams", "zstd", "z" }
       filter{}
 
       filter { "system:linux", "architecture:amd64" }
          -- Paths to vcpkg manifest installed dependencies
          libdirs { "vcpkg_installed/x64-linux/lib" }
          includedirs { "vcpkg_installed/x64-linux/include" }
-         links { "pugixml", "lua", "fmt", "ssl", "mariadb", "cryptopp", "crypto", "boost_iostreams", "zstd", "z" }
+         links { "pugixml", "lua", "fmt", "ssl", "mariadb", "openssl", "crypto", "boost_iostreams", "zstd", "z" }
       filter{}
 
       filter "toolset:gcc"
