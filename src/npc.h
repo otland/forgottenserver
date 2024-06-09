@@ -64,6 +64,7 @@ public:
 	void onPlayerCloseChannel(Player* player);
 	void onPlayerEndTrade(Player* player);
 	void onThink();
+	void onCreatureSight(Creature* creature);
 
 	void setNpc(Npc* n) { npc = n; };
 
@@ -76,6 +77,7 @@ public:
 	int32_t playerCloseChannelEvent = -1;
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
+	int32_t creatureSightEvent = -1;
 
 	std::shared_ptr<NpcScriptInterface> scriptInterface;
 	friend class NpcScriptInterface;
@@ -97,6 +99,8 @@ public:
 	bool loadCallback(NpcScriptInterface* scriptInterface);
 
 	uint8_t speechBubble = SPEECHBUBBLE_NONE;
+	uint16_t sightX = 0;
+	uint16_t sightY = 0;
 
 	uint32_t walkTicks = 1500;
 	uint32_t baseSpeed = 100;
@@ -256,6 +260,8 @@ private:
 	uint32_t baseSpeed;
 	int32_t focusCreature;
 	int32_t masterRadius;
+	uint16_t sightX;
+	uint16_t sightY;
 
 	uint8_t speechBubble;
 
@@ -265,6 +271,7 @@ private:
 	bool loaded;
 	bool isIdle;
 	bool pushable;
+	std::set<Creature*> spectatorCache;
 
 	friend class NpcType;
 };

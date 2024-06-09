@@ -162,6 +162,10 @@ do
 			self:eventType("think")
 			self:onThink(value)
 			return
+		elseif key == "onSight" then
+			self:eventType("sight")
+			self:onSight(value)
+			return
 		end
 		rawset(self, key, value)
 	end

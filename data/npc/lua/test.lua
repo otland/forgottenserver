@@ -8,6 +8,11 @@ local npc = Game.createNpcType("Merchant")
 npc:speechBubble(SPEECHBUBBLE_TRADE)
 npc:outfit({lookType = 128, lookHead = 114, lookBody = 114, lookLegs = 114, lookFeet = 114})
 npc:defaultBehavior()
+npc:sight(5, 5)
+local callbacks = npc:callbacks()
+function callbacks:onSay(creature, type, message)
+   print(self, creature, type, message)
+end
 
 -- This table defines the items available in the weapon shops.
 local weaponShop = {

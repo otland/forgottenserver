@@ -32,7 +32,6 @@ MESSAGE_LIST = {
     sold = "You sold |ITEMCOUNT| |ITEMNAME|(s) for |TOTALCOST| gold.",
     -- requirement cancel messages
     storage = "You do not meet the storage requirement.",
-    -- bla
     storageRange = "You do not meet the storage requirement.",
     storageNotEqual = "You do not meet the storage requirement.",
     storageToLow = "You do not meet the storage requirement.",

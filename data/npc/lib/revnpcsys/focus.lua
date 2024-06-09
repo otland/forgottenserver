@@ -28,56 +28,56 @@
 if not NpcFocus then
     -- If NpcFocus doesn't exist, it's created as an empty table
     NpcFocus = {}
-    -- The metatable is set up to call the function when NpcFocus is called
-    setmetatable(NpcFocus, {
-        __call = function(self, npc)
-            -- If the NPC doesn't have a NpcFocus, one is created for it
-            if not self[npc:getId()] then
-                self[npc:getId()] = {
-                    focus = {},
-                    currentFocus = nil
-                }
-                setmetatable(self[npc:getId()], {__index = NpcFocus})
-            end
-            -- The NpcFocus is returned
-            return self[npc:getId()]
+end
+-- The metatable is set up to call the function when NpcFocus is called
+setmetatable(NpcFocus, {
+    __call = function(self, npc)
+        -- If the NPC doesn't have a NpcFocus, one is created for it
+        if not self[npc:getId()] then
+            self[npc:getId()] = {
+                focus = {},
+                currentFocus = nil
+            }
+            setmetatable(self[npc:getId()], {__index = NpcFocus})
         end
-    })
-
-    -- Clears all NpcFocus data for an NPC.
-    function NpcFocus:clear()
-        self = nil
+        -- The NpcFocus is returned
+        return self[npc:getId()]
     end
+})
 
-    -- Adds focus on a player for a certain duration.
-    ---@param player Player The player to add focus on.
-    function NpcFocus:addFocus(player)
-        self.focus[player:getGuid()] = os.time() + FOCUS.time
-        self.currentFocus = player:getGuid()
-    end
+-- Clears all NpcFocus data for an NPC.
+function NpcFocus:clear()
+    self = nil
+end
 
-    -- Checks if a player is currently being focused by the NPC.
-    ---@param player Player The player to check focus on.
-    ---@return boolean True if the player is being focused, false otherwise.
-    function NpcFocus:isFocused(player)
-        if self.focus[player:getGuid()] then
-            return self.focus[player:getGuid()] > os.time()
-        end
-        return false
-    end
+-- Adds focus on a player for a certain duration.
+---@param player Player The player to add focus on.
+function NpcFocus:addFocus(player)
+    self.focus[player:getGuid()] = os.time() + FOCUS.time
+    self.currentFocus = player:getGuid()
+end
 
-    -- Removes focus from a player.
-    ---@param player Player The player to remove focus from.
-    function NpcFocus:removeFocus(player)
-        self.focus[player:getGuid()] = nil
-        if self.currentFocus == player:getGuid() then
-            self.currentFocus = nil
-        end
+-- Checks if a player is currently being focused by the NPC.
+---@param player Player The player to check focus on.
+---@return boolean True if the player is being focused, false otherwise.
+function NpcFocus:isFocused(player)
+    if self.focus[player:getGuid()] then
+        return self.focus[player:getGuid()] > os.time()
     end
+    return false
+end
 
-    -- Retrieves the currently focused player.
-    ---@return nil|Player The currently focused player or nil if there is no focus.
-    function NpcFocus:getCurrentFocus()
-        return not self.currentFocus and nil or Player(self.currentFocus)
+-- Removes focus from a player.
+---@param player Player The player to remove focus from.
+function NpcFocus:removeFocus(player)
+    self.focus[player:getGuid()] = nil
+    if self.currentFocus == player:getGuid() then
+        self.currentFocus = nil
     end
+end
+
+-- Retrieves the currently focused player.
+---@return nil|Player The currently focused player or nil if there is no focus.
+function NpcFocus:getCurrentFocus()
+    return not self.currentFocus and nil or Player(self.currentFocus)
 end

@@ -47,18 +47,24 @@ void reload()
 
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
 	for (const auto& it : npcs) {
-		it.second->closeAllShopWindows();
+		if (it.second) {
+			it.second->closeAllShopWindows();
+		}
 	}
 
 	for (const auto& it : getNpcTypes()) {
-		if (!it.second->fromLua) {
-			it.second->loadFromXml();
+		if (it.second) {
+			if (!it.second->fromLua) {
+				it.second->loadFromXml();
+			}
 		}
 	}
 
 	for (const auto& it : npcs) {
-		if (!it.second->npcType->fromLua) {
-			it.second->reload();
+		if (it.second) {
+			if (!it.second->npcType->fromLua) {
+				it.second->reload();
+			}
 		}
 	}
 }
@@ -404,6 +410,8 @@ void Npc::loadNpcTypeInfo()
 	parameters = npcType->parameters;
 	health = npcType->health;
 	healthMax = npcType->healthMax;
+	sightX = npcType->sightX;
+	sightY = npcType->sightY;
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
@@ -447,6 +455,8 @@ bool NpcType::loadCallback(NpcScriptInterface* scriptInterface)
 		npcEventHandler->playerEndTradeEvent = id;
 	} else if (eventType == "think") {
 		npcEventHandler->thinkEvent = id;
+	} else if (eventType == "sight") {
+		npcEventHandler->creatureSightEvent = id;
 	}
 	return true;
 }
@@ -509,6 +519,25 @@ void Npc::onThink(uint32_t interval)
 	for (const auto& player : players) {
 		assert(dynamic_cast<Player*>(player) != nullptr);
 		spectators.insert(static_cast<Player*>(player));
+	}
+
+	if (sightX > 0 || sightY > 0) {
+		SpectatorVec tempCreatures;
+		g_game.map.getSpectators(tempCreatures, getPosition(), false, false, Npcs::ViewportX, Npcs::ViewportX, Npcs::ViewportY,
+		                         Npcs::ViewportY);
+		std::erase_if(spectatorCache, [&](auto const& it) {
+			return std::find(tempCreatures.begin(), tempCreatures.end(), it) == tempCreatures.end();
+		});
+		SpectatorVec sightCreatures;
+		g_game.map.getSpectators(sightCreatures, getPosition(), false, false, sightX, sightX, sightY, sightY);
+		for (const auto& creature : sightCreatures) {
+			if (!spectatorCache.contains(creature)) {
+				if (npcEventHandler) {
+					npcEventHandler->onCreatureSight(creature);
+				}
+				spectatorCache.insert(creature);
+			}
+		}
 	}
 
 	setIdle(spectators.empty());
@@ -1470,4 +1499,27 @@ void NpcEventsHandler::onThink()
 
 	scriptInterface->pushFunction(thinkEvent);
 	scriptInterface->callFunction(0);
+}
+
+void NpcEventsHandler::onCreatureSight(Creature* creature)
+{
+	if (creatureSightEvent == -1) {
+		return;
+	}
+
+	// onCreatureSight(creature)
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onCreatureSight] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	env->setScriptId(creatureSightEvent, scriptInterface.get());
+	env->setNpc(npc);
+
+	lua_State* L = scriptInterface->getLuaState();
+	scriptInterface->pushFunction(creatureSightEvent);
+	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::setCreatureMetatable(L, -1, creature);
+	scriptInterface->callFunction(1);
 }

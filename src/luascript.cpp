@@ -3013,6 +3013,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "NpcType", "onPlayerCloseChannel", LuaScriptInterface::luaNpcTypeOnCallback);
 	registerMethod(L, "NpcType", "onPlayerEndTrade", LuaScriptInterface::luaNpcTypeOnCallback);
 	registerMethod(L, "NpcType", "onThink", LuaScriptInterface::luaNpcTypeOnCallback);
+	registerMethod(L, "NpcType", "onSight", LuaScriptInterface::luaNpcTypeOnCallback);
 
 	registerMethod(L, "NpcType", "speechBubble", LuaScriptInterface::luaNpcTypeSpeechBubble);
 	registerMethod(L, "NpcType", "walkInterval", LuaScriptInterface::luaNpcTypeWalkTicks);
@@ -3027,6 +3028,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "NpcType", "parameters", LuaScriptInterface::luaNpcTypeParameter);
 	registerMethod(L, "NpcType", "health", LuaScriptInterface::luaNpcTypeHealth);
 	registerMethod(L, "NpcType", "maxHealth", LuaScriptInterface::luaNpcTypeMaxHealth);
+	registerMethod(L, "NpcType", "sight", LuaScriptInterface::luaNpcTypeSight);
 
 	// Guild
 	registerClass(L, "Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -11920,7 +11922,7 @@ int LuaScriptInterface::luaNpcTypeEventType(lua_State* L)
 		} else {
 			std::string type = tfs::lua::getString(L, 2);
 			const static auto tmp =
-			    std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think"};
+			    std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think", "sight"};
 
 			const auto it = std::find(tmp.begin(), tmp.end(), type);
 			if (it != tmp.end()) {
@@ -11948,6 +11950,7 @@ int LuaScriptInterface::luaNpcTypeOnCallback(lua_State* L)
 	// npcType:onPlayerCloseChannel(callback)
 	// npcType:onPlayerEndTrade(callback)
 	// npcType:onThink(callback)
+	// npcType:onSight(callback)
 	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
 	if (npcType) {
 		if (npcType->loadCallback(Npcs::getScriptInterface())) {
@@ -12209,6 +12212,26 @@ int LuaScriptInterface::luaNpcTypeMaxHealth(lua_State* L)
 		} else {
 			int32_t health = tfs::lua::getNumber<int32_t>(L, 2);
 			npcType->healthMax = health;
+			tfs::lua::pushBoolean(L, true);
+		}
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaNpcTypeSight(lua_State* L)
+{
+	// get: npcType:sight() set: npcType:sight(x, y)
+	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
+	if (npcType) {
+		if (lua_gettop(L) == 1) {
+			lua_pushnumber(L, npcType->sightX);
+			lua_pushnumber(L, npcType->sightY);
+			return 2;
+		} else {
+			npcType->sightX = tfs::lua::getNumber<uint16_t>(L, 2);
+			npcType->sightY = tfs::lua::getNumber<uint16_t>(L, 3);
 			tfs::lua::pushBoolean(L, true);
 		}
 	} else {

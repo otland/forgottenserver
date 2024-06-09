@@ -573,20 +573,17 @@ Npc = {}
 ---@field maxHealth fun(self: NpcType, maxHealth?: number): any
 ---@field setMaxHealth fun(self: NpcType, maxHealth: number): boolean
 ---@field getMaxHealth fun(self: NpcType): number
----@field onSay fun(self: NpcType, callback: function): boolean
----@field onDisappear fun(self: NpcType, callback: function): boolean
----@field onAppear fun(self: NpcType, callback: function): boolean
----@field onMove fun(self: NpcType, callback: function): boolean
----@field onPlayerCloseChannel fun(self: NpcType, callback: function): boolean
----@field onPlayerEndTrade fun(self: NpcType, callback: function): boolean
----@field onThink fun(self: NpcType, callback: function): boolean
----@field onSayCallback fun(self: NpcType, callback: function): boolean
----@field onDisappearCallback fun(self: NpcType, callback: function): boolean
----@field onAppearCallback fun(self: NpcType, callback: function): boolean
----@field onMoveCallback fun(self: NpcType, callback: function): boolean
----@field onPlayerCloseChannelCallback fun(self: NpcType, callback: function): boolean
----@field onPlayerEndTradeCallback fun(self: NpcType, callback: function): boolean
----@field onThinkCallback fun(self: NpcType, callback: function): boolean
+---@field sight fun(self: NpcType, x?: number, y?: number): number?, number?
+---@field setSight fun(self: NpcType, x: number, y: number)
+---@field getSight fun(self: NpcType): number, number
+---@field onSay fun(self: NpcType, callback: function)
+---@field onDisappear fun(self: NpcType, callback: function)
+---@field onAppear fun(self: NpcType, callback: function)
+---@field onMove fun(self: NpcType, callback: function)
+---@field onPlayerCloseChannel fun(self: NpcType, callback: function)
+---@field onPlayerEndTrade fun(self: NpcType, callback: function)
+---@field onThink fun(self: NpcType, callback: function)
+---@field onSight fun(self: NpcType, callback: function)
 NpcType = {}
 
 ---@class Guild
