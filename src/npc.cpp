@@ -523,8 +523,8 @@ void Npc::onThink(uint32_t interval)
 
 	if (sightX > 0 || sightY > 0) {
 		SpectatorVec tempCreatures;
-		g_game.map.getSpectators(tempCreatures, getPosition(), false, false, Npcs::ViewportX, Npcs::ViewportX, Npcs::ViewportY,
-		                         Npcs::ViewportY);
+		g_game.map.getSpectators(tempCreatures, getPosition(), false, false, Npcs::ViewportX, Npcs::ViewportX,
+		                         Npcs::ViewportY, Npcs::ViewportY);
 		std::erase_if(spectatorCache, [&](auto const& it) {
 			return std::find(tempCreatures.begin(), tempCreatures.end(), it) == tempCreatures.end();
 		});
