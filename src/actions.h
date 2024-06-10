@@ -70,6 +70,7 @@ public:
 	bool registerLuaEvent(Action* event);
 	void clear(bool fromLua) override final;
 
+	bool isValid(std::map<Action*, std::vector<uint16_t>> map, Action* action) { return map.find(action) != map.end(); }
 	void clearItemIdRange(Action* action) { ids.erase(action); }
 	const std::vector<uint16_t>& getItemIdRange(Action* action) const { return ids.at(action); }
 	void addItemId(Action* action, uint16_t id) { ids[action].emplace_back(id); }
