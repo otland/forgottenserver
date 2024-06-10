@@ -4,7 +4,7 @@
     Description:
         - The NpcFocus module provides a way to manage the focus of NPCs on creatures.
         - It keeps track of the creatures that are currently being focused by an NPC, as well as the duration of the focus.
-        - The class provides methods to add, check, and remove focus on creaturess, as well as retrieve the currently focused creature.
+        - The class provides methods to add, check, and remove focus on creatures, as well as retrieve the currently focused creature.
         - The focus duration and distance are defined in the FOCUS table in constants.lua.
 
     Functions:
