@@ -190,7 +190,7 @@ public:
 	uint8_t getSpeechBubble() const override { return speechBubble; }
 	void setSpeechBubble(const uint8_t bubble) { speechBubble = bubble; }
 
-	void doSay(const std::string& text);
+	void doSay(const std::string& text, SpeakClasses talkType = TALKTYPE_SAY);
 	void doSayToPlayer(Player* player, const std::string& text);
 
 	bool doMoveTo(const Position& pos, int32_t minTargetDist = 1, int32_t maxTargetDist = 1, bool fullPathSearch = true,

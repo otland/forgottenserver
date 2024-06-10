@@ -93,8 +93,8 @@ MESSAGES_FAREWELL = {
 ---@class FOCUS
 ---@type table<string, any>
 FOCUS = {
-    -- how long the npc will focus the player in seconds
-    time = 60,
+    -- how long the npc will focus the player in ms
+    time = 60000,
     -- how far the player can step away until the npc loses focus
     distance = 5,
     -- how near the player has to be to greet the npc

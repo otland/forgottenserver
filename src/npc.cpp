@@ -495,12 +495,8 @@ void Npc::onCreatureSay(Creature* creature, SpeakClasses type, const std::string
 		return;
 	}
 
-	// only players for script events
-	Player* player = creature->getPlayer();
-	if (player) {
-		if (npcEventHandler) {
-			npcEventHandler->onCreatureSay(player, type, text);
-		}
+	if (npcEventHandler) {
+		npcEventHandler->onCreatureSay(creature, type, text);
 	}
 }
 
@@ -533,7 +529,9 @@ void Npc::onThink(uint32_t interval)
 		for (const auto& creature : sightCreatures) {
 			if (!spectatorCache.contains(creature)) {
 				if (npcEventHandler) {
-					npcEventHandler->onCreatureSight(creature);
+					if (this != creature) {
+						npcEventHandler->onCreatureSight(creature);
+					}
 				}
 				spectatorCache.insert(creature);
 			}
@@ -559,7 +557,7 @@ void Npc::onThink(uint32_t interval)
 	spectators.clear();
 }
 
-void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(this, TALKTYPE_SAY, text, false); }
+void Npc::doSay(const std::string& text, SpeakClasses talkType) { g_game.internalCreatureSay(this, talkType, text, false); }
 
 void Npc::doSayToPlayer(Player* player, const std::string& text)
 {
@@ -824,7 +822,8 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 		}
 	}
 
-	npc->doSay(text);
+	SpeakClasses talkType = tfs::lua::getNumber<SpeakClasses>(L, 3, TALKTYPE_SAY);
+	npc->doSay(text, talkType);
 	return 0;
 }
 

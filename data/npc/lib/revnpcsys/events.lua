@@ -93,7 +93,7 @@ function NpcEvents.onDisappear(npc, creature)
 end
 
 -- onThink function is called when an NPC thinks.
--- It handles the behavior of the NPC when thinking, such as removing focus from players who are too far away or have been focused for too long.
+-- It handles the behavior of the NPC when thinking, such as removing focus from creatures who are too far away or have been focused for too long.
 -- It also processes the talk queue and adjusts the NPC's orientation based on the current focus.
 -- It executes the onThinkCallback function of the NPC if it is defined.
 ---@param npc Npc The NPC that is thinking.
@@ -101,14 +101,16 @@ function NpcEvents.onThink(npc)
     local handler = NpcsHandler(npc)
     local focus = NpcFocus(npc)
     local voices = NpcVoices(npc)
-    for playerid, releaseTime in pairs(focus.focus) do
-        local player = Player(playerid)
-        if getDistanceTo(player:getId()) >= FOCUS.distance or releaseTime < os.time() then
-            focus:removeFocus(player)
-            closeShopWindow(player)
-            selfSay(handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = player:getName()}), player)
-            handler:setTalkState(handler, player)
-            handler:resetData(player)
+    for creatureid, releaseTime in pairs(focus.focus) do
+        local creature = Creature(creatureid)
+        if getDistanceTo(creature:getId()) >= FOCUS.distance or releaseTime < os.mtime() then
+            focus:removeFocus(creature)
+            if creature:isPlayer() then
+                closeShopWindow(creature)
+                selfSay(handler.farewellResponses[math.random(1, #handler.farewellResponses)]:replaceTags({playerName = creature:getName()}), creature)
+                handler:setTalkState(handler, creature)
+                handler:resetData(creature)
+            end
         end
     end
 
@@ -118,20 +120,20 @@ function NpcEvents.onThink(npc)
     if not next(focus.focus) then
         doNpcSetCreatureFocus(nil)
     else
-        local player = focus:getCurrentFocus()
-        if player then
-            if player:getPosition().y > npc:getPosition().y and player:getPosition().x == npc:getPosition().x then
+        local creature = focus:getCurrentFocus()
+        if creature then
+            if creature:getPosition().y > npc:getPosition().y and creature:getPosition().x == npc:getPosition().x then
                 selfTurn(DIRECTION_SOUTH)
-            elseif player:getPosition().y < npc:getPosition().y and player:getPosition().x == npc:getPosition().x then
+            elseif creature:getPosition().y < npc:getPosition().y and creature:getPosition().x == npc:getPosition().x then
                 selfTurn(DIRECTION_NORTH)
-            elseif player:getPosition().x > npc:getPosition().x and player:getPosition().y == npc:getPosition().y then
+            elseif creature:getPosition().x > npc:getPosition().x and creature:getPosition().y == npc:getPosition().y then
                 selfTurn(DIRECTION_EAST)
-            elseif player:getPosition().x < npc:getPosition().x and player:getPosition().y == npc:getPosition().y then
+            elseif creature:getPosition().x < npc:getPosition().x and creature:getPosition().y == npc:getPosition().y then
                 selfTurn(DIRECTION_WEST)
             end
         else
-            local playerGuid,_ = next(focus.focus)
-            focus.currentFocus = playerGuid
+            local creatureid,_ = next(focus.focus)
+            focus.currentFocus = creatureid
         end
     end
 
