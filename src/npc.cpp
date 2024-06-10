@@ -557,7 +557,10 @@ void Npc::onThink(uint32_t interval)
 	spectators.clear();
 }
 
-void Npc::doSay(const std::string& text, SpeakClasses talkType) { g_game.internalCreatureSay(this, talkType, text, false); }
+void Npc::doSay(const std::string& text, SpeakClasses talkType)
+{
+	g_game.internalCreatureSay(this, talkType, text, false);
+}
 
 void Npc::doSayToPlayer(Player* player, const std::string& text)
 {
@@ -807,7 +810,7 @@ void NpcScriptInterface::registerFunctions()
 
 int NpcScriptInterface::luaActionSay(lua_State* L)
 {
-	// selfSay(words[, target])
+	// selfSay(words[, target[, talkType = TALKTYPE_SAY])
 	Npc* npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		return 0;

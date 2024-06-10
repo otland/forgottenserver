@@ -1309,7 +1309,8 @@ function isScriptsInterface() end
 ---@alias isScriptsInterface fun(): boolean
 
 function getNpcCid() end
-function selfSay(message, player) end
+function selfSay(message, player, talkType) end
+---@alias selfSay fun(message: string, player?: number, talkType?: number)
 function selfMove(direction) end
 function selfMoveTo(...) end
 function selfTurn(direction) end
