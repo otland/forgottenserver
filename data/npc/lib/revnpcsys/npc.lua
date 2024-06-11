@@ -141,6 +141,14 @@ function NpcType:defaultBehavior()
             self:callbacks().onAppear(Npc(getNpcCid()), creature)
         end
     end
+    -- The onSpeechBubble function is called when the Player sees the NPC then we set the speech bubble.
+    self.onSpeechBubble = function(player, speechBubble)
+        local ret = NpcEvents.onSpeechBubble(Npc(getNpcCid()), player, speechBubble)
+        if self:callbacks():hasCallback("onSpeechBubble") then
+            ret = self:callbacks().onSpeechBubble(Npc(getNpcCid()), player, speechBubble)
+        end
+        return ret
+    end
     -- The onSight function is called when the NPC sees a creature.
     self.onSight = function(creature)
         NpcEvents.onSight(Npc(getNpcCid()), creature)

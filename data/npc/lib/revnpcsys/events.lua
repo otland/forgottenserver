@@ -17,6 +17,8 @@
         - NpcEvents.onDisappear(npc, creature)
         - NpcEvents.onThink(npc)
         - NpcEvents.onSay(npc, creature, messageType, message)
+        - NpcEvents.onSight(npc, creature)
+        - NpcEvents.onSpeechBubble(npc, player, speechBubble)
 ]]
 
 ---@class NpcEvents
@@ -28,6 +30,7 @@
 ---@field onThink fun(npc: Npc): boolean
 ---@field onSay fun(npc: Npc, creature: Creature, messageType: number, message: string)
 ---@field onSight fun(npc: Npc, creature: Creature)
+---@field onSpeechBubble fun(npc: Npc, player: Player, speechBubble: number): number
 
 -- If NpcEvents doesn't exist, it's created as an empty table
 NpcEvents = {}
@@ -36,6 +39,10 @@ NpcEvents = {}
 ---@param npc Npc The NPC that appeared.
 ---@param creature Creature The creature (player) that the NPC appeared to.
 function NpcEvents.onAppear(npc, creature)
+end
+
+function NpcEvents.onSpeechBubble(npc, player, speechBubble)
+    return speechBubble
 end
 
 -- onSight function is called when an NPC sees a creature.

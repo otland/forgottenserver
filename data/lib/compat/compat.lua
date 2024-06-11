@@ -166,6 +166,10 @@ do
 			self:eventType("sight")
 			self:onSight(value)
 			return
+		elseif key == "onSpeechBubble" then
+			self:eventType("speechbubble")
+			self:onSpeechBubble(value)
+			return
 		end
 		rawset(self, key, value)
 	end

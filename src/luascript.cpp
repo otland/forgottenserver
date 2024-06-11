@@ -3014,6 +3014,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "NpcType", "onPlayerEndTrade", LuaScriptInterface::luaNpcTypeOnCallback);
 	registerMethod(L, "NpcType", "onThink", LuaScriptInterface::luaNpcTypeOnCallback);
 	registerMethod(L, "NpcType", "onSight", LuaScriptInterface::luaNpcTypeOnCallback);
+	registerMethod(L, "NpcType", "onSpeechBubble", LuaScriptInterface::luaNpcTypeOnCallback);
 
 	registerMethod(L, "NpcType", "speechBubble", LuaScriptInterface::luaNpcTypeSpeechBubble);
 	registerMethod(L, "NpcType", "walkInterval", LuaScriptInterface::luaNpcTypeWalkTicks);
@@ -11921,8 +11922,8 @@ int LuaScriptInterface::luaNpcTypeEventType(lua_State* L)
 			tfs::lua::pushString(L, npcType->eventType);
 		} else {
 			std::string type = tfs::lua::getString(L, 2);
-			const static auto tmp =
-			    std::array{"say", "disappear", "appear", "move", "closechannel", "endtrade", "think", "sight"};
+			const static auto tmp = std::array{"say",      "disappear", "appear", "move",        "closechannel",
+			                                   "endtrade", "think",     "sight",  "speechbubble"};
 
 			const auto it = std::find(tmp.begin(), tmp.end(), type);
 			if (it != tmp.end()) {

@@ -65,6 +65,7 @@ public:
 	void onPlayerEndTrade(Player* player);
 	void onThink();
 	void onCreatureSight(Creature* creature);
+	void onSpeechBubble(Player* player, uint8_t& speechBubble);
 
 	void setNpc(Npc* n) { npc = n; };
 
@@ -78,6 +79,7 @@ public:
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
 	int32_t creatureSightEvent = -1;
+	int32_t speechBubbleEvent = -1;
 
 	std::shared_ptr<NpcScriptInterface> scriptInterface;
 	friend class NpcScriptInterface;

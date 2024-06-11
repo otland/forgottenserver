@@ -457,6 +457,8 @@ bool NpcType::loadCallback(NpcScriptInterface* scriptInterface)
 		npcEventHandler->thinkEvent = id;
 	} else if (eventType == "sight") {
 		npcEventHandler->creatureSightEvent = id;
+	} else if (eventType == "speechbubble") {
+		npcEventHandler->speechBubbleEvent = id;
 	}
 	return true;
 }
@@ -1524,4 +1526,35 @@ void NpcEventsHandler::onCreatureSight(Creature* creature)
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	scriptInterface->callFunction(1);
+}
+
+void NpcEventsHandler::onSpeechBubble(Player* player, uint8_t& speechBubble)
+{
+	if (speechBubbleEvent == -1) {
+		return;
+	}
+
+	// onSpeechBubble(player, speechBubble)
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - NpcScript::onSpeechBubble] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	env->setScriptId(speechBubbleEvent, scriptInterface.get());
+	env->setNpc(npc);
+
+	lua_State* L = scriptInterface->getLuaState();
+	scriptInterface->pushFunction(speechBubbleEvent);
+	tfs::lua::pushUserdata(L, player);
+	tfs::lua::setMetatable(L, -1, "Player");
+	lua_pushnumber(L, speechBubble);
+
+	if (tfs::lua::protectedCall(L, 2, 1) != 0) {
+		reportErrorFunc(L, tfs::lua::popString(L));
+	} else {
+		speechBubble = tfs::lua::getNumber<uint8_t>(L, -1);
+		lua_pop(L, 1);
+	}
+	tfs::lua::resetScriptEnv();
 }
