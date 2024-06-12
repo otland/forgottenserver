@@ -51,7 +51,7 @@ void reload()
 	}
 
 	for (const auto& it : getNpcTypes()) {
-		if (!it.second->fromLua) {
+		if (it.second  && !it.second->fromLua) {
 			it.second->loadFromXml();
 		}
 	}
@@ -1273,7 +1273,7 @@ NpcEventsHandler::~NpcEventsHandler()
 {
 	for (auto eventId : {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent,
 	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent}) {
-		if (!npc->npcType->fromLua) {
+		if (npc && !npc->npcType->fromLua) {
 			scriptInterface->removeEvent(eventId);
 		}
 	}
