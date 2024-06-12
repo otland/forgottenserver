@@ -369,7 +369,7 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `account_id` int NOT NULL,
   `ip` varbinary(16) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `expired_at` timestamp,
+  `expired_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE
