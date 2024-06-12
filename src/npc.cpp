@@ -53,18 +53,14 @@ void reload()
 	}
 
 	for (const auto& it : getNpcTypes()) {
-		if (it.second) {
-			if (!it.second->fromLua) {
-				it.second->loadFromXml();
-			}
+		if (it.second && !it.second->fromLua) {
+			it.second->loadFromXml();
 		}
 	}
 
 	for (const auto& it : npcs) {
-		if (it.second) {
-			if (!it.second->npcType->fromLua) {
-				it.second->reload();
-			}
+		if (it.second && !it.second->npcType->fromLua) {
+			it.second->reload();
 		}
 	}
 }
@@ -1305,8 +1301,8 @@ NpcEventsHandler::NpcEventsHandler() : scriptInterface(Npcs::scriptInterface) {}
 NpcEventsHandler::~NpcEventsHandler()
 {
 	for (auto eventId : {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent,
-	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent}) {
-		if (!npc->npcType->fromLua) {
+	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent, speechBubbleEvent, creatureSightEvent}) {
+		if (npc && !npc->npcType->fromLua) {
 			scriptInterface->removeEvent(eventId);
 		}
 	}
