@@ -51,7 +51,7 @@ void reload()
 	}
 
 	for (const auto& it : getNpcTypes()) {
-		if (it.second  && !it.second->fromLua) {
+		if (it.second && !it.second->fromLua) {
 			it.second->loadFromXml();
 		}
 	}
