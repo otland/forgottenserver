@@ -37,8 +37,12 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
+	auto nameToLower = name;
+	toLowerCaseString(nameToLower);
 	for (auto rank : ranks) {
-		if (rank->name == name) {
+		auto rankToLower = rank->name;
+		toLowerCaseString(rankToLower);
+		if (rankToLower == nameToLower) {
 			return rank;
 		}
 	}

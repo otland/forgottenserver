@@ -390,8 +390,6 @@ void AccessList::parseList(std::string_view list)
 			break;
 		}
 
-		boost::algorithm::trim(line);
-
 		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
@@ -403,7 +401,7 @@ void AccessList::parseList(std::string_view list)
 			if (at_pos == 0) {
 				addGuild(line.substr(1));
 			} else {
-				addGuildRank(line.substr(0, at_pos - 1), line.substr(at_pos + 1));
+				addGuildRank(line.substr(0, at_pos), line.substr(at_pos + 1));
 			}
 		} else if (line == "*") {
 			allowEveryone = true;
@@ -411,6 +409,7 @@ void AccessList::parseList(std::string_view list)
 		           line.find("?") != std::string::npos) {
 			continue; // regexp no longer supported
 		} else {
+			boost::algorithm::trim(line);
 			addPlayer(line);
 		}
 	}
