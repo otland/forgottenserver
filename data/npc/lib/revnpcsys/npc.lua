@@ -1,6 +1,6 @@
 --[[
     Revisioned NPC System:
-        - Version: 1.2
+        - Version: 1.3
 
     Credits:
         - Evil Hero (https://otland.net/members/evil-hero.4280/)
@@ -19,6 +19,9 @@
         - NpcShop: Handles the items available in the shops for the NPCs.
         - NpcEvents: Handles the appearance, disappearance, thinking, and interaction with players for the NPCs.
         - NpcRequirements: Stores the requirements for an NPC interaction.
+        - NpcModules: Stores stuff to give to the Player the NPC is interacting with.
+        - NpcVoices: Will let the NPCs talk randomly.
+        - NpcCallbacks: Handles the Event callbacks for the NPCs.
         - Constants: Contains the constants used by the system.
 
     Functions:
@@ -26,25 +29,11 @@
         - checkStorageValueWithOperator(player: Player, storage: table<string, string>)
         - checkLevelWithOperator(player: Player, level: number, operator: string)
         - NpcType:defaultBehavior()
-        - NpcType.onAppearCallback(creature)
-        - NpcType.onMoveCallback(creature, oldPos, newPos)
-        - NpcType.onPlayerCloseChannelCallback(creature)
-        - NpcType.onPlayerEndTradeCallback(creature)
-        - NpcType.onDisappearCallback(creature)
-        - NpcType.onThinkCallback()
-        - NpcType.onSayCallback(creature, messageType, message)
+        - NpcType:callbacks()
 
     Example:
         - An example of how to use the system is provided in the data/npc/lua/#test.lua file.
 ]]
-
----@alias NpcType.onAppearCallback fun(creature: Creature)
----@alias NpcType.onMoveCallback fun(creature: Creature, oldPos: Position, newPos: Position)
----@alias NpcType.onPlayerCloseChannelCallback fun(creature: Creature)
----@alias NpcType.onPlayerEndTradeCallback fun(creature: Creature)
----@alias NpcType.onDisappearCallback fun(creature: Creature)
----@alias NpcType.onThinkCallback fun()
----@alias NpcType.onSayCallback fun(creature: Creature, messageType: number, message: string)
 
 -- Load all the necessary files to create the NPC system
 dofile('data/npc/lib/revnpcsys/constants.lua')
@@ -56,6 +45,7 @@ dofile('data/npc/lib/revnpcsys/talkqueue.lua')
 dofile('data/npc/lib/revnpcsys/requirements.lua')
 dofile('data/npc/lib/revnpcsys/modules.lua')
 dofile('data/npc/lib/revnpcsys/voices.lua')
+dofile('data/npc/lib/revnpcsys/callbacks.lua')
 
 -- had to move this due to loading order
 NpcType.getName = function(self)
@@ -138,56 +128,75 @@ function checkLevelWithOperator(player, level, operator)
     return false
 end
 
+function NpcType:callbacks()
+    return NpcCallbacks(self)
+end
+
 -- This function assigns event handlers for the NPC's appearance, disappearance, thinking, and interaction with players.
 function NpcType:defaultBehavior()
     -- The onAppear function is called when the NPC/Creature appears.
     self.onAppear = function(creature)
         NpcEvents.onAppear(Npc(getNpcCid()), creature)
-        if self.onAppearCallback then
-            self.onAppearCallback(Npc(getNpcCid()), creature)
+        if self:callbacks():hasCallback("onAppear") then
+            self:callbacks().onAppear(Npc(getNpcCid()), creature)
+        end
+    end
+    -- The onSpeechBubble function is called when the Player sees the NPC then we set the speech bubble.
+    self.onSpeechBubble = function(player, speechBubble)
+        local ret = NpcEvents.onSpeechBubble(Npc(getNpcCid()), player, speechBubble)
+        if self:callbacks():hasCallback("onSpeechBubble") then
+            ret = self:callbacks().onSpeechBubble(Npc(getNpcCid()), player, speechBubble)
+        end
+        return ret
+    end
+    -- The onSight function is called when the NPC sees a creature.
+    self.onSight = function(creature)
+        NpcEvents.onSight(Npc(getNpcCid()), creature)
+        if self:callbacks():hasCallback("onSight") then
+            self:callbacks().onSight(Npc(getNpcCid()), creature)
         end
     end
     -- The onDisappear function is called when the NPC/Creature disappears.
     self.onDisappear = function(creature)
         NpcEvents.onDisappear(Npc(getNpcCid()), creature)
-        if self.onDisappearCallback then
-            self.onDisappearCallback(Npc(getNpcCid()), creature)
+        if self:callbacks():hasCallback("onDisappear") then
+            self:callbacks().onDisappear(Npc(getNpcCid()), creature)
         end
     end
     -- The onThink function is called when the NPC thinks.
     self.onThink = function()
         NpcEvents.onThink(Npc(getNpcCid()))
-        if self.onThinkCallback then
-            self.onThinkCallback(Npc(getNpcCid()))
+        if self:callbacks():hasCallback("onThink") then
+            self:callbacks().onThink(Npc(getNpcCid()))
         end
         return true
     end
     -- The onSay function is called when a player says something to the NPC.
     self.onSay = function(creature, messageType, message)
         NpcEvents.onSay(Npc(getNpcCid()), creature, messageType, message)
-        if self.onSayCallback then
-            self.onSayCallback(Npc(getNpcCid()), creature, messageType, message)
+        if self:callbacks():hasCallback("onSay") then
+            self:callbacks().onSay(Npc(getNpcCid()), creature, messageType, message)
         end
     end
     -- The onMove function is called when the NPC moves.
     self.onMove = function(creature, oldPos, newPos)
         NpcEvents.onMove(Npc(getNpcCid()), oldPos, newPos)
-        if self.onMoveCallback then
-            self.onMoveCallback(Npc(getNpcCid()), oldPos, newPos)
+        if self:callbacks():hasCallback("onMove") then
+            self:callbacks().onMove(Npc(getNpcCid()), oldPos, newPos)
         end
     end
     -- The onPlayerCloseChannel function is called when a player closes the channel with the NPC.
     self.onPlayerCloseChannel = function(creature)
         NpcEvents.onPlayerCloseChannel(Npc(getNpcCid()), creature)
-        if self.onPlayerCloseChannelCallback then
-            self.onPlayerCloseChannelCallback(Npc(getNpcCid()), creature)
+        if self:callbacks():hasCallback("onPlayerCloseChannel") then
+            self:callbacks().onPlayerCloseChannel(Npc(getNpcCid()), creature)
         end
     end
     -- The onPlayerEndTrade function is called when a player ends the trade with the NPC.
     self.onPlayerEndTrade = function(creature)
         NpcEvents.onPlayerEndTrade(Npc(getNpcCid()), creature)
-        if self.onPlayerEndTradeCallback then
-            self.onPlayerEndTradeCallback(Npc(getNpcCid()), creature)
+        if self:callbacks():hasCallback("onPlayerEndTrade") then
+            self:callbacks().onPlayerEndTrade(Npc(getNpcCid()), creature)
         end
     end
 end

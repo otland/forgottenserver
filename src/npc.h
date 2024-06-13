@@ -64,6 +64,8 @@ public:
 	void onPlayerCloseChannel(Player* player);
 	void onPlayerEndTrade(Player* player);
 	void onThink();
+	void onCreatureSight(Creature* creature);
+	void onSpeechBubble(Player* player, uint8_t& speechBubble);
 
 	void setNpc(Npc* n) { npc = n; };
 
@@ -76,6 +78,8 @@ public:
 	int32_t playerCloseChannelEvent = -1;
 	int32_t playerEndTradeEvent = -1;
 	int32_t thinkEvent = -1;
+	int32_t creatureSightEvent = -1;
+	int32_t speechBubbleEvent = -1;
 
 	std::shared_ptr<NpcScriptInterface> scriptInterface;
 	friend class NpcScriptInterface;
@@ -97,6 +101,8 @@ public:
 	bool loadCallback(NpcScriptInterface* scriptInterface);
 
 	uint8_t speechBubble = SPEECHBUBBLE_NONE;
+	uint16_t sightX = 0;
+	uint16_t sightY = 0;
 
 	uint32_t walkTicks = 1500;
 	uint32_t baseSpeed = 100;
@@ -186,7 +192,7 @@ public:
 	uint8_t getSpeechBubble() const override { return speechBubble; }
 	void setSpeechBubble(const uint8_t bubble) { speechBubble = bubble; }
 
-	void doSay(const std::string& text);
+	void doSay(const std::string& text, SpeakClasses talkType = TALKTYPE_SAY);
 	void doSayToPlayer(Player* player, const std::string& text);
 
 	bool doMoveTo(const Position& pos, int32_t minTargetDist = 1, int32_t maxTargetDist = 1, bool fullPathSearch = true,
@@ -256,6 +262,8 @@ private:
 	uint32_t baseSpeed;
 	int32_t focusCreature;
 	int32_t masterRadius;
+	uint16_t sightX;
+	uint16_t sightY;
 
 	uint8_t speechBubble;
 
@@ -265,6 +273,7 @@ private:
 	bool loaded;
 	bool isIdle;
 	bool pushable;
+	std::set<Creature*> spectatorCache;
 
 	friend class NpcType;
 };
