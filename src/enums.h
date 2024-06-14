@@ -676,7 +676,7 @@ enum MonstersEvent_t : uint8_t
 struct Reflect
 {
 	Reflect() = default;
-	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance){};
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
 
 	Reflect& operator+=(const Reflect& other)
 	{
