@@ -551,8 +551,6 @@ struct LightInfo
 {
 	uint8_t level = 0;
 	uint8_t color = 215;
-	constexpr LightInfo() = default;
-	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
 struct ShopInfo
@@ -678,7 +676,7 @@ enum MonstersEvent_t : uint8_t
 struct Reflect
 {
 	Reflect() = default;
-	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance){};
 
 	Reflect& operator+=(const Reflect& other)
 	{
