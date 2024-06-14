@@ -408,7 +408,6 @@ void AccessList::parseList(std::string_view list)
 		           line.find("?") != std::string::npos) {
 			continue; // regexp no longer supported
 		} else {
-			boost::algorithm::to_lower(line);
 			addPlayer(line);
 		}
 	}
