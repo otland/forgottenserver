@@ -390,11 +390,10 @@ void AccessList::parseList(std::string_view list)
 			break;
 		}
 
+		boost::algorithm::trim(line);
 		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
-
-		boost::algorithm::to_lower(line);
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {
@@ -409,7 +408,7 @@ void AccessList::parseList(std::string_view list)
 		           line.find("?") != std::string::npos) {
 			continue; // regexp no longer supported
 		} else {
-			boost::algorithm::trim(line);
+			boost::algorithm::to_lower(line);
 			addPlayer(line);
 		}
 	}
