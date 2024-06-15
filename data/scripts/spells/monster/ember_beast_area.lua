@@ -33,6 +33,6 @@ end
 
 spell:name("ember beast area")
 spell:words("###76")
-spell:selfTarget(true)
+spell:isSelfTarget(true)
 spell:needLearn(true)
 spell:register()

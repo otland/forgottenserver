@@ -33,6 +33,6 @@ end
 
 spell:name("aggresive lava bomb")
 spell:words("###75")
-spell:selfTarget(true)
+spell:isSelfTarget(true)
 spell:needLearn(true)
 spell:register()

@@ -34,6 +34,6 @@ end
 spell:name("ember beast beam")
 spell:words("###77")
 spell:needDirection(true)
-spell:selfTarget(true)
+spell:isSelfTarget(true)
 spell:needLearn(true)
 spell:register()
