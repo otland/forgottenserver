@@ -25,5 +25,5 @@ combat:setArea(createCombatArea(AREA_SQUARE1X1))
 combat:addCondition(condition)
 
 function onCastSpell(creature, variant, isHotkey)
-	return combat:execute(creature, variant)
+    return combat:execute(creature, variant)
 end

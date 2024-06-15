@@ -11,5 +11,5 @@ combat:setFormula(COMBAT_FORMULA_LEVELMAGIC, -1.3, -30, -1.7, 0)
 combat:addCondition(condition)
 
 function onCastSpell(creature, variant, isHotkey)
-	return combat:execute(creature, variant)
+    return combat:execute(creature, variant)
 end

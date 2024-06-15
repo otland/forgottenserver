@@ -12,6 +12,4 @@ local area = createCombatArea(AREA_CIRCLE2X2)
 combat:setArea(area)
 combat:addCondition(condition)
 
-function onCastSpell(creature, variant)
-	return combat:execute(creature, variant)
-end
+function onCastSpell(creature, variant) return combat:execute(creature, variant) end

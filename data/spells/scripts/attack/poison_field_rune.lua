@@ -4,5 +4,5 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_ENERGY)
 combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_POISONFIELD_PVP)
 
 function onCastSpell(creature, variant, isHotkey)
-	return combat:execute(creature, variant)
+    return combat:execute(creature, variant)
 end

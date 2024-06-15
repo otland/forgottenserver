@@ -5,5 +5,5 @@ combat:setParameter(COMBAT_PARAM_TARGETCASTERORTOPMOST, true)
 combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 function onCastSpell(creature, variant, isHotkey)
-	return combat:execute(creature, variant)
+    return combat:execute(creature, variant)
 end
