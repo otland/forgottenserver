@@ -1,6 +1,6 @@
---Pre-made areas
+-- Pre-made areas
 
---Waves
+-- Waves
 AREA_WAVE3 = {
 	{1, 1, 1},
 	{1, 1, 1},
@@ -65,7 +65,7 @@ AREA_SQUAREWAVE7 = {
 	{0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0}
 }
 
---Diagonal waves
+-- Diagonal waves
 AREADIAGONAL_WAVE4 = {
 	{0, 0, 0, 0, 1, 0},
 	{0, 0, 0, 1, 1, 0},
@@ -99,7 +99,7 @@ AREADIAGONAL_WAVE7 = {
 	{0, 0, 0, 0, 0, 0, 3}
 }
 
---Beams
+-- Beams
 AREA_BEAM1 = {
 	{3}
 }
@@ -133,7 +133,7 @@ AREA_BEAM8 = {
 	{3}
 }
 
---Diagonal Beams
+-- Diagonal Beams
 AREADIAGONAL_BEAM5 = {
 	{1, 0, 0, 0, 0},
 	{0, 1, 0, 0, 0},
@@ -152,7 +152,7 @@ AREADIAGONAL_BEAM7 = {
 	{0, 0, 0, 0, 0, 0, 3}
 }
 
---Circles
+-- Circles
 AREA_CIRCLE2X2 = {
 	{0, 1, 1, 1, 0},
 	{1, 1, 1, 1, 1},
@@ -208,7 +208,7 @@ AREA_CIRCLE6X6 = {
 	{0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0}
 }
 
---Squares
+-- Squares
 AREA_SQUARE1X1 = {
 	{1, 1, 1},
 	{1, 3, 1},
