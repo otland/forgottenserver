@@ -6,7 +6,7 @@ combat:setArea(createCombatArea(AREA_CIRCLE3X3))
 local spell = Spell(SPELL_INSTANT)
 
 function spell.onCastSpell(creature, variant)
-    return combat:execute(creature, variant)
+	return combat:execute(creature, variant)
 end
 
 spell:group("support")

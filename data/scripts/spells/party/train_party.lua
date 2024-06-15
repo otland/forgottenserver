@@ -12,7 +12,7 @@ condition:setParameter(CONDITION_PARAM_BUFF_SPELL, true)
 local spell = Spell(SPELL_INSTANT)
 
 function spell.onCastSpell(creature, variant)
-    return creature:addPartyCondition(combat, variant, condition, 60)
+	return creature:addPartyCondition(combat, variant, condition, 60)
 end
 
 spell:group("support")

@@ -1,7 +1,7 @@
 local spell = Spell(SPELL_INSTANT)
 
 function spell.onCastSpell(creature, variant)
-    return creature:conjureItem(0, 28416, 1, CONST_ME_MAGIC_GREEN)
+	return creature:conjureItem(0, 28416, 1, CONST_ME_MAGIC_GREEN)
 end
 
 spell:group("support")

@@ -4,7 +4,7 @@ combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_HITBYFIRE)
 combat:setArea(createCombatArea(AREA_WAVE4, AREADIAGONAL_WAVE4))
 
 function onGetFormulaValues(player, level, magicLevel)
-    return -11, -14
+	return -11, -14
 end
 
 combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
@@ -12,7 +12,7 @@ combat:setCallback(CALLBACK_PARAM_LEVELMAGICVALUE, "onGetFormulaValues")
 local spell = Spell(SPELL_INSTANT)
 
 function spell.onCastSpell(creature, variant)
-    return combat:execute(creature, variant)
+	return combat:execute(creature, variant)
 end
 
 spell:group("attack")
