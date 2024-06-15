@@ -12,4 +12,14 @@ local area = createCombatArea(AREA_CIRCLE2X2)
 combat:setArea(area)
 combat:addCondition(condition)
 
-function onCastSpell(creature, variant) return combat:execute(creature, variant) end
+local spell = Spell(SPELL_INSTANT)
+
+function spell.onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
+end
+
+spell:name("pixie skill reducer")
+spell:words("###72")
+spell:blockWalls(true)
+spell:needLearn(true)
+spell:register()

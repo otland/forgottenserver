@@ -6,4 +6,15 @@ local condition = Condition(CONDITION_ROOT)
 condition:setParameter(CONDITION_PARAM_TICKS, 3000)
 combat:addCondition(condition)
 
-function onCastSpell(creature, variant) return combat:execute(creature, variant) end
+local spell = Spell(SPELL_INSTANT)
+
+function spell.onCastSpell(creature, variant)
+	return combat:execute(creature, variant)
+end
+
+spell:name("root branchy")
+spell:words("###53")
+spell:blockWalls(true)
+spell:needTarget(true)
+spell:needLearn(true)
+spell:register()

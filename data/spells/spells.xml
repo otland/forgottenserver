@@ -52,39 +52,4 @@
 	<rune group="support" spellid="14" name="Chameleon Rune" id="2291" allowfaruse="1" charges="1" level="27" magiclevel="4" cooldown="2000" groupcooldown="2000" aggressive="0" selftarget="1" blocktype="solid" script="support/chameleon.lua" />
 	<rune group="support" spellid="78" name="Disintegrate Rune" id="2310" allowfaruse="0" charges="3" level="21" magiclevel="4" cooldown="2000" groupcooldown="2000" range="1" script="support/disintegrate_rune.lua" />
 	<rune group="support" spellid="30" name="Destroy Field Rune" id="2261" allowfaruse="1" charges="3" level="17" magiclevel="3" cooldown="2000" groupcooldown="2000" aggressive="0" range="5" script="support/destroy_field_rune.lua" />
-
-	<!-- Conjuring Spells -->
-	<instant group="support" name="Blank Rune" words="adori blank" level="20" mana="50" soul="1" aggressive="0" cooldown="2000" groupcooldown="2000" needlearn="0" script="conjuring/blank_rune.lua">
-		<vocation name="Druid" />
-		<vocation name="Elder Druid" />
-		<vocation name="Paladin" />
-		<vocation name="Royal Paladin" />
-		<vocation name="Sorcerer" />
-		<vocation name="Master Sorcerer" />
-	</instant>
-
-	<!-- Monster Spells -->
-	<instant name="aggresive lava bomb" words="###75" selftarget="1" needlearn="1" script="monster/aggresive_lava_bomb.lua" />
-	<instant name="djinn cancel invisibility" words="###47" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/djinn_cancel_invisibility.lua" />
-	<instant name="ember beast area" words="###76" selftarget="1" needlearn="1" script="monster/ember_beast_area.lua" />
-	<instant name="ember beast beam" words="###77" direction="1" selftarget="1" needlearn="1" script="monster/ember_beast_beam.lua" />
-	<instant name="explosion wave" words="###54" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/explosion_wave.lua" />
-	<instant name="ferumbras electrify" words="###65" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/ferumbras_electrify.lua" />
-	<instant name="ferumbras soulfire" words="###66" aggressive="1" blockwalls="1" needtarget="1" needlearn="1" script="monster/ferumbras_soulfire.lua" />
-	<instant name="freed soul spell" words="###69" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/freed_soul_spell.lua" />
-	<instant name="frozen minion beam" words="###58" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/frozen_minion_beam.lua" />
-	<instant name="frozen minion heal" words="###57" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/frozen_minion_heal.lua" />
-	<instant name="frozen minion wave" words="###56" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/frozen_minion_wave.lua" />
-	<instant name="heal monster 9x9" words="###70" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/heal_monsters_9x9.lua" />
-	<instant name="heal monster" words="###71" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/heal_monsters.lua" />
-	<instant name="hirintror freeze" words="###62" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/hirintror_freeze.lua" />
-	<instant name="icicle heal" words="###59" aggressive="1" blockwalls="1" needlearn="1" selftarget="1" script="monster/icicle_heal.lua" />
-	<instant name="lloyd wave 1" words="###60" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_1.lua" />
-	<instant name="lloyd wave 2" words="###61" aggressive="1" blockwalls="1" needlearn="1" direction="1" script="monster/lloyd_wave_2.lua" />
-	<instant name="physical explosion" words="###68" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/physical_explosion.lua" />
-	<instant name="pixie skill reducer" words="###72" blockwalls="1" aggressive="1" needtarget="0" needlearn="1" script="monster/pixie_skill_reducer.lua" />
-	<instant name="remorseless wave" words="###73" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/remorseless_wave.lua" />
-	<instant name="source of corruption wave" words="###74" direction="1" aggressive="0" blockwalls="1" needtarget="0" needlearn="1" script="monster/source_of_corruption_wave.lua" />
-	<instant name="summon challenge" words="###52" blockwalls="1" needtarget="0" needlearn="1" script="monster/summon_challenge.lua" />
-	<instant name="wave t" words="###55" direction="1" aggressive="1" blockwalls="1" needtarget="0" needlearn="1" script="monster/wave_t.lua" />
 </spells>
