@@ -8,41 +8,6 @@
 #include "connection.h"
 #include "database.h"
 #include "databasetasks.h"
-#include "tools.h"
-
-bool Ban::acceptConnection(const Connection::Address& clientIP)
-{
-	std::lock_guard<std::recursive_mutex> lockClass(lock);
-
-	uint64_t currentTime = OTSYS_TIME();
-
-	auto it = ipConnectMap.find(clientIP);
-	if (it == ipConnectMap.end()) {
-		ipConnectMap.emplace(clientIP, ConnectBlock(currentTime, 0, 1));
-		return true;
-	}
-
-	ConnectBlock& connectBlock = it->second;
-	if (connectBlock.blockTime > currentTime) {
-		connectBlock.blockTime += 250;
-		return false;
-	}
-
-	int64_t timeDiff = currentTime - connectBlock.lastAttempt;
-	connectBlock.lastAttempt = currentTime;
-	if (timeDiff <= 5000) {
-		if (++connectBlock.count > 5) {
-			connectBlock.count = 0;
-			if (timeDiff <= 500) {
-				connectBlock.blockTime = currentTime + 3000;
-				return false;
-			}
-		}
-	} else {
-		connectBlock.count = 1;
-	}
-	return true;
-}
 
 const std::optional<BanInfo> IOBan::getAccountBanInfo(uint32_t accountId)
 {
