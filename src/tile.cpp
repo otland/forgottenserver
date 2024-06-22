@@ -1606,10 +1606,12 @@ Item* Tile::getUseItem(int32_t index) const
 {
 	const TileItemVector* items = getItemList();
 
+	// no items, get ground
 	if (!items || items->size() == 0) {
 		return ground;
 	}
 
+	// try getting thing by index
 	if (Thing* thing = getThing(index)) {
 		Item* thingItem = thing->getItem();
 		if (thingItem) {
@@ -1617,16 +1619,18 @@ Item* Tile::getUseItem(int32_t index) const
 		}
 	}
 
+	// try getting top usable item
 	Item* topDownItem = getTopDownItem();
 	if (topDownItem) {
 		return topDownItem;
 	}
 
+	// try getting door
 	for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
 		if ((*it)->getDoor()) {
-			return (*it)->getItem();
+			return (*it)->getDoor();
 		}
 	}
 
-	return *items->begin();
+	return nullptr;
 }
