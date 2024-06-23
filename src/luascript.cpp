@@ -14067,7 +14067,7 @@ int LuaScriptInterface::luaItemTypeGetMarketBuyStatistics(lua_State* L)
 	// itemType:getMarketBuyStatistics()
 	const ItemType* itemType = tfs::lua::getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		MarketStatistics* statistics = IOMarket::getInstance().getPurchaseStatistics(itemType->id);
+		MarketStatistics* statistics = tfs::io::market::getPurchaseStatistics(itemType->id);
 		if (statistics) {
 			lua_createtable(L, 4, 0);
 			setField(L, "numTransactions", statistics->numTransactions);
@@ -14088,7 +14088,7 @@ int LuaScriptInterface::luaItemTypeGetMarketSellStatistics(lua_State* L)
 	// itemType:getMarketSellStatistics()
 	const ItemType* itemType = tfs::lua::getUserdata<const ItemType>(L, 1);
 	if (itemType) {
-		MarketStatistics* statistics = IOMarket::getInstance().getSaleStatistics(itemType->id);
+		MarketStatistics* statistics = tfs::io::market::getSaleStatistics(itemType->id);
 		if (statistics) {
 			lua_createtable(L, 4, 0);
 			setField(L, "numTransactions", statistics->numTransactions);
