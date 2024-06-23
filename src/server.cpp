@@ -8,10 +8,52 @@
 #include "ban.h"
 #include "configmanager.h"
 #include "scheduler.h"
-
-Ban g_bans;
+#include "tools.h"
 
 namespace {
+
+struct ConnectBlock
+{
+	uint64_t lastAttempt;
+	uint64_t blockTime = 0;
+	uint32_t count = 1;
+};
+
+bool acceptConnection(const Connection::Address& clientIP)
+{
+	static std::recursive_mutex mu;
+	std::lock_guard lock{mu};
+
+	uint64_t currentTime = OTSYS_TIME();
+
+	static std::map<Connection::Address, ConnectBlock> ipConnectMap;
+	auto it = ipConnectMap.find(clientIP);
+	if (it == ipConnectMap.end()) {
+		ipConnectMap.emplace(clientIP, ConnectBlock{.lastAttempt = currentTime});
+		return true;
+	}
+
+	ConnectBlock& connectBlock = it->second;
+	if (connectBlock.blockTime > currentTime) {
+		connectBlock.blockTime += 250;
+		return false;
+	}
+
+	int64_t timeDiff = currentTime - connectBlock.lastAttempt;
+	connectBlock.lastAttempt = currentTime;
+	if (timeDiff <= 5000) {
+		if (++connectBlock.count > 5) {
+			connectBlock.count = 0;
+			if (timeDiff <= 500) {
+				connectBlock.blockTime = currentTime + 3000;
+				return false;
+			}
+		}
+	} else {
+		connectBlock.count = 1;
+	}
+	return true;
+}
 
 boost::asio::ip::address getListenAddress()
 {
@@ -103,7 +145,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		}
 
 		const auto& remote_ip = connection->getIP();
-		if (g_bans.acceptConnection(remote_ip)) {
+		if (acceptConnection(remote_ip)) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));
