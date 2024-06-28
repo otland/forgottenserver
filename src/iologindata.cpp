@@ -14,23 +14,6 @@
 
 extern Game g_game;
 
-Account IOLoginData::loadAccount(uint32_t accno)
-{
-	Account account;
-
-	DBResult_ptr result = Database::getInstance().storeQuery(
-	    fmt::format("SELECT `id`, `name`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
-	if (!result) {
-		return account;
-	}
-
-	account.id = result->getNumber<uint32_t>("id");
-	account.name = result->getString("name");
-	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
-	return account;
-}
-
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 {
 	Database& db = Database::getInstance();
@@ -158,16 +141,20 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	Database& db = Database::getInstance();
 
-	uint32_t accno = result->getNumber<uint32_t>("account_id");
-	Account acc = loadAccount(accno);
+	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+
+	auto account =
+	    db.storeQuery(fmt::format("SELECT `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accountId));
+	if (!account) {
+		return false;
+	}
+
+	player->accountType = static_cast<AccountType_t>(account->getNumber<int32_t>("type"));
+	player->premiumEndsAt = account->getNumber<time_t>("premium_ends_at");
 
 	player->setGUID(result->getNumber<uint32_t>("id"));
 	player->name = result->getString("name");
-	player->accountNumber = accno;
-
-	player->accountType = acc.accountType;
-
-	player->premiumEndsAt = acc.premiumEndsAt;
+	player->accountNumber = accountId;
 
 	Group* group = g_game.groups.getGroup(result->getNumber<uint16_t>("group_id"));
 	if (!group) {

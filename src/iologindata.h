@@ -4,7 +4,6 @@
 #ifndef FS_IOLOGINDATA_H
 #define FS_IOLOGINDATA_H
 
-#include "account.h"
 #include "database.h"
 
 class Item;
@@ -17,8 +16,6 @@ using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 class IOLoginData
 {
 public:
-	static Account loadAccount(uint32_t accno);
-
 	static uint32_t getAccountIdByPlayerName(const std::string& playerName);
 	static uint32_t getAccountIdByPlayerId(uint32_t playerId);
 

@@ -80,7 +80,6 @@ set(tfs_SRC
 
 set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/otpch.h
-	${CMAKE_CURRENT_LIST_DIR}/account.h
 	${CMAKE_CURRENT_LIST_DIR}/actions.h
 	${CMAKE_CURRENT_LIST_DIR}/ban.h
 	${CMAKE_CURRENT_LIST_DIR}/base64.h
