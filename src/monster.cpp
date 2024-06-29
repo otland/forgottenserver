@@ -1913,29 +1913,29 @@ void Monster::updateLookDirection()
 		if (dx > dy) {
 			// look EAST/WEST
 			if (offsetx < 0) {
-				newDir = DIRECTION_WEST;
-			} else {
 				newDir = DIRECTION_EAST;
+			} else {
+				newDir = DIRECTION_WEST;
 			}
 		} else if (dx < dy) {
 			// look NORTH/SOUTH
 			if (offsety < 0) {
-				newDir = DIRECTION_NORTH;
-			} else {
 				newDir = DIRECTION_SOUTH;
+			} else {
+				newDir = DIRECTION_NORTH;
 			}
 		} else if (offsetx < 0 && offsety < 0) {
-			// target to north-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx < 0 && offsety > 0) {
-			// target to south-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx > 0 && offsety < 0) {
 			// target to north-east
 			newDir = DIRECTION_EAST;
-		} else {
+		} else if (offsetx < 0 && offsety > 0) {
 			// target to south-east
 			newDir = DIRECTION_EAST;
+		} else if (offsetx > 0 && offsety < 0) {
+			// target to north-west
+			newDir = DIRECTION_WEST;
+		} else {
+			// target to south-west
+			newDir = DIRECTION_WEST;
 		}
 	}
 
