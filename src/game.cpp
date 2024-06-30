@@ -1214,17 +1214,17 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 
 		int32_t newCount = m - n;
-		if (!updateItem && newCount == item->getItemCount()) {
+		if (newCount == item->getItemCount()) {
 			// full item is moved (move count is the same as item count)
 		} else if (newCount > 0) {
 			moveItem = item->clone();
 			moveItem->setItemCount(newCount);
 		} else {
+			if (item->isRemoved()) {
+				ReleaseItem(item);
+			}
+			
 			moveItem = nullptr;
-		}
-
-		if (item->isRemoved()) {
-			item->onRemoved();
 		}
 	}
 
