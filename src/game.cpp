@@ -1214,7 +1214,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 
 		int32_t newCount = m - n;
-		if (newCount == item->getItemCount()) {
+		if (!updateItem && newCount == item->getItemCount()) {
 			// full item is moved (move count is the same as item count)
 		} else if (newCount > 0) {
 			moveItem = item->clone();
@@ -1222,18 +1222,26 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		} else {
 			moveItem = nullptr;
 		}
+
+		if (item->isRemoved()) {
+			item->onRemoved();
+		}
 	}
 
 	// add item
-	toCylinder->addThing(index, moveItem);
+	if (moveItem) {
+		toCylinder->addThing(index, moveItem);
+	}
 
 	if (itemIndex != -1) {
 		fromCylinder->postRemoveNotification(item, toCylinder, itemIndex);
 	}
 
-	int32_t moveItemIndex = toCylinder->getThingIndex(moveItem);
-	if (moveItemIndex != -1) {
-		toCylinder->postAddNotification(moveItem, fromCylinder, moveItemIndex);
+	if (moveItem) {
+		int32_t moveItemIndex = toCylinder->getThingIndex(moveItem);
+		if (moveItemIndex != -1) {
+			toCylinder->postAddNotification(moveItem, fromCylinder, moveItemIndex);
+		}
 	}
 
 	if (updateItem) {
