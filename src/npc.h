@@ -259,7 +259,6 @@ private:
 	Position masterPos;
 
 	uint32_t walkTicks;
-	uint32_t baseSpeed;
 	int32_t focusCreature;
 	int32_t masterRadius;
 	uint16_t sightX;

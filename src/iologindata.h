@@ -5,6 +5,7 @@
 #define FS_IOLOGINDATA_H
 
 #include "database.h"
+#include "enums.h"
 
 class Item;
 class Player;
