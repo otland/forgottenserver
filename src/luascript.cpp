@@ -5037,10 +5037,10 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 		return 1;
 	}
 
-	const Position& position = tfs::lua::getPosition(L, 2);
-	bool extended = tfs::lua::getBoolean(L, 3, false);
-	bool force = tfs::lua::getBoolean(L, 4, false);
-	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
+	const Position& position = getPosition(L, 2);
+	bool extended = getBoolean(L, 3, false);
+	bool force = getBoolean(L, 4, false);
+	MagicEffectClasses magicEffect = getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
 	if (tfs::events::monster::onSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
 			tfs::lua::pushUserdata(L, monster);
@@ -8688,7 +8688,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 	}
 
 	// Prevent infinity echo on event onHear
-	bool echo = tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::CREATURE_ONHEAR);
+	bool echo = getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::CREATURE_ONHEAR);
 
 	if (position.x != 0) {
 		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &spectators, &position, echo));
@@ -11350,7 +11350,7 @@ int LuaScriptInterface::luaMonsterGetId(lua_State* L)
 	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
 	if (monster) {
 		// Set monster id if it's not set yet (only for onSpawn event)
-		if (tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
+		if (getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
 			monster->setID();
 		}
 
