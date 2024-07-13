@@ -68,10 +68,10 @@ local config = {
 		},
 
 		-- Ice Cube
-		[7441] = {chance = 22000, newItem = 7442},
-		[7442] = {chance = 4800, newItem = 7444},
-		[7444] = {chance = 900, newItem = 7445},
-		[7445] = {chance = 40, newItem = 7446},
+		[7441] = {chance = 22300, newItem = 7442},
+		[7442] = {chance = 22200, newItem = 7444},
+		[7444] = {chance = 19500, newItem = 7445},
+		[7445] = {chance = 5900, newItem = 7446},
 
 		-- The Mutated Pumpkin
 		[13583] = {
