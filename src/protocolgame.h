@@ -100,7 +100,6 @@ private:
 	void parseFollow(NetworkMessage& msg);
 	void parseEquipObject(NetworkMessage& msg);
 
-	void parseBugReport(NetworkMessage& msg);
 	void parseDebugAssert(NetworkMessage& msg);
 	void parseRuleViolationReport(NetworkMessage& msg);
 
