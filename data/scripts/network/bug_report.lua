@@ -10,7 +10,7 @@ function handler.onReceive(player, msg)
 	local message = msg:getString()
 
 	local position
-	if params.category == BUG_CATEGORY_MAP then
+	if category == BUG_CATEGORY_MAP then
 		position = msg:getPosition()
 	end
 
