@@ -1173,8 +1173,6 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		m = maxQueryCount;
 	}
 
-	Item* moveItem = item;
-
 	// check if we can remove this item
 	ret = fromCylinder->queryRemove(*item, m, flags, actor);
 	if (ret != RETURNVALUE_NOERROR) {
@@ -1196,6 +1194,8 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
+	Item* moveItem = item;
+
 	// remove the item
 	int32_t itemIndex = fromCylinder->getThingIndex(item);
 	Item* updateItem = nullptr;
@@ -1214,20 +1214,22 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 
 		int32_t newCount = m - n;
-		if (newCount > 0) {
+		if (newCount == item->getItemCount()) {
+			// full item is moved (move count is the same as item count)
+		} else if (newCount > 0) {
 			moveItem = item->clone();
 			moveItem->setItemCount(newCount);
 		} else {
+			if (item->isRemoved()) {
+				ReleaseItem(item);
+			}
+			
 			moveItem = nullptr;
-		}
-
-		if (item->isRemoved()) {
-			ReleaseItem(item);
 		}
 	}
 
 	// add item
-	if (moveItem /*m - n > 0*/) {
+	if (moveItem) {
 		toCylinder->addThing(index, moveItem);
 	}
 
