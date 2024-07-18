@@ -98,7 +98,9 @@ public:
 	void onWalk() override;
 	void onWalkComplete() override;
 	bool getNextStep(Direction& direction, uint32_t& flags) override;
-	void onFollowCreatureComplete(const Creature* creature) override;
+
+	void goToFollowCreature() override;
+	void onGoToFollowCreatureComplete(const Creature* creature) override;
 
 	void onThink(uint32_t interval) override;
 
@@ -217,7 +219,7 @@ private:
 	void dropLoot(Container* corpse, Creature* lastHitCreature) override;
 	uint32_t getDamageImmunities() const override { return mType->info.damageImmunities; }
 	uint32_t getConditionImmunities() const override { return mType->info.conditionImmunities; }
-	void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
+	void buildFindPathParams(const Creature*, FindPathParams& fpp, bool fullPathSearch) const override;
 	bool useCacheMap() const override { return !randomStepping; }
 
 	friend class LuaScriptInterface;
