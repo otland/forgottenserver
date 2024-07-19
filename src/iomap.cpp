@@ -407,19 +407,11 @@ bool IOMap::parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map
 			return false;
 		}
 
-		Town* town = map.towns.getTown(townId);
-		if (!town) {
-			town = new Town(townId);
-			map.towns.addTown(townId, town);
-		}
-
 		auto [townName, ok] = propStream.readString();
 		if (!ok) {
 			setLastErrorString("Could not read town name.");
 			return false;
 		}
-
-		town->setName(townName);
 
 		OTBM_Destination_coords town_coords;
 		if (!propStream.read(town_coords)) {
@@ -427,7 +419,9 @@ bool IOMap::parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map
 			return false;
 		}
 
-		town->setTemplePos(Position(town_coords.x, town_coords.y, town_coords.z));
+		map.towns.setTown(townId, new Town{.id = townId,
+		                                   .name = std::string{townName},
+		                                   .templePosition = {town_coords.x, town_coords.y, town_coords.z}});
 	}
 	return true;
 }
