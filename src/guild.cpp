@@ -4,6 +4,7 @@
 #include "otpch.h"
 
 #include "guild.h"
+#include "tools.h"
 
 #include "game.h"
 
@@ -38,7 +39,7 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
 	for (auto rank : ranks) {
-		if (rank->name == name) {
+		if (caseInsensitiveEqual(rank->name, name)) {
 			return rank;
 		}
 	}
