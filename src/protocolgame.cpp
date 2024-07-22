@@ -1601,7 +1601,12 @@ void ProtocolGame::sendCreatureLight(const Creature* creature)
 	}
 
 	NetworkMessage msg;
-	AddCreatureLight(msg, creature);
+	msg.addByte(0x8D);
+	msg.add<uint32_t>(creature->getID());
+
+	auto&& [level, color] = creature->getCreatureLight();
+	msg.addByte((player->isAccessPlayer() ? 0xFF : level));
+	msg.addByte(color);
 	writeToOutputBuffer(msg);
 }
 
@@ -3626,23 +3631,6 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 		msg.addByte(outfit.lookMountLegs);
 		msg.addByte(outfit.lookMountFeet);
 	}
-}
-
-void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
-{
-	msg.addByte(0x82);
-	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
-	msg.addByte(lightInfo.color);
-}
-
-void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creature)
-{
-	LightInfo lightInfo = creature->getCreatureLight();
-
-	msg.addByte(0x8D);
-	msg.add<uint32_t>(creature->getID());
-	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
-	msg.addByte(lightInfo.color);
 }
 
 // tile
