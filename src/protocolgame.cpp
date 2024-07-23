@@ -2092,7 +2092,7 @@ void ProtocolGame::sendMarketEnter()
 
 	for (const auto& chest : player->depotChests) {
 		if (!chest.second->empty()) {
-			containerList.push_front(chest.second);
+			containerList.push_front(chest.second.get());
 		}
 	}
 
