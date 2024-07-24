@@ -24,7 +24,7 @@ function fireBug.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		toPosition:sendMagicEffect(CONST_ME_POFF)
 	elseif chance == 1 then -- It explodes on the user 1% chance
 		doTargetCombat(0, player, COMBAT_FIREDAMAGE, -5, -5, CONST_ME_HITBYFIRE)
-		player:say('OUCH!', TALKTYPE_MONSTER_SAY)
+		player:say("OUCH!", TALKTYPE_MONSTER_SAY)
 		item:remove(1)
 	else
 		toPosition:sendMagicEffect(CONST_ME_POFF) -- It fails, but don't get removed 3% chance

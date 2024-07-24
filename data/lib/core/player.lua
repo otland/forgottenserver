@@ -44,7 +44,7 @@ function Player.getLossPercent(self)
 		[2] = 45,
 		[3] = 25,
 		[4] = 10,
-		[5] = 0
+		[5] = 0,
 	}
 
 	for i = 1, 5 do
@@ -92,7 +92,9 @@ function Player.removePremiumDays(self, days)
 end
 
 function Player.isPremium(self)
-	return self:getPremiumTime() > 0 or configManager.getBoolean(configKeys.FREE_PREMIUM) or self:hasFlag(PlayerFlag_IsAlwaysPremium)
+	return self:getPremiumTime() > 0
+		or configManager.getBoolean(configKeys.FREE_PREMIUM)
+		or self:hasFlag(PlayerFlag_IsAlwaysPremium)
 end
 
 function Player.sendCancelMessage(self, message)
@@ -153,7 +155,13 @@ function Player.transferMoneyTo(self, target, amount)
 	local targetPlayer = Player(target.guid)
 	if targetPlayer then
 		targetPlayer:setBankBalance(targetPlayer:getBankBalance() + amount)
-		db.query("UPDATE `players` SET `balance` = " .. targetPlayer:getBankBalance() .. " WHERE `id` = '" .. targetPlayer:getGuid() .. "'")
+		db.query(
+			"UPDATE `players` SET `balance` = "
+				.. targetPlayer:getBankBalance()
+				.. " WHERE `id` = '"
+				.. targetPlayer:getGuid()
+				.. "'"
+		)
 	else
 		db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `id` = '" .. target.guid .. "'")
 	end
@@ -234,12 +242,25 @@ function Player.removeTotalMoney(self, amount)
 			self:removeMoney(moneyCount)
 			local remains = amount - moneyCount
 			self:setBankBalance(bankCount - remains)
-			self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(moneyCount, amount - moneyCount, self:getBankBalance()))
+			self:sendTextMessage(
+				MESSAGE_INFO_DESCR,
+				("Paid %d from inventory and %d gold from bank account. Your account balance is now %d gold."):format(
+					moneyCount,
+					amount - moneyCount,
+					self:getBankBalance()
+				)
+			)
 			return true
 		end
 
 		self:setBankBalance(bankCount - amount)
-		self:sendTextMessage(MESSAGE_INFO_DESCR, ("Paid %d gold from bank account. Your account balance is now %d gold."):format(amount, self:getBankBalance()))
+		self:sendTextMessage(
+			MESSAGE_INFO_DESCR,
+			("Paid %d gold from bank account. Your account balance is now %d gold."):format(
+				amount,
+				self:getBankBalance()
+			)
+		)
 		return true
 	end
 	return false
@@ -249,9 +270,17 @@ function Player.addLevel(self, amount, round)
 	round = round or false
 	local level, amount = self:getLevel(), amount or 1
 	if amount > 0 then
-		return self:addExperience(Game.getExperienceForLevel(level + amount) - (round and self:getExperience() or Game.getExperienceForLevel(level)))
+		return self:addExperience(
+			Game.getExperienceForLevel(level + amount)
+				- (round and self:getExperience() or Game.getExperienceForLevel(level))
+		)
 	end
-	return self:removeExperience(((round and self:getExperience() or Game.getExperienceForLevel(level)) - Game.getExperienceForLevel(level + amount)))
+	return self:removeExperience(
+		(
+			(round and self:getExperience() or Game.getExperienceForLevel(level))
+			- Game.getExperienceForLevel(level + amount)
+		)
+	)
 end
 
 function Player.addMagicLevel(self, value)
@@ -398,7 +427,9 @@ function Player.isPromoted(self)
 end
 
 function Player.getMaxTrackedQuests(self)
-	return configManager.getNumber(self:isPremium() and configKeys.QUEST_TRACKER_PREMIUM_LIMIT or configKeys.QUEST_TRACKER_FREE_LIMIT)
+	return configManager.getNumber(
+		self:isPremium() and configKeys.QUEST_TRACKER_PREMIUM_LIMIT or configKeys.QUEST_TRACKER_FREE_LIMIT
+	)
 end
 
 function Player.getQuests(self)
@@ -519,9 +550,12 @@ function Player.addBestiaryKills(self, raceId)
 	local kills = self:getBestiaryKills(raceId)
 	local newKills = kills + 1
 	local bestiaryInfo = monsterType:getBestiaryInfo()
-	for _, totalKills in pairs({bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery}) do
+	for _, totalKills in pairs({ bestiaryInfo.prowess, bestiaryInfo.expertise, bestiaryInfo.mastery }) do
 		if kills == 0 or (kills < totalKills and newKills >= totalKills) then
-			self:sendTextMessage(MESSAGE_EVENT_DEFAULT, string.format("You unlocked details for the creature %s.", monsterType:getName()))
+			self:sendTextMessage(
+				MESSAGE_EVENT_DEFAULT,
+				string.format("You unlocked details for the creature %s.", monsterType:getName())
+			)
 			self:sendBestiaryMilestoneReached(raceId)
 			break
 		end
@@ -550,7 +584,7 @@ end
 
 function Player.calculateLowLevelBonus(self, level)
 	if level > 1 and level <= 50 then
-		local expBonus = {minlevel = 2, maxlevel = 50, bonus = 1}
+		local expBonus = { minlevel = 2, maxlevel = 50, bonus = 1 }
 		local bonusPercentage = (expBonus.maxlevel - level) / (expBonus.maxlevel - expBonus.minlevel)
 		return expBonus.bonus * 100 * bonusPercentage
 	else
@@ -667,7 +701,7 @@ local slots = {
 	CONST_SLOT_ARMOR,
 	CONST_SLOT_LEGS,
 	CONST_SLOT_FEET,
-	CONST_SLOT_RING
+	CONST_SLOT_RING,
 }
 
 function Player.getTotalArmor(self)

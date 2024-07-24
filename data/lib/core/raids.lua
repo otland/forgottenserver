@@ -1,7 +1,9 @@
 local raids = {}
 
 Raid = setmetatable({
-	getRaids = function() return raids end
+	getRaids = function()
+		return raids
+	end,
 }, {
 	__call = function(self, name)
 		local events = {}
@@ -39,5 +41,5 @@ Raid = setmetatable({
 		end
 
 		return obj
-	end
+	end,
 })

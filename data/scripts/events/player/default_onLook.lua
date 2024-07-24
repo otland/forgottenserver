@@ -39,10 +39,7 @@ event.onLook = function(self, thing, position, distance, description)
 		end
 
 		local position = thing:getPosition()
-		description = string.format(
-			"%s\nPosition: %d, %d, %d",
-			description, position.x, position.y, position.z
-		)
+		description = string.format("%s\nPosition: %d, %d, %d", description, position.x, position.y, position.z)
 
 		if thing:isCreature() then
 			if thing:isPlayer() then

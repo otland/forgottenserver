@@ -2,55 +2,55 @@ local config = {
 	[18517] = { -- gnomish voucher type MB
 		female = 514,
 		male = 516,
-		effect = CONST_ME_GREEN_RINGS
+		effect = CONST_ME_GREEN_RINGS,
 	},
 	[18518] = { -- gnomish voucher type MA1
 		female = 514,
 		male = 516,
 		addon = 1,
 		effect = CONST_ME_GREEN_RINGS,
-		achievement = "Funghitastic"
+		achievement = "Funghitastic",
 	},
 	[18519] = { -- gnomish voucher type MA2
 		female = 514,
 		male = 516,
 		addon = 2,
 		effect = CONST_ME_GREEN_RINGS,
-		achievement = "Funghitastic"
+		achievement = "Funghitastic",
 	},
 	[18520] = { -- gnomish voucher type CB
 		female = 513,
 		male = 512,
-		effect = CONST_ME_GIANTICE
+		effect = CONST_ME_GIANTICE,
 	},
 	[18521] = { -- gnomish voucher type CA1
 		female = 513,
 		male = 512,
 		addon = 1,
 		effect = CONST_ME_GIANTICE,
-		achievement = "Crystal Clear"
+		achievement = "Crystal Clear",
 	},
 	[18522] = { -- gnomish voucher type CA2
 		female = 513,
 		male = 512,
 		addon = 2,
 		effect = CONST_ME_GIANTICE,
-		achievement = "Crystal Clear"
+		achievement = "Crystal Clear",
 	},
 	[35286] = { -- spooky hood
 		female = 1271,
 		male = 1270,
 		addon = 1,
 		effect = CONST_ME_GREEN_RINGS,
-		achievement = "Mainstreet Nightmare"
+		achievement = "Mainstreet Nightmare",
 	},
 	[35287] = { -- ghost claw
 		female = 1271,
 		male = 1270,
 		addon = 2,
 		effect = CONST_ME_GREEN_RINGS,
-		achievement = "Mainstreet Nightmare"
-	}
+		achievement = "Mainstreet Nightmare",
+	},
 }
 
 local usableOutfitItems = Action()

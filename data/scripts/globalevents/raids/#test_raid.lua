@@ -6,9 +6,10 @@ local function event0()
 end
 
 local function event1()
-	local center, radius, z = {x=94, y=126}, 5, 7
+	local center, radius, z = { x = 94, y = 126 }, 5, 7
 	for _ = 1, 3 do
-		local x, y = math.random(center.x - radius, center.x + radius), math.random(center.y - radius, center.y + radius)
+		local x, y =
+			math.random(center.x - radius, center.x + radius), math.random(center.y - radius, center.y + radius)
 		Game.createMonster("Rat", Position(x, y, z))
 	end
 end
@@ -22,7 +23,7 @@ local function event3()
 end
 
 local function event4()
-	local from, to, z = {x=89, y=122}, {x=99, y=130}, 7
+	local from, to, z = { x = 89, y = 122 }, { x = 99, y = 130 }, 7
 	for _ = 1, math.random(4, 10) do
 		local x, y = math.random(from.x, to.x), math.random(from.y, to.y)
 		Game.createMonster("Rat", Position(x, y, z))

@@ -4,8 +4,8 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_EXPLOSION)
 combat:setArea(createCombatArea(AREA_CIRCLE2X2))
 
 local parameters = {
-	{key = CONDITION_PARAM_TICKS, value = 6 * 1000},
-	{key = CONDITION_PARAM_SKILL_SHIELDPERCENT, value = 65}
+	{ key = CONDITION_PARAM_TICKS, value = 6 * 1000 },
+	{ key = CONDITION_PARAM_SKILL_SHIELDPERCENT, value = 65 },
 }
 
 function onCastSpell(creature, variant)

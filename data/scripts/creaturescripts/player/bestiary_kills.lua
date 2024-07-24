@@ -9,7 +9,7 @@ local function getKillersForBestiary(monster)
 	for _, killer in pairs(monster:getKillers(true)) do
 		local party = killer:getParty()
 		if party then
-			for _, member in pairs({party:getLeader(), unpack(party:getMembers())}) do
+			for _, member in pairs({ party:getLeader(), unpack(party:getMembers()) }) do
 				if party:isMemberSharingExp(member) then
 					killers[member:getId()] = member
 				end

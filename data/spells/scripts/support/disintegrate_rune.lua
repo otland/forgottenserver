@@ -1,4 +1,4 @@
-local corpseIds = {3058, 3059, 3060, 3061, 3064, 3065, 3066}
+local corpseIds = { 3058, 3059, 3060, 3061, 3064, 3065, 3066 }
 local removalLimit = 500
 
 function onCastSpell(creature, variant, isHotkey)
@@ -12,12 +12,14 @@ function onCastSpell(creature, variant, isHotkey)
 		local items = tile:getItems()
 		if items then
 			for i, item in ipairs(items) do
-				if item:getType():isMovable() and
-						item:getUniqueId() > 65535 and
-						item:getActionId() == 0 and not
-						table.contains(corpseIds, item:getId()) and not
-						item:isPodium() and not
-						item:isStoreItem() then
+				if
+					item:getType():isMovable()
+					and item:getUniqueId() > 65535
+					and item:getActionId() == 0
+					and not table.contains(corpseIds, item:getId())
+					and not item:isPodium()
+					and not item:isStoreItem()
+				then
 					item:remove()
 				end
 

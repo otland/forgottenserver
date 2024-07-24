@@ -19,7 +19,7 @@ local bestiaryElements = {
 	COMBAT_ICEDAMAGE,
 	COMBAT_HOLYDAMAGE,
 	COMBAT_DEATHDAMAGE,
-	COMBAT_HEALING
+	COMBAT_HEALING,
 }
 
 local function getBestiaryElements(monsterType)
@@ -45,7 +45,7 @@ function handler.onReceive(player, msg)
 	local progress = 0
 	if kills ~= 0 then
 		progress = 4
-		for i, amount in pairs({info.prowess, info.expertise, info.mastery}) do
+		for i, amount in pairs({ info.prowess, info.expertise, info.mastery }) do
 			if kills < amount then
 				progress = i
 				break

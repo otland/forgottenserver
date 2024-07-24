@@ -1,4 +1,4 @@
-local depotTiles = {11062, 11063}
+local depotTiles = { 11062, 11063 }
 local diceEnabledOnDepot = true
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -17,7 +17,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 
 	local spectators = Game.getSpectators(position, false, true, 3, 3)
 	for _, spectator in ipairs(spectators) do
-		player:say(player:getName() .. " rolled a " .. value .. ".", TALKTYPE_MONSTER_SAY, isInGhostMode, spectator, position)
+		player:say(
+			player:getName() .. " rolled a " .. value .. ".",
+			TALKTYPE_MONSTER_SAY,
+			isInGhostMode,
+			spectator,
+			position
+		)
 	end
 
 	item:transform(5791 + value)

@@ -19,8 +19,12 @@ function Creature.getClosestFreePosition(self, position, maxRadius, mustBeReacha
 			end
 
 			local tile = Tile(checkPosition)
-			if tile and tile:getCreatureCount() == 0 and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) and
-				(not mustBeReachable or self:getPathTo(checkPosition)) then
+			if
+				tile
+				and tile:getCreatureCount() == 0
+				and not tile:hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID)
+				and (not mustBeReachable or self:getPathTo(checkPosition))
+			then
 				return checkPosition
 			end
 		end
@@ -82,7 +86,7 @@ function Creature:setItemOutfit(item, time)
 
 	local condition = Condition(CONDITION_OUTFIT)
 	condition:setOutfit({
-		lookTypeEx = itemType:getId()
+		lookTypeEx = itemType:getId(),
 	})
 	condition:setTicks(time)
 	self:addCondition(condition)
@@ -188,12 +192,14 @@ function Creature.getKillers(self, onlyPlayers)
 		if creature and creature ~= self and (timeNow - cb.ticks) <= inFightTicks then
 			killers[#killers + 1] = {
 				creature = creature,
-				damage = cb.total
+				damage = cb.total,
 			}
 		end
 	end
 
-	table.sort(killers, function(a, b) return a.damage > b.damage end)
+	table.sort(killers, function(a, b)
+		return a.damage > b.damage
+	end)
 	for i, killer in pairs(killers) do
 		killers[i] = killer.creature
 	end

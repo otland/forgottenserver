@@ -1,6 +1,6 @@
 local machines = {
 	[5469] = 5513,
-	[5470] = 5514
+	[5470] = 5514,
 }
 
 local sugarOat = Action()

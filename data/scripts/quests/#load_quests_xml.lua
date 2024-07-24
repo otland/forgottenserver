@@ -4,8 +4,7 @@ local xmlQuest = GlobalEvent("Load XML Quests")
 function xmlQuest.onStartup()
 	local questDoc = XMLDocument("data/XML/quests.xml")
 	if not questDoc then
-		io.write(
-			"[Warning - GlobalEvent::onStartup] Could not load quests.xml.\n")
+		io.write("[Warning - GlobalEvent::onStartup] Could not load quests.xml.\n")
 		return true
 	end
 
@@ -19,14 +18,13 @@ function xmlQuest.onStartup()
 				startValue = tonumber(missionNode:attribute("startvalue")),
 				endValue = tonumber(missionNode:attribute("endvalue")),
 				ignoreEndValue = tobool(missionNode:attribute("ignoreendvalue")),
-				description = missionNode:attribute("description")
+				description = missionNode:attribute("description"),
 			}
 
 			if not mission.description then
 				local description = {}
 				for missionState in missionNode:children() do
-					description[tonumber(missionState:attribute("id"))] =
-						missionState:attribute("description") or ""
+					description[tonumber(missionState:attribute("id"))] = missionState:attribute("description") or ""
 				end
 
 				mission.description = description
@@ -38,7 +36,7 @@ function xmlQuest.onStartup()
 		Game.createQuest(questNode:attribute("name"), {
 			storageId = tonumber(questNode:attribute("startstorageid")),
 			storageValue = tonumber(questNode:attribute("startstoragevalue")),
-			missions = missions
+			missions = missions,
 		}):register()
 	end
 	return true

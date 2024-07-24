@@ -10,19 +10,25 @@ function mt.__sub(lhs, rhs)
 	return Position(lhs.x - (rhs.x or 0), lhs.y - (rhs.y or 0), lhs.z - (rhs.z or 0), stackpos)
 end
 
-function mt.__concat(lhs, rhs) return tostring(lhs) .. tostring(rhs) end
-function mt.__eq(lhs, rhs) return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z end
-function mt.__tostring(self) return string.format("Position(%d, %d, %d)", self.x, self.y, self.z) end
+function mt.__concat(lhs, rhs)
+	return tostring(lhs) .. tostring(rhs)
+end
+function mt.__eq(lhs, rhs)
+	return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z
+end
+function mt.__tostring(self)
+	return string.format("Position(%d, %d, %d)", self.x, self.y, self.z)
+end
 
 Position.directionOffset = {
-	[DIRECTION_NORTH] = {x = 0, y = -1},
-	[DIRECTION_EAST] = {x = 1, y = 0},
-	[DIRECTION_SOUTH] = {x = 0, y = 1},
-	[DIRECTION_WEST] = {x = -1, y = 0},
-	[DIRECTION_SOUTHWEST] = {x = -1, y = 1},
-	[DIRECTION_SOUTHEAST] = {x = 1, y = 1},
-	[DIRECTION_NORTHWEST] = {x = -1, y = -1},
-	[DIRECTION_NORTHEAST] = {x = 1, y = -1}
+	[DIRECTION_NORTH] = { x = 0, y = -1 },
+	[DIRECTION_EAST] = { x = 1, y = 0 },
+	[DIRECTION_SOUTH] = { x = 0, y = 1 },
+	[DIRECTION_WEST] = { x = -1, y = 0 },
+	[DIRECTION_SOUTHWEST] = { x = -1, y = 1 },
+	[DIRECTION_SOUTHEAST] = { x = 1, y = 1 },
+	[DIRECTION_NORTHWEST] = { x = -1, y = -1 },
+	[DIRECTION_NORTHEAST] = { x = 1, y = -1 },
 }
 
 local abs, max = math.abs, math.max
@@ -79,18 +85,23 @@ function Position:isInRange(from, to)
 		nW = {
 			x = (from.x < to.x and from.x or to.x),
 			y = (from.y < to.y and from.y or to.y),
-			z = (from.z < to.z and from.z or to.z)
+			z = (from.z < to.z and from.z or to.z),
 		},
 		sE = {
 			x = (to.x > from.x and to.x or from.x),
 			y = (to.y > from.y and to.y or from.y),
-			z = (to.z > from.z and to.z or from.z)
-		}
+			z = (to.z > from.z and to.z or from.z),
+		},
 	}
 
-	if self.x >= zone.nW.x and self.x <= zone.sE.x
-	and self.y >= zone.nW.y and self.y <= zone.sE.y
-	and self.z >= zone.nW.z and self.z <= zone.sE.z then
+	if
+		self.x >= zone.nW.x
+		and self.x <= zone.sE.x
+		and self.y >= zone.nW.y
+		and self.y <= zone.sE.y
+		and self.z >= zone.nW.z
+		and self.z <= zone.sE.z
+	then
 		return true
 	end
 	return false

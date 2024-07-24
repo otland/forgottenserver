@@ -1,16 +1,31 @@
 function onUpdateDatabase()
 	print("> Updating database to version 11 (improved guild and players online structure)")
-	db.query("CREATE TABLE IF NOT EXISTS `guild_membership` (`player_id` int NOT NULL, `guild_id` int NOT NULL, `rank_id` int NOT NULL, `nick` varchar(15) NOT NULL DEFAULT '', PRIMARY KEY (`player_id`), KEY `guild_id` (`guild_id`), KEY `rank_id` (`rank_id`)) ENGINE=InnoDB")
-	db.query("ALTER TABLE `guild_membership` ADD CONSTRAINT `guild_membership_ibfk_3` FOREIGN KEY (`rank_id`) REFERENCES `guild_ranks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_2` FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`id`) ON DELETE CASCADE ON UPDATE CASCADE")
+	db.query(
+		"CREATE TABLE IF NOT EXISTS `guild_membership` (`player_id` int NOT NULL, `guild_id` int NOT NULL, `rank_id` int NOT NULL, `nick` varchar(15) NOT NULL DEFAULT '', PRIMARY KEY (`player_id`), KEY `guild_id` (`guild_id`), KEY `rank_id` (`rank_id`)) ENGINE=InnoDB"
+	)
+	db.query(
+		"ALTER TABLE `guild_membership` ADD CONSTRAINT `guild_membership_ibfk_3` FOREIGN KEY (`rank_id`) REFERENCES `guild_ranks` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, ADD CONSTRAINT `guild_membership_ibfk_2` FOREIGN KEY (`guild_id`) REFERENCES `guilds` (`id`) ON DELETE CASCADE ON UPDATE CASCADE"
+	)
 	db.query("ALTER TABLE `guild_invites` ADD PRIMARY KEY (`player_id`, `guild_id`)")
 	db.query("ALTER TABLE `player_skills` ADD PRIMARY KEY (`player_id`, `skillid`)")
 	db.query("ALTER TABLE `player_storage` ADD PRIMARY KEY (`player_id`, `key`)")
 
-	local resultId = db.storeQuery("SELECT `players`.`id` AS `player_id`, `players`.`rank_id` AS `rank_id`, `players`.`guildnick` AS `guild_nick`, `guild_ranks`.`guild_id` AS `guild_id` FROM `guild_ranks` INNER JOIN `players` ON `guild_ranks`.`id` = `players`.`rank_id`")
+	local resultId = db.storeQuery(
+		"SELECT `players`.`id` AS `player_id`, `players`.`rank_id` AS `rank_id`, `players`.`guildnick` AS `guild_nick`, `guild_ranks`.`guild_id` AS `guild_id` FROM `guild_ranks` INNER JOIN `players` ON `guild_ranks`.`id` = `players`.`rank_id`"
+	)
 	if resultId then
 		local stmt = "INSERT INTO `guild_membership` (`player_id`, `guild_id`, `rank_id`, `nick`) VALUES "
 		repeat
-			stmt = stmt .. "(" .. result.getNumber(resultId, "player_id") .. ", " .. result.getNumber(resultId, "guild_id") .. ", " .. result.getNumber(resultId, "rank_id") .. ", " .. db.escapeString(result.getString(resultId, "guild_nick")) .. "),"
+			stmt = stmt
+				.. "("
+				.. result.getNumber(resultId, "player_id")
+				.. ", "
+				.. result.getNumber(resultId, "guild_id")
+				.. ", "
+				.. result.getNumber(resultId, "rank_id")
+				.. ", "
+				.. db.escapeString(result.getString(resultId, "guild_nick"))
+				.. "),"
 		until not result.next(resultId)
 		result.free(resultId)
 
@@ -21,8 +36,12 @@ function onUpdateDatabase()
 		end
 	end
 
-	db.query("ALTER TABLE `players` DROP `rank_id`, DROP `guildnick`, DROP `direction`, DROP `loss_experience`, DROP `loss_mana`, DROP `loss_skills`, DROP `premend`, DROP `online`")
+	db.query(
+		"ALTER TABLE `players` DROP `rank_id`, DROP `guildnick`, DROP `direction`, DROP `loss_experience`, DROP `loss_mana`, DROP `loss_skills`, DROP `premend`, DROP `online`"
+	)
 	db.query("DROP TRIGGER IF EXISTS `ondelete_guilds`")
-	db.query("CREATE TABLE IF NOT EXISTS `players_online` (`player_id` int NOT NULL, PRIMARY KEY (`player_id`)) ENGINE=MEMORY")
+	db.query(
+		"CREATE TABLE IF NOT EXISTS `players_online` (`player_id` int NOT NULL, PRIMARY KEY (`player_id`)) ENGINE=MEMORY"
+	)
 	return true
 end

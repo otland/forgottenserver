@@ -3,7 +3,7 @@ local statues = {
 	[18489] = SKILL_AXE,
 	[18490] = SKILL_CLUB,
 	[18491] = SKILL_DISTANCE,
-	[18492] = SKILL_MAGLEVEL
+	[18492] = SKILL_MAGLEVEL,
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

@@ -25,7 +25,7 @@ function setUpHighscores()
 	end
 end
 
-highscoresExcludedGroups = {4, 5, 6}
+highscoresExcludedGroups = { 4, 5, 6 }
 
 HIGHSCORES_BATTLEYE_NOT_PROTECTED = 0
 HIGHSCORES_BATTLEYE_PROTECTED = 1
@@ -62,7 +62,7 @@ HIGHSCORES_CATEGORIES = {
 	[HIGHSCORES_CATEGORY_DISTANCE_FIGHTING] = { name = "Distance Fighting", type = HIGHSCORES_TYPE_SKILLS },
 	[HIGHSCORES_CATEGORY_SHIELDING] = { name = "Shielding", type = HIGHSCORES_TYPE_SKILLS },
 	[HIGHSCORES_CATEGORY_FISHING] = { name = "Fishing", type = HIGHSCORES_TYPE_SKILLS },
-	[HIGHSCORES_CATEGORY_ACHIEVEMENTS] = { name = "Achievement Points", type = HIGHSCORES_TYPE_POINTS }
+	[HIGHSCORES_CATEGORY_ACHIEVEMENTS] = { name = "Achievement Points", type = HIGHSCORES_TYPE_POINTS },
 }
 
 HIGHSCORES_QUERIES = {
@@ -108,7 +108,7 @@ HIGHSCORES_QUERIES = {
 		LEFT JOIN `players` ON `players`.`id` = `storages`.`player_id`
 		WHERE `storages`.`key` = ]] .. PlayerStorageKeys.achievementsTotal .. [[
 		AND `deletion` = 0 %s
-		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults
+		ORDER BY `points` DESC, `name` ASC LIMIT ]] .. highscoresMaxResults,
 }
 
 local function chunk(source, index, size)
@@ -166,7 +166,7 @@ local function render(self, player)
 		self.params.page = self:findPlayer(player:getGuid())
 		self.params.action = HIGHSCORES_ACTION_BROWSE
 	end
-	
+
 	self.params.totalPages = math.ceil(#entries.data / highscoresPageSize)
 	if self.params.page > self.params.totalPages then
 		self.params.page = 1
@@ -189,9 +189,9 @@ local function fetch(self)
 	local world = configManager.getString(configKeys.SERVER_NAME)
 	local rank = 1
 
-	local extras = {"AND `group_id` NOT IN (" .. table.concat(highscoresExcludedGroups, ",") .. ")"}
+	local extras = { "AND `group_id` NOT IN (" .. table.concat(highscoresExcludedGroups, ",") .. ")" }
 	if self.params.vocation ~= 0xFFFFFFFF then
-		local vocations = relatedIdsVocation[self.params.vocation] or {VOCATION_NONE}
+		local vocations = relatedIdsVocation[self.params.vocation] or { VOCATION_NONE }
 		table.insert(extras, "AND `vocation` IN(" .. table.concat(vocations, ",") .. ")")
 	end
 
@@ -206,13 +206,13 @@ local function fetch(self)
 				vocation = clientIdsVocation[result.getNumber(resultId, "vocation")] or VOCATION_NONE,
 				world = world,
 				level = result.getNumber(resultId, "level"),
-				points = result.getNumber(resultId, "points")
+				points = result.getNumber(resultId, "points"),
 			}
 			rank = rank + 1
-		until not result.next(resultId)		
+		until not result.next(resultId)
 		result.free(resultId)
 	end
-	
+
 	self.params.ts = os.time()
 	return { data = entries, ts = self.params.ts }
 end
@@ -229,6 +229,6 @@ function Highscores(params)
 		params = params,
 		refresh = refresh,
 		render = render,
-		set = set
+		set = set,
 	}
 end

@@ -26,58 +26,58 @@
 
 -- Make sure we are not overloading on reload
 if not NpcFocus then
-    -- If NpcFocus doesn't exist, it's created as an empty table
-    NpcFocus = {}
+	-- If NpcFocus doesn't exist, it's created as an empty table
+	NpcFocus = {}
 end
 -- The metatable is set up to call the function when NpcFocus is called
 setmetatable(NpcFocus, {
-    __call = function(self, npc)
-        -- If the NPC doesn't have a NpcFocus, one is created for it
-        if not self[npc:getId()] then
-            self[npc:getId()] = {
-                focus = {},
-                currentFocus = nil
-            }
-            setmetatable(self[npc:getId()], {__index = NpcFocus})
-        end
-        -- The NpcFocus is returned
-        return self[npc:getId()]
-    end
+	__call = function(self, npc)
+		-- If the NPC doesn't have a NpcFocus, one is created for it
+		if not self[npc:getId()] then
+			self[npc:getId()] = {
+				focus = {},
+				currentFocus = nil,
+			}
+			setmetatable(self[npc:getId()], { __index = NpcFocus })
+		end
+		-- The NpcFocus is returned
+		return self[npc:getId()]
+	end,
 })
 
 -- Clears all NpcFocus data for an NPC.
 function NpcFocus:clear()
-    self = nil
+	self = nil
 end
 
 -- Adds focus on a creature for a certain duration.
 ---@param creature Creature The creature to add focus on.
 function NpcFocus:addFocus(creature, focusTime)
-    self.focus[creature:getId()] = os.mtime() + (focusTime or FOCUS.time)
-    self.currentFocus = creature:getId()
+	self.focus[creature:getId()] = os.mtime() + (focusTime or FOCUS.time)
+	self.currentFocus = creature:getId()
 end
 
 -- Checks if a creature is currently being focused by the NPC.
 ---@param creature Creature The creature to check focus on.
 ---@return boolean True if the creature is being focused, false otherwise.
 function NpcFocus:isFocused(creature)
-    if self.focus[creature:getId()] then
-        return self.focus[creature:getId()] > os.mtime()
-    end
-    return false
+	if self.focus[creature:getId()] then
+		return self.focus[creature:getId()] > os.mtime()
+	end
+	return false
 end
 
 -- Removes focus from a creature.
 ---@param creature Creature The creature to remove focus from.
 function NpcFocus:removeFocus(creature)
-    self.focus[creature:getId()] = nil
-    if self.currentFocus == creature:getId() then
-        self.currentFocus = nil
-    end
+	self.focus[creature:getId()] = nil
+	if self.currentFocus == creature:getId() then
+		self.currentFocus = nil
+	end
 end
 
 -- Retrieves the currently focused creature.
 ---@return nil|Creature The currently focused creature or nil if there is no focus.
 function NpcFocus:getCurrentFocus()
-    return not self.currentFocus and nil or Creature(self.currentFocus)
+	return not self.currentFocus and nil or Creature(self.currentFocus)
 end

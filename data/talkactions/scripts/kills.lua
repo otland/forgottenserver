@@ -18,7 +18,11 @@ function onSay(player, words, param)
 	local minutes = math.floor((remainingSeconds % 3600) / 60)
 	local seconds = remainingSeconds % 60
 
-	local message = "You have " .. kills .. " unjustified kill" .. (kills > 1 and "s" or "") .. ". The amount of unjustified kills will decrease after: "
+	local message = "You have "
+		.. kills
+		.. " unjustified kill"
+		.. (kills > 1 and "s" or "")
+		.. ". The amount of unjustified kills will decrease after: "
 	if hours ~= 0 then
 		if hours == 1 then
 			message = message .. hours .. " hour, "

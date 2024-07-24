@@ -10,7 +10,7 @@ if not MonsterStorages then
 				storage[cid] = {}
 				return storage[cid]
 			end
-		end
+		end,
 	})
 end
 

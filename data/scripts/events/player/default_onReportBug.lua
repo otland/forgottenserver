@@ -9,7 +9,10 @@ event.onReportBug = function(self, message, position)
 	local file = io.open("data/reports/bugs/" .. name .. " report.txt", "a")
 
 	if not file then
-		self:sendTextMessage(MESSAGE_EVENT_DEFAULT, "There was an error when processing your report, please contact a gamemaster.")
+		self:sendTextMessage(
+			MESSAGE_EVENT_DEFAULT,
+			"There was an error when processing your report, please contact a gamemaster."
+		)
 		return true
 	end
 
@@ -24,7 +27,10 @@ event.onReportBug = function(self, message, position)
 	io.write("Comment: " .. message .. "\n")
 	io.close(file)
 
-	self:sendTextMessage(MESSAGE_EVENT_DEFAULT, "Your report has been sent to " .. configManager.getString(configKeys.SERVER_NAME) .. ".")
+	self:sendTextMessage(
+		MESSAGE_EVENT_DEFAULT,
+		"Your report has been sent to " .. configManager.getString(configKeys.SERVER_NAME) .. "."
+	)
 	return true
 end
 

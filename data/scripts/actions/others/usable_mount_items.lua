@@ -2,30 +2,30 @@ local config = {
 	[26194] = { -- vibrant egg
 		name = "vortexion",
 		mountId = 94,
-		tameMessage = "You receive the permission to ride a sparkion."
+		tameMessage = "You receive the permission to ride a sparkion.",
 	},
 	[26340] = { -- crackling egg
 		name = "neon sparkid",
 		mountId = 98,
-		tameMessage = "You receive the permission to ride a neon sparkid."
+		tameMessage = "You receive the permission to ride a neon sparkid.",
 	},
 	[26341] = { -- menacing egg
 		name = "vortexion",
 		mountId = 99,
-		tameMessage = "You receive the permission to ride a vortexion."
+		tameMessage = "You receive the permission to ride a vortexion.",
 	},
 	[25521] = { -- mysterious scroll
 		name = "rift runner",
 		mountId = 87,
 		achievement = "Running the Rift",
-		tameMessage = "You receive the permission to ride a rift runner."
+		tameMessage = "You receive the permission to ride a rift runner.",
 	},
 	[35285] = { -- spectral scrap of cloth
 		name = "haze",
 		mountId = 162,
 		achievement = "Nothing but Hot Air",
-		tameMessage = "You are now versed to ride the haze!"
-	}
+		tameMessage = "You are now versed to ride the haze!",
+	},
 }
 
 local usableItemMounts = Action()
@@ -41,7 +41,7 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 		return false
 	end
 
-	if table.contains({26194, 26340, 26341}, item.itemid) then
+	if table.contains({ 26194, 26340, 26341 }, item.itemid) then
 		local storage = player:getStorageValue(PlayerStorageKeys.vortexTamer)
 		player:setStorageValue(PlayerStorageKeys.vortexTamer, storage + 1)
 		if storage == 1 then

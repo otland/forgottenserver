@@ -15,7 +15,9 @@ function spellbook.onUse(player, item, fromPosition, target, toPosition, isHotke
 		end
 	end
 
-	table.sort(spells, function(a, b) return a.level < b.level end)
+	table.sort(spells, function(a, b)
+		return a.level < b.level
+	end)
 
 	local prevLevel = -1
 	for i, spell in ipairs(spells) do

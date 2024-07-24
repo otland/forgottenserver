@@ -1,12 +1,10 @@
 registerMonsterType = {}
-setmetatable(registerMonsterType,
-{
-	__call =
-	function(self, mtype, mask)
+setmetatable(registerMonsterType, {
+	__call = function(self, mtype, mask)
 		for _, parse in pairs(self) do
 			parse(mtype, mask)
 		end
-	end
+	end,
 })
 
 MonsterType.register = function(self, mask)
@@ -147,7 +145,7 @@ do
 		easy = 2,
 		medium = 3,
 		hard = 4,
-		challenging = 5
+		challenging = 5,
 	}
 
 	registerMonsterType.bestiary = function(mtype, mask)
@@ -191,7 +189,14 @@ end
 registerMonsterType.summons = function(mtype, mask)
 	if type(mask.summons) == "table" then
 		for k, v in pairs(mask.summons) do
-			mtype:addSummon(v.name, v.interval, v.chance, v.max or -1, v.effect or CONST_ME_TELEPORT, v.masterEffect or CONST_ME_NONE)
+			mtype:addSummon(
+				v.name,
+				v.interval,
+				v.chance,
+				v.max or -1,
+				v.effect or CONST_ME_TELEPORT,
+				v.masterEffect or CONST_ME_NONE
+			)
 		end
 	end
 end
@@ -258,7 +263,7 @@ registerMonsterType.loot = function(mtype, mask)
 			mtype:addLoot(parent)
 		end
 		if lootError then
-			print("[Warning - end] Monster: \"" .. mtype:name() .. "\" loot could not correctly be load.")
+			print('[Warning - end] Monster: "' .. mtype:name() .. '" loot could not correctly be load.')
 		end
 	end
 end

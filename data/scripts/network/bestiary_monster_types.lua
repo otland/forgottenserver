@@ -40,7 +40,7 @@ function handler.onReceive(player, msg)
 			response:addByte(0)
 		else
 			local progress = 4
-			for i, amount in pairs({info.prowess, info.expertise, info.mastery}) do
+			for i, amount in pairs({ info.prowess, info.expertise, info.mastery }) do
 				if kills < amount then
 					progress = i
 					break

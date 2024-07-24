@@ -1,4 +1,4 @@
-local boolTrue = {"1", "y", "Y", "t", "T"}
+local boolTrue = { "1", "y", "Y", "t", "T" }
 
 function tobool(str)
 	return str and table.contains(boolTrue, str:sub(1, 1))

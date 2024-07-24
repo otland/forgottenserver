@@ -14,7 +14,7 @@ local transformDisplay = {
 	[34168] = 34160,
 	[34160] = 34164,
 	[34164] = 34172,
-	[34172] = 34168
+	[34172] = 34168,
 }
 
 local goldenOutfitDisplay = Action()

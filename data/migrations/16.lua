@@ -4,6 +4,8 @@ function onUpdateDatabase()
 	db.query("ALTER TABLE `account_ban_history` DROP PRIMARY KEY")
 	db.query("ALTER TABLE `account_ban_history` ADD `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST")
 	db.query("ALTER TABLE `account_ban_history` ADD INDEX (`account_id`)")
-	db.query("ALTER TABLE `account_ban_history` ADD FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE")
+	db.query(
+		"ALTER TABLE `account_ban_history` ADD FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE"
+	)
 	return true
 end

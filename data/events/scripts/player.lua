@@ -249,7 +249,10 @@ function Player:onWrapItem(item)
 		return
 	end
 
-	if house ~= self:getHouse() and not string.find(house:getAccessList(SUBOWNER_LIST):lower(), "%f[%a]" .. self:getName():lower() .. "%f[%A]") then
+	if
+		house ~= self:getHouse()
+		and not string.find(house:getAccessList(SUBOWNER_LIST):lower(), "%f[%a]" .. self:getName():lower() .. "%f[%A]")
+	then
 		self:sendCancelMessage("You cannot wrap or unwrap items from a house, which you are only guest to.")
 		return
 	end

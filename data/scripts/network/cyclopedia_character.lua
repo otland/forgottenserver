@@ -84,7 +84,7 @@ local clientSkillsId = {
 	[3] = CYCLOPEDIA_SKILL_AXE,
 	[4] = CYCLOPEDIA_SKILL_DISTANCE,
 	[5] = CYCLOPEDIA_SKILL_SHIELDING,
-	[6] = CYCLOPEDIA_SKILL_FISHING
+	[6] = CYCLOPEDIA_SKILL_FISHING,
 }
 
 local function sendGeneralStats(self, msg)
@@ -203,7 +203,8 @@ local BADGES = 0x0A
 	local STORE = 0x08
 	local INSPECTION = 0x09
 	local TITLES = 0x0B
-]]--
+]]
+--
 
 local handlers = {
 	[BASIC_INFO] = sendBasicInfo,
@@ -220,7 +221,8 @@ local handlers = {
 		[STORE] = sendStore,
 		[INSPECTION] = sendInspection,
 		[TITLES] = sendTitles
-	]]--
+	]]
+	--
 }
 
 local handler = PacketHandler(0xE5)

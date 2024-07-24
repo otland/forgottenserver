@@ -20,10 +20,10 @@ local fluidMessage = {
 	[FLUID_WINE] = "Aah...",
 	[FLUID_MUD] = "Urgh!",
 	[FLUID_RUM] = "Aah...",
-	[FLUID_MEAD] = "Aaaah..."
+	[FLUID_MEAD] = "Aaaah...",
 }
 
-local distillery = {[5513] = 5469, [5514] = 5470}
+local distillery = { [5513] = 5469, [5514] = 5470 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	local targetItemType = ItemType(target.itemid)
@@ -43,7 +43,7 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if item.type == FLUID_NONE then
 			player:sendTextMessage(MESSAGE_STATUS_SMALL, "It is empty.")
 		elseif target.uid == player.uid then
-			if table.contains({FLUID_BEER, FLUID_WINE, FLUID_MEAD}, item.type) then
+			if table.contains({ FLUID_BEER, FLUID_WINE, FLUID_MEAD }, item.type) then
 				player:addCondition(drunk)
 			elseif item.type == FLUID_SLIME then
 				player:addCondition(poison)

@@ -5,7 +5,7 @@ local foods = {
 	2674, -- apple
 	2689, -- bread
 	2690, -- roll
-	2696 -- cheese
+	2696, -- cheese
 }
 
 function onCastSpell(creature, variant)

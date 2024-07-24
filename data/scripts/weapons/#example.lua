@@ -4,9 +4,9 @@
 
 ]]
 local area = createCombatArea({
-	{1, 1, 1},
-	{1, 3, 1},
-	{1, 1, 1}
+	{ 1, 1, 1 },
+	{ 1, 3, 1 },
+	{ 1, 1, 1 },
 })
 
 local combat = Combat()

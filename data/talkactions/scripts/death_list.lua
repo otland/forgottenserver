@@ -14,7 +14,7 @@ local function getMonthDayEnding(day)
 end
 
 local function getMonthString(m)
-	return os.date("%B", os.time{year = 1970, month = m, day = 1})
+	return os.date("%B", os.time({ year = 1970, month = m, day = 1 }))
 end
 
 function onSay(player, words, param)
@@ -26,7 +26,11 @@ function onSay(player, words, param)
 		local str = ""
 		local breakline = ""
 
-		local resultId = db.storeQuery("SELECT `time`, `level`, `killed_by`, `is_player` FROM `player_deaths` WHERE `player_id` = " .. targetGUID .. " ORDER BY `time` DESC")
+		local resultId = db.storeQuery(
+			"SELECT `time`, `level`, `killed_by`, `is_player` FROM `player_deaths` WHERE `player_id` = "
+				.. targetGUID
+				.. " ORDER BY `time` DESC"
+		)
 		if resultId then
 			repeat
 				if str ~= "" then
@@ -41,11 +45,39 @@ function onSay(player, words, param)
 					killed_by = string.lower(killed_by)
 				end
 
-				if date.day < 10 then date.day = "0" .. date.day end
-				if date.hour < 10 then date.hour = "0" .. date.hour end
-				if date.min < 10 then date.min = "0" .. date.min end
-				if date.sec < 10 then date.sec = "0" .. date.sec end
-				str = str .. breakline .. " " .. date.day .. getMonthDayEnding(date.day) .. " " .. getMonthString(date.month) .. " " .. date.year .. " " .. date.hour .. ":" .. date.min .. ":" .. date.sec .. "   Died at Level " .. result.getNumber(resultId, "level") .. " by " .. article .. killed_by .. "."
+				if date.day < 10 then
+					date.day = "0" .. date.day
+				end
+				if date.hour < 10 then
+					date.hour = "0" .. date.hour
+				end
+				if date.min < 10 then
+					date.min = "0" .. date.min
+				end
+				if date.sec < 10 then
+					date.sec = "0" .. date.sec
+				end
+				str = str
+					.. breakline
+					.. " "
+					.. date.day
+					.. getMonthDayEnding(date.day)
+					.. " "
+					.. getMonthString(date.month)
+					.. " "
+					.. date.year
+					.. " "
+					.. date.hour
+					.. ":"
+					.. date.min
+					.. ":"
+					.. date.sec
+					.. "   Died at Level "
+					.. result.getNumber(resultId, "level")
+					.. " by "
+					.. article
+					.. killed_by
+					.. "."
 			until not result.next(resultId)
 			result.free(resultId)
 		end

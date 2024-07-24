@@ -1,4 +1,4 @@
-local monsters = {"Rat", "Green Frog", "Chicken"}
+local monsters = { "Rat", "Green Frog", "Chicken" }
 
 local spellwand = Action()
 

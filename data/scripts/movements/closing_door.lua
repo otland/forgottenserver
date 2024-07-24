@@ -6,7 +6,7 @@ function closingDoor.onStepOut(creature, item, position, fromPosition)
 		return true
 	end
 
-	local newPosition = {x = position.x + 1, y = position.y, z = position.z}
+	local newPosition = { x = position.x + 1, y = position.y, z = position.z }
 	local query = Tile(newPosition):queryAdd(creature, FLAG_IGNOREBLOCKCREATURE)
 	if query ~= RETURNVALUE_NOERROR or query == RETURNVALUE_NOTENOUGHROOM then
 		newPosition.x = newPosition.x - 1

@@ -19,6 +19,14 @@ function onUpdateDatabase()
 		playersRecordFile:close()
 	end
 
-	db.query("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '" .. record .. "'), ('motd_hash', SHA1(" .. db.escapeString(motd) .. ")), ('motd_num', " .. db.escapeString(motdNum) .. ")")
+	db.query(
+		"INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '"
+			.. record
+			.. "'), ('motd_hash', SHA1("
+			.. db.escapeString(motd)
+			.. ")), ('motd_num', "
+			.. db.escapeString(motdNum)
+			.. ")"
+	)
 	return true
 end

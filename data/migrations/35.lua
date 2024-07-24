@@ -23,30 +23,55 @@ function onUpdateDatabase()
 	local outfitRange = 10001000
 	local mountRange = 10002001
 
-	local resultId = db.storeQuery(string.format("SELECT `player_id`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500))
+	local resultId = db.storeQuery(
+		string.format(
+			"SELECT `player_id`, `value` FROM `player_storage` WHERE `key` >= %d AND `key` <= %d",
+			outfitRange,
+			outfitRange + 500
+		)
+	)
 	if resultId then
 		repeat
 			local playerId = result.getNumber(resultId, "player_id")
 			local outfitId = bit.rshift(result.getNumber(resultId, "value"), 16)
 			local addons = bit.band(result.getNumber(resultId, "value"), 0xFF)
 
-			db.query(string.format("INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES (%d, %d, %d)", playerId, outfitId, addons))
+			db.query(
+				string.format(
+					"INSERT INTO `player_outfits` (`player_id`, `outfit_id`, `addons`) VALUES (%d, %d, %d)",
+					playerId,
+					outfitId,
+					addons
+				)
+			)
 		until not result.next(resultId)
 		result.free(resultId)
 	end
 
-	local resultId = db.storeQuery(string.format("SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` <= %d", mountRange, mountRange + 10))
+	local resultId = db.storeQuery(
+		string.format(
+			"SELECT `player_id`, `key`, `value` FROM `player_storage` WHERE `key`>= %d AND `key` <= %d",
+			mountRange,
+			mountRange + 10
+		)
+	)
 	if resultId then
 		repeat
 			for i = 1, 200 do
-				local key = mountRange + ((i-1) / 31)
+				local key = mountRange + ((i - 1) / 31)
 				if key == result.getNumber(resultId, "key") then
 					local playerId = result.getNumber(resultId, "player_id")
-					local lshift = bit.lshift(1, ((i-1) % 31))
+					local lshift = bit.lshift(1, ((i - 1) % 31))
 					local mount = bit.band(lshift, result.getNumber(resultId, "value"))
 
 					if mount ~= 0 then
-						db.query(string.format("INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)", playerId, i))
+						db.query(
+							string.format(
+								"INSERT INTO `player_mounts` (`player_id`, `mount_id`) VALUES (%d, %d)",
+								playerId,
+								i
+							)
+						)
 					end
 				end
 			end
@@ -55,6 +80,14 @@ function onUpdateDatabase()
 	end
 
 	-- deleting all outfit & mount storages at once
-	db.asyncQuery(string.format("DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d OR `key` >= %d AND `key` <= %d", outfitRange, outfitRange + 500, mountRange, mountRange + 10))
+	db.asyncQuery(
+		string.format(
+			"DELETE FROM `player_storage` WHERE `key` >= %d AND `key` <= %d OR `key` >= %d AND `key` <= %d",
+			outfitRange,
+			outfitRange + 500,
+			mountRange,
+			mountRange + 10
+		)
+	)
 	return true
 end

@@ -1,7 +1,7 @@
 local config = {
-	[9075] = {"orc warrior", "pirate cutthroat", "dworc voodoomaster", "dwarf guard", "minotaur mage"}, -- common
-	[9077] = {"serpent spawn", "demon", "juggernaut", "behemoth", "ashmunrah"}, -- deluxe
-	[9076] = {"quara hydromancer", "diabolic imp", "banshee", "frost giant", "lich"} -- uncommon
+	[9075] = { "orc warrior", "pirate cutthroat", "dworc voodoomaster", "dwarf guard", "minotaur mage" }, -- common
+	[9077] = { "serpent spawn", "demon", "juggernaut", "behemoth", "ashmunrah" }, -- deluxe
+	[9076] = { "quara hydromancer", "diabolic imp", "banshee", "frost giant", "lich" }, -- uncommon
 }
 
 local costumeBag = Action()

@@ -21,9 +21,9 @@ function ModalWindow.new(self, ...)
 end
 
 setmetatable(ModalWindow, {
-	__call = function (self, ...)
+	__call = function(self, ...)
 		return ModalWindow.new(...)
-	end
+	end,
 })
 
 function ModalWindow:setTitle(title)

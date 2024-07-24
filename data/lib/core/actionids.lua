@@ -7,5 +7,4 @@ actionIds = {
 	citizenshipLast = 30050, -- citizenship teleport last
 }
 
-uniqueIds = {
-}
+uniqueIds = {}

@@ -1,9 +1,13 @@
-if not TextWindows then TextWindows = {} end
+if not TextWindows then
+	TextWindows = {}
+end
 
 local textWindow = {}
 textWindow.__index = textWindow
 
-function TextWindow(window) return setmetatable(window, textWindow) end
+function TextWindow(window)
+	return setmetatable(window, textWindow)
+end
 
 function textWindow.setCallback(window, callback)
 	window.callback = callback
@@ -52,9 +56,13 @@ function textWindowHelper.onTextEdit(player, item, text, windowTextId)
 	player:unregisterEvent("TextWindowHelper")
 	local playerGuid = player:getGuid()
 	local windows = TextWindows[playerGuid]
-	if not windows then return true end
+	if not windows then
+		return true
+	end
 	local window = windows[windowTextId]
-	if not window then return true end
+	if not window then
+		return true
+	end
 	windows[windowTextId] = nil
 	if window.id == windowTextId and window.callback then
 		return window.callback(player, item, text)

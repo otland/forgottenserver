@@ -15,7 +15,7 @@ function juiceSquizer.onUse(player, item, fromPosition, target, toPosition, isHo
 		5097, -- mango
 		8839, -- plum
 		8840, -- raspberry
-		8841 -- lemon
+		8841, -- lemon
 	}
 	if table.contains(fruits, target.itemid) and player:removeItem(2006, 1, 0) then
 		target:remove(1)

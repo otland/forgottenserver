@@ -11,7 +11,7 @@ Game.createQuest("Example Quest II", {
 			ignoreEndValue = false,
 			description = function(player)
 				return string.format("Example description %d by %s.", player.storage[1002], player:getName())
-			end
+			end,
 		},
 		{
 			name = "Example Mission 2",
@@ -19,7 +19,7 @@ Game.createQuest("Example Quest II", {
 			startValue = 1,
 			endValue = 3,
 			ignoreEndValue = false,
-			description = "Mission 2"
-		}
-	}
+			description = "Mission 2",
+		},
+	},
 }):register()

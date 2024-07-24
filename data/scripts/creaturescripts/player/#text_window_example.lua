@@ -9,7 +9,7 @@ function reactWindow.onSay(player, words, param, type)
 		callback = function(player, item, text)
 			player:sendTextMessage(MESSAGE_STATUS_CONSOLE_BLUE, "You wrote: " .. text)
 			return true
-		end
+		end,
 	})
 
 	txtWindow:sendToPlayer(player)

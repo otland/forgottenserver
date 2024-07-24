@@ -5,7 +5,10 @@ function ferumbrasManaKeg.onUse(player, item, fromPosition, target, toPosition, 
 	item:transform(25426)
 	item:getPosition():sendMagicEffect(CONST_ME_MAGIC_RED)
 	item:decay()
-	player:say("Magical sparks whirl around the keg as you open the spigot and you fill ten empty vials with mana fluid.", TALKTYPE_MONSTER_SAY)
+	player:say(
+		"Magical sparks whirl around the keg as you open the spigot and you fill ten empty vials with mana fluid.",
+		TALKTYPE_MONSTER_SAY
+	)
 	return true
 end
 

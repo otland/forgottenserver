@@ -10,10 +10,7 @@ event.onLookInBattleList = function(self, creature, distance)
 		description = string.format(str, description, creature:getHealth(), creature:getMaxHealth()) .. "."
 
 		local position = creature:getPosition()
-		description = string.format(
-			"%s\nPosition: %d, %d, %d",
-			description, position.x, position.y, position.z
-		)
+		description = string.format("%s\nPosition: %d, %d, %d", description, position.x, position.y, position.z)
 
 		if creature:isPlayer() then
 			description = string.format("%s\nGUID: %s", description, creature:getGuid())

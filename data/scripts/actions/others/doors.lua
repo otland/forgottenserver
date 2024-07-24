@@ -25,7 +25,7 @@ local openOddDoors = {
 	[37596] = { locked = 37593, closed = 37592 },
 	[37597] = { locked = 37595, closed = 37594 },
 	[39119] = { locked = 39116, closed = 39115 },
-	[39120] = { locked = 39118, closed = 39117 }
+	[39120] = { locked = 39118, closed = 39117 },
 }
 local closedOddDoors = {
 	[12692] = { locked = 13237, open = 12695 },
@@ -54,7 +54,7 @@ local closedOddDoors = {
 	[37592] = { locked = 37593, open = 37596 },
 	[37594] = { locked = 37595, open = 37597 },
 	[39115] = { locked = 39116, open = 39119 },
-	[39117] = { locked = 39118, open = 39120 }
+	[39117] = { locked = 39118, open = 39120 },
 }
 local lockedOddDoors = {
 	[13237] = { closed = 12692, open = 12695 },
@@ -79,14 +79,14 @@ local lockedOddDoors = {
 	[37593] = { closed = 37592, open = 37596 },
 	[37595] = { closed = 37594, open = 37597 },
 	[39116] = { closed = 39115, open = 39119 },
-	[39118] = { closed = 39117, open = 39120 }
+	[39118] = { closed = 39117, open = 39120 },
 }
 
 local positionOffsets = {
-	{x = 1, y = 0}, -- east
-	{x = 0, y = 1}, -- south
-	{x = -1, y = 0}, -- west
-	{x = 0, y = -1}, -- north
+	{ x = 1, y = 0 }, -- east
+	{ x = 0, y = 1 }, -- south
+	{ x = -1, y = 0 }, -- west
+	{ x = 0, y = -1 }, -- north
 }
 
 --[[
@@ -108,13 +108,19 @@ local function findPushPosition(creature, round)
 			local creatureCount = tile:getCreatureCount()
 			if round == 1 then
 				if tile:queryAdd(creature) == RETURNVALUE_NOERROR and creatureCount == 0 then
-					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
+					if
+						not tile:hasFlag(TILESTATE_PROTECTIONZONE)
+						or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz())
+					then
 						return offsetPosition
 					end
 				end
 			elseif round == 2 then
 				if creatureCount > 0 then
-					if not tile:hasFlag(TILESTATE_PROTECTIONZONE) or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz()) then
+					if
+						not tile:hasFlag(TILESTATE_PROTECTIONZONE)
+						or (tile:hasFlag(TILESTATE_PROTECTIONZONE) and creature:canAccessPz())
+					then
 						return offsetPosition
 					end
 				end
@@ -151,7 +157,10 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		return true
 	elseif table.contains(closedLevelDoors, itemId) then
-		if item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor or player:getGroup():getAccess() then
+		if
+			item.actionid > 0 and player:getLevel() >= item.actionid - actionIds.levelDoor
+			or player:getGroup():getAccess()
+		then
 			item:transform(itemId + 1)
 			player:teleportTo(toPosition, true)
 		else
@@ -170,7 +179,11 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		if table.contains(keys, target.itemid) then
 			return false
 		end
-		if not table.contains(openDoors, target.itemid) and not table.contains(closedDoors, target.itemid) and not table.contains(lockedDoors, target.itemid) then
+		if
+			not table.contains(openDoors, target.itemid)
+			and not table.contains(closedDoors, target.itemid)
+			and not table.contains(lockedDoors, target.itemid)
+		then
 			return false
 		end
 		if item.actionid ~= target.actionid then
@@ -200,7 +213,11 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	elseif table.contains(lockedDoors, itemId) then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "It is locked.")
 		return true
-	elseif table.contains(openDoors, itemId) or table.contains(openExtraDoors, itemId) or table.contains(openHouseDoors, itemId) then
+	elseif
+		table.contains(openDoors, itemId)
+		or table.contains(openExtraDoors, itemId)
+		or table.contains(openHouseDoors, itemId)
+	then
 		local creaturePositionTable = {}
 		local doorCreatures = Tile(toPosition):getCreatures()
 		if doorCreatures and #doorCreatures > 0 then
@@ -210,7 +227,7 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 					player:sendCancelMessage(RETURNVALUE_NOTENOUGHROOM)
 					return true
 				end
-				table.insert(creaturePositionTable, {creature = doorCreature, position = pushPosition})
+				table.insert(creaturePositionTable, { creature = doorCreature, position = pushPosition })
 			end
 			for _, tableCreature in ipairs(creaturePositionTable) do
 				tableCreature.creature:teleportTo(tableCreature.position, true)
@@ -223,7 +240,11 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 		end
 		item:transform(transformTo)
 		return true
-	elseif table.contains(closedDoors, itemId) or table.contains(closedExtraDoors, itemId) or table.contains(closedHouseDoors, itemId) then
+	elseif
+		table.contains(closedDoors, itemId)
+		or table.contains(closedExtraDoors, itemId)
+		or table.contains(closedHouseDoors, itemId)
+	then
 		if closedOddDoors[itemId] then
 			transformTo = closedOddDoors[itemId].open
 		else
@@ -235,7 +256,18 @@ function door.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	return false
 end
 
-local doorTables = {keys, openDoors, closedDoors, lockedDoors, openExtraDoors, closedExtraDoors, openHouseDoors, closedHouseDoors, closedQuestDoors, closedLevelDoors}
+local doorTables = {
+	keys,
+	openDoors,
+	closedDoors,
+	lockedDoors,
+	openExtraDoors,
+	closedExtraDoors,
+	openHouseDoors,
+	closedHouseDoors,
+	closedQuestDoors,
+	closedLevelDoors,
+}
 for _, doors in pairs(doorTables) do
 	for _, doorId in pairs(doors) do
 		door:id(doorId)

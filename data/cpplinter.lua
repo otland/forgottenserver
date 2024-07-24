@@ -1293,7 +1293,9 @@ function isInWar(cid, target) end
 ---@alias isInWar fun(cid: number, target: number): boolean
 
 --- Gets the position of a waypoint by name.
-function getWaypointPositionByName(name) return {} end
+function getWaypointPositionByName(name)
+	return {}
+end
 ---@alias getWaypointPositionByName fun(name: string): table
 
 --- Sends a message to a channel.
@@ -1595,11 +1597,13 @@ TILESTATE_IMMOVABLENOFIELDBLOCKPATH = 1 * 2 ^ 21
 TILESTATE_NOFIELDBLOCKPATH = 1 * 2 ^ 22
 TILESTATE_SUPPORTS_HANGABLE = 1 * 2 ^ 23
 
-TILESTATE_FLOORCHANGE =
-	TILESTATE_FLOORCHANGE_DOWN or TILESTATE_FLOORCHANGE_NORTH or
-		TILESTATE_FLOORCHANGE_SOUTH or TILESTATE_FLOORCHANGE_EAST or
-		TILESTATE_FLOORCHANGE_WEST or TILESTATE_FLOORCHANGE_SOUTH_ALT or
-		TILESTATE_FLOORCHANGE_EAST_ALT
+TILESTATE_FLOORCHANGE = TILESTATE_FLOORCHANGE_DOWN
+	or TILESTATE_FLOORCHANGE_NORTH
+	or TILESTATE_FLOORCHANGE_SOUTH
+	or TILESTATE_FLOORCHANGE_EAST
+	or TILESTATE_FLOORCHANGE_WEST
+	or TILESTATE_FLOORCHANGE_SOUTH_ALT
+	or TILESTATE_FLOORCHANGE_EAST_ALT
 
 SPELL_UNDEFINED = 0
 SPELL_INSTANT = 1
@@ -1650,7 +1654,7 @@ CallBackParam = {
 	LEVELMAGICVALUE = 0,
 	SKILLVALUE = 1,
 	TARGETTILE = 2,
-	TARGETCREATURE = 3
+	TARGETCREATURE = 3,
 }
 
 CALLBACK_PARAM_LEVELMAGICVALUE = 0
@@ -1659,14 +1663,14 @@ CALLBACK_PARAM_TARGETTILE = 2
 CALLBACK_PARAM_TARGETCREATURE = 3
 
 ---@enum ExperienceRateType
-ExperienceRateType = {BASE = 1, LOW_LEVEL = 2, BONUS = 3, STAMINA = 4}
+ExperienceRateType = { BASE = 1, LOW_LEVEL = 2, BONUS = 3, STAMINA = 4 }
 
 GUEST_LIST = 0x100
 SUBOWNER_LIST = 0x101
 
 PODIUM_SHOW_PLATFORM = 0 -- show the platform below the outfit
-PODIUM_SHOW_OUTFIT = 1   -- show outfit
-PODIUM_SHOW_MOUNT = 2     -- show mount
+PODIUM_SHOW_OUTFIT = 1 -- show outfit
+PODIUM_SHOW_MOUNT = 2 -- show mount
 
 DIRECTION_NORTH = 0
 DIRECTION_EAST = 1
@@ -1690,12 +1694,12 @@ SKULL_RED = 4
 SKULL_BLACK = 5
 SKULL_ORANGE = 6
 
-MESSAGE_STATUS_DEFAULT = 17  -- White, bottom + console
-MESSAGE_STATUS_WARNING = 18  -- Red, over player + console
-MESSAGE_EVENT_ADVANCE = 19   -- White, over player + console
+MESSAGE_STATUS_DEFAULT = 17 -- White, bottom + console
+MESSAGE_STATUS_WARNING = 18 -- Red, over player + console
+MESSAGE_EVENT_ADVANCE = 19 -- White, over player + console
 MESSAGE_STATUS_WARNING2 = 20 -- Red, over player + console
-MESSAGE_STATUS_SMALL = 21    -- White, bottom of the screen
-MESSAGE_INFO_DESCR = 22      -- Green, over player + console
+MESSAGE_STATUS_SMALL = 21 -- White, bottom of the screen
+MESSAGE_INFO_DESCR = 22 -- Green, over player + console
 MESSAGE_DAMAGE_DEALT = 23
 MESSAGE_DAMAGE_RECEIVED = 24
 MESSAGE_HEALED = 25
@@ -1704,37 +1708,37 @@ MESSAGE_DAMAGE_OTHERS = 27
 MESSAGE_HEALED_OTHERS = 28
 MESSAGE_EXPERIENCE_OTHERS = 29
 MESSAGE_EVENT_DEFAULT = 30 -- White, bottom + console
-MESSAGE_LOOT = 31          -- White, over player + console, supports colors as {text|itemClientId}
-MESSAGE_TRADE = 32         -- Green, over player + console
+MESSAGE_LOOT = 31 -- White, over player + console, supports colors as {text|itemClientId}
+MESSAGE_TRADE = 32 -- Green, over player + console
 MESSAGE_GUILD = 33
 MESSAGE_PARTY_MANAGEMENT = 34
 MESSAGE_PARTY = 35
-MESSAGE_REPORT = 38         -- White, over player + conosle
+MESSAGE_REPORT = 38 -- White, over player + conosle
 MESSAGE_HOTKEY_PRESSED = 39 -- Green, over player + console
 -- MESSAGE_TUTORIAL_HINT = 40 -- not working (?)
 -- MESSAGE_THANK_YOU = 41 -- not working (?)
 MESSAGE_MARKET = 42 -- Window "Market Message" + "Ok" button
 -- MESSAGE_MANA = 43 -- not working (?)
-MESSAGE_BEYOND_LAST = 44     -- White, console only
+MESSAGE_BEYOND_LAST = 44 -- White, console only
 MESSAGE_TOURNAMENT_INFO = 45 -- Window "Tournament" + "Ok" button
 -- unused 46?
 -- unused 47?
-MESSAGE_ATTENTION = 48        -- White, console only
+MESSAGE_ATTENTION = 48 -- White, console only
 MESSAGE_BOOSTED_CREATURE = 49 -- White, console only
 MESSAGE_OFFLINE_TRAINING = 50 -- White, over player + console
-MESSAGE_TRANSACTION = 51      -- White, console only
+MESSAGE_TRANSACTION = 51 -- White, console only
 
 INDEX_WHEREEVER = -1
 VIRTUAL_PARENT = true
 
-FLAG_NOLIMIT = 1 * 2 ^ 0             -- Bypass limits like capacity/container limits, blocking items/creatures etc.
-FLAG_IGNOREBLOCKITEM = 1 * 2 ^ 1     -- Bypass movable blocking item checks
+FLAG_NOLIMIT = 1 * 2 ^ 0 -- Bypass limits like capacity/container limits, blocking items/creatures etc.
+FLAG_IGNOREBLOCKITEM = 1 * 2 ^ 1 -- Bypass movable blocking item checks
 FLAG_IGNOREBLOCKCREATURE = 1 * 2 ^ 2 -- Bypass creature checks
-FLAG_CHILDISOWNER = 1 * 2 ^ 3        -- Used by containers to query capacity of the carrier (player)
-FLAG_PATHFINDING = 1 * 2 ^ 4         -- An additional check is done for floor changing/teleport items
-FLAG_IGNOREFIELDDAMAGE = 1 * 2 ^ 5   -- Bypass field damage checks
-FLAG_IGNORENOTMOVEABLE = 1 * 2 ^ 6   -- Bypass check for mobility
-FLAG_IGNOREAUTOSTACK = 1 * 2 ^ 7     -- queryDestination will not try to stack items together
+FLAG_CHILDISOWNER = 1 * 2 ^ 3 -- Used by containers to query capacity of the carrier (player)
+FLAG_PATHFINDING = 1 * 2 ^ 4 -- An additional check is done for floor changing/teleport items
+FLAG_IGNOREFIELDDAMAGE = 1 * 2 ^ 5 -- Bypass field damage checks
+FLAG_IGNORENOTMOVEABLE = 1 * 2 ^ 6 -- Bypass check for mobility
+FLAG_IGNOREAUTOSTACK = 1 * 2 ^ 7 -- queryDestination will not try to stack items together
 
 RETURNVALUE_NOERROR = 0
 RETURNVALUE_NOTPOSSIBLE = 1
@@ -1834,7 +1838,7 @@ CONDITION_FREEZING = 1 * 2 ^ 20
 CONDITION_DAZZLED = 1 * 2 ^ 21
 CONDITION_CURSED = 1 * 2 ^ 22
 CONDITION_EXHAUST_COMBAT = 1 * 2 ^ 23 -- unused
-CONDITION_EXHAUST_HEAL = 1 * 2 ^ 24   -- unused
+CONDITION_EXHAUST_HEAL = 1 * 2 ^ 24 -- unused
 CONDITION_PACIFIED = 1 * 2 ^ 25
 CONDITION_SPELLCOOLDOWN = 1 * 2 ^ 26
 CONDITION_SPELLGROUPCOOLDOWN = 1 * 2 ^ 27
@@ -2287,17 +2291,17 @@ ITEM_TYPE_LAST = 12
 ITEM_GROUP_NONE = 0
 ITEM_GROUP_GROUND = 1
 ITEM_GROUP_CONTAINER = 2
-ITEM_GROUP_WEAPON = 3     -- deprecated
+ITEM_GROUP_WEAPON = 3 -- deprecated
 ITEM_GROUP_AMMUNITION = 4 -- deprecated
-ITEM_GROUP_ARMOR = 5      -- deprecated
+ITEM_GROUP_ARMOR = 5 -- deprecated
 ITEM_GROUP_CHARGES = 6
-ITEM_GROUP_TELEPORT = 7   -- deprecated
+ITEM_GROUP_TELEPORT = 7 -- deprecated
 ITEM_GROUP_MAGICFIELD = 8 -- deprecated
-ITEM_GROUP_WRITEABLE = 9  -- deprecated
-ITEM_GROUP_KEY = 10       -- deprecated
+ITEM_GROUP_WRITEABLE = 9 -- deprecated
+ITEM_GROUP_KEY = 10 -- deprecated
 ITEM_GROUP_SPLASH = 11
 ITEM_GROUP_FLUID = 12
-ITEM_GROUP_DOOR = 13      -- deprecated
+ITEM_GROUP_DOOR = 13 -- deprecated
 ITEM_GROUP_DEPRECATED = 14
 ITEM_GROUP_PODIUM = 15
 ITEM_GROUP_LAST = 16
@@ -2321,18 +2325,18 @@ TALKTYPE_SAY = 1
 TALKTYPE_WHISPER = 2
 TALKTYPE_YELL = 3
 TALKTYPE_PRIVATE_FROM = 4 -- Received private message
-TALKTYPE_PRIVATE_TO = 5   -- Sent private message
+TALKTYPE_PRIVATE_TO = 5 -- Sent private message
 -- TALKTYPE_CHANNEL_M = 6 -- not working (?)
 TALKTYPE_CHANNEL_Y = 7
 TALKTYPE_CHANNEL_O = 8
-TALKTYPE_SPELL = 9               -- Like SAY but with "casts" instead of "says"
-TALKTYPE_PRIVATE_NP = 10         -- NPC speaking to player
+TALKTYPE_SPELL = 9 -- Like SAY but with "casts" instead of "says"
+TALKTYPE_PRIVATE_NP = 10 -- NPC speaking to player
 TALKTYPE_PRIVATE_NP_CONSOLE = 11 -- NPC channel message, no text on game screen, for sendPrivateMessage use only
-TALKTYPE_PRIVATE_PN = 12         -- Player speaking to NPC
+TALKTYPE_PRIVATE_PN = 12 -- Player speaking to NPC
 TALKTYPE_BROADCAST = 13
-TALKTYPE_CHANNEL_R1 = 14       -- red - #c text
+TALKTYPE_CHANNEL_R1 = 14 -- red - #c text
 TALKTYPE_PRIVATE_RED_FROM = 15 -- @name@text
-TALKTYPE_PRIVATE_RED_TO = 16   -- @name@text
+TALKTYPE_PRIVATE_RED_TO = 16 -- @name@text
 TALKTYPE_MONSTER_SAY = 36
 TALKTYPE_MONSTER_YELL = 37
 TALKTYPE_POTION = 52 -- Like MONSTER_SAY but can be disabled in client settings

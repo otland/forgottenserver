@@ -1,5 +1,5 @@
-local showAtkWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE}
-local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD}
+local showAtkWeaponTypes = { WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE }
+local showDefWeaponTypes = { WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD }
 
 local event = Event()
 
@@ -49,7 +49,12 @@ event.onLookInMarket = function(self, itemType)
 				atkAttrs[#atkAttrs + 1] = atk
 				local elementDmg = itemType:getElementDamage()
 				if elementDmg ~= 0 then
-					atkAttrs[#atkAttrs] = string.format("%d physical %+d %s", atkAttrs[#atkAttrs], elementDmg, getCombatName(itemType:getElementType()))
+					atkAttrs[#atkAttrs] = string.format(
+						"%d physical %+d %s",
+						atkAttrs[#atkAttrs],
+						elementDmg,
+						getCombatName(itemType:getElementType())
+					)
 				end
 			end
 

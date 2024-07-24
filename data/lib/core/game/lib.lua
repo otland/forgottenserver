@@ -1,8 +1,8 @@
-dofile('data/lib/core/game/account_storage.lua')
-dofile('data/lib/core/game/global_storage.lua')
-dofile('data/lib/core/game/quest.lua')
-dofile('data/lib/core/game/world_light.lua')
-dofile('data/lib/core/game/world_time.lua')
+dofile("data/lib/core/game/account_storage.lua")
+dofile("data/lib/core/game/global_storage.lua")
+dofile("data/lib/core/game/quest.lua")
+dofile("data/lib/core/game/world_light.lua")
+dofile("data/lib/core/game/world_time.lua")
 
 function Game.broadcastMessage(message, messageType)
 	if not messageType then
@@ -51,8 +51,8 @@ function Game.getSkillType(weaponType)
 end
 
 do
-	local cdShort = {"d", "h", "m", "s"}
-	local cdLong = {" day", " hour", " minute", " second"}
+	local cdShort = { "d", "h", "m", "s" }
+	local cdLong = { " day", " hour", " minute", " second" }
 	local function getTimeUnitGrammar(amount, unitID, isLong)
 		return isLong and string.format("%s%s", cdLong[unitID], amount ~= 1 and "s" or "") or cdShort[unitID]
 	end

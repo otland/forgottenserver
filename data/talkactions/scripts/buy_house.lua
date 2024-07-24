@@ -1,6 +1,6 @@
 local config = {
 	level = 1,
-	onlyPremium = true
+	onlyPremium = true,
 }
 
 function onSay(player, words, param)
@@ -46,6 +46,9 @@ function onSay(player, words, param)
 	end
 
 	house:setOwnerGuid(player:getGuid())
-	player:sendTextMessage(MESSAGE_INFO_DESCR, "You have successfully bought this house, be sure to have the money for the rent in the bank.")
+	player:sendTextMessage(
+		MESSAGE_INFO_DESCR,
+		"You have successfully bought this house, be sure to have the money for the rent in the bank."
+	)
 	return false
 end

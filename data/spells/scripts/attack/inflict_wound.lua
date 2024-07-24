@@ -19,7 +19,12 @@ function onCastSpell(creature, variant)
 	local max = (creature:getLevel() / 80) + (skill * 0.4) + 2
 	local damage = math.random(math.floor(min) * 1000, math.floor(max) * 1000) / 1000
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
-		creature:addDamageCondition(target, CONDITION_BLEEDING, DAMAGELIST_LOGARITHMIC_DAMAGE, target:isPlayer() and damage / 4 or damage)
+		creature:addDamageCondition(
+			target,
+			CONDITION_BLEEDING,
+			DAMAGELIST_LOGARITHMIC_DAMAGE,
+			target:isPlayer() and damage / 4 or damage
+		)
 	end
 	return true
 end

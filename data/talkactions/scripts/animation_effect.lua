@@ -5,8 +5,8 @@ function onSay(player, words, param)
 
 	local effect = tonumber(param)
 	local position = player:getPosition()
-	local toPositionLow = {z = position.z}
-	local toPositionHigh = {z = position.z}
+	local toPositionLow = { z = position.z }
+	local toPositionHigh = { z = position.z }
 
 	toPositionLow.x = position.x - 7
 	toPositionHigh.x = position.x + 7

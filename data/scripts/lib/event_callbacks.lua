@@ -3,29 +3,31 @@ local pack = table.pack
 
 local EventData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
 -- This metatable creates an auto-configuration mechanism to create new types of Events
-local ec = setmetatable({}, { __newindex = function(self, key, value)
-	autoID = autoID + 1
-	callbacks[key] = autoID
-	local info, update = {}, {}
-	for k, v in pairs(value) do
-		if type(k) == "string" then
-			info[k] = v
-		else
-			update[k] = v
+local ec = setmetatable({}, {
+	__newindex = function(self, key, value)
+		autoID = autoID + 1
+		callbacks[key] = autoID
+		local info, update = {}, {}
+		for k, v in pairs(value) do
+			if type(k) == "string" then
+				info[k] = v
+			else
+				update[k] = v
+			end
 		end
-	end
-	updateableParameters[autoID] = update
-	callbacks[autoID] = info
-	EventData[autoID] = {maxn = 0}
-end})
+		updateableParameters[autoID] = update
+		callbacks[autoID] = info
+		EventData[autoID] = { maxn = 0 }
+	end,
+})
 
 --@ Definitions of valid Event types to hook according to the given field name
 --@ The fields within the assigned table, allow to save arbitrary information
 -- Creature
 ec.onChangeOutfit = {}
 ec.onChangeMount = {}
-ec.onAreaCombat = {returnValue=true}
-ec.onTargetCombat = {returnValue=true}
+ec.onAreaCombat = { returnValue = true }
+ec.onTargetCombat = { returnValue = true }
 ec.onHear = {}
 ec.onChangeZone = {}
 ec.onUpdateStorage = {}
@@ -39,24 +41,24 @@ ec.onRevokeInvitation = {}
 ec.onPassLeadership = {}
 -- Player
 ec.onBrowseField = {}
-ec.onLook = {[5] = 1}
-ec.onLookInBattleList = {[4] = 1}
-ec.onLookInTrade = {[5] = 1}
-ec.onLookInShop = {[4] = 1}
+ec.onLook = { [5] = 1 }
+ec.onLookInBattleList = { [4] = 1 }
+ec.onLookInTrade = { [5] = 1 }
+ec.onLookInShop = { [4] = 1 }
 ec.onLookInMarket = {}
 ec.onTradeRequest = {}
 ec.onTradeAccept = {}
 ec.onTradeCompleted = {}
-ec.onMoveItem = {returnValue=true}
+ec.onMoveItem = { returnValue = true }
 ec.onItemMoved = {}
 ec.onMoveCreature = {}
 ec.onReportRuleViolation = {}
 ec.onReportBug = {}
 ec.onRotateItem = {}
 ec.onTurn = {}
-ec.onGainExperience = {[3] = 1}
-ec.onLoseExperience = {[2] = 1}
-ec.onGainSkillTries = {[3] = 1}
+ec.onGainExperience = { [3] = 1 }
+ec.onLoseExperience = { [2] = 1 }
+ec.onGainSkillTries = { [3] = 1 }
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
 ec.onSpellCheck = {}
@@ -81,9 +83,9 @@ local EventMeta = {
 			return
 		end
 
-		rawset(self, 'eventType', eventType)
-		rawset(self, 'callback', callback)
-	end
+		rawset(self, "eventType", eventType)
+		rawset(self, "callback", callback)
+	end,
 }
 
 local function register(self, triggerIndex)
@@ -91,8 +93,8 @@ local function register(self, triggerIndex)
 		return
 	end
 
-	local eventType = rawget(self, 'eventType')
-	local callback = rawget(self, 'callback')
+	local eventType = rawget(self, "eventType")
+	local callback = rawget(self, "callback")
 	if not eventType or not callback then
 		debugPrint("[Warning - Event::register] need to setup a callback before you can register.")
 		return false
@@ -102,10 +104,12 @@ local function register(self, triggerIndex)
 	events.maxn = #events + 1
 	events[events.maxn] = {
 		callback = callback,
-		triggerIndex = tonumber(triggerIndex) or 0
+		triggerIndex = tonumber(triggerIndex) or 0,
 	}
 
-	table.sort(events, function(ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
+	table.sort(events, function(ecl, ecr)
+		return ecl.triggerIndex < ecr.triggerIndex
+	end)
 	self.eventType = nil
 	self.callback = nil
 	return true
@@ -115,12 +119,12 @@ Event = setmetatable({
 	clear = function(self)
 		EventData = {}
 		for i = 1, autoID do
-			EventData[i] = {maxn = 0}
+			EventData[i] = { maxn = 0 }
 		end
-	end
+	end,
 }, {
 	__call = function(self)
-		return setmetatable({register = register}, EventMeta)
+		return setmetatable({ register = register }, EventMeta)
 	end,
 
 	__index = function(self, key)
@@ -136,7 +140,7 @@ Event = setmetatable({
 			local results, args, info = {}, pack(...), callbacks[callback]
 			for index = 1, eventsCount do
 				repeat
-					results = {events[index].callback(unpack(args))}
+					results = { events[index].callback(unpack(args)) }
 					local output = results[1]
 					-- If the call returns nil then we continue with the next call
 					if output == nil then
@@ -164,7 +168,7 @@ Event = setmetatable({
 				end
 			end
 		end
-	end
+	end,
 })
 
 hasEvent = setmetatable({}, {
@@ -173,7 +177,7 @@ hasEvent = setmetatable({}, {
 		if callback then
 			return EventData[callback].maxn > 0
 		end
-	end
+	end,
 })
 
 -- For compatibility with the previous version.

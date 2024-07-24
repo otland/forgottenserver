@@ -18,13 +18,27 @@ local function parseAnnounce(node, filename)
 
 	local type = node:attribute("type")
 	if not type then
-		io.write("[Notice] Missing type for announce event in " .. filename .. ". Using default: " .. defaultMessageType .. ".\n")
+		io.write(
+			"[Notice] Missing type for announce event in "
+				.. filename
+				.. ". Using default: "
+				.. defaultMessageType
+				.. ".\n"
+		)
 		type = defaultMessageType
 	end
 
 	local messageType = messageTypes[type:lower()]
 	if not messageType then
-		io.write("[Notice] Unknown type " .. type .. " for announce event in " .. filename .. ". Using default: " .. messageTypes[defaultMessageType] .. ".\n")
+		io.write(
+			"[Notice] Unknown type "
+				.. type
+				.. " for announce event in "
+				.. filename
+				.. ". Using default: "
+				.. messageTypes[defaultMessageType]
+				.. ".\n"
+		)
 		messageType = messageTypes[defaultMessageType]
 	end
 
@@ -38,7 +52,10 @@ local function parseAreaSpawn(node, filename)
 
 	local radius = tonumber(node:attribute("radius"))
 	if radius then
-		local centerx, centery, centerz = tonumber(node:attribute("centerx")), tonumber(node:attribute("centery")), tonumber(node:attribute("centerz"))
+		local centerx, centery, centerz =
+			tonumber(node:attribute("centerx")),
+			tonumber(node:attribute("centery")),
+			tonumber(node:attribute("centerz"))
 		if not centerx or not centery or not centerz then
 			io.write("[Error] Missing one of: centerx, centery, centerz, check data/raids/" .. filename .. "\n")
 		end
@@ -46,12 +63,14 @@ local function parseAreaSpawn(node, filename)
 		fromx, fromy, fromz = centerx - radius, centery - radius, z
 		tox, toy, toz = centerx + radius, centery + radius, z
 	else
-		fromx, fromy, fromz = tonumber(node:attribute("fromx")), tonumber(node:attribute("fromy")), tonumber(node:attribute("fromz"))
+		fromx, fromy, fromz =
+			tonumber(node:attribute("fromx")), tonumber(node:attribute("fromy")), tonumber(node:attribute("fromz"))
 		if not fromx or not fromy or not fromz then
 			io.write("[Error] Missing one of: fromx, fromy, fromz, check data/raids/" .. filename .. "\n")
 		end
 
-		tox, toy, toz = tonumber(node:attribute("tox")), tonumber(node:attribute("toy")), tonumber(node:attribute("toz"))
+		tox, toy, toz =
+			tonumber(node:attribute("tox")), tonumber(node:attribute("toy")), tonumber(node:attribute("toz"))
 		if not tox or not toy or not toz then
 			io.write("[Error] Missing one of: tox, toy, toz, check data/raids/" .. filename .. "\n")
 		end
@@ -65,11 +84,14 @@ local function parseAreaSpawn(node, filename)
 			return nil
 		end
 
-		local minAmount, maxAmount = tonumber(spawnNode:attribute("minamount")), tonumber(spawnNode:attribute("maxamount"))
+		local minAmount, maxAmount =
+			tonumber(spawnNode:attribute("minamount")), tonumber(spawnNode:attribute("maxamount"))
 		if not minAmount and not maxAmount then
 			local amount = tonumber(spawnNode:attribute("amount"))
 			if not amount then
-				io.write("[Error] Missing attributes minamount/maxamount or amount, check data/raids/" .. filename .. "\n")
+				io.write(
+					"[Error] Missing attributes minamount/maxamount or amount, check data/raids/" .. filename .. "\n"
+				)
 			end
 
 			minAmount, maxAmount = amount, amount
@@ -187,7 +209,11 @@ local function configureRaidEvent(node)
 
 	local interval = tonumber(node:attribute("interval2"))
 	if not interval or interval == 0 then
-		io.write("[Error] interval2 attribute missing or zero (would divide by 0), check raid " .. name .. " in data/raids/raids.xml\n")
+		io.write(
+			"[Error] interval2 attribute missing or zero (would divide by 0), check raid "
+				.. name
+				.. " in data/raids/raids.xml\n"
+		)
 		return nil
 	end
 	raid.interval = interval

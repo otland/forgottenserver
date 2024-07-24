@@ -18,7 +18,7 @@ function onSay(player, words, param)
 		return false
 	end
 
-	local separatorPos = param:find(',')
+	local separatorPos = param:find(",")
 	if not separatorPos then
 		player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Usage: %s attribute, value.", words))
 		return false
@@ -39,7 +39,10 @@ function onSay(player, words, param)
 			return false
 		end
 
-		player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Attribute %s set to: %s", attribute, thing:getAttribute(attributeId)))
+		player:sendTextMessage(
+			MESSAGE_INFO_DESCR,
+			string.format("Attribute %s set to: %s", attribute, thing:getAttribute(attributeId))
+		)
 		position:sendMagicEffect(CONST_ME_MAGIC_GREEN)
 	else
 		player:sendTextMessage(MESSAGE_INFO_DESCR, "Thing in front of you is not supported.")

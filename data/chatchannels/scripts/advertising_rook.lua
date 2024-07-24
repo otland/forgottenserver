@@ -35,7 +35,15 @@ function onSpeak(player, type, message)
 end
 
 function onJoin(player)
-	sendChannelMessage(CHANNEL_ADVERTISING_ROOK, MESSAGE_GUILD, "Here you can advertise all kinds of things. Among others, you can trade items, advertise ingame events, seek characters for a quest or a hunting group, find members for your guild or look for somebody to help you with something.")
-	sendChannelMessage(CHANNEL_ADVERTISING_ROOK, MESSAGE_GUILD, "It goes without saying that all advertisements must conform to the Rules, e.g. it is illegal to advertise trades including real money.")
+	sendChannelMessage(
+		CHANNEL_ADVERTISING_ROOK,
+		MESSAGE_GUILD,
+		"Here you can advertise all kinds of things. Among others, you can trade items, advertise ingame events, seek characters for a quest or a hunting group, find members for your guild or look for somebody to help you with something."
+	)
+	sendChannelMessage(
+		CHANNEL_ADVERTISING_ROOK,
+		MESSAGE_GUILD,
+		"It goes without saying that all advertisements must conform to the Rules, e.g. it is illegal to advertise trades including real money."
+	)
 	return true
 end

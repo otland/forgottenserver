@@ -47,7 +47,11 @@ function Tile.isWalkable(self)
 	for i = 1, self:getItemCount() do
 		local item = items[i]
 		local itemType = item:getType()
-		if itemType:getType() ~= ITEM_TYPE_MAGICFIELD and not itemType:isMovable() and item:hasProperty(CONST_PROP_BLOCKSOLID) then
+		if
+			itemType:getType() ~= ITEM_TYPE_MAGICFIELD
+			and not itemType:isMovable()
+			and item:hasProperty(CONST_PROP_BLOCKSOLID)
+		then
 			return false
 		end
 	end

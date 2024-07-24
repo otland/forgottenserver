@@ -9,7 +9,14 @@ function onCastSpell(creature, variant)
 	local rounds = math.random(math.floor(min), math.floor(max))
 	local period = math.random(10, 12)
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
-		creature:addDamageCondition(target, CONDITION_DAZZLED, DAMAGELIST_CONSTANT_PERIOD, target:isPlayer() and 10 or 20, period, rounds)
+		creature:addDamageCondition(
+			target,
+			CONDITION_DAZZLED,
+			DAMAGELIST_CONSTANT_PERIOD,
+			target:isPlayer() and 10 or 20,
+			period,
+			rounds
+		)
 	end
 	return true
 end

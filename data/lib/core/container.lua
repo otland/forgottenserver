@@ -73,7 +73,11 @@ function Container:getContentDescription()
 	if items and #items > 0 then
 		local loot = {}
 		for i = 1, #items do
-			loot[#loot + 1] = string.format("{%d|%s}", items[i]:getType():getClientId(), items[i]:getNameDescription(items[i]:getSubType(), true))
+			loot[#loot + 1] = string.format(
+				"{%d|%s}",
+				items[i]:getType():getClientId(),
+				items[i]:getNameDescription(items[i]:getSubType(), true)
+			)
 		end
 
 		return table.concat(loot, ", ")

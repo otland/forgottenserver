@@ -19,23 +19,26 @@ local manaShield = Condition(CONDITION_MANASHIELD_BREAKABLE)
 manaShield:setParameter(CONDITION_PARAM_TICKS, 3 * 60 * 1000)
 
 local function magicShieldCapacity(player)
-	manaShield:setParameter(CONDITION_PARAM_MANASHIELD_BREAKABLE, math.min(player:getMaxMana(), 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel()))
+	manaShield:setParameter(
+		CONDITION_PARAM_MANASHIELD_BREAKABLE,
+		math.min(player:getMaxMana(), 300 + 7.6 * player:getLevel() + 7 * player:getMagicLevel())
+	)
 end
 
 local potions = {
 	[6558] = { -- flask of demonic blood
-		transform = {7588, 7589},
-		effect = CONST_ME_DRAWBLOOD
+		transform = { 7588, 7589 },
+		effect = CONST_ME_DRAWBLOOD,
 	},
 	[7439] = { -- berserk potion
 		condition = berserk,
 		vocations = {
 			VOCATION_KNIGHT,
-			VOCATION_ELITE_KNIGHT
+			VOCATION_ELITE_KNIGHT,
 		},
 		effect = CONST_ME_MAGIC_RED,
 		description = "Only knights may drink this potion.",
-		text = "You feel stronger."
+		text = "You feel stronger.",
 	},
 	[7440] = { -- mastermind potion
 		condition = mastermind,
@@ -43,21 +46,21 @@ local potions = {
 			VOCATION_SORCERER,
 			VOCATION_DRUID,
 			VOCATION_MASTER_SORCERER,
-			VOCATION_ELDER_DRUID
+			VOCATION_ELDER_DRUID,
 		},
 		effect = CONST_ME_MAGIC_BLUE,
 		description = "Only sorcerers and druids may drink this potion.",
-		text = "You feel smarter."
+		text = "You feel smarter.",
 	},
 	[7443] = { -- bullseye potion
 		condition = bullseye,
 		vocations = {
 			VOCATION_PALADIN,
-			VOCATION_ROYAL_PALADIN
+			VOCATION_ROYAL_PALADIN,
 		},
 		effect = CONST_ME_MAGIC_GREEN,
 		description = "Only paladins may drink this potion.",
-		text = "You feel more accurate."
+		text = "You feel more accurate.",
 	},
 	[38219] = { -- magic shield potion
 		condition = manaShield,
@@ -65,125 +68,125 @@ local potions = {
 			VOCATION_SORCERER,
 			VOCATION_DRUID,
 			VOCATION_MASTER_SORCERER,
-			VOCATION_ELDER_DRUID
+			VOCATION_ELDER_DRUID,
 		},
 		level = 14,
 		effect = CONST_ME_ENERGYAREA,
 		description = "Only sorcerers and druids of level 14 or above may drink this potion.",
-		capacity = magicShieldCapacity
+		capacity = magicShieldCapacity,
 	},
 	[7588] = { -- strong health potion
-		health = {250, 350},
+		health = { 250, 350 },
 		vocations = {
 			VOCATION_PALADIN,
 			VOCATION_KNIGHT,
 			VOCATION_ROYAL_PALADIN,
-			VOCATION_ELITE_KNIGHT
+			VOCATION_ELITE_KNIGHT,
 		},
 		level = 50,
 		flask = 7634,
-		description = "Only knights and paladins of level 50 or above may drink this fluid."
+		description = "Only knights and paladins of level 50 or above may drink this fluid.",
 	},
 	[7589] = { -- strong mana potion
-		mana = {115, 185},
+		mana = { 115, 185 },
 		level = 50,
 		flask = 7634,
-		description = "Only players of level 50 or above may drink this fluid."
+		description = "Only players of level 50 or above may drink this fluid.",
 	},
 	[7590] = { -- great mana potion
-		mana = {150, 250},
+		mana = { 150, 250 },
 		vocations = {
 			VOCATION_SORCERER,
 			VOCATION_DRUID,
 			VOCATION_PALADIN,
 			VOCATION_MASTER_SORCERER,
 			VOCATION_ELDER_DRUID,
-			VOCATION_ROYAL_PALADIN
+			VOCATION_ROYAL_PALADIN,
 		},
 		level = 80,
 		flask = 7635,
-		description = "Only sorcerers, druids and paladins of level 80 or above may drink this fluid."
+		description = "Only sorcerers, druids and paladins of level 80 or above may drink this fluid.",
 	},
 	[7591] = { -- great health potion
-		health = {425, 575},
+		health = { 425, 575 },
 		vocations = {
 			VOCATION_KNIGHT,
-			VOCATION_ELITE_KNIGHT
+			VOCATION_ELITE_KNIGHT,
 		},
 		level = 80,
 		flask = 7635,
-		description = "Only knights of level 80 or above may drink this fluid."
+		description = "Only knights of level 80 or above may drink this fluid.",
 	},
 	[7618] = { -- health potion
-		health = {125, 175},
-		flask = 7636
+		health = { 125, 175 },
+		flask = 7636,
 	},
 	[7620] = { -- mana potion
-		mana = {75, 125},
-		flask = 7636
+		mana = { 75, 125 },
+		flask = 7636,
 	},
 	[8472] = { -- great spirit potion
-		health = {250, 350},
-		mana = {100, 200},
+		health = { 250, 350 },
+		mana = { 100, 200 },
 		vocations = {
 			VOCATION_PALADIN,
-			VOCATION_ROYAL_PALADIN
+			VOCATION_ROYAL_PALADIN,
 		},
 		level = 80,
 		flask = 7635,
-		description = "Only paladins of level 80 or above may drink this fluid."
+		description = "Only paladins of level 80 or above may drink this fluid.",
 	},
 	[8473] = { -- ultimate health potion
-		health = {650, 850},
+		health = { 650, 850 },
 		vocations = {
 			VOCATION_KNIGHT,
-			VOCATION_ELITE_KNIGHT
+			VOCATION_ELITE_KNIGHT,
 		},
 		level = 130,
 		flask = 7635,
-		description = "Only knights of level 130 or above may drink this fluid."
+		description = "Only knights of level 130 or above may drink this fluid.",
 	},
 	[8474] = { -- antidote potion
 		antidote = true,
-		flask = 7636
+		flask = 7636,
 	},
 	[8704] = { -- small health potion
-		health = {60, 90},
-		flask = 7636
+		health = { 60, 90 },
+		flask = 7636,
 	},
 	[26029] = { -- ultimate mana potion
-		mana = {425, 575},
+		mana = { 425, 575 },
 		vocations = {
 			VOCATION_SORCERER,
 			VOCATION_DRUID,
 			VOCATION_MASTER_SORCERER,
-			VOCATION_ELDER_DRUID
+			VOCATION_ELDER_DRUID,
 		},
 		level = 130,
 		flask = 7635,
-		description = "Only druids and sorcerers of level 130 or above may drink this fluid."
+		description = "Only druids and sorcerers of level 130 or above may drink this fluid.",
 	},
 	[26030] = { -- ultimate spirit potion
-		health = {410, 580},
-		mana = {150, 250},
+		health = { 410, 580 },
+		mana = { 150, 250 },
 		vocations = {
 			VOCATION_PALADIN,
-			VOCATION_ROYAL_PALADIN
+			VOCATION_ROYAL_PALADIN,
 		},
 		level = 130,
 		flask = 7635,
-		description = "Only paladins of level 130 or above may drink this fluid."
+		description = "Only paladins of level 130 or above may drink this fluid.",
 	},
 	[26031] = { -- supreme health potion
-		health = {875, 1125},
+		health = { 875, 1125 },
 		vocations = {
 			VOCATION_KNIGHT,
-			VOCATION_ELITE_KNIGHT
+			VOCATION_ELITE_KNIGHT,
 		},
 		level = 200,
 		flask = 7635,
-		description = "Only knights of level 200 or above may drink this fluid."
-	}
+		description = "Only knights of level 200 or above may drink this fluid.",
+	},
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)
@@ -192,7 +195,13 @@ function onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	local potion = potions[item:getId()]
-	if not player:getGroup():getAccess() and (potion.level and player:getLevel() < potion.level or potion.vocations and not table.contains(potion.vocations, player:getVocation():getId())) then
+	if
+		not player:getGroup():getAccess()
+		and (
+			potion.level and player:getLevel() < potion.level
+			or potion.vocations and not table.contains(potion.vocations, player:getVocation():getId())
+		)
+	then
 		player:say(potion.description, TALKTYPE_POTION)
 		return true
 	end

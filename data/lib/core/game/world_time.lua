@@ -1,7 +1,9 @@
 do
 	local worldTime = 0
 
-	function Game.getWorldTime() return worldTime end
+	function Game.getWorldTime()
+		return worldTime
+	end
 
 	function Game.setWorldTime(time)
 		worldTime = time
@@ -20,11 +22,11 @@ do
 
 		local minutes = worldTime % 60
 		if minutes < 10 then
-			minutes = '0' .. minutes
+			minutes = "0" .. minutes
 		end
 
 		minutes = math.floor(minutes)
 
-		return hours .. ':' .. minutes
+		return hours .. ":" .. minutes
 	end
 end

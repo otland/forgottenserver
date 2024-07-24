@@ -6,10 +6,18 @@ local vocation = {}
 local town = {}
 local destination = {}
 
-function onCreatureAppear(cid)				npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)			npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)	end
-function onThink()							npcHandler:onThink()						end
+function onCreatureAppear(cid)
+	npcHandler:onCreatureAppear(cid)
+end
+function onCreatureDisappear(cid)
+	npcHandler:onCreatureDisappear(cid)
+end
+function onCreatureSay(cid, type, msg)
+	npcHandler:onCreatureSay(cid, type, msg)
+end
+function onThink()
+	npcHandler:onThink()
+end
 
 local function greetCallback(cid)
 	local player = Player(cid)
@@ -18,7 +26,11 @@ local function greetCallback(cid)
 		npcHandler:say("CHILD! COME BACK WHEN YOU HAVE GROWN UP!", cid)
 		return false
 	elseif level > 9 then
-		npcHandler:say(player:getName() .. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.", cid)
+		npcHandler:say(
+			player:getName()
+				.. ", I CAN'T LET YOU LEAVE - YOU ARE TOO STRONG ALREADY! YOU CAN ONLY LEAVE WITH LEVEL 9 OR LOWER.",
+			cid
+		)
 		return false
 	elseif player:getVocation():getId() ~= VOCATION_NONE then
 		npcHandler:say("YOU ALREADY HAVE A VOCATION!", cid)
@@ -39,7 +51,10 @@ local function creatureSayCallback(cid, type, msg)
 		if msgcontains(msg, "rhyves") then
 			town[cid] = 2
 			destination[cid] = Position(159, 387, 6)
-			npcHandler:say("IN RHYVES! AND WHAT PROFESSION HAVE YOU CHOSEN: {KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?", cid)
+			npcHandler:say(
+				"IN RHYVES! AND WHAT PROFESSION HAVE YOU CHOSEN: {KNIGHT}, {PALADIN}, {SORCERER}, OR {DRUID}?",
+				cid
+			)
 			npcHandler.topic[cid] = 2
 		else
 			npcHandler:say("IN WHICH TOWN DO YOU WANT TO LIVE: {RHYVES}?", cid)

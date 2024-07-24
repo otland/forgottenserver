@@ -15,22 +15,22 @@ local directions = {
 	[DIRECTION_NORTHEAST] = "north-east",
 	[DIRECTION_NORTHWEST] = "north-west",
 	[DIRECTION_SOUTHEAST] = "south-east",
-	[DIRECTION_SOUTHWEST] = "south-west"
+	[DIRECTION_SOUTHWEST] = "south-west",
 }
 
 local descriptions = {
 	[DISTANCE_BESIDE] = {
 		[LEVEL_LOWER] = "is below you",
 		[LEVEL_SAME] = "is standing next to you",
-		[LEVEL_HIGHER] = "is above you"
+		[LEVEL_HIGHER] = "is above you",
 	},
 	[DISTANCE_CLOSE] = {
 		[LEVEL_LOWER] = "is on a lower level to the",
 		[LEVEL_SAME] = "is to the",
-		[LEVEL_HIGHER] = "is on a higher level to the"
+		[LEVEL_HIGHER] = "is on a higher level to the",
 	},
 	[DISTANCE_FAR] = "is far to the",
-	[DISTANCE_VERYFAR] = "is very far to the"
+	[DISTANCE_VERYFAR] = "is very far to the",
 }
 
 function onCastSpell(creature, variant)
@@ -46,7 +46,7 @@ function onCastSpell(creature, variant)
 	local positionDifference = {
 		x = creaturePosition.x - targetPosition.x,
 		y = creaturePosition.y - targetPosition.y,
-		z = creaturePosition.z - targetPosition.z
+		z = creaturePosition.z - targetPosition.z,
 	}
 
 	local maxPositionDifference, direction = math.max(math.abs(positionDifference.x), math.abs(positionDifference.y))
@@ -55,14 +55,20 @@ function onCastSpell(creature, variant)
 		if math.abs(positionTangent) < 0.4142 then
 			direction = positionDifference.x > 0 and DIRECTION_WEST or DIRECTION_EAST
 		elseif math.abs(positionTangent) < 2.4142 then
-			direction = positionTangent > 0 and (positionDifference.y > 0 and DIRECTION_NORTHWEST or DIRECTION_SOUTHEAST) or positionDifference.x > 0 and DIRECTION_SOUTHWEST or DIRECTION_NORTHEAST
+			direction = positionTangent > 0
+					and (positionDifference.y > 0 and DIRECTION_NORTHWEST or DIRECTION_SOUTHEAST)
+				or positionDifference.x > 0 and DIRECTION_SOUTHWEST
+				or DIRECTION_NORTHEAST
 		else
 			direction = positionDifference.y > 0 and DIRECTION_NORTH or DIRECTION_SOUTH
 		end
 	end
 
 	local level = positionDifference.z > 0 and LEVEL_HIGHER or positionDifference.z < 0 and LEVEL_LOWER or LEVEL_SAME
-	local distance = maxPositionDifference < 5 and DISTANCE_BESIDE or maxPositionDifference < 101 and DISTANCE_CLOSE or maxPositionDifference < 250 and DISTANCE_FAR or DISTANCE_VERYFAR
+	local distance = maxPositionDifference < 5 and DISTANCE_BESIDE
+		or maxPositionDifference < 101 and DISTANCE_CLOSE
+		or maxPositionDifference < 250 and DISTANCE_FAR
+		or DISTANCE_VERYFAR
 	local description = descriptions[distance][level] or descriptions[distance]
 	if distance ~= DISTANCE_BESIDE then
 		description = description .. " " .. directions[direction]

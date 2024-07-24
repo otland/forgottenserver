@@ -13,7 +13,7 @@ do
 		[CONST_SLOT_LEGS] = SLOTP_LEGS,
 		[CONST_SLOT_FEET] = SLOTP_FEET,
 		[CONST_SLOT_RING] = SLOTP_RING,
-		[CONST_SLOT_AMMO] = SLOTP_AMMO
+		[CONST_SLOT_AMMO] = SLOTP_AMMO,
 	}
 
 	function ItemType:usesSlot(slot)
@@ -37,7 +37,7 @@ function ItemType:isBoots()
 	return self:usesSlot(CONST_SLOT_FEET)
 end
 
-local notWeapons = {WEAPON_NONE, WEAPON_SHIELD, WEAPON_AMMO}
+local notWeapons = { WEAPON_NONE, WEAPON_SHIELD, WEAPON_AMMO }
 function ItemType:isWeapon()
 	return not table.contains(notWeapons, self:getWeaponType())
 end

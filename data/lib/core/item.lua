@@ -44,17 +44,32 @@ end
 
 do
 	local aux = {
-		["Defense"] = {key = ITEM_ATTRIBUTE_DEFENSE},
-		["ExtraDefense"] = {key = ITEM_ATTRIBUTE_EXTRADEFENSE},
-		["Attack"] = {key = ITEM_ATTRIBUTE_ATTACK},
-		["AttackSpeed"] = {key = ITEM_ATTRIBUTE_ATTACK_SPEED},
-		["HitChance"] = {key = ITEM_ATTRIBUTE_HITCHANCE},
-		["ShootRange"] = {key = ITEM_ATTRIBUTE_SHOOTRANGE},
-		["Armor"] = {key = ITEM_ATTRIBUTE_ARMOR},
-		["Duration"] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
-		["Text"] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= "" end},
-		["Date"] = {key = ITEM_ATTRIBUTE_DATE},
-		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end}
+		["Defense"] = { key = ITEM_ATTRIBUTE_DEFENSE },
+		["ExtraDefense"] = { key = ITEM_ATTRIBUTE_EXTRADEFENSE },
+		["Attack"] = { key = ITEM_ATTRIBUTE_ATTACK },
+		["AttackSpeed"] = { key = ITEM_ATTRIBUTE_ATTACK_SPEED },
+		["HitChance"] = { key = ITEM_ATTRIBUTE_HITCHANCE },
+		["ShootRange"] = { key = ITEM_ATTRIBUTE_SHOOTRANGE },
+		["Armor"] = { key = ITEM_ATTRIBUTE_ARMOR },
+		["Duration"] = {
+			key = ITEM_ATTRIBUTE_DURATION,
+			cmp = function(v)
+				return v > 0
+			end,
+		},
+		["Text"] = {
+			key = ITEM_ATTRIBUTE_TEXT,
+			cmp = function(v)
+				return v ~= ""
+			end,
+		},
+		["Date"] = { key = ITEM_ATTRIBUTE_DATE },
+		["Writer"] = {
+			key = ITEM_ATTRIBUTE_WRITER,
+			cmp = function(v)
+				return v ~= ""
+			end,
+		},
 	}
 
 	function setAuxFunctions()
@@ -80,8 +95,8 @@ do
 	setmetatable(StringStream, {
 		__call = function(self)
 			local obj = {}
-			return setmetatable(obj, {__index = StringStream})
-		end
+			return setmetatable(obj, { __index = StringStream })
+		end,
 	})
 
 	function StringStream.append(self, str, ...)
@@ -129,8 +144,8 @@ do
 	local housePriceVisible = configManager.getBoolean(configKeys.HOUSE_DOOR_SHOW_PRICE)
 	local pricePerSQM = configManager.getNumber(configKeys.HOUSE_PRICE)
 
-	local showAtkWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE}
-	local showDefWeaponTypes = {WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD}
+	local showAtkWeaponTypes = { WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE }
+	local showDefWeaponTypes = { WEAPON_CLUB, WEAPON_SWORD, WEAPON_AXE, WEAPON_DISTANCE, WEAPON_SHIELD }
 	local suppressedConditionNames = {
 		-- NOTE: these names are made up just to match dwarven ring attribute style
 		[CONDITION_POISON] = "antidote",
@@ -143,7 +158,7 @@ do
 		[CONDITION_DROWN] = "water breathing",
 		[CONDITION_FREEZING] = "warm",
 		[CONDITION_DAZZLED] = "dazzle immunity",
-		[CONDITION_CURSED] = "curse immunity"
+		[CONDITION_CURSED] = "curse immunity",
 	}
 
 	-- first argument: Item, itemType or item id
@@ -256,7 +271,12 @@ do
 				local atkString = string.format("Atk:%d", attack)
 				local elementDmg = itemType:getElementDamage()
 				if elementDmg ~= 0 then
-					atkString = string.format("%s physical %+d %s", atkString, elementDmg, getCombatName(itemType:getElementType()))
+					atkString = string.format(
+						"%s physical %+d %s",
+						atkString,
+						elementDmg,
+						getCombatName(itemType:getElementType())
+					)
 				end
 
 				descriptions[#descriptions + 1] = atkString
@@ -315,7 +335,7 @@ do
 			local stats = {}
 			-- flat buffs
 			for stat, value in pairs(abilities.stats) do
-				stats[stat] = {name = getStatName(stat-1)}
+				stats[stat] = { name = getStatName(stat - 1) }
 				if value ~= 0 then
 					stats[stat].flat = value
 				end
@@ -344,7 +364,8 @@ do
 				-- +20 and 5%
 				if #displayValues > 0 then
 					displayValues[1] = string.format("%+d", displayValues[1])
-					descriptions[#descriptions + 1] = string.format("%s %s", statData.name, table.concat(displayValues, " and "))
+					descriptions[#descriptions + 1] =
+						string.format("%s %s", statData.name, table.concat(displayValues, " and "))
 				end
 			end
 		end
@@ -353,7 +374,7 @@ do
 		do
 			for skill, value in pairs(abilities.skills) do
 				if value ~= 0 then
-					descriptions[#descriptions + 1] = string.format("%s %+d", getSkillName(skill-1), value)
+					descriptions[#descriptions + 1] = string.format("%s %+d", getSkillName(skill - 1), value)
 				end
 			end
 		end
@@ -362,7 +383,8 @@ do
 		do
 			for element, value in pairs(abilities.specialMagicLevel) do
 				if value ~= 0 then
-					descriptions[#descriptions + 1] = string.format("%s magic level %+d", getCombatName(2^(element-1)), value)
+					descriptions[#descriptions + 1] =
+						string.format("%s magic level %+d", getCombatName(2 ^ (element - 1)), value)
 				end
 			end
 		end
@@ -372,17 +394,17 @@ do
 			for skill, value in pairs(abilities.specialSkills) do
 				if value ~= 0 then
 					-- add + symbol to special skill "amount" fields
-					if skill-1 < 6 and skill % 2 == 0 and not (skill-1 == SPECIALSKILL_CRITICALHITAMOUNT) then
-						value = string.format("%+d", value/100)
-					elseif skill-1 < 6 and skill % 2 == 1 then
+					if skill - 1 < 6 and skill % 2 == 0 and not (skill - 1 == SPECIALSKILL_CRITICALHITAMOUNT) then
+						value = string.format("%+d", value / 100)
+					elseif skill - 1 < 6 and skill % 2 == 1 then
 						value = string.format("%+d", value)
-					elseif skill-1 >= 6 then
+					elseif skill - 1 >= 6 then
 						-- fatal, dodge, momentum coming from the item natively
 						-- (stats coming from tier are near tier info)
-						value = string.format("%0.2f", value/100)
+						value = string.format("%0.2f", value / 100)
 					end
 
-					descriptions[#descriptions + 1] = string.format("%s %s%%", getSpecialSkillName(skill-1), value)
+					descriptions[#descriptions + 1] = string.format("%s %s%%", getSpecialSkillName(skill - 1), value)
 				end
 			end
 		end
@@ -396,7 +418,7 @@ do
 			local protections = {}
 			for element, value in pairs(abilities.absorbPercent) do
 				if value ~= 0 then
-					protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2^(element-1)), value)
+					protections[#protections + 1] = string.format("%s %+d%%", getCombatName(2 ^ (element - 1)), value)
 				end
 			end
 
@@ -443,7 +465,7 @@ do
 
 		-- collecting attributes finished
 		-- build the output text
-		local response = {itemName}
+		local response = { itemName }
 
 		-- item group (will be reused)
 		local itemGroup = itemType:getGroup()
@@ -452,7 +474,7 @@ do
 		do
 			if (itemGroup == ITEM_GROUP_FLUID or itemGroup == ITEM_GROUP_SPLASH) and subType > 0 then
 				local subTypeName = getSubTypeName(subType)
-				response[#response + 1] = string.format(" of %s", (subTypeName ~= '' and subTypeName or "unknown"))
+				response[#response + 1] = string.format(" of %s", (subTypeName ~= "" and subTypeName or "unknown"))
 			end
 		end
 
@@ -521,7 +543,8 @@ do
 			-- charges
 			if itemType:hasShowCharges() then
 				local charges = item:getCharges()
-				expireInfo[#expireInfo + 1] = string.format("has %d charge%s left", charges, (charges ~= 1 and "s" or ""))
+				expireInfo[#expireInfo + 1] =
+					string.format("has %d charge%s left", charges, (charges ~= 1 and "s" or ""))
 			end
 
 			-- duration
@@ -543,7 +566,10 @@ do
 				if currentDuration == maxDuration then
 					expireInfo[#expireInfo + 1] = "is brand-new"
 				elseif currentDuration ~= 0 then
-					expireInfo[#expireInfo + 1] = string.format("will expire in %s", Game.getCountdownString(math.floor(currentDuration/1000), true, true))
+					expireInfo[#expireInfo + 1] = string.format(
+						"will expire in %s",
+						Game.getCountdownString(math.floor(currentDuration / 1000), true, true)
+					)
 				end
 			end
 
@@ -575,9 +601,11 @@ do
 						isForSale = true
 					end
 
-					response[#response + 1] = string.format(" It belongs to house '%s'. %s owns this house.", houseName, houseOwnerName)
+					response[#response + 1] =
+						string.format(" It belongs to house '%s'. %s owns this house.", houseName, houseOwnerName)
 					if housePriceVisible and isForSale and pricePerSQM > 0 then
-						response[#response + 1] = string.format(" It costs %d gold coins.", pricePerSQM * house:getTileCount())
+						response[#response + 1] =
+							string.format(" It costs %d gold coins.", pricePerSQM * house:getTileCount())
 					end
 				end
 			end
@@ -602,7 +630,8 @@ do
 					local bonusType, bonusValue = itemType:getTierBonus(tier)
 					if bonusType ~= -1 then
 						if bonusType > 5 then
-							tierString = string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
+							tierString =
+								string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
 						else
 							tierString = string.format("%d (%d%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
 						end
@@ -676,7 +705,7 @@ do
 					end
 
 					local vocStr = itemType:getVocationString()
-					if vocStr ~= '' then
+					if vocStr ~= "" then
 						wieldAttrs[#wieldAttrs + 1] = vocStr
 					else
 						wieldAttrs[#wieldAttrs + 1] = "players"
@@ -707,7 +736,11 @@ do
 		if lookDistance <= 1 then
 			local weight = item:getWeight()
 			if isPickupable and not isUnique then
-				response[#response + 1] = string.format("\n%s %0.2f oz.", (count == 1 or not itemType:hasShowCount()) and "It weighs" or "They weigh", weight / 100)
+				response[#response + 1] = string.format(
+					"\n%s %0.2f oz.",
+					(count == 1 or not itemType:hasShowCount()) and "It weighs" or "They weigh",
+					weight / 100
+				)
 			end
 		end
 

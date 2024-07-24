@@ -3,9 +3,9 @@ combat:setParameter(COMBAT_PARAM_TYPE, COMBAT_ENERGYDAMAGE)
 combat:setParameter(COMBAT_PARAM_EFFECT, CONST_ME_PURPLEENERGY)
 
 combat:setArea(createCombatArea({
-	{0, 0, 0, 0, 0},
-	{0, 1, 3, 1, 0},
-	{0, 0, 0, 0, 0}
+	{ 0, 0, 0, 0, 0 },
+	{ 0, 1, 3, 1, 0 },
+	{ 0, 0, 0, 0, 0 },
 }))
 
 function spellCallback(param)

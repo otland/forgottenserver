@@ -9,7 +9,7 @@ local messages = {
 	"You look awesome!",
 	"You nearly don't recognize yourself.",
 	"You look fabulous.",
-	"Surprise, surprise, you don't see yourself."
+	"Surprise, surprise, you don't see yourself.",
 }
 
 function onUse(player, item, fromPosition, target, toPosition, isHotkey)

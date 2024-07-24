@@ -1,6 +1,7 @@
 --[[
 	ModalWindowHelper Example
-]]--
+]]
+--
 
 local moveDirectionTest = {
 	["Right"] = function(player)
@@ -22,16 +23,16 @@ local moveDirectionTest = {
 		local pos = player:getPosition()
 		pos:getNextPosition(DIRECTION_SOUTH)
 		player:teleportTo(pos, true)
-	end
+	end,
 }
 
 local talkAction = TalkAction("!modalTest")
 
 function talkAction.onSay(player, words, param, type)
-	local modalWindow = ModalWindow{
+	local modalWindow = ModalWindow({
 		title = "Modal Window Helper Example",
-		message = "This is an example of ModalWindowHelper."
-	}
+		message = "This is an example of ModalWindowHelper.",
+	})
 	if param == "choices" then
 		for text, callback in pairs(moveDirectionTest) do
 			modalWindow:addChoice(text, function(player, button, choice)

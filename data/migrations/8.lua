@@ -1,15 +1,26 @@
 function onUpdateDatabase()
 	print("> Updating database to version 9 (global inbox)")
-	db.query("CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int NOT NULL, `sid` int NOT NULL, `pid` int NOT NULL DEFAULT '0', `itemtype` smallint NOT NULL, `count` smallint NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`, `sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1")
+	db.query(
+		"CREATE TABLE IF NOT EXISTS `player_inboxitems` (`player_id` int NOT NULL, `sid` int NOT NULL, `pid` int NOT NULL DEFAULT '0', `itemtype` smallint NOT NULL, `count` smallint NOT NULL DEFAULT '0', `attributes` blob NOT NULL, UNIQUE KEY `player_id_2` (`player_id`, `sid`), KEY `player_id` (`player_id`), FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=latin1"
+	)
 
 	-- Delete "market" item
 	db.query("DELETE FROM `player_depotitems` WHERE `itemtype` = 14405")
 
 	-- Move up items in depot chests
-	local resultId = db.storeQuery("SELECT `player_id`, `pid`, (SELECT `dp2`.`sid` FROM `player_depotitems` AS `dp2` WHERE `dp2`.`player_id` = `dp1`.`player_id` AND `dp2`.`pid` = `dp1`.`sid` AND `itemtype` = 2594) AS `sid` FROM `player_depotitems` AS `dp1` WHERE `itemtype` = 2589")
+	local resultId = db.storeQuery(
+		"SELECT `player_id`, `pid`, (SELECT `dp2`.`sid` FROM `player_depotitems` AS `dp2` WHERE `dp2`.`player_id` = `dp1`.`player_id` AND `dp2`.`pid` = `dp1`.`sid` AND `itemtype` = 2594) AS `sid` FROM `player_depotitems` AS `dp1` WHERE `itemtype` = 2589"
+	)
 	if resultId then
 		repeat
-			db.query("UPDATE `player_depotitems` SET `pid` = " .. result.getNumber(resultId, "pid") .. " WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `pid` = " .. result.getNumber(resultId, "sid"))
+			db.query(
+				"UPDATE `player_depotitems` SET `pid` = "
+					.. result.getNumber(resultId, "pid")
+					.. " WHERE `player_id` = "
+					.. result.getNumber(resultId, "player_id")
+					.. " AND `pid` = "
+					.. result.getNumber(resultId, "sid")
+			)
 		until not result.next(resultId)
 		result.free(resultId)
 	end
@@ -27,9 +38,12 @@ function onUpdateDatabase()
 
 			local runningId = 100
 
-			local stmt = "INSERT INTO `player_inboxitems` (`player_id`, `sid`, `pid`, `itemtype`, `count`, `attributes`) VALUES "
+			local stmt =
+				"INSERT INTO `player_inboxitems` (`player_id`, `sid`, `pid`, `itemtype`, `count`, `attributes`) VALUES "
 
-			local resultId2 = db.storeQuery("SELECT `sid` FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `itemtype` = 14404")
+			local resultId2 = db.storeQuery(
+				"SELECT `sid` FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `itemtype` = 14404"
+			)
 			if resultId2 then
 				repeat
 					local sids = {}
@@ -38,15 +52,36 @@ function onUpdateDatabase()
 						local sid = sids[#sids]
 						sids[#sids] = nil
 
-						local resultId3 = db.storeQuery("SELECT * FROM `player_depotitems` WHERE `player_id` = " .. playerId .. " AND `pid` = " .. sid)
+						local resultId3 = db.storeQuery(
+							"SELECT * FROM `player_depotitems` WHERE `player_id` = "
+								.. playerId
+								.. " AND `pid` = "
+								.. sid
+						)
 						if resultId3 then
 							repeat
 								local attr, attrSize = result.getStream(resultId3, "attributes")
 								runningId = runningId + 1
-								stmt = stmt .. "(" .. playerId .. ", " .. runningId .. ", 0, " .. result.getNumber(resultId3, "itemtype") .. ", " .. result.getNumber(resultId3, "count") .. ", " .. db.escapeBlob(attr, attrSize) .. "),"
+								stmt = stmt
+									.. "("
+									.. playerId
+									.. ", "
+									.. runningId
+									.. ", 0, "
+									.. result.getNumber(resultId3, "itemtype")
+									.. ", "
+									.. result.getNumber(resultId3, "count")
+									.. ", "
+									.. db.escapeBlob(attr, attrSize)
+									.. "),"
 								sids[#sids + 1] = result.getNumber(resultId3, "sid")
 
-								db.query("DELETE FROM `player_depotitems` WHERE `player_id` = " .. result.getNumber(resultId, "player_id") .. " AND `sid` = " .. result.getNumber(resultId3, "sid"))
+								db.query(
+									"DELETE FROM `player_depotitems` WHERE `player_id` = "
+										.. result.getNumber(resultId, "player_id")
+										.. " AND `sid` = "
+										.. result.getNumber(resultId3, "sid")
+								)
 							until not result.next(resultId3)
 							result.free(resultId3)
 						end
