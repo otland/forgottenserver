@@ -1,0 +1,13 @@
+---
+name: Lua-format (dumy)
+
+on:
+  pull_request:
+    paths-ignore:
+      - "data*/**"
+
+jobs:
+  lua-formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This is a dummy job to satisfy branch protection checks"

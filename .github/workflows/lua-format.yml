@@ -1,0 +1,42 @@
+---
+name: Lua-format
+on:
+  pull_request:
+    paths:
+      - "data*/**"
+  merge_group:
+  push:
+    paths:
+      - "data*/**"
+jobs:
+  lua-formatter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+      - name: Actions checkout
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: JohnnyMorganz/stylua-action@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: .
+
+      - name: Run add and commit
+        if: ${{ github.ref != 'refs/heads/main' }}
+        uses: EndBug/add-and-commit@v9
+        with:
+          author_name: GitHub Actions
+          author_email: github-actions[bot]@users.noreply.github.com
+          message: "Lua code format - (Stylua)"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
