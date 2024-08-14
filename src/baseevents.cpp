@@ -156,6 +156,15 @@ bool Event::loadCallback()
 	return true;
 }
 
+void Event::clearScript()
+{
+	// We only delete the script if it is lua, this is because the XML interface resets and deletes the reference table
+	// so it is not necessary to delete it manually.
+	if (scriptInterface && fromLua) {
+		scriptInterface->removeEvent(scriptId);
+	}
+}
+
 bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& name)
 {
 	if (!interface) {
@@ -174,4 +183,11 @@ bool CallBack::loadCallBack(LuaScriptInterface* interface, const std::string& na
 	scriptId = id;
 	loaded = true;
 	return true;
+}
+
+void CallBack::clearScript()
+{
+	if (scriptInterface) {
+		scriptInterface->removeEvent(scriptId);
+	}
 }

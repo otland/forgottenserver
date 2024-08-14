@@ -254,9 +254,38 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	return result;
 }
 
+void ChatChannel::clearScripts(LuaScriptInterface& interface) const
+{
+	interface.removeEvent(canJoinEvent);
+	interface.removeEvent(onJoinEvent);
+	interface.removeEvent(onLeaveEvent);
+	interface.removeEvent(onSpeakEvent);
+}
+
 Chat::Chat() : scriptInterface("Chat Interface"), dummyPrivate(CHANNEL_PRIVATE, "Private Chat Channel")
 {
 	scriptInterface.initState();
+}
+
+bool Chat::reload()
+{
+	for (auto&& [_, channel] : normalChannels) {
+		channel.clearScripts(scriptInterface);
+	}
+
+	for (auto&& [_, channel] : privateChannels) {
+		channel.clearScripts(scriptInterface);
+	}
+
+	for (auto&& [_, channel] : partyChannels) {
+		channel.clearScripts(scriptInterface);
+	}
+
+	for (auto&& [_, channel] : guildChannels) {
+		channel.clearScripts(scriptInterface);
+	}
+
+	return load();
 }
 
 bool Chat::load()

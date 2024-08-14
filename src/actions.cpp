@@ -25,6 +25,7 @@ void Actions::clearMap(ActionUseMap& map, bool fromLua)
 {
 	for (auto it = map.begin(); it != map.end();) {
 		if (fromLua == it->second.fromLua) {
+			it->second.clearScript();
 			it = map.erase(it);
 		} else {
 			++it;
