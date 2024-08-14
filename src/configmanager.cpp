@@ -163,7 +163,10 @@ bool ConfigManager::load()
 
 	luaL_openlibs(L);
 
-	string[CONFIG_FILE] = "config.lua";
+	if (string[CONFIG_FILE].empty()) {
+		string[CONFIG_FILE] = "config.lua";
+	}
+
 	if (luaL_dofile(L, string[CONFIG_FILE].data())) {
 		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
