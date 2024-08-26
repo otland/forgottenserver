@@ -6,6 +6,8 @@
 
 #include "connection.h"
 
+namespace IOBan {
+
 struct BanInfo
 {
 	std::string bannedBy;
@@ -13,12 +15,10 @@ struct BanInfo
 	time_t expiresAt;
 };
 
-class IOBan
-{
-public:
-	static const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId);
-	static const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP);
-	static bool isPlayerNamelocked(uint32_t playerId);
-};
+const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId);
+const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP);
+bool isPlayerNamelocked(uint32_t playerId);
+
+}; // namespace IOBan
 
 #endif // FS_BAN_H
