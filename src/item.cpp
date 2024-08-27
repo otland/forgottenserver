@@ -1272,39 +1272,35 @@ bool Item::hasMarketAttributes() const
 template <>
 const std::string& ItemAttributes::CustomAttribute::get<std::string>()
 {
-	if (value.type() == typeid(std::string)) {
-		return boost::get<std::string>(value);
+	if (const auto* v = std::get_if<std::string>(&value)) {
+		return *v;
 	}
-
 	return emptyString;
 }
 
 template <>
 const int64_t& ItemAttributes::CustomAttribute::get<int64_t>()
 {
-	if (value.type() == typeid(int64_t)) {
-		return boost::get<int64_t>(value);
+	if (const auto* v = std::get_if<int64_t>(&value)) {
+		return *v;
 	}
-
 	return emptyInt;
 }
 
 template <>
 const double& ItemAttributes::CustomAttribute::get<double>()
 {
-	if (value.type() == typeid(double)) {
-		return boost::get<double>(value);
+	if (const auto* v = std::get_if<double>(&value)) {
+		return *v;
 	}
-
 	return emptyDouble;
 }
 
 template <>
 const bool& ItemAttributes::CustomAttribute::get<bool>()
 {
-	if (value.type() == typeid(bool)) {
-		return boost::get<bool>(value);
+	if (const auto* v = std::get_if<bool>(&value)) {
+		return *v;
 	}
-
 	return emptyBool;
 }
