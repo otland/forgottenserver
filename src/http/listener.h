@@ -22,6 +22,6 @@ private:
 	boost::asio::ip::tcp::acceptor acceptor;
 };
 
-std::shared_ptr<Listener> make_listener(boost::asio::io_context& ioc, boost::asio::ip::tcp::endpoint endpoint);
+std::shared_ptr<Listener> make_listener(boost::asio::io_context& ioctx, boost::asio::ip::tcp::endpoint endpoint);
 
 } // namespace tfs::http

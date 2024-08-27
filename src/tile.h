@@ -107,7 +107,7 @@ public:
 		}
 		return *getBeginDownItem();
 	}
-	void addDownItemCount(uint16_t increment) { downItemCount += increment; }
+	void addDownItemCount(int16_t increment) { downItemCount += increment; }
 
 private:
 	uint16_t downItemCount = 0;

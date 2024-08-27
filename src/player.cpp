@@ -3868,8 +3868,8 @@ bool Player::canWear(uint32_t lookType, uint8_t addons) const
 		return true;
 	}
 
-	for (auto& [outfit, addon] : outfits) {
-		if (outfit == lookType) {
+	for (auto& [outfitLookType, addon] : outfits) {
+		if (outfitLookType == lookType) {
 			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
@@ -3890,8 +3890,8 @@ bool Player::hasOutfit(uint32_t lookType, uint8_t addons)
 		return true;
 	}
 
-	for (auto& [outfit, addon] : outfits) {
-		if (outfit == lookType) {
+	for (auto& [outfitLookType, addon] : outfits) {
+		if (outfitLookType == lookType) {
 			if (addon == addons || addon == 3 || addons == 0) {
 				return true;
 			}
