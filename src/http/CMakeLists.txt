@@ -22,10 +22,6 @@ add_library(http OBJECT ${http_SRC})
 target_link_libraries(http PRIVATE Boost::json)
 set_target_properties(http PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
-if (ENABLE_IPO)
-	set_target_properties(http PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
-endif()
-
 if (BUILD_TESTING)
     add_subdirectory(tests)
 endif()

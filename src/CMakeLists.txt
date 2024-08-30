@@ -188,10 +188,6 @@ if (APPLE)
 	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
 endif()
 
-if (ENABLE_IPO)
-	set_target_properties(tfslib PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
-endif()
-
 if (HTTP)
 	add_subdirectory(http)
 	target_link_libraries(tfslib PRIVATE http)
