@@ -398,8 +398,13 @@ bool Events::eventPartyOnJoin(Party_ptr party, Player* player)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnJoin);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -425,8 +430,13 @@ bool Events::eventPartyOnLeave(Party_ptr party, Player* player)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnLeave);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -452,8 +462,13 @@ bool Events::eventPartyOnDisband(Party_ptr party)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnDisband);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	return scriptInterface.callFunction(1);
 }
@@ -476,8 +491,13 @@ bool Events::eventPartyOnInvite(Party_ptr party, Player* player)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnInvite);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -503,8 +523,13 @@ bool Events::eventPartyOnRevokeInvitation(Party_ptr party, Player* player)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnRevokeInvitation);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -530,8 +555,13 @@ bool Events::eventPartyOnPassLeadership(Party_ptr party, Player* player)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnPassLeadership);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -557,8 +587,13 @@ void Events::eventPartyOnShareExperience(Party_ptr party, uint64_t& exp)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(info.partyOnShareExperience);
 
+<<<<<<< HEAD
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
+=======
+	LuaScriptInterface::pushSharedPtr(L, party);
+	LuaScriptInterface::setMetatable(L, -1, "Party");
+>>>>>>> 0b8f40dc406a0333322781831e63bab402bee0e1
 
 	lua_pushnumber(L, exp);
 
