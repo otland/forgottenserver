@@ -17,6 +17,12 @@
     "pugixml"
   ],
   "features": {
+    "experimental": {
+      "description": "Enable experimental features",
+      "dependencies": [
+        "boost-unordered"
+      ]
+    },
     "http": {
       "description": "Enable HTTP support",
       "dependencies": [
