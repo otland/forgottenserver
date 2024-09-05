@@ -50,7 +50,7 @@ private:
 	int_fast32_t closedNodes;
 };
 
-using SpectatorCache = std::map<Position, Spectators>;
+using SpectatorCache = boost::unordered_flat_map<Position, Spectators>;
 
 static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
