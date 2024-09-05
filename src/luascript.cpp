@@ -31,7 +31,6 @@
 #include "protocolstatus.h"
 #include "scheduler.h"
 #include "script.h"
-#include "spectators.h"
 #include "spells.h"
 #include "storeinbox.h"
 #include "teleport.h"
@@ -4599,7 +4598,7 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 	int32_t minRangeY = tfs::lua::getNumber<int32_t>(L, 6, 0);
 	int32_t maxRangeY = tfs::lua::getNumber<int32_t>(L, 7, 0);
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, position, multifloor, onlyPlayers, minRangeX, maxRangeX, minRangeY, maxRangeY);
 
 	lua_createtable(L, spectators.size(), 0);
@@ -5309,11 +5308,11 @@ int LuaScriptInterface::luaPositionIsSightClear(lua_State* L)
 int LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 {
 	// position:sendMagicEffect(magicEffect[, player = nullptr])
-	SpectatorVec spectators;
+	Spectators spectators;
 	if (lua_gettop(L) >= 3) {
 		Player* player = tfs::lua::getPlayer(L, 3);
 		if (player) {
-			spectators.add(player);
+			spectators.insert(player);
 		}
 	}
 
@@ -5337,11 +5336,11 @@ int LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 int LuaScriptInterface::luaPositionSendDistanceEffect(lua_State* L)
 {
 	// position:sendDistanceEffect(positionEx, distanceEffect[, player = nullptr])
-	SpectatorVec spectators;
+	Spectators spectators;
 	if (lua_gettop(L) >= 4) {
 		Player* player = tfs::lua::getPlayer(L, 4);
 		if (player) {
-			spectators.add(player);
+			spectators.insert(player);
 		}
 	}
 
@@ -8678,9 +8677,9 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 		return 1;
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	if (target) {
-		spectators.add(target);
+		spectators.insert(target);
 	}
 
 	// Prevent infinity echo on event onHear
@@ -10958,7 +10957,7 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	const Position& position = player->getPosition();
 	const bool isInvisible = player->isInvisible();
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, position, true, true);
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);

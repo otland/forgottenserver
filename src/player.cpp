@@ -21,7 +21,6 @@
 #include "outfit.h"
 #include "party.h"
 #include "scheduler.h"
-#include "spectators.h"
 #include "storeinbox.h"
 #include "tools.h"
 #include "weapons.h"
@@ -1827,7 +1826,7 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 		message.primary.color = TEXTCOLOR_RED;
 		sendTextMessage(message);
 
-		SpectatorVec spectators;
+		Spectators spectators;
 		g_game.map.getSpectators(spectators, position, false, true);
 		spectators.erase(this);
 		if (!spectators.empty()) {

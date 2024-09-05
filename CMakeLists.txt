@@ -31,11 +31,6 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "lua")
 endif()
 
-option(EXPERIMENTAL_SPECTATOR_SET "Enable experimental spectators using boost::unordered_flat_set" OFF)
-if (EXPERIMENTAL_SPECTATOR_SET)
-    list(APPEND VCPKG_MANIFEST_FEATURES "experimental")
-endif ()
-
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -50,10 +45,6 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_compile_options(-Wimplicit-fallthrough -Wmove)
-endif ()
-
-if (EXPERIMENTAL_SPECTATOR_SET)
-    add_compile_options(-DEXPERIMENTAL_SPECTATOR_SET)
 endif ()
 
 # Find packages.

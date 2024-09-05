@@ -6,6 +6,7 @@
     "boost-locale",
     "boost-lockfree",
     "boost-system",
+    "boost-unordered",
     "boost-variant",
     "fmt",
     {
@@ -17,12 +18,6 @@
     "pugixml"
   ],
   "features": {
-    "experimental": {
-      "description": "Enable experimental features",
-      "dependencies": [
-        "boost-unordered"
-      ]
-    },
     "http": {
       "description": "Enable HTTP support",
       "dependencies": [
