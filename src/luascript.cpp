@@ -8686,9 +8686,9 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 	bool echo = tfs::lua::getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::CREATURE_ONHEAR);
 
 	if (position.x != 0) {
-		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &spectators, &position, echo));
+		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, std::move(spectators), &position, echo));
 	} else {
-		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &spectators, nullptr, echo));
+		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, std::move(spectators), nullptr, echo));
 	}
 	return 1;
 }

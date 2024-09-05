@@ -3749,7 +3749,7 @@ bool Game::internalCreatureTurn(Creature* creature, Direction dir)
 }
 
 bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
-                               Spectators* spectatorsPtr /* = nullptr*/, const Position* pos /* = nullptr*/,
+                               Spectators spectators /* = {}*/, const Position* pos /* = nullptr*/,
                                bool echo /* = false*/)
 {
 	if (text.empty()) {
@@ -3760,13 +3760,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		pos = &creature->getPosition();
 	}
 
-	Spectators spectators;
-
-	if (!spectatorsPtr || spectatorsPtr->empty()) {
-		// This somewhat complex construct ensures that the cached Spectators
-		// is used if available and if it can be used, else a local vector is
-		// used (hopefully the compiler will optimize away the construction of
-		// the temporary when it's not used).
+	if (spectators.empty()) {
 		if (type != TALKTYPE_YELL && type != TALKTYPE_MONSTER_YELL) {
 			map.getSpectators(spectators, *pos, false, false, Map::maxClientViewportX, Map::maxClientViewportX,
 			                  Map::maxClientViewportY, Map::maxClientViewportY);
@@ -3775,8 +3769,6 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 			                  (Map::maxClientViewportX * 2) + 2, (Map::maxClientViewportY * 2) + 2,
 			                  (Map::maxClientViewportY * 2) + 2);
 		}
-	} else {
-		spectators = (*spectatorsPtr);
 	}
 
 	// send to client

@@ -290,7 +290,7 @@ public:
 	 * \param text The text to say
 	 */
 	bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
-	                         Spectators* spectatorsPtr = nullptr, const Position* pos = nullptr, bool echo = false);
+	                         Spectators spectators = {}, const Position* pos = nullptr, bool echo = false);
 
 	void loadPlayersRecord();
 	void checkPlayersRecord();
