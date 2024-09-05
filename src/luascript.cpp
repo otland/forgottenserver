@@ -1184,7 +1184,8 @@ static void pushTown(lua_State* L, const Town& town)
 	setField(L, "name", town.name);
 	tfs::lua::pushPosition(L, town.templePosition);
 	lua_setfield(L, -2, "templePosition");
-	tfs::lua::setMetatable(L, -1, "Town");
+	lua_getglobal(L, "Town");
+	lua_setmetatable(L, -2);
 }
 
 #define registerEnum(L, value) \
@@ -9762,7 +9763,6 @@ int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
 		pushTown(L, *player->getTown());
-		tfs::lua::setMetatable(L, -1, "Town");
 	} else {
 		lua_pushnil(L);
 	}
@@ -12822,7 +12822,6 @@ int LuaScriptInterface::luaHouseGetTown(lua_State* L)
 	const Town* town = g_game.map.towns.getTown(house->getTownId());
 	if (town) {
 		pushTown(L, *town);
-		tfs::lua::setMetatable(L, -1, "Town");
 	} else {
 		lua_pushnil(L);
 	}

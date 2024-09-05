@@ -1,4 +1,6 @@
 Town = {}
+Town.__index = Town
+
 setmetatable(Town, {
     __call = function(self, idOrName)
         local towns = Game.getTowns()
