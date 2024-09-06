@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE generate_token
+#define BOOST_TEST_MODULE rsa
 
 #include "../otpch.h"
 
