@@ -39,27 +39,27 @@ WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
 	return &pair.first->second;
 }
 
-void WildcardTreeNode::add(const std::string& str)
+void WildcardTreeNode::add(const std::string& s)
 {
 	auto node = this;
 
-	auto length = str.length() - 1;
+	auto length = s.length() - 1;
 	for (size_t pos = 0; pos < length; ++pos) {
-		node = node->add_child(str[pos], false);
+		node = node->add_child(s[pos], false);
 	}
-	node->add_child(str[length], true);
+	node->add_child(s[length], true);
 }
 
-void WildcardTreeNode::remove(const std::string& str)
+void WildcardTreeNode::remove(const std::string& s)
 {
 	auto node = this;
 
 	std::stack<WildcardTreeNode*> path;
 	path.push(node);
 
-	auto len = str.length();
+	auto len = s.length();
 	for (size_t pos = 0; pos < len; ++pos) {
-		node = node->find_child(str[pos]);
+		node = node->find_child(s[pos]);
 		if (!node) {
 			return;
 		}
@@ -78,7 +78,7 @@ void WildcardTreeNode::remove(const std::string& str)
 
 		node = path.top();
 
-		auto it = node->children.find(str[--len]);
+		auto it = node->children.find(s[--len]);
 		if (it != node->children.end()) {
 			node->children.erase(it);
 		}

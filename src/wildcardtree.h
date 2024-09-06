@@ -23,8 +23,8 @@ public:
 	WildcardTreeNode(const WildcardTreeNode&) = delete;
 	WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
-	void add(const std::string& str);
-	void remove(const std::string& str);
+	void add(const std::string& s);
+	void remove(const std::string& s);
 
 	std::pair<WildcardTreeNode::SearchResult, std::string> search(const std::string& query) const;
 
