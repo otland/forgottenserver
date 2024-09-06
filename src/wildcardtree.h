@@ -23,15 +23,15 @@ public:
 	WildcardTreeNode(const WildcardTreeNode&) = delete;
 	WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
-	void insert(const std::string& str);
+	void add(const std::string& str);
 	void remove(const std::string& str);
 
 	std::pair<WildcardTreeNode::SearchResult, std::string> search(const std::string& query) const;
 
 private:
-	WildcardTreeNode* getChild(char ch);
-	const WildcardTreeNode* getChild(char ch) const;
-	WildcardTreeNode* addChild(char ch, bool breakpoint);
+	WildcardTreeNode* find_child(char c);
+	const WildcardTreeNode* find_child(char c) const;
+	WildcardTreeNode* add_child(char c, bool breakpoint);
 
 	std::map<char, WildcardTreeNode> children;
 	bool breakpoint;

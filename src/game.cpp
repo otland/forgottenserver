@@ -5668,7 +5668,7 @@ void Game::addPlayer(Player* player)
 	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
 	mappedPlayerGuids[player->getGUID()] = player;
-	wildcardTree.insert(lowercase_name);
+	wildcardTree.add(lowercase_name);
 	players[player->getID()] = player;
 }
 

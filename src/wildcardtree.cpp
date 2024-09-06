@@ -8,47 +8,46 @@
 #include <stack>
 #include <tuple>
 
-WildcardTreeNode* WildcardTreeNode::getChild(char ch)
+WildcardTreeNode* WildcardTreeNode::find_child(char c)
 {
-	auto it = children.find(ch);
+	auto it = children.find(c);
 	if (it == children.end()) {
 		return nullptr;
 	}
 	return &it->second;
 }
 
-const WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
+const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
 {
-	auto it = children.find(ch);
+	auto it = children.find(c);
 	if (it == children.end()) {
 		return nullptr;
 	}
 	return &it->second;
 }
 
-WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
+WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
 {
-	if (auto child = getChild(ch)) {
+	if (auto child = find_child(c)) {
 		if (breakpoint && !child->breakpoint) {
 			child->breakpoint = true;
 		}
 		return child;
 	}
 
-	auto pair =
-	    children.emplace(std::piecewise_construct, std::forward_as_tuple(ch), std::forward_as_tuple(breakpoint));
+	auto pair = children.emplace(std::piecewise_construct, std::forward_as_tuple(c), std::forward_as_tuple(breakpoint));
 	return &pair.first->second;
 }
 
-void WildcardTreeNode::insert(const std::string& str)
+void WildcardTreeNode::add(const std::string& str)
 {
 	auto node = this;
 
 	auto length = str.length() - 1;
 	for (size_t pos = 0; pos < length; ++pos) {
-		node = node->addChild(str[pos], false);
+		node = node->add_child(str[pos], false);
 	}
-	node->addChild(str[length], true);
+	node->add_child(str[length], true);
 }
 
 void WildcardTreeNode::remove(const std::string& str)
@@ -60,7 +59,7 @@ void WildcardTreeNode::remove(const std::string& str)
 
 	auto len = str.length();
 	for (size_t pos = 0; pos < len; ++pos) {
-		node = node->getChild(str[pos]);
+		node = node->find_child(str[pos]);
 		if (!node) {
 			return;
 		}
@@ -91,7 +90,7 @@ std::pair<WildcardTreeNode::SearchResult, std::string> WildcardTreeNode::search(
 	auto node = this;
 
 	for (auto c : query) {
-		node = node->getChild(c);
+		node = node->find_child(c);
 		if (!node) {
 			return std::make_pair(NotFound, "");
 		}
