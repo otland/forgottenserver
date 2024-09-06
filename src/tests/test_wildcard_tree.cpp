@@ -77,12 +77,12 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_search_after_remove)
     WildcardTreeNode root(false);
 
     root.add("test");
-    root.add("testing");
+    root.add("te");
     root.remove("test");
 
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::NotFound);
     BOOST_CHECK_EQUAL(root.search("test").second, "");
 
-    BOOST_CHECK_EQUAL(root.search("testing").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("testing").second, "testing");
+    BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(root.search("te").second, "te");
 }
