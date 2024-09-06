@@ -463,14 +463,17 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 	}
 
 	if (s.back() == '~') {
-		const std::string& query = boost::algorithm::to_lower_copy(s.substr(0, strlen - 1));
-		std::string result;
-		ReturnValue ret = wildcardTree.findOne(query, result);
-		if (ret != RETURNVALUE_NOERROR) {
-			return ret;
+		const auto& query = boost::algorithm::to_lower_copy(s.substr(0, strlen - 1));
+		auto searchResult = wildcardTree.search(query);
+		switch (searchResult.first) {
+			case WildcardTreeNode::NotFound:
+				return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
+			case WildcardTreeNode::Ambiguous:
+				return RETURNVALUE_NAMEISTOOAMBIGUOUS;
+			case WildcardTreeNode::Found:
+				player = getPlayerByName(searchResult.second);
+				break;
 		}
-
-		player = getPlayerByName(result);
 	} else {
 		player = getPlayerByName(s);
 	}

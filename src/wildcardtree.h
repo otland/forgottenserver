@@ -9,6 +9,13 @@
 class WildcardTreeNode
 {
 public:
+	enum SearchResult
+	{
+		Found,
+		NotFound,
+		Ambiguous,
+	};
+
 	explicit WildcardTreeNode(bool breakpoint) : breakpoint(breakpoint) {}
 	WildcardTreeNode(WildcardTreeNode&& other) = default;
 
@@ -16,16 +23,16 @@ public:
 	WildcardTreeNode(const WildcardTreeNode&) = delete;
 	WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
+	void insert(const std::string& str);
+	void remove(const std::string& str);
+
+	std::pair<WildcardTreeNode::SearchResult, std::string> search(const std::string& query) const;
+
+private:
 	WildcardTreeNode* getChild(char ch);
 	const WildcardTreeNode* getChild(char ch) const;
 	WildcardTreeNode* addChild(char ch, bool breakpoint);
 
-	void insert(const std::string& str);
-	void remove(const std::string& str);
-
-	ReturnValue findOne(const std::string& query, std::string& result) const;
-
-private:
 	std::map<char, WildcardTreeNode> children;
 	bool breakpoint;
 };
