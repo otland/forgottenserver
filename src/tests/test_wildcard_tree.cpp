@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_single_words)
 {
 	WildcardTreeNode root(false);
 
-	root.insert("test");
+	root.add("test");
 
     BOOST_CHECK_EQUAL(root.search("tes").first, WildcardTreeNode::NotFound);
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
@@ -22,8 +22,8 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_ambiguity)
 {
 	WildcardTreeNode root(false);
 
-	root.insert("test");
-    root.insert("te");
+	root.add("test");
+    root.add("te");
 
     BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Ambiguous);
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_remove)
 {
     WildcardTreeNode root(false);
 
-    root.insert("test");
+    root.add("test");
 
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
     BOOST_CHECK_EQUAL(root.search("test").second, "test");
@@ -48,8 +48,8 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_partial_search)
 {
     WildcardTreeNode root(false);
 
-    root.insert("test");
-    root.insert("te");
+    root.add("test");
+    root.add("te");
 
     BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Ambiguous);
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
@@ -66,8 +66,8 @@ BOOST_AUTO_TEST_CASE(test_wildcard_tree_search_after_remove)
 {
     WildcardTreeNode root(false);
 
-    root.insert("test");
-    root.insert("testing");
+    root.add("test");
+    root.add("testing");
     root.remove("test");
 
     BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::NotFound);
