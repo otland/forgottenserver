@@ -6,24 +6,44 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      db:
+        image: mariadb
+
+        env:
+          MARIADB_USER: forgottenserver
+          MARIADB_PASSWORD: forgottenserver
+          MARIADB_DATABASE: forgottenserver
+          MARIADB_INITDB_SKIP_TZINFO: "yes"
+          MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        ports:
+          - 3306:3306
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Install dependencies
-        run: >
-          sudo apt update -q &&
-          sudo apt install -yq git build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-system-dev libboost-iostreams-dev libboost-locale-dev libboost-test-dev
-          libpugixml-dev libcrypto++-dev libfmt-dev
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v11
+
+      - name: Setup database
+        run: |
+          sudo apt update -qq
+          sudo apt install -yqq mariadb-client
+          mysql -h 0.0.0.0 -u forgottenserver -pforgottenserver forgottenserver < schema.sql
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
-          buildPreset: default
-          configurePreset: default
-          configurePresetAdditionalArgs: "['-G Ninja', '-DBUILD_TESTING=ON']"
-          testPreset: default
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config', 'Debug']"
+          configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
+          testPreset: vcpkg
+          testPresetAdditionalArgs: "['--build-config', 'Debug', '--output-on-failure']"

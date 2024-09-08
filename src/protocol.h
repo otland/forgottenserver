@@ -43,6 +43,8 @@ public:
 	}
 
 protected:
+	static constexpr size_t RSA_BUFFER_LENGTH = 128;
+
 	void disconnect() const
 	{
 		if (auto connection = getConnection()) {

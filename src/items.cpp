@@ -944,6 +944,8 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 					if (maxValueAttr) {
 						it.decayTimeMax = pugi::cast<uint32_t>(maxValueAttr.value());
+					} else {
+						it.decayTimeMax = pugi::cast<uint32_t>(valueAttribute.value());
 					}
 					break;
 				}

@@ -16,7 +16,6 @@
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
-extern ConfigManager g_config;
 
 spellBlock_t::~spellBlock_t()
 {
@@ -58,7 +57,7 @@ bool Monsters::loadFromXml(bool reloading /*= false*/)
 		unloadedMonsters.emplace(name, file);
 	}
 
-	bool forceLoad = g_config.getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
+	bool forceLoad = getBoolean(ConfigManager::FORCE_MONSTERTYPE_LOAD);
 
 	for (auto it : unloadedMonsters) {
 		if (forceLoad || (reloading && monsters.find(it.first) != monsters.end())) {

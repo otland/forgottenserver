@@ -8,16 +8,57 @@
 #include "ban.h"
 #include "configmanager.h"
 #include "scheduler.h"
-
-extern ConfigManager g_config;
-Ban g_bans;
+#include "tools.h"
 
 namespace {
 
+struct ConnectBlock
+{
+	uint64_t lastAttempt;
+	uint64_t blockTime = 0;
+	uint32_t count = 1;
+};
+
+bool acceptConnection(const Connection::Address& clientIP)
+{
+	static std::recursive_mutex mu;
+	std::lock_guard lock{mu};
+
+	uint64_t currentTime = OTSYS_TIME();
+
+	static std::map<Connection::Address, ConnectBlock> ipConnectMap;
+	auto it = ipConnectMap.find(clientIP);
+	if (it == ipConnectMap.end()) {
+		ipConnectMap.emplace(clientIP, ConnectBlock{.lastAttempt = currentTime});
+		return true;
+	}
+
+	ConnectBlock& connectBlock = it->second;
+	if (connectBlock.blockTime > currentTime) {
+		connectBlock.blockTime += 250;
+		return false;
+	}
+
+	int64_t timeDiff = currentTime - connectBlock.lastAttempt;
+	connectBlock.lastAttempt = currentTime;
+	if (timeDiff <= 5000) {
+		if (++connectBlock.count > 5) {
+			connectBlock.count = 0;
+			if (timeDiff <= 500) {
+				connectBlock.blockTime = currentTime + 3000;
+				return false;
+			}
+		}
+	} else {
+		connectBlock.count = 1;
+	}
+	return true;
+}
+
 boost::asio::ip::address getListenAddress()
 {
-	if (g_config.getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
-		return boost::asio::ip::address::from_string(g_config.getString(ConfigManager::IP));
+	if (getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS)) {
+		return boost::asio::ip::make_address(getString(ConfigManager::IP));
 	}
 	return boost::asio::ip::address_v6::any();
 }
@@ -33,13 +74,13 @@ void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port)
 
 ServiceManager::~ServiceManager() { stop(); }
 
-void ServiceManager::die() { io_service.stop(); }
+void ServiceManager::die() { io_context.stop(); }
 
 void ServiceManager::run()
 {
 	assert(!running);
 	running = true;
-	io_service.run();
+	io_context.run();
 }
 
 void ServiceManager::stop()
@@ -52,7 +93,7 @@ void ServiceManager::stop()
 
 	for (auto& servicePortIt : acceptors) {
 		try {
-			io_service.post([servicePort = servicePortIt.second]() { servicePort->onStopServer(); });
+			boost::asio::post(io_context, [servicePort = servicePortIt.second]() { servicePort->onStopServer(); });
 		} catch (boost::system::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}
@@ -60,7 +101,7 @@ void ServiceManager::stop()
 
 	acceptors.clear();
 
-	death_timer.expires_from_now(std::chrono::seconds(3));
+	death_timer.expires_after(std::chrono::seconds(3));
 	death_timer.async_wait([this](const boost::system::error_code&) { die(); });
 }
 
@@ -89,7 +130,7 @@ void ServicePort::accept()
 		return;
 	}
 
-	auto connection = ConnectionManager::getInstance().createConnection(io_service, shared_from_this());
+	auto connection = ConnectionManager::getInstance().createConnection(io_context, shared_from_this());
 	acceptor->async_accept(connection->getSocket(),
 	                       [=, thisPtr = shared_from_this()](const boost::system::error_code& error) {
 		                       thisPtr->onAccept(connection, error);
@@ -104,7 +145,7 @@ void ServicePort::onAccept(Connection_ptr connection, const boost::system::error
 		}
 
 		const auto& remote_ip = connection->getIP();
-		if (g_bans.acceptConnection(remote_ip)) {
+		if (acceptConnection(remote_ip)) {
 			Service_ptr service = services.front();
 			if (service->is_single_socket()) {
 				connection->accept(service->make_protocol(connection));
@@ -154,7 +195,7 @@ void ServicePort::open(uint16_t port)
 	try {
 		auto address = getListenAddress();
 
-		acceptor = std::make_unique<ip::tcp::acceptor>(io_service, ip::tcp::endpoint{address, serverPort});
+		acceptor = std::make_unique<ip::tcp::acceptor>(io_context, ip::tcp::endpoint{address, serverPort});
 		if (address.is_v6()) {
 			ip::v6_only option;
 			acceptor->get_option(option);

@@ -8,21 +8,17 @@
 
 struct Outfit
 {
-	Outfit(std::string name, uint16_t lookType, bool premium, bool unlocked) :
-	    name(std::move(name)), lookType(lookType), premium(premium), unlocked(unlocked)
-	{}
-
-	bool operator==(const Outfit& otherOutfit) const
-	{
-		return name == otherOutfit.name && lookType == otherOutfit.lookType && premium == otherOutfit.premium &&
-		       unlocked == otherOutfit.unlocked;
-	}
-
 	std::string name;
 	uint16_t lookType;
 	bool premium;
 	bool unlocked;
 };
+
+inline bool operator==(const Outfit& lhs, const Outfit& rhs)
+{
+	return lhs.name == rhs.name && lhs.lookType == rhs.lookType && lhs.premium == rhs.premium &&
+	       lhs.unlocked == rhs.unlocked;
+}
 
 struct ProtocolOutfit
 {

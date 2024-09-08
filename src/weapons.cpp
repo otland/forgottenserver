@@ -13,7 +13,6 @@
 
 extern Game g_game;
 extern Vocations g_vocations;
-extern ConfigManager g_config;
 extern Weapons* g_weapons;
 
 Weapons::Weapons() { scriptInterface.initState(); }
@@ -253,7 +252,7 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (std::max(playerPos.getDistanceX(targetPos), targetPos.getDistanceY(playerPos)) > shootRange) {
+	if (std::max(playerPos.getDistanceX(targetPos), playerPos.getDistanceY(targetPos)) > shootRange) {
 		return 0;
 	}
 
@@ -453,7 +452,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 	switch (action) {
 		case WEAPONACTION_REMOVECOUNT:
-			if (g_config.getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
+			if (getBoolean(ConfigManager::REMOVE_WEAPON_AMMO)) {
 				player->sendSupplyUsed(item->getClientID());
 				Weapon::decrementItemCount(item);
 				player->sendQuiverUpdate();
@@ -462,7 +461,7 @@ void Weapon::onUsedWeapon(Player* player, Item* item, Tile* destTile) const
 
 		case WEAPONACTION_REMOVECHARGE: {
 			uint16_t charges = item->getCharges();
-			if (charges != 0 && g_config.getBoolean(ConfigManager::REMOVE_WEAPON_CHARGES)) {
+			if (charges != 0 && getBoolean(ConfigManager::REMOVE_WEAPON_CHARGES)) {
 				g_game.transformItem(item, item->getID(), charges - 1);
 			}
 			break;
@@ -506,20 +505,20 @@ int32_t Weapon::getHealthCost(const Player* player) const
 bool Weapon::executeUseWeapon(Player* player, const LuaVariant& var) const
 {
 	// onUseWeapon(player, var)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - Weapon::executeUseWeapon] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-	scriptInterface->pushVariant(L, var);
+	tfs::lua::pushUserdata(L, player);
+	tfs::lua::setMetatable(L, -1, "Player");
+	tfs::lua::pushVariant(L, var);
 
 	return scriptInterface->callFunction(2);
 }

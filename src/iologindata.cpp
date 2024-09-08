@@ -12,125 +12,7 @@
 #include "inbox.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
-
-Account IOLoginData::loadAccount(uint32_t accno)
-{
-	Account account;
-
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accno));
-	if (!result) {
-		return account;
-	}
-
-	account.id = result->getNumber<uint32_t>("id");
-	account.name = result->getString("name");
-	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
-	return account;
-}
-
-std::string decodeSecret(std::string_view secret)
-{
-	// simple base32 decoding
-	std::string key;
-	key.reserve(10);
-
-	uint32_t buffer = 0, left = 0;
-	for (const auto& ch : secret) {
-		buffer <<= 5;
-		if (ch >= 'A' && ch <= 'Z') {
-			buffer |= (ch & 0x1F) - 1;
-		} else if (ch >= '2' && ch <= '7') {
-			buffer |= ch - 24;
-		} else {
-			// if a key is broken, return empty and the comparison will always be false since the token must not be
-			// empty
-			return {};
-		}
-
-		left += 5;
-		if (left >= 8) {
-			left -= 8;
-			key.push_back(static_cast<char>(buffer >> left));
-		}
-	}
-
-	return key;
-}
-
-bool IOLoginData::loginserverAuthentication(const std::string& name, const std::string& password, Account& account)
-{
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `id`, `name`, `password`, `secret`, `type`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
-	    db.escapeString(name), db.escapeString(name)));
-	if (!result) {
-		return false;
-	}
-
-	if (transformToSHA1(password) != result->getString("password")) {
-		return false;
-	}
-
-	account.id = result->getNumber<uint32_t>("id");
-	account.name = result->getString("name");
-	account.key = decodeSecret(result->getString("secret"));
-	account.accountType = static_cast<AccountType_t>(result->getNumber<int32_t>("type"));
-	account.premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
-
-	result = db.storeQuery(fmt::format(
-	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", account.id));
-	if (result) {
-		do {
-			account.characters.emplace_back(result->getString("name"));
-		} while (result->next());
-	}
-	return true;
-}
-
-std::pair<uint32_t, uint32_t> IOLoginData::gameworldAuthentication(std::string_view accountName,
-                                                                   std::string_view password,
-                                                                   std::string_view characterName,
-                                                                   std::string_view token, uint32_t tokenTime)
-{
-	Database& db = Database::getInstance();
-	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, `a`.`password`, `a`.`secret`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE (`a`.`name` = {:s} OR `a`.`email` = {:s}) AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(accountName), db.escapeString(accountName), db.escapeString(characterName)));
-	if (!result) {
-		return {};
-	}
-
-	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
-		std::string secret = decodeSecret(result->getString("secret"));
-		if (!secret.empty()) {
-			if (token.empty()) {
-				return {};
-			}
-
-			bool tokenValid = token == generateToken(secret, tokenTime) ||
-			                  token == generateToken(secret, tokenTime - 1) ||
-			                  token == generateToken(secret, tokenTime + 1);
-			if (!tokenValid) {
-				return {};
-			}
-		}
-	}
-
-	if (transformToSHA1(password) != result->getString("password")) {
-		return {};
-	}
-
-	uint32_t accountId = result->getNumber<uint32_t>("account_id");
-	uint32_t characterId = result->getNumber<uint32_t>("character_id");
-
-	return std::make_pair(accountId, characterId);
-}
 
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 {
@@ -173,7 +55,7 @@ void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 {
-	if (g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (getBoolean(ConfigManager::ALLOW_CLONES)) {
 		return;
 	}
 
@@ -259,16 +141,20 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	Database& db = Database::getInstance();
 
-	uint32_t accno = result->getNumber<uint32_t>("account_id");
-	Account acc = loadAccount(accno);
+	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+
+	auto account =
+	    db.storeQuery(fmt::format("SELECT `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accountId));
+	if (!account) {
+		return false;
+	}
+
+	player->accountType = static_cast<AccountType_t>(account->getNumber<int32_t>("type"));
+	player->premiumEndsAt = account->getNumber<time_t>("premium_ends_at");
 
 	player->setGUID(result->getNumber<uint32_t>("id"));
 	player->name = result->getString("name");
-	player->accountNumber = accno;
-
-	player->accountType = acc.accountType;
-
-	player->premiumEndsAt = acc.premiumEndsAt;
+	player->accountNumber = accountId;
 
 	Group* group = g_game.groups.getGroup(result->getNumber<uint16_t>("group_id"));
 	if (!group) {
@@ -423,7 +309,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		uint32_t playerRankId = result->getNumber<uint32_t>("rank_id");
 		player->guildNick = result->getString("nick");
 
-		Guild* guild = g_game.getGuild(guildId);
+		auto guild = g_game.getGuild(guildId);
 		if (!guild) {
 			guild = IOGuild::loadGuild(guildId);
 			if (guild) {
@@ -436,7 +322,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 		if (guild) {
 			player->guild = guild;
-			GuildRank_ptr rank = guild->getRankById(playerRankId);
+			auto rank = guild->getRankById(playerRankId);
 			if (!rank) {
 				if ((result = db.storeQuery(fmt::format(
 				         "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = {:d}", playerRankId)))) {
@@ -491,7 +377,6 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
-				player->postAddNotification(item, nullptr, pid);
 			} else {
 				ItemMap::const_iterator it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {

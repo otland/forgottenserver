@@ -297,7 +297,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Cylinder* const topParent = getTopParent();
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
 			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
@@ -384,7 +384,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
 			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
@@ -614,7 +614,7 @@ size_t Container::getFirstIndex() const { return 0; }
 
 size_t Container::getLastIndex() const { return size(); }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/, bool) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {

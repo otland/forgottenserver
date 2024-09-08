@@ -367,7 +367,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 						continue;
 					}
 
-					int16_t offsetZ = cpos.getOffsetZ(centerPos);
+					int16_t offsetZ = centerPos.getOffsetZ(cpos);
 					if ((min_y + offsetZ) > cpos.y || (max_y + offsetZ) < cpos.y || (min_x + offsetZ) > cpos.x ||
 					    (max_x + offsetZ) < cpos.x) {
 						continue;
@@ -491,7 +491,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
                            bool sameFloor /*= false*/, int32_t rangex /*= Map::maxClientViewportX*/,
                            int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	if (fromPos.getDistanceX(toPos) > rangex || toPos.getDistanceY(fromPos) > rangey) {
+	if (fromPos.getDistanceX(toPos) > rangex || fromPos.getDistanceY(toPos) > rangey) {
 		return false;
 	}
 
@@ -575,7 +575,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
 		// skip checks if toPos is next to us
-		if (fromPos.getDistanceX(toPos) < 2 && toPos.getDistanceY(fromPos) < 2) {
+		if (fromPos.getDistanceX(toPos) < 2 && fromPos.getDistanceY(toPos) < 2) {
 			return true;
 		}
 

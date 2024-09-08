@@ -6,6 +6,7 @@
 #include "protocolgame.h"
 
 #include "ban.h"
+#include "base64.h"
 #include "condition.h"
 #include "configmanager.h"
 #include "depotchest.h"
@@ -22,7 +23,6 @@
 #include "scheduler.h"
 #include "storeinbox.h"
 
-extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;
 
@@ -68,7 +68,7 @@ std::size_t clientLogin(const Player& player)
 		return 0;
 	}
 
-	uint32_t maxPlayers = static_cast<uint32_t>(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+	uint32_t maxPlayers = static_cast<uint32_t>(getNumber(ConfigManager::MAX_PLAYERS));
 	if (maxPlayers == 0 || (waitList.empty() && g_game.getPlayersOnline() < maxPlayers)) {
 		return 0;
 	}
@@ -154,7 +154,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 {
 	// dispatcher thread
 	Player* foundPlayer = g_game.getPlayerByGUID(characterId);
-	if (!foundPlayer || g_config.getBoolean(ConfigManager::ALLOW_CLONES)) {
+	if (!foundPlayer || getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = new Player(getThis());
 
 		player->incrementReferenceCounter();
@@ -181,8 +181,8 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			return;
 		}
 
-		if (g_config.getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) &&
-		    player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER && g_game.getPlayerByAccount(player->getAccount())) {
+		if (getBoolean(ConfigManager::ONE_PLAYER_ON_ACCOUNT) && player->getAccountType() < ACCOUNT_TYPE_GAMEMASTER &&
+		    g_game.getPlayerByAccount(player->getAccount())) {
 			disconnectClient("You may only login with one character\nof your account at the same time.");
 			return;
 		}
@@ -236,7 +236,7 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 		acceptPackets = true;
 	} else {
-		if (eventConnect != 0 || !g_config.getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
+		if (eventConnect != 0 || !getBoolean(ConfigManager::REPLACE_KICK_ON_LOGIN)) {
 			// Already trying to connect
 			disconnectClient("You are already logged in.");
 			return;
@@ -389,9 +389,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // Gamemaster flag
 
-	// acc name or email, password, token, timestamp divided by 30
-	auto sessionArgs = explodeString(msg.getString(), "\n", 4);
-	if (sessionArgs.size() < 2) {
+	auto sessionToken = tfs::base64::decode(msg.getString());
+	if (sessionToken.empty()) {
 		disconnectClient("Malformed session key.");
 		return;
 	}
@@ -399,38 +398,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		msg.getString(); // OS name (?)
 		msg.getString(); // OS version (?)
-	}
-
-	auto accountName = sessionArgs[0];
-	auto password = sessionArgs[1];
-	if (accountName.empty()) {
-		disconnectClient("You must enter your account name.");
-		return;
-	}
-
-	std::string_view token;
-	uint32_t tokenTime = 0;
-
-	// two-factor auth
-	if (g_config.getBoolean(ConfigManager::TWO_FACTOR_AUTH)) {
-		if (sessionArgs.size() < 4) {
-			disconnectClient("Authentication failed. Incomplete session key.");
-			return;
-		}
-
-		token = sessionArgs[2];
-
-		try {
-			tokenTime = std::stoul(sessionArgs[3].data());
-		} catch (const std::invalid_argument&) {
-			disconnectClient("Malformed token packet.");
-			return;
-		} catch (const std::out_of_range&) {
-			disconnectClient("Token time is too long.");
-			return;
-		}
-	} else {
-		tokenTime = std::floor(challengeTimestamp / 30);
 	}
 
 	auto characterName = msg.getString();
@@ -451,21 +418,36 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	if (const auto& banInfo = IOBan::getIpBanInfo(getIP())) {
+	auto ip = getIP();
+	if (const auto& banInfo = IOBan::getIpBanInfo(ip)) {
 		disconnectClient(fmt::format("Your IP has been banned until {:s} by {:s}.\n\nReason specified:\n{:s}",
 		                             formatDateShort(banInfo->expiresAt), banInfo->bannedBy, banInfo->reason));
 		return;
 	}
 
-	// TODO: use structured binding when C++20 is adopted
-	auto authIds = IOLoginData::gameworldAuthentication(accountName, password, characterName, token, tokenTime);
-	if (authIds.first == 0) {
+	Database& db = Database::getInstance();
+	auto result = db.storeQuery(fmt::format(
+	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    db.escapeString(sessionToken), db.escapeString(characterName)));
+	if (!result) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	g_dispatcher.addTask(
-	    [=, thisPtr = getThis()]() { thisPtr->login(authIds.second, authIds.first, operatingSystem); });
+	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+	if (accountId == 0) {
+		disconnectClient("Account name or password is not correct.");
+		return;
+	}
+
+	Connection::Address sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
+	if (!sessionIP.is_loopback() && ip != sessionIP) {
+		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
+	}
+
+	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = result->getNumber<uint32_t>("character_id")]() {
+		thisPtr->login(characterId, accountId, operatingSystem);
+	});
 }
 
 void ProtocolGame::onConnect()
@@ -1775,7 +1757,7 @@ void ProtocolGame::sendBasicData()
 	msg.addByte(0x9F);
 	if (player->isPremium()) {
 		msg.addByte(1);
-		msg.add<uint32_t>(g_config.getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
+		msg.add<uint32_t>(getBoolean(ConfigManager::FREE_PREMIUM) ? 0 : player->premiumEndsAt);
 	} else {
 		msg.addByte(0);
 		msg.add<uint32_t>(0);
@@ -3504,14 +3486,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	msg.add<uint16_t>(creature->getStepSpeed() / 2);
 
-	msg.addByte(0x00); // creature debuffs, to do
-	/*
-	if (icon != CREATUREICON_NONE) {
-	        msg.addByte(icon);
-	        msg.addByte(1);
-	        msg.add<uint16_t>(0);
-	}
-	*/
+	AddCreatureIcons(msg, creature);
 
 	msg.addByte(player->getSkullClient(creature));
 	msg.addByte(player->getPartyShield(otherPlayer));
@@ -3531,7 +3506,13 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 		msg.addByte(otherPlayer ? otherPlayer->getVocation()->getClientId() : 0x00);
 	}
 
-	msg.addByte(creature->getSpeechBubble());
+	uint8_t speechBubble = creature->getSpeechBubble();
+	if (auto npc = creature->getNpc()) {
+		if (npc->npcEventHandler->speechBubbleEvent != -1) {
+			npc->npcEventHandler->onSpeechBubble(player, speechBubble);
+		}
+	}
+	msg.addByte(speechBubble);
 	msg.addByte(0xFF); // MARK_UNMARKED
 	msg.addByte(0x00); // inspection type (bool?)
 

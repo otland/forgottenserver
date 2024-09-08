@@ -8,15 +8,13 @@
 #include "configmanager.h"
 #include "luascript.h"
 
-extern ConfigManager g_config;
-
 bool DatabaseManager::optimizeTables()
 {
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
 	    "SELECT `TABLE_NAME` FROM `information_schema`.`TABLES` WHERE `TABLE_SCHEMA` = {:s} AND `DATA_FREE` > 0",
-	    db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))));
+	    db.escapeString(getString(ConfigManager::MYSQL_DB))));
 	if (!result) {
 		return false;
 	}
@@ -40,7 +38,7 @@ bool DatabaseManager::tableExists(const std::string& tableName)
 	return db
 	    .storeQuery(fmt::format(
 	        "SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s} AND `TABLE_NAME` = {:s} LIMIT 1",
-	        db.escapeString(g_config.getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName)))
+	        db.escapeString(getString(ConfigManager::MYSQL_DB)), db.escapeString(tableName)))
 	    .get();
 }
 
@@ -49,7 +47,7 @@ bool DatabaseManager::isDatabaseSetup()
 	Database& db = Database::getInstance();
 	return db
 	    .storeQuery(fmt::format("SELECT `TABLE_NAME` FROM `information_schema`.`tables` WHERE `TABLE_SCHEMA` = {:s}",
-	                            db.escapeString(g_config.getString(ConfigManager::MYSQL_DB))))
+	                            db.escapeString(getString(ConfigManager::MYSQL_DB))))
 	    .get();
 }
 
@@ -99,20 +97,20 @@ void DatabaseManager::updateDatabase()
 			break;
 		}
 
-		if (!LuaScriptInterface::reserveScriptEnv()) {
+		if (!tfs::lua::reserveScriptEnv()) {
 			break;
 		}
 
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
-			LuaScriptInterface::resetScriptEnv();
+			tfs::lua::resetScriptEnv();
 			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
 			          << lua_tostring(L, -1) << std::endl;
 			break;
 		}
 
-		if (!LuaScriptInterface::getBoolean(L, -1, false)) {
-			LuaScriptInterface::resetScriptEnv();
+		if (!tfs::lua::getBoolean(L, -1, false)) {
+			tfs::lua::resetScriptEnv();
 			break;
 		}
 
@@ -120,7 +118,7 @@ void DatabaseManager::updateDatabase()
 		std::cout << "> Database has been updated to version " << version << '.' << std::endl;
 		registerDatabaseConfig("db_version", version);
 
-		LuaScriptInterface::resetScriptEnv();
+		tfs::lua::resetScriptEnv();
 	} while (true);
 	lua_close(L);
 }

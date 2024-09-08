@@ -14,10 +14,10 @@ jobs:
         os: [ubuntu, macos, windows]
 
     env:
-      VCPKG_FEATURE_FLAGS: luajit
+      VCPKG_BUILD_TYPE: release
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
@@ -30,20 +30,20 @@ jobs:
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config Release', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', 'RelWithDebInfo']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-G Ninja']"
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=ON']"
 
       - name: Prepare datapack contents
         run: |
           pwd
           ls -al
           find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
-          mv ../build/tfs ../build/tfs.exe* ../build/*.dll .
+          mv ../build/RelWithDebInfo/tfs ../build/RelWithDebInfo/tfs.exe* ../build/RelWithDebInfo/*.dll .
         shell: bash
 
       - name: Zip the release files
-        uses: thedoctor0/zip-release@master
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: zip
           filename: tfs-${{ github.ref_name }}-${{ matrix.os }}.zip

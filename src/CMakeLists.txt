@@ -2,6 +2,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/otpch.cpp
 	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ban.cpp
+	${CMAKE_CURRENT_LIST_DIR}/base64.cpp
 	${CMAKE_CURRENT_LIST_DIR}/baseevents.cpp
 	${CMAKE_CURRENT_LIST_DIR}/bed.cpp
 	${CMAKE_CURRENT_LIST_DIR}/chat.cpp
@@ -79,9 +80,9 @@ set(tfs_SRC
 
 set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/otpch.h
-	${CMAKE_CURRENT_LIST_DIR}/account.h
 	${CMAKE_CURRENT_LIST_DIR}/actions.h
 	${CMAKE_CURRENT_LIST_DIR}/ban.h
+	${CMAKE_CURRENT_LIST_DIR}/base64.h
 	${CMAKE_CURRENT_LIST_DIR}/baseevents.h
 	${CMAKE_CURRENT_LIST_DIR}/bed.h
 	${CMAKE_CURRENT_LIST_DIR}/chat.h
@@ -175,14 +176,29 @@ target_link_libraries(tfslib PRIVATE
 	Boost::system
 	Boost::locale
 	fmt::fmt
+	OpenSSL::Crypto
 	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
-	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
 	)
+set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
+
 if (APPLE)
 	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
 endif()
 
+if (ENABLE_IPO)
+	set_target_properties(tfslib PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
+endif()
+
+if (HTTP)
+	add_subdirectory(http)
+	target_link_libraries(tfslib PRIVATE http)
+endif ()
+
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

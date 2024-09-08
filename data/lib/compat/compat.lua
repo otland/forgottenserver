@@ -133,6 +133,50 @@ do
 end
 
 do
+	local function NpcTypeNewIndex(self, key, value)
+		if key == "onSay" then
+			self:eventType("say")
+			self:onSay(value)
+			return
+		elseif key == "onDisappear" then
+			self:eventType("disappear")
+			self:onDisappear(value)
+			return
+		elseif key == "onAppear" then
+			self:eventType("appear")
+			self:onAppear(value)
+			return
+		elseif key == "onMove" then
+			self:eventType("move")
+			self:onMove(value)
+			return
+		elseif key == "onPlayerCloseChannel" then
+			self:eventType("closechannel")
+			self:onPlayerCloseChannel(value)
+			return
+		elseif key == "onPlayerEndTrade" then
+			self:eventType("endtrade")
+			self:onPlayerEndTrade(value)
+			return
+		elseif key == "onThink" then
+			self:eventType("think")
+			self:onThink(value)
+			return
+		elseif key == "onSight" then
+			self:eventType("sight")
+			self:onSight(value)
+			return
+		elseif key == "onSpeechBubble" then
+			self:eventType("speechbubble")
+			self:onSpeechBubble(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("NpcType").__newindex = NpcTypeNewIndex
+end
+
+do
 	local function TalkActionNewIndex(self, key, value)
 		if key == "onSay" then
 			self:onSay(value)
@@ -588,8 +632,6 @@ function isPremium(cid) local p = Player(cid) return p and p:isPremium() or fals
 
 STORAGEVALUE_EMPTY = -1
 function Player:getStorageValue(key)
-	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
-
 	local v = Creature.getStorageValue(self, key)
 	return v or STORAGEVALUE_EMPTY
 end
@@ -622,6 +664,7 @@ function getPlayersByIPAddress(ip, mask)
 	if not mask then mask = 0xFFFFFFFF end
 	local masked = bit.band(ip, mask)
 	local lshift = bit.lshift
+	local players = {}
 	for _, player in ipairs(Game.getPlayers()) do
 		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
 		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
@@ -1141,7 +1184,6 @@ function getTileInfo(position)
 	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
 	ret.nopz = ret.protection
 	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
-	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
 	ret.house = t:getHouse()
 	ret.bed = t:hasFlag(TILESTATE_BED)
 	ret.depot = t:hasFlag(TILESTATE_DEPOT)
