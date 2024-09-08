@@ -50,8 +50,6 @@ private:
 	int_fast32_t closedNodes;
 };
 
-using SpectatorCache = boost::unordered_flat_map<Position, Spectators>;
-
 static constexpr int32_t FLOOR_BITS = 3;
 static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
 static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
@@ -206,9 +204,6 @@ public:
 	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
 	                   int32_t maxRangeY = 0);
 
-	void clearSpectatorCache();
-	void clearPlayersSpectatorCache();
-
 	/**
 	 * Checks if you can throw an object to that position
 	 *	\param fromPos from Source point
@@ -257,9 +252,6 @@ public:
 	Houses houses;
 
 private:
-	SpectatorCache spectatorCache;
-	SpectatorCache playersSpectatorCache;
-
 	QTreeNode root;
 
 	std::filesystem::path spawnfile;
@@ -276,5 +268,12 @@ private:
 	friend class Game;
 	friend class IOMap;
 };
+
+namespace tfs::map {
+
+void clearSpectatorCache();
+void clearPlayersSpectatorCache();
+
+} // namespace tfs::map
 
 #endif // FS_MAP_H

@@ -14,6 +14,15 @@
 
 extern Game g_game;
 
+namespace {
+
+using SpectatorCache = boost::unordered_flat_map<Position, Spectators>;
+
+SpectatorCache spectatorCache;
+SpectatorCache playersSpectatorCache;
+
+} // namespace
+
 bool Map::loadMap(const std::string& identifier, bool loadHouses)
 {
 	IOMap loader;
@@ -472,9 +481,9 @@ void Map::getSpectators(Spectators& spectators, const Position& centerPos, bool 
 	}
 }
 
-void Map::clearSpectatorCache() { spectatorCache.clear(); }
+void tfs::map::clearSpectatorCache() { spectatorCache.clear(); }
 
-void Map::clearPlayersSpectatorCache() { playersSpectatorCache.clear(); }
+void tfs::map::clearPlayersSpectatorCache() { playersSpectatorCache.clear(); }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                            bool sameFloor /*= false*/, int32_t rangex /*= Map::maxClientViewportX*/,
