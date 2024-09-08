@@ -108,6 +108,8 @@ public:
 		GAME_PORT,
 		LOGIN_PORT,
 		STATUS_PORT,
+		HTTP_PORT,
+		HTTP_WORKERS,
 		STAIRHOP_DELAY,
 		MARKET_OFFER_DURATION,
 		CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES,
@@ -125,31 +127,21 @@ public:
 		QUEST_TRACKER_PREMIUM_LIMIT,
 		STAMINA_REGEN_MINUTE,
 		STAMINA_REGEN_PREMIUM,
-		PATHFINDING_INTERVAL,
-		PATHFINDING_DELAY,
 
 		LAST_INTEGER_CONFIG /* this must be the last one */
 	};
 
 	bool load();
 
-	const std::string& getString(string_config_t what) const;
-	int32_t getNumber(integer_config_t what) const;
-	bool getBoolean(boolean_config_t what) const;
-	float getExperienceStage(uint32_t level) const;
+	const std::string& getString(string_config_t what);
+	int32_t getNumber(integer_config_t what);
+	bool getBoolean(boolean_config_t what);
+	float getExperienceStage(uint32_t level);
 
 	bool setString(string_config_t what, std::string_view value);
 	bool setNumber(integer_config_t what, int32_t value);
 	bool setBoolean(boolean_config_t what, bool value);
 
-private:
-	std::string string[LAST_STRING_CONFIG] = {};
-	int32_t integer[LAST_INTEGER_CONFIG] = {};
-	bool boolean[LAST_BOOLEAN_CONFIG] = {};
-
-	ExperienceStages expStages = {};
-
-	bool loaded = false;
-};
+}; // namespace ConfigManager
 
 #endif // FS_CONFIGMANAGER_H
