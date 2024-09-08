@@ -749,7 +749,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			// The cost to walk to this neighbor
 			const double g = n->g + AStarNodes::getMapWalkCost(n, pos) + AStarNodes::getTileWalkCost(creature, tile);
-			const double h = AStarNodes::calculateHeuristic(pos, targetPos);
+			const double h = calculateHeuristic(pos, targetPos);
 			const double newf = h + g;
 
 			if (neighborNode) {
