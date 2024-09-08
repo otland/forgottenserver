@@ -3887,13 +3887,10 @@ void Game::updateCreaturesPath(size_t index)
 	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
 
 	auto& checkCreatureList = checkCreatureLists[index];
-	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
-	while (it != end) {
-		Creature* creature = *it;
+	for (Creature* creature : checkCreatureList) {
 		if (!creature->isDead()) {
 			creature->forceUpdatePath();
 		}
-		++it;
 	}
 
 	cleanup();

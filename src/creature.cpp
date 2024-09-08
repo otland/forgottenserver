@@ -152,7 +152,7 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	if (lastPathUpdate - OTSYS_TIME() > 0) {
+	if (lastPathUpdate > OTSYS_TIME()) {
 		return;
 	}
 
@@ -1042,8 +1042,6 @@ void Creature::updateFollowingCreaturesPath()
 		return;
 	}
 
-	std::list<Creature*> newList;
-	newList.resize(followedByCreatures.size());
 	const Position& thisPosition = getPosition();
 	for (auto follower : followedByCreatures) {
 		const Position& followerPosition = follower->getPosition();
@@ -1052,17 +1050,8 @@ void Creature::updateFollowingCreaturesPath()
 			continue;
 		}
 
-		newList.push_back(follower);
 		g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
 	}
-
-	followedByCreatures.clear();
-
-	for (auto follower : followedByCreatures) {
-		followedByCreatures.push_back(follower);
-	}
-
-	newList.clear();
 }
 
 double Creature::getDamageRatio(Creature* attacker) const

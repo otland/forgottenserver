@@ -843,7 +843,8 @@ AStarNode* AStarNodes::getBestNode()
 		return nullptr;
 	}
 
-	std::sort(nodes.begin(), nodes.end(), [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
+	std::nth_element(nodes.begin(), nodes.end() - 1, nodes.end(),
+	                 [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
 	AStarNode* retNode = nodes.back();
 	nodes.pop_back();
 	return retNode;
