@@ -657,6 +657,14 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
+double calculateHeuristic(const Position& p1, const Position& p2)
+{
+	uint16_t dx = std::abs(p1.getX() - p2.getX());
+	uint16_t dy = std::abs(p1.getY() - p2.getY());
+
+	return std::sqrt(dx * dx + dy * dy);
+}
+
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
                           const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
@@ -848,14 +856,6 @@ AStarNode* AStarNodes::getBestNode()
 	AStarNode* retNode = nodes.back();
 	nodes.pop_back();
 	return retNode;
-}
-
-double AStarNodes::calculateHeuristic(const Position& p1, const Position& p2)
-{
-	uint16_t dx = std::abs(p1.x - p2.x);
-	uint16_t dy = std::abs(p1.y - p2.y);
-
-	return std::sqrt(dx * dx + dy * dy);
 }
 
 void AStarNodes::clear()
