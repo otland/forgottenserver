@@ -659,10 +659,7 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 
 double calculateHeuristic(const Position& p1, const Position& p2)
 {
-	uint16_t dx = std::abs(p1.getX() - p2.getX());
-	uint16_t dy = std::abs(p1.getY() - p2.getY());
-
-	return std::sqrt(dx * dx + dy * dy);
+	return (std::abs(p1.x - p2.x) + std::abs(p1.y - p2.y)) * 10;
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -678,16 +675,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	}
 
 	// Don't update path. The target is too far away.
-	if (fpp.maxSearchDist) {
-		if (startPos.getDistanceX(targetPos) > fpp.maxSearchDist ||
-		    startPos.getDistanceY(targetPos) > fpp.maxSearchDist) {
-			return false;
-		}
-	}
-
-	// Don't update path. Target in not in the viewport.
-	if (startPos.getDistanceX(targetPos) > Map::maxViewportX + 1 ||
-	    startPos.getDistanceY(targetPos) > Map::maxViewportY + 1) {
+	int32_t maxDistanceX = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportX + 1;
+	int32_t maxDistanceY = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportY + 1;
+	if (startPos.getDistanceX(targetPos) > maxDistanceX || startPos.getDistanceY(targetPos) > maxDistanceY) {
 		return false;
 	}
 
