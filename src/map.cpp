@@ -674,15 +674,15 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
+	// Dont update path. We are on top of our target position. Let dance step decide.
+	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
+		return false;
+	}
+
 	// Don't update path. The target is too far away.
 	int32_t maxDistanceX = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportX + 1;
 	int32_t maxDistanceY = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportY + 1;
 	if (startPos.getDistanceX(targetPos) > maxDistanceX || startPos.getDistanceY(targetPos) > maxDistanceY) {
-		return false;
-	}
-
-	// Dont update path. We are on top of our target position. Let dance step decide.
-	if (startPos.x == targetPos.x && startPos.y == targetPos.y) {
 		return false;
 	}
 
