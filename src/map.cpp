@@ -659,7 +659,10 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 
 double calculateHeuristic(const Position& p1, const Position& p2)
 {
-	return (std::abs(p1.x - p2.x) + std::abs(p1.y - p2.y)) * 10;
+	uint16_t dx = std::abs(p1.getX() - p2.getX());
+	uint16_t dy = std::abs(p1.getY() - p2.getY());
+
+	return std::sqrt(dx * dx + dy * dy);
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -686,7 +689,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	static constexpr int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+	static constexpr int_fast32_t allNeighbors[8][2] = {{-1, 0},  {0, 1},  {1, 0}, {0, -1},
+	                                                    {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	AStarNodes nodes(pos.x, pos.y);
 
@@ -818,7 +822,7 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 
 	// Add node to node vector and map
 	nodes.reserve(50);
-	nodes.push_back(firstNode);
+	nodes.emplace_back(firstNode);
 	nodeMap[x][y] = firstNode;
 }
 
@@ -831,7 +835,7 @@ void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, double
 	newNode->g = g;
 	newNode->f = f;
 
-	nodes.push_back(newNode);
+	nodes.emplace_back(newNode);
 	nodeMap[x][y] = newNode;
 }
 

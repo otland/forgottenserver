@@ -32,7 +32,7 @@ public:
 	AStarNodes(uint16_t x, uint16_t y);
 
 	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, double g, double f);
-	void addNode(AStarNode* node) { nodes.push_back(node); };
+	void addNode(AStarNode* node) { nodes.emplace_back(node); };
 
 	AStarNode* getBestNode();
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
