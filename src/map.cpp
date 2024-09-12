@@ -686,7 +686,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	static int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+	static constexpr int_fast32_t allNeighbors[8][2] = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
 
 	AStarNodes nodes(pos.x, pos.y);
 
