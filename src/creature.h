@@ -197,7 +197,7 @@ public:
 	virtual void onFollowCreatureComplete(const Creature*) {}
 
 	// Pathfinding functions
-	void addFollowedByCreature(Creature* creature) { followers.emplace_back(creature); };
+	void addFollower(Creature* creature) { followers.emplace_back(creature); };
 
 	// Pathfinding events
 	void updateFollowingCreaturesPath();
