@@ -197,7 +197,7 @@ public:
 	virtual void onFollowCreatureComplete(const Creature*) {}
 
 	// Pathfinding functions
-	void addFollowedByCreature(Creature* creature) { followedByCreatures.emplace_back(creature); };
+	void addFollowedByCreature(Creature* creature) { followers.emplace_back(creature); };
 
 	// Pathfinding events
 	void updateFollowingCreaturesPath();
@@ -392,7 +392,7 @@ protected:
 	Creature* attackedCreature = nullptr;
 	Creature* master = nullptr;
 	Creature* followCreature = nullptr;
-	std::vector<Creature*> followedByCreatures;
+	std::vector<Creature*> followers;
 
 	uint64_t lastStep = 0;
 	int64_t lastPathUpdate = 0;

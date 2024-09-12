@@ -689,8 +689,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	static constexpr int_fast32_t allNeighbors[8][2] = {{-1, 0},  {0, 1},  {1, 0}, {0, -1},
-	                                                    {-1, -1}, {1, -1}, {1, 1}, {-1, 1}};
+	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
+	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
 	AStarNodes nodes(pos.x, pos.y);
 
@@ -718,8 +718,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		}
 
 		for (uint_fast32_t i = 0; i < 8; ++i) {
-			pos.x = x + allNeighbors[i][0];
-			pos.y = y + allNeighbors[i][1];
+			pos.x = x + allNeighbors[i].first;
+			pos.y = y + allNeighbors[i].second;
 
 			if (fpp.maxSearchDist != 0 &&
 			    (startPos.getDistanceX(pos) > fpp.maxSearchDist || startPos.getDistanceY(pos) > fpp.maxSearchDist)) {

@@ -1040,12 +1040,12 @@ bool Creature::setFollowCreature(Creature* creature)
 // Pathfinding Events
 void Creature::updateFollowingCreaturesPath()
 {
-	if (followedByCreatures.empty()) {
+	if (followers.empty()) {
 		return;
 	}
 
 	const Position& thisPosition = getPosition();
-	for (const auto follower : followedByCreatures) {
+	for (const auto follower : followers) {
 		const Position& followerPosition = follower->getPosition();
 		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX + 2 ||
 		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY + 2) {
