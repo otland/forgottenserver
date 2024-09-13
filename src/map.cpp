@@ -681,8 +681,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	if (startPos.getZ() != targetPos.getZ()) return false;
 
 	// We are next to our target. Let dance step decide.
-	if (!fpp.keepDistance &&
-	    startPos.getDistanceX(targetPos) + startPos.getDistanceY(targetPos) <= 2) {
+	if (!fpp.keepDistance && startPos.getDistanceX(targetPos) + startPos.getDistanceY(targetPos) <= 2) {
 		return true;
 	}
 
