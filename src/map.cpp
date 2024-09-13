@@ -680,9 +680,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	// We can't get paths up or down floors.
 	if (startPos.getZ() != targetPos.getZ()) return false;
 
-	// We are on top of our target position. Let dance step decide.
-	if (!fpp.keepDistance && startPos.getX() == targetPos.getX() && startPos.getY() == targetPos.getY()) return true;
-
 	// We are next to our target. Let dance step decide.
 	if (!fpp.keepDistance &&
 	    startPos.getDistanceX(targetPos) + startPos.getDistanceY(targetPos) <= 2) {
