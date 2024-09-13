@@ -939,7 +939,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 		}
 
 		attackedCreature = creature;
-		creature->addFollowedByCreature(this);
+		creature->addFollower(this);
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
 	} else {
@@ -1027,7 +1027,7 @@ bool Creature::setFollowCreature(Creature* creature)
 		}
 
 		followCreature = creature;
-		creature->addFollowedByCreature(this);
+		creature->addFollower(this);
 		hasFollowPath = false;
 	} else {
 		followCreature = nullptr;
