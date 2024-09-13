@@ -200,7 +200,7 @@ public:
 	void addFollower(Creature* creature) { followers.emplace_back(creature); };
 
 	// Pathfinding events
-	void updateFollowingCreaturesPath();
+	void updateFollowersPaths();
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }

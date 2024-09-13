@@ -206,7 +206,7 @@ void Creature::onWalk()
 		}
 	}
 
-	updateFollowingCreaturesPath();
+	updateFollowersPaths();
 
 	if (cancelNextWalk) {
 		listWalkDir.clear();
@@ -1038,7 +1038,7 @@ bool Creature::setFollowCreature(Creature* creature)
 }
 
 // Pathfinding Events
-void Creature::updateFollowingCreaturesPath()
+void Creature::updateFollowersPaths()
 {
 	if (followers.empty()) {
 		return;
