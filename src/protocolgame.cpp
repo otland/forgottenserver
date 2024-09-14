@@ -1729,7 +1729,6 @@ void ProtocolGame::sendClientFeatures()
 	msg.add<uint16_t>(25);   // premium coin package size
 
 	msg.addByte(0x00); // exiva button enabled (bool)
-	msg.addByte(0x00); // Tournament button (bool)
 
 	writeToOutputBuffer(msg);
 }
@@ -1751,7 +1750,7 @@ void ProtocolGame::sendBasicData()
 
 	// unlock spells on action bar
 	msg.add<uint16_t>(0xFF);
-	for (uint8_t spellId = 0x00; spellId < 0xFF; spellId++) {
+	for (uint16_t spellId = 0x00; spellId < 0xFF; spellId++) {
 		msg.add<uint16_t>(spellId);
 	}
 
@@ -2074,7 +2073,6 @@ void ProtocolGame::sendStoreBalance()
 	msg.add<uint32_t>(0); // total store coins (transferable + non-t)
 	msg.add<uint32_t>(0); // transferable store coins
 	msg.add<uint32_t>(0); // reserved auction coins
-	msg.add<uint32_t>(0); // tournament coins
 	writeToOutputBuffer(msg);
 }
 
@@ -3340,11 +3338,11 @@ void ProtocolGame::sendItemClasses()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendSpellCooldown(uint8_t spellId, uint32_t time)
+void ProtocolGame::sendSpellCooldown(uint16_t spellId, uint32_t time)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA4);
-	msg.add<uint16_t>(static_cast<uint16_t>(spellId));
+	msg.add<uint16_t>(spellId);
 	msg.add<uint32_t>(time);
 	writeToOutputBuffer(msg);
 }

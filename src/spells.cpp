@@ -181,7 +181,7 @@ Spell* Spells::getSpellByName(const std::string& name)
 	return spell;
 }
 
-RuneSpell* Spells::getRuneSpell(uint32_t id)
+RuneSpell* Spells::getRuneSpell(uint16_t id)
 {
 	auto it = runes.find(id);
 	if (it == runes.end()) {

@@ -31,7 +31,7 @@ public:
 	Spells& operator=(const Spells&) = delete;
 
 	Spell* getSpellByName(const std::string& name);
-	RuneSpell* getRuneSpell(uint32_t id);
+	RuneSpell* getRuneSpell(uint16_t id);
 	RuneSpell* getRuneSpellByName(const std::string& name);
 
 	InstantSpell* getInstantSpell(const std::string& words);
@@ -107,8 +107,8 @@ public:
 	bool configureSpell(const pugi::xml_node& node);
 	const std::string& getName() const { return name; }
 	void setName(std::string n) { name = n; }
-	uint8_t getId() const { return spellId; }
-	void setId(uint8_t id) { spellId = id; }
+	uint16_t getId() const { return spellId; }
+	void setId(uint16_t id) { spellId = id; }
 
 	void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
 	static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
@@ -198,7 +198,7 @@ protected:
 	uint32_t magLevel = 0;
 	int32_t range = -1;
 
-	uint8_t spellId = 0;
+	uint16_t spellId = 0;
 
 	bool selfTarget = false;
 	bool needTarget = false;
