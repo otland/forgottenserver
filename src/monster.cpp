@@ -749,6 +749,11 @@ void Monster::onThink(uint32_t interval)
 	} else {
 		updateIdleStatus();
 
+		// Ensure monsters update look direction.
+		if (!isFleeing() && attackedCreature) {
+			updateLookDirection();
+		}
+
 		if (!isIdle) {
 			addEventWalk();
 
@@ -825,11 +830,6 @@ void Monster::doAttacking(uint32_t interval)
 			// melee swing out of reach
 			lastMeleeAttack = 0;
 		}
-	}
-
-	// ensure ranged creatures turn to player
-	if (!lookUpdated && lastMeleeAttack == 0) {
-		updateLookDirection();
 	}
 
 	if (resetTicks) {
