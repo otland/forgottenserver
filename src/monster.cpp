@@ -812,8 +812,7 @@ void Monster::doAttacking(uint32_t interval)
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
 				if (inRange) {
 					updateLookDirection();
-					stopEventWalk();
-					lastStep = OTSYS_TIME();
+					lastStep = OTSYS_TIME() - 200;
 				}
 
 				minCombatValue = spellBlock.minCombatValue;
