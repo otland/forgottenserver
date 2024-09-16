@@ -810,7 +810,9 @@ void Monster::doAttacking(uint32_t interval)
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
-				if (inRange) {
+				if ((isFleeing() ||
+				     mType->info.targetDistance > (myPos.getDistanceX(targetPos) + myPos.getDistanceY(targetPos))) &&
+				    inRange) {
 					updateLookDirection();
 					lastStep = OTSYS_TIME() - 200;
 				}
