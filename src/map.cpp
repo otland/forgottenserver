@@ -681,10 +681,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	if (startPos.getZ() != targetPos.getZ()) return false;
 
 	// We are next to our target. Let dance step decide.
-	if (fpp.maxTargetDist > 1 && startPos.getDistanceX(targetPos) <= 1 && startPos.getDistanceY(targetPos) <= 1) {
-		if (!creature.isSummon()) {
-			return true;
-		}
+	if (fpp.maxTargetDist <= 1 && startPos.getDistanceX(targetPos) <= 1 && startPos.getDistanceY(targetPos) <= 1) {
+		return true;
 	}
 
 	// Don't update path. The target is too far away.
