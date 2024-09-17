@@ -1906,8 +1906,8 @@ void Monster::updateLookDirection()
 	if (attackedCreature) {
 		const Position& pos = getPosition();
 		const Position& attackedCreaturePos = attackedCreature->getPosition();
-		int32_t offsetx = pos.getOffsetX(attackedCreaturePos);
-		int32_t offsety = pos.getOffsetY(attackedCreaturePos);
+		int32_t offsetx = attackedCreaturePos.getOffsetX(pos);
+		int32_t offsety = attackedCreaturePos.getOffsetY(pos);
 
 		int32_t dx = std::abs(offsetx);
 		int32_t dy = std::abs(offsety);
