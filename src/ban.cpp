@@ -86,4 +86,4 @@ bool isPlayerNamelocked(uint32_t playerId)
 	    .get();
 }
 
-}
+} // namespace IOBan
