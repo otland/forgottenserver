@@ -129,6 +129,9 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	// map cache
+	int32_t getWalkCache(const Position& pos) const;
+
 	// monster icons
 	MonsterIconHashMap& getSpecialIcons() { return monsterIcons; }
 	const MonsterIconHashMap& getSpecialIcons() const { return monsterIcons; }
@@ -136,6 +139,11 @@ public:
 	static uint32_t monsterAutoID;
 
 private:
+	static constexpr int32_t walkCacheWidth = Map::maxViewportX * 2 + 1;
+	static constexpr int32_t walkCacheHeight = Map::maxViewportY * 2 + 1;
+	static constexpr int32_t maxWalkCacheWidth = (walkCacheWidth - 1) / 2;
+	static constexpr int32_t maxWalkCacheHeight = (walkCacheHeight - 1) / 2;
+
 	CreatureHashSet friendList;
 	CreatureList targetList;
 	MonsterIconHashMap monsterIcons;
@@ -165,6 +173,11 @@ private:
 	bool isMasterInRange = false;
 	bool randomStepping = false;
 	bool walkingToSpawn = false;
+
+	void onAddTileItem(const Tile* tile, const Position& pos) override;
+	void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
+	                      const Item* newItem, const ItemType& newType) override;
+	void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) override;
 
 	void onCreatureEnter(Creature* creature);
 	void onCreatureLeave(Creature* creature);
@@ -218,7 +231,17 @@ private:
 	uint32_t getDamageImmunities() const override { return mType->info.damageImmunities; }
 	uint32_t getConditionImmunities() const override { return mType->info.conditionImmunities; }
 	void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
-	bool useCacheMap() const override { return !randomStepping; }
+
+	// map cache
+	bool mapLoaded = false;
+	bool walkabilityCache[walkCacheHeight][walkCacheWidth] = {{false}};
+
+	bool useWalkCache() const { return !randomStepping; }
+	bool hasLoadedMap() const { return mapLoaded; }
+
+	void updateWalkCache();
+	void updateTileWalkCache(const Tile* tile, int32_t dx, int32_t dy);
+	void updateTileWalkCache(const Tile* tile, const Position& pos);
 
 	friend class LuaScriptInterface;
 };

@@ -113,6 +113,17 @@ void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
+	if (creature == this) {
+		if (useWalkCache()) {
+			mapLoaded = true;
+			updateWalkCache();
+		}
+	} else if (hasLoadedMap()) {
+		if (creature->getPosition().z == getPosition().z) {
+			updateTileWalkCache(creature->getTile(), creature->getPosition());
+		}
+	}
+
 	if (mType->info.creatureAppearEvent != -1) {
 		// onCreatureAppear(self, creature)
 		LuaScriptInterface* scriptInterface = mType->info.scriptInterface;
@@ -155,6 +166,14 @@ void Monster::onRemoveCreature(Creature* creature, bool isLogout)
 {
 	Creature::onRemoveCreature(creature, isLogout);
 
+	if (creature != this) {
+		if (hasLoadedMap()) {
+			if (creature->getPosition().z == getPosition().z) {
+				updateTileWalkCache(creature->getTile(), creature->getPosition());
+			}
+		}
+	}
+
 	if (mType->info.creatureDisappearEvent != -1) {
 		// onCreatureDisappear(self, creature)
 		LuaScriptInterface* scriptInterface = mType->info.scriptInterface;
@@ -194,6 +213,127 @@ void Monster::onRemoveCreature(Creature* creature, bool isLogout)
 void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
                              const Position& oldPos, bool teleport)
 {
+	if (hasLoadedMap()) {
+		// update map cache
+		if (creature == this) {
+			if (teleport || oldPos.z != newPos.z) {
+				updateWalkCache();
+			} else {
+				const Position& myPos = getPosition();
+
+				if (oldPos.y > newPos.y) { // north
+					// shift y south
+					for (int32_t y = walkCacheHeight - 1; --y >= 0;) {
+						memcpy(walkabilityCache[y + 1], walkabilityCache[y], sizeof(walkabilityCache[y]));
+					}
+
+					// update 0
+					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+						Tile* cacheTile =
+						    g_game.map.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
+						updateTileWalkCache(cacheTile, x, -maxWalkCacheHeight);
+					}
+				} else if (oldPos.y < newPos.y) { // south
+					// shift y north
+					for (int32_t y = 0; y <= walkCacheHeight - 2; ++y) {
+						memcpy(walkabilityCache[y], walkabilityCache[y + 1], sizeof(walkabilityCache[y]));
+					}
+
+					// update map_walk_height - 1
+					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+						Tile* cacheTile =
+						    g_game.map.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
+						updateTileWalkCache(cacheTile, x, maxWalkCacheHeight);
+					}
+				}
+
+				if (oldPos.x < newPos.x) { // east
+					// shift y west
+					int32_t starty = 0;
+					int32_t endy = walkCacheHeight - 1;
+					int32_t dy = oldPos.getDistanceY(newPos);
+
+					if (dy < 0) {
+						endy += dy;
+					} else if (dy > 0) {
+						starty = dy;
+					}
+
+					for (int32_t y = starty; y <= endy; ++y) {
+						for (int32_t x = 0; x <= walkCacheWidth - 2; ++x) {
+							walkabilityCache[y][x] = walkabilityCache[y][x + 1];
+						}
+					}
+
+					// update map_walk_width - 1
+					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+						Tile* cacheTile = g_game.map.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileWalkCache(cacheTile, maxWalkCacheWidth, y);
+					}
+				} else if (oldPos.x > newPos.x) { // west
+					// shift y east
+					int32_t starty = 0;
+					int32_t endy = walkCacheHeight - 1;
+					int32_t dy = oldPos.getDistanceY(newPos);
+
+					if (dy < 0) {
+						endy += dy;
+					} else if (dy > 0) {
+						starty = dy;
+					}
+
+					for (int32_t y = starty; y <= endy; ++y) {
+						for (int32_t x = walkCacheWidth - 1; --x >= 0;) {
+							walkabilityCache[y][x + 1] = walkabilityCache[y][x];
+						}
+					}
+
+					// update 0
+					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+						Tile* cacheTile = g_game.map.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
+						updateTileWalkCache(cacheTile, -maxWalkCacheWidth, y);
+					}
+				}
+
+				updateTileWalkCache(oldTile, oldPos);
+			}
+		} else {
+			const Position& myPos = getPosition();
+			if (newPos.z == myPos.z) {
+				updateTileWalkCache(newTile, newPos);
+			}
+
+			if (oldPos.z == myPos.z) {
+				updateTileWalkCache(oldTile, oldPos);
+			}
+		}
+	}
+
+	if (creature == followCreature || (creature == this && followCreature)) {
+		if (hasFollowPath) {
+			isUpdatingPath = true;
+		}
+
+		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
+			onCreatureDisappear(followCreature, false);
+		}
+	}
+
+	if (creature == attackedCreature || (creature == this && attackedCreature)) {
+		if (newPos.z != oldPos.z || !canSee(attackedCreature->getPosition())) {
+			onCreatureDisappear(attackedCreature, false);
+		} else {
+			if (hasExtraSwing()) {
+				// our target is moving lets see if we can get in hit
+				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+			}
+
+			if (newTile->getZone() != oldTile->getZone()) {
+				onAttackedCreatureChangeZone(attackedCreature->getZone());
+			}
+		}
+	}
+
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
 	if (mType->info.creatureMoveEvent != -1) {
@@ -412,6 +552,72 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront /* = false*/)
 	}
 
 	updateIdleStatus();
+}
+
+void Monster::updateWalkCache()
+{
+	Tile* tile;
+	const Position& myPos = getPosition();
+	Position pos(0, 0, myPos.z);
+
+	for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
+		for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+			pos.x = myPos.getX() + x;
+			pos.y = myPos.getY() + y;
+			tile = g_game.map.getTile(pos);
+			updateTileWalkCache(tile, pos);
+		}
+	}
+}
+
+void Monster::updateTileWalkCache(const Tile* tile, int32_t dx, int32_t dy)
+{
+	if (std::abs(dx) <= maxWalkCacheWidth && std::abs(dy) <= maxWalkCacheHeight) {
+		walkabilityCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx] =
+		    tile && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RETURNVALUE_NOERROR;
+	}
+}
+
+void Monster::updateTileWalkCache(const Tile* tile, const Position& pos)
+{
+	const Position& myPos = getPosition();
+	if (pos.z == myPos.z) {
+		int32_t dx = pos.getOffsetX(myPos);
+		int32_t dy = pos.getOffsetY(myPos);
+		updateTileWalkCache(tile, dx, dy);
+	}
+}
+
+void Monster::onAddTileItem(const Tile* tile, const Position& pos)
+{
+	if (hasLoadedMap()) {
+		if (pos.z == getPosition().z) {
+			updateTileWalkCache(tile, pos);
+		}
+	}
+}
+
+void Monster::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*, const ItemType& oldType, const Item*,
+                               const ItemType& newType)
+{
+	if (hasLoadedMap()) {
+		if (oldType.blockSolid || oldType.blockPathFind || newType.blockPathFind || newType.blockSolid) {
+			if (pos.z == getPosition().z) {
+				updateTileWalkCache(tile, pos);
+			}
+		}
+	}
+}
+
+void Monster::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item*)
+{
+	if (hasLoadedMap()) {
+		if (iType.blockSolid || iType.blockPathFind || iType.isGroundTile()) {
+			if (pos.z == getPosition().z) {
+				updateTileWalkCache(tile, pos);
+			}
+		}
+	}
 }
 
 void Monster::onCreatureEnter(Creature* creature)
@@ -686,7 +892,7 @@ void Monster::updateIdleStatus()
 void Monster::onAddCondition(ConditionType_t type)
 {
 	if (type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON) {
-		updateMapCache();
+		updateWalkCache();
 	}
 
 	updateIdleStatus();
@@ -696,7 +902,7 @@ void Monster::onEndCondition(ConditionType_t type)
 {
 	if (type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON) {
 		ignoreFieldDamage = false;
-		updateMapCache();
+		updateWalkCache();
 	}
 
 	updateIdleStatus();
@@ -704,6 +910,13 @@ void Monster::onEndCondition(ConditionType_t type)
 
 void Monster::onThink(uint32_t interval)
 {
+	if (!hasLoadedMap()) {
+		if (useWalkCache()) {
+			mapLoaded = true;
+			updateWalkCache();
+		}
+	}
+
 	Creature::onThink(interval);
 
 	if (mType->info.thinkEvent != -1) {
@@ -1181,8 +1394,9 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			} else {
 				if (ignoreFieldDamage) {
 					ignoreFieldDamage = false;
-					updateMapCache();
+					updateWalkCache();
 				}
+
 				// target dancing
 				if (attackedCreature && attackedCreature == followCreature) {
 					if (isFleeing()) {
@@ -1813,6 +2027,29 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 	return true;
 }
 
+int32_t Monster::getWalkCache(const Position& pos) const
+{
+	if (useWalkCache()) {
+		const Position& myPos = getPosition();
+		if (myPos.z != pos.z) {
+			return 0;
+		} else if (pos == myPos) {
+			return 1;
+		}
+
+		if (int32_t dx = pos.getOffsetX(myPos); std::abs(dx) <= maxWalkCacheWidth) {
+			if (int32_t dy = pos.getOffsetY(myPos); std::abs(dy) <= maxWalkCacheHeight) {
+				if (walkabilityCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
+					return 1;
+				}
+				return 0;
+			}
+		}
+	}
+
+	return 2;
+}
+
 bool Monster::canWalkTo(Position pos, Direction direction) const
 {
 	pos = getNextPosition(direction, pos);
@@ -1957,7 +2194,7 @@ void Monster::drainHealth(Creature* attacker, int32_t damage)
 
 	if (damage > 0 && randomStepping) {
 		ignoreFieldDamage = true;
-		updateMapCache();
+		updateWalkCache();
 	}
 
 	if (isInvisible()) {
