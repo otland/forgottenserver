@@ -408,11 +408,17 @@ bool Items::loadFromOtb(const std::string& file)
 {
 	auto loader = OTB::load(file, "OTBI");
 
+<<<<<<< HEAD
 	auto first = loader.begin(), last = loader.end();
+=======
+	auto first = loader.begin();
+	const auto last = loader.end();
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 	// 4 byte flags
 	// attributes
 	// 0x01 = version data
+<<<<<<< HEAD
 	// auto flags = OTB::read<uint32_t>(first, last); // unused
 	OTB::skip(first, last, sizeof(uint32_t));
 
@@ -431,6 +437,26 @@ bool Items::loadFromOtb(const std::string& file)
 	buildNumber = OTB::read<uint32_t>(first, last);  // revision
 	OTB::skip(first, last, VERSION_INFO_SIZE - 3 * sizeof(uint32_t));
 
+=======
+	// uint32_t flags = OTB::read<uint32_t>(first, last); // unused
+	OTB::skip(first, last, sizeof(uint32_t));
+	uint8_t attr = OTB::read<uint8_t>(first, last);
+
+	if (attr == ROOT_ATTR_VERSION) {
+		constexpr auto VERSION_INFO_SIZE = 140;
+		auto length = OTB::read<uint16_t>(first, last);
+		if (length != VERSION_INFO_SIZE) {
+			throw std::invalid_argument(
+			    fmt::format("Invalid data length for version info: expected 140, got {:d}", length));
+		}
+
+		majorVersion = OTB::read<uint32_t>(first, last); // items otb format file version
+		minorVersion = OTB::read<uint32_t>(first, last); // client version
+		buildNumber = OTB::read<uint32_t>(first, last);  // revision
+		OTB::skip(first, last, VERSION_INFO_SIZE - 3 * sizeof(uint32_t));
+	}
+
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	if (majorVersion == std::numeric_limits<uint32_t>::max()) {
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
 	} else if (majorVersion != 3) {
@@ -442,8 +468,16 @@ bool Items::loadFromOtb(const std::string& file)
 	}
 
 	for (auto& itemNode : loader.children()) {
+<<<<<<< HEAD
 		auto first = itemNode.propsBegin;
 		auto flags = OTB::read<uint32_t>(first, itemNode.propsEnd);
+=======
+		auto first = itemNode.props_begin;
+		const auto last = itemNode.props_end;
+
+		uint32_t flags = OTB::read<uint32_t>(first, last);
+
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
 		uint16_t speed = 0;
@@ -453,6 +487,7 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t alwaysOnTopOrder = 0;
 		uint8_t classification = 0;
 
+<<<<<<< HEAD
 		while (first != itemNode.propsEnd) {
 			auto attr = OTB::read<uint8_t>(first, itemNode.propsEnd);
 			auto length = OTB::read<uint16_t>(first, itemNode.propsEnd);
@@ -460,79 +495,145 @@ bool Items::loadFromOtb(const std::string& file)
 			switch (attr) {
 				case ITEM_ATTR_SERVERID: {
 					if (length != sizeof(uint16_t)) [[unlikely]] {
+=======
+		while (first != last) {
+			uint8_t attr = OTB::read<uint8_t>(first, last);
+			uint16_t length = OTB::read<uint16_t>(first, last);
+
+			switch (attr) {
+				case ITEM_ATTR_SERVERID: {
+					if (length != sizeof(uint16_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid server ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					serverId = OTB::read<uint16_t>(first, itemNode.propsEnd);
+=======
+					serverId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_CLIENTID: {
+<<<<<<< HEAD
 					if (length != sizeof(uint16_t)) [[unlikely]] {
+=======
+					if (length != sizeof(uint16_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid client ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					clientId = OTB::read<uint16_t>(first, itemNode.propsEnd);
+=======
+					clientId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_SPEED: {
+<<<<<<< HEAD
 					if (length != sizeof(uint16_t)) [[unlikely]] {
+=======
+					if (length != sizeof(uint16_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid speed attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					speed = OTB::read<uint16_t>(first, itemNode.propsEnd);
+=======
+					speed = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_LIGHT2: {
+<<<<<<< HEAD
 					if (length != 2 * sizeof(uint16_t)) [[unlikely]] {
+=======
+					if (length != sizeof(lightBlock2)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid light2 attribute length: expected {:d}, got {:d}", 2 * sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, itemNode.propsEnd));
 					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, itemNode.propsEnd));
+=======
+					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
+					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_TOPORDER: {
+<<<<<<< HEAD
 					if (length != sizeof(uint8_t)) [[unlikely]] {
+=======
+					if (length != sizeof(uint8_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid top order attribute length: expected {:d}, got {:d}", sizeof(uint8_t), length));
 					}
 
+<<<<<<< HEAD
 					alwaysOnTopOrder = OTB::read<uint8_t>(first, itemNode.propsEnd);
+=======
+					alwaysOnTopOrder = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_WAREID: {
+<<<<<<< HEAD
 					if (length != sizeof(uint16_t)) [[unlikely]] {
+=======
+					if (length != sizeof(uint16_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(fmt::format(
 						    "Invalid ware ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					wareId = OTB::read<uint16_t>(first, itemNode.propsEnd);
+=======
+					wareId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				case ITEM_ATTR_CLASSIFICATION: {
+<<<<<<< HEAD
 					if (length != sizeof(uint8_t)) [[unlikely]] {
+=======
+					if (length != sizeof(uint8_t)) {
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 						throw std::invalid_argument(
 						    fmt::format("Invalid classification attribute length: expected {:d}, got {:d}",
 						                sizeof(uint16_t), length));
 					}
 
+<<<<<<< HEAD
 					classification = OTB::read<uint8_t>(first, itemNode.propsEnd);
+=======
+					classification = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 
 				default: {
 					// skip unknown attributes
+<<<<<<< HEAD
 					OTB::skip(first, itemNode.propsEnd, length);
+=======
+					OTB::skip(first, last, length);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 					break;
 				}
 			}

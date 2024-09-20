@@ -15,7 +15,11 @@ public:
 	const Teleport* getTeleport() const override { return this; }
 
 	// serialization
+<<<<<<< HEAD
 	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
+=======
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last) override;
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
 	const Position& getDestPos() const { return destPos; }

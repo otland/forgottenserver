@@ -13,11 +13,19 @@ extern Game g_game;
 
 namespace {
 
+<<<<<<< HEAD
 bool loadContainer(const char*& first, const char* const last, Container* container);
 
 bool loadItem(const char*& first, const char* const last, Cylinder* parent)
 {
 	auto id = OTB::read<uint16_t>(first, last);
+=======
+bool loadContainer(const char*& first, const char* last, Container* container);
+
+bool loadItem(const char*& first, const char* last, Cylinder* parent)
+{
+	uint16_t id = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 	Tile* tile = nullptr;
 	if (!parent->hasParent()) {
@@ -27,6 +35,7 @@ bool loadItem(const char*& first, const char* const last, Cylinder* parent)
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || iType.forceSerialize || !tile) {
 		// create a new item
+<<<<<<< HEAD
 		if (Item* item = Item::CreateItem(id)) {
 			try {
 				item->unserializeAttr(first, last);
@@ -39,6 +48,15 @@ bool loadItem(const char*& first, const char* const last, Cylinder* parent)
 			}
 
 			parent->internalAddThing(item);
+=======
+		if (std::unique_ptr<Item> item{Item::CreateItem(id)}) {
+			item->unserializeAttr(first, last);
+			if (Container* container = item->getContainer()) {
+				loadContainer(first, last, container);
+			}
+
+			parent->internalAddThing(item.get());
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			item->startDecaying();
 		}
 	} else {
@@ -85,14 +103,22 @@ bool loadItem(const char*& first, const char* const last, Cylinder* parent)
 	return true;
 }
 
+<<<<<<< HEAD
 bool loadContainer(const char*& first, const char* const last, Container* container)
+=======
+bool loadContainer(const char*& first, const char* last, Container* container)
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 {
 	while (container->serializationCount > 0) {
 		loadItem(first, last, container);
 		container->serializationCount--;
 	}
 
+<<<<<<< HEAD
 	auto endAttr = OTB::read<uint8_t>(first, last);
+=======
+	uint8_t endAttr = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	if (endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
 		          << container->getID() << std::endl;
@@ -117,16 +143,26 @@ void IOMapSerialize::loadHouseItems(Map* map)
 		auto first = attr.begin(), last = attr.end();
 
 		try {
+<<<<<<< HEAD
 			auto x = OTB::read<uint16_t>(first, last);
 			auto y = OTB::read<uint16_t>(first, last);
 			auto z = OTB::read<uint8_t>(first, last);
+=======
+			uint16_t x = OTB::read<uint16_t>(first, last);
+			uint16_t y = OTB::read<uint16_t>(first, last);
+			uint8_t z = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 			Tile* tile = map->getTile(x, y, z);
 			if (!tile) {
 				continue;
 			}
 
+<<<<<<< HEAD
 			auto item_count = OTB::read<uint32_t>(first, last);
+=======
+			uint32_t item_count = OTB::read<uint32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 			while (item_count--) {
 				loadItem(first, last, tile);
