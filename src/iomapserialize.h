@@ -9,7 +9,6 @@ class Cylinder;
 class House;
 class Item;
 class Map;
-class PropStream;
 class PropWriteStream;
 class Tile;
 
@@ -26,9 +25,6 @@ public:
 private:
 	static void saveItem(PropWriteStream& stream, const Item* item);
 	static void saveTile(PropWriteStream& stream, const Tile* tile);
-
-	static bool loadContainer(PropStream& propStream, Container* container);
-	static bool loadItem(PropStream& propStream, Cylinder* parent);
 };
 
 #endif // FS_IOMAPSERIALIZE_H

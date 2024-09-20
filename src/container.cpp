@@ -98,49 +98,40 @@ void Container::addItem(Item* item)
 	item->setParent(this);
 }
 
-Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
 	if (attr == ATTR_CONTAINER_ITEMS) {
-		if (!propStream.read<uint32_t>(serializationCount)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_END;
+		serializationCount = OTB::read<uint32_t>(first, last);
+	} else {
+		Item::readAttr(attr, first, last);
 	}
-	return Item::readAttr(attr, propStream);
 }
 
-bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
+void Container::unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node& node)
 {
-	bool ret = Item::unserializeItemNode(loader, node, propStream);
-	if (!ret) {
-		return false;
-	}
+	Item::unserializeItemNode(first, last, node);
 
 	for (auto& itemNode : node.children) {
 		// load container items
 		if (itemNode.type != OTBM_ITEM) {
-			// unknown type
-			return false;
+			throw std::invalid_argument("Invalid node type");
 		}
 
-		PropStream itemPropStream;
-		if (!loader.getProps(itemNode, itemPropStream)) {
-			return false;
-		}
+		auto node_first = itemNode.props_begin;
+		const auto node_last = itemNode.props_end;
 
-		Item* item = Item::CreateItem(itemPropStream);
+		uint16_t id = OTB::read<uint16_t>(node_first, node_last);
+
+		auto item = Item::CreateItem2(id);
 		if (!item) {
-			return false;
+			throw std::invalid_argument("Invalid item id");
 		}
 
-		if (!item->unserializeItemNode(loader, itemNode, itemPropStream)) {
-			return false;
-		}
+		item->unserializeItemNode(node_first, node_last, itemNode);
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
 	}
-	return true;
 }
 
 void Container::updateItemWeight(int32_t diff)

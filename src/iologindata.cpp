@@ -959,15 +959,11 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		uint16_t count = result->getNumber<uint16_t>("count");
 
 		auto attr = result->getString("attributes");
-		PropStream propStream;
-		propStream.init(attr.data(), attr.size());
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {
-			if (!item->unserializeAttr(propStream)) {
-				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
-			}
-
+			auto first = attr.begin();
+			item->unserializeAttr(first, attr.end());
 			std::pair<Item*, uint32_t> pair(item, pid);
 			itemMap[sid] = pair;
 		}

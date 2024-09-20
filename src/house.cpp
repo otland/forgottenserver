@@ -487,18 +487,14 @@ void AccessList::getList(std::string& list) const { list = this->list; }
 
 Door::Door(uint16_t type) : Item(type) {}
 
-Attr_ReadValue Door::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
 	if (attr == ATTR_HOUSEDOORID) {
-		uint8_t doorId;
-		if (!propStream.read<uint8_t>(doorId)) {
-			return ATTR_READ_ERROR;
-		}
-
+		uint8_t doorId = OTB::read<uint8_t>(first, last);
 		setDoorId(doorId);
-		return ATTR_READ_CONTINUE;
+	} else {
+		Item::readAttr(attr, first, last);
 	}
-	return Item::readAttr(attr, propStream);
 }
 
 void Door::setHouse(House* house)

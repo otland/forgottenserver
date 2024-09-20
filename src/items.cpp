@@ -328,51 +328,35 @@ bool Items::reload()
 	return true;
 }
 
-constexpr auto OTBI = OTB::Identifier{{'O', 'T', 'B', 'I'}};
-
 bool Items::loadFromOtb(const std::string& file)
 {
-	OTB::Loader loader{file, OTBI};
+	auto loader = OTB::load(file, "OTBI");
 
-	auto& root = loader.parseTree();
+	auto first = loader.begin();
+	const auto last = loader.end();
 
-	PropStream props;
-	if (loader.getProps(root, props)) {
-		// 4 byte flags
-		// attributes
-		// 0x01 = version data
-		uint32_t flags;
-		if (!props.read<uint32_t>(flags)) {
-			return false;
+	// 4 byte flags
+	// attributes
+	// 0x01 = version data
+	// uint32_t flags = OTB::read<uint32_t>(first, last); // unused
+	OTB::skip(first, last, sizeof(uint32_t));
+	uint8_t attr = OTB::read<uint8_t>(first, last);
+
+	if (attr == ROOT_ATTR_VERSION) {
+		constexpr auto VERSION_INFO_SIZE = 140;
+		auto length = OTB::read<uint16_t>(first, last);
+		if (length != VERSION_INFO_SIZE) {
+			throw std::invalid_argument(
+			    fmt::format("Invalid data length for version info: expected 140, got {:d}", length));
 		}
 
-		uint8_t attr;
-		if (!props.read<uint8_t>(attr)) {
-			return false;
-		}
-
-		if (attr == ROOT_ATTR_VERSION) {
-			uint16_t datalen;
-			if (!props.read<uint16_t>(datalen)) {
-				return false;
-			}
-
-			if (datalen != sizeof(VERSIONINFO)) {
-				return false;
-			}
-
-			VERSIONINFO vi;
-			if (!props.read(vi)) {
-				return false;
-			}
-
-			majorVersion = vi.dwMajorVersion; // items otb format file version
-			minorVersion = vi.dwMinorVersion; // client version
-			buildNumber = vi.dwBuildNumber;   // revision
-		}
+		majorVersion = OTB::read<uint32_t>(first, last); // items otb format file version
+		minorVersion = OTB::read<uint32_t>(first, last); // client version
+		buildNumber = OTB::read<uint32_t>(first, last);  // revision
+		OTB::skip(first, last, VERSION_INFO_SIZE - 3 * sizeof(uint32_t));
 	}
 
-	if (majorVersion == 0xFFFFFFFF) {
+	if (majorVersion == std::numeric_limits<uint32_t>::max()) {
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
 	} else if (majorVersion != 3) {
 		std::cout << "Old version detected, a newer version of items.otb is required." << std::endl;
@@ -382,16 +366,11 @@ bool Items::loadFromOtb(const std::string& file)
 		return false;
 	}
 
-	for (auto& itemNode : root.children) {
-		PropStream stream;
-		if (!loader.getProps(itemNode, stream)) {
-			return false;
-		}
+	for (auto& itemNode : loader.children()) {
+		auto first = itemNode.props_begin;
+		const auto last = itemNode.props_end;
 
-		uint32_t flags;
-		if (!stream.read<uint32_t>(flags)) {
-			return false;
-		}
+		uint32_t flags = OTB::read<uint32_t>(first, last);
 
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
@@ -402,100 +381,86 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t alwaysOnTopOrder = 0;
 		uint8_t classification = 0;
 
-		uint8_t attrib;
-		while (stream.read<uint8_t>(attrib)) {
-			uint16_t datalen;
-			if (!stream.read<uint16_t>(datalen)) {
-				return false;
-			}
+		while (first != last) {
+			uint8_t attr = OTB::read<uint8_t>(first, last);
+			uint16_t length = OTB::read<uint16_t>(first, last);
 
-			switch (attrib) {
+			switch (attr) {
 				case ITEM_ATTR_SERVERID: {
-					if (datalen != sizeof(uint16_t)) {
-						return false;
+					if (length != sizeof(uint16_t)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid server ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					if (!stream.read<uint16_t>(serverId)) {
-						return false;
-					}
+					serverId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_CLIENTID: {
-					if (datalen != sizeof(uint16_t)) {
-						return false;
+					if (length != sizeof(uint16_t)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid client ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					if (!stream.read<uint16_t>(clientId)) {
-						return false;
-					}
+					clientId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_SPEED: {
-					if (datalen != sizeof(uint16_t)) {
-						return false;
+					if (length != sizeof(uint16_t)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid speed attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					if (!stream.read<uint16_t>(speed)) {
-						return false;
-					}
+					speed = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_LIGHT2: {
-					if (datalen != sizeof(lightBlock2)) {
-						return false;
+					if (length != sizeof(lightBlock2)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid light2 attribute length: expected {:d}, got {:d}", 2 * sizeof(uint16_t), length));
 					}
 
-					lightBlock2 lb2;
-					if (!stream.read(lb2)) {
-						return false;
-					}
-
-					lightLevel = static_cast<uint8_t>(lb2.lightLevel);
-					lightColor = static_cast<uint8_t>(lb2.lightColor);
+					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
+					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
 					break;
 				}
 
 				case ITEM_ATTR_TOPORDER: {
-					if (datalen != sizeof(uint8_t)) {
-						return false;
+					if (length != sizeof(uint8_t)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid top order attribute length: expected {:d}, got {:d}", sizeof(uint8_t), length));
 					}
 
-					if (!stream.read<uint8_t>(alwaysOnTopOrder)) {
-						return false;
-					}
+					alwaysOnTopOrder = OTB::read<uint8_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_WAREID: {
-					if (datalen != sizeof(uint16_t)) {
-						return false;
+					if (length != sizeof(uint16_t)) {
+						throw std::invalid_argument(fmt::format(
+						    "Invalid ware ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					if (!stream.read<uint16_t>(wareId)) {
-						return false;
-					}
+					wareId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_CLASSIFICATION: {
-					if (datalen != sizeof(uint8_t)) {
-						return false;
+					if (length != sizeof(uint8_t)) {
+						throw std::invalid_argument(
+						    fmt::format("Invalid classification attribute length: expected {:d}, got {:d}",
+						                sizeof(uint16_t), length));
 					}
 
-					if (!stream.read<uint8_t>(classification)) {
-						return false;
-					}
+					classification = OTB::read<uint8_t>(first, last);
 					break;
 				}
 
 				default: {
 					// skip unknown attributes
-					if (!stream.skip(datalen)) {
-						return false;
-					}
+					OTB::skip(first, last, length);
 					break;
 				}
 			}

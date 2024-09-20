@@ -4,52 +4,139 @@
 #ifndef FS_FILELOADER_H
 #define FS_FILELOADER_H
 
-class PropStream;
-
 namespace OTB {
+
 using MappedFile = boost::iostreams::mapped_file_source;
-using ContentIt = MappedFile::iterator;
-using Identifier = std::array<char, 4>;
+using iterator = MappedFile::iterator;
 
 struct Node
 {
-	using ChildrenVector = std::vector<Node>;
+	std::vector<Node> children = {};
+	OTB::iterator props_begin, props_end;
+	char type;
 
-	ChildrenVector children;
-	ContentIt propsBegin;
-	ContentIt propsEnd;
-	uint8_t type;
-	enum NodeChar : uint8_t
-	{
-		ESCAPE = 0xFD,
-		START = 0xFE,
-		END = 0xFF,
-	};
-};
-
-struct LoadError : std::exception
-{
-	const char* what() const noexcept override = 0;
-};
-
-struct InvalidOTBFormat final : LoadError
-{
-	const char* what() const noexcept override { return "Invalid OTBM file format"; }
+	static constexpr char ESCAPE = '\xFD';
+	static constexpr char START = '\xFE';
+	static constexpr char END = '\xFF';
 };
 
 class Loader
 {
-	MappedFile fileContents;
-	Node root;
-	std::vector<char> propBuffer;
-
 public:
-	Loader(const std::string& fileName, const Identifier& acceptedIdentifier);
-	bool getProps(const Node& node, PropStream& props);
-	const Node& parseTree();
+	Loader(MappedFile file, Node root) : file{std::move(file)}, root{std::move(root)} {}
+
+	const std::vector<Node>& children() const { return root.children; }
+	auto begin() const { return root.props_begin; }
+	auto end() const { return root.props_end; }
+
+private:
+	MappedFile file;
+	Node root;
 };
 
+Loader load(std::string_view filename, std::string_view acceptedIdentifier);
+
+template <class T, class It>
+T read(It& first, It const last)
+{
+	std::array<char, sizeof(T)> buf;
+	auto it = buf.begin();
+
+	while (it != buf.end() && first < last) {
+		if (*first == Node::ESCAPE) {
+			++first;
+		}
+		*it++ = *first++;
+	}
+
+	if (it != buf.end()) {
+		throw std::invalid_argument("Not enough bytes to read.");
+	}
+
+	T out;
+	std::memcpy(reinterpret_cast<char*>(&out), buf.data(), buf.size());
+	return out;
+}
+
+template <class It>
+std::string readString(It& first, It const last)
+{
+	auto len = read<uint16_t>(first, last);
+	if (last - first < len) {
+		throw std::invalid_argument("Not enough bytes to read as string.");
+	}
+
+	std::string out;
+	out.reserve(len);
+
+	auto start = first, end = first + len;
+	while (start < end) {
+		if (*start == Node::ESCAPE) {
+			++start, ++end;
+		}
+		out.push_back(*start);
+		++start;
+	}
+
+	first = end;
+	return out;
+}
+
+template <class It>
+void skip(It& first, It const last, const int len)
+{
+	if (last - first < len) {
+		throw std::invalid_argument("Not enough bytes to skip.");
+	}
+
+	auto start = first, end = first + len;
+	while (start < end) {
+		if (*start == Node::ESCAPE) {
+			++start, ++end;
+		}
+		++start;
+	}
+
+	first = end;
+}
+
 } // namespace OTB
+
+class PropWriteStream
+{
+public:
+	PropWriteStream() = default;
+
+	// non-copyable
+	PropWriteStream(const PropWriteStream&) = delete;
+	PropWriteStream& operator=(const PropWriteStream&) = delete;
+
+	std::string_view getStream() const { return {buffer.data(), buffer.size()}; }
+
+	void clear() { buffer.clear(); }
+
+	template <typename T>
+	void write(T add)
+	{
+		char* addr = reinterpret_cast<char*>(&add);
+		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
+	}
+
+	void writeString(std::string_view str)
+	{
+		size_t strLength = str.size();
+		if (strLength > std::numeric_limits<uint16_t>::max()) {
+			write<uint16_t>(0);
+			return;
+		}
+
+		write(static_cast<uint16_t>(strLength));
+		std::copy(str.begin(), str.end(), std::back_inserter(buffer));
+	}
+
+private:
+	std::vector<char> buffer;
+};
 
 class PropStream
 {
@@ -103,42 +190,6 @@ public:
 private:
 	const char* p = nullptr;
 	const char* end = nullptr;
-};
-
-class PropWriteStream
-{
-public:
-	PropWriteStream() = default;
-
-	// non-copyable
-	PropWriteStream(const PropWriteStream&) = delete;
-	PropWriteStream& operator=(const PropWriteStream&) = delete;
-
-	std::string_view getStream() const { return {buffer.data(), buffer.size()}; }
-
-	void clear() { buffer.clear(); }
-
-	template <typename T>
-	void write(T add)
-	{
-		char* addr = reinterpret_cast<char*>(&add);
-		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
-	}
-
-	void writeString(const std::string& str)
-	{
-		size_t strLength = str.size();
-		if (strLength > std::numeric_limits<uint16_t>::max()) {
-			write<uint16_t>(0);
-			return;
-		}
-
-		write(static_cast<uint16_t>(strLength));
-		std::copy(str.begin(), str.end(), std::back_inserter(buffer));
-	}
-
-private:
-	std::vector<char> buffer;
 };
 
 #endif // FS_FILELOADER_H

@@ -85,6 +85,11 @@ Item* Item::CreateItem(PropStream& propStream)
 		return nullptr;
 	}
 
+	return Item::CreateItem2(id);
+}
+
+Item* Item::CreateItem2(uint16_t id)
+{
 	switch (id) {
 		case ITEM_FIREFIELD_PVP_FULL:
 			id = ITEM_FIREFIELD_PERSISTENT_FULL;
@@ -351,106 +356,61 @@ void Item::setSubType(uint16_t n)
 	}
 }
 
-Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
 	switch (attr) {
+		case ATTR_CHARGES:
 		case ATTR_COUNT:
 		case ATTR_RUNE_CHARGES: {
-			uint8_t count;
-			if (!propStream.read<uint8_t>(count)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint8_t count = OTB::read<uint8_t>(first, last);
 			setSubType(count);
 			break;
 		}
 
 		case ATTR_ACTION_ID: {
-			uint16_t actionId;
-			if (!propStream.read<uint16_t>(actionId)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint16_t actionId = OTB::read<uint16_t>(first, last);
 			setActionId(actionId);
 			break;
 		}
 
 		case ATTR_UNIQUE_ID: {
-			uint16_t uniqueId;
-			if (!propStream.read<uint16_t>(uniqueId)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint16_t uniqueId = OTB::read<uint16_t>(first, last);
 			setUniqueId(uniqueId);
 			break;
 		}
 
 		case ATTR_TEXT: {
-			auto [text, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string text = OTB::readString(first, last);
 			setText(text);
 			break;
 		}
 
 		case ATTR_WRITTENDATE: {
-			uint32_t writtenDate;
-			if (!propStream.read<uint32_t>(writtenDate)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint32_t writtenDate = OTB::read<uint32_t>(first, last);
 			setDate(writtenDate);
 			break;
 		}
 
 		case ATTR_WRITTENBY: {
-			auto [writer, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string writer = OTB::readString(first, last);
 			setWriter(writer);
 			break;
 		}
 
 		case ATTR_DESC: {
-			auto [text, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string text = OTB::readString(first, last);
 			setSpecialDescription(text);
 			break;
 		}
 
-		case ATTR_CHARGES: {
-			uint16_t charges;
-			if (!propStream.read<uint16_t>(charges)) {
-				return ATTR_READ_ERROR;
-			}
-
-			setSubType(charges);
-			break;
-		}
-
 		case ATTR_DURATION: {
-			int32_t duration;
-			if (!propStream.read<int32_t>(duration)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t duration = OTB::read<int32_t>(first, last);
 			setDuration(std::max<int32_t>(0, duration));
 			break;
 		}
 
 		case ATTR_DECAYING_STATE: {
-			uint8_t state;
-			if (!propStream.read<uint8_t>(state)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint8_t state = OTB::read<uint8_t>(first, last);
 			if (state != DECAYING_FALSE) {
 				setDecaying(DECAYING_PENDING);
 			}
@@ -458,189 +418,112 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 		}
 
 		case ATTR_NAME: {
-			auto [name, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string name = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_NAME, name);
 			break;
 		}
 
 		case ATTR_ARTICLE: {
-			auto [article, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string article = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, article);
 			break;
 		}
 
 		case ATTR_PLURALNAME: {
-			auto [pluralName, ok] = propStream.readString();
-			if (!ok) {
-				return ATTR_READ_ERROR;
-			}
-
+			std::string pluralName = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_PLURALNAME, pluralName);
 			break;
 		}
 
 		case ATTR_WEIGHT: {
-			uint32_t weight;
-			if (!propStream.read<uint32_t>(weight)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint32_t weight = OTB::read<uint32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_WEIGHT, weight);
 			break;
 		}
 
 		case ATTR_ATTACK: {
-			int32_t attack;
-			if (!propStream.read<int32_t>(attack)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t attack = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK, attack);
 			break;
 		}
 
 		case ATTR_ATTACK_SPEED: {
-			uint32_t attackSpeed;
-			if (!propStream.read<uint32_t>(attackSpeed)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint32_t attackSpeed = OTB::read<uint32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK_SPEED, attackSpeed);
 			break;
 		}
 
 		case ATTR_DEFENSE: {
-			int32_t defense;
-			if (!propStream.read<int32_t>(defense)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t defense = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, defense);
 			break;
 		}
 
 		case ATTR_EXTRADEFENSE: {
-			int32_t extraDefense;
-			if (!propStream.read<int32_t>(extraDefense)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t extraDefense = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE, extraDefense);
 			break;
 		}
 
 		case ATTR_ARMOR: {
-			int32_t armor;
-			if (!propStream.read<int32_t>(armor)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t armor = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ARMOR, armor);
 			break;
 		}
 
 		case ATTR_HITCHANCE: {
-			int8_t hitChance;
-			if (!propStream.read<int8_t>(hitChance)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int8_t hitChance = OTB::read<int8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_HITCHANCE, hitChance);
 			break;
 		}
 
 		case ATTR_SHOOTRANGE: {
-			uint8_t shootRange;
-			if (!propStream.read<uint8_t>(shootRange)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint8_t shootRange = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, shootRange);
 			break;
 		}
 
 		case ATTR_DECAYTO: {
-			int32_t decayTo;
-			if (!propStream.read<int32_t>(decayTo)) {
-				return ATTR_READ_ERROR;
-			}
-
+			int32_t decayTo = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 			break;
 		}
 
 		case ATTR_WRAPID: {
-			uint16_t wrapId;
-			if (!propStream.read<uint16_t>(wrapId)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint16_t wrapId = OTB::read<uint16_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_WRAPID, wrapId);
 			break;
 		}
 
 		case ATTR_STOREITEM: {
-			uint8_t storeItem;
-			if (!propStream.read<uint8_t>(storeItem)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint8_t storeItem = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, storeItem);
 			break;
 		}
 
 		case ATTR_OPENCONTAINER: {
-			uint8_t openContainer;
-			if (!propStream.read<uint8_t>(openContainer)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint8_t openContainer = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, openContainer);
 			break;
 		}
 
 		case ATTR_REFLECT: {
-			uint16_t size;
-			if (!propStream.read<uint16_t>(size)) {
-				return ATTR_READ_ERROR;
-			}
+			uint16_t size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
-				CombatType_t combatType;
-				Reflect reflect;
-
-				if (!propStream.read<CombatType_t>(combatType) || !propStream.read<uint16_t>(reflect.percent) ||
-				    !propStream.read<uint16_t>(reflect.chance)) {
-					return ATTR_READ_ERROR;
-				}
-
+				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
+				Reflect reflect(OTB::read<uint16_t>(first, last), OTB::read<uint16_t>(first, last));
 				getAttributes()->reflect[combatType] = reflect;
 			}
 			break;
 		}
 
 		case ATTR_BOOST: {
-			uint16_t size;
-			if (!propStream.read<uint16_t>(size)) {
-				return ATTR_READ_ERROR;
-			}
+			uint16_t size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
-				CombatType_t combatType;
-				uint16_t percent;
-
-				if (!propStream.read<CombatType_t>(combatType) || !propStream.read<uint16_t>(percent)) {
-					return ATTR_READ_ERROR;
-				}
-
+				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
+				uint16_t percent = OTB::read<uint16_t>(first, last);
 				getAttributes()->boostPercent[combatType] = percent;
 			}
 			break;
@@ -651,104 +534,76 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 
 		// Depot class
 		case ATTR_DEPOT_ID: {
-			if (!propStream.skip(2)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 2);
 			break;
 		}
 
 		// Door class
 		case ATTR_HOUSEDOORID: {
-			if (!propStream.skip(1)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 1);
 			break;
 		}
 
 		// Bed class
 		case ATTR_SLEEPERGUID: {
-			if (!propStream.skip(4)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 4);
 			break;
 		}
 
 		case ATTR_SLEEPSTART: {
-			if (!propStream.skip(4)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 4);
 			break;
 		}
 
 		// Podium class
 		case ATTR_PODIUMOUTFIT: {
-			if (!propStream.skip(15)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 15);
 			break;
 		}
 
 		// Teleport class
 		case ATTR_TELE_DEST: {
-			if (!propStream.skip(5)) {
-				return ATTR_READ_ERROR;
-			}
+			OTB::skip(first, last, 5);
 			break;
 		}
 
 		// Container class
 		case ATTR_CONTAINER_ITEMS: {
-			return ATTR_READ_ERROR;
+			throw std::invalid_argument("Container items should be handled by Container class");
 		}
 
 		case ATTR_CUSTOM_ATTRIBUTES: {
-			uint64_t size;
-			if (!propStream.read<uint64_t>(size)) {
-				return ATTR_READ_ERROR;
-			}
+			uint64_t size = OTB::read<uint64_t>(first, last);
 
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
-				auto [key, ok] = propStream.readString();
-				if (!ok) {
-					return ATTR_READ_ERROR;
-				};
+				std::string key = OTB::readString(first, last);
 
 				// Unserialize value type and value
 				ItemAttributes::CustomAttribute val;
-				if (!val.unserialize(propStream)) {
-					return ATTR_READ_ERROR;
-				}
-
+				val.unserialize(first, last);
 				setCustomAttribute(key, val);
 			}
 			break;
 		}
 
 		default:
-			return ATTR_READ_ERROR;
+			// fmt::print("Invalid attribute type: {:d}\n", tfs::to_underlying(attr));
+			break;
 	}
-
-	return ATTR_READ_CONTINUE;
 }
 
-bool Item::unserializeAttr(PropStream& propStream)
+void Item::unserializeAttr(OTB::iterator& first, OTB::iterator const last)
 {
-	uint8_t attr_type;
-	while (propStream.read<uint8_t>(attr_type) && attr_type != 0) {
-		Attr_ReadValue ret = readAttr(static_cast<AttrTypes_t>(attr_type), propStream);
-		if (ret == ATTR_READ_ERROR) {
-			return false;
-		} else if (ret == ATTR_READ_END) {
-			return true;
-		}
+	while (first != last) {
+		auto attr = OTB::read<uint8_t>(first, last);
+		readAttr(static_cast<AttrTypes_t>(attr), first, last);
 	}
-	return true;
 }
 
-bool Item::unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream)
+void Item::unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node&)
 {
-	return unserializeAttr(propStream);
+	return unserializeAttr(first, last);
 }
 
 void Item::serializeAttr(PropWriteStream& propWriteStream) const
@@ -1272,44 +1127,4 @@ bool Item::hasMarketAttributes() const
 		}
 	}
 	return true;
-}
-
-template <>
-const std::string& ItemAttributes::CustomAttribute::get<std::string>()
-{
-	if (value.type() == typeid(std::string)) {
-		return boost::get<std::string>(value);
-	}
-
-	return emptyString;
-}
-
-template <>
-const int64_t& ItemAttributes::CustomAttribute::get<int64_t>()
-{
-	if (value.type() == typeid(int64_t)) {
-		return boost::get<int64_t>(value);
-	}
-
-	return emptyInt;
-}
-
-template <>
-const double& ItemAttributes::CustomAttribute::get<double>()
-{
-	if (value.type() == typeid(double)) {
-		return boost::get<double>(value);
-	}
-
-	return emptyDouble;
-}
-
-template <>
-const bool& ItemAttributes::CustomAttribute::get<bool>()
-{
-	if (value.type() == typeid(bool)) {
-		return boost::get<bool>(value);
-	}
-
-	return emptyBool;
 }

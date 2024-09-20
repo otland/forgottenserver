@@ -152,123 +152,76 @@ public:
 
 	struct CustomAttribute
 	{
-		typedef boost::variant<boost::blank, std::string, int64_t, double, bool> VariantAttribute;
-		VariantAttribute value;
+		typedef std::variant<std::monostate, std::string, int64_t, double, bool> VariantAttribute;
+		VariantAttribute value = {};
 
-		CustomAttribute() : value(boost::blank()) {}
+		CustomAttribute() = default;
 
-		bool operator==(const CustomAttribute& otherAttr) const { return value == otherAttr.value; }
+		bool operator==(const CustomAttribute& rhs) const { return value == rhs.value; }
+		bool operator!=(const CustomAttribute& rhs) const { return value != rhs.value; }
+		auto operator=(const auto& v) { value = v; }
 
-		bool operator!=(const CustomAttribute& otherAttr) const { return value != otherAttr.value; }
+		// template <typename T>
+		// explicit CustomAttribute(const T& v) : value(v)
+		// {}
 
-		template <typename T>
-		explicit CustomAttribute(const T& v) : value(v)
-		{}
-
-		template <typename T>
-		void set(const T& v)
+		template <class... Ts>
+		struct overloaded : Ts...
 		{
-			value = v;
+			using Ts::operator()...;
+		};
+
+		void pushToLua(lua_State* L) const
+		{
+			std::visit(overloaded{
+			               [&](std::monostate) { lua_pushnil(L); },
+			               [&](std::string_view v) { tfs::lua::pushString(L, v); },
+			               [&](bool v) { tfs::lua::pushBoolean(L, v); },
+			               [&](int64_t v) { lua_pushnumber(L, v); },
+			               [&](double v) { lua_pushnumber(L, v); },
+			           },
+			           value);
 		}
-
-		template <typename T>
-		const T& get();
-
-		struct PushLuaVisitor : public boost::static_visitor<>
-		{
-			lua_State* L;
-
-			explicit PushLuaVisitor(lua_State* L) : boost::static_visitor<>(), L(L) {}
-
-			void operator()(const boost::blank&) const { lua_pushnil(L); }
-
-			void operator()(std::string_view v) const { tfs::lua::pushString(L, v); }
-
-			void operator()(bool v) const { tfs::lua::pushBoolean(L, v); }
-
-			void operator()(const int64_t& v) const { lua_pushnumber(L, v); }
-
-			void operator()(const double& v) const { lua_pushnumber(L, v); }
-		};
-
-		void pushToLua(lua_State* L) const { boost::apply_visitor(PushLuaVisitor(L), value); }
-
-		struct SerializeVisitor : public boost::static_visitor<>
-		{
-			PropWriteStream& propWriteStream;
-
-			explicit SerializeVisitor(PropWriteStream& propWriteStream) :
-			    boost::static_visitor<>(), propWriteStream(propWriteStream)
-			{}
-
-			void operator()(const boost::blank&) const {}
-
-			void operator()(const std::string& v) const { propWriteStream.writeString(v); }
-
-			template <typename T>
-			void operator()(const T& v) const
-			{
-				propWriteStream.write<T>(v);
-			}
-		};
 
 		void serialize(PropWriteStream& propWriteStream) const
 		{
-			propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.which()));
-			boost::apply_visitor(SerializeVisitor(propWriteStream), value);
+			propWriteStream.write<uint8_t>(static_cast<uint8_t>(value.index()));
+			std::visit(overloaded{
+			               [&](std::monostate) {},
+			               [&](std::string_view v) { propWriteStream.writeString(v); },
+			               [&](auto v) { propWriteStream.write(v); },
+			           },
+			           value);
 		}
 
-		bool unserialize(PropStream& propStream)
+		void unserialize(OTB::iterator& first, OTB::iterator const last)
 		{
 			// This is hard-coded so it's not general, depends on the position of the variants.
-			uint8_t pos;
-			if (!propStream.read<uint8_t>(pos)) {
-				return false;
-			}
-
-			switch (pos) {
+			switch (OTB::read<uint8_t>(first, last)) {
 				case 1: { // std::string
-					auto [str, ok] = propStream.readString();
-					if (!ok) {
-						return false;
-					}
-					value = std::string{str};
+					value = OTB::readString(first, last);
 					break;
 				}
 
 				case 2: { // int64_t
-					int64_t tmp;
-					if (!propStream.read<int64_t>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<int64_t>(first, last);
 					break;
 				}
 
 				case 3: { // double
-					double tmp;
-					if (!propStream.read<double>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<double>(first, last);
 					break;
 				}
 
 				case 4: { // bool
-					bool tmp;
-					if (!propStream.read<bool>(tmp)) {
-						return false;
-					}
-					value = tmp;
+					value = OTB::read<bool>(first, last);
 					break;
 				}
 
 				default: {
-					value = boost::blank();
-					return false;
+					throw std::invalid_argument("Invalid custom attribute type");
 				}
 			}
-			return true;
 		}
 	};
 
@@ -496,6 +449,7 @@ public:
 	static Item* CreateItem(const uint16_t type, uint16_t count = 0);
 	static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
 	static Item* CreateItem(PropStream& propStream);
+	static Item* CreateItem2(uint16_t type);
 	static Items items;
 
 	// Constructor for items
@@ -731,9 +685,9 @@ public:
 	std::string getWeightDescription() const;
 
 	// serialization
-	virtual Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream);
-	bool unserializeAttr(PropStream& propStream);
-	virtual bool unserializeItemNode(OTB::Loader&, const OTB::Node&, PropStream& propStream);
+	virtual void readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last);
+	virtual void unserializeAttr(OTB::iterator& first, OTB::iterator const last);
+	virtual void unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node& node);
 
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
