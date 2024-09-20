@@ -84,10 +84,17 @@ Item* Item::CreateItem(PropStream& propStream)
 		return nullptr;
 	}
 
+<<<<<<< HEAD
 	return Item::CreateItem(getPersistentId(id));
 }
 
 uint16_t Item::getPersistentId(uint16_t id)
+=======
+	return Item::CreateItem2(id);
+}
+
+Item* Item::CreateItem2(uint16_t id)
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 {
 	switch (id) {
 		case ITEM_FIREFIELD_PVP_FULL:
@@ -346,61 +353,101 @@ void Item::setSubType(uint16_t n)
 	}
 }
 
+<<<<<<< HEAD
 void Item::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
+=======
+void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 {
 	switch (attr) {
 		case ATTR_CHARGES:
 		case ATTR_COUNT:
 		case ATTR_RUNE_CHARGES: {
+<<<<<<< HEAD
 			auto count = OTB::read<uint8_t>(first, last);
+=======
+			uint8_t count = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setSubType(count);
 			break;
 		}
 
 		case ATTR_ACTION_ID: {
+<<<<<<< HEAD
 			auto actionId = OTB::read<uint16_t>(first, last);
+=======
+			uint16_t actionId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setActionId(actionId);
 			break;
 		}
 
 		case ATTR_UNIQUE_ID: {
+<<<<<<< HEAD
 			auto uniqueId = OTB::read<uint16_t>(first, last);
+=======
+			uint16_t uniqueId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setUniqueId(uniqueId);
 			break;
 		}
 
 		case ATTR_TEXT: {
+<<<<<<< HEAD
 			auto text = OTB::readString(first, last);
+=======
+			std::string text = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setText(text);
 			break;
 		}
 
 		case ATTR_WRITTENDATE: {
+<<<<<<< HEAD
 			auto writtenDate = OTB::read<uint32_t>(first, last);
+=======
+			uint32_t writtenDate = OTB::read<uint32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setDate(writtenDate);
 			break;
 		}
 
 		case ATTR_WRITTENBY: {
+<<<<<<< HEAD
 			auto writer = OTB::readString(first, last);
+=======
+			std::string writer = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setWriter(writer);
 			break;
 		}
 
 		case ATTR_DESC: {
+<<<<<<< HEAD
 			auto text = OTB::readString(first, last);
+=======
+			std::string text = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setSpecialDescription(text);
 			break;
 		}
 
 		case ATTR_DURATION: {
+<<<<<<< HEAD
 			auto duration = OTB::read<int32_t>(first, last);
+=======
+			int32_t duration = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setDuration(std::max<int32_t>(0, duration));
 			break;
 		}
 
 		case ATTR_DECAYING_STATE: {
+<<<<<<< HEAD
 			auto state = OTB::read<uint8_t>(first, last);
+=======
+			uint8_t state = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			if (state != DECAYING_FALSE) {
 				setDecaying(DECAYING_PENDING);
 			}
@@ -408,100 +455,167 @@ void Item::readAttr(AttrTypes_t attr, const char*& first, const char* const last
 		}
 
 		case ATTR_NAME: {
+<<<<<<< HEAD
 			auto name = OTB::readString(first, last);
+=======
+			std::string name = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setStrAttr(ITEM_ATTRIBUTE_NAME, name);
 			break;
 		}
 
 		case ATTR_ARTICLE: {
+<<<<<<< HEAD
 			auto article = OTB::readString(first, last);
+=======
+			std::string article = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, article);
 			break;
 		}
 
 		case ATTR_PLURALNAME: {
+<<<<<<< HEAD
 			auto pluralName = OTB::readString(first, last);
+=======
+			std::string pluralName = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setStrAttr(ITEM_ATTRIBUTE_PLURALNAME, pluralName);
 			break;
 		}
 
 		case ATTR_WEIGHT: {
+<<<<<<< HEAD
 			auto weight = OTB::read<uint32_t>(first, last);
+=======
+			uint32_t weight = OTB::read<uint32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_WEIGHT, weight);
 			break;
 		}
 
 		case ATTR_ATTACK: {
+<<<<<<< HEAD
 			auto attack = OTB::read<int32_t>(first, last);
+=======
+			int32_t attack = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK, attack);
 			break;
 		}
 
 		case ATTR_ATTACK_SPEED: {
+<<<<<<< HEAD
 			auto attackSpeed = OTB::read<uint32_t>(first, last);
+=======
+			uint32_t attackSpeed = OTB::read<uint32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK_SPEED, attackSpeed);
 			break;
 		}
 
 		case ATTR_DEFENSE: {
+<<<<<<< HEAD
 			auto defense = OTB::read<int32_t>(first, last);
+=======
+			int32_t defense = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, defense);
 			break;
 		}
 
 		case ATTR_EXTRADEFENSE: {
+<<<<<<< HEAD
 			auto extraDefense = OTB::read<int32_t>(first, last);
+=======
+			int32_t extraDefense = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE, extraDefense);
 			break;
 		}
 
 		case ATTR_ARMOR: {
+<<<<<<< HEAD
 			auto armor = OTB::read<int32_t>(first, last);
+=======
+			int32_t armor = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_ARMOR, armor);
 			break;
 		}
 
 		case ATTR_HITCHANCE: {
+<<<<<<< HEAD
 			auto hitChance = OTB::read<int8_t>(first, last);
+=======
+			int8_t hitChance = OTB::read<int8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_HITCHANCE, hitChance);
 			break;
 		}
 
 		case ATTR_SHOOTRANGE: {
+<<<<<<< HEAD
 			auto shootRange = OTB::read<uint8_t>(first, last);
+=======
+			uint8_t shootRange = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, shootRange);
 			break;
 		}
 
 		case ATTR_DECAYTO: {
+<<<<<<< HEAD
 			auto decayTo = OTB::read<int32_t>(first, last);
+=======
+			int32_t decayTo = OTB::read<int32_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 			break;
 		}
 
 		case ATTR_WRAPID: {
+<<<<<<< HEAD
 			auto wrapId = OTB::read<uint16_t>(first, last);
+=======
+			uint16_t wrapId = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_WRAPID, wrapId);
 			break;
 		}
 
 		case ATTR_STOREITEM: {
+<<<<<<< HEAD
 			auto storeItem = OTB::read<uint8_t>(first, last);
+=======
+			uint8_t storeItem = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, storeItem);
 			break;
 		}
 
 		case ATTR_OPENCONTAINER: {
+<<<<<<< HEAD
 			auto openContainer = OTB::read<uint8_t>(first, last);
+=======
+			uint8_t openContainer = OTB::read<uint8_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, openContainer);
 			break;
 		}
 
 		case ATTR_REFLECT: {
+<<<<<<< HEAD
 			auto size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
 				auto combatType = OTB::read<CombatType_t>(first, last);
+=======
+			uint16_t size = OTB::read<uint16_t>(first, last);
+
+			for (uint16_t i = 0; i < size; ++i) {
+				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 				Reflect reflect(OTB::read<uint16_t>(first, last), OTB::read<uint16_t>(first, last));
 				getAttributes()->reflect[combatType] = reflect;
 			}
@@ -509,22 +623,82 @@ void Item::readAttr(AttrTypes_t attr, const char*& first, const char* const last
 		}
 
 		case ATTR_BOOST: {
+<<<<<<< HEAD
 			auto size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
 				auto combatType = OTB::read<CombatType_t>(first, last);
 				auto percent = OTB::read<uint16_t>(first, last);
+=======
+			uint16_t size = OTB::read<uint16_t>(first, last);
+
+			for (uint16_t i = 0; i < size; ++i) {
+				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
+				uint16_t percent = OTB::read<uint16_t>(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 				getAttributes()->boostPercent[combatType] = percent;
 			}
 			break;
 		}
 
+<<<<<<< HEAD
 		case ATTR_CUSTOM_ATTRIBUTES: {
 			auto size = OTB::read<uint64_t>(first, last);
 
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
 				auto key = OTB::readString(first, last);
+=======
+		// these should be handled through derived classes If these are called then something has changed in the
+		// items.xml since the map was saved just read the values
+
+		// Depot class
+		case ATTR_DEPOT_ID: {
+			OTB::skip(first, last, 2);
+			break;
+		}
+
+		// Door class
+		case ATTR_HOUSEDOORID: {
+			OTB::skip(first, last, 1);
+			break;
+		}
+
+		// Bed class
+		case ATTR_SLEEPERGUID: {
+			OTB::skip(first, last, 4);
+			break;
+		}
+
+		case ATTR_SLEEPSTART: {
+			OTB::skip(first, last, 4);
+			break;
+		}
+
+		// Podium class
+		case ATTR_PODIUMOUTFIT: {
+			OTB::skip(first, last, 15);
+			break;
+		}
+
+		// Teleport class
+		case ATTR_TELE_DEST: {
+			OTB::skip(first, last, 5);
+			break;
+		}
+
+		// Container class
+		case ATTR_CONTAINER_ITEMS: {
+			throw std::invalid_argument("Container items should be handled by Container class");
+		}
+
+		case ATTR_CUSTOM_ATTRIBUTES: {
+			uint64_t size = OTB::read<uint64_t>(first, last);
+
+			for (uint64_t i = 0; i < size; i++) {
+				// Unserialize key type and value
+				std::string key = OTB::readString(first, last);
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 				// Unserialize value type and value
 				ItemAttributes::CustomAttribute val;
@@ -540,7 +714,11 @@ void Item::readAttr(AttrTypes_t attr, const char*& first, const char* const last
 	}
 }
 
+<<<<<<< HEAD
 void Item::unserializeAttr(const char*& first, const char* const last)
+=======
+void Item::unserializeAttr(OTB::iterator& first, OTB::iterator const last)
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 {
 	while (first != last) {
 		auto attr = OTB::read<uint8_t>(first, last);
@@ -548,7 +726,11 @@ void Item::unserializeAttr(const char*& first, const char* const last)
 	}
 }
 
+<<<<<<< HEAD
 void Item::unserializeItemNode(const char*& first, const char* const last, const OTB::Node&)
+=======
+void Item::unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node&)
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 {
 	return unserializeAttr(first, last);
 }

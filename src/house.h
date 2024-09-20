@@ -48,7 +48,11 @@ public:
 	House* getHouse() { return house; }
 
 	// serialization
+<<<<<<< HEAD
 	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
+=======
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last) override;
+>>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	void serializeAttr(PropWriteStream&) const override {}
 
 	void setDoorId(uint32_t doorId) { setIntAttr(ITEM_ATTRIBUTE_DOORID, doorId); }
