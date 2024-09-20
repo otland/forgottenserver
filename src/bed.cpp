@@ -14,14 +14,11 @@ extern Game g_game;
 
 BedItem::BedItem(uint16_t id) : Item(id) { internalRemoveSleeper(); }
 
-Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
+void BedItem::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
-			uint32_t guid;
-			if (!propStream.read<uint32_t>(guid)) {
-				return ATTR_READ_ERROR;
-			}
+			uint32_t guid = OTB::read<uint32_t>(first, last);
 
 			if (guid != 0) {
 				std::string name = IOLoginData::getNameByGuid(guid);
@@ -31,23 +28,19 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 					sleeperGUID = guid;
 				}
 			}
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		case ATTR_SLEEPSTART: {
-			uint32_t sleep_start;
-			if (!propStream.read<uint32_t>(sleep_start)) {
-				return ATTR_READ_ERROR;
-			}
-
+			uint32_t sleep_start = OTB::read<uint32_t>(first, last);
 			sleepStart = static_cast<uint64_t>(sleep_start);
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		default:
+			Item::readAttr(attr, first, last);
 			break;
 	}
-	return Item::readAttr(attr, propStream);
 }
 
 void BedItem::serializeAttr(PropWriteStream& propWriteStream) const
