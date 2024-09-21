@@ -5,8 +5,6 @@
 
 #include "fileloader.h"
 
-#include <stack>
-
 namespace OTB {
 
 namespace {

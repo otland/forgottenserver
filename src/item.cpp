@@ -85,45 +85,36 @@ Item* Item::CreateItem(PropStream& propStream)
 		return nullptr;
 	}
 
-	return Item::CreateItem2(id);
+	return Item::CreateItem(getPersistentId(id));
 }
 
-Item* Item::CreateItem2(uint16_t id)
+uint16_t Item::getPersistentId(uint16_t id)
 {
 	switch (id) {
 		case ITEM_FIREFIELD_PVP_FULL:
-			id = ITEM_FIREFIELD_PERSISTENT_FULL;
-			break;
+			return ITEM_FIREFIELD_PERSISTENT_FULL;
 
 		case ITEM_FIREFIELD_PVP_MEDIUM:
-			id = ITEM_FIREFIELD_PERSISTENT_MEDIUM;
-			break;
+			return ITEM_FIREFIELD_PERSISTENT_MEDIUM;
 
 		case ITEM_FIREFIELD_PVP_SMALL:
-			id = ITEM_FIREFIELD_PERSISTENT_SMALL;
-			break;
+			return ITEM_FIREFIELD_PERSISTENT_SMALL;
 
 		case ITEM_ENERGYFIELD_PVP:
-			id = ITEM_ENERGYFIELD_PERSISTENT;
-			break;
+			return ITEM_ENERGYFIELD_PERSISTENT;
 
 		case ITEM_POISONFIELD_PVP:
-			id = ITEM_POISONFIELD_PERSISTENT;
-			break;
+			return ITEM_POISONFIELD_PERSISTENT;
 
 		case ITEM_MAGICWALL:
-			id = ITEM_MAGICWALL_PERSISTENT;
-			break;
+			return ITEM_MAGICWALL_PERSISTENT;
 
 		case ITEM_WILDGROWTH:
-			id = ITEM_WILDGROWTH_PERSISTENT;
-			break;
+			return ITEM_WILDGROWTH_PERSISTENT;
 
 		default:
-			break;
+			return id;
 	}
-
-	return Item::CreateItem(id, 0);
 }
 
 Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id(type)

@@ -186,7 +186,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 				}
 
 				case OTBM_ATTR_ITEM: {
-					auto item = Item::CreateItem2(OTB::read<uint16_t>(tile_begin, tile_end));
+					auto item = Item::CreateItem(Item::getPersistentId(OTB::read<uint16_t>(tile_begin, tile_end)));
 					if (!item) {
 						throw std::invalid_argument(
 						    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
@@ -231,7 +231,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 			auto item_begin = itemNode.props_begin;
 			auto item_end = itemNode.props_end;
 			auto id = OTB::read<uint16_t>(item_begin, item_end);
-			Item* item = Item::CreateItem2(id);
+			Item* item = Item::CreateItem(Item::getPersistentId(id));
 			if (!item) {
 				throw std::invalid_argument(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
 			}
