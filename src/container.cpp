@@ -126,7 +126,7 @@ void Container::unserializeItemNode(OTB::iterator& first, OTB::iterator const la
 
 		uint16_t id = OTB::read<uint16_t>(node_first, node_last);
 
-		auto item = Item::CreateItem(Item::getPersistentId( id));
+		auto item = Item::CreateItem(Item::getPersistentId(id));
 		if (!item) {
 			throw std::invalid_argument("Invalid item id");
 		}
