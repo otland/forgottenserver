@@ -64,7 +64,7 @@ enum OTBM_NodeTypes_t
 class IOMap
 {
 public:
-	bool loadMap(Map* map, const std::filesystem::path& fileName);
+	void loadMap(Map* map, const std::filesystem::path& fileName);
 
 	/* Load the spawns
 	 * \param map pointer to the Map class
