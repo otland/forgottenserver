@@ -11,10 +11,14 @@ DepotLocker::DepotLocker(uint16_t type) : Container(type), depotId(0) {}
 
 void DepotLocker::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
-	if (attr == ATTR_DEPOT_ID) {
-		depotId = OTB::read<uint16_t>(first, last);
-	} else {
-		Item::readAttr(attr, first, last);
+	switch (attr) {
+		case ATTR_DEPOT_ID:
+			depotId = OTB::read<uint16_t>(first, last);
+			break;
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
 }
 

@@ -100,10 +100,14 @@ void Container::addItem(Item* item)
 
 void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
-	if (attr == ATTR_CONTAINER_ITEMS) {
-		serializationCount = OTB::read<uint32_t>(first, last);
-	} else {
-		Item::readAttr(attr, first, last);
+	switch (attr) {
+		case ATTR_CONTAINER_ITEMS:
+			serializationCount = OTB::read<uint32_t>(first, last);
+			break;
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
 }
 

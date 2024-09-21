@@ -489,11 +489,16 @@ Door::Door(uint16_t type) : Item(type) {}
 
 void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
-	if (attr == ATTR_HOUSEDOORID) {
-		uint8_t doorId = OTB::read<uint8_t>(first, last);
-		setDoorId(doorId);
-	} else {
-		Item::readAttr(attr, first, last);
+	switch (attr) {
+		case ATTR_HOUSEDOORID: {
+			uint8_t doorId = OTB::read<uint8_t>(first, last);
+			setDoorId(doorId);
+			break;
+		}
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
 }
 
