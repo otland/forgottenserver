@@ -449,7 +449,7 @@ public:
 	static Item* CreateItem(const uint16_t type, uint16_t count = 0);
 	static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
 	static Item* CreateItem(PropStream& propStream);
-	static Item* CreateItem2(uint16_t type);
+	static uint16_t getPersistentId(uint16_t type);
 	static Items items;
 
 	// Constructor for items
