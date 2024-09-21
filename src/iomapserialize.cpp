@@ -27,13 +27,18 @@ bool loadItem(const char*& first, const char* last, Cylinder* parent)
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || iType.forceSerialize || !tile) {
 		// create a new item
-		if (std::unique_ptr<Item> item{Item::CreateItem(id)}) {
-			item->unserializeAttr(first, last);
-			if (Container* container = item->getContainer()) {
-				loadContainer(first, last, container);
+		if (Item* item = Item::CreateItem(id)) {
+			try {
+				item->unserializeAttr(first, last);
+				if (Container* container = item->getContainer()) {
+					loadContainer(first, last, container);
+				}
+			} catch (const std::invalid_argument& e) {
+				delete item;
+				throw e;
 			}
 
-			parent->internalAddThing(item.get());
+			parent->internalAddThing(item);
 			item->startDecaying();
 		}
 	} else {
