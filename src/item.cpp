@@ -28,9 +28,7 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 	Item* newItem = nullptr;
 
 	const ItemType& it = Item::items[type];
-	if (it.group == ITEM_GROUP_DEPRECATED) {
-		return nullptr;
-	}
+	assert(it.group != ITEM_GROUP_DEPRECATED);
 
 	if (it.stackable && count == 0) {
 		count = 1;
