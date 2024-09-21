@@ -12,7 +12,7 @@ using iterator = MappedFile::iterator;
 struct Node
 {
 	std::vector<Node> children = {};
-	OTB::iterator props_begin, props_end;
+	iterator props_begin, props_end;
 	char type;
 
 	static constexpr char ESCAPE = '\xFD';
