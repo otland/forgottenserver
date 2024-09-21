@@ -11,12 +11,16 @@ extern Game g_game;
 
 void Teleport::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
 {
-	if (attr == ATTR_TELE_DEST) {
-		destPos.x = OTB::read<uint16_t>(first, last);
-		destPos.y = OTB::read<uint16_t>(first, last);
-		destPos.z = OTB::read<uint8_t>(first, last);
-	} else {
-		Item::readAttr(attr, first, last);
+	switch (attr) {
+		case ATTR_TELE_DEST:
+			destPos.x = OTB::read<uint16_t>(first, last);
+			destPos.y = OTB::read<uint16_t>(first, last);
+			destPos.z = OTB::read<uint8_t>(first, last);
+			break;
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
 }
 

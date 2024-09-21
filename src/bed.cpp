@@ -31,11 +31,9 @@ void BedItem::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator con
 			break;
 		}
 
-		case ATTR_SLEEPSTART: {
-			uint32_t sleep_start = OTB::read<uint32_t>(first, last);
-			sleepStart = static_cast<uint64_t>(sleep_start);
+		case ATTR_SLEEPSTART:
+			sleepStart = static_cast<uint64_t>(OTB::read<uint32_t>(first, last));
 			break;
-		}
 
 		default:
 			Item::readAttr(attr, first, last);
