@@ -1,6 +1,6 @@
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local target = Creature(variant:getNumber())
 	if not target or not target:isMonster() then
 		creature:sendCancelMessage(RETURNVALUE_NOTPOSSIBLE)

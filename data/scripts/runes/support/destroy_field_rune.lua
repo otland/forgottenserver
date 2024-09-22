@@ -1,6 +1,6 @@
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local position = variant:getPosition()
 	local tile = Tile(position)
 	local field = tile and tile:getItemByType(ITEM_TYPE_MAGICFIELD)

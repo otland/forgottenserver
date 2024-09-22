@@ -5,7 +5,7 @@ combat:setParameter(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_FIRE)
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local min = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.3) + 2
 	local max = (creature:getLevel() / 80) + (creature:getMagicLevel() * 0.6) + 4
 	local rounds = math.random(math.floor(min), math.floor(max))

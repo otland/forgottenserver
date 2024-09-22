@@ -5,7 +5,7 @@ combat:setParameter(COMBAT_PARAM_CREATEITEM, ITEM_FIREFIELD_PVP_FULL)
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	return combat:execute(creature, variant)
 end
 
