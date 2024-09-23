@@ -37,10 +37,6 @@ local function calculateWorldLightLevel()
 end
 
 function event.onTime(interval)
-	if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
-		return true
-	end
-
 	local worldLightColor, worldLightLevel = Game.getWorldLight()
 	local level = calculateWorldLightLevel()
 	Game.setWorldLight(worldLightColor, level)

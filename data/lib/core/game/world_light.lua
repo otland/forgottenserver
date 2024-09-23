@@ -5,10 +5,6 @@ do
 	function Game.getWorldLight() return worldLightLevel, worldLightColor end
 
 	function Game.setWorldLight(color, level)
-		if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
-			return
-		end
-
 		local previousColor = worldLightColor
 		local previousLevel = worldLightLevel
 		worldLightColor = color
