@@ -1309,11 +1309,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, AMMO_STONE);
 	registerEnum(L, AMMO_SNOWBALL);
 
-	registerEnum(L, BUG_CATEGORY_MAP);
-	registerEnum(L, BUG_CATEGORY_TYPO);
-	registerEnum(L, BUG_CATEGORY_TECHNICAL);
-	registerEnum(L, BUG_CATEGORY_OTHER);
-
 	registerEnum(L, CALLBACK_PARAM_LEVELMAGICVALUE);
 	registerEnum(L, CALLBACK_PARAM_SKILLVALUE);
 	registerEnum(L, CALLBACK_PARAM_TARGETTILE);

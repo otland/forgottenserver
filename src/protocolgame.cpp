@@ -749,9 +749,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		// case 0xE0: break; // premium shop (?)
 		// case 0xE4: break; // buy charm rune
 		// case 0xE5: break; // request character info (cyclopedia)
-		case 0xE6:
-			parseBugReport(msg);
-			break;
+		// case 0xE6: break // parse bug report
 		case 0xE7: /* thank you */
 			break;
 		case 0xE8:
@@ -1435,21 +1433,6 @@ void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
 	});
 }
 
-void ProtocolGame::parseBugReport(NetworkMessage& msg)
-{
-	uint8_t category = msg.getByte();
-	auto message = msg.getString();
-
-	Position position;
-	if (category == BUG_CATEGORY_MAP) {
-		position = msg.getPosition();
-	}
-
-	g_dispatcher.addTask([=, playerID = player->getID(), message = std::string{message}]() {
-		g_game.playerReportBug(playerID, message, position, category);
-	});
-}
-
 void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 {
 	if (debugAssertSent) {
@@ -1618,7 +1601,12 @@ void ProtocolGame::sendCreatureLight(const Creature* creature)
 	}
 
 	NetworkMessage msg;
-	AddCreatureLight(msg, creature);
+	msg.addByte(0x8D);
+	msg.add<uint32_t>(creature->getID());
+
+	auto&& [level, color] = creature->getCreatureLight();
+	msg.addByte((player->isAccessPlayer() ? 0xFF : level));
+	msg.addByte(color);
 	writeToOutputBuffer(msg);
 }
 
@@ -3643,23 +3631,6 @@ void ProtocolGame::AddOutfit(NetworkMessage& msg, const Outfit_t& outfit)
 		msg.addByte(outfit.lookMountLegs);
 		msg.addByte(outfit.lookMountFeet);
 	}
-}
-
-void ProtocolGame::AddWorldLight(NetworkMessage& msg, LightInfo lightInfo)
-{
-	msg.addByte(0x82);
-	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
-	msg.addByte(lightInfo.color);
-}
-
-void ProtocolGame::AddCreatureLight(NetworkMessage& msg, const Creature* creature)
-{
-	LightInfo lightInfo = creature->getCreatureLight();
-
-	msg.addByte(0x8D);
-	msg.add<uint32_t>(creature->getID());
-	msg.addByte((player->isAccessPlayer() ? 0xFF : lightInfo.level));
-	msg.addByte(lightInfo.color);
 }
 
 // tile

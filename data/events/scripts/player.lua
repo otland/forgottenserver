@@ -81,9 +81,9 @@ function Player:onReportRuleViolation(targetName, reportType, reportReason, comm
 	end
 end
 
-function Player:onReportBug(message, position, category)
+function Player:onReportBug(message, position)
 	if hasEvent.onReportBug then
-		return Event.onReportBug(self, message, position, category)
+		return Event.onReportBug(self, message, position)
 	end
 	return true
 end

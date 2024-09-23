@@ -9,7 +9,9 @@
 #include "database.h"
 #include "databasetasks.h"
 
-const std::optional<BanInfo> IOBan::getAccountBanInfo(uint32_t accountId)
+namespace IOBan {
+
+const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
@@ -43,7 +45,7 @@ const std::optional<BanInfo> IOBan::getAccountBanInfo(uint32_t accountId)
 	return banInfo;
 }
 
-const std::optional<BanInfo> IOBan::getIpBanInfo(const Connection::Address& clientIP)
+const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP)
 {
 	if (clientIP.is_unspecified()) {
 		return std::nullopt;
@@ -77,9 +79,11 @@ const std::optional<BanInfo> IOBan::getIpBanInfo(const Connection::Address& clie
 	return banInfo;
 }
 
-bool IOBan::isPlayerNamelocked(uint32_t playerId)
+bool isPlayerNamelocked(uint32_t playerId)
 {
 	return Database::getInstance()
 	    .storeQuery(fmt::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId))
 	    .get();
 }
+
+} // namespace IOBan
