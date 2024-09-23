@@ -6,7 +6,7 @@ combat:setParameter(COMBAT_PARAM_AGGRESSIVE, false)
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	return combat:execute(creature, variant)
 end
 

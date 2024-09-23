@@ -8,7 +8,7 @@ combat:addCondition(condition)
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	if not combat:execute(creature, variant) then
 		return false
 	end

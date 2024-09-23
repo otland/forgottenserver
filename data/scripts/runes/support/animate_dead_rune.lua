@@ -1,6 +1,6 @@
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local position = variant:getPosition()
 	local tile = Tile(position)
 	if tile and creature:getSkull() ~= SKULL_BLACK then

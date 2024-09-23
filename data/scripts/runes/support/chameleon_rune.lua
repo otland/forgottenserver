@@ -3,7 +3,7 @@ condition:setTicks(200000)
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local position, item = variant:getPosition()
 	if position.x == CONTAINER_POSITION then
 		local container = creature:getContainerById(position.y - 64)

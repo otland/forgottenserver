@@ -3,7 +3,7 @@ local removalLimit = 500
 
 local spell = Spell(SPELL_RUNE)
 
-function onCastSpell(creature, variant, isHotkey)
+function spell.onCastSpell(creature, variant, isHotkey)
 	local position = variant:getPosition()
 	local tile = Tile(position)
 	if tile then
