@@ -1,5 +1,6 @@
 set(tests_SRC
     ${CMAKE_CURRENT_LIST_DIR}/test_base64.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/test_fileloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/test_generate_token.cpp
     ${CMAKE_CURRENT_LIST_DIR}/test_matrixarea.cpp
     ${CMAKE_CURRENT_LIST_DIR}/test_rsa.cpp
