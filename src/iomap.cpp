@@ -71,7 +71,7 @@ auto parseMapAttributes(const OTB::Node& mapNode)
 {
 	std::string spawns = {}, houses = {};
 
-	auto first = mapNode.props_begin, last = mapNode.props_end;
+	auto first = mapNode.propsBegin, last = mapNode.propsEnd;
 
 	while (first != last) {
 		switch (auto attr = OTB::read<uint8_t>(first, last)) {
@@ -129,13 +129,13 @@ Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z)
 
 void parseTileArea(const OTB::Node& node, Map& map)
 {
-	auto node_begin = node.props_begin;
-	auto [base_x, base_y, z] = read_coords(node_begin, node.props_end);
+	auto node_begin = node.propsBegin;
+	auto [base_x, base_y, z] = read_coords(node_begin, node.propsEnd);
 
 	for (auto& tileNode : node.children) {
 		assert(tileNode.type == OTBM_TILE || tileNode.type == OTBM_HOUSETILE);
 
-		auto first = tileNode.props_begin, last = tileNode.props_end;
+		auto first = tileNode.propsBegin, last = tileNode.propsEnd;
 
 		uint16_t x = base_x + OTB::read<uint8_t>(first, last);
 		uint16_t y = base_y + OTB::read<uint8_t>(first, last);
@@ -216,7 +216,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		for (const auto& itemNode : tileNode.children) {
 			assert(itemNode.type == OTBM_ITEM);
 
-			auto first = itemNode.props_begin, last = itemNode.props_end;
+			auto first = itemNode.propsBegin, last = itemNode.propsEnd;
 			auto id = OTB::read<uint16_t>(first, last);
 			Item* item = Item::CreateItem(Item::getPersistentId(id));
 			item->unserializeItemNode(first, last, itemNode);
@@ -262,7 +262,7 @@ void parseTowns(const OTB::Node& townsNode, Map& map)
 	for (auto& node : townsNode.children) {
 		assert(node.type == OTBM_TOWN);
 
-		auto first = node.props_begin, last = node.props_end;
+		auto first = node.propsBegin, last = node.propsEnd;
 		auto townId = OTB::read<uint32_t>(first, last);
 		auto townName = OTB::readString(first, last);
 		auto [x, y, z] = read_coords(first, last);
@@ -277,7 +277,7 @@ void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 	for (auto& node : waypointsNode.children) {
 		assert(node.type != OTBM_WAYPOINT);
 
-		auto first = node.props_begin, last = node.props_end;
+		auto first = node.propsBegin, last = node.propsEnd;
 
 		auto name = OTB::readString(first, last);
 		auto [x, y, z] = read_coords(first, last);
