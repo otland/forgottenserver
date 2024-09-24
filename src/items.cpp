@@ -443,8 +443,8 @@ bool Items::loadFromOtb(const std::string& file)
 	}
 
 	for (auto& itemNode : loader.children()) {
-		auto first = itemNode.props_begin;
-		const auto last = itemNode.props_end;
+		auto first = itemNode.propsBegin;
+		const auto last = itemNode.propsEnd;
 
 		uint32_t flags = OTB::read<uint32_t>(first, last);
 

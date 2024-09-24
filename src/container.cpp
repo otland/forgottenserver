@@ -121,8 +121,8 @@ void Container::unserializeItemNode(OTB::iterator& first, OTB::iterator const la
 			throw std::invalid_argument("Invalid node type");
 		}
 
-		auto node_first = itemNode.props_begin;
-		const auto node_last = itemNode.props_end;
+		auto node_first = itemNode.propsBegin;
+		const auto node_last = itemNode.propsEnd;
 
 		uint16_t id = OTB::read<uint16_t>(node_first, node_last);
 
