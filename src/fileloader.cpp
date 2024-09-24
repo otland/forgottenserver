@@ -19,13 +19,13 @@ auto checkIdentifier(iterator it, std::string_view acceptedIdentifier)
 
 Node parseTree(iterator& first, const iterator last)
 {
-	auto node = Node{.props_begin = first + 1, .props_end = last, .type = *first};
+	auto node = Node{.propsBegin = first + 1, .propsEnd = last, .type = *first};
 
 	for (; first != last; ++first) {
 		switch (*first) {
 			case Node::START: {
 				if (node.children.empty()) {
-					node.props_end = first;
+					node.propsEnd = first;
 				}
 
 				if (++first == last) {
@@ -37,7 +37,7 @@ Node parseTree(iterator& first, const iterator last)
 			}
 			case Node::END: {
 				if (node.children.empty()) {
-					node.props_end = first;
+					node.propsEnd = first;
 				}
 
 				return node;
