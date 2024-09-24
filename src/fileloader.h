@@ -69,12 +69,11 @@ std::string readString(It& first, It const last)
 	std::string out;
 	out.reserve(len);
 
-	auto end = first + len;
-	while (first < end) {
+	for (auto end = first + len; first < end; ++first) {
 		if (*first == Node::ESCAPE) {
 			++first, ++end;
 		}
-		out.push_back(*first++);
+		out.push_back(*first);
 	}
 
 	return out;
@@ -87,12 +86,10 @@ void skip(It& first, It const last, const int len)
 		throw std::invalid_argument("Not enough bytes to skip.");
 	}
 
-	auto end = first + len;
-	while (first < end) {
+	for (auto end = first + len; first < end; ++first) {
 		if (*first == Node::ESCAPE) {
 			++first, ++end;
 		}
-		++first;
 	}
 }
 
