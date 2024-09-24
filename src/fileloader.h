@@ -12,7 +12,7 @@ using iterator = MappedFile::iterator;
 struct Node
 {
 	std::vector<Node> children = {};
-	iterator props_begin, props_end;
+	iterator propsBegin, propsEnd;
 	char type;
 
 	static constexpr char ESCAPE = '\xFD';
@@ -26,8 +26,8 @@ public:
 	Loader(MappedFile file, Node root) : file{std::move(file)}, root{std::move(root)} {}
 
 	const std::vector<Node>& children() const { return root.children; }
-	auto begin() const { return root.props_begin; }
-	auto end() const { return root.props_end; }
+	auto begin() const { return root.propsBegin; }
+	auto end() const { return root.propsEnd; }
 
 private:
 	MappedFile file;
@@ -74,8 +74,7 @@ std::string readString(It& first, It const last)
 		if (*start == Node::ESCAPE) {
 			++start, ++end;
 		}
-		out.push_back(*start);
-		++start;
+		out.push_back(*start++);
 	}
 
 	first = end;
