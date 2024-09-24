@@ -69,15 +69,14 @@ std::string readString(It& first, It const last)
 	std::string out;
 	out.reserve(len);
 
-	auto start = first, end = first + len;
-	while (start < end) {
-		if (*start == Node::ESCAPE) {
-			++start, ++end;
+	auto end = first + len;
+	while (first < end) {
+		if (*first == Node::ESCAPE) {
+			++first, ++end;
 		}
-		out.push_back(*start++);
+		out.push_back(*first++);
 	}
 
-	first = end;
 	return out;
 }
 
@@ -88,15 +87,13 @@ void skip(It& first, It const last, const int len)
 		throw std::invalid_argument("Not enough bytes to skip.");
 	}
 
-	auto start = first, end = first + len;
-	while (start < end) {
-		if (*start == Node::ESCAPE) {
-			++start, ++end;
+	auto end = first + len;
+	while (first < end) {
+		if (*first == Node::ESCAPE) {
+			++first, ++end;
 		}
-		++start;
+		++first;
 	}
-
-	first = end;
 }
 
 } // namespace OTB
