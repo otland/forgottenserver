@@ -36,9 +36,10 @@ private:
 
 Loader load(std::string_view filename, std::string_view acceptedIdentifier);
 
-template <class T, class It>
-T read(It& first, It const last)
+template <class T>
+[[nodiscard]] T read(auto& first, const auto last)
 {
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	std::array<char, sizeof(T)> buf;
 	auto it = buf.begin();
 
@@ -49,22 +50,28 @@ T read(It& first, It const last)
 		*it++ = *first++;
 	}
 
+#ifndef NDEBUG
 	if (it != buf.end()) {
 		throw std::invalid_argument("Not enough bytes to read.");
 	}
+#endif
 
+#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	T out;
 	std::memcpy(reinterpret_cast<char*>(&out), buf.data(), buf.size());
 	return out;
 }
 
-template <class It>
-std::string readString(It& first, It const last)
+[[nodiscard]] std::string readString(auto& first, const auto last)
 {
 	auto len = read<uint16_t>(first, last);
+
+	(void)last;
+#ifndef NDEBUG
 	if (last - first < len) {
 		throw std::invalid_argument("Not enough bytes to read as string.");
 	}
+#endif
 
 	std::string out;
 	out.reserve(len);
@@ -79,12 +86,14 @@ std::string readString(It& first, It const last)
 	return out;
 }
 
-template <class It>
-void skip(It& first, It const last, const int len)
+void skip(auto& first, const auto last, const int len)
 {
+	(void)last;
+#ifndef NDEBUG
 	if (last - first < len) {
 		throw std::invalid_argument("Not enough bytes to skip.");
 	}
+#endif
 
 	for (auto end = first + len; first < end; ++first) {
 		if (*first == Node::ESCAPE) {

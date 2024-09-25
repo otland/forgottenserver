@@ -46,6 +46,8 @@ BOOST_AUTO_TEST_CASE(test_read_not_enough_bytes)
 	auto s = "\x01\x02\x03\x04\x05\x06\x07"sv;
 
 	auto first = s.begin();
+
+#pragma GCC diagnostic ignored "-Wunused-result"
 	BOOST_CHECK_THROW(OTB::read<uint64_t>(first, s.end()), std::invalid_argument);
 }
 
@@ -94,6 +96,8 @@ BOOST_AUTO_TEST_CASE(test_read_string_not_enough_bytes)
 	auto s = "\x09\x00"sv;
 
 	auto first = s.begin();
+
+#pragma GCC diagnostic ignored "-Wunused-result"
 	BOOST_CHECK_THROW(OTB::readString(first, s.end()), std::invalid_argument);
 }
 
