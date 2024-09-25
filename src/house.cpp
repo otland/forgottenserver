@@ -487,7 +487,6 @@ void AccessList::getList(std::string& list) const { list = this->list; }
 
 Door::Door(uint16_t type) : Item(type) {}
 
-<<<<<<< HEAD
 void Door::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
@@ -500,15 +499,6 @@ void Door::readAttr(AttrTypes_t attr, const char*& first, const char* const last
 		default:
 			Item::readAttr(attr, first, last);
 			break;
-=======
-void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
-{
-	if (attr == ATTR_HOUSEDOORID) {
-		uint8_t doorId = OTB::read<uint8_t>(first, last);
-		setDoorId(doorId);
-	} else {
-		Item::readAttr(attr, first, last);
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	}
 }
 

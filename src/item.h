@@ -187,11 +187,7 @@ public:
 			           value);
 		}
 
-<<<<<<< HEAD
 		void unserialize(const char*& first, const char* const last)
-=======
-		void unserialize(OTB::iterator& first, OTB::iterator const last)
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 		{
 			// This is hard-coded so it's not general, depends on the position of the variants.
 			switch (OTB::read<uint8_t>(first, last)) {
@@ -446,11 +442,7 @@ public:
 	static Item* CreateItem(const uint16_t type, uint16_t count = 0);
 	static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
 	static Item* CreateItem(PropStream& propStream);
-<<<<<<< HEAD
 	static uint16_t getPersistentId(uint16_t type);
-=======
-	static Item* CreateItem2(uint16_t type);
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	static Items items;
 
 	// Constructor for items
@@ -686,15 +678,9 @@ public:
 	std::string getWeightDescription() const;
 
 	// serialization
-<<<<<<< HEAD
 	virtual void readAttr(AttrTypes_t attr, const char*& first, const char* const last);
 	void unserializeAttr(const char*& first, const char* const last);
 	virtual void unserializeItemNode(const char*& first, const char* const last, const OTB::Node& node);
-=======
-	virtual void readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last);
-	virtual void unserializeAttr(OTB::iterator& first, OTB::iterator const last);
-	virtual void unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node& node);
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 

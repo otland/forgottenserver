@@ -9,7 +9,6 @@
 
 extern Game g_game;
 
-<<<<<<< HEAD
 void Teleport::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
@@ -22,16 +21,6 @@ void Teleport::readAttr(AttrTypes_t attr, const char*& first, const char* const 
 		default:
 			Item::readAttr(attr, first, last);
 			break;
-=======
-void Teleport::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
-{
-	if (attr == ATTR_TELE_DEST) {
-		destPos.x = OTB::read<uint16_t>(first, last);
-		destPos.y = OTB::read<uint16_t>(first, last);
-		destPos.z = OTB::read<uint8_t>(first, last);
-	} else {
-		Item::readAttr(attr, first, last);
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 	}
 }
 

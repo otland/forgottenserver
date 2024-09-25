@@ -9,7 +9,6 @@
 
 extern Game g_game;
 
-<<<<<<< HEAD
 void Podium::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
@@ -22,20 +21,6 @@ void Podium::readAttr(AttrTypes_t attr, const char*& first, const char* const la
 			setFlags(flags);
 
 			auto newDirection = OTB::read<uint8_t>(first, last);
-=======
-void Podium::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
-{
-	switch (attr) {
-		case ATTR_PODIUMOUTFIT: {
-			if ((last - first) < 15) {
-				throw std::invalid_argument("Invalid podium outfit");
-			}
-
-			uint8_t flags = OTB::read<uint8_t>(first, last);
-			setFlags(flags);
-
-			uint8_t newDirection = OTB::read<uint8_t>(first, last);
->>>>>>> 910d04f7 (Rewrite fileloader with direct pointer access)
 			setDirection(static_cast<Direction>(newDirection));
 
 			setOutfit({.lookType = OTB::read<uint16_t>(first, last),
