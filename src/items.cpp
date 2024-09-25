@@ -408,20 +408,18 @@ bool Items::loadFromOtb(const std::string& file)
 {
 	auto loader = OTB::load(file, "OTBI");
 
-	auto first = loader.begin();
-	const auto last = loader.end();
+	auto first = loader.begin(), last = loader.end();
 
 	// 4 byte flags
 	// attributes
 	// 0x01 = version data
 	// uint32_t flags = OTB::read<uint32_t>(first, last); // unused
 	OTB::skip(first, last, sizeof(uint32_t));
-	uint8_t attr = OTB::read<uint8_t>(first, last);
 
-	if (attr == ROOT_ATTR_VERSION) {
-		constexpr auto VERSION_INFO_SIZE = 140;
-		auto length = OTB::read<uint16_t>(first, last);
-		if (length != VERSION_INFO_SIZE) {
+	if (uint8_t attr = OTB::read<uint8_t>(first, last); attr == ROOT_ATTR_VERSION) {
+		constexpr auto VERSION_INFO_SIZE = 140u;
+
+		if (auto length = OTB::read<uint16_t>(first, last); length != VERSION_INFO_SIZE) {
 			throw std::invalid_argument(
 			    fmt::format("Invalid data length for version info: expected 140, got {:d}", length));
 		}
@@ -443,11 +441,9 @@ bool Items::loadFromOtb(const std::string& file)
 	}
 
 	for (auto& itemNode : loader.children()) {
-		auto first = itemNode.propsBegin;
-		const auto last = itemNode.propsEnd;
+		auto first = itemNode.propsBegin, last = itemNode.propsEnd;
 
 		uint32_t flags = OTB::read<uint32_t>(first, last);
-
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
 		uint16_t speed = 0;

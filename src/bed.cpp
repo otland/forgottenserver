@@ -14,7 +14,7 @@ extern Game g_game;
 
 BedItem::BedItem(uint16_t id) : Item(id) { internalRemoveSleeper(); }
 
-void BedItem::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
+void BedItem::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
 {
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
