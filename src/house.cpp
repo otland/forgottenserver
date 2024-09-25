@@ -487,7 +487,7 @@ void AccessList::getList(std::string& list) const { list = this->list; }
 
 Door::Door(uint16_t type) : Item(type) {}
 
-void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
+void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
 {
 	switch (attr) {
 		case ATTR_HOUSEDOORID: {

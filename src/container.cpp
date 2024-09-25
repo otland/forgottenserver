@@ -98,7 +98,7 @@ void Container::addItem(Item* item)
 	item->setParent(this);
 }
 
-void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator const last)
+void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
 {
 	switch (attr) {
 		case ATTR_CONTAINER_ITEMS:
@@ -111,7 +111,7 @@ void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, OTB::iterator c
 	}
 }
 
-void Container::unserializeItemNode(OTB::iterator& first, OTB::iterator const last, const OTB::Node& node)
+void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator last, const OTB::Node& node)
 {
 	Item::unserializeItemNode(first, last, node);
 
@@ -121,17 +121,15 @@ void Container::unserializeItemNode(OTB::iterator& first, OTB::iterator const la
 			throw std::invalid_argument("Invalid node type");
 		}
 
-		auto node_first = itemNode.propsBegin;
-		const auto node_last = itemNode.propsEnd;
-
-		uint16_t id = OTB::read<uint16_t>(node_first, node_last);
+		auto first = itemNode.propsBegin, last = itemNode.propsEnd;
+		uint16_t id = OTB::read<uint16_t>(first, last);
 
 		auto item = Item::CreateItem(Item::getPersistentId(id));
 		if (!item) {
 			throw std::invalid_argument("Invalid item id");
 		}
 
-		item->unserializeItemNode(node_first, node_last, itemNode);
+		item->unserializeItemNode(first, last, itemNode);
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
