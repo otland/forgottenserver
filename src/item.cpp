@@ -519,49 +519,6 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 			break;
 		}
 
-		// these should be handled through derived classes If these are called then something has changed in the
-		// items.xml since the map was saved just read the values
-
-		// Depot class
-		case ATTR_DEPOT_ID: {
-			OTB::skip(first, last, 2);
-			break;
-		}
-
-		// Door class
-		case ATTR_HOUSEDOORID: {
-			OTB::skip(first, last, 1);
-			break;
-		}
-
-		// Bed class
-		case ATTR_SLEEPERGUID: {
-			OTB::skip(first, last, 4);
-			break;
-		}
-
-		case ATTR_SLEEPSTART: {
-			OTB::skip(first, last, 4);
-			break;
-		}
-
-		// Podium class
-		case ATTR_PODIUMOUTFIT: {
-			OTB::skip(first, last, 15);
-			break;
-		}
-
-		// Teleport class
-		case ATTR_TELE_DEST: {
-			OTB::skip(first, last, 5);
-			break;
-		}
-
-		// Container class
-		case ATTR_CONTAINER_ITEMS: {
-			throw std::invalid_argument("Container items should be handled by Container class");
-		}
-
 		case ATTR_CUSTOM_ATTRIBUTES: {
 			auto size = OTB::read<uint64_t>(first, last);
 
