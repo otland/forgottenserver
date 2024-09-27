@@ -13,14 +13,14 @@ void Podium::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterato
 {
 	switch (attr) {
 		case ATTR_PODIUMOUTFIT: {
-			if ((last - first) < 15) {
+			if (last - first < 15) {
 				throw std::invalid_argument("Invalid podium outfit");
 			}
 
-			uint8_t flags = OTB::read<uint8_t>(first, last);
+			auto flags = OTB::read<uint8_t>(first, last);
 			setFlags(flags);
 
-			uint8_t newDirection = OTB::read<uint8_t>(first, last);
+			auto newDirection = OTB::read<uint8_t>(first, last);
 			setDirection(static_cast<Direction>(newDirection));
 
 			setOutfit({.lookType = OTB::read<uint16_t>(first, last),

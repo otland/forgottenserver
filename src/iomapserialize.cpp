@@ -17,7 +17,7 @@ bool loadContainer(const char*& first, const char* last, Container* container);
 
 bool loadItem(const char*& first, const char* last, Cylinder* parent)
 {
-	uint16_t id = OTB::read<uint16_t>(first, last);
+	auto id = OTB::read<uint16_t>(first, last);
 
 	Tile* tile = nullptr;
 	if (!parent->hasParent()) {
@@ -92,7 +92,7 @@ bool loadContainer(const char*& first, const char* last, Container* container)
 		container->serializationCount--;
 	}
 
-	uint8_t endAttr = OTB::read<uint8_t>(first, last);
+	auto endAttr = OTB::read<uint8_t>(first, last);
 	if (endAttr != 0) {
 		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
 		          << container->getID() << std::endl;
@@ -117,16 +117,16 @@ void IOMapSerialize::loadHouseItems(Map* map)
 		auto first = attr.begin(), last = attr.end();
 
 		try {
-			uint16_t x = OTB::read<uint16_t>(first, last);
-			uint16_t y = OTB::read<uint16_t>(first, last);
-			uint8_t z = OTB::read<uint8_t>(first, last);
+			auto x = OTB::read<uint16_t>(first, last);
+			auto y = OTB::read<uint16_t>(first, last);
+			auto z = OTB::read<uint8_t>(first, last);
 
 			Tile* tile = map->getTile(x, y, z);
 			if (!tile) {
 				continue;
 			}
 
-			uint32_t item_count = OTB::read<uint32_t>(first, last);
+			auto item_count = OTB::read<uint32_t>(first, last);
 
 			while (item_count--) {
 				loadItem(first, last, tile);

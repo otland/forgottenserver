@@ -95,13 +95,6 @@ enum AttrTypes_t
 	ATTR_BOOST = 43,
 };
 
-enum Attr_ReadValue
-{
-	ATTR_READ_CONTINUE,
-	ATTR_READ_ERROR,
-	ATTR_READ_END,
-};
-
 class ItemAttributes
 {
 public:
