@@ -31,6 +31,8 @@
         |--- OTBM_ITEM_DEF (not implemented)
 */
 
+namespace tfs::io::map {
+
 namespace {
 
 enum OTBM_AttrTypes_t
@@ -296,7 +298,7 @@ void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 
 } // namespace
 
-void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
+MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 {
 	auto start = std::chrono::steady_clock::now();
 
@@ -316,8 +318,8 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 		throw std::invalid_argument("Unknown OTBM version detected.");
 	}
 
-	map->width = OTB::read<uint16_t>(first, last);
-	map->height = OTB::read<uint16_t>(first, last);
+	auto width = OTB::read<uint16_t>(first, last);
+	auto height = OTB::read<uint16_t>(first, last);
 	auto majorVersionItems = OTB::read<uint32_t>(first, last);
 	auto minorVersionItems = OTB::read<uint32_t>(first, last);
 
@@ -339,7 +341,7 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 		fmt::print("[Warning - IOMap::loadMap] This map needs an updated items.otb.\n");
 	}
 
-	fmt::print("> Map size: {:d}x{:d}\n.", map->width, map->height);
+	fmt::print("> Map size: {:d}x{:d}\n.", width, height);
 
 	const auto& rootNodes = loader.children();
 	if (rootNodes.size() != 1 || rootNodes.front().type != OTBM_MAP_DATA) {
@@ -349,17 +351,24 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	const auto& mapNode = rootNodes.front();
 	auto [spawns, houses] = parseMapAttributes(mapNode);
 
-	map->spawnfile = fileName.parent_path() / std::move(spawns);
-	map->housefile = fileName.parent_path() / std::move(houses);
+	if (spawns.empty()) {
+		// OTBM file doesn't tell us about the spawnfile, lets guess it is mapname-spawn.xml.
+		spawns = fileName.stem().concat("-spawn.xml");
+	}
+
+	if (houses.empty()) {
+		// OTBM file doesn't tell us about the housefile, lets guess it is mapname-house.xml.
+		houses = fileName.stem().concat("-house.xml");
+	}
 
 	for (auto& node : mapNode.children) {
 		switch (node.type) {
 			case OTBM_TILE_AREA:
-				parseTileArea(node, *map);
+				parseTileArea(node, map);
 				break;
 
 			case OTBM_TOWNS:
-				parseTowns(node, *map);
+				parseTowns(node, map);
 				break;
 
 			case OTBM_WAYPOINTS:
@@ -368,7 +377,7 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 					    "Waypoints are not supported in OTBM version {:d}, please update your map.", version));
 				}
 
-				parseWaypoints(node, *map);
+				parseWaypoints(node, map);
 				break;
 
 			default:
@@ -379,4 +388,13 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	auto end = std::chrono::steady_clock::now();
 
 	std::cout << "> Map loading time: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms.\n";
+
+	return {
+	    .spawns = fileName.parent_path() / spawns,
+	    .houses = fileName.parent_path() / houses,
+	    .width = width,
+	    .height = height,
+	};
 }
+
+} // namespace tfs::io::map

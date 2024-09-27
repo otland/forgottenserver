@@ -4615,8 +4615,7 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	g_dispatcher.addTask([path]() {
 		try {
 			g_game.loadMap(path, true);
-		} catch (const std::exception& e) {
-			// FIXME: Should only catch some exceptions
+		} catch (const std::invalid_argument& e) {
 			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
 		}
 	});
