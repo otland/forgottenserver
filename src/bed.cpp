@@ -18,7 +18,7 @@ void BedItem::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterat
 {
 	switch (attr) {
 		case ATTR_SLEEPERGUID: {
-			uint32_t guid = OTB::read<uint32_t>(first, last);
+			auto guid = OTB::read<uint32_t>(first, last);
 
 			if (guid != 0) {
 				std::string name = IOLoginData::getNameByGuid(guid);
