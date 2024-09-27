@@ -359,7 +359,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_TEXT: {
-			std::string text = OTB::readString(first, last);
+			auto text = OTB::readString(first, last);
 			setText(text);
 			break;
 		}
@@ -371,13 +371,13 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_WRITTENBY: {
-			std::string writer = OTB::readString(first, last);
+			auto writer = OTB::readString(first, last);
 			setWriter(writer);
 			break;
 		}
 
 		case ATTR_DESC: {
-			std::string text = OTB::readString(first, last);
+			auto text = OTB::readString(first, last);
 			setSpecialDescription(text);
 			break;
 		}
@@ -397,19 +397,19 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_NAME: {
-			std::string name = OTB::readString(first, last);
+			auto name = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_NAME, name);
 			break;
 		}
 
 		case ATTR_ARTICLE: {
-			std::string article = OTB::readString(first, last);
+			auto article = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_ARTICLE, article);
 			break;
 		}
 
 		case ATTR_PLURALNAME: {
-			std::string pluralName = OTB::readString(first, last);
+			auto pluralName = OTB::readString(first, last);
 			setStrAttr(ITEM_ATTRIBUTE_PLURALNAME, pluralName);
 			break;
 		}
@@ -513,7 +513,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value
-				std::string key = OTB::readString(first, last);
+				auto key = OTB::readString(first, last);
 
 				// Unserialize value type and value
 				ItemAttributes::CustomAttribute val;
