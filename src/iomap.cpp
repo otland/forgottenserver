@@ -133,7 +133,9 @@ void parseTileArea(const OTB::Node& node, Map& map)
 	auto [base_x, base_y, z] = read_coords(node_begin, node.propsEnd);
 
 	for (auto& tileNode : node.children) {
-		assert(tileNode.type == OTBM_TILE || tileNode.type == OTBM_HOUSETILE);
+		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) [[unlikely]] {
+			throw std::invalid_argument(fmt::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
+		}
 
 		auto first = tileNode.propsBegin, last = tileNode.propsEnd;
 
@@ -147,7 +149,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		uint32_t tileflags = TILESTATE_NONE;
 
 		if (tileNode.type == OTBM_HOUSETILE) {
-			uint32_t house_id = OTB::read<uint32_t>(first, last);
+			auto house_id = OTB::read<uint32_t>(first, last);
 
 			house = map.houses.addHouse(house_id);
 
@@ -161,7 +163,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		while (first != last) {
 			switch (OTB::read<char>(first, last)) {
 				case OTBM_ATTR_TILE_FLAGS: {
-					uint32_t flags = OTB::read<uint32_t>(first, last);
+					auto flags = OTB::read<uint32_t>(first, last);
 
 					if ((flags & OTBM_TILEFLAG_PROTECTIONZONE) != 0) {
 						tileflags |= TILESTATE_PROTECTIONZONE;
@@ -214,7 +216,9 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		}
 
 		for (const auto& itemNode : tileNode.children) {
-			assert(itemNode.type == OTBM_ITEM);
+			if (itemNode.type != OTBM_ITEM) [[unlikely]] {
+				throw std::invalid_argument(fmt::format("Unknown item node: {:d}.", static_cast<uint16_t>(node.type)));
+			}
 
 			auto first = itemNode.propsBegin, last = itemNode.propsEnd;
 			auto id = OTB::read<uint16_t>(first, last);
@@ -260,7 +264,9 @@ void parseTileArea(const OTB::Node& node, Map& map)
 void parseTowns(const OTB::Node& townsNode, Map& map)
 {
 	for (auto& node : townsNode.children) {
-		assert(node.type == OTBM_TOWN);
+		if (node.type != OTBM_TOWN) [[unlikely]] {
+			throw std::invalid_argument(fmt::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
+		}
 
 		auto first = node.propsBegin, last = node.propsEnd;
 		auto townId = OTB::read<uint32_t>(first, last);
@@ -275,7 +281,9 @@ void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 {
 	PropStream propStream;
 	for (auto& node : waypointsNode.children) {
-		assert(node.type != OTBM_WAYPOINT);
+		if (node.type != OTBM_WAYPOINT) [[unlikely]] {
+			throw std::invalid_argument(fmt::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
+		}
 
 		auto first = node.propsBegin, last = node.propsEnd;
 
@@ -295,7 +303,7 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	auto loader = OTB::load(fileName.string(), "OTBM");
 	auto first = loader.begin(), last = loader.end();
 
-	uint32_t version = OTB::read<uint32_t>(first, last);
+	auto version = OTB::read<uint32_t>(first, last);
 	if (version == 0) {
 		// In otbm version 1 the count variable after splashes/fluidcontainers and stackables are saved as
 		// attributes instead, this solves a lot of problems with items that are changed
@@ -310,8 +318,8 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 
 	map->width = OTB::read<uint16_t>(first, last);
 	map->height = OTB::read<uint16_t>(first, last);
-	uint32_t majorVersionItems = OTB::read<uint32_t>(first, last);
-	uint32_t minorVersionItems = OTB::read<uint32_t>(first, last);
+	auto majorVersionItems = OTB::read<uint32_t>(first, last);
+	auto minorVersionItems = OTB::read<uint32_t>(first, last);
 
 	if (majorVersionItems < 3) {
 		throw std::invalid_argument(
@@ -355,12 +363,16 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 				break;
 
 			case OTBM_WAYPOINTS:
-				assert(version > 1);
+				if (version <= 1) [[unlikely]] {
+					throw std::invalid_argument(fmt::format(
+					    "Waypoints are not supported in OTBM version {:d}, please update your map.", version));
+				}
+
 				parseWaypoints(node, *map);
 				break;
 
 			default:
-				throw std::invalid_argument(fmt::format("Unknown map node: {:d}.", node.type));
+				throw std::invalid_argument(fmt::format("Unknown map node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 	}
 
