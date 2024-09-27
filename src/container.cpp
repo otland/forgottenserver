@@ -117,7 +117,7 @@ void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator la
 
 	for (auto& itemNode : node.children) {
 		// load container items
-		if (itemNode.type != OTBM_ITEM) {
+		if (itemNode.type != OTBM_ITEM) [[unlikely]] {
 			throw std::invalid_argument("Invalid node type");
 		}
 
@@ -125,7 +125,7 @@ void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator la
 		auto id = OTB::read<uint16_t>(first, last);
 
 		auto item = Item::CreateItem(Item::getPersistentId(id));
-		if (!item) {
+		if (!item) [[unlikely]] {
 			throw std::invalid_argument("Invalid item id");
 		}
 

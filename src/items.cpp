@@ -416,19 +416,20 @@ bool Items::loadFromOtb(const std::string& file)
 	// auto flags = OTB::read<uint32_t>(first, last); // unused
 	OTB::skip(first, last, sizeof(uint32_t));
 
-	if (auto attr = OTB::read<uint8_t>(first, last); attr == ROOT_ATTR_VERSION) {
-		constexpr auto VERSION_INFO_SIZE = 140u;
-
-		if (auto length = OTB::read<uint16_t>(first, last); length != VERSION_INFO_SIZE) {
-			throw std::invalid_argument(
-			    fmt::format("Invalid data length for version info: expected 140, got {:d}", length));
-		}
-
-		majorVersion = OTB::read<uint32_t>(first, last); // items otb format file version
-		minorVersion = OTB::read<uint32_t>(first, last); // client version
-		buildNumber = OTB::read<uint32_t>(first, last);  // revision
-		OTB::skip(first, last, VERSION_INFO_SIZE - 3 * sizeof(uint32_t));
+	if (auto attr = OTB::read<uint8_t>(first, last); attr != ROOT_ATTR_VERSION) {
+		throw std::invalid_argument(fmt::format("Unknown root node: {:d}.", attr));
 	}
+
+	constexpr auto VERSION_INFO_SIZE = 140u;
+	if (auto length = OTB::read<uint16_t>(first, last); length != VERSION_INFO_SIZE) {
+		throw std::invalid_argument(
+		    fmt::format("Invalid data length for version info: expected 140, got {:d}", length));
+	}
+
+	majorVersion = OTB::read<uint32_t>(first, last); // items otb format file version
+	minorVersion = OTB::read<uint32_t>(first, last); // client version
+	buildNumber = OTB::read<uint32_t>(first, last);  // revision
+	OTB::skip(first, last, VERSION_INFO_SIZE - 3 * sizeof(uint32_t));
 
 	if (majorVersion == std::numeric_limits<uint32_t>::max()) {
 		std::cout << "[Warning - Items::loadFromOtb] items.otb using generic client version." << std::endl;
@@ -459,48 +460,40 @@ bool Items::loadFromOtb(const std::string& file)
 
 			switch (attr) {
 				case ITEM_ATTR_SERVERID: {
-#ifndef NDEBUG
-					if (length != sizeof(uint16_t)) {
+					if (length != sizeof(uint16_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid server ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
-#endif
 
 					serverId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_CLIENTID: {
-#ifndef NDEBUG
-					if (length != sizeof(uint16_t)) {
+					if (length != sizeof(uint16_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid client ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
-#endif
 
 					clientId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_SPEED: {
-#ifndef NDEBUG
-					if (length != sizeof(uint16_t)) {
+					if (length != sizeof(uint16_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid speed attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
-#endif
 
 					speed = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_LIGHT2: {
-#ifndef NDEBUG
-					if (length != 2 * sizeof(uint16_t)) {
+					if (length != 2 * sizeof(uint16_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid light2 attribute length: expected {:d}, got {:d}", 2 * sizeof(uint16_t), length));
 					}
-#endif
 
 					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
 					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
@@ -508,37 +501,31 @@ bool Items::loadFromOtb(const std::string& file)
 				}
 
 				case ITEM_ATTR_TOPORDER: {
-#ifndef NDEBUG
-					if (length != sizeof(uint8_t)) {
+					if (length != sizeof(uint8_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid top order attribute length: expected {:d}, got {:d}", sizeof(uint8_t), length));
 					}
-#endif
 
 					alwaysOnTopOrder = OTB::read<uint8_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_WAREID: {
-#ifndef NDEBUG
-					if (length != sizeof(uint16_t)) {
+					if (length != sizeof(uint16_t)) [[unlikely]] {
 						throw std::invalid_argument(fmt::format(
 						    "Invalid ware ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
-#endif
 
 					wareId = OTB::read<uint16_t>(first, last);
 					break;
 				}
 
 				case ITEM_ATTR_CLASSIFICATION: {
-#ifndef NDEBUG
-					if (length != sizeof(uint8_t)) {
+					if (length != sizeof(uint8_t)) [[unlikely]] {
 						throw std::invalid_argument(
 						    fmt::format("Invalid classification attribute length: expected {:d}, got {:d}",
 						                sizeof(uint16_t), length));
 					}
-#endif
 
 					classification = OTB::read<uint8_t>(first, last);
 					break;

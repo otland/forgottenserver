@@ -28,7 +28,7 @@ Node parseTree(iterator& first, const iterator last)
 					node.propsEnd = first;
 				}
 
-				if (++first == last) {
+				if (++first == last) [[unlikely]] {
 					throw std::invalid_argument("File overflow on start node.");
 				}
 
@@ -43,7 +43,7 @@ Node parseTree(iterator& first, const iterator last)
 				return node;
 			}
 			case Node::ESCAPE: {
-				if (++first == last) {
+				if (++first == last) [[unlikely]] {
 					throw std::invalid_argument("File overflow on escape node.");
 				}
 				break;
