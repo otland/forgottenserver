@@ -14,7 +14,7 @@ const auto wildcard = std::string_view{"\0\0\0\0", 4};
 auto checkIdentifier(iterator it, std::string_view acceptedIdentifier)
 {
 	auto identifier = std::string_view(it, 4);
-	return identifier == acceptedIdentifier or identifier == wildcard;
+	return identifier == acceptedIdentifier || identifier == wildcard;
 }
 
 Node parseTree(iterator& first, const iterator last)
