@@ -13,7 +13,7 @@ void Podium::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterato
 {
 	switch (attr) {
 		case ATTR_PODIUMOUTFIT: {
-			if (last - first < 15) {
+			if (last - first < 15) [[unlikely]] {
 				throw std::invalid_argument("Invalid podium outfit");
 			}
 
