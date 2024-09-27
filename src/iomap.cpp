@@ -342,7 +342,7 @@ void IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	fmt::print("> Map size: {:d}x{:d}\n.", map->width, map->height);
 
 	const auto& rootNodes = loader.children();
-	if (rootNodes.size() != 1 or rootNodes.front().type != OTBM_MAP_DATA) {
+	if (rootNodes.size() != 1 || rootNodes.front().type != OTBM_MAP_DATA) {
 		throw std::invalid_argument("Could not read data node.");
 	}
 
