@@ -25,11 +25,12 @@ Items Item::items;
 
 Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 {
-	Item* newItem = nullptr;
-
 	const ItemType& it = Item::items[type];
-	assert(it.group != ITEM_GROUP_DEPRECATED);
+	if (it.group == ITEM_GROUP_DEPRECATED) [[unlikely]] {
+		return nullptr;
+	}
 
+	Item* newItem = nullptr;
 	if (it.stackable && count == 0) {
 		count = 1;
 	}
@@ -351,19 +352,19 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		case ATTR_CHARGES:
 		case ATTR_COUNT:
 		case ATTR_RUNE_CHARGES: {
-			uint8_t count = OTB::read<uint8_t>(first, last);
+			auto count = OTB::read<uint8_t>(first, last);
 			setSubType(count);
 			break;
 		}
 
 		case ATTR_ACTION_ID: {
-			uint16_t actionId = OTB::read<uint16_t>(first, last);
+			auto actionId = OTB::read<uint16_t>(first, last);
 			setActionId(actionId);
 			break;
 		}
 
 		case ATTR_UNIQUE_ID: {
-			uint16_t uniqueId = OTB::read<uint16_t>(first, last);
+			auto uniqueId = OTB::read<uint16_t>(first, last);
 			setUniqueId(uniqueId);
 			break;
 		}
@@ -375,7 +376,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_WRITTENDATE: {
-			uint32_t writtenDate = OTB::read<uint32_t>(first, last);
+			auto writtenDate = OTB::read<uint32_t>(first, last);
 			setDate(writtenDate);
 			break;
 		}
@@ -393,13 +394,13 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_DURATION: {
-			int32_t duration = OTB::read<int32_t>(first, last);
+			auto duration = OTB::read<int32_t>(first, last);
 			setDuration(std::max<int32_t>(0, duration));
 			break;
 		}
 
 		case ATTR_DECAYING_STATE: {
-			uint8_t state = OTB::read<uint8_t>(first, last);
+			auto state = OTB::read<uint8_t>(first, last);
 			if (state != DECAYING_FALSE) {
 				setDecaying(DECAYING_PENDING);
 			}
@@ -425,82 +426,82 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_WEIGHT: {
-			uint32_t weight = OTB::read<uint32_t>(first, last);
+			auto weight = OTB::read<uint32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_WEIGHT, weight);
 			break;
 		}
 
 		case ATTR_ATTACK: {
-			int32_t attack = OTB::read<int32_t>(first, last);
+			auto attack = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK, attack);
 			break;
 		}
 
 		case ATTR_ATTACK_SPEED: {
-			uint32_t attackSpeed = OTB::read<uint32_t>(first, last);
+			auto attackSpeed = OTB::read<uint32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ATTACK_SPEED, attackSpeed);
 			break;
 		}
 
 		case ATTR_DEFENSE: {
-			int32_t defense = OTB::read<int32_t>(first, last);
+			auto defense = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_DEFENSE, defense);
 			break;
 		}
 
 		case ATTR_EXTRADEFENSE: {
-			int32_t extraDefense = OTB::read<int32_t>(first, last);
+			auto extraDefense = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_EXTRADEFENSE, extraDefense);
 			break;
 		}
 
 		case ATTR_ARMOR: {
-			int32_t armor = OTB::read<int32_t>(first, last);
+			auto armor = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_ARMOR, armor);
 			break;
 		}
 
 		case ATTR_HITCHANCE: {
-			int8_t hitChance = OTB::read<int8_t>(first, last);
+			auto hitChance = OTB::read<int8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_HITCHANCE, hitChance);
 			break;
 		}
 
 		case ATTR_SHOOTRANGE: {
-			uint8_t shootRange = OTB::read<uint8_t>(first, last);
+			auto shootRange = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_SHOOTRANGE, shootRange);
 			break;
 		}
 
 		case ATTR_DECAYTO: {
-			int32_t decayTo = OTB::read<int32_t>(first, last);
+			auto decayTo = OTB::read<int32_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_DECAYTO, decayTo);
 			break;
 		}
 
 		case ATTR_WRAPID: {
-			uint16_t wrapId = OTB::read<uint16_t>(first, last);
+			auto wrapId = OTB::read<uint16_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_WRAPID, wrapId);
 			break;
 		}
 
 		case ATTR_STOREITEM: {
-			uint8_t storeItem = OTB::read<uint8_t>(first, last);
+			auto storeItem = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_STOREITEM, storeItem);
 			break;
 		}
 
 		case ATTR_OPENCONTAINER: {
-			uint8_t openContainer = OTB::read<uint8_t>(first, last);
+			auto openContainer = OTB::read<uint8_t>(first, last);
 			setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, openContainer);
 			break;
 		}
 
 		case ATTR_REFLECT: {
-			uint16_t size = OTB::read<uint16_t>(first, last);
+			auto size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
-				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
+				auto combatType = OTB::read<CombatType_t>(first, last);
 				Reflect reflect(OTB::read<uint16_t>(first, last), OTB::read<uint16_t>(first, last));
 				getAttributes()->reflect[combatType] = reflect;
 			}
@@ -508,11 +509,11 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_BOOST: {
-			uint16_t size = OTB::read<uint16_t>(first, last);
+			auto size = OTB::read<uint16_t>(first, last);
 
 			for (uint16_t i = 0; i < size; ++i) {
-				CombatType_t combatType = OTB::read<CombatType_t>(first, last);
-				uint16_t percent = OTB::read<uint16_t>(first, last);
+				auto combatType = OTB::read<CombatType_t>(first, last);
+				auto percent = OTB::read<uint16_t>(first, last);
 				getAttributes()->boostPercent[combatType] = percent;
 			}
 			break;
@@ -562,7 +563,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 		}
 
 		case ATTR_CUSTOM_ATTRIBUTES: {
-			uint64_t size = OTB::read<uint64_t>(first, last);
+			auto size = OTB::read<uint64_t>(first, last);
 
 			for (uint64_t i = 0; i < size; i++) {
 				// Unserialize key type and value

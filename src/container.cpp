@@ -122,7 +122,7 @@ void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator la
 		}
 
 		auto first = itemNode.propsBegin, last = itemNode.propsEnd;
-		uint16_t id = OTB::read<uint16_t>(first, last);
+		auto id = OTB::read<uint16_t>(first, last);
 
 		auto item = Item::CreateItem(Item::getPersistentId(id));
 		if (!item) {

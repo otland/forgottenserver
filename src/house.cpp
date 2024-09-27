@@ -491,7 +491,7 @@ void Door::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 {
 	switch (attr) {
 		case ATTR_HOUSEDOORID: {
-			uint8_t doorId = OTB::read<uint8_t>(first, last);
+			auto doorId = OTB::read<uint8_t>(first, last);
 			setDoorId(doorId);
 			break;
 		}

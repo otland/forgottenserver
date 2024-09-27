@@ -50,11 +50,9 @@ template <class T>
 		*it++ = *first++;
 	}
 
-#ifndef NDEBUG
-	if (it != buf.end()) {
+	if (it != buf.end()) [[unlikely]] {
 		throw std::invalid_argument("Not enough bytes to read.");
 	}
-#endif
 
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	T out;
@@ -65,13 +63,9 @@ template <class T>
 [[nodiscard]] std::string readString(auto& first, const auto last)
 {
 	auto len = read<uint16_t>(first, last);
-
-	(void)last;
-#ifndef NDEBUG
-	if (last - first < len) {
+	if (last - first < len) [[unlikely]] {
 		throw std::invalid_argument("Not enough bytes to read as string.");
 	}
-#endif
 
 	std::string out;
 	out.reserve(len);
@@ -88,12 +82,9 @@ template <class T>
 
 void skip(auto& first, const auto last, const int len)
 {
-	(void)last;
-#ifndef NDEBUG
-	if (last - first < len) {
+	if (last - first < len) [[unlikely]] {
 		throw std::invalid_argument("Not enough bytes to skip.");
 	}
-#endif
 
 	for (auto end = first + len; first < end; ++first) {
 		if (*first == Node::ESCAPE) {

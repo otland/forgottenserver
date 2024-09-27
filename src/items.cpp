@@ -413,10 +413,10 @@ bool Items::loadFromOtb(const std::string& file)
 	// 4 byte flags
 	// attributes
 	// 0x01 = version data
-	// uint32_t flags = OTB::read<uint32_t>(first, last); // unused
+	// auto flags = OTB::read<uint32_t>(first, last); // unused
 	OTB::skip(first, last, sizeof(uint32_t));
 
-	if (uint8_t attr = OTB::read<uint8_t>(first, last); attr == ROOT_ATTR_VERSION) {
+	if (auto attr = OTB::read<uint8_t>(first, last); attr == ROOT_ATTR_VERSION) {
 		constexpr auto VERSION_INFO_SIZE = 140u;
 
 		if (auto length = OTB::read<uint16_t>(first, last); length != VERSION_INFO_SIZE) {
@@ -443,7 +443,7 @@ bool Items::loadFromOtb(const std::string& file)
 	for (auto& itemNode : loader.children()) {
 		auto first = itemNode.propsBegin, last = itemNode.propsEnd;
 
-		uint32_t flags = OTB::read<uint32_t>(first, last);
+		auto flags = OTB::read<uint32_t>(first, last);
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
 		uint16_t speed = 0;
@@ -454,8 +454,8 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t classification = 0;
 
 		while (first != last) {
-			uint8_t attr = OTB::read<uint8_t>(first, last);
-			uint16_t length = OTB::read<uint16_t>(first, last);
+			auto attr = OTB::read<uint8_t>(first, last);
+			auto length = OTB::read<uint16_t>(first, last);
 
 			switch (attr) {
 				case ITEM_ATTR_SERVERID: {
