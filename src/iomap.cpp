@@ -134,7 +134,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 	auto first = node.propsBegin;
 	auto [base_x, base_y, z] = read_coords(first, node.propsEnd);
 
-	for (auto& tileNode : node.children) {
+	for (const auto& tileNode : node.children) {
 		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) [[unlikely]] {
 			throw std::invalid_argument(fmt::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
@@ -264,7 +264,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 
 void parseTowns(const OTB::Node& townsNode, Map& map)
 {
-	for (auto& node : townsNode.children) {
+	for (const auto& node : townsNode.children) {
 		if (node.type != OTBM_TOWN) [[unlikely]] {
 			throw std::invalid_argument(fmt::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
@@ -280,8 +280,7 @@ void parseTowns(const OTB::Node& townsNode, Map& map)
 
 void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 {
-	PropStream propStream;
-	for (auto& node : waypointsNode.children) {
+	for (const auto& node : waypointsNode.children) {
 		if (node.type != OTBM_WAYPOINT) [[unlikely]] {
 			throw std::invalid_argument(fmt::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
@@ -360,7 +359,7 @@ MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 		houses = fileName.stem().concat("-house.xml");
 	}
 
-	for (auto& node : mapNode.children) {
+	for (const auto& node : mapNode.children) {
 		switch (node.type) {
 			case OTBM_TILE_AREA:
 				parseTileArea(node, map);
