@@ -73,24 +73,24 @@ auto parseMapAttributes(const OTB::Node& mapNode)
 {
 	std::string spawns = {}, houses = {};
 
-	auto first = mapNode.propsBegin, last = mapNode.propsEnd;
+	auto first = mapNode.propsBegin;
 
-	while (first != last) {
-		switch (auto attr = OTB::read<uint8_t>(first, last)) {
+	while (first != mapNode.propsEnd) {
+		switch (auto attr = OTB::read<uint8_t>(first, mapNode.propsEnd)) {
 			case OTBM_ATTR_DESCRIPTION: {
-				auto len = OTB::read<uint16_t>(first, last);
-				OTB::skip(first, last, len);
-				// out.description = OTB::readString(first, last);
+				auto len = OTB::read<uint16_t>(first, mapNode.propsEnd);
+				OTB::skip(first, mapNode.propsEnd, len);
+				// out.description = OTB::readString(first, mapNode.propsEnd);
 				break;
 			}
 
 			case OTBM_ATTR_EXT_SPAWN_FILE: {
-				spawns = OTB::readString(first, last);
+				spawns = OTB::readString(first, mapNode.propsEnd);
 				break;
 			}
 
 			case OTBM_ATTR_EXT_HOUSE_FILE: {
-				houses = OTB::readString(first, last);
+				houses = OTB::readString(first, mapNode.propsEnd);
 				break;
 			}
 
@@ -102,7 +102,7 @@ auto parseMapAttributes(const OTB::Node& mapNode)
 	return std::make_pair(spawns, houses);
 }
 
-auto read_coords(auto& first, auto const last)
+auto read_coords(auto& first, const auto last)
 {
 	auto x = OTB::read<uint16_t>(first, last);
 	auto y = OTB::read<uint16_t>(first, last);
@@ -131,18 +131,17 @@ Tile* createTile(Item*& ground, Item* item, uint16_t x, uint16_t y, uint8_t z)
 
 void parseTileArea(const OTB::Node& node, Map& map)
 {
-	auto node_begin = node.propsBegin;
-	auto [base_x, base_y, z] = read_coords(node_begin, node.propsEnd);
+	auto first = node.propsBegin;
+	auto [base_x, base_y, z] = read_coords(first, node.propsEnd);
 
 	for (auto& tileNode : node.children) {
 		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) [[unlikely]] {
 			throw std::invalid_argument(fmt::format("Unknown tile node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		auto first = tileNode.propsBegin, last = tileNode.propsEnd;
-
-		uint16_t x = base_x + OTB::read<uint8_t>(first, last);
-		uint16_t y = base_y + OTB::read<uint8_t>(first, last);
+		auto first = tileNode.propsBegin;
+		auto x = base_x + OTB::read<uint8_t>(first, tileNode.propsEnd);
+		auto y = base_y + OTB::read<uint8_t>(first, tileNode.propsEnd);
 
 		bool isHouseTile = false;
 		House* house = nullptr;
@@ -151,7 +150,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		uint32_t tileflags = TILESTATE_NONE;
 
 		if (tileNode.type == OTBM_HOUSETILE) {
-			auto house_id = OTB::read<uint32_t>(first, last);
+			auto house_id = OTB::read<uint32_t>(first, tileNode.propsEnd);
 
 			house = map.houses.addHouse(house_id);
 
@@ -162,10 +161,10 @@ void parseTileArea(const OTB::Node& node, Map& map)
 		}
 
 		// read tile attributes
-		while (first != last) {
-			switch (OTB::read<char>(first, last)) {
+		while (first != tileNode.propsEnd) {
+			switch (OTB::read<char>(first, tileNode.propsEnd)) {
 				case OTBM_ATTR_TILE_FLAGS: {
-					auto flags = OTB::read<uint32_t>(first, last);
+					auto flags = OTB::read<uint32_t>(first, tileNode.propsEnd);
 
 					if ((flags & OTBM_TILEFLAG_PROTECTIONZONE) != 0) {
 						tileflags |= TILESTATE_PROTECTIONZONE;
@@ -182,7 +181,7 @@ void parseTileArea(const OTB::Node& node, Map& map)
 				}
 
 				case OTBM_ATTR_ITEM: {
-					auto item = Item::CreateItem(Item::getPersistentId(OTB::read<uint16_t>(first, last)));
+					auto item = Item::CreateItem(Item::getPersistentId(OTB::read<uint16_t>(first, tileNode.propsEnd)));
 
 					if (isHouseTile && item->isMoveable()) {
 						std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
@@ -222,10 +221,10 @@ void parseTileArea(const OTB::Node& node, Map& map)
 				throw std::invalid_argument(fmt::format("Unknown item node: {:d}.", static_cast<uint16_t>(node.type)));
 			}
 
-			auto first = itemNode.propsBegin, last = itemNode.propsEnd;
-			auto id = OTB::read<uint16_t>(first, last);
+			auto first = itemNode.propsBegin;
+			auto id = OTB::read<uint16_t>(first, itemNode.propsEnd);
 			Item* item = Item::CreateItem(Item::getPersistentId(id));
-			item->unserializeItemNode(first, last, itemNode);
+			item->unserializeItemNode(first, itemNode.propsEnd, itemNode);
 
 			if (isHouseTile && item->isMoveable()) {
 				std::cout << "[Warning - IOMap::loadMap] Moveable item with ID: " << item->getID()
@@ -270,10 +269,10 @@ void parseTowns(const OTB::Node& townsNode, Map& map)
 			throw std::invalid_argument(fmt::format("Unknown town node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		auto first = node.propsBegin, last = node.propsEnd;
-		auto townId = OTB::read<uint32_t>(first, last);
-		auto townName = OTB::readString(first, last);
-		auto [x, y, z] = read_coords(first, last);
+		auto first = node.propsBegin;
+		auto townId = OTB::read<uint32_t>(first, node.propsEnd);
+		auto townName = OTB::readString(first, node.propsEnd);
+		auto [x, y, z] = read_coords(first, node.propsEnd);
 
 		map.towns.setTown(townId, new Town{.id = townId, .name = std::move(townName), .templePosition = {x, y, z}});
 	}
@@ -287,10 +286,10 @@ void parseWaypoints(const OTB::Node& waypointsNode, Map& map)
 			throw std::invalid_argument(fmt::format("Unknown waypoint node: {:d}.", static_cast<uint16_t>(node.type)));
 		}
 
-		auto first = node.propsBegin, last = node.propsEnd;
+		auto first = node.propsBegin;
 
-		auto name = OTB::readString(first, last);
-		auto [x, y, z] = read_coords(first, last);
+		auto name = OTB::readString(first, node.propsEnd);
+		auto [x, y, z] = read_coords(first, node.propsEnd);
 
 		map.waypoints[name] = Position{x, y, z};
 	}
