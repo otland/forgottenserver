@@ -115,7 +115,7 @@ void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator la
 {
 	Item::unserializeItemNode(first, last, node);
 
-	for (auto& itemNode : node.children) {
+	for (const auto& itemNode : node.children) {
 		// load container items
 		if (itemNode.type != tfs::io::map::OTBM_ITEM) [[unlikely]] {
 			throw std::invalid_argument("Invalid node type");
