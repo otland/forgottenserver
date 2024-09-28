@@ -442,9 +442,8 @@ bool Items::loadFromOtb(const std::string& file)
 	}
 
 	for (auto& itemNode : loader.children()) {
-		auto first = itemNode.propsBegin, last = itemNode.propsEnd;
-
-		auto flags = OTB::read<uint32_t>(first, last);
+		auto first = itemNode.propsBegin;
+		auto flags = OTB::read<uint32_t>(first, itemNode.propsEnd);
 		uint16_t serverId = 0;
 		uint16_t clientId = 0;
 		uint16_t speed = 0;
@@ -454,9 +453,9 @@ bool Items::loadFromOtb(const std::string& file)
 		uint8_t alwaysOnTopOrder = 0;
 		uint8_t classification = 0;
 
-		while (first != last) {
-			auto attr = OTB::read<uint8_t>(first, last);
-			auto length = OTB::read<uint16_t>(first, last);
+		while (first != itemNode.propsEnd) {
+			auto attr = OTB::read<uint8_t>(first, itemNode.propsEnd);
+			auto length = OTB::read<uint16_t>(first, itemNode.propsEnd);
 
 			switch (attr) {
 				case ITEM_ATTR_SERVERID: {
@@ -465,7 +464,7 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid server ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					serverId = OTB::read<uint16_t>(first, last);
+					serverId = OTB::read<uint16_t>(first, itemNode.propsEnd);
 					break;
 				}
 
@@ -475,7 +474,7 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid client ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					clientId = OTB::read<uint16_t>(first, last);
+					clientId = OTB::read<uint16_t>(first, itemNode.propsEnd);
 					break;
 				}
 
@@ -485,7 +484,7 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid speed attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					speed = OTB::read<uint16_t>(first, last);
+					speed = OTB::read<uint16_t>(first, itemNode.propsEnd);
 					break;
 				}
 
@@ -495,8 +494,8 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid light2 attribute length: expected {:d}, got {:d}", 2 * sizeof(uint16_t), length));
 					}
 
-					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
-					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, last));
+					lightLevel = static_cast<uint8_t>(OTB::read<uint16_t>(first, itemNode.propsEnd));
+					lightColor = static_cast<uint8_t>(OTB::read<uint16_t>(first, itemNode.propsEnd));
 					break;
 				}
 
@@ -506,7 +505,7 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid top order attribute length: expected {:d}, got {:d}", sizeof(uint8_t), length));
 					}
 
-					alwaysOnTopOrder = OTB::read<uint8_t>(first, last);
+					alwaysOnTopOrder = OTB::read<uint8_t>(first, itemNode.propsEnd);
 					break;
 				}
 
@@ -516,7 +515,7 @@ bool Items::loadFromOtb(const std::string& file)
 						    "Invalid ware ID attribute length: expected {:d}, got {:d}", sizeof(uint16_t), length));
 					}
 
-					wareId = OTB::read<uint16_t>(first, last);
+					wareId = OTB::read<uint16_t>(first, itemNode.propsEnd);
 					break;
 				}
 
@@ -527,13 +526,13 @@ bool Items::loadFromOtb(const std::string& file)
 						                sizeof(uint16_t), length));
 					}
 
-					classification = OTB::read<uint8_t>(first, last);
+					classification = OTB::read<uint8_t>(first, itemNode.propsEnd);
 					break;
 				}
 
 				default: {
 					// skip unknown attributes
-					OTB::skip(first, last, length);
+					OTB::skip(first, itemNode.propsEnd, length);
 					break;
 				}
 			}
