@@ -39,7 +39,6 @@ Loader load(std::string_view filename, std::string_view acceptedIdentifier);
 template <class T>
 [[nodiscard]] T read(auto& first, const auto last)
 {
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	std::array<char, sizeof(T)> buf;
 	auto it = buf.begin();
 
@@ -54,7 +53,6 @@ template <class T>
 		throw std::invalid_argument("Not enough bytes to read.");
 	}
 
-#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 	T out;
 	std::memcpy(reinterpret_cast<char*>(&out), buf.data(), buf.size());
 	return out;
