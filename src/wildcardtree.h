@@ -16,6 +16,7 @@ class WildcardTreeNode
 public:
 	/**
 	 * @brief Constructs a WildcardTreeNode with an optional breakpoint.
+	 *
 	 * @param {breakpoint} A boolean
 	 * value indicating if the node represents a breakpoint (i.e., the end of a string).
 	 */
@@ -23,6 +24,7 @@ public:
 
 	/**
 	 * @brief Move constructor for WildcardTreeNode.
+	 *
 	 * @param other The node to move from.
 	 */
 	WildcardTreeNode(WildcardTreeNode&& other) = default;
@@ -50,10 +52,8 @@ public:
 	/**
 	 * @brief Adds a string to the wildcard tree.
 	 *
-	 * This method breaks the string into characters
-	 * and adds them as children nodes.
-	 * If the string already exists, it updates the final node to represent a
-	 * breakpoint.
+	 * This method breaks the string into characters and adds them as children nodes.
+	 * If the string already exists, it updates the final node to represent a breakpoint.
 	 *
 	 * @param {s} The string to be added.
 	 */
@@ -62,10 +62,8 @@ public:
 	/**
 	 * @brief Removes a string from the wildcard tree.
 	 *
-	 * This method traverses the tree based on
-	 * the input string and marks the final node as non-breakpoint.
-	 * If the node becomes orphaned (no children and
-	 * not a breakpoint), it is removed.
+	 * This method traverses the tree based on the input string and marks the final node as non-breakpoint.
+	 * If the node becomes orphaned (no children and not a breakpoint), it is removed.
 	 *
 	 * @param {s} The string to be removed.
 	 */
@@ -74,12 +72,9 @@ public:
 	/**
 	 * @brief Searches for a string in the wildcard tree.
 	 *
-	 * This method traverses the tree based on
-	 * the input query string and returns the search result and matched string.
+	 * This method traverses the tree based on the input query string and returns the search result and matched string.
 	 *
-	 * @param {query} The string
-	 * to search for.
-	 *
+	 * @param {query} The string to search for.
 	 * @return A pair containing the search result and the matched string.
 	 */
 	std::pair<WildcardTreeNode::SearchResult, std::string> search(const std::string& query) const;
@@ -87,16 +82,16 @@ public:
 private:
 	/**
 	 * @brief Finds a child node corresponding to a character.
-	 * @param {c} The character to search for
-	 * among the children.
+	 *
+	 * @param {c} The character to search for among the children.
 	 * @return A pointer to the child node if found, otherwise nullptr.
 	 */
 	WildcardTreeNode* find_child(char c);
 
 	/**
 	 * @brief Finds a child node corresponding to a character (const version).
-	 * @param {c} The character
-	 * to search for among the children.
+	 *
+	 * @param {c} The character to search for among the children.
 	 * @return A const pointer to the child node if found, otherwise nullptr.
 	 */
 	const WildcardTreeNode* find_child(char c) const;
@@ -104,14 +99,11 @@ private:
 	/**
 	 * @brief Adds a child node for a specific character.
 	 *
-	 * If the child node for the character
-	 * already exists, it will be updated.
-	 * If it does not exist, a new node will be created.
-	 *
+	 * If the child node for the character already exists, it will be updated. If it does not exist, a new node will be
+	 * created.
 	 *
 	 * @param {c} The character to add as a child node.
-	 * @param {breakpoint} A boolean value indicating if this
-	 * node represents a breakpoint.
+	 * @param {breakpoint} A boolean value indicating if this node represents a breakpoint.
 	 * @return A pointer to the added or existing child node.
 	 */
 	WildcardTreeNode* add_child(char c, bool breakpoint);
