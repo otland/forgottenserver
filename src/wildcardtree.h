@@ -25,7 +25,7 @@ public:
 	/**
 	 * @brief Move constructor for WildcardTreeNode.
 	 *
-	 * @param other The node to move from.
+	 * @param {other} The node to move from.
 	 */
 	WildcardTreeNode(WildcardTreeNode&& other) = default;
 
