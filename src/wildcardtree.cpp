@@ -8,37 +8,6 @@
 #include <stack>
 #include <tuple>
 
-WildcardTreeNode* WildcardTreeNode::find_child(char c)
-{
-	auto it = children.find(c);
-	if (it == children.end()) {
-		return nullptr;
-	}
-	return &it->second;
-}
-
-const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
-{
-	auto it = children.find(c);
-	if (it == children.end()) {
-		return nullptr;
-	}
-	return &it->second;
-}
-
-WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
-{
-	if (auto child = find_child(c)) {
-		if (breakpoint && !child->breakpoint) {
-			child->breakpoint = true;
-		}
-		return child;
-	}
-
-	auto pair = children.emplace(std::piecewise_construct, std::forward_as_tuple(c), std::forward_as_tuple(breakpoint));
-	return &pair.first->second;
-}
-
 void WildcardTreeNode::add(const std::string& s)
 {
 	auto node = this;
@@ -110,4 +79,35 @@ std::pair<WildcardTreeNode::SearchResult, std::string> WildcardTreeNode::search(
 		result += it->first;
 		node = &it->second;
 	} while (true);
+}
+
+WildcardTreeNode* WildcardTreeNode::find_child(char c)
+{
+	auto it = children.find(c);
+	if (it == children.end()) {
+		return nullptr;
+	}
+	return &it->second;
+}
+
+const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
+{
+	auto it = children.find(c);
+	if (it == children.end()) {
+		return nullptr;
+	}
+	return &it->second;
+}
+
+WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
+{
+	if (auto child = find_child(c)) {
+		if (breakpoint && !child->breakpoint) {
+			child->breakpoint = true;
+		}
+		return child;
+	}
+
+	auto pair = children.emplace(std::piecewise_construct, std::forward_as_tuple(c), std::forward_as_tuple(breakpoint));
+	return &pair.first->second;
 }
