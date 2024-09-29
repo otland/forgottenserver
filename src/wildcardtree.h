@@ -119,7 +119,7 @@ private:
 	/// A map of child nodes indexed by characters.
 	std::map<char, WildcardTreeNode> children;
 
-	/// Indicates whether this node represents a breakpoint (end of a valid string).
+	/// Indicates whether this node represents a breakpoint (end of a string).
 	bool breakpoint;
 };
 
