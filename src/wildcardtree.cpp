@@ -10,7 +10,7 @@
 
 void WildcardTreeNode::add(const std::string& s)
 {
-	auto node = this;
+	auto node = shared_from_this();
 
 	auto length = s.length() - 1;
 	for (size_t pos = 0; pos < length; ++pos) {
@@ -21,9 +21,9 @@ void WildcardTreeNode::add(const std::string& s)
 
 void WildcardTreeNode::remove(const std::string& s)
 {
-	auto node = this;
+	auto node = shared_from_this();
 
-	std::stack<WildcardTreeNode*> path;
+	std::stack<std::shared_ptr<WildcardTreeNode>> path;
 	path.push(node);
 
 	auto len = s.length();
@@ -56,7 +56,7 @@ void WildcardTreeNode::remove(const std::string& s)
 
 std::pair<WildcardTreeNode::SearchResult, std::string> WildcardTreeNode::search(const std::string& query) const
 {
-	auto node = this;
+	auto node = shared_from_this();
 
 	for (auto c : query) {
 		node = node->find_child(c);
@@ -77,29 +77,29 @@ std::pair<WildcardTreeNode::SearchResult, std::string> WildcardTreeNode::search(
 
 		auto it = node->children.begin();
 		result += it->first;
-		node = &it->second;
+		node = it->second;
 	} while (true);
 }
 
-WildcardTreeNode* WildcardTreeNode::find_child(char c)
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::find_child(char c)
 {
 	auto it = children.find(c);
 	if (it == children.end()) {
 		return nullptr;
 	}
-	return &it->second;
+	return it->second;
 }
 
-const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
+std::shared_ptr<const WildcardTreeNode> WildcardTreeNode::find_child(char c) const
 {
 	auto it = children.find(c);
 	if (it == children.end()) {
 		return nullptr;
 	}
-	return &it->second;
+	return it->second;
 }
 
-WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::add_child(char c, bool breakpoint)
 {
 	if (auto child = find_child(c)) {
 		if (breakpoint && !child->breakpoint) {
@@ -108,6 +108,6 @@ WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
 		return child;
 	}
 
-	auto pair = children.emplace(std::piecewise_construct, std::forward_as_tuple(c), std::forward_as_tuple(breakpoint));
-	return &pair.first->second;
+	auto pair = children.emplace(c, std::make_shared<WildcardTreeNode>(breakpoint));
+	return pair.first->second;
 }

@@ -6,12 +6,14 @@
 
 #include "enums.h"
 
+#include <memory>
+
 /**
  * @class WildcardTreeNode
  * @brief Represents a node in a wildcard tree. Each node can store children nodes, with
  * an optional "breakpoint" to mark the end of a string.
  */
-class WildcardTreeNode
+class WildcardTreeNode final : public std::enable_shared_from_this<WildcardTreeNode>
 {
 public:
 	/**
@@ -86,7 +88,7 @@ private:
 	 * @param {c} The character to search for among the children.
 	 * @return A pointer to the child node if found, otherwise nullptr.
 	 */
-	WildcardTreeNode* find_child(char c);
+	std::shared_ptr<WildcardTreeNode> find_child(char c);
 
 	/**
 	 * @brief Finds a child node corresponding to a character (const version).
@@ -94,7 +96,7 @@ private:
 	 * @param {c} The character to search for among the children.
 	 * @return A const pointer to the child node if found, otherwise nullptr.
 	 */
-	const WildcardTreeNode* find_child(char c) const;
+	std::shared_ptr<const WildcardTreeNode> find_child(char c) const;
 
 	/**
 	 * @brief Adds a child node for a specific character.
@@ -106,10 +108,10 @@ private:
 	 * @param {breakpoint} A boolean value indicating if this node represents a breakpoint.
 	 * @return A pointer to the added or existing child node.
 	 */
-	WildcardTreeNode* add_child(char c, bool breakpoint);
+	std::shared_ptr<WildcardTreeNode> add_child(char c, bool breakpoint);
 
 	/// A map of child nodes indexed by characters.
-	std::map<char, WildcardTreeNode> children;
+	std::map<char, std::shared_ptr<WildcardTreeNode>> children;
 
 	/// Indicates whether this node represents a breakpoint (end of a string).
 	bool breakpoint;
