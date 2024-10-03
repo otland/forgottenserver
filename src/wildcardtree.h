@@ -10,8 +10,8 @@
 
 /**
  * @class WildcardTreeNode
- * @brief Represents a node in a wildcard tree. Each node can store children nodes, with
- * an optional "breakpoint" to mark the end of a string.
+ * @brief Represents a node in a wildcard tree. Each node stores child nodes using `std::shared_ptr`,
+ * and optionally marks a "breakpoint" to represent the end of a string.
  */
 class WildcardTreeNode final : public std::enable_shared_from_this<WildcardTreeNode>
 {
@@ -19,8 +19,7 @@ public:
 	/**
 	 * @brief Constructs a WildcardTreeNode with an optional breakpoint.
 	 *
-	 * @param {breakpoint} A boolean
-	 * value indicating if the node represents a breakpoint (i.e., the end of a string).
+	 * @param {breakpoint} A boolean value indicating if the node represents a breakpoint (i.e., the end of a string).
 	 */
 	explicit WildcardTreeNode(bool breakpoint) : breakpoint(breakpoint) {}
 
@@ -54,8 +53,8 @@ public:
 	/**
 	 * @brief Adds a string to the wildcard tree.
 	 *
-	 * This method breaks the string into characters and adds them as children nodes.
-	 * If the string already exists, it updates the final node to represent a breakpoint.
+	 * This method splits the string into characters and adds them as child nodes.
+	 * If the string already exists, it marks the final node as a breakpoint.
 	 *
 	 * @param {s} The string to be added.
 	 */
@@ -86,7 +85,7 @@ private:
 	 * @brief Finds a child node corresponding to a character.
 	 *
 	 * @param {c} The character to search for among the children.
-	 * @return A pointer to the child node if found, otherwise nullptr.
+	 * @return A shared pointer to the child node if found, otherwise nullptr.
 	 */
 	std::shared_ptr<WildcardTreeNode> find_child(char c);
 
@@ -94,7 +93,7 @@ private:
 	 * @brief Finds a child node corresponding to a character (const version).
 	 *
 	 * @param {c} The character to search for among the children.
-	 * @return A const pointer to the child node if found, otherwise nullptr.
+	 * @return A shared pointer to the child node if found, otherwise nullptr.
 	 */
 	std::shared_ptr<const WildcardTreeNode> find_child(char c) const;
 
@@ -106,7 +105,7 @@ private:
 	 *
 	 * @param {c} The character to add as a child node.
 	 * @param {breakpoint} A boolean value indicating if this node represents a breakpoint.
-	 * @return A pointer to the added or existing child node.
+	 * @return A shared pointer to the added or existing child node.
 	 */
 	std::shared_ptr<WildcardTreeNode> add_child(char c, bool breakpoint);
 
