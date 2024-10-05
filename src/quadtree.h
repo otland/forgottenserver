@@ -1,8 +1,6 @@
 #include "otpch.h"
 
 #include "creature.h"
-#include "map.h"
-#include "spectators.h"
 
 namespace tfs::map::quadtree {
 

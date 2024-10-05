@@ -13,7 +13,7 @@
 
 class Creature;
 
-static constexpr int32_t MAP_MAX_LAYERS = 16;
+inline constexpr int32_t MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 struct AStarNode
