@@ -1,28 +1,28 @@
 #include "quadtree.h"
 
 namespace {
-std::unique_ptr<QuadTree> nodes[4] = {};
+std::array<QuadTree*, 4> nodes = {};
 
-uint32_t create_index(uint16_t x, uint16_t y) { return ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14); }
+uint8_t create_index(uint16_t x, uint16_t y) { return ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14); }
 
 Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
 {
 	auto index = create_index(x, y);
-	if (auto next_node = nodes[index].get()) {
-		return find_leaf(x, y, next_node);
+	if (auto node = nodes[index]; auto leaf = find_leaf(x, y, node)) {
+		return static_cast<Leaf*>(leaf);
 	}
 	return nullptr;
 }
 
-Leaf* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
+QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
 {
 	if (node->is_leaf()) {
-		return static_cast<Leaf*>(node);
+		return node;
 	}
 
 	auto index = create_index(x, y);
-	if (auto next_node = node->nodes[index].get()) {
-		return find_leaf(x << 1, y << 1, next_node);
+	if (auto node_child = node->get_child(index)) {
+		return find_leaf(x << 1, y << 1, node_child);
 	}
 	return nullptr;
 }
@@ -31,10 +31,10 @@ void create_leaf_in_root(uint16_t x, uint16_t y, uint8_t z)
 {
 	auto index = create_index(x, y);
 	if (!nodes[index]) {
-		nodes[index] = std::make_unique<Node>();
+		nodes[index] = new Node();
 	}
 
-	create_leaf(x, y, (MAP_MAX_LAYERS - 1), nodes[index].get());
+	create_leaf(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
 }
 
 void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
@@ -44,21 +44,24 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 	}
 
 	auto index = create_index(x, y);
-	if (!node->nodes[index]) {
+	auto node_child = node->get_child(index);
+	if (!node_child) {
 		if (z == FLOOR_BITS) {
-			node->nodes[index] = std::make_unique<Leaf>(x, y);
+			node_child = new Leaf(x, y);
 		} else {
-			node->nodes[index] = std::make_unique<Node>();
+			node_child = new Node();
 		}
+
+		node->set_child(index, node_child);
 	}
 
-	create_leaf(x * 2, y * 2, z - 1, node->nodes[index].get());
+	create_leaf(x * 2, y * 2, z - 1, node_child);
 }
 
 } // namespace
 
-void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
-                         std::function<bool(Creature*)> comparison)
+void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y,
+                              SpectatorVec& spectators, std::function<bool(Creature*)> comparison)
 {
 	int32_t start_x_aligned = start_x - (start_x % FLOOR_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % FLOOR_SIZE);
@@ -74,7 +77,7 @@ void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x
 			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += FLOOR_SIZE) {
 				if (east_leaf) {
 					for (auto creature : east_leaf->creatures) {
-						if (comparasion(creature)) {
+						if (comparison(creature)) {
 							spectators.emplace_back(creature);
 						}
 					}
@@ -112,7 +115,7 @@ void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* ti
 }
 
 void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
-                                  Creature* creature)
+                                       Creature* creature)
 {
 	if (auto old_leaf = find_leaf_in_root(old_x, old_y); auto leaf = find_leaf_in_root(x, y)) {
 		if (old_leaf != leaf) {
