@@ -8,56 +8,20 @@ namespace tfs::map::quadtree {
 void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
           std::function<bool(Creature*)> comparasion);
 
-/**
- * @brief Finds the tile at the specified coordinates and layer.
- *
- * @param {x} The x-coordinate of the tile.
- * @param {y} The y-coordinate of the tile.
- * @param {z} The layer of the tile.
- * @return A pointer to the Tile at the specified coordinates, or nullptr if not found.
- * */
+/// @brief Finds the tile at the specified coordinates and layer.
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
 
-/**
- * @brief Creates a tile at the specified coordinates and layer.
- *
- * @param x The x-coordinate for the tile.
- * @param y The y-coordinate for the tile.
- * @param z The layer for the tile.
- * @param tile A pointer to the Tile to be created.
- */
+/// @brief Creates a tile at the specified coordinates and layer.
 void create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile);
 
-/**
- * @brief Moves a creature from one location to another within the quadtree.
- *
- * @param {old_x} The old x-coordinate of the creature.
- * @param {old_y} The old y-coordinate of the creature.
- * @param {old_z} The old layer of the creature.
- * @param {x} The new x-coordinate of the creature.
- * @param {y} The new y-coordinate of the creature.
- * @param {z} The new layer of the creature.
- * @param {creature} A pointer to the Creature to be moved.
- */
+/// @brief Moves a creature from one location to another within the quadtree.
 void move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
                    Creature* creature);
 
-/** @brief Inserts a creature into the quadtree at the specified coordinates.
- *
- * @param {x} The x-coordinate of the creature.
- * @param {y} The y-coordinate of the creature.
- * @param {z} The layer of the creature.
- * @param {creature} A pointer to the Creature to be inserted.
- */
+/// @brief Inserts a creature into the quadtree at the specified coordinates.
 void insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
 
-/** @brief Removes a creature from the quadtree at the specified coordinates.
- *
- * @param {x} The x-coordinate of the creature.
- * @param {y} The y-coordinate of the creature.
- * @param {z} The layer of the creature.
- * @param {creature} A pointer to the Creature to be removed.
- */
+/// @brief Removes a creature from the quadtree at the specified coordinates.
 void remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
 
 } // namespace tfs::map::quadtree
@@ -91,7 +55,7 @@ public:
 	/**
      * @brief Check if the node is a leaf node.
      * @return true if the node is a leaf, false otherwise.
- */
+	 */
 	virtual bool is_leaf() const = 0;
 
 	/**
@@ -129,7 +93,7 @@ inline constexpr int32_t TILE_INDEX_MASK = (TILE_GRID_SIZE - 1);
   * @brief Represents a node in a QuadTree.
   * 
   * This class extends the QuadTree interface and
- * implements a specific type of node that can have up to four child nodes.
+  * implements a specific type of node that can have up to four child nodes.
   */
 class Node final : public QuadTree
 {
