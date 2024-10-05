@@ -67,7 +67,7 @@ Tile* Map::getTile(uint16_t x, uint16_t y, uint8_t z) const
 	if (z >= MAP_MAX_LAYERS) {
 		return nullptr;
 	}
-	return tfs::quadtree::find_tile(x, y, z);
+	return tfs::map::quadtree::find_tile(x, y, z);
 }
 
 void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
@@ -77,7 +77,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 		return;
 	}
 
-	if (auto tile = tfs::quadtree::find_tile(x, y, z)) {
+	if (auto tile = tfs::map::quadtree::find_tile(x, y, z)) {
 		TileItemVector* items = newTile->getItemList();
 		if (items) {
 			for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
@@ -93,7 +93,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile)
 		}
 		delete newTile;
 	} else {
-		tfs::quadtree::create_tile(x, y, z, newTile);
+		tfs::map::quadtree::create_tile(x, y, z, newTile);
 	}
 }
 
@@ -103,7 +103,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 		return;
 	}
 
-	auto tile = tfs::quadtree::find_tile(x, y, z);
+	auto tile = tfs::map::quadtree::find_tile(x, y, z);
 	if (!tile) {
 		return;
 	}
@@ -192,7 +192,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	toCylinder->internalAddThing(creature);
 
 	const Position& destPos = toCylinder->getPosition();
-	tfs::quadtree::insert_creature(destPos.x, destPos.y, destPos.z, creature);
+	tfs::map::quadtree::insert_creature(destPos.x, destPos.y, destPos.z, creature);
 	return true;
 }
 
@@ -229,7 +229,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	// remove the creature
 	oldTile.removeThing(&creature, 0);
 
-	tfs::quadtree::move_creature(oldPos.x, oldPos.y, oldPos.z, newPos.x, newPos.y, newPos.z, &creature);
+	tfs::map::quadtree::move_creature(oldPos.x, oldPos.y, oldPos.z, newPos.x, newPos.y, newPos.z, &creature);
 
 	// add the creature
 	newTile.addThing(&creature);
@@ -379,9 +379,9 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		};
 
 		if (onlyPlayers) {
-			tfs::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
+			tfs::map::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
 		} else {
-			tfs::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
+			tfs::map::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
 		}
 
 		if (cacheResult) {

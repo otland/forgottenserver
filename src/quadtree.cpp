@@ -57,7 +57,7 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 
 } // namespace
 
-void tfs::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
+void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
                          std::function<bool(Creature*)> comparison)
 {
 	int32_t start_x_aligned = start_x - (start_x % FLOOR_SIZE);
@@ -94,7 +94,7 @@ void tfs::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uin
 	}
 }
 
-Tile* tfs::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
+Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		return leaf->tiles[z][x & FLOOR_MASK][y & FLOOR_MASK];
@@ -102,7 +102,7 @@ Tile* tfs::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
 	return nullptr;
 }
 
-void tfs::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile)
+void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile)
 {
 	create_leaf_in_root(x, y, z);
 
@@ -111,7 +111,7 @@ void tfs::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile)
 	}
 }
 
-void tfs::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
+void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
                                   Creature* creature)
 {
 	if (auto old_leaf = find_leaf_in_root(old_x, old_y); auto leaf = find_leaf_in_root(x, y)) {
@@ -122,14 +122,14 @@ void tfs::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z,
 	}
 }
 
-void tfs::quadtree::insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
+void tfs::map::quadtree::insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->push_creature(creature);
 	}
 }
 
-void tfs::quadtree::remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
+void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->remove_creature(creature);

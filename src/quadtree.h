@@ -3,7 +3,7 @@
 #include "creature.h"
 #include "spectators.h"
 
-namespace tfs::quadtree {
+namespace tfs::map::quadtree {
 void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
           std::function<bool(Creature*)> comparasion);
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
@@ -12,7 +12,7 @@ void move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, ui
                    Creature* creature);
 void insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
 void remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
-} // namespace tfs::quadtree
+} // namespace tfs::map::quadtree
 
 class QuadTree
 {
