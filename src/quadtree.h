@@ -4,14 +4,62 @@
 #include "spectators.h"
 
 namespace tfs::map::quadtree {
+
 void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
           std::function<bool(Creature*)> comparasion);
+
+/**
+ * @brief Finds the tile at the specified coordinates and layer.
+ *
+ * @param {x} The x-coordinate of the tile.
+ * @param {y} The y-coordinate of the tile.
+ * @param {z} The layer of the tile.
+ * @return A pointer to the Tile at the specified coordinates, or nullptr if not found.
+ * */
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
+
+/**
+ * @brief Creates a tile at the specified coordinates and layer.
+ *
+ * @param x The x-coordinate for the tile.
+ * @param y The y-coordinate for the tile.
+ * @param z The layer for the tile.
+ * @param tile A pointer to the Tile to be created.
+ */
 void create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile);
+
+/**
+ * @brief Moves a creature from one location to another within the quadtree.
+ *
+ * @param {old_x} The old x-coordinate of the creature.
+ * @param {old_y} The old y-coordinate of the creature.
+ * @param {old_z} The old layer of the creature.
+ * @param {x} The new x-coordinate of the creature.
+ * @param {y} The new y-coordinate of the creature.
+ * @param {z} The new layer of the creature.
+ * @param {creature} A pointer to the Creature to be moved.
+ */
 void move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
                    Creature* creature);
+
+/** @brief Inserts a creature into the quadtree at the specified coordinates.
+ *
+ * @param {x} The x-coordinate of the creature.
+ * @param {y} The y-coordinate of the creature.
+ * @param {z} The layer of the creature.
+ * @param {creature} A pointer to the Creature to be inserted.
+ */
 void insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
+
+/** @brief Removes a creature from the quadtree at the specified coordinates.
+ *
+ * @param {x} The x-coordinate of the creature.
+ * @param {y} The y-coordinate of the creature.
+ * @param {z} The layer of the creature.
+ * @param {creature} A pointer to the Creature to be removed.
+ */
 void remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
+
 } // namespace tfs::map::quadtree
 
 /**
@@ -67,12 +115,14 @@ public:
 	virtual QuadTree* get_child(uint8_t index) const = 0;
 };
 
-/// The number of bits used to represent the floor size.
-inline constexpr int32_t FLOOR_BITS = 3;
-/// The size of the floor, calculated as 2 ^ FLOOR_BITS.
-inline constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
-/// A mask to isolate the floor size.
-inline constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
+/// The number of bits used to represent the dimensions of a tile grid.
+inline constexpr int32_t TILE_GRID_BITS = 3;
+/// The size of the tile grid, calculated as 2 ^ TILE_GRID_BITS.
+/// This value indicates the number of tiles that can fit along one dimension of the grid.
+inline constexpr int32_t TILE_GRID_SIZE = (1 << TILE_GRID_BITS);
+/// A mask to isolate the tile index within the bounds of the grid size.
+/// This mask is used to ensure tile indices remain valid and wrap around correctly.
+inline constexpr int32_t TILE_INDEX_MASK = (TILE_GRID_SIZE - 1);
 
 /**
   * @class Node
@@ -105,7 +155,7 @@ public:
      * @brief Set a child node at a specified index.
      * 
      * This method assigns a child node to the
-	 * current Node at the given index. The index must be in the range of 0 to 3.
+	 * current node at the given index. The index must be in the range of 0 to 3.
      *
      * @param {index} The index
 	 * at which to set the child node (0 to 3).
@@ -143,7 +193,7 @@ public:
 	/**
      * @brief Constructor for Leaf.
      * 
-     * This constructor initializes the Leaf node with the specified
+     * This constructor initializes the leaf node with the specified
 	 * coordinates.
      */
 	explicit Leaf(uint16_t x, uint16_t y);
@@ -158,7 +208,7 @@ public:
      * 
      * This implementation always returns true,
 	 * indicating that this object is a leaf.
-     * @return true, indicating that the node is a leaf.
+     * @return true, indicating that the node is a Leaf.
      */
 	bool is_leaf() const override { return true; }
 
@@ -196,7 +246,7 @@ public:
      * @brief Remove a creature from the leaf.
      * 
      * This method removes the specified creature from
-	 * the Leaf node.
+	 * the leaf node.
      * @param {creature} A pointer to the creature to be removed.
 	 */
 	void remove_creature(Creature* creature);
@@ -209,7 +259,7 @@ public:
 	 *  and third dimensions represent the x and y coordinates of the tiles within
 	 *  each layer. Each layer can contain a grid of tiles.
 	*/
-	std::array<std::array<std::array<Tile*, FLOOR_SIZE>, FLOOR_SIZE>, MAP_MAX_LAYERS> tiles = {};
+	std::array<std::array<std::array<Tile*, TILE_GRID_SIZE>, TILE_GRID_SIZE>, MAP_MAX_LAYERS> tiles = {};
 
 	/// @brief A set of creatures (monsters, NPCs and players) present in this leaf node.
 	std::set<Creature*> creatures;
