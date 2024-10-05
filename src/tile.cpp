@@ -1152,7 +1152,7 @@ bool Tile::hasCreature(Creature* creature) const
 
 void Tile::removeCreature(Creature* creature)
 {
-	g_game.map.getQTNode(tilePos.x, tilePos.y)->removeCreature(creature);
+	tfs::quadtree::remove_creature(tilePos.x, tilePos.y, tilePos.z, creature);
 	removeThing(creature, 0);
 }
 
