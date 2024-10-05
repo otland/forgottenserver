@@ -24,9 +24,9 @@ public:
 	std::array<std::unique_ptr<QuadTree>, 4> nodes = {};
 };
 
-static constexpr int32_t FLOOR_BITS = 3;
-static constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
-static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
+inline constexpr int32_t FLOOR_BITS = 3;
+inline constexpr int32_t FLOOR_SIZE = (1 << FLOOR_BITS);
+inline constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 
 class Node final : public QuadTree
 {
