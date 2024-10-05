@@ -58,7 +58,7 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 } // namespace
 
 void tfs::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
-                         std::function<bool(Creature*S)> comparasion)
+                         std::function<bool(Creature*)> comparison)
 {
 	int32_t start_x_aligned = start_x - (start_x % FLOOR_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % FLOOR_SIZE);
@@ -174,25 +174,13 @@ void Leaf::push_creature(Creature* creature)
 
 void Leaf::remove_creature(Creature* creature)
 {
-	auto it = creatures.find(creature);
-	if (it != creatures.end()) {
-		creatures.erase(it);
-	}
+	creatures.erase(creature);
 
 	if (auto monster = creature->getMonster()) {
-		auto it = monsters.find(monster);
-		if (it != monsters.end()) {
-			monsters.erase(it);
-		}
+		monsters.erase(monster);
 	} else if (auto npc = creature->getNpc()) {
-		auto it = npcs.find(npc);
-		if (it != npcs.end()) {
-			npcs.erase(it);
-		}
+		npcs.erase(npc);
 	} else if (auto player = creature->getPlayer()) {
-		auto it = players.find(player);
-		if (it != players.end()) {
-			players.erase(it);
-		}
+		players.erase(player);
 	}
 }
