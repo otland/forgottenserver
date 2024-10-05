@@ -21,7 +21,7 @@ public:
 
 	virtual bool is_leaf() = 0;
 
-	std::unique_ptr<QuadTree> nodes[4] = {};
+	std::array<std::unique_ptr<QuadTree>, 4> nodes = {};
 };
 
 static constexpr int32_t FLOOR_BITS = 3;
