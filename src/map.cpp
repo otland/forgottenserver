@@ -192,7 +192,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	toCylinder->internalAddThing(creature);
 
 	const Position& destPos = toCylinder->getPosition();
-	tfs::map::quadtree::insert_creature(destPos.x, destPos.y, destPos.z, creature);
+	tfs::map::quadtree::push_creature(destPos.x, destPos.y, destPos.z, creature);
 	return true;
 }
 
@@ -364,7 +364,11 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		uint16_t x2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
 		uint16_t y2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
 
-		auto is_within_range = [=](Creature* creature) -> bool {
+		tfs::map::quadtree::find(x1, y1, x2, y2, spectators, [=](Creature* creature) -> bool {
+			if (onlyPlayers && !creature->getPlayer()) {
+				return false;
+			}
+
 			const auto& position = creature->getPosition();
 			if (minRangeZ > position.z || maxRangeZ < position.z) {
 				return false;
@@ -376,13 +380,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				return false;
 			}
 			return true;
-		};
-
-		if (onlyPlayers) {
-			tfs::map::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
-		} else {
-			tfs::map::quadtree::find(x1, y1, x2, y2, spectators, is_within_range);
-		}
+		});
 
 		if (cacheResult) {
 			if (onlyPlayers) {

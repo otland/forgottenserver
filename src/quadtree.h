@@ -19,8 +19,8 @@ void create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile);
 void move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
                    Creature* creature);
 
-/// @brief Inserts a creature into the quadtree at the specified coordinates.
-void insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
+/// @brief Adds a creature into the quadtree at the specified coordinates.
+void push_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
 
 /// @brief Removes a creature from the quadtree at the specified coordinates.
 void remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
@@ -228,12 +228,6 @@ public:
 
 	/// @brief A set of creatures (monsters, NPCs and players) present in this leaf node.
 	std::set<Creature*> creatures;
-	/// @brief A set of monsters present in this leaf node.
-	std::set<Monster*> monsters;
-	/// @brief A set of NPCs present in this leaf node.
-	std::set<Npc*> npcs;
-	/// @brief A set of players present in this leaf node.
-	std::set<Player*> players;
 
 	Leaf* south_leaf = nullptr;
 	Leaf* east_leaf = nullptr;

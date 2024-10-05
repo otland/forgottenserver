@@ -130,7 +130,7 @@ void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t o
 	}
 }
 
-void tfs::map::quadtree::insert_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
+void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->push_creature(creature);
@@ -148,14 +148,14 @@ void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, uint8_t z, Crea
  * @brief Constructs a Leaf node in the quadtree and establishes relationships with neighboring Leaf nodes.
  *
  * The constructor takes the coordinates of the leaf and attempts to find neighboring leaf nodes (north, south, east,
- * and west) 
+ * and west)
  * within the quadtree. If neighboring leaf nodes are found, it establishes two-way relationships between
  * the leaf nodes by updating their respective pointers.
  *
  * @param {x} The x-coordinate of the leaf node in the
  * quadtree.
  * @param {y} The y-coordinate of the leaf node in the quadtree.
- * 
+ *
  * The following relationships are
  * established:
  * - North neighbor's south_leaf points to this leaf.
@@ -188,28 +188,6 @@ Leaf::Leaf(uint16_t x, uint16_t y)
 	}
 }
 
-void Leaf::push_creature(Creature* creature)
-{
-	creatures.insert(creature);
+void Leaf::push_creature(Creature* creature) { creatures.insert(creature); }
 
-	if (auto monster = creature->getMonster()) {
-		monsters.insert(monster);
-	} else if (auto npc = creature->getNpc()) {
-		npcs.insert(npc);
-	} else if (auto player = creature->getPlayer()) {
-		players.insert(player);
-	}
-}
-
-void Leaf::remove_creature(Creature* creature)
-{
-	creatures.erase(creature);
-
-	if (auto monster = creature->getMonster()) {
-		monsters.erase(monster);
-	} else if (auto npc = creature->getNpc()) {
-		npcs.erase(npc);
-	} else if (auto player = creature->getPlayer()) {
-		players.erase(player);
-	}
-}
+void Leaf::remove_creature(Creature* creature) { creatures.erase(creature); }
