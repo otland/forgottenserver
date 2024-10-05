@@ -66,13 +66,12 @@ void tfs::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uin
 	int32_t end_y_aligned = end_y - (end_y % FLOOR_SIZE);
 
 	if (auto start_leaf = find_leaf_in_root(start_x_aligned, start_y_aligned)) {
-		Leaf* south_leaf = start_leaf;
-		Leaf* east_leaf;
+		auto south_leaf = start_leaf;
 
-		for (int_fast32_t ny = start_y_aligned; ny <= end_y_aligned; ny += FLOOR_SIZE) {
-			east_leaf = south_leaf;
+		for (int32_t ny = start_y_aligned; ny <= end_y_aligned; ny += FLOOR_SIZE) {
+			auto east_leaf = south_leaf;
 
-			for (int_fast32_t nx = start_x_aligned; nx <= end_x_aligned; nx += FLOOR_SIZE) {
+			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += FLOOR_SIZE) {
 				if (east_leaf) {
 					for (auto creature : east_leaf->creatures) {
 						if (comparasion(creature)) {
