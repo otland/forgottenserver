@@ -138,6 +138,13 @@ void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creat
 	}
 }
 
+Node::~Node()
+{
+	for (auto node_ptr : nodes) {
+		delete node_ptr;
+	}
+}
+
 /**
  * @brief Constructs a Leaf node in the quadtree and establishes relationships with neighboring Leaf nodes.
  *
@@ -179,6 +186,17 @@ Leaf::Leaf(uint16_t x, uint16_t y)
 	// update east
 	if (auto east_leaf = find_leaf_in_root(x + TILE_GRID_SIZE, y)) {
 		this->east_leaf = east_leaf;
+	}
+}
+
+Leaf::~Leaf()
+{
+	for (auto& layer : tiles) {
+		for (auto& row : layer) {
+			for (auto tile : row) {
+				delete tile;
+			}
+		}
 	}
 }
 

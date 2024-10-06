@@ -168,6 +168,7 @@ public:
 	 * coordinates.
 	 */
 	explicit Leaf(uint16_t x, uint16_t y);
+	~Leaf();
 
 	/// Deleted copy constructor to ensure Leaf is non-copyable.
 	Leaf(const Leaf&) = delete;
