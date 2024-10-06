@@ -48,7 +48,7 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 	create_leaf(x * 2, y * 2, z - 1, node_child);
 }
 
-void create_leaf_in_root(uint16_t x, uint16_t y, uint8_t z)
+void create_leaf_in_root(uint16_t x, uint16_t y)
 {
 	auto index = create_index(x, y);
 	if (!nodes[index]) {
@@ -104,7 +104,7 @@ Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
 
 void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile)
 {
-	create_leaf_in_root(x, y, z);
+	create_leaf_in_root(x, y);
 
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		// Store the tile in the correct position in the tile array.
@@ -114,8 +114,7 @@ void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* ti
 	}
 }
 
-void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
-                                       Creature* creature)
+void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint16_t x, uint16_t y, Creature* creature)
 {
 	if (auto old_leaf = find_leaf_in_root(old_x, old_y); auto leaf = find_leaf_in_root(x, y)) {
 		if (old_leaf != leaf) {
@@ -125,14 +124,14 @@ void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint8_t o
 	}
 }
 
-void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
+void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, Creature* creature)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->push_creature(creature);
 	}
 }
 
-void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature)
+void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creature)
 {
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->remove_creature(creature);

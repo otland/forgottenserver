@@ -193,7 +193,7 @@ bool Map::placeCreature(const Position& centerPos, Creature* creature, bool exte
 	toCylinder->internalAddThing(creature);
 
 	const Position& destPos = toCylinder->getPosition();
-	tfs::map::quadtree::push_creature(destPos.x, destPos.y, destPos.z, creature);
+	tfs::map::quadtree::push_creature(destPos.x, destPos.y, creature);
 	return true;
 }
 
@@ -230,7 +230,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	// remove the creature
 	oldTile.removeThing(&creature, 0);
 
-	tfs::map::quadtree::move_creature(oldPos.x, oldPos.y, oldPos.z, newPos.x, newPos.y, newPos.z, &creature);
+	tfs::map::quadtree::move_creature(oldPos.x, oldPos.y, newPos.x, newPos.y, &creature);
 
 	// add the creature
 	newTile.addThing(&creature);

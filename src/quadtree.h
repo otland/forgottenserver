@@ -23,14 +23,13 @@ Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
 void create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile);
 
 /// @brief Moves a creature from one location to another within the quadtree.
-void move_creature(uint16_t old_x, uint16_t old_y, uint8_t old_z, uint16_t x, uint16_t y, uint8_t z,
-                   Creature* creature);
+void move_creature(uint16_t old_x, uint16_t old_y, uint16_t x, uint16_t y, Creature* creature);
 
 /// @brief Adds a creature into the quadtree at the specified coordinates.
-void push_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
+void push_creature(uint16_t x, uint16_t y, Creature* creature);
 
 /// @brief Removes a creature from the quadtree at the specified coordinates.
-void remove_creature(uint16_t x, uint16_t y, uint8_t z, Creature* creature);
+void remove_creature(uint16_t x, uint16_t y, Creature* creature);
 
 } // namespace tfs::map::quadtree
 

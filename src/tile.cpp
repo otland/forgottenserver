@@ -1153,7 +1153,7 @@ bool Tile::hasCreature(Creature* creature) const
 
 void Tile::removeCreature(Creature* creature)
 {
-	tfs::map::quadtree::remove_creature(tilePos.x, tilePos.y, tilePos.z, creature);
+	tfs::map::quadtree::remove_creature(tilePos.x, tilePos.y, creature);
 	removeThing(creature, 0);
 }
 
