@@ -1605,13 +1605,32 @@ bool Tile::isMoveableBlocking() const { return !ground || hasFlag(TILESTATE_BLOC
 Item* Tile::getUseItem(int32_t index) const
 {
 	const TileItemVector* items = getItemList();
+
+	// no items, get ground
 	if (!items || items->size() == 0) {
 		return ground;
 	}
 
+	// try getting thing by index
 	if (Thing* thing = getThing(index)) {
-		return thing->getItem();
+		Item* thingItem = thing->getItem();
+		if (thingItem) {
+			return thingItem;
+		}
 	}
 
-	return nullptr;
+	// try getting top movable item
+	Item* topDownItem = getTopDownItem();
+	if (topDownItem) {
+		return topDownItem;
+	}
+
+	// try getting door
+	for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
+		if ((*it)->getDoor()) {
+			return (*it)->getItem();
+		}
+	}
+
+	return *items->begin();
 }
