@@ -8,15 +8,13 @@
 
 #include "map.h"
 
-#include <experimental/generator> // TODO: Use std::generator in C++23.
-
 class Creature;
 class Tile;
 
 namespace tfs::map::quadtree {
 
 /// @brief Finds creatures within the specified range.
-std::experimental::generator<Creature*> find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
+tfs::generator<Creature*> find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
                                                       uint16_t end_y);
 
 /// @brief Finds the tile at the specified coordinates and layer.
