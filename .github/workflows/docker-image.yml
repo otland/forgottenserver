@@ -21,7 +21,7 @@ jobs:
   # Push image to GitHub Package Registry.
   # See also https://docs.docker.com/docker-hub/builds/
   docker-image:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     permissions:
       packages: write

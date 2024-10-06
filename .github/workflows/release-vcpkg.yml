@@ -7,11 +7,11 @@ on:
 
 jobs:
   unix:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-latest, windows-latest]
+        os: [ubuntu, macos, windows]
 
     env:
       VCPKG_BUILD_TYPE: release
