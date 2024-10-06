@@ -365,7 +365,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		uint16_t x2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
 		uint16_t y2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
 
-		for (auto creature : tfs::map::quadtree::find(x1, y1, x2, y2)) {
+		for (auto creature : tfs::map::quadtree::find_in_range(x1, y1, x2, y2)) {
 			if (onlyPlayers && !creature->getPlayer()) {
 				continue;
 			}

@@ -5,7 +5,7 @@ std::array<QuadTree*, 4> nodes = {};
 
 uint8_t create_index(uint16_t x, uint16_t y) { return ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14); }
 
-QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
+QuadTree* find_leaf(QuadTree* node, uint16_t x, uint16_t y)
 {
 	if (node->is_leaf()) {
 		return node;
@@ -13,7 +13,7 @@ QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
 
 	auto index = create_index(x, y);
 	if (auto node_child = node->get_child(index)) {
-		return find_leaf(x << 1, y << 1, node_child);
+		return find_leaf(node_child, x << 1, y << 1);
 	}
 	return nullptr;
 }
@@ -21,13 +21,15 @@ QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
 Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
 {
 	auto index = create_index(x, y);
-	if (auto node = nodes[index]; auto leaf = find_leaf(x, y, node)) {
-		return static_cast<Leaf*>(leaf);
+	if (auto node = nodes[index]) {
+		if (auto leaf = find_leaf(node, x, y)) {
+			return static_cast<Leaf*>(leaf);
+		}
 	}
 	return nullptr;
 }
 
-void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
+void create_leaf_node(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 {
 	if (node->is_leaf()) {
 		return;
@@ -37,7 +39,7 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 	auto node_child = node->get_child(index);
 	if (!node_child) {
 		if (z == TILE_GRID_BITS) {
-			node_child = new Leaf(x, y);
+			node_child = new Leaf();
 		} else {
 			node_child = new Node();
 		}
@@ -45,7 +47,7 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 		node->set_child(index, node_child);
 	}
 
-	create_leaf(x * 2, y * 2, z - 1, node_child);
+	create_leaf_node(x * 2, y * 2, z - 1, node_child);
 }
 
 void create_leaf_in_root(uint16_t x, uint16_t y)
@@ -55,13 +57,59 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 		nodes[index] = new Node();
 	}
 
-	create_leaf(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
+	create_leaf_node(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
+	update_leaf_neighbors(x, y);
+}
+
+/**
+ * @brief Establishes relationships with neighboring Leaf nodes.
+ *
+ * This section checks for neighboring leaf
+ * nodes (north, south, east, and west) 
+ * and establishes two-way relationships if those neighboring leaves are found.
+ * 
+ * @param {x} The x-coordinate of the leaf node in the quadtree.
+ * @param {y} The
+ * y-coordinate of the leaf node in the quadtree.
+ * 
+ * The following relationships are updated:
+ * - The north
+ * neighbor's south_leaf pointer is updated to point to this leaf.
+ * - The west neighbor's east_leaf pointer is
+ * updated to point to this leaf.
+ * - This leaf's south_leaf pointer is updated to point to the south neighbor, if
+ * found.
+ * - This leaf's east_leaf pointer is updated to point to the east neighbor, if found.
+ */
+void update_leaf_neighbors(uint16_t x, uint16_t y)
+{
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		// update north
+		if (auto north_leaf = find_leaf_in_root(x, y - TILE_GRID_SIZE)) {
+			north_leaf->south_leaf = leaf;
+		}
+
+		// update west
+		if (auto west_leaf = find_leaf_in_root(x - TILE_GRID_SIZE, y)) {
+			west_leaf->east_leaf = leaf;
+		}
+
+		// update south
+		if (auto south_leaf = find_leaf_in_root(x, y + TILE_GRID_SIZE)) {
+			leaf->south_leaf = south_leaf;
+		}
+
+		// update east
+		if (auto east_leaf = find_leaf_in_root(x + TILE_GRID_SIZE, y)) {
+			leaf->east_leaf = east_leaf;
+		}
+	}
 }
 
 } // namespace
 
-std::experimental::generator<Creature*> tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x,
-                                                                 uint16_t end_y)
+std::experimental::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y,
+                                                                          uint16_t end_x, uint16_t end_y)
 {
 	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
@@ -93,8 +141,6 @@ std::experimental::generator<Creature*> tfs::map::quadtree::find(uint16_t start_
 			}
 		}
 	}
-
-	co_return;
 }
 
 Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
@@ -149,50 +195,6 @@ Node::~Node()
 {
 	for (auto node_ptr : nodes) {
 		delete node_ptr;
-	}
-}
-
-/**
- * @brief Constructs a Leaf node in the quadtree and establishes relationships with neighboring Leaf nodes.
- *
- * The constructor takes the coordinates of the leaf and attempts to find neighboring leaf nodes (north, south, east,
- * and west)
- * within the quadtree. If neighboring leaf nodes are found, it establishes two-way relationships between
- * the leaf nodes by updating their respective pointers.
- *
- * @param {x} The x-coordinate of the leaf node in the
- * quadtree.
- * @param {y} The y-coordinate of the leaf node in the quadtree.
- *
- * The following relationships are
- * established:
- * - North neighbor's south_leaf points to this leaf.
- * - West neighbor's east_leaf points to this
- * leaf.
- * - This leaf south_leaf points to the south neighbor, if found.
- * - This leaf east_leaf points to the
- * east neighbor, if found.
- */
-Leaf::Leaf(uint16_t x, uint16_t y)
-{
-	// update north
-	if (auto north_leaf = find_leaf_in_root(x, y - TILE_GRID_SIZE)) {
-		north_leaf->south_leaf = this;
-	}
-
-	// update west
-	if (auto west_leaf = find_leaf_in_root(x - TILE_GRID_SIZE, y)) {
-		west_leaf->east_leaf = this;
-	}
-
-	// update south
-	if (auto south_leaf = find_leaf_in_root(x, y + TILE_GRID_SIZE)) {
-		this->south_leaf = south_leaf;
-	}
-
-	// update east
-	if (auto east_leaf = find_leaf_in_root(x + TILE_GRID_SIZE, y)) {
-		this->east_leaf = east_leaf;
 	}
 }
 

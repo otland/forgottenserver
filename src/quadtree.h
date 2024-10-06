@@ -8,14 +8,16 @@
 
 #include "map.h"
 
-#include <experimental/generator>// TODO: Use std::generator in C++23.
+#include <experimental/generator> // TODO: Use std::generator in C++23.
 
 class Creature;
 class Tile;
 
 namespace tfs::map::quadtree {
 
-std::experimental::generator<Creature*> find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y);
+/// @brief Finds creatures within the specified range.
+std::experimental::generator<Creature*> find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
+                                                      uint16_t end_y);
 
 /// @brief Finds the tile at the specified coordinates and layer.
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
@@ -169,7 +171,7 @@ public:
 	 * This constructor initializes the leaf node with the specified
 	 * coordinates.
 	 */
-	explicit Leaf(uint16_t x, uint16_t y);
+	constexpr Leaf() = default;
 	~Leaf();
 
 	/// Deleted copy constructor to ensure Leaf is non-copyable.
