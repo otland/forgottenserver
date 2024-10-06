@@ -55,17 +55,18 @@
 #include <lua.hpp>
 #endif
 
-#if __cpp_lib_generator >= 202207L
-#include <generator>
-namespace tfs {
-template <class T>
-using generator = std::generator<T>;
-}
-#else
+
+#if __has_include(<experimental/generator>)
 #include <experimental/generator>
 namespace tfs {
 template <class T>
 using generator = std::experimental::generator<T>;
+}
+#elif __has_include(<generator>)
+#include <generator>
+namespace tfs {
+template <class T>
+using generator = std::generator<T>;
 }
 #endif
 
