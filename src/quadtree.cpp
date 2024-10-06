@@ -32,25 +32,21 @@ Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
 /**
  * @brief Establishes relationships with neighboring Leaf nodes.
  *
- * This section checks for neighboring leaf
- * nodes (north, south, east, and west)
- * and establishes two-way relationships if those neighboring leaves are found.
+ * This section checks for neighboring leaf nodes (north, south, east, and west) and establishes two-way relationships
+ * if those neighboring leaves are found.
  *
  * @param {x} The x-coordinate of the leaf node in the quadtree.
- * @param {y} The
- * y-coordinate of the leaf node in the quadtree.
- *
- * The following relationships are updated:
- * - The north
- * neighbor's south_leaf pointer is updated to point to this leaf.
- * - The west neighbor's east_leaf pointer is
- * updated to point to this leaf.
- * - This leaf's south_leaf pointer is updated to point to the south neighbor, if
- * found.
- * - This leaf's east_leaf pointer is updated to point to the east neighbor, if found.
+ * @param {y} The y-coordinate of the leaf node in the quadtree.
  */
 void update_leaf_neighbors(uint16_t x, uint16_t y)
 {
+	/*
+	 * The following relationships are updated:
+	 * - The north neighbor's south_leaf pointer is updated to point to this leaf.
+	 * - The west neighbor's east_leaf pointer is updated to point to this leaf.
+	 * - This leaf's south_leaf pointer is updated to point to the south neighbor, if found.
+	 * - This leaf's east_leaf pointer is updated to point to the east neighbor, if found.
+	*/
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		// update north
 		if (auto north_leaf = find_leaf_in_root(x, y - TILE_GRID_SIZE)) {
@@ -72,38 +68,39 @@ void update_leaf_neighbors(uint16_t x, uint16_t y)
 			leaf->east_leaf = east_leaf;
 		}
 	}
+}
 
-	void create_leaf_node(uint16_t x, uint16_t y, uint8_t z, QuadTree * node)
-	{
-		if (node->is_leaf()) {
-			return;
-		}
-
-		auto index = create_index(x, y);
-		auto node_child = node->get_child(index);
-		if (!node_child) {
-			if (z == TILE_GRID_BITS) {
-				node_child = new Leaf();
-			} else {
-				node_child = new Node();
-			}
-
-			node->set_child(index, node_child);
-		}
-
-		create_leaf_node(x * 2, y * 2, z - 1, node_child);
+void create_leaf_node(QuadTree* node, uint16_t x, uint16_t y, uint8_t z)
+{
+	if (node->is_leaf()) {
+		return;
 	}
 
-	void create_leaf_in_root(uint16_t x, uint16_t y)
-	{
-		auto index = create_index(x, y);
-		if (!nodes[index]) {
-			nodes[index] = new Node();
+	auto index = create_index(x, y);
+	auto node_child = node->get_child(index);
+	if (!node_child) {
+		if (z == TILE_GRID_BITS) {
+			node_child = new Leaf();
+		} else {
+			node_child = new Node();
 		}
 
-		create_leaf_node(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
-		update_leaf_neighbors(x, y);
+		node->set_child(index, node_child);
 	}
+
+	create_leaf_node(node_child, x * 2, y * 2, z - 1);
+}
+
+void create_leaf_in_root(uint16_t x, uint16_t y)
+{
+	auto index = create_index(x, y);
+	if (!nodes[index]) {
+		nodes[index] = new Node();
+	}
+
+	create_leaf_node(nodes[index], x, y, (MAP_MAX_LAYERS - 1));
+	update_leaf_neighbors(x, y);
+}
 
 } // namespace
 
