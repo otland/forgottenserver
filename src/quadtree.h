@@ -1,11 +1,20 @@
+// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
+
+#ifndef FS_QUADTREE_H
+#define FS_QUADTREE_H
+
 #include "otpch.h"
 
-#include "creature.h"
+#include "map.h"
+
+class Creature;
+class Tile;
 
 namespace tfs::map::quadtree {
 
-void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y, SpectatorVec& spectators,
-          std::function<bool(Creature*)> comparasion);
+void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y,
+          std::function<void(std::set<Creature*>&)> comparasion);
 
 /// @brief Finds the tile at the specified coordinates and layer.
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);
@@ -35,7 +44,7 @@ class QuadTree
 {
 public:
 	/// @brief Default constructor for QuadTree.
-	explicit QuadTree() = default;
+	constexpr QuadTree() = default;
 
 	/**
 	 * @brief Virtual destructor for QuadTree.
@@ -98,7 +107,7 @@ class Node final : public QuadTree
 {
 public:
 	/// @brief Default constructor for QuadTree.
-	explicit Node() = default;
+	constexpr Node() = default;
 
 	/// Deleted copy constructor to ensure Node is non-copyable.
 	Node(const Node&) = delete;
@@ -230,3 +239,5 @@ public:
 	Leaf* south_leaf = nullptr;
 	Leaf* east_leaf = nullptr;
 };
+
+#endif // FS_QUADTREE_H

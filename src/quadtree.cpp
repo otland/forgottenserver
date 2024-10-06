@@ -5,15 +5,6 @@ std::array<QuadTree*, 4> nodes = {};
 
 uint8_t create_index(uint16_t x, uint16_t y) { return ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14); }
 
-Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
-{
-	auto index = create_index(x, y);
-	if (auto node = nodes[index]; auto leaf = find_leaf(x, y, node)) {
-		return static_cast<Leaf*>(leaf);
-	}
-	return nullptr;
-}
-
 QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
 {
 	if (node->is_leaf()) {
@@ -27,14 +18,13 @@ QuadTree* find_leaf(uint16_t x, uint16_t y, QuadTree* node)
 	return nullptr;
 }
 
-void create_leaf_in_root(uint16_t x, uint16_t y, uint8_t z)
+Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
 {
 	auto index = create_index(x, y);
-	if (!nodes[index]) {
-		nodes[index] = new Node();
+	if (auto node = nodes[index]; auto leaf = find_leaf(x, y, node)) {
+		return static_cast<Leaf*>(leaf);
 	}
-
-	create_leaf(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
+	return nullptr;
 }
 
 void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
@@ -58,10 +48,20 @@ void create_leaf(uint16_t x, uint16_t y, uint8_t z, QuadTree* node)
 	create_leaf(x * 2, y * 2, z - 1, node_child);
 }
 
+void create_leaf_in_root(uint16_t x, uint16_t y, uint8_t z)
+{
+	auto index = create_index(x, y);
+	if (!nodes[index]) {
+		nodes[index] = new Node();
+	}
+
+	create_leaf(x, y, (MAP_MAX_LAYERS - 1), nodes[index]);
+}
+
 } // namespace
 
 void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y,
-                              SpectatorVec& spectators, std::function<bool(Creature*)> comparison)
+                              std::function<void(std::set<Creature*>&)> comparison)
 {
 	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
@@ -76,12 +76,7 @@ void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x
 
 			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += TILE_GRID_SIZE) {
 				if (east_leaf) {
-					for (auto creature : east_leaf->creatures) {
-						if (comparison(creature)) {
-							spectators.emplace_back(creature);
-						}
-					}
-
+					comparison(east_leaf->creatures);
 					east_leaf = east_leaf->east_leaf;
 				} else {
 					east_leaf = find_leaf_in_root(nx + TILE_GRID_SIZE, ny);

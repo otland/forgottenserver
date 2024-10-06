@@ -6,14 +6,13 @@
 
 #include "house.h"
 #include "position.h"
-#include "quadtree.h"
 #include "spawn.h"
 #include "spectators.h"
 #include "town.h"
 
 class Creature;
 
-inline constexpr int32_t MAP_MAX_LAYERS = 16;
+inline constexpr int32_t const MAP_MAX_LAYERS = 16;
 
 struct FindPathParams;
 struct AStarNode
