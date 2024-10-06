@@ -26,10 +26,10 @@ on:
 jobs:
   build-vcpkg:
     name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
-    runs-on: ${{ matrix.os }}-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu, macos, windows]
+        os: [ubuntu-24.04, macos-latest, windows-latest]
         buildtype: [Debug, Release]
         luajit: [on, off]
 

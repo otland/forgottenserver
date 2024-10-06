@@ -7,7 +7,7 @@ on:
 
 jobs:
   vcpkg-update-baseline:
-    runs-on: ubuntu-latest
+    runs-on: v
 
     steps:
       - uses: actions/checkout@v4

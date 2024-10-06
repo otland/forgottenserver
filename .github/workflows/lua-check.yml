@@ -19,7 +19,7 @@ on:
 
 jobs:
   luac:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +31,7 @@ jobs:
         run: find data/ -name '*.lua' -print0 | xargs -0 -n1 luac -p
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: leafo/gh-actions-lua@v10
@@ -44,7 +44,7 @@ jobs:
         run: luacheck data config.lua.dist || true
 
   format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: leafo/gh-actions-lua@v10
