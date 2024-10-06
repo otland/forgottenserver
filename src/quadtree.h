@@ -107,6 +107,7 @@ class Node final : public QuadTree
 public:
 	/// @brief Default constructor for QuadTree.
 	constexpr Node() = default;
+	~Node();
 
 	/// Deleted copy constructor to ensure Node is non-copyable.
 	Node(const Node&) = delete;
