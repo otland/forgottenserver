@@ -365,26 +365,24 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		uint16_t x2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_x + maxoffset)));
 		uint16_t y2 = std::min<uint32_t>(0xFFFF, std::max<int32_t>(0, (max_y + maxoffset)));
 
-		tfs::map::quadtree::find(x1, y1, x2, y2, [&](std::set<Creature*>& creatures) {
-			for (auto creature : creatures) {
-				if (onlyPlayers && !creature->getPlayer()) {
-					continue;
-				}
-
-				const auto& position = creature->getPosition();
-				if (minRangeZ > position.z || maxRangeZ < position.z) {
-					continue;
-				}
-
-				auto offsetZ = centerPos.getOffsetZ(position);
-				if ((min_y + offsetZ) > position.y || (max_y + offsetZ) < position.y ||
-				    (min_x + offsetZ) > position.x || (max_x + offsetZ) < position.x) {
-					continue;
-				}
-
-				spectators.emplace_back(creature);
+		for (auto creature : tfs::map::quadtree::find(x1, y1, x2, y2)) {
+			if (onlyPlayers && !creature->getPlayer()) {
+				continue;
 			}
-		});
+
+			const auto& position = creature->getPosition();
+			if (minRangeZ > position.z || maxRangeZ < position.z) {
+				continue;
+			}
+
+			auto offsetZ = centerPos.getOffsetZ(position);
+			if ((min_y + offsetZ) > position.y || (max_y + offsetZ) < position.y || (min_x + offsetZ) > position.x ||
+			    (max_x + offsetZ) < position.x) {
+				continue;
+			}
+
+			spectators.emplace_back(creature);
+		}
 
 		if (cacheResult) {
 			if (onlyPlayers) {

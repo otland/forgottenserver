@@ -8,13 +8,14 @@
 
 #include "map.h"
 
+#include <experimental/generator>
+
 class Creature;
 class Tile;
 
 namespace tfs::map::quadtree {
 
-void find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y,
-          std::function<void(std::set<Creature*>&)> comparasion);
+std::experimental::generator<Creature*> find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y);
 
 /// @brief Finds the tile at the specified coordinates and layer.
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);

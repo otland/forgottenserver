@@ -60,8 +60,8 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 
 } // namespace
 
-void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y,
-                              std::function<void(std::set<Creature*>&)> comparison)
+std::experimental::generator<Creature*> tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x,
+                                                                 uint16_t end_y)
 {
 	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
@@ -76,7 +76,10 @@ void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x
 
 			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += TILE_GRID_SIZE) {
 				if (east_leaf) {
-					comparison(east_leaf->creatures);
+					for (auto creature : east_leaf->creatures) {
+						co_yield creature;
+					}
+
 					east_leaf = east_leaf->east_leaf;
 				} else {
 					east_leaf = find_leaf_in_root(nx + TILE_GRID_SIZE, ny);
@@ -90,6 +93,8 @@ void tfs::map::quadtree::find(uint16_t start_x, uint16_t start_y, uint16_t end_x
 			}
 		}
 	}
+
+	co_return;
 }
 
 Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
