@@ -8,7 +8,7 @@
 
 #include "map.h"
 
-#include <experimental/generator>
+#include <experimental/generator>// TODO: Use std::generator in C++23.
 
 class Creature;
 class Tile;

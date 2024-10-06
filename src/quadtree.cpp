@@ -121,10 +121,12 @@ void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* ti
 
 void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint16_t x, uint16_t y, Creature* creature)
 {
-	if (auto old_leaf = find_leaf_in_root(old_x, old_y); auto leaf = find_leaf_in_root(x, y)) {
-		if (old_leaf != leaf) {
-			old_leaf->remove_creature(creature);
-			leaf->push_creature(creature);
+	if (auto old_leaf = find_leaf_in_root(old_x, old_y)) {
+		if (auto leaf = find_leaf_in_root(x, y)) {
+			if (old_leaf != leaf) {
+				old_leaf->remove_creature(creature);
+				leaf->push_creature(creature);
+			}
 		}
 	}
 }
