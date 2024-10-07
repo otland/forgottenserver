@@ -519,8 +519,6 @@ private:
 
 	size_t lastBucket = 0;
 
-	WildcardTreeNode wildcardTree{false};
-
 	std::map<uint32_t, Npc*> npcs;
 	std::map<uint32_t, Monster*> monsters;
 

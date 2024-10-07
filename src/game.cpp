@@ -464,14 +464,14 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 
 	if (s.back() == '~') {
 		const auto& query = boost::algorithm::to_lower_copy(s.substr(0, strlen - 1));
-		auto searchResult = wildcardTree.search(query);
-		switch (searchResult.first) {
-			case WildcardTreeNode::NotFound:
+		auto search_result = tfs::game::wildcardtree::search(query);
+		switch (search_result.first) {
+			case WildcardTreeSearchResult::NotFound:
 				return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
-			case WildcardTreeNode::Ambiguous:
+			case WildcardTreeSearchResult::Ambiguous:
 				return RETURNVALUE_NAMEISTOOAMBIGUOUS;
-			case WildcardTreeNode::Found:
-				player = getPlayerByName(searchResult.second);
+			case WildcardTreeSearchResult::Found:
+				player = getPlayerByName(search_result.second);
 				break;
 		}
 	} else {
@@ -5668,7 +5668,7 @@ void Game::addPlayer(Player* player)
 	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
 	mappedPlayerGuids[player->getGUID()] = player;
-	wildcardTree.add(lowercase_name);
+	tfs::game::wildcardtree::add(lowercase_name);
 	players[player->getID()] = player;
 }
 
@@ -5677,7 +5677,7 @@ void Game::removePlayer(Player* player)
 	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 	mappedPlayerNames.erase(lowercase_name);
 	mappedPlayerGuids.erase(player->getGUID());
-	wildcardTree.remove(lowercase_name);
+	tfs::game::wildcardtree::remove(lowercase_name);
 	players.erase(player->getID());
 }
 
