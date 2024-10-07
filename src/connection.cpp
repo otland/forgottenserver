@@ -277,7 +277,14 @@ void Connection::send(const OutputMessage_ptr& msg)
 	bool noPendingWrite = messageQueue.empty();
 	messageQueue.emplace_back(msg);
 	if (noPendingWrite) {
-		internalSend(msg);
+		try {
+			boost::asio::post(socket.get_executor(),
+			                  [thisPtr = shared_from_this(), msg] { thisPtr->internalSend(msg); });
+		} catch (boost::system::system_error& e) {
+			std::cout << "[Network error - Connection::send] " << e.what() << std::endl;
+			messageQueue.clear();
+			close(FORCE_CLOSE);
+		}
 	}
 }
 
