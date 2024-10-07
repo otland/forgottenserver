@@ -8,81 +8,71 @@
 
 BOOST_AUTO_TEST_CASE(test_wildcard_tree_single_words)
 {
-	WildcardTreeNode root(false);
+	tfs::game::wildcardtree::add("test");
 
-	root.add("test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("tes").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("tes").second, "test");
 
-    BOOST_CHECK_EQUAL(root.search("tes").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("tes").second, "test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "test");
 
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("test").second, "test");
-
-    BOOST_CHECK_EQUAL(root.search("testing").first, WildcardTreeNode::NotFound);
-    BOOST_CHECK_EQUAL(root.search("testing").second, "");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("testing").first, WildcardTreeNode::NotFound);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("testing").second, "");
 }
 
 BOOST_AUTO_TEST_CASE(test_wildcard_tree_ambiguity)
 {
-	WildcardTreeNode root(false);
+	tfs::game::wildcardtree::add("test");
+    tfs::game::wildcardtree::add("te");
 
-	root.add("test");
-    root.add("te");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").first, WildcardTreeNode::Ambiguous);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").second, "");
 
-    BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Ambiguous);
-    BOOST_CHECK_EQUAL(root.search("te").second, "");
-
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("test").second, "test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "test");
 }
 
 BOOST_AUTO_TEST_CASE(test_wildcard_tree_remove)
 {
-    WildcardTreeNode root(false);
+    tfs::game::wildcardtree::add("test");
 
-    root.add("test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "test");
 
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("test").second, "test");
+    tfs::game::wildcardtree::remove("test");
 
-    root.remove("test");
-
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::NotFound);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::NotFound);
 }
 
 BOOST_AUTO_TEST_CASE(test_wildcard_tree_partial_search)
 {
-    WildcardTreeNode root(false);
+    tfs::game::wildcardtree::add("test");
+    tfs::game::wildcardtree::add("te");
 
-    root.add("test");
-    root.add("te");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").first, WildcardTreeNode::Ambiguous);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").second, "");
 
-    BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Ambiguous);
-    BOOST_CHECK_EQUAL(root.search("te").second, "");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "test");
 
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("test").second, "test");
+    tfs::game::wildcardtree::remove("test");
 
-    root.remove("test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").second, "te");
 
-    BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("te").second, "te");
-
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::NotFound);
-    BOOST_CHECK_EQUAL(root.search("test").second, "");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::NotFound);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "");
 }
 
 BOOST_AUTO_TEST_CASE(test_wildcard_tree_search_after_remove)
 {
-    WildcardTreeNode root(false);
+    tfs::game::wildcardtree::add("test");
+    tfs::game::wildcardtree::add("te");
+    tfs::game::wildcardtree::remove("test");
 
-    root.add("test");
-    root.add("te");
-    root.remove("test");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").first, WildcardTreeNode::NotFound);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("test").second, "");
 
-    BOOST_CHECK_EQUAL(root.search("test").first, WildcardTreeNode::NotFound);
-    BOOST_CHECK_EQUAL(root.search("test").second, "");
-
-    BOOST_CHECK_EQUAL(root.search("te").first, WildcardTreeNode::Found);
-    BOOST_CHECK_EQUAL(root.search("te").second, "te");
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").first, WildcardTreeNode::Found);
+    BOOST_CHECK_EQUAL(tfs::game::wildcardtree::search("te").second, "te");
 }
