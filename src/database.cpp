@@ -112,7 +112,7 @@ bool Database::executeQuery(const std::string& query)
 	// we have to store that result, even though we do not need it, otherwise handle will get blocked
 	auto mysql_res = mysql_store_result(handle.get());
 	mysql_free_result(mysql_res);
-	
+
 	return success;
 }
 
