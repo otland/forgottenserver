@@ -14,7 +14,7 @@ namespace {
  * @brief Represents a node in a wildcard tree. Each node stores child nodes using `std::shared_ptr`,
  * and optionally marks a "breakpoint" to represent the end of a string.
  */
-class WildcardTreeNode final
+class WildcardTreeNode final : public std::enable_shared_from_this<WildcardTreeNode>
 {
 public:
 	/**
@@ -37,20 +37,12 @@ public:
 	WildcardTreeNode& operator=(const WildcardTreeNode&) = delete;
 
 	/**
-	 * @brief Finds a child node corresponding to a character (const version).
-	 *
-	 * @param {c} The character to search for among the children.
-	 * @return A shared pointer to the child node if found, otherwise nullptr.
-	 */
-	const WildcardTreeNode* find_child(char c) const;
-
-	/**
 	 * @brief Finds a child node corresponding to a character.
 	 *
 	 * @param {c} The character to search for among the children.
 	 * @return A shared pointer to the child node if found, otherwise nullptr.
 	 */
-	WildcardTreeNode* find_child(char c);
+	std::shared_ptr<WildcardTreeNode> find_child(char c);
 
 	/**
 	 * @brief Adds a child node for a specific character.
@@ -62,10 +54,10 @@ public:
 	 * @param {breakpoint} A boolean value indicating if this node represents a breakpoint.
 	 * @return A shared pointer to the added or existing child node.
 	 */
-	WildcardTreeNode* add_child(char c, bool breakpoint);
+	std::shared_ptr<WildcardTreeNode> add_child(char c, bool breakpoint);
 
 	/// A map of child nodes indexed by characters.
-	std::map<char, WildcardTreeNode*> children;
+	std::map<char, std::shared_ptr<WildcardTreeNode>> children;
 
 	/// Indicates whether this node represents a breakpoint (end of a string).
 	bool breakpoint;

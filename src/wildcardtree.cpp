@@ -6,13 +6,12 @@
 #include "wildcardtree.h"
 
 #include <stack>
-#include <tuple>
 
 namespace {
 
-auto wildcardtree_root = new WildcardTreeNode(false);
+auto wildcardtree_root = std::make_shared<WildcardTreeNode>(false);
 
-const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::find_child(char c)
 {
 	auto it = children.find(c);
 	if (it == children.end()) {
@@ -21,16 +20,7 @@ const WildcardTreeNode* WildcardTreeNode::find_child(char c) const
 	return it->second;
 }
 
-WildcardTreeNode* WildcardTreeNode::find_child(char c)
-{
-	auto it = children.find(c);
-	if (it == children.end()) {
-		return nullptr;
-	}
-	return it->second;
-}
-
-WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::add_child(char c, bool breakpoint)
 {
 	if (auto child = find_child(c)) {
 		// If the child already exists, update its breakpoint if necessary
@@ -40,7 +30,7 @@ WildcardTreeNode* WildcardTreeNode::add_child(char c, bool breakpoint)
 		return child;
 	}
 
-	auto node = new WildcardTreeNode(breakpoint);
+	auto node = std::make_shared<WildcardTreeNode>(breakpoint);
 	auto pair = children.emplace(c, node);
 	return node;
 }
@@ -69,7 +59,7 @@ void remove(std::string_view s)
 	auto node = wildcardtree_root;
 
 	// Stack to keep track of the path as we traverse the tree
-	std::stack<WildcardTreeNode*> path;
+	std::stack<std::shared_ptr<WildcardTreeNode>> path;
 	path.push(node);
 
 	auto length = s.length();
