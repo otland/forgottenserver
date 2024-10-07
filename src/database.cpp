@@ -110,8 +110,8 @@ bool Database::executeQuery(const std::string& query)
 
 	// executeQuery can be called with command that produces result (e.g. SELECT)
 	// we have to store that result, even though we do not need it, otherwise handle will get blocked
-	mysql_store_result(handle.get());
-	mysql_free_result(handle.get());
+	auto mysql_res = mysql_store_result(handle.get());
+	mysql_free_result(mysql_res);
 	
 	return success;
 }
