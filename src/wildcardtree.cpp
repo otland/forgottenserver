@@ -30,9 +30,8 @@ std::shared_ptr<WildcardTreeNode> WildcardTreeNode::add_child(char c, bool break
 		return child;
 	}
 
-	auto node = std::make_shared<WildcardTreeNode>(breakpoint);
-	auto pair = children.emplace(c, node);
-	return node;
+	auto pair = children.emplace(c, std::make_shared<WildcardTreeNode>(breakpoint));
+	return pair.first->second;
 }
 
 } // namespace
