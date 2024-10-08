@@ -93,10 +93,7 @@ void Player::setID()
 void Player::setVocation(Vocation_ptr vocation)
 {
 	this->vocation = vocation;
-	updateRegeneration();
-	setBaseSpeed(vocation->baseSpeed);
-	updateBaseSpeed();
-	g_game.changeSpeed(this, 0);
+	updateVocation();
 }
 
 void Player::updateVocation()
