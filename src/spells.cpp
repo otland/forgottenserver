@@ -500,15 +500,14 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		group = (aggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
 	}
 
-	for (auto vocationNode : node.children()) {
-		if (!(attr = vocationNode.attribute("name"))) {
+	for (auto& vocation_node : node.children()) {
+		if (!(attr = vocation_node.attribute("name"))) {
 			continue;
 		}
 
-		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
-			attr = vocationNode.attribute("showInDescription");
-			vocationSpellMap[vocationId] = !attr || attr.as_bool();
+		if (auto vocation = tfs::game::vocations::get_vocation_by_name(attr.as_string())) {
+			attr = vocation_node.attribute("showInDescription");
+			addVocation(vocation, !attr || attr.as_bool());
 		} else {
 			std::cout << "[Warning - Spell::configureSpell] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
@@ -594,7 +593,7 @@ bool Spell::playerSpellCheck(Player* player) const
 			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 			return false;
 		}
-	} else if (!hasVocationSpellMap(player->getVocationId())) {
+	} else if (!hasVocation(player->getVocation())) {
 		player->sendCancelMessage(RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
 		return false;
@@ -1055,12 +1054,9 @@ bool InstantSpell::canCast(const Player* player) const
 		if (player->hasLearnedInstantSpell(getName())) {
 			return true;
 		}
-	} else {
-		if (vocationSpellMap.empty() || hasVocationSpellMap(player->getVocationId())) {
-			return true;
-		}
+	} else if (hasVocation(player->getVocation())) {
+		return true;
 	}
-
 	return false;
 }
 

@@ -276,7 +276,7 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 		return true;
 	}
 
-	if (!attacker->getVocation()->allowsPvp() || !target->getVocation()->allowsPvp()) {
+	if (!attacker->getVocation()->allowPvp || !target->getVocation()->allowPvp) {
 		return true;
 	}
 

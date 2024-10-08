@@ -190,8 +190,6 @@ public:
 
 	const GuildWarVector& getGuildWarVector() const { return guildWarVector; }
 
-	Vocation* getVocation() const { return vocation; }
-
 	OperatingSystem_t getOperatingSystem() const { return operatingSystem; }
 	void setOperatingSystem(OperatingSystem_t clientos) { operatingSystem = clientos; }
 
@@ -280,8 +278,9 @@ public:
 	bool isPremium() const;
 	void setPremiumTime(time_t premiumEndsAt);
 
-	bool setVocation(uint16_t vocId);
-	uint16_t getVocationId() const { return vocation->getId(); }
+	void setVocation(Vocation_ptr vocation);
+	void updateVocation();
+	auto getVocation() const { return vocation; }
 
 	PlayerSex_t getSex() const { return sex; }
 	void setSex(PlayerSex_t);
@@ -1220,7 +1219,7 @@ private:
 	Player* tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;
 	Town* town = nullptr;
-	Vocation* vocation = nullptr;
+	Vocation_ptr vocation = nullptr;
 	StoreInbox* storeInbox = nullptr;
 	DepotLocker_ptr depotLocker = nullptr;
 
@@ -1297,7 +1296,7 @@ private:
 	void updateBaseSpeed()
 	{
 		if (!hasFlag(PlayerFlag_SetMaxSpeed)) {
-			baseSpeed = vocation->getBaseSpeed() + (2 * (level - 1));
+			baseSpeed = vocation->baseSpeed + (2 * (level - 1));
 		} else {
 			baseSpeed = PLAYER_MAX_SPEED;
 		}

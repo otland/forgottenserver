@@ -43,7 +43,6 @@ extern Chat* g_chat;
 extern Game g_game;
 extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
-extern Vocations g_vocations;
 extern Spells* g_spells;
 extern Events* g_events;
 extern Actions* g_actions;
@@ -2204,6 +2203,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, RELOAD_TYPE_SPELLS);
 	registerEnum(L, RELOAD_TYPE_TALKACTIONS);
 	registerEnum(L, RELOAD_TYPE_WEAPONS);
+	registerEnum(L, RELOAD_TYPE_VOCATIONS);
 
 	registerEnum(L, ZONE_PROTECTION);
 	registerEnum(L, ZONE_NOPVP);
@@ -4877,12 +4877,12 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 {
 	// Game.getVocations()
-	const auto& vocations = g_vocations.getVocations();
+	const auto& vocations = tfs::game::vocations::get_vocations();
 	lua_createtable(L, vocations.size(), 0);
 
 	int index = 0;
-	for (const auto& [id, vocation] : vocations) {
-		tfs::lua::pushUserdata(L, &vocation);
+	for (const auto& vocation : vocations) {
+		pushSharedPtr(L, vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -9691,7 +9691,7 @@ int LuaScriptInterface::luaPlayerGetVocation(lua_State* L)
 	// player:getVocation()
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
-		tfs::lua::pushUserdata(L, player->getVocation());
+		pushSharedPtr(L, player->getVocation());
 		tfs::lua::setMetatable(L, -1, "Vocation");
 	} else {
 		lua_pushnil(L);
@@ -9708,24 +9708,22 @@ int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 		return 1;
 	}
 
-	Vocation* vocation;
+	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		vocation = g_vocations.getVocation(tfs::lua::getNumber<uint16_t>(L, 2));
+		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
-		vocation = g_vocations.getVocation(g_vocations.getVocationId(tfs::lua::getString(L, 2)));
+		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
 	} else if (lua_isuserdata(L, 2)) {
-		vocation = tfs::lua::getUserdata<Vocation>(L, 2);
+		vocation = getSharedPtr<Vocation>(L, 2);
+	}
+
+	if (vocation) {
+		player->setVocation(vocation);
+		tfs::lua::pushBoolean(L, true);
 	} else {
-		vocation = nullptr;
-	}
-
-	if (!vocation) {
+		std::cout << "[Warning - Player::setVocation] Wrong vocation: " << tfs::lua::getString(L, 2) << std::endl;
 		tfs::lua::pushBoolean(L, false);
-		return 1;
 	}
-
-	player->setVocation(vocation->getId());
-	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
 
@@ -9972,7 +9970,7 @@ int LuaScriptInterface::luaPlayerGetMaxSoul(lua_State* L)
 	// player:getMaxSoul()
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player && player->vocation) {
-		lua_pushnumber(L, player->vocation->getSoulMax());
+		lua_pushnumber(L, player->vocation->soulMax);
 	} else {
 		lua_pushnil(L);
 	}
@@ -10738,7 +10736,7 @@ int LuaScriptInterface::luaPlayerCanLearnSpell(lua_State* L)
 		return 1;
 	}
 
-	if (!spell->hasVocationSpellMap(player->getVocationId())) {
+	if (!spell->hasVocation(player->getVocation())) {
 		tfs::lua::pushBoolean(L, false);
 	} else if (player->getLevel() < spell->getLevel()) {
 		tfs::lua::pushBoolean(L, false);
@@ -12480,18 +12478,18 @@ int LuaScriptInterface::luaGroupHasFlag(lua_State* L)
 int LuaScriptInterface::luaVocationCreate(lua_State* L)
 {
 	// Vocation(id or name)
-	uint32_t id;
+	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		id = tfs::lua::getNumber<uint32_t>(L, 2);
-	} else {
-		id = g_vocations.getVocationId(tfs::lua::getString(L, 2));
+		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+	} else if (lua_isstring(L, 2)) {
+		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
 	}
 
-	Vocation* vocation = g_vocations.getVocation(id);
 	if (vocation) {
-		tfs::lua::pushUserdata(L, vocation);
+		pushSharedPtr(L, vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
 	} else {
+		std::cout << "[Warning - Vocation] Wrong vocation: " << tfs::lua::getString(L, 2) << std::endl;
 		lua_pushnil(L);
 	}
 	return 1;
@@ -12500,9 +12498,8 @@ int LuaScriptInterface::luaVocationCreate(lua_State* L)
 int LuaScriptInterface::luaVocationGetId(lua_State* L)
 {
 	// vocation:getId()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getId());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->id);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12512,9 +12509,8 @@ int LuaScriptInterface::luaVocationGetId(lua_State* L)
 int LuaScriptInterface::luaVocationGetClientId(lua_State* L)
 {
 	// vocation:getClientId()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getClientId());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->clientId);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12524,9 +12520,8 @@ int LuaScriptInterface::luaVocationGetClientId(lua_State* L)
 int LuaScriptInterface::luaVocationGetName(lua_State* L)
 {
 	// vocation:getName()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		tfs::lua::pushString(L, vocation->getVocName());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		tfs::lua::pushString(L, vocation->name);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12536,9 +12531,8 @@ int LuaScriptInterface::luaVocationGetName(lua_State* L)
 int LuaScriptInterface::luaVocationGetDescription(lua_State* L)
 {
 	// vocation:getDescription()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		tfs::lua::pushString(L, vocation->getVocDescription());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		tfs::lua::pushString(L, vocation->description);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12548,8 +12542,7 @@ int LuaScriptInterface::luaVocationGetDescription(lua_State* L)
 int LuaScriptInterface::luaVocationGetRequiredSkillTries(lua_State* L)
 {
 	// vocation:getRequiredSkillTries(skillType, skillLevel)
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
 		skills_t skillType = tfs::lua::getNumber<skills_t>(L, 2);
 		uint16_t skillLevel = tfs::lua::getNumber<uint16_t>(L, 3);
 		lua_pushnumber(L, vocation->getReqSkillTries(skillType, skillLevel));
@@ -12562,8 +12555,7 @@ int LuaScriptInterface::luaVocationGetRequiredSkillTries(lua_State* L)
 int LuaScriptInterface::luaVocationGetRequiredManaSpent(lua_State* L)
 {
 	// vocation:getRequiredManaSpent(magicLevel)
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
 		uint32_t magicLevel = tfs::lua::getNumber<uint32_t>(L, 2);
 		lua_pushnumber(L, vocation->getReqMana(magicLevel));
 	} else {
@@ -12575,9 +12567,8 @@ int LuaScriptInterface::luaVocationGetRequiredManaSpent(lua_State* L)
 int LuaScriptInterface::luaVocationGetCapacityGain(lua_State* L)
 {
 	// vocation:getCapacityGain()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getCapGain());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainCap);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12587,9 +12578,8 @@ int LuaScriptInterface::luaVocationGetCapacityGain(lua_State* L)
 int LuaScriptInterface::luaVocationGetHealthGain(lua_State* L)
 {
 	// vocation:getHealthGain()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getHPGain());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainHP);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12599,9 +12589,8 @@ int LuaScriptInterface::luaVocationGetHealthGain(lua_State* L)
 int LuaScriptInterface::luaVocationGetHealthGainTicks(lua_State* L)
 {
 	// vocation:getHealthGainTicks()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getHealthGainTicks());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainHealthTicks);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12611,9 +12600,8 @@ int LuaScriptInterface::luaVocationGetHealthGainTicks(lua_State* L)
 int LuaScriptInterface::luaVocationGetHealthGainAmount(lua_State* L)
 {
 	// vocation:getHealthGainAmount()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getHealthGainAmount());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainHealthAmount);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12623,9 +12611,8 @@ int LuaScriptInterface::luaVocationGetHealthGainAmount(lua_State* L)
 int LuaScriptInterface::luaVocationGetManaGain(lua_State* L)
 {
 	// vocation:getManaGain()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getManaGain());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainMana);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12635,9 +12622,8 @@ int LuaScriptInterface::luaVocationGetManaGain(lua_State* L)
 int LuaScriptInterface::luaVocationGetManaGainTicks(lua_State* L)
 {
 	// vocation:getManaGainTicks()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getManaGainTicks());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainManaTicks);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12647,9 +12633,8 @@ int LuaScriptInterface::luaVocationGetManaGainTicks(lua_State* L)
 int LuaScriptInterface::luaVocationGetManaGainAmount(lua_State* L)
 {
 	// vocation:getManaGainAmount()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getManaGainAmount());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainManaAmount);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12659,9 +12644,8 @@ int LuaScriptInterface::luaVocationGetManaGainAmount(lua_State* L)
 int LuaScriptInterface::luaVocationGetMaxSoul(lua_State* L)
 {
 	// vocation:getMaxSoul()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getSoulMax());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->soulMax);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12671,9 +12655,8 @@ int LuaScriptInterface::luaVocationGetMaxSoul(lua_State* L)
 int LuaScriptInterface::luaVocationGetSoulGainTicks(lua_State* L)
 {
 	// vocation:getSoulGainTicks()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getSoulGainTicks());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->gainSoulTicks);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12683,9 +12666,8 @@ int LuaScriptInterface::luaVocationGetSoulGainTicks(lua_State* L)
 int LuaScriptInterface::luaVocationGetAttackSpeed(lua_State* L)
 {
 	// vocation:getAttackSpeed()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getAttackSpeed());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->attackSpeed);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12695,9 +12677,8 @@ int LuaScriptInterface::luaVocationGetAttackSpeed(lua_State* L)
 int LuaScriptInterface::luaVocationGetBaseSpeed(lua_State* L)
 {
 	// vocation:getBaseSpeed()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		lua_pushnumber(L, vocation->getBaseSpeed());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		lua_pushnumber(L, vocation->baseSpeed);
 	} else {
 		lua_pushnil(L);
 	}
@@ -12707,21 +12688,15 @@ int LuaScriptInterface::luaVocationGetBaseSpeed(lua_State* L)
 int LuaScriptInterface::luaVocationGetDemotion(lua_State* L)
 {
 	// vocation:getDemotion()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
+	auto vocation = getSharedPtr<Vocation>(L, 1);
 	if (!vocation) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint16_t fromId = vocation->getFromVocation();
-	if (fromId == VOCATION_NONE) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	Vocation* demotedVocation = g_vocations.getVocation(fromId);
-	if (demotedVocation && demotedVocation != vocation) {
-		tfs::lua::pushUserdata(L, demotedVocation);
+	auto demoted_vocation = tfs::game::vocations::get_vocation_by_id(vocation->fromVocation);
+	if (demoted_vocation && !demoted_vocation->isNone() && demoted_vocation != vocation) {
+		pushSharedPtr(L, demoted_vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
 	} else {
 		lua_pushnil(L);
@@ -12732,21 +12707,15 @@ int LuaScriptInterface::luaVocationGetDemotion(lua_State* L)
 int LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
 {
 	// vocation:getPromotion()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
+	auto vocation = getSharedPtr<Vocation>(L, 1);
 	if (!vocation) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	uint16_t promotedId = g_vocations.getPromotedVocation(vocation->getId());
-	if (promotedId == VOCATION_NONE) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	Vocation* promotedVocation = g_vocations.getVocation(promotedId);
-	if (promotedVocation && promotedVocation != vocation) {
-		tfs::lua::pushUserdata(L, promotedVocation);
+	auto promoted_vocation = tfs::game::vocations::get_vocation_by_promoted_id(vocation->id);
+	if (promoted_vocation && !promoted_vocation->isNone() && promoted_vocation != vocation) {
+		pushSharedPtr(L, promoted_vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
 	} else {
 		lua_pushnil(L);
@@ -12757,9 +12726,8 @@ int LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
 int LuaScriptInterface::luaVocationAllowsPvp(lua_State* L)
 {
 	// vocation:allowsPvp()
-	Vocation* vocation = tfs::lua::getUserdata<Vocation>(L, 1);
-	if (vocation) {
-		tfs::lua::pushBoolean(L, vocation->allowsPvp());
+	if (auto vocation = getSharedPtr<Vocation>(L, 1)) {
+		tfs::lua::pushBoolean(L, vocation->allowPvp);
 	} else {
 		lua_pushnil(L);
 	}
@@ -17145,17 +17113,20 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 	if (lua_gettop(L) == 1) {
 		lua_createtable(L, 0, 0);
 		int i = 0;
-		for (auto& vocation : spell->getVocationSpellMap()) {
-			std::string name = g_vocations.getVocation(vocation.first)->getVocName();
-			tfs::lua::pushString(L, name);
+		for (auto [vocation, show_in_description] : spell->getVocations()) {
+			tfs::lua::pushString(L, vocation->name);
 			lua_rawseti(L, -2, ++i);
 		}
 	} else {
 		int parameters = lua_gettop(L) - 1; // - 1 because self is a parameter aswell, which we want to skip ofc
 		for (int i = 0; i < parameters; ++i) {
 			std::string vocStr = tfs::lua::getString(L, 2 + i);
-			auto vocList = explodeString(vocStr, ";");
-			spell->addVocationSpellMap(vocList[0], vocList.size() > 1 ? booleanString(vocList[1]) : false);
+			auto vocations = explodeString(vocStr, ";");
+			if (auto vocation = tfs::game::vocations::get_vocation_by_name(vocations[0])) {
+				spell->addVocation(vocation, vocations.size() > 1 ? booleanString(vocations[1]) : false);
+			} else {
+				std::cout << "[Warning - Spell::vocation] Wrong vocation name: " << vocations[0] << std::endl;
+			}
 		}
 		tfs::lua::pushBoolean(L, true);
 	}
@@ -18000,41 +17971,48 @@ int LuaScriptInterface::luaMoveEventPremium(lua_State* L)
 
 int LuaScriptInterface::luaMoveEventVocation(lua_State* L)
 {
-	// moveevent:vocation(vocName[, showInDescription = false, lastVoc = false])
+	// moveevent:vocation(id or name or userdata[, showInDescription = false, lastVoc = false])
 	MoveEvent* moveevent = tfs::lua::getUserdata<MoveEvent>(L, 1);
-	if (moveevent) {
-		moveevent->addVocationEquipSet(tfs::lua::getString(L, 2));
-		moveevent->setWieldInfo(WIELDINFO_VOCREQ);
-		std::string tmp;
-		bool showInDescription = false;
-		bool lastVoc = false;
-		if (tfs::lua::getBoolean(L, 3)) {
-			showInDescription = tfs::lua::getBoolean(L, 3);
-		}
-		if (tfs::lua::getBoolean(L, 4)) {
-			lastVoc = tfs::lua::getBoolean(L, 4);
-		}
-		if (showInDescription) {
-			if (moveevent->getVocationString().empty()) {
-				tmp = boost::algorithm::to_lower_copy(tfs::lua::getString(L, 2));
-				tmp += "s";
-				moveevent->setVocationString(tmp);
-			} else {
-				tmp = moveevent->getVocationString();
-				if (lastVoc) {
-					tmp += " and ";
-				} else {
-					tmp += ", ";
-				}
-				tmp += boost::algorithm::to_lower_copy(tfs::lua::getString(L, 2));
-				tmp += "s";
-				moveevent->setVocationString(tmp);
-			}
-		}
-		tfs::lua::pushBoolean(L, true);
-	} else {
+	if (!moveevent) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Vocation_ptr vocation = nullptr;
+	if (isNumber(L, 2)) {
+		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+	} else if (lua_isstring(L, 2)) {
+		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+	} else if (lua_isuserdata(L, 2)) {
+		vocation = getSharedPtr<Vocation>(L, 2);
+	}
+
+	if (!vocation) {
+		std::cout << "[Warning - Weapon::vocation] Wrong vocation: " << tfs::lua::getString(L, 2) << std::endl;
+		lua_pushnil(L);
+		return 1;
+	}
+
+	moveevent->addVocation(vocation);
+	moveevent->setWieldInfo(WIELDINFO_VOCREQ);
+
+	bool showInDescription = tfs::lua::getBoolean(L, 3, false);
+	bool lastVoc = tfs::lua::getBoolean(L, 4, false);
+
+	if (showInDescription) {
+		std::string description = moveevent->getVocationString();
+		if (description.empty()) {
+			description = boost::algorithm::to_lower_copy(vocation->name);
+			description += "s";
+		} else {
+			description += lastVoc ? " and " : ", ";
+			description += boost::algorithm::to_lower_copy(vocation->name);
+			description += "s";
+		}
+		moveevent->setVocationString(description);
+	}
+
+	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
 
@@ -18603,36 +18581,48 @@ int LuaScriptInterface::luaWeaponPremium(lua_State* L)
 
 int LuaScriptInterface::luaWeaponVocation(lua_State* L)
 {
-	// weapon:vocation(vocName[, showInDescription = false, lastVoc = false])
+	// weapon:vocation(id or name or userdata[, showInDescription = false, lastVoc = false])
 	Weapon* weapon = tfs::lua::getUserdata<Weapon>(L, 1);
-	if (weapon) {
-		weapon->addVocationWeaponSet(tfs::lua::getString(L, 2));
-		weapon->setWieldInfo(WIELDINFO_VOCREQ);
-		std::string tmp;
-		bool showInDescription = tfs::lua::getBoolean(L, 3, false);
-		bool lastVoc = tfs::lua::getBoolean(L, 4, false);
-
-		if (showInDescription) {
-			if (weapon->getVocationString().empty()) {
-				tmp = boost::algorithm::to_lower_copy(tfs::lua::getString(L, 2));
-				tmp += "s";
-				weapon->setVocationString(tmp);
-			} else {
-				tmp = weapon->getVocationString();
-				if (lastVoc) {
-					tmp += " and ";
-				} else {
-					tmp += ", ";
-				}
-				tmp += boost::algorithm::to_lower_copy(tfs::lua::getString(L, 2));
-				tmp += "s";
-				weapon->setVocationString(tmp);
-			}
-		}
-		tfs::lua::pushBoolean(L, true);
-	} else {
+	if (!weapon) {
 		lua_pushnil(L);
+		return 1;
 	}
+
+	Vocation_ptr vocation = nullptr;
+	if (isNumber(L, 2)) {
+		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+	} else if (lua_isstring(L, 2)) {
+		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+	} else if (lua_isuserdata(L, 2)) {
+		vocation = getSharedPtr<Vocation>(L, 2);
+	}
+
+	if (!vocation) {
+		std::cout << "[Warning - Weapon::vocation] Wrong vocation: " << tfs::lua::getString(L, 2) << std::endl;
+		lua_pushnil(L);
+		return 1;
+	}
+
+	weapon->addVocation(vocation);
+	weapon->setWieldInfo(WIELDINFO_VOCREQ);
+
+	bool showInDescription = tfs::lua::getBoolean(L, 3, false);
+	bool lastVoc = tfs::lua::getBoolean(L, 4, false);
+
+	if (showInDescription) {
+		std::string description = weapon->getVocationString();
+		if (description.empty()) {
+			description = boost::algorithm::to_lower_copy(vocation->name);
+			description += "s";
+		} else {
+			description += lastVoc ? " and " : ", ";
+			description += boost::algorithm::to_lower_copy(vocation->name);
+			description += "s";
+		}
+		weapon->setVocationString(description);
+	}
+
+	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
 

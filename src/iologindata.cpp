@@ -204,11 +204,13 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		condition = Condition::createCondition(propStream);
 	}
 
-	if (!player->setVocation(result->getNumber<uint16_t>("vocation"))) {
+	auto vocation = tfs::game::vocations::get_vocation_by_id(result->getNumber<uint16_t>("vocation"));
+	if (!vocation) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Vocation ID "
 		          << result->getNumber<uint16_t>("vocation") << " which doesn't exist" << std::endl;
 		return false;
 	}
+	player->setVocation(vocation);
 
 	player->mana = result->getNumber<uint32_t>("mana");
 	player->manaMax = result->getNumber<uint32_t>("manamax");
@@ -648,7 +650,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "UPDATE `players` SET ";
 	query << "`level` = " << player->level << ',';
 	query << "`group_id` = " << player->group->id << ',';
-	query << "`vocation` = " << player->getVocationId() << ',';
+	query << "`vocation` = " << player->getVocation()->id << ',';
 	query << "`health` = " << player->health << ',';
 	query << "`healthmax` = " << player->healthMax << ',';
 	query << "`experience` = " << player->experience << ',';

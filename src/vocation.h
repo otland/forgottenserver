@@ -7,56 +7,22 @@
 #include "configmanager.h"
 #include "enums.h"
 
-class Vocation
+#include <memory>
+
+class Vocation final : public std::enable_shared_from_this<Vocation>
 {
 public:
 	explicit Vocation(uint16_t id) : id(id) {}
 
-	const std::string& getVocName() const { return name; }
-	const std::string& getVocDescription() const { return description; }
 	uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
 	uint64_t getReqMana(uint32_t magLevel);
 
-	uint16_t getId() const { return id; }
-
-	uint8_t getClientId() const { return clientId; }
-
-	uint32_t getHPGain() const { return gainHP; }
-	uint32_t getManaGain() const { return gainMana; }
-	uint32_t getCapGain() const { return gainCap; }
-
-	uint32_t getManaGainTicks() const { return gainManaTicks; }
-	uint32_t getManaGainAmount() const { return gainManaAmount; }
-	uint32_t getHealthGainTicks() const { return gainHealthTicks; }
-	uint32_t getHealthGainAmount() const { return gainHealthAmount; }
-
-	uint8_t getSoulMax() const { return soulMax; }
-	uint16_t getSoulGainTicks() const { return gainSoulTicks; }
-
-	uint32_t getAttackSpeed() const { return attackSpeed; }
-	uint32_t getBaseSpeed() const { return baseSpeed; }
-
-	uint32_t getFromVocation() const { return fromVocation; }
-
-	uint32_t getNoPongKickTime() const { return noPongKickTime; }
-
-	bool allowsPvp() const { return allowPvp; }
-
-	bool getMagicShield() const
-	{
-		if (!getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
-			return false;
-		}
-		return magicShield;
-	}
+	bool isNone() const { return id == VOCATION_NONE; }
 
 	float meleeDamageMultiplier = 1.0f;
 	float distDamageMultiplier = 1.0f;
 	float defenseMultiplier = 1.0f;
 	float armorMultiplier = 1.0f;
-
-private:
-	friend class Vocations;
 
 	std::string name = "none";
 	std::string description;
@@ -83,24 +49,27 @@ private:
 	uint8_t clientId = 0;
 
 	bool allowPvp = true;
-
 	bool magicShield = false;
+
+	bool operator==(const Vocation& other) const { return id == other.id; }
 };
 
-using VocationMap = std::map<uint16_t, Vocation>;
+using Vocation_ptr = std::shared_ptr<Vocation>;
 
-class Vocations
-{
-public:
-	bool loadFromXml(std::istream& is, std::string_view filename);
+namespace {
 
-	Vocation* getVocation(uint16_t id);
-	int32_t getVocationId(std::string_view name) const;
-	uint16_t getPromotedVocation(uint16_t vocationId) const;
-	const VocationMap& getVocations() const { return vocationsMap; }
+std::set<Vocation_ptr> loaded_vocations;
 
-private:
-	VocationMap vocationsMap;
-};
+} // namespace
+
+namespace tfs::game::vocations {
+
+bool load_from_xml(bool reload = false);
+Vocation_ptr get_vocation_by_id(uint16_t id);
+Vocation_ptr get_vocation_by_name(std::string_view name);
+Vocation_ptr get_vocation_by_promoted_id(uint16_t id);
+const std::set<Vocation_ptr>& get_vocations();
+
+} // namespace tfs::game::vocations
 
 #endif // FS_VOCATION_H

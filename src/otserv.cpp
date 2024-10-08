@@ -35,7 +35,6 @@ Scheduler g_scheduler;
 
 Game g_game;
 Monsters g_monsters;
-Vocations g_vocations;
 extern Scripts* g_scripts;
 
 std::mutex g_loaderLock;
@@ -139,7 +138,7 @@ void mainLoader(ServiceManager* services)
 
 	// load vocations
 	std::cout << ">> Loading vocations" << std::endl;
-	if (std::ifstream is{"data/XML/vocations.xml"}; !g_vocations.loadFromXml(is, "data/XML/vocations.xml")) {
+	if (!tfs::game::vocations::load_from_xml()) {
 		startupErrorMessage("Unable to load vocations!");
 		return;
 	}

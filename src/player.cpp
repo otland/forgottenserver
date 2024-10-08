@@ -28,7 +28,6 @@
 
 extern Game g_game;
 extern Chat* g_chat;
-extern Vocations g_vocations;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
@@ -91,19 +90,21 @@ void Player::setID()
 	}
 }
 
-bool Player::setVocation(uint16_t vocId)
+void Player::setVocation(Vocation_ptr vocation)
 {
-	Vocation* voc = g_vocations.getVocation(vocId);
-	if (!voc) {
-		return false;
-	}
-	vocation = voc;
-
+	this->vocation = vocation;
 	updateRegeneration();
-	setBaseSpeed(voc->getBaseSpeed());
+	setBaseSpeed(vocation->baseSpeed);
 	updateBaseSpeed();
 	g_game.changeSpeed(this, 0);
-	return true;
+}
+
+void Player::updateVocation()
+{
+	updateRegeneration();
+	setBaseSpeed(vocation->baseSpeed);
+	updateBaseSpeed();
+	g_game.changeSpeed(this, 0);
 }
 
 bool Player::isPushable() const
@@ -123,8 +124,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 		if (group->access) {
 			s << " You are " << group->name << '.';
-		} else if (vocation->getId() != VOCATION_NONE) {
-			s << " You are " << vocation->getVocDescription() << '.';
+		} else if (!vocation->isNone()) {
+			s << " You are " << vocation->description << '.';
 		} else {
 			s << " You have no vocation.";
 		}
@@ -143,8 +144,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 
 		if (group->access) {
 			s << " is " << group->name << '.';
-		} else if (vocation->getId() != VOCATION_NONE) {
-			s << " is " << vocation->getVocDescription() << '.';
+		} else if (!vocation->isNone()) {
+			s << " is " << vocation->description << '.';
 		} else {
 			s << " has no vocation.";
 		}
@@ -399,7 +400,7 @@ uint32_t Player::getAttackSpeed() const
 {
 	const Item* weapon = getWeapon(true);
 	if (!weapon || weapon->getAttackSpeed() == 0) {
-		return vocation->getAttackSpeed();
+		return vocation->attackSpeed;
 	}
 
 	return weapon->getAttackSpeed();
@@ -885,7 +886,7 @@ void Player::sendPing()
 		setAttackedCreature(nullptr);
 	}
 
-	int32_t noPongKickTime = vocation->getNoPongKickTime();
+	int32_t noPongKickTime = vocation->noPongKickTime;
 	if (pzLocked && noPongKickTime < 60000) {
 		noPongKickTime = 60000;
 	}
@@ -1753,11 +1754,11 @@ void Player::addExperience(Creature* source, uint64_t exp, bool sendText /* = fa
 	uint32_t prevLevel = level;
 	while (experience >= nextLevelExp) {
 		++level;
-		healthMax += vocation->getHPGain();
-		health += vocation->getHPGain();
-		manaMax += vocation->getManaGain();
-		mana += vocation->getManaGain();
-		capacity += vocation->getCapGain();
+		healthMax += vocation->gainHP;
+		health += vocation->gainHP;
+		manaMax += vocation->gainMana;
+		mana += vocation->gainMana;
+		capacity += vocation->gainCap;
 
 		currLevelExp = nextLevelExp;
 		nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1845,9 +1846,9 @@ void Player::removeExperience(uint64_t exp, bool sendText /* = false*/)
 
 	while (level > 1 && experience < currLevelExp) {
 		--level;
-		healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
-		manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-		capacity = std::max<int32_t>(0, capacity - vocation->getCapGain());
+		healthMax = std::max<int32_t>(0, healthMax - vocation->gainHP);
+		manaMax = std::max<int32_t>(0, manaMax - vocation->gainMana);
+		capacity = std::max<int32_t>(0, capacity - vocation->gainCap);
 		currLevelExp = Player::getExpForLevel(level);
 	}
 
@@ -2104,15 +2105,15 @@ void Player::death(Creature* lastHitCreature)
 		if (expLoss != 0) {
 			uint32_t oldLevel = level;
 
-			if (vocation->getId() == VOCATION_NONE || level > 7) {
+			if (vocation->isNone() || level > 7) {
 				experience -= expLoss;
 			}
 
 			while (level > 1 && experience < Player::getExpForLevel(level)) {
 				--level;
-				healthMax = std::max<int32_t>(0, healthMax - vocation->getHPGain());
-				manaMax = std::max<int32_t>(0, manaMax - vocation->getManaGain());
-				capacity = std::max<int32_t>(0, capacity - vocation->getCapGain());
+				healthMax = std::max<int32_t>(0, healthMax - vocation->gainHP);
+				manaMax = std::max<int32_t>(0, manaMax - vocation->gainMana);
+				capacity = std::max<int32_t>(0, capacity - vocation->gainCap);
 			}
 
 			if (oldLevel != level) {
@@ -3841,7 +3842,7 @@ void Player::changeMana(int32_t manaChange)
 void Player::changeSoul(int32_t soulChange)
 {
 	if (soulChange > 0) {
-		soul += std::min<int32_t>(soulChange, vocation->getSoulMax() - soul);
+		soul += std::min<int32_t>(soulChange, vocation->soulMax - soul);
 	} else {
 		soul = std::max<int32_t>(0, soul + soulChange);
 	}
@@ -4064,8 +4065,8 @@ void Player::checkSkullTicks(int64_t ticks)
 
 bool Player::isPromoted() const
 {
-	uint16_t promotedVocation = g_vocations.getPromotedVocation(vocation->getId());
-	return promotedVocation == VOCATION_NONE && vocation->getId() != promotedVocation;
+	auto promoted_vocation = tfs::game::vocations::get_vocation_by_promoted_id(vocation->id);
+	return promoted_vocation && promoted_vocation->isNone() && vocation != promoted_vocation;
 }
 
 double Player::getLostPercent() const
@@ -4712,15 +4713,11 @@ void Player::setGuild(Guild_ptr guild)
 
 void Player::updateRegeneration()
 {
-	if (!vocation) {
-		return;
-	}
-
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-	if (condition) {
-		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->getHealthGainAmount());
-		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
-		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());
-		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
+	if (auto condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)) {
+		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->gainHealthAmount);
+		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->gainHealthAmount);
+		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->gainHealthTicks * 1000);
+		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->gainManaAmount);
+		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->gainManaTicks * 1000);
 	}
 }
