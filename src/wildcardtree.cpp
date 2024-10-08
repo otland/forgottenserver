@@ -6,109 +6,127 @@
 #include "wildcardtree.h"
 
 #include <stack>
-#include <tuple>
 
-WildcardTreeNode* WildcardTreeNode::getChild(char ch)
+namespace {
+
+auto wildcardtree_root = std::make_shared<WildcardTreeNode>(false);
+
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::find_child(char c)
 {
-	auto it = children.find(ch);
+	auto it = children.find(c);
 	if (it == children.end()) {
 		return nullptr;
 	}
-	return &it->second;
+	return it->second;
 }
 
-const WildcardTreeNode* WildcardTreeNode::getChild(char ch) const
+std::shared_ptr<WildcardTreeNode> WildcardTreeNode::add_child(char c, bool breakpoint)
 {
-	auto it = children.find(ch);
-	if (it == children.end()) {
-		return nullptr;
-	}
-	return &it->second;
-}
-
-WildcardTreeNode* WildcardTreeNode::addChild(char ch, bool breakpoint)
-{
-	WildcardTreeNode* child = getChild(ch);
-	if (child) {
+	if (auto child = find_child(c)) {
+		// If the child already exists, update its breakpoint if necessary
 		if (breakpoint && !child->breakpoint) {
 			child->breakpoint = true;
 		}
-	} else {
-		auto pair =
-		    children.emplace(std::piecewise_construct, std::forward_as_tuple(ch), std::forward_as_tuple(breakpoint));
-		child = &pair.first->second;
+		return child;
 	}
-	return child;
+
+	auto pair = children.emplace(c, std::make_shared<WildcardTreeNode>(breakpoint));
+	return pair.first->second;
 }
 
-void WildcardTreeNode::insert(const std::string& str)
-{
-	WildcardTreeNode* cur = this;
+} // namespace
 
-	size_t length = str.length() - 1;
+namespace tfs::game::wildcardtree {
+
+void add(std::string_view s)
+{
+	auto node = wildcardtree_root;
+
+	auto length = s.length();
+	// Iterate through the string, adding nodes for each character except the last
+	for (size_t pos = 0; pos < length - 1; ++pos) {
+		// Add child nodes without marking breakpoints
+		node = node->add_child(s[pos], false);
+	}
+
+	// Mark the final character as a breakpoint
+	node->add_child(s.back(), true);
+}
+
+void remove(std::string_view s)
+{
+	auto node = wildcardtree_root;
+
+	// Stack to keep track of the path as we traverse the tree
+	std::stack<std::shared_ptr<WildcardTreeNode>> path;
+	path.push(node);
+
+	auto length = s.length();
+	// Traverse the tree based on the input string
 	for (size_t pos = 0; pos < length; ++pos) {
-		cur = cur->addChild(str[pos], false);
-	}
-
-	cur->addChild(str[length], true);
-}
-
-void WildcardTreeNode::remove(const std::string& str)
-{
-	WildcardTreeNode* cur = this;
-
-	std::stack<WildcardTreeNode*> path;
-	path.push(cur);
-	size_t len = str.length();
-	for (size_t pos = 0; pos < len; ++pos) {
-		cur = cur->getChild(str[pos]);
-		if (!cur) {
+		node = node->find_child(s[pos]);
+		if (!node) {
 			return;
 		}
-		path.push(cur);
+		path.push(node);
 	}
 
-	cur->breakpoint = false;
+	node->breakpoint = false;
 
-	do {
-		cur = path.top();
+	// Remove orphaned nodes
+	while (true) {
+		node = path.top();
 		path.pop();
-
-		if (!cur->children.empty() || cur->breakpoint || path.empty()) {
+		if (path.empty()) {
+			// Stop if the root is reached
 			break;
 		}
 
-		cur = path.top();
-
-		auto it = cur->children.find(str[--len]);
-		if (it != cur->children.end()) {
-			cur->children.erase(it);
+		if (node->breakpoint || !node->children.empty()) {
+			// Stop if the node has children or is a breakpoint
+			break;
 		}
-	} while (true);
+
+		node = path.top(); // Go back to the parent node
+
+		auto it = node->children.find(s[--length]);
+		if (it != node->children.end()) {
+			// Erase the child node from the parent if it exists
+			node->children.erase(it);
+		}
+	}
 }
 
-ReturnValue WildcardTreeNode::findOne(const std::string& query, std::string& result) const
+std::pair<WildcardTreeSearchResult, std::string> search(std::string_view query)
 {
-	const WildcardTreeNode* cur = this;
-	for (char pos : query) {
-		cur = cur->getChild(pos);
-		if (!cur) {
-			return RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE;
+	auto node = wildcardtree_root;
+
+	for (auto c : query) {
+		node = node->find_child(c);
+		if (!node) {
+			return std::make_pair(WildcardTreeSearchResult::NotFound, "");
 		}
 	}
 
-	result = query;
+	std::string result(query);
 
-	do {
-		size_t size = cur->children.size();
+	// Continue traversal until ambiguity or the end of the string is found
+	while (true) {
+		const auto size = node->children.size();
 		if (size == 0) {
-			return RETURNVALUE_NOERROR;
-		} else if (size > 1 || cur->breakpoint) {
-			return RETURNVALUE_NAMEISTOOAMBIGUOUS;
+			// Exact match found
+			return std::make_pair(WildcardTreeSearchResult::Found, result);
 		}
 
-		auto it = cur->children.begin();
+		if (size > 1 || node->breakpoint) {
+			// Return ambiguous if multiple child nodes exist or a breakpoint is reached
+			return std::make_pair(WildcardTreeSearchResult::Ambiguous, "");
+		}
+
+		auto it = node->children.begin();
 		result += it->first;
-		cur = &it->second;
-	} while (true);
+		node = it->second;
+	}
 }
+
+} // namespace tfs::game::wildcardtree
