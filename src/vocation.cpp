@@ -56,7 +56,7 @@ bool tfs::game::vocations::load_from_xml(bool reload)
 		}
 
 		if (!vocation) {
-			vocation = std::make_unique<Vocation>(vocation_id);
+			vocation = std::make_shared<Vocation>(vocation_id);
 			loaded_vocations.emplace(vocation);
 		}
 
