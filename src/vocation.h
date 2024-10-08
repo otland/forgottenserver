@@ -14,6 +14,11 @@ class Vocation final : public std::enable_shared_from_this<Vocation>
 public:
 	explicit Vocation(uint16_t id) : id(id) {}
 
+	/// Deleted copy constructor to ensure Vocation is non-copyable.
+	Vocation(const Vocation&) = delete;
+	/// Deleted assignment operator to ensure Vocation is non-copyable.
+	Vocation& operator=(const Vocation&) = delete;
+
 	uint64_t getReqSkillTries(uint8_t skill, uint16_t level);
 	uint64_t getReqMana(uint32_t magLevel);
 
@@ -64,10 +69,28 @@ std::set<Vocation_ptr> loaded_vocations;
 
 namespace tfs::game::vocations {
 
+/// @brief Loads vocation data from an XML file.
+/// @param {reload} Specifies whether to reload existing data.
+/// @return True if the vocations were loaded successfully, false otherwise.
 bool load_from_xml(bool reload = false);
+
+/// @brief Finds a vocation by its unique ID.
+/// @param {id} The unique identifier of the vocation.
+/// @return A shared pointer to the vocation, or nullptr if not found.
 Vocation_ptr find_by_id(uint16_t id);
+
+/// @brief Finds a vocation by its name.
+/// @param {name} The name of the vocation.
+/// @return A shared pointer to the vocation, or nullptr if not found.
 Vocation_ptr find_by_name(std::string_view name);
+
+/// @brief Finds a vocation by its promoted vocation ID.
+/// @param {id} The promoted vocation ID.
+/// @return A shared pointer to the vocation, or nullptr if not found.
 Vocation_ptr find_by_promoted_id(uint16_t id);
+
+/// @brief Gets the set of all loaded vocations.
+/// @return A constant reference to the set of loaded vocations.
 const std::set<Vocation_ptr>& find_vocations();
 
 } // namespace tfs::game::vocations
