@@ -204,7 +204,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		condition = Condition::createCondition(propStream);
 	}
 
-	auto vocation = tfs::game::vocations::get_vocation_by_id(result->getNumber<uint16_t>("vocation"));
+	auto vocation = tfs::game::vocations::find_by_id(result->getNumber<uint16_t>("vocation"));
 	if (!vocation) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Vocation ID "
 		          << result->getNumber<uint16_t>("vocation") << " which doesn't exist" << std::endl;

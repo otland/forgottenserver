@@ -65,10 +65,10 @@ std::set<Vocation_ptr> loaded_vocations;
 namespace tfs::game::vocations {
 
 bool load_from_xml(bool reload = false);
-Vocation_ptr get_vocation_by_id(uint16_t id);
-Vocation_ptr get_vocation_by_name(std::string_view name);
-Vocation_ptr get_vocation_by_promoted_id(uint16_t id);
-const std::set<Vocation_ptr>& get_vocations();
+Vocation_ptr find_by_id(uint16_t id);
+Vocation_ptr find_by_name(std::string_view name);
+Vocation_ptr find_by_promoted_id(uint16_t id);
+const std::set<Vocation_ptr>& find_vocations();
 
 } // namespace tfs::game::vocations
 

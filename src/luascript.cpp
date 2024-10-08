@@ -4877,7 +4877,7 @@ int LuaScriptInterface::luaGameGetMounts(lua_State* L)
 int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 {
 	// Game.getVocations()
-	const auto& vocations = tfs::game::vocations::get_vocations();
+	const auto& vocations = tfs::game::vocations::find_vocations();
 	lua_createtable(L, vocations.size(), 0);
 
 	int index = 0;
@@ -9710,9 +9710,9 @@ int LuaScriptInterface::luaPlayerSetVocation(lua_State* L)
 
 	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+		vocation = tfs::game::vocations::find_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+		vocation = tfs::game::vocations::find_by_name(tfs::lua::getString(L, 2));
 	} else if (lua_isuserdata(L, 2)) {
 		vocation = getSharedPtr<Vocation>(L, 2);
 	}
@@ -12480,9 +12480,9 @@ int LuaScriptInterface::luaVocationCreate(lua_State* L)
 	// Vocation(id or name)
 	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+		vocation = tfs::game::vocations::find_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+		vocation = tfs::game::vocations::find_by_name(tfs::lua::getString(L, 2));
 	}
 
 	if (vocation) {
@@ -12694,7 +12694,7 @@ int LuaScriptInterface::luaVocationGetDemotion(lua_State* L)
 		return 1;
 	}
 
-	auto demoted_vocation = tfs::game::vocations::get_vocation_by_id(vocation->fromVocation);
+	auto demoted_vocation = tfs::game::vocations::find_by_id(vocation->fromVocation);
 	if (demoted_vocation && !demoted_vocation->isNone() && demoted_vocation != vocation) {
 		pushSharedPtr(L, demoted_vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
@@ -12713,7 +12713,7 @@ int LuaScriptInterface::luaVocationGetPromotion(lua_State* L)
 		return 1;
 	}
 
-	auto promoted_vocation = tfs::game::vocations::get_vocation_by_promoted_id(vocation->id);
+	auto promoted_vocation = tfs::game::vocations::find_by_promoted_id(vocation->id);
 	if (promoted_vocation && !promoted_vocation->isNone() && promoted_vocation != vocation) {
 		pushSharedPtr(L, promoted_vocation);
 		tfs::lua::setMetatable(L, -1, "Vocation");
@@ -17122,7 +17122,7 @@ int LuaScriptInterface::luaSpellVocation(lua_State* L)
 		for (int i = 0; i < parameters; ++i) {
 			std::string vocStr = tfs::lua::getString(L, 2 + i);
 			auto vocations = explodeString(vocStr, ";");
-			if (auto vocation = tfs::game::vocations::get_vocation_by_name(vocations[0])) {
+			if (auto vocation = tfs::game::vocations::find_by_name(vocations[0])) {
 				spell->addVocation(vocation, vocations.size() > 1 ? booleanString(vocations[1]) : false);
 			} else {
 				std::cout << "[Warning - Spell::vocation] Wrong vocation name: " << vocations[0] << std::endl;
@@ -17980,9 +17980,9 @@ int LuaScriptInterface::luaMoveEventVocation(lua_State* L)
 
 	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+		vocation = tfs::game::vocations::find_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+		vocation = tfs::game::vocations::find_by_name(tfs::lua::getString(L, 2));
 	} else if (lua_isuserdata(L, 2)) {
 		vocation = getSharedPtr<Vocation>(L, 2);
 	}
@@ -18590,9 +18590,9 @@ int LuaScriptInterface::luaWeaponVocation(lua_State* L)
 
 	Vocation_ptr vocation = nullptr;
 	if (isNumber(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
+		vocation = tfs::game::vocations::find_by_id(tfs::lua::getNumber<uint16_t>(L, 2));
 	} else if (lua_isstring(L, 2)) {
-		vocation = tfs::game::vocations::get_vocation_by_name(tfs::lua::getString(L, 2));
+		vocation = tfs::game::vocations::find_by_name(tfs::lua::getString(L, 2));
 	} else if (lua_isuserdata(L, 2)) {
 		vocation = getSharedPtr<Vocation>(L, 2);
 	}

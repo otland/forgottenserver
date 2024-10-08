@@ -52,7 +52,7 @@ bool tfs::game::vocations::load_from_xml(bool reload)
 
 		Vocation_ptr vocation = nullptr;
 		if (reload) {
-			vocation = tfs::game::vocations::get_vocation_by_id(vocation_id);
+			vocation = tfs::game::vocations::find_by_id(vocation_id);
 		}
 
 		if (!vocation) {
@@ -145,7 +145,7 @@ bool tfs::game::vocations::load_from_xml(bool reload)
 	return true;
 }
 
-Vocation_ptr tfs::game::vocations::get_vocation_by_id(uint16_t id)
+Vocation_ptr tfs::game::vocations::find_by_id(uint16_t id)
 {
 	auto it = std::find_if(loaded_vocations.begin(), loaded_vocations.end(), [id](auto it) { return it->id == id; });
 	if (it == loaded_vocations.end()) {
@@ -154,7 +154,7 @@ Vocation_ptr tfs::game::vocations::get_vocation_by_id(uint16_t id)
 	return *it;
 }
 
-Vocation_ptr tfs::game::vocations::get_vocation_by_name(std::string_view name)
+Vocation_ptr tfs::game::vocations::find_by_name(std::string_view name)
 {
 	auto it = std::find_if(loaded_vocations.begin(), loaded_vocations.end(),
 	                       [=](auto it) { return caseInsensitiveEqual(name, it->name); });
@@ -165,7 +165,7 @@ Vocation_ptr tfs::game::vocations::get_vocation_by_name(std::string_view name)
 	return *it;
 }
 
-Vocation_ptr tfs::game::vocations::get_vocation_by_promoted_id(uint16_t id)
+Vocation_ptr tfs::game::vocations::find_by_promoted_id(uint16_t id)
 {
 	auto it = std::find_if(loaded_vocations.begin(), loaded_vocations.end(),
 	                       [id](auto it) { return it->fromVocation == id && it->id != id; });
@@ -176,4 +176,4 @@ Vocation_ptr tfs::game::vocations::get_vocation_by_promoted_id(uint16_t id)
 	return *it;
 }
 
-const std::set<Vocation_ptr>& tfs::game::vocations::get_vocations() { return loaded_vocations; }
+const std::set<Vocation_ptr>& tfs::game::vocations::find_vocations() { return loaded_vocations; }

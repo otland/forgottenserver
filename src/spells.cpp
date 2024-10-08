@@ -505,7 +505,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 			continue;
 		}
 
-		if (auto vocation = tfs::game::vocations::get_vocation_by_name(attr.as_string())) {
+		if (auto vocation = tfs::game::vocations::find_by_name(attr.as_string())) {
 			attr = vocation_node.attribute("showInDescription");
 			addVocation(vocation, !attr || attr.as_bool());
 		} else {

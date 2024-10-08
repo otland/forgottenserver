@@ -4065,7 +4065,7 @@ void Player::checkSkullTicks(int64_t ticks)
 
 bool Player::isPromoted() const
 {
-	auto promoted_vocation = tfs::game::vocations::get_vocation_by_promoted_id(vocation->id);
+	auto promoted_vocation = tfs::game::vocations::find_by_promoted_id(vocation->id);
 	return promoted_vocation && promoted_vocation->isNone() && vocation != promoted_vocation;
 }
 

@@ -98,7 +98,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	uint32_t lastLogin = 0;
 	if (result) {
 		do {
-			auto vocation = tfs::game::vocations::get_vocation_by_id(result->getNumber<uint32_t>("vocation"));
+			auto vocation = tfs::game::vocations::find_by_id(result->getNumber<uint32_t>("vocation"));
 			assert(vocation);
 
 			characters.push_back({

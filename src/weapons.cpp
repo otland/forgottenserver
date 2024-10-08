@@ -183,10 +183,10 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 			continue;
 		}
 
-		if (auto vocation = tfs::game::vocations::get_vocation_by_name(attr.as_string())) {
+		if (auto vocation = tfs::game::vocations::find_by_name(attr.as_string())) {
 			addVocation(vocation);
 
-			if (auto promoted_vocation = tfs::game::vocations::get_vocation_by_promoted_id(vocation->id)) {
+			if (auto promoted_vocation = tfs::game::vocations::find_by_promoted_id(vocation->id)) {
 				addVocation(promoted_vocation);
 			}
 
