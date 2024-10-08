@@ -6,6 +6,7 @@
     "boost-locale",
     "boost-lockfree",
     "boost-system",
+    "boost-unordered",
     "boost-variant",
     "fmt",
     {
