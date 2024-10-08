@@ -187,7 +187,7 @@ Npc* Npc::createNpc(const std::string& name)
 		}
 	}
 	Npc* npc = new Npc(name);
-	npc->setName(name);
+	npc->setName(npcType->name);
 	npc->loaded = true;
 	npc->npcType = npcType;
 	npc->loadNpcTypeInfo();
