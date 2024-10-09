@@ -5851,7 +5851,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 
 		case RELOAD_TYPE_VOCATIONS: {
 			if (std::ifstream is{"data/XML/vocations.xml"};
-			    tfs::game::vocations::load_from_xml(is, "data/XML/vocations.xml")) {
+			    tfs::game::vocations::load_from_xml(is, "data/XML/vocations.xml", true)) {
 				// Reload players vocations
 				for (const auto& [_, player] : players) {
 					player->updateVocation();
