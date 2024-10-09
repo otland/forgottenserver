@@ -160,9 +160,8 @@ public:
 
 	/**
 	 * Load a map.
-	 * \returns true if the map was loaded successfully
 	 */
-	bool loadMap(const std::string& identifier, bool loadHouses);
+	void loadMap(const std::string& identifier, bool loadHouses);
 
 	/**
 	 * Save a map.
@@ -262,9 +261,6 @@ private:
 
 	QTreeNode root;
 
-	std::filesystem::path spawnfile;
-	std::filesystem::path housefile;
-
 	uint32_t width = 0;
 	uint32_t height = 0;
 
@@ -274,7 +270,6 @@ private:
 	                           int32_t maxRangeZ, bool onlyPlayers) const;
 
 	friend class Game;
-	friend class IOMap;
 };
 
 #endif // FS_MAP_H

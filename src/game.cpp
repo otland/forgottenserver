@@ -167,7 +167,7 @@ void Game::saveGameState()
 	}
 }
 
-bool Game::loadMainMap(const std::string& filename) { return map.loadMap("data/world/" + filename + ".otbm", true); }
+void Game::loadMainMap(const std::string& filename) { map.loadMap("data/world/" + filename + ".otbm", true); }
 
 void Game::loadMap(const std::string& path) { map.loadMap(path, false); }
 

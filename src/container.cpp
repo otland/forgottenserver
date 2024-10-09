@@ -86,49 +86,42 @@ void Container::addItem(Item* item)
 	item->setParent(this);
 }
 
-Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
+void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
 {
-	if (attr == ATTR_CONTAINER_ITEMS) {
-		if (!propStream.read<uint32_t>(serializationCount)) {
-			return ATTR_READ_ERROR;
-		}
-		return ATTR_READ_END;
+	switch (attr) {
+		case ATTR_CONTAINER_ITEMS:
+			serializationCount = OTB::read<uint32_t>(first, last);
+			break;
+
+		default:
+			Item::readAttr(attr, first, last);
+			break;
 	}
-	return Item::readAttr(attr, propStream);
 }
 
-bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream)
+void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator last, const OTB::Node& node)
 {
-	bool ret = Item::unserializeItemNode(loader, node, propStream);
-	if (!ret) {
-		return false;
-	}
+	Item::unserializeItemNode(first, last, node);
 
-	for (auto& itemNode : node.children) {
+	for (const auto& itemNode : node.children) {
 		// load container items
-		if (itemNode.type != OTBM_ITEM) {
-			// unknown type
-			return false;
+		if (itemNode.type != tfs::io::map::OTBM_ITEM) [[unlikely]] {
+			throw std::invalid_argument("Invalid node type");
 		}
 
-		PropStream itemPropStream;
-		if (!loader.getProps(itemNode, itemPropStream)) {
-			return false;
+		auto first = itemNode.propsBegin;
+		auto id = OTB::read<uint16_t>(first, itemNode.propsEnd);
+
+		auto item = Item::CreateItem(Item::getPersistentId(id));
+		if (!item) [[unlikely]] {
+			throw std::invalid_argument("Invalid item id");
 		}
 
-		Item* item = Item::CreateItem(itemPropStream);
-		if (!item) {
-			return false;
-		}
-
-		if (!item->unserializeItemNode(loader, itemNode, itemPropStream)) {
-			return false;
-		}
+		item->unserializeItemNode(first, itemNode.propsEnd, itemNode);
 
 		addItem(item);
 		updateItemWeight(item->getWeight());
 	}
-	return true;
 }
 
 void Container::updateItemWeight(int32_t diff)
