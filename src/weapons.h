@@ -14,8 +14,6 @@ class Weapon;
 
 using Weapon_ptr = std::unique_ptr<Weapon>;
 
-extern Vocations g_vocations;
-
 class Weapons final : public BaseEvents
 {
 public:
@@ -105,18 +103,17 @@ public:
 	uint32_t getWieldInfo() const { return wieldInfo; }
 	void setWieldInfo(uint32_t info) { wieldInfo |= info; }
 
-	const auto& getVocationWeaponSet() const { return vocationWeaponSet; }
-	void addVocationWeaponSet(const std::string& vocationName)
+	const auto& getVocations() { return vocations; }
+
+	void addVocation(Vocation_ptr vocation) { vocations.insert(vocation); }
+
+	bool hasVocation(Vocation_ptr vocation) const
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocationName);
-		if (vocationId != -1) {
-			vocationWeaponSet.insert(vocationId);
+		if (vocations.empty()) {
+			// If the set is empty, it is considered to be for all vocations.
+			return true;
 		}
-	}
-	// If the set is empty, it is considered to be for all vocations.
-	bool hasVocationWeaponSet(uint16_t vocationId) const
-	{
-		return vocationWeaponSet.empty() || vocationWeaponSet.find(vocationId) != vocationWeaponSet.end();
+		return vocations.find(vocation) != vocations.end();
 	}
 
 	const std::string& getVocationString() const { return vocationString; }
@@ -125,7 +122,6 @@ public:
 	WeaponAction_t action = WEAPONACTION_NONE;
 	CombatParams params;
 	WeaponType_t weaponType;
-	std::unordered_set<uint16_t> vocationWeaponSet;
 
 protected:
 	void internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const;
@@ -152,6 +148,8 @@ private:
 	bool premium = false;
 	bool wieldUnproperly = false;
 	std::string vocationString = "";
+
+	std::set<Vocation_ptr> vocations;
 
 	std::string_view getScriptEventName() const override final { return "onUseWeapon"; }
 

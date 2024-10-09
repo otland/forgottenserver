@@ -35,11 +35,12 @@
 #include "talkaction.h"
 #include "weapons.h"
 
+#include <fstream>
+
 extern Actions* g_actions;
 extern Chat* g_chat;
 extern TalkActions* g_talkActions;
 extern Spells* g_spells;
-extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern CreatureEvents* g_creatureEvents;
 extern Events* g_events;
@@ -5848,6 +5849,18 @@ bool Game::reload(ReloadTypes_t reloadType)
 			bool results = g_weapons->reload();
 			g_weapons->loadDefaults();
 			return results;
+		}
+
+		case RELOAD_TYPE_VOCATIONS: {
+			if (std::ifstream is{"data/XML/vocations.xml"};
+			    tfs::game::vocations::load_from_xml(is, "data/XML/vocations.xml", true)) {
+				// Reload players vocations
+				for (const auto& [_, player] : players) {
+					player->updateVocation();
+				}
+				return true;
+			}
+			return false;
 		}
 
 		case RELOAD_TYPE_SCRIPTS: {

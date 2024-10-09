@@ -1751,7 +1751,7 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint32_t>(0);
 	}
 
-	msg.addByte(player->getVocation()->getClientId());
+	msg.addByte(player->getVocation()->clientId);
 	msg.addByte(0x00); // is prey system enabled (bool)
 
 	// unlock spells on action bar
@@ -1760,7 +1760,9 @@ void ProtocolGame::sendBasicData()
 		msg.add<uint16_t>(spellId);
 	}
 
-	msg.addByte(player->getVocation()->getMagicShield()); // is magic shield active (bool)
+	// is magic shield active ?
+	msg.addByte(getBoolean(ConfigManager::MANASHIELD_BREAKABLE) ? player->getVocation()->magicShield : false);
+
 	writeToOutputBuffer(msg);
 }
 
@@ -3491,7 +3493,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 
 	// Player vocation info
 	if (creatureType == CREATURETYPE_PLAYER) {
-		msg.addByte(otherPlayer ? otherPlayer->getVocation()->getClientId() : 0x00);
+		msg.addByte(otherPlayer ? otherPlayer->getVocation()->clientId : 0x00);
 	}
 
 	uint8_t speechBubble = creature->getSpeechBubble();

@@ -12,7 +12,6 @@
 #include "pugicast.h"
 
 extern Game g_game;
-extern Vocations g_vocations;
 extern Weapons* g_weapons;
 
 Weapons::Weapons() { scriptInterface.initState(); }
@@ -179,22 +178,23 @@ bool Weapon::configureEvent(const pugi::xml_node& node)
 	}
 
 	std::list<std::string> vocStringList;
-	for (auto vocationNode : node.children()) {
-		if (!(attr = vocationNode.attribute("name"))) {
+	for (auto& vocation_node : node.children()) {
+		if (!(attr = vocation_node.attribute("name"))) {
 			continue;
 		}
 
-		int32_t vocationId = g_vocations.getVocationId(attr.as_string());
-		if (vocationId != -1) {
-			vocationWeaponSet.insert(vocationId);
-			int32_t promotedVocation = g_vocations.getPromotedVocation(vocationId);
-			if (promotedVocation != VOCATION_NONE) {
-				vocationWeaponSet.insert(promotedVocation);
+		if (auto vocation = tfs::game::vocations::find_by_name(attr.as_string())) {
+			addVocation(vocation);
+
+			if (auto promoted_vocation = tfs::game::vocations::find_by_promoted_id(vocation->id)) {
+				addVocation(promoted_vocation);
 			}
 
-			if (vocationNode.attribute("showInDescription").as_bool(true)) {
+			if (vocation_node.attribute("showInDescription").as_bool(true)) {
 				vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 			}
+		} else {
+			std::cout << "[Warning - Weapon::configureEvent] Wrong vocation name: " << attr.as_string() << std::endl;
 		}
 	}
 
@@ -280,12 +280,11 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target, uint8_t shoo
 		return 0;
 	}
 
-	if (!hasVocationWeaponSet(player->getVocationId())) {
+	if (!hasVocation(player->getVocation())) {
 		return 0;
 	}
 
 	int32_t damageModifier = 100;
-
 	if (player->getLevel() < getReqLevel()) {
 		damageModifier = (isWieldedUnproperly() ? damageModifier / 2 : 0);
 	}
@@ -331,10 +330,9 @@ bool Weapon::ammoCheck(const Player* player) const
 		return false;
 	}
 
-	if (!hasVocationWeaponSet(player->getVocationId())) {
+	if (!hasVocation(player->getVocation())) {
 		return false;
 	}
-
 	return true;
 }
 

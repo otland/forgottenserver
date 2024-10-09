@@ -9,7 +9,6 @@
 #include <fmt/format.h>
 
 extern Game g_game;
-extern Vocations g_vocations;
 
 namespace beast = boost::beast;
 namespace json = boost::json;
@@ -99,14 +98,14 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	uint32_t lastLogin = 0;
 	if (result) {
 		do {
-			auto vocation = g_vocations.getVocation(result->getNumber<uint32_t>("vocation"));
+			auto vocation = tfs::game::vocations::find_by_id(result->getNumber<uint32_t>("vocation"));
 			assert(vocation);
 
 			characters.push_back({
 			    {"worldid", 0}, // not implemented
 			    {"name", result->getString("name")},
 			    {"level", result->getNumber<uint32_t>("level")},
-			    {"vocation", vocation->getVocName()},
+			    {"vocation", vocation->name},
 			    {"lastlogin", result->getNumber<uint64_t>("lastlogin")},
 			    {"ismale", result->getNumber<uint16_t>("sex") == PLAYERSEX_MALE},
 			    {"ishidden", false},        // not implemented
