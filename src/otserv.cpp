@@ -138,7 +138,8 @@ void mainLoader(ServiceManager* services)
 
 	// load vocations
 	std::cout << ">> Loading vocations" << std::endl;
-	if (!tfs::game::vocations::load_from_xml()) {
+	if (std::ifstream is{"data/XML/vocations.xml"};
+	    !tfs::game::vocations::load_from_xml(is, "data/XML/vocations.xml")) {
 		startupErrorMessage("Unable to load vocations!");
 		return;
 	}

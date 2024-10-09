@@ -35,6 +35,8 @@
 #include "talkaction.h"
 #include "weapons.h"
 
+#include <fstream>
+
 extern Actions* g_actions;
 extern Chat* g_chat;
 extern TalkActions* g_talkActions;
@@ -5848,7 +5850,8 @@ bool Game::reload(ReloadTypes_t reloadType)
 		}
 
 		case RELOAD_TYPE_VOCATIONS: {
-			if (tfs::game::vocations::load_from_xml(true)) {
+			if (std::ifstream is{"data/XML/vocations.xml"};
+			    tfs::game::vocations::load_from_xml(is, "data/XML/vocations.xml")) {
 				// Reload players vocations
 				for (const auto& [_, player] : players) {
 					player->updateVocation();

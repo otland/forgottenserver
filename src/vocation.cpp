@@ -32,12 +32,12 @@ uint64_t Vocation::getReqMana(uint32_t magLevel)
 	return 1600 * std::pow(manaMultiplier, static_cast<int32_t>(magLevel - 1));
 }
 
-bool tfs::game::vocations::load_from_xml(bool reload)
+bool tfs::game::vocations::load_from_xml(std::istream& is, std::string_view filename, bool reload)
 {
 	pugi::xml_document doc;
-	pugi::xml_parse_result result = doc.load_file("data/XML/vocations.xml");
+	pugi::xml_parse_result result = doc.load(is);
 	if (!result) {
-		printXMLError("Error - tfs::game::vocations::load_from_xml", "data/XML/vocations.xml", result);
+		printXMLError("Error - tfs::game::vocations::load_from_xml", filename, result);
 		return false;
 	}
 

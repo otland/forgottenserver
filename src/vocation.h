@@ -72,7 +72,7 @@ namespace tfs::game::vocations {
 /// @brief Loads vocation data from an XML file.
 /// @param {reload} Specifies whether to reload existing data.
 /// @return True if the vocations were loaded successfully, false otherwise.
-bool load_from_xml(bool reload = false);
+bool load_from_xml(std::istream& is, std::string_view filename, bool reload = false);
 
 /// @brief Finds a vocation by its unique ID.
 /// @param {id} The unique identifier of the vocation.

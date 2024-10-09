@@ -10,8 +10,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-extern Vocations g_vocations;
-
 auto vocationsXml = []() {
 	return std::istringstream{R"(<?xml version="1.0" encoding="UTF-8"?>
 <vocations>
@@ -127,7 +125,7 @@ struct LoginFixture
 		setNumber(ConfigManager::SQL_PORT, 3306);
 
 		auto is = vocationsXml();
-		g_vocations.loadFromXml(is, ":memory:");
+		tfs::game::vocations::load_from_xml(is, ":memory:");
 
 		db.connect();
 		transaction.begin();
