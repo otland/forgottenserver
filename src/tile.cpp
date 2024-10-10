@@ -13,6 +13,7 @@
 #include "mailbox.h"
 #include "monster.h"
 #include "movement.h"
+#include "quadtree.h"
 #include "spectators.h"
 #include "teleport.h"
 #include "trashholder.h"
@@ -1152,7 +1153,7 @@ bool Tile::hasCreature(Creature* creature) const
 
 void Tile::removeCreature(Creature* creature)
 {
-	g_game.map.getQTNode(tilePos.x, tilePos.y)->removeCreature(creature);
+	tfs::map::quadtree::remove_creature(tilePos.x, tilePos.y, creature);
 	removeThing(creature, 0);
 }
 

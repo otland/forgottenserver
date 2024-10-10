@@ -55,4 +55,21 @@
 #include <lua.hpp>
 #endif
 
+
+#if __has_include(<experimental/generator>)
+#include <experimental/generator>
+namespace tfs {
+template <typename T>
+using generator = std::experimental::generator<T>;
+}
+#elif __has_include(<generator>)
+#include <generator>
+namespace tfs {
+template <typename T>
+using generator = std::generator<T>;
+}
+#else
+#error "No suitable generator header found."
+#endif
+
 #endif // FS_OTPCH_H
