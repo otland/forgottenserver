@@ -5804,7 +5804,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 		case RELOAD_TYPE_ACTIONS:
 			return g_actions->reload();
 		case RELOAD_TYPE_CHAT:
-			return g_chat->load();
+			return g_chat->reload();
 		case RELOAD_TYPE_CONFIG:
 			return ConfigManager::load();
 		case RELOAD_TYPE_CREATURESCRIPTS: {
@@ -5868,7 +5868,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			mounts.reload();
 			ConfigManager::reload();
 			g_events->load();
-			g_chat->load();
+			g_chat->reload();
 			*/
 			return true;
 		}
@@ -5896,7 +5896,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			mounts.reload();
 			g_globalEvents->reload();
 			g_events->load();
-			g_chat->load();
+			g_chat->reload();
 			g_actions->clear(true);
 			g_creatureEvents->clear(true);
 			g_moveEvents->clear(true);

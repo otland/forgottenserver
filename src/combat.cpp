@@ -1429,3 +1429,18 @@ void MagicField::onStepInField(Creature* creature)
 		creature->addCondition(conditionCopy);
 	}
 }
+
+void CombatParams::clearScripts() const
+{
+	if (valueCallback) {
+		valueCallback->clearScript();
+	}
+
+	if (tileCallback) {
+		tileCallback->clearScript();
+	}
+
+	if (targetCallback) {
+		targetCallback->clearScript();
+	}
+}
