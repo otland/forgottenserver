@@ -576,7 +576,44 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	return false;
 }
 
-void Monster::onFollowCreatureComplete(const Creature* creature)
+void Monster::goToFollowCreature()
+{
+	if (followCreature) {
+		FindPathParams findPathParams;
+		buildFindPathParams(followCreature, findPathParams, !hasFollowPath);
+
+		if (!getMaster() && (isFleeing() || findPathParams.maxTargetDist > 1)) {
+			Direction dir = DIRECTION_NONE;
+
+			if (isFleeing()) {
+				getDistanceStep(followCreature->getPosition(), dir, true);
+			} else { // maxTargetDist > 1
+				if (!getDistanceStep(followCreature->getPosition(), dir)) {
+					// if we can't get anything then let the A* calculate
+					if (updateFollowPath(findPathParams)) {
+						startAutoWalk();
+					}
+					return;
+				}
+			}
+
+			if (dir != DIRECTION_NONE) {
+				listWalkDir.clear();
+				listWalkDir.push_back(dir);
+
+				hasFollowPath = true;
+				startAutoWalk();
+			}
+		} else {
+			Creature::goToFollowCreature();
+			return;
+		}
+	}
+
+	onGoToFollowCreatureComplete(followCreature);
+}
+
+void Monster::onGoToFollowCreatureComplete(const Creature* creature)
 {
 	if (creature) {
 		auto it = std::find(targetList.begin(), targetList.end(), creature);
@@ -1992,9 +2029,9 @@ bool Monster::challengeCreature(Creature* creature, bool force /* = false*/)
 	return result;
 }
 
-void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp) const
+void Monster::buildFindPathParams(const Creature* creature, FindPathParams& fpp, bool fullPathSearch) const
 {
-	Creature::getPathSearchParams(creature, fpp);
+	Creature::buildFindPathParams(creature, fpp, fullPathSearch);
 
 	fpp.minTargetDist = 1;
 	fpp.maxTargetDist = mType->info.targetDistance;

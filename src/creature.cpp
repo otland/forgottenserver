@@ -947,9 +947,9 @@ bool Creature::setAttackedCreature(Creature* creature)
 	return true;
 }
 
-void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
+void Creature::buildFindPathParams(const Creature*, FindPathParams& fpp, bool fullPathSearch) const
 {
-	fpp.fullPathSearch = !hasFollowPath;
+	fpp.fullPathSearch = fullPathSearch;
 	fpp.clearSight = true;
 	fpp.maxSearchDist = 12;
 	fpp.minTargetDist = 1;
@@ -960,47 +960,21 @@ void Creature::goToFollowCreature()
 {
 	if (followCreature) {
 		FindPathParams fpp;
-		getPathSearchParams(followCreature, fpp);
+		buildFindPathParams(followCreature, fpp, !hasFollowPath);
 
-		Monster* monster = getMonster();
-		if (monster && !monster->getMaster() && (monster->isFleeing() || fpp.maxTargetDist > 1)) {
-			Direction dir = DIRECTION_NONE;
-
-			if (monster->isFleeing()) {
-				monster->getDistanceStep(followCreature->getPosition(), dir, true);
-			} else { // maxTargetDist > 1
-				if (!monster->getDistanceStep(followCreature->getPosition(), dir)) {
-					// if we can't get anything then let the A* calculate
-					listWalkDir.clear();
-					if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
-						hasFollowPath = true;
-						startAutoWalk();
-					} else {
-						hasFollowPath = false;
-					}
-					return;
-				}
-			}
-
-			if (dir != DIRECTION_NONE) {
-				listWalkDir.clear();
-				listWalkDir.push_back(dir);
-
-				hasFollowPath = true;
-				startAutoWalk();
-			}
-		} else {
-			listWalkDir.clear();
-			if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
-				hasFollowPath = true;
-				startAutoWalk();
-			} else {
-				hasFollowPath = false;
-			}
+		if (updateFollowPath(fpp)) {
+			startAutoWalk();
 		}
 	}
 
-	onFollowCreatureComplete(followCreature);
+	onGoToFollowCreatureComplete(followCreature);
+}
+
+bool Creature::updateFollowPath(FindPathParams& fpp)
+{
+	listWalkDir.clear();
+
+	return hasFollowPath = getPathTo(followCreature->getPosition(), listWalkDir, fpp);
 }
 
 bool Creature::setFollowCreature(Creature* creature)
