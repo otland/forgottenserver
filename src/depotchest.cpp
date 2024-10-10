@@ -7,8 +7,8 @@
 
 #include "tools.h"
 
-DepotChest::DepotChest(uint16_t type, bool paginated /*= true*/) :
-    Container{type, items[type].maxItems, true, paginated}
+DepotChest::DepotChest(uint16_t type, uint16_t depotId, bool paginated /*= false*/) :
+    Container{type, items[type].maxItems, true, paginated}, depotId{depotId}
 {}
 
 ReturnValue DepotChest::queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,

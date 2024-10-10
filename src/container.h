@@ -9,6 +9,7 @@
 #include "tile.h"
 
 class Container;
+class DepotChest;
 class DepotLocker;
 class StoreInbox;
 
@@ -43,6 +44,9 @@ public:
 
 	Container* getContainer() override final { return this; }
 	const Container* getContainer() const override final { return this; }
+
+	virtual DepotChest* getDepotChest() { return nullptr; }
+	virtual const DepotChest* getDepotChest() const { return nullptr; }
 
 	virtual DepotLocker* getDepotLocker() { return nullptr; }
 	virtual const DepotLocker* getDepotLocker() const { return nullptr; }
