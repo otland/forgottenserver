@@ -141,25 +141,25 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
-	if (followCreature) {
-		walkUpdateTicks += interval;
-		if (forceUpdateFollowPath || walkUpdateTicks >= 2000) {
-			walkUpdateTicks = 0;
-			forceUpdateFollowPath = false;
-			isUpdatingPath = true;
-		}
-	}
-
-	if (isUpdatingPath) {
-		isUpdatingPath = false;
-		goToFollowCreature();
-	}
-
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
 		thinkEvent->executeOnThink(this, interval);
 	}
+}
+
+void Creature::forceUpdatePath()
+{
+	if (!attackedCreature && !followCreature) {
+		return;
+	}
+
+	if (lastPathUpdate > OTSYS_TIME()) {
+		return;
+	}
+
+	lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
 void Creature::onAttacking(uint32_t interval)
@@ -196,8 +196,6 @@ void Creature::onWalk()
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
-
-				forceUpdateFollowPath = true;
 			}
 		} else {
 			stopEventWalk();
@@ -208,6 +206,8 @@ void Creature::onWalk()
 		}
 	}
 
+	updateFollowersPaths();
+
 	if (cancelNextWalk) {
 		listWalkDir.clear();
 		onWalkAborted();
@@ -217,6 +217,10 @@ void Creature::onWalk()
 	if (eventWalk != 0) {
 		eventWalk = 0;
 		addEventWalk();
+	}
+
+	if (attackedCreature || followCreature) {
+		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 	}
 }
 
@@ -619,10 +623,6 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 	}
 
 	if (creature == followCreature || (creature == this && followCreature)) {
-		if (hasFollowPath) {
-			isUpdatingPath = true;
-		}
-
 		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
 			onCreatureDisappear(followCreature, false);
 		}
@@ -935,6 +935,7 @@ bool Creature::setAttackedCreature(Creature* creature)
 		}
 
 		attackedCreature = creature;
+		creature->addFollower(this);
 		onAttackedCreature(attackedCreature);
 		attackedCreature->onAttacked();
 	} else {
@@ -951,7 +952,7 @@ void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 {
 	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
-	fpp.maxSearchDist = 12;
+	fpp.maxSearchDist = Map::maxViewportX + Map::maxViewportY;
 	fpp.minTargetDist = 1;
 	fpp.maxTargetDist = 1;
 }
@@ -1021,17 +1022,34 @@ bool Creature::setFollowCreature(Creature* creature)
 			onWalkAborted();
 		}
 
-		hasFollowPath = false;
-		forceUpdateFollowPath = false;
 		followCreature = creature;
-		isUpdatingPath = true;
+		creature->addFollower(this);
+		hasFollowPath = false;
 	} else {
-		isUpdatingPath = false;
 		followCreature = nullptr;
 	}
 
 	onFollowCreature(creature);
 	return true;
+}
+
+// Pathfinding Events
+void Creature::updateFollowersPaths()
+{
+	if (followers.empty()) {
+		return;
+	}
+
+	const Position& thisPosition = getPosition();
+	for (const auto follower : followers) {
+		const Position& followerPosition = follower->getPosition();
+		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX + 2 ||
+		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY + 2) {
+			continue;
+		}
+
+		g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
+	}
 }
 
 double Creature::getDamageRatio(Creature* attacker) const
@@ -1659,7 +1677,7 @@ bool Creature::isInvisible() const
 
 bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const
 {
-	return g_game.map.getPathMatching(*this, dirList, FrozenPathingConditionCall(targetPos), fpp);
+	return g_game.map.getPathMatching(*this, targetPos, dirList, FrozenPathingConditionCall(targetPos), fpp);
 }
 
 bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist,

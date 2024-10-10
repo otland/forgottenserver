@@ -67,6 +67,8 @@ void Game::start(ServiceManager* manager)
 	serviceManager = manager;
 
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_scheduler.addEvent(
+	    createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL), [this]() { updateCreaturesPath(0); }));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
@@ -3869,6 +3871,21 @@ void Game::checkCreatures(size_t index)
 			creature->inCheckCreaturesVector = false;
 			it = checkCreatureList.erase(it);
 			ReleaseCreature(creature);
+		}
+	}
+
+	cleanup();
+}
+
+void Game::updateCreaturesPath(size_t index)
+{
+	g_scheduler.addEvent(createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL),
+	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
+
+	auto& checkCreatureList = checkCreatureLists[index];
+	for (Creature* creature : checkCreatureList) {
+		if (!creature->isDead()) {
+			creature->forceUpdatePath();
 		}
 	}
 
