@@ -749,6 +749,11 @@ void Monster::onThink(uint32_t interval)
 	} else {
 		updateIdleStatus();
 
+		// Ensure monsters update look direction.
+		if (!isFleeing() && attackedCreature) {
+			updateLookDirection();
+		}
+
 		if (!isIdle) {
 			addEventWalk();
 
@@ -790,7 +795,6 @@ void Monster::doAttacking(uint32_t interval)
 		return;
 	}
 
-	bool lookUpdated = false;
 	bool resetTicks = interval != 0;
 	attackTicks += interval;
 
@@ -806,9 +810,11 @@ void Monster::doAttacking(uint32_t interval)
 
 		if (canUseSpell(myPos, targetPos, spellBlock, interval, inRange, resetTicks)) {
 			if (spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100))) {
-				if (!lookUpdated) {
+				if ((isFleeing() ||
+				     mType->info.targetDistance > (myPos.getDistanceX(targetPos) + myPos.getDistanceY(targetPos))) &&
+				    inRange) {
 					updateLookDirection();
-					lookUpdated = true;
+					lastStep = OTSYS_TIME() - 200;
 				}
 
 				minCombatValue = spellBlock.minCombatValue;
@@ -825,11 +831,6 @@ void Monster::doAttacking(uint32_t interval)
 			// melee swing out of reach
 			lastMeleeAttack = 0;
 		}
-	}
-
-	// ensure ranged creatures turn to player
-	if (!lookUpdated && lastMeleeAttack == 0) {
-		updateLookDirection();
 	}
 
 	if (resetTicks) {
@@ -1906,8 +1907,8 @@ void Monster::updateLookDirection()
 	if (attackedCreature) {
 		const Position& pos = getPosition();
 		const Position& attackedCreaturePos = attackedCreature->getPosition();
-		int32_t offsetx = pos.getOffsetX(attackedCreaturePos);
-		int32_t offsety = pos.getOffsetY(attackedCreaturePos);
+		int32_t offsetx = attackedCreaturePos.getOffsetX(pos);
+		int32_t offsety = attackedCreaturePos.getOffsetY(pos);
 
 		int32_t dx = std::abs(offsetx);
 		int32_t dy = std::abs(offsety);
