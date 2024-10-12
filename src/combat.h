@@ -13,8 +13,9 @@ class Creature;
 class MatrixArea;
 class Player;
 struct Position;
-class SpectatorVec;
 class Tile;
+
+using Spectators = boost::unordered_flat_set<Creature*>;
 
 // for luascript callback
 class ValueCallback final : public CallBack
@@ -123,7 +124,7 @@ public:
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	static void combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile,
+	static void combatTileEffects(const Spectators& spectators, Creature* caster, Tile* tile,
 	                              const CombatParams& params);
 	CombatDamage getCombatDamage(Creature* creature, Creature* target) const;
 

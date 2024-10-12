@@ -7,7 +7,6 @@
 
 #include "game.h"
 #include "pugicast.h"
-#include "spectators.h"
 
 extern Game g_game;
 extern LuaEnvironment g_luaEnvironment;
@@ -254,7 +253,7 @@ void Npc::reload()
 		reset(true);
 	}
 
-	SpectatorVec players;
+	Spectators players;
 	g_game.map.getSpectators(players, getPosition(), true, true);
 	for (const auto& player : players) {
 		assert(dynamic_cast<Player*>(player) != nullptr);
@@ -507,7 +506,7 @@ void Npc::onPlayerCloseChannel(Player* player)
 
 void Npc::onThink(uint32_t interval)
 {
-	SpectatorVec players;
+	Spectators players;
 	g_game.map.getSpectators(players, getPosition(), true, true, Npcs::ViewportX, Npcs::ViewportX, Npcs::ViewportY,
 	                         Npcs::ViewportY);
 	for (const auto& player : players) {
@@ -516,13 +515,13 @@ void Npc::onThink(uint32_t interval)
 	}
 
 	if (sightX > 0 || sightY > 0) {
-		SpectatorVec tempCreatures;
+		Spectators tempCreatures;
 		g_game.map.getSpectators(tempCreatures, getPosition(), false, false, Npcs::ViewportX, Npcs::ViewportX,
 		                         Npcs::ViewportY, Npcs::ViewportY);
 		std::erase_if(spectatorCache, [&](auto const& it) {
 			return std::find(tempCreatures.begin(), tempCreatures.end(), it) == tempCreatures.end();
 		});
-		SpectatorVec sightCreatures;
+		Spectators sightCreatures;
 		g_game.map.getSpectators(sightCreatures, getPosition(), false, false, sightX, sightX, sightY, sightY);
 		for (const auto& creature : sightCreatures) {
 			if (!spectatorCache.contains(creature)) {

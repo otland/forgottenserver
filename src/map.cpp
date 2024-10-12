@@ -11,9 +11,17 @@
 #include "iomap.h"
 #include "iomapserialize.h"
 #include "monster.h"
-#include "spectators.h"
 
 extern Game g_game;
+
+namespace {
+
+using SpectatorCache = boost::unordered_flat_map<Position, Spectators>;
+
+SpectatorCache spectatorCache;
+SpectatorCache playersSpectatorCache;
+
+} // namespace
 
 bool Map::loadMap(const std::string& identifier, bool loadHouses)
 {
@@ -262,10 +270,9 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 
 	bool teleport = forceTeleport || !newTile.getGround() || !oldPos.isInRange(newPos, 1, 1, 0);
 
-	SpectatorVec spectators, newPosSpectators;
+	Spectators spectators;
 	getSpectators(spectators, oldPos, true);
-	getSpectators(newPosSpectators, newPos, true);
-	spectators.addSpectators(newPosSpectators);
+	getSpectators(spectators, newPos, true);
 
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {
@@ -329,9 +336,9 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	newTile.postAddNotification(&creature, &oldTile, 0);
 }
 
-void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
-                                int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
-                                int32_t maxRangeZ, bool onlyPlayers) const
+void Map::getSpectatorsInternal(Spectators& spectators, const Position& centerPos, int32_t minRangeX, int32_t maxRangeX,
+                                int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ, int32_t maxRangeZ,
+                                bool onlyPlayers) const
 {
 	auto min_y = centerPos.y + minRangeY;
 	auto min_x = centerPos.x + minRangeX;
@@ -373,7 +380,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 						continue;
 					}
 
-					spectators.emplace_back(creature);
+					spectators.insert(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
@@ -389,7 +396,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 	}
 }
 
-void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor /*= false*/,
+void Map::getSpectators(Spectators& spectators, const Position& centerPos, bool multifloor /*= false*/,
                         bool onlyPlayers /*= false*/, int32_t minRangeX /*= 0*/, int32_t maxRangeX /*= 0*/,
                         int32_t minRangeY /*= 0*/, int32_t maxRangeY /*= 0*/)
 {
@@ -410,11 +417,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		if (onlyPlayers) {
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
-				if (!spectators.empty()) {
-					spectators.addSpectators(it->second);
-				} else {
-					spectators = it->second;
-				}
+				spectators.insert(it->second.begin(), it->second.end());
 
 				foundCache = true;
 			}
@@ -424,17 +427,12 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			auto it = spectatorCache.find(centerPos);
 			if (it != spectatorCache.end()) {
 				if (!onlyPlayers) {
-					if (!spectators.empty()) {
-						const SpectatorVec& cachedSpectators = it->second;
-						spectators.addSpectators(cachedSpectators);
-					} else {
-						spectators = it->second;
-					}
+					spectators.insert(it->second.begin(), it->second.end());
 				} else {
-					const SpectatorVec& cachedSpectators = it->second;
+					const Spectators& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							spectators.emplace_back(spectator);
+							spectators.insert(spectator);
 						}
 					}
 				}
@@ -483,9 +481,9 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 	}
 }
 
-void Map::clearSpectatorCache() { spectatorCache.clear(); }
+void tfs::map::clearSpectatorCache() { spectatorCache.clear(); }
 
-void Map::clearPlayersSpectatorCache() { playersSpectatorCache.clear(); }
+void tfs::map::clearPlayersSpectatorCache() { playersSpectatorCache.clear(); }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
                            bool sameFloor /*= false*/, int32_t rangex /*= Map::maxClientViewportX*/,

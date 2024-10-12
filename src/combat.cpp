@@ -9,7 +9,6 @@
 #include "events.h"
 #include "game.h"
 #include "matrixarea.h"
-#include "spectators.h"
 #include "weapons.h"
 
 extern Game g_game;
@@ -522,7 +521,7 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	return nullptr;
 }
 
-void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster, Tile* tile, const CombatParams& params)
+void Combat::combatTileEffects(const Spectators& spectators, Creature* caster, Tile* tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
@@ -666,7 +665,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 		}
 	} else {
 		if (!params.aggressive || (caster != target && Combat::canDoCombat(caster, target) == RETURNVALUE_NOERROR)) {
-			SpectatorVec spectators;
+			Spectators spectators;
 			g_game.map.getSpectators(spectators, target->getPosition(), true, true);
 
 			if (params.origin != ORIGIN_MELEE) {
@@ -715,7 +714,6 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 		auto tiles = caster ? getCombatArea(caster->getPosition(), position, area.get())
 		                    : getCombatArea(position, position, area.get());
 
-		SpectatorVec spectators;
 		int32_t maxX = 0;
 		int32_t maxY = 0;
 
@@ -728,6 +726,8 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 
 		const int32_t rangeX = maxX + Map::maxViewportX;
 		const int32_t rangeY = maxY + Map::maxViewportY;
+
+		Spectators spectators;
 		g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 		postCombatEffects(caster, position, params);
@@ -918,7 +918,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 	const int32_t rangeX = maxX + Map::maxViewportX;
 	const int32_t rangeY = maxY + Map::maxViewportY;
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, position, true, true, rangeX, rangeX, rangeY, rangeY);
 
 	postCombatEffects(caster, position, params);

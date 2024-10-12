@@ -9,7 +9,6 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
-#include "spectators.h"
 #include "spells.h"
 
 extern Game g_game;
@@ -369,7 +368,7 @@ void Monster::updateTargetList()
 		}
 	}
 
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, position, true);
 	spectators.erase(this);
 	for (Creature* spectator : spectators) {

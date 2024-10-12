@@ -12,7 +12,6 @@
 #include "npc.h"
 #include "pugicast.h"
 #include "scheduler.h"
-#include "spectators.h"
 
 extern Monsters g_monsters;
 extern Game g_game;
@@ -258,7 +257,7 @@ Spawn::~Spawn()
 
 bool Spawn::findPlayer(const Position& pos)
 {
-	SpectatorVec spectators;
+	Spectators spectators;
 	g_game.map.getSpectators(spectators, pos, false, true);
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);

@@ -15,3 +15,12 @@ std::ostream& operator<<(std::ostream& os, const Position& pos)
 	os << " )";
 	return os;
 }
+
+std::size_t hash_value(const Position& p)
+{
+	std::size_t seed = 0;
+	boost::hash_combine(seed, p.x);
+	boost::hash_combine(seed, p.y);
+	boost::hash_combine(seed, p.z);
+	return seed;
+}
