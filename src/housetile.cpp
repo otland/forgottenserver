@@ -17,7 +17,7 @@ void HouseTile::addThing(int32_t index, Thing* thing)
 {
 	Tile::addThing(index, thing);
 
-	if (!thing->getParent()) {
+	if (!thing->hasParent()) {
 		return;
 	}
 
@@ -30,7 +30,7 @@ void HouseTile::internalAddThing(uint32_t index, Thing* thing)
 {
 	Tile::internalAddThing(index, thing);
 
-	if (!thing->getParent()) {
+	if (!thing->hasParent()) {
 		return;
 	}
 

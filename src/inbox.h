@@ -23,6 +23,7 @@ public:
 	// overrides
 	bool canRemove() const override { return false; }
 
+	bool hasParent() const override { return getParent(); }
 	Cylinder* getParent() const override;
 	Cylinder* getRealParent() const override { return parent; }
 };

@@ -436,6 +436,7 @@ private:
 
 	static int luaItemIsItem(lua_State* L);
 
+	static int luaItemHasParent(lua_State* L);
 	static int luaItemGetParent(lua_State* L);
 	static int luaItemGetTopParent(lua_State* L);
 
@@ -541,6 +542,7 @@ private:
 	static int luaCreatureCanSeeGhostMode(lua_State* L);
 	static int luaCreatureCanSeeInvisibility(lua_State* L);
 
+	static int luaCreatureHasParent(lua_State* L);
 	static int luaCreatureGetParent(lua_State* L);
 
 	static int luaCreatureGetId(lua_State* L);
