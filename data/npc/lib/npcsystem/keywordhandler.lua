@@ -45,7 +45,7 @@ if not KeywordHandler then
 
 	-- Returns the parent of this node or nil if no such node exists.
 	function KeywordNode:hasParent()
-		return self.parent
+		return self.parent ~= nil
 	end
 
 	function KeywordNode:getParent()
