@@ -87,7 +87,7 @@ constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlyi
 
 #endif
 
-#ifdef  __cpp_lib_unreachable
+#ifdef __cpp_lib_unreachable
 
 using std::unreachable;
 
