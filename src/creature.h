@@ -181,7 +181,7 @@ public:
 	void addEventWalk(bool firstStep = false);
 	void stopEventWalk();
 	virtual void goToFollowCreature() = 0;
-	void updateWalkPathToFollowCreature(FindPathParams& fpp);
+	void updateFollowCreaturePath(FindPathParams& fpp);
 
 	// walk events
 	virtual void onWalk(Direction& dir);

@@ -467,7 +467,7 @@ void Creature::onCreatureDisappear(const Creature* creature, bool isLogout)
 	}
 }
 
-void Creature::updateWalkPathToFollowCreature(FindPathParams& fpp)
+void Creature::updateFollowCreaturePath(FindPathParams& fpp)
 {
 	listWalkDir.clear();
 

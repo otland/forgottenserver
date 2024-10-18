@@ -3366,7 +3366,7 @@ void Player::goToFollowCreature()
 
 	FindPathParams fpp;
 	getPathSearchParams(followCreature, fpp);
-	updateWalkPathToFollowCreature(fpp);
+	updateFollowCreaturePath(fpp);
 
 	if (!hasFollowPath) {
 		lastFailedFollow = OTSYS_TIME();

@@ -418,7 +418,7 @@ void Npc::goToFollowCreature()
 
 	FindPathParams fpp;
 	getPathSearchParams(followCreature, fpp);
-	updateWalkPathToFollowCreature(fpp);
+	updateFollowCreaturePath(fpp);
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
