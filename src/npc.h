@@ -222,6 +222,8 @@ public:
 
 	void loadNpcTypeInfo();
 
+	void goToFollowCreature() override;
+
 	std::unique_ptr<NpcEventsHandler> npcEventHandler;
 	bool fromLua = false;
 	NpcType* npcType;
