@@ -576,21 +576,55 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	return false;
 }
 
-void Monster::onFollowCreatureComplete(const Creature* creature)
+void Monster::goToFollowCreature()
 {
-	if (creature) {
-		auto it = std::find(targetList.begin(), targetList.end(), creature);
-		if (it != targetList.end()) {
-			Creature* target = (*it);
-			targetList.erase(it);
+	if (!followCreature) {
+		return;
+	}
 
-			if (hasFollowPath) {
-				targetList.push_front(target);
-			} else if (!isSummon()) {
-				targetList.push_back(target);
-			} else {
-				target->decrementReferenceCounter();
+	FindPathParams fpp;
+	getPathSearchParams(followCreature, fpp);
+
+	if (isSummon()) {
+		Direction dir = DIRECTION_NONE;
+
+		if (isFleeing()) {
+			getDistanceStep(followCreature->getPosition(), dir, true);
+		} else if (fpp.maxTargetDist > 1) {
+			if (!getDistanceStep(followCreature->getPosition(), dir)) {
+				// if we can't get anything then let the A* calculate
+				updateWalkPathToFollowCreature(fpp);
+				return;
 			}
+		}
+
+		if (dir != DIRECTION_NONE) {
+			listWalkDir.clear();
+			listWalkDir.push_back(dir);
+
+			hasFollowPath = true;
+			startAutoWalk();
+		}
+	} else {
+		updateWalkPathToFollowCreature(fpp);
+	}
+
+	onFollowCreatureComplete();
+}
+
+void Monster::onFollowCreatureComplete()
+{
+	auto it = std::find(targetList.begin(), targetList.end(), followCreature);
+	if (it != targetList.end()) {
+		Creature* target = (*it);
+		targetList.erase(it);
+
+		if (hasFollowPath) {
+			targetList.push_front(target);
+		} else if (!isSummon()) {
+			targetList.push_back(target);
+		} else {
+			target->decrementReferenceCounter();
 		}
 	}
 }
