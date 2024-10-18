@@ -77,18 +77,17 @@ const std::vector<Direction>& getShuffleDirections();
 
 namespace tfs {
 
-#if __has_cpp_attribute(__cpp_lib_to_underlying)
+#ifdef __cpp_lib_to_underlying
 
-template <class T>
-using std::to_underlying<T>;
+using std::to_underlying;
 
 #else
 
-inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
+constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
 
 #endif
 
-#if __has_cpp_attribute(__cpp_lib_unreachable)
+#ifdef  __cpp_lib_unreachable
 
 using std::unreachable;
 
