@@ -585,7 +585,7 @@ void Monster::goToFollowCreature()
 	FindPathParams fpp;
 	getPathSearchParams(followCreature, fpp);
 
-	if (isSummon()) {
+	if (!isSummon()) {
 		Direction dir = DIRECTION_NONE;
 
 		if (isFleeing()) {
