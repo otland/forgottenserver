@@ -10,7 +10,7 @@ function onTargetCreature(creature, target)
 		doTargetCombat(0, target, COMBAT_ICEDAMAGE, min, max, CONST_ME_NONE)
 		return true
 	end
-	
+
 	doTargetCombat(0, target, COMBAT_HEALING, min, max, CONST_ME_NONE)
 	return true
 end
