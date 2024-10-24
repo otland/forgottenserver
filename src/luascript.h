@@ -552,8 +552,24 @@ private:
 	static int luaCreatureGetFollowCreature(lua_State* L);
 	static int luaCreatureSetFollowCreature(lua_State* L);
 
+	static int luaCreatureIsSummon(lua_State* L);
 	static int luaCreatureGetMaster(lua_State* L);
 	static int luaCreatureSetMaster(lua_State* L);
+	static int luaCreatureRemoveMaster(lua_State* L);
+
+	static int luaCreatureHasPlayerOwned(lua_State* L);
+	static int luaCreatureGetPlayerOwned(lua_State* L);
+	static int luaCreatureHasNpcOwned(lua_State* L);
+	static int luaCreatureGetNpcOwned(lua_State* L);
+	static int luaCreatureHasMonsterOwned(lua_State* L);
+	static int luaCreatureGetMonsterOwned(lua_State* L);
+
+	static int luaCreatureIsPlayerSummon(lua_State* L);
+	static int luaCreatureGetPlayerMaster(lua_State* L);
+	static int luaCreatureIsNpcSummon(lua_State* L);
+	static int luaCreatureGetNpcMaster(lua_State* L);
+	static int luaCreatureIsMonsterSummon(lua_State* L);
+	static int luaCreatureGetMonsterMaster(lua_State* L);
 
 	static int luaCreatureGetLight(lua_State* L);
 	static int luaCreatureSetLight(lua_State* L);

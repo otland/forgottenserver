@@ -3425,13 +3425,9 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const Creature* creature, bo
 	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
-		const Creature* master = creature->getMaster();
-		if (master) {
-			masterPlayer = master->getPlayer();
-			if (masterPlayer) {
-				masterId = master->getID();
-				creatureType = CREATURETYPE_SUMMON_OWN;
-			}
+		if (const Player* masterPlayer = creature->getPlayerMaster()) {
+			masterId = masterPlayer->getID();
+			creatureType = CREATURETYPE_SUMMON_OWN;
 		}
 	}
 

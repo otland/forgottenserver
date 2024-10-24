@@ -428,43 +428,31 @@ void Monster::onCreatureEnter(Creature* creature)
 
 bool Monster::isFriend(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
-		const Player* masterPlayer = getMaster()->getPlayer();
-		const Player* tmpPlayer = nullptr;
-
-		if (creature->getPlayer()) {
-			tmpPlayer = creature->getPlayer();
-		} else {
-			const Creature* creatureMaster = creature->getMaster();
-
-			if (creatureMaster && creatureMaster->getPlayer()) {
-				tmpPlayer = creatureMaster->getPlayer();
+	if (const Player* masterPlayer = getPlayerMaster()) {
+		if (const Player* ownedPlayer = creature->getPlayerOwned()) {
+			if (masterPlayer == ownedPlayer || masterPlayer->isPartner(ownedPlayer)) {
+				return true;
 			}
-		}
-
-		if (tmpPlayer && (tmpPlayer == getMaster() || masterPlayer->isPartner(tmpPlayer))) {
-			return true;
 		}
 	} else if (creature->getMonster() && !creature->isSummon()) {
 		return true;
 	}
-
 	return false;
 }
 
 bool Monster::isOpponent(const Creature* creature) const
 {
-	if (isSummon() && getMaster()->getPlayer()) {
-		if (creature != getMaster()) {
-			return true;
-		}
-	} else {
-		if ((creature->getPlayer() && !creature->getPlayer()->hasFlag(PlayerFlag_IgnoredByMonsters)) ||
-		    (creature->getMaster() && creature->getMaster()->getPlayer())) {
-			return true;
-		}
+	if (const Player* player = getPlayerMaster(); creature != player) {
+		return true;
 	}
 
+	if (const Player* player = creature->getPlayer(); !player->hasFlag(PlayerFlag_IgnoredByMonsters)) {
+		return true;
+	}
+
+	if (creature->isPlayerSummon()) {
+		return true;
+	}
 	return false;
 }
 
@@ -1170,7 +1158,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 			result = getRandomStep(getPosition(), direction);
 		}
 	} else if ((isSummon() && isMasterInRange) || followCreature || walkingToSpawn) {
-		if (!hasFollowPath && getMaster() && !getMaster()->getPlayer()) {
+		if (!hasFollowPath && isSummon() && !isPlayerSummon()) {
 			randomStepping = true;
 			result = getRandomStep(getPosition(), direction);
 		} else {
@@ -1848,16 +1836,13 @@ void Monster::death(Creature*)
 Item* Monster::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
-	if (corpse) {
-		if (mostDamageCreature) {
-			if (mostDamageCreature->getPlayer()) {
-				corpse->setCorpseOwner(mostDamageCreature->getID());
-			} else {
-				const Creature* mostDamageCreatureMaster = mostDamageCreature->getMaster();
-				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
-					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
-				}
-			}
+	if (!corpse) {
+		return nullptr;
+	}
+
+	if (mostDamageCreature) {
+		if (const Player* mostDamagePlayer = mostDamageCreature->getPlayerOwned()) {
+			corpse->setCorpseOwner(mostDamagePlayer->getID());
 		}
 	}
 	return corpse;

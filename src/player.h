@@ -433,7 +433,6 @@ public:
 	bool isImmune(ConditionType_t type) const override;
 	bool hasShield() const;
 	bool isAttackable() const override;
-	static bool lastHitIsPlayer(Creature* lastHitCreature);
 
 	void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
 	void changeMana(int32_t manaChange);

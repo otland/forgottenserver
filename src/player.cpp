@@ -2054,9 +2054,7 @@ void Player::death(Creature* lastHitCreature)
 
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;
-		bool lastHitPlayer = Player::lastHitIsPlayer(lastHitCreature);
-
-		if (lastHitPlayer) {
+		if (lastHitCreature && lastHitCreature->hasPlayerOwned()) {
 			uint32_t sumLevels = 0;
 			uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 			for (const auto& it : damageMap) {
@@ -2130,7 +2128,7 @@ void Player::death(Creature* lastHitCreature)
 		}
 
 		if (blessings.test(5)) {
-			if (lastHitPlayer) {
+			if (lastHitCreature && lastHitCreature->hasPlayerOwned()) {
 				blessings.reset(5);
 			} else {
 				blessings.reset();
@@ -2194,12 +2192,11 @@ void Player::death(Creature* lastHitCreature)
 bool Player::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified,
                         bool mostDamageUnjustified)
 {
-	if (getZone() != ZONE_PVP || !Player::lastHitIsPlayer(lastHitCreature)) {
-		return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
+	if (getZone() == ZONE_PVP && lastHitCreature && lastHitCreature->hasPlayerOwned()) {
+		setDropLoot(true);
+		return false;
 	}
-
-	setDropLoot(true);
-	return false;
+	return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 }
 
 Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
@@ -3691,10 +3688,9 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);
 
-	if (target) {
-		if (party && !Combat::isPlayerCombat(target)) {
-			Monster* tmpMonster = target->getMonster();
-			if (tmpMonster && tmpMonster->isHostile()) {
+	if (party && target) {
+		if (!target->hasPlayerOwned()) {
+			if (const Monster* monster = target->getMonster(); monster->isHostile()) {
 				// We have fulfilled a requirement for shared experience
 				party->updatePlayerTicks(this, points);
 			}
@@ -3709,10 +3705,8 @@ void Player::onTargetCreatureGainHealth(Creature* target, int32_t points)
 
 		if (target->getPlayer()) {
 			tmpPlayer = target->getPlayer();
-		} else if (Creature* targetMaster = target->getMaster()) {
-			if (Player* targetMasterPlayer = targetMaster->getPlayer()) {
-				tmpPlayer = targetMasterPlayer;
-			}
+		} else if (Player* targetMasterPlayer = target->getPlayerMaster()) {
+			tmpPlayer = targetMasterPlayer;
 		}
 
 		if (isPartner(tmpPlayer)) {
@@ -3804,20 +3798,6 @@ bool Player::isImmune(ConditionType_t type) const
 }
 
 bool Player::isAttackable() const { return !hasFlag(PlayerFlag_CannotBeAttacked); }
-
-bool Player::lastHitIsPlayer(Creature* lastHitCreature)
-{
-	if (!lastHitCreature) {
-		return false;
-	}
-
-	if (lastHitCreature->getPlayer()) {
-		return true;
-	}
-
-	Creature* lastHitMaster = lastHitCreature->getMaster();
-	return lastHitMaster && lastHitMaster->getPlayer();
-}
 
 void Player::changeHealth(int32_t healthChange, bool sendHealthChange /* = true*/)
 {
