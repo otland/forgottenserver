@@ -505,8 +505,10 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				if (!creatures->empty()) {
 					if (monster->canPushCreatures() && !monster->isSummon()) {
 						for (Creature* tileCreature : *creatures) {
-							if (const Player* tilePlayer = tileCreature->getPlayer(); tilePlayer->isInGhostMode()) {
-								continue;
+							if (const Player* tilePlayer = tileCreature->getPlayer()) {
+								if (tilePlayer->isInGhostMode()) {
+									continue;
+								}
 							}
 
 							if (!tileCreature->isPushable()) {

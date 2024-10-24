@@ -446,8 +446,10 @@ bool Monster::isOpponent(const Creature* creature) const
 		return true;
 	}
 
-	if (const Player* player = creature->getPlayer(); !player->hasFlag(PlayerFlag_IgnoredByMonsters)) {
-		return true;
+	if (const Player* player = creature->getPlayer()) {
+		if (!player->hasFlag(PlayerFlag_IgnoredByMonsters)) {
+			return true;
+		}
 	}
 
 	if (creature->isPlayerSummon()) {

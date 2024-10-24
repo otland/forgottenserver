@@ -3690,9 +3690,11 @@ void Player::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 
 	if (party && target) {
 		if (!target->hasPlayerOwned()) {
-			if (const Monster* monster = target->getMonster(); monster->isHostile()) {
-				// We have fulfilled a requirement for shared experience
-				party->updatePlayerTicks(this, points);
+			if (const Monster* monster = target->getMonster()) {
+				if (monster->isHostile()) {
+					// We have fulfilled a requirement for shared experience
+					party->updatePlayerTicks(this, points);
+				}
 			}
 		}
 	}
