@@ -2,7 +2,7 @@ local creatureevent = CreatureEvent("WhiteDeerScouts")
 
 function creatureevent.onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	local targetMonster = creature:getMonster()
-	if not targetMonster or targetMonster:getMaster() then
+	if not targetMonster or targetMonster:isSummon() then
 		return true
 	end
 

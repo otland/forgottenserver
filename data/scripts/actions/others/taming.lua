@@ -418,7 +418,7 @@ function taming.onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	end
 
 	if target.type == TYPE_MONSTER then
-		if target:getMaster() then
+		if target:isSummon() then
 			return false
 		end
 	end

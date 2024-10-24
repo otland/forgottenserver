@@ -894,7 +894,7 @@ function doSetMonsterTarget(cid, target)
 		return false
 	end
 
-	if monster:getMaster() then
+	if monster:isSummon() then
 		return true
 	end
 
@@ -913,7 +913,7 @@ function doMonsterChangeTarget(cid)
 		return false
 	end
 
-	if monster:getMaster() then
+	if monster:isSummon() then
 		return true
 	end
 

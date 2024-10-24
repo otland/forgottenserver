@@ -14,12 +14,11 @@ combat:setArea(createCombatArea(area))
 function onTargetCreature(creature, target)
 	local min = 200
 	local max = 700
-	local master = target:getMaster()
-	if target:isPlayer() and not master or master and master:isPlayer() then
+	if target:hasPlayerOwned() then
 		doTargetCombat(0, target, COMBAT_ICEDAMAGE, min, max, CONST_ME_NONE)
 		return true
 	end
-
+	
 	doTargetCombat(0, target, COMBAT_HEALING, min, max, CONST_ME_NONE)
 	return true
 end
