@@ -375,7 +375,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				continue;
 			}
 
-			auto offsetZ = centerPos.getOffsetZ(position);
+			const auto offsetZ = centerPos.getOffsetZ(position);
 			if ((min_y + offsetZ) > position.y || (max_y + offsetZ) < position.y || (min_x + offsetZ) > position.x ||
 			    (max_x + offsetZ) < position.x) {
 				continue;

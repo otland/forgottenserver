@@ -14,8 +14,7 @@ class Tile;
 namespace tfs::map::quadtree {
 
 /// @brief Finds creatures within the specified range.
-tfs::generator<Creature*> find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
-                                                      uint16_t end_y);
+SpectatorVec find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y);
 
 /// @brief Finds the tile at the specified coordinates and layer.
 Tile* find_tile(uint16_t x, uint16_t y, uint8_t z);

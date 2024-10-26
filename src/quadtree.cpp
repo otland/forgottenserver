@@ -46,7 +46,7 @@ void update_leaf_neighbors(uint16_t x, uint16_t y)
 	 * - The west neighbor's east_leaf pointer is updated to point to this leaf.
 	 * - This leaf's south_leaf pointer is updated to point to the south neighbor, if found.
 	 * - This leaf's east_leaf pointer is updated to point to the east neighbor, if found.
-	*/
+	 */
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		// update north
 		if (auto north_leaf = find_leaf_in_root(x, y - TILE_GRID_SIZE)) {
@@ -104,9 +104,10 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 
 } // namespace
 
-tfs::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y,
-                                                                          uint16_t end_x, uint16_t end_y)
+SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y)
 {
+	SpectatorVec spectators;
+
 	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
 	int32_t end_x_aligned = end_x - (end_x % TILE_GRID_SIZE);
@@ -121,7 +122,7 @@ tfs::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, ui
 			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += TILE_GRID_SIZE) {
 				if (east_leaf) {
 					for (auto creature : east_leaf->creatures) {
-						co_yield creature;
+						spectators.emplace_back(creature);
 					}
 
 					east_leaf = east_leaf->east_leaf;
@@ -137,6 +138,8 @@ tfs::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, ui
 			}
 		}
 	}
+
+	return spectators;
 }
 
 Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)

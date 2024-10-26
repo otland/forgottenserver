@@ -55,18 +55,4 @@
 #include <lua.hpp>
 #endif
 
-#if __has_include(<generator>)
-#include <generator>
-namespace tfs {
-template <typename T>
-using generator = std::generator<T>;
-}
-#else
-#include <experimental/generator>
-namespace tfs {
-template <typename T>
-using generator = std::experimental::generator<T>;
-}
-#endif
-
 #endif // FS_OTPCH_H
