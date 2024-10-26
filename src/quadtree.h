@@ -168,7 +168,7 @@ public:
 	 * This constructor initializes the leaf node with the specified
 	 * coordinates.
 	 */
-	constexpr Leaf() = default;
+	explicit Leaf() = default;
 	~Leaf();
 
 	/// Deleted copy constructor to ensure Leaf is non-copyable.
