@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 
 	auto creatures = 0;
 	for (auto creature : tfs::map::quadtree::find_in_range(0, 0, 10, 10)) {
-		BOOST_TEST(creature == npc1);
+		BOOST_TEST(creature->getNpc() == npc1);
 		creatures++;
 	}
 
@@ -37,7 +37,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 
 	auto creatures = 0;
 	for (auto creature : tfs::map::quadtree::find_in_range(0, 0, 15, 15)) {
-		BOOST_TEST(creature == npc1 || creature == npc2 || creature == npc3 || creature == npc4);
+		BOOST_TEST(creature->getNpc() == npc1 || creature->getNpc() == npc2 || creature->getNpc() == npc3 ||
+		           creature->getNpc() == npc4);
 		creatures++;
 	}
 
@@ -70,7 +71,7 @@ BOOST_AUTO_TEST_CASE(test_move_single_creature)
 
 	auto creatures = 0;
 	for (auto creature : tfs::map::quadtree::find_in_range(0, 0, 20, 20)) {
-		BOOST_TEST(creature == npc1);
+		BOOST_TEST(creature->getNpc() == npc1);
 		creatures++;
 	}
 
@@ -92,7 +93,7 @@ BOOST_AUTO_TEST_CASE(test_move_multiple_creature)
 
 	auto creatures = 0;
 	for (auto creature : tfs::map::quadtree::find_in_range(0, 0, 20, 20)) {
-		BOOST_TEST(creature == npc1 || creature == npc2);
+		BOOST_TEST(creature->getNpc() == npc1 || creature->getNpc() == npc2);
 		creatures++;
 	}
 
