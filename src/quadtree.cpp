@@ -144,6 +144,8 @@ SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_
 
 Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
 {
+	create_leaf_in_root(x, y);
+
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		// Find the tile at layer z, using TILE_INDEX_MASK to ensure that the x and y coordinates
 		// are within the bounds of the leaf (only the least significant bits are used).
@@ -166,7 +168,11 @@ void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* ti
 
 void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint16_t x, uint16_t y, Creature* creature)
 {
+	create_leaf_in_root(old_x, old_y);
+
 	if (auto old_leaf = find_leaf_in_root(old_x, old_y)) {
+		create_leaf_in_root(x, y);
+
 		if (auto leaf = find_leaf_in_root(x, y)) {
 			if (old_leaf != leaf) {
 				old_leaf->remove_creature(creature);
@@ -178,6 +184,8 @@ void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint16_t 
 
 void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, Creature* creature)
 {
+	create_leaf_in_root(x, y);
+
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->push_creature(creature);
 	}
@@ -185,6 +193,8 @@ void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, Creature* creatur
 
 void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creature)
 {
+	create_leaf_in_root(x, y);
+
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		leaf->remove_creature(creature);
 	}
