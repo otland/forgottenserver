@@ -102,13 +102,6 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 	update_leaf_neighbors(x, y);
 }
 
-void reset_nodes()
-{
-	for (auto& node : nodes) {
-		delete node;
-	}
-}
-
 } // namespace
 
 SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y)
@@ -206,8 +199,6 @@ void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creat
 		leaf->remove_creature(creature);
 	}
 }
-
-void tfs::map::quadtree::reset() { reset_nodes(); }
 
 Node::~Node()
 {

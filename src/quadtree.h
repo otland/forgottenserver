@@ -31,9 +31,6 @@ void push_creature(uint16_t x, uint16_t y, Creature* creature);
 /// @brief Removes a creature from the quadtree at the specified coordinates.
 void remove_creature(uint16_t x, uint16_t y, Creature* creature);
 
-/// @brief Reset the quadtree.
-void reset();
-
 } // namespace tfs::map::quadtree
 
 /**
