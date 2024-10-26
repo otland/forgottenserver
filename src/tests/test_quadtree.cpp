@@ -8,7 +8,7 @@
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 {
-	auto npc1 = new Npc();
+	auto npc1 = new Npc("Test");
 	tfs::map::quadtree::push_creature(12, 12, npc1);
 
 	auto count = 0;
@@ -22,8 +22,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 {
-	auto npc1 = new Npc();
-	auto npc2 = new Npc();
+	auto npc1 = new Npc("Test1");
+	auto npc2 = new Npc("Test2");
 	tfs::map::quadtree::push_creature(10, 10, npc1);
 	tfs::map::quadtree::push_creature(15, 15, npc2);
 
@@ -38,8 +38,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_no_creatures)
 {
-	auto npc1 = new Npc();
-	auto npc2 = new Npc();
+	auto npc1 = new Npc("Test1");
+	auto npc2 = new Npc("Test2");
 	tfs::map::quadtree::push_creature(50, 50, npc1);
 	tfs::map::quadtree::push_creature(60, 60, npc2);
 
