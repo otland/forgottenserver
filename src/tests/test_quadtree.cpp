@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 
 	auto creatures = 0;
 	for (auto creature : tfs::map::quadtree::find_in_range(0, 0, 10, 10)) {
-		BOOST_TEST(creature == npc1);
+		BOOST_CHECK(creature == npc1);
 		creatures++;
 	}
 
