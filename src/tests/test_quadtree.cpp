@@ -9,6 +9,8 @@
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Alchemist");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
 
@@ -23,6 +25,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Guard");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
 
@@ -46,6 +50,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 
 BOOST_AUTO_TEST_CASE(test_find_in_range_no_creatures)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Herbalist");
 	tfs::map::quadtree::push_creature(10, 10, npc1);
 
@@ -59,6 +65,8 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_no_creatures)
 
 BOOST_AUTO_TEST_CASE(test_move_single_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Stablemaster");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
 
@@ -79,6 +87,8 @@ BOOST_AUTO_TEST_CASE(test_move_single_creature)
 
 BOOST_AUTO_TEST_CASE(test_move_multiple_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Priestess");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
 
@@ -101,6 +111,8 @@ BOOST_AUTO_TEST_CASE(test_move_multiple_creature)
 
 BOOST_AUTO_TEST_CASE(test_move_no_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc1 = new Npc("Innkeeper");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
 
@@ -117,6 +129,8 @@ BOOST_AUTO_TEST_CASE(test_move_no_creature)
 
 BOOST_AUTO_TEST_CASE(test_remove_creature)
 {
+	tfs::map::quadtree::reset();
+
 	auto npc = new Npc("Fisherman");
 	tfs::map::quadtree::push_creature(5, 5, npc);
 

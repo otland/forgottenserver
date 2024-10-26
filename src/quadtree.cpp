@@ -102,6 +102,13 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 	update_leaf_neighbors(x, y);
 }
 
+void reset_nodes()
+{
+	for (auto node : nodes) {
+		delete node;
+	}
+}
+
 } // namespace
 
 SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y)
@@ -149,7 +156,7 @@ Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
 	if (auto leaf = find_leaf_in_root(x, y)) {
 		// Find the tile at layer z, using TILE_INDEX_MASK to ensure that the x and y coordinates
 		// are within the bounds of the leaf (only the least significant bits are used).
-		return leaf->tiles[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK];
+		return leaf->layers[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK];
 	}
 	return nullptr;
 }
@@ -162,7 +169,7 @@ void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* ti
 		// Store the tile in the correct position in the tile array.
 		// Here, we also use TILE_INDEX_MASK to index correctly, ensuring that only
 		// the relevant bits of the x and y coordinates are used.
-		leaf->tiles[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK] = tile;
+		leaf->layers[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK] = tile;
 	}
 }
 
@@ -200,18 +207,20 @@ void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creat
 	}
 }
 
+void tfs::map::quadtree::reset() { reset_nodes(); }
+
 Node::~Node()
 {
-	for (auto node_ptr : nodes) {
-		delete node_ptr;
+	for (auto node : nodes) {
+		delete node;
 	}
 }
 
 Leaf::~Leaf()
 {
-	for (auto& layer : tiles) {
-		for (auto& row : layer) {
-			for (auto tile : row) {
+	for (auto& layer : layers) {
+		for (auto& layer_row : layer) {
+			for (auto tile : layer_row) {
 				delete tile;
 			}
 		}

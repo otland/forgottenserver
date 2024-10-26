@@ -31,6 +31,9 @@ void push_creature(uint16_t x, uint16_t y, Creature* creature);
 /// @brief Removes a creature from the quadtree at the specified coordinates.
 void remove_creature(uint16_t x, uint16_t y, Creature* creature);
 
+/// @brief Reset the quadtree.
+void reset();
+
 } // namespace tfs::map::quadtree
 
 /**
@@ -232,7 +235,7 @@ public:
 	 *  and third dimensions represent the x and y coordinates of the tiles within
 	 *  each layer. Each layer can contain a grid of tiles.
 	 */
-	std::array<std::array<std::array<Tile*, TILE_GRID_SIZE>, TILE_GRID_SIZE>, MAP_MAX_LAYERS> tiles = {};
+	std::array<std::array<std::array<Tile*, TILE_GRID_SIZE>, TILE_GRID_SIZE>, MAP_MAX_LAYERS> layers = {};
 
 	/// @brief A set of creatures (monsters, NPCs and players) present in this leaf node.
 	std::set<Creature*> creatures;
