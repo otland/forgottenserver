@@ -3,6 +3,7 @@
 #include "../otpch.h"
 
 #include "../quadtree.h"
+#include "../npc.h"
 
 #include <boost/test/unit_test.hpp>
 
