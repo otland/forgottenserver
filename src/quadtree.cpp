@@ -104,7 +104,7 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 
 void reset_nodes()
 {
-	for (auto node : nodes) {
+	for (auto& node : nodes) {
 		delete node;
 	}
 }
@@ -213,7 +213,6 @@ Node::~Node()
 {
 	for (auto& node : nodes) {
 		delete node;
-		node = nullptr;
 	}
 }
 
