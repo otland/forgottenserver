@@ -211,8 +211,9 @@ void tfs::map::quadtree::reset() { reset_nodes(); }
 
 Node::~Node()
 {
-	for (auto node : nodes) {
+	for (auto& node : nodes) {
 		delete node;
+		node = nullptr;
 	}
 }
 
