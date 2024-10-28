@@ -2860,13 +2860,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
 	registerMethod(L, "Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
 	registerMethod(L, "Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
-
-	registerMethod("Player", "sendTextMessage", LuaScriptInterface::luaPlayerSendTextMessage);
-	registerMethod("Player", "sendChannelMessage", LuaScriptInterface::luaPlayerSendChannelMessage);
-	registerMethod("Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
-	registerMethod("Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
-	registerMethod("Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
-	registerMethod("Player", "leaveChannel", LuaScriptInterface::luaPlayerLeaveChannel);
+	registerMethod(L, "Player", "leaveChannel", LuaScriptInterface::luaPlayerLeaveChannel);
 
 	registerMethod(L, "Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
