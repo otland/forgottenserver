@@ -10425,11 +10425,11 @@ int LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
 {
 	// player:leaveChannel(channelId)
-	uint16_t channelId = getNumber<uint16_t>(L, 2);
-	Player* player = getUserdata<Player>(L, 1);
+	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 2);
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
 		g_game.playerCloseChannel(player->getID(), channelId);
-		pushBoolean(L, true);
+		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
 	}
