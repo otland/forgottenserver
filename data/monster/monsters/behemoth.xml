@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Behemoth" nameDescription="a behemoth" race="blood" experience="2500" speed="340">
+<monster name="Behemoth" nameDescription="a behemoth" race="blood" experience="2500" speed="340" raceId="55">
 	<health now="4000" max="4000" />
 	<look type="55" corpse="5999" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Giant" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Behemoth Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-455" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-200">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190">
+<monster name="White Deer" nameDescription="a white deer" race="blood" experience="0" speed="190" raceId="720">
 	<health now="195" max="195" />
 	<look type="400" corpse="13513" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="rare" locations="White Deer Locations..." />
 	<voices interval="5000" chance="10">
 		<voice sentence="*wheeze*" />
 		<voice sentence="ROOOAAARR!!" />

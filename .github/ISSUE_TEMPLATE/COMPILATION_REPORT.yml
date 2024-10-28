@@ -1,0 +1,140 @@
+name: Compilation Problem Report
+description: Reporting a compilation problem reproducible using unmodified engine
+title: "[Compilation]: "
+labels: ["compilation-error", "needs-confirmation"]
+
+body:
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: By submitting this compilation problem issue, you agree to the following.
+      options:
+        - label: This is a compilation problem in the software that resides in this repository, 
+            and not a support matter (use https://otland.net/forums/support.16/ for support)
+          required: true
+        - label: This issue is reproducible without changes to the C++ code in this repository
+          required: true
+        - label: This compilation problem has not been resolved in master branch
+          required: true
+        - label: There is no existing issue for this compilation problem already
+          required: true
+        - label: I have tried to compile the software using the provided instructions in the Wiki page
+          required: true
+  
+  - type: dropdown
+    id: server-version
+    attributes:
+      label: Server Version
+      description: Which version did you try to compile?
+      multiple: true
+      options:
+        - 1.7 (Master)
+        - 1.6 (Release)
+        - 1.5 (Development)
+        - 1.4.x (Release)
+      default: 0
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operation System
+      description: On which OS does this problem appear?
+      multiple: true
+      options:
+        - all (listed below)
+        - Windows
+        - Ubuntu 20.04
+        - Ubuntu 22.04
+        - Ubuntu 24.04
+        - Debian 12
+        - MacOS
+        - other (please specify in the description)
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: os-description
+    attributes:
+      label: OS Description
+      description: If you selected 'other' in the Operation System, please specify the OS you used
+      placeholder: "Example: Fedora 35"
+  
+  - type: dropdown
+    id: compiler
+    attributes:
+      label: Compiler
+      description: Which compiler did you use?
+      options:
+        - GCC
+        - Clang
+        - MSVC
+        - other (please specify in the description)
+      default: 0
+    validations:
+      required: true
+  
+  - type: input
+    id: compiler-description
+    attributes:
+      label: Compiler Description
+      description: If you selected 'other' in the 'Compiler', please specify the compiler you used
+      placeholder: "Example: GCC 12.0.0"
+
+  - type: dropdown
+    id: compiler-flags
+    attributes:
+      label: Compiler Flags
+      description: Which compiler flags are included?
+      options:
+        - http
+        - luajit
+        - none
+      default: 0
+    validations:
+      required: true
+
+  - type: dropdown
+    id: build-type
+    attributes:
+      label: Buildtype
+      description: Which Buildtype did this happen on?
+      options:
+        - RelWithDebInfo (default if downloaded from releases or artifacts)
+        - Debug
+        - Release
+        - all (listed above)
+      default: 0
+    validations:
+      required: true
+  
+  - type: textarea
+    id: pr-cause
+    attributes:
+      label: Possible Pull Requests which are to blame
+      description: |
+        If you suspect a PR caused this bug, please provide the PR number (you can insert several)
+        Delete everything inside if you don't suspect any
+      placeholder: |
+        - [ ] #pr1
+        - [ ] #pr2
+      value: |
+        - [ ] #
+        - [ ] #
+  
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Message
+      placeholder: Please include the error message you received when trying to compile the software
+      description: This will be automatically formatted into code, no need for backticks.
+      render: cpp
+    validations:
+      required: true
+  
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this compilation error report!

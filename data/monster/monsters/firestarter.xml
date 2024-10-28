@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180">
+<monster name="Firestarter" nameDescription="a firestarter" race="blood" experience="80" speed="180" raceId="737">
 	<health now="180" max="180" />
 	<look type="159" head="94" body="77" legs="78" feet="79" corpse="20599" />
 	<targetchange interval="4000" chance="0" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Firestarter Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="fire" interval="2000" chance="15" radius="1" target="1" min="0" max="-21">

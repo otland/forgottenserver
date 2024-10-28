@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Gnarlhound" nameDescription="a gnarlhound" race="blood" experience="60" speed="280" manacost="465">
+<monster name="Gnarlhound" nameDescription="a gnarlhound" race="blood" experience="60" speed="280" manacost="465" raceId="630">
 	<health now="198" max="198" />
 	<look type="341" corpse="11250" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Gnarlhound Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-70" />
 	</attacks>

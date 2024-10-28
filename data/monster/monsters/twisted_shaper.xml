@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Twisted Shaper" nameDescription="a twisted shaper" race="blood" experience="1750" speed="280">
+<monster name="Twisted Shaper" nameDescription="a twisted shaper" race="blood" experience="1750" speed="280" raceId="1322">
 	<health now="2500" max="2500" />
 	<look type="932" head="105" body="0" legs="0" feet="94" corpse="27724" />
 	<targetchange interval="2000" chance="5" />
@@ -20,6 +20,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Twisted Shaper Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-100" />
 		<attack name="physical" interval="2000" chance="10" range="7" target="1" min="-50" max="-100">

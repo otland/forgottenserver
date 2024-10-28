@@ -10,7 +10,6 @@
 #include "game.h"
 
 extern Game g_game;
-extern ConfigManager g_config;
 extern Events* g_events;
 
 Party::Party(Player* leader) : leader(leader) { leader->setParty(this); }
@@ -412,8 +411,8 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(const Player* player) c
 		return SHAREDEXP_LEVELDIFFTOOLARGE;
 	}
 
-	if (!Position::areInRange<EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_FLOORS>(
-	        leader->getPosition(), player->getPosition())) {
+	if (!leader->getPosition().isInRange(player->getPosition(), EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_RANGE,
+	                                     EXPERIENCE_SHARE_FLOORS)) {
 		return SHAREDEXP_TOOFARAWAY;
 	}
 
@@ -425,7 +424,7 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(const Player* player) c
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second;
-		if (timeDiff > static_cast<uint64_t>(g_config.getNumber(ConfigManager::PZ_LOCKED))) {
+		if (timeDiff > static_cast<uint64_t>(getNumber(ConfigManager::PZ_LOCKED))) {
 			return SHAREDEXP_MEMBERINACTIVE;
 		}
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Sight Of Surrender" nameDescription="a sight of surrender" race="undead" experience="17000" speed="340">
+<monster name="Sight Of Surrender" nameDescription="a sight of surrender" race="undead" experience="17000" speed="340" raceId="1012">
 	<health now="28000" max="28000" />
 	<look type="583" corpse="22478" />
 	<targetchange interval="4000" chance="20" />
@@ -16,6 +16,7 @@
 		<flag staticattack="80" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Sight of Surrender Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-1100" />
 		<attack name="energy" interval="2000" chance="15" length="8" spread="0" target="1" min="-500" max="-800">

@@ -15,8 +15,6 @@
 #include "mounts.h"
 #include "movement.h"
 #include "npc.h"
-#include "quests.h"
-#include "raids.h"
 #include "scheduler.h"
 #include "spells.h"
 #include "talkaction.h"
@@ -29,7 +27,6 @@ extern Scheduler g_scheduler;
 extern DatabaseTasks g_databaseTasks;
 extern Dispatcher g_dispatcher;
 
-extern ConfigManager g_config;
 extern Actions* g_actions;
 extern Monsters g_monsters;
 extern TalkActions* g_talkActions;
@@ -50,6 +47,7 @@ void sigusr1Handler()
 {
 	// Dispatcher thread
 	std::cout << "SIGUSR1 received, saving the game state..." << std::endl;
+	g_globalEvents->save();
 	g_game.saveGameState();
 }
 
@@ -61,7 +59,7 @@ void sighupHandler()
 	g_actions->reload();
 	std::cout << "Reloaded actions." << std::endl;
 
-	g_config.load();
+	ConfigManager::load();
 	std::cout << "Reloaded config." << std::endl;
 
 	g_creatureEvents->reload();
@@ -72,10 +70,6 @@ void sighupHandler()
 
 	Npcs::reload();
 	std::cout << "Reloaded npcs." << std::endl;
-
-	g_game.raids.reload();
-	g_game.raids.startup();
-	std::cout << "Reloaded raids." << std::endl;
 
 	g_monsters.reload();
 	std::cout << "Reloaded monsters." << std::endl;
@@ -92,9 +86,6 @@ void sighupHandler()
 	g_weapons->reload();
 	g_weapons->loadDefaults();
 	std::cout << "Reloaded weapons." << std::endl;
-
-	g_game.quests.reload();
-	std::cout << "Reloaded quests." << std::endl;
 
 	g_game.mounts.reload();
 	std::cout << "Reloaded mounts." << std::endl;
@@ -171,7 +162,7 @@ void dispatchSignalHandler(int signal)
 
 } // namespace
 
-Signals::Signals(boost::asio::io_service& service) : set(service)
+Signals::Signals(boost::asio::io_context& ioc) : set(ioc)
 {
 	set.add(SIGINT);
 	set.add(SIGTERM);

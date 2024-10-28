@@ -190,10 +190,9 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 		}
 	}
 
-	if (moveEvent->getItemIdRange().size() > 0) {
-		if (moveEvent->getItemIdRange().size() == 1) {
-			uint32_t id = moveEvent->getItemIdRange().at(0);
-			addEvent(*moveEvent, id, itemIdMap);
+	if (isValid(itemIdRange, event)) {
+		const auto& range = getItemIdRange(event);
+		for (auto& id : range) {
 			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 				ItemType& it = Item::items.getItemType(id);
 				it.wieldInfo = moveEvent->getWieldInfo();
@@ -201,18 +200,7 @@ bool MoveEvents::registerLuaFunction(MoveEvent* event)
 				it.minReqMagicLevel = moveEvent->getReqMagLv();
 				it.vocationString = moveEvent->getVocationString();
 			}
-		} else {
-			uint32_t iterId = 0;
-			while (++iterId < moveEvent->getItemIdRange().size()) {
-				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-					ItemType& it = Item::items.getItemType(moveEvent->getItemIdRange().at(iterId));
-					it.wieldInfo = moveEvent->getWieldInfo();
-					it.minReqLevel = moveEvent->getReqLevel();
-					it.minReqMagicLevel = moveEvent->getReqMagLv();
-					it.vocationString = moveEvent->getVocationString();
-				}
-				addEvent(*moveEvent, moveEvent->getItemIdRange().at(iterId), itemIdMap);
-			}
+			addEvent(*moveEvent, id, itemIdMap);
 		}
 	} else {
 		return false;
@@ -240,10 +228,9 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 		}
 	}
 
-	if (moveEvent->getItemIdRange().size() > 0) {
-		if (moveEvent->getItemIdRange().size() == 1) {
-			uint32_t id = moveEvent->getItemIdRange().at(0);
-			addEvent(*moveEvent, id, itemIdMap);
+	if (isValid(itemIdRange, event)) {
+		const auto& range = getItemIdRange(event);
+		for (auto& id : range) {
 			if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
 				ItemType& it = Item::items.getItemType(id);
 				it.wieldInfo = moveEvent->getWieldInfo();
@@ -251,53 +238,26 @@ bool MoveEvents::registerLuaEvent(MoveEvent* event)
 				it.minReqMagicLevel = moveEvent->getReqMagLv();
 				it.vocationString = moveEvent->getVocationString();
 			}
-		} else {
-			auto v = moveEvent->getItemIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				if (moveEvent->getEventType() == MOVE_EVENT_EQUIP) {
-					ItemType& it = Item::items.getItemType(*i);
-					it.wieldInfo = moveEvent->getWieldInfo();
-					it.minReqLevel = moveEvent->getReqLevel();
-					it.minReqMagicLevel = moveEvent->getReqMagLv();
-					it.vocationString = moveEvent->getVocationString();
-				}
-				addEvent(*moveEvent, *i, itemIdMap);
-			}
+			addEvent(*moveEvent, id, itemIdMap);
 		}
-	} else if (moveEvent->getActionIdRange().size() > 0) {
-		if (moveEvent->getActionIdRange().size() == 1) {
-			int32_t id = moveEvent->getActionIdRange().at(0);
+	} else if (isValid(actionIdRange, event)) {
+		const auto& range = getActionIdRange(event);
+		for (auto& id : range) {
 			addEvent(*moveEvent, id, actionIdMap);
-		} else {
-			auto v = moveEvent->getActionIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, actionIdMap);
-			}
 		}
-	} else if (moveEvent->getUniqueIdRange().size() > 0) {
-		if (moveEvent->getUniqueIdRange().size() == 1) {
-			int32_t id = moveEvent->getUniqueIdRange().at(0);
+	} else if (isValid(uniqueIdRange, event)) {
+		const auto& range = getUniqueIdRange(event);
+		for (auto& id : range) {
 			addEvent(*moveEvent, id, uniqueIdMap);
-		} else {
-			auto v = moveEvent->getUniqueIdRange();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, uniqueIdMap);
-			}
 		}
-	} else if (moveEvent->getPosList().size() > 0) {
-		if (moveEvent->getPosList().size() == 1) {
-			Position pos = moveEvent->getPosList().at(0);
+	} else if (isValidPos(posList, event)) {
+		const auto& range = getPosList(event);
+		for (auto& pos : range) {
 			addEvent(*moveEvent, pos, positionMap);
-		} else {
-			auto v = moveEvent->getPosList();
-			for (auto i = v.begin(); i != v.end(); i++) {
-				addEvent(*moveEvent, *i, positionMap);
-			}
 		}
 	} else {
 		return false;
 	}
-
 	return true;
 }
 
@@ -476,6 +436,9 @@ ReturnValue MoveEvents::onPlayerDeEquip(Player* player, Item* item, slots_t slot
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
+		// If the item does not have an event, we make sure to reset the slot, since some items transform into items
+		// without events.
+		player->setItemAbility(slot, false);
 		return RETURNVALUE_NOERROR;
 	}
 	return moveEvent->fireEquip(player, item, slot, false);
@@ -969,22 +932,22 @@ bool MoveEvent::executeStep(Creature* creature, Item* item, const Position& pos)
 {
 	// onStepIn(creature, item, pos, fromPosition)
 	// onStepOut(creature, item, pos, fromPosition)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeStep] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	LuaScriptInterface::pushUserdata<Creature>(L, creature);
-	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
-	LuaScriptInterface::pushThing(L, item);
-	LuaScriptInterface::pushPosition(L, pos);
-	LuaScriptInterface::pushPosition(L, creature->getLastPosition());
+	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::setCreatureMetatable(L, -1, creature);
+	tfs::lua::pushThing(L, item);
+	tfs::lua::pushPosition(L, pos);
+	tfs::lua::pushPosition(L, creature->getLastPosition());
 
 	return scriptInterface->callFunction(4);
 }
@@ -1005,22 +968,22 @@ bool MoveEvent::executeEquip(Player* player, Item* item, slots_t slot, bool isCh
 {
 	// onEquip(player, item, slot, isCheck)
 	// onDeEquip(player, item, slot, isCheck)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeEquip] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
-	LuaScriptInterface::pushThing(L, item);
+	tfs::lua::pushUserdata(L, player);
+	tfs::lua::setMetatable(L, -1, "Player");
+	tfs::lua::pushThing(L, item);
 	lua_pushnumber(L, slot);
-	LuaScriptInterface::pushBoolean(L, isCheck);
+	tfs::lua::pushBoolean(L, isCheck);
 
 	return scriptInterface->callFunction(4);
 }
@@ -1037,20 +1000,20 @@ bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& po
 {
 	// onaddItem(moveitem, tileitem, pos)
 	// onRemoveItem(moveitem, tileitem, pos)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - MoveEvent::executeAddRemItem] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	LuaScriptInterface::pushThing(L, item);
-	LuaScriptInterface::pushThing(L, tileItem);
-	LuaScriptInterface::pushPosition(L, pos);
+	tfs::lua::pushThing(L, item);
+	tfs::lua::pushThing(L, tileItem);
+	tfs::lua::pushPosition(L, pos);
 
 	return scriptInterface->callFunction(3);
 }

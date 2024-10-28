@@ -16,6 +16,7 @@
 
 class DepotChest;
 class House;
+struct Mount;
 class NetworkMessage;
 class Npc;
 class Party;
@@ -71,21 +72,13 @@ struct OpenContainer
 	uint16_t index;
 };
 
-struct OutfitEntry
-{
-	constexpr OutfitEntry(uint16_t lookType, uint8_t addons) : lookType(lookType), addons(addons) {}
-
-	uint16_t lookType;
-	uint8_t addons;
-};
-
 static constexpr int16_t MINIMUM_SKILL_LEVEL = 10;
 
 struct Skill
 {
 	uint64_t tries = 0;
 	uint16_t level = MINIMUM_SKILL_LEVEL;
-	uint8_t percent = 0;
+	uint16_t percent = 0;
 };
 
 using MuteCountMap = std::map<uint32_t, uint32_t>;
@@ -100,6 +93,8 @@ class Player final : public Creature, public Cylinder
 public:
 	explicit Player(ProtocolGame_ptr p);
 	~Player();
+
+	using Creature::onWalk;
 
 	// non-copyable
 	Player(const Player&) = delete;
@@ -119,13 +114,13 @@ public:
 
 	CreatureType_t getType() const override { return CREATURETYPE_PLAYER; }
 
-	uint8_t getRandomMount() const;
-	uint8_t getCurrentMount() const;
-	void setCurrentMount(uint8_t mountId);
+	uint16_t getRandomMount() const;
+	uint16_t getCurrentMount() const;
+	void setCurrentMount(uint16_t mountId);
 	bool isMounted() const { return defaultOutfit.lookMount != 0; }
 	bool toggleMount(bool mount);
-	bool tameMount(uint8_t mountId);
-	bool untameMount(uint8_t mountId);
+	bool tameMount(uint16_t mountId);
+	bool untameMount(uint16_t mountId);
 	bool hasMount(const Mount* mount) const;
 	bool hasMounts() const;
 	void dismount();
@@ -170,8 +165,8 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	Guild* getGuild() const { return guild; }
-	void setGuild(Guild* guild);
+	Guild_ptr getGuild() const { return guild; }
+	void setGuild(Guild_ptr guild);
 
 	GuildRank_ptr getGuildRank() const { return guildRank; }
 	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
@@ -253,9 +248,7 @@ public:
 
 	bool canOpenCorpse(uint32_t ownerId) const;
 
-	void addStorageValue(const uint32_t key, const int32_t value, const bool isLogin = false);
-	bool getStorageValue(const uint32_t key, int32_t& value) const;
-	void genReservedStorageRange();
+	void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false) override;
 
 	void setGroup(Group* newGroup) { group = newGroup; }
 	Group* getGroup() const { return group; }
@@ -281,7 +274,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint32_t getBaseMagicLevel() const { return magLevel; }
-	uint8_t getMagicLevelPercent() const { return magLevelPercent; }
+	uint16_t getMagicLevelPercent() const { return magLevelPercent; }
 	uint8_t getSoul() const { return soul; }
 	bool isAccessPlayer() const { return group->access; }
 	bool isPremium() const;
@@ -462,7 +455,7 @@ public:
 		return std::max<int32_t>(0, specialMagicLevelSkill[combatTypeToIndex(type)]);
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
-	uint8_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+	uint16_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -538,10 +531,6 @@ public:
 	size_t getMaxVIPEntries() const;
 	size_t getMaxDepotItems() const;
 
-	// quest tracker
-	size_t getMaxTrackedQuests() const;
-	void resetQuestTracker(const std::vector<uint16_t>& missionIds);
-
 	// tile
 	// send methods
 	void sendAddTileItem(const Tile* tile, const Position& pos, const Item* item)
@@ -585,6 +574,12 @@ public:
 	{
 		if (client) {
 			client->sendUpdateTile(tile, pos);
+		}
+	}
+	void sendUpdateCreatureIcons(const Creature* creature)
+	{
+		if (client) {
+			client->sendUpdateCreatureIcons(creature);
 		}
 	}
 
@@ -781,6 +776,9 @@ public:
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                    const Position& oldPos, bool teleport) override;
+
+	void onEquipInventory();
+	void onDeEquipInventory();
 
 	void onAttackedCreatureDisappear(bool isLogout) override;
 	void onFollowCreatureDisappear(bool isLogout) override;
@@ -994,18 +992,6 @@ public:
 			client->sendCloseTrade();
 		}
 	}
-	void sendWorldLight(LightInfo lightInfo)
-	{
-		if (client) {
-			client->sendWorldLight(lightInfo);
-		}
-	}
-	void sendWorldTime()
-	{
-		if (client) {
-			client->sendWorldTime();
-		}
-	}
 	void sendChannelsDialog()
 	{
 		if (client) {
@@ -1056,30 +1042,6 @@ public:
 			client->sendAddMarker(pos, markType, desc);
 		}
 	}
-	void sendQuestLog()
-	{
-		if (client) {
-			client->sendQuestLog();
-		}
-	}
-	void sendQuestLine(const Quest* quest)
-	{
-		if (client) {
-			client->sendQuestLine(quest);
-		}
-	}
-	void sendQuestTracker()
-	{
-		if (client) {
-			client->sendQuestTracker();
-		}
-	}
-	void sendUpdateQuestTracker(const TrackedQuest& trackedQuest)
-	{
-		if (client) {
-			client->sendUpdateQuestTracker(trackedQuest);
-		}
-	}
 	void sendEnterWorld()
 	{
 		if (client) {
@@ -1103,6 +1065,12 @@ public:
 	{
 		if (client) {
 			client->sendCombatAnalyzer(type, amount, impactType, target);
+		}
+	}
+	void sendResourceBalance(const ResourceTypes_t resourceType, uint64_t amount)
+	{
+		if (client) {
+			client->sendResourceBalance(resourceType, amount);
 		}
 	}
 
@@ -1138,6 +1106,15 @@ public:
 
 	const std::map<uint8_t, OpenContainer>& getOpenContainers() const { return openContainers; }
 
+	uint16_t getClientExpDisplay() const { return clientExpDisplay; }
+	void setClientExpDisplay(uint16_t value) { clientExpDisplay = value; }
+
+	uint16_t getClientStaminaBonusDisplay() const { return clientStaminaBonusDisplay; }
+	void setClientStaminaBonusDisplay(uint16_t value) { clientStaminaBonusDisplay = value; }
+
+	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
+	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1151,7 +1128,6 @@ private:
 	void updateInventoryWeight();
 
 	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextWalkTask(SchedulerTask* task);
 	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
 
 	void death(Creature* lastHitCreature) override;
@@ -1179,7 +1155,7 @@ private:
 	int32_t getThingIndex(const Thing* thing) const override;
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const override;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
@@ -1191,9 +1167,9 @@ private:
 
 	std::map<uint8_t, OpenContainer> openContainers;
 	std::map<uint32_t, DepotChest*> depotChests;
-	std::map<uint32_t, int32_t> storageMap;
 
-	std::vector<OutfitEntry> outfits;
+	std::map<uint16_t, uint8_t> outfits;
+	std::unordered_set<uint16_t> mounts;
 	GuildWarVector guildWarVector;
 
 	std::list<ShopInfo> shopItemList;
@@ -1203,9 +1179,6 @@ private:
 	std::forward_list<std::string> learnedInstantSpellList;
 	std::forward_list<Condition*>
 	    storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
-
-	// quest tracker
-	std::vector<TrackedQuest> trackedQuests;
 
 	std::string name;
 	std::string guildNick;
@@ -1223,7 +1196,6 @@ private:
 	uint64_t manaSpent = 0;
 	uint64_t lastAttack = 0;
 	uint64_t bankBalance = 0;
-	uint64_t lastQuestlogUpdate = 0;
 	int64_t lastFailedFollow = 0;
 	int64_t skullTicks = 0;
 	int64_t lastWalkthroughAttempt = 0;
@@ -1235,7 +1207,7 @@ private:
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
 	BedItem* bedItem = nullptr;
-	Guild* guild = nullptr;
+	Guild_ptr guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
 	Inbox* inbox;
@@ -1260,8 +1232,8 @@ private:
 	uint32_t level = 1;
 	uint32_t magLevel = 0;
 	uint32_t actionTaskEvent = 0;
-	uint32_t nextStepEvent = 0;
 	uint32_t walkTaskEvent = 0;
+	uint32_t classicAttackEvent = 0;
 	uint32_t MessageBufferTicks = 0;
 	uint32_t accountNumber = 0;
 	uint32_t guid = 0;
@@ -1287,11 +1259,14 @@ private:
 	uint16_t lastStatsTrainingTime = 0;
 	uint16_t staminaMinutes = 2520;
 	uint16_t maxWriteLen = 0;
+	uint16_t clientExpDisplay = 100;
+	uint16_t clientStaminaBonusDisplay = 100;
+	uint16_t clientLowLevelBonusDisplay = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
 	uint8_t levelPercent = 0;
-	uint8_t magLevelPercent = 0;
+	uint16_t magLevelPercent = 0;
 
 	PlayerSex_t sex = PLAYERSEX_FEMALE;
 	OperatingSystem_t operatingSystem = CLIENTOS_NONE;
@@ -1332,7 +1307,7 @@ private:
 
 	uint32_t getAttackSpeed() const;
 
-	static uint8_t getPercentLevel(uint64_t count, uint64_t nextLevelCount);
+	static uint16_t getBasisPointLevel(uint64_t count, uint64_t nextLevelCount);
 	double getLostPercent() const;
 	uint64_t getLostExperience() const override
 	{

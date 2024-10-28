@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Destroyer" nameDescription="a destroyer" race="blood" experience="2500" speed="300">
+<monster name="Destroyer" nameDescription="a destroyer" race="blood" experience="2500" speed="300" raceId="287">
 	<health now="3700" max="3700" />
 	<look type="236" corpse="6320" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Demon" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Destroyer Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-500" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-200">

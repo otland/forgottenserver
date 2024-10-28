@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Vicious Squire" nameDescription="a vicious squire" race="blood" experience="900" speed="210">
+<monster name="Vicious Squire" nameDescription="a vicious squire" race="blood" experience="900" speed="210" raceId="1145">
 	<health now="1000" max="1000" />
 	<look type="131" head="97" body="24" legs="73" feet="116" addons="1" corpse="20418" />
 	<targetchange interval="2000" chance="5" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Human" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Vicious Squire Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="82" attack="50" />
 		<attack name="physical" interval="2000" chance="15" range="7" min="0" max="-110">

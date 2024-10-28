@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Grave Guard" nameDescription="a grave guard" race="undead" experience="485" speed="200">
+<monster name="Grave Guard" nameDescription="a grave guard" race="undead" experience="485" speed="200" raceId="707">
 	<health now="720" max="720" />
 	<look type="234" corpse="13975" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="rare" locations="Grave Guard Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-147" />
 		<attack name="physical" interval="2000" chance="5" target="0" radius="1">

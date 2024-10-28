@@ -70,7 +70,7 @@ public:
 		return value;
 	}
 
-	std::string_view getString(uint16_t stringLen = 0);
+	std::string getString(uint16_t stringLen = 0);
 	Position getPosition();
 
 	// skips count unknown/unused bytes in an incoming message
@@ -114,9 +114,13 @@ public:
 
 	MsgSize_t getLength() const { return info.length; }
 
+	bool isEmpty() const { return info.length == 0; }
+
 	void setLength(MsgSize_t newLength) { info.length = newLength; }
 
 	MsgSize_t getBufferPosition() const { return info.position; }
+
+	MsgSize_t getRemainingBufferLength() const { return info.length - info.position; }
 
 	bool setBufferPosition(MsgSize_t pos)
 	{
@@ -134,6 +138,8 @@ public:
 	uint8_t* getBuffer() { return &buffer[0]; }
 
 	const uint8_t* getBuffer() const { return &buffer[0]; }
+
+	uint8_t* getRemainingBuffer() { return &buffer[0] + info.position; }
 
 	uint8_t* getBodyBuffer()
 	{

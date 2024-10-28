@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Squid Warden" nameDescription="a squid warden" race="ink" experience="15300" speed="430">
+<monster name="Squid Warden" nameDescription="a squid warden" race="ink" experience="15300" speed="430" raceId="1669">
 	<health now="16500" max="16500" />
 	<look type="1059" head="9" body="21" legs="3" feet="57" corpse="31442" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Squid Warden Locations..." />
 	<attacks>
 		<attack name="ice" interval="2000" chance="15" min="-600" max="-900" range="2" radius="1" target="1">
 			<attribute key="shootEffect" value="ice" />

@@ -10,6 +10,7 @@
 #include "events.h"
 #include "globalevent.h"
 #include "movement.h"
+#include "npc.h"
 #include "script.h"
 #include "spells.h"
 #include "talkaction.h"
@@ -54,6 +55,8 @@ bool ScriptingManager::loadScriptSystems()
 		std::cout << "> ERROR: Unable to load lua libs!" << std::endl;
 		return false;
 	}
+
+	Npcs::load();
 
 	g_chat = new Chat();
 

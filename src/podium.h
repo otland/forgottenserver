@@ -9,7 +9,7 @@
 class Podium final : public Item
 {
 public:
-	explicit Podium(uint16_t type) : Item(type){};
+	explicit Podium(uint16_t type) : Item(type) {};
 
 	Podium* getPodium() override { return this; }
 	const Podium* getPodium() const override { return this; }
@@ -31,7 +31,7 @@ public:
 	}
 	void setFlags(uint8_t newFlags) { flags = newFlags; }
 
-	const Direction getDirection() const { return direction; }
+	Direction getDirection() const { return direction; }
 	void setDirection(Direction newDirection) { direction = newDirection; }
 
 protected:

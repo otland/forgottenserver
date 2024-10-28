@@ -39,9 +39,6 @@ local reloadTypes = {
 	["quest"] = RELOAD_TYPE_QUESTS,
 	["quests"] = RELOAD_TYPE_QUESTS,
 
-	["raid"] = RELOAD_TYPE_RAIDS,
-	["raids"] = RELOAD_TYPE_RAIDS,
-
 	["spell"] = RELOAD_TYPE_SPELLS,
 	["spells"] = RELOAD_TYPE_SPELLS,
 
@@ -73,9 +70,10 @@ function onSay(player, words, param)
 		return false
 	end
 
-	-- need to clear EventCallback.data or we end up having duplicated events on /reload scripts
+	-- need to clear Event.data or we end up having duplicated events on /reload scripts
 	if table.contains({RELOAD_TYPE_SCRIPTS, RELOAD_TYPE_ALL}, reloadType) then
-		EventCallback:clear()
+		Event:clear()
+		Game.clearQuests()
 	end
 
 	Game.reload(reloadType)

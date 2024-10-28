@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Barkless Fanatic" nameDescription="a barkless fanatic" race="blood" experience="2500" speed="300">
+<monster name="Barkless Fanatic" nameDescription="a barkless fanatic" race="blood" experience="2500" speed="300" raceId="1488">
 	<health now="3200" max="3200" />
 	<look type="990" corpse="6012" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Barkless Fanatic Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-230" />
 		<attack name="earth" interval="2000" chance="20" range="7" target="1" radius="4" min="-220" max="-450">

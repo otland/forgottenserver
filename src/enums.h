@@ -36,14 +36,6 @@ enum RuleViolationReasons_t : uint8_t
 	REPORT_REASON_SERVICEAGREEMENT = 20
 };
 
-enum BugReportType_t : uint8_t
-{
-	BUG_CATEGORY_MAP = 0,
-	BUG_CATEGORY_TYPO = 1,
-	BUG_CATEGORY_TECHNICAL = 2,
-	BUG_CATEGORY_OTHER = 3
-};
-
 enum ThreadState
 {
 	THREAD_STATE_RUNNING,
@@ -83,6 +75,8 @@ enum itemAttrTypes : uint32_t
 	ITEM_ATTRIBUTE_STOREITEM = 1 << 25,
 	ITEM_ATTRIBUTE_ATTACK_SPEED = 1 << 26,
 	ITEM_ATTRIBUTE_OPENCONTAINER = 1 << 27,
+	ITEM_ATTRIBUTE_DURATION_MIN = ITEM_ATTRIBUTE_DURATION,
+	ITEM_ATTRIBUTE_DURATION_MAX = 1 << 28,
 
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
@@ -413,10 +407,7 @@ enum PlayerSex_t : uint8_t
 	PLAYERSEX_LAST = PLAYERSEX_MALE
 };
 
-enum Vocation_t : uint16_t
-{
-	VOCATION_NONE = 0
-};
+inline constexpr uint16_t VOCATION_NONE = 0;
 
 enum ReturnValue
 {
@@ -482,8 +473,6 @@ enum ReturnValue
 	RETURNVALUE_CANONLYUSEONESHIELD,
 	RETURNVALUE_NOPARTYMEMBERSINRANGE,
 	RETURNVALUE_YOUARENOTTHEOWNER,
-	RETURNVALUE_NOSUCHRAIDEXISTS,
-	RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING,
 	RETURNVALUE_TRADEPLAYERFARAWAY,
 	RETURNVALUE_YOUDONTOWNTHISHOUSE,
 	RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE,
@@ -554,8 +543,6 @@ struct LightInfo
 {
 	uint8_t level = 0;
 	uint8_t color = 215;
-	constexpr LightInfo() = default;
-	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
 struct ShopInfo
@@ -681,7 +668,7 @@ enum MonstersEvent_t : uint8_t
 struct Reflect
 {
 	Reflect() = default;
-	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance){};
+	Reflect(uint16_t percent, uint16_t chance) : percent(percent), chance(chance) {};
 
 	Reflect& operator+=(const Reflect& other)
 	{

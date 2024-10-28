@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "monster.h"
 #include "party.h"
@@ -18,8 +19,8 @@ double Creature::speedB = 261.29;
 double Creature::speedC = -4795.01;
 
 extern Game g_game;
-extern ConfigManager g_config;
 extern CreatureEvents* g_creatureEvents;
+extern Events* g_events;
 
 Creature::Creature() { onIdleStatus(); }
 
@@ -32,6 +33,9 @@ Creature::~Creature()
 
 	for (Condition* condition : conditions) {
 		condition->endCondition(this);
+	}
+
+	for (auto condition : conditions) {
 		delete condition;
 	}
 }
@@ -52,12 +56,12 @@ bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRa
 		}
 
 		// view is +/- 2 from the floor we stand on
-		if (Position::getDistanceZ(myPos, pos) > 2) {
+		if (myPos.getDistanceZ(pos) > 2) {
 			return false;
 		}
 	}
 
-	const int_fast32_t offsetz = myPos.getZ() - pos.getZ();
+	int32_t offsetz = myPos.getOffsetZ(pos);
 	return (pos.getX() >= myPos.getX() - viewRangeX + offsetz) && (pos.getX() <= myPos.getX() + viewRangeX + offsetz) &&
 	       (pos.getY() >= myPos.getY() - viewRangeY + offsetz) && (pos.getY() <= myPos.getY() + viewRangeY + offsetz);
 }
@@ -316,6 +320,16 @@ void Creature::stopEventWalk()
 	}
 }
 
+void Creature::updateIcons() const
+{
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, position, true, true);
+	for (Creature* spectator : spectators) {
+		assert(dynamic_cast<Player*>(spectator) != nullptr);
+		static_cast<Player*>(spectator)->sendUpdateCreatureIcons(this);
+	}
+}
+
 void Creature::updateMapCache()
 {
 	Tile* tile;
@@ -344,8 +358,8 @@ void Creature::updateTileCache(const Tile* tile, const Position& pos)
 {
 	const Position& myPos = getPosition();
 	if (pos.z == myPos.z) {
-		int32_t dx = Position::getOffsetX(pos, myPos);
-		int32_t dy = Position::getOffsetY(pos, myPos);
+		int32_t dx = pos.getOffsetX(myPos);
+		int32_t dy = pos.getOffsetY(myPos);
 		updateTileCache(tile, dx, dy);
 	}
 }
@@ -365,10 +379,8 @@ int32_t Creature::getWalkCache(const Position& pos) const
 		return 1;
 	}
 
-	int32_t dx = Position::getOffsetX(pos, myPos);
-	if (std::abs(dx) <= maxWalkCacheWidth) {
-		int32_t dy = Position::getOffsetY(pos, myPos);
-		if (std::abs(dy) <= maxWalkCacheHeight) {
+	if (int32_t dx = pos.getOffsetX(myPos); std::abs(dx) <= maxWalkCacheWidth) {
+		if (int32_t dy = pos.getOffsetY(myPos); std::abs(dy) <= maxWalkCacheHeight) {
 			if (localMapCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
 				return 1;
 			}
@@ -480,7 +492,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			if (oldPos.z != newPos.z) {
 				// floor change extra cost
 				lastStepCost = 2;
-			} else if (Position::getDistanceX(newPos, oldPos) >= 1 && Position::getDistanceY(newPos, oldPos) >= 1) {
+			} else if (newPos.getDistanceX(oldPos) >= 1 && newPos.getDistanceY(oldPos) >= 1) {
 				// diagonal extra cost
 				lastStepCost = 3;
 			}
@@ -493,9 +505,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 			std::forward_list<Creature*> despawnList;
 			for (Creature* summon : summons) {
 				const Position& pos = summon->getPosition();
-				if (Position::getDistanceZ(newPos, pos) > 2 ||
-				    (std::max<int32_t>(Position::getDistanceX(newPos, pos), Position::getDistanceY(newPos, pos)) >
-				     30)) {
+				if (newPos.getDistanceZ(pos) > 2 || std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30) {
 					despawnList.push_front(summon);
 				}
 			}
@@ -506,6 +516,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 		}
 
 		if (newTile->getZone() != oldTile->getZone()) {
+			g_events->eventCreatureOnChangeZone(this, oldTile->getZone(), newTile->getZone());
 			onChangeZone(getZone());
 		}
 
@@ -546,7 +557,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 					// shift y west
 					int32_t starty = 0;
 					int32_t endy = mapWalkHeight - 1;
-					int32_t dy = Position::getDistanceY(oldPos, newPos);
+					int32_t dy = oldPos.getDistanceY(newPos);
 
 					if (dy < 0) {
 						endy += dy;
@@ -569,7 +580,7 @@ void Creature::onCreatureMove(Creature* creature, const Tile* newTile, const Pos
 					// shift y east
 					int32_t starty = 0;
 					int32_t endy = mapWalkHeight - 1;
-					int32_t dy = Position::getDistanceY(oldPos, newPos);
+					int32_t dy = oldPos.getDistanceY(newPos);
 
 					if (dy < 0) {
 						endy += dy;
@@ -637,7 +648,7 @@ CreatureVector Creature::getKillers()
 {
 	CreatureVector killers;
 	const int64_t timeNow = OTSYS_TIME();
-	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 	for (const auto& it : damageMap) {
 		Creature* attacker = g_game.getCreatureByID(it.first);
 		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
@@ -663,7 +674,7 @@ void Creature::onDeath()
 	Creature* mostDamageCreature = nullptr;
 
 	const int64_t timeNow = OTSYS_TIME();
-	const uint32_t inFightTicks = g_config.getNumber(ConfigManager::PZ_LOCKED);
+	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 	int32_t mostDamage = 0;
 	std::map<Creature*, uint64_t> experienceMap;
 	for (const auto& it : damageMap) {
@@ -789,7 +800,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	if (it == damageMap.end()) {
 		return false;
 	}
-	return (OTSYS_TIME() - it->second.ticks) <= g_config.getNumber(ConfigManager::PZ_LOCKED);
+	return (OTSYS_TIME() - it->second.ticks) <= getNumber(ConfigManager::PZ_LOCKED);
 }
 
 Item* Creature::getCorpse(Creature*, Creature*) { return Item::CreateItem(getLookCorpse()); }
@@ -1577,7 +1588,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 	} else {
-		int_fast32_t dx = Position::getOffsetX(startPos, targetPos);
+		int32_t dx = startPos.getOffsetX(targetPos);
 
 		int32_t dxMax = (dx >= 0 ? fpp.maxTargetDist : 0);
 		if (testPos.x > targetPos.x + dxMax) {
@@ -1589,7 +1600,7 @@ bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Posit
 			return false;
 		}
 
-		int_fast32_t dy = Position::getOffsetY(startPos, targetPos);
+		int32_t dy = startPos.getOffsetY(targetPos);
 
 		int32_t dyMax = (dy >= 0 ? fpp.maxTargetDist : 0);
 		if (testPos.y > targetPos.y + dyMax) {
@@ -1615,8 +1626,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 		return false;
 	}
 
-	int32_t testDist =
-	    std::max<int32_t>(Position::getDistanceX(targetPos, testPos), Position::getDistanceY(targetPos, testPos));
+	int32_t testDist = std::max(targetPos.getDistanceX(testPos), targetPos.getDistanceY(testPos));
 	if (fpp.maxTargetDist == 1) {
 		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {
 			return false;
@@ -1663,4 +1673,24 @@ bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirL
 	fpp.minTargetDist = minTargetDist;
 	fpp.maxTargetDist = maxTargetDist;
 	return getPathTo(targetPos, dirList, fpp);
+}
+
+void Creature::setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn)
+{
+	auto oldValue = getStorageValue(key);
+	if (value) {
+		storageMap.insert_or_assign(key, value.value());
+	} else {
+		storageMap.erase(key);
+	}
+	g_events->eventCreatureOnUpdateStorage(this, key, oldValue, value, isSpawn);
+}
+
+std::optional<int32_t> Creature::getStorageValue(uint32_t key) const
+{
+	auto it = storageMap.find(key);
+	if (it == storageMap.end()) {
+		return std::nullopt;
+	}
+	return std::make_optional(it->second);
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Metal Gargoyle" nameDescription="a metal gargoyle" race="energy" experience="1400" speed="190">
+<monster name="Metal Gargoyle" nameDescription="a metal gargoyle" race="energy" experience="1400" speed="190" raceId="1039">
 	<health now="2100" max="2100" />
 	<look type="601" corpse="23347" />
 	<targetchange interval="2000" chance="5" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Construct" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Metal Gargoyle Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" skill="84" attack="50" />
 		<attack name="death" interval="2000" chance="10" length="8" spread="0" min="-125" max="-230">

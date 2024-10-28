@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Insect Swarm" nameDescription="an insect swarm" race="undead" experience="40" speed="150">
+<monster name="Insect Swarm" nameDescription="an insect swarm" race="undead" experience="40" speed="150" raceId="621">
 	<health now="50" max="50" />
 	<look type="349" corpse="11320" />
 	<targetchange interval="5000" chance="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Insect Swarm Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-10" poison="16" />
 		<attack name="lifedrain" interval="2000" chance="15" range="1" min="0" max="-15">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Leaf Golem" nameDescription="a leaf golem" race="undead" experience="45" speed="140" manacost="390">
+<monster name="Leaf Golem" nameDescription="a leaf golem" race="undead" experience="45" speed="140" manacost="390" raceId="979">
 	<health now="90" max="90" />
 	<look type="567" corpse="21358" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Plant" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Leaf Golem Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="physical" interval="2000" chance="15" range="7" target="1" min="0" max="-15">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Water Buffalo" nameDescription="a water buffalo" race="blood" experience="20" speed="150">
+<monster name="Water Buffalo" nameDescription="a water buffalo" race="blood" experience="20" speed="150" raceId="872">
 	<health now="390" max="390" />
 	<look type="523" corpse="19701" />
 	<targetchange interval="4000" chance="10" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="2" expertise="3" mastery="5" charmPoints="75" difficulty="easy" occurrence="very rare" locations="Water Buffalo Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>

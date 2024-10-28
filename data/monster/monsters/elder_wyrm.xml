@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="280">
+<monster name="Elder Wyrm" nameDescription="an elder wyrm" race="blood" experience="2500" speed="280" raceId="963">
 	<health now="2700" max="2700" />
 	<look type="561" corpse="21283" />
 	<targetchange interval="4000" chance="15" />
@@ -15,6 +15,7 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="250" />
 	</flags>
+	<bestiary class="Dragon" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Elder Wyrm Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-350" />
 		<attack name="energy" interval="2000" chance="15" radius="4" target="1" min="-90" max="-150">

@@ -2,6 +2,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/otpch.cpp
 	${CMAKE_CURRENT_LIST_DIR}/actions.cpp
 	${CMAKE_CURRENT_LIST_DIR}/ban.cpp
+	${CMAKE_CURRENT_LIST_DIR}/base64.cpp
 	${CMAKE_CURRENT_LIST_DIR}/baseevents.cpp
 	${CMAKE_CURRENT_LIST_DIR}/bed.cpp
 	${CMAKE_CURRENT_LIST_DIR}/chat.cpp
@@ -43,6 +44,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/movement.cpp
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/npc.cpp
+	${CMAKE_CURRENT_LIST_DIR}/otserv.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outfit.cpp
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.cpp
 	${CMAKE_CURRENT_LIST_DIR}/party.cpp
@@ -54,8 +56,6 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.cpp
-	${CMAKE_CURRENT_LIST_DIR}/quests.cpp
-	${CMAKE_CURRENT_LIST_DIR}/raids.cpp
 	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/script.cpp
@@ -80,9 +80,9 @@ set(tfs_SRC
 
 set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/otpch.h
-	${CMAKE_CURRENT_LIST_DIR}/account.h
 	${CMAKE_CURRENT_LIST_DIR}/actions.h
 	${CMAKE_CURRENT_LIST_DIR}/ban.h
+	${CMAKE_CURRENT_LIST_DIR}/base64.h
 	${CMAKE_CURRENT_LIST_DIR}/baseevents.h
 	${CMAKE_CURRENT_LIST_DIR}/bed.h
 	${CMAKE_CURRENT_LIST_DIR}/chat.h
@@ -130,6 +130,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/movement.h
 	${CMAKE_CURRENT_LIST_DIR}/networkmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/npc.h
+	${CMAKE_CURRENT_LIST_DIR}/otserv.h
 	${CMAKE_CURRENT_LIST_DIR}/outfit.h
 	${CMAKE_CURRENT_LIST_DIR}/outputmessage.h
 	${CMAKE_CURRENT_LIST_DIR}/party.h
@@ -142,8 +143,6 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.h
 	${CMAKE_CURRENT_LIST_DIR}/pugicast.h
-	${CMAKE_CURRENT_LIST_DIR}/quests.h
-	${CMAKE_CURRENT_LIST_DIR}/raids.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/script.h
@@ -169,19 +168,33 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/xtea.h
 	)
 
-set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/otserv.cpp PARENT_SCOPE)
+set(tfs_MAIN ${CMAKE_CURRENT_LIST_DIR}/main.cpp PARENT_SCOPE)
 
 add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
-	Boost::date_time
-	Boost::system
 	Boost::iostreams
+	Boost::system
+	Boost::locale
 	fmt::fmt
+	OpenSSL::Crypto
+	pugixml::pugixml
 	${CMAKE_THREAD_LIBS_INIT}
-	${Crypto++_LIBRARIES}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
-	${PUGIXML_LIBRARIES}
 	)
+set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
+
+if (APPLE)
+	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
+endif()
+
+if (HTTP)
+	add_subdirectory(http)
+	target_link_libraries(tfslib PRIVATE http)
+endif ()
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
+
+if (BUILD_TESTING)
+    add_subdirectory(tests)
+endif()

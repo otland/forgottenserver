@@ -25,6 +25,24 @@ extern Game g_game;
 
 namespace {
 
+std::array<std::string, ConfigManager::LAST_STRING_CONFIG> string = {};
+std::array<int32_t, ConfigManager::LAST_INTEGER_CONFIG> integer = {};
+std::array<bool, ConfigManager::LAST_BOOLEAN_CONFIG> boolean = {};
+
+using ExperienceStages = std::vector<std::tuple<uint32_t, uint32_t, float>>;
+ExperienceStages expStages;
+
+bool loaded = false;
+
+template <typename T>
+auto getEnv(const char* envVar, T&& defaultValue)
+{
+	if (auto value = std::getenv(envVar)) {
+		return pugi::cast<std::decay_t<T>>(value);
+	}
+	return defaultValue;
+}
+
 std::string getGlobalString(lua_State* L, const char* identifier, const char* defaultValue)
 {
 	lua_getglobal(L, identifier);
@@ -72,12 +90,6 @@ bool getGlobalBoolean(lua_State* L, const char* identifier, const bool defaultVa
 	return val != 0;
 }
 
-} // namespace
-
-ConfigManager::ConfigManager() { string[CONFIG_FILE] = "config.lua"; }
-
-namespace {
-
 ExperienceStages loadLuaStages(lua_State* L)
 {
 	ExperienceStages stages;
@@ -90,9 +102,9 @@ ExperienceStages loadLuaStages(lua_State* L)
 	lua_pushnil(L);
 	while (lua_next(L, -2) != 0) {
 		const auto tableIndex = lua_gettop(L);
-		auto minLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "minlevel");
-		auto maxLevel = LuaScriptInterface::getField<uint32_t>(L, tableIndex, "maxlevel");
-		auto multiplier = LuaScriptInterface::getField<float>(L, tableIndex, "multiplier");
+		auto minLevel = tfs::lua::getField<uint32_t>(L, tableIndex, "minlevel", 1);
+		auto maxLevel = tfs::lua::getField<uint32_t>(L, tableIndex, "maxlevel", std::numeric_limits<uint32_t>::max());
+		auto multiplier = tfs::lua::getField<float>(L, tableIndex, "multiplier", 1);
 		stages.emplace_back(minLevel, maxLevel, multiplier);
 		lua_pop(L, 4);
 	}
@@ -118,12 +130,10 @@ ExperienceStages loadXMLStages()
 				return {};
 			}
 		} else {
-			uint32_t minLevel, maxLevel, multiplier;
+			uint32_t minLevel = 1, maxLevel = std::numeric_limits<uint32_t>::max(), multiplier = 1;
 
 			if (auto minLevelAttribute = stageNode.attribute("minlevel")) {
 				minLevel = pugi::cast<uint32_t>(minLevelAttribute.value());
-			} else {
-				minLevel = 1;
 			}
 
 			if (auto maxLevelAttribute = stageNode.attribute("maxlevel")) {
@@ -132,8 +142,6 @@ ExperienceStages loadXMLStages()
 
 			if (auto multiplierAttribute = stageNode.attribute("multiplier")) {
 				multiplier = pugi::cast<uint32_t>(multiplierAttribute.value());
-			} else {
-				multiplier = 1;
 			}
 
 			stages.emplace_back(minLevel, maxLevel, multiplier);
@@ -155,7 +163,11 @@ bool ConfigManager::load()
 
 	luaL_openlibs(L);
 
-	if (luaL_dofile(L, getString(CONFIG_FILE).c_str())) {
+	if (string[CONFIG_FILE].empty()) {
+		string[CONFIG_FILE] = "config.lua";
+	}
+
+	if (luaL_dofile(L, string[CONFIG_FILE].data())) {
 		std::cout << "[Error - ConfigManager::load] " << lua_tostring(L, -1) << std::endl;
 		lua_close(L);
 		return false;
@@ -173,13 +185,13 @@ bool ConfigManager::load()
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
 		string[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "never");
-		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", "127.0.0.1");
-		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", "forgottenserver");
-		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", "");
-		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", "forgottenserver");
-		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", "");
+		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", getEnv("MYSQL_HOST", "127.0.0.1"));
+		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", getEnv("MYSQL_USER", "forgottenserver"));
+		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", getEnv("MYSQL_PASSWORD", ""));
+		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", getEnv("MYSQL_DATABASE", "forgottenserver"));
+		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", getEnv("MYSQL_SOCK", ""));
 
-		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", 3306);
+		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", getEnv<uint16_t>("MYSQL_PORT", 3306));
 
 		if (integer[GAME_PORT] == 0) {
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
@@ -190,6 +202,8 @@ bool ConfigManager::load()
 		}
 
 		integer[STATUS_PORT] = getGlobalNumber(L, "statusProtocolPort", 7171);
+		integer[HTTP_PORT] = getGlobalNumber(L, "httpPort", 8080);
+		integer[HTTP_WORKERS] = getGlobalNumber(L, "httpWorkers", 1);
 
 		integer[MARKET_OFFER_DURATION] = getGlobalNumber(L, "marketOfferDuration", 30 * 24 * 60 * 60);
 	}
@@ -222,13 +236,11 @@ bool ConfigManager::load()
 	boolean[YELL_ALLOW_PREMIUM] = getGlobalBoolean(L, "yellAlwaysAllowPremium", false);
 	boolean[PREMIUM_TO_SEND_PRIVATE] = getGlobalBoolean(L, "premiumToSendPrivate", false);
 	boolean[FORCE_MONSTERTYPE_LOAD] = getGlobalBoolean(L, "forceMonsterTypesOnLoad", true);
-	boolean[DEFAULT_WORLD_LIGHT] = getGlobalBoolean(L, "defaultWorldLight", true);
 	boolean[HOUSE_OWNED_BY_ACCOUNT] = getGlobalBoolean(L, "houseOwnedByAccount", false);
 	boolean[CLEAN_PROTECTION_ZONES] = getGlobalBoolean(L, "cleanProtectionZones", false);
 	boolean[HOUSE_DOOR_SHOW_PRICE] = getGlobalBoolean(L, "houseDoorShowPrice", true);
 	boolean[ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS] = getGlobalBoolean(L, "onlyInvitedCanMoveHouseItems", true);
 	boolean[REMOVE_ON_DESPAWN] = getGlobalBoolean(L, "removeOnDespawn", true);
-	boolean[PLAYER_CONSOLE_LOGS] = getGlobalBoolean(L, "showPlayerLogInConsole", true);
 	boolean[MANASHIELD_BREAKABLE] = getGlobalBoolean(L, "useBreakableManaShield", true);
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
 	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
@@ -279,7 +291,7 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_FREE_LIMIT] = getGlobalNumber(L, "questTrackerFreeLimit", 10);
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
-	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 10 * 60);
+	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
@@ -297,10 +309,9 @@ bool ConfigManager::load()
 	return true;
 }
 
-static std::string dummyStr;
-
-const std::string& ConfigManager::getString(string_config_t what) const
+const std::string& ConfigManager::getString(string_config_t what)
 {
+	static std::string dummyStr;
 	if (what >= LAST_STRING_CONFIG) {
 		std::cout << "[Warning - ConfigManager::getString] Accessing invalid index: " << what << std::endl;
 		return dummyStr;
@@ -308,7 +319,7 @@ const std::string& ConfigManager::getString(string_config_t what) const
 	return string[what];
 }
 
-int32_t ConfigManager::getNumber(integer_config_t what) const
+int32_t ConfigManager::getNumber(integer_config_t what)
 {
 	if (what >= LAST_INTEGER_CONFIG) {
 		std::cout << "[Warning - ConfigManager::getNumber] Accessing invalid index: " << what << std::endl;
@@ -317,7 +328,7 @@ int32_t ConfigManager::getNumber(integer_config_t what) const
 	return integer[what];
 }
 
-bool ConfigManager::getBoolean(boolean_config_t what) const
+bool ConfigManager::getBoolean(boolean_config_t what)
 {
 	if (what >= LAST_BOOLEAN_CONFIG) {
 		std::cout << "[Warning - ConfigManager::getBoolean] Accessing invalid index: " << what << std::endl;
@@ -326,10 +337,11 @@ bool ConfigManager::getBoolean(boolean_config_t what) const
 	return boolean[what];
 }
 
-float ConfigManager::getExperienceStage(uint32_t level) const
+float ConfigManager::getExperienceStage(uint32_t level)
 {
-	auto it = std::find_if(expStages.begin(), expStages.end(), [level](ExperienceStages::value_type stage) {
-		return level >= std::get<0>(stage) && level <= std::get<1>(stage);
+	auto it = std::find_if(expStages.begin(), expStages.end(), [level](auto&& stage) {
+		auto&& [minLevel, maxLevel, _] = stage;
+		return level >= minLevel && level <= maxLevel;
 	});
 
 	if (it == expStages.end()) {

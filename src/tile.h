@@ -210,12 +210,13 @@ public:
 
 	void removeThing(Thing* thing, uint32_t count) override final;
 
+	bool hasCreature(Creature* creature) const;
 	void removeCreature(Creature* creature);
 
 	int32_t getThingIndex(const Thing* thing) const override final;
 	size_t getFirstIndex() const override final;
 	size_t getLastIndex() const override final;
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const override final;
 	Thing* getThing(size_t index) const override final;
 
 	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
@@ -266,6 +267,8 @@ public:
 		}
 	}
 
+	using Tile::internalAddThing;
+
 	// non-copyable
 	DynamicTile(const DynamicTile&) = delete;
 	DynamicTile& operator=(const DynamicTile&) = delete;
@@ -296,6 +299,8 @@ public:
 			}
 		}
 	}
+
+	using Tile::internalAddThing;
 
 	// non-copyable
 	StaticTile(const StaticTile&) = delete;

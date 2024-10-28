@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Damaged Crystal Golem" nameDescription="a damaged crystal golem" race="energy" experience="0" speed="180">
+<monster name="Damaged Crystal Golem" nameDescription="a damaged crystal golem" race="energy" experience="0" speed="180" raceId="874">
 	<health now="500" max="500" />
 	<look type="508" corpse="18466" />
 	<targetchange interval="4000" chance="10" />
@@ -16,4 +16,5 @@
 		<flag staticattack="90" />
 		<flag runonhealth="500" />
 	</flags>
+	<bestiary class="Construct" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="uncommon" locations="Damaged Crystal Golem Locations..." />
 </monster>

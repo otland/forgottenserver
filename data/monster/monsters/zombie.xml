@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Zombie" nameDescription="a zombie" race="blood" experience="280" speed="180">
+<monster name="Zombie" nameDescription="a zombie" race="blood" experience="280" speed="180" raceId="512">
 	<health now="500" max="500" />
 	<look type="311" corpse="9875" />
 	<targetchange interval="4000" chance="10" />
@@ -17,6 +17,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Zombie Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-130" />
 		<attack name="manadrain" interval="2000" chance="10" target="1" range="1" min="-14" max="-23" />

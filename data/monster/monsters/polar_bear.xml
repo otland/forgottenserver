@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Polar Bear" nameDescription="a polar bear" race="blood" experience="28" speed="156" manacost="315">
+<monster name="Polar Bear" nameDescription="a polar bear" race="blood" experience="28" speed="156" manacost="315" raceId="42">
 	<health now="85" max="85" />
 	<look type="42" corpse="5987" />
 	<targetchange interval="4000" chance="0" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Mammal" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Polar Bear Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-30" />
 	</attacks>

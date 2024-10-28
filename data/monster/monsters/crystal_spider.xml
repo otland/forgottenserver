@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Crystal Spider" nameDescription="a crystal spider" race="undead" experience="900" speed="230">
+<monster name="Crystal Spider" nameDescription="a crystal spider" race="undead" experience="900" speed="230" raceId="330">
 	<health now="1250" max="1250" />
 	<look type="263" corpse="7344" />
 	<targetchange interval="4000" chance="15" />
@@ -16,6 +16,7 @@
 		<flag runonhealth="0" />
 		<flag canwalkonenergy="0" />
 	</flags>
+	<bestiary class="Magical" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Crystal Spider Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-250" poison="160" />
 		<attack name="speed" interval="2000" chance="15" range="7" radius="6" target="0" speedchange="-800" duration="15000">

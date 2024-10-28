@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Herald of Gloom" nameDescription="a herald of gloom" experience="450" speed="260" race="undead">
+<monster name="Herald of Gloom" nameDescription="a herald of gloom" experience="450" speed="260" race="undead" raceId="586">
 	<health now="350" max="350" />
 	<targetchange speed="0" chance="8" />
 	<look type="320" corpse="9915" />
@@ -19,6 +19,7 @@
 		<flag canwalkonfire="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Demon" prowess="2" expertise="3" mastery="5" charmPoints="125" difficulty="medium" occurrence="very rare" locations="Herald of Gloom Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-90" />
 		<attack name="speed" interval="3000" chance="10" range="7" target="1" duration="30000" speedchange="-600">

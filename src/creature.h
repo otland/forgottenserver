@@ -20,6 +20,7 @@ class Player;
 
 using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
+using CreatureIconHashMap = std::unordered_map<CreatureIcon_t, uint16_t>;
 
 enum slots_t : uint8_t
 {
@@ -168,6 +169,11 @@ public:
 	bool isInvisible() const;
 	ZoneType_t getZone() const { return getTile()->getZone(); }
 
+	// creature icons
+	CreatureIconHashMap& getIcons() { return creatureIcons; }
+	const CreatureIconHashMap& getIcons() const { return creatureIcons; }
+	void updateIcons() const;
+
 	// walk functions
 	void startAutoWalk();
 	void startAutoWalk(Direction direction);
@@ -310,6 +316,7 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
+	bool hasParent() const override { return getParent(); }
 	Cylinder* getParent() const override final { return tile; }
 	void setParent(Cylinder* cylinder) override final
 	{
@@ -344,6 +351,10 @@ public:
 		}
 	}
 
+	virtual void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false);
+	virtual std::optional<int32_t> getStorageValue(uint32_t key) const;
+	decltype(auto) getStorageMap() const { return storageMap; }
+
 protected:
 	virtual bool useCacheMap() const { return false; }
 
@@ -366,6 +377,7 @@ protected:
 	std::list<Creature*> summons;
 	CreatureEventList eventsList;
 	ConditionList conditions;
+	CreatureIconHashMap creatureIcons;
 
 	std::vector<Direction> listWalkDir;
 
@@ -392,6 +404,7 @@ protected:
 
 	Outfit_t currentOutfit;
 	Outfit_t defaultOutfit;
+	uint16_t currentMount;
 
 	Position lastPosition;
 	LightInfo internalLight;
@@ -440,6 +453,9 @@ protected:
 	friend class Game;
 	friend class Map;
 	friend class LuaScriptInterface;
+
+private:
+	std::map<uint32_t, int32_t> storageMap;
 };
 
 #endif // FS_CREATURE_H

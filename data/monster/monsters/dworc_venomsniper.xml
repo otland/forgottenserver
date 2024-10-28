@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="152">
+<monster name="Dworc Venomsniper" namedescription="a dworc venomsniper" race="blood" experience="35" speed="152" raceId="216">
 	<health now="80" max="80" />
 	<look type="216" corpse="6059" />
 	<targetchange interval="4000" chance="0" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonfire="0" />
 	</flags>
+	<bestiary class="Humanoid" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="common" locations="Dworc Venomsniper Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-15" />
 		<attack name="poisoncondition" interval="2000" chance="15" range="5" min="-20" max="-40">

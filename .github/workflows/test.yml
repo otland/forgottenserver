@@ -4,26 +4,46 @@ on: [push, pull_request]
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mariadb
+
+        env:
+          MARIADB_USER: forgottenserver
+          MARIADB_PASSWORD: forgottenserver
+          MARIADB_DATABASE: forgottenserver
+          MARIADB_INITDB_SKIP_TZINFO: "yes"
+          MARIADB_RANDOM_ROOT_PASSWORD: "yes"
+
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=3
+
+        ports:
+          - 3306:3306
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: >
-          sudo apt update -q &&
-          sudo apt install -yq git cmake build-essential libluajit-5.1-dev libmysqlclient-dev
-          libboost-date-time-dev libboost-system-dev libboost-iostreams-dev libboost-filesystem-dev
-          libboost-test-dev libpugixml-dev libcrypto++-dev libfmt-dev
+      - name: Get latest CMake
+        # Using 'latest' branch, the latest CMake is installed.
+        uses: lukka/get-cmake@latest
 
-      - name: Build with cmake
-        uses: ashutoshvarma/action-cmake-build@master
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v11
+
+      - name: Setup database
+        run: |
+          sudo apt update -qq
+          sudo apt install -yqq mariadb-client
+          mysql -h 0.0.0.0 -u forgottenserver -pforgottenserver forgottenserver < schema.sql
+
+      - name: Build with CMake
+        uses: lukka/run-cmake@v10
         with:
-          build-dir: ${{ runner.workspace }}/build
-          # will set the CC & CXX for cmake
-          cc: gcc
-          cxx: g++
-          # Extra options pass to cmake while configuring project
-          configure-options: -DENABLE_TESTING=ON -DUSE_LUAJIT=on
-          # run build using '-j [parallel]' to use multiple threads to build
-          parallel: 2
-          run-test: true
+          buildPreset: vcpkg
+          buildPresetAdditionalArgs: "['--config', 'Debug']"
+          configurePreset: vcpkg
+          configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
+          testPreset: vcpkg
+          testPresetAdditionalArgs: "['--build-config', 'Debug', '--output-on-failure']"

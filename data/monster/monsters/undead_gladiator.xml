@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Undead Gladiator" nameDescription="an undead gladiator" race="undead" experience="800" speed="220">
+<monster name="Undead Gladiator" nameDescription="an undead gladiator" race="undead" experience="800" speed="220" raceId="508">
 	<health now="1000" max="1000" />
 	<look type="306" corpse="9823" />
 	<targetchange interval="4000" chance="10" />
@@ -18,6 +18,7 @@
 		<flag canwalkonenergy="0" />
 		<flag canwalkonpoison="0" />
 	</flags>
+	<bestiary class="Undead" prowess="50" expertise="500" mastery="1000" charmPoints="50" difficulty="medium" occurrence="common" locations="Undead Gladiator Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-250" />
 		<attack name="physical" interval="2000" chance="20" range="7" min="0" max="-135">

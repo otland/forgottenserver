@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Bog Frog" namedescription="a bog frog" race="blood" experience="0" speed="200" manacost="305">
+<monster name="Bog Frog" namedescription="a bog frog" race="blood" experience="0" speed="200" manacost="305" raceId="738">
 	<health now="25" max="25" />
 	<look type="412" corpse="6079" />
 	<targetchange interval="4000" chance="0" />
@@ -16,4 +16,5 @@
 		<flag targetdistance="1" />
 		<flag runonhealth="25" />
 	</flags>
+	<bestiary class="Amphibic" prowess="10" expertise="100" mastery="250" charmPoints="10" difficulty="trivial" occurrence="common" locations="Bog Frog Locations..." />
 </monster>

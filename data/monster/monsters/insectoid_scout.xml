@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190">
+<monster name="Insectoid Scout" nameDescription="an insectoid scout" race="venom" experience="150" speed="190" raceId="732">
 	<health now="230" max="230" />
 	<look type="403" corpse="13514" />
 	<targetchange interval="5000" chance="0" />
@@ -16,6 +16,7 @@
 		<flag staticattack="90" />
 		<flag runonhealth="0" />
 	</flags>
+	<bestiary class="Vermin" prowess="25" expertise="250" mastery="500" charmPoints="30" difficulty="easy" occurrence="rare" locations="Insectoid Scout Locations..." />
 	<attacks>
 		<attack name="melee" interval="2000" min="0" max="-74" poison="60" />
 	</attacks>

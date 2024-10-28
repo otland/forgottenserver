@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<monster name="Burning Book" nameDescription="a burning book" race="ink" experience="11934" speed="440">
+<monster name="Burning Book" nameDescription="a burning book" race="ink" experience="11934" speed="440" raceId="1663">
 	<health now="18000" max="18000" />
 	<look type="1061" head="79" body="113" legs="78" feet="112" addons="0" corpse="31410" />
 	<targetchange interval="2000" chance="5" />
@@ -13,6 +13,7 @@
 		<flag canwalkonfire="1" />
 		<flag canwalkonpoison="1" />
 	</flags>
+	<bestiary class="Magical" prowess="100" expertise="1000" mastery="2500" charmPoints="100" difficulty="hard" occurrence="common" locations="Burning Book Locations..." />
 	<immunities>
 		<immunity paralyze="1" />
 		<immunity invisible="1" />

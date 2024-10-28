@@ -88,17 +88,6 @@ function getDistanceBetween(firstPosition, secondPosition)
 	return posDif
 end
 
-function getFormattedWorldTime()
-	local worldTime = getWorldTime()
-	local hours = math.floor(worldTime / 60)
-
-	local minutes = worldTime % 60
-	if minutes < 10 then
-		minutes = '0' .. minutes
-	end
-	return hours .. ':' .. minutes
-end
-
 function getLootRandom()
 	return math.random(0, MAX_LOOTCHANCE) / configManager.getNumber(configKeys.RATE_LOOT)
 end
@@ -110,6 +99,10 @@ table.contains = function(array, value)
 		end
 	end
 	return false
+end
+
+table.slice = function(array, from, to)
+	return {unpack(array, from or 1, to or #array)}
 end
 
 string.split = function(str, sep)

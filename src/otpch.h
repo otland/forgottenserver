@@ -18,8 +18,8 @@
 #include <boost/lockfree/stack.hpp>
 #include <boost/variant.hpp>
 #include <cassert>
+#include <concepts>
 #include <condition_variable>
-#include <cryptopp/rsa.h>
 #include <cstdint>
 #include <cstdlib>
 #include <deque>
@@ -34,6 +34,7 @@
 #include <memory>
 #include <mutex>
 #include <mysql/mysql.h>
+#include <optional>
 #include <pugixml.hpp>
 #include <random>
 #include <set>

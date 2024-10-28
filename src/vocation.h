@@ -7,8 +7,6 @@
 #include "configmanager.h"
 #include "enums.h"
 
-extern ConfigManager g_config;
-
 class Vocation
 {
 public:
@@ -46,7 +44,7 @@ public:
 
 	bool getMagicShield() const
 	{
-		if (!g_config.getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
+		if (!getBoolean(ConfigManager::MANASHIELD_BREAKABLE)) {
 			return false;
 		}
 		return magicShield;
@@ -89,17 +87,20 @@ private:
 	bool magicShield = false;
 };
 
+using VocationMap = std::map<uint16_t, Vocation>;
+
 class Vocations
 {
 public:
-	bool loadFromXml();
+	bool loadFromXml(std::istream& is, std::string_view filename);
 
 	Vocation* getVocation(uint16_t id);
 	int32_t getVocationId(std::string_view name) const;
 	uint16_t getPromotedVocation(uint16_t vocationId) const;
+	const VocationMap& getVocations() const { return vocationsMap; }
 
 private:
-	std::map<uint16_t, Vocation> vocationsMap;
+	VocationMap vocationsMap;
 };
 
 #endif // FS_VOCATION_H

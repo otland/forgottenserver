@@ -54,8 +54,7 @@ do
 		["Duration"] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
 		["Text"] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= "" end},
 		["Date"] = {key = ITEM_ATTRIBUTE_DATE},
-		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end},
-		["Tier"] = {key = ITEM_ATTRIBUTE_TIER}
+		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end}
 	}
 
 	function setAuxFunctions()
@@ -373,7 +372,9 @@ do
 			for skill, value in pairs(abilities.specialSkills) do
 				if value ~= 0 then
 					-- add + symbol to special skill "amount" fields
-					if skill-1 < 6 and skill % 2 == 1 then
+					if skill-1 < 6 and skill % 2 == 0 and not (skill-1 == SPECIALSKILL_CRITICALHITAMOUNT) then
+						value = string.format("%+d", value/100)
+					elseif skill-1 < 6 and skill % 2 == 1 then
 						value = string.format("%+d", value)
 					elseif skill-1 >= 6 then
 						-- fatal, dodge, momentum coming from the item natively
