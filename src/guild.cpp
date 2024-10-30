@@ -4,9 +4,9 @@
 #include "otpch.h"
 
 #include "guild.h"
-#include "tools.h"
 
 #include "game.h"
+#include "tools.h"
 
 extern Game g_game;
 
