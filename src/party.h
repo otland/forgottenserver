@@ -9,8 +9,6 @@ class Player;
 class Party
 {
 public:
-	explicit Party(Player* leader) : leader(leader) { leader->setParty(this); }
-
 	Player* leader;
 
 	std::vector<Player*> members;
@@ -20,7 +18,7 @@ public:
 	{
 		bool active = false;
 		bool enabled = false;
-		std::map<uint32_t, int64_t> attackTicks;
+		std::map<Player*, int64_t> attackTicks;
 	} sharedExperience;
 };
 
