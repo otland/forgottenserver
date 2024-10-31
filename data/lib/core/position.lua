@@ -11,18 +11,20 @@ function mt.__sub(lhs, rhs)
 end
 
 function mt.__concat(lhs, rhs) return tostring(lhs) .. tostring(rhs) end
+
 function mt.__eq(lhs, rhs) return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z end
+
 function mt.__tostring(self) return string.format("Position(%d, %d, %d)", self.x, self.y, self.z) end
 
 Position.directionOffset = {
-	[DIRECTION_NORTH] = {x = 0, y = -1},
-	[DIRECTION_EAST] = {x = 1, y = 0},
-	[DIRECTION_SOUTH] = {x = 0, y = 1},
-	[DIRECTION_WEST] = {x = -1, y = 0},
-	[DIRECTION_SOUTHWEST] = {x = -1, y = 1},
-	[DIRECTION_SOUTHEAST] = {x = 1, y = 1},
-	[DIRECTION_NORTHWEST] = {x = -1, y = -1},
-	[DIRECTION_NORTHEAST] = {x = 1, y = -1}
+	[DIRECTION_NORTH] = { x = 0, y = -1 },
+	[DIRECTION_EAST] = { x = 1, y = 0 },
+	[DIRECTION_SOUTH] = { x = 0, y = 1 },
+	[DIRECTION_WEST] = { x = -1, y = 0 },
+	[DIRECTION_SOUTHWEST] = { x = -1, y = 1 },
+	[DIRECTION_SOUTHEAST] = { x = 1, y = 1 },
+	[DIRECTION_NORTHWEST] = { x = -1, y = -1 },
+	[DIRECTION_NORTHEAST] = { x = 1, y = -1 }
 }
 
 local abs, max = math.abs, math.max
@@ -72,7 +74,39 @@ function Position:moveUpstairs()
 	return self
 end
 
-function Position:isInRange(from, to)
+function Position:getOffsetX(from, to)
+	return from.x - to.x
+end
+
+function Position:getOffsetY(from, to)
+	return from.y - to.y
+end
+
+function Position:getOffsetZ(from, to)
+	return from.z - to.z
+end
+
+function Position:getDistanceX(from, to)
+	return math.abs(from:getOffsetX(to))
+end
+
+function Position:getDistanceY(from, to)
+	return math.abs(from:getOffsetY(to))
+end
+
+function Position:getDistanceZ(from, to)
+	return math.abs(from:getOffsetZ(to))
+end
+
+function Position:isInRange(from, to, deltax, deltay, deltaz)
+	if deltax and deltay then
+		if deltaz then
+			return from:getDistanceX(to) <= deltax and from:getDistanceY(to) <= deltay and
+				from:getDistanceZ(to) <= deltaz
+		end
+		return from:getDistanceX(to) <= deltax and from:getDistanceY(to) <= deltay
+	end
+
 	-- No matter what corner from and to is, we want to make
 	-- life easier by calculating north-west and south-east
 	local zone = {
@@ -89,8 +123,8 @@ function Position:isInRange(from, to)
 	}
 
 	if self.x >= zone.nW.x and self.x <= zone.sE.x
-	and self.y >= zone.nW.y and self.y <= zone.sE.y
-	and self.z >= zone.nW.z and self.z <= zone.sE.z then
+		and self.y >= zone.nW.y and self.y <= zone.sE.y
+		and self.z >= zone.nW.z and self.z <= zone.sE.z then
 		return true
 	end
 	return false
