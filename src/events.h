@@ -10,7 +10,6 @@
 
 class ItemType;
 class NetworkMessage;
-class Party;
 class Spell;
 class Tile;
 
@@ -34,15 +33,6 @@ class Events
 		int32_t creatureOnHear = -1;
 		int32_t creatureOnChangeZone = -1;
 		int32_t creatureOnUpdateStorage = -1;
-
-		// Party
-		int32_t partyOnJoin = -1;
-		int32_t partyOnLeave = -1;
-		int32_t partyOnDisband = -1;
-		int32_t partyOnShareExperience = -1;
-		int32_t partyOnInvite = -1;
-		int32_t partyOnRevokeInvitation = -1;
-		int32_t partyOnPassLeadership = -1;
 
 		// Player
 		int32_t playerOnBrowseField = -1;
@@ -89,15 +79,6 @@ public:
 	void eventCreatureOnChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone);
 	void eventCreatureOnUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value,
 	                                  std::optional<int32_t> oldValue, bool isSpawn);
-
-	// Party
-	bool eventPartyOnJoin(Party* party, Player* player);
-	bool eventPartyOnLeave(Party* party, Player* player);
-	bool eventPartyOnDisband(Party* party);
-	void eventPartyOnShareExperience(Party* party, uint64_t& exp);
-	bool eventPartyOnInvite(Party* party, Player* player);
-	bool eventPartyOnRevokeInvitation(Party* party, Player* player);
-	bool eventPartyOnPassLeadership(Party* party, Player* player);
 
 	// Player
 	bool eventPlayerOnBrowseField(Player* player, const Position& position);

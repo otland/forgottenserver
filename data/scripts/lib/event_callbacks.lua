@@ -29,14 +29,6 @@ ec.onTargetCombat = {returnValue=true}
 ec.onHear = {}
 ec.onChangeZone = {}
 ec.onUpdateStorage = {}
--- Party
-ec.onJoin = {}
-ec.onLeave = {}
-ec.onDisband = {}
-ec.onShareExperience = {}
-ec.onInvite = {}
-ec.onRevokeInvitation = {}
-ec.onPassLeadership = {}
 -- Player
 ec.onBrowseField = {}
 ec.onLook = {[5] = 1}
