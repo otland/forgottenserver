@@ -389,7 +389,6 @@ void Spawn::cleanup()
 {
 	auto it = spawnedMap.begin();
 	while (it != spawnedMap.end()) {
-		uint32_t spawnId = it->first;
 		Monster* monster = it->second;
 		if (monster->isRemoved()) {
 			monster->decrementReferenceCounter();
