@@ -271,8 +271,6 @@ bool Spawn::findPlayer(const Position& pos)
 	return false;
 }
 
-bool Spawn::isInSpawnZone(const Position& pos) { return Spawns::isInZone(centerPos, radius, pos); }
-
 bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = false*/)
 {
 	bool isBlocked = !startup && findPlayer(sb.pos);
@@ -391,9 +389,6 @@ void Spawn::cleanup()
 	while (it != spawnedMap.end()) {
 		Monster* monster = it->second;
 		if (monster->isRemoved()) {
-			monster->decrementReferenceCounter();
-			it = spawnedMap.erase(it);
-		} else if (!isInSpawnZone(monster->getPosition())) {
 			monster->decrementReferenceCounter();
 			it = spawnedMap.erase(it);
 		} else {
