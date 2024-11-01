@@ -394,8 +394,8 @@ void Spawn::cleanup()
 		if (monster->isRemoved()) {
 			monster->decrementReferenceCounter();
 			it = spawnedMap.erase(it);
-		} else if (!isInSpawnZone(monster->getPosition()) && spawnId != 0) {
-			spawnedMap.insert({0, monster});
+		} else if (!isInSpawnZone(monster->getPosition())) {
+			monster->decrementReferenceCounter();
 			it = spawnedMap.erase(it);
 		} else {
 			++it;
