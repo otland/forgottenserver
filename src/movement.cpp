@@ -10,7 +10,6 @@
 #include "pugicast.h"
 
 extern Game g_game;
-extern Vocations g_vocations;
 
 MoveEvents::MoveEvents() : scriptInterface("MoveEvents Interface") { scriptInterface.initState(); }
 
@@ -510,13 +509,14 @@ std::string_view MoveEvent::getScriptEventName() const
 
 bool MoveEvent::configureEvent(const pugi::xml_node& node)
 {
-	pugi::xml_attribute eventAttr = node.attribute("event");
-	if (!eventAttr) {
+	pugi::xml_attribute attr;
+
+	if (!(attr = node.attribute("event"))) {
 		std::cout << "[Error - MoveEvent::configureMoveEvent] Missing event" << std::endl;
 		return false;
 	}
 
-	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(eventAttr.as_string());
+	std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 	if (tmpStr == "stepin") {
 		eventType = MOVE_EVENT_STEP_IN;
 	} else if (tmpStr == "stepout") {
@@ -530,15 +530,13 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	} else if (tmpStr == "removeitem") {
 		eventType = MOVE_EVENT_REMOVE_ITEM;
 	} else {
-		std::cout << "Error: [MoveEvent::configureMoveEvent] No valid event name " << eventAttr.as_string()
-		          << std::endl;
+		std::cout << "Error: [MoveEvent::configureMoveEvent] No valid event name " << attr.as_string() << std::endl;
 		return false;
 	}
 
 	if (eventType == MOVE_EVENT_EQUIP || eventType == MOVE_EVENT_DEEQUIP) {
-		pugi::xml_attribute slotAttribute = node.attribute("slot");
-		if (slotAttribute) {
-			tmpStr = boost::algorithm::to_lower_copy<std::string>(slotAttribute.as_string());
+		if ((attr = node.attribute("slot"))) {
+			tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 			if (tmpStr == "head") {
 				slot = SLOTP_HEAD;
 			} else if (tmpStr == "necklace") {
@@ -562,32 +560,29 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 			} else if (tmpStr == "ammo") {
 				slot = SLOTP_AMMO;
 			} else {
-				std::cout << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: "
-				          << slotAttribute.as_string() << std::endl;
+				std::cout << "[Warning - MoveEvent::configureMoveEvent] Unknown slot type: " << attr.as_string()
+				          << std::endl;
 			}
 		}
 
 		wieldInfo = 0;
 
-		pugi::xml_attribute levelAttribute = node.attribute("level");
-		if (levelAttribute) {
-			reqLevel = pugi::cast<uint32_t>(levelAttribute.value());
+		if ((attr = node.attribute("level"))) {
+			reqLevel = pugi::cast<uint32_t>(attr.value());
 			if (reqLevel > 0) {
 				wieldInfo |= WIELDINFO_LEVEL;
 			}
 		}
 
-		pugi::xml_attribute magLevelAttribute = node.attribute("maglevel");
-		if (magLevelAttribute) {
-			reqMagLevel = pugi::cast<uint32_t>(magLevelAttribute.value());
+		if ((attr = node.attribute("maglevel"))) {
+			reqMagLevel = pugi::cast<uint32_t>(attr.value());
 			if (reqMagLevel > 0) {
 				wieldInfo |= WIELDINFO_MAGLV;
 			}
 		}
 
-		pugi::xml_attribute premiumAttribute = node.attribute("premium");
-		if (premiumAttribute) {
-			premium = premiumAttribute.as_bool();
+		if ((attr = node.attribute("premium"))) {
+			premium = attr.as_bool();
 			if (premium) {
 				wieldInfo |= WIELDINFO_PREMIUM;
 			}
@@ -595,23 +590,24 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 
 		// Gather vocation information
 		std::list<std::string> vocStringList;
-		for (auto vocationNode : node.children()) {
-			pugi::xml_attribute vocationNameAttribute = vocationNode.attribute("name");
-			if (!vocationNameAttribute) {
+		for (auto& vocation_node : node.children()) {
+			if (!(attr = vocation_node.attribute("name"))) {
 				continue;
 			}
 
-			int32_t vocationId = g_vocations.getVocationId(vocationNameAttribute.as_string());
-			if (vocationId != -1) {
-				vocationEquipSet.insert(vocationId);
-				if (vocationNode.attribute("showInDescription").as_bool(true)) {
-					vocStringList.push_back(
-					    boost::algorithm::to_lower_copy<std::string>(vocationNameAttribute.as_string()));
+			if (auto vocation = tfs::game::vocations::find_by_name(attr.as_string())) {
+				addVocation(vocation);
+
+				if (vocation_node.attribute("showInDescription").as_bool(true)) {
+					vocStringList.push_back(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 				}
+			} else {
+				std::cout << "[Warning - MoveEvent::configureMoveEvent] Wrong vocation name: " << attr.as_string()
+				          << std::endl;
 			}
 		}
 
-		if (!vocationEquipSet.empty()) {
+		if (!vocations.empty()) {
 			wieldInfo |= WIELDINFO_VOCREQ;
 		}
 
@@ -664,7 +660,7 @@ uint32_t MoveEvent::RemoveItemField(Item*, Item*, const Position&) { return 1; }
 ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck)
 {
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
-		if (!moveEvent->hasVocationEquipSet(player->getVocationId())) {
+		if (!moveEvent->hasVocation(player->getVocation())) {
 			return RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION;
 		}
 

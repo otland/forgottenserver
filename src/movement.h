@@ -11,8 +11,6 @@
 
 class MoveEvent;
 
-extern Vocations g_vocations;
-
 enum MoveEvent_t
 {
 	MOVE_EVENT_STEP_IN,
@@ -145,19 +143,18 @@ public:
 	const std::string& getVocationString() const { return vocationString; }
 	void setVocationString(const std::string& str) { vocationString = str; }
 	uint32_t getWieldInfo() const { return wieldInfo; }
-	const auto& getVocationEquipSet() const { return vocationEquipSet; }
-	void addVocationEquipSet(const std::string& vocationName)
+
+	void addVocation(Vocation_ptr vocation) { vocations.insert(vocation); }
+
+	bool hasVocation(Vocation_ptr vocation) const
 	{
-		int32_t vocationId = g_vocations.getVocationId(vocationName);
-		if (vocationId != -1) {
-			vocationEquipSet.insert(vocationId);
+		if (vocations.empty()) {
+			// If the set is empty, it is considered to be for all vocations.
+			return true;
 		}
+		return vocations.find(vocation) != vocations.end();
 	}
-	// If the set is empty, it is considered to be for all vocations.
-	bool hasVocationEquipSet(uint16_t vocationId) const
-	{
-		return vocationEquipSet.empty() || vocationEquipSet.find(vocationId) != vocationEquipSet.end();
-	}
+
 	bool getTileItem() const { return tileItem; }
 	void setTileItem(bool b) { tileItem = b; }
 	void setSlot(uint32_t s) { slot = s; }
@@ -195,8 +192,9 @@ private:
 	bool premium = false;
 	std::string vocationString;
 	uint32_t wieldInfo = 0;
-	std::unordered_set<uint16_t> vocationEquipSet;
 	bool tileItem = false;
+
+	std::set<Vocation_ptr> vocations;
 };
 
 #endif // FS_MOVEMENT_H
