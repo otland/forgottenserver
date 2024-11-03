@@ -186,7 +186,7 @@ public:
 
 			void operator()(bool v) const { tfs::lua::pushBoolean(L, v); }
 
-			void operator()(const int64_t& v) const { lua_pushnumber(L, v); }
+			void operator()(const int64_t& v) const { lua_pushinteger(L, v); }
 
 			void operator()(const double& v) const { lua_pushnumber(L, v); }
 		};
