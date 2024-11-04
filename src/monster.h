@@ -239,7 +239,7 @@ private:
 
 	// map cache
 	bool mapLoaded = false;
-	bool walkabilityCache[walkCacheHeight][walkCacheWidth] = {{false}};
+	bool walkabilityCache[walkCacheHeight][walkCacheWidth] = {};
 
 	bool useWalkCache() const { return !randomStepping; }
 	bool hasLoadedMap() const { return mapLoaded; }
