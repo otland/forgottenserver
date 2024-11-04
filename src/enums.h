@@ -81,14 +81,6 @@ enum itemAttrTypes : uint32_t
 	ITEM_ATTRIBUTE_CUSTOM = 1U << 31
 };
 
-enum VipStatus_t : uint8_t
-{
-	VIPSTATUS_OFFLINE = 0,
-	VIPSTATUS_ONLINE = 1,
-	VIPSTATUS_PENDING = 2,
-	VIPSTATUS_TRAINING = 3
-};
-
 enum MarketAction_t
 {
 	MARKETACTION_BUY = 0,
