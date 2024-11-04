@@ -2261,15 +2261,9 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 	addCondition(condition);
 }
 
-void Player::removeList()
-{
-	g_game.removePlayer(this);
-}
+void Player::removeList() { g_game.removePlayer(this); }
 
-void Player::addList()
-{
-	g_game.addPlayer(this);
-}
+void Player::addList() { g_game.addPlayer(this); }
 
 void Player::kickPlayer(bool displayEffect)
 {
