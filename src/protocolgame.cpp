@@ -736,15 +736,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		// case 0xD5: break; // apply imbuement
 		// case 0xD6: break; // clear imbuement
 		// case 0xD7: break; // close imbuing window
-		case 0xDC:
-			parseAddVip(msg);
-			break;
-		case 0xDD:
-			parseRemoveVip(msg);
-			break;
-		case 0xDE:
-			parseEditVip(msg);
-			break;
 		// case 0xDF: break; // premium shop (?)
 		// case 0xE0: break; // premium shop (?)
 		// case 0xE4: break; // buy charm rune
@@ -1376,30 +1367,6 @@ void ProtocolGame::parseLookInTrade(NetworkMessage& msg)
 	uint8_t index = msg.getByte();
 	g_dispatcher.addTask(DISPATCHER_TASK_EXPIRATION, [=, playerID = player->getID()]() {
 		g_game.playerLookInTrade(playerID, counterOffer, index);
-	});
-}
-
-void ProtocolGame::parseAddVip(NetworkMessage& msg)
-{
-	auto name = msg.getString();
-	g_dispatcher.addTask(
-	    [playerID = player->getID(), name = std::string{name}]() { g_game.playerRequestAddVip(playerID, name); });
-}
-
-void ProtocolGame::parseRemoveVip(NetworkMessage& msg)
-{
-	uint32_t guid = msg.get<uint32_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerRequestRemoveVip(playerID, guid); });
-}
-
-void ProtocolGame::parseEditVip(NetworkMessage& msg)
-{
-	uint32_t guid = msg.get<uint32_t>();
-	auto description = msg.getString();
-	uint32_t icon = std::min<uint32_t>(10, msg.get<uint32_t>()); // 10 is max icon in 9.63
-	bool notify = msg.getByte() != 0;
-	g_dispatcher.addTask([=, playerID = player->getID(), description = std::string{description}]() {
-		g_game.playerRequestEditVip(playerID, guid, description, icon, notify);
 	});
 }
 
@@ -2807,9 +2774,6 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	// player light level
 	sendCreatureLight(creature);
 
-	// player vip list
-	sendVIPEntries();
-
 	// tiers for forge and market
 	sendItemClasses();
 
@@ -3273,47 +3237,6 @@ void ProtocolGame::sendPodiumWindow(const Item* item)
 	msg.addByte(0x01);                                                // "outfit" checkbox, ignored by the client
 	msg.addByte(podium->getDirection());                              // outfit direction
 	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus)
-{
-	NetworkMessage msg;
-	msg.addByte(0xD3);
-	msg.add<uint32_t>(guid);
-	msg.addByte(newStatus);
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon,
-                           bool notify, VipStatus_t status)
-{
-	NetworkMessage msg;
-	msg.addByte(0xD2);
-	msg.add<uint32_t>(guid);
-	msg.addString(name);
-	msg.addString(description);
-	msg.add<uint32_t>(std::min<uint32_t>(10, icon));
-	msg.addByte(notify ? 0x01 : 0x00);
-	msg.addByte(status);
-	msg.addByte(0x00); // vipGroups (placeholder)
-	writeToOutputBuffer(msg);
-}
-
-void ProtocolGame::sendVIPEntries()
-{
-	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
-
-	for (const VIPEntry& entry : vipEntries) {
-		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
-
-		Player* vipPlayer = g_game.getPlayerByGUID(entry.guid);
-
-		if (!vipPlayer || !player->canSeeCreature(vipPlayer)) {
-			vipStatus = VIPSTATUS_OFFLINE;
-		}
-
-		sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
-	}
 }
 
 void ProtocolGame::sendItemClasses()

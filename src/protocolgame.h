@@ -140,11 +140,6 @@ private:
 	void parseMarketCancelOffer(NetworkMessage& msg);
 	void parseMarketAcceptOffer(NetworkMessage& msg);
 
-	// VIP methods
-	void parseAddVip(NetworkMessage& msg);
-	void parseRemoveVip(NetworkMessage& msg);
-	void parseEditVip(NetworkMessage& msg);
-
 	void parseRotateItem(NetworkMessage& msg);
 
 	// Channel tabs
@@ -219,11 +214,6 @@ private:
 	void sendOutfitWindow();
 
 	void sendPodiumWindow(const Item* item);
-
-	void sendUpdatedVIPStatus(uint32_t guid, VipStatus_t newStatus);
-	void sendVIP(uint32_t guid, const std::string& name, const std::string& description, uint32_t icon, bool notify,
-	             VipStatus_t status);
-	void sendVIPEntries();
 
 	void sendItemClasses();
 
