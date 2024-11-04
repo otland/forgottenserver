@@ -40,14 +40,14 @@ DBTransaction = {}
 ---@field query fun(query: string): any
 ---@field storeQuery fun(query: string): any
 ---@field escapeString fun(value: string): string
----@field asyncQuery fun(query: string): boolean
+---@field asyncQuery fun(query: string, callback?: function): boolean
 db = {}
 
 ---@class result
 ---@field free fun(resultId: number)
 ---@field next fun(resultId: number): number
 ---@field getNumber fun(resultId: number, column: string): number
----@field getString fun(resultId: number, column: number): string
+---@field getString fun(resultId: number, column: string): string
 ---@field getBoolean fun(resultId: number, column: number): boolean
 ---@field getStream fun(resultId: number, column: number): string
 result = {}

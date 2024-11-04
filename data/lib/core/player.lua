@@ -819,18 +819,18 @@ function Player.addVip(self, name)
 	local notify = false
 
 	local accountId = self:getAccountId()
-	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" .. accountId .. ", " .. vipGuid .. ")")
-
-	playerVip:add(vipGuid)
-	self:sendVip(vipGuid, vipName, description, icon, notify, status)
+	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" .. accountId .. ", " .. vipGuid .. ")", function(result) 
+		playerVip:add(vipGuid)
+		self:sendVip(vipGuid, vipName, description, icon, notify, status)
+	end)
 end
 
 function Player.removeVip(self, vipGuid)
 	local accountId = self:getAccountId()
-	db.asyncQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid)
-
-	local playerVip = Vip(self:getGuid())
-	playerVip:remove(vipGuid)
+	db.asyncQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid, function(result) 
+		local playerVip = Vip(self:getGuid())
+		playerVip:remove(vipGuid)
+	end)
 end
 
 function Player.editVip(self, vipGuid, description, icon, notify)
@@ -839,6 +839,7 @@ function Player.editVip(self, vipGuid, description, icon, notify)
 		return
 	end
 
+	local accountId = self:getAccountId()
 	db.asyncQuery("UPDATE `account_viplist` SET `description` = " .. db.escapeString(description) ..", `icon` = " .. icon .. ", `notify` = " .. (notify and 1 or 0) .. " WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid .. "")
 end
 
