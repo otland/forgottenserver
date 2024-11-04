@@ -769,8 +769,8 @@ public:
 
 	// event methods
 	void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
-	                      const Item* newItem, const ItemType& newType) override;
-	void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) override;
+	                      const Item* newItem, const ItemType&) override;
+	void onRemoveTileItem(const Tile*, const Position& pos, const ItemType& iType, const Item* item) override;
 
 	void onCreatureAppear(Creature* creature, bool isLogin) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;

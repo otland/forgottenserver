@@ -1081,7 +1081,7 @@ void Player::openSavedContainers()
 }
 
 void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
-                              const Item* newItem, const ItemType& newType)
+                              const Item* newItem, const ItemType&)
 {
 	if (oldItem != newItem) {
 		onRemoveTileItem(tile, pos, oldType, oldItem);
@@ -1094,7 +1094,7 @@ void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*
 	}
 }
 
-void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item)
+void Player::onRemoveTileItem(const Tile*, const Position& pos, const ItemType& iType, const Item* item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
