@@ -1094,7 +1094,7 @@ void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*
 	}
 }
 
-void Player::onRemoveTileItem(const Tile*, const Position& pos, const ItemType& iType, const Item* item)
+void Player::onRemoveTileItem(const Tile*, const Position&, const ItemType&, const Item* item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
