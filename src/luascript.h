@@ -730,6 +730,7 @@ private:
 
 	static int luaPlayerChannelSay(lua_State* L);
 	static int luaPlayerOpenChannel(lua_State* L);
+	static int luaPlayerLeaveChannel(lua_State* L);
 
 	static int luaPlayerGetSlotItem(lua_State* L);
 
