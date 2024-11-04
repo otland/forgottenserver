@@ -92,10 +92,8 @@ forceMonsterTypesOnLoad = true
 cleanProtectionZones = false
 checkDuplicateStorageKeys = false
 
--- VIP and Depot limits
+-- Depot limits
 -- NOTE: you can set custom limits per group in data/XML/groups.xml
-vipFreeLimit = 20
-vipPremiumLimit = 100
 depotFreeLimit = 2000
 depotPremiumLimit = 15000
 

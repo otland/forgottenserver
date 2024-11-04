@@ -2264,6 +2264,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, MONSTER_ICON_FIRST);
 	registerEnum(L, MONSTER_ICON_LAST);
 
+	registerEnum(L, PLAYER_NAME_LENGTH);
+
 	// _G
 	registerGlobalVariable(L, "INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean(L, "VIRTUAL_PARENT", true);
