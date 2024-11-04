@@ -465,8 +465,8 @@ void Monster::updateTileWalkCache(const Tile* tile, const Position& pos)
 {
 	const auto& myPos = getPosition();
 	if (pos.z == myPos.z) {
-		int32_t dx = pos.getOffsetX(myPos);
-		int32_t dy = pos.getOffsetY(myPos);
+		auto dx = pos.getOffsetX(myPos);
+		auto dy = pos.getOffsetY(myPos);
 		updateTileWalkCache(tile, dx, dy);
 	}
 }

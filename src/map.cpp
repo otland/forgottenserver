@@ -632,10 +632,10 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 {
 	if (auto monster = creature.getMonster()) {
-		auto walk_cache = monster->getWalkCache(pos);
-		if (walk_cache == WALKCACHE_NOTFOUND) {
+		auto walkCache = monster->getWalkCache(pos);
+		if (walkCache == WALKCACHE_NOTFOUND) {
 			return nullptr;
-		} else if (walk_cache == WALKCACHE_FOUND) {
+		} else if (walkCache == WALKCACHE_FOUND) {
 			return getTile(pos.x, pos.y, pos.z);
 		}
 	}
