@@ -282,11 +282,11 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(const Tile* tile, const Position& pos) {}
-	virtual void onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
-	                              const Item* newItem, const ItemType& newType)
+	virtual void onAddTileItem(const Tile*, const Position&) {}
+	virtual void onUpdateTileItem(const Tile*, const Position&, const Item*, const ItemType&, const Item*,
+	                              const ItemType&)
 	{}
-	virtual void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) {}
+	virtual void onRemoveTileItem(const Tile*, const Position&, const ItemType&, const Item*) {}
 
 	virtual void onCreatureAppear(Creature* creature, bool isLogin);
 	virtual void onRemoveCreature(Creature* creature, bool isLogout) {}
