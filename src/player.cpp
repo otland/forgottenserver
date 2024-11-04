@@ -2050,7 +2050,7 @@ Connection::Address Player::getIP() const
 
 void Player::death(Creature* lastHitCreature)
 {
-	loginPosition = town->getTemplePosition();
+	loginPosition = town->templePosition;
 
 	if (skillLoss) {
 		uint8_t unfairFightReduction = 100;
