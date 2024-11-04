@@ -633,9 +633,9 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 {
 	if (auto monster = creature.getMonster()) {
 		auto walk_cache = monster->getWalkCache(pos);
-		if (walk_cache == 0) {
+		if (walk_cache == WALKCACHE_NOTFOUND) {
 			return nullptr;
-		} else if (walk_cache == 1) {
+		} else if (walk_cache == WALKCACHE_FOUND) {
 			return getTile(pos.x, pos.y, pos.z);
 		}
 	}

@@ -461,7 +461,7 @@ bool NpcType::loadCallback(NpcScriptInterface* scriptInterface)
 
 void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 {
-	Creature::onRemoveCreature(creature, isLogout);
+	onCreatureDisappear(creature, isLogout);
 
 	if (creature == this) {
 		closeAllShopWindows();

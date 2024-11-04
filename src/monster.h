@@ -24,6 +24,13 @@ enum TargetSearchType_t
 	TARGETSEARCH_NEAREST,
 };
 
+enum WalkCacheResult
+{
+	WALKCACHE_DISABLED,
+	WALKCACHE_NOTFOUND,
+	WALKCACHE_FOUND,
+};
+
 class Monster final : public Creature
 {
 public:
@@ -130,7 +137,7 @@ public:
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
 	// map cache
-	int32_t getWalkCache(const Position& pos) const;
+	WalkCacheResult getWalkCache(const Position& pos) const;
 
 	// monster icons
 	MonsterIconHashMap& getSpecialIcons() { return monsterIcons; }
@@ -141,8 +148,6 @@ public:
 private:
 	static constexpr int32_t walkCacheWidth = Map::maxViewportX * 2 + 1;
 	static constexpr int32_t walkCacheHeight = Map::maxViewportY * 2 + 1;
-	static constexpr int32_t maxWalkCacheWidth = (walkCacheWidth - 1) / 2;
-	static constexpr int32_t maxWalkCacheHeight = (walkCacheHeight - 1) / 2;
 
 	CreatureHashSet friendList;
 	CreatureList targetList;
@@ -242,6 +247,8 @@ private:
 	void updateWalkCache();
 	void updateTileWalkCache(const Tile* tile, int32_t dx, int32_t dy);
 	void updateTileWalkCache(const Tile* tile, const Position& pos);
+	void updateMoveWalkCache(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
+	                         const Position& oldPos, bool teleport);
 
 	friend class LuaScriptInterface;
 };

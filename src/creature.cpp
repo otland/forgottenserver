@@ -334,8 +334,6 @@ void Creature::onCreatureAppear(Creature* creature, bool isLogin)
 	}
 }
 
-void Creature::onRemoveCreature(Creature* creature, bool) { onCreatureDisappear(creature, true); }
-
 void Creature::onCreatureDisappear(const Creature* creature, bool isLogout)
 {
 	if (attackedCreature == creature) {

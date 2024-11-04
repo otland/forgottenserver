@@ -1083,8 +1083,6 @@ void Player::openSavedContainers()
 void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item* oldItem, const ItemType& oldType,
                               const Item* newItem, const ItemType& newType)
 {
-	Creature::onUpdateTileItem(tile, pos, oldItem, oldType, newItem, newType);
-
 	if (oldItem != newItem) {
 		onRemoveTileItem(tile, pos, oldType, oldItem);
 	}
@@ -1098,8 +1096,6 @@ void Player::onUpdateTileItem(const Tile* tile, const Position& pos, const Item*
 
 void Player::onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item)
 {
-	Creature::onRemoveTileItem(tile, pos, iType, item);
-
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
@@ -1240,7 +1236,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 
 void Player::onRemoveCreature(Creature* creature, bool isLogout)
 {
-	Creature::onRemoveCreature(creature, isLogout);
+	onCreatureDisappear(creature, isLogout);
 
 	if (creature == this) {
 		onDeEquipInventory();

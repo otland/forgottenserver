@@ -164,7 +164,7 @@ void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 
 void Monster::onRemoveCreature(Creature* creature, bool isLogout)
 {
-	Creature::onRemoveCreature(creature, isLogout);
+	onCreatureDisappear(creature, isLogout);
 
 	if (creature != this) {
 		if (hasLoadedMap()) {
@@ -214,124 +214,7 @@ void Monster::onCreatureMove(Creature* creature, const Tile* newTile, const Posi
                              const Position& oldPos, bool teleport)
 {
 	if (hasLoadedMap()) {
-		// update map cache
-		if (creature == this) {
-			if (teleport || oldPos.z != newPos.z) {
-				updateWalkCache();
-			} else {
-				const Position& myPos = getPosition();
-
-				if (oldPos.y > newPos.y) { // north
-					// shift y south
-					for (int32_t y = walkCacheHeight - 1; --y >= 0;) {
-						memcpy(walkabilityCache[y + 1], walkabilityCache[y], sizeof(walkabilityCache[y]));
-					}
-
-					// update 0
-					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						Tile* cacheTile =
-						    g_game.map.getTile(myPos.getX() + x, myPos.getY() - maxWalkCacheHeight, myPos.z);
-						updateTileWalkCache(cacheTile, x, -maxWalkCacheHeight);
-					}
-				} else if (oldPos.y < newPos.y) { // south
-					// shift y north
-					for (int32_t y = 0; y <= walkCacheHeight - 2; ++y) {
-						memcpy(walkabilityCache[y], walkabilityCache[y + 1], sizeof(walkabilityCache[y]));
-					}
-
-					// update map_walk_height - 1
-					for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
-						Tile* cacheTile =
-						    g_game.map.getTile(myPos.getX() + x, myPos.getY() + maxWalkCacheHeight, myPos.z);
-						updateTileWalkCache(cacheTile, x, maxWalkCacheHeight);
-					}
-				}
-
-				if (oldPos.x < newPos.x) { // east
-					// shift y west
-					int32_t starty = 0;
-					int32_t endy = walkCacheHeight - 1;
-					int32_t dy = oldPos.getDistanceY(newPos);
-
-					if (dy < 0) {
-						endy += dy;
-					} else if (dy > 0) {
-						starty = dy;
-					}
-
-					for (int32_t y = starty; y <= endy; ++y) {
-						for (int32_t x = 0; x <= walkCacheWidth - 2; ++x) {
-							walkabilityCache[y][x] = walkabilityCache[y][x + 1];
-						}
-					}
-
-					// update map_walk_width - 1
-					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						Tile* cacheTile = g_game.map.getTile(myPos.x + maxWalkCacheWidth, myPos.y + y, myPos.z);
-						updateTileWalkCache(cacheTile, maxWalkCacheWidth, y);
-					}
-				} else if (oldPos.x > newPos.x) { // west
-					// shift y east
-					int32_t starty = 0;
-					int32_t endy = walkCacheHeight - 1;
-					int32_t dy = oldPos.getDistanceY(newPos);
-
-					if (dy < 0) {
-						endy += dy;
-					} else if (dy > 0) {
-						starty = dy;
-					}
-
-					for (int32_t y = starty; y <= endy; ++y) {
-						for (int32_t x = walkCacheWidth - 1; --x >= 0;) {
-							walkabilityCache[y][x + 1] = walkabilityCache[y][x];
-						}
-					}
-
-					// update 0
-					for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-						Tile* cacheTile = g_game.map.getTile(myPos.x - maxWalkCacheWidth, myPos.y + y, myPos.z);
-						updateTileWalkCache(cacheTile, -maxWalkCacheWidth, y);
-					}
-				}
-
-				updateTileWalkCache(oldTile, oldPos);
-			}
-		} else {
-			const Position& myPos = getPosition();
-			if (newPos.z == myPos.z) {
-				updateTileWalkCache(newTile, newPos);
-			}
-
-			if (oldPos.z == myPos.z) {
-				updateTileWalkCache(oldTile, oldPos);
-			}
-		}
-	}
-
-	if (creature == followCreature || (creature == this && followCreature)) {
-		if (hasFollowPath) {
-			isUpdatingPath = true;
-		}
-
-		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
-			onCreatureDisappear(followCreature, false);
-		}
-	}
-
-	if (creature == attackedCreature || (creature == this && attackedCreature)) {
-		if (newPos.z != oldPos.z || !canSee(attackedCreature->getPosition())) {
-			onCreatureDisappear(attackedCreature, false);
-		} else {
-			if (hasExtraSwing()) {
-				// our target is moving lets see if we can get in hit
-				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
-			}
-
-			if (newTile->getZone() != oldTile->getZone()) {
-				onAttackedCreatureChangeZone(attackedCreature->getZone());
-			}
-		}
+		updateMoveWalkCache(creature, newTile, newPos, oldTile, oldPos, teleport);
 	}
 
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -557,11 +440,11 @@ void Monster::onCreatureFound(Creature* creature, bool pushFront /* = false*/)
 void Monster::updateWalkCache()
 {
 	Tile* tile;
-	const Position& myPos = getPosition();
+	const auto& myPos = getPosition();
 	Position pos(0, 0, myPos.z);
 
-	for (int32_t y = -maxWalkCacheHeight; y <= maxWalkCacheHeight; ++y) {
-		for (int32_t x = -maxWalkCacheWidth; x <= maxWalkCacheWidth; ++x) {
+	for (auto y = -Map::maxViewportY; y <= Map::maxViewportY; ++y) {
+		for (auto x = -Map::maxViewportX; x <= Map::maxViewportX; ++x) {
 			pos.x = myPos.getX() + x;
 			pos.y = myPos.getY() + y;
 			tile = g_game.map.getTile(pos);
@@ -572,19 +455,112 @@ void Monster::updateWalkCache()
 
 void Monster::updateTileWalkCache(const Tile* tile, int32_t dx, int32_t dy)
 {
-	if (std::abs(dx) <= maxWalkCacheWidth && std::abs(dy) <= maxWalkCacheHeight) {
-		walkabilityCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx] =
+	if (std::abs(dx) <= Map::maxViewportX && std::abs(dy) <= Map::maxViewportY) {
+		walkabilityCache[Map::maxViewportY + dy][Map::maxViewportX + dx] =
 		    tile && tile->queryAdd(0, *this, 1, FLAG_PATHFINDING | FLAG_IGNOREFIELDDAMAGE) == RETURNVALUE_NOERROR;
 	}
 }
 
 void Monster::updateTileWalkCache(const Tile* tile, const Position& pos)
 {
-	const Position& myPos = getPosition();
+	const auto& myPos = getPosition();
 	if (pos.z == myPos.z) {
 		int32_t dx = pos.getOffsetX(myPos);
 		int32_t dy = pos.getOffsetY(myPos);
 		updateTileWalkCache(tile, dx, dy);
+	}
+}
+
+void Monster::updateMoveWalkCache(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
+                                  const Position& oldPos, bool teleport)
+{
+	if (creature == this) {
+		if (teleport || oldPos.z != newPos.z) {
+			updateWalkCache();
+		} else {
+			const auto& myPos = getPosition();
+
+			if (oldPos.y > newPos.y) { // north
+				// shift y south
+				for (auto y = walkCacheHeight - 1; --y >= 0;) {
+					memcpy(walkabilityCache[y + 1], walkabilityCache[y], sizeof(walkabilityCache[y]));
+				}
+
+				// update 0
+				for (auto x = -Map::maxViewportX; x <= Map::maxViewportX; ++x) {
+					auto cacheTile = g_game.map.getTile(myPos.getX() + x, myPos.getY() - Map::maxViewportY, myPos.z);
+					updateTileWalkCache(cacheTile, x, -Map::maxViewportY);
+				}
+			} else if (oldPos.y < newPos.y) { // south
+				// shift y north
+				for (auto y = 0; y <= walkCacheHeight - 2; ++y) {
+					memcpy(walkabilityCache[y], walkabilityCache[y + 1], sizeof(walkabilityCache[y]));
+				}
+
+				// update map_walk_height - 1
+				for (auto x = -Map::maxViewportX; x <= Map::maxViewportX; ++x) {
+					auto cacheTile = g_game.map.getTile(myPos.getX() + x, myPos.getY() + Map::maxViewportY, myPos.z);
+					updateTileWalkCache(cacheTile, x, Map::maxViewportY);
+				}
+			}
+
+			if (oldPos.x < newPos.x) { // east
+				// shift y west
+				auto starty = 0;
+				auto endy = walkCacheHeight - 1;
+				auto dy = oldPos.getDistanceY(newPos);
+
+				if (dy < 0) {
+					endy += dy;
+				} else if (dy > 0) {
+					starty = dy;
+				}
+
+				for (auto y = starty; y <= endy; ++y) {
+					for (auto x = 0; x <= walkCacheWidth - 2; ++x) {
+						walkabilityCache[y][x] = walkabilityCache[y][x + 1];
+					}
+				}
+
+				// update map_walk_width - 1
+				for (auto y = -Map::maxViewportY; y <= Map::maxViewportY; ++y) {
+					auto cacheTile = g_game.map.getTile(myPos.x + Map::maxViewportX, myPos.y + y, myPos.z);
+					updateTileWalkCache(cacheTile, Map::maxViewportX, y);
+				}
+			} else if (oldPos.x > newPos.x) { // west
+				// shift y east
+				auto starty = 0;
+				auto endy = walkCacheHeight - 1;
+				auto dy = oldPos.getDistanceY(newPos);
+
+				if (dy < 0) {
+					endy += dy;
+				} else if (dy > 0) {
+					starty = dy;
+				}
+
+				for (auto y = starty; y <= endy; ++y) {
+					for (auto x = walkCacheWidth - 1; --x >= 0;) {
+						walkabilityCache[y][x + 1] = walkabilityCache[y][x];
+					}
+				}
+
+				// update 0
+				for (auto y = -Map::maxViewportY; y <= Map::maxViewportY; ++y) {
+					auto cacheTile = g_game.map.getTile(myPos.x - Map::maxViewportX, myPos.y + y, myPos.z);
+					updateTileWalkCache(cacheTile, -Map::maxViewportX, y);
+				}
+			}
+
+			updateTileWalkCache(oldTile, oldPos);
+		}
+	} else {
+		const auto& myPos = getPosition();
+		if (newPos.z == myPos.z) {
+			updateTileWalkCache(newTile, newPos);
+		} else if (oldPos.z == myPos.z) {
+			updateTileWalkCache(oldTile, oldPos);
+		}
 	}
 }
 
@@ -2027,34 +2003,34 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 	return true;
 }
 
-int32_t Monster::getWalkCache(const Position& pos) const
+WalkCacheResult Monster::getWalkCache(const Position& pos) const
 {
 	if (useWalkCache()) {
-		const Position& myPos = getPosition();
+		const auto& myPos = getPosition();
 		if (myPos.z != pos.z) {
-			return 0;
+			return WALKCACHE_NOTFOUND;
 		} else if (pos == myPos) {
-			return 1;
+			return WALKCACHE_FOUND;
 		}
 
-		if (int32_t dx = pos.getOffsetX(myPos); std::abs(dx) <= maxWalkCacheWidth) {
-			if (int32_t dy = pos.getOffsetY(myPos); std::abs(dy) <= maxWalkCacheHeight) {
-				if (walkabilityCache[maxWalkCacheHeight + dy][maxWalkCacheWidth + dx]) {
-					return 1;
+		if (auto x = pos.getOffsetX(myPos); std::abs(x) <= Map::maxViewportX) {
+			if (auto y = pos.getOffsetY(myPos); std::abs(y) <= Map::maxViewportY) {
+				if (walkabilityCache[Map::maxViewportY + y][Map::maxViewportX + x]) {
+					return WALKCACHE_FOUND;
 				}
-				return 0;
+				return WALKCACHE_NOTFOUND;
 			}
 		}
 	}
 
-	return 2;
+	return WALKCACHE_DISABLED;
 }
 
 bool Monster::canWalkTo(Position pos, Direction direction) const
 {
 	pos = getNextPosition(direction, pos);
 	if (isInSpawnRange(pos)) {
-		if (getWalkCache(pos) == 0) {
+		if (getWalkCache(pos) == WALKCACHE_NOTFOUND) {
 			return false;
 		}
 
