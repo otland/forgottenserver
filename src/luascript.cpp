@@ -11008,21 +11008,8 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		}
 	}
 
-	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), false);
-	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), true);
-	}
+	IOLoginData::updateOnlineStatus(player->getGUID(), !player->isInGhostMode());
+
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }
