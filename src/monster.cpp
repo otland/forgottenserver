@@ -658,7 +658,7 @@ bool Monster::selectTarget(Creature* creature)
 		}
 	}
 
-	if (hasFollowingCreature(creature) || canFollowCreature(creature)) {
+	if (isFollowingCreature(creature) || canFollowCreature(creature)) {
 		setFollowCreature(creature);
 		return true;
 	}

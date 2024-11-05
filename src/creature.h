@@ -192,7 +192,7 @@ public:
 	virtual void setFollowCreature(Creature* creature);
 	virtual void removeFollowCreature();
 	virtual bool canFollowCreature(Creature* creature);
-	virtual bool hasFollowingCreature(Creature* creature) { return followCreature == creature; }
+	virtual bool isFollowingCreature(Creature* creature) { return followCreature == creature; }
 
 	// follow events
 	virtual void onFollowCreature(const Creature*);
@@ -204,7 +204,7 @@ public:
 	virtual void setAttackedCreature(Creature* creature);
 	virtual void removeAttackedCreature();
 	virtual bool canAttackCreature(Creature* creature);
-	virtual bool hasAttackedCreature(Creature* creature) { return attackedCreature == creature; }
+	virtual bool isAttackingCreature(Creature* creature) { return attackedCreature == creature; }
 
 	virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,

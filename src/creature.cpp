@@ -927,7 +927,7 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 
 void Creature::setAttackedCreature(Creature* creature)
 {
-	if (hasAttackedCreature(creature)) {
+	if (isAttackingCreature(creature)) {
 		return;
 	}
 
@@ -1021,7 +1021,7 @@ void Creature::goToFollowCreature()
 
 void Creature::setFollowCreature(Creature* creature)
 {
-	if (hasFollowingCreature(creature)) {
+	if (isFollowingCreature(creature)) {
 		return;
 	}
 
