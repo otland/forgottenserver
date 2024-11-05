@@ -267,7 +267,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	player->offlineTrainingTime = result->getNumber<int32_t>("offlinetraining_time") * 1000;
 	player->offlineTrainingSkill = result->getNumber<int32_t>("offlinetraining_skill");
 
-	Town* town = g_game.map.towns.getTown(result->getNumber<uint32_t>("town_id"));
+	const Town* town = g_game.map.towns.getTown(result->getNumber<uint32_t>("town_id"));
 	if (!town) {
 		std::cout << "[Error - IOLoginData::loadPlayer] " << player->name << " has Town ID "
 		          << result->getNumber<uint32_t>("town_id") << " which doesn't exist" << std::endl;
@@ -662,7 +662,7 @@ bool IOLoginData::savePlayer(Player* player)
 	query << "`manamax` = " << player->manaMax << ',';
 	query << "`manaspent` = " << player->manaSpent << ',';
 	query << "`soul` = " << static_cast<uint16_t>(player->soul) << ',';
-	query << "`town_id` = " << player->town->getID() << ',';
+	query << "`town_id` = " << player->town->id << ',';
 
 	const Position& loginPosition = player->getLoginPosition();
 	query << "`posx` = " << loginPosition.getX() << ',';

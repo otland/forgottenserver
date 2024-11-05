@@ -279,9 +279,9 @@ public:
 	time_t getLastLogout() const { return lastLogout; }
 
 	const Position& getLoginPosition() const { return loginPosition; }
-	const Position& getTemplePosition() const { return town->getTemplePosition(); }
-	Town* getTown() const { return town; }
-	void setTown(Town* town) { this->town = town; }
+	const Position& getTemplePosition() const { return town->templePosition; }
+	const Town* getTown() const { return town; }
+	void setTown(const Town* town) { this->town = town; }
 
 	void clearModalWindows();
 	bool hasModalWindowOpen(uint32_t modalWindowId) const;
@@ -1197,7 +1197,7 @@ private:
 	Party* party = nullptr;
 	Player* tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;
-	Town* town = nullptr;
+	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	StoreInbox* storeInbox = nullptr;
 	DepotLocker_ptr depotLocker = nullptr;

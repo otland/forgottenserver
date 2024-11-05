@@ -620,7 +620,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 		}
 
 		const uint32_t ownerId = house->getOwner();
-		Town* town = g_game.map.towns.getTown(house->getTownId());
+		const Town* town = g_game.map.towns.getTown(house->getTownId());
 		if (!town) {
 			continue;
 		}

@@ -730,6 +730,7 @@ private:
 
 	static int luaPlayerChannelSay(lua_State* L);
 	static int luaPlayerOpenChannel(lua_State* L);
+	static int luaPlayerLeaveChannel(lua_State* L);
 
 	static int luaPlayerGetSlotItem(lua_State* L);
 
@@ -938,13 +939,6 @@ private:
 	static int luaVocationGetPromotion(lua_State* L);
 
 	static int luaVocationAllowsPvp(lua_State* L);
-
-	// Town
-	static int luaTownCreate(lua_State* L);
-
-	static int luaTownGetId(lua_State* L);
-	static int luaTownGetName(lua_State* L);
-	static int luaTownGetTemplePosition(lua_State* L);
 
 	// House
 	static int luaHouseCreate(lua_State* L);

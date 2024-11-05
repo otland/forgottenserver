@@ -37,9 +37,9 @@ void Listener::on_accept(beast::error_code ec, asio::ip::tcp::socket socket)
 	accept();
 }
 
-std::shared_ptr<Listener> make_listener(asio::io_context& ioc, asio::ip::tcp::endpoint endpoint)
+std::shared_ptr<Listener> make_listener(asio::io_context& iocontext, asio::ip::tcp::endpoint endpoint)
 {
-	asio::ip::tcp::acceptor acceptor{asio::make_strand(ioc)};
+	asio::ip::tcp::acceptor acceptor{asio::make_strand(iocontext)};
 
 	beast::error_code ec;
 	if (acceptor.open(endpoint.protocol(), ec); ec) {
@@ -55,7 +55,7 @@ std::shared_ptr<Listener> make_listener(asio::io_context& ioc, asio::ip::tcp::en
 		throw std::runtime_error(ec.message());
 	}
 
-	return std::make_shared<Listener>(ioc, std::move(acceptor));
+	return std::make_shared<Listener>(iocontext, std::move(acceptor));
 }
 
 } // namespace tfs::http
