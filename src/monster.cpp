@@ -646,18 +646,23 @@ bool Monster::selectTarget(Creature* creature)
 	}
 
 	if (isSummon()) {
-		if (!canAttack(creature)) {
+		if (!canAttackCreature(creature)) {
 			removeAttackedCreature();
 		}
 	} else if (isHostile()) {
-		if (canAttack(creature)) {
+		if (canAttackCreature(creature)) {
 			setAttackedCreature(creature);
 			g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 		} else {
 			removeAttackedCreature();
 		}
 	}
-	return setFollowCreature(creature);
+
+	if (hasFollowingCreature(creature) || canFollowCreature(creature)) {
+		setFollowCreature(creature);
+		return true;
+	}
+	return false;
 }
 
 void Monster::setIdle(bool idle)
@@ -761,7 +766,7 @@ void Monster::onThink(uint32_t interval)
 						setFollowCreature(getMaster());
 					}
 				} else if (attackedCreature == this) {
-					setFollowCreature(nullptr);
+					removeFollowCreature();
 				} else if (followCreature != attackedCreature) {
 					// This happens just after a master orders an attack, so lets follow it as well.
 					setFollowCreature(attackedCreature);

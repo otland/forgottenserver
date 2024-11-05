@@ -406,11 +406,11 @@ public:
 	bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 	// follow functions
-	bool setFollowCreature(Creature* creature) override;
+	void setFollowCreature(Creature* creature) override;
 	void goToFollowCreature() override;
 
 	// follow events
-	void onFollowCreature(const Creature* creature) override;
+	void onUnfollowCreature() override;
 
 	// walk events
 	void onWalk(Direction& dir) override;

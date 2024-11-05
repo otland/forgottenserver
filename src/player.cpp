@@ -1252,7 +1252,7 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		lastLogout = time(nullptr);
 
 		if (eventWalk != 0) {
-			setFollowCreature(nullptr);
+			removeFollowCreature();
 		}
 
 		if (tradePartner) {
@@ -3318,23 +3318,31 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 	}
 }
 
-bool Player::setFollowCreature(Creature* creature)
+void Player::setFollowCreature(Creature* creature)
 {
-	if (!Creature::setFollowCreature(creature)) {
-		setFollowCreature(nullptr);
-		removeAttackedCreature();
-
-		sendCancelMessage(RETURNVALUE_THEREISNOWAY);
-		sendCancelTarget();
-		stopWalk();
-		return false;
+	if (hasFollowingCreature(creature)) {
+		return;
 	}
-	return true;
+
+	if (!canFollowCreature(creature)) {
+		removeFollowCreature();
+		removeAttackedCreature();
+		sendCancelTarget();
+		sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+		stopWalk();
+		return;
+	}
+
+	Creature::setFollowCreature(creature);
 }
 
 void Player::setAttackedCreature(Creature* creature)
 {
-	if (!canAttack(creature)) {
+	if (hasAttackedCreature(creature)) {
+		return;
+	}
+
+	if (!canAttackCreature(creature)) {
 		removeAttackedCreature();
 		sendCancelTarget();
 		return;
@@ -3348,7 +3356,7 @@ void Player::setAttackedCreature(Creature* creature)
 			setFollowCreature(creature);
 		}
 	} else if (followCreature) {
-		setFollowCreature(nullptr);
+		removeFollowCreature();
 	}
 
 	g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
@@ -3359,7 +3367,7 @@ void Player::removeAttackedCreature()
 	Creature::removeAttackedCreature();
 
 	if (followCreature) {
-		setFollowCreature(nullptr);
+		removeFollowCreature();
 	}
 }
 
@@ -3442,12 +3450,7 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 	return 0;
 }
 
-void Player::onFollowCreature(const Creature* creature)
-{
-	if (!creature) {
-		stopWalk();
-	}
-}
+void Player::onUnfollowCreature() { stopWalk(); }
 
 void Player::setChaseMode(bool mode)
 {
@@ -3461,7 +3464,7 @@ void Player::setChaseMode(bool mode)
 				setFollowCreature(attackedCreature);
 			}
 		} else if (attackedCreature) {
-			setFollowCreature(nullptr);
+			removeFollowCreature();
 			cancelNextWalk = true;
 		}
 	}
