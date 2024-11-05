@@ -1037,18 +1037,17 @@ void Creature::setFollowCreature(Creature* creature)
 
 	hasFollowPath = false;
 	forceUpdateFollowPath = false;
-
 	isUpdatingPath = true;
-	followCreature = creature;
 
+	followCreature = creature;
 	onFollowCreature(creature);
 }
 
 void Creature::removeFollowCreature()
 {
 	isUpdatingPath = false;
-	followCreature = nullptr;
 
+	followCreature = nullptr;
 	onUnfollowCreature();
 }
 
