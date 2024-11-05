@@ -27,7 +27,7 @@ Creature::Creature() { onIdleStatus(); }
 Creature::~Creature()
 {
 	for (Creature* summon : summons) {
-		summon->setAttackedCreature(nullptr);
+		summon->removeAttackedCreature();
 		summon->removeMaster();
 	}
 
@@ -339,7 +339,7 @@ void Creature::onRemoveCreature(Creature* creature, bool) { onCreatureDisappear(
 void Creature::onCreatureDisappear(const Creature* creature, bool isLogout)
 {
 	if (attackedCreature == creature) {
-		setAttackedCreature(nullptr);
+		removeAttackedCreature();
 		onAttackedCreatureDisappear(isLogout);
 	}
 
@@ -710,26 +710,33 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 	return blockType;
 }
 
-bool Creature::setAttackedCreature(Creature* creature)
+void Creature::setAttackedCreature(Creature* creature)
 {
-	if (creature) {
-		const Position& creaturePos = creature->getPosition();
-		if (creaturePos.z != getPosition().z || !canSee(creaturePos)) {
-			attackedCreature = nullptr;
-			return false;
-		}
-
-		attackedCreature = creature;
-		onAttackedCreature(attackedCreature);
-		attackedCreature->onAttacked();
-	} else {
-		attackedCreature = nullptr;
-	}
+	attackedCreature = creature;
+	onAttackedCreature(attackedCreature);
+	attackedCreature->onAttacked();
 
 	for (Creature* summon : summons) {
 		summon->setAttackedCreature(creature);
 	}
-	return true;
+}
+
+void Creature::removeAttackedCreature()
+{
+	attackedCreature = nullptr;
+
+	for (Creature* summon : summons) {
+		summon->removeAttackedCreature();
+	}
+}
+
+bool Creature::canAttack(Creature* creature)
+{
+	const auto& creaturePos = creature->getPosition();
+	if (creaturePos.z != getPosition().z) {
+		return false;
+	}
+	return canSee(creaturePos);
 }
 
 void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const

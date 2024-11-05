@@ -8117,10 +8117,25 @@ int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 {
 	// creature:setTarget(target)
 	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		tfs::lua::pushBoolean(L, creature->setAttackedCreature(tfs::lua::getCreature(L, 2)));
-	} else {
+	if (!creature) {
 		lua_pushnil(L);
+
+		return 1;
+	}
+
+	Creature* target = tfs::lua::getCreature(L, 2);
+	if (!target) {
+		creature->removeAttackedCreature();
+		tfs::lua::pushBoolean(L, true);
+		return 1;
+	}
+
+	if (creature->canAttack(target)) {
+		creature->setAttackedCreature(target);
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		creature->removeAttackedCreature();
+		tfs::lua::pushBoolean(L, false);
 	}
 	return 1;
 }

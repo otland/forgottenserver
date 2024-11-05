@@ -428,7 +428,7 @@ public:
 	void setSecureMode(bool mode) { secureMode = mode; }
 
 	// combat functions
-	bool setAttackedCreature(Creature* creature) override;
+	void setAttackedCreature(Creature* creature) override;
 	bool isImmune(CombatType_t type) const override;
 	bool isImmune(ConditionType_t type) const override;
 	bool hasShield() const;
