@@ -202,8 +202,15 @@ public:
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                             bool ignoreResistances = false);
 
+	/// Returns the master of this creature.
+	Creature* getMaster() const { return master; }
+	/// Checks if the creature is a summon, i.e., if it has a master.
+	bool isSummon() const { return master != nullptr; }
+
+	/// Sets a new master for this creature.
 	bool setMaster(Creature* newMaster);
 
+	/// Removes the current master from this creature.
 	void removeMaster()
 	{
 		if (master) {
@@ -212,9 +219,55 @@ public:
 		}
 	}
 
-	bool isSummon() const { return master != nullptr; }
-	Creature* getMaster() const { return master; }
+	/// Checks if the creature is owned by a player, either directly or through its master.
+	bool hasPlayerOwned() const { return getPlayer() || (master && master->getPlayer()); }
+	/// Returns the player that owns this creature, either directly or through its master.
+	Player* getPlayerOwned() { return getPlayer() ? getPlayer() : (master ? master->getPlayer() : nullptr); }
+	/// Returns the player that owns this creature, either directly or through its master.
+	const Player* getPlayerOwned() const
+	{
+		return getPlayer() ? getPlayer() : (master ? master->getPlayer() : nullptr);
+	}
 
+	/// Checks if the creature is owned by an NPC, either directly or through its master.
+	bool hasNpcOwned() const { return getNpc() || (master && master->getNpc()); }
+	/// Returns the NPC that owns this creature, either directly or through its master.
+	Npc* getNpcOwned() { return getNpc() ? getNpc() : (master ? master->getNpc() : nullptr); }
+	/// Returns the NPC that owns this creature, either directly or through its master.
+	const Npc* getNpcOwned() const { return getNpc() ? getNpc() : (master ? master->getNpc() : nullptr); }
+
+	/// Checks if the creature is owned by a monster, either directly or through its master.
+	bool hasMonsterOwned() const { return getMonster() || (master && master->getMonster()); }
+	/// Returns the monster that owns this creature, either directly or through its master.
+	Monster* getMonsterOwned() { return getMonster() ? getMonster() : (master ? master->getMonster() : nullptr); }
+	/// Returns the monster that owns this creature, either directly or through its master.
+	const Monster* getMonsterOwned() const
+	{
+		return getMonster() ? getMonster() : (master ? master->getMonster() : nullptr);
+	}
+
+	/// Checks if the creature's master is a player.
+	bool isPlayerSummon() const { return master && master->getPlayer(); }
+	/// Returns the player who is the master of this creature.
+	Player* getPlayerMaster() { return master ? master->getPlayer() : nullptr; }
+	/// Returns the player who is the master of this creature.
+	const Player* getPlayerMaster() const { return master ? master->getPlayer() : nullptr; }
+
+	/// Checks if the creature's master is an NPC.
+	bool isNpcSummon() const { return master && master->getNpc(); }
+	/// Returns the NPC who is the master of this creature.
+	Npc* getNpcMaster() { return master ? master->getNpc() : nullptr; }
+	/// Returns the NPC who is the master of this creature.
+	const Npc* getNpcMaster() const { return master ? master->getNpc() : nullptr; }
+
+	/// Checks if the creature's master is a monster.
+	bool isMonsterSummon() const { return master && master->getMonster(); }
+	/// Returns the monster who is the master of this creature.
+	Monster* getMonsterMaster() { return master ? master->getMonster() : nullptr; }
+	/// Returns the monster who is the master of this creature.
+	const Monster* getMonsterMaster() const { return master ? master->getMonster() : nullptr; }
+
+	/// Retrieves the list of summoned creatures.
 	const std::list<Creature*>& getSummons() const { return summons; }
 
 	virtual int32_t getArmor() const { return 0; }

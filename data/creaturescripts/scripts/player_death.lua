@@ -6,15 +6,10 @@ local function getKiller(killer)
 		return false, "field item"
 	end
 
-	if killer:isPlayer() then
-		return true, killer:getName()
+	local player = killer:getPlayerOwned()
+	if player and player ~= killer then
+		return true, player:getName()
 	end
-
-	local master = killer:getMaster()
-	if master and master ~= killer and master:isPlayer() then
-		return true, master:getName()
-	end
-
 	return false, killer:getName()
 end
 

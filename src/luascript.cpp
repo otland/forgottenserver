@@ -2695,8 +2695,24 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Creature", "getFollowCreature", LuaScriptInterface::luaCreatureGetFollowCreature);
 	registerMethod(L, "Creature", "setFollowCreature", LuaScriptInterface::luaCreatureSetFollowCreature);
 
+	registerMethod(L, "Creature", "isSummon", LuaScriptInterface::luaCreatureIsSummon);
 	registerMethod(L, "Creature", "getMaster", LuaScriptInterface::luaCreatureGetMaster);
 	registerMethod(L, "Creature", "setMaster", LuaScriptInterface::luaCreatureSetMaster);
+	registerMethod(L, "Creature", "removeMaster", LuaScriptInterface::luaCreatureRemoveMaster);
+
+	registerMethod(L, "Creature", "hasPlayerOwned", LuaScriptInterface::luaCreatureHasPlayerOwned);
+	registerMethod(L, "Creature", "getPlayerOwned", LuaScriptInterface::luaCreatureGetPlayerOwned);
+	registerMethod(L, "Creature", "hasNpcOwned", LuaScriptInterface::luaCreatureHasNpcOwned);
+	registerMethod(L, "Creature", "getNpcOwned", LuaScriptInterface::luaCreatureGetNpcOwned);
+	registerMethod(L, "Creature", "hasMonsterOwned", LuaScriptInterface::luaCreatureHasMonsterOwned);
+	registerMethod(L, "Creature", "getMonsterOwned", LuaScriptInterface::luaCreatureGetMonsterOwned);
+
+	registerMethod(L, "Creature", "isPlayerSummon", LuaScriptInterface::luaCreatureIsPlayerSummon);
+	registerMethod(L, "Creature", "getPlayerMaster", LuaScriptInterface::luaCreatureGetPlayerMaster);
+	registerMethod(L, "Creature", "isNpcSummon", LuaScriptInterface::luaCreatureIsNpcSummon);
+	registerMethod(L, "Creature", "getNpcMaster", LuaScriptInterface::luaCreatureGetNpcMaster);
+	registerMethod(L, "Creature", "isMonsterSummon", LuaScriptInterface::luaCreatureIsMonsterSummon);
+	registerMethod(L, "Creature", "getMonsterMaster", LuaScriptInterface::luaCreatureGetMonsterMaster);
 
 	registerMethod(L, "Creature", "getLight", LuaScriptInterface::luaCreatureGetLight);
 	registerMethod(L, "Creature", "setLight", LuaScriptInterface::luaCreatureSetLight);
@@ -8156,6 +8172,18 @@ int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureIsSummon(lua_State* L)
+{
+	// creature:isSummon()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (creature) {
+		tfs::lua::pushBoolean(L, creature->isSummon());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 {
 	// creature:getMaster()
@@ -8165,14 +8193,12 @@ int LuaScriptInterface::luaCreatureGetMaster(lua_State* L)
 		return 1;
 	}
 
-	Creature* master = creature->getMaster();
-	if (!master) {
+	if (Creature* master = creature->getMaster()) {
+		tfs::lua::pushUserdata(L, master);
+		tfs::lua::setCreatureMetatable(L, -1, master);
+	} else {
 		lua_pushnil(L);
-		return 1;
 	}
-
-	tfs::lua::pushUserdata(L, master);
-	tfs::lua::setCreatureMetatable(L, -1, master);
 	return 1;
 }
 
@@ -8189,6 +8215,192 @@ int LuaScriptInterface::luaCreatureSetMaster(lua_State* L)
 
 	// update summon icon
 	g_game.updateKnownCreature(creature);
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureRemoveMaster(lua_State* L)
+{
+	// creature:removeMaster()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		creature->removeMaster();
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureHasPlayerOwned(lua_State* L)
+{
+	// creature:hasPlayerOwned()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->hasPlayerOwned());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetPlayerOwned(lua_State* L)
+{
+	// creature:getPlayerOwned()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Player* player = creature->getPlayerOwned()) {
+		tfs::lua::pushUserdata(L, player);
+		tfs::lua::setMetatable(L, -1, "Player");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureHasNpcOwned(lua_State* L)
+{
+	// creature:hasNpcOwned()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->hasNpcOwned());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetNpcOwned(lua_State* L)
+{
+	// creature:getNpcOwned()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Npc* npc = creature->getNpcOwned()) {
+		tfs::lua::pushUserdata(L, npc);
+		tfs::lua::setMetatable(L, -1, "Npc");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureHasMonsterOwned(lua_State* L)
+{
+	// creature:hasMonsterOwned()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->hasMonsterOwned());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetMonsterOwned(lua_State* L)
+{
+	// creature:getMonsterOwned()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Monster* monster = creature->getMonsterOwned()) {
+		tfs::lua::pushUserdata(L, monster);
+		tfs::lua::setMetatable(L, -1, "Monster");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsPlayerSummon(lua_State* L)
+{
+	// creature:isPlayerSummon()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->isPlayerSummon());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetPlayerMaster(lua_State* L)
+{
+	// creature:getPlayerMaster()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Player* player = creature->getPlayerMaster()) {
+		tfs::lua::pushUserdata(L, player);
+		tfs::lua::setMetatable(L, -1, "Player");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsNpcSummon(lua_State* L)
+{
+	// creature:isNpcSummon()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->isNpcSummon());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetNpcMaster(lua_State* L)
+{
+	// creature:getNpcMaster()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Npc* npc = creature->getNpcMaster()) {
+		tfs::lua::pushUserdata(L, npc);
+		tfs::lua::setMetatable(L, -1, "Npc");
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureIsMonsterSummon(lua_State* L)
+{
+	// creature:isMonsterSummon()
+	if (Creature* creature = tfs::lua::getUserdata<Creature>(L, 1)) {
+		tfs::lua::pushBoolean(L, creature->isMonsterSummon());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaCreatureGetMonsterMaster(lua_State* L)
+{
+	// creature:getMonsterMaster()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Monster* monster = creature->getMonsterMaster()) {
+		tfs::lua::pushUserdata(L, monster);
+		tfs::lua::setMetatable(L, -1, "Monster");
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 

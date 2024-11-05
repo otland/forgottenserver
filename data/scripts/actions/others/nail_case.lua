@@ -8,7 +8,7 @@ local messages = {
 local nailCase = Action()
 
 function nailCase.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	if not target:isCreature() or not target:isMonster() or target:getMaster() then
+	if not target:isCreature() or not target:isMonster() or target:isSummon() then
 		return false
 	end
 

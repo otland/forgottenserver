@@ -501,25 +501,31 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
-			const CreatureVector* creatures = getCreatures();
-			if (monster->canPushCreatures() && !monster->isSummon()) {
-				if (creatures) {
-					for (Creature* tileCreature : *creatures) {
-						if (tileCreature->getPlayer() && tileCreature->getPlayer()->isInGhostMode()) {
-							continue;
-						}
+			if (const CreatureVector* creatures = getCreatures()) {
+				if (!creatures->empty()) {
+					if (monster->canPushCreatures() && !monster->isSummon()) {
+						for (Creature* tileCreature : *creatures) {
+							if (const Player* tilePlayer = tileCreature->getPlayer()) {
+								if (tilePlayer->isInGhostMode()) {
+									continue;
+								}
+							}
 
-						const Monster* creatureMonster = tileCreature->getMonster();
-						if (!creatureMonster || !tileCreature->isPushable() ||
-						    (creatureMonster->isSummon() && creatureMonster->getMaster()->getPlayer())) {
-							return RETURNVALUE_NOTPOSSIBLE;
+							if (!tileCreature->isPushable()) {
+								return RETURNVALUE_NOTPOSSIBLE;
+							}
+
+							const Monster* creatureMonster = tileCreature->getMonster();
+							if (!creatureMonster || creatureMonster->isPlayerSummon()) {
+								return RETURNVALUE_NOTPOSSIBLE;
+							}
 						}
-					}
-				}
-			} else if (creatures && !creatures->empty()) {
-				for (const Creature* tileCreature : *creatures) {
-					if (!tileCreature->isInGhostMode()) {
-						return RETURNVALUE_NOTENOUGHROOM;
+					} else {
+						for (const Creature* tileCreature : *creatures) {
+							if (!tileCreature->isInGhostMode()) {
+								return RETURNVALUE_NOTENOUGHROOM;
+							}
+						}
 					}
 				}
 			}

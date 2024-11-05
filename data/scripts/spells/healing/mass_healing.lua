@@ -10,8 +10,7 @@ function spell.onCastSpell(creature, variant)
 	local min = (creature:getLevel() / 5) + (creature:getMagicLevel() * 4.6) + 100
 	local max = (creature:getLevel() / 5) + (creature:getMagicLevel() * 9.6) + 125
 	for _, target in ipairs(combat:getTargets(creature, variant)) do
-		local master = target:getMaster()
-		if target:isPlayer() or master and master:isPlayer() then
+		if target:hasPlayerOwned() then
 			doTargetCombat(creature, target, COMBAT_HEALING, min, max)
 		end
 	end

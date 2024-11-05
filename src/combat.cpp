@@ -164,19 +164,6 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 	}
 }
 
-bool Combat::isPlayerCombat(const Creature* target)
-{
-	if (target->getPlayer()) {
-		return true;
-	}
-
-	if (target->isSummon() && target->getMaster()->getPlayer()) {
-		return true;
-	}
-
-	return false;
-}
-
 ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 {
 	if (attacker == target) {
@@ -194,7 +181,7 @@ ReturnValue Combat::canTargetCreature(Player* attacker, Creature* target)
 		}
 
 		// nopvp-zone
-		if (isPlayerCombat(target)) {
+		if (target->hasPlayerOwned()) {
 			if (attacker->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
@@ -317,19 +304,17 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 			}
 		}
 
-		if (attacker->isSummon()) {
-			if (const Player* masterAttackerPlayer = attacker->getMaster()->getPlayer()) {
-				if (masterAttackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
-					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
-				}
+		if (const Player* masterAttackerPlayer = attacker->getPlayerMaster()) {
+			if (masterAttackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
+				return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
+			}
 
-				if (targetPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
-					return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
-				}
+			if (targetPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
+				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
+			}
 
-				if (isProtected(masterAttackerPlayer, targetPlayer)) {
-					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
-				}
+			if (isProtected(masterAttackerPlayer, targetPlayer)) {
+				return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 			}
 		}
 	} else if (target->getMonster()) {
@@ -338,34 +323,21 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
 
-			if (target->isSummon() && target->getMaster()->getPlayer() && target->getZone() == ZONE_NOPVP) {
+			if (target->isPlayerSummon() && target->getZone() == ZONE_NOPVP) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
 		} else if (attacker->getMonster()) {
-			const Creature* targetMaster = target->getMaster();
-
-			if (!targetMaster || !targetMaster->getPlayer()) {
-				const Creature* attackerMaster = attacker->getMaster();
-
-				if (!attackerMaster || !attackerMaster->getPlayer()) {
-					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
-				}
+			if (!target->isPlayerSummon() && !attacker->isPlayerSummon()) {
+				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
 		}
 	}
 
 	if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-		if (attacker->getPlayer() || (attacker->isSummon() && attacker->getMaster()->getPlayer())) {
-			if (target->getPlayer()) {
-				if (!isInPvpZone(attacker, target)) {
-					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
-				}
-			}
-
-			if (target->isSummon() && target->getMaster()->getPlayer()) {
-				if (!isInPvpZone(attacker, target)) {
-					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
-				}
+		if (attacker->hasPlayerOwned() && target->hasPlayerOwned()) {
+			if (!isInPvpZone(attacker, target)) {
+				return target->getPlayer() ? RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER
+				                           : RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
 		}
 	}
@@ -560,14 +532,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, Creature* caster,
 		}
 
 		if (caster) {
-			Player* casterPlayer;
-			if (caster->isSummon()) {
-				casterPlayer = caster->getMaster()->getPlayer();
-			} else {
-				casterPlayer = caster->getPlayer();
-			}
-
-			if (casterPlayer) {
+			if (Player* casterPlayer = caster->getPlayerOwned()) {
 				if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || tile->hasFlag(TILESTATE_NOPVPZONE)) {
 					if (itemId == ITEM_FIREFIELD_PVP_FULL) {
 						itemId = ITEM_FIREFIELD_NOPVP;
@@ -1403,9 +1368,8 @@ void MagicField::onStepInField(Creature* creature)
 			bool harmfulField = true;
 
 			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
-				Creature* owner = g_game.getCreatureByID(ownerId);
-				if (owner) {
-					if (owner->getPlayer() || (owner->isSummon() && owner->getMaster()->getPlayer())) {
+				if (Creature* owner = g_game.getCreatureByID(ownerId)) {
+					if (owner->hasPlayerOwned()) {
 						harmfulField = false;
 					}
 				}
