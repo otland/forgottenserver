@@ -683,10 +683,7 @@ void Monster::updateIdleStatus()
 	setIdle(idle);
 }
 
-void Monster::onAddCondition(ConditionType_t type)
-{
-	updateIdleStatus();
-}
+void Monster::onAddCondition(ConditionType_t type) { updateIdleStatus(); }
 
 void Monster::onEndCondition(ConditionType_t type)
 {
