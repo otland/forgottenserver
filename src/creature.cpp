@@ -462,7 +462,7 @@ void Creature::onCreatureDisappear(const Creature* creature, bool isLogout)
 	}
 
 	if (followCreature == creature) {
-		setFollowCreature(nullptr);
+		removeFollowCreature();
 		onFollowCreatureDisappear(isLogout);
 	}
 }
@@ -927,6 +927,15 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 
 void Creature::setAttackedCreature(Creature* creature)
 {
+	if (hasAttackedCreature(creature)) {
+		return;
+	}
+
+	if (!canAttackCreature(creature)) {
+		removeAttackedCreature();
+		return;
+	}
+
 	attackedCreature = creature;
 	onAttackedCreature(attackedCreature);
 	attackedCreature->onAttacked();
@@ -945,7 +954,7 @@ void Creature::removeAttackedCreature()
 	}
 }
 
-bool Creature::canAttack(Creature* creature)
+bool Creature::canAttackCreature(Creature* creature)
 {
 	const auto& creaturePos = creature->getPosition();
 	if (creaturePos.z != getPosition().z) {
@@ -1010,35 +1019,46 @@ void Creature::goToFollowCreature()
 	onFollowCreatureComplete(followCreature);
 }
 
-bool Creature::setFollowCreature(Creature* creature)
+void Creature::setFollowCreature(Creature* creature)
 {
-	if (creature) {
-		if (followCreature == creature) {
-			return true;
-		}
-
-		const Position& creaturePos = creature->getPosition();
-		if (creaturePos.z != getPosition().z || !canSee(creaturePos)) {
-			followCreature = nullptr;
-			return false;
-		}
-
-		if (!listWalkDir.empty()) {
-			listWalkDir.clear();
-			onWalkAborted();
-		}
-
-		hasFollowPath = false;
-		forceUpdateFollowPath = false;
-		followCreature = creature;
-		isUpdatingPath = true;
-	} else {
-		isUpdatingPath = false;
-		followCreature = nullptr;
+	if (hasFollowingCreature(creature)) {
+		return;
 	}
 
+	if (!canFollowCreature(creature)) {
+		removeFollowCreature();
+		return;
+	}
+
+	if (!listWalkDir.empty()) {
+		listWalkDir.clear();
+		onWalkAborted();
+	}
+
+	hasFollowPath = false;
+	forceUpdateFollowPath = false;
+
+	isUpdatingPath = true;
+	followCreature = creature;
+
 	onFollowCreature(creature);
-	return true;
+}
+
+void Creature::removeFollowCreature()
+{
+	isUpdatingPath = false;
+	followCreature = nullptr;
+
+	onUnfollowCreature();
+}
+
+bool Creature::canFollowCreature(Creature* creature)
+{
+	const auto& creaturePos = creature->getPosition();
+	if (creaturePos.z != getPosition().z) {
+		return false;
+	}
+	return canSee(creaturePos);
 }
 
 double Creature::getDamageRatio(Creature* attacker) const
