@@ -3320,7 +3320,7 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 
 void Player::setFollowCreature(Creature* creature)
 {
-	if (hasFollowingCreature(creature)) {
+	if (isFollowingCreature(creature)) {
 		return;
 	}
 
@@ -3338,7 +3338,7 @@ void Player::setFollowCreature(Creature* creature)
 
 void Player::setAttackedCreature(Creature* creature)
 {
-	if (hasAttackedCreature(creature)) {
+	if (isAttackingCreature(creature)) {
 		return;
 	}
 
