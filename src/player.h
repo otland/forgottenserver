@@ -429,6 +429,7 @@ public:
 
 	// combat functions
 	void setAttackedCreature(Creature* creature) override;
+	void removeAttackedCreature() override;
 	bool isImmune(CombatType_t type) const override;
 	bool isImmune(ConditionType_t type) const override;
 	bool hasShield() const;
