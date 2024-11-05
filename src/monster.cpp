@@ -645,15 +645,16 @@ bool Monster::selectTarget(Creature* creature)
 		return false;
 	}
 
-	if (isHostile()) {
-		if (isSummon()) {
-			if (!canAttack(creature)) {
-				removeAttackedCreature();
-			}
+	if (isSummon()) {
+		if (!canAttack(creature)) {
+			removeAttackedCreature();
+		}
+	} else if (isHostile()) {
+		if (canAttack(creature)) {
+			setAttackedCreature(creature);
+			g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 		} else {
-			if (canAttack(creature)) {
-				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
-			}
+			removeAttackedCreature();
 		}
 	}
 	return setFollowCreature(creature);
