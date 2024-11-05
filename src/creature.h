@@ -180,7 +180,6 @@ public:
 	void startAutoWalk(const std::vector<Direction>& listDir);
 	void addEventWalk(bool firstStep = false);
 	void stopEventWalk();
-	virtual void goToFollowCreature();
 
 	// walk events
 	virtual void onWalk(Direction& dir);
@@ -190,10 +189,12 @@ public:
 	// follow functions
 	Creature* getFollowCreature() const { return followCreature; }
 	virtual bool setFollowCreature(Creature* creature);
+	virtual void goToFollowCreature();
+	bool updateFollowPath(FindPathParams& findPathParams);
 
 	// follow events
 	virtual void onFollowCreature(const Creature*) {}
-	virtual void onFollowCreatureComplete(const Creature*) {}
+	virtual void onGoToFollowCreatureComplete(const Creature*) {}
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
@@ -444,7 +445,7 @@ protected:
 	virtual uint64_t getLostExperience() const { return 0; }
 	virtual void dropLoot(Container*, Creature*) {}
 	virtual uint16_t getLookCorpse() const { return 0; }
-	virtual void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const;
+	virtual void buildFindPathParams(const Creature* creature, FindPathParams& fpp, bool fullPathSearch) const;
 	virtual void death(Creature*) {}
 	virtual bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified,
 	                        bool mostDamageUnjustified);
