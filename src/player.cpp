@@ -3450,7 +3450,12 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 	return 0;
 }
 
-void Player::onUnfollowCreature() { stopWalk(); }
+void Player::onUnfollowCreature()
+{
+	Creature::onUnfollowCreature();
+
+	stopWalk();
+}
 
 void Player::setChaseMode(bool mode)
 {

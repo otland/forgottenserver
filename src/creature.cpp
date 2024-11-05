@@ -1030,23 +1030,12 @@ void Creature::setFollowCreature(Creature* creature)
 		return;
 	}
 
-	if (!listWalkDir.empty()) {
-		listWalkDir.clear();
-		onWalkAborted();
-	}
-
-	hasFollowPath = false;
-	forceUpdateFollowPath = false;
-	isUpdatingPath = true;
-
 	followCreature = creature;
 	onFollowCreature(creature);
 }
 
 void Creature::removeFollowCreature()
 {
-	isUpdatingPath = false;
-
 	followCreature = nullptr;
 	onUnfollowCreature();
 }
@@ -1059,6 +1048,20 @@ bool Creature::canFollowCreature(Creature* creature)
 	}
 	return canSee(creaturePos);
 }
+
+void Creature::onFollowCreature(const Creature*)
+{
+	if (!listWalkDir.empty()) {
+		listWalkDir.clear();
+		onWalkAborted();
+	}
+
+	hasFollowPath = false;
+	forceUpdateFollowPath = false;
+	isUpdatingPath = true;
+}
+
+void Creature::onUnfollowCreature() { isUpdatingPath = false; }
 
 double Creature::getDamageRatio(Creature* attacker) const
 {
