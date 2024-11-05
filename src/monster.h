@@ -218,7 +218,6 @@ private:
 	uint32_t getDamageImmunities() const override { return mType->info.damageImmunities; }
 	uint32_t getConditionImmunities() const override { return mType->info.conditionImmunities; }
 	void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
-	bool useCacheMap() const override { return !randomStepping; }
 
 	friend class LuaScriptInterface;
 };
