@@ -197,7 +197,9 @@ public:
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
-	virtual bool setAttackedCreature(Creature* creature);
+	virtual void setAttackedCreature(Creature* creature);
+	virtual void removeAttackedCreature();
+	virtual bool canAttack(Creature* creature);
 	virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                             bool ignoreResistances = false);

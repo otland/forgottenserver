@@ -645,9 +645,15 @@ bool Monster::selectTarget(Creature* creature)
 		return false;
 	}
 
-	if (isHostile() || isSummon()) {
-		if (setAttackedCreature(creature) && !isSummon()) {
-			g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+	if (isHostile()) {
+		if (isSummon()) {
+			if (!canAttack(creature)) {
+				removeAttackedCreature();
+			}
+		} else {
+			if (canAttack(creature)) {
+				g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+			}
 		}
 	}
 	return setFollowCreature(creature);
@@ -1832,7 +1838,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 
 void Monster::death(Creature*)
 {
-	setAttackedCreature(nullptr);
+	removeAttackedCreature();
 
 	for (Creature* summon : summons) {
 		summon->changeHealth(-summon->getHealth());
