@@ -3354,6 +3354,15 @@ void Player::setAttackedCreature(Creature* creature)
 	g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 }
 
+void Player::removeAttackedCreature()
+{
+	Creature::removeAttackedCreature();
+
+	if (followCreature) {
+		setFollowCreature(nullptr);
+	}
+}
+
 void Player::goToFollowCreature()
 {
 	if (!walkTask) {
