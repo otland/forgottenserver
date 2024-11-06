@@ -809,6 +809,7 @@ private:
 	static int luaPlayerSetClientLowLevelBonusDisplay(lua_State* L);
 
 	static int luaPlayerSendResourceBalance(lua_State* L);
+	static int luaPlayerSendEnterMarket(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
