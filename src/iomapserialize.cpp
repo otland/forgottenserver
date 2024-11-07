@@ -120,7 +120,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	}
 
 	Tile* tile = nullptr;
-	if (!parent->hasParent()) {
+	if (!parent->getParent()) {
 		tile = parent->getTile();
 	}
 

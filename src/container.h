@@ -50,8 +50,6 @@ public:
 	virtual StoreInbox* getStoreInbox() { return nullptr; }
 	virtual const StoreInbox* getStoreInbox() const { return nullptr; }
 
-	bool hasParent() const override;
-
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
 
@@ -69,6 +67,7 @@ public:
 
 	std::string getName(bool addArticle = false) const;
 
+	bool hasParent() const;
 	void addItem(Item* item);
 	Item* getItemByIndex(size_t index) const;
 	bool isHoldingItem(const Item* item) const;
