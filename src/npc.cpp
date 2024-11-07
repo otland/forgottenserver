@@ -410,6 +410,17 @@ void Npc::loadNpcTypeInfo()
 	sightY = npcType->sightY;
 }
 
+void Npc::goToFollowCreature()
+{
+	if (!followCreature) {
+		return;
+	}
+
+	FindPathParams fpp;
+	getPathSearchParams(followCreature, fpp);
+	updateFollowCreaturePath(fpp);
+}
+
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
