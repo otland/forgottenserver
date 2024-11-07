@@ -26,9 +26,6 @@ public:
 
 	// Item implementations
 	bool canRemove() const override { return false; }
-
-	// Thing implementations
-	bool hasParent() const override { return getParent(); }
 };
 
 #endif // FS_STOREINBOX_H

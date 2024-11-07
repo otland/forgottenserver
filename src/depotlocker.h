@@ -38,9 +38,6 @@ public:
 	// Item implementations
 	bool canRemove() const override { return false; }
 
-	// Thing implementations
-	bool hasParent() const override { return getParent(); }
-
 private:
 	uint16_t depotId;
 };
