@@ -198,6 +198,7 @@ const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributes
     {"storeitem", ITEM_PARSE_STOREITEM},
     {"worth", ITEM_PARSE_WORTH},
     {"supply", ITEM_PARSE_SUPPLY},
+    {"stacksize", ITEM_PARSE_STACKSIZE},
 };
 
 const std::unordered_map<std::string, ItemTypes_t> ItemTypesMap = {{"key", ITEM_TYPE_KEY},
@@ -1862,6 +1863,11 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 						currencyItems.insert(CurrencyMap::value_type(worth, id));
 						it.worth = worth;
 					}
+					break;
+				}
+
+				case ITEM_PARSE_STACKSIZE: {
+					it.stackSize = pugi::cast<uint8_t>(valueAttribute.value());
 					break;
 				}
 

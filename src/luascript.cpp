@@ -3174,6 +3174,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "ItemType", "getCapacity", LuaScriptInterface::luaItemTypeGetCapacity);
 	registerMethod(L, "ItemType", "getWeight", LuaScriptInterface::luaItemTypeGetWeight);
 	registerMethod(L, "ItemType", "getWorth", LuaScriptInterface::luaItemTypeGetWorth);
+	registerMethod(L, "ItemType", "getStackSize", LuaScriptInterface::luaItemTypeGetStackSize);
 
 	registerMethod(L, "ItemType", "getHitChance", LuaScriptInterface::luaItemTypeGetHitChance);
 	registerMethod(L, "ItemType", "getShootRange", LuaScriptInterface::luaItemTypeGetShootRange);
@@ -3659,7 +3660,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / ITEM_STACK_SIZE));
+			itemCount = static_cast<int32_t>(std::ceil(static_cast<float>(count) / it.stackSize));
 		} else {
 			itemCount = 1;
 		}
@@ -3670,8 +3671,8 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 
 	while (itemCount > 0) {
 		uint16_t stackCount = subType;
-		if (it.stackable && stackCount > ITEM_STACK_SIZE) {
-			stackCount = ITEM_STACK_SIZE;
+		if (it.stackable && stackCount > it.stackSize) {
+			stackCount = it.stackSize;
 		}
 
 		Item* newItem = Item::CreateItem(itemId, stackCount);
@@ -4956,7 +4957,7 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 
 	const ItemType& it = Item::items[id];
 	if (it.stackable) {
-		count = std::min<uint16_t>(count, ITEM_STACK_SIZE);
+		count = std::min<uint16_t>(count, it.stackSize);
 	}
 
 	Item* item = Item::CreateItem(id, count);
@@ -5986,7 +5987,7 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 
 	uint32_t subType = tfs::lua::getNumber<uint32_t>(L, 3, 1);
 
-	Item* item = Item::CreateItem(itemId, std::min<uint32_t>(subType, ITEM_STACK_SIZE));
+	Item* item = Item::CreateItem(itemId, std::min<uint32_t>(subType, Item::items[itemId].stackSize));
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -7257,7 +7258,7 @@ int LuaScriptInterface::luaItemTransform(lua_State* L)
 
 	const ItemType& it = Item::items[itemId];
 	if (it.stackable) {
-		subType = std::min<int32_t>(subType, ITEM_STACK_SIZE);
+		subType = std::min<int32_t>(subType, it.stackSize);
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
@@ -7555,7 +7556,7 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 
 	if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = std::ceil(count / static_cast<float>(ITEM_STACK_SIZE));
+			itemCount = std::ceil(count / static_cast<float>(it.stackSize));
 		}
 
 		subType = count;
@@ -7575,7 +7576,7 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 5, 0);
 
 	for (int32_t i = 1; i <= itemCount; ++i) {
-		int32_t stackCount = std::min<int32_t>(subType, ITEM_STACK_SIZE);
+		int32_t stackCount = std::min<int32_t>(subType, it.stackSize);
 		Item* item = Item::CreateItem(itemId, stackCount);
 		if (!item) {
 			reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
@@ -10071,7 +10072,7 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 		itemCount = std::max<int32_t>(1, count);
 	} else if (it.hasSubType()) {
 		if (it.stackable) {
-			itemCount = std::ceil(count / static_cast<float>(ITEM_STACK_SIZE));
+			itemCount = std::ceil(count / static_cast<float>(it.stackSize));
 		}
 
 		subType = count;
@@ -10092,7 +10093,7 @@ int LuaScriptInterface::luaPlayerAddItem(lua_State* L)
 	for (int32_t i = 1; i <= itemCount; ++i) {
 		int32_t stackCount = subType;
 		if (it.stackable) {
-			stackCount = std::min<int32_t>(stackCount, ITEM_STACK_SIZE);
+			stackCount = std::min<int32_t>(stackCount, it.stackSize);
 			subType -= stackCount;
 		}
 
@@ -13687,6 +13688,18 @@ int LuaScriptInterface::luaItemTypeGetWorth(lua_State* L)
 	}
 
 	lua_pushnumber(L, itemType->worth);
+	return 1;
+}
+
+int LuaScriptInterface::luaItemTypeGetStackSize(lua_State* L)
+{
+	// itemType:getStackSize()
+	const ItemType* itemType = tfs::lua::getUserdata<const ItemType>(L, 1);
+	if (!itemType) {
+		lua_pushnil(L);
+		return 1;
+	}
+	lua_pushnumber(L, itemType->stackSize);
 	return 1;
 }
 

@@ -335,22 +335,22 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
 				if (containerItem != item && containerItem->equals(item) &&
-				    containerItem->getItemCount() < ITEM_STACK_SIZE) {
+				    containerItem->getItemCount() < containerItem->getStackSize()) {
 					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
-						n += ITEM_STACK_SIZE - containerItem->getItemCount();
+						n += containerItem->getStackSize() - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
-			if (item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
+			if (item->equals(destItem) && destItem->getItemCount() < destItem->getStackSize()) {
 				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
-					n = ITEM_STACK_SIZE - destItem->getItemCount();
+					n = destItem->getStackSize() - destItem->getItemCount();
 				}
 			}
 		}
 
-		maxQueryCount = freeSlots * ITEM_STACK_SIZE + n;
+		maxQueryCount = freeSlots * item->getStackSize() + n;
 		if (maxQueryCount < count) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
@@ -450,14 +450,14 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
-		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < ITEM_STACK_SIZE) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < (*destItem)->getStackSize()) {
 			return this;
 		}
 
 		// try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
-			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < ITEM_STACK_SIZE) {
+			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < (*destItem)->getStackSize()) {
 				*destItem = listItem;
 				index = n;
 				return this;

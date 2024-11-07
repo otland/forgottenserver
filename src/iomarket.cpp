@@ -130,7 +130,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 			if (itemType.stackable) {
 				uint16_t tmpAmount = amount;
 				while (tmpAmount > 0) {
-					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
+					uint16_t stackCount = std::min<uint16_t>(itemType.stackSize, tmpAmount);
 					Item* item = Item::CreateItem(itemType.id, stackCount);
 					if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 					    RETURNVALUE_NOERROR) {

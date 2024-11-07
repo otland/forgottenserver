@@ -11,19 +11,45 @@ function msgcontains(message, keyword)
 	return message:find(keyword) and not message:find('(%w+)' .. keyword)
 end
 
+
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
 	local amount = amount or 1
 	local subType = subType or 0
+	local startingAmount = amount
+	local result = RETURNVALUE_NOERROR
 
-	if ItemType(itemid):isStackable() then
+	local itemType = ItemType(itemid)
+	if itemType:isStackable() then
 		local stuff
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			stuff:addItem(itemid, math.min(ITEM_STACK_SIZE, amount))
+			local itemAdded = true
+			while startingAmount > 0 and itemAdded do
+				local item = stuff:addItem(itemid, math.min(itemType:getStackSize(), startingAmount))
+				if item then
+					print("item Added")
+					startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
+					itemAdded = true
+				else
+					print("item Not Added")
+					itemAdded = false
+				end
+			end
+			print(startingAmount)
+			result = Player(cid):addItemEx(stuff, ignoreCap)
 		else
-			stuff = Game.createItem(itemid, math.min(ITEM_STACK_SIZE, amount))
+			while startingAmount > 0 and result == RETURNVALUE_NOERROR do
+				stuff = Game.createItem(itemid, math.min(itemType:getStackSize(), startingAmount))
+				if result == RETURNVALUE_NOERROR then
+					result = Player(cid):addItemEx(stuff, ignoreCap)
+					startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
+				end
+			end
 		end
-		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
+
+		print(result)
+
+		return result ~= RETURNVALUE_NOERROR and 0 or amount - startingAmount, 0
 	end
 
 	local a = 0

@@ -1022,6 +1022,7 @@ private:
 	static int luaItemTypeGetCapacity(lua_State* L);
 	static int luaItemTypeGetWeight(lua_State* L);
 	static int luaItemTypeGetWorth(lua_State* L);
+	static int luaItemTypeGetStackSize(lua_State* L);
 
 	static int luaItemTypeGetHitChance(lua_State* L);
 	static int luaItemTypeGetShootRange(lua_State* L);
