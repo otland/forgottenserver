@@ -769,7 +769,7 @@ void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 	fpp.maxTargetDist = 1;
 }
 
-bool Creature::setFollowCreature(Creature* creature)
+void Creature::setFollowCreature(Creature* creature)
 {
 	if (isFollowingCreature(creature)) {
 		return;
