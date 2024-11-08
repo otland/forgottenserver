@@ -107,6 +107,7 @@ public:
 
 	void setNormalCreatureLight() override;
 	bool getCombatValues(int32_t& min, int32_t& max) override;
+	void onAttackedCreature(Creature* target, bool addFightTicks = true);
 
 	void doAttacking(uint32_t interval) override;
 	bool hasExtraSwing() override { return lastMeleeAttack == 0; }

@@ -679,14 +679,9 @@ bool Monster::selectTarget(Creature* creature)
 		return false;
 	}
 
-	if (isSummon()) {
-		if (!canAttackCreature(creature)) {
-			removeAttackedCreature();
-		}
-	} else if (isHostile()) {
+	if (isHostile() || isSummon()) {
 		if (canAttackCreature(creature)) {
 			setAttackedCreature(creature);
-			g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
 		} else {
 			removeAttackedCreature();
 		}
@@ -1930,6 +1925,15 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 	min = minCombatValue;
 	max = maxCombatValue;
 	return true;
+}
+
+void Monster::onAttackedCreature(Creature* target, bool addFightTicks = true)
+{
+	Creature::onAttackedCreature(target, addFightTicks);
+
+	if (isHostile()) {
+		g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+	}
 }
 
 void Monster::updateLookDirection()
