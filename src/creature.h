@@ -198,7 +198,6 @@ public:
 	// follow events
 	virtual void onFollowCreature(const Creature*) {}
 	virtual void onUnfollowCreature();
-	virtual void onFollowCreatureComplete(const Creature*) {}
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
