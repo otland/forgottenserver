@@ -196,7 +196,7 @@ public:
 	virtual bool isFollowingCreature(Creature* creature) { return followCreature == creature; }
 
 	// follow events
-	virtual void onFollowCreature(const Creature*) {}
+	virtual void onFollowCreature(const Creature*);
 	virtual void onUnfollowCreature();
 
 	// combat functions
