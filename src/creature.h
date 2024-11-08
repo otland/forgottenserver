@@ -180,7 +180,8 @@ public:
 	void startAutoWalk(const std::vector<Direction>& listDir);
 	void addEventWalk(bool firstStep = false);
 	void stopEventWalk();
-	virtual void goToFollowCreature();
+	virtual void goToFollowCreature() = 0;
+	void updateFollowCreaturePath(FindPathParams& fpp);
 
 	// walk events
 	virtual void onWalk(Direction& dir);
@@ -195,7 +196,7 @@ public:
 	virtual bool isFollowingCreature(Creature* creature) { return followCreature == creature; }
 
 	// follow events
-	virtual void onFollowCreature(const Creature*);
+	virtual void onFollowCreature(const Creature*) {}
 	virtual void onUnfollowCreature();
 	virtual void onFollowCreatureComplete(const Creature*) {}
 

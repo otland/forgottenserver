@@ -3373,16 +3373,20 @@ void Player::removeAttackedCreature()
 
 void Player::goToFollowCreature()
 {
-	if (!walkTask) {
-		if ((OTSYS_TIME() - lastFailedFollow) < 2000) {
-			return;
-		}
+	if (walkTask || !followCreature) {
+		return;
+	}
 
-		Creature::goToFollowCreature();
+	if ((OTSYS_TIME() - lastFailedFollow) < 2000) {
+		return;
+	}
 
-		if (followCreature && !hasFollowPath) {
-			lastFailedFollow = OTSYS_TIME();
-		}
+	FindPathParams fpp;
+	getPathSearchParams(followCreature, fpp);
+	updateFollowCreaturePath(fpp);
+
+	if (!hasFollowPath) {
+		lastFailedFollow = OTSYS_TIME();
 	}
 }
 
