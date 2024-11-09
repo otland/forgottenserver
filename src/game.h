@@ -78,7 +78,7 @@ public:
 
 	void start(ServiceManager* manager);
 
-	void forceAddCondition(uint32_t creatureId, Condition* condition);
+	void forceAddCondition(uint32_t creatureId, const std::shared_ptr<Condition>& condition);
 	void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
 	bool loadMainMap(const std::string& filename);

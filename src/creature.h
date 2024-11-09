@@ -18,7 +18,7 @@ class Monster;
 class Npc;
 class Player;
 
-using ConditionList = std::list<Condition*>;
+using ConditionList = std::list<std::shared_ptr<Condition>>;
 using CreatureEventList = std::list<CreatureEvent*>;
 using CreatureIconHashMap = std::unordered_map<CreatureIcon_t, uint16_t>;
 
@@ -224,14 +224,14 @@ public:
 
 	virtual uint8_t getSpeechBubble() const { return SPEECHBUBBLE_NONE; }
 
-	bool addCondition(Condition* condition, bool force = false);
-	bool addCombatCondition(Condition* condition);
+	bool addCondition(const std::shared_ptr<Condition>& condition, bool force = false);
+	bool addCombatCondition(const std::shared_ptr<Condition>& condition);
 	void removeCondition(ConditionType_t type, ConditionId_t conditionId, bool force = false);
 	void removeCondition(ConditionType_t type, bool force = false);
-	void removeCondition(Condition* condition, bool force = false);
+	void removeCondition(const std::shared_ptr<Condition>& condition, bool force = false);
 	void removeCombatCondition(ConditionType_t type);
-	Condition* getCondition(ConditionType_t type) const;
-	Condition* getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId = 0) const;
+	std::shared_ptr<Condition> getCondition(ConditionType_t type) const;
+	std::shared_ptr<Condition> getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId = 0) const;
 	void executeConditions(uint32_t interval);
 	bool hasCondition(ConditionType_t type, uint32_t subId = 0) const;
 	virtual bool isImmune(ConditionType_t type) const;
@@ -260,7 +260,7 @@ public:
 	virtual void onAddCombatCondition(ConditionType_t type);
 	virtual void onEndCondition(ConditionType_t type);
 	void onTickCondition(ConditionType_t type, bool& bRemove);
-	virtual void onCombatRemoveCondition(Condition* condition);
+	virtual void onCombatRemoveCondition(const std::shared_ptr<Condition>& condition);
 	virtual void onAttackedCreature(Creature*, bool = true) {}
 	virtual void onAttacked();
 	virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
