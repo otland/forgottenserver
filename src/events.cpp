@@ -12,7 +12,7 @@ namespace {
 
 LuaScriptInterface scriptInterface{"Event Interface"};
 
-struct CreatureEvents
+struct CreatureHandlers
 {
 	int32_t onChangeOutfit = -1;
 	int32_t onAreaCombat = -1;
@@ -20,9 +20,9 @@ struct CreatureEvents
 	int32_t onHear = -1;
 	int32_t onChangeZone = -1;
 	int32_t onUpdateStorage = -1;
-};
+} creatureHandlers;
 
-struct PartyEvents
+struct PartyHandlers
 {
 	int32_t onJoin = -1;
 	int32_t onLeave = -1;
@@ -31,9 +31,9 @@ struct PartyEvents
 	int32_t onInvite = -1;
 	int32_t onRevokeInvitation = -1;
 	int32_t onPassLeadership = -1;
-};
+} partyHandlers;
 
-struct PlayerEvents
+struct PlayerHandlers
 {
 	int32_t onBrowseField = -1;
 	int32_t onLook = -1;
@@ -60,18 +60,13 @@ struct PlayerEvents
 	int32_t onInventoryUpdate = -1;
 	int32_t onNetworkMessage = -1;
 	int32_t onSpellCheck = -1;
-};
+} playerHandlers;
 
-struct MonsterEvents
+struct MonsterHandlers
 {
 	int32_t onDropLoot = -1;
 	int32_t onSpawn = -1;
-};
-
-CreatureEvents creatureEvents;
-PartyEvents partyEvents;
-PlayerEvents playerEvents;
-MonsterEvents monsterEvents;
+} monsterHandlers;
 
 bool load_from_xml()
 {
@@ -82,10 +77,10 @@ bool load_from_xml()
 		return false;
 	}
 
-	creatureEvents = {};
-	partyEvents = {};
-	playerEvents = {};
-	monsterEvents = {};
+	creatureHandlers = {};
+	partyHandlers = {};
+	playerHandlers = {};
+	monsterHandlers = {};
 
 	std::set<std::string> classes;
 	for (auto eventNode : doc.child("events").children()) {
@@ -108,99 +103,99 @@ bool load_from_xml()
 		const auto event = scriptInterface.getMetaEvent(className, methodName);
 		if (className == "Creature") {
 			if (methodName == "onChangeOutfit") {
-				creatureEvents.onChangeOutfit = event;
+				creatureHandlers.onChangeOutfit = event;
 			} else if (methodName == "onAreaCombat") {
-				creatureEvents.onAreaCombat = event;
+				creatureHandlers.onAreaCombat = event;
 			} else if (methodName == "onTargetCombat") {
-				creatureEvents.onTargetCombat = event;
+				creatureHandlers.onTargetCombat = event;
 			} else if (methodName == "onHear") {
-				creatureEvents.onHear = event;
+				creatureHandlers.onHear = event;
 			} else if (methodName == "onChangeZone") {
-				creatureEvents.onChangeZone = event;
+				creatureHandlers.onChangeZone = event;
 			} else if (methodName == "onUpdateStorage") {
-				creatureEvents.onUpdateStorage = event;
+				creatureHandlers.onUpdateStorage = event;
 			} else {
 				std::cout << "[Warning - tfs::events::load_from_xml] Unknown creature method: " << methodName
 				          << std::endl;
 			}
 		} else if (className == "Party") {
 			if (methodName == "onJoin") {
-				partyEvents.onJoin = event;
+				partyHandlers.onJoin = event;
 			} else if (methodName == "onLeave") {
-				partyEvents.onLeave = event;
+				partyHandlers.onLeave = event;
 			} else if (methodName == "onDisband") {
-				partyEvents.onDisband = event;
+				partyHandlers.onDisband = event;
 			} else if (methodName == "onShareExperience") {
-				partyEvents.onShareExperience = event;
+				partyHandlers.onShareExperience = event;
 			} else if (methodName == "onInvite") {
-				partyEvents.onInvite = event;
+				partyHandlers.onInvite = event;
 			} else if (methodName == "onRevokeInvitation") {
-				partyEvents.onRevokeInvitation = event;
+				partyHandlers.onRevokeInvitation = event;
 			} else if (methodName == "onPassLeadership") {
-				partyEvents.onPassLeadership = event;
+				partyHandlers.onPassLeadership = event;
 			} else {
 				std::cout << "[Warning - tfs::events::load_from_xml] Unknown party method: " << methodName << std::endl;
 			}
 		} else if (className == "Player") {
 			if (methodName == "onBrowseField") {
-				playerEvents.onBrowseField = event;
+				playerHandlers.onBrowseField = event;
 			} else if (methodName == "onLook") {
-				playerEvents.onLook = event;
+				playerHandlers.onLook = event;
 			} else if (methodName == "onLookInBattleList") {
-				playerEvents.onLookInBattleList = event;
+				playerHandlers.onLookInBattleList = event;
 			} else if (methodName == "onLookInTrade") {
-				playerEvents.onLookInTrade = event;
+				playerHandlers.onLookInTrade = event;
 			} else if (methodName == "onLookInShop") {
-				playerEvents.onLookInShop = event;
+				playerHandlers.onLookInShop = event;
 			} else if (methodName == "onLookInMarket") {
-				playerEvents.onLookInMarket = event;
+				playerHandlers.onLookInMarket = event;
 			} else if (methodName == "onTradeRequest") {
-				playerEvents.onTradeRequest = event;
+				playerHandlers.onTradeRequest = event;
 			} else if (methodName == "onTradeAccept") {
-				playerEvents.onTradeAccept = event;
+				playerHandlers.onTradeAccept = event;
 			} else if (methodName == "onTradeCompleted") {
-				playerEvents.onTradeCompleted = event;
+				playerHandlers.onTradeCompleted = event;
 			} else if (methodName == "onPodiumRequest") {
-				playerEvents.onPodiumRequest = event;
+				playerHandlers.onPodiumRequest = event;
 			} else if (methodName == "onPodiumEdit") {
-				playerEvents.onPodiumEdit = event;
+				playerHandlers.onPodiumEdit = event;
 			} else if (methodName == "onMoveItem") {
-				playerEvents.onMoveItem = event;
+				playerHandlers.onMoveItem = event;
 			} else if (methodName == "onItemMoved") {
-				playerEvents.onItemMoved = event;
+				playerHandlers.onItemMoved = event;
 			} else if (methodName == "onMoveCreature") {
-				playerEvents.onMoveCreature = event;
+				playerHandlers.onMoveCreature = event;
 			} else if (methodName == "onReportRuleViolation") {
-				playerEvents.onReportRuleViolation = event;
+				playerHandlers.onReportRuleViolation = event;
 			} else if (methodName == "onReportBug") {
-				playerEvents.onReportBug = event;
+				playerHandlers.onReportBug = event;
 			} else if (methodName == "onRotateItem") {
-				playerEvents.onRotateItem = event;
+				playerHandlers.onRotateItem = event;
 			} else if (methodName == "onTurn") {
-				playerEvents.onTurn = event;
+				playerHandlers.onTurn = event;
 			} else if (methodName == "onGainExperience") {
-				playerEvents.onGainExperience = event;
+				playerHandlers.onGainExperience = event;
 			} else if (methodName == "onLoseExperience") {
-				playerEvents.onLoseExperience = event;
+				playerHandlers.onLoseExperience = event;
 			} else if (methodName == "onGainSkillTries") {
-				playerEvents.onGainSkillTries = event;
+				playerHandlers.onGainSkillTries = event;
 			} else if (methodName == "onWrapItem") {
-				playerEvents.onWrapItem = event;
+				playerHandlers.onWrapItem = event;
 			} else if (methodName == "onInventoryUpdate") {
-				playerEvents.onInventoryUpdate = event;
+				playerHandlers.onInventoryUpdate = event;
 			} else if (methodName == "onNetworkMessage") {
-				playerEvents.onNetworkMessage = event;
+				playerHandlers.onNetworkMessage = event;
 			} else if (methodName == "onSpellCheck") {
-				playerEvents.onSpellCheck = event;
+				playerHandlers.onSpellCheck = event;
 			} else {
 				std::cout << "[Warning - tfs::events::load_from_xml] Unknown player method: " << methodName
 				          << std::endl;
 			}
 		} else if (className == "Monster") {
 			if (methodName == "onDropLoot") {
-				monsterEvents.onDropLoot = event;
+				monsterHandlers.onDropLoot = event;
 			} else if (methodName == "onSpawn") {
-				monsterEvents.onSpawn = event;
+				monsterHandlers.onSpawn = event;
 			} else {
 				std::cout << "[Warning - tfs::events::load_from_xml] Unknown monster method: " << methodName
 				          << std::endl;
@@ -221,9 +216,9 @@ int32_t getScriptId(EventInfoId eventInfoId)
 {
 	switch (eventInfoId) {
 		case EventInfoId::CREATURE_ONHEAR:
-			return creatureEvents.onHear;
+			return creatureHandlers.onHear;
 		case EventInfoId::MONSTER_ONSPAWN:
-			return monsterEvents.onSpawn;
+			return monsterHandlers.onSpawn;
 		default:
 			return -1;
 	}
@@ -248,7 +243,7 @@ namespace tfs::events::creature {
 bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
 	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
-	if (creatureEvents.onChangeOutfit == -1) {
+	if (creatureHandlers.onChangeOutfit == -1) {
 		return true;
 	}
 
@@ -258,10 +253,10 @@ bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onChangeOutfit, &scriptInterface);
+	env->setScriptId(creatureHandlers.onChangeOutfit, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onChangeOutfit);
+	scriptInterface.pushFunction(creatureHandlers.onChangeOutfit);
 
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
@@ -274,7 +269,7 @@ bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
 ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 {
 	// Creature:onAreaCombat(tile, aggressive) or Creature.onAreaCombat(self, tile, aggressive)
-	if (creatureEvents.onAreaCombat == -1) {
+	if (creatureHandlers.onAreaCombat == -1) {
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -284,10 +279,10 @@ ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onAreaCombat, &scriptInterface);
+	env->setScriptId(creatureHandlers.onAreaCombat, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onAreaCombat);
+	scriptInterface.pushFunction(creatureHandlers.onAreaCombat);
 
 	if (creature) {
 		tfs::lua::pushUserdata(L, creature);
@@ -317,7 +312,7 @@ ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 ReturnValue onTargetCombat(Creature* creature, Creature* target)
 {
 	// Creature:onTargetCombat(target) or Creature.onTargetCombat(self, target)
-	if (creatureEvents.onTargetCombat == -1) {
+	if (creatureHandlers.onTargetCombat == -1) {
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -327,10 +322,10 @@ ReturnValue onTargetCombat(Creature* creature, Creature* target)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onTargetCombat, &scriptInterface);
+	env->setScriptId(creatureHandlers.onTargetCombat, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onTargetCombat);
+	scriptInterface.pushFunction(creatureHandlers.onTargetCombat);
 
 	if (creature) {
 		tfs::lua::pushUserdata(L, creature);
@@ -358,7 +353,7 @@ ReturnValue onTargetCombat(Creature* creature, Creature* target)
 void onHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type)
 {
 	// Creature:onHear(speaker, words, type)
-	if (creatureEvents.onHear == -1) {
+	if (creatureHandlers.onHear == -1) {
 		return;
 	}
 
@@ -368,10 +363,10 @@ void onHear(Creature* creature, Creature* speaker, const std::string& words, Spe
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onHear, &scriptInterface);
+	env->setScriptId(creatureHandlers.onHear, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onHear);
+	scriptInterface.pushFunction(creatureHandlers.onHear);
 
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
@@ -388,7 +383,7 @@ void onHear(Creature* creature, Creature* speaker, const std::string& words, Spe
 void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 {
 	// Creature:onChangeZone(fromZone, toZone)
-	if (creatureEvents.onChangeZone == -1) {
+	if (creatureHandlers.onChangeZone == -1) {
 		return;
 	}
 
@@ -398,10 +393,10 @@ void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onChangeZone, &scriptInterface);
+	env->setScriptId(creatureHandlers.onChangeZone, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onChangeZone);
+	scriptInterface.pushFunction(creatureHandlers.onChangeZone);
 
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
@@ -416,7 +411,7 @@ void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> va
                      bool isSpawn)
 {
 	// Creature:onUpdateStorage(key, value, oldValue, isSpawn)
-	if (creatureEvents.onUpdateStorage == -1) {
+	if (creatureHandlers.onUpdateStorage == -1) {
 		return;
 	}
 
@@ -426,10 +421,10 @@ void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> va
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(creatureEvents.onUpdateStorage, &scriptInterface);
+	env->setScriptId(creatureHandlers.onUpdateStorage, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(creatureEvents.onUpdateStorage);
+	scriptInterface.pushFunction(creatureHandlers.onUpdateStorage);
 
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setMetatable(L, -1, "Creature");
@@ -460,7 +455,7 @@ namespace tfs::events::party {
 bool onJoin(Party* party, Player* player)
 {
 	// Party:onJoin(player) or Party.onJoin(self, player)
-	if (partyEvents.onJoin == -1) {
+	if (partyHandlers.onJoin == -1) {
 		return true;
 	}
 
@@ -470,10 +465,10 @@ bool onJoin(Party* party, Player* player)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onJoin, &scriptInterface);
+	env->setScriptId(partyHandlers.onJoin, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onJoin);
+	scriptInterface.pushFunction(partyHandlers.onJoin);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -487,7 +482,7 @@ bool onJoin(Party* party, Player* player)
 bool onLeave(Party* party, Player* player)
 {
 	// Party:onLeave(player) or Party.onLeave(self, player)
-	if (partyEvents.onLeave == -1) {
+	if (partyHandlers.onLeave == -1) {
 		return true;
 	}
 
@@ -497,10 +492,10 @@ bool onLeave(Party* party, Player* player)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onLeave, &scriptInterface);
+	env->setScriptId(partyHandlers.onLeave, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onLeave);
+	scriptInterface.pushFunction(partyHandlers.onLeave);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -514,7 +509,7 @@ bool onLeave(Party* party, Player* player)
 bool onDisband(Party* party)
 {
 	// Party:onDisband() or Party.onDisband(self)
-	if (partyEvents.onDisband == -1) {
+	if (partyHandlers.onDisband == -1) {
 		return true;
 	}
 
@@ -524,10 +519,10 @@ bool onDisband(Party* party)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onDisband, &scriptInterface);
+	env->setScriptId(partyHandlers.onDisband, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onDisband);
+	scriptInterface.pushFunction(partyHandlers.onDisband);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -538,7 +533,7 @@ bool onDisband(Party* party)
 bool onInvite(Party* party, Player* player)
 {
 	// Party:onInvite(player) or Party.onInvite(self, player)
-	if (partyEvents.onInvite == -1) {
+	if (partyHandlers.onInvite == -1) {
 		return true;
 	}
 
@@ -548,10 +543,10 @@ bool onInvite(Party* party, Player* player)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onInvite, &scriptInterface);
+	env->setScriptId(partyHandlers.onInvite, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onInvite);
+	scriptInterface.pushFunction(partyHandlers.onInvite);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -565,7 +560,7 @@ bool onInvite(Party* party, Player* player)
 bool onRevokeInvitation(Party* party, Player* player)
 {
 	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
-	if (partyEvents.onRevokeInvitation == -1) {
+	if (partyHandlers.onRevokeInvitation == -1) {
 		return true;
 	}
 
@@ -575,10 +570,10 @@ bool onRevokeInvitation(Party* party, Player* player)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onRevokeInvitation, &scriptInterface);
+	env->setScriptId(partyHandlers.onRevokeInvitation, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onRevokeInvitation);
+	scriptInterface.pushFunction(partyHandlers.onRevokeInvitation);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -592,7 +587,7 @@ bool onRevokeInvitation(Party* party, Player* player)
 bool onPassLeadership(Party* party, Player* player)
 {
 	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
-	if (partyEvents.onPassLeadership == -1) {
+	if (partyHandlers.onPassLeadership == -1) {
 		return true;
 	}
 
@@ -602,10 +597,10 @@ bool onPassLeadership(Party* party, Player* player)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onPassLeadership, &scriptInterface);
+	env->setScriptId(partyHandlers.onPassLeadership, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onPassLeadership);
+	scriptInterface.pushFunction(partyHandlers.onPassLeadership);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -619,7 +614,7 @@ bool onPassLeadership(Party* party, Player* player)
 void onShareExperience(Party* party, uint64_t& exp)
 {
 	// Party:onShareExperience(exp) or Party.onShareExperience(self, exp)
-	if (partyEvents.onShareExperience == -1) {
+	if (partyHandlers.onShareExperience == -1) {
 		return;
 	}
 
@@ -629,10 +624,10 @@ void onShareExperience(Party* party, uint64_t& exp)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(partyEvents.onShareExperience, &scriptInterface);
+	env->setScriptId(partyHandlers.onShareExperience, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(partyEvents.onShareExperience);
+	scriptInterface.pushFunction(partyHandlers.onShareExperience);
 
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
@@ -656,7 +651,7 @@ namespace tfs::events::player {
 bool onBrowseField(Player* player, const Position& position)
 {
 	// Player:onBrowseField(position) or Player.onBrowseField(self, position)
-	if (playerEvents.onBrowseField == -1) {
+	if (playerHandlers.onBrowseField == -1) {
 		return true;
 	}
 
@@ -666,10 +661,10 @@ bool onBrowseField(Player* player, const Position& position)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onBrowseField, &scriptInterface);
+	env->setScriptId(playerHandlers.onBrowseField, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onBrowseField);
+	scriptInterface.pushFunction(playerHandlers.onBrowseField);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -682,7 +677,7 @@ bool onBrowseField(Player* player, const Position& position)
 void onLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
-	if (playerEvents.onLook == -1) {
+	if (playerHandlers.onLook == -1) {
 		return;
 	}
 
@@ -692,10 +687,10 @@ void onLook(Player* player, const Position& position, Thing* thing, uint8_t stac
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLook, &scriptInterface);
+	env->setScriptId(playerHandlers.onLook, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLook);
+	scriptInterface.pushFunction(playerHandlers.onLook);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -720,7 +715,7 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 {
 	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position,
 	// distance)
-	if (playerEvents.onLookInBattleList == -1) {
+	if (playerHandlers.onLookInBattleList == -1) {
 		return;
 	}
 
@@ -730,10 +725,10 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLookInBattleList, &scriptInterface);
+	env->setScriptId(playerHandlers.onLookInBattleList, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLookInBattleList);
+	scriptInterface.pushFunction(playerHandlers.onLookInBattleList);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -749,7 +744,7 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance)
 {
 	// Player:onLookInTrade(partner, item, distance) or Player.onLookInTrade(self, partner, item, distance)
-	if (playerEvents.onLookInTrade == -1) {
+	if (playerHandlers.onLookInTrade == -1) {
 		return;
 	}
 
@@ -759,10 +754,10 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLookInTrade, &scriptInterface);
+	env->setScriptId(playerHandlers.onLookInTrade, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLookInTrade);
+	scriptInterface.pushFunction(playerHandlers.onLookInTrade);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -781,7 +776,7 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 {
 	// Player:onLookInShop(itemType, count) or Player.onLookInShop(self, itemType, count)
-	if (playerEvents.onLookInShop == -1) {
+	if (playerHandlers.onLookInShop == -1) {
 		return true;
 	}
 
@@ -791,10 +786,10 @@ bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLookInShop, &scriptInterface);
+	env->setScriptId(playerHandlers.onLookInShop, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLookInShop);
+	scriptInterface.pushFunction(playerHandlers.onLookInShop);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -810,7 +805,7 @@ bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 bool onLookInMarket(Player* player, const ItemType* itemType)
 {
 	// Player:onLookInMarket(itemType) or Player.onLookInMarket(self, itemType)
-	if (playerEvents.onLookInMarket == -1) {
+	if (playerHandlers.onLookInMarket == -1) {
 		return true;
 	}
 
@@ -820,10 +815,10 @@ bool onLookInMarket(Player* player, const ItemType* itemType)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLookInMarket, &scriptInterface);
+	env->setScriptId(playerHandlers.onLookInMarket, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLookInMarket);
+	scriptInterface.pushFunction(playerHandlers.onLookInMarket);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -839,7 +834,7 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
-	if (playerEvents.onMoveItem == -1) {
+	if (playerHandlers.onMoveItem == -1) {
 		return RETURNVALUE_NOERROR;
 	}
 
@@ -849,10 +844,10 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onMoveItem, &scriptInterface);
+	env->setScriptId(playerHandlers.onMoveItem, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onMoveItem);
+	scriptInterface.pushFunction(playerHandlers.onMoveItem);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -885,7 +880,7 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
-	if (playerEvents.onItemMoved == -1) {
+	if (playerHandlers.onItemMoved == -1) {
 		return;
 	}
 
@@ -895,10 +890,10 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onItemMoved, &scriptInterface);
+	env->setScriptId(playerHandlers.onItemMoved, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onItemMoved);
+	scriptInterface.pushFunction(playerHandlers.onItemMoved);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -920,7 +915,7 @@ bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosi
 {
 	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
 	// toPosition)
-	if (playerEvents.onMoveCreature == -1) {
+	if (playerHandlers.onMoveCreature == -1) {
 		return true;
 	}
 
@@ -930,10 +925,10 @@ bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosi
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onMoveCreature, &scriptInterface);
+	env->setScriptId(playerHandlers.onMoveCreature, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onMoveCreature);
+	scriptInterface.pushFunction(playerHandlers.onMoveCreature);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -951,7 +946,7 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
                            const std::string& comment, const std::string& translation)
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
-	if (playerEvents.onReportRuleViolation == -1) {
+	if (playerHandlers.onReportRuleViolation == -1) {
 		return;
 	}
 
@@ -961,10 +956,10 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onReportRuleViolation, &scriptInterface);
+	env->setScriptId(playerHandlers.onReportRuleViolation, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onReportRuleViolation);
+	scriptInterface.pushFunction(playerHandlers.onReportRuleViolation);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -983,7 +978,7 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
 bool onReportBug(Player* player, const std::string& message, const Position& position, uint8_t category)
 {
 	// Player:onReportBug(message, position, category)
-	if (playerEvents.onReportBug == -1) {
+	if (playerHandlers.onReportBug == -1) {
 		return true;
 	}
 
@@ -993,10 +988,10 @@ bool onReportBug(Player* player, const std::string& message, const Position& pos
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onReportBug, &scriptInterface);
+	env->setScriptId(playerHandlers.onReportBug, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onReportBug);
+	scriptInterface.pushFunction(playerHandlers.onReportBug);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1011,7 +1006,7 @@ bool onReportBug(Player* player, const std::string& message, const Position& pos
 void onRotateItem(Player* player, Item* item)
 {
 	// Player:onRotateItem(item)
-	if (playerEvents.onRotateItem == -1) {
+	if (playerHandlers.onRotateItem == -1) {
 		return;
 	}
 
@@ -1021,10 +1016,10 @@ void onRotateItem(Player* player, Item* item)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onRotateItem, &scriptInterface);
+	env->setScriptId(playerHandlers.onRotateItem, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onRotateItem);
+	scriptInterface.pushFunction(playerHandlers.onRotateItem);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1038,7 +1033,7 @@ void onRotateItem(Player* player, Item* item)
 bool onTurn(Player* player, Direction direction)
 {
 	// Player:onTurn(direction) or Player.onTurn(self, direction)
-	if (playerEvents.onTurn == -1) {
+	if (playerHandlers.onTurn == -1) {
 		return true;
 	}
 
@@ -1048,10 +1043,10 @@ bool onTurn(Player* player, Direction direction)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onTurn, &scriptInterface);
+	env->setScriptId(playerHandlers.onTurn, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onTurn);
+	scriptInterface.pushFunction(playerHandlers.onTurn);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1064,7 +1059,7 @@ bool onTurn(Player* player, Direction direction)
 bool onTradeRequest(Player* player, Player* target, Item* item)
 {
 	// Player:onTradeRequest(target, item)
-	if (playerEvents.onTradeRequest == -1) {
+	if (playerHandlers.onTradeRequest == -1) {
 		return true;
 	}
 
@@ -1074,10 +1069,10 @@ bool onTradeRequest(Player* player, Player* target, Item* item)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onTradeRequest, &scriptInterface);
+	env->setScriptId(playerHandlers.onTradeRequest, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onTradeRequest);
+	scriptInterface.pushFunction(playerHandlers.onTradeRequest);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1094,7 +1089,7 @@ bool onTradeRequest(Player* player, Player* target, Item* item)
 bool onTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
 {
 	// Player:onTradeAccept(target, item, targetItem)
-	if (playerEvents.onTradeAccept == -1) {
+	if (playerHandlers.onTradeAccept == -1) {
 		return true;
 	}
 
@@ -1104,10 +1099,10 @@ bool onTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onTradeAccept, &scriptInterface);
+	env->setScriptId(playerHandlers.onTradeAccept, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onTradeAccept);
+	scriptInterface.pushFunction(playerHandlers.onTradeAccept);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1127,7 +1122,7 @@ bool onTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
 void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetItem, bool isSuccess)
 {
 	// Player:onTradeCompleted(target, item, targetItem, isSuccess)
-	if (playerEvents.onTradeCompleted == -1) {
+	if (playerHandlers.onTradeCompleted == -1) {
 		return;
 	}
 
@@ -1137,10 +1132,10 @@ void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetIt
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onTradeCompleted, &scriptInterface);
+	env->setScriptId(playerHandlers.onTradeCompleted, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onTradeCompleted);
+	scriptInterface.pushFunction(playerHandlers.onTradeCompleted);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1162,7 +1157,7 @@ void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetIt
 void onPodiumRequest(Player* player, Item* item)
 {
 	// Player:onPodiumRequest(item) or Player.onPodiumRequest(self, item)
-	if (playerEvents.onPodiumRequest == -1) {
+	if (playerHandlers.onPodiumRequest == -1) {
 		return;
 	}
 
@@ -1172,10 +1167,10 @@ void onPodiumRequest(Player* player, Item* item)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onPodiumRequest, &scriptInterface);
+	env->setScriptId(playerHandlers.onPodiumRequest, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onPodiumRequest);
+	scriptInterface.pushFunction(playerHandlers.onPodiumRequest);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1190,7 +1185,7 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 {
 	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
 	// isVisible)
-	if (playerEvents.onPodiumEdit == -1) {
+	if (playerHandlers.onPodiumEdit == -1) {
 		return;
 	}
 
@@ -1200,10 +1195,10 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onPodiumEdit, &scriptInterface);
+	env->setScriptId(playerHandlers.onPodiumEdit, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onPodiumEdit);
+	scriptInterface.pushFunction(playerHandlers.onPodiumEdit);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1222,7 +1217,7 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp, bool sendText)
 {
 	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
-	if (playerEvents.onGainExperience == -1) {
+	if (playerHandlers.onGainExperience == -1) {
 		return;
 	}
 
@@ -1232,10 +1227,10 @@ void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t 
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onGainExperience, &scriptInterface);
+	env->setScriptId(playerHandlers.onGainExperience, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onGainExperience);
+	scriptInterface.pushFunction(playerHandlers.onGainExperience);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1264,7 +1259,7 @@ void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t 
 void onLoseExperience(Player* player, uint64_t& exp)
 {
 	// Player:onLoseExperience(exp)
-	if (playerEvents.onLoseExperience == -1) {
+	if (playerHandlers.onLoseExperience == -1) {
 		return;
 	}
 
@@ -1274,10 +1269,10 @@ void onLoseExperience(Player* player, uint64_t& exp)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onLoseExperience, &scriptInterface);
+	env->setScriptId(playerHandlers.onLoseExperience, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onLoseExperience);
+	scriptInterface.pushFunction(playerHandlers.onLoseExperience);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1297,7 +1292,7 @@ void onLoseExperience(Player* player, uint64_t& exp)
 void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 {
 	// Player:onGainSkillTries(skill, tries)
-	if (playerEvents.onGainSkillTries == -1) {
+	if (playerHandlers.onGainSkillTries == -1) {
 		return;
 	}
 
@@ -1307,10 +1302,10 @@ void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onGainSkillTries, &scriptInterface);
+	env->setScriptId(playerHandlers.onGainSkillTries, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onGainSkillTries);
+	scriptInterface.pushFunction(playerHandlers.onGainSkillTries);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1331,7 +1326,7 @@ void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 void onWrapItem(Player* player, Item* item)
 {
 	// Player:onWrapItem(item)
-	if (playerEvents.onWrapItem == -1) {
+	if (playerHandlers.onWrapItem == -1) {
 		return;
 	}
 
@@ -1341,10 +1336,10 @@ void onWrapItem(Player* player, Item* item)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onWrapItem, &scriptInterface);
+	env->setScriptId(playerHandlers.onWrapItem, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onWrapItem);
+	scriptInterface.pushFunction(playerHandlers.onWrapItem);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1358,7 +1353,7 @@ void onWrapItem(Player* player, Item* item)
 void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 {
 	// Player:onInventoryUpdate(item, slot, equip)
-	if (playerEvents.onInventoryUpdate == -1) {
+	if (playerHandlers.onInventoryUpdate == -1) {
 		return;
 	}
 
@@ -1368,10 +1363,10 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onInventoryUpdate, &scriptInterface);
+	env->setScriptId(playerHandlers.onInventoryUpdate, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onInventoryUpdate);
+	scriptInterface.pushFunction(playerHandlers.onInventoryUpdate);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1388,7 +1383,7 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
 {
 	// Player:onNetworkMessage(recvByte, msg)
-	if (playerEvents.onNetworkMessage == -1) {
+	if (playerHandlers.onNetworkMessage == -1) {
 		return;
 	}
 
@@ -1398,10 +1393,10 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onNetworkMessage, &scriptInterface);
+	env->setScriptId(playerHandlers.onNetworkMessage, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onNetworkMessage);
+	scriptInterface.pushFunction(playerHandlers.onNetworkMessage);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1417,7 +1412,7 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage* msg)
 bool onSpellCheck(Player* player, const Spell* spell)
 {
 	// Player:onSpellCheck(spell)
-	if (playerEvents.onSpellCheck == -1) {
+	if (playerHandlers.onSpellCheck == -1) {
 		return true;
 	}
 
@@ -1427,10 +1422,10 @@ bool onSpellCheck(Player* player, const Spell* spell)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(playerEvents.onSpellCheck, &scriptInterface);
+	env->setScriptId(playerHandlers.onSpellCheck, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(playerEvents.onSpellCheck);
+	scriptInterface.pushFunction(playerHandlers.onSpellCheck);
 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
@@ -1447,7 +1442,7 @@ namespace tfs::events::monster {
 bool onSpawn(Monster* monster, const Position& position, bool startup, bool artificial)
 {
 	// Monster:onSpawn(position, startup, artificial)
-	if (monsterEvents.onSpawn == -1) {
+	if (monsterHandlers.onSpawn == -1) {
 		return true;
 	}
 
@@ -1457,10 +1452,10 @@ bool onSpawn(Monster* monster, const Position& position, bool startup, bool arti
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(monsterEvents.onSpawn, &scriptInterface);
+	env->setScriptId(monsterHandlers.onSpawn, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(monsterEvents.onSpawn);
+	scriptInterface.pushFunction(monsterHandlers.onSpawn);
 
 	tfs::lua::pushUserdata(L, monster);
 	tfs::lua::setMetatable(L, -1, "Monster");
@@ -1474,7 +1469,7 @@ bool onSpawn(Monster* monster, const Position& position, bool startup, bool arti
 void onDropLoot(Monster* monster, Container* corpse)
 {
 	// Monster:onDropLoot(corpse)
-	if (monsterEvents.onDropLoot == -1) {
+	if (monsterHandlers.onDropLoot == -1) {
 		return;
 	}
 
@@ -1484,10 +1479,10 @@ void onDropLoot(Monster* monster, Container* corpse)
 	}
 
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(monsterEvents.onDropLoot, &scriptInterface);
+	env->setScriptId(monsterHandlers.onDropLoot, &scriptInterface);
 
 	lua_State* L = scriptInterface.getLuaState();
-	scriptInterface.pushFunction(monsterEvents.onDropLoot);
+	scriptInterface.pushFunction(monsterHandlers.onDropLoot);
 
 	tfs::lua::pushUserdata(L, monster);
 	tfs::lua::setMetatable(L, -1, "Monster");
