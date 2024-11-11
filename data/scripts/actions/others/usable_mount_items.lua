@@ -2,20 +2,17 @@ local config = {
 	[26194] = { -- vibrant egg
 		name = "vortexion",
 		mountId = 94,
-		tameMessage = "You receive the permission to ride a sparkion.",
-		achievementProgress = { name = "Vortex Tamer", progress = 3 }
+		tameMessage = "You receive the permission to ride a sparkion."
 	},
 	[26340] = { -- crackling egg
 		name = "neon sparkid",
 		mountId = 98,
-		tameMessage = "You receive the permission to ride a neon sparkid.",
-		achievementProgress = { name = "Vortex Tamer", progress = 3 }
+		tameMessage = "You receive the permission to ride a neon sparkid."
 	},
 	[26341] = { -- menacing egg
 		name = "vortexion",
 		mountId = 99,
-		tameMessage = "You receive the permission to ride a vortexion.",
-		achievementProgress = { name = "Vortex Tamer", progress = 3 }
+		tameMessage = "You receive the permission to ride a vortexion."
 	},
 	[25521] = { -- mysterious scroll
 		name = "rift runner",
@@ -34,22 +31,18 @@ local config = {
 local usableItemMounts = Action()
 
 function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, isHotkey)
-	local useItem = config[item.itemid]
-	if not useItem then
-		return true
-	end
-
 	if not player:isPremium() then
 		player:sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT)
 		return true
 	end
 
+	local useItem = config[item.itemid]
 	if player:hasMount(useItem.mountId) then
-		return true
+		return false
 	end
 
-	if useItem.achievementProgress then
-		player:addAchievementProgress(useItem.achievementProgress.name, useItem.achievementProgress.progress)
+	if table.contains({26194, 26340, 26341}, item.itemid) then
+		player:addAchievementProgress("Vortex Tamer", 3)
 	end
 
 	if useItem.achievement then
@@ -63,8 +56,8 @@ function usableItemMounts.onUse(player, item, fromPosition, target, toPosition, 
 	return true
 end
 
-for itemId in pairs(config) do
-	usableItemMounts:id(itemId)
+for k, v in pairs(config) do
+	usableItemMounts:id(k)
 end
 
 usableItemMounts:register()
