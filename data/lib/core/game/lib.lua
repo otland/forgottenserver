@@ -115,3 +115,18 @@ function Game.getUnpromotedVocations()
 	end
 	return vocations
 end
+
+function Game.getPlayerAccountId(name)
+	local player = Player(name)
+	if player then
+		return player:getAccountId()
+	end
+
+	local resultId = db.storeQuery("SELECT `account_id` FROM `players` WHERE `name` = " .. db.escapeString(name))
+	if resultId then
+		local accountId = result.getNumber(resultId, "account_id")
+		result.free(resultId)
+		return accountId
+	end
+	return 0
+end
