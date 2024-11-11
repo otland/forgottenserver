@@ -2,7 +2,6 @@
 <talkactions>
 	<!-- commands -->
 	<talkaction words="/attr" separator=" " script="attributes.lua" />
-	<talkaction words="/ipban" separator=" " script="ip_ban.lua" />
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />
 	<talkaction words="/c" separator=" " script="teleport_creature_here.lua" />
