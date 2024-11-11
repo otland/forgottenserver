@@ -20,7 +20,7 @@ function talk.onSay(player, words, param)
 		return true
 	end
 
-	local accountId = getAccountNumberByPlayerName(name)
+	local accountId = Game.getPlayerAccountId(name)
 	if accountId == 0 then
 		return true
 	end
