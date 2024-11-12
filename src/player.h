@@ -211,10 +211,6 @@ public:
 	PartyShields_t getPartyShield(const Player* player) const;
 	bool isInviting(const Player* player) const;
 	bool isPartner(const Player* player) const;
-	void sendPlayerPartyIcons(Player* player);
-	bool addPartyInvitation(Party* party);
-	void removePartyInvitation(Party* party);
-	void clearPartyInvitations();
 
 	GuildEmblems_t getGuildEmblem(const Player* player) const;
 
@@ -1174,7 +1170,6 @@ private:
 
 	std::list<ShopInfo> shopItemList;
 
-	std::forward_list<Party*> invitePartyList;
 	std::forward_list<uint32_t> modalWindows;
 	std::forward_list<std::string> learnedInstantSpellList;
 	std::forward_list<Condition*>

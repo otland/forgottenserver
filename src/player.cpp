@@ -4242,33 +4242,6 @@ bool Player::isGuildMate(const Player* player) const
 	return guild == player->guild;
 }
 
-void Player::sendPlayerPartyIcons(Player* player)
-{
-	sendCreatureShield(player);
-	sendCreatureSkull(player);
-}
-
-bool Player::addPartyInvitation(Party* party)
-{
-	auto it = std::find(invitePartyList.begin(), invitePartyList.end(), party);
-	if (it != invitePartyList.end()) {
-		return false;
-	}
-
-	invitePartyList.push_front(party);
-	return true;
-}
-
-void Player::removePartyInvitation(Party* party) { invitePartyList.remove(party); }
-
-void Player::clearPartyInvitations()
-{
-	for (Party* invitingParty : invitePartyList) {
-		invitingParty->removeInvite(*this, false);
-	}
-	invitePartyList.clear();
-}
-
 GuildEmblems_t Player::getGuildEmblem(const Player* player) const
 {
 	if (!player) {

@@ -683,24 +683,6 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		case 0xA2:
 			parseFollow(msg);
 			break;
-		case 0xA3:
-			parseInviteToParty(msg);
-			break;
-		case 0xA4:
-			parseJoinParty(msg);
-			break;
-		case 0xA5:
-			parseRevokePartyInvite(msg);
-			break;
-		case 0xA6:
-			parsePassPartyLeadership(msg);
-			break;
-		case 0xA7:
-			g_dispatcher.addTask([playerID = player->getID()]() { g_game.playerLeaveParty(playerID); });
-			break;
-		case 0xA8:
-			parseEnableSharedPartyExperience(msg);
-			break;
 		case 0xAA:
 			g_dispatcher.addTask([playerID = player->getID()]() { g_game.playerCreatePrivateChannel(playerID); });
 			break;
@@ -1449,37 +1431,6 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 	                      description = std::string{description}, comment = std::string{comment}]() {
 		g_game.playerDebugAssert(playerID, assertLine, date, description, comment);
 	});
-}
-
-void ProtocolGame::parseInviteToParty(NetworkMessage& msg)
-{
-	uint32_t targetID = msg.get<uint32_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerInviteToParty(playerID, targetID); });
-}
-
-void ProtocolGame::parseJoinParty(NetworkMessage& msg)
-{
-	uint32_t targetID = msg.get<uint32_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerJoinParty(playerID, targetID); });
-}
-
-void ProtocolGame::parseRevokePartyInvite(NetworkMessage& msg)
-{
-	uint32_t targetID = msg.get<uint32_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerRevokePartyInvitation(playerID, targetID); });
-}
-
-void ProtocolGame::parsePassPartyLeadership(NetworkMessage& msg)
-{
-	uint32_t targetID = msg.get<uint32_t>();
-	g_dispatcher.addTask([=, playerID = player->getID()]() { g_game.playerPassPartyLeadership(playerID, targetID); });
-}
-
-void ProtocolGame::parseEnableSharedPartyExperience(NetworkMessage& msg)
-{
-	bool sharedExpActive = msg.getByte() == 1;
-	g_dispatcher.addTask(
-	    [=, playerID = player->getID()]() { g_game.playerEnableSharedPartyExperience(playerID, sharedExpActive); });
 }
 
 void ProtocolGame::parseMarketLeave()

@@ -118,12 +118,6 @@ private:
 	void parsePlayerPurchase(NetworkMessage& msg);
 	void parsePlayerSale(NetworkMessage& msg);
 
-	void parseInviteToParty(NetworkMessage& msg);
-	void parseJoinParty(NetworkMessage& msg);
-	void parseRevokePartyInvite(NetworkMessage& msg);
-	void parsePassPartyLeadership(NetworkMessage& msg);
-	void parseEnableSharedPartyExperience(NetworkMessage& msg);
-
 	void parseModalWindowAnswer(NetworkMessage& msg);
 
 	void parseBrowseField(NetworkMessage& msg);
