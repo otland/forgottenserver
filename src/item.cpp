@@ -261,7 +261,7 @@ Cylinder* Item::getTopParent()
 		return prevaux;
 	}
 
-	while (aux->hasParent()) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -280,7 +280,7 @@ const Cylinder* Item::getTopParent() const
 		return prevaux;
 	}
 
-	while (aux->hasParent()) {
+	while (aux->getParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -295,7 +295,7 @@ Tile* Item::getTile()
 {
 	Cylinder* cylinder = getTopParent();
 	// get root cylinder
-	if (cylinder && cylinder->hasParent()) {
+	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
 	return dynamic_cast<Tile*>(cylinder);
@@ -305,7 +305,7 @@ const Tile* Item::getTile() const
 {
 	const Cylinder* cylinder = getTopParent();
 	// get root cylinder
-	if (cylinder && cylinder->hasParent()) {
+	if (cylinder && cylinder->getParent()) {
 		cylinder = cylinder->getParent();
 	}
 	return dynamic_cast<const Tile*>(cylinder);
