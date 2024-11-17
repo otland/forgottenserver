@@ -1922,46 +1922,33 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 
 void Monster::updateLookDirection()
 {
-	Direction newDir = getDirection();
-
-	if (attackedCreature) {
-		const Position& pos = getPosition();
-		const Position& attackedCreaturePos = attackedCreature->getPosition();
-		int32_t offsetx = pos.getOffsetX(attackedCreaturePos);
-		int32_t offsety = pos.getOffsetY(attackedCreaturePos);
-
-		int32_t dx = std::abs(offsetx);
-		int32_t dy = std::abs(offsety);
-		if (dx > dy) {
-			// look EAST/WEST
-			if (offsetx < 0) {
-				newDir = DIRECTION_WEST;
-			} else {
-				newDir = DIRECTION_EAST;
-			}
-		} else if (dx < dy) {
-			// look NORTH/SOUTH
-			if (offsety < 0) {
-				newDir = DIRECTION_NORTH;
-			} else {
-				newDir = DIRECTION_SOUTH;
-			}
-		} else if (offsetx < 0 && offsety < 0) {
-			// target to north-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx < 0 && offsety > 0) {
-			// target to south-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx > 0 && offsety < 0) {
-			// target to north-east
-			newDir = DIRECTION_EAST;
-		} else {
-			// target to south-east
-			newDir = DIRECTION_EAST;
-		}
+	if (!attackedCreature) {
+		return;
 	}
 
-	g_game.internalCreatureTurn(this, newDir);
+	auto lookDirection = DIRECTION_NONE;
+
+	const auto& currentPosition = getPosition();
+	const auto& targetPosition = attackedCreature->getPosition();
+
+	auto offsetX = targetPosition.getOffsetX(currentPosition);
+	auto absOffsetX = std::abs(offsetX);
+
+	auto offsetY = targetPosition.getOffsetY(currentPosition);
+	auto absOffsetY = std::abs(offsetY);
+
+	if (absOffsetX > absOffsetY) {
+		// Target is farther on the horizontal axis
+		lookDirection = (offsetX < 0) ? DIRECTION_WEST : DIRECTION_EAST;
+	} else if (absOffsetY > absOffsetX) {
+		// Target is farther on the vertical axis
+		lookDirection = (offsetY < 0) ? DIRECTION_NORTH : DIRECTION_SOUTH;
+	} else {
+		// Target is equally far on both axes, prioritize horizontal direction
+		lookDirection = (offsetX < 0) ? DIRECTION_WEST : DIRECTION_EAST;
+	}
+
+	g_game.internalCreatureTurn(this, lookDirection);
 }
 
 void Monster::dropLoot(Container* corpse, Creature*)
