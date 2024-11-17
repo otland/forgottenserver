@@ -14,7 +14,6 @@
 
 extern Game g_game;
 extern Monsters g_monsters;
-extern Events* g_events;
 
 int32_t Monster::despawnRange;
 int32_t Monster::despawnRadius;
@@ -1967,7 +1966,7 @@ void Monster::updateLookDirection()
 void Monster::dropLoot(Container* corpse, Creature*)
 {
 	if (corpse && lootDrop) {
-		g_events->eventMonsterOnDropLoot(this, corpse);
+		tfs::events::monster::onDropLoot(this, corpse);
 	}
 }
 

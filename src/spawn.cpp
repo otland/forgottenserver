@@ -16,7 +16,6 @@
 
 extern Monsters g_monsters;
 extern Game g_game;
-extern Events* g_events;
 
 static constexpr int32_t MINSPAWN_INTERVAL = 10 * 1000;           // 10 seconds to match RME
 static constexpr int32_t MAXSPAWN_INTERVAL = 24 * 60 * 60 * 1000; // 1 day
@@ -314,7 +313,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
                          bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
+	if (!tfs::events::monster::onSpawn(monster_ptr.get(), pos, startup, false)) {
 		return false;
 	}
 
