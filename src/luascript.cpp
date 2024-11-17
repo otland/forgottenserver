@@ -2954,6 +2954,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Player", "sendResourceBalance", LuaScriptInterface::luaPlayerSendResourceBalance);
 
+	registerMethod(L, "Player", "sendEnterMarket", LuaScriptInterface::luaPlayerSendEnterMarket);
+
 	// Monster
 	registerClass(L, "Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod(L, "Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -11365,6 +11367,19 @@ int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
 		const ResourceTypes_t resourceType = tfs::lua::getNumber<ResourceTypes_t>(L, 2);
 		uint64_t amount = tfs::lua::getNumber<uint64_t>(L, 3);
 		player->sendResourceBalance(resourceType, amount);
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerSendEnterMarket(lua_State* L)
+{
+	// player:sendEnterMarket()
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendMarketEnter();
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
