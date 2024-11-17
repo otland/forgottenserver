@@ -3231,14 +3231,14 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	if (player->getAttackedCreature() && creatureId == 0) {
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		player->sendCancelTarget();
 		return;
 	}
 
 	Creature* attackCreature = getCreatureByID(creatureId);
 	if (!attackCreature) {
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		player->sendCancelTarget();
 		return;
 	}
@@ -3247,11 +3247,12 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		player->sendCancelTarget();
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		return;
 	}
 
 	player->setAttackedCreature(attackCreature);
+
 	g_dispatcher.addTask([this, id = player->getID()]() { updateCreatureWalk(id); });
 }
 
@@ -3262,9 +3263,15 @@ void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	player->setAttackedCreature(nullptr);
+	player->removeAttackedCreature();
+
+	if (Creature* followCreature = getCreatureByID(creatureId)) {
+		player->setFollowCreature(followCreature);
+	} else {
+		player->removeFollowCreature();
+	}
+
 	g_dispatcher.addTask([this, id = player->getID()]() { updateCreatureWalk(id); });
-	player->setFollowCreature(getCreatureByID(creatureId));
 }
 
 void Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, bool chaseMode, bool secureMode)

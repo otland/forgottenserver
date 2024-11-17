@@ -881,7 +881,7 @@ void Player::sendPing()
 
 	int64_t noPongTime = timeNow - lastPong;
 	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
-		setAttackedCreature(nullptr);
+		removeAttackedCreature();
 	}
 
 	int32_t noPongKickTime = vocation->getNoPongKickTime();
@@ -1192,7 +1192,7 @@ void Player::onChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
 		if (attackedCreature && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-			setAttackedCreature(nullptr);
+			removeAttackedCreature();
 			onAttackedCreatureDisappear(false);
 		}
 
@@ -1216,13 +1216,13 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
 		if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-			setAttackedCreature(nullptr);
+			removeAttackedCreature();
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
 		if (attackedCreature->getPlayer()) {
 			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
-				setAttackedCreature(nullptr);
+				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
 			}
 		}
@@ -1230,7 +1230,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 		// attackedCreature can leave a pvp zone if not pzlocked
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
 			if (attackedCreature->getPlayer()) {
-				setAttackedCreature(nullptr);
+				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
 			}
 		}
@@ -1251,7 +1251,7 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 		lastLogout = time(nullptr);
 
 		if (eventWalk != 0) {
-			setFollowCreature(nullptr);
+			removeFollowCreature();
 		}
 
 		if (tradePartner) {
@@ -3315,40 +3315,57 @@ void Player::internalAddThing(uint32_t index, Thing* thing)
 	}
 }
 
-bool Player::setFollowCreature(Creature* creature)
+void Player::setFollowCreature(Creature* creature)
 {
-	if (!Creature::setFollowCreature(creature)) {
-		setFollowCreature(nullptr);
-		setAttackedCreature(nullptr);
-
-		sendCancelMessage(RETURNVALUE_THEREISNOWAY);
-		sendCancelTarget();
-		stopWalk();
-		return false;
+	if (isFollowingCreature(creature)) {
+		return;
 	}
-	return true;
+
+	if (!canFollowCreature(creature)) {
+		removeFollowCreature();
+		removeAttackedCreature();
+		sendCancelTarget();
+		sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+		stopWalk();
+		return;
+	}
+
+	Creature::setFollowCreature(creature);
 }
 
-bool Player::setAttackedCreature(Creature* creature)
+void Player::setAttackedCreature(Creature* creature)
 {
-	if (!Creature::setAttackedCreature(creature)) {
-		sendCancelTarget();
-		return false;
+	if (isAttackingCreature(creature)) {
+		return;
 	}
 
-	if (chaseMode && creature) {
+	if (!canAttackCreature(creature)) {
+		removeAttackedCreature();
+		sendCancelTarget();
+		return;
+	}
+
+	Creature::setAttackedCreature(creature);
+
+	if (chaseMode) {
 		if (followCreature != creature) {
 			// chase opponent
 			setFollowCreature(creature);
 		}
 	} else if (followCreature) {
-		setFollowCreature(nullptr);
+		removeFollowCreature();
 	}
 
-	if (creature) {
-		g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+	g_dispatcher.addTask([id = getID()]() { g_game.checkCreatureAttack(id); });
+}
+
+void Player::removeAttackedCreature()
+{
+	Creature::removeAttackedCreature();
+
+	if (followCreature) {
+		removeFollowCreature();
 	}
-	return true;
 }
 
 void Player::goToFollowCreature()
@@ -3434,11 +3451,11 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 	return 0;
 }
 
-void Player::onFollowCreature(const Creature* creature)
+void Player::onUnfollowCreature()
 {
-	if (!creature) {
-		stopWalk();
-	}
+	Creature::onUnfollowCreature();
+
+	stopWalk();
 }
 
 void Player::setChaseMode(bool mode)
@@ -3453,7 +3470,7 @@ void Player::setChaseMode(bool mode)
 				setFollowCreature(attackedCreature);
 			}
 		} else if (attackedCreature) {
-			setFollowCreature(nullptr);
+			removeFollowCreature();
 			cancelNextWalk = true;
 		}
 	}
