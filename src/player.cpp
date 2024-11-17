@@ -1030,7 +1030,7 @@ void Player::sendRemoveContainerItem(const Container* container, uint16_t slot)
 		uint16_t& firstIndex = openContainer.index;
 		if (firstIndex > 0 && firstIndex >= container->size() - 1) {
 			firstIndex -= container->capacity();
-			sendContainer(it.first, container, false, firstIndex);
+			sendContainer(it.first, container, firstIndex);
 		}
 
 		client->sendRemoveContainerItem(it.first, std::max<uint16_t>(slot, firstIndex),
@@ -1450,11 +1450,10 @@ void Player::onSendContainer(const Container* container)
 		return;
 	}
 
-	bool hasParent = container->hasParent();
 	for (const auto& it : openContainers) {
 		const OpenContainer& openContainer = it.second;
 		if (openContainer.container == container) {
-			client->sendContainer(it.first, container, hasParent, openContainer.index);
+			client->sendContainer(it.first, container, openContainer.index);
 		}
 	}
 }

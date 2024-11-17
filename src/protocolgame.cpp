@@ -1888,7 +1888,7 @@ void ProtocolGame::sendIcons(uint32_t icons)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex)
+void ProtocolGame::sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex)
 {
 	NetworkMessage msg;
 	msg.addByte(0x6E);
@@ -1904,7 +1904,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	}
 
 	msg.addByte(container->capacity());
-	msg.addByte(hasParent ? 0x01 : 0x00);
+	msg.addByte(container->hasContainerParent() ? 0x01 : 0x00);
 	msg.addByte(0x00);                                     // show search icon (boolean)
 	msg.addByte(container->isUnlocked() ? 0x01 : 0x00);    // Drag and drop
 	msg.addByte(container->hasPagination() ? 0x01 : 0x00); // Pagination

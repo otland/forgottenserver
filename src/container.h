@@ -50,7 +50,7 @@ public:
 	virtual StoreInbox* getStoreInbox() { return nullptr; }
 	virtual const StoreInbox* getStoreInbox() const { return nullptr; }
 
-	bool hasParent() const override;
+	bool hasContainerParent() const;
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
