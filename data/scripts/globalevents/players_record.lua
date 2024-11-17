@@ -19,8 +19,8 @@ do
 	-- Save players record
 	local event = GlobalEvent("SavePlayersRecord")
 
-	function event.onShutdown()
-		db.query("UPDATE `server_config` SET `value` = '" .. Game.getPlayersRecord() .. "' WHERE `config` = 'players_record'")
+	function event.onSave()
+		Game.savePlayersRecord()
 		return true
 	end
 	
