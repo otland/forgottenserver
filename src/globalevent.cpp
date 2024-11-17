@@ -208,7 +208,6 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 			return timerMap;
 		case GLOBALEVENT_STARTUP:
 		case GLOBALEVENT_SHUTDOWN:
-		case GLOBALEVENT_RECORD:
 		case GLOBALEVENT_SAVE: {
 			GlobalEventMap retMap;
 			for (const auto& it : serverMap) {
@@ -288,8 +287,6 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 			eventType = GLOBALEVENT_STARTUP;
 		} else if (caseInsensitiveEqual(value, "shutdown")) {
 			eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (caseInsensitiveEqual(value, "record")) {
-			eventType = GLOBALEVENT_RECORD;
 		} else if (caseInsensitiveEqual(value, "save")) {
 			eventType = GLOBALEVENT_SAVE;
 		} else {
@@ -315,8 +312,6 @@ std::string_view GlobalEvent::getScriptEventName() const
 			return "onStartup";
 		case GLOBALEVENT_SHUTDOWN:
 			return "onShutdown";
-		case GLOBALEVENT_RECORD:
-			return "onRecord";
 		case GLOBALEVENT_SAVE:
 			return "onSave";
 		case GLOBALEVENT_TIMER:
@@ -324,25 +319,6 @@ std::string_view GlobalEvent::getScriptEventName() const
 		default:
 			return "onThink";
 	}
-}
-
-bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
-{
-	// onRecord(current, old)
-	if (!tfs::lua::reserveScriptEnv()) {
-		std::cout << "[Error - GlobalEvent::executeRecord] Call stack overflow" << std::endl;
-		return false;
-	}
-
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(scriptId, scriptInterface);
-
-	lua_State* L = scriptInterface->getLuaState();
-	scriptInterface->pushFunction(scriptId);
-
-	lua_pushnumber(L, current);
-	lua_pushnumber(L, old);
-	return scriptInterface->callFunction(2);
 }
 
 bool GlobalEvent::executeEvent() const

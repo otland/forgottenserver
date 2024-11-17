@@ -3535,7 +3535,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "GlobalEvent", "onTime", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod(L, "GlobalEvent", "onStartup", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod(L, "GlobalEvent", "onShutdown", LuaScriptInterface::luaGlobalEventOnCallback);
-	registerMethod(L, "GlobalEvent", "onRecord", LuaScriptInterface::luaGlobalEventOnCallback);
 	registerMethod(L, "GlobalEvent", "onSave", LuaScriptInterface::luaGlobalEventOnCallback);
 
 	// Weapon
@@ -18166,8 +18165,6 @@ int LuaScriptInterface::luaGlobalEventType(lua_State* L)
 			global->setEventType(GLOBALEVENT_STARTUP);
 		} else if (tmpStr == "shutdown") {
 			global->setEventType(GLOBALEVENT_SHUTDOWN);
-		} else if (tmpStr == "record") {
-			global->setEventType(GLOBALEVENT_RECORD);
 		} else if (tmpStr == "timer") {
 			global->setEventType(GLOBALEVENT_TIMER);
 		} else if (tmpStr == "save") {
@@ -18210,7 +18207,7 @@ int LuaScriptInterface::luaGlobalEventRegister(lua_State* L)
 
 int LuaScriptInterface::luaGlobalEventOnCallback(lua_State* L)
 {
-	// globalevent:onThink / record / etc. (callback)
+	// globalevent:onThink / etc. (callback)
 	GlobalEvent* globalevent = tfs::lua::getUserdata<GlobalEvent>(L, 1);
 	if (globalevent) {
 		if (!globalevent->loadCallback()) {
