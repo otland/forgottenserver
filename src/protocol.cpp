@@ -68,10 +68,10 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
 	// dispatcher thread
 	if (!outputBuffer) {
-		outputBuffer = OutputMessagePool::getOutputMessage();
+		outputBuffer = tfs::net::make_output_message();
 	} else if ((outputBuffer->getLength() + size) > NetworkMessage::MAX_PROTOCOL_BODY_LENGTH) {
 		send(outputBuffer);
-		outputBuffer = OutputMessagePool::getOutputMessage();
+		outputBuffer = tfs::net::make_output_message();
 	}
 	return outputBuffer;
 }

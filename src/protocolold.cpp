@@ -12,7 +12,7 @@ extern Game g_game;
 
 void ProtocolOld::disconnectClient(const std::string& message)
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	output->addByte(0x0A);
 	output->addString(message);
 	send(output);
