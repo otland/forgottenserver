@@ -68,6 +68,6 @@ OutputMessage_ptr make_output_message();
 void insert_protocol_to_autosend(const Protocol_ptr& protocol);
 void remove_protocol_from_autosend(const Protocol_ptr& protocol);
 
-} // namespace tfs::net::protocol
+} // namespace tfs::net
 
 #endif // FS_OUTPUTMESSAGE_H
