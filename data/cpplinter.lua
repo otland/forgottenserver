@@ -1002,6 +1002,7 @@ TalkAction = {}
 ---@field register fun(self:CreatureEvent):boolean
 ---@field onLogin fun(player:Player):boolean
 ---@field onLogout fun(player:Player):boolean
+---@field onReconnect fun(player:Player)
 ---@field onThink fun(creature:Creature, interval:integer):boolean
 ---@field onPrepareDeath fun(creature:Creature, killer:Creature):boolean
 ---@field onDeath fun(creature:Creature, corpse:Item, killer:Creature, mostDamageKiller:Creature, lastHitUnjustified:boolean, mostDamageUnjustified:boolean):boolean
