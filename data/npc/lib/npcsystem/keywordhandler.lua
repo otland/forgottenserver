@@ -43,6 +43,10 @@ if not KeywordHandler then
 		return true
 	end
 
+	function KeywordNode:hasParent()
+		return self.parent ~= nil
+	end
+
 	-- Returns the parent of this node or nil if no such node exists.
 	function KeywordNode:getParent()
 		return self.parent
@@ -121,7 +125,7 @@ if not KeywordHandler then
 			return true
 		end
 
-		if node:getParent() then
+		if node:hasParent() then
 			node = node:getParent() -- Search through the parent.
 			local ret = self:processNodeMessage(node, cid, message)
 			if ret then

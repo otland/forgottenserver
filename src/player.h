@@ -292,9 +292,9 @@ public:
 	time_t getLastLogout() const { return lastLogout; }
 
 	const Position& getLoginPosition() const { return loginPosition; }
-	const Position& getTemplePosition() const { return town->getTemplePosition(); }
-	Town* getTown() const { return town; }
-	void setTown(Town* town) { this->town = town; }
+	const Position& getTemplePosition() const { return town->templePosition; }
+	const Town* getTown() const { return town; }
+	void setTown(const Town* town) { this->town = town; }
 
 	void clearModalWindows();
 	bool hasModalWindowOpen(uint32_t modalWindowId) const;
@@ -406,11 +406,11 @@ public:
 	bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 	// follow functions
-	bool setFollowCreature(Creature* creature) override;
+	void setFollowCreature(Creature* creature) override;
 	void goToFollowCreature() override;
 
 	// follow events
-	void onFollowCreature(const Creature* creature) override;
+	void onUnfollowCreature() override;
 
 	// walk events
 	void onWalk(Direction& dir) override;
@@ -428,7 +428,8 @@ public:
 	void setSecureMode(bool mode) { secureMode = mode; }
 
 	// combat functions
-	bool setAttackedCreature(Creature* creature) override;
+	void setAttackedCreature(Creature* creature) override;
+	void removeAttackedCreature() override;
 	bool isImmune(CombatType_t type) const override;
 	bool isImmune(ConditionType_t type) const override;
 	bool hasShield() const;
@@ -720,10 +721,10 @@ public:
 	void sendAddContainerItem(const Container* container, const Item* item);
 	void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem);
 	void sendRemoveContainerItem(const Container* container, uint16_t slot);
-	void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex)
+	void sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex)
 	{
 		if (client) {
-			client->sendContainer(cid, container, hasParent, firstIndex);
+			client->sendContainer(cid, container, firstIndex);
 		}
 	}
 
@@ -1219,7 +1220,7 @@ private:
 	Party* party = nullptr;
 	Player* tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;
-	Town* town = nullptr;
+	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	StoreInbox* storeInbox = nullptr;
 	DepotLocker_ptr depotLocker = nullptr;

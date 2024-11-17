@@ -587,30 +587,13 @@ do
 		-- \nImbuements: (Basic Strike 2:30h, Basic Void 2:30h, Empty Slot).
 
 		-- item class
-		-- Classification: x Tier: y (0.50% Onslaught).
+		-- Classification: x.
 		do
 			local classification = itemType:getClassification()
-			local tier = isVirtual and 0 or item:getTier() or 0
-
-			if classification > 0 or tier > 0 then
-				if classification == 0 then
-					classification = "other"
-				end
-
-				local tierString = tier
-				if tier > 0 then
-					local bonusType, bonusValue = itemType:getTierBonus(tier)
-					if bonusType ~= -1 then
-						if bonusType > 5 then
-							tierString = string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-						else
-							tierString = string.format("%d (%d%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-						end
-					end
-				end
-
-				response[#response + 1] = string.format("\nClassification: %s Tier: %s.", classification, tierString)
+			if classification == 0 then
+				classification = "other"
 			end
+			response[#response + 1] = string.format("\nClassification: %s.", classification)
 		end
 
 		-- item count (will be reused later)

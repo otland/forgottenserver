@@ -45,7 +45,6 @@ extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
 extern Vocations g_vocations;
 extern Spells* g_spells;
-extern Events* g_events;
 extern Actions* g_actions;
 extern TalkActions* g_talkActions;
 extern CreatureEvents* g_creatureEvents;
@@ -1175,6 +1174,17 @@ static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
 
 		lua_rawseti(L, -2, ++index);
 	}
+}
+
+static void pushTown(lua_State* L, const Town& town)
+{
+	lua_createtable(L, 0, 3);
+	setField(L, "id", town.id);
+	setField(L, "name", town.name);
+	tfs::lua::pushPosition(L, town.templePosition);
+	lua_setfield(L, -2, "templePosition");
+	lua_getglobal(L, "Town");
+	lua_setmetatable(L, -2);
 }
 
 #define registerEnum(L, value) \
@@ -2562,6 +2572,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Item", "isItem", LuaScriptInterface::luaItemIsItem);
 
+	registerMethod(L, "Item", "hasParent", LuaScriptInterface::luaItemHasParent);
 	registerMethod(L, "Item", "getParent", LuaScriptInterface::luaItemGetParent);
 	registerMethod(L, "Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
 
@@ -2671,6 +2682,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Creature", "canSeeGhostMode", LuaScriptInterface::luaCreatureCanSeeGhostMode);
 	registerMethod(L, "Creature", "canSeeInvisibility", LuaScriptInterface::luaCreatureCanSeeInvisibility);
 
+	registerMethod(L, "Creature", "hasParent", LuaScriptInterface::luaCreatureHasParent);
 	registerMethod(L, "Creature", "getParent", LuaScriptInterface::luaCreatureGetParent);
 
 	registerMethod(L, "Creature", "getId", LuaScriptInterface::luaCreatureGetId);
@@ -2858,6 +2870,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
 	registerMethod(L, "Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
 	registerMethod(L, "Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
+	registerMethod(L, "Player", "leaveChannel", LuaScriptInterface::luaPlayerLeaveChannel);
 
 	registerMethod(L, "Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
@@ -3085,14 +3098,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Vocation", "getPromotion", LuaScriptInterface::luaVocationGetPromotion);
 
 	registerMethod(L, "Vocation", "allowsPvp", LuaScriptInterface::luaVocationAllowsPvp);
-
-	// Town
-	registerClass(L, "Town", "", LuaScriptInterface::luaTownCreate);
-	registerMetaMethod(L, "Town", "__eq", LuaScriptInterface::luaUserdataCompare);
-
-	registerMethod(L, "Town", "getId", LuaScriptInterface::luaTownGetId);
-	registerMethod(L, "Town", "getName", LuaScriptInterface::luaTownGetName);
-	registerMethod(L, "Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
 
 	// House
 	registerClass(L, "House", "", LuaScriptInterface::luaHouseCreate);
@@ -3691,7 +3696,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		}
 
 		if (--itemCount == 0) {
-			if (newItem->getParent()) {
+			if (newItem->hasParent()) {
 				uint32_t uid = tfs::lua::getScriptEnv()->addThing(newItem);
 				lua_pushnumber(L, uid);
 				return 1;
@@ -4803,9 +4808,8 @@ int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 	lua_createtable(L, towns.size(), 0);
 
 	int index = 0;
-	for (auto townEntry : towns) {
-		tfs::lua::pushUserdata(L, townEntry.second);
-		tfs::lua::setMetatable(L, -1, "Town");
+	for (const auto& [_, town] : towns) {
+		pushTown(L, *town);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -5037,7 +5041,7 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	bool extended = tfs::lua::getBoolean(L, 3, false);
 	bool force = tfs::lua::getBoolean(L, 4, false);
 	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
-	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
+	if (tfs::events::monster::onSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
 			tfs::lua::pushUserdata(L, monster);
 			tfs::lua::setMetatable(L, -1, "Monster");
@@ -6628,6 +6632,19 @@ int LuaScriptInterface::luaItemIsItem(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemHasParent(lua_State* L)
+{
+	// item:hasParent()
+	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	tfs::lua::pushBoolean(L, item->hasParent());
+	return 1;
+}
+
 int LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
@@ -8020,6 +8037,19 @@ int LuaScriptInterface::luaCreatureCanSeeInvisibility(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureHasParent(lua_State* L)
+{
+	// creature:hasParent()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	tfs::lua::pushBoolean(L, creature->hasParent());
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 {
 	// creature:getParent()
@@ -8085,11 +8115,20 @@ int LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 {
 	// creature:setTarget(target)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		tfs::lua::pushBoolean(L, creature->setAttackedCreature(tfs::lua::getCreature(L, 2)));
-	} else {
+	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
 		lua_pushnil(L);
+
+		return 1;
+	}
+
+	auto target = tfs::lua::getCreature(L, 2);
+	if (target) {
+		creature->setAttackedCreature(target);
+		tfs::lua::pushBoolean(L, creature->canAttackCreature(target));
+	} else {
+		creature->removeAttackedCreature();
+		tfs::lua::pushBoolean(L, true);
 	}
 	return 1;
 }
@@ -8116,11 +8155,19 @@ int LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
 	// creature:setFollowCreature(followedCreature)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		tfs::lua::pushBoolean(L, creature->setFollowCreature(tfs::lua::getCreature(L, 2)));
-	} else {
+	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	auto followedCreature = tfs::lua::getCreature(L, 2);
+	if (followedCreature) {
+		creature->setFollowCreature(followedCreature);
+		tfs::lua::pushBoolean(L, creature->canFollowCreature(followedCreature));
+	} else {
+		creature->removeFollowCreature();
+		tfs::lua::pushBoolean(L, true);
 	}
 	return 1;
 }
@@ -8684,7 +8731,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 	}
 
 	// Prevent infinity echo on event onHear
-	bool echo = tfs::lua::getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::CREATURE_ONHEAR);
+	bool echo = tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::CREATURE_ONHEAR);
 
 	if (position.x != 0) {
 		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &spectators, &position, echo));
@@ -9760,8 +9807,7 @@ int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 	// player:getTown()
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
-		tfs::lua::pushUserdata(L, player->getTown());
-		tfs::lua::setMetatable(L, -1, "Town");
+		pushTown(L, *player->getTown());
 	} else {
 		lua_pushnil(L);
 	}
@@ -9771,7 +9817,12 @@ int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 {
 	// player:setTown(town)
-	Town* town = tfs::lua::getUserdata<Town>(L, 2);
+	if (!lua_istable(L, 2)) {
+		tfs::lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", -1));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -10386,6 +10437,20 @@ int LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
 		g_game.playerOpenChannel(player->getID(), channelId);
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
+{
+	// player:leaveChannel(channelId)
+	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 2);
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		g_game.playerCloseChannel(player->getID(), channelId);
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -11346,7 +11411,7 @@ int LuaScriptInterface::luaMonsterGetId(lua_State* L)
 	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
 	if (monster) {
 		// Set monster id if it's not set yet (only for onSpawn event)
-		if (tfs::lua::getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
+		if (tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
 			monster->setID();
 		}
 
@@ -12766,64 +12831,6 @@ int LuaScriptInterface::luaVocationAllowsPvp(lua_State* L)
 	return 1;
 }
 
-// Town
-int LuaScriptInterface::luaTownCreate(lua_State* L)
-{
-	// Town(id or name)
-	Town* town;
-	if (isNumber(L, 2)) {
-		town = g_game.map.towns.getTown(tfs::lua::getNumber<uint32_t>(L, 2));
-	} else if (lua_isstring(L, 2)) {
-		town = g_game.map.towns.getTown(tfs::lua::getString(L, 2));
-	} else {
-		town = nullptr;
-	}
-
-	if (town) {
-		tfs::lua::pushUserdata(L, town);
-		tfs::lua::setMetatable(L, -1, "Town");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetId(lua_State* L)
-{
-	// town:getId()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		lua_pushnumber(L, town->getID());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetName(lua_State* L)
-{
-	// town:getName()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		tfs::lua::pushString(L, town->getName());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
-{
-	// town:getTemplePosition()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		tfs::lua::pushPosition(L, town->getTemplePosition());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 // House
 int LuaScriptInterface::luaHouseCreate(lua_State* L)
 {
@@ -12871,10 +12878,9 @@ int LuaScriptInterface::luaHouseGetTown(lua_State* L)
 		return 1;
 	}
 
-	Town* town = g_game.map.towns.getTown(house->getTownId());
+	const Town* town = g_game.map.towns.getTown(house->getTownId());
 	if (town) {
-		tfs::lua::pushUserdata(L, town);
-		tfs::lua::setMetatable(L, -1, "Town");
+		pushTown(L, *town);
 	} else {
 		lua_pushnil(L);
 	}

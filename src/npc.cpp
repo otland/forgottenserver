@@ -187,7 +187,7 @@ Npc* Npc::createNpc(const std::string& name)
 		}
 	}
 	Npc* npc = new Npc(name);
-	npc->setName(name);
+	npc->setName(npcType->name);
 	npc->loaded = true;
 	npc->npcType = npcType;
 	npc->loadNpcTypeInfo();
@@ -408,6 +408,17 @@ void Npc::loadNpcTypeInfo()
 	healthMax = npcType->healthMax;
 	sightX = npcType->sightX;
 	sightY = npcType->sightY;
+}
+
+void Npc::goToFollowCreature()
+{
+	if (!followCreature) {
+		return;
+	}
+
+	FindPathParams fpp;
+	getPathSearchParams(followCreature, fpp);
+	updateFollowCreaturePath(fpp);
 }
 
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
@@ -886,7 +897,14 @@ int NpcScriptInterface::luaActionFollow(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::pushBoolean(L, npc->setFollowCreature(tfs::lua::getPlayer(L, 1)));
+	auto followedPlayer = tfs::lua::getPlayer(L, 1);
+	if (followedPlayer) {
+		npc->setFollowCreature(followedPlayer);
+		tfs::lua::pushBoolean(L, npc->canFollowCreature(followedPlayer));
+	} else {
+		npc->removeFollowCreature();
+		tfs::lua::pushBoolean(L, true);
+	}
 	return 1;
 }
 

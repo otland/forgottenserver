@@ -78,7 +78,19 @@ std::string Container::getName(bool addArticle /* = false*/) const
 	return getNameDescription(it, this, -1, addArticle);
 }
 
-bool Container::hasParent() const { return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent()); }
+bool Container::hasContainerParent() const
+{
+	if (getID() == ITEM_BROWSEFIELD) {
+		return false;
+	}
+
+	if (hasParent()) {
+		if (auto creature = getParent()->getCreature()) {
+			return !creature->getPlayer();
+		}
+	}
+	return true;
+}
 
 void Container::addItem(Item* item)
 {
@@ -487,7 +499,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
@@ -499,7 +511,7 @@ void Container::addItemBack(Item* item)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
@@ -525,7 +537,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	updateItemWeight(-oldWeight + item->getWeight());
 
 	// send change to client
-	if (getParent()) {
+	if (hasParent()) {
 		onUpdateContainerItem(index, item, item);
 	}
 }
@@ -551,7 +563,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent()) {
+	if (hasParent()) {
 		onUpdateContainerItem(index, replacedItem, item);
 	}
 
@@ -580,7 +592,7 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		updateItemWeight(-oldWeight + item->getWeight());
 
 		// send change to client
-		if (getParent()) {
+		if (hasParent()) {
 			onUpdateContainerItem(index, item, item);
 		}
 	} else {
@@ -589,7 +601,7 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		ammoCount -= item->getItemCount();
 
 		// send change to client
-		if (getParent()) {
+		if (hasParent()) {
 			onRemoveContainerItem(index, item);
 		}
 
@@ -657,7 +669,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		// let the tile class notify surrounding players
-		if (topParent->getParent()) {
+		if (topParent->hasParent()) {
 			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
 	} else {
@@ -672,7 +684,7 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		// let the tile class notify surrounding players
-		if (topParent->getParent()) {
+		if (topParent->hasParent()) {
 			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}
 	} else {

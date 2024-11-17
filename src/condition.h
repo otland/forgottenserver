@@ -383,7 +383,7 @@ public:
 	bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
 private:
-	LightInfo lightInfo;
+	LightInfo lightInfo{1};
 	uint32_t internalLightTicks = 0;
 	uint32_t lightChangeInterval = 0;
 };
