@@ -146,7 +146,8 @@ void ProtocolGame::release()
 		player = nullptr;
 	}
 
-	OutputMessagePool::getInstance().removeProtocolFromAutosend(shared_from_this());
+	tfs::net::remove_protocol_from_autosend(shared_from_this());
+
 	Protocol::release();
 }
 
@@ -204,12 +205,13 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 
 		if (std::size_t currentSlot = clientLogin(*player)) {
 			uint8_t retryTime = getWaitTime(currentSlot);
-			auto output = OutputMessagePool::getOutputMessage();
+			auto output = tfs::net::make_output_message();
 			output->addByte(0x16);
 			output->addString(
 			    fmt::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
 			output->addByte(retryTime);
 			send(output);
+
 			disconnect();
 			return;
 		}
@@ -254,7 +256,8 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			connect(foundPlayer->getID(), operatingSystem);
 		}
 	}
-	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
+
+	tfs::net::insert_protocol_to_autosend(shared_from_this());
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
@@ -455,7 +458,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolGame::onConnect()
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	static std::random_device rd;
 	static std::ranlux24 generator(rd());
 	static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
@@ -483,10 +486,11 @@ void ProtocolGame::onConnect()
 
 void ProtocolGame::disconnectClient(const std::string& message) const
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	output->addByte(0x14);
 	output->addString(message);
 	send(output);
+
 	disconnect();
 }
 
@@ -3413,7 +3417,7 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 
 void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	output->addByte(0x18);
 	output->addByte(reason);
 	send(output);
