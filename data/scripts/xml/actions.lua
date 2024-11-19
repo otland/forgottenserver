@@ -95,7 +95,7 @@ end
 local function loadXMLActions()
     local doc = XMLDocument("data/actions/actions.xml")
     if not doc then
-        io.write("[Warning - lib::xml::loadXMLActions] Could not load actions.xml.\n")
+        io.write("[Warning - Scripts::XML::loadXMLActions] Could not load actions.xml.\n")
         return
     end
 

@@ -3,7 +3,7 @@
 local function loadXMLQuests()
 	local doc = XMLDocument("data/XML/quests.xml")
 	if not doc then
-		io.write("[Warning - lib::xml::loadXMLQuests] Could not load quests.xml.\n")
+		io.write("[Warning - Scripts::XML::loadXMLQuests] Could not load quests.xml.\n")
 		return true
 	end
 

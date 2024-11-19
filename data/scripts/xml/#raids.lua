@@ -219,7 +219,7 @@ end
 local function loadXMLRaids()
 	local doc = XMLDocument("data/raids/raids.xml")
 	if not doc then
-		io.write("[Warning - lib::xml::loadXMLRaids] Could not load raids.xml.\n")
+		io.write("[Warning - Scripts::XML::loadXMLRaids] Could not load raids.xml.\n")
 		return
 	end
 
