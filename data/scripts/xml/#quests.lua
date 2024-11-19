@@ -1,15 +1,13 @@
 -- If you don't intend to use quests.xml, you can delete this file.
-local xmlQuest = GlobalEvent("Load XML Quests")
 
-function xmlQuest.onStartup()
-	local questDoc = XMLDocument("data/XML/quests.xml")
-	if not questDoc then
-		io.write(
-			"[Warning - GlobalEvent::onStartup] Could not load quests.xml.\n")
+local function loadXMLQuests()
+	local doc = XMLDocument("data/XML/quests.xml")
+	if not doc then
+		io.write("[Warning - lib::xml::loadXMLQuests] Could not load quests.xml.\n")
 		return true
 	end
 
-	local quests = questDoc:child("quests")
+	local quests = doc:child("quests")
 	for questNode in quests:children() do
 		local missions = {}
 		for missionNode in questNode:children() do
@@ -41,7 +39,6 @@ function xmlQuest.onStartup()
 			missions = missions
 		}):register()
 	end
-	return true
 end
 
-xmlQuest:register()
+loadXMLQuests()

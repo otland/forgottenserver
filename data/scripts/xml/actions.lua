@@ -92,18 +92,17 @@ local function configureActionEvent(node)
     return action
 end
 
-local event = GlobalEvent("load actions.xml")
-
-function event.onStartup()
+local function loadXMLActions()
     local doc = XMLDocument("data/actions/actions.xml")
     if not doc then
-        io.write("[Warning - GlobalEvent::onStartup] Could not load data/actions/actions.xml.\n")
-        return true
+        io.write("[Warning - lib::xml::loadXMLActions] Could not load actions.xml.\n")
+        return
     end
 
     local actions = doc:child("actions")
 
     io.write(">> Loading legacy XML actions from data/actions/actions.xml...\n")
+
     local loaded, start = 0, os.mtime()
     for node in actions:children() do
         local action = configureActionEvent(node)
@@ -112,7 +111,8 @@ function event.onStartup()
             loaded = loaded + 1
         end
     end
+
     io.write(">> Loaded " .. loaded .. " actions in " .. os.mtime() - start .. "ms.\n")
 end
 
-event:register()
+loadXMLActions()
