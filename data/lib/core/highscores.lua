@@ -166,7 +166,7 @@ local function render(self, player)
 		self.params.page = self:findPlayer(player:getGuid())
 		self.params.action = HIGHSCORES_ACTION_BROWSE
 	end
-	
+
 	self.params.totalPages = math.ceil(#entries.data / highscoresPageSize)
 	if self.params.page > self.params.totalPages then
 		self.params.page = 1
@@ -209,10 +209,10 @@ local function fetch(self)
 				points = result.getNumber(resultId, "points")
 			}
 			rank = rank + 1
-		until not result.next(resultId)		
+		until not result.next(resultId)
 		result.free(resultId)
 	end
-	
+
 	self.params.ts = os.time()
 	return { data = entries, ts = self.params.ts }
 end

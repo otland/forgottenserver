@@ -9,7 +9,7 @@ body:
     attributes:
       label: By submitting this compilation problem issue, you agree to the following.
       options:
-        - label: This is a compilation problem in the software that resides in this repository, 
+        - label: This is a compilation problem in the software that resides in this repository,
             and not a support matter (use https://otland.net/forums/support.16/ for support)
           required: true
         - label: This issue is reproducible without changes to the C++ code in this repository
@@ -20,7 +20,7 @@ body:
           required: true
         - label: I have tried to compile the software using the provided instructions in the Wiki page
           required: true
-  
+
   - type: dropdown
     id: server-version
     attributes:
@@ -35,7 +35,7 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: dropdown
     id: os
     attributes:
@@ -54,14 +54,14 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: input
     id: os-description
     attributes:
       label: OS Description
       description: If you selected 'other' in the Operation System, please specify the OS you used
       placeholder: "Example: Fedora 35"
-  
+
   - type: dropdown
     id: compiler
     attributes:
@@ -75,7 +75,7 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: input
     id: compiler-description
     attributes:
@@ -109,7 +109,7 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: textarea
     id: pr-cause
     attributes:
@@ -123,7 +123,7 @@ body:
       value: |
         - [ ] #
         - [ ] #
-  
+
   - type: textarea
     id: error
     attributes:
@@ -133,7 +133,7 @@ body:
       render: cpp
     validations:
       required: true
-  
+
   - type: markdown
     attributes:
       value: |

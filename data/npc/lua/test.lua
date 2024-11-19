@@ -1,7 +1,7 @@
 --[[
-    This is a test Merchant NPC that sells weapons and shields.
-    It includes a showcase of the shop discount feature.
-    This example consists of 2 different shops, one for weapons and one for shields.
+	This is a test Merchant NPC that sells weapons and shields.
+	It includes a showcase of the shop discount feature.
+	This example consists of 2 different shops, one for weapons and one for shields.
 ]]
 
 local npc = Game.createNpcType("Merchant")
@@ -11,13 +11,13 @@ npc:defaultBehavior()
 npc:sight(5, 5)
 local callbacks = npc:callbacks()
 function callbacks:onSay(creature, type, message)
-   print(self, creature, type, message)
+	print(self, creature, type, message)
 end
 
 -- This table defines the items available in the weapon shops.
 local weaponShop = {
-    [2400] = {buy = 2000, sell = 1000},
-    [2402] = {buy = 50, sell = 25}
+	[2400] = {buy = 2000, sell = 1000},
+	[2402] = {buy = 50, sell = 25}
 }
 
 -- The NpcsHandler class is used to handle the NPC's responses to player interactions.
@@ -102,16 +102,16 @@ shop2:addItem(2510, 500, 200)
 shop2:addDiscount(9999)
 
 function shop2:callback(npc, player, handler, items, afterDiscount)
-    local afterDiscount = afterDiscount or items
-    for _, item in pairs(afterDiscount) do
-        item.buy = item.buy * 2
-    end
-    return afterDiscount
+	local afterDiscount = afterDiscount or items
+	for _, item in pairs(afterDiscount) do
+		item.buy = item.buy * 2
+	end
+	return afterDiscount
 end
 
 --[[
-    This is a test Traveler NPC that demonstrates the use of the NPC system.
-    This example relies on the Travel Module to handle the travel functionality and requirement checks.
+	This is a test Traveler NPC that demonstrates the use of the NPC system.
+	This example relies on the Travel Module to handle the travel functionality and requirement checks.
 ]]
 
 local npc = Game.createNpcType("Traveler")
@@ -129,30 +129,30 @@ local greet = handler:keyword(handler.greetWords)
 greet:setGreetResponse("Hello |PLAYERNAME| I can travel you to wherever you want, just tell me your {destination}")
 
 local destinations = {
-    ["temple"] =
-    {
-        position = Position(94, 129, 7)--[[,
-        removeMoney = {100, "poor sucker"},
-        storage = {9999, 10, ">", "You need to have more than 10 storage to travel to this destination"}, -- operators: <, >, <=, >=, ==, ~=
-        -- storage = {9999, 10, ">", 50, "<", "You need to have more than 10 storage to travel to this destination", "You need to have less than 50 storage to travel to this destination"}, -- ranged operators (between something and something)
-        level = {1, ">", "You need to be above level 1"}, -- operators: <, >, <=, >=, ==, ~=
-        -- level = {10, ">", 50, "<", "You need to be above level 10", "You need to be lower than level 50"}, -- range operators (between something and something)
-        premium = {true, "You need to be premium to travel to this destination"},
-        items = {{{item = 2509, count = 1}, {item = 2510, count = 2}, {item = "crystal coin", count = 50}, {item = 2400, count = 1}}, true, "You need to have those items to travel to this destination"}, -- If true player needs all items, if false player does not have one of the items
-        party = {true, "You need to be in a party to travel to this destination"},
-        guild = {true, "You need to be in a guild to travel to this destination"},
-        town = {1, true, "You need to be a citizen of town 1 to travel to this destination"},
-        sex = {PLAYERSEX_MALE, true, "You need to be a male to travel to this destination"},
-        mount = {1, true, "You need to have this mount to travel to this destination"},
-        outfit = {1211, 1212, 3, true, "You need to have this outfit to travel to this destination"}, -- male/female, female/male, addon
-        removeItems = {{{item = 2509, count = 1}, {item = 2510, count = 2}, {item = "crystal coin", count = 50}, {item = 2400, count = 1}}, "You need to have those items for me to remove"},
-        learnedSpell = {"exori", false, "You need to know exori to travel to this destination"}
-        ]]
-    },
-    ["depot"] =
-    {
-        position = Position(94, 129, 7)
-    }
+	["temple"] =
+	{
+		position = Position(94, 129, 7)--[[,
+		removeMoney = {100, "poor sucker"},
+		storage = {9999, 10, ">", "You need to have more than 10 storage to travel to this destination"}, -- operators: <, >, <=, >=, ==, ~=
+		-- storage = {9999, 10, ">", 50, "<", "You need to have more than 10 storage to travel to this destination", "You need to have less than 50 storage to travel to this destination"}, -- ranged operators (between something and something)
+		level = {1, ">", "You need to be above level 1"}, -- operators: <, >, <=, >=, ==, ~=
+		-- level = {10, ">", 50, "<", "You need to be above level 10", "You need to be lower than level 50"}, -- range operators (between something and something)
+		premium = {true, "You need to be premium to travel to this destination"},
+		items = {{{item = 2509, count = 1}, {item = 2510, count = 2}, {item = "crystal coin", count = 50}, {item = 2400, count = 1}}, true, "You need to have those items to travel to this destination"}, -- If true player needs all items, if false player does not have one of the items
+		party = {true, "You need to be in a party to travel to this destination"},
+		guild = {true, "You need to be in a guild to travel to this destination"},
+		town = {1, true, "You need to be a citizen of town 1 to travel to this destination"},
+		sex = {PLAYERSEX_MALE, true, "You need to be a male to travel to this destination"},
+		mount = {1, true, "You need to have this mount to travel to this destination"},
+		outfit = {1211, 1212, 3, true, "You need to have this outfit to travel to this destination"}, -- male/female, female/male, addon
+		removeItems = {{{item = 2509, count = 1}, {item = 2510, count = 2}, {item = "crystal coin", count = 50}, {item = 2400, count = 1}}, "You need to have those items for me to remove"},
+		learnedSpell = {"exori", false, "You need to know exori to travel to this destination"}
+		]]
+	},
+	["depot"] =
+	{
+		position = Position(94, 129, 7)
+	}
 }
 
 greet:travelTo(destinations)

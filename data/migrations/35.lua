@@ -17,7 +17,7 @@ function onUpdateDatabase()
 
 	db.query([[
 		ALTER TABLE `players`
-    	ADD `currentmount` smallint unsigned NOT NULL DEFAULT 0 AFTER `lookmountfeet`;
+		ADD `currentmount` smallint unsigned NOT NULL DEFAULT 0 AFTER `lookmountfeet`;
 	]])
 
 	local outfitRange = 10001000

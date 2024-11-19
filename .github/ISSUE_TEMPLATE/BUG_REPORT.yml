@@ -9,7 +9,7 @@ body:
     attributes:
       label: By submitting this bug issue, you agree to the following.
       options:
-        - label: This is a bug in the software that resides in this repository, 
+        - label: This is a bug in the software that resides in this repository,
             and not a support matter (use https://otland.net/forums/support.16/ for support)
           required: true
         - label: This issue is reproducible without changes to the C++ code in this repository
@@ -18,7 +18,7 @@ body:
           required: true
         - label: There is no existing issue for this bug already
           required: true
-  
+
   - type: dropdown
     id: crash
     attributes:
@@ -31,7 +31,7 @@ body:
         - "yes (not always)"
     validations:
       required: true
-  
+
   - type: dropdown
     id: server-version
     attributes:
@@ -46,7 +46,7 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: dropdown
     id: os
     attributes:
@@ -65,14 +65,14 @@ body:
       default: 0
     validations:
       required: true
-  
+
   - type: input
     id: os-description
     attributes:
       label: OS Description
       description: If you picked 'other' in Operation System, please specify here
       placeholder: "Example: Fedora 35"
-  
+
   - type: input
     id: title
     attributes:
@@ -81,7 +81,7 @@ body:
       placeholder: "Example: Server crashes when using X spell"
     validations:
       required: true
-  
+
   - type: textarea
     id: pr-cause
     attributes:
@@ -95,7 +95,7 @@ body:
       value: |
         - [ ] #
         - [ ] #
-  
+
   - type: textarea
     id: steps
     attributes:
@@ -111,7 +111,7 @@ body:
         ```
     validations:
       required: true
-  
+
   - type: textarea
     id: actual-behavior
     attributes:
@@ -120,7 +120,7 @@ body:
       placeholder: Please include videos/screenshots (if possible)
     validations:
       required: true
-  
+
   - type: textarea
     id: expected-behavior
     attributes:
@@ -129,7 +129,7 @@ body:
       placeholder: Please include videos/screenshots (if possible)
     validations:
       required: true
-  
+
   - type: textarea
     id: backtrace
     attributes:
@@ -137,7 +137,7 @@ body:
       placeholder: Please provide a backtrace of your debugger if this bug crashes tfs.
       description: This will be automatically formatted into code, no need for backticks.
       render: cpp
-  
+
   - type: markdown
     attributes:
       value: |
