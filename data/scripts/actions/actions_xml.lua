@@ -66,15 +66,6 @@ local function configureActionEvent(node)
         return nil
     end
 
-    if function_ then
-        if function_ ~= "market" then
-            io.write("[Error] Invalid function attribute, check 'data/actions/actions.xml'.\n")
-            return nil
-        end
-
-        function action.onUse(player, item, fromPosition, target, toPosition, isHotkey) return player:sendEnterMarket() end
-    end
-
     if script then
         local scriptFile = "data/actions/scripts/" .. script
         dofile(scriptFile)
