@@ -76,7 +76,7 @@ function ipban.onSay(player, words, param)
 	result.free(resultId)
 
 	if targetIp == "0" then
-		player:sendTextMessage(MESSAGE_STATUS_WARNING, string.format("Invalid IP for player %s.", targetName))
+		player:sendCancelMessage(string.format("Invalid IP for player %s.", targetName))
 		return true
 	end
 
@@ -107,7 +107,7 @@ local unban = TalkAction("/unban")
 
 function unban.onSay(player, words, param)
 	if param == "" then
-		player:sendTextMessage(MESSAGE_STATUS_WARNING, "Command requires 1 parameter: /unban <player name>")
+		player:sendCancelMessage("Command requires 1 parameter: /unban <player name>")
 		return true
 	end
 
@@ -130,3 +130,33 @@ end
 unban:access(true)
 unban:separator(" ")
 unban:register()
+
+local deleteAccount = TalkAction("/deleteaccount")
+
+function deleteAccount.onSay(player, words, param)
+	if param == "" then
+		player:sendCancelMessage("Command requires 1 parameter: /deleteaccount <player name>")
+		return true
+	end
+
+	local targetName = param:trim()
+	local accountId = Game.getPlayerAccountId(targetName)
+
+	if accountId == 0 then
+		return true
+	end
+
+	local target = Player(targetName)
+	if target then
+		target:remove()
+	end
+
+	db.query("DELETE FROM `accounts` WHERE `id` = " .. accountId)
+
+	player:sendTextMessage(MESSAGE_EVENT_ADVANCE, string.format("The account of %s has been deleted.", targetName))
+	return true
+end
+
+deleteAccount:access(true)
+deleteAccount:separator(" ")
+deleteAccount:register()
