@@ -337,6 +337,7 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 // Login to the game world request
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
+	std::cout << "onRecvFirstMessage" << std::endl;
 	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		disconnect();
@@ -356,10 +357,12 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		}
 	}
 
-	msg.skipBytes(3); // U16 dat revision, U8 preview state
+	auto assets_hash = msg.getString();
+	msg.skipBytes(1); // U8 preview state
 
 	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
+		std::cout << "RSA failed" << std::endl;
 		disconnect();
 		return;
 	}
@@ -396,10 +399,10 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	msg.skipBytes(1); // Gamemaster flag
 
 	auto sessionToken = tfs::base64::decode(msg.getString());
-	if (sessionToken.empty()) {
+	/*if (sessionToken.empty()) {
 		disconnectClient("Malformed session key.");
 		return;
-	}
+	}*/
 
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		msg.getString(); // OS name (?)
@@ -410,6 +413,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	uint32_t timeStamp = msg.get<uint32_t>();
 	uint8_t randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
+		std::cout << "onRecvFirstMessage: challenge failed" << std::endl;
 		disconnect();
 		return;
 	}
@@ -431,7 +435,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	Database& db = Database::getInstance();
+	/*Database& db = Database::getInstance();
 	auto result = db.storeQuery(fmt::format(
 	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
 	    db.escapeString(sessionToken), db.escapeString(characterName)));
@@ -449,15 +453,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	Connection::Address sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
 	if (!sessionIP.is_loopback() && ip != sessionIP) {
 		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
-	}
+	}*/
 
-	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = result->getNumber<uint32_t>("character_id")]() {
-		thisPtr->login(characterId, accountId, operatingSystem);
+	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = 1]() {
+		thisPtr->login(characterId, 1, operatingSystem);
 	});
 }
 
 void ProtocolGame::onConnect()
 {
+	std::cout << "onConnect: sending challenge" << std::endl;
 	auto output = tfs::net::make_output_message();
 	static std::random_device rd;
 	static std::ranlux24 generator(rd());
@@ -527,7 +532,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			return;
 		}
 	}
-
+	std::cout << "parsing: " << std::hex << recvbyte << std::endl;
 	switch (recvbyte) {
 		case 0x14:
 			g_dispatcher.addTask([thisPtr = getThis()]() { thisPtr->logout(true, false); });
@@ -1732,7 +1737,7 @@ void ProtocolGame::sendClientFeatures()
 	msg.addDouble(Creature::speedC, 3);
 
 	// can report bugs?
-	msg.addByte(player->getAccountType() >= ACCOUNT_TYPE_TUTOR ? 0x01 : 0x00);
+	//msg.addByte(player->getAccountType() >= ACCOUNT_TYPE_TUTOR ? 0x01 : 0x00);
 
 	msg.addByte(0x00); // can change pvp framing option
 	msg.addByte(0x00); // expert mode button enabled
@@ -1741,7 +1746,7 @@ void ProtocolGame::sendClientFeatures()
 	msg.add<uint16_t>(25);   // premium coin package size
 
 	msg.addByte(0x00); // exiva button enabled (bool)
-	msg.addByte(0x00); // Tournament button (bool)
+	//msg.addByte(0x00); // Tournament button (bool)
 
 	writeToOutputBuffer(msg);
 }
@@ -1892,6 +1897,7 @@ void ProtocolGame::sendIcons(uint32_t icons)
 	NetworkMessage msg;
 	msg.addByte(0xA2);
 	msg.add<uint32_t>(icons);
+	msg.addByte(0);
 	writeToOutputBuffer(msg);
 }
 
@@ -1930,6 +1936,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, uint16
 	} else {
 		msg.addByte(0x00);
 	}
+	msg.add<uint16_t>(0);
 	writeToOutputBuffer(msg);
 }
 
@@ -2548,7 +2555,7 @@ void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, u
 	msg.addByte(0x83);
 	msg.addPosition(from);
 	msg.addByte(MAGIC_EFFECTS_CREATE_DISTANCEEFFECT);
-	msg.addByte(type);
+	msg.add<uint16_t>(type);
 	msg.addByte(static_cast<uint8_t>(static_cast<int8_t>(static_cast<int32_t>(to.x) - static_cast<int32_t>(from.x))));
 	msg.addByte(static_cast<uint8_t>(static_cast<int8_t>(static_cast<int32_t>(to.y) - static_cast<int32_t>(from.y))));
 	msg.addByte(MAGIC_EFFECTS_END_LOOP);
@@ -2565,7 +2572,7 @@ void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
 	msg.addByte(0x83);
 	msg.addPosition(pos);
 	msg.addByte(MAGIC_EFFECTS_CREATE_EFFECT);
-	msg.addByte(type);
+	msg.add<uint16_t>(type);
 	msg.addByte(MAGIC_EFFECTS_END_LOOP);
 	writeToOutputBuffer(msg);
 }
@@ -2809,7 +2816,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	}
 
 	// send store inbox
-	sendInventoryItem(CONST_SLOT_STORE_INBOX, player->getStoreInbox()->getItem());
+	sendInventoryItem(CONST_SLOT_STORE_INBOX, nullptr);
 
 	// player light level
 	sendCreatureLight(creature);
@@ -2818,10 +2825,10 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 	sendVIPEntries();
 
 	// tiers for forge and market
-	sendItemClasses();
+	//sendItemClasses();
 
 	// opened containers
-	player->openSavedContainers();
+	//player->openSavedContainers();
 }
 
 void ProtocolGame::sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos,
@@ -3595,6 +3602,9 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	}
 
 	for (uint8_t i = SPECIALSKILL_FIRST; i <= SPECIALSKILL_LAST; ++i) {
+		if (i == SPECIALSKILL_LIFELEECHCHANCE || i == SPECIALSKILL_MANALEECHCHANCE) {
+			continue;
+		}
 		msg.add<uint16_t>(std::min<int32_t>(10000, player->varSpecialSkills[i])); // base + bonus special skill
 		msg.add<uint16_t>(0);                                                     // base special skill
 	}
@@ -3605,7 +3615,7 @@ void ProtocolGame::AddPlayerSkills(NetworkMessage& msg)
 	// u16 bonus element ml
 
 	// fatal, dodge, momentum
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		msg.add<uint16_t>(0);
 		msg.add<uint16_t>(0);
 	}
