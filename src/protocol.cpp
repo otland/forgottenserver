@@ -32,7 +32,8 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 	uint8_t* buffer = msg.getRemainingBuffer();
 	xtea::decrypt(buffer, msg.getLength() - 6, key);
 
-	uint16_t innerLength = msg.get<uint16_t>();
+	uint16_t padding = msg.getByte();
+	auto innerLength = msg.getLength() - 6 - padding;
 	if (innerLength + 8 > msg.getLength()) {
 		return false;
 	}
@@ -46,12 +47,13 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {
-		msg->writeMessageLength();
-
-		if (encryptionEnabled) {
-			XTEA_encrypt(*msg, key);
-			msg->addCryptoHeader(checksumMode, sequenceNumber);
+		if (!encryptionEnabled) {
+			msg->writeMessageLength();
+			return;
 		}
+		msg->writePaddingLength();
+		XTEA_encrypt(*msg, key);
+		msg->addCryptoHeader(checksumMode, sequenceNumber);
 	}
 }
 

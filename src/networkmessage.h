@@ -16,7 +16,7 @@ public:
 	// Headers:
 	// 2 bytes for unencrypted message size
 	// 4 bytes for checksum
-	// 2 bytes for encrypted message size
+	// 1 byte for padding
 	static constexpr MsgSize_t INITIAL_BUFFER_POSITION = 8;
 	enum
 	{

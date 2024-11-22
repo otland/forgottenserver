@@ -337,7 +337,6 @@ void ProtocolGame::logout(bool displayEffect, bool forced)
 // Login to the game world request
 void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 {
-	std::cout << "onRecvFirstMessage" << std::endl;
 	// Server is shutting down
 	if (g_game.getGameState() == GAME_STATE_SHUTDOWN) {
 		disconnect();
@@ -348,21 +347,15 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	OperatingSystem_t operatingSystem = static_cast<OperatingSystem_t>(msg.get<uint16_t>());
 
 	version = msg.get<uint16_t>(); // U16 client version
-	msg.skipBytes(4);              // U32 client version
+	auto client_version = msg.get<uint32_t>();              // U32 client version
 
 	// String client version
-	if (version >= 1240) {
-		if (msg.getRemainingBufferLength() > 132) {
-			msg.getString();
-		}
-	}
-
+	auto version_str = msg.getString();
 	auto assets_hash = msg.getString();
 	msg.skipBytes(1); // U8 preview state
 
 	// Disconnect if RSA decrypt fails
 	if (!Protocol::RSA_decrypt(msg)) {
-		std::cout << "RSA failed" << std::endl;
 		disconnect();
 		return;
 	}
@@ -462,7 +455,6 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolGame::onConnect()
 {
-	std::cout << "onConnect: sending challenge" << std::endl;
 	auto output = tfs::net::make_output_message();
 	static std::random_device rd;
 	static std::ranlux24 generator(rd());
@@ -471,8 +463,8 @@ void ProtocolGame::onConnect()
 	// Skip checksum
 	output->skipBytes(sizeof(uint32_t));
 
-	// Packet length & type
-	output->add<uint16_t>(0x0006);
+	// Packet padding & type
+	output->addByte(1);
 	output->addByte(0x1F);
 
 	// Add timestamp & random number
@@ -481,6 +473,9 @@ void ProtocolGame::onConnect()
 
 	challengeRandom = randNumber(generator);
 	output->addByte(challengeRandom);
+
+	// Add padding
+	output->addByte(0);
 
 	// Go back and write checksum
 	output->skipBytes(-12);
@@ -532,7 +527,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 			return;
 		}
 	}
-	std::cout << "parsing: " << std::hex << recvbyte << std::endl;
+
 	switch (recvbyte) {
 		case 0x14:
 			g_dispatcher.addTask([thisPtr = getThis()]() { thisPtr->logout(true, false); });
