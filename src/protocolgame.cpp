@@ -1224,7 +1224,7 @@ void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
 
 void ProtocolGame::parseSay(NetworkMessage& msg)
 {
-	std::string_view receiver;
+	std::string receiver;
 	uint16_t channelId;
 
 	SpeakClasses type = static_cast<SpeakClasses>(msg.getByte());
