@@ -1419,7 +1419,7 @@ void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
 	uint8_t reportReason = msg.getByte();
 	auto targetName = msg.getString();
 	auto comment = msg.getString();
-	std::string_view translation;
+	std::string translation;
 	if (reportType == REPORT_TYPE_NAME) {
 		translation = msg.getString();
 	} else if (reportType == REPORT_TYPE_STATEMENT) {
