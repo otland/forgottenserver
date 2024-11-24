@@ -469,7 +469,7 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 		// try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
-			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < (*destItem)->getStackSize()) {
+			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < item->getStackSize()) {
 				*destItem = listItem;
 				index = n;
 				return this;

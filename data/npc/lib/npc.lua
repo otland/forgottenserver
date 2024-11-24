@@ -17,26 +17,39 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 	local subType = subType or 0
 	local startingAmount = amount
 	local result = RETURNVALUE_NOERROR
-
+	local bpSize = 20
 	local itemType = ItemType(itemid)
+
 	if itemType:isStackable() then
 		local stuff
+		local bpsToAdd = math.ceil(amount / itemType:getStackSize() / bpSize)
 		if inBackpacks then
-			stuff = Game.createItem(backpack, 1)
-			local itemAdded = true
-			while startingAmount > 0 and itemAdded do
-				local item = stuff:addItem(itemid, math.min(itemType:getStackSize(), startingAmount))
-				if item then
-					print("item Added")
-					startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
-					itemAdded = true
-				else
-					print("item Not Added")
-					itemAdded = false
+			local bps = {}
+			for i = 1, bpsToAdd, 1 do
+				stuff = Game.createItem(backpack, 1)
+				local itemAdded = true
+				while startingAmount > 0 and itemAdded do
+					local item = stuff:addItem(itemid, math.min(itemType:getStackSize(), startingAmount))
+					if item then
+						startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
+						itemAdded = true
+					else
+						itemAdded = false
+					end
+				end
+				bps[i] = stuff
+			end
+			for i = 1, bpsToAdd, 1 do
+				result = result and Player(cid):addItemEx(bps[i], ignoreCap)
+			end
+
+			if result ~= RETURNVALUE_NOERROR then
+				for i = 1, bpsToAdd, 1 do
+					if bps[i] then
+						bps[i]:remove()
+					end
 				end
 			end
-			print(startingAmount)
-			result = Player(cid):addItemEx(stuff, ignoreCap)
 		else
 			while startingAmount > 0 and result == RETURNVALUE_NOERROR do
 				stuff = Game.createItem(itemid, math.min(itemType:getStackSize(), startingAmount))
@@ -46,8 +59,6 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 				end
 			end
 		end
-
-		print(result)
 
 		return result ~= RETURNVALUE_NOERROR and 0 or amount - startingAmount, 0
 	end
