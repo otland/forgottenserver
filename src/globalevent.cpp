@@ -138,12 +138,8 @@ void GlobalEvents::timer()
 			continue;
 		}
 
-		nextExecutionTime = 86400000;
-		if (nextExecutionTime < nextScheduledTime) {
-			nextScheduledTime = nextExecutionTime;
-		}
-
-		globalEvent.setNextExecution(globalEvent.getNextExecution() + nextExecutionTime);
+		nextScheduledTime = globalEvent.getInterval();
+		globalEvent.setNextExecution(now + nextScheduledTime);
 
 		++it;
 	}
