@@ -2686,7 +2686,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 				}
 			} else if (queryAdd(slotIndex, *item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { // empty slot
 				if (item->isStackable()) {
-					n += 100;
+					n += item->getStackSize();
 				} else {
 					++n;
 				}
@@ -2705,7 +2705,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		if (destItem) {
 			if (destItem->isStackable() && item->equals(destItem) &&
 			    destItem->getItemCount() < destItem->getStackSize()) {
-				maxQueryCount = 100 - destItem->getItemCount();
+				maxQueryCount = destItem->getStackSize() - destItem->getItemCount();
 			} else {
 				maxQueryCount = 0;
 			}
