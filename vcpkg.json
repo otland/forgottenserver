@@ -3,22 +3,49 @@
   "dependencies": [
     "boost-asio",
     "boost-iostreams",
+    "boost-locale",
     "boost-lockfree",
     "boost-system",
     "boost-variant",
-    "cryptopp",
     "fmt",
+    {
+      "name": "libiconv",
+      "platform": "osx"
+    },
     "libmariadb",
-    "lua",
+    "openssl",
     "pugixml"
   ],
   "features": {
+    "http": {
+      "description": "Enable HTTP support",
+      "dependencies": [
+        "boost-beast",
+        "boost-json"
+      ]
+    },
+    "lua": {
+      "description": "Use Lua instead of LuaJIT",
+      "dependencies": [
+        "lua"
+      ]
+    },
     "luajit": {
       "description": "Use LuaJIT instead of Lua",
       "dependencies": [
         "luajit"
       ]
+    },
+    "unit-tests": {
+      "description": "Build unit tests",
+      "dependencies": [
+        "boost-test"
+      ]
     }
   },
-  "builtin-baseline": "7f59e0013648f0dd80377330b770b414032233cb"
+  "default-features": [
+    "lua",
+    "http"
+  ],
+  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
 }

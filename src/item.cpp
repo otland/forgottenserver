@@ -225,7 +225,7 @@ void Item::setDefaultSubtype()
 
 void Item::onRemoved()
 {
-	ScriptEnvironment::removeTempItem(this);
+	tfs::lua::removeTempItem(this);
 
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		g_game.removeUniqueItem(getUniqueId());
@@ -238,7 +238,7 @@ void Item::setID(uint16_t newid)
 	id = newid;
 
 	const ItemType& it = Item::items[newid];
-	uint32_t newDuration = it.decayTime * 1000;
+	uint32_t newDuration = normal_random(it.decayTimeMin, it.decayTimeMax) * 1000;
 
 	if (newDuration == 0 && !it.stopTime && it.decayTo < 0) {
 		removeAttribute(ITEM_ATTRIBUTE_DECAYSTATE);
@@ -261,7 +261,7 @@ Cylinder* Item::getTopParent()
 		return prevaux;
 	}
 
-	while (aux->getParent()) {
+	while (aux->hasParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -280,7 +280,7 @@ const Cylinder* Item::getTopParent() const
 		return prevaux;
 	}
 
-	while (aux->getParent()) {
+	while (aux->hasParent()) {
 		prevaux = aux;
 		aux = aux->getParent();
 	}
@@ -295,7 +295,7 @@ Tile* Item::getTile()
 {
 	Cylinder* cylinder = getTopParent();
 	// get root cylinder
-	if (cylinder && cylinder->getParent()) {
+	if (cylinder && cylinder->hasParent()) {
 		cylinder = cylinder->getParent();
 	}
 	return dynamic_cast<Tile*>(cylinder);
@@ -305,7 +305,7 @@ const Tile* Item::getTile() const
 {
 	const Cylinder* cylinder = getTopParent();
 	// get root cylinder
-	if (cylinder && cylinder->getParent()) {
+	if (cylinder && cylinder->hasParent()) {
 		cylinder = cylinder->getParent();
 	}
 	return dynamic_cast<const Tile*>(cylinder);
@@ -1050,13 +1050,25 @@ void Item::setUniqueId(uint16_t n)
 	}
 }
 
+void Item::setDefaultDuration()
+{
+	uint32_t duration = getDefaultDurationMin();
+	if (uint32_t durationMax = getDefaultDurationMax()) {
+		duration = normal_random(duration, durationMax);
+	}
+
+	if (duration != 0) {
+		setDuration(duration);
+	}
+}
+
 bool Item::canDecay() const
 {
 	if (isRemoved()) {
 		return false;
 	}
 
-	if (getDecayTo() < 0 || getDecayTime() == 0) {
+	if (getDecayTo() < 0 || (getDecayTimeMin() == 0 && getDecayTimeMax() == 0)) {
 		return false;
 	}
 
@@ -1247,7 +1259,7 @@ bool Item::hasMarketAttributes() const
 			}
 		} else if (attr.type == ITEM_ATTRIBUTE_DURATION) {
 			uint32_t duration = static_cast<uint32_t>(attr.value.integer);
-			if (duration != getDefaultDuration()) {
+			if (duration <= getDefaultDurationMin()) {
 				return false;
 			}
 		} else {

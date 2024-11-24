@@ -2,9 +2,6 @@
 <talkactions>
 	<!-- commands -->
 	<talkaction words="/attr" separator=" " script="attributes.lua" />
-	<talkaction words="/ban" separator=" " script="ban.lua" />
-	<talkaction words="/ipban" separator=" " script="ip_ban.lua" />
-	<talkaction words="/unban" separator=" " script="unban.lua" />
 	<talkaction words="/up" script="up.lua" />
 	<talkaction words="/down" script="down.lua" />
 	<talkaction words="/c" separator=" " script="teleport_creature_here.lua" />
@@ -33,7 +30,6 @@
 	<talkaction words="/clean" script="clean.lua" />
 	<talkaction words="/hide" script="hide.lua" />
 	<talkaction words="/reload" separator=" " script="reload.lua" />
-	<talkaction words="/raid" separator=" " script="force_raid.lua" />
 
 	<!-- player talkactions -->
 	<talkaction words="!buypremium" script="buy_premium.lua" />

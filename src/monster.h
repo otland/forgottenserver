@@ -14,6 +14,7 @@ class Tile;
 
 using CreatureHashSet = std::unordered_set<Creature*>;
 using CreatureList = std::list<Creature*>;
+using MonsterIconHashMap = std::unordered_map<MonsterIcon_t, uint16_t>;
 
 enum TargetSearchType_t
 {
@@ -27,6 +28,9 @@ class Monster final : public Creature
 {
 public:
 	static Monster* createMonster(const std::string& name);
+
+	using Creature::onWalk;
+
 	static int32_t despawnRange;
 	static int32_t despawnRadius;
 
@@ -94,7 +98,8 @@ public:
 	void onWalk() override;
 	void onWalkComplete() override;
 	bool getNextStep(Direction& direction, uint32_t& flags) override;
-	void onFollowCreatureComplete(const Creature* creature) override;
+	void goToFollowCreature() override;
+	void onFollowCreatureComplete();
 
 	void onThink(uint32_t interval) override;
 
@@ -125,11 +130,16 @@ public:
 	BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage, bool checkDefense = false,
 	                     bool checkArmor = false, bool field = false, bool ignoreResistances = false) override;
 
+	// monster icons
+	MonsterIconHashMap& getSpecialIcons() { return monsterIcons; }
+	const MonsterIconHashMap& getSpecialIcons() const { return monsterIcons; }
+
 	static uint32_t monsterAutoID;
 
 private:
 	CreatureHashSet friendList;
 	CreatureList targetList;
+	MonsterIconHashMap monsterIcons;
 
 	std::string name;
 	std::string nameDescription;
@@ -140,7 +150,6 @@ private:
 	int64_t lastMeleeAttack = 0;
 
 	uint32_t attackTicks = 0;
-	uint32_t targetTicks = 0;
 	uint32_t targetChangeTicks = 0;
 	uint32_t defenseTicks = 0;
 	uint32_t yellTicks = 0;
@@ -210,7 +219,6 @@ private:
 	uint32_t getDamageImmunities() const override { return mType->info.damageImmunities; }
 	uint32_t getConditionImmunities() const override { return mType->info.conditionImmunities; }
 	void getPathSearchParams(const Creature* creature, FindPathParams& fpp) const override;
-	bool useCacheMap() const override { return !randomStepping; }
 
 	friend class LuaScriptInterface;
 };

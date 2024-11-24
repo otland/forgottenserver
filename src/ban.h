@@ -6,6 +6,8 @@
 
 #include "connection.h"
 
+namespace IOBan {
+
 struct BanInfo
 {
 	std::string bannedBy;
@@ -13,35 +15,10 @@ struct BanInfo
 	time_t expiresAt;
 };
 
-struct ConnectBlock
-{
-	constexpr ConnectBlock(uint64_t lastAttempt, uint64_t blockTime, uint32_t count) :
-	    lastAttempt(lastAttempt), blockTime(blockTime), count(count)
-	{}
+const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId);
+const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP);
+bool isPlayerNamelocked(uint32_t playerId);
 
-	uint64_t lastAttempt;
-	uint64_t blockTime;
-	uint32_t count;
-};
-
-using IpConnectMap = std::map<Connection::Address, ConnectBlock>;
-
-class Ban
-{
-public:
-	bool acceptConnection(const Connection::Address& clientIP);
-
-private:
-	IpConnectMap ipConnectMap;
-	std::recursive_mutex lock;
-};
-
-class IOBan
-{
-public:
-	static bool isAccountBanned(uint32_t accountId, BanInfo& banInfo);
-	static bool isIpBanned(const Connection::Address& clientIP, BanInfo& banInfo);
-	static bool isPlayerNamelocked(uint32_t playerId);
-};
+}; // namespace IOBan
 
 #endif // FS_BAN_H

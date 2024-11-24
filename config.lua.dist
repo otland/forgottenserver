@@ -25,6 +25,8 @@ bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
+httpPort = 8080
+httpWorkers = 1
 maxPlayers = 0
 onePlayerOnlinePerAccount = true
 allowClones = false
@@ -66,14 +68,6 @@ premiumToCreateMarketOffer = true
 checkExpiredMarketOffersEachMinutes = 60
 maxMarketOffersAtATimePerPlayer = 100
 
--- MySQL
-mysqlHost = "127.0.0.1"
-mysqlUser = "forgottenserver"
-mysqlPass = ""
-mysqlDatabase = "forgottenserver"
-mysqlPort = 3306
-mysqlSock = ""
-
 -- Misc.
 -- NOTE: classicAttackSpeed set to true makes players constantly attack at regular
 -- intervals regardless of other actions such as item (potion) use. This setting
@@ -108,12 +102,6 @@ depotPremiumLimit = 15000
 -- Quest Tracker limits
 questTrackerFreeLimit = 10
 questTrackerPremiumLimit = 15
-
--- World Light
--- NOTE: if defaultWorldLight is set to true the world light algorithm will
--- be handled in the sources. set it to false to avoid conflicts if you wish
--- to make use of the function setWorldLight(level, color)
-defaultWorldLight = true
 
 -- Server Save
 -- NOTE: serverSaveNotifyDuration in minutes

@@ -10,14 +10,12 @@
 #include "game.h"
 
 extern Game g_game;
-extern ConfigManager g_config;
-extern Events* g_events;
 
 Party::Party(Player* leader) : leader(leader) { leader->setParty(this); }
 
 void Party::disband()
 {
-	if (!g_events->eventPartyOnDisband(this)) {
+	if (!tfs::events::party::onDisband(this)) {
 		return;
 	}
 
@@ -66,7 +64,7 @@ bool Party::leaveParty(Player* player, bool forceRemove /* = false */)
 		return false;
 	}
 
-	bool canRemove = g_events->eventPartyOnLeave(this, player);
+	bool canRemove = tfs::events::party::onLeave(this, player);
 	if (!forceRemove && !canRemove) {
 		return false;
 	}
@@ -129,7 +127,7 @@ bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 		return false;
 	}
 
-	if (!g_events->eventPartyOnPassLeadership(this, player) && !forceRemove) {
+	if (!tfs::events::party::onPassLeadership(this, player) && !forceRemove) {
 		return false;
 	}
 
@@ -169,7 +167,7 @@ bool Party::passPartyLeadership(Player* player, bool forceRemove /* = false*/)
 bool Party::joinParty(Player& player)
 {
 	// check if lua scripts allow the player to join
-	if (!g_events->eventPartyOnJoin(this, &player)) {
+	if (!tfs::events::party::onJoin(this, &player)) {
 		return false;
 	}
 
@@ -243,7 +241,7 @@ bool Party::removeInvite(Player& player, bool removeFromPlayer /* = true*/)
 
 void Party::revokeInvitation(Player& player)
 {
-	if (!g_events->eventPartyOnRevokeInvitation(this, &player)) {
+	if (!tfs::events::party::onRevokeInvitation(this, &player)) {
 		return;
 	}
 
@@ -381,7 +379,7 @@ bool Party::setSharedExperience(Player* player, bool sharedExpActive)
 void Party::shareExperience(uint64_t experience, Creature* source /* = nullptr*/)
 {
 	uint64_t shareExperience = experience;
-	g_events->eventPartyOnShareExperience(this, shareExperience);
+	tfs::events::party::onShareExperience(this, shareExperience);
 
 	for (Player* member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
@@ -412,8 +410,8 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(const Player* player) c
 		return SHAREDEXP_LEVELDIFFTOOLARGE;
 	}
 
-	if (!Position::areInRange<EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_FLOORS>(
-	        leader->getPosition(), player->getPosition())) {
+	if (!leader->getPosition().isInRange(player->getPosition(), EXPERIENCE_SHARE_RANGE, EXPERIENCE_SHARE_RANGE,
+	                                     EXPERIENCE_SHARE_FLOORS)) {
 		return SHAREDEXP_TOOFARAWAY;
 	}
 
@@ -425,7 +423,7 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(const Player* player) c
 		}
 
 		uint64_t timeDiff = OTSYS_TIME() - it->second;
-		if (timeDiff > static_cast<uint64_t>(g_config.getNumber(ConfigManager::PZ_LOCKED))) {
+		if (timeDiff > static_cast<uint64_t>(getNumber(ConfigManager::PZ_LOCKED))) {
 			return SHAREDEXP_MEMBERINACTIVE;
 		}
 	}

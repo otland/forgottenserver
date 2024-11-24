@@ -16,6 +16,7 @@ enum CreatureEventType_t
 	CREATURE_EVENT_NONE,
 	CREATURE_EVENT_LOGIN,
 	CREATURE_EVENT_LOGOUT,
+	CREATURE_EVENT_RECONNECT,
 	CREATURE_EVENT_THINK,
 	CREATURE_EVENT_PREPAREDEATH,
 	CREATURE_EVENT_DEATH,
@@ -48,6 +49,7 @@ public:
 	// scripting
 	bool executeOnLogin(Player* player) const;
 	bool executeOnLogout(Player* player) const;
+	void executeOnReconnect(Player* player) const;
 	bool executeOnThink(Creature* creature, uint32_t interval);
 	bool executeOnPrepareDeath(Creature* creature, Creature* killer);
 	bool executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller,
@@ -55,7 +57,7 @@ public:
 	void executeOnKill(Creature* creature, Creature* target);
 	bool executeAdvance(Player* player, skills_t, uint32_t, uint32_t);
 	void executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId);
-	bool executeTextEdit(Player* player, Item* item, const std::string& text);
+	bool executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId);
 	void executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage);
 	void executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer);
@@ -81,6 +83,7 @@ public:
 	// global events
 	bool playerLogin(Player* player) const;
 	bool playerLogout(Player* player) const;
+	void playerReconnect(Player* player) const;
 	bool playerAdvance(Player* player, skills_t, uint32_t, uint32_t);
 
 	CreatureEvent* getEventByName(const std::string& name, bool forceLoaded = true);

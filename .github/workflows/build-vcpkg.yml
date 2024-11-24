@@ -7,6 +7,7 @@ on:
       - v*
 
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -15,6 +16,7 @@ on:
 
   pull_request:
     paths:
+      - .github/workflows/build-vcpkg.yml
       - cmake/**
       - src/**
       - CMakeLists.txt
@@ -31,52 +33,63 @@ jobs:
         buildtype: [Debug, Release]
         luajit: [on, off]
 
+    env:
+      VCPKG_BUILD_TYPE: release
+
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: cpp
+          # For more details on CodeQL's query packs, refer to: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          queries: +security-extended,security-and-quality
+        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
 
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
 
-      - name: Enable LuaJIT
-        if: ${{ matrix.luajit }} == "on"
-        run: echo "VCPKG_FEATURE_FLAGS=luajit" >> $GITHUB_ENV
-
       - name: Run vcpkg
         uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: 501db0f17ef6df184fcdbfbe0f87cde2313b6ab1
 
       - name: Build with CMake
         uses: lukka/run-cmake@v10
         with:
           buildPreset: vcpkg
-          buildPresetAdditionalArgs: "['--config ${{ matrix.buildtype }}', '--clean-first']"
+          buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-G Ninja']"
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:cpp"
+        if: ${{ matrix.os == 'ubuntu' && matrix.buildtype == 'Debug' }}
 
       - name: Upload artifact binary
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
-          path: ${{ runner.workspace }}/build/tfs
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: |
-            ${{ runner.workspace }}/build/tfs.exe
-            ${{ runner.workspace }}/build/*.dll
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
+            ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
 
       - name: Prepare datapack contents
         run: find . -maxdepth 1 ! -name data ! -name config.lua.dist ! -name key.pem ! -name LICENSE ! -name README.md ! -name schema.sql -exec rm -r {} \;
         shell: bash
 
       - name: Upload datapack contents
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tfs-${{ matrix.name }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
           path: ${{ github.workspace }}

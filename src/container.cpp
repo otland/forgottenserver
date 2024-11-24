@@ -78,7 +78,19 @@ std::string Container::getName(bool addArticle /* = false*/) const
 	return getNameDescription(it, this, -1, addArticle);
 }
 
-bool Container::hasParent() const { return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent()); }
+bool Container::hasContainerParent() const
+{
+	if (getID() == ITEM_BROWSEFIELD) {
+		return false;
+	}
+
+	if (hasParent()) {
+		if (auto creature = getParent()->getCreature()) {
+			return !creature->getPlayer();
+		}
+	}
+	return true;
+}
 
 void Container::addItem(Item* item)
 {
@@ -297,7 +309,7 @@ ReturnValue Container::queryAdd(int32_t index, const Thing& thing, uint32_t coun
 	}
 
 	const Cylinder* const topParent = getTopParent();
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
 			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
@@ -334,22 +346,23 @@ ReturnValue Container::queryMaxCount(int32_t index, const Thing& thing, uint32_t
 			// Iterate through every item and check how much free stackable slots there is.
 			uint32_t slotIndex = 0;
 			for (Item* containerItem : itemlist) {
-				if (containerItem != item && containerItem->equals(item) && containerItem->getItemCount() < 100) {
+				if (containerItem != item && containerItem->equals(item) &&
+				    containerItem->getItemCount() < ITEM_STACK_SIZE) {
 					if (queryAdd(slotIndex++, *item, count, flags) == RETURNVALUE_NOERROR) {
-						n += 100 - containerItem->getItemCount();
+						n += ITEM_STACK_SIZE - containerItem->getItemCount();
 					}
 				}
 			}
 		} else {
 			const Item* destItem = getItemByIndex(index);
-			if (item->equals(destItem) && destItem->getItemCount() < 100) {
+			if (item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) {
-					n = 100 - destItem->getItemCount();
+					n = ITEM_STACK_SIZE - destItem->getItemCount();
 				}
 			}
 		}
 
-		maxQueryCount = freeSlots * 100 + n;
+		maxQueryCount = freeSlots * ITEM_STACK_SIZE + n;
 		if (maxQueryCount < count) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
@@ -383,7 +396,7 @@ ReturnValue Container::queryRemove(const Thing& thing, uint32_t count, uint32_t 
 		return RETURNVALUE_NOTMOVEABLE;
 	}
 
-	if (actor && g_config.getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
+	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		const Cylinder* const topParent = getTopParent();
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(topParent->getTile())) {
 			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
@@ -449,14 +462,14 @@ Cylinder* Container::queryDestination(int32_t& index, const Thing& thing, Item**
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent() != this) {
-		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < 100) {
+		if (*destItem && (*destItem)->equals(item) && (*destItem)->getItemCount() < ITEM_STACK_SIZE) {
 			return this;
 		}
 
 		// try find a suitable item to stack with
 		uint32_t n = 0;
 		for (Item* listItem : itemlist) {
-			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < 100) {
+			if (listItem != item && listItem->equals(item) && listItem->getItemCount() < ITEM_STACK_SIZE) {
 				*destItem = listItem;
 				index = n;
 				return this;
@@ -486,7 +499,7 @@ void Container::addThing(int32_t index, Thing* thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
@@ -498,7 +511,7 @@ void Container::addItemBack(Item* item)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
 		onAddContainerItem(item);
 	}
 }
@@ -524,7 +537,7 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	updateItemWeight(-oldWeight + item->getWeight());
 
 	// send change to client
-	if (getParent()) {
+	if (hasParent()) {
 		onUpdateContainerItem(index, item, item);
 	}
 }
@@ -550,7 +563,7 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (getParent()) {
+	if (hasParent()) {
 		onUpdateContainerItem(index, replacedItem, item);
 	}
 
@@ -579,7 +592,7 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		updateItemWeight(-oldWeight + item->getWeight());
 
 		// send change to client
-		if (getParent()) {
+		if (hasParent()) {
 			onUpdateContainerItem(index, item, item);
 		}
 	} else {
@@ -588,7 +601,7 @@ void Container::removeThing(Thing* thing, uint32_t count)
 		ammoCount -= item->getItemCount();
 
 		// send change to client
-		if (getParent()) {
+		if (hasParent()) {
 			onRemoveContainerItem(index, item);
 		}
 
@@ -613,7 +626,7 @@ size_t Container::getFirstIndex() const { return 0; }
 
 size_t Container::getLastIndex() const { return size(); }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/, bool) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {
@@ -656,7 +669,7 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		// let the tile class notify surrounding players
-		if (topParent->getParent()) {
+		if (topParent->hasParent()) {
 			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
 	} else {
@@ -671,7 +684,7 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent == this) {
 		// let the tile class notify surrounding players
-		if (topParent->getParent()) {
+		if (topParent->hasParent()) {
 			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}
 	} else {

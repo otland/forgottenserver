@@ -54,8 +54,7 @@ do
 		["Duration"] = {key = ITEM_ATTRIBUTE_DURATION, cmp = function(v) return v > 0 end},
 		["Text"] = {key = ITEM_ATTRIBUTE_TEXT, cmp = function(v) return v ~= "" end},
 		["Date"] = {key = ITEM_ATTRIBUTE_DATE},
-		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end},
-		["Tier"] = {key = ITEM_ATTRIBUTE_TIER}
+		["Writer"] = {key = ITEM_ATTRIBUTE_WRITER, cmp = function(v) return v ~= "" end}
 	}
 
 	function setAuxFunctions()
@@ -373,7 +372,9 @@ do
 			for skill, value in pairs(abilities.specialSkills) do
 				if value ~= 0 then
 					-- add + symbol to special skill "amount" fields
-					if skill-1 < 6 and skill % 2 == 1 then
+					if skill-1 < 6 and skill % 2 == 0 and not (skill-1 == SPECIALSKILL_CRITICALHITAMOUNT) then
+						value = string.format("%+d", value/100)
+					elseif skill-1 < 6 and skill % 2 == 1 then
 						value = string.format("%+d", value)
 					elseif skill-1 >= 6 then
 						-- fatal, dodge, momentum coming from the item natively
@@ -586,30 +587,13 @@ do
 		-- \nImbuements: (Basic Strike 2:30h, Basic Void 2:30h, Empty Slot).
 
 		-- item class
-		-- Classification: x Tier: y (0.50% Onslaught).
+		-- Classification: x.
 		do
 			local classification = itemType:getClassification()
-			local tier = isVirtual and 0 or item:getTier() or 0
-
-			if classification > 0 or tier > 0 then
-				if classification == 0 then
-					classification = "other"
-				end
-
-				local tierString = tier
-				if tier > 0 then
-					local bonusType, bonusValue = itemType:getTierBonus(tier)
-					if bonusType ~= -1 then
-						if bonusType > 5 then
-							tierString = string.format("%d (%0.2f%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-						else
-							tierString = string.format("%d (%d%% %s)", tier, bonusValue, getSpecialSkillName(bonusType))
-						end
-					end
-				end
-
-				response[#response + 1] = string.format("\nClassification: %s Tier: %s.", classification, tierString)
+			if classification == 0 then
+				classification = "other"
 			end
+			response[#response + 1] = string.format("\nClassification: %s.", classification)
 		end
 
 		-- item count (will be reused later)

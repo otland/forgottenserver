@@ -162,7 +162,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				if (Player* player = (*creatures)[i]->getPlayer()) {
-					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
+					g_game.internalTeleport(player, player->getTown()->templePosition, false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
 				}
@@ -252,10 +252,15 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 {
 	Tile& oldTile = *creature.getTile();
 
+	// If the tile does not have the creature it means that the creature is ready for elimination, we skip the move.
+	if (!oldTile.hasCreature(&creature)) {
+		return;
+	}
+
 	Position oldPos = oldTile.getPosition();
 	Position newPos = newTile.getPosition();
 
-	bool teleport = forceTeleport || !newTile.getGround() || !Position::areInRange<1, 1, 0>(oldPos, newPos);
+	bool teleport = forceTeleport || !newTile.getGround() || !oldPos.isInRange(newPos, 1, 1, 0);
 
 	SpectatorVec spectators, newPosSpectators;
 	getSpectators(spectators, oldPos, true);
@@ -362,7 +367,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 						continue;
 					}
 
-					int_fast16_t offsetZ = Position::getOffsetZ(centerPos, cpos);
+					int16_t offsetZ = centerPos.getOffsetZ(cpos);
 					if ((min_y + offsetZ) > cpos.y || (max_y + offsetZ) < cpos.y || (min_x + offsetZ) > cpos.x ||
 					    (max_x + offsetZ) < cpos.x) {
 						continue;
@@ -448,8 +453,8 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 		if (multifloor) {
 			if (centerPos.z > 7) {
 				// underground (8->15)
-				minRangeZ = std::max<int32_t>(centerPos.getZ() - 2, 0);
-				maxRangeZ = std::min<int32_t>(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
+				minRangeZ = std::max(centerPos.getZ() - 2, 0);
+				maxRangeZ = std::min(centerPos.getZ() + 2, MAP_MAX_LAYERS - 1);
 			} else if (centerPos.z == 6) {
 				minRangeZ = 0;
 				maxRangeZ = 8;
@@ -486,7 +491,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
                            bool sameFloor /*= false*/, int32_t rangex /*= Map::maxClientViewportX*/,
                            int32_t rangey /*= Map::maxClientViewportY*/) const
 {
-	if (Position::getDistanceX(fromPos, toPos) > rangex || Position::getDistanceY(fromPos, toPos) > rangey) {
+	if (fromPos.getDistanceX(toPos) > rangex || fromPos.getDistanceY(toPos) > rangey) {
 		return false;
 	}
 
@@ -570,7 +575,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
 		// skip checks if toPos is next to us
-		if (Position::getDistanceX(fromPos, toPos) < 2 && Position::getDistanceY(fromPos, toPos) < 2) {
+		if (fromPos.getDistanceX(toPos) < 2 && fromPos.getDistanceY(toPos) < 2) {
 			return true;
 		}
 
@@ -603,7 +608,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 	// target is above us
 	if (fromPos.z > toPos.z) {
-		if (Position::getDistanceZ(fromPos, toPos) > 1) {
+		if (fromPos.getDistanceZ(toPos) > 1) {
 			return false;
 		}
 
@@ -626,14 +631,6 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 {
-	int32_t walkCache = creature.getWalkCache(pos);
-	if (walkCache == 0) {
-		return nullptr;
-	} else if (walkCache == 1) {
-		return getTile(pos.x, pos.y, pos.z);
-	}
-
-	// used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
 		if (!tile) {
@@ -732,8 +729,8 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 			pos.x = x + *neighbors++;
 			pos.y = y + *neighbors++;
 
-			if (fpp.maxSearchDist != 0 && (Position::getDistanceX(startPos, pos) > fpp.maxSearchDist ||
-			                               Position::getDistanceY(startPos, pos) > fpp.maxSearchDist)) {
+			if (fpp.maxSearchDist != 0 &&
+			    (startPos.getDistanceX(pos) > fpp.maxSearchDist || startPos.getDistanceY(pos) > fpp.maxSearchDist)) {
 				continue;
 			}
 
@@ -785,16 +782,16 @@ bool Map::getPathMatching(const Creature& creature, std::vector<Direction>& dirL
 		return false;
 	}
 
-	int_fast32_t prevx = endPos.x;
-	int_fast32_t prevy = endPos.y;
+	int32_t prevx = endPos.getX();
+	int32_t prevy = endPos.getY();
 
 	found = found->parent;
 	while (found) {
 		pos.x = found->x;
 		pos.y = found->y;
 
-		int_fast32_t dx = pos.getX() - prevx;
-		int_fast32_t dy = pos.getY() - prevy;
+		int32_t dx = pos.getX() - prevx;
+		int32_t dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;

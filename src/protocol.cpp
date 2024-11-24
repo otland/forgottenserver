@@ -9,8 +9,6 @@
 #include "rsa.h"
 #include "xtea.h"
 
-extern RSA g_RSA;
-
 namespace {
 
 void XTEA_encrypt(OutputMessage& msg, const xtea::round_keys& key)
@@ -31,7 +29,7 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 		return false;
 	}
 
-	uint8_t* buffer = msg.getBuffer() + msg.getBufferPosition();
+	uint8_t* buffer = msg.getRemainingBuffer();
 	xtea::decrypt(buffer, msg.getLength() - 6, key);
 
 	uint16_t innerLength = msg.get<uint16_t>();
@@ -70,21 +68,21 @@ OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
 	// dispatcher thread
 	if (!outputBuffer) {
-		outputBuffer = OutputMessagePool::getOutputMessage();
+		outputBuffer = tfs::net::make_output_message();
 	} else if ((outputBuffer->getLength() + size) > NetworkMessage::MAX_PROTOCOL_BODY_LENGTH) {
 		send(outputBuffer);
-		outputBuffer = OutputMessagePool::getOutputMessage();
+		outputBuffer = tfs::net::make_output_message();
 	}
 	return outputBuffer;
 }
 
 bool Protocol::RSA_decrypt(NetworkMessage& msg)
 {
-	if ((msg.getLength() - msg.getBufferPosition()) < 128) {
+	if (msg.getRemainingBufferLength() < RSA_BUFFER_LENGTH) {
 		return false;
 	}
 
-	g_RSA.decrypt(reinterpret_cast<char*>(msg.getBuffer()) + msg.getBufferPosition()); // does not break strict aliasing
+	tfs::rsa::decrypt(msg.getRemainingBuffer(), RSA_BUFFER_LENGTH);
 	return msg.getByte() == 0;
 }
 

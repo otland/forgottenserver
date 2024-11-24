@@ -1,5 +1,6 @@
 -- Including the Advanced NPC System
 dofile('data/npc/lib/npcsystem/npcsystem.lua')
+dofile("data/npc/lib/revnpcsys/npc.lua")
 
 function msgcontains(message, keyword)
 	local message, keyword = message:lower(), keyword:lower()
@@ -18,9 +19,9 @@ function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, bac
 		local stuff
 		if inBackpacks then
 			stuff = Game.createItem(backpack, 1)
-			stuff:addItem(itemid, math.min(100, amount))
+			stuff:addItem(itemid, math.min(ITEM_STACK_SIZE, amount))
 		else
-			stuff = Game.createItem(itemid, math.min(100, amount))
+			stuff = Game.createItem(itemid, math.min(ITEM_STACK_SIZE, amount))
 		end
 		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
 	end
@@ -100,15 +101,18 @@ function doPlayerBuyItemContainer(cid, containerid, itemid, count, cost, charges
 	end
 	return true
 end
-
 function getCount(string)
 	local b, e = string:find("%d+")
-	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
+	if not b then
+		return -1
+	end
+	local count = tonumber(string:sub(b, e))
+	if count > 2 ^ 32 - 1 then
 		print("Warning: Casting value to 32bit to prevent crash\n" .. debug.traceback())
 	end
-	return b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	return b and e and math.min(2 ^ 32 - 1, count) or -1
 end
+
 
 function isValidMoney(money)
 	return isNumber(money) and money > 0
@@ -116,11 +120,14 @@ end
 
 function getMoneyCount(string)
 	local b, e = string:find("%d+")
-	local tonumber = tonumber(string:sub(b, e))
-	if tonumber > 2 ^ 32 - 1 then
+	if not b then
+		return -1
+	end
+	local count = tonumber(string:sub(b, e))
+	if count > 2 ^ 32 - 1 then
 		print("Warning: Casting value to 32bit to prevent crash\n" .. debug.traceback())
 	end
-	local money = b and e and math.min(2 ^ 32 - 1, tonumber) or -1
+	local money = b and e and math.min(2 ^ 32 - 1, count) or -1
 	if isValidMoney(money) then
 		return money
 	end

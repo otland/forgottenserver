@@ -6,6 +6,7 @@
 #include "guild.h"
 
 #include "game.h"
+#include "tools.h"
 
 extern Game g_game;
 
@@ -17,8 +18,12 @@ void Guild::removeMember(Player* player)
 
 	if (membersOnline.empty()) {
 		g_game.removeGuild(id);
-		delete this;
 	}
+}
+
+void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
+{
+	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
 
 GuildRank_ptr Guild::getRankById(uint32_t rankId)
@@ -34,7 +39,7 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
 	for (auto rank : ranks) {
-		if (rank->name == name) {
+		if (caseInsensitiveEqual(rank->name, name)) {
 			return rank;
 		}
 	}
@@ -51,27 +56,23 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
-{
-	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
-}
-
-Guild* IOGuild::loadGuild(uint32_t guildId)
+Guild_ptr IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
-	if (DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId))) {
-		Guild* guild = new Guild(guildId, result->getString("name"));
-
-		if ((result = db.storeQuery(
-		         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
-			do {
-				guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
-				               result->getNumber<uint16_t>("level"));
-			} while (result->next());
-		}
-		return guild;
+	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId));
+	if (!result) {
+		return nullptr;
 	}
-	return nullptr;
+
+	const auto& guild = std::make_shared<Guild>(guildId, result->getString("name"));
+	if ((result = db.storeQuery(
+	         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
+		do {
+			guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
+			               result->getNumber<uint16_t>("level"));
+		} while (result->next());
+	}
+	return guild;
 }
 
 uint32_t IOGuild::getGuildIdByName(const std::string& name)

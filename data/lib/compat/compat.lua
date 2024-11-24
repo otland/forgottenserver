@@ -133,6 +133,50 @@ do
 end
 
 do
+	local function NpcTypeNewIndex(self, key, value)
+		if key == "onSay" then
+			self:eventType("say")
+			self:onSay(value)
+			return
+		elseif key == "onDisappear" then
+			self:eventType("disappear")
+			self:onDisappear(value)
+			return
+		elseif key == "onAppear" then
+			self:eventType("appear")
+			self:onAppear(value)
+			return
+		elseif key == "onMove" then
+			self:eventType("move")
+			self:onMove(value)
+			return
+		elseif key == "onPlayerCloseChannel" then
+			self:eventType("closechannel")
+			self:onPlayerCloseChannel(value)
+			return
+		elseif key == "onPlayerEndTrade" then
+			self:eventType("endtrade")
+			self:onPlayerEndTrade(value)
+			return
+		elseif key == "onThink" then
+			self:eventType("think")
+			self:onThink(value)
+			return
+		elseif key == "onSight" then
+			self:eventType("sight")
+			self:onSight(value)
+			return
+		elseif key == "onSpeechBubble" then
+			self:eventType("speechbubble")
+			self:onSpeechBubble(value)
+			return
+		end
+		rawset(self, key, value)
+	end
+	rawgetmetatable("NpcType").__newindex = NpcTypeNewIndex
+end
+
+do
 	local function TalkActionNewIndex(self, key, value)
 		if key == "onSay" then
 			self:onSay(value)
@@ -152,6 +196,10 @@ do
 		elseif key == "onLogout" then
 			self:type("logout")
 			self:onLogout(value)
+			return
+		elseif key == "onReconnect" then
+			self:type("reconnect")
+			self:onReconnect(value)
 			return
 		elseif key == "onThink" then
 			self:type("think")
@@ -237,6 +285,7 @@ do
 			self:onThink(value)
 			return
 		elseif key == "onTime" then
+			self:type("timer")
 			self:onTime(value)
 			return
 		elseif key == "onStartup" then
@@ -250,6 +299,10 @@ do
 		elseif key == "onRecord" then
 			self:type("record")
 			self:onRecord(value)
+			return
+		elseif key == "onSave" then
+			self:type("save")
+			self:onSave(value)
 			return
 		end
 		rawset(self, key, value)
@@ -583,8 +636,6 @@ function isPremium(cid) local p = Player(cid) return p and p:isPremium() or fals
 
 STORAGEVALUE_EMPTY = -1
 function Player:getStorageValue(key)
-	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
-
 	local v = Creature.getStorageValue(self, key)
 	return v or STORAGEVALUE_EMPTY
 end
@@ -617,6 +668,7 @@ function getPlayersByIPAddress(ip, mask)
 	if not mask then mask = 0xFFFFFFFF end
 	local masked = bit.band(ip, mask)
 	local lshift = bit.lshift
+	local players = {}
 	for _, player in ipairs(Game.getPlayers()) do
 		local a, b, c, d = player:getIp():match("(%d*)%.(%d*)%.(%d*)%.(%d*)")
 		if a and b and c and d and bit.band(lshift(a, 24) + lshift(b, 16) + lshift(c, 8) + d, mask) == masked then
@@ -658,19 +710,9 @@ function getPlayerGUIDByName(name)
 	end
 	return 0
 end
-function getAccountNumberByPlayerName(name)
-	local player = Player(name)
-	if player then
-		return player:getAccountId()
-	end
 
-	local resultId = db.storeQuery("SELECT `account_id` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if resultId then
-		local accountId = result.getNumber(resultId, "account_id")
-		result.free(resultId)
-		return accountId
-	end
-	return 0
+function getAccountNumberByPlayerName(name)
+	return Game.getPlayerAccountId(name)
 end
 
 getPlayerAccountBalance = getPlayerBalance
@@ -1054,7 +1096,7 @@ function hasProperty(uid, prop)
 	return item:hasProperty(prop)
 end
 
-function doSetItemText(uid, text)
+function doSetItemText(uid, text, writer, date)
 	local item = Item(uid)
 	if not item then
 		return false
@@ -1065,6 +1107,19 @@ function doSetItemText(uid, text)
 	else
 		item:removeAttribute(ITEM_ATTRIBUTE_TEXT)
 	end
+
+	if writer then
+		item:setAttribute(ITEM_ATTRIBUTE_WRITER, tostring(writer))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_WRITER)
+	end
+
+	if date then
+		item:setAttribute(ITEM_ATTRIBUTE_DATE, tonumber(date))
+	else
+		item:removeAttribute(ITEM_ATTRIBUTE_DATE)
+	end
+
 	return true
 end
 function doSetItemSpecialDescription(uid, desc)
@@ -1123,7 +1178,6 @@ function getTileInfo(position)
 	ret.protection = t:hasFlag(TILESTATE_PROTECTIONZONE)
 	ret.nopz = ret.protection
 	ret.nologout = t:hasFlag(TILESTATE_NOLOGOUT)
-	ret.refresh = t:hasFlag(TILESTATE_REFRESH)
 	ret.house = t:getHouse()
 	ret.bed = t:hasFlag(TILESTATE_BED)
 	ret.depot = t:hasFlag(TILESTATE_DEPOT)
@@ -1333,8 +1387,10 @@ function doSetGameState(state)
 end
 
 function doExecuteRaid(raidName)
-	return Game.startRaid(raidName)
+	debugPrint("Deprecated function, use Game.startEvent('" .. raidName .. "') instead.")
+	return Game.startEvent(raidName)
 end
+Game.startRaid = doExecuteRaid
 
 function Game.convertIpToString(ip)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
@@ -1618,4 +1674,16 @@ function table.maxn(t)
 		end
 	end
 	return max
+end
+
+ItemType.getDuration = ItemType.getDurationMin
+
+function getFormattedWorldTime()
+	return Game.getFormattedWorldTime()
+end
+
+do
+	local getmetatable = getmetatable
+
+	function isClass(obj, class) return getmetatable(obj) == class end
 end

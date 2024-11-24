@@ -33,7 +33,7 @@ PlayerStorageKeys = {
 	nailCaseUseCount = 30031,
 	swampDigging = 30032,
 	insectoidCell = 30033,
-	vortexTamer = 30034,
+	-- empty: 30034
 	mutatedPumpkin = 30035,
 
 	-- Achievements:

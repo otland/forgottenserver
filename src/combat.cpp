@@ -14,8 +14,6 @@
 
 extern Game g_game;
 extern Weapons* g_weapons;
-extern ConfigManager g_config;
-extern Events* g_events;
 
 std::vector<Tile*> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {
@@ -262,7 +260,7 @@ ReturnValue Combat::canDoCombat(Creature* caster, Tile* tile, bool aggressive)
 		return RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE;
 	}
 
-	return g_events->eventCreatureOnAreaCombat(caster, tile, aggressive);
+	return tfs::events::creature::onAreaCombat(caster, tile, aggressive);
 }
 
 bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
@@ -272,7 +270,7 @@ bool Combat::isInPvpZone(const Creature* attacker, const Creature* target)
 
 bool Combat::isProtected(const Player* attacker, const Player* target)
 {
-	uint32_t protectionLevel = g_config.getNumber(ConfigManager::PROTECTION_LEVEL);
+	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
 	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
 		return true;
 	}
@@ -291,7 +289,7 @@ bool Combat::isProtected(const Player* attacker, const Player* target)
 ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 {
 	if (!attacker) {
-		return g_events->eventCreatureOnTargetCombat(attacker, target);
+		return tfs::events::creature::onTargetCombat(attacker, target);
 	}
 
 	if (const Player* targetPlayer = target->getPlayer()) {
@@ -370,7 +368,7 @@ ReturnValue Combat::canDoCombat(Creature* attacker, Creature* target)
 			}
 		}
 	}
-	return g_events->eventCreatureOnTargetCombat(attacker, target);
+	return tfs::events::creature::onTargetCombat(attacker, target);
 }
 
 void Combat::setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb)
@@ -717,22 +715,14 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 		                    : getCombatArea(position, position, area.get());
 
 		SpectatorVec spectators;
-		uint32_t maxX = 0;
-		uint32_t maxY = 0;
+		int32_t maxX = 0;
+		int32_t maxY = 0;
 
 		// calculate the max viewable range
 		for (Tile* tile : tiles) {
 			const Position& tilePos = tile->getPosition();
-
-			uint32_t diff = Position::getDistanceX(tilePos, position);
-			if (diff > maxX) {
-				maxX = diff;
-			}
-
-			diff = Position::getDistanceY(tilePos, position);
-			if (diff > maxY) {
-				maxY = diff;
-			}
+			maxX = std::max(maxX, tilePos.getDistanceX(position));
+			maxY = std::max(maxY, tilePos.getDistanceY(position));
 		}
 
 		const int32_t rangeX = maxX + Map::maxViewportX;
@@ -865,7 +855,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-					leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+					leechCombat.primary.value = std::round(totalDamage * (skill / 10000.));
 					g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
 					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
 				}
@@ -875,7 +865,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 				uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 				uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 				if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-					leechCombat.primary.value = std::round(totalDamage * (skill / 100.));
+					leechCombat.primary.value = std::round(totalDamage * (skill / 10000.));
 					g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
 					casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
 				}
@@ -908,28 +898,20 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 		uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITCHANCE);
 		uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_CRITICALHITAMOUNT);
 		if (chance > 0 && skill > 0 && uniform_random(1, 100) <= chance) {
-			criticalPrimary = std::round(damage.primary.value * (skill / 100.));
-			criticalSecondary = std::round(damage.secondary.value * (skill / 100.));
+			criticalPrimary = std::round(damage.primary.value * (skill / 10000.));
+			criticalSecondary = std::round(damage.secondary.value * (skill / 10000.));
 			damage.critical = true;
 		}
 	}
 
-	uint32_t maxX = 0;
-	uint32_t maxY = 0;
+	int32_t maxX = 0;
+	int32_t maxY = 0;
 
 	// calculate the max viewable range
 	for (Tile* tile : tiles) {
 		const Position& tilePos = tile->getPosition();
-
-		uint32_t diff = Position::getDistanceX(tilePos, position);
-		if (diff > maxX) {
-			maxX = diff;
-		}
-
-		diff = Position::getDistanceY(tilePos, position);
-		if (diff > maxY) {
-			maxY = diff;
-		}
+		maxX = std::max(maxX, tilePos.getDistanceX(position));
+		maxY = std::max(maxY, tilePos.getDistanceY(position));
 	}
 
 	const int32_t rangeX = maxX + Map::maxViewportX;
@@ -1035,9 +1017,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_LIFELEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 10000.) + ((targetsCount - 1) * ((skill / 10000.) / 10.))) /
+						    targetsCount);
 						g_game.combatChangeHealth(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_RED);
 					}
@@ -1047,9 +1029,9 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 					uint16_t chance = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHCHANCE);
 					uint16_t skill = casterPlayer->getSpecialSkill(SPECIALSKILL_MANALEECHAMOUNT);
 					if (chance > 0 && skill > 0 && normal_random(1, 100) <= chance) {
-						leechCombat.primary.value =
-						    std::ceil(totalDamage * ((skill / 100.) + ((targetsCount - 1) * ((skill / 100.) / 10.))) /
-						              targetsCount);
+						leechCombat.primary.value = std::ceil(
+						    totalDamage * ((skill / 10000.) + ((targetsCount - 1) * ((skill / 10000.) / 10.))) /
+						    targetsCount);
 						g_game.combatChangeMana(nullptr, casterPlayer, leechCombat);
 						casterPlayer->sendMagicEffect(casterPlayer->getPosition(), CONST_ME_MAGIC_BLUE);
 					}
@@ -1074,14 +1056,14 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 {
 	// onGetPlayerMinMaxValues(...)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - ValueCallback::getMinMaxValues] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	if (!env->setCallbackId(scriptId, scriptInterface)) {
-		scriptInterface->resetScriptEnv();
+		tfs::lua::resetScriptEnv();
 		return;
 	}
 
@@ -1089,8 +1071,8 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 
 	scriptInterface->pushFunction(scriptId);
 
-	LuaScriptInterface::pushUserdata<Player>(L, player);
-	LuaScriptInterface::setMetatable(L, -1, "Player");
+	tfs::lua::pushUserdata(L, player);
+	tfs::lua::setMetatable(L, -1, "Player");
 
 	int parameters = 1;
 	switch (type) {
@@ -1131,25 +1113,24 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 
 		default: {
 			std::cout << "ValueCallback::getMinMaxValues - unknown callback type" << std::endl;
-			scriptInterface->resetScriptEnv();
+			tfs::lua::resetScriptEnv();
 			return;
 		}
 	}
 
 	int size0 = lua_gettop(L);
 	if (lua_pcall(L, parameters, 2, 0) != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		reportErrorFunc(L, tfs::lua::popString(L));
 	} else {
-		damage.primary.value =
-		    normal_random(LuaScriptInterface::getNumber<int32_t>(L, -2), LuaScriptInterface::getNumber<int32_t>(L, -1));
+		damage.primary.value = normal_random(tfs::lua::getNumber<int32_t>(L, -2), tfs::lua::getNumber<int32_t>(L, -1));
 		lua_pop(L, 2);
 	}
 
 	if ((lua_gettop(L) + parameters + 1) != size0) {
-		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+		reportErrorFunc(L, "Stack size changed!");
 	}
 
-	scriptInterface->resetScriptEnv();
+	tfs::lua::resetScriptEnv();
 }
 
 //**********************************************************//
@@ -1157,14 +1138,14 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 {
 	// onTileCombat(creature, pos)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - TileCallback::onTileCombat] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	if (!env->setCallbackId(scriptId, scriptInterface)) {
-		scriptInterface->resetScriptEnv();
+		tfs::lua::resetScriptEnv();
 		return;
 	}
 
@@ -1172,12 +1153,12 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 
 	scriptInterface->pushFunction(scriptId);
 	if (creature) {
-		LuaScriptInterface::pushUserdata<Creature>(L, creature);
-		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
 	}
-	LuaScriptInterface::pushPosition(L, tile->getPosition());
+	tfs::lua::pushPosition(L, tile->getPosition());
 
 	scriptInterface->callFunction(2);
 }
@@ -1187,14 +1168,14 @@ void TileCallback::onTileCombat(Creature* creature, Tile* tile) const
 void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 {
 	// onTargetCombat(creature, target)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - TargetCallback::onTargetCombat] Call stack overflow" << std::endl;
 		return;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	if (!env->setCallbackId(scriptId, scriptInterface)) {
-		scriptInterface->resetScriptEnv();
+		tfs::lua::resetScriptEnv();
 		return;
 	}
 
@@ -1203,15 +1184,15 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 	scriptInterface->pushFunction(scriptId);
 
 	if (creature) {
-		LuaScriptInterface::pushUserdata<Creature>(L, creature);
-		LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
 	}
 
 	if (target) {
-		LuaScriptInterface::pushUserdata<Creature>(L, target);
-		LuaScriptInterface::setCreatureMetatable(L, -1, target);
+		tfs::lua::pushUserdata(L, target);
+		tfs::lua::setCreatureMetatable(L, -1, target);
 	} else {
 		lua_pushnil(L);
 	}
@@ -1219,20 +1200,20 @@ void TargetCallback::onTargetCombat(Creature* creature, Creature* target) const
 	int size0 = lua_gettop(L);
 
 	if (lua_pcall(L, 2, 0 /*nReturnValues*/, 0) != 0) {
-		LuaScriptInterface::reportError(nullptr, LuaScriptInterface::popString(L));
+		reportErrorFunc(L, tfs::lua::popString(L));
 	}
 
 	if ((lua_gettop(L) + 2 /*nParams*/ + 1) != size0) {
-		LuaScriptInterface::reportError(nullptr, "Stack size changed!");
+		reportErrorFunc(L, "Stack size changed!");
 	}
 
-	scriptInterface->resetScriptEnv();
+	tfs::lua::resetScriptEnv();
 }
 
 const MatrixArea& AreaCombat::getArea(const Position& centerPos, const Position& targetPos) const
 {
-	int32_t dx = Position::getOffsetX(targetPos, centerPos);
-	int32_t dy = Position::getOffsetY(targetPos, centerPos);
+	int32_t dx = targetPos.getOffsetX(centerPos);
+	int32_t dy = targetPos.getOffsetY(centerPos);
 
 	Direction dir;
 	if (dx < 0) {

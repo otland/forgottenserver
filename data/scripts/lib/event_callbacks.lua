@@ -1,8 +1,8 @@
 local unpack = unpack
 local pack = table.pack
 
-local EventCallbackData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
--- This metatable creates an auto-configuration mechanism to create new types of EventCallbacks
+local EventData, callbacks, updateableParameters, autoID = {}, {}, {}, 0
+-- This metatable creates an auto-configuration mechanism to create new types of Events
 local ec = setmetatable({}, { __newindex = function(self, key, value)
 	autoID = autoID + 1
 	callbacks[key] = autoID
@@ -16,11 +16,10 @@ local ec = setmetatable({}, { __newindex = function(self, key, value)
 	end
 	updateableParameters[autoID] = update
 	callbacks[autoID] = info
-	EventCallbackData[autoID] = {maxn = 0}
-	EVENT_CALLBACK_LAST = autoID
+	EventData[autoID] = {maxn = 0}
 end})
 
---@ Definitions of valid EventCallback types to hook according to the given field name
+--@ Definitions of valid Event types to hook according to the given field name
 --@ The fields within the assigned table, allow to save arbitrary information
 -- Creature
 ec.onChangeOutfit = {}
@@ -28,6 +27,8 @@ ec.onChangeMount = {}
 ec.onAreaCombat = {returnValue=true}
 ec.onTargetCombat = {returnValue=true}
 ec.onHear = {}
+ec.onChangeZone = {}
+ec.onUpdateStorage = {}
 -- Party
 ec.onJoin = {}
 ec.onLeave = {}
@@ -51,48 +52,19 @@ ec.onItemMoved = {}
 ec.onMoveCreature = {}
 ec.onReportRuleViolation = {}
 ec.onReportBug = {}
+ec.onRotateItem = {}
 ec.onTurn = {}
 ec.onGainExperience = {[3] = 1}
 ec.onLoseExperience = {[2] = 1}
 ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
-ec.onUpdateStorage = {}
+ec.onSpellCheck = {}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}
 
-EventCallback = {
-	register = function(self, triggerIndex)
-		if isScriptsInterface() then
-			local eventType = rawget(self, 'eventType')
-			local callback = rawget(self, 'callback')
-			if not eventType or not callback then
-				debugPrint("[Warning - EventCallback::register] need to setup a callback before you can register.")
-				return
-			end
-
-			local eventData = EventCallbackData[eventType]
-			eventData.maxn = #eventData + 1
-			eventData[eventData.maxn] = {
-				callback = callback,
-				triggerIndex = tonumber(triggerIndex) or 0
-			}
-			table.sort(eventData, function(ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
-			self.eventType = nil
-			self.callback = nil
-		end
-	end,
-
-	clear = function(self)
-		EventCallbackData = {}
-		for i = 1, EVENT_CALLBACK_LAST do
-			EventCallbackData[i] = {maxn = 0}
-		end
-	end
-}
-
-setmetatable(EventCallback, {
+local EventMeta = {
 	__newindex = function(self, key, callback)
 		if not isScriptsInterface() then
 			return
@@ -100,40 +72,71 @@ setmetatable(EventCallback, {
 
 		local eventType = callbacks[key]
 		if not eventType then
-			debugPrint(string.format("[Warning - EventCallback::%s] is not a valid callback.", key))
+			debugPrint(string.format("[Warning - Event::%s] is not a valid callback.", key))
 			return
 		end
 
 		if type(callback) ~= "function" then
-			debugPrint(string.format("[Warning - EventCallback::%s] a function is expected.", key))
+			debugPrint(string.format("[Warning - Event::%s] a function is expected.", key))
 			return
 		end
 
 		rawset(self, 'eventType', eventType)
 		rawset(self, 'callback', callback)
+	end
+}
+
+local function register(self, triggerIndex)
+	if not isScriptsInterface() then
+		return
+	end
+
+	local eventType = rawget(self, 'eventType')
+	local callback = rawget(self, 'callback')
+	if not eventType or not callback then
+		debugPrint("[Warning - Event::register] need to setup a callback before you can register.")
+		return false
+	end
+
+	local events = EventData[eventType]
+	events.maxn = #events + 1
+	events[events.maxn] = {
+		callback = callback,
+		triggerIndex = tonumber(triggerIndex) or 0
+	}
+
+	table.sort(events, function(ecl, ecr) return ecl.triggerIndex < ecr.triggerIndex end)
+	self.eventType = nil
+	self.callback = nil
+	return true
+end
+
+Event = setmetatable({
+	clear = function(self)
+		EventData = {}
+		for i = 1, autoID do
+			EventData[i] = {maxn = 0}
+		end
+	end
+}, {
+	__call = function(self)
+		return setmetatable({register = register}, EventMeta)
 	end,
 
 	__index = function(self, key)
 		local callback = callbacks[key]
 		if not callback then
-			if not isScriptsInterface() then
-				return
-			end
-
-			return rawget(self, key)
-		end
-
-		local eventData = EventCallbackData[callback]
-		local maxn = eventData.maxn
-		if maxn == 0 then
 			return
 		end
 
+		local events = EventData[callback]
+		local eventsCount = events.maxn
+		local updateableParams = updateableParameters[callback]
 		return function(...)
 			local results, args, info = {}, pack(...), callbacks[callback]
-			for index = 1, maxn do
+			for index = 1, eventsCount do
 				repeat
-					results = {eventData[index].callback(unpack(args))}
+					results = {events[index].callback(unpack(args))}
 					local output = results[1]
 					-- If the call returns nil then we continue with the next call
 					if output == nil then
@@ -151,15 +154,27 @@ setmetatable(EventCallback, {
 						return output
 					end
 					-- We left the loop why have we reached the end
-					if index == eventData.maxn then
+					if index == eventsCount then
 						return unpack(results)
 					end
 				until true
 				-- Update the results for the next call
-				for index, value in pairs(updateableParameters[callback]) do
-					args[index] = results[value]
+				for i, value in pairs(updateableParams) do
+					args[i] = results[value]
 				end
 			end
 		end
 	end
 })
+
+hasEvent = setmetatable({}, {
+	__index = function(self, key)
+		local callback = callbacks[key]
+		if callback then
+			return EventData[callback].maxn > 0
+		end
+	end
+})
+
+-- For compatibility with the previous version.
+EventCallback = Event()

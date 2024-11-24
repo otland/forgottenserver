@@ -14,7 +14,7 @@ jobs:
   xmllint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install xmllint
         run: sudo apt update -q && sudo apt install -yq libxml2-utils

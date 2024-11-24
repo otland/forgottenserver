@@ -9,14 +9,14 @@
 
 #include <chrono>
 #include <fmt/chrono.h>
+#include <openssl/evp.h>
+#include <openssl/hmac.h>
 
-extern ConfigManager g_config;
-
-void printXMLError(const std::string& where, const std::string& fileName, const pugi::xml_parse_result& result)
+void printXMLError(const std::string& where, std::string_view fileName, const pugi::xml_parse_result& result)
 {
 	std::cout << '[' << where << "] Failed to load " << fileName << ": " << result.description() << std::endl;
 
-	FILE* file = fopen(fileName.c_str(), "rb");
+	FILE* file = fopen(fileName.data(), "rb");
 	if (!file) {
 		return;
 	}
@@ -61,171 +61,77 @@ void printXMLError(const std::string& where, const std::string& fileName, const 
 	std::cout << '^' << std::endl;
 }
 
-static uint32_t circularShift(int bits, uint32_t value) { return (value << bits) | (value >> (32 - bits)); }
-
-static void processSHA1MessageBlock(const uint8_t* messageBlock, uint32_t* H)
-{
-	uint32_t W[80];
-	for (int i = 0; i < 16; ++i) {
-		const size_t offset = i << 2;
-		W[i] = messageBlock[offset] << 24 | messageBlock[offset + 1] << 16 | messageBlock[offset + 2] << 8 |
-		       messageBlock[offset + 3];
-	}
-
-	for (int i = 16; i < 80; ++i) {
-		W[i] = circularShift(1, W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16]);
-	}
-
-	uint32_t A = H[0], B = H[1], C = H[2], D = H[3], E = H[4];
-
-	for (int i = 0; i < 20; ++i) {
-		const uint32_t tmp = circularShift(5, A) + ((B & C) | ((~B) & D)) + E + W[i] + 0x5A827999;
-		E = D;
-		D = C;
-		C = circularShift(30, B);
-		B = A;
-		A = tmp;
-	}
-
-	for (int i = 20; i < 40; ++i) {
-		const uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1;
-		E = D;
-		D = C;
-		C = circularShift(30, B);
-		B = A;
-		A = tmp;
-	}
-
-	for (int i = 40; i < 60; ++i) {
-		const uint32_t tmp = circularShift(5, A) + ((B & C) | (B & D) | (C & D)) + E + W[i] + 0x8F1BBCDC;
-		E = D;
-		D = C;
-		C = circularShift(30, B);
-		B = A;
-		A = tmp;
-	}
-
-	for (int i = 60; i < 80; ++i) {
-		const uint32_t tmp = circularShift(5, A) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6;
-		E = D;
-		D = C;
-		C = circularShift(30, B);
-		B = A;
-		A = tmp;
-	}
-
-	H[0] += A;
-	H[1] += B;
-	H[2] += C;
-	H[3] += D;
-	H[4] += E;
-}
-
 std::string transformToSHA1(std::string_view input)
 {
-	uint32_t H[] = {0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0};
-
-	uint8_t messageBlock[64];
-	size_t index = 0;
-
-	uint32_t length_low = 0;
-	uint32_t length_high = 0;
-	for (char ch : input) {
-		messageBlock[index++] = ch;
-
-		length_low += 8;
-		if (length_low == 0) {
-			length_high++;
-		}
-
-		if (index == 64) {
-			processSHA1MessageBlock(messageBlock, H);
-			index = 0;
-		}
+	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
+	if (!ctx) {
+		throw std::runtime_error("Failed to create EVP context");
 	}
 
-	messageBlock[index++] = 0x80;
-
-	if (index > 56) {
-		while (index < 64) {
-			messageBlock[index++] = 0;
-		}
-
-		processSHA1MessageBlock(messageBlock, H);
-		index = 0;
+	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, "SHA1", nullptr), EVP_MD_free};
+	if (!md) {
+		throw std::runtime_error("Failed to fetch SHA1");
 	}
 
-	while (index < 56) {
-		messageBlock[index++] = 0;
+	if (!EVP_DigestInit_ex(ctx.get(), md.get(), nullptr)) {
+		throw std::runtime_error("Message digest initialization failed");
 	}
 
-	messageBlock[56] = length_high >> 24;
-	messageBlock[57] = length_high >> 16;
-	messageBlock[58] = length_high >> 8;
-	messageBlock[59] = length_high;
-
-	messageBlock[60] = length_low >> 24;
-	messageBlock[61] = length_low >> 16;
-	messageBlock[62] = length_low >> 8;
-	messageBlock[63] = length_low;
-
-	processSHA1MessageBlock(messageBlock, H);
-
-	char hexstring[41];
-	static const char hexDigits[] = {"0123456789abcdef"};
-	for (int hashByte = 20; --hashByte >= 0;) {
-		const uint8_t byte = H[hashByte >> 2] >> (((3 - hashByte) & 3) << 3);
-		index = hashByte << 1;
-		hexstring[index] = hexDigits[byte >> 4];
-		hexstring[index + 1] = hexDigits[byte & 15];
+	if (!EVP_DigestUpdate(ctx.get(), input.data(), input.size())) {
+		throw std::runtime_error("Message digest update failed");
 	}
-	return std::string(hexstring, 40);
+
+	unsigned int len = EVP_MD_size(md.get());
+	std::string digest(static_cast<size_t>(len), '\0');
+	if (!EVP_DigestFinal_ex(ctx.get(), reinterpret_cast<unsigned char*>(digest.data()), &len)) {
+		throw std::runtime_error("Message digest finalization failed");
+	}
+
+	return digest;
 }
 
-std::string generateToken(const std::string& key, uint32_t ticks)
+std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message)
 {
-	// generate message from ticks
-	std::string message(8, 0);
-	for (uint8_t i = 8; --i; ticks >>= 8) {
-		message[i] = static_cast<char>(ticks & 0xFF);
+	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
+	if (!ctx) {
+		throw std::runtime_error("Failed to create EVP context");
 	}
 
-	// hmac key pad generation
-	std::string iKeyPad(64, 0x36), oKeyPad(64, 0x5C);
-	for (uint8_t i = 0; i < key.length(); ++i) {
-		iKeyPad[i] ^= key[i];
-		oKeyPad[i] ^= key[i];
+	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, algorithm.data(), nullptr), EVP_MD_free};
+	if (!md) {
+		throw std::runtime_error(fmt::format("Failed to fetch {:s}", algorithm));
 	}
 
-	oKeyPad.reserve(84);
+	std::array<unsigned char, EVP_MAX_MD_SIZE> result;
+	unsigned int len;
 
-	// hmac concat inner pad with message
-	iKeyPad.append(message);
-
-	// hmac first pass
-	message.assign(transformToSHA1(iKeyPad));
-
-	// hmac concat outer pad with message, conversion from hex to int needed
-	for (uint8_t i = 0; i < message.length(); i += 2) {
-		oKeyPad.push_back(static_cast<char>(std::strtoul(message.substr(i, 2).c_str(), nullptr, 16)));
+	if (!HMAC(md.get(), key.data(), key.size(), reinterpret_cast<const unsigned char*>(message.data()), message.size(),
+	          result.data(), &len)) {
+		throw std::runtime_error("HMAC failed");
 	}
 
-	// hmac second pass
-	message.assign(transformToSHA1(oKeyPad));
+	return {reinterpret_cast<char*>(result.data()), len};
+}
+
+std::string generateToken(std::string_view key, uint64_t counter, size_t length /*= AUTHENTICATOR_DIGITS*/)
+{
+	std::string mac(8, 0);
+	for (uint8_t i = 8; --i; counter >>= 8) {
+		mac[i] = static_cast<char>(counter % 256);
+	}
+
+	mac = hmac("SHA1", key, mac);
 
 	// calculate hmac offset
-	uint32_t offset = static_cast<uint32_t>(std::strtoul(message.substr(39, 1).c_str(), nullptr, 16) & 0xF);
+	auto offset = mac.back() % 16u;
 
 	// get truncated hash
-	uint32_t truncHash =
-	    static_cast<uint32_t>(std::strtoul(message.substr(2 * offset, 8).c_str(), nullptr, 16)) & 0x7FFFFFFF;
-	message.assign(std::to_string(truncHash));
+	uint32_t p =
+	    (static_cast<unsigned char>(mac[offset + 0]) << 24u) | (static_cast<unsigned char>(mac[offset + 1]) << 16u) |
+	    (static_cast<unsigned char>(mac[offset + 2]) << 8u) | (static_cast<unsigned char>(mac[offset + 3]) << 0u);
 
-	// return only last AUTHENTICATOR_DIGITS (default 6) digits, also asserts exactly 6 digits
-	uint32_t hashLen = message.length();
-	message.assign(message.substr(hashLen - std::min(hashLen, AUTHENTICATOR_DIGITS)));
-	message.insert(0, AUTHENTICATOR_DIGITS - std::min(hashLen, AUTHENTICATOR_DIGITS), '0');
-	return message;
+	auto token = std::to_string(p & 0x7fffffff);
+	return token.substr(token.size() - length);
 }
 
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
@@ -285,23 +191,14 @@ int32_t uniform_random(int32_t minNumber, int32_t maxNumber)
 int32_t normal_random(int32_t minNumber, int32_t maxNumber)
 {
 	static std::normal_distribution<float> normalRand(0.5f, 0.25f);
-	if (minNumber == maxNumber) {
-		return minNumber;
-	} else if (minNumber > maxNumber) {
-		std::swap(minNumber, maxNumber);
-	}
 
-	int32_t increment;
-	const int32_t diff = maxNumber - minNumber;
-	const float v = normalRand(getRandomGenerator());
-	if (v < 0.0) {
-		increment = diff / 2;
-	} else if (v > 1.0) {
-		increment = (diff + 1) / 2;
-	} else {
-		increment = round(v * diff);
-	}
-	return minNumber + increment;
+	float v;
+	do {
+		v = normalRand(getRandomGenerator());
+	} while (v < 0.0 || v > 1.0);
+
+	auto&& [a, b] = std::minmax(minNumber, maxNumber);
+	return a + std::lround(v * (b - a));
 }
 
 bool boolean_random(double probability /* = 0.5*/)
@@ -310,38 +207,19 @@ bool boolean_random(double probability /* = 0.5*/)
 	return booleanRand(getRandomGenerator(), std::bernoulli_distribution::param_type(probability));
 }
 
+std::string randomBytes(size_t length)
+{
+	static std::uniform_int_distribution<unsigned> distribution(0, 255);
+	static auto& generator = getRandomGenerator();
+
+	std::string bytes(length, '\x00');
+	std::generate(bytes.begin(), bytes.end(), []() { return static_cast<char>(distribution(generator)); });
+	return bytes;
+}
+
 std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
 
 std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
-
-Direction getDirection(const std::string& string)
-{
-	Direction direction = DIRECTION_NORTH;
-
-	if (string == "north" || string == "n" || string == "0") {
-		direction = DIRECTION_NORTH;
-	} else if (string == "east" || string == "e" || string == "1") {
-		direction = DIRECTION_EAST;
-	} else if (string == "south" || string == "s" || string == "2") {
-		direction = DIRECTION_SOUTH;
-	} else if (string == "west" || string == "w" || string == "3") {
-		direction = DIRECTION_WEST;
-	} else if (string == "southwest" || string == "south west" || string == "south-west" || string == "sw" ||
-	           string == "4") {
-		direction = DIRECTION_SOUTHWEST;
-	} else if (string == "southeast" || string == "south east" || string == "south-east" || string == "se" ||
-	           string == "5") {
-		direction = DIRECTION_SOUTHEAST;
-	} else if (string == "northwest" || string == "north west" || string == "north-west" || string == "nw" ||
-	           string == "6") {
-		direction = DIRECTION_NORTHWEST;
-	} else if (string == "northeast" || string == "north east" || string == "north-east" || string == "ne" ||
-	           string == "7") {
-		direction = DIRECTION_NORTHEAST;
-	}
-
-	return direction;
-}
 
 Position getNextPosition(Direction direction, Position pos)
 {
@@ -397,7 +275,7 @@ Direction getDirectionTo(const Position& from, const Position& to)
 
 	Direction dir;
 
-	int32_t x_offset = Position::getOffsetX(from, to);
+	int32_t x_offset = from.getOffsetX(to);
 	if (x_offset < 0) {
 		dir = DIRECTION_EAST;
 		x_offset = std::abs(x_offset);
@@ -405,7 +283,7 @@ Direction getDirectionTo(const Position& from, const Position& to)
 		dir = DIRECTION_WEST;
 	}
 
-	int32_t y_offset = Position::getOffsetY(from, to);
+	int32_t y_offset = from.getOffsetY(to);
 	if (y_offset >= 0) {
 		if (y_offset > x_offset) {
 			dir = DIRECTION_NORTH;
@@ -577,6 +455,7 @@ MagicEffectNames magicEffectNames = {
     {"horestis", CONST_ME_HORESTIS},
     {"devovorga", CONST_ME_DEVOVORGA},
     {"ferumbras2", CONST_ME_FERUMBRAS_2},
+    {"foam", CONST_ME_FOAM},
 };
 
 ShootTypeNames shootTypeNames = {
@@ -694,11 +573,12 @@ SkullNames skullNames = {
     {"red", SKULL_RED},   {"black", SKULL_BLACK},   {"orange", SKULL_ORANGE},
 };
 
-std::vector<uint16_t> depotBoxes = {ITEM_DEPOT_BOX_I,    ITEM_DEPOT_BOX_II,   ITEM_DEPOT_BOX_III, ITEM_DEPOT_BOX_IV,
-                                    ITEM_DEPOT_BOX_V,    ITEM_DEPOT_BOX_VI,   ITEM_DEPOT_BOX_VII, ITEM_DEPOT_BOX_VIII,
-                                    ITEM_DEPOT_BOX_IX,   ITEM_DEPOT_BOX_X,    ITEM_DEPOT_BOX_XI,  ITEM_DEPOT_BOX_XII,
-                                    ITEM_DEPOT_BOX_XIII, ITEM_DEPOT_BOX_XIV,  ITEM_DEPOT_BOX_XV,  ITEM_DEPOT_BOX_XVI,
-                                    ITEM_DEPOT_BOX_XVII, ITEM_DEPOT_BOX_XVIII};
+std::vector<uint16_t> depotBoxes = {
+    ITEM_DEPOT_BOX_I,   ITEM_DEPOT_BOX_II,   ITEM_DEPOT_BOX_III,   ITEM_DEPOT_BOX_IV,  ITEM_DEPOT_BOX_V,
+    ITEM_DEPOT_BOX_VI,  ITEM_DEPOT_BOX_VII,  ITEM_DEPOT_BOX_VIII,  ITEM_DEPOT_BOX_IX,  ITEM_DEPOT_BOX_X,
+    ITEM_DEPOT_BOX_XI,  ITEM_DEPOT_BOX_XII,  ITEM_DEPOT_BOX_XIII,  ITEM_DEPOT_BOX_XIV, ITEM_DEPOT_BOX_XV,
+    ITEM_DEPOT_BOX_XVI, ITEM_DEPOT_BOX_XVII, ITEM_DEPOT_BOX_XVIII, ITEM_DEPOT_BOX_XIX, ITEM_DEPOT_BOX_XX,
+};
 
 uint16_t getDepotBoxId(uint16_t index)
 {
@@ -1192,12 +1072,6 @@ const char* getReturnMessage(ReturnValue value)
 		case RETURNVALUE_YOUARENOTTHEOWNER:
 			return "You are not the owner.";
 
-		case RETURNVALUE_NOSUCHRAIDEXISTS:
-			return "No such raid exists.";
-
-		case RETURNVALUE_ANOTHERRAIDISALREADYEXECUTING:
-			return "Another raid is already executing.";
-
 		case RETURNVALUE_TRADEPLAYERFARAWAY:
 			return "Trade player is too far away.";
 
@@ -1235,8 +1109,7 @@ const char* getReturnMessage(ReturnValue value)
 
 int64_t OTSYS_TIME()
 {
-	return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch())
-	    .count();
+	return duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 }
 
 SpellGroup_t stringToSpellGroup(const std::string& value)
@@ -1253,4 +1126,11 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 	}
 
 	return SPELLGROUP_NONE;
+}
+
+const std::vector<Direction>& getShuffleDirections()
+{
+	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
+	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
+	return dirList;
 }

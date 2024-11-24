@@ -155,12 +155,10 @@
 	<action itemid="486" script="others/snow_heap.lua" />
 	<action itemid="1369" script="others/draw_well.lua" />
 	<action itemid="1386" script="others/teleport.lua" />
-	<action fromid="1728" toid="1731" script="others/watch.lua" />
 	<action fromid="1816" toid="1817" script="others/wall_mirror.lua" />
 	<action fromid="1843" toid="1844" script="others/wall_mirror.lua" />
 	<action fromid="1846" toid="1847" script="others/wall_mirror.lua" />
 	<action fromid="1849" toid="1850" script="others/wall_mirror.lua" />
-	<action itemid="2036" script="others/watch.lua" />
 	<action itemid="2093" script="others/water_pipe.lua" />
 	<action itemid="2095" script="others/bird_cage.lua" />
 	<action itemid="2099" script="others/water_pipe.lua" />
@@ -170,16 +168,12 @@
 	<action itemid="2694" script="others/create_bread.lua" />
 	<action itemid="2785" script="others/blueberry_bush.lua" />
 	<action itemid="3678" script="others/teleport.lua" />
-	<action itemid="3900" script="others/watch.lua" />
 	<action itemid="5543" script="others/teleport.lua" />
 	<action fromid="5792" toid="5797" script="others/die.lua" />
-	<action itemid="6092" script="others/watch.lua" />
 	<action itemid="6576" script="others/fireworks_rocket.lua" />
 	<action itemid="6578" script="others/party_hat.lua" />
 	<action itemid="7552" script="others/large_seashell.lua" />
-	<action itemid="7828" script="others/watch.lua" />
 	<action fromid="7904" toid="7907" script="others/bed_modification_kits.lua" />
-	<action fromid="9443" toid="9444" script="others/watch.lua" />
 	<action fromid="18488" toid="18492" script="others/skill_trainer.lua" />
 	<action itemid="20252" script="others/bed_modification_kits.lua" />
 	<action fromid="22845" toid="22846" script="others/teleport.lua" />

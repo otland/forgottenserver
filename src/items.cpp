@@ -12,6 +12,8 @@
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 
+namespace {
+
 const std::unordered_map<std::string, ItemParseAttributes_t> ItemParseAttributesMap = {
     {"type", ITEM_PARSE_TYPE},
     {"description", ITEM_PARSE_DESCRIPTION},
@@ -249,6 +251,52 @@ const std::unordered_map<std::string, FluidTypes_t> FluidTypesMap = {
     {"mead", FLUID_MEAD},
     {"ink", FLUID_INK},
 };
+
+const std::unordered_map<std::string_view, Direction> DirectionsMap = {
+    {"north", DIRECTION_NORTH},
+    {"n", DIRECTION_NORTH},
+    {"0", DIRECTION_NORTH},
+    {"east", DIRECTION_EAST},
+    {"e", DIRECTION_EAST},
+    {"1", DIRECTION_EAST},
+    {"south", DIRECTION_SOUTH},
+    {"s", DIRECTION_SOUTH},
+    {"2", DIRECTION_SOUTH},
+    {"west", DIRECTION_WEST},
+    {"w", DIRECTION_WEST},
+    {"3", DIRECTION_WEST},
+    {"southwest", DIRECTION_SOUTHWEST},
+    {"south west", DIRECTION_SOUTHWEST},
+    {"south-west", DIRECTION_SOUTHWEST},
+    {"sw", DIRECTION_SOUTHWEST},
+    {"4", DIRECTION_SOUTHWEST},
+    {"southeast", DIRECTION_SOUTHEAST},
+    {"south east", DIRECTION_SOUTHEAST},
+    {"south-east", DIRECTION_SOUTHEAST},
+    {"se", DIRECTION_SOUTHEAST},
+    {"5", DIRECTION_SOUTHEAST},
+    {"northwest", DIRECTION_NORTHWEST},
+    {"north west", DIRECTION_NORTHWEST},
+    {"north-west", DIRECTION_NORTHWEST},
+    {"nw", DIRECTION_NORTHWEST},
+    {"6", DIRECTION_NORTHWEST},
+    {"northeast", DIRECTION_NORTHEAST},
+    {"north east", DIRECTION_NORTHEAST},
+    {"north-east", DIRECTION_NORTHEAST},
+    {"ne", DIRECTION_NORTHEAST},
+    {"7", DIRECTION_NORTHEAST},
+};
+
+Direction getDirection(std::string_view string)
+{
+	if (auto it = DirectionsMap.find(string); it != DirectionsMap.end()) {
+		return it->second;
+	}
+	fmt::print("[Warning - getDirection] Invalid direction: {}\n", string);
+	return DIRECTION_NORTH;
+}
+
+} // namespace
 
 Items::Items()
 {
@@ -512,6 +560,8 @@ bool Items::loadFromOtb(const std::string& file)
 		iType.isAnimation = hasBitSet(FLAG_ANIMATION, flags);
 		// iType.walkStack = !hasBitSet(FLAG_FULLTILE, flags);
 		iType.forceUse = hasBitSet(FLAG_FORCEUSE, flags);
+		iType.showClientCharges = hasBitSet(FLAG_CLIENTCHARGES, flags);
+		iType.showClientDuration = hasBitSet(FLAG_CLIENTDURATION, flags);
 
 		iType.id = serverId;
 		iType.clientId = clientId;
@@ -611,8 +661,17 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 		}
 
 		pugi::xml_attribute valueAttribute = attributeNode.attribute("value");
+		pugi::xml_attribute maxValueAttr;
 		if (!valueAttribute) {
-			continue;
+			valueAttribute = attributeNode.attribute("minvalue");
+			if (!valueAttribute) {
+				continue;
+			}
+
+			maxValueAttr = attributeNode.attribute("maxvalue");
+			if (!maxValueAttr) {
+				continue;
+			}
 		}
 
 		std::string tmpStrValue = boost::algorithm::to_lower_copy<std::string>(keyAttribute.as_string());
@@ -881,7 +940,13 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 				}
 
 				case ITEM_PARSE_DURATION: {
-					it.decayTime = pugi::cast<uint32_t>(valueAttribute.value());
+					it.decayTimeMin = pugi::cast<uint32_t>(valueAttribute.value());
+
+					if (maxValueAttr) {
+						it.decayTimeMax = pugi::cast<uint32_t>(maxValueAttr.value());
+					} else {
+						it.decayTimeMax = pugi::cast<uint32_t>(valueAttribute.value());
+					}
 					break;
 				}
 

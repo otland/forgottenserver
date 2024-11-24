@@ -12,7 +12,6 @@
 #include "iologindata.h"
 #include "scheduler.h"
 
-extern ConfigManager g_config;
 extern Game g_game;
 
 MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId)
@@ -26,7 +25,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 		return offerList;
 	}
 
-	const int32_t marketOfferDuration = g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	do {
 		MarketOffer offer;
@@ -49,7 +48,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 {
 	MarketOfferList offerList;
 
-	const int32_t marketOfferDuration = g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `itemtype` FROM `market_offers` WHERE `player_id` = {:d} AND `sale` = {:d}",
@@ -131,7 +130,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 			if (itemType.stackable) {
 				uint16_t tmpAmount = amount;
 				while (tmpAmount > 0) {
-					uint16_t stackCount = std::min<uint16_t>(100, tmpAmount);
+					uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 					Item* item = Item::CreateItem(itemType.id, stackCount);
 					if (g_game.internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 					    RETURNVALUE_NOERROR) {
@@ -178,7 +177,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 
 void IOMarket::checkExpiredOffers()
 {
-	const time_t lastExpireDate = time(nullptr) - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const time_t lastExpireDate = time(nullptr) - getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	g_databaseTasks.addTask(
 	    fmt::format(
@@ -186,8 +185,7 @@ void IOMarket::checkExpiredOffers()
 	        lastExpireDate),
 	    IOMarket::processExpiredOffers, true);
 
-	int32_t checkExpiredMarketOffersEachMinutes =
-	    g_config.getNumber(ConfigManager::CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES);
+	int32_t checkExpiredMarketOffersEachMinutes = getNumber(ConfigManager::CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES);
 	if (checkExpiredMarketOffersEachMinutes <= 0) {
 		return;
 	}
@@ -210,7 +208,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 {
 	MarketOfferEx offer;
 
-	const int32_t created = timestamp - g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const int32_t created = timestamp - getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `id`, `sale`, `itemtype`, `amount`, `created`, `price`, `player_id`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `created` = {:d} AND (`id` & 65535) = {:d} LIMIT 1",
@@ -267,7 +265,7 @@ void IOMarket::appendHistory(uint32_t playerId, MarketAction_t action, uint16_t 
 
 bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 {
-	const int32_t marketOfferDuration = g_config.getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	Database& db = Database::getInstance();
 

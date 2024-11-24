@@ -365,7 +365,7 @@ class ConditionLight final : public Condition
 public:
 	ConditionLight(ConditionId_t id, ConditionType_t type, int32_t ticks, bool buff, uint32_t subId, uint8_t lightlevel,
 	               uint8_t lightcolor, bool aggressive = false) :
-	    Condition(id, type, ticks, buff, subId, aggressive), lightInfo(lightlevel, lightcolor)
+	    Condition{id, type, ticks, buff, subId, aggressive}, lightInfo{.level = lightlevel, .color = lightcolor}
 	{}
 
 	bool startCondition(Creature* creature) override;
@@ -383,7 +383,7 @@ public:
 	bool unserializeProp(ConditionAttr_t attr, PropStream& propStream) override;
 
 private:
-	LightInfo lightInfo;
+	LightInfo lightInfo{1};
 	uint32_t internalLightTicks = 0;
 	uint32_t lightChangeInterval = 0;
 };

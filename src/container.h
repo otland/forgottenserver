@@ -50,6 +50,8 @@ public:
 	virtual StoreInbox* getStoreInbox() { return nullptr; }
 	virtual const StoreInbox* getStoreInbox() const { return nullptr; }
 
+	bool hasContainerParent() const;
+
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	bool unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, PropStream& propStream) override;
 
@@ -67,7 +69,6 @@ public:
 
 	std::string getName(bool addArticle = false) const;
 
-	bool hasParent() const;
 	void addItem(Item* item);
 	Item* getItemByIndex(size_t index) const;
 	bool isHoldingItem(const Item* item) const;
@@ -99,7 +100,7 @@ public:
 	int32_t getThingIndex(const Thing* thing) const override final;
 	size_t getFirstIndex() const override final;
 	size_t getLastIndex() const override final;
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const override final;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override final;
 	Thing* getThing(size_t index) const override final;
 

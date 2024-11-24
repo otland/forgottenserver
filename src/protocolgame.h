@@ -100,7 +100,6 @@ private:
 	void parseFollow(NetworkMessage& msg);
 	void parseEquipObject(NetworkMessage& msg);
 
-	void parseBugReport(NetworkMessage& msg);
 	void parseDebugAssert(NetworkMessage& msg);
 	void parseRuleViolationReport(NetworkMessage& msg);
 
@@ -175,7 +174,7 @@ private:
 	void sendSkills();
 	void sendPing();
 	void sendPingBack();
-	void sendCreatureTurn(const Creature* creature, uint32_t stackPos);
+	void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text,
 	                     const Position* pos = nullptr);
 
@@ -234,8 +233,6 @@ private:
 	void sendFightModes();
 
 	void sendCreatureLight(const Creature* creature);
-	void sendWorldLight(LightInfo lightInfo);
-	void sendWorldTime();
 
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
@@ -254,6 +251,8 @@ private:
 	void sendRemoveTileCreature(const Creature* creature, const Position& pos, uint32_t stackpos);
 	void sendUpdateTile(const Tile* tile, const Position& pos);
 
+	void sendUpdateCreatureIcons(const Creature* creature);
+
 	void sendAddCreature(const Creature* creature, const Position& pos, int32_t stackpos,
 	                     MagicEffectClasses magicEffect = CONST_ME_NONE);
 	void sendMoveCreature(const Creature* creature, const Position& newPos, int32_t newStackPos, const Position& oldPos,
@@ -264,7 +263,7 @@ private:
 	void sendUpdateContainerItem(uint8_t cid, uint16_t slot, const Item* item);
 	void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
 
-	void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex);
+	void sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex);
 	void sendEmptyContainer(uint8_t cid);
 	void sendCloseContainer(uint8_t cid);
 
@@ -291,11 +290,10 @@ private:
 	void GetMapDescription(int32_t x, int32_t y, int32_t z, int32_t width, int32_t height, NetworkMessage& msg);
 
 	void AddCreature(NetworkMessage& msg, const Creature* creature, bool known, uint32_t remove);
+	void AddCreatureIcons(NetworkMessage& msg, const Creature* creature);
 	void AddPlayerStats(NetworkMessage& msg);
 	void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 	void AddPlayerSkills(NetworkMessage& msg);
-	void AddWorldLight(NetworkMessage& msg, LightInfo lightInfo);
-	void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 	// tiles
 	static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);

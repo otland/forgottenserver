@@ -7,6 +7,7 @@
 
 #include "combat.h"
 #include "configmanager.h"
+#include "events.h"
 #include "game.h"
 #include "luavariant.h"
 #include "monsters.h"
@@ -15,7 +16,6 @@
 extern Game g_game;
 extern Spells* g_spells;
 extern Monsters g_monsters;
-extern ConfigManager g_config;
 extern LuaEnvironment g_luaEnvironment;
 
 Spells::Spells() { scriptInterface.initState(); }
@@ -323,22 +323,22 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 bool CombatSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
 	// onCastSpell(creature, var)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - CombatSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
 
-	LuaScriptInterface::pushUserdata<Creature>(L, creature);
-	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	LuaScriptInterface::pushVariant(L, var);
+	tfs::lua::pushVariant(L, var);
 
 	return scriptInterface->callFunction(2);
 }
@@ -526,6 +526,10 @@ bool Spell::playerSpellCheck(Player* player) const
 	}
 
 	if (!enabled) {
+		return false;
+	}
+
+	if (!tfs::events::player::onSpellCheck(player, this)) {
 		return false;
 	}
 
@@ -1016,22 +1020,22 @@ bool InstantSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
 bool InstantSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 {
 	// onCastSpell(creature, var)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - InstantSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
 
-	LuaScriptInterface::pushUserdata<Creature>(L, creature);
-	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	LuaScriptInterface::pushVariant(L, var);
+	tfs::lua::pushVariant(L, var);
 
 	return scriptInterface->callFunction(2);
 }
@@ -1160,7 +1164,7 @@ bool RuneSpell::executeUse(Player* player, Item* item, const Position&, Thing* t
 		}
 	}
 
-	if (hasCharges && item && g_config.getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
+	if (hasCharges && item && getBoolean(ConfigManager::REMOVE_RUNE_CHARGES)) {
 		int32_t newCount = std::max<int32_t>(0, item->getItemCount() - 1);
 		player->sendSupplyUsed(item->getClientID());
 		g_game.transformItem(item, item->getID(), newCount);
@@ -1196,24 +1200,23 @@ bool RuneSpell::internalCastSpell(Creature* creature, const LuaVariant& var, boo
 bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey)
 {
 	// onCastSpell(creature, var, isHotkey)
-	if (!scriptInterface->reserveScriptEnv()) {
+	if (!tfs::lua::reserveScriptEnv()) {
 		std::cout << "[Error - RuneSpell::executeCastSpell] Call stack overflow" << std::endl;
 		return false;
 	}
 
-	ScriptEnvironment* env = scriptInterface->getScriptEnv();
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 	env->setScriptId(scriptId, scriptInterface);
 
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
 
-	LuaScriptInterface::pushUserdata<Creature>(L, creature);
-	LuaScriptInterface::setCreatureMetatable(L, -1, creature);
+	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	LuaScriptInterface::pushVariant(L, var);
-
-	LuaScriptInterface::pushBoolean(L, isHotkey);
+	tfs::lua::pushVariant(L, var);
+	tfs::lua::pushBoolean(L, isHotkey);
 
 	return scriptInterface->callFunction(3);
 }
