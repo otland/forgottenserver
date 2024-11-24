@@ -3041,7 +3041,7 @@ void Game::playerPurchaseItem(uint32_t playerId, uint16_t spriteId, uint8_t coun
 		return;
 	}
 
-	if (amount == 0 ) {
+	if (amount == 0) {
 		return;
 	}
 
