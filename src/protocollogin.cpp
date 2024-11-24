@@ -115,9 +115,10 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	output->addByte(0x28);
 	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
-	if (!db.executeQuery(fmt::format(
-	        "INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	        db.escapeBlob(sessionKey.data(), sessionKey.size()), id, getConnection()->getIP().to_string()))) {
+	if (!db.executeQuery(
+	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
+	                    db.escapeString(getConnection()->getIP().to_string())))) {
 		disconnectClient("Failed to create session.\nPlease try again later.", version);
 		return;
 	}
