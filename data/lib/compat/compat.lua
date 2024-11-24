@@ -197,6 +197,10 @@ do
 			self:type("logout")
 			self:onLogout(value)
 			return
+		elseif key == "onReconnect" then
+			self:type("reconnect")
+			self:onReconnect(value)
+			return
 		elseif key == "onThink" then
 			self:type("think")
 			self:onThink(value)
@@ -706,19 +710,9 @@ function getPlayerGUIDByName(name)
 	end
 	return 0
 end
-function getAccountNumberByPlayerName(name)
-	local player = Player(name)
-	if player then
-		return player:getAccountId()
-	end
 
-	local resultId = db.storeQuery("SELECT `account_id` FROM `players` WHERE `name` = " .. db.escapeString(name))
-	if resultId then
-		local accountId = result.getNumber(resultId, "account_id")
-		result.free(resultId)
-		return accountId
-	end
-	return 0
+function getAccountNumberByPlayerName(name)
+	return Game.getPlayerAccountId(name)
 end
 
 getPlayerAccountBalance = getPlayerBalance

@@ -43,11 +43,11 @@ if not KeywordHandler then
 		return true
 	end
 
-	-- Returns the parent of this node or nil if no such node exists.
 	function KeywordNode:hasParent()
 		return self.parent ~= nil
 	end
 
+	-- Returns the parent of this node or nil if no such node exists.
 	function KeywordNode:getParent()
 		return self.parent
 	end

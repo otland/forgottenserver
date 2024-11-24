@@ -17,6 +17,7 @@
 
 **Issues addressed:** <!-- Write here the issue number, if any. -->
 
+**How to test:** <!-- Write here how to test changes. -->
 
 <!-- You can safely ignore the links below:  -->
 

@@ -146,7 +146,8 @@ void ProtocolGame::release()
 		player = nullptr;
 	}
 
-	OutputMessagePool::getInstance().removeProtocolFromAutosend(shared_from_this());
+	tfs::net::remove_protocol_from_autosend(shared_from_this());
+
 	Protocol::release();
 }
 
@@ -204,12 +205,13 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 
 		if (std::size_t currentSlot = clientLogin(*player)) {
 			uint8_t retryTime = getWaitTime(currentSlot);
-			auto output = OutputMessagePool::getOutputMessage();
+			auto output = tfs::net::make_output_message();
 			output->addByte(0x16);
 			output->addString(
 			    fmt::format("Too many players online.\nYou are at place {:d} on the waiting list.", currentSlot));
 			output->addByte(retryTime);
 			send(output);
+
 			disconnect();
 			return;
 		}
@@ -254,11 +256,13 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 			connect(foundPlayer->getID(), operatingSystem);
 		}
 	}
-	OutputMessagePool::getInstance().addProtocolToAutosend(shared_from_this());
+
+	tfs::net::insert_protocol_to_autosend(shared_from_this());
 }
 
 void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 {
+	// dispatcher thread
 	eventConnect = 0;
 
 	Player* foundPlayer = g_game.getPlayerByID(playerId);
@@ -287,6 +291,8 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	player->resetIdleTime();
 	acceptPackets = true;
+
+	g_creatureEvents->playerReconnect(player);
 }
 
 void ProtocolGame::logout(bool displayEffect, bool forced)
@@ -452,7 +458,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolGame::onConnect()
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	static std::random_device rd;
 	static std::ranlux24 generator(rd());
 	static std::uniform_int_distribution<uint16_t> randNumber(0x00, 0xFF);
@@ -480,10 +486,11 @@ void ProtocolGame::onConnect()
 
 void ProtocolGame::disconnectClient(const std::string& message) const
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	output->addByte(0x14);
 	output->addString(message);
 	send(output);
+
 	disconnect();
 }
 
@@ -1224,7 +1231,7 @@ void ProtocolGame::parseLookInBattleList(NetworkMessage& msg)
 
 void ProtocolGame::parseSay(NetworkMessage& msg)
 {
-	std::string_view receiver;
+	std::string receiver;
 	uint16_t channelId;
 
 	SpeakClasses type = static_cast<SpeakClasses>(msg.getByte());
@@ -1419,7 +1426,7 @@ void ProtocolGame::parseRuleViolationReport(NetworkMessage& msg)
 	uint8_t reportReason = msg.getByte();
 	auto targetName = msg.getString();
 	auto comment = msg.getString();
-	std::string_view translation;
+	std::string translation;
 	if (reportType == REPORT_TYPE_NAME) {
 		translation = msg.getString();
 	} else if (reportType == REPORT_TYPE_STATEMENT) {
@@ -1888,7 +1895,7 @@ void ProtocolGame::sendIcons(uint32_t icons)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex)
+void ProtocolGame::sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex)
 {
 	NetworkMessage msg;
 	msg.addByte(0x6E);
@@ -1904,7 +1911,7 @@ void ProtocolGame::sendContainer(uint8_t cid, const Container* container, bool h
 	}
 
 	msg.addByte(container->capacity());
-	msg.addByte(hasParent ? 0x01 : 0x00);
+	msg.addByte(container->hasContainerParent() ? 0x01 : 0x00);
 	msg.addByte(0x00);                                     // show search icon (boolean)
 	msg.addByte(container->isUnlocked() ? 0x01 : 0x00);    // Drag and drop
 	msg.addByte(container->hasPagination() ? 0x01 : 0x00); // Pagination
@@ -3410,7 +3417,7 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 
 void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	output->addByte(0x18);
 	output->addByte(reason);
 	send(output);

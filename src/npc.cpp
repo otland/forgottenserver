@@ -410,6 +410,17 @@ void Npc::loadNpcTypeInfo()
 	sightY = npcType->sightY;
 }
 
+void Npc::goToFollowCreature()
+{
+	if (!followCreature) {
+		return;
+	}
+
+	FindPathParams fpp;
+	getPathSearchParams(followCreature, fpp);
+	updateFollowCreaturePath(fpp);
+}
+
 void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
@@ -886,7 +897,14 @@ int NpcScriptInterface::luaActionFollow(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::pushBoolean(L, npc->setFollowCreature(tfs::lua::getPlayer(L, 1)));
+	auto followedPlayer = tfs::lua::getPlayer(L, 1);
+	if (followedPlayer) {
+		npc->setFollowCreature(followedPlayer);
+		tfs::lua::pushBoolean(L, npc->canFollowCreature(followedPlayer));
+	} else {
+		npc->removeFollowCreature();
+		tfs::lua::pushBoolean(L, true);
+	}
 	return 1;
 }
 
