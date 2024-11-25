@@ -25,6 +25,7 @@ void load(bool reload /*= false*/)
 		return;
 	}
 
+	scriptInterface->loadFile("data/global.lua");
 	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
 		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: data/npc/lib/npc.lua" << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;
