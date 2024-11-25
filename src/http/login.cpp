@@ -93,9 +93,9 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	json::array characters;
 	uint32_t lastLogin = 0;
 
-	if (auto result = tfs::db::store_query(fmt::format(
-	        "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
-	        accountId))) {
+	if ((result = tfs::db::store_query(fmt::format(
+	         "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
+	         accountId)))) {
 		do {
 			auto vocation = g_vocations.getVocation(result->getNumber<uint32_t>("vocation"));
 			assert(vocation);

@@ -264,7 +264,7 @@ bool IOMapSerialize::loadHouseInfo()
 		}
 	} while (result->next());
 
-	if (auto result = tfs::db::store_query("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
+	if ((result = tfs::db::store_query("SELECT `house_id`, `listid`, `list` FROM `house_lists`"))) {
 		do {
 			if (auto house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"))) {
 				house->setAccessList(result->getNumber<uint32_t>("listid"), result->getString("list"));

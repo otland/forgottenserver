@@ -81,8 +81,8 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 
 	std::vector<std::string> characters = {};
 
-	if (auto result = tfs::db::store_query(fmt::format(
-	        "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", id))) {
+	if ((result = tfs::db::store_query(fmt::format(
+	         "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", id)))) {
 		do {
 			characters.emplace_back(result->getString("name"));
 		} while (result->next());
