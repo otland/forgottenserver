@@ -197,7 +197,7 @@ void IOMarket::checkExpiredOffers()
 uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 {
 	auto result = tfs::db::store_query(
-	        fmt::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
+	    fmt::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
 	if (!result) {
 		return 0;
 	}
