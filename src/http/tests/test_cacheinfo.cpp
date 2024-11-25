@@ -20,7 +20,7 @@ struct CacheInfoFixture
 		setString(ConfigManager::MYSQL_DB, "forgottenserver");
 		setNumber(ConfigManager::SQL_PORT, 3306);
 
-		db.connect();
+		tfs::db::connect();
 		transaction.begin();
 	}
 
@@ -28,10 +28,9 @@ struct CacheInfoFixture
 	{
 		// `players_online` is a memory table and does not support transactions, so we need to clear it manually
 		// do NOT run this test against a running server's database
-		db.executeQuery("TRUNCATE `players_online`");
+		tfs::db::execute_query("TRUNCATE `players_online`");
 	}
 
-	Database& db = Database::getInstance();
 	DBTransaction transaction;
 
 	std::string_view ip = "74.125.224.72";
@@ -42,7 +41,7 @@ using status = boost::beast::http::status;
 
 BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 {
-	auto result = db.storeQuery(
+	auto result = tfs::db::store_query(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('foo', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
 	auto id = result->getNumber<uint64_t>("id");
 
@@ -54,7 +53,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Bobeek"));
 	BOOST_TEST(insertPlayers.execute());
 
-	BOOST_TEST(db.executeQuery(fmt::format(
+	BOOST_TEST(tfs::db::execute_query(fmt::format(
 	    "INSERT INTO `players_online` (`player_id`) SELECT `id` FROM `players` WHERE `account_id` = {:d}", id)));
 
 	auto&& [status, body] = tfs::http::handle_cacheinfo({{"type", "cacheinfo"}}, ip);
