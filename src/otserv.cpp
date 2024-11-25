@@ -114,12 +114,12 @@ void mainLoader(ServiceManager* services)
 
 	std::cout << ">> Establishing database connection..." << std::flush;
 
-	if (!Database::getInstance().connect()) {
+	if (!tfs::db::connect()) {
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
 
-	std::cout << " MySQL " << Database::getClientVersion() << std::endl;
+	std::cout << " MySQL " << tfs::db::client_version() << std::endl;
 
 	// run database manager
 	std::cout << ">> Running database manager" << std::endl;

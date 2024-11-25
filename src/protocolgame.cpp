@@ -407,8 +407,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	auto characterName = msg.getString();
-	uint32_t timeStamp = msg.get<uint32_t>();
-	uint8_t randNumber = msg.getByte();
+	auto timeStamp = msg.get<uint32_t>();
+	auto randNumber = msg.getByte();
 	if (challengeTimestamp != timeStamp || challengeRandom != randNumber) {
 		disconnect();
 		return;
@@ -431,22 +431,21 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
-	Database& db = Database::getInstance();
-	auto result = db.storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(sessionToken), db.escapeString(characterName)));
+	    tfs::db::escape_string(sessionToken), tfs::db::escape_string(characterName)));
 	if (!result) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	uint32_t accountId = result->getNumber<uint32_t>("account_id");
+	auto accountId = result->getNumber<uint32_t>("account_id");
 	if (accountId == 0) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
-	Connection::Address sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
+	auto sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
 	if (!sessionIP.is_loopback() && ip != sessionIP) {
 		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
 	}

@@ -411,9 +411,9 @@ void tfs::lua::removeTempItem(Item* item)
 	std::erase_if(tempItems, [item](const auto& pair) { return pair.second == item; });
 }
 
-static uint32_t addResult(DBResult_ptr res)
+static uint32_t addResult(DBResult_ptr result)
 {
-	tempResults[++lastResultId] = std::move(res);
+	tempResults[++lastResultId] = std::move(result);
 	return lastResultId;
 }
 
@@ -4257,7 +4257,7 @@ const luaL_Reg LuaScriptInterface::luaDatabaseTable[] = {
 int LuaScriptInterface::luaDatabaseExecute(lua_State* L)
 {
 	// db.query(query)
-	tfs::lua::pushBoolean(L, Database::getInstance().executeQuery(tfs::lua::getString(L, -1)));
+	tfs::lua::pushBoolean(L, tfs::db::execute_query(tfs::lua::getString(L, -1)));
 	return 1;
 }
 
@@ -4295,8 +4295,8 @@ int LuaScriptInterface::luaDatabaseAsyncExecute(lua_State* L)
 int LuaScriptInterface::luaDatabaseStoreQuery(lua_State* L)
 {
 	// db.storeQuery(query)
-	if (DBResult_ptr res = Database::getInstance().storeQuery(tfs::lua::getString(L, -1))) {
-		lua_pushnumber(L, addResult(res));
+	if (auto result = tfs::db::store_query(tfs::lua::getString(L, -1))) {
+		lua_pushnumber(L, addResult(result));
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -4341,7 +4341,7 @@ int LuaScriptInterface::luaDatabaseAsyncStoreQuery(lua_State* L)
 int LuaScriptInterface::luaDatabaseEscapeString(lua_State* L)
 {
 	// db.escapeString(s)
-	tfs::lua::pushString(L, Database::getInstance().escapeString(tfs::lua::getString(L, -1)));
+	tfs::lua::pushString(L, tfs::db::escape_string(tfs::lua::getString(L, -1)));
 	return 1;
 }
 
@@ -4349,14 +4349,14 @@ int LuaScriptInterface::luaDatabaseEscapeBlob(lua_State* L)
 {
 	// db.escapeBlob(s, length)
 	uint32_t length = tfs::lua::getNumber<uint32_t>(L, 2);
-	tfs::lua::pushString(L, Database::getInstance().escapeBlob(tfs::lua::getString(L, 1).data(), length));
+	tfs::lua::pushString(L, tfs::db::escape_blob(tfs::lua::getString(L, 1).data(), length));
 	return 1;
 }
 
 int LuaScriptInterface::luaDatabaseLastInsertId(lua_State* L)
 {
 	// db.lastInsertId()
-	lua_pushnumber(L, Database::getInstance().getLastInsertId());
+	lua_pushnumber(L, tfs::db::last_insert_id());
 	return 1;
 }
 
@@ -4374,39 +4374,39 @@ const luaL_Reg LuaScriptInterface::luaResultTable[] = {
 
 int LuaScriptInterface::luaResultGetNumber(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	auto result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
 	const std::string& s = tfs::lua::getString(L, 2);
-	lua_pushnumber(L, res->getNumber<int64_t>(s));
+	lua_pushnumber(L, result->getNumber<int64_t>(s));
 	return 1;
 }
 
 int LuaScriptInterface::luaResultGetString(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	auto result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
 	const std::string& s = tfs::lua::getString(L, 2);
-	tfs::lua::pushString(L, res->getString(s));
+	tfs::lua::pushString(L, result->getString(s));
 	return 1;
 }
 
 int LuaScriptInterface::luaResultGetStream(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
-	if (!res) {
+	auto result = getResultByID(tfs::lua::getNumber<uint32_t>(L, 1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	auto stream = res->getString(tfs::lua::getString(L, 2));
+	auto stream = result->getString(tfs::lua::getString(L, 2));
 	lua_pushlstring(L, stream.data(), stream.size());
 	lua_pushnumber(L, stream.size());
 	return 2;
@@ -4414,13 +4414,13 @@ int LuaScriptInterface::luaResultGetStream(lua_State* L)
 
 int LuaScriptInterface::luaResultNext(lua_State* L)
 {
-	DBResult_ptr res = getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
-	if (!res) {
+	auto result = getResultByID(tfs::lua::getNumber<uint32_t>(L, -1));
+	if (!result) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	tfs::lua::pushBoolean(L, res->next());
+	tfs::lua::pushBoolean(L, result->next());
 	return 1;
 }
 

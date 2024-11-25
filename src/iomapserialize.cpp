@@ -15,7 +15,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 {
 	int64_t start = OTSYS_TIME();
 
-	DBResult_ptr result = Database::getInstance().storeQuery("SELECT `data` FROM `tile_store`");
+	auto result = tfs::db::store_query("SELECT `data` FROM `tile_store`");
 	if (!result) {
 		return;
 	}
@@ -51,7 +51,6 @@ void IOMapSerialize::loadHouseItems(Map* map)
 bool IOMapSerialize::saveHouseItems()
 {
 	int64_t start = OTSYS_TIME();
-	Database& db = Database::getInstance();
 
 	// Start the transaction
 	DBTransaction transaction;
@@ -60,7 +59,7 @@ bool IOMapSerialize::saveHouseItems()
 	}
 
 	// clear old tile data
-	if (!db.executeQuery("DELETE FROM `tile_store`")) {
+	if (!tfs::db::execute_query("DELETE FROM `tile_store`")) {
 		return false;
 	}
 
@@ -74,7 +73,7 @@ bool IOMapSerialize::saveHouseItems()
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
-				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), db.escapeString(attributes)))) {
+				if (!stmt.addRow(fmt::format("{:d}, {:s}", house->getId(), tfs::db::escape_string(attributes)))) {
 					return false;
 				}
 				stream.clear();
@@ -252,27 +251,22 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 
 bool IOMapSerialize::loadHouseInfo()
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
+	auto result = tfs::db::store_query("SELECT `id`, `owner`, `paid`, `warnings` FROM `houses`");
 	if (!result) {
 		return false;
 	}
 
 	do {
-		House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("id"));
-		if (house) {
+		if (auto house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("id"))) {
 			house->setOwner(result->getNumber<uint32_t>("owner"), false);
 			house->setPaidUntil(result->getNumber<time_t>("paid"));
 			house->setPayRentWarnings(result->getNumber<uint32_t>("warnings"));
 		}
 	} while (result->next());
 
-	result = db.storeQuery("SELECT `house_id`, `listid`, `list` FROM `house_lists`");
-	if (result) {
+	if (auto result = tfs::db::store_query("SELECT `house_id`, `listid`, `list` FROM `house_lists`")) {
 		do {
-			House* house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"));
-			if (house) {
+			if (auto house = g_game.map.houses.getHouse(result->getNumber<uint32_t>("house_id"))) {
 				house->setAccessList(result->getNumber<uint32_t>("listid"), result->getString("list"));
 			}
 		} while (result->next());
@@ -282,32 +276,30 @@ bool IOMapSerialize::loadHouseInfo()
 
 bool IOMapSerialize::saveHouseInfo()
 {
-	Database& db = Database::getInstance();
-
 	DBTransaction transaction;
 	if (!transaction.begin()) {
 		return false;
 	}
 
-	if (!db.executeQuery("DELETE FROM `house_lists`")) {
+	if (!tfs::db::execute_query("DELETE FROM `house_lists`")) {
 		return false;
 	}
 
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		House* house = it.second;
-		DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
-		if (result) {
-			db.executeQuery(fmt::format(
+		if (auto result =
+		        tfs::db::store_query(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()))) {
+			tfs::db::execute_query(fmt::format(
 			    "UPDATE `houses` SET `owner` = {:d}, `paid` = {:d}, `warnings` = {:d}, `name` = {:s}, `town_id` = {:d}, `rent` = {:d}, `size` = {:d}, `beds` = {:d} WHERE `id` = {:d}",
 			    house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
-			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount(), house->getId()));
+			    tfs::db::escape_string(house->getName()), house->getTownId(), house->getRent(),
+			    house->getTiles().size(), house->getBedCount(), house->getId()));
 		} else {
-			db.executeQuery(fmt::format(
+			tfs::db::execute_query(fmt::format(
 			    "INSERT INTO `houses` (`id`, `owner`, `paid`, `warnings`, `name`, `town_id`, `rent`, `size`, `beds`) VALUES ({:d}, {:d}, {:d}, {:d}, {:s}, {:d}, {:d}, {:d}, {:d})",
 			    house->getId(), house->getOwner(), house->getPaidUntil(), house->getPayRentWarnings(),
-			    db.escapeString(house->getName()), house->getTownId(), house->getRent(), house->getTiles().size(),
-			    house->getBedCount()));
+			    tfs::db::escape_string(house->getName()), house->getTownId(), house->getRent(),
+			    house->getTiles().size(), house->getBedCount()));
 		}
 	}
 
@@ -319,7 +311,7 @@ bool IOMapSerialize::saveHouseInfo()
 		std::string listText;
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), tfs::to_underlying(GUEST_LIST),
-			                             db.escapeString(listText)))) {
+			                             tfs::db::escape_string(listText)))) {
 				return false;
 			}
 
@@ -328,17 +320,17 @@ bool IOMapSerialize::saveHouseInfo()
 
 		if (house->getAccessList(SUBOWNER_LIST, listText) && !listText.empty()) {
 			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), tfs::to_underlying(SUBOWNER_LIST),
-			                             db.escapeString(listText)))) {
+			                             tfs::db::escape_string(listText)))) {
 				return false;
 			}
 
 			listText.clear();
 		}
 
-		for (Door* door : house->getDoors()) {
+		for (auto door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
 				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
-				                             db.escapeString(listText)))) {
+				                             tfs::db::escape_string(listText)))) {
 					return false;
 				}
 
@@ -356,8 +348,6 @@ bool IOMapSerialize::saveHouseInfo()
 
 bool IOMapSerialize::saveHouse(House* house)
 {
-	Database& db = Database::getInstance();
-
 	// Start the transaction
 	DBTransaction transaction;
 	if (!transaction.begin()) {
@@ -367,7 +357,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	uint32_t houseId = house->getId();
 
 	// clear old tile data
-	if (!db.executeQuery(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
+	if (!tfs::db::execute_query(fmt::format("DELETE FROM `tile_store` WHERE `house_id` = {:d}", houseId))) {
 		return false;
 	}
 
@@ -378,7 +368,7 @@ bool IOMapSerialize::saveHouse(House* house)
 		saveTile(stream, tile);
 
 		if (auto attributes = stream.getStream(); attributes.size() > 0) {
-			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, db.escapeString(attributes)))) {
+			if (!stmt.addRow(fmt::format("{:d}, {:s}", houseId, tfs::db::escape_string(attributes)))) {
 				return false;
 			}
 			stream.clear();

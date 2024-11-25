@@ -16,10 +16,8 @@ extern Game g_game;
 
 uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(
-	    fmt::format("SELECT `account_id` FROM `players` WHERE `name` = {:s}", db.escapeString(playerName)));
+	auto result = tfs::db::store_query(
+	    fmt::format("SELECT `account_id` FROM `players` WHERE `name` = {:s}", tfs::db::escape_string(playerName)));
 	if (!result) {
 		return 0;
 	}
@@ -28,9 +26,7 @@ uint32_t IOLoginData::getAccountIdByPlayerName(const std::string& playerName)
 
 uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `account_id` FROM `players` WHERE `id` = {:d}", playerId));
+	auto result = tfs::db::store_query(fmt::format("SELECT `account_id` FROM `players` WHERE `id` = {:d}", playerId));
 	if (!result) {
 		return 0;
 	}
@@ -39,8 +35,7 @@ uint32_t IOLoginData::getAccountIdByPlayerId(uint32_t playerId)
 
 AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 {
-	DBResult_ptr result =
-	    Database::getInstance().storeQuery(fmt::format("SELECT `type` FROM `accounts` WHERE `id` = {:d}", accountId));
+	auto result = tfs::db::store_query(fmt::format("SELECT `type` FROM `accounts` WHERE `id` = {:d}", accountId));
 	if (!result) {
 		return ACCOUNT_TYPE_NORMAL;
 	}
@@ -49,8 +44,8 @@ AccountType_t IOLoginData::getAccountType(uint32_t accountId)
 
 void IOLoginData::setAccountType(uint32_t accountId, AccountType_t accountType)
 {
-	Database::getInstance().executeQuery(fmt::format("UPDATE `accounts` SET `type` = {:d} WHERE `id` = {:d}",
-	                                                 static_cast<uint16_t>(accountType), accountId));
+	tfs::db::execute_query(fmt::format("UPDATE `accounts` SET `type` = {:d} WHERE `id` = {:d}",
+	                                   static_cast<uint16_t>(accountType), accountId));
 }
 
 void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
@@ -60,18 +55,15 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	}
 
 	if (login) {
-		Database::getInstance().executeQuery(fmt::format("INSERT INTO `players_online` VALUES ({:d})", guid));
+		tfs::db::execute_query(fmt::format("INSERT INTO `players_online` VALUES ({:d})", guid));
 	} else {
-		Database::getInstance().executeQuery(
-		    fmt::format("DELETE FROM `players_online` WHERE `player_id` = {:d}", guid));
+		tfs::db::execute_query(fmt::format("DELETE FROM `players_online` WHERE `player_id` = {:d}", guid));
 	}
 }
 
 bool IOLoginData::preloadPlayer(Player* player)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `p`.`name`, `p`.`account_id`, `p`.`group_id`, `a`.`type`, `a`.`premium_ends_at` FROM `players` AS `p` JOIN `accounts` AS `a` ON `a`.`id` = `p`.`account_id` WHERE `p`.`id` = {:d} AND `p`.`deletion` = 0",
 	    player->getGUID()));
 	if (!result) {
@@ -94,27 +86,25 @@ bool IOLoginData::preloadPlayer(Player* player)
 
 bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 {
-	Database& db = Database::getInstance();
 	return loadPlayer(
 	    player,
-	    db.storeQuery(fmt::format(
+	    tfs::db::store_query(fmt::format(
 	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `currentmount`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `id` = {:d}",
 	        id)));
 }
 
 bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
 {
-	Database& db = Database::getInstance();
 	return loadPlayer(
 	    player,
-	    db.storeQuery(fmt::format(
+	    tfs::db::store_query(fmt::format(
 	        "SELECT `id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `blessings`, `mana`, `manamax`, `manaspent`, `soul`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `lookaddons`, `lookmount`, `lookmounthead`, `lookmountbody`, `lookmountlegs`, `lookmountfeet`, `currentmount`, `randomizemount`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skulltime`, `skull`, `town_id`, `balance`, `offlinetraining_time`, `offlinetraining_skill`, `stamina`, `skill_fist`, `skill_fist_tries`, `skill_club`, `skill_club_tries`, `skill_sword`, `skill_sword_tries`, `skill_axe`, `skill_axe_tries`, `skill_dist`, `skill_dist_tries`, `skill_shielding`, `skill_shielding_tries`, `skill_fishing`, `skill_fishing_tries`, `direction` FROM `players` WHERE `name` = {:s}",
-	        db.escapeString(name))));
+	        tfs::db::escape_string(name))));
 }
 
 static GuildWarVector getWarList(uint32_t guildId)
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `guild1`, `guild2` FROM `guild_wars` WHERE (`guild1` = {:d} OR `guild2` = {:d}) AND `ended` = 0 AND `status` = 1",
 	    guildId, guildId));
 	if (!result) {
@@ -139,12 +129,10 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		return false;
 	}
 
-	Database& db = Database::getInstance();
-
 	uint32_t accountId = result->getNumber<uint32_t>("account_id");
 
-	auto account =
-	    db.storeQuery(fmt::format("SELECT `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accountId));
+	auto account = tfs::db::store_query(
+	    fmt::format("SELECT `type`, `premium_ends_at` FROM `accounts` WHERE `id` = {:d}", accountId));
 	if (!account) {
 		return false;
 	}
@@ -302,7 +290,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		player->skills[i].percent = Player::getBasisPointLevel(skillTries, nextSkillTries);
 	}
 
-	if ((result = db.storeQuery(
+	if ((result = tfs::db::store_query(
 	         fmt::format("SELECT `guild_id`, `rank_id`, `nick` FROM `guild_membership` WHERE `player_id` = {:d}",
 	                     player->getGUID())))) {
 		uint32_t guildId = result->getNumber<uint32_t>("guild_id");
@@ -324,7 +312,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			player->guild = guild;
 			auto rank = guild->getRankById(playerRankId);
 			if (!rank) {
-				if ((result = db.storeQuery(fmt::format(
+				if ((result = tfs::db::store_query(fmt::format(
 				         "SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `id` = {:d}", playerRankId)))) {
 					guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
 					               result->getNumber<uint16_t>("level"));
@@ -339,15 +327,15 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			player->guildRank = rank;
 			player->guildWarVector = getWarList(guildId);
 
-			if ((result = db.storeQuery(fmt::format(
+			if ((result = tfs::db::store_query(fmt::format(
 			         "SELECT COUNT(*) AS `members` FROM `guild_membership` WHERE `guild_id` = {:d}", guildId)))) {
 				guild->setMemberCount(result->getNumber<uint32_t>("members"));
 			}
 		}
 	}
 
-	if ((result = db.storeQuery(fmt::format("SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = {:d}",
-	                                        player->getGUID())))) {
+	if ((result = tfs::db::store_query(fmt::format(
+	         "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = {:d}", player->getGUID())))) {
 		do {
 			player->learnedInstantSpellList.emplace_front(result->getString("name"));
 		} while (result->next());
@@ -357,7 +345,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	ItemMap itemMap;
 	std::map<uint8_t, Container*> openContainersList;
 
-	if ((result = db.storeQuery(fmt::format(
+	if ((result = tfs::db::store_query(fmt::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
@@ -399,7 +387,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	// load depot items
 	itemMap.clear();
 
-	if ((result = db.storeQuery(fmt::format(
+	if ((result = tfs::db::store_query(fmt::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_depotitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
@@ -431,7 +419,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	// load inbox items
 	itemMap.clear();
 
-	if ((result = db.storeQuery(fmt::format(
+	if ((result = tfs::db::store_query(fmt::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_inboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
@@ -461,7 +449,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	// load store inbox items
 	itemMap.clear();
 
-	if ((result = db.storeQuery(fmt::format(
+	if ((result = tfs::db::store_query(fmt::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_storeinboxitems` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
@@ -489,7 +477,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	// load storage map
-	if ((result = db.storeQuery(
+	if ((result = tfs::db::store_query(
 	         fmt::format("SELECT `key`, `value` FROM `player_storage` WHERE `player_id` = {:d}", player->getGUID())))) {
 		do {
 			player->setStorageValue(result->getNumber<uint32_t>("key"), result->getNumber<int32_t>("value"), true);
@@ -497,15 +485,15 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	// load vip list
-	if ((result = db.storeQuery(fmt::format("SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}",
-	                                        player->getAccount())))) {
+	if ((result = tfs::db::store_query(fmt::format(
+	         "SELECT `player_id` FROM `account_viplist` WHERE `account_id` = {:d}", player->getAccount())))) {
 		do {
 			player->addVIPInternal(result->getNumber<uint32_t>("player_id"));
 		} while (result->next());
 	}
 
 	// load outfits & addons
-	if ((result = db.storeQuery(fmt::format(
+	if ((result = tfs::db::store_query(fmt::format(
 	         "SELECT `outfit_id`, `addons` FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID())))) {
 		do {
 			player->addOutfit(result->getNumber<uint16_t>("outfit_id"), result->getNumber<uint8_t>("addons"));
@@ -513,7 +501,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	}
 
 	// load mounts
-	if ((result = db.storeQuery(
+	if ((result = tfs::db::store_query(
 	         fmt::format("SELECT `mount_id` FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID())))) {
 		do {
 			player->tameMount(result->getNumber<uint16_t>("mount_id"));
@@ -536,7 +524,6 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	int32_t runningId = 100;
 	const auto& openContainers = player->getOpenContainers();
 
-	Database& db = Database::getInstance();
 	for (const auto& it : itemList) {
 		int32_t pid = it.first;
 		Item* item = it.second;
@@ -567,7 +554,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 		if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), pid, runningId,
 		                                     item->getID(), item->getSubType(),
-		                                     db.escapeString(propWriteStream.getStream())))) {
+		                                     tfs::db::escape_string(propWriteStream.getStream())))) {
 			return false;
 		}
 	}
@@ -606,7 +593,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 
 			if (!query_insert.addRow(fmt::format("{:d}, {:d}, {:d}, {:d}, {:d}, {:s}", player->getGUID(), parentId,
 			                                     runningId, item->getID(), item->getSubType(),
-			                                     db.escapeString(propWriteStream.getStream())))) {
+			                                     tfs::db::escape_string(propWriteStream.getStream())))) {
 				return false;
 			}
 		}
@@ -620,16 +607,14 @@ bool IOLoginData::savePlayer(Player* player)
 		player->changeHealth(1);
 	}
 
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result =
-	    db.storeQuery(fmt::format("SELECT `save` FROM `players` WHERE `id` = {:d}", player->getGUID()));
+	auto result =
+	    tfs::db::store_query(fmt::format("SELECT `save` FROM `players` WHERE `id` = {:d}", player->getGUID()));
 	if (!result) {
 		return false;
 	}
 
 	if (result->getNumber<uint16_t>("save") == 0) {
-		return db.executeQuery(
+		return tfs::db::execute_query(
 		    fmt::format("UPDATE `players` SET `lastlogin` = {:d}, `lastip` = INET6_ATON('{:s}') WHERE `id` = {:d}",
 		                player->lastLoginSaved, player->lastIP.to_string(), player->getGUID()));
 	}
@@ -688,7 +673,7 @@ bool IOLoginData::savePlayer(Player* player)
 		query << "`lastip` = INET6_ATON('" << player->lastIP.to_string() << "'),";
 	}
 
-	query << "`conditions` = " << db.escapeString(propWriteStream.getStream()) << ',';
+	query << "`conditions` = " << tfs::db::escape_string(propWriteStream.getStream()) << ',';
 
 	if (g_game.getWorldType() != WORLD_TYPE_PVP_ENFORCED) {
 		int64_t skullTime = 0;
@@ -740,18 +725,19 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	if (!db.executeQuery(query.str())) {
+	if (!tfs::db::execute_query(query.str())) {
 		return false;
 	}
 
 	// learned spells
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_spells` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_spells` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
 	DBInsert spellsQuery("INSERT INTO `player_spells` (`player_id`, `name`) VALUES ");
 	for (const std::string& spellName : player->learnedInstantSpellList) {
-		if (!spellsQuery.addRow(fmt::format("{:d}, {:s}", player->getGUID(), db.escapeString(spellName)))) {
+		if (!spellsQuery.addRow(fmt::format("{:d}, {:s}", player->getGUID(), tfs::db::escape_string(spellName)))) {
 			return false;
 		}
 	}
@@ -761,7 +747,8 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// item saving
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_items` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_items` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -781,7 +768,8 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// save depot items
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_depotitems` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_depotitems` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -800,7 +788,8 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// save inbox items
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_inboxitems` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_inboxitems` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -817,7 +806,7 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// save store inbox items
-	if (!db.executeQuery(
+	if (!tfs::db::execute_query(
 	        fmt::format("DELETE FROM `player_storeinboxitems` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
@@ -834,7 +823,8 @@ bool IOLoginData::savePlayer(Player* player)
 		return false;
 	}
 
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_storage` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_storage` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -851,7 +841,8 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// save outfits & addons
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_outfits` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -868,7 +859,8 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	// save mounts
-	if (!db.executeQuery(fmt::format("DELETE FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID()))) {
+	if (!tfs::db::execute_query(
+	        fmt::format("DELETE FROM `player_mounts` WHERE `player_id` = {:d}", player->getGUID()))) {
 		return false;
 	}
 
@@ -890,8 +882,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 std::string IOLoginData::getNameByGuid(uint32_t guid)
 {
-	DBResult_ptr result =
-	    Database::getInstance().storeQuery(fmt::format("SELECT `name` FROM `players` WHERE `id` = {:d}", guid));
+	auto result = tfs::db::store_query(fmt::format("SELECT `name` FROM `players` WHERE `id` = {:d}", guid));
 	if (!result) {
 		return {};
 	}
@@ -902,10 +893,8 @@ std::string IOLoginData::getNameByGuid(uint32_t guid)
 
 uint32_t IOLoginData::getGuidByName(const std::string& name)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result =
-	    db.storeQuery(fmt::format("SELECT `id` FROM `players` WHERE `name` = {:s}", db.escapeString(name)));
+	auto result = tfs::db::store_query(
+	    fmt::format("SELECT `id` FROM `players` WHERE `name` = {:s}", tfs::db::escape_string(name)));
 	if (!result) {
 		return 0;
 	}
@@ -914,10 +903,9 @@ uint32_t IOLoginData::getGuidByName(const std::string& name)
 
 bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format(
-	    "SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = {:s}", db.escapeString(name)));
+	auto result = tfs::db::store_query(
+	    fmt::format("SELECT `name`, `id`, `group_id`, `account_id` FROM `players` WHERE `name` = {:s}",
+	                tfs::db::escape_string(name)));
 	if (!result) {
 		return false;
 	}
@@ -926,23 +914,15 @@ bool IOLoginData::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string&
 	guid = result->getNumber<uint32_t>("id");
 	Group* group = g_game.groups.getGroup(result->getNumber<uint16_t>("group_id"));
 
-	uint64_t flags;
-	if (group) {
-		flags = group->flags;
-	} else {
-		flags = 0;
-	}
-
+	auto flags = group ? group->flags : 0;
 	specialVip = (flags & PlayerFlag_SpecialVIP) != 0;
 	return true;
 }
 
 bool IOLoginData::formatPlayerName(std::string& name)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result =
-	    db.storeQuery(fmt::format("SELECT `name` FROM `players` WHERE `name` = {:s}", db.escapeString(name)));
+	auto result = tfs::db::store_query(
+	    fmt::format("SELECT `name` FROM `players` WHERE `name` = {:s}", tfs::db::escape_string(name)));
 	if (!result) {
 		return false;
 	}
@@ -954,17 +934,16 @@ bool IOLoginData::formatPlayerName(std::string& name)
 void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 {
 	do {
-		uint32_t sid = result->getNumber<uint32_t>("sid");
-		uint32_t pid = result->getNumber<uint32_t>("pid");
-		uint16_t type = result->getNumber<uint16_t>("itemtype");
-		uint16_t count = result->getNumber<uint16_t>("count");
-
+		auto sid = result->getNumber<uint32_t>("sid");
+		auto pid = result->getNumber<uint32_t>("pid");
+		auto type = result->getNumber<uint16_t>("itemtype");
+		auto count = result->getNumber<uint16_t>("count");
 		auto attr = result->getString("attributes");
+
 		PropStream propStream;
 		propStream.init(attr.data(), attr.size());
 
-		Item* item = Item::CreateItem(type, count);
-		if (item) {
+		if (auto item = Item::CreateItem(type, count)) {
 			if (!item->unserializeAttr(propStream)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}
@@ -977,23 +956,24 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 
 void IOLoginData::increaseBankBalance(uint32_t guid, uint64_t bankBalance)
 {
-	Database::getInstance().executeQuery(
+	tfs::db::execute_query(
 	    fmt::format("UPDATE `players` SET `balance` = `balance` + {:d} WHERE `id` = {:d}", bankBalance, guid));
 }
 
 bool IOLoginData::hasBiddedOnHouse(uint32_t guid)
 {
-	Database& db = Database::getInstance();
-	return db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid)).get();
+	return tfs::db::store_query(fmt::format("SELECT `id` FROM `houses` WHERE `highest_bidder` = {:d} LIMIT 1", guid))
+	    .get();
 }
 
 std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 {
 	std::forward_list<VIPEntry> entries;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `player_id`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `name`, `description`, `icon`, `notify` FROM `account_viplist` WHERE `account_id` = {:d}",
 	    accountId));
+
 	if (result) {
 		do {
 			entries.emplace_front(result->getNumber<uint32_t>("player_id"), result->getString("name"),
@@ -1007,29 +987,27 @@ std::forward_list<VIPEntry> IOLoginData::getVIPEntries(uint32_t accountId)
 void IOLoginData::addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
                               bool notify)
 {
-	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format(
+	tfs::db::execute_query(fmt::format(
 	    "INSERT INTO `account_viplist` (`account_id`, `player_id`, `description`, `icon`, `notify`) VALUES ({:d}, {:d}, {:s}, {:d}, {:d})",
-	    accountId, guid, db.escapeString(description), icon, notify));
+	    accountId, guid, tfs::db::escape_string(description), icon, notify));
 }
 
 void IOLoginData::editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
                                bool notify)
 {
-	Database& db = Database::getInstance();
-	db.executeQuery(fmt::format(
+	tfs::db::execute_query(fmt::format(
 	    "UPDATE `account_viplist` SET `description` = {:s}, `icon` = {:d}, `notify` = {:d} WHERE `account_id` = {:d} AND `player_id` = {:d}",
-	    db.escapeString(description), icon, notify, accountId, guid));
+	    tfs::db::escape_string(description), icon, notify, accountId, guid));
 }
 
 void IOLoginData::removeVIPEntry(uint32_t accountId, uint32_t guid)
 {
-	Database::getInstance().executeQuery(
+	tfs::db::execute_query(
 	    fmt::format("DELETE FROM `account_viplist` WHERE `account_id` = {:d} AND `player_id` = {:d}", accountId, guid));
 }
 
 void IOLoginData::updatePremiumTime(uint32_t accountId, time_t endTime)
 {
-	Database::getInstance().executeQuery(
+	tfs::db::execute_query(
 	    fmt::format("UPDATE `accounts` SET `premium_ends_at` = {:d} WHERE `id` = {:d}", endTime, accountId));
 }

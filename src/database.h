@@ -9,7 +9,79 @@
 class DBResult;
 using DBResult_ptr = std::shared_ptr<DBResult>;
 
-namespace tfs::detail {
+namespace tfs::db {
+
+/// @brief Connects to the database.
+/// @return true on successful connection, false on error.
+bool connect();
+
+/// @brief Executes a command that does not return results.
+///
+/// This is used for queries such as INSERT, UPDATE, DELETE, etc.
+/// @param {query} The SQL command to execute.
+/// @return true on success, false on error.
+bool execute_query(std::string_view query);
+
+/// @brief Queries the database and retrieves results.
+///
+/// Executes a query that generates results, typically a SELECT statement.
+/// @param {query} The SQL query to execute.
+/// @return A DBResult_ptr object containing the results, or nullptr on error.
+DBResult_ptr store_query(std::string_view query);
+
+/// @brief Escapes a string for use in an SQL query.
+///
+/// Prepares a string to be safely included in SQL statements, adding necessary
+/// escaping and quoting.
+/// @param {s} The string to escape.
+/// @return The escaped and quoted string.
+std::string escape_string(std::string_view s);
+
+/// @brief Escapes a binary stream for use in an SQL query.
+///
+/// Converts a binary stream into a format suitable for inclusion in SQL
+/// statements.
+/// @param {s} The binary stream to escape.
+/// @param {length} The length of the binary stream.
+/// @return The escaped and quoted string.
+std::string escape_blob(const char* s, uint32_t length);
+
+/// @brief Retrieves the ID of the last inserted row.
+///
+/// If the last query involved an auto-increment column, this retrieves the ID
+/// of the row that was inserted.
+/// @return The last inserted ID, or 0 if no rows were affected.
+uint64_t last_insert_id();
+
+/// @brief Gets the version of the database client engine.
+///
+/// @return A string containing the database engine version.
+const char* client_version();
+
+/// @brief Retrieves the maximum packet size allowed by the database.
+///
+/// @return The maximum packet size in bytes.
+uint64_t max_packet_size();
+
+} // namespace tfs::db
+
+namespace tfs::db::transaction {
+
+/// @brief Begins a database transaction.
+/// @return true on success, false on error.
+bool begin();
+
+/// @brief Rolls back the current database transaction.
+/// @return true on success, false on error.
+bool rollback();
+
+/// @brief Commits the current database transaction.
+/// @return true on success, false on error.
+bool commit();
+
+} // namespace tfs::db::transaction
+
+namespace tfs::db::detail {
 
 struct MysqlDeleter
 {
@@ -20,113 +92,12 @@ struct MysqlDeleter
 using Mysql_ptr = std::unique_ptr<MYSQL, MysqlDeleter>;
 using MysqlResult_ptr = std::unique_ptr<MYSQL_RES, MysqlDeleter>;
 
-} // namespace tfs::detail
-
-class Database
-{
-public:
-	/**
-	 * Singleton implementation.
-	 *
-	 * @return database connection handler singleton
-	 */
-	static Database& getInstance()
-	{
-		static Database instance;
-		return instance;
-	}
-
-	/**
-	 * Connects to the database
-	 *
-	 * @return true on successful connection, false on error
-	 */
-	bool connect();
-
-	/**
-	 * Executes command.
-	 *
-	 * Executes query which doesn't generates results (eg. INSERT, UPDATE,
-	 * DELETE...).
-	 *
-	 * @param query command
-	 * @return true on success, false on error
-	 */
-	bool executeQuery(const std::string& query);
-
-	/**
-	 * Queries database.
-	 *
-	 * Executes query which generates results (mostly SELECT).
-	 *
-	 * @return results object (nullptr on error)
-	 */
-	DBResult_ptr storeQuery(std::string_view query);
-
-	/**
-	 * Escapes string for query.
-	 *
-	 * Prepares string to fit SQL queries including quoting it.
-	 *
-	 * @param s string to be escaped
-	 * @return quoted string
-	 */
-	std::string escapeString(std::string_view s) const { return escapeBlob(s.data(), s.length()); }
-
-	/**
-	 * Escapes binary stream for query.
-	 *
-	 * Prepares binary stream to fit SQL queries.
-	 *
-	 * @param s binary stream
-	 * @param length stream length
-	 * @return quoted string
-	 */
-	std::string escapeBlob(const char* s, uint32_t length) const;
-
-	/**
-	 * Retrieve id of last inserted row
-	 *
-	 * @return id on success, 0 if last query did not result on any rows with
-	 * auto_increment keys
-	 */
-	uint64_t getLastInsertId() const { return static_cast<uint64_t>(mysql_insert_id(handle.get())); }
-
-	/**
-	 * Get database engine version
-	 *
-	 * @return the database engine version
-	 */
-	static const char* getClientVersion() { return mysql_get_client_info(); }
-
-	uint64_t getMaxPacketSize() const { return maxPacketSize; }
-
-private:
-	/**
-	 * Transaction related methods.
-	 *
-	 * Methods for starting, committing and rolling back transaction. Each of
-	 * the returns boolean value.
-	 *
-	 * @return true on success, false on error
-	 */
-	bool beginTransaction();
-	bool rollback();
-	bool commit();
-
-	tfs::detail::Mysql_ptr handle = nullptr;
-	std::recursive_mutex databaseLock;
-	uint64_t maxPacketSize = 1048576;
-	// Do not retry queries if we are in the middle of a transaction
-	bool retryQueries = true;
-
-	friend class DBTransaction;
-};
+} // namespace tfs::db::detail
 
 class DBResult
 {
 public:
-	explicit DBResult(tfs::detail::MysqlResult_ptr&& res);
+	explicit DBResult(tfs::db::detail::MysqlResult_ptr&& res);
 
 	// non-copyable
 	DBResult(const DBResult&) = delete;
@@ -155,12 +126,10 @@ public:
 	bool next();
 
 private:
-	tfs::detail::MysqlResult_ptr handle;
+	tfs::db::detail::MysqlResult_ptr handle;
 	MYSQL_ROW row;
 
 	std::map<std::string_view, size_t> listNames;
-
-	friend class Database;
 };
 
 /**
@@ -188,7 +157,7 @@ public:
 	~DBTransaction()
 	{
 		if (state == STATE_START) {
-			Database::getInstance().rollback();
+			tfs::db::transaction::rollback();
 		}
 	}
 
@@ -199,7 +168,7 @@ public:
 	bool begin()
 	{
 		state = STATE_START;
-		return Database::getInstance().beginTransaction();
+		return tfs::db::transaction::begin();
 	}
 
 	bool commit()
@@ -209,7 +178,7 @@ public:
 		}
 
 		state = STATE_COMMIT;
-		return Database::getInstance().commit();
+		return tfs::db::transaction::commit();
 	}
 
 private:

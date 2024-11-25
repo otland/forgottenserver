@@ -9,12 +9,6 @@
 
 extern Dispatcher g_dispatcher;
 
-void DatabaseTasks::start()
-{
-	db.connect();
-	ThreadHolder::start();
-}
-
 void DatabaseTasks::threadMain()
 {
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
@@ -56,11 +50,11 @@ void DatabaseTasks::runTask(const DatabaseTask& task)
 	bool success;
 	DBResult_ptr result;
 	if (task.store) {
-		result = db.storeQuery(task.query);
+		result = tfs::db::store_query(task.query);
 		success = true;
 	} else {
 		result = nullptr;
-		success = db.executeQuery(task.query);
+		success = tfs::db::execute_query(task.query);
 	}
 
 	if (task.callback) {

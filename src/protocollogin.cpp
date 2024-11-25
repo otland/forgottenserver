@@ -62,11 +62,9 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
                                      const std::string& token, uint16_t version)
 {
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `id`, UNHEX(`password`) AS `password`, `secret`, `premium_ends_at` FROM `accounts` WHERE `name` = {:s} OR `email` = {:s}",
-	    db.escapeString(accountName), db.escapeString(accountName)));
+	    tfs::db::escape_string(accountName), tfs::db::escape_string(accountName)));
 	if (!result) {
 		disconnectClient("Account name or password is not correct.", version);
 		return;
@@ -82,9 +80,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	auto premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 
 	std::vector<std::string> characters = {};
-	result = db.storeQuery(fmt::format(
-	    "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", id));
-	if (result) {
+
+	if (auto result = tfs::db::store_query(fmt::format(
+	        "SELECT `name` FROM `players` WHERE `account_id` = {:d} AND `deletion` = 0 ORDER BY `name` ASC", id))) {
 		do {
 			characters.emplace_back(result->getString("name"));
 		} while (result->next());
@@ -115,10 +113,10 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	output->addByte(0x28);
 	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
-	if (!db.executeQuery(
+	if (!tfs::db::execute_query(
 	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
-	                    db.escapeString(getConnection()->getIP().to_string())))) {
+	                    tfs::db::escape_blob(sessionKey.data(), sessionKey.size()), id,
+	                    tfs::db::escape_string(getConnection()->getIP().to_string())))) {
 		disconnectClient("Failed to create session.\nPlease try again later.", version);
 		return;
 	}

@@ -22,7 +22,6 @@ class DatabaseTasks : public ThreadHolder<DatabaseTasks>
 {
 public:
 	DatabaseTasks() = default;
-	void start();
 	void flush();
 	void shutdown();
 
@@ -33,7 +32,6 @@ public:
 private:
 	void runTask(const DatabaseTask& task);
 
-	Database db;
 	std::thread thread;
 	std::list<DatabaseTask> tasks;
 	std::mutex taskLock;

@@ -18,14 +18,14 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 {
 	MarketOfferList offerList;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `sale` = {:d} AND `itemtype` = {:d}",
 	    tfs::to_underlying(action), itemId));
 	if (!result) {
 		return offerList;
 	}
 
-	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
+	const auto marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
 	do {
 		MarketOffer offer;
@@ -50,7 +50,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `id`, `amount`, `price`, `created`, `itemtype` FROM `market_offers` WHERE `player_id` = {:d} AND `sale` = {:d}",
 	    playerId, tfs::to_underlying(action)));
 	if (!result) {
@@ -73,7 +73,7 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 {
 	HistoryMarketOfferList offerList;
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `itemtype`, `amount`, `price`, `expires_at`, `state` FROM `market_history` WHERE `player_id` = {:d} AND `sale` = {:d}",
 	    playerId, tfs::to_underlying(action)));
 	if (!result) {
@@ -196,8 +196,8 @@ void IOMarket::checkExpiredOffers()
 
 uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(
-	    fmt::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
+	auto result = tfs::db::store_query(
+	        fmt::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
 	if (!result) {
 		return 0;
 	}
@@ -210,7 +210,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 
 	const int32_t created = timestamp - getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `id`, `sale`, `itemtype`, `amount`, `created`, `price`, `player_id`, `anonymous`, (SELECT `name` FROM `players` WHERE `id` = `player_id`) AS `player_name` FROM `market_offers` WHERE `created` = {:d} AND (`id` & 65535) = {:d} LIMIT 1",
 	    created, counter));
 	if (!result) {
@@ -238,20 +238,20 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint64_t price,
                            bool anonymous)
 {
-	Database::getInstance().executeQuery(fmt::format(
+	tfs::db::execute_query(fmt::format(
 	    "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
 	    playerId, tfs::to_underlying(action), itemId, amount, price, time(nullptr), anonymous));
 }
 
 void IOMarket::acceptOffer(uint32_t offerId, uint16_t amount)
 {
-	Database::getInstance().executeQuery(
+	tfs::db::execute_query(
 	    fmt::format("UPDATE `market_offers` SET `amount` = `amount` - {:d} WHERE `id` = {:d}", amount, offerId));
 }
 
 void IOMarket::deleteOffer(uint32_t offerId)
 {
-	Database::getInstance().executeQuery(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId));
+	tfs::db::execute_query(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId));
 }
 
 void IOMarket::appendHistory(uint32_t playerId, MarketAction_t action, uint16_t itemId, uint16_t amount, uint64_t price,
@@ -267,16 +267,14 @@ bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 {
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `player_id`, `sale`, `itemtype`, `amount`, `price`, `created` FROM `market_offers` WHERE `id` = {:d}",
 	    offerId));
 	if (!result) {
 		return false;
 	}
 
-	if (!db.executeQuery(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId))) {
+	if (!tfs::db::execute_query(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId))) {
 		return false;
 	}
 
@@ -289,7 +287,7 @@ bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 
 void IOMarket::updateStatistics()
 {
-	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
+	auto result = tfs::db::store_query(fmt::format(
 	    "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = {:d} GROUP BY `itemtype`, `sale`",
 	    tfs::to_underlying(OFFERSTATE_ACCEPTED)));
 	if (!result) {
