@@ -40,14 +40,14 @@ DBTransaction = {}
 ---@field query fun(query: string): any
 ---@field storeQuery fun(query: string): any
 ---@field escapeString fun(value: string): string
----@field asyncQuery fun(query: string): boolean
+---@field asyncQuery fun(query: string, callback?: function): boolean
 db = {}
 
 ---@class result
 ---@field free fun(resultId: number)
 ---@field next fun(resultId: number): number
 ---@field getNumber fun(resultId: number, column: string): number
----@field getString fun(resultId: number, column: number): string
+---@field getString fun(resultId: number, column: string): string
 ---@field getBoolean fun(resultId: number, column: number): boolean
 ---@field getStream fun(resultId: number, column: number): string
 result = {}
@@ -289,7 +289,7 @@ Podium = {}
 ---@field isImmune fun(self: Creature): boolean
 ---@field canSee fun(self: Creature, position: Position): boolean
 ---@field canSeeCreature fun(self: Creature, creature: Creature): boolean
----@field canSeeGhostMode fun(self: Creature): boolean
+---@field canSeeGhostMode fun(self: Creature, otherCreature?: Creature): boolean
 ---@field canSeeInvisibility fun(self: Creature): boolean
 ---@field getParent fun(self: Creature): Creature
 ---@field getId fun(self: Creature): number
@@ -2260,14 +2260,12 @@ configKeys = {
 	SERVER_SAVE_NOTIFY_DURATION = 34,
 	YELL_MINIMUM_LEVEL = 35,
 	MINIMUM_LEVEL_TO_SEND_PRIVATE = 36,
-	VIP_FREE_LIMIT = 37,
-	VIP_PREMIUM_LIMIT = 38,
-	DEPOT_FREE_LIMIT = 39,
-	DEPOT_PREMIUM_LIMIT = 40,
-	QUEST_TRACKER_FREE_LIMIT = 41,
-	QUEST_TRACKER_PREMIUM_LIMIT = 42,
-	STAMINA_REGEN_MINUTE = 43,
-	STAMINA_REGEN_PREMIUM = 44,
+	DEPOT_FREE_LIMIT = 37,
+	DEPOT_PREMIUM_LIMIT = 38,
+	QUEST_TRACKER_FREE_LIMIT = 39,
+	QUEST_TRACKER_PREMIUM_LIMIT = 40,
+	STAMINA_REGEN_MINUTE = 41,
+	STAMINA_REGEN_PREMIUM = 42,
 }
 
 ITEM_TYPE_NONE = 0
@@ -2466,3 +2464,5 @@ SPELLGROUP_ULTIMATESTRIKES = 8
 WORLD_TYPE_NO_PVP = 1
 WORLD_TYPE_PVP = 2
 WORLD_TYPE_PVP_ENFORCED = 3
+
+PLAYER_NAME_LENGTH = 25

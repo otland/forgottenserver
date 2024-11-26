@@ -2275,6 +2275,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, MONSTER_ICON_FIRST);
 	registerEnum(L, MONSTER_ICON_LAST);
 
+	registerEnum(L, PLAYER_NAME_LENGTH);
+
 	// _G
 	registerGlobalVariable(L, "INDEX_WHEREEVER", INDEX_WHEREEVER);
 	registerGlobalBoolean(L, "VIRTUAL_PARENT", true);
@@ -11049,21 +11051,8 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 		}
 	}
 
-	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), false);
-	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
-			}
-		}
-		IOLoginData::updateOnlineStatus(player->getGUID(), true);
-	}
+	IOLoginData::updateOnlineStatus(player->getGUID(), !player->isInGhostMode());
+
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }

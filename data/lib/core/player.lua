@@ -749,3 +749,141 @@ function Player.sendInboxItems(self, items, containerId)
 	end
 	container:moveTo(inbox)
 end
+
+function Player.getMaxVipEntries(self)
+	local groupMaxVipEntries = self:getGroup():getMaxVipEntries()
+	if groupMaxVipEntries > 0 then
+		return groupMaxVipEntries
+	end
+	return self:isPremium() and VIP_PREMIUM_LIMIT or VIP_FREE_LIMIT
+end
+
+function Player.addVip(self, name)
+	if name:len() > PLAYER_NAME_LENGTH then
+		return
+	end
+
+	local vipGuid
+	local vipName
+	local status
+
+	-- check if the Vip is online
+	local vipPlayer = Player(name)
+	if vipPlayer then
+		if vipPlayer:hasFlag(PlayerFlag_SpecialVIP) and not self:hasFlag(PlayerFlag_SpecialVIP) then
+			self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.")
+			return
+		end
+
+		vipGuid = vipPlayer:getGuid()
+		vipName =  vipPlayer:getName()
+		status = (not vipPlayer:isInGhostMode() or self:canSeeGhostMode(vipPlayer)) and VIPSTATUS_ONLINE or VIPSTATUS_OFFLINE
+	else
+		-- if not online, attempt to load by name
+		local resultId = db.storeQuery("SELECT `name`, `id`, `group_id` FROM `players` WHERE `name` = " .. db.escapeString(name))
+		if not resultId then
+			self:sendTextMessage(MESSAGE_STATUS_SMALL, "A player with this name does not exist.")
+			return
+		end
+
+		-- find Vip group and check if exists
+		local groupId = result.getNumber(resultId, "group_id")
+		local group = Group(groupId)
+		if not group then
+			return
+		end
+
+		if group:hasFlag(PlayerFlag_SpecialVIP) and not self:hasFlag(PlayerFlag_SpecialVIP) then
+			self:sendTextMessage(MESSAGE_STATUS_SMALL, "You can not add this player.")
+			return
+		end
+
+		vipGuid = result.getNumber(resultId, "id")
+		vipName = result.getString(resultId, "name")
+		status = VIPSTATUS_OFFLINE
+	end
+
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:canAdd() then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "You cannot add more buddies.")
+		return
+	end
+
+	if playerVip:has(vipGuid) then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, "This player is already in your list.")
+		return
+	end
+
+	local description = ""
+	local icon = 0
+	local notify = false
+
+	playerVip:add(vipGuid)
+	self:sendVip(vipGuid, vipName, description, icon, notify, status)
+
+	local accountId = self:getAccountId()
+	db.asyncQuery("INSERT INTO `account_viplist` (`account_id`, `player_id`) VALUES (" .. accountId .. ", " .. vipGuid .. ")")
+end
+
+function Player.removeVip(self, vipGuid)
+	local playerVip = Vip(self:getGuid())
+	playerVip:remove(vipGuid)
+
+	local accountId = self:getAccountId()
+	db.asyncQuery("DELETE FROM `account_viplist` WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid)
+end
+
+function Player.editVip(self, vipGuid, description, icon, notify)
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:has(vipGuid) then
+		return
+	end
+
+	local accountId = self:getAccountId()
+	db.asyncQuery("UPDATE `account_viplist` SET `description` = " .. db.escapeString(description) ..", `icon` = " .. icon .. ", `notify` = " .. (notify and 1 or 0) .. " WHERE `account_id` = " .. accountId .. " AND `player_id` = " .. vipGuid .. "")
+end
+
+function Player.notifyVipStatusChange(self, vipGuid, status)
+	local vipPlayer = Player(vipGuid)
+	if not vipPlayer then
+		return
+	end
+
+	local playerVip = Vip(self:getGuid())
+	if not playerVip:has(vipGuid) then
+		return
+	end
+
+	self:sendUpdatedVipStatus(vipGuid, status)
+
+	if status == VIPSTATUS_ONLINE then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, vipPlayer:getName() .. " has logged in.")
+	elseif status == VIPSTATUS_OFFLINE then
+		self:sendTextMessage(MESSAGE_STATUS_SMALL, vipPlayer:getName() .. " has logged out.")
+	end
+end
+
+function Player.sendVip(self, guid, name, description, icon, notify, status)
+	local msg = NetworkMessage()
+	msg:addByte(0xD2)
+	msg:addU32(guid)
+	msg:addString(name)
+	msg:addString(description)
+	msg:addU32(math.min(10, icon))
+	msg:addByte(notify and 1 or 0)
+	msg:addByte(status)
+	msg:addByte(0x00) -- vipGroups (placeholder)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end
+
+function Player.sendUpdatedVipStatus(self, guid, status)
+	local msg = NetworkMessage()
+	msg:addByte(0xD3)
+	msg:addU32(guid)
+	msg:addByte(status)
+	msg:sendToPlayer(self)
+	msg:delete()
+	return true
+end

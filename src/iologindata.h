@@ -10,7 +10,6 @@
 class Item;
 class Player;
 class PropWriteStream;
-struct VIPEntry;
 
 using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
 
@@ -30,18 +29,10 @@ public:
 	static bool loadPlayer(Player* player, DBResult_ptr result);
 	static bool savePlayer(Player* player);
 	static uint32_t getGuidByName(const std::string& name);
-	static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 	static std::string getNameByGuid(uint32_t guid);
 	static bool formatPlayerName(std::string& name);
 	static void increaseBankBalance(uint32_t guid, uint64_t bankBalance);
 	static bool hasBiddedOnHouse(uint32_t guid);
-
-	static std::forward_list<VIPEntry> getVIPEntries(uint32_t accountId);
-	static void addVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
-	                        bool notify);
-	static void editVIPEntry(uint32_t accountId, uint32_t guid, const std::string& description, uint32_t icon,
-	                         bool notify);
-	static void removeVIPEntry(uint32_t accountId, uint32_t guid);
 
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
