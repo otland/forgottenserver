@@ -83,7 +83,8 @@ public:
 
 	void send(const OutputMessage_ptr& msg);
 
-	const Address& getIP() const {
+	const Address& getIP() const
+	{
 		if (isOtcProxy() || isHaProxy()) {
 			return realIpAddress;
 		}

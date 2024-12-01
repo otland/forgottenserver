@@ -177,18 +177,15 @@ bool Connection::tryParseProxyPacket()
 	if (getBoolean(ConfigManager::ALLOW_OTC_PROXY) && size == 0xFFFEu) {
 		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(
-			[thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
-				Connection::handleTimeout(thisPtr, error);
-			});
+		    [thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+			    Connection::handleTimeout(thisPtr, error);
+		    });
 
 		auto self(shared_from_this());
-		boost::asio::async_read(
-			socket,
-			boost::asio::buffer(msg.getBuffer(), 4),
-			[&, thisPtr = shared_from_this()](const boost::system::error_code &error2, size_t) {
-				thisPtr->parseOtcProxyPacket(error2);
-			}
-		);
+		boost::asio::async_read(socket, boost::asio::buffer(msg.getBuffer(), 4),
+		                        [&, thisPtr = shared_from_this()](const boost::system::error_code& error2, size_t) {
+			                        thisPtr->parseOtcProxyPacket(error2);
+		                        });
 		return true;
 	}
 
@@ -197,17 +194,14 @@ bool Connection::tryParseProxyPacket()
 	if (getBoolean(ConfigManager::ALLOW_HAPROXY) && size == 0x0A0Du) {
 		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
 		readTimer.async_wait(
-			[thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
-				Connection::handleTimeout(thisPtr, error);
-			});
+		    [thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+			    Connection::handleTimeout(thisPtr, error);
+		    });
 
-		boost::asio::async_read(
-			socket,
-			boost::asio::buffer(msg.getBuffer(), 26),
-			[&, thisPtr = shared_from_this()](const boost::system::error_code &error2, size_t) {
-				thisPtr->parseHaProxyPacket(error2);
-			}
-		);
+		boost::asio::async_read(socket, boost::asio::buffer(msg.getBuffer(), 26),
+		                        [&, thisPtr = shared_from_this()](const boost::system::error_code& error2, size_t) {
+			                        thisPtr->parseHaProxyPacket(error2);
+		                        });
 		return true;
 	}
 
