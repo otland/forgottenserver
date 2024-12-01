@@ -2312,6 +2312,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN);
 	registerEnumIn(L, "configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST);
 	registerEnumIn(L, "configKeys", ConfigManager::CHECK_DUPLICATE_STORAGE_KEYS);
+	registerEnumIn(L, "configKeys", ConfigManager::ALLOW_OTC_PROXY);
+	registerEnumIn(L, "configKeys", ConfigManager::ALLOW_HAPROXY);
 
 	registerEnumIn(L, "configKeys", ConfigManager::MAP_NAME);
 	registerEnumIn(L, "configKeys", ConfigManager::HOUSE_RENT_PERIOD);
@@ -2329,6 +2331,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::MYSQL_SOCK);
 	registerEnumIn(L, "configKeys", ConfigManager::DEFAULT_PRIORITY);
 	registerEnumIn(L, "configKeys", ConfigManager::MAP_AUTHOR);
+	registerEnumIn(L, "configKeys", ConfigManager::STATUS_IP);
 
 	registerEnumIn(L, "configKeys", ConfigManager::SQL_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::MAX_PLAYERS);
@@ -2763,6 +2766,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Player", "getGuid", LuaScriptInterface::luaPlayerGetGuid);
 	registerMethod(L, "Player", "getIp", LuaScriptInterface::luaPlayerGetIp);
+	registerMethod(L, "Player", "isOtcProxy", LuaScriptInterface::luaPlayerIsOtcProxy);
+	registerMethod(L, "Player", "isHaProxy", LuaScriptInterface::luaPlayerIsHaProxy);
 	registerMethod(L, "Player", "getAccountId", LuaScriptInterface::luaPlayerGetAccountId);
 	registerMethod(L, "Player", "getLastLoginSaved", LuaScriptInterface::luaPlayerGetLastLoginSaved);
 	registerMethod(L, "Player", "getLastLogout", LuaScriptInterface::luaPlayerGetLastLogout);
@@ -9057,6 +9062,30 @@ int LuaScriptInterface::luaPlayerGetIp(lua_State* L)
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
 		tfs::lua::pushString(L, player->getIP().to_string());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsOtcProxy(lua_State* L)
+{
+	// player:isOtcProxy()
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		tfs::lua::pushBoolean(L, player->isOtcProxy());
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerIsHaProxy(lua_State* L)
+{
+	// player:isHaProxy()
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		tfs::lua::pushBoolean(L, player->isHaProxy());
 	} else {
 		lua_pushnil(L);
 	}

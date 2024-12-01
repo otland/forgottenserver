@@ -132,6 +132,88 @@ void Connection::accept()
 	}
 }
 
+void Connection::parseOtcProxyPacket(const boost::system::error_code& error)
+{
+	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	readTimer.cancel();
+	if (error) {
+		return close();
+	}
+
+	const uint8_t* msgBuffer = msg.getBuffer();
+	uint32_t realIP = *reinterpret_cast<const uint32_t*>(msgBuffer);
+	realIpAddress = boost::asio::ip::address(boost::asio::ip::address_v4(realIP));
+	otcProxy = true;
+	accept();
+}
+
+void Connection::parseHaProxyPacket(const boost::system::error_code& error)
+{
+	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
+	readTimer.cancel();
+	if (error) {
+		return close();
+	}
+
+	const uint8_t* msgBuffer = msg.getBuffer();
+	uint32_t realIP = *reinterpret_cast<const uint32_t*>(&msgBuffer[14]);
+	realIpAddress = boost::asio::ip::address(boost::asio::ip::address_v4(realIP));
+	haProxy = true;
+	accept();
+}
+
+bool Connection::tryParseProxyPacket()
+{
+	// only first packet may contain IP from OTCv8 proxy / haproxy
+	if (receivedFirstHeader) {
+		return false;
+	}
+
+	receivedFirstHeader = true;
+
+	uint16_t size = msg.getLengthHeader();
+	// OTCv8 proxy, 6 bytes packet
+	// starts from 2 bytes 0xFFFEu, then 4 bytes with IP uint32_t
+	if (getBoolean(ConfigManager::ALLOW_OTC_PROXY) && size == 0xFFFEu) {
+		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.async_wait(
+			[thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+				Connection::handleTimeout(thisPtr, error);
+			});
+
+		auto self(shared_from_this());
+		boost::asio::async_read(
+			socket,
+			boost::asio::buffer(msg.getBuffer(), 4),
+			[&, thisPtr = shared_from_this()](const boost::system::error_code &error2, size_t) {
+				thisPtr->parseOtcProxyPacket(error2);
+			}
+		);
+		return true;
+	}
+
+	// HAProxy send-proxy-v2, 28 bytes packet
+	// starts from 2 bytes 0x0A0Du, then 26 bytes, IP uint32_t starts from 17th byte (of 28 bytes)
+	if (getBoolean(ConfigManager::ALLOW_HAPROXY) && size == 0x0A0Du) {
+		readTimer.expires_after(std::chrono::seconds(CONNECTION_READ_TIMEOUT));
+		readTimer.async_wait(
+			[thisPtr = std::weak_ptr<Connection>(shared_from_this())](const boost::system::error_code& error) {
+				Connection::handleTimeout(thisPtr, error);
+			});
+
+		boost::asio::async_read(
+			socket,
+			boost::asio::buffer(msg.getBuffer(), 26),
+			[&, thisPtr = shared_from_this()](const boost::system::error_code &error2, size_t) {
+				thisPtr->parseHaProxyPacket(error2);
+			}
+		);
+		return true;
+	}
+
+	return false;
+}
+
 void Connection::parseHeader(const boost::system::error_code& error)
 {
 	std::lock_guard<std::recursive_mutex> lockClass(connectionLock);
@@ -141,6 +223,10 @@ void Connection::parseHeader(const boost::system::error_code& error)
 		close(FORCE_CLOSE);
 		return;
 	} else if (connectionState == CONNECTION_STATE_DISCONNECTED) {
+		return;
+	}
+
+	if (tryParseProxyPacket()) {
 		return;
 	}
 

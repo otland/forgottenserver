@@ -134,7 +134,13 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		for (uint8_t i = 0; i < 2; i++) {
 			output->addByte(i); // world id
 			output->addString(i == 0 ? "Offline" : "Online");
-			output->addString(getString(ConfigManager::IP));
+			if (getConnection()->isOtcProxy()) {
+				output->addString("127.0.0.1");
+			} else if (getConnection()->isHaProxy()) {
+				output->addString(getString(ConfigManager::STATUS_IP));
+			} else {
+				output->addString(getString(ConfigManager::IP));
+			}
 			output->add<uint16_t>(getNumber(ConfigManager::GAME_PORT));
 			output->addByte(0);
 		}
@@ -142,7 +148,13 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		output->addByte(1); // number of worlds
 		output->addByte(0); // world id
 		output->addString(getString(ConfigManager::SERVER_NAME));
-		output->addString(getString(ConfigManager::IP));
+		if (getConnection()->isOtcProxy()) {
+			output->addString("127.0.0.1");
+		} else if (getConnection()->isHaProxy()) {
+			output->addString(getString(ConfigManager::STATUS_IP));
+		} else {
+			output->addString(getString(ConfigManager::IP));
+		}
 		output->add<uint16_t>(getNumber(ConfigManager::GAME_PORT));
 		output->addByte(0);
 	}

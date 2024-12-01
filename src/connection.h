@@ -83,9 +83,19 @@ public:
 
 	void send(const OutputMessage_ptr& msg);
 
-	const Address& getIP() const { return remoteAddress; };
+	const Address& getIP() const {
+		if (isOtcProxy() || isHaProxy()) {
+			return realIpAddress;
+		}
+		return remoteAddress;
+	};
+	bool isOtcProxy() const { return otcProxy; };
+	bool isHaProxy() const { return haProxy; };
 
 private:
+	void parseOtcProxyPacket(const boost::system::error_code& error);
+	void parseHaProxyPacket(const boost::system::error_code& error);
+	bool tryParseProxyPacket();
 	void parseHeader(const boost::system::error_code& error);
 	void parsePacket(const boost::system::error_code& error);
 
@@ -115,6 +125,11 @@ private:
 	Address remoteAddress;
 	time_t timeConnected;
 	uint32_t packetsSent = 0;
+
+	Address realIpAddress;
+	bool otcProxy = false;
+	bool haProxy = false;
+	bool receivedFirstHeader = false;
 
 	ConnectionState_t connectionState = CONNECTION_STATE_PENDING;
 	bool receivedFirst = false;

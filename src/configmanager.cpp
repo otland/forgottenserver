@@ -245,6 +245,8 @@ bool ConfigManager::load()
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
 	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
 	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
+	boolean[ALLOW_OTC_PROXY] = getGlobalBoolean(L, "allowOtcProxy", false);
+	boolean[ALLOW_HAPROXY] = getGlobalBoolean(L, "allowHaProxy", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -253,6 +255,7 @@ bool ConfigManager::load()
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
+	string[STATUS_IP] = getGlobalString(L, "statusIp", "");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
