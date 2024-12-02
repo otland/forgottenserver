@@ -13,7 +13,7 @@ size_t Cylinder::getFirstIndex() const { return 0; }
 
 size_t Cylinder::getLastIndex() const { return 0; }
 
-uint32_t Cylinder::getItemTypeCount(uint16_t, int32_t, bool) const { return 0; }
+uint32_t Cylinder::getItemTypeCount(uint16_t, int32_t) const { return 0; }
 
 std::map<uint32_t, uint32_t>& Cylinder::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {

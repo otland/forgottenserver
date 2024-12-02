@@ -626,7 +626,7 @@ size_t Container::getFirstIndex() const { return 0; }
 
 size_t Container::getLastIndex() const { return size(); }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/, bool) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {
