@@ -16,8 +16,8 @@
         - NpcsHandler:getAllData(player)
         - NpcsHandler:addData(player, key, data)
         - NpcsHandler:resetData(player)
+        - NpcsHandler:setStorageValue(key, value)
         - NpcsHandler:requirements()
-        - NpcsHandler:player()
         - NpcsHandler:isKeyword(word)
         - NpcsHandler:getKeywords()
         - NpcsHandler:getTalkState(player)
@@ -35,6 +35,7 @@
         - NpcsHandler:setFarewellResponse(texts)
         - NpcsHandler:resetTalkState()
         - NpcsHandler:failureRespond(text)
+        - NpcsHandler:teleport(position)
         - NpcsHandler:callback(npc, player, message)
         - NpcsHandler:farewell()
         - NpcsHandler:talk(table)
@@ -53,6 +54,7 @@
 ---@field openShop number
 ---@field resetTalkstate boolean
 ---@field failureResponse string
+---@field teleportPosition Position
 ---@field keyword fun(self: NpcsHandler, words: string|table): NpcsHandler
 ---@field onStorageValue fun(self: NpcsHandler, key: number, value: number, operator?: string, value2?: number, operator2?: string): NpcsHandler
 ---@field onAnswer fun(self: NpcsHandler): NpcsHandler
@@ -61,6 +63,8 @@
 ---@field getAllData fun(self: NpcsHandler, player: Player): table
 ---@field addData fun(self: NpcsHandler, player: Player, key: string, data: string)
 ---@field resetAData fun(self: NpcsHandler, player: Player)
+---@field setStorageValue fun(self: NpcsHandler, key: number, value: number)
+---@field addItems fun(self: NpcsHandler, items: table, container?: number|string, inbox?: boolean)
 ---@field requirements fun(self: NpcsHandler): NpcRequirements
 ---@field isKeyword fun(self: NpcsHandler, word: string): NpcsHandler|boolean
 ---@field getKeywords fun(self: NpcsHandler): table<string, NpcsHandler>
@@ -79,9 +83,9 @@
 ---@field setFarewellResponse fun(self: NpcsHandler, texts: string|table)
 ---@field resetTalkState fun(self: NpcsHandler)
 ---@field failureRespond fun(self: NpcsHandler, text: string)
+---@field teleport fun(self: NpcsHandler, position: Position)
 ---@field callback fun(self: NpcsHandler, npc: Npc, player: Player, message: string): boolean, string
 ---@field require NpcRequirements
----@field player NpcModules
 ---@field farewell fun(self: NpcsHandler)
 ---@field talk fun(self: NpcsHandler, params: table<number, table>)
 ---@field checkOnStorage fun(self: NpcsHandler, creature: Creature, handler: NpcsHandler)
@@ -234,6 +238,24 @@ if not NpcsHandler then
         self.data[player:getGuid()] = {}
     end
 
+    -- This function sets the storage value for the keyword.
+    ---@param key number The key to set the storage value for.
+    ---@param value number The value to set the storage value to.
+    function NpcsHandler:setStorageValue(key, value)
+        self.setStorage = {key = key, value = value}
+    end
+
+    -- This function adds items to the player, if the player does not have storage it goes into the players inbox.
+    ---@param items table The items to add to the player.
+    ---@param container number|string The container to add the items to.
+    ---@param inbox boolean Whether to add the items to the player's inbox.
+    function NpcsHandler:addItems(items, container, inbox)
+        self.items = {}
+        self.items.items = items
+        self.items.container = container or nil
+        self.items.inbox = inbox or false
+    end
+
     -- Retrieves the requirements for a keyword.
     -- If the requirements have not been initialized, it creates a new table and sets the metatable to NpcRequirements.
     ---@return NpcRequirements The requirements table for the NPC.
@@ -243,17 +265,6 @@ if not NpcsHandler then
             setmetatable(self.require, {__index = NpcRequirements})
         end
         return self.require
-    end
-
-    -- Retrieves the player modules for a keyword.
-    -- If the modules have not been initialized, it creates a new table and sets the metatable to NpcModules.
-    ---@return NpcModules The modules table for the NPC.
-    function NpcsHandler:player()
-        if not self.modules then
-            self.modules = {}
-            setmetatable(self.modules, {__index = NpcModules})
-        end
-        return self.modules
     end
 
     -- Checks if a word is a keyword.
@@ -377,6 +388,15 @@ if not NpcsHandler then
     ---@param text string The failure response text.
     function NpcsHandler:failureRespond(text)
         self.failureResponse = text
+    end
+
+    -- Sets the position to teleport the player to.
+    ---@param position Position The position to teleport the player to.
+    function NpcsHandler:teleport(position, magicEffectFromPos, magicEffectToPos)
+        self.teleportPosition = {}
+        self.teleportPosition.position = position
+        self.teleportPosition.magicEffectFromPos = magicEffectFromPos or CONST_ME_TELEPORT
+        self.teleportPosition.magicEffectToPos = magicEffectToPos or CONST_ME_TELEPORT
     end
 
     -- Releases the focus of the player like we are saying goodbye.

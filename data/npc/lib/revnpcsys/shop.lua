@@ -12,7 +12,6 @@
         - NpcShop:hasDiscount(player)
         - NpcShop:getItems()
         - NpcShop:getItem(itemid/name, subType)
-        - NpcShop:callback(npc, player, handler, items, afterDiscount)
         - NpcShop.onBuy(player, itemid, subType, amount, ignoreCap, inBackpacks)
         - NpcShop.onSell(player, itemid, subType, amount, ignoreEquipped)
 ]]
@@ -26,12 +25,9 @@
 ---@field hasDiscount fun(player: Player): number|boolean
 ---@field getItems fun(): table
 ---@field getItem fun(itemid: number|string, subType?: number): Item|boolean
----@field callback fun(npc: Npc, player: Player, handler: table, items: table, afterDiscount?: number): table
 ---@field onBuy fun(player: Player, itemid: number, subType: number, amount: number, ignoreCap: boolean, inBackpacks: boolean): boolean
 ---@field onSell fun(player: Player, itemid: number, subType: number, amount: number, ignoreEquipped: boolean): boolean
 ---@type table<string, table<string, NpcShop>>
-
----@alias NpcShop.callback fun(npc, player, handler, items, afterDiscount?): table
 
 -- Make sure we are not overloading on reload
 if not NpcShop then

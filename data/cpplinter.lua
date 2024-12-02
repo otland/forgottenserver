@@ -322,7 +322,7 @@ Podium = {}
 ---@field setSkull fun(self: Creature, skullType: number)
 ---@field getOutfit fun(self: Creature): Outfit
 ---@field setOutfit fun(self: Creature, outfit: Outfit)
----@field getCondition fun(self: Creature, conditionType: number, conditionId?: number, subId?: number): Condition
+---@field getCondition fun(self: Creature, conditionType: number): Condition
 ---@field addCondition fun(self: Creature, condition: Condition)
 ---@field removeCondition fun(self: Creature, conditionType: number)
 ---@field hasCondition fun(self: Creature, conditionType: number): boolean
@@ -400,7 +400,7 @@ Creature = {}
 ---@field setVocation fun(self: Player, vocationId: number)
 ---@field getSex fun(self: Player): number
 ---@field setSex fun(self: Player, sexId: number)
----@field getTown fun(self: Player): Town
+---@field getTown fun(self: Player): number
 ---@field setTown fun(self: Player, townId: number)
 ---@field getGuild fun(self: Player): Guild
 ---@field setGuild fun(self: Player, guild: Guild)
@@ -449,10 +449,10 @@ Creature = {}
 ---@field hasBlessing fun(self: Player, blessingId: number): boolean
 ---@field addBlessing fun(self: Player, blessingId: number)
 ---@field removeBlessing fun(self: Player, blessingId: number)
----@field canLearnSpell fun(self: Player, name: string): boolean
----@field learnSpell fun(self: Player, name: string)
----@field forgetSpell fun(self: Player, name: string)
----@field hasLearnedSpell fun(self: Player, name: string): boolean
+---@field canLearnSpell fun(self: Player, spellId: number): boolean
+---@field learnSpell fun(self: Player, spellId: number)
+---@field forgetSpell fun(self: Player, spellId: number)
+---@field hasLearnedSpell fun(self: Player, spellId: number): boolean
 ---@field sendTutorial fun(self: Player, tutorialId: number)
 ---@field addMapMark fun(self: Player, position: Position, type: number, description?: string)
 ---@field save fun(self: Player)
@@ -580,13 +580,6 @@ Npc = {}
 ---@field onPlayerCloseChannel fun(self: NpcType, callback: function): boolean
 ---@field onPlayerEndTrade fun(self: NpcType, callback: function): boolean
 ---@field onThink fun(self: NpcType, callback: function): boolean
----@field onSayCallback fun(self: NpcType, callback: function): boolean
----@field onDisappearCallback fun(self: NpcType, callback: function): boolean
----@field onAppearCallback fun(self: NpcType, callback: function): boolean
----@field onMoveCallback fun(self: NpcType, callback: function): boolean
----@field onPlayerCloseChannelCallback fun(self: NpcType, callback: function): boolean
----@field onPlayerEndTradeCallback fun(self: NpcType, callback: function): boolean
----@field onThinkCallback fun(self: NpcType, callback: function): boolean
 NpcType = {}
 
 ---@class Guild
@@ -1322,7 +1315,7 @@ function getDistanceTo(creature) end
 function doNpcSetCreatureFocus(creature) end
 function getNpcParameter(key) end
 function openShopWindow(shopWindow) end
-function closeShopWindow(player) end
+function closeShopWindow() end
 function doSellItem(item) end
 
 storages = {}

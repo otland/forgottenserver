@@ -8,7 +8,6 @@
         - The focus duration and distance are defined in the FOCUS table in constants.lua.
 
     Functions:
-        - NpcFocus:clear()
         - NpcFocus:addFocus(player)
         - NpcFocus:isFocused(player)
         - NpcFocus:removeFocus(player)
@@ -18,7 +17,6 @@
 ---@class NpcFocus
 ---@field focus table<number, number>
 ---@field currentFocus Player
----@field clear fun()
 ---@field addFocus fun(player: Player)
 ---@field isFocused fun(player: Player): boolean
 ---@field removeFocus fun(player: Player)
@@ -43,11 +41,6 @@ if not NpcFocus then
             return self[npc:getId()]
         end
     })
-
-    -- Clears all NpcFocus data for an NPC.
-    function NpcFocus:clear()
-        self = nil
-    end
 
     -- Adds focus on a player for a certain duration.
     ---@param player Player The player to add focus on.
