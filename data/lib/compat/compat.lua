@@ -133,42 +133,6 @@ do
 end
 
 do
-	local function NpcTypeNewIndex(self, key, value)
-		if key == "onSay" then
-			self:eventType("say")
-			self:onSay(value)
-			return
-		elseif key == "onDisappear" then
-			self:eventType("disappear")
-			self:onDisappear(value)
-			return
-		elseif key == "onAppear" then
-			self:eventType("appear")
-			self:onAppear(value)
-			return
-		elseif key == "onMove" then
-			self:eventType("move")
-			self:onMove(value)
-			return
-		elseif key == "onPlayerCloseChannel" then
-			self:eventType("closechannel")
-			self:onPlayerCloseChannel(value)
-			return
-		elseif key == "onPlayerEndTrade" then
-			self:eventType("endtrade")
-			self:onPlayerEndTrade(value)
-			return
-		elseif key == "onThink" then
-			self:eventType("think")
-			self:onThink(value)
-			return
-		end
-		rawset(self, key, value)
-	end
-	rawgetmetatable("NpcType").__newindex = NpcTypeNewIndex
-end
-
-do
 	local function TalkActionNewIndex(self, key, value)
 		if key == "onSay" then
 			self:onSay(value)
@@ -628,6 +592,8 @@ function isPremium(cid) local p = Player(cid) return p and p:isPremium() or fals
 
 STORAGEVALUE_EMPTY = -1
 function Player:getStorageValue(key)
+	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.")
+
 	local v = Creature.getStorageValue(self, key)
 	return v or STORAGEVALUE_EMPTY
 end

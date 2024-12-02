@@ -14,93 +14,25 @@ extern LuaEnvironment g_luaEnvironment;
 
 uint32_t Npc::npcAutoID = 0x20000000;
 
-namespace Npcs {
-bool loaded = false;
-std::shared_ptr<NpcScriptInterface> scriptInterface = std::make_shared<NpcScriptInterface>();
-std::map<const std::string, NpcType*> npcTypes;
-
-void load(bool reload /*= false*/)
+void Npcs::reload()
 {
-	if (!reload && loaded) {
-		return;
-	}
-
-	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
-		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: data/npc/lib/npc.lua" << std::endl;
-		std::cout << scriptInterface->getLastLuaError() << std::endl;
-		return;
-	}
-
-	loaded = true;
-
-	if (!reload) {
-		fmt::print(">> NpcLib loaded\n");
-	} else {
-		fmt::print(">> NpcLib reloaded\n");
-	}
-}
-
-void reload()
-{
-	load(true);
-
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
 	for (const auto& it : npcs) {
 		it.second->closeAllShopWindows();
 	}
 
-	for (const auto& it : getNpcTypes()) {
-		if (!it.second->fromLua) {
-			it.second->loadFromXml();
-		}
-	}
-
 	for (const auto& it : npcs) {
-		if (!it.second->npcType->fromLua) {
-			it.second->reload();
-		}
+		it.second->reload();
 	}
 }
-
-void addNpcType(const std::string& name, NpcType* npcType) { npcTypes[name] = npcType; }
-void clearNpcTypes() { npcTypes.clear(); }
-std::map<const std::string, NpcType*> getNpcTypes() { return npcTypes; }
-
-NpcType* getNpcType(std::string name)
-{
-	auto npcType = npcTypes[name];
-	if (npcType) {
-		return npcType;
-	}
-	return nullptr;
-}
-
-NpcScriptInterface* getScriptInterface() { return scriptInterface.get(); }
-} // namespace Npcs
 
 Npc* Npc::createNpc(const std::string& name)
 {
-	auto npcType = Npcs::getNpcType(name);
-	if (!npcType) {
-		npcType = new NpcType();
-		npcType->filename = "data/npc/" + name + ".xml";
-		if (!npcType->loadFromXml()) {
-			delete npcType;
-			return nullptr;
-		}
+	std::unique_ptr<Npc> npc(new Npc(name));
+	if (!npc->load()) {
+		return nullptr;
 	}
-	Npc* npc = new Npc(name);
-	npc->setName(npcType->name);
-	npc->loaded = true;
-	npc->npcType = npcType;
-	npc->loadNpcTypeInfo();
-	if (npcType->fromLua) {
-		npc->npcEventHandler = std::make_unique<NpcEventsHandler>(*npcType->npcEventHandler);
-	} else {
-		npc->npcEventHandler = std::make_unique<NpcEventsHandler>(npcType->scriptFilename, npc);
-	}
-	npc->npcEventHandler->setNpc(npc);
-	return npc;
+	return npc.release();
 }
 
 Npc::Npc(const std::string& name) : Creature(), filename("data/npc/" + name + ".xml"), masterRadius(-1), loaded(false)
@@ -120,15 +52,13 @@ bool Npc::load()
 		return true;
 	}
 
-	loadNpcTypeInfo();
-	npcEventHandler = std::make_unique<NpcEventsHandler>(npcType->scriptFilename, this);
-	npcEventHandler->setNpc(this);
+	reset();
 
-	loaded = true;
+	loaded = loadFromXml();
 	return loaded;
 }
 
-void Npc::reset(bool reload)
+void Npc::reset()
 {
 	loaded = false;
 	isIdle = true;
@@ -145,17 +75,12 @@ void Npc::reset(bool reload)
 	parameters.clear();
 	shopPlayerSet.clear();
 	spectators.clear();
-
-	if (reload) {
-		load();
-	}
 }
 
 void Npc::reload()
 {
-	if (!npcType->fromLua) {
-		reset(true);
-	}
+	reset();
+	load();
 
 	SpectatorVec players;
 	g_game.map.getSpectators(players, getPosition(), true, true);
@@ -177,7 +102,7 @@ void Npc::reload()
 	}
 }
 
-bool NpcType::loadFromXml()
+bool Npc::loadFromXml()
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
@@ -224,7 +149,7 @@ bool NpcType::loadFromXml()
 	}
 
 	if ((attr = npcNode.attribute("skull"))) {
-		skull = getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
+		setSkull(getSkullType(boost::algorithm::to_lower_copy<std::string>(attr.as_string())));
 	}
 
 	pugi::xml_node healthNode = npcNode.child("health");
@@ -262,6 +187,8 @@ bool NpcType::loadFromXml()
 			defaultOutfit.lookTypeEx = pugi::cast<uint16_t>(attr.value());
 		}
 		defaultOutfit.lookMount = pugi::cast<uint16_t>(lookNode.attribute("mount").value());
+
+		currentOutfit = defaultOutfit;
 	}
 
 	for (auto parameterNode : npcNode.child("parameters").children()) {
@@ -270,9 +197,12 @@ bool NpcType::loadFromXml()
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
 	if (scriptFile) {
-		scriptFilename = scriptFile.as_string();
+		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), this);
+		if (!handler->isLoaded()) {
+			return false;
+		}
+		npcEventHandler = std::move(handler);
 	}
-	Npcs::addNpcType(name, this);
 	return true;
 }
 
@@ -293,24 +223,6 @@ std::string Npc::getDescription(int32_t) const
 	return descr;
 }
 
-void Npc::loadNpcTypeInfo()
-{
-	speechBubble = npcType->speechBubble;
-	walkTicks = npcType->walkTicks;
-	baseSpeed = npcType->baseSpeed;
-	masterRadius = npcType->masterRadius;
-	floorChange = npcType->floorChange;
-	attackable = npcType->attackable;
-	ignoreHeight = npcType->ignoreHeight;
-	isIdle = npcType->isIdle;
-	pushable = npcType->pushable;
-	defaultOutfit = npcType->defaultOutfit;
-	currentOutfit = defaultOutfit;
-	parameters = npcType->parameters;
-	health = npcType->health;
-	healthMax = npcType->healthMax;
-}
-
 void Npc::goToFollowCreature()
 {
 	if (!followCreature) {
@@ -327,44 +239,31 @@ void Npc::onCreatureAppear(Creature* creature, bool isLogin)
 	Creature::onCreatureAppear(creature, isLogin);
 
 	if (creature == this) {
-		if (walkTicks > 0) {
+		SpectatorVec players;
+		g_game.map.getSpectators(players, getPosition(), true, true);
+		for (const auto& player : players) {
+			assert(dynamic_cast<Player*>(player) != nullptr);
+			spectators.insert(static_cast<Player*>(player));
+		}
+
+		const bool hasSpectators = !spectators.empty();
+		setIdle(!hasSpectators);
+
+		if (hasSpectators && walkTicks > 0) {
 			addEventWalk();
 		}
 
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	}
-}
 
-bool NpcType::loadCallback(NpcScriptInterface* scriptInterface)
-{
-	int32_t id = scriptInterface->getEvent();
-	if (id == -1) {
-		std::cout << "[Warning - Npc::loadCallback] Event not found. " << std::endl;
-		return false;
+		spectators.insert(player);
+		setIdle(false);
 	}
-
-	if (eventType == "say") {
-		npcEventHandler->creatureSayEvent = id;
-	} else if (eventType == "disappear") {
-		npcEventHandler->creatureDisappearEvent = id;
-	} else if (eventType == "appear") {
-		npcEventHandler->creatureAppearEvent = id;
-	} else if (eventType == "move") {
-		npcEventHandler->creatureMoveEvent = id;
-	} else if (eventType == "closechannel") {
-		npcEventHandler->playerCloseChannelEvent = id;
-	} else if (eventType == "endtrade") {
-		npcEventHandler->playerEndTradeEvent = id;
-	} else if (eventType == "think") {
-		npcEventHandler->thinkEvent = id;
-	}
-	return true;
 }
 
 void Npc::onRemoveCreature(Creature* creature, bool isLogout)
@@ -376,10 +275,13 @@ void Npc::onRemoveCreature(Creature* creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (creature->getPlayer()) {
+	} else if (Player* player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
+
+		spectators.erase(player);
+		setIdle(spectators.empty());
 	}
 }
 
@@ -391,6 +293,19 @@ void Npc::onCreatureMove(Creature* creature, const Tile* newTile, const Position
 	if (creature == this || creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureMove(creature, oldPos, newPos);
+		}
+
+		if (creature != this) {
+			Player* player = creature->getPlayer();
+
+			// if player is now in range, add to spectators list, otherwise erase
+			if (player->canSee(position)) {
+				spectators.insert(player);
+			} else {
+				spectators.erase(player);
+			}
+
+			setIdle(spectators.empty());
 		}
 	}
 }
@@ -419,31 +334,15 @@ void Npc::onPlayerCloseChannel(Player* player)
 
 void Npc::onThink(uint32_t interval)
 {
-	SpectatorVec players;
-	g_game.map.getSpectators(players, getPosition(), true, true, Npcs::ViewportX, Npcs::ViewportX, Npcs::ViewportY,
-	                         Npcs::ViewportY);
-	for (const auto& player : players) {
-		assert(dynamic_cast<Player*>(player) != nullptr);
-		spectators.insert(static_cast<Player*>(player));
-	}
-
-	setIdle(spectators.empty());
-
-	if (isIdle) {
-		return;
-	}
-
 	Creature::onThink(interval);
 
 	if (npcEventHandler) {
 		npcEventHandler->onThink();
 	}
 
-	if (getTimeSinceLastMove() >= walkTicks) {
+	if (!isIdle && getTimeSinceLastMove() >= walkTicks) {
 		addEventWalk();
 	}
-
-	spectators.clear();
 }
 
 void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(this, TALKTYPE_SAY, text, false); }
@@ -467,7 +366,7 @@ void Npc::onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8
 
 void Npc::onPlayerEndTrade(Player* player, int32_t buyCallback, int32_t sellCallback)
 {
-	lua_State* L = Npcs::getScriptInterface()->getLuaState();
+	lua_State* L = getScriptInterface()->getLuaState();
 
 	if (buyCallback != -1) {
 		luaL_unref(L, LUA_REGISTRYINDEX, buyCallback);
@@ -1173,8 +1072,15 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	return 1;
 }
 
-NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) : scriptInterface(Npcs::scriptInterface), npc(npc)
+NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) :
+    scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
 {
+	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
+		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
+		std::cout << scriptInterface->getLastLuaError() << std::endl;
+		return;
+	}
+
 	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
@@ -1187,18 +1093,6 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, Npc* npc) : scriptIn
 		playerCloseChannelEvent = scriptInterface->getEvent("onPlayerCloseChannel");
 		playerEndTradeEvent = scriptInterface->getEvent("onPlayerEndTrade");
 		thinkEvent = scriptInterface->getEvent("onThink");
-	}
-}
-
-NpcEventsHandler::NpcEventsHandler() : scriptInterface(Npcs::scriptInterface) {}
-
-NpcEventsHandler::~NpcEventsHandler()
-{
-	for (auto eventId : {creatureSayEvent, creatureDisappearEvent, creatureAppearEvent, creatureMoveEvent,
-	                     playerCloseChannelEvent, playerEndTradeEvent, thinkEvent}) {
-		if (!npc->npcType->fromLua) {
-			scriptInterface->removeEvent(eventId);
-		}
 	}
 }
 

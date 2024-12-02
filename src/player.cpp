@@ -2999,39 +2999,23 @@ size_t Player::getFirstIndex() const { return CONST_SLOT_FIRST; }
 
 size_t Player::getLastIndex() const { return CONST_SLOT_LAST + 1; }
 
-uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/, bool ignoreEquipped /*= false*/) const
+uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-
-	if (ignoreEquipped) {
-		Item* item = inventory[CONST_SLOT_BACKPACK];
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+		Item* item = inventory[i];
 		if (!item) {
-			return 0;
+			continue;
+		}
+
+		if (item->getID() == itemId) {
+			count += Item::countByType(item, subType);
 		}
 
 		if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
-				}
-			}
-		}
-	} else {
-		for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-			Item* item = inventory[i];
-			if (!item) {
-				continue;
-			}
-
-			if (item->getID() == itemId) {
-				count += Item::countByType(item, subType);
-			}
-
-			if (Container* container = item->getContainer()) {
-				for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-					if ((*it)->getID() == itemId) {
-						count += Item::countByType(*it, subType);
-					}
 				}
 			}
 		}
