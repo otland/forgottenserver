@@ -25,7 +25,6 @@ void load(bool reload /*= false*/)
 		return;
 	}
 
-	scriptInterface->loadFile("data/global.lua");
 	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
 		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: data/npc/lib/npc.lua" << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;
@@ -77,101 +76,7 @@ NpcType* getNpcType(std::string name)
 }
 
 NpcScriptInterface* getScriptInterface() { return scriptInterface.get(); }
-
-bool loadNpcs(bool reload)
-{
-	namespace fs = std::filesystem;
-
-	const auto dir = fs::current_path() / "data/npc/lua";
-	if (!fs::exists(dir) || !fs::is_directory(dir)) {
-		std::cout << "[Warning - Npcs::loadNpcs] Can not load folder 'npc/lua'" << std::endl;
-		return false;
-	}
-
-	fs::recursive_directory_iterator endit;
-	std::vector<fs::path> v;
-	std::string disable = ("#");
-	for (fs::recursive_directory_iterator it(dir); it != endit; ++it) {
-		auto fn = it->path().parent_path().filename();
-		if (fs::is_regular_file(*it) && it->path().extension() == ".lua") {
-			size_t found = it->path().filename().string().find(disable);
-			if (found != std::string::npos) {
-				if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-					std::cout << "> " << it->path().filename().string() << " [disabled]" << std::endl;
-				}
-				continue;
-			}
-			v.push_back(it->path());
-		}
-	}
-	sort(v.begin(), v.end());
-	std::string redir;
-	for (auto it = v.begin(); it != v.end(); ++it) {
-		const std::string scriptFile = it->string();
-		if (redir.empty() || redir != it->parent_path().string()) {
-			auto p = fs::path(it->relative_path());
-			if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-				std::cout << ">> [" << p.parent_path().filename() << "]" << std::endl;
-			}
-			redir = it->parent_path().string();
-		}
-
-		if (scriptInterface->loadFile(scriptFile) == -1) {
-			std::cout << "> " << it->filename().string() << " [error]" << std::endl;
-			std::cout << "^ " << scriptInterface->getLastLuaError() << std::endl;
-			continue;
-		}
-
-		if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-			if (!reload) {
-				std::cout << "> " << it->filename().string() << " [loaded]" << std::endl;
-			} else {
-				std::cout << "> " << it->filename().string() << " [reloaded]" << std::endl;
-			}
-		}
-	}
-
-	return true;
-}
 } // namespace Npcs
-
-int32_t NpcScriptInterface::loadFile(const std::string& file, Npc* npc /* = nullptr*/)
-{
-	// loads file as a chunk at stack top
-	int ret = luaL_loadfile(L, file.data());
-	if (ret != 0) {
-		lastLuaError = tfs::lua::popString(L);
-		return -1;
-	}
-
-	// check that it is loaded as a function
-	if (!lua_isfunction(L, -1)) {
-		lua_pop(L, 1);
-		return -1;
-	}
-
-	loadingFile = file;
-
-	if (!tfs::lua::reserveScriptEnv()) {
-		lua_pop(L, 1);
-		return -1;
-	}
-
-	ScriptEnvironment* env = tfs::lua::getScriptEnv();
-	env->setScriptId(Npcs::EVENT_ID_LOADING, this);
-	env->setNpc(npc);
-
-	// execute it
-	ret = tfs::lua::protectedCall(L, 0, 0);
-	if (ret != 0) {
-		reportErrorFunc(nullptr, tfs::lua::popString(L));
-		tfs::lua::resetScriptEnv();
-		return -1;
-	}
-
-	tfs::lua::resetScriptEnv();
-	return 0;
-}
 
 Npc* Npc::createNpc(const std::string& name)
 {
