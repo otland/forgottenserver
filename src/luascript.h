@@ -882,7 +882,6 @@ private:
 	static int luaNpcTypeParameter(lua_State* L);
 	static int luaNpcTypeHealth(lua_State* L);
 	static int luaNpcTypeMaxHealth(lua_State* L);
-	static int luaNpcTypeSight(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);
