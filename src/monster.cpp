@@ -589,7 +589,7 @@ void Monster::goToFollowCreature()
 
 		if (isFleeing()) {
 			getDistanceStep(followCreature->getPosition(), dir, true);
-		} else if (fpp.maxTargetDist > 1) {
+		} else {
 			if (!getDistanceStep(followCreature->getPosition(), dir)) {
 				// if we can't get anything then let the A* calculate
 				updateFollowCreaturePath(fpp);
