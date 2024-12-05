@@ -5561,7 +5561,7 @@ std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientC
 
 	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {
-			containers.push_front(chest.second);
+			containers.push_front(chest.second.get());
 		}
 	}
 
