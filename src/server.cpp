@@ -21,6 +21,16 @@ struct ConnectBlock
 
 bool acceptConnection(const Connection::Address& clientIP)
 {
+	/*
+	 * With HAProxy, IP of client is known after establishing TCP connection.
+	 * In moment of connection (acceptConnection), each client has IP 127.0.0.1,
+	 * so we cannot limit number of connections per IP here.
+	 *
+	 * Anyway, use iptables (on HAProxy servers) to limit number of connections per IP, it's much more efficient.
+	 */
+	if (getBoolean(ConfigManager::ALLOW_OTC_PROXY) || getBoolean(ConfigManager::ALLOW_HAPROXY)) {
+		return true;
+	}
 	static std::recursive_mutex mu;
 	std::lock_guard lock{mu};
 
