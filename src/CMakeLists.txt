@@ -56,6 +56,7 @@ set(tfs_SRC
 	${CMAKE_CURRENT_LIST_DIR}/protocollogin.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.cpp
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.cpp
+	${CMAKE_CURRENT_LIST_DIR}/quadtree.cpp
 	${CMAKE_CURRENT_LIST_DIR}/rsa.cpp
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.cpp
 	${CMAKE_CURRENT_LIST_DIR}/script.cpp
@@ -143,6 +144,7 @@ set(tfs_HDR
 	${CMAKE_CURRENT_LIST_DIR}/protocolold.h
 	${CMAKE_CURRENT_LIST_DIR}/protocolstatus.h
 	${CMAKE_CURRENT_LIST_DIR}/pugicast.h
+	${CMAKE_CURRENT_LIST_DIR}/quadtree.h
 	${CMAKE_CURRENT_LIST_DIR}/rsa.h
 	${CMAKE_CURRENT_LIST_DIR}/scheduler.h
 	${CMAKE_CURRENT_LIST_DIR}/script.h
