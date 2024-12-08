@@ -44,7 +44,13 @@ PlayerStorageKeys = {
 	-- Bestiary:
 	bestiaryKillsBase = 400000,
 
-	-- Bosstiary:
+	-- Charms: 410000 to 410201
+	charmPoints = 410000,
+	charmsMonster = 410001,
+    charmsUnlocked = 410101,
+
+	-- Bosstiary: 430000 to 450006
+	bosstiaryKillsBase = 430000,
 	bosstiaryCooldownsBase = 440000,
 	bosstiaryPoints = 450000,
 	bosstiarySlot1 = 450001,

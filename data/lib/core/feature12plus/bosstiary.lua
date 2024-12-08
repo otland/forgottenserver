@@ -404,6 +404,20 @@ local function isFirstSlotUnlocked(player, bossId, bossType)
 	return false
 end
 
+local function addBosstiaryPointsIfNeeded(player, boss, step, oldCount, newCount, points)
+    if oldCount < step.PROWESS and newCount >= step.PROWESS then
+        player:addBosstiaryPoints(points.PROWESS)
+    end
+
+    if oldCount < step.EXPERTISE and newCount >= step.EXPERTISE then
+        player:addBosstiaryPoints(points.EXPERTISE)
+    end
+
+    if oldCount < step.MASTERY and newCount >= step.MASTERY then
+        player:addBosstiaryPoints(points.MASTERY)
+    end
+end
+
 -- PUBLIC API --
 
 Bosstiary = {}
@@ -459,11 +473,28 @@ end
 
 function Player.addBosstiaryPoints(self, points)
 	return self:setStorageValue(PlayerStorageKeys.bosstiaryPoints,
-		math.max(0, (self:getStorageValue(PlayerStorageKeys.bosstiaryPoints) or 0) + points))
+		self:getBosstiaryPoints() + math.max(0, points))
 end
 
 function Player.setBosstiaryPoints(self, points)
 	return self:setStorageValue(PlayerStorageKeys.bosstiaryPoints, math.max(0, points))
+end
+
+function Player.addBosstiaryPointsIfNeeded(self, boss, oldCount, newCount)
+    local bossType = Bosstiary.getBossById(boss).bossType
+    local steps = CONST.KILLS.BANE
+    local points = CONST.POINTS.BANE
+    if bossType == CONST.BOSS_TYPE.BANE then
+        steps = CONST.KILLS.BANE
+        points = CONST.POINTS.BANE
+    elseif bossType == CONST.BOSS_TYPE.ARCHFOE then
+        steps = CONST.KILLS.ARCHFOE
+        points = CONST.POINTS.ARCHFOE
+    else
+        steps = CONST.KILLS.NEMESIS
+        points = CONST.POINTS.NEMESIS
+    end
+    addBosstiaryPointsIfNeeded(self, boss, steps, oldCount, newCount, points)
 end
 
 -- SLOTS
@@ -563,8 +594,12 @@ function Player.addBosstiaryKills(self, boss, points)
 		boss = Bosstiary.getBossByName(boss).id
 	end
 
-	return self:setStorageValue(PlayerStorageKeys.bosstiaryKillsBase + boss,
-		self:getBosstiaryKills(boss) + math.max(0, points))
+    local oldCount = self:getBosstiaryKills(boss)
+    local newCount = oldCount + math.max(0, points)
+
+    self:addBosstiaryPointsIfNeeded(boss, oldCount, newCount)
+
+	return self:setStorageValue(PlayerStorageKeys.bosstiaryKillsBase + boss, newCount)
 end
 
 -- BONUS

@@ -52,7 +52,6 @@ playerCharm:register()
 
 local creatureevent = CreatureEvent("Bosstiary_onKill")
 function creatureevent.onKill(player, target)
-
 	local bossData = Bosstiary.getBossByName(target:getName())
 	if not bossData then
 		return true
@@ -63,20 +62,11 @@ function creatureevent.onKill(player, target)
 	local killers = target:getKillers(true)
 	if todayBoostedBossName == target:getName() then
 		for _, killer in ipairs(killers) do
-			print("killer", killer, todayBoostedBossId)
 			killer:addBosstiaryKills(todayBoostedBossId, Bosstiary.getConst().TODAY_BOOSTED_BOSS_KILL_COUNT)
 		end
-	end
-
-	for _, killer in ipairs(killers) do
-		local firstSlotBossId = killer:getBosstiarySlotBoss(Bosstiary.getConst().SLOT.FIRST)
-		if firstSlotBossId ~= 0 and target:getName() == Bosstiary.getBossById(firstSlotBossId).name then
-			killer:addBosstiaryKills(firstSlotBossId, 1)
-		end
-
-		local secondSlotBossId = killer:getBosstiarySlotBoss(Bosstiary.getConst().SLOT.SECOND)
-		if secondSlotBossId ~= 0 and target:getName() == Bosstiary.getBossById(firstSlotBossId).name then
-			killer:addBosstiaryKills(secondSlotBossId, 1)
+	else
+		for _, killer in ipairs(killers) do
+			killer:addBosstiaryKills(bossData.id, 1)
 		end
 	end
 	return true

@@ -526,6 +526,11 @@ function Player.addBestiaryKills(self, raceId)
 			break
 		end
 	end
+
+	if kills < bestiaryInfo.mastery and newKills >= bestiaryInfo.mastery then
+		self:addCharmPoints(bestiaryInfo.charmPoints)
+	end
+
 	return self:setBestiaryKills(raceId, newKills)
 end
 

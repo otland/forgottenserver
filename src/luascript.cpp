@@ -2222,6 +2222,13 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, ZONE_NOLOGOUT);
 	registerEnum(L, ZONE_NORMAL);
 
+	registerEnum(L, RESOURCE_BANK_BALANCE);
+	registerEnum(L, RESOURCE_GOLD_EQUIPPED);
+	registerEnum(L, RESOURCE_PREY_WILDCARDS);
+	registerEnum(L, RESOURCE_DAILYREWARD_STREAK);
+	registerEnum(L, RESOURCE_DAILYREWARD_JOKERS);
+	registerEnum(L, RESOURCE_CHARM_POINTS);
+
 	registerEnum(L, MAX_LOOTCHANCE);
 
 	registerEnum(L, SPELL_INSTANT);
