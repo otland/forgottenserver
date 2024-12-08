@@ -43,4 +43,13 @@ PlayerStorageKeys = {
 
 	-- Bestiary:
 	bestiaryKillsBase = 400000,
+
+	-- Bosstiary:
+	bosstiaryCooldownsBase = 440000,
+	bosstiaryPoints = 450000,
+	bosstiarySlot1 = 450001,
+	bosstiarySlot2 = 450002,
+	bosstiaryDay = 450004,
+	bosstiaryTodayRemoveDate = 450005,
+	bosstiaryTodayRemoveCount = 450006,
 }
