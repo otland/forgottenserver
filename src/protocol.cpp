@@ -46,11 +46,20 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {
+		if (encryptionEnabled && checksumMode == CHECKSUM_SEQUENCE) {
+			uint32_t compressionChecksum = 0;
+			if (msg->getLength() >= 128 && deflateMessage(*msg)) {
+				compressionChecksum = 0x80000000;
+			}
+
+			msg->setSequenceId(compressionChecksum | getNextSequenceId());
+		}
+
 		msg->writeMessageLength();
 
 		if (encryptionEnabled) {
 			XTEA_encrypt(*msg, key);
-			msg->addCryptoHeader(checksumMode, sequenceNumber);
+			msg->addCryptoHeader(checksumMode);
 		}
 	}
 }
@@ -84,6 +93,37 @@ bool Protocol::RSA_decrypt(NetworkMessage& msg)
 
 	tfs::rsa::decrypt(msg.getRemainingBuffer(), RSA_BUFFER_LENGTH);
 	return msg.getByte() == 0;
+}
+
+bool Protocol::deflateMessage(OutputMessage& msg)
+{
+	static thread_local std::vector<uint8_t> buffer(NETWORKMESSAGE_MAXSIZE);
+
+	zstream.next_in = msg.getOutputBuffer();
+	zstream.avail_in = msg.getLength();
+	zstream.next_out = buffer.data();
+	zstream.avail_out = buffer.size();
+
+	const auto result = deflate(&zstream, Z_FINISH);
+	if (result != Z_OK && result != Z_STREAM_END) {
+		std::cout << "Error while deflating packet data error: " << (zstream.msg ? zstream.msg : "unknown")
+		          << std::endl;
+		return false;
+	}
+
+	const auto size = zstream.total_out;
+	deflateReset(&zstream);
+
+	if (size <= 0) {
+		std::cout << "Deflated packet data had invalid size: " << size
+		          << " error: " << (zstream.msg ? zstream.msg : "unknown") << std::endl;
+		return false;
+	}
+
+	msg.reset();
+	msg.addBytes(reinterpret_cast<const char*>(buffer.data()), size);
+
+	return true;
 }
 
 Connection::Address Protocol::getIP() const
