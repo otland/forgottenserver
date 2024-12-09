@@ -7,10 +7,17 @@
 #include "connection.h"
 #include "xtea.h"
 
+#include <zlib.h>
+
 class Protocol : public std::enable_shared_from_this<Protocol>
 {
 public:
-	explicit Protocol(Connection_ptr connection) : connection(connection) {}
+	explicit Protocol(Connection_ptr connection) : connection(connection)
+	{
+		if (deflateInit2(&zstream, 6, Z_DEFLATED, -15, 8, Z_DEFAULT_STRATEGY) != Z_OK) {
+			std::cout << "ZLIB initialization error: " << (zstream.msg ? zstream.msg : "unknown") << std::endl;
+		}
+	}
 	virtual ~Protocol() = default;
 
 	// non-copyable
@@ -42,6 +49,16 @@ public:
 		}
 	}
 
+	uint32_t getNextSequenceId()
+	{
+		const auto sequence = ++sequenceNumber;
+		if (sequenceNumber >= std::numeric_limits<int32_t>::max()) {
+			sequenceNumber = 0;
+		}
+
+		return sequence;
+	}
+
 protected:
 	static constexpr size_t RSA_BUFFER_LENGTH = 128;
 
@@ -56,6 +73,8 @@ protected:
 	void setChecksumMode(checksumMode_t newMode) { checksumMode = newMode; }
 
 	static bool RSA_decrypt(NetworkMessage& msg);
+
+	bool deflateMessage(OutputMessage& msg);
 
 	void setRawMessages(bool value) { rawMessages = value; }
 
@@ -72,6 +91,8 @@ private:
 	bool encryptionEnabled = false;
 	checksumMode_t checksumMode = CHECKSUM_ADLER;
 	bool rawMessages = false;
+
+	z_stream zstream{};
 };
 
 #endif // FS_PROTOCOL_H
