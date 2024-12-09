@@ -52,7 +52,7 @@ public:
 	uint32_t getNextSequenceId()
 	{
 		const auto sequence = ++sequenceNumber;
-		if (sequenceNumber >= std::numeric_limits<int32_t>::max()) {
+		if (sequenceNumber >= static_cast<uint32_t>(std::numeric_limits<int32_t>::max())) {
 			sequenceNumber = 0;
 		}
 
