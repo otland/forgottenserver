@@ -733,23 +733,20 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	return true;
 }
 
-void Spell::addCooldowns(Player* player)
+void Spell::addCooldowns(Player* player) const
 {
 	if (cooldown > 0) {
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
-															cooldown, 0, false, spellId);
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId);
 		player->addCondition(condition);
 	}
 
 	if (group != SPELLGROUP_NONE && groupCooldown > 0) {
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-															groupCooldown, 0, false, group);
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group);
 		player->addCondition(condition);
 	}
 
 	if (secondaryGroup != SPELLGROUP_NONE && secondaryGroupCooldown > 0) {
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-															secondaryGroupCooldown, 0, false, secondaryGroup);
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
 		player->addCondition(condition);
 	}
 }

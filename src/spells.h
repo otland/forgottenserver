@@ -191,7 +191,7 @@ protected:
 	bool playerSpellCheck(Player* player) const;
 	bool playerInstantSpellCheck(Player* player, const Position& toPos);
 	bool playerRuneSpellCheck(Player* player, const Position& toPos);
-	void addCooldowns(Player* player);
+	void addCooldowns(Player* player) const;
 
 	std::map<uint16_t, bool> vocationSpellMap;
 
