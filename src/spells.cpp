@@ -385,6 +385,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			group = SPELLGROUP_NONE;
+			groupCooldown = 0;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
 			group = SPELLGROUP_ATTACK;
 		} else if (tmpStr == "healing" || tmpStr == "2") {
@@ -406,6 +407,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			secondaryGroup = SPELLGROUP_NONE;
+			secondaryGroupCooldown = 0;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
 			secondaryGroup = SPELLGROUP_ATTACK;
 		} else if (tmpStr == "healing" || tmpStr == "2") {
@@ -551,7 +553,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) ||
+	if ((group != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group)) ||
 	    player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId) ||
 	    (secondaryGroup != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, secondaryGroup))) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
@@ -741,13 +743,13 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 				player->addCondition(condition);
 			}
 
-			if (groupCooldown > 0) {
+			if (group != SPELLGROUP_NONE && groupCooldown > 0) {
 				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
 				                                                  groupCooldown, 0, false, group);
 				player->addCondition(condition);
 			}
 
-			if (secondaryGroupCooldown > 0) {
+			if (secondaryGroup != SPELLGROUP_NONE && secondaryGroupCooldown > 0) {
 				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
 				                                                  secondaryGroupCooldown, 0, false, secondaryGroup);
 				player->addCondition(condition);
@@ -857,13 +859,13 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 						player->addCondition(condition);
 					}
 
-					if (groupCooldown > 0) {
+					if (group != SPELLGROUP_NONE && groupCooldown > 0) {
 						Condition* condition = Condition::createCondition(
 						    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group);
 						player->addCondition(condition);
 					}
 
-					if (secondaryGroupCooldown > 0) {
+					if (secondaryGroup != SPELLGROUP_NONE && secondaryGroupCooldown > 0) {
 						Condition* condition =
 						    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
 						                               secondaryGroupCooldown, 0, false, secondaryGroup);
@@ -921,13 +923,13 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 					player->addCondition(condition);
 				}
 
-				if (groupCooldown > 0) {
+				if (group != SPELLGROUP_NONE && groupCooldown > 0) {
 					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
 					                                                  groupCooldown, 0, false, group);
 					player->addCondition(condition);
 				}
 
-				if (secondaryGroupCooldown > 0) {
+				if (secondaryGroup != SPELLGROUP_NONE && secondaryGroupCooldown > 0) {
 					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
 					                                                  secondaryGroupCooldown, 0, false, secondaryGroup);
 					player->addCondition(condition);

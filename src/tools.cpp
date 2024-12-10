@@ -1115,7 +1115,9 @@ int64_t OTSYS_TIME()
 SpellGroup_t stringToSpellGroup(const std::string& value)
 {
 	std::string tmpStr = boost::algorithm::to_lower_copy(value);
-	if (tmpStr == "attack" || tmpStr == "1") {
+	if (tmpStr == "none" || tmpStr == "0") {
+		return SPELLGROUP_NONE;
+	} else if (tmpStr == "attack" || tmpStr == "1") {
 		return SPELLGROUP_ATTACK;
 	} else if (tmpStr == "healing" || tmpStr == "2") {
 		return SPELLGROUP_HEALING;
@@ -1125,7 +1127,7 @@ SpellGroup_t stringToSpellGroup(const std::string& value)
 		return SPELLGROUP_SPECIAL;
 	}
 
-	return SPELLGROUP_NONE;
+	return SPELLGROUP_UNKNOWN;
 }
 
 const std::vector<Direction>& getShuffleDirections()

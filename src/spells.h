@@ -148,7 +148,12 @@ public:
 	}
 
 	SpellGroup_t getGroup() const { return group; }
-	void setGroup(SpellGroup_t g) { group = g; }
+	void setGroup(SpellGroup_t g) {
+		group = g;
+		if(group == SPELLGROUP_NONE) {
+			groupCooldown = 0;
+		}
+	}
 	SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
 	void setSecondaryGroup(SpellGroup_t g) { secondaryGroup = g; }
 

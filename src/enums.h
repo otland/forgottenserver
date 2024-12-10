@@ -158,6 +158,8 @@ enum SpellGroup_t : uint8_t
 	SPELLGROUP_CRIPPLING = 6,
 	SPELLGROUP_FOCUS = 7,
 	SPELLGROUP_ULTIMATESTRIKES = 8,
+
+	SPELLGROUP_UNKNOWN = 255, // last, unspecified
 };
 
 enum SpellType_t : uint8_t
