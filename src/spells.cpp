@@ -373,10 +373,19 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		spellId = pugi::cast<uint16_t>(attr.value());
 	}
 
+	if ((attr = node.attribute("aggressive"))) {
+		aggressive = booleanString(attr.as_string());
+	}
+
+	if (group == SPELLGROUP_NONE) {
+		group = (aggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
+	}
+
 	if ((attr = node.attribute("group"))) {
 		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			group = SPELLGROUP_NONE;
+			groupCooldown = 0;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
 			group = SPELLGROUP_ATTACK;
 		} else if (tmpStr == "healing" || tmpStr == "2") {
@@ -390,7 +399,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		}
 	}
 
-	if ((attr = node.attribute("groupcooldown"))) {
+	if (group != SPELLGROUP_NONE && (attr = node.attribute("groupcooldown"))) {
 		groupCooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -398,6 +407,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		std::string tmpStr = boost::algorithm::to_lower_copy<std::string>(attr.as_string());
 		if (tmpStr == "none" || tmpStr == "0") {
 			secondaryGroup = SPELLGROUP_NONE;
+			secondaryGroupCooldown = 0;
 		} else if (tmpStr == "attack" || tmpStr == "1") {
 			secondaryGroup = SPELLGROUP_ATTACK;
 		} else if (tmpStr == "healing" || tmpStr == "2") {
@@ -411,7 +421,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		}
 	}
 
-	if ((attr = node.attribute("secondarygroupcooldown"))) {
+	if (secondaryGroup != SPELLGROUP_NONE && (attr = node.attribute("secondarygroupcooldown"))) {
 		secondaryGroupCooldown = pugi::cast<uint32_t>(attr.value());
 	}
 
@@ -491,14 +501,6 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 		pzLock = booleanString(attr.as_string());
 	}
 
-	if ((attr = node.attribute("aggressive"))) {
-		aggressive = booleanString(attr.as_string());
-	}
-
-	if (group == SPELLGROUP_NONE) {
-		group = (aggressive ? SPELLGROUP_ATTACK : SPELLGROUP_HEALING);
-	}
-
 	for (auto vocationNode : node.children()) {
 		if (!(attr = vocationNode.attribute("name"))) {
 			continue;
@@ -551,7 +553,7 @@ bool Spell::playerSpellCheck(Player* player) const
 		return false;
 	}
 
-	if (player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group) ||
+	if ((group != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, group)) ||
 	    player->hasCondition(CONDITION_SPELLCOOLDOWN, spellId) ||
 	    (secondaryGroup != SPELLGROUP_NONE && player->hasCondition(CONDITION_SPELLGROUPCOOLDOWN, secondaryGroup))) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
@@ -731,27 +733,29 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	return true;
 }
 
+void Spell::addCooldowns(Player* player) const
+{
+	if (cooldown > 0) {
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN, cooldown, 0, false, spellId);
+		player->addCondition(condition);
+	}
+
+	if (group != SPELLGROUP_NONE && groupCooldown > 0) {
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group);
+		player->addCondition(condition);
+	}
+
+	if (secondaryGroup != SPELLGROUP_NONE && secondaryGroupCooldown > 0) {
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, secondaryGroupCooldown, 0, false, secondaryGroup);
+		player->addCondition(condition);
+	}
+}
+
 void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool payCost /*= true*/) const
 {
 	if (finishedCast) {
 		if (!player->hasFlag(PlayerFlag_HasNoExhaustion)) {
-			if (cooldown > 0) {
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
-				                                                  cooldown, 0, false, spellId);
-				player->addCondition(condition);
-			}
-
-			if (groupCooldown > 0) {
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-				                                                  groupCooldown, 0, false, group);
-				player->addCondition(condition);
-			}
-
-			if (secondaryGroupCooldown > 0) {
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-				                                                  secondaryGroupCooldown, 0, false, secondaryGroup);
-				player->addCondition(condition);
-			}
+			addCooldowns(player);
 		}
 
 		if (aggressive) {
@@ -851,24 +855,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			target = playerTarget;
 			if (!target || target->isRemoved() || target->isDead()) {
 				if (!casterTargetOrDirection) {
-					if (cooldown > 0) {
-						Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
-						                                                  cooldown, 0, false, spellId);
-						player->addCondition(condition);
-					}
-
-					if (groupCooldown > 0) {
-						Condition* condition = Condition::createCondition(
-						    CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN, groupCooldown, 0, false, group);
-						player->addCondition(condition);
-					}
-
-					if (secondaryGroupCooldown > 0) {
-						Condition* condition =
-						    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-						                               secondaryGroupCooldown, 0, false, secondaryGroup);
-						player->addCondition(condition);
-					}
+					addCooldowns(player);
 
 					player->sendCancelMessage(ret);
 					g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -915,23 +902,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			ReturnValue ret = g_game.getPlayerByNameWildcard(param, playerTarget);
 
 			if (ret != RETURNVALUE_NOERROR) {
-				if (cooldown > 0) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
-					                                                  cooldown, 0, false, spellId);
-					player->addCondition(condition);
-				}
-
-				if (groupCooldown > 0) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-					                                                  groupCooldown, 0, false, group);
-					player->addCondition(condition);
-				}
-
-				if (secondaryGroupCooldown > 0) {
-					Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLGROUPCOOLDOWN,
-					                                                  secondaryGroupCooldown, 0, false, secondaryGroup);
-					player->addCondition(condition);
-				}
+				addCooldowns(player);
 
 				player->sendCancelMessage(ret);
 				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
