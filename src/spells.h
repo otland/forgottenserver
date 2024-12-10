@@ -148,7 +148,8 @@ public:
 	}
 
 	SpellGroup_t getGroup() const { return group; }
-	void setGroup(SpellGroup_t g) {
+	void setGroup(SpellGroup_t g)
+	{
 		group = g;
 		if(group == SPELLGROUP_NONE) {
 			groupCooldown = 0;
