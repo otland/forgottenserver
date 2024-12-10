@@ -383,7 +383,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 	}
 
 	// Change packet verifying mode for QT clients
-	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem < CLIENTOS_OTCLIENT_LINUX) {
+	if (version >= 1111 && operatingSystem >= CLIENTOS_QT_LINUX && operatingSystem <= CLIENTOS_OTCLIENT_MAC) {
 		setChecksumMode(CHECKSUM_SEQUENCE);
 	}
 
