@@ -159,7 +159,7 @@ enum SpellGroup_t : uint8_t
 	SPELLGROUP_FOCUS = 7,
 	SPELLGROUP_ULTIMATESTRIKES = 8,
 
-	SPELLGROUP_UNKNOWN = 255 // last, unspecified
+	SPELLGROUP_UNKNOWN = 255 // when no group set in revscript
 };
 
 enum SpellType_t : uint8_t
