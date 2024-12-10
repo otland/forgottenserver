@@ -1168,17 +1168,15 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		return retMaxCount;
 	}
 
-	uint32_t m;
+	uint32_t moveCount;
 	if (item->isStackable()) {
-		m = std::min<uint32_t>(count, maxQueryCount);
+		moveCount = std::min<uint32_t>(count, maxQueryCount);
 	} else {
-		m = maxQueryCount;
+		moveCount = maxQueryCount;
 	}
 
-	Item* moveItem = item;
-
 	// check if we can remove this item
-	ret = fromCylinder->queryRemove(*item, m, flags, actor);
+	ret = fromCylinder->queryRemove(*item, moveCount, flags, actor);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1198,42 +1196,52 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
+	Item* moveItem = nullptr;
+
 	// remove the item
 	int32_t itemIndex = fromCylinder->getThingIndex(item);
 	Item* updateItem = nullptr;
-	fromCylinder->removeThing(item, m);
+	fromCylinder->removeThing(item, moveCount);
 
-	// update item(s)
 	if (item->isStackable()) {
-		uint32_t n;
+		// lets find out how much we need to move
+		uint32_t allowedCount = 0;
 
 		if (item->equals(toItem)) {
-			n = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), m);
-			toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
-			updateItem = toItem;
-		} else {
-			n = 0;
+			allowedCount = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), moveCount);
+			if (allowedCount > 0) {
+				toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + allowedCount);
+				updateItem = toItem;
+			}
 		}
 
-		int32_t newCount = m - n;
-		if (newCount > 0) {
-			moveItem = item->clone();
-			moveItem->setItemCount(newCount);
-		} else {
-			moveItem = nullptr;
-		}
+		if (!updateItem) { // we DONT have equal destination item
+			int32_t newCount = moveCount - allowedCount;
+			if (newCount != item->getItemCount() && newCount > 0) {
+				// we get part of the source, clone the item and remove moved count from source
+				moveItem = item->clone();
+				moveItem->setItemCount(newCount);
 
-		if (item->isRemoved()) {
-			ReleaseItem(item);
+				// source item may get deleted if move count is actually the whole source count, so let's release it if
+				// needed
+				if (item->isRemoved()) {
+					ReleaseItem(item);
+				}
+			} else {
+				// whole source item is moved
+				moveItem = item;
+			}
 		}
+	} else {
+		fromCylinder->removeThing(item, moveCount);
 	}
 
 	// add item
-	if (moveItem /*m - n > 0*/) {
+	if (moveItem) {
 		toCylinder->addThing(index, moveItem);
 	}
 
-	if (itemIndex != -1) {
+	if (itemIndex != -1 && !item->hasParent()) {
 		fromCylinder->postRemoveNotification(item, toCylinder, itemIndex);
 	}
 
