@@ -151,7 +151,7 @@ public:
 	void setGroup(SpellGroup_t g)
 	{
 		group = g;
-		if(group == SPELLGROUP_NONE) {
+		if (group == SPELLGROUP_NONE) {
 			groupCooldown = 0;
 		}
 	}
