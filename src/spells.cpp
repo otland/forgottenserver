@@ -733,7 +733,8 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	return true;
 }
 
-void Spell::setCooldowns(Player* player) {
+void Spell::addCooldowns(Player* player)
+{
 	if (cooldown > 0) {
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SPELLCOOLDOWN,
 															cooldown, 0, false, spellId);
@@ -757,7 +758,7 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 {
 	if (finishedCast) {
 		if (!player->hasFlag(PlayerFlag_HasNoExhaustion)) {
-			setCooldowns(player);
+			addCooldowns(player);
 		}
 
 		if (aggressive) {
@@ -857,7 +858,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			target = playerTarget;
 			if (!target || target->isRemoved() || target->isDead()) {
 				if (!casterTargetOrDirection) {
-					setCooldowns(player);
+					addCooldowns(player);
 
 					player->sendCancelMessage(ret);
 					g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -904,7 +905,7 @@ bool InstantSpell::playerCastInstant(Player* player, std::string& param)
 			ReturnValue ret = g_game.getPlayerByNameWildcard(param, playerTarget);
 
 			if (ret != RETURNVALUE_NOERROR) {
-				setCooldowns(player);
+				addCooldowns(player);
 
 				player->sendCancelMessage(ret);
 				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
