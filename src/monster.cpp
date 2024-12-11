@@ -578,21 +578,28 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 void Monster::goToFollowCreature()
 {
 	if (!followCreature) {
+		onFollowCreatureComplete();
 		return;
 	}
 
 	FindPathParams fpp;
 	getPathSearchParams(followCreature, fpp);
 
-	if (!isSummon()) {
+	if (getMaster() && (isFleeing() || fpp.maxTargetDist > 1)) {
 		Direction dir = DIRECTION_NONE;
 
 		if (isFleeing()) {
 			getDistanceStep(followCreature->getPosition(), dir, true);
-		} else {
+		} else { // maxTargetDist > 1
 			if (!getDistanceStep(followCreature->getPosition(), dir)) {
 				// if we can't get anything then let the A* calculate
-				updateFollowCreaturePath(fpp);
+				listWalkDir.clear();
+				if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
+					hasFollowPath = true;
+					startAutoWalk();
+				} else {
+					hasFollowPath = false;
+				}
 				return;
 			}
 		}
@@ -605,10 +612,14 @@ void Monster::goToFollowCreature()
 			startAutoWalk();
 		}
 	} else {
-		updateFollowCreaturePath(fpp);
+		listWalkDir.clear();
+		if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
+			hasFollowPath = true;
+			startAutoWalk();
+		} else {
+			hasFollowPath = false;
+		}
 	}
-
-	onFollowCreatureComplete();
 }
 
 void Monster::onFollowCreatureComplete()
