@@ -578,6 +578,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 void Monster::goToFollowCreature()
 {
 	if (!followCreature) {
+		onFollowCreatureComplete();
 		return;
 	}
 
@@ -619,8 +620,6 @@ void Monster::goToFollowCreature()
 			hasFollowPath = false;
 		}
 	}
-
-	onFollowCreatureComplete();
 }
 
 void Monster::onFollowCreatureComplete()
