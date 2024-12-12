@@ -1232,8 +1232,6 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 				moveItem = item;
 			}
 		}
-	} else {
-		fromCylinder->removeThing(item, moveCount);
 	}
 
 	// add item
