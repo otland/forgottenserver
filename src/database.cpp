@@ -65,7 +65,9 @@ static bool executeQuery(tfs::detail::Mysql_ptr& handle, std::string_view query,
 	}
 
 #ifdef STATS_ENABLED
-	uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point).count();
+	uint64_t ns =
+	    std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point)
+	        .count();
 	std::string statsQuery = {query.begin(), query.end()};
 	g_stats.addSqlStats(new Stat(ns, statsQuery.substr(0, 100), statsQuery.substr(0, 256)));
 #endif

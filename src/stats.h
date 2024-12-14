@@ -8,7 +8,7 @@ class Task;
 struct Stat
 {
 	Stat(uint64_t _executionTime, const std::string& _description, const std::string& _extraDescription) :
-	    executionTime(_executionTime), description(_description), extraDescription(_extraDescription){};
+	    executionTime(_executionTime), description(_description), extraDescription(_extraDescription) {};
 	uint64_t executionTime = 0;
 	std::string description;
 	std::string extraDescription;
@@ -98,8 +98,10 @@ public:
 	{
 		assert(activeStat == this);
 		activeStat = parent;
-		if(activeStat)
-			activeStat->minusTime += std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point).count();
+		if (activeStat)
+			activeStat->minusTime += std::chrono::duration_cast<std::chrono::nanoseconds>(
+			                             std::chrono::high_resolution_clock::now() - time_point)
+			                             .count();
 	}
 
 private:
