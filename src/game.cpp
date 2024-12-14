@@ -31,6 +31,7 @@
 #include "server.h"
 #include "spectators.h"
 #include "spells.h"
+#include "stats.h"
 #include "storeinbox.h"
 #include "talkaction.h"
 #include "weapons.h"
@@ -117,6 +118,9 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+#ifdef STATS_ENABLED
+			g_stats.stop();
+#endif
 			tfs::http::stop();
 			break;
 		}
@@ -3882,6 +3886,10 @@ void Game::checkCreatures(size_t index)
 	}
 
 	cleanup();
+
+#ifdef STATS_ENABLED
+	g_stats.playersOnline = getPlayersOnline();
+#endif
 }
 
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
@@ -4800,6 +4808,9 @@ void Game::shutdown()
 	g_scheduler.shutdown();
 	g_databaseTasks.shutdown();
 	g_dispatcher.shutdown();
+#ifdef STATS_ENABLED
+	g_stats.shutdown();
+#endif
 	map.spawns.clear();
 
 	cleanup();

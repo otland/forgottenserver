@@ -33,6 +33,7 @@
 #include "script.h"
 #include "spectators.h"
 #include "spells.h"
+#include "stats.h"
 #include "storeinbox.h"
 #include "teleport.h"
 #include "weapons.h"
@@ -489,12 +490,27 @@ bool LuaScriptInterface::reInitState()
 /// Same as lua_pcall, but adds stack trace to error strings in called function.
 int tfs::lua::protectedCall(lua_State* L, int nargs, int nresults)
 {
+#ifdef STATS_ENABLED
+	auto [scriptId, scriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
+	std::chrono::high_resolution_clock::time_point time_point = std::chrono::high_resolution_clock::now();
+#endif
+
 	int error_index = lua_gettop(L) - nargs;
 	lua_pushcfunction(L, luaErrorHandler);
 	lua_insert(L, error_index);
 
 	int ret = lua_pcall(L, nargs, nresults, error_index);
 	lua_remove(L, error_index);
+
+#ifdef STATS_ENABLED
+	uint64_t ns =
+	    std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point)
+	        .count();
+	if (scriptInterface) {
+		g_stats.addLuaStats(new Stat(ns, scriptInterface->getFileById(scriptId), ""));
+	}
+#endif
+
 	return ret;
 }
 
@@ -633,6 +649,35 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 	return it->second;
 }
 
+#ifdef STATS_ENABLED
+const std::string& LuaScriptInterface::getAddEventStackTracebackHash(const std::string& addEventStackBacktrace)
+{
+	if (!getBoolean(ConfigManager::STATS_TRACK_LUA_ADD_EVENTS_HASHES)) {
+		static const std::string& hashesDisabledText = "LuaAddEvent";
+		return hashesDisabledText;
+	}
+
+	if (auto it{addEventStackTracebackHashCache.find(addEventStackBacktrace)};
+	    it != std::end(addEventStackTracebackHashCache)) {
+		return it->second;
+	}
+
+	std::chrono::high_resolution_clock::time_point time_point = std::chrono::high_resolution_clock::now();
+	auto* hash = new std::string(
+	    fmt::format("LuaAddEvent-{:d}", adlerChecksum(reinterpret_cast<const uint8_t*>(addEventStackBacktrace.c_str()),
+	                                                  addEventStackBacktrace.length())));
+	uint64_t ns =
+	    std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point)
+	        .count();
+
+	addEventStackTracebackHashCache[addEventStackBacktrace] = *hash;
+
+	std::cout << "Generated new addEvent hash (" << ns << "): " << *hash << "=" << addEventStackBacktrace << std::endl;
+
+	return *hash;
+}
+#endif
+
 void tfs::lua::reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
                            bool stack_trace /*= false*/)
 {
@@ -696,6 +741,9 @@ bool LuaScriptInterface::closeState()
 	}
 
 	cacheFiles.clear();
+#ifdef STATS_ENABLED
+	addEventStackTracebackHashCache.clear();
+#endif
 	if (eventTableRef != -1) {
 		luaL_unref(L, LUA_REGISTRYINDEX, eventTableRef);
 		eventTableRef = -1;
@@ -2285,6 +2333,8 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN);
 	registerEnumIn(L, "configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST);
 	registerEnumIn(L, "configKeys", ConfigManager::CHECK_DUPLICATE_STORAGE_KEYS);
+	registerEnumIn(L, "configKeys", ConfigManager::STATS_TRACK_LUA_ADD_EVENTS);
+	registerEnumIn(L, "configKeys", ConfigManager::STATS_TRACK_LUA_ADD_EVENTS_HASHES);
 
 	registerEnumIn(L, "configKeys", ConfigManager::MAP_NAME);
 	registerEnumIn(L, "configKeys", ConfigManager::HOUSE_RENT_PERIOD);
@@ -2342,6 +2392,9 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::STAMINA_REGEN_PREMIUM);
 	registerEnumIn(L, "configKeys", ConfigManager::HOUSE_DOOR_SHOW_PRICE);
 	registerEnumIn(L, "configKeys", ConfigManager::MONSTER_OVERSPAWN);
+	registerEnumIn(L, "configKeys", ConfigManager::STATS_DUMP_INTERVAL);
+	registerEnumIn(L, "configKeys", ConfigManager::STATS_SLOW_LOG_TIME);
+	registerEnumIn(L, "configKeys", ConfigManager::STATS_VERY_SLOW_LOG_TIME);
 
 	registerEnumIn(L, "configKeys", ConfigManager::QUEST_TRACKER_FREE_LIMIT);
 	registerEnumIn(L, "configKeys", ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT);
@@ -3982,6 +4035,14 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 
 	eventDesc.function = luaL_ref(L, LUA_REGISTRYINDEX);
 	eventDesc.scriptId = tfs::lua::getScriptEnv()->getScriptId();
+
+#ifdef STATS_ENABLED
+	if (getBoolean(ConfigManager::STATS_TRACK_LUA_ADD_EVENTS)) {
+		std::string trackLuaAddEventLog = getStackTrace(L, "");
+		replaceString(trackLuaAddEventLog, "\n", " ");
+		eventDesc.stackTraceback = trackLuaAddEventLog;
+	}
+#endif
 
 	auto& lastTimerEventId = g_luaEnvironment.lastEventTimerId;
 	eventDesc.eventId = g_scheduler.addEvent(
@@ -18707,6 +18768,9 @@ bool LuaEnvironment::closeState()
 	areaIdMap.clear();
 	timerEvents.clear();
 	cacheFiles.clear();
+#ifdef STATS_ENABLED
+	addEventStackTracebackHashCache.clear();
+#endif
 
 	lua_close(L);
 	L = nullptr;
@@ -18808,10 +18872,23 @@ void LuaEnvironment::executeTimerEvent(uint32_t eventIndex)
 
 	// call the function
 	if (tfs::lua::reserveScriptEnv()) {
+#ifdef STATS_ENABLED
+		std::chrono::high_resolution_clock::time_point time_point = std::chrono::high_resolution_clock::now();
+#endif
 		ScriptEnvironment* env = tfs::lua::getScriptEnv();
 		env->setTimerEvent();
 		env->setScriptId(timerEventDesc.scriptId, this);
 		callFunction(timerEventDesc.parameters.size());
+
+#ifdef STATS_ENABLED
+		uint64_t ns =
+		    std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point)
+		        .count();
+		if (getBoolean(ConfigManager::STATS_TRACK_LUA_ADD_EVENTS)) {
+			g_stats.addSpecialStats(new Stat(ns, getAddEventStackTracebackHash(timerEventDesc.stackTraceback),
+			                                 timerEventDesc.stackTraceback));
+		}
+#endif
 	} else {
 		std::cout << "[Error - LuaScriptInterface::executeTimerEvent] Call stack overflow\n";
 	}

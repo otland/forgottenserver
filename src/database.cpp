@@ -6,6 +6,7 @@
 #include "database.h"
 
 #include "configmanager.h"
+#include "stats.h"
 
 #include <mysql/errmsg.h>
 
@@ -49,6 +50,10 @@ static bool isLostConnectionError(const unsigned error)
 
 static bool executeQuery(tfs::detail::Mysql_ptr& handle, std::string_view query, const bool retryIfLostConnection)
 {
+#ifdef STATS_ENABLED
+	std::chrono::high_resolution_clock::time_point time_point = std::chrono::high_resolution_clock::now();
+#endif
+
 	while (mysql_real_query(handle.get(), query.data(), query.length()) != 0) {
 		std::cout << "[Error - mysql_real_query] Query: " << query.substr(0, 256) << std::endl
 		          << "Message: " << mysql_error(handle.get()) << std::endl;
@@ -58,6 +63,13 @@ static bool executeQuery(tfs::detail::Mysql_ptr& handle, std::string_view query,
 		}
 		handle = connectToDatabase(true);
 	}
+
+#ifdef STATS_ENABLED
+	uint64_t ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::high_resolution_clock::now() - time_point).count();
+	std::string statsQuery = {query.begin(), query.end()};
+	g_stats.addSqlStats(new Stat(ns, statsQuery.substr(0, 100), statsQuery.substr(0, 256)));
+#endif
+
 	return true;
 }
 

@@ -14,6 +14,7 @@ std::string transformToSHA1(std::string_view input);
 std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message);
 std::string generateToken(std::string_view key, uint64_t counter, size_t length = AUTHENTICATOR_DIGITS);
 
+void replaceString(std::string& str, const std::string& sought, const std::string& replacement);
 // checks that str1 is equivalent to str2 ignoring letter case
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
 
