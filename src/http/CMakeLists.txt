@@ -19,6 +19,7 @@ set(http_HDR
 	)
 
 add_library(http OBJECT ${http_SRC})
+target_include_directories(http PRIVATE "../")
 target_link_libraries(http PRIVATE Boost::json)
 set_target_properties(http PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
