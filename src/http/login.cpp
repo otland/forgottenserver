@@ -1,4 +1,4 @@
-#include "../otpch.h"
+#include "otpch.h"
 
 #include "login.h"
 
