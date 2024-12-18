@@ -168,3 +168,19 @@ ownerName = ""
 ownerEmail = ""
 url = "https://otland.net/"
 location = "Sweden"
+
+-- Server Statistics
+-- time in seconds: 30 = 30 seconds, 0 = disabled
+statsDumpInterval = 30
+-- time in milliseconds: 10 = 0.01 sec, 0 = disabled
+statsSlowLogTime = 10
+-- time in milliseconds: 50 = 0.05 sec, 0 = disabled
+statsVerySlowLogTime = 50
+-- normal stats reports all Lua addEvents as '(Unknown scriptfile)'
+-- with this option enabled, it will generate special.log with addEvent CPU usage
+-- it will also generate special_slow/very_slow.log with addEvent stack backtrace
+statsTrackLuaAddEvents = false
+-- statsTrackLuaAddEvents reports all scripts in special.log with name 'LuaAddEvent'
+-- if you want to track CPU usage of individual addEvent scripts, enable this option - IT WILL USE A LOT MORE CPU!
+-- hashID = stack backtrace will be printed in server console, so you must log server output to some file
+statsTrackLuaAddEventsHashes = false
