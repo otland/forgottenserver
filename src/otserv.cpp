@@ -224,9 +224,11 @@ void mainLoader(ServiceManager* services)
 	// Legacy login protocol
 	services->add<ProtocolOld>(static_cast<uint16_t>(getNumber(ConfigManager::LOGIN_PORT)));
 
+#ifdef HTTP
 	// HTTP server
 	tfs::http::start(getString(ConfigManager::IP), getNumber(ConfigManager::HTTP_PORT),
 	                 getNumber(ConfigManager::HTTP_WORKERS));
+#endif
 
 	RentPeriod_t rentPeriod;
 	std::string strRentPeriod = boost::algorithm::to_lower_copy(getString(ConfigManager::HOUSE_RENT_PERIOD));

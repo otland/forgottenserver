@@ -117,7 +117,9 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+#ifdef HTTP
 			tfs::http::stop();
+#endif
 			break;
 		}
 
