@@ -2527,6 +2527,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "NetworkMessage", "addDouble", LuaScriptInterface::luaNetworkMessageAddDouble);
 	registerMethod(L, "NetworkMessage", "addItem", LuaScriptInterface::luaNetworkMessageAddItem);
 	registerMethod(L, "NetworkMessage", "addItemId", LuaScriptInterface::luaNetworkMessageAddItemId);
+	registerMethod(L, "NetworkMessage", "addNetworkMessage", LuaScriptInterface::luaNetworkMessageAddNetworkMessage);
 
 	registerMethod(L, "NetworkMessage", "reset", LuaScriptInterface::luaNetworkMessageReset);
 	registerMethod(L, "NetworkMessage", "seek", LuaScriptInterface::luaNetworkMessageSeek);
@@ -6289,6 +6290,26 @@ int LuaScriptInterface::luaNetworkMessageAddItemId(lua_State* L)
 	}
 
 	message->addItemId(itemId);
+	tfs::lua::pushBoolean(L, true);
+	return 1;
+}
+
+int LuaScriptInterface::luaNetworkMessageAddNetworkMessage(lua_State* L)
+{
+	// networkMessage:addNetworkMessage(msg)
+	NetworkMessage* message = tfs::lua::getUserdata<NetworkMessage>(L, 1);
+	if (!message) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	NetworkMessage* msgToAdd = tfs::lua::getUserdata<NetworkMessage>(L, 2);
+	if (!msgToAdd) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	message->addNetworkMessage(msgToAdd);
 	tfs::lua::pushBoolean(L, true);
 	return 1;
 }

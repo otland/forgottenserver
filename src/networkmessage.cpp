@@ -191,3 +191,19 @@ void NetworkMessage::addItem(const Item* item)
 }
 
 void NetworkMessage::addItemId(uint16_t itemId) { add<uint16_t>(Item::items[itemId].clientId); }
+
+void NetworkMessage::addNetworkMessage(NetworkMessage* networkMsg)
+{
+	if (!networkMsg) {
+		return;
+	}
+
+	if (!canAdd(networkMsg->getLength())) {
+		return;
+	}
+
+	std::memcpy(buffer.data() + info.position, networkMsg->getBuffer() + INITIAL_BUFFER_POSITION,
+	            networkMsg->getLength());
+	info.position += networkMsg->getLength();
+	info.length += networkMsg->getLength();
+}
