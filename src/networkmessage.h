@@ -100,6 +100,7 @@ public:
 	}
 
 	void addBytes(const char* bytes, size_t size);
+	void addBytes(const uint8_t* bytes, size_t size);
 	void addPaddingBytes(size_t n);
 
 	void addString(std::string_view value);
@@ -111,7 +112,7 @@ public:
 	void addItem(uint16_t id, uint8_t count);
 	void addItem(const Item* item);
 	void addItemId(uint16_t itemId);
-	void addNetworkMessage(NetworkMessage* networkMsg);
+	void addNetworkMessage(const NetworkMessage& networkMsg);
 
 	MsgSize_t getLength() const { return info.length; }
 
