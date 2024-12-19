@@ -54,12 +54,12 @@ public:
 	}
 
 	// Returns first element of body
-	uint8_t getPreviousByte() { 
-		if (info.position == INITIAL_BUFFER_POSITION)
-		{
+	uint8_t getPreviousByte()
+	{
+		if (info.position == INITIAL_BUFFER_POSITION) {
 			return buffer[INITIAL_BUFFER_POSITION];
 		}
-		return buffer[--info.position]; 
+		return buffer[--info.position];
 	}
 
 	template <typename T>

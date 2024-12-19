@@ -22,7 +22,6 @@ BOOST_AUTO_TEST_CASE(test_networkmessage_reset)
 	BOOST_TEST(actual == expected);
 }
 
-
 BOOST_AUTO_TEST_CASE(test_networkmessage_getPreviousByte)
 {
 	NetworkMessage msg{};
@@ -38,7 +37,6 @@ BOOST_AUTO_TEST_CASE(test_networkmessage_getPreviousByte)
 	// overflow case
 	BOOST_TEST(msg.getPreviousByte() == 11);
 	BOOST_TEST(msg.getBufferPosition() == NetworkMessage::INITIAL_BUFFER_POSITION);
-
 }
 
 BOOST_AUTO_TEST_CASE(test_networkmessage_add_get_template)
