@@ -148,7 +148,13 @@ public:
 	}
 
 	SpellGroup_t getGroup() const { return group; }
-	void setGroup(SpellGroup_t g) { group = g; }
+	void setGroup(SpellGroup_t g)
+	{
+		group = g;
+		if (group == SPELLGROUP_NONE) {
+			groupCooldown = 0;
+		}
+	}
 	SpellGroup_t getSecondaryGroup() const { return secondaryGroup; }
 	void setSecondaryGroup(SpellGroup_t g) { secondaryGroup = g; }
 
@@ -185,6 +191,7 @@ protected:
 	bool playerSpellCheck(Player* player) const;
 	bool playerInstantSpellCheck(Player* player, const Position& toPos);
 	bool playerRuneSpellCheck(Player* player, const Position& toPos);
+	void addCooldowns(Player* player) const;
 
 	std::map<uint16_t, bool> vocationSpellMap;
 
