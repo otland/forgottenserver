@@ -22,7 +22,7 @@ function closingDoor.onStepOut(creature, item, position, fromPosition)
 	while tileItem and i < tileCount do
 		tileItem = tile:getThing(i)
 		if tileItem and tileItem:getUniqueId() ~= item.uid and tileItem:getType():isMovable() then
-			tileItem:remove()
+			doRelocate(position, creature:getPosition())
 		else
 			i = i + 1
 		end
