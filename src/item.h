@@ -897,6 +897,8 @@ public:
 
 	bool hasMarketAttributes() const;
 
+	uint8_t getStackSize() const { return items[id].stackSize; }
+
 	std::unique_ptr<ItemAttributes>& getAttributes()
 	{
 		if (!attributes) {
