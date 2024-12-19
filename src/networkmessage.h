@@ -111,6 +111,7 @@ public:
 	void addItem(uint16_t id, uint8_t count);
 	void addItem(const Item* item);
 	void addItemId(uint16_t itemId);
+	void addNetworkMessage(NetworkMessage* networkMsg);
 
 	MsgSize_t getLength() const { return info.length; }
 
