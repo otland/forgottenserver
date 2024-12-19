@@ -1196,52 +1196,49 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
-	Item* moveItem = nullptr;
-
-	// remove the item
+	Item* moveItem = item;
 	int32_t itemIndex = fromCylinder->getThingIndex(item);
 	Item* updateItem = nullptr;
-	fromCylinder->removeThing(item, moveCount);
 
 	if (item->isStackable()) {
 		// lets find out how much we need to move
 		uint32_t allowedCount = 0;
 
-		if (item->equals(toItem)) {
+		// when item is moved onto another equal item
+		if (item->equals(toItem) && moveCount != ITEM_STACK_SIZE) {
 			allowedCount = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), moveCount);
 			if (allowedCount > 0) {
+				fromCylinder->removeThing(item, allowedCount);
 				toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + allowedCount);
 				updateItem = toItem;
-			}
-		}
+				moveCount -= allowedCount;
 
-		if (!updateItem) { // we DONT have equal destination item
+				// we fully merged two stacks, so we have nothing to move
+				if (moveCount == 0) {
+					moveItem = nullptr;
+				}
+			}
+		} else {
 			int32_t newCount = moveCount - allowedCount;
 			if (newCount != item->getItemCount() && newCount > 0) {
 				// we get part of the source, clone the item and remove moved count from source
 				moveItem = item->clone();
 				moveItem->setItemCount(newCount);
 
-				// source item may get deleted if move count is actually the whole source count, so let's release it if
-				// needed
 				if (item->isRemoved()) {
 					ReleaseItem(item);
 				}
-			} else {
-				// whole source item is moved
-				moveItem = item;
 			}
 		}
-	} else {
-		moveItem = item;
 	}
 
 	// add item
 	if (moveItem) {
+		fromCylinder->removeThing(item, moveCount);
 		toCylinder->addThing(index, moveItem);
 	}
 
-	if (itemIndex != -1 && !item->hasParent()) {
+	if (itemIndex != -1) {
 		fromCylinder->postRemoveNotification(item, toCylinder, itemIndex);
 	}
 
