@@ -53,7 +53,14 @@ public:
 		return buffer[info.position++];
 	}
 
-	uint8_t getPreviousByte() { return buffer[--info.position]; }
+	// Returns first element of body
+	uint8_t getPreviousByte()
+	{
+		if (info.position == INITIAL_BUFFER_POSITION) {
+			return buffer[INITIAL_BUFFER_POSITION];
+		}
+		return buffer[--info.position];
+	}
 
 	template <typename T>
 	std::enable_if_t<std::is_trivially_copyable_v<T>, T> get() noexcept
@@ -100,6 +107,7 @@ public:
 	}
 
 	void addBytes(const char* bytes, size_t size);
+	void addBytes(const uint8_t* bytes, size_t size);
 	void addPaddingBytes(size_t n);
 
 	void addString(std::string_view value);
@@ -111,6 +119,7 @@ public:
 	void addItem(uint16_t id, uint8_t count);
 	void addItem(const Item* item);
 	void addItemId(uint16_t itemId);
+	void addNetworkMessage(const NetworkMessage& networkMsg);
 
 	MsgSize_t getLength() const { return info.length; }
 
