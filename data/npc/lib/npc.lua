@@ -10,19 +10,56 @@ function msgcontains(message, keyword)
 	return message:find(keyword) and not message:find('(%w+)' .. keyword)
 end
 
+
 function doNpcSellItem(cid, itemid, amount, subType, ignoreCap, inBackpacks, backpack)
 	local amount = amount or 1
 	local subType = subType or 0
+	local startingAmount = amount
+	local result = RETURNVALUE_NOERROR
+	local bpSize = 20
+	local itemType = ItemType(itemid)
 
-	if ItemType(itemid):isStackable() then
+	if itemType:isStackable() then
 		local stuff
+		local bpsToAdd = math.ceil(amount / itemType:getStackSize() / bpSize)
 		if inBackpacks then
-			stuff = Game.createItem(backpack, 1)
-			stuff:addItem(itemid, math.min(ITEM_STACK_SIZE, amount))
+			local bps = {}
+			for i = 1, bpsToAdd, 1 do
+				stuff = Game.createItem(backpack, 1)
+				local itemAdded = true
+				while startingAmount > 0 and itemAdded do
+					local item = stuff:addItem(itemid, math.min(itemType:getStackSize(), startingAmount))
+					if item then
+						startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
+						itemAdded = true
+					else
+						itemAdded = false
+					end
+				end
+				bps[i] = stuff
+			end
+			for i = 1, bpsToAdd, 1 do
+				result = result and Player(cid):addItemEx(bps[i], ignoreCap)
+			end
+
+			if result ~= RETURNVALUE_NOERROR then
+				for i = 1, bpsToAdd, 1 do
+					if bps[i] then
+						bps[i]:remove()
+					end
+				end
+			end
 		else
-			stuff = Game.createItem(itemid, math.min(ITEM_STACK_SIZE, amount))
+			while startingAmount > 0 and result == RETURNVALUE_NOERROR do
+				stuff = Game.createItem(itemid, math.min(itemType:getStackSize(), startingAmount))
+				if result == RETURNVALUE_NOERROR then
+					result = Player(cid):addItemEx(stuff, ignoreCap)
+					startingAmount = startingAmount - math.min(itemType:getStackSize(), startingAmount)
+				end
+			end
 		end
-		return Player(cid):addItemEx(stuff, ignoreCap) ~= RETURNVALUE_NOERROR and 0 or amount, 0
+
+		return result ~= RETURNVALUE_NOERROR and 0 or amount - startingAmount, 0
 	end
 
 	local a = 0

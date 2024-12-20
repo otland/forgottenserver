@@ -9,6 +9,8 @@
 #include "itemloader.h"
 #include "position.h"
 
+static constexpr uint8_t ITEM_STACK_SIZE = 100;
+
 class ConditionDamage;
 
 enum SlotPositionBits : uint32_t
@@ -172,6 +174,7 @@ enum ItemParseAttributes_t
 	ITEM_PARSE_ALLOWDISTREAD,
 	ITEM_PARSE_STOREITEM,
 	ITEM_PARSE_WORTH,
+	ITEM_PARSE_STACKSIZE,
 	ITEM_PARSE_REFLECTPERCENTALL,
 	ITEM_PARSE_REFLECTPERCENTELEMENTS,
 	ITEM_PARSE_REFLECTPERCENTMAGIC,
@@ -353,6 +356,7 @@ public:
 	int32_t runeMagLevel = 0;
 	int32_t runeLevel = 0;
 	uint64_t worth = 0;
+	uint8_t stackSize = ITEM_STACK_SIZE;
 
 	CombatType_t combatType = COMBAT_NONE;
 
