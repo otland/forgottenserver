@@ -178,6 +178,7 @@ target_link_libraries(tfslib PRIVATE
 	fmt::fmt
 	OpenSSL::Crypto
 	pugixml::pugixml
+	ZLIB::ZLIB
 	${CMAKE_THREAD_LIBS_INIT}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
