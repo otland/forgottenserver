@@ -9087,10 +9087,10 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 
 	uint32_t depotId = tfs::lua::getNumber<uint32_t>(L, 2);
 	bool autoCreate = tfs::lua::getBoolean(L, 3, false);
-	DepotChest* depotChest = player->getDepotChest(depotId, autoCreate);
+	const auto& depotChest = player->getDepotChest(depotId, autoCreate);
 	if (depotChest) {
-		tfs::lua::pushUserdata<Item>(L, depotChest);
-		tfs::lua::setItemMetatable(L, -1, depotChest);
+		pushSharedPtr(L, depotChest);
+		tfs::lua::setItemMetatable(L, -1, depotChest.get());
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}

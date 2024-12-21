@@ -22,6 +22,11 @@ std::map<uint32_t, uint32_t>& Cylinder::getAllItemTypeCount(std::map<uint32_t, u
 
 Thing* Cylinder::getThing(size_t) const { return nullptr; }
 
+void Cylinder::internalRemoveThing(Thing*)
+{
+	//
+}
+
 void Cylinder::internalAddThing(Thing*)
 {
 	//

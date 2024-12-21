@@ -111,6 +111,7 @@ public:
 	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
+	void internalRemoveThing(Thing* thing) override final;
 	void internalAddThing(Thing* thing) override final;
 	void internalAddThing(uint32_t index, Thing* thing) override final;
 	void startDecaying() override final;

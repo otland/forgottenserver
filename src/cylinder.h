@@ -175,6 +175,12 @@ public:
 	virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
 
 	/**
+	 * Removes an object from the cylinder without sending to the client(s)
+	 * \param thing is the object to add
+	 */
+	virtual void internalRemoveThing(Thing* thing);
+
+	/**
 	 * Adds an object to the cylinder without sending to the client(s)
 	 * \param thing is the object to add
 	 */

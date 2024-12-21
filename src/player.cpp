@@ -61,6 +61,14 @@ Player::~Player()
 		}
 	}
 
+	for (const auto& [_, depot] : depotChests) {
+		if (Cylinder* parent = depot->getRealParent()) {
+			// remove chest from depot locker, because of possible double free when shared_ptr decides to free up the
+			// resource
+			parent->internalRemoveThing(depot.get());
+		}
+	}
+
 	if (depotLocker) {
 		depotLocker->removeInbox(inbox);
 	}
@@ -814,7 +822,7 @@ bool Player::isNearDepotBox() const
 	return false;
 }
 
-DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
+DepotChest_ptr Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
@@ -830,9 +838,10 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
-	it->second->setMaxDepotItems(getMaxDepotItems());
-	return it->second;
+	const DepotChest_ptr& depotChest =
+	    depotChests.emplace(depotId, std::make_shared<DepotChest>(depotItemId)).first->second;
+	depotChest->setMaxDepotItems(getMaxDepotItems());
+	return depotChest;
 }
 
 DepotLocker& Player::getDepotLocker()
@@ -845,8 +854,8 @@ DepotLocker& Player::getDepotLocker()
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
 		for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
-			if (DepotChest* box = getDepotChest(depotId, true)) {
-				depotChest->internalAddThing(box);
+			if (const auto& box = getDepotChest(depotId, true)) {
+				depotChest->internalAddThing(box.get());
 			}
 		}
 
@@ -3205,7 +3214,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second == depotChest) {
+						if (it.second.get() == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
