@@ -13,7 +13,8 @@
       "platform": "osx"
     },
     "openssl",
-    "pugixml"
+    "pugixml",
+    "zlib"
   ],
   "features": {
     "http": {
