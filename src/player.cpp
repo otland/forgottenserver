@@ -13,7 +13,6 @@
 #include "depotchest.h"
 #include "events.h"
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
@@ -43,11 +42,8 @@ Player::Player(ProtocolGame_ptr p) :
     lastPing(OTSYS_TIME()),
     lastPong(lastPing),
     client(std::move(p)),
-    inbox(new Inbox(ITEM_INBOX)),
     storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
-	inbox->incrementReferenceCounter();
-
 	storeInbox->setParent(this);
 	storeInbox->incrementReferenceCounter();
 }
@@ -62,10 +58,8 @@ Player::~Player()
 	}
 
 	if (depotLocker) {
-		depotLocker->removeInbox(inbox);
+		depotLocker->removeInbox(inbox.get());
 	}
-
-	inbox->decrementReferenceCounter();
 
 	storeInbox->setParent(nullptr);
 	storeInbox->decrementReferenceCounter();
@@ -840,7 +834,7 @@ DepotLocker& Player::getDepotLocker()
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-		depotLocker->internalAddThing(inbox);
+		depotLocker->internalAddThing(getInbox().get());
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
@@ -3215,7 +3209,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 						autoCloseContainers(container);
 					}
 				} else if (const Inbox* inboxContainer = dynamic_cast<const Inbox*>(topContainer)) {
-					if (inboxContainer == inbox) {
+					if (inboxContainer == inbox.get()) {
 						onSendContainer(container);
 					} else {
 						autoCloseContainers(container);
