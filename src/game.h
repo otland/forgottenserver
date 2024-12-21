@@ -394,7 +394,7 @@ public:
 	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
 	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg);
 
-	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
+	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player);
 
 	void cleanup();
 	void shutdown();

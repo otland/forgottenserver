@@ -9106,10 +9106,10 @@ int LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 		return 1;
 	}
 
-	Inbox* inbox = player->getInbox();
+	const auto& inbox = player->getInbox();
 	if (inbox) {
-		tfs::lua::pushUserdata<Item>(L, inbox);
-		tfs::lua::setItemMetatable(L, -1, inbox);
+		pushSharedPtr(L, inbox);
+		tfs::lua::setItemMetatable(L, -1, inbox.get());
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
