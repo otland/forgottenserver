@@ -692,6 +692,15 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	}
 }
 
+void Container::internalRemoveThing(Thing* thing)
+{
+	auto cit = std::find(itemlist.begin(), itemlist.end(), thing);
+	if (cit == itemlist.end()) {
+		return;
+	}
+	itemlist.erase(cit);
+}
+
 void Container::internalAddThing(Thing* thing) { internalAddThing(0, thing); }
 
 void Container::internalAddThing(uint32_t, Thing* thing)

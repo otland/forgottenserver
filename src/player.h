@@ -6,6 +6,7 @@
 
 #include "creature.h"
 #include "cylinder.h"
+#include "depotchest.h"
 #include "depotlocker.h"
 #include "enums.h"
 #include "groups.h"
@@ -15,7 +16,6 @@
 #include "town.h"
 #include "vocation.h"
 
-class DepotChest;
 class House;
 struct Mount;
 class NetworkMessage;
@@ -363,7 +363,7 @@ public:
 	void addConditionSuppressions(uint32_t conditions);
 	void removeConditionSuppressions(uint32_t conditions);
 
-	DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
+	DepotChest_ptr getDepotChest(uint32_t depotId, bool autoCreate);
 	DepotLocker& getDepotLocker();
 	void onReceiveMail() const;
 	bool isNearDepotBox() const;
@@ -1174,7 +1174,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, DepotChest*> depotChests;
+	std::map<uint32_t, DepotChest_ptr> depotChests;
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;
