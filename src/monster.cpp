@@ -584,26 +584,31 @@ void Monster::goToFollowCreature()
 	FindPathParams fpp;
 	getPathSearchParams(followCreature, fpp);
 
-	if (!isSummon()) {
-		Direction dir = DIRECTION_NONE;
+	if (isSummon()) {
+		// summon must follow the orders of master.
+		updateFollowCreaturePath(fpp);
+		onFollowCreatureComplete();
+		return;
+	}
 
-		if (isFleeing()) {
-			getDistanceStep(followCreature->getPosition(), dir, true);
-		} else if (fpp.maxTargetDist > 1) {
-			if (!getDistanceStep(followCreature->getPosition(), dir)) {
-				// if we can't get anything then let the A* calculate
-				updateFollowCreaturePath(fpp);
-				return;
-			}
+	auto dir = DIRECTION_NONE;
+
+	if (isFleeing()) {
+		getDistanceStep(followCreature->getPosition(), dir, true);
+	} else if (fpp.maxTargetDist > 1) {
+		if (!getDistanceStep(followCreature->getPosition(), dir)) {
+			// if we can't get anything then let the A* calculate
+			updateFollowCreaturePath(fpp);
+			return;
 		}
+	}
 
-		if (dir != DIRECTION_NONE) {
-			listWalkDir.clear();
-			listWalkDir.push_back(dir);
+	if (dir != DIRECTION_NONE) {
+		listWalkDir.clear();
+		listWalkDir.push_back(dir);
 
-			hasFollowPath = true;
-			startAutoWalk();
-		}
+		hasFollowPath = true;
+		startAutoWalk();
 	} else {
 		updateFollowCreaturePath(fpp);
 	}
