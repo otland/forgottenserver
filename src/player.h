@@ -15,6 +15,7 @@
 #include "protocolgame.h"
 #include "town.h"
 #include "vocation.h"
+#include "scheduler.h"
 
 class House;
 struct Mount;
@@ -1135,8 +1136,8 @@ private:
 
 	void updateInventoryWeight();
 
-	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
+	void setNextWalkActionTask(SchedulerTask_ptr task);
+	void setNextActionTask(SchedulerTask_ptr task, bool resetIdleTime = true);
 
 	void death(Creature* lastHitCreature) override;
 	bool dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreature, bool lastHitUnjustified,
@@ -1226,7 +1227,7 @@ private:
 	Npc* shopOwner = nullptr;
 	Party* party = nullptr;
 	Player* tradePartner = nullptr;
-	SchedulerTask* walkTask = nullptr;
+	SchedulerTask_ptr walkTask = nullptr;
 	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	StoreInbox* storeInbox = nullptr;

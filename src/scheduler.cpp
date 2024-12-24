@@ -5,33 +5,33 @@
 
 #include "scheduler.h"
 
-uint32_t Scheduler::addEvent(SchedulerTask* task)
+uint32_t Scheduler::addEvent(SchedulerTask_ptr task)
 {
-	// check if the event has a valid id
 	if (task->getEventId() == 0) {
 		task->setEventId(++lastEventId);
 	}
 
-	boost::asio::post(io_context, [this, task]() {
+	auto eventId = task->getEventId();
+
+	boost::asio::post(io_context, [this, scheduledTask = std::move(task)]() mutable {
 		// insert the event id in the list of active events
-		auto it = eventIdTimerMap.emplace(task->getEventId(), boost::asio::steady_timer{io_context});
+		auto it = eventIdTimerMap.emplace(scheduledTask->getEventId(), boost::asio::steady_timer{io_context});
 		auto& timer = it.first->second;
 
-		timer.expires_after(std::chrono::milliseconds(task->getDelay()));
-		timer.async_wait([this, task](const boost::system::error_code& error) {
-			eventIdTimerMap.erase(task->getEventId());
+		timer.expires_after(std::chrono::milliseconds(scheduledTask->getDelay()));
+		timer.async_wait([this, scheduledTask = std::move(scheduledTask)](const boost::system::error_code& error) mutable {
+			eventIdTimerMap.erase(scheduledTask->getEventId());
 
 			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
-				// the timer has been manually canceled(timer->cancel()) or Scheduler::shutdown has been called
-				delete task;
+				// The timer was manually canceled or Scheduler::shutdown was called
 				return;
 			}
 
-			g_dispatcher.addTask(task);
+			g_dispatcher.addTask(std::move(scheduledTask));
 		});
 	});
 
-	return task->getEventId();
+	return eventId;
 }
 
 void Scheduler::stopEvent(uint32_t eventId)
@@ -62,4 +62,4 @@ void Scheduler::shutdown()
 	});
 }
 
-SchedulerTask* createSchedulerTask(uint32_t delay, TaskFunc&& f) { return new SchedulerTask(delay, std::move(f)); }
+SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f) { return SchedulerTask_ptr(new SchedulerTask(delay, std::move(f))); }

@@ -1508,18 +1508,17 @@ void Player::checkTradeState(const Item* item)
 	}
 }
 
-void Player::setNextWalkActionTask(SchedulerTask* task)
+void Player::setNextWalkActionTask(SchedulerTask_ptr task)
 {
 	if (walkTaskEvent != 0) {
 		g_scheduler.stopEvent(walkTaskEvent);
 		walkTaskEvent = 0;
 	}
 
-	delete walkTask;
-	walkTask = task;
+	walkTask = std::move(task);
 }
 
-void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true */)
+void Player::setNextActionTask(SchedulerTask_ptr task, bool resetIdleTime /*= true */)
 {
 	if (actionTaskEvent != 0) {
 		g_scheduler.stopEvent(actionTaskEvent);
@@ -1527,7 +1526,7 @@ void Player::setNextActionTask(SchedulerTask* task, bool resetIdleTime /*= true 
 	}
 
 	if (task) {
-		actionTaskEvent = g_scheduler.addEvent(task);
+		actionTaskEvent = g_scheduler.addEvent(std::move(task));
 		if (resetIdleTime) {
 			this->resetIdleTime();
 		}
@@ -3407,13 +3406,13 @@ void Player::doAttacking(uint32_t)
 			result = Weapon::useFist(this, attackedCreature);
 		}
 
-		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
+		SchedulerTask_ptr task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
 		                                          [id = getID()]() { g_game.checkCreatureAttack(id); });
 		if (!classicSpeed) {
-			setNextActionTask(task, false);
+			setNextActionTask(std::move(task), false);
 		} else {
 			g_scheduler.stopEvent(classicAttackEvent);
-			classicAttackEvent = g_scheduler.addEvent(task);
+			classicAttackEvent = g_scheduler.addEvent(std::move(task));
 		}
 
 		if (result) {
@@ -3469,8 +3468,7 @@ void Player::onWalkAborted()
 void Player::onWalkComplete()
 {
 	if (walkTask) {
-		walkTaskEvent = g_scheduler.addEvent(walkTask);
-		walkTask = nullptr;
+		walkTaskEvent = g_scheduler.addEvent(std::move(walkTask));
 	}
 }
 

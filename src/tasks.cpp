@@ -10,13 +10,13 @@
 
 extern Game g_game;
 
-Task* createTask(TaskFunc&& f) { return new Task(std::move(f)); }
+Task_ptr createTask(TaskFunc&& f) { return std::make_unique<Task>(std::move(f)); }
 
-Task* createTask(uint32_t expiration, TaskFunc&& f) { return new Task(expiration, std::move(f)); }
+Task_ptr createTask(uint32_t expiration, TaskFunc&& f) { return std::make_unique<Task>(expiration, std::move(f)); }
 
 void Dispatcher::threadMain()
 {
-	std::vector<Task*> tmpTaskList;
+	std::vector<std::unique_ptr<Task>> tmpTaskList;
 	// NOTE: second argument defer_lock is to prevent from immediate locking
 	std::unique_lock<std::mutex> taskLockUnique(taskLock, std::defer_lock);
 
@@ -30,19 +30,18 @@ void Dispatcher::threadMain()
 		tmpTaskList.swap(taskList);
 		taskLockUnique.unlock();
 
-		for (Task* task : tmpTaskList) {
+		for (auto &task : tmpTaskList) {
 			if (!task->hasExpired()) {
 				++dispatcherCycle;
 				// execute it
 				(*task)();
 			}
-			delete task;
 		}
 		tmpTaskList.clear();
 	}
 }
 
-void Dispatcher::addTask(Task* task)
+void Dispatcher::addTask(Task_ptr task)
 {
 	bool do_signal = false;
 
@@ -50,9 +49,7 @@ void Dispatcher::addTask(Task* task)
 
 	if (getState() == THREAD_STATE_RUNNING) {
 		do_signal = taskList.empty();
-		taskList.push_back(task);
-	} else {
-		delete task;
+		taskList.push_back(std::move(task));
 	}
 
 	taskLock.unlock();
@@ -65,13 +62,13 @@ void Dispatcher::addTask(Task* task)
 
 void Dispatcher::shutdown()
 {
-	Task* task = createTask([this]() {
+	Task_ptr task = createTask([this]() {
 		setState(THREAD_STATE_TERMINATED);
 		taskSignal.notify_one();
 	});
 
 	std::lock_guard<std::mutex> lockClass(taskLock);
-	taskList.push_back(task);
+	taskList.push_back(std::move(task));
 
 	taskSignal.notify_one();
 }
