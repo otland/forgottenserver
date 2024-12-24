@@ -36,7 +36,6 @@ void Weapons::clear(bool fromLua)
 {
 	for (auto it = weapons.begin(); it != weapons.end();) {
 		if (fromLua == it->second->fromLua) {
-			delete it->second;
 			it = weapons.erase(it);
 		} else {
 			++it;
