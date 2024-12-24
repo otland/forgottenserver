@@ -19,16 +19,17 @@ uint32_t Scheduler::addEvent(SchedulerTask_ptr task)
 		auto& timer = it.first->second;
 
 		timer.expires_after(std::chrono::milliseconds(scheduledTask->getDelay()));
-		timer.async_wait([this, scheduledTask = std::move(scheduledTask)](const boost::system::error_code& error) mutable {
-			eventIdTimerMap.erase(scheduledTask->getEventId());
+		timer.async_wait(
+		    [this, scheduledTask = std::move(scheduledTask)](const boost::system::error_code& error) mutable {
+			    eventIdTimerMap.erase(scheduledTask->getEventId());
 
-			if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
-				// The timer was manually canceled or Scheduler::shutdown was called
-				return;
-			}
+			    if (error == boost::asio::error::operation_aborted || getState() == THREAD_STATE_TERMINATED) {
+				    // The timer was manually canceled or Scheduler::shutdown was called
+				    return;
+			    }
 
-			g_dispatcher.addTask(std::move(scheduledTask));
-		});
+			    g_dispatcher.addTask(std::move(scheduledTask));
+		    });
 	});
 
 	return eventId;
@@ -62,4 +63,7 @@ void Scheduler::shutdown()
 	});
 }
 
-SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f) { return SchedulerTask_ptr(new SchedulerTask(delay, std::move(f))); }
+SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f)
+{
+	return SchedulerTask_ptr(new SchedulerTask(delay, std::move(f)));
+}

@@ -13,9 +13,9 @@
 #include "guild.h"
 #include "inbox.h"
 #include "protocolgame.h"
+#include "scheduler.h"
 #include "town.h"
 #include "vocation.h"
-#include "scheduler.h"
 
 class House;
 struct Mount;
