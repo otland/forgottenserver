@@ -37,6 +37,11 @@ public:
 	}
 
 	/**
+	 * Close MySQL client
+	 */
+	~Database();
+
+	/**
 	 * Connects to the database
 	 *
 	 * @return true on successful connection, false on error
