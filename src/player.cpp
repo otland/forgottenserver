@@ -3406,8 +3406,8 @@ void Player::doAttacking(uint32_t)
 			result = Weapon::useFist(this, attackedCreature);
 		}
 
-		SchedulerTask_ptr task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
-		                                             [id = getID()]() { g_game.checkCreatureAttack(id); });
+		auto task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
+		                                [id = getID()]() { g_game.checkCreatureAttack(id); });
 		if (!classicSpeed) {
 			setNextActionTask(std::move(task), false);
 		} else {

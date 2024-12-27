@@ -34,7 +34,7 @@ void Dispatcher::threadMain()
 			if (!task->hasExpired()) {
 				++dispatcherCycle;
 				// execute it
-				(*task)();
+				std::invoke(*task);
 			}
 		}
 		tmpTaskList.clear();

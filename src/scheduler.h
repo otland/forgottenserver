@@ -16,14 +16,14 @@ using SchedulerTask_ptr = std::unique_ptr<SchedulerTask>;
 class SchedulerTask : public Task
 {
 public:
+	SchedulerTask(uint32_t delay, TaskFunc&& f) : Task(std::forward<TaskFunc>(f)), delay(delay) {}
+
 	void setEventId(uint32_t id) { eventId = id; }
 	uint32_t getEventId() const { return eventId; }
 
 	uint32_t getDelay() const { return delay; }
 
 private:
-	SchedulerTask(uint32_t delay, TaskFunc&& f) : Task(std::move(f)), delay(delay) {}
-
 	uint32_t eventId = 0;
 	uint32_t delay = 0;
 

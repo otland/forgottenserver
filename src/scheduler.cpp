@@ -65,5 +65,5 @@ void Scheduler::shutdown()
 
 SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f)
 {
-	return SchedulerTask_ptr(new SchedulerTask(delay, std::move(f)));
+	return std::make_unique<SchedulerTask>(delay, std::forward<TaskFunc>(f));
 }

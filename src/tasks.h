@@ -18,9 +18,9 @@ class Task
 {
 public:
 	// DO NOT allocate this class on the stack
-	explicit Task(TaskFunc&& f) : func(std::move(f)) {}
+	explicit Task(TaskFunc&& f) : func(std::forward<TaskFunc>(f)) {}
 	Task(uint32_t ms, TaskFunc&& f) :
-	    expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::move(f))
+	    expiration(std::chrono::system_clock::now() + std::chrono::milliseconds(ms)), func(std::forward<TaskFunc>(f))
 	{}
 
 	virtual ~Task() = default;
@@ -53,9 +53,12 @@ class Dispatcher : public ThreadHolder<Dispatcher>
 public:
 	void addTask(Task_ptr task);
 
-	void addTask(TaskFunc&& f) { addTask(std::make_unique<Task>(std::move(f))); }
+	void addTask(TaskFunc&& f) { addTask(std::make_unique<Task>(std::forward<TaskFunc>(f))); }
 
-	void addTask(uint32_t expiration, TaskFunc&& f) { addTask(make_unique<Task>(expiration, std::move(f))); }
+	void addTask(uint32_t expiration, TaskFunc&& f)
+	{
+		addTask(std::make_unique<Task>(expiration, std::forward<TaskFunc>(f)));
+	}
 
 	void shutdown();
 
