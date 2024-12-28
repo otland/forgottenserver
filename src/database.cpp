@@ -61,7 +61,7 @@ static bool executeQuery(tfs::detail::Mysql_ptr& handle, std::string_view query,
 	return true;
 }
 
-Database::~Database() { mysql_server_end(); }
+Database::~Database() { mysql_library_end(); }
 
 bool Database::connect()
 {
