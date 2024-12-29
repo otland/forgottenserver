@@ -593,6 +593,7 @@ void Monster::goToFollowCreature()
 		} else { // maxTargetDist > 1
 			if (!getDistanceStep(followCreature->getPosition(), dir)) {
 				// if we can't get anything then let the A* calculate
+				updateFollowCreaturePath(fpp);
 				listWalkDir.clear();
 				if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
 					hasFollowPath = true;
@@ -612,6 +613,7 @@ void Monster::goToFollowCreature()
 			startAutoWalk();
 		}
 	} else {
+		updateFollowCreaturePath(fpp);
 		listWalkDir.clear();
 		if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
 			hasFollowPath = true;
