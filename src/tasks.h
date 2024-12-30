@@ -10,9 +10,7 @@ using TaskFunc = std::function<void(void)>;
 const int DISPATCHER_TASK_EXPIRATION = 2000;
 const auto SYSTEM_TIME_ZERO = std::chrono::system_clock::time_point(std::chrono::milliseconds(0));
 
-class Task;
-
-using Task_ptr = std::unique_ptr<Task>;
+using Task_ptr = std::unique_ptr<class Task>;
 
 class Task
 {

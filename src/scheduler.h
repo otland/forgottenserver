@@ -7,11 +7,11 @@
 #include "tasks.h"
 #include "thread_holder_base.h"
 
+#include <memory>
+
 static constexpr int32_t SCHEDULER_MINTICKS = 50;
 
-class SchedulerTask;
-
-using SchedulerTask_ptr = std::unique_ptr<SchedulerTask>;
+using SchedulerTask_ptr = std::unique_ptr<class SchedulerTask>;
 
 class SchedulerTask : public Task
 {
@@ -26,8 +26,6 @@ public:
 private:
 	uint32_t eventId = 0;
 	uint32_t delay = 0;
-
-	friend SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f);
 };
 
 SchedulerTask_ptr createSchedulerTask(uint32_t delay, TaskFunc&& f);
