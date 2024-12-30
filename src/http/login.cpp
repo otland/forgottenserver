@@ -125,13 +125,20 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 		} while (result->next());
 	}
 
+	std::string serverIp = getString(ConfigManager::IP);
+	if (getBoolean(ConfigManager::ALLOW_OTC_PROXY)) {
+		serverIp = std::string("127.0.0.1");
+	} else if (getBoolean(ConfigManager::ALLOW_HAPROXY)) {
+		serverIp = getString(ConfigManager::STATUS_IP);
+	}
+
 	json::array worlds{
 	    {
 	        {"id", 0}, // not implemented
 	        {"name", getString(ConfigManager::SERVER_NAME)},
-	        {"externaladdressprotected", getString(ConfigManager::IP)},
+	        {"externaladdressprotected", serverIp},
 	        {"externalportprotected", getNumber(ConfigManager::GAME_PORT)},
-	        {"externaladdressunprotected", getString(ConfigManager::IP)},
+	        {"externaladdressunprotected", serverIp},
 	        {"externalportunprotected", getNumber(ConfigManager::GAME_PORT)},
 	        {"previewstate", 0}, // not implemented
 	        {"location", getString(ConfigManager::LOCATION)},

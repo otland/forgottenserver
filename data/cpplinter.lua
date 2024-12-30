@@ -344,6 +344,8 @@ Creature = {}
 ---@field isPlayer fun(self: Player): boolean
 ---@field getGuid fun(self: Player): number
 ---@field getIp fun(self: Player): number
+---@field isOtcProxy fun(self: Player): boolean
+---@field isHaProxy fun(self: Player): boolean
 ---@field getAccountId fun(self: Player): number
 ---@field getLastLoginSaved fun(self: Player): number
 ---@field getLastLogout fun(self: Player): number
@@ -2137,6 +2139,8 @@ configKeys = {
 	MANASHIELD_BREAKABLE = 36,
 	CHECK_DUPLICATE_STORAGE_KEYS = 37,
 	MONSTER_OVERSPAWN = 38,
+	ALLOW_OTC_PROXY = 39,
+	ALLOW_HAPROXY = 40,
 
 	-- ConfigKeysString
 	MAP_NAME = 0,
@@ -2156,6 +2160,7 @@ configKeys = {
 	DEFAULT_PRIORITY = 14,
 	MAP_AUTHOR = 15,
 	CONFIG_FILE = 16,
+	STATUS_IP = 17,
 
 	-- ConfigKeysInteger
 	SQL_PORT = 0,
