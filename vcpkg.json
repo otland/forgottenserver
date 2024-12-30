@@ -12,7 +12,6 @@
       "name": "libiconv",
       "platform": "osx"
     },
-    "libmariadb",
     "openssl",
     "pugixml",
     "zlib"
@@ -30,11 +29,19 @@
       "description": "Use LuaJIT instead of Lua",
       "dependencies": ["luajit"]
     },
+    "libmariadb": {
+      "description": "Use libmariadb instead of libmysql",
+      "dependencies": ["libmariadb"]
+    },
+    "libmysql": {
+      "description": "Use libmysql instead of libmariadb",
+      "dependencies": ["libmysql"]
+    },
     "unit-tests": {
       "description": "Build unit tests",
       "dependencies": ["boost-test"]
     }
   },
-  "default-features": ["lua", "http"],
+  "default-features": ["lua", "http", "libmariadb"],
   "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
 }
