@@ -15,6 +15,7 @@ void TalkActions::clear(bool fromLua)
 {
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
 		if (fromLua == it->second.fromLua) {
+			it->second.clearScript();
 			it = talkActions.erase(it);
 		} else {
 			++it;
