@@ -1779,7 +1779,7 @@ void ConditionLight::addCondition(Creature* creature, const Condition* condition
 		const ConditionLight& conditionLight = static_cast<const ConditionLight&>(*condition);
 		lightInfo.level = conditionLight.lightInfo.level;
 		lightInfo.color = conditionLight.lightInfo.color;
-		lightChangeInterval = ticks / lightInfo.level;
+		lightChangeInterval = ticks / std::max<uint8_t>(1, lightInfo.level);
 		internalLightTicks = 0;
 		creature->setCreatureLight(lightInfo);
 		g_game.changeLight(creature);
@@ -1794,9 +1794,14 @@ bool ConditionLight::setParam(ConditionParam_t param, int32_t value)
 	}
 
 	switch (param) {
-		case CONDITION_PARAM_LIGHT_LEVEL:
-			lightInfo.level = value;
+		case CONDITION_PARAM_LIGHT_LEVEL: {
+			if (value < 1) {
+				std::cout << "[ConditionLight::setParam] trying to set invalid light value: " << value
+				          << " defaulting to 1" << std::endl;
+			}
+			lightInfo.level = std::max(1, value);
 			return true;
+		}
 
 		case CONDITION_PARAM_LIGHT_COLOR:
 			lightInfo.color = value;

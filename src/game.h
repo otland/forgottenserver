@@ -44,8 +44,6 @@ enum GameState_t
 
 static constexpr int32_t PLAYER_NAME_LENGTH = 25;
 
-static constexpr int32_t EVENT_LIGHTINTERVAL = 10000;
-static constexpr int32_t EVENT_WORLDTIMEINTERVAL = 2500;
 static constexpr int32_t EVENT_DECAYINTERVAL = 250;
 static constexpr int32_t EVENT_DECAY_BUCKETS = 4;
 
@@ -84,7 +82,7 @@ public:
 	void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
 	bool loadMainMap(const std::string& filename);
-	void loadMap(const std::string& path);
+	void loadMap(const std::string& path, bool isCalledByLua = false);
 
 	/**
 	 * Get the map size - info purpose only
@@ -396,7 +394,7 @@ public:
 	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
 	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg);
 
-	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
+	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player);
 
 	void cleanup();
 	void shutdown();
@@ -426,7 +424,6 @@ public:
 	void updateCreatureWalk(uint32_t creatureId);
 	void checkCreatureAttack(uint32_t creatureId);
 	void checkCreatures(size_t index);
-	void checkLight();
 
 	bool combatBlockHit(CombatDamage& damage, Creature* attacker, Creature* target, bool checkDefense, bool checkArmor,
 	                    bool field, bool ignoreResistances = false);

@@ -1,0 +1,20 @@
+local spell = Spell(SPELL_INSTANT)
+
+function spell.onCastSpell(creature, variant)
+	return creature:conjureItem(0, 2545, 7, CONST_ME_MAGIC_BLUE)
+end
+
+spell:group("support")
+spell:id(48)
+spell:name("Conjure Poisoned Arrow")
+spell:words("exevo con pox")
+spell:level(16)
+spell:mana(130)
+spell:soul(2)
+spell:isPremium(true)
+spell:isAggressive(false)
+spell:isSelfTarget(true)
+spell:cooldown(2000)
+spell:groupCooldown(2000)
+spell:vocation("paladin;true", "royal paladin;true")
+spell:register()

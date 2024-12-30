@@ -42,7 +42,6 @@ extern Spells* g_spells;
 extern Vocations g_vocations;
 extern GlobalEvents* g_globalEvents;
 extern CreatureEvents* g_creatureEvents;
-extern Events* g_events;
 extern Monsters g_monsters;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
@@ -167,9 +166,12 @@ void Game::saveGameState()
 	}
 }
 
-bool Game::loadMainMap(const std::string& filename) { return map.loadMap("data/world/" + filename + ".otbm", true); }
+bool Game::loadMainMap(const std::string& filename)
+{
+	return map.loadMap("data/world/" + filename + ".otbm", true, false);
+}
 
-void Game::loadMap(const std::string& path) { map.loadMap(path, false); }
+void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {
@@ -495,7 +497,7 @@ Player* Game::getPlayerByAccount(uint32_t acc)
 bool Game::internalPlaceCreature(Creature* creature, const Position& pos, bool extendedPos /*=false*/,
                                  bool forced /*= false*/)
 {
-	if (creature->getParent()) {
+	if (creature->hasParent()) {
 		return false;
 	}
 
@@ -761,7 +763,7 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 		}
 	}
 
-	if (!g_events->eventPlayerOnMoveCreature(player, movingCreature, movingCreaturePos, toPos)) {
+	if (!tfs::events::player::onMoveCreature(player, movingCreature, movingCreaturePos, toPos)) {
 		return;
 	}
 
@@ -1073,7 +1075,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	Player* actorPlayer = actor ? actor->getPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret =
-		    g_events->eventPlayerOnMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
 		}
@@ -1113,7 +1115,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		ret = fromCylinder->queryAdd(fromCylinder->getThingIndex(item), *toItem, toItem->getItemCount(), 0);
 		if (ret == RETURNVALUE_NOERROR) {
 			if (actorPlayer && fromPos && toPos) {
-				const ReturnValue eventRet = g_events->eventPlayerOnMoveItem(
+				const ReturnValue eventRet = tfs::events::player::onMoveItem(
 				    actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos, toCylinder, fromCylinder);
 				if (eventRet != RETURNVALUE_NOERROR) {
 					return eventRet;
@@ -1146,7 +1148,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 				ret = toCylinder->queryAdd(index, *item, count, flags);
 
 				if (actorPlayer && fromPos && toPos && !toItem->isRemoved()) {
-					g_events->eventPlayerOnItemMoved(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos,
+					tfs::events::player::onItemMoved(actorPlayer, toItem, toItem->getItemCount(), *toPos, *fromPos,
 					                                 toCylinder, fromCylinder);
 				}
 
@@ -1277,12 +1279,12 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 
 	if (actorPlayer && fromPos && toPos) {
 		if (updateItem && !updateItem->isRemoved()) {
-			g_events->eventPlayerOnItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromCylinder,
+			tfs::events::player::onItemMoved(actorPlayer, updateItem, count, *fromPos, *toPos, fromCylinder,
 			                                 toCylinder);
 		} else if (moveItem && !moveItem->isRemoved()) {
-			g_events->eventPlayerOnItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
+			tfs::events::player::onItemMoved(actorPlayer, moveItem, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		} else if (item && !item->isRemoved()) {
-			g_events->eventPlayerOnItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
+			tfs::events::player::onItemMoved(actorPlayer, item, count, *fromPos, *toPos, fromCylinder, toCylinder);
 		}
 	}
 
@@ -1372,9 +1374,11 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 	}
 
 	if (item->getDuration() > 0) {
-		item->incrementReferenceCounter();
-		item->setDecaying(DECAYING_TRUE);
-		toDecayItems.push_front(item);
+		if (item->getDecaying() != DECAYING_TRUE) {
+			item->incrementReferenceCounter();
+			item->setDecaying(DECAYING_TRUE);
+			toDecayItems.push_front(item);
+		}
 	}
 
 	return RETURNVALUE_NOERROR;
@@ -2352,7 +2356,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 			return;
 		}
 
-		if (!g_events->eventPlayerOnBrowseField(player, tile->getPosition())) {
+		if (!tfs::events::player::onBrowseField(player, tile->getPosition())) {
 			return;
 		}
 
@@ -2369,7 +2373,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 	}
 
 	player->addContainer(cid, parentContainer);
-	player->sendContainer(cid, parentContainer, parentContainer->hasParent(), player->getContainerIndex(cid));
+	player->sendContainer(cid, parentContainer, player->getContainerIndex(cid));
 }
 
 void Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
@@ -2384,7 +2388,7 @@ void Game::playerUpdateContainer(uint32_t playerId, uint8_t cid)
 		return;
 	}
 
-	player->sendContainer(cid, container, container->hasParent(), player->getContainerIndex(cid));
+	player->sendContainer(cid, container, player->getContainerIndex(cid));
 }
 
 void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stackPos, const uint16_t spriteId)
@@ -2425,7 +2429,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 		podium->setDirection(static_cast<Direction>((podium->getDirection() + 1) % 4));
 		updatePodium(podium);
 	} else {
-		g_events->eventPlayerOnRotateItem(player, item);
+		tfs::events::player::onRotateItem(player, item);
 	}
 }
 
@@ -2522,7 +2526,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnBrowseField(player, pos)) {
+	if (!tfs::events::player::onBrowseField(player, pos)) {
 		return;
 	}
 
@@ -2546,7 +2550,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 		player->closeContainer(dummyContainerId);
 	} else {
 		player->addContainer(dummyContainerId, container);
-		player->sendContainer(dummyContainerId, container, false, 0);
+		player->sendContainer(dummyContainerId, container, 0);
 	}
 }
 
@@ -2567,7 +2571,7 @@ void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 	}
 
 	player->setContainerIndex(containerId, index);
-	player->sendContainer(containerId, container, container->hasParent(), index);
+	player->sendContainer(containerId, container, index);
 }
 
 void Game::playerUpdateHouseWindow(uint32_t playerId, uint8_t listId, uint32_t windowTextId, const std::string& text)
@@ -2623,7 +2627,7 @@ void Game::playerWrapItem(uint32_t playerId, const Position& position, uint8_t s
 		return;
 	}
 
-	g_events->eventPlayerOnWrapItem(player, item);
+	tfs::events::player::onWrapItem(player, item);
 }
 
 void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t stackPos, uint32_t tradePlayerId,
@@ -2738,7 +2742,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	if (!g_events->eventPlayerOnTradeRequest(player, tradePartner, tradeItem)) {
+	if (!tfs::events::player::onTradeRequest(player, tradePartner, tradeItem)) {
 		return;
 	}
 
@@ -2806,7 +2810,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		Item* playerTradeItem = player->tradeItem;
 		Item* partnerTradeItem = tradePartner->tradeItem;
 
-		if (!g_events->eventPlayerOnTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
+		if (!tfs::events::player::onTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
 			internalCloseTrade(player, false);
 			return;
 		}
@@ -2887,7 +2891,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			}
 		}
 
-		g_events->eventPlayerOnTradeCompleted(player, tradePartner, playerTradeItem, partnerTradeItem, isSuccess);
+		tfs::events::player::onTradeCompleted(player, tradePartner, playerTradeItem, partnerTradeItem, isSuccess);
 
 		player->setTradeState(TRADE_NONE);
 		player->tradeItem = nullptr;
@@ -2945,7 +2949,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 	int32_t lookDistance =
 	    std::max(playerPosition.getDistanceX(tradeItemPosition), playerPosition.getDistanceY(tradeItemPosition));
 	if (index == 0) {
-		g_events->eventPlayerOnLookInTrade(player, tradePartner, tradeItem, lookDistance);
+		tfs::events::player::onLookInTrade(player, tradePartner, tradeItem, lookDistance);
 		return;
 	}
 
@@ -2965,7 +2969,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 			}
 
 			if (--index == 0) {
-				g_events->eventPlayerOnLookInTrade(player, tradePartner, item, lookDistance);
+				tfs::events::player::onLookInTrade(player, tradePartner, item, lookDistance);
 				return;
 			}
 		}
@@ -3142,7 +3146,7 @@ void Game::playerLookInShop(uint32_t playerId, uint16_t spriteId, uint8_t count)
 		return;
 	}
 
-	g_events->eventPlayerOnLookInShop(player, &it, subType);
+	tfs::events::player::onLookInShop(player, &it, subType);
 }
 
 void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos)
@@ -3174,7 +3178,7 @@ void Game::playerLookAt(uint32_t playerId, const Position& pos, uint8_t stackPos
 		}
 	}
 
-	g_events->eventPlayerOnLook(player, pos, thing, stackPos, lookDistance);
+	tfs::events::player::onLook(player, pos, thing, stackPos, lookDistance);
 }
 
 void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
@@ -3207,7 +3211,7 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		}
 	}
 
-	g_events->eventPlayerOnLookInBattleList(player, creature, lookDistance);
+	tfs::events::player::onLookInBattleList(player, creature, lookDistance);
 }
 
 void Game::playerCancelAttackAndFollow(uint32_t playerId)
@@ -3230,14 +3234,14 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	}
 
 	if (player->getAttackedCreature() && creatureId == 0) {
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		player->sendCancelTarget();
 		return;
 	}
 
 	Creature* attackCreature = getCreatureByID(creatureId);
 	if (!attackCreature) {
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		player->sendCancelTarget();
 		return;
 	}
@@ -3246,11 +3250,12 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 		player->sendCancelTarget();
-		player->setAttackedCreature(nullptr);
+		player->removeAttackedCreature();
 		return;
 	}
 
 	player->setAttackedCreature(attackCreature);
+
 	g_dispatcher.addTask([this, id = player->getID()]() { updateCreatureWalk(id); });
 }
 
@@ -3261,9 +3266,15 @@ void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	player->setAttackedCreature(nullptr);
+	player->removeAttackedCreature();
+
+	if (Creature* followCreature = getCreatureByID(creatureId)) {
+		player->setFollowCreature(followCreature);
+	} else {
+		player->removeFollowCreature();
+	}
+
 	g_dispatcher.addTask([this, id = player->getID()]() { updateCreatureWalk(id); });
-	player->setFollowCreature(getCreatureByID(creatureId));
 }
 
 void Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, bool chaseMode, bool secureMode)
@@ -3347,7 +3358,7 @@ void Game::playerTurn(uint32_t playerId, Direction dir)
 		return;
 	}
 
-	if (!g_events->eventPlayerOnTurn(player, dir)) {
+	if (!tfs::events::player::onTurn(player, dir)) {
 		return;
 	}
 
@@ -3412,7 +3423,7 @@ void Game::playerRequestEditPodium(uint32_t playerId, const Position& position, 
 		}
 	}
 
-	g_events->eventPlayerOnPodiumRequest(player, item);
+	tfs::events::player::onPodiumRequest(player, item);
 }
 
 void Game::playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& position, uint8_t stackPos,
@@ -3438,7 +3449,7 @@ void Game::playerEditPodium(uint32_t playerId, Outfit_t outfit, const Position& 
 		return;
 	}
 
-	g_events->eventPlayerOnPodiumEdit(player, item, outfit, podiumVisible, direction);
+	tfs::events::player::onPodiumEdit(player, item, outfit, podiumVisible, direction);
 }
 
 void Game::playerToggleMount(uint32_t playerId, bool mount)
@@ -3794,7 +3805,7 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 		for (Creature* spectator : spectators) {
 			spectator->onCreatureSay(creature, type, text);
 			if (creature != spectator) {
-				g_events->eventCreatureOnHear(spectator, creature, text, type);
+				tfs::events::creature::onHear(spectator, creature, text, type);
 			}
 		}
 	}
@@ -3891,7 +3902,7 @@ void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 
 void Game::internalCreatureChangeOutfit(Creature* creature, const Outfit_t& outfit)
 {
-	if (!g_events->eventCreatureOnChangeOutfit(creature, outfit)) {
+	if (!tfs::events::creature::onChangeOutfit(creature, outfit)) {
 		return;
 	}
 
@@ -4948,7 +4959,7 @@ void Game::playerInviteToParty(uint32_t playerId, uint32_t invitedId)
 		return;
 	}
 
-	if (!g_events->eventPartyOnInvite(party, invitedPlayer)) {
+	if (!tfs::events::party::onInvite(party, invitedPlayer)) {
 		if (party->empty()) {
 			player->setParty(nullptr);
 			delete party;
@@ -5084,7 +5095,7 @@ void Game::playerReportRuleViolation(uint32_t playerId, const std::string& targe
 		return;
 	}
 
-	g_events->eventPlayerOnReportRuleViolation(player, targetName, reportType, reportReason, comment, translation);
+	tfs::events::player::onReportRuleViolation(player, targetName, reportType, reportReason, comment, translation);
 }
 
 void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, const std::string& date,
@@ -5138,7 +5149,7 @@ void Game::playerBrowseMarket(uint32_t playerId, uint16_t spriteId)
 	const MarketOfferList& buyOffers = IOMarket::getActiveOffers(MARKETACTION_BUY, it.id);
 	const MarketOfferList& sellOffers = IOMarket::getActiveOffers(MARKETACTION_SELL, it.id);
 	player->sendMarketBrowseItem(it.id, buyOffers, sellOffers);
-	g_events->eventPlayerOnLookInMarket(player, &it);
+	tfs::events::player::onLookInMarket(player, &it);
 }
 
 void Game::playerBrowseMarketOwnOffers(uint32_t playerId)
@@ -5310,7 +5321,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5327,7 +5339,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5418,7 +5431,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				if (internalAddItem(buyerPlayer->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
@@ -5436,7 +5449,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				if (internalAddItem(buyerPlayer->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
@@ -5465,7 +5478,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5482,7 +5496,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5540,17 +5555,17 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 		return;
 	}
 
-	g_events->eventPlayerOnNetworkMessage(player, recvByte, msg);
+	tfs::events::player::onNetworkMessage(player, recvByte, msg);
 }
 
-std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player)
+std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player)
 {
 	uint16_t count = 0;
-	std::list<Container*> containers{player.getInbox()};
+	std::list<Container*> containers{player.getInbox().get()};
 
 	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {
-			containers.push_front(chest.second);
+			containers.push_front(chest.second.get());
 		}
 	}
 
@@ -5811,7 +5826,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return true;
 		}
 		case RELOAD_TYPE_EVENTS:
-			return g_events->load();
+			return tfs::events::reload();
 		case RELOAD_TYPE_GLOBALEVENTS:
 			return g_globalEvents->reload();
 		case RELOAD_TYPE_ITEMS:
@@ -5824,7 +5839,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return g_moveEvents->reload();
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
-			Npcs::loadNpcs(true);
 			return true;
 		}
 
@@ -5865,7 +5879,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			Item::items.reload();
 			mounts.reload();
 			ConfigManager::reload();
-			g_events->load();
+			tfs::events::load();
 			g_chat->reload();
 			*/
 			return true;
@@ -5893,7 +5907,7 @@ bool Game::reload(ReloadTypes_t reloadType)
 			g_weapons->loadDefaults();
 			mounts.reload();
 			g_globalEvents->reload();
-			g_events->load();
+			tfs::events::reload();
 			g_chat->reload();
 			g_actions->clear(true);
 			g_creatureEvents->clear(true);

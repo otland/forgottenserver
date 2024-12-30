@@ -153,14 +153,11 @@ function Player.transferMoneyTo(self, target, amount)
 	local targetPlayer = Player(target.guid)
 	if targetPlayer then
 		targetPlayer:setBankBalance(targetPlayer:getBankBalance() + amount)
-		db.query("UPDATE `players` SET `balance` = " .. targetPlayer:getBankBalance() .. " WHERE `id` = '" .. targetPlayer:getGuid() .. "'")
 	else
 		db.query("UPDATE `players` SET `balance` = `balance` + " .. amount .. " WHERE `id` = '" .. target.guid .. "'")
 	end
 
 	self:setBankBalance(self:getBankBalance() - amount)
-	-- incase server crashes that we do not duplicate money
-	self:save()
 	return true
 end
 
@@ -739,13 +736,4 @@ function Player.disableLoginMusic(self)
 	msg:sendToPlayer(self)
 	msg:delete()
 	return true
-end
-
-function Player.sendInboxItems(self, items, containerId)
-	local inbox = self:getInbox()
-	local container = Game.createItem(containerId, 1)
-	for _, item in pairs(items) do
-		container:addItem(item.item, item.count)
-	end
-	container:moveTo(inbox)
 end

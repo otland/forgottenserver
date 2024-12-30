@@ -16,17 +16,12 @@
 
 extern Monsters g_monsters;
 extern Game g_game;
-extern Events* g_events;
 
 static constexpr int32_t MINSPAWN_INTERVAL = 10 * 1000;           // 10 seconds to match RME
 static constexpr int32_t MAXSPAWN_INTERVAL = 24 * 60 * 60 * 1000; // 1 day
 
-bool Spawns::loadFromXml(const std::string& filename)
+bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 {
-	if (loaded) {
-		return true;
-	}
-
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
@@ -192,6 +187,10 @@ bool Spawns::loadFromXml(const std::string& filename)
 				npcList.push_front(npc);
 			}
 		}
+
+		if (isCalledByLua) {
+			spawn.startup();
+		}
 	}
 	return true;
 }
@@ -271,8 +270,6 @@ bool Spawn::findPlayer(const Position& pos)
 	return false;
 }
 
-bool Spawn::isInSpawnZone(const Position& pos) { return Spawns::isInZone(centerPos, radius, pos); }
-
 bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = false*/)
 {
 	bool isBlocked = !startup && findPlayer(sb.pos);
@@ -316,7 +313,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
                          bool startup /*= false*/)
 {
 	std::unique_ptr<Monster> monster_ptr(new Monster(mType));
-	if (!g_events->eventMonsterOnSpawn(monster_ptr.get(), pos, startup, false)) {
+	if (!tfs::events::monster::onSpawn(monster_ptr.get(), pos, startup, false)) {
 		return false;
 	}
 
@@ -389,13 +386,9 @@ void Spawn::cleanup()
 {
 	auto it = spawnedMap.begin();
 	while (it != spawnedMap.end()) {
-		uint32_t spawnId = it->first;
 		Monster* monster = it->second;
 		if (monster->isRemoved()) {
 			monster->decrementReferenceCounter();
-			it = spawnedMap.erase(it);
-		} else if (!isInSpawnZone(monster->getPosition()) && spawnId != 0) {
-			spawnedMap.insert({0, monster});
 			it = spawnedMap.erase(it);
 		} else {
 			++it;

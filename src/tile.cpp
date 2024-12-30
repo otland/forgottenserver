@@ -582,7 +582,7 @@ ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags
 				}
 			}
 
-			if (!player->getParent() && hasFlag(TILESTATE_NOLOGOUT)) {
+			if (!player->hasParent() && hasFlag(TILESTATE_NOLOGOUT)) {
 				// player is trying to login to a "no logout" tile
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
@@ -1289,7 +1289,7 @@ size_t Tile::getFirstIndex() const { return 0; }
 
 size_t Tile::getLastIndex() const { return getThingCount(); }
 
-uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/, bool) const
+uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
 	if (ground && ground->getID() == itemId) {
@@ -1605,13 +1605,32 @@ bool Tile::isMoveableBlocking() const { return !ground || hasFlag(TILESTATE_BLOC
 Item* Tile::getUseItem(int32_t index) const
 {
 	const TileItemVector* items = getItemList();
+
+	// no items, get ground
 	if (!items || items->size() == 0) {
 		return ground;
 	}
 
+	// try getting thing by index
 	if (Thing* thing = getThing(index)) {
-		return thing->getItem();
+		Item* thingItem = thing->getItem();
+		if (thingItem) {
+			return thingItem;
+		}
 	}
 
-	return nullptr;
+	// try getting top movable item
+	Item* topDownItem = getTopDownItem();
+	if (topDownItem) {
+		return topDownItem;
+	}
+
+	// try getting door
+	for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
+		if ((*it)->getDoor()) {
+			return (*it)->getItem();
+		}
+	}
+
+	return *items->begin();
 }

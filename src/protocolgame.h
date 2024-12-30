@@ -263,7 +263,7 @@ private:
 	void sendUpdateContainerItem(uint8_t cid, uint16_t slot, const Item* item);
 	void sendRemoveContainerItem(uint8_t cid, uint16_t slot, const Item* lastItem);
 
-	void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex);
+	void sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex);
 	void sendEmptyContainer(uint8_t cid);
 	void sendCloseContainer(uint8_t cid);
 
@@ -294,8 +294,6 @@ private:
 	void AddPlayerStats(NetworkMessage& msg);
 	void AddOutfit(NetworkMessage& msg, const Outfit_t& outfit);
 	void AddPlayerSkills(NetworkMessage& msg);
-	void AddWorldLight(NetworkMessage& msg, LightInfo lightInfo);
-	void AddCreatureLight(NetworkMessage& msg, const Creature* creature);
 
 	// tiles
 	static void RemoveTileThing(NetworkMessage& msg, const Position& pos, uint32_t stackpos);

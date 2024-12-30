@@ -12,7 +12,6 @@
 #include "http/http.h"
 #include "iomarket.h"
 #include "monsters.h"
-#include "npc.h"
 #include "outfit.h"
 #include "protocollogin.h"
 #include "protocolold.h"
@@ -178,14 +177,8 @@ void mainLoader(ServiceManager* services)
 	}
 
 	std::cout << ">> Loading lua monsters" << std::endl;
-	if (!g_scripts->loadScripts("monster/lua", false, false)) {
+	if (!g_scripts->loadScripts("monster", false, false)) {
 		startupErrorMessage("Failed to load lua monsters");
-		return;
-	}
-
-	std::cout << ">> Loading lua npcs" << std::endl;
-	if (!Npcs::loadNpcs(false)) {
-		startupErrorMessage("Failed to load lua npcs");
 		return;
 	}
 

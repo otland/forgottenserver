@@ -178,6 +178,7 @@ target_link_libraries(tfslib PRIVATE
 	fmt::fmt
 	OpenSSL::Crypto
 	pugixml::pugixml
+	ZLIB::ZLIB
 	${CMAKE_THREAD_LIBS_INIT}
 	${LUA_LIBRARIES}
 	${MYSQL_CLIENT_LIBS}
@@ -186,10 +187,6 @@ set_target_properties(tfslib PROPERTIES UNITY_BUILD ${ENABLE_UNITY_BUILD})
 
 if (APPLE)
 	target_link_libraries(tfslib PRIVATE Iconv::Iconv)
-endif()
-
-if (ENABLE_IPO)
-	set_target_properties(tfslib PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
 endif()
 
 if (HTTP)

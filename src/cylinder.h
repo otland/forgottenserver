@@ -164,9 +164,8 @@ public:
 	 * \param subType is the extra type an item can have such as
 	 * charges/fluidtype, -1 means not used \returns the amount of items of the
 	 * asked item type
-	 * \param ignoreEquipped if we want to include equipped items in the search aswell or not
 	 */
-	virtual uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const;
+	virtual uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const;
 
 	/**
 	 * Get the amount of items of a all types
@@ -174,6 +173,12 @@ public:
 	 * \returns a map mapping item id to count (same as first argument)
 	 */
 	virtual std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const;
+
+	/**
+	 * Removes an object from the cylinder without sending to the client(s)
+	 * \param thing is the object to add
+	 */
+	virtual void internalRemoveThing(Thing* thing);
 
 	/**
 	 * Adds an object to the cylinder without sending to the client(s)

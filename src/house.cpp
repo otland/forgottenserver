@@ -229,8 +229,8 @@ bool House::transferToDepot(Player* player) const
 	}
 
 	for (Item* item : moveItemList) {
-		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                        nullptr, FLAG_NOLIMIT);
+		g_game.internalMoveItem(item->getParent(), player->getInbox().get(), INDEX_WHEREEVER, item,
+		                        item->getItemCount(), nullptr, FLAG_NOLIMIT);
 	}
 	return true;
 }
@@ -391,19 +391,16 @@ void AccessList::parseList(std::string_view list)
 		}
 
 		boost::algorithm::trim(line);
-
 		if (line.empty() || line.front() == '#' || line.length() > 100) {
 			continue;
 		}
-
-		boost::algorithm::to_lower(line);
 
 		std::string::size_type at_pos = line.find("@");
 		if (at_pos != std::string::npos) {
 			if (at_pos == 0) {
 				addGuild(line.substr(1));
 			} else {
-				addGuildRank(line.substr(0, at_pos - 1), line.substr(at_pos + 1));
+				addGuildRank(line.substr(0, at_pos), line.substr(at_pos + 1));
 			}
 		} else if (line == "*") {
 			allowEveryone = true;
@@ -623,7 +620,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 		}
 
 		const uint32_t ownerId = house->getOwner();
-		Town* town = g_game.map.towns.getTown(house->getTownId());
+		const Town* town = g_game.map.towns.getTown(house->getTownId());
 		if (!town) {
 			continue;
 		}
@@ -689,7 +686,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 				letter->setText(fmt::format(
 				    "Warning! \nThe {:s} rent of {:d} gold for your house \"{:s}\" is payable. Have it within {:d} days or you will lose this house.",
 				    period, house->getRent(), house->getName(), daysLeft));
-				g_game.internalAddItem(player.getInbox(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
+				g_game.internalAddItem(player.getInbox().get(), letter, INDEX_WHEREEVER, FLAG_NOLIMIT);
 				house->setPayRentWarnings(house->getPayRentWarnings() + 1);
 			} else {
 				house->setOwner(0, true, &player);
