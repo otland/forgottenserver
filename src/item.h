@@ -905,6 +905,8 @@ public:
 		return attributes;
 	}
 
+	bool shouldTriggerBrowseFieldUpdate() const { return getContainer() || hasProperty(CONST_PROP_MOVEABLE); }
+
 	void incrementReferenceCounter() { ++referenceCounter; }
 	void decrementReferenceCounter()
 	{
