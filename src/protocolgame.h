@@ -236,7 +236,7 @@ private:
 
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color);
 
-	void sendSpellCooldown(uint8_t spellId, uint32_t time);
+	void sendSpellCooldown(uint16_t spellId, uint32_t time);
 	void sendSpellGroupCooldown(SpellGroup_t groupId, uint32_t time);
 	void sendUseItemCooldown(uint32_t time);
 	void sendSupplyUsed(const uint16_t clientId);
