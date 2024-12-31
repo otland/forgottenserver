@@ -2680,7 +2680,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 						}
 					}
 				} else if (inventoryItem->isStackable() && item->equals(inventoryItem) &&
-				           inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
+				           inventoryItem->getItemCount() < inventoryItem->getStackSize()) {
 					uint32_t remainder = (100 - inventoryItem->getItemCount());
 
 					if (queryAdd(slotIndex, *item, remainder, flags) == RETURNVALUE_NOERROR) {
@@ -2689,7 +2689,7 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 				}
 			} else if (queryAdd(slotIndex, *item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { // empty slot
 				if (item->isStackable()) {
-					n += 100;
+					n += item->getStackSize();
 				} else {
 					++n;
 				}
@@ -2706,14 +2706,15 @@ ReturnValue Player::queryMaxCount(int32_t index, const Thing& thing, uint32_t co
 		}
 
 		if (destItem) {
-			if (destItem->isStackable() && item->equals(destItem) && destItem->getItemCount() < ITEM_STACK_SIZE) {
-				maxQueryCount = 100 - destItem->getItemCount();
+			if (destItem->isStackable() && item->equals(destItem) &&
+			    destItem->getItemCount() < destItem->getStackSize()) {
+				maxQueryCount = destItem->getStackSize() - destItem->getItemCount();
 			} else {
 				maxQueryCount = 0;
 			}
 		} else if (queryAdd(index, *item, count, flags) == RETURNVALUE_NOERROR) { // empty slot
 			if (item->isStackable()) {
-				maxQueryCount = 100;
+				maxQueryCount = item->getStackSize();
 			} else {
 				maxQueryCount = 1;
 			}
@@ -2780,7 +2781,8 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				if (autoStack && isStackable) {
 					// try find an already existing item to stack with
 					if (queryAdd(slotIndex, *item, item->getItemCount(), 0) == RETURNVALUE_NOERROR) {
-						if (inventoryItem->equals(item) && inventoryItem->getItemCount() < ITEM_STACK_SIZE) {
+						if (inventoryItem->equals(item) &&
+						    inventoryItem->getItemCount() < inventoryItem->getStackSize()) {
 							index = slotIndex;
 							*destItem = inventoryItem;
 							return this;
@@ -2839,7 +2841,7 @@ Cylinder* Player::queryDestination(int32_t& index, const Thing& thing, Item** de
 				}
 
 				// try find an already existing item to stack with
-				if (tmpItem->equals(item) && tmpItem->getItemCount() < ITEM_STACK_SIZE) {
+				if (tmpItem->equals(item) && tmpItem->getItemCount() < tmpItem->getStackSize()) {
 					index = n;
 					*destItem = tmpItem;
 					return tmpContainer;
