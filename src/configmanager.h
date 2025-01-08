@@ -47,6 +47,7 @@ enum boolean_config_t
 	MANASHIELD_BREAKABLE,
 	CHECK_DUPLICATE_STORAGE_KEYS,
 	MONSTER_OVERSPAWN,
+	STASH_MOVING,
 
 	LAST_BOOLEAN_CONFIG /* this must be the last one */
 };
@@ -121,6 +122,7 @@ enum integer_config_t
 	QUEST_TRACKER_PREMIUM_LIMIT,
 	STAMINA_REGEN_MINUTE,
 	STAMINA_REGEN_PREMIUM,
+	STASH_ITEMS,
 
 	LAST_INTEGER_CONFIG /* this must be the last one */
 };

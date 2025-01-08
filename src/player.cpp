@@ -107,6 +107,19 @@ bool Player::setVocation(uint16_t vocId)
 	return true;
 }
 
+uint16_t Player::getFreeBackpackSlots() const {
+	Thing* thing = getThing(CONST_SLOT_BACKPACK);
+	if (!thing) {
+		return 0;
+	}
+	Container* backpack = thing->getContainer();
+	if (!backpack) {
+		return 0;
+	}
+	uint16_t counter = std::max<uint16_t>(0, backpack->getFreeSlots());
+	return counter;
+}
+
 bool Player::isPushable() const
 {
 	if (hasFlag(PlayerFlag_CannotBePushed)) {
@@ -842,6 +855,7 @@ DepotLocker& Player::getDepotLocker()
 {
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
+		depotLocker->internalAddThing(Item::CreateItem(ITEM_SUPPLY_STASH));
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
 		depotLocker->internalAddThing(getInbox().get());
 
@@ -3024,6 +3038,72 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 		}
 	}
 	return count;
+}
+
+void Player::stashContainer(StashContainerList itemDict) {
+    StashItemList stashItemDict;  // ItemID - StashItem (clientId, itemCount)
+    //std::cout << "Initializing stashContainer with " << itemDict.size() << " items in itemDict." << std::endl;
+    for (const auto& it_dict : itemDict) {
+        uint16_t itemId = (it_dict.first)->getID();
+        uint16_t clientId = (it_dict.first)->getClientID();  // Assuming getClientID is available
+        //std::cout << "Processing item: " << itemId << " with clientId: " << clientId << " and count: " << it_dict.second << std::endl;
+        // Add the item to stashItemDict with the itemId and itemCount
+        stashItemDict[itemId] = {clientId, it_dict.second};
+    }
+    // Add existing stash items to stashItemDict, merging counts if the item already exists
+    for (auto it : stashItems) {
+        if (stashItemDict.find(it.first) == stashItemDict.end()) {
+            //std::cout << "Adding new item from existing stash: " << it.first << std::endl;
+            stashItemDict[it.first] = it.second;
+        } else {
+            //std::cout << "Merging existing item: " << it.first << " with new count: " << it.second.itemCount << std::endl;
+            stashItemDict[it.first].itemCount += it.second.itemCount;
+        }
+    }
+    // Check if the total stash size exceeds the capacity limit
+    uint32_t stashSize = getStashSize(stashItemDict);
+    //std::cout << "Total stash size after merging: " << stashSize << std::endl;
+    if (stashSize > g_config.getNumber(ConfigManager::STASH_ITEMS)) {
+        //std::cout << "Error: Stash size exceeds limit." << std::endl;
+        sendCancelMessage("You don't have capacity in the Supply Stash to stow all this item.");
+        return;
+    }
+    uint32_t totalStowed = 0;
+    std::ostringstream retString;
+    // Process items in itemDict and attempt to remove and stash them
+    for (const auto& stashIterator : itemDict) {
+        uint16_t itemId = (stashIterator.first)->getID();        // Extract item ID
+        uint16_t clientId = stashIterator.first->getClientID();  // Extract client ID
+        uint32_t amount = stashIterator.second;                  // Extract item amount
+        //std::cout << "Attempting to remove item: " << itemId << " with clientId: " << clientId << " and count: " << amount << std::endl;
+        // Try to remove the item from the container and add it to the stash
+        if (g_game.internalRemoveItem(stashIterator.first, amount) == RETURNVALUE_NOERROR) {
+            //std::cout << "Successfully removed item: " << itemId << " from container." << std::endl;
+            addItemOnStash(itemId, amount, clientId);  // Pass id, amount, and clientId
+            totalStowed += amount;
+			const std::string itemName = Item::items[itemId].name;  // Assuming item names are retrievable from the Item class
+			std::ostringstream individualMessage;
+			individualMessage << "Stowed " << amount << "x " << itemName << ".";
+			sendTextMessage(MESSAGE_STATUS_DEFAULT, individualMessage.str());
+        } else {
+            //std::cout << "Failed to remove item: " << itemId << std::endl;
+        }
+    }
+    if (totalStowed == 0) {
+        //std::cout << "No items were stowed." << std::endl;
+        sendCancelMessage("Sorry, not possible.");
+        return;
+    }
+    // Generate the result message to send to the player
+    retString << "Total stowed: " << totalStowed << " object" << (totalStowed > 1 ? "s." : ".");
+    //std::cout << "Total stowed: " << totalStowed << std::endl;
+    if (moved) {
+        retString << " Moved " << movedItems << " object" << (movedItems > 1 ? "s." : ".");
+        //std::cout << "Moved items: " << movedItems << std::endl;
+        movedItems = 0;
+    }
+    sendTextMessage(MESSAGE_STATUS_DEFAULT, retString.str());
+    //std::cout << "Stash container operation completed successfully." << std::endl;
 }
 
 bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped /* = false*/) const

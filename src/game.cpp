@@ -2554,6 +2554,111 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 }
 
+void Game::playerStowItem(uint32_t playerId, const Position &pos, uint16_t clientId, uint8_t stackpos, uint8_t count, bool allItems) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		//std::cout << "Error: Player not found for ID: " << playerId << std::endl;
+		return;
+	}
+	if (!player->isPremium()) {
+		//std::cout << "Error: Player does not have a premium account." << std::endl;
+		player->sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
+		return;
+	}
+	// Get the itemId using clientId
+	const ItemType& it = Item::items.getItemIdByClientId(clientId);
+	if (it.id == 0) {
+		//std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+		return;
+	}
+	uint16_t itemId = it.id;  // Reassign itemId from the retrieved ItemType
+	Thing* thing = internalGetThing(player, pos, stackpos, itemId, STACKPOS_TOPDOWN_ITEM);
+	if (!thing) {
+		//std::cout << "Error: Thing not found at position: " << pos << " with stackpos: " << (int)stackpos << " and itemId: " << itemId << std::endl;
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+	Item* item = thing->getItem();
+	if (!item) {
+		//std::cout << "Error: Thing is not an item." << std::endl;
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+	if (item->getID() != itemId) {
+		//std::cout << "Error: Item ID mismatch. Expected: " << itemId << " but got: " << item->getID() << std::endl;
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+	if (item->getItemCount() < count) {
+		//std::cout << "Error: Not enough items to stow. Requested count: " << (int)count << " but only have: " << item->getItemCount() << std::endl;
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
+		//std::cout << "Error: Player is not in range. Player position: " << player->getPosition() << " Item position: " << pos << std::endl;
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+	//std::cout << "Success: Stowing item. Item ID: " << itemId << " Count: " << (int)count << " All items: " << allItems << std::endl;
+	player->stowItem(item, count, allItems);
+}
+
+void Game::playerStashWithdraw(uint32_t playerId, uint16_t itemId, uint32_t count, uint8_t) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+	if (player->hasFlag(PlayerFlags::PlayerFlag_CannotPickupItem)) {
+		return;
+	}
+	const ItemType &it = Item::items[itemId];
+	if (it.id == 0 || count == 0) {
+		return;
+	}
+	uint16_t freeSlots = player->getFreeBackpackSlots();
+	if (freeSlots == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
+		return;
+	}
+	if (player->getFreeCapacity() < 100) {
+		player->sendCancelMessage(RETURNVALUE_NOTENOUGHCAPACITY);
+		return;
+	}
+	
+	// Assume stack size of 100 for stackable items, and 1 for non-stackable
+	uint32_t stackSize = it.stackable ? 100 : 1;
+	int32_t NDSlots = ((freeSlots) - (count < stackSize ? 1 : (count / stackSize)));
+	uint32_t SlotsWith = count;
+	uint32_t noSlotsWith = 0;
+	if (NDSlots <= 0) {
+		SlotsWith = (freeSlots * stackSize);
+		noSlotsWith = (count - SlotsWith);
+	}
+	uint32_t capWith = count;
+	uint32_t noCapWith = 0;
+	if (player->getFreeCapacity() < (count * it.weight)) {
+		capWith = (player->getFreeCapacity() / it.weight);
+		noCapWith = (count - capWith);
+	}
+	std::stringstream ss;
+	uint32_t WithdrawCount = (SlotsWith > capWith ? capWith : SlotsWith);
+	uint32_t NoWithdrawCount = (noSlotsWith < noCapWith ? noCapWith : noSlotsWith);
+	const char* NoWithdrawMsg = (noSlotsWith < noCapWith ? "capacity" : "slots");
+	if (WithdrawCount != count) {
+		ss << "Retrieved " << WithdrawCount << "x " << it.name << ".\n";
+		ss << NoWithdrawCount << "x are impossible to retrieve due to insufficient inventory " << NoWithdrawMsg << ".";
+	} else {
+		ss << "Retrieved " << WithdrawCount << "x " << it.name << '.';
+	}
+	player->sendTextMessage(MESSAGE_STATUS_DEFAULT, ss.str());
+	if (player->withdrawItem(itemId, WithdrawCount)) {
+		player->addItemFromStash(it.id, WithdrawCount);
+	} else {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+	}
+	player->sendOpenStash(true);
+}
+
 void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index)
 {
 	Player* player = getPlayerByID(playerId);
@@ -5921,4 +6026,11 @@ bool Game::reload(ReloadTypes_t reloadType)
 		}
 	}
 	return true;
+}
+
+bool Game::tryRetrieveStashItems(Player* player, Item* item) {
+	if (!player || !item) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+	return RETURNVALUE_NOERROR;
 }

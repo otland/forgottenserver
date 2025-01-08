@@ -98,6 +98,36 @@ void Container::addItem(Item* item)
 	item->setParent(this);
 }
 
+StashContainerList Container::getStowableItems() const {
+    StashContainerList toReturnList;
+    // List of items that cannot be stowed (coin types)
+    const std::set<uint16_t> excludedItemIds = {
+        ITEM_GOLD_COIN,
+        ITEM_PLATINUM_COIN,
+        ITEM_CRYSTAL_COIN
+    };
+    // Iterate through items in the container
+    for (auto item : itemlist) {
+        if (item->getContainer() != nullptr) {
+            // Recursively get stowable items from sub-containers
+            auto subContainer = item->getContainer()->getStowableItems();
+            for (auto subContItem : subContainer) {
+                Item* containerItem = subContItem.first;
+                // Exclude items from the list if they are in the excluded set
+                if (excludedItemIds.find(containerItem->getID()) == excludedItemIds.end()) {
+                    toReturnList.push_back(std::pair<Item*, uint32_t>(containerItem, static_cast<uint32_t>(containerItem->getItemCount())));
+                }
+            }
+        } else if (item->isStackable()) {
+            // Exclude non-container stackable items if they are in the excluded set
+            if (excludedItemIds.find(item->getID()) == excludedItemIds.end()) {
+                toReturnList.push_back(std::pair<Item*, uint32_t>(item, static_cast<uint32_t>(item->getItemCount())));
+            }
+        }
+    }
+    return toReturnList;
+}
+
 Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_CONTAINER_ITEMS) {
@@ -149,6 +179,16 @@ void Container::updateItemWeight(int32_t diff)
 	if (Container* parentContainer = getParentContainer()) {
 		parentContainer->updateItemWeight(diff);
 	}
+}
+
+uint16_t Container::getFreeSlots() {
+	uint16_t counter = std::max<uint16_t>(0, capacity() - size());
+	for (auto item : itemlist) {
+		if (Container* container = item->getContainer()) {
+			counter += std::max<uint16_t>(0, container->getFreeSlots());
+		}
+	}
+	return counter;
 }
 
 uint32_t Container::getWeight() const { return Item::getWeight() + totalWeight; }

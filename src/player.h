@@ -313,6 +313,43 @@ public:
 	void removeMessageBuffer();
 
 	bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false) const;
+	
+	void addItemOnStash(uint16_t itemId, uint32_t amount, uint16_t clientId) {
+		auto it = stashItems.find(itemId);
+		if (it != stashItems.end()) {
+			it->second.itemCount += amount;  // Update item count
+		} else {
+			// Add a new item with the given amount and clientId
+			stashItems[itemId] = {clientId, amount};
+		}
+	}
+	
+	uint32_t getStashItemCount(uint16_t itemId) const {
+		auto it = stashItems.find(itemId);
+		if (it != stashItems.end()) {
+			return it->second.itemCount;  // Return item count
+		}
+		return 0;
+	}
+	
+	bool withdrawItem(uint16_t itemId, uint32_t amount) {
+		auto it = stashItems.find(itemId);
+		if (it != stashItems.end()) {
+			if (it->second.itemCount > amount) {
+				it->second.itemCount -= amount;  // Reduce item count
+			} else if (it->second.itemCount == amount) {
+				stashItems.erase(itemId);  // Remove item if fully withdrawn
+			} else {
+				return false;  // Not enough items to withdraw
+			}
+			return true;
+		}
+		return false;  // Item not found
+	}
+	
+	StashItemList getStashItems() const {
+		return stashItems;
+	}
 
 	uint32_t getCapacity() const
 	{
@@ -442,6 +479,10 @@ public:
 	bool hasShield() const;
 	bool isAttackable() const override;
 	static bool lastHitIsPlayer(Creature* lastHitCreature);
+	
+	// stash functions
+	bool addItemFromStash(uint16_t itemId, uint32_t itemCount);
+	void stowItem(Item* item, uint32_t count, bool allItems);
 
 	void changeHealth(int32_t healthChange, bool sendHealthChange = true) override;
 	void changeMana(int32_t manaChange);
@@ -538,6 +579,8 @@ public:
 
 	size_t getMaxVIPEntries() const;
 	size_t getMaxDepotItems() const;
+	
+	uint16_t getFreeBackpackSlots() const;
 
 	// tile
 	// send methods
@@ -1068,6 +1111,11 @@ public:
 			client->writeToOutputBuffer(message);
 		}
 	}
+	void sendOpenStash(bool isNpc = false) {
+		if (client && ((getLastDepotId() != -1) || isNpc)) {
+			client->sendOpenStash();
+		}
+	}
 	void sendCombatAnalyzer(CombatType_t type, int32_t amount, DamageAnalyzerImpactType impactType,
 	                        const std::string& target)
 	{
@@ -1164,6 +1212,7 @@ private:
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
+	void stashContainer(StashContainerList itemDict);
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
@@ -1270,6 +1319,8 @@ private:
 	uint16_t clientExpDisplay = 100;
 	uint16_t clientStaminaBonusDisplay = 100;
 	uint16_t clientLowLevelBonusDisplay = 0;
+	StashItemList stashItems; // [ItemID] = amount
+	uint32_t movedItems = 0;
 
 	uint8_t soul = 0;
 	std::bitset<6> blessings;
@@ -1286,6 +1337,8 @@ private:
 	bool chaseMode = false;
 	bool secureMode = false;
 	bool inMarket = false;
+	bool supplyStash = false; // Menu option 'stow, stow container ...'
+	bool moved = false;
 	bool wasMounted = false;
 	bool ghostMode = false;
 	bool pzLocked = false;

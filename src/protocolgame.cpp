@@ -542,6 +542,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		// case 0x2C: break; // team finder (leader)
 		// case 0x2D: break; // team finder (member)
 		// case 0x28: break; // stash withdraw
+		case 0x28: parseStashWithdraw(msg); break;
 		case 0x32:
 			parseExtendedOpcode(msg);
 			break; // otclient extended opcode
@@ -3771,6 +3772,58 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 	msg.add<uint32_t>(it.weight);
 	msg.add<uint32_t>(std::max<uint32_t>(item.buyPrice, 0));
 	msg.add<uint32_t>(std::max<uint32_t>(item.sellPrice, 0));
+}
+
+void ProtocolGame::sendOpenStash() {
+	NetworkMessage msg;
+	msg.addByte(0x29);
+	StashItemList list = player->getStashItems();
+	msg.add<uint16_t>(list.size());
+	for (auto item : list) {
+		msg.add<uint16_t>(item.first);  // itemId
+		msg.add<uint16_t>(item.second.clientId);  // clientId
+		msg.add<uint32_t>(item.second.itemCount);  // itemCount
+	}
+	msg.add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STASH_ITEMS) - getStashSize(list)));
+	writeToOutputBuffer(msg);
+}
+
+void ProtocolGame::parseStashWithdraw(NetworkMessage &msg) {
+	Supply_Stash_Actions_t action = static_cast<Supply_Stash_Actions_t>(msg.getByte());
+	switch (action) {
+		case SUPPLY_STASH_ACTION_STOW_ITEM: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint32_t count = msg.get<uint32_t>();
+			uint8_t stackpos = msg.getByte();
+			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, count, false);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_STOW_CONTAINER: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint8_t stackpos = msg.getByte();
+			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, 0, false);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_STOW_STACK: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint8_t stackpos = msg.getByte();
+			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, 0, true);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_WITHDRAW: {
+			uint16_t itemId = msg.get<uint16_t>();
+			uint32_t count = msg.get<uint32_t>();
+			uint8_t stackpos = msg.getByte();
+			g_game.playerStashWithdraw(player->getID(), itemId, count, stackpos);
+			break;
+		}
+		default:
+			std::cout << "Unknown 'supply stash' action switch: " << static_cast<int>(action) << std::endl;
+			break;
+	}
 }
 
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
