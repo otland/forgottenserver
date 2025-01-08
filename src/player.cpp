@@ -4806,3 +4806,85 @@ void Player::updateRegeneration()
 		condition->setParam(CONDITION_PARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
 }
+
+bool Player::addItemFromStash(uint16_t itemId, uint32_t itemCount) {
+	uint32_t stackCount = 100u;
+	while (itemCount > 0) {
+		auto addValue = itemCount > stackCount ? stackCount : itemCount;
+		itemCount -= addValue;
+		Item* newItem = Item::CreateItem(itemId, addValue);
+		
+		g_game.internalPlayerAddItem(this, newItem, true);
+	}
+	return true;
+}
+
+void sendStowItems(const Item* item, const Item* stowItem, StashContainerList& itemDict) {
+	// Check if the item IDs match and push to itemDict
+	if (stowItem->getID() == item->getID()) {
+		// Cast stowItem to Item* before pushing to itemDict
+		itemDict.push_back(std::make_pair(const_cast<Item*>(stowItem), stowItem->getItemCount()));
+	}
+	// If the stowItem is a container, iterate over its stowable items
+	if (const auto* container = stowItem->getContainer()) {
+		for (const auto& stowable_it : container->getStowableItems()) {
+			// Check if the stowable item's ID matches the item's ID
+			if (stowable_it.first->getID() == item->getID()) {
+				// Push the matching stowable item to itemDict
+				itemDict.push_back(std::make_pair(const_cast<Item*>(stowable_it.first), stowable_it.second));
+			}
+		}
+	}
+}
+
+void Player::stowItem(Item* item, uint32_t count, bool allItems) {
+    // Check if the player is near a depot box
+    if (!isNearDepotBox()) {
+        sendCancelMessage("You need to be nearby depot to stow items.");
+        return;
+    }
+    // Check if the item is valid
+    if (!item) {
+        sendCancelMessage("This item cannot be stowed here.");
+        return;
+    }
+    // List of items that cannot be stowed (coin types)
+    const std::set<uint16_t> excludedItemIds = {
+        ITEM_GOLD_COIN,
+        ITEM_PLATINUM_COIN,
+        ITEM_CRYSTAL_COIN
+    };
+    StashContainerList itemDict;
+    // If the item is a container, process its contents
+    if (item->getContainer()) {
+        itemDict = item->getContainer()->getStowableItems();
+        // Iterate through container items and move non-stackable items (if configured)
+        for (Item* containerItem : item->getContainer()->getItems(true)) {
+            if (g_config.getBoolean(ConfigManager::STASH_MOVING) && containerItem && !containerItem->isStackable()) {
+                // Move non-stackable items if not excluded
+                g_game.internalMoveItem(containerItem->getParent(), getDepotChest(getLastDepotId(), true), INDEX_WHEREEVER, containerItem, containerItem->getItemCount(), nullptr);
+                movedItems++;
+                moved = true;
+            }
+        }
+    } else {
+        // If the item is not a container, check if it's stackable
+        if (!item->isStackable()) {
+            sendCancelMessage("This item cannot be stowed here because it is not stackable.");
+            return;
+        }
+        // Add the item to the stash if it is not excluded
+        itemDict.emplace_back(item, count);
+    }
+    // Excluded items check: filter out any item from the itemDict if it matches an excluded item ID
+    itemDict.erase(std::remove_if(itemDict.begin(), itemDict.end(), [&](const std::pair<Item*, uint32_t>& pair) {
+        return excludedItemIds.find(pair.first->getID()) != excludedItemIds.end();
+    }), itemDict.end());
+    // If no stowable items were found, send a specific cancel message
+    if (itemDict.empty()) {
+        sendCancelMessage("There are no stowable items.");
+        return;
+    }
+    // Stow the items
+    stashContainer(itemDict);
+}
