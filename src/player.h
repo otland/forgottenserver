@@ -314,37 +314,37 @@ public:
 
 	bool removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType, bool ignoreEquipped = false) const;
 	
-	void addItemOnStash(uint16_t itemId, uint32_t amount, uint16_t clientId) {
+	void addItemOnStash(uint16_t itemId, uint32_t amount) {
 		auto it = stashItems.find(itemId);
 		if (it != stashItems.end()) {
-			it->second.itemCount += amount;  // Update item count
+			it->second += amount;
 		} else {
-			// Add a new item with the given amount and clientId
-			stashItems[itemId] = {clientId, amount};
+			stashItems[itemId] = amount;
 		}
 	}
+
 	
 	uint32_t getStashItemCount(uint16_t itemId) const {
-		auto it = stashItems.find(itemId);
+		const auto it = stashItems.find(itemId);
 		if (it != stashItems.end()) {
-			return it->second.itemCount;  // Return item count
+			return it->second;
 		}
 		return 0;
 	}
 	
 	bool withdrawItem(uint16_t itemId, uint32_t amount) {
-		auto it = stashItems.find(itemId);
+		const auto it = stashItems.find(itemId);
 		if (it != stashItems.end()) {
-			if (it->second.itemCount > amount) {
-				it->second.itemCount -= amount;  // Reduce item count
-			} else if (it->second.itemCount == amount) {
-				stashItems.erase(itemId);  // Remove item if fully withdrawn
+			if (it->second > amount) {
+				stashItems[itemId] -= amount;
+			} else if (it->second == amount) {
+				stashItems.erase(itemId);
 			} else {
-				return false;  // Not enough items to withdraw
+				return false;
 			}
 			return true;
 		}
-		return false;  // Item not found
+		return false;
 	}
 	
 	StashItemList getStashItems() const {
@@ -1212,7 +1212,7 @@ private:
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
-	void stashContainer(StashContainerList itemDict);
+	void stashContainer(const StashContainerList &itemDict);
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 

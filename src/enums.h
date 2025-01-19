@@ -655,11 +655,7 @@ using MarketOfferList = std::list<MarketOffer>;
 using HistoryMarketOfferList = std::list<HistoryMarketOffer>;
 using ShopInfoList = std::list<ShopInfo>;
 
-struct StashItem {
-    uint16_t clientId;
-    uint32_t itemCount;
-};
-using StashItemList = std::map<uint16_t, StashItem>;  // itemId, StashItem
+using StashItemList = std::map<uint16_t, uint32_t>; // itemID, count
 
 enum MonstersEvent_t : uint8_t
 {

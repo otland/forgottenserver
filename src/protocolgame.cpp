@@ -3776,17 +3776,27 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 
 void ProtocolGame::sendOpenStash() {
 	NetworkMessage msg;
-	msg.addByte(0x29);
+	msg.addByte(0x29); // Stash open opcode
 	StashItemList list = player->getStashItems();
-	msg.add<uint16_t>(list.size());
-	for (auto item : list) {
-		msg.add<uint16_t>(item.first);  // itemId
-		msg.add<uint16_t>(item.second.clientId);  // clientId
-		msg.add<uint32_t>(item.second.itemCount);  // itemCount
+	msg.add<uint16_t>(list.size()); // Number of items in stash
+
+	for (const auto& item : list) {
+		const ItemType& it = Item::items.getItemType(item.first); // Get ItemType from itemId
+		if (it.clientId == 0) {
+			std::cout << "Error: Invalid itemId: " << item.first << ". No matching clientId found." << std::endl;
+			continue; // Skip invalid entries
+		}
+
+		msg.add<uint16_t>(it.clientId);  // Add clientId to message
+		msg.add<uint32_t>(item.second); // Add itemCount to message
 	}
-	msg.add<uint16_t>(static_cast<uint16_t>(g_config.getNumber(ConfigManager::STASH_ITEMS) - getStashSize(list)));
+
+	uint16_t maxStashItems = static_cast<uint16_t>(g_config.getNumber(ConfigManager::STASH_ITEMS));
+	uint16_t stashSize = getStashSize(list);
+	msg.add<uint16_t>(maxStashItems - stashSize); // Remaining stash capacity
 	writeToOutputBuffer(msg);
 }
+
 
 void ProtocolGame::parseStashWithdraw(NetworkMessage &msg) {
 	Supply_Stash_Actions_t action = static_cast<Supply_Stash_Actions_t>(msg.getByte());
@@ -3796,27 +3806,64 @@ void ProtocolGame::parseStashWithdraw(NetworkMessage &msg) {
 			uint16_t clientId = msg.get<uint16_t>();
 			uint32_t count = msg.get<uint32_t>();
 			uint8_t stackpos = msg.getByte();
-			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, count, false);
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				// Invalid clientId, no matching item found
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, count, false);
 			break;
 		}
 		case SUPPLY_STASH_ACTION_STOW_CONTAINER: {
 			Position pos = msg.getPosition();
 			uint16_t clientId = msg.get<uint16_t>();
 			uint8_t stackpos = msg.getByte();
-			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, 0, false);
+
+			// Convert clientId to itemId
+		 const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, 0, false);
 			break;
 		}
 		case SUPPLY_STASH_ACTION_STOW_STACK: {
 			Position pos = msg.getPosition();
 			uint16_t clientId = msg.get<uint16_t>();
 			uint8_t stackpos = msg.getByte();
-			g_game.playerStowItem(player->getID(), pos, clientId, stackpos, 0, true);
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, 0, true);
 			break;
 		}
 		case SUPPLY_STASH_ACTION_WITHDRAW: {
-			uint16_t itemId = msg.get<uint16_t>();
+			uint16_t clientId = msg.get<uint16_t>();
 			uint32_t count = msg.get<uint32_t>();
 			uint8_t stackpos = msg.getByte();
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
 			g_game.playerStashWithdraw(player->getID(), itemId, count, stackpos);
 			break;
 		}
@@ -3825,6 +3872,7 @@ void ProtocolGame::parseStashWithdraw(NetworkMessage &msg) {
 			break;
 	}
 }
+
 
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 {

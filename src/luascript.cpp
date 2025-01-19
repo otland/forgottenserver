@@ -11359,17 +11359,19 @@ int LuaScriptInterface::luaPlayerOpenStash(lua_State* L) {
 }
 
 int LuaScriptInterface::luaPlayerAddItemStash(lua_State* L) {
-	// player:addItemStash(itemId, clientId, count = 1)
+	// player:addItemStash(itemId, count = 1)
 	Player* player = getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
 		return 1;
 	}
+
 	auto itemId = getNumber<uint16_t>(L, 2);
-	auto clientId = getNumber<uint16_t>(L, 3);
-	auto count = getNumber<uint32_t>(L, 4, 1);  // Default count to 1 if not provided
-	// Pass itemId, count, and clientId to the player's stash
-	player->addItemOnStash(itemId, count, clientId);
+	auto count = getNumber<uint32_t>(L, 3, 1);  // Default count to 1 if not provided
+
+	// Add itemId and count to the player's stash
+	player->addItemOnStash(itemId, count);
+
 	pushBoolean(L, true);
 	return 1;
 }

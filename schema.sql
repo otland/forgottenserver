@@ -328,6 +328,14 @@ CREATE TABLE IF NOT EXISTS `player_items` (
   KEY `sid` (`sid`)
 ) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
+CREATE TABLE IF NOT EXISTS `player_stash` (
+    `player_id` int NOT NULL,             -- The unique ID of the player
+    `item_id` smallint unsigned NOT NULL, -- The ID of the stashed item
+    `item_count` int unsigned NOT NULL,   -- The number of items stashed
+    PRIMARY KEY (`player_id`, `item_id`), -- Ensures each player can only have one entry per item_id
+    FOREIGN KEY (`player_id`) REFERENCES `players`(`id`) ON DELETE CASCADE
+)	ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `player_spells` (
   `player_id` int NOT NULL,
   `name` varchar(255) NOT NULL,
