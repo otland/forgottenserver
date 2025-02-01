@@ -657,12 +657,12 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-double calculateHeuristic(const Position& p1, const Position& p2)
+uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
-	uint16_t dx = std::abs(p1.getX() - p2.getX());
-	uint16_t dy = std::abs(p1.getY() - p2.getY());
+	uint16_t dx = p1.getX() - p2.getX();
+	uint16_t dy = p1.getY() - p2.getY();
 
-	return std::sqrt(dx * dx + dy * dy);
+	return dx * dx + dy * dy;
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -745,9 +745,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// The cost to walk to this neighbor
-			const double g = n->g + AStarNodes::getMapWalkCost(n, pos) + AStarNodes::getTileWalkCost(creature, tile);
-			const double h = calculateHeuristic(pos, targetPos);
-			const double newf = h + g;
+			const uint16_t g = n->g + AStarNodes::getMapWalkCost(n, pos) + AStarNodes::getTileWalkCost(creature, tile);
+			const uint16_t h = calculateHeuristic(pos, targetPos);
+			const uint16_t newf = h + g;
 
 			if (neighborNode) {
 				if (neighborNode->f <= newf) {
@@ -829,7 +829,7 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	nodeMap[x][y] = firstNode;
 }
 
-void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, double g, double f)
+void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
 {
 	AStarNode* newNode = new AStarNode;
 	newNode->parent = parent;
@@ -861,7 +861,7 @@ void AStarNodes::clear()
 	nodeMap.clear();
 };
 
-double AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
+uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
 	if (std::abs(node->x - neighborPos.x) == std::abs(node->y - neighborPos.y)) {
 		// diagonal movement extra cost
@@ -870,7 +870,7 @@ double AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 	return MAP_NORMALWALKCOST;
 }
 
-double AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
+uint16_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
 	double cost = 0;
 	if (tile->getTopVisibleCreature(&creature)) {

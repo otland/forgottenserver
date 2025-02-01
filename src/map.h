@@ -18,28 +18,28 @@ struct FindPathParams;
 struct AStarNode
 {
 	AStarNode* parent;
-	double g;
-	double f;
+	uint16_t g;
+	uint16_t f;
 	uint16_t x, y;
 };
 
-static constexpr float MAP_NORMALWALKCOST = 1.0f;
-static constexpr float MAP_DIAGONALWALKCOST = 2.5f;
+static constexpr uint16_t MAP_NORMALWALKCOST = 10;
+static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 
 class AStarNodes
 {
 public:
 	AStarNodes(uint16_t x, uint16_t y);
 
-	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, double g, double f);
+	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	void addNode(AStarNode* node) { nodes.emplace_back(node); };
 
 	AStarNode* getBestNode();
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
 	void clear();
 
-	static double getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static double getTileWalkCost(const Creature& creature, const Tile* tile);
+	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
+	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
 	std::vector<AStarNode*> nodes;
