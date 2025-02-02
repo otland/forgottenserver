@@ -913,6 +913,7 @@ public:
 		}
 	}
 
+	bool hasParent() const override { return getParent(); }
 	Cylinder* getParent() const override { return parent; }
 	void setParent(Cylinder* cylinder) override { parent = cylinder; }
 	Cylinder* getTopParent();

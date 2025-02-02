@@ -1,6 +1,6 @@
 local event = GlobalEvent("raids")
 
-local CHECK_RAIDS_INTERVAL = 60
+local CHECK_RAIDS_INTERVAL = 60 * 1000
 local MAX_RAND_RANGE = 10000000
 
 event:interval(CHECK_RAIDS_INTERVAL)

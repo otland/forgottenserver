@@ -37,7 +37,7 @@ local function calculateWorldLightLevel()
 end
 
 function event.onTime(interval)
-	if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
+	if not defaultWorldLight then
 		return true
 	end
 

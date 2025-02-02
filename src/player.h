@@ -6,15 +6,16 @@
 
 #include "creature.h"
 #include "cylinder.h"
+#include "depotchest.h"
 #include "depotlocker.h"
 #include "enums.h"
 #include "groups.h"
 #include "guild.h"
+#include "inbox.h"
 #include "protocolgame.h"
 #include "town.h"
 #include "vocation.h"
 
-class DepotChest;
 class House;
 struct Mount;
 class NetworkMessage;
@@ -182,7 +183,13 @@ public:
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }
 
-	Inbox* getInbox() const { return inbox; }
+	Inbox_ptr getInbox()
+	{
+		if (!inbox) {
+			inbox = std::make_shared<Inbox>(ITEM_INBOX);
+		}
+		return inbox;
+	}
 
 	StoreInbox* getStoreInbox() const { return storeInbox; }
 
@@ -292,9 +299,9 @@ public:
 	time_t getLastLogout() const { return lastLogout; }
 
 	const Position& getLoginPosition() const { return loginPosition; }
-	const Position& getTemplePosition() const { return town->getTemplePosition(); }
-	Town* getTown() const { return town; }
-	void setTown(Town* town) { this->town = town; }
+	const Position& getTemplePosition() const { return town->templePosition; }
+	const Town* getTown() const { return town; }
+	void setTown(const Town* town) { this->town = town; }
 
 	void clearModalWindows();
 	bool hasModalWindowOpen(uint32_t modalWindowId) const;
@@ -356,7 +363,7 @@ public:
 	void addConditionSuppressions(uint32_t conditions);
 	void removeConditionSuppressions(uint32_t conditions);
 
-	DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
+	DepotChest_ptr getDepotChest(uint32_t depotId, bool autoCreate);
 	DepotLocker& getDepotLocker();
 	void onReceiveMail() const;
 	bool isNearDepotBox() const;
@@ -406,11 +413,11 @@ public:
 	bool editVIP(uint32_t vipGuid, const std::string& description, uint32_t icon, bool notify);
 
 	// follow functions
-	bool setFollowCreature(Creature* creature) override;
+	void setFollowCreature(Creature* creature) override;
 	void goToFollowCreature() override;
 
 	// follow events
-	void onFollowCreature(const Creature* creature) override;
+	void onUnfollowCreature() override;
 
 	// walk events
 	void onWalk(Direction& dir) override;
@@ -428,7 +435,8 @@ public:
 	void setSecureMode(bool mode) { secureMode = mode; }
 
 	// combat functions
-	bool setAttackedCreature(Creature* creature) override;
+	void setAttackedCreature(Creature* creature) override;
+	void removeAttackedCreature() override;
 	bool isImmune(CombatType_t type) const override;
 	bool isImmune(ConditionType_t type) const override;
 	bool hasShield() const;
@@ -720,10 +728,10 @@ public:
 	void sendAddContainerItem(const Container* container, const Item* item);
 	void sendUpdateContainerItem(const Container* container, uint16_t slot, const Item* newItem);
 	void sendRemoveContainerItem(const Container* container, uint16_t slot);
-	void sendContainer(uint8_t cid, const Container* container, bool hasParent, uint16_t firstIndex)
+	void sendContainer(uint8_t cid, const Container* container, uint16_t firstIndex)
 	{
 		if (client) {
-			client->sendContainer(cid, container, hasParent, firstIndex);
+			client->sendContainer(cid, container, firstIndex);
 		}
 	}
 
@@ -1155,7 +1163,7 @@ private:
 	int32_t getThingIndex(const Thing* thing) const override;
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const override;
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
@@ -1166,7 +1174,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, DepotChest*> depotChests;
+	std::map<uint32_t, DepotChest_ptr> depotChests;
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;
@@ -1210,7 +1218,7 @@ private:
 	Guild_ptr guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
-	Inbox* inbox;
+	Inbox_ptr inbox = nullptr;
 	Item* tradeItem = nullptr;
 	Item* inventory[CONST_SLOT_LAST + 1] = {};
 	Item* writeItem = nullptr;
@@ -1219,7 +1227,7 @@ private:
 	Party* party = nullptr;
 	Player* tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;
-	Town* town = nullptr;
+	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	StoreInbox* storeInbox = nullptr;
 	DepotLocker_ptr depotLocker = nullptr;

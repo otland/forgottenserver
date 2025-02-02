@@ -22,6 +22,7 @@ build/
 [Bb]in/
 [Oo]bj/
 cmake-build-*/
+vcpkg_installed/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
