@@ -135,6 +135,12 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
+	for (auto* creature : followers) {
+		if (!canSeeCreature(creature) || getPosition().z != creature->getPosition().z) {
+			removeFollower(creature);
+		}
+	}
+
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
@@ -812,6 +818,17 @@ void Creature::onFollowCreature(const Creature*)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
+void Creature::removeFollower(Creature* creature)
+{
+	for (auto it = followers.begin(); it != followers.end();) {
+		if (*it == creature) {
+			it = followers.erase(it);
+		} else {
+			++it;
+		}
+	}
+}
+
 void Creature::updateFollowersPaths()
 {
 	if (followers.empty()) {

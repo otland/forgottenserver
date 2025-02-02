@@ -202,6 +202,7 @@ public:
 
 	// Pathfinding functions
 	void addFollower(Creature* creature) { followers.emplace_back(creature); };
+	void removeFollower(Creature* creature);
 
 	// Pathfinding events
 	void updateFollowersPaths();
