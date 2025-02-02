@@ -167,8 +167,6 @@ Tile = {}
 ---@field addItem fun(self: NetworkMessage, item: Item)
 ---@field addItemId fun(self: NetworkMessage, itemId: number)
 ---@field reset fun(self: NetworkMessage)
----@field seek fun(self: NetworkMessage, position: number)
----@field tell fun(self: NetworkMessage): number
 ---@field len fun(self: NetworkMessage): number
 ---@field skipBytes fun(self: NetworkMessage, count: number)
 ---@field sendToPlayer fun(self: NetworkMessage, player: Player)
