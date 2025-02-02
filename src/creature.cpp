@@ -727,14 +727,13 @@ void Creature::setAttackedCreature(Creature* creature)
 		return;
 	}
 
-
 	if (!canAttackCreature(creature)) {
 		removeAttackedCreature();
 		return;
 	}
-  
-  attackedCreature = creature;
-  creature->addFollower(this);
+
+	attackedCreature = creature;
+	creature->addFollower(this);
 	onAttackedCreature(attackedCreature);
 	attackedCreature->onAttacked();
 
@@ -782,6 +781,8 @@ void Creature::setFollowCreature(Creature* creature)
 	}
 
 	followCreature = creature;
+	creature->addFollower(this);
+	hasFollowPath = false;
 	onFollowCreature(creature);
 }
 
@@ -806,13 +807,9 @@ void Creature::onFollowCreature(const Creature*)
 		listWalkDir.clear();
 		onWalkAborted();
 	}
-
-	followCreature = creature;
-	creature->addFollower(this);
-	hasFollowPath = false;
 }
 
-void Creature::onUnfollowCreature() { isUpdatingPath = false; }
+void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
 void Creature::updateFollowersPaths()
