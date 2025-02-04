@@ -5555,7 +5555,7 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 		return;
 	}
 
-	tfs::events::player::onNetworkMessage(player, recvByte, std::move(msg));
+	tfs::events::player::onNetworkMessage(player, recvByte, msg);
 }
 
 std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player)

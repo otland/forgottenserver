@@ -1380,7 +1380,7 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 	scriptInterface.callVoidFunction(4);
 }
 
-void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr msg)
+void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg)
 {
 	// Player:onNetworkMessage(recvByte, msg)
 	if (playerHandlers.onNetworkMessage == -1) {
