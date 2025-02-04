@@ -1403,7 +1403,7 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr msg)
 
 	lua_pushnumber(L, recvByte);
 
-	tfs::lua::pushUserdata(L, msg.release()); 
+	tfs::lua::pushUserdata(L, msg.release());
 	tfs::lua::setMetatable(L, -1, "NetworkMessage");
 
 	scriptInterface.callVoidFunction(3);
