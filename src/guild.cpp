@@ -6,6 +6,7 @@
 #include "guild.h"
 
 #include "game.h"
+#include "tools.h"
 
 extern Game g_game;
 
@@ -38,7 +39,7 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
 	for (auto rank : ranks) {
-		if (rank->name == name) {
+		if (caseInsensitiveEqual(rank->name, name)) {
 			return rank;
 		}
 	}
@@ -64,8 +65,8 @@ Guild_ptr IOGuild::loadGuild(uint32_t guildId)
 	}
 
 	const auto& guild = std::make_shared<Guild>(guildId, result->getString("name"));
-	if (auto result = db.storeQuery(
-	        fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId))) {
+	if ((result = db.storeQuery(
+	         fmt::format("SELECT `id`, `name`, `level` FROM `guild_ranks` WHERE `guild_id` = {:d}", guildId)))) {
 		do {
 			guild->addRank(result->getNumber<uint32_t>("id"), result->getString("name"),
 			               result->getNumber<uint16_t>("level"));

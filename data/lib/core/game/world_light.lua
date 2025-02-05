@@ -1,11 +1,17 @@
 do
+	-- World Light
+	-- NOTE: if defaultWorldLight is set to true the world light algorithm will
+	-- be handled in the sources. set it to false to avoid conflicts if you wish
+	-- to make use of the function Game.setWorldLight(level, color)
+	defaultWorldLight = true
+
 	local worldLightLevel = 0
 	local worldLightColor = 0
 
 	function Game.getWorldLight() return worldLightLevel, worldLightColor end
 
 	function Game.setWorldLight(color, level)
-		if not configManager.getBoolean(configKeys.DEFAULT_WORLD_LIGHT) then
+		if not defaultWorldLight then
 			return
 		end
 

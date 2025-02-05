@@ -10,7 +10,6 @@
 #include "events.h"
 #include "globalevent.h"
 #include "movement.h"
-#include "npc.h"
 #include "script.h"
 #include "spells.h"
 #include "talkaction.h"
@@ -19,7 +18,6 @@
 Actions* g_actions = nullptr;
 CreatureEvents* g_creatureEvents = nullptr;
 Chat* g_chat = nullptr;
-Events* g_events = nullptr;
 GlobalEvents* g_globalEvents = nullptr;
 Spells* g_spells = nullptr;
 TalkActions* g_talkActions = nullptr;
@@ -31,7 +29,6 @@ extern LuaEnvironment g_luaEnvironment;
 
 ScriptingManager::~ScriptingManager()
 {
-	delete g_events;
 	delete g_weapons;
 	delete g_spells;
 	delete g_actions;
@@ -56,8 +53,6 @@ bool ScriptingManager::loadScriptSystems()
 		return false;
 	}
 
-	Npcs::load();
-
 	g_chat = new Chat();
 
 	g_weapons = new Weapons();
@@ -75,10 +70,6 @@ bool ScriptingManager::loadScriptSystems()
 	}
 
 	g_actions = new Actions();
-	if (!g_actions->loadFromXml()) {
-		std::cout << "> ERROR: Unable to load actions!" << std::endl;
-		return false;
-	}
 
 	g_talkActions = new TalkActions();
 	if (!g_talkActions->loadFromXml()) {
@@ -104,8 +95,7 @@ bool ScriptingManager::loadScriptSystems()
 		return false;
 	}
 
-	g_events = new Events();
-	if (!g_events->load()) {
+	if (!tfs::events::load()) {
 		std::cout << "> ERROR: Unable to load events!" << std::endl;
 		return false;
 	}

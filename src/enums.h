@@ -36,14 +36,6 @@ enum RuleViolationReasons_t : uint8_t
 	REPORT_REASON_SERVICEAGREEMENT = 20
 };
 
-enum BugReportType_t : uint8_t
-{
-	BUG_CATEGORY_MAP = 0,
-	BUG_CATEGORY_TYPO = 1,
-	BUG_CATEGORY_TECHNICAL = 2,
-	BUG_CATEGORY_OTHER = 3
-};
-
 enum ThreadState
 {
 	THREAD_STATE_RUNNING,
@@ -551,8 +543,6 @@ struct LightInfo
 {
 	uint8_t level = 0;
 	uint8_t color = 215;
-	constexpr LightInfo() = default;
-	constexpr LightInfo(uint8_t level, uint8_t color) : level(level), color(color) {}
 };
 
 struct ShopInfo

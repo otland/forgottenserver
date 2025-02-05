@@ -15,7 +15,7 @@
 
 extern Game g_game;
 
-bool Map::loadMap(const std::string& identifier, bool loadHouses)
+bool Map::loadMap(const std::string& identifier, bool loadHouses, bool isCalledByLua)
 {
 	IOMap loader;
 	if (!loader.loadMap(this, identifier)) {
@@ -23,11 +23,11 @@ bool Map::loadMap(const std::string& identifier, bool loadHouses)
 		return false;
 	}
 
-	if (!IOMap::loadSpawns(this)) {
+	if (!IOMap::loadSpawns(this, isCalledByLua)) {
 		std::cout << "[Warning - Map::loadMap] Failed to load spawn data." << std::endl;
 	}
 
-	if (loadHouses) {
+	if (loadHouses && !isCalledByLua) {
 		if (!IOMap::loadHouses(this)) {
 			std::cout << "[Warning - Map::loadMap] Failed to load house data." << std::endl;
 		}
@@ -162,7 +162,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				if (Player* player = (*creatures)[i]->getPlayer()) {
-					g_game.internalTeleport(player, player->getTown()->getTemplePosition(), false, FLAG_NOLIMIT);
+					g_game.internalTeleport(player, player->getTown()->templePosition, false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
 				}
@@ -631,14 +631,6 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 {
-	int32_t walkCache = creature.getWalkCache(pos);
-	if (walkCache == 0) {
-		return nullptr;
-	} else if (walkCache == 1) {
-		return getTile(pos.x, pos.y, pos.z);
-	}
-
-	// used for non-cached tiles
 	Tile* tile = getTile(pos.x, pos.y, pos.z);
 	if (creature.getTile() != tile) {
 		if (!tile) {

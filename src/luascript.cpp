@@ -45,7 +45,6 @@ extern GlobalEvents* g_globalEvents;
 extern Monsters g_monsters;
 extern Vocations g_vocations;
 extern Spells* g_spells;
-extern Events* g_events;
 extern Actions* g_actions;
 extern TalkActions* g_talkActions;
 extern CreatureEvents* g_creatureEvents;
@@ -93,12 +92,6 @@ void setField(lua_State* L, const char* index, std::string_view value)
 {
 	tfs::lua::pushString(L, value);
 	lua_setfield(L, -2, index);
-}
-
-void setField(lua_State* L, std::string_view index, std::string_view value)
-{
-	tfs::lua::pushString(L, value);
-	lua_setfield(L, -2, index.data());
 }
 
 void registerClass(lua_State* L, std::string_view className, std::string_view baseClass,
@@ -624,27 +617,6 @@ int32_t LuaScriptInterface::getMetaEvent(const std::string& globalName, const st
 
 	cacheFiles[runningEventId] = loadingFile + ":" + globalName + "@" + eventName;
 	return runningEventId++;
-}
-
-void LuaScriptInterface::removeEvent(int32_t scriptId)
-{
-	if (scriptId == -1) {
-		return;
-	}
-
-	// get our events table
-	lua_rawgeti(L, LUA_REGISTRYINDEX, eventTableRef);
-	if (!lua_istable(L, -1)) {
-		lua_pop(L, 1);
-		return;
-	}
-
-	// remove event from table
-	lua_pushnil(L);
-	lua_rawseti(L, -2, scriptId);
-	lua_pop(L, 1);
-
-	cacheFiles.erase(scriptId);
 }
 
 const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
@@ -1177,6 +1149,17 @@ static void pushLoot(lua_State* L, const std::vector<LootBlock>& lootList)
 	}
 }
 
+static void pushTown(lua_State* L, const Town& town)
+{
+	lua_createtable(L, 0, 3);
+	setField(L, "id", town.id);
+	setField(L, "name", town.name);
+	tfs::lua::pushPosition(L, town.templePosition);
+	lua_setfield(L, -2, "templePosition");
+	lua_getglobal(L, "Town");
+	lua_setmetatable(L, -2);
+}
+
 #define registerEnum(L, value) \
 	{ \
 		std::string enumName = #value; \
@@ -1308,11 +1291,6 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, AMMO_THROWINGKNIFE);
 	registerEnum(L, AMMO_STONE);
 	registerEnum(L, AMMO_SNOWBALL);
-
-	registerEnum(L, BUG_CATEGORY_MAP);
-	registerEnum(L, BUG_CATEGORY_TYPO);
-	registerEnum(L, BUG_CATEGORY_TECHNICAL);
-	registerEnum(L, BUG_CATEGORY_OTHER);
 
 	registerEnum(L, CALLBACK_PARAM_LEVELMAGICVALUE);
 	registerEnum(L, CALLBACK_PARAM_SKILLVALUE);
@@ -1682,6 +1660,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnum(L, CREATURE_EVENT_NONE);
 	registerEnum(L, CREATURE_EVENT_LOGIN);
 	registerEnum(L, CREATURE_EVENT_LOGOUT);
+	registerEnum(L, CREATURE_EVENT_RECONNECT);
 	registerEnum(L, CREATURE_EVENT_THINK);
 	registerEnum(L, CREATURE_EVENT_PREPAREDEATH);
 	registerEnum(L, CREATURE_EVENT_DEATH);
@@ -2431,7 +2410,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Game", "createNpc", LuaScriptInterface::luaGameCreateNpc);
 	registerMethod(L, "Game", "createTile", LuaScriptInterface::luaGameCreateTile);
 	registerMethod(L, "Game", "createMonsterType", LuaScriptInterface::luaGameCreateMonsterType);
-	registerMethod(L, "Game", "createNpcType", LuaScriptInterface::luaGameCreateNpcType);
 
 	registerMethod(L, "Game", "startEvent", LuaScriptInterface::luaGameStartEvent);
 
@@ -2567,6 +2545,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Item", "isItem", LuaScriptInterface::luaItemIsItem);
 
+	registerMethod(L, "Item", "hasParent", LuaScriptInterface::luaItemHasParent);
 	registerMethod(L, "Item", "getParent", LuaScriptInterface::luaItemGetParent);
 	registerMethod(L, "Item", "getTopParent", LuaScriptInterface::luaItemGetTopParent);
 
@@ -2676,6 +2655,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Creature", "canSeeGhostMode", LuaScriptInterface::luaCreatureCanSeeGhostMode);
 	registerMethod(L, "Creature", "canSeeInvisibility", LuaScriptInterface::luaCreatureCanSeeInvisibility);
 
+	registerMethod(L, "Creature", "hasParent", LuaScriptInterface::luaCreatureHasParent);
 	registerMethod(L, "Creature", "getParent", LuaScriptInterface::luaCreatureGetParent);
 
 	registerMethod(L, "Creature", "getId", LuaScriptInterface::luaCreatureGetId);
@@ -2863,6 +2843,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Player", "sendPrivateMessage", LuaScriptInterface::luaPlayerSendPrivateMessage);
 	registerMethod(L, "Player", "channelSay", LuaScriptInterface::luaPlayerChannelSay);
 	registerMethod(L, "Player", "openChannel", LuaScriptInterface::luaPlayerOpenChannel);
+	registerMethod(L, "Player", "leaveChannel", LuaScriptInterface::luaPlayerLeaveChannel);
 
 	registerMethod(L, "Player", "getSlotItem", LuaScriptInterface::luaPlayerGetSlotItem);
 
@@ -2946,6 +2927,8 @@ void LuaScriptInterface::registerFunctions()
 
 	registerMethod(L, "Player", "sendResourceBalance", LuaScriptInterface::luaPlayerSendResourceBalance);
 
+	registerMethod(L, "Player", "sendEnterMarket", LuaScriptInterface::luaPlayerSendEnterMarket);
+
 	// Monster
 	registerClass(L, "Monster", "Creature", LuaScriptInterface::luaMonsterCreate);
 	registerMetaMethod(L, "Monster", "__eq", LuaScriptInterface::luaUserdataCompare);
@@ -3000,36 +2983,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Npc", "setSpeechBubble", LuaScriptInterface::luaNpcSetSpeechBubble);
 
 	registerMethod(L, "Npc", "getSpectators", LuaScriptInterface::luaNpcGetSpectators);
-
-	// NpcType
-	registerClass(L, "NpcType", "", LuaScriptInterface::luaNpcTypeCreate);
-	registerMethod(L, "NpcType", "name", LuaScriptInterface::luaNpcTypeName);
-
-	registerMethod(L, "NpcType", "eventType", LuaScriptInterface::luaNpcTypeEventType);
-	registerMethod(L, "NpcType", "onSay", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onDisappear", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onAppear", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onMove", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onPlayerCloseChannel", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onPlayerEndTrade", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onThink", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onSight", LuaScriptInterface::luaNpcTypeOnCallback);
-	registerMethod(L, "NpcType", "onSpeechBubble", LuaScriptInterface::luaNpcTypeOnCallback);
-
-	registerMethod(L, "NpcType", "speechBubble", LuaScriptInterface::luaNpcTypeSpeechBubble);
-	registerMethod(L, "NpcType", "walkInterval", LuaScriptInterface::luaNpcTypeWalkTicks);
-	registerMethod(L, "NpcType", "walkSpeed", LuaScriptInterface::luaNpcTypeBaseSpeed);
-	registerMethod(L, "NpcType", "spawnRadius", LuaScriptInterface::luaNpcTypeMasterRadius);
-	registerMethod(L, "NpcType", "floorChange", LuaScriptInterface::luaNpcTypeFloorChange);
-	registerMethod(L, "NpcType", "attackable", LuaScriptInterface::luaNpcTypeAttackable);
-	registerMethod(L, "NpcType", "ignoreHeight", LuaScriptInterface::luaNpcTypeIgnoreHeight);
-	registerMethod(L, "NpcType", "isIdle", LuaScriptInterface::luaNpcTypeIsIdle);
-	registerMethod(L, "NpcType", "pushable", LuaScriptInterface::luaNpcTypePushable);
-	registerMethod(L, "NpcType", "outfit", LuaScriptInterface::luaNpcTypeDefaultOutfit);
-	registerMethod(L, "NpcType", "parameters", LuaScriptInterface::luaNpcTypeParameter);
-	registerMethod(L, "NpcType", "health", LuaScriptInterface::luaNpcTypeHealth);
-	registerMethod(L, "NpcType", "maxHealth", LuaScriptInterface::luaNpcTypeMaxHealth);
-	registerMethod(L, "NpcType", "sight", LuaScriptInterface::luaNpcTypeSight);
 
 	// Guild
 	registerClass(L, "Guild", "", LuaScriptInterface::luaGuildCreate);
@@ -3090,14 +3043,6 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Vocation", "getPromotion", LuaScriptInterface::luaVocationGetPromotion);
 
 	registerMethod(L, "Vocation", "allowsPvp", LuaScriptInterface::luaVocationAllowsPvp);
-
-	// Town
-	registerClass(L, "Town", "", LuaScriptInterface::luaTownCreate);
-	registerMetaMethod(L, "Town", "__eq", LuaScriptInterface::luaUserdataCompare);
-
-	registerMethod(L, "Town", "getId", LuaScriptInterface::luaTownGetId);
-	registerMethod(L, "Town", "getName", LuaScriptInterface::luaTownGetName);
-	registerMethod(L, "Town", "getTemplePosition", LuaScriptInterface::luaTownGetTemplePosition);
 
 	// House
 	registerClass(L, "House", "", LuaScriptInterface::luaHouseCreate);
@@ -3493,6 +3438,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "CreatureEvent", "register", LuaScriptInterface::luaCreatureEventRegister);
 	registerMethod(L, "CreatureEvent", "onLogin", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod(L, "CreatureEvent", "onLogout", LuaScriptInterface::luaCreatureEventOnCallback);
+	registerMethod(L, "CreatureEvent", "onReconnect", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod(L, "CreatureEvent", "onThink", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod(L, "CreatureEvent", "onPrepareDeath", LuaScriptInterface::luaCreatureEventOnCallback);
 	registerMethod(L, "CreatureEvent", "onDeath", LuaScriptInterface::luaCreatureEventOnCallback);
@@ -3696,7 +3642,7 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State* L)
 		}
 
 		if (--itemCount == 0) {
-			if (newItem->getParent()) {
+			if (newItem->hasParent()) {
 				uint32_t uid = tfs::lua::getScriptEnv()->addThing(newItem);
 				lua_pushnumber(L, uid);
 				return 1;
@@ -4666,7 +4612,7 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	const std::string& path = tfs::lua::getString(L, 1);
 	g_dispatcher.addTask([path]() {
 		try {
-			g_game.loadMap(path);
+			g_game.loadMap(path, true);
 		} catch (const std::exception& e) {
 			// FIXME: Should only catch some exceptions
 			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
@@ -4808,9 +4754,8 @@ int LuaScriptInterface::luaGameGetTowns(lua_State* L)
 	lua_createtable(L, towns.size(), 0);
 
 	int index = 0;
-	for (auto townEntry : towns) {
-		tfs::lua::pushUserdata(L, townEntry.second);
-		tfs::lua::setMetatable(L, -1, "Town");
+	for (const auto& [_, town] : towns) {
+		pushTown(L, *town);
 		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
@@ -5042,7 +4987,7 @@ int LuaScriptInterface::luaGameCreateMonster(lua_State* L)
 	bool extended = tfs::lua::getBoolean(L, 3, false);
 	bool force = tfs::lua::getBoolean(L, 4, false);
 	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
-	if (g_events->eventMonsterOnSpawn(monster, position, false, true) || force) {
+	if (tfs::events::monster::onSpawn(monster, position, false, true) || force) {
 		if (g_game.placeCreature(monster, position, extended, force, magicEffect)) {
 			tfs::lua::pushUserdata(L, monster);
 			tfs::lua::setMetatable(L, -1, "Monster");
@@ -5067,7 +5012,6 @@ int LuaScriptInterface::luaGameCreateNpc(lua_State* L)
 	}
 
 	const Position& position = tfs::lua::getPosition(L, 2);
-	npc->setMasterPos(position);
 	bool extended = tfs::lua::getBoolean(L, 3, false);
 	bool force = tfs::lua::getBoolean(L, 4, false);
 	MagicEffectClasses magicEffect = tfs::lua::getNumber<MagicEffectClasses>(L, 5, CONST_ME_TELEPORT);
@@ -5147,34 +5091,6 @@ int LuaScriptInterface::luaGameCreateMonsterType(lua_State* L)
 
 	tfs::lua::pushUserdata(L, monsterType);
 	tfs::lua::setMetatable(L, -1, "MonsterType");
-	return 1;
-}
-
-int LuaScriptInterface::luaGameCreateNpcType(lua_State* L)
-{
-	// Game.createNpcType(name)
-	if (tfs::lua::getScriptEnv()->getScriptInterface() != Npcs::getScriptInterface()) {
-		reportErrorFunc(L, "NpcTypes can only be registered in the Npcs interface.");
-		lua_pushnil(L);
-		return 1;
-	}
-
-	const std::string& name = tfs::lua::getString(L, 1);
-	if (name.length() == 0) {
-		lua_pushnil(L);
-		return 1;
-	}
-
-	NpcType* npcType = Npcs::getNpcType(name);
-	if (!npcType) {
-		npcType = new NpcType();
-		npcType->name = name;
-		npcType->fromLua = true;
-		Npcs::addNpcType(name, npcType);
-	}
-
-	tfs::lua::pushUserdata<NpcType>(L, npcType);
-	tfs::lua::setMetatable(L, -1, "NpcType");
 	return 1;
 }
 
@@ -6633,6 +6549,19 @@ int LuaScriptInterface::luaItemIsItem(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaItemHasParent(lua_State* L)
+{
+	// item:hasParent()
+	Item* item = tfs::lua::getUserdata<Item>(L, 1);
+	if (!item) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	tfs::lua::pushBoolean(L, item->hasParent());
+	return 1;
+}
+
 int LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
@@ -8025,6 +7954,19 @@ int LuaScriptInterface::luaCreatureCanSeeInvisibility(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaCreatureHasParent(lua_State* L)
+{
+	// creature:hasParent()
+	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	tfs::lua::pushBoolean(L, creature->hasParent());
+	return 1;
+}
+
 int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 {
 	// creature:getParent()
@@ -8090,11 +8032,20 @@ int LuaScriptInterface::luaCreatureGetTarget(lua_State* L)
 int LuaScriptInterface::luaCreatureSetTarget(lua_State* L)
 {
 	// creature:setTarget(target)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		tfs::lua::pushBoolean(L, creature->setAttackedCreature(tfs::lua::getCreature(L, 2)));
-	} else {
+	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
 		lua_pushnil(L);
+
+		return 1;
+	}
+
+	auto target = tfs::lua::getCreature(L, 2);
+	if (target) {
+		creature->setAttackedCreature(target);
+		tfs::lua::pushBoolean(L, creature->canAttackCreature(target));
+	} else {
+		creature->removeAttackedCreature();
+		tfs::lua::pushBoolean(L, true);
 	}
 	return 1;
 }
@@ -8121,11 +8072,19 @@ int LuaScriptInterface::luaCreatureGetFollowCreature(lua_State* L)
 int LuaScriptInterface::luaCreatureSetFollowCreature(lua_State* L)
 {
 	// creature:setFollowCreature(followedCreature)
-	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	if (creature) {
-		tfs::lua::pushBoolean(L, creature->setFollowCreature(tfs::lua::getCreature(L, 2)));
-	} else {
+	auto creature = tfs::lua::getUserdata<Creature>(L, 1);
+	if (!creature) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	auto followedCreature = tfs::lua::getCreature(L, 2);
+	if (followedCreature) {
+		creature->setFollowCreature(followedCreature);
+		tfs::lua::pushBoolean(L, creature->canFollowCreature(followedCreature));
+	} else {
+		creature->removeFollowCreature();
+		tfs::lua::pushBoolean(L, true);
 	}
 	return 1;
 }
@@ -8689,7 +8648,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 	}
 
 	// Prevent infinity echo on event onHear
-	bool echo = tfs::lua::getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::CREATURE_ONHEAR);
+	bool echo = tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::CREATURE_ONHEAR);
 
 	if (position.x != 0) {
 		tfs::lua::pushBoolean(L, g_game.internalCreatureSay(creature, type, text, ghost, &spectators, &position, echo));
@@ -9128,10 +9087,10 @@ int LuaScriptInterface::luaPlayerGetDepotChest(lua_State* L)
 
 	uint32_t depotId = tfs::lua::getNumber<uint32_t>(L, 2);
 	bool autoCreate = tfs::lua::getBoolean(L, 3, false);
-	DepotChest* depotChest = player->getDepotChest(depotId, autoCreate);
+	const auto& depotChest = player->getDepotChest(depotId, autoCreate);
 	if (depotChest) {
-		tfs::lua::pushUserdata<Item>(L, depotChest);
-		tfs::lua::setItemMetatable(L, -1, depotChest);
+		pushSharedPtr(L, depotChest);
+		tfs::lua::setItemMetatable(L, -1, depotChest.get());
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -9147,10 +9106,10 @@ int LuaScriptInterface::luaPlayerGetInbox(lua_State* L)
 		return 1;
 	}
 
-	Inbox* inbox = player->getInbox();
+	const auto& inbox = player->getInbox();
 	if (inbox) {
-		tfs::lua::pushUserdata<Item>(L, inbox);
-		tfs::lua::setItemMetatable(L, -1, inbox);
+		pushSharedPtr(L, inbox);
+		tfs::lua::setItemMetatable(L, -1, inbox.get());
 	} else {
 		tfs::lua::pushBoolean(L, false);
 	}
@@ -9635,7 +9594,7 @@ int LuaScriptInterface::luaPlayerSetOfflineTrainingSkill(lua_State* L)
 
 int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 {
-	// player:getItemCount(itemId[[, subType = -1], ignoreEquipped = false])
+	// player:getItemCount(itemId[, subType = -1])
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (!player) {
 		lua_pushnil(L);
@@ -9654,8 +9613,7 @@ int LuaScriptInterface::luaPlayerGetItemCount(lua_State* L)
 	}
 
 	int32_t subType = tfs::lua::getNumber<int32_t>(L, 3, -1);
-	bool ignoreEquipped = tfs::lua::getBoolean(L, 4, false);
-	lua_pushnumber(L, player->getItemTypeCount(itemId, subType, ignoreEquipped));
+	lua_pushnumber(L, player->getItemTypeCount(itemId, subType));
 	return 1;
 }
 
@@ -9765,8 +9723,7 @@ int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 	// player:getTown()
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
-		tfs::lua::pushUserdata(L, player->getTown());
-		tfs::lua::setMetatable(L, -1, "Town");
+		pushTown(L, *player->getTown());
 	} else {
 		lua_pushnil(L);
 	}
@@ -9776,7 +9733,12 @@ int LuaScriptInterface::luaPlayerGetTown(lua_State* L)
 int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 {
 	// player:setTown(town)
-	Town* town = tfs::lua::getUserdata<Town>(L, 2);
+	if (!lua_istable(L, 2)) {
+		tfs::lua::pushBoolean(L, false);
+		return 1;
+	}
+
+	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", -1));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -10391,6 +10353,20 @@ int LuaScriptInterface::luaPlayerOpenChannel(lua_State* L)
 	Player* player = tfs::lua::getUserdata<Player>(L, 1);
 	if (player) {
 		g_game.playerOpenChannel(player->getID(), channelId);
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerLeaveChannel(lua_State* L)
+{
+	// player:leaveChannel(channelId)
+	uint16_t channelId = tfs::lua::getNumber<uint16_t>(L, 2);
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		g_game.playerCloseChannel(player->getID(), channelId);
 		tfs::lua::pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -11312,6 +11288,19 @@ int LuaScriptInterface::luaPlayerSendResourceBalance(lua_State* L)
 	return 1;
 }
 
+int LuaScriptInterface::luaPlayerSendEnterMarket(lua_State* L)
+{
+	// player:sendEnterMarket()
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (player) {
+		player->sendMarketEnter();
+		tfs::lua::pushBoolean(L, true);
+	} else {
+		lua_pushnil(L);
+	}
+	return 1;
+}
+
 // Monster
 int LuaScriptInterface::luaMonsterCreate(lua_State* L)
 {
@@ -11351,7 +11340,7 @@ int LuaScriptInterface::luaMonsterGetId(lua_State* L)
 	Monster* monster = tfs::lua::getUserdata<Monster>(L, 1);
 	if (monster) {
 		// Set monster id if it's not set yet (only for onSpawn event)
-		if (tfs::lua::getScriptEnv()->getScriptId() == g_events->getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
+		if (tfs::lua::getScriptEnv()->getScriptId() == tfs::events::getScriptId(EventInfoId::MONSTER_ONSPAWN)) {
 			monster->setID();
 		}
 
@@ -11898,349 +11887,6 @@ int LuaScriptInterface::luaNpcGetSpectators(lua_State* L)
 	return 1;
 }
 
-// NpcType
-int LuaScriptInterface::luaNpcTypeCreate(lua_State* L)
-{
-	// NpcType(name)
-	auto name = tfs::lua::getString(L, 2);
-	auto npcType = Npcs::getNpcType(name);
-	if (npcType) {
-		tfs::lua::pushUserdata<NpcType>(L, npcType);
-		tfs::lua::setMetatable(L, -1, "NpcType");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeEventType(lua_State* L)
-{
-	// get: npcType:eventType() set: npcType:eventType(string)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushString(L, npcType->eventType);
-		} else {
-			std::string type = tfs::lua::getString(L, 2);
-			const static auto tmp = std::array{"say",      "disappear", "appear", "move",        "closechannel",
-			                                   "endtrade", "think",     "sight",  "speechbubble"};
-
-			const auto it = std::find(tmp.begin(), tmp.end(), type);
-			if (it != tmp.end()) {
-				npcType->eventType = type;
-				tfs::lua::pushBoolean(L, true);
-				return 1;
-			}
-
-			std::cout << "[Warning - Npc::eventType] Unknown eventType name: " << type << " for npc: " << npcType->name
-			          << std::endl;
-			lua_pushnil(L);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeOnCallback(lua_State* L)
-{
-	// npcType:onSay(callback)
-	// npcType:onDisappear(callback)
-	// npcType:onAppear(callback)
-	// npcType:onMove(callback)
-	// npcType:onPlayerCloseChannel(callback)
-	// npcType:onPlayerEndTrade(callback)
-	// npcType:onThink(callback)
-	// npcType:onSight(callback)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (npcType->loadCallback(Npcs::getScriptInterface())) {
-			tfs::lua::pushBoolean(L, true);
-			return 1;
-		}
-		tfs::lua::pushBoolean(L, false);
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeName(lua_State* L)
-{
-	// get: npcType:name() set: npcType:name(string)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushString(L, npcType->name);
-		} else {
-			std::string name = tfs::lua::getString(L, 2);
-			npcType->name = name;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeSpeechBubble(lua_State* L)
-{
-	// get: npcType:speechBubble() set: npcType:speechBubble(SPEECH_BUBBLE_)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->speechBubble);
-		} else {
-			uint8_t bubble = tfs::lua::getNumber<uint8_t>(L, 2);
-			npcType->speechBubble = bubble;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeWalkTicks(lua_State* L)
-{
-	// get: npcType:walkTicks() set: npcType:walkTicks(ticks)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->walkTicks);
-		} else {
-			uint32_t ticks = tfs::lua::getNumber<uint32_t>(L, 2);
-			npcType->walkTicks = ticks;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeBaseSpeed(lua_State* L)
-{
-	// get: npcType:baseSpeed() set: npcType:baseSpeed(speed)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->baseSpeed);
-		} else {
-			uint32_t speed = tfs::lua::getNumber<uint32_t>(L, 2);
-			npcType->baseSpeed = speed;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeMasterRadius(lua_State* L)
-{
-	// get: npcType:masterRadius() set: npcType:masterRadius(radius)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->masterRadius);
-		} else {
-			int32_t radius = tfs::lua::getNumber<int32_t>(L, 2);
-			npcType->masterRadius = radius;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeFloorChange(lua_State* L)
-{
-	// get: npcType:floorChange() set: npcType:floorChange(bool)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushBoolean(L, npcType->floorChange);
-		} else {
-			bool b = tfs::lua::getBoolean(L, 2);
-			npcType->floorChange = b;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeAttackable(lua_State* L)
-{
-	// get: npcType:attackable() set: npcType:attackable(bool)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushBoolean(L, npcType->attackable);
-		} else {
-			bool b = tfs::lua::getBoolean(L, 2);
-			npcType->attackable = b;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeIgnoreHeight(lua_State* L)
-{
-	// get: npcType:ignoreHeight() set: npcType:ignoreHeight(bool)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushBoolean(L, npcType->ignoreHeight);
-		} else {
-			bool b = tfs::lua::getBoolean(L, 2);
-			npcType->ignoreHeight = b;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeIsIdle(lua_State* L)
-{
-	// get: npcType:isIdle() set: npcType:isIdle(bool)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushBoolean(L, npcType->isIdle);
-		} else {
-			bool b = tfs::lua::getBoolean(L, 2);
-			npcType->isIdle = b;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypePushable(lua_State* L)
-{
-	// get: npcType:pushable() set: npcType:pushable(bool)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushBoolean(L, npcType->pushable);
-		} else {
-			bool b = tfs::lua::getBoolean(L, 2);
-			npcType->pushable = b;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeDefaultOutfit(lua_State* L)
-{
-	// get: npcType:defaultOutfit() set: npcType:defaultOutfit(outfit)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			tfs::lua::pushOutfit(L, npcType->defaultOutfit);
-		} else {
-			auto outfit = getOutfit(L, 2);
-			npcType->defaultOutfit = outfit;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeParameter(lua_State* L)
-{
-	// get: npcType:parameters() set: npcType:parameters(key, value)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_createtable(L, npcType->parameters.size(), 0);
-			for (auto i : npcType->parameters) {
-				setField(L, i.first, i.second);
-			}
-		} else {
-			std::string key = tfs::lua::getString(L, 2);
-			std::string value = tfs::lua::getString(L, 3);
-			npcType->parameters[key] = value;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeHealth(lua_State* L)
-{
-	// get: npcType:health() set: npcType:health(health)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->health);
-		} else {
-			int32_t health = tfs::lua::getNumber<int32_t>(L, 2);
-			npcType->health = health;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeMaxHealth(lua_State* L)
-{
-	// get: npcType:maxHealth() set: npcType:maxHealth(health)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->healthMax);
-		} else {
-			int32_t health = tfs::lua::getNumber<int32_t>(L, 2);
-			npcType->healthMax = health;
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaNpcTypeSight(lua_State* L)
-{
-	// get: npcType:sight() set: npcType:sight(x, y)
-	NpcType* npcType = tfs::lua::getUserdata<NpcType>(L, 1);
-	if (npcType) {
-		if (lua_gettop(L) == 1) {
-			lua_pushnumber(L, npcType->sightX);
-			lua_pushnumber(L, npcType->sightY);
-			return 2;
-		} else {
-			npcType->sightX = tfs::lua::getNumber<uint16_t>(L, 2);
-			npcType->sightY = tfs::lua::getNumber<uint16_t>(L, 3);
-			tfs::lua::pushBoolean(L, true);
-		}
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 // Guild
 int LuaScriptInterface::luaGuildCreate(lua_State* L)
 {
@@ -12771,64 +12417,6 @@ int LuaScriptInterface::luaVocationAllowsPvp(lua_State* L)
 	return 1;
 }
 
-// Town
-int LuaScriptInterface::luaTownCreate(lua_State* L)
-{
-	// Town(id or name)
-	Town* town;
-	if (isNumber(L, 2)) {
-		town = g_game.map.towns.getTown(tfs::lua::getNumber<uint32_t>(L, 2));
-	} else if (lua_isstring(L, 2)) {
-		town = g_game.map.towns.getTown(tfs::lua::getString(L, 2));
-	} else {
-		town = nullptr;
-	}
-
-	if (town) {
-		tfs::lua::pushUserdata(L, town);
-		tfs::lua::setMetatable(L, -1, "Town");
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetId(lua_State* L)
-{
-	// town:getId()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		lua_pushnumber(L, town->getID());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetName(lua_State* L)
-{
-	// town:getName()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		tfs::lua::pushString(L, town->getName());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
-int LuaScriptInterface::luaTownGetTemplePosition(lua_State* L)
-{
-	// town:getTemplePosition()
-	Town* town = tfs::lua::getUserdata<Town>(L, 1);
-	if (town) {
-		tfs::lua::pushPosition(L, town->getTemplePosition());
-	} else {
-		lua_pushnil(L);
-	}
-	return 1;
-}
-
 // House
 int LuaScriptInterface::luaHouseCreate(lua_State* L)
 {
@@ -12876,10 +12464,9 @@ int LuaScriptInterface::luaHouseGetTown(lua_State* L)
 		return 1;
 	}
 
-	Town* town = g_game.map.towns.getTown(house->getTownId());
+	const Town* town = g_game.map.towns.getTown(house->getTownId());
 	if (town) {
-		tfs::lua::pushUserdata(L, town);
-		tfs::lua::setMetatable(L, -1, "Town");
+		pushTown(L, *town);
 	} else {
 		lua_pushnil(L);
 	}
@@ -17757,6 +17344,8 @@ int LuaScriptInterface::luaCreatureEventType(lua_State* L)
 			creature->setEventType(CREATURE_EVENT_LOGIN);
 		} else if (tmpStr == "logout") {
 			creature->setEventType(CREATURE_EVENT_LOGOUT);
+		} else if (tmpStr == "reconnect") {
+			creature->setEventType(CREATURE_EVENT_RECONNECT);
 		} else if (tmpStr == "think") {
 			creature->setEventType(CREATURE_EVENT_THINK);
 		} else if (tmpStr == "preparedeath") {

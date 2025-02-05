@@ -21,12 +21,12 @@ public:
 
 	void writeMessageLength() { add_header(info.length); }
 
-	void addCryptoHeader(checksumMode_t mode, uint32_t& sequence)
+	void addCryptoHeader(checksumMode_t mode)
 	{
 		if (mode == CHECKSUM_ADLER) {
 			add_header(adlerChecksum(&buffer[outputBufferStart], info.length));
 		} else if (mode == CHECKSUM_SEQUENCE) {
-			add_header(sequence++);
+			add_header(getSequenceId());
 		}
 
 		writeMessageLength();
@@ -48,6 +48,9 @@ public:
 		info.position += msgLen;
 	}
 
+	void setSequenceId(uint32_t sequence) { sequenceId = sequence; }
+	uint32_t getSequenceId() const { return sequenceId; }
+
 private:
 	template <typename T>
 	void add_header(T add)
@@ -60,31 +63,15 @@ private:
 	}
 
 	MsgSize_t outputBufferStart = INITIAL_BUFFER_POSITION;
+	uint32_t sequenceId;
 };
 
-class OutputMessagePool
-{
-public:
-	// non-copyable
-	OutputMessagePool(const OutputMessagePool&) = delete;
-	OutputMessagePool& operator=(const OutputMessagePool&) = delete;
+namespace tfs::net {
 
-	static OutputMessagePool& getInstance()
-	{
-		static OutputMessagePool instance;
-		return instance;
-	}
+OutputMessage_ptr make_output_message();
+void insert_protocol_to_autosend(const Protocol_ptr& protocol);
+void remove_protocol_from_autosend(const Protocol_ptr& protocol);
 
-	static OutputMessage_ptr getOutputMessage();
-
-	void addProtocolToAutosend(Protocol_ptr protocol);
-	void removeProtocolFromAutosend(const Protocol_ptr& protocol);
-
-private:
-	OutputMessagePool() = default;
-	// NOTE: A vector is used here because this container is mostly read and relatively rarely modified (only when a
-	// client connects/disconnects)
-	std::vector<Protocol_ptr> bufferedProtocols;
-};
+} // namespace tfs::net
 
 #endif // FS_OUTPUTMESSAGE_H

@@ -77,7 +77,7 @@ if not NpcHandler then
 		messages = {
 			-- These are the default replies of all npcs. They can/should be changed individually for each npc.
 			[MESSAGE_GREET] = "Greetings, |PLAYERNAME|.",
-			[MESSAGE_FAREWELL] = "Good bye, |PLAYERNAME|.",
+			[MESSAGE_FAREWELL] = "Goodbye, |PLAYERNAME|.",
 			[MESSAGE_BUY] = "Do you want to buy |ITEMCOUNT| |ITEMNAME| for |TOTALCOST| gold coins?",
 			[MESSAGE_ONBUY] = "Here you are.",
 			[MESSAGE_BOUGHT] = "Bought |ITEMCOUNT|x |ITEMNAME| for |TOTALCOST| gold.",
@@ -90,15 +90,15 @@ if not NpcHandler then
 			[MESSAGE_NEEDITEM] = "You do not have this object.",
 			[MESSAGE_NEEDSPACE] = "You do not have enough capacity.",
 			[MESSAGE_NEEDMORESPACE] = "You do not have enough capacity for all items.",
-			[MESSAGE_IDLETIMEOUT] = "Good bye.",
-			[MESSAGE_WALKAWAY] = "Good bye.",
+			[MESSAGE_IDLETIMEOUT] = "Goodbye.",
+			[MESSAGE_WALKAWAY] = "Goodbye.",
 			[MESSAGE_DECLINE] = "Then not.",
 			[MESSAGE_SENDTRADE] = "Of course, just browse through my wares.",
 			[MESSAGE_NOSHOP] = "Sorry, I'm not offering anything.",
 			[MESSAGE_ONCLOSESHOP] = "Thank you, come back whenever you're in need of something else.",
 			[MESSAGE_ALREADYFOCUSED] = "|PLAYERNAME|, I am already talking to you.",
-			[MESSAGE_WALKAWAY_MALE] = "Good bye.",
-			[MESSAGE_WALKAWAY_FEMALE] = "Good bye."
+			[MESSAGE_WALKAWAY_MALE] = "Goodbye.",
+			[MESSAGE_WALKAWAY_FEMALE] = "Goodbye."
 		}
 	}
 

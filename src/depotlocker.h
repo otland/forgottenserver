@@ -15,18 +15,18 @@ class DepotLocker final : public Container
 public:
 	explicit DepotLocker(uint16_t type);
 
-	DepotLocker* getDepotLocker() override { return this; }
-	const DepotLocker* getDepotLocker() const override { return this; }
-
 	void removeInbox(Inbox* inbox);
-
-	// serialization
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
-
 	uint16_t getDepotId() const { return depotId; }
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
-	// cylinder implementations
+	// Serialization
+	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+
+	// Container implementations
+	DepotLocker* getDepotLocker() override { return this; }
+	const DepotLocker* getDepotLocker() const override { return this; }
+
+	// Cylinder implementations
 	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
 	                     Creature* actor = nullptr) const override;
 
@@ -35,6 +35,7 @@ public:
 	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
+	// Item implementations
 	bool canRemove() const override { return false; }
 
 private:

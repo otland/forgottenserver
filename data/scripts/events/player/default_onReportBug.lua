@@ -1,6 +1,6 @@
 local event = Event()
 
-event.onReportBug = function(self, message, position, category)
+event.onReportBug = function(self, message, position)
 	if self:getAccountType() == ACCOUNT_TYPE_NORMAL then
 		return false
 	end
@@ -16,7 +16,7 @@ event.onReportBug = function(self, message, position, category)
 	io.output(file)
 	io.write("------------------------------\n")
 	io.write("Name: " .. name)
-	if category == BUG_CATEGORY_MAP then
+	if position ~= nil then
 		io.write(" [Map position: " .. position.x .. ", " .. position.y .. ", " .. position.z .. "]")
 	end
 	local playerPosition = self:getPosition()

@@ -136,7 +136,6 @@ public:
 	int32_t getEvent(std::string_view eventName);
 	int32_t getEvent();
 	int32_t getMetaEvent(const std::string& globalName, const std::string& eventName);
-	void removeEvent(int32_t scriptId);
 
 	const std::string& getInterfaceName() const { return interfaceName; }
 	const std::string& getLastLuaError() const { return lastLuaError; }
@@ -154,11 +153,6 @@ public:
 	static const luaL_Reg luaConfigManagerTable[4];
 	static const luaL_Reg luaDatabaseTable[9];
 	static const luaL_Reg luaResultTable[6];
-
-	//
-	std::string lastLuaError;
-	std::string interfaceName;
-	std::string loadingFile;
 
 protected:
 	virtual bool closeState();
@@ -308,7 +302,6 @@ private:
 	static int luaGameCreateNpc(lua_State* L);
 	static int luaGameCreateTile(lua_State* L);
 	static int luaGameCreateMonsterType(lua_State* L);
-	static int luaGameCreateNpcType(lua_State* L);
 
 	static int luaGameStartEvent(lua_State* L);
 
@@ -436,6 +429,7 @@ private:
 
 	static int luaItemIsItem(lua_State* L);
 
+	static int luaItemHasParent(lua_State* L);
 	static int luaItemGetParent(lua_State* L);
 	static int luaItemGetTopParent(lua_State* L);
 
@@ -541,6 +535,7 @@ private:
 	static int luaCreatureCanSeeGhostMode(lua_State* L);
 	static int luaCreatureCanSeeInvisibility(lua_State* L);
 
+	static int luaCreatureHasParent(lua_State* L);
 	static int luaCreatureGetParent(lua_State* L);
 
 	static int luaCreatureGetId(lua_State* L);
@@ -728,6 +723,7 @@ private:
 
 	static int luaPlayerChannelSay(lua_State* L);
 	static int luaPlayerOpenChannel(lua_State* L);
+	static int luaPlayerLeaveChannel(lua_State* L);
 
 	static int luaPlayerGetSlotItem(lua_State* L);
 
@@ -806,6 +802,7 @@ private:
 	static int luaPlayerSetClientLowLevelBonusDisplay(lua_State* L);
 
 	static int luaPlayerSendResourceBalance(lua_State* L);
+	static int luaPlayerSendEnterMarket(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);
@@ -859,26 +856,6 @@ private:
 	static int luaNpcSetSpeechBubble(lua_State* L);
 
 	static int luaNpcGetSpectators(lua_State* L);
-
-	// NpcType
-	static int luaNpcTypeCreate(lua_State* L);
-	static int luaNpcTypeName(lua_State* L);
-	static int luaNpcTypeOnCallback(lua_State* L);
-	static int luaNpcTypeEventType(lua_State* L);
-	static int luaNpcTypeSpeechBubble(lua_State* L);
-	static int luaNpcTypeWalkTicks(lua_State* L);
-	static int luaNpcTypeBaseSpeed(lua_State* L);
-	static int luaNpcTypeMasterRadius(lua_State* L);
-	static int luaNpcTypeFloorChange(lua_State* L);
-	static int luaNpcTypeAttackable(lua_State* L);
-	static int luaNpcTypeIgnoreHeight(lua_State* L);
-	static int luaNpcTypeIsIdle(lua_State* L);
-	static int luaNpcTypePushable(lua_State* L);
-	static int luaNpcTypeDefaultOutfit(lua_State* L);
-	static int luaNpcTypeParameter(lua_State* L);
-	static int luaNpcTypeHealth(lua_State* L);
-	static int luaNpcTypeMaxHealth(lua_State* L);
-	static int luaNpcTypeSight(lua_State* L);
 
 	// Guild
 	static int luaGuildCreate(lua_State* L);
@@ -936,13 +913,6 @@ private:
 	static int luaVocationGetPromotion(lua_State* L);
 
 	static int luaVocationAllowsPvp(lua_State* L);
-
-	// Town
-	static int luaTownCreate(lua_State* L);
-
-	static int luaTownGetId(lua_State* L);
-	static int luaTownGetName(lua_State* L);
-	static int luaTownGetTemplePosition(lua_State* L);
 
 	// House
 	static int luaHouseCreate(lua_State* L);
@@ -1390,6 +1360,11 @@ private:
 	static int luaXmlNodeName(lua_State* L);
 	static int luaXmlNodeFirstChild(lua_State* L);
 	static int luaXmlNodeNextSibling(lua_State* L);
+
+	//
+	std::string lastLuaError;
+	std::string interfaceName;
+	std::string loadingFile;
 };
 
 class LuaEnvironment : public LuaScriptInterface

@@ -12,9 +12,5 @@ foreach(test_src ${tests_SRC})
     add_executable(${test_name} ${test_src})
     target_link_libraries(${test_name} PRIVATE tfslib Boost::unit_test_framework)
 
-    if (ENABLE_IPO)
-	    set_target_properties(${test_name} PROPERTIES INTERPROCEDURAL_OPTIMIZATION True)
-    endif()
-
     add_test(NAME ${test_name} COMMAND ${test_name})
 endforeach()
