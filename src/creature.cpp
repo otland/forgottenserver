@@ -135,8 +135,11 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
+	const Position& position = getPosition();
 	for (auto* creature : followers) {
-		if (!canSeeCreature(creature) || getPosition().z != creature->getPosition().z) {
+		const Position& followerPosition = creature->getPosition();
+		uint16_t distance = position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
+		if (distance >= Map::maxViewportX + Map::maxViewportY || getPosition().z != creature->getPosition().z) {
 			removeFollower(creature);
 		}
 	}
