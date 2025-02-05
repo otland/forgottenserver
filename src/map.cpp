@@ -697,6 +697,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		iterations++;
 
 		if (iterations >= 200) {
+			nodes.clear();
 			return false;
 		}
 
