@@ -848,12 +848,6 @@ AStarNode* AStarNodes::getBestNode()
 	return retNode;
 }
 
-void AStarNodes::clear()
-{
-	nodes.clear();
-	nodeMap.clear();
-};
-
 uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
 	if (std::abs(node->x - neighborPos.x) == std::abs(node->y - neighborPos.y)) {
