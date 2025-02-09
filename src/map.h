@@ -31,20 +31,12 @@ class AStarNodes
 public:
 	AStarNodes(uint16_t x, uint16_t y);
 
-	~AStarNodes()
-	{
-		for (AStarNode* node : nodes) {
-			delete node;
-		}
-		nodes.clear();
-		nodeMap.clear();
-	}
-
 	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	void addNode(AStarNode* node) { nodes.emplace_back(node); };
 
 	AStarNode* getBestNode();
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
+	void clear();
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);

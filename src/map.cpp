@@ -697,6 +697,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		iterations++;
 
 		if (iterations >= 200) {
+			nodes.clear();
 			return false;
 		}
 
@@ -759,6 +760,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		n = nodes.getBestNode();
 	}
+
+	nodes.clear();
 
 	if (!found) {
 		return false;
@@ -844,6 +847,12 @@ AStarNode* AStarNodes::getBestNode()
 	nodes.pop_back();
 	return retNode;
 }
+
+void AStarNodes::clear()
+{
+	nodes.clear();
+	nodeMap.clear();
+};
 
 uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)
 {
