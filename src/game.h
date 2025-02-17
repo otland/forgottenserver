@@ -326,6 +326,8 @@ public:
 	void playerOpenChannel(uint32_t playerId, uint16_t channelId);
 	void playerCloseChannel(uint32_t playerId, uint16_t channelId);
 	void playerOpenPrivateChannel(uint32_t playerId, std::string receiver);
+	void playerStowItem(uint32_t playerId, const Position &pos, uint16_t itemId, uint8_t stackpos, uint8_t count, bool allItems);
+	void playerStashWithdraw(uint32_t playerId, uint16_t itemId, uint32_t count, uint8_t stackpos);
 	void playerCloseNpcChannel(uint32_t playerId);
 	void playerReceivePing(uint32_t playerId);
 	void playerReceivePingBack(uint32_t playerId);
@@ -491,6 +493,7 @@ public:
 	void addTileToClean(Tile* tile) { tilesToClean.emplace(tile); }
 	void removeTileToClean(Tile* tile) { tilesToClean.erase(tile); }
 	void clearTilesToClean() { tilesToClean.clear(); }
+	bool tryRetrieveStashItems(Player* player, Item* item);
 
 private:
 	bool playerSaySpell(Player* player, SpeakClasses type, const std::string& text);
