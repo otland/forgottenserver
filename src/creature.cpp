@@ -846,7 +846,7 @@ void Creature::updateFollowersPaths()
 		if (follower != nullptr) {
 			const Position& followerPosition = follower->getPosition();
 
-			if (lastPathUpdate - OTSYS_TIME() > 0) {
+			if (follower->lastPathUpdate - OTSYS_TIME() > 0) {
 				continue;
 			}
 
