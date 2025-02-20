@@ -223,7 +223,10 @@ void Creature::onWalk()
 	}
 
 	if (attackedCreature || followCreature) {
-		g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+		if (lastPathUpdate - OTSYS_TIME() > 0) {
+			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+		}
 	}
 }
 
