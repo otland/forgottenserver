@@ -840,13 +840,21 @@ void Creature::updateFollowersPaths()
 
 	const Position& thisPosition = getPosition();
 	for (const auto follower : followers) {
-		const Position& followerPosition = follower->getPosition();
-		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX + 2 ||
-		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY + 2) {
-			continue;
-		}
+		if (follower != nullptr) {
+			const Position& followerPosition = follower->getPosition();
 
-		g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
+			if (lastPathUpdate - OTSYS_TIME() > 0) {
+				continue;
+			}
+
+			if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX ||
+			    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY) {
+				continue;
+			}
+
+			g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
+			follower->lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+		}
 	}
 }
 

@@ -664,6 +664,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	Position endPos;
 	const Position startPos = pos;
 
+	// We are trying to find paths too fast.
+	if (creature.lastPathUpdate - OTSYS_TIME() > 0) {
+		return false;
+	}
+
 	// We can't walk, no need to create path.
 	if (creature.getSpeed() <= 0) {
 		return false;
