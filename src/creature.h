@@ -201,7 +201,8 @@ public:
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	void addFollower(Creature* creature) { followers.emplace_back(creature); };
+	bool isFollower(Creature* creature);
+	void addFollower(Creature* creature);
 	void removeFollower(Creature* creature);
 
 	// Pathfinding events

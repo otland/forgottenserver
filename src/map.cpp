@@ -670,7 +670,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	}
 
 	// We can't get paths up or down floors.
-	if (startPos.getZ() != targetPos.getZ()) return false;
+	if (startPos.getZ() != targetPos.getZ()) {
+		return false;
+	}
 
 	// We are next to our target. Let dance step decide.
 	if (fpp.maxTargetDist <= 1 && startPos.getDistanceX(targetPos) <= 1 && startPos.getDistanceY(targetPos) <= 1) {
@@ -696,7 +698,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	while (n) {
 		iterations++;
 
-		if (iterations >= 200) {
+		if (iterations >= 120) {
 			nodes.clear();
 			return false;
 		}
@@ -720,6 +722,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			if (fpp.maxSearchDist != 0 &&
 			    (startPos.getDistanceX(pos) > fpp.maxSearchDist || startPos.getDistanceY(pos) > fpp.maxSearchDist)) {
 				continue;
+			}
+
+			if (startPos.getDistanceX(pos) >= Map::maxViewportX + 1 ||
+			    startPos.getDistanceY(pos) >= Map::maxViewportY + 1) {
+				break;
 			}
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {

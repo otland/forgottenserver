@@ -157,10 +157,6 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	if (lastPathUpdate > OTSYS_TIME()) {
-		return;
-	}
-
 	lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
@@ -824,14 +820,27 @@ void Creature::onFollowCreature(const Creature*)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
+bool Creature::isFollower(Creature* creature)
+{
+	auto it = std::find(followers.begin(), followers.end(), creature);
+	if (it != followers.end()) {
+		return true;
+	}
+	return false;
+}
+
+void Creature::addFollower(Creature* creature)
+{
+	if (!isFollower(creature)) {
+		followers.push_back(creature);
+	}
+}
+
 void Creature::removeFollower(Creature* creature)
 {
-	for (auto it = followers.begin(); it != followers.end();) {
-		if (*it == creature) {
-			it = followers.erase(it);
-		} else {
-			++it;
-		}
+	auto it = std::find(followers.begin(), followers.end(), creature);
+	if (it != followers.end()) {
+		followers.erase(it);
 	}
 }
 

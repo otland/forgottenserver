@@ -3897,8 +3897,6 @@ void Game::updateCreaturesPath(size_t index)
 			creature->forceUpdatePath();
 		}
 	}
-
-	cleanup();
 }
 
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
