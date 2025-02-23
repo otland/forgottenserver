@@ -18,7 +18,7 @@ public:
 			std::cout << "ZLIB initialization error: " << (zstream.msg ? zstream.msg : "unknown") << std::endl;
 		}
 	}
-	virtual ~Protocol() = default;
+	virtual ~Protocol();
 
 	// non-copyable
 	Protocol(const Protocol&) = delete;
