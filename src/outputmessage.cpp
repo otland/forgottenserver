@@ -24,8 +24,7 @@ void sendAll(const std::vector<Protocol_ptr>& protocols);
 
 void scheduleSendAll(const std::vector<Protocol_ptr>& protocols)
 {
-	g_scheduler.addEvent(
-	    createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(protocols); }));
+	g_scheduler.addEvent(createSchedulerTask(OUTPUTMESSAGE_AUTOSEND_DELAY.count(), [&]() { sendAll(protocols); }));
 }
 
 void sendAll(const std::vector<Protocol_ptr>& protocols)
