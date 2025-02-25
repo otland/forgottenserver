@@ -294,7 +294,7 @@ void ScriptEnvironment::resetEnv()
 	}
 }
 
-bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
+bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* luaScriptInterface)
 {
 	if (this->callbackId != 0) {
 		// nested callbacks are not allowed
@@ -305,7 +305,7 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	}
 
 	this->callbackId = callbackId;
-	interface = scriptInterface;
+	interface = luaScriptInterface;
 	return true;
 }
 
@@ -636,22 +636,22 @@ const std::string& LuaScriptInterface::getFileById(int32_t scriptId)
 void tfs::lua::reportError(std::string_view function, std::string_view error_desc, lua_State* L /*= nullptr*/,
                            bool stack_trace /*= false*/)
 {
-	auto [scriptId, scriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
+	auto [scriptId, luaScriptInterface, callbackId, timerEvent] = getScriptEnv()->getEventInfo();
 
 	std::cout << "\nLua Script Error: ";
 
-	if (scriptInterface) {
-		std::cout << '[' << scriptInterface->getInterfaceName() << "]\n";
+	if (luaScriptInterface) {
+		std::cout << '[' << luaScriptInterface->getInterfaceName() << "]\n";
 
 		if (timerEvent) {
 			std::cout << "in a timer event called from:\n";
 		}
 
 		if (callbackId) {
-			std::cout << "in callback: " << scriptInterface->getFileById(callbackId) << '\n';
+			std::cout << "in callback: " << luaScriptInterface->getFileById(callbackId) << '\n';
 		}
 
-		std::cout << scriptInterface->getFileById(scriptId) << '\n';
+		std::cout << luaScriptInterface->getFileById(scriptId) << '\n';
 	}
 
 	if (!function.empty()) {
@@ -9738,7 +9738,7 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 		return 1;
 	}
 
-	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", -1));
+	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", 0));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
