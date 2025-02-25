@@ -10,6 +10,8 @@
 
 #include <boost/locale.hpp>
 
+static constexpr size_t MAX_BODY_SIZE = 8192;
+
 std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
 	if (stringLen == 0) {
@@ -42,7 +44,7 @@ void NetworkMessage::addString(std::string_view value)
 	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
 	                                                            boost::locale::conv::skip);
 	size_t stringLen = latin1Str.size();
-	if (!canAdd(stringLen + 2) || stringLen > 8192) {
+	if (!canAdd(stringLen + 2) || stringLen > MAX_BODY_SIZE) {
 		return;
 	}
 
@@ -61,7 +63,18 @@ void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
 
 void NetworkMessage::addBytes(const char* bytes, size_t size)
 {
-	if (!canAdd(size) || size > 8192) {
+	if (!canAdd(size) || size > MAX_BODY_SIZE) {
+		return;
+	}
+
+	std::memcpy(buffer.data() + info.position, bytes, size);
+	info.position += size;
+	info.length += size;
+}
+
+void NetworkMessage::addBytes(const uint8_t* bytes, size_t size)
+{
+	if (!canAdd(size) || size > MAX_BODY_SIZE) {
 		return;
 	}
 
@@ -191,3 +204,12 @@ void NetworkMessage::addItem(const Item* item)
 }
 
 void NetworkMessage::addItemId(uint16_t itemId) { add<uint16_t>(Item::items[itemId].clientId); }
+
+void NetworkMessage::addNetworkMessage(const NetworkMessage& networkMsg)
+{
+	if (!canAdd(networkMsg.getLength())) {
+		return;
+	}
+
+	addBytes(networkMsg.getBuffer() + INITIAL_BUFFER_POSITION, networkMsg.getLength());
+}
