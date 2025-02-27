@@ -712,6 +712,10 @@ BlockType_t Creature::blockHit(Creature* attacker, CombatType_t combatType, int3
 		if (combatType != COMBAT_HEALING) {
 			attacker->onAttackedCreature(this);
 			attacker->onAttackedCreatureBlockHit(blockType);
+			if (attacker->getMaster() && attacker->getMaster()->getPlayer()) {
+				Player* masterPlayer = attacker->getMaster()->getPlayer();
+				masterPlayer->onAttackedCreature(this);
+			}
 		}
 	}
 
