@@ -18,7 +18,6 @@ enum GlobalEvent_t
 
 	GLOBALEVENT_STARTUP,
 	GLOBALEVENT_SHUTDOWN,
-	GLOBALEVENT_RECORD,
 	GLOBALEVENT_SAVE,
 };
 
@@ -66,7 +65,6 @@ public:
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	bool executeRecord(uint32_t current, uint32_t old);
 	bool executeEvent() const;
 
 	GlobalEvent_t getEventType() const { return eventType; }
