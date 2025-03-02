@@ -872,7 +872,7 @@ uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos
 
 uint16_t AStarNodes::getTileWalkCost(const Creature& creature, const Tile* tile)
 {
-	double cost = 0;
+	uint16_t cost = 0;
 	if (tile->getTopVisibleCreature(&creature)) {
 		// destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
