@@ -12,6 +12,11 @@ end
 local handler = PacketHandler(0xE1)
 
 function handler.onReceive(player)
+	sendCharmData(player)
+	player:sendResourceBalance(RESOURCE_BANK_BALANCE, player:getBankBalance())
+	player:sendResourceBalance(RESOURCE_GOLD_EQUIPPED, player:getMoney())
+	player:sendResourceBalance(RESOURCE_CHARM_POINTS, player:getCharmPoints())
+
 	local bestiaryClasses = Game.getBestiary()
 	local msg = NetworkMessage()
 	msg:addByte(0xD5)
