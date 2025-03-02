@@ -43,6 +43,16 @@ bool XTEA_decrypt(NetworkMessage& msg, const xtea::round_keys& key)
 
 } // namespace
 
+Protocol::~Protocol()
+{
+	const auto zlibEndResult = deflateEnd(&zstream);
+	if (zlibEndResult == Z_DATA_ERROR) {
+		std::cout << "ZLIB discarded pending output or unprocessed input while cleaning up stream state" << std::endl;
+	} else if (zlibEndResult == Z_STREAM_ERROR) {
+		std::cout << "ZLIB encountered an error while cleaning up stream state" << std::endl;
+	}
+}
+
 void Protocol::onSendMessage(const OutputMessage_ptr& msg)
 {
 	if (!rawMessages) {
