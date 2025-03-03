@@ -9,7 +9,7 @@ event.onDropLoot = function(self, corpse)
 	local mType = self:getType()
 	local doCreateLoot = false
 
-	if not player or player:getStamina() > 840 then
+	if not player or player:getStamina() > 840 or not configManager.getBoolean(configKeys.STAMINA_SYSTEM) then
 		doCreateLoot = true
 	end
 
