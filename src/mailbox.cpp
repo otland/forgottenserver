@@ -70,19 +70,23 @@ void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, in
 
 bool Mailbox::sendItem(Item* item) const
 {
-	std::string receiver;
-	if (!getReceiver(item, receiver)) {
+	if (!item) {
 		return false;
 	}
 
-	/**No need to continue if its still empty**/
-	if (receiver.empty()) {
+	std::string receiver;
+	if (!getReceiver(item, receiver) || receiver.empty()) {
 		return false;
 	}
 
 	Player* player = g_game.getPlayerByName(receiver);
 	if (player) {
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox().get(), INDEX_WHEREEVER, item,
+		Container* inbox = player->getInbox().get();
+		if (!inbox) {
+			return false;
+		}
+
+		if (g_game.internalMoveItem(item->getParent(), inbox, INDEX_WHEREEVER, item,
 		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			player->onReceiveMail();
@@ -94,7 +98,12 @@ bool Mailbox::sendItem(Item* item) const
 			return false;
 		}
 
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer.getInbox().get(), INDEX_WHEREEVER, item,
+		Container* tmpInbox = tmpPlayer.getInbox().get();
+		if (!tmpInbox) {
+			return false;
+		}
+
+		if (g_game.internalMoveItem(item->getParent(), tmpInbox, INDEX_WHEREEVER, item,
 		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
 			IOLoginData::savePlayer(&tmpPlayer);
