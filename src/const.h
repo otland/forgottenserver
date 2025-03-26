@@ -599,6 +599,7 @@ enum item_t : uint16_t
 	ITEM_AMULETOFLOSS = 2173,
 
 	ITEM_DOCUMENT_RO = 1968, // read-only
+	ITEM_SUPPLY_STASH = 31406, //read-only
 };
 
 enum ResourceTypes_t : uint8_t
@@ -721,6 +722,13 @@ enum CreatureIcon_t : uint8_t
 
 	CREATURE_ICON_FIRST = CREATURE_ICON_CROSS_WHITE,
 	CREATURE_ICON_LAST = CREATURE_ICON_CROSS_RED
+};
+
+enum Supply_Stash_Actions_t : uint8_t {
+	SUPPLY_STASH_ACTION_STOW_ITEM = 0,
+	SUPPLY_STASH_ACTION_STOW_CONTAINER = 1,
+	SUPPLY_STASH_ACTION_STOW_STACK = 2,
+	SUPPLY_STASH_ACTION_WITHDRAW = 3
 };
 
 static constexpr int32_t CHANNEL_GUILD = 0x00;

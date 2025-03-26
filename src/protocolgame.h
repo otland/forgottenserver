@@ -270,6 +270,8 @@ private:
 	// inventory
 	void sendInventoryItem(slots_t slot, const Item* item);
 	void sendItems();
+	void sendOpenStash();
+	void parseStashWithdraw(NetworkMessage &msg);
 
 	// messages
 	void sendModalWindow(const ModalWindow& modalWindow);

@@ -6,6 +6,7 @@
 #include "tools.h"
 
 #include "configmanager.h"
+#include "item.h"
 
 #include <chrono>
 #include <fmt/chrono.h>
@@ -133,6 +134,20 @@ std::string generateToken(std::string_view key, uint64_t counter, size_t length 
 	auto token = std::to_string(p & 0x7fffffff);
 	return token.substr(token.size() - length);
 }
+
+uint16_t getStashSize(const StashItemList& itemList) {
+    uint16_t size = 0;
+    for (const auto& item : itemList) {
+        // Assume a default stack size of 1 for non-stackable items
+        uint32_t stackSize = Item::items[item.first].stackable ? 100 : 1; // Replace 100 with actual default stack size
+        // Access the item count directly (item.second)
+        uint32_t itemCount = item.second;
+        // Calculate the number of stacks needed and accumulate the total size
+        size += (itemCount + stackSize - 1) / stackSize;  // Rounds up to the nearest stack
+    }
+    return size;
+}
+
 
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 {
