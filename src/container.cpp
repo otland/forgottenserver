@@ -78,7 +78,19 @@ std::string Container::getName(bool addArticle /* = false*/) const
 	return getNameDescription(it, this, -1, addArticle);
 }
 
-bool Container::hasParent() const { return getID() != ITEM_BROWSEFIELD && !dynamic_cast<const Player*>(getParent()); }
+bool Container::hasContainerParent() const
+{
+	if (getID() == ITEM_BROWSEFIELD) {
+		return false;
+	}
+
+	if (hasParent()) {
+		if (auto creature = getParent()->getCreature()) {
+			return !creature->getPlayer();
+		}
+	}
+	return true;
+}
 
 void Container::addItem(Item* item)
 {
@@ -614,7 +626,7 @@ size_t Container::getFirstIndex() const { return 0; }
 
 size_t Container::getLastIndex() const { return size(); }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/, bool) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {
@@ -678,6 +690,15 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	} else {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
+}
+
+void Container::internalRemoveThing(Thing* thing)
+{
+	auto cit = std::find(itemlist.begin(), itemlist.end(), thing);
+	if (cit == itemlist.end()) {
+		return;
+	}
+	itemlist.erase(cit);
 }
 
 void Container::internalAddThing(Thing* thing) { internalAddThing(0, thing); }

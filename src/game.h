@@ -82,7 +82,7 @@ public:
 	void forceRemoveCondition(uint32_t creatureId, ConditionType_t type);
 
 	bool loadMainMap(const std::string& filename);
-	void loadMap(const std::string& path);
+	void loadMap(const std::string& path, bool isCalledByLua = false);
 
 	/**
 	 * Get the map size - info purpose only
@@ -392,9 +392,9 @@ public:
 	void playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16_t counter, uint16_t amount);
 
 	void parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const std::string& buffer);
-	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg);
+	void parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage_ptr msg);
 
-	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player);
+	std::vector<Item*> getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player);
 
 	void cleanup();
 	void shutdown();

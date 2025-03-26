@@ -190,14 +190,22 @@ public:
 
 	// follow functions
 	Creature* getFollowCreature() const { return followCreature; }
-	virtual bool setFollowCreature(Creature* creature);
+	virtual void setFollowCreature(Creature* creature);
+	virtual void removeFollowCreature();
+	virtual bool canFollowCreature(Creature* creature);
+	virtual bool isFollowingCreature(Creature* creature) { return followCreature == creature; }
 
 	// follow events
-	virtual void onFollowCreature(const Creature*) {}
+	virtual void onFollowCreature(const Creature*);
+	virtual void onUnfollowCreature();
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
-	virtual bool setAttackedCreature(Creature* creature);
+	virtual void setAttackedCreature(Creature* creature);
+	virtual void removeAttackedCreature();
+	virtual bool canAttackCreature(Creature* creature);
+	virtual bool isAttackingCreature(Creature* creature) { return attackedCreature == creature; }
+
 	virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                             bool ignoreResistances = false);

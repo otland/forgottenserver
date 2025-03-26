@@ -408,8 +408,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 			int32_t pid = pair.second;
 			if (pid >= 0 && pid < 100) {
-				DepotChest* depotChest = player->getDepotChest(pid, true);
-				if (depotChest) {
+				if (const auto& depotChest = player->getDepotChest(pid, true)) {
 					depotChest->internalAddThing(item);
 				}
 			} else {

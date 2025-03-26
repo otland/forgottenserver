@@ -51,8 +51,7 @@ std::string decodeSecret(std::string_view secret)
 
 void ProtocolLogin::disconnectClient(const std::string& message, uint16_t version)
 {
-	auto output = OutputMessagePool::getOutputMessage();
-
+	auto output = tfs::net::make_output_message();
 	output->addByte(version >= 1076 ? 0x0B : 0x0A);
 	output->addString(message);
 	send(output);
@@ -94,7 +93,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	uint32_t ticks = duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count() /
 	                 AUTHENTICATOR_PERIOD;
 
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 	if (!key.empty()) {
 		if (token.empty() || !(token == generateToken(key, ticks) || token == generateToken(key, ticks - 1) ||
 		                       token == generateToken(key, ticks + 1))) {
@@ -116,9 +115,10 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	output->addByte(0x28);
 	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
-	if (!db.executeQuery(fmt::format(
-	        "INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	        db.escapeBlob(sessionKey.data(), sessionKey.size()), id, getConnection()->getIP().to_string()))) {
+	if (!db.executeQuery(
+	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
+	                    db.escapeString(getConnection()->getIP().to_string())))) {
 		disconnectClient("Failed to create session.\nPlease try again later.", version);
 		return;
 	}

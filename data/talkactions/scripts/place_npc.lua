@@ -8,9 +8,9 @@ function onSay(player, words, param)
 	end
 
 	local position = player:getPosition()
-	local npc = NpcType(param)
+	local npc = Game.createNpc(param, position)
 	if npc then
-		Game.createNpc(param, position)
+		npc:setMasterPos(position)
 		position:sendMagicEffect(CONST_ME_MAGIC_RED)
 	else
 		player:sendCancelMessage("There is not enough room.")
