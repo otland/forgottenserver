@@ -921,6 +921,10 @@ void Creature::onAttacked()
 
 void Creature::onAttackedCreatureDrainHealth(Creature* target, int32_t points)
 {
+	if (!target || points <= 0) {
+		return;
+	}
+
 	target->addDamagePoints(this, points);
 }
 
