@@ -56,6 +56,10 @@ Container::~Container()
 Item* Container::clone() const
 {
 	Container* clone = static_cast<Container*>(Item::clone());
+	if (!clone) {
+		return nullptr;
+	}
+
 	for (Item* item : itemlist) {
 		clone->addItem(item->clone());
 	}
@@ -94,6 +98,10 @@ bool Container::hasContainerParent() const
 
 void Container::addItem(Item* item)
 {
+	if (!item) {
+		return;
+	}
+
 	itemlist.push_back(item);
 	item->setParent(this);
 }
@@ -544,6 +552,10 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Container::replaceThing(uint32_t index, Thing* thing)
 {
+	if (!thing) {
+		return;
+	}
+
 	Item* item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -572,6 +584,10 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 
 void Container::removeThing(Thing* thing, uint32_t count)
 {
+	if (!thing) {
+		return;
+	}
+
 	Item* item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
