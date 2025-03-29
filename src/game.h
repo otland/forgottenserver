@@ -208,7 +208,7 @@ public:
 	size_t getPlayersOnline() const { return players.size(); }
 	size_t getMonstersOnline() const { return monsters.size(); }
 	size_t getNpcsOnline() const { return npcs.size(); }
-	uint32_t getPlayersRecord() const { return playersRecord; }
+	uint32_t getPlayersRecord();
 
 	ReturnValue internalMoveCreature(Creature* creature, Direction direction, uint32_t flags = 0);
 	ReturnValue internalMoveCreature(Creature& creature, Tile& toTile, uint32_t flags = 0);
@@ -289,9 +289,6 @@ public:
 	 */
 	bool internalCreatureSay(Creature* creature, SpeakClasses type, const std::string& text, bool ghostMode,
 	                         SpectatorVec* spectatorsPtr = nullptr, const Position* pos = nullptr, bool echo = false);
-
-	void loadPlayersRecord();
-	void checkPlayersRecord();
 
 	void sendGuildMotd(uint32_t playerId);
 	void kickPlayer(uint32_t playerId, bool displayEffect);
@@ -502,6 +499,8 @@ private:
 	void checkDecay();
 	void internalDecayItem(Item* item);
 
+	LuaScriptInterface scriptInterface;
+
 	std::unordered_map<uint32_t, Player*> players;
 	std::unordered_map<std::string, Player*> mappedPlayerNames;
 	std::unordered_map<uint32_t, Player*> mappedPlayerGuids;
@@ -534,9 +533,6 @@ private:
 	WorldType_t worldType = WORLD_TYPE_PVP;
 
 	ServiceManager* serviceManager = nullptr;
-
-	void updatePlayersRecord() const;
-	uint32_t playersRecord = 0;
 };
 
 #endif // FS_GAME_H

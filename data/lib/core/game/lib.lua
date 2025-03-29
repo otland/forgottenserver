@@ -1,5 +1,6 @@
 dofile('data/lib/core/game/account_storage.lua')
 dofile('data/lib/core/game/global_storage.lua')
+dofile('data/lib/core/game/players_record.lua')
 dofile('data/lib/core/game/quest.lua')
 dofile('data/lib/core/game/world_light.lua')
 dofile('data/lib/core/game/world_time.lua')
