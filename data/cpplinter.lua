@@ -3,15 +3,45 @@
 ---@alias table.create fun(arrayLength: number, keyLength: number): table
 ---@alias table.pack fun(...): table
 
+---@class UserClientVersion
+---@field version uint16 The version number of the client
+---@field os OperatingSystem The operating system of the user 
+
+---@class SpellsTable
+---@field name string The name of the spell
+---@field words string The words used to cast the spell
+---@field level uint32 The level required to cast the spell
+---@field mlevel uint32 The magic level required to cast the spell
+---@field mana uint32 The mana cost of the spell
+---@field manaPercent uint32 The mana percentage required to cast the spell
+---@field params boolean Whether the spell has parameters or not
+
+---@class MountInfoTable
+---@field name string The name of the mount
+---@field speed int32 The speed of the mount
+---@field clientId uint16 The client ID of the mount
+---@field id uint16 The ID of the mount
+---@field premium boolean Whether the mount is requires a premium account or not
+
+---@class GameClientVersion
+---@field min number -- Mininum version of the client allowed (Current 1310)
+---@field max number -- Maximum version of the client allowed (Current 1311)
+---@field string string -- String representation of the version (Current "13.10")
+
 ---@class rawgetmetatable
 ---@field __index fun(self: table, key: any): any
 rawgetmetatable = {}
 
 ---@class bit
+---@source ../src/luascript.cpp:4117
 ---@field band fun(a: number, b: number): number
+---@source ../src/luascript.cpp:4117
 ---@field bor fun(a: number, b: number): number
+---@source ../src/luascript.cpp:4117
 ---@field bxor fun(a: number, b: number): number
+---@source ../src/luascript.cpp:4117
 ---@field lshift fun(a: number, b: number): number
+---@source ../src/luascript.cpp:4117
 ---@field rshift fun(a: number, b: number): number
 bit = {}
 
@@ -20,95 +50,162 @@ bit = {}
 
 ---@class DBInsert
 ---@field __gc fun(self: DBInsert)
+---@source ../src/luascript.cpp:4463
 ---@field addRow fun(self: DBInsert, row: string): boolean|nil
+---@source ../src/luascript.cpp:4475
 ---@field execute fun(self: DBInsert): boolean|nil
 DBInsert = {}
 
 ---@class DBTransaction
 ---@field __eq fun(self: DBTransaction, other: DBTransaction): boolean
 ---@field __gc fun(self: DBTransaction)
+---@source ../src/luascript.cpp:4508
 ---@field begin fun(self: DBTransaction): boolean|nil
+---@source ../src/luascript.cpp:4518
 ---@field commit fun(self: DBTransaction): boolean|nil
 ---@field rollback fun(self: DBTransaction)
 DBTransaction = {}
 
 ---@class db
+---@source ../src/luascript.cpp:4199
 ---@field query fun(query: string): any
----@field storeQuery fun(query: string): any
----@field escapeString fun(value: string): string
+---@source ../src/luascript.cpp:4206
 ---@field asyncQuery fun(query: string): boolean
+---@source ../src/luascript.cpp:4237
+---@field storeQuery fun(query: string): any
+---@source ../src/luascript.cpp:4248
+---@field asyncStoreQuery fun(query: string): boolean
+---@source ../src/luascript.cpp:4283
+---@field escapeString fun(value: string): string -- Escapes a string for query
+---@source ../src/luascript.cpp:4290
+---@field escapeBlob fun(value: string, length: uint32): string -- Escapes a binary stream for query
+---@source ../src/luascript.cpp:4298
+---@field lastInsertId fun(): uint64 -- Returns the last inserted row's id
 db = {}
 
 ---@class result
----@field free fun(resultId: number)
----@field next fun(resultId: number): number
----@field getNumber fun(resultId: number, column: string): number
----@field getString fun(resultId: number, column: number): string
----@field getBoolean fun(resultId: number, column: number): boolean
----@field getStream fun(resultId: number, column: number): string
+---@source ../src/luascript.cpp:4369
+---@field free fun(resultId: uint32)
+---@source ../src/luascript.cpp:4357
+---@field next fun(resultId: uint32): number
+---@source ../src/luascript.cpp:4317
+---@field getNumber fun(resultId: uint32, column: string): number
+---@source ../src/luascript.cpp:4330
+---@field getString fun(resultId: uint32, column: string): string
+---@field getBoolean fun(resultId: uint32, column: string): boolean -- No source in luascript?
+---@source ../src/luascript.cpp:4343
+---@field getStream fun(resultId: uint32, column: string): string
 result = {}
 
 ---@class configManager
+---@source ../src/luascript.cpp:4182
 ---@field getBoolean fun(key: string): boolean
+---@source ../src/luascript.cpp:4176
 ---@field getNumber fun(key: string): number
+---@source ../src/luascript.cpp:4170
 ---@field getString fun(key: string): string
----@field setBoolean fun(key: string, value: boolean): boolean
----@field setNumber fun(key: string, value: number): boolean
----@field setString fun(key: string, value: string): boolean
----@field remove fun(key: string): boolean
----@field getKeys fun(): table
 configManager = {}
+-- These functions do not exist in luascript.cpp
+-- -@field setBoolean fun(key: string, value: boolean): boolean
+-- -@field setNumber fun(key: string, value: number): boolean
+-- -@field setString fun(key: string, value: string): boolean
+-- -@field remove fun(key: string): boolean
+-- -@field getKeys fun(): table
+
 
 ---@class Game
----@field getSpectators fun(position: Position, multifloor?: boolean, onlyPlayers?: boolean, minRangeX?: number, minRangeY?: number, maxRangeX?: number, maxRangeY?: number): table
----@field getPlayers fun(): table
----@field getNpcs fun(): table
----@field getMonsters fun(): table
----@field loadMap fun(path: string): boolean
----@field getExperienceStage fun(level: number): number
----@field getExperienceForLevel fun(level: number): number
+---@source ../src/luascript.cpp:4541
+---@field getSpectators fun(position: Position, multifloor?: boolean, onlyPlayers?: boolean, minRangeX?: int32, minRangeY?: int32, maxRangeX?: int32, maxRangeY?: int32): table<number, Creature> -- Returns a table of all creatures (spectators) in a defined range. Recommended whenever possible not define a min/max range, as it will default to maxViewPortX/maxViewPortY which is cached
+---@source ../src/luascript.cpp:4567
+---@field getPlayers fun(): table<number, Player> 
+---@source ../src/luascript.cpp:4581
+---@field getNpcs fun(): table<number, Npc>
+---@source ../src/luascript.cpp:4595
+---@field getMonsters fun(): table<number, Monster>
+---@source ../src/luascript.cpp:4609
+---@field loadMap fun(path: string)
+---@source ../src/luascript.cpp:4624
+---@field getExperienceStage fun(level: uint32): number
+---@source ../src/luascript.cpp:4632
+---@field getExperienceForLevel fun(level: uint32): uint64
+---@source ../src/luascript.cpp:4644
 ---@field getMonsterCount fun(): number
+---@source ../src/luascript.cpp:4651
 ---@field getPlayerCount fun(): number
+---@source ../src/luascript.cpp:4658
 ---@field getNpcCount fun(): number
----@field getMonsterTypes fun(): table
----@field getBestiary fun(): table
----@field getCurrencyItems fun(): table
----@field getItemTypeByClientId fun(clientId: number): ItemType
----@field getMountIdByLookType fun(lookType: number): number
----@field getTowns fun(): table
----@field getHouses fun(): table
----@field getOutfits fun(sex: number): table
----@field getMounts fun(): table
----@field getVocations fun(): table
----@field getGameState fun(): string
----@field setGameState fun(state: string): boolean
----@field getWorldType fun(): string
----@field setWorldType fun(type: string): boolean
----@field getItemAttributeByName fun(attribute: string): any
----@field getReturnMessage fun(value: number): string
----@field createItem fun(itemId: number, count: number, subtype: number|nil): Item
----@field createContainer fun(containerId: number, size: number): Container
----@field createMonster fun(name: string, position: Position, extended?: boolean, force?: boolean, magicEffect?: MagicEffect_t): Monster
----@field createNpc fun(name: string, position: Position, extended?: boolean, force?: boolean, magicEffect?: MagicEffect_t): Npc
----@field createTile fun(position: Position): Tile
+---@source ../src/luascript.cpp:4665
+---@field getMonsterTypes fun(): table<number, MonsterType> -- Table of all monster types
+---@source ../src/luascript.cpp:4679
+---@field getBestiary fun(): table<string, table<number, MonsterType>> -- Table of all monsters in the bestiary. Sorted by {className = {index = monsterType, ...}, ...}
+---@source ../src/luascript.cpp:4703
+---@field getCurrencyItems fun(): table<number, ItemType>
+---@source ../src/luascript.cpp:4719
+---@field getItemTypeByClientId fun(clientId: uint16): ItemType
+---@source ../src/luascript.cpp:4734
+---@field getMountIdByLookType fun(lookType: uint16): number
+---@source ../src/luascript.cpp:4750
+---@field getTowns fun(): table<number, Town>
+---@source ../src/luascript.cpp:4764
+---@field getHouses fun(): table<number, House>
+---@source ../src/luascript.cpp:4779
+---@field getOutfits fun(sex: PlayerSexes): table<number, Outfit>
+---@source ../src/luascript.cpp:4805
+---@field getMounts fun(): table<number, MountInfoTable>
+---@source ../src/luascript.cpp:4827
+---@field getVocations fun(): table<number, Vocation>
+---@source ../src/luascript.cpp:4843
+---@field getGameState fun(): GameStates
+---@source ../src/luascript.cpp:4850
+---@field setGameState fun(state: GameStates): boolean -- Will always return true
+---@source ../src/luascript.cpp:4859
+---@field getWorldType fun(): WorldTypes
+---@source ../src/luascript.cpp:4866
+---@field setWorldType fun(type: WorldTypes): boolean -- Will always return true
+---@source ../src/luascript.cpp:4875
+---@field getReturnMessage fun(value: ReturnValues): string
+---@source ../src/luascript.cpp:4883
+---@field getItemAttributeByName fun(attribute: string): ItemAttributes
+---@source ../src/luascript.cpp:4890
+---@field createItem fun(itemInfo: uint16|string, count?: uint16, position?: Position): Item
+---@source ../src/luascript.cpp:4936
+---@field createContainer fun(containerInfo: uint16|string, size: number, position?: Position): Container
+---@source ../src/luascript.cpp:4977
+---@field createMonster fun(name: string, position: Position, extended?: boolean, force?: boolean, magicEffect?: MagicEffectConsts): Monster
+---@source ../src/luascript.cpp:5005
+---@field createNpc fun(name: string, position: Position, extended?: boolean, force?: boolean, magicEffect?: MagicEffectConsts): Npc
+---@source ../src/luascript.cpp:5028
+---@field createTile fun(position: Position, isDynamic?: boolean): Tile -- Position can either be given as three params x, y, z or as a Position, Position(x,y,z) 
+---@source ../src/luascript.cpp:5060
 ---@field createMonsterType fun(name: string): MonsterType
+---@source ../src/luascript.cpp:5097
 ---@field startEvent fun(eventName: string): boolean
----@field getClientVersion fun(): string
+---@source ../src/luascript.cpp:5111
+---@field getClientVersion fun(): GameClientVersion
+---@source ../src/luascript.cpp:5121
 ---@field reload fun(reloadType: number): boolean
 Game = {}
 
 ---@class Variant
----@field create fun(): Variant
----@field getNumber fun(self: Variant): number
+---@source ../src/luascript.cpp:5138
+---@field create fun(variantInfo: uint32|Thing|string|Position): Variant
+---@source ../src/luascript.cpp:5157
+---@field getNumber fun(self: Variant): uint32
+---@source ../src/luascript.cpp:5169
 ---@field getString fun(self: Variant): string
+---@source ../src/luascript.cpp:5181
 ---@field getPosition fun(self: Variant): Position
 Variant = {}
 
 ---@class Position
----@field create fun(): Position
----@field isSightClear fun(self: Position, other: Position): boolean
----@field sendMagicEffect fun(self: Position, effectType: number, creature?: Creature): boolean
----@field sendDistanceEffect fun(self: Position, target: Position, effectType: number): boolean
+---@source ../src/luascript.cpp:5196
+---@field create fun(positionX: uint16, positionY: uint16, positionZ: uint8, stackPos?: uint32): Position -- Can be passed x, y, z, stackPos, or another Position
+---@source ../src/luascript.cpp:5220
+---@field isSightClear fun(self: Position, positionEx: Position, sameFloor?: boolean): boolean
+---@source ../src/luascript.cpp:5230
+---@field sendMagicEffect fun(self: Position, effectType: MagicEffectConsts, creature?: Creature): boolean
+---@source ../src/luascript.cpp:5258
+---@field sendDistanceEffect fun(self: Position, targetPos: Position, effectType: MagicEffectConsts, player?: Player): boolean
 Position = {}
 
 ---@class Tile
@@ -141,7 +238,7 @@ Position = {}
 ---@field hasProperty fun(self: Tile, property: number): boolean
 ---@field hasFlag fun(self: Tile, flag: number): boolean
 ---@field queryAdd fun(self: Tile, thing: Creature|Item, index: number): boolean
----@field addItem fun(self: Tile, item: Item): boolean
+---@field addItem fun(self: Tile, item: Item, countOrSubtype?: number, flags?: number): boolean
 ---@field addItemEx fun(self: Tile, item: Item, index: number): boolean
 ---@field getHouse fun(self: Tile): House
 Tile = {}
@@ -341,184 +438,358 @@ Creature = {}
 ---@class Player : Creature
 ---@field create fun(): Player
 ---@field __eq fun(self: Player, other: Player): boolean
+---@source ../src/luascript.cpp:8948
 ---@field isPlayer fun(self: Player): boolean
----@field getGuid fun(self: Player): number
----@field getIp fun(self: Player): number
----@field getAccountId fun(self: Player): number
----@field getLastLoginSaved fun(self: Player): number
----@field getLastLogout fun(self: Player): number
----@field getAccountType fun(self: Player): number
----@field setAccountType fun(self: Player, accountType: number)
----@field getCapacity fun(self: Player): number
----@field setCapacity fun(self: Player, capacity: number)
----@field getFreeCapacity fun(self: Player): number
----@field getDepotChest fun(self: Player, depotId: number, autoCreate?: boolean): Item
+---@source ../src/luascript.cpp:8955
+---@field getGuid fun(self: Player): uint32 -- Unique identifier for the player, used in the database
+---@source ../src/luascript.cpp:8967
+---@field getIp fun(self: Player): string -- IP address of the player as a string
+---@source ../src/luascript.cpp:8979
+---@field getAccountId fun(self: Player): uint32 -- Account ID of the player, used in the database
+---@source ../src/luascript.cpp:8991
+---@field getLastLoginSaved fun(self: Player): number -- Returns timestamp of the last login saved in the database
+---@source ../src/luascript.cpp:9003
+---@field getLastLogout fun(self: Player): number -- Returns timestamp of the last logout saved in the database
+---@source ../src/luascript.cpp:9015
+---@field getAccountType fun(self: Player): AccountTypes
+---@source ../src/luascript.cpp:9027
+---@field setAccountType fun(self: Player, accountType: AccountTypes)
+---@source ../src/luascript.cpp:9041
+---@field getCapacity fun(self: Player): uint32
+---@source ../src/luascript.cpp:9053
+---@field setCapacity fun(self: Player, capacity: uint32)
+---@source ../src/luascript.cpp:9067
+---@field getFreeCapacity fun(self: Player): uint32
+---@source ../src/luascript.cpp:9079
+---@field getDepotChest fun(self: Player, depotId: uint32, autoCreate?: boolean): Item
+---@source ../src/luascript.cpp:9100
 ---@field getInbox fun(self: Player): Item
----@field getSkullTime fun(self: Player): number
----@field setSkullTime fun(self: Player, time: number)
----@field getDeathPenalty fun(self: Player): number
----@field getExperience fun(self: Player): number
----@field addExperience fun(self: Player, amount: number)
----@field removeExperience fun(self: Player, amount: number)
----@field getLevel fun(self: Player): number
----@field getLevelPercent fun(self: Player): number
----@field getMagicLevel fun(self: Player): number
----@field getMagicLevelPercent fun(self: Player): number
----@field getBaseMagicLevel fun(self: Player): number
----@field getMana fun(self: Player): number
----@field addMana fun(self: Player, amount: number)
----@field getMaxMana fun(self: Player): number
----@field setMaxMana fun(self: Player, maxMana: number)
----@field setManaShieldBar fun(self: Player, visible: boolean)
----@field getManaSpent fun(self: Player): number
----@field addManaSpent fun(self: Player, amount: number)
----@field removeManaSpent fun(self: Player, amount: number)
----@field getBaseMaxHealth fun(self: Player): number
----@field getBaseMaxMana fun(self: Player): number
----@field getSkillLevel fun(self: Player, skill: number): number
----@field getEffectiveSkillLevel fun(self: Player, skill: number): number
----@field getSkillPercent fun(self: Player, skill: number): number
----@field getSkillTries fun(self: Player, skill: number): number
----@field addSkillTries fun(self: Player, skill: number, amount: number)
----@field removeSkillTries fun(self: Player, skill: number, amount: number, notify?: boolean)
----@field getSpecialSkill fun(self: Player, skill: number): number
----@field addSpecialSkill fun(self: Player, skill: number, amount: number)
----@field addOfflineTrainingTime fun(self: Player, time: number)
----@field getOfflineTrainingTime fun(self: Player): number
----@field removeOfflineTrainingTime fun(self: Player, time: number)
----@field addOfflineTrainingTries fun(self: Player, skill: number, amount: number)
----@field getOfflineTrainingSkill fun(self: Player): number
----@field setOfflineTrainingSkill fun(self: Player, skill: number)
----@field getItemCount fun(self: Player, itemId: number): number
----@field getItemById fun(self: Player, itemId: number, subType?: number): Item
+---@source ../src/luascript.cpp:9119
+---@field getSkullTime fun(self: Player): int64
+---@source ../src/luascript.cpp:9131
+---@field setSkullTime fun(self: Player, time: int64)
+---@source ../src/luascript.cpp:9144
+---@field getDeathPenalty fun(self: Player): double
+---@source ../src/luascript.cpp:9156
+---@field getExperience fun(self: Player): uint64
+---@source ../src/luascript.cpp:9168
+---@field addExperience fun(self: Player, amount: uint64): boolean? -- Will return true if player, nil if there is no player 
+---@source ../src/luascript.cpp:9183
+---@field removeExperience fun(self: Player, amount: uint64): boolean? --- Will return true if player, nil if there is no player
+---@source ../src/luascript.cpp:9198
+---@field getLevel fun(self: Player): uint32
+---@source ../src/luascript.cpp:9210
+---@field getLevelPercent fun(self: Player): uint8
+---@source ../src/luascript.cpp:9222
+---@field getMagicLevel fun(self: Player): uint32
+---@source ../src/luascript.cpp:9234
+---@field getMagicLevelPercent fun(self: Player): uint16
+---@source ../src/luascript.cpp:9246
+---@field getBaseMagicLevel fun(self: Player): uint32
+---@source ../src/luascript.cpp:9258
+---@field getMana fun(self: Player): uint32
+---@source ../src/luascript.cpp:9270
+---@field addMana fun(self: Player, amount: int32, animationOnLoss?: boolean)
+---@source ../src/luascript.cpp:9293
+---@field getMaxMana fun(self: Player): uint32
+---@source ../src/luascript.cpp:9305
+---@field setMaxMana fun(self: Player, maxMana: int32)
+---@source ../src/luascript.cpp:9320
+---@field setManaShieldBar fun(self: Player, capacity: uint16, value: uint16) -- Capacity is the "max mana", value is the current mana
+---@source ../src/luascript.cpp:9335
+---@field getManaSpent fun(self: Player): uint64
+---@source ../src/luascript.cpp:9347
+---@field addManaSpent fun(self: Player, amount: uint64)
+---@source ../src/luascript.cpp:9360
+---@field removeManaSpent fun(self: Player, amount: uint64, notify?: boolean) -- Notify is set to true by default
+---@source ../src/luascript.cpp:9373
+---@field getBaseMaxHealth fun(self: Player): int32
+---@source ../src/luascript.cpp:9385
+---@field getBaseMaxMana fun(self: Player): uint32
+---@source ../src/luascript.cpp:9397
+---@field getSkillLevel fun(self: Player, skill: SkillTypes): uint8
+---@source ../src/luascript.cpp:9410
+---@field getEffectiveSkillLevel fun(self: Player, skill: SkillTypes): uint16
+---@source ../src/luascript.cpp:9423
+---@field getSkillPercent fun(self: Player, skill: SkillTypes): uint16
+---@source ../src/luascript.cpp:9436
+---@field getSkillTries fun(self: Player, skill: SkillTypes): uint64
+---@source ../src/luascript.cpp:9449
+---@field addSkillTries fun(self: Player, skill: SkillTypes, amount: uint64)
+---@source ../src/luascript.cpp:9464
+---@field removeSkillTries fun(self: Player, skill: SkillTypes, amount: uint64, notify?: boolean) -- Notify is set to true by default
+---@source ../src/luascript.cpp:9479
+---@field getSpecialSkill fun(self: Player, skill: SpecialSkills): uint16 --! Why is this uint16. getSpecialSkill returns uint16, however varSpecialSkills is a int32
+---@source ../src/luascript.cpp:9492
+---@field addSpecialSkill fun(self: Player, skill: SpecialSkills, amount: int32)
+---@source ../src/luascript.cpp:9513
+---@field addOfflineTrainingTime fun(self: Player, time: int32)
+---@source ../src/luascript.cpp:9528
+---@field getOfflineTrainingTime fun(self: Player): int32
+---@source ../src/luascript.cpp:9540
+---@field removeOfflineTrainingTime fun(self: Player, time: int32)
+---@source ../src/luascript.cpp:9555
+---@field addOfflineTrainingTries fun(self: Player, skill: SkillTypes, amount: uint64): boolean? -- Returns nil if no player, true if player had offline training tries added, false if not
+---@source ../src/luascript.cpp:9569
+---@field getOfflineTrainingSkill fun(self: Player): int32
+---@source ../src/luascript.cpp:9581
+---@field setOfflineTrainingSkill fun(self: Player, skill: SkillTypes)
+---@source ../src/luascript.cpp:9595
+---@field getItemCount fun(self: Player, itemId: uint16, subType?: int32): uint32
+---@source ../src/luascript.cpp:9620
+---@field getItemById fun(self: Player, itemId: uint16, deepSearch?:boolean, subType?: int32): Item
+---@source ../src/luascript.cpp:9652
 ---@field getVocation fun(self: Player): Vocation
----@field setVocation fun(self: Player, vocationId: number)
----@field getSex fun(self: Player): number
----@field setSex fun(self: Player, sexId: number)
----@field getTown fun(self: Player): number
----@field setTown fun(self: Player, townId: number)
+---@source ../src/luascript.cpp:9665
+---@field setVocation fun(self: Player, vocationId: uint16|string|Vocation): boolean
+---@source ../src/luascript.cpp:9695
+---@field getSex fun(self: Player): PlayerSexes
+---@source ../src/luascript.cpp:9707
+---@field setSex fun(self: Player, sexId: PlayerSexes)
+---@source ../src/luascript.cpp:9721
+---@field getTown fun(self: Player): Town
+---@source ../src/luascript.cpp:9733
+---@field setTown fun(self: Player, townId: uint32)
+---@source ../src/luascript.cpp:9757
 ---@field getGuild fun(self: Player): Guild
+---@source ../src/luascript.cpp:9775
 ---@field setGuild fun(self: Player, guild: Guild)
----@field getGuildLevel fun(self: Player): number
----@field setGuildLevel fun(self: Player, level: number)
+---@source ../src/luascript.cpp:9789
+---@field getGuildLevel fun(self: Player): uint8 -- GuildLevel is the rank of the player in the guild
+---@source ../src/luascript.cpp:9801
+---@field setGuildLevel fun(self: Player, level: uint8) -- GuildLevel is the rank of the player in the guild
+---@source ../src/luascript.cpp:9826
 ---@field getGuildNick fun(self: Player): string
+---@source ../src/luascript.cpp:9838
 ---@field setGuildNick fun(self: Player, nick: string)
+---@source ../src/luascript.cpp:9852
 ---@field getGroup fun(self: Player): Group
----@field setGroup fun(self: Player, groupId: number)
----@field getStamina fun(self: Player): number
----@field setStamina fun(self: Player, stamina: number)
----@field getSoul fun(self: Player): number
----@field addSoul fun(self: Player, amount: number)
----@field getMaxSoul fun(self: Player): number
----@field getBankBalance fun(self: Player): number
----@field setBankBalance fun(self: Player, balance: number)
----@field addItem fun(self: Player, itemId: number, count?: number): Item
----@field addItemEx fun(self: Player, item: Item, copyItem?: boolean): boolean
----@field removeItem fun(self: Player, itemId: number, count?: number, subtype?: number): boolean
+---@source ../src/luascript.cpp:9865
+---@field setGroup fun(self: Player, groupId: uint16)
+---@source ../src/luascript.cpp:9884
+---@field getStamina fun(self: Player): uint16
+---@source ../src/luascript.cpp:9896
+---@field setStamina fun(self: Player, stamina: uint16)
+---@source ../src/luascript.cpp:9911
+---@field getSoul fun(self: Player): uint8
+---@source ../src/luascript.cpp:9923
+---@field addSoul fun(self: Player, amount: int32)
+---@source ../src/luascript.cpp:9937
+---@field getMaxSoul fun(self: Player): uint8
+---@source ../src/luascript.cpp:9949
+---@field getBankBalance fun(self: Player): uint64
+---@source ../src/luascript.cpp:9961
+---@field setBankBalance fun(self: Player, balance: uint64)
+---@source ../src/luascript.cpp:9982
+---@field addItem fun(self: Player, itemId: uint16|string, count?: int32, canDropOnMap?: boolean, subType?: int32, slot?: PlayerEquipmentSlots): Item
+---@source ../src/luascript.cpp:10068
+---@field addItemEx fun(self: Player, item: Item, dropOnMap?: boolean, indexOrSlot?: PlayerEquipmentSlots|int32): boolean -- If dropOnMap is FALSE, index = INDEXWHEREVER unless defined and returns internalPlayerAddItem, if dropOnMap is TRUE, slot = CONST_SLOT_WHEREEVER, and returns internalAddItem
+---@source ../src/luascript.cpp:10109 
+---@field removeItem fun(self: Player, itemId: uint16|string, count?: uint32, subtype?: int32, ignoreEquipped?: boolean): boolean 
+---@source ../src/luascript.cpp:10136
 ---@field sendSupplyUsed fun(self: Player, item: Item)
----@field getMoney fun(self: Player): number
----@field addMoney fun(self: Player, amount: number)
----@field removeMoney fun(self: Player, amount: number)
----@field showTextDialog fun(self: Player, itemId: number, text: string)
----@field sendTextMessage fun(self: Player, messageType: number, message: string, position?: Position|number, primaryValue?: number, primaryColor?: number, secondaryValue?: number, secondaryColor?: number)
----@field sendChannelMessage fun(self: Player, author: string, message: string, type: number, channelId: number)
----@field sendPrivateMessage fun(self: Player, receiver: Player, message: string)
----@field channelSay fun(self: Player, channelId: number, message: string)
----@field openChannel fun(self: Player, channelId: number)
----@field getSlotItem fun(self: Player, slot: number): Item
+---@source ../src/luascript.cpp:10158
+---@field getMoney fun(self: Player): uint64
+---@source ../src/luascript.cpp:10170
+---@field addMoney fun(self: Player, amount: uint64)
+---@source ../src/luascript.cpp:10184
+---@field removeMoney fun(self: Player, amount: uint64)
+---@source ../src/luascript.cpp:10197
+---@field showTextDialog fun(self: Player, itemToShow: uint16|string|Item, text: string, canWrite: boolean, length: int32): boolean?|uint32 -- Returns nil if no player. Returns false if cannot show the window. Push 
+---@source ../src/luascript.cpp:10255
+---@field sendTextMessage fun(self: Player, messageType: MessageTypes, message: string, position?: Position|number, primaryValue?: int32, primaryColor?: TextColors, secondaryValue?: int32, secondaryColor?: TextColors): boolean? -- Returns nil if no player, true if message sent, false if cannot send message (e.g. player is not part of that channel)
+---@source ../src/luascript.cpp:10296
+---@field sendChannelMessage fun(self: Player, author: string, message: string, type: SpeakClasses, channelId: uint16): boolean? -- Returns nil if no player, true if message sent
+---@source ../src/luascript.cpp:10314
+---@field sendPrivateMessage fun(self: Player, receiver: Player, message: string, type?: SpeakClasses)
+---@source ../src/luascript.cpp:10331
+---@field channelSay fun(self: Player, speaker: Creature, type: SpeakClasses, message: string, channelId: uint16)
+---@source ../src/luascript.cpp:10349
+---@field openChannel fun(self: Player, channelId: uint16)
+---@source ../src/luascript.cpp:10377
+---@field getSlotItem fun(self: Player, slot: PlayerEquipmentSlots): Item
+---@source ../src/luascript.cpp:10403
 ---@field getParty fun(self: Player): Party
----@field addOutfit fun(self: Player, outfitId: number)
----@field addOutfitAddon fun(self: Player, outfitId: number, addonId: number)
----@field removeOutfit fun(self: Player, outfitId: number)
----@field removeOutfitAddon fun(self: Player, outfitId: number, addonId: number)
----@field hasOutfit fun(self: Player, outfitId: number, addon?: number): boolean
----@field canWearOutfit fun(self: Player, outfitId: number, addonId?: number): boolean
+---@source ../src/luascript.cpp:10422
+---@field addOutfit fun(self: Player, outfitId: uint16)
+---@source ../src/luascript.cpp:10435
+---@field addOutfitAddon fun(self: Player, outfitId: uint16, addonId: uint8)
+---@source ../src/luascript.cpp:10450
+---@field removeOutfit fun(self: Player, outfitId: uint16)
+---@source ../src/luascript.cpp:10463
+---@field removeOutfitAddon fun(self: Player, outfitId: uint16, addonId: uint8)
+---@source ../src/luascript.cpp:10477
+---@field hasOutfit fun(self: Player, outfitId: uint16, addon?: uint8): boolean
+---@source ../src/luascript.cpp:10491
+---@field canWearOutfit fun(self: Player, outfitId: uint16, addonId?: uint8): boolean
+---@source ../src/luascript.cpp:10505
 ---@field sendOutfitWindow fun(self: Player)
+---@source ../src/luascript.cpp:10518
 ---@field sendEditPodium fun(self: Player, item: Item)
----@field addMount fun(self: Player, mountId: number)
----@field removeMount fun(self: Player, mountId: number)
----@field hasMount fun(self: Player, mountId: number): boolean
+---@source ../src/luascript.cpp:10533
+---@field addMount fun(self: Player, mountId: uint16): boolean? -- Returns nil if no player or no mount, false if player already has mount, true if tamed
+---@source ../src/luascript.cpp:10556
+---@field removeMount fun(self: Player, mountId: uint16): boolean? -- Returns nil if no player or no mount, false if player does not have mount, true if untamed
+---@source ../src/luascript.cpp:10580
+---@field hasMount fun(self: Player, mountId: uint16): boolean
+---@source ../src/luascript.cpp:10604
 ---@field toggleMount fun(self: Player, active: boolean)
+---@source ../src/luascript.cpp:10618
 ---@field getPremiumEndsAt fun(self: Player): number
+---@source ../src/luascript.cpp:10630
 ---@field setPremiumEndsAt fun(self: Player, timestamp: number)
----@field hasBlessing fun(self: Player, blessingId: number): boolean
----@field addBlessing fun(self: Player, blessingId: number)
----@field removeBlessing fun(self: Player, blessingId: number)
----@field canLearnSpell fun(self: Player, spellId: number): boolean
----@field learnSpell fun(self: Player, spellId: number)
----@field forgetSpell fun(self: Player, spellId: number)
----@field hasLearnedSpell fun(self: Player, spellId: number): boolean
----@field sendTutorial fun(self: Player, tutorialId: number)
----@field addMapMark fun(self: Player, position: Position, type: number, description?: string)
+---@source ../src/luascript.cpp:10647
+---@field hasBlessing fun(self: Player, blessingId: uint8): boolean? -- Returns nil if no player, true if player has blessing, false if player does not have blessing
+---@source ../src/luascript.cpp:10660
+---@field addBlessing fun(self: Player, blessingId: uint8): boolean? -- Returns nil if no player, true if player did not have the blessing and it was added, false if player already had the blessing
+---@source ../src/luascript.cpp:10680
+---@field removeBlessing fun(self: Player, blessingId: uint8): boolean? -- Returns nil if no player, true if player had the blessing and it was removed, false if player did not have the blessing
+---@source ../src/luascript.cpp:10700
+---@field canLearnSpell fun(self: Player, spellName: string): boolean? -- Returns nil if no player, true if player can learn the spell, false if player cannot learn the spell
+---@source ../src/luascript.cpp:10734
+---@field learnSpell fun(self: Player, spellName: string): boolean? -- Returns nil if no player, true if player. Does not check if player already had the spell
+---@source ../src/luascript.cpp:10748
+---@field forgetSpell fun(self: Player, spellName: string): boolean? -- Returns nil if no player, true if player. Does not check if player forgot the spell
+---@source ../src/luascript.cpp:10762
+---@field hasLearnedSpell fun(self: Player, spellName: string): boolean -- Retrusn nil if no player, true if player has learned the spell, false if player has not learned the spell
+---@source ../src/luascript.cpp:10775
+---@field sendTutorial fun(self: Player, tutorialId: uint8)
+---@source ../src/luascript.cpp:10789
+---@field addMapMark fun(self: Player, position: Position, type: MapMarks, description?: string)
+---@source ../src/luascript.cpp:10805
 ---@field save fun(self: Player)
+---@source ../src/luascript.cpp:10818
 ---@field popupFYI fun(self: Player, message: string)
+---@source ../src/luascript.cpp:10832
 ---@field isPzLocked fun(self: Player): boolean
----@field getClient fun(self: Player): table
+---@source ../src/luascript.cpp:10844
+---@field getClient fun(self: Player): UserClientVersion -- ClientVersion is a table {version = uint16, os = OperatingSystem}
+---@source ../src/luascript.cpp:10858
 ---@field getHouse fun(self: Player): House
----@field sendHouseWindow fun(self: Player, houseId: number)
----@field setEditHouse fun(self: Player, houseId: number, editMode: boolean)
----@field setGhostMode fun(self: Player, active: boolean)
----@field getContainerId fun(self: Player, index: number): number
----@field getContainerById fun(self: Player, containerId: number): Container
----@field getContainerIndex fun(self: Player, containerId: number): number
----@field getInstantSpells fun(self: Player): table
+---@source ../src/luascript.cpp:10877
+---@field sendHouseWindow fun(self: Player, houseId: uint32, listId: uint32)
+---@source ../src/luascript.cpp:10898
+---@field setEditHouse fun(self: Player, houseId: uint32, listId: uint32)
+---@source ../src/luascript.cpp:10919
+---@field setGhostMode fun(self: Player, enabled: boolean, magicEffect: MagicEffectConsts)
+---@source ../src/luascript.cpp:10983
+---@field getContainerId fun(self: Player, container: Container): int8
+---@source ../src/luascript.cpp:11001
+---@field getContainerById fun(self: Player, containerId: int8): Container
+---@source ../src/luascript.cpp:11020
+---@field getContainerIndex fun(self: Player, containerIndex: uint8): uint16
+---@source ../src/luascript.cpp:11032
+---@field getInstantSpells fun(self: Player): table<number, SpellsTable> -- Spells table has the following information in the table: {name = string, words = string, level = uint32, mlevel = uint32, mana = uint32, manapercent = uint32, params = boolean}
+---@source ../src/luascript.cpp:11068
 ---@field canCast fun(self: Player, spellId: number): boolean
+---@source ../src/luascript.cpp:11081
 ---@field hasChaseMode fun(self: Player): boolean
+---@source ../src/luascript.cpp:11093
 ---@field hasSecureMode fun(self: Player): boolean
----@field getFightMode fun(self: Player): number
+---@source ../src/luascript.cpp:11105
+---@field getFightMode fun(self: Player): FightModes
+---@source ../src/luascript.cpp:11117
 ---@field getStoreInbox fun(self: Player): Container
+---@source ../src/luascript.cpp:11137
 ---@field isNearDepotBox fun(self: Player): boolean
----@field getIdleTime fun(self: Player): number
+---@source ../src/luascript.cpp:11150
+---@field getIdleTime fun(self: Player): int32
+---@source ../src/luascript.cpp:11163
 ---@field resetIdleTime fun(self: Player)
----@field sendCreatureSquare fun(self: Player, creature: Creature, color: number)
----@field getClientExpDisplay fun(self: Player): number
----@field setClientExpDisplay fun(self: Player, display: number)
----@field getClientStaminaBonusDisplay fun(self: Player): number
----@field setClientStaminaBonusDisplay fun(self: Player, display: number)
----@field getClientLowLevelBonusDisplay fun(self: Player): number
----@field setClientLowLevelBonusDisplay fun(self: Player, display: number)
+---@source ../src/luascript.cpp:11177
+---@field sendCreatureSquare fun(self: Player, creature: Creature, color: SquareColours)
+---@source ../src/luascript.cpp:11198
+---@field getClientExpDisplay fun(self: Player): uint16
+---@source ../src/luascript.cpp:11210
+---@field setClientExpDisplay fun(self: Player, display: uint16)
+---@source ../src/luascript.cpp:11224
+---@field getClientStaminaBonusDisplay fun(self: Player): uint16
+---@source ../src/luascript.cpp:11236
+---@field setClientStaminaBonusDisplay fun(self: Player, display: uint16)
+---@source ../src/luascript.cpp:11250
+---@field getClientLowLevelBonusDisplay fun(self: Player): uint16
+---@source ../src/luascript.cpp:11262
+---@field setClientLowLevelBonusDisplay fun(self: Player, display: uint16)
+---@source ../src/luascript.cpp:11276
+---@field sendResourceBalance fun(self: Player, resource: ResourceTypes, amount: uint64): boolean?
+---@source ../src/luascript.cpp:11291
+---@field sendEnterMarket fun(self: Player): boolean?
 Player = {}
 
 ---@class Monster : Creature
----@field create fun(): Monster
+---@source ../src/luascript.cpp:11305
+---@field create fun(monsterInfo: uint32|Monster): Monster -- Monster info can either be the ID of the monster, or user data of the monster
 ---@field __eq fun(self: Monster, other: Monster): boolean
+---@source ../src/luascript.cpp:11330
 ---@field isMonster fun(self: Monster): boolean
----@field getId fun(self: Monster): number
----@field getType fun(self: Monster): string
----@field rename fun(self: Monster, newName: string)
+---@source ../src/luascript.cpp:11337
+---@field getId fun(self: Monster): uint32
+---@source ../src/luascript.cpp:11354
+---@field getType fun(self: Monster): MonsterType
+---@source ../src/luascript.cpp:11367
+---@field rename fun(self: Monster, newName: string, nameDescription?: string)
+---@source ../src/luascript.cpp:11385
 ---@field getSpawnPosition fun(self: Monster): Position
----@field isInSpawnRange fun(self: Monster, position: Position): boolean
+---@source ../src/luascript.cpp:11397
+---@field isInSpawnRange fun(self: Monster, position?: Position): boolean
+---@source ../src/luascript.cpp:11410
 ---@field isIdle fun(self: Monster): boolean
+---@source ../src/luascript.cpp:11422
 ---@field setIdle fun(self: Monster, idle: boolean)
+---@source ../src/luascript.cpp:11436
 ---@field isTarget fun(self: Monster, creature: Creature): boolean
+---@source ../src/luascript.cpp:114555
 ---@field isOpponent fun(self: Monster, creature: Creature): boolean
+---@source ../src/luascript.cpp:11474
 ---@field isFriend fun(self: Monster, creature: Creature): boolean
+---@source ../src/luascript.cpp:11493
 ---@field addFriend fun(self: Monster, creature: Creature)
+---@source ../src/luascript.cpp:11513
 ---@field removeFriend fun(self: Monster, creature: Creature)
----@field getFriendList fun(self: Monster): table
+---@source ../src/luascript.cpp:11533
+---@field getFriendList fun(self: Monster): table<number, Creature>
+---@source ../src/luascript.cpp:11554
 ---@field getFriendCount fun(self: Monster): number
----@field addTarget fun(self: Monster, creature: Creature)
+---@source ../src/luascript.cpp:11566
+---@field addTarget fun(self: Monster, creature: Creature, pushFront?: boolean): boolean? -- Returns nil if no monster, false if no creature to target, true if success
+---@source ../src/luascript.cpp:11588
 ---@field removeTarget fun(self: Monster, creature: Creature)
----@field getTargetList fun(self: Monster): table
+---@source ../src/luascript.cpp:11609
+---@field getTargetList fun(self: Monster): table<number, Creature>
+---@source ../src/luascript.cpp:11630
 ---@field getTargetCount fun(self: Monster): number
----@field selectTarget fun(self: Monster, creature: Creature): boolean
----@field searchTarget fun(self: Monster): boolean
+---@source ../src/luascript.cpp:11642
+---@field selectTarget fun(self: Monster, creature: Creature): boolean? -- Returns nil if no monster, false if no creature to target, true/false if success
+---@source ../src/luascript.cpp:11661
+---@field searchTarget fun(self: Monster, searchType: TargetSearchType): boolean
+---@source ../src/luascript.cpp:11674
 ---@field isWalkingToSpawn fun(self: Monster): boolean
----@field walkToSpawn fun(self: Monster)
----@field hasSpecialIcon fun(self: Monster): boolean
----@field setSpecialIcon fun(self: Monster, iconId: number)
----@field getSpecialIcon fun(self: Monster): number
----@field removeSpecialIcon fun(self: Monster)
+---@source ../src/luascript.cpp:11686
+---@field walkToSpawn fun(self: Monster): boolean
+---@source ../src/luascript.cpp:11698
+---@field hasSpecialIcon fun(self: Monster, iconId: MonsterIcons): boolean
+---@source ../src/luascript.cpp:11710
+---@field setSpecialIcon fun(self: Monster, iconId: MonsterIcons, value: uint16)
+---@source ../src/luascript.cpp:11733
+---@field getSpecialIcon fun(self: Monster): number -- Returns the value stored with the special icon
+---@source ../src/luascript.cpp:11753
+---@field removeSpecialIcon fun(self: Monster, iconId: MonsterIcons)
 Monster = {}
 
 ---@class Npc : Creature
----@field create fun(): Npc
+---@source ../src/luascript.cpp:11766
+---@field create fun(npcInfo: uint32|string|Npc): Npc
 ---@field __eq fun(self: Npc, other: Npc): boolean
+---@source ../src/luascript.cpp:11807
 ---@field isNpc fun(self: Npc): boolean
----@field setMasterPos fun(self: Npc, position: Position)
----@field getSpeechBubble fun(self: Npc): number
----@field setSpeechBubble fun(self: Npc, bubbleType: number)
----@field getSpectators fun(self: Npc, centerPos: Position, rangeX: number, rangeY: number, multifloor: boolean): table
+---@source ../src/luascript.cpp:11814
+---@field setMasterPos fun(self: Npc, position: Position, radius?: int32)
+---@source ../src/luascript.cpp:11830
+---@field getSpeechBubble fun(self: Npc): uint8
+---@source ../src/luascript.cpp:11842
+---@field setSpeechBubble fun(self: Npc, bubbleType: uint8)
+---@source ../src/luascript.cpp:11869
+---@field getSpectators fun(self: Npc): table<number, Player> -- Returns a table of all players the npc can see
 Npc = {}
 
 ---@class Guild
@@ -1321,158 +1592,451 @@ CONST_ANI_SPECTRALBOLT = 58
 CONST_ANI_ROYALSTAR = 59
 CONST_ANI_WEAPONTYPE = 254
 
--- Constants: CONST_ME
+---@alias MagicEffectConsts uint8
+---| 0 # CONST_ME_NONE
+---| 1 # CONST_ME_DRAWBLOOD
+---| 2 # CONST_ME_LOSEENERGY
+---| 3 # CONST_ME_POFF
+---| 4 # CONST_ME_BLOCKHIT
+---| 5 # CONST_ME_EXPLOSIONAREA
+---| 6 # CONST_ME_EXPLOSIONHIT
+---| 7 # CONST_ME_FIREAREA
+---| 8 # CONST_ME_YELLOW_RINGS
+---| 9 # CONST_ME_GREEN_RINGS
+---| 10 # CONST_ME_HITAREA
+---| 11 # CONST_ME_TELEPORT
+---| 12 # CONST_ME_ENERGYHIT
+---| 13 # CONST_ME_MAGIC_BLUE
+---| 14 # CONST_ME_MAGIC_RED
+---| 15 # CONST_ME_MAGIC_GREEN
+---| 16 # CONST_ME_HITBYFIRE
+---| 17 # CONST_ME_HITBYPOISON
+---| 18 # CONST_ME_MORTAREA
+---| 19 # CONST_ME_SOUND_GREEN
+---| 20 # CONST_ME_SOUND_RED
+---| 21 # CONST_ME_POISONAREA
+---| 22 # CONST_ME_SOUND_YELLOW
+---| 23 # CONST_ME_SOUND_PURPLE
+---| 24 # CONST_ME_SOUND_BLUE
+---| 25 # CONST_ME_SOUND_WHITE
+---| 26 # CONST_ME_BUBBLES
+---| 27 # CONST_ME_CRAPS
+---| 28 # CONST_ME_GIFT_WRAPS
+---| 29 # CONST_ME_FIREWORK_YELLOW
+---| 30 # CONST_ME_FIREWORK_RED
+---| 31 # CONST_ME_FIREWORK_BLUE
+---| 32 # CONST_ME_STUN
+---| 33 # CONST_ME_SLEEP
+---| 34 # CONST_ME_WATERCREATURE
+---| 35 # CONST_ME_GROUNDSHAKER
+---| 36 # CONST_ME_HEARTS
+---| 37 # CONST_ME_FIREATTACK
+---| 38 # CONST_ME_ENERGYAREA
+---| 39 # CONST_ME_SMALLCLOUDS
+---| 40 # CONST_ME_HOLYDAMAGE
+---| 41 # CONST_ME_BIGCLOUDS
+---| 42 # CONST_ME_ICEAREA
+---| 43 # CONST_ME_ICETORNADO
+---| 44 # CONST_ME_ICEATTACK
+---| 45 # CONST_ME_STONES
+---| 46 # CONST_ME_SMALLPLANTS
+---| 47 # CONST_ME_CARNIPHILA
+---| 48 # CONST_ME_PURPLEENERGY
+---| 49 # CONST_ME_YELLOWENERGY
+---| 50 # CONST_ME_HOLYAREA
+---| 51 # CONST_ME_BIGPLANTS
+---| 52 # CONST_ME_CAKE
+---| 53 # CONST_ME_GIANTICE
+---| 54 # CONST_ME_WATERSPLASH
+---| 55 # CONST_ME_PLANTATTACK
+---| 56 # CONST_ME_TUTORIALARROW
+---| 57 # CONST_ME_TUTORIALSQUARE
+---| 58 # CONST_ME_MIRRORHORIZONTAL
+---| 59 # CONST_ME_MIRRORVERTICAL
+---| 60 # CONST_ME_SKULLHORIZONTAL
+---| 61 # CONST_ME_SKULLVERTICAL
+---| 62 # CONST_ME_ASSASSIN
+---| 63 # CONST_ME_STEPSHORIZONTAL
+---| 64 # CONST_ME_BLOODYSTEPS
+---| 65 # CONST_ME_STEPSVERTICAL
+---| 66 # CONST_ME_YALAHARIGHOST
+---| 67 # CONST_ME_BATS
+---| 68 # CONST_ME_SMOKE
+---| 69 # CONST_ME_INSECTS
+---| 70 # CONST_ME_DRAGONHEAD
+---| 71 # CONST_ME_ORCSHAMAN
+---| 72 # CONST_ME_ORCSHAMAN_FIRE
+---| 73 # CONST_ME_THUNDER
+---| 74 # CONST_ME_FERUMBRAS
+---| 75 # CONST_ME_CONFETTI_HORIZONTAL
+---| 76 # CONST_ME_CONFETTI_VERTICAL
+---| 158 # CONST_ME_BLACKSMOKE
+---| 167 # CONST_ME_REDSMOKE
+---| 168 # CONST_ME_YELLOWSMOKE
+---| 169 # CONST_ME_GREENSMOKE
+---| 170 # CONST_ME_PURPLESMOKE
+---| 171 # CONST_ME_EARLY_THUNDER
+---| 172 # CONST_ME_RAGIAZ_BONECAPSULE
+---| 173 # CONST_ME_CRITICAL_DAMAGE
+---| 175 # CONST_ME_PLUNGING_FISH
+---| 176 # CONST_ME_BLUECHAIN
+---| 177 # CONST_ME_ORANGECHAIN
+---| 178 # CONST_ME_GREENCHAIN
+---| 179 # CONST_ME_PURPLECHAIN
+---| 180 # CONST_ME_GREYCHAIN
+---| 181 # CONST_ME_YELLOWCHAIN
+---| 182 # CONST_ME_YELLOWSPARKLES
+---| 184 # CONST_ME_FAEEXPLOSION
+---| 185 # CONST_ME_FAECOMING
+---| 186 # CONST_ME_FAEGOING
+---| 188 # CONST_ME_BIGCLOUDSSINGLESPACE
+---| 189 # CONST_ME_STONESSINGLESPACE
+---| 191 # CONST_ME_BLUEGHOST
+---| 193 # CONST_ME_POINTOFINTEREST
+---| 194 # CONST_ME_MAPEFFECT
+---| 195 # CONST_ME_PINKSPARK
+---| 196 # CONST_ME_FIREWORK_GREEN
+---| 197 # CONST_ME_FIREWORK_ORANGE
+---| 198 # CONST_ME_FIREWORK_PURPLE
+---| 199 # CONST_ME_FIREWORK_TURQUOISE
+---| 201 # CONST_ME_THECUBE
+---| 202 # CONST_ME_DRAWINK
+---| 203 # CONST_ME_PRISMATICSPARKLES
+---| 204 # CONST_ME_THAIAN
+---| 205 # CONST_ME_THAIANGHOST
+---| 206 # CONST_ME_GHOSTSMOKE
+---| 208 # CONST_ME_FLOATINGBLOCK
+---| 209 # CONST_ME_BLOCK
+---| 210 # CONST_ME_ROOTING
+---| 213 # CONST_ME_GHOSTLYSCRATCH
+---| 214 # CONST_ME_GHOSTLYBITE
+---| 215 # CONST_ME_BIGSCRATCHING
+---| 216 # CONST_ME_SLASH
+---| 217 # CONST_ME_BITE
+---| 219 # CONST_ME_CHIVALRIOUSCHALLENGE
+---| 220 # CONST_ME_DIVINEDAZZLE
+---| 221 # CONST_ME_ELECTRICALSPARK
+---| 222 # CONST_ME_PURPLETELEPORT
+---| 223 # CONST_ME_REDTELEPORT
+---| 224 # CONST_ME_ORANGETELEPORT
+---| 225 # CONST_ME_GREYTELEPORT
+---| 226 # CONST_ME_LIGHTBLUETELEPORT
+---| 230 # CONST_ME_FATAL
+---| 231 # CONST_ME_DODGE
+---| 232 # CONST_ME_HOURGLASS
+---| 233 # CONST_ME_FIREWORKSSTAR
+---| 234 # CONST_ME_FIREWORKSCIRCLE
+---| 235 # CONST_ME_FERUMBRAS_1
+---| 236 # CONST_ME_GAZHARAGOTH
+---| 237 # CONST_ME_MAD_MAGE
+---| 238 # CONST_ME_HORESTIS
+---| 239 # CONST_ME_DEVOVORGA
+---| 240 # CONST_ME_FERUMBRAS_2
+---| 241 # CONST_ME_FOAM
+
+---@source ../src/const.h:23
 CONST_ME_NONE = 0
+---@source ../src/const.h:25
 CONST_ME_DRAWBLOOD = 1
+---@source ../src/const.h:26
 CONST_ME_LOSEENERGY = 2
+---@source ../src/const.h:27
 CONST_ME_POFF = 3
+---@source ../src/const.h:28
 CONST_ME_BLOCKHIT = 4
+---@source ../src/const.h:29
 CONST_ME_EXPLOSIONAREA = 5
+---@source ../src/const.h:30
 CONST_ME_EXPLOSIONHIT = 6
+---@source ../src/const.h:31
 CONST_ME_FIREAREA = 7
+---@source ../src/const.h:32
 CONST_ME_YELLOW_RINGS = 8
+---@source ../src/const.h:33
 CONST_ME_GREEN_RINGS = 9
+---@source ../src/const.h:34
 CONST_ME_HITAREA = 10
+---@source ../src/const.h:35
 CONST_ME_TELEPORT = 11
+---@source ../src/const.h:36
 CONST_ME_ENERGYHIT = 12
+---@source ../src/const.h:37
 CONST_ME_MAGIC_BLUE = 13
+---@source ../src/const.h:38
 CONST_ME_MAGIC_RED = 14
+---@source ../src/const.h:39
 CONST_ME_MAGIC_GREEN = 15
+---@source ../src/const.h:40
 CONST_ME_HITBYFIRE = 16
+---@source ../src/const.h:41
 CONST_ME_HITBYPOISON = 17
+---@source ../src/const.h:42
 CONST_ME_MORTAREA = 18
+---@source ../src/const.h:43
 CONST_ME_SOUND_GREEN = 19
+---@source ../src/const.h:44
 CONST_ME_SOUND_RED = 20
+---@source ../src/const.h:45
 CONST_ME_POISONAREA = 21
+---@source ../src/const.h:46
 CONST_ME_SOUND_YELLOW = 22
+---@source ../src/const.h:47
 CONST_ME_SOUND_PURPLE = 23
+---@source ../src/const.h:48
 CONST_ME_SOUND_BLUE = 24
+---@source ../src/const.h:49
 CONST_ME_SOUND_WHITE = 25
+---@source ../src/const.h:50
 CONST_ME_BUBBLES = 26
+---@source ../src/const.h:51
 CONST_ME_CRAPS = 27
+---@source ../src/const.h:52
 CONST_ME_GIFT_WRAPS = 28
+---@source ../src/const.h:53
 CONST_ME_FIREWORK_YELLOW = 29
+---@source ../src/const.h:54
 CONST_ME_FIREWORK_RED = 30
+---@source ../src/const.h:55
 CONST_ME_FIREWORK_BLUE = 31
+---@source ../src/const.h:56
 CONST_ME_STUN = 32
+---@source ../src/const.h:57
 CONST_ME_SLEEP = 33
+---@source ../src/const.h:58
 CONST_ME_WATERCREATURE = 34
+---@source ../src/const.h:59
 CONST_ME_GROUNDSHAKER = 35
+---@source ../src/const.h:60
 CONST_ME_HEARTS = 36
+---@source ../src/const.h:61
 CONST_ME_FIREATTACK = 37
+---@source ../src/const.h:62
 CONST_ME_ENERGYAREA = 38
+---@source ../src/const.h:63
 CONST_ME_SMALLCLOUDS = 39
+---@source ../src/const.h:64
 CONST_ME_HOLYDAMAGE = 40
+---@source ../src/const.h:65
 CONST_ME_BIGCLOUDS = 41
+---@source ../src/const.h:66
 CONST_ME_ICEAREA = 42
+---@source ../src/const.h:67
 CONST_ME_ICETORNADO = 43
+---@source ../src/const.h:68
 CONST_ME_ICEATTACK = 44
+---@source ../src/const.h:69
 CONST_ME_STONES = 45
+---@source ../src/const.h:70
 CONST_ME_SMALLPLANTS = 46
+---@source ../src/const.h:71
 CONST_ME_CARNIPHILA = 47
+---@source ../src/const.h:72
 CONST_ME_PURPLEENERGY = 48
+---@source ../src/const.h:73
 CONST_ME_YELLOWENERGY = 49
+---@source ../src/const.h:74
 CONST_ME_HOLYAREA = 50
+---@source ../src/const.h:75
 CONST_ME_BIGPLANTS = 51
+---@source ../src/const.h:76
 CONST_ME_CAKE = 52
+---@source ../src/const.h:77
 CONST_ME_GIANTICE = 53
+---@source ../src/const.h:78
 CONST_ME_WATERSPLASH = 54
+---@source ../src/const.h:79
 CONST_ME_PLANTATTACK = 55
+---@source ../src/const.h:80
 CONST_ME_TUTORIALARROW = 56
+---@source ../src/const.h:81
 CONST_ME_TUTORIALSQUARE = 57
+---@source ../src/const.h:82
 CONST_ME_MIRRORHORIZONTAL = 58
+---@source ../src/const.h:83
 CONST_ME_MIRRORVERTICAL = 59
+---@source ../src/const.h:84
 CONST_ME_SKULLHORIZONTAL = 60
+---@source ../src/const.h:85
 CONST_ME_SKULLVERTICAL = 61
+---@source ../src/const.h:86
 CONST_ME_ASSASSIN = 62
+---@source ../src/const.h:87
 CONST_ME_STEPSHORIZONTAL = 63
+---@source ../src/const.h:88
 CONST_ME_BLOODYSTEPS = 64
+---@source ../src/const.h:89
 CONST_ME_STEPSVERTICAL = 65
+---@source ../src/const.h:90
 CONST_ME_YALAHARIGHOST = 66
+---@source ../src/const.h:91
 CONST_ME_BATS = 67
+---@source ../src/const.h:92
 CONST_ME_SMOKE = 68
+---@source ../src/const.h:93
 CONST_ME_INSECTS = 69
+---@source ../src/const.h:94
 CONST_ME_DRAGONHEAD = 70
+---@source ../src/const.h:95
 CONST_ME_ORCSHAMAN = 71
+---@source ../src/const.h:96
 CONST_ME_ORCSHAMAN_FIRE = 72
+---@source ../src/const.h:97
 CONST_ME_THUNDER = 73
+---@source ../src/const.h:98
 CONST_ME_FERUMBRAS = 74
+---@source ../src/const.h:99
 CONST_ME_CONFETTI_HORIZONTAL = 75
+---@source ../src/const.h:100
 CONST_ME_CONFETTI_VERTICAL = 76
+---@source ../src/const.h:101
 -- 77-157 are empty
+---@source ../src/const.h:102
 CONST_ME_BLACKSMOKE = 158
+---@source ../src/const.h:103
 -- 159-166 are empty
+---@source ../src/const.h:104
 CONST_ME_REDSMOKE = 167
+---@source ../src/const.h:105
 CONST_ME_YELLOWSMOKE = 168
+---@source ../src/const.h:106
 CONST_ME_GREENSMOKE = 169
+---@source ../src/const.h:107
 CONST_ME_PURPLESMOKE = 170
+---@source ../src/const.h:108
 CONST_ME_EARLY_THUNDER = 171
+---@source ../src/const.h:109
 CONST_ME_RAGIAZ_BONECAPSULE = 172
+---@source ../src/const.h:110
 CONST_ME_CRITICAL_DAMAGE = 173
+---@source ../src/const.h:111
 -- 174 is empty
+---@source ../src/const.h:112
 CONST_ME_PLUNGING_FISH = 175
+---@source ../src/const.h:113
 CONST_ME_BLUECHAIN = 176
+---@source ../src/const.h:114
 CONST_ME_ORANGECHAIN = 177
+---@source ../src/const.h:115
 CONST_ME_GREENCHAIN = 178
+---@source ../src/const.h:116
 CONST_ME_PURPLECHAIN = 179
+---@source ../src/const.h:117
 CONST_ME_GREYCHAIN = 180
+---@source ../src/const.h:118
 CONST_ME_YELLOWCHAIN = 181
+---@source ../src/const.h:119
 CONST_ME_YELLOWSPARKLES = 182
+---@source ../src/const.h:120
 -- 183 is empty
+---@source ../src/const.h:121
 CONST_ME_FAEEXPLOSION = 184
+---@source ../src/const.h:122
 CONST_ME_FAECOMING = 185
+---@source ../src/const.h:123
 CONST_ME_FAEGOING = 186
+---@source ../src/const.h:124
 -- 187 is empty
+---@source ../src/const.h:125
 CONST_ME_BIGCLOUDSSINGLESPACE = 188
+---@source ../src/const.h:126
 CONST_ME_STONESSINGLESPACE = 189
+---@source ../src/const.h:127
 -- 190 is empty
+---@source ../src/const.h:128
 CONST_ME_BLUEGHOST = 191
+---@source ../src/const.h:129
 -- 192 is empty
+---@source ../src/const.h:130
 CONST_ME_POINTOFINTEREST = 193
+---@source ../src/const.h:131
 CONST_ME_MAPEFFECT = 194
+---@source ../src/const.h:132
 CONST_ME_PINKSPARK = 195
+---@source ../src/const.h:133
 CONST_ME_FIREWORK_GREEN = 196
+---@source ../src/const.h:134
 CONST_ME_FIREWORK_ORANGE = 197
+---@source ../src/const.h:135
 CONST_ME_FIREWORK_PURPLE = 198
+---@source ../src/const.h:136
 CONST_ME_FIREWORK_TURQUOISE = 199
+---@source ../src/const.h:137
 -- 200 is empty
+---@source ../src/const.h:138
 CONST_ME_THECUBE = 201
+---@source ../src/const.h:139
 CONST_ME_DRAWINK = 202
+---@source ../src/const.h:140
 CONST_ME_PRISMATICSPARKLES = 203
+---@source ../src/const.h:141
 CONST_ME_THAIAN = 204
+---@source ../src/const.h:142
 CONST_ME_THAIANGHOST = 205
+---@source ../src/const.h:143
 CONST_ME_GHOSTSMOKE = 206
+---@source ../src/const.h:144
 -- 207 is empty
+---@source ../src/const.h:145
 CONST_ME_FLOATINGBLOCK = 208
+---@source ../src/const.h:146
 CONST_ME_BLOCK = 209
+---@source ../src/const.h:147
 CONST_ME_ROOTING = 210
+---@source ../src/const.h:148
 -- 211-212 were removed from the client
+---@source ../src/const.h:149
 CONST_ME_GHOSTLYSCRATCH = 213
+---@source ../src/const.h:150
 CONST_ME_GHOSTLYBITE = 214
+---@source ../src/const.h:151
 CONST_ME_BIGSCRATCHING = 215
+---@source ../src/const.h:152
 CONST_ME_SLASH = 216
+---@source ../src/const.h:153
 CONST_ME_BITE = 217
+---@source ../src/const.h:154
 -- 218 is empty
+---@source ../src/const.h:155
 CONST_ME_CHIVALRIOUSCHALLENGE = 219
+---@source ../src/const.h:156
 CONST_ME_DIVINEDAZZLE = 220
+---@source ../src/const.h:157
 CONST_ME_ELECTRICALSPARK = 221
+---@source ../src/const.h:158
 CONST_ME_PURPLETELEPORT = 222
+---@source ../src/const.h:159
 CONST_ME_REDTELEPORT = 223
+---@source ../src/const.h:160
 CONST_ME_ORANGETELEPORT = 224
+---@source ../src/const.h:161
 CONST_ME_GREYTELEPORT = 225
+---@source ../src/const.h:162
 CONST_ME_LIGHTBLUETELEPORT = 226
+---@source ../src/const.h:163
 -- 227-229 are empty
+---@source ../src/const.h:164
 CONST_ME_FATAL = 230
+---@source ../src/const.h:165
 CONST_ME_DODGE = 231
+---@source ../src/const.h:166
 CONST_ME_HOURGLASS = 232
+---@source ../src/const.h:167
 CONST_ME_FIREWORKSSTAR = 233
+---@source ../src/const.h:168
 CONST_ME_FIREWORKSCIRCLE = 234
+---@source ../src/const.h:169
 CONST_ME_FERUMBRAS_1 = 235
+---@source ../src/const.h:170
 CONST_ME_GAZHARAGOTH = 236
+---@source ../src/const.h:171
 CONST_ME_MAD_MAGE = 237
+---@source ../src/const.h:172
 CONST_ME_HORESTIS = 238
+---@source ../src/const.h:173
 CONST_ME_DEVOVORGA = 239
+---@source ../src/const.h:174
 CONST_ME_FERUMBRAS_2 = 240
+---@source ../src/const.h:175
 CONST_ME_FOAM = 241
 
 -- Constants: CONST_PROP
@@ -1489,20 +2053,52 @@ CONST_PROP_IMMOVABLENOFIELDBLOCKPATH = 9
 CONST_PROP_NOFIELDBLOCKPATH = 10
 CONST_PROP_SUPPORTHANGABLE = 11
 
+
+---@alias PlayerEquipmentSlots uint8
+---| 0 # CONST_SLOT_WHEREEVER
+---| 1 # CONST_SLOT_HEAD
+---| 2 # CONST_SLOT_NECKLACE
+---| 3 # CONST_SLOT_BACKPACK
+---| 4 # CONST_SLOT_ARMOR
+---| 5 # CONST_SLOT_RIGHT
+---| 6 # CONST_SLOT_LEFT
+---| 7 # CONST_SLOT_LEGS
+---| 8 # CONST_SLOT_FEET
+---| 9 # CONST_SLOT_RING
+---| 10 # CONST_SLOT_AMMO
+---| 11 # CONST_SLOT_STORE_INBOX
+---| 1 # CONST_SLOT_FIRST
+---| 10 # CONST_SLOT_LAST
+
 -- Constants: CONST_SLOT
+
+---@source ../src/creature.h:27
 CONST_SLOT_WHEREEVER = 0
+---@source ../src/creature.h:28
 CONST_SLOT_HEAD = 1
+---@source ../src/creature.h:29
 CONST_SLOT_NECKLACE = 2
+---@source ../src/creature.h:30
 CONST_SLOT_BACKPACK = 3
+---@source ../src/creature.h:31
 CONST_SLOT_ARMOR = 4
+---@source ../src/creature.h:32
 CONST_SLOT_RIGHT = 5
+---@source ../src/creature.h:33
 CONST_SLOT_LEFT = 6
+---@source ../src/creature.h:34
 CONST_SLOT_LEGS = 7
+---@source ../src/creature.h:35
 CONST_SLOT_FEET = 8
+---@source ../src/creature.h:36
 CONST_SLOT_RING = 9
+---@source ../src/creature.h:37
 CONST_SLOT_AMMO = 10
+---@source ../src/creature.h:38
 CONST_SLOT_STORE_INBOX = 11
+---@source ../src/creature.h:40
 CONST_SLOT_FIRST = CONST_SLOT_HEAD
+---@source ../src/creature.h:41
 CONST_SLOT_LAST = CONST_SLOT_AMMO
 
 TILESTATE_NONE = 0
@@ -1574,11 +2170,24 @@ COMBAT_FORMULA_LEVELMAGIC = 1
 COMBAT_FORMULA_SKILL = 2
 COMBAT_FORMULA_DAMAGE = 3
 
+---@alias AccountTypes uint8
+---| 1 # ACCOUNT_TYPE_NORMAL
+---| 2 # ACCOUNT_TYPE_TUTOR
+---| 3 # ACCOUNT_TYPE_SENIORTUTOR
+---| 4 # ACCOUNT_TYPE_GAMEMASTER
+---| 5 # ACCOUNT_TYPE_COMMUNITYMANAGER
+---| 6 # ACCOUNT_TYPE_GOD
+---@source ../src/const.h:172
 ACCOUNT_TYPE_NORMAL = 1
+---@source ../src/const.h:173
 ACCOUNT_TYPE_TUTOR = 2
+---@source ../src/const.h:174
 ACCOUNT_TYPE_SENIORTUTOR = 3
+---@source ../src/const.h:175
 ACCOUNT_TYPE_GAMEMASTER = 4
+---@source ../src/const.h:176
 ACCOUNT_TYPE_COMMUNITYMANAGER = 5
+---@source ../src/const.h:177
 ACCOUNT_TYPE_GOD = 6
 
 ---@enum CallBackParam
@@ -1618,133 +2227,400 @@ DIRECTION_NORTHEAST = DIRECTION_DIAGONAL_MASK or 3
 DIRECTION_LAST = DIRECTION_NORTHEAST
 DIRECTION_NONE = 8
 
+---@alias Skulls number
+---| 0 # SKULL_NONE
+---| 1 # SKULL_YELLOW
+---| 2 # SKULL_GREEN
+---| 3 # SKULL_WHITE
+---| 4 # SKULL_RED
+---| 5 # SKULL_BLACK
+---| 6 # SKULL_ORANGE
+---@source ../src/const.h:485
 SKULL_NONE = 0
+---@source ../src/const.h:486
 SKULL_YELLOW = 1
+---@source ../src/const.h:487
 SKULL_GREEN = 2
+---@source ../src/const.h:488
 SKULL_WHITE = 3
+---@source ../src/const.h:489
 SKULL_RED = 4
+---@source ../src/const.h:490
 SKULL_BLACK = 5
+---@source ../src/const.h:491
 SKULL_ORANGE = 6
 
+---@alias MessageTypes uint8
+---| 17 # MESSAGE_STATUS_DEFAULT -- White, bottom + console
+---| 18 # MESSAGE_STATUS_WARNING -- Red, over player + console
+---| 19 # MESSAGE_EVENT_ADVANCE -- White, over player + console
+---| 20 # MESSAGE_STATUS_WARNING2 -- Red, over player + console
+---| 21 # MESSAGE_STATUS_SMALL -- White, bottom of the screen
+---| 22 # MESSAGE_INFO_DESCR -- Green, over player + console
+---| 23 # MESSAGE_DAMAGE_DEALT
+---| 24 # MESSAGE_DAMAGE_RECEIVED
+---| 25 # MESSAGE_HEALED
+---| 26 # MESSAGE_EXPERIENCE
+---| 27 # MESSAGE_DAMAGE_OTHERS
+---| 28 # MESSAGE_HEALED_OTHERS
+---| 29 # MESSAGE_EXPERIENCE_OTHERS
+---| 30 # MESSAGE_EVENT_DEFAULT -- White, bottom + console
+---| 31 # MESSAGE_LOOT -- White, over player + console, supports colors as {text|itemClientId}
+---| 32 # MESSAGE_TRADE -- Green, over player + console
+---| 33 # MESSAGE_GUILD
+---| 34 # MESSAGE_PARTY_MANAGEMENT
+---| 35 # MESSAGE_PARTY
+---| 38 # MESSAGE_REPORT -- White, over player + console
+---| 39 # MESSAGE_HOTKEY_PRESSED -- Green, over player + console
+---| 42 # MESSAGE_MARKET -- Window "Market Message" + "Ok" button
+---| 44 # MESSAGE_BEYOND_LAST -- White, console only
+---| 45 # MESSAGE_TOURNAMENT_INFO -- Window "Tournament" + "Ok" button
+---| 48 # MESSAGE_ATTENTION -- White, console only
+---| 49 # MESSAGE_BOOSTED_CREATURE -- White, console only
+---| 50 # MESSAGE_OFFLINE_TRAINING -- White, over player + console
+---| 51 # MESSAGE_TRANSACTION -- White, console only
+---@source ../src/const.h:270
 MESSAGE_STATUS_DEFAULT = 17  -- White, bottom + console
+---@source ../src/const.h:271
 MESSAGE_STATUS_WARNING = 18  -- Red, over player + console
+---@source ../src/const.h:272
 MESSAGE_EVENT_ADVANCE = 19   -- White, over player + console
+---@source ../src/const.h:273
 MESSAGE_STATUS_WARNING2 = 20 -- Red, over player + console
+---@source ../src/const.h:274
 MESSAGE_STATUS_SMALL = 21    -- White, bottom of the screen
+---@source ../src/const.h:275
 MESSAGE_INFO_DESCR = 22      -- Green, over player + console
+---@source ../src/const.h:278
 MESSAGE_DAMAGE_DEALT = 23
+---@source ../src/const.h:279
 MESSAGE_DAMAGE_RECEIVED = 24
+---@source ../src/const.h:280
 MESSAGE_HEALED = 25
+---@source ../src/const.h:281
 MESSAGE_EXPERIENCE = 26
+---@source ../src/const.h:282
 MESSAGE_DAMAGE_OTHERS = 27
+---@source ../src/const.h:283
 MESSAGE_HEALED_OTHERS = 28
+---@source ../src/const.h:284
 MESSAGE_EXPERIENCE_OTHERS = 29
+---@source ../src/const.h:286
 MESSAGE_EVENT_DEFAULT = 30 -- White, bottom + console
+---@source ../src/const.h:287
 MESSAGE_LOOT = 31          -- White, over player + console, supports colors as {text|itemClientId}
+---@source ../src/const.h:288
 MESSAGE_TRADE = 32         -- Green, over player + console
+---@source ../src/const.h:291
 MESSAGE_GUILD = 33
+---@source ../src/const.h:292
 MESSAGE_PARTY_MANAGEMENT = 34
+---@source ../src/const.h:293
 MESSAGE_PARTY = 35
+---@source ../src/const.h:295
 MESSAGE_REPORT = 38         -- White, over player + conosle
+---@source ../src/const.h:296
 MESSAGE_HOTKEY_PRESSED = 39 -- Green, over player + console
+---@source ../src/const.h:297
 -- MESSAGE_TUTORIAL_HINT = 40 -- not working (?)
+---@source ../src/const.h:298
 -- MESSAGE_THANK_YOU = 41 -- not working (?)
+---@source ../src/const.h:299
 MESSAGE_MARKET = 42 -- Window "Market Message" + "Ok" button
+---@source ../src/const.h:300
 -- MESSAGE_MANA = 43 -- not working (?)
+---@source ../src/const.h:301
 MESSAGE_BEYOND_LAST = 44     -- White, console only
+---@source ../src/const.h:302
 MESSAGE_TOURNAMENT_INFO = 45 -- Window "Tournament" + "Ok" button
+---@source ../src/const.h:303
 -- unused 46?
+---@source ../src/const.h:304
 -- unused 47?
+---@source ../src/const.h:305
 MESSAGE_ATTENTION = 48        -- White, console only
+---@source ../src/const.h:306
 MESSAGE_BOOSTED_CREATURE = 49 -- White, console only
+---@source ../src/const.h:307
 MESSAGE_OFFLINE_TRAINING = 50 -- White, over player + console
+---@source ../src/const.h:308
 MESSAGE_TRANSACTION = 51      -- White, console only
 
+---@source ../src/cylinder.h:13
 INDEX_WHEREEVER = -1
+---@source ../src/luascript.cpp:2253
 VIRTUAL_PARENT = true
 
+---@alias CylinderFlag number
+---@source ../src/cylinder.h:17
 FLAG_NOLIMIT = 1 * 2 ^ 0             -- Bypass limits like capacity/container limits, blocking items/creatures etc.
+---@source ../src/cylinder.h:18
 FLAG_IGNOREBLOCKITEM = 1 * 2 ^ 1     -- Bypass movable blocking item checks
+---@source ../src/cylinder.h:19
 FLAG_IGNOREBLOCKCREATURE = 1 * 2 ^ 2 -- Bypass creature checks
+---@source ../src/cylinder.h:20
 FLAG_CHILDISOWNER = 1 * 2 ^ 3        -- Used by containers to query capacity of the carrier (player)
+---@source ../src/cylinder.h:21
 FLAG_PATHFINDING = 1 * 2 ^ 4         -- An additional check is done for floor changing/teleport items
+---@source ../src/cylinder.h:21
 FLAG_IGNOREFIELDDAMAGE = 1 * 2 ^ 5   -- Bypass field damage checks
+---@source ../src/cylinder.h:22
 FLAG_IGNORENOTMOVEABLE = 1 * 2 ^ 6   -- Bypass check for mobility
+---@source ../src/cylinder.h:23
 FLAG_IGNOREAUTOSTACK = 1 * 2 ^ 7     -- queryDestination will not try to stack items together
 
+---@source src/enum.h:414
+---@alias ReturnValues number
+---| 0 # RETURNVALUE_NOERROR
+---| 1 # RETURNVALUE_NOTPOSSIBLE
+---| 2 # RETURNVALUE_NOTENOUGHROOM
+---| 3 # RETURNVALUE_PLAYERISPZLOCKED
+---| 4 # RETURNVALUE_PLAYERISNOTINVITED
+---| 5 # RETURNVALUE_CANNOTTHROW
+---| 6 # RETURNVALUE_THEREISNOWAY
+---| 7 # RETURNVALUE_DESTINATIONOUTOFREACH
+---| 8 # RETURNVALUE_CREATUREBLOCK
+---| 9 # RETURNVALUE_NOTMOVEABLE
+---| 10 # RETURNVALUE_DROPTWOHANDEDITEM
+---| 11 # RETURNVALUE_BOTHHANDSNEEDTOBEFREE
+---| 12 # RETURNVALUE_CANONLYUSEONEWEAPON
+---| 13 # RETURNVALUE_NEEDEXCHANGE
+---| 14 # RETURNVALUE_CANNOTBEDRESSED
+---| 15 # RETURNVALUE_PUTTHISOBJECTINYOURHAND
+---| 16 # RETURNVALUE_PUTTHISOBJECTINBOTHHANDS
+---| 17 # RETURNVALUE_TOOFARAWAY
+---| 18 # RETURNVALUE_FIRSTGODOWNSTAIRS
+---| 19 # RETURNVALUE_FIRSTGOUPSTAIRS
+---| 20 # RETURNVALUE_CONTAINERNOTENOUGHROOM
+---| 21 # RETURNVALUE_NOTENOUGHCAPACITY
+---| 22 # RETURNVALUE_CANNOTPICKUP
+---| 23 # RETURNVALUE_THISISIMPOSSIBLE
+---| 24 # RETURNVALUE_DEPOTISFULL
+---| 25 # RETURNVALUE_CREATUREDOESNOTEXIST
+---| 26 # RETURNVALUE_CANNOTUSETHISOBJECT
+---| 27 # RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE
+---| 28 # RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE
+---| 29 # RETURNVALUE_YOUAREALREADYTRADING
+---| 30 # RETURNVALUE_THISPLAYERISALREADYTRADING
+---| 31 # RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT
+---| 32 # RETURNVALUE_DIRECTPLAYERSHOOT
+---| 33 # RETURNVALUE_NOTENOUGHLEVEL
+---| 34 # RETURNVALUE_NOTENOUGHMAGICLEVEL
+---| 35 # RETURNVALUE_NOTENOUGHMANA
+---| 36 # RETURNVALUE_NOTENOUGHSOUL
+---| 37 # RETURNVALUE_YOUAREEXHAUSTED
+---| 38 # RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST
+---| 39 # RETURNVALUE_PLAYERISNOTREACHABLE
+---| 40 # RETURNVALUE_CANONLYUSETHISRUNEONCREATURES
+---| 41 # RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE
+---| 42 # RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER
+---| 43 # RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE
+---| 44 # RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE
+---| 45 # RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE
+---| 46 # RETURNVALUE_YOUCANONLYUSEITONCREATURES
+---| 47 # RETURNVALUE_CREATUREISNOTREACHABLE
+---| 48 # RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS
+---| 49 # RETURNVALUE_YOUNEEDPREMIUMACCOUNT
+---| 50 # RETURNVALUE_YOUNEEDTOLEARNTHISSPELL
+---| 51 # RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL
+---| 52 # RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL
+---| 53 # RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE
+---| 54 # RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE
+---| 55 # RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE
+---| 56 # RETURNVALUE_YOUCANNOTLOGOUTHERE
+---| 57 # RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL
+---| 58 # RETURNVALUE_NAMEISTOOAMBIGUOUS
+---| 59 # RETURNVALUE_CANONLYUSEONESHIELD
+---| 60 # RETURNVALUE_NOPARTYMEMBERSINRANGE
+---| 61 # RETURNVALUE_YOUARENOTTHEOWNER
+---| 62 # RETURNVALUE_TRADEPLAYERFARAWAY
+---| 63 # RETURNVALUE_YOUDONTOWNTHISHOUSE
+---| 64 # RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE
+---| 65 # RETURNVALUE_TRADEPLAYERHIGHESTBIDDER
+---| 66 # RETURNVALUE_YOUCANNOTTRADETHISHOUSE
+---| 67 # RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION
+---| 68 # RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM
+---| 69 # RETURNVALUE_ITEMCANNOTBEMOVEDTHERE
+---| 70 # RETURNVALUE_YOUCANNOTUSETHISBED
+---| 71 # RETURNVALUE_QUIVERAMMOONLY
+
+---@source ../src/enums.h:414
 RETURNVALUE_NOERROR = 0
+---@source ../src/enums.h:415
 RETURNVALUE_NOTPOSSIBLE = 1
+---@source ../src/enums.h:416
 RETURNVALUE_NOTENOUGHROOM = 2
+---@source ../src/enums.h:417
 RETURNVALUE_PLAYERISPZLOCKED = 3
+---@source ../src/enums.h:418
 RETURNVALUE_PLAYERISNOTINVITED = 4
+---@source ../src/enums.h:419
 RETURNVALUE_CANNOTTHROW = 5
+---@source ../src/enums.h:420
 RETURNVALUE_THEREISNOWAY = 6
+---@source ../src/enums.h:421
 RETURNVALUE_DESTINATIONOUTOFREACH = 7
+---@source ../src/enums.h:422
 RETURNVALUE_CREATUREBLOCK = 8
+---@source ../src/enums.h:423
 RETURNVALUE_NOTMOVEABLE = 9
+---@source ../src/enums.h:424
 RETURNVALUE_DROPTWOHANDEDITEM = 10
+---@source ../src/enums.h:425
 RETURNVALUE_BOTHHANDSNEEDTOBEFREE = 11
+---@source ../src/enums.h:426
 RETURNVALUE_CANONLYUSEONEWEAPON = 12
+---@source ../src/enums.h:427
 RETURNVALUE_NEEDEXCHANGE = 13
+---@source ../src/enums.h:428
 RETURNVALUE_CANNOTBEDRESSED = 14
+---@source ../src/enums.h:429
 RETURNVALUE_PUTTHISOBJECTINYOURHAND = 15
+---@source ../src/enums.h:430
 RETURNVALUE_PUTTHISOBJECTINBOTHHANDS = 16
+---@source ../src/enums.h:431
 RETURNVALUE_TOOFARAWAY = 17
+---@source ../src/enums.h:432
 RETURNVALUE_FIRSTGODOWNSTAIRS = 18
+---@source ../src/enums.h:433
 RETURNVALUE_FIRSTGOUPSTAIRS = 19
+---@source ../src/enums.h:434
 RETURNVALUE_CONTAINERNOTENOUGHROOM = 20
+---@source ../src/enums.h:435
 RETURNVALUE_NOTENOUGHCAPACITY = 21
+---@source ../src/enums.h:436
 RETURNVALUE_CANNOTPICKUP = 22
+---@source ../src/enums.h:437
 RETURNVALUE_THISISIMPOSSIBLE = 23
+---@source ../src/enums.h:438
 RETURNVALUE_DEPOTISFULL = 24
+---@source ../src/enums.h:439
 RETURNVALUE_CREATUREDOESNOTEXIST = 25
+---@source ../src/enums.h:440
 RETURNVALUE_CANNOTUSETHISOBJECT = 26
+---@source ../src/enums.h:441
 RETURNVALUE_PLAYERWITHTHISNAMEISNOTONLINE = 27
+---@source ../src/enums.h:442
 RETURNVALUE_NOTREQUIREDLEVELTOUSERUNE = 28
+---@source ../src/enums.h:443
 RETURNVALUE_YOUAREALREADYTRADING = 29
+---@source ../src/enums.h:444
 RETURNVALUE_THISPLAYERISALREADYTRADING = 30
+---@source ../src/enums.h:445
 RETURNVALUE_YOUMAYNOTLOGOUTDURINGAFIGHT = 31
+---@source ../src/enums.h:446
 RETURNVALUE_DIRECTPLAYERSHOOT = 32
+---@source ../src/enums.h:447
 RETURNVALUE_NOTENOUGHLEVEL = 33
+---@source ../src/enums.h:448
 RETURNVALUE_NOTENOUGHMAGICLEVEL = 34
+---@source ../src/enums.h:449
 RETURNVALUE_NOTENOUGHMANA = 35
+---@source ../src/enums.h:450
 RETURNVALUE_NOTENOUGHSOUL = 36
+---@source ../src/enums.h:451
 RETURNVALUE_YOUAREEXHAUSTED = 37
+---@source ../src/enums.h:452
 RETURNVALUE_YOUCANNOTUSEOBJECTSTHATFAST = 38
+---@source ../src/enums.h:453
 RETURNVALUE_PLAYERISNOTREACHABLE = 39
+---@source ../src/enums.h:454
 RETURNVALUE_CANONLYUSETHISRUNEONCREATURES = 40
+---@source ../src/enums.h:455
 RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE = 41
+---@source ../src/enums.h:456
 RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER = 42
+---@source ../src/enums.h:457
 RETURNVALUE_YOUMAYNOTATTACKAPERSONINPROTECTIONZONE = 43
+---@source ../src/enums.h:458
 RETURNVALUE_YOUMAYNOTATTACKAPERSONWHILEINPROTECTIONZONE = 44
+---@source ../src/enums.h:459
 RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE = 45
+---@source ../src/enums.h:460
 RETURNVALUE_YOUCANONLYUSEITONCREATURES = 46
+---@source ../src/enums.h:461
 RETURNVALUE_CREATUREISNOTREACHABLE = 47
+---@source ../src/enums.h:462
 RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS = 48
+---@source ../src/enums.h:463
 RETURNVALUE_YOUNEEDPREMIUMACCOUNT = 49
+---@source ../src/enums.h:464
 RETURNVALUE_YOUNEEDTOLEARNTHISSPELL = 50
+---@source ../src/enums.h:465
 RETURNVALUE_YOURVOCATIONCANNOTUSETHISSPELL = 51
+---@source ../src/enums.h:466
 RETURNVALUE_YOUNEEDAWEAPONTOUSETHISSPELL = 52
+---@source ../src/enums.h:467
 RETURNVALUE_PLAYERISPZLOCKEDLEAVEPVPZONE = 53
+---@source ../src/enums.h:468
 RETURNVALUE_PLAYERISPZLOCKEDENTERPVPZONE = 54
+---@source ../src/enums.h:469
 RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE = 55
+---@source ../src/enums.h:470
 RETURNVALUE_YOUCANNOTLOGOUTHERE = 56
+---@source ../src/enums.h:471
 RETURNVALUE_YOUNEEDAMAGICITEMTOCASTSPELL = 57
+---@source ../src/enums.h:472
 RETURNVALUE_NAMEISTOOAMBIGUOUS = 58
+---@source ../src/enums.h:473
 RETURNVALUE_CANONLYUSEONESHIELD = 59
+---@source ../src/enums.h:474
 RETURNVALUE_NOPARTYMEMBERSINRANGE = 60
+---@source ../src/enums.h:475
 RETURNVALUE_YOUARENOTTHEOWNER = 61
+---@source ../src/enums.h:476
 RETURNVALUE_TRADEPLAYERFARAWAY = 62
+---@source ../src/enums.h:477
 RETURNVALUE_YOUDONTOWNTHISHOUSE = 63
+---@source ../src/enums.h:478
 RETURNVALUE_TRADEPLAYERALREADYOWNSAHOUSE = 64
+---@source ../src/enums.h:479
 RETURNVALUE_TRADEPLAYERHIGHESTBIDDER = 65
+---@source ../src/enums.h:480
 RETURNVALUE_YOUCANNOTTRADETHISHOUSE = 66
+---@source ../src/enums.h:481
 RETURNVALUE_YOUDONTHAVEREQUIREDPROFESSION = 67
+---@source ../src/enums.h:482
 RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM = 68
+---@source ../src/enums.h:483
 RETURNVALUE_ITEMCANNOTBEMOVEDTHERE = 69
+---@source ../src/enums.h:484
 RETURNVALUE_YOUCANNOTUSETHISBED = 70
+---@source ../src/enums.h:485
 RETURNVALUE_QUIVERAMMOONLY = 71
 
+---@alias ConditionType number
+---| 0 # CONDITION_NONE
+---| 1 # CONDITION_POISON
+---| 2 # CONDITION_FIRE
+---| 4 # CONDITION_ENERGY
+---| 8 # CONDITION_BLEEDING
+---| 16 # CONDITION_HASTE
+---| 32 # CONDITION_PARALYZE
+---| 64 # CONDITION_OUTFIT
+---| 128 # CONDITION_INVISIBLE
+---| 256 # CONDITION_LIGHT
+---| 512 # CONDITION_MANASHIELD
+---| 1024 # CONDITION_INFIGHT
+---| 2048 # CONDITION_DRUNK
+---| 4096 # CONDITION_EXHAUST_WEAPON -- UNUSED
+---| 8192 # CONDITION_REGENERATION
+---| 16384 # CONDITION_SOUL
+---| 32768 # CONDITION_DROWN
+---| 65536 # CONDITION_MUTED
+---| 131072 # CONDITION_CHANNELMUTEDTICKS
+---| 262144 # CONDITION_YELLTICKS
+---| 524288 # CONDITION_ATTRIBUTES
+---| 1048576 # CONDITION_FREEZING
+---| 2097152 # CONDITION_DAZZLED
+---| 4194304 # CONDITION_CURSED
+---| 8388608 # CONDITION_EXHAUST_COMBAT  -- UNUSED
+---| 16777216 # CONDITION_EXHAUST_HEAL  -- UNUSED
+---| 33554432 # CONDITION_PACIFIED
+---| 67108864 # CONDITION_SPELLCOOLDOWN
+---| 134217728 # CONDITION_SPELLGROUPCOOLDOWN
+---| 268435456 # CONDITION_ROOT
+---| 536870912 # CONDITION_MANASHIELD_BREAKABLE
 CONDITION_NONE = 0
 CONDITION_POISON = 1 * 2 ^ 0
 CONDITION_FIRE = 1 * 2 ^ 1
@@ -1777,6 +2653,61 @@ CONDITION_SPELLGROUPCOOLDOWN = 1 * 2 ^ 27
 CONDITION_ROOT = 1 * 2 ^ 28
 CONDITION_MANASHIELD_BREAKABLE = 1 * 2 ^ 29
 
+---@alias ConditionParam number
+---| 0 # CONDITION_PARAM_TICKS
+---| 1 # CONDITION_PARAM_OWNER
+---| 2 # CONDITION_PARAM_TICKS
+---| 4 # CONDITION_PARAM_HEALTHGAIN
+---| 5 # CONDITION_PARAM_HEALTHTICKS
+---| 6 # CONDITION_PARAM_MANAGAIN
+---| 7 # CONDITION_PARAM_MANATICKS
+---| 8 # CONDITION_PARAM_DELAYED
+---| 9 # CONDITION_PARAM_SPEED
+---| 10 # CONDITION_PARAM_LIGHT_LEVEL
+---| 11 # CONDITION_PARAM_LIGHT_COLOR
+---| 12 # CONDITION_PARAM_SOULGAIN
+---| 13 # CONDITION_PARAM_SOULTICKS
+---| 14 # CONDITION_PARAM_MINVALUE
+---| 15 # CONDITION_PARAM_MAXVALUE
+---| 16 # CONDITION_PARAM_STARTVALUE
+---| 17 # CONDITION_PARAM_TICKINTERVAL
+---| 18 # CONDITION_PARAM_FORCEUPDATE
+---| 19 # CONDITION_PARAM_SKILL_MELEE
+---| 20 # CONDITION_PARAM_SKILL_FIST
+---| 21 # CONDITION_PARAM_SKILL_CLUB
+---| 22 # CONDITION_PARAM_SKILL_SWORD
+---| 23 # CONDITION_PARAM_SKILL_AXE
+---| 24 # CONDITION_PARAM_SKILL_DISTANCE
+---| 25 # CONDITION_PARAM_SKILL_SHIELD
+---| 26 # CONDITION_PARAM_SKILL_FISHING
+---| 27 # CONDITION_PARAM_STAT_MAXHITPOINTS
+---| 28 # CONDITION_PARAM_STAT_MAXMANAPOINTS
+---| 30 # CONDITION_PARAM_STAT_MAGICPOINTS
+---| 31 # CONDITION_PARAM_STAT_MAXHITPOINTSPERCENT
+---| 32 # CONDITION_PARAM_STAT_MAXMANAPOINTSPERCENT
+---| 34 # CONDITION_PARAM_STAT_MAGICPOINTSPERCENT
+---| 35 # CONDITION_PARAM_PERIODICDAMAGE
+---| 36 # CONDITION_PARAM_SKILL_MELEEPERCENT
+---| 37 # CONDITION_PARAM_SKILL_FISTPERCENT
+---| 38 # CONDITION_PARAM_SKILL_CLUBPERCENT
+---| 39 # CONDITION_PARAM_SKILL_SWORDPERCENT
+---| 40 # CONDITION_PARAM_SKILL_AXEPERCENT
+---| 41 # CONDITION_PARAM_SKILL_DISTANCEPERCENT
+---| 42 # CONDITION_PARAM_SKILL_SHIELDPERCENT
+---| 43 # CONDITION_PARAM_SKILL_FISHINGPERCENT
+---| 44 # CONDITION_PARAM_BUFF_SPELL
+---| 45 # CONDITION_PARAM_SUBID
+---| 46 # CONDITION_PARAM_FIELD
+---| 47 # CONDITION_PARAM_DISABLE_DEFENSE
+---| 48 # CONDITION_PARAM_SPECIALSKILL_CRITICALHITCHANCE
+---| 49 # CONDITION_PARAM_SPECIALSKILL_CRITICALHITAMOUNT
+---| 50 # CONDITION_PARAM_SPECIALSKILL_LIFELEECHCHANCE
+---| 51 # CONDITION_PARAM_SPECIALSKILL_LIFELEECHAMOUNT
+---| 52 # CONDITION_PARAM_SPECIALSKILL_MANALEECHCHANCE
+---| 53 # CONDITION_PARAM_SPECIALSKILL_MANALEECHAMOUNT
+---| 54 # CONDITION_PARAM_AGGRESSIVE
+---| 55 # CONDITION_PARAM_DRUNKENNESS
+---| 56 # CONDITION_PARAM_MANASHIELD_BREAKABLE
 CONDITION_PARAM_OWNER = 1
 CONDITION_PARAM_TICKS = 2
 -- CONDITION_PARAM_OUTFIT = 3
@@ -1834,6 +2765,16 @@ CONDITION_PARAM_AGGRESSIVE = 54
 CONDITION_PARAM_DRUNKENNESS = 55
 CONDITION_PARAM_MANASHIELD_BREAKABLE = 56
 
+---@alias WeaponType number
+---| 0 # WEAPON_NONE
+---| 1 # WEAPON_SWORD
+---| 2 # WEAPON_CLUB
+---| 3 # WEAPON_AXE
+---| 4 # WEAPON_SHIELD
+---| 5 # WEAPON_DISTANCE
+---| 6 # WEAPON_WAND
+---| 7 # WEAPON_AMMO
+---| 8 # WEAPON_QUIVER
 WEAPON_NONE = 0
 WEAPON_SWORD = 1
 WEAPON_CLUB = 2
@@ -1844,6 +2785,21 @@ WEAPON_WAND = 6
 WEAPON_AMMO = 7
 WEAPON_QUIVER = 8
 
+---@alias SlotPositions number
+---| 4294967295 # SLOTP_WHEREEVER
+---| 1 # SLOTP_HEAD
+---| 2 # SLOTP_NECKLACE
+---| 4 # SLOTP_BACKPACK
+---| 8 # SLOTP_ARMOR
+---| 16 # SLOTP_RIGHT
+---| 32 # SLOTP_LEFT
+---| 64 # SLOTP_LEGS
+---| 128 # SLOTP_FEET
+---| 256 # SLOTP_RING
+---| 512 # SLOTP_AMMO
+---| 1024 # SLOTP_DEPOT
+---| 2048 # SLOTP_TWO_HAND
+---| 48 # SLOTP_HAND
 SLOTP_WHEREEVER = 0xFFFFFFFF
 SLOTP_HEAD = 1 * 2 ^ 0
 SLOTP_NECKLACE = 1 * 2 ^ 1
@@ -1859,6 +2815,14 @@ SLOTP_DEPOT = 1 * 2 ^ 10
 SLOTP_TWO_HAND = 1 * 2 ^ 11
 SLOTP_HAND = SLOTP_LEFT or SLOTP_RIGHT
 
+---@alias DamageOrigin number
+---| 0 # ORIGIN_NONE
+---| 1 # ORIGIN_CONDITION
+---| 2 # ORIGIN_SPELL
+---| 3 # ORIGIN_MELEE
+---| 4 # ORIGIN_RANGED
+---| 5 # ORIGIN_WAND
+---| 6 # ORIGIN_REFLECT
 ORIGIN_NONE = 0
 ORIGIN_CONDITION = 1
 ORIGIN_SPELL = 2
@@ -1867,9 +2831,25 @@ ORIGIN_RANGED = 4
 ORIGIN_WAND = 5
 ORIGIN_REFLECT = 6
 
+---@alias PlayerSexes number
+---| 0 # PLAYERSEX_FEMALE
+---| 1 # PLAYERSEX_MALE
 PLAYERSEX_FEMALE = 0
 PLAYERSEX_MALE = 1
 
+---@alias ConditionIds number
+---| -1 # CONDITIONID_DEFAULT
+---| 0 # CONDITIONID_COMBAT
+---| 1 # CONDITIONID_HEAD
+---| 2 # CONDITIONID_NECKLACE
+---| 3 # CONDITIONID_BACKPACK
+---| 4 # CONDITIONID_ARMOR
+---| 5 # CONDITIONID_RIGHT
+---| 6 # CONDITIONID_LEFT
+---| 7 # CONDITIONID_LEGS
+---| 8 # CONDITIONID_FEET
+---| 9 # CONDITIONID_RING
+---| 10 # CONDITIONID_AMMO
 CONDITIONID_DEFAULT = -1
 CONDITIONID_COMBAT = 0
 CONDITIONID_HEAD = 1
@@ -1883,6 +2863,27 @@ CONDITIONID_FEET = 8
 CONDITIONID_RING = 9
 CONDITIONID_AMMO = 10
 
+---@alias MapMarks uint8
+---| 0 # MAPMARK_TICK
+---| 1 # MAPMARK_QUESTION
+---| 2 # MAPMARK_EXCLAMATION
+---| 3 # MAPMARK_STAR
+---| 4 # MAPMARK_CROSS
+---| 5 # MAPMARK_TEMPLE
+---| 6 # MAPMARK_KISS
+---| 7 # MAPMARK_SHOVEL
+---| 8 # MAPMARK_SWORD
+---| 9 # MAPMARK_FLAG
+---| 10 # MAPMARK_LOCK
+---| 11 # MAPMARK_BAG
+---| 12 # MAPMARK_SKULL
+---| 13 # MAPMARK_DOLLAR
+---| 14 # MAPMARK_REDNORTH
+---| 15 # MAPMARK_REDSOUTH
+---| 16 # MAPMARK_REDEAST
+---| 17 # MAPMARK_REDWEST
+---| 18 # MAPMARK_GREENNORTH
+---| 19 # MAPMARK_GREENSOUTH
 MAPMARK_TICK = 0
 MAPMARK_QUESTION = 1
 MAPMARK_EXCLAMATION = 2
@@ -1904,25 +2905,103 @@ MAPMARK_REDWEST = 17
 MAPMARK_GREENNORTH = 18
 MAPMARK_GREENSOUTH = 19
 
+---@alias ReloadTypes uint8
+---| 0 # RELOAD_TYPE_ALL
+---| 1 # RELOAD_TYPE_ACTIONS
+---| 2 # RELOAD_TYPE_CHAT
+---| 3 # RELOAD_TYPE_CONFIG
+---| 4 # RELOAD_TYPE_CREATURESCRIPTS
+---| 5 # RELOAD_TYPE_EVENTS
+---| 6 # RELOAD_TYPE_GLOBAL
+---| 7 # RELOAD_TYPE_GLOBALEVENTS
+---| 8 # RELOAD_TYPE_ITEMS
+---| 9 # RELOAD_TYPE_MONSTERS
+---| 10 # RELOAD_TYPE_MOUNTS
+---| 11 # RELOAD_TYPE_MOVEMENTS
+---| 12 # RELOAD_TYPE_NPCS
+---| 13 # RELOAD_TYPE_QUESTS
+---| 14 # RELOAD_TYPE_SCRIPTS
+---| 15 # RELOAD_TYPE_SPELLS
+---| 16 # RELOAD_TYPE_TALKACTIONS
+---| 17 # RELOAD_TYPE_WEAPONS
+
+---@source ../src/const.h:666
 RELOAD_TYPE_ALL = 0
+---@source ../src/const.h:667
 RELOAD_TYPE_ACTIONS = 1
+---@source ../src/const.h:668
 RELOAD_TYPE_CHAT = 2
+---@source ../src/const.h:669
 RELOAD_TYPE_CONFIG = 3
+---@source ../src/const.h:670
 RELOAD_TYPE_CREATURESCRIPTS = 4
+---@source ../src/const.h:671
 RELOAD_TYPE_EVENTS = 5
+---@source ../src/const.h:672
 RELOAD_TYPE_GLOBAL = 6
+---@source ../src/const.h:673
 RELOAD_TYPE_GLOBALEVENTS = 7
+---@source ../src/const.h:674
 RELOAD_TYPE_ITEMS = 8
+---@source ../src/const.h:675
 RELOAD_TYPE_MONSTERS = 9
+---@source ../src/const.h:676
 RELOAD_TYPE_MOUNTS = 10
+---@source ../src/const.h:677
 RELOAD_TYPE_MOVEMENTS = 11
+---@source ../src/const.h:678
 RELOAD_TYPE_NPCS = 12
+---@source ../src/const.h:679
 RELOAD_TYPE_QUESTS = 13
+---@source ../src/const.h:680
 RELOAD_TYPE_SCRIPTS = 14
+---@source ../src/const.h:681
 RELOAD_TYPE_SPELLS = 15
+---@source ../src/const.h:682
 RELOAD_TYPE_TALKACTIONS = 16
+---@source ../src/const.h:683
 RELOAD_TYPE_WEAPONS = 17
 
+---@alias PlayerFlags number
+---| 1 # PlayerFlag_CannotUseCombat
+---| 2 # PlayerFlag_CannotAttackPlayer
+---| 4 # PlayerFlag_CannotAttackMonster
+---| 8 # PlayerFlag_CannotBeAttacked
+---| 16 # PlayerFlag_CanConvinceAll
+---| 32 # PlayerFlag_CanSummonAll
+---| 64 # PlayerFlag_CanIllusionAll
+---| 128 # PlayerFlag_CanSenseInvisibility
+---| 256 # PlayerFlag_IgnoredByMonsters
+---| 512 # PlayerFlag_NotGainInFight
+---| 1024 # PlayerFlag_HasInfiniteMana
+---| 2048 # PlayerFlag_HasInfiniteSoul
+---| 4096 # PlayerFlag_HasNoExhaustion
+---| 8192 # PlayerFlag_CannotUseSpells
+---| 16384 # PlayerFlag_CannotPickupItem
+---| 32768 # PlayerFlag_CanAlwaysLogin
+---| 65536 # PlayerFlag_CanBroadcast
+---| 131072 # PlayerFlag_CanEditHouses
+---| 262144 # PlayerFlag_CannotBeBanned
+---| 524288 # PlayerFlag_CannotBePushed
+---| 1048576 # PlayerFlag_HasInfiniteCapacity
+---| 2097152 # PlayerFlag_CanPushAllCreatures
+---| 4194304 # PlayerFlag_CanTalkRedPrivate
+---| 8388608 # PlayerFlag_CanTalkRedChannel
+---| 16777216 # PlayerFlag_TalkOrangeHelpChannel
+---| 33554432 # PlayerFlag_NotGainExperience
+---| 67108864 # PlayerFlag_NotGainMana
+---| 134217728 # PlayerFlag_NotGainHealth
+---| 268435456 # PlayerFlag_NotGainSkill
+---| 536870912 # PlayerFlag_SetMaxSpeed
+---| 1073741824 # PlayerFlag_SpecialVIP
+---| 2147483648 # PlayerFlag_NotGenerateLoot
+---| 8589934592 # PlayerFlag_IgnoreProtectionZone
+---| 17179869184 # PlayerFlag_IgnoreSpellCheck
+---| 34359738368 # PlayerFlag_IgnoreWeaponCheck
+---| 68719476736 # PlayerFlag_CannotBeMuted
+---| 137438953472 # PlayerFlag_IsAlwaysPremium
+---| 274877906944 # PlayerFlag_IgnoreYellCheck
+---| 549755813888 # PlayerFlag_IgnoreSendPrivateCheck
 PlayerFlag_CannotUseCombat = 1 * 2 ^ 0
 PlayerFlag_CannotAttackPlayer = 1 * 2 ^ 1
 PlayerFlag_CannotAttackMonster = 1 * 2 ^ 2
@@ -1964,38 +3043,103 @@ PlayerFlag_IsAlwaysPremium = 1 * 2 ^ 37
 PlayerFlag_IgnoreYellCheck = 1 * 2 ^ 38
 PlayerFlag_IgnoreSendPrivateCheck = 1 * 2 ^ 39
 
-ITEM_ATTRIBUTE_NONE = 0
+---@alias ItemAttributes number
+---| 0 # ITEM_ATTRIBUTE_NONE
+---| 1 # ITEM_ATTRIBUTE_ACTIONID
+---| 2 # ITEM_ATTRIBUTE_UNIQUEID
+---| 4 # ITEM_ATTRIBUTE_DESCRIPTION
+---| 8 # ITEM_ATTRIBUTE_TEXT
+---| 16 # ITEM_ATTRIBUTE_DATE
+---| 32 # ITEM_ATTRIBUTE_WRITER
+---| 64 # ITEM_ATTRIBUTE_NAME
+---| 128 # ITEM_ATTRIBUTE_ARTICLE
+---| 256 # ITEM_ATTRIBUTE_PLURALNAME
+---| 512 # ITEM_ATTRIBUTE_WEIGHT
+---| 1024 # ITEM_ATTRIBUTE_ATTACK
+---| 2048 # ITEM_ATTRIBUTE_DEFENSE
+---| 4096 # ITEM_ATTRIBUTE_EXTRADEFENSE
+---| 8192 # ITEM_ATTRIBUTE_ARMOR
+---| 16384 # ITEM_ATTRIBUTE_HITCHANCE
+---| 32768 # ITEM_ATTRIBUTE_SHOOTRANGE
+---| 65536 # ITEM_ATTRIBUTE_OWNER
+---| 131072 # ITEM_ATTRIBUTE_DURATION
+---| 262144 # ITEM_ATTRIBUTE_DECAYSTATE
+---| 524288 # ITEM_ATTRIBUTE_CORPSEOWNER
+---| 1048576 # ITEM_ATTRIBUTE_CHARGES
+---| 2097152 # ITEM_ATTRIBUTE_FLUIDTYPE
+---| 4194304 # ITEM_ATTRIBUTE_DOORID
+---| 8388608 # ITEM_ATTRIBUTE_DECAYTO
+---| 16777216 # ITEM_ATTRIBUTE_WRAPID
+---| 33554432 # ITEM_ATTRIBUTE_STOREITEM
+---| 67108864 # ITEM_ATTRIBUTE_ATTACK_SPEED
+---| 134217728 # ITEM_ATTRIBUTE_OPENCONTAINER
+---| 134217728 # ITEM_ATTRIBUTE_DURATION_MIN
+---| 134217728 # ITEM_ATTRIBUTE_DURATION_MAX
+---| 2147483648 # ITEM_ATTRIBUTE_CUSTOM
 
+---@source ../src/enums.h:48
+ITEM_ATTRIBUTE_NONE = 0
+---@source ../src/enums.h:50
 ITEM_ATTRIBUTE_ACTIONID = 1 * 2 ^ 0
+---@source ../src/enums.h:51
 ITEM_ATTRIBUTE_UNIQUEID = 1 * 2 ^ 1
+---@source ../src/enums.h:52
 ITEM_ATTRIBUTE_DESCRIPTION = 1 * 2 ^ 2
+---@source ../src/enums.h:53
 ITEM_ATTRIBUTE_TEXT = 1 * 2 ^ 3
+---@source ../src/enums.h:54
 ITEM_ATTRIBUTE_DATE = 1 * 2 ^ 4
+---@source ../src/enums.h:55
 ITEM_ATTRIBUTE_WRITER = 1 * 2 ^ 5
+---@source ../src/enums.h:56
 ITEM_ATTRIBUTE_NAME = 1 * 2 ^ 6
+---@source ../src/enums.h:57
 ITEM_ATTRIBUTE_ARTICLE = 1 * 2 ^ 7
+---@source ../src/enums.h:58
 ITEM_ATTRIBUTE_PLURALNAME = 1 * 2 ^ 8
+---@source ../src/enums.h:59
 ITEM_ATTRIBUTE_WEIGHT = 1 * 2 ^ 9
+---@source ../src/enums.h:60
 ITEM_ATTRIBUTE_ATTACK = 1 * 2 ^ 10
+---@source ../src/enums.h:61
 ITEM_ATTRIBUTE_DEFENSE = 1 * 2 ^ 11
+---@source ../src/enums.h:62
 ITEM_ATTRIBUTE_EXTRADEFENSE = 1 * 2 ^ 12
+---@source ../src/enums.h:63
 ITEM_ATTRIBUTE_ARMOR = 1 * 2 ^ 13
+---@source ../src/enums.h:64
 ITEM_ATTRIBUTE_HITCHANCE = 1 * 2 ^ 14
+---@source ../src/enums.h:65
 ITEM_ATTRIBUTE_SHOOTRANGE = 1 * 2 ^ 15
+---@source ../src/enums.h:66
 ITEM_ATTRIBUTE_OWNER = 1 * 2 ^ 16
+---@source ../src/enums.h:67
 ITEM_ATTRIBUTE_DURATION = 1 * 2 ^ 17
+---@source ../src/enums.h:68
 ITEM_ATTRIBUTE_DECAYSTATE = 1 * 2 ^ 18
+---@source ../src/enums.h:69
 ITEM_ATTRIBUTE_CORPSEOWNER = 1 * 2 ^ 19
+---@source ../src/enums.h:70
 ITEM_ATTRIBUTE_CHARGES = 1 * 2 ^ 20
+---@source ../src/enums.h:71
 ITEM_ATTRIBUTE_FLUIDTYPE = 1 * 2 ^ 21
+---@source ../src/enums.h:72
 ITEM_ATTRIBUTE_DOORID = 1 * 2 ^ 22
+---@source ../src/enums.h:73
 ITEM_ATTRIBUTE_DECAYTO = 1 * 2 ^ 23
+---@source ../src/enums.h:74
 ITEM_ATTRIBUTE_WRAPID = 1 * 2 ^ 24
+---@source ../src/enums.h:75
 ITEM_ATTRIBUTE_STOREITEM = 1 * 2 ^ 25
+---@source ../src/enums.h:76
 ITEM_ATTRIBUTE_ATTACK_SPEED = 1 * 2 ^ 26
+---@source ../src/enums.h:77
 ITEM_ATTRIBUTE_OPENCONTAINER = 1 * 2 ^ 27
+---@source ../src/enums.h:78
 ITEM_ATTRIBUTE_DURATION_MIN = ITEM_ATTRIBUTE_DURATION
+---@source ../src/enums.h:79
 ITEM_ATTRIBUTE_DURATION_MAX = 1 * 2 ^ 27
+---@source ../src/enums.h:80
 ITEM_ATTRIBUTE_CUSTOM = 1 * 2 ^ 31
 
 ITEM_BROWSEFIELD = 460
@@ -2070,6 +3214,18 @@ RESOURCE_PREY_WILDCARDS = 10
 RESOURCE_DAILYREWARD_STREAK = 20
 RESOURCE_DAILYREWARD_JOKERS = 21
 
+---@alias OperatingSystem uint8
+---| 0 # CLIENTOS_NONE
+---| 1 # CLIENTOS_LINUX
+---| 2 # CLIENTOS_WINDOWS
+---| 3 # CLIENTOS_FLASH
+---| 4 # CLIENTOS_QT_LINUX
+---| 5 # CLIENTOS_QT_WINDOWS
+---| 6 # CLIENTOS_QT_MAC
+---| 7 # CLIENTOS_QT_LINUX2
+---| 10 # CLIENTOS_OTCLIENT_LINUX
+---| 11 # CLIENTOS_OTCLIENT_WINDOWS
+---| 12 # CLIENTOS_OTCLIENT_MAC
 CLIENTOS_NONE = 0
 CLIENTOS_LINUX = 1
 CLIENTOS_WINDOWS = 2
@@ -2082,6 +3238,18 @@ CLIENTOS_OTCLIENT_LINUX = 10
 CLIENTOS_OTCLIENT_WINDOWS = 11
 CLIENTOS_OTCLIENT_MAC = 12
 
+---@alias SkillTypes number
+---| 0 # SKILL_FIST
+---| 1 # SKILL_CLUB
+---| 2 # SKILL_SWORD
+---| 3 # SKILL_AXE
+---| 4 # SKILL_DISTANCE
+---| 5 # SKILL_SHIELD
+---| 6 # SKILL_FISHING
+---| 7 # SKILL_MAGLEVEL
+---| 8 # SKILL_LEVEL
+---| 0 # SKILL_FIRST
+---| 8 # SKILL_LAST
 SKILL_FIST = 0
 SKILL_CLUB = 1
 SKILL_SWORD = 2
@@ -2252,24 +3420,62 @@ WIELDINFO_MAGLV = 1 * 2 ^ 1
 WIELDINFO_VOCREQ = 1 * 2 ^ 2
 WIELDINFO_PREMIUM = 1 * 2 ^ 3
 
+---@alias SpeakClasses uint8
+---| 1 # TALKTYPE_SAY
+---| 2 # TALKTYPE_WHISPER
+---| 3 # TALKTYPE_YELL
+---| 4 # TALKTYPE_PRIVATE_FROM -- Received private message
+---| 5 # TALKTYPE_PRIVATE_TO -- Sent private message
+---| 7 # TALKTYPE_CHANNEL_Y
+---| 8 # TALKTYPE_CHANNEL_O
+---| 9 # TALKTYPE_SPELL -- Like SAY but with "casts" instead of "says"
+---| 10 # TALKTYPE_PRIVATE_NP -- NPC speaking to player
+---| 11 # TALKTYPE_PRIVATE_NP_CONSOLE -- NPC channel message, no text on game screen, for sendPrivateMessage use only
+---| 12 # TALKTYPE_PRIVATE_PN -- Player speaking to NPC
+---| 13 # TALKTYPE_BROADCAST
+---| 14 # TALKTYPE_CHANNEL_R1 -- red - #c text
+---| 15 # TALKTYPE_PRIVATE_RED_FROM -- @name@text
+---| 16 # TALKTYPE_PRIVATE_RED_TO -- @name@text
+---| 36 # TALKTYPE_MONSTER_SAY
+---| 37 # TALKTYPE_MONSTER_YELL
+---| 52 # TALKTYPE_POTION -- Like MONSTER_SAY but can be disabled in client settings
+---@source ../src/const.h:247
 TALKTYPE_SAY = 1
+---@source ../src/const.h:248
 TALKTYPE_WHISPER = 2
+---@source ../src/const.h:249
 TALKTYPE_YELL = 3
+---@source ../src/const.h:250
 TALKTYPE_PRIVATE_FROM = 4 -- Received private message
+---@source ../src/const.h:251
 TALKTYPE_PRIVATE_TO = 5   -- Sent private message
+---@source ../src/const.h:252
 -- TALKTYPE_CHANNEL_M = 6 -- not working (?)
+---@source ../src/const.h:253
 TALKTYPE_CHANNEL_Y = 7
+---@source ../src/const.h:254
 TALKTYPE_CHANNEL_O = 8
+---@source ../src/const.h:255
 TALKTYPE_SPELL = 9               -- Like SAY but with "casts" instead of "says"
+---@source ../src/const.h:256
 TALKTYPE_PRIVATE_NP = 10         -- NPC speaking to player
+---@source ../src/const.h:257
 TALKTYPE_PRIVATE_NP_CONSOLE = 11 -- NPC channel message, no text on game screen, for sendPrivateMessage use only
+---@source ../src/const.h:258
 TALKTYPE_PRIVATE_PN = 12         -- Player speaking to NPC
+---@source ../src/const.h:259
 TALKTYPE_BROADCAST = 13
+---@source ../src/const.h:260
 TALKTYPE_CHANNEL_R1 = 14       -- red - #c text
+---@source ../src/const.h:261
 TALKTYPE_PRIVATE_RED_FROM = 15 -- @name@text
+---@source ../src/const.h:262
 TALKTYPE_PRIVATE_RED_TO = 16   -- @name@text
+---@source ../src/const.h:263
 TALKTYPE_MONSTER_SAY = 36
+---@source ../src/const.h:264
 TALKTYPE_MONSTER_YELL = 37
+---@source ../src/const.h:265
 TALKTYPE_POTION = 52 -- Like MONSTER_SAY but can be disabled in client settings
 
 VARIANT_NUMBER = 0
@@ -2277,6 +3483,15 @@ VARIANT_POSITION = 1
 VARIANT_TARGETPOSITION = 2
 VARIANT_STRING = 3
 
+---@alias SpecialSkills number
+---| 0 # SPECIALSKILL_CRITICALHITCHANCE
+---| 1 # SPECIALSKILL_CRITICALHITAMOUNT
+---| 2 # SPECIALSKILL_LIFELEECHCHANCE
+---| 3 # SPECIALSKILL_LIFELEECHAMOUNT
+---| 4 # SPECIALSKILL_MANALEECHCHANCE
+---| 5 # SPECIALSKILL_MANALEECHAMOUNT
+---| 0 # SPECIALSKILL_FIRST
+---| 5 # SPECIALSKILL_LAST
 SPECIALSKILL_CRITICALHITCHANCE = 0
 SPECIALSKILL_CRITICALHITAMOUNT = 1
 SPECIALSKILL_LIFELEECHCHANCE = 2
@@ -2359,33 +3574,83 @@ RACE_FIRE = 4
 RACE_ENERGY = 5
 RACE_INK = 6
 
+---@alias GameStates number
+---| 0 # GAME_STATE_STARTUP
+---| 1 # GAME_STATE_INIT
+---| 2 # GAME_STATE_NORMAL
+---| 3 # GAME_STATE_CLOSED
+---| 4 # GAME_STATE_SHUTDOWN
+---| 5 # GAME_STATE_CLOSING
+---| 6 # GAME_STATE_MAINTAIN
+
+---@source ../src/game.h:36
 GAME_STATE_STARTUP = 0
+---@source ../src/game.h:37
 GAME_STATE_INIT = 1
+---@source ../src/game.h:38
 GAME_STATE_NORMAL = 2
+---@source ../src/game.h:39
 GAME_STATE_CLOSED = 3
+---@source ../src/game.h:40
 GAME_STATE_SHUTDOWN = 4
+---@source ../src/game.h:41
 GAME_STATE_CLOSING = 5
+---@source ../src/game.h:42
 GAME_STATE_MAINTAIN = 6
 
 REPORT_TYPE_NAME = 0
 REPORT_TYPE_STATEMENT = 1
 REPORT_TYPE_BOT = 2
 
+---@alias TextColors uint8
+---| 5 # TEXTCOLOR_BLUE
+---| 30 # TEXTCOLOR_LIGHTGREEN
+---| 35 # TEXTCOLOR_LIGHTBLUE
+---| 86 # TEXTCOLOR_DARKGREY
+---| 95 # TEXTCOLOR_MAYABLUE
+---| 108 # TEXTCOLOR_DARKRED
+---| 129 # TEXTCOLOR_LIGHTGREY
+---| 143 # TEXTCOLOR_SKYBLUE
+---| 154 # TEXTCOLOR_PURPLE
+---| 155 # TEXTCOLOR_ELECTRICPURPLE
+---| 180 # TEXTCOLOR_RED
+---| 194 # TEXTCOLOR_PASTELRED
+---| 198 # TEXTCOLOR_ORANGE
+---| 210 # TEXTCOLOR_YELLOW
+---| 215 # TEXTCOLOR_WHITE_EXP
+---| 255 # TEXTCOLOR_NONE
+
+---@source ../src/const.h:392
 TEXTCOLOR_BLUE = 5
+---@source ../src/const.h:393
 TEXTCOLOR_LIGHTGREEN = 30
+---@source ../src/const.h:394
 TEXTCOLOR_LIGHTBLUE = 35
+---@source ../src/const.h:395
 TEXTCOLOR_DARKGREY = 86
+---@source ../src/const.h:396
 TEXTCOLOR_MAYABLUE = 95
+---@source ../src/const.h:397
 TEXTCOLOR_DARKRED = 108
+---@source ../src/const.h:398
 TEXTCOLOR_LIGHTGREY = 129
+---@source ../src/const.h:399
 TEXTCOLOR_SKYBLUE = 143
+---@source ../src/const.h:400
 TEXTCOLOR_PURPLE = 154
+---@source ../src/const.h:401
 TEXTCOLOR_ELECTRICPURPLE = 155
+---@source ../src/const.h:402
 TEXTCOLOR_RED = 180
+---@source ../src/const.h:403
 TEXTCOLOR_PASTELRED = 194
+---@source ../src/const.h:404
 TEXTCOLOR_ORANGE = 198
+---@source ../src/const.h:405
 TEXTCOLOR_YELLOW = 210
+---@source ../src/const.h:406
 TEXTCOLOR_WHITE_EXP = 215
+---@source ../src/const.h:407
 TEXTCOLOR_NONE = 255
 
 SPELLGROUP_NONE = 0
@@ -2398,6 +3663,100 @@ SPELLGROUP_CRIPPLING = 6
 SPELLGROUP_FOCUS = 7
 SPELLGROUP_ULTIMATESTRIKES = 8
 
+---@alias WorldTypes number
+---| 1 # WORLD_TYPE_NO_PVP
+---| 2 # WORLD_TYPE_PVP
+---| 3 # WORLD_TYPE_PVP_ENFORCED
+
+---@source ../src/game.h:29
 WORLD_TYPE_NO_PVP = 1
+---@source ../src/game.h:30
 WORLD_TYPE_PVP = 2
+---@source ../src/game.h:31
 WORLD_TYPE_PVP_ENFORCED = 3
+
+---@alias FightModes uint8
+---| 1 # FIGHTMODE_ATTACK
+---| 2 # FIGHTMODE_BALANCE
+---| 3 # FIGHTMODE_DEFENSE
+
+---@source ../src/player.h:35
+FIGHTMODE_ATTACK = 1
+---@source ../src/player.h:36
+FIGHTMODE_BALANCE = 2
+---@source ../src/player.h:37
+FIGHTMODE_DEFENSE = 3
+
+---@alias SquareColours uint8
+---| 0 # SQ_COLOR_BLACK
+
+---@source ../src/const.h:387
+SQ_COLOR_BLACK = 0
+
+---@alias ResourceTypes uint8
+---| 0 # RESOURCE_BANK_BALANCE
+---| 1 # RESOURCE_GOLD_EQUIPPED
+---| 10 # RESOURCE_PREY_WILDCARDS
+---| 20 # RESOURCE_DAILYREWARD_STREAK
+---| 21 # RESOURCE_DAILYREWARD_JOKERS
+
+---@source ../src/const.h:606
+RESOURCE_BANK_BALANCE = 0x00
+---@source ../src/const.h:607
+RESOURCE_GOLD_EQUIPPED = 0x01
+---@source ../src/const.h:608
+RESOURCE_PREY_WILDCARDS = 0x0A
+---@source ../src/const.h:609
+RESOURCE_DAILYREWARD_STREAK = 0x14
+---@source ../src/const.h:610
+RESOURCE_DAILYREWARD_JOKERS = 0x15
+
+---@alias TargetSearchType number
+---| 0 # TARGETSEARCH_TYPE_DEFAULT
+---| 1 # TARGETSEARCH_TYPE_RANDOM
+---| 2 # TARGETSEARCH_TYPE_ATTACKRANGE
+---| 3 # TARGETSEARCH_TYPE_NEAREST
+
+---@source ../src/monster.h:21
+TARGETSEARCH_DEFAULT = 0
+---@source ../src/monster.h:22
+TARGETSEARCH_RANDOM = 1
+---@source ../src/monster.h:23
+TARGETSEARCH_ATTACKRANGE = 2
+---@source ../src/monster.h:24
+TARGETSEARCH_NEAREST = 3
+
+---@alias MonsterIcons uint8
+---| 1 # MONSTER_ICON_VULNERABLE
+---| 2 # MONSTER_ICON_WEAKENED
+---| 3 # MONSTER_ICON_MELEE
+---| 4 # MONSTER_ICON_INFLUENCED
+---| 5 # MONSTER_ICON_FIENDISH
+---| 1 # MONSTER_ICON_FIRST
+---| 5 # MONSTER_ICON_LAST
+
+---@source ../src/const.h:688
+MONSTER_ICON_VULNERABLE = 1
+---@source ../src/const.h:689
+MONSTER_ICON_WEAKENED = 2
+---@source ../src/const.h:690
+MONSTER_ICON_MELEE = 3
+---@source ../src/const.h:691
+MONSTER_ICON_INFLUENCED = 4
+---@source ../src/const.h:692
+MONSTER_ICON_FIENDISH = 5
+
+MONSTER_ICON_FIRST = MONSTER_ICON_VULNERABLE
+MONSTER_ICON_LAST =  MONSTER_ICON_FIENDISH
+
+--These aliases are at the bottom so when you "ctrl+click" an alias that uses them, the alias definition will pop up first
+
+---@alias uint8 number @A number between 0 and 255
+---@alias uint16 number @A number between 0 and 65535
+---@alias uint32 number @A number between 0 and 4294967295
+---@alias uint64 number @A number between 0 and 18446744073709551615
+---@alias int8 number @A number between -128 and 127
+---@alias int16 number @A number between -32768 and 32767
+---@alias int32 number @A number between -2147483648 and 2147483647
+---@alias int64 number @A number between -9223372036854775808 and 9223372036854775807
+---@alias double number @A number between -1.7976931348623157E+308 and 1.7976931348623157E+308
