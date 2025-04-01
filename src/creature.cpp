@@ -30,7 +30,7 @@ Creature::~Creature()
 		summon->removeMaster();
 	}
 
-	for (Condition* condition : conditions) {
+	for (const std::shared_ptr<Condition>& condition : conditions) {
 		condition->endCondition(this);
 	}
 }

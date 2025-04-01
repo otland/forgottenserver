@@ -1682,7 +1682,7 @@ void Items::parseItemNode(const pugi::xml_node& itemNode, uint16_t id)
 
 					if (combatType != COMBAT_NONE) {
 						it.combatType = combatType;
-						it.conditionDamage.reset(conditionDamage);
+						it.conditionDamage = conditionDamage;
 
 						uint32_t ticks = 0;
 						int32_t start = 0;

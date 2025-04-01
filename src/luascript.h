@@ -1503,6 +1503,17 @@ T* getUserdata(lua_State* L, int32_t arg)
 	return *userdata;
 }
 
+template <class T>
+std::shared_ptr<T>& getSharedPtr(lua_State* L, int32_t arg)
+{
+	return *static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
+}
+template <class T>
+void pushSharedPtr(lua_State* L, T value)
+{
+	new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
+}
+
 bool getBoolean(lua_State* L, int32_t arg);
 bool getBoolean(lua_State* L, int32_t arg, bool defaultValue);
 std::string getString(lua_State* L, int32_t arg);
