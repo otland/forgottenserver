@@ -16,8 +16,6 @@
 --- print("Client OS: " .. clientTable.os) -- Example: 2 (CLIENTOS_WINDOWS)
 --- ```
 --- <br>
----*int LuaScriptInterface::luaPlayerGetClient(lua_State* L)
----@source ../src/luascript.cpp:10844
 ---@class UserClientVersion
 ---@field version uint16 The version number of the client
 ---@field os OperatingSystem The operating system of the user 
@@ -40,8 +38,6 @@
 ---end -- As per this example, this for loop will only run once 
 --- ```
 --- <br>
----*int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
----@source ../src/luascript.cpp:11032
 ---@class SpellsTable
 ---@field name string The name of the spell
 ---@field words string The words used to cast the spell
@@ -67,8 +63,6 @@
 ---end
 ---```
 ---<br>
----*int LuaScriptInterface::luaGameGetMounts(lua_State* L)
----@source ../src/luascript.cpp:4805
 ---@class MountInfoTable
 ---@field name string The name of the mount
 ---@field speed int32 The speed of the mount
@@ -88,8 +82,6 @@
 --- print("Client String: " .. clientTable.string) -- Example: 13.10
 --- ```
 --- <br>
----*int LuaScriptInterface::luaGameGetClientVersion(lua_State* L)
----@source ../src/luascript.cpp:5111
 ---@class GameClientVersion
 ---@field min number -- Mininum version of the client allowed (Current 1310)
 ---@field max number -- Maximum version of the client allowed (Current 1311)
@@ -1024,7 +1016,7 @@ Podium = {}
 --- <br>
 --- Further definiton of the Creature class can be found in creature.h <br>
 ---@source ../src/creature.h
----@class Creature : Thing\
+---@class Creature : Thing
 ---*int LuaScriptInterface::luaCreatureCreate(lua_State* L)
 ---@source ../src/luascript.cpp:7764
 ---@field create fun(): Creature
@@ -2731,7 +2723,7 @@ Outfit = {}
 ---@field baseSpeed fun(self: MonsterType, setBaseSpeed?: uint32): uint32?
 ---*int LuaScriptInterface::luaMonsterTypeLight(lua_State* L)
 ---@source ../src/luascript.cpp:15302
----@field light fun(self: MonsterType, setLightColour?: uint8, setLightLevel?: uint8): table --! TODO: Check how light level and colour is being returned. It is currently pushing two numbers
+---@field light fun(self: MonsterType, setLightColour?: uint8, setLightLevel?: uint8): uint8, uint8 
 ---*int LuaScriptInterface::luaMonsterTypeStaticAttackChance(lua_State* L)
 ---@source ../src/luascript.cpp:15322
 ---@field staticAttackChance fun(self: MonsterType, setStaticAttackChance?: uint32): uint32?
@@ -3050,7 +3042,7 @@ Party = {}
 ---@field isSelfTarget fun(self:Spell, setSelfTarget?:boolean):boolean
 ---*int LuaScriptInterface::luaSpellBlocking(lua_State* L)
 ---@source ../src/luascript.cpp:16674
----@field isBlocking fun(self:Spell, setBlockingSolid?:boolean, setBlockingCreature?:boolean):boolean, boolean | boolean --! TODO: like another one in monstertype, how does this return two booleans at once? Do you need to do local blockingSolid, blockingCreature = spell:isBlocking()?
+---@field isBlocking fun(self:Spell, setBlockingSolid?:boolean, setBlockingCreature?:boolean):boolean, boolean | boolean 
 ---*int LuaScriptInterface::luaSpellAggressive(lua_State* L)
 ---@source ../src/luascript.cpp:16694
 ---@field isAggressive fun(self:Spell, setIsAggressive?:boolean):boolean
@@ -4925,6 +4917,15 @@ INDEX_WHEREEVER = -1
 VIRTUAL_PARENT = true
 
 ---@alias CylinderFlag
+---| 1 # FLAG_NOLIMIT
+---| 2 # FLAG_IGNOREBLOCKITEM
+---| 4 # FLAG_IGNOREBLOCKCREATURE
+---| 8 # FLAG_CHILDISOWNER
+---| 16 # FLAG_PATHFINDING
+---| 32 # FLAG_IGNOREFIELDDAMAGE
+---| 64 # FLAG_IGNORENOTMOVEABLE
+---| 128 # FLAG_IGNOREAUTOSTACK
+
 ---@source ../src/cylinder.h:17
 FLAG_NOLIMIT = 1 * 2 ^ 0             -- Bypass limits like capacity/container limits, blocking items/creatures etc.
 ---@source ../src/cylinder.h:18
