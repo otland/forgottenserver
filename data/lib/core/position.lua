@@ -14,6 +14,9 @@ function mt.__concat(lhs, rhs) return tostring(lhs) .. tostring(rhs) end
 function mt.__eq(lhs, rhs) return lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z end
 function mt.__tostring(self) return string.format("Position(%d, %d, %d)", self.x, self.y, self.z) end
 
+---@alias directionOffsets table<Directions, {x: number, y: number}>
+
+---@type directionOffsets
 Position.directionOffset = {
 	[DIRECTION_NORTH] = {x = 0, y = -1},
 	[DIRECTION_EAST] = {x = 1, y = 0},
@@ -26,6 +29,10 @@ Position.directionOffset = {
 }
 
 local abs, max = math.abs, math.max
+---Returns the distance between two positions
+---@param self Position
+---@param positionEx Position
+---@return number maxDistance -- The maximum distance between two positions
 function Position:getDistance(positionEx)
 	local dx = abs(self.x - positionEx.x)
 	local dy = abs(self.y - positionEx.y)
@@ -33,6 +40,9 @@ function Position:getDistance(positionEx)
 	return max(dx, dy, dz)
 end
 
+---Returns the next position in a specific direction and how many steps in that direction
+---@param direction directionOffsets
+---@param steps? number
 function Position:getNextPosition(direction, steps)
 	local offset = Position.directionOffset[direction]
 	if offset then
