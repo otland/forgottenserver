@@ -8,8 +8,13 @@ do
 	local worldLightLevel = 0
 	local worldLightColor = 0
 
+--- Gets the current world light color and level
+---@return integer, integer
 	function Game.getWorldLight() return worldLightLevel, worldLightColor end
 
+--- Sets the world light to a specific color and level
+---@param color any
+---@param level any
 	function Game.setWorldLight(color, level)
 		if not defaultWorldLight then
 			return

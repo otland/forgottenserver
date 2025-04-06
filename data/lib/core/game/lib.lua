@@ -4,6 +4,9 @@ dofile('data/lib/core/game/quest.lua')
 dofile('data/lib/core/game/world_light.lua')
 dofile('data/lib/core/game/world_time.lua')
 
+---Sends a message to all players in the game.
+---@param message string
+---@param messageType? MessageTypes
 function Game.broadcastMessage(message, messageType)
 	if not messageType then
 		messageType = MESSAGE_STATUS_WARNING
@@ -14,6 +17,9 @@ function Game.broadcastMessage(message, messageType)
 	end
 end
 
+---Returns the opposite direction of the given direction.
+---@param direction Directions
+---@return Directions
 function Game.getReverseDirection(direction)
 	if direction == WEST then
 		return EAST
