@@ -14,6 +14,10 @@ function Tile.isContainer(self)
 	return false
 end
 
+---Moves all items and creatures from one tile to another.
+---@param self Tile
+---@param toPosition Position
+---@return boolean
 function Tile.relocateTo(self, toPosition)
 	if self:getPosition() == toPosition or not Tile(toPosition) then
 		return false
@@ -37,6 +41,9 @@ function Tile.relocateTo(self, toPosition)
 	return true
 end
 
+---Checks if a tile is walkable
+---@param self Tile
+---@return boolean
 function Tile.isWalkable(self)
 	local ground = self:getGround()
 	if not ground or ground:hasProperty(CONST_PROP_BLOCKSOLID) then

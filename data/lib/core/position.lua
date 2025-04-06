@@ -52,6 +52,8 @@ function Position:getNextPosition(direction, steps)
 	end
 end
 
+---Returns the next position up one floor
+---@return Position
 function Position:moveUpstairs()
 	local swap = function(lhs, rhs)
 		lhs.x, rhs.x = rhs.x, lhs.x
@@ -82,6 +84,10 @@ function Position:moveUpstairs()
 	return self
 end
 
+---Checks if a position is in range of two other positions
+---@param from Position
+---@param to Position
+---@return boolean
 function Position:isInRange(from, to)
 	-- No matter what corner from and to is, we want to make
 	-- life easier by calculating north-west and south-east
@@ -106,6 +112,8 @@ function Position:isInRange(from, to)
 	return false
 end
 
+---Adds the summon to the target list of all spectators in the area
+---@param summon Monster
 function Position:notifySummonAppear(summon)
 	local spectators = Game.getSpectators(self)
 	for _, spectator in ipairs(spectators) do

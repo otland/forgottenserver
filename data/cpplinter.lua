@@ -118,25 +118,6 @@
 ---@field name string
 ---@field level uint32
 
---- A town is a table that contains information about a town.
---- <br>
---- It is returned when using `Game.getTowns()`, `player:getTown()` or `house:getTown()`
---- <br><br>
---- Example Usage:
---- ```lua
---- local towns = Game.getTowns() -- Gets all the towns in the game
---- 
---- for i, town in ipairs(towns) do -- This will iterate through every town registered
----	    print("Town Name: " .. town.name) -- Example: "Thais"
----	    print("Town ID: " .. town.id) -- Example: 1
----	    print("Town Position: " .. town.position) -- Example: Position(100, 100, 7)
---- end
---- ```
----@class Town
----@field id uint32 -- The ID of the town
----@field name string -- The name of the town
----@field position Position -- The position of the town
-
 --- Item Abilities is a table which contains all the information about what an ItemType will give a player when equipped.
 --- <br>
 --- It is returned when using `itemType:getAbilities()`
@@ -216,8 +197,8 @@
 --- ```
 --- Full definition is found in `monsters.h:18`
 ---@class MonsterLootBlock
----@field id uint16 -- the Item ID of the item that would be looted
----@field countmax uint32 -- The max amount of items that would be looted
+---@field itemId uint16 -- the Item ID of the item that would be looted
+---@field maxCount uint32 -- The max amount of items that would be looted
 ---@field chance uint32 -- The chance of the item being looted
 ---@field subType? int32 -- The subType of the item, optional if applicable
 ---@field actionId? int32 -- The actionId of the item, optional
@@ -1212,7 +1193,7 @@ Podium = {}
 ---@field getStorageValue fun(self: Creature, key: uint32): int32
 ---*int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 ---@source ../src/luascript.cpp:8883
----@field setStorageValue fun(self: Creature, key: uint32, value: int32)
+---@field setStorageValue fun(self: Creature, key: uint32, value: int32?): boolean
 Creature = {}
 
 --- The Player class is representing a logged in and active player in the game world
@@ -2290,7 +2271,7 @@ House = {}
 ---@field hasAllowDistRead fun(self: ItemType): boolean
 ---*int LuaScriptInterface::luaItemTypeGetWieldInfo(lua_State* L)
 ---@source ../src/luascript.cpp:13556
----@field getWieldInfo fun(self: ItemType): string
+---@field getWieldInfo fun(self: ItemType): number
 ---*int LuaScriptInterface::luaItemTypeGetDurationMin(lua_State* L)
 ---@source ../src/luascript.cpp:13568
 ---@field getDurationMin fun(self: ItemType): uint32
@@ -2415,7 +2396,8 @@ ItemType = {}
 ---@field setOrigin fun(self: Combat, originType: DamageOrigin)
 ---*int LuaScriptInterface::luaCombatExecute(lua_State* L)
 ---@source ../src/luascript.cpp:14000
----@field execute fun(self: Combat, caster: Creature, target: Variant)
+---@field execute fun(self: Combat, caster: Creature, target: Variant): boolean
+---@operator call():Combat
 Combat = {}
 
 --- A condition is a temporary effect that can be applied to a creature.
@@ -6640,13 +6622,26 @@ STAT_FIRST = STAT_MAXHITPOINTS
 ---@source ../src/enums.h:318
 STAT_LAST = STAT_MAGICPOINTS
 
--- Not accessible in LUA
--- MONSTERS_EVENT_NONE = 0
--- MONSTERS_EVENT_THINK = 1
--- MONSTERS_EVENT_APPEAR = 2
--- MONSTERS_EVENT_DISAPPEAR = 3
--- MONSTERS_EVENT_MOVE = 4
--- MONSTERS_EVENT_SAY = 5
+---@alias MonstersEvent
+---| 0 # MONSTERS_EVENT_NONE
+---| 1 # MONSTERS_EVENT_THINK
+---| 2 # MONSTERS_EVENT_APPEAR
+---| 3 # MONSTERS_EVENT_DISAPPEAR
+---| 4 # MONSTERS_EVENT_MOVE
+---| 5 # MONSTERS_EVENT_SAY
+
+---@source ../src/enums.h:658
+ MONSTERS_EVENT_NONE = 0
+ ---@source ../src/enums.h:658
+ MONSTERS_EVENT_THINK = 1
+ ---@source ../src/enums.h:658
+ MONSTERS_EVENT_APPEAR = 2
+ ---@source ../src/enums.h:658
+ MONSTERS_EVENT_DISAPPEAR = 3
+ ---@source ../src/enums.h:658
+ MONSTERS_EVENT_MOVE = 4
+ ---@source ../src/enums.h:658
+ MONSTERS_EVENT_SAY = 5
 
 
 ---@alias CreatureTypes
@@ -6732,7 +6727,6 @@ FLUID_WATER = FLUID_BLUE
 ---@source ../src/const.h:324
 FLUID_BLOOD = FLUID_RED
 ---@source ../src/const.h:324
----@---@source ../src/const.h:324
 FLUID_BEER = FLUID_BROWN
 ---@source ../src/const.h:324
 FLUID_SLIME = FLUID_GREEN

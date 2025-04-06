@@ -22,6 +22,15 @@ Storages:
 	(Ex: this storage + the id of achievement 'Allowance Collector' to save how many piggy banks has been broken
 ]]
 
+---@class AchievementInfo
+---@field clientId number
+---@field name string
+---@field grade number
+---@field points number
+---@field secret? boolean
+---@field description string
+
+---@type table<number, AchievementInfo>
 achievements = {
 	-- 8.6
 	[1] = {clientId = 60, name = "Allow Cookies?", grade = 1, points = 2, description = "With a perfectly harmless smile you fooled all of those wisecrackers into eating your exploding cookies. Consider a boy or girl scout outfit next time to make the trick even better."},
@@ -618,6 +627,9 @@ achievements = {
 ACHIEVEMENT_FIRST = 1
 ACHIEVEMENT_LAST = #achievements
 
+---Returns the achievement info table using the achievement ID.
+---@param id number
+---@return AchievementInfo|boolean
 function getAchievementInfoById(id)
 	for k, v in pairs(achievements) do
 		if k == id then
@@ -687,9 +699,14 @@ function isAchievementSecret(ach)
 	return achievement.secret
 end
 
+---Checks if a player has a specific achievement, either by the ID or the name.
+---@param self Player
+---@param ach number|string
+---@return boolean
 function Player.hasAchievement(self, ach)
 	local achievement
 	if tonumber(ach) then
+---@diagnostic disable-next-line: param-type-mismatch
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -702,6 +719,9 @@ function Player.hasAchievement(self, ach)
 	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
 end
 
+---Returns a table of all achievements the player has.
+---@param self Player
+---@return table
 function Player.getAchievements(self)
 	local targetAchievement = {}
 	for k = 1, #achievements do
@@ -712,9 +732,15 @@ function Player.getAchievements(self)
 	return targetAchievement
 end
 
+---Adds an achievement to the player. If the achievement is already owned, it does nothing.
+---@param self Player
+---@param ach number|string
+---@param hideMsg boolean|nil
+---@return boolean
 function Player.addAchievement(self, ach, hideMsg)
 	local achievement
 	if tonumber(ach) then
+---@diagnostic disable-next-line: param-type-mismatch
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -740,9 +766,14 @@ function Player.addAchievement(self, ach, hideMsg)
 	return true
 end
 
+---Removes an achievement from the player. If the achievement is not owned, it does nothing.
+---@param self Player
+---@param ach number|string
+---@return boolean
 function Player.removeAchievement(self, ach)
 	local achievement
 	if tonumber(ach) then
+---@diagnostic disable-next-line: param-type-mismatch
 		achievement = getAchievementInfoById(ach)
 	else
 		achievement = getAchievementInfoByName(ach)
@@ -762,6 +793,10 @@ function Player.removeAchievement(self, ach)
 	return true
 end
 
+---Adds all achievements to the player
+---@param self Player
+---@param hideMsg boolean
+---@return boolean
 function Player.addAllAchievements(self, hideMsg)
 	for i = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
 		self:addAchievement(i, hideMsg)
@@ -769,6 +804,9 @@ function Player.addAllAchievements(self, hideMsg)
 	return true
 end
 
+---Removes all achievements from the player
+---@param self Player
+---@return boolean
 function Player.removeAllAchievements(self)
 	for k = 1, #achievements do
 		if self:hasAchievement(k) then
@@ -778,6 +816,9 @@ function Player.removeAllAchievements(self)
 	return true
 end
 
+---Returns a table of all secret achievements the player has.
+---@param self Player
+---@return table
 function Player.getSecretAchievements(self)
 	local targetAchievement = {}
 	for k, v in pairs(achievements) do
@@ -788,6 +829,9 @@ function Player.getSecretAchievements(self)
 	return targetAchievement
 end
 
+---Returns a table of all achievements that are not secret the player has.
+---@param self Player
+---@return table
 function Player.getPublicAchievements(self)
 	local targetAchievement = {}
 	for k, v in pairs(achievements) do
@@ -798,13 +842,16 @@ function Player.getPublicAchievements(self)
 	return targetAchievement
 end
 
+---Returns the total amount of achievement points the player has.
+---@param self Player
+---@return integer
 function Player.getAchievementPoints(self)
 	local points = 0
 	local list = self:getAchievements()
 	if #list > 0 then -- has achievements
 		for i = 1, #list do
 			local targetAchievement = getAchievementInfoById(list[i])
-			if targetAchievement.points > 0 then -- avoid achievements with unknow points
+			if targetAchievement and targetAchievement.points > 0 then -- avoid achievements with unknown points
 				points = points + targetAchievement.points
 			end
 		end
@@ -812,7 +859,13 @@ function Player.getAchievementPoints(self)
 	return points
 end
 
+---Adds progress to an achievement. If the progress is equal to the value, it will add the achievement.
+---@param self Player
+---@param ach number|string
+---@param value number
+---@return boolean
 function Player.addAchievementProgress(self, ach, value)
+---@diagnostic disable-next-line: param-type-mismatch
 	local achievement = tonumber(ach) and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
 	if not achievement then
 		print('[!] -> Invalid achievement "' .. ach .. '".')

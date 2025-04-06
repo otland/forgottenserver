@@ -231,6 +231,12 @@ AREADIAGONAL_WALLFIELD = {
 -- This array contains all destroyable field items
 FIELDS = {1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1500, 1501, 1502, 1503, 1504}
 
+---addPartyCondition will apply a condition to all party members in the area of effect of the combat.
+---@param combat Combat
+---@param variant Variant
+---@param condition Condition
+---@param baseMana number
+---@return boolean
 function Player:addPartyCondition(combat, variant, condition, baseMana)
 	local party = self:getParty()
 	if not party then
@@ -279,6 +285,12 @@ function Player:addPartyCondition(combat, variant, condition, baseMana)
 	return true
 end
 
+---conjureItem is used when a player casts a spell to conjure an item.
+---@param reagentId number
+---@param conjureId number
+---@param conjureCount number
+---@param effect MagicEffectConsts
+---@return boolean
 function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
 	if not conjureCount and conjureId ~= 0 then
 		local itemType = ItemType(conjureId)
@@ -314,6 +326,7 @@ function Player:conjureItem(reagentId, conjureId, conjureCount, effect)
 end
 
 function Creature:addAttributeCondition(parameters)
+	---@type Condition
 	local condition = Condition(CONDITION_ATTRIBUTES)
 	for _, parameter in ipairs(parameters) do
 		if parameter.key and parameter.value then
