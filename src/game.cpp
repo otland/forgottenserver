@@ -2559,6 +2559,115 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 }
 
+void Game::playerStowItem(uint32_t playerId, const Position& pos, uint16_t itemId, uint8_t stackpos, uint8_t count, bool allItems) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+	
+	if (!player->isPremium()) {
+		player->sendCancelMessage(RETURNVALUE_YOUNEEDPREMIUMACCOUNT);
+		return;
+	}
+
+	Thing* thing = internalGetThing(player, pos, stackpos, itemId, STACKPOS_TOPDOWN_ITEM);
+	if (!thing) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	Item* item = thing->getItem();
+	if (!item) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// Use tryRetrieveStashItems for additional validation
+	if (!tryRetrieveStashItems(player, item)) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	if (item->getID() != itemId) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	if (item->getItemCount() < count) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	if (pos.x != 0xFFFF && !Position::areInRange<1, 1, 0>(pos, player->getPosition())) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	player->stowItem(item, count, allItems);
+}
+
+void Game::playerStashWithdraw(uint32_t playerId, uint16_t itemId, uint32_t count, uint8_t) {
+	Player* player = getPlayerByID(playerId);
+	if (!player) {
+		return;
+	}
+	if (player->hasFlag(PlayerFlags::PlayerFlag_CannotPickupItem)) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	const ItemType& it = Item::items[itemId];
+	if (it.id == 0 || count == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	uint16_t freeSlots = player->getFreeBackpackSlots();
+	if (freeSlots == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
+		return;
+	}
+
+	if (player->getFreeCapacity() < (count * it.weight)) {
+		player->sendCancelMessage(RETURNVALUE_NOTENOUGHCAPACITY);
+		return;
+	}
+
+	// Determine stack size: 100 for stackable items, 1 for non-stackable
+	uint32_t stackSize = it.stackable ? 100 : 1;
+
+	// Calculate how many slots are needed and compare with free slots
+	uint32_t requiredSlots = (count + stackSize - 1) / stackSize; // Ceiling division for slots
+	if (requiredSlots > freeSlots) {
+		count = freeSlots * stackSize; // Adjust count to fit available slots
+	}
+
+	// Calculate how much weight the player can carry
+	uint32_t maxWeightCount = player->getFreeCapacity() / it.weight;
+	if (count > maxWeightCount) {
+		count = maxWeightCount; // Adjust count to fit capacity
+	}
+
+	if (count == 0) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	// Withdraw items from stash and add them to the player's inventory
+	if (player->withdrawItem(itemId, count)) {
+		player->addItemFromStash(it.id, count);
+
+		std::stringstream ss;
+		ss << "Retrieved " << count << "x " << it.name << ".";
+		player->sendTextMessage(MESSAGE_STATUS_DEFAULT, ss.str());
+	} else {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+	}
+
+	// Update stash view for the player
+	player->sendOpenStash(true);
+}
+
 void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_t index)
 {
 	Player* player = getPlayerByID(playerId);
@@ -5933,4 +6042,11 @@ bool Game::reload(ReloadTypes_t reloadType)
 		}
 	}
 	return true;
+}
+
+bool Game::tryRetrieveStashItems(Player* player, Item* item) {
+	if (!player || !item) {
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
+	return RETURNVALUE_NOERROR;
 }

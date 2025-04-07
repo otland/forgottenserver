@@ -943,5 +943,6 @@ private:
 
 using ItemList = std::list<Item*>;
 using ItemDeque = std::deque<Item*>;
+using StashContainerList = std::vector<std::pair<Item*, uint32_t>>;
 
 #endif // FS_ITEM_H
