@@ -41,7 +41,7 @@ public:
 
 struct CombatParams
 {
-	std::forward_list<std::unique_ptr<const Condition>> conditionList = {};
+	std::forward_list<std::shared_ptr<const Condition>> conditionList = {};
 
 	std::unique_ptr<ValueCallback> valueCallback = nullptr;
 	std::unique_ptr<TileCallback> tileCallback = nullptr;
@@ -115,7 +115,10 @@ public:
 
 	void setArea(AreaCombat* area);
 	bool hasArea() const { return area != nullptr; }
-	void addCondition(const Condition* condition) { params.conditionList.emplace_front(condition); }
+	void addCondition(const std::shared_ptr<const Condition>& condition)
+	{
+		params.conditionList.emplace_front(condition);
+	}
 	void clearConditions() { params.conditionList.clear(); }
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
 	void postCombatEffects(Creature* caster, const Position& pos) const { postCombatEffects(caster, pos, params); }
