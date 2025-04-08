@@ -740,9 +740,7 @@ do
 			end
 
 			if desc and desc:len() > 0 then
-				if not (isBed and desc == "Nobody is sleeping there.") then
-					response[#response + 1] = string.format("\n%s", desc)
-				end
+				response[#response + 1] = string.format("\n%s", desc)
 			end
 		else
 			if lookDistance <= 4 then
