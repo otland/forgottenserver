@@ -6,7 +6,6 @@
     "boost-locale",
     "boost-lockfree",
     "boost-system",
-    "boost-variant",
     "fmt",
     {
       "name": "libiconv",
