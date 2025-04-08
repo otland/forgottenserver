@@ -1645,3 +1645,21 @@ do
 
 	function isClass(obj, class) return getmetatable(obj) == class end
 end
+
+function getAchievementInfoById(...) return fetchAchievementById(...) end
+function getAchievementInfoByName(...) return fetchAchievementByName(...) end
+function getSecretAchievements(...) return getAllSecretAchievementIds(...) end
+function getPublicAchievements(...) return getAllPublicAchievementIds(...) end
+function getAchievements(...) return getAllAchievements(...) end
+function isAchievementSecret(...) return isSecretAchievement(...) end
+
+function Player.hasAchievement(self, ...) return self:hasUnlockedAchievement(...) end
+function Player.getAchievements(self, ...) return self:getUnlockedAchievementIds(...) end
+function Player.addAchievement(self, ...) return self:grantAchievement(...) end
+function Player.removeAchievement(self, ...) return self:revokeAchievement(...) end
+function Player.addAllAchievements(self, ...) return self:grantAllAchievements(...) end
+function Player.removeAllAchievements(self, ...) return self:revokeAllAchievements(...) end
+function Player.getSecretAchievements(self, ...) return self:getUnlockedSecretAchievementIds(...) end
+function Player.getPublicAchievements(self, ...) return self:getUnlockedPublicAchievementIds(...) end
+function Player.getAchievementPoints(self, ...) return self:getTotalAchievementPoints(...) end
+function Player.addAchievementProgress(self, ...) return self:incrementAchievementProgress(...) end
