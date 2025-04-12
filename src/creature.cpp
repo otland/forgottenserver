@@ -39,30 +39,15 @@ Creature::~Creature()
 	}
 }
 
-bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
+bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY) 
 {
-	if (myPos.z <= 7) {
-		// we are on ground level or above (7 -> 0)
-		// view is from 7 -> 0
-		if (pos.z > 7) {
-			return false;
-		}
-	} else if (myPos.z >= 8) {
-		// we are underground (8 -> 15)
-		// we can't see floors above 8
-		if (pos.z < 8) {
-			return false;
-		}
-
-		// view is +/- 2 from the floor we stand on
-		if (myPos.getDistanceZ(pos) > 2) {
-			return false;
-		}
+// Monsters only can see -1 and +1 floors like a real tibia.	
+	if (std::abs(myPos.z - pos.z) > 1) {
+		return false;
 	}
 
-	int32_t offsetz = myPos.getOffsetZ(pos);
-	return (pos.getX() >= myPos.getX() - viewRangeX + offsetz) && (pos.getX() <= myPos.getX() + viewRangeX + offsetz) &&
-	       (pos.getY() >= myPos.getY() - viewRangeY + offsetz) && (pos.getY() <= myPos.getY() + viewRangeY + offsetz);
+	return (pos.x >= myPos.x - viewRangeX) && (pos.x <= myPos.x + viewRangeX)
+		&& (pos.y >= myPos.y - viewRangeY) && (pos.y <= myPos.y + viewRangeY);
 }
 
 bool Creature::canSee(const Position& pos) const
