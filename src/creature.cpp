@@ -39,7 +39,7 @@ Creature::~Creature()
 	}
 }
 
-bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY) 
+bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
 {
 // Monsters only can see -1 and +1 floors like a real tibia.	
 	if (std::abs(myPos.z - pos.z) > 1) {
