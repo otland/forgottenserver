@@ -298,8 +298,8 @@ enum MessageClasses : uint8_t
 	// MESSAGE_THANK_YOU = 41, // not working (?)
 	MESSAGE_MARKET = 42, // Window "Market Message" + "Ok" button
 	// MESSAGE_MANA = 43, // not working (?)
-	MESSAGE_BEYOND_LAST = 44,     // White, console only
-	MESSAGE_TOURNAMENT_INFO = 45, // Window "Tournament" + "Ok" button
+	MESSAGE_BEYOND_LAST = 44, // White, console only
+	// unused 45, old window "Tournament" + "Ok" button
 	// unused 46?
 	// unused 47?
 	MESSAGE_ATTENTION = 48,        // White, console only

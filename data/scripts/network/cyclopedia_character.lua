@@ -16,7 +16,6 @@ local function sendBasicInfo(self, msg)
 	end
 
 	msg:addByte(0) -- hide stamina
-	msg:addByte(1) -- enable store summary & character titles
 	msg:addString("") -- character title
 
 	msg:sendToPlayer(self)
@@ -93,7 +92,6 @@ local function sendGeneralStats(self, msg)
 	msg:addByte(self:getLevelPercent())
 
 	msg:addU16(self:getClientExpDisplay())
-	msg:addU32(0) -- tournament exp (deprecated)
 	msg:addU16(self:getClientLowLevelBonusDisplay())
 	msg:addU16(0) -- store exp bonus
 	msg:addU16(self:getClientStaminaBonusDisplay())
