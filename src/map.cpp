@@ -686,14 +686,14 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
+	const std::array<std::pair<int, int>, 8> allNeighbors = {
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
 	AStarNodes nodes(pos.x, pos.y);
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
-	int16_t iterations = 0;
+	uint8_t iterations = 0;
 	AStarNode* n = nodes.getBestNode();
 	while (n) {
 		iterations++;
@@ -703,8 +703,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			return false;
 		}
 
-		const int_fast32_t x = n->x;
-		const int_fast32_t y = n->y;
+		const int32_t x = n->x;
+		const int32_t y = n->y;
 		pos.x = x;
 		pos.y = y;
 		if (pathCondition(startPos, pos, fpp, bestMatch)) {
@@ -715,7 +715,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 		}
 
-		for (uint_fast32_t i = 0; i < 8; ++i) {
+		for (uint8_t i = 0; i < 8; ++i) {
 			pos.x = x + allNeighbors[i].first;
 			pos.y = y + allNeighbors[i].second;
 
@@ -774,16 +774,16 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	int_fast32_t prevx = endPos.getX();
-	int_fast32_t prevy = endPos.getY();
+	int32_t prevx = endPos.getX();
+	int32_t prevy = endPos.getY();
 
 	found = found->parent;
 	while (found) {
 		pos.x = found->x;
 		pos.y = found->y;
 
-		int_fast32_t dx = pos.getX() - prevx;
-		int_fast32_t dy = pos.getY() - prevy;
+		int32_t dx = pos.getX() - prevx;
+		int32_t dy = pos.getY() - prevy;
 
 		prevx = pos.x;
 		prevy = pos.y;

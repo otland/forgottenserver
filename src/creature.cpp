@@ -135,15 +135,6 @@ void Creature::onThink(uint32_t interval)
 		blockTicks = 0;
 	}
 
-	const Position& position = getPosition();
-	for (auto* creature : followers) {
-		const Position& followerPosition = creature->getPosition();
-		uint16_t distance = position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
-		if (distance >= Map::maxViewportX + Map::maxViewportY || getPosition().z != creature->getPosition().z) {
-			removeFollower(creature);
-		}
-	}
-
 	// scripting event - onThink
 	const CreatureEventList& thinkEvents = getCreatureEvents(CREATURE_EVENT_THINK);
 	for (CreatureEvent* thinkEvent : thinkEvents) {
@@ -205,6 +196,7 @@ void Creature::onWalk()
 		}
 	}
 
+	removeFollowers();
 	updateFollowersPaths();
 
 	if (cancelNextWalk) {
@@ -823,10 +815,7 @@ void Creature::onUnfollowCreature() { hasFollowPath = false; }
 bool Creature::isFollower(Creature* creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		return true;
-	}
-	return false;
+	return it != followers.end();
 }
 
 void Creature::addFollower(Creature* creature)
@@ -836,11 +825,18 @@ void Creature::addFollower(Creature* creature)
 	}
 }
 
-void Creature::removeFollower(Creature* creature)
+void Creature::removeFollowers()
 {
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		followers.erase(it);
+	const Position& position = getPosition();
+	for (auto* creature : followers) {
+		const Position& followerPosition = creature->getPosition();
+		uint16_t distance = position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
+		if (distance >= Map::maxViewportX + Map::maxViewportY || getPosition().z != creature->getPosition().z) {
+			auto it = std::find(followers.begin(), followers.end(), creature);
+			if (it != followers.end()) {
+				followers.erase(it);
+			}
+		}
 	}
 }
 
@@ -851,7 +847,7 @@ void Creature::updateFollowersPaths()
 	}
 
 	const Position& thisPosition = getPosition();
-	for (const auto follower : followers) {
+	for (const auto& follower : followers) {
 		if (follower != nullptr) {
 			const Position& followerPosition = follower->getPosition();
 
