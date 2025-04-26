@@ -828,16 +828,16 @@ void Creature::addFollower(Creature* creature)
 void Creature::removeFollowers()
 {
 	const Position& position = getPosition();
-	for (auto* creature : followers) {
-		const Position& followerPosition = creature->getPosition();
-		uint16_t distance = position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
-		if (distance >= Map::maxViewportX + Map::maxViewportY || getPosition().z != creature->getPosition().z) {
-			auto it = std::find(followers.begin(), followers.end(), creature);
-			if (it != followers.end()) {
-				followers.erase(it);
-			}
-		}
-	}
+
+	followers.erase(std::remove_if(followers.begin(), followers.end(),
+	                               [&position](Creature* creature) {
+		                               const Position& followerPosition = creature->getPosition();
+		                               uint16_t distance = position.getDistanceX(followerPosition) +
+		                                                   position.getDistanceY(followerPosition);
+		                               return distance >= Map::maxViewportX + Map::maxViewportY ||
+		                                      position.z != followerPosition.z;
+	                               }),
+	                followers.end());
 }
 
 void Creature::updateFollowersPaths()
