@@ -17,6 +17,7 @@
 #include "npc.h"
 #include "scheduler.h"
 #include "spells.h"
+#include "stats.h"
 #include "talkaction.h"
 #include "tasks.h"
 #include "weapons.h"
@@ -152,6 +153,9 @@ void dispatchSignalHandler(int signal)
 			g_scheduler.join();
 			g_databaseTasks.join();
 			g_dispatcher.join();
+#ifdef STATS_ENABLED
+			g_stats.join();
+#endif
 			break;
 #endif
 		default:

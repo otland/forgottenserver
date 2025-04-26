@@ -134,6 +134,19 @@ std::string generateToken(std::string_view key, uint64_t counter, size_t length 
 	return token.substr(token.size() - length);
 }
 
+void replaceString(std::string& str, const std::string& sought, const std::string& replacement)
+{
+	size_t pos = 0;
+	size_t start = 0;
+	size_t soughtLen = sought.length();
+	size_t replaceLen = replacement.length();
+
+	while ((pos = str.find(sought, start)) != std::string::npos) {
+		str = str.substr(0, pos) + replacement + str.substr(pos + soughtLen);
+		start = pos + replaceLen;
+	}
+}
+
 bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
 {
 	return str1.size() == str2.size() &&

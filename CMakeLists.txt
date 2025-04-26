@@ -98,6 +98,13 @@ if (BUILD_TESTING)
     enable_testing()
 endif()
 
+if (NOT DEFINED DISABLE_STATS OR NOT DISABLE_STATS)
+    message(STATUS "OTS stats enabled. Run 'cmake -DDISABLE_STATS=ON ..' to disable")
+    ADD_DEFINITIONS(-DSTATS_ENABLED)
+else ()
+    message(STATUS "OTS stats disabled. Run 'cmake -DDISABLE_STATS=OFF ..' to enable")
+endif ()
+
 # Option to disable unity builds
 option(ENABLE_UNITY_BUILD "Enable unity build" ON)
 
