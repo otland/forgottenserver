@@ -686,7 +686,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	const std::array<std::pair<int, int>, 8> allNeighbors = {
+	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
 	AStarNodes nodes(pos.x, pos.y);
