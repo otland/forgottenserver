@@ -542,6 +542,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 		// case 0x2C: break; // team finder (leader)
 		// case 0x2D: break; // team finder (member)
 		// case 0x28: break; // stash withdraw
+		case 0x28: parseStashWithdraw(msg); break;
 		case 0x32:
 			parseExtendedOpcode(msg);
 			break; // otclient extended opcode
@@ -3774,6 +3775,106 @@ void ProtocolGame::AddShopItem(NetworkMessage& msg, const ShopInfo& item)
 	msg.add<uint32_t>(std::max<uint32_t>(item.buyPrice, 0));
 	msg.add<uint32_t>(std::max<uint32_t>(item.sellPrice, 0));
 }
+
+void ProtocolGame::sendOpenStash() {
+	NetworkMessage msg;
+	msg.addByte(0x29); // Stash open opcode
+	StashItemList list = player->getStashItems();
+	msg.add<uint16_t>(list.size()); // Number of items in stash
+
+	for (const auto& item : list) {
+		const ItemType& it = Item::items.getItemType(item.first); // Get ItemType from itemId
+		if (it.clientId == 0) {
+			std::cout << "Error: Invalid itemId: " << item.first << ". No matching clientId found." << std::endl;
+			continue; // Skip invalid entries
+		}
+
+		msg.add<uint16_t>(it.clientId);  // Add clientId to message
+		msg.add<uint32_t>(item.second); // Add itemCount to message
+	}
+
+	uint16_t maxStashItems = static_cast<uint16_t>(g_config.getNumber(ConfigManager::STASH_ITEMS));
+	uint16_t stashSize = getStashSize(list);
+	msg.add<uint16_t>(maxStashItems - stashSize); // Remaining stash capacity
+	writeToOutputBuffer(msg);
+}
+
+
+void ProtocolGame::parseStashWithdraw(NetworkMessage &msg) {
+	Supply_Stash_Actions_t action = static_cast<Supply_Stash_Actions_t>(msg.getByte());
+	switch (action) {
+		case SUPPLY_STASH_ACTION_STOW_ITEM: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint32_t count = msg.get<uint32_t>();
+			uint8_t stackpos = msg.getByte();
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				// Invalid clientId, no matching item found
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, count, false);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_STOW_CONTAINER: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint8_t stackpos = msg.getByte();
+
+			// Convert clientId to itemId
+		 const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, 0, false);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_STOW_STACK: {
+			Position pos = msg.getPosition();
+			uint16_t clientId = msg.get<uint16_t>();
+			uint8_t stackpos = msg.getByte();
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStowItem(player->getID(), pos, itemId, stackpos, 0, true);
+			break;
+		}
+		case SUPPLY_STASH_ACTION_WITHDRAW: {
+			uint16_t clientId = msg.get<uint16_t>();
+			uint32_t count = msg.get<uint32_t>();
+			uint8_t stackpos = msg.getByte();
+
+			// Convert clientId to itemId
+			const ItemType& it = Item::items.getItemIdByClientId(clientId);
+			if (it.id == 0) {
+				std::cout << "Error: Invalid clientId: " << clientId << ". No matching item found." << std::endl;
+				return;
+			}
+			uint16_t itemId = it.id;
+
+			g_game.playerStashWithdraw(player->getID(), itemId, count, stackpos);
+			break;
+		}
+		default:
+			std::cout << "Unknown 'supply stash' action switch: " << static_cast<int>(action) << std::endl;
+			break;
+	}
+}
+
 
 void ProtocolGame::parseExtendedOpcode(NetworkMessage& msg)
 {

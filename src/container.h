@@ -74,7 +74,9 @@ public:
 	bool isHoldingItem(const Item* item) const;
 
 	uint32_t getItemHoldingCount() const;
+	uint16_t getFreeSlots();
 	uint32_t getWeight() const override final;
+	StashContainerList getStowableItems() const;
 
 	bool isUnlocked() const { return unlocked; }
 	bool hasPagination() const { return pagination; }

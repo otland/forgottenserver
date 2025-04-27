@@ -803,6 +803,12 @@ private:
 
 	static int luaPlayerSendResourceBalance(lua_State* L);
 	static int luaPlayerSendEnterMarket(lua_State* L);
+	
+	static int luaPlayerGetStashItemCount(lua_State* L);
+	static int luaPlayerGetStashCounter(lua_State* L);
+	static int luaPlayerOpenStash(lua_State* L);
+	static int luaPlayerAddItemStash(lua_State* L);
+	static int luaPlayerRemoveStashItem(lua_State* L);
 
 	// Monster
 	static int luaMonsterCreate(lua_State* L);

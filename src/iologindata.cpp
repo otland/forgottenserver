@@ -486,6 +486,19 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 			}
 		}
 	}
+	
+	// Load stash items
+	query.str(std::string());
+	query << "SELECT `item_count`, `item_id` FROM `player_stash` WHERE `player_id` = " << player->getGUID();
+	if ((result = db.storeQuery(query.str()))) {
+		do {
+			uint16_t itemId = result->getNumber<uint16_t>("item_id");
+			uint32_t itemCount = result->getNumber<uint32_t>("item_count");
+
+			// Add the item to the player's stash with itemId and itemCount
+			player->addItemOnStash(itemId, itemCount);
+		} while (result->next());
+	}
 
 	// load storage map
 	if ((result = db.storeQuery(
@@ -740,6 +753,31 @@ bool IOLoginData::savePlayer(Player* player)
 	}
 
 	if (!db.executeQuery(query.str())) {
+		return false;
+	}
+	
+	// Save Player Stash
+	query.str(std::string());
+	query << "DELETE FROM `player_stash` WHERE `player_id` = " << player->getGUID();
+	if (!db.executeQuery(query.str())) {
+		return false;
+	}
+
+	query.str(std::string());
+	DBInsert stashQuery("INSERT INTO `player_stash` (`player_id`, `item_id`, `item_count`) VALUES ");
+	for (const auto& stashItem : player->getStashItems()) {
+		uint16_t itemId = stashItem.first;       // Accessing the key (itemId)
+		uint32_t itemCount = stashItem.second;   // Accessing the item count
+
+		query.str(std::string());
+		query << player->getGUID() << ',' << itemId << ',' << itemCount;
+
+		if (!stashQuery.addRow(query)) {
+			return false;
+		}
+	}
+
+	if (!stashQuery.execute()) {
 		return false;
 	}
 
