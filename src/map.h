@@ -18,36 +18,31 @@ struct FindPathParams;
 struct AStarNode
 {
 	AStarNode* parent;
-	int_fast32_t f;
+	uint16_t g;
+	uint16_t f;
 	uint16_t x, y;
 };
 
-static constexpr int32_t MAX_NODES = 512;
-
-static constexpr int32_t MAP_NORMALWALKCOST = 10;
-static constexpr int32_t MAP_DIAGONALWALKCOST = 25;
+static constexpr uint16_t MAP_NORMALWALKCOST = 10;
+static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 
 class AStarNodes
 {
 public:
-	AStarNodes(uint32_t x, uint32_t y);
+	AStarNodes(uint16_t x, uint16_t y);
 
-	AStarNode* createOpenNode(AStarNode* parent, uint32_t x, uint32_t y, int_fast32_t f);
+	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
+	void addNode(AStarNode* node) { nodes.emplace_back(node); };
+
 	AStarNode* getBestNode();
-	void closeNode(AStarNode* node);
-	void openNode(AStarNode* node);
-	int_fast32_t getClosedNodes() const;
-	AStarNode* getNodeByPosition(uint32_t x, uint32_t y);
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
 
-	static int_fast32_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static int_fast32_t getTileWalkCost(const Creature& creature, const Tile* tile);
+	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
+	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	AStarNode nodes[MAX_NODES];
-	bool openNodes[MAX_NODES];
-	std::unordered_map<uint32_t, AStarNode*> nodeTable;
-	size_t curNode;
-	int_fast32_t closedNodes;
+	std::vector<AStarNode*> nodes;
+	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
@@ -242,7 +237,7 @@ public:
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
-	bool getPathMatching(const Creature& creature, std::vector<Direction>& dirList,
+	bool getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
 	                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
 
 	std::map<std::string, Position> waypoints;
