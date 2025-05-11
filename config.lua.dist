@@ -38,8 +38,9 @@ maxPacketsPerSecond = 25
 enableTwoFactorAuth = true
 
 -- Pathfinding
--- pathfindingInterval how often paths are force drawn
--- pathfindingDelay delay recently force drawn paths from drawing again
+-- pathfindingInterval handles how often paths are force drawn
+-- pathfindingDelay delays any recently drawn paths from drawing again
+-- pathfindingDelay does not delay pathfindingInterval
 pathfindingInterval = 200
 pathfindingDelay = 300
 

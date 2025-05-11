@@ -425,7 +425,6 @@ protected:
 	Skulls_t skull = SKULL_NONE;
 
 	bool isInternalRemoved = false;
-	bool isMapLoaded = false;
 	bool creatureCheck = false;
 	bool inCheckCreaturesVector = false;
 	bool skillLoss = true;
