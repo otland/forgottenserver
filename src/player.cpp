@@ -2048,6 +2048,24 @@ Connection::Address Player::getIP() const
 	return {};
 }
 
+bool Player::isOtcProxy() const
+{
+	if (client) {
+		return client->isOtcProxy();
+	}
+
+	return {};
+}
+
+bool Player::isHaProxy() const
+{
+	if (client) {
+		return client->isHaProxy();
+	}
+
+	return {};
+}
+
 void Player::death(Creature* lastHitCreature)
 {
 	loginPosition = town->templePosition;

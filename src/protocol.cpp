@@ -144,3 +144,21 @@ Connection::Address Protocol::getIP() const
 
 	return {};
 }
+
+bool Protocol::isOtcProxy() const
+{
+	if (auto connection = getConnection()) {
+		return connection->isOtcProxy();
+	}
+
+	return false;
+}
+
+bool Protocol::isHaProxy() const
+{
+	if (auto connection = getConnection()) {
+		return connection->isHaProxy();
+	}
+
+	return false;
+}
