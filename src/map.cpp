@@ -512,13 +512,23 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
-namespace {
-
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool Map::checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
+	bool reversed = false;
+	if (y1 < y0) {
+		uint16_t x = x0, y = y0;
+		x0 = x1;
+		y0 = y1;
+		x1 = x;
+		y1 = y;
+		reversed = true;
+	}
 	float dx = x1 - x0;
-	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
-	float yi = y0 + slope;
+	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
+	if (y1 < y0) {
+		slope *= -1;
+	}
+	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.85 : 0.05));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
@@ -531,11 +541,23 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool Map::checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
+	bool reversed = false;
+	if (x0 > x1) {
+		uint16_t x = x0, y = y0;
+		x0 = x1;
+		y0 = y1;
+		x1 = x;
+		y1 = y;
+		reversed = true;
+	}
 	float dx = x1 - x0;
-	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
-	float yi = y0 + slope;
+	float slope = (dx == 0) ? 1 : std::abs((y1 - y0) / dx);
+	if (y1 < y0) {
+		slope *= -1;
+	}
+	float yi = y0 + slope + (y0 == y1 ? 0 : ((reversed && y0 < y1) || (!reversed && y1 < y0) ? 0.05 : 0.85));
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
@@ -548,25 +570,16 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 	return true;
 }
 
-} // namespace
-
 bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
 	}
 
+	// from top to bottom
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
-		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z);
-		}
-		return checkSteepLine(y1, x1, y0, x0, z);
+		return checkSteepLine(y0, x0, y1, x1, z);
 	}
-
-	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z);
-	}
-
 	return checkSlightLine(x0, y0, x1, y1, z);
 }
 
