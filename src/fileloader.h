@@ -27,14 +27,36 @@ struct Node
 	};
 };
 
-struct LoadError : std::exception
+enum OTBMExceptionType : uint8_t
 {
-	const char* what() const noexcept override = 0;
+	INVALID_FILE_FORMAT,
+	OPEN_FAILED
 };
 
-struct InvalidOTBFormat final : LoadError
+struct OTBMException final : std::exception
 {
-	const char* what() const noexcept override { return "Invalid OTBM file format"; }
+	OTBMException(OTBMExceptionType t)
+	{
+		switch (t) {
+			case INVALID_FILE_FORMAT: {
+				w = "Invalid OTBM file format";
+				break;
+			}
+			case OPEN_FAILED: {
+				w = "Failed to open OTBM file";
+				break;
+			}
+			default: {
+				w = "OTBM Exception";
+				break;
+			}
+		}
+	}
+
+	const char* what() const noexcept override { return w; }
+
+private:
+	const char* w;
 };
 
 class Loader
