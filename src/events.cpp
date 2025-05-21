@@ -60,6 +60,7 @@ struct PlayerHandlers
 	int32_t onInventoryUpdate = -1;
 	int32_t onNetworkMessage = -1;
 	int32_t onSpellCheck = -1;
+	int32_t onConnect = -1;
 } playerHandlers;
 
 struct MonsterHandlers
@@ -187,6 +188,8 @@ bool load_from_xml()
 				playerHandlers.onNetworkMessage = event;
 			} else if (methodName == "onSpellCheck") {
 				playerHandlers.onSpellCheck = event;
+			} else if (methodName == "onConnect") {
+				playerHandlers.onConnect = event;
 			} else {
 				std::cout << "[Warning - tfs::events::load_from_xml] Unknown player method: " << methodName
 				          << std::endl;
@@ -1433,6 +1436,39 @@ bool onSpellCheck(Player* player, const Spell* spell)
 	tfs::lua::pushSpell(L, *spell);
 
 	return scriptInterface.callFunction(2);
+}
+
+void onConnect(Player* player, std::string& msg)
+{
+	// Player:onConnect(msg)
+	if (playerHandlers.onConnect == -1) {
+		return;
+	}
+
+	if (!tfs::lua::reserveScriptEnv()) {
+		std::cout << "[Error - events::player::onConnect] Call stack overflow" << std::endl;
+		return;
+	}
+
+	ScriptEnvironment* env = tfs::lua::getScriptEnv();
+	env->setScriptId(playerHandlers.onConnect, &scriptInterface);
+
+	lua_State* L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(playerHandlers.onConnect);
+
+	tfs::lua::pushUserdata(L, player);
+	tfs::lua::setMetatable(L, -1, "Player");
+
+	tfs::lua::pushString(L, msg);
+
+	if (tfs::lua::protectedCall(L, 2, 1) != 0) {
+		reportErrorFunc(L, tfs::lua::popString(L));
+	} else {
+		msg = tfs::lua::getString(L, -1);
+		lua_pop(L, 1);
+	}
+
+	tfs::lua::resetScriptEnv();
 }
 
 } // namespace tfs::events::player
