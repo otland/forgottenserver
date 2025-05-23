@@ -85,6 +85,7 @@ void onWrapItem(Player* player, Item* item);
 void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip);
 void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg);
 bool onSpellCheck(Player* player, const Spell* spell);
+void onConnect(Player* player, std::string& msg);
 
 } // namespace tfs::events::player
 

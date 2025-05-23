@@ -60,6 +60,7 @@ ec.onGainSkillTries = {[3] = 1}
 ec.onWrapItem = {}
 ec.onInventoryUpdate = {}
 ec.onSpellCheck = {}
+ec.onConnect = {[2] = 1}
 -- Monster
 ec.onDropLoot = {}
 ec.onSpawn = {}

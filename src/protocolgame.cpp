@@ -162,6 +162,14 @@ void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSyst
 		player->setID();
 		player->setGUID(characterId);
 
+		// event onConnect
+		std::string msg;
+		tfs::events::player::onConnect(player, msg);
+		if (msg != "") {
+			disconnectClient(msg);
+			return;
+		}
+
 		if (!IOLoginData::preloadPlayer(player)) {
 			disconnectClient("Your character could not be loaded.");
 			return;
@@ -284,15 +292,15 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	player->clearModalWindows();
 	player->setOperatingSystem(operatingSystem);
 	player->isConnecting = false;
-
 	player->client = getThis();
+
+	g_creatureEvents->playerReconnect(player);
+
 	sendAddCreature(player, player->getPosition(), 0);
 	player->lastIP = player->getIP();
 	player->lastLoginSaved = std::max<time_t>(time(nullptr), player->lastLoginSaved + 1);
 	player->resetIdleTime();
 	acceptPackets = true;
-
-	g_creatureEvents->playerReconnect(player);
 }
 
 void ProtocolGame::logout(bool displayEffect, bool forced)

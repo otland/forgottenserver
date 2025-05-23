@@ -291,3 +291,10 @@ function Player:onSpellCheck(spell)
 	end
 	return true
 end
+
+function Player:onConnect(msg)
+	if hasEvent.onConnect then
+		return Event.onConnect(self, msg)
+	end
+	return msg
+end
