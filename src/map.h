@@ -41,6 +41,8 @@ public:
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
+	std::vector<std::unique_ptr<AStarNode>> toReleaseNodes;
+	
 	std::vector<AStarNode*> nodes;
 	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
 };

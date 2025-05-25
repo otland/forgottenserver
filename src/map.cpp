@@ -808,7 +808,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
 	// Create our first node to check.
-	AStarNode* firstNode = new AStarNode;
+	toReleaseNodes.push_back(std::make_unique<AStarNode>());
+	auto firstNode = toReleaseNodes.back().get();
+
 	firstNode->parent = nullptr;
 	firstNode->x = x;
 	firstNode->y = y;
@@ -823,7 +825,9 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 
 void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
 {
-	AStarNode* newNode = new AStarNode;
+	toReleaseNodes.push_back(std::make_unique<AStarNode>());
+
+	auto newNode = toReleaseNodes.back().get();
 	newNode->parent = parent;
 	newNode->x = x;
 	newNode->y = y;
