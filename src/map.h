@@ -35,13 +35,12 @@ public:
 	void addNode(AStarNode* node) { nodes.emplace_back(node); };
 
 	AStarNode* getBestNode();
-	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	std::vector<std::unique_ptr<AStarNode>> nodeStore;
 	std::vector<AStarNode*> nodes;
 	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
 };

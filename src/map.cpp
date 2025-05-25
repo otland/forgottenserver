@@ -808,9 +808,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
 	// Create our first node to check.
-	auto firstNodeUnique = std::make_unique<AStarNode>();
-	AStarNode* firstNode = firstNodeUnique.get();
-
+	AStarNode* firstNode = new AStarNode;
 	firstNode->parent = nullptr;
 	firstNode->x = x;
 	firstNode->y = y;
@@ -818,17 +816,14 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	firstNode->f = 0;
 
 	// Add node to node vector and map
-	nodeStore.reserve(50);
 	nodes.reserve(50);
 	nodes.emplace_back(firstNode);
 	nodeMap[x][y] = firstNode;
-	nodeStore.emplace_back(std::move(firstNodeUnique));
 }
 
 void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
 {
-	auto newNodeUnique = std::make_unique<AStarNode>();
-	AStarNode* newNode = newNodeUnique.get();
+	AStarNode* newNode = new AStarNode;
 	newNode->parent = parent;
 	newNode->x = x;
 	newNode->y = y;
@@ -837,19 +832,6 @@ void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16
 
 	nodes.emplace_back(newNode);
 	nodeMap[x][y] = newNode;
-	nodeStore.emplace_back(std::move(newNodeUnique));
-}
-
-AStarNode* AStarNodes::getNodeByPosition(uint16_t x, uint16_t y)
-{
-	auto it_x = nodeMap.find(x);
-	if (it_x != nodeMap.end()) {
-		auto it_y = it_x->second.find(y);
-		if (it_y != it_x->second.end()) {
-			return it_y->second;
-		}
-	}
-	return nullptr;
 }
 
 AStarNode* AStarNodes::getBestNode()
@@ -861,7 +843,7 @@ AStarNode* AStarNodes::getBestNode()
 	std::nth_element(nodes.begin(), nodes.end() - 1, nodes.end(),
 	                 [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
 	AStarNode* retNode = nodes.back();
-	nodes.pop_back(); // (still in nodeStore)
+	nodes.pop_back();
 	return retNode;
 }
 
