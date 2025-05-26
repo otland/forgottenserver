@@ -19,29 +19,46 @@
   "features": {
     "http": {
       "description": "Enable HTTP support",
-      "dependencies": ["boost-beast", "boost-json"]
+      "dependencies": [
+        "boost-beast",
+        "boost-json"
+      ]
     },
     "lua": {
       "description": "Use Lua instead of LuaJIT",
-      "dependencies": ["lua"]
+      "dependencies": [
+        "lua"
+      ]
     },
     "luajit": {
       "description": "Use LuaJIT instead of Lua",
-      "dependencies": ["luajit"]
+      "dependencies": [
+        "luajit"
+      ]
     },
     "libmariadb": {
       "description": "Use libmariadb instead of libmysql",
-      "dependencies": ["libmariadb"]
+      "dependencies": [
+        "libmariadb"
+      ]
     },
     "libmysql": {
       "description": "Use libmysql instead of libmariadb",
-      "dependencies": ["libmysql"]
+      "dependencies": [
+        "libmysql"
+      ]
     },
     "unit-tests": {
       "description": "Build unit tests",
-      "dependencies": ["boost-test"]
+      "dependencies": [
+        "boost-test"
+      ]
     }
   },
-  "default-features": ["lua", "http", "libmariadb"],
-  "builtin-baseline": "215a2535590f1f63788ac9bd2ed58ad15e6afdff"
+  "default-features": [
+    "lua",
+    "http",
+    "libmariadb"
+  ],
+  "builtin-baseline": "86fba13068f1e8111e7d885de2aef11378435139"
 }
