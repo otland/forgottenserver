@@ -42,7 +42,7 @@ public:
 
 private:
 	std::vector<std::unique_ptr<AStarNode>> toReleaseNodes;
-	
+
 	std::vector<AStarNode*> nodes;
 	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
 };
