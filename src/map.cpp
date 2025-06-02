@@ -808,34 +808,30 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
 	// Create our first node to check.
-	toReleaseNodes.push_back(std::make_unique<AStarNode>());
-	auto firstNode = toReleaseNodes.back().get();
-
-	firstNode->parent = nullptr;
-	firstNode->x = x;
-	firstNode->y = y;
-	firstNode->g = 0;
-	firstNode->f = 0;
+	AStarNode firstNode;
+	firstNode.parent = nullptr;
+	firstNode.x = x;
+	firstNode.y = y;
+	firstNode.g = 0;
+	firstNode.f = 0;
 
 	// Add node to node vector and map
+	nodeMap[x][y] = std::move(firstNode);
 	nodes.reserve(50);
-	nodes.emplace_back(firstNode);
-	nodeMap[x][y] = firstNode;
+	nodes.push_back(&nodeMap[x][y]);
 }
 
 void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
 {
-	toReleaseNodes.push_back(std::make_unique<AStarNode>());
+	AStarNode newNode;
+	newNode.parent = parent;
+	newNode.x = x;
+	newNode.y = y;
+	newNode.g = g;
+	newNode.f = f;
 
-	auto newNode = toReleaseNodes.back().get();
-	newNode->parent = parent;
-	newNode->x = x;
-	newNode->y = y;
-	newNode->g = g;
-	newNode->f = f;
-
-	nodes.emplace_back(newNode);
-	nodeMap[x][y] = newNode;
+	nodeMap[x][y] = std::move(newNode);
+	nodes.push_back(&nodeMap[x][y]);
 }
 
 AStarNode* AStarNodes::getBestNode()
@@ -849,6 +845,19 @@ AStarNode* AStarNodes::getBestNode()
 	AStarNode* retNode = nodes.back();
 	nodes.pop_back();
 	return retNode;
+}
+
+AStarNode* AStarNodes::getNodeByPosition(uint16_t x, uint16_t y)
+{
+	// Check if the node exists in the map
+	auto it = nodeMap.find(x);
+	if (it != nodeMap.end()) {
+		auto it2 = it->second.find(y);
+		if (it2 != it->second.end()) {
+			return &it2->second;
+		}
+	}
+	return nullptr;
 }
 
 uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)

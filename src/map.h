@@ -32,19 +32,18 @@ public:
 	AStarNodes(uint16_t x, uint16_t y);
 
 	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
-	void addNode(AStarNode* node) { nodes.emplace_back(node); };
+	void addNode(AStarNode* node) { nodes.push_back(node); };
 
 	AStarNode* getBestNode();
-	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	std::vector<std::unique_ptr<AStarNode>> toReleaseNodes;
-
 	std::vector<AStarNode*> nodes;
-	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
+
+	std::map<uint16_t, std::map<uint16_t, AStarNode>> nodeMap;
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
