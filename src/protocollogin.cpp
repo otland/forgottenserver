@@ -62,6 +62,11 @@ void ProtocolLogin::disconnectClient(const std::string& message, uint16_t versio
 void ProtocolLogin::getCharacterList(const std::string& accountName, const std::string& password,
                                      const std::string& token, uint16_t version)
 {
+	auto connection = getConnection();
+	if (!connection) {
+		return;
+	}
+
 	Database& db = Database::getInstance();
 
 	DBResult_ptr result = db.storeQuery(fmt::format(
@@ -118,7 +123,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	if (!db.executeQuery(
 	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
 	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
-	                    db.escapeString(getConnection()->getIP().to_string())))) {
+	                    db.escapeString(connection->getIP().to_string())))) {
 		disconnectClient("Failed to create session.\nPlease try again later.", version);
 		return;
 	}
