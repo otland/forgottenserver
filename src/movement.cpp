@@ -993,7 +993,12 @@ uint32_t MoveEvent::fireAddRemItem(Item* item, Item* tileItem, const Position& p
 	if (scripted) {
 		return executeAddRemItem(item, tileItem, pos);
 	}
-	return moveFunction(item, tileItem, pos);
+
+	if (moveFunction) {
+		return moveFunction(item, tileItem, pos);
+	}
+
+	return 0;
 }
 
 bool MoveEvent::executeAddRemItem(Item* item, Item* tileItem, const Position& pos)
