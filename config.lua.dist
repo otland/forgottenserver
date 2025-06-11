@@ -37,6 +37,16 @@ replaceKickOnLogin = true
 maxPacketsPerSecond = 25
 enableTwoFactorAuth = true
 
+-- MySQL
+mysqlHost = "hostname"
+mysqlUser = "mysql_user"
+mysqlPass = "mysql_password"
+mysqlDatabase = "database_name"
+mysqlDatabaseBackup = false
+mysqlPort = 3306
+mysqlSock = ""
+passwordType = "sha1"
+
 -- Pathfinding
 -- pathfindingInterval handles how often paths are force drawn
 -- pathfindingDelay delays any recently drawn paths from drawing again
