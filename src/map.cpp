@@ -689,7 +689,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
-	AStarNodes nodes(pos.x, pos.y);
+	AStarNodes nodes(maxDistanceX, maxDistanceY);
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
