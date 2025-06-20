@@ -31,7 +31,7 @@ inline uint32_t hashCoord(uint16_t x, uint16_t y) { return (static_cast<uint32_t
 class AStarNodes
 {
 public:
-	AStarNodes(uint16_t width, uint16_t height);
+	AStarNodes(uint16_t x, uint16_t y);
 	void clear();
 
 	AStarNode* createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);

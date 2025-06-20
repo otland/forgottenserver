@@ -661,7 +661,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
                           const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
-	Position endPos;
 	const Position startPos = pos;
 
 	// We can't walk, no need to create path.
@@ -674,24 +673,25 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
+	uint16_t distanceX = startPos.getDistanceX(targetPos);
+	uint16_t distanceY = startPos.getDistanceY(targetPos);
 	// We are next to our target. Let dance step decide.
-	if (fpp.maxTargetDist <= 1 && startPos.getDistanceX(targetPos) <= 1 && startPos.getDistanceY(targetPos) <= 1) {
+	if (fpp.maxTargetDist <= 1 && distanceX <= 1 && distanceY <= 1) {
 		return true;
 	}
 
 	// Don't update path. The target is too far away.
 	int32_t maxDistanceX = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportX + 1;
 	int32_t maxDistanceY = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportY + 1;
-	if (startPos.getDistanceX(targetPos) > maxDistanceX || startPos.getDistanceY(targetPos) > maxDistanceY) {
+	if (distanceX > maxDistanceX || distanceY > maxDistanceY) {
 		return false;
 	}
 
 	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
-	uint16_t width = startPos.getDistanceX(targetPos);
-	uint16_t height = startPos.getDistanceY(targetPos);
-	AStarNodes nodes(width, height);
+	Position endPos;
+	AStarNodes nodes(pos.x , pos.y);
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
