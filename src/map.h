@@ -14,35 +14,47 @@ class Creature;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
-struct FindPathParams;
-struct AStarNode
-{
-	AStarNode* parent;
-	uint16_t g;
-	uint16_t f;
-	uint16_t x, y;
-};
 
 static constexpr uint16_t MAP_NORMALWALKCOST = 10;
 static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 
+struct FindPathParams;
+struct AStarNode
+{
+	AStarNode* parent = nullptr;
+	uint16_t x, y = 0;
+	uint16_t g, f = 0;
+};
+
+inline uint32_t hashCoord(uint16_t x, uint16_t y) { return (static_cast<uint32_t>(x) << 16) | y; }
+
 class AStarNodes
 {
 public:
-	AStarNodes(uint16_t x, uint16_t y);
+	AStarNodes(uint16_t width, uint16_t height);
+	void clear();
 
-	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
-	void addNode(AStarNode* node) { nodes.emplace_back(node); };
-
+	AStarNode* createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	AStarNode* getBestNode();
-	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	std::vector<AStarNode*> nodes;
-	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
+	std::vector<AStarNode> nodes;
+	std::unordered_map<uint32_t, AStarNode*> nodeMap;
+	std::unordered_set<uint32_t> visited;
+
+	struct NodeCompare
+	{
+		bool operator()(AStarNode* a, AStarNode* b) const
+		{
+			return a->f > b->f; // Min-heap based on f score
+		}
+	};
+
+	std::priority_queue<AStarNode*, std::vector<AStarNode*>, NodeCompare> openSet;
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;

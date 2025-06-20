@@ -699,6 +699,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		iterations++;
 
 		if (iterations >= 120) {
+			nodes.clear();
 			return false;
 		}
 
@@ -752,15 +753,16 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				neighborNode->g = g;
 				neighborNode->f = newf;
 				neighborNode->parent = n;
-				nodes.addNode(neighborNode);
 			} else {
 				// Does not exist in the open/closed list, create a new node
-				nodes.createNewNode(n, pos.x, pos.y, g, newf);
+				nodes.createNode(n, pos.x, pos.y, g, newf);
 			}
 		}
 
 		n = nodes.getBestNode();
 	}
+
+	nodes.clear();
 
 	if (!found) {
 		return false;
@@ -804,47 +806,48 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 }
 
 // AStarNodes
-
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
-	// Create our first node to check.
-	AStarNode* firstNode = new AStarNode;
-	firstNode->parent = nullptr;
-	firstNode->x = x;
-	firstNode->y = y;
-	firstNode->g = 0;
-	firstNode->f = 0;
-
-	// Add node to node vector and map
-	nodes.reserve(50);
-	nodes.emplace_back(firstNode);
-	nodeMap[x][y] = firstNode;
+	nodes.reserve(static_cast<size_t>(x * y));
+	createNode(nullptr, x, y, 0, 0);
 }
 
-void AStarNodes::createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
+void AStarNodes::clear()
 {
-	AStarNode* newNode = new AStarNode;
-	newNode->parent = parent;
-	newNode->x = x;
-	newNode->y = y;
-	newNode->g = g;
-	newNode->f = f;
+	nodes.clear();
+	std::priority_queue<AStarNode*, std::vector<AStarNode*>, NodeCompare>().swap(openSet);
+	visited.clear();
+	nodeMap.clear();
+}
 
-	nodes.emplace_back(newNode);
-	nodeMap[x][y] = newNode;
+AStarNode* AStarNodes::createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
+{
+	uint32_t key = hashCoord(x, y);
+	nodes.emplace_back(AStarNode{parent, x, y, g, f});
+	AStarNode* node = &nodes.back();
+	nodeMap[key] = node;
+	openSet.push(node);
+	return node;
 }
 
 AStarNode* AStarNodes::getBestNode()
 {
-	if (nodes.size() == 0) {
-		return nullptr;
+	while (!openSet.empty()) {
+		AStarNode* node = openSet.top();
+		openSet.pop();
+		uint32_t key = hashCoord(node->x, node->y);
+		if (visited.find(key) == visited.end()) {
+			visited.insert(key);
+			return node;
+		}
 	}
+	return nullptr;
+}
 
-	std::nth_element(nodes.begin(), nodes.end() - 1, nodes.end(),
-	                 [](AStarNode* left, AStarNode* right) { return left->f > right->f; });
-	AStarNode* retNode = nodes.back();
-	nodes.pop_back();
-	return retNode;
+AStarNode* AStarNodes::getNodeByPosition(uint16_t x, uint16_t y)
+{
+	auto it = nodeMap.find(hashCoord(x, y));
+	return (it != nodeMap.end()) ? it->second : nullptr;
 }
 
 uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos)

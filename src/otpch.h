@@ -44,6 +44,7 @@
 #include <thread>
 #include <unordered_map>
 #include <unordered_set>
+#include <queue>
 #include <utility>
 #include <valarray>
 #include <variant>
