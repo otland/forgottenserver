@@ -810,7 +810,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 // AStarNodes
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
-	nodes.reserve(static_cast<size_t>(x * y));
+	// Needs to be large enough to never resize 250 should be plenty
+	// If you want paths larger than 20-30 sqm this must be increased.
+	nodes.reserve(250);
 	createNode(nullptr, x, y, 0, 0);
 }
 
