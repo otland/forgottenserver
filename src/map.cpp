@@ -651,10 +651,9 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 
 uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
-	uint16_t dx = p1.getX() - p2.getX();
-	uint16_t dy = p1.getY() - p2.getY();
-
-	return dx * dx + dy * dy;
+	uint16_t dx = std::abs(p1.getX() - p2.getX());
+	uint16_t dy = std::abs(p1.getY() - p2.getY());
+	return 10 * (dx + dy) - 6 * std::min(dx, dy); // Octile distance
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
