@@ -691,6 +691,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
 	Position endPos;
+	bool sightClear = isSightClear(startPos, targetPos, true);
 	AStarNodes nodes(pos.x , pos.y);
 
 	AStarNode* found = nullptr;
@@ -728,6 +729,43 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
 				continue;
+			}
+
+			// If sight is clear we can ignore a lot of nodes.
+			if (sightClear) {
+				int32_t startX = startPos.getX();
+				int32_t startY = startPos.getY();
+				int32_t targetX = targetPos.getX();
+				int32_t targetY = targetPos.getY();
+
+				// We don't need nodes behind us.
+				// We also do not need nodes on a different x or y if target and start is same x/y.
+				if (startX > targetX && pos.x > startX) {
+					continue;
+				} else if (startX == targetX && pos.x != startX) {
+					continue;
+				} else if (startX < targetX && pos.x < startX) {
+					continue;
+				}
+				if (startY > targetY && pos.y > startY) {
+					continue;
+				} else if (startY == targetY && pos.y != startY) {
+					continue;
+				} else if (startY < targetY && pos.y < startY) {
+					continue;
+				}
+
+				// We don't need nodes past the targetPos
+				if (startX > targetX && pos.x < targetX) {
+					continue;
+				} else if (startX < targetX && pos.x > targetX) {
+					continue;
+				}
+				if (startY > targetY && pos.y < targetY) {
+					continue;
+				} else if (startY < targetY && pos.y > targetY) {
+					continue;
+				}
 			}
 
 			const Tile* tile;
