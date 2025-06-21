@@ -21,9 +21,9 @@ static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 struct FindPathParams;
 struct AStarNode
 {
-	AStarNode* parent = nullptr;
-	uint16_t x, y = 0;
-	uint16_t g, f = 0;
+	AStarNode* parent;
+	uint16_t x, y;
+	uint16_t g, f;
 };
 
 inline uint32_t hashCoord(uint16_t x, uint16_t y) { return (static_cast<uint32_t>(x) << 16) | y; }
