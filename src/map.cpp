@@ -498,7 +498,8 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	return !checkLineOfSight || isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/) const
+bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
+                      bool pathfinding /*= false*/) const
 {
 	const Tile* tile = getTile(x, y, z);
 	if (!tile) {
@@ -509,12 +510,18 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 		return false;
 	}
 
+	if (pathfinding) {
+		return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE) && !tile->hasProperty(CONST_PROP_BLOCKPATH) &&
+		       !tile->hasProperty(CONST_PROP_BLOCKSOLID) && !tile->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH) &&
+		       !tile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID);
+	}
+
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
 }
 
 namespace {
 
-bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
@@ -522,7 +529,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z)) {
+		if (!g_game.map.isTileClear(std::floor(yi + 0.1), x, z, false, pathfinding)) {
 			return false;
 		}
 		yi += slope;
@@ -531,7 +538,7 @@ bool checkSteepLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t 
 	return true;
 }
 
-bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z)
+bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding /*= false*/)
 {
 	float dx = x1 - x0;
 	float slope = (dx == 0) ? 1 : (y1 - y0) / dx;
@@ -539,7 +546,7 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 	for (uint16_t x = x0 + 1; x < x1; ++x) {
 		// 0.1 is necessary to avoid loss of precision during calculation
-		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z)) {
+		if (!g_game.map.isTileClear(x, std::floor(yi + 0.1), z, false, pathfinding)) {
 			return false;
 		}
 		yi += slope;
@@ -550,7 +557,8 @@ bool checkSlightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t
 
 } // namespace
 
-bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const
+bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z,
+                         bool pathfinding /*= false*/) const
 {
 	if (x0 == x1 && y0 == y1) {
 		return true;
@@ -558,25 +566,32 @@ bool Map::checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uin
 
 	if (std::abs(y1 - y0) > std::abs(x1 - x0)) {
 		if (y1 > y0) {
-			return checkSteepLine(y0, x0, y1, x1, z);
+			return checkSteepLine(y0, x0, y1, x1, z, pathfinding);
 		}
-		return checkSteepLine(y1, x1, y0, x0, z);
+		return checkSteepLine(y1, x1, y0, x0, z, pathfinding);
 	}
 
 	if (x0 > x1) {
-		return checkSlightLine(x1, y1, x0, y0, z);
+		return checkSlightLine(x1, y1, x0, y0, z, pathfinding);
 	}
 
-	return checkSlightLine(x0, y0, x1, y1, z);
+	return checkSlightLine(x0, y0, x1, y1, z, pathfinding);
 }
 
-bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/) const
+bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor /*= false*/,
+                       bool pathfinding /*= false*/) const
 {
 	// target is on the same floor
 	if (fromPos.z == toPos.z) {
 		// skip checks if toPos is next to us
 		if (fromPos.getDistanceX(toPos) < 2 && fromPos.getDistanceY(toPos) < 2) {
 			return true;
+		}
+
+		// Check for additional tile properties when pathfinding
+		if (pathfinding) {
+			bool sightClear = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
+			return sightClear;
 		}
 
 		// sight is clear or sameFloor is enabled
@@ -689,6 +704,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	static constexpr std::array<std::pair<int, int>, 8> allNeighbors = {
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
+	bool sightClear = isSightClear(startPos, targetPos, true, true);
+
 	Position endPos;
 	AStarNodes nodes(pos.x , pos.y);
 
@@ -727,6 +744,43 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
 				continue;
+			}
+
+			// If sight is clear we can ignore a lot of nodes.
+			if (sightClear) {
+				int32_t startX = startPos.getX();
+				int32_t startY = startPos.getY();
+				int32_t targetX = targetPos.getX();
+				int32_t targetY = targetPos.getY();
+
+				// We don't need nodes behind us.
+				// We also do not need nodes on a different x or y if target and start is same x/y.
+				if (startX > targetX && pos.x > startX) {
+					continue;
+				} else if (startX == targetX && pos.x != startX) {
+					continue;
+				} else if (startX < targetX && pos.x < startX) {
+					continue;
+				}
+				if (startY > targetY && pos.y > startY) {
+					continue;
+				} else if (startY == targetY && pos.y != startY) {
+					continue;
+				} else if (startY < targetY && pos.y < startY) {
+					continue;
+				}
+
+				// We don't need nodes past the targetPos
+				if (startX > targetX && pos.x < targetX) {
+					continue;
+				} else if (startX < targetX && pos.x > targetX) {
+					continue;
+				}
+				if (startY > targetY && pos.y < targetY) {
+					continue;
+				} else if (startY < targetY && pos.y > targetY) {
+					continue;
+				}
 			}
 
 			const Tile* tile;
