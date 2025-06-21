@@ -653,7 +653,7 @@ uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
 	uint16_t dx = std::abs(p1.getX() - p2.getX());
 	uint16_t dy = std::abs(p1.getY() - p2.getY());
-	return 10 * (dx + dy) - 6 * std::min(dx, dy); // Octile distance
+	return 10 * (dx + dy);
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -690,7 +690,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	    {{-1, 0}, {0, 1}, {1, 0}, {0, -1}, {-1, -1}, {1, -1}, {1, 1}, {-1, 1}}};
 
 	Position endPos;
-	bool sightClear = false;
 	AStarNodes nodes(pos.x , pos.y);
 
 	AStarNode* found = nullptr;
@@ -728,43 +727,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
 				continue;
-			}
-
-			// If sight is clear we can ignore a lot of nodes.
-			if (sightClear) {
-				int32_t startX = startPos.getX();
-				int32_t startY = startPos.getY();
-				int32_t targetX = targetPos.getX();
-				int32_t targetY = targetPos.getY();
-
-				// We don't need nodes behind us.
-				// We also do not need nodes on a different x or y if target and start is same x/y.
-				if (startX > targetX && pos.x > startX) {
-					continue;
-				} else if (startX == targetX && pos.x != startX) {
-					continue;
-				} else if (startX < targetX && pos.x < startX) {
-					continue;
-				}
-				if (startY > targetY && pos.y > startY) {
-					continue;
-				} else if (startY == targetY && pos.y != startY) {
-					continue;
-				} else if (startY < targetY && pos.y < startY) {
-					continue;
-				}
-
-				// We don't need nodes past the targetPos
-				if (startX > targetX && pos.x < targetX) {
-					continue;
-				} else if (startX < targetX && pos.x > targetX) {
-					continue;
-				}
-				if (startY > targetY && pos.y < targetY) {
-					continue;
-				} else if (startY < targetY && pos.y > targetY) {
-					continue;
-				}
 			}
 
 			const Tile* tile;
@@ -849,7 +811,10 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
 	// Needs to be large enough to never resize 250 should be plenty
 	// If you want paths larger than 20-30 sqm this must be increased.
-	nodes.reserve(250);
+	uint8_t reserveSize = 250;
+	nodes.reserve(reserveSize);
+	nodeMap.reserve(reserveSize);
+	visited.reserve(reserveSize);
 	createNode(nullptr, x, y, 0, 0);
 }
 
