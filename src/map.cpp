@@ -664,11 +664,11 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
-uint16_t calculateHeuristic(const Position& p1, const Position& p2)
+static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
 	uint16_t dx = std::abs(p1.getX() - p2.getX());
 	uint16_t dy = std::abs(p1.getY() - p2.getY());
-	return 10 * (dx + dy);
+	return MAP_NORMALWALKCOST * (dx + dy) + (MAP_DIAGONALWALKCOST - 2 * 10) * std::min(dx, dy);
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -865,7 +865,7 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
 	// Needs to be large enough to never resize 250 should be plenty
 	// If you want paths larger than 20-30 sqm this must be increased.
-	uint8_t reserveSize = 250;
+	uint8_t reserveSize = 150;
 	nodes.reserve(reserveSize);
 	nodeMap.reserve(reserveSize);
 	visited.reserve(reserveSize);
