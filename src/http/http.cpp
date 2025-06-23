@@ -23,7 +23,7 @@ void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, 
 		return;
 	}
 
-	std::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
+	std::println(">> Starting HTTP server on {:s}:{:d} with {:d} threads.", address, port, threads);
 
 	auto listener = make_listener(ioc, {asio::ip::make_address(address), port});
 	listener->run();
@@ -40,12 +40,12 @@ void tfs::http::stop()
 		return;
 	}
 
-	std::print(">> Stopping HTTP server...\n");
+	std::println(">> Stopping HTTP server...");
 
 	ioc.stop();
 	for (auto& worker : workers) {
 		worker.join();
 	}
 
-	std::print(">> Stopped HTTP server.\n");
+	std::println(">> Stopped HTTP server.");
 }

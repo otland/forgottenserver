@@ -49,7 +49,7 @@ namespace {
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	std::print(BOLDRED "ERROR: {:s}" RESET "\n", errorStr);
+	std::println(BOLDRED "ERROR: {:s}" RESET, errorStr);
 	g_loaderSignal.notify_all();
 }
 

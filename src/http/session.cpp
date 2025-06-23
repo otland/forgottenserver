@@ -68,7 +68,7 @@ void Session::on_read(beast::error_code ec, size_t /*bytes_transferred*/)
 	}
 
 	if (ec) {
-		std::print(stderr, "{}: {}\n", __FUNCTION__, ec.message());
+		std::println(stderr, "{}: {}", __FUNCTION__, ec.message());
 		return;
 	};
 
@@ -79,7 +79,7 @@ void Session::on_read(beast::error_code ec, size_t /*bytes_transferred*/)
 void Session::on_write(beast::error_code ec, size_t /*bytes_transferred*/, bool keep_alive)
 {
 	if (ec) {
-		std::print(stderr, "{}: {}\n", __FUNCTION__, ec.message());
+		std::println(stderr, "{}: {}", __FUNCTION__, ec.message());
 		return;
 	};
 
