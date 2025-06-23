@@ -85,11 +85,11 @@ void Weapons::loadDefaults()
 
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
-	if (caseInsensitiveEqual(nodeName, "melee")) {
+	if (boost::iequals(nodeName, "melee")) {
 		return Event_ptr(new WeaponMelee(&scriptInterface));
-	} else if (caseInsensitiveEqual(nodeName, "distance")) {
+	} else if (boost::iequals(nodeName, "distance")) {
 		return Event_ptr(new WeaponDistance(&scriptInterface));
-	} else if (caseInsensitiveEqual(nodeName, "wand")) {
+	} else if (boost::iequals(nodeName, "wand")) {
 		return Event_ptr(new WeaponWand(&scriptInterface));
 	}
 	return nullptr;
