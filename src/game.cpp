@@ -426,7 +426,7 @@ Npc* Game::getNpcByName(const std::string& s)
 
 	const char* npcName = s.c_str();
 	for (const auto& it : npcs) {
-		if (caseInsensitiveEqual(npcName, it.second->getName())) {
+		if (boost::iequals(npcName, it.second->getName())) {
 			return it.second;
 		}
 	}
@@ -5730,12 +5730,12 @@ Guild_ptr Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(Guild_ptr guild) 
+void Game::addGuild(Guild_ptr guild)
 {
-  if (!guild) {
-     return;
-   }
-   
+	if (!guild) {
+		return;
+	}
+
 	guilds[guild->getId()] = guild;
 }
 
