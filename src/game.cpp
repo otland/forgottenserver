@@ -426,9 +426,8 @@ Npc* Game::getNpcByName(const std::string& s)
 		return nullptr;
 	}
 
-	const char* npcName = s.c_str();
 	for (const auto& it : npcs) {
-		if (boost::iequals(npcName, it.second->getName())) {
+		if (boost::iequals(s, it.second->getName())) {
 			return it.second;
 		}
 	}
