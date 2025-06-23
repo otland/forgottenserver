@@ -49,12 +49,12 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 	DBInsert insertSession("INSERT INTO `sessions` (`account_id`, `token`, `expire_at`) VALUES");
 
 	DBInsert insertPlayers("INSERT INTO `players` (`account_id`, `name`) VALUES");
-	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Dejairzin"));
-	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Goraca"));
-	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Bobeek"));
+	insertPlayers.addRow(std::format("{:d}, \"{:s}\"", id, "Dejairzin"));
+	insertPlayers.addRow(std::format("{:d}, \"{:s}\"", id, "Goraca"));
+	insertPlayers.addRow(std::format("{:d}, \"{:s}\"", id, "Bobeek"));
 	BOOST_TEST(insertPlayers.execute());
 
-	BOOST_TEST(db.executeQuery(fmt::format(
+	BOOST_TEST(db.executeQuery(std::format(
 	    "INSERT INTO `players_online` (`player_id`) SELECT `id` FROM `players` WHERE `account_id` = {:d}", id)));
 
 	auto&& [status, body] = tfs::http::handle_cacheinfo({{"type", "cacheinfo"}}, ip);

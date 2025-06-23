@@ -4,7 +4,7 @@
 
 #include "listener.h"
 
-#include <fmt/core.h>
+#include <print>
 #include <thread>
 
 namespace asio = boost::asio;
@@ -27,7 +27,7 @@ void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short
 	if (bindOnlyOtsIP) {
 		address = asio::ip::make_address(otsIP);
 	}
-	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address.to_string(), port, threads);
+	std::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
 
 	auto listener = make_listener(ioc, {address, port});
 	listener->run();
@@ -44,12 +44,12 @@ void tfs::http::stop()
 		return;
 	}
 
-	fmt::print(">> Stopping HTTP server...\n");
+	std::print(">> Stopping HTTP server...\n");
 
 	ioc.stop();
 	for (auto& worker : workers) {
 		worker.join();
 	}
 
-	fmt::print(">> Stopped HTTP server.\n");
+	std::print(">> Stopped HTTP server.\n");
 }

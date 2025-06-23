@@ -244,14 +244,14 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 		if (tileNode.type == OTBM_HOUSETILE) {
 			uint32_t houseId;
 			if (!propStream.read<uint32_t>(houseId)) {
-				setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Could not read house id.", x, y, z));
+				setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Could not read house id.", x, y, z));
 				return false;
 			}
 
 			house = map.houses.addHouse(houseId);
 			if (!house) {
 				setLastErrorString(
-				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Could not create house id: {:d}", x, y, z, houseId));
+				    std::format("[x:{:d}, y:{:d}, z:{:d}] Could not create house id: {:d}", x, y, z, houseId));
 				return false;
 			}
 
@@ -267,7 +267,7 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 				case OTBM_ATTR_TILE_FLAGS: {
 					uint32_t flags;
 					if (!propStream.read<uint32_t>(flags)) {
-						setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to read tile flags.", x, y, z));
+						setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to read tile flags.", x, y, z));
 						return false;
 					}
 
@@ -288,7 +288,7 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 				case OTBM_ATTR_ITEM: {
 					Item* item = Item::CreateItem(propStream);
 					if (!item) {
-						setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
+						setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
 						return false;
 					}
 
@@ -320,14 +320,14 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 				}
 
 				default:
-					setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
+					setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown tile attribute.", x, y, z));
 					return false;
 			}
 		}
 
 		for (auto& itemNode : tileNode.children) {
 			if (itemNode.type != OTBM_ITEM) {
-				setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Unknown node type.", x, y, z));
+				setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Unknown node type.", x, y, z));
 				return false;
 			}
 
@@ -339,13 +339,13 @@ bool IOMap::parseTileArea(OTB::Loader& loader, const OTB::Node& tileAreaNode, Ma
 
 			Item* item = Item::CreateItem(stream);
 			if (!item) {
-				setLastErrorString(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
+				setLastErrorString(std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
 				return false;
 			}
 
 			if (!item->unserializeItemNode(loader, itemNode, stream)) {
 				setLastErrorString(
-				    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to load item {:d}.", x, y, z, item->getID()));
+				    std::format("[x:{:d}, y:{:d}, z:{:d}] Failed to load item {:d}.", x, y, z, item->getID()));
 				delete item;
 				return false;
 			}

@@ -62,11 +62,6 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 find_package(ZLIB REQUIRED)
 
-find_package(fmt 8.1.1 CONFIG)
-if (NOT fmt_FOUND)
-    find_package(fmt 8.1.1 REQUIRED)
-endif()
-
 # Look for vcpkg-provided packages first
 # If we link to the file directly, we might miss its dependencies from vcpkg
 if (USE_LIBMYSQL)

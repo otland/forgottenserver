@@ -21,6 +21,7 @@
 #include "server.h"
 
 #include <fstream>
+#include <print>
 
 #if __has_include("gitmetadata.h")
 #include "gitmetadata.h"
@@ -39,11 +40,14 @@ std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
 std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
+#define RESET "\033[0m"
+#define BOLDRED "\033[1m\033[31m"
+
 namespace {
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	fmt::print(fg(fmt::color::crimson) | fmt::emphasis::bold, "> ERROR: {:s}\n", errorStr);
+	std::print(BOLDRED "ERROR: {:s}" RESET "\n", errorStr);
 	g_loaderSignal.notify_all();
 }
 
@@ -147,7 +151,7 @@ void mainLoader(ServiceManager* services)
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
-	std::cout << fmt::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion,
+	std::cout << std::format("OTB v{:d}.{:d}.{:d}", Item::items.majorVersion, Item::items.minorVersion,
 	                         Item::items.buildNumber)
 	          << std::endl;
 
@@ -197,7 +201,7 @@ void mainLoader(ServiceManager* services)
 	} else {
 		std::cout << std::endl;
 		startupErrorMessage(
-		    fmt::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
+		    std::format("Unknown world type: {:s}, valid world types are: pvp, no-pvp and pvp-enforced.",
 		                getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}

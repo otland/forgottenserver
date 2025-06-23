@@ -24,7 +24,7 @@
 #include <cstdlib>
 #include <deque>
 #include <filesystem>
-#include <fmt/color.h>
+#include <format>
 #include <forward_list>
 #include <functional>
 #include <iostream>
@@ -35,6 +35,7 @@
 #include <mutex>
 #include <mysql/mysql.h>
 #include <optional>
+#include <print>
 #include <pugixml.hpp>
 #include <queue>
 #include <random>

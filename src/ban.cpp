@@ -15,7 +15,7 @@ const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId)
 {
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	DBResult_ptr result = db.storeQuery(std::format(
 	    "SELECT `reason`, `expires_at`, `banned_at`, `banned_by`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `account_bans` WHERE `account_id` = {:d}",
 	    accountId));
 	if (!result) {
@@ -25,11 +25,11 @@ const std::optional<BanInfo> getAccountBanInfo(uint32_t accountId)
 	time_t expiresAt = result->getNumber<time_t>("expires_at");
 	if (expiresAt != 0 && std::chrono::system_clock::now() > std::chrono::system_clock::from_time_t(expiresAt)) {
 		// Move the ban to history if it has expired
-		g_databaseTasks.addTask(fmt::format(
+		g_databaseTasks.addTask(std::format(
 		    "INSERT INTO `account_ban_history` (`account_id`, `reason`, `banned_at`, `expired_at`, `banned_by`) VALUES ({:d}, {:s}, {:d}, {:d}, {:d})",
 		    accountId, db.escapeString(result->getString("reason")), result->getNumber<time_t>("banned_at"), expiresAt,
 		    result->getNumber<uint32_t>("banned_by")));
-		g_databaseTasks.addTask(fmt::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
+		g_databaseTasks.addTask(std::format("DELETE FROM `account_bans` WHERE `account_id` = {:d}", accountId));
 		return std::nullopt;
 	}
 
@@ -53,7 +53,7 @@ const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP)
 
 	Database& db = Database::getInstance();
 
-	DBResult_ptr result = db.storeQuery(fmt::format(
+	DBResult_ptr result = db.storeQuery(std::format(
 	    "SELECT `reason`, `expires_at`, (SELECT `name` FROM `players` WHERE `id` = `banned_by`) AS `name` FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')",
 	    clientIP.to_string()));
 	if (!result) {
@@ -63,7 +63,7 @@ const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP)
 	time_t expiresAt = result->getNumber<time_t>("expires_at");
 	if (expiresAt != 0 && std::chrono::system_clock::now() > std::chrono::system_clock::from_time_t(expiresAt)) {
 		g_databaseTasks.addTask(
-		    fmt::format("DELETE FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')", clientIP.to_string()));
+		    std::format("DELETE FROM `ip_bans` WHERE `ip` = INET6_ATON('{:s}')", clientIP.to_string()));
 		return std::nullopt;
 	}
 
@@ -82,7 +82,7 @@ const std::optional<BanInfo> getIpBanInfo(const Connection::Address& clientIP)
 bool isPlayerNamelocked(uint32_t playerId)
 {
 	return Database::getInstance()
-	    .storeQuery(fmt::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId))
+	    .storeQuery(std::format("SELECT 1 FROM `player_namelocks` WHERE `player_id` = {:d}", playerId))
 	    .get();
 }
 

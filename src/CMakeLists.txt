@@ -169,7 +169,6 @@ target_link_libraries(tfslib PRIVATE
 	Boost::iostreams
 	Boost::system
 	Boost::locale
-	fmt::fmt
 	OpenSSL::Crypto
 	pugixml::pugixml
 	ZLIB::ZLIB

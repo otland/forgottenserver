@@ -6,7 +6,7 @@
 #include "../game.h"
 #include "error.h"
 
-#include <fmt/format.h>
+#include <utility>
 
 extern Game g_game;
 extern Vocations g_vocations;
@@ -50,7 +50,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	}
 
 	thread_local auto& db = Database::getInstance();
-	auto result = db.storeQuery(fmt::format(
+	auto result = db.storeQuery(std::format(
 	    "SELECT `id`, UNHEX(`password`) AS `password`, `secret`, `premium_ends_at` FROM `accounts` WHERE `email` = {:s}",
 	    db.escapeString(emailField->get_string())));
 	if (!result) {
@@ -86,12 +86,12 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 
 	std::string sessionKey = randomBytes(16);
 	if (!db.executeQuery(
-	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
+	        std::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
 	                    db.escapeString(sessionKey), accountId, db.escapeString(ip)))) {
 		return make_error_response();
 	}
 
-	result = db.storeQuery(fmt::format(
+	result = db.storeQuery(std::format(
 	    "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
 	    accountId));
 
