@@ -53,11 +53,6 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 find_package(ZLIB REQUIRED)
 
-find_package(fmt 8.1.1 CONFIG)
-if (NOT fmt_FOUND)
-    find_package(fmt 8.1.1 REQUIRED)
-endif()
-
 # Look for vcpkg-provided libmariadb first
 # If we link to the file directly, we might miss its dependencies from vcpkg
 find_package(unofficial-libmariadb CONFIG)
@@ -92,7 +87,7 @@ find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS ${BOOST_REQUIRE
 
 include_directories(${Boost_INCLUDE_DIRS} ${OPENSSL_INCLUDE_DIR} ${LUA_INCLUDE_DIR} ${MYSQL_INCLUDE_DIR} ${PUGIXML_INCLUDE_DIR})
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (BUILD_TESTING)
