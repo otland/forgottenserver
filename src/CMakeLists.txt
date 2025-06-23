@@ -167,7 +167,6 @@ add_library(tfslib ${tfs_SRC})
 target_link_libraries(tfslib PRIVATE
 	Boost::iostreams
 	Boost::system
-	fmt::fmt
 	OpenSSL::Crypto
 	pugixml::pugixml
 	simdutf::simdutf

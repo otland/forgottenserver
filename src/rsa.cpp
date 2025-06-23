@@ -41,13 +41,13 @@ EVP_PKEY* loadPEM(std::string_view pem)
 	C_ptr<BIO> bio{BIO_new(BIO_s_mem())};
 	if (!BIO_write(bio.get(), pem.data(), pem.size())) {
 		throw std::runtime_error(
-		    fmt::format("Error while reading PEM data: {}", ERR_error_string(ERR_get_error(), nullptr)));
+		    std::format("Error while reading PEM data: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
 	EVP_PKEY* pkey_ = nullptr;
 	if (!PEM_read_bio_PrivateKey(bio.get(), &pkey_, nullptr, nullptr)) {
 		throw std::runtime_error(
-		    fmt::format("Error while reading private key: {}", ERR_error_string(ERR_get_error(), nullptr)));
+		    std::format("Error while reading private key: {}", ERR_error_string(ERR_get_error(), nullptr)));
 	}
 
 	pkey.reset(pkey_);

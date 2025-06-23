@@ -68,17 +68,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_compile_options(-Wimplicit-fallthrough -Wmove)
 endif ()
 
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-
 # Find packages.
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
 find_package(simdutf CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
-
-find_package(fmt 8.1.1 CONFIG)
-if (NOT fmt_FOUND)
-    find_package(fmt 8.1.1 REQUIRED)
-endif()
 
 # Look for vcpkg-provided packages first
 # If we link to the file directly, we might miss its dependencies from vcpkg

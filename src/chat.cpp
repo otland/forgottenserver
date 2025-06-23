@@ -30,10 +30,10 @@ void PrivateChatChannel::invitePlayer(const Player& player, Player& invitePlayer
 	}
 
 	invitePlayer.sendTextMessage(MESSAGE_INFO_DESCR,
-	                             fmt::format("{:s} invites you to {:s} private chat channel.", player.getName(),
+	                             std::format("{:s} invites you to {:s} private chat channel.", player.getName(),
 	                                         player.getSex() == PLAYERSEX_FEMALE ? "her" : "his"));
 
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer.getName()));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been invited.", invitePlayer.getName()));
 
 	for (auto&& user : users | std::views::values | std::views::as_const) {
 		user->sendChannelEvent(id, invitePlayer.getName(), CHANNELEVENT_INVITE);
@@ -48,7 +48,7 @@ void PrivateChatChannel::excludePlayer(const Player& player, Player& excludePlay
 
 	removeUser(excludePlayer);
 
-	player.sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been excluded.", excludePlayer.getName()));
+	player.sendTextMessage(MESSAGE_INFO_DESCR, std::format("{:s} has been excluded.", excludePlayer.getName()));
 
 	excludePlayer.sendClosePrivate(id);
 
