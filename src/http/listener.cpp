@@ -25,7 +25,7 @@ void Listener::accept()
 void Listener::on_accept(beast::error_code ec, asio::ip::tcp::socket socket)
 {
 	if (ec) {
-		std::print(stderr, "{}: {}\n", __FUNCTION__, ec.message());
+		std::println(stderr, "{}: {}", __FUNCTION__, ec.message());
 		return;
 	}
 

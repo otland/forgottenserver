@@ -27,7 +27,7 @@ void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short
 	if (bindOnlyOtsIP) {
 		address = asio::ip::make_address(otsIP);
 	}
-	std::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
+	std::println(">> Starting HTTP server on {:s}:{:d} with {:d} threads.", address, port, threads);
 
 	auto listener = make_listener(ioc, {address, port});
 	listener->run();
@@ -44,12 +44,12 @@ void tfs::http::stop()
 		return;
 	}
 
-	std::print(">> Stopping HTTP server...\n");
+	std::println(">> Stopping HTTP server...");
 
 	ioc.stop();
 	for (auto& worker : workers) {
 		worker.join();
 	}
 
-	std::print(">> Stopped HTTP server.\n");
+	std::println(">> Stopped HTTP server.");
 }
