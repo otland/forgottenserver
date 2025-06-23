@@ -32,43 +32,43 @@ bool Vocations::loadFromXml(std::istream& is, std::string_view filename)
 		vocationNode.remove_attribute("id");
 		for (auto attrNode : vocationNode.attributes()) {
 			const char* attrName = attrNode.name();
-			if (caseInsensitiveEqual(attrName, "name")) {
+			if (boost::iequals(attrName, "name")) {
 				voc.name = attrNode.as_string();
-			} else if (caseInsensitiveEqual(attrName, "allowpvp")) {
+			} else if (boost::iequals(attrName, "allowpvp")) {
 				voc.allowPvp = attrNode.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "clientid")) {
+			} else if (boost::iequals(attrName, "clientid")) {
 				voc.clientId = pugi::cast<uint16_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "description")) {
+			} else if (boost::iequals(attrName, "description")) {
 				voc.description = attrNode.as_string();
-			} else if (caseInsensitiveEqual(attrName, "magicshield")) {
+			} else if (boost::iequals(attrName, "magicshield")) {
 				voc.magicShield = attrNode.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "gaincap")) {
+			} else if (boost::iequals(attrName, "gaincap")) {
 				voc.gainCap = pugi::cast<uint32_t>(attrNode.value()) * 100;
-			} else if (caseInsensitiveEqual(attrName, "gainhp")) {
+			} else if (boost::iequals(attrName, "gainhp")) {
 				voc.gainHP = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainmana")) {
+			} else if (boost::iequals(attrName, "gainmana")) {
 				voc.gainMana = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainhpticks")) {
+			} else if (boost::iequals(attrName, "gainhpticks")) {
 				voc.gainHealthTicks = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainhpamount")) {
+			} else if (boost::iequals(attrName, "gainhpamount")) {
 				voc.gainHealthAmount = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainmanaticks")) {
+			} else if (boost::iequals(attrName, "gainmanaticks")) {
 				voc.gainManaTicks = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainmanaamount")) {
+			} else if (boost::iequals(attrName, "gainmanaamount")) {
 				voc.gainManaAmount = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "manamultiplier")) {
+			} else if (boost::iequals(attrName, "manamultiplier")) {
 				voc.manaMultiplier = pugi::cast<float>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "attackspeed")) {
+			} else if (boost::iequals(attrName, "attackspeed")) {
 				voc.attackSpeed = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "basespeed")) {
+			} else if (boost::iequals(attrName, "basespeed")) {
 				voc.baseSpeed = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "soulmax")) {
+			} else if (boost::iequals(attrName, "soulmax")) {
 				voc.soulMax = pugi::cast<uint16_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "gainsoulticks")) {
+			} else if (boost::iequals(attrName, "gainsoulticks")) {
 				voc.gainSoulTicks = pugi::cast<uint16_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "fromvoc")) {
+			} else if (boost::iequals(attrName, "fromvoc")) {
 				voc.fromVocation = pugi::cast<uint32_t>(attrNode.value());
-			} else if (caseInsensitiveEqual(attrName, "nopongkicktime")) {
+			} else if (boost::iequals(attrName, "nopongkicktime")) {
 				voc.noPongKickTime = pugi::cast<uint32_t>(attrNode.value()) * 1000;
 			} else {
 				std::cout << "[Notice - Vocations::loadFromXml] Unknown attribute: \"" << attrName
@@ -77,7 +77,7 @@ bool Vocations::loadFromXml(std::istream& is, std::string_view filename)
 		}
 
 		for (auto childNode : vocationNode.children()) {
-			if (caseInsensitiveEqual(childNode.name(), "skill")) {
+			if (boost::iequals(childNode.name(), "skill")) {
 				if ((attr = childNode.attribute("id"))) {
 					uint16_t skillId = pugi::cast<uint16_t>(attr.value());
 					if (skillId <= SKILL_LAST) {
@@ -90,7 +90,7 @@ bool Vocations::loadFromXml(std::istream& is, std::string_view filename)
 					std::cout << "[Notice - Vocations::loadFromXml] Missing skill id for vocation: " << voc.id
 					          << std::endl;
 				}
-			} else if (caseInsensitiveEqual(childNode.name(), "formula")) {
+			} else if (boost::iequals(childNode.name(), "formula")) {
 				if ((attr = childNode.attribute("meleeDamage"))) {
 					voc.meleeDamageMultiplier = pugi::cast<float>(attr.value());
 				}
@@ -125,7 +125,7 @@ Vocation* Vocations::getVocation(uint16_t id)
 int32_t Vocations::getVocationId(std::string_view name) const
 {
 	auto it = std::find_if(vocationsMap.begin(), vocationsMap.end(),
-	                       [=](auto it) { return caseInsensitiveEqual(name, it.second.name); });
+	                       [=](auto it) { return boost::iequals(name, it.second.name); });
 	return it != vocationsMap.end() ? it->first : -1;
 }
 

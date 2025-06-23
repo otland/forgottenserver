@@ -36,7 +36,7 @@ LuaScriptInterface& CreatureEvents::getScriptInterface() { return scriptInterfac
 
 Event_ptr CreatureEvents::getEvent(const std::string& nodeName)
 {
-	if (!caseInsensitiveEqual(nodeName, "event")) {
+	if (!boost::iequals(nodeName, "event")) {
 		return nullptr;
 	}
 	return Event_ptr(new CreatureEvent(&scriptInterface));

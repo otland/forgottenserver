@@ -39,7 +39,7 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 GuildRank_ptr Guild::getRankByName(const std::string& name) const
 {
 	for (auto rank : ranks) {
-		if (caseInsensitiveEqual(rank->name, name)) {
+		if (boost::iequals(rank->name, name)) {
 			return rank;
 		}
 	}

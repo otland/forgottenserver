@@ -93,9 +93,9 @@ void mainLoader(ServiceManager* services)
 
 #ifdef _WIN32
 	const std::string& defaultPriority = getString(ConfigManager::DEFAULT_PRIORITY);
-	if (caseInsensitiveEqual(defaultPriority, "high")) {
+	if (boost::iequals(defaultPriority, "high")) {
 		SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS);
-	} else if (caseInsensitiveEqual(defaultPriority, "above-normal")) {
+	} else if (boost::iequals(defaultPriority, "above-normal")) {
 		SetPriorityClass(GetCurrentProcess(), ABOVE_NORMAL_PRIORITY_CLASS);
 	}
 #endif
