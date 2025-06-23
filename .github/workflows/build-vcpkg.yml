@@ -39,6 +39,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: (Ubuntu) Set GCC version to g++-14
+        run: sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+        if: ${{ matrix.os == 'ubuntu' }}
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:

@@ -25,6 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Set GCC version to g++-14
+        run: sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-14 100
+
       - name: Get latest CMake
         # Using 'latest' branch, the latest CMake is installed.
         uses: lukka/get-cmake@latest
