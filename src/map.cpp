@@ -668,7 +668,7 @@ static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
 	uint16_t dx = std::abs(p1.getX() - p2.getX());
 	uint16_t dy = std::abs(p1.getY() - p2.getY());
-	return MAP_NORMALWALKCOST * (dx + dy) + (MAP_DIAGONALWALKCOST - 2 * 10) * std::min(dx, dy);
+	return 10 * (dx + dy);
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
@@ -740,6 +740,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			if (fpp.maxSearchDist != 0 &&
 			    (startPos.getDistanceX(pos) > fpp.maxSearchDist || startPos.getDistanceY(pos) > fpp.maxSearchDist)) {
 				continue;
+			} else if ((startPos.getDistanceX(pos) + startPos.getDistanceY(pos) >
+			            Map::maxViewportX + Map::maxViewportY)) {
+				break;
 			}
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
