@@ -161,7 +161,7 @@ public:
 	static constexpr int32_t maxViewportY = 11; // min value: maxClientViewportY + 1
 	static constexpr int32_t maxClientViewportX = 8;
 	static constexpr int32_t maxClientViewportY = 6;
-	static constexpr int16_t nodeReserveSize = 150; // Increase if maxViewport is increased.
+	static constexpr int16_t nodeReserveSize = (maxViewportX + maxViewportY) * 7;
 
 	uint32_t clean() const;
 
