@@ -716,7 +716,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	while (n) {
 		iterations++;
 
-		if (iterations >= 120) {
+		if (iterations >= Map::nodeReserveSize) {
 			nodes.clear();
 			return false;
 		}
