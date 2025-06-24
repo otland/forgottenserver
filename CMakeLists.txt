@@ -32,7 +32,7 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "lua")
 endif()
 
-option(USE_SIMDUTF "Use simdutf for UTF-8 validation" ON)
+option(USE_SIMDUTF "Use simdutf for UTF-8 validation" OFF)
 if (USE_SIMDUTF)
     list(APPEND VCPKG_MANIFEST_FEATURES "simdutf")
     add_compile_definitions(USE_SIMDUTF)
