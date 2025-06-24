@@ -14,7 +14,6 @@ class Creature;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
-
 static constexpr uint16_t MAP_NORMALWALKCOST = 10;
 static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
 
@@ -162,6 +161,7 @@ public:
 	static constexpr int32_t maxViewportY = 11; // min value: maxClientViewportY + 1
 	static constexpr int32_t maxClientViewportX = 8;
 	static constexpr int32_t maxClientViewportY = 6;
+	static constexpr int16_t nodeReserveSize = 150; // Increase if maxViewport is increased.
 
 	uint32_t clean() const;
 

@@ -866,12 +866,9 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 // AStarNodes
 AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 {
-	// Needs to be large enough to never resize 250 should be plenty
-	// If you want paths larger than 20-30 sqm this must be increased.
-	uint8_t reserveSize = 150;
-	nodes.reserve(reserveSize);
-	nodeMap.reserve(reserveSize);
-	visited.reserve(reserveSize);
+	nodes.reserve(Map::nodeReserveSize);
+	nodeMap.reserve(Map::nodeReserveSize);
+	visited.reserve(Map::nodeReserveSize);
 	createNode(nullptr, x, y, 0, 0);
 }
 

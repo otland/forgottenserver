@@ -36,6 +36,7 @@
 #include <mysql/mysql.h>
 #include <optional>
 #include <pugixml.hpp>
+#include <queue>
 #include <random>
 #include <set>
 #include <sstream>
@@ -44,7 +45,6 @@
 #include <thread>
 #include <unordered_map>
 #include <unordered_set>
-#include <queue>
 #include <utility>
 #include <valarray>
 #include <variant>
