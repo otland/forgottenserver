@@ -60,6 +60,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # Find packages.
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
+find_package(simdutf CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 find_package(fmt 8.1.1 CONFIG)
@@ -100,7 +101,7 @@ if (APPLE)
     find_package(Iconv REQUIRED)
 endif()
 
-set(BOOST_REQUIRED_COMPONENTS system iostreams locale)
+set(BOOST_REQUIRED_COMPONENTS system iostreams)
 if (HTTP)
     list(APPEND BOOST_REQUIRED_COMPONENTS json)
 endif ()
