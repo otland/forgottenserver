@@ -707,7 +707,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	bool sightClear = isSightClear(startPos, targetPos, true, true);
 
 	Position endPos;
-	AStarNodes nodes(pos.x , pos.y);
+	AStarNodes nodes(pos.x, pos.y);
 
 	AStarNode* found = nullptr;
 	int32_t bestMatch = 0;
