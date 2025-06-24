@@ -8,7 +8,13 @@
 #include "container.h"
 #include "podium.h"
 
+#ifdef USE_SIMDUTF
+#include <simdutf.h>
+#else
 #include <boost/locale.hpp>
+
+constexpr std::locale latin1{"ISO-8859-1"};
+#endif
 
 std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
@@ -20,12 +26,16 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 		return {};
 	}
 
-	auto it = buffer.data() + info.position;
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
 
-	std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
-	return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
-	                                         boost::locale::conv::skip);
+#ifdef USE_SIMDUTF
+	auto expectedLen = simdutf::utf8_length_from_latin1(it, stringLen);
+	auto output = std::make_unique<char[]>(expectedLen);
+	return {output.get(), simdutf::convert_latin1_to_utf8_safe(it, stringLen, output.get(), expectedLen)};
+#else
+	return boost::locale::conv::to_utf<char>(it, it + stringLen, latin1, boost::locale::conv::skip);
+#endif
 }
 
 Position NetworkMessage::getPosition()
@@ -39,7 +49,19 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
+#ifdef USE_SIMDUTF
+	auto expectedLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
+	if (!canAdd(expectedLen + 2) || expectedLen > 8192) {
+		return;
+	}
+
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position + 2);
+	auto stringLen = simdutf::convert_utf8_to_latin1(value.data(), value.size(), it);
+	assert(stringLen <= expectedLen);
+
+	add<uint16_t>(stringLen);
+#else
+	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), latin1,
 	                                                            boost::locale::conv::skip);
 	size_t stringLen = latin1Str.size();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
@@ -48,6 +70,8 @@ void NetworkMessage::addString(std::string_view value)
 
 	add<uint16_t>(stringLen);
 	std::memcpy(buffer.data() + info.position, latin1Str.data(), stringLen);
+#endif
+
 	info.position += stringLen;
 	info.length += stringLen;
 }

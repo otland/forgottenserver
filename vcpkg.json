@@ -3,7 +3,6 @@
   "dependencies": [
     "boost-asio",
     "boost-iostreams",
-    "boost-locale",
     "boost-lockfree",
     "boost-system",
     "boost-variant",
@@ -17,6 +16,12 @@
     "zlib"
   ],
   "features": {
+    "boost-locale": {
+      "description": "Enable Boost.Locale UTF-8 support",
+      "dependencies": [
+        "boost-locale"
+      ]
+    },
     "http": {
       "description": "Enable HTTP support",
       "dependencies": [
@@ -48,6 +53,12 @@
         "libmysql"
       ]
     },
+    "simdutf": {
+      "description": "Enable SIMD UTF-8 support",
+      "dependencies": [
+        "simdutf"
+      ]
+    },
     "unit-tests": {
       "description": "Build unit tests",
       "dependencies": [
@@ -55,10 +66,5 @@
       ]
     }
   },
-  "default-features": [
-    "lua",
-    "http",
-    "libmariadb"
-  ],
   "builtin-baseline": "0cf34c184ce990471435b5b9c92edcf7424930b1"
 }
