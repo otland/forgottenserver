@@ -64,7 +64,7 @@ public:
 		this->scriptId = scriptId;
 		interface = scriptInterface;
 	}
-	bool setCallbackId(int32_t callbackId, LuaScriptInterface* luaScriptInterface);
+	bool setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface);
 
 	int32_t getScriptId() const { return scriptId; }
 	LuaScriptInterface* getScriptInterface() { return interface; }
