@@ -32,6 +32,7 @@ jobs:
         os: [ubuntu, macos, windows]
         buildtype: [Debug, Release]
         luajit: [on, off]
+        simdutf: [on, off]
 
     env:
       VCPKG_BUILD_TYPE: release
@@ -63,7 +64,7 @@ jobs:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', '${{ matrix.buildtype }}']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}']"
+          configurePresetAdditionalArgs: "['-DUSE_LUAJIT=${{ matrix.luajit }}', '-DUSE_SIMDUTF=${{ matrix.simdutf }}']"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
@@ -75,14 +76,14 @@ jobs:
         uses: actions/upload-artifact@v4
         if: ${{ !startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-simdutf=${{ matrix.simdutf }}-${{ github.sha }}
           path: ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs
 
       - name: Upload artifact binary (exe)
         uses: actions/upload-artifact@v4
         if: ${{ startsWith(matrix.os, 'windows') }}
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-simdutf=${{ matrix.simdutf }}-${{ github.sha }}
           path: |
             ${{ runner.workspace }}/build/${{ matrix.buildtype }}/tfs.exe
             ${{ runner.workspace }}/build/${{ matrix.buildtype }}/*.dll
@@ -94,5 +95,5 @@ jobs:
       - name: Upload datapack contents
         uses: actions/upload-artifact@v4
         with:
-          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-${{ github.sha }}
+          name: tfs-${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-simdutf=${{ matrix.simdutf }}-${{ github.sha }}
           path: ${{ github.workspace }}
