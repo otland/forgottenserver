@@ -294,7 +294,7 @@ void ScriptEnvironment::resetEnv()
 	}
 }
 
-bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* luaScriptInterface)
+bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
 {
 	if (this->callbackId != 0) {
 		// nested callbacks are not allowed
@@ -305,7 +305,7 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* lu
 	}
 
 	this->callbackId = callbackId;
-	interface = luaScriptInterface;
+	interface = scriptInterface;
 	return true;
 }
 
@@ -9738,7 +9738,7 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 		return 1;
 	}
 
-	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", 0));
+	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", std::numeric_limits<uint32_t>::max()));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
