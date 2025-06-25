@@ -39,7 +39,6 @@ Direction getDirectionTo(const Position& from, const Position& to);
 
 std::string getFirstLine(const std::string& str);
 
-std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 
 uint16_t getDepotBoxId(uint16_t index);
@@ -74,40 +73,5 @@ int64_t OTSYS_TIME();
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
 const std::vector<Direction>& getShuffleDirections();
-
-namespace tfs {
-
-#if __has_cpp_attribute(__cpp_lib_to_underlying)
-
-template <class T>
-using std::to_underlying<T>;
-
-#else
-
-inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
-
-#endif
-
-#if __has_cpp_attribute(__cpp_lib_unreachable)
-
-using std::unreachable;
-
-#else
-
-[[noreturn]] inline void unreachable()
-{
-	// Uses compiler specific extensions if possible.
-	// Even if no extension is used, undefined behavior is still raised by
-	// an empty function body and the noreturn attribute.
-#if defined(_MSC_VER) && !defined(__clang__) // MSVC
-	__assume(false);
-#else                                        // GCC, Clang
-	__builtin_unreachable();
-#endif
-}
-
-#endif
-
-} // namespace tfs
 
 #endif // FS_TOOLS_H

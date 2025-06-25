@@ -8,7 +8,6 @@
 #include "configmanager.h"
 
 #include <chrono>
-#include <fmt/chrono.h>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
@@ -99,7 +98,7 @@ std::string hmac(std::string_view algorithm, std::string_view key, std::string_v
 
 	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, algorithm.data(), nullptr), EVP_MD_free};
 	if (!md) {
-		throw std::runtime_error(fmt::format("Failed to fetch {:s}", algorithm));
+		throw std::runtime_error(std::format("Failed to fetch {:s}", algorithm));
 	}
 
 	std::array<unsigned char, EVP_MAX_MD_SIZE> result;
@@ -217,9 +216,10 @@ std::string randomBytes(size_t length)
 	return bytes;
 }
 
-std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
-
-std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
+std::string formatDateShort(time_t time)
+{
+	return std::format("{:%d %b %Y}", std::chrono::system_clock::from_time_t(time));
+}
 
 Position getNextPosition(Direction direction, Position pos)
 {

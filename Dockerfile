@@ -1,9 +1,8 @@
-FROM alpine:3.19 AS build
+FROM alpine:3.22 AS build
 RUN apk add --no-cache \
   build-base \
   boost-dev \
   cmake \
-  fmt-dev \
   luajit-dev \
   mariadb-connector-c-dev \
   openssl-dev \
@@ -16,13 +15,12 @@ COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
 RUN cmake --preset default -DUSE_LUAJIT=ON && cmake --build --config RelWithDebInfo --preset default
 
-FROM alpine:3.19
+FROM alpine:3.22
 RUN apk add --no-cache \
   boost-iostreams \
   boost-locale \
   boost-system \
   boost-json \
-  fmt \
   luajit \
   mariadb-connector-c \
   openssl \
