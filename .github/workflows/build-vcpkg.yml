@@ -25,7 +25,7 @@ on:
 
 jobs:
   build-vcpkg:
-    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}
+    name: ${{ matrix.os }}-${{ matrix.buildtype }}-luajit=${{ matrix.luajit }}-simdutf=${{ matrix.simdutf }}
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
