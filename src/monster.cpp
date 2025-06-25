@@ -1085,7 +1085,14 @@ bool Monster::walkToSpawn()
 	return true;
 }
 
-void Monster::onWalk() { Creature::onWalk(); }
+void Monster::onWalk()
+{
+	Creature::onWalk();
+
+	if (isFleeing()) {
+		forceUpdatePath();
+	}
+}
 
 void Monster::onWalkComplete()
 {

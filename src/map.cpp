@@ -737,12 +737,11 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			pos.x = x + allNeighbors[i].first;
 			pos.y = y + allNeighbors[i].second;
 
-			if (fpp.maxSearchDist != 0 &&
-			    (startPos.getDistanceX(pos) > fpp.maxSearchDist || startPos.getDistanceY(pos) > fpp.maxSearchDist)) {
+			int32_t startDistanceToNode = startPos.getDistanceX(pos) + startPos.getDistanceY(pos);
+			if (fpp.maxSearchDist != 0 && startDistanceToNode > fpp.maxSearchDist) {
 				continue;
-			} else if ((startPos.getDistanceX(pos) + startPos.getDistanceY(pos) >
-			            Map::maxViewportX + Map::maxViewportY)) {
-				break;
+			} else if (fpp.maxSearchDist == 0 && (startDistanceToNode > (Map::maxViewportX + Map::maxViewportY))) {
+				continue;
 			}
 
 			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
