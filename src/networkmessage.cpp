@@ -13,7 +13,7 @@
 #else
 #include <boost/locale.hpp>
 
-constexpr std::locale latin1{"ISO-8859-1"};
+static const std::locale latin1{"ISO-8859-1"};
 #endif
 
 std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
