@@ -9738,7 +9738,8 @@ int LuaScriptInterface::luaPlayerSetTown(lua_State* L)
 		return 1;
 	}
 
-	const Town* town = g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", std::numeric_limits<uint32_t>::max()));
+	const Town* town =
+	    g_game.map.towns.getTown(tfs::lua::getField<uint32_t>(L, 2, "id", std::numeric_limits<uint32_t>::max()));
 	if (!town) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
