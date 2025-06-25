@@ -30,9 +30,11 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 	info.position += stringLen;
 
 #ifdef USE_SIMDUTF
-	auto expectedLen = simdutf::utf8_length_from_latin1(it, stringLen);
-	auto output = std::make_unique<char[]>(expectedLen);
-	return {output.get(), simdutf::convert_latin1_to_utf8_safe(it, stringLen, output.get(), expectedLen)};
+	auto out = std::string(simdutf::utf8_length_from_latin1(it, stringLen), '\0');
+	auto outLen = simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
+	assert(outLen <= out.size());
+
+	return out.substr(0, outLen);
 #else
 	return boost::locale::conv::to_utf<char>(it, it + stringLen, latin1, boost::locale::conv::skip);
 #endif
@@ -49,17 +51,16 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
+	auto out = reinterpret_cast<char*>(buffer.data() + info.position + sizeof(uint16_t));
+
 #ifdef USE_SIMDUTF
 	auto expectedLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
 	if (!canAdd(expectedLen + 2) || expectedLen > 8192) {
 		return;
 	}
 
-	auto it = reinterpret_cast<char*>(buffer.data() + info.position + 2);
-	auto stringLen = simdutf::convert_utf8_to_latin1(value.data(), value.size(), it);
+	auto stringLen = simdutf::convert_utf8_to_latin1(value.data(), value.size(), out);
 	assert(stringLen <= expectedLen);
-
-	add<uint16_t>(stringLen);
 #else
 	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), latin1,
 	                                                            boost::locale::conv::skip);
@@ -68,10 +69,10 @@ void NetworkMessage::addString(std::string_view value)
 		return;
 	}
 
-	add<uint16_t>(stringLen);
-	std::memcpy(buffer.data() + info.position, latin1Str.data(), stringLen);
+	std::memcpy(out, latin1Str.data(), stringLen);
 #endif
 
+	add<uint16_t>(stringLen);
 	info.position += stringLen;
 	info.length += stringLen;
 }
