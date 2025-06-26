@@ -5486,11 +5486,12 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			buyerPlayer->onReceiveMail();
 		}
 	} else {
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
