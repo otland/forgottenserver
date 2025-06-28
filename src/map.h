@@ -31,7 +31,7 @@ class AStarNodes
 {
 public:
 	AStarNodes(uint16_t x, uint16_t y);
-	void clear();
+	~AStarNodes();
 
 	AStarNode* createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	AStarNode* getBestNode();
@@ -41,7 +41,7 @@ public:
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	std::vector<AStarNode> nodes;
+	std::vector<AStarNode*> nodes;
 	std::unordered_map<uint32_t, AStarNode*> nodeMap;
 	std::unordered_set<uint32_t> visited;
 
