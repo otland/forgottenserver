@@ -20,7 +20,7 @@ expFromPlayersLevelRange = 75
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players
 -- NOTE: two-factor auth requires token and timestamp in session key
-ip = "127.0.0.1"
+ip = "0.0.0.0"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
 gameProtocolPort = 7172
