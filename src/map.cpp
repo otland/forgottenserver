@@ -717,6 +717,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		iterations++;
 
 		if (iterations >= Map::nodeReserveSize) {
+			nodes.clear();
 			return false;
 		}
 
@@ -819,6 +820,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	}
 
 	if (!found) {
+		nodes.clear();
 		return false;
 	}
 
@@ -856,6 +858,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 		found = found->parent;
 	}
+
+	nodes.clear();
 	return true;
 }
 
@@ -868,18 +872,21 @@ AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
 	createNode(nullptr, x, y, 0, 0);
 }
 
-AStarNodes::~AStarNodes()
+void AStarNodes::clear()
 {
-	for (auto* node : nodes) {
-		delete node;
+	nodes.clear();
+	visited.clear();
+	nodeMap.clear();
+	while (!openSet.empty()) {
+		openSet.pop();
 	}
 }
 
 AStarNode* AStarNodes::createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f)
 {
 	uint32_t key = hashCoord(x, y);
-	nodes.emplace_back(new AStarNode(parent, x, y, g, f));
-	AStarNode* node = nodes.back();
+	nodes.emplace_back(AStarNode{parent, x, y, g, f});
+	AStarNode* node = &nodes.back();
 	nodeMap[key] = node;
 	openSet.push(node);
 	return node;
