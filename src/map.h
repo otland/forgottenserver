@@ -31,7 +31,6 @@ class AStarNodes
 {
 public:
 	AStarNodes(uint16_t x, uint16_t y);
-	void clear();
 
 	AStarNode* createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	AStarNode* getBestNode();
@@ -161,7 +160,7 @@ public:
 	static constexpr int32_t maxViewportY = 11; // min value: maxClientViewportY + 1
 	static constexpr int32_t maxClientViewportX = 8;
 	static constexpr int32_t maxClientViewportY = 6;
-	static constexpr int16_t nodeReserveSize = (maxViewportX + maxViewportY) * 12;
+	static constexpr int16_t nodeReserveSize = (maxViewportX + maxViewportY) * 7;
 
 	uint32_t clean() const;
 
