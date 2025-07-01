@@ -687,16 +687,16 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		return false;
 	}
 
-	uint16_t distanceX = startPos.getDistanceX(targetPos);
-	uint16_t distanceY = startPos.getDistanceY(targetPos);
+	int32_t distanceX = startPos.getDistanceX(targetPos);
+	int32_t distanceY = startPos.getDistanceY(targetPos);
 	// We are next to our target. Let dance step decide.
 	if (fpp.maxTargetDist <= 1 && distanceX <= 1 && distanceY <= 1) {
 		return true;
 	}
 
 	// Don't update path. The target is too far away.
-	int32_t maxDistanceX = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportX + 1;
-	int32_t maxDistanceY = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxClientViewportY + 1;
+	int32_t maxDistanceX = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxViewportX + 1;
+	int32_t maxDistanceY = fpp.maxSearchDist ? fpp.maxSearchDist : Map::maxViewportY + 1;
 	if (distanceX > maxDistanceX || distanceY > maxDistanceY) {
 		return false;
 	}
