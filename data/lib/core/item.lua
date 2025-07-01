@@ -1,43 +1,66 @@
+---Returns the itemtype of the item.
+---@param self Item
+---@return ItemType
 function Item.getType(self)
 	return ItemType(self:getId())
 end
 
+---Returns the classification of the item.
+---@return number
 function Item:getClassification()
 	return self:getType():getClassification()
 end
 
+---@param self Item
+---@return boolean
 function Item.isContainer(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isCreature(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isMonster(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isNpc(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isPlayer(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isTeleport(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isPodium(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item.isTile(self)
 	return false
 end
 
+---@param self Item
+---@return boolean
 function Item:isItemType()
 	return false
 end
@@ -146,7 +169,12 @@ do
 		[CONDITION_CURSED] = "curse immunity"
 	}
 
-	-- first argument: Item, itemType or item id
+	---Function to return an item's description, wether it is an item, itemType, or just an itemId.
+	---@param item Item|ItemType|number
+	---@param lookDistance number
+	---@param subType number
+	---@param addArticle boolean
+	---@return string?
 	local function internalItemGetDescription(item, lookDistance, subType, addArticle)
 		-- optional, but true by default
 		if addArticle == nil then
@@ -154,6 +182,7 @@ do
 		end
 
 		local isVirtual = false -- check if we're inspecting a real item or itemType only
+		---@type ItemType
 		local itemType
 
 		-- determine the kind of item data to process
@@ -755,10 +784,20 @@ do
 		return table.concat(response, "")
 	end
 
+	---Gets an item's description
+	---@param lookDistance number
+	---@param subType number
+	---@param addArticle boolean
+	---@return string?
 	function Item:getDescription(lookDistance, subType, addArticle)
 		return internalItemGetDescription(self, lookDistance, subType, addArticle)
 	end
 
+	---Gets an itemType's description
+	---@param lookDistance number
+	---@param subType number
+	---@param addArticle boolean
+	---@return string?
 	function ItemType:getItemDescription(lookDistance, subType, addArticle)
 		return internalItemGetDescription(self, lookDistance, subType, addArticle)
 	end
