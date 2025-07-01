@@ -583,11 +583,15 @@ do
 			end
 		end
 
+		--[[
 		-- imbuements (to do)
 		-- \nImbuements: (Basic Strike 2:30h, Basic Void 2:30h, Empty Slot).
 
-		-- item class
+		
+		-- item class (placeholder)
 		-- Classification: x.
+		-- Disabled until classification system is implemented.
+
 		do
 			local classification = itemType:getClassification()
 			if classification == 0 then
@@ -595,6 +599,7 @@ do
 			end
 			response[#response + 1] = string.format("\nClassification: %s.", classification)
 		end
+		]]
 
 		-- item count (will be reused later)
 		local count = isVirtual and 1 or item:getCount()
