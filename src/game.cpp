@@ -396,24 +396,17 @@ Creature* Game::getCreatureByName(const std::string& s)
 		return nullptr;
 	}
 
-	const std::string& lowerCaseName = boost::algorithm::to_lower_copy(s);
+	auto predicate = [&](const auto it) { return boost::iequals(s, it.second->getName()); };
 
-	if (auto it = mappedPlayerNames.find(lowerCaseName); it != mappedPlayerNames.end()) {
+	if (auto it = std::ranges::find_if(mappedPlayerNames, predicate); it != mappedPlayerNames.end()) {
 		return it->second;
 	}
 
-	auto equalCreatureName = [&](const std::pair<uint32_t, Creature*>& it) {
-		auto name = it.second->getName();
-		return lowerCaseName.size() == name.size() &&
-		       std::equal(lowerCaseName.begin(), lowerCaseName.end(), name.begin(),
-		                  [](char a, char b) { return a == std::tolower(b); });
-	};
-
-	if (auto it = std::find_if(npcs.begin(), npcs.end(), equalCreatureName); it != npcs.end()) {
+	if (auto it = std::ranges::find_if(npcs, predicate); it != npcs.end()) {
 		return it->second;
 	}
 
-	if (auto it = std::find_if(monsters.begin(), monsters.end(), equalCreatureName); it != monsters.end()) {
+	if (auto it = std::ranges::find_if(monsters, predicate); it != monsters.end()) {
 		return it->second;
 	}
 
@@ -426,9 +419,8 @@ Npc* Game::getNpcByName(const std::string& s)
 		return nullptr;
 	}
 
-	const char* npcName = s.c_str();
 	for (const auto& it : npcs) {
-		if (caseInsensitiveEqual(npcName, it.second->getName())) {
+		if (boost::iequals(s, it.second->getName())) {
 			return it.second;
 		}
 	}

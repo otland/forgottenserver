@@ -508,7 +508,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 		for (auto attributeNode : node.children()) {
 			if ((attr = attributeNode.attribute("key"))) {
 				const char* value = attr.value();
-				if (caseInsensitiveEqual(value, "shooteffect")) {
+				if (boost::iequals(value, "shooteffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
 						ShootType_t shoot =
 						    getShootType(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
@@ -519,7 +519,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 							          << " - Unknown shootEffect: " << attr.as_string() << std::endl;
 						}
 					}
-				} else if (caseInsensitiveEqual(value, "areaeffect")) {
+				} else if (boost::iequals(value, "areaeffect")) {
 					if ((attr = attributeNode.attribute("value"))) {
 						MagicEffectClasses effect =
 						    getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
@@ -920,29 +920,29 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 		for (auto flagNode : node.children()) {
 			attr = flagNode.first_attribute();
 			const char* attrName = attr.name();
-			if (caseInsensitiveEqual(attrName, "summonable")) {
+			if (boost::iequals(attrName, "summonable")) {
 				mType->info.isSummonable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "attackable")) {
+			} else if (boost::iequals(attrName, "attackable")) {
 				mType->info.isAttackable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "hostile")) {
+			} else if (boost::iequals(attrName, "hostile")) {
 				mType->info.isHostile = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "ignorespawnblock")) {
+			} else if (boost::iequals(attrName, "ignorespawnblock")) {
 				mType->info.isIgnoringSpawnBlock = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "illusionable")) {
+			} else if (boost::iequals(attrName, "illusionable")) {
 				mType->info.isIllusionable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "challengeable")) {
+			} else if (boost::iequals(attrName, "challengeable")) {
 				mType->info.isChallengeable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "convinceable")) {
+			} else if (boost::iequals(attrName, "convinceable")) {
 				mType->info.isConvinceable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "pushable")) {
+			} else if (boost::iequals(attrName, "pushable")) {
 				mType->info.pushable = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "isboss")) {
+			} else if (boost::iequals(attrName, "isboss")) {
 				mType->info.isBoss = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "canpushitems")) {
+			} else if (boost::iequals(attrName, "canpushitems")) {
 				mType->info.canPushItems = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "canpushcreatures")) {
+			} else if (boost::iequals(attrName, "canpushcreatures")) {
 				mType->info.canPushCreatures = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "staticattack")) {
+			} else if (boost::iequals(attrName, "staticattack")) {
 				uint32_t staticAttack = pugi::cast<uint32_t>(attr.value());
 				if (staticAttack > 100) {
 					std::cout << "[Warning - Monsters::loadMonster] staticattack greater than 100. " << file
@@ -951,26 +951,26 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 				}
 
 				mType->info.staticAttackChance = staticAttack;
-			} else if (caseInsensitiveEqual(attrName, "lightlevel")) {
+			} else if (boost::iequals(attrName, "lightlevel")) {
 				mType->info.light.level = pugi::cast<uint16_t>(attr.value());
-			} else if (caseInsensitiveEqual(attrName, "lightcolor")) {
+			} else if (boost::iequals(attrName, "lightcolor")) {
 				mType->info.light.color = pugi::cast<uint16_t>(attr.value());
-			} else if (caseInsensitiveEqual(attrName, "targetdistance")) {
+			} else if (boost::iequals(attrName, "targetdistance")) {
 				int32_t targetDistance = pugi::cast<int32_t>(attr.value());
 				if (targetDistance < 1) {
 					targetDistance = 1;
 					std::cout << "[Warning - Monsters::loadMonster] targetdistance less than 1. " << file << std::endl;
 				}
 				mType->info.targetDistance = targetDistance;
-			} else if (caseInsensitiveEqual(attrName, "runonhealth")) {
+			} else if (boost::iequals(attrName, "runonhealth")) {
 				mType->info.runAwayHealth = pugi::cast<int32_t>(attr.value());
-			} else if (caseInsensitiveEqual(attrName, "hidehealth")) {
+			} else if (boost::iequals(attrName, "hidehealth")) {
 				mType->info.hiddenHealth = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "canwalkonenergy")) {
+			} else if (boost::iequals(attrName, "canwalkonenergy")) {
 				mType->info.canWalkOnEnergy = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "canwalkonfire")) {
+			} else if (boost::iequals(attrName, "canwalkonfire")) {
 				mType->info.canWalkOnFire = attr.as_bool();
-			} else if (caseInsensitiveEqual(attrName, "canwalkonpoison")) {
+			} else if (boost::iequals(attrName, "canwalkonpoison")) {
 				mType->info.canWalkOnPoison = attr.as_bool();
 			} else {
 				std::cout << "[Warning - Monsters::loadMonster] Unknown flag attribute: " << attrName << ". " << file
@@ -1409,7 +1409,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 			for (const auto& attributeNode : summonNode.children()) {
 				if ((attr = attributeNode.attribute("key"))) {
 					const char* value = attr.value();
-					if (caseInsensitiveEqual(value, "mastereffect")) {
+					if (boost::iequals(value, "mastereffect")) {
 						if ((attr = attributeNode.attribute("value"))) {
 							masterEffect =
 							    getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
@@ -1419,7 +1419,7 @@ MonsterType* Monsters::loadMonster(const std::string& file, const std::string& m
 								    << attr.as_string() << std::endl;
 							}
 						}
-					} else if (caseInsensitiveEqual(value, "effect")) {
+					} else if (boost::iequals(value, "effect")) {
 						if ((attr = attributeNode.attribute("value"))) {
 							effect = getMagicEffect(boost::algorithm::to_lower_copy<std::string>(attr.as_string()));
 							if (effect == CONST_ME_NONE) {
