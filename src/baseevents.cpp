@@ -73,10 +73,12 @@ bool BaseEvents::reload()
 	return loadFromXml();
 }
 
-void BaseEvents::reInitState()
+void BaseEvents::reInitState(bool fromLua)
 {
-	getScriptInterface().reInitState();
-	getScriptInterface().initState();
+	if (fromLua) {
+		getScriptInterface().reInitState();
+		getScriptInterface().initState();
+	}
 }
 
 Event::Event(LuaScriptInterface* interface) : scriptInterface(interface) {}

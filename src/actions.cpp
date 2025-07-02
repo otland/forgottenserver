@@ -38,7 +38,7 @@ void Actions::clear(bool fromLua)
 	clearMap(uniqueItemMap, fromLua);
 	clearMap(actionItemMap, fromLua);
 
-	reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Actions::getScriptInterface() { return scriptInterface; }

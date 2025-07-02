@@ -21,7 +21,7 @@ void TalkActions::clear(bool fromLua)
 		}
 	}
 
-	reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; }

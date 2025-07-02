@@ -55,7 +55,7 @@ void MoveEvents::clear(bool fromLua)
 	clearMap(uniqueIdMap, fromLua);
 	clearPosMap(positionMap, fromLua);
 
-	reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& MoveEvents::getScriptInterface() { return scriptInterface; }

@@ -42,7 +42,7 @@ void Weapons::clear(bool fromLua)
 		}
 	}
 
-	reInitState();
+	reInitState(fromLua);
 }
 
 LuaScriptInterface& Weapons::getScriptInterface() { return scriptInterface; }
