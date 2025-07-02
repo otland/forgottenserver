@@ -13,6 +13,12 @@ Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.init
 
 Scripts::~Scripts() { scriptInterface.reInitState(); }
 
+void Scripts::clear(bool fromLua)
+{
+	scriptInterface.reInitState();
+	scriptInterface.initState();
+}
+
 bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 {
 	namespace fs = std::filesystem;
