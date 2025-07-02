@@ -1089,11 +1089,8 @@ void Monster::onWalk()
 {
 	Creature::onWalk();
 
-	if ((attackedCreature || followCreature) && isFleeing()) {
-		if (lastPathUpdate > OTSYS_TIME()) {
-			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
-		}
+	if (isFleeing() && lastPathUpdate > OTSYS_TIME()) {
+		forceUpdatePath();
 	}
 }
 
