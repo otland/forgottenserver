@@ -748,7 +748,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// If sight is clear we can ignore a lot of nodes.
-			if (sightClear) {
+			if (sightClear && !fpp.keepDistance) {
 				int32_t startX = startPos.getX();
 				int32_t startY = startPos.getY();
 				int32_t targetX = targetPos.getX();
