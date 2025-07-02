@@ -18,7 +18,7 @@ void CreatureEvents::clear(bool fromLua)
 		}
 	}
 
-	reInitState(fromLua);
+	reInitState();
 }
 
 void CreatureEvents::removeInvalidEvents()

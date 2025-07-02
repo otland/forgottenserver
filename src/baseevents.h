@@ -45,7 +45,7 @@ public:
 	bool loadFromXml();
 	bool reload();
 	bool isLoaded() const { return loaded; }
-	void reInitState(bool fromLua);
+	void reInitState();
 
 private:
 	virtual LuaScriptInterface& getScriptInterface() = 0;

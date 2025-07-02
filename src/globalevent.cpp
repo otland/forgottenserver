@@ -36,7 +36,7 @@ void GlobalEvents::clear(bool fromLua)
 	clearMap(serverMap, fromLua);
 	clearMap(timerMap, fromLua);
 
-	reInitState(fromLua);
+	reInitState();
 }
 
 Event_ptr GlobalEvents::getEvent(const std::string& nodeName)

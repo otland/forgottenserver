@@ -13,7 +13,7 @@ Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.init
 
 Scripts::~Scripts() { scriptInterface.reInitState(); }
 
-void Scripts::clear(bool fromLua)
+void Scripts::clear()
 {
 	scriptInterface.reInitState();
 	scriptInterface.initState();
