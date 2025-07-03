@@ -332,8 +332,8 @@ bool GlobalEvent::executeRecord(uint32_t current, uint32_t old)
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);
 
-	lua_pushnumber(L, current);
-	lua_pushnumber(L, old);
+	tfs::lua::pushNumber(L, current);
+	tfs::lua::pushNumber(L, old);
 	return scriptInterface->callFunction(2);
 }
 
@@ -351,7 +351,7 @@ bool GlobalEvent::executeEvent() const
 
 	int32_t params = 0;
 	if (eventType == GLOBALEVENT_NONE || eventType == GLOBALEVENT_TIMER) {
-		lua_pushnumber(L, interval);
+		tfs::lua::pushNumber(L, interval);
 		params = 1;
 	}
 

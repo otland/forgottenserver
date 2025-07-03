@@ -296,7 +296,7 @@ void Monster::onCreatureSay(Creature* creature, SpeakClasses type, const std::st
 		tfs::lua::pushUserdata(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 
-		lua_pushnumber(L, type);
+		tfs::lua::pushNumber(L, type);
 		tfs::lua::pushString(L, text);
 
 		scriptInterface->callVoidFunction(4);
@@ -758,7 +758,7 @@ void Monster::onThink(uint32_t interval)
 		tfs::lua::pushUserdata(L, this);
 		tfs::lua::setMetatable(L, -1, "Monster");
 
-		lua_pushnumber(L, interval);
+		tfs::lua::pushNumber(L, interval);
 
 		if (scriptInterface->callFunction(2)) {
 			return;

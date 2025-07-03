@@ -706,9 +706,9 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 	const Position& thingPos = thing->getPosition();
 	const Position& npcPos = npc->getPosition();
 	if (npcPos.z != thingPos.z) {
-		lua_pushnumber(L, -1);
+		tfs::lua::pushNumber(L, -1);
 	} else {
-		lua_pushnumber(L, std::max(npcPos.getDistanceX(thingPos), npcPos.getDistanceY(thingPos)));
+		tfs::lua::pushNumber(L, std::max(npcPos.getDistanceX(thingPos), npcPos.getDistanceY(thingPos)));
 	}
 	return 1;
 }
@@ -728,7 +728,7 @@ int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 	// getNpcCid()
 	Npc* npc = tfs::lua::getScriptEnv()->getNpc();
 	if (npc) {
-		lua_pushnumber(L, npc->getID());
+		tfs::lua::pushNumber(L, npc->getID());
 	} else {
 		lua_pushnil(L);
 	}
@@ -906,7 +906,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
-				lua_pushnumber(L, sellCount);
+				tfs::lua::pushNumber(L, sellCount);
 				return 1;
 			}
 
@@ -922,7 +922,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
 				delete item;
-				lua_pushnumber(L, sellCount);
+				tfs::lua::pushNumber(L, sellCount);
 				return 1;
 			}
 
@@ -930,7 +930,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 		}
 	}
 
-	lua_pushnumber(L, sellCount);
+	tfs::lua::pushNumber(L, sellCount);
 	return 1;
 }
 
@@ -1188,7 +1188,7 @@ void NpcEventsHandler::onCreatureSay(Creature* creature, SpeakClasses type, cons
 	scriptInterface->pushFunction(creatureSayEvent);
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, type);
+	tfs::lua::pushNumber(L, type);
 	tfs::lua::pushString(L, text);
 	scriptInterface->callFunction(3);
 }
@@ -1214,9 +1214,9 @@ void NpcEventsHandler::onPlayerTrade(Player* player, int32_t callback, uint16_t 
 	tfs::lua::pushCallback(L, callback);
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
-	lua_pushnumber(L, itemId);
-	lua_pushnumber(L, count);
-	lua_pushnumber(L, amount);
+	tfs::lua::pushNumber(L, itemId);
+	tfs::lua::pushNumber(L, count);
+	tfs::lua::pushNumber(L, amount);
 	tfs::lua::pushBoolean(L, ignore);
 	tfs::lua::pushBoolean(L, inBackpacks);
 	scriptInterface->callFunction(6);

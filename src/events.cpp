@@ -375,7 +375,7 @@ void onHear(Creature* creature, Creature* speaker, const std::string& words, Spe
 	tfs::lua::setCreatureMetatable(L, -1, speaker);
 
 	tfs::lua::pushString(L, words);
-	lua_pushnumber(L, type);
+	tfs::lua::pushNumber(L, type);
 
 	scriptInterface.callVoidFunction(4);
 }
@@ -401,8 +401,8 @@ void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	lua_pushnumber(L, fromZone);
-	lua_pushnumber(L, toZone);
+	tfs::lua::pushNumber(L, fromZone);
+	tfs::lua::pushNumber(L, toZone);
 
 	scriptInterface.callVoidFunction(3);
 }
@@ -429,16 +429,16 @@ void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> va
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setMetatable(L, -1, "Creature");
 
-	lua_pushnumber(L, key);
+	tfs::lua::pushNumber(L, key);
 
 	if (value) {
-		lua_pushnumber(L, value.value());
+		tfs::lua::pushNumber(L, value.value());
 	} else {
 		lua_pushnil(L);
 	}
 
 	if (oldValue) {
-		lua_pushnumber(L, oldValue.value());
+		tfs::lua::pushNumber(L, oldValue.value());
 	} else {
 		lua_pushnil(L);
 	}
@@ -632,7 +632,7 @@ void onShareExperience(Party* party, uint64_t& exp)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	lua_pushnumber(L, exp);
+	tfs::lua::pushNumber(L, exp);
 
 	if (tfs::lua::protectedCall(L, 2, 1) != 0) {
 		reportErrorFunc(L, tfs::lua::popString(L));
@@ -706,7 +706,7 @@ void onLook(Player* player, const Position& position, Thing* thing, uint8_t stac
 	}
 
 	tfs::lua::pushPosition(L, position, stackpos);
-	lua_pushnumber(L, lookDistance);
+	tfs::lua::pushNumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(4);
 }
@@ -736,7 +736,7 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	lua_pushnumber(L, lookDistance);
+	tfs::lua::pushNumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(3);
 }
@@ -768,7 +768,7 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 	tfs::lua::pushUserdata(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	lua_pushnumber(L, lookDistance);
+	tfs::lua::pushNumber(L, lookDistance);
 
 	scriptInterface.callVoidFunction(4);
 }
@@ -797,7 +797,7 @@ bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 	tfs::lua::pushUserdata(L, itemType);
 	tfs::lua::setMetatable(L, -1, "ItemType");
 
-	lua_pushnumber(L, count);
+	tfs::lua::pushNumber(L, count);
 
 	return scriptInterface.callFunction(3);
 }
@@ -855,7 +855,7 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 	tfs::lua::pushUserdata(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	lua_pushnumber(L, count);
+	tfs::lua::pushNumber(L, count);
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
@@ -901,7 +901,7 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 	tfs::lua::pushUserdata(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	lua_pushnumber(L, count);
+	tfs::lua::pushNumber(L, count);
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
@@ -966,8 +966,8 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
 
 	tfs::lua::pushString(L, targetName);
 
-	lua_pushnumber(L, reportType);
-	lua_pushnumber(L, reportReason);
+	tfs::lua::pushNumber(L, reportType);
+	tfs::lua::pushNumber(L, reportReason);
 
 	tfs::lua::pushString(L, comment);
 	tfs::lua::pushString(L, translation);
@@ -998,7 +998,7 @@ bool onReportBug(Player* player, const std::string& message, const Position& pos
 
 	tfs::lua::pushString(L, message);
 	tfs::lua::pushPosition(L, position);
-	lua_pushnumber(L, category);
+	tfs::lua::pushNumber(L, category);
 
 	return scriptInterface.callFunction(4);
 }
@@ -1051,7 +1051,7 @@ bool onTurn(Player* player, Direction direction)
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, direction);
+	tfs::lua::pushNumber(L, direction);
 
 	return scriptInterface.callFunction(2);
 }
@@ -1208,7 +1208,7 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 
 	tfs::lua::pushOutfit(L, outfit);
 
-	lua_pushnumber(L, direction);
+	tfs::lua::pushNumber(L, direction);
 	lua_pushboolean(L, podiumVisible);
 
 	scriptInterface.callFunction(5);
@@ -1242,8 +1242,8 @@ void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t 
 		lua_pushnil(L);
 	}
 
-	lua_pushnumber(L, exp);
-	lua_pushnumber(L, rawExp);
+	tfs::lua::pushNumber(L, exp);
+	tfs::lua::pushNumber(L, rawExp);
 	tfs::lua::pushBoolean(L, sendText);
 
 	if (tfs::lua::protectedCall(L, 5, 1) != 0) {
@@ -1277,7 +1277,7 @@ void onLoseExperience(Player* player, uint64_t& exp)
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, exp);
+	tfs::lua::pushNumber(L, exp);
 
 	if (tfs::lua::protectedCall(L, 2, 1) != 0) {
 		reportErrorFunc(L, tfs::lua::popString(L));
@@ -1310,8 +1310,8 @@ void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, skill);
-	lua_pushnumber(L, tries);
+	tfs::lua::pushNumber(L, skill);
+	tfs::lua::pushNumber(L, tries);
 
 	if (tfs::lua::protectedCall(L, 3, 1) != 0) {
 		reportErrorFunc(L, tfs::lua::popString(L));
@@ -1374,7 +1374,7 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 	tfs::lua::pushUserdata(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	lua_pushnumber(L, slot);
+	tfs::lua::pushNumber(L, slot);
 	tfs::lua::pushBoolean(L, equip);
 
 	scriptInterface.callVoidFunction(4);
@@ -1401,7 +1401,7 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg)
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, recvByte);
+	tfs::lua::pushNumber(L, recvByte);
 
 	tfs::lua::pushUserdata(L, msg.release());
 	tfs::lua::setMetatable(L, -1, "NetworkMessage");

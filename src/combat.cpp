@@ -842,8 +842,8 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 			g_game.addMagicEffect(target->getPosition(), CONST_ME_CRITICAL_DAMAGE);
 		}
 
-		if (!damage.leeched && damage.primary.type != COMBAT_HEALING && casterPlayer &&
-		    target != caster && damage.origin != ORIGIN_CONDITION) {
+		if (!damage.leeched && damage.primary.type != COMBAT_HEALING && casterPlayer && target != caster &&
+		    damage.origin != ORIGIN_CONDITION) {
 			CombatDamage leechCombat;
 			leechCombat.origin = ORIGIN_NONE;
 			leechCombat.leeched = true;
@@ -1077,8 +1077,8 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 	switch (type) {
 		case COMBAT_FORMULA_LEVELMAGIC: {
 			// onGetPlayerMinMaxValues(player, level, maglevel)
-			lua_pushnumber(L, player->getLevel());
-			lua_pushnumber(L, player->getMagicLevel() + player->getSpecialMagicLevel(damage.primary.type));
+			tfs::lua::pushNumber(L, player->getLevel());
+			tfs::lua::pushNumber(L, player->getMagicLevel() + player->getSpecialMagicLevel(damage.primary.type));
 			parameters += 2;
 			break;
 		}
@@ -1103,9 +1103,9 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 				damage.secondary.value = weapon->getElementDamage(player, nullptr, tool);
 			}
 
-			lua_pushnumber(L, player->getWeaponSkill(item ? item : tool));
-			lua_pushnumber(L, attackValue);
-			lua_pushnumber(L, player->getAttackFactor());
+			tfs::lua::pushNumber(L, player->getWeaponSkill(item ? item : tool));
+			tfs::lua::pushNumber(L, attackValue);
+			tfs::lua::pushNumber(L, player->getAttackFactor());
 			parameters += 3;
 			break;
 		}
