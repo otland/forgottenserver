@@ -13,15 +13,10 @@
     },
     "openssl",
     "pugixml",
+    "simdutf",
     "zlib"
   ],
   "features": {
-    "boost-locale": {
-      "description": "Enable Boost.Locale UTF-8 support",
-      "dependencies": [
-        "boost-locale"
-      ]
-    },
     "http": {
       "description": "Enable HTTP support",
       "dependencies": [
@@ -51,12 +46,6 @@
       "description": "Use libmysql instead of libmariadb",
       "dependencies": [
         "libmysql"
-      ]
-    },
-    "simdutf": {
-      "description": "Enable SIMD UTF-8 support",
-      "dependencies": [
-        "simdutf"
       ]
     },
     "unit-tests": {
