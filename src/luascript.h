@@ -1436,6 +1436,18 @@ void pushCylinder(lua_State* L, Cylinder* cylinder);
 std::string popString(lua_State* L);
 int32_t popCallback(lua_State* L);
 
+template <typename T>
+std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, void> pushNumber(lua_State* L, T value)
+{
+	lua_pushinteger(L, value);
+}
+
+template <typename T>
+std::enable_if_t<std::is_floating_point_v<T>, void> pushNumber(lua_State* L, auto value)
+{
+	lua_pushnumber(L, value);
+}
+
 // Userdata
 template <class T>
 void pushUserdata(lua_State* L, T* value)
@@ -1457,28 +1469,29 @@ typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t 
 }
 
 template <typename T>
-typename std::enable_if_t<std::is_integral_v<T> && std::is_unsigned_v<T>, T> getNumber(lua_State* L, int32_t arg)
+typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, T> getNumber(lua_State* L, int32_t arg)
 {
-	double num = lua_tonumber(L, arg);
-	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
-	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+	int isnum;
+	if (auto num = lua_tointegerx(L, arg, &isnum); isnum != 0) {
+		if (num < static_cast<decltype(num)>(std::numeric_limits<T>::lowest()) ||
+		    num > static_cast<decltype(num)>(std::numeric_limits<T>::max())) {
+			reportErrorFunc(L,
+			                fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+		}
+		return static_cast<T>(num);
 	}
 
-	return static_cast<T>(num);
-}
-
-template <typename T>
-typename std::enable_if_t<(std::is_integral_v<T> && std::is_signed_v<T>) || std::is_floating_point_v<T>, T> getNumber(
-    lua_State* L, int32_t arg)
-{
-	double num = lua_tonumber(L, arg);
-	if (num < static_cast<double>(std::numeric_limits<T>::lowest()) ||
-	    num > static_cast<double>(std::numeric_limits<T>::max())) {
-		reportErrorFunc(L, fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+	if (auto num = lua_tonumberx(L, arg, &isnum); isnum != 0) {
+		if (num < static_cast<decltype(num)>(std::numeric_limits<T>::lowest()) ||
+		    num > static_cast<decltype(num)>(std::numeric_limits<T>::max())) {
+			reportErrorFunc(L,
+			                fmt::format("Argument {} has out-of-range value for {}: {}", arg, typeid(T).name(), num));
+		}
+		return static_cast<T>(num);
 	}
 
-	return static_cast<T>(num);
+	reportErrorFunc(L, fmt::format("Argument {} is not a number for {}", arg, typeid(T).name()));
+	return {};
 }
 
 template <typename T>

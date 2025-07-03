@@ -229,7 +229,7 @@ bool ChatChannel::executeOnSpeakEvent(const Player& player, SpeakClasses& type, 
 	tfs::lua::pushUserdata(L, &player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, type);
+	tfs::lua::pushNumber(L, type);
 	tfs::lua::pushString(L, message);
 
 	bool result = false;
