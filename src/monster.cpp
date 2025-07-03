@@ -1089,7 +1089,7 @@ void Monster::onWalk()
 {
 	Creature::onWalk();
 
-	if (isFleeing() && lastPathUpdate > OTSYS_TIME()) {
+	if (isFleeing() && lastPathUpdate < OTSYS_TIME()) {
 		forceUpdatePath();
 	}
 }
