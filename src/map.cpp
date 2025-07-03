@@ -829,7 +829,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 	found = found->parent;
 	while (found) {
-		g_game.addMagicEffect(pos, CONST_ME_TELEPORT);
 		pos.x = found->x;
 		pos.y = found->y;
 
