@@ -747,7 +747,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// If sight is clear we can ignore a lot of nodes.
-			if (sightClear && !fpp.keepDistance && fpp.minTargetDist == 1) {
+			if (sightClear && !fpp.keepDistance && !fpp.summonTargetMaster && fpp.minTargetDist <= 1) {
 				int32_t startX = startPos.getX();
 				int32_t startY = startPos.getY();
 				int32_t targetX = targetPos.getX();
@@ -829,6 +829,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 
 	found = found->parent;
 	while (found) {
+		g_game.addMagicEffect(pos, CONST_ME_TELEPORT);
 		pos.x = found->x;
 		pos.y = found->y;
 
