@@ -177,6 +177,7 @@ target_link_libraries(tfslib PRIVATE
 	fmt::fmt
 	OpenSSL::Crypto
 	pugixml::pugixml
+	simdutf::simdutf
 	ZLIB::ZLIB
 	${CMAKE_THREAD_LIBS_INIT}
 	${LUA_LIBRARIES}
@@ -191,12 +192,6 @@ endif()
 if (HTTP)
 	add_subdirectory(http)
 	target_link_libraries(tfslib PRIVATE http)
-endif ()
-
-if (USE_SIMDUTF)
-	target_link_libraries(tfslib PRIVATE simdutf::simdutf)
-else ()
-	target_link_libraries(tfslib PRIVATE Boost::locale)
 endif ()
 
 add_custom_target(format COMMAND /usr/bin/clang-format -style=file -i ${tfs_HDR} ${tfs_SRC} ${tfs_MAIN})
