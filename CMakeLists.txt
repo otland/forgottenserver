@@ -32,14 +32,6 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "lua")
 endif()
 
-option(USE_SIMDUTF "Use simdutf for UTF-8 validation" OFF)
-if (USE_SIMDUTF)
-    list(APPEND VCPKG_MANIFEST_FEATURES "simdutf")
-    add_compile_definitions(USE_SIMDUTF)
-else()
-    list(APPEND VCPKG_MANIFEST_FEATURES "boost-locale")
-endif ()
-
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -60,6 +52,7 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # Find packages.
 find_package(OpenSSL 3.0.0 REQUIRED COMPONENTS Crypto)
+find_package(simdutf CONFIG REQUIRED)
 find_package(ZLIB REQUIRED)
 
 find_package(fmt 8.1.1 CONFIG)
@@ -84,11 +77,6 @@ if (USE_LUAJIT)
     find_package(LuaJIT REQUIRED)
 else ()
     find_package(Lua REQUIRED)
-endif ()
-
-# Find simdutf if enabled
-if (USE_SIMDUTF)
-    find_package(simdutf CONFIG REQUIRED)
 endif ()
 
 if (APPLE)
