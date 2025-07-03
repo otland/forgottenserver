@@ -155,7 +155,7 @@ bool TalkAction::executeSay(Player* player, const std::string& words, const std:
 
 	tfs::lua::pushString(L, words);
 	tfs::lua::pushString(L, param);
-	lua_pushnumber(L, type);
+	tfs::lua::pushNumber(L, type);
 
 	return scriptInterface->callFunction(4);
 }

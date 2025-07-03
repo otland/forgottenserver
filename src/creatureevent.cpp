@@ -347,7 +347,7 @@ bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	scriptInterface->pushFunction(scriptId);
 	tfs::lua::pushUserdata(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
-	lua_pushnumber(L, interval);
+	tfs::lua::pushNumber(L, interval);
 
 	return scriptInterface->callFunction(2);
 }
@@ -436,9 +436,9 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	scriptInterface->pushFunction(scriptId);
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
-	lua_pushnumber(L, static_cast<uint32_t>(skill));
-	lua_pushnumber(L, oldLevel);
-	lua_pushnumber(L, newLevel);
+	tfs::lua::pushNumber(L, static_cast<uint32_t>(skill));
+	tfs::lua::pushNumber(L, oldLevel);
+	tfs::lua::pushNumber(L, newLevel);
 
 	return scriptInterface->callFunction(4);
 }
@@ -481,9 +481,9 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, modalWindowId);
-	lua_pushnumber(L, buttonId);
-	lua_pushnumber(L, choiceId);
+	tfs::lua::pushNumber(L, modalWindowId);
+	tfs::lua::pushNumber(L, buttonId);
+	tfs::lua::pushNumber(L, choiceId);
 
 	scriptInterface->callVoidFunction(4);
 }
@@ -508,7 +508,7 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view
 	tfs::lua::pushThing(L, item);
 	tfs::lua::pushString(L, text);
 
-	lua_pushinteger(L, windowTextId);
+	tfs::lua::pushNumber(L, windowTextId);
 
 	return scriptInterface->callFunction(4);
 }
@@ -517,11 +517,11 @@ namespace {
 
 void pushCombatDamage(lua_State* L, const CombatDamage& damage)
 {
-	lua_pushnumber(L, damage.primary.value);
-	lua_pushnumber(L, damage.primary.type);
-	lua_pushnumber(L, damage.secondary.value);
-	lua_pushnumber(L, damage.secondary.type);
-	lua_pushnumber(L, damage.origin);
+	tfs::lua::pushNumber(L, damage.primary.value);
+	tfs::lua::pushNumber(L, damage.primary.type);
+	tfs::lua::pushNumber(L, damage.secondary.value);
+	tfs::lua::pushNumber(L, damage.secondary.type);
+	tfs::lua::pushNumber(L, damage.origin);
 }
 
 } // namespace
@@ -625,7 +625,7 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 	tfs::lua::pushUserdata(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	lua_pushnumber(L, opcode);
+	tfs::lua::pushNumber(L, opcode);
 	tfs::lua::pushString(L, buffer);
 
 	scriptInterface->callVoidFunction(3);
