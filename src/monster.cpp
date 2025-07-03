@@ -793,18 +793,15 @@ void Monster::onThink(uint32_t interval)
 					if (getMaster() && getMaster()->getAttackedCreature()) {
 						// This happens if the monster is summoned during combat
 						selectTarget(getMaster()->getAttackedCreature());
-						forceUpdatePath();
 					} else if (getMaster() != followCreature) {
 						// Our master has not ordered us to attack anything, lets follow him around instead.
 						setFollowCreature(getMaster());
-						forceUpdatePath();
 					}
 				} else if (attackedCreature == this) {
 					removeFollowCreature();
 				} else if (followCreature != attackedCreature) {
 					// This happens just after a master orders an attack, so lets follow it as well.
 					setFollowCreature(attackedCreature);
-					forceUpdatePath();
 				}
 			} else if (!targetList.empty()) {
 				if (!followCreature || !hasFollowPath) {
