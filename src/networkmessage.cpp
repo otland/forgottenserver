@@ -8,7 +8,7 @@
 #include "container.h"
 #include "podium.h"
 
-#include <boost/locale.hpp>
+#include <simdutf.h>
 
 std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
@@ -20,12 +20,13 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 		return {};
 	}
 
-	auto it = buffer.data() + info.position;
+	auto input = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
 
-	std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
-	return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
-	                                         boost::locale::conv::skip);
+	auto output = std::string(simdutf::utf8_length_from_latin1(input, stringLen), '\0');
+	auto convertedLen = simdutf::convert_latin1_to_utf8(input, stringLen, output.data());
+	assert(convertedLen == output.size());
+	return output;
 }
 
 Position NetworkMessage::getPosition()
@@ -39,17 +40,19 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
-	                                                            boost::locale::conv::skip);
-	size_t stringLen = latin1Str.size();
-	if (!canAdd(stringLen + 2) || stringLen > 8192) {
+	auto expectedLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
+	if (!canAdd(expectedLen + 2) || expectedLen > 8192) {
 		return;
 	}
 
-	add<uint16_t>(stringLen);
-	std::memcpy(buffer.data() + info.position, latin1Str.data(), stringLen);
-	info.position += stringLen;
-	info.length += stringLen;
+	add<uint16_t>(expectedLen);
+
+	auto output = reinterpret_cast<char*>(buffer.data() + info.position);
+	info.position += expectedLen;
+	info.length += expectedLen;
+
+	auto outputLen = simdutf::convert_utf8_to_latin1(value.data(), value.size(), output);
+	assert(outputLen == expectedLen);
 }
 
 void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
