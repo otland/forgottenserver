@@ -1431,7 +1431,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					return true;
 				}
 
-				if (!n && !w && !s && !w) {
+				if (!n && !w && !s && !e) {
 					if (canWalkTo(creaturePos, DIRECTION_SOUTHEAST)) {
 						direction = DIRECTION_SOUTHEAST;
 						return true;
@@ -1492,7 +1492,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					return true;
 				}
 
-				if (!n && !w && !s && !w) {
+				if (!n && !w && !s && !e) {
 					if (canWalkTo(creaturePos, DIRECTION_NORTHWEST)) {
 						direction = DIRECTION_NORTHWEST;
 						return true;
@@ -1552,7 +1552,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					return true;
 				}
 
-				if (!n && !w && !s && !w) {
+				if (!n && !w && !s && !e) {
 					if (canWalkTo(creaturePos, DIRECTION_NORTHEAST)) {
 						direction = DIRECTION_NORTHEAST;
 						return true;
@@ -1610,7 +1610,7 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 					return true;
 				}
 
-				if (!n && !w && !s && !w) {
+				if (!n && !w && !s && !e) {
 					if (canWalkTo(creaturePos, DIRECTION_SOUTHWEST)) {
 						direction = DIRECTION_SOUTHWEST;
 						return true;
