@@ -211,7 +211,7 @@ void Creature::onWalk()
 	}
 
 	if (attackedCreature || followCreature) {
-		if (lastPathUpdate - OTSYS_TIME() > 0) {
+		if (lastPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 		}
@@ -855,7 +855,7 @@ void Creature::updateFollowersPaths()
 		if (follower != nullptr) {
 			const Position& followerPosition = follower->getPosition();
 
-			if (follower->lastPathUpdate - OTSYS_TIME() > 0) {
+			if (follower->lastPathUpdate < OTSYS_TIME()) {
 				continue;
 			}
 
