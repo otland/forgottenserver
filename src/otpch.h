@@ -36,6 +36,7 @@
 #include <mysql/mysql.h>
 #include <optional>
 #include <pugixml.hpp>
+#include <queue>
 #include <random>
 #include <set>
 #include <sstream>

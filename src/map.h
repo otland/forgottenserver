@@ -14,35 +14,45 @@ class Creature;
 
 static constexpr int32_t MAP_MAX_LAYERS = 16;
 
+static constexpr uint16_t MAP_NORMALWALKCOST = 10;
+static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
+
 struct FindPathParams;
 struct AStarNode
 {
 	AStarNode* parent;
-	uint16_t g;
-	uint16_t f;
 	uint16_t x, y;
+	uint16_t g, f;
 };
 
-static constexpr uint16_t MAP_NORMALWALKCOST = 10;
-static constexpr uint16_t MAP_DIAGONALWALKCOST = 25;
+inline uint32_t hashCoord(uint16_t x, uint16_t y) { return (static_cast<uint32_t>(x) << 16) | y; }
 
 class AStarNodes
 {
 public:
 	AStarNodes(uint16_t x, uint16_t y);
 
-	void createNewNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
-	void addNode(AStarNode* node) { nodes.emplace_back(node); };
-
+	AStarNode* createNode(AStarNode* parent, uint16_t x, uint16_t y, uint16_t g, uint16_t f);
 	AStarNode* getBestNode();
-	AStarNode* getNodeByPosition(uint16_t x, uint16_t y) { return nodeMap[x][y]; };
+	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
 	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
 
 private:
-	std::vector<AStarNode*> nodes;
-	std::map<uint16_t, std::map<uint16_t, AStarNode*>> nodeMap;
+	std::vector<AStarNode> nodes;
+	std::unordered_map<uint32_t, AStarNode*> nodeMap;
+	std::unordered_set<uint32_t> visited;
+
+	struct NodeCompare
+	{
+		bool operator()(AStarNode* a, AStarNode* b) const
+		{
+			return a->f > b->f; // Min-heap based on f score
+		}
+	};
+
+	std::priority_queue<AStarNode*, std::vector<AStarNode*>, NodeCompare> openSet;
 };
 
 using SpectatorCache = std::map<Position, SpectatorVec>;
@@ -150,6 +160,7 @@ public:
 	static constexpr int32_t maxViewportY = 11; // min value: maxClientViewportY + 1
 	static constexpr int32_t maxClientViewportX = 8;
 	static constexpr int32_t maxClientViewportY = 6;
+	static constexpr int16_t nodeReserveSize = static_cast<int16_t>((maxViewportX * maxViewportY * 3) / 2);
 
 	uint32_t clean() const;
 
@@ -223,7 +234,7 @@ public:
 	 *	\param blockFloor counts the ground tile as an obstacle
 	 *	\returns The result if there is an obstacle or not
 	 */
-	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false) const;
+	bool isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor = false, bool pathfinding = false) const;
 
 	/**
 	 * Checks if path is clear from fromPos to toPos
@@ -232,8 +243,9 @@ public:
 	 *Destination point \param sameFloor checks if the destination is on same
 	 *floor \returns The result if there is no obstacles
 	 */
-	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false) const;
-	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z) const;
+	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor = false,
+	                  bool pathfinding = false) const;
+	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding = false) const;
 
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 

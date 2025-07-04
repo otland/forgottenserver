@@ -17,6 +17,7 @@ option(HTTP "Enable HTTP support" ON)
 if (HTTP)
     list(APPEND VCPKG_MANIFEST_FEATURES "http")
     set(BOOST_REQUIRED_VERSION 1.75.0)
+    add_definitions(-DHTTP)
 endif()
 
 option(BUILD_TESTING "Build unit tests" OFF)
