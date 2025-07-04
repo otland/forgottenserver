@@ -2,7 +2,7 @@ services:
   ots:
     build:
       context: .
-    restart: on-failure
+    restart: unless-stopped
     deploy:
       restart_policy:
         condition: any
