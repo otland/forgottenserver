@@ -2017,6 +2017,9 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 	fpp.maxTargetDist = mType->info.targetDistance;
 
 	if (isSummon()) {
+		if (followCreature && followCreature == getMaster()) {
+			fpp.summonTargetMaster = true;
+		}
 		if (getMaster() == creature) {
 			fpp.maxTargetDist = 2;
 			fpp.fullPathSearch = true;

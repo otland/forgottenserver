@@ -47,6 +47,7 @@ struct FindPathParams
 	bool clearSight = true;
 	bool allowDiagonal = true;
 	bool keepDistance = false;
+	bool summonTargetMaster = false;
 	int32_t maxSearchDist = 0;
 	int32_t minTargetDist = -1;
 	int32_t maxTargetDist = -1;
