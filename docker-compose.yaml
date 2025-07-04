@@ -1,0 +1,56 @@
+services:
+  ots:
+    build:
+      context: .
+    restart: on-failure
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 1s
+    volumes:
+      - .:/srv
+    environment:
+      MYSQL_HOST: mariadb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: forgottenserver
+    ports:
+      - "7171:7171"
+      - "7172:7172"
+      - "8080:8080"
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-compose
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: forgottenserver
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./docker/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mariadb", "-u", "root", "-proot", "forgottenserver", "-e", "SELECT 1;"]
+      interval: 1s
+      timeout: 1s
+      retries: 60
+      start_period: 3s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin-compose
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8081:80"
+    depends_on:
+      mariadb:
+        condition: service_healthy

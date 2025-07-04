@@ -32,7 +32,7 @@ COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/
 
-EXPOSE 7171 7172
+EXPOSE 7171 7172 8080
 WORKDIR /srv
 VOLUME /srv
 ENTRYPOINT ["/bin/tfs"]
