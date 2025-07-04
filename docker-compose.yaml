@@ -24,7 +24,6 @@ services:
 
   mariadb:
     image: mariadb:latest
-    container_name: mariadb-compose
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: forgottenserver
@@ -42,7 +41,6 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
-    container_name: phpmyadmin-compose
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306

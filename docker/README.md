@@ -2,7 +2,7 @@
 
 If you have Docker installed, you can run a server in a container using:
 ```
-docker-compose up
+docker compose up
 ```
 (first copy `config.lua.dist` into `config.lua`)
 
@@ -14,7 +14,7 @@ Account e-mail is `tfs@tfs`and password is `tfs`. There are characters `GOD` and
 
 OTS files are in real-time synchronization. You can do changes in `data`/`config.lua` and run `/reload all` on GOD character to load changes. You don't have to restart OTS.
 
-Database data is not stored outside docker container. Every `docker-compose down`, it resets a database to state from `docker/data.sql`. If you want to add more accounts/characters, put them in that `.sql` file.
+Database data is not stored outside docker container. Every `docker compose down`, it resets a database to state from `docker/data.sql`. If you want to add more accounts/characters, put them in that `.sql` file.
 
 #### Database management
 
@@ -31,18 +31,18 @@ There is also phpMyAdmin running in a container available on port `8081`. You ca
 
 To start server:
 ```
-docker-compose up
+docker compose up
 ```
 
 To shut down server, press `CTRL+C`.
 
 To reset database:
 ```
-docker-compose down
+docker compose down
 ```
 
 To compile TFS again:
 ```
-docker-compose build
+docker compose build
 ```
 If you often compile and compilation is slow, you can try to replace `RelWithDebInfo` with `Debug` in 2 places in `Dockerfile`.
