@@ -8,18 +8,18 @@
 
 struct Basee64Fixture
 {
-	std::string_view plain;
-	std::string_view encoded;
+	std::string plain;
+	std::string encoded;
 };
 
 // test vectors from https://datatracker.ietf.org/doc/html/rfc4648#section-10
 auto testVectors = std::vector<Basee64Fixture>{
     {.plain = "", .encoded = ""},
-    {.plain = "f", .encoded = "Zg=="},
-    {.plain = "fo", .encoded = "Zm8="},
+    {.plain = "f", .encoded = "Zg"},
+    {.plain = "fo", .encoded = "Zm8"},
     {.plain = "foo", .encoded = "Zm9v"},
-    {.plain = "foob", .encoded = "Zm9vYg=="},
-    {.plain = "fooba", .encoded = "Zm9vYmE="},
+    {.plain = "foob", .encoded = "Zm9vYg"},
+    {.plain = "fooba", .encoded = "Zm9vYmE"},
     {.plain = "foobar", .encoded = "Zm9vYmFy"},
 
 };

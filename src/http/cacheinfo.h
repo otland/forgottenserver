@@ -5,7 +5,6 @@
 
 namespace tfs::http {
 
-std::pair<boost::beast::http::status, boost::json::value> handle_cacheinfo(const boost::json::object& body,
-                                                                           std::string_view ip);
+std::pair<boost::beast::http::status, boost::json::value> handle_cacheinfo(const boost::json::object& body);
 
 }
