@@ -9,7 +9,7 @@ namespace beast = boost::beast;
 namespace json = boost::json;
 using boost::beast::http::status;
 
-std::pair<status, json::value> tfs::http::handle_cacheinfo(const json::object&, std::string_view)
+std::pair<status, json::value> tfs::http::handle_cacheinfo(const json::object&)
 {
 	thread_local auto& db = Database::getInstance();
 	auto result = db.storeQuery("SELECT COUNT(*) AS `count` FROM `players_online`");

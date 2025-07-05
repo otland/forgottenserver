@@ -33,7 +33,11 @@ void decrypt(uint8_t* msg, size_t len)
 	EVP_PKEY_decrypt_init(pctx.get());
 	EVP_PKEY_CTX_set_rsa_padding(pctx.get(), RSA_NO_PADDING);
 
-	EVP_PKEY_decrypt(pctx.get(), msg, &len, msg, len);
+	auto ret = EVP_PKEY_decrypt(pctx.get(), msg, &len, msg, len);
+	if (ret <= 0) {
+		throw std::runtime_error(
+		    fmt::format("Error while decrypting message: {}", ERR_error_string(ERR_get_error(), nullptr)));
+	}
 }
 
 EVP_PKEY* loadPEM(std::string_view pem)

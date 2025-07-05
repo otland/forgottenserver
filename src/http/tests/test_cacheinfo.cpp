@@ -57,7 +57,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 	BOOST_TEST(db.executeQuery(fmt::format(
 	    "INSERT INTO `players_online` (`player_id`) SELECT `id` FROM `players` WHERE `account_id` = {:d}", id)));
 
-	auto&& [status, body] = tfs::http::handle_cacheinfo({{"type", "cacheinfo"}}, ip);
+	auto&& [status, body] = tfs::http::handle_cacheinfo({{"type", "cacheinfo"}});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("playersonline").as_uint64() == 3);

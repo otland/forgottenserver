@@ -62,6 +62,7 @@ enum string_config_t
 	LOCATION,
 	IP,
 	WORLD_TYPE,
+	SESSION_SECRET,
 	MYSQL_HOST,
 	MYSQL_USER,
 	MYSQL_PASS,
