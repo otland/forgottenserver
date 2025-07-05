@@ -5262,7 +5262,8 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	}
 
 	if (type == MARKETACTION_SELL) {
-		if (fee > (player->getMoney() + player->bankBalance)) {
+		uint64_t playerMoney = player->getMoney();
+		if (fee > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
@@ -5288,18 +5289,19 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		const auto debitCash = std::min(player->getMoney(), fee);
+		const auto debitCash = std::min(playerMoney, fee);
 		const auto debitBank = fee - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
