@@ -13,15 +13,15 @@ namespace json = boost::json;
 
 namespace {
 
-auto router(std::string_view type, const json::object& body, std::string_view ip)
+auto router(std::string_view type, const json::object& body)
 {
 	using namespace tfs::http;
 
 	if (type == "cacheinfo") {
-		return handle_cacheinfo(body, ip);
+		return handle_cacheinfo(body);
 	}
 	if (type == "login") {
-		return handle_login(body, ip);
+		return handle_login(body);
 	}
 
 	return make_error_response();
@@ -47,7 +47,7 @@ beast::http::message_generator tfs::http::handle_request(const beast::http::requ
 			return make_error_response({.code = 2, .message = "Invalid request type."});
 		}
 
-		return router(typeField->get_string(), requestBodyObj, ip);
+		return router(typeField->get_string(), requestBodyObj);
 	}();
 
 	beast::http::response<beast::http::string_body> res{status, req.version()};

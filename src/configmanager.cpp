@@ -6,6 +6,7 @@
 
 #include "configmanager.h"
 
+#include "base64.h"
 #include "game.h"
 #include "monster.h"
 #include "pugicast.h"
@@ -253,6 +254,7 @@ bool ConfigManager::load()
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
+	string[SESSION_SECRET] = tfs::base64::decode(getGlobalString(L, "sessionSecret", ""));
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);

@@ -6,8 +6,6 @@
 #include "../game.h"
 #include "error.h"
 
-#include <fmt/format.h>
-
 extern Game g_game;
 extern Vocations g_vocations;
 
@@ -33,7 +31,7 @@ int getPvpType()
 
 } // namespace
 
-std::pair<status, json::value> tfs::http::handle_login(const json::object& body, std::string_view ip)
+std::pair<status, json::value> tfs::http::handle_login(const json::object& body)
 {
 	using namespace std::chrono;
 
@@ -50,7 +48,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	}
 
 	thread_local auto& db = Database::getInstance();
-	auto result = db.storeQuery(fmt::format(
+	auto result = db.storeQuery(std::format(
 	    "SELECT `id`, UNHEX(`password`) AS `password`, `secret`, `premium_ends_at` FROM `accounts` WHERE `email` = {:s}",
 	    db.escapeString(emailField->get_string())));
 	if (!result) {
@@ -84,14 +82,13 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	auto accountId = result->getNumber<uint64_t>("id");
 	auto premiumEndsAt = result->getNumber<int64_t>("premium_ends_at");
 
-	std::string sessionKey = randomBytes(16);
-	if (!db.executeQuery(
-	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	                    db.escapeString(sessionKey), accountId, db.escapeString(ip)))) {
-		return make_error_response();
-	}
+	const auto& header = tfs::base64::encode(R"({"alg":"HS256","typ":"JWT"})");
+	const auto& payload = tfs::base64::encode(std::format(R"({{"sub":"{:d}","iat":{:d}}})", accountId, now));
+	const auto& data = std::format("{:s}.{:s}", header, payload);
+	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), data);
+	std::string sessionKey = std::format("{:s}.{:s}", data, tfs::base64::encode(signature));
 
-	result = db.storeQuery(fmt::format(
+	result = db.storeQuery(std::format(
 	    "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
 	    accountId));
 
@@ -145,7 +142,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	    {
 	        {"session",
 	         {
-	             {"sessionkey", tfs::base64::encode(sessionKey)},
+	             {"sessionkey", sessionKey},
 	             {"lastlogintime", lastLogin},
 	             {"ispremium", premiumEndsAt >= now},
 	             {"premiumuntil", premiumEndsAt},

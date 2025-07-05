@@ -151,7 +151,7 @@ using status = boost::beast::http::status;
 
 BOOST_FIXTURE_TEST_CASE(test_login_missing_email, LoginFixture)
 {
-	auto&& [status, body] = tfs::http::handle_login({{"type", "login"}, {"password", "bar"}}, ip);
+	auto&& [status, body] = tfs::http::handle_login({{"type", "login"}, {"password", "bar"}});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 3);
@@ -160,7 +160,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_email, LoginFixture)
 BOOST_FIXTURE_TEST_CASE(test_login_account_does_not_exist, LoginFixture)
 {
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "k@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "k@example.com"}, {"password", "bar"}});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 3);
@@ -168,7 +168,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_account_does_not_exist, LoginFixture)
 
 BOOST_FIXTURE_TEST_CASE(test_login_missing_password, LoginFixture)
 {
-	auto&& [status, body] = tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}}, ip);
+	auto&& [status, body] = tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 3);
@@ -180,7 +180,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_invalid_password, LoginFixture)
 	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('abc', 'foo@example.com', SHA1('bar'))"));
 
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "baz"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "foo@example.com"}, {"password", "baz"}});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 3);
@@ -193,13 +193,11 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 
 	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
 
-	auto&& [status, body] = tfs::http::handle_login(
-	    {
-	        {"type", "login"},
-	        {"email", "fooba@example.com"},
-	        {"password", "bar"},
-	    },
-	    ip);
+	auto&& [status, body] = tfs::http::handle_login({
+	    {"type", "login"},
+	    {"email", "fooba@example.com"},
+	    {"password", "bar"},
+	});
 
 	BOOST_TEST(status == status::ok);
 	BOOST_TEST(body.at("errorCode").as_int64() == 6);
@@ -211,7 +209,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_no_players, LoginFixture)
 	    "INSERT INTO `accounts` (`name`, `email`, `password`) VALUES ('defg', 'foobar@example.com', SHA1('bar'))"));
 
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "foobar@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "foobar@example.com"}, {"password", "bar"}});
 
 	BOOST_TEST(status == status::ok);
 	auto& characters = body.at("playdata").at("characters").as_array();
@@ -229,12 +227,12 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 
 	DBInsert insert(
 	    "INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons`) VALUES");
-	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id,
-	                          "Test", 2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
+	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id, "Test",
+	                          2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
 	BOOST_TEST(insert.execute());
 
 	auto&& [status, body] =
-	    tfs::http::handle_login({{"type", "login"}, {"email", "ghij@example.com"}, {"password", "bar"}}, ip);
+	    tfs::http::handle_login({{"type", "login"}, {"email", "ghij@example.com"}, {"password", "bar"}});
 
 	BOOST_TEST(status == status::ok);
 
@@ -285,14 +283,12 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, LoginFixture)
 	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}", id, "Testtoken", 2597, 6, 1715719401));
 	BOOST_TEST(insert.execute());
 
-	auto&& [status, body] = tfs::http::handle_login(
-	    {
-	        {"type", "login"},
-	        {"email", "nbdj@example.com"},
-	        {"password", "bar"},
-	        {"token", generateToken("", now.count() / AUTHENTICATOR_PERIOD)},
-	    },
-	    ip);
+	auto&& [status, body] = tfs::http::handle_login({
+	    {"type", "login"},
+	    {"email", "nbdj@example.com"},
+	    {"password", "bar"},
+	    {"token", generateToken("", now.count() / AUTHENTICATOR_PERIOD)},
+	});
 
 	BOOST_TEST(status == status::ok);
 }

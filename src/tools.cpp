@@ -12,6 +12,20 @@
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
+namespace {
+
+struct Deleter
+{
+	void operator()(BIO* bio) const { BIO_free(bio); }
+	void operator()(EVP_MD* md) const { EVP_MD_free(md); }
+	void operator()(EVP_MD_CTX* ctx) const { EVP_MD_CTX_free(ctx); }
+};
+
+template <class T>
+using C_ptr = std::unique_ptr<T, Deleter>;
+
+} // namespace
+
 void printXMLError(const std::string& where, std::string_view fileName, const pugi::xml_parse_result& result)
 {
 	std::cout << '[' << where << "] Failed to load " << fileName << ": " << result.description() << std::endl;
@@ -63,12 +77,12 @@ void printXMLError(const std::string& where, std::string_view fileName, const pu
 
 std::string transformToSHA1(std::string_view input)
 {
-	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
+	C_ptr<EVP_MD_CTX> ctx{EVP_MD_CTX_new()};
 	if (!ctx) {
 		throw std::runtime_error("Failed to create EVP context");
 	}
 
-	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, "SHA1", nullptr), EVP_MD_free};
+	C_ptr<EVP_MD> md{EVP_MD_fetch(nullptr, "SHA1", nullptr)};
 	if (!md) {
 		throw std::runtime_error("Failed to fetch SHA1");
 	}
@@ -92,25 +106,23 @@ std::string transformToSHA1(std::string_view input)
 
 std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message)
 {
-	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
+	C_ptr<EVP_MD_CTX> ctx{EVP_MD_CTX_new()};
 	if (!ctx) {
 		throw std::runtime_error("Failed to create EVP context");
 	}
 
-	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, algorithm.data(), nullptr), EVP_MD_free};
+	C_ptr<EVP_MD> md{EVP_MD_fetch(nullptr, algorithm.data(), nullptr)};
 	if (!md) {
 		throw std::runtime_error(fmt::format("Failed to fetch {:s}", algorithm));
 	}
 
-	std::array<unsigned char, EVP_MAX_MD_SIZE> result;
-	unsigned int len;
-
-	if (!HMAC(md.get(), key.data(), key.size(), reinterpret_cast<const unsigned char*>(message.data()), message.size(),
-	          result.data(), &len)) {
+	std::string result(EVP_MD_get_size(md.get()), '\0');
+	if (!HMAC(md.get(), key.data(), key.size(), reinterpret_cast<const uint8_t*>(message.data()), message.size(),
+	          reinterpret_cast<uint8_t*>(result.data()), nullptr)) {
 		throw std::runtime_error("HMAC failed");
 	}
 
-	return {reinterpret_cast<char*>(result.data()), len};
+	return result;
 }
 
 std::string generateToken(std::string_view key, uint64_t counter, size_t length /*= AUTHENTICATOR_DIGITS*/)

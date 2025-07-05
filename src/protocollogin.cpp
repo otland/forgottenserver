@@ -14,6 +14,8 @@
 #include "rsa.h"
 #include "tasks.h"
 
+#include <format>
+
 extern Game g_game;
 
 namespace {
@@ -95,11 +97,11 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		} while (result->next());
 	}
 
-	uint32_t ticks = duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now().time_since_epoch()).count() /
-	                 AUTHENTICATOR_PERIOD;
+	auto now = duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 	auto output = tfs::net::make_output_message();
 	if (!key.empty()) {
+		auto ticks = static_cast<uint64_t>(now) / AUTHENTICATOR_PERIOD;
 		if (token.empty() || !(token == generateToken(key, ticks) || token == generateToken(key, ticks - 1) ||
 		                       token == generateToken(key, ticks + 1))) {
 			output->addByte(0x0D);
@@ -113,20 +115,14 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	// Generate and add session key
-	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned short> rbe;
-	std::string sessionKey(16, '\x00');
-	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
+	const auto& header = tfs::base64::encode(R"({"alg":"HS256","typ":"JWT"})");
+	const auto& payload = tfs::base64::encode(std::format(R"({{"sub":"{:d}","iat":{:d}}})", id, now));
+	const auto& data = std::format("{:s}.{:s}", header, payload);
+	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), data);
+	std::string sessionKey = std::format("{:s}.{:s}", data, tfs::base64::encode(signature));
 
 	output->addByte(0x28);
-	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
-
-	if (!db.executeQuery(
-	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
-	                    db.escapeString(connection->getIP().to_string())))) {
-		disconnectClient("Failed to create session.\nPlease try again later.", version);
-		return;
-	}
+	output->addString(tfs::base64::encode(sessionKey));
 
 	// Add char list
 	output->addByte(0x64);
