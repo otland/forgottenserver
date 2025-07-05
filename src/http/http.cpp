@@ -15,7 +15,11 @@ asio::io_context ioc;
 
 std::vector<std::thread> workers = {};
 
+auto startTimepoint = std::chrono::system_clock::now();
+
 } // namespace
+
+std::chrono::system_clock::time_point tfs::http::serverStart() { return startTimepoint; }
 
 void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, int threads /*= 1*/)
 {
