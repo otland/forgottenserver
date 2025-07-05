@@ -2,12 +2,6 @@
 
 #include "base64.h"
 
-// #include <boost/archive/iterators/base64_from_binary.hpp>
-// #include <boost/archive/iterators/binary_from_base64.hpp>
-// #include <boost/archive/iterators/transform_width.hpp>
-// #include <boost/beast/core/detail/base64.hpp>
-#include <openssl/evp.h>
-
 static constexpr std::string_view alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
 
 std::string tfs::base64::encode(std::string_view input)
