@@ -513,7 +513,7 @@ bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= fal
 	if (pathfinding) {
 		return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE) && !tile->hasProperty(CONST_PROP_BLOCKPATH) &&
 		       !tile->hasProperty(CONST_PROP_BLOCKSOLID) && !tile->hasProperty(CONST_PROP_IMMOVABLEBLOCKPATH) &&
-		       !tile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID);
+		       !tile->hasProperty(CONST_PROP_IMMOVABLEBLOCKSOLID) && !tile->getTopCreature();
 	}
 
 	return !tile->hasProperty(CONST_PROP_BLOCKPROJECTILE);
@@ -590,8 +590,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 		// Check for additional tile properties when pathfinding
 		if (pathfinding) {
-			bool sightClear = checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
-			return sightClear;
+			return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z, true);
 		}
 
 		// sight is clear or sameFloor is enabled
@@ -748,7 +747,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 			}
 
 			// If sight is clear we can ignore a lot of nodes.
-			if (sightClear) {
+			if (sightClear && !fpp.keepDistance && !fpp.summonTargetMaster && fpp.minTargetDist <= 1) {
 				int32_t startX = startPos.getX();
 				int32_t startY = startPos.getY();
 				int32_t targetX = targetPos.getX();
