@@ -24,6 +24,7 @@ services:
 
   mariadb:
     image: mariadb:latest
+    restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: forgottenserver
@@ -41,6 +42,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
     environment:
       PMA_HOST: mariadb
       PMA_PORT: 3306
