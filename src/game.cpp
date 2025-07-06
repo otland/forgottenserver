@@ -5261,8 +5261,8 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		fee = MAX_MARKET_FEE;
 	}
 
+	uint64_t playerMoney = player->getMoney();
 	if (type == MARKETACTION_SELL) {
-		uint64_t playerMoney = player->getMoney();
 		if (fee > (playerMoney + player->bankBalance)) {
 			return;
 		}
@@ -5296,7 +5296,6 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		uint64_t playerMoney = player->getMoney();
 		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
