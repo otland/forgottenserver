@@ -73,7 +73,6 @@ struct Floor
 	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
-class FrozenPathingConditionCall;
 class QTreeLeafNode;
 
 class QTreeNode
@@ -250,7 +249,7 @@ public:
 	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
 
 	bool getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-	                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
+	                     const FindPathParams& fpp) const;
 
 	std::map<std::string, Position> waypoints;
 

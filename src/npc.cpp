@@ -460,11 +460,11 @@ bool Npc::getRandomStep(Direction& direction) const
 	return false;
 }
 
-bool Npc::doMoveTo(const Position& pos, int32_t minTargetDist /* = 1*/, int32_t maxTargetDist /* = 1*/,
-                   bool fullPathSearch /* = true*/, bool clearSight /* = true*/, int32_t maxSearchDist /* = 0*/)
+bool Npc::doMoveTo(const Position& pos, int32_t targetDist /* = 1*/, bool clearSight /* = true*/,
+                   int32_t maxSearchDist /* = 0*/)
 {
 	listWalkDir.clear();
-	if (getPathTo(pos, listWalkDir, minTargetDist, maxTargetDist, fullPathSearch, clearSight, maxSearchDist)) {
+	if (getPathTo(pos, listWalkDir, targetDist, clearSight, maxSearchDist)) {
 		startAutoWalk();
 		return true;
 	}
@@ -626,9 +626,8 @@ int NpcScriptInterface::luaActionMove(lua_State* L)
 
 int NpcScriptInterface::luaActionMoveTo(lua_State* L)
 {
-	// selfMoveTo(x, y, z[, minTargetDist = 1[, maxTargetDist = 1[, fullPathSearch = true[, clearSight = true[,
-	// maxSearchDist = 0]]]]]) selfMoveTo(position[, minTargetDist = 1[, maxTargetDist = 1[, fullPathSearch = true[,
-	// clearSight = true[, maxSearchDist = 0]]]]])
+	// selfMoveTo(x, y, z[, targetDist = 1[, clearSight = true[, maxSearchDist = 0]]])
+	// selfMoveTo(position[, targetDist = 1[, clearSight = true[, maxSearchDist = 0]]])
 	Npc* npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		return 0;
@@ -645,11 +644,9 @@ int NpcScriptInterface::luaActionMoveTo(lua_State* L)
 		argsStart = 4;
 	}
 
-	tfs::lua::pushBoolean(
-	    L,
-	    npc->doMoveTo(position, tfs::lua::getNumber<int32_t>(L, argsStart, 1),
-	                  tfs::lua::getNumber<int32_t>(L, argsStart + 1, 1), tfs::lua::getBoolean(L, argsStart + 2, true),
-	                  tfs::lua::getBoolean(L, argsStart + 3, true), tfs::lua::getNumber<int32_t>(L, argsStart + 4, 0)));
+	tfs::lua::pushBoolean(L, npc->doMoveTo(position, tfs::lua::getNumber<int32_t>(L, argsStart, 1),
+	                                       tfs::lua::getBoolean(L, argsStart + 1, true),
+	                                       tfs::lua::getNumber<int32_t>(L, argsStart + 2, 0)));
 	return 1;
 }
 

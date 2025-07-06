@@ -43,14 +43,12 @@ enum slots_t : uint8_t
 
 struct FindPathParams
 {
-	bool fullPathSearch = true;
 	bool clearSight = true;
 	bool allowDiagonal = true;
-	bool keepDistance = false;
-	bool summonTargetMaster = false;
+	bool isSummon = false;
+	bool isFleeing = false;
+	int32_t targetDist = 1;
 	int32_t maxSearchDist = 0;
-	int32_t minTargetDist = -1;
-	int32_t maxTargetDist = -1;
 };
 
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
@@ -59,20 +57,6 @@ static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_I
 
 static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
 static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
-
-class FrozenPathingConditionCall
-{
-public:
-	explicit FrozenPathingConditionCall(Position targetPos) : targetPos(std::move(targetPos)) {}
-
-	bool operator()(const Position& startPos, const Position& testPos, const FindPathParams& fpp,
-	                int32_t& bestMatchDist) const;
-
-	bool isInRange(const Position& startPos, const Position& testPos, const FindPathParams& fpp) const;
-
-private:
-	Position targetPos;
-};
 
 //////////////////////////////////////////////////////////////////////
 // Defines the Base class for all creatures and base functions which
@@ -357,9 +341,8 @@ public:
 	double getDamageRatio(Creature* attacker) const;
 
 	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const;
-	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist,
-	               int32_t maxTargetDist, bool fullPathSearch = true, bool clearSight = true,
-	               int32_t maxSearchDist = 0) const;
+	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t targetDist,
+	               bool clearSight = true, int32_t maxSearchDist = 0) const;
 
 	void incrementReferenceCounter() { ++referenceCounter; }
 	void decrementReferenceCounter()

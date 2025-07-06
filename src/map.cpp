@@ -663,6 +663,50 @@ const Tile* Map::canWalkTo(const Creature& creature, const Position& pos) const
 	return tile;
 }
 
+static bool isCorrectNode(const Position& nodePos, const Position& targetPos, const FindPathParams& fpp)
+{
+	int32_t offsetX = std::abs(nodePos.getOffsetX(targetPos));
+	int32_t offsetY = std::abs(nodePos.getOffsetY(targetPos));
+	int32_t totalOffset = offsetX + offsetY;
+
+	if (totalOffset > fpp.targetDist + 1) {
+		return false;
+	}
+
+	if ((offsetX == fpp.targetDist + 1 && offsetY == 0) || (offsetY == fpp.targetDist + 1 && offsetX == 0)) {
+		return false;
+	}
+
+	if (offsetX == fpp.targetDist && offsetY == 0) {
+		return true;
+	}
+
+	if (offsetY == fpp.targetDist && offsetX == 0) {
+		return true;
+	}
+
+	if (totalOffset <= fpp.targetDist) {
+		return false;
+	}
+
+	return true;
+}
+
+static bool isCorrectFleeNode(const Position& nodePos, const Position& startPos, const Position& targetPos,
+                              const FindPathParams& fpp)
+{
+	int8_t startDistanceToTarget =
+	    std::abs(startPos.getDistanceX(targetPos)) + std::abs(startPos.getDistanceY(targetPos));
+	int8_t nodeDistanceToTarget = std::abs(nodePos.getDistanceX(targetPos)) + std::abs(nodePos.getDistanceY(targetPos));
+	if (nodeDistanceToTarget > 2 && nodeDistanceToTarget <= fpp.targetDist) {
+		if (nodeDistanceToTarget <= startDistanceToTarget) {
+			return false;
+		}
+		return true;
+	}
+	return false;
+}
+
 static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 {
 	uint16_t dx = std::abs(p1.getX() - p2.getX());
@@ -671,7 +715,7 @@ static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 }
 
 bool Map::getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-                          const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const
+                          const FindPathParams& fpp) const
 {
 	Position pos = creature.getPosition();
 	const Position startPos = pos;
@@ -689,7 +733,7 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	int32_t distanceX = startPos.getDistanceX(targetPos);
 	int32_t distanceY = startPos.getDistanceY(targetPos);
 	// We are next to our target. Let dance step decide.
-	if (fpp.maxTargetDist <= 1 && distanceX <= 1 && distanceY <= 1) {
+	if (fpp.targetDist <= 1 && distanceX <= 1 && distanceY <= 1) {
 		return true;
 	}
 
@@ -709,7 +753,6 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 	AStarNodes nodes(pos.x, pos.y);
 
 	AStarNode* found = nullptr;
-	int32_t bestMatch = 0;
 	uint16_t iterations = 0;
 	AStarNode* n = nodes.getBestNode();
 	while (n) {
@@ -723,12 +766,14 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 		const int32_t y = n->y;
 		pos.x = x;
 		pos.y = y;
-		if (pathCondition(startPos, pos, fpp, bestMatch)) {
+		if (!fpp.isFleeing && isCorrectNode(pos, targetPos, fpp)) {
 			found = n;
 			endPos = pos;
-			if (bestMatch == 0) {
-				break;
-			}
+			break;
+		} else if (fpp.isFleeing && isCorrectFleeNode(pos, startPos, targetPos, fpp)) {
+			found = n;
+			endPos = pos;
+			break;
 		}
 
 		for (uint8_t i = 0; i < 8; ++i) {
@@ -742,12 +787,8 @@ bool Map::getPathMatching(const Creature& creature, const Position& targetPos, s
 				continue;
 			}
 
-			if (fpp.keepDistance && !pathCondition.isInRange(startPos, pos, fpp)) {
-				continue;
-			}
-
 			// If sight is clear we can ignore a lot of nodes.
-			if (sightClear && !fpp.keepDistance && !fpp.summonTargetMaster && fpp.minTargetDist <= 1) {
+			if (sightClear && !fpp.isSummon && fpp.targetDist <= 1) {
 				int32_t startX = startPos.getX();
 				int32_t startY = startPos.getY();
 				int32_t targetX = targetPos.getX();

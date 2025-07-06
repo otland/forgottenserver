@@ -123,7 +123,7 @@ public:
 		return !isSummon() && getHealth() <= mType->info.runAwayHealth && challengeFocusDuration <= 0;
 	}
 
-	bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
+	bool getDistanceStep(const Position& targetPos, Direction& direction);
 	bool isTargetNearby() const { return stepDuration >= 1; }
 	bool isIgnoringFieldDamage() const { return ignoreFieldDamage; }
 
@@ -196,8 +196,7 @@ private:
 	bool canUseSpell(const Position& pos, const Position& targetPos, const spellBlock_t& sb, uint32_t interval,
 	                 bool& inRange, bool& resetTicks);
 	bool getRandomStep(const Position& creaturePos, Direction& direction) const;
-	bool getDanceStep(const Position& creaturePos, Direction& direction, bool keepAttack = true,
-	                  bool keepDistance = true);
+	bool getDanceStep(const Position& creaturePos, Direction& direction, bool keepAttack = true);
 	bool isInSpawnRange(const Position& pos) const;
 	bool canWalkTo(Position pos, Direction direction) const;
 
