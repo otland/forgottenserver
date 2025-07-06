@@ -826,6 +826,7 @@ void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
 		followers.push_back(creature);
+		creature->incrementReferenceCounter();
 	}
 }
 
@@ -838,8 +839,12 @@ void Creature::removeFollowers()
 		                               const Position& followerPosition = creature->getPosition();
 		                               uint16_t distance = position.getDistanceX(followerPosition) +
 		                                                   position.getDistanceY(followerPosition);
-		                               return distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                      position.z != followerPosition.z;
+		                               bool isInRemoveRange = distance >= Map::maxViewportX + Map::maxViewportY ||
+		                                                      position.z != followerPosition.z;
+		                               if (isInRemoveRange) {
+			                               creature->decrementReferenceCounter();
+		                               }
+		                               return isInRemoveRange;
 	                               }),
 	                followers.end());
 }
