@@ -13,10 +13,9 @@ Scripts::Scripts() : scriptInterface("Scripts Interface") { scriptInterface.init
 
 Scripts::~Scripts() { scriptInterface.reInitState(); }
 
-void Scripts::clear()
+void Scripts::reInitState()
 {
 	scriptInterface.reInitState();
-	scriptInterface.initState();
 }
 
 bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)

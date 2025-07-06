@@ -75,9 +75,8 @@ bool BaseEvents::reload()
 
 void BaseEvents::reInitState(bool fromLua)
 {
-	if (fromLua) {
+	if (!fromLua) {
 		getScriptInterface().reInitState();
-		getScriptInterface().initState();
 	}
 }
 

@@ -5895,24 +5895,14 @@ bool Game::reload(ReloadTypes_t reloadType)
 		case RELOAD_TYPE_SCRIPTS: {
 			// commented out stuff is TODO, once we approach further in revscriptsys
 			g_actions->clear(true);
-			g_actions->reload();
 			g_creatureEvents->clear(true);
-			g_creatureEvents->reload();
 			g_moveEvents->clear(true);
-			g_moveEvents->reload();
 			g_talkActions->clear(true);
-			g_talkActions->reload();
 			g_globalEvents->clear(true);
-			g_globalEvents->reload();
 			g_weapons->clear(true);
-			g_weapons->reload();
 			g_weapons->loadDefaults();
 			g_spells->clear(true);
-			if (!g_spells->reload()) {
-				std::cout << "[Error - Game::reload] Failed to reload spells." << std::endl;
-				std::terminate();
-			}
-			g_scripts->clear();
+			g_scripts->reInitState();
 			g_scripts->loadScripts("scripts", false, true);
 			g_creatureEvents->removeInvalidEvents();
 			/*
