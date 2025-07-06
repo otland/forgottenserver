@@ -37,6 +37,8 @@ Creature::~Creature()
 	for (auto condition : conditions) {
 		delete condition;
 	}
+
+	releaseFollowCreature();
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
@@ -816,7 +818,7 @@ void Creature::onFollowCreature(const Creature*)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(Creature* creature)
+bool Creature::isFollower(const Creature* creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
 	return it != followers.end();
@@ -827,6 +829,17 @@ void Creature::addFollower(Creature* creature)
 	if (!isFollower(creature)) {
 		followers.push_back(creature);
 		creature->incrementReferenceCounter();
+	}
+}
+
+void Creature::removeFollower(Creature* creature)
+{
+	if (isFollower(creature)) {
+		auto it = std::find(followers.begin(), followers.end(), creature);
+		if (it != followers.end()) {
+			creature->decrementReferenceCounter();
+			followers.erase(it);
+		}
 	}
 }
 
@@ -847,6 +860,16 @@ void Creature::removeFollowers()
 		                               return isInRemoveRange;
 	                               }),
 	                followers.end());
+}
+
+void Creature::releaseFollowCreature()
+{
+	if (!attackedCreature && !followCreature) {
+		return;
+	}
+
+	Creature* following = attackedCreature ? attackedCreature : followCreature;
+	following->removeFollower(this);
 }
 
 void Creature::updateFollowersPaths()
