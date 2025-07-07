@@ -1,27 +1,3 @@
---[[
-Functions:
-	getAchievementInfoById(achievement_id)
-	getAchievementInfoByName(achievement_name)
-	getSecretAchievements()
-	getPublicAchievements()
-	getAchievements()
-	Player:addAchievement(achievement_id/name[, hideMsg])
-	Player:removeAchievement(achievement_id/name)
-	Player:hasAchievement(achievement_id/name)
-	Player:addAllAchievements([hideMsg])
-	Player:removeAllAchievements()
-	Player:getSecretAchievements()
-	Player:getPublicAchievements()
-	Player:getAchievements()
-	isAchievementSecret(achievement_id/name)
-	Player:getAchievementPoints()
-	Player:addAchievementProgress()
-Storages:
-	PlayerStorageKeys.achievementsBase -- base storage
-	PlayerStorageKeys.achievementsCounter -- this storage will be used to save the process to obtain the certain achievement
-	(Ex: this storage + the id of achievement 'Allowance Collector' to save how many piggy banks has been broken
-]]
-
 achievements = {
 	-- 8.6
 	[1] = {clientId = 60, name = "Allow Cookies?", grade = 1, points = 2, description = "With a perfectly harmless smile you fooled all of those wisecrackers into eating your exploding cookies. Consider a boy or girl scout outfit next time to make the trick even better."},
@@ -459,7 +435,6 @@ achievements = {
 	[397] = {clientId = 413, name = "Ender of the End", grade = 2, points = 5, description = "You have entered the heart of destruction and valiantly defeated the world devourer. By your actions you have postponed the end of the world — at least for a while."},
 	[398] = {clientId = 414, name = "Vortex Tamer", grade = 2, points = 5, description = "After a long journey and dedication you were favoured by fortune and have tamed all three elusive beasts of the vortex. Unless the Vortexion decides you're a tasty morsel you can enjoy your small stable of ravaging beasts from beyond."},
 
-
 	-- 11.02
 	[399] = {clientId = 329, name = "Forbidden Fruit", grade = 1, points = 1, secret = true, description = "You could not resist the taste of the forbidden fruit. Since you don't feel changed at all, it couldn't have been that bad after all. Or could it?"},
 	[400] = {clientId = 330, name = "Forbidden Knowledge", grade = 1, points = 1, secret = true, description = "Perhaps with so much acquired knowledge, never meant for you, you know even when to stop! Time will tell whether this knowledge will do more harm or good."},
@@ -618,214 +593,184 @@ achievements = {
 ACHIEVEMENT_FIRST = 1
 ACHIEVEMENT_LAST = #achievements
 
-function getAchievementInfoById(id)
-	for k, v in pairs(achievements) do
-		if k == id then
-			local targetAchievement = {}
-			targetAchievement.id = k
-			targetAchievement.actionStorage = PlayerStorageKeys.achievementsCounter + k
-			for inf, it in pairs(v) do
-				targetAchievement[inf] = it
-			end
-			return targetAchievement
+-- Retrieve full achievement data by its ID
+function fetchAchievementById(id)
+	local data = achievements[id]
+	if not data then return false end
+
+	local result = { id = id, actionStorage = PlayerStorageKeys.achievementsCounter + id }
+	for k, v in pairs(data) do result[k] = v end
+	return result
+end
+
+-- Retrieve achievement data by name (case-insensitive)
+function fetchAchievementByName(name)
+	for id, data in pairs(achievements) do
+		if data.name:lower() == name:lower() then
+			local result = { id = id, actionStorage = PlayerStorageKeys.achievementsCounter + id }
+			for k, v in pairs(data) do result[k] = v end
+			return result
 		end
 	end
 	return false
 end
 
-function getAchievementInfoByName(name)
-	for k, v in pairs(achievements) do
-		if v.name:lower() == name:lower() then
-			local targetAchievement = {}
-			targetAchievement.id = k
-			targetAchievement.actionStorage = PlayerStorageKeys.achievementsCounter + k
-			for inf, it in pairs(v) do
-				targetAchievement[inf] = it
-			end
-			return targetAchievement
-		end
+-- Get all secret achievement IDs
+function getAllSecretAchievementIds()
+	local result = {}
+	for id, data in pairs(achievements) do
+		if data.secret then result[#result + 1] = id end
 	end
-	return false
+	return result
 end
 
-function getSecretAchievements()
-	local targetAchievement = {}
-	for k, v in pairs(achievements) do
-		if v.secret then
-			targetAchievement[#targetAchievement + 1] = k
-		end
+-- Get all public (non-secret) achievement IDs
+function getAllPublicAchievementIds()
+	local result = {}
+	for id, data in pairs(achievements) do
+		if not data.secret then result[#result + 1] = id end
 	end
-	return targetAchievement
+	return result
 end
 
-function getPublicAchievements()
-	local targetAchievement = {}
-	for k, v in pairs(achievements) do
-		if not v.secret then
-			targetAchievement[#targetAchievement + 1] = k
-		end
-	end
-	return targetAchievement
-end
-
-function getAchievements()
+-- Get full table of all achievements
+function getAllAchievements()
 	return achievements
 end
 
-function isAchievementSecret(ach)
-	local achievement
-	if tonumber(ach) then
-		achievement = getAchievementInfoById(ach)
-	else
-		achievement = getAchievementInfoByName(ach)
-	end
-	if not achievement then
-		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+-- Check if achievement (by name or id) is secret
+function isSecretAchievement(ach)
+	local a = tonumber(ach) and fetchAchievementById(ach) or fetchAchievementByName(ach)
+	if not a then
+		print("[!] Invalid achievement reference: \"" .. tostring(ach) .. "\".")
 		return false
 	end
-
-	return achievement.secret
+	return a.secret == true
 end
 
-function Player.hasAchievement(self, ach)
-	local achievement
-	if tonumber(ach) then
-		achievement = getAchievementInfoById(ach)
-	else
-		achievement = getAchievementInfoByName(ach)
-	end
-	if not achievement then
-		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+function Player:hasUnlockedAchievement(ach)
+	local a = tonumber(ach) and fetchAchievementById(ach) or fetchAchievementByName(ach)
+	if not a then
+		print("[!] Invalid achievement reference: \"" .. tostring(ach) .. "\".")
 		return false
 	end
-
-	return self:getStorageValue(PlayerStorageKeys.achievementsBase + achievement.id) > 0
+	return self:getStorageValue(PlayerStorageKeys.achievementsBase + a.id) > 0
 end
 
-function Player.getAchievements(self)
-	local targetAchievement = {}
-	for k = 1, #achievements do
-		if self:hasAchievement(k) then
-			targetAchievement[#targetAchievement + 1] = k
+function Player:getUnlockedAchievementIds()
+	local list = {}
+	for id = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
+		if self:hasUnlockedAchievement(id) then
+			list[#list + 1] = id
 		end
 	end
-	return targetAchievement
+	return list
 end
 
-function Player.addAchievement(self, ach, hideMsg)
-	local achievement
-	if tonumber(ach) then
-		achievement = getAchievementInfoById(ach)
-	else
-		achievement = getAchievementInfoByName(ach)
-	end
-
-	if not achievement then
-		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+function Player:grantAchievement(ach, hideMsg)
+	local a = tonumber(ach) and fetchAchievementById(ach) or fetchAchievementByName(ach)
+	if not a then
+		print("[!] Invalid achievement reference: \"" .. tostring(ach) .. "\".")
 		return false
 	end
 
-	if not self:hasAchievement(achievement.id) then
-		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, os.time())
+	if not self:hasUnlockedAchievement(a.id) then
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + a.id, os.time())
 
-		if achievement.points > 0 then
-			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
-			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value + achievement.points)
+		if a.points > 0 then
+			local current = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
+			self:setStorageValue(PlayerStorageKeys.achievementsTotal, current + a.points)
 		end
 
 		if not hideMsg then
-			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. achievement.name .. "\".")
+			self:sendTextMessage(MESSAGE_EVENT_ADVANCE, "Congratulations! You earned the achievement \"" .. a.name .. "\".")
 		end
 	end
 	return true
 end
 
-function Player.removeAchievement(self, ach)
-	local achievement
-	if tonumber(ach) then
-		achievement = getAchievementInfoById(ach)
-	else
-		achievement = getAchievementInfoByName(ach)
-	end
-	if not achievement then
-		print("[!] -> Invalid achievement \"" .. ach .. "\".")
+function Player:revokeAchievement(ach)
+	local a = tonumber(ach) and fetchAchievementById(ach) or fetchAchievementByName(ach)
+	if not a then
+		print("[!] Invalid achievement reference: \"" .. tostring(ach) .. "\".")
 		return false
 	end
 
-	if self:hasAchievement(achievement.id) then
-		self:setStorageValue(PlayerStorageKeys.achievementsBase + achievement.id, nil)
-		if achievement.points > 0 then
-			local value = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
-			self:setStorageValue(PlayerStorageKeys.achievementsTotal, value - achievement.points)
+	if self:hasUnlockedAchievement(a.id) then
+		self:setStorageValue(PlayerStorageKeys.achievementsBase + a.id, nil)
+
+		if a.points > 0 then
+			local current = self:getStorageValue(PlayerStorageKeys.achievementsTotal)
+			self:setStorageValue(PlayerStorageKeys.achievementsTotal, current - a.points)
 		end
 	end
 	return true
 end
 
-function Player.addAllAchievements(self, hideMsg)
-	for i = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
-		self:addAchievement(i, hideMsg)
+function Player:grantAllAchievements(hideMsg)
+	for id = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
+		self:grantAchievement(id, hideMsg)
 	end
 	return true
 end
 
-function Player.removeAllAchievements(self)
-	for k = 1, #achievements do
-		if self:hasAchievement(k) then
-			self:removeAchievement(k)
+function Player:revokeAllAchievements()
+	for id = ACHIEVEMENT_FIRST, ACHIEVEMENT_LAST do
+		if self:hasUnlockedAchievement(id) then
+			self:revokeAchievement(id)
 		end
 	end
 	return true
 end
 
-function Player.getSecretAchievements(self)
-	local targetAchievement = {}
-	for k, v in pairs(achievements) do
-		if self:hasAchievement(k) and v.secret then
-			targetAchievement[#targetAchievement + 1] = k
+function Player:getUnlockedSecretAchievementIds()
+	local result = {}
+	for id, data in pairs(achievements) do
+		if self:hasUnlockedAchievement(id) and data.secret then
+			result[#result + 1] = id
 		end
 	end
-	return targetAchievement
+	return result
 end
 
-function Player.getPublicAchievements(self)
-	local targetAchievement = {}
-	for k, v in pairs(achievements) do
-		if self:hasAchievement(k) and not v.secret then
-			targetAchievement[#targetAchievement + 1] = k
+function Player:getUnlockedPublicAchievementIds()
+	local result = {}
+	for id, data in pairs(achievements) do
+		if self:hasUnlockedAchievement(id) and not data.secret then
+			result[#result + 1] = id
 		end
 	end
-	return targetAchievement
+	return result
 end
 
-function Player.getAchievementPoints(self)
-	local points = 0
-	local list = self:getAchievements()
-	if #list > 0 then -- has achievements
-		for i = 1, #list do
-			local targetAchievement = getAchievementInfoById(list[i])
-			if targetAchievement.points > 0 then -- avoid achievements with unknow points
-				points = points + targetAchievement.points
-			end
+function Player:getTotalAchievementPoints()
+	local total = 0
+	local list = self:getUnlockedAchievementIds()
+	for i = 1, #list do
+		local a = fetchAchievementById(list[i])
+		if a and a.points > 0 then
+			total = total + a.points
 		end
 	end
-	return points
+	return total
 end
 
-function Player.addAchievementProgress(self, ach, value)
-	local achievement = tonumber(ach) and getAchievementInfoById(ach) or getAchievementInfoByName(ach)
-	if not achievement then
-		print('[!] -> Invalid achievement "' .. ach .. '".')
+-- Increments the progress for a specific achievement and unlocks it if goal reached
+function Player:incrementAchievementProgress(ach, value)
+	local a = tonumber(ach) and fetchAchievementById(ach) or fetchAchievementByName(ach)
+	if not a then
+		print("[!] Invalid achievement reference: \"" .. tostring(ach) .. "\".")
 		return true
 	end
 
-	local storage = PlayerStorageKeys.achievementsCounter + achievement.id
-	local progress = self:getStorageValue(storage)
+	local key = PlayerStorageKeys.achievementsCounter + a.id
+	local progress = self:getStorageValue(key)
+
 	if progress < value then
-		self:setStorageValue(storage, math.max(1, progress) + 1)
+		self:setStorageValue(key, math.max(1, progress) + 1)
 	elseif progress == value then
-		self:setStorageValue(storage, value + 1)
-		self:addAchievement(achievement.id)
+		self:setStorageValue(key, value + 1)
+		self:grantAchievement(a.id)
 	end
 	return true
 end
