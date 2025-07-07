@@ -15,6 +15,18 @@ using boost::beast::http::status;
 
 namespace {
 
+[[noreturn]] inline void unreachable()
+{
+	// Uses compiler specific extensions if possible.
+	// Even if no extension is used, undefined behavior is still raised by
+	// an empty function body and the noreturn attribute.
+#if defined(_MSC_VER) && !defined(__clang__) // MSVC
+	__assume(false);
+#else // GCC, Clang
+	__builtin_unreachable();
+#endif
+}
+
 int getPvpType()
 {
 	switch (g_game.getWorldType()) {
@@ -26,7 +38,7 @@ int getPvpType()
 			return 2;
 	}
 
-	tfs::unreachable();
+	unreachable();
 }
 
 } // namespace
@@ -82,11 +94,9 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body)
 	auto accountId = result->getNumber<uint64_t>("id");
 	auto premiumEndsAt = result->getNumber<int64_t>("premium_ends_at");
 
-	const auto& header = tfs::base64::encode(R"({"alg":"HS256","typ":"JWT"})");
-	const auto& payload = tfs::base64::encode(std::format(R"({{"sub":"{:d}","iat":{:d}}})", accountId, now));
-	const auto& data = std::format("{:s}.{:s}", header, payload);
-	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), data);
-	std::string sessionKey = std::format("{:s}.{:s}", data, tfs::base64::encode(signature));
+	const auto& payload = std::format("{:s}{:s}", tfs::to_bytes(accountId), tfs::to_bytes(now));
+	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), payload);
+	const auto& sessionKey = std::format("{:s}{:s}", payload, signature);
 
 	result = db.storeQuery(std::format(
 	    "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
@@ -142,7 +152,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body)
 	    {
 	        {"session",
 	         {
-	             {"sessionkey", sessionKey},
+	             {"sessionkey", tfs::base64::encode(sessionKey)},
 	             {"lastlogintime", lastLogin},
 	             {"ispremium", premiumEndsAt >= now},
 	             {"premiumuntil", premiumEndsAt},

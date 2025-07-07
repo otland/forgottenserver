@@ -84,7 +84,7 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 		return;
 	}
 
-	auto id = result->getNumber<uint32_t>("id");
+	auto id = result->getNumber<uint64_t>("id");
 	auto key = decodeSecret(result->getString("secret"));
 	auto premiumEndsAt = result->getNumber<time_t>("premium_ends_at");
 
@@ -115,11 +115,9 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	// Generate and add session key
-	const auto& header = tfs::base64::encode(R"({"alg":"HS256","typ":"JWT"})");
-	const auto& payload = tfs::base64::encode(std::format(R"({{"sub":"{:d}","iat":{:d}}})", id, now));
-	const auto& data = std::format("{:s}.{:s}", header, payload);
-	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), data);
-	std::string sessionKey = std::format("{:s}.{:s}", data, tfs::base64::encode(signature));
+	const auto& payload = std::format("{:s}{:s}", tfs::to_bytes(id), tfs::to_bytes(now));
+	const auto& signature = hmac("SHA256", getString(ConfigManager::SESSION_SECRET), payload);
+	const auto& sessionKey = std::format("{:s}{:s}", payload, signature);
 
 	output->addByte(0x28);
 	output->addString(tfs::base64::encode(sessionKey));

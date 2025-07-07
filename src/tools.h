@@ -88,25 +88,39 @@ inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::u
 
 #endif
 
-#if __has_cpp_attribute(__cpp_lib_unreachable)
-
-using std::unreachable;
-
-#else
-
-[[noreturn]] inline void unreachable()
+template <std::integral T>
+constexpr T byteswap(T value) noexcept
 {
-	// Uses compiler specific extensions if possible.
-	// Even if no extension is used, undefined behavior is still raised by
-	// an empty function body and the noreturn attribute.
-#if defined(_MSC_VER) && !defined(__clang__) // MSVC
-	__assume(false);
-#else                                        // GCC, Clang
-	__builtin_unreachable();
-#endif
+	static_assert(std::has_unique_object_representations_v<T>, "T may not have padding bits");
+	auto repr = std::bit_cast<std::array<std::byte, sizeof(T)>>(value);
+	std::ranges::reverse(repr);
+	return std::bit_cast<T>(repr);
 }
 
-#endif
+template <std::integral T>
+T from_bytes(std::string_view repr)
+{
+	if (repr.size() != sizeof(T)) {
+		throw std::invalid_argument("Invalid byte representation size");
+	}
+
+	T value;
+	std::memcpy(&value, repr.data(), sizeof(T));
+	if constexpr (std::endian::native == std::endian::big) {
+		value = byteswap(value);
+	}
+	return value;
+}
+
+template <std::integral T>
+constexpr std::string to_bytes(T value) noexcept
+{
+	if constexpr (std::endian::native == std::endian::big) {
+		value = byteswap(value);
+	}
+	auto repr = std::bit_cast<std::array<std::byte, sizeof(T)>>(value);
+	return {repr.begin(), repr.end()};
+}
 
 } // namespace tfs
 

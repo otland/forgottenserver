@@ -401,6 +401,16 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
+	std::string_view view{sessionToken};
+	auto tokenAccountId = view.substr(0, sizeof(uint64_t));
+	auto tokenTimestamp = view.substr(sizeof(uint64_t), sizeof(int64_t));
+	auto tokenSignature = view.substr(sizeof(uint64_t) + sizeof(int64_t));
+	if (tokenSignature != hmac("SHA256", getString(ConfigManager::SESSION_SECRET),
+	                           std::format("{:s}{:s}", tokenAccountId, tokenTimestamp))) {
+		disconnectClient("Malformed session key.");
+		return;
+	}
+
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		msg.getString(); // OS name (?)
 		msg.getString(); // OS version (?)
@@ -433,22 +443,17 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	Database& db = Database::getInstance();
 	auto result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(sessionToken), db.escapeString(characterName)));
+	    "SELECT `a`.`id` AS `account_id`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    db.escapeString(characterName)));
 	if (!result) {
 		disconnectClient("Account name or password is not correct.");
 		return;
 	}
 
 	uint32_t accountId = result->getNumber<uint32_t>("account_id");
-	if (accountId == 0) {
+	if (accountId == 0 || accountId != tfs::from_bytes<uint64_t>(tokenAccountId)) {
 		disconnectClient("Account name or password is not correct.");
 		return;
-	}
-
-	Connection::Address sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
-	if (!sessionIP.is_loopback() && ip != sessionIP) {
-		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
 	}
 
 	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = result->getNumber<uint32_t>("character_id")]() {
