@@ -695,10 +695,9 @@ static bool isCorrectNode(const Position& nodePos, const Position& targetPos, co
 static bool isCorrectFleeNode(const Position& nodePos, const Position& startPos, const Position& targetPos,
                               const FindPathParams& fpp)
 {
-	int8_t startDistanceToTarget =
-	    std::abs(startPos.getDistanceX(targetPos)) + std::abs(startPos.getDistanceY(targetPos));
-	int8_t nodeDistanceToTarget = std::abs(nodePos.getDistanceX(targetPos)) + std::abs(nodePos.getDistanceY(targetPos));
-	if (nodeDistanceToTarget > 2 && nodeDistanceToTarget <= fpp.targetDist) {
+	int8_t startDistanceToTarget = std::max(startPos.getDistanceX(targetPos), startPos.getDistanceY(targetPos));
+	int8_t nodeDistanceToTarget = std::max(nodePos.getDistanceX(targetPos), nodePos.getDistanceY(targetPos));
+	if (nodeDistanceToTarget > 1 && nodeDistanceToTarget <= fpp.targetDist + 2) {
 		if (nodeDistanceToTarget <= startDistanceToTarget) {
 			return false;
 		}

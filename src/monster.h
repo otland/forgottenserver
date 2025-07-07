@@ -123,7 +123,7 @@ public:
 		return !isSummon() && getHealth() <= mType->info.runAwayHealth && challengeFocusDuration <= 0;
 	}
 
-	bool getDistanceStep(const Position& targetPos, Direction& direction);
+	bool getDistanceStep(const Position& targetPos, Direction& direction, bool flee = false);
 	bool isTargetNearby() const { return stepDuration >= 1; }
 	bool isIgnoringFieldDamage() const { return ignoreFieldDamage; }
 
