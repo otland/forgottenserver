@@ -1,9 +1,13 @@
 TRUE = true
 FALSE = false
 
+---@deprecated Use result.getNumber instead.
 result.getDataInt = result.getNumber
+---@deprecated Use result.getNumber instead.
 result.getDataLong = result.getNumber
+---@deprecated Use result.getString instead.
 result.getDataString = result.getString
+---@deprecated Use result.getStream instead.
 result.getDataStream = result.getStream
 
 LUA_ERROR = false
@@ -23,24 +27,41 @@ THING_TYPE_PLAYER = CREATURETYPE_PLAYER + 1
 THING_TYPE_MONSTER = CREATURETYPE_MONSTER + 1
 THING_TYPE_NPC = CREATURETYPE_NPC + 1
 
+---@deprecated Use COMBAT_EARTHDAMAGE instead.
 COMBAT_POISONDAMAGE = COMBAT_EARTHDAMAGE
+---@deprecated Use CONDITION_EXHAUST_WEAPON instead.
 CONDITION_EXHAUST = CONDITION_EXHAUST_WEAPON
+---@deprecated Use MESSAGE_INFO_DESCR instead.
 MESSAGE_STATUS_CONSOLE_BLUE = MESSAGE_INFO_DESCR
+---@deprecated Use MESSAGE_STATUS_WARNING instead.
 MESSAGE_STATUS_CONSOLE_RED = MESSAGE_STATUS_WARNING
+---@deprecated Use MESSAGE_STATUS_WARNING instead.
 MESSAGE_EVENT_ORANGE = MESSAGE_STATUS_WARNING
+---@deprecated Use MESSAGE_STATUS_WARNING instead.
 MESSAGE_STATUS_CONSOLE_ORANGE = MESSAGE_STATUS_WARNING
+---@deprecated Use TALKTYPE_MONSTER_SAY instead.
 TALKTYPE_ORANGE_1 = TALKTYPE_MONSTER_SAY
+---@deprecated Use TALKTYPE_MONSTER_YELL instead.
 TALKTYPE_ORANGE_2 = TALKTYPE_MONSTER_YELL
 
+---@deprecated Use DIRECTION_NORTH instead.
 NORTH = DIRECTION_NORTH
+---@deprecated Use DIRECTION_EAST instead.
 EAST = DIRECTION_EAST
+---@deprecated Use DIRECTION_SOUTH instead.
 SOUTH = DIRECTION_SOUTH
+---@deprecated Use DIRECTION_WEST instead.
 WEST = DIRECTION_WEST
+---@deprecated Use DIRECTION_SOUTHWEST instead.
 SOUTHWEST = DIRECTION_SOUTHWEST
+---@deprecated Use DIRECTION_SOUTHEAST instead.
 SOUTHEAST = DIRECTION_SOUTHEAST
+---@deprecated Use DIRECTION_NORTHWEST instead.
 NORTHWEST = DIRECTION_NORTHWEST
+---@deprecated Use DIRECTION_NORTHEAST instead.
 NORTHEAST = DIRECTION_NORTHEAST
 
+---@deprecated Use SPEECHBUBBLE_QUEST instead.
 SPEECHBUBBLE_QUESTTRADER = SPEECHBUBBLE_QUEST
 
 do
@@ -316,6 +337,7 @@ do
 	rawgetmetatable("MonsterType").__newindex = MonsterTypeNewIndex
 end
 
+---@deprecated
 function pushThing(thing)
 	local t = {uid = 0, itemid = 0, type = 0, actionid = 0}
 	if thing then
@@ -341,28 +363,41 @@ function pushThing(thing)
 	return t
 end
 
+---@deprecated Use Combat() instead
 createCombatObject = Combat
+---@deprecated Use combat:addCondition() instead
 addCombatCondition = Combat.addCondition
+---@deprecated Use combat:setArea() instead
 setCombatArea = Combat.setArea
+---@deprecated Use combat:setCallback() instead
 setCombatCallback = Combat.setCallback
+---@deprecated Use combat:setFormula() instead
 setCombatFormula = Combat.setFormula
+---@deprecated Use combat:setParameter() instead
 setCombatParam = Combat.setParameter
 
+---@deprecated Use Combat:addCondition instead.
 Combat.setCondition = function(...)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Combat.setCondition was renamed to Combat.addCondition and will be removed in the future")
 	Combat.addCondition(...)
 end
 
+---@deprecated Use addCombatCondition instead.
 setCombatCondition = function(...)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function setCombatCondition was renamed to addCombatCondition and will be removed in the future")
 	Combat.addCondition(...)
 end
 
+---@deprecated use doTargetCombat instead.
 function doTargetCombatHealth(...) return doTargetCombat(...) end
+---@deprecated use doAreaCombat instead
 function doAreaCombatHealth(...) return doAreaCombat(...) end
 doCombatAreaHealth = doAreaCombatHealth
+---@deprecated use doTargetCombat instead.
 function doTargetCombatMana(cid, target, min, max, effect) return doTargetCombat(cid, target, COMBAT_MANADRAIN, min, max, effect) end
+---@deprecated use doTargetCombat instead
 doCombatAreaMana = doTargetCombatMana
+---@deprecated use doAreaCombat instead
 function doAreaCombatMana(cid, pos, area, min, max, effect) return doAreaCombat(cid, COMBAT_MANADRAIN, pos, area, min, max, effect) end
 
 createConditionObject = Condition
@@ -371,31 +406,54 @@ setConditionFormula = Condition.setFormula
 addDamageCondition = Condition.addDamage
 addOutfitCondition = Condition.setOutfit
 
+---@deprecated use combat:execute(creature, variant) instead
 function doCombat(cid, combat, var) return combat:execute(cid, var) end
 
+---@deprecated Use Creature(cid) instead.
 function isCreature(cid) return Creature(cid) end
+---@deprecated Use Player(cid) instead.
 function isPlayer(cid) return Player(cid) end
+---@deprecated Use Monster(cid) instead.
 function isMonster(cid) return Monster(cid) end
+---@deprecated Check if the creature is a summon using Creature:getMaster() instead.
 function isSummon(cid) local c = Creature(cid) return c and c:getMaster() end
+---@deprecated Use Npc(cid) instead.
 function isNpc(cid) return Npc(cid) end
+---@deprecated Use Item(uid) instead.
 function isItem(uid) return Item(uid) end
+---@deprecated Use Container(uid) instead.
 function isContainer(uid) return Container(uid) end
 
+---@deprecated Use creature:getName() instead.
 function getCreatureName(cid) local c = Creature(cid) return c and c:getName() or false end
+---@deprecated use creature:getStorageValue(key) instead.
 function getCreatureStorage(uid, key) local c = Creature(uid) return c and c:getStorageValue(key) or false end
+---@deprecated use creature:getHealth() instead.
 function getCreatureHealth(cid) local c = Creature(cid) return c and c:getHealth() or false end
+---@deprecated use creature:getMaxHealth() instead.
 function getCreatureMaxHealth(cid) local c = Creature(cid) return c and c:getMaxHealth() or false end
+---@deprecated use creature:getMana() instead.
 function getCreatureMana(cid) local c = Creature(cid) return c and c:getMana() or false end
+---@deprecated use creature:getMaxMana() instead.
 function getCreatureMaxMana(cid) local c = Creature(cid) return c and c:getMaxMana() or false end
+---@deprecated use creature:getPosition() instead.
 function getCreaturePosition(cid) local c = Creature(cid) return c and c:getPosition() or false end
+---@deprecated use creature:getOutfit() instead.
 function getCreatureOutfit(cid) local c = Creature(cid) return c and c:getOutfit() or false end
+---@deprecated use creature:getSpeed() instead.
 function getCreatureSpeed(cid) local c = Creature(cid) return c and c:getSpeed() or false end
+---@deprecated use creature:getBaseSpeed() instead.
 function getCreatureBaseSpeed(cid) local c = Creature(cid) return c and c:getBaseSpeed() or false end
+---@deprecated use creature:getDirection() instead.
 function getCreatureLookDirection(cid) local c = Creature(cid) return c and c:getDirection() or false end
+---@deprecated use creature:isHealthHidden() instead.
 function getCreatureHideHealth(cid) local c = Creature(cid) return c and c:isHealthHidden() or false end
+---@deprecated use creature:getSkull() instead.
 function getCreatureSkullType(cid) local c = Creature(cid) return c and c:getSkull() or false end
+---@deprecated use creature:isMovementBlocked() instead.
 function getCreatureNoMove(cid) local c = Creature(cid) return c and c:isMovementBlocked() or false end
 
+---@deprecated Use creature:getTarget() instead.
 function getCreatureTarget(cid)
 	local c = Creature(cid)
 	if c then
@@ -405,6 +463,7 @@ function getCreatureTarget(cid)
 	return false
 end
 
+---@deprecated Use creature:getMaster() instead.
 function getCreatureMaster(cid)
 	local c = Creature(cid)
 	if c then
@@ -414,6 +473,7 @@ function getCreatureMaster(cid)
 	return false
 end
 
+---@deprecated Use creature:getSummons() instead.
 function getCreatureSummons(cid)
 	local c = Creature(cid)
 	if not c then
@@ -427,52 +487,93 @@ function getCreatureSummons(cid)
 	return result
 end
 
+---@deprecated Use creature:getPosition() instead
 getCreaturePos = getCreaturePosition
 
+---@deprecated Use creature:addHealth(health) instead
 function doCreatureAddHealth(cid, health) local c = Creature(cid) return c and c:addHealth(health) or false end
+---@deprecated Use creature:addMana(mana) instead
 function doCreatureAddMana(cid, mana) local c = Creature(cid) return c and c:addMana(mana) or false end
+---@deprecated Use creature:remove() instead
 function doRemoveCreature(cid) local c = Creature(cid) return c and c:remove() or false end
+---@deprecated Use creature:setStorageValue(key, value) instead
 function doCreatureSetStorage(uid, key, value) local c = Creature(uid) return c and c:setStorageValue(key, value) or false end
+---@deprecated Use creature:setDirection(direction)
 function doCreatureSetLookDir(cid, direction) local c = Creature(cid) return c and c:setDirection(direction) or false end
+---@deprecated Use creature:setSkull(skull) instead
 function doCreatureSetSkullType(cid, skull) local c = Creature(cid) return c and c:setSkull(skull) or false end
+---@deprecated Use creature:setMaxHealth(health) instead
 function setCreatureMaxHealth(cid, health) local c = Creature(cid) return c and c:setMaxHealth(health) or false end
+---@deprecated Use creature:setMaxMana(mana) instead
 function setCreatureMaxMana(cid, mana) local c = Creature(cid) return c and c:setMaxMana(mana) or false end
+---@deprecated Use creature:setHiddenHealth(boolean) instead
 function doCreatureSetHideHealth(cid, hide) local c = Creature(cid) return c and c:setHiddenHealth(hide) or false end
+---@deprecated Use creature:setMovementBlocked(boolean) instead
 function doCreatureSetNoMove(cid, block) local c = Creature(cid) return c and c:setMovementBlocked(block) or false end
+---@deprecated Use creature:say(text, type, ...) instead
 function doCreatureSay(cid, text, type, ...) local c = Creature(cid) return c and c:say(text, type, ...) or false end
+---@deprecated Use creature:setOutfit(outfit) instead
 function doCreatureChangeOutfit(cid, outfit) local c = Creature(cid) return c and c:setOutfit(outfit) or false end
+---@deprecated Use creature:setDropLoot(doDrop)
 function doSetCreatureDropLoot(cid, doDrop) local c = Creature(cid) return c and c:setDropLoot(doDrop) or false end
 doCreatureSetDropLoot = doSetCreatureDropLoot
+---@deprecated Use creature:changeSpeed(delta) instead
 function doChangeSpeed(cid, delta) local c = Creature(cid) return c and c:changeSpeed(delta) or false end
+---@deprecated Use creature:addCondition() instead
 function doAddCondition(cid, conditionId) local c = Creature(cid) return c and c:addCondition(conditionId) or false end
+---@deprecated Use creature:removeCondition() instead
 function doRemoveCondition(cid, conditionType, subId) local c = Creature(cid) return c and (c:removeCondition(conditionType, CONDITIONID_COMBAT, subId) or c:removeCondition(conditionType, CONDITIONID_DEFAULT, subId) or true) end
+---@deprecated Use creature:hasCondition() instead
 function getCreatureCondition(cid, type, subId) local c = Creature(cid) return c and c:hasCondition(type, subId) or false end
 
 doCreatureSetLookDirection = doCreatureSetLookDir
 doSetCreatureDirection = doCreatureSetLookDir
 
+---@deprecated Use creature:registerEvent() instead
 function registerCreatureEvent(cid, name) local c = Creature(cid) return c and c:registerEvent(name) or false end
+---@deprecated Use creature:unregisterEvent() instead
 function unregisterCreatureEvent(cid, name) local c = Creature(cid) return c and c:unregisterEvent(name) or false end
 
+---@deprecated Use Player(name) instead
 function getPlayerByName(name) local p = Player(name) return p and p:getId() or false end
+---@deprecated Use player:getIp() instead
 function getIPByPlayerName(name) local p = Player(name) return p and p:getIp() or false end
+---@deprecated Use player:getGuid() instead
 function getPlayerGUID(cid) local p = Player(cid) return p and p:getGuid() or false end
+---@deprecated Use player:getDescrption() instead
 function getPlayerNameDescription(cid, distance) local p = Player(cid) return p and p:getDescription(distance) or false end
+---@deprecated Use an onLook event instead
 function getPlayerSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+---@deprecated Use player:getAccountId() instead
 function getPlayerAccountId(cid) local p = Player(cid) return p and p:getAccountId() or false end
+---@deprecated Use player:getAccountId() instead
 getPlayerAccount = getPlayerAccountId
+---@deprecated Use player:getIp() instead
 function getPlayerIp(cid) local p = Player(cid) return p and p:getIp() or false end
+---@deprecated Use player:getAccountType() instead
 function getPlayerAccountType(cid) local p = Player(cid) return p and p:getAccountType() or false end
+---@deprecated Use player:getLastLoginSaved() instead
 function getPlayerLastLoginSaved(cid) local p = Player(cid) return p and p:getLastLoginSaved() or false end
+---@deprecated Use player:getLastLoginSaved() instead
 getPlayerLastLogin = getPlayerLastLoginSaved
+---@deprecated Use player:getName() instead
 function getPlayerName(cid) local p = Player(cid) return p and p:getName() or false end
+---@deprecated Use player:getName() instead
 getPlayerNameDescription = getPlayerName
+---@deprecated Use player:getFreeCapacity() instead
 function getPlayerFreeCap(cid) local p = Player(cid) return p and (p:getFreeCapacity() / 100) or false end
+---@deprecated Use player:getPosition() instead
 function getPlayerPosition(cid) local p = Player(cid) return p and p:getPosition() or false end
+---@deprecated Use player:getMagicLevel() instead
 function getPlayerMagLevel(cid) local p = Player(cid) return p and p:getMagicLevel() or false end
+---@deprecated Use player:getManaSpent() instead
 function getPlayerSpentMana(cid) local p = Player(cid) return p and p:getManaSpent() or false end
+---@deprecated Use player:getVocation():getRequiredManaSpent(magicLevel) instead
 function getPlayerRequiredMana(cid, magicLevel) local p = Player(cid) return p and p:getVocation():getRequiredManaSpent(magicLevel) or false end
+---@deprecated Use player:getVocation():getRequiredSkillTries(skillId) instead
 function getPlayerRequiredSkillTries(cid, skillId) local p = Player(cid) return p and p:getVocation():getRequiredSkillTries(skillId) or false end
+
+---@deprecated Use player:getGroup():getAccess() instead
 function getPlayerAccess(cid)
 	local player = Player(cid)
 	if not player then
@@ -480,33 +581,60 @@ function getPlayerAccess(cid)
 	end
 	return player:getGroup():getAccess() and 1 or 0
 end
+---@deprecated Use player:getSkillLevel(skillId) instead
 function getPlayerSkill(cid, skillId) local p = Player(cid) return p and p:getSkillLevel(skillId) or false end
+---@deprecated Use player:getSkillLevel(skillType) instead
 getPlayerSkillLevel = getPlayerSkill
+---@deprecated Use player:getSkillTries(skillId) instead
 function getPlayerSkillTries(cid, skillId) local p = Player(cid) return p and p:getSkillTries(skillId) or false end
+---@deprecated Use player:getMana() instead
 function getPlayerMana(cid) local p = Player(cid) return p and p:getMana() or false end
+---@deprecated Use player:getMaxMana() instead
 function getPlayerMaxMana(cid) local p = Player(cid) return p and p:getMaxMana() or false end
+---@deprecated Use player:getLevel() instead
 function getPlayerLevel(cid) local p = Player(cid) return p and p:getLevel() or false end
+---@deprecated Use player:getExperience() instead
 function getPlayerExperience(cid) local p = Player(cid) return p and p:getExperience() or false end
+---@deprecated Use player:getTown() instead
 function getPlayerTown(cid) local p = Player(cid) return p and p:getTown():getId() or false end
+---@deprecated Use player:getVocation():getId() instead
 function getPlayerVocation(cid) local p = Player(cid) return p and p:getVocation():getId() or false end
+---@deprecated Use player:getSoul() instead
 function getPlayerSoul(cid) local p = Player(cid) return p and p:getSoul() or false end
+---@deprecated Use player:getSex() instead
 function getPlayerSex(cid) local p = Player(cid) return p and p:getSex() or false end
+---@deprecated Use player:getStorageValue(key) instead
 function getPlayerStorageValue(cid, key) local p = Player(cid) return p and p:getStorageValue(key) or false end
+---@deprecated Use player:getBankBalance() instead
 function getPlayerBalance(cid) local p = Player(cid) return p and p:getBankBalance() or false end
+---@deprecated Use player:getMoney() instead
 function getPlayerMoney(cid) local p = Player(cid) return p and p:getMoney() or false end
+---@deprecated Use player:getGroup():getId() instead
 function getPlayerGroupId(cid) local p = Player(cid) return p and p:getGroup():getId() or false end
+---@deprecated Use player:getDirection() instead
 function getPlayerLookDir(cid) local p = Player(cid) return p and p:getDirection() or false end
+---@deprecated Use player:getLight() instead
 function getPlayerLight(cid) local p = Player(cid) return p and p:getLight() or false end
+---@deprecated Use player:getDepotItems(depotId) instead
 function getPlayerDepotItems(cid, depotId) local p = Player(cid) return p and p:getDepotItems(depotId) or false end
+---@deprecated Use player:getStamina() instead
 function getPlayerStamina(cid) local p = Player(cid) return p and p:getStamina() or false end
+---@deprecated Use player:getSkull() instead
 function getPlayerSkullType(cid) local p = Player(cid) return p and p:getSkull() or false end
+---@deprecated Use player:getDeathPenalty() instead
 function getPlayerLossPercent(cid) local p = Player(cid) return p and p:getDeathPenalty() or false end
+---@deprecated Use player:hasMount(mountId) instead
 function getPlayerMount(cid, mountId) local p = Player(cid) return p and p:hasMount(mountId) or false end
+---@deprecated Use player:getPremiumDays() instead
 function getPlayerPremiumDays(cid) local p = Player(cid) return p and p:getPremiumDays() or false end
+---@deprecated Use player:hasBlessing(blessing) instead
 function getPlayerBlessing(cid, blessing) local p = Player(cid) return p and p:hasBlessing(blessing) or false end
+---@deprecated Use player:hasFlag(flag) instead
 function getPlayerFlagValue(cid, flag) local p = Player(cid) return p and p:hasFlag(flag) or false end
+---@deprecated Use player:hasFlag(flag) instead
 function getPlayerCustomFlagValue() debugPrint("Deprecated function, use player:hasFlag(flag) instead.") return true end
 
+---@deprecated Use player:getParty() instead
 function getPlayerParty(cid)
 	local player = Player(cid)
 	if not player then
@@ -519,6 +647,8 @@ function getPlayerParty(cid)
 	end
 	return party:getLeader():getId()
 end
+
+---@deprecated Use player:getGuild():getId() instead
 function getPlayerGuildId(cid)
 	local player = Player(cid)
 	if not player then
@@ -531,7 +661,11 @@ function getPlayerGuildId(cid)
 	end
 	return guild:getId()
 end
+
+---@deprecated Use player:getGuildLevel() instead
 function getPlayerGuildLevel(cid) local p = Player(cid) return p and p:getGuildLevel() or false end
+
+---@deprecated Use player:getGuild():getName() instead
 function getPlayerGuildName(cid)
 	local player = Player(cid)
 	if not player then
@@ -544,6 +678,8 @@ function getPlayerGuildName(cid)
 	end
 	return guild:getName()
 end
+
+---@deprecated Use player:getGuild():getRankByLevel(player:getGuildLevel()) instead
 function getPlayerGuildRank(cid)
 	local player = Player(cid)
 	if not player then
@@ -558,11 +694,17 @@ function getPlayerGuildRank(cid)
 	local rank = guild:getRankByLevel(player:getGuildLevel())
 	return rank and rank.name or false
 end
+---@deprecated Use player:getGuildLevel() instead
 function getPlayerGuildRankId(cid) local p = Player(cid) return p and p:getGuildLevel() or false end
+---@deprecated Use player:getGuildNick() instead
 function getPlayerGuildNick(cid) local p = Player(cid) return p and p:getGuildNick() or false end
+---@deprecated Use player:getTown():getTemplePosition() instead
 function getPlayerMasterPos(cid) local p = Player(cid) return p and p:getTown():getTemplePosition() or false end
+---@deprecated Use player:getItemCount(itemId, ...) instead
 function getPlayerItemCount(cid, itemId, ...) local p = Player(cid) return p and p:getItemCount(itemId, ...) or false end
+---@deprecated Use player:getWeaponType() instead
 function getPlayerWeapon(cid) local p = Player(cid) return p and p:getWeaponType() or false end
+---@deprecated Use player:getSlotItem(slot) instead
 function getPlayerSlotItem(cid, slot)
 	local player = Player(cid)
 	if not player then
@@ -570,6 +712,7 @@ function getPlayerSlotItem(cid, slot)
 	end
 	return pushThing(player:getSlotItem(slot))
 end
+---@deprecated Use player:getItemById(itemId, deepSearch, ...) instead
 function getPlayerItemById(cid, deepSearch, itemId, ...)
 	local player = Player(cid)
 	if not player then
@@ -577,6 +720,7 @@ function getPlayerItemById(cid, deepSearch, itemId, ...)
 	end
 	return pushThing(player:getItemById(itemId, deepSearch, ...))
 end
+---@deprecated Use player:getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT) to get the condition, and condition:getTicks() instead
 function getPlayerFood(cid)
 	local player = Player(cid)
 	if not player then
@@ -591,11 +735,13 @@ function isPlayerPzLocked(cid) local p = Player(cid) return p and p:isPzLocked()
 function isPremium(cid) local p = Player(cid) return p and p:isPremium() or false end
 
 STORAGEVALUE_EMPTY = -1
+---Invoking Creature:getStorageValue will return nil to indicate absence in the future. Please update your scripts accordingly.
 function Player:getStorageValue(key)
 	local v = Creature.getStorageValue(self, key)
 	return v or STORAGEVALUE_EMPTY
 end
 
+---Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.
 function Player:setStorageValue(key, value)
 	if value == STORAGEVALUE_EMPTY then
 		Creature.removeStorageValue(self, key)
@@ -633,6 +779,7 @@ function getPlayersByIPAddress(ip, mask)
 	return result
 end
 getPlayersByIp = getPlayersByIPAddress
+---@deprecated Use Game.getPlayers() instead
 function getOnlinePlayers()
 	local result = {}
 	for _, player in ipairs(Game.getPlayers()) do
@@ -672,16 +819,27 @@ end
 getPlayerAccountBalance = getPlayerBalance
 getIpByName = getIPByPlayerName
 
+---@deprecated Use Player:setStoreageValue(key, value) instead
 function setPlayerStorageValue(cid, key, value) local p = Player(cid) return p and p:setStorageValue(key, value) or false end
+---@deprecated Use player:onLook event instead
 function doPlayerSetNameDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+---@deprecated Use player:sendChannelMessage() instead
 function doPlayerSendChannelMessage(cid, author, message, SpeakClasses, channel) local p = Player(cid) return p and p:sendChannelMessage(author, message, SpeakClasses, channel) or false end
+---@deprecated Use player:setCapacity() instead
 function doPlayerSetMaxCapacity(cid, cap) local p = Player(cid) return p and p:setCapacity(cap) or false end
+---@deprecated Use player:onLook event instead
 function doPlayerSetSpecialDescription() debugPrint("Deprecated function, use Player:onLook event instead.") return true end
+---@deprecated Use player:setBankBalance() instead
 function doPlayerSetBalance(cid, balance) local p = Player(cid) return p and p:setBankBalance(balance) or false end
+---@deprecated Use player:setVocation() instead
 function doPlayerSetPromotionLevel(cid, level) local p = Player(cid) return p and p:setVocation(p:getVocation():getPromotion()) or false end
+---@deprecated Use player:addMoney() instead
 function doPlayerAddMoney(cid, money) local p = Player(cid) return p and p:addMoney(money) or false end
+---@deprecated Use player:removeMoney() instead
 function doPlayerRemoveMoney(cid, money) local p = Player(cid) return p and p:removeMoney(money) or false end
+---@deprecated Use player:removeItem() instead
 function doPlayerTakeItem(cid, itemid, count) local p = Player(cid) return p and p:removeItem(itemid, count) or false end
+---@deprecated Use player:transferMoneyTo() instead
 function doPlayerTransferMoneyTo(cid, target, money)
 	if not isValidMoney(money) then
 		return false
@@ -689,24 +847,43 @@ function doPlayerTransferMoneyTo(cid, target, money)
 	local p = Player(cid)
 	return p and p:transferMoneyTo(target, money) or false
 end
+---@deprecated use player:save() instead
 function doPlayerSave(cid) local p = Player(cid) return p and p:save() or false end
+---@deprecated Use player:addSoul() instead
 function doPlayerAddSoul(cid, soul) local p = Player(cid) return p and p:addSoul(soul) or false end
+---@deprecated Use player:setVocation() instead
 function doPlayerSetVocation(cid, vocation) local p = Player(cid) return p and p:setVocation(Vocation(vocation)) or false end
+---@deprecated Use player:setTown() instead
 function doPlayerSetTown(cid, town) local p = Player(cid) return p and p:setTown(Town(town)) or false end
+---@deprecated use player:setGroup() instead
 function setPlayerGroupId(cid, groupId) local p = Player(cid) return p and p:setGroup(Group(groupId)) or false end
+---@deprecated Use player:setGroup() instead
 doPlayerSetGroupId = setPlayerGroupId
+---@deprecated Use player:setSex() instead
 function doPlayerSetSex(cid, sex) local p = Player(cid) return p and p:setSex(sex) or false end
+---@deprecated Use player:setGuildLevel() instead
 function doPlayerSetGuildLevel(cid, level) local p = Player(cid) return p and p:setGuildLevel(level) or false end
+---@deprecated Use player:setGuildNick() instead
 function doPlayerSetGuildNick(cid, nick) local p = Player(cid) return p and p:setGuildNick(nick) or false end
+---@deprecated Use player:setOfflineTrainingSkill() instead
 function doPlayerSetOfflineTrainingSkill(cid, skillId) local p = Player(cid) return p and p:setOfflineTrainingSkill(skillId) or false end
+---@deprecated Use player:showTextDialog() instead
 function doShowTextDialog(cid, itemId, text) local p = Player(cid) return p and p:showTextDialog(itemId, text) or false end
+---@deprecated Use player:addItemEx() instead
 function doPlayerAddItemEx(cid, uid, ...) local p = Player(cid) return p and p:addItemEx(Item(uid), ...) or false end
+---@deprecated Use player:removeItem() instead
 function doPlayerRemoveItem(cid, itemid, count, ...) local p = Player(cid) return p and p:removeItem(itemid, count, ...) or false end
+---@deprecated Use player:addPremiumDays() instead
 function doPlayerAddPremiumDays(cid, days) local p = Player(cid) return p and p:addPremiumDays(days) or false end
+---@deprecated Use player:removePremiumDays() instead
 function doPlayerRemovePremiumDays(cid, days) local p = Player(cid) return p and p:removePremiumDays(days) or false end
+---@deprecated Use player:setStamina() instead
 function doPlayerSetStamina(cid, minutes) local p = Player(cid) return p and p:setStamina(minutes) or false end
+---@deprecated Use player:addBlessing() instead
 function doPlayerAddBlessing(cid, blessing) local p = Player(cid) return p and p:addBlessing(blessing) or false end
+---@deprecated Use player:addOutfitAddon() instead
 function doPlayerAddOutfit(cid, lookType, addons) local p = Player(cid) return p and p:addOutfitAddon(lookType, addons) or false end
+---@deprecated Use player:removeOutfit() or player:removeOutfitAddon() instead
 function doPlayerRemOutfit(cid, lookType, addons)
 	local player = Player(cid)
 	if not player then
@@ -717,29 +894,53 @@ function doPlayerRemOutfit(cid, lookType, addons)
 	end
 	return player:removeOutfitAddon(lookType, addons)
 end
+---@deprecated Use player:removeOutfit() or player:removeOutfitAddon() instead
 doPlayerRemoveOutfit = doPlayerRemOutfit
+---@deprecated Use player:addAddonToAllOutfits() instead
 function doPlayerAddAddons(cid, addon) local p = Player(cid) return p and p:addAddonToAllOutfits(addon) or false end
+---@deprecated Use player:hasOutfit() instead
 function canPlayerWearOutfit(cid, lookType, addons) local p = Player(cid) return p and p:hasOutfit(lookType, addons) or false end
+---@deprecated Use player:addMount() instead
 function doPlayerAddMount(cid, mountId) local p = Player(cid) return p and p:addMount(mountId) or false end
+---@deprecated Use player:removeMount() instead
 function doPlayerRemoveMount(cid, mountId) local p = Player(cid) return p and p:removeMount(mountId) or false end
+---@deprecated Use player:sendOutfitWindow() instead
 function doPlayerSendOutfitWindow(cid) local p = Player(cid) return p and p:sendOutfitWindow() or false end
+---@deprecated Use player:sendCancelMessage() instead
 function doPlayerSendCancel(cid, text) local p = Player(cid) return p and p:sendCancelMessage(text) or false end
+---@deprecated Use player:feed() instead
 function doPlayerFeed(cid, food) local p = Player(cid) return p and p:feed(food) or false end
+---@deprecated Use player:learnSpell() instead
 function playerLearnInstantSpell(cid, name) local p = Player(cid) return p and p:learnSpell(name) or false end
+---@deprecated Use player:learnSpell() instead
 doPlayerLearnInstantSpell = playerLearnInstantSpell
+---@deprecated Use player:forgetSpell() instead
 function doPlayerUnlearnInstantSpell(cid, name) local p = Player(cid) return p and p:forgetSpell(name) or false end
+---@deprecated Use player:popupFYI() instead
 function doPlayerPopupFYI(cid, message) local p = Player(cid) return p and p:popupFYI(message) or false end
+---@deprecated Use player:sendTutorial() instead
 function doSendTutorial(cid, tutorialId) local p = Player(cid) return p and p:sendTutorial(tutorialId) or false end
+---@deprecated Use player:sendTutorial() instead
 doPlayerSendTutorial = doSendTutorial
+---@deprecated Use player:addMapMark() instead
 function doAddMapMark(cid, pos, type, description) local p = Player(cid) return p and p:addMapMark(pos, type, description or "") or false end
+---@deprecated Use player:addMapMark() instead
 doPlayerAddMapMark = doAddMapMark
+---@deprecated Use player:sendTextMessage() instead
 function doPlayerSendTextMessage(cid, type, text, ...) local p = Player(cid) return p and p:sendTextMessage(type, text, ...) or false end
+---@deprecated
 function doSendAnimatedText() debugPrint("Deprecated function.") return true end
+---@deprecated
 function getPlayerAccountManager() debugPrint("Deprecated function.") return true end
+---@deprecated Use Player:onGainExperience event instead
 function doPlayerSetExperienceRate() debugPrint("Deprecated function, use Player:onGainExperience event instead.") return true end
+---@deprecated Use player:addSkill() instead
 function doPlayerSetSkillLevel(cid, skillId, value, ...) local p = Player(cid) return p and p:addSkill(skillId, value, ...) end
+---@deprecated Use player:addMagicLevel() instead
 function doPlayerSetMagicLevel(cid, value) local p = Player(cid) return p and p:addMagicLevel(value) end
+---@deprecated Use player:addLevel() instead
 function doPlayerAddLevel(cid, amount, round) local p = Player(cid) return p and p:addLevel(amount, round) end
+---@deprecated Use player:addExperience() instead
 function doPlayerAddExp(cid, exp, useMult, ...)
 	local player = Player(cid)
 	if not player then
@@ -751,11 +952,17 @@ function doPlayerAddExp(cid, exp, useMult, ...)
 	end
 	return player:addExperience(exp, ...)
 end
+---@deprecated Use player:addExperience() instead
 doPlayerAddExperience = doPlayerAddExp
+---@deprecated Use player:addManaSpent()  instead
 function doPlayerAddManaSpent(cid, mana) local p = Player(cid) return p and p:addManaSpent(mana) or false end
+---@deprecated Use player:addManaSpent()  instead
 doPlayerAddSpentMana = doPlayerAddManaSpent
+---@deprecated Use player:addSkillTries() instead
 function doPlayerAddSkillTry(cid, skillid, n) local p = Player(cid) return p and p:addSkillTries(skillid, n) or false end
+---@deprecated Use player:addMana() instead
 function doPlayerAddMana(cid, mana, ...) local p = Player(cid) return p and p:addMana(mana, ...) or false end
+---@deprecated Check party invites with partry:getInvitees(), add member if the player is apart of the invitees.
 function doPlayerJoinParty(cid, leaderId)
 	local player = Player(cid)
 	if not player then
@@ -786,6 +993,7 @@ function doPlayerJoinParty(cid, leaderId)
 	party:addMember(player)
 	return true
 end
+---@deprecated Use player:getMembers() and :getLeader() instead
 function getPartyMembers(cid)
 	local player = Player(cid)
 	if not player then
@@ -804,8 +1012,10 @@ function getPartyMembers(cid)
 	return result
 end
 
+---@deprecated Use player:sendCancelMessage() instead
 doPlayerSendDefaultCancel = doPlayerSendCancel
 
+---@deprecated Use monster:getTargetList() instead
 function getMonsterTargetList(cid)
 	local monster = Monster(cid)
 	if not monster then
@@ -820,6 +1030,7 @@ function getMonsterTargetList(cid)
 	end
 	return result
 end
+---@deprecated Use monster:getFriendList() instead
 function getMonsterFriendList(cid)
 	local monster = Monster(cid)
 	if not monster then
@@ -836,6 +1047,7 @@ function getMonsterFriendList(cid)
 	end
 	return result
 end
+---@deprecated Use monster:selectTarget() instead
 function doSetMonsterTarget(cid, target)
 	local monster = Monster(cid)
 	if not monster then
@@ -854,7 +1066,9 @@ function doSetMonsterTarget(cid, target)
 	monster:selectTarget(target)
 	return true
 end
+---@deprecated Use monster:selectTarget() instead
 doMonsterSetTarget = doSetMonsterTarget
+---@deprecated Use monster:searchTarget() instead
 function doMonsterChangeTarget(cid)
 	local monster = Monster(cid)
 	if not monster then
@@ -868,13 +1082,17 @@ function doMonsterChangeTarget(cid)
 	monster:searchTarget(1)
 	return true
 end
+---@deprecated Use Game.createNpc() instead
 function doCreateNpc(name, pos, ...)
 	local npc = Game.createNpc(name, pos, ...) return npc and npc:setMasterPos(pos) or false
 end
+---@deprecated Use Game.createMonster() instead
 function doSummonCreature(name, pos, ...)
 	local m = Game.createMonster(name, pos, ...) return m and m:getId() or false
 end
+---@deprecated Use Game.createMonster() instead
 doCreateMonster = doSummonCreature
+---@deprecated Use creature:addSummon(target)
 function doConvinceCreature(cid, target)
 	local creature = Creature(cid)
 	if not creature then
@@ -889,6 +1107,7 @@ function doConvinceCreature(cid, target)
 	creature:addSummon(targetCreature)
 	return true
 end
+---@deprecated Use `monster = Game.createMonster(monsterName, position, true)` then `player:addSummon(monster)` instead
 function doSummonMonster(cid, name)
 	local player = Player(cid)
 	local position = player:getPosition()
@@ -903,17 +1122,27 @@ function doSummonMonster(cid, name)
 	return true
 end
 
+---@deprecated Use town:getId() instead
 function getTownId(townName) local t = Town(townName) return t and t:getId() or false end
+---@deprecated Use town:getName() instead
 function getTownName(townId) local t = Town(townId) return t and t:getName() or false end
+---@deprecated Use town:getTemplePosition() instead
 function getTownTemplePosition(townId) local t = Town(townId) return t and t:getTemplePosition() or false end
 
+---@deprecated Use item:setActionId() instead
 function doSetItemActionId(uid, actionId) local i = Item(uid) return i and i:setActionId(actionId) or false end
+---@deprecated Use item:transform() instead
 function doTransformItem(uid, newItemId, ...) local i = Item(uid) return i and i:transform(newItemId, ...) or false end
+---@deprecated Use item:transform() instead
 function doChangeTypeItem(uid, newType) local i = Item(uid) return i and i:transform(i:getId(), newType) or false end
+---@deprecated Use item:remove() instead
 function doRemoveItem(uid, ...) local i = Item(uid) return i and i:remove(...) or false end
 
+---@deprecated Use container:getSize() instead
 function getContainerSize(uid) local c = Container(uid) return c and c:getSize() or false end
+---@deprecated Use container:getCapacity() instead
 function getContainerCap(uid) local c = Container(uid) return c and c:getCapacity() or false end
+---@deprecated Use container:getItem(slot) instead
 function getContainerItem(uid, slot)
 	local container = Container(uid)
 	if not container then
@@ -922,6 +1151,7 @@ function getContainerItem(uid, slot)
 	return pushThing(container:getItem(slot))
 end
 
+---@deprecated Use container:addItemEx() instead
 function doAddContainerItemEx(uid, virtualId)
 	local container = Container(uid)
 	if not container then
@@ -935,6 +1165,7 @@ function doAddContainerItemEx(uid, virtualId)
 	return res
 end
 
+---@deprecated Use container:addItem() instead
 function doAddContainerItem(uid, itemid, count)
 	local container = Container(uid)
 	if not container then
@@ -944,10 +1175,14 @@ function doAddContainerItem(uid, itemid, count)
 	return container:addItem(itemid, count)
 end
 
+---@deprecated Use position:sendMagicEffect() instead
 function doSendMagicEffect(pos, magicEffect, ...) return Position(pos):sendMagicEffect(magicEffect, ...) end
+---@deprecated Use position:sendDistanceEffect() instead
 function doSendDistanceShoot(fromPos, toPos, distanceEffect, ...) return Position(fromPos):sendDistanceEffect(toPos, distanceEffect, ...) end
+---@deprecated Use position:isSightClear() instead
 function isSightClear(fromPos, toPos, floorCheck) return Position(fromPos):isSightClear(toPos, floorCheck) end
 
+---@deprecated Use vocation:getPromotion() instead
 function getPromotedVocation(vocationId)
 	local vocation = Vocation(vocationId)
 	if not vocation then
@@ -960,8 +1195,9 @@ function getPromotedVocation(vocationId)
 	end
 	return promotedVocation:getId()
 end
+---@deprecated Use vocation:getPromotion() instead
 getPlayerPromotionLevel = getPromotedVocation
-
+---@deprecated Use guild:getId() instead
 function getGuildId(guildName)
 	local resultId = db.storeQuery("SELECT `id` FROM `guilds` WHERE `name` = " .. db.escapeString(guildName))
 	if not resultId then
@@ -973,26 +1209,44 @@ function getGuildId(guildName)
 	return guildId
 end
 
+---@deprecated Use house:getName() instead
 function getHouseName(houseId) local h = House(houseId) return h and h:getName() or false end
+---@deprecated Use house:getOwnerGuid() instead
 function getHouseOwner(houseId) local h = House(houseId) return h and h:getOwnerGuid() or false end
+---@deprecated Use house:getExitPosition() instead
 function getHouseEntry(houseId) local h = House(houseId) return h and h:getExitPosition() or false end
+---@deprecated Use house:getTown() instead
 function getHouseTown(houseId) local h = House(houseId) if not h then return false end local t = h:getTown() return t and t:getId() or false end
+---@deprecated Use house:getTileCount() instead
 function getHouseTilesSize(houseId) local h = House(houseId) return h and h:getTileCount() or false end
 
+---@deprecated Use itemType:isStackable() instead
 function isItemStackable(itemId) return ItemType(itemId):isStackable() end
+---@deprecated Use itemType:isRune() instead
 function isItemRune(itemId) return ItemType(itemId):isRune() end
+---@deprecated Use itemType:isDoor() instead
 function isItemDoor(itemId) return ItemType(itemId):isDoor() end
+---@deprecated Use itemType:isContainer() instead
 function isItemContainer(itemId) return ItemType(itemId):isContainer() end
+---@deprecated Use itemType:isFluidContainer() instead
 function isItemFluidContainer(itemId) return ItemType(itemId):isFluidContainer() end
+---@deprecated Use itemType:isMovable() instead
 function isItemMovable(itemId) return ItemType(itemId):isMovable() end
+---@deprecated Use itemType:isCorpse() instead
 function isCorpse(uid) local i = Item(uid) return i and ItemType(i:getId()):isCorpse() or false end
 
+---@deprecated Use itemType:isMoveable() instead
 isItemMoveable = isItemMovable
+---@deprecated Use itemType:isMoveable() instead
 isMoveable = isMovable
 
+---@deprecated Use itemType:getName() instead
 function getItemName(itemId) return ItemType(itemId):getName() end
+---@deprecated Use itemType:getName() instead
 getItemNameById = getItemName
+---@deprecated Use itemType:getWeight() instead
 function getItemWeight(itemId, ...) return ItemType(itemId):getWeight(...) / 100 end
+---@deprecated Use itemType:getDescription(), :getName(), :getPluralName(), :getArticle() instead
 function getItemDescriptions(itemId)
 	local itemType = ItemType(itemId)
 	return {
@@ -1002,6 +1256,7 @@ function getItemDescriptions(itemId)
 		description = itemType:getDescription()
 	}
 end
+---@deprecated Use ItemType(name):getId() instead
 function getItemIdByName(name)
 	local id = ItemType(name):getId()
 	if id == 0 then
@@ -1009,6 +1264,7 @@ function getItemIdByName(name)
 	end
 	return id
 end
+---@deprecated Use ItemType:getWeight() instead
 function getItemWeightByUID(uid, ...)
 	local item = Item(uid)
 	if not item then
@@ -1018,6 +1274,7 @@ function getItemWeightByUID(uid, ...)
 	local itemType = ItemType(item:getId())
 	return itemType:isStackable() and (itemType:getWeight(item:getCount(), ...) / 100) or (itemType:getWeight(1, ...) / 100)
 end
+---@deprecated Use itemType:isReadable() and itemType:isWritable() instead
 function getItemRWInfo(uid)
 	local item = Item(uid)
 	if not item then
@@ -1035,8 +1292,11 @@ function getItemRWInfo(uid)
 	end
 	return rwFlags
 end
+---@deprecated Use itemType:getCapacity() instead
 function getContainerCapById(itemId) return ItemType(itemId):getCapacity() end
+---@deprecated Use itemType():getFluidSource() instead
 function getFluidSourceType(itemId) local it = ItemType(itemId) return it.id ~= 0 and it:getFluidSource() or false end
+---@deprecated Use item:hasProperty() instead
 function hasProperty(uid, prop)
 	local item = Item(uid)
 	if not item then
@@ -1050,6 +1310,7 @@ function hasProperty(uid, prop)
 	return item:hasProperty(prop)
 end
 
+---@deprecated Use item:setAttribute(ITEM_ATTRIBUTE_TEXT, text) instead
 function doSetItemText(uid, text, writer, date)
 	local item = Item(uid)
 	if not item then
@@ -1076,6 +1337,7 @@ function doSetItemText(uid, text, writer, date)
 
 	return true
 end
+---@deprecated Use item:setAttribute(ITEM_ATTRIBUTE_DESCRIPTION, desc) instead
 function doSetItemSpecialDescription(uid, desc)
 	local item = Item(uid)
 	if not item then
@@ -1089,11 +1351,16 @@ function doSetItemSpecialDescription(uid, desc)
 	end
 	return true
 end
+---@deprecated Use item:decay() instead
 function doDecayItem(uid) local i = Item(uid) return i and i:decay() or false end
 
+---@deprecated Use house:setOwnerGuid() instead
 function setHouseOwner(id, guid) local h = House(id) return h and h:setOwnerGuid(guid) or false end
+---@deprecated Use house:getRent() instead
 function getHouseRent(id) local h = House(id) return h and h:getRent() or nil end
+---@deprecated Use house:getAccessList() instead
 function getHouseAccessList(id, listId) local h = House(id) return h and h:getAccessList(listId) or nil end
+---@deprecated Use house:setAccessList() instead
 function setHouseAccessList(id, listId, listText) local h = House(id) return h and h:setAccessList(listId, listText) or false end
 
 function getHouseByPlayerGUID(playerGUID)
@@ -1114,6 +1381,7 @@ function getTileHouseInfo(pos)
 	return h and h:getId() or false
 end
 
+---@deprecated Use tile:hasFlag(TILESTATE_PROTECTIONZONE) instead
 function getTilePzInfo(position)
 	local t = Tile(position)
 	if not t then
@@ -1144,6 +1412,7 @@ function getTileInfo(position)
 	return ret
 end
 
+---@deprecated Use tile:getItemByType() instead
 function getTileItemByType(position, itemType)
 	local t = Tile(position)
 	if not t then
@@ -1152,6 +1421,7 @@ function getTileItemByType(position, itemType)
 	return pushThing(t:getItemByType(itemType))
 end
 
+---@deprecated Use tile:getItemById() instead
 function getTileItemById(position, itemId, ...)
 	local t = Tile(position)
 	if not t then
@@ -1175,6 +1445,7 @@ function getTileThingByPos(position)
 	return pushThing(t:getThing(position.stackpos))
 end
 
+---@deprecated Use tile:getItemByTopOrder() instead
 function getTileThingByTopOrder(position, topOrder)
 	local t = Tile(position)
 	if not t then
@@ -1183,6 +1454,7 @@ function getTileThingByTopOrder(position, topOrder)
 	return pushThing(t:getItemByTopOrder(topOrder))
 end
 
+---@deprecated Use tile:getTopCreature() instead
 function getTopCreature(position)
 	local t = Tile(position)
 	if not t then
@@ -1191,8 +1463,10 @@ function getTopCreature(position)
 	return pushThing(t:getTopCreature())
 end
 
+---@deprecated Use tile:queryAdd() instead
 function queryTileAddThing(thing, position, ...) local t = Tile(position) return t and t:queryAdd(thing, ...) or false end
 
+---@deprecated Use thing:teleportTo() if creature, or thing:moveTo() if item
 function doTeleportThing(uid, dest, pushMovement)
 	if type(uid) == "userdata" then
 		if uid:isCreature() then
@@ -1213,6 +1487,7 @@ function doTeleportThing(uid, dest, pushMovement)
 	return false
 end
 
+---@deprecated Use thing:getPosition() instead
 function getThingPos(uid)
 	local thing
 	if type(uid) ~= "userdata" then
@@ -1235,8 +1510,10 @@ function getThingPos(uid)
 	position.stackpos = stackpos
 	return position
 end
+---@deprecated Use thing:getPosition() instead
 getThingPosition = getThingPos
 
+---@deprecated
 function getThingfromPos(pos)
 	local tile = Tile(pos)
 	if not tile then
@@ -1263,6 +1540,7 @@ function getThingfromPos(pos)
 	return pushThing(thing)
 end
 
+---@deprecated Use specific implementations of item:moveTo() and creature:teleportTo() instead
 function doRelocate(fromPos, toPos)
 	if fromPos == toPos then
 		return false
@@ -1304,6 +1582,7 @@ function getConfigInfo(info)
 	return _G[info]
 end
 
+---@deprecated Use Game.getPlayerCount(), Game.getMonsterCount(), Game.getNpcCount() instead
 function getWorldCreatures(type)
 	if type == 0 then
 		return Game.getPlayerCount()
@@ -1314,38 +1593,49 @@ function getWorldCreatures(type)
 	end
 	return Game.getPlayerCount() + Game.getMonsterCount() + Game.getNpcCount()
 end
-
+---@deprecated Use saveServer instead
 saveData = saveServer
 
+---@deprecated Use Game.getStorageValue() instead
 function getGlobalStorageValue(key)
 	return Game.getStorageValue(key) or -1
 end
+---@deprecated Use Game.getStorageValue() instead
 getStorage = getGlobalStorageValue
+---@deprecated Use Game.setStorageValue() instead
 function setGlobalStorageValue(key, value)
 	Game.setStorageValue(key, value)
 	return true
 end
+---@deprecated Use Game.setStorageValue() instead
 doSetStorage = setGlobalStorageValue
+---@deprecated Use Game.getWorldType() instead
 getWorldType = Game.getWorldType
 
+---@deprecated Use Game.setWorldType() instead
 function setWorldType(type)
 	return Game.setWorldType(type)
 end
 
+---@deprecated Use Game.getGameState() instead
 function getGameState()
 	return Game.getGameState()
 end
 
+---@deprecated Use Game.setGameState() instead
 function doSetGameState(state)
 	return Game.setGameState(state)
 end
 
+---@deprecated Use Game.startEvent() instead
 function doExecuteRaid(raidName)
 	debugPrint("Deprecated function, use Game.startEvent('" .. raidName .. "') instead.")
 	return Game.startEvent(raidName)
 end
+---@deprecated Use Game.startEvent() instead
 Game.startRaid = doExecuteRaid
 
+---@deprecated Use player:getIp() instead
 function Game.convertIpToString(ip)
 	print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Function Game.convertIpToString is deprecated and will be removed in the future. Use the return value of player:getIp() instead.")
 
@@ -1363,20 +1653,28 @@ function Game.convertIpToString(ip)
 	)
 end
 
+---@deprecated Use Variant(number) instead
 numberToVariant = Variant
+---@deprecated Use Variant(string) instead
 stringToVariant = Variant
+---@deprecated Use Variant(Position()) instead
 positionToVariant = Variant
 
+---@deprecated Use Variant(position) instead
 function targetPositionToVariant(position)
 	local variant = Variant(position)
 	variant.type = VARIANT_TARGETPOSITION
 	return variant
 end
 
+---@deprecated Use Variant.getNumber() instead
 variantToNumber = Variant.getNumber
+---@deprecated Use Variant.getString instead
 variantToString = Variant.getString
+---@deprecated Use Variant.getPosition() instead
 variantToPosition = Variant.getPosition
 
+---@deprecated Use Game.createItem() with :setDestination instead
 function doCreateTeleport(itemId, destination, position)
 	local item = Game.createItem(itemId, 1, position)
 	if not item:isTeleport() then
@@ -1387,6 +1685,7 @@ function doCreateTeleport(itemId, destination, position)
 	return item:getUniqueId()
 end
 
+---@deprecated Use Game.getSpectators() instead
 function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	local result = Game.getSpectators(centerPos, multifloor, onlyPlayers or false, rangex, rangex, rangey, rangey)
 	if #result == 0 then
@@ -1399,20 +1698,26 @@ function getSpectators(centerPos, rangex, rangey, multifloor, onlyPlayers)
 	return result
 end
 
+---@deprecated Use Game.broadcastMessage() instead
 function broadcastMessage(message, messageType)
 	Game.broadcastMessage(message, messageType)
 	print("> Broadcasted message: \"" .. message .. "\".")
 end
+---@deprecated Use Game.broadcastMessage() instead
 doBroadcastMessage = broadcastMessage
 
+---@deprecated Use player:setGuild() instead
 function Guild.addMember(self, player)
 	return player:setGuild(self)
 end
+---@deprecated Use player:setGuild(nil) instead
 function Guild.removeMember(self, player)
 	return player:getGuild() == self and player:setGuild(nil)
 end
 
+---@deprecated Use #player:getInstantSpells() instead
 function getPlayerInstantSpellCount(cid) local p = Player(cid) return p and #p:getInstantSpells() end
+---@deprecated Use Spell(spellId) instead
 function getPlayerInstantSpellInfo(cid, spellId)
 	local player = Player(cid)
 	if not player then
@@ -1427,8 +1732,11 @@ function getPlayerInstantSpellInfo(cid, spellId)
 	return spell
 end
 
+---@deprecated Use creature:setItemOutfit() instead
 function doSetItemOutfit(cid, item, time) local c = Creature(cid) return c and c:setItemOutfit(item, time) end
+---@deprecated Use creature:setMonsterOutfit() instead
 function doSetMonsterOutfit(cid, name, time) local c = Creature(cid) return c and c:setMonsterOutfit(name, time) end
+---@deprecated Use a Condition(CONDITION_OUTFIT) and apply to the creature instead
 function doSetCreatureOutfit(cid, outfit, time)
 	local creature = Creature(cid)
 	if not creature then
@@ -1443,6 +1751,7 @@ function doSetCreatureOutfit(cid, outfit, time)
 	return true
 end
 
+---@deprecated Use tile:addItemEx() instead
 function doTileAddItemEx(pos, uid, flags)
 	local tile = Tile(pos)
 	if not tile then
@@ -1457,8 +1766,10 @@ function doTileAddItemEx(pos, uid, flags)
 	return false
 end
 
+---@deprecated Use table.contains() instead
 function isInArray(array, value) return table.contains(array, value) end
 
+---@deprecated Use Game.createItem() instead
 function doCreateItem(itemid, count, pos)
 	local tile = Tile(pos)
 	if not tile then
@@ -1472,6 +1783,7 @@ function doCreateItem(itemid, count, pos)
 	return false
 end
 
+---@deprecated Use Game.createItem() instead
 function doCreateItemEx(itemid, count)
 	local item = Game.createItem(itemid, count)
 	if item then
@@ -1480,6 +1792,7 @@ function doCreateItemEx(itemid, count)
 	return false
 end
 
+---@deprecated Use creature:move() instead
 function doMoveCreature(cid, direction) local c = Creature(cid) return c and c:move(direction) end
 
 function createFunctions(class)
@@ -1509,10 +1822,12 @@ function createFunctions(class)
 	end
 end
 
+---@deprecated Use tonumber(string)
 function isNumber(str)
 	return tonumber(str)
 end
 
+---@deprecated Use a CONDITION_LIGHT condition
 function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	local creature = Creature(cid)
 	if not creature then
@@ -1527,6 +1842,7 @@ function doSetCreatureLight(cid, lightLevel, lightColor, time)
 	return true
 end
 
+---@deprecated Use Game.getExperienceForLevel() instead
 function getExperienceForLevel(level) return Game.getExperienceForLevel(level) end
 
 do
@@ -1632,6 +1948,7 @@ end
 
 ItemType.getDuration = ItemType.getDurationMin
 
+---@deprecated Use Game.getFormattedWorldTime() instead
 function getFormattedWorldTime()
 	return Game.getFormattedWorldTime()
 end
