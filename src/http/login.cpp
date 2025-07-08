@@ -51,15 +51,15 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 
 	thread_local auto& db = Database::getInstance();
 	auto result = db.storeQuery(fmt::format(
-	    "SELECT `id`, UNHEX(`password`) AS `password`, `secret`, `premium_ends_at` FROM `accounts` WHERE `email` = {:s}",
+	    "SELECT `id`, `password`, UNHEX(`password`) AS `password_unhex`, `secret`, `premium_ends_at` FROM `accounts` WHERE `email` = {:s}",
 	    db.escapeString(emailField->get_string())));
 	if (!result) {
 		return make_error_response(
 		    {.code = 3, .message = "Tibia account email address or Tibia password is not correct."});
 	}
 
-	auto password = result->getString("password");
-	if (password != transformToSHA1(passwordField->get_string())) {
+	auto passwordUnhex = result->getString("password_unhex");
+	if (passwordUnhex != transformToSHA1(passwordField->get_string())) {
 		return make_error_response(
 		    {.code = 3, .message = "Tibia account email address or Tibia password is not correct."});
 	}
@@ -81,15 +81,12 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 		}
 	}
 
-	auto accountId = result->getNumber<uint64_t>("id");
+	auto accountId = result->getNumber<uint32_t>("id");
 	auto premiumEndsAt = result->getNumber<int64_t>("premium_ends_at");
 
-	std::string sessionKey = randomBytes(16);
-	if (!db.executeQuery(
-	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	                    db.escapeString(sessionKey), accountId, db.escapeString(ip)))) {
-		return make_error_response();
-	}
+	auto passwordHash = result->getString("password");
+	SessionToken sessionToken(accountId, passwordHash, static_cast<uint32_t>(time(nullptr)), ip,
+	                          getString(ConfigManager::SESSION_TOKEN_SECRET_KEY));
 
 	result = db.storeQuery(fmt::format(
 	    "SELECT `id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons` FROM `players` WHERE `account_id` = {:d}",
@@ -145,7 +142,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	    {
 	        {"session",
 	         {
-	             {"sessionkey", tfs::base64::encode(sessionKey)},
+	             {"sessionkey", sessionToken.getToken()},
 	             {"lastlogintime", lastLogin},
 	             {"ispremium", premiumEndsAt >= now},
 	             {"premiumuntil", premiumEndsAt},

@@ -540,4 +540,38 @@ private:
 	uint32_t playersRecord = 0;
 };
 
+class SessionToken
+{
+public:
+	SessionToken(uint32_t accountId, std::string_view passwordHash, uint32_t timestamp, std::string_view ip,
+	             std::string sessionSignKey) :
+	    signKey(sessionSignKey)
+	{
+		data = generateData(accountId, passwordHash, timestamp, ip);
+		sign = generateSign(data);
+	}
+	SessionToken(std::string tokenData, std::string sessionSignKey) : signKey(sessionSignKey), data(tokenData)
+	{
+		sign = generateSign(tokenData);
+	}
+
+	std::string getToken() { return fmt::format("{:s}{:s}", data, sign); }
+	bool isSignValid(std::string sessionSign);
+	bool isValidPassword(uint32_t accountId, std::string_view passwordHash);
+	bool isExpired(uint32_t expirationTime);
+	bool isIpValid(std::string ip);
+
+	std::string generateData(uint32_t accountId, std::string_view passwordHash, uint32_t timestamp,
+	                         std::string_view ip);
+	std::string generateSign(std::string tokenData);
+
+	std::string signAccountAndPassword(uint32_t accountId, std::string_view passwordHash);
+	std::string signIp(std::string_view ip);
+
+private:
+	std::string signKey;
+	std::string data;
+	std::string sign;
+};
+
 #endif // FS_GAME_H

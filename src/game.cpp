@@ -5952,3 +5952,67 @@ bool Game::reload(ReloadTypes_t reloadType)
 	}
 	return true;
 }
+
+std::string SessionToken::generateData(uint32_t accountId, std::string_view passwordHash, uint32_t timestamp,
+                                       std::string_view ip)
+{
+	return fmt::format("{:s}{:d}{:s}", signAccountAndPassword(accountId, passwordHash), timestamp, signIp(ip));
+}
+
+std::string SessionToken::generateSign(std::string tokenData)
+{
+	return transformToSHA256hex(fmt::format("{:s};{:s}", tokenData, signKey)).substr(0, 10);
+}
+
+std::string SessionToken::signAccountAndPassword(uint32_t accountId, std::string_view passwordHash)
+{
+	auto first20bytes = passwordHash.substr(0, 20);
+	return transformToSHA256hex(std::format("{:d};{:s};{:s}", accountId, first20bytes, signKey)).substr(0, 10);
+}
+
+std::string SessionToken::signIp(std::string_view ip)
+{
+	return transformToSHA256hex(fmt::format("{:s};{:s}", ip, signKey)).substr(0, 10);
+}
+
+bool SessionToken::isSignValid(std::string sessionSign) {
+	return sessionSign == sign;
+}
+
+bool SessionToken::isValidPassword(uint32_t accountId, std::string_view passwordHash)
+{
+	if (data.length() < 10) {
+		return false;
+	}
+
+	return signAccountAndPassword(accountId, passwordHash) == data.substr(0, 10);
+}
+
+bool SessionToken::isExpired(uint32_t expirationTime)
+{
+	if (expirationTime == 0) {
+		return false;
+	}
+
+	if (data.length() < 20) {
+		return true;
+	}
+
+	try {
+		auto tokenTime = static_cast<uint32_t>(std::stoll(data.substr(10, 10)));
+		return tokenTime + expirationTime < static_cast<uint32_t>(std::time(nullptr));
+	} catch (std::invalid_argument const&) {
+		return true;
+	} catch (std::out_of_range const&) {
+		return true;
+	}
+}
+
+bool SessionToken::isIpValid(std::string ip)
+{
+	if (data.length() < 30) {
+		return false;
+	}
+
+	return signIp(ip) == data.substr(20, 10);
+}
