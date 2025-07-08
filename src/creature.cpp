@@ -148,7 +148,7 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+	nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
@@ -211,9 +211,9 @@ void Creature::onWalk()
 	}
 
 	if (attackedCreature || followCreature) {
-		if (lastPathUpdate < OTSYS_TIME()) {
+		if (nextPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+			nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 		}
 	}
 }
@@ -852,7 +852,7 @@ void Creature::updateFollowersPaths()
 		if (follower != nullptr) {
 			const Position& followerPosition = follower->getPosition();
 
-			if (follower->lastPathUpdate < OTSYS_TIME()) {
+			if (follower->nextPathUpdate < OTSYS_TIME()) {
 				continue;
 			}
 
@@ -862,7 +862,7 @@ void Creature::updateFollowersPaths()
 			}
 
 			g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
-			follower->lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+			follower->nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 		}
 	}
 }

@@ -382,7 +382,7 @@ protected:
 	std::vector<Creature*> followers;
 
 	uint64_t lastStep = 0;
-	int64_t lastPathUpdate = 0;
+	int64_t nextPathUpdate = 0;
 	uint32_t referenceCounter = 0;
 	uint32_t id = 0;
 	uint32_t scriptEventsBitField = 0;
