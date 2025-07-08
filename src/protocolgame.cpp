@@ -431,8 +431,8 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		disconnectClient("Malformed session key.");
 		return;
 	}
-	std::string sessionData = sessionTokenString.substr(0,30);
-	std::string sessionSignature = sessionTokenString.substr(30,10);
+	std::string sessionData = sessionTokenString.substr(0, 30);
+	std::string sessionSignature = sessionTokenString.substr(30, 10);
 
 	SessionToken sessionToken(sessionData, getString(ConfigManager::SESSION_TOKEN_SECRET_KEY));
 

@@ -5975,9 +5975,7 @@ std::string SessionToken::signIp(std::string_view ip)
 	return transformToSHA256hex(fmt::format("{:s};{:s}", ip, signKey)).substr(0, 10);
 }
 
-bool SessionToken::isSignValid(std::string sessionSign) {
-	return sessionSign == sign;
-}
+bool SessionToken::isSignValid(std::string sessionSign) { return sessionSign == sign; }
 
 bool SessionToken::isValidPassword(uint32_t accountId, std::string_view passwordHash)
 {
