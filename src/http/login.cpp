@@ -58,8 +58,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 		    {.code = 3, .message = "Tibia account email address or Tibia password is not correct."});
 	}
 
-	auto passwordUnhex = result->getString("password_unhex");
-	if (passwordUnhex != transformToSHA1(passwordField->get_string())) {
+	if (result->getString("password_unhex") != transformToSHA1(passwordField->get_string())) {
 		return make_error_response(
 		    {.code = 3, .message = "Tibia account email address or Tibia password is not correct."});
 	}
@@ -84,8 +83,7 @@ std::pair<status, json::value> tfs::http::handle_login(const json::object& body,
 	auto accountId = result->getNumber<uint32_t>("id");
 	auto premiumEndsAt = result->getNumber<int64_t>("premium_ends_at");
 
-	auto passwordHash = result->getString("password");
-	SessionToken sessionToken(accountId, passwordHash, static_cast<uint32_t>(time(nullptr)), ip,
+	SessionToken sessionToken(accountId, result->getString("password"), static_cast<uint32_t>(time(nullptr)), ip,
 	                          getString(ConfigManager::SESSION_TOKEN_SECRET_KEY));
 
 	result = db.storeQuery(fmt::format(
