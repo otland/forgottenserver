@@ -226,8 +226,8 @@ void mainLoader(ServiceManager* services)
 
 #ifdef HTTP
 	// HTTP server
-	tfs::http::start(getString(ConfigManager::IP), getNumber(ConfigManager::HTTP_PORT),
-	                 getNumber(ConfigManager::HTTP_WORKERS));
+	tfs::http::start(getBoolean(ConfigManager::BIND_ONLY_GLOBAL_ADDRESS), getString(ConfigManager::IP),
+	                 getNumber(ConfigManager::HTTP_PORT), getNumber(ConfigManager::HTTP_WORKERS));
 #endif
 
 	RentPeriod_t rentPeriod;

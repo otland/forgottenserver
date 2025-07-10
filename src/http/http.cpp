@@ -17,15 +17,19 @@ std::vector<std::thread> workers = {};
 
 } // namespace
 
-void tfs::http::start(std::string_view address, unsigned short port /*= 8080*/, int threads /*= 1*/)
+void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short port /*= 8080*/, int threads /*= 1*/)
 {
 	if (port == 0 || threads < 1) {
 		return;
 	}
 
-	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address, port, threads);
+	asio::ip::address address = asio::ip::address_v6::any();
+	if (bindOnlyOtsIP) {
+		address = asio::ip::make_address(otsIP);
+	}
+	fmt::print(">> Starting HTTP server on {:s}:{:d} with {:d} threads.\n", address.to_string(), port, threads);
 
-	auto listener = make_listener(ioc, {asio::ip::make_address(address), port});
+	auto listener = make_listener(ioc, {address, port});
 	listener->run();
 
 	workers.reserve(threads);
