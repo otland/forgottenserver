@@ -202,9 +202,11 @@ public:
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	bool isFollower(Creature* creature);
+	bool isFollower(const Creature* creature);
 	void addFollower(Creature* creature);
+	void removeFollower(Creature* creature);
 	void removeFollowers();
+	void releaseFollowCreature();
 
 	// Pathfinding events
 	void updateFollowersPaths();
