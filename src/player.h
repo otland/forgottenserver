@@ -244,6 +244,8 @@ public:
 		}
 	}
 	Connection::Address getIP() const;
+	bool isOtcProxy() const;
+	bool isHaProxy() const;
 
 	void addContainer(uint8_t cid, Container* container);
 	void closeContainer(uint8_t cid);
