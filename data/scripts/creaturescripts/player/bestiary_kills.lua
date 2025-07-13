@@ -37,6 +37,7 @@ function creatureEvent.onKill(player, target)
 	for _, killer in pairs(getKillersForBestiary(monster)) do
 		killer:addBestiaryKills(raceId)
 	end
+
 	return true
 end
 
