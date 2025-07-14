@@ -206,7 +206,7 @@ public:
 	void addFollower(Creature* creature);
 	void removeFollower(Creature* creature);
 	void removeFollowers();
-	void releaseFollowCreature();
+	void releaseFollowers();
 
 	// Pathfinding events
 	void updateFollowersPaths();

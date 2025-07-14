@@ -38,7 +38,7 @@ Creature::~Creature()
 		delete condition;
 	}
 
-	releaseFollowCreature();
+	releaseFollowers();
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
@@ -862,14 +862,11 @@ void Creature::removeFollowers()
 	                followers.end());
 }
 
-void Creature::releaseFollowCreature()
+void Creature::releaseFollowers()
 {
-	if (!attackedCreature && !followCreature) {
-		return;
+	for (const auto& follower : followers) {
+		follower->decrementReferenceCounter();
 	}
-
-	Creature* following = attackedCreature ? attackedCreature : followCreature;
-	following->removeFollower(this);
 }
 
 void Creature::updateFollowersPaths()
