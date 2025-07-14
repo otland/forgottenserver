@@ -834,12 +834,10 @@ void Creature::addFollower(Creature* creature)
 
 void Creature::removeFollower(Creature* creature)
 {
-	if (isFollower(creature)) {
-		auto it = std::find(followers.begin(), followers.end(), creature);
-		if (it != followers.end()) {
-			creature->decrementReferenceCounter();
-			followers.erase(it);
-		}
+	auto it = std::find(followers.begin(), followers.end(), creature);
+	if (it != followers.end()) {
+		creature->decrementReferenceCounter();
+		followers.erase(it);
 	}
 }
 
