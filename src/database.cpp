@@ -24,8 +24,8 @@ retry:
 // For more details see issue #4954 ( https://github.com/otland/forgottenserver/issues/4954 )
 #ifdef MARIADB_VERSION_ID
 	// this needs to be above "goto" otherwise it won't build
-	bool ssl_enforce = 0;
-	bool ssl_verify = 0;
+	bool ssl_enforce = false;
+	bool ssl_verify = false;
 #endif
 
 	tfs::detail::Mysql_ptr handle{mysql_init(nullptr)};
