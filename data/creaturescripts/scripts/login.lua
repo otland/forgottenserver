@@ -29,7 +29,7 @@ function onLogin(player)
 
 	-- achievements points for highscores
 	if not player:getStorageValue(PlayerStorageKeys.achievementsTotal) then
-		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getAchievementPoints())
+		player:setStorageValue(PlayerStorageKeys.achievementsTotal, player:getTotalAchievementPoints())
 	end
 
 	-- Events
