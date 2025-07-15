@@ -47,8 +47,10 @@ extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern Scripts* g_scripts;
 
-Game::Game()
+Game::Game() : scriptInterface("Game Interface")
 {
+	scriptInterface.initState();
+
 	offlineTrainingWindow.defaultEnterButton = 0;
 	offlineTrainingWindow.defaultEscapeButton = 1;
 	offlineTrainingWindow.choices.emplace_back("Sword Fighting and Shielding", SKILL_SWORD);
@@ -94,8 +96,6 @@ void Game::setGameState(GameState_t newState)
 			map.spawns.startup();
 
 			mounts.loadFromXml();
-
-			loadPlayersRecord();
 
 			g_globalEvents->startup();
 			break;
@@ -775,6 +775,18 @@ void Game::playerMoveCreature(Player* player, Creature* movingCreature, const Po
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
 	}
+}
+
+uint32_t Game::getPlayersRecord()
+{
+	lua_State* L = scriptInterface.getLuaState();
+	lua_getglobal(L, "Game");
+	lua_getfield(L, -1, "getPlayersRecord");
+	lua_call(L, 0, 1);
+
+	uint32_t playersRecord = lua_tointeger(L, -1);
+	lua_pop(L, 1);
+	return playersRecord;
 }
 
 ReturnValue Game::internalMoveCreature(Creature* creature, Direction direction, uint32_t flags /*= 0*/)
@@ -4916,39 +4928,6 @@ void Game::updatePlayerShield(Player* player)
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->sendCreatureShield(player);
-	}
-}
-
-void Game::checkPlayersRecord()
-{
-	const size_t playersOnline = getPlayersOnline();
-	if (playersOnline > playersRecord) {
-		uint32_t previousRecord = playersRecord;
-		playersRecord = playersOnline;
-
-		for (auto& it : g_globalEvents->getEventMap(GLOBALEVENT_RECORD)) {
-			it.second.executeRecord(playersRecord, previousRecord);
-		}
-		updatePlayersRecord();
-	}
-}
-
-void Game::updatePlayersRecord() const
-{
-	Database& db = Database::getInstance();
-	db.executeQuery(
-	    fmt::format("UPDATE `server_config` SET `value` = '{:d}' WHERE `config` = 'players_record'", playersRecord));
-}
-
-void Game::loadPlayersRecord()
-{
-	Database& db = Database::getInstance();
-
-	DBResult_ptr result = db.storeQuery("SELECT `value` FROM `server_config` WHERE `config` = 'players_record'");
-	if (result) {
-		playersRecord = result->getNumber<uint32_t>("value");
-	} else {
-		db.executeQuery("INSERT INTO `server_config` (`config`, `value`) VALUES ('players_record', '0')");
 	}
 }
 
