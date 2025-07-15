@@ -1440,7 +1440,7 @@ std::enable_if_t<std::is_integral_v<T> || std::is_enum_v<T>, void> pushNumber(lu
 }
 
 template <typename T>
-std::enable_if_t<std::is_floating_point_v<T>, void> pushNumber(lua_State* L, auto value)
+std::enable_if_t<std::is_floating_point_v<T>, void> pushNumber(lua_State* L, T value)
 {
 	lua_pushnumber(L, value);
 }
