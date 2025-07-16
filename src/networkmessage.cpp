@@ -22,9 +22,8 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 
 	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
-
 	auto out = std::string(simdutf::utf8_length_from_latin1(it, stringLen), '\0');
-	simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
+	std::ignore = simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
 	return out;
 }
 
@@ -45,7 +44,8 @@ void NetworkMessage::addString(std::string_view value)
 	}
 
 	add<uint16_t>(stringLen);
-	simdutf::convert_utf8_to_latin1(value.data(), value.size(), reinterpret_cast<char*>(buffer.data() + info.position));
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
+	std::ignore = simdutf::convert_utf8_to_latin1(value.data(), value.size(), it);
 	info.position += stringLen;
 	info.length += stringLen;
 }
