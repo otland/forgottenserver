@@ -20,13 +20,12 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 		return {};
 	}
 
-	auto input = reinterpret_cast<char*>(buffer.data() + info.position);
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
 
-	auto output = std::string(simdutf::utf8_length_from_latin1(input, stringLen), '\0');
-	auto convertedLen = simdutf::convert_latin1_to_utf8(input, stringLen, output.data());
-	assert(convertedLen == output.size());
-	return output;
+	auto out = std::string(simdutf::utf8_length_from_latin1(it, stringLen), '\0');
+	simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
+	return out;
 }
 
 Position NetworkMessage::getPosition()
@@ -40,19 +39,15 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	auto expectedLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
-	if (!canAdd(expectedLen + 2) || expectedLen > 8192) {
+	auto stringLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
+	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
-	add<uint16_t>(expectedLen);
-
-	auto output = reinterpret_cast<char*>(buffer.data() + info.position);
-	info.position += expectedLen;
-	info.length += expectedLen;
-
-	auto outputLen = simdutf::convert_utf8_to_latin1(value.data(), value.size(), output);
-	assert(outputLen == expectedLen);
+	add<uint16_t>(stringLen);
+	simdutf::convert_utf8_to_latin1(value.data(), value.size(), reinterpret_cast<char*>(buffer.data() + info.position));
+	info.position += stringLen;
+	info.length += stringLen;
 }
 
 void NetworkMessage::addDouble(double value, uint8_t precision /* = 2*/)
