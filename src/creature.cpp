@@ -148,7 +148,7 @@ void Creature::forceUpdatePath()
 		return;
 	}
 
-	lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+	nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 	g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 }
 
@@ -211,9 +211,9 @@ void Creature::onWalk()
 	}
 
 	if (attackedCreature || followCreature) {
-		if (lastPathUpdate < OTSYS_TIME()) {
+		if (nextPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
-			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+			nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 		}
 	}
 }
@@ -766,11 +766,8 @@ bool Creature::canAttackCreature(Creature* creature)
 
 void Creature::getPathSearchParams(const Creature*, FindPathParams& fpp) const
 {
-	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
 	fpp.maxSearchDist = Map::maxViewportX + Map::maxViewportY;
-	fpp.minTargetDist = 1;
-	fpp.maxTargetDist = 1;
 }
 
 void Creature::setFollowCreature(Creature* creature)
@@ -855,7 +852,7 @@ void Creature::updateFollowersPaths()
 		if (follower != nullptr) {
 			const Position& followerPosition = follower->getPosition();
 
-			if (follower->lastPathUpdate < OTSYS_TIME()) {
+			if (follower->nextPathUpdate < OTSYS_TIME()) {
 				continue;
 			}
 
@@ -865,7 +862,7 @@ void Creature::updateFollowersPaths()
 			}
 
 			g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
-			follower->lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+			follower->nextPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 		}
 	}
 }
@@ -1404,88 +1401,6 @@ CreatureEventList Creature::getCreatureEvents(CreatureEventType_t type)
 	return tmpEventList;
 }
 
-bool FrozenPathingConditionCall::isInRange(const Position& startPos, const Position& testPos,
-                                           const FindPathParams& fpp) const
-{
-	if (fpp.fullPathSearch) {
-		if (testPos.x > targetPos.x + fpp.maxTargetDist) {
-			return false;
-		}
-
-		if (testPos.x < targetPos.x - fpp.maxTargetDist) {
-			return false;
-		}
-
-		if (testPos.y > targetPos.y + fpp.maxTargetDist) {
-			return false;
-		}
-
-		if (testPos.y < targetPos.y - fpp.maxTargetDist) {
-			return false;
-		}
-	} else {
-		int32_t dx = startPos.getOffsetX(targetPos);
-
-		int32_t dxMax = (dx >= 0 ? fpp.maxTargetDist : 0);
-		if (testPos.x > targetPos.x + dxMax) {
-			return false;
-		}
-
-		int32_t dxMin = (dx <= 0 ? fpp.maxTargetDist : 0);
-		if (testPos.x < targetPos.x - dxMin) {
-			return false;
-		}
-
-		int32_t dy = startPos.getOffsetY(targetPos);
-
-		int32_t dyMax = (dy >= 0 ? fpp.maxTargetDist : 0);
-		if (testPos.y > targetPos.y + dyMax) {
-			return false;
-		}
-
-		int32_t dyMin = (dy <= 0 ? fpp.maxTargetDist : 0);
-		if (testPos.y < targetPos.y - dyMin) {
-			return false;
-		}
-	}
-	return true;
-}
-
-bool FrozenPathingConditionCall::operator()(const Position& startPos, const Position& testPos,
-                                            const FindPathParams& fpp, int32_t& bestMatchDist) const
-{
-	if (!isInRange(startPos, testPos, fpp)) {
-		return false;
-	}
-
-	if (fpp.clearSight && !g_game.isSightClear(testPos, targetPos, true)) {
-		return false;
-	}
-
-	int32_t testDist = std::max(targetPos.getDistanceX(testPos), targetPos.getDistanceY(testPos));
-	if (fpp.maxTargetDist == 1) {
-		if (testDist < fpp.minTargetDist || testDist > fpp.maxTargetDist) {
-			return false;
-		}
-
-		return true;
-	} else if (testDist <= fpp.maxTargetDist) {
-		if (testDist < fpp.minTargetDist) {
-			return false;
-		}
-
-		if (testDist == fpp.maxTargetDist) {
-			bestMatchDist = 0;
-			return true;
-		} else if (testDist > bestMatchDist) {
-			// not quite what we want, but the best so far
-			bestMatchDist = testDist;
-			return true;
-		}
-	}
-	return false;
-}
-
 bool Creature::isInvisible() const
 {
 	return std::find_if(conditions.begin(), conditions.end(), [](const Condition* condition) {
@@ -1495,19 +1410,16 @@ bool Creature::isInvisible() const
 
 bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const
 {
-	return g_game.map.getPathMatching(*this, targetPos, dirList, FrozenPathingConditionCall(targetPos), fpp);
+	return g_game.map.getPathMatching(*this, targetPos, dirList, fpp);
 }
 
-bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist,
-                         int32_t maxTargetDist, bool fullPathSearch /*= true*/, bool clearSight /*= true*/,
-                         int32_t maxSearchDist /*= 0*/) const
+bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t targetDist,
+                         bool clearSight /*= true*/, int32_t maxSearchDist /*= 0*/) const
 {
 	FindPathParams fpp;
-	fpp.fullPathSearch = fullPathSearch;
 	fpp.maxSearchDist = maxSearchDist;
 	fpp.clearSight = clearSight;
-	fpp.minTargetDist = minTargetDist;
-	fpp.maxTargetDist = maxTargetDist;
+	fpp.targetDist = targetDist;
 	return getPathTo(targetPos, dirList, fpp);
 }
 
