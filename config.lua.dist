@@ -37,6 +37,11 @@ replaceKickOnLogin = true
 maxPacketsPerSecond = 25
 enableTwoFactorAuth = true
 
+-- to increase session tokens security set random secret key
+sessionTokenSecretKey = ""
+sessionTokenIpVerification = false
+sessionTokenExpirationTime = 30 * 24 * 3600
+
 -- Pathfinding
 -- pathfindingInterval handles how often paths are force drawn
 -- pathfindingDelay delays any recently drawn paths from drawing again
