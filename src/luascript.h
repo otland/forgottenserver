@@ -1465,7 +1465,7 @@ void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 template <typename T>
 typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t arg)
 {
-	return static_cast<T>(static_cast<int64_t>(lua_tonumber(L, arg)));
+	return static_cast<T>(getNumber<int64_t>(L, arg));
 }
 
 template <typename T>
@@ -1492,15 +1492,6 @@ typename std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>, 
 
 	reportErrorFunc(L, fmt::format("Argument {} is not a number for {}", arg, typeid(T).name()));
 	return {};
-}
-
-template <typename T>
-T getNumber(lua_State* L, int32_t arg, T defaultValue)
-{
-	if (lua_isnumber(L, arg) == 0) {
-		return defaultValue;
-	}
-	return getNumber<T>(L, arg);
 }
 
 template <class T>
