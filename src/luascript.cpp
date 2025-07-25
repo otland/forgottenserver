@@ -2401,6 +2401,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Game", "getWorldType", LuaScriptInterface::luaGameGetWorldType);
 	registerMethod(L, "Game", "setWorldType", LuaScriptInterface::luaGameSetWorldType);
 
+	registerMethod(L, "Game", "getInternalThing", LuaScriptInterface::luaGameGetInternalThing);
 	registerMethod(L, "Game", "getItemAttributeByName", LuaScriptInterface::luaGameGetItemAttributeByName);
 	registerMethod(L, "Game", "getReturnMessage", LuaScriptInterface::luaGameGetReturnMessage);
 
@@ -4877,6 +4878,39 @@ int LuaScriptInterface::luaGameGetReturnMessage(lua_State* L)
 	// Game.getReturnMessage(value)
 	ReturnValue value = tfs::lua::getNumber<ReturnValue>(L, 1);
 	tfs::lua::pushString(L, getReturnMessage(value));
+	return 1;
+}
+
+int LuaScriptInterface::luaGameGetInternalThing(lua_State* L)
+{
+	// Game.getInternalThing(player, position, index, clientId, type)
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	const Position& position = tfs::lua::getPosition(L, 2);
+	int32_t index = tfs::lua::getNumber<int32_t>(L, 3);
+	uint32_t clientId = tfs::lua::getNumber<uint32_t>(L, 4);
+	stackPosType_t type = tfs::lua::getNumber<stackPosType_t>(L, 5);
+
+	Thing* thing = g_game.internalGetThing(player, position, index, clientId, type);
+
+	if (!thing) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	if (Creature* creature = thing->getCreature()) {
+		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::setCreatureMetatable(L, -1, creature);
+	} else if (Item* item = thing->getItem()) {
+		tfs::lua::pushUserdata(L, item);
+		tfs::lua::setItemMetatable(L, -1, item);
+	} else {
+		lua_pushnil(L);
+	}
 	return 1;
 }
 
