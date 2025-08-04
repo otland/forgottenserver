@@ -1168,7 +1168,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			}
 		}
 
-		g_game.checkPlayersRecord();
 		IOLoginData::updateOnlineStatus(guid, true);
 	}
 }
