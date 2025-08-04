@@ -332,7 +332,7 @@ public:
 	std::string vocationString;
 
 	std::unique_ptr<Abilities> abilities;
-	std::unique_ptr<ConditionDamage> conditionDamage;
+	std::shared_ptr<ConditionDamage> conditionDamage;
 
 	uint32_t attackSpeed = 0;
 	uint32_t weight = 0;
