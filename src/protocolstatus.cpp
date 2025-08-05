@@ -5,6 +5,8 @@
 
 #include "protocolstatus.h"
 
+#include <ranges>
+
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
@@ -111,17 +113,12 @@ void ProtocolStatus::sendStatusString()
 		std::map<Connection::Address, uint32_t> playersPerIp;
 		for (const auto& it : g_game.getPlayers()) {
 			if (!it.second->getIP().is_unspecified()) {
-				auto ipEntry = playersPerIp.find(it.second->getIP());
-				if (ipEntry != playersPerIp.end()) {
-					playersPerIp[it.second->getIP()]++;
-					if (playersPerIp[it.second->getIP()] <= maxPlayersPerIp) {
-						reportableOnlinePlayerCount++;
-					}
-				} else {
-					playersPerIp[it.second->getIP()] = 1;
-					reportableOnlinePlayerCount++;
-				}
+				++playersPerIp[it.second->getIP()];
 			}
+		}
+
+		for (auto &p: playersPerIp | std::views::values) {
+			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
 		}
 	} else {
 		reportableOnlinePlayerCount = g_game.getPlayersOnline();
