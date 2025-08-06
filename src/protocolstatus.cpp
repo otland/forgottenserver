@@ -117,7 +117,7 @@ void ProtocolStatus::sendStatusString()
 			}
 		}
 
-		for (auto &p: playersPerIp | std::views::values) {
+		for (auto& p : playersPerIp | std::views::values) {
 			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
 		}
 	} else {
