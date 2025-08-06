@@ -20,7 +20,7 @@ expFromPlayersLevelRange = 75
 -- NOTE: maxPlayers set to 0 means no limit
 -- NOTE: allowWalkthrough is only applicable to players
 -- NOTE: two-factor auth requires token and timestamp in session key
--- NOTE: statusCountMaxPlayersPerIp allows you to only count first X players per IP in status response (0 = disabled)
+-- NOTE: statusCountMaxPlayersPerIp allows you to only count up to X players per IP in status response (0 = disabled)
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
 loginProtocolPort = 7171
