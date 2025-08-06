@@ -5,11 +5,11 @@
 
 #include "protocolstatus.h"
 
-#include <ranges>
-
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
+
+#include <ranges>
 
 extern Game g_game;
 
