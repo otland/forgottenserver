@@ -454,8 +454,6 @@ private:
 				customAttrMap->erase(it);
 
 				if (customAttrMap->empty()) {
-					delete customAttrMap;
-					getAttr(ITEM_ATTRIBUTE_CUSTOM).value.custom = nullptr;
 					removeAttribute(ITEM_ATTRIBUTE_CUSTOM);
 				}
 				return true;
