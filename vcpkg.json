@@ -3,7 +3,6 @@
   "dependencies": [
     "boost-asio",
     "boost-iostreams",
-    "boost-locale",
     "boost-lockfree",
     "boost-system",
     "boost-variant",
@@ -14,6 +13,7 @@
     },
     "openssl",
     "pugixml",
+    "simdutf",
     "zlib"
   ],
   "features": {
