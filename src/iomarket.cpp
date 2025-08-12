@@ -14,7 +14,16 @@
 
 extern Game g_game;
 
-MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId)
+namespace {
+
+std::map<uint16_t, MarketStatistics> purchaseStatistics;
+std::map<uint16_t, MarketStatistics> saleStatistics;
+
+} // namespace
+
+namespace tfs::iomarket {
+
+MarketOfferList getActiveOffers(MarketAction_t action, uint16_t itemId)
 {
 	MarketOfferList offerList;
 
@@ -44,7 +53,7 @@ MarketOfferList IOMarket::getActiveOffers(MarketAction_t action, uint16_t itemId
 	return offerList;
 }
 
-MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
+MarketOfferList getOwnOffers(MarketAction_t action, uint32_t playerId)
 {
 	MarketOfferList offerList;
 
@@ -69,7 +78,7 @@ MarketOfferList IOMarket::getOwnOffers(MarketAction_t action, uint32_t playerId)
 	return offerList;
 }
 
-HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t playerId)
+HistoryMarketOfferList getOwnHistory(MarketAction_t action, uint32_t playerId)
 {
 	HistoryMarketOfferList offerList;
 
@@ -99,14 +108,14 @@ HistoryMarketOfferList IOMarket::getOwnHistory(MarketAction_t action, uint32_t p
 	return offerList;
 }
 
-void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
+void processExpiredOffers(DBResult_ptr result, bool)
 {
 	if (!result) {
 		return;
 	}
 
 	do {
-		if (!IOMarket::moveOfferToHistory(result->getNumber<uint32_t>("id"), OFFERSTATE_EXPIRED)) {
+		if (!moveOfferToHistory(result->getNumber<uint32_t>("id"), OFFERSTATE_EXPIRED)) {
 			continue;
 		}
 
@@ -175,7 +184,7 @@ void IOMarket::processExpiredOffers(DBResult_ptr result, bool)
 	} while (result->next());
 }
 
-void IOMarket::checkExpiredOffers()
+void checkExpiredOffers()
 {
 	const time_t lastExpireDate = time(nullptr) - getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
@@ -183,7 +192,7 @@ void IOMarket::checkExpiredOffers()
 	    fmt::format(
 	        "SELECT `id`, `amount`, `price`, `itemtype`, `player_id`, `sale` FROM `market_offers` WHERE `created` <= {:d}",
 	        lastExpireDate),
-	    IOMarket::processExpiredOffers, true);
+	    processExpiredOffers, true);
 
 	int32_t checkExpiredMarketOffersEachMinutes = getNumber(ConfigManager::CHECK_EXPIRED_MARKET_OFFERS_EACH_MINUTES);
 	if (checkExpiredMarketOffersEachMinutes <= 0) {
@@ -191,10 +200,10 @@ void IOMarket::checkExpiredOffers()
 	}
 
 	g_scheduler.addEvent(
-	    createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &IOMarket::checkExpiredOffers));
+	    createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &checkExpiredOffers));
 }
 
-uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
+uint32_t getPlayerOfferCount(uint32_t playerId)
 {
 	DBResult_ptr result = Database::getInstance().storeQuery(
 	    fmt::format("SELECT COUNT(*) AS `count` FROM `market_offers` WHERE `player_id` = {:d}", playerId));
@@ -204,7 +213,7 @@ uint32_t IOMarket::getPlayerOfferCount(uint32_t playerId)
 	return result->getNumber<int32_t>("count");
 }
 
-MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
+MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter)
 {
 	MarketOfferEx offer;
 
@@ -235,7 +244,7 @@ MarketOfferEx IOMarket::getOfferByCounter(uint32_t timestamp, uint16_t counter)
 	return offer;
 }
 
-void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint64_t price,
+void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint64_t price,
                            bool anonymous)
 {
 	Database::getInstance().executeQuery(fmt::format(
@@ -243,18 +252,18 @@ void IOMarket::createOffer(uint32_t playerId, MarketAction_t action, uint32_t it
 	    playerId, tfs::to_underlying(action), itemId, amount, price, time(nullptr), anonymous));
 }
 
-void IOMarket::acceptOffer(uint32_t offerId, uint16_t amount)
+void acceptOffer(uint32_t offerId, uint16_t amount)
 {
 	Database::getInstance().executeQuery(
 	    fmt::format("UPDATE `market_offers` SET `amount` = `amount` - {:d} WHERE `id` = {:d}", amount, offerId));
 }
 
-void IOMarket::deleteOffer(uint32_t offerId)
+void deleteOffer(uint32_t offerId)
 {
 	Database::getInstance().executeQuery(fmt::format("DELETE FROM `market_offers` WHERE `id` = {:d}", offerId));
 }
 
-void IOMarket::appendHistory(uint32_t playerId, MarketAction_t action, uint16_t itemId, uint16_t amount, uint64_t price,
+void appendHistory(uint32_t playerId, MarketAction_t action, uint16_t itemId, uint16_t amount, uint64_t price,
                              time_t timestamp, MarketOfferState_t state)
 {
 	g_databaseTasks.addTask(fmt::format(
@@ -263,7 +272,7 @@ void IOMarket::appendHistory(uint32_t playerId, MarketAction_t action, uint16_t 
 	    tfs::to_underlying(state)));
 }
 
-bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
+bool moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 {
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
@@ -287,7 +296,7 @@ bool IOMarket::moveOfferToHistory(uint32_t offerId, MarketOfferState_t state)
 	return true;
 }
 
-void IOMarket::updateStatistics()
+void updateStatistics()
 {
 	DBResult_ptr result = Database::getInstance().storeQuery(fmt::format(
 	    "SELECT `sale` AS `sale`, `itemtype` AS `itemtype`, COUNT(`price`) AS `num`, MIN(`price`) AS `min`, MAX(`price`) AS `max`, SUM(`price`) AS `sum` FROM `market_history` WHERE `state` = {:d} GROUP BY `itemtype`, `sale`",
@@ -311,7 +320,7 @@ void IOMarket::updateStatistics()
 	} while (result->next());
 }
 
-MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
+MarketStatistics* getPurchaseStatistics(uint16_t itemId)
 {
 	auto it = purchaseStatistics.find(itemId);
 	if (it == purchaseStatistics.end()) {
@@ -320,7 +329,7 @@ MarketStatistics* IOMarket::getPurchaseStatistics(uint16_t itemId)
 	return &it->second;
 }
 
-MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
+MarketStatistics* getSaleStatistics(uint16_t itemId)
 {
 	auto it = saleStatistics.find(itemId);
 	if (it == saleStatistics.end()) {
@@ -328,3 +337,5 @@ MarketStatistics* IOMarket::getSaleStatistics(uint16_t itemId)
 	}
 	return &it->second;
 }
+
+} // namespace tfs::iomarket
