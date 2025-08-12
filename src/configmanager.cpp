@@ -256,6 +256,7 @@ bool ConfigManager::load()
 	boolean[TWO_FACTOR_AUTH] = getGlobalBoolean(L, "enableTwoFactorAuth", true);
 	boolean[CHECK_DUPLICATE_STORAGE_KEYS] = getGlobalBoolean(L, "checkDuplicateStorageKeys", false);
 	boolean[MONSTER_OVERSPAWN] = getGlobalBoolean(L, "monsterOverspawn", false);
+	boolean[SESSION_TOKEN_IP_VERIFICATION] = getGlobalBoolean(L, "sessionTokenIpVerification", false);
 
 	string[DEFAULT_PRIORITY] = getGlobalString(L, "defaultPriority", "high");
 	string[SERVER_NAME] = getGlobalString(L, "serverName", "");
@@ -264,6 +265,7 @@ bool ConfigManager::load()
 	string[URL] = getGlobalString(L, "url", "");
 	string[LOCATION] = getGlobalString(L, "location", "");
 	string[WORLD_TYPE] = getGlobalString(L, "worldType", "pvp");
+	string[SESSION_TOKEN_SECRET_KEY] = getGlobalString(L, "sessionTokenSecretKey", "");
 
 	integer[MAX_PLAYERS] = getGlobalNumber(L, "maxPlayers");
 	integer[PZ_LOCKED] = getGlobalNumber(L, "pzLocked", 60000);
@@ -306,6 +308,7 @@ bool ConfigManager::load()
 	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
 	integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
 	integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
+	integer[SESSION_TOKEN_EXPIRATION_TIME] = getGlobalNumber(L, "sessionTokenExpirationTime", 30 * 24 * 3600);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {

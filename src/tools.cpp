@@ -90,6 +90,49 @@ std::string transformToSHA1(std::string_view input)
 	return digest;
 }
 
+std::string transformToSHA256hex(std::string_view input)
+{
+	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
+	if (!ctx) {
+		throw std::runtime_error("Failed to create EVP context");
+	}
+
+	std::unique_ptr<EVP_MD, decltype(&EVP_MD_free)> md{EVP_MD_fetch(nullptr, "SHA256", nullptr), EVP_MD_free};
+	if (!md) {
+		throw std::runtime_error("Failed to fetch SHA256");
+	}
+
+	if (!EVP_DigestInit_ex(ctx.get(), md.get(), nullptr)) {
+		throw std::runtime_error("Message digest initialization failed");
+	}
+
+	if (!EVP_DigestUpdate(ctx.get(), input.data(), input.size())) {
+		throw std::runtime_error("Message digest update failed");
+	}
+
+	unsigned int len = EVP_MD_size(md.get());
+	std::string digest(static_cast<size_t>(len), '\0');
+	if (!EVP_DigestFinal_ex(ctx.get(), reinterpret_cast<unsigned char*>(digest.data()), &len)) {
+		throw std::runtime_error("Message digest finalization failed");
+	}
+
+	if (digest.length() != 32) {
+		throw std::runtime_error("Generated SHA256 digest length is not 32");
+	}
+
+	char hexString[65] = {0};
+	static const char hexDigits[] = {"0123456789abcdef"};
+	int index;
+	for (int hashByte = 0; hashByte < 32; hashByte++) {
+		const uint8_t byte = digest[hashByte];
+		index = hashByte << 1;
+		hexString[index] = hexDigits[byte >> 4];
+		hexString[index + 1] = hexDigits[byte & 15];
+	}
+
+	return std::string(hexString, 64);
+}
+
 std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message)
 {
 	std::unique_ptr<EVP_MD_CTX, decltype(&EVP_MD_CTX_free)> ctx{EVP_MD_CTX_new(), EVP_MD_CTX_free};
