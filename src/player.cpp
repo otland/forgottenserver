@@ -1334,7 +1334,6 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
-		isUpdatingPath = false;
 		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
@@ -4381,12 +4380,8 @@ bool Player::toggleMount(bool mount)
 
 bool Player::tameMount(uint16_t mountId)
 {
-	if (!g_game.mounts.getMountByID(mountId)) {
-		return false;
-	}
-
 	Mount* mount = g_game.mounts.getMountByID(mountId);
-	if (hasMount(mount)) {
+	if (!mount || hasMount(mount)) {
 		return false;
 	}
 
@@ -4396,12 +4391,8 @@ bool Player::tameMount(uint16_t mountId)
 
 bool Player::untameMount(uint16_t mountId)
 {
-	if (!g_game.mounts.getMountByID(mountId)) {
-		return false;
-	}
-
 	Mount* mount = g_game.mounts.getMountByID(mountId);
-	if (!hasMount(mount)) {
+	if (!mount || !hasMount(mount)) {
 		return false;
 	}
 

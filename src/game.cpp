@@ -66,6 +66,8 @@ void Game::start(ServiceManager* manager)
 	serviceManager = manager;
 
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_scheduler.addEvent(
+	    createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL), [this]() { updateCreaturesPath(0); }));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
@@ -117,7 +119,9 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+#ifdef HTTP
 			tfs::http::stop();
+#endif
 			break;
 		}
 
@@ -3886,6 +3890,19 @@ void Game::checkCreatures(size_t index)
 	cleanup();
 }
 
+void Game::updateCreaturesPath(size_t index)
+{
+	g_scheduler.addEvent(createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL),
+	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
+
+	auto& checkCreatureList = checkCreatureLists[index];
+	for (Creature* creature : checkCreatureList) {
+		if (!creature->isDead()) {
+			creature->forceUpdatePath();
+		}
+	}
+}
+
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
 {
 	int32_t varSpeed = creature->getSpeed() - creature->getBaseSpeed();
@@ -5241,8 +5258,9 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		fee = MAX_MARKET_FEE;
 	}
 
+	uint64_t playerMoney = player->getMoney();
 	if (type == MARKETACTION_SELL) {
-		if (fee > (player->getMoney() + player->bankBalance)) {
+		if (fee > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
@@ -5268,18 +5286,18 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		const auto debitCash = std::min(player->getMoney(), fee);
+		const auto debitCash = std::min(playerMoney, fee);
 		const auto debitBank = fee - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
@@ -5466,11 +5484,12 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			buyerPlayer->onReceiveMail();
 		}
 	} else {
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
@@ -5712,7 +5731,14 @@ Guild_ptr Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(Guild_ptr guild) { guilds[guild->getId()] = guild; }
+void Game::addGuild(Guild_ptr guild)
+{
+	if (!guild) {
+		return;
+	}
+
+	guilds[guild->getId()] = guild;
+}
 
 void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 

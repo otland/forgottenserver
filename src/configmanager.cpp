@@ -34,11 +34,22 @@ ExperienceStages expStages;
 
 bool loaded = false;
 
-template <typename T>
-auto getEnv(const char* envVar, T&& defaultValue)
+std::string getEnv(const char* envVar, std::string defaultValue)
 {
 	if (auto value = std::getenv(envVar)) {
-		return pugi::cast<std::decay_t<T>>(value);
+		if (strlen(value)) {
+			return {value};
+		}
+	}
+	return defaultValue;
+}
+
+uint16_t getEnv(const char* envVar, uint16_t defaultValue)
+{
+	if (auto value = std::getenv(envVar)) {
+		if (strlen(value)) {
+			return pugi::cast<uint16_t>(value);
+		}
 	}
 	return defaultValue;
 }
@@ -185,13 +196,13 @@ bool ConfigManager::load()
 		string[MAP_NAME] = getGlobalString(L, "mapName", "forgotten");
 		string[MAP_AUTHOR] = getGlobalString(L, "mapAuthor", "Unknown");
 		string[HOUSE_RENT_PERIOD] = getGlobalString(L, "houseRentPeriod", "never");
-		string[MYSQL_HOST] = getGlobalString(L, "mysqlHost", getEnv("MYSQL_HOST", "127.0.0.1"));
-		string[MYSQL_USER] = getGlobalString(L, "mysqlUser", getEnv("MYSQL_USER", "forgottenserver"));
-		string[MYSQL_PASS] = getGlobalString(L, "mysqlPass", getEnv("MYSQL_PASSWORD", ""));
-		string[MYSQL_DB] = getGlobalString(L, "mysqlDatabase", getEnv("MYSQL_DATABASE", "forgottenserver"));
-		string[MYSQL_SOCK] = getGlobalString(L, "mysqlSock", getEnv("MYSQL_SOCK", ""));
+		string[MYSQL_HOST] = getEnv("MYSQL_HOST", getGlobalString(L, "mysqlHost", "127.0.0.1"));
+		string[MYSQL_USER] = getEnv("MYSQL_USER", getGlobalString(L, "mysqlUser", "forgottenserver"));
+		string[MYSQL_PASS] = getEnv("MYSQL_PASSWORD", getGlobalString(L, "mysqlPass", ""));
+		string[MYSQL_DB] = getEnv("MYSQL_DATABASE", getGlobalString(L, "mysqlDatabase", "forgottenserver"));
+		string[MYSQL_SOCK] = getEnv("MYSQL_SOCK", getGlobalString(L, "mysqlSock", ""));
 
-		integer[SQL_PORT] = getGlobalNumber(L, "mysqlPort", getEnv<uint16_t>("MYSQL_PORT", 3306));
+		integer[SQL_PORT] = getEnv("MYSQL_PORT", getGlobalNumber(L, "mysqlPort", 3306));
 
 		if (integer[GAME_PORT] == 0) {
 			integer[GAME_PORT] = getGlobalNumber(L, "gameProtocolPort", 7172);
@@ -274,6 +285,7 @@ bool ConfigManager::load()
 	integer[PROTECTION_LEVEL] = getGlobalNumber(L, "protectionLevel", 1);
 	integer[DEATH_LOSE_PERCENT] = getGlobalNumber(L, "deathLosePercent", -1);
 	integer[STATUSQUERY_TIMEOUT] = getGlobalNumber(L, "statusTimeout", 5000);
+	integer[STATUS_COUNT_MAX_PLAYERS_PER_IP] = getGlobalNumber(L, "statusCountMaxPlayersPerIp", 0);
 	integer[FRAG_TIME] = getGlobalNumber(L, "timeToDecreaseFrags", 24 * 60 * 60);
 	integer[WHITE_SKULL_TIME] = getGlobalNumber(L, "whiteSkullTime", 15 * 60);
 	integer[STAIRHOP_DELAY] = getGlobalNumber(L, "stairJumpExhaustion", 2000);
@@ -292,6 +304,8 @@ bool ConfigManager::load()
 	integer[QUEST_TRACKER_PREMIUM_LIMIT] = getGlobalNumber(L, "questTrackerPremiumLimit", 15);
 	integer[STAMINA_REGEN_MINUTE] = getGlobalNumber(L, "timeToRegenMinuteStamina", 3 * 60);
 	integer[STAMINA_REGEN_PREMIUM] = getGlobalNumber(L, "timeToRegenMinutePremiumStamina", 6 * 60);
+	integer[PATHFINDING_INTERVAL] = getGlobalNumber(L, "pathfindingInterval", 200);
+	integer[PATHFINDING_DELAY] = getGlobalNumber(L, "pathfindingDelay", 300);
 
 	expStages = loadXMLStages();
 	if (expStages.empty()) {
