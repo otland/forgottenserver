@@ -4613,8 +4613,7 @@ int LuaScriptInterface::luaGameLoadMap(lua_State* L)
 	g_dispatcher.addTask([path]() {
 		try {
 			g_game.loadMap(path, true);
-		} catch (const std::exception& e) {
-			// FIXME: Should only catch some exceptions
+		} catch (const std::invalid_argument& e) {
 			std::cout << "[Error - LuaScriptInterface::luaGameLoadMap] Failed to load map: " << e.what() << '\n';
 		}
 	});
@@ -7041,14 +7040,14 @@ int LuaScriptInterface::luaItemSetCustomAttribute(lua_State* L)
 	if (isNumber(L, 3)) {
 		double tmp = tfs::lua::getNumber<double>(L, 3);
 		if (std::floor(tmp) < tmp) {
-			val.set<double>(tmp);
+			val = tmp;
 		} else {
-			val.set<int64_t>(tmp);
+			val = static_cast<int64_t>(tmp);
 		}
 	} else if (lua_isstring(L, 3)) {
-		val.set<std::string>(tfs::lua::getString(L, 3));
+		val = tfs::lua::getString(L, 3);
 	} else if (lua_isboolean(L, 3)) {
-		val.set<bool>(tfs::lua::getBoolean(L, 3));
+		val = tfs::lua::getBoolean(L, 3);
 	} else {
 		lua_pushnil(L);
 		return 1;
