@@ -808,7 +808,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 
 int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* target, const Item* item) const
 {
-	if (elementType == COMBAT_NONE) {
+	if (!player || !item || elementType == COMBAT_NONE) {
 		return 0;
 	}
 
@@ -839,6 +839,10 @@ int32_t WeaponDistance::getElementDamage(const Player* player, const Creature* t
 int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* target, const Item* item,
                                         bool maxDamage /*= false*/) const
 {
+	if (!player || !item) {
+		return 0;
+	}
+		
 	int32_t attackValue = item->getAttack();
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
