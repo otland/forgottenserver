@@ -113,8 +113,8 @@ void ProtocolStatus::sendStatusString()
 			}
 		}
 
-		for (auto& p : playersPerIp | std::views::values) {
-			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
+		for (auto&& [ip, players] : playersPerIp) {
+			reportableOnlinePlayerCount += std::min(players, maxPlayersPerIp);
 		}
 	} else {
 		reportableOnlinePlayerCount = g_game.getPlayersOnline();
