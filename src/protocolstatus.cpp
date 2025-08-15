@@ -7,7 +7,6 @@
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
-#include <ranges>
 
 extern ConfigManager g_config;
 extern Game g_game;
