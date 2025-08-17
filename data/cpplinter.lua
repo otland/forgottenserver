@@ -985,7 +985,6 @@ MoveEvent = {}
 ---@field interval fun(self:GlobalEvent, interval:integer):boolean
 ---@field onStartup fun():boolean
 ---@field onShutdown fun():boolean
----@field onRecord fun(current:integer, old:integer):boolean
 ---@field onThink fun(interval:integer):boolean
 ---@field onTime fun(interval:integer):boolean
 ---@operator call(string):GlobalEvent
