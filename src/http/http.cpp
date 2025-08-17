@@ -1,5 +1,7 @@
 #define BOOST_ASIO_NO_DEPRECATED
 
+#include "otpch.h"
+
 #include "http.h"
 
 #include "listener.h"
