@@ -9,7 +9,9 @@ MatrixArea MatrixArea::rotate90() const
 		// assign rows, top to bottom, to the current cols, right to left
 		newArr[std::slice(i, cols, rows)] = arr[std::slice((rows - i - 1) * cols, cols, 1)];
 	}
+	// clang-format off
 	auto &&[centerX, centerY] = center;
+	// clang-format on
 	return {{rows - centerY - 1, centerX}, cols, rows, std::move(newArr)};
 }
 
@@ -17,7 +19,9 @@ MatrixArea MatrixArea::rotate180() const
 {
 	Container newArr(arr.size());
 	std::reverse_copy(std::begin(arr), std::end(arr), std::begin(newArr));
+	// clang-format off
 	auto &&[centerX, centerY] = center;
+	// clang-format on
 	return {{cols - centerX - 1, rows - centerY - 1}, rows, cols, std::move(newArr)};
 }
 
@@ -28,7 +32,9 @@ MatrixArea MatrixArea::rotate270() const
 		// assign cols, left to right, to the current rows, bottom to top
 		newArr[std::slice(i * rows, rows, 1)] = arr[std::slice(cols - i - 1, rows, cols)];
 	}
+	// clang-format off
 	auto &&[centerX, centerY] = center;
+	// clang-format on
 	return {{centerY, cols - centerX - 1}, cols, rows, std::move(newArr)};
 }
 
