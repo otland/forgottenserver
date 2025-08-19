@@ -4118,7 +4118,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	}
 
 	for (const auto& learnedSpellName : learnedInstantSpellList) {
-		if (caseInsensitiveEqual(learnedSpellName, spellName)) {
+		if (boost::iequals(learnedSpellName, spellName)) {
 			return true;
 		}
 	}
