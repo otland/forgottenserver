@@ -1352,7 +1352,6 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction, bo
 	}
 
 	if (!dirList.empty()) {
-		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
