@@ -452,6 +452,10 @@ private:
 			auto lowercaseKey = boost::algorithm::to_lower_copy(std::string{key});
 			if (auto it = customAttrMap->find(lowercaseKey); it != customAttrMap->end()) {
 				customAttrMap->erase(it);
+
+				if (customAttrMap->empty()) {
+					removeAttribute(ITEM_ATTRIBUTE_CUSTOM);
+				}
 				return true;
 			}
 		}
