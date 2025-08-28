@@ -28,7 +28,7 @@ LuaScriptInterface& TalkActions::getScriptInterface() { return scriptInterface; 
 
 Event_ptr TalkActions::getEvent(const std::string& nodeName)
 {
-	if (!caseInsensitiveEqual(nodeName, "talkaction")) {
+	if (!boost::iequals(nodeName, "talkaction")) {
 		return nullptr;
 	}
 	return Event_ptr(new TalkAction(&scriptInterface));
@@ -71,7 +71,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
 		const std::string& talkactionWords = it->first;
-		if (!caseInsensitiveStartsWith(words, talkactionWords)) {
+		if (!boost::istarts_with(words, talkactionWords)) {
 			++it;
 			continue;
 		}
