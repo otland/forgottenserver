@@ -1,1 +1,1 @@
--- empty file --
+-- See data/scripts/lib/globalevents.lua
