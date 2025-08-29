@@ -1249,6 +1249,8 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 
 		if (isLogout) {
 			loginPosition = getPosition();
+			g_chat->removeUserFromAllChannels(*this);
+			clearPartyInvitations();
 		}
 
 		lastLogout = time(nullptr);
@@ -1263,15 +1265,11 @@ void Player::onRemoveCreature(Creature* creature, bool isLogout)
 
 		closeShopWindow();
 
-		clearPartyInvitations();
-
-		if (party) {
+		if (party && isLogout) {
 			party->leaveParty(this, true);
 		}
 
-		g_chat->removeUserFromAllChannels(*this);
-
-		if (guild) {
+		if (guild && isLogout) {
 			guild->removeMember(this);
 		}
 
