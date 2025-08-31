@@ -25,6 +25,13 @@ class Loader
 public:
 	Loader(MappedFile file, Node root) : file{std::move(file)}, root{std::move(root)} {}
 
+	Loader(Loader&&) = default;
+	Loader& operator=(Loader&&) = default;
+
+	// Delete copy operations to prevent accidental expensive copies
+	Loader(const Loader&) = delete;
+	Loader& operator=(const Loader&) = delete;
+
 	const std::vector<Node>& children() const { return root.children; }
 	auto begin() const { return root.propsBegin; }
 	auto end() const { return root.propsEnd; }
