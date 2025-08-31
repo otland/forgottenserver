@@ -42,14 +42,14 @@ template <class T>
 	std::array<char, sizeof(T)> buf;
 	auto it = buf.begin();
 
-	while (it != buf.end() && first < last) {
-		if (*first == Node::ESCAPE) {
-			++first;
+	for (auto end = first + sizeof(T); first < end; ++first, ++it) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
+			++first, ++end;
 		}
-		*it++ = *first++;
+		*it = *first;
 	}
 
-	if (it != buf.end()) [[unlikely]] {
+	if (first > last) [[unlikely]] {
 		throw std::invalid_argument("Not enough bytes to read.");
 	}
 
@@ -61,33 +61,34 @@ template <class T>
 [[nodiscard]] std::string readString(auto& first, const auto last)
 {
 	auto len = read<uint16_t>(first, last);
-	if (last - first < len) [[unlikely]] {
-		throw std::invalid_argument("Not enough bytes to read as string.");
-	}
 
 	std::string out;
 	out.reserve(len);
 
 	for (auto end = first + len; first < end; ++first) {
-		if (*first == Node::ESCAPE) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
 			++first, ++end;
 		}
 		out.push_back(*first);
 	}
 
+	if (first > last) [[unlikely]] {
+		throw std::invalid_argument("Not enough bytes to read as string.");
+	}
+
 	return out;
 }
 
-void skip(auto& first, const auto last, const int len)
+void skip(auto& first, const auto last, const std::size_t len)
 {
-	if (last - first < len) [[unlikely]] {
-		throw std::invalid_argument("Not enough bytes to skip.");
-	}
-
 	for (auto end = first + len; first < end; ++first) {
-		if (*first == Node::ESCAPE) {
+		if (*first == Node::ESCAPE) [[unlikely]] {
 			++first, ++end;
 		}
+	}
+
+	if (first > last) [[unlikely]] {
+		throw std::invalid_argument("Not enough bytes to skip.");
 	}
 }
 
