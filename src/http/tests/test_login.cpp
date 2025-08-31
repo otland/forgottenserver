@@ -191,8 +191,6 @@ BOOST_FIXTURE_TEST_CASE(test_login_missing_token, LoginFixture)
 	BOOST_TEST(db.executeQuery(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('abcd', 'fooba@example.com', SHA1('bar'), UNHEX('48656c6c6f21dead'))"));
 
-	auto now = duration_cast<seconds>(system_clock::now().time_since_epoch());
-
 	auto&& [status, body] = tfs::http::handle_login(
 	    {
 	        {"type", "login"},
@@ -229,8 +227,8 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 
 	DBInsert insert(
 	    "INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons`) VALUES");
-	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id,
-	                          "Test", 2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
+	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id, "Test",
+	                          2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
 	BOOST_TEST(insert.execute());
 
 	auto&& [status, body] =
