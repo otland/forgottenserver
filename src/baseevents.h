@@ -44,7 +44,7 @@ public:
 
 	bool loadFromXml();
 	bool reload();
-	bool isLoaded() const { return loaded; }
+	bool isLoaded() const { return loaded; };
 	void reInitState(bool fromLua);
 
 private:
