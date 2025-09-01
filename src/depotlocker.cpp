@@ -9,7 +9,7 @@
 
 DepotLocker::DepotLocker(uint16_t type) : Container(type), depotId(0) {}
 
-void DepotLocker::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
+void DepotLocker::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
 		case ATTR_DEPOT_ID:
