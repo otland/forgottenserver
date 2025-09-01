@@ -346,7 +346,7 @@ void Item::setSubType(uint16_t n)
 	}
 }
 
-void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
+void Item::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
 		case ATTR_CHARGES:
@@ -540,7 +540,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator 
 	}
 }
 
-void Item::unserializeAttr(OTB::iterator& first, const OTB::iterator last)
+void Item::unserializeAttr(const char*& first, const char* const last)
 {
 	while (first != last) {
 		auto attr = OTB::read<uint8_t>(first, last);
@@ -548,7 +548,7 @@ void Item::unserializeAttr(OTB::iterator& first, const OTB::iterator last)
 	}
 }
 
-void Item::unserializeItemNode(OTB::iterator& first, const OTB::iterator last, const OTB::Node&)
+void Item::unserializeItemNode(const char*& first, const char* const last, const OTB::Node&)
 {
 	return unserializeAttr(first, last);
 }

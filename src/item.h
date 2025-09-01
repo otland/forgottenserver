@@ -187,7 +187,7 @@ public:
 			           value);
 		}
 
-		void unserialize(OTB::iterator& first, const OTB::iterator last)
+		void unserialize(const char*& first, const char* const last)
 		{
 			// This is hard-coded so it's not general, depends on the position of the variants.
 			switch (OTB::read<uint8_t>(first, last)) {
@@ -678,9 +678,9 @@ public:
 	std::string getWeightDescription() const;
 
 	// serialization
-	virtual void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last);
-	virtual void unserializeAttr(OTB::iterator& first, const OTB::iterator last);
-	virtual void unserializeItemNode(OTB::iterator& first, const OTB::iterator last, const OTB::Node& node);
+	virtual void readAttr(AttrTypes_t attr, const char*& first, const char* const last);
+	void unserializeAttr(const char*& first, const char* const last);
+	virtual void unserializeItemNode(const char*& first, const char* const last, const OTB::Node& node);
 
 	virtual void serializeAttr(PropWriteStream& propWriteStream) const;
 
