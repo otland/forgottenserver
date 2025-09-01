@@ -9,7 +9,7 @@
 
 extern Game g_game;
 
-void Podium::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator last)
+void Podium::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
 {
 	switch (attr) {
 		case ATTR_PODIUMOUTFIT: {

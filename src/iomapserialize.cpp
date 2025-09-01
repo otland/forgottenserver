@@ -13,9 +13,9 @@ extern Game g_game;
 
 namespace {
 
-bool loadContainer(const char*& first, const char* last, Container* container);
+bool loadContainer(const char*& first, const char* const last, Container* container);
 
-bool loadItem(const char*& first, const char* last, Cylinder* parent)
+bool loadItem(const char*& first, const char* const last, Cylinder* parent)
 {
 	auto id = OTB::read<uint16_t>(first, last);
 
@@ -85,7 +85,7 @@ bool loadItem(const char*& first, const char* last, Cylinder* parent)
 	return true;
 }
 
-bool loadContainer(const char*& first, const char* last, Container* container)
+bool loadContainer(const char*& first, const char* const last, Container* container)
 {
 	while (container->serializationCount > 0) {
 		loadItem(first, last, container);
