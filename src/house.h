@@ -48,7 +48,7 @@ public:
 	House* getHouse() { return house; }
 
 	// serialization
-	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
+	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
 	void serializeAttr(PropWriteStream&) const override {}
 
 	void setDoorId(uint32_t doorId) { setIntAttr(ITEM_ATTRIBUTE_DOORID, doorId); }
