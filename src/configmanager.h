@@ -47,6 +47,7 @@ enum boolean_config_t
 	MANASHIELD_BREAKABLE,
 	CHECK_DUPLICATE_STORAGE_KEYS,
 	MONSTER_OVERSPAWN,
+	SESSION_TOKEN_IP_VERIFICATION,
 
 	LAST_BOOLEAN_CONFIG /* this must be the last one */
 };
@@ -70,6 +71,7 @@ enum string_config_t
 	DEFAULT_PRIORITY,
 	MAP_AUTHOR,
 	CONFIG_FILE,
+	SESSION_TOKEN_SECRET_KEY,
 
 	LAST_STRING_CONFIG /* this must be the last one */
 };
@@ -124,6 +126,7 @@ enum integer_config_t
 	STAMINA_REGEN_PREMIUM,
 	PATHFINDING_INTERVAL,
 	PATHFINDING_DELAY,
+	SESSION_TOKEN_EXPIRATION_TIME,
 
 	LAST_INTEGER_CONFIG /* this must be the last one */
 };
