@@ -2140,7 +2140,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	}
 
 	if (retFrom == RETURNVALUE_TOOFARAWAY || retTo == RETURNVALUE_TOOFARAWAY) {
-		Position walkToPos = (retTo == RETURNVALUE_TOOFARAWAY ? toPos : fromPos);
+		Position walkToPos = (retFrom == RETURNVALUE_TOOFARAWAY ? fromPos : toPos);
 		if (retFrom == RETURNVALUE_NOERROR && retTo == RETURNVALUE_TOOFARAWAY &&
 			fromPos.x != 0xFFFF && toPos.x != 0xFFFF &&
 			fromPos.isInRange(player->getPosition(), 1, 1, 0) && !fromPos.isInRange(toPos, 1, 1, 0))
