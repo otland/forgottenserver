@@ -2193,8 +2193,10 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	}
 
 	const bool sameZ = (player->getPosition().z == toPos.z);
-	const bool losFail = (retFrom == RETURNVALUE_NOERROR && sameZ &&
-		(retTo == RETURNVALUE_CANNOTTHROW || retTo == RETURNVALUE_CANNOTTHROW));
+	const bool losFail =
+		retFrom == RETURNVALUE_NOERROR &&
+		player->getPosition().z == toPos.z &&
+		retTo == RETURNVALUE_CANNOTTHROW;
 
 	if (retFrom == RETURNVALUE_TOOFARAWAY || retTo == RETURNVALUE_TOOFARAWAY || losFail) {
 		const Position base = (retFrom == RETURNVALUE_TOOFARAWAY ? fromPos : toPos);
