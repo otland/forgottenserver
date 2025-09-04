@@ -2088,7 +2088,7 @@ void Game::playerStopAutoWalk(uint32_t playerId)
 }
 
 void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint16_t fromSpriteId,
-	const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId)
+	const Position& toPos, uint8_t toStackPos, uint16_t /*toSpriteId*/)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -2113,6 +2113,84 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	}
 
 	const bool targetSelfAtClick = (toPos == player->getPosition());
+	auto resched = [this, playerId, targetSelfAtClick](const Position& pFrom, uint8_t fromStack,
+		uint16_t fromCid, const Position& pTo, uint8_t toStack) {
+			SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [this,
+				playerId, pFrom, fromStack, fromCid, pTo, toStack, targetSelfAtClick]() {
+					Position newToPos = pTo;
+					if (targetSelfAtClick) {
+						if (Player* p = getPlayerByID(playerId)) {
+							newToPos = p->getPosition();
+						}
+					}
+					playerUseItemEx(playerId, pFrom, fromStack, fromCid, newToPos, toStack, /*toSpriteId*/0);
+				});
+			if (Player* p = getPlayerByID(playerId)) {
+				p->setNextWalkActionTask(task);
+			}
+		};
+
+	auto planPathNear = [player](const Position& target, std::vector<Direction>& outDirs, Position& outWalkTo) -> bool {
+		auto canPathTo = [player](const Position& p, std::vector<Direction>& out) -> bool {
+			std::vector<Direction> tmp;
+			if (player->getPathTo(p, tmp, 0, 1, /*fullSearch=*/true, /*clearSight=*/false)) {
+				out = std::move(tmp);
+				return true;
+			}
+			return false;
+			};
+
+		if (canPathTo(target, outDirs)) {
+			outWalkTo = target;
+			return true;
+		}
+
+		static constexpr int dx[8] = { -1, 0, 1, 0, -1, 1, 1, -1 };
+		static constexpr int dy[8] = { 0, 1, 0,-1, -1,-1, 1,  1 };
+		for (int i = 0; i < 8; ++i) {
+			Position cand(target.x + dx[i], target.y + dy[i], target.z);
+			if (canPathTo(cand, outDirs)) {
+				outWalkTo = cand;
+				return true;
+			}
+		}
+		return false;
+		};
+
+	auto moveItemToCarry = [this, player, item, &fromPos, &toPos](Item*& movedItemOut,
+		Position& newFromPos, uint8_t& newFromStack) -> ReturnValue {
+			if (Item* bp = player->getInventoryItem(CONST_SLOT_BACKPACK)) {
+				if (Container* cont = bp->getContainer()) {
+					ReturnValue mv = internalMoveItem(item->getParent(), cont, INDEX_WHEREEVER,
+						item, item->getItemCount(), &movedItemOut, 0, player, nullptr, &fromPos, &toPos);
+					if (mv == RETURNVALUE_NOERROR && movedItemOut) {
+						internalGetPosition(movedItemOut, newFromPos, newFromStack);
+						return RETURNVALUE_NOERROR;
+					}
+				}
+			}
+
+			constexpr slots_t handSlots[] = { CONST_SLOT_RIGHT, CONST_SLOT_LEFT };
+			for (const slots_t slot : handSlots) {
+				if (!player->getInventoryItem(slot)) {
+					const int32_t toIndex = static_cast<int32_t>(slot);
+					ReturnValue mv = internalMoveItem(item->getParent(), player, toIndex,
+						item, item->getItemCount(), &movedItemOut, 0, player, nullptr, &fromPos, &toPos);
+					if (mv == RETURNVALUE_NOERROR && movedItemOut) {
+						internalGetPosition(movedItemOut, newFromPos, newFromStack);
+						return RETURNVALUE_NOERROR;
+					}
+				}
+			}
+
+			ReturnValue mv = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER,
+				item, item->getItemCount(), &movedItemOut, 0, player, nullptr, &fromPos, &toPos);
+			if (mv == RETURNVALUE_NOERROR && movedItemOut) {
+				internalGetPosition(movedItemOut, newFromPos, newFromStack);
+				return RETURNVALUE_NOERROR;
+			}
+			return mv;
+		};
 
 	ReturnValue retFrom = g_actions->canUse(player, fromPos);
 	ReturnValue retTo = g_actions->canUse(player, toPos, item);
@@ -2120,14 +2198,15 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	if (retFrom == RETURNVALUE_NOERROR && retTo == RETURNVALUE_NOERROR) {
 		if (!player->canDoAction()) {
 			const uint32_t delay = player->getNextActionTime();
-			SchedulerTask* task = createSchedulerTask(delay, [=, this]() {
-				Position newToPos = toPos;
-				if (targetSelfAtClick) {
-					if (Player* p = getPlayerByID(playerId)) {
-						newToPos = p->getPosition();
+			SchedulerTask* task = createSchedulerTask(delay, [this,
+				playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, targetSelfAtClick]() {
+					Position newToPos = toPos;
+					if (targetSelfAtClick) {
+						if (Player* p = getPlayerByID(playerId)) {
+							newToPos = p->getPosition();
+						}
 					}
-				}
-				playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
+					playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, newToPos, toStackPos, /*toSpriteId*/0);
 				});
 			player->setNextActionTask(task);
 			return;
@@ -2139,8 +2218,20 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	if (retFrom == RETURNVALUE_TOOFARAWAY || retTo == RETURNVALUE_TOOFARAWAY) {
-		Position walkToPos = (retFrom == RETURNVALUE_TOOFARAWAY ? fromPos : toPos);
+	const bool sameFloor = (player->getPosition().z == toPos.z);
+	const bool losFail =
+		(retFrom == RETURNVALUE_NOERROR && sameFloor &&
+			(retTo == RETURNVALUE_CANNOTTHROW || retTo == RETURNVALUE_CANNOTTHROW));
+
+	if (retFrom == RETURNVALUE_TOOFARAWAY || retTo == RETURNVALUE_TOOFARAWAY || losFail) {
+		Position baseWalkTo = (retFrom == RETURNVALUE_TOOFARAWAY ? fromPos : toPos);
+		std::vector<Direction> listDir;
+		Position walkToPos;
+		if (!planPathNear(baseWalkTo, listDir, walkToPos)) {
+			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+			return;
+		}
+
 		if (retFrom == RETURNVALUE_NOERROR && retTo == RETURNVALUE_TOOFARAWAY &&
 			fromPos.x != 0xFFFF && toPos.x != 0xFFFF &&
 			fromPos.isInRange(player->getPosition(), 1, 1, 0) && !fromPos.isInRange(toPos, 1, 1, 0))
@@ -2149,58 +2240,24 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 			Position itemPos = fromPos;
 			uint8_t  itemStackPos = fromStackPos;
 
-			ReturnValue mv = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER,
-				item, item->getItemCount(), &movedItem, 0, player, nullptr, &fromPos, &toPos);
-			if (mv != RETURNVALUE_NOERROR) {
-				player->sendCancelMessage(mv);
+			ReturnValue mv = moveItemToCarry(movedItem, itemPos, itemStackPos);
+			if (mv != RETURNVALUE_NOERROR || !movedItem) {
+				player->sendCancelMessage(mv != RETURNVALUE_NOERROR ? mv : RETURNVALUE_NOTPOSSIBLE);
 				return;
 			}
 
-			internalGetPosition(movedItem, itemPos, itemStackPos);
-			walkToPos = toPos;
-			std::vector<Direction> listDir;
-			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
-				g_dispatcher.addTask([this, pid = player->getID(), dirs = std::move(listDir)]() {
-					playerAutoWalk(pid, dirs);
-					});
-
-				SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [=, this]() {
-					Position newToPos = toPos;
-					if (targetSelfAtClick) {
-						if (Player* p = getPlayerByID(playerId)) {
-							newToPos = p->getPosition();
-						}
-					}
-					playerUseItemEx(playerId, itemPos, itemStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
-					});
-				player->setNextWalkActionTask(task);
-			}
-			else {
-				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
-			}
-			return;
-		}
-
-		std::vector<Direction> listDir;
-		if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
 			g_dispatcher.addTask([this, pid = player->getID(), dirs = std::move(listDir)]() {
 				playerAutoWalk(pid, dirs);
 				});
 
-			SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [=, this]() {
-				Position newToPos = toPos;
-				if (targetSelfAtClick) {
-					if (Player* p = getPlayerByID(playerId)) {
-						newToPos = p->getPosition();
-					}
-				}
-				playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
-				});
-			player->setNextWalkActionTask(task);
+			resched(itemPos, itemStackPos, item->getClientID(), toPos, toStackPos);
+			return;
 		}
-		else {
-			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
-		}
+
+		g_dispatcher.addTask([this, pid = player->getID(), dirs = std::move(listDir)]() {
+			playerAutoWalk(pid, dirs);
+			});
+		resched(fromPos, fromStackPos, item->getClientID(), toPos, toStackPos);
 		return;
 	}
 
