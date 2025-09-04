@@ -2088,14 +2088,14 @@ void Game::playerStopAutoWalk(uint32_t playerId)
 }
 
 void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t fromStackPos, uint16_t fromSpriteId,
-                           const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId)
+	const Position& toPos, uint8_t toStackPos, uint16_t toSpriteId)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
 		return;
 	}
 
-	bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
+	const bool isHotkey = (fromPos.x == 0xFFFF && fromPos.y == 0 && fromPos.z == 0);
 	if (isHotkey && !getBoolean(ConfigManager::AIMBOT_HOTKEY_ENABLED)) {
 		return;
 	}
@@ -2112,67 +2112,99 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		return;
 	}
 
-	Position walkToPos = fromPos;
-	ReturnValue ret = g_actions->canUse(player, fromPos);
-	if (ret == RETURNVALUE_NOERROR) {
-		ret = g_actions->canUse(player, toPos, item);
-		if (ret == RETURNVALUE_TOOFARAWAY) {
-			walkToPos = toPos;
+	const bool targetSelfAtClick = (toPos == player->getPosition());
+
+	ReturnValue retFrom = g_actions->canUse(player, fromPos);
+	ReturnValue retTo = g_actions->canUse(player, toPos, item);
+
+	if (retFrom == RETURNVALUE_NOERROR && retTo == RETURNVALUE_NOERROR) {
+		if (!player->canDoAction()) {
+			const uint32_t delay = player->getNextActionTime();
+			SchedulerTask* task = createSchedulerTask(delay, [=, this]() {
+				Position newToPos = toPos;
+				if (targetSelfAtClick) {
+					if (Player* p = getPlayerByID(playerId)) {
+						newToPos = p->getPosition();
+					}
+				}
+				playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
+				});
+			player->setNextActionTask(task);
+			return;
 		}
+
+		player->resetIdleTime();
+		player->setNextActionTask(nullptr);
+		g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
+		return;
 	}
 
-	if (ret != RETURNVALUE_NOERROR) {
-		if (ret == RETURNVALUE_TOOFARAWAY) {
+	if (retFrom == RETURNVALUE_TOOFARAWAY || retTo == RETURNVALUE_TOOFARAWAY) {
+		Position walkToPos = (retTo == RETURNVALUE_TOOFARAWAY ? toPos : fromPos);
+		if (retFrom == RETURNVALUE_NOERROR && retTo == RETURNVALUE_TOOFARAWAY &&
+			fromPos.x != 0xFFFF && toPos.x != 0xFFFF &&
+			fromPos.isInRange(player->getPosition(), 1, 1, 0) && !fromPos.isInRange(toPos, 1, 1, 0))
+		{
+			Item* movedItem = nullptr;
 			Position itemPos = fromPos;
-			uint8_t itemStackPos = fromStackPos;
+			uint8_t  itemStackPos = fromStackPos;
 
-			if (fromPos.x != 0xFFFF && toPos.x != 0xFFFF && fromPos.isInRange(player->getPosition(), 1, 1, 0) &&
-			    !fromPos.isInRange(toPos, 1, 1, 0)) {
-				Item* moveItem = nullptr;
-
-				ret = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER, item, item->getItemCount(),
-				                       &moveItem, 0, player, nullptr, &fromPos, &toPos);
-				if (ret != RETURNVALUE_NOERROR) {
-					player->sendCancelMessage(ret);
-					return;
-				}
-
-				// changing the position since its now in the inventory of the player
-				internalGetPosition(moveItem, itemPos, itemStackPos);
+			ReturnValue mv = internalMoveItem(item->getParent(), player, INDEX_WHEREEVER,
+				item, item->getItemCount(), &movedItem, 0, player, nullptr, &fromPos, &toPos);
+			if (mv != RETURNVALUE_NOERROR) {
+				player->sendCancelMessage(mv);
+				return;
 			}
 
+			internalGetPosition(movedItem, itemPos, itemStackPos);
+			walkToPos = toPos;
 			std::vector<Direction> listDir;
 			if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
-				g_dispatcher.addTask([this, playerID = player->getID(), listDir = std::move(listDir)]() {
-					playerAutoWalk(playerID, listDir);
-				});
+				g_dispatcher.addTask([this, pid = player->getID(), dirs = std::move(listDir)]() {
+					playerAutoWalk(pid, dirs);
+					});
+
 				SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [=, this]() {
-					playerUseItemEx(playerId, itemPos, itemStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
-				});
+					Position newToPos = toPos;
+					if (targetSelfAtClick) {
+						if (Player* p = getPlayerByID(playerId)) {
+							newToPos = p->getPosition();
+						}
+					}
+					playerUseItemEx(playerId, itemPos, itemStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
+					});
 				player->setNextWalkActionTask(task);
-			} else {
+			}
+			else {
 				player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
 			}
 			return;
 		}
 
-		player->sendCancelMessage(ret);
+		std::vector<Direction> listDir;
+		if (player->getPathTo(walkToPos, listDir, 0, 1, true, true)) {
+			g_dispatcher.addTask([this, pid = player->getID(), dirs = std::move(listDir)]() {
+				playerAutoWalk(pid, dirs);
+				});
+
+			SchedulerTask* task = createSchedulerTask(RANGE_USE_ITEM_EX_INTERVAL, [=, this]() {
+				Position newToPos = toPos;
+				if (targetSelfAtClick) {
+					if (Player* p = getPlayerByID(playerId)) {
+						newToPos = p->getPosition();
+					}
+				}
+				playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, newToPos, toStackPos, toSpriteId);
+				});
+			player->setNextWalkActionTask(task);
+		}
+		else {
+			player->sendCancelMessage(RETURNVALUE_THEREISNOWAY);
+		}
 		return;
 	}
 
-	if (!player->canDoAction()) {
-		uint32_t delay = player->getNextActionTime();
-		SchedulerTask* task = createSchedulerTask(delay, [=, this]() {
-			playerUseItemEx(playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId);
-		});
-		player->setNextActionTask(task);
-		return;
-	}
-
-	player->resetIdleTime();
-	player->setNextActionTask(nullptr);
-
-	g_actions->useItemEx(player, fromPos, toPos, toStackPos, item, isHotkey);
+	player->sendCancelMessage(retFrom != RETURNVALUE_NOERROR ? retFrom : retTo);
 }
 
 void Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPos, uint8_t index, uint16_t spriteId)
