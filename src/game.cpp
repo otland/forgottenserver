@@ -2147,7 +2147,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 		}
 
 		static constexpr int8_t dx[8] = { -1, 0, 1, 0, -1,  1,  1, -1 };
-		static constexpr int8_t dy[8] = { 0, 1, 0,-1, -1, -1,  1,  1 };
+		static constexpr int8_t dy[8] = { 0, 1, 0, -1, -1, -1,  1,  1 };
 
 		for (int i = 0; i < 8; ++i) {
 			int32_t nx = static_cast<int32_t>(t.x) + dx[i];
