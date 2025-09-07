@@ -931,8 +931,8 @@ void Creature::onEndCondition(ConditionType_t)
 
 void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 {
-	const auto &tile = getTile();
-	const auto &field = tile ? tile->getFieldItem() : nullptr;
+	const auto& tile = getTile();
+	const auto& field = tile ? tile->getFieldItem() : nullptr;
 	if (!field) {
 		return;
 	}
