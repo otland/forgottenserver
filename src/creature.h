@@ -170,7 +170,7 @@ public:
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
 	bool isInvisible() const;
 	ZoneType_t getZone() const
-    {
+	{
 		const Tile* tile = getTile();
 		if (!tile) {
 			return ZONE_NORMAL;
