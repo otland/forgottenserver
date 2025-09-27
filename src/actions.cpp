@@ -45,7 +45,7 @@ LuaScriptInterface& Actions::getScriptInterface() { return scriptInterface; }
 
 Event_ptr Actions::getEvent(const std::string& nodeName)
 {
-	if (!caseInsensitiveEqual(nodeName, "action")) {
+	if (!boost::iequals(nodeName, "action")) {
 		return nullptr;
 	}
 	return Event_ptr(new Action(&scriptInterface));
