@@ -5,6 +5,98 @@ if not __ModalWindow then
 	ModalWindows = {}
 end
 
+-- NOTE: As ModalWindow has a real table defined here, I moved the definition of the class to this file
+
+-- This is to allow for proper documentation of the class and its methods, as having it in cpplinter.lua was causing the language server
+-- to not be able to find the class and its methods.
+
+---The ModalWindow is a small window that will be shown to the player with the information set for the window 
+---<br>
+---ModalWindows can be quite useful for having a user input data, be shown some information, etc... 
+---<br><br>
+---There is a helper function for creating a ModalWindow, which is ModalWindowHelper, found in data\scripts\creaturescripts\player\modal_window_helper.lua
+---<br><br>
+---A ModalWindow example can be seen in data\scripts\creaturescripts\player\#modal_window_example.lua
+---<br>
+--- Example usage:
+--- ```lua
+--- local modalWindow = ModalWindow{
+---		title = "Modal Window Helper Example",
+---		message = "This is an example of ModalWindowHelper."
+---	}
+--- modalWindow:addChoice("Up", function(player, button, choice)
+--- 	if button.name == "Select" then
+---			local pos = player:getPosition()
+---			pos:getNextPosition(DIRECTION_NORTH)
+---			player:teleportTo(pos, true)
+---			modalWindow:sendToPlayer(player) -- This will resend the same modal window to the player again, to be able to interact again with the window
+--- 	end
+--- end)
+--- ```
+--- <br>
+--- Further definitons of the ModalWindow can be found in 
+--- <ol>
+--- <li>modal_window_helper.lua</li>
+--- <li>#modal_window_example.lua</li>
+--- <li>luascript.cpp</li>
+--- </ol>
+---@class ModalWindow
+---*int LuaScriptInterface::luaModalWindowCreate(lua_State* L)
+---@source ../src/luascript.cpp:6293
+---@field create fun(): ModalWindow
+---@field __eq fun(self: ModalWindow, other: ModalWindow): boolean
+---@field __gc fun(self: ModalWindow)
+---*int LuaScriptInterface::luaModalWindowDelete(lua_State* L)
+---@source ../src/luascript.cpp:6305
+---@field delete fun(self: ModalWindow)
+---*int LuaScriptInterface::luaModalWindowGetId(lua_State* L)
+---@source ../src/luascript.cpp:6315
+---@field getId fun(self: ModalWindow): number
+---*int LuaScriptInterface::luaModalWindowGetTitle(lua_State* L)
+---@source ../src/luascript.cpp:6327
+---@field getTitle fun(self: ModalWindow): string
+---*int LuaScriptInterface::luaModalWindowGetMessage(lua_State* L)
+---@source ../src/luascript.cpp:6339
+---@field getMessage fun(self: ModalWindow): string
+---*int LuaScriptInterface::luaModalWindowSetTitle(lua_State* L)
+---@source ../src/luascript.cpp:6351
+---@field setTitle fun(self: ModalWindow, title: string)
+---*int LuaScriptInterface::luaModalWindowSetMessage(lua_State* L)
+---@source ../src/luascript.cpp:6365
+---@field setMessage fun(self: ModalWindow, message: string)
+---*int LuaScriptInterface::luaModalWindowGetButtonCount(lua_State* L)
+---@source ../src/luascript.cpp:6379
+---@field getButtonCount fun(self: ModalWindow): number
+---*int LuaScriptInterface::luaModalWindowGetChoiceCount(lua_State* L)
+---@source ../src/luascript.cpp:6391
+---@field getChoiceCount fun(self: ModalWindow): number
+---*int LuaScriptInterface::luaModalWindowAddButton(lua_State* L)
+---@source ../src/luascript.cpp:6403
+---@field addButton fun(self: ModalWindow, buttonId: number, buttonText: string)
+---*int LuaScriptInterface::luaModalWindowAddChoice(lua_State* L)
+---@source ../src/luascript.cpp:6418
+---@field addChoice fun(self: ModalWindow, choiceId: number, choiceText: string)
+---*int LuaScriptInterface::luaModalWindowGetDefaultEnterButton(lua_State* L)
+---@source ../src/luascript.cpp:6433
+---@field getDefaultEnterButton fun(self: ModalWindow): number
+---*int LuaScriptInterface::luaModalWindowSetDefaultEnterButton(lua_State* L)
+---@source ../src/luascript.cpp:6445
+---@field setDefaultEnterButton fun(self: ModalWindow, buttonId: number)
+---*int LuaScriptInterface::luaModalWindowGetDefaultEscapeButton(lua_State* L)
+---@source ../src/luascript.cpp:6458
+---@field getDefaultEscapeButton fun(self: ModalWindow): number
+---*int LuaScriptInterface::luaModalWindowSetDefaultEscapeButton(lua_State* L)
+---@source ../src/luascript.cpp:6470
+---@field setDefaultEscapeButton fun(self: ModalWindow, buttonId: number)
+---*int LuaScriptInterface::luaModalWindowHasPriority(lua_State* L)
+---@source ../src/luascript.cpp:6483
+---@field hasPriority fun(self: ModalWindow): boolean
+---*int LuaScriptInterface::luaModalWindowSetPriority(lua_State* L)
+---@source ../src/luascript.cpp:6495
+---@field setPriority fun(self: ModalWindow, priority: boolean)
+---*int LuaScriptInterface::luaModalWindowSendToPlayer(lua_State* L)
+---@source ../src/luascript.cpp:6508
+---@field sendToPlayer fun(self: ModalWindow, player: Player)
 ModalWindow = {}
 ModalWindow.__index = ModalWindow
 

@@ -1,8 +1,12 @@
 do
 	local worldTime = 0
 
+--- Returns the current world time
+---@return integer
 	function Game.getWorldTime() return worldTime end
 
+--- Sets the world time to the given value.
+---@param time number
 	function Game.setWorldTime(time)
 		worldTime = time
 
@@ -14,6 +18,8 @@ do
 		end
 	end
 
+--- Returns the world time as a formatted string in HH:MM format.
+---@return string
 	function Game.getFormattedWorldTime()
 		local worldTime = Game.getWorldTime()
 		local hours = math.floor(worldTime / 60)
