@@ -4845,13 +4845,13 @@ int LuaScriptInterface::luaGameGetVocations(lua_State* L)
 int LuaScriptInterface::luaGameGetRuneSpells(lua_State* L)
 {
 	// Game.getRuneSpells()
-	const auto& runeSpells = g_spells->getRuneSpells();
+	auto runeSpells = g_spells->getRuneSpells();
 
 	lua_createtable(L, runeSpells.size(), 0);
 
 	int index = 0;
-	for (const auto& spell : runeSpells | std::views::values) {
-		tfs::lua::pushUserdata<Spell>(L, const_cast<RuneSpell*>(&spell));
+	for (auto& spell : runeSpells | std::views::values) {
+		tfs::lua::pushUserdata<Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
 	}
@@ -4862,13 +4862,13 @@ int LuaScriptInterface::luaGameGetRuneSpells(lua_State* L)
 int LuaScriptInterface::luaGameGetInstantSpells(lua_State* L)
 {
 	// Game.getInstantSpells()
-	const auto& instantSpells = g_spells->getInstantSpells();
+	auto instantSpells = g_spells->getInstantSpells();
 
 	lua_createtable(L, instantSpells.size(), 0);
 
 	int index = 0;
-	for (const auto& spell : instantSpells | std::views::values) {
-		tfs::lua::pushUserdata<Spell>(L, const_cast<InstantSpell*>(&spell));
+	for (auto& spell : instantSpells | std::views::values) {
+		tfs::lua::pushUserdata<Spell>(L, &spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
 	}
