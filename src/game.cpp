@@ -2679,7 +2679,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	if (tradeItem->isRemoved() || !tradeItem->getParent()) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
-	}	
+	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		if (const HouseTile* const houseTile = dynamic_cast<const HouseTile*>(tradeItem->getTile())) {
