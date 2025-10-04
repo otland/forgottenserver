@@ -2669,6 +2669,11 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
+	if (tradeItem->isRemoved() || !tradeItem->getParent()) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}	
+
 	Item* tradeItem = tradeThing->getItem();
 	if (tradeItem->getClientID() != spriteId || !tradeItem->isPickupable() ||
 	    tradeItem->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
