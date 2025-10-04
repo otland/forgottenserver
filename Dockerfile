@@ -1,5 +1,11 @@
+# Stage 1: Build
 FROM alpine:3.19 AS build
+
+# Install build dependencies including Clang and libc++
 RUN apk add --no-cache \
+  clang \
+  libc++ \
+  libc++abi \
   build-base \
   boost-dev \
   cmake \
@@ -10,13 +16,24 @@ RUN apk add --no-cache \
   pugixml-dev \
   samurai
 
+# Set Clang as the compiler
+ENV CC=clang
+ENV CXX=clang++
+
+# Copy source and cmake files
 COPY cmake /usr/src/forgottenserver/cmake/
 COPY src /usr/src/forgottenserver/src/
 COPY CMakeLists.txt CMakePresets.json /usr/src/forgottenserver/
 WORKDIR /usr/src/forgottenserver
-RUN cmake --preset default -DUSE_LUAJIT=ON && cmake --build --config RelWithDebInfo --preset default
 
+# Build the project
+RUN cmake --preset default -DUSE_LUAJIT=ON -DCMAKE_CXX_COMPILER=clang++ && \
+  cmake --build --config RelWithDebInfo --preset default
+
+# Stage 2: Runtime
 FROM alpine:3.19
+
+# Install runtime dependencies
 RUN apk add --no-cache \
   boost-iostreams \
   boost-locale \
@@ -28,6 +45,7 @@ RUN apk add --no-cache \
   openssl \
   pugixml
 
+# Copy built binary and data
 COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
 COPY data /srv/data/
 COPY LICENSE README.md *.dist *.sql key.pem /srv/
