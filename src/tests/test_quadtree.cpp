@@ -7,7 +7,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_find_in_range_single_creature)
 {
 	auto npc1 = new Npc("Alchemist");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_single_creature)
 	BOOST_TEST(creatures == 1);
 }
 
-BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_find_in_range_multiple_creature)
 {
 	auto npc1 = new Npc("Guard");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_multiple_creature)
 	BOOST_TEST(creatures == 4);
 }
 
-BOOST_AUTO_TEST_CASE(test_find_in_range_no_creatures)
+BOOST_AUTO_TEST_CASE(test_quadtree_find_in_range_no_creatures)
 {
 	auto npc1 = new Npc("Herbalist");
 	tfs::map::quadtree::push_creature(10, 10, npc1);
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(test_find_in_range_no_creatures)
 	BOOST_TEST(tfs::map::quadtree::find_in_range(0, 0, 5, 5).empty());
 }
 
-BOOST_AUTO_TEST_CASE(test_move_single_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_move_single_creature)
 {
 	auto npc1 = new Npc("Stablemaster");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_CASE(test_move_single_creature)
 	BOOST_TEST(creatures == 1);
 }
 
-BOOST_AUTO_TEST_CASE(test_move_multiple_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_move_multiple_creature)
 {
 	auto npc1 = new Npc("Priestess");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(test_move_multiple_creature)
 	BOOST_TEST(creatures == 2);
 }
 
-BOOST_AUTO_TEST_CASE(test_move_no_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_move_no_creature)
 {
 	auto npc1 = new Npc("Innkeeper");
 	tfs::map::quadtree::push_creature(5, 5, npc1);
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(test_move_no_creature)
 	BOOST_TEST(tfs::map::quadtree::find_in_range(0, 0, 20, 20).empty());
 }
 
-BOOST_AUTO_TEST_CASE(test_remove_creature)
+BOOST_AUTO_TEST_CASE(test_quadtree_remove_creature)
 {
 	auto npc = new Npc("Fisherman");
 	tfs::map::quadtree::push_creature(5, 5, npc);

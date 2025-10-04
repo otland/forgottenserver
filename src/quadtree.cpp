@@ -80,6 +80,11 @@ void create_leaf_node(QuadTree* node, uint16_t x, uint16_t y, uint8_t z)
 	auto node_child = node->get_child(index);
 	if (!node_child) {
 		if (z == TILE_GRID_BITS) {
+			/*
+			 * Stop subdividing and create a Leaf when z reaches TILE_GRID_BITS.
+			 * Each Leaf stores a TILE_GRID_SIZE × TILE_GRID_SIZE tile block (TILE_GRID_SIZE = 2^TILE_GRID_BITS)
+			 * and contains creatures, allowing direct indexing with x & TILE_INDEX_MASK and y & TILE_INDEX_MASK.
+			 */
 			node_child = new Leaf();
 		} else {
 			node_child = new Node();
@@ -104,10 +109,9 @@ void create_leaf_in_root(uint16_t x, uint16_t y)
 
 } // namespace
 
-SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x, uint16_t end_y)
+std::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
+                                                            uint16_t end_y)
 {
-	SpectatorVec spectators;
-
 	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
 	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
 	int32_t end_x_aligned = end_x - (end_x % TILE_GRID_SIZE);
@@ -122,7 +126,7 @@ SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_
 			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += TILE_GRID_SIZE) {
 				if (east_leaf) {
 					for (auto creature : east_leaf->creatures) {
-						spectators.emplace_back(creature);
+						co_yield creature;
 					}
 
 					east_leaf = east_leaf->east_leaf;
@@ -138,8 +142,6 @@ SpectatorVec tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_
 			}
 		}
 	}
-
-	return spectators;
 }
 
 Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
