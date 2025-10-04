@@ -21,6 +21,7 @@ RUN apk add --no-cache \
   boost-iostreams \
   boost-locale \
   boost-system \
+  boost-json \
   fmt \
   luajit \
   mariadb-connector-c \

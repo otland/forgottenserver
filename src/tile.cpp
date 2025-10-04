@@ -1290,7 +1290,7 @@ size_t Tile::getFirstIndex() const { return 0; }
 
 size_t Tile::getLastIndex() const { return getThingCount(); }
 
-uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/, bool) const
+uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
 	if (ground && ground->getID() == itemId) {

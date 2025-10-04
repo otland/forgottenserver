@@ -880,6 +880,10 @@ void ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
 
 bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interval)
 {
+	if (!creature) {
+		return false;
+	}
+
 	internalHealthTicks += interval;
 	internalManaTicks += interval;
 
@@ -1037,6 +1041,10 @@ void ConditionSoul::serialize(PropWriteStream& propWriteStream)
 
 bool ConditionSoul::executeCondition(Creature* creature, int32_t interval)
 {
+	if (!creature) {
+		return false;
+	}
+
 	internalSoulTicks += interval;
 
 	if (Player* player = creature->getPlayer()) {
@@ -1362,6 +1370,10 @@ bool ConditionDamage::getNextDamage(int32_t& damage)
 
 bool ConditionDamage::doDamage(Creature* creature, int32_t healthChange)
 {
+	if (!creature) {
+		return false;
+	}
+
 	if (creature->isSuppress(getType()) || creature->isImmune(getType())) {
 		return false;
 	}
@@ -1749,6 +1761,10 @@ bool ConditionLight::startCondition(Creature* creature)
 
 bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 {
+	if (!creature) {
+		return false;
+	}
+
 	internalLightTicks += interval;
 
 	if (internalLightTicks >= lightChangeInterval) {
@@ -1978,6 +1994,10 @@ bool ConditionDrunk::setParam(ConditionParam_t param, int32_t value)
 
 bool ConditionManaShield::startCondition(Creature* creature)
 {
+	if (!creature) {
+		return false;
+	}
+
 	if (!Condition::startCondition(creature)) {
 		return false;
 	}

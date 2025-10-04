@@ -6,15 +6,16 @@
 
 #include "creature.h"
 #include "cylinder.h"
+#include "depotchest.h"
 #include "depotlocker.h"
 #include "enums.h"
 #include "groups.h"
 #include "guild.h"
+#include "inbox.h"
 #include "protocolgame.h"
 #include "town.h"
 #include "vocation.h"
 
-class DepotChest;
 class House;
 struct Mount;
 class NetworkMessage;
@@ -182,7 +183,13 @@ public:
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }
 
-	Inbox* getInbox() const { return inbox; }
+	Inbox_ptr getInbox()
+	{
+		if (!inbox) {
+			inbox = std::make_shared<Inbox>(ITEM_INBOX);
+		}
+		return inbox;
+	}
 
 	StoreInbox* getStoreInbox() const { return storeInbox; }
 
@@ -356,7 +363,7 @@ public:
 	void addConditionSuppressions(uint32_t conditions);
 	void removeConditionSuppressions(uint32_t conditions);
 
-	DepotChest* getDepotChest(uint32_t depotId, bool autoCreate);
+	DepotChest_ptr getDepotChest(uint32_t depotId, bool autoCreate);
 	DepotLocker& getDepotLocker();
 	void onReceiveMail() const;
 	bool isNearDepotBox() const;
@@ -1156,7 +1163,7 @@ private:
 	int32_t getThingIndex(const Thing* thing) const override;
 	size_t getFirstIndex() const override;
 	size_t getLastIndex() const override;
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1, bool ignoreEquipped = false) const override;
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	Thing* getThing(size_t index) const override;
 
@@ -1167,7 +1174,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, DepotChest*> depotChests;
+	std::map<uint32_t, DepotChest_ptr> depotChests;
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;
@@ -1211,7 +1218,7 @@ private:
 	Guild_ptr guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
-	Inbox* inbox;
+	Inbox_ptr inbox = nullptr;
 	Item* tradeItem = nullptr;
 	Item* inventory[CONST_SLOT_LAST + 1] = {};
 	Item* writeItem = nullptr;

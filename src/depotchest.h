@@ -6,6 +6,9 @@
 
 #include "container.h"
 
+class DepotChest;
+using DepotChest_ptr = std::shared_ptr<DepotChest>;
+
 class DepotChest final : public Container
 {
 public:

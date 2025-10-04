@@ -9,6 +9,8 @@
 #include "game.h"
 #include "outputmessage.h"
 
+#include <ranges>
+
 extern Game g_game;
 
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;
@@ -75,7 +77,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 void ProtocolStatus::sendStatusString()
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 
 	setRawMessages(true);
 
@@ -104,7 +106,25 @@ void ProtocolStatus::sendStatusString()
 	owner.append_attribute("email") = getString(ConfigManager::OWNER_EMAIL).c_str();
 
 	pugi::xml_node players = tsqp.append_child("players");
-	players.append_attribute("online") = std::to_string(g_game.getPlayersOnline()).c_str();
+
+	uint32_t reportableOnlinePlayerCount = 0;
+	uint32_t maxPlayersPerIp = getNumber(ConfigManager::STATUS_COUNT_MAX_PLAYERS_PER_IP);
+	if (maxPlayersPerIp > 0) {
+		std::map<Connection::Address, uint32_t> playersPerIp;
+		for (const auto& it : g_game.getPlayers()) {
+			if (!it.second->getIP().is_unspecified()) {
+				++playersPerIp[it.second->getIP()];
+			}
+		}
+
+		for (auto& p : playersPerIp | std::views::values) {
+			reportableOnlinePlayerCount += std::min(p, maxPlayersPerIp);
+		}
+	} else {
+		reportableOnlinePlayerCount = g_game.getPlayersOnline();
+	}
+
+	players.append_attribute("online") = std::to_string(reportableOnlinePlayerCount).c_str();
 	players.append_attribute("max") = std::to_string(getNumber(ConfigManager::MAX_PLAYERS)).c_str();
 	players.append_attribute("peak") = std::to_string(g_game.getPlayersRecord()).c_str();
 
@@ -144,7 +164,7 @@ void ProtocolStatus::sendStatusString()
 
 void ProtocolStatus::sendInfo(uint16_t requestedInfo, const std::string& characterName)
 {
-	auto output = OutputMessagePool::getOutputMessage();
+	auto output = tfs::net::make_output_message();
 
 	if (requestedInfo & REQUEST_BASIC_SERVER_INFO) {
 		output->addByte(0x10);

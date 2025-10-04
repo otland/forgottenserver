@@ -13,7 +13,6 @@
 #include "depotchest.h"
 #include "events.h"
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "monster.h"
 #include "movement.h"
@@ -43,11 +42,8 @@ Player::Player(ProtocolGame_ptr p) :
     lastPing(OTSYS_TIME()),
     lastPong(lastPing),
     client(std::move(p)),
-    inbox(new Inbox(ITEM_INBOX)),
     storeInbox(new StoreInbox(ITEM_STORE_INBOX))
 {
-	inbox->incrementReferenceCounter();
-
 	storeInbox->setParent(this);
 	storeInbox->incrementReferenceCounter();
 }
@@ -61,11 +57,17 @@ Player::~Player()
 		}
 	}
 
-	if (depotLocker) {
-		depotLocker->removeInbox(inbox);
+	for (const auto& [_, depot] : depotChests) {
+		if (Cylinder* parent = depot->getRealParent()) {
+			// remove chest from depot locker, because of possible double free when shared_ptr decides to free up the
+			// resource
+			parent->internalRemoveThing(depot.get());
+		}
 	}
 
-	inbox->decrementReferenceCounter();
+	if (depotLocker) {
+		depotLocker->removeInbox(inbox.get());
+	}
 
 	storeInbox->setParent(nullptr);
 	storeInbox->decrementReferenceCounter();
@@ -814,7 +816,7 @@ bool Player::isNearDepotBox() const
 	return false;
 }
 
-DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
+DepotChest_ptr Player::getDepotChest(uint32_t depotId, bool autoCreate)
 {
 	auto it = depotChests.find(depotId);
 	if (it != depotChests.end()) {
@@ -830,9 +832,10 @@ DepotChest* Player::getDepotChest(uint32_t depotId, bool autoCreate)
 		return nullptr;
 	}
 
-	it = depotChests.emplace(depotId, new DepotChest(depotItemId)).first;
-	it->second->setMaxDepotItems(getMaxDepotItems());
-	return it->second;
+	const DepotChest_ptr& depotChest =
+	    depotChests.emplace(depotId, std::make_shared<DepotChest>(depotItemId)).first->second;
+	depotChest->setMaxDepotItems(getMaxDepotItems());
+	return depotChest;
 }
 
 DepotLocker& Player::getDepotLocker()
@@ -840,13 +843,13 @@ DepotLocker& Player::getDepotLocker()
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-		depotLocker->internalAddThing(inbox);
+		depotLocker->internalAddThing(getInbox().get());
 
 		DepotChest* depotChest = new DepotChest(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
 		for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
-			if (DepotChest* box = getDepotChest(depotId, true)) {
-				depotChest->internalAddThing(box);
+			if (const auto& box = getDepotChest(depotId, true)) {
+				depotChest->internalAddThing(box.get());
 			}
 		}
 
@@ -1331,7 +1334,6 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
 	if (hasFollowPath && (creature == followCreature || (creature == this && followCreature))) {
-		isUpdatingPath = false;
 		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
@@ -2203,29 +2205,26 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 {
 	Item* corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
-		std::unordered_map<std::string, uint16_t> names;
-		for (const auto& killer : getKillers()) {
-			++names[killer->getName()];
-		}
+		size_t killersSize = getKillers().size();
 
 		if (lastHitCreature) {
 			if (!mostDamageCreature) {
 				corpse->setSpecialDescription(
 				    fmt::format("You recognize {:s}. {:s} was killed by {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", lastHitCreature->getNameDescription(),
-				                names.size() > 1 ? " and others." : "."));
-			} else if (lastHitCreature != mostDamageCreature && names[lastHitCreature->getName()] == 1) {
+				                killersSize > 1 ? " and others." : "."));
+			} else if (lastHitCreature != mostDamageCreature) {
 				corpse->setSpecialDescription(
 				    fmt::format("You recognize {:s}. {:s} was killed by {:s}, {:s}{:s}", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription(),
-				                lastHitCreature->getNameDescription(), names.size() > 2 ? " and others." : "."));
+				                lastHitCreature->getNameDescription(), killersSize > 2 ? " and others." : "."));
 			} else {
 				corpse->setSpecialDescription(
 				    fmt::format("You recognize {:s}. {:s} was killed by {:s} and others.", getNameDescription(),
 				                getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
 			}
 		} else if (mostDamageCreature) {
-			if (names.size() > 1) {
+			if (killersSize > 1) {
 				corpse->setSpecialDescription(fmt::format(
 				    "You recognize {:s}. {:s} was killed by something evil, {:s}, and others", getNameDescription(),
 				    getSex() == PLAYERSEX_FEMALE ? "She" : "He", mostDamageCreature->getNameDescription()));
@@ -2237,7 +2236,7 @@ Item* Player::getCorpse(Creature* lastHitCreature, Creature* mostDamageCreature)
 		} else {
 			corpse->setSpecialDescription(fmt::format("You recognize {:s}. {:s} was killed by something evil {:s}",
 			                                          getNameDescription(), getSex() == PLAYERSEX_FEMALE ? "She" : "He",
-			                                          names.size() ? " and others." : "."));
+			                                          killersSize ? " and others." : "."));
 		}
 	}
 	return corpse;
@@ -3002,39 +3001,23 @@ size_t Player::getFirstIndex() const { return CONST_SLOT_FIRST; }
 
 size_t Player::getLastIndex() const { return CONST_SLOT_LAST + 1; }
 
-uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/, bool ignoreEquipped /*= false*/) const
+uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
 	uint32_t count = 0;
-
-	if (ignoreEquipped) {
-		Item* item = inventory[CONST_SLOT_BACKPACK];
+	for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
+		Item* item = inventory[i];
 		if (!item) {
-			return 0;
+			continue;
+		}
+
+		if (item->getID() == itemId) {
+			count += Item::countByType(item, subType);
 		}
 
 		if (Container* container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
-				}
-			}
-		}
-	} else {
-		for (int32_t i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; i++) {
-			Item* item = inventory[i];
-			if (!item) {
-				continue;
-			}
-
-			if (item->getID() == itemId) {
-				count += Item::countByType(item, subType);
-			}
-
-			if (Container* container = item->getContainer()) {
-				for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
-					if ((*it)->getID() == itemId) {
-						count += Item::countByType(*it, subType);
-					}
 				}
 			}
 		}
@@ -3224,7 +3207,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 					bool isOwner = false;
 
 					for (const auto& it : depotChests) {
-						if (it.second == depotChest) {
+						if (it.second.get() == depotChest) {
 							isOwner = true;
 							onSendContainer(container);
 						}
@@ -3234,7 +3217,7 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 						autoCloseContainers(container);
 					}
 				} else if (const Inbox* inboxContainer = dynamic_cast<const Inbox*>(topContainer)) {
-					if (inboxContainer == inbox) {
+					if (inboxContainer == inbox.get()) {
 						onSendContainer(container);
 					} else {
 						autoCloseContainers(container);
@@ -4397,12 +4380,8 @@ bool Player::toggleMount(bool mount)
 
 bool Player::tameMount(uint16_t mountId)
 {
-	if (!g_game.mounts.getMountByID(mountId)) {
-		return false;
-	}
-
 	Mount* mount = g_game.mounts.getMountByID(mountId);
-	if (hasMount(mount)) {
+	if (!mount || hasMount(mount)) {
 		return false;
 	}
 
@@ -4412,12 +4391,8 @@ bool Player::tameMount(uint16_t mountId)
 
 bool Player::untameMount(uint16_t mountId)
 {
-	if (!g_game.mounts.getMountByID(mountId)) {
-		return false;
-	}
-
 	Mount* mount = g_game.mounts.getMountByID(mountId);
-	if (!hasMount(mount)) {
+	if (!mount || !hasMount(mount)) {
 		return false;
 	}
 

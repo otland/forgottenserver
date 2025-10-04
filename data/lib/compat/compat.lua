@@ -133,50 +133,6 @@ do
 end
 
 do
-	local function NpcTypeNewIndex(self, key, value)
-		if key == "onSay" then
-			self:eventType("say")
-			self:onSay(value)
-			return
-		elseif key == "onDisappear" then
-			self:eventType("disappear")
-			self:onDisappear(value)
-			return
-		elseif key == "onAppear" then
-			self:eventType("appear")
-			self:onAppear(value)
-			return
-		elseif key == "onMove" then
-			self:eventType("move")
-			self:onMove(value)
-			return
-		elseif key == "onPlayerCloseChannel" then
-			self:eventType("closechannel")
-			self:onPlayerCloseChannel(value)
-			return
-		elseif key == "onPlayerEndTrade" then
-			self:eventType("endtrade")
-			self:onPlayerEndTrade(value)
-			return
-		elseif key == "onThink" then
-			self:eventType("think")
-			self:onThink(value)
-			return
-		elseif key == "onSight" then
-			self:eventType("sight")
-			self:onSight(value)
-			return
-		elseif key == "onSpeechBubble" then
-			self:eventType("speechbubble")
-			self:onSpeechBubble(value)
-			return
-		end
-		rawset(self, key, value)
-	end
-	rawgetmetatable("NpcType").__newindex = NpcTypeNewIndex
-end
-
-do
 	local function TalkActionNewIndex(self, key, value)
 		if key == "onSay" then
 			self:onSay(value)
@@ -196,6 +152,10 @@ do
 		elseif key == "onLogout" then
 			self:type("logout")
 			self:onLogout(value)
+			return
+		elseif key == "onReconnect" then
+			self:type("reconnect")
+			self:onReconnect(value)
 			return
 		elseif key == "onThink" then
 			self:type("think")
@@ -637,9 +597,7 @@ function Player:getStorageValue(key)
 end
 
 function Player:setStorageValue(key, value)
-
 	if value == STORAGEVALUE_EMPTY then
-		print("[Warning - " .. debug.getinfo(2).source:match("@?(.*)") .. "] Invoking Creature:setStorageValue with a value of -1 to remove it is deprecated. Please use Creature:removeStorageValue(key) instead.")
 		Creature.removeStorageValue(self, key)
 	else
 		Creature.setStorageValue(self, key, value)

@@ -10,7 +10,6 @@
 #include "events.h"
 #include "globalevent.h"
 #include "movement.h"
-#include "npc.h"
 #include "script.h"
 #include "spells.h"
 #include "talkaction.h"
@@ -54,8 +53,6 @@ bool ScriptingManager::loadScriptSystems()
 		return false;
 	}
 
-	Npcs::load();
-
 	g_chat = new Chat();
 
 	g_weapons = new Weapons();
@@ -73,10 +70,6 @@ bool ScriptingManager::loadScriptSystems()
 	}
 
 	g_actions = new Actions();
-	if (!g_actions->loadFromXml()) {
-		std::cout << "> ERROR: Unable to load actions!" << std::endl;
-		return false;
-	}
 
 	g_talkActions = new TalkActions();
 	if (!g_talkActions->loadFromXml()) {

@@ -589,7 +589,7 @@ void Monster::goToFollowCreature()
 
 		if (isFleeing()) {
 			getDistanceStep(followCreature->getPosition(), dir, true);
-		} else if (fpp.maxTargetDist > 1) {
+		} else { // maxTargetDist > 1
 			if (!getDistanceStep(followCreature->getPosition(), dir)) {
 				// if we can't get anything then let the A* calculate
 				updateFollowCreaturePath(fpp);
@@ -864,7 +864,7 @@ void Monster::doAttacking(uint32_t interval)
 	}
 
 	// ensure ranged creatures turn to player
-	if (!lookUpdated && lastMeleeAttack == 0) {
+	if (!lookUpdated && lastMeleeAttack == 0 && !isFleeing()) {
 		updateLookDirection();
 	}
 
@@ -1085,7 +1085,17 @@ bool Monster::walkToSpawn()
 	return true;
 }
 
-void Monster::onWalk() { Creature::onWalk(); }
+void Monster::onWalk()
+{
+	Creature::onWalk();
+
+	if ((attackedCreature || followCreature) && isFleeing()) {
+		if (lastPathUpdate < OTSYS_TIME()) {
+			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
+			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+		}
+	}
+}
 
 void Monster::onWalkComplete()
 {
@@ -1342,7 +1352,6 @@ bool Monster::getDanceStep(const Position& creaturePos, Direction& direction, bo
 	}
 
 	if (!dirList.empty()) {
-		std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
 		direction = dirList[uniform_random(0, dirList.size() - 1)];
 		return true;
 	}
@@ -1932,46 +1941,33 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 
 void Monster::updateLookDirection()
 {
-	Direction newDir = getDirection();
-
-	if (attackedCreature) {
-		const Position& pos = getPosition();
-		const Position& attackedCreaturePos = attackedCreature->getPosition();
-		int32_t offsetx = pos.getOffsetX(attackedCreaturePos);
-		int32_t offsety = pos.getOffsetY(attackedCreaturePos);
-
-		int32_t dx = std::abs(offsetx);
-		int32_t dy = std::abs(offsety);
-		if (dx > dy) {
-			// look EAST/WEST
-			if (offsetx < 0) {
-				newDir = DIRECTION_WEST;
-			} else {
-				newDir = DIRECTION_EAST;
-			}
-		} else if (dx < dy) {
-			// look NORTH/SOUTH
-			if (offsety < 0) {
-				newDir = DIRECTION_NORTH;
-			} else {
-				newDir = DIRECTION_SOUTH;
-			}
-		} else if (offsetx < 0 && offsety < 0) {
-			// target to north-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx < 0 && offsety > 0) {
-			// target to south-west
-			newDir = DIRECTION_WEST;
-		} else if (offsetx > 0 && offsety < 0) {
-			// target to north-east
-			newDir = DIRECTION_EAST;
-		} else {
-			// target to south-east
-			newDir = DIRECTION_EAST;
-		}
+	if (!attackedCreature) {
+		return;
 	}
 
-	g_game.internalCreatureTurn(this, newDir);
+	auto lookDirection = DIRECTION_NONE;
+
+	const auto& currentPosition = getPosition();
+	const auto& targetPosition = attackedCreature->getPosition();
+
+	auto offsetX = targetPosition.getOffsetX(currentPosition);
+	auto absOffsetX = std::abs(offsetX);
+
+	auto offsetY = targetPosition.getOffsetY(currentPosition);
+	auto absOffsetY = std::abs(offsetY);
+
+	if (absOffsetX > absOffsetY) {
+		// Target is farther on the horizontal axis
+		lookDirection = (offsetX < 0) ? DIRECTION_WEST : DIRECTION_EAST;
+	} else if (absOffsetY > absOffsetX) {
+		// Target is farther on the vertical axis
+		lookDirection = (offsetY < 0) ? DIRECTION_NORTH : DIRECTION_SOUTH;
+	} else {
+		// Target is equally far on both axes, prioritize horizontal direction
+		lookDirection = (offsetX < 0) ? DIRECTION_WEST : DIRECTION_EAST;
+	}
+
+	g_game.internalCreatureTurn(this, lookDirection);
 }
 
 void Monster::dropLoot(Container* corpse, Creature*)
@@ -2030,6 +2026,9 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 	fpp.maxTargetDist = mType->info.targetDistance;
 
 	if (isSummon()) {
+		if (followCreature && followCreature == getMaster()) {
+			fpp.summonTargetMaster = true;
+		}
 		if (getMaster() == creature) {
 			fpp.maxTargetDist = 2;
 			fpp.fullPathSearch = true;

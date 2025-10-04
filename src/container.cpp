@@ -56,6 +56,10 @@ Container::~Container()
 Item* Container::clone() const
 {
 	Container* clone = static_cast<Container*>(Item::clone());
+	if (!clone) {
+		return nullptr;
+	}
+
 	for (Item* item : itemlist) {
 		clone->addItem(item->clone());
 	}
@@ -94,6 +98,10 @@ bool Container::hasContainerParent() const
 
 void Container::addItem(Item* item)
 {
+	if (!item) {
+		return;
+	}
+
 	itemlist.push_back(item);
 	item->setParent(this);
 }
@@ -544,6 +552,10 @@ void Container::updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 
 void Container::replaceThing(uint32_t index, Thing* thing)
 {
+	if (!thing) {
+		return;
+	}
+
 	Item* item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -572,6 +584,10 @@ void Container::replaceThing(uint32_t index, Thing* thing)
 
 void Container::removeThing(Thing* thing, uint32_t count)
 {
+	if (!thing) {
+		return;
+	}
+
 	Item* item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -626,7 +642,7 @@ size_t Container::getFirstIndex() const { return 0; }
 
 size_t Container::getLastIndex() const { return size(); }
 
-uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/, bool) const
+uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/) const
 {
 	uint32_t count = 0;
 	for (Item* item : itemlist) {
@@ -690,6 +706,15 @@ void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, 
 	} else {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
+}
+
+void Container::internalRemoveThing(Thing* thing)
+{
+	auto cit = std::find(itemlist.begin(), itemlist.end(), thing);
+	if (cit == itemlist.end()) {
+		return;
+	}
+	itemlist.erase(cit);
 }
 
 void Container::internalAddThing(Thing* thing) { internalAddThing(0, thing); }

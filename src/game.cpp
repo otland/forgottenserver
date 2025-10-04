@@ -66,6 +66,8 @@ void Game::start(ServiceManager* manager)
 	serviceManager = manager;
 
 	g_scheduler.addEvent(createSchedulerTask(EVENT_CREATURE_THINK_INTERVAL, [this]() { checkCreatures(0); }));
+	g_scheduler.addEvent(
+	    createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL), [this]() { updateCreaturesPath(0); }));
 	g_scheduler.addEvent(createSchedulerTask(EVENT_DECAYINTERVAL, [this]() { checkDecay(); }));
 }
 
@@ -117,7 +119,9 @@ void Game::setGameState(GameState_t newState)
 			g_scheduler.stop();
 			g_databaseTasks.stop();
 			g_dispatcher.stop();
+#ifdef HTTP
 			tfs::http::stop();
+#endif
 			break;
 		}
 
@@ -166,9 +170,12 @@ void Game::saveGameState()
 	}
 }
 
-bool Game::loadMainMap(const std::string& filename) { return map.loadMap("data/world/" + filename + ".otbm", true); }
+bool Game::loadMainMap(const std::string& filename)
+{
+	return map.loadMap("data/world/" + filename + ".otbm", true, false);
+}
 
-void Game::loadMap(const std::string& path) { map.loadMap(path, false); }
+void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
 Cylinder* Game::internalGetCylinder(Player* player, const Position& pos) const
 {
@@ -1165,17 +1172,15 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		return retMaxCount;
 	}
 
-	uint32_t m;
+	uint32_t moveCount;
 	if (item->isStackable()) {
-		m = std::min<uint32_t>(count, maxQueryCount);
+		moveCount = std::min<uint32_t>(count, maxQueryCount);
 	} else {
-		m = maxQueryCount;
+		moveCount = maxQueryCount;
 	}
 
-	Item* moveItem = item;
-
 	// check if we can remove this item
-	ret = fromCylinder->queryRemove(*item, m, flags, actor);
+	ret = fromCylinder->queryRemove(*item, moveCount, flags, actor);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1195,38 +1200,45 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		}
 	}
 
-	// remove the item
+	Item* moveItem = item;
 	int32_t itemIndex = fromCylinder->getThingIndex(item);
 	Item* updateItem = nullptr;
-	fromCylinder->removeThing(item, m);
 
-	// update item(s)
 	if (item->isStackable()) {
-		uint32_t n;
+		// lets find out how much we need to move
+		uint32_t allowedCount = 0;
 
-		if (item->equals(toItem)) {
-			n = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), m);
-			toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
-			updateItem = toItem;
+		// when item is moved onto another equal item
+		if (item->equals(toItem) && moveCount != ITEM_STACK_SIZE) {
+			allowedCount = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), moveCount);
+			if (allowedCount > 0) {
+				fromCylinder->removeThing(item, allowedCount);
+				toCylinder->updateThing(toItem, toItem->getID(), toItem->getItemCount() + allowedCount);
+				updateItem = toItem;
+				moveCount -= allowedCount;
+
+				// we fully merged two stacks, so we have nothing to move
+				if (moveCount == 0) {
+					moveItem = nullptr;
+				}
+			}
 		} else {
-			n = 0;
-		}
+			int32_t newCount = moveCount - allowedCount;
+			if (newCount != item->getItemCount() && newCount > 0) {
+				// we get part of the source, clone the item and remove moved count from source
+				moveItem = item->clone();
+				moveItem->setItemCount(newCount);
 
-		int32_t newCount = m - n;
-		if (newCount > 0) {
-			moveItem = item->clone();
-			moveItem->setItemCount(newCount);
-		} else {
-			moveItem = nullptr;
-		}
-
-		if (item->isRemoved()) {
-			ReleaseItem(item);
+				if (item->isRemoved()) {
+					ReleaseItem(item);
+				}
+			}
 		}
 	}
 
 	// add item
-	if (moveItem /*m - n > 0*/) {
+	if (moveItem) {
+		fromCylinder->removeThing(item, moveCount);
 		toCylinder->addThing(index, moveItem);
 	}
 
@@ -3814,7 +3826,6 @@ void Game::checkCreatureWalk(uint32_t creatureId)
 	Creature* creature = getCreatureByID(creatureId);
 	if (creature && !creature->isDead()) {
 		creature->onWalk();
-		cleanup();
 	}
 }
 
@@ -3879,6 +3890,19 @@ void Game::checkCreatures(size_t index)
 	}
 
 	cleanup();
+}
+
+void Game::updateCreaturesPath(size_t index)
+{
+	g_scheduler.addEvent(createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL),
+	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
+
+	auto& checkCreatureList = checkCreatureLists[index];
+	for (Creature* creature : checkCreatureList) {
+		if (!creature->isDead()) {
+			creature->forceUpdatePath();
+		}
+	}
 }
 
 void Game::changeSpeed(Creature* creature, int32_t varSpeedDelta)
@@ -5236,8 +5260,9 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		fee = MAX_MARKET_FEE;
 	}
 
+	uint64_t playerMoney = player->getMoney();
 	if (type == MARKETACTION_SELL) {
-		if (fee > (player->getMoney() + player->bankBalance)) {
+		if (fee > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
@@ -5263,18 +5288,18 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 			}
 		}
 
-		const auto debitCash = std::min(player->getMoney(), fee);
+		const auto debitCash = std::min(playerMoney, fee);
 		const auto debitBank = fee - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
@@ -5318,7 +5343,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5335,7 +5361,8 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < offer.amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5426,7 +5453,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				if (internalAddItem(buyerPlayer->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
@@ -5444,7 +5471,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(buyerPlayer->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				if (internalAddItem(buyerPlayer->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
 				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
@@ -5459,11 +5486,12 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			buyerPlayer->onReceiveMail();
 		}
 	} else {
-		if (totalPrice > (player->getMoney() + player->bankBalance)) {
+		uint64_t playerMoney = player->getMoney();
+		if (totalPrice > (playerMoney + player->bankBalance)) {
 			return;
 		}
 
-		const auto debitCash = std::min(player->getMoney(), totalPrice);
+		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
 		player->bankBalance -= debitBank;
@@ -5473,7 +5501,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			while (tmpAmount > 0) {
 				uint16_t stackCount = std::min<uint16_t>(ITEM_STACK_SIZE, tmpAmount);
 				Item* item = Item::CreateItem(it.id, stackCount);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5490,7 +5519,8 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 			for (uint16_t i = 0; i < amount; ++i) {
 				Item* item = Item::CreateItem(it.id, subType);
-				if (internalAddItem(player->getInbox(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(player->getInbox().get(), item, INDEX_WHEREEVER, FLAG_NOLIMIT) !=
+				    RETURNVALUE_NOERROR) {
 					delete item;
 					break;
 				}
@@ -5541,7 +5571,7 @@ void Game::parsePlayerExtendedOpcode(uint32_t playerId, uint8_t opcode, const st
 	}
 }
 
-void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage* msg)
+void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, NetworkMessage_ptr msg)
 {
 	Player* player = getPlayerByID(playerId);
 	if (!player) {
@@ -5551,14 +5581,14 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 	tfs::events::player::onNetworkMessage(player, recvByte, msg);
 }
 
-std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, const Player& player)
+std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player)
 {
 	uint16_t count = 0;
-	std::list<Container*> containers{player.getInbox()};
+	std::list<Container*> containers{player.getInbox().get()};
 
 	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {
-			containers.push_front(chest.second);
+			containers.push_front(chest.second.get());
 		}
 	}
 
@@ -5703,7 +5733,14 @@ Guild_ptr Game::getGuild(uint32_t id) const
 	return it->second;
 }
 
-void Game::addGuild(Guild_ptr guild) { guilds[guild->getId()] = guild; }
+void Game::addGuild(Guild_ptr guild)
+{
+	if (!guild) {
+		return;
+	}
+
+	guilds[guild->getId()] = guild;
+}
 
 void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 
@@ -5832,7 +5869,6 @@ bool Game::reload(ReloadTypes_t reloadType)
 			return g_moveEvents->reload();
 		case RELOAD_TYPE_NPCS: {
 			Npcs::reload();
-			Npcs::loadNpcs(true);
 			return true;
 		}
 

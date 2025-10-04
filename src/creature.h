@@ -47,6 +47,7 @@ struct FindPathParams
 	bool clearSight = true;
 	bool allowDiagonal = true;
 	bool keepDistance = false;
+	bool summonTargetMaster = false;
 	int32_t maxSearchDist = 0;
 	int32_t minTargetDist = -1;
 	int32_t maxTargetDist = -1;
@@ -55,6 +56,7 @@ struct FindPathParams
 static constexpr int32_t EVENT_CREATURECOUNT = 10;
 static constexpr int32_t EVENT_CREATURE_THINK_INTERVAL = 1000;
 static constexpr int32_t EVENT_CHECK_CREATURE_INTERVAL = (EVENT_CREATURE_THINK_INTERVAL / EVENT_CREATURECOUNT);
+
 static constexpr uint32_t CREATURE_ID_MIN = 0x10000000;
 static constexpr uint32_t CREATURE_ID_MAX = std::numeric_limits<uint32_t>::max();
 
@@ -167,7 +169,14 @@ public:
 	void setCurrentOutfit(Outfit_t outfit) { currentOutfit = outfit; }
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
 	bool isInvisible() const;
-	ZoneType_t getZone() const { return getTile()->getZone(); }
+	ZoneType_t getZone() const
+	{
+		const Tile* tile = getTile();
+		if (!tile) {
+			return ZONE_NORMAL;
+		}
+		return tile->getZone();
+	}
 
 	// creature icons
 	CreatureIconHashMap& getIcons() { return creatureIcons; }
@@ -198,6 +207,14 @@ public:
 	// follow events
 	virtual void onFollowCreature(const Creature*);
 	virtual void onUnfollowCreature();
+
+	// Pathfinding functions
+	bool isFollower(Creature* creature);
+	void addFollower(Creature* creature);
+	void removeFollowers();
+
+	// Pathfinding events
+	void updateFollowersPaths();
 
 	// combat functions
 	Creature* getAttackedCreature() { return attackedCreature; }
@@ -286,6 +303,7 @@ public:
 	void setCreatureLight(LightInfo lightInfo);
 
 	virtual void onThink(uint32_t interval);
+	virtual void forceUpdatePath();
 	void onAttacking(uint32_t interval);
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
@@ -385,8 +403,10 @@ protected:
 	Creature* attackedCreature = nullptr;
 	Creature* master = nullptr;
 	Creature* followCreature = nullptr;
+	std::vector<Creature*> followers;
 
 	uint64_t lastStep = 0;
+	int64_t lastPathUpdate = 0;
 	uint32_t referenceCounter = 0;
 	uint32_t id = 0;
 	uint32_t scriptEventsBitField = 0;
@@ -413,14 +433,12 @@ protected:
 	Skulls_t skull = SKULL_NONE;
 
 	bool isInternalRemoved = false;
-	bool isUpdatingPath = false;
 	bool creatureCheck = false;
 	bool inCheckCreaturesVector = false;
 	bool skillLoss = true;
 	bool lootDrop = true;
 	bool cancelNextWalk = false;
 	bool hasFollowPath = false;
-	bool forceUpdateFollowPath = false;
 	bool hiddenHealth = false;
 	bool canUseDefense = true;
 	bool movementBlocked = false;
