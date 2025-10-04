@@ -5,7 +5,6 @@ FROM alpine:3.19 AS build
 RUN apk add --no-cache \
   clang \
   libc++ \
-  libc++abi \
   build-base \
   boost-dev \
   cmake \
