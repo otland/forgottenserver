@@ -42,6 +42,7 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     add_compile_options(-fno-strict-aliasing)
+    add_compile_options(-fcoroutines)
 endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
