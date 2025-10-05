@@ -113,19 +113,17 @@ void ProtocolLogin::getCharacterList(const std::string& accountName, const std::
 	}
 
 	// Generate and add session key
-	static std::independent_bits_engine<std::default_random_engine, CHAR_BIT, unsigned short> rbe;
-	std::string sessionKey(16, '\x00');
-	std::generate(sessionKey.begin(), sessionKey.end(), std::ref(rbe));
+	std::string sessionKey = randomBytes(16);
 
 	output->addByte(0x28);
 	output->addString(tfs::base64::encode({sessionKey.data(), sessionKey.size()}));
 
 	if (!db.executeQuery(
 	        fmt::format("INSERT INTO `sessions` (`token`, `account_id`, `ip`) VALUES ({:s}, {:d}, INET6_ATON({:s}))",
-	                    db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
-	                    db.escapeString(connection->getIP().to_string())))) {
-		disconnectClient("Failed to create session.\nPlease try again later.", version);
-		return;
+	            db.escapeBlob(sessionKey.data(), sessionKey.size()), id,
+	            "'" + db.escapeString(connection->getIP().to_string()) + "'"))) {
+	    disconnectClient("Failed to create session.\nPlease try again later.", version);
+	    return;
 	}
 
 	// Add char list
