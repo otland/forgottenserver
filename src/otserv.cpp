@@ -247,8 +247,8 @@ void mainLoader(ServiceManager* services)
 
 	g_game.map.houses.payHouses(rentPeriod);
 
-	IOMarket::checkExpiredOffers();
-	IOMarket::getInstance().updateStatistics();
+	tfs::iomarket::checkExpiredOffers();
+	tfs::iomarket::updateStatistics();
 
 	std::cout << ">> Loaded all modules, server starting up..." << std::endl;
 
