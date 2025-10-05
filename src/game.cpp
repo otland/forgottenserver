@@ -5541,12 +5541,12 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 	const int32_t marketOfferDuration = getNumber(ConfigManager::MARKET_OFFER_DURATION);
 
-	tfs::iomarket::appendHistory(player->getGUID(), (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY),
-	                        offer.itemId, amount, offer.price, offer.timestamp + marketOfferDuration,
-	                        OFFERSTATE_ACCEPTEDEX);
+	tfs::iomarket::appendHistory(player->getGUID(),
+	                             (offer.type == MARKETACTION_BUY ? MARKETACTION_SELL : MARKETACTION_BUY), offer.itemId,
+	                             amount, offer.price, offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTEDEX);
 
 	tfs::iomarket::appendHistory(offer.playerId, offer.type, offer.itemId, amount, offer.price,
-	                        offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
+	                             offer.timestamp + marketOfferDuration, OFFERSTATE_ACCEPTED);
 
 	offer.amount -= amount;
 
