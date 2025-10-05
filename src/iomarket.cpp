@@ -199,8 +199,7 @@ void checkExpiredOffers()
 		return;
 	}
 
-	g_scheduler.addEvent(
-	    createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &checkExpiredOffers));
+	g_scheduler.addEvent(createSchedulerTask(checkExpiredMarketOffersEachMinutes * 60 * 1000, &checkExpiredOffers));
 }
 
 uint32_t getPlayerOfferCount(uint32_t playerId)
@@ -245,7 +244,7 @@ MarketOfferEx getOfferByCounter(uint32_t timestamp, uint16_t counter)
 }
 
 void createOffer(uint32_t playerId, MarketAction_t action, uint32_t itemId, uint16_t amount, uint64_t price,
-                           bool anonymous)
+                 bool anonymous)
 {
 	Database::getInstance().executeQuery(fmt::format(
 	    "INSERT INTO `market_offers` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `created`, `anonymous`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
@@ -264,7 +263,7 @@ void deleteOffer(uint32_t offerId)
 }
 
 void appendHistory(uint32_t playerId, MarketAction_t action, uint16_t itemId, uint16_t amount, uint64_t price,
-                             time_t timestamp, MarketOfferState_t state)
+                   time_t timestamp, MarketOfferState_t state)
 {
 	g_databaseTasks.addTask(fmt::format(
 	    "INSERT INTO `market_history` (`player_id`, `sale`, `itemtype`, `amount`, `price`, `expires_at`, `inserted`, `state`) VALUES ({:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d})",
