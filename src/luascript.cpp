@@ -17860,7 +17860,7 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 
 		time_t difference = static_cast<time_t>(difftime(mktime(timeinfo), current_time));
 		if (difference < 0) {
-			difference += 86400;
+			difference += 86400000;
 		}
 
 		globalevent->setNextExecution(current_time + difference);
