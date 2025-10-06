@@ -181,7 +181,6 @@ public:
 
 private:
 	bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const override;
-
 };
 
 class WeaponDistance final : public Weapon
