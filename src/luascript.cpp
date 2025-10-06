@@ -8712,8 +8712,7 @@ int LuaScriptInterface::luaCreatureGetDescription(lua_State* L)
 
 int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 {
-	// creature:getPathTo(pos[, minTargetDist = 0[, maxTargetDist = 1[, fullPathSearch = true[, clearSight = true[,
-	// maxSearchDist = 0]]]]])
+	// creature:getPathTo(pos[, targetDist = 0[, clearSight = true[, maxSearchDist = 0]]])
 	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
 	if (!creature) {
 		lua_pushnil(L);
@@ -8723,11 +8722,9 @@ int LuaScriptInterface::luaCreatureGetPathTo(lua_State* L)
 	const Position& position = tfs::lua::getPosition(L, 2);
 
 	FindPathParams fpp;
-	fpp.minTargetDist = tfs::lua::getNumber<int32_t>(L, 3, 0);
-	fpp.maxTargetDist = tfs::lua::getNumber<int32_t>(L, 4, 1);
-	fpp.fullPathSearch = tfs::lua::getBoolean(L, 5, fpp.fullPathSearch);
-	fpp.clearSight = tfs::lua::getBoolean(L, 6, fpp.clearSight);
-	fpp.maxSearchDist = tfs::lua::getNumber<int32_t>(L, 7, fpp.maxSearchDist);
+	fpp.targetDist = tfs::lua::getNumber<int32_t>(L, 3, 0);
+	fpp.clearSight = tfs::lua::getBoolean(L, 4, fpp.clearSight);
+	fpp.maxSearchDist = tfs::lua::getNumber<int32_t>(L, 5, fpp.maxSearchDist);
 
 	std::vector<Direction> dirList;
 	if (creature->getPathTo(position, dirList, fpp)) {
