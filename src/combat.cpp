@@ -1075,6 +1075,9 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	int parameters = 1;
+	int32_t attackValue = 7;
+	int32_t attackElementValue = 0;
+
 	switch (type) {
 		case COMBAT_FORMULA_LEVELMAGIC: {
 			// onGetPlayerMinMaxValues(player, level, maglevel)
@@ -1090,7 +1093,6 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 			const Weapon* weapon = g_weapons->getWeapon(tool);
 			Item* item = nullptr;
 
-			int32_t attackValue = 7;
 			if (weapon) {
 				attackValue = tool->getAttack();
 				if (tool->getWeaponType() == WEAPON_AMMO) {
@@ -1099,13 +1101,13 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 						attackValue += item->getAttack();
 					}
 				}
+				attackElementValue = weapon->getElementAttack();
 
 				damage.secondary.type = weapon->getElementType();
-				damage.secondary.value = weapon->getElementDamage(player, nullptr, tool);
 			}
 
 			lua_pushnumber(L, player->getWeaponSkill(item ? item : tool));
-			lua_pushnumber(L, attackValue);
+			lua_pushnumber(L, attackValue + attackElementValue);
 			lua_pushnumber(L, player->getAttackFactor());
 			parameters += 3;
 			break;
@@ -1125,6 +1127,13 @@ void ValueCallback::getMinMaxValues(Player* player, CombatDamage& damage) const
 		damage.primary.value = normal_random(tfs::lua::getNumber<int32_t>(L, -2), tfs::lua::getNumber<int32_t>(L, -1));
 		lua_pop(L, 2);
 	}
+
+	int32_t total = attackValue + attackElementValue;
+	damage.secondary.value = static_cast<int32_t>(static_cast<double>(attackElementValue) / static_cast<double>(total) *
+	                                              static_cast<double>(damage.primary.value));
+
+	damage.primary.value = static_cast<int32_t>(static_cast<double>(attackValue) / static_cast<double>(total) *
+	                                            static_cast<double>(damage.primary.value));
 
 	if ((lua_gettop(L) + parameters + 1) != size0) {
 		reportErrorFunc(L, "Stack size changed!");

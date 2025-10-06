@@ -64,7 +64,8 @@ public:
 	virtual int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
 	                                bool maxDamage = false) const = 0;
 	virtual int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const = 0;
-	virtual CombatType_t getElementType() const = 0;
+	CombatType_t getElementType() const { return elementType; }
+	uint16_t getElementAttack() const { return elementDamage; }
 
 	uint16_t getID() const { return id; }
 	void setID(uint16_t newId) { id = newId; }
@@ -132,6 +133,8 @@ protected:
 	void internalUseWeapon(Player* player, Item* item, Tile* tile) const;
 
 	uint16_t id = 0;
+	CombatType_t elementType = COMBAT_NONE;
+	uint16_t elementDamage = 0;
 
 private:
 	virtual bool getSkillType(const Player*, const Item*, skills_t&, uint32_t&) const { return false; }
@@ -175,13 +178,10 @@ public:
 	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
 	                        bool maxDamage = false) const override;
 	int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const override;
-	CombatType_t getElementType() const override { return elementType; }
 
 private:
 	bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const override;
 
-	CombatType_t elementType = COMBAT_NONE;
-	uint16_t elementDamage = 0;
 };
 
 class WeaponDistance final : public Weapon
@@ -197,13 +197,9 @@ public:
 	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
 	                        bool maxDamage = false) const override;
 	int32_t getElementDamage(const Player* player, const Creature* target, const Item* item) const override;
-	CombatType_t getElementType() const override { return elementType; }
 
 private:
 	bool getSkillType(const Player* player, const Item* item, skills_t& skill, uint32_t& skillpoint) const override;
-
-	CombatType_t elementType = COMBAT_NONE;
-	uint16_t elementDamage = 0;
 };
 
 class WeaponWand final : public Weapon
@@ -217,7 +213,6 @@ public:
 	int32_t getWeaponDamage(const Player* player, const Creature* target, const Item* item,
 	                        bool maxDamage = false) const override;
 	int32_t getElementDamage(const Player*, const Creature*, const Item*) const override { return 0; }
-	CombatType_t getElementType() const override { return COMBAT_NONE; }
 
 	void setMinChange(int32_t change) { minChange = change; }
 
