@@ -1,0 +1,233 @@
+#include "quadtree.h"
+
+namespace {
+std::array<QuadTree*, 4> root_nodes = {};
+
+uint8_t create_index(uint16_t x, uint16_t y) { return ((x & 0x8000) >> 15) | ((y & 0x8000) >> 14); }
+
+QuadTree* find_leaf(QuadTree* current_node, uint16_t x, uint16_t y)
+{
+	if (current_node->is_leaf()) {
+		return current_node;
+	}
+
+	auto index = create_index(x, y);
+	if (auto child_node = current_node->get_child(index)) {
+		return find_leaf(child_node, x << 1, y << 1);
+	}
+	return nullptr;
+}
+
+Leaf* find_leaf_in_root(uint16_t x, uint16_t y)
+{
+	auto index = create_index(x, y);
+	if (auto node = root_nodes[index]) {
+		if (auto leaf = find_leaf(node, x, y)) {
+			return static_cast<Leaf*>(leaf);
+		}
+	}
+	return nullptr;
+}
+
+/**
+ * @brief Establishes relationships with neighboring Leaf nodes.
+ *
+ * This section checks for neighboring leaf nodes (north, south, east, and west) and establishes two-way relationships
+ * if those neighboring leaves are found.
+ *
+ * @param {x} The x-coordinate of the leaf node in the quadtree.
+ * @param {y} The y-coordinate of the leaf node in the quadtree.
+ */
+void update_leaf_neighbors(uint16_t x, uint16_t y)
+{
+	/*
+	 * The following relationships are updated:
+	 * - The north neighbor's south_leaf pointer is updated to point to this leaf.
+	 * - The west neighbor's east_leaf pointer is updated to point to this leaf.
+	 * - This leaf's south_leaf pointer is updated to point to the south neighbor, if found.
+	 * - This leaf's east_leaf pointer is updated to point to the east neighbor, if found.
+	 */
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		// update north
+		if (auto north_leaf = find_leaf_in_root(x, y - TILE_GRID_SIZE)) {
+			north_leaf->south_leaf = leaf;
+		}
+
+		// update west
+		if (auto west_leaf = find_leaf_in_root(x - TILE_GRID_SIZE, y)) {
+			west_leaf->east_leaf = leaf;
+		}
+
+		// update south
+		if (auto south_leaf = find_leaf_in_root(x, y + TILE_GRID_SIZE)) {
+			leaf->south_leaf = south_leaf;
+		}
+
+		// update east
+		if (auto east_leaf = find_leaf_in_root(x + TILE_GRID_SIZE, y)) {
+			leaf->east_leaf = east_leaf;
+		}
+	}
+}
+
+void create_leaf_node(QuadTree* current_node, uint16_t x, uint16_t y, uint8_t z)
+{
+	if (current_node->is_leaf()) {
+		return;
+	}
+
+	auto index = create_index(x, y);
+	auto child_node = current_node->get_child(index);
+	if (!child_node) {
+		if (z == TILE_GRID_BITS) {
+			/*
+			 * Stop subdividing and create a Leaf when z reaches TILE_GRID_BITS.
+			 * Each Leaf stores a TILE_GRID_SIZE × TILE_GRID_SIZE tile block (TILE_GRID_SIZE = 2^TILE_GRID_BITS)
+			 * and contains creatures, allowing direct indexing with x & TILE_INDEX_MASK and y & TILE_INDEX_MASK.
+			 */
+			child_node = new Leaf();
+		} else {
+			child_node = new Node();
+		}
+
+		current_node->set_child(index, child_node);
+	}
+
+	create_leaf_node(child_node, x * 2, y * 2, z - 1);
+}
+
+void create_leaf_in_root(uint16_t x, uint16_t y)
+{
+	auto index = create_index(x, y);
+	if (!root_nodes[index]) {
+		root_nodes[index] = new Node();
+	}
+
+	create_leaf_node(root_nodes[index], x, y, (MAP_MAX_LAYERS - 1));
+	update_leaf_neighbors(x, y);
+}
+
+} // namespace
+
+std::generator<Creature*> tfs::map::quadtree::find_in_range(uint16_t start_x, uint16_t start_y, uint16_t end_x,
+                                                            uint16_t end_y)
+{
+	int32_t start_x_aligned = start_x - (start_x % TILE_GRID_SIZE);
+	int32_t start_y_aligned = start_y - (start_y % TILE_GRID_SIZE);
+	int32_t end_x_aligned = end_x - (end_x % TILE_GRID_SIZE);
+	int32_t end_y_aligned = end_y - (end_y % TILE_GRID_SIZE);
+
+	// Find the starting leaf at the top-left of the range.
+	if (auto start_leaf = find_leaf_in_root(start_x_aligned, start_y_aligned)) {
+		auto current_south_leaf = start_leaf;
+
+		// Iterate row by row (south direction)
+		for (int32_t ny = start_y_aligned; ny <= end_y_aligned; ny += TILE_GRID_SIZE) {
+			auto current_east_leaf = current_south_leaf;
+
+			// Iterate column by column (east direction)
+			for (int32_t nx = start_x_aligned; nx <= end_x_aligned; nx += TILE_GRID_SIZE) {
+				if (current_east_leaf) {
+					// Yield all creatures in the current leaf
+					for (auto creature : current_east_leaf->creatures) {
+						co_yield creature;
+					}
+
+					// Move to the eastern neighbor leaf
+					current_east_leaf = current_east_leaf->east_leaf;
+				} else {
+					// If no eastern neighbor is cached, find it via the root quadtree
+					current_east_leaf = find_leaf_in_root(nx + TILE_GRID_SIZE, ny);
+				}
+			}
+
+			if (current_south_leaf) {
+				// Move to the southern neighbor leaf
+				current_south_leaf = current_south_leaf->south_leaf;
+			} else {
+				// If no southern neighbor is cached, find it via the root quadtree
+				current_south_leaf = find_leaf_in_root(start_x_aligned, ny + TILE_GRID_SIZE);
+			}
+		}
+	}
+}
+
+Tile* tfs::map::quadtree::find_tile(uint16_t x, uint16_t y, uint8_t z)
+{
+	create_leaf_in_root(x, y);
+
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		// Find the tile at layer z, using TILE_INDEX_MASK to ensure that the x and y coordinates
+		// are within the bounds of the leaf (only the least significant bits are used).
+		return leaf->layers[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK];
+	}
+	return nullptr;
+}
+
+void tfs::map::quadtree::create_tile(uint16_t x, uint16_t y, uint8_t z, Tile* tile)
+{
+	create_leaf_in_root(x, y);
+
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		// Store the tile in the correct position in the tile array.
+		// Here, we also use TILE_INDEX_MASK to index correctly, ensuring that only
+		// the relevant bits of the x and y coordinates are used.
+		leaf->layers[z][x & TILE_INDEX_MASK][y & TILE_INDEX_MASK] = tile;
+	}
+}
+
+void tfs::map::quadtree::move_creature(uint16_t old_x, uint16_t old_y, uint16_t x, uint16_t y, Creature* creature)
+{
+	create_leaf_in_root(old_x, old_y);
+
+	if (auto old_leaf = find_leaf_in_root(old_x, old_y)) {
+		create_leaf_in_root(x, y);
+
+		if (auto leaf = find_leaf_in_root(x, y)) {
+			if (old_leaf != leaf) {
+				old_leaf->remove_creature(creature);
+				leaf->push_creature(creature);
+			}
+		}
+	}
+}
+
+void tfs::map::quadtree::push_creature(uint16_t x, uint16_t y, Creature* creature)
+{
+	create_leaf_in_root(x, y);
+
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		leaf->push_creature(creature);
+	}
+}
+
+void tfs::map::quadtree::remove_creature(uint16_t x, uint16_t y, Creature* creature)
+{
+	create_leaf_in_root(x, y);
+
+	if (auto leaf = find_leaf_in_root(x, y)) {
+		leaf->remove_creature(creature);
+	}
+}
+
+Node::~Node()
+{
+	for (auto& node : nodes) {
+		delete node;
+	}
+}
+
+Leaf::~Leaf()
+{
+	for (auto& layer : layers) {
+		for (auto& layer_row : layer) {
+			for (auto tile : layer_row) {
+				delete tile;
+			}
+		}
+	}
+}
+
+void Leaf::push_creature(Creature* creature) { creatures.insert(creature); }
+
+void Leaf::remove_creature(Creature* creature) { creatures.erase(creature); }
