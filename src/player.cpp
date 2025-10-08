@@ -1217,7 +1217,7 @@ void Player::onChangeZone(ZoneType_t zone)
 
 void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
-	const auto& attackedCreature = getAttackedCreature();
+	const auto attackedCreature = getAttackedCreature();
 	if (!attackedCreature) {
 		return;
 	}
