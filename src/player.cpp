@@ -1217,6 +1217,10 @@ void Player::onChangeZone(ZoneType_t zone)
 
 void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
+	const auto& attackedCreature = getAttackedCreature();
+	if (!attackedCreature) {
+		return;
+	}	
 	if (zone == ZONE_PROTECTION) {
 		if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 			removeAttackedCreature();
