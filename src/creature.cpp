@@ -37,8 +37,6 @@ Creature::~Creature()
 	for (auto condition : conditions) {
 		delete condition;
 	}
-
-	releaseFollowers();
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
@@ -818,7 +816,7 @@ void Creature::onFollowCreature(const Creature*)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(const Creature* creature)
+bool Creature::isFollower(Creature* creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
 	return it != followers.end();
@@ -828,16 +826,6 @@ void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
 		followers.push_back(creature);
-		creature->incrementReferenceCounter();
-	}
-}
-
-void Creature::removeFollower(Creature* creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		creature->decrementReferenceCounter();
-		followers.erase(it);
 	}
 }
 
@@ -850,21 +838,10 @@ void Creature::removeFollowers()
 		                               const Position& followerPosition = creature->getPosition();
 		                               uint16_t distance = position.getDistanceX(followerPosition) +
 		                                                   position.getDistanceY(followerPosition);
-		                               bool isInRemoveRange = distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                                      position.z != followerPosition.z;
-		                               if (isInRemoveRange) {
-			                               creature->decrementReferenceCounter();
-		                               }
-		                               return isInRemoveRange;
+		                               return distance >= Map::maxViewportX + Map::maxViewportY ||
+		                                      position.z != followerPosition.z;
 	                               }),
 	                followers.end());
-}
-
-void Creature::releaseFollowers()
-{
-	for (const auto& follower : followers) {
-		follower->decrementReferenceCounter();
-	}
 }
 
 void Creature::updateFollowersPaths()
