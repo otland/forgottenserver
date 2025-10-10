@@ -2896,6 +2896,7 @@ void LuaScriptInterface::registerFunctions()
 	registerMethod(L, "Player", "getContainerById", LuaScriptInterface::luaPlayerGetContainerById);
 	registerMethod(L, "Player", "getContainerIndex", LuaScriptInterface::luaPlayerGetContainerIndex);
 
+	registerMethod(L, "Player", "getRuneSpells", LuaScriptInterface::luaPlayerGetRuneSpells);
 	registerMethod(L, "Player", "getInstantSpells", LuaScriptInterface::luaPlayerGetInstantSpells);
 	registerMethod(L, "Player", "canCast", LuaScriptInterface::luaPlayerCanCast);
 
@@ -11025,6 +11026,40 @@ int LuaScriptInterface::luaPlayerGetContainerIndex(lua_State* L)
 		lua_pushnumber(L, player->getContainerIndex(tfs::lua::getNumber<uint8_t>(L, 2)));
 	} else {
 		lua_pushnil(L);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaPlayerGetRuneSpells(lua_State* L) {
+	// player:getRuneSpells()
+	Player* player = tfs::lua::getUserdata<Player>(L, 1);
+	if (!player) {
+		lua_pushnil(L);
+		return 1;
+	}
+
+	std::vector<const RuneSpell*> spells;
+	for (const auto& spell : g_spells->getRuneSpells() | std::views::values) {
+		if (spell.canUse(player)) {
+			spells.push_back(&spell);
+		}
+	}
+
+	lua_createtable(L, spells.size(), 0);
+
+	int index = 0;
+	for (const auto* spell : spells) {
+		lua_createtable(L, 0, 6);
+
+		setField(L, "id", spell->getId());
+		setField(L, "name", spell->getName());
+		setField(L, "runeid", spell->getRuneItemId());
+		setField(L, "charges", spell->getCharges());
+		setField(L, "level", spell->getLevel());
+		setField(L, "mlevel", spell->getMagicLevel());
+
+		tfs::lua::setMetatable(L, -1, "Spell");
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
