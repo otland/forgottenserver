@@ -39,7 +39,6 @@ Direction getDirectionTo(const Position& from, const Position& to);
 
 std::string getFirstLine(const std::string& str);
 
-std::string formatDate(time_t time);
 std::string formatDateShort(time_t time);
 
 uint16_t getDepotBoxId(uint16_t index);
