@@ -8,7 +8,6 @@
 #include "configmanager.h"
 
 #include <chrono>
-#include <fmt/chrono.h>
 #include <openssl/evp.h>
 #include <openssl/hmac.h>
 
@@ -217,9 +216,10 @@ std::string randomBytes(size_t length)
 	return bytes;
 }
 
-std::string formatDate(time_t time) { return fmt::format("{:%d/%m/%Y %H:%M:%S}", fmt::localtime(time)); }
-
-std::string formatDateShort(time_t time) { return fmt::format("{:%d %b %Y}", fmt::localtime(time)); }
+std::string formatDateShort(time_t time)
+{
+	return std::format("{:%d %b %Y}", std::chrono::system_clock::from_time_t(time));
+}
 
 Position getNextPosition(Direction direction, Position pos)
 {
