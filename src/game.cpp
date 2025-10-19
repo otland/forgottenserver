@@ -5132,7 +5132,8 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 	// TODO: move debug assertions to database
 	FILE* file = fopen("client_assertions.txt", "a");
 	if (file) {
-		fprintf(file, "----- %s - %s (%s) -----\n", formatDate(time(nullptr)).c_str(), player->getName().c_str(),
+		const auto& timestamp = std::format("{:%d/%m/%Y %T}", std::chrono::system_clock::now());
+		fprintf(file, "----- %s - %s (%s) -----\n", timestamp.c_str(), player->getName().c_str(),
 		        player->getIP().to_string().c_str());
 		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
 		fclose(file);
