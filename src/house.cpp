@@ -267,8 +267,9 @@ void House::removeDoor(Door* door)
 {
 	auto it = doorSet.find(door);
 	if (it != doorSet.end()) {
-		door->decrementReferenceCounter();
+		Door* doorToRemove = *it;
 		doorSet.erase(it);
+		doorToRemove->decrementReferenceCounter();
 	}
 }
 
