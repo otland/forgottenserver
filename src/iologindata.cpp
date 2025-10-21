@@ -67,7 +67,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	}
 }
 
-bool IOLoginData::preloadPlayer(Player* player)
+bool IOLoginData::preloadPlayer(std::shared_ptr<Player> player)
 {
 	Database& db = Database::getInstance();
 
@@ -92,7 +92,7 @@ bool IOLoginData::preloadPlayer(Player* player)
 	return true;
 }
 
-bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
+bool IOLoginData::loadPlayerById(std::shared_ptr<Player> player, uint32_t id)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -102,7 +102,7 @@ bool IOLoginData::loadPlayerById(Player* player, uint32_t id)
 	        id)));
 }
 
-bool IOLoginData::loadPlayerByName(Player* player, const std::string& name)
+bool IOLoginData::loadPlayerByName(std::shared_ptr<Player> player, const std::string& name)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -133,7 +133,7 @@ static GuildWarVector getWarList(uint32_t guildId)
 	return guildWarVector;
 }
 
-bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
+bool IOLoginData::loadPlayer(std::shared_ptr<Player> player, DBResult_ptr result)
 {
 	if (!result) {
 		return false;
@@ -355,7 +355,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 
 	// load inventory items
 	ItemMap itemMap;
-	std::map<uint8_t, Container*> openContainersList;
+	std::map<uint8_t, std::shared_ptr<Container>> openContainersList;
 
 	if ((result = db.storeQuery(fmt::format(
 	         "SELECT `pid`, `sid`, `itemtype`, `count`, `attributes` FROM `player_items` WHERE `player_id` = {:d} ORDER BY `sid` DESC",
@@ -363,11 +363,13 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto item = it->second.first;
+			if (!item) {
+				continue;
+			}
+			int32_t pid = it->second.second;
 
-			Container* itemContainer = item->getContainer();
+			auto itemContainer = item->getContainer();
 			if (itemContainer) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
@@ -383,7 +385,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				auto parentItem = it2->second.first;
+				auto container = parentItem ? parentItem->getContainer() : nullptr;
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -405,10 +408,12 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
+			auto item = it->second.first;
+			if (!item) {
+				continue;
+			}
 
-			int32_t pid = pair.second;
+			int32_t pid = it->second.second;
 			if (pid >= 0 && pid < 100) {
 				if (const auto& depotChest = player->getDepotChest(pid, true)) {
 					depotChest->internalAddThing(item);
@@ -419,7 +424,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				auto parentItem = it2->second.first;
+				auto container = parentItem ? parentItem->getContainer() : nullptr;
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -436,9 +442,11 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto item = it->second.first;
+			if (!item) {
+				continue;
+			}
+			int32_t pid = it->second.second;
 
 			if (pid >= 0 && pid < 100) {
 				player->getInbox()->internalAddThing(item);
@@ -449,7 +457,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				auto parentItem = it2->second.first;
+				auto container = parentItem ? parentItem->getContainer() : nullptr;
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -466,9 +475,11 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 		loadItems(itemMap, result);
 
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const std::pair<Item*, int32_t>& pair = it->second;
-			Item* item = pair.first;
-			int32_t pid = pair.second;
+			auto item = it->second.first;
+			if (!item) {
+				continue;
+			}
+			int32_t pid = it->second.second;
 
 			if (pid >= 0 && pid < 100) {
 				player->getStoreInbox()->internalAddThing(item);
@@ -479,7 +490,8 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 					continue;
 				}
 
-				Container* container = it2->second.first->getContainer();
+				auto parentItem = it2->second.first;
+				auto container = parentItem ? parentItem->getContainer() : nullptr;
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -525,7 +537,7 @@ bool IOLoginData::loadPlayer(Player* player, DBResult_ptr result)
 	return true;
 }
 
-bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
+bool IOLoginData::saveItems(std::shared_ptr<const Player> player, const ItemBlockList& itemList, DBInsert& query_insert,
                             PropWriteStream& propWriteStream)
 {
 	using ContainerBlock = std::pair<Container*, int32_t>;
@@ -536,29 +548,26 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	const auto& openContainers = player->getOpenContainers();
 
 	Database& db = Database::getInstance();
-	for (const auto& it : itemList) {
-		int32_t pid = it.first;
-		Item* item = it.second;
+	for (const auto& [pid, item] : itemList) {
 		++runningId;
 
-		if (Container* container = item->getContainer()) {
+		if (auto container = item->getContainer()) {
 			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
 
 			if (!openContainers.empty()) {
-				for (const auto& its : openContainers) {
-					auto openContainer = its.second;
+				for (const auto& [id, openContainer] : openContainers) {
 					auto opcontainer = openContainer.container;
 
 					if (opcontainer == container) {
-						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(its.first) + 1);
+						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(id) + 1);
 						break;
 					}
 				}
 			}
 
-			containers.emplace_back(container, runningId);
+			containers.emplace_back(container.get(), runningId);
 		}
 
 		propWriteStream.clear();
@@ -576,12 +585,13 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 		Container* container = cb.first;
 		int32_t parentId = cb.second;
 
-		for (Item* item : container->getItemList()) {
+		for (const auto& item : container->getItemList()) {
+			if (!item) continue;
 			++runningId;
 
-			Container* subContainer = item->getContainer();
+			auto subContainer = item->getContainer();
 			if (subContainer) {
-				containers.emplace_back(subContainer, runningId);
+				containers.emplace_back(subContainer.get(), runningId);
 
 				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 					subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
@@ -613,7 +623,7 @@ bool IOLoginData::saveItems(const Player* player, const ItemBlockList& itemList,
 	return query_insert.execute();
 }
 
-bool IOLoginData::savePlayer(Player* player)
+bool IOLoginData::savePlayer(std::shared_ptr<Player> player)
 {
 	if (player->isDead()) {
 		player->changeHealth(1);
@@ -769,7 +779,7 @@ bool IOLoginData::savePlayer(Player* player)
 
 	ItemBlockList itemList;
 	for (int32_t slotId = CONST_SLOT_FIRST; slotId <= CONST_SLOT_LAST; ++slotId) {
-		Item* item = player->inventory[slotId];
+		auto item = player->inventory[slotId];
 		if (item) {
 			itemList.emplace_back(slotId, item);
 		}
@@ -789,7 +799,9 @@ bool IOLoginData::savePlayer(Player* player)
 	itemList.clear();
 
 	for (const auto& it : player->depotChests) {
-		for (Item* item : it.second->getItemList()) {
+		for (const auto& itemPtr : it.second->getItemList()) {
+			Item* item = itemPtr.get();
+			if (!item) continue;
 			itemList.emplace_back(it.first, item);
 		}
 	}
@@ -807,7 +819,9 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_inboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (Item* item : player->getInbox()->getItemList()) {
+	for (const auto& itemPtr : player->getInbox()->getItemList()) {
+		Item* item = itemPtr.get();
+		if (!item) continue;
 		itemList.emplace_back(0, item);
 	}
 
@@ -825,7 +839,9 @@ bool IOLoginData::savePlayer(Player* player)
 	    "INSERT INTO `player_storeinboxitems` (`player_id`, `pid`, `sid`, `itemtype`, `count`, `attributes`) VALUES ");
 	itemList.clear();
 
-	for (Item* item : player->getStoreInbox()->getItemList()) {
+	for (const auto& itemPtr : player->getStoreInbox()->getItemList()) {
+		Item* item = itemPtr.get();
+		if (!item) continue;
 		itemList.emplace_back(0, item);
 	}
 
@@ -962,14 +978,14 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		PropStream propStream;
 		propStream.init(attr.data(), attr.size());
 
-		Item* item = Item::CreateItem(type, count);
+		std::shared_ptr<Item> itemPtr = Item::CreateItem(type, count);
+		Item* item = itemPtr.get();
 		if (item) {
 			if (!item->unserializeAttr(propStream)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}
 
-			std::pair<Item*, uint32_t> pair(item, pid);
-			itemMap[sid] = pair;
+			itemMap[sid] = std::make_pair(std::move(itemPtr), pid);
 		}
 	} while (result->next());
 }

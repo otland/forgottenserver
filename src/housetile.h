@@ -16,21 +16,22 @@ public:
 	using DynamicTile::internalAddThing;
 
 	// cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                     std::shared_ptr<Creature> actor = nullptr) const override;
 
-	Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override;
+	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                        std::shared_ptr<Creature> actor = nullptr) const override;
 
-	void addThing(int32_t index, Thing* thing) override;
-	void internalAddThing(uint32_t index, Thing* thing) override;
+	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;
+	void internalAddThing(uint32_t index, std::shared_ptr<Thing> thing) override;
 
 	House* getHouse() const { return house; }
 
 private:
-	void updateHouse(Item* item);
+	void updateHouse(std::shared_ptr<Item> item);
 
 	House* house;
 };

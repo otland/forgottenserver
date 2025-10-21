@@ -29,9 +29,9 @@ public:
 	uint32_t getId() const { return id; }
 	const std::string& getName() const { return name; }
 
-	void addMember(Player* player);
-	void removeMember(Player* player);
-	const std::list<Player*>& getMembersOnline() const { return membersOnline; }
+	void addMember(std::shared_ptr<Player> player);
+	void removeMember(std::shared_ptr<Player> player);
+	const std::list<std::shared_ptr<Player>>& getMembersOnline() const { return membersOnline; }
 	uint32_t getMemberCount() const { return memberCount; }
 	void setMemberCount(uint32_t count) { memberCount = count; }
 
@@ -45,7 +45,7 @@ public:
 	void setMotd(const std::string& motd) { this->motd = motd; }
 
 private:
-	std::list<Player*> membersOnline;
+	std::list<std::shared_ptr<Player>> membersOnline;
 	std::vector<GuildRank_ptr> ranks;
 	std::string name;
 	std::string motd;

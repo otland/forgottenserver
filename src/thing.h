@@ -24,27 +24,24 @@ public:
 	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 	virtual bool hasParent() const { return false; }
-	virtual Cylinder* getParent() const { return nullptr; }
-	virtual Cylinder* getRealParent() const { return getParent(); }
+	virtual std::shared_ptr<Cylinder> getParent() const { return nullptr; }
+	virtual std::shared_ptr<Cylinder> getRealParent() const { return getParent(); }
 
-	virtual void setParent(Cylinder*)
-	{
-		//
-	}
+	virtual void setParent(std::shared_ptr<Cylinder>) {}
 
-	virtual Tile* getTile();
-	virtual const Tile* getTile() const;
+	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
+	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
 
 	virtual const Position& getPosition() const;
 	virtual int32_t getThrowRange() const = 0;
 	virtual bool isPushable() const = 0;
 
-	virtual Container* getContainer() { return nullptr; }
-	virtual const Container* getContainer() const { return nullptr; }
-	virtual Item* getItem() { return nullptr; }
-	virtual const Item* getItem() const { return nullptr; }
-	virtual Creature* getCreature() { return nullptr; }
-	virtual const Creature* getCreature() const { return nullptr; }
+	virtual std::shared_ptr<Container> getContainer() { return nullptr; }
+	virtual std::shared_ptr<const Container> getContainer() const { return nullptr; }
+	virtual std::shared_ptr<Item> getItem() { return nullptr; }
+	virtual std::shared_ptr<const Item> getItem() const { return nullptr; }
+	virtual std::shared_ptr<Creature> getCreature() { return nullptr; }
+	virtual std::shared_ptr<const Creature> getCreature() const { return nullptr; }
 
 	virtual bool isRemoved() const { return true; }
 };

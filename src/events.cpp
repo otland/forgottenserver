@@ -240,7 +240,7 @@ bool reload()
 
 namespace tfs::events::creature {
 
-bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
+bool onChangeOutfit(std::shared_ptr<Creature> creature, const Outfit_t& outfit)
 {
 	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
 	if (creatureHandlers.onChangeOutfit == -1) {
@@ -258,7 +258,7 @@ bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(creatureHandlers.onChangeOutfit);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	tfs::lua::pushOutfit(L, outfit);
@@ -266,7 +266,7 @@ bool onChangeOutfit(Creature* creature, const Outfit_t& outfit)
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
+ReturnValue onAreaCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> tile, bool aggressive)
 {
 	// Creature:onAreaCombat(tile, aggressive) or Creature.onAreaCombat(self, tile, aggressive)
 	if (creatureHandlers.onAreaCombat == -1) {
@@ -285,13 +285,13 @@ ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 	scriptInterface.pushFunction(creatureHandlers.onAreaCombat);
 
 	if (creature) {
-		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
 	}
 
-	tfs::lua::pushUserdata(L, tile);
+	tfs::lua::pushSharedPtr(L, tile);
 	tfs::lua::setMetatable(L, -1, "Tile");
 
 	tfs::lua::pushBoolean(L, aggressive);
@@ -309,7 +309,7 @@ ReturnValue onAreaCombat(Creature* creature, Tile* tile, bool aggressive)
 	return returnValue;
 }
 
-ReturnValue onTargetCombat(Creature* creature, Creature* target)
+ReturnValue onTargetCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
 {
 	// Creature:onTargetCombat(target) or Creature.onTargetCombat(self, target)
 	if (creatureHandlers.onTargetCombat == -1) {
@@ -328,13 +328,13 @@ ReturnValue onTargetCombat(Creature* creature, Creature* target)
 	scriptInterface.pushFunction(creatureHandlers.onTargetCombat);
 
 	if (creature) {
-		tfs::lua::pushUserdata(L, creature);
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 	} else {
 		lua_pushnil(L);
 	}
 
-	tfs::lua::pushUserdata(L, target);
+	tfs::lua::pushSharedPtr(L, target);
 	tfs::lua::setCreatureMetatable(L, -1, target);
 
 	ReturnValue returnValue;
@@ -350,7 +350,8 @@ ReturnValue onTargetCombat(Creature* creature, Creature* target)
 	return returnValue;
 }
 
-void onHear(Creature* creature, Creature* speaker, const std::string& words, SpeakClasses type)
+void onHear(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> speaker, const std::string& words,
+            SpeakClasses type)
 {
 	// Creature:onHear(speaker, words, type)
 	if (creatureHandlers.onHear == -1) {
@@ -368,10 +369,10 @@ void onHear(Creature* creature, Creature* speaker, const std::string& words, Spe
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(creatureHandlers.onHear);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
-	tfs::lua::pushUserdata(L, speaker);
+	tfs::lua::pushSharedPtr(L, speaker);
 	tfs::lua::setCreatureMetatable(L, -1, speaker);
 
 	tfs::lua::pushString(L, words);
@@ -380,7 +381,7 @@ void onHear(Creature* creature, Creature* speaker, const std::string& words, Spe
 	scriptInterface.callVoidFunction(4);
 }
 
-void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
+void onChangeZone(std::shared_ptr<Creature> creature, ZoneType_t fromZone, ZoneType_t toZone)
 {
 	// Creature:onChangeZone(fromZone, toZone)
 	if (creatureHandlers.onChangeZone == -1) {
@@ -398,7 +399,7 @@ void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(creatureHandlers.onChangeZone);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	lua_pushnumber(L, fromZone);
@@ -407,8 +408,8 @@ void onChangeZone(Creature* creature, ZoneType_t fromZone, ZoneType_t toZone)
 	scriptInterface.callVoidFunction(3);
 }
 
-void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> value, std::optional<int32_t> oldValue,
-                     bool isSpawn)
+void onUpdateStorage(std::shared_ptr<Creature> creature, uint32_t key, std::optional<int32_t> value,
+                     std::optional<int32_t> oldValue, bool isSpawn)
 {
 	// Creature:onUpdateStorage(key, value, oldValue, isSpawn)
 	if (creatureHandlers.onUpdateStorage == -1) {
@@ -426,7 +427,7 @@ void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> va
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(creatureHandlers.onUpdateStorage);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setMetatable(L, -1, "Creature");
 
 	lua_pushnumber(L, key);
@@ -452,7 +453,7 @@ void onUpdateStorage(Creature* creature, uint32_t key, std::optional<int32_t> va
 
 namespace tfs::events::party {
 
-bool onJoin(Party* party, Player* player)
+bool onJoin(Party* party, std::shared_ptr<Player> player)
 {
 	// Party:onJoin(player) or Party.onJoin(self, player)
 	if (partyHandlers.onJoin == -1) {
@@ -473,13 +474,13 @@ bool onJoin(Party* party, Player* player)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
 }
 
-bool onLeave(Party* party, Player* player)
+bool onLeave(Party* party, std::shared_ptr<Player> player)
 {
 	// Party:onLeave(player) or Party.onLeave(self, player)
 	if (partyHandlers.onLeave == -1) {
@@ -500,7 +501,7 @@ bool onLeave(Party* party, Player* player)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
@@ -530,7 +531,7 @@ bool onDisband(Party* party)
 	return scriptInterface.callFunction(1);
 }
 
-bool onInvite(Party* party, Player* player)
+bool onInvite(Party* party, std::shared_ptr<Player> player)
 {
 	// Party:onInvite(player) or Party.onInvite(self, player)
 	if (partyHandlers.onInvite == -1) {
@@ -551,13 +552,13 @@ bool onInvite(Party* party, Player* player)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
 }
 
-bool onRevokeInvitation(Party* party, Player* player)
+bool onRevokeInvitation(Party* party, std::shared_ptr<Player> player)
 {
 	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
 	if (partyHandlers.onRevokeInvitation == -1) {
@@ -578,13 +579,13 @@ bool onRevokeInvitation(Party* party, Player* player)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
 }
 
-bool onPassLeadership(Party* party, Player* player)
+bool onPassLeadership(Party* party, std::shared_ptr<Player> player)
 {
 	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
 	if (partyHandlers.onPassLeadership == -1) {
@@ -605,7 +606,7 @@ bool onPassLeadership(Party* party, Player* player)
 	tfs::lua::pushUserdata(L, party);
 	tfs::lua::setMetatable(L, -1, "Party");
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface.callFunction(2);
@@ -648,7 +649,7 @@ void onShareExperience(Party* party, uint64_t& exp)
 
 namespace tfs::events::player {
 
-bool onBrowseField(Player* player, const Position& position)
+bool onBrowseField(std::shared_ptr<Player> player, const Position& position)
 {
 	// Player:onBrowseField(position) or Player.onBrowseField(self, position)
 	if (playerHandlers.onBrowseField == -1) {
@@ -666,7 +667,7 @@ bool onBrowseField(Player* player, const Position& position)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onBrowseField);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushPosition(L, position);
@@ -674,7 +675,8 @@ bool onBrowseField(Player* player, const Position& position)
 	return scriptInterface.callFunction(2);
 }
 
-void onLook(Player* player, const Position& position, Thing* thing, uint8_t stackpos, int32_t lookDistance)
+void onLook(std::shared_ptr<Player> player, const Position& position, std::shared_ptr<Thing> thing, uint8_t stackpos,
+            int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
 	if (playerHandlers.onLook == -1) {
@@ -692,14 +694,14 @@ void onLook(Player* player, const Position& position, Thing* thing, uint8_t stac
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLook);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	if (Creature* creature = thing->getCreature()) {
-		tfs::lua::pushUserdata(L, creature);
+	if (auto creature = thing->getCreature()) {
+		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
-	} else if (Item* item = thing->getItem()) {
-		tfs::lua::pushUserdata(L, item);
+	} else if (auto item = thing->getItem()) {
+		tfs::lua::pushSharedPtr(L, item);
 		tfs::lua::setItemMetatable(L, -1, item);
 	} else {
 		lua_pushnil(L);
@@ -711,7 +713,7 @@ void onLook(Player* player, const Position& position, Thing* thing, uint8_t stac
 	scriptInterface.callVoidFunction(4);
 }
 
-void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance)
+void onLookInBattleList(std::shared_ptr<Player> player, std::shared_ptr<Creature> creature, int32_t lookDistance)
 {
 	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position,
 	// distance)
@@ -730,10 +732,10 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLookInBattleList);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	lua_pushnumber(L, lookDistance);
@@ -741,7 +743,8 @@ void onLookInBattleList(Player* player, Creature* creature, int32_t lookDistance
 	scriptInterface.callVoidFunction(3);
 }
 
-void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDistance)
+void onLookInTrade(std::shared_ptr<Player> player, std::shared_ptr<Player> partner, std::shared_ptr<Item> item,
+                   int32_t lookDistance)
 {
 	// Player:onLookInTrade(partner, item, distance) or Player.onLookInTrade(self, partner, item, distance)
 	if (playerHandlers.onLookInTrade == -1) {
@@ -759,13 +762,13 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLookInTrade);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, partner);
+	tfs::lua::pushSharedPtr(L, partner);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	lua_pushnumber(L, lookDistance);
@@ -773,7 +776,7 @@ void onLookInTrade(Player* player, Player* partner, Item* item, int32_t lookDist
 	scriptInterface.callVoidFunction(4);
 }
 
-bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
+bool onLookInShop(std::shared_ptr<Player> player, const ItemType* itemType, uint8_t count)
 {
 	// Player:onLookInShop(itemType, count) or Player.onLookInShop(self, itemType, count)
 	if (playerHandlers.onLookInShop == -1) {
@@ -791,7 +794,7 @@ bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLookInShop);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushUserdata(L, itemType);
@@ -802,7 +805,7 @@ bool onLookInShop(Player* player, const ItemType* itemType, uint8_t count)
 	return scriptInterface.callFunction(3);
 }
 
-bool onLookInMarket(Player* player, const ItemType* itemType)
+bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType)
 {
 	// Player:onLookInMarket(itemType) or Player.onLookInMarket(self, itemType)
 	if (playerHandlers.onLookInMarket == -1) {
@@ -820,7 +823,7 @@ bool onLookInMarket(Player* player, const ItemType* itemType)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLookInMarket);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushUserdata(L, itemType);
@@ -829,8 +832,9 @@ bool onLookInMarket(Player* player, const ItemType* itemType)
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Position& fromPosition,
-                       const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
+ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
+                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Cylinder> fromCylinder,
+                       std::shared_ptr<Cylinder> toCylinder)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
@@ -849,10 +853,10 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onMoveItem);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	lua_pushnumber(L, count);
@@ -875,8 +879,9 @@ ReturnValue onMoveItem(Player* player, Item* item, uint16_t count, const Positio
 	return returnValue;
 }
 
-void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition,
-                 Cylinder* fromCylinder, Cylinder* toCylinder)
+void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
+                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Cylinder> fromCylinder,
+                 std::shared_ptr<Cylinder> toCylinder)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
@@ -895,10 +900,10 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onItemMoved);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	lua_pushnumber(L, count);
@@ -911,7 +916,8 @@ void onItemMoved(Player* player, Item* item, uint16_t count, const Position& fro
 	scriptInterface.callVoidFunction(7);
 }
 
-bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosition, const Position& toPosition)
+bool onMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Creature> creature, const Position& fromPosition,
+                    const Position& toPosition)
 {
 	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
 	// toPosition)
@@ -930,10 +936,10 @@ bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosi
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onMoveCreature);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	tfs::lua::pushPosition(L, fromPosition);
@@ -942,8 +948,8 @@ bool onMoveCreature(Player* player, Creature* creature, const Position& fromPosi
 	return scriptInterface.callFunction(4);
 }
 
-void onReportRuleViolation(Player* player, const std::string& targetName, uint8_t reportType, uint8_t reportReason,
-                           const std::string& comment, const std::string& translation)
+void onReportRuleViolation(std::shared_ptr<Player> player, const std::string& targetName, uint8_t reportType,
+                           uint8_t reportReason, const std::string& comment, const std::string& translation)
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
 	if (playerHandlers.onReportRuleViolation == -1) {
@@ -961,7 +967,7 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onReportRuleViolation);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushString(L, targetName);
@@ -975,7 +981,7 @@ void onReportRuleViolation(Player* player, const std::string& targetName, uint8_
 	scriptInterface.callVoidFunction(6);
 }
 
-bool onReportBug(Player* player, const std::string& message, const Position& position, uint8_t category)
+bool onReportBug(std::shared_ptr<Player> player, const std::string& message, const Position& position, uint8_t category)
 {
 	// Player:onReportBug(message, position, category)
 	if (playerHandlers.onReportBug == -1) {
@@ -993,7 +999,7 @@ bool onReportBug(Player* player, const std::string& message, const Position& pos
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onReportBug);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushString(L, message);
@@ -1003,7 +1009,7 @@ bool onReportBug(Player* player, const std::string& message, const Position& pos
 	return scriptInterface.callFunction(4);
 }
 
-void onRotateItem(Player* player, Item* item)
+void onRotateItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 {
 	// Player:onRotateItem(item)
 	if (playerHandlers.onRotateItem == -1) {
@@ -1021,16 +1027,16 @@ void onRotateItem(Player* player, Item* item)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onRotateItem);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	scriptInterface.callFunction(2);
 }
 
-bool onTurn(Player* player, Direction direction)
+bool onTurn(std::shared_ptr<Player> player, Direction direction)
 {
 	// Player:onTurn(direction) or Player.onTurn(self, direction)
 	if (playerHandlers.onTurn == -1) {
@@ -1048,7 +1054,7 @@ bool onTurn(Player* player, Direction direction)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onTurn);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, direction);
@@ -1056,7 +1062,7 @@ bool onTurn(Player* player, Direction direction)
 	return scriptInterface.callFunction(2);
 }
 
-bool onTradeRequest(Player* player, Player* target, Item* item)
+bool onTradeRequest(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item)
 {
 	// Player:onTradeRequest(target, item)
 	if (playerHandlers.onTradeRequest == -1) {
@@ -1074,19 +1080,20 @@ bool onTradeRequest(Player* player, Player* target, Item* item)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onTradeRequest);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, target);
+	tfs::lua::pushSharedPtr(L, target);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	return scriptInterface.callFunction(3);
 }
 
-bool onTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
+bool onTradeAccept(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item,
+                   std::shared_ptr<Item> targetItem)
 {
 	// Player:onTradeAccept(target, item, targetItem)
 	if (playerHandlers.onTradeAccept == -1) {
@@ -1104,22 +1111,23 @@ bool onTradeAccept(Player* player, Player* target, Item* item, Item* targetItem)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onTradeAccept);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, target);
+	tfs::lua::pushSharedPtr(L, target);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	tfs::lua::pushUserdata(L, targetItem);
+	tfs::lua::pushSharedPtr(L, targetItem);
 	tfs::lua::setItemMetatable(L, -1, targetItem);
 
 	return scriptInterface.callFunction(4);
 }
 
-void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetItem, bool isSuccess)
+void onTradeCompleted(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item,
+                      std::shared_ptr<Item> targetItem, bool isSuccess)
 {
 	// Player:onTradeCompleted(target, item, targetItem, isSuccess)
 	if (playerHandlers.onTradeCompleted == -1) {
@@ -1137,16 +1145,16 @@ void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetIt
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onTradeCompleted);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, target);
+	tfs::lua::pushSharedPtr(L, target);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
-	tfs::lua::pushUserdata(L, targetItem);
+	tfs::lua::pushSharedPtr(L, targetItem);
 	tfs::lua::setItemMetatable(L, -1, targetItem);
 
 	tfs::lua::pushBoolean(L, isSuccess);
@@ -1154,7 +1162,7 @@ void onTradeCompleted(Player* player, Player* target, Item* item, Item* targetIt
 	return scriptInterface.callVoidFunction(5);
 }
 
-void onPodiumRequest(Player* player, Item* item)
+void onPodiumRequest(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 {
 	// Player:onPodiumRequest(item) or Player.onPodiumRequest(self, item)
 	if (playerHandlers.onPodiumRequest == -1) {
@@ -1172,16 +1180,17 @@ void onPodiumRequest(Player* player, Item* item)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onPodiumRequest);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	scriptInterface.callFunction(2);
 }
 
-void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiumVisible, Direction direction)
+void onPodiumEdit(std::shared_ptr<Player> player, std::shared_ptr<Item> item, const Outfit_t& outfit,
+                  bool podiumVisible, Direction direction)
 {
 	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
 	// isVisible)
@@ -1200,10 +1209,10 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onPodiumEdit);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	tfs::lua::pushOutfit(L, outfit);
@@ -1214,7 +1223,8 @@ void onPodiumEdit(Player* player, Item* item, const Outfit_t& outfit, bool podiu
 	scriptInterface.callFunction(5);
 }
 
-void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t rawExp, bool sendText)
+void onGainExperience(std::shared_ptr<Player> player, std::shared_ptr<Creature> source, uint64_t& exp, uint64_t rawExp,
+                      bool sendText)
 {
 	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
 	if (playerHandlers.onGainExperience == -1) {
@@ -1232,11 +1242,11 @@ void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t 
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onGainExperience);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	if (source) {
-		tfs::lua::pushUserdata(L, source);
+		tfs::lua::pushSharedPtr(L, source);
 		tfs::lua::setCreatureMetatable(L, -1, source);
 	} else {
 		lua_pushnil(L);
@@ -1256,7 +1266,7 @@ void onGainExperience(Player* player, Creature* source, uint64_t& exp, uint64_t 
 	tfs::lua::resetScriptEnv();
 }
 
-void onLoseExperience(Player* player, uint64_t& exp)
+void onLoseExperience(std::shared_ptr<Player> player, uint64_t& exp)
 {
 	// Player:onLoseExperience(exp)
 	if (playerHandlers.onLoseExperience == -1) {
@@ -1274,7 +1284,7 @@ void onLoseExperience(Player* player, uint64_t& exp)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onLoseExperience);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, exp);
@@ -1289,7 +1299,7 @@ void onLoseExperience(Player* player, uint64_t& exp)
 	tfs::lua::resetScriptEnv();
 }
 
-void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
+void onGainSkillTries(std::shared_ptr<Player> player, skills_t skill, uint64_t& tries)
 {
 	// Player:onGainSkillTries(skill, tries)
 	if (playerHandlers.onGainSkillTries == -1) {
@@ -1307,7 +1317,7 @@ void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onGainSkillTries);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, skill);
@@ -1323,7 +1333,7 @@ void onGainSkillTries(Player* player, skills_t skill, uint64_t& tries)
 	tfs::lua::resetScriptEnv();
 }
 
-void onWrapItem(Player* player, Item* item)
+void onWrapItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 {
 	// Player:onWrapItem(item)
 	if (playerHandlers.onWrapItem == -1) {
@@ -1341,16 +1351,16 @@ void onWrapItem(Player* player, Item* item)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onWrapItem);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	scriptInterface.callVoidFunction(2);
 }
 
-void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
+void onInventoryUpdate(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool equip)
 {
 	// Player:onInventoryUpdate(item, slot, equip)
 	if (playerHandlers.onInventoryUpdate == -1) {
@@ -1368,10 +1378,10 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onInventoryUpdate);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
-	tfs::lua::pushUserdata(L, item);
+	tfs::lua::pushSharedPtr(L, item);
 	tfs::lua::setItemMetatable(L, -1, item);
 
 	lua_pushnumber(L, slot);
@@ -1380,7 +1390,7 @@ void onInventoryUpdate(Player* player, Item* item, slots_t slot, bool equip)
 	scriptInterface.callVoidFunction(4);
 }
 
-void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg)
+void onNetworkMessage(std::shared_ptr<Player> player, uint8_t recvByte, NetworkMessage_ptr& msg)
 {
 	// Player:onNetworkMessage(recvByte, msg)
 	if (playerHandlers.onNetworkMessage == -1) {
@@ -1398,7 +1408,7 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onNetworkMessage);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, recvByte);
@@ -1409,7 +1419,7 @@ void onNetworkMessage(Player* player, uint8_t recvByte, NetworkMessage_ptr& msg)
 	scriptInterface.callVoidFunction(3);
 }
 
-bool onSpellCheck(Player* player, const Spell* spell)
+bool onSpellCheck(std::shared_ptr<Player> player, const Spell* spell)
 {
 	// Player:onSpellCheck(spell)
 	if (playerHandlers.onSpellCheck == -1) {
@@ -1427,7 +1437,7 @@ bool onSpellCheck(Player* player, const Spell* spell)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(playerHandlers.onSpellCheck);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushSpell(L, *spell);
@@ -1439,7 +1449,7 @@ bool onSpellCheck(Player* player, const Spell* spell)
 
 namespace tfs::events::monster {
 
-bool onSpawn(Monster* monster, const Position& position, bool startup, bool artificial)
+bool onSpawn(std::shared_ptr<Monster> monster, const Position& position, bool startup, bool artificial)
 {
 	// Monster:onSpawn(position, startup, artificial)
 	if (monsterHandlers.onSpawn == -1) {
@@ -1457,7 +1467,7 @@ bool onSpawn(Monster* monster, const Position& position, bool startup, bool arti
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(monsterHandlers.onSpawn);
 
-	tfs::lua::pushUserdata(L, monster);
+	tfs::lua::pushSharedPtr(L, monster);
 	tfs::lua::setMetatable(L, -1, "Monster");
 	tfs::lua::pushPosition(L, position);
 	tfs::lua::pushBoolean(L, startup);
@@ -1466,7 +1476,7 @@ bool onSpawn(Monster* monster, const Position& position, bool startup, bool arti
 	return scriptInterface.callFunction(4);
 }
 
-void onDropLoot(Monster* monster, Container* corpse)
+void onDropLoot(std::shared_ptr<Monster> monster, std::shared_ptr<Container> corpse)
 {
 	// Monster:onDropLoot(corpse)
 	if (monsterHandlers.onDropLoot == -1) {
@@ -1484,10 +1494,10 @@ void onDropLoot(Monster* monster, Container* corpse)
 	lua_State* L = scriptInterface.getLuaState();
 	scriptInterface.pushFunction(monsterHandlers.onDropLoot);
 
-	tfs::lua::pushUserdata(L, monster);
+	tfs::lua::pushSharedPtr(L, monster);
 	tfs::lua::setMetatable(L, -1, "Monster");
 
-	tfs::lua::pushUserdata(L, corpse);
+	tfs::lua::pushSharedPtr(L, corpse);
 	tfs::lua::setMetatable(L, -1, "Container");
 
 	return scriptInterface.callVoidFunction(2);

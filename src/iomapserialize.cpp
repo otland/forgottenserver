@@ -31,7 +31,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 			continue;
 		}
 
-		Tile* tile = map->getTile(x, y, z);
+		auto tile = map->getTile(x, y, z);
 		if (!tile) {
 			continue;
 		}
@@ -70,7 +70,7 @@ bool IOMapSerialize::saveHouseItems()
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		// save house items
 		House* house = it.second;
-		for (HouseTile* tile : house->getTiles()) {
+		for (auto tile : house->getTiles()) {
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
@@ -92,7 +92,7 @@ bool IOMapSerialize::saveHouseItems()
 	return success;
 }
 
-bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
+bool IOMapSerialize::loadContainer(PropStream& propStream, std::shared_ptr<Container> container)
 {
 	while (container->serializationCount > 0) {
 		if (!loadItem(propStream, container)) {
@@ -112,14 +112,14 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, Container* container)
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
+bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Cylinder> parent)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {
 		return false;
 	}
 
-	Tile* tile = nullptr;
+	std::shared_ptr<Tile> tile = nullptr;
 	if (!parent->hasParent()) {
 		tile = parent->getTile();
 	}
@@ -127,12 +127,11 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || iType.forceSerialize || !tile) {
 		// create a new item
-		Item* item = Item::CreateItem(id);
+		auto item = Item::CreateItem(id);
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
+				auto container = item->getContainer();
 				if (container && !loadContainer(propStream, container)) {
-					delete item;
 					return false;
 				}
 
@@ -140,15 +139,14 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 				item->startDecaying();
 			} else {
 				std::cout << "WARNING: Unserialization error in IOMapSerialize::loadItem()" << id << std::endl;
-				delete item;
 				return false;
 			}
 		}
 	} else {
 		// Stationary items like doors/beds/blackboards/bookcases
-		Item* item = nullptr;
+		std::shared_ptr<Item> item = nullptr;
 		if (const TileItemVector* items = tile->getItemList()) {
-			for (Item* findItem : *items) {
+			for (const auto& findItem : *items) {
 				if (findItem->getID() == id) {
 					item = findItem;
 					break;
@@ -164,7 +162,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 
 		if (item) {
 			if (item->unserializeAttr(propStream)) {
-				Container* container = item->getContainer();
+				auto container = item->getContainer();
 				if (container && !loadContainer(propStream, container)) {
 					return false;
 				}
@@ -175,10 +173,10 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 			}
 		} else {
 			// The map changed since the last save, just read the attributes
-			std::unique_ptr<Item> dummy(Item::CreateItem(id));
+			auto dummy = Item::CreateItem(id);
 			if (dummy) {
 				dummy->unserializeAttr(propStream);
-				Container* container = dummy->getContainer();
+				auto container = dummy->getContainer();
 				if (container) {
 					if (!loadContainer(propStream, container)) {
 						return false;
@@ -195,9 +193,9 @@ bool IOMapSerialize::loadItem(PropStream& propStream, Cylinder* parent)
 	return true;
 }
 
-void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
+void IOMapSerialize::saveItem(PropWriteStream& stream, std::shared_ptr<const Item> item)
 {
-	const Container* container = item->getContainer();
+	auto container = item->getContainer();
 
 	// Write ID & props
 	stream.write<uint16_t>(item->getID());
@@ -215,16 +213,17 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 	stream.write<uint8_t>(0x00); // attr end
 }
 
-void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
+void IOMapSerialize::saveTile(PropWriteStream& stream, std::shared_ptr<const Tile> tile)
 {
 	const TileItemVector* tileItems = tile->getItemList();
 	if (!tileItems) {
 		return;
 	}
 
-	std::forward_list<Item*> items;
+	std::forward_list<std::shared_ptr<const Item>> items;
 	uint16_t count = 0;
-	for (Item* item : *tileItems) {
+	for (const auto& item : *tileItems) {
+		if (!item) continue;
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
@@ -244,7 +243,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
 		stream.write<uint8_t>(tilePosition.z);
 
 		stream.write<uint32_t>(count);
-		for (const Item* item : items) {
+		for (std::shared_ptr<const Item> item : items) {
 			saveItem(stream, item);
 		}
 	}
@@ -335,7 +334,7 @@ bool IOMapSerialize::saveHouseInfo()
 			listText.clear();
 		}
 
-		for (Door* door : house->getDoors()) {
+		for (auto door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
 				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
 				                             db.escapeString(listText)))) {
@@ -374,7 +373,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (HouseTile* tile : house->getTiles()) {
+	for (auto tile : house->getTiles()) {
 		saveTile(stream, tile);
 
 		if (auto attributes = stream.getStream(); attributes.size() > 0) {

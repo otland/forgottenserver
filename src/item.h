@@ -9,6 +9,8 @@
 #include "luascript.h"
 #include "thing.h"
 
+#include <memory>
+
 class BedItem;
 class Container;
 class Door;
@@ -489,43 +491,42 @@ public:
 	friend class Item;
 };
 
-class Item : virtual public Thing
+class Item : virtual public Thing, public std::enable_shared_from_this<Item>
 {
 public:
 	// Factory member to create item of right type based on type
-	static Item* CreateItem(const uint16_t type, uint16_t count = 0);
-	static Container* CreateItemAsContainer(const uint16_t type, uint16_t size);
-	static Item* CreateItem(PropStream& propStream);
+	static std::shared_ptr<Item> CreateItem(const uint16_t type, uint16_t count = 0);
+	static std::shared_ptr<Container> CreateItemAsContainer(const uint16_t type, uint16_t size);
+	static std::shared_ptr<Item> CreateItem(PropStream& propStream);
 	static Items items;
 
 	// Constructor for items
 	Item(const uint16_t type, uint16_t count = 0);
 	Item(const Item& i);
-	virtual Item* clone() const;
+	virtual std::shared_ptr<Item> clone() const;
 
 	virtual ~Item() = default;
 
 	// non-assignable
 	Item& operator=(const Item&) = delete;
+	bool operator==(const Item& otherItem) const;
 
-	bool equals(const Item* otherItem) const;
-
-	Item* getItem() override final { return this; }
-	const Item* getItem() const override final { return this; }
-	virtual Teleport* getTeleport() { return nullptr; }
-	virtual const Teleport* getTeleport() const { return nullptr; }
-	virtual TrashHolder* getTrashHolder() { return nullptr; }
-	virtual const TrashHolder* getTrashHolder() const { return nullptr; }
-	virtual Mailbox* getMailbox() { return nullptr; }
-	virtual const Mailbox* getMailbox() const { return nullptr; }
-	virtual Door* getDoor() { return nullptr; }
-	virtual const Door* getDoor() const { return nullptr; }
-	virtual MagicField* getMagicField() { return nullptr; }
-	virtual const MagicField* getMagicField() const { return nullptr; }
-	virtual BedItem* getBed() { return nullptr; }
-	virtual const BedItem* getBed() const { return nullptr; }
-	virtual Podium* getPodium() { return nullptr; }
-	virtual const Podium* getPodium() const { return nullptr; }
+	std::shared_ptr<Item> getItem() override final { return shared_from_this(); }
+	std::shared_ptr<const Item> getItem() const override final { return shared_from_this(); }
+	virtual std::shared_ptr<Teleport> getTeleport() { return nullptr; }
+	virtual std::shared_ptr<const Teleport> getTeleport() const { return nullptr; }
+	virtual std::shared_ptr<TrashHolder> getTrashHolder() { return nullptr; }
+	virtual std::shared_ptr<const TrashHolder> getTrashHolder() const { return nullptr; }
+	virtual std::shared_ptr<Mailbox> getMailbox() { return nullptr; }
+	virtual std::shared_ptr<const Mailbox> getMailbox() const { return nullptr; }
+	virtual std::shared_ptr<Door> getDoor() { return nullptr; }
+	virtual std::shared_ptr<const Door> getDoor() const { return nullptr; }
+	virtual std::shared_ptr<MagicField> getMagicField() { return nullptr; }
+	virtual std::shared_ptr<const MagicField> getMagicField() const { return nullptr; }
+	virtual std::shared_ptr<BedItem> getBed() { return nullptr; }
+	virtual std::shared_ptr<const BedItem> getBed() const { return nullptr; }
+	virtual std::shared_ptr<Podium> getPodium() { return nullptr; }
+	virtual std::shared_ptr<const Podium> getPodium() const { return nullptr; }
 
 	const std::string& getStrAttr(itemAttrTypes type) const
 	{
@@ -744,7 +745,7 @@ public:
 	void setID(uint16_t newid);
 
 	// Returns the player that is holding this item in his inventory
-	const Player* getHoldingPlayer() const;
+	std::shared_ptr<const Player> getHoldingPlayer() const;
 
 	WeaponType_t getWeaponType() const { return items[id].weaponType; }
 	Ammo_t getAmmoType() const { return items[id].ammoType; }
@@ -870,7 +871,7 @@ public:
 	uint16_t getItemCount() const { return count; }
 	void setItemCount(uint8_t n) { count = n; }
 
-	static uint32_t countByType(const Item* i, int32_t subType)
+	static uint32_t countByType(std::shared_ptr<const Item> i, int32_t subType)
 	{
 		if (subType == -1 || subType == i->getSubType()) {
 			return i->getItemCount();
@@ -893,7 +894,7 @@ public:
 	virtual bool canRemove() const { return true; }
 	virtual bool canTransform() const { return true; }
 	virtual void onRemoved();
-	virtual void onTradeEvent(TradeEvents_t, Player*) {}
+	virtual void onTradeEvent(TradeEvents_t, std::shared_ptr<Player>) {}
 
 	virtual void startDecaying();
 
@@ -915,34 +916,28 @@ public:
 		return attributes;
 	}
 
-	void incrementReferenceCounter() { ++referenceCounter; }
-	void decrementReferenceCounter()
-	{
-		if (--referenceCounter == 0) {
-			delete this;
-		}
-	}
-
-	bool hasParent() const override { return getParent(); }
-	Cylinder* getParent() const override { return parent; }
-	void setParent(Cylinder* cylinder) override { parent = cylinder; }
-	Cylinder* getTopParent();
-	const Cylinder* getTopParent() const;
-	Tile* getTile() override;
-	const Tile* getTile() const override;
+	bool hasParent() const override { return getParent() != nullptr; }
+	std::shared_ptr<Cylinder> getParent() const override { return parent; }
+	void setParent(std::shared_ptr<Cylinder> cylinder) override { parent = std::move(cylinder); }
+	std::shared_ptr<Cylinder> getTopParent();
+	std::shared_ptr<const Cylinder> getTopParent() const;
+	std::shared_ptr<Tile> getTile() override;
+	std::shared_ptr<const Tile> getTile() const override;
 	bool isRemoved() const override { return !parent || parent->isRemoved(); }
 
 protected:
-	Cylinder* parent = nullptr;
+	std::shared_ptr<Cylinder> parent = nullptr;
 
 	uint16_t id; // the same id as in ItemType
 
 private:
+	Item() = delete;
+
 	std::string getWeightDescription(uint32_t weight) const;
 
 	std::unique_ptr<ItemAttributes> attributes;
 
-	uint32_t referenceCounter = 0;
+	// legacy referenceCounter removed
 
 	uint8_t count = 1; // number of stacked items
 
@@ -951,7 +946,7 @@ private:
 	// Don't add variables here, use the ItemAttribute class.
 };
 
-using ItemList = std::list<Item*>;
-using ItemDeque = std::deque<Item*>;
+using ItemList = std::list<std::shared_ptr<Item>>;
+using ItemDeque = std::deque<std::shared_ptr<Item>>;
 
 #endif // FS_ITEM_H

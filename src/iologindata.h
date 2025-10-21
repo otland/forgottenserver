@@ -12,7 +12,7 @@ class Player;
 class PropWriteStream;
 struct VIPEntry;
 
-using ItemBlockList = std::list<std::pair<int32_t, Item*>>;
+using ItemBlockList = std::list<std::pair<int32_t, std::shared_ptr<Item>>>;
 
 class IOLoginData
 {
@@ -23,12 +23,12 @@ public:
 	static AccountType_t getAccountType(uint32_t accountId);
 	static void setAccountType(uint32_t accountId, AccountType_t accountType);
 	static void updateOnlineStatus(uint32_t guid, bool login);
-	static bool preloadPlayer(Player* player);
+	static bool preloadPlayer(std::shared_ptr<Player> player);
 
-	static bool loadPlayerById(Player* player, uint32_t id);
-	static bool loadPlayerByName(Player* player, const std::string& name);
-	static bool loadPlayer(Player* player, DBResult_ptr result);
-	static bool savePlayer(Player* player);
+	static bool loadPlayerById(std::shared_ptr<Player> player, uint32_t id);
+	static bool loadPlayerByName(std::shared_ptr<Player> player, const std::string& name);
+	static bool loadPlayer(std::shared_ptr<Player> player, DBResult_ptr result);
+	static bool savePlayer(std::shared_ptr<Player> player);
 	static uint32_t getGuidByName(const std::string& name);
 	static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 	static std::string getNameByGuid(uint32_t guid);
@@ -46,10 +46,10 @@ public:
 	static void updatePremiumTime(uint32_t accountId, time_t endTime);
 
 private:
-	using ItemMap = std::map<uint32_t, std::pair<Item*, uint32_t>>;
+	using ItemMap = std::map<uint32_t, std::pair<std::shared_ptr<Item>, uint32_t>>;
 
 	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-	static bool saveItems(const Player* player, const ItemBlockList& itemList, DBInsert& query_insert,
+	static bool saveItems(std::shared_ptr<const Player> player, const ItemBlockList& itemList, DBInsert& query_insert,
 	                      PropWriteStream& propWriteStream);
 };
 

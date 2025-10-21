@@ -45,8 +45,8 @@ public:
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                             Creature* actor = nullptr) const = 0;
+	virtual ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                             std::shared_ptr<Creature> actor = nullptr) const = 0;
 
 	/**
 	 * Query the cylinder how much it can accept
@@ -57,8 +57,8 @@ public:
 	 * that the cylinder can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                                  uint32_t flags) const = 0;
+	virtual ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,
+	                                  uint32_t& maxQueryCount, uint32_t flags) const = 0;
 
 	/**
 	 * Query if the cylinder can remove an object
@@ -67,7 +67,8 @@ public:
 	 * \param flags optional flags to modify the default behaviour
 	 * \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags, Creature* = nullptr) const = 0;
+	virtual ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                                std::shared_ptr<Creature> = nullptr) const = 0;
 
 	/**
 	 * Query the destination cylinder
@@ -78,20 +79,21 @@ public:
 	 * flags to modify the default behaviour this method can modify the flags
 	 * \returns Cylinder returns the destination cylinder
 	 */
-	virtual Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) = 0;
+	virtual std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                                   std::shared_ptr<Item>& destItem, uint32_t& flags) = 0;
 
 	/**
 	 * Add the object to the cylinder
 	 * \param thing is the object to add
 	 */
-	virtual void addThing(Thing* thing) = 0;
+	virtual void addThing(std::shared_ptr<Thing> thing) = 0;
 
 	/**
 	 * Add the object to the cylinder
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
-	virtual void addThing(int32_t index, Thing* thing) = 0;
+	virtual void addThing(int32_t index, std::shared_ptr<Thing> thing) = 0;
 
 	/**
 	 * Update the item count or type for an object
@@ -99,21 +101,21 @@ public:
 	 * \param itemId is the new item id
 	 * \param count is the new count value
 	 */
-	virtual void updateThing(Thing* thing, uint16_t itemId, uint32_t count) = 0;
+	virtual void updateThing(std::shared_ptr<Thing> thing, uint16_t itemId, uint32_t count) = 0;
 
 	/**
 	 * Replace an object with a new
 	 * \param index is the position to change (inventory slot/container
 	 * position) \param thing is the object to update
 	 */
-	virtual void replaceThing(uint32_t index, Thing* thing) = 0;
+	virtual void replaceThing(uint32_t index, std::shared_ptr<Thing> thing) = 0;
 
 	/**
 	 * Remove an object
 	 * \param thing is the object to delete
 	 * \param count is the new count value
 	 */
-	virtual void removeThing(Thing* thing, uint32_t count) = 0;
+	virtual void removeThing(std::shared_ptr<Thing> thing, uint32_t count) = 0;
 
 	/**
 	 * Is sent after an operation (move/add) to update internal values
@@ -121,8 +123,8 @@ public:
 	 * \param index is the objects new index value
 	 * \param link holds the relation the object has to the cylinder
 	 */
-	virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
-	                                 cylinderlink_t link = LINK_OWNER) = 0;
+	virtual void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent,
+	                                 int32_t index, cylinderlink_t link = LINK_OWNER) = 0;
 
 	/**
 	 * Is sent after an operation (move/remove) to update internal values
@@ -130,15 +132,15 @@ public:
 	 * \param index is the previous index of the removed object
 	 * \param link holds the relation the object has to the cylinder
 	 */
-	virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
-	                                    cylinderlink_t link = LINK_OWNER) = 0;
+	virtual void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
+	                                    int32_t index, cylinderlink_t link = LINK_OWNER) = 0;
 
 	/**
 	 * Gets the index of an object
 	 * \param thing the object to get the index value from
 	 * \returns the index of the object, returns -1 if not found
 	 */
-	virtual int32_t getThingIndex(const Thing* thing) const;
+	virtual int32_t getThingIndex(std::shared_ptr<const Thing> thing) const;
 
 	/**
 	 * Returns the first index
@@ -156,7 +158,7 @@ public:
 	 * Gets the object based on index
 	 * \returns the object, returns nullptr if not found
 	 */
-	virtual Thing* getThing(size_t index) const;
+	virtual std::shared_ptr<Thing> getThing(size_t index) const;
 
 	/**
 	 * Get the amount of items of a certain type
@@ -178,13 +180,13 @@ public:
 	 * Removes an object from the cylinder without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalRemoveThing(Thing* thing);
+	virtual void internalRemoveThing(std::shared_ptr<Thing> thing);
 
 	/**
 	 * Adds an object to the cylinder without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalAddThing(Thing* thing);
+	virtual void internalAddThing(std::shared_ptr<Thing> thing);
 
 	/**
 	 * Adds an object to the cylinder without sending to the client(s)
@@ -192,7 +194,7 @@ public:
 	 * \param index points to the destination index (inventory slot/container
 	 * position)
 	 */
-	virtual void internalAddThing(uint32_t index, Thing* thing);
+	virtual void internalAddThing(uint32_t index, std::shared_ptr<Thing> thing);
 
 	virtual void startDecaying();
 };
@@ -200,30 +202,41 @@ public:
 class VirtualCylinder final : public Cylinder
 {
 public:
-	static VirtualCylinder* virtualCylinder;
+	static std::shared_ptr<VirtualCylinder> virtualCylinder;
 
-	virtual ReturnValue queryAdd(int32_t, const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
+	virtual ReturnValue queryAdd(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t,
+	                             std::shared_ptr<Creature> = nullptr) const override
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
-	virtual ReturnValue queryMaxCount(int32_t, const Thing&, uint32_t, uint32_t&, uint32_t) const override
+	virtual ReturnValue queryMaxCount(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t&,
+	                                  uint32_t) const override
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
-	virtual ReturnValue queryRemove(const Thing&, uint32_t, uint32_t, Creature* = nullptr) const override
+	virtual ReturnValue queryRemove(std::shared_ptr<const Thing>, uint32_t, uint32_t,
+	                                std::shared_ptr<Creature> = nullptr) const override
 	{
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
-	virtual Cylinder* queryDestination(int32_t&, const Thing&, Item**, uint32_t&) override { return nullptr; }
+	virtual std::shared_ptr<Cylinder> queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
+	                                                   uint32_t&) override
+	{
+		return nullptr;
+	}
 
-	virtual void addThing(Thing*) override {}
-	virtual void addThing(int32_t, Thing*) override {}
-	virtual void updateThing(Thing*, uint16_t, uint32_t) override {}
-	virtual void replaceThing(uint32_t, Thing*) override {}
-	virtual void removeThing(Thing*, uint32_t) override {}
+	virtual void addThing(std::shared_ptr<Thing>) override {}
+	virtual void addThing(int32_t, std::shared_ptr<Thing>) override {}
+	virtual void updateThing(std::shared_ptr<Thing>, uint16_t, uint32_t) override {}
+	virtual void replaceThing(uint32_t, std::shared_ptr<Thing>) override {}
+	virtual void removeThing(std::shared_ptr<Thing>, uint32_t) override {}
 
-	virtual void postAddNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
-	virtual void postRemoveNotification(Thing*, const Cylinder*, int32_t, cylinderlink_t = LINK_OWNER) override {}
+	virtual void postAddNotification(std::shared_ptr<Thing>, std::shared_ptr<const Cylinder>, int32_t,
+	                                 cylinderlink_t = LINK_OWNER) override
+	{}
+	virtual void postRemoveNotification(std::shared_ptr<Thing>, std::shared_ptr<const Cylinder>, int32_t,
+	                                    cylinderlink_t = LINK_OWNER) override
+	{}
 
 	bool isPushable() const override { return false; }
 	int32_t getThrowRange() const override { return 1; }

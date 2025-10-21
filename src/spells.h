@@ -37,9 +37,9 @@ public:
 	InstantSpell* getInstantSpell(const std::string& words);
 	InstantSpell* getInstantSpellByName(const std::string& name);
 
-	TalkActionResult_t playerSaySpell(Player* player, std::string& words);
+	TalkActionResult_t playerSaySpell(std::shared_ptr<Player> player, std::string& words);
 
-	static Position getCasterPosition(Creature* creature, Direction dir);
+	static Position getCasterPosition(std::shared_ptr<Creature> creature, Direction dir);
 	std::string_view getScriptBaseName() const override { return "spells"; }
 
 	const std::map<uint16_t, RuneSpell>& getRuneSpells() const { return runes; };
@@ -68,8 +68,8 @@ public:
 	constexpr BaseSpell() = default;
 	virtual ~BaseSpell() = default;
 
-	virtual bool castSpell(Creature* creature) = 0;
-	virtual bool castSpell(Creature* creature, Creature* target) = 0;
+	virtual bool castSpell(std::shared_ptr<Creature> creature) = 0;
+	virtual bool castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) = 0;
 };
 
 class CombatSpell final : public Event, public BaseSpell
@@ -81,12 +81,12 @@ public:
 	CombatSpell(const CombatSpell&) = delete;
 	CombatSpell& operator=(const CombatSpell&) = delete;
 
-	bool castSpell(Creature* creature) override;
-	bool castSpell(Creature* creature, Creature* target) override;
+	bool castSpell(std::shared_ptr<Creature> creature) override;
+	bool castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) override;
 	bool configureEvent(const pugi::xml_node&) override { return true; }
 
 	// scripting
-	bool executeCastSpell(Creature* creature, const LuaVariant& var);
+	bool executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var);
 
 	bool loadScriptCombat();
 	Combat_ptr getCombat() { return combat; }
@@ -111,10 +111,10 @@ public:
 	uint8_t getId() const { return spellId; }
 	void setId(uint8_t id) { spellId = id; }
 
-	void postCastSpell(Player* player, bool finishedCast = true, bool payCost = true) const;
-	static void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost);
+	void postCastSpell(std::shared_ptr<Player> player, bool finishedCast = true, bool payCost = true) const;
+	static void postCastSpell(std::shared_ptr<Player> player, uint32_t manaCost, uint32_t soulCost);
 
-	uint32_t getManaCost(const Player* player) const;
+	uint32_t getManaCost(std::shared_ptr<const Player> player) const;
 	uint32_t getSoulCost() const { return soul; }
 	void setSoulCost(uint32_t s) { soul = s; }
 	uint32_t getLevel() const { return level; }
@@ -183,9 +183,9 @@ public:
 	SpellType_t spellType = SPELL_UNDEFINED;
 
 protected:
-	bool playerSpellCheck(Player* player) const;
-	bool playerInstantSpellCheck(Player* player, const Position& toPos);
-	bool playerRuneSpellCheck(Player* player, const Position& toPos);
+	bool playerSpellCheck(std::shared_ptr<Player> player) const;
+	bool playerInstantSpellCheck(std::shared_ptr<Player> player, const Position& toPos);
+	bool playerRuneSpellCheck(std::shared_ptr<Player> player, const Position& toPos);
 
 	std::map<uint16_t, bool> vocationSpellMap;
 
@@ -228,13 +228,13 @@ public:
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	virtual bool playerCastInstant(Player* player, std::string& param);
+	virtual bool playerCastInstant(std::shared_ptr<Player> player, std::string& param);
 
-	bool castSpell(Creature* creature) override;
-	bool castSpell(Creature* creature, Creature* target) override;
+	bool castSpell(std::shared_ptr<Creature> creature) override;
+	bool castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) override;
 
 	// scripting
-	bool executeCastSpell(Creature* creature, const LuaVariant& var);
+	bool executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var);
 
 	bool isInstant() const override { return true; }
 	bool getHasParam() const { return hasParam; }
@@ -247,13 +247,13 @@ public:
 	void setNeedCasterTargetOrDirection(bool d) { casterTargetOrDirection = d; }
 	bool getBlockWalls() const { return checkLineOfSight; }
 	void setBlockWalls(bool w) { checkLineOfSight = w; }
-	bool canCast(const Player* player) const;
-	bool canThrowSpell(const Creature* creature, const Creature* target) const;
+	bool canCast(std::shared_ptr<const Player> player) const;
+	bool canThrowSpell(std::shared_ptr<const Creature> creature, std::shared_ptr<const Creature> target) const;
 
 private:
 	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
-	bool internalCastSpell(Creature* creature, const LuaVariant& var);
+	bool internalCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var);
 
 	bool needDirection = false;
 	bool hasParam = false;
@@ -269,21 +269,22 @@ public:
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	ReturnValue canExecuteAction(const Player* player, const Position& toPos) override;
+	ReturnValue canExecuteAction(std::shared_ptr<const Player> player, const Position& toPos) override;
 	bool hasOwnErrorHandler() override { return true; }
-	Thing* getTarget(Player*, Creature* targetCreature, const Position&, uint8_t) const override
+	std::shared_ptr<Thing> getTarget(std::shared_ptr<Player>, std::shared_ptr<Creature> targetCreature, const Position&,
+	                                 uint8_t) const override
 	{
 		return targetCreature;
 	}
 
-	bool executeUse(Player* player, Item* item, const Position& fromPosition, Thing* target, const Position& toPosition,
-	                bool isHotkey) override;
+	bool executeUse(std::shared_ptr<Player> player, std::shared_ptr<Item> item, const Position& fromPosition,
+	                std::shared_ptr<Thing> target, const Position& toPosition, bool isHotkey) override;
 
-	bool castSpell(Creature* creature) override;
-	bool castSpell(Creature* creature, Creature* target) override;
+	bool castSpell(std::shared_ptr<Creature> creature) override;
+	bool castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) override;
 
 	// scripting
-	bool executeCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
+	bool executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var, bool isHotkey);
 
 	bool isInstant() const override { return false; }
 	uint16_t getRuneItemId() const { return runeId; }
@@ -301,7 +302,7 @@ public:
 private:
 	std::string_view getScriptEventName() const override { return "onCastSpell"; }
 
-	bool internalCastSpell(Creature* creature, const LuaVariant& var, bool isHotkey);
+	bool internalCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var, bool isHotkey);
 
 	uint16_t runeId = 0;
 	uint32_t charges = 0;

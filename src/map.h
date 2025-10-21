@@ -37,7 +37,7 @@ public:
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static uint16_t getTileWalkCost(const Creature& creature, const Tile* tile);
+	static uint16_t getTileWalkCost(std::shared_ptr<const Creature> creature, std::shared_ptr<const Tile> tile);
 
 private:
 	std::vector<AStarNode> nodes;
@@ -70,7 +70,7 @@ struct Floor
 	Floor(const Floor&) = delete;
 	Floor& operator=(const Floor&) = delete;
 
-	Tile* tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
+	std::shared_ptr<Tile> tiles[FLOOR_SIZE][FLOOR_SIZE] = {};
 };
 
 class FrozenPathingConditionCall;
@@ -133,8 +133,8 @@ public:
 	Floor* createFloor(uint32_t z);
 	Floor* getFloor(uint8_t z) const { return array[z]; }
 
-	void addCreature(Creature* c);
-	void removeCreature(Creature* c);
+	void addCreature(std::shared_ptr<Creature> c);
+	void removeCreature(std::shared_ptr<Creature> c);
 
 private:
 	static bool newLeaf;
@@ -180,14 +180,14 @@ public:
 	 * Get a single tile.
 	 * \returns A pointer to that tile.
 	 */
-	Tile* getTile(uint16_t x, uint16_t y, uint8_t z) const;
-	Tile* getTile(const Position& pos) const { return getTile(pos.x, pos.y, pos.z); }
+	std::shared_ptr<Tile> getTile(uint16_t x, uint16_t y, uint8_t z) const;
+	std::shared_ptr<Tile> getTile(const Position& pos) const { return getTile(pos.x, pos.y, pos.z); }
 
 	/**
 	 * Set a single tile.
 	 */
-	void setTile(uint16_t x, uint16_t y, uint8_t z, Tile* newTile);
-	void setTile(const Position& pos, Tile* newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
+	void setTile(uint16_t x, uint16_t y, uint8_t z, std::shared_ptr<Tile> newTile);
+	void setTile(const Position& pos, std::shared_ptr<Tile> newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
 
 	/**
 	 * Removes a single tile.
@@ -203,10 +203,10 @@ public:
 	 * tiles away \param forceLogin If true, placing the creature will not fail
 	 * because of obstacles (creatures/chests)
 	 */
-	bool placeCreature(const Position& centerPos, Creature* creature, bool extendedPos = false,
+	bool placeCreature(const Position& centerPos, std::shared_ptr<Creature> creature, bool extendedPos = false,
 	                   bool forceLogin = false);
 
-	void moveCreature(Creature& creature, Tile& newTile, bool forceTeleport = false);
+	void moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> newTile, bool forceTeleport = false);
 
 	void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false,
 	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
@@ -247,10 +247,11 @@ public:
 	                  bool pathfinding = false) const;
 	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding = false) const;
 
-	const Tile* canWalkTo(const Creature& creature, const Position& pos) const;
+	const std::shared_ptr<Tile> canWalkTo(std::shared_ptr<const Creature> creature, const Position& pos) const;
 
-	bool getPathMatching(const Creature& creature, const Position& targetPos, std::vector<Direction>& dirList,
-	                     const FrozenPathingConditionCall& pathCondition, const FindPathParams& fpp) const;
+	bool getPathMatching(std::shared_ptr<const Creature> creature, const Position& targetPos,
+	                     std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
+	                     const FindPathParams& fpp) const;
 
 	std::map<std::string, Position> waypoints;
 
@@ -269,19 +270,20 @@ private:
 
 	QTreeNode root;
 
+public:
 	std::filesystem::path spawnfile;
 	std::filesystem::path housefile;
 
 	uint32_t width = 0;
 	uint32_t height = 0;
 
+private:
 	// Actually scans the map for spectators
 	void getSpectatorsInternal(SpectatorVec& spectators, const Position& centerPos, int32_t minRangeX,
 	                           int32_t maxRangeX, int32_t minRangeY, int32_t maxRangeY, int32_t minRangeZ,
 	                           int32_t maxRangeZ, bool onlyPlayers) const;
 
 	friend class Game;
-	friend class IOMap;
 };
 
 #endif // FS_MAP_H

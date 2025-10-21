@@ -9,13 +9,14 @@
 class House;
 class Player;
 
-class BedItem final : public Item
+class BedItem final : public Item, public std::enable_shared_from_this<BedItem>
 {
 public:
 	explicit BedItem(uint16_t id);
 
-	BedItem* getBed() override { return this; }
-	const BedItem* getBed() const override { return this; }
+	using std::enable_shared_from_this<BedItem>::shared_from_this;
+	std::shared_ptr<BedItem> getBed() override { return shared_from_this(); }
+	std::shared_ptr<const BedItem> getBed() const override { return shared_from_this(); }
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
@@ -27,18 +28,18 @@ public:
 	House* getHouse() const { return house; }
 	void setHouse(House* h) { house = h; }
 
-	bool canUse(Player* player);
+	bool canUse(std::shared_ptr<Player> player);
 
-	bool trySleep(Player* player);
-	bool sleep(Player* player);
-	void wakeUp(Player* player);
+	bool trySleep(std::shared_ptr<Player> player);
+	bool sleep(std::shared_ptr<Player> player);
+	void wakeUp(std::shared_ptr<Player> player);
 
-	BedItem* getNextBedItem() const;
+	std::shared_ptr<BedItem> getNextBedItem() const;
 
 private:
-	void updateAppearance(const Player* player);
-	void regeneratePlayer(Player* player) const;
-	void internalSetSleeper(const Player* player);
+	void updateAppearance(std::shared_ptr<const Player> player);
+	void regeneratePlayer(std::shared_ptr<Player> player) const;
+	void internalSetSleeper(std::shared_ptr<const Player> player);
 	void internalRemoveSleeper();
 
 	House* house = nullptr;

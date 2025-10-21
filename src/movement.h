@@ -45,12 +45,13 @@ public:
 	MoveEvents(const MoveEvents&) = delete;
 	MoveEvents& operator=(const MoveEvents&) = delete;
 
-	uint32_t onCreatureMove(Creature* creature, const Tile* tile, MoveEvent_t eventType);
-	ReturnValue onPlayerEquip(Player* player, Item* item, slots_t slot, bool isCheck);
-	ReturnValue onPlayerDeEquip(Player* player, Item* item, slots_t slot);
-	uint32_t onItemMove(Item* item, Tile* tile, bool isAdd);
+	uint32_t onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> tile,
+	                        MoveEvent_t eventType);
+	ReturnValue onPlayerEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool isCheck);
+	ReturnValue onPlayerDeEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot);
+	uint32_t onItemMove(std::shared_ptr<Item> item, std::shared_ptr<Tile> tile, bool isAdd);
 
-	MoveEvent* getEvent(Item* item, MoveEvent_t eventType);
+	MoveEvent* getEvent(std::shared_ptr<Item> item, MoveEvent_t eventType);
 
 	bool registerLuaEvent(MoveEvent* event);
 	bool registerLuaFunction(MoveEvent* event);
@@ -94,9 +95,9 @@ private:
 	void addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map);
 
 	void addEvent(MoveEvent moveEvent, const Position& pos, MovePosListMap& map);
-	MoveEvent* getEvent(const Tile* tile, MoveEvent_t eventType);
+	MoveEvent* getEvent(std::shared_ptr<const Tile> tile, MoveEvent_t eventType);
 
-	MoveEvent* getEvent(Item* item, MoveEvent_t eventType, slots_t slot);
+	MoveEvent* getEvent(std::shared_ptr<Item> item, MoveEvent_t eventType, slots_t slot);
 
 	MoveListMap uniqueIdMap;
 	MoveListMap actionIdMap;
@@ -110,10 +111,12 @@ private:
 	LuaScriptInterface scriptInterface;
 };
 
-using StepFunction = std::function<uint32_t(Creature* creature, Item* item, const Position& pos)>;
-using MoveFunction = std::function<uint32_t(Item* item, Item* tileItem, const Position& pos)>;
-using EquipFunction =
-    std::function<ReturnValue(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool boolean)>;
+using StepFunction =
+    std::function<uint32_t(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos)>;
+using MoveFunction =
+    std::function<uint32_t(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos)>;
+using EquipFunction = std::function<ReturnValue(MoveEvent* moveEvent, std::shared_ptr<Player> player,
+                                                std::shared_ptr<Item> item, slots_t slot, bool boolean)>;
 
 class MoveEvent final : public Event
 {
@@ -126,16 +129,16 @@ public:
 	bool configureEvent(const pugi::xml_node& node) override;
 	bool loadFunction(const pugi::xml_attribute& attr, bool isScripted) override;
 
-	uint32_t fireStepEvent(Creature* creature, Item* item, const Position& pos);
-	uint32_t fireAddRemItem(Item* item, Item* tileItem, const Position& pos);
-	ReturnValue fireEquip(Player* player, Item* item, slots_t slot, bool isCheck);
+	uint32_t fireStepEvent(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos);
+	uint32_t fireAddRemItem(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos);
+	ReturnValue fireEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool isCheck);
 
 	uint32_t getSlot() const { return slot; }
 
 	// scripting
-	bool executeStep(Creature* creature, Item* item, const Position& pos);
-	bool executeEquip(Player* player, Item* item, slots_t slot, bool isCheck);
-	bool executeAddRemItem(Item* item, Item* tileItem, const Position& pos);
+	bool executeStep(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos);
+	bool executeEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool isCheck);
+	bool executeAddRemItem(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos);
 	//
 
 	// onEquip information
@@ -170,14 +173,16 @@ public:
 	uint32_t getWieldInfo() { return wieldInfo; }
 	void setWieldInfo(WieldInfo_t info) { wieldInfo |= info; }
 
-	static uint32_t StepInField(Creature* creature, Item* item, const Position& pos);
-	static uint32_t StepOutField(Creature* creature, Item* item, const Position& pos);
+	static uint32_t StepInField(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos);
+	static uint32_t StepOutField(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos);
 
-	static uint32_t AddItemField(Item* item, Item* tileItem, const Position& pos);
-	static uint32_t RemoveItemField(Item* item, Item* tileItem, const Position& pos);
+	static uint32_t AddItemField(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos);
+	static uint32_t RemoveItemField(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos);
 
-	static ReturnValue EquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool isCheck);
-	static ReturnValue DeEquipItem(MoveEvent* moveEvent, Player* player, Item* item, slots_t slot, bool);
+	static ReturnValue EquipItem(MoveEvent* moveEvent, std::shared_ptr<Player> player, std::shared_ptr<Item> item,
+	                             slots_t slot, bool isCheck);
+	static ReturnValue DeEquipItem(MoveEvent* moveEvent, std::shared_ptr<Player> player, std::shared_ptr<Item> item,
+	                               slots_t slot, bool);
 
 	MoveEvent_t eventType = MOVE_EVENT_NONE;
 	StepFunction stepFunction;

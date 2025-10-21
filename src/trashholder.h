@@ -6,34 +6,36 @@
 
 #include "item.h"
 
-class TrashHolder final : public Item, public Cylinder
+class TrashHolder final : public Item, public Cylinder, public std::enable_shared_from_this<TrashHolder>
 {
 public:
 	explicit TrashHolder(uint16_t itemId) : Item(itemId) {}
 
-	TrashHolder* getTrashHolder() override { return this; }
-	const TrashHolder* getTrashHolder() const override { return this; }
+	using std::enable_shared_from_this<TrashHolder>::shared_from_this;
+	std::shared_ptr<TrashHolder> getTrashHolder() override { return shared_from_this(); }
+	std::shared_ptr<const TrashHolder> getTrashHolder() const override { return shared_from_this(); }
 
 	// cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
-	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                          uint32_t flags) const override;
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override;
-	Cylinder* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                     std::shared_ptr<Creature> actor = nullptr) const override;
+	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,
+	                          uint32_t& maxQueryCount, uint32_t flags) const override;
+	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                        std::shared_ptr<Creature> actor = nullptr) const override;
+	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
-	void addThing(Thing* thing) override;
-	void addThing(int32_t index, Thing* thing) override;
+	void addThing(std::shared_ptr<Thing> thing) override;
+	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;
 
-	void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override;
-	void replaceThing(uint32_t index, Thing* thing) override;
+	void updateThing(std::shared_ptr<Thing> thing, uint16_t itemId, uint32_t count) override;
+	void replaceThing(uint32_t index, std::shared_ptr<Thing> thing) override;
 
-	void removeThing(Thing* thing, uint32_t count) override;
+	void removeThing(std::shared_ptr<Thing> thing, uint32_t count) override;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 };
 

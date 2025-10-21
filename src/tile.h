@@ -16,8 +16,8 @@ class SpectatorVec;
 class Teleport;
 class TrashHolder;
 
-using CreatureVector = std::vector<Creature*>;
-using ItemVector = std::vector<Item*>;
+using CreatureVector = std::vector<std::shared_ptr<Creature>>;
+using ItemVector = std::vector<std::shared_ptr<Item>>;
 
 enum tileflags_t : uint32_t
 {
@@ -93,14 +93,14 @@ public:
 
 	uint32_t getTopItemCount() const { return size() - downItemCount; }
 	uint32_t getDownItemCount() const { return downItemCount; }
-	inline Item* getTopTopItem() const
+	inline std::shared_ptr<Item> getTopTopItem() const
 	{
 		if (getTopItemCount() == 0) {
 			return nullptr;
 		}
 		return *(getEndTopItem() - 1);
 	}
-	inline Item* getTopDownItem() const
+	inline std::shared_ptr<Item> getTopDownItem() const
 	{
 		if (downItemCount == 0) {
 			return nullptr;
@@ -113,12 +113,12 @@ private:
 	uint16_t downItemCount = 0;
 };
 
-class Tile : public Cylinder
+class Tile : public Cylinder, public std::enable_shared_from_this<Tile>
 {
 public:
-	static Tile& nullptr_tile;
+	static std::shared_ptr<Tile> nullptr_tile;
 	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos(x, y, z) {}
-	virtual ~Tile() { delete ground; };
+	virtual ~Tile() = default;
 
 	// non-copyable
 	Tile(const Tile&) = delete;
@@ -135,21 +135,21 @@ public:
 	int32_t getThrowRange() const override final { return 0; }
 	bool isPushable() const override final { return false; }
 
-	MagicField* getFieldItem() const;
-	Teleport* getTeleportItem() const;
-	TrashHolder* getTrashHolder() const;
-	Mailbox* getMailbox() const;
-	BedItem* getBedItem() const;
+	std::shared_ptr<MagicField> getFieldItem() const;
+	std::shared_ptr<Teleport> getTeleportItem() const;
+	std::shared_ptr<TrashHolder> getTrashHolder() const;
+	std::shared_ptr<Mailbox> getMailbox() const;
+	std::shared_ptr<BedItem> getBedItem() const;
 
-	Creature* getTopCreature() const;
-	const Creature* getBottomCreature() const;
-	Creature* getTopVisibleCreature(const Creature* creature) const;
-	const Creature* getBottomVisibleCreature(const Creature* creature) const;
-	Item* getTopTopItem() const;
-	Item* getTopDownItem() const;
+	std::shared_ptr<Creature> getTopCreature() const;
+	std::shared_ptr<const Creature> getBottomCreature() const;
+	std::shared_ptr<Creature> getTopVisibleCreature(std::shared_ptr<const Creature> creature) const;
+	std::shared_ptr<const Creature> getBottomVisibleCreature(std::shared_ptr<const Creature> creature) const;
+	std::shared_ptr<Item> getTopTopItem() const;
+	std::shared_ptr<Item> getTopDownItem() const;
 	bool isMoveableBlocking() const;
-	Thing* getTopVisibleThing(const Creature* creature);
-	Item* getItemByTopOrder(int32_t topOrder);
+	std::shared_ptr<Thing> getTopVisibleThing(std::shared_ptr<const Creature> creature);
+	std::shared_ptr<Item> getItemByTopOrder(int32_t topOrder);
 
 	size_t getThingCount() const
 	{
@@ -166,7 +166,7 @@ public:
 	uint32_t getDownItemCount() const;
 
 	bool hasProperty(ITEMPROPERTY prop) const;
-	bool hasProperty(const Item* exclude, ITEMPROPERTY prop) const;
+	bool hasProperty(std::shared_ptr<const Item> exclude, ITEMPROPERTY prop) const;
 
 	bool hasFlag(uint32_t flag) const { return hasBitSet(flag, this->flags); }
 	void setFlag(uint32_t flag) { this->flags |= flag; }
@@ -190,62 +190,66 @@ public:
 
 	std::string getDescription(int32_t lookDistance) const override final;
 
-	int32_t getClientIndexOfCreature(const Player* player, const Creature* creature) const;
-	int32_t getStackposOfItem(const Player* player, const Item* item) const;
+	int32_t getClientIndexOfCreature(std::shared_ptr<const Player> player,
+	                                 std::shared_ptr<const Creature> creature) const;
+	int32_t getStackposOfItem(std::shared_ptr<const Player> player, std::shared_ptr<const Item> item) const;
 
 	// cylinder implementations
-	ReturnValue queryAdd(int32_t index, const Thing& thing, uint32_t count, uint32_t flags,
-	                     Creature* actor = nullptr) const override;
-	ReturnValue queryMaxCount(int32_t index, const Thing& thing, uint32_t count, uint32_t& maxQueryCount,
-	                          uint32_t flags) const override final;
-	ReturnValue queryRemove(const Thing& thing, uint32_t count, uint32_t flags,
-	                        Creature* actor = nullptr) const override;
-	Tile* queryDestination(int32_t& index, const Thing& thing, Item** destItem, uint32_t& flags) override;
+	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                     std::shared_ptr<Creature> actor = nullptr) const override;
+	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,
+	                          uint32_t& maxQueryCount, uint32_t flags) const override final;
+	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
+	                        std::shared_ptr<Creature> actor = nullptr) const override;
+	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
-	void addThing(Thing* thing) override final;
-	void addThing(int32_t index, Thing* thing) override;
+	void addThing(std::shared_ptr<Thing> thing) override final;
+	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;
 
-	void updateThing(Thing* thing, uint16_t itemId, uint32_t count) override final;
-	void replaceThing(uint32_t index, Thing* thing) override final;
+	void updateThing(std::shared_ptr<Thing> thing, uint16_t itemId, uint32_t count) override final;
+	void replaceThing(uint32_t index, std::shared_ptr<Thing> thing) override final;
 
-	void removeThing(Thing* thing, uint32_t count) override final;
+	void removeThing(std::shared_ptr<Thing> thing, uint32_t count) override final;
 
-	bool hasCreature(Creature* creature) const;
-	void removeCreature(Creature* creature);
+	bool hasCreature(std::shared_ptr<Creature> creature) const;
+	void removeCreature(std::shared_ptr<Creature> creature);
 
-	int32_t getThingIndex(const Thing* thing) const override final;
+	int32_t getThingIndex(std::shared_ptr<const Thing> thing) const override final;
 	size_t getFirstIndex() const override final;
 	size_t getLastIndex() const override final;
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
-	Thing* getThing(size_t index) const override final;
+	std::shared_ptr<Thing> getThing(size_t index) const override final;
 
-	void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override final;
-	void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override final;
 
-	void internalAddThing(Thing* thing) override final;
-	void internalAddThing(uint32_t index, Thing* thing) override;
+	void internalAddThing(std::shared_ptr<Thing> thing) override final;
+	void internalAddThing(uint32_t index, std::shared_ptr<Thing> thing) override;
 
 	const Position& getPosition() const override final { return tilePos; }
 
 	bool isRemoved() const override final { return false; }
 
-	Item* getUseItem(int32_t index) const;
+	std::shared_ptr<Item> getUseItem(int32_t index) const;
 
-	Item* getGround() const { return ground; }
-	void setGround(Item* item) { ground = item; }
+	std::shared_ptr<Item> getGround() const { return ground; }
+	void setGround(std::shared_ptr<Item> item) { ground = std::move(item); }
 
 private:
-	void onAddTileItem(Item* item);
-	void onUpdateTileItem(Item* oldItem, const ItemType& oldType, Item* newItem, const ItemType& newType);
-	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector, Item* item);
+	void onAddTileItem(std::shared_ptr<Item> item);
+	void onUpdateTileItem(std::shared_ptr<Item> oldItem, const ItemType& oldType, std::shared_ptr<Item> newItem,
+	                      const ItemType& newType);
+	void onRemoveTileItem(const SpectatorVec& spectators, const std::vector<int32_t>& oldStackPosVector,
+	                      std::shared_ptr<Item> item);
 	void onUpdateTile(const SpectatorVec& spectators);
 
-	void setTileFlags(const Item* item);
-	void resetTileFlags(const Item* item);
+	void setTileFlags(std::shared_ptr<const Item> item);
+	void resetTileFlags(std::shared_ptr<const Item> item);
 
-	Item* ground = nullptr;
+	std::shared_ptr<Item> ground = nullptr;
 	Position tilePos;
 	uint32_t flags = 0;
 };
@@ -262,8 +266,9 @@ public:
 	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 	~DynamicTile()
 	{
-		for (Item* item : items) {
-			item->decrementReferenceCounter();
+		// items are managed by shared_ptr now; no manual reference management needed
+		for (const auto& itemPtr : items) {
+			(void)itemPtr;
 		}
 	}
 
@@ -293,9 +298,10 @@ public:
 	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
 	~StaticTile()
 	{
+		// items are managed by shared_ptr now; nothing to manually release
 		if (items) {
-			for (Item* item : *items) {
-				item->decrementReferenceCounter();
+			for (const auto& itemPtr : *items) {
+				(void)itemPtr;
 			}
 		}
 	}

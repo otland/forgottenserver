@@ -23,49 +23,46 @@ extern Vocations g_vocations;
 
 Items Item::items;
 
-Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
+std::shared_ptr<Item> Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/)
 {
-	Item* newItem = nullptr;
-
 	const ItemType& it = Item::items[type];
-	if (it.group == ITEM_GROUP_DEPRECATED) {
-		return nullptr;
-	}
+	assert(it.id != 0 && it.group != ITEM_GROUP_DEPRECATED);
 
 	if (it.stackable && count == 0) {
 		count = 1;
 	}
 
-	if (it.id != 0) {
-		if (it.isDepot()) {
-			newItem = new DepotLocker(type);
-		} else if (it.isContainer()) {
-			newItem = new Container(type);
-		} else if (it.isTeleport()) {
-			newItem = new Teleport(type);
-		} else if (it.isMagicField()) {
-			newItem = new MagicField(type);
-		} else if (it.isDoor()) {
-			newItem = new Door(type);
-		} else if (it.isTrashHolder()) {
-			newItem = new TrashHolder(type);
-		} else if (it.isMailbox()) {
-			newItem = new Mailbox(type);
-		} else if (it.isBed()) {
-			newItem = new BedItem(type);
-		} else if (it.isPodium()) {
-			newItem = new Podium(type);
-		} else {
-			newItem = new Item(type, count);
-		}
-
-		newItem->incrementReferenceCounter();
+	if (it.isDepot()) {
+		return std::make_shared<DepotLocker>(type);
 	}
-
-	return newItem;
+	if (it.isContainer()) {
+		return std::make_shared<Container>(type);
+	}
+	if (it.isTeleport()) {
+		return std::make_shared<Teleport>(type);
+	}
+	if (it.isMagicField()) {
+		return std::make_shared<MagicField>(type);
+	}
+	if (it.isDoor()) {
+		return std::make_shared<Door>(type);
+	}
+	if (it.isTrashHolder()) {
+		return std::make_shared<TrashHolder>(type);
+	}
+	if (it.isMailbox()) {
+		return std::make_shared<Mailbox>(type);
+	}
+	if (it.isBed()) {
+		return std::make_shared<BedItem>(type);
+	}
+	if (it.isPodium()) {
+		return std::make_shared<Podium>(type);
+	}
+	return std::make_shared<Item>(type, count);
 }
 
-Container* Item::CreateItemAsContainer(const uint16_t type, uint16_t size)
+std::shared_ptr<Container> Item::CreateItemAsContainer(const uint16_t type, uint16_t size)
 {
 	const ItemType& it = Item::items[type];
 	if (it.id == 0 || it.group == ITEM_GROUP_DEPRECATED || it.stackable || it.useable || it.moveable || it.pickupable ||
@@ -73,12 +70,11 @@ Container* Item::CreateItemAsContainer(const uint16_t type, uint16_t size)
 		return nullptr;
 	}
 
-	Container* newItem = new Container(type, size);
-	newItem->incrementReferenceCounter();
+	auto newItem = std::make_shared<Container>(type, size);
 	return newItem;
 }
 
-Item* Item::CreateItem(PropStream& propStream)
+std::shared_ptr<Item> Item::CreateItem(PropStream& propStream)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {
@@ -121,7 +117,7 @@ Item* Item::CreateItem(PropStream& propStream)
 	return Item::CreateItem(id, 0);
 }
 
-Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id(type)
+Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id{type}
 {
 	const ItemType& it = items[id];
 
@@ -144,20 +140,20 @@ Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id(type)
 	setDefaultDuration();
 }
 
-Item::Item(const Item& i) : Thing(), id(i.id), count(i.count), loadedFromMap(i.loadedFromMap)
+Item::Item(const Item& i) :
+    Thing{}, std::enable_shared_from_this<Item>{i}, id(i.id), count(i.count), loadedFromMap(i.loadedFromMap)
 {
 	if (i.attributes) {
 		attributes.reset(new ItemAttributes(*i.attributes));
 	}
 }
 
-Item* Item::clone() const
+std::shared_ptr<Item> Item::clone() const
 {
-	Item* item = Item::CreateItem(id, count);
+	auto item = Item::CreateItem(id, count);
 	if (attributes) {
 		item->attributes.reset(new ItemAttributes(*attributes));
 		if (item->getDuration() > 0) {
-			item->incrementReferenceCounter();
 			item->setDecaying(DECAYING_TRUE);
 			g_game.toDecayItems.push_front(item);
 		}
@@ -165,13 +161,13 @@ Item* Item::clone() const
 	return item;
 }
 
-bool Item::equals(const Item* otherItem) const
+bool Item::operator==(const Item& otherItem) const
 {
-	if (!otherItem || id != otherItem->id) {
+	if (id != otherItem.id) {
 		return false;
 	}
 
-	const auto& otherAttributes = otherItem->attributes;
+	const auto& otherAttributes = otherItem.attributes;
 	if (!attributes) {
 		return !otherAttributes || (otherAttributes->attributeBits == 0);
 	} else if (!otherAttributes) {
@@ -225,7 +221,7 @@ void Item::setDefaultSubtype()
 
 void Item::onRemoved()
 {
-	tfs::lua::removeTempItem(this);
+	tfs::lua::removeTempItem(shared_from_this());
 
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		g_game.removeUniqueItem(getUniqueId());
@@ -253,10 +249,10 @@ void Item::setID(uint16_t newid)
 	}
 }
 
-Cylinder* Item::getTopParent()
+std::shared_ptr<Cylinder> Item::getTopParent()
 {
-	Cylinder* aux = getParent();
-	Cylinder* prevaux = dynamic_cast<Cylinder*>(this);
+	auto aux = getParent();
+	auto prevaux = std::dynamic_pointer_cast<Cylinder>(this->shared_from_this());
 	if (!aux) {
 		return prevaux;
 	}
@@ -272,10 +268,10 @@ Cylinder* Item::getTopParent()
 	return aux;
 }
 
-const Cylinder* Item::getTopParent() const
+std::shared_ptr<const Cylinder> Item::getTopParent() const
 {
-	const Cylinder* aux = getParent();
-	const Cylinder* prevaux = dynamic_cast<const Cylinder*>(this);
+	auto aux = getParent();
+	auto prevaux = std::dynamic_pointer_cast<const Cylinder>(this->shared_from_this());
 	if (!aux) {
 		return prevaux;
 	}
@@ -291,24 +287,24 @@ const Cylinder* Item::getTopParent() const
 	return aux;
 }
 
-Tile* Item::getTile()
+std::shared_ptr<Tile> Item::getTile()
 {
-	Cylinder* cylinder = getTopParent();
+	auto cylinder = getTopParent();
 	// get root cylinder
 	if (cylinder && cylinder->hasParent()) {
 		cylinder = cylinder->getParent();
 	}
-	return dynamic_cast<Tile*>(cylinder);
+	return std::dynamic_pointer_cast<Tile>(cylinder);
 }
 
-const Tile* Item::getTile() const
+std::shared_ptr<const Tile> Item::getTile() const
 {
-	const Cylinder* cylinder = getTopParent();
+	auto cylinder = getTopParent();
 	// get root cylinder
 	if (cylinder && cylinder->hasParent()) {
 		cylinder = cylinder->getParent();
 	}
-	return dynamic_cast<const Tile*>(cylinder);
+	return std::dynamic_pointer_cast<const Tile>(cylinder);
 }
 
 uint16_t Item::getSubType() const
@@ -324,7 +320,10 @@ uint16_t Item::getSubType() const
 	return count;
 }
 
-const Player* Item::getHoldingPlayer() const { return dynamic_cast<const Player*>(getTopParent()); }
+std::shared_ptr<const Player> Item::getHoldingPlayer() const
+{
+	return std::dynamic_pointer_cast<const Player>(getTopParent());
+}
 
 void Item::setSubType(uint16_t n)
 {
@@ -1045,7 +1044,7 @@ void Item::setUniqueId(uint16_t n)
 		return;
 	}
 
-	if (g_game.addUniqueItem(n, this)) {
+	if (g_game.addUniqueItem(n, shared_from_this())) {
 		getAttributes()->setUniqueId(n);
 	}
 }
@@ -1230,7 +1229,7 @@ ItemAttributes::Attribute& ItemAttributes::getAttr(itemAttrTypes type)
 	return attributes.back();
 }
 
-void Item::startDecaying() { g_game.startDecay(this); }
+void Item::startDecaying() { g_game.startDecay(shared_from_this()); }
 
 bool Item::hasMarketAttributes() const
 {

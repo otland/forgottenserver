@@ -10,9 +10,9 @@
 
 extern Game g_game;
 
-void Guild::addMember(Player* player) { membersOnline.push_back(player); }
+void Guild::addMember(std::shared_ptr<Player> player) { membersOnline.push_back(player); }
 
-void Guild::removeMember(Player* player)
+void Guild::removeMember(std::shared_ptr<Player> player)
 {
 	membersOnline.remove(player);
 

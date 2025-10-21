@@ -64,19 +64,19 @@ void BedItem::serializeAttr(PropWriteStream& propWriteStream) const
 	}
 }
 
-BedItem* BedItem::getNextBedItem() const
+std::shared_ptr<BedItem> BedItem::getNextBedItem() const
 {
 	Direction dir = Item::items[id].bedPartnerDir;
 	Position targetPos = getNextPosition(dir, getPosition());
 
-	Tile* tile = g_game.map.getTile(targetPos);
+	auto tile = g_game.map.getTile(targetPos);
 	if (!tile) {
 		return nullptr;
 	}
 	return tile->getBedItem();
 }
 
-bool BedItem::canUse(Player* player)
+bool BedItem::canUse(std::shared_ptr<Player> player)
 {
 	if (!player || !house || !player->isPremium() || player->getZone() != ZONE_PROTECTION) {
 		return false;
@@ -90,18 +90,18 @@ bool BedItem::canUse(Player* player)
 		return true;
 	}
 
-	Player sleeper(nullptr);
-	if (!IOLoginData::loadPlayerById(&sleeper, sleeperGUID)) {
+	auto sleeper = std::make_shared<Player>(nullptr);
+	if (!IOLoginData::loadPlayerById(sleeper, sleeperGUID)) {
 		return false;
 	}
 
-	if (house->getHouseAccessLevel(&sleeper) > house->getHouseAccessLevel(player)) {
+	if (house->getHouseAccessLevel(sleeper) > house->getHouseAccessLevel(player)) {
 		return false;
 	}
 	return true;
 }
 
-bool BedItem::trySleep(Player* player)
+bool BedItem::trySleep(std::shared_ptr<Player> player)
 {
 	if (!house || player->isRemoved()) {
 		return false;
@@ -118,7 +118,7 @@ bool BedItem::trySleep(Player* player)
 	return true;
 }
 
-bool BedItem::sleep(Player* player)
+bool BedItem::sleep(std::shared_ptr<Player> player)
 {
 	if (!house) {
 		return false;
@@ -128,7 +128,7 @@ bool BedItem::sleep(Player* player)
 		return false;
 	}
 
-	BedItem* nextBedItem = getNextBedItem();
+	std::shared_ptr<BedItem> nextBedItem = getNextBedItem();
 
 	internalSetSleeper(player);
 
@@ -140,7 +140,7 @@ bool BedItem::sleep(Player* player)
 	g_game.setBedSleeper(this, player->getGUID());
 
 	// make the player walk onto the bed
-	g_game.map.moveCreature(*player, *getTile());
+	g_game.map.moveCreature(player, getTile());
 
 	// display 'Zzzz'/sleep effect
 	g_game.addMagicEffect(player->getPosition(), CONST_ME_SLEEP);
@@ -159,7 +159,7 @@ bool BedItem::sleep(Player* player)
 	return true;
 }
 
-void BedItem::wakeUp(Player* player)
+void BedItem::wakeUp(std::shared_ptr<Player> player)
 {
 	if (!house) {
 		return;
@@ -167,10 +167,10 @@ void BedItem::wakeUp(Player* player)
 
 	if (sleeperGUID != 0) {
 		if (!player) {
-			Player regenPlayer(nullptr);
-			if (IOLoginData::loadPlayerById(&regenPlayer, sleeperGUID)) {
-				regeneratePlayer(&regenPlayer);
-				IOLoginData::savePlayer(&regenPlayer);
+			auto regenPlayer = std::make_shared<Player>(nullptr);
+			if (IOLoginData::loadPlayerById(regenPlayer, sleeperGUID)) {
+				regeneratePlayer(regenPlayer);
+				IOLoginData::savePlayer(regenPlayer);
 			}
 		} else {
 			regeneratePlayer(player);
@@ -181,7 +181,7 @@ void BedItem::wakeUp(Player* player)
 	// update the bedSleepersMap
 	g_game.removeBedSleeper(sleeperGUID);
 
-	BedItem* nextBedItem = getNextBedItem();
+	std::shared_ptr<BedItem> nextBedItem = getNextBedItem();
 
 	// unset sleep info
 	internalRemoveSleeper();
@@ -198,7 +198,7 @@ void BedItem::wakeUp(Player* player)
 	}
 }
 
-void BedItem::regeneratePlayer(Player* player) const
+void BedItem::regeneratePlayer(std::shared_ptr<Player> player) const
 {
 	const uint32_t sleptTime = time(nullptr) - sleepStart;
 
@@ -225,25 +225,25 @@ void BedItem::regeneratePlayer(Player* player) const
 	player->changeSoul(soulRegen);
 }
 
-void BedItem::updateAppearance(const Player* player)
+void BedItem::updateAppearance(std::shared_ptr<const Player> player)
 {
 	const ItemType& it = Item::items[id];
 	if (it.type == ITEM_TYPE_BED) {
 		if (player && it.transformToOnUse[player->getSex()] != 0) {
 			const ItemType& newType = Item::items[it.transformToOnUse[player->getSex()]];
 			if (newType.type == ITEM_TYPE_BED) {
-				g_game.transformItem(this, it.transformToOnUse[player->getSex()]);
+				g_game.transformItem(shared_from_this(), it.transformToOnUse[player->getSex()]);
 			}
 		} else if (it.transformToFree != 0) {
 			const ItemType& newType = Item::items[it.transformToFree];
 			if (newType.type == ITEM_TYPE_BED) {
-				g_game.transformItem(this, it.transformToFree);
+				g_game.transformItem(shared_from_this(), it.transformToFree);
 			}
 		}
 	}
 }
 
-void BedItem::internalSetSleeper(const Player* player)
+void BedItem::internalSetSleeper(std::shared_ptr<const Player> player)
 {
 	std::string desc_str = player->getName() + " is sleeping there.";
 

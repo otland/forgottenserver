@@ -5,9 +5,9 @@
 
 #include "cylinder.h"
 
-VirtualCylinder* VirtualCylinder::virtualCylinder = new VirtualCylinder;
+std::shared_ptr<VirtualCylinder> VirtualCylinder::virtualCylinder = std::make_shared<VirtualCylinder>();
 
-int32_t Cylinder::getThingIndex(const Thing*) const { return -1; }
+int32_t Cylinder::getThingIndex(std::shared_ptr<const Thing>) const { return -1; }
 
 size_t Cylinder::getFirstIndex() const { return 0; }
 
@@ -20,19 +20,19 @@ std::map<uint32_t, uint32_t>& Cylinder::getAllItemTypeCount(std::map<uint32_t, u
 	return countMap;
 }
 
-Thing* Cylinder::getThing(size_t) const { return nullptr; }
+std::shared_ptr<Thing> Cylinder::getThing(size_t) const { return nullptr; }
 
-void Cylinder::internalRemoveThing(Thing*)
+void Cylinder::internalRemoveThing(std::shared_ptr<Thing>)
 {
 	//
 }
 
-void Cylinder::internalAddThing(Thing*)
+void Cylinder::internalAddThing(std::shared_ptr<Thing>)
 {
 	//
 }
 
-void Cylinder::internalAddThing(uint32_t, Thing*)
+void Cylinder::internalAddThing(uint32_t, std::shared_ptr<Thing>)
 {
 	//
 }

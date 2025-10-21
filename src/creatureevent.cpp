@@ -100,7 +100,7 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 	return nullptr;
 }
 
-bool CreatureEvents::playerLogin(Player* player) const
+bool CreatureEvents::playerLogin(std::shared_ptr<Player> player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -113,7 +113,7 @@ bool CreatureEvents::playerLogin(Player* player) const
 	return true;
 }
 
-bool CreatureEvents::playerLogout(Player* player) const
+bool CreatureEvents::playerLogout(std::shared_ptr<Player> player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -126,7 +126,7 @@ bool CreatureEvents::playerLogout(Player* player) const
 	return true;
 }
 
-void CreatureEvents::playerReconnect(Player* player) const
+void CreatureEvents::playerReconnect(std::shared_ptr<Player> player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -136,7 +136,7 @@ void CreatureEvents::playerReconnect(Player* player) const
 	}
 }
 
-bool CreatureEvents::playerAdvance(Player* player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+bool CreatureEvents::playerAdvance(std::shared_ptr<Player> player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
 {
 	// fire global event if is registered
 	for (auto& it : creatureEvents) {
@@ -274,7 +274,7 @@ void CreatureEvent::clearEvent()
 	loaded = false;
 }
 
-bool CreatureEvent::executeOnLogin(Player* player) const
+bool CreatureEvent::executeOnLogin(std::shared_ptr<Player> player) const
 {
 	// onLogin(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -288,12 +288,12 @@ bool CreatureEvent::executeOnLogin(Player* player) const
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 	return scriptInterface->callFunction(1);
 }
 
-bool CreatureEvent::executeOnLogout(Player* player) const
+bool CreatureEvent::executeOnLogout(std::shared_ptr<Player> player) const
 {
 	// onLogout(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -307,12 +307,12 @@ bool CreatureEvent::executeOnLogout(Player* player) const
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 	return scriptInterface->callFunction(1);
 }
 
-void CreatureEvent::executeOnReconnect(Player* player) const
+void CreatureEvent::executeOnReconnect(std::shared_ptr<Player> player) const
 {
 	// onReconnect(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -326,12 +326,12 @@ void CreatureEvent::executeOnReconnect(Player* player) const
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 	scriptInterface->callFunction(1);
 }
 
-bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
+bool CreatureEvent::executeOnThink(std::shared_ptr<Creature> creature, uint32_t interval)
 {
 	// onThink(creature, interval)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -345,14 +345,14 @@ bool CreatureEvent::executeOnThink(Creature* creature, uint32_t interval)
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	lua_pushnumber(L, interval);
 
 	return scriptInterface->callFunction(2);
 }
 
-bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
+bool CreatureEvent::executeOnPrepareDeath(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> killer)
 {
 	// onPrepareDeath(creature, killer)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -367,11 +367,11 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	if (killer) {
-		tfs::lua::pushUserdata(L, killer);
+		tfs::lua::pushSharedPtr(L, killer);
 		tfs::lua::setCreatureMetatable(L, -1, killer);
 	} else {
 		lua_pushnil(L);
@@ -380,7 +380,8 @@ bool CreatureEvent::executeOnPrepareDeath(Creature* creature, Creature* killer)
 	return scriptInterface->callFunction(2);
 }
 
-bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* killer, Creature* mostDamageKiller,
+bool CreatureEvent::executeOnDeath(std::shared_ptr<Creature> creature, std::shared_ptr<Item> corpse,
+                                   std::shared_ptr<Creature> killer, std::shared_ptr<Creature> mostDamageKiller,
                                    bool lastHitUnjustified, bool mostDamageUnjustified)
 {
 	// onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
@@ -395,20 +396,20 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 
 	tfs::lua::pushThing(L, corpse);
 
 	if (killer) {
-		tfs::lua::pushUserdata(L, killer);
+		tfs::lua::pushSharedPtr(L, killer);
 		tfs::lua::setCreatureMetatable(L, -1, killer);
 	} else {
 		lua_pushnil(L);
 	}
 
 	if (mostDamageKiller) {
-		tfs::lua::pushUserdata(L, mostDamageKiller);
+		tfs::lua::pushSharedPtr(L, mostDamageKiller);
 		tfs::lua::setCreatureMetatable(L, -1, mostDamageKiller);
 	} else {
 		lua_pushnil(L);
@@ -420,7 +421,7 @@ bool CreatureEvent::executeOnDeath(Creature* creature, Item* corpse, Creature* k
 	return scriptInterface->callFunction(6);
 }
 
-bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+bool CreatureEvent::executeAdvance(std::shared_ptr<Player> player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
 {
 	// onAdvance(player, skill, oldLevel, newLevel)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -434,7 +435,7 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 	lua_pushnumber(L, static_cast<uint32_t>(skill));
 	lua_pushnumber(L, oldLevel);
@@ -443,7 +444,7 @@ bool CreatureEvent::executeAdvance(Player* player, skills_t skill, uint32_t oldL
 	return scriptInterface->callFunction(4);
 }
 
-void CreatureEvent::executeOnKill(Creature* creature, Creature* target)
+void CreatureEvent::executeOnKill(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
 {
 	// onKill(creature, target)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -457,14 +458,15 @@ void CreatureEvent::executeOnKill(Creature* creature, Creature* target)
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(scriptId);
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
-	tfs::lua::pushUserdata(L, target);
+	tfs::lua::pushSharedPtr(L, target);
 	tfs::lua::setCreatureMetatable(L, -1, target);
 	scriptInterface->callVoidFunction(2);
 }
 
-void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, uint8_t buttonId, uint8_t choiceId)
+void CreatureEvent::executeModalWindow(std::shared_ptr<Player> player, uint32_t modalWindowId, uint8_t buttonId,
+                                       uint8_t choiceId)
 {
 	// onModalWindow(player, modalWindowId, buttonId, choiceId)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -478,7 +480,7 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, modalWindowId);
@@ -488,7 +490,8 @@ void CreatureEvent::executeModalWindow(Player* player, uint32_t modalWindowId, u
 	scriptInterface->callVoidFunction(4);
 }
 
-bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view text, const uint32_t windowTextId)
+bool CreatureEvent::executeTextEdit(std::shared_ptr<Player> player, std::shared_ptr<Item> item, std::string_view text,
+                                    const uint32_t windowTextId)
 {
 	// onTextEdit(player, item, text, windowTextId)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -502,7 +505,7 @@ bool CreatureEvent::executeTextEdit(Player* player, Item* item, std::string_view
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	tfs::lua::pushThing(L, item);
@@ -526,7 +529,8 @@ void pushCombatDamage(lua_State* L, const CombatDamage& damage)
 
 } // namespace
 
-void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, CombatDamage& damage)
+void CreatureEvent::executeHealthChange(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> attacker,
+                                        CombatDamage& damage)
 {
 	// onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -540,10 +544,10 @@ void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, 
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	if (attacker) {
-		tfs::lua::pushUserdata(L, attacker);
+		tfs::lua::pushSharedPtr(L, attacker);
 		tfs::lua::setCreatureMetatable(L, -1, attacker);
 	} else {
 		lua_pushnil(L);
@@ -569,7 +573,8 @@ void CreatureEvent::executeHealthChange(Creature* creature, Creature* attacker, 
 	tfs::lua::resetScriptEnv();
 }
 
-void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, CombatDamage& damage)
+void CreatureEvent::executeManaChange(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> attacker,
+                                      CombatDamage& damage)
 {
 	// onManaChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -583,10 +588,10 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 	lua_State* L = scriptInterface->getLuaState();
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, creature);
+	tfs::lua::pushSharedPtr(L, creature);
 	tfs::lua::setCreatureMetatable(L, -1, creature);
 	if (attacker) {
-		tfs::lua::pushUserdata(L, attacker);
+		tfs::lua::pushSharedPtr(L, attacker);
 		tfs::lua::setCreatureMetatable(L, -1, attacker);
 	} else {
 		lua_pushnil(L);
@@ -607,7 +612,7 @@ void CreatureEvent::executeManaChange(Creature* creature, Creature* attacker, Co
 	tfs::lua::resetScriptEnv();
 }
 
-void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const std::string& buffer)
+void CreatureEvent::executeExtendedOpcode(std::shared_ptr<Player> player, uint8_t opcode, const std::string& buffer)
 {
 	// onExtendedOpcode(player, opcode, buffer)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -622,7 +627,7 @@ void CreatureEvent::executeExtendedOpcode(Player* player, uint8_t opcode, const 
 
 	scriptInterface->pushFunction(scriptId);
 
-	tfs::lua::pushUserdata(L, player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, opcode);

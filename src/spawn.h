@@ -44,7 +44,7 @@ public:
 
 private:
 	// map of the spawned creatures
-	using SpawnedMap = std::multimap<uint32_t, Monster*>;
+	using SpawnedMap = std::multimap<uint32_t, std::shared_ptr<Monster>>;
 	SpawnedMap spawnedMap;
 
 	// map of creatures in the spawn
@@ -74,7 +74,7 @@ public:
 	bool isStarted() const { return started; }
 
 private:
-	std::forward_list<Npc*> npcList;
+	std::forward_list<std::shared_ptr<Npc>> npcList;
 	std::forward_list<Spawn> spawnList;
 	std::string filename;
 	bool loaded = false;

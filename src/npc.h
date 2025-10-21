@@ -56,16 +56,16 @@ private:
 class NpcEventsHandler
 {
 public:
-	NpcEventsHandler(const std::string& file, Npc* npc);
+	NpcEventsHandler(const std::string& file, std::shared_ptr<Npc> npc);
 
-	void onCreatureAppear(Creature* creature);
-	void onCreatureDisappear(Creature* creature);
-	void onCreatureMove(Creature* creature, const Position& oldPos, const Position& newPos);
-	void onCreatureSay(Creature* creature, SpeakClasses, const std::string& text);
-	void onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint16_t amount,
-	                   bool ignore = false, bool inBackpacks = false);
-	void onPlayerCloseChannel(Player* player);
-	void onPlayerEndTrade(Player* player);
+	void onCreatureAppear(std::shared_ptr<Creature> creature);
+	void onCreatureDisappear(std::shared_ptr<Creature> creature);
+	void onCreatureMove(std::shared_ptr<Creature> creature, const Position& oldPos, const Position& newPos);
+	void onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses, const std::string& text);
+	void onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
+	                   uint16_t amount, bool ignore = false, bool inBackpacks = false);
+	void onPlayerCloseChannel(std::shared_ptr<Player> player);
+	void onPlayerEndTrade(std::shared_ptr<Player> player);
 	void onThink();
 
 	bool isLoaded() const;
@@ -73,7 +73,7 @@ public:
 	std::unique_ptr<NpcScriptInterface> scriptInterface;
 
 private:
-	Npc* npc;
+	std::shared_ptr<Npc> npc;
 
 	int32_t creatureAppearEvent = -1;
 	int32_t creatureDisappearEvent = -1;
@@ -85,9 +85,10 @@ private:
 	bool loaded = false;
 };
 
-class Npc final : public Creature
+class Npc final : public Creature, public std::enable_shared_from_this<Npc>
 {
 public:
+	explicit Npc(const std::string& name);
 	~Npc();
 
 	// non-copyable
@@ -96,8 +97,9 @@ public:
 
 	using Creature::onWalk;
 
-	Npc* getNpc() override { return this; }
-	const Npc* getNpc() const override { return this; }
+	using std::enable_shared_from_this<Npc>::shared_from_this;
+	std::shared_ptr<Npc> getNpc() override { return shared_from_this(); }
+	std::shared_ptr<const Npc> getNpc() const override { return shared_from_this(); }
 
 	bool isPushable() const override { return pushable && walkTicks != 0; }
 
@@ -111,7 +113,7 @@ public:
 	void removeList() override;
 	void addList() override;
 
-	static Npc* createNpc(const std::string& name);
+	static std::shared_ptr<Npc> createNpc(const std::string& name);
 
 	bool canSee(const Position& pos) const override;
 
@@ -127,7 +129,7 @@ public:
 	void setSpeechBubble(const uint8_t bubble) { speechBubble = bubble; }
 
 	void doSay(const std::string& text);
-	void doSayToPlayer(Player* player, const std::string& text);
+	void doSayToPlayer(std::shared_ptr<Player> player, const std::string& text);
 
 	bool doMoveTo(const Position& pos, int32_t minTargetDist = 1, int32_t maxTargetDist = 1, bool fullPathSearch = true,
 	              bool clearSight = true, int32_t maxSearchDist = 0);
@@ -142,13 +144,13 @@ public:
 		}
 	}
 
-	void onPlayerCloseChannel(Player* player);
-	void onPlayerTrade(Player* player, int32_t callback, uint16_t itemId, uint8_t count, uint16_t amount,
-	                   bool ignore = false, bool inBackpacks = false);
-	void onPlayerEndTrade(Player* player, int32_t buyCallback, int32_t sellCallback);
+	void onPlayerCloseChannel(std::shared_ptr<Player> player);
+	void onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
+	                   uint16_t amount, bool ignore = false, bool inBackpacks = false);
+	void onPlayerEndTrade(std::shared_ptr<Player> player, int32_t buyCallback, int32_t sellCallback);
 
-	void turnToCreature(Creature* creature);
-	void setCreatureFocus(Creature* creature);
+	void turnToCreature(std::shared_ptr<Creature> creature);
+	void setCreatureFocus(std::shared_ptr<Creature> creature);
 
 	auto& getScriptInterface() { return npcEventHandler->scriptInterface; }
 
@@ -159,14 +161,12 @@ public:
 	void goToFollowCreature() override;
 
 private:
-	explicit Npc(const std::string& name);
+	void onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin) override;
+	void onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout) override;
+	void onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile, const Position& newPos,
+	                    std::shared_ptr<const Tile> oldTile, const Position& oldPos, bool teleport) override;
 
-	void onCreatureAppear(Creature* creature, bool isLogin) override;
-	void onRemoveCreature(Creature* creature, bool isLogout) override;
-	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
-	                    const Position& oldPos, bool teleport) override;
-
-	void onCreatureSay(Creature* creature, SpeakClasses type, const std::string& text) override;
+	void onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text) override;
 	void onThink(uint32_t interval) override;
 	std::string getDescription(int32_t lookDistance) const override;
 
@@ -183,14 +183,14 @@ private:
 	void reset();
 	bool loadFromXml();
 
-	void addShopPlayer(Player* player);
-	void removeShopPlayer(Player* player);
+	void addShopPlayer(std::shared_ptr<Player> player);
+	void removeShopPlayer(std::shared_ptr<Player> player);
 	void closeAllShopWindows();
 
 	std::map<std::string, std::string> parameters;
 
-	std::set<Player*> shopPlayerSet;
-	std::set<Player*> spectators;
+	std::set<std::shared_ptr<Player>> shopPlayerSet;
+	std::set<std::shared_ptr<Player>> spectators;
 
 	std::string name;
 	std::string filename;

@@ -56,6 +56,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     add_compile_options(-Wimplicit-fallthrough -Wmove)
 endif ()
 
+add_compile_options(-fsanitize=address)
+add_link_options(-fsanitize=address)
+
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
 
 # Find packages.

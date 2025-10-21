@@ -8,7 +8,7 @@ class Creature;
 
 class SpectatorVec
 {
-	using Vec = std::vector<Creature*>;
+	using Vec = std::vector<std::shared_ptr<Creature>>;
 	using Iterator = Vec::iterator;
 	using ConstIterator = Vec::const_iterator;
 
@@ -17,7 +17,7 @@ public:
 
 	void addSpectators(const SpectatorVec& spectators)
 	{
-		for (Creature* spectator : spectators.vec) {
+		for (auto spectator : spectators.vec) {
 			auto it = std::find(vec.begin(), vec.end(), spectator);
 			if (it != end()) {
 				continue;
@@ -26,9 +26,9 @@ public:
 		}
 	}
 
-	void erase(Creature* spectator)
+	void erase(std::shared_ptr<Creature> spectator)
 	{
-		auto it = std::find(vec.begin(), vec.end(), spectator);
+		auto it = std::find(vec.begin(), vec.end(), std::move(spectator));
 		if (it == end()) {
 			return;
 		}
@@ -42,7 +42,7 @@ public:
 	ConstIterator begin() const { return vec.begin(); }
 	Iterator end() { return vec.end(); }
 	ConstIterator end() const { return vec.end(); }
-	void emplace_back(Creature* c) { vec.emplace_back(c); }
+	void emplace_back(std::shared_ptr<Creature> c) { vec.emplace_back(std::move(c)); }
 
 private:
 	Vec vec;
