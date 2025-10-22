@@ -115,7 +115,10 @@ public:
 
 	void setArea(AreaCombat* area);
 	bool hasArea() const { return area != nullptr; }
-	void addCondition(std::shared_ptr<const Condition> condition) { params.conditions.emplace_front(std::move(condition)); }
+	void addCondition(std::shared_ptr<const Condition> condition)
+	{
+		params.conditions.emplace_front(std::move(condition));
+	}
 	void clearConditions() { params.conditions.clear(); }
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
 	void postCombatEffects(Creature* caster, const Position& pos) const { postCombatEffects(caster, pos, params); }
