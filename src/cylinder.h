@@ -32,9 +32,17 @@ enum cylinderlink_t
 	LINK_NEAR,
 };
 
-class Cylinder : virtual public Thing
+class Cylinder : virtual public Thing, private std::enable_shared_from_this<Cylinder>
 {
 public:
+	virtual ~Cylinder() = default;
+
+	std::shared_ptr<Cylinder> getCylinder() { return std::static_pointer_cast<Cylinder>(shared_from_this()); }
+	std::shared_ptr<const Cylinder> getCylinder() const
+	{
+		return std::static_pointer_cast<const Cylinder>(shared_from_this());
+	}
+
 	/**
 	 * Query if the cylinder can add an object
 	 * \param index points to the destination index (inventory slot/container
@@ -237,11 +245,6 @@ public:
 	virtual void postRemoveNotification(std::shared_ptr<Thing>, std::shared_ptr<const Cylinder>, int32_t,
 	                                    cylinderlink_t = LINK_OWNER) override
 	{}
-
-	bool isPushable() const override { return false; }
-	int32_t getThrowRange() const override { return 1; }
-	std::string getDescription(int32_t) const override { return {}; }
-	bool isRemoved() const override { return false; }
 };
 
 #endif // FS_CYLINDER_H

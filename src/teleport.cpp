@@ -51,7 +51,7 @@ ReturnValue Teleport::queryRemove(std::shared_ptr<const Thing>, uint32_t, uint32
 std::shared_ptr<Cylinder> Teleport::queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
                                                      uint32_t&)
 {
-	return shared_from_this();
+	return getCylinder();
 }
 
 void Teleport::addThing(std::shared_ptr<Thing> thing) { return addThing(0, thing); }
@@ -66,7 +66,7 @@ void Teleport::addThing(int32_t, std::shared_ptr<Thing> thing)
 	// Prevent infinite loop
 	auto destTeleport = destTile->getTeleportItem();
 	if (destTeleport) {
-		std::vector<Position> lastPositions = {getPosition()};
+		auto lastPositions = std::vector{getPosition()};
 
 		while (true) {
 			const Position& nextPos = destTeleport->getDestPos();

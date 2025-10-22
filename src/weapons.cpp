@@ -781,7 +781,7 @@ bool WeaponDistance::useWeapon(std::shared_ptr<Player> player, std::shared_ptr<I
 	}
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		std::shared_ptr<Item> bow = player->getWeapon(true);
+		auto bow = player->getWeapon(true);
 		if (bow && bow->getHitChance() != 0) {
 			chance += bow->getHitChance();
 		}
@@ -824,7 +824,7 @@ int32_t WeaponDistance::getElementDamage(std::shared_ptr<const Player> player, s
 
 	int32_t attackValue = elementDamage;
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		std::shared_ptr<Item> weapon = player->getWeapon(true);
+		auto weapon = player->getWeapon(true);
 		if (weapon) {
 			attackValue += weapon->getAttack();
 		}
@@ -852,7 +852,7 @@ int32_t WeaponDistance::getWeaponDamage(std::shared_ptr<const Player> player, st
 	int32_t attackValue = item->getAttack();
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		std::shared_ptr<Item> weapon = player->getWeapon(true);
+		auto weapon = player->getWeapon(true);
 		if (weapon) {
 			attackValue += weapon->getAttack();
 		}

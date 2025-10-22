@@ -39,7 +39,7 @@ Attr_ReadValue Podium::readAttr(AttrTypes_t attr, PropStream& propStream)
 			propStream.read<uint8_t>(newOutfit.lookMountFeet);
 			setOutfit(newOutfit);
 
-			g_game.updatePodium(shared_from_this());
+			g_game.updatePodium(getPodium());
 			return ATTR_READ_CONTINUE;
 		}
 

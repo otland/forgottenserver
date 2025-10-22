@@ -6,14 +6,16 @@
 
 #include "item.h"
 
-class TrashHolder final : public Item, public Cylinder, public std::enable_shared_from_this<TrashHolder>
+class TrashHolder final : public Item, public Cylinder
 {
 public:
-	explicit TrashHolder(uint16_t itemId) : Item(itemId) {}
+	explicit TrashHolder(uint16_t itemId) : Item{itemId} {}
 
-	using std::enable_shared_from_this<TrashHolder>::shared_from_this;
-	std::shared_ptr<TrashHolder> getTrashHolder() override { return shared_from_this(); }
-	std::shared_ptr<const TrashHolder> getTrashHolder() const override { return shared_from_this(); }
+	std::shared_ptr<TrashHolder> getTrashHolder() override { return std::static_pointer_cast<TrashHolder>(getItem()); }
+	std::shared_ptr<const TrashHolder> getTrashHolder() const override
+	{
+		return std::static_pointer_cast<const TrashHolder>(getItem());
+	}
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

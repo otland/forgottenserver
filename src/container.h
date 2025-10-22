@@ -27,7 +27,7 @@ private:
 	friend class Container;
 };
 
-class Container : public Item, public Cylinder, public std::enable_shared_from_this<Container>
+class Container : public Item, public Cylinder
 {
 public:
 	explicit Container(uint16_t type);
@@ -41,9 +41,14 @@ public:
 
 	std::shared_ptr<Item> clone() const override final;
 
-	using std::enable_shared_from_this<Container>::shared_from_this;
-	std::shared_ptr<Container> getContainer() override final { return shared_from_this(); }
-	std::shared_ptr<const Container> getContainer() const override final { return shared_from_this(); }
+	std::shared_ptr<Container> getContainer() override final
+	{
+		return std::static_pointer_cast<Container>(Item::getItem());
+	}
+	std::shared_ptr<const Container> getContainer() const override final
+	{
+		return std::static_pointer_cast<const Container>(Item::getItem());
+	}
 
 	virtual std::shared_ptr<DepotLocker> getDepotLocker() { return nullptr; }
 	virtual std::shared_ptr<const DepotLocker> getDepotLocker() const { return nullptr; }

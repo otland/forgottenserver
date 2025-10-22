@@ -128,7 +128,6 @@ void processExpiredOffers(DBResult_ptr result, bool)
 			}
 
 			auto player = g_game.getPlayerByGUID(playerId);
-			std::shared_ptr<Player> tempPlayerPtr;
 			if (!player) {
 				player = std::make_shared<Player>(nullptr);
 				if (!IOLoginData::loadPlayerById(player, playerId)) {

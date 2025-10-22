@@ -24,12 +24,10 @@ enum TargetSearchType_t
 	TARGETSEARCH_NEAREST,
 };
 
-class Monster final : public Creature, public std::enable_shared_from_this<Monster>
+class Monster final : public Creature
 {
 public:
 	static std::shared_ptr<Monster> createMonster(const std::string& name);
-
-	using Creature::onWalk;
 
 	static int32_t despawnRange;
 	static int32_t despawnRadius;
@@ -41,9 +39,11 @@ public:
 	Monster(const Monster&) = delete;
 	Monster& operator=(const Monster&) = delete;
 
-	using std::enable_shared_from_this<Monster>::shared_from_this;
-	std::shared_ptr<Monster> getMonster() override { return shared_from_this(); }
-	std::shared_ptr<const Monster> getMonster() const override { return shared_from_this(); }
+	std::shared_ptr<Monster> getMonster() override { return std::static_pointer_cast<Monster>(getCreature()); }
+	std::shared_ptr<const Monster> getMonster() const override
+	{
+		return std::static_pointer_cast<const Monster>(getCreature());
+	}
 
 	void setID() override
 	{

@@ -6,14 +6,19 @@
 
 #include "container.h"
 
-class StoreInbox final : public Container, public std::enable_shared_from_this<StoreInbox>
+class StoreInbox final : public Container
 {
 public:
 	explicit StoreInbox(uint16_t type);
 
-	using std::enable_shared_from_this<StoreInbox>::shared_from_this;
-	std::shared_ptr<StoreInbox> getStoreInbox() override { return shared_from_this(); }
-	std::shared_ptr<const StoreInbox> getStoreInbox() const override { return shared_from_this(); }
+	std::shared_ptr<StoreInbox> getStoreInbox() override
+	{
+		return std::static_pointer_cast<StoreInbox>(getContainer());
+	}
+	std::shared_ptr<const StoreInbox> getStoreInbox() const override
+	{
+		return std::static_pointer_cast<const StoreInbox>(getContainer());
+	}
 
 	// Cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

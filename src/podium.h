@@ -6,14 +6,16 @@
 
 #include "item.h"
 
-class Podium final : public Item, public std::enable_shared_from_this<Podium>
+class Podium final : public Item
 {
 public:
 	explicit Podium(uint16_t type) : Item(type) {};
 
-	using std::enable_shared_from_this<Podium>::shared_from_this;
-	std::shared_ptr<Podium> getPodium() override { return shared_from_this(); }
-	std::shared_ptr<const Podium> getPodium() const override { return shared_from_this(); }
+	std::shared_ptr<Podium> getPodium() override { return std::static_pointer_cast<Podium>(getItem()); }
+	std::shared_ptr<const Podium> getPodium() const override
+	{
+		return std::static_pointer_cast<const Podium>(getItem());
+	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;

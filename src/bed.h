@@ -9,14 +9,16 @@
 class House;
 class Player;
 
-class BedItem final : public Item, public std::enable_shared_from_this<BedItem>
+class BedItem final : public Item
 {
 public:
 	explicit BedItem(uint16_t id);
 
-	using std::enable_shared_from_this<BedItem>::shared_from_this;
-	std::shared_ptr<BedItem> getBed() override { return shared_from_this(); }
-	std::shared_ptr<const BedItem> getBed() const override { return shared_from_this(); }
+	std::shared_ptr<BedItem> getBed() override { return std::static_pointer_cast<BedItem>(getItem()); }
+	std::shared_ptr<const BedItem> getBed() const override
+	{
+		return std::static_pointer_cast<const BedItem>(getItem());
+	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;

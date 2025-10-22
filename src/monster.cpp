@@ -54,9 +54,9 @@ Monster::~Monster()
 	clearFriendList();
 }
 
-void Monster::addList() { g_game.addMonster(shared_from_this()); }
+void Monster::addList() { g_game.addMonster(getMonster()); }
 
-void Monster::removeList() { g_game.removeMonster(shared_from_this()); }
+void Monster::removeList() { g_game.removeMonster(getMonster()); }
 
 const std::string& Monster::getName() const
 {
@@ -76,7 +76,7 @@ void Monster::setName(const std::string& name)
 
 	// NOTE: Due to how client caches known creatures, it is not feasible to send creature update to everyone that has
 	// ever met it
-	g_game.updateKnownCreature(shared_from_this());
+	g_game.updateKnownCreature(getMonster());
 }
 
 const std::string& Monster::getNameDescription() const
@@ -260,7 +260,7 @@ void Monster::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr
 
 					auto tile = g_game.map.getTile(checkPosition);
 					if (tile) {
-						std::shared_ptr<Creature> topCreature = tile->getTopCreature();
+						auto topCreature = tile->getTopCreature();
 						if (topCreature && followCreature != topCreature && isOpponent(topCreature)) {
 							selectTarget(topCreature);
 						}
@@ -313,7 +313,6 @@ void Monster::addFriend(std::shared_ptr<Creature> creature)
 
 void Monster::removeFriend(std::shared_ptr<Creature> creature)
 {
-	// find by raw pointer
 	auto it = friendList.find(creature);
 	if (it != friendList.end()) {
 		friendList.erase(it);
@@ -342,27 +341,28 @@ void Monster::removeTarget(std::shared_ptr<Creature> creature)
 
 void Monster::updateTargetList()
 {
-	for (auto it = friendList.begin(); it != friendList.end();) {
-		auto creature = *it;
+	for (auto friendIterator = friendList.begin(); friendIterator != friendList.end();) {
+		auto creature = *friendIterator;
 		if (creature->isDead() || !canSee(creature->getPosition())) {
-			it = friendList.erase(it);
+			friendIterator = friendList.erase(friendIterator);
 		} else {
-			++it;
+			++friendIterator;
 		}
 	}
 
-	for (auto it = targetList.begin(); it != targetList.end();) {
-		if ((*it)->isDead() || !canSee((*it)->getPosition())) {
-			it = targetList.erase(it);
-			continue;
+	for (auto targetIterator = targetList.begin(); targetIterator != targetList.end();) {
+		auto creature = *targetIterator;
+		if (creature->isDead() || !canSee(creature->getPosition())) {
+			targetIterator = targetList.erase(targetIterator);
+		} else {
+			++targetIterator;
 		}
-		++it;
 	}
 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true);
-	spectators.erase(shared_from_this());
-	for (auto spectator : spectators) {
+	spectators.erase(getMonster());
+	for (const auto& spectator : spectators) {
 		onCreatureFound(spectator);
 	}
 }
@@ -512,6 +512,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 					if (!isTarget(creature)) {
 						continue;
 					}
+
 					const Position& pos = creature->getPosition();
 					if (int32_t distance = myPos.getDistanceX(pos) + myPos.getDistanceY(pos); distance < minRange) {
 						target = creature;
@@ -593,12 +594,13 @@ void Monster::onFollowCreatureComplete()
 {
 	auto it = std::find(targetList.begin(), targetList.end(), followCreature);
 	if (it != targetList.end()) {
+		auto target = *it;
 		targetList.erase(it);
 
 		if (hasFollowPath) {
-			targetList.push_front(followCreature);
+			targetList.push_front(target);
 		} else if (!isSummon()) {
-			targetList.push_back(followCreature);
+			targetList.push_back(target);
 		}
 	}
 }
@@ -681,12 +683,12 @@ void Monster::setIdle(bool idle)
 	isIdle = idle;
 
 	if (!isIdle) {
-		g_game.addCreatureCheck(shared_from_this());
+		g_game.addCreatureCheck(getMonster());
 	} else {
 		onIdleStatus();
 		clearTargetList();
 		clearFriendList();
-		Game::removeCreatureCheck(shared_from_this());
+		Game::removeCreatureCheck(getMonster());
 	}
 }
 
@@ -744,16 +746,16 @@ void Monster::onThink(uint32_t interval)
 	if (!isInSpawnRange(position)) {
 		if (getBoolean(ConfigManager::MONSTER_OVERSPAWN)) {
 			if (spawn) {
-				spawn->removeMonster(this);
+				spawn->removeMonster(getMonster());
 				spawn->startSpawnCheck();
 				spawn = nullptr;
 			}
 		} else {
 			g_game.addMagicEffect(this->getPosition(), CONST_ME_POFF);
 			if (getBoolean(ConfigManager::REMOVE_ON_DESPAWN)) {
-				g_game.removeCreature(shared_from_this(), false);
+				g_game.removeCreature(getMonster(), false);
 			} else {
-				g_game.internalTeleport(shared_from_this(), masterPos);
+				g_game.internalTeleport(getMonster(), masterPos);
 				setIdle(true);
 			}
 		}
@@ -824,7 +826,7 @@ void Monster::doAttacking(uint32_t interval)
 
 				minCombatValue = spellBlock.minCombatValue;
 				maxCombatValue = spellBlock.maxCombatValue;
-				spellBlock.spell->castSpell(shared_from_this(), attackedCreature);
+				spellBlock.spell->castSpell(getMonster(), attackedCreature);
 
 				if (spellBlock.isMelee) {
 					lastMeleeAttack = OTSYS_TIME();
@@ -959,7 +961,7 @@ void Monster::onThinkDefense(uint32_t interval)
 		if ((spellBlock.chance >= static_cast<uint32_t>(uniform_random(1, 100)))) {
 			minCombatValue = spellBlock.minCombatValue;
 			maxCombatValue = spellBlock.maxCombatValue;
-			spellBlock.spell->castSpell(shared_from_this(), shared_from_this());
+			spellBlock.spell->castSpell(getMonster(), getMonster());
 		}
 	}
 
@@ -981,7 +983,7 @@ void Monster::onThinkDefense(uint32_t interval)
 
 			uint32_t summonCount = 0;
 			for (const auto& summon : summons) {
-				if (summon && summon->getName() == summonBlock.name) {
+				if (summon->getName() == summonBlock.name) {
 					++summonCount;
 				}
 			}
@@ -999,7 +1001,7 @@ void Monster::onThinkDefense(uint32_t interval)
 				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force, summonBlock.effect)) {
 					summon->setDropLoot(false);
 					summon->setSkillLoss(false);
-					summon->setMaster(shared_from_this());
+					summon->setMaster(getMonster());
 					if (summonBlock.masterEffect != CONST_ME_NONE) {
 						g_game.addMagicEffect(getPosition(), summonBlock.masterEffect);
 					}
@@ -1029,9 +1031,9 @@ void Monster::onThinkYell(uint32_t interval)
 			const voiceBlock_t& vb = mType->info.voiceVector[index];
 
 			if (vb.yellText) {
-				g_game.internalCreatureSay(shared_from_this(), TALKTYPE_MONSTER_YELL, vb.text, false);
+				g_game.internalCreatureSay(getMonster(), TALKTYPE_MONSTER_YELL, vb.text, false);
 			} else {
-				g_game.internalCreatureSay(shared_from_this(), TALKTYPE_MONSTER_SAY, vb.text, false);
+				g_game.internalCreatureSay(getMonster(), TALKTYPE_MONSTER_SAY, vb.text, false);
 			}
 		}
 	}
@@ -1214,7 +1216,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 	}
 
 	if (result && (canPushItems() || canPushCreatures())) {
-		const Position& pos = Spells::getCasterPosition(shared_from_this(), direction);
+		const Position& pos = Spells::getCasterPosition(getMonster(), direction);
 		auto tile = g_game.map.getTile(pos);
 		if (tile) {
 			if (canPushItems()) {
@@ -1360,9 +1362,8 @@ bool Monster::getDistanceStep(const Position& targetPos, Direction& direction, b
 	}
 
 	if (offsetx == 0 && offsety == 0) {
-		return getRandomStep(
-		    creaturePos,
-		    direction); // player is "on" the monster so let's get some random step and rest will be taken care later.
+		// player is "on" the monster so let's get some random step and rest will be taken care later.
+		return getRandomStep(creaturePos, direction);
 	}
 
 	if (dx == dy) {
@@ -1835,8 +1836,8 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 	pos = getNextPosition(direction, pos);
 	if (isInSpawnRange(pos)) {
 		auto tile = g_game.map.getTile(pos);
-		if (tile && !tile->getTopVisibleCreature(shared_from_this()) &&
-		    tile->queryAdd(0, shared_from_this(), 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
+		if (tile && !tile->getTopVisibleCreature(getMonster()) &&
+		    tile->queryAdd(0, getMonster(), 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
 			return true;
 		}
 	}
@@ -1848,10 +1849,8 @@ void Monster::death(std::shared_ptr<Creature>)
 	removeAttackedCreature();
 
 	for (const auto& summon : summons) {
-		if (summon) {
-			summon->changeHealth(-summon->getHealth());
-			summon->removeMaster();
-		}
+		summon->changeHealth(-summon->getHealth());
+		summon->removeMaster();
 	}
 	summons.clear();
 
@@ -1943,13 +1942,13 @@ void Monster::updateLookDirection()
 		lookDirection = (offsetX < 0) ? DIRECTION_WEST : DIRECTION_EAST;
 	}
 
-	g_game.internalCreatureTurn(shared_from_this(), lookDirection);
+	g_game.internalCreatureTurn(getMonster(), lookDirection);
 }
 
 void Monster::dropLoot(std::shared_ptr<Container> corpse, std::shared_ptr<Creature>)
 {
 	if (corpse && lootDrop) {
-		tfs::events::monster::onDropLoot(shared_from_this(), corpse);
+		tfs::events::monster::onDropLoot(getMonster(), corpse);
 	}
 }
 

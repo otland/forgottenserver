@@ -25,11 +25,8 @@ public:
 
 	// Item implementations
 	bool canRemove() const override { return false; }
-
-	// Thing implementations
-	using Thing::hasParent;
 	std::shared_ptr<Cylinder> getParent() const override;
-	using Thing::getRealParent;
+	std::shared_ptr<Cylinder> getRealParent() const override { return parent; }
 };
 
 #endif // FS_INBOX_H

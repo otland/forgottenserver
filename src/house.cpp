@@ -46,7 +46,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, std::shared
 			transferToDepot();
 		}
 
-		for (auto tile : houseTiles) {
+		for (const auto& tile : houseTiles) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
 					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
@@ -55,7 +55,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, std::shared
 		}
 
 		// Remove players from beds
-		for (auto bed : bedsList) {
+		for (const auto& bed : bedsList) {
 			if (bed->getSleeper() != 0) {
 				bed->wakeUp(nullptr);
 			}
@@ -68,7 +68,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/, std::shared
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
-		for (auto door : doorSet) {
+		for (const auto& door : doorSet) {
 			door->setAccessList("");
 		}
 	} else {
@@ -172,7 +172,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	}
 
 	// kick uninvited players
-	for (auto tile : houseTiles) {
+	for (const auto& tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				auto player = (*creatures)[i]->getPlayer();
@@ -212,7 +212,7 @@ bool House::transferToDepot(std::shared_ptr<Player> player) const
 	}
 
 	ItemList moveItemList;
-	for (auto tile : houseTiles) {
+	for (const auto& tile : houseTiles) {
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (const auto& item : *items) {
 				if (item->isPickupable()) {
@@ -220,8 +220,8 @@ bool House::transferToDepot(std::shared_ptr<Player> player) const
 				} else {
 					auto container = item->getContainer();
 					if (container) {
-						for (const auto& containerItemPtr : container->getItemList()) {
-							moveItemList.push_back(containerItemPtr);
+						for (const auto& containerItem : container->getItemList()) {
+							moveItemList.push_back(containerItem);
 						}
 					}
 				}
@@ -230,7 +230,6 @@ bool House::transferToDepot(std::shared_ptr<Player> player) const
 	}
 
 	for (const auto& item : moveItemList) {
-		if (!item) continue;
 		g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
 		                        nullptr, FLAG_NOLIMIT);
 	}
@@ -282,7 +281,7 @@ void House::addBed(std::shared_ptr<BedItem> bed)
 
 std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 {
-	for (auto door : doorSet) {
+	for (const auto& door : doorSet) {
 		if (door->getDoorId() == doorId) {
 			return door;
 		}
@@ -292,7 +291,7 @@ std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 
 std::shared_ptr<Door> House::getDoorByPosition(const Position& pos)
 {
-	for (auto door : doorSet) {
+	for (const auto& door : doorSet) {
 		if (door->getPosition() == pos) {
 			return door;
 		}
@@ -333,7 +332,6 @@ void House::resetTransferItem()
 		transferItem = nullptr;
 		transferContainer.setParent(nullptr);
 
-		std::shared_ptr<Item> tmpPtr = tmpItem->shared_from_this();
 		transferContainer.removeThing(tmpItem, tmpItem->getItemCount());
 	}
 }
@@ -351,10 +349,10 @@ void HouseTransferItem::onTradeEvent(TradeEvents_t event, std::shared_ptr<Player
 {
 	if (event == ON_TRADE_TRANSFER) {
 		if (house) {
-			house->executeTransfer(shared_from_this(), owner);
+			house->executeTransfer(std::static_pointer_cast<HouseTransferItem>(getItem()), owner);
 		}
 
-		g_game.internalRemoveItem(shared_from_this(), 1);
+		g_game.internalRemoveItem(getItem(), 1);
 	} else if (event == ON_TRADE_CANCEL) {
 		if (house) {
 			house->resetTransferItem();
@@ -417,7 +415,7 @@ void AccessList::parseList(std::string_view list)
 
 void AccessList::addPlayer(const std::string& name)
 {
-	std::shared_ptr<Player> player = g_game.getPlayerByName(name);
+	auto player = g_game.getPlayerByName(name);
 	if (player) {
 		playerList.insert(player->getGUID());
 	} else {
@@ -547,7 +545,7 @@ void Door::onRemoved()
 	Item::onRemoved();
 
 	if (house) {
-		house->removeDoor(shared_from_this());
+		house->removeDoor(getDoor());
 	}
 }
 
@@ -661,10 +659,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 			if (house->getPayRentWarnings() < 7) {
 				int32_t daysLeft = 7 - house->getPayRentWarnings();
 
-				std::shared_ptr<Item> letter = Item::CreateItem(ITEM_LETTER_STAMPED);
-				if (!letter) {
-					continue;
-				}
+				auto letter = Item::CreateItem(ITEM_LETTER_STAMPED);
 				std::string period;
 
 				switch (rentPeriod) {

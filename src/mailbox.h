@@ -7,14 +7,16 @@
 #include "cylinder.h"
 #include "item.h"
 
-class Mailbox final : public Item, public Cylinder, public std::enable_shared_from_this<Mailbox>
+class Mailbox final : public Item, public Cylinder
 {
 public:
 	explicit Mailbox(uint16_t itemId) : Item(itemId) {}
 
-	using std::enable_shared_from_this<Mailbox>::shared_from_this;
-	std::shared_ptr<Mailbox> getMailbox() override { return shared_from_this(); }
-	std::shared_ptr<const Mailbox> getMailbox() const override { return shared_from_this(); }
+	std::shared_ptr<Mailbox> getMailbox() override { return std::static_pointer_cast<Mailbox>(getItem()); }
+	std::shared_ptr<const Mailbox> getMailbox() const override
+	{
+		return std::static_pointer_cast<const Mailbox>(getItem());
+	}
 
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

@@ -145,14 +145,16 @@ private:
 	std::unique_ptr<AreaCombat> area;
 };
 
-class MagicField final : public Item, public std::enable_shared_from_this<MagicField>
+class MagicField final : public Item
 {
 public:
 	explicit MagicField(uint16_t type) : Item{type}, createTime(OTSYS_TIME()) {}
 
-	using std::enable_shared_from_this<MagicField>::shared_from_this;
-	std::shared_ptr<MagicField> getMagicField() override { return shared_from_this(); }
-	std::shared_ptr<const MagicField> getMagicField() const override { return shared_from_this(); }
+	std::shared_ptr<MagicField> getMagicField() override { return std::static_pointer_cast<MagicField>(getItem()); }
+	std::shared_ptr<const MagicField> getMagicField() const override
+	{
+		return std::static_pointer_cast<const MagicField>(getItem());
+	}
 
 	bool isReplaceable() const { return Item::items[getID()].replaceable; }
 	CombatType_t getCombatType() const

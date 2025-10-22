@@ -27,7 +27,7 @@ Attr_ReadValue BedItem::readAttr(AttrTypes_t attr, PropStream& propStream)
 				std::string name = IOLoginData::getNameByGuid(guid);
 				if (!name.empty()) {
 					setSpecialDescription(name + " is sleeping there.");
-					g_game.setBedSleeper(this, guid);
+					g_game.setBedSleeper(getBed(), guid);
 					sleeperGUID = guid;
 				}
 			}
@@ -128,7 +128,7 @@ bool BedItem::sleep(std::shared_ptr<Player> player)
 		return false;
 	}
 
-	std::shared_ptr<BedItem> nextBedItem = getNextBedItem();
+	auto nextBedItem = getNextBedItem();
 
 	internalSetSleeper(player);
 
@@ -137,7 +137,7 @@ bool BedItem::sleep(std::shared_ptr<Player> player)
 	}
 
 	// update the bedSleepersMap
-	g_game.setBedSleeper(this, player->getGUID());
+	g_game.setBedSleeper(getBed(), player->getGUID());
 
 	// make the player walk onto the bed
 	g_game.map.moveCreature(player, getTile());
@@ -181,7 +181,7 @@ void BedItem::wakeUp(std::shared_ptr<Player> player)
 	// update the bedSleepersMap
 	g_game.removeBedSleeper(sleeperGUID);
 
-	std::shared_ptr<BedItem> nextBedItem = getNextBedItem();
+	auto nextBedItem = getNextBedItem();
 
 	// unset sleep info
 	internalRemoveSleeper();
@@ -232,12 +232,12 @@ void BedItem::updateAppearance(std::shared_ptr<const Player> player)
 		if (player && it.transformToOnUse[player->getSex()] != 0) {
 			const ItemType& newType = Item::items[it.transformToOnUse[player->getSex()]];
 			if (newType.type == ITEM_TYPE_BED) {
-				g_game.transformItem(shared_from_this(), it.transformToOnUse[player->getSex()]);
+				g_game.transformItem(getBed(), it.transformToOnUse[player->getSex()]);
 			}
 		} else if (it.transformToFree != 0) {
 			const ItemType& newType = Item::items[it.transformToFree];
 			if (newType.type == ITEM_TYPE_BED) {
-				g_game.transformItem(shared_from_this(), it.transformToFree);
+				g_game.transformItem(getBed(), it.transformToFree);
 			}
 		}
 	}

@@ -42,9 +42,9 @@ Npc::Npc(const std::string& name) : Creature(), filename("data/npc/" + name + ".
 
 Npc::~Npc() { reset(); }
 
-void Npc::addList() { g_game.addNpc(shared_from_this()); }
+void Npc::addList() { g_game.addNpc(getNpc()); }
 
-void Npc::removeList() { g_game.removeNpc(shared_from_this()); }
+void Npc::removeList() { g_game.removeNpc(getNpc()); }
 
 bool Npc::load()
 {
@@ -98,7 +98,7 @@ void Npc::reload()
 
 	// Simulate that the creature is placed on the map again.
 	if (npcEventHandler) {
-		npcEventHandler->onCreatureAppear(shared_from_this());
+		npcEventHandler->onCreatureAppear(getNpc());
 	}
 }
 
@@ -197,7 +197,7 @@ bool Npc::loadFromXml()
 
 	pugi::xml_attribute scriptFile = npcNode.attribute("script");
 	if (scriptFile) {
-		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), shared_from_this());
+		auto handler = std::make_unique<NpcEventsHandler>(scriptFile.as_string(), getNpc());
 		if (!handler->isLoaded()) {
 			return false;
 		}
@@ -346,13 +346,13 @@ void Npc::onThink(uint32_t interval)
 	}
 }
 
-void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(shared_from_this(), TALKTYPE_SAY, text, false); }
+void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(getNpc(), TALKTYPE_SAY, text, false); }
 
 void Npc::doSayToPlayer(std::shared_ptr<Player> player, const std::string& text)
 {
 	if (player) {
-		player->sendCreatureSay(shared_from_this(), TALKTYPE_PRIVATE_NP, text);
-		player->onCreatureSay(shared_from_this(), TALKTYPE_PRIVATE_NP, text);
+		player->sendCreatureSay(getNpc(), TALKTYPE_PRIVATE_NP, text);
+		player->onCreatureSay(getNpc(), TALKTYPE_PRIVATE_NP, text);
 	}
 }
 
@@ -434,7 +434,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 	}
 
 	auto tile = g_game.map.getTile(toPos);
-	if (!tile || tile->queryAdd(0, shared_from_this(), 1, 0) != RETURNVALUE_NOERROR) {
+	if (!tile || tile->queryAdd(0, getNpc(), 1, 0) != RETURNVALUE_NOERROR) {
 		return false;
 	}
 
@@ -500,7 +500,7 @@ void Npc::turnToCreature(std::shared_ptr<Creature> creature)
 			dir = DIRECTION_SOUTH;
 		}
 	}
-	g_game.internalCreatureTurn(shared_from_this(), dir);
+	g_game.internalCreatureTurn(getNpc(), dir);
 }
 
 void Npc::setCreatureFocus(std::shared_ptr<Creature> creature)
@@ -907,7 +907,6 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 			}
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
-				// Item not added; let shared_ptr go out of scope to release
 				lua_pushnumber(L, sellCount);
 				return 1;
 			}
@@ -923,7 +922,6 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 			}
 
 			if (g_game.internalPlayerAddItem(player, item, canDropOnMap) != RETURNVALUE_NOERROR) {
-				// Item not added; let shared_ptr go out of scope to release
 				lua_pushnumber(L, sellCount);
 				return 1;
 			}

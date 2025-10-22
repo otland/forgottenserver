@@ -113,7 +113,7 @@ private:
 	uint16_t downItemCount = 0;
 };
 
-class Tile : public Cylinder, public std::enable_shared_from_this<Tile>
+class Tile : public Cylinder
 {
 public:
 	static std::shared_ptr<Tile> nullptr_tile;
@@ -123,6 +123,12 @@ public:
 	// non-copyable
 	Tile(const Tile&) = delete;
 	Tile& operator=(const Tile&) = delete;
+
+	std::shared_ptr<Tile> getTile() override final { return std::static_pointer_cast<Tile>(getCylinder()); }
+	std::shared_ptr<const Tile> getTile() const override final
+	{
+		return std::static_pointer_cast<const Tile>(getCylinder());
+	}
 
 	virtual TileItemVector* getItemList() = 0;
 	virtual const TileItemVector* getItemList() const = 0;
@@ -188,8 +194,6 @@ public:
 
 	bool hasHeight(uint32_t n) const;
 
-	std::string getDescription(int32_t lookDistance) const override final;
-
 	int32_t getClientIndexOfCreature(std::shared_ptr<const Player> player,
 	                                 std::shared_ptr<const Creature> creature) const;
 	int32_t getStackposOfItem(std::shared_ptr<const Player> player, std::shared_ptr<const Item> item) const;
@@ -229,7 +233,7 @@ public:
 	void internalAddThing(std::shared_ptr<Thing> thing) override final;
 	void internalAddThing(uint32_t index, std::shared_ptr<Thing> thing) override;
 
-	const Position& getPosition() const override final { return tilePos; }
+	const Position& getPosition() const { return tilePos; }
 
 	bool isRemoved() const override final { return false; }
 
@@ -263,14 +267,8 @@ class DynamicTile : public Tile
 	CreatureVector creatures;
 
 public:
-	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-	~DynamicTile()
-	{
-		// items are managed by shared_ptr now; no manual reference management needed
-		for (const auto& itemPtr : items) {
-			(void)itemPtr;
-		}
-	}
+	DynamicTile(uint16_t x, uint16_t y, uint8_t z) : Tile{x, y, z} {}
+	~DynamicTile() = default;
 
 	using Tile::internalAddThing;
 
@@ -295,16 +293,8 @@ class StaticTile final : public Tile
 	std::unique_ptr<CreatureVector> creatures;
 
 public:
-	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile(x, y, z) {}
-	~StaticTile()
-	{
-		// items are managed by shared_ptr now; nothing to manually release
-		if (items) {
-			for (const auto& itemPtr : *items) {
-				(void)itemPtr;
-			}
-		}
-	}
+	StaticTile(uint16_t x, uint16_t y, uint8_t z) : Tile{x, y, z} {}
+	~StaticTile() = default;
 
 	using Tile::internalAddThing;
 

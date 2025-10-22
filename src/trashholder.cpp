@@ -31,7 +31,7 @@ ReturnValue TrashHolder::queryRemove(std::shared_ptr<const Thing>, uint32_t, uin
 std::shared_ptr<Cylinder> TrashHolder::queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
                                                         uint32_t&)
 {
-	return shared_from_this();
+	return getCylinder();
 }
 
 void TrashHolder::addThing(std::shared_ptr<Thing> thing) { return addThing(0, thing); }
@@ -49,13 +49,13 @@ void TrashHolder::addThing(int32_t, std::shared_ptr<Thing> thing)
 
 	const ItemType& it = Item::items[id];
 	if (item->isHangable() && it.isGroundTile()) {
-		auto tile = std::dynamic_pointer_cast<Tile>(getParent());
+		auto tile = getTile();
 		if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 			return;
 		}
 	}
 
-	g_game.internalRemoveItem(item->shared_from_this());
+	g_game.internalRemoveItem(item);
 
 	if (it.magicEffect != CONST_ME_NONE) {
 		g_game.addMagicEffect(getPosition(), it.magicEffect);
@@ -80,11 +80,11 @@ void TrashHolder::removeThing(std::shared_ptr<Thing>, uint32_t)
 void TrashHolder::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent,
                                       int32_t index, cylinderlink_t)
 {
-	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	Item::getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
 }
 
 void TrashHolder::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
                                          int32_t index, cylinderlink_t)
 {
-	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	Item::getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 }

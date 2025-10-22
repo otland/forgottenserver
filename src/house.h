@@ -33,7 +33,7 @@ private:
 	bool allowEveryone = false;
 };
 
-class Door final : public Item, public std::enable_shared_from_this<Door>
+class Door final : public Item
 {
 public:
 	explicit Door(uint16_t type);
@@ -42,9 +42,8 @@ public:
 	Door(const Door&) = delete;
 	Door& operator=(const Door&) = delete;
 
-	using std::enable_shared_from_this<Door>::shared_from_this;
-	std::shared_ptr<Door> getDoor() override { return shared_from_this(); }
-	std::shared_ptr<const Door> getDoor() const override { return shared_from_this(); }
+	std::shared_ptr<Door> getDoor() override { return std::static_pointer_cast<Door>(getItem()); }
+	std::shared_ptr<const Door> getDoor() const override { return std::static_pointer_cast<const Door>(getItem()); }
 
 	House* getHouse() { return house; }
 
@@ -87,14 +86,13 @@ enum AccessHouseLevel_t
 using HouseTileList = std::list<std::shared_ptr<HouseTile>>;
 using HouseBedItemList = std::list<std::shared_ptr<BedItem>>;
 
-class HouseTransferItem final : public Item, public std::enable_shared_from_this<HouseTransferItem>
+class HouseTransferItem final : public Item
 {
 public:
 	static std::shared_ptr<HouseTransferItem> createHouseTransferItem(House* house);
 
-	explicit HouseTransferItem(House* house) : Item(0), house(house) {}
+	explicit HouseTransferItem(House* house) : Item{0}, house{house} {}
 
-	using std::enable_shared_from_this<HouseTransferItem>::shared_from_this;
 	void onTradeEvent(TradeEvents_t event, std::shared_ptr<Player> owner) override;
 	bool canTransform() const override { return false; }
 

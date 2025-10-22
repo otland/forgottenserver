@@ -11,8 +11,6 @@
 #include "position.h"
 #include "wildcardtree.h"
 
-#include <memory>
-
 class Monster;
 class Npc;
 class ServiceManager;
@@ -479,8 +477,8 @@ public:
 
 	void internalRemoveItems(std::vector<std::shared_ptr<Item>> itemList, uint32_t amount, bool stackable);
 
-	BedItem* getBedBySleeper(uint32_t guid) const;
-	void setBedSleeper(BedItem* bed, uint32_t guid);
+	std::shared_ptr<BedItem> getBedBySleeper(uint32_t guid) const;
+	void setBedSleeper(std::shared_ptr<BedItem> bed, uint32_t guid);
 	void removeBedSleeper(uint32_t guid);
 
 	void updatePodium(std::shared_ptr<Item> item);
@@ -536,7 +534,7 @@ private:
 	// list of items that are in trading state, mapped to the player holding them
 	std::map<std::shared_ptr<Item>, uint32_t> tradeItems;
 
-	std::map<uint32_t, BedItem*> bedSleepersMap;
+	std::map<uint32_t, std::shared_ptr<BedItem>> bedSleepersMap;
 
 	std::unordered_set<std::shared_ptr<Tile>> tilesToClean;
 

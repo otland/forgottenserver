@@ -9,8 +9,6 @@
 #include "luascript.h"
 #include "thing.h"
 
-#include <memory>
-
 class BedItem;
 class Container;
 class Door;
@@ -491,7 +489,7 @@ public:
 	friend class Item;
 };
 
-class Item : virtual public Thing, public std::enable_shared_from_this<Item>
+class Item : virtual public Thing, private std::enable_shared_from_this<Item>
 {
 public:
 	// Factory member to create item of right type based on type
@@ -511,8 +509,11 @@ public:
 	Item& operator=(const Item&) = delete;
 	bool operator==(const Item& otherItem) const;
 
-	std::shared_ptr<Item> getItem() override final { return shared_from_this(); }
-	std::shared_ptr<const Item> getItem() const override final { return shared_from_this(); }
+	const Position& getPosition() const override;
+
+	std::shared_ptr<Item> getItem() { return std::static_pointer_cast<Item>(shared_from_this()); }
+	std::shared_ptr<const Item> getItem() const { return std::static_pointer_cast<const Item>(shared_from_this()); }
+
 	virtual std::shared_ptr<Teleport> getTeleport() { return nullptr; }
 	virtual std::shared_ptr<const Teleport> getTeleport() const { return nullptr; }
 	virtual std::shared_ptr<TrashHolder> getTrashHolder() { return nullptr; }
@@ -722,11 +723,10 @@ public:
 		return items[id].decayTo;
 	}
 
-	static std::string getNameDescription(const ItemType& it, const Item* item = nullptr, int32_t subType = -1,
-	                                      bool addArticle = true);
+	static std::string getNameDescription(const ItemType& it, std::shared_ptr<const Item> item = nullptr,
+	                                      int32_t subType = -1, bool addArticle = true);
 	static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
-	std::string getDescription(int32_t lookDistance) const override final;
 	std::string getNameDescription() const;
 	std::string getWeightDescription() const;
 
@@ -916,14 +916,12 @@ public:
 		return attributes;
 	}
 
-	bool hasParent() const override { return getParent() != nullptr; }
-	std::shared_ptr<Cylinder> getParent() const override { return parent; }
 	void setParent(std::shared_ptr<Cylinder> cylinder) override { parent = std::move(cylinder); }
 	std::shared_ptr<Cylinder> getTopParent();
 	std::shared_ptr<const Cylinder> getTopParent() const;
-	std::shared_ptr<Tile> getTile() override;
-	std::shared_ptr<const Tile> getTile() const override;
-	bool isRemoved() const override { return !parent || parent->isRemoved(); }
+	std::shared_ptr<Tile> getTile() override final;
+	std::shared_ptr<const Tile> getTile() const override final;
+	bool isRemoved() const override { return !parent || std::static_pointer_cast<Thing>(parent)->isRemoved(); }
 
 protected:
 	std::shared_ptr<Cylinder> parent = nullptr;
@@ -931,13 +929,9 @@ protected:
 	uint16_t id; // the same id as in ItemType
 
 private:
-	Item() = delete;
-
 	std::string getWeightDescription(uint32_t weight) const;
 
 	std::unique_ptr<ItemAttributes> attributes;
-
-	// legacy referenceCounter removed
 
 	uint8_t count = 1; // number of stacked items
 

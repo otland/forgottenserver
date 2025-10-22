@@ -6,14 +6,16 @@
 
 #include "item.h"
 
-class Teleport final : public Item, public Cylinder, public std::enable_shared_from_this<Teleport>
+class Teleport final : public Item, public Cylinder
 {
 public:
 	explicit Teleport(uint16_t type) : Item(type) {};
 
-	using std::enable_shared_from_this<Teleport>::shared_from_this;
-	std::shared_ptr<Teleport> getTeleport() override { return shared_from_this(); }
-	std::shared_ptr<const Teleport> getTeleport() const override { return shared_from_this(); }
+	std::shared_ptr<Teleport> getTeleport() override { return std::static_pointer_cast<Teleport>(Item::getItem()); }
+	std::shared_ptr<const Teleport> getTeleport() const override
+	{
+		return std::static_pointer_cast<const Teleport>(Item::getItem());
+	}
 
 	// serialization
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;

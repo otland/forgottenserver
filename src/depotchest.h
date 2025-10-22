@@ -6,9 +6,6 @@
 
 #include "container.h"
 
-class DepotChest;
-using DepotChest_ptr = std::shared_ptr<DepotChest>;
-
 class DepotChest final : public Container
 {
 public:
@@ -28,11 +25,8 @@ public:
 
 	// Item implementations
 	bool canRemove() const override { return false; }
-
-	// Thing implementations
-	using Thing::hasParent;
 	std::shared_ptr<Cylinder> getParent() const override;
-	using Thing::getRealParent;
+	std::shared_ptr<Cylinder> getRealParent() const override { return parent; }
 
 private:
 	uint32_t maxDepotItems = 0;

@@ -125,10 +125,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, std::shared_ptr<Tile> newTi
 		TileItemVector* items = newTile->getItemList();
 		if (items) {
 			for (auto it = items->rbegin(), end = items->rend(); it != end; ++it) {
-				auto raw = *it;
-				if (raw) {
-					tile->addThing(raw);
-				}
+				tile->addThing(*it);
 			}
 			items->clear();
 		}
@@ -191,7 +188,7 @@ bool Map::placeCreature(const Position& centerPos, std::shared_ptr<Creature> cre
 	bool foundTile;
 	bool placeInPZ;
 
-	std::shared_ptr<Tile> tile = getTile(centerPos.x, centerPos.y, centerPos.z);
+	auto tile = getTile(centerPos.x, centerPos.y, centerPos.z);
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
 		ReturnValue ret = tile->queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
@@ -271,7 +268,7 @@ void Map::moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile>
 	spectators.addSpectators(newPosSpectators);
 
 	std::vector<int32_t> oldStackPosVector;
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		if (auto tmpPlayer = spectator->getPlayer()) {
 			if (tmpPlayer->canSeeCreature(creature)) {
 				oldStackPosVector.push_back(oldTile->getClientIndexOfCreature(tmpPlayer, creature));
@@ -312,7 +309,7 @@ void Map::moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile>
 
 	// send to client
 	size_t i = 0;
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		if (auto tmpPlayer = spectator->getPlayer()) {
 			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
@@ -324,7 +321,7 @@ void Map::moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile>
 	}
 
 	// event method
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		spectator->onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 	}
 
@@ -364,7 +361,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 		for (int_fast32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
 				const CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
-				for (auto creature : node_list) {
+				for (const auto& creature : node_list) {
 					const Position& cpos = creature->getPosition();
 					if (minRangeZ > cpos.z || maxRangeZ < cpos.z) {
 						continue;
@@ -504,7 +501,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
                       bool pathfinding /*= false*/) const
 {
-	const std::shared_ptr<Tile> tile = getTile(x, y, z);
+	const auto tile = getTile(x, y, z);
 	if (!tile) {
 		return true;
 	}
@@ -648,7 +645,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 const std::shared_ptr<Tile> Map::canWalkTo(std::shared_ptr<const Creature> creature, const Position& pos) const
 {
-	std::shared_ptr<Tile> tile = getTile(pos.x, pos.y, pos.z);
+	auto tile = getTile(pos.x, pos.y, pos.z);
 	if (creature->getTile() != tile) {
 		if (!tile) {
 			return nullptr;
@@ -1045,8 +1042,7 @@ uint32_t Map::clean() const
 
 		if (auto items = tile->getItemList()) {
 			++tiles;
-			for (const auto& itemPtr : *items) {
-				Item* item = itemPtr.get();
+			for (const auto& item : *items) {
 				if (item && item->isCleanable()) {
 					toRemove.emplace_back(item);
 				}

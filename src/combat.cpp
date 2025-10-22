@@ -28,7 +28,7 @@ std::vector<std::shared_ptr<Tile>> getList(const MatrixArea& area, const Positio
 		for (uint32_t col = 0; col < area.getCols(); ++col, ++tmpPos.x) {
 			if (area(row, col)) {
 				if (g_game.isSightClear(casterPos, tmpPos, true)) {
-					std::shared_ptr<Tile> tile = g_game.map.getTile(tmpPos);
+					auto tile = g_game.map.getTile(tmpPos);
 					if (!tile) {
 						tile = std::make_shared<StaticTile>(tmpPos.x, tmpPos.y, tmpPos.z);
 						g_game.map.setTile(tmpPos, tile);
@@ -72,7 +72,7 @@ CombatDamage Combat::getCombatDamage(std::shared_ptr<Creature> creature, std::sh
 		int32_t min, max;
 		if (creature->getCombatValues(min, max)) {
 			damage.primary.value = normal_random(min, max);
-		} else if (std::shared_ptr<Player> player = creature->getPlayer()) {
+		} else if (auto player = creature->getPlayer()) {
 			if (params.valueCallback) {
 				params.valueCallback->getMinMaxValues(player, damage);
 			} else if (formulaType == COMBAT_FORMULA_LEVELMAGIC) {
@@ -588,8 +588,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, std::shared_ptr<C
 			}
 		}
 
-		std::shared_ptr<Item> item = Item::CreateItem(itemId);
-
+		auto item = Item::CreateItem(itemId);
 		if (caster) {
 			item->setOwner(caster->getID());
 		}
@@ -624,7 +623,7 @@ void Combat::addDistanceEffect(std::shared_ptr<Creature> caster, const Position&
 			return;
 		}
 
-		std::shared_ptr<Player> player = caster->getPlayer();
+		auto player = caster->getPlayer();
 		if (!player) {
 			return;
 		}
@@ -721,7 +720,7 @@ void Combat::doCombat(std::shared_ptr<Creature> caster, const Position& position
 		int32_t maxY = 0;
 
 		// calculate the max viewable range
-		for (std::shared_ptr<Tile> tile : tiles) {
+		for (const auto& tile : tiles) {
 			const Position& tilePos = tile->getPosition();
 			maxX = std::max(maxX, tilePos.getDistanceX(position));
 			maxY = std::max(maxY, tilePos.getDistanceY(position));
@@ -733,7 +732,7 @@ void Combat::doCombat(std::shared_ptr<Creature> caster, const Position& position
 
 		postCombatEffects(caster, position, params);
 
-		for (std::shared_ptr<Tile> tile : tiles) {
+		for (const auto& tile : tiles) {
 			if (canDoCombat(caster, tile, params.aggressive) != RETURNVALUE_NOERROR) {
 				continue;
 			}
@@ -742,7 +741,7 @@ void Combat::doCombat(std::shared_ptr<Creature> caster, const Position& position
 
 			if (CreatureVector* creatures = tile->getCreatures()) {
 				auto topCreature = tile->getTopCreature();
-				for (auto creature : *creatures) {
+				for (const auto& creature : *creatures) {
 					if (params.targetCasterOrTopMost) {
 						if (caster && caster->getTile() == tile) {
 							if (creature != caster) {
@@ -794,7 +793,7 @@ void Combat::doTargetCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Cr
 		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 	}
 
-	std::shared_ptr<Player> casterPlayer = caster ? caster->getPlayer() : nullptr;
+	auto casterPlayer = caster ? caster->getPlayer() : nullptr;
 
 	bool success = false;
 	if (damage.primary.type != COMBAT_MANADRAIN) {
@@ -804,7 +803,7 @@ void Combat::doTargetCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Cr
 		}
 
 		if (casterPlayer) {
-			std::shared_ptr<Player> targetPlayer = target ? target->getPlayer() : nullptr;
+			auto targetPlayer = target ? target->getPlayer() : nullptr;
 			if (targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK &&
 			    damage.primary.type != COMBAT_HEALING) {
 				damage.primary.value /= 2;
@@ -893,7 +892,7 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 	auto tiles =
 	    caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
 
-	std::shared_ptr<Player> casterPlayer = caster ? caster->getPlayer() : nullptr;
+	auto casterPlayer = caster ? caster->getPlayer() : nullptr;
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
 	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer &&
@@ -911,7 +910,7 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 	int32_t maxY = 0;
 
 	// calculate the max viewable range
-	for (std::shared_ptr<Tile> tile : tiles) {
+	for (const auto& tile : tiles) {
 		const Position& tilePos = tile->getPosition();
 		maxX = std::max(maxX, tilePos.getDistanceX(position));
 		maxY = std::max(maxY, tilePos.getDistanceY(position));
@@ -928,7 +927,7 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 	std::vector<std::shared_ptr<Creature>> toDamageCreatures;
 	toDamageCreatures.reserve(100);
 
-	for (std::shared_ptr<Tile> tile : tiles) {
+	for (const auto& tile : tiles) {
 		if (canDoCombat(caster, tile, params.aggressive) != RETURNVALUE_NOERROR) {
 			continue;
 		}
@@ -937,7 +936,7 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			auto topCreature = tile->getTopCreature();
-			for (auto creature : *creatures) {
+			for (const auto& creature : *creatures) {
 				if (params.targetCasterOrTopMost) {
 					if (caster && caster->getTile() == tile) {
 						if (creature != caster) {
@@ -964,12 +963,12 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 	leechCombat.origin = ORIGIN_NONE;
 	leechCombat.leeched = true;
 
-	for (auto creature : toDamageCreatures) {
+	for (const auto& creature : toDamageCreatures) {
 		CombatDamage damageCopy = damage; // we cannot avoid copying here, because we don't know if it's player combat
 		                                  // or not, so we can't modify the initial damage.
 		bool playerCombatReduced = false;
 		if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
-			std::shared_ptr<Player> targetPlayer = creature->getPlayer();
+			auto targetPlayer = creature->getPlayer();
 			if (casterPlayer && targetPlayer && casterPlayer != targetPlayer &&
 			    targetPlayer->getSkull() != SKULL_BLACK) {
 				damageCopy.primary.value /= 2;
@@ -1373,7 +1372,7 @@ void MagicField::onStepInField(std::shared_ptr<Creature> creature)
 	// remove magic walls/wild growth
 	if (id == ITEM_MAGICWALL_SAFE || id == ITEM_WILDGROWTH_SAFE || isBlocking()) {
 		if (!creature->isInGhostMode()) {
-			g_game.internalRemoveItem(shared_from_this(), 1);
+			g_game.internalRemoveItem(getMagicField(), 1);
 		}
 
 		return;
@@ -1382,7 +1381,7 @@ void MagicField::onStepInField(std::shared_ptr<Creature> creature)
 	// remove magic walls/wild growth (only nopvp tiles/world)
 	if (id == ITEM_MAGICWALL_NOPVP || id == ITEM_WILDGROWTH_NOPVP) {
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
-			g_game.internalRemoveItem(shared_from_this(), 1);
+			g_game.internalRemoveItem(getMagicField(), 1);
 		}
 		return;
 	}
@@ -1405,7 +1404,7 @@ void MagicField::onStepInField(std::shared_ptr<Creature> creature)
 			bool harmfulField = true;
 
 			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
-				std::shared_ptr<Creature> owner = g_game.getCreatureByID(ownerId);
+				auto owner = g_game.getCreatureByID(ownerId);
 				if (owner) {
 					if (owner->getPlayer() || (owner->isSummon() && owner->getMaster()->getPlayer())) {
 						harmfulField = false;
@@ -1415,7 +1414,7 @@ void MagicField::onStepInField(std::shared_ptr<Creature> creature)
 
 			std::shared_ptr<Player> targetPlayer = creature->getPlayer();
 			if (!harmfulField && targetPlayer) {
-				std::shared_ptr<Player> attackerPlayer = g_game.getPlayerByID(ownerId);
+				auto attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {
 					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
 						harmfulField = false;

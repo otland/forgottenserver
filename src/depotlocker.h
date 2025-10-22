@@ -10,7 +10,7 @@ class Inbox;
 
 using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 
-class DepotLocker final : public Container, public std::enable_shared_from_this<DepotLocker>
+class DepotLocker final : public Container
 {
 public:
 	explicit DepotLocker(uint16_t type);
@@ -22,9 +22,14 @@ public:
 	// Serialization
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;
 
-	using std::enable_shared_from_this<DepotLocker>::shared_from_this;
-	std::shared_ptr<DepotLocker> getDepotLocker() override { return shared_from_this(); }
-	std::shared_ptr<const DepotLocker> getDepotLocker() const override { return shared_from_this(); }
+	std::shared_ptr<DepotLocker> getDepotLocker() override
+	{
+		return std::static_pointer_cast<DepotLocker>(Item::getItem());
+	}
+	std::shared_ptr<const DepotLocker> getDepotLocker() const override
+	{
+		return std::static_pointer_cast<const DepotLocker>(Item::getItem());
+	}
 
 	// Cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

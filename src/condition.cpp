@@ -394,7 +394,7 @@ void ConditionAttributes::addCondition(std::shared_ptr<Creature> creature, const
 		memcpy(statsPercent, conditionAttrs.statsPercent, sizeof(statsPercent));
 		disableDefense = conditionAttrs.disableDefense;
 
-		if (std::shared_ptr<Player> player = creature->getPlayer()) {
+		if (auto player = creature->getPlayer()) {
 			updatePercentSkills(player);
 			updateSkills(player);
 			updatePercentStats(player);
@@ -448,7 +448,7 @@ bool ConditionAttributes::startCondition(std::shared_ptr<Creature> creature)
 
 	creature->setUseDefense(!disableDefense);
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (auto player = creature->getPlayer()) {
 		updatePercentSkills(player);
 		updateSkills(player);
 		updatePercentStats(player);
@@ -540,8 +540,7 @@ bool ConditionAttributes::executeCondition(std::shared_ptr<Creature> creature, i
 
 void ConditionAttributes::endCondition(std::shared_ptr<Creature> creature)
 {
-	std::shared_ptr<Player> player = creature->getPlayer();
-	if (player) {
+	if (auto player = creature->getPlayer()) {
 		bool needUpdateSkills = false;
 
 		for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
@@ -902,8 +901,7 @@ bool ConditionRegeneration::executeCondition(std::shared_ptr<Creature> creature,
 		realHealthGain = creature->getHealth() - realHealthGain;
 
 		if (isBuff && realHealthGain > 0) {
-			std::shared_ptr<Player> player = creature->getPlayer();
-			if (player) {
+			if (auto player = creature->getPlayer()) {
 				std::string healString =
 				    std::to_string(realHealthGain) + (realHealthGain != 1 ? " hitpoints." : " hitpoint.");
 
@@ -919,7 +917,7 @@ bool ConditionRegeneration::executeCondition(std::shared_ptr<Creature> creature,
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " was healed for " + healString;
-					for (auto spectator : spectators) {
+					for (const auto& spectator : spectators) {
 						assert(spectator->getPlayer() != nullptr);
 						std::static_pointer_cast<Player>(spectator)->sendTextMessage(message);
 					}
@@ -931,7 +929,7 @@ bool ConditionRegeneration::executeCondition(std::shared_ptr<Creature> creature,
 	if (internalManaTicks >= manaTicks) {
 		internalManaTicks = 0;
 
-		if (std::shared_ptr<Player> player = creature->getPlayer()) {
+		if (auto player = creature->getPlayer()) {
 			int32_t realManaGain = player->getMana();
 			player->changeMana(manaGain);
 			realManaGain = player->getMana() - realManaGain;
@@ -951,7 +949,7 @@ bool ConditionRegeneration::executeCondition(std::shared_ptr<Creature> creature,
 				if (!spectators.empty()) {
 					message.type = MESSAGE_HEALED_OTHERS;
 					message.text = player->getName() + " gained " + manaGainString + " mana.";
-					for (auto spectator : spectators) {
+					for (const auto& spectator : spectators) {
 						assert(spectator->getPlayer() != nullptr);
 						std::static_pointer_cast<Player>(spectator)->sendTextMessage(message);
 					}
@@ -1050,7 +1048,7 @@ bool ConditionSoul::executeCondition(std::shared_ptr<Creature> creature, int32_t
 
 	internalSoulTicks += interval;
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (auto player = creature->getPlayer()) {
 		if (player->getZone() != ZONE_PROTECTION) {
 			if (internalSoulTicks >= soulTicks) {
 				internalSoulTicks = 0;
@@ -1386,7 +1384,7 @@ bool ConditionDamage::doDamage(std::shared_ptr<Creature> creature, int32_t healt
 	damage.primary.value = healthChange;
 	damage.primary.type = Combat::ConditionToDamageType(conditionType);
 
-	std::shared_ptr<Creature> attacker = g_game.getCreatureByID(owner);
+	auto attacker = g_game.getCreatureByID(owner);
 	if (field && creature->getPlayer() && attacker && attacker->getPlayer()) {
 		damage.primary.value = static_cast<int32_t>(std::round(damage.primary.value / 2.));
 	}
@@ -1896,8 +1894,7 @@ void ConditionSpellCooldown::addCondition(std::shared_ptr<Creature> creature, co
 		setTicks(condition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			std::shared_ptr<Player> player = creature->getPlayer();
-			if (player) {
+			if (auto player = creature->getPlayer()) {
 				player->sendSpellCooldown(subId, ticks);
 			}
 		}
@@ -1911,8 +1908,7 @@ bool ConditionSpellCooldown::startCondition(std::shared_ptr<Creature> creature)
 	}
 
 	if (subId != 0 && ticks > 0) {
-		std::shared_ptr<Player> player = creature->getPlayer();
-		if (player) {
+		if (auto player = creature->getPlayer()) {
 			player->sendSpellCooldown(subId, ticks);
 		}
 	}
@@ -1940,8 +1936,7 @@ bool ConditionSpellGroupCooldown::startCondition(std::shared_ptr<Creature> creat
 	}
 
 	if (subId != 0 && ticks > 0) {
-		std::shared_ptr<Player> player = creature->getPlayer();
-		if (player) {
+		if (auto player = creature->getPlayer()) {
 			player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 		}
 	}
@@ -2005,7 +2000,7 @@ bool ConditionManaShield::startCondition(std::shared_ptr<Creature> creature)
 		return false;
 	}
 
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (auto player = creature->getPlayer()) {
 		const auto& conditionManaShield = static_cast<const ConditionManaShield&>(*this);
 		manaShield = conditionManaShield.manaShield;
 		maxManaShield = conditionManaShield.manaShield;
@@ -2017,14 +2012,14 @@ bool ConditionManaShield::startCondition(std::shared_ptr<Creature> creature)
 
 void ConditionManaShield::endCondition(std::shared_ptr<Creature> creature)
 {
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (auto player = creature->getPlayer()) {
 		player->sendStats();
 	}
 }
 
 void ConditionManaShield::addCondition(std::shared_ptr<Creature> creature, const Condition* addCondition)
 {
-	if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	if (auto player = creature->getPlayer()) {
 		endCondition(player);
 		setTicks(addCondition->getTicks());
 

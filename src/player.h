@@ -16,8 +16,6 @@
 #include "town.h"
 #include "vocation.h"
 
-#include <memory>
-
 class House;
 struct Mount;
 class NetworkMessage;
@@ -91,21 +89,21 @@ static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
-class Player final : public Creature, public Cylinder, public std::enable_shared_from_this<Player>
+class Player final : public Creature, public Cylinder
 {
 public:
 	explicit Player(ProtocolGame_ptr p);
 	~Player();
 
-	using Creature::onWalk;
-
 	// non-copyable
 	Player(const Player&) = delete;
 	Player& operator=(const Player&) = delete;
 
-	using std::enable_shared_from_this<Player>::shared_from_this;
-	std::shared_ptr<Player> getPlayer() override { return shared_from_this(); }
-	std::shared_ptr<const Player> getPlayer() const override { return shared_from_this(); }
+	std::shared_ptr<Player> getPlayer() override { return std::static_pointer_cast<Player>(getCreature()); }
+	std::shared_ptr<const Player> getPlayer() const override
+	{
+		return std::static_pointer_cast<const Player>(getCreature());
+	}
 
 	void setID() final;
 
@@ -366,7 +364,7 @@ public:
 	void addConditionSuppressions(uint32_t conditions);
 	void removeConditionSuppressions(uint32_t conditions);
 
-	DepotChest_ptr getDepotChest(uint32_t depotId, bool autoCreate);
+	std::shared_ptr<DepotChest> getDepotChest(uint32_t depotId, bool autoCreate);
 	std::shared_ptr<DepotLocker> getDepotLocker();
 	void onReceiveMail() const;
 	bool isNearDepotBox() const;
@@ -548,7 +546,7 @@ public:
 	void sendAddTileItem(std::shared_ptr<const Tile> tile, const Position& pos, std::shared_ptr<const Item> item)
 	{
 		if (client) {
-			int32_t stackpos = tile->getStackposOfItem(this->getPlayer(), item);
+			int32_t stackpos = tile->getStackposOfItem(getPlayer(), item);
 			if (stackpos != -1) {
 				client->sendAddTileItem(pos, stackpos, item);
 			}
@@ -557,7 +555,7 @@ public:
 	void sendUpdateTileItem(std::shared_ptr<const Tile> tile, const Position& pos, std::shared_ptr<const Item> item)
 	{
 		if (client) {
-			int32_t stackpos = tile->getStackposOfItem(this->getPlayer(), item);
+			int32_t stackpos = tile->getStackposOfItem(getPlayer(), item);
 			if (stackpos != -1) {
 				client->sendUpdateTileItem(pos, stackpos, item);
 			}
@@ -573,7 +571,7 @@ public:
 	{
 		if (client) {
 			client->sendUpdateTileCreature(creature->getPosition(),
-			                               creature->getTile()->getClientIndexOfCreature(this->getPlayer(), creature),
+			                               creature->getTile()->getClientIndexOfCreature(getPlayer(), creature),
 			                               creature);
 		}
 	}
@@ -612,8 +610,8 @@ public:
 	                        MagicEffectClasses magicEffect = CONST_ME_NONE)
 	{
 		if (client) {
-			client->sendAddCreature(
-			    creature, pos, creature->getTile()->getClientIndexOfCreature(this->getPlayer(), creature), magicEffect);
+			client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(getPlayer(), creature),
+			                        magicEffect);
 		}
 	}
 	void sendCreatureMove(std::shared_ptr<const Creature> creature, const Position& newPos, int32_t newStackPos,
@@ -626,7 +624,7 @@ public:
 	void sendCreatureTurn(std::shared_ptr<const Creature> creature)
 	{
 		if (client && canSeeCreature(creature)) {
-			int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this->getPlayer(), creature);
+			int32_t stackpos = creature->getTile()->getClientIndexOfCreature(getPlayer(), creature);
 			if (stackpos != -1) {
 				client->sendCreatureTurn(creature, stackpos);
 			}
@@ -673,7 +671,7 @@ public:
 		} else if (canSeeInvisibility()) {
 			client->sendCreatureOutfit(creature, creature->getCurrentOutfit());
 		} else {
-			int32_t stackpos = creature->getTile()->getClientIndexOfCreature(this->getPlayer(), creature);
+			int32_t stackpos = creature->getTile()->getClientIndexOfCreature(getPlayer(), creature);
 			if (stackpos == -1) {
 				return;
 			}
@@ -1186,7 +1184,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, DepotChest_ptr> depotChests;
+	std::map<uint32_t, std::shared_ptr<DepotChest>> depotChests;
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;

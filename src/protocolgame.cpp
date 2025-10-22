@@ -517,7 +517,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 
 	// a dead player can not performs actions
 	if (player->isRemoved() || player->isDead()) {
-		if (recvbyte == 0x0F || recvbyte == 0x14) {
+		if (recvbyte == 0x0F) {
 			disconnect();
 			return;
 		}
@@ -830,7 +830,7 @@ void ProtocolGame::GetTileDescription(std::shared_ptr<const Tile> tile, NetworkM
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
 		for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-			std::shared_ptr<const Creature> creature = (*it);
+			auto creature = *it;
 			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
@@ -2101,22 +2101,22 @@ void ProtocolGame::sendMarketEnter()
 	player->setInMarket(true);
 
 	std::map<uint16_t, uint32_t> depotItems;
-	std::forward_list<std::shared_ptr<Container>> containerList{player->getInbox()};
+	auto containerList = std::vector{std::static_pointer_cast<Container>(player->getInbox())};
 
 	for (const auto& chest : player->depotChests) {
 		if (!chest.second->empty()) {
-			containerList.push_front(chest.second);
+			containerList.push_back(chest.second);
 		}
 	}
 
 	do {
-		auto container = containerList.front();
-		containerList.pop_front();
+		auto container = containerList.back();
+		containerList.pop_back();
 
 		for (const auto& item : container->getItemList()) {
 			auto c = item->getContainer();
 			if (c && !c->empty()) {
-				containerList.push_front(c);
+				containerList.push_back(c);
 				continue;
 			}
 
@@ -2141,7 +2141,7 @@ void ProtocolGame::sendMarketEnter()
 	uint16_t i = 0;
 
 	msg.add<uint16_t>(itemsToSend);
-	for (std::map<uint16_t, uint32_t>::const_iterator it = depotItems.begin(); i < itemsToSend; ++it, ++i) {
+	for (auto it = depotItems.begin(); i < itemsToSend; ++it, ++i) {
 		const ItemType& itemType = Item::items[it->first];
 		msg.add<uint16_t>(itemType.wareId);
 		if (itemType.classification > 0) {
@@ -2354,18 +2354,18 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, std::shar
 	msg.addString(traderName);
 
 	if (auto tradeContainer = item->getContainer()) {
-		std::list<std::shared_ptr<const Container>> listContainer{tradeContainer};
-		std::list<std::shared_ptr<const Item>> itemList{tradeContainer};
-		while (!listContainer.empty()) {
-			auto container = listContainer.front();
-			listContainer.pop_front();
+		auto containerList = std::deque{tradeContainer};
+		auto itemList = std::deque{std::static_pointer_cast<const Item>(tradeContainer)};
+		while (!containerList.empty()) {
+			auto container = containerList.front();
+			containerList.pop_front();
 
-			for (const auto& containerItem : container->getItemList()) {
-				auto tmpContainer = containerItem->getContainer();
-				if (tmpContainer) {
-					listContainer.push_back(tmpContainer);
+			for (const auto& item : container->getItemList()) {
+				auto container = item->getContainer();
+				if (container) {
+					containerList.push_back(container);
 				}
-				itemList.push_back(containerItem);
+				itemList.push_back(item);
 			}
 		}
 
@@ -2763,7 +2763,7 @@ void ProtocolGame::sendAddCreature(std::shared_ptr<const Creature> creature, con
 		// screen
 		if (stackpos >= MAX_STACKPOS) {
 			// @todo: should we avoid this check?
-			if (std::shared_ptr<const Tile> tile = creature->getTile()) {
+			if (auto tile = creature->getTile()) {
 				sendUpdateTile(tile, pos);
 			}
 		} else {
@@ -3161,7 +3161,7 @@ void ProtocolGame::sendPodiumWindow(std::shared_ptr<const Item> item)
 		return;
 	}
 
-	std::shared_ptr<const Tile> tile = item->getTile();
+	auto tile = item->getTile();
 	if (!tile) {
 		return;
 	}

@@ -42,7 +42,7 @@ ReturnValue Mailbox::queryRemove(std::shared_ptr<const Thing>, uint32_t, uint32_
 std::shared_ptr<Cylinder> Mailbox::queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
                                                     uint32_t&)
 {
-	return shared_from_this();
+	return getCylinder();
 }
 
 void Mailbox::addThing(std::shared_ptr<Thing> thing) { return addThing(0, thing); }
@@ -103,7 +103,7 @@ bool Mailbox::sendItem(std::shared_ptr<Item> item) const
 			return true;
 		}
 	} else {
-		std::shared_ptr<Player> tmpPlayer = nullptr;
+		auto tmpPlayer = std::make_shared<Player>(nullptr);
 		if (!IOLoginData::loadPlayerByName(tmpPlayer, receiver)) {
 			return false;
 		}

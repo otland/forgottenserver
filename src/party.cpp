@@ -28,22 +28,22 @@ void Party::disband()
 	currentLeader->sendCreatureSkull(currentLeader);
 	currentLeader->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
 
-	for (std::shared_ptr<Player> invitee : inviteList) {
+	for (const auto& invitee : inviteList) {
 		invitee->removePartyInvitation(this);
 		currentLeader->sendCreatureShield(invitee);
 	}
 	inviteList.clear();
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->setParty(nullptr);
 		member->sendClosePrivate(CHANNEL_PARTY);
 		member->sendTextMessage(MESSAGE_INFO_DESCR, "Your party has been disbanded.");
 	}
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		g_game.updatePlayerShield(member);
 
-		for (std::shared_ptr<Player> otherMember : memberList) {
+		for (const auto& otherMember : memberList) {
 			otherMember->sendCreatureSkull(member);
 		}
 
@@ -92,7 +92,7 @@ bool Party::leaveParty(std::shared_ptr<Player> player, bool forceRemove /* = fal
 	player->sendClosePrivate(CHANNEL_PARTY);
 	g_game.updatePlayerShield(player);
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->sendCreatureSkull(player);
 		player->sendPlayerPartyIcons(member);
 	}
@@ -102,7 +102,7 @@ bool Party::leaveParty(std::shared_ptr<Player> player, bool forceRemove /* = fal
 	player->sendPlayerPartyIcons(leader);
 
 	// remove pending invitation icons from the screen
-	for (std::shared_ptr<Player> invitee : inviteList) {
+	for (const auto& invitee : inviteList) {
 		player->sendCreatureShield(invitee);
 	}
 
@@ -140,19 +140,19 @@ bool Party::passPartyLeadership(std::shared_ptr<Player> player, bool forceRemove
 	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} is now the leader of the party.", player->getName()),
 	                      true);
 
-	std::shared_ptr<Player> oldLeader = leader;
+	auto oldLeader = leader;
 	leader = player;
 
 	memberList.insert(memberList.begin(), oldLeader);
 
 	updateSharedExperience();
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->sendCreatureShield(oldLeader);
 		member->sendCreatureShield(leader);
 	}
 
-	for (std::shared_ptr<Player> invitee : inviteList) {
+	for (const auto& invitee : inviteList) {
 		invitee->sendCreatureShield(oldLeader);
 		invitee->sendCreatureShield(leader);
 	}
@@ -189,7 +189,7 @@ bool Party::joinParty(std::shared_ptr<Player> player)
 	g_game.updatePlayerShield(player);
 
 	// update player-member party icons
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->sendCreatureSkull(player);
 		player->sendPlayerPartyIcons(member);
 	}
@@ -201,7 +201,7 @@ bool Party::joinParty(std::shared_ptr<Player> player)
 	player->sendCreatureSkull(player);
 
 	// show the new member who else is invited
-	for (std::shared_ptr<Player> invitee : inviteList) {
+	for (const auto& invitee : inviteList) {
 		player->sendCreatureShield(invitee);
 	}
 
@@ -278,7 +278,7 @@ bool Party::invitePlayer(std::shared_ptr<Player> player)
 	player->sendCreatureShield(leader);
 
 	// update the invitation status for other members
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->sendCreatureShield(player);
 	}
 
@@ -294,8 +294,8 @@ bool Party::isPlayerInvited(std::shared_ptr<const Player> player) const
 
 void Party::updateAllPartyIcons()
 {
-	for (std::shared_ptr<Player> member : memberList) {
-		for (std::shared_ptr<Player> otherMember : memberList) {
+	for (const auto& member : memberList) {
+		for (const auto& otherMember : memberList) {
 			member->sendCreatureShield(otherMember);
 		}
 
@@ -307,14 +307,14 @@ void Party::updateAllPartyIcons()
 
 void Party::broadcastPartyMessage(MessageClasses msgClass, const std::string& msg, bool sendToInvitations /*= false*/)
 {
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->sendTextMessage(msgClass, msg);
 	}
 
 	leader->sendTextMessage(msgClass, msg);
 
 	if (sendToInvitations) {
-		for (std::shared_ptr<Player> invitee : inviteList) {
+		for (const auto& invitee : inviteList) {
 			invitee->sendTextMessage(msgClass, msg);
 		}
 	}
@@ -382,7 +382,7 @@ void Party::shareExperience(uint64_t experience, std::shared_ptr<Creature> sourc
 	uint64_t shareExperience = experience;
 	tfs::events::party::onShareExperience(this, shareExperience);
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		member->onGainSharedExperience(shareExperience, source);
 	}
 	leader->onGainSharedExperience(shareExperience, source);
@@ -400,7 +400,7 @@ SharedExpStatus_t Party::getMemberSharedExperienceStatus(std::shared_ptr<const P
 	}
 
 	uint32_t highestLevel = leader->getLevel();
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		if (member->getLevel() > highestLevel) {
 			highestLevel = member->getLevel();
 		}
@@ -438,7 +438,7 @@ SharedExpStatus_t Party::getSharedExperienceStatus()
 		return leaderStatus;
 	}
 
-	for (std::shared_ptr<Player> member : memberList) {
+	for (const auto& member : memberList) {
 		SharedExpStatus_t memberStatus = getMemberSharedExperienceStatus(member);
 		if (memberStatus != SHAREDEXP_OK) {
 			return memberStatus;

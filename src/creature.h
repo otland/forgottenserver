@@ -11,8 +11,6 @@
 #include "position.h"
 #include "tile.h"
 
-#include <memory>
-
 class Condition;
 class Container;
 class Item;
@@ -80,7 +78,7 @@ private:
 // Defines the Base class for all creatures and base functions which
 // every creature has
 
-class Creature : virtual public Thing, public std::enable_shared_from_this<Creature>
+class Creature : virtual public Thing, private std::enable_shared_from_this<Creature>
 {
 protected:
 	Creature();
@@ -94,8 +92,15 @@ public:
 	Creature(const Creature&) = delete;
 	Creature& operator=(const Creature&) = delete;
 
-	std::shared_ptr<Creature> getCreature() override final { return shared_from_this(); }
-	std::shared_ptr<const Creature> getCreature() const override final { return shared_from_this(); }
+	std::shared_ptr<Creature> getCreature() override final
+	{
+		return std::static_pointer_cast<Creature>(shared_from_this());
+	}
+	std::shared_ptr<const Creature> getCreature() const override final
+	{
+		return std::static_pointer_cast<const Creature>(shared_from_this());
+	}
+
 	virtual std::shared_ptr<Player> getPlayer() { return nullptr; }
 	virtual std::shared_ptr<const Player> getPlayer() const { return nullptr; }
 	virtual std::shared_ptr<Npc> getNpc() { return nullptr; }
@@ -105,6 +110,7 @@ public:
 
 	virtual const std::string& getName() const = 0;
 	virtual const std::string& getNameDescription() const = 0;
+	virtual std::string getDescription(int32_t lookDistance) const = 0;
 
 	virtual CreatureType_t getType() const = 0;
 
@@ -354,11 +360,11 @@ public:
 	std::shared_ptr<Cylinder> getParent() const override final { return tile; }
 	void setParent(std::shared_ptr<Cylinder> cylinder) override final
 	{
-		tile = std::dynamic_pointer_cast<Tile>(cylinder);
+		tile = cylinder->getTile();
 		position = tile->getPosition();
 	}
 
-	const Position& getPosition() const override final { return position; }
+	const Position& getPosition() const { return position; }
 
 	std::shared_ptr<Tile> getTile() override final { return tile; }
 	std::shared_ptr<const Tile> getTile() const override final { return tile; }

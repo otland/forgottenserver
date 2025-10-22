@@ -17,7 +17,7 @@ public:
 
 	void addSpectators(const SpectatorVec& spectators)
 	{
-		for (auto spectator : spectators.vec) {
+		for (const auto& spectator : spectators.vec) {
 			auto it = std::find(vec.begin(), vec.end(), spectator);
 			if (it != end()) {
 				continue;

@@ -85,7 +85,7 @@ private:
 	bool loaded = false;
 };
 
-class Npc final : public Creature, public std::enable_shared_from_this<Npc>
+class Npc final : public Creature
 {
 public:
 	explicit Npc(const std::string& name);
@@ -95,11 +95,8 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
-	using Creature::onWalk;
-
-	using std::enable_shared_from_this<Npc>::shared_from_this;
-	std::shared_ptr<Npc> getNpc() override { return shared_from_this(); }
-	std::shared_ptr<const Npc> getNpc() const override { return shared_from_this(); }
+	std::shared_ptr<Npc> getNpc() override { return std::static_pointer_cast<Npc>(getCreature()); }
+	std::shared_ptr<const Npc> getNpc() const override { return std::static_pointer_cast<const Npc>(getCreature()); }
 
 	bool isPushable() const override { return pushable && walkTicks != 0; }
 

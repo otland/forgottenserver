@@ -70,7 +70,7 @@ bool IOMapSerialize::saveHouseItems()
 	for (const auto& it : g_game.map.houses.getHouses()) {
 		// save house items
 		House* house = it.second;
-		for (auto tile : house->getTiles()) {
+		for (const auto& tile : house->getTiles()) {
 			saveTile(stream, tile);
 
 			if (auto attributes = stream.getStream(); !attributes.empty()) {
@@ -181,7 +181,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Cylinder> 
 					if (!loadContainer(propStream, container)) {
 						return false;
 					}
-				} else if (BedItem* bedItem = dynamic_cast<BedItem*>(dummy.get())) {
+				} else if (auto bedItem = dummy->getBed()) {
 					uint32_t sleeperGUID = bedItem->getSleeper();
 					if (sleeperGUID != 0) {
 						g_game.removeBedSleeper(sleeperGUID);
@@ -223,7 +223,6 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, std::shared_ptr<const Til
 	std::forward_list<std::shared_ptr<const Item>> items;
 	uint16_t count = 0;
 	for (const auto& item : *tileItems) {
-		if (!item) continue;
 		const ItemType& it = Item::items[item->getID()];
 
 		// Note that these are NEGATED, ie. these are the items that will be saved.
@@ -243,7 +242,7 @@ void IOMapSerialize::saveTile(PropWriteStream& stream, std::shared_ptr<const Til
 		stream.write<uint8_t>(tilePosition.z);
 
 		stream.write<uint32_t>(count);
-		for (std::shared_ptr<const Item> item : items) {
+		for (const auto& item : items) {
 			saveItem(stream, item);
 		}
 	}
@@ -334,7 +333,7 @@ bool IOMapSerialize::saveHouseInfo()
 			listText.clear();
 		}
 
-		for (auto door : house->getDoors()) {
+		for (const auto& door : house->getDoors()) {
 			if (door->getAccessList(listText) && !listText.empty()) {
 				if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), door->getDoorId(),
 				                             db.escapeString(listText)))) {
@@ -373,7 +372,7 @@ bool IOMapSerialize::saveHouse(House* house)
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (auto tile : house->getTiles()) {
+	for (const auto& tile : house->getTiles()) {
 		saveTile(stream, tile);
 
 		if (auto attributes = stream.getStream(); attributes.size() > 0) {

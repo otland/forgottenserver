@@ -7,7 +7,6 @@
 
 #include "combat.h"
 #include "game.h"
-#include "item.h"
 #include "pugicast.h"
 
 extern Game g_game;
@@ -412,7 +411,7 @@ uint32_t MoveEvents::onCreatureMove(std::shared_ptr<Creature> creature, std::sha
 			continue;
 		}
 
-		std::shared_ptr<Item> tileItem = thing->getItem();
+		auto tileItem = thing->getItem();
 		if (!tileItem) {
 			continue;
 		}
@@ -653,7 +652,7 @@ uint32_t MoveEvent::AddItemField(std::shared_ptr<Item> item, std::shared_ptr<Ite
 	if (auto field = item->getMagicField()) {
 		auto tile = item->getTile();
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			for (auto creature : *creatures) {
+			for (const auto& creature : *creatures) {
 				field->onStepInField(creature);
 			}
 		}
@@ -695,14 +694,8 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, std::shared_ptr<Player> p
 
 	const ItemType& it = Item::items[item->getID()];
 	if (it.transformEquipTo != 0) {
-		std::shared_ptr<Item> newItem = g_game.transformItem(item, it.transformEquipTo);
-		if (newItem) {
-			if (newItem == item) {
-				g_game.startDecay(item);
-			} else {
-				g_game.startDecay(newItem->shared_from_this());
-			}
-		}
+		auto newItem = g_game.transformItem(item, it.transformEquipTo);
+		g_game.startDecay(newItem);
 	} else {
 		player->setItemAbility(slot, true);
 	}
@@ -817,14 +810,8 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, std::shared_ptr<Player> player, s
 
 	const ItemType& it = Item::items[item->getID()];
 	if (it.transformDeEquipTo != 0) {
-		auto transformed = g_game.transformItem(item, it.transformDeEquipTo);
-		if (transformed) {
-			if (transformed == item) {
-				g_game.startDecay(item);
-			} else {
-				g_game.startDecay(transformed->shared_from_this());
-			}
-		}
+		g_game.transformItem(item, it.transformDeEquipTo);
+		g_game.startDecay(item);
 	}
 
 	if (!it.abilities) {

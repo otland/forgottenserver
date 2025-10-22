@@ -21,20 +21,20 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	virtual std::string getDescription(int32_t lookDistance) const = 0;
-
 	virtual bool hasParent() const { return false; }
 	virtual std::shared_ptr<Cylinder> getParent() const { return nullptr; }
 	virtual std::shared_ptr<Cylinder> getRealParent() const { return getParent(); }
 
-	virtual void setParent(std::shared_ptr<Cylinder>) {}
+	virtual void setParent(std::shared_ptr<Cylinder>) { throw std::runtime_error("Not implemented"); };
 
+	virtual std::shared_ptr<Cylinder> getCylinder() { return nullptr; }
+	virtual std::shared_ptr<const Cylinder> getCylinder() const { return nullptr; }
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
 
 	virtual const Position& getPosition() const;
-	virtual int32_t getThrowRange() const = 0;
-	virtual bool isPushable() const = 0;
+	virtual int32_t getThrowRange() const { throw std::runtime_error("Not implemented"); };
+	virtual bool isPushable() const { throw std::runtime_error("Not implemented"); };
 
 	virtual std::shared_ptr<Container> getContainer() { return nullptr; }
 	virtual std::shared_ptr<const Container> getContainer() const { return nullptr; }

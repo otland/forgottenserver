@@ -247,11 +247,8 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (const auto& it : spawnedMap) {
-		auto& monsterPtr = it.second;
-		if (monsterPtr) {
-			monsterPtr->setSpawn(nullptr);
-		}
+	for (const auto& [_, monster] : spawnedMap) {
+		monster->setSpawn(nullptr);
 	}
 }
 
@@ -259,7 +256,7 @@ bool Spawn::findPlayer(const Position& pos)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, pos, false, true);
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		if (!std::static_pointer_cast<Player>(spectator)->hasFlag(PlayerFlag_IgnoredByMonsters)) {
 			return true;
@@ -416,10 +413,10 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 	return addBlock(sb);
 }
 
-void Spawn::removeMonster(Monster* monster)
+void Spawn::removeMonster(std::shared_ptr<Monster> monster)
 {
 	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
-		if (it->second.get() == monster) {
+		if (it->second == monster) {
 			spawnedMap.erase(it);
 			break;
 		}
