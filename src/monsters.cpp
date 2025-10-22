@@ -636,8 +636,7 @@ bool Monsters::deserializeSpell(MonsterSpell* spell, spellBlock_t& sb, const std
 			int32_t conMaxDamage = std::abs(spell->conditionMaxDamage);
 			int32_t startDamage = std::abs(spell->conditionStartDamage);
 
-			const auto& condition =
-			    getDamageCondition(conditionType, conMaxDamage, conMinDamage, startDamage, tickInterval);
+			auto condition = getDamageCondition(conditionType, conMaxDamage, conMinDamage, startDamage, tickInterval);
 			combat->addCondition(condition);
 		}
 

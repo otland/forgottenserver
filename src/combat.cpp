@@ -671,7 +671,7 @@ void Combat::doCombat(Creature* caster, Creature* target) const
 			if (params.origin != ORIGIN_MELEE) {
 				for (const auto& condition : params.conditions) {
 					if (caster == target || !target->isImmune(condition->getType())) {
-						const auto& conditionCopy = condition->clone();
+						auto conditionCopy = condition->clone();
 						conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
 						target->addCombatCondition(conditionCopy);
 					}
@@ -755,7 +755,7 @@ void Combat::doCombat(Creature* caster, const Position& position) const
 					    (caster != creature && Combat::canDoCombat(caster, creature) == RETURNVALUE_NOERROR)) {
 						for (const auto& condition : params.conditions) {
 							if (caster == creature || !creature->isImmune(condition->getType())) {
-								const auto& conditionCopy = condition->clone();
+								auto conditionCopy = condition->clone();
 								if (caster) {
 									conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
 								}
@@ -828,7 +828,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		if (damage.blockType == BLOCK_NONE || damage.blockType == BLOCK_ARMOR) {
 			for (const auto& condition : params.conditions) {
 				if (caster == target || !target->isImmune(condition->getType())) {
-					const auto& conditionCopy = condition->clone();
+					auto conditionCopy = condition->clone();
 					if (caster) {
 						conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
 					}
@@ -996,7 +996,7 @@ void Combat::doAreaCombat(Creature* caster, const Position& position, const Area
 			if (damage.blockType == BLOCK_NONE || damage.blockType == BLOCK_ARMOR) {
 				for (const auto& condition : params.conditions) {
 					if (caster == creature || !creature->isImmune(condition->getType())) {
-						const auto& conditionCopy = condition->clone();
+						auto conditionCopy = condition->clone();
 						if (caster) {
 							conditionCopy->setParam(CONDITION_PARAM_OWNER, caster->getID());
 						}
@@ -1396,7 +1396,7 @@ void MagicField::onStepInField(Creature* creature)
 
 	const ItemType& it = items[getID()];
 	if (it.conditionDamage) {
-		const auto& conditionCopy = it.conditionDamage->clone();
+		auto conditionCopy = it.conditionDamage->clone();
 		uint32_t ownerId = getOwner();
 		if (ownerId) {
 			bool harmfulField = true;
