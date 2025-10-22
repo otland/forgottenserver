@@ -3674,7 +3674,7 @@ bool Game::playerYell(Player* player, const std::string& text)
 			}
 		}
 
-		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_YELLTICKS, 30000, 0);
+		auto condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_YELLTICKS, 30000, 0);
 		player->addCondition(condition);
 	}
 
@@ -4311,7 +4311,7 @@ bool Game::combatChangeHealth(Creature* attacker, Creature* target, CombatDamage
 			}
 
 			if (getBoolean(ConfigManager::MANASHIELD_BREAKABLE) && targetPlayer) {
-				if (ConditionManaShield* conditionManaShield = dynamic_cast<ConditionManaShield*>(
+				if (auto conditionManaShield = std::dynamic_pointer_cast<ConditionManaShield>(
 				        targetPlayer->getCondition(CONDITION_MANASHIELD_BREAKABLE))) {
 					if (int32_t remainingManaDamage =
 					        conditionManaShield->onDamageTaken(targetPlayer, manaDamage) != 0) {
@@ -5633,11 +5633,10 @@ std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientC
 	return {};
 }
 
-void Game::forceAddCondition(uint32_t creatureId, Condition* condition)
+void Game::forceAddCondition(uint32_t creatureId, std::shared_ptr<Condition> condition)
 {
 	Creature* creature = getCreatureByID(creatureId);
 	if (!creature) {
-		delete condition;
 		return;
 	}
 

@@ -437,7 +437,7 @@ float Player::getDefenseFactor() const
 uint32_t Player::getClientIcons() const
 {
 	uint32_t icons = 0;
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		if (!isSuppress(condition->getType())) {
 			icons |= condition->getIcons();
 		}
@@ -1122,7 +1122,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 		sendItems();
 		onEquipInventory();
 
-		for (Condition* condition : storedConditionList) {
+		for (const auto& condition : storedConditionList) {
 			addCondition(condition);
 		}
 		storedConditionList.clear();
@@ -1161,7 +1161,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin)
 			offlineTime = 0;
 		}
 
-		for (Condition* condition : getMuteConditions()) {
+		for (const auto& condition : getMuteConditions()) {
 			condition->setTicks(condition->getTicks() - (offlineTime * 1000));
 			if (condition->getTicks() <= 0) {
 				removeCondition(condition);
@@ -1376,7 +1376,7 @@ void Player::onCreatureMove(Creature* creature, const Tile* newTile, const Posit
 	if (teleport || oldPos.z != newPos.z) {
 		int32_t ticks = getNumber(ConfigManager::STAIRHOP_DELAY);
 		if (ticks > 0) {
-			if (Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
+			if (auto condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED, ticks, 0)) {
 				addCondition(condition);
 			}
 		}
@@ -1578,7 +1578,7 @@ uint32_t Player::isMuted() const
 	}
 
 	int32_t muteTicks = 0;
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		if (condition->getType() == CONDITION_MUTED && condition->getTicks() > muteTicks) {
 			muteTicks = condition->getTicks();
 		}
@@ -1611,7 +1611,8 @@ void Player::removeMessageBuffer()
 
 			uint32_t muteTime = 5 * muteCount * muteCount;
 			muteCountMap[guid] = muteCount + 1;
-			Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, muteTime * 1000, 0);
+			const auto& condition =
+			    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_MUTED, muteTime * 1000, 0);
 			addCondition(condition);
 
 			sendTextMessage(MESSAGE_STATUS_SMALL, fmt::format("You are muted for {:d} seconds.", muteTime));
@@ -2153,13 +2154,12 @@ void Player::death(Creature* lastHitCreature)
 
 		auto it = conditions.begin(), end = conditions.end();
 		while (it != end) {
-			Condition* condition = *it;
+			const auto& condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
 				condition->endCondition(this);
 				onEndCondition(condition->getType());
-				delete condition;
 			} else {
 				++it;
 			}
@@ -2169,13 +2169,12 @@ void Player::death(Creature* lastHitCreature)
 
 		auto it = conditions.begin(), end = conditions.end();
 		while (it != end) {
-			Condition* condition = *it;
+			const auto& condition = *it;
 			if (condition->isPersistent()) {
 				it = conditions.erase(it);
 
 				condition->endCondition(this);
 				onEndCondition(condition->getType());
-				delete condition;
 			} else {
 				++it;
 			}
@@ -2252,7 +2251,7 @@ void Player::addInFightTicks(bool pzlock /*= false*/)
 		pzLocked = true;
 	}
 
-	Condition* condition =
+	auto condition =
 	    Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, getNumber(ConfigManager::PZ_LOCKED), 0);
 	addCondition(condition);
 }
@@ -3579,7 +3578,7 @@ void Player::onEndCondition(ConditionType_t type)
 	sendIcons();
 }
 
-void Player::onCombatRemoveCondition(Condition* condition)
+void Player::onCombatRemoveCondition(std::shared_ptr<Condition> condition)
 {
 	// Creature::onCombatRemoveCondition(condition);
 	if (condition->getId() > 0) {
@@ -3750,8 +3749,8 @@ bool Player::onKilledCreature(Creature* target, bool lastHit /* = true*/)
 
 			if (lastHit && hasCondition(CONDITION_INFIGHT)) {
 				pzLocked = true;
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT,
-				                                                  getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000, 0);
+				auto condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT,
+				                                            getNumber(ConfigManager::WHITE_SKULL_TIME) * 1000, 0);
 				addCondition(condition);
 			}
 		}
@@ -4657,10 +4656,10 @@ size_t Player::getMaxDepotItems() const
 	return getNumber(isPremium() ? ConfigManager::DEPOT_PREMIUM_LIMIT : ConfigManager::DEPOT_FREE_LIMIT);
 }
 
-std::forward_list<Condition*> Player::getMuteConditions() const
+std::forward_list<std::shared_ptr<Condition>> Player::getMuteConditions() const
 {
-	std::forward_list<Condition*> muteConditions;
-	for (Condition* condition : conditions) {
+	std::forward_list<std::shared_ptr<Condition>> muteConditions;
+	for (const auto& condition : conditions) {
 		if (condition->getTicks() <= 0) {
 			continue;
 		}
@@ -4709,8 +4708,7 @@ void Player::updateRegeneration()
 		return;
 	}
 
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-	if (condition) {
+	if (const auto& condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)) {
 		condition->setParam(CONDITION_PARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITION_PARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
 		condition->setParam(CONDITION_PARAM_MANAGAIN, vocation->getManaGainAmount());

@@ -494,7 +494,7 @@ public:
 	void onAddCondition(ConditionType_t type) override;
 	void onAddCombatCondition(ConditionType_t type) override;
 	void onEndCondition(ConditionType_t type) override;
-	void onCombatRemoveCondition(Condition* condition) override;
+	void onCombatRemoveCondition(std::shared_ptr<Condition> condition) override;
 	void onAttackedCreature(Creature* target, bool addFightTicks = true) override;
 	void onAttacked() override;
 	void onAttackedCreatureDrainHealth(Creature* target, int32_t points) override;
@@ -1124,7 +1124,7 @@ public:
 	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
 
 private:
-	std::forward_list<Condition*> getMuteConditions() const;
+	std::forward_list<std::shared_ptr<Condition>> getMuteConditions() const;
 
 	void checkTradeState(const Item* item);
 	bool hasCapacity(const Item* item, uint32_t count) const;
@@ -1185,7 +1185,7 @@ private:
 	std::forward_list<Party*> invitePartyList;
 	std::forward_list<uint32_t> modalWindows;
 	std::forward_list<std::string> learnedInstantSpellList;
-	std::forward_list<Condition*>
+	std::forward_list<std::shared_ptr<Condition>>
 	    storedConditionList; // TODO: This variable is only temporarily used when logging in, get rid of it somehow
 
 	std::string name;

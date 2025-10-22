@@ -30,12 +30,8 @@ Creature::~Creature()
 		summon->removeMaster();
 	}
 
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		condition->endCondition(this);
-	}
-
-	for (auto condition : conditions) {
-		delete condition;
 	}
 
 	releaseFollowers();
@@ -994,7 +990,7 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 	}
 }
 
-void Creature::onCombatRemoveCondition(Condition* condition) { removeCondition(condition); }
+void Creature::onCombatRemoveCondition(std::shared_ptr<Condition> condition) { removeCondition(condition); }
 
 void Creature::onAttacked()
 {
@@ -1072,7 +1068,7 @@ bool Creature::setMaster(Creature* newMaster)
 	return true;
 }
 
-bool Creature::addCondition(Condition* condition, bool force /* = false*/)
+bool Creature::addCondition(std::shared_ptr<Condition> condition, bool force /* = false*/)
 {
 	if (!condition) {
 		return false;
@@ -1087,10 +1083,8 @@ bool Creature::addCondition(Condition* condition, bool force /* = false*/)
 		}
 	}
 
-	Condition* prevCond = getCondition(condition->getType(), condition->getId(), condition->getSubId());
-	if (prevCond) {
-		prevCond->addCondition(this, condition);
-		delete condition;
+	if (const auto& prevCondition = getCondition(condition->getType(), condition->getId(), condition->getSubId())) {
+		prevCondition->addCondition(this, condition);
 		return true;
 	}
 
@@ -1100,11 +1094,10 @@ bool Creature::addCondition(Condition* condition, bool force /* = false*/)
 		return true;
 	}
 
-	delete condition;
 	return false;
 }
 
-bool Creature::addCombatCondition(Condition* condition)
+bool Creature::addCombatCondition(std::shared_ptr<Condition> condition)
 {
 	// Caution: condition variable could be deleted after the call to addCondition
 	ConditionType_t type = condition->getType();
@@ -1121,7 +1114,7 @@ void Creature::removeCondition(ConditionType_t type, bool force /* = false*/)
 {
 	auto it = conditions.begin(), end = conditions.end();
 	while (it != end) {
-		Condition* condition = *it;
+		const auto& condition = *it;
 		if (condition->getType() != type) {
 			++it;
 			continue;
@@ -1139,7 +1132,6 @@ void Creature::removeCondition(ConditionType_t type, bool force /* = false*/)
 		it = conditions.erase(it);
 
 		condition->endCondition(this);
-		delete condition;
 
 		onEndCondition(type);
 	}
@@ -1149,7 +1141,7 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 {
 	auto it = conditions.begin(), end = conditions.end();
 	while (it != end) {
-		Condition* condition = *it;
+		const auto& condition = *it;
 		if (condition->getType() != type || condition->getId() != conditionId) {
 			++it;
 			continue;
@@ -1167,7 +1159,6 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 		it = conditions.erase(it);
 
 		condition->endCondition(this);
-		delete condition;
 
 		onEndCondition(type);
 	}
@@ -1175,19 +1166,19 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t conditionId, 
 
 void Creature::removeCombatCondition(ConditionType_t type)
 {
-	std::vector<Condition*> removeConditions;
-	for (Condition* condition : conditions) {
+	std::vector<std::shared_ptr<Condition>> removeConditions;
+	for (const auto& condition : conditions) {
 		if (condition->getType() == type) {
 			removeConditions.push_back(condition);
 		}
 	}
 
-	for (Condition* condition : removeConditions) {
+	for (const auto& condition : removeConditions) {
 		onCombatRemoveCondition(condition);
 	}
 }
 
-void Creature::removeCondition(Condition* condition, bool force /* = false*/)
+void Creature::removeCondition(std::shared_ptr<Condition> condition, bool force /* = false*/)
 {
 	auto it = std::find(conditions.begin(), conditions.end(), condition);
 	if (it == conditions.end()) {
@@ -1207,12 +1198,11 @@ void Creature::removeCondition(Condition* condition, bool force /* = false*/)
 
 	condition->endCondition(this);
 	onEndCondition(condition->getType());
-	delete condition;
 }
 
-Condition* Creature::getCondition(ConditionType_t type) const
+std::shared_ptr<Condition> Creature::getCondition(ConditionType_t type) const
 {
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		if (condition->getType() == type) {
 			return condition;
 		}
@@ -1220,9 +1210,10 @@ Condition* Creature::getCondition(ConditionType_t type) const
 	return nullptr;
 }
 
-Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId /* = 0*/) const
+std::shared_ptr<Condition> Creature::getCondition(ConditionType_t type, ConditionId_t conditionId,
+                                                  uint32_t subId /* = 0*/) const
 {
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		if (condition->getType() == type && condition->getId() == conditionId && condition->getSubId() == subId) {
 			return condition;
 		}
@@ -1232,8 +1223,8 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	ConditionList tempConditions{conditions};
-	for (Condition* condition : tempConditions) {
+	auto tempConditions{conditions};
+	for (const auto& condition : tempConditions) {
 		auto it = std::find(conditions.begin(), conditions.end(), condition);
 		if (it == conditions.end()) {
 			continue;
@@ -1245,7 +1236,6 @@ void Creature::executeConditions(uint32_t interval)
 				conditions.erase(it);
 				condition->endCondition(this);
 				onEndCondition(condition->getType());
-				delete condition;
 			}
 		}
 	}
@@ -1258,7 +1248,7 @@ bool Creature::hasCondition(ConditionType_t type, uint32_t subId /* = 0*/) const
 	}
 
 	int64_t timeNow = OTSYS_TIME();
-	for (Condition* condition : conditions) {
+	for (const auto& condition : conditions) {
 		if (condition->getType() != type || condition->getSubId() != subId) {
 			continue;
 		}
@@ -1516,7 +1506,7 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 
 bool Creature::isInvisible() const
 {
-	return std::find_if(conditions.begin(), conditions.end(), [](const Condition* condition) {
+	return std::find_if(conditions.begin(), conditions.end(), [](const std::shared_ptr<Condition>& condition) {
 		       return condition->getType() == CONDITION_INVISIBLE;
 	       }) != conditions.end();
 }
