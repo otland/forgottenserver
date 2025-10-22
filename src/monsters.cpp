@@ -299,7 +299,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 			}
 
 			if (conditionType != CONDITION_NONE) {
-				const auto& condition = getDamageCondition(conditionType, maxDamage, minDamage, 0, tickInterval);
+				auto condition = getDamageCondition(conditionType, maxDamage, minDamage, 0, tickInterval);
 				combat->addCondition(condition);
 			}
 
@@ -490,7 +490,7 @@ bool Monsters::deserializeSpell(const pugi::xml_node& node, spellBlock_t& sb, co
 				}
 			}
 
-			const auto& condition = getDamageCondition(conditionType, maxDamage, minDamage, startDamage, tickInterval);
+			auto condition = getDamageCondition(conditionType, maxDamage, minDamage, startDamage, tickInterval);
 			combat->addCondition(condition);
 		} else if (tmpName == "strength") {
 			//
