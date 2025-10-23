@@ -98,7 +98,7 @@ public:
 	void setWorldType(WorldType_t type);
 	WorldType_t getWorldType() const { return worldType; }
 
-	std::shared_ptr<Cylinder> internalGetCylinder(std::shared_ptr<Player> player, const Position& pos) const;
+	std::shared_ptr<Thing> internalGetCylinder(std::shared_ptr<Player> player, const Position& pos) const;
 	std::shared_ptr<Thing> internalGetThing(std::shared_ptr<Player> player, const Position& pos, int32_t index,
 	                                        uint32_t spriteId, stackPosType_t type) const;
 	static void internalGetPosition(std::shared_ptr<Item> item, Position& pos, uint8_t& stackpos);
@@ -215,15 +215,15 @@ public:
 	ReturnValue internalMoveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> toTile,
 	                                 uint32_t flags = 0);
 
-	ReturnValue internalMoveItem(std::shared_ptr<Cylinder> fromCylinder, std::shared_ptr<Cylinder> toCylinder,
-	                             int32_t index, std::shared_ptr<Item> item, uint32_t count,
-	                             std::shared_ptr<Item>* _moveItem, uint32_t flags = 0,
-	                             std::shared_ptr<Creature> actor = nullptr, std::shared_ptr<Item> tradeItem = nullptr,
-	                             const Position* fromPos = nullptr, const Position* toPos = nullptr);
+	ReturnValue internalMoveItem(std::shared_ptr<Thing> fromCylinder, std::shared_ptr<Thing> toCylinder, int32_t index,
+	                             std::shared_ptr<Item> item, uint32_t count, std::shared_ptr<Item>* _moveItem,
+	                             uint32_t flags = 0, std::shared_ptr<Creature> actor = nullptr,
+	                             std::shared_ptr<Item> tradeItem = nullptr, const Position* fromPos = nullptr,
+	                             const Position* toPos = nullptr);
 
-	ReturnValue internalAddItem(std::shared_ptr<Cylinder> toCylinder, std::shared_ptr<Item> item,
+	ReturnValue internalAddItem(std::shared_ptr<Thing> toCylinder, std::shared_ptr<Item> item,
 	                            int32_t index = INDEX_WHEREEVER, uint32_t flags = 0, bool test = false);
-	ReturnValue internalAddItem(std::shared_ptr<Cylinder> toCylinder, std::shared_ptr<Item> item, int32_t index,
+	ReturnValue internalAddItem(std::shared_ptr<Thing> toCylinder, std::shared_ptr<Item> item, int32_t index,
 	                            uint32_t flags, bool test, uint32_t& remainderCount);
 	ReturnValue internalRemoveItem(std::shared_ptr<Item> item, int32_t count = -1, bool test = false,
 	                               uint32_t flags = 0);
@@ -240,7 +240,7 @@ public:
 	 * \param depthSearch if true it will check child containers aswell
 	 * \returns A pointer to the item to an item and nullptr if not found
 	 */
-	std::shared_ptr<Item> findItemOfType(std::shared_ptr<Cylinder> cylinder, uint16_t itemId, bool depthSearch = true,
+	std::shared_ptr<Item> findItemOfType(std::shared_ptr<Thing> cylinder, uint16_t itemId, bool depthSearch = true,
 	                                     int32_t subType = -1) const;
 
 	/**
@@ -250,7 +250,7 @@ public:
 	 * \param flags optional flags to modify the default behavior
 	 * \returns true if the removal was successful
 	 */
-	bool removeMoney(std::shared_ptr<Cylinder> cylinder, uint64_t money, uint32_t flags = 0);
+	bool removeMoney(std::shared_ptr<Thing> cylinder, uint64_t money, uint32_t flags = 0);
 
 	/**
 	 * Add item(s) with monetary value
@@ -258,7 +258,7 @@ public:
 	 * \param money the amount to give
 	 * \param flags optional flags to modify default behavior
 	 */
-	void addMoney(std::shared_ptr<Cylinder> cylinder, uint64_t money, uint32_t flags = 0);
+	void addMoney(std::shared_ptr<Thing> cylinder, uint64_t money, uint32_t flags = 0);
 
 	/**
 	 * Transform one item to another type/count
@@ -325,7 +325,7 @@ public:
 	                              const Position& toPos, uint8_t count);
 	void playerMoveItem(std::shared_ptr<Player> player, const Position& fromPos, uint16_t spriteId,
 	                    uint8_t fromStackPos, const Position& toPos, uint8_t count, std::shared_ptr<Item> item,
-	                    std::shared_ptr<Cylinder> toCylinder);
+	                    std::shared_ptr<Thing> toCylinder);
 	void playerEquipItem(uint32_t playerId, uint16_t spriteId);
 	void playerMove(uint32_t playerId, Direction direction);
 	void playerCreatePrivateChannel(uint32_t playerId);

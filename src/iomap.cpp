@@ -200,9 +200,9 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 							item->startDecaying();
 							item->setLoadedFromMap(true);
 						} else if (item->isGroundTile()) {
-							ground_item = item;
+							ground_item = std::move(item);
 						} else {
-							tile = createTile(ground_item, item, x, y, z);
+							tile = createTile(std::move(ground_item), item, x, y, z);
 							tile->internalAddThing(item);
 							item->startDecaying();
 							item->setLoadedFromMap(true);
@@ -250,9 +250,9 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 					item->startDecaying();
 					item->setLoadedFromMap(true);
 				} else if (item->isGroundTile()) {
-					ground_item = item;
+					ground_item = std::move(item);
 				} else {
-					tile = createTile(ground_item, item, x, y, z);
+					tile = createTile(std::move(ground_item), item, x, y, z);
 					tile->internalAddThing(item);
 					item->startDecaying();
 					item->setLoadedFromMap(true);
@@ -261,12 +261,12 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 		}
 
 		if (!tile) {
-			tile = createTile(ground_item, nullptr, x, y, z);
+			tile = createTile(std::move(ground_item), nullptr, x, y, z);
 		}
 
-		tile->setFlag(static_cast<tileflags_t>(tileflags));
+		tile->setFlag(tileflags);
 
-		map.setTile(x, y, z, tile);
+		map.setTile(x, y, z, std::move(tile));
 	}
 	return std::nullopt;
 }

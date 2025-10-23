@@ -6,15 +6,20 @@
 
 #include "item.h"
 
-class Teleport final : public Item, public Cylinder
+class Teleport final : public Item
 {
 public:
 	explicit Teleport(uint16_t type) : Item(type) {};
 
-	std::shared_ptr<Teleport> getTeleport() override { return std::static_pointer_cast<Teleport>(Item::getItem()); }
+	std::shared_ptr<Teleport> getTeleport() override
+	{
+		assert(std::dynamic_pointer_cast<Teleport>(shared_from_this()) != nullptr);
+		return std::static_pointer_cast<Teleport>(shared_from_this());
+	}
 	std::shared_ptr<const Teleport> getTeleport() const override
 	{
-		return std::static_pointer_cast<const Teleport>(Item::getItem());
+		assert(std::dynamic_pointer_cast<const Teleport>(shared_from_this()) != nullptr);
+		return std::static_pointer_cast<const Teleport>(shared_from_this());
 	}
 
 	// serialization
@@ -31,8 +36,8 @@ public:
 	                          uint32_t& maxQueryCount, uint32_t flags) const override;
 	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                        std::shared_ptr<Creature> actor = nullptr) const override;
-	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
+	std::shared_ptr<Thing> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
 	void addThing(std::shared_ptr<Thing> thing) override;
 	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;
@@ -42,9 +47,9 @@ public:
 
 	void removeThing(std::shared_ptr<Thing> thing, uint32_t count) override;
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
 private:

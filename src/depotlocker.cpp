@@ -26,7 +26,7 @@ ReturnValue DepotLocker::queryAdd(int32_t, std::shared_ptr<const Thing>, uint32_
 	return RETURNVALUE_NOTENOUGHROOM;
 }
 
-void DepotLocker::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent,
+void DepotLocker::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent,
                                       int32_t index, cylinderlink_t)
 {
 	if (parent) {
@@ -34,7 +34,7 @@ void DepotLocker::postAddNotification(std::shared_ptr<Thing> thing, std::shared_
 	}
 }
 
-void DepotLocker::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
+void DepotLocker::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
                                          int32_t index, cylinderlink_t)
 {
 	if (parent) {

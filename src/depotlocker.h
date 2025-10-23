@@ -24,20 +24,22 @@ public:
 
 	std::shared_ptr<DepotLocker> getDepotLocker() override
 	{
-		return std::static_pointer_cast<DepotLocker>(Item::getItem());
+		assert(std::dynamic_pointer_cast<DepotLocker>(getContainer()) != nullptr);
+		return std::static_pointer_cast<DepotLocker>(getContainer());
 	}
 	std::shared_ptr<const DepotLocker> getDepotLocker() const override
 	{
-		return std::static_pointer_cast<const DepotLocker>(Item::getItem());
+		assert(std::dynamic_pointer_cast<const DepotLocker>(getContainer()) != nullptr);
+		return std::static_pointer_cast<const DepotLocker>(getContainer());
 	}
 
 	// Cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                     std::shared_ptr<Creature> actor = nullptr) const override;
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
 	// Item implementations

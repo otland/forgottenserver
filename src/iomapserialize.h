@@ -28,7 +28,7 @@ private:
 	static void saveTile(PropWriteStream& stream, std::shared_ptr<const Tile> tile);
 
 	static bool loadContainer(PropStream& propStream, std::shared_ptr<Container> container);
-	static bool loadItem(PropStream& propStream, std::shared_ptr<Cylinder> parent);
+	static bool loadItem(PropStream& propStream, std::shared_ptr<Thing> parent);
 };
 
 #endif // FS_IOMAPSERIALIZE_H

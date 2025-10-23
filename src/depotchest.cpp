@@ -43,7 +43,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, std::shared_ptr<const Thing> thi
 	return Container::queryAdd(index, thing, count, flags, actor);
 }
 
-void DepotChest::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent,
+void DepotChest::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent,
                                      int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
@@ -52,7 +52,7 @@ void DepotChest::postAddNotification(std::shared_ptr<Thing> thing, std::shared_p
 	}
 }
 
-void DepotChest::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
+void DepotChest::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
                                         int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
@@ -61,7 +61,7 @@ void DepotChest::postRemoveNotification(std::shared_ptr<Thing> thing, std::share
 	}
 }
 
-std::shared_ptr<Cylinder> DepotChest::getParent() const
+std::shared_ptr<Thing> DepotChest::getParent() const
 {
 	if (parent) {
 		return parent->getParent();

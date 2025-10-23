@@ -13,10 +13,12 @@ public:
 
 	std::shared_ptr<StoreInbox> getStoreInbox() override
 	{
+		assert(std::dynamic_pointer_cast<StoreInbox>(getContainer()) != nullptr);
 		return std::static_pointer_cast<StoreInbox>(getContainer());
 	}
 	std::shared_ptr<const StoreInbox> getStoreInbox() const override
 	{
+		assert(std::dynamic_pointer_cast<const StoreInbox>(getContainer()) != nullptr);
 		return std::static_pointer_cast<const StoreInbox>(getContainer());
 	}
 
@@ -24,9 +26,9 @@ public:
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                     std::shared_ptr<Creature> actor = nullptr) const override;
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
 	// Item implementations

@@ -112,7 +112,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, std::shared_ptr<Conta
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Cylinder> parent)
+bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Thing> parent)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {

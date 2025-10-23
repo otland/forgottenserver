@@ -113,7 +113,7 @@ private:
 	uint16_t downItemCount = 0;
 };
 
-class Tile : public Cylinder
+class Tile : public Thing
 {
 public:
 	static std::shared_ptr<Tile> nullptr_tile;
@@ -124,10 +124,15 @@ public:
 	Tile(const Tile&) = delete;
 	Tile& operator=(const Tile&) = delete;
 
-	std::shared_ptr<Tile> getTile() override final { return std::static_pointer_cast<Tile>(getCylinder()); }
+	std::shared_ptr<Tile> getTile() override final
+	{
+		assert(std::dynamic_pointer_cast<Tile>(shared_from_this()) != nullptr);
+		return std::static_pointer_cast<Tile>(shared_from_this());
+	}
 	std::shared_ptr<const Tile> getTile() const override final
 	{
-		return std::static_pointer_cast<const Tile>(getCylinder());
+		assert(std::dynamic_pointer_cast<const Tile>(shared_from_this()) != nullptr);
+		return std::static_pointer_cast<const Tile>(shared_from_this());
 	}
 
 	virtual TileItemVector* getItemList() = 0;
@@ -205,8 +210,8 @@ public:
 	                          uint32_t& maxQueryCount, uint32_t flags) const override final;
 	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                        std::shared_ptr<Creature> actor = nullptr) const override;
-	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
+	std::shared_ptr<Thing> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
 	void addThing(std::shared_ptr<Thing> thing) override final;
 	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;
@@ -225,9 +230,9 @@ public:
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
 	std::shared_ptr<Thing> getThing(size_t index) const override final;
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override final;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override final;
 
 	void internalAddThing(std::shared_ptr<Thing> thing) override final;

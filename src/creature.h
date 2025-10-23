@@ -78,7 +78,7 @@ private:
 // Defines the Base class for all creatures and base functions which
 // every creature has
 
-class Creature : virtual public Thing, private std::enable_shared_from_this<Creature>
+class Creature : public Thing
 {
 protected:
 	Creature();
@@ -357,10 +357,10 @@ public:
 	bool unregisterCreatureEvent(const std::string& name);
 
 	bool hasParent() const override { return getParent() != nullptr; }
-	std::shared_ptr<Cylinder> getParent() const override final { return tile; }
-	void setParent(std::shared_ptr<Cylinder> cylinder) override final
+	std::shared_ptr<Thing> getParent() const override final { return tile; }
+	void setParent(std::shared_ptr<Thing> thing) override final
 	{
-		tile = cylinder->getTile();
+		tile = thing->getTile();
 		position = tile->getPosition();
 	}
 

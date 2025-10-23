@@ -95,8 +95,16 @@ public:
 	Npc(const Npc&) = delete;
 	Npc& operator=(const Npc&) = delete;
 
-	std::shared_ptr<Npc> getNpc() override { return std::static_pointer_cast<Npc>(getCreature()); }
-	std::shared_ptr<const Npc> getNpc() const override { return std::static_pointer_cast<const Npc>(getCreature()); }
+	std::shared_ptr<Npc> getNpc() override
+	{
+		assert(std::dynamic_pointer_cast<Npc>(getCreature()) != nullptr);
+		return std::static_pointer_cast<Npc>(getCreature());
+	}
+	std::shared_ptr<const Npc> getNpc() const override
+	{
+		assert(std::dynamic_pointer_cast<const Npc>(getCreature()) != nullptr);
+		return std::static_pointer_cast<const Npc>(getCreature());
+	}
 
 	bool isPushable() const override { return pushable && walkTicks != 0; }
 

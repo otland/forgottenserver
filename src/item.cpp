@@ -140,8 +140,7 @@ Item::Item(const uint16_t type, uint16_t count /*= 0*/) : id{type}
 	setDefaultDuration();
 }
 
-Item::Item(const Item& i) :
-    Thing{}, std::enable_shared_from_this<Item>{}, id{i.id}, count{i.count}, loadedFromMap{i.loadedFromMap}
+Item::Item(const Item& i) : Thing{}, id{i.id}, count{i.count}, loadedFromMap{i.loadedFromMap}
 {
 	if (i.attributes) {
 		attributes = std::make_unique<ItemAttributes>(*i.attributes);
@@ -255,10 +254,10 @@ void Item::setID(uint16_t newid)
 	}
 }
 
-std::shared_ptr<Cylinder> Item::getTopParent()
+std::shared_ptr<Thing> Item::getTopParent()
 {
 	auto aux = getParent();
-	auto prevaux = getCylinder();
+	auto prevaux = shared_from_this();
 	if (!aux) {
 		return prevaux;
 	}
@@ -274,17 +273,17 @@ std::shared_ptr<Cylinder> Item::getTopParent()
 	return aux;
 }
 
-std::shared_ptr<const Cylinder> Item::getTopParent() const
+std::shared_ptr<const Thing> Item::getTopParent() const
 {
 	auto aux = getParent();
-	auto prevaux = getCylinder();
 	if (!aux) {
-		return prevaux;
+		return nullptr;
 	}
 
+	std::shared_ptr<Thing> prevaux = nullptr;
 	while (aux->hasParent()) {
-		prevaux = aux;
-		aux = aux->getParent();
+		prevaux = std::move(aux);
+		aux = prevaux->getParent();
 	}
 
 	if (prevaux) {
@@ -305,12 +304,12 @@ std::shared_ptr<Tile> Item::getTile()
 
 std::shared_ptr<const Tile> Item::getTile() const
 {
-	auto cylinder = getTopParent();
+	auto parent = getTopParent();
 	// get root cylinder
-	if (cylinder && cylinder->hasParent()) {
-		cylinder = cylinder->getParent();
+	if (parent && parent->hasParent()) {
+		parent = parent->getParent();
 	}
-	return cylinder->getTile();
+	return parent->getTile();
 }
 
 uint16_t Item::getSubType() const

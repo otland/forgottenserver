@@ -150,9 +150,14 @@ class MagicField final : public Item
 public:
 	explicit MagicField(uint16_t type) : Item{type}, createTime(OTSYS_TIME()) {}
 
-	std::shared_ptr<MagicField> getMagicField() override { return std::static_pointer_cast<MagicField>(getItem()); }
+	std::shared_ptr<MagicField> getMagicField() override
+	{
+		assert(std::dynamic_pointer_cast<MagicField>(getItem()) != nullptr);
+		return std::static_pointer_cast<MagicField>(getItem());
+	}
 	std::shared_ptr<const MagicField> getMagicField() const override
 	{
+		assert(std::dynamic_pointer_cast<const MagicField>(getItem()) != nullptr);
 		return std::static_pointer_cast<const MagicField>(getItem());
 	}
 

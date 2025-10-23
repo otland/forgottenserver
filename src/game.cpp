@@ -35,6 +35,8 @@
 #include "talkaction.h"
 #include "weapons.h"
 
+#include <fstream>
+
 extern Actions* g_actions;
 extern Chat* g_chat;
 extern TalkActions* g_talkActions;
@@ -177,7 +179,7 @@ bool Game::loadMainMap(const std::string& filename)
 
 void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
-std::shared_ptr<Cylinder> Game::internalGetCylinder(std::shared_ptr<Player> player, const Position& pos) const
+std::shared_ptr<Thing> Game::internalGetCylinder(std::shared_ptr<Player> player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
 		return map.getTile(pos);
@@ -844,9 +846,9 @@ ReturnValue Game::internalMoveCreature(std::shared_ptr<Creature> creature, std::
 
 	int32_t index = 0;
 	std::shared_ptr<Item> toItem = nullptr;
-	std::shared_ptr<Cylinder> subCylinder = nullptr;
-	std::shared_ptr<Cylinder> toCylinder = toTile;
-	std::shared_ptr<Cylinder> fromCylinder = nullptr;
+	std::shared_ptr<Thing> subCylinder = nullptr;
+	std::shared_ptr<Thing> toCylinder = toTile;
+	std::shared_ptr<Thing> fromCylinder = nullptr;
 	uint32_t n = 0;
 
 	while ((subCylinder = toCylinder->queryDestination(index, creature, toItem, flags)) != toCylinder) {
@@ -894,7 +896,7 @@ void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, 
 
 void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPos, uint16_t spriteId,
                           uint8_t fromStackPos, const Position& toPos, uint8_t count, std::shared_ptr<Item> item,
-                          std::shared_ptr<Cylinder> toCylinder)
+                          std::shared_ptr<Thing> toCylinder)
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
@@ -1074,7 +1076,7 @@ void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPo
 	}
 }
 
-ReturnValue Game::internalMoveItem(std::shared_ptr<Cylinder> fromCylinder, std::shared_ptr<Cylinder> toCylinder,
+ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromCylinder, std::shared_ptr<Thing> toCylinder,
                                    int32_t index, std::shared_ptr<Item> item, uint32_t count,
                                    std::shared_ptr<Item>* _moveItem, uint32_t flags /*= 0*/,
                                    std::shared_ptr<Creature> actor /* = nullptr*/,
@@ -1100,7 +1102,7 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Cylinder> fromCylinder, std::
 
 	std::shared_ptr<Item> toItem = nullptr;
 
-	std::shared_ptr<Cylinder> subCylinder;
+	std::shared_ptr<Thing> subCylinder;
 	int floorN = 0;
 
 	while ((subCylinder = toCylinder->queryDestination(index, item, toItem, flags)) != toCylinder) {
@@ -1300,14 +1302,14 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Cylinder> fromCylinder, std::
 	return ret;
 }
 
-ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, std::shared_ptr<Item> item,
+ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toCylinder, std::shared_ptr<Item> item,
                                   int32_t index /*= INDEX_WHEREEVER*/, uint32_t flags /* = 0*/, bool test /* = false*/)
 {
 	uint32_t remainderCount = 0;
 	return internalAddItem(toCylinder, std::move(item), index, flags, test, remainderCount);
 }
 
-ReturnValue Game::internalAddItem(std::shared_ptr<Cylinder> toCylinder, std::shared_ptr<Item> item, int32_t index,
+ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toCylinder, std::shared_ptr<Item> item, int32_t index,
                                   uint32_t flags, bool test, uint32_t& remainderCount)
 {
 	if (!toCylinder || !item) {
@@ -1456,7 +1458,7 @@ ReturnValue Game::internalPlayerAddItem(std::shared_ptr<Player> player, std::sha
 	return ret;
 }
 
-std::shared_ptr<Item> Game::findItemOfType(std::shared_ptr<Cylinder> cylinder, uint16_t itemId,
+std::shared_ptr<Item> Game::findItemOfType(std::shared_ptr<Thing> cylinder, uint16_t itemId,
                                            bool depthSearch /*= true*/, int32_t subType /*= -1*/) const
 {
 	if (!cylinder) {
@@ -1504,7 +1506,7 @@ std::shared_ptr<Item> Game::findItemOfType(std::shared_ptr<Cylinder> cylinder, u
 	return nullptr;
 }
 
-bool Game::removeMoney(std::shared_ptr<Cylinder> cylinder, uint64_t money, uint32_t flags /*= 0*/)
+bool Game::removeMoney(std::shared_ptr<Thing> cylinder, uint64_t money, uint32_t flags /*= 0*/)
 {
 	if (!cylinder) {
 		return false;
@@ -1583,7 +1585,7 @@ bool Game::removeMoney(std::shared_ptr<Cylinder> cylinder, uint64_t money, uint3
 	return true;
 }
 
-void Game::addMoney(std::shared_ptr<Cylinder> cylinder, uint64_t money, uint32_t flags /*= 0*/)
+void Game::addMoney(std::shared_ptr<Thing> cylinder, uint64_t money, uint32_t flags /*= 0*/)
 {
 	if (money == 0) {
 		return;
@@ -1620,7 +1622,7 @@ std::shared_ptr<Item> Game::transformItem(std::shared_ptr<Item> item, uint16_t n
 		return item;
 	}
 
-	std::shared_ptr<Cylinder> cylinder = item->getParent();
+	std::shared_ptr<Thing> cylinder = item->getParent();
 	if (!cylinder) {
 		return nullptr;
 	}
@@ -5071,14 +5073,13 @@ void Game::playerDebugAssert(uint32_t playerId, const std::string& assertLine, c
 	}
 
 	// TODO: move debug assertions to database
-	FILE* file = fopen("client_assertions.txt", "a");
-	if (file) {
-		const auto& timestamp = std::format("{:%d/%m/%Y %T}", std::chrono::system_clock::now());
-		fprintf(file, "----- %s - %s (%s) -----\n", timestamp.c_str(), player->getName().c_str(),
-		        player->getIP().to_string().c_str());
-		fprintf(file, "%s\n%s\n%s\n%s\n", assertLine.c_str(), date.c_str(), description.c_str(), comment.c_str());
-		fclose(file);
-	}
+	auto fs = std::ofstream{"client_assertions.txt", std::ios::app};
+	fs << "----- " << std::format("{:%d/%m/%Y %T}", std::chrono::system_clock::now()) << " - " << player->getName()
+	   << " (" << player->getIP().to_string() << ") -----\n"
+	   << assertLine << '\n'
+	   << date << '\n'
+	   << description << '\n'
+	   << comment << "\n\n";
 }
 
 void Game::playerLeaveMarket(uint32_t playerId)

@@ -13,13 +13,13 @@
 #include "spectators.h"
 #include "storeinbox.h"
 
-Container::Container(uint16_t type) : Container(type, items[type].maxItems) {}
+Container::Container(uint16_t type) : Container{type, items[type].maxItems} {}
 
 Container::Container(uint16_t type, uint16_t size, bool unlocked /*= true*/, bool pagination /*= false*/) :
-    Item(type), maxSize(size), unlocked(unlocked), pagination(pagination)
+    Item{type}, maxSize{size}, unlocked{unlocked}, pagination{pagination}
 {}
 
-Container::Container(std::shared_ptr<Tile> tile) : Container(ITEM_BROWSEFIELD, 30, false, true)
+Container::Container(std::shared_ptr<Tile> tile) : Container{ITEM_BROWSEFIELD, 30, false, true}
 {
 	TileItemVector* itemVector = tile->getItemList();
 	if (itemVector) {
@@ -413,12 +413,12 @@ ReturnValue Container::queryRemove(std::shared_ptr<const Thing> thing, uint32_t 
 	return RETURNVALUE_NOERROR;
 }
 
-std::shared_ptr<Cylinder> Container::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-                                                      std::shared_ptr<Item>& destItem, uint32_t& flags)
+std::shared_ptr<Thing> Container::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+                                                   std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
 	if (!unlocked) {
 		destItem = nullptr;
-		return getCylinder();
+		return shared_from_this();
 	}
 
 	if (index == 254 /*move up*/) {
@@ -428,7 +428,7 @@ std::shared_ptr<Cylinder> Container::queryDestination(int32_t& index, std::share
 		if (auto parent = getParent()) {
 			return parent->getContainer();
 		}
-		return getCylinder();
+		return shared_from_this();
 	}
 
 	if (index == 255 /*add wherever*/) {
@@ -448,7 +448,7 @@ std::shared_ptr<Cylinder> Container::queryDestination(int32_t& index, std::share
 
 	auto item = thing->getItem();
 	if (!item) {
-		return getCylinder();
+		return shared_from_this();
 	}
 
 	if (index != INDEX_WHEREEVER) {
@@ -458,18 +458,17 @@ std::shared_ptr<Cylinder> Container::queryDestination(int32_t& index, std::share
 		}
 
 		if (destItem) {
-			if (auto subCylinder = destItem->getCylinder()) {
-				index = INDEX_WHEREEVER;
-				destItem = nullptr;
-				return subCylinder;
-			}
+			auto subCylinder = destItem;
+			index = INDEX_WHEREEVER;
+			destItem = nullptr;
+			return subCylinder;
 		}
 	}
 
 	bool autoStack = !hasBitSet(FLAG_IGNOREAUTOSTACK, flags);
 	if (autoStack && item->isStackable() && item->getParent().get() != this) {
 		if (destItem && *destItem == *item && destItem->getItemCount() < ITEM_STACK_SIZE) {
-			return getCylinder();
+			return shared_from_this();
 		}
 
 		// try find a suitable item to stack with
@@ -478,12 +477,12 @@ std::shared_ptr<Cylinder> Container::queryDestination(int32_t& index, std::share
 			if (listItem != item && *listItem == *item && listItem->getItemCount() < ITEM_STACK_SIZE) {
 				destItem = listItem;
 				index = n;
-				return getCylinder();
+				return shared_from_this();
 			}
 			++n;
 		}
 	}
-	return getCylinder();
+	return shared_from_this();
 }
 
 void Container::addThing(std::shared_ptr<Thing> thing) { return addThing(0, thing); }
@@ -676,8 +675,8 @@ ItemVector Container::getItems(bool recursive /*= false*/)
 
 std::shared_ptr<Thing> Container::getThing(size_t index) const { return getItemByIndex(index); }
 
-void Container::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent,
-                                    int32_t index, cylinderlink_t)
+void Container::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
+                                    cylinderlink_t)
 {
 	auto topParent = getTopParent();
 	if (topParent->getCreature()) {
@@ -692,7 +691,7 @@ void Container::postAddNotification(std::shared_ptr<Thing> thing, std::shared_pt
 	}
 }
 
-void Container::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
+void Container::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
                                        int32_t index, cylinderlink_t)
 {
 	auto topParent = getTopParent();

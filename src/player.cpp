@@ -2746,8 +2746,8 @@ ReturnValue Player::queryRemove(std::shared_ptr<const Thing> thing, uint32_t cou
 	return RETURNVALUE_NOERROR;
 }
 
-std::shared_ptr<Cylinder> Player::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-                                                   std::shared_ptr<Item>& destItem, uint32_t& flags)
+std::shared_ptr<Thing> Player::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+                                                std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		destItem = nullptr;
@@ -3100,7 +3100,7 @@ std::shared_ptr<Thing> Player::getThing(size_t index) const
 	return nullptr;
 }
 
-void Player::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+void Player::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
                                  cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
@@ -3157,8 +3157,8 @@ void Player::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<c
 	}
 }
 
-void Player::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
-                                    int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
+                                    cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts

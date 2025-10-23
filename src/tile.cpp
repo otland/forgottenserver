@@ -744,8 +744,8 @@ ReturnValue Tile::queryRemove(std::shared_ptr<const Thing> thing, uint32_t count
 	return RETURNVALUE_NOERROR;
 }
 
-std::shared_ptr<Cylinder> Tile::queryDestination(int32_t&, std::shared_ptr<const Thing>,
-                                                 std::shared_ptr<Item>& destItem, uint32_t& flags)
+std::shared_ptr<Thing> Tile::queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>& destItem,
+                                              uint32_t& flags)
 {
 	std::shared_ptr<Tile> destTile = nullptr;
 	destItem = nullptr;
@@ -1339,7 +1339,7 @@ std::shared_ptr<Thing> Tile::getThing(size_t index) const
 	return nullptr;
 }
 
-void Tile::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+void Tile::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
                                cylinderlink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
@@ -1383,8 +1383,8 @@ void Tile::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<con
 	}
 }
 
-void Tile::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
-                                  int32_t index, cylinderlink_t)
+void Tile::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
+                                  cylinderlink_t)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
@@ -1410,7 +1410,7 @@ void Tile::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<
 	}
 }
 
-void Tile::internalAddThing(std::shared_ptr<Thing> thing) { internalAddThing(0, thing); }
+void Tile::internalAddThing(std::shared_ptr<Thing> thing) { internalAddThing(0, std::move(thing)); }
 
 void Tile::internalAddThing(uint32_t, std::shared_ptr<Thing> thing)
 {

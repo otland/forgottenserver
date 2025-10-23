@@ -489,7 +489,7 @@ public:
 	friend class Item;
 };
 
-class Item : virtual public Thing, private std::enable_shared_from_this<Item>
+class Item : public Thing
 {
 public:
 	// Factory member to create item of right type based on type
@@ -916,15 +916,16 @@ public:
 		return attributes;
 	}
 
-	void setParent(std::shared_ptr<Cylinder> cylinder) override { parent = std::move(cylinder); }
-	std::shared_ptr<Cylinder> getTopParent();
-	std::shared_ptr<const Cylinder> getTopParent() const;
+	std::shared_ptr<Thing> getParent() const override { return parent; }
+	void setParent(std::shared_ptr<Thing> thing) override { parent = std::move(thing); }
+	std::shared_ptr<Thing> getTopParent();
+	std::shared_ptr<const Thing> getTopParent() const;
 	std::shared_ptr<Tile> getTile() override final;
 	std::shared_ptr<const Tile> getTile() const override final;
 	bool isRemoved() const override { return !parent || std::static_pointer_cast<Thing>(parent)->isRemoved(); }
 
 protected:
-	std::shared_ptr<Cylinder> parent = nullptr;
+	std::shared_ptr<Thing> parent = nullptr;
 
 	uint16_t id; // the same id as in ItemType
 

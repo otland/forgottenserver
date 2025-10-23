@@ -32,7 +32,7 @@ ReturnValue Inbox::queryAdd(int32_t, std::shared_ptr<const Thing> thing, uint32_
 	return RETURNVALUE_NOERROR;
 }
 
-void Inbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+void Inbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
                                 cylinderlink_t)
 {
 	auto parent = getParent();
@@ -41,8 +41,8 @@ void Inbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<co
 	}
 }
 
-void Inbox::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent,
-                                   int32_t index, cylinderlink_t)
+void Inbox::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
+                                   cylinderlink_t)
 {
 	auto parent = getParent();
 	if (parent) {
@@ -50,7 +50,7 @@ void Inbox::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr
 	}
 }
 
-std::shared_ptr<Cylinder> Inbox::getParent() const
+std::shared_ptr<Thing> Inbox::getParent() const
 {
 	if (parent) {
 		return parent->getParent();

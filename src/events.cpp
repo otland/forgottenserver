@@ -833,8 +833,8 @@ bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType)
 }
 
 ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Cylinder> fromCylinder,
-                       std::shared_ptr<Cylinder> toCylinder)
+                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
+                       std::shared_ptr<Thing> toCylinder)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)
@@ -880,8 +880,8 @@ ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> ite
 }
 
 void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Cylinder> fromCylinder,
-                 std::shared_ptr<Cylinder> toCylinder)
+                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
+                 std::shared_ptr<Thing> toCylinder)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
 	// toPosition, fromCylinder, toCylinder)

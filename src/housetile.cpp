@@ -81,8 +81,8 @@ ReturnValue HouseTile::queryAdd(int32_t index, std::shared_ptr<const Thing> thin
 	return Tile::queryAdd(index, thing, count, flags, actor);
 }
 
-std::shared_ptr<Cylinder> HouseTile::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-                                                      std::shared_ptr<Item>& destItem, uint32_t& flags)
+std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+                                                   std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
 	if (auto creature = thing->getCreature()) {
 		if (auto player = creature->getPlayer()) {

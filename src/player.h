@@ -89,7 +89,7 @@ static constexpr int32_t PLAYER_MIN_SPEED = 10;
 
 static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 
-class Player final : public Creature, public Cylinder
+class Player final : public Creature
 {
 public:
 	explicit Player(ProtocolGame_ptr p);
@@ -99,10 +99,15 @@ public:
 	Player(const Player&) = delete;
 	Player& operator=(const Player&) = delete;
 
-	std::shared_ptr<Player> getPlayer() override { return std::static_pointer_cast<Player>(getCreature()); }
+	std::shared_ptr<Player> getPlayer() override
+	{
+		assert(std::dynamic_pointer_cast<Player>(Creature::getCreature()) != nullptr);
+		return std::static_pointer_cast<Player>(Creature::getCreature());
+	}
 	std::shared_ptr<const Player> getPlayer() const override
 	{
-		return std::static_pointer_cast<const Player>(getCreature());
+		assert(std::dynamic_pointer_cast<const Player>(Creature::getCreature()) != nullptr);
+		return std::static_pointer_cast<const Player>(Creature::getCreature());
 	}
 
 	void setID() final;
@@ -1094,9 +1099,9 @@ public:
 
 	void onThink(uint32_t interval) override;
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
 	void setNextAction(int64_t time)
@@ -1159,8 +1164,8 @@ private:
 	                          uint32_t& maxQueryCount, uint32_t flags) const override;
 	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                        std::shared_ptr<Creature> actor = nullptr) const override;
-	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override;
+	std::shared_ptr<Thing> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
 	void addThing(std::shared_ptr<Thing>) override {}
 	void addThing(int32_t index, std::shared_ptr<Thing> thing) override;

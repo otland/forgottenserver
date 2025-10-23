@@ -4,7 +4,6 @@
 #ifndef FS_CONTAINER_H
 #define FS_CONTAINER_H
 
-#include "cylinder.h"
 #include "item.h"
 #include "tile.h"
 
@@ -27,7 +26,7 @@ private:
 	friend class Container;
 };
 
-class Container : public Item, public Cylinder
+class Container : public Item
 {
 public:
 	explicit Container(uint16_t type);
@@ -43,10 +42,12 @@ public:
 
 	std::shared_ptr<Container> getContainer() override final
 	{
+		assert(std::dynamic_pointer_cast<Container>(Item::getItem()) != nullptr);
 		return std::static_pointer_cast<Container>(Item::getItem());
 	}
 	std::shared_ptr<const Container> getContainer() const override final
 	{
+		assert(std::dynamic_pointer_cast<const Container>(Item::getItem()) != nullptr);
 		return std::static_pointer_cast<const Container>(Item::getItem());
 	}
 
@@ -85,15 +86,15 @@ public:
 	bool isUnlocked() const { return unlocked; }
 	bool hasPagination() const { return pagination; }
 
-	// cylinder implementations
+	// Thing implementations
 	virtual ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                             std::shared_ptr<Creature> actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,
 	                          uint32_t& maxQueryCount, uint32_t flags) const override final;
 	ReturnValue queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                        std::shared_ptr<Creature> actor = nullptr) const override final;
-	std::shared_ptr<Cylinder> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
-	                                           std::shared_ptr<Item>& destItem, uint32_t& flags) override final;
+	std::shared_ptr<Thing> queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override final;
 
 	void addThing(std::shared_ptr<Thing> thing) override final;
 	void addThing(int32_t index, std::shared_ptr<Thing> thing) override final;
@@ -113,9 +114,9 @@ public:
 
 	ItemVector getItems(bool recursive = false);
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> oldParent, int32_t index,
+	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
 	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Cylinder> newParent, int32_t index,
+	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
 	                            cylinderlink_t link = LINK_OWNER) override;
 
 	void internalRemoveThing(std::shared_ptr<Thing> thing) override final;

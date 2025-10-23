@@ -769,7 +769,7 @@ void tfs::lua::pushThing(lua_State* L, std::shared_ptr<Thing> thing)
 	}
 }
 
-void tfs::lua::pushCylinder(lua_State* L, std::shared_ptr<Cylinder> cylinder)
+void tfs::lua::pushCylinder(lua_State* L, std::shared_ptr<Thing> cylinder)
 {
 	if (auto creature = cylinder->getCreature()) {
 		pushSharedPtr(L, creature);
@@ -989,33 +989,30 @@ static LuaVariant getVariant(lua_State* L, int32_t arg)
 
 std::shared_ptr<Thing> tfs::lua::getThing(lua_State* L, int32_t arg)
 {
-	std::shared_ptr<Thing> thing;
+	std::shared_ptr<Thing> thing = nullptr;
 	if (lua_getmetatable(L, arg) != 0) {
 		lua_rawgeti(L, -1, 't');
 		switch (getNumber<uint32_t>(L, -1)) {
 			case LuaData_Item:
-				thing = getSharedPtr<Item>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Item>(L, arg));
 				break;
 			case LuaData_Container:
-				thing = getSharedPtr<Container>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Container>(L, arg));
 				break;
 			case LuaData_Teleport:
-				thing = getSharedPtr<Teleport>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Teleport>(L, arg));
 				break;
 			case LuaData_Podium:
-				thing = getSharedPtr<Podium>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Podium>(L, arg));
 				break;
 			case LuaData_Player:
-				thing = getSharedPtr<Player>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Player>(L, arg));
 				break;
 			case LuaData_Monster:
-				thing = getSharedPtr<Monster>(L, arg);
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Monster>(L, arg));
 				break;
 			case LuaData_Npc:
-				thing = getSharedPtr<Npc>(L, arg);
-				break;
-			default:
-				thing = nullptr;
+				thing = std::static_pointer_cast<Thing>(getSharedPtr<Npc>(L, arg));
 				break;
 		}
 		lua_pop(L, 2);
@@ -7104,7 +7101,7 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 		return 1;
 	}
 
-	std::shared_ptr<Cylinder> toCylinder;
+	std::shared_ptr<Thing> toCylinder;
 	if (lua_isuserdata(L, 2)) {
 		const LuaDataType type = getUserdataType(L, 2);
 		switch (type) {
