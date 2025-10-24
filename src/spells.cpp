@@ -1233,4 +1233,3 @@ bool RuneSpell::canUse(const Player* player) const
 
 	return hasVocationSpellMap(player->getVocationId());
 }
-
