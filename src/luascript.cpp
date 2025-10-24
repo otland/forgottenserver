@@ -11074,30 +11074,24 @@ int LuaScriptInterface::luaPlayerGetInstantSpells(lua_State* L)
 		return 1;
 	}
 
-	std::vector<const InstantSpell*> spells;
-	for (auto& spell : g_spells->getInstantSpells()) {
-		if (spell.second.canCast(player)) {
-			spells.push_back(&spell.second);
+	auto instantSpells = g_spells->getInstantSpells();
+
+	std::vector<InstantSpell*> spells;
+	for (auto& spell : instantSpells | std::views::values) {
+		if (spell.canCast(player)) {
+			spells.push_back(&spell);
 		}
 	}
 
 	lua_createtable(L, spells.size(), 0);
 
 	int index = 0;
-	for (auto spell : spells) {
-		lua_createtable(L, 0, 7);
-
-		setField(L, "name", spell->getName());
-		setField(L, "words", spell->getWords());
-		setField(L, "level", spell->getLevel());
-		setField(L, "mlevel", spell->getMagicLevel());
-		setField(L, "mana", spell->getMana());
-		setField(L, "manapercent", spell->getManaPercent());
-		setField(L, "params", spell->getHasParam());
-
+	for (auto& spell : spells) {
+		tfs::lua::pushUserdata<Spell>(L, spell);
 		tfs::lua::setMetatable(L, -1, "Spell");
 		lua_rawseti(L, -2, ++index);
 	}
+
 	return 1;
 }
 
