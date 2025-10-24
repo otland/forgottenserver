@@ -296,6 +296,7 @@ public:
 		}
 		charges = c;
 	}
+	bool canUse(const Player* player) const;
 
 private:
 	std::string_view getScriptEventName() const override { return "onCastSpell"; }
