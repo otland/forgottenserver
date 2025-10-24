@@ -5,7 +5,6 @@
 #define FS_PLAYER_H
 
 #include "creature.h"
-#include "cylinder.h"
 #include "depotchest.h"
 #include "depotlocker.h"
 #include "enums.h"
@@ -1157,7 +1156,6 @@ private:
 	std::shared_ptr<Item> getCorpse(std::shared_ptr<Creature> lastHitCreature,
 	                                std::shared_ptr<Creature> mostDamageCreature) override;
 
-	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                     std::shared_ptr<Creature> actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,

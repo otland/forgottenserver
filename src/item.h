@@ -4,7 +4,6 @@
 #ifndef FS_ITEM_H
 #define FS_ITEM_H
 
-#include "cylinder.h"
 #include "items.h"
 #include "luascript.h"
 #include "thing.h"

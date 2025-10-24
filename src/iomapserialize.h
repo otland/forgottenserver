@@ -5,7 +5,6 @@
 #define FS_IOMAPSERIALIZE_H
 
 class Container;
-class Cylinder;
 class House;
 class Item;
 class Map;

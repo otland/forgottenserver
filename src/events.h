@@ -67,11 +67,11 @@ void onLookInTrade(std::shared_ptr<Player> player, std::shared_ptr<Player> partn
 bool onLookInShop(std::shared_ptr<Player> player, const ItemType* itemType, uint8_t count);
 bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType);
 ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
-                       std::shared_ptr<Thing> toCylinder);
+                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
+                       std::shared_ptr<Thing> toThing);
 void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
-                 std::shared_ptr<Thing> toCylinder);
+                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
+                 std::shared_ptr<Thing> toThing);
 bool onMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Creature> creature, const Position& fromPosition,
                     const Position& toPosition);
 void onReportRuleViolation(std::shared_ptr<Player> player, const std::string& targetName, uint8_t reportType,

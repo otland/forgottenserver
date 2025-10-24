@@ -356,21 +356,21 @@ void Tile::onAddTileItem(std::shared_ptr<Item> item)
 
 	setTileFlags(item);
 
-	const Position& cylinderMapPos = getPosition();
+	const Position& thingMapPos = getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, cylinderMapPos, true);
+	g_game.map.getSpectators(spectators, thingMapPos, true);
 
 	// send to client
 	for (const auto& spectator : spectators) {
 		if (auto spectatorPlayer = spectator->getPlayer()) {
-			spectatorPlayer->sendAddTileItem(getTile(), cylinderMapPos, item);
+			spectatorPlayer->sendAddTileItem(getTile(), thingMapPos, item);
 		}
 	}
 
 	// event methods
 	for (auto spectator : spectators) {
-		spectator->onAddTileItem(getTile(), cylinderMapPos);
+		spectator->onAddTileItem(getTile(), thingMapPos);
 	}
 
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) &&
@@ -402,21 +402,21 @@ void Tile::onUpdateTileItem(std::shared_ptr<Item> oldItem, const ItemType& oldTy
 		}
 	}
 
-	const Position& cylinderMapPos = getPosition();
+	const Position& thingMapPos = getPosition();
 
 	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, cylinderMapPos, true);
+	g_game.map.getSpectators(spectators, thingMapPos, true);
 
 	// send to client
 	for (const auto& spectator : spectators) {
 		if (auto spectatorPlayer = spectator->getPlayer()) {
-			spectatorPlayer->sendUpdateTileItem(getTile(), cylinderMapPos, newItem);
+			spectatorPlayer->sendUpdateTileItem(getTile(), thingMapPos, newItem);
 		}
 	}
 
 	// event methods
 	for (const auto& spectator : spectators) {
-		spectator->onUpdateTileItem(getTile(), cylinderMapPos, oldItem, oldType, newItem, newType);
+		spectator->onUpdateTileItem(getTile(), thingMapPos, oldItem, oldType, newItem, newType);
 	}
 }
 
@@ -432,20 +432,20 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 
 	resetTileFlags(item);
 
-	const Position& cylinderMapPos = getPosition();
+	const Position& thingMapPos = getPosition();
 	const ItemType& iType = Item::items[item->getID()];
 
 	// send to client
 	size_t i = 0;
 	for (const auto& spectator : spectators) {
 		if (auto tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendRemoveTileThing(cylinderMapPos, oldStackPosVector[i++]);
+			tmpPlayer->sendRemoveTileThing(thingMapPos, oldStackPosVector[i++]);
 		}
 	}
 
 	// event methods
 	for (const auto& spectator : spectators) {
-		spectator->onRemoveTileItem(getTile(), cylinderMapPos, iType, item);
+		spectator->onRemoveTileItem(getTile(), thingMapPos, iType, item);
 	}
 
 	if (!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) {
@@ -471,12 +471,12 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 
 void Tile::onUpdateTile(const SpectatorVec& spectators)
 {
-	const Position& cylinderMapPos = getPosition();
+	const Position& thingMapPos = getPosition();
 
 	// send to clients
 	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
-		std::static_pointer_cast<Player>(spectator)->sendUpdateTile(getTile(), cylinderMapPos);
+		std::static_pointer_cast<Player>(spectator)->sendUpdateTile(getTile(), thingMapPos);
 	}
 }
 

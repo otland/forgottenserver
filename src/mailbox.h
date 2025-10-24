@@ -4,7 +4,6 @@
 #ifndef FS_MAILBOX_H
 #define FS_MAILBOX_H
 
-#include "cylinder.h"
 #include "item.h"
 
 class Mailbox final : public Item
@@ -23,7 +22,6 @@ public:
 		return std::static_pointer_cast<const Mailbox>(shared_from_this());
 	}
 
-	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                     std::shared_ptr<Creature> actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,

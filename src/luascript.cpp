@@ -8,6 +8,7 @@
 #include "bed.h"
 #include "chat.h"
 #include "configmanager.h"
+#include "cylinder.h"
 #include "databasemanager.h"
 #include "databasetasks.h"
 #include "depotchest.h"
@@ -758,29 +759,16 @@ void tfs::lua::pushThing(lua_State* L, std::shared_ptr<Thing> thing)
 		return;
 	}
 
-	if (auto item = thing->getItem()) {
+	if (auto creature = thing->getCreature()) {
+		pushSharedPtr(L, creature);
+		setCreatureMetatable(L, -1, creature);
+	} else if (auto item = thing->getItem()) {
 		pushSharedPtr(L, item);
 		setItemMetatable(L, -1, item);
-	} else if (auto creature = thing->getCreature()) {
-		pushSharedPtr(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else {
-		lua_pushnil(L);
-	}
-}
-
-void tfs::lua::pushCylinder(lua_State* L, std::shared_ptr<Thing> cylinder)
-{
-	if (auto creature = cylinder->getCreature()) {
-		pushSharedPtr(L, creature);
-		setCreatureMetatable(L, -1, creature);
-	} else if (auto parentItem = cylinder->getItem()) {
-		pushSharedPtr(L, parentItem);
-		setItemMetatable(L, -1, parentItem);
-	} else if (auto tile = cylinder->getTile()) {
+	} else if (auto tile = thing->getTile()) {
 		pushSharedPtr(L, tile);
 		setMetatable(L, -1, "Tile");
-	} else if (cylinder == VirtualCylinder::virtualCylinder) {
+	} else if (thing == VirtualCylinder::virtualCylinder) {
 		pushBoolean(L, true);
 	} else {
 		lua_pushnil(L);
@@ -6585,7 +6573,7 @@ int LuaScriptInterface::luaItemGetParent(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 
@@ -6604,7 +6592,7 @@ int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, topParent);
+	tfs::lua::pushThing(L, topParent);
 	return 1;
 }
 
@@ -7088,7 +7076,7 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
 
 int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
-	// item:moveTo(position or cylinder[, flags])
+	// item:moveTo(position or thing[, flags])
 	auto itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
@@ -7101,33 +7089,33 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 		return 1;
 	}
 
-	std::shared_ptr<Thing> toCylinder;
+	std::shared_ptr<Thing> toThing;
 	if (lua_isuserdata(L, 2)) {
 		const LuaDataType type = getUserdataType(L, 2);
 		switch (type) {
 			case LuaData_Container:
-				toCylinder = tfs::lua::getSharedPtr<Container>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Container>(L, 2);
 				break;
 			case LuaData_Player:
-				toCylinder = tfs::lua::getSharedPtr<Player>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Player>(L, 2);
 				break;
 			case LuaData_Tile:
-				toCylinder = tfs::lua::getSharedPtr<Tile>(L, 2);
+				toThing = tfs::lua::getSharedPtr<Tile>(L, 2);
 				break;
 			default:
-				toCylinder = nullptr;
+				toThing = nullptr;
 				break;
 		}
 	} else {
-		toCylinder = g_game.map.getTile(tfs::lua::getPosition(L, 2));
+		toThing = g_game.map.getTile(tfs::lua::getPosition(L, 2));
 	}
 
-	if (!toCylinder) {
+	if (!toThing) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	if (item->getParent() == toCylinder) {
+	if (item->getParent() == toThing) {
 		tfs::lua::pushBoolean(L, true);
 		return 1;
 	}
@@ -7136,11 +7124,10 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	    L, 3, FLAG_NOLIMIT | FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE | FLAG_IGNORENOTMOVEABLE);
 
 	if (item->getParent() == VirtualCylinder::virtualCylinder) {
-		tfs::lua::pushBoolean(L,
-		                      g_game.internalAddItem(toCylinder, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
+		tfs::lua::pushBoolean(L, g_game.internalAddItem(toThing, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
 	} else {
 		auto moveItem = nullptr;
-		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toCylinder, INDEX_WHEREEVER, item,
+		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toThing, INDEX_WHEREEVER, item,
 		                                          item->getItemCount(), moveItem, flags);
 		if (moveItem) {
 			*itemPtr = moveItem;
@@ -7987,7 +7974,7 @@ int LuaScriptInterface::luaCreatureGetParent(lua_State* L)
 		return 1;
 	}
 
-	tfs::lua::pushCylinder(L, parent);
+	tfs::lua::pushThing(L, parent);
 	return 1;
 }
 

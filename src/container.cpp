@@ -5,6 +5,7 @@
 
 #include "container.h"
 
+#include "cylinder.h"
 #include "depotchest.h"
 #include "game.h"
 #include "housetile.h"
@@ -276,10 +277,10 @@ ReturnValue Container::queryAdd(int32_t index, std::shared_ptr<const Thing> thin
 		return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 	}
 
-	auto cylinder = getParent();
+	auto parent = getParent();
 
 	// don't allow moving items into container that is store item and is in store inbox
-	if (isStoreItem() && std::dynamic_pointer_cast<const StoreInbox>(cylinder)) {
+	if (isStoreItem() && std::dynamic_pointer_cast<const StoreInbox>(parent)) {
 		ReturnValue ret = RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		if (!item->isStoreItem()) {
 			ret = RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
@@ -288,28 +289,28 @@ ReturnValue Container::queryAdd(int32_t index, std::shared_ptr<const Thing> thin
 	}
 
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
-		while (cylinder) {
-			if (cylinder == thing) {
+		while (parent) {
+			if (parent == thing) {
 				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
-			if (std::dynamic_pointer_cast<const Inbox>(cylinder)) {
+			if (std::dynamic_pointer_cast<const Inbox>(parent)) {
 				return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 			}
 
-			cylinder = cylinder->getParent();
+			parent = parent->getParent();
 		}
 
 		if (index == INDEX_WHEREEVER && size() >= capacity() && !hasPagination()) {
 			return RETURNVALUE_CONTAINERNOTENOUGHROOM;
 		}
 	} else {
-		while (cylinder) {
-			if (cylinder == thing) {
+		while (parent) {
+			if (parent == thing) {
 				return RETURNVALUE_THISISIMPOSSIBLE;
 			}
 
-			cylinder = cylinder->getParent();
+			parent = parent->getParent();
 		}
 	}
 
@@ -359,8 +360,8 @@ ReturnValue Container::queryMaxCount(int32_t index, std::shared_ptr<const Thing>
 				}
 			}
 		} else {
-			auto destItem = getItemByIndex(index);
-			if (destItem && *item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
+			if (auto destItem = getItemByIndex(index);
+			    *item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
 					n = ITEM_STACK_SIZE - destItem->getItemCount();
 				}

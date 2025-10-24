@@ -6,10 +6,23 @@
 
 class Container;
 class Creature;
-class Cylinder;
 class Item;
 class Tile;
 struct Position;
+
+inline constexpr int32_t INDEX_WHEREEVER = -1;
+
+enum cylinderflags_t
+{
+	FLAG_NOLIMIT = 1 << 0,             // Bypass limits like capacity/container limits, blocking items/creatures etc.
+	FLAG_IGNOREBLOCKITEM = 1 << 1,     // Bypass movable blocking item checks
+	FLAG_IGNOREBLOCKCREATURE = 1 << 2, // Bypass creature checks
+	FLAG_CHILDISOWNER = 1 << 3,        // Used by containers to query capacity of the carrier (player)
+	FLAG_PATHFINDING = 1 << 4,         // An additional check is done for floor changing/teleport items
+	FLAG_IGNOREFIELDDAMAGE = 1 << 5,   // Bypass field damage checks
+	FLAG_IGNORENOTMOVEABLE = 1 << 6,   // Bypass check for mobility
+	FLAG_IGNOREAUTOSTACK = 1 << 7,     // queryDestination will not try to stack items together
+};
 
 enum cylinderlink_t
 {
@@ -52,12 +65,12 @@ public:
 	virtual bool isRemoved() const { return true; }
 
 	/**
-	 * Query if the cylinder can add an object
+	 * Query if the thing can add an object
 	 * \param index points to the destination index (inventory slot/container
 	 * position) -1 is a internal value and means add to a empty position, with
 	 * no destItem \param thing the object to move/add \param count is the
 	 * amount that we want to move/add \param flags if FLAG_CHILDISOWNER if set
-	 * the query is from a child-cylinder (check cap etc.) if FLAG_NOLIMIT is
+	 * the query is from a child-thing (check cap etc.) if FLAG_NOLIMIT is
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
@@ -68,12 +81,12 @@ public:
 	};
 
 	/**
-	 * Query the cylinder how much it can accept
+	 * Query the thing how much it can accept
 	 * \param index points to the destination index (inventory slot/container
 	 * position) -1 is a internal value and means add to a empty position, with
 	 * no destItem \param thing the object to move/add \param count is the
 	 * amount that we want to move/add \param maxQueryCount is the max amount
-	 * that the cylinder can accept \param flags optional flags to modify the
+	 * that the thing can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
 	virtual ReturnValue queryMaxCount(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t&, uint32_t) const
@@ -82,7 +95,7 @@ public:
 	};
 
 	/**
-	 * Query if the cylinder can remove an object
+	 * Query if the thing can remove an object
 	 * \param thing the object to move/remove
 	 * \param count is the amount that we want to remove
 	 * \param flags optional flags to modify the default behaviour
@@ -95,13 +108,13 @@ public:
 	};
 
 	/**
-	 * Query the destination cylinder
+	 * Query the destination thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position), -1 is a internal value and means add to a empty position, with
-	 * no destItem this method can change the index to point to the new cylinder
+	 * no destItem this method can change the index to point to the new thing
 	 * index \param destItem is the destination object \param flags optional
 	 * flags to modify the default behaviour this method can modify the flags
-	 * \returns Cylinder returns the destination cylinder
+	 * \returns Thing returns the destination thing
 	 */
 	virtual std::shared_ptr<Thing> queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
 	                                                uint32_t&)
@@ -110,13 +123,13 @@ public:
 	};
 
 	/**
-	 * Add the object to the cylinder
+	 * Add the object to the thing
 	 * \param thing is the object to add
 	 */
 	virtual void addThing(std::shared_ptr<Thing>) { throw std::runtime_error("Not implemented"); };
 
 	/**
-	 * Add the object to the cylinder
+	 * Add the object to the thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
@@ -151,7 +164,7 @@ public:
 	 * Is sent after an operation (move/add) to update internal values
 	 * \param thing is the object that has been added
 	 * \param index is the objects new index value
-	 * \param link holds the relation the object has to the cylinder
+	 * \param link holds the relation the object has to the thing
 	 */
 	virtual void postAddNotification(std::shared_ptr<Thing>, std::shared_ptr<const Thing>, int32_t,
 	                                 cylinderlink_t = LINK_OWNER)
@@ -163,7 +176,7 @@ public:
 	 * Is sent after an operation (move/remove) to update internal values
 	 * \param thing is the object that has been removed
 	 * \param index is the previous index of the removed object
-	 * \param link holds the relation the object has to the cylinder
+	 * \param link holds the relation the object has to the thing
 	 */
 	virtual void postRemoveNotification(std::shared_ptr<Thing>, std::shared_ptr<const Thing>, int32_t,
 	                                    cylinderlink_t = LINK_OWNER)
@@ -216,19 +229,19 @@ public:
 	}
 
 	/**
-	 * Removes an object from the cylinder without sending to the client(s)
+	 * Removes an object from the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
 	virtual void internalRemoveThing(std::shared_ptr<Thing>) {}
 
 	/**
-	 * Adds an object to the cylinder without sending to the client(s)
+	 * Adds an object to the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
 	virtual void internalAddThing(std::shared_ptr<Thing>) {}
 
 	/**
-	 * Adds an object to the cylinder without sending to the client(s)
+	 * Adds an object to the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 * \param index points to the destination index (inventory slot/container
 	 * position)

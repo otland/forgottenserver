@@ -4,7 +4,6 @@
 #ifndef FS_TILE_H
 #define FS_TILE_H
 
-#include "cylinder.h"
 #include "item.h"
 #include "tools.h"
 
@@ -203,7 +202,6 @@ public:
 	                                 std::shared_ptr<const Creature> creature) const;
 	int32_t getStackposOfItem(std::shared_ptr<const Player> player, std::shared_ptr<const Item> item) const;
 
-	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
 	                     std::shared_ptr<Creature> actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,

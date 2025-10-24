@@ -833,11 +833,11 @@ bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType)
 }
 
 ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
-                       std::shared_ptr<Thing> toCylinder)
+                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
+                       std::shared_ptr<Thing> toThing)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
-	// toPosition, fromCylinder, toCylinder)
+	// toPosition, fromThing, toThing)
 	if (playerHandlers.onMoveItem == -1) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -863,8 +863,8 @@ ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> ite
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
-	tfs::lua::pushCylinder(L, fromCylinder);
-	tfs::lua::pushCylinder(L, toCylinder);
+	tfs::lua::pushThing(L, fromThing);
+	tfs::lua::pushThing(L, toThing);
 
 	ReturnValue returnValue;
 	if (tfs::lua::protectedCall(L, 7, 1) != 0) {
@@ -880,11 +880,11 @@ ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> ite
 }
 
 void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromCylinder,
-                 std::shared_ptr<Thing> toCylinder)
+                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
+                 std::shared_ptr<Thing> toThing)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
-	// toPosition, fromCylinder, toCylinder)
+	// toPosition, fromThing, toThing)
 	if (playerHandlers.onItemMoved == -1) {
 		return;
 	}
@@ -910,8 +910,8 @@ void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uin
 	tfs::lua::pushPosition(L, fromPosition);
 	tfs::lua::pushPosition(L, toPosition);
 
-	tfs::lua::pushCylinder(L, fromCylinder);
-	tfs::lua::pushCylinder(L, toCylinder);
+	tfs::lua::pushThing(L, fromThing);
+	tfs::lua::pushThing(L, toThing);
 
 	scriptInterface.callVoidFunction(7);
 }

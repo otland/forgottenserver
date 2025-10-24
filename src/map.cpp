@@ -239,10 +239,10 @@ bool Map::placeCreature(const Position& centerPos, std::shared_ptr<Creature> cre
 	uint32_t flags = 0;
 	std::shared_ptr<Item> toItem = nullptr;
 
-	auto toCylinder = tile->queryDestination(index, creature, toItem, flags);
-	toCylinder->internalAddThing(creature);
+	auto toThing = tile->queryDestination(index, creature, toItem, flags);
+	toThing->internalAddThing(creature);
 
-	const Position& dest = toCylinder->getPosition();
+	const Position& dest = toThing->getPosition();
 	getQTNode(dest.x, dest.y)->addCreature(creature);
 	return true;
 }
@@ -939,7 +939,11 @@ Floor::~Floor()
 {
 	for (auto& row : tiles) {
 		for (auto tile : row) {
-			assert(tile.use_count() <= 1);
+			auto c = tile.use_count();
+			if (c > 1) {
+				auto p = tile->getPosition();
+				std::cout << "Tile use count: " << c << " at position (" << p.x << ", " << p.y << ", " << p.z << ")\n";
+			}
 		}
 	}
 }

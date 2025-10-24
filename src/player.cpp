@@ -2633,9 +2633,9 @@ ReturnValue Player::queryAdd(int32_t index, std::shared_ptr<const Thing> thing, 
 	auto inventoryItem = getInventoryItem(static_cast<slots_t>(index));
 	if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 		if (!getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
-			auto cylinder = item->getTopParent();
-			if (cylinder && (std::dynamic_pointer_cast<const DepotChest>(cylinder) ||
-			                 std::dynamic_pointer_cast<const Player>(cylinder))) {
+			auto topParent = item->getTopParent();
+			if (topParent && (std::dynamic_pointer_cast<const DepotChest>(topParent) ||
+			                  std::dynamic_pointer_cast<const Player>(topParent))) {
 				return RETURNVALUE_NEEDEXCHANGE;
 			}
 			return RETURNVALUE_NOTENOUGHROOM;
@@ -2864,11 +2864,11 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, std::shared_ptr<
 		destItem = destThing->getItem();
 	}
 
-	auto subCylinder = destThing->getContainer();
-	if (subCylinder) {
+	auto container = destThing->getContainer();
+	if (container) {
 		index = INDEX_WHEREEVER;
 		destItem = nullptr;
-		return subCylinder;
+		return container;
 	}
 	return getPlayer();
 }
