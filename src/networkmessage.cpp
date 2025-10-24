@@ -46,7 +46,7 @@ void NetworkMessage::addString(std::string_view value)
 	std::string latin1Str;
 	try {
 		latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
-		                                               boost::locale::conv::skip);
+		                                                boost::locale::conv::skip);
 	} catch (const boost::locale::conv::conversion_error&) {
 		return;
 	}
