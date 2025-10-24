@@ -126,7 +126,7 @@ void Monster::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
 		lua_State* L = scriptInterface->getLuaState();
 		scriptInterface->pushFunction(mType->info.creatureAppearEvent);
 
-		tfs::lua::pushUserdata(L, this);
+		tfs::lua::pushSharedPtr(L, getMonster());
 		tfs::lua::setMetatable(L, -1, "Monster");
 
 		tfs::lua::pushSharedPtr(L, creature);
@@ -168,7 +168,7 @@ void Monster::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout
 		lua_State* L = scriptInterface->getLuaState();
 		scriptInterface->pushFunction(mType->info.creatureDisappearEvent);
 
-		tfs::lua::pushUserdata(L, this);
+		tfs::lua::pushSharedPtr(L, getMonster());
 		tfs::lua::setMetatable(L, -1, "Monster");
 
 		tfs::lua::pushSharedPtr(L, creature);
@@ -210,7 +210,7 @@ void Monster::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr
 		lua_State* L = scriptInterface->getLuaState();
 		scriptInterface->pushFunction(mType->info.creatureMoveEvent);
 
-		tfs::lua::pushUserdata(L, this);
+		tfs::lua::pushSharedPtr(L, getMonster());
 		tfs::lua::setMetatable(L, -1, "Monster");
 
 		tfs::lua::pushSharedPtr(L, creature);
@@ -292,7 +292,7 @@ void Monster::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses typ
 		lua_State* L = scriptInterface->getLuaState();
 		scriptInterface->pushFunction(mType->info.creatureSayEvent);
 
-		tfs::lua::pushUserdata(L, this);
+		tfs::lua::pushSharedPtr(L, getMonster());
 		tfs::lua::setMetatable(L, -1, "Monster");
 
 		tfs::lua::pushSharedPtr(L, creature);
@@ -733,7 +733,7 @@ void Monster::onThink(uint32_t interval)
 		lua_State* L = scriptInterface->getLuaState();
 		scriptInterface->pushFunction(mType->info.thinkEvent);
 
-		tfs::lua::pushUserdata(L, this);
+		tfs::lua::pushSharedPtr(L, getMonster());
 		tfs::lua::setMetatable(L, -1, "Monster");
 
 		lua_pushnumber(L, interval);

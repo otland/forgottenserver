@@ -151,7 +151,7 @@ bool ChatChannel::executeCanJoinEvent(std::shared_ptr<const Player> player)
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(canJoinEvent);
-	tfs::lua::pushUserdata(L, &player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface->callFunction(1);
@@ -176,7 +176,7 @@ bool ChatChannel::executeOnJoinEvent(std::shared_ptr<const Player> player)
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(onJoinEvent);
-	tfs::lua::pushUserdata(L, &player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface->callFunction(1);
@@ -201,7 +201,7 @@ bool ChatChannel::executeOnLeaveEvent(std::shared_ptr<const Player> player)
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(onLeaveEvent);
-	tfs::lua::pushUserdata(L, &player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	return scriptInterface->callFunction(1);
@@ -227,7 +227,7 @@ bool ChatChannel::executeOnSpeakEvent(std::shared_ptr<const Player> player, Spea
 	lua_State* L = scriptInterface->getLuaState();
 
 	scriptInterface->pushFunction(onSpeakEvent);
-	tfs::lua::pushUserdata(L, &player);
+	tfs::lua::pushSharedPtr(L, player);
 	tfs::lua::setMetatable(L, -1, "Player");
 
 	lua_pushnumber(L, type);

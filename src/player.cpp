@@ -44,7 +44,7 @@ Player::Player(ProtocolGame_ptr p) :
     client(std::move(p)),
     storeInbox(std::make_shared<StoreInbox>(ITEM_STORE_INBOX))
 {
-	storeInbox->setParent(getPlayer());
+	// storeInbox->setParent(shared_from_this());
 }
 
 Player::~Player()

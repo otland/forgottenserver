@@ -1216,7 +1216,7 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromCylinder, std::sha
 		uint32_t allowedCount = 0;
 
 		// when item is moved onto another equal item
-		if (*item == *toItem && moveCount != ITEM_STACK_SIZE) {
+		if (toItem && *item == *toItem && moveCount != ITEM_STACK_SIZE) {
 			allowedCount = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), moveCount);
 			if (allowedCount > 0) {
 				fromCylinder->removeThing(item, allowedCount);
@@ -1341,7 +1341,7 @@ ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toCylinder, std::shared
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (item->isStackable() && *item == *toItem) {
+	if (item->isStackable() && toItem && *item == *toItem) {
 		uint32_t m = std::min<uint32_t>(item->getItemCount(), maxQueryCount);
 		uint32_t n = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), m);
 

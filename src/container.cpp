@@ -360,7 +360,7 @@ ReturnValue Container::queryMaxCount(int32_t index, std::shared_ptr<const Thing>
 			}
 		} else {
 			auto destItem = getItemByIndex(index);
-			if (*item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
+			if (destItem && *item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
 					n = ITEM_STACK_SIZE - destItem->getItemCount();
 				}

@@ -257,7 +257,7 @@ void Item::setID(uint16_t newid)
 std::shared_ptr<Thing> Item::getTopParent()
 {
 	auto aux = getParent();
-	auto prevaux = shared_from_this();
+	std::shared_ptr<Thing> prevaux = nullptr;
 	if (!aux) {
 		return prevaux;
 	}
