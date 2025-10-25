@@ -37,8 +37,6 @@ Creature::~Creature()
 	for (auto condition : conditions) {
 		delete condition;
 	}
-
-	releaseFollowers();
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
