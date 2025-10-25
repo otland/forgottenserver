@@ -41,14 +41,14 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
-void NetworkMessage::addString(std::string_view value)
+void NetworkMessage::addString(const std::string_view& value)
 {
-	std::string latin1Str;
+	std::string latin1Str{};
 	try {
 		latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
 		                                                boost::locale::conv::skip);
-	} catch (const boost::locale::conv::conversion_error&) {
-		return;
+	} catch (const boost::locale::conv::conversion_error& e) {
+		std::clog << "Failed to convert string to ISO-8859-1: " << e.what() << ", will add an empty string as padding" << std::endl;
 	}
 
 	size_t stringLen = latin1Str.size();
