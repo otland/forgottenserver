@@ -202,8 +202,7 @@ void BedItem::regeneratePlayer(Player* player) const
 {
 	const uint32_t sleptTime = time(nullptr) - sleepStart;
 
-	Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT);
-	if (condition) {
+	if (const auto& condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT)) {
 		uint32_t regen;
 		if (condition->getTicks() != -1) {
 			regen = std::min<int32_t>((condition->getTicks() / 1000), sleptTime) / 30;

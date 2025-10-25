@@ -8492,9 +8492,9 @@ int LuaScriptInterface::luaCreatureGetCondition(lua_State* L)
 	ConditionId_t conditionId = tfs::lua::getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
 	uint32_t subId = tfs::lua::getNumber<uint32_t>(L, 4, 0);
 
-	Condition* condition = creature->getCondition(conditionType, conditionId, subId);
+	const auto& condition = creature->getCondition(conditionType, conditionId, subId);
 	if (condition) {
-		tfs::lua::pushUserdata(L, condition);
+		pushSharedPtr(L, condition);
 		setWeakMetatable(L, -1, "Condition");
 	} else {
 		lua_pushnil(L);
@@ -8506,7 +8506,7 @@ int LuaScriptInterface::luaCreatureAddCondition(lua_State* L)
 {
 	// creature:addCondition(condition[, force = false])
 	Creature* creature = tfs::lua::getUserdata<Creature>(L, 1);
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 2);
+	const auto& condition = getSharedPtr<Condition>(L, 2);
 	if (creature && condition) {
 		bool force = tfs::lua::getBoolean(L, 3, false);
 		tfs::lua::pushBoolean(L, creature->addCondition(condition->clone(), force));
@@ -8526,11 +8526,11 @@ int LuaScriptInterface::luaCreatureRemoveCondition(lua_State* L)
 		return 1;
 	}
 
-	Condition* creatureCondition = nullptr;
+	std::shared_ptr<Condition> creatureCondition;
 	bool force = false;
 
 	if (lua_isuserdata(L, 2)) {
-		const Condition* const condition = tfs::lua::getUserdata<Condition>(L, 2);
+		const auto& condition = getSharedPtr<Condition>(L, 2);
 		const ConditionType_t conditionType = condition->getType();
 		const ConditionId_t conditionId = condition->getId();
 		const uint32_t subId = condition->getSubId();
@@ -8579,7 +8579,7 @@ int LuaScriptInterface::luaCreatureIsImmune(lua_State* L)
 
 	if (isNumber(L, 2)) {
 		tfs::lua::pushBoolean(L, creature->isImmune(tfs::lua::getNumber<ConditionType_t>(L, 2)));
-	} else if (Condition* condition = tfs::lua::getUserdata<Condition>(L, 2)) {
+	} else if (const auto& condition = getSharedPtr<Condition>(L, 2)) {
 		tfs::lua::pushBoolean(L, creature->isImmune(condition->getType()));
 	} else {
 		lua_pushnil(L);
@@ -13997,7 +13997,7 @@ int LuaScriptInterface::luaCombatAddCondition(lua_State* L)
 		return 1;
 	}
 
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 2);
+	const auto& condition = getSharedPtr<Condition>(L, 2);
 	if (condition) {
 		combat->addCondition(condition->clone());
 		tfs::lua::pushBoolean(L, true);
@@ -14149,9 +14149,8 @@ int LuaScriptInterface::luaConditionCreate(lua_State* L)
 	ConditionType_t conditionType = tfs::lua::getNumber<ConditionType_t>(L, 2);
 	ConditionId_t conditionId = tfs::lua::getNumber<ConditionId_t>(L, 3, CONDITIONID_COMBAT);
 
-	Condition* condition = Condition::createCondition(conditionId, conditionType, 0, 0);
-	if (condition) {
-		tfs::lua::pushUserdata(L, condition);
+	if (auto condition = Condition::createCondition(conditionId, conditionType, 0, 0)) {
+		pushSharedPtr(L, condition);
 		tfs::lua::setMetatable(L, -1, "Condition");
 	} else {
 		lua_pushnil(L);
@@ -14162,10 +14161,9 @@ int LuaScriptInterface::luaConditionCreate(lua_State* L)
 int LuaScriptInterface::luaConditionDelete(lua_State* L)
 {
 	// condition:delete()
-	Condition** conditionPtr = tfs::lua::getRawUserdata<Condition>(L, 1);
-	if (conditionPtr && *conditionPtr) {
-		delete *conditionPtr;
-		*conditionPtr = nullptr;
+	auto& condition = getSharedPtr<Condition>(L, 1);
+	if (condition) {
+		condition.reset();
 	}
 	return 0;
 }
@@ -14173,7 +14171,7 @@ int LuaScriptInterface::luaConditionDelete(lua_State* L)
 int LuaScriptInterface::luaConditionGetId(lua_State* L)
 {
 	// condition:getId()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getId());
 	} else {
@@ -14185,7 +14183,7 @@ int LuaScriptInterface::luaConditionGetId(lua_State* L)
 int LuaScriptInterface::luaConditionGetSubId(lua_State* L)
 {
 	// condition:getSubId()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getSubId());
 	} else {
@@ -14197,7 +14195,7 @@ int LuaScriptInterface::luaConditionGetSubId(lua_State* L)
 int LuaScriptInterface::luaConditionGetType(lua_State* L)
 {
 	// condition:getType()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getType());
 	} else {
@@ -14209,7 +14207,7 @@ int LuaScriptInterface::luaConditionGetType(lua_State* L)
 int LuaScriptInterface::luaConditionGetIcons(lua_State* L)
 {
 	// condition:getIcons()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getIcons());
 	} else {
@@ -14221,7 +14219,7 @@ int LuaScriptInterface::luaConditionGetIcons(lua_State* L)
 int LuaScriptInterface::luaConditionGetEndTime(lua_State* L)
 {
 	// condition:getEndTime()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getEndTime());
 	} else {
@@ -14233,9 +14231,9 @@ int LuaScriptInterface::luaConditionGetEndTime(lua_State* L)
 int LuaScriptInterface::luaConditionClone(lua_State* L)
 {
 	// condition:clone()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
-		tfs::lua::pushUserdata(L, condition->clone());
+		pushSharedPtr(L, condition->clone());
 		tfs::lua::setMetatable(L, -1, "Condition");
 	} else {
 		lua_pushnil(L);
@@ -14246,7 +14244,7 @@ int LuaScriptInterface::luaConditionClone(lua_State* L)
 int LuaScriptInterface::luaConditionGetTicks(lua_State* L)
 {
 	// condition:getTicks()
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		lua_pushnumber(L, condition->getTicks());
 	} else {
@@ -14259,7 +14257,7 @@ int LuaScriptInterface::luaConditionSetTicks(lua_State* L)
 {
 	// condition:setTicks(ticks)
 	int32_t ticks = tfs::lua::getNumber<int32_t>(L, 2);
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (condition) {
 		condition->setTicks(ticks);
 		tfs::lua::pushBoolean(L, true);
@@ -14272,7 +14270,7 @@ int LuaScriptInterface::luaConditionSetTicks(lua_State* L)
 int LuaScriptInterface::luaConditionSetParameter(lua_State* L)
 {
 	// condition:setParameter(key, value)
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (!condition) {
 		lua_pushnil(L);
 		return 1;
@@ -14293,7 +14291,7 @@ int LuaScriptInterface::luaConditionSetParameter(lua_State* L)
 int LuaScriptInterface::luaConditionGetParameter(lua_State* L)
 {
 	// condition:getParameter(key)
-	Condition* condition = tfs::lua::getUserdata<Condition>(L, 1);
+	const auto& condition = getSharedPtr<Condition>(L, 1);
 	if (!condition) {
 		lua_pushnil(L);
 		return 1;
@@ -14316,7 +14314,7 @@ int LuaScriptInterface::luaConditionSetFormula(lua_State* L)
 	double maxa = tfs::lua::getNumber<double>(L, 4);
 	double minb = tfs::lua::getNumber<double>(L, 3);
 	double mina = tfs::lua::getNumber<double>(L, 2);
-	ConditionSpeed* condition = dynamic_cast<ConditionSpeed*>(tfs::lua::getUserdata<Condition>(L, 1));
+	auto condition = std::dynamic_pointer_cast<ConditionSpeed>(getSharedPtr<Condition>(L, 1));
 	if (condition) {
 		condition->setFormulaVars(mina, minb, maxa, maxb);
 		tfs::lua::pushBoolean(L, true);
@@ -14344,7 +14342,7 @@ int LuaScriptInterface::luaConditionSetOutfit(lua_State* L)
 		outfit.lookTypeEx = tfs::lua::getNumber<uint16_t>(L, 2);
 	}
 
-	ConditionOutfit* condition = dynamic_cast<ConditionOutfit*>(tfs::lua::getUserdata<Condition>(L, 1));
+	auto condition = std::dynamic_pointer_cast<ConditionOutfit>(getSharedPtr<Condition>(L, 1));
 	if (condition) {
 		condition->setOutfit(outfit);
 		tfs::lua::pushBoolean(L, true);
@@ -14360,7 +14358,7 @@ int LuaScriptInterface::luaConditionAddDamage(lua_State* L)
 	int32_t value = tfs::lua::getNumber<int32_t>(L, 4);
 	int32_t time = tfs::lua::getNumber<int32_t>(L, 3);
 	int32_t rounds = tfs::lua::getNumber<int32_t>(L, 2);
-	ConditionDamage* condition = dynamic_cast<ConditionDamage*>(tfs::lua::getUserdata<Condition>(L, 1));
+	auto condition = std::dynamic_pointer_cast<ConditionDamage>(getSharedPtr<Condition>(L, 1));
 	if (condition) {
 		tfs::lua::pushBoolean(L, condition->addDamage(rounds, time, value));
 	} else {
