@@ -720,9 +720,8 @@ void Monster::updateIdleStatus()
 	bool idle = false;
 	if (!isSummon() && targetList.empty()) {
 		// check if there are aggressive conditions
-		idle = std::find_if(conditions.begin(), conditions.end(), [](const std::shared_ptr<Condition>& condition) {
-			       return condition->isAggressive();
-		       }) == conditions.end();
+		idle = std::any_of(conditions.begin(), conditions.end(),
+		                   [](const std::shared_ptr<Condition>& condition) { return condition->isAggressive(); });
 	}
 
 	setIdle(idle);

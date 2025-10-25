@@ -1506,9 +1506,9 @@ bool FrozenPathingConditionCall::operator()(const Position& startPos, const Posi
 
 bool Creature::isInvisible() const
 {
-	return std::find_if(conditions.begin(), conditions.end(), [](const std::shared_ptr<Condition>& condition) {
-		       return condition->getType() == CONDITION_INVISIBLE;
-	       }) != conditions.end();
+	return std::any_of(conditions.begin(), conditions.end(), [](const std::shared_ptr<Condition>& condition) {
+		return condition->getType() == CONDITION_INVISIBLE;
+	});
 }
 
 bool Creature::getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const
