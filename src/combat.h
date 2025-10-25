@@ -41,7 +41,7 @@ public:
 
 struct CombatParams
 {
-	std::forward_list<std::shared_ptr<const Condition>> conditions = {};
+	std::vector<std::shared_ptr<const Condition>> conditions = {};
 
 	std::unique_ptr<ValueCallback> valueCallback = nullptr;
 	std::unique_ptr<TileCallback> tileCallback = nullptr;
@@ -117,7 +117,7 @@ public:
 	bool hasArea() const { return area != nullptr; }
 	void addCondition(std::shared_ptr<const Condition> condition)
 	{
-		params.conditions.emplace_front(std::move(condition));
+		params.conditions.push_back(std::move(condition));
 	}
 	void clearConditions() { params.conditions.clear(); }
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
