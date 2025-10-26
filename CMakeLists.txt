@@ -12,6 +12,7 @@ if (DEFINED ENV{VCPKG_DEFAULT_TRIPLET} AND NOT DEFINED VCPKG_TARGET_TRIPLET)
 endif()
 
 set(BOOST_REQUIRED_VERSION 1.71.0)
+set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
 option(HTTP "Enable HTTP support" ON)
 if (HTTP)
@@ -23,6 +24,13 @@ endif()
 option(BUILD_TESTING "Build unit tests" OFF)
 if (BUILD_TESTING)
     list(APPEND VCPKG_MANIFEST_FEATURES "unit-tests")
+endif()
+
+option(USE_LIBMYSQL "Use libmysql instead of libmariadb (vcpkg only)" OFF)
+if (USE_LIBMYSQL)
+    list(APPEND VCPKG_MANIFEST_FEATURES "libmysql")
+else()
+    list(APPEND VCPKG_MANIFEST_FEATURES "libmariadb")
 endif()
 
 option(USE_LUAJIT "Use LuaJIT" OFF)
@@ -59,12 +67,22 @@ if (NOT fmt_FOUND)
     find_package(fmt 8.1.1 REQUIRED)
 endif()
 
-# Look for vcpkg-provided libmariadb first
+# Look for vcpkg-provided packages first
 # If we link to the file directly, we might miss its dependencies from vcpkg
-find_package(unofficial-libmariadb CONFIG)
-if (unofficial-libmariadb_FOUND)
-    set(MYSQL_CLIENT_LIBS "unofficial::libmariadb")
+if (USE_LIBMYSQL)
+    find_package(unofficial-libmysql CONFIG)
+    if (unofficial-libmysql_FOUND)
+        set(MYSQL_CLIENT_LIBS "unofficial::libmysql::libmysql")
+    endif ()
 else ()
+    find_package(unofficial-libmariadb CONFIG)
+    if (unofficial-libmariadb_FOUND)
+        set(MYSQL_CLIENT_LIBS "unofficial::libmariadb")
+    endif ()
+endif ()
+
+if (NOT MYSQL_CLIENT_LIBS)
+    message(STATUS "Using MySQL client library from system")
     find_package(MySQL REQUIRED)
 endif ()
 
