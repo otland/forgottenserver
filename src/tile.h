@@ -123,14 +123,9 @@ public:
 	Tile(const Tile&) = delete;
 	Tile& operator=(const Tile&) = delete;
 
-	std::shared_ptr<Tile> getTile() override final
-	{
-		assert(std::dynamic_pointer_cast<Tile>(shared_from_this()) != nullptr);
-		return std::static_pointer_cast<Tile>(shared_from_this());
-	}
+	std::shared_ptr<Tile> getTile() override final { return std::static_pointer_cast<Tile>(shared_from_this()); }
 	std::shared_ptr<const Tile> getTile() const override final
 	{
-		assert(std::dynamic_pointer_cast<const Tile>(shared_from_this()) != nullptr);
 		return std::static_pointer_cast<const Tile>(shared_from_this());
 	}
 

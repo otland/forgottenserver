@@ -11,15 +11,10 @@ class Podium final : public Item
 public:
 	explicit Podium(uint16_t type) : Item(type) {};
 
-	std::shared_ptr<Podium> getPodium() override
-	{
-		assert(std::dynamic_pointer_cast<Podium>(getItem()) != nullptr);
-		return std::static_pointer_cast<Podium>(getItem());
-	}
+	std::shared_ptr<Podium> getPodium() override { return std::static_pointer_cast<Podium>(shared_from_this()); }
 	std::shared_ptr<const Podium> getPodium() const override
 	{
-		assert(std::dynamic_pointer_cast<const Podium>(getItem()) != nullptr);
-		return std::static_pointer_cast<const Podium>(getItem());
+		return std::static_pointer_cast<const Podium>(shared_from_this());
 	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;

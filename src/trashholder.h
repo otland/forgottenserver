@@ -13,13 +13,11 @@ public:
 
 	std::shared_ptr<TrashHolder> getTrashHolder() override
 	{
-		assert(std::dynamic_pointer_cast<TrashHolder>(Item::getItem()) != nullptr);
-		return std::static_pointer_cast<TrashHolder>(Item::getItem());
+		return std::static_pointer_cast<TrashHolder>(shared_from_this());
 	}
 	std::shared_ptr<const TrashHolder> getTrashHolder() const override
 	{
-		assert(std::dynamic_pointer_cast<const TrashHolder>(Item::getItem()) != nullptr);
-		return std::static_pointer_cast<const TrashHolder>(Item::getItem());
+		return std::static_pointer_cast<const TrashHolder>(shared_from_this());
 	}
 
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

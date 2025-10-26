@@ -24,13 +24,11 @@ public:
 
 	std::shared_ptr<DepotLocker> getDepotLocker() override
 	{
-		assert(std::dynamic_pointer_cast<DepotLocker>(getContainer()) != nullptr);
-		return std::static_pointer_cast<DepotLocker>(getContainer());
+		return std::static_pointer_cast<DepotLocker>(shared_from_this());
 	}
 	std::shared_ptr<const DepotLocker> getDepotLocker() const override
 	{
-		assert(std::dynamic_pointer_cast<const DepotLocker>(getContainer()) != nullptr);
-		return std::static_pointer_cast<const DepotLocker>(getContainer());
+		return std::static_pointer_cast<const DepotLocker>(shared_from_this());
 	}
 
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

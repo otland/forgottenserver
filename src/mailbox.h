@@ -11,14 +11,9 @@ class Mailbox final : public Item
 public:
 	explicit Mailbox(uint16_t itemId) : Item(itemId) {}
 
-	std::shared_ptr<Mailbox> getMailbox() override
-	{
-		assert(std::dynamic_pointer_cast<Mailbox>(shared_from_this()) != nullptr);
-		return std::static_pointer_cast<Mailbox>(shared_from_this());
-	}
+	std::shared_ptr<Mailbox> getMailbox() override { return std::static_pointer_cast<Mailbox>(shared_from_this()); }
 	std::shared_ptr<const Mailbox> getMailbox() const override
 	{
-		assert(std::dynamic_pointer_cast<const Mailbox>(shared_from_this()) != nullptr);
 		return std::static_pointer_cast<const Mailbox>(shared_from_this());
 	}
 

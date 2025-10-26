@@ -14,15 +14,10 @@ class BedItem final : public Item
 public:
 	explicit BedItem(uint16_t id);
 
-	std::shared_ptr<BedItem> getBed() override
-	{
-		assert(std::dynamic_pointer_cast<BedItem>(getItem()) != nullptr);
-		return std::static_pointer_cast<BedItem>(getItem());
-	}
+	std::shared_ptr<BedItem> getBed() override { return std::static_pointer_cast<BedItem>(shared_from_this()); }
 	std::shared_ptr<const BedItem> getBed() const override
 	{
-		assert(std::dynamic_pointer_cast<const BedItem>(getItem()) != nullptr);
-		return std::static_pointer_cast<const BedItem>(getItem());
+		return std::static_pointer_cast<const BedItem>(shared_from_this());
 	}
 
 	Attr_ReadValue readAttr(AttrTypes_t attr, PropStream& propStream) override;

@@ -39,15 +39,10 @@ public:
 	Monster(const Monster&) = delete;
 	Monster& operator=(const Monster&) = delete;
 
-	std::shared_ptr<Monster> getMonster() override
-	{
-		assert(std::dynamic_pointer_cast<Monster>(getCreature()) != nullptr);
-		return std::static_pointer_cast<Monster>(getCreature());
-	}
+	std::shared_ptr<Monster> getMonster() override { return std::static_pointer_cast<Monster>(shared_from_this()); }
 	std::shared_ptr<const Monster> getMonster() const override
 	{
-		assert(std::dynamic_pointer_cast<const Monster>(getCreature()) != nullptr);
-		return std::static_pointer_cast<const Monster>(getCreature());
+		return std::static_pointer_cast<const Monster>(shared_from_this());
 	}
 
 	void setID() override

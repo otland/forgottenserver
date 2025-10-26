@@ -152,13 +152,11 @@ public:
 
 	std::shared_ptr<MagicField> getMagicField() override
 	{
-		assert(std::dynamic_pointer_cast<MagicField>(getItem()) != nullptr);
-		return std::static_pointer_cast<MagicField>(getItem());
+		return std::static_pointer_cast<MagicField>(shared_from_this());
 	}
 	std::shared_ptr<const MagicField> getMagicField() const override
 	{
-		assert(std::dynamic_pointer_cast<const MagicField>(getItem()) != nullptr);
-		return std::static_pointer_cast<const MagicField>(getItem());
+		return std::static_pointer_cast<const MagicField>(shared_from_this());
 	}
 
 	bool isReplaceable() const { return Item::items[getID()].replaceable; }

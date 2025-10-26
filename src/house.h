@@ -42,15 +42,10 @@ public:
 	Door(const Door&) = delete;
 	Door& operator=(const Door&) = delete;
 
-	std::shared_ptr<Door> getDoor() override
-	{
-		assert(std::dynamic_pointer_cast<Door>(getItem()) != nullptr);
-		return std::static_pointer_cast<Door>(getItem());
-	}
+	std::shared_ptr<Door> getDoor() override { return std::static_pointer_cast<Door>(shared_from_this()); }
 	std::shared_ptr<const Door> getDoor() const override
 	{
-		assert(std::dynamic_pointer_cast<const Door>(getItem()) != nullptr);
-		return std::static_pointer_cast<const Door>(getItem());
+		return std::static_pointer_cast<const Door>(shared_from_this());
 	}
 
 	House* getHouse() { return house; }

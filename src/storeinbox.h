@@ -13,13 +13,11 @@ public:
 
 	std::shared_ptr<StoreInbox> getStoreInbox() override
 	{
-		assert(std::dynamic_pointer_cast<StoreInbox>(getContainer()) != nullptr);
-		return std::static_pointer_cast<StoreInbox>(getContainer());
+		return std::static_pointer_cast<StoreInbox>(shared_from_this());
 	}
 	std::shared_ptr<const StoreInbox> getStoreInbox() const override
 	{
-		assert(std::dynamic_pointer_cast<const StoreInbox>(getContainer()) != nullptr);
-		return std::static_pointer_cast<const StoreInbox>(getContainer());
+		return std::static_pointer_cast<const StoreInbox>(shared_from_this());
 	}
 
 	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,

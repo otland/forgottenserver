@@ -42,13 +42,11 @@ public:
 
 	std::shared_ptr<Container> getContainer() override final
 	{
-		assert(std::dynamic_pointer_cast<Container>(Item::getItem()) != nullptr);
-		return std::static_pointer_cast<Container>(Item::getItem());
+		return std::static_pointer_cast<Container>(shared_from_this());
 	}
 	std::shared_ptr<const Container> getContainer() const override final
 	{
-		assert(std::dynamic_pointer_cast<const Container>(Item::getItem()) != nullptr);
-		return std::static_pointer_cast<const Container>(Item::getItem());
+		return std::static_pointer_cast<const Container>(shared_from_this());
 	}
 
 	virtual std::shared_ptr<DepotLocker> getDepotLocker() { return nullptr; }
