@@ -105,7 +105,7 @@ public:
 	void addBytes(const char* bytes, size_t size);
 	void addPaddingBytes(size_t n);
 
-	void addString(const std::string_view& value);
+	void addString(std::string_view value);
 
 	void addDouble(double value, uint8_t precision = 2);
 

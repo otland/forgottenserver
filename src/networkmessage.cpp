@@ -41,7 +41,7 @@ Position NetworkMessage::getPosition()
 	return pos;
 }
 
-void NetworkMessage::addString(const std::string_view& value)
+void NetworkMessage::addString(std::string_view value)
 {
 	std::string latin1Str{};
 	try {
