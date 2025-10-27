@@ -23,9 +23,13 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 	auto it = buffer.data() + info.position;
 	info.position += stringLen;
 
-	std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
-	return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
-	                                         boost::locale::conv::skip);
+	try {
+		std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
+		return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
+		                                         boost::locale::conv::skip);
+	} catch (const boost::locale::conv::conversion_error&) {
+		return {};
+	}
 }
 
 Position NetworkMessage::getPosition()
@@ -39,8 +43,15 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
-	                                                            boost::locale::conv::skip);
+	std::string latin1Str{};
+	try {
+		latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
+		                                                boost::locale::conv::skip);
+	} catch (const boost::locale::conv::conversion_error& e) {
+		std::cerr << "Failed to convert string to ISO-8859-1: " << e.what() << ", will add an empty string as padding"
+		          << std::endl;
+	}
+
 	size_t stringLen = latin1Str.size();
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
