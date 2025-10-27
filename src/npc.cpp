@@ -234,7 +234,7 @@ void Npc::goToFollowCreature()
 	updateFollowCreaturePath(fpp);
 }
 
-void Npc::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
+void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
@@ -256,7 +256,7 @@ void Npc::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	} else if (const std::shared_ptr<Player>& player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
@@ -266,7 +266,7 @@ void Npc::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
 	}
 }
 
-void Npc::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
+void Npc::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout)
 {
 	Creature::onRemoveCreature(creature, isLogout);
 
@@ -275,7 +275,7 @@ void Npc::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (std::shared_ptr<Player> player = creature->getPlayer()) {
+	} else if (const std::shared_ptr<Player>& player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
@@ -285,8 +285,8 @@ void Npc::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
 	}
 }
 
-void Npc::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile,
-                         const Position& newPos, std::shared_ptr<const Tile> oldTile, const Position& oldPos,
+void Npc::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+                         const Position& newPos, const std::shared_ptr<const Tile>& oldTile, const Position& oldPos,
                          bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -311,7 +311,7 @@ void Npc::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<con
 	}
 }
 
-void Npc::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text)
+void Npc::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type, const std::string& text)
 {
 	if (creature.get() == this) {
 		return;
@@ -326,7 +326,7 @@ void Npc::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, c
 	}
 }
 
-void Npc::onPlayerCloseChannel(std::shared_ptr<Player> player)
+void Npc::onPlayerCloseChannel(const std::shared_ptr<Player>& player)
 {
 	if (npcEventHandler) {
 		npcEventHandler->onPlayerCloseChannel(player);
@@ -348,7 +348,7 @@ void Npc::onThink(uint32_t interval)
 
 void Npc::doSay(const std::string& text) { g_game.internalCreatureSay(getNpc(), TALKTYPE_SAY, text, false); }
 
-void Npc::doSayToPlayer(std::shared_ptr<Player> player, const std::string& text)
+void Npc::doSayToPlayer(const std::shared_ptr<Player>& player, const std::string& text)
 {
 	if (player) {
 		player->sendCreatureSay(getNpc(), TALKTYPE_PRIVATE_NP, text);
@@ -356,7 +356,7 @@ void Npc::doSayToPlayer(std::shared_ptr<Player> player, const std::string& text)
 	}
 }
 
-void Npc::onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
+void Npc::onPlayerTrade(const std::shared_ptr<Player>& player, int32_t callback, uint16_t itemId, uint8_t count,
                         uint16_t amount, bool ignore /* = false*/, bool inBackpacks /* = false*/)
 {
 	if (npcEventHandler) {
@@ -365,7 +365,7 @@ void Npc::onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16
 	player->sendSaleItemList();
 }
 
-void Npc::onPlayerEndTrade(std::shared_ptr<Player> player, int32_t buyCallback, int32_t sellCallback)
+void Npc::onPlayerEndTrade(const std::shared_ptr<Player>& player, int32_t buyCallback, int32_t sellCallback)
 {
 	lua_State* L = getScriptInterface()->getLuaState();
 
@@ -472,7 +472,7 @@ bool Npc::doMoveTo(const Position& pos, int32_t minTargetDist /* = 1*/, int32_t 
 	return false;
 }
 
-void Npc::turnToCreature(std::shared_ptr<Creature> creature)
+void Npc::turnToCreature(const std::shared_ptr<Creature>& creature)
 {
 	const Position& creaturePos = creature->getPosition();
 	const Position& myPos = getPosition();
@@ -503,7 +503,7 @@ void Npc::turnToCreature(std::shared_ptr<Creature> creature)
 	g_game.internalCreatureTurn(getNpc(), dir);
 }
 
-void Npc::setCreatureFocus(std::shared_ptr<Creature> creature)
+void Npc::setCreatureFocus(const std::shared_ptr<Creature>& creature)
 {
 	if (creature) {
 		focusCreature = creature->getID();
@@ -513,9 +513,9 @@ void Npc::setCreatureFocus(std::shared_ptr<Creature> creature)
 	}
 }
 
-void Npc::addShopPlayer(std::shared_ptr<Player> player) { shopPlayerSet.insert(player); }
+void Npc::addShopPlayer(const std::shared_ptr<Player>& player) { shopPlayerSet.insert(player); }
 
-void Npc::removeShopPlayer(std::shared_ptr<Player> player) { shopPlayerSet.erase(player); }
+void Npc::removeShopPlayer(const std::shared_ptr<Player>& player) { shopPlayerSet.erase(player); }
 
 void Npc::closeAllShopWindows()
 {
@@ -955,7 +955,7 @@ int NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 int NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 {
 	// npc:setFocus(creature)
-	std::shared_ptr<Creature> creature = tfs::lua::getCreature(L, 2);
+	const std::shared_ptr<Creature>& creature = tfs::lua::getCreature(L, 2);
 	auto npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (npc) {
 		npc->setCreatureFocus(creature);
@@ -1072,7 +1072,7 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 }
 
 NpcEventsHandler::NpcEventsHandler(const std::string& file, std::shared_ptr<Npc> npc) :
-    scriptInterface(std::make_unique<NpcScriptInterface>()), npc(npc)
+    scriptInterface{std::make_unique<NpcScriptInterface>()}, npc{std::move(npc)}
 {
 	if (!scriptInterface->loadNpcLib("data/npc/lib/npc.lua")) {
 		std::cout << "[Warning - NpcLib::NpcLib] Can not load lib: " << file << std::endl;
@@ -1080,7 +1080,7 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, std::shared_ptr<Npc>
 		return;
 	}
 
-	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, npc) == 0;
+	loaded = scriptInterface->loadFile("data/npc/scripts/" + file, this->npc) == 0;
 	if (!loaded) {
 		std::cout << "[Warning - NpcScript::NpcScript] Can not load script: " << file << std::endl;
 		std::cout << scriptInterface->getLastLuaError() << std::endl;
@@ -1097,7 +1097,7 @@ NpcEventsHandler::NpcEventsHandler(const std::string& file, std::shared_ptr<Npc>
 
 bool NpcEventsHandler::isLoaded() const { return loaded; }
 
-void NpcEventsHandler::onCreatureAppear(std::shared_ptr<Creature> creature)
+void NpcEventsHandler::onCreatureAppear(const std::shared_ptr<Creature>& creature)
 {
 	if (creatureAppearEvent == -1) {
 		return;
@@ -1120,7 +1120,7 @@ void NpcEventsHandler::onCreatureAppear(std::shared_ptr<Creature> creature)
 	scriptInterface->callFunction(1);
 }
 
-void NpcEventsHandler::onCreatureDisappear(std::shared_ptr<Creature> creature)
+void NpcEventsHandler::onCreatureDisappear(const std::shared_ptr<Creature>& creature)
 {
 	if (creatureDisappearEvent == -1) {
 		return;
@@ -1143,7 +1143,7 @@ void NpcEventsHandler::onCreatureDisappear(std::shared_ptr<Creature> creature)
 	scriptInterface->callFunction(1);
 }
 
-void NpcEventsHandler::onCreatureMove(std::shared_ptr<Creature> creature, const Position& oldPos,
+void NpcEventsHandler::onCreatureMove(const std::shared_ptr<Creature>& creature, const Position& oldPos,
                                       const Position& newPos)
 {
 	if (creatureMoveEvent == -1) {
@@ -1169,7 +1169,8 @@ void NpcEventsHandler::onCreatureMove(std::shared_ptr<Creature> creature, const 
 	scriptInterface->callFunction(3);
 }
 
-void NpcEventsHandler::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text)
+void NpcEventsHandler::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type,
+                                     const std::string& text)
 {
 	if (creatureSayEvent == -1) {
 		return;
@@ -1194,8 +1195,8 @@ void NpcEventsHandler::onCreatureSay(std::shared_ptr<Creature> creature, SpeakCl
 	scriptInterface->callFunction(3);
 }
 
-void NpcEventsHandler::onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
-                                     uint16_t amount, bool ignore, bool inBackpacks)
+void NpcEventsHandler::onPlayerTrade(const std::shared_ptr<Player>& player, int32_t callback, uint16_t itemId,
+                                     uint8_t count, uint16_t amount, bool ignore, bool inBackpacks)
 {
 	if (callback == -1) {
 		return;
@@ -1223,7 +1224,7 @@ void NpcEventsHandler::onPlayerTrade(std::shared_ptr<Player> player, int32_t cal
 	scriptInterface->callFunction(6);
 }
 
-void NpcEventsHandler::onPlayerCloseChannel(std::shared_ptr<Player> player)
+void NpcEventsHandler::onPlayerCloseChannel(const std::shared_ptr<Player>& player)
 {
 	if (playerCloseChannelEvent == -1) {
 		return;
@@ -1246,7 +1247,7 @@ void NpcEventsHandler::onPlayerCloseChannel(std::shared_ptr<Player> player)
 	scriptInterface->callFunction(1);
 }
 
-void NpcEventsHandler::onPlayerEndTrade(std::shared_ptr<Player> player)
+void NpcEventsHandler::onPlayerEndTrade(const std::shared_ptr<Player>& player)
 {
 	if (playerEndTradeEvent == -1) {
 		return;

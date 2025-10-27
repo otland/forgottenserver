@@ -7,12 +7,8 @@
 
 #include "tools.h"
 
-DepotChest::DepotChest(uint16_t type, bool paginated /*= true*/) :
-    Container{type, items[type].maxItems, true, paginated}
-{}
-
-ReturnValue DepotChest::queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
-                                 std::shared_ptr<Creature> actor /* = nullptr*/) const
+ReturnValue DepotChest::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
+                                 uint32_t flags, const std::shared_ptr<Creature>& actor /* = nullptr*/) const
 {
 	auto item = thing->getItem();
 	if (!item) {
@@ -43,7 +39,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, std::shared_ptr<const Thing> thi
 	return Container::queryAdd(index, thing, count, flags, actor);
 }
 
-void DepotChest::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent,
+void DepotChest::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
                                      int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
@@ -52,8 +48,8 @@ void DepotChest::postAddNotification(std::shared_ptr<Thing> thing, std::shared_p
 	}
 }
 
-void DepotChest::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
-                                        int32_t index, cylinderlink_t)
+void DepotChest::postRemoveNotification(const std::shared_ptr<Thing>& thing,
+                                        const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
 	if (parent) {

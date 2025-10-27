@@ -26,9 +26,9 @@ public:
 		}
 	}
 
-	void erase(std::shared_ptr<Creature> spectator)
+	void erase(const std::shared_ptr<Creature>& spectator)
 	{
-		auto it = std::find(vec.begin(), vec.end(), std::move(spectator));
+		auto it = std::find(vec.begin(), vec.end(), spectator);
 		if (it == end()) {
 			return;
 		}

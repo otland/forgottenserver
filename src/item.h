@@ -722,7 +722,7 @@ public:
 		return items[id].decayTo;
 	}
 
-	static std::string getNameDescription(const ItemType& it, std::shared_ptr<const Item> item = nullptr,
+	static std::string getNameDescription(const ItemType& it, const std::shared_ptr<const Item>& item = nullptr,
 	                                      int32_t subType = -1, bool addArticle = true);
 	static std::string getWeightDescription(const ItemType& it, uint32_t weight, uint32_t count = 1);
 
@@ -870,7 +870,7 @@ public:
 	uint16_t getItemCount() const { return count; }
 	void setItemCount(uint8_t n) { count = n; }
 
-	static uint32_t countByType(std::shared_ptr<const Item> i, int32_t subType)
+	static uint32_t countByType(const std::shared_ptr<const Item>& i, int32_t subType)
 	{
 		if (subType == -1 || subType == i->getSubType()) {
 			return i->getItemCount();
@@ -893,7 +893,7 @@ public:
 	virtual bool canRemove() const { return true; }
 	virtual bool canTransform() const { return true; }
 	virtual void onRemoved();
-	virtual void onTradeEvent(TradeEvents_t, std::shared_ptr<Player>) {}
+	virtual void onTradeEvent(TradeEvents_t, const std::shared_ptr<Player>&) {}
 
 	virtual void startDecaying();
 
@@ -916,7 +916,7 @@ public:
 	}
 
 	std::shared_ptr<Thing> getParent() const override { return parent; }
-	void setParent(std::shared_ptr<Thing> thing) override { parent = std::move(thing); }
+	void setParent(const std::shared_ptr<Thing>& thing) override { parent = thing; }
 	std::shared_ptr<Thing> getTopParent();
 	std::shared_ptr<const Thing> getTopParent() const;
 	std::shared_ptr<Tile> getTile() override final;

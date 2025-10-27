@@ -293,7 +293,7 @@ bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* sc
 	return true;
 }
 
-uint32_t ScriptEnvironment::addThing(std::shared_ptr<Thing> thing)
+uint32_t ScriptEnvironment::addThing(const std::shared_ptr<Thing>& thing)
 {
 	if (!thing || thing->isRemoved()) {
 		return 0;
@@ -319,7 +319,7 @@ uint32_t ScriptEnvironment::addThing(std::shared_ptr<Thing> thing)
 	return lastUID;
 }
 
-void ScriptEnvironment::insertItem(uint32_t uid, std::shared_ptr<Item> item)
+void ScriptEnvironment::insertItem(uint32_t uid, const std::shared_ptr<Item>& item)
 {
 	auto result = localMap.emplace(uid, item);
 	if (!result.second) {
@@ -384,7 +384,7 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 
 static void addTempItem(std::shared_ptr<Item> item) { tempItems.emplace(tfs::lua::getScriptEnv(), std::move(item)); }
 
-void tfs::lua::removeTempItem(std::shared_ptr<Item> item)
+void tfs::lua::removeTempItem(const std::shared_ptr<Item>& item)
 {
 	std::erase_if(tempItems, [&item](const auto& pair) { return pair.second == item; });
 }
@@ -482,7 +482,7 @@ int tfs::lua::protectedCall(lua_State* L, int nargs, int nresults)
 	return ret;
 }
 
-int32_t LuaScriptInterface::loadFile(const std::string& file, std::shared_ptr<Npc> npc /* = nullptr*/)
+int32_t LuaScriptInterface::loadFile(const std::string& file, const std::shared_ptr<Npc>& npc /* = nullptr*/)
 {
 	// loads file as a chunk at stack top
 	int ret = luaL_loadfile(L, file.data());
@@ -748,7 +748,7 @@ void tfs::lua::pushVariant(lua_State* L, const LuaVariant& var)
 	setMetatable(L, -1, "Variant");
 }
 
-void tfs::lua::pushThing(lua_State* L, std::shared_ptr<Thing> thing)
+void tfs::lua::pushThing(lua_State* L, const std::shared_ptr<Thing>& thing)
 {
 	if (!thing) {
 		lua_createtable(L, 0, 4);
@@ -833,7 +833,7 @@ static void setWeakMetatable(lua_State* L, int32_t index, const std::string& nam
 	lua_setmetatable(L, index - 1);
 }
 
-void tfs::lua::setItemMetatable(lua_State* L, int32_t index, std::shared_ptr<const Item> item)
+void tfs::lua::setItemMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Item>& item)
 {
 	if (item->getContainer()) {
 		luaL_getmetatable(L, "Container");
@@ -847,7 +847,7 @@ void tfs::lua::setItemMetatable(lua_State* L, int32_t index, std::shared_ptr<con
 	lua_setmetatable(L, index - 1);
 }
 
-void tfs::lua::setCreatureMetatable(lua_State* L, int32_t index, std::shared_ptr<const Creature> creature)
+void tfs::lua::setCreatureMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Creature>& creature)
 {
 	if (creature->getPlayer()) {
 		luaL_getmetatable(L, "Player");
@@ -5923,7 +5923,7 @@ int LuaScriptInterface::luaTileAddItem(lua_State* L)
 int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
 {
 	// tile:addItemEx(item[, flags = 0])
-	auto item = tfs::lua::getSharedPtr<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
@@ -6561,13 +6561,13 @@ int LuaScriptInterface::luaItemHasParent(lua_State* L)
 int LuaScriptInterface::luaItemGetParent(lua_State* L)
 {
 	// item:getParent()
-	auto item = tfs::lua::getSharedPtr<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto parent = item->getParent();
+	const auto& parent = item->getParent();
 	if (!parent) {
 		lua_pushnil(L);
 		return 1;
@@ -6580,13 +6580,13 @@ int LuaScriptInterface::luaItemGetParent(lua_State* L)
 int LuaScriptInterface::luaItemGetTopParent(lua_State* L)
 {
 	// item:getTopParent()
-	auto item = tfs::lua::getSharedPtr<Item>(L, 1);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 1);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto topParent = item->getTopParent();
+	const auto& topParent = item->getTopParent();
 	if (!topParent) {
 		lua_pushnil(L);
 		return 1;
@@ -7527,13 +7527,13 @@ int LuaScriptInterface::luaContainerAddItem(lua_State* L)
 int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 {
 	// container:addItemEx(item[, index = INDEX_WHEREEVER[, flags = 0]])
-	auto item = tfs::lua::getSharedPtr<Item>(L, 2);
+	const auto& item = tfs::lua::getSharedPtr<Item>(L, 2);
 	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
 
-	auto container = tfs::lua::getSharedPtr<Container>(L, 1);
+	const auto& container = tfs::lua::getSharedPtr<Container>(L, 1);
 	if (!container) {
 		lua_pushnil(L);
 		return 1;

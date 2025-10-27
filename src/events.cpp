@@ -240,7 +240,7 @@ bool reload()
 
 namespace tfs::events::creature {
 
-bool onChangeOutfit(std::shared_ptr<Creature> creature, const Outfit_t& outfit)
+bool onChangeOutfit(const std::shared_ptr<Creature>& creature, const Outfit_t& outfit)
 {
 	// Creature:onChangeOutfit(outfit) or Creature.onChangeOutfit(self, outfit)
 	if (creatureHandlers.onChangeOutfit == -1) {
@@ -266,7 +266,7 @@ bool onChangeOutfit(std::shared_ptr<Creature> creature, const Outfit_t& outfit)
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue onAreaCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> tile, bool aggressive)
+ReturnValue onAreaCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& tile, bool aggressive)
 {
 	// Creature:onAreaCombat(tile, aggressive) or Creature.onAreaCombat(self, tile, aggressive)
 	if (creatureHandlers.onAreaCombat == -1) {
@@ -309,7 +309,7 @@ ReturnValue onAreaCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Til
 	return returnValue;
 }
 
-ReturnValue onTargetCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
+ReturnValue onTargetCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target)
 {
 	// Creature:onTargetCombat(target) or Creature.onTargetCombat(self, target)
 	if (creatureHandlers.onTargetCombat == -1) {
@@ -350,8 +350,8 @@ ReturnValue onTargetCombat(std::shared_ptr<Creature> creature, std::shared_ptr<C
 	return returnValue;
 }
 
-void onHear(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> speaker, const std::string& words,
-            SpeakClasses type)
+void onHear(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& speaker,
+            const std::string& words, SpeakClasses type)
 {
 	// Creature:onHear(speaker, words, type)
 	if (creatureHandlers.onHear == -1) {
@@ -381,7 +381,7 @@ void onHear(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> speake
 	scriptInterface.callVoidFunction(4);
 }
 
-void onChangeZone(std::shared_ptr<Creature> creature, ZoneType_t fromZone, ZoneType_t toZone)
+void onChangeZone(const std::shared_ptr<Creature>& creature, ZoneType_t fromZone, ZoneType_t toZone)
 {
 	// Creature:onChangeZone(fromZone, toZone)
 	if (creatureHandlers.onChangeZone == -1) {
@@ -408,7 +408,7 @@ void onChangeZone(std::shared_ptr<Creature> creature, ZoneType_t fromZone, ZoneT
 	scriptInterface.callVoidFunction(3);
 }
 
-void onUpdateStorage(std::shared_ptr<Creature> creature, uint32_t key, std::optional<int32_t> value,
+void onUpdateStorage(const std::shared_ptr<Creature>& creature, uint32_t key, std::optional<int32_t> value,
                      std::optional<int32_t> oldValue, bool isSpawn)
 {
 	// Creature:onUpdateStorage(key, value, oldValue, isSpawn)
@@ -453,7 +453,7 @@ void onUpdateStorage(std::shared_ptr<Creature> creature, uint32_t key, std::opti
 
 namespace tfs::events::party {
 
-bool onJoin(Party* party, std::shared_ptr<Player> player)
+bool onJoin(Party* party, const std::shared_ptr<Player>& player)
 {
 	// Party:onJoin(player) or Party.onJoin(self, player)
 	if (partyHandlers.onJoin == -1) {
@@ -480,7 +480,7 @@ bool onJoin(Party* party, std::shared_ptr<Player> player)
 	return scriptInterface.callFunction(2);
 }
 
-bool onLeave(Party* party, std::shared_ptr<Player> player)
+bool onLeave(Party* party, const std::shared_ptr<Player>& player)
 {
 	// Party:onLeave(player) or Party.onLeave(self, player)
 	if (partyHandlers.onLeave == -1) {
@@ -531,7 +531,7 @@ bool onDisband(Party* party)
 	return scriptInterface.callFunction(1);
 }
 
-bool onInvite(Party* party, std::shared_ptr<Player> player)
+bool onInvite(Party* party, const std::shared_ptr<Player>& player)
 {
 	// Party:onInvite(player) or Party.onInvite(self, player)
 	if (partyHandlers.onInvite == -1) {
@@ -558,7 +558,7 @@ bool onInvite(Party* party, std::shared_ptr<Player> player)
 	return scriptInterface.callFunction(2);
 }
 
-bool onRevokeInvitation(Party* party, std::shared_ptr<Player> player)
+bool onRevokeInvitation(Party* party, const std::shared_ptr<Player>& player)
 {
 	// Party:onRevokeInvitation(player) or Party.onRevokeInvitation(self, player)
 	if (partyHandlers.onRevokeInvitation == -1) {
@@ -585,7 +585,7 @@ bool onRevokeInvitation(Party* party, std::shared_ptr<Player> player)
 	return scriptInterface.callFunction(2);
 }
 
-bool onPassLeadership(Party* party, std::shared_ptr<Player> player)
+bool onPassLeadership(Party* party, const std::shared_ptr<Player>& player)
 {
 	// Party:onPassLeadership(player) or Party.onPassLeadership(self, player)
 	if (partyHandlers.onPassLeadership == -1) {
@@ -649,7 +649,7 @@ void onShareExperience(Party* party, uint64_t& exp)
 
 namespace tfs::events::player {
 
-bool onBrowseField(std::shared_ptr<Player> player, const Position& position)
+bool onBrowseField(const std::shared_ptr<Player>& player, const Position& position)
 {
 	// Player:onBrowseField(position) or Player.onBrowseField(self, position)
 	if (playerHandlers.onBrowseField == -1) {
@@ -675,8 +675,8 @@ bool onBrowseField(std::shared_ptr<Player> player, const Position& position)
 	return scriptInterface.callFunction(2);
 }
 
-void onLook(std::shared_ptr<Player> player, const Position& position, std::shared_ptr<Thing> thing, uint8_t stackpos,
-            int32_t lookDistance)
+void onLook(const std::shared_ptr<Player>& player, const Position& position, const std::shared_ptr<Thing>& thing,
+            uint8_t stackpos, int32_t lookDistance)
 {
 	// Player:onLook(thing, position, distance) or Player.onLook(self, thing, position, distance)
 	if (playerHandlers.onLook == -1) {
@@ -713,7 +713,8 @@ void onLook(std::shared_ptr<Player> player, const Position& position, std::share
 	scriptInterface.callVoidFunction(4);
 }
 
-void onLookInBattleList(std::shared_ptr<Player> player, std::shared_ptr<Creature> creature, int32_t lookDistance)
+void onLookInBattleList(const std::shared_ptr<Player>& player, const std::shared_ptr<Creature>& creature,
+                        int32_t lookDistance)
 {
 	// Player:onLookInBattleList(creature, position, distance) or Player.onLookInBattleList(self, creature, position,
 	// distance)
@@ -743,8 +744,8 @@ void onLookInBattleList(std::shared_ptr<Player> player, std::shared_ptr<Creature
 	scriptInterface.callVoidFunction(3);
 }
 
-void onLookInTrade(std::shared_ptr<Player> player, std::shared_ptr<Player> partner, std::shared_ptr<Item> item,
-                   int32_t lookDistance)
+void onLookInTrade(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& partner,
+                   const std::shared_ptr<Item>& item, int32_t lookDistance)
 {
 	// Player:onLookInTrade(partner, item, distance) or Player.onLookInTrade(self, partner, item, distance)
 	if (playerHandlers.onLookInTrade == -1) {
@@ -776,7 +777,7 @@ void onLookInTrade(std::shared_ptr<Player> player, std::shared_ptr<Player> partn
 	scriptInterface.callVoidFunction(4);
 }
 
-bool onLookInShop(std::shared_ptr<Player> player, const ItemType* itemType, uint8_t count)
+bool onLookInShop(const std::shared_ptr<Player>& player, const ItemType* itemType, uint8_t count)
 {
 	// Player:onLookInShop(itemType, count) or Player.onLookInShop(self, itemType, count)
 	if (playerHandlers.onLookInShop == -1) {
@@ -805,7 +806,7 @@ bool onLookInShop(std::shared_ptr<Player> player, const ItemType* itemType, uint
 	return scriptInterface.callFunction(3);
 }
 
-bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType)
+bool onLookInMarket(const std::shared_ptr<Player>& player, const ItemType* itemType)
 {
 	// Player:onLookInMarket(itemType) or Player.onLookInMarket(self, itemType)
 	if (playerHandlers.onLookInMarket == -1) {
@@ -832,9 +833,9 @@ bool onLookInMarket(std::shared_ptr<Player> player, const ItemType* itemType)
 	return scriptInterface.callFunction(2);
 }
 
-ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                       const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
-                       std::shared_ptr<Thing> toThing)
+ReturnValue onMoveItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, uint16_t count,
+                       const Position& fromPosition, const Position& toPosition,
+                       const std::shared_ptr<Thing>& fromThing, const std::shared_ptr<Thing>& toThing)
 {
 	// Player:onMoveItem(item, count, fromPosition, toPosition) or Player.onMoveItem(self, item, count, fromPosition,
 	// toPosition, fromThing, toThing)
@@ -879,9 +880,9 @@ ReturnValue onMoveItem(std::shared_ptr<Player> player, std::shared_ptr<Item> ite
 	return returnValue;
 }
 
-void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uint16_t count,
-                 const Position& fromPosition, const Position& toPosition, std::shared_ptr<Thing> fromThing,
-                 std::shared_ptr<Thing> toThing)
+void onItemMoved(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, uint16_t count,
+                 const Position& fromPosition, const Position& toPosition, const std::shared_ptr<Thing>& fromThing,
+                 const std::shared_ptr<Thing>& toThing)
 {
 	// Player:onItemMoved(item, count, fromPosition, toPosition) or Player.onItemMoved(self, item, count, fromPosition,
 	// toPosition, fromThing, toThing)
@@ -916,8 +917,8 @@ void onItemMoved(std::shared_ptr<Player> player, std::shared_ptr<Item> item, uin
 	scriptInterface.callVoidFunction(7);
 }
 
-bool onMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Creature> creature, const Position& fromPosition,
-                    const Position& toPosition)
+bool onMoveCreature(const std::shared_ptr<Player>& player, const std::shared_ptr<Creature>& creature,
+                    const Position& fromPosition, const Position& toPosition)
 {
 	// Player:onMoveCreature(creature, fromPosition, toPosition) or Player.onMoveCreature(self, creature, fromPosition,
 	// toPosition)
@@ -948,7 +949,7 @@ bool onMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Creature> cr
 	return scriptInterface.callFunction(4);
 }
 
-void onReportRuleViolation(std::shared_ptr<Player> player, const std::string& targetName, uint8_t reportType,
+void onReportRuleViolation(const std::shared_ptr<Player>& player, const std::string& targetName, uint8_t reportType,
                            uint8_t reportReason, const std::string& comment, const std::string& translation)
 {
 	// Player:onReportRuleViolation(targetName, reportType, reportReason, comment, translation)
@@ -981,7 +982,8 @@ void onReportRuleViolation(std::shared_ptr<Player> player, const std::string& ta
 	scriptInterface.callVoidFunction(6);
 }
 
-bool onReportBug(std::shared_ptr<Player> player, const std::string& message, const Position& position, uint8_t category)
+bool onReportBug(const std::shared_ptr<Player>& player, const std::string& message, const Position& position,
+                 uint8_t category)
 {
 	// Player:onReportBug(message, position, category)
 	if (playerHandlers.onReportBug == -1) {
@@ -1009,7 +1011,7 @@ bool onReportBug(std::shared_ptr<Player> player, const std::string& message, con
 	return scriptInterface.callFunction(4);
 }
 
-void onRotateItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
+void onRotateItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item)
 {
 	// Player:onRotateItem(item)
 	if (playerHandlers.onRotateItem == -1) {
@@ -1036,7 +1038,7 @@ void onRotateItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 	scriptInterface.callFunction(2);
 }
 
-bool onTurn(std::shared_ptr<Player> player, Direction direction)
+bool onTurn(const std::shared_ptr<Player>& player, Direction direction)
 {
 	// Player:onTurn(direction) or Player.onTurn(self, direction)
 	if (playerHandlers.onTurn == -1) {
@@ -1062,7 +1064,8 @@ bool onTurn(std::shared_ptr<Player> player, Direction direction)
 	return scriptInterface.callFunction(2);
 }
 
-bool onTradeRequest(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item)
+bool onTradeRequest(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& target,
+                    const std::shared_ptr<Item>& item)
 {
 	// Player:onTradeRequest(target, item)
 	if (playerHandlers.onTradeRequest == -1) {
@@ -1092,8 +1095,8 @@ bool onTradeRequest(std::shared_ptr<Player> player, std::shared_ptr<Player> targ
 	return scriptInterface.callFunction(3);
 }
 
-bool onTradeAccept(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item,
-                   std::shared_ptr<Item> targetItem)
+bool onTradeAccept(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& target,
+                   const std::shared_ptr<Item>& item, const std::shared_ptr<Item>& targetItem)
 {
 	// Player:onTradeAccept(target, item, targetItem)
 	if (playerHandlers.onTradeAccept == -1) {
@@ -1126,8 +1129,8 @@ bool onTradeAccept(std::shared_ptr<Player> player, std::shared_ptr<Player> targe
 	return scriptInterface.callFunction(4);
 }
 
-void onTradeCompleted(std::shared_ptr<Player> player, std::shared_ptr<Player> target, std::shared_ptr<Item> item,
-                      std::shared_ptr<Item> targetItem, bool isSuccess)
+void onTradeCompleted(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& target,
+                      const std::shared_ptr<Item>& item, const std::shared_ptr<Item>& targetItem, bool isSuccess)
 {
 	// Player:onTradeCompleted(target, item, targetItem, isSuccess)
 	if (playerHandlers.onTradeCompleted == -1) {
@@ -1162,7 +1165,7 @@ void onTradeCompleted(std::shared_ptr<Player> player, std::shared_ptr<Player> ta
 	return scriptInterface.callVoidFunction(5);
 }
 
-void onPodiumRequest(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
+void onPodiumRequest(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item)
 {
 	// Player:onPodiumRequest(item) or Player.onPodiumRequest(self, item)
 	if (playerHandlers.onPodiumRequest == -1) {
@@ -1189,7 +1192,7 @@ void onPodiumRequest(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 	scriptInterface.callFunction(2);
 }
 
-void onPodiumEdit(std::shared_ptr<Player> player, std::shared_ptr<Item> item, const Outfit_t& outfit,
+void onPodiumEdit(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, const Outfit_t& outfit,
                   bool podiumVisible, Direction direction)
 {
 	// Player:onPodiumEdit(item, outfit, direction, isVisible) or Player.onPodiumEdit(self, item, outfit, direction,
@@ -1223,8 +1226,8 @@ void onPodiumEdit(std::shared_ptr<Player> player, std::shared_ptr<Item> item, co
 	scriptInterface.callFunction(5);
 }
 
-void onGainExperience(std::shared_ptr<Player> player, std::shared_ptr<Creature> source, uint64_t& exp, uint64_t rawExp,
-                      bool sendText)
+void onGainExperience(const std::shared_ptr<Player>& player, const std::shared_ptr<Creature>& source, uint64_t& exp,
+                      uint64_t rawExp, bool sendText)
 {
 	// Player:onGainExperience(source, exp, rawExp, sendText) rawExp gives the original exp which is not multiplied
 	if (playerHandlers.onGainExperience == -1) {
@@ -1266,7 +1269,7 @@ void onGainExperience(std::shared_ptr<Player> player, std::shared_ptr<Creature> 
 	tfs::lua::resetScriptEnv();
 }
 
-void onLoseExperience(std::shared_ptr<Player> player, uint64_t& exp)
+void onLoseExperience(const std::shared_ptr<Player>& player, uint64_t& exp)
 {
 	// Player:onLoseExperience(exp)
 	if (playerHandlers.onLoseExperience == -1) {
@@ -1299,7 +1302,7 @@ void onLoseExperience(std::shared_ptr<Player> player, uint64_t& exp)
 	tfs::lua::resetScriptEnv();
 }
 
-void onGainSkillTries(std::shared_ptr<Player> player, skills_t skill, uint64_t& tries)
+void onGainSkillTries(const std::shared_ptr<Player>& player, skills_t skill, uint64_t& tries)
 {
 	// Player:onGainSkillTries(skill, tries)
 	if (playerHandlers.onGainSkillTries == -1) {
@@ -1333,7 +1336,7 @@ void onGainSkillTries(std::shared_ptr<Player> player, skills_t skill, uint64_t& 
 	tfs::lua::resetScriptEnv();
 }
 
-void onWrapItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
+void onWrapItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item)
 {
 	// Player:onWrapItem(item)
 	if (playerHandlers.onWrapItem == -1) {
@@ -1360,7 +1363,8 @@ void onWrapItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item)
 	scriptInterface.callVoidFunction(2);
 }
 
-void onInventoryUpdate(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool equip)
+void onInventoryUpdate(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, slots_t slot,
+                       bool equip)
 {
 	// Player:onInventoryUpdate(item, slot, equip)
 	if (playerHandlers.onInventoryUpdate == -1) {
@@ -1390,7 +1394,7 @@ void onInventoryUpdate(std::shared_ptr<Player> player, std::shared_ptr<Item> ite
 	scriptInterface.callVoidFunction(4);
 }
 
-void onNetworkMessage(std::shared_ptr<Player> player, uint8_t recvByte, NetworkMessage_ptr& msg)
+void onNetworkMessage(const std::shared_ptr<Player>& player, uint8_t recvByte, NetworkMessage_ptr& msg)
 {
 	// Player:onNetworkMessage(recvByte, msg)
 	if (playerHandlers.onNetworkMessage == -1) {
@@ -1419,7 +1423,7 @@ void onNetworkMessage(std::shared_ptr<Player> player, uint8_t recvByte, NetworkM
 	scriptInterface.callVoidFunction(3);
 }
 
-bool onSpellCheck(std::shared_ptr<Player> player, const Spell* spell)
+bool onSpellCheck(const std::shared_ptr<Player>& player, const Spell* spell)
 {
 	// Player:onSpellCheck(spell)
 	if (playerHandlers.onSpellCheck == -1) {
@@ -1449,7 +1453,7 @@ bool onSpellCheck(std::shared_ptr<Player> player, const Spell* spell)
 
 namespace tfs::events::monster {
 
-bool onSpawn(std::shared_ptr<Monster> monster, const Position& position, bool startup, bool artificial)
+bool onSpawn(const std::shared_ptr<Monster>& monster, const Position& position, bool startup, bool artificial)
 {
 	// Monster:onSpawn(position, startup, artificial)
 	if (monsterHandlers.onSpawn == -1) {
@@ -1476,7 +1480,7 @@ bool onSpawn(std::shared_ptr<Monster> monster, const Position& position, bool st
 	return scriptInterface.callFunction(4);
 }
 
-void onDropLoot(std::shared_ptr<Monster> monster, std::shared_ptr<Container> corpse)
+void onDropLoot(const std::shared_ptr<Monster>& monster, const std::shared_ptr<Container>& corpse)
 {
 	// Monster:onDropLoot(corpse)
 	if (monsterHandlers.onDropLoot == -1) {

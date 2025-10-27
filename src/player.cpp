@@ -204,10 +204,6 @@ std::shared_ptr<Item> Player::getInventoryItem(slots_t slot) const
 	return inventory[slot];
 }
 
-void Player::addConditionSuppressions(uint32_t conditions) { conditionSuppressions |= conditions; }
-
-void Player::removeConditionSuppressions(uint32_t conditions) { conditionSuppressions &= ~conditions; }
-
 std::shared_ptr<Item> Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 {
 	auto item = inventory[slot];
@@ -275,7 +271,7 @@ WeaponType_t Player::getWeaponType() const
 	return item->getWeaponType();
 }
 
-int32_t Player::getWeaponSkill(std::shared_ptr<const Item> item) const
+int32_t Player::getWeaponSkill(const std::shared_ptr<const Item>& item) const
 {
 	if (!item) {
 		return getSkillLevel(SKILL_FIST);
@@ -603,7 +599,7 @@ int32_t Player::getDefaultStats(stats_t stat) const
 	}
 }
 
-void Player::addContainer(uint8_t cid, std::shared_ptr<Container> container)
+void Player::addContainer(uint8_t cid, const std::shared_ptr<Container>& container)
 {
 	if (cid > 0xF) {
 		return;
@@ -662,7 +658,7 @@ std::shared_ptr<Container> Player::getContainerByID(uint8_t cid)
 	return it->second.container;
 }
 
-int8_t Player::getContainerID(std::shared_ptr<const Container> container) const
+int8_t Player::getContainerID(const std::shared_ptr<const Container>& container) const
 {
 	for (const auto& it : openContainers) {
 		if (it.second.container == container) {
@@ -712,7 +708,7 @@ bool Player::canSee(const Position& pos) const
 	return client->canSee(pos);
 }
 
-bool Player::canSeeCreature(std::shared_ptr<const Creature> creature) const
+bool Player::canSeeCreature(const std::shared_ptr<const Creature>& creature) const
 {
 	if (creature.get() == this) {
 		return true;
@@ -728,9 +724,9 @@ bool Player::canSeeCreature(std::shared_ptr<const Creature> creature) const
 	return true;
 }
 
-bool Player::canSeeGhostMode(std::shared_ptr<const Creature>) const { return group->access; }
+bool Player::canSeeGhostMode(const std::shared_ptr<const Creature>&) const { return group->access; }
 
-bool Player::canWalkthrough(std::shared_ptr<const Creature> creature) const
+bool Player::canWalkthrough(const std::shared_ptr<const Creature>& creature) const
 {
 	if (group->access || creature->isInGhostMode()) {
 		return true;
@@ -767,7 +763,7 @@ bool Player::canWalkthrough(std::shared_ptr<const Creature> creature) const
 	return true;
 }
 
-bool Player::canWalkthroughEx(std::shared_ptr<const Creature> creature) const
+bool Player::canWalkthroughEx(const std::shared_ptr<const Creature>& creature) const
 {
 	if (group->access) {
 		return true;
@@ -908,7 +904,7 @@ std::shared_ptr<Item> Player::getWriteItem(uint32_t& windowTextId, uint16_t& max
 	return writeItem;
 }
 
-void Player::setWriteItem(std::shared_ptr<Item> item, uint16_t maxWriteLen /*= 0*/)
+void Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen /*= 0*/)
 {
 	windowTextId++;
 
@@ -948,12 +944,14 @@ void Player::sendHouseWindow(House* house, uint32_t listId) const
 }
 
 // container
-void Player::sendAddContainerItem(std::shared_ptr<const Container> container, std::shared_ptr<const Item> item)
+void Player::sendAddContainerItem(const std::shared_ptr<const Container>& container,
+                                  const std::shared_ptr<const Item>& item)
 {
 	if (!client) {
 		return;
 	}
 
+	auto slotItem = item;
 	for (const auto& it : openContainers) {
 		const OpenContainer& openContainer = it.second;
 		if (openContainer.container != container) {
@@ -966,21 +964,21 @@ void Player::sendAddContainerItem(std::shared_ptr<const Container> container, st
 			uint16_t pageEnd = openContainer.index + container->capacity() - 1;
 			if (containerSize > pageEnd) {
 				slot = pageEnd;
-				item = container->getItemByIndex(pageEnd);
+				slotItem = container->getItemByIndex(pageEnd);
 			} else {
 				slot = containerSize;
 			}
 		} else if (openContainer.index >= container->capacity()) {
-			item = container->getItemByIndex(openContainer.index);
+			slotItem = container->getItemByIndex(openContainer.index);
 		}
 
-		if (item) {
-			client->sendAddContainerItem(it.first, slot, item);
+		if (slotItem) {
+			client->sendAddContainerItem(it.first, slot, slotItem);
 		}
 	}
 }
 
-void Player::sendUpdateContainerItem(std::shared_ptr<const Container> container, uint16_t slot,
+void Player::sendUpdateContainerItem(const std::shared_ptr<const Container>& container, uint16_t slot,
                                      std::shared_ptr<const Item> newItem)
 {
 	if (!client) {
@@ -1006,7 +1004,7 @@ void Player::sendUpdateContainerItem(std::shared_ptr<const Container> container,
 	}
 }
 
-void Player::sendRemoveContainerItem(std::shared_ptr<const Container> container, uint16_t slot)
+void Player::sendRemoveContainerItem(const std::shared_ptr<const Container>& container, uint16_t slot)
 {
 	if (!client) {
 		return;
@@ -1070,9 +1068,9 @@ void Player::openSavedContainers()
 	}
 }
 
-void Player::onUpdateTileItem(std::shared_ptr<const Tile> tile, const Position& pos,
-                              std::shared_ptr<const Item> oldItem, const ItemType& oldType,
-                              std::shared_ptr<const Item> newItem, const ItemType& newType)
+void Player::onUpdateTileItem(const std::shared_ptr<const Tile>& tile, const Position& pos,
+                              const std::shared_ptr<const Item>& oldItem, const ItemType& oldType,
+                              const std::shared_ptr<const Item>& newItem, const ItemType& newType)
 {
 	Creature::onUpdateTileItem(tile, pos, oldItem, oldType, newItem, newType);
 
@@ -1087,8 +1085,8 @@ void Player::onUpdateTileItem(std::shared_ptr<const Tile> tile, const Position& 
 	}
 }
 
-void Player::onRemoveTileItem(std::shared_ptr<const Tile> tile, const Position& pos, const ItemType& iType,
-                              std::shared_ptr<const Item> item)
+void Player::onRemoveTileItem(const std::shared_ptr<const Tile>& tile, const Position& pos, const ItemType& iType,
+                              const std::shared_ptr<const Item>& item)
 {
 	Creature::onRemoveTileItem(tile, pos, iType, item);
 
@@ -1096,7 +1094,7 @@ void Player::onRemoveTileItem(std::shared_ptr<const Tile> tile, const Position& 
 		checkTradeState(item);
 
 		if (tradeItem) {
-			std::shared_ptr<const Container> container = item->getContainer();
+			const std::shared_ptr<const Container>& container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 			}
@@ -1104,7 +1102,7 @@ void Player::onRemoveTileItem(std::shared_ptr<const Tile> tile, const Position& 
 	}
 }
 
-void Player::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
+void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
@@ -1230,7 +1228,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	}
 }
 
-void Player::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
+void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout)
 {
 	Creature::onRemoveCreature(creature, isLogout);
 
@@ -1281,7 +1279,7 @@ void Player::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
 	}
 }
 
-void Player::openShopWindow(std::shared_ptr<Npc> npc, const std::list<ShopInfo>& shop)
+void Player::openShopWindow(const std::shared_ptr<Npc>& npc, const std::list<ShopInfo>& shop)
 {
 	shopItemList = shop;
 	sendShop(npc);
@@ -1318,8 +1316,8 @@ void Player::onWalk(Direction& dir)
 	setNextAction(OTSYS_TIME() + getStepDuration(dir));
 }
 
-void Player::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile,
-                            const Position& newPos, std::shared_ptr<const Tile> oldTile, const Position& oldPos,
+void Player::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+                            const Position& newPos, const std::shared_ptr<const Tile>& oldTile, const Position& oldPos,
                             bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -1398,10 +1396,11 @@ void Player::onDeEquipInventory()
 }
 
 // container
-void Player::onAddContainerItem(std::shared_ptr<const Item> item) { checkTradeState(item); }
+void Player::onAddContainerItem(const std::shared_ptr<const Item>& item) { checkTradeState(item); }
 
-void Player::onUpdateContainerItem(std::shared_ptr<const Container> container, std::shared_ptr<const Item> oldItem,
-                                   std::shared_ptr<const Item> newItem)
+void Player::onUpdateContainerItem(const std::shared_ptr<const Container>& container,
+                                   const std::shared_ptr<const Item>& oldItem,
+                                   const std::shared_ptr<const Item>& newItem)
 {
 	if (oldItem != newItem) {
 		onRemoveContainerItem(container, oldItem);
@@ -1412,7 +1411,8 @@ void Player::onUpdateContainerItem(std::shared_ptr<const Container> container, s
 	}
 }
 
-void Player::onRemoveContainerItem(std::shared_ptr<const Container> container, std::shared_ptr<const Item> item)
+void Player::onRemoveContainerItem(const std::shared_ptr<const Container>& container,
+                                   const std::shared_ptr<const Item>& item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
@@ -1425,7 +1425,7 @@ void Player::onRemoveContainerItem(std::shared_ptr<const Container> container, s
 	}
 }
 
-void Player::onCloseContainer(std::shared_ptr<const Container> container)
+void Player::onCloseContainer(const std::shared_ptr<const Container>& container)
 {
 	if (!client) {
 		return;
@@ -1438,7 +1438,7 @@ void Player::onCloseContainer(std::shared_ptr<const Container> container)
 	}
 }
 
-void Player::onSendContainer(std::shared_ptr<const Container> container)
+void Player::onSendContainer(const std::shared_ptr<const Container>& container)
 {
 	if (!client) {
 		return;
@@ -1452,7 +1452,7 @@ void Player::onSendContainer(std::shared_ptr<const Container> container)
 }
 
 // inventory
-void Player::onUpdateInventoryItem(std::shared_ptr<Item> oldItem, std::shared_ptr<Item> newItem)
+void Player::onUpdateInventoryItem(const std::shared_ptr<Item>& oldItem, const std::shared_ptr<Item>& newItem)
 {
 	if (oldItem != newItem) {
 		onRemoveInventoryItem(oldItem);
@@ -1463,13 +1463,13 @@ void Player::onUpdateInventoryItem(std::shared_ptr<Item> oldItem, std::shared_pt
 	}
 }
 
-void Player::onRemoveInventoryItem(std::shared_ptr<Item> item)
+void Player::onRemoveInventoryItem(const std::shared_ptr<Item>& item)
 {
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
 		if (tradeItem) {
-			std::shared_ptr<const Container> container = item->getContainer();
+			const std::shared_ptr<const Container>& container = item->getContainer();
 			if (container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 			}
@@ -1477,7 +1477,7 @@ void Player::onRemoveInventoryItem(std::shared_ptr<Item> item)
 	}
 }
 
-void Player::checkTradeState(std::shared_ptr<const Item> item)
+void Player::checkTradeState(const std::shared_ptr<const Item>& item)
 {
 	if (!tradeItem || tradeState == TRADE_TRANSFER) {
 		return;
@@ -1611,13 +1611,13 @@ void Player::removeMessageBuffer()
 	}
 }
 
-void Player::drainHealth(std::shared_ptr<Creature> attacker, int32_t damage)
+void Player::drainHealth(const std::shared_ptr<Creature>& attacker, int32_t damage)
 {
 	Creature::drainHealth(attacker, damage);
 	sendStats();
 }
 
-void Player::drainMana(std::shared_ptr<Creature> attacker, int32_t manaLoss)
+void Player::drainMana(const std::shared_ptr<Creature>& attacker, int32_t manaLoss)
 {
 	onAttacked();
 	changeMana(-manaLoss);
@@ -1723,7 +1723,7 @@ void Player::removeManaSpent(uint64_t amount, bool notify /* = false*/)
 	}
 }
 
-void Player::addExperience(std::shared_ptr<Creature> source, uint64_t exp, bool sendText /* = false*/)
+void Player::addExperience(const std::shared_ptr<Creature>& source, uint64_t exp, bool sendText /* = false*/)
 {
 	uint64_t currLevelExp = Player::getExpForLevel(level);
 	uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
@@ -1946,7 +1946,7 @@ bool Player::hasShield() const
 	return false;
 }
 
-BlockType_t Player::blockHit(std::shared_ptr<Creature> attacker, CombatType_t combatType, int32_t& damage,
+BlockType_t Player::blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
                              bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool field /* = false*/,
                              bool ignoreResistances /* = false*/)
 {
@@ -2040,7 +2040,7 @@ Connection::Address Player::getIP() const
 	return {};
 }
 
-void Player::death(std::shared_ptr<Creature> lastHitCreature)
+void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 {
 	loginPosition = town->templePosition;
 
@@ -2182,8 +2182,9 @@ void Player::death(std::shared_ptr<Creature> lastHitCreature)
 	}
 }
 
-bool Player::dropCorpse(std::shared_ptr<Creature> lastHitCreature, std::shared_ptr<Creature> mostDamageCreature,
-                        bool lastHitUnjustified, bool mostDamageUnjustified)
+bool Player::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+                        const std::shared_ptr<Creature>& mostDamageCreature, bool lastHitUnjustified,
+                        bool mostDamageUnjustified)
 {
 	if (getZone() != ZONE_PVP || !Player::lastHitIsPlayer(lastHitCreature)) {
 		return Creature::dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
@@ -2193,8 +2194,8 @@ bool Player::dropCorpse(std::shared_ptr<Creature> lastHitCreature, std::shared_p
 	return false;
 }
 
-std::shared_ptr<Item> Player::getCorpse(std::shared_ptr<Creature> lastHitCreature,
-                                        std::shared_ptr<Creature> mostDamageCreature)
+std::shared_ptr<Item> Player::getCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+                                        const std::shared_ptr<Creature>& mostDamageCreature)
 {
 	auto corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse && corpse->getContainer()) {
@@ -2278,7 +2279,7 @@ void Player::kickPlayer(bool displayEffect)
 	}
 }
 
-void Player::notifyStatusChange(std::shared_ptr<Player> loginPlayer, VipStatus_t status)
+void Player::notifyStatusChange(const std::shared_ptr<Player>& loginPlayer, VipStatus_t status)
 {
 	if (!client) {
 		return;
@@ -2349,7 +2350,7 @@ bool Player::editVIP(uint32_t vipGuid, const std::string& description, uint32_t 
 }
 
 // close container and its child containers
-void Player::autoCloseContainers(std::shared_ptr<const Container> container)
+void Player::autoCloseContainers(const std::shared_ptr<const Container>& container)
 {
 	std::vector<uint32_t> closeList;
 	for (const auto& [id, openContainer] : openContainers) {
@@ -2373,7 +2374,7 @@ void Player::autoCloseContainers(std::shared_ptr<const Container> container)
 	}
 }
 
-bool Player::hasCapacity(std::shared_ptr<const Item> item, uint32_t count) const
+bool Player::hasCapacity(const std::shared_ptr<const Item>& item, uint32_t count) const
 {
 	if (hasFlag(PlayerFlag_CannotPickupItem)) {
 		return false;
@@ -2390,8 +2391,8 @@ bool Player::hasCapacity(std::shared_ptr<const Item> item, uint32_t count) const
 	return itemWeight <= getFreeCapacity();
 }
 
-ReturnValue Player::queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
-                             std::shared_ptr<Creature>) const
+ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+                             const std::shared_ptr<Creature>&) const
 {
 	auto item = thing->getItem();
 	if (!item) {
@@ -2646,7 +2647,7 @@ ReturnValue Player::queryAdd(int32_t index, std::shared_ptr<const Thing> thing, 
 	return ret;
 }
 
-ReturnValue Player::queryMaxCount(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count,
+ReturnValue Player::queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                   uint32_t& maxQueryCount, uint32_t flags) const
 {
 	auto item = thing->getItem();
@@ -2722,8 +2723,8 @@ ReturnValue Player::queryMaxCount(int32_t index, std::shared_ptr<const Thing> th
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Player::queryRemove(std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
-                                std::shared_ptr<Creature> /*= nullptr*/) const
+ReturnValue Player::queryRemove(const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
+                                const std::shared_ptr<Creature>& /*= nullptr*/) const
 {
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
@@ -2746,7 +2747,7 @@ ReturnValue Player::queryRemove(std::shared_ptr<const Thing> thing, uint32_t cou
 	return RETURNVALUE_NOERROR;
 }
 
-std::shared_ptr<Thing> Player::queryDestination(int32_t& index, std::shared_ptr<const Thing> thing,
+std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
                                                 std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
@@ -2873,7 +2874,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, std::shared_ptr<
 	return getPlayer();
 }
 
-void Player::addThing(int32_t index, std::shared_ptr<Thing> thing)
+void Player::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 {
 	if (index < CONST_SLOT_FIRST || index > CONST_SLOT_LAST) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -2891,7 +2892,7 @@ void Player::addThing(int32_t index, std::shared_ptr<Thing> thing)
 	sendInventoryItem(static_cast<slots_t>(index), item);
 }
 
-void Player::updateThing(std::shared_ptr<Thing> thing, uint16_t itemId, uint32_t count)
+void Player::updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId, uint32_t count)
 {
 	int32_t index = getThingIndex(thing);
 	if (index == -1) {
@@ -2913,7 +2914,7 @@ void Player::updateThing(std::shared_ptr<Thing> thing, uint16_t itemId, uint32_t
 	onUpdateInventoryItem(item, item);
 }
 
-void Player::replaceThing(uint32_t index, std::shared_ptr<Thing> thing)
+void Player::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 {
 	if (index > CONST_SLOT_LAST) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
@@ -2940,7 +2941,7 @@ void Player::replaceThing(uint32_t index, std::shared_ptr<Thing> thing)
 	inventory[index] = item;
 }
 
-void Player::removeThing(std::shared_ptr<Thing> thing, uint32_t count)
+void Player::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 {
 	auto item = thing->getItem();
 	if (!item) {
@@ -2984,7 +2985,7 @@ void Player::removeThing(std::shared_ptr<Thing> thing, uint32_t count)
 	}
 }
 
-int32_t Player::getThingIndex(std::shared_ptr<const Thing> thing) const
+int32_t Player::getThingIndex(const std::shared_ptr<const Thing>& thing) const
 {
 	for (int i = CONST_SLOT_FIRST; i <= CONST_SLOT_LAST; ++i) {
 		if (inventory[i] == thing) {
@@ -2993,10 +2994,6 @@ int32_t Player::getThingIndex(std::shared_ptr<const Thing> thing) const
 	}
 	return -1;
 }
-
-size_t Player::getFirstIndex() const { return CONST_SLOT_FIRST; }
-
-size_t Player::getLastIndex() const { return CONST_SLOT_LAST + 1; }
 
 uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 {
@@ -3100,8 +3097,8 @@ std::shared_ptr<Thing> Player::getThing(size_t index) const
 	return nullptr;
 }
 
-void Player::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
-                                 cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+                                 int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3157,8 +3154,8 @@ void Player::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<c
 	}
 }
 
-void Player::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
-                                    cylinderlink_t link /*= LINK_OWNER*/)
+void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+                                    int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3233,7 +3230,7 @@ void Player::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_pt
 	}
 }
 
-bool Player::updateSaleShopList(std::shared_ptr<const Item> item)
+bool Player::updateSaleShopList(const std::shared_ptr<const Item>& item)
 {
 	uint16_t itemId = item->getID();
 	bool isCurrency = false;
@@ -3275,9 +3272,7 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 	});
 }
 
-void Player::internalAddThing(std::shared_ptr<Thing> thing) { internalAddThing(0, thing); }
-
-void Player::internalAddThing(uint32_t index, std::shared_ptr<Thing> thing)
+void Player::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 {
 	auto item = thing->getItem();
 	if (!item) {
@@ -3295,7 +3290,7 @@ void Player::internalAddThing(uint32_t index, std::shared_ptr<Thing> thing)
 	}
 }
 
-void Player::setFollowCreature(std::shared_ptr<Creature> creature)
+void Player::setFollowCreature(const std::shared_ptr<Creature>& creature)
 {
 	if (isFollowingCreature(creature)) {
 		return;
@@ -3313,7 +3308,7 @@ void Player::setFollowCreature(std::shared_ptr<Creature> creature)
 	Creature::setFollowCreature(creature);
 }
 
-void Player::setAttackedCreature(std::shared_ptr<Creature> creature)
+void Player::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 {
 	if (isAttackingCreature(creature)) {
 		return;
@@ -3367,7 +3362,7 @@ void Player::goToFollowCreature()
 	}
 }
 
-void Player::getPathSearchParams(std::shared_ptr<const Creature> creature, FindPathParams& fpp) const
+void Player::getPathSearchParams(const std::shared_ptr<const Creature>& creature, FindPathParams& fpp) const
 {
 	Creature::getPathSearchParams(creature, fpp);
 	fpp.fullPathSearch = true;
@@ -3418,7 +3413,7 @@ void Player::doAttacking(uint32_t)
 	}
 }
 
-uint64_t Player::getGainedExperience(std::shared_ptr<Creature> attacker) const
+uint64_t Player::getGainedExperience(const std::shared_ptr<Creature>& attacker) const
 {
 	if (getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {
 		auto attackerPlayer = attacker->getPlayer();
@@ -3605,7 +3600,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 	}
 }
 
-void Player::onAttackedCreature(std::shared_ptr<Creature> target, bool addFightTicks /* = true */)
+void Player::onAttackedCreature(const std::shared_ptr<Creature>& target, bool addFightTicks /* = true */)
 {
 	Creature::onAttackedCreature(target);
 
@@ -3685,7 +3680,7 @@ void Player::onPlacedCreature()
 	}
 }
 
-void Player::onAttackedCreatureDrainHealth(std::shared_ptr<Creature> target, int32_t points)
+void Player::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points)
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);
 
@@ -3700,7 +3695,7 @@ void Player::onAttackedCreatureDrainHealth(std::shared_ptr<Creature> target, int
 	}
 }
 
-void Player::onTargetCreatureGainHealth(std::shared_ptr<Creature> target, int32_t points)
+void Player::onTargetCreatureGainHealth(const std::shared_ptr<Creature>& target, int32_t points)
 {
 	if (target && party) {
 		std::shared_ptr<Player> tmpPlayer = nullptr;
@@ -3719,7 +3714,7 @@ void Player::onTargetCreatureGainHealth(std::shared_ptr<Creature> target, int32_
 	}
 }
 
-bool Player::onKilledCreature(std::shared_ptr<Creature> target, bool lastHit /* = true*/)
+bool Player::onKilledCreature(const std::shared_ptr<Creature>& target, bool lastHit /* = true*/)
 {
 	bool unjustified = false;
 
@@ -3757,7 +3752,7 @@ bool Player::onKilledCreature(std::shared_ptr<Creature> target, bool lastHit /* 
 	return unjustified;
 }
 
-void Player::gainExperience(uint64_t gainExp, std::shared_ptr<Creature> source)
+void Player::gainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& source)
 {
 	if (hasFlag(PlayerFlag_NotGainExperience) || gainExp == 0 || staminaMinutes == 0) {
 		return;
@@ -3766,7 +3761,7 @@ void Player::gainExperience(uint64_t gainExp, std::shared_ptr<Creature> source)
 	addExperience(source, gainExp, true);
 }
 
-void Player::onGainExperience(uint64_t gainExp, std::shared_ptr<Creature> target)
+void Player::onGainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& target)
 {
 	if (hasFlag(PlayerFlag_NotGainExperience)) {
 		return;
@@ -3783,7 +3778,7 @@ void Player::onGainExperience(uint64_t gainExp, std::shared_ptr<Creature> target
 	gainExperience(gainExp, target);
 }
 
-void Player::onGainSharedExperience(uint64_t gainExp, std::shared_ptr<Creature> source)
+void Player::onGainSharedExperience(uint64_t gainExp, const std::shared_ptr<Creature>& source)
 {
 	gainExperience(gainExp, source);
 }
@@ -3806,7 +3801,7 @@ bool Player::isImmune(ConditionType_t type) const
 
 bool Player::isAttackable() const { return !hasFlag(PlayerFlag_CannotBeAttacked); }
 
-bool Player::lastHitIsPlayer(std::shared_ptr<Creature> lastHitCreature)
+bool Player::lastHitIsPlayer(const std::shared_ptr<Creature>& lastHitCreature)
 {
 	if (!lastHitCreature) {
 		return false;
@@ -3973,13 +3968,13 @@ Skulls_t Player::getSkull() const
 	return skull;
 }
 
-Skulls_t Player::getSkullClient(std::shared_ptr<const Creature> creature) const
+Skulls_t Player::getSkullClient(const std::shared_ptr<const Creature>& creature) const
 {
 	if (!creature || g_game.getWorldType() != WORLD_TYPE_PVP) {
 		return SKULL_NONE;
 	}
 
-	std::shared_ptr<const Player> player = creature->getPlayer();
+	const std::shared_ptr<const Player>& player = creature->getPlayer();
 	if (!player || player->getSkull() != SKULL_NONE) {
 		return Creature::getSkullClient(creature);
 	}
@@ -3994,7 +3989,7 @@ Skulls_t Player::getSkullClient(std::shared_ptr<const Creature> creature) const
 	return Creature::getSkullClient(creature);
 }
 
-bool Player::hasAttacked(std::shared_ptr<const Player> attacked) const
+bool Player::hasAttacked(const std::shared_ptr<const Player>& attacked) const
 {
 	if (hasFlag(PlayerFlag_NotGainInFight) || !attacked) {
 		return false;
@@ -4003,7 +3998,7 @@ bool Player::hasAttacked(std::shared_ptr<const Player> attacked) const
 	return attackedSet.find(attacked->guid) != attackedSet.end();
 }
 
-void Player::addAttacked(std::shared_ptr<const Player> attacked)
+void Player::addAttacked(const std::shared_ptr<const Player>& attacked)
 {
 	if (hasFlag(PlayerFlag_NotGainInFight) || !attacked || attacked.get() == this) {
 		return;
@@ -4012,7 +4007,7 @@ void Player::addAttacked(std::shared_ptr<const Player> attacked)
 	attackedSet.insert(attacked->guid);
 }
 
-void Player::removeAttacked(std::shared_ptr<const Player> attacked)
+void Player::removeAttacked(const std::shared_ptr<const Player>& attacked)
 {
 	if (!attacked || attacked.get() == this) {
 		return;
@@ -4026,7 +4021,7 @@ void Player::removeAttacked(std::shared_ptr<const Player> attacked)
 
 void Player::clearAttacked() { attackedSet.clear(); }
 
-void Player::addUnjustifiedDead(std::shared_ptr<const Player> attacked)
+void Player::addUnjustifiedDead(const std::shared_ptr<const Player>& attacked)
 {
 	if (hasFlag(PlayerFlag_NotGainInFight) || attacked.get() == this ||
 	    g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
@@ -4126,7 +4121,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 	return false;
 }
 
-bool Player::isInWar(std::shared_ptr<const Player> player) const
+bool Player::isInWar(const std::shared_ptr<const Player>& player) const
 {
 	if (!player || !guild) {
 		return false;
@@ -4160,7 +4155,7 @@ void Player::setPremiumTime(time_t premiumEndsAt)
 	sendBasicData();
 }
 
-PartyShields_t Player::getPartyShield(std::shared_ptr<const Player> player) const
+PartyShields_t Player::getPartyShield(const std::shared_ptr<const Player>& player) const
 {
 	if (!player) {
 		return SHIELD_NONE;
@@ -4216,7 +4211,7 @@ PartyShields_t Player::getPartyShield(std::shared_ptr<const Player> player) cons
 	return SHIELD_NONE;
 }
 
-bool Player::isInviting(std::shared_ptr<const Player> player) const
+bool Player::isInviting(const std::shared_ptr<const Player>& player) const
 {
 	if (!player || !party || party->getLeader().get() != this) {
 		return false;
@@ -4224,7 +4219,7 @@ bool Player::isInviting(std::shared_ptr<const Player> player) const
 	return party->isPlayerInvited(player);
 }
 
-bool Player::isPartner(std::shared_ptr<const Player> player) const
+bool Player::isPartner(const std::shared_ptr<const Player>& player) const
 {
 	if (!player || !party || player.get() == this) {
 		return false;
@@ -4232,7 +4227,7 @@ bool Player::isPartner(std::shared_ptr<const Player> player) const
 	return party == player->party;
 }
 
-bool Player::isGuildMate(std::shared_ptr<const Player> player) const
+bool Player::isGuildMate(const std::shared_ptr<const Player>& player) const
 {
 	if (!player || !guild) {
 		return false;
@@ -4240,7 +4235,7 @@ bool Player::isGuildMate(std::shared_ptr<const Player> player) const
 	return guild == player->guild;
 }
 
-void Player::sendPlayerPartyIcons(std::shared_ptr<Player> player)
+void Player::sendPlayerPartyIcons(const std::shared_ptr<Player>& player)
 {
 	sendCreatureShield(player);
 	sendCreatureSkull(player);
@@ -4267,7 +4262,7 @@ void Player::clearPartyInvitations()
 	invitePartyList.clear();
 }
 
-GuildEmblems_t Player::getGuildEmblem(std::shared_ptr<const Player> player) const
+GuildEmblems_t Player::getGuildEmblem(const std::shared_ptr<const Player>& player) const
 {
 	if (!player) {
 		return GUILDEMBLEM_NONE;

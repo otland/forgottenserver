@@ -122,11 +122,14 @@ public:
 	virtual void addList() = 0;
 
 	virtual bool canSee(const Position& pos) const;
-	virtual bool canSeeCreature(std::shared_ptr<const Creature> creature) const;
+	virtual bool canSeeCreature(const std::shared_ptr<const Creature>& creature) const;
 
 	virtual RaceType_t getRace() const { return RACE_NONE; }
 	virtual Skulls_t getSkull() const { return skull; }
-	virtual Skulls_t getSkullClient(std::shared_ptr<const Creature> creature) const { return creature->getSkull(); }
+	virtual Skulls_t getSkullClient(const std::shared_ptr<const Creature>& creature) const
+	{
+		return creature->getSkull();
+	}
 	void setSkull(Skulls_t newSkull);
 	Direction getDirection() const { return direction; }
 	void setDirection(Direction dir) { direction = dir; }
@@ -139,7 +142,7 @@ public:
 	bool isRemoved() const override final { return isInternalRemoved; }
 	virtual bool canSeeInvisibility() const { return false; }
 	virtual bool isInGhostMode() const { return false; }
-	virtual bool canSeeGhostMode(std::shared_ptr<const Creature>) const { return false; }
+	virtual bool canSeeGhostMode(const std::shared_ptr<const Creature>&) const { return false; }
 
 	int32_t getWalkDelay(Direction dir) const;
 	int32_t getWalkDelay() const;
@@ -207,19 +210,19 @@ public:
 
 	// follow functions
 	std::shared_ptr<Creature> getFollowCreature() const { return followCreature; }
-	virtual void setFollowCreature(std::shared_ptr<Creature> creature);
+	virtual void setFollowCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeFollowCreature();
-	virtual bool canFollowCreature(std::shared_ptr<Creature> creature);
-	virtual bool isFollowingCreature(std::shared_ptr<Creature> creature) { return followCreature == creature; }
+	virtual bool canFollowCreature(const std::shared_ptr<Creature>& creature);
+	virtual bool isFollowingCreature(const std::shared_ptr<Creature>& creature) { return followCreature == creature; }
 
 	// follow events
-	virtual void onFollowCreature(std::shared_ptr<const Creature>);
+	virtual void onFollowCreature(const std::shared_ptr<const Creature>&);
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	bool isFollower(std::shared_ptr<const Creature> creature);
-	void addFollower(std::shared_ptr<Creature> creature);
-	void removeFollower(std::shared_ptr<Creature> creature);
+	bool isFollower(const std::shared_ptr<const Creature>& creature);
+	void addFollower(const std::shared_ptr<Creature>& creature);
+	void removeFollower(const std::shared_ptr<Creature>& creature);
 	void removeFollowers();
 	void releaseFollowers();
 
@@ -228,16 +231,16 @@ public:
 
 	// combat functions
 	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature; }
-	virtual void setAttackedCreature(std::shared_ptr<Creature> creature);
+	virtual void setAttackedCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeAttackedCreature();
-	virtual bool canAttackCreature(std::shared_ptr<Creature> creature);
-	virtual bool isAttackingCreature(std::shared_ptr<Creature> creature) { return attackedCreature == creature; }
+	virtual bool canAttackCreature(const std::shared_ptr<Creature>& creature);
+	virtual bool isAttackingCreature(const std::shared_ptr<Creature>& creature) { return attackedCreature == creature; }
 
-	virtual BlockType_t blockHit(std::shared_ptr<Creature> attacker, CombatType_t combatType, int32_t& damage,
+	virtual BlockType_t blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                             bool ignoreResistances = false);
 
-	bool setMaster(std::shared_ptr<Creature> newMaster);
+	bool setMaster(const std::shared_ptr<Creature>& newMaster);
 
 	void removeMaster()
 	{
@@ -279,15 +282,15 @@ public:
 
 	virtual void changeHealth(int32_t healthChange, bool sendHealthChange = true);
 
-	void gainHealth(std::shared_ptr<Creature> healer, int32_t healthGain);
-	virtual void drainHealth(std::shared_ptr<Creature> attacker, int32_t damage);
+	void gainHealth(const std::shared_ptr<Creature>& healer, int32_t healthGain);
+	virtual void drainHealth(const std::shared_ptr<Creature>& attacker, int32_t damage);
 
-	virtual bool challengeCreature(std::shared_ptr<Creature>, bool) { return false; }
+	virtual bool challengeCreature(const std::shared_ptr<Creature>&, bool) { return false; }
 
 	CreatureVector getKillers();
 	void onDeath();
-	virtual uint64_t getGainedExperience(std::shared_ptr<Creature> attacker) const;
-	void addDamagePoints(std::shared_ptr<Creature> attacker, int32_t damagePoints);
+	virtual uint64_t getGainedExperience(const std::shared_ptr<Creature>& attacker) const;
+	void addDamagePoints(const std::shared_ptr<Creature>& attacker, int32_t damagePoints);
 	bool hasBeenAttacked(uint32_t attackerId);
 
 	// combat event functions
@@ -296,12 +299,12 @@ public:
 	virtual void onEndCondition(ConditionType_t type);
 	void onTickCondition(ConditionType_t type, bool& bRemove);
 	virtual void onCombatRemoveCondition(Condition* condition);
-	virtual void onAttackedCreature(std::shared_ptr<Creature>, bool = true) {}
+	virtual void onAttackedCreature(const std::shared_ptr<Creature>&, bool = true) {}
 	virtual void onAttacked();
-	virtual void onAttackedCreatureDrainHealth(std::shared_ptr<Creature> target, int32_t points);
-	virtual void onTargetCreatureGainHealth(std::shared_ptr<Creature>, int32_t) {}
-	virtual bool onKilledCreature(std::shared_ptr<Creature> target, bool lastHit = true);
-	virtual void onGainExperience(uint64_t gainExp, std::shared_ptr<Creature> target);
+	virtual void onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points);
+	virtual void onTargetCreatureGainHealth(const std::shared_ptr<Creature>&, int32_t) {}
+	virtual bool onKilledCreature(const std::shared_ptr<Creature>& target, bool lastHit = true);
+	virtual void onGainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& target);
 	virtual void onAttackedCreatureBlockHit(BlockType_t) {}
 	virtual void onBlockHit() {}
 	virtual void onChangeZone(ZoneType_t zone);
@@ -318,24 +321,25 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(std::shared_ptr<const Tile>, const Position&) {}
-	virtual void onUpdateTileItem(std::shared_ptr<const Tile>, const Position&, std::shared_ptr<const Item>,
-	                              const ItemType&, std::shared_ptr<const Item>, const ItemType&)
+	virtual void onAddTileItem(const std::shared_ptr<const Tile>&, const Position&) {}
+	virtual void onUpdateTileItem(const std::shared_ptr<const Tile>&, const Position&,
+	                              const std::shared_ptr<const Item>&, const ItemType&,
+	                              const std::shared_ptr<const Item>&, const ItemType&)
 	{}
-	virtual void onRemoveTileItem(std::shared_ptr<const Tile>, const Position&, const ItemType&,
-	                              std::shared_ptr<const Item>)
+	virtual void onRemoveTileItem(const std::shared_ptr<const Tile>&, const Position&, const ItemType&,
+	                              const std::shared_ptr<const Item>&)
 	{}
 
-	virtual void onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin);
-	virtual void onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout);
-	virtual void onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile,
-	                            const Position& newPos, std::shared_ptr<const Tile> oldTile, const Position& oldPos,
-	                            bool teleport);
+	virtual void onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin);
+	virtual void onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout);
+	virtual void onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+	                            const Position& newPos, const std::shared_ptr<const Tile>& oldTile,
+	                            const Position& oldPos, bool teleport);
 
 	virtual void onAttackedCreatureDisappear(bool) {}
 	virtual void onFollowCreatureDisappear(bool) {}
 
-	virtual void onCreatureSay(std::shared_ptr<Creature>, SpeakClasses, const std::string&) {}
+	virtual void onCreatureSay(const std::shared_ptr<Creature>&, SpeakClasses, const std::string&) {}
 
 	virtual void onPlacedCreature() {}
 
@@ -358,7 +362,7 @@ public:
 
 	bool hasParent() const override { return getParent() != nullptr; }
 	std::shared_ptr<Thing> getParent() const override final { return tile; }
-	void setParent(std::shared_ptr<Thing> thing) override final
+	void setParent(const std::shared_ptr<Thing>& thing) override final
 	{
 		tile = thing->getTile();
 		position = tile->getPosition();
@@ -374,7 +378,7 @@ public:
 
 	static bool canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY);
 
-	double getDamageRatio(std::shared_ptr<Creature> attacker) const;
+	double getDamageRatio(const std::shared_ptr<Creature>& attacker) const;
 
 	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, const FindPathParams& fpp) const;
 	bool getPathTo(const Position& targetPos, std::vector<Direction>& dirList, int32_t minTargetDist,
@@ -454,19 +458,20 @@ protected:
 	}
 	CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
-	void onCreatureDisappear(std::shared_ptr<const Creature> creature, bool isLogout);
+	void onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout);
 	virtual void doAttacking(uint32_t) {}
 	virtual bool hasExtraSwing() { return false; }
 
 	virtual uint64_t getLostExperience() const { return 0; }
-	virtual void dropLoot(std::shared_ptr<Container>, std::shared_ptr<Creature>) {}
+	virtual void dropLoot(const std::shared_ptr<Container>&, const std::shared_ptr<Creature>&) {}
 	virtual uint16_t getLookCorpse() const { return 0; }
-	virtual void getPathSearchParams(std::shared_ptr<const Creature> creature, FindPathParams& fpp) const;
-	virtual void death(std::shared_ptr<Creature>) {}
-	virtual bool dropCorpse(std::shared_ptr<Creature> lastHitCreature, std::shared_ptr<Creature> mostDamageCreature,
-	                        bool lastHitUnjustified, bool mostDamageUnjustified);
-	virtual std::shared_ptr<Item> getCorpse(std::shared_ptr<Creature> lastHitCreature,
-	                                        std::shared_ptr<Creature> mostDamageCreature);
+	virtual void getPathSearchParams(const std::shared_ptr<const Creature>& creature, FindPathParams& fpp) const;
+	virtual void death(const std::shared_ptr<Creature>&) {}
+	virtual bool dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+	                        const std::shared_ptr<Creature>& mostDamageCreature, bool lastHitUnjustified,
+	                        bool mostDamageUnjustified);
+	virtual std::shared_ptr<Item> getCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+	                                        const std::shared_ptr<Creature>& mostDamageCreature);
 
 	friend class Game;
 	friend class Map;

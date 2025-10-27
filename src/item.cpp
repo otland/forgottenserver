@@ -154,7 +154,7 @@ std::shared_ptr<Item> Item::clone() const
 		item->attributes.reset(new ItemAttributes(*attributes));
 		if (item->getDuration() > 0) {
 			item->setDecaying(DECAYING_TRUE);
-			g_game.toDecayItems.push_front(item);
+			g_game.toDecayItems.push_back(item);
 		}
 	}
 	return item;
@@ -957,7 +957,7 @@ uint32_t Item::getWeight() const
 	return weight;
 }
 
-std::string Item::getNameDescription(const ItemType& it, std::shared_ptr<const Item> item /*= nullptr*/,
+std::string Item::getNameDescription(const ItemType& it, const std::shared_ptr<const Item>& item /*= nullptr*/,
                                      int32_t subType /*= -1*/, bool addArticle /*= true*/)
 {
 	if (item) {

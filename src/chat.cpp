@@ -22,7 +22,7 @@ bool PrivateChatChannel::isInvited(uint32_t guid) const
 
 bool PrivateChatChannel::removeInvite(uint32_t guid) { return invites.erase(guid) != 0; }
 
-void PrivateChatChannel::invitePlayer(std::shared_ptr<const Player> player, std::shared_ptr<Player> invitePlayer)
+void PrivateChatChannel::invitePlayer(const std::shared_ptr<const Player>& player, std::shared_ptr<Player> invitePlayer)
 {
 	auto result = invites.emplace(invitePlayer->getGUID(), invitePlayer);
 	if (!result.second) {
@@ -40,7 +40,8 @@ void PrivateChatChannel::invitePlayer(std::shared_ptr<const Player> player, std:
 	}
 }
 
-void PrivateChatChannel::excludePlayer(std::shared_ptr<const Player> player, std::shared_ptr<Player> excludePlayer)
+void PrivateChatChannel::excludePlayer(const std::shared_ptr<const Player>& player,
+                                       const std::shared_ptr<Player>& excludePlayer)
 {
 	if (!removeInvite(excludePlayer->getGUID())) {
 		return;
@@ -64,7 +65,7 @@ void PrivateChatChannel::closeChannel() const
 	}
 }
 
-bool ChatChannel::addUser(std::shared_ptr<Player> player)
+bool ChatChannel::addUser(const std::shared_ptr<Player>& player)
 {
 	if (users.find(player->getID()) != users.end()) {
 		return false;
@@ -92,7 +93,7 @@ bool ChatChannel::addUser(std::shared_ptr<Player> player)
 	return true;
 }
 
-bool ChatChannel::removeUser(std::shared_ptr<const Player> player)
+bool ChatChannel::removeUser(const std::shared_ptr<const Player>& player)
 {
 	auto iter = users.find(player->getID());
 	if (iter == users.end()) {
@@ -111,7 +112,10 @@ bool ChatChannel::removeUser(std::shared_ptr<const Player> player)
 	return true;
 }
 
-bool ChatChannel::hasUser(std::shared_ptr<const Player> player) { return users.find(player->getID()) != users.end(); }
+bool ChatChannel::hasUser(const std::shared_ptr<const Player>& player)
+{
+	return users.find(player->getID()) != users.end();
+}
 
 void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 {
@@ -120,7 +124,7 @@ void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 	}
 }
 
-bool ChatChannel::talk(std::shared_ptr<const Player> fromPlayer, SpeakClasses type, const std::string& text)
+bool ChatChannel::talk(const std::shared_ptr<const Player>& fromPlayer, SpeakClasses type, const std::string& text)
 {
 	if (users.find(fromPlayer->getID()) == users.end()) {
 		return false;
@@ -132,7 +136,7 @@ bool ChatChannel::talk(std::shared_ptr<const Player> fromPlayer, SpeakClasses ty
 	return true;
 }
 
-bool ChatChannel::executeCanJoinEvent(std::shared_ptr<const Player> player)
+bool ChatChannel::executeCanJoinEvent(const std::shared_ptr<const Player>& player)
 {
 	if (canJoinEvent == -1) {
 		return true;
@@ -157,7 +161,7 @@ bool ChatChannel::executeCanJoinEvent(std::shared_ptr<const Player> player)
 	return scriptInterface->callFunction(1);
 }
 
-bool ChatChannel::executeOnJoinEvent(std::shared_ptr<const Player> player)
+bool ChatChannel::executeOnJoinEvent(const std::shared_ptr<const Player>& player)
 {
 	if (onJoinEvent == -1) {
 		return true;
@@ -182,7 +186,7 @@ bool ChatChannel::executeOnJoinEvent(std::shared_ptr<const Player> player)
 	return scriptInterface->callFunction(1);
 }
 
-bool ChatChannel::executeOnLeaveEvent(std::shared_ptr<const Player> player)
+bool ChatChannel::executeOnLeaveEvent(const std::shared_ptr<const Player>& player)
 {
 	if (onLeaveEvent == -1) {
 		return true;
@@ -207,7 +211,7 @@ bool ChatChannel::executeOnLeaveEvent(std::shared_ptr<const Player> player)
 	return scriptInterface->callFunction(1);
 }
 
-bool ChatChannel::executeOnSpeakEvent(std::shared_ptr<const Player> player, SpeakClasses& type,
+bool ChatChannel::executeOnSpeakEvent(const std::shared_ptr<const Player>& player, SpeakClasses& type,
                                       const std::string& message)
 {
 	if (onSpeakEvent == -1) {
@@ -321,7 +325,7 @@ bool Chat::load()
 	return true;
 }
 
-ChatChannel* Chat::createChannel(std::shared_ptr<const Player> player, uint16_t channelId)
+ChatChannel* Chat::createChannel(const std::shared_ptr<const Player>& player, uint16_t channelId)
 {
 	if (getChannel(player, channelId)) {
 		return nullptr;
@@ -371,7 +375,7 @@ ChatChannel* Chat::createChannel(std::shared_ptr<const Player> player, uint16_t 
 	return nullptr;
 }
 
-bool Chat::deleteChannel(std::shared_ptr<const Player> player, uint16_t channelId)
+bool Chat::deleteChannel(const std::shared_ptr<const Player>& player, uint16_t channelId)
 {
 	switch (channelId) {
 		case CHANNEL_GUILD: {
@@ -422,13 +426,13 @@ bool Chat::deleteChannel(std::shared_ptr<const Player> player, uint16_t channelI
 ChatChannel* Chat::addUserToChannel(std::shared_ptr<Player> player, uint16_t channelId)
 {
 	ChatChannel* channel = getChannel(player, channelId);
-	if (channel && channel->addUser(player)) {
+	if (channel && channel->addUser(std::move(player))) {
 		return channel;
 	}
 	return nullptr;
 }
 
-bool Chat::removeUserFromChannel(std::shared_ptr<const Player> player, uint16_t channelId)
+bool Chat::removeUserFromChannel(const std::shared_ptr<const Player>& player, uint16_t channelId)
 {
 	ChatChannel* channel = getChannel(player, channelId);
 	if (!channel || !channel->removeUser(player)) {
@@ -441,7 +445,7 @@ bool Chat::removeUserFromChannel(std::shared_ptr<const Player> player, uint16_t 
 	return true;
 }
 
-void Chat::removeUserFromAllChannels(std::shared_ptr<const Player> player)
+void Chat::removeUserFromAllChannels(const std::shared_ptr<const Player>& player)
 {
 	for (auto& it : normalChannels) {
 		it.second.removeUser(player);
@@ -469,7 +473,7 @@ void Chat::removeUserFromAllChannels(std::shared_ptr<const Player> player)
 	}
 }
 
-bool Chat::talkToChannel(std::shared_ptr<const Player> player, SpeakClasses type, const std::string& text,
+bool Chat::talkToChannel(const std::shared_ptr<const Player>& player, SpeakClasses type, const std::string& text,
                          uint16_t channelId)
 {
 	ChatChannel* channel = getChannel(player, channelId);
@@ -495,7 +499,7 @@ bool Chat::talkToChannel(std::shared_ptr<const Player> player, SpeakClasses type
 	return channel->talk(player, type, text);
 }
 
-ChannelList Chat::getChannelList(std::shared_ptr<const Player> player)
+ChannelList Chat::getChannelList(const std::shared_ptr<const Player>& player)
 {
 	ChannelList list;
 	if (player->getGuild()) {
@@ -549,7 +553,7 @@ ChannelList Chat::getChannelList(std::shared_ptr<const Player> player)
 	return list;
 }
 
-ChatChannel* Chat::getChannel(std::shared_ptr<const Player> player, uint16_t channelId)
+ChatChannel* Chat::getChannel(const std::shared_ptr<const Player>& player, uint16_t channelId)
 {
 	switch (channelId) {
 		case CHANNEL_GUILD: {
@@ -611,7 +615,7 @@ ChatChannel* Chat::getChannelById(uint16_t channelId)
 	return &it->second;
 }
 
-PrivateChatChannel* Chat::getPrivateChannel(std::shared_ptr<const Player> player)
+PrivateChatChannel* Chat::getPrivateChannel(const std::shared_ptr<const Player>& player)
 {
 	for (auto& it : privateChannels) {
 		if (it.second.getOwner() == player->getGUID()) {

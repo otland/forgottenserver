@@ -61,7 +61,8 @@ std::vector<std::shared_ptr<Tile>> getCombatArea(const Position& centerPos, cons
 	return {tile};
 }
 
-CombatDamage Combat::getCombatDamage(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) const
+CombatDamage Combat::getCombatDamage(const std::shared_ptr<Creature>& creature,
+                                     const std::shared_ptr<Creature>& target) const
 {
 	CombatDamage damage;
 	damage.origin = params.origin;
@@ -164,7 +165,7 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 	}
 }
 
-bool Combat::isPlayerCombat(std::shared_ptr<const Creature> target)
+bool Combat::isPlayerCombat(const std::shared_ptr<const Creature>& target)
 {
 	if (target->getPlayer()) {
 		return true;
@@ -177,7 +178,7 @@ bool Combat::isPlayerCombat(std::shared_ptr<const Creature> target)
 	return false;
 }
 
-ReturnValue Combat::canTargetCreature(std::shared_ptr<Player> attacker, std::shared_ptr<Creature> target)
+ReturnValue Combat::canTargetCreature(const std::shared_ptr<Player>& attacker, const std::shared_ptr<Creature>& target)
 {
 	if (attacker == target) {
 		return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
@@ -226,7 +227,8 @@ ReturnValue Combat::canTargetCreature(std::shared_ptr<Player> attacker, std::sha
 	return Combat::canDoCombat(attacker, target);
 }
 
-ReturnValue Combat::canDoCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Tile> tile, bool aggressive)
+ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Tile>& tile,
+                                bool aggressive)
 {
 	if (tile->hasProperty(CONST_PROP_BLOCKPROJECTILE)) {
 		return RETURNVALUE_NOTENOUGHROOM;
@@ -264,12 +266,12 @@ ReturnValue Combat::canDoCombat(std::shared_ptr<Creature> caster, std::shared_pt
 	return tfs::events::creature::onAreaCombat(caster, tile, aggressive);
 }
 
-bool Combat::isInPvpZone(std::shared_ptr<const Creature> attacker, std::shared_ptr<const Creature> target)
+bool Combat::isInPvpZone(const std::shared_ptr<const Creature>& attacker, const std::shared_ptr<const Creature>& target)
 {
 	return attacker->getZone() == ZONE_PVP && target->getZone() == ZONE_PVP;
 }
 
-bool Combat::isProtected(std::shared_ptr<const Player> attacker, std::shared_ptr<const Player> target)
+bool Combat::isProtected(const std::shared_ptr<const Player>& attacker, const std::shared_ptr<const Player>& target)
 {
 	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
 	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
@@ -287,7 +289,7 @@ bool Combat::isProtected(std::shared_ptr<const Player> attacker, std::shared_ptr
 	return false;
 }
 
-ReturnValue Combat::canDoCombat(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature> target)
+ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target)
 {
 	if (!attacker) {
 		return tfs::events::creature::onTargetCombat(attacker, target);
@@ -522,8 +524,8 @@ CallBack* Combat::getCallback(CallBackParam_t key)
 	return nullptr;
 }
 
-void Combat::combatTileEffects(const SpectatorVec& spectators, std::shared_ptr<Creature> caster,
-                               std::shared_ptr<Tile> tile, const CombatParams& params)
+void Combat::combatTileEffects(const SpectatorVec& spectators, const std::shared_ptr<Creature>& caster,
+                               const std::shared_ptr<Tile>& tile, const CombatParams& params)
 {
 	if (params.itemId != 0) {
 		uint16_t itemId = params.itemId;
@@ -608,14 +610,14 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, std::shared_ptr<C
 	}
 }
 
-void Combat::postCombatEffects(std::shared_ptr<Creature> caster, const Position& pos, const CombatParams& params)
+void Combat::postCombatEffects(const std::shared_ptr<Creature>& caster, const Position& pos, const CombatParams& params)
 {
 	if (caster && params.distanceEffect != CONST_ANI_NONE) {
 		addDistanceEffect(caster, caster->getPosition(), pos, params.distanceEffect);
 	}
 }
 
-void Combat::addDistanceEffect(std::shared_ptr<Creature> caster, const Position& fromPos, const Position& toPos,
+void Combat::addDistanceEffect(const std::shared_ptr<Creature>& caster, const Position& fromPos, const Position& toPos,
                                uint8_t effect)
 {
 	if (effect == CONST_ANI_WEAPONTYPE) {
@@ -649,7 +651,7 @@ void Combat::addDistanceEffect(std::shared_ptr<Creature> caster, const Position&
 	}
 }
 
-void Combat::doCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Creature> target) const
+void Combat::doCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target) const
 {
 	// target combat callback function
 	if (params.combatType != COMBAT_NONE) {
@@ -705,7 +707,7 @@ void Combat::doCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Creature
 	}
 }
 
-void Combat::doCombat(std::shared_ptr<Creature> caster, const Position& position) const
+void Combat::doCombat(const std::shared_ptr<Creature>& caster, const Position& position) const
 {
 	// area combat callback function
 	if (params.combatType != COMBAT_NONE) {
@@ -786,8 +788,8 @@ void Combat::doCombat(std::shared_ptr<Creature> caster, const Position& position
 	}
 }
 
-void Combat::doTargetCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Creature> target, CombatDamage& damage,
-                            const CombatParams& params)
+void Combat::doTargetCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target,
+                            CombatDamage& damage, const CombatParams& params)
 {
 	if (caster && target && params.distanceEffect != CONST_ANI_NONE) {
 		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
@@ -886,7 +888,7 @@ void Combat::doTargetCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Cr
 	}
 }
 
-void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& position, const AreaCombat* area,
+void Combat::doAreaCombat(const std::shared_ptr<Creature>& caster, const Position& position, const AreaCombat* area,
                           CombatDamage& damage, const CombatParams& params)
 {
 	auto tiles =
@@ -1055,7 +1057,7 @@ void Combat::doAreaCombat(std::shared_ptr<Creature> caster, const Position& posi
 
 //**********************************************************//
 
-void ValueCallback::getMinMaxValues(std::shared_ptr<Player> player, CombatDamage& damage) const
+void ValueCallback::getMinMaxValues(const std::shared_ptr<Player>& player, CombatDamage& damage) const
 {
 	// onGetPlayerMinMaxValues(...)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -1137,7 +1139,7 @@ void ValueCallback::getMinMaxValues(std::shared_ptr<Player> player, CombatDamage
 
 //**********************************************************//
 
-void TileCallback::onTileCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> tile) const
+void TileCallback::onTileCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& tile) const
 {
 	// onTileCombat(creature, pos)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -1167,7 +1169,8 @@ void TileCallback::onTileCombat(std::shared_ptr<Creature> creature, std::shared_
 
 //**********************************************************//
 
-void TargetCallback::onTargetCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) const
+void TargetCallback::onTargetCombat(const std::shared_ptr<Creature>& creature,
+                                    const std::shared_ptr<Creature>& target) const
 {
 	// onTargetCombat(creature, target)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -1367,7 +1370,7 @@ void AreaCombat::setupExtArea(const std::vector<uint32_t>& vec, uint32_t rows)
 
 //**********************************************************//
 
-void MagicField::onStepInField(std::shared_ptr<Creature> creature)
+void MagicField::onStepInField(const std::shared_ptr<Creature>& creature)
 {
 	// remove magic walls/wild growth
 	if (id == ITEM_MAGICWALL_SAFE || id == ITEM_WILDGROWTH_SAFE || isBlocking()) {

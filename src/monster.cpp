@@ -108,7 +108,7 @@ bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 
 void Monster::onAttackedCreatureDisappear(bool) { attackTicks = 0; }
 
-void Monster::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
+void Monster::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)
 {
 	Creature::onCreatureAppear(creature, isLogin);
 
@@ -150,7 +150,7 @@ void Monster::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
 	}
 }
 
-void Monster::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout)
+void Monster::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout)
 {
 	Creature::onRemoveCreature(creature, isLogout);
 
@@ -190,8 +190,8 @@ void Monster::onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout
 	}
 }
 
-void Monster::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile,
-                             const Position& newPos, std::shared_ptr<const Tile> oldTile, const Position& oldPos,
+void Monster::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+                             const Position& newPos, const std::shared_ptr<const Tile>& oldTile, const Position& oldPos,
                              bool teleport)
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
@@ -274,7 +274,7 @@ void Monster::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr
 	}
 }
 
-void Monster::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text)
+void Monster::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type, const std::string& text)
 {
 	Creature::onCreatureSay(creature, type, text);
 
@@ -305,13 +305,13 @@ void Monster::onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses typ
 	}
 }
 
-void Monster::addFriend(std::shared_ptr<Creature> creature)
+void Monster::addFriend(const std::shared_ptr<Creature>& creature)
 {
 	assert(creature.get() != this);
 	friendList.insert(creature);
 }
 
-void Monster::removeFriend(std::shared_ptr<Creature> creature)
+void Monster::removeFriend(const std::shared_ptr<Creature>& creature)
 {
 	auto it = friendList.find(creature);
 	if (it != friendList.end()) {
@@ -319,7 +319,7 @@ void Monster::removeFriend(std::shared_ptr<Creature> creature)
 	}
 }
 
-void Monster::addTarget(std::shared_ptr<Creature> creature, bool pushFront /* = false*/)
+void Monster::addTarget(const std::shared_ptr<Creature>& creature, bool pushFront /* = false*/)
 {
 	assert(creature.get() != this);
 	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
@@ -331,7 +331,7 @@ void Monster::addTarget(std::shared_ptr<Creature> creature, bool pushFront /* = 
 	}
 }
 
-void Monster::removeTarget(std::shared_ptr<Creature> creature)
+void Monster::removeTarget(const std::shared_ptr<Creature>& creature)
 {
 	auto it = std::find(targetList.begin(), targetList.end(), creature);
 	if (it != targetList.end()) {
@@ -371,7 +371,7 @@ void Monster::clearTargetList() { targetList.clear(); }
 
 void Monster::clearFriendList() { friendList.clear(); }
 
-void Monster::onCreatureFound(std::shared_ptr<Creature> creature, bool pushFront /* = false*/)
+void Monster::onCreatureFound(const std::shared_ptr<Creature>& creature, bool pushFront /* = false*/)
 {
 	if (!creature) {
 		return;
@@ -392,7 +392,7 @@ void Monster::onCreatureFound(std::shared_ptr<Creature> creature, bool pushFront
 	updateIdleStatus();
 }
 
-void Monster::onCreatureEnter(std::shared_ptr<Creature> creature)
+void Monster::onCreatureEnter(const std::shared_ptr<Creature>& creature)
 {
 	// std::cout << "onCreatureEnter - " << creature->getName() << std::endl;
 
@@ -404,7 +404,7 @@ void Monster::onCreatureEnter(std::shared_ptr<Creature> creature)
 	onCreatureFound(creature, true);
 }
 
-bool Monster::isFriend(std::shared_ptr<const Creature> creature) const
+bool Monster::isFriend(const std::shared_ptr<const Creature>& creature) const
 {
 	if (isSummon() && getMaster()->getPlayer()) {
 		auto masterPlayer = getMaster()->getPlayer();
@@ -430,7 +430,7 @@ bool Monster::isFriend(std::shared_ptr<const Creature> creature) const
 	return false;
 }
 
-bool Monster::isOpponent(std::shared_ptr<const Creature> creature) const
+bool Monster::isOpponent(const std::shared_ptr<const Creature>& creature) const
 {
 	if (isSummon() && getMaster()->getPlayer()) {
 		if (creature != getMaster()) {
@@ -446,7 +446,7 @@ bool Monster::isOpponent(std::shared_ptr<const Creature> creature) const
 	return false;
 }
 
-void Monster::onCreatureLeave(std::shared_ptr<Creature> creature)
+void Monster::onCreatureLeave(const std::shared_ptr<Creature>& creature)
 {
 	// std::cout << "onCreatureLeave - " << creature->getName() << std::endl;
 
@@ -605,7 +605,7 @@ void Monster::onFollowCreatureComplete()
 	}
 }
 
-BlockType_t Monster::blockHit(std::shared_ptr<Creature> attacker, CombatType_t combatType, int32_t& damage,
+BlockType_t Monster::blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
                               bool checkDefense /* = false*/, bool checkArmor /* = false*/, bool /* field = false */,
                               bool /* ignoreResistances = false */)
 {
@@ -630,7 +630,7 @@ BlockType_t Monster::blockHit(std::shared_ptr<Creature> attacker, CombatType_t c
 	return blockType;
 }
 
-bool Monster::isTarget(std::shared_ptr<const Creature> creature) const
+bool Monster::isTarget(const std::shared_ptr<const Creature>& creature) const
 {
 	if (creature->isRemoved() || !creature->isAttackable() || creature->getZone() == ZONE_PROTECTION ||
 	    !canSeeCreature(creature)) {
@@ -643,7 +643,7 @@ bool Monster::isTarget(std::shared_ptr<const Creature> creature) const
 	return true;
 }
 
-bool Monster::selectTarget(std::shared_ptr<Creature> creature)
+bool Monster::selectTarget(const std::shared_ptr<Creature>& creature)
 {
 	if (!isTarget(creature)) {
 		return false;
@@ -850,7 +850,7 @@ void Monster::doAttacking(uint32_t interval)
 	}
 }
 
-bool Monster::canUseAttack(const Position& pos, std::shared_ptr<const Creature> target) const
+bool Monster::canUseAttack(const Position& pos, const std::shared_ptr<const Creature>& target) const
 {
 	if (isHostile()) {
 		const Position& targetPos = target->getPosition();
@@ -1081,7 +1081,7 @@ void Monster::onWalkComplete()
 	}
 }
 
-bool Monster::pushItem(std::shared_ptr<Item> item)
+bool Monster::pushItem(const std::shared_ptr<Item>& item)
 {
 	const Position& centerPos = item->getPosition();
 
@@ -1103,7 +1103,7 @@ bool Monster::pushItem(std::shared_ptr<Item> item)
 	return false;
 }
 
-void Monster::pushItems(std::shared_ptr<Tile> tile)
+void Monster::pushItems(const std::shared_ptr<Tile>& tile)
 {
 	// We can not use iterators here since we can push the item to another tile which will invalidate the iterator.
 	// start from the end to minimize the amount of traffic
@@ -1130,7 +1130,7 @@ void Monster::pushItems(std::shared_ptr<Tile> tile)
 	}
 }
 
-bool Monster::pushCreature(std::shared_ptr<Creature> creature)
+bool Monster::pushCreature(const std::shared_ptr<Creature>& creature)
 {
 	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
 	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
@@ -1147,7 +1147,7 @@ bool Monster::pushCreature(std::shared_ptr<Creature> creature)
 	return false;
 }
 
-void Monster::pushCreatures(std::shared_ptr<Tile> tile)
+void Monster::pushCreatures(const std::shared_ptr<Tile>& tile)
 {
 	// We can not use iterators here since we can push a creature to another tile which will invalidate the iterator.
 	if (CreatureVector* creatures = tile->getCreatures()) {
@@ -1844,7 +1844,7 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 	return false;
 }
 
-void Monster::death(std::shared_ptr<Creature>)
+void Monster::death(const std::shared_ptr<Creature>&)
 {
 	removeAttackedCreature();
 
@@ -1859,10 +1859,10 @@ void Monster::death(std::shared_ptr<Creature>)
 	onIdleStatus();
 }
 
-std::shared_ptr<Item> Monster::getCorpse(std::shared_ptr<Creature> lastHitCreature,
-                                         std::shared_ptr<Creature> mostDamageCreature)
+std::shared_ptr<Item> Monster::getCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+                                         const std::shared_ptr<Creature>& mostDamageCreature)
 {
-	std::shared_ptr<Item> corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
+	auto corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
 	if (corpse) {
 		if (mostDamageCreature) {
 			if (mostDamageCreature->getPlayer()) {
@@ -1945,7 +1945,7 @@ void Monster::updateLookDirection()
 	g_game.internalCreatureTurn(getMonster(), lookDirection);
 }
 
-void Monster::dropLoot(std::shared_ptr<Container> corpse, std::shared_ptr<Creature>)
+void Monster::dropLoot(const std::shared_ptr<Container>& corpse, const std::shared_ptr<Creature>&)
 {
 	if (corpse && lootDrop) {
 		tfs::events::monster::onDropLoot(getMonster(), corpse);
@@ -1954,7 +1954,7 @@ void Monster::dropLoot(std::shared_ptr<Container> corpse, std::shared_ptr<Creatu
 
 void Monster::setNormalCreatureLight() { internalLight = mType->info.light; }
 
-void Monster::drainHealth(std::shared_ptr<Creature> attacker, int32_t damage)
+void Monster::drainHealth(const std::shared_ptr<Creature>& attacker, int32_t damage)
 {
 	Creature::drainHealth(attacker, damage);
 
@@ -1974,7 +1974,7 @@ void Monster::changeHealth(int32_t healthChange, bool sendHealthChange /* = true
 	Creature::changeHealth(healthChange, sendHealthChange);
 }
 
-bool Monster::challengeCreature(std::shared_ptr<Creature> creature, bool force /* = false*/)
+bool Monster::challengeCreature(const std::shared_ptr<Creature>& creature, bool force /* = false*/)
 {
 	if (isSummon()) {
 		return false;
@@ -1993,7 +1993,7 @@ bool Monster::challengeCreature(std::shared_ptr<Creature> creature, bool force /
 	return result;
 }
 
-void Monster::getPathSearchParams(std::shared_ptr<const Creature> creature, FindPathParams& fpp) const
+void Monster::getPathSearchParams(const std::shared_ptr<const Creature>& creature, FindPathParams& fpp) const
 {
 	Creature::getPathSearchParams(creature, fpp);
 

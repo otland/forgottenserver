@@ -66,7 +66,7 @@ bool TalkActions::registerLuaEvent(TalkAction* event)
 	return true;
 }
 
-TalkActionResult_t TalkActions::playerSaySpell(std::shared_ptr<Player> player, SpeakClasses type,
+TalkActionResult_t TalkActions::playerSaySpell(const std::shared_ptr<Player>& player, SpeakClasses type,
                                                const std::string& words) const
 {
 	size_t wordsLength = words.length();
@@ -136,7 +136,7 @@ bool TalkAction::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool TalkAction::executeSay(std::shared_ptr<Player> player, const std::string& words, const std::string& param,
+bool TalkAction::executeSay(const std::shared_ptr<Player>& player, const std::string& words, const std::string& param,
                             SpeakClasses type) const
 {
 	// onSay(player, words, param, type)

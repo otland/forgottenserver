@@ -179,7 +179,7 @@ bool Game::loadMainMap(const std::string& filename)
 
 void Game::loadMap(const std::string& path, bool isCalledByLua) { map.loadMap(path, false, isCalledByLua); }
 
-std::shared_ptr<Thing> Game::internalGetThing(std::shared_ptr<Player> player, const Position& pos) const
+std::shared_ptr<Thing> Game::internalGetThing(const std::shared_ptr<Player>& player, const Position& pos) const
 {
 	if (pos.x != 0xFFFF) {
 		return map.getTile(pos);
@@ -195,7 +195,7 @@ std::shared_ptr<Thing> Game::internalGetThing(std::shared_ptr<Player> player, co
 	return player;
 }
 
-std::shared_ptr<Thing> Game::internalGetThing(std::shared_ptr<Player> player, const Position& pos, int32_t index,
+std::shared_ptr<Thing> Game::internalGetThing(const std::shared_ptr<Player>& player, const Position& pos, int32_t index,
                                               uint32_t spriteId, stackPosType_t type) const
 {
 	if (pos.x != 0xFFFF) {
@@ -204,7 +204,7 @@ std::shared_ptr<Thing> Game::internalGetThing(std::shared_ptr<Player> player, co
 			return nullptr;
 		}
 
-		std::shared_ptr<Thing> thing;
+		std::shared_ptr<Thing> thing = nullptr;
 		switch (type) {
 			case STACKPOS_LOOK: {
 				return tile->getTopVisibleThing(player);
@@ -313,7 +313,7 @@ std::shared_ptr<Thing> Game::internalGetThing(std::shared_ptr<Player> player, co
 	return player->getInventoryItem(slot);
 }
 
-void Game::internalGetPosition(std::shared_ptr<Item> item, Position& pos, uint8_t& stackpos)
+void Game::internalGetPosition(const std::shared_ptr<Item>& item, Position& pos, uint8_t& stackpos)
 {
 	pos.x = 0;
 	pos.y = 0;
@@ -501,8 +501,8 @@ std::shared_ptr<Player> Game::getPlayerByAccount(uint32_t acc)
 	return nullptr;
 }
 
-bool Game::internalPlaceCreature(std::shared_ptr<Creature> creature, const Position& pos, bool extendedPos /*=false*/,
-                                 bool forced /*= false*/)
+bool Game::internalPlaceCreature(const std::shared_ptr<Creature>& creature, const Position& pos,
+                                 bool extendedPos /*=false*/, bool forced /*= false*/)
 {
 	if (creature->hasParent()) {
 		return false;
@@ -517,7 +517,7 @@ bool Game::internalPlaceCreature(std::shared_ptr<Creature> creature, const Posit
 	return true;
 }
 
-bool Game::placeCreature(std::shared_ptr<Creature> creature, const Position& pos, bool extendedPos /*=false*/,
+bool Game::placeCreature(const std::shared_ptr<Creature>& creature, const Position& pos, bool extendedPos /*=false*/,
                          bool forced /*= false*/, MagicEffectClasses magicEffect /*= CONST_ME_TELEPORT*/)
 {
 	if (!internalPlaceCreature(creature, pos, extendedPos, forced)) {
@@ -543,7 +543,7 @@ bool Game::placeCreature(std::shared_ptr<Creature> creature, const Position& pos
 	return true;
 }
 
-bool Game::removeCreature(std::shared_ptr<Creature> creature, bool isLogout /* = true*/)
+bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogout /* = true*/)
 {
 	if (creature->isRemoved()) {
 		return false;
@@ -682,8 +682,8 @@ void Game::playerMoveCreatureByID(uint32_t playerId, uint32_t movingCreatureId, 
 	playerMoveCreature(player, movingCreature, movingCreatureOrigPos, toTile);
 }
 
-void Game::playerMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Creature> movingCreature,
-                              const Position& movingCreatureOrigPos, std::shared_ptr<Tile> toTile)
+void Game::playerMoveCreature(const std::shared_ptr<Player>& player, const std::shared_ptr<Creature>& movingCreature,
+                              const Position& movingCreatureOrigPos, const std::shared_ptr<Tile>& toTile)
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
@@ -780,7 +780,8 @@ void Game::playerMoveCreature(std::shared_ptr<Player> player, std::shared_ptr<Cr
 	}
 }
 
-ReturnValue Game::internalMoveCreature(std::shared_ptr<Creature> creature, Direction direction, uint32_t flags /*= 0*/)
+ReturnValue Game::internalMoveCreature(const std::shared_ptr<Creature>& creature, Direction direction,
+                                       uint32_t flags /*= 0*/)
 {
 	creature->setLastPosition(creature->getPosition());
 	const Position& currentPos = creature->getPosition();
@@ -826,7 +827,7 @@ ReturnValue Game::internalMoveCreature(std::shared_ptr<Creature> creature, Direc
 	return internalMoveCreature(creature, toTile, flags);
 }
 
-ReturnValue Game::internalMoveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> toTile,
+ReturnValue Game::internalMoveCreature(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& toTile,
                                        uint32_t flags /*= 0*/)
 {
 	if (creature->hasCondition(CONDITION_ROOT)) {
@@ -894,9 +895,9 @@ void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, 
 	playerMoveItem(player, fromPos, spriteId, fromStackPos, toPos, count, nullptr, nullptr);
 }
 
-void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPos, uint16_t spriteId,
-                          uint8_t fromStackPos, const Position& toPos, uint8_t count, std::shared_ptr<Item> item,
-                          std::shared_ptr<Thing> toThing)
+void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position& fromPos, uint16_t spriteId,
+                          uint8_t fromStackPos, const Position& toPos, uint8_t count,
+                          const std::shared_ptr<Item>& _item, const std::shared_ptr<Thing>& _toThing)
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
@@ -909,6 +910,7 @@ void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPo
 
 	player->setNextActionTask(nullptr);
 
+	std::shared_ptr<Item> item = _item;
 	if (!item) {
 		uint8_t fromIndex = 0;
 		if (fromPos.x == 0xFFFF) {
@@ -941,6 +943,7 @@ void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPo
 		return;
 	}
 
+	auto toThing = _toThing;
 	if (!toThing) {
 		toThing = internalGetThing(player, toPos);
 		if (!toThing) {
@@ -1076,21 +1079,23 @@ void Game::playerMoveItem(std::shared_ptr<Player> player, const Position& fromPo
 	}
 }
 
-ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared_ptr<Thing> toThing, int32_t index,
-                                   std::shared_ptr<Item> item, uint32_t count, std::shared_ptr<Item>* _moveItem,
-                                   uint32_t flags /*= 0*/, std::shared_ptr<Creature> actor /* = nullptr*/,
-                                   std::shared_ptr<Item> tradeItem /* = nullptr*/,
+ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& _fromThing, const std::shared_ptr<Thing>& _toThing,
+                                   int32_t index, const std::shared_ptr<Item>& item, uint32_t count,
+                                   std::shared_ptr<Item>* _moveItem, uint32_t flags /*= 0*/,
+                                   const std::shared_ptr<Creature>& actor /* = nullptr*/,
+                                   const std::shared_ptr<Item>& tradeItem /* = nullptr*/,
                                    const Position* fromPos /*= nullptr*/, const Position* toPos /*= nullptr*/)
 {
 	auto actorPlayer = actor ? actor->getPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret =
-		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromThing, toThing);
+		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, _fromThing, _toThing);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
 		}
 	}
 
+	auto fromThing = _fromThing;
 	auto fromTile = fromThing->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile);
@@ -1104,6 +1109,7 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared
 	std::shared_ptr<Thing> subThing;
 	int floorN = 0;
 
+	auto toThing = _toThing;
 	while ((subThing = toThing->queryDestination(index, item, toItem, flags)) != toThing) {
 		toThing = subThing;
 
@@ -1283,7 +1289,7 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared
 	if (moveItem && moveItem->getDuration() > 0) {
 		if (moveItem->getDecaying() != DECAYING_TRUE) {
 			moveItem->setDecaying(DECAYING_TRUE);
-			toDecayItems.push_front(moveItem);
+			toDecayItems.push_back(moveItem);
 		}
 	}
 
@@ -1300,23 +1306,23 @@ ReturnValue Game::internalMoveItem(std::shared_ptr<Thing> fromThing, std::shared
 	return ret;
 }
 
-ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toThing, std::shared_ptr<Item> item,
+ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& toThing, const std::shared_ptr<Item>& item,
                                   int32_t index /*= INDEX_WHEREEVER*/, uint32_t flags /* = 0*/, bool test /* = false*/)
 {
 	uint32_t remainderCount = 0;
 	return internalAddItem(std::move(toThing), std::move(item), index, flags, test, remainderCount);
 }
 
-ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toThing, std::shared_ptr<Item> item, int32_t index,
-                                  uint32_t flags, bool test, uint32_t& remainderCount)
+ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& _toThing, const std::shared_ptr<Item>& item,
+                                  int32_t index, uint32_t flags, bool test, uint32_t& remainderCount)
 {
-	if (!toThing || !item) {
+	if (!_toThing || !item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	auto destThing = toThing;
+	auto destThing = _toThing;
 	std::shared_ptr<Item> toItem = nullptr;
-	toThing = toThing->queryDestination(index, item, toItem, flags);
+	auto toThing = _toThing->queryDestination(index, item, toItem, flags);
 
 	// check if we can add this item
 	ReturnValue ret = toThing->queryAdd(index, item, item->getItemCount(), flags);
@@ -1382,14 +1388,14 @@ ReturnValue Game::internalAddItem(std::shared_ptr<Thing> toThing, std::shared_pt
 	if (!item->isRemoved() && item->getDuration() > 0) {
 		if (item->getDecaying() != DECAYING_TRUE) {
 			item->setDecaying(DECAYING_TRUE);
-			toDecayItems.push_front(item);
+			toDecayItems.push_back(item);
 		}
 	}
 
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Game::internalRemoveItem(std::shared_ptr<Item> item, int32_t count /*= -1*/, bool test /*= false*/,
+ReturnValue Game::internalRemoveItem(const std::shared_ptr<Item>& item, int32_t count /*= -1*/, bool test /*= false*/,
                                      uint32_t flags /*= 0*/)
 {
 	auto parent = item->getParent();
@@ -1438,7 +1444,7 @@ ReturnValue Game::internalRemoveItem(std::shared_ptr<Item> item, int32_t count /
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Game::internalPlayerAddItem(std::shared_ptr<Player> player, std::shared_ptr<Item> item,
+ReturnValue Game::internalPlayerAddItem(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
                                         bool dropOnMap /*= true*/, slots_t slot /*= CONST_SLOT_WHEREEVER*/)
 {
 	uint32_t remainderCount = 0;
@@ -1455,7 +1461,7 @@ ReturnValue Game::internalPlayerAddItem(std::shared_ptr<Player> player, std::sha
 	return ret;
 }
 
-std::shared_ptr<Item> Game::findItemOfType(std::shared_ptr<Thing> fromThing, uint16_t itemId,
+std::shared_ptr<Item> Game::findItemOfType(const std::shared_ptr<Thing>& fromThing, uint16_t itemId,
                                            bool depthSearch /*= true*/, int32_t subType /*= -1*/) const
 {
 	if (!fromThing) {
@@ -1503,7 +1509,7 @@ std::shared_ptr<Item> Game::findItemOfType(std::shared_ptr<Thing> fromThing, uin
 	return nullptr;
 }
 
-bool Game::removeMoney(std::shared_ptr<Thing> fromThing, uint64_t money, uint32_t flags /*= 0*/)
+bool Game::removeMoney(const std::shared_ptr<Thing>& fromThing, uint64_t money, uint32_t flags /*= 0*/)
 {
 	if (!fromThing) {
 		return false;
@@ -1582,7 +1588,7 @@ bool Game::removeMoney(std::shared_ptr<Thing> fromThing, uint64_t money, uint32_
 	return true;
 }
 
-void Game::addMoney(std::shared_ptr<Thing> thing, uint64_t money, uint32_t flags /*= 0*/)
+void Game::addMoney(const std::shared_ptr<Thing>& thing, uint64_t money, uint32_t flags /*= 0*/)
 {
 	if (money == 0) {
 		return;
@@ -1612,7 +1618,7 @@ void Game::addMoney(std::shared_ptr<Thing> thing, uint64_t money, uint32_t flags
 	}
 }
 
-std::shared_ptr<Item> Game::transformItem(std::shared_ptr<Item> item, uint16_t newId, int32_t newCount /*= -1*/)
+std::shared_ptr<Item> Game::transformItem(const std::shared_ptr<Item>& item, uint16_t newId, int32_t newCount /*= -1*/)
 {
 	if (item->getID() == newId && (newCount == -1 || (newCount == item->getSubType() &&
 	                                                  newCount != 0))) { // chargeless item placed on map = infinite
@@ -1743,15 +1749,15 @@ std::shared_ptr<Item> Game::transformItem(std::shared_ptr<Item> item, uint16_t n
 	if (newItem->getDuration() > 0) {
 		if (newItem->getDecaying() != DECAYING_TRUE) {
 			newItem->setDecaying(DECAYING_TRUE);
-			toDecayItems.push_front(newItem);
+			toDecayItems.push_back(newItem);
 		}
 	}
 
 	return newItem;
 }
 
-ReturnValue Game::internalTeleport(std::shared_ptr<Thing> thing, const Position& newPos, bool pushMove /* = true*/,
-                                   uint32_t flags /*= 0*/)
+ReturnValue Game::internalTeleport(const std::shared_ptr<Thing>& thing, const Position& newPos,
+                                   bool pushMove /* = true*/, uint32_t flags /*= 0*/)
 {
 	if (newPos == thing->getPosition()) {
 		return RETURNVALUE_NOERROR;
@@ -1777,6 +1783,8 @@ ReturnValue Game::internalTeleport(std::shared_ptr<Thing> thing, const Position&
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
 }
+
+namespace {
 
 std::shared_ptr<Item> searchForItem(std::shared_ptr<Container> container, uint16_t itemId)
 {
@@ -1816,6 +1824,8 @@ slots_t getSlotType(const ItemType& it)
 
 	return slot;
 }
+
+} // namespace
 
 // Implementation of player invoked events
 void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
@@ -1878,7 +1888,7 @@ void Game::playerMove(uint32_t playerId, Direction direction)
 	player->startAutoWalk(direction);
 }
 
-bool Game::playerBroadcastMessage(std::shared_ptr<Player> player, const std::string& text) const
+bool Game::playerBroadcastMessage(const std::shared_ptr<Player>& player, const std::string& text) const
 {
 	if (!player->hasFlag(PlayerFlag_CanBroadcast)) {
 		return false;
@@ -2744,8 +2754,8 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	internalStartTrade(player, tradePartner, tradeItem);
 }
 
-bool Game::internalStartTrade(std::shared_ptr<Player> player, std::shared_ptr<Player> tradePartner,
-                              std::shared_ptr<Item> tradeItem)
+bool Game::internalStartTrade(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& tradePartner,
+                              const std::shared_ptr<Item>& tradeItem)
 {
 	if (player->tradeState != TRADE_NONE &&
 	    !(player->tradeState == TRADE_ACKNOWLEDGE && player->tradePartner == tradePartner)) {
@@ -2898,7 +2908,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 	}
 }
 
-std::string Game::getTradeErrorDescription(ReturnValue ret, std::shared_ptr<Item> item)
+std::string Game::getTradeErrorDescription(ReturnValue ret, const std::shared_ptr<Item>& item)
 {
 	if (item) {
 		if (ret == RETURNVALUE_NOTENOUGHCAPACITY) {
@@ -2973,7 +2983,7 @@ void Game::playerCloseTrade(uint32_t playerId)
 	internalCloseTrade(player);
 }
 
-void Game::internalCloseTrade(std::shared_ptr<Player> player, bool sendCancel /* = true*/)
+void Game::internalCloseTrade(const std::shared_ptr<Player>& player, bool sendCancel /* = true*/)
 {
 	auto tradePartner = player->tradePartner;
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) ||
@@ -3173,7 +3183,7 @@ void Game::playerLookInBattleList(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	std::shared_ptr<Creature> creature = getCreatureByID(creatureId);
+	const std::shared_ptr<Creature>& creature = getCreatureByID(creatureId);
 	if (!creature) {
 		return;
 	}
@@ -3224,7 +3234,7 @@ void Game::playerSetAttackedCreature(uint32_t playerId, uint32_t creatureId)
 		return;
 	}
 
-	std::shared_ptr<Creature> attackCreature = getCreatureByID(creatureId);
+	const std::shared_ptr<Creature>& attackCreature = getCreatureByID(creatureId);
 	if (!attackCreature) {
 		player->removeAttackedCreature();
 		player->sendCancelTarget();
@@ -3253,7 +3263,7 @@ void Game::playerFollowCreature(uint32_t playerId, uint32_t creatureId)
 
 	player->removeAttackedCreature();
 
-	if (std::shared_ptr<Creature> followCreature = getCreatureByID(creatureId)) {
+	if (const std::shared_ptr<Creature>& followCreature = getCreatureByID(creatureId)) {
 		player->setFollowCreature(followCreature);
 	} else {
 		player->removeFollowCreature();
@@ -3577,7 +3587,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 	}
 }
 
-bool Game::playerSaySpell(std::shared_ptr<Player> player, SpeakClasses type, const std::string& text)
+bool Game::playerSaySpell(const std::shared_ptr<Player>& player, SpeakClasses type, const std::string& text)
 {
 	std::string words = text;
 
@@ -3599,7 +3609,7 @@ bool Game::playerSaySpell(std::shared_ptr<Player> player, SpeakClasses type, con
 	return false;
 }
 
-void Game::playerWhisper(std::shared_ptr<Player> player, const std::string& text)
+void Game::playerWhisper(const std::shared_ptr<Player>& player, const std::string& text)
 {
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), false, false, Map::maxClientViewportX, Map::maxClientViewportX,
@@ -3622,7 +3632,7 @@ void Game::playerWhisper(std::shared_ptr<Player> player, const std::string& text
 	}
 }
 
-bool Game::playerYell(std::shared_ptr<Player> player, const std::string& text)
+bool Game::playerYell(const std::shared_ptr<Player>& player, const std::string& text)
 {
 	if (player->hasCondition(CONDITION_YELLTICKS)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
@@ -3656,7 +3666,7 @@ bool Game::playerYell(std::shared_ptr<Player> player, const std::string& text)
 	return true;
 }
 
-bool Game::playerSpeakTo(std::shared_ptr<Player> player, SpeakClasses type, const std::string& receiver,
+bool Game::playerSpeakTo(const std::shared_ptr<Player>& player, SpeakClasses type, const std::string& receiver,
                          const std::string& text)
 {
 	auto toPlayer = getPlayerByName(receiver);
@@ -3704,7 +3714,7 @@ bool Game::playerSpeakTo(std::shared_ptr<Player> player, SpeakClasses type, cons
 	return true;
 }
 
-void Game::playerSpeakToNpc(std::shared_ptr<Player> player, const std::string& text)
+void Game::playerSpeakToNpc(const std::shared_ptr<Player>& player, const std::string& text)
 {
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition());
@@ -3728,7 +3738,7 @@ bool Game::isSightClear(const Position& fromPos, const Position& toPos, bool sam
 	return map.isSightClear(fromPos, toPos, sameFloor);
 }
 
-bool Game::internalCreatureTurn(std::shared_ptr<Creature> creature, Direction dir)
+bool Game::internalCreatureTurn(const std::shared_ptr<Creature>& creature, Direction dir)
 {
 	if (creature->getDirection() == dir) {
 		return false;
@@ -3746,7 +3756,7 @@ bool Game::internalCreatureTurn(std::shared_ptr<Creature> creature, Direction di
 	return true;
 }
 
-bool Game::internalCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text,
+bool Game::internalCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type, const std::string& text,
                                bool ghostMode, SpectatorVec* spectatorsPtr /* = nullptr*/,
                                const Position* pos /* = nullptr*/, bool echo /* = false*/)
 {
@@ -3822,7 +3832,7 @@ void Game::checkCreatureAttack(uint32_t creatureId)
 	}
 }
 
-void Game::addCreatureCheck(std::shared_ptr<Creature> creature)
+void Game::addCreatureCheck(const std::shared_ptr<Creature>& creature)
 {
 	creature->creatureCheck = true;
 
@@ -3835,7 +3845,7 @@ void Game::addCreatureCheck(std::shared_ptr<Creature> creature)
 	checkCreatureLists[uniform_random(0, EVENT_CREATURECOUNT - 1)].push_back(creature);
 }
 
-void Game::removeCreatureCheck(std::shared_ptr<Creature> creature)
+void Game::removeCreatureCheck(const std::shared_ptr<Creature>& creature)
 {
 	if (creature->inCheckCreaturesVector) {
 		creature->creatureCheck = false;
@@ -3880,7 +3890,7 @@ void Game::updateCreaturesPath(size_t index)
 	}
 }
 
-void Game::changeSpeed(std::shared_ptr<Creature> creature, int32_t varSpeedDelta)
+void Game::changeSpeed(const std::shared_ptr<Creature>& creature, int32_t varSpeedDelta)
 {
 	int32_t varSpeed = creature->getSpeed() - creature->getBaseSpeed();
 	varSpeed += varSpeedDelta;
@@ -3896,7 +3906,7 @@ void Game::changeSpeed(std::shared_ptr<Creature> creature, int32_t varSpeedDelta
 	}
 }
 
-void Game::internalCreatureChangeOutfit(std::shared_ptr<Creature> creature, const Outfit_t& outfit)
+void Game::internalCreatureChangeOutfit(const std::shared_ptr<Creature>& creature, const Outfit_t& outfit)
 {
 	if (!tfs::events::creature::onChangeOutfit(creature, outfit)) {
 		return;
@@ -3917,7 +3927,7 @@ void Game::internalCreatureChangeOutfit(std::shared_ptr<Creature> creature, cons
 	}
 }
 
-void Game::internalCreatureChangeVisible(std::shared_ptr<Creature> creature, bool visible)
+void Game::internalCreatureChangeVisible(const std::shared_ptr<Creature>& creature, bool visible)
 {
 	// send to clients
 	SpectatorVec spectators;
@@ -3928,7 +3938,7 @@ void Game::internalCreatureChangeVisible(std::shared_ptr<Creature> creature, boo
 	}
 }
 
-void Game::changeLight(std::shared_ptr<const Creature> creature)
+void Game::changeLight(const std::shared_ptr<const Creature>& creature)
 {
 	// send to clients
 	SpectatorVec spectators;
@@ -3939,8 +3949,9 @@ void Game::changeLight(std::shared_ptr<const Creature> creature)
 	}
 }
 
-bool Game::combatBlockHit(CombatDamage& damage, std::shared_ptr<Creature> attacker, std::shared_ptr<Creature> target,
-                          bool checkDefense, bool checkArmor, bool field, bool ignoreResistances /*= false */)
+bool Game::combatBlockHit(CombatDamage& damage, const std::shared_ptr<Creature>& attacker,
+                          const std::shared_ptr<Creature>& target, bool checkDefense, bool checkArmor, bool field,
+                          bool ignoreResistances /*= false */)
 {
 	if (damage.primary.type == COMBAT_NONE && damage.secondary.type == COMBAT_NONE) {
 		return true;
@@ -4021,7 +4032,7 @@ bool Game::combatBlockHit(CombatDamage& damage, std::shared_ptr<Creature> attack
 	return (primaryBlockType != BLOCK_NONE) && (secondaryBlockType != BLOCK_NONE);
 }
 
-void Game::combatGetTypeInfo(CombatType_t combatType, std::shared_ptr<Creature> target, TextColor_t& color,
+void Game::combatGetTypeInfo(CombatType_t combatType, const std::shared_ptr<Creature>& target, TextColor_t& color,
                              uint8_t& effect)
 {
 	switch (combatType) {
@@ -4127,7 +4138,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, std::shared_ptr<Creature> 
 	}
 }
 
-bool Game::combatChangeHealth(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature> target,
+bool Game::combatChangeHealth(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target,
                               CombatDamage& damage)
 {
 	const Position& targetPos = target->getPosition();
@@ -4508,7 +4519,8 @@ bool Game::combatChangeHealth(std::shared_ptr<Creature> attacker, std::shared_pt
 	return true;
 }
 
-bool Game::combatChangeMana(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature> target, CombatDamage& damage)
+bool Game::combatChangeMana(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target,
+                            CombatDamage& damage)
 {
 	auto targetPlayer = target->getPlayer();
 	if (!targetPlayer) {
@@ -4639,14 +4651,14 @@ bool Game::combatChangeMana(std::shared_ptr<Creature> attacker, std::shared_ptr<
 	return true;
 }
 
-void Game::addCreatureHealth(std::shared_ptr<const Creature> target)
+void Game::addCreatureHealth(const std::shared_ptr<const Creature>& target)
 {
 	SpectatorVec spectators;
 	map.getSpectators(spectators, target->getPosition(), true, true);
 	addCreatureHealth(spectators, target);
 }
 
-void Game::addCreatureHealth(const SpectatorVec& spectators, std::shared_ptr<const Creature> target)
+void Game::addCreatureHealth(const SpectatorVec& spectators, const std::shared_ptr<const Creature>& target)
 {
 	for (const auto& spectator : spectators) {
 		if (auto tmpPlayer = spectator->getPlayer()) {
@@ -4691,7 +4703,7 @@ void Game::addDistanceEffect(const SpectatorVec& spectators, const Position& fro
 	}
 }
 
-void Game::startDecay(std::shared_ptr<Item> item)
+void Game::startDecay(const std::shared_ptr<Item>& item)
 {
 	if (!item || !item->canDecay()) {
 		return;
@@ -4704,13 +4716,13 @@ void Game::startDecay(std::shared_ptr<Item> item)
 
 	if (item->getDuration() > 0) {
 		item->setDecaying(DECAYING_TRUE);
-		toDecayItems.push_front(item);
+		toDecayItems.push_back(item);
 	} else {
 		internalDecayItem(item);
 	}
 }
 
-void Game::internalDecayItem(std::shared_ptr<Item> item)
+void Game::internalDecayItem(const std::shared_ptr<Item>& item)
 {
 	const int32_t decayTo = item->getDecayTo();
 	if (decayTo > 0) {
@@ -4812,7 +4824,7 @@ void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 	}
 }
 
-void Game::updateCreatureWalkthrough(std::shared_ptr<const Creature> creature)
+void Game::updateCreatureWalkthrough(const std::shared_ptr<const Creature>& creature)
 {
 	// send to clients
 	SpectatorVec spectators;
@@ -4825,7 +4837,7 @@ void Game::updateCreatureWalkthrough(std::shared_ptr<const Creature> creature)
 	}
 }
 
-void Game::updateKnownCreature(std::shared_ptr<const Creature> creature)
+void Game::updateKnownCreature(const std::shared_ptr<const Creature>& creature)
 {
 	// send to clients
 	SpectatorVec spectators;
@@ -4836,7 +4848,7 @@ void Game::updateKnownCreature(std::shared_ptr<const Creature> creature)
 	}
 }
 
-void Game::updateCreatureSkull(std::shared_ptr<const Creature> creature)
+void Game::updateCreatureSkull(const std::shared_ptr<const Creature>& creature)
 {
 	if (getWorldType() != WORLD_TYPE_PVP) {
 		return;
@@ -4850,7 +4862,7 @@ void Game::updateCreatureSkull(std::shared_ptr<const Creature> creature)
 	}
 }
 
-void Game::updatePlayerShield(std::shared_ptr<Player> player)
+void Game::updatePlayerShield(const std::shared_ptr<Player>& player)
 {
 	SpectatorVec spectators;
 	map.getSpectators(spectators, player->getPosition(), true, true);
@@ -5215,7 +5227,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-			for (std::shared_ptr<Item> item : itemList) {
+			for (const std::shared_ptr<Item>& item : itemList) {
 				uint16_t removeCount = std::min<uint16_t>(tmpAmount, item->getItemCount());
 				tmpAmount -= removeCount;
 				internalRemoveItem(item, removeCount);
@@ -5225,7 +5237,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 				}
 			}
 		} else {
-			for (std::shared_ptr<Item> item : itemList) {
+			for (const std::shared_ptr<Item>& item : itemList) {
 				internalRemoveItem(item);
 			}
 		}
@@ -5581,7 +5593,7 @@ void Game::forceRemoveCondition(uint32_t creatureId, ConditionType_t type)
 	creature->removeCondition(type, true);
 }
 
-void Game::sendOfflineTrainingDialog(std::shared_ptr<Player> player)
+void Game::sendOfflineTrainingDialog(const std::shared_ptr<Player>& player)
 {
 	if (!player) {
 		return;
@@ -5634,10 +5646,10 @@ void Game::addPlayer(std::shared_ptr<Player> player)
 	mappedPlayerNames[lowercase_name] = player;
 	mappedPlayerGuids[player->getGUID()] = player;
 	wildcardTree.insert(lowercase_name);
-	players[player->getID()] = player;
+	players[player->getID()] = std::move(player);
 }
 
-void Game::removePlayer(std::shared_ptr<Player> player)
+void Game::removePlayer(const std::shared_ptr<Player>& player)
 {
 	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 	mappedPlayerNames.erase(lowercase_name);
@@ -5646,13 +5658,13 @@ void Game::removePlayer(std::shared_ptr<Player> player)
 	players.erase(player->getID());
 }
 
-void Game::addNpc(std::shared_ptr<Npc> npc) { npcs[npc->getID()] = npc; }
+void Game::addNpc(std::shared_ptr<Npc> npc) { npcs[npc->getID()] = std::move(npc); }
 
-void Game::removeNpc(std::shared_ptr<Npc> npc) { npcs.erase(npc->getID()); }
+void Game::removeNpc(const std::shared_ptr<Npc>& npc) { npcs.erase(npc->getID()); }
 
-void Game::addMonster(std::shared_ptr<Monster> monster) { monsters[monster->getID()] = monster; }
+void Game::addMonster(std::shared_ptr<Monster> monster) { monsters[monster->getID()] = std::move(monster); }
 
-void Game::removeMonster(std::shared_ptr<Monster> monster) { monsters.erase(monster->getID()); }
+void Game::removeMonster(const std::shared_ptr<Monster>& monster) { monsters.erase(monster->getID()); }
 
 Guild_ptr Game::getGuild(uint32_t id) const
 {
@@ -5669,7 +5681,7 @@ void Game::addGuild(Guild_ptr guild)
 		return;
 	}
 
-	guilds[guild->getId()] = guild;
+	guilds[guild->getId()] = std::move(guild);
 }
 
 void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
@@ -5687,7 +5699,7 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 	}
 }
 
-void Game::internalRemoveItems(std::vector<std::shared_ptr<Item>> itemList, uint32_t amount, bool stackable)
+void Game::internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable)
 {
 	if (stackable) {
 		for (const auto& item : itemList) {
@@ -5725,7 +5737,7 @@ void Game::removeBedSleeper(uint32_t guid)
 	}
 }
 
-void Game::updatePodium(std::shared_ptr<Item> item)
+void Game::updatePodium(const std::shared_ptr<Item>& item)
 {
 	if (!item->getPodium()) {
 		return;
@@ -5754,7 +5766,7 @@ std::shared_ptr<Item> Game::getUniqueItem(uint16_t uniqueId)
 	return it->second;
 }
 
-bool Game::addUniqueItem(uint16_t uniqueId, std::shared_ptr<Item> item)
+bool Game::addUniqueItem(uint16_t uniqueId, const std::shared_ptr<Item>& item)
 {
 	auto result = uniqueItems.emplace(uniqueId, item);
 	if (!result.second) {

@@ -13,7 +13,7 @@ using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
 class DepotLocker final : public Container
 {
 public:
-	explicit DepotLocker(uint16_t type);
+	explicit DepotLocker(uint16_t type) : Container{type}, depotId{0} {}
 
 	void removeInbox(std::shared_ptr<Inbox> inbox);
 	uint16_t getDepotId() const { return depotId; }
@@ -31,13 +31,16 @@ public:
 		return std::static_pointer_cast<const DepotLocker>(shared_from_this());
 	}
 
-	ReturnValue queryAdd(int32_t index, std::shared_ptr<const Thing> thing, uint32_t count, uint32_t flags,
-	                     std::shared_ptr<Creature> actor = nullptr) const override;
+	ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                     const std::shared_ptr<Creature>& = nullptr) const override
+	{
+		return RETURNVALUE_NOTENOUGHROOM;
+	}
 
-	void postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
-	                         cylinderlink_t link = LINK_OWNER) override;
-	void postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
-	                            cylinderlink_t link = LINK_OWNER) override;
+	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+	                         int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
 	// Item implementations
 	bool canRemove() const override { return false; }

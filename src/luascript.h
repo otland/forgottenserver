@@ -72,10 +72,10 @@ public:
 
 	auto getEventInfo() const { return std::make_tuple(scriptId, interface, callbackId, timerEvent); }
 
-	uint32_t addThing(std::shared_ptr<Thing> thing);
-	void insertItem(uint32_t uid, std::shared_ptr<Item> item);
+	uint32_t addThing(const std::shared_ptr<Thing>& thing);
+	void insertItem(uint32_t uid, const std::shared_ptr<Item>& item);
 
-	void setNpc(std::shared_ptr<Npc> npc) { curNpc = npc; }
+	void setNpc(std::shared_ptr<Npc> npc) { curNpc = std::move(npc); }
 	std::shared_ptr<Npc> getNpc() const { return curNpc; }
 
 	std::shared_ptr<Thing> getThingByUID(uint32_t uid);
@@ -129,7 +129,7 @@ public:
 	virtual bool initState();
 	bool reInitState();
 
-	int32_t loadFile(const std::string& file, std::shared_ptr<Npc> npc = nullptr);
+	int32_t loadFile(const std::string& file, const std::shared_ptr<Npc>& npc = nullptr);
 
 	const std::string& getFileById(int32_t scriptId);
 	int32_t getEvent(std::string_view eventName);
@@ -1415,7 +1415,7 @@ private:
 
 namespace tfs::lua {
 
-void removeTempItem(std::shared_ptr<Item> item);
+void removeTempItem(const std::shared_ptr<Item>& item);
 
 ScriptEnvironment* getScriptEnv();
 bool reserveScriptEnv();
@@ -1426,7 +1426,7 @@ void reportError(std::string_view function, std::string_view error_desc, lua_Sta
 #define reportErrorFunc(L, a) tfs::lua::reportError(__FUNCTION__, a, L, true)
 
 // push/pop common structures
-void pushThing(lua_State* L, std::shared_ptr<Thing> thing);
+void pushThing(lua_State* L, const std::shared_ptr<Thing>& thing);
 void pushVariant(lua_State* L, const LuaVariant& var);
 void pushString(lua_State* L, std::string_view value);
 void pushCallback(lua_State* L, int32_t callback);
@@ -1454,15 +1454,15 @@ std::shared_ptr<T>* getRawSharedPtr(lua_State* L, int32_t arg)
 	return static_cast<std::shared_ptr<T>*>(lua_touserdata(L, arg));
 }
 template <class T>
-void pushSharedPtr(lua_State* L, T value)
+void pushSharedPtr(lua_State* L, std::shared_ptr<T> value)
 {
-	new (lua_newuserdata(L, sizeof(T))) T(std::move(value));
+	new (lua_newuserdata(L, sizeof(std::shared_ptr<T>))) std::shared_ptr<T>(std::move(value));
 }
 
 // Metatables
 void setMetatable(lua_State* L, int32_t index, std::string_view name);
-void setItemMetatable(lua_State* L, int32_t index, std::shared_ptr<const Item> item);
-void setCreatureMetatable(lua_State* L, int32_t index, std::shared_ptr<const Creature> creature);
+void setItemMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Item>& item);
+void setCreatureMetatable(lua_State* L, int32_t index, const std::shared_ptr<const Creature>& creature);
 
 // Get
 template <typename T>

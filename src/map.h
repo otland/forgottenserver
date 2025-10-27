@@ -37,12 +37,13 @@ public:
 	AStarNode* getNodeByPosition(uint16_t x, uint16_t y);
 
 	static uint16_t getMapWalkCost(AStarNode* node, const Position& neighborPos);
-	static uint16_t getTileWalkCost(std::shared_ptr<const Creature> creature, std::shared_ptr<const Tile> tile);
+	static uint16_t getTileWalkCost(const std::shared_ptr<const Creature>& creature,
+	                                const std::shared_ptr<const Tile>& tile);
 
 private:
-	std::vector<AStarNode> nodes;
-	std::unordered_map<uint32_t, AStarNode*> nodeMap;
-	std::unordered_set<uint32_t> visited;
+	std::vector<AStarNode> nodes = {};
+	std::unordered_map<uint32_t, AStarNode*> nodeMap = {};
+	std::unordered_set<uint32_t> visited = {};
 
 	struct NodeCompare
 	{
@@ -64,7 +65,6 @@ static constexpr int32_t FLOOR_MASK = (FLOOR_SIZE - 1);
 struct Floor
 {
 	constexpr Floor() = default;
-	~Floor();
 
 	// non-copyable
 	Floor(const Floor&) = delete;
@@ -133,8 +133,8 @@ public:
 	Floor* createFloor(uint32_t z);
 	Floor* getFloor(uint8_t z) const { return array[z]; }
 
-	void addCreature(std::shared_ptr<Creature> c);
-	void removeCreature(std::shared_ptr<Creature> c);
+	void addCreature(const std::shared_ptr<Creature>& c);
+	void removeCreature(const std::shared_ptr<Creature>& c);
 
 private:
 	static bool newLeaf;
@@ -186,8 +186,8 @@ public:
 	/**
 	 * Set a single tile.
 	 */
-	void setTile(uint16_t x, uint16_t y, uint8_t z, std::shared_ptr<Tile> newTile);
-	void setTile(const Position& pos, std::shared_ptr<Tile> newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
+	void setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>& newTile);
+	void setTile(const Position& pos, const std::shared_ptr<Tile>& newTile) { setTile(pos.x, pos.y, pos.z, newTile); }
 
 	/**
 	 * Removes a single tile.
@@ -203,10 +203,11 @@ public:
 	 * tiles away \param forceLogin If true, placing the creature will not fail
 	 * because of obstacles (creatures/chests)
 	 */
-	bool placeCreature(const Position& centerPos, std::shared_ptr<Creature> creature, bool extendedPos = false,
+	bool placeCreature(const Position& centerPos, const std::shared_ptr<Creature>& creature, bool extendedPos = false,
 	                   bool forceLogin = false);
 
-	void moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> newTile, bool forceTeleport = false);
+	void moveCreature(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& newTile,
+	                  bool forceTeleport = false);
 
 	void getSpectators(SpectatorVec& spectators, const Position& centerPos, bool multifloor = false,
 	                   bool onlyPlayers = false, int32_t minRangeX = 0, int32_t maxRangeX = 0, int32_t minRangeY = 0,
@@ -247,9 +248,9 @@ public:
 	                  bool pathfinding = false) const;
 	bool checkSightLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint8_t z, bool pathfinding = false) const;
 
-	const std::shared_ptr<Tile> canWalkTo(std::shared_ptr<const Creature> creature, const Position& pos) const;
+	const std::shared_ptr<Tile> canWalkTo(const std::shared_ptr<const Creature>& creature, const Position& pos) const;
 
-	bool getPathMatching(std::shared_ptr<const Creature> creature, const Position& targetPos,
+	bool getPathMatching(const std::shared_ptr<const Creature>& creature, const Position& targetPos,
 	                     std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
 	                     const FindPathParams& fpp) const;
 

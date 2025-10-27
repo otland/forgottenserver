@@ -23,12 +23,12 @@ public:
 	static AccountType_t getAccountType(uint32_t accountId);
 	static void setAccountType(uint32_t accountId, AccountType_t accountType);
 	static void updateOnlineStatus(uint32_t guid, bool login);
-	static bool preloadPlayer(std::shared_ptr<Player> player);
+	static bool preloadPlayer(const std::shared_ptr<Player>& player);
 
-	static bool loadPlayerById(std::shared_ptr<Player> player, uint32_t id);
-	static bool loadPlayerByName(std::shared_ptr<Player> player, const std::string& name);
-	static bool loadPlayer(std::shared_ptr<Player> player, DBResult_ptr result);
-	static bool savePlayer(std::shared_ptr<Player> player);
+	static bool loadPlayerById(const std::shared_ptr<Player>& player, uint32_t id);
+	static bool loadPlayerByName(const std::shared_ptr<Player>& player, const std::string& name);
+	static bool loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr result);
+	static bool savePlayer(const std::shared_ptr<Player>& player);
 	static uint32_t getGuidByName(const std::string& name);
 	static bool getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& name);
 	static std::string getNameByGuid(uint32_t guid);
@@ -49,8 +49,8 @@ private:
 	using ItemMap = std::map<uint32_t, std::pair<std::shared_ptr<Item>, uint32_t>>;
 
 	static void loadItems(ItemMap& itemMap, DBResult_ptr result);
-	static bool saveItems(std::shared_ptr<const Player> player, const ItemBlockList& itemList, DBInsert& query_insert,
-	                      PropWriteStream& propWriteStream);
+	static bool saveItems(const std::shared_ptr<const Player>& player, const ItemBlockList& itemList,
+	                      DBInsert& query_insert, PropWriteStream& propWriteStream);
 };
 
 #endif // FS_IOLOGINDATA_H

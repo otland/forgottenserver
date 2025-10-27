@@ -67,7 +67,7 @@ void IOLoginData::updateOnlineStatus(uint32_t guid, bool login)
 	}
 }
 
-bool IOLoginData::preloadPlayer(std::shared_ptr<Player> player)
+bool IOLoginData::preloadPlayer(const std::shared_ptr<Player>& player)
 {
 	Database& db = Database::getInstance();
 
@@ -92,7 +92,7 @@ bool IOLoginData::preloadPlayer(std::shared_ptr<Player> player)
 	return true;
 }
 
-bool IOLoginData::loadPlayerById(std::shared_ptr<Player> player, uint32_t id)
+bool IOLoginData::loadPlayerById(const std::shared_ptr<Player>& player, uint32_t id)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -102,7 +102,7 @@ bool IOLoginData::loadPlayerById(std::shared_ptr<Player> player, uint32_t id)
 	        id)));
 }
 
-bool IOLoginData::loadPlayerByName(std::shared_ptr<Player> player, const std::string& name)
+bool IOLoginData::loadPlayerByName(const std::shared_ptr<Player>& player, const std::string& name)
 {
 	Database& db = Database::getInstance();
 	return loadPlayer(
@@ -133,7 +133,7 @@ static GuildWarVector getWarList(uint32_t guildId)
 	return guildWarVector;
 }
 
-bool IOLoginData::loadPlayer(std::shared_ptr<Player> player, DBResult_ptr result)
+bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr result)
 {
 	if (!result) {
 		return false;
@@ -517,8 +517,8 @@ bool IOLoginData::loadPlayer(std::shared_ptr<Player> player, DBResult_ptr result
 	return true;
 }
 
-bool IOLoginData::saveItems(std::shared_ptr<const Player> player, const ItemBlockList& itemList, DBInsert& query_insert,
-                            PropWriteStream& propWriteStream)
+bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const ItemBlockList& itemList,
+                            DBInsert& query_insert, PropWriteStream& propWriteStream)
 {
 	using ContainerBlock = std::pair<std::shared_ptr<const Container>, int32_t>;
 	std::vector<ContainerBlock> containers;
@@ -599,7 +599,7 @@ bool IOLoginData::saveItems(std::shared_ptr<const Player> player, const ItemBloc
 	return query_insert.execute();
 }
 
-bool IOLoginData::savePlayer(std::shared_ptr<Player> player)
+bool IOLoginData::savePlayer(const std::shared_ptr<Player>& player)
 {
 	if (player->isDead()) {
 		player->changeHealth(1);

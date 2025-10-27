@@ -92,7 +92,7 @@ bool IOMapSerialize::saveHouseItems()
 	return success;
 }
 
-bool IOMapSerialize::loadContainer(PropStream& propStream, std::shared_ptr<Container> container)
+bool IOMapSerialize::loadContainer(PropStream& propStream, const std::shared_ptr<Container>& container)
 {
 	while (container->serializationCount > 0) {
 		if (!loadItem(propStream, container)) {
@@ -112,7 +112,7 @@ bool IOMapSerialize::loadContainer(PropStream& propStream, std::shared_ptr<Conta
 	return true;
 }
 
-bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Thing> parent)
+bool IOMapSerialize::loadItem(PropStream& propStream, const std::shared_ptr<Thing>& parent)
 {
 	uint16_t id;
 	if (!propStream.read<uint16_t>(id)) {
@@ -193,7 +193,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, std::shared_ptr<Thing> par
 	return true;
 }
 
-void IOMapSerialize::saveItem(PropWriteStream& stream, std::shared_ptr<const Item> item)
+void IOMapSerialize::saveItem(PropWriteStream& stream, const std::shared_ptr<const Item>& item)
 {
 	auto container = item->getContainer();
 
@@ -213,7 +213,7 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, std::shared_ptr<const Ite
 	stream.write<uint8_t>(0x00); // attr end
 }
 
-void IOMapSerialize::saveTile(PropWriteStream& stream, std::shared_ptr<const Tile> tile)
+void IOMapSerialize::saveTile(PropWriteStream& stream, const std::shared_ptr<const Tile>& tile)
 {
 	const TileItemVector* tileItems = tile->getItemList();
 	if (!tileItems) {

@@ -90,7 +90,7 @@ bool Actions::registerLuaEvent(Action* event)
 	return false;
 }
 
-ReturnValue Actions::canUse(std::shared_ptr<const Player> player, const Position& pos)
+ReturnValue Actions::canUse(const std::shared_ptr<const Player>& player, const Position& pos)
 {
 	if (pos.x != 0xFFFF) {
 		const Position& playerPos = player->getPosition();
@@ -105,7 +105,8 @@ ReturnValue Actions::canUse(std::shared_ptr<const Player> player, const Position
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Actions::canUse(std::shared_ptr<const Player> player, const Position& pos, std::shared_ptr<const Item> item)
+ReturnValue Actions::canUse(const std::shared_ptr<const Player>& player, const Position& pos,
+                            const std::shared_ptr<const Item>& item)
 {
 	Action* action = getAction(item);
 	if (action) {
@@ -114,8 +115,8 @@ ReturnValue Actions::canUse(std::shared_ptr<const Player> player, const Position
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue Actions::canUseFar(std::shared_ptr<const Creature> creature, const Position& toPos, bool checkLineOfSight,
-                               bool checkFloor)
+ReturnValue Actions::canUseFar(const std::shared_ptr<const Creature>& creature, const Position& toPos,
+                               bool checkLineOfSight, bool checkFloor)
 {
 	if (toPos.x == 0xFFFF) {
 		return RETURNVALUE_NOERROR;
@@ -137,7 +138,7 @@ ReturnValue Actions::canUseFar(std::shared_ptr<const Creature> creature, const P
 	return RETURNVALUE_NOERROR;
 }
 
-Action* Actions::getAction(std::shared_ptr<const Item> item)
+Action* Actions::getAction(const std::shared_ptr<const Item>& item)
 {
 	if (item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		auto it = uniqueItemMap.find(item->getUniqueId());
@@ -162,8 +163,8 @@ Action* Actions::getAction(std::shared_ptr<const Item> item)
 	return g_spells->getRuneSpell(item->getID());
 }
 
-ReturnValue Actions::internalUseItem(std::shared_ptr<Player> player, const Position& pos, uint8_t index,
-                                     std::shared_ptr<Item> item, bool isHotkey)
+ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+                                     const std::shared_ptr<Item>& item, bool isHotkey)
 {
 	if (auto door = item->getDoor()) {
 		if (!door->canUse(player)) {
@@ -265,8 +266,8 @@ static void showUseHotkeyMessage(std::shared_ptr<Player> player, std::shared_ptr
 	}
 }
 
-bool Actions::useItem(std::shared_ptr<Player> player, const Position& pos, uint8_t index, std::shared_ptr<Item> item,
-                      bool isHotkey)
+bool Actions::useItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
+                      const std::shared_ptr<Item>& item, bool isHotkey)
 {
 	int32_t cooldown = getNumber(ConfigManager::ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
@@ -304,9 +305,9 @@ bool Actions::useItem(std::shared_ptr<Player> player, const Position& pos, uint8
 	return true;
 }
 
-bool Actions::useItemEx(std::shared_ptr<Player> player, const Position& fromPos, const Position& toPos,
-                        uint8_t toStackPos, std::shared_ptr<Item> item, bool isHotkey,
-                        std::shared_ptr<Creature> creature /* = nullptr*/)
+bool Actions::useItemEx(const std::shared_ptr<Player>& player, const Position& fromPos, const Position& toPos,
+                        uint8_t toStackPos, const std::shared_ptr<Item>& item, bool isHotkey,
+                        const std::shared_ptr<Creature>& creature /* = nullptr*/)
 {
 	int32_t cooldown = getNumber(ConfigManager::EX_ACTIONS_DELAY_INTERVAL);
 	player->setNextAction(OTSYS_TIME() + cooldown);
@@ -355,7 +356,7 @@ Action::Action(LuaScriptInterface* interface) :
     Event(interface), function(nullptr), allowFarUse(false), checkFloor(true), checkLineOfSight(true)
 {}
 
-ReturnValue Action::canExecuteAction(std::shared_ptr<const Player> player, const Position& toPos)
+ReturnValue Action::canExecuteAction(const std::shared_ptr<const Player>& player, const Position& toPos)
 {
 	if (allowFarUse) {
 		return g_actions->canUseFar(player, toPos, checkLineOfSight, checkFloor);
@@ -363,8 +364,9 @@ ReturnValue Action::canExecuteAction(std::shared_ptr<const Player> player, const
 	return g_actions->canUse(player, toPos);
 }
 
-std::shared_ptr<Thing> Action::getTarget(std::shared_ptr<Player> player, std::shared_ptr<Creature> targetCreature,
-                                         const Position& toPosition, uint8_t toStackPos) const
+std::shared_ptr<Thing> Action::getTarget(const std::shared_ptr<Player>& player,
+                                         const std::shared_ptr<Creature>& targetCreature, const Position& toPosition,
+                                         uint8_t toStackPos) const
 {
 	if (targetCreature) {
 		return targetCreature;
@@ -372,8 +374,9 @@ std::shared_ptr<Thing> Action::getTarget(std::shared_ptr<Player> player, std::sh
 	return g_game.internalGetThing(player, toPosition, toStackPos, 0, STACKPOS_USETARGET);
 }
 
-bool Action::executeUse(std::shared_ptr<Player> player, std::shared_ptr<Item> item, const Position& fromPosition,
-                        std::shared_ptr<Thing> target, const Position& toPosition, bool isHotkey)
+bool Action::executeUse(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                        const Position& fromPosition, const std::shared_ptr<Thing>& target, const Position& toPosition,
+                        bool isHotkey)
 {
 	// onUse(player, item, fromPosition, target, toPosition, isHotkey)
 	if (!tfs::lua::reserveScriptEnv()) {

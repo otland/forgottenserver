@@ -22,7 +22,7 @@ Spells::Spells() { scriptInterface.initState(); }
 
 Spells::~Spells() { clear(false); }
 
-TalkActionResult_t Spells::playerSaySpell(std::shared_ptr<Player> player, std::string& words)
+TalkActionResult_t Spells::playerSaySpell(const std::shared_ptr<Player>& player, std::string& words)
 {
 	std::string str_words = words;
 
@@ -107,9 +107,9 @@ LuaScriptInterface& Spells::getScriptInterface() { return scriptInterface; }
 Event_ptr Spells::getEvent(const std::string& nodeName)
 {
 	if (caseInsensitiveEqual(nodeName, "rune")) {
-		return Event_ptr(new RuneSpell(&scriptInterface));
+		return std::make_unique<RuneSpell>(&scriptInterface);
 	} else if (caseInsensitiveEqual(nodeName, "instant")) {
-		return Event_ptr(new InstantSpell(&scriptInterface));
+		return std::make_unique<InstantSpell>(&scriptInterface);
 	}
 	return nullptr;
 }
@@ -249,7 +249,7 @@ InstantSpell* Spells::getInstantSpellByName(const std::string& name)
 	return nullptr;
 }
 
-Position Spells::getCasterPosition(std::shared_ptr<Creature> creature, Direction dir)
+Position Spells::getCasterPosition(const std::shared_ptr<Creature>& creature, Direction dir)
 {
 	return getNextPosition(dir, creature->getPosition());
 }
@@ -264,7 +264,7 @@ bool CombatSpell::loadScriptCombat()
 	return combat != nullptr;
 }
 
-bool CombatSpell::castSpell(std::shared_ptr<Creature> creature)
+bool CombatSpell::castSpell(const std::shared_ptr<Creature>& creature)
 {
 	if (scripted) {
 		LuaVariant var;
@@ -289,7 +289,7 @@ bool CombatSpell::castSpell(std::shared_ptr<Creature> creature)
 	return true;
 }
 
-bool CombatSpell::castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
+bool CombatSpell::castSpell(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target)
 {
 	if (scripted) {
 		LuaVariant var;
@@ -320,7 +320,7 @@ bool CombatSpell::castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<
 	return true;
 }
 
-bool CombatSpell::executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var)
+bool CombatSpell::executeCastSpell(const std::shared_ptr<Creature>& creature, const LuaVariant& var)
 {
 	// onCastSpell(creature, var)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -515,7 +515,7 @@ bool Spell::configureSpell(const pugi::xml_node& node)
 	return true;
 }
 
-bool Spell::playerSpellCheck(std::shared_ptr<Player> player) const
+bool Spell::playerSpellCheck(const std::shared_ptr<Player>& player) const
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
 		return false;
@@ -623,7 +623,7 @@ bool Spell::playerSpellCheck(std::shared_ptr<Player> player) const
 	return true;
 }
 
-bool Spell::playerInstantSpellCheck(std::shared_ptr<Player> player, const Position& toPos)
+bool Spell::playerInstantSpellCheck(const std::shared_ptr<Player>& player, const Position& toPos)
 {
 	if (toPos.x == 0xFFFF) {
 		return true;
@@ -661,7 +661,7 @@ bool Spell::playerInstantSpellCheck(std::shared_ptr<Player> player, const Positi
 	return true;
 }
 
-bool Spell::playerRuneSpellCheck(std::shared_ptr<Player> player, const Position& toPos)
+bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Position& toPos)
 {
 	if (!playerSpellCheck(player)) {
 		return false;
@@ -731,7 +731,8 @@ bool Spell::playerRuneSpellCheck(std::shared_ptr<Player> player, const Position&
 	return true;
 }
 
-void Spell::postCastSpell(std::shared_ptr<Player> player, bool finishedCast /*= true*/, bool payCost /*= true*/) const
+void Spell::postCastSpell(const std::shared_ptr<Player>& player, bool finishedCast /*= true*/,
+                          bool payCost /*= true*/) const
 {
 	if (finishedCast) {
 		if (!player->hasFlag(PlayerFlag_HasNoExhaustion)) {
@@ -764,7 +765,7 @@ void Spell::postCastSpell(std::shared_ptr<Player> player, bool finishedCast /*= 
 	}
 }
 
-void Spell::postCastSpell(std::shared_ptr<Player> player, uint32_t manaCost, uint32_t soulCost)
+void Spell::postCastSpell(const std::shared_ptr<Player>& player, uint32_t manaCost, uint32_t soulCost)
 {
 	if (manaCost > 0) {
 		player->addManaSpent(manaCost);
@@ -778,7 +779,7 @@ void Spell::postCastSpell(std::shared_ptr<Player> player, uint32_t manaCost, uin
 	}
 }
 
-uint32_t Spell::getManaCost(std::shared_ptr<const Player> player) const
+uint32_t Spell::getManaCost(const std::shared_ptr<const Player>& player) const
 {
 	if (mana != 0) {
 		return mana;
@@ -826,7 +827,7 @@ bool InstantSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-bool InstantSpell::playerCastInstant(std::shared_ptr<Player> player, std::string& param)
+bool InstantSpell::playerCastInstant(const std::shared_ptr<Player>& player, std::string& param)
 {
 	if (!playerSpellCheck(player)) {
 		return false;
@@ -964,7 +965,8 @@ bool InstantSpell::playerCastInstant(std::shared_ptr<Player> player, std::string
 	return result;
 }
 
-bool InstantSpell::canThrowSpell(std::shared_ptr<const Creature> creature, std::shared_ptr<const Creature> target) const
+bool InstantSpell::canThrowSpell(const std::shared_ptr<const Creature>& creature,
+                                 const std::shared_ptr<const Creature>& target) const
 {
 	const Position& fromPos = creature->getPosition();
 	const Position& toPos = target->getPosition();
@@ -977,7 +979,7 @@ bool InstantSpell::canThrowSpell(std::shared_ptr<const Creature> creature, std::
 	return true;
 }
 
-bool InstantSpell::castSpell(std::shared_ptr<Creature> creature)
+bool InstantSpell::castSpell(const std::shared_ptr<Creature>& creature)
 {
 	LuaVariant var;
 
@@ -1002,7 +1004,7 @@ bool InstantSpell::castSpell(std::shared_ptr<Creature> creature)
 	return internalCastSpell(creature, var);
 }
 
-bool InstantSpell::castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
+bool InstantSpell::castSpell(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target)
 {
 	if (needTarget) {
 		LuaVariant var;
@@ -1012,12 +1014,12 @@ bool InstantSpell::castSpell(std::shared_ptr<Creature> creature, std::shared_ptr
 	return castSpell(creature);
 }
 
-bool InstantSpell::internalCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var)
+bool InstantSpell::internalCastSpell(const std::shared_ptr<Creature>& creature, const LuaVariant& var)
 {
 	return executeCastSpell(creature, var);
 }
 
-bool InstantSpell::executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var)
+bool InstantSpell::executeCastSpell(const std::shared_ptr<Creature>& creature, const LuaVariant& var)
 {
 	// onCastSpell(creature, var)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -1040,7 +1042,7 @@ bool InstantSpell::executeCastSpell(std::shared_ptr<Creature> creature, const Lu
 	return scriptInterface->callFunction(2);
 }
 
-bool InstantSpell::canCast(std::shared_ptr<const Player> player) const
+bool InstantSpell::canCast(const std::shared_ptr<const Player>& player) const
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
 		return false;
@@ -1100,7 +1102,7 @@ bool RuneSpell::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-ReturnValue RuneSpell::canExecuteAction(std::shared_ptr<const Player> player, const Position& toPos)
+ReturnValue RuneSpell::canExecuteAction(const std::shared_ptr<const Player>& player, const Position& toPos)
 {
 	if (player->hasFlag(PlayerFlag_CannotUseSpells)) {
 		return RETURNVALUE_CANNOTUSETHISOBJECT;
@@ -1122,8 +1124,8 @@ ReturnValue RuneSpell::canExecuteAction(std::shared_ptr<const Player> player, co
 	return RETURNVALUE_NOERROR;
 }
 
-bool RuneSpell::executeUse(std::shared_ptr<Player> player, std::shared_ptr<Item> item, const Position&,
-                           std::shared_ptr<Thing> target, const Position& toPosition, bool isHotkey)
+bool RuneSpell::executeUse(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, const Position&,
+                           const std::shared_ptr<Thing>& target, const Position& toPosition, bool isHotkey)
 {
 	if (!playerRuneSpellCheck(player, toPosition)) {
 		return false;
@@ -1158,7 +1160,7 @@ bool RuneSpell::executeUse(std::shared_ptr<Player> player, std::shared_ptr<Item>
 	postCastSpell(player);
 
 	if (var.isNumber()) {
-		target = g_game.getCreatureByID(var.getNumber());
+		auto target = g_game.getCreatureByID(var.getNumber());
 		if (getPzLock() && target) {
 			player->onAttackedCreature(target->getCreature());
 		}
@@ -1172,21 +1174,21 @@ bool RuneSpell::executeUse(std::shared_ptr<Player> player, std::shared_ptr<Item>
 	return true;
 }
 
-bool RuneSpell::castSpell(std::shared_ptr<Creature> creature)
+bool RuneSpell::castSpell(const std::shared_ptr<Creature>& creature)
 {
 	LuaVariant var;
 	var.setNumber(creature->getID());
 	return internalCastSpell(creature, var, false);
 }
 
-bool RuneSpell::castSpell(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
+bool RuneSpell::castSpell(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target)
 {
 	LuaVariant var;
 	var.setNumber(target->getID());
 	return internalCastSpell(creature, var, false);
 }
 
-bool RuneSpell::internalCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var, bool isHotkey)
+bool RuneSpell::internalCastSpell(const std::shared_ptr<Creature>& creature, const LuaVariant& var, bool isHotkey)
 {
 	bool result;
 	if (scripted) {
@@ -1197,7 +1199,7 @@ bool RuneSpell::internalCastSpell(std::shared_ptr<Creature> creature, const LuaV
 	return result;
 }
 
-bool RuneSpell::executeCastSpell(std::shared_ptr<Creature> creature, const LuaVariant& var, bool isHotkey)
+bool RuneSpell::executeCastSpell(const std::shared_ptr<Creature>& creature, const LuaVariant& var, bool isHotkey)
 {
 	// onCastSpell(creature, var, isHotkey)
 	if (!tfs::lua::reserveScriptEnv()) {

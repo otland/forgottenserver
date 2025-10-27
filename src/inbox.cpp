@@ -7,10 +7,8 @@
 
 #include "tools.h"
 
-Inbox::Inbox(uint16_t type) : Container(type, 30, false, true) {}
-
-ReturnValue Inbox::queryAdd(int32_t, std::shared_ptr<const Thing> thing, uint32_t, uint32_t flags,
-                            std::shared_ptr<Creature>) const
+ReturnValue Inbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
+                            const std::shared_ptr<Creature>&) const
 {
 	if (!hasBitSet(FLAG_NOLIMIT, flags)) {
 		return RETURNVALUE_CONTAINERNOTENOUGHROOM;
@@ -32,8 +30,8 @@ ReturnValue Inbox::queryAdd(int32_t, std::shared_ptr<const Thing> thing, uint32_
 	return RETURNVALUE_NOERROR;
 }
 
-void Inbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent, int32_t index,
-                                cylinderlink_t)
+void Inbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
+                                int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
 	if (parent) {
@@ -41,8 +39,8 @@ void Inbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<co
 	}
 }
 
-void Inbox::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent, int32_t index,
-                                   cylinderlink_t)
+void Inbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
+                                   int32_t index, cylinderlink_t)
 {
 	auto parent = getParent();
 	if (parent) {

@@ -80,7 +80,7 @@ std::shared_ptr<Tile> Map::getTile(uint16_t x, uint16_t y, uint8_t z) const
 	return floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 }
 
-void Map::setTile(uint16_t x, uint16_t y, uint8_t z, std::shared_ptr<Tile> newTile)
+void Map::setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>& newTile)
 {
 	if (z >= MAP_MAX_LAYERS) {
 		std::cout << "ERROR: Attempt to set tile on invalid coordinate " << Position(x, y, z) << "!" << std::endl;
@@ -182,8 +182,8 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	}
 }
 
-bool Map::placeCreature(const Position& centerPos, std::shared_ptr<Creature> creature, bool extendedPos /* = false*/,
-                        bool forceLogin /* = false*/)
+bool Map::placeCreature(const Position& centerPos, const std::shared_ptr<Creature>& creature,
+                        bool extendedPos /* = false*/, bool forceLogin /* = false*/)
 {
 	bool foundTile;
 	bool placeInPZ;
@@ -247,7 +247,7 @@ bool Map::placeCreature(const Position& centerPos, std::shared_ptr<Creature> cre
 	return true;
 }
 
-void Map::moveCreature(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> newTile,
+void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& newTile,
                        bool forceTeleport /* = false*/)
 {
 	auto oldTile = creature->getTile();
@@ -643,7 +643,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 	return checkSightLine(fromPos.x, fromPos.y, toPos.x, toPos.y, fromPos.z);
 }
 
-const std::shared_ptr<Tile> Map::canWalkTo(std::shared_ptr<const Creature> creature, const Position& pos) const
+const std::shared_ptr<Tile> Map::canWalkTo(const std::shared_ptr<const Creature>& creature, const Position& pos) const
 {
 	auto tile = getTile(pos.x, pos.y, pos.z);
 	if (creature->getTile() != tile) {
@@ -670,7 +670,7 @@ static uint16_t calculateHeuristic(const Position& p1, const Position& p2)
 	return dx * dx + dy * dy;
 }
 
-bool Map::getPathMatching(std::shared_ptr<const Creature> creature, const Position& targetPos,
+bool Map::getPathMatching(const std::shared_ptr<const Creature>& creature, const Position& targetPos,
                           std::vector<Direction>& dirList, const FrozenPathingConditionCall& pathCondition,
                           const FindPathParams& fpp) const
 {
@@ -864,7 +864,7 @@ bool Map::getPathMatching(std::shared_ptr<const Creature> creature, const Positi
 }
 
 // AStarNodes
-AStarNodes::AStarNodes(uint16_t x, uint16_t y) : nodes(), nodeMap()
+AStarNodes::AStarNodes(uint16_t x, uint16_t y)
 {
 	nodes.reserve(Map::nodeReserveSize);
 	nodeMap.reserve(Map::nodeReserveSize);
@@ -915,7 +915,8 @@ uint16_t AStarNodes::getMapWalkCost(AStarNode* node, const Position& neighborPos
 	return MAP_NORMALWALKCOST;
 }
 
-uint16_t AStarNodes::getTileWalkCost(std::shared_ptr<const Creature> creature, std::shared_ptr<const Tile> tile)
+uint16_t AStarNodes::getTileWalkCost(const std::shared_ptr<const Creature>& creature,
+                                     const std::shared_ptr<const Tile>& tile)
 {
 	uint16_t cost = 0;
 	if (tile->getTopVisibleCreature(creature)) {
@@ -934,20 +935,6 @@ uint16_t AStarNodes::getTileWalkCost(std::shared_ptr<const Creature> creature, s
 	return cost;
 }
 
-// Floor
-Floor::~Floor()
-{
-	for (auto& row : tiles) {
-		for (auto tile : row) {
-			auto c = tile.use_count();
-			if (c > 1) {
-				auto p = tile->getPosition();
-				std::cout << "Tile use count: " << c << " at position (" << p.x << ", " << p.y << ", " << p.z << ")\n";
-			}
-		}
-	}
-}
-
 // QTreeNode
 QTreeNode::~QTreeNode()
 {
@@ -962,7 +949,7 @@ QTreeLeafNode* QTreeNode::getLeaf(uint32_t x, uint32_t y)
 		return static_cast<QTreeLeafNode*>(this);
 	}
 
-	QTreeNode* node = child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
+	auto node = child[((x & 0x8000) >> 15) | ((y & 0x8000) >> 14)];
 	if (!node) {
 		return nullptr;
 	}
@@ -1004,7 +991,7 @@ Floor* QTreeLeafNode::createFloor(uint32_t z)
 	return array[z];
 }
 
-void QTreeLeafNode::addCreature(std::shared_ptr<Creature> c)
+void QTreeLeafNode::addCreature(const std::shared_ptr<Creature>& c)
 {
 	creature_list.push_back(c);
 
@@ -1013,7 +1000,7 @@ void QTreeLeafNode::addCreature(std::shared_ptr<Creature> c)
 	}
 }
 
-void QTreeLeafNode::removeCreature(std::shared_ptr<Creature> c)
+void QTreeLeafNode::removeCreature(const std::shared_ptr<Creature>& c)
 {
 	auto iter = std::find(creature_list.begin(), creature_list.end(), c);
 	assert(iter != creature_list.end());

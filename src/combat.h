@@ -21,7 +21,7 @@ class ValueCallback final : public CallBack
 {
 public:
 	explicit ValueCallback(formulaType_t type) : type(type) {}
-	void getMinMaxValues(std::shared_ptr<Player> player, CombatDamage& damage) const;
+	void getMinMaxValues(const std::shared_ptr<Player>& player, CombatDamage& damage) const;
 
 private:
 	formulaType_t type;
@@ -30,18 +30,18 @@ private:
 class TileCallback final : public CallBack
 {
 public:
-	void onTileCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Tile> tile) const;
+	void onTileCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& tile) const;
 };
 
 class TargetCallback final : public CallBack
 {
 public:
-	void onTargetCombat(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) const;
+	void onTargetCombat(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target) const;
 };
 
 struct CombatParams
 {
-	std::forward_list<std::unique_ptr<const Condition>> conditionList = {};
+	std::vector<std::unique_ptr<const Condition>> conditionList = {};
 
 	std::unique_ptr<ValueCallback> valueCallback = nullptr;
 	std::unique_ptr<TileCallback> tileCallback = nullptr;
@@ -88,25 +88,29 @@ public:
 	Combat(const Combat&) = delete;
 	Combat& operator=(const Combat&) = delete;
 
-	static bool isInPvpZone(std::shared_ptr<const Creature> attacker, std::shared_ptr<const Creature> target);
-	static bool isProtected(std::shared_ptr<const Player> attacker, std::shared_ptr<const Player> target);
-	static bool isPlayerCombat(std::shared_ptr<const Creature> target);
+	static bool isInPvpZone(const std::shared_ptr<const Creature>& attacker,
+	                        const std::shared_ptr<const Creature>& target);
+	static bool isProtected(const std::shared_ptr<const Player>& attacker, const std::shared_ptr<const Player>& target);
+	static bool isPlayerCombat(const std::shared_ptr<const Creature>& target);
 	static CombatType_t ConditionToDamageType(ConditionType_t type);
 	static ConditionType_t DamageToConditionType(CombatType_t type);
-	static ReturnValue canTargetCreature(std::shared_ptr<Player> attacker, std::shared_ptr<Creature> target);
-	static ReturnValue canDoCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Tile> tile, bool aggressive);
-	static ReturnValue canDoCombat(std::shared_ptr<Creature> attacker, std::shared_ptr<Creature> target);
-	static void postCombatEffects(std::shared_ptr<Creature> caster, const Position& pos, const CombatParams& params);
+	static ReturnValue canTargetCreature(const std::shared_ptr<Player>& attacker,
+	                                     const std::shared_ptr<Creature>& target);
+	static ReturnValue canDoCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Tile>& tile,
+	                               bool aggressive);
+	static ReturnValue canDoCombat(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target);
+	static void postCombatEffects(const std::shared_ptr<Creature>& caster, const Position& pos,
+	                              const CombatParams& params);
 
-	static void addDistanceEffect(std::shared_ptr<Creature> caster, const Position& fromPos, const Position& toPos,
-	                              uint8_t effect);
+	static void addDistanceEffect(const std::shared_ptr<Creature>& caster, const Position& fromPos,
+	                              const Position& toPos, uint8_t effect);
 
-	void doCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Creature> target) const;
-	void doCombat(std::shared_ptr<Creature> caster, const Position& position) const;
+	void doCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target) const;
+	void doCombat(const std::shared_ptr<Creature>& caster, const Position& position) const;
 
-	static void doTargetCombat(std::shared_ptr<Creature> caster, std::shared_ptr<Creature> target, CombatDamage& damage,
-	                           const CombatParams& params);
-	static void doAreaCombat(std::shared_ptr<Creature> caster, const Position& position, const AreaCombat* area,
+	static void doTargetCombat(const std::shared_ptr<Creature>& caster, const std::shared_ptr<Creature>& target,
+	                           CombatDamage& damage, const CombatParams& params);
+	static void doAreaCombat(const std::shared_ptr<Creature>& caster, const Position& position, const AreaCombat* area,
 	                         CombatDamage& damage, const CombatParams& params);
 
 	bool setCallback(CallBackParam_t key);
@@ -117,10 +121,10 @@ public:
 
 	void setArea(AreaCombat* area);
 	bool hasArea() const { return area != nullptr; }
-	void addCondition(const Condition* condition) { params.conditionList.emplace_front(condition); }
+	void addCondition(const Condition* condition) { params.conditionList.emplace_back(condition); }
 	void clearConditions() { params.conditionList.clear(); }
 	void setPlayerCombatValues(formulaType_t formulaType, double mina, double minb, double maxa, double maxb);
-	void postCombatEffects(std::shared_ptr<Creature> caster, const Position& pos) const
+	void postCombatEffects(const std::shared_ptr<Creature>& caster, const Position& pos) const
 	{
 		postCombatEffects(caster, pos, params);
 	}
@@ -128,9 +132,10 @@ public:
 	void setOrigin(CombatOrigin origin) { params.origin = origin; }
 
 private:
-	static void combatTileEffects(const SpectatorVec& spectators, std::shared_ptr<Creature> caster,
-	                              std::shared_ptr<Tile> tile, const CombatParams& params);
-	CombatDamage getCombatDamage(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target) const;
+	static void combatTileEffects(const SpectatorVec& spectators, const std::shared_ptr<Creature>& caster,
+	                              const std::shared_ptr<Tile>& tile, const CombatParams& params);
+	CombatDamage getCombatDamage(const std::shared_ptr<Creature>& creature,
+	                             const std::shared_ptr<Creature>& target) const;
 
 	// configurable
 	CombatParams params;
@@ -173,7 +178,7 @@ public:
 		}
 		return 0;
 	}
-	void onStepInField(std::shared_ptr<Creature> creature);
+	void onStepInField(const std::shared_ptr<Creature>& creature);
 
 private:
 	int64_t createTime;

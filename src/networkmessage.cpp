@@ -118,7 +118,7 @@ void NetworkMessage::addItem(uint16_t id, uint8_t count)
 	}
 }
 
-void NetworkMessage::addItem(std::shared_ptr<const Item> item)
+void NetworkMessage::addItem(const std::shared_ptr<const Item>& item)
 {
 	const ItemType& it = Item::items[item->getID()];
 

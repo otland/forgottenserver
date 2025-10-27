@@ -58,14 +58,14 @@ class NpcEventsHandler
 public:
 	NpcEventsHandler(const std::string& file, std::shared_ptr<Npc> npc);
 
-	void onCreatureAppear(std::shared_ptr<Creature> creature);
-	void onCreatureDisappear(std::shared_ptr<Creature> creature);
-	void onCreatureMove(std::shared_ptr<Creature> creature, const Position& oldPos, const Position& newPos);
-	void onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses, const std::string& text);
-	void onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
+	void onCreatureAppear(const std::shared_ptr<Creature>& creature);
+	void onCreatureDisappear(const std::shared_ptr<Creature>& creature);
+	void onCreatureMove(const std::shared_ptr<Creature>& creature, const Position& oldPos, const Position& newPos);
+	void onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses, const std::string& text);
+	void onPlayerTrade(const std::shared_ptr<Player>& player, int32_t callback, uint16_t itemId, uint8_t count,
 	                   uint16_t amount, bool ignore = false, bool inBackpacks = false);
-	void onPlayerCloseChannel(std::shared_ptr<Player> player);
-	void onPlayerEndTrade(std::shared_ptr<Player> player);
+	void onPlayerCloseChannel(const std::shared_ptr<Player>& player);
+	void onPlayerEndTrade(const std::shared_ptr<Player>& player);
 	void onThink();
 
 	bool isLoaded() const;
@@ -129,7 +129,7 @@ public:
 	void setSpeechBubble(const uint8_t bubble) { speechBubble = bubble; }
 
 	void doSay(const std::string& text);
-	void doSayToPlayer(std::shared_ptr<Player> player, const std::string& text);
+	void doSayToPlayer(const std::shared_ptr<Player>& player, const std::string& text);
 
 	bool doMoveTo(const Position& pos, int32_t minTargetDist = 1, int32_t maxTargetDist = 1, bool fullPathSearch = true,
 	              bool clearSight = true, int32_t maxSearchDist = 0);
@@ -144,13 +144,13 @@ public:
 		}
 	}
 
-	void onPlayerCloseChannel(std::shared_ptr<Player> player);
-	void onPlayerTrade(std::shared_ptr<Player> player, int32_t callback, uint16_t itemId, uint8_t count,
+	void onPlayerCloseChannel(const std::shared_ptr<Player>& player);
+	void onPlayerTrade(const std::shared_ptr<Player>& player, int32_t callback, uint16_t itemId, uint8_t count,
 	                   uint16_t amount, bool ignore = false, bool inBackpacks = false);
-	void onPlayerEndTrade(std::shared_ptr<Player> player, int32_t buyCallback, int32_t sellCallback);
+	void onPlayerEndTrade(const std::shared_ptr<Player>& player, int32_t buyCallback, int32_t sellCallback);
 
-	void turnToCreature(std::shared_ptr<Creature> creature);
-	void setCreatureFocus(std::shared_ptr<Creature> creature);
+	void turnToCreature(const std::shared_ptr<Creature>& creature);
+	void setCreatureFocus(const std::shared_ptr<Creature>& creature);
 
 	auto& getScriptInterface() { return npcEventHandler->scriptInterface; }
 
@@ -161,12 +161,13 @@ public:
 	void goToFollowCreature() override;
 
 private:
-	void onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin) override;
-	void onRemoveCreature(std::shared_ptr<Creature> creature, bool isLogout) override;
-	void onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile, const Position& newPos,
-	                    std::shared_ptr<const Tile> oldTile, const Position& oldPos, bool teleport) override;
+	void onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin) override;
+	void onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout) override;
+	void onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+	                    const Position& newPos, const std::shared_ptr<const Tile>& oldTile, const Position& oldPos,
+	                    bool teleport) override;
 
-	void onCreatureSay(std::shared_ptr<Creature> creature, SpeakClasses type, const std::string& text) override;
+	void onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses type, const std::string& text) override;
 	void onThink(uint32_t interval) override;
 	std::string getDescription(int32_t lookDistance) const override;
 
@@ -183,8 +184,8 @@ private:
 	void reset();
 	bool loadFromXml();
 
-	void addShopPlayer(std::shared_ptr<Player> player);
-	void removeShopPlayer(std::shared_ptr<Player> player);
+	void addShopPlayer(const std::shared_ptr<Player>& player);
+	void removeShopPlayer(const std::shared_ptr<Player>& player);
 	void closeAllShopWindows();
 
 	std::map<std::string, std::string> parameters;

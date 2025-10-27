@@ -805,7 +805,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 	}
 }
 
-void ProtocolGame::GetTileDescription(std::shared_ptr<const Tile> tile, NetworkMessage& msg)
+void ProtocolGame::GetTileDescription(const std::shared_ptr<const Tile>& tile, NetworkMessage& msg)
 {
 	int32_t count;
 	auto ground = tile->getGround();
@@ -939,7 +939,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 	}
 }
 
-bool ProtocolGame::canSee(std::shared_ptr<const Creature> c) const
+bool ProtocolGame::canSee(const std::shared_ptr<const Creature>& c) const
 {
 	if (!c || !player || c->isRemoved()) {
 		return false;
@@ -1589,7 +1589,7 @@ void ProtocolGame::sendChannelEvent(uint16_t channelId, const std::string& playe
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureOutfit(std::shared_ptr<const Creature> creature, const Outfit_t& outfit)
+void ProtocolGame::sendCreatureOutfit(const std::shared_ptr<const Creature>& creature, const Outfit_t& outfit)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1602,7 +1602,7 @@ void ProtocolGame::sendCreatureOutfit(std::shared_ptr<const Creature> creature, 
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureLight(std::shared_ptr<const Creature> creature)
+void ProtocolGame::sendCreatureLight(const std::shared_ptr<const Creature>& creature)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1618,7 +1618,7 @@ void ProtocolGame::sendCreatureLight(std::shared_ptr<const Creature> creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureWalkthrough(std::shared_ptr<const Creature> creature, bool walkthrough)
+void ProtocolGame::sendCreatureWalkthrough(const std::shared_ptr<const Creature>& creature, bool walkthrough)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1631,7 +1631,7 @@ void ProtocolGame::sendCreatureWalkthrough(std::shared_ptr<const Creature> creat
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureShield(std::shared_ptr<const Creature> creature)
+void ProtocolGame::sendCreatureShield(const std::shared_ptr<const Creature>& creature)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1644,7 +1644,7 @@ void ProtocolGame::sendCreatureShield(std::shared_ptr<const Creature> creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSkull(std::shared_ptr<const Creature> creature)
+void ProtocolGame::sendCreatureSkull(const std::shared_ptr<const Creature>& creature)
 {
 	if (g_game.getWorldType() != WORLD_TYPE_PVP) {
 		return;
@@ -1661,7 +1661,7 @@ void ProtocolGame::sendCreatureSkull(std::shared_ptr<const Creature> creature)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSquare(std::shared_ptr<const Creature> creature, SquareColor_t color)
+void ProtocolGame::sendCreatureSquare(const std::shared_ptr<const Creature>& creature, SquareColor_t color)
 {
 	if (!canSee(creature)) {
 		return;
@@ -1896,7 +1896,7 @@ void ProtocolGame::sendIcons(uint32_t icons)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendContainer(uint8_t cid, std::shared_ptr<const Container> container, uint16_t firstIndex)
+void ProtocolGame::sendContainer(uint8_t cid, const std::shared_ptr<const Container>& container, uint16_t firstIndex)
 {
 	NetworkMessage msg;
 	msg.addByte(0x6E);
@@ -1955,7 +1955,7 @@ void ProtocolGame::sendEmptyContainer(uint8_t cid)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendShop(std::shared_ptr<Npc> npc, const ShopInfoList& itemList)
+void ProtocolGame::sendShop(const std::shared_ptr<Npc>& npc, const ShopInfoList& itemList)
 {
 	NetworkMessage msg;
 	msg.addByte(0x7A);
@@ -2341,7 +2341,8 @@ void ProtocolGame::sendMarketBrowseOwnHistory(const HistoryMarketOfferList& buyO
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTradeItemRequest(const std::string& traderName, std::shared_ptr<const Item> item, bool ack)
+void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const std::shared_ptr<const Item>& item,
+                                        bool ack)
 {
 	NetworkMessage msg;
 
@@ -2395,7 +2396,7 @@ void ProtocolGame::sendCloseContainer(uint8_t cid)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureTurn(std::shared_ptr<const Creature> creature, uint32_t stackpos)
+void ProtocolGame::sendCreatureTurn(const std::shared_ptr<const Creature>& creature, uint32_t stackpos)
 {
 	if (!canSee(creature)) {
 		return;
@@ -2418,8 +2419,8 @@ void ProtocolGame::sendCreatureTurn(std::shared_ptr<const Creature> creature, ui
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureSay(std::shared_ptr<const Creature> creature, SpeakClasses type, const std::string& text,
-                                   const Position* pos /* = nullptr*/)
+void ProtocolGame::sendCreatureSay(const std::shared_ptr<const Creature>& creature, SpeakClasses type,
+                                   const std::string& text, const Position* pos /* = nullptr*/)
 {
 	NetworkMessage msg;
 	msg.addByte(0xAA);
@@ -2448,8 +2449,8 @@ void ProtocolGame::sendCreatureSay(std::shared_ptr<const Creature> creature, Spe
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendToChannel(std::shared_ptr<const Creature> creature, SpeakClasses type, const std::string& text,
-                                 uint16_t channelId)
+void ProtocolGame::sendToChannel(const std::shared_ptr<const Creature>& creature, SpeakClasses type,
+                                 const std::string& text, uint16_t channelId)
 {
 	NetworkMessage msg;
 	msg.addByte(0xAA);
@@ -2477,7 +2478,8 @@ void ProtocolGame::sendToChannel(std::shared_ptr<const Creature> creature, Speak
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendPrivateMessage(std::shared_ptr<const Player> speaker, SpeakClasses type, const std::string& text)
+void ProtocolGame::sendPrivateMessage(const std::shared_ptr<const Player>& speaker, SpeakClasses type,
+                                      const std::string& text)
 {
 	NetworkMessage msg;
 	msg.addByte(0xAA);
@@ -2504,7 +2506,7 @@ void ProtocolGame::sendCancelTarget()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendChangeSpeed(std::shared_ptr<const Creature> creature, uint32_t speed)
+void ProtocolGame::sendChangeSpeed(const std::shared_ptr<const Creature>& creature, uint32_t speed)
 {
 	NetworkMessage msg;
 	msg.addByte(0x8F);
@@ -2571,7 +2573,7 @@ void ProtocolGame::sendMagicEffect(const Position& pos, uint8_t type)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendCreatureHealth(std::shared_ptr<const Creature> creature)
+void ProtocolGame::sendCreatureHealth(const std::shared_ptr<const Creature>& creature)
 {
 	NetworkMessage msg;
 	msg.addByte(0x8C);
@@ -2605,7 +2607,7 @@ void ProtocolGame::sendMapDescription(const Position& pos)
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, std::shared_ptr<const Item> item)
+void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, const std::shared_ptr<const Item>& item)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2619,7 +2621,7 @@ void ProtocolGame::sendAddTileItem(const Position& pos, uint32_t stackpos, std::
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, std::shared_ptr<const Item> item)
+void ProtocolGame::sendUpdateTileItem(const Position& pos, uint32_t stackpos, const std::shared_ptr<const Item>& item)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2645,7 +2647,7 @@ void ProtocolGame::sendRemoveTileThing(const Position& pos, uint32_t stackpos)
 }
 
 void ProtocolGame::sendUpdateTileCreature(const Position& pos, uint32_t stackpos,
-                                          std::shared_ptr<const Creature> creature)
+                                          const std::shared_ptr<const Creature>& creature)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2664,7 +2666,7 @@ void ProtocolGame::sendUpdateTileCreature(const Position& pos, uint32_t stackpos
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendRemoveTileCreature(std::shared_ptr<const Creature> creature, const Position& pos,
+void ProtocolGame::sendRemoveTileCreature(const std::shared_ptr<const Creature>& creature, const Position& pos,
                                           uint32_t stackpos)
 {
 	if (stackpos < MAX_STACKPOS) {
@@ -2685,7 +2687,7 @@ void ProtocolGame::sendRemoveTileCreature(std::shared_ptr<const Creature> creatu
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendUpdateTile(std::shared_ptr<const Tile> tile, const Position& pos)
+void ProtocolGame::sendUpdateTile(const std::shared_ptr<const Tile>& tile, const Position& pos)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2707,7 +2709,7 @@ void ProtocolGame::sendUpdateTile(std::shared_ptr<const Tile> tile, const Positi
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendUpdateCreatureIcons(std::shared_ptr<const Creature> creature)
+void ProtocolGame::sendUpdateCreatureIcons(const std::shared_ptr<const Creature>& creature)
 {
 	if (!canSee(creature->getPosition())) {
 		return;
@@ -2747,8 +2749,8 @@ void ProtocolGame::sendFightModes()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendAddCreature(std::shared_ptr<const Creature> creature, const Position& pos, int32_t stackpos,
-                                   MagicEffectClasses magicEffect /*= CONST_ME_NONE*/)
+void ProtocolGame::sendAddCreature(const std::shared_ptr<const Creature>& creature, const Position& pos,
+                                   int32_t stackpos, MagicEffectClasses magicEffect /*= CONST_ME_NONE*/)
 {
 	if (!canSee(pos)) {
 		return;
@@ -2827,7 +2829,7 @@ void ProtocolGame::sendAddCreature(std::shared_ptr<const Creature> creature, con
 	player->openSavedContainers();
 }
 
-void ProtocolGame::sendMoveCreature(std::shared_ptr<const Creature> creature, const Position& newPos,
+void ProtocolGame::sendMoveCreature(const std::shared_ptr<const Creature>& creature, const Position& newPos,
                                     int32_t newStackPos, const Position& oldPos, int32_t oldStackPos, bool teleport)
 {
 	if (creature == player) {
@@ -2901,7 +2903,7 @@ void ProtocolGame::sendMoveCreature(std::shared_ptr<const Creature> creature, co
 	}
 }
 
-void ProtocolGame::sendInventoryItem(slots_t slot, std::shared_ptr<const Item> item)
+void ProtocolGame::sendInventoryItem(slots_t slot, const std::shared_ptr<const Item>& item)
 {
 	NetworkMessage msg;
 	if (item) {
@@ -2941,7 +2943,7 @@ void ProtocolGame::sendItems()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendAddContainerItem(uint8_t cid, uint16_t slot, std::shared_ptr<const Item> item)
+void ProtocolGame::sendAddContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& item)
 {
 	NetworkMessage msg;
 	msg.addByte(0x70);
@@ -2951,7 +2953,7 @@ void ProtocolGame::sendAddContainerItem(uint8_t cid, uint16_t slot, std::shared_
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendUpdateContainerItem(uint8_t cid, uint16_t slot, std::shared_ptr<const Item> item)
+void ProtocolGame::sendUpdateContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& item)
 {
 	NetworkMessage msg;
 	msg.addByte(0x71);
@@ -2961,7 +2963,7 @@ void ProtocolGame::sendUpdateContainerItem(uint8_t cid, uint16_t slot, std::shar
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, std::shared_ptr<const Item> lastItem)
+void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, const std::shared_ptr<const Item>& lastItem)
 {
 	NetworkMessage msg;
 	msg.addByte(0x72);
@@ -2975,7 +2977,7 @@ void ProtocolGame::sendRemoveContainerItem(uint8_t cid, uint16_t slot, std::shar
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendTextWindow(uint32_t windowTextId, std::shared_ptr<const Item> item, uint16_t maxlen,
+void ProtocolGame::sendTextWindow(uint32_t windowTextId, const std::shared_ptr<const Item>& item, uint16_t maxlen,
                                   bool canWrite)
 {
 	NetworkMessage msg;
@@ -3150,7 +3152,7 @@ void ProtocolGame::sendOutfitWindow()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendPodiumWindow(std::shared_ptr<const Item> item)
+void ProtocolGame::sendPodiumWindow(const std::shared_ptr<const Item>& item)
 {
 	if (!item) {
 		return;
@@ -3428,7 +3430,7 @@ void ProtocolGame::sendSessionEnd(SessionEndTypes_t reason)
 }
 
 ////////////// Add common messages
-void ProtocolGame::AddCreature(NetworkMessage& msg, std::shared_ptr<const Creature> creature, bool known,
+void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature, bool known,
                                uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
@@ -3513,7 +3515,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, std::shared_ptr<const Creatu
 	msg.addByte(player->canWalkthroughEx(creature) ? 0x00 : 0x01);
 }
 
-void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, std::shared_ptr<const Creature> creature)
+void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature)
 {
 	const auto& creatureIcons = creature->getIcons();
 	if (auto monster = creature->getMonster()) {
@@ -3651,7 +3653,7 @@ void ProtocolGame::RemoveTileThing(NetworkMessage& msg, const Position& pos, uin
 	msg.addByte(stackpos);
 }
 
-void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, std::shared_ptr<const Creature> creature,
+void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature,
                                       const Position& pos, uint32_t stackpos)
 {
 	if (stackpos < MAX_STACKPOS) {
@@ -3664,8 +3666,8 @@ void ProtocolGame::RemoveTileCreature(NetworkMessage& msg, std::shared_ptr<const
 	msg.add<uint32_t>(creature->getID());
 }
 
-void ProtocolGame::MoveUpCreature(NetworkMessage& msg, std::shared_ptr<const Creature> creature, const Position& newPos,
-                                  const Position& oldPos)
+void ProtocolGame::MoveUpCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature,
+                                  const Position& newPos, const Position& oldPos)
 {
 	if (creature != player) {
 		return;
@@ -3713,7 +3715,7 @@ void ProtocolGame::MoveUpCreature(NetworkMessage& msg, std::shared_ptr<const Cre
 	                  (Map::maxClientViewportX * 2) + 2, 1, msg);
 }
 
-void ProtocolGame::MoveDownCreature(NetworkMessage& msg, std::shared_ptr<const Creature> creature,
+void ProtocolGame::MoveDownCreature(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature,
                                     const Position& newPos, const Position& oldPos)
 {
 	if (creature != player) {

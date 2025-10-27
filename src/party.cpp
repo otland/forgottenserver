@@ -11,7 +11,7 @@
 
 extern Game g_game;
 
-Party::Party(std::shared_ptr<Player> leader) : leader(leader) { leader->setParty(this); }
+Party::Party(std::shared_ptr<Player> leader) : leader{std::move(leader)} { this->leader->setParty(this); }
 
 void Party::disband()
 {
@@ -54,7 +54,7 @@ void Party::disband()
 	delete this;
 }
 
-bool Party::leaveParty(std::shared_ptr<Player> player, bool forceRemove /* = false */)
+bool Party::leaveParty(const std::shared_ptr<Player>& player, bool forceRemove /* = false */)
 {
 	if (!player) {
 		return false;
@@ -121,7 +121,7 @@ bool Party::leaveParty(std::shared_ptr<Player> player, bool forceRemove /* = fal
 	return true;
 }
 
-bool Party::passPartyLeadership(std::shared_ptr<Player> player, bool forceRemove /* = false*/)
+bool Party::passPartyLeadership(const std::shared_ptr<Player>& player, bool forceRemove /* = false*/)
 {
 	if (!player || leader == player || player->getParty() != this) {
 		return false;
@@ -164,7 +164,7 @@ bool Party::passPartyLeadership(std::shared_ptr<Player> player, bool forceRemove
 	return true;
 }
 
-bool Party::joinParty(std::shared_ptr<Player> player)
+bool Party::joinParty(const std::shared_ptr<Player>& player)
 {
 	// check if lua scripts allow the player to join
 	if (!tfs::events::party::onJoin(this, player)) {
@@ -216,7 +216,7 @@ bool Party::joinParty(std::shared_ptr<Player> player)
 	return true;
 }
 
-bool Party::removeInvite(std::shared_ptr<Player> player, bool removeFromPlayer /* = true*/)
+bool Party::removeInvite(const std::shared_ptr<Player>& player, bool removeFromPlayer /* = true*/)
 {
 	auto it = std::find(inviteList.begin(), inviteList.end(), player);
 	if (it == inviteList.end()) {
@@ -239,7 +239,7 @@ bool Party::removeInvite(std::shared_ptr<Player> player, bool removeFromPlayer /
 	return true;
 }
 
-void Party::revokeInvitation(std::shared_ptr<Player> player)
+void Party::revokeInvitation(const std::shared_ptr<Player>& player)
 {
 	if (!tfs::events::party::onRevokeInvitation(this, player)) {
 		return;
@@ -252,7 +252,7 @@ void Party::revokeInvitation(std::shared_ptr<Player> player)
 	removeInvite(player);
 }
 
-bool Party::invitePlayer(std::shared_ptr<Player> player)
+bool Party::invitePlayer(const std::shared_ptr<Player>& player)
 {
 	if (isPlayerInvited(player)) {
 		return false;
@@ -287,7 +287,7 @@ bool Party::invitePlayer(std::shared_ptr<Player> player)
 	return true;
 }
 
-bool Party::isPlayerInvited(std::shared_ptr<const Player> player) const
+bool Party::isPlayerInvited(const std::shared_ptr<const Player>& player) const
 {
 	return std::find(inviteList.begin(), inviteList.end(), player) != inviteList.end();
 }
@@ -353,7 +353,7 @@ const char* getSharedExpReturnMessage(SharedExpStatus_t value)
 
 } // namespace
 
-bool Party::setSharedExperience(std::shared_ptr<Player> player, bool sharedExpActive)
+bool Party::setSharedExperience(const std::shared_ptr<Player>& player, bool sharedExpActive)
 {
 	if (!player || leader != player) {
 		return false;
@@ -377,7 +377,7 @@ bool Party::setSharedExperience(std::shared_ptr<Player> player, bool sharedExpAc
 	return true;
 }
 
-void Party::shareExperience(uint64_t experience, std::shared_ptr<Creature> source /* = nullptr*/)
+void Party::shareExperience(uint64_t experience, const std::shared_ptr<Creature>& source /* = nullptr*/)
 {
 	uint64_t shareExperience = experience;
 	tfs::events::party::onShareExperience(this, shareExperience);
@@ -447,7 +447,7 @@ SharedExpStatus_t Party::getSharedExperienceStatus()
 	return SHAREDEXP_OK;
 }
 
-void Party::updatePlayerTicks(std::shared_ptr<Player> player, uint32_t points)
+void Party::updatePlayerTicks(const std::shared_ptr<Player>& player, uint32_t points)
 {
 	if (points != 0 && !player->hasFlag(PlayerFlag_NotGainInFight)) {
 		ticksMap[player->getID()] = OTSYS_TIME();
@@ -455,7 +455,7 @@ void Party::updatePlayerTicks(std::shared_ptr<Player> player, uint32_t points)
 	}
 }
 
-void Party::clearPlayerPoints(std::shared_ptr<Player> player)
+void Party::clearPlayerPoints(const std::shared_ptr<Player>& player)
 {
 	auto it = ticksMap.find(player->getID());
 	if (it != ticksMap.end()) {
@@ -466,7 +466,7 @@ void Party::clearPlayerPoints(std::shared_ptr<Player> player)
 
 bool Party::canOpenCorpse(uint32_t ownerId) const
 {
-	if (std::shared_ptr<Player> player = g_game.getPlayerByID(ownerId)) {
+	if (const std::shared_ptr<Player>& player = g_game.getPlayerByID(ownerId)) {
 		return leader->getID() == ownerId || player->getParty() == this;
 	}
 	return false;

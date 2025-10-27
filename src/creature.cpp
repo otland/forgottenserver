@@ -72,7 +72,7 @@ bool Creature::canSee(const Position& pos) const
 	return canSee(getPosition(), pos, Map::maxViewportX, Map::maxViewportY);
 }
 
-bool Creature::canSeeCreature(std::shared_ptr<const Creature> creature) const
+bool Creature::canSeeCreature(const std::shared_ptr<const Creature>& creature) const
 {
 	if (!canSeeGhostMode(creature) && creature->isInGhostMode()) {
 		return false;
@@ -330,7 +330,7 @@ void Creature::updateIcons() const
 	}
 }
 
-void Creature::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin)
+void Creature::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)
 {
 	if (creature.get() == this) {
 		if (isLogin) {
@@ -339,9 +339,12 @@ void Creature::onCreatureAppear(std::shared_ptr<Creature> creature, bool isLogin
 	}
 }
 
-void Creature::onRemoveCreature(std::shared_ptr<Creature> creature, bool) { onCreatureDisappear(creature, true); }
+void Creature::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool)
+{
+	onCreatureDisappear(creature, true);
+}
 
-void Creature::onCreatureDisappear(std::shared_ptr<const Creature> creature, bool isLogout)
+void Creature::onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout)
 {
 	if (attackedCreature == creature) {
 		removeAttackedCreature();
@@ -380,9 +383,9 @@ void Creature::onAttackedCreatureChangeZone(ZoneType_t zone)
 	}
 }
 
-void Creature::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> newTile,
-                              const Position& newPos, std::shared_ptr<const Tile> oldTile, const Position& oldPos,
-                              bool teleport)
+void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& newTile,
+                              const Position& newPos, const std::shared_ptr<const Tile>& oldTile,
+                              const Position& oldPos, bool teleport)
 {
 	if (creature.get() == this) {
 		lastStep = OTSYS_TIME();
@@ -477,7 +480,7 @@ void Creature::onDeath()
 	int32_t mostDamage = 0;
 	std::map<std::shared_ptr<Creature>, uint64_t> experienceMap;
 	for (const auto& it : damageMap) {
-		if (std::shared_ptr<Creature> attacker = g_game.getCreatureByID(it.first)) {
+		if (auto attacker = g_game.getCreatureByID(it.first)) {
 			CountBlock_t cb = it.second;
 			if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
 				mostDamage = cb.total;
@@ -532,8 +535,9 @@ void Creature::onDeath()
 	}
 }
 
-bool Creature::dropCorpse(std::shared_ptr<Creature> lastHitCreature, std::shared_ptr<Creature> mostDamageCreature,
-                          bool lastHitUnjustified, bool mostDamageUnjustified)
+bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
+                          const std::shared_ptr<Creature>& mostDamageCreature, bool lastHitUnjustified,
+                          bool mostDamageUnjustified)
 {
 	if (!lootDrop && getMonster()) {
 		if (master) {
@@ -602,7 +606,7 @@ bool Creature::hasBeenAttacked(uint32_t attackerId)
 	return (OTSYS_TIME() - it->second.ticks) <= getNumber(ConfigManager::PZ_LOCKED);
 }
 
-std::shared_ptr<Item> Creature::getCorpse(std::shared_ptr<Creature>, std::shared_ptr<Creature>)
+std::shared_ptr<Item> Creature::getCorpse(const std::shared_ptr<Creature>&, const std::shared_ptr<Creature>&)
 {
 	return Item::CreateItem(getLookCorpse());
 }
@@ -626,7 +630,7 @@ void Creature::changeHealth(int32_t healthChange, bool sendHealthChange /* = tru
 	}
 }
 
-void Creature::gainHealth(std::shared_ptr<Creature> healer, int32_t healthGain)
+void Creature::gainHealth(const std::shared_ptr<Creature>& healer, int32_t healthGain)
 {
 	changeHealth(healthGain);
 	if (healer) {
@@ -634,7 +638,7 @@ void Creature::gainHealth(std::shared_ptr<Creature> healer, int32_t healthGain)
 	}
 }
 
-void Creature::drainHealth(std::shared_ptr<Creature> attacker, int32_t damage)
+void Creature::drainHealth(const std::shared_ptr<Creature>& attacker, int32_t damage)
 {
 	changeHealth(-damage, false);
 
@@ -645,7 +649,7 @@ void Creature::drainHealth(std::shared_ptr<Creature> attacker, int32_t damage)
 	}
 }
 
-BlockType_t Creature::blockHit(std::shared_ptr<Creature> attacker, CombatType_t combatType, int32_t& damage,
+BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
                                bool checkDefense /* = false */, bool checkArmor /* = false */, bool /* field = false */,
                                bool /* ignoreResistances = false */)
 {
@@ -731,7 +735,7 @@ BlockType_t Creature::blockHit(std::shared_ptr<Creature> attacker, CombatType_t 
 	return blockType;
 }
 
-void Creature::setAttackedCreature(std::shared_ptr<Creature> creature)
+void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 {
 	if (isAttackingCreature(creature)) {
 		return;
@@ -763,7 +767,7 @@ void Creature::removeAttackedCreature()
 	}
 }
 
-bool Creature::canAttackCreature(std::shared_ptr<Creature> creature)
+bool Creature::canAttackCreature(const std::shared_ptr<Creature>& creature)
 {
 	const auto& creaturePos = creature->getPosition();
 	if (creaturePos.z != getPosition().z) {
@@ -772,7 +776,7 @@ bool Creature::canAttackCreature(std::shared_ptr<Creature> creature)
 	return canSee(creaturePos);
 }
 
-void Creature::getPathSearchParams(std::shared_ptr<const Creature>, FindPathParams& fpp) const
+void Creature::getPathSearchParams(const std::shared_ptr<const Creature>&, FindPathParams& fpp) const
 {
 	fpp.fullPathSearch = !hasFollowPath;
 	fpp.clearSight = true;
@@ -781,7 +785,7 @@ void Creature::getPathSearchParams(std::shared_ptr<const Creature>, FindPathPara
 	fpp.maxTargetDist = 1;
 }
 
-void Creature::setFollowCreature(std::shared_ptr<Creature> creature)
+void Creature::setFollowCreature(const std::shared_ptr<Creature>& creature)
 {
 	if (isFollowingCreature(creature)) {
 		return;
@@ -804,7 +808,7 @@ void Creature::removeFollowCreature()
 	onUnfollowCreature();
 }
 
-bool Creature::canFollowCreature(std::shared_ptr<Creature> creature)
+bool Creature::canFollowCreature(const std::shared_ptr<Creature>& creature)
 {
 	const auto& creaturePos = creature->getPosition();
 	if (creaturePos.z != getPosition().z) {
@@ -813,7 +817,7 @@ bool Creature::canFollowCreature(std::shared_ptr<Creature> creature)
 	return canSee(creaturePos);
 }
 
-void Creature::onFollowCreature(std::shared_ptr<const Creature>)
+void Creature::onFollowCreature(const std::shared_ptr<const Creature>&)
 {
 	if (!listWalkDir.empty()) {
 		listWalkDir.clear();
@@ -824,13 +828,13 @@ void Creature::onFollowCreature(std::shared_ptr<const Creature>)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(std::shared_ptr<const Creature> creature)
+bool Creature::isFollower(const std::shared_ptr<const Creature>& creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
 	return it != followers.end();
 }
 
-void Creature::addFollower(std::shared_ptr<Creature> creature)
+void Creature::addFollower(const std::shared_ptr<Creature>& creature)
 {
 	// store a weak reference to avoid ownership cycles
 	if (!isFollower(creature)) {
@@ -838,7 +842,7 @@ void Creature::addFollower(std::shared_ptr<Creature> creature)
 	}
 }
 
-void Creature::removeFollower(std::shared_ptr<Creature> creature)
+void Creature::removeFollower(const std::shared_ptr<Creature>& creature)
 {
 	auto it = std::find(followers.begin(), followers.end(), creature);
 	if (it != followers.end()) {
@@ -890,7 +894,7 @@ void Creature::updateFollowersPaths()
 	}
 }
 
-double Creature::getDamageRatio(std::shared_ptr<Creature> attacker) const
+double Creature::getDamageRatio(const std::shared_ptr<Creature>& attacker) const
 {
 	uint32_t totalDamage = 0;
 	uint32_t attackerDamage = 0;
@@ -910,12 +914,12 @@ double Creature::getDamageRatio(std::shared_ptr<Creature> attacker) const
 	return (static_cast<double>(attackerDamage) / totalDamage);
 }
 
-uint64_t Creature::getGainedExperience(std::shared_ptr<Creature> attacker) const
+uint64_t Creature::getGainedExperience(const std::shared_ptr<Creature>& attacker) const
 {
 	return std::floor(getDamageRatio(attacker) * getLostExperience());
 }
 
-void Creature::addDamagePoints(std::shared_ptr<Creature> attacker, int32_t damagePoints)
+void Creature::addDamagePoints(const std::shared_ptr<Creature>& attacker, int32_t damagePoints)
 {
 	if (damagePoints <= 0) {
 		return;
@@ -998,12 +1002,12 @@ void Creature::onAttacked()
 	//
 }
 
-void Creature::onAttackedCreatureDrainHealth(std::shared_ptr<Creature> target, int32_t points)
+void Creature::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& target, int32_t points)
 {
 	target->addDamagePoints(getCreature(), points);
 }
 
-bool Creature::onKilledCreature(std::shared_ptr<Creature> target, bool)
+bool Creature::onKilledCreature(const std::shared_ptr<Creature>& target, bool)
 {
 	if (master) {
 		master->onKilledCreature(target);
@@ -1017,7 +1021,7 @@ bool Creature::onKilledCreature(std::shared_ptr<Creature> target, bool)
 	return false;
 }
 
-void Creature::onGainExperience(uint64_t gainExp, std::shared_ptr<Creature> target)
+void Creature::onGainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& target)
 {
 	if (gainExp == 0 || !master) {
 		return;
@@ -1045,7 +1049,7 @@ void Creature::onGainExperience(uint64_t gainExp, std::shared_ptr<Creature> targ
 	}
 }
 
-bool Creature::setMaster(std::shared_ptr<Creature> newMaster)
+bool Creature::setMaster(const std::shared_ptr<Creature>& newMaster)
 {
 	if (!newMaster && !master) {
 		return false;
@@ -1056,12 +1060,13 @@ bool Creature::setMaster(std::shared_ptr<Creature> newMaster)
 		newMaster->summons.push_back(getCreature());
 	}
 
-	std::swap(master, newMaster);
+	auto oldMaster = master;
+	master = newMaster;
 
-	if (newMaster) {
-		auto summon = std::find(newMaster->summons.begin(), newMaster->summons.end(), getCreature());
-		if (summon != newMaster->summons.end()) {
-			newMaster->summons.erase(summon);
+	if (oldMaster) {
+		auto summon = std::find(oldMaster->summons.begin(), oldMaster->summons.end(), getCreature());
+		if (summon != oldMaster->summons.end()) {
+			oldMaster->summons.erase(summon);
 		}
 	}
 	return true;

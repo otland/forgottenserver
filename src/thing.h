@@ -46,7 +46,7 @@ public:
 	virtual std::shared_ptr<Thing> getParent() const { return nullptr; }
 	virtual std::shared_ptr<Thing> getRealParent() const { return getParent(); }
 
-	virtual void setParent(std::shared_ptr<Thing>) { throw std::runtime_error("Not implemented"); };
+	virtual void setParent(const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
 
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
@@ -74,8 +74,8 @@ public:
 	 * set blocking items/container limits is ignored \param actor the creature
 	 * trying to add the thing \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryAdd(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t,
-	                             std::shared_ptr<Creature> = nullptr) const
+	virtual ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                             const std::shared_ptr<Creature>& = nullptr) const
 	{
 		throw std::runtime_error("Not implemented");
 	};
@@ -89,7 +89,7 @@ public:
 	 * that the thing can accept \param flags optional flags to modify the
 	 * default behaviour \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryMaxCount(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t&, uint32_t) const
+	virtual ReturnValue queryMaxCount(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t&, uint32_t) const
 	{
 		throw std::runtime_error("Not implemented");
 	};
@@ -101,8 +101,8 @@ public:
 	 * \param flags optional flags to modify the default behaviour
 	 * \returns ReturnValue holds the return value
 	 */
-	virtual ReturnValue queryRemove(std::shared_ptr<const Thing>, uint32_t, uint32_t,
-	                                std::shared_ptr<Creature> = nullptr) const
+	virtual ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
+	                                const std::shared_ptr<Creature>& = nullptr) const
 	{
 		throw std::runtime_error("Not implemented");
 	};
@@ -116,8 +116,8 @@ public:
 	 * flags to modify the default behaviour this method can modify the flags
 	 * \returns Thing returns the destination thing
 	 */
-	virtual std::shared_ptr<Thing> queryDestination(int32_t&, std::shared_ptr<const Thing>, std::shared_ptr<Item>&,
-	                                                uint32_t&)
+	virtual std::shared_ptr<Thing> queryDestination(int32_t&, const std::shared_ptr<const Thing>&,
+	                                                std::shared_ptr<Item>&, uint32_t&)
 	{
 		throw std::runtime_error("Not implemented");
 	};
@@ -126,14 +126,14 @@ public:
 	 * Add the object to the thing
 	 * \param thing is the object to add
 	 */
-	virtual void addThing(std::shared_ptr<Thing>) { throw std::runtime_error("Not implemented"); };
+	virtual void addThing(const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
 
 	/**
 	 * Add the object to the thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
-	virtual void addThing(int32_t, std::shared_ptr<Thing>) { throw std::runtime_error("Not implemented"); };
+	virtual void addThing(int32_t, const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
 
 	/**
 	 * Update the item count or type for an object
@@ -141,7 +141,7 @@ public:
 	 * \param itemId is the new item id
 	 * \param count is the new count value
 	 */
-	virtual void updateThing(std::shared_ptr<Thing>, uint16_t, uint32_t)
+	virtual void updateThing(const std::shared_ptr<Thing>&, uint16_t, uint32_t)
 	{
 		throw std::runtime_error("Not implemented");
 	};
@@ -151,14 +151,14 @@ public:
 	 * \param index is the position to change (inventory slot/container
 	 * position) \param thing is the object to update
 	 */
-	virtual void replaceThing(uint32_t, std::shared_ptr<Thing>) { throw std::runtime_error("Not implemented"); };
+	virtual void replaceThing(uint32_t, const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
 
 	/**
 	 * Remove an object
 	 * \param thing is the object to delete
 	 * \param count is the new count value
 	 */
-	virtual void removeThing(std::shared_ptr<Thing>, uint32_t) { throw std::runtime_error("Not implemented"); };
+	virtual void removeThing(const std::shared_ptr<Thing>&, uint32_t) { throw std::runtime_error("Not implemented"); };
 
 	/**
 	 * Is sent after an operation (move/add) to update internal values
@@ -166,7 +166,7 @@ public:
 	 * \param index is the objects new index value
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postAddNotification(std::shared_ptr<Thing>, std::shared_ptr<const Thing>, int32_t,
+	virtual void postAddNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
 	                                 cylinderlink_t = LINK_OWNER)
 	{
 		throw std::runtime_error("Not implemented");
@@ -178,7 +178,7 @@ public:
 	 * \param index is the previous index of the removed object
 	 * \param link holds the relation the object has to the thing
 	 */
-	virtual void postRemoveNotification(std::shared_ptr<Thing>, std::shared_ptr<const Thing>, int32_t,
+	virtual void postRemoveNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
 	                                    cylinderlink_t = LINK_OWNER)
 	{
 		throw std::runtime_error("Not implemented");
@@ -189,7 +189,7 @@ public:
 	 * \param thing the object to get the index value from
 	 * \returns the index of the object, returns -1 if not found
 	 */
-	virtual int32_t getThingIndex(std::shared_ptr<const Thing>) const { return -1; }
+	virtual int32_t getThingIndex(const std::shared_ptr<const Thing>&) const { return -1; }
 
 	/**
 	 * Returns the first index
@@ -232,13 +232,13 @@ public:
 	 * Removes an object from the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalRemoveThing(std::shared_ptr<Thing>) {}
+	virtual void internalRemoveThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
 	 * \param thing is the object to add
 	 */
-	virtual void internalAddThing(std::shared_ptr<Thing>) {}
+	virtual void internalAddThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Adds an object to the thing without sending to the client(s)
@@ -246,7 +246,7 @@ public:
 	 * \param index points to the destination index (inventory slot/container
 	 * position)
 	 */
-	virtual void internalAddThing(uint32_t, std::shared_ptr<Thing>) {}
+	virtual void internalAddThing(uint32_t, const std::shared_ptr<Thing>&) {}
 
 	virtual void startDecaying() {}
 };

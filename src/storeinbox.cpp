@@ -5,10 +5,8 @@
 
 #include "storeinbox.h"
 
-StoreInbox::StoreInbox(uint16_t type) : Container(type, 20, true, true) {}
-
-ReturnValue StoreInbox::queryAdd(int32_t, std::shared_ptr<const Thing> thing, uint32_t, uint32_t flags,
-                                 std::shared_ptr<Creature>) const
+ReturnValue StoreInbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
+                                 const std::shared_ptr<Creature>&) const
 {
 	auto item = thing->getItem();
 	if (!item) {
@@ -37,7 +35,7 @@ ReturnValue StoreInbox::queryAdd(int32_t, std::shared_ptr<const Thing> thing, ui
 	return RETURNVALUE_NOERROR;
 }
 
-void StoreInbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent,
+void StoreInbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
                                      int32_t index, cylinderlink_t)
 {
 	if (parent) {
@@ -45,8 +43,8 @@ void StoreInbox::postAddNotification(std::shared_ptr<Thing> thing, std::shared_p
 	}
 }
 
-void StoreInbox::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
-                                        int32_t index, cylinderlink_t)
+void StoreInbox::postRemoveNotification(const std::shared_ptr<Thing>& thing,
+                                        const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
 	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);

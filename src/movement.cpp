@@ -279,7 +279,7 @@ void MoveEvents::addEvent(MoveEvent moveEvent, int32_t id, MoveListMap& map)
 	}
 }
 
-MoveEvent* MoveEvents::getEvent(std::shared_ptr<Item> item, MoveEvent_t eventType, slots_t slot)
+MoveEvent* MoveEvents::getEvent(const std::shared_ptr<Item>& item, MoveEvent_t eventType, slots_t slot)
 {
 	uint32_t slotp;
 	switch (slot) {
@@ -330,7 +330,7 @@ MoveEvent* MoveEvents::getEvent(std::shared_ptr<Item> item, MoveEvent_t eventTyp
 	return nullptr;
 }
 
-MoveEvent* MoveEvents::getEvent(std::shared_ptr<Item> item, MoveEvent_t eventType)
+MoveEvent* MoveEvents::getEvent(const std::shared_ptr<Item>& item, MoveEvent_t eventType)
 {
 	MoveListMap::iterator it;
 
@@ -381,7 +381,7 @@ void MoveEvents::addEvent(MoveEvent moveEvent, const Position& pos, MovePosListM
 	}
 }
 
-MoveEvent* MoveEvents::getEvent(std::shared_ptr<const Tile> tile, MoveEvent_t eventType)
+MoveEvent* MoveEvents::getEvent(const std::shared_ptr<const Tile>& tile, MoveEvent_t eventType)
 {
 	auto it = positionMap.find(tile->getPosition());
 	if (it != positionMap.end()) {
@@ -393,7 +393,7 @@ MoveEvent* MoveEvents::getEvent(std::shared_ptr<const Tile> tile, MoveEvent_t ev
 	return nullptr;
 }
 
-uint32_t MoveEvents::onCreatureMove(std::shared_ptr<Creature> creature, std::shared_ptr<const Tile> tile,
+uint32_t MoveEvents::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::shared_ptr<const Tile>& tile,
                                     MoveEvent_t eventType)
 {
 	const Position& pos = tile->getPosition();
@@ -424,8 +424,8 @@ uint32_t MoveEvents::onCreatureMove(std::shared_ptr<Creature> creature, std::sha
 	return ret;
 }
 
-ReturnValue MoveEvents::onPlayerEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot,
-                                      bool isCheck)
+ReturnValue MoveEvents::onPlayerEquip(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                                      slots_t slot, bool isCheck)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_EQUIP, slot);
 	if (!moveEvent) {
@@ -434,7 +434,8 @@ ReturnValue MoveEvents::onPlayerEquip(std::shared_ptr<Player> player, std::share
 	return moveEvent->fireEquip(player, item, slot, isCheck);
 }
 
-ReturnValue MoveEvents::onPlayerDeEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot)
+ReturnValue MoveEvents::onPlayerDeEquip(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                                        slots_t slot)
 {
 	MoveEvent* moveEvent = getEvent(item, MOVE_EVENT_DEEQUIP, slot);
 	if (!moveEvent) {
@@ -446,7 +447,7 @@ ReturnValue MoveEvents::onPlayerDeEquip(std::shared_ptr<Player> player, std::sha
 	return moveEvent->fireEquip(player, item, slot, false);
 }
 
-uint32_t MoveEvents::onItemMove(std::shared_ptr<Item> item, std::shared_ptr<Tile> tile, bool isAdd)
+uint32_t MoveEvents::onItemMove(const std::shared_ptr<Item>& item, const std::shared_ptr<Tile>& tile, bool isAdd)
 {
 	MoveEvent_t eventType1, eventType2;
 	if (isAdd) {
@@ -634,7 +635,8 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 	return true;
 }
 
-uint32_t MoveEvent::StepInField(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position&)
+uint32_t MoveEvent::StepInField(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& item,
+                                const Position&)
 {
 	auto field = item->getMagicField();
 	if (field) {
@@ -645,9 +647,12 @@ uint32_t MoveEvent::StepInField(std::shared_ptr<Creature> creature, std::shared_
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::StepOutField(std::shared_ptr<Creature>, std::shared_ptr<Item>, const Position&) { return 1; }
+uint32_t MoveEvent::StepOutField(const std::shared_ptr<Creature>&, const std::shared_ptr<Item>&, const Position&)
+{
+	return 1;
+}
 
-uint32_t MoveEvent::AddItemField(std::shared_ptr<Item> item, std::shared_ptr<Item>, const Position&)
+uint32_t MoveEvent::AddItemField(const std::shared_ptr<Item>& item, const std::shared_ptr<Item>&, const Position&)
 {
 	if (auto field = item->getMagicField()) {
 		auto tile = item->getTile();
@@ -661,10 +666,13 @@ uint32_t MoveEvent::AddItemField(std::shared_ptr<Item> item, std::shared_ptr<Ite
 	return LUA_ERROR_ITEM_NOT_FOUND;
 }
 
-uint32_t MoveEvent::RemoveItemField(std::shared_ptr<Item>, std::shared_ptr<Item>, const Position&) { return 1; }
+uint32_t MoveEvent::RemoveItemField(const std::shared_ptr<Item>&, const std::shared_ptr<Item>&, const Position&)
+{
+	return 1;
+}
 
-ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, std::shared_ptr<Player> player, std::shared_ptr<Item> item,
-                                 slots_t slot, bool isCheck)
+ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, const std::shared_ptr<Player>& player,
+                                 const std::shared_ptr<Item>& item, slots_t slot, bool isCheck)
 {
 	if (!player->hasFlag(PlayerFlag_IgnoreWeaponCheck) && moveEvent->getWieldInfo() != 0) {
 		if (!moveEvent->hasVocationEquipSet(player->getVocationId())) {
@@ -799,8 +807,8 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, std::shared_ptr<Player> p
 	return RETURNVALUE_NOERROR;
 }
 
-ReturnValue MoveEvent::DeEquipItem(MoveEvent*, std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot,
-                                   bool)
+ReturnValue MoveEvent::DeEquipItem(MoveEvent*, const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                                   slots_t slot, bool)
 {
 	if (!player->isItemAbilityEnabled(slot)) {
 		return RETURNVALUE_NOERROR;
@@ -924,7 +932,8 @@ MoveEvent_t MoveEvent::getEventType() const { return eventType; }
 
 void MoveEvent::setEventType(MoveEvent_t type) { eventType = type; }
 
-uint32_t MoveEvent::fireStepEvent(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos)
+uint32_t MoveEvent::fireStepEvent(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& item,
+                                  const Position& pos)
 {
 	if (scripted) {
 		return executeStep(creature, item, pos);
@@ -932,7 +941,8 @@ uint32_t MoveEvent::fireStepEvent(std::shared_ptr<Creature> creature, std::share
 	return stepFunction(creature, item, pos);
 }
 
-bool MoveEvent::executeStep(std::shared_ptr<Creature> creature, std::shared_ptr<Item> item, const Position& pos)
+bool MoveEvent::executeStep(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& item,
+                            const Position& pos)
 {
 	// onStepIn(creature, item, pos, fromPosition)
 	// onStepOut(creature, item, pos, fromPosition)
@@ -956,7 +966,8 @@ bool MoveEvent::executeStep(std::shared_ptr<Creature> creature, std::shared_ptr<
 	return scriptInterface->callFunction(4);
 }
 
-ReturnValue MoveEvent::fireEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool isCheck)
+ReturnValue MoveEvent::fireEquip(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, slots_t slot,
+                                 bool isCheck)
 {
 	ReturnValue ret = RETURNVALUE_NOERROR;
 	if (equipFunction) {
@@ -968,7 +979,8 @@ ReturnValue MoveEvent::fireEquip(std::shared_ptr<Player> player, std::shared_ptr
 	return ret;
 }
 
-bool MoveEvent::executeEquip(std::shared_ptr<Player> player, std::shared_ptr<Item> item, slots_t slot, bool isCheck)
+bool MoveEvent::executeEquip(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item, slots_t slot,
+                             bool isCheck)
 {
 	// onEquip(player, item, slot, isCheck)
 	// onDeEquip(player, item, slot, isCheck)
@@ -992,7 +1004,8 @@ bool MoveEvent::executeEquip(std::shared_ptr<Player> player, std::shared_ptr<Ite
 	return scriptInterface->callFunction(4);
 }
 
-uint32_t MoveEvent::fireAddRemItem(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos)
+uint32_t MoveEvent::fireAddRemItem(const std::shared_ptr<Item>& item, const std::shared_ptr<Item>& tileItem,
+                                   const Position& pos)
 {
 	if (scripted) {
 		return executeAddRemItem(item, tileItem, pos);
@@ -1000,7 +1013,8 @@ uint32_t MoveEvent::fireAddRemItem(std::shared_ptr<Item> item, std::shared_ptr<I
 	return moveFunction(item, tileItem, pos);
 }
 
-bool MoveEvent::executeAddRemItem(std::shared_ptr<Item> item, std::shared_ptr<Item> tileItem, const Position& pos)
+bool MoveEvent::executeAddRemItem(const std::shared_ptr<Item>& item, const std::shared_ptr<Item>& tileItem,
+                                  const Position& pos)
 {
 	// onaddItem(moveitem, tileitem, pos)
 	// onRemoveItem(moveitem, tileitem, pos)

@@ -7,8 +7,6 @@
 
 #include "inbox.h"
 
-DepotLocker::DepotLocker(uint16_t type) : Container(type), depotId(0) {}
-
 Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 {
 	if (attr == ATTR_DEPOT_ID) {
@@ -20,22 +18,16 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 	return Item::readAttr(attr, propStream);
 }
 
-ReturnValue DepotLocker::queryAdd(int32_t, std::shared_ptr<const Thing>, uint32_t, uint32_t,
-                                  std::shared_ptr<Creature>) const
-{
-	return RETURNVALUE_NOTENOUGHROOM;
-}
-
-void DepotLocker::postAddNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> oldParent,
-                                      int32_t index, cylinderlink_t)
+void DepotLocker::postAddNotification(const std::shared_ptr<Thing>& thing,
+                                      const std::shared_ptr<const Thing>& oldParent, int32_t index, cylinderlink_t)
 {
 	if (parent) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
-void DepotLocker::postRemoveNotification(std::shared_ptr<Thing> thing, std::shared_ptr<const Thing> newParent,
-                                         int32_t index, cylinderlink_t)
+void DepotLocker::postRemoveNotification(const std::shared_ptr<Thing>& thing,
+                                         const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
 	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);

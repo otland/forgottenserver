@@ -22,7 +22,7 @@ struct spawnBlock_t
 class Spawn
 {
 public:
-	Spawn(Position pos, int32_t radius) : centerPos(std::move(pos)), radius(radius) {}
+	Spawn(Position pos, int32_t radius) : centerPos{std::move(pos)}, radius{radius} {}
 	~Spawn();
 
 	// non-copyable

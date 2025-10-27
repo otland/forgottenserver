@@ -30,18 +30,18 @@ public:
 	House* getHouse() const { return house; }
 	void setHouse(House* h) { house = h; }
 
-	bool canUse(std::shared_ptr<Player> player);
+	bool canUse(const std::shared_ptr<Player>& player);
 
-	bool trySleep(std::shared_ptr<Player> player);
-	bool sleep(std::shared_ptr<Player> player);
-	void wakeUp(std::shared_ptr<Player> player);
+	bool trySleep(const std::shared_ptr<Player>& player);
+	bool sleep(const std::shared_ptr<Player>& player);
+	void wakeUp(const std::shared_ptr<Player>& player);
 
 	std::shared_ptr<BedItem> getNextBedItem() const;
 
 private:
-	void updateAppearance(std::shared_ptr<const Player> player);
-	void regeneratePlayer(std::shared_ptr<Player> player) const;
-	void internalSetSleeper(std::shared_ptr<const Player> player);
+	void updateAppearance(const std::shared_ptr<const Player>& player);
+	void regeneratePlayer(const std::shared_ptr<Player>& player) const;
+	void internalSetSleeper(const std::shared_ptr<const Player>& player);
 	void internalRemoveSleeper();
 
 	House* house = nullptr;

@@ -100,7 +100,7 @@ CreatureEvent* CreatureEvents::getEventByName(const std::string& name, bool forc
 	return nullptr;
 }
 
-bool CreatureEvents::playerLogin(std::shared_ptr<Player> player) const
+bool CreatureEvents::playerLogin(const std::shared_ptr<Player>& player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -113,7 +113,7 @@ bool CreatureEvents::playerLogin(std::shared_ptr<Player> player) const
 	return true;
 }
 
-bool CreatureEvents::playerLogout(std::shared_ptr<Player> player) const
+bool CreatureEvents::playerLogout(const std::shared_ptr<Player>& player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -126,7 +126,7 @@ bool CreatureEvents::playerLogout(std::shared_ptr<Player> player) const
 	return true;
 }
 
-void CreatureEvents::playerReconnect(std::shared_ptr<Player> player) const
+void CreatureEvents::playerReconnect(const std::shared_ptr<Player>& player) const
 {
 	// fire global event if is registered
 	for (const auto& it : creatureEvents) {
@@ -136,7 +136,8 @@ void CreatureEvents::playerReconnect(std::shared_ptr<Player> player) const
 	}
 }
 
-bool CreatureEvents::playerAdvance(std::shared_ptr<Player> player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+bool CreatureEvents::playerAdvance(const std::shared_ptr<Player>& player, skills_t skill, uint32_t oldLevel,
+                                   uint32_t newLevel)
 {
 	// fire global event if is registered
 	for (auto& it : creatureEvents) {
@@ -274,7 +275,7 @@ void CreatureEvent::clearEvent()
 	loaded = false;
 }
 
-bool CreatureEvent::executeOnLogin(std::shared_ptr<Player> player) const
+bool CreatureEvent::executeOnLogin(const std::shared_ptr<Player>& player) const
 {
 	// onLogin(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -293,7 +294,7 @@ bool CreatureEvent::executeOnLogin(std::shared_ptr<Player> player) const
 	return scriptInterface->callFunction(1);
 }
 
-bool CreatureEvent::executeOnLogout(std::shared_ptr<Player> player) const
+bool CreatureEvent::executeOnLogout(const std::shared_ptr<Player>& player) const
 {
 	// onLogout(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -312,7 +313,7 @@ bool CreatureEvent::executeOnLogout(std::shared_ptr<Player> player) const
 	return scriptInterface->callFunction(1);
 }
 
-void CreatureEvent::executeOnReconnect(std::shared_ptr<Player> player) const
+void CreatureEvent::executeOnReconnect(const std::shared_ptr<Player>& player) const
 {
 	// onReconnect(player)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -331,7 +332,7 @@ void CreatureEvent::executeOnReconnect(std::shared_ptr<Player> player) const
 	scriptInterface->callFunction(1);
 }
 
-bool CreatureEvent::executeOnThink(std::shared_ptr<Creature> creature, uint32_t interval)
+bool CreatureEvent::executeOnThink(const std::shared_ptr<Creature>& creature, uint32_t interval)
 {
 	// onThink(creature, interval)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -352,7 +353,8 @@ bool CreatureEvent::executeOnThink(std::shared_ptr<Creature> creature, uint32_t 
 	return scriptInterface->callFunction(2);
 }
 
-bool CreatureEvent::executeOnPrepareDeath(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> killer)
+bool CreatureEvent::executeOnPrepareDeath(const std::shared_ptr<Creature>& creature,
+                                          const std::shared_ptr<Creature>& killer)
 {
 	// onPrepareDeath(creature, killer)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -380,9 +382,10 @@ bool CreatureEvent::executeOnPrepareDeath(std::shared_ptr<Creature> creature, st
 	return scriptInterface->callFunction(2);
 }
 
-bool CreatureEvent::executeOnDeath(std::shared_ptr<Creature> creature, std::shared_ptr<Item> corpse,
-                                   std::shared_ptr<Creature> killer, std::shared_ptr<Creature> mostDamageKiller,
-                                   bool lastHitUnjustified, bool mostDamageUnjustified)
+bool CreatureEvent::executeOnDeath(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& corpse,
+                                   const std::shared_ptr<Creature>& killer,
+                                   const std::shared_ptr<Creature>& mostDamageKiller, bool lastHitUnjustified,
+                                   bool mostDamageUnjustified)
 {
 	// onDeath(creature, corpse, killer, mostDamageKiller, lastHitUnjustified, mostDamageUnjustified)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -421,7 +424,8 @@ bool CreatureEvent::executeOnDeath(std::shared_ptr<Creature> creature, std::shar
 	return scriptInterface->callFunction(6);
 }
 
-bool CreatureEvent::executeAdvance(std::shared_ptr<Player> player, skills_t skill, uint32_t oldLevel, uint32_t newLevel)
+bool CreatureEvent::executeAdvance(const std::shared_ptr<Player>& player, skills_t skill, uint32_t oldLevel,
+                                   uint32_t newLevel)
 {
 	// onAdvance(player, skill, oldLevel, newLevel)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -444,7 +448,7 @@ bool CreatureEvent::executeAdvance(std::shared_ptr<Player> player, skills_t skil
 	return scriptInterface->callFunction(4);
 }
 
-void CreatureEvent::executeOnKill(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> target)
+void CreatureEvent::executeOnKill(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target)
 {
 	// onKill(creature, target)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -465,7 +469,7 @@ void CreatureEvent::executeOnKill(std::shared_ptr<Creature> creature, std::share
 	scriptInterface->callVoidFunction(2);
 }
 
-void CreatureEvent::executeModalWindow(std::shared_ptr<Player> player, uint32_t modalWindowId, uint8_t buttonId,
+void CreatureEvent::executeModalWindow(const std::shared_ptr<Player>& player, uint32_t modalWindowId, uint8_t buttonId,
                                        uint8_t choiceId)
 {
 	// onModalWindow(player, modalWindowId, buttonId, choiceId)
@@ -490,8 +494,8 @@ void CreatureEvent::executeModalWindow(std::shared_ptr<Player> player, uint32_t 
 	scriptInterface->callVoidFunction(4);
 }
 
-bool CreatureEvent::executeTextEdit(std::shared_ptr<Player> player, std::shared_ptr<Item> item, std::string_view text,
-                                    const uint32_t windowTextId)
+bool CreatureEvent::executeTextEdit(const std::shared_ptr<Player>& player, const std::shared_ptr<Item>& item,
+                                    std::string_view text, const uint32_t windowTextId)
 {
 	// onTextEdit(player, item, text, windowTextId)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -529,8 +533,8 @@ void pushCombatDamage(lua_State* L, const CombatDamage& damage)
 
 } // namespace
 
-void CreatureEvent::executeHealthChange(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> attacker,
-                                        CombatDamage& damage)
+void CreatureEvent::executeHealthChange(const std::shared_ptr<Creature>& creature,
+                                        const std::shared_ptr<Creature>& attacker, CombatDamage& damage)
 {
 	// onHealthChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -573,8 +577,8 @@ void CreatureEvent::executeHealthChange(std::shared_ptr<Creature> creature, std:
 	tfs::lua::resetScriptEnv();
 }
 
-void CreatureEvent::executeManaChange(std::shared_ptr<Creature> creature, std::shared_ptr<Creature> attacker,
-                                      CombatDamage& damage)
+void CreatureEvent::executeManaChange(const std::shared_ptr<Creature>& creature,
+                                      const std::shared_ptr<Creature>& attacker, CombatDamage& damage)
 {
 	// onManaChange(creature, attacker, primaryDamage, primaryType, secondaryDamage, secondaryType, origin)
 	if (!tfs::lua::reserveScriptEnv()) {
@@ -612,7 +616,8 @@ void CreatureEvent::executeManaChange(std::shared_ptr<Creature> creature, std::s
 	tfs::lua::resetScriptEnv();
 }
 
-void CreatureEvent::executeExtendedOpcode(std::shared_ptr<Player> player, uint8_t opcode, const std::string& buffer)
+void CreatureEvent::executeExtendedOpcode(const std::shared_ptr<Player>& player, uint8_t opcode,
+                                          const std::string& buffer)
 {
 	// onExtendedOpcode(player, opcode, buffer)
 	if (!tfs::lua::reserveScriptEnv()) {
