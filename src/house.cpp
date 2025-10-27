@@ -139,8 +139,12 @@ bool House::kickPlayer(const std::shared_ptr<Player>& player, const std::shared_
 		return false;
 	}
 
-	auto houseTile = std::dynamic_pointer_cast<HouseTile>(target->getTile());
-	if (!houseTile || houseTile->getHouse() != this) {
+	auto tile = target->getTile();
+	if (!tile) {
+		return false;
+	}
+
+	if (auto houseTile = tile->getHouseTile(); !houseTile || houseTile->getHouse() != this) {
 		return false;
 	}
 

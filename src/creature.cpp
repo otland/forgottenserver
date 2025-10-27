@@ -452,7 +452,7 @@ CreatureVector Creature::getKillers()
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 	for (const auto& it : damageMap) {
-		std::shared_ptr<Creature> attacker = g_game.getCreatureByID(it.first);
+		auto attacker = g_game.getCreatureByID(it.first);
 		if (attacker && attacker.get() != this && timeNow - it.second.ticks <= inFightTicks) {
 			killers.push_back(attacker);
 		}
@@ -464,8 +464,8 @@ void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
 	bool mostDamageUnjustified = false;
-	std::shared_ptr<Creature> lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
-	std::shared_ptr<Creature> lastHitCreatureMaster;
+	auto lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
+	std::shared_ptr<Creature> lastHitCreatureMaster = nullptr;
 	if (lastHitCreature) {
 		lastHitUnjustified = lastHitCreature->onKilledCreature(getCreature());
 		lastHitCreatureMaster = lastHitCreature->getMaster();
@@ -551,7 +551,7 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 
 		g_game.addMagicEffect(getPosition(), CONST_ME_POFF);
 	} else {
-		std::shared_ptr<Item> splash;
+		std::shared_ptr<Item> splash = nullptr;
 		switch (getRace()) {
 			case RACE_VENOM:
 				splash = Item::CreateItem(ITEM_FULLSPLASH, FLUID_SLIME);
@@ -752,9 +752,7 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 	attackedCreature->onAttacked();
 
 	for (const auto& summon : summons) {
-		if (summon) {
-			summon->setAttackedCreature(creature);
-		}
+		summon->setAttackedCreature(creature);
 	}
 }
 
@@ -876,21 +874,19 @@ void Creature::updateFollowersPaths()
 
 	const Position& thisPosition = getPosition();
 	for (const auto& follower : followers) {
-		if (follower) {
-			const Position& followerPosition = follower->getPosition();
+		const Position& followerPosition = follower->getPosition();
 
-			if (follower->lastPathUpdate < OTSYS_TIME()) {
-				continue;
-			}
-
-			if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX ||
-			    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY) {
-				continue;
-			}
-
-			g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
-			follower->lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
+		if (follower->lastPathUpdate < OTSYS_TIME()) {
+			continue;
 		}
+
+		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX ||
+		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY) {
+			continue;
+		}
+
+		g_dispatcher.addTask(createTask([id = follower->getID()]() { g_game.updateCreatureWalk(id); }));
+		follower->lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
 	}
 }
 

@@ -19,7 +19,7 @@ void Party::disband()
 		return;
 	}
 
-	std::shared_ptr<Player> currentLeader = leader;
+	auto currentLeader = leader;
 	leader = nullptr;
 
 	currentLeader->setParty(nullptr);
@@ -466,7 +466,7 @@ void Party::clearPlayerPoints(const std::shared_ptr<Player>& player)
 
 bool Party::canOpenCorpse(uint32_t ownerId) const
 {
-	if (const std::shared_ptr<Player>& player = g_game.getPlayerByID(ownerId)) {
+	if (const auto& player = g_game.getPlayerByID(ownerId)) {
 		return leader->getID() == ownerId || player->getParty() == this;
 	}
 	return false;

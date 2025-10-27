@@ -128,7 +128,7 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 			return false;
 		}
 
-		std::shared_ptr<Item> item = Item::CreateItem(itemPropStream);
+		auto item = Item::CreateItem(itemPropStream);
 		if (!item) {
 			return false;
 		}
@@ -186,13 +186,13 @@ void Container::onAddContainerItem(const std::shared_ptr<Item>& item)
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	// send to client
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendAddContainerItem(getContainer(), item);
 	}
 
 	// event methods
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onAddContainerItem(item);
 	}
@@ -205,13 +205,13 @@ void Container::onUpdateContainerItem(uint32_t index, const std::shared_ptr<Item
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	// send to client
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendUpdateContainerItem(getContainer(), index, newItem);
 	}
 
 	// event methods
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onUpdateContainerItem(getContainer(), oldItem, newItem);
 	}
@@ -223,13 +223,13 @@ void Container::onRemoveContainerItem(uint32_t index, const std::shared_ptr<Item
 	g_game.map.getSpectators(spectators, getPosition(), false, true, 1, 1, 1, 1);
 
 	// send change to client
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->sendRemoveContainerItem(getContainer(), index);
 	}
 
 	// event methods
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->onRemoveContainerItem(getContainer(), item);
 	}
@@ -311,9 +311,11 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 
 	auto const topParent = getTopParent();
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (auto houseTile = std::dynamic_pointer_cast<const HouseTile>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
+		if (auto tile = topParent->getTile()) {
+			if (auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
+				}
 			}
 		}
 	}
@@ -399,9 +401,11 @@ ReturnValue Container::queryRemove(const std::shared_ptr<const Thing>& thing, ui
 
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
 		auto topParent = getTopParent();
-		if (auto houseTile = std::dynamic_pointer_cast<const HouseTile>(topParent->getTile())) {
-			if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
-				return RETURNVALUE_PLAYERISNOTINVITED;
+		if (auto tile = topParent->getTile()) {
+			if (auto houseTile = tile->getHouseTile()) {
+				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
+					return RETURNVALUE_PLAYERISNOTINVITED;
+				}
 			}
 		}
 	}
@@ -620,7 +624,7 @@ void Container::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 int32_t Container::getThingIndex(const std::shared_ptr<const Thing>& thing) const
 {
 	int32_t index = 0;
-	for (auto item : itemList) {
+	for (const auto& item : itemList) {
 		if (item == thing) {
 			return index;
 		}
@@ -642,7 +646,7 @@ uint32_t Container::getItemTypeCount(uint16_t itemId, int32_t subType /* = -1*/)
 
 std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const
 {
-	for (auto item : itemList) {
+	for (const auto& item : itemList) {
 		countMap[item->getID()] += item->getItemCount();
 	}
 	return countMap;
@@ -721,7 +725,7 @@ void Container::startDecaying()
 {
 	Item::startDecaying();
 
-	for (auto item : itemList) {
+	for (const auto& item : itemList) {
 		item->startDecaying();
 	}
 }

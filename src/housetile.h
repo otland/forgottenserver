@@ -13,6 +13,15 @@ class HouseTile final : public DynamicTile
 public:
 	HouseTile(uint16_t x, uint16_t y, uint8_t z, House* house) : DynamicTile{x, y, z}, house{house} {}
 
+	std::shared_ptr<HouseTile> getHouseTile() override
+	{
+		return std::static_pointer_cast<HouseTile>(shared_from_this());
+	}
+	std::shared_ptr<const HouseTile> getHouseTile() const override
+	{
+		return std::static_pointer_cast<const HouseTile>(shared_from_this());
+	}
+
 	// cylinder implementations
 	ReturnValue queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
 	                     const std::shared_ptr<Creature>& actor = nullptr) const override;

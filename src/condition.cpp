@@ -1924,7 +1924,7 @@ void ConditionSpellGroupCooldown::addCondition(const std::shared_ptr<Creature>& 
 		setTicks(condition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			const std::shared_ptr<Player>& player = creature->getPlayer();
+			auto player = creature->getPlayer();
 			if (player) {
 				player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 			}

@@ -120,7 +120,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>
 	uint32_t offsetX = x & FLOOR_MASK;
 	uint32_t offsetY = y & FLOOR_MASK;
 
-	std::shared_ptr<Tile>& tile = floor->tiles[offsetX][offsetY];
+	auto& tile = floor->tiles[offsetX][offsetY];
 	if (tile) {
 		TileItemVector* items = newTile->getItemList();
 		if (items) {
@@ -156,7 +156,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 		return;
 	}
 
-	std::shared_ptr<Tile> tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
+	const auto& tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
 	if (tile) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {

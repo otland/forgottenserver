@@ -327,7 +327,16 @@ uint16_t Item::getSubType() const
 
 std::shared_ptr<const Player> Item::getHoldingPlayer() const
 {
-	return std::dynamic_pointer_cast<const Player>(getTopParent());
+	auto topParent = getTopParent();
+	if (!topParent) {
+		return nullptr;
+	}
+
+	auto creature = topParent->getCreature();
+	if (creature) {
+		return creature->getPlayer();
+	}
+	return nullptr;
 }
 
 void Item::setSubType(uint16_t n)

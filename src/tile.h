@@ -9,6 +9,7 @@
 
 class BedItem;
 class Creature;
+class HouseTile;
 class MagicField;
 class Mailbox;
 class SpectatorVec;
@@ -129,6 +130,9 @@ public:
 		return std::static_pointer_cast<const Tile>(shared_from_this());
 	}
 
+	virtual std::shared_ptr<HouseTile> getHouseTile() { return nullptr; }
+	virtual std::shared_ptr<const HouseTile> getHouseTile() const { return nullptr; }
+
 	virtual TileItemVector* getItemList() = 0;
 	virtual const TileItemVector* getItemList() const = 0;
 	virtual TileItemVector* makeItemList() = 0;
@@ -232,7 +236,7 @@ public:
 	void internalAddThing(const std::shared_ptr<Thing>& thing) override final { internalAddThing(0, thing); };
 	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;
 
-	const Position& getPosition() const { return tilePos; }
+	const Position& getPosition() const override final { return tilePos; }
 
 	bool isRemoved() const override final { return false; }
 

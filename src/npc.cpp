@@ -256,7 +256,7 @@ void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLog
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
-	} else if (const std::shared_ptr<Player>& player = creature->getPlayer()) {
+	} else if (const auto& player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureAppear(creature);
 		}
@@ -275,7 +275,7 @@ void Npc::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLog
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}
-	} else if (const std::shared_ptr<Player>& player = creature->getPlayer()) {
+	} else if (const auto& player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureDisappear(creature);
 		}

@@ -241,13 +241,7 @@ public:
 	                             bool ignoreResistances = false);
 
 	bool setMaster(const std::shared_ptr<Creature>& newMaster);
-
-	void removeMaster()
-	{
-		if (master) {
-			master = nullptr;
-		}
-	}
+	void removeMaster() { master = nullptr; }
 
 	bool isSummon() const { return master != nullptr; }
 	std::shared_ptr<Creature> getMaster() const { return master; }
@@ -368,7 +362,7 @@ public:
 		position = tile->getPosition();
 	}
 
-	const Position& getPosition() const { return position; }
+	const Position& getPosition() const override final { return position; }
 
 	std::shared_ptr<Tile> getTile() override final { return tile; }
 	std::shared_ptr<const Tile> getTile() const override final { return tile; }

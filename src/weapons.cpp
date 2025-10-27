@@ -534,7 +534,7 @@ void Weapon::decrementItemCount(const std::shared_ptr<Item>& item)
 	if (count > 1) {
 		g_game.transformItem(item, item->getID(), count - 1);
 	} else {
-		g_game.internalRemoveItem(item->getItem());
+		g_game.internalRemoveItem(item);
 	}
 }
 

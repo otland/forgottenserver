@@ -369,7 +369,7 @@ void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 	}
 
 	// event methods
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		spectator->onAddTileItem(getTile(), thingMapPos);
 	}
 
@@ -1180,7 +1180,7 @@ int32_t Tile::getThingIndex(const std::shared_ptr<const Thing>& thing) const
 
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (thing->getCreature()) {
-			for (auto creature : *creatures) {
+			for (const auto& creature : *creatures) {
 				++n;
 				if (creature == thing) {
 					return n;
@@ -1339,7 +1339,7 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
-	for (auto spectator : spectators) {
+	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
 		std::static_pointer_cast<Player>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}

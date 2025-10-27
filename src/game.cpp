@@ -322,22 +322,25 @@ void Game::internalGetPosition(const std::shared_ptr<Item>& item, Position& pos,
 
 	auto topParent = item->getTopParent();
 	if (topParent) {
-		if (auto player = std::dynamic_pointer_cast<Player>(topParent)) {
-			pos.x = 0xFFFF;
+		auto creature = topParent->getCreature();
+		if (creature) {
+			if (auto player = creature->getPlayer()) {
+				pos.x = 0xFFFF;
 
-			auto parent = item->getParent();
-			auto container = parent->getContainer();
-			if (container) {
-				pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
-				pos.z = container->getThingIndex(item);
-				stackpos = pos.z;
-			} else {
-				pos.y = player->getThingIndex(item);
-				stackpos = pos.y;
+				auto parent = item->getParent();
+				auto container = parent->getContainer();
+				if (container) {
+					pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
+					pos.z = container->getThingIndex(item);
+					stackpos = pos.z;
+				} else {
+					pos.y = player->getThingIndex(item);
+					stackpos = pos.y;
+				}
+			} else if (auto tile = topParent->getTile()) {
+				pos = tile->getPosition();
+				stackpos = tile->getThingIndex(item);
 			}
-		} else if (auto tile = topParent->getTile()) {
-			pos = tile->getPosition();
-			stackpos = tile->getThingIndex(item);
 		}
 	}
 }
@@ -2463,8 +2466,13 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string
 
 	auto topParent = writeItem->getTopParent();
 
-	auto owner = std::dynamic_pointer_cast<Player>(topParent);
-	if (owner && owner != player) {
+	auto creature = topParent->getCreature();
+	if (creature && creature != player) {
+		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+		return;
+	}
+
+	if (auto owner = creature->getPlayer()) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
@@ -2675,10 +2683,12 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (auto houseTile = std::dynamic_pointer_cast<const HouseTile>(tradeItem->getTile())) {
-			if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
-				player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
-				return;
+		if (auto tile = tradeItem->getTile()) {
+			if (auto houseTile = tile->getHouseTile()) {
+				if (!tradeItem->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
+					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
+					return;
+				}
 			}
 		}
 	}

@@ -201,7 +201,7 @@ void Spawns::startup()
 		return;
 	}
 
-	for (auto npc : npcList) {
+	for (const auto& npc : npcList) {
 		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName()
 			          << "\" on position: " << npc->getMasterPos() << '.' << std::endl;
