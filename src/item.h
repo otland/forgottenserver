@@ -510,8 +510,11 @@ public:
 
 	const Position& getPosition() const override;
 
-	std::shared_ptr<Item> getItem() { return std::static_pointer_cast<Item>(shared_from_this()); }
-	std::shared_ptr<const Item> getItem() const { return std::static_pointer_cast<const Item>(shared_from_this()); }
+	std::shared_ptr<Item> getItem() override final { return std::static_pointer_cast<Item>(shared_from_this()); }
+	std::shared_ptr<const Item> getItem() const override final
+	{
+		return std::static_pointer_cast<const Item>(shared_from_this());
+	}
 
 	virtual std::shared_ptr<Teleport> getTeleport() { return nullptr; }
 	virtual std::shared_ptr<const Teleport> getTeleport() const { return nullptr; }
