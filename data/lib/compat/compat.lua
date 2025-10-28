@@ -1636,6 +1636,33 @@ function getFormattedWorldTime()
 	return Game.getFormattedWorldTime()
 end
 
+function getPlayerInstantSpells(cid)
+	local result = {}
+
+	if not player then
+		return result
+	end
+
+	local spells = player:getInstantSpells()
+	if not spells then
+		return result
+	end
+
+	for i, spell in ipairs(spells) do
+		result[i] = {
+			name = spell:name(),
+			words = spell:words(),
+			level = spell:level(),
+			mlevel = spell:magicLevel(),
+			mana = spell:mana(),
+			manapercent = spell:manaPercent(),
+			params = spell:hasParam()
+		}
+	end
+
+	return result
+end
+
 do
 	local getmetatable = getmetatable
 
