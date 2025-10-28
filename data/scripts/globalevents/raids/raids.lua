@@ -9,7 +9,7 @@ local running = nil
 local lastRaidEnd = 0
 
 function event.onTime(interval)
-	io.write(">> Executing raids event...\n")
+	logInfo(">> Executing raids event...\n")
 	if running then
 		return true
 	end
@@ -22,7 +22,7 @@ function event.onTime(interval)
 		if now >= lastRaidEnd + raid.margin and chance >= math.random(0, MAX_RAND_RANGE) then
 			running = key
 
-			io.write("Executing raid: " .. raid.name .. "\n")
+			logInfo("Executing raid: " .. raid.name .. "\n")
 			raid:execute()
 
 			if not raid.repeats then
