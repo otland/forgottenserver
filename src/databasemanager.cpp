@@ -7,6 +7,7 @@
 
 #include "configmanager.h"
 #include "luascript.h"
+#include "logger.h"
 
 bool DatabaseManager::optimizeTables()
 {
@@ -92,8 +93,8 @@ void DatabaseManager::updateDatabase()
 	int32_t version = getDatabaseVersion();
 	do {
 		if (luaL_dofile(L, fmt::format("data/migrations/{:d}.lua", version).c_str()) != 0) {
-			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			          << lua_tostring(L, -1) << std::endl;
+			g_logger().info("[Error - DatabaseManager::updateDatabase - Version: {} {}", version, lua_tostring(L, -1));
+
 			break;
 		}
 
@@ -104,8 +105,8 @@ void DatabaseManager::updateDatabase()
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
 			tfs::lua::resetScriptEnv();
-			std::cout << "[Error - DatabaseManager::updateDatabase - Version: " << version << "] "
-			          << lua_tostring(L, -1) << std::endl;
+			g_logger().info("[Error - DatabaseManager::updateDatabase - Version: {} {}", version, lua_tostring(L, -1));
+
 			break;
 		}
 
@@ -115,7 +116,7 @@ void DatabaseManager::updateDatabase()
 		}
 
 		version++;
-		std::cout << "> Database has been updated to version " << version << '.' << std::endl;
+		g_logger().info("Database has been updated to version {} ", version, lua_tostring(L, -1));
 		registerDatabaseConfig("db_version", version);
 
 		tfs::lua::resetScriptEnv();

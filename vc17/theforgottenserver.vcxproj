@@ -207,6 +207,7 @@
     <ClCompile Include="..\src\iomarket.cpp" />
     <ClCompile Include="..\src\item.cpp" />
     <ClCompile Include="..\src\items.cpp" />
+    <ClCompile Include="..\src\logger.cpp" />
     <ClCompile Include="..\src\luascript.cpp" />
     <ClCompile Include="..\src\mailbox.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="..\src\itemloader.h" />
     <ClInclude Include="..\src\items.h" />
     <ClInclude Include="..\src\lockfree.h" />
+    <ClInclude Include="..\src\logger.h" />
     <ClInclude Include="..\src\luascript.h" />
     <ClInclude Include="..\src\mailbox.h" />
     <ClInclude Include="..\src\map.h" />
