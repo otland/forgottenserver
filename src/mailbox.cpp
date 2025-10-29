@@ -40,6 +40,7 @@ std::string getReceiver(const std::shared_ptr<Item>& item)
 	boost::algorithm::trim(name);
 	return name;
 }
+
 } // namespace
 
 ReturnValue Mailbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t,
