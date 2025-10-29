@@ -144,7 +144,7 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 		return false;
 	}
 
-	g_logger().info("Map loading time: {} seconds ", (OTSYS_TIME() - start) / (1000.));
+	g_logger().info("Map loading time: {} seconds", (OTSYS_TIME() - start) / (1000.));
 
 	return true;
 }
