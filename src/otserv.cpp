@@ -173,7 +173,7 @@ void mainLoader(ServiceManager* services)
 		return;
 	}
 
-	g_logger().info("Loading lua monsters");
+	g_logger().info("Loading Xml monsters");
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
 		return;
