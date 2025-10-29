@@ -139,7 +139,7 @@ void mainLoader(ServiceManager* services)
 	DatabaseManager::updateDatabase();
 
 	if (getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
-		g_logger().info("  >> No tables were optimized.");
+		g_logger().info(">> No tables were optimized.");
 	}
 
 	// load vocations
