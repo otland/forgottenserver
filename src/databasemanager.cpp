@@ -105,7 +105,7 @@ void DatabaseManager::updateDatabase()
 		lua_getglobal(L, "onUpdateDatabase");
 		if (lua_pcall(L, 0, 1, 0) != 0) {
 			tfs::lua::resetScriptEnv();
-			g_logger().info("[Error - DatabaseManager::updateDatabase - Version: {} {}", version, lua_tostring(L, -1));
+			g_logger().error("[Error - DatabaseManager::updateDatabase - Version: {} {}", version, lua_tostring(L, -1));
 
 			break;
 		}
