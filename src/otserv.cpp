@@ -124,7 +124,7 @@ void mainLoader(ServiceManager* services)
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
-	g_logger().info("Establishing database connection...,MySQL {}", Database::getClientVersion());
+	g_logger().info("Establishing database connection... MySQL {}", Database::getClientVersion());
 
 	// run database manager
 	g_logger().info("Running database manager");
