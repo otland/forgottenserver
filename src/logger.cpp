@@ -170,7 +170,7 @@ namespace {
 
 				try {
 					if (level >= LogLevel::ERRORR && !checkDiskSpace(timestampedPath_)) {
-						fprintf(stderr, "[DISK FULL] %.*s\n", (int)msg.size(), msg.data());
+						fprintf(stderr, "[DISK FULL] %.*s\n", static_cast<int>(msg.size()), msg.data());
 					}
 
 					logger_->log(toSpd(level), msg);
@@ -180,7 +180,7 @@ namespace {
 					}
 				}
 				catch (const std::exception& e) {
-					fprintf(stderr, "[LOGGER ERROR] %s: %.*s\n", e.what(), (int)msg.size(), msg.data());
+					fprintf(stderr, "[LOGGER ERROR] %s: %.*s\n", e.what(), static_cast<int>(msg.size()), msg.data());
 				}
 			}
 
