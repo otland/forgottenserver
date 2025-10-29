@@ -116,7 +116,7 @@ void DatabaseManager::updateDatabase()
 		}
 
 		version++;
-		g_logger().info("Database has been updated to version {} ", version, lua_tostring(L, -1));
+		g_logger().info("Database has been updated to version {} {}", version, lua_tostring(L, -1));
 		registerDatabaseConfig("db_version", version);
 
 		tfs::lua::resetScriptEnv();
