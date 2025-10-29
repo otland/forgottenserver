@@ -22,7 +22,7 @@ function event.onTime(interval)
 		if now >= lastRaidEnd + raid.margin and chance >= math.random(0, MAX_RAND_RANGE) then
 			running = key
 
-			logInfo("Executing raid: " .. raid.name .. "\n")
+			logInfo("Executing raid: " .. raid.name)
 			raid:execute()
 
 			if not raid.repeats then
