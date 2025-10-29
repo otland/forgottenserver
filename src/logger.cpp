@@ -67,9 +67,9 @@ namespace {
 		ss << std::put_time(std::localtime(&time_t), "%Y%m%d_%H%M%S");
 
 		std::filesystem::path path(basePath);
-		std::string directory = path.parent_path().string();
-		std::string baseName = path.stem().string();
-		std::string extension = path.extension().string();
+		auto directory = path.parent_path();
+		auto baseName = path.stem();
+		auto extension = path.extension();
 
 		if (!directory.empty()) {
 			try {
@@ -81,7 +81,7 @@ namespace {
 			}
 		}
 
-		return directory + "/" + baseName + "_" + ss.str() + extension;
+		return (directory / (baseName.string() + "_" + ss.str() + extension.string())).string();
 	}
 
 	bool checkDiskSpace(const std::string& path, size_t minSpaceBytes = 50 * 1024 * 1024) {
@@ -96,40 +96,21 @@ namespace {
 
 	class LogWithSpdLog final : public Logger {
 		public:
-			LogWithSpdLog(std::string_view filePath, size_t rotateSize, size_t rotateFiles) {
-				try {
-					timestampedPath_ = generateLogFileName(filePath);
+			LogWithSpdLog(const std::string& timestampedPath, std::shared_ptr<spdlog::sinks::stdout_color_sink_mt> consoleSink,
+						std::shared_ptr<spdlog::sinks::rotating_file_sink_mt> fileSink) :
+				timestampedPath_(timestampedPath)
+			{
+				std::vector<spdlog::sink_ptr> sinks{consoleSink, fileSink};
+				logger_ = std::make_shared<spdlog::logger>("tfs", sinks.begin(), sinks.end());
 
-					if (!checkDiskSpace(timestampedPath_)) {
-						fprintf(stderr, "Warning: Low disk space for logging\n");
-					}
+				logger_->set_level(spdlog::level::trace);
+				logger_->flush_on(spdlog::level::info);
 
-					auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-					console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+				spdlog::register_logger(logger_);
 
-					auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(timestampedPath_, rotateSize, rotateFiles);
-					file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
-
-					file_sink->set_level(spdlog::level::trace);
-
-					std::vector<spdlog::sink_ptr> sinks{ console_sink, file_sink };
-
-					logger_ = std::make_shared<spdlog::logger>("tfs", sinks.begin(), sinks.end());
-
-					logger_->set_level(spdlog::level::trace);
-			        logger_->flush_on(spdlog::level::info);
-
-					spdlog::register_logger(logger_);
-
-					logger_->info("=== TFS Logger Initialized ===");
-					logger_->info("Log file: {}", timestampedPath_);
-					logger_->flush();
-
-				}
-				catch (const std::exception& e) {
-					fprintf(stderr, "Error creating logger: %s\n", e.what());
-					throw;
-				}
+				logger_->info("=== TFS Logger Initialized ===");
+				logger_->info("Log file: {}", timestampedPath_);
+				logger_->flush();
 			}
 
 			~LogWithSpdLog() override {
@@ -189,11 +170,24 @@ namespace {
 			std::string timestampedPath_;
 	};
 
+	std::unique_ptr<Logger> createLogger(std::string_view filePath, size_t rotateSize, size_t rotateFiles)
+	{
+		std::string timestampedPath = generateLogFileName(filePath);
+		if (!checkDiskSpace(timestampedPath)) {
+			fprintf(stderr, "Warning: Low disk space for logging\n");
+		}
+		auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+		console_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%^%l%$] %v");
+		auto file_sink = std::make_shared<spdlog::sinks::rotating_file_sink_mt>(timestampedPath, rotateSize, rotateFiles);
+		file_sink->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%l] %v");
+		file_sink->set_level(spdlog::level::trace);
+		return std::make_unique<LogWithSpdLog>(timestampedPath, console_sink, file_sink);
+	}
 	static std::unique_ptr<Logger> loggerInstance;
 
 } // namespace
 
-Logger& g_logger() {
+Logger& getLogger() {
 	if (loggerInitialized.load(std::memory_order_acquire) && loggerInstance) {
 		return *loggerInstance;
 	}
@@ -216,14 +210,12 @@ bool initLogger(LogLevel level, std::string_view filePath, size_t rotateSize, si
 	}
 
 	try {
-		loggerInstance = std::make_unique<LogWithSpdLog>(filePath, rotateSize, rotateFiles);
+		loggerInstance = createLogger(filePath, rotateSize, rotateFiles);
 		loggerInstance->setLevel(level);
 		loggerInitialized.store(true, std::memory_order_release);
 
 		return true;
-	}
-
-	catch (const std::exception& e) {
+	} catch (const std::exception& e) {
 		fprintf(stderr, "Failed to initialize logger: %s\n", e.what());
 		return false;
 	}
@@ -269,7 +261,7 @@ LogLevel parseLogLevel(std::string_view level) {
 
 void loggerSignalHandler(int signal) {
 	// Signal handlers must only use async-signal-safe functions.
-	// write() is async-signal-safe, while fprintf, g_logger(), etc. are not.
+	// write() is async-signal-safe, while fprintf, getLogger(), etc. are not.
 	const char* signalName = "UNKNOWN";
 	switch (signal) {
 	case SIGTERM:

@@ -28,22 +28,18 @@ public:
 	virtual LogLevel getLevel() const = 0;
 	virtual bool isEnabled(LogLevel level) const = 0;
 
-	void trace([[maybe_unused]] std::string_view msg)
+	void trace(std::string_view msg)
 	{
-#if !defined(NDEBUG) || defined(DEBUG_LOG)
 		if (isEnabled(LogLevel::TRACE)) {
 			log(LogLevel::TRACE, msg);
 		}
-#endif
 	}
 
-	void debug([[maybe_unused]] std::string_view msg)
+	void debug(std::string_view msg)
 	{
-#if !defined(NDEBUG) || defined(DEBUG_LOG)
 		if (isEnabled(LogLevel::DEBUG)) {
 			log(LogLevel::DEBUG, msg);
 		}
-#endif
 	}
 
 	void info(std::string_view msg)
@@ -77,21 +73,17 @@ public:
 	template <typename... Args>
 	void trace(fmt::format_string<Args...> fmt, Args&&... args)
 	{
-#if !defined(NDEBUG) || defined(DEBUG_LOG)
 		if (isEnabled(LogLevel::TRACE)) {
 			log(LogLevel::TRACE, fmt::format(fmt, std::forward<Args>(args)...));
 		}
-#endif
 	}
 
 	template <typename... Args>
 	void debug(fmt::format_string<Args...> fmt, Args&&... args)
 	{
-#if !defined(NDEBUG) || defined(DEBUG_LOG)
 		if (isEnabled(LogLevel::DEBUG)) {
 			log(LogLevel::DEBUG, fmt::format(fmt, std::forward<Args>(args)...));
 		}
-#endif
 	}
 
 	template <typename... Args>
@@ -139,9 +131,7 @@ public:
 			auto end = std::chrono::steady_clock::now();
 			info("{} took {} ms", name, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
 			return result;
-		}
-
-		catch (...) {
+		} catch (...) {
 			auto end = std::chrono::steady_clock::now();
 			error("{} failed after {} ms", name,
 			      std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
@@ -153,7 +143,7 @@ protected:
 	virtual void log(LogLevel level, std::string_view message) = 0;
 };
 
-Logger& g_logger();
+Logger& getLogger();
 bool initLogger(LogLevel level = LogLevel::INFO, std::string_view filePath = "data/logs/server.log",
                 size_t rotateSize = 5 * 1024 * 1024, size_t rotateFiles = 3);
 void shutdownLogger();
@@ -166,27 +156,27 @@ void loggerSignalHandler(int signal);
 
 #define LOG_TRACE(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().trace(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().trace(__VA_ARGS__); \
 	} while (0)
 #define LOG_DEBUG(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().debug(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().debug(__VA_ARGS__); \
 	} while (0)
 #define LOG_INFO(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().info(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().info(__VA_ARGS__); \
 	} while (0)
 #define LOG_WARN(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().warn(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().warn(__VA_ARGS__); \
 	} while (0)
 #define LOG_ERROR(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().error(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().error(__VA_ARGS__); \
 	} while (0)
 #define LOG_CRITICAL(...) \
 	do { \
-		if (isLoggerInitialized()) g_logger().critical(__VA_ARGS__); \
+		if (isLoggerInitialized()) getLogger().critical(__VA_ARGS__); \
 	} while (0)
 
 template <typename T>
