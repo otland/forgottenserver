@@ -388,12 +388,12 @@ void Party::shareExperience(uint64_t experience, const std::shared_ptr<Creature>
 	leader->onGainSharedExperience(shareExperience, source);
 }
 
-bool Party::canUseSharedExperience(std::shared_ptr<const Player> player) const
+bool Party::canUseSharedExperience(const std::shared_ptr<const Player>& player) const
 {
 	return getMemberSharedExperienceStatus(player) == SHAREDEXP_OK;
 }
 
-SharedExpStatus_t Party::getMemberSharedExperienceStatus(std::shared_ptr<const Player> player) const
+SharedExpStatus_t Party::getMemberSharedExperienceStatus(const std::shared_ptr<const Player>& player) const
 {
 	if (memberList.empty()) {
 		return SHAREDEXP_EMPTYPARTY;

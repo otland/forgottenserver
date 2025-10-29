@@ -22,7 +22,8 @@ bool PrivateChatChannel::isInvited(uint32_t guid) const
 
 bool PrivateChatChannel::removeInvite(uint32_t guid) { return invites.erase(guid) != 0; }
 
-void PrivateChatChannel::invitePlayer(const std::shared_ptr<const Player>& player, std::shared_ptr<Player> invitePlayer)
+void PrivateChatChannel::invitePlayer(const std::shared_ptr<const Player>& player,
+                                      const std::shared_ptr<Player>& invitePlayer)
 {
 	auto result = invites.emplace(invitePlayer->getGUID(), invitePlayer);
 	if (!result.second) {
@@ -423,10 +424,10 @@ bool Chat::deleteChannel(const std::shared_ptr<const Player>& player, uint16_t c
 	return true;
 }
 
-ChatChannel* Chat::addUserToChannel(std::shared_ptr<Player> player, uint16_t channelId)
+ChatChannel* Chat::addUserToChannel(const std::shared_ptr<Player>& player, uint16_t channelId)
 {
 	ChatChannel* channel = getChannel(player, channelId);
-	if (channel && channel->addUser(std::move(player))) {
+	if (channel && channel->addUser(player)) {
 		return channel;
 	}
 	return nullptr;

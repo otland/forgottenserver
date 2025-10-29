@@ -31,7 +31,7 @@ public:
 
 	bool addBlock(spawnBlock_t sb);
 	bool addMonster(const std::string& name, const Position& pos, Direction dir, uint32_t interval);
-	void removeMonster(std::shared_ptr<Monster> monster);
+	void removeMonster(const std::shared_ptr<Monster>& monster);
 
 	uint32_t getInterval() const { return interval; }
 	void startup();

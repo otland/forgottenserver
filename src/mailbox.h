@@ -47,7 +47,6 @@ public:
 	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
 private:
-	std::optional<std::string> getReceiver(const std::shared_ptr<Item>& item, std::string& name) const;
 	bool sendItem(const std::shared_ptr<Item>& item) const;
 };
 

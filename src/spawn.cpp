@@ -413,7 +413,7 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 	return addBlock(sb);
 }
 
-void Spawn::removeMonster(std::shared_ptr<Monster> monster)
+void Spawn::removeMonster(const std::shared_ptr<Monster>& monster)
 {
 	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
 		if (it->second == monster) {

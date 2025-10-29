@@ -20,7 +20,7 @@ House::House(uint32_t houseId) : id(houseId) {}
 void House::addTile(std::shared_ptr<HouseTile> tile)
 {
 	tile->setFlag(TILESTATE_PROTECTIONZONE);
-	houseTiles.push_back(tile);
+	houseTiles.push_back(std::move(tile));
 }
 
 void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,

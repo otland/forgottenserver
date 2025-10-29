@@ -881,19 +881,6 @@ itemAttrTypes stringToItemAttribute(const std::string& str)
 	return ITEM_ATTRIBUTE_NONE;
 }
 
-std::string getFirstLine(const std::string& str)
-{
-	std::string firstLine;
-	firstLine.reserve(str.length());
-	for (const char c : str) {
-		if (c == '\n') {
-			break;
-		}
-		firstLine.push_back(c);
-	}
-	return firstLine;
-}
-
 const char* getReturnMessage(ReturnValue value)
 {
 	switch (value) {

@@ -11,10 +11,36 @@
 
 extern Game g_game;
 
-static bool canSend(std::shared_ptr<const Item> item)
+namespace {
+
+bool canSend(const std::shared_ptr<const Item>& item)
 {
 	return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER;
 }
+
+std::string getReceiver(const std::shared_ptr<Item>& item)
+{
+	auto container = item->getContainer();
+	if (container) {
+		for (const auto& containerItem : container->getItemList()) {
+			if (containerItem->getID() == ITEM_LABEL) {
+				return getReceiver(containerItem);
+			}
+		}
+		return "";
+	}
+
+	const std::string& text = item->getText();
+	if (text.empty()) {
+		return "";
+	}
+
+	std::string name;
+	std::getline(std::istringstream{text}, name);
+	boost::algorithm::trim(name);
+	return name;
+}
+} // namespace
 
 ReturnValue Mailbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t,
                               const std::shared_ptr<Creature>&) const
@@ -55,11 +81,7 @@ void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const 
 
 bool Mailbox::sendItem(const std::shared_ptr<Item>& item) const
 {
-	std::string receiver;
-	if (!getReceiver(item, receiver)) {
-		return false;
-	}
-
+	auto receiver = getReceiver(item);
 	/**No need to continue if its still empty**/
 	if (receiver.empty()) {
 		return false;
@@ -87,26 +109,4 @@ bool Mailbox::sendItem(const std::shared_ptr<Item>& item) const
 		}
 	}
 	return false;
-}
-
-std::optional<std::string> Mailbox::getReceiver(const std::shared_ptr<Item>& item, std::string& name) const
-{
-	auto container = item->getContainer();
-	if (container) {
-		for (const auto& containerItem : container->getItemList()) {
-			if (containerItem->getID() == ITEM_LABEL) {
-				return getReceiver(containerItem, name);
-			}
-		}
-		return std::nullopt;
-	}
-
-	const std::string& text = item->getText();
-	if (text.empty()) {
-		return std::nullopt;
-	}
-
-	name = getFirstLine(text);
-	boost::algorithm::trim(name);
-	return std::make_optional(name);
 }

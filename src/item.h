@@ -898,7 +898,7 @@ public:
 	virtual void onRemoved();
 	virtual void onTradeEvent(TradeEvents_t, const std::shared_ptr<Player>&) {}
 
-	virtual void startDecaying();
+	virtual void startDecaying() override;
 
 	bool isLoadedFromMap() const { return loadedFromMap; }
 	void setLoadedFromMap(bool value) { loadedFromMap = value; }

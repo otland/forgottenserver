@@ -5237,7 +5237,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
-			for (const std::shared_ptr<Item>& item : itemList) {
+			for (const auto& item : itemList) {
 				uint16_t removeCount = std::min<uint16_t>(tmpAmount, item->getItemCount());
 				tmpAmount -= removeCount;
 				internalRemoveItem(item, removeCount);
@@ -5247,7 +5247,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 				}
 			}
 		} else {
-			for (const std::shared_ptr<Item>& item : itemList) {
+			for (const auto& item : itemList) {
 				internalRemoveItem(item);
 			}
 		}

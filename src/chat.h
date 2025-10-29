@@ -71,7 +71,7 @@ public:
 
 	bool isInvited(uint32_t guid) const;
 
-	void invitePlayer(const std::shared_ptr<const Player>& player, std::shared_ptr<Player> invitePlayer);
+	void invitePlayer(const std::shared_ptr<const Player>& player, const std::shared_ptr<Player>& invitePlayer);
 	void excludePlayer(const std::shared_ptr<const Player>& player, const std::shared_ptr<Player>& excludePlayer);
 
 	bool removeInvite(uint32_t guid);
@@ -101,7 +101,7 @@ public:
 	ChatChannel* createChannel(const std::shared_ptr<const Player>& player, uint16_t channelId);
 	bool deleteChannel(const std::shared_ptr<const Player>& player, uint16_t channelId);
 
-	ChatChannel* addUserToChannel(std::shared_ptr<Player> player, uint16_t channelId);
+	ChatChannel* addUserToChannel(const std::shared_ptr<Player>& player, uint16_t channelId);
 	bool removeUserFromChannel(const std::shared_ptr<const Player>& player, uint16_t channelId);
 	void removeUserFromAllChannels(const std::shared_ptr<const Player>& player);
 

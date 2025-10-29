@@ -53,8 +53,8 @@ public:
 	bool setSharedExperience(const std::shared_ptr<Player>& player, bool sharedExpActive);
 	bool isSharedExperienceActive() const { return sharedExpActive; }
 	bool isSharedExperienceEnabled() const { return sharedExpEnabled; }
-	bool canUseSharedExperience(std::shared_ptr<const Player> player) const;
-	SharedExpStatus_t getMemberSharedExperienceStatus(std::shared_ptr<const Player> player) const;
+	bool canUseSharedExperience(const std::shared_ptr<const Player>& player) const;
+	SharedExpStatus_t getMemberSharedExperienceStatus(const std::shared_ptr<const Player>& player) const;
 	void updateSharedExperience();
 
 	void updatePlayerTicks(const std::shared_ptr<Player>& player, uint32_t points);

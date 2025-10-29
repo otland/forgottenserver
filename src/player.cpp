@@ -979,7 +979,7 @@ void Player::sendAddContainerItem(const std::shared_ptr<const Container>& contai
 }
 
 void Player::sendUpdateContainerItem(const std::shared_ptr<const Container>& container, uint16_t slot,
-                                     std::shared_ptr<const Item> newItem)
+                                     const std::shared_ptr<const Item>& newItem)
 {
 	if (!client) {
 		return;

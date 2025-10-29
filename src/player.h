@@ -229,8 +229,8 @@ public:
 
 	bool hasFlag(PlayerFlags value) const { return (group->flags & value) != 0; }
 
-	std::shared_ptr<BedItem> getBedItem() { return bedItem; }
-	void setBedItem(const std::shared_ptr<BedItem>& b) { bedItem = std::move(b); }
+	std::shared_ptr<BedItem> getBedItem() const { return bedItem; }
+	void setBedItem(std::shared_ptr<BedItem> b) { bedItem = std::move(b); }
 
 	void addBlessing(uint8_t blessing) { blessings.set(blessing); }
 	void removeBlessing(uint8_t blessing) { blessings.reset(blessing); }
@@ -732,7 +732,7 @@ public:
 	void sendAddContainerItem(const std::shared_ptr<const Container>& container,
 	                          const std::shared_ptr<const Item>& item);
 	void sendUpdateContainerItem(const std::shared_ptr<const Container>& container, uint16_t slot,
-	                             std::shared_ptr<const Item> newItem);
+	                             const std::shared_ptr<const Item>& newItem);
 	void sendRemoveContainerItem(const std::shared_ptr<const Container>& container, uint16_t slot);
 	void sendContainer(uint8_t cid, const std::shared_ptr<const Container>& container, uint16_t firstIndex)
 	{
