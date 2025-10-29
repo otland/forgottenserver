@@ -106,7 +106,7 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 			std::cout << "[Warning - IOMap::loadMap] This map needs an updated items.otb." << std::endl;
 		}
 
-		g_logger().info("Map size: {}x{} ", root_header.width, root_header.height);
+		g_logger().info("Map size: {}x{}", root_header.width, root_header.height);
 
 		map->width = root_header.width;
 		map->height = root_header.height;
