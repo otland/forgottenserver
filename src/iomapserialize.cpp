@@ -46,7 +46,7 @@ void IOMapSerialize::loadHouseItems(Map* map)
 			loadItem(propStream, tile);
 		}
 	} while (result->next());
-	g_logger().info("Loaded house items in: {} s", (OTSYS_TIME() - start) / (1000.));
+	getLogger().info("Loaded house items in: {}s ", (OTSYS_TIME() - start) / (1000.));
 }
 
 bool IOMapSerialize::saveHouseItems()

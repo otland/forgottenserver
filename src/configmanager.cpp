@@ -180,7 +180,7 @@ bool ConfigManager::load()
 	}
 
 	if (luaL_dofile(L, string[CONFIG_FILE].data())) {
-		g_logger().error("{}", lua_tostring(L, -1));
+		getLogger().error("{}", lua_tostring(L, -1));
 		lua_close(L);
 		return false;
 	}

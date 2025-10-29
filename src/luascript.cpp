@@ -3679,19 +3679,19 @@ int LuaScriptInterface::luaDebugPrint(lua_State* L)
 
 int LuaScriptInterface::luaLogInfo(lua_State* L)
 {
-	g_logger().info(tfs::lua::getString(L, 1));
+	getLogger().info(tfs::lua::getString(L, 1));
 	return 0;
 }
 
 int LuaScriptInterface::luaLogWarning(lua_State* L)
 {
-	g_logger().warn(tfs::lua::getString(L, 1));
+	getLogger().warn(tfs::lua::getString(L, 1));
 	return 0;
 }
 
 int LuaScriptInterface::luaLogError(lua_State* L)
 {
-	g_logger().error(tfs::lua::getString(L, 1));
+	getLogger().error(tfs::lua::getString(L, 1));
 	return 0;
 }
 

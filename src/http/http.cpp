@@ -28,7 +28,7 @@ void tfs::http::start(bool bindOnlyOtsIP, std::string_view otsIP, unsigned short
 	if (bindOnlyOtsIP) {
 		address = asio::ip::make_address(otsIP);
 	}
-	g_logger().info("Starting HTTP server on {}:{} with {} threads", address.to_string(), port, threads);
+	getLogger().info("Starting HTTP server on {}:{} with {} threads", address.to_string(), port, threads);
 
 	auto listener = make_listener(ioc, {address, port});
 	listener->run();

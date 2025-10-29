@@ -20,7 +20,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 
 	const auto dir = fs::current_path() / "data" / folderName;
 	if (!fs::exists(dir) || !fs::is_directory(dir)) {
-		g_logger().warn("[Scripts::loadScripts] Can not load folder '{}'.", folderName);
+		getLogger().warn("[Scripts::loadScripts] Can not load folder '{}'.", folderName);
 		return false;
 	}
 
@@ -36,7 +36,7 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 			size_t found = it->path().filename().string().find(disable);
 			if (found != std::string::npos) {
 				if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-					g_logger().info("> {} [disabled]", it->path().filename().string());
+					getLogger().info("> {} [disabled]", it->path().filename().string());
 				}
 				continue;
 			}
@@ -51,23 +51,23 @@ bool Scripts::loadScripts(std::string folderName, bool isLib, bool reload)
 			if (redir.empty() || redir != it->parent_path().string()) {
 				auto p = fs::path(it->relative_path());
 				if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
-					g_logger().info(">> [{}]", p.parent_path().filename().string());
+					getLogger().info(">> [{}]", p.parent_path().filename().string());
 				}
 				redir = it->parent_path().string();
 			}
 		}
 
 		if (scriptInterface.loadFile(scriptFile) == -1) {
-			g_logger().error("> {} [error]", it->filename().string());
-			g_logger().error("^ {}", scriptInterface.getLastLuaError());
+			getLogger().error("> {} [error]", it->filename().string());
+			getLogger().error("^ {}", scriptInterface.getLastLuaError());
 			continue;
 		}
 
 		if (getBoolean(ConfigManager::SCRIPTS_CONSOLE_LOGS)) {
 			if (!reload) {
-				g_logger().info("> {} [loaded]", it->filename().string());
+				getLogger().info("> {} [loaded]", it->filename().string());
 			} else {
-				g_logger().info("> {} [reloaded]", it->filename().string());
+				getLogger().info("> {} [reloaded]", it->filename().string());
 			}
 		}
 	}

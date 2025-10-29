@@ -46,7 +46,7 @@ namespace {
 
 void startupErrorMessage(const std::string& errorStr)
 {
-	g_logger().error("{}", errorStr);
+	getLogger().error("{}", errorStr);
 	g_loaderSignal.notify_all();
 }
 
@@ -81,7 +81,7 @@ void mainLoader(ServiceManager* services)
 	if (!c_test.is_open()) {
 		std::ifstream config_lua_dist("./config.lua.dist");
 		if (config_lua_dist.is_open()) {
-			g_logger().info("copying config.lua.dist to {}", configFile);
+			getLogger().info("copying config.lua.dist to {}", configFile);
 			std::ofstream config_lua(configFile);
 			config_lua << config_lua_dist.rdbuf();
 			config_lua.close();
@@ -92,12 +92,12 @@ void mainLoader(ServiceManager* services)
 	}
 
 	// read global config
-	g_logger().info("Loading config");
+	getLogger().info("Loading config");
 	if (!ConfigManager::load()) {
 		startupErrorMessage("Unable to load " + configFile + "!");
 		return;
 	}
-	g_logger().setLevel(parseLogLevel(getString(ConfigManager::LOG_LEVEL)));
+	getLogger().setLevel(parseLogLevel(getString(ConfigManager::LOG_LEVEL)));
 
 #ifdef _WIN32
 	const std::string& defaultPriority = getString(ConfigManager::DEFAULT_PRIORITY);
@@ -109,7 +109,7 @@ void mainLoader(ServiceManager* services)
 #endif
 
 	// set RSA key
-	g_logger().info("Loading RSA key");
+	getLogger().info("Loading RSA key");
 	try {
 		std::ifstream key{"key.pem"};
 		std::string pem{std::istreambuf_iterator<char>{key}, std::istreambuf_iterator<char>{}};
@@ -124,10 +124,10 @@ void mainLoader(ServiceManager* services)
 		startupErrorMessage("Failed to connect to database.");
 		return;
 	}
-	g_logger().info("Establishing database connection... MySQL {}", Database::getClientVersion());
+	getLogger().info("Establishing database connection...,MySQL {}", Database::getClientVersion());
 
 	// run database manager
-	g_logger().info("Running database manager");
+	getLogger().info("Running database manager");
 
 	if (!DatabaseManager::isDatabaseSetup()) {
 		startupErrorMessage(
@@ -139,11 +139,11 @@ void mainLoader(ServiceManager* services)
 	DatabaseManager::updateDatabase();
 
 	if (getBoolean(ConfigManager::OPTIMIZE_DATABASE) && !DatabaseManager::optimizeTables()) {
-		g_logger().info(">> No tables were optimized.");
+		getLogger().info("  >> No tables were optimized.");
 	}
 
 	// load vocations
-	g_logger().info("Loading vocations");
+	getLogger().info("Loading vocations");
 	if (std::ifstream is{"data/XML/vocations.xml"}; !g_vocations.loadFromXml(is, "data/XML/vocations.xml")) {
 		startupErrorMessage("Unable to load vocations!");
 		return;
@@ -154,37 +154,37 @@ void mainLoader(ServiceManager* services)
 		startupErrorMessage("Unable to load items (OTB)!");
 		return;
 	}
-	g_logger().info("Loading items... OTB v{}.{}.{}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber);
+	getLogger().info("Loading items... OTB v{}.{}.{}", Item::items.majorVersion, Item::items.minorVersion, Item::items.buildNumber);
 
 	if (!Item::items.loadFromXml()) {
 		startupErrorMessage("Unable to load items (XML)!");
 		return;
 	}
 
-	g_logger().info("Loading script systems");
+	getLogger().info("Loading script systems");
 	if (!ScriptingManager::getInstance().loadScriptSystems()) {
 		startupErrorMessage("Failed to load script systems");
 		return;
 	}
 
-	g_logger().info("Loading lua scripts");
+	getLogger().info("Loading lua scripts");
 	if (!g_scripts->loadScripts("scripts", false, false)) {
 		startupErrorMessage("Failed to load lua scripts");
 		return;
 	}
 
-	g_logger().info("Loading Xml monsters");
+	getLogger().info("Loading lua monsters");
 	if (!g_monsters.loadFromXml()) {
 		startupErrorMessage("Unable to load monsters!");
 		return;
 	}
-	g_logger().info("Loading lua monsters");
+	getLogger().info("Loading lua monsters");
 	if (!g_scripts->loadScripts("monster", false, false)) {
 		startupErrorMessage("Failed to load lua monsters");
 		return;
 	}
 
-	g_logger().info("Loading outfits");
+	getLogger().info("Loading outfits");
 	if (!Outfits::getInstance().loadFromXml()) {
 		startupErrorMessage("Unable to load outfits!");
 		return;
@@ -204,15 +204,15 @@ void mainLoader(ServiceManager* services)
 		                getString(ConfigManager::WORLD_TYPE)));
 		return;
 	}
-	g_logger().info("Checking world type... {}", boost::algorithm::to_upper_copy(worldType));
+	getLogger().info("Checking world type... {}", boost::algorithm::to_upper_copy(worldType));
 
-	g_logger().info("Loading map");
+	getLogger().info("Loading map");
 	if (!g_game.loadMainMap(getString(ConfigManager::MAP_NAME))) {
 		startupErrorMessage("Failed to load map");
 		return;
 	}
 
-	g_logger().info("Initializing gamestate");
+	getLogger().info("Initializing gamestate");
 	g_game.setGameState(GAME_STATE_INIT);
 
 	// Game client protocols
@@ -251,11 +251,11 @@ void mainLoader(ServiceManager* services)
 	tfs::iomarket::checkExpiredOffers();
 	tfs::iomarket::updateStatistics();
 
-	g_logger().info("Loaded all modules, server starting up...");
+	getLogger().info("Loaded all modules, server starting up...");
 
 #ifndef _WIN32
 	if (getuid() == 0 || geteuid() == 0) {
-		g_logger().critical("Warning: {} has been executed as root user, please consider running it as a normal user.", STATUS_SERVER_NAME);
+		getLogger().critical("Warning: {} has been executed as root user, please consider running it as a normal user.", STATUS_SERVER_NAME);
 	}
 #endif
 
@@ -289,10 +289,10 @@ void startServer()
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
 	if (serviceManager.is_running()) {
-		g_logger().info("{}  Server Online!", getString(ConfigManager::SERVER_NAME));
+		getLogger().info("{}  Server Online!", getString(ConfigManager::SERVER_NAME));
 		serviceManager.run();
 	} else {
-		g_logger().error("No services running. The server is NOT online.");
+		getLogger().error("No services running. The server is NOT online.");
 		g_scheduler.shutdown();
 		g_databaseTasks.shutdown();
 		g_dispatcher.shutdown();
@@ -306,34 +306,34 @@ void startServer()
 void printServerVersion()
 {
 #if defined(GIT_RETRIEVED_STATE) && GIT_RETRIEVED_STATE
-	g_logger().info("{} - Version {}", STATUS_SERVER_NAME, GIT_DESCRIBE);
-	g_logger().info("Git SHA1 {} dated {}", GIT_SHORT_SHA1, GIT_COMMIT_DATE_ISO8601);
+	getLogger().info("{} - Version {}", STATUS_SERVER_NAME, GIT_DESCRIBE);
+	getLogger().info("Git SHA1 {} dated {}", GIT_SHORT_SHA1, GIT_COMMIT_DATE_ISO8601);
 #if GIT_IS_DIRTY
-	g_logger().info("*** DIRTY - NOT OFFICIAL RELEASE ***");
+	getLogger().info("*** DIRTY - NOT OFFICIAL RELEASE ***");
 #endif
 #else
-	g_logger().info("{} - Version {}", STATUS_SERVER_NAME, STATUS_SERVER_VERSION);
+	getLogger().info("{} - Version {}", STATUS_SERVER_NAME, STATUS_SERVER_VERSION);
 #endif
 	std::cout << std::endl;
 
-	g_logger().info("Compiled with {}", BOOST_COMPILER);
-	g_logger().info("Compiled on {} {}", __DATE__, __TIME__);
+	getLogger().info("Compiled with {}", BOOST_COMPILER);
+	getLogger().info("Compiled on {} {}", __DATE__, __TIME__);
 #if defined(__amd64__) || defined(_M_X64)
-	g_logger().info("for platform: x64");
+	getLogger().info("for platform: x64");
 #elif defined(__i386__) || defined(_M_IX86) || defined(_X86_)
-	g_logger().info("for platform: x86");
+	getLogger().info("for platform: x86");
 #elif defined(__arm__)
-	g_logger().info("for platform: ARM");
+	getLogger().info("for platform: ARM");
 #else
-	g_logger().warn("for platform: unknown");
+	getLogger().warn("for platform: unknown");
 #endif
 #if defined(LUAJIT_VERSION)
-	g_logger().info("Linked with {} for Lua support", LUAJIT_VERSION);
+	getLogger().info("Linked with {} for Lua support", LUAJIT_VERSION);
 #else
-	g_logger().info("Linked with {} for Lua support", LUA_RELEASE);
+	getLogger().info("Linked with {} for Lua support", LUA_RELEASE);
 #endif
 	std::cout << std::endl;
 
-	g_logger().info("A server developed by {}", STATUS_SERVER_DEVELOPERS);
-	g_logger().info("Visit our forum for updates, support, and resources: https://otland.net/.");
+	getLogger().info("A server developed by {}", STATUS_SERVER_DEVELOPERS);
+	getLogger().info("Visit our forum for updates, support, and resources: https://otland.net/.");
 }
