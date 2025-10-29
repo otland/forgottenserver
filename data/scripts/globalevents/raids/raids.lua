@@ -9,7 +9,7 @@ local running = nil
 local lastRaidEnd = 0
 
 function event.onTime(interval)
-	logInfo(">> Executing raids event...\n")
+	logInfo(">> Executing raids event...")
 	if running then
 		return true
 	end
