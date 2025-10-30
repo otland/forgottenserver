@@ -47,11 +47,3 @@ void Inbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const st
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
-
-std::shared_ptr<Thing> Inbox::getParent() const
-{
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
-}

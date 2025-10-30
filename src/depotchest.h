@@ -23,9 +23,9 @@ public:
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
 	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
-	// Item implementations
+	// Thing implementations
 	bool canRemove() const override { return false; }
-	std::shared_ptr<Thing> getParent() const override;
+	std::shared_ptr<Thing> getParent() const override { return parent ? parent->getParent() : nullptr; }
 	std::shared_ptr<Thing> getRealParent() const override { return parent; }
 
 private:

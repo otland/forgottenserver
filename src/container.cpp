@@ -359,7 +359,7 @@ ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const 
 				}
 			}
 		} else {
-			if (auto destItem = getItemByIndex(index);
+			if (const auto& destItem = getItemByIndex(index);
 			    *item == *destItem && destItem->getItemCount() < ITEM_STACK_SIZE) {
 				if (queryAdd(index, item, count, flags) == RETURNVALUE_NOERROR) {
 					n = ITEM_STACK_SIZE - destItem->getItemCount();
@@ -454,7 +454,7 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 	}
 
 	if (index != INDEX_WHEREEVER) {
-		auto itemFromIndex = getItemByIndex(index);
+		const auto& itemFromIndex = getItemByIndex(index);
 		if (itemFromIndex) {
 			destItem = itemFromIndex;
 		}
@@ -558,7 +558,7 @@ void Container::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto replacedItem = getItemByIndex(index);
+	const auto& replacedItem = getItemByIndex(index);
 	if (!replacedItem) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}

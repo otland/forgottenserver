@@ -2866,11 +2866,13 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 		destItem = destThing->getItem();
 	}
 
-	const auto& container = destThing->getContainer();
-	if (container) {
-		index = INDEX_WHEREEVER;
-		destItem = nullptr;
-		return container;
+	if (destItem) {
+		const auto& container = destThing->getContainer();
+		if (container) {
+			index = INDEX_WHEREEVER;
+			destItem = nullptr;
+			return container;
+		}
 	}
 	return getPlayer();
 }

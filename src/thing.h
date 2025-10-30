@@ -42,11 +42,11 @@ public:
 	Thing(const Thing&) = delete;
 	Thing& operator=(const Thing&) = delete;
 
-	virtual bool hasParent() const { return false; }
-	virtual std::shared_ptr<Thing> getParent() const { return nullptr; }
+	bool hasParent() const { return getParent() != nullptr; }
+	virtual std::shared_ptr<Thing> getParent() const { return parent; }
 	virtual std::shared_ptr<Thing> getRealParent() const { return getParent(); }
 
-	virtual void setParent(const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
+	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
 
 	virtual std::shared_ptr<Tile> getTile() { return nullptr; }
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
@@ -249,6 +249,9 @@ public:
 	virtual void internalAddThing(uint32_t, const std::shared_ptr<Thing>&) {}
 
 	virtual void startDecaying() {}
+
+private:
+	std::shared_ptr<Thing> parent = nullptr;
 };
 
 #endif // FS_THING_H

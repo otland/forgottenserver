@@ -276,8 +276,6 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	}
 
 	player = foundPlayer;
-	// protocol will keep raw pointer in `player`, ownership is held by shared_ptr stored in Game
-	// when player is added via addList()
 
 	g_chat->removeUserFromAllChannels(player);
 	player->clearModalWindows();
@@ -830,7 +828,7 @@ void ProtocolGame::GetTileDescription(const std::shared_ptr<const Tile>& tile, N
 	const CreatureVector* creatures = tile->getCreatures();
 	if (creatures) {
 		for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-			auto creature = *it;
+			const auto& creature = *it;
 			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
@@ -3319,7 +3317,7 @@ void ProtocolGame::sendVIPEntries()
 	for (const VIPEntry& entry : vipEntries) {
 		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
 
-		auto vipPlayer = g_game.getPlayerByGUID(entry.guid);
+		const auto& vipPlayer = g_game.getPlayerByGUID(entry.guid);
 
 		if (!vipPlayer || !player->canSeeCreature(vipPlayer)) {
 			vipStatus = VIPSTATUS_OFFLINE;

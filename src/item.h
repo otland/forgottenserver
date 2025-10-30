@@ -918,8 +918,6 @@ public:
 		return attributes;
 	}
 
-	std::shared_ptr<Thing> getParent() const override { return parent; }
-	void setParent(const std::shared_ptr<Thing>& thing) override { parent = thing; }
 	std::shared_ptr<Thing> getTopParent();
 	std::shared_ptr<const Thing> getTopParent() const;
 	std::shared_ptr<Tile> getTile() override final;

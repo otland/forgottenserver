@@ -354,7 +354,6 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
-	bool hasParent() const override { return getParent() != nullptr; }
 	std::shared_ptr<Thing> getParent() const override final { return tile; }
 	void setParent(const std::shared_ptr<Thing>& thing) override final
 	{

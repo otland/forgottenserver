@@ -56,11 +56,3 @@ void DepotChest::postRemoveNotification(const std::shared_ptr<Thing>& thing,
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
-
-std::shared_ptr<Thing> DepotChest::getParent() const
-{
-	if (parent) {
-		return parent->getParent();
-	}
-	return nullptr;
-}
