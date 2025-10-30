@@ -14041,7 +14041,7 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 	const LuaVariant& variant = getVariant(L, 3);
 	switch (variant.type()) {
 		case VARIANT_NUMBER: {
-			auto target = g_game.getCreatureByID(variant.getNumber());
+			const auto& target = g_game.getCreatureByID(variant.getNumber());
 			if (!target) {
 				tfs::lua::pushBoolean(L, false);
 				return 1;
@@ -14071,7 +14071,7 @@ int LuaScriptInterface::luaCombatExecute(lua_State* L)
 		}
 
 		case VARIANT_STRING: {
-			auto target = g_game.getPlayerByName(variant.getString());
+			const auto& target = g_game.getPlayerByName(variant.getString());
 			if (!target) {
 				tfs::lua::pushBoolean(L, false);
 				return 1;

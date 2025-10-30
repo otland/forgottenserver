@@ -1609,7 +1609,7 @@ void Game::addMoney(const std::shared_ptr<Thing>& thing, uint64_t money, uint32_
 		while (currencyCoins > 0) {
 			const uint16_t count = std::min<uint32_t>(ITEM_STACK_SIZE, currencyCoins);
 
-			std::shared_ptr<Item> remaindItem = Item::CreateItem(it.second, count);
+			auto remaindItem = Item::CreateItem(it.second, count);
 
 			ReturnValue ret = internalAddItem(thing, remaindItem, INDEX_WHEREEVER, flags);
 			if (ret != RETURNVALUE_NOERROR) {
