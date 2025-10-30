@@ -630,7 +630,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 			continue;
 		}
 
-		std::shared_ptr<Player> player = nullptr;
+		auto player = std::make_shared<Player>(nullptr);
 		if (!IOLoginData::loadPlayerById(player, ownerId)) {
 			// Player doesn't exist, reset house owner
 			house->setOwner(0);
