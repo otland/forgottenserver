@@ -94,7 +94,7 @@ std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::sh
 
 					destTile = g_game.map.getTile(player->getTemplePosition());
 					if (!destTile) {
-						destTile = Tile::nullptr_tile;
+						destTile = Tile::nullptrTile;
 					}
 				}
 

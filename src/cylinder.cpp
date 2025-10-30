@@ -5,4 +5,4 @@
 
 #include "cylinder.h"
 
-std::shared_ptr<VirtualCylinder> VirtualCylinder::virtualCylinder = std::make_shared<VirtualCylinder>();
+const std::shared_ptr<VirtualCylinder> VirtualCylinder::virtualCylinder = std::make_shared<VirtualCylinder>();

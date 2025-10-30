@@ -116,7 +116,7 @@ private:
 class Tile : public Thing
 {
 public:
-	static std::shared_ptr<Tile> nullptr_tile;
+	static const std::shared_ptr<Tile> nullptrTile;
 	Tile(uint16_t x, uint16_t y, uint8_t z) : tilePos{x, y, z} {}
 	virtual ~Tile() = default;
 

@@ -13,7 +13,7 @@ class Item;
 class VirtualCylinder final : public Thing
 {
 public:
-	static std::shared_ptr<VirtualCylinder> virtualCylinder;
+	static const std::shared_ptr<VirtualCylinder> virtualCylinder;
 
 	ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
 	                     const std::shared_ptr<Creature>& = nullptr) const override

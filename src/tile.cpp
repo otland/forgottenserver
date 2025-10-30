@@ -20,7 +20,7 @@
 extern Game g_game;
 extern MoveEvents* g_moveEvents;
 
-std::shared_ptr<Tile> Tile::nullptr_tile = std::make_shared<StaticTile>(0xFFFF, 0xFFFF, 0xFF);
+const std::shared_ptr<Tile> Tile::nullptrTile = std::make_shared<StaticTile>(0xFFFF, 0xFFFF, 0xFF);
 
 bool Tile::hasProperty(ITEMPROPERTY prop) const
 {

@@ -7126,9 +7126,9 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	if (item->getParent() == VirtualCylinder::virtualCylinder) {
 		tfs::lua::pushBoolean(L, g_game.internalAddItem(toThing, item, INDEX_WHEREEVER, flags) == RETURNVALUE_NOERROR);
 	} else {
-		auto moveItem = nullptr;
+		std::shared_ptr<Item> moveItem = nullptr;
 		ReturnValue ret = g_game.internalMoveItem(item->getParent(), toThing, INDEX_WHEREEVER, item,
-		                                          item->getItemCount(), moveItem, flags);
+		                                          item->getItemCount(), &moveItem, flags);
 		if (moveItem) {
 			*itemPtr = moveItem;
 		}
