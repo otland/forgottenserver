@@ -18,7 +18,7 @@ ReturnValue TrashHolder::queryMaxCount(int32_t, const std::shared_ptr<const Thin
 
 void TrashHolder::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return;
 	}

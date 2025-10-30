@@ -56,7 +56,7 @@ Player::~Player()
 	}
 
 	for (const auto& [_, depot] : depotChests) {
-		if (auto parent = depot->getRealParent()) {
+		if (const auto& parent = depot->getRealParent()) {
 			parent->internalRemoveThing(depot->getItem());
 		}
 	}
@@ -223,7 +223,8 @@ std::shared_ptr<Item> Player::getWeapon(slots_t slot, bool ignoreAmmo) const
 			auto ammoItem = inventory[CONST_SLOT_AMMO];
 			if (!ammoItem || ammoItem->getAmmoType() != itemType.ammoType) {
 				// no ammo item was found, search for quiver instead
-				auto quiver = inventory[CONST_SLOT_RIGHT] ? inventory[CONST_SLOT_RIGHT]->getContainer() : nullptr;
+				const auto& quiver =
+				    inventory[CONST_SLOT_RIGHT] ? inventory[CONST_SLOT_RIGHT]->getContainer() : nullptr;
 				if (!quiver || quiver->getWeaponType() != WEAPON_QUIVER) {
 					// no quiver equipped
 					return nullptr;
@@ -732,23 +733,23 @@ bool Player::canWalkthrough(const std::shared_ptr<const Creature>& creature) con
 		return true;
 	}
 
-	auto player = creature->getPlayer();
+	const auto& player = creature->getPlayer();
 	if (!player || !getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
 
-	auto playerTile = player->getTile();
+	const auto& playerTile = player->getTile();
 	if (!playerTile || (!playerTile->hasFlag(TILESTATE_PROTECTIONZONE) &&
 	                    player->getLevel() > static_cast<uint32_t>(getNumber(ConfigManager::PROTECTION_LEVEL)))) {
 		return false;
 	}
 
-	auto playerTileGround = playerTile->getGround();
+	const auto& playerTileGround = playerTile->getGround();
 	if (!playerTileGround || !playerTileGround->hasWalkStack()) {
 		return false;
 	}
 
-	auto thisPlayer = const_cast<Player*>(this);
+	const auto& thisPlayer = const_cast<Player*>(this);
 	if ((OTSYS_TIME() - lastWalkthroughAttempt) > 2000) {
 		thisPlayer->setLastWalkthroughAttempt(OTSYS_TIME());
 		return false;
@@ -769,12 +770,12 @@ bool Player::canWalkthroughEx(const std::shared_ptr<const Creature>& creature) c
 		return true;
 	}
 
-	auto player = creature->getPlayer();
+	const auto& player = creature->getPlayer();
 	if (!player || !getBoolean(ConfigManager::ALLOW_WALKTHROUGH)) {
 		return false;
 	}
 
-	auto playerTile = player->getTile();
+	const auto& playerTile = player->getTile();
 	return playerTile && (playerTile->hasFlag(TILESTATE_PROTECTIONZONE) ||
 	                      player->getLevel() <= static_cast<uint32_t>(getNumber(ConfigManager::PROTECTION_LEVEL)));
 }
@@ -1037,14 +1038,14 @@ void Player::openSavedContainers()
 			continue;
 		}
 
-		auto itemContainer = item->getContainer();
+		const auto& itemContainer = item->getContainer();
 		if (itemContainer) {
 			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 			if (cid > 0) {
 				openContainersList.emplace(cid, itemContainer);
 			}
 			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
-				auto subContainer = (*it)->getContainer();
+				const auto& subContainer = (*it)->getContainer();
 				if (subContainer) {
 					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 					if (subcid > 0) {
@@ -2361,7 +2362,7 @@ void Player::autoCloseContainers(const std::shared_ptr<const Container>& contain
 				break;
 			}
 
-			auto parent = tmpContainer->getParent();
+			const auto& parent = tmpContainer->getParent();
 			tmpContainer = parent ? parent->getContainer() : nullptr;
 		}
 	}
@@ -2394,7 +2395,7 @@ bool Player::hasCapacity(const std::shared_ptr<const Item>& item, uint32_t count
 ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
                              const std::shared_ptr<Creature>&) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2634,7 +2635,7 @@ ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& 
 	auto inventoryItem = getInventoryItem(static_cast<slots_t>(index));
 	if (inventoryItem && (!inventoryItem->isStackable() || inventoryItem->getID() != item->getID())) {
 		if (!getBoolean(ConfigManager::CLASSIC_EQUIPMENT_SLOTS)) {
-			auto topParent = item->getTopParent();
+			const auto& topParent = item->getTopParent();
 			if (topParent && (std::dynamic_pointer_cast<const DepotChest>(topParent) ||
 			                  std::dynamic_pointer_cast<const Player>(topParent))) {
 				return RETURNVALUE_NEEDEXCHANGE;
@@ -2650,7 +2651,7 @@ ReturnValue Player::queryAdd(int32_t index, const std::shared_ptr<const Thing>& 
 ReturnValue Player::queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                   uint32_t& maxQueryCount, uint32_t flags) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -2661,14 +2662,14 @@ ReturnValue Player::queryMaxCount(int32_t index, const std::shared_ptr<const Thi
 		for (int32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
 			auto inventoryItem = inventory[slotIndex];
 			if (inventoryItem) {
-				if (auto subContainer = inventoryItem->getContainer()) {
+				if (const auto& subContainer = inventoryItem->getContainer()) {
 					uint32_t queryCount = 0;
 					subContainer->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), queryCount, flags);
 					n += queryCount;
 
 					// iterate through all items, including sub-containers (deep search)
 					for (ContainerIterator it = subContainer->iterator(); it.hasNext(); it.advance()) {
-						if (auto tmpContainer = (*it)->getContainer()) {
+						if (const auto& tmpContainer = (*it)->getContainer()) {
 							queryCount = 0;
 							tmpContainer->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), queryCount, flags);
 							n += queryCount;
@@ -2731,7 +2732,7 @@ ReturnValue Player::queryRemove(const std::shared_ptr<const Thing>& thing, uint3
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -2753,7 +2754,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 	if (index == 0 /*drop to capacity window*/ || index == INDEX_WHEREEVER) {
 		destItem = nullptr;
 
-		auto item = thing->getItem();
+		const auto& item = thing->getItem();
 		if (!item) {
 			return getPlayer();
 		}
@@ -2784,10 +2785,10 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 						}
 					}
 
-					if (auto subContainer = inventoryItem->getContainer()) {
+					if (const auto& subContainer = inventoryItem->getContainer()) {
 						containers.push_back(subContainer);
 					}
-				} else if (auto subContainer = inventoryItem->getContainer()) {
+				} else if (const auto& subContainer = inventoryItem->getContainer()) {
 					containers.push_back(subContainer);
 				}
 			} else if (queryAdd(slotIndex, item, item->getItemCount(), flags) == RETURNVALUE_NOERROR) { // empty slot
@@ -2816,7 +2817,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 				}
 
 				for (const auto& tmpContainerItem : tmpContainer->getItemList()) {
-					if (auto subContainer = tmpContainerItem->getContainer()) {
+					if (const auto& subContainer = tmpContainerItem->getContainer()) {
 						containers.push_back(subContainer);
 					}
 				}
@@ -2842,7 +2843,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 					return tmpContainer;
 				}
 
-				if (auto subContainer = tmpItem->getContainer()) {
+				if (const auto& subContainer = tmpItem->getContainer()) {
 					containers.push_back(subContainer);
 				}
 
@@ -2865,7 +2866,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 		destItem = destThing->getItem();
 	}
 
-	auto container = destThing->getContainer();
+	const auto& container = destThing->getContainer();
 	if (container) {
 		index = INDEX_WHEREEVER;
 		destItem = nullptr;
@@ -2880,7 +2881,7 @@ void Player::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2899,7 +2900,7 @@ void Player::updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId, u
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2925,7 +2926,7 @@ void Player::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -2943,7 +2944,7 @@ void Player::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 
 void Player::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -3008,7 +3009,7 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 			count += Item::countByType(item, subType);
 		}
 
-		if (auto container = item->getContainer()) {
+		if (const auto& container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				if ((*it)->getID() == itemId) {
 					count += Item::countByType(*it, subType);
@@ -3047,7 +3048,7 @@ bool Player::removeItemOfType(uint16_t itemId, uint32_t amount, int32_t subType,
 				g_game.internalRemoveItems(std::move(itemList), amount, Item::items[itemId].stackable);
 				return true;
 			}
-		} else if (auto container = item->getContainer()) {
+		} else if (const auto& container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				auto containerItem = *it;
 				if (containerItem->getID() == itemId) {
@@ -3080,7 +3081,7 @@ std::map<uint32_t, uint32_t>& Player::getAllItemTypeCount(std::map<uint32_t, uin
 
 		countMap[item->getID()] += Item::countByType(item, -1);
 
-		if (auto container = item->getContainer()) {
+		if (const auto& container = item->getContainer()) {
 			for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 				countMap[(*it)->getID()] += Item::countByType(*it, -1);
 			}
@@ -3109,7 +3110,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		auto i = (oldParent ? oldParent->getItem() : nullptr);
+		const auto& i = (oldParent ? oldParent->getItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3127,15 +3128,15 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 		sendItems();
 	}
 
-	if (auto item = thing->getItem()) {
-		if (auto container = item->getContainer()) {
+	if (const auto& item = thing->getItem()) {
+		if (const auto& container = item->getContainer()) {
 			onSendContainer(container);
 		}
 
 		if (shopOwner && requireListUpdate) {
 			updateSaleShopList(item);
 		}
-	} else if (auto creature = thing->getCreature()) {
+	} else if (const auto& creature = thing->getCreature()) {
 		if (creature.get() == this) {
 			// check containers
 			std::vector<std::shared_ptr<Container>> containers;
@@ -3166,7 +3167,7 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 	bool requireListUpdate = false;
 
 	if (link == LINK_OWNER || link == LINK_TOPPARENT) {
-		auto i = (newParent ? newParent->getItem() : nullptr);
+		const auto& i = (newParent ? newParent->getItem() : nullptr);
 
 		// Check if we owned the old container too, so we don't need to do anything,
 		// as the list was updated in postRemoveNotification
@@ -3184,19 +3185,19 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 		sendItems();
 	}
 
-	if (auto item = thing->getItem()) {
+	if (const auto& item = thing->getItem()) {
 		if (item->isSupply()) {
-			if (auto player = item->getHoldingPlayer()) {
+			if (const auto& player = item->getHoldingPlayer()) {
 				player->sendSupplyUsed(item->getClientID());
 			}
 		}
 
-		if (auto container = item->getContainer()) {
+		if (const auto& container = item->getContainer()) {
 			if (container->isRemoved() || !getPosition().isInRange(container->getPosition(), 1, 1, 0)) {
 				autoCloseContainers(container);
 			} else if (container->getTopParent().get() == this) {
 				onSendContainer(container);
-			} else if (auto topContainer = container->getTopParent()) {
+			} else if (const auto& topContainer = container->getTopParent()) {
 				if (auto depotChest = std::dynamic_pointer_cast<const DepotChest>(topContainer)) {
 					bool isOwner = false;
 
@@ -3246,7 +3247,7 @@ bool Player::updateSaleShopList(const std::shared_ptr<const Item>& item)
 			return shopInfo.itemId == itemId && shopInfo.sellPrice != 0;
 		});
 		if (it == shopItemList.end()) {
-			auto container = item->getContainer();
+			const auto& container = item->getContainer();
 			if (!container) {
 				return false;
 			}
@@ -3274,7 +3275,7 @@ bool Player::hasShopItemForSale(uint32_t itemId, uint8_t subType) const
 
 void Player::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing)
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return;
 	}
@@ -3416,7 +3417,7 @@ void Player::doAttacking(uint32_t)
 uint64_t Player::getGainedExperience(const std::shared_ptr<Creature>& attacker) const
 {
 	if (getBoolean(ConfigManager::EXPERIENCE_FROM_PLAYERS)) {
-		auto attackerPlayer = attacker->getPlayer();
+		const auto& attackerPlayer = attacker->getPlayer();
 		if (attackerPlayer && attackerPlayer.get() != this && skillLoss &&
 		    std::abs(static_cast<int32_t>(attackerPlayer->getLevel() - level)) <=
 		        getNumber(ConfigManager::EXP_FROM_PLAYERS_LEVEL_RANGE)) {
@@ -3577,7 +3578,7 @@ void Player::onCombatRemoveCondition(Condition* condition)
 	if (condition->getId() > 0) {
 		// Means the condition is from an item, id == slot
 		if (g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
-			auto item = getInventoryItem(static_cast<slots_t>(condition->getId()));
+			const auto& item = getInventoryItem(static_cast<slots_t>(condition->getId()));
 			if (item) {
 				// 25% chance to destroy the item
 				if (25 >= uniform_random(1, 100)) {
@@ -3619,7 +3620,7 @@ void Player::onAttackedCreature(const std::shared_ptr<Creature>& target, bool ad
 		return;
 	}
 
-	auto targetPlayer = target->getPlayer();
+	const auto& targetPlayer = target->getPlayer();
 	if (targetPlayer && !isPartner(targetPlayer) && !isGuildMate(targetPlayer)) {
 		if (!pzLocked && g_game.getWorldType() == WORLD_TYPE_PVP_ENFORCED) {
 			pzLocked = true;
@@ -3686,7 +3687,7 @@ void Player::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& targ
 
 	if (target) {
 		if (party && !Combat::isPlayerCombat(target)) {
-			auto tmpMonster = target->getMonster();
+			const auto& tmpMonster = target->getMonster();
 			if (tmpMonster && tmpMonster->isHostile()) {
 				// We have fulfilled a requirement for shared experience
 				party->updatePlayerTicks(getPlayer(), points);
@@ -3702,8 +3703,8 @@ void Player::onTargetCreatureGainHealth(const std::shared_ptr<Creature>& target,
 
 		if (target->getPlayer()) {
 			tmpPlayer = target->getPlayer();
-		} else if (auto targetMaster = target->getMaster()) {
-			if (auto targetMasterPlayer = targetMaster->getPlayer()) {
+		} else if (const auto& targetMaster = target->getMaster()) {
+			if (const auto& targetMasterPlayer = targetMaster->getPlayer()) {
 				tmpPlayer = targetMasterPlayer;
 			}
 		}
@@ -3724,7 +3725,7 @@ bool Player::onKilledCreature(const std::shared_ptr<Creature>& target, bool last
 
 	Creature::onKilledCreature(target, lastHit);
 
-	auto targetPlayer = target->getPlayer();
+	const auto& targetPlayer = target->getPlayer();
 	if (!targetPlayer) {
 		return false;
 	}
@@ -4612,7 +4613,7 @@ uint64_t Player::getMoney() const
 			continue;
 		}
 
-		auto container = item->getContainer();
+		const auto& container = item->getContainer();
 		if (container) {
 			containers.push_back(container);
 		} else {
@@ -4624,7 +4625,7 @@ uint64_t Player::getMoney() const
 	while (i < containers.size()) {
 		auto container = containers[i++];
 		for (const auto& item : container->getItemList()) {
-			auto tmpContainer = item->getContainer();
+			const auto& tmpContainer = item->getContainer();
 			if (tmpContainer) {
 				containers.push_back(tmpContainer);
 			} else {

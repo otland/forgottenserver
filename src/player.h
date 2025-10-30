@@ -759,9 +759,9 @@ public:
 	{
 		if (!sendAll) {
 			// update one slot
-			auto slotThing = getThing(CONST_SLOT_RIGHT);
+			const auto& slotThing = getThing(CONST_SLOT_RIGHT);
 			if (slotThing) {
-				auto slotItem = slotThing->getItem();
+				const auto& slotItem = slotThing->getItem();
 				if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
 					sendInventoryItem(CONST_SLOT_RIGHT, slotItem);
 				}
@@ -769,10 +769,10 @@ public:
 		} else {
 			// update all slots
 			std::vector<slots_t> slots = {CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_AMMO};
-			for (auto const& slot : slots) {
-				auto slotThing = getThing(slot);
+			for (const auto& slot : slots) {
+				const auto& slotThing = getThing(slot);
 				if (slotThing) {
-					auto slotItem = slotThing->getItem();
+					const auto& slotItem = slotThing->getItem();
 					if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
 						sendInventoryItem(slot, slotItem);
 					}

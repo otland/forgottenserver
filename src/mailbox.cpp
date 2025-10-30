@@ -20,7 +20,7 @@ bool canSend(const std::shared_ptr<const Item>& item)
 
 std::string getReceiver(const std::shared_ptr<Item>& item)
 {
-	auto container = item->getContainer();
+	const auto& container = item->getContainer();
 	if (container) {
 		for (const auto& containerItem : container->getItemList()) {
 			if (containerItem->getID() == ITEM_LABEL) {
@@ -46,7 +46,7 @@ std::string getReceiver(const std::shared_ptr<Item>& item)
 ReturnValue Mailbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t,
                               const std::shared_ptr<Creature>&) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (item && canSend(item)) {
 		return RETURNVALUE_NOERROR;
 	}
@@ -62,7 +62,7 @@ ReturnValue Mailbox::queryMaxCount(int32_t, const std::shared_ptr<const Thing>&,
 
 void Mailbox::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (item && canSend(item)) {
 		sendItem(item);
 	}
@@ -82,13 +82,13 @@ void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const 
 
 bool Mailbox::sendItem(const std::shared_ptr<Item>& item) const
 {
-	auto receiver = getReceiver(item);
+	const auto& receiver = getReceiver(item);
 	/**No need to continue if its still empty**/
 	if (receiver.empty()) {
 		return false;
 	}
 
-	auto player = g_game.getPlayerByName(receiver);
+	const auto& player = g_game.getPlayerByName(receiver);
 	if (player) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
 		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {

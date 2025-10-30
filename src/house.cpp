@@ -139,12 +139,12 @@ bool House::kickPlayer(const std::shared_ptr<Player>& player, const std::shared_
 		return false;
 	}
 
-	auto tile = target->getTile();
+	const auto& tile = target->getTile();
 	if (!tile) {
 		return false;
 	}
 
-	if (auto houseTile = tile->getHouseTile(); !houseTile || houseTile->getHouse() != this) {
+	if (const auto& houseTile = tile->getHouseTile(); !houseTile || houseTile->getHouse() != this) {
 		return false;
 	}
 
@@ -180,7 +180,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	for (const auto& tile : houseTiles) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				auto player = (*creatures)[i]->getPlayer();
+				const auto& player = (*creatures)[i]->getPlayer();
 				if (player && !isInvited(player)) {
 					kickPlayer(nullptr, player);
 				}
@@ -223,7 +223,7 @@ bool House::transferToDepot(const std::shared_ptr<Player>& player) const
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
 				} else {
-					auto container = item->getContainer();
+					const auto& container = item->getContainer();
 					if (container) {
 						for (const auto& containerItem : container->getItemList()) {
 							moveItemList.push_back(containerItem);
@@ -473,7 +473,7 @@ bool AccessList::isInList(const std::shared_ptr<const Player>& player) const
 		return true;
 	}
 
-	auto playerIt = playerList.find(player->getGUID());
+	const auto& playerIt = playerList.find(player->getGUID());
 	if (playerIt != playerList.end()) {
 		return true;
 	}

@@ -130,7 +130,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>
 			items->clear();
 		}
 
-		auto ground = newTile->getGround();
+		const auto& ground = newTile->getGround();
 		if (ground) {
 			tile->addThing(ground);
 			newTile->setGround(nullptr);
@@ -160,7 +160,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 	if (tile) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
-				if (auto player = (*creatures)[i]->getPlayer()) {
+				if (const auto& player = (*creatures)[i]->getPlayer()) {
 					g_game.internalTeleport(player, player->getTown()->templePosition, false, FLAG_NOLIMIT);
 				} else {
 					g_game.removeCreature((*creatures)[i]);
@@ -174,7 +174,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 			}
 		}
 
-		auto ground = tile->getGround();
+		const auto& ground = tile->getGround();
 		if (ground) {
 			g_game.internalRemoveItem(ground);
 			tile->setGround(nullptr);
@@ -239,7 +239,7 @@ bool Map::placeCreature(const Position& centerPos, const std::shared_ptr<Creatur
 	uint32_t flags = 0;
 	std::shared_ptr<Item> toItem = nullptr;
 
-	auto toThing = tile->queryDestination(index, creature, toItem, flags);
+	const auto& toThing = tile->queryDestination(index, creature, toItem, flags);
 	toThing->internalAddThing(creature);
 
 	const Position& dest = toThing->getPosition();
@@ -250,7 +250,7 @@ bool Map::placeCreature(const Position& centerPos, const std::shared_ptr<Creatur
 void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Tile>& newTile,
                        bool forceTeleport /* = false*/)
 {
-	auto oldTile = creature->getTile();
+	const auto& oldTile = creature->getTile();
 
 	// If the tile does not have the creature it means that the creature is ready for elimination, we skip the move.
 	if (!oldTile->hasCreature(creature)) {
@@ -269,7 +269,7 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 
 	std::vector<int32_t> oldStackPosVector;
 	for (const auto& spectator : spectators) {
-		if (auto tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->getPlayer()) {
 			if (tmpPlayer->canSeeCreature(creature)) {
 				oldStackPosVector.push_back(oldTile->getClientIndexOfCreature(tmpPlayer, creature));
 			} else {
@@ -310,7 +310,7 @@ void Map::moveCreature(const std::shared_ptr<Creature>& creature, const std::sha
 	// send to client
 	size_t i = 0;
 	for (const auto& spectator : spectators) {
-		if (auto tmpPlayer = spectator->getPlayer()) {
+		if (const auto& tmpPlayer = spectator->getPlayer()) {
 			// Use the correct stackpos
 			int32_t stackpos = oldStackPosVector[i++];
 			if (stackpos != -1) {
@@ -924,9 +924,9 @@ uint16_t AStarNodes::getTileWalkCost(const std::shared_ptr<const Creature>& crea
 		cost += MAP_NORMALWALKCOST * 3;
 	}
 
-	if (auto field = tile->getFieldItem()) {
+	if (const auto& field = tile->getFieldItem()) {
 		CombatType_t combatType = field->getCombatType();
-		auto monster = creature->getMonster();
+		const auto& monster = creature->getMonster();
 		if (!creature->isImmune(combatType) && !creature->hasCondition(Combat::DamageToConditionType(combatType)) &&
 		    (monster && !monster->canWalkOnFieldType(combatType))) {
 			cost += MAP_NORMALWALKCOST * 18;
@@ -1026,12 +1026,12 @@ uint32_t Map::clean() const
 
 	std::vector<std::shared_ptr<Item>> toRemove;
 
-	for (auto tile : g_game.getTilesToClean()) {
+	for (const auto& tile : g_game.getTilesToClean()) {
 		if (!tile) {
 			continue;
 		}
 
-		if (auto items = tile->getItemList()) {
+		if (const auto& items = tile->getItemList()) {
 			++tiles;
 			for (const auto& item : *items) {
 				if (item && item->isCleanable()) {
@@ -1041,7 +1041,7 @@ uint32_t Map::clean() const
 		}
 	}
 
-	for (auto item : toRemove) {
+	for (const auto& item : toRemove) {
 		g_game.internalRemoveItem(item, -1);
 	}
 

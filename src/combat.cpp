@@ -73,7 +73,7 @@ CombatDamage Combat::getCombatDamage(const std::shared_ptr<Creature>& creature,
 		int32_t min, max;
 		if (creature->getCombatValues(min, max)) {
 			damage.primary.value = normal_random(min, max);
-		} else if (auto player = creature->getPlayer()) {
+		} else if (const auto& player = creature->getPlayer()) {
 			if (params.valueCallback) {
 				params.valueCallback->getMinMaxValues(player, damage);
 			} else if (formulaType == COMBAT_FORMULA_LEVELMAGIC) {
@@ -83,7 +83,7 @@ CombatDamage Combat::getCombatDamage(const std::shared_ptr<Creature>& creature,
 				damage.primary.value =
 				    normal_random(std::fma(levelFormula, mina, minb), std::fma(levelFormula, maxa, maxb));
 			} else if (formulaType == COMBAT_FORMULA_SKILL) {
-				auto tool = player->getWeapon();
+				const auto& tool = player->getWeapon();
 				auto weapon = g_weapons->getWeapon(tool);
 				if (weapon) {
 					damage.primary.value =
@@ -251,7 +251,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& caster, const s
 			return RETURNVALUE_FIRSTGOUPSTAIRS;
 		}
 
-		if (auto player = caster->getPlayer()) {
+		if (const auto& player = caster->getPlayer()) {
 			if (player->hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 				return RETURNVALUE_NOERROR;
 			}
@@ -295,12 +295,12 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 		return tfs::events::creature::onTargetCombat(attacker, target);
 	}
 
-	if (auto targetPlayer = target->getPlayer()) {
+	if (const auto& targetPlayer = target->getPlayer()) {
 		if (targetPlayer->hasFlag(PlayerFlag_CannotBeAttacked)) {
 			return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 		}
 
-		if (auto attackerPlayer = attacker->getPlayer()) {
+		if (const auto& attackerPlayer = attacker->getPlayer()) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 			}
@@ -310,7 +310,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 			}
 
 			// nopvp-zone
-			const std::shared_ptr<Tile> targetPlayerTile = targetPlayer->getTile();
+			const auto& targetPlayerTile = targetPlayer->getTile();
 			if (targetPlayerTile->hasFlag(TILESTATE_NOPVPZONE)) {
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			} else if (attackerPlayer->getTile()->hasFlag(TILESTATE_NOPVPZONE) &&
@@ -320,7 +320,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 		}
 
 		if (attacker->isSummon()) {
-			if (auto masterAttackerPlayer = attacker->getMaster()->getPlayer()) {
+			if (const auto& masterAttackerPlayer = attacker->getMaster()->getPlayer()) {
 				if (masterAttackerPlayer->hasFlag(PlayerFlag_CannotAttackPlayer)) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISPLAYER;
 				}
@@ -335,7 +335,7 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 			}
 		}
 	} else if (target->getMonster()) {
-		if (auto attackerPlayer = attacker->getPlayer()) {
+		if (const auto& attackerPlayer = attacker->getPlayer()) {
 			if (attackerPlayer->hasFlag(PlayerFlag_CannotAttackMonster)) {
 				return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
 			}
@@ -344,10 +344,10 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const
 				return RETURNVALUE_ACTIONNOTPERMITTEDINANOPVPZONE;
 			}
 		} else if (attacker->getMonster()) {
-			auto targetMaster = target->getMaster();
+			const auto& targetMaster = target->getMaster();
 
 			if (!targetMaster || !targetMaster->getPlayer()) {
-				auto attackerMaster = attacker->getMaster();
+				const auto& attackerMaster = attacker->getMaster();
 
 				if (!attackerMaster || !attackerMaster->getPlayer()) {
 					return RETURNVALUE_YOUMAYNOTATTACKTHISCREATURE;
@@ -625,7 +625,7 @@ void Combat::addDistanceEffect(const std::shared_ptr<Creature>& caster, const Po
 			return;
 		}
 
-		auto player = caster->getPlayer();
+		const auto& player = caster->getPlayer();
 		if (!player) {
 			return;
 		}
@@ -714,8 +714,8 @@ void Combat::doCombat(const std::shared_ptr<Creature>& caster, const Position& p
 		CombatDamage damage = getCombatDamage(caster, nullptr);
 		doAreaCombat(caster, position, area.get(), damage, params);
 	} else {
-		auto tiles = caster ? getCombatArea(caster->getPosition(), position, area.get())
-		                    : getCombatArea(position, position, area.get());
+		const auto& tiles = caster ? getCombatArea(caster->getPosition(), position, area.get())
+		                           : getCombatArea(position, position, area.get());
 
 		SpectatorVec spectators;
 		int32_t maxX = 0;
@@ -742,7 +742,7 @@ void Combat::doCombat(const std::shared_ptr<Creature>& caster, const Position& p
 			combatTileEffects(spectators, caster, tile, params);
 
 			if (CreatureVector* creatures = tile->getCreatures()) {
-				auto topCreature = tile->getTopCreature();
+				const auto& topCreature = tile->getTopCreature();
 				for (const auto& creature : *creatures) {
 					if (params.targetCasterOrTopMost) {
 						if (caster && caster->getTile() == tile) {
@@ -795,7 +795,7 @@ void Combat::doTargetCombat(const std::shared_ptr<Creature>& caster, const std::
 		addDistanceEffect(caster, caster->getPosition(), target->getPosition(), params.distanceEffect);
 	}
 
-	auto casterPlayer = caster ? caster->getPlayer() : nullptr;
+	const auto& casterPlayer = caster ? caster->getPlayer() : nullptr;
 
 	bool success = false;
 	if (damage.primary.type != COMBAT_MANADRAIN) {
@@ -805,7 +805,7 @@ void Combat::doTargetCombat(const std::shared_ptr<Creature>& caster, const std::
 		}
 
 		if (casterPlayer) {
-			auto targetPlayer = target ? target->getPlayer() : nullptr;
+			const auto& targetPlayer = target ? target->getPlayer() : nullptr;
 			if (targetPlayer && casterPlayer != targetPlayer && targetPlayer->getSkull() != SKULL_BLACK &&
 			    damage.primary.type != COMBAT_HEALING) {
 				damage.primary.value /= 2;
@@ -894,7 +894,7 @@ void Combat::doAreaCombat(const std::shared_ptr<Creature>& caster, const Positio
 	auto tiles =
 	    caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
 
-	auto casterPlayer = caster ? caster->getPlayer() : nullptr;
+	const auto& casterPlayer = caster ? caster->getPlayer() : nullptr;
 	int32_t criticalPrimary = 0;
 	int32_t criticalSecondary = 0;
 	if (!damage.critical && damage.primary.type != COMBAT_HEALING && casterPlayer &&
@@ -937,7 +937,7 @@ void Combat::doAreaCombat(const std::shared_ptr<Creature>& caster, const Positio
 		combatTileEffects(spectators, caster, tile, params);
 
 		if (CreatureVector* creatures = tile->getCreatures()) {
-			auto topCreature = tile->getTopCreature();
+			const auto& topCreature = tile->getTopCreature();
 			for (const auto& creature : *creatures) {
 				if (params.targetCasterOrTopMost) {
 					if (caster && caster->getTile() == tile) {
@@ -970,7 +970,7 @@ void Combat::doAreaCombat(const std::shared_ptr<Creature>& caster, const Positio
 		                                  // or not, so we can't modify the initial damage.
 		bool playerCombatReduced = false;
 		if ((damageCopy.primary.value < 0 || damageCopy.secondary.value < 0) && caster) {
-			auto targetPlayer = creature->getPlayer();
+			const auto& targetPlayer = creature->getPlayer();
 			if (casterPlayer && targetPlayer && casterPlayer != targetPlayer &&
 			    targetPlayer->getSkull() != SKULL_BLACK) {
 				damageCopy.primary.value /= 2;
@@ -1090,7 +1090,7 @@ void ValueCallback::getMinMaxValues(const std::shared_ptr<Player>& player, Comba
 
 		case COMBAT_FORMULA_SKILL: {
 			// onGetPlayerMinMaxValues(player, attackSkill, attackValue, attackFactor)
-			auto tool = player->getWeapon();
+			const auto& tool = player->getWeapon();
 			auto weapon = g_weapons->getWeapon(tool);
 			std::shared_ptr<Item> item = nullptr;
 

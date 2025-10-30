@@ -143,7 +143,7 @@ void NetworkMessage::addItem(const std::shared_ptr<const Item>& item)
 	if (it.isContainer()) {
 		addByte(0x00); // assigned loot container icon
 		// quiver ammo count
-		auto container = item->getContainer();
+		const auto& container = item->getContainer();
 		if (container && it.weaponType == WEAPON_QUIVER) {
 			addByte(0x01);
 			add<uint32_t>(container->getAmmoCount());
@@ -154,7 +154,7 @@ void NetworkMessage::addItem(const std::shared_ptr<const Item>& item)
 
 	// display outfit on the podium
 	if (it.isPodium()) {
-		auto podium = item->getPodium();
+		const auto& podium = item->getPodium();
 		const Outfit_t& outfit = podium->getOutfit();
 
 		// add outfit

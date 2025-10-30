@@ -8,7 +8,7 @@
 ReturnValue StoreInbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t flags,
                                  const std::shared_ptr<Creature>&) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -26,7 +26,7 @@ ReturnValue StoreInbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& th
 			return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
 		}
 
-		auto container = item->getContainer();
+		const auto& container = item->getContainer();
 		if (container && !container->empty()) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}

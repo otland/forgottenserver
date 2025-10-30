@@ -365,7 +365,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
 			const auto& [item, pid] = it->second;
 
-			auto itemContainer = item->getContainer();
+			const auto& itemContainer = item->getContainer();
 			if (itemContainer) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
@@ -381,7 +381,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 					continue;
 				}
 
-				auto container = it2->second.first->getContainer();
+				const auto& container = it2->second.first->getContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -415,7 +415,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 					continue;
 				}
 
-				auto container = it2->second.first->getContainer();
+				const auto& container = it2->second.first->getContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -443,7 +443,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 					continue;
 				}
 
-				auto container = it2->second.first->getContainer();
+				const auto& container = it2->second.first->getContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -471,7 +471,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 					continue;
 				}
 
-				auto container = it2->second.first->getContainer();
+				const auto& container = it2->second.first->getContainer();
 				if (container) {
 					container->internalAddThing(item);
 				}
@@ -531,7 +531,7 @@ bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const I
 	for (const auto& [pid, item] : itemList) {
 		++runningId;
 
-		if (auto container = item->getContainer()) {
+		if (const auto& container = item->getContainer()) {
 			if (container->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
 				container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, 0);
 			}
@@ -566,7 +566,7 @@ bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const I
 		for (const auto& item : container->getItemList()) {
 			++runningId;
 
-			auto subContainer = item->getContainer();
+			const auto& subContainer = item->getContainer();
 			if (subContainer) {
 				containers.emplace_back(subContainer, runningId);
 

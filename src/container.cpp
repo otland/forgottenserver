@@ -33,7 +33,9 @@ Container::Container(const std::shared_ptr<Tile>& tile) : Container{ITEM_BROWSEF
 Container::~Container()
 {
 	if (getID() == ITEM_BROWSEFIELD) {
-		g_game.browseFields.erase(getTile());
+		if (const auto& tile = getTile()) {
+			g_game.browseFields.erase(tile);
+		}
 
 		for (const auto& item : itemList) {
 			item->setParent(parent);
@@ -81,7 +83,7 @@ bool Container::hasContainerParent() const
 	}
 
 	if (hasParent()) {
-		if (auto creature = getParent()->getCreature()) {
+		if (const auto& creature = getParent()->getCreature()) {
 			return !creature->getPlayer();
 		}
 	}
@@ -249,7 +251,7 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -309,10 +311,10 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 		}
 	}
 
-	auto const topParent = getTopParent();
+	const auto& topParent = getTopParent();
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (auto tile = topParent->getTile()) {
-			if (auto houseTile = tile->getHouseTile()) {
+		if (const auto& tile = topParent->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
@@ -329,7 +331,7 @@ ReturnValue Container::queryAdd(int32_t index, const std::shared_ptr<const Thing
 ReturnValue Container::queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                      uint32_t& maxQueryCount, uint32_t flags) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		maxQueryCount = 0;
 		return RETURNVALUE_NOTPOSSIBLE;
@@ -386,7 +388,7 @@ ReturnValue Container::queryRemove(const std::shared_ptr<const Thing>& thing, ui
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -400,9 +402,9 @@ ReturnValue Container::queryRemove(const std::shared_ptr<const Thing>& thing, ui
 	}
 
 	if (actor && getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		auto topParent = getTopParent();
-		if (auto tile = topParent->getTile()) {
-			if (auto houseTile = tile->getHouseTile()) {
+		const auto& topParent = getTopParent();
+		if (const auto& tile = topParent->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!topParent->getCreature() && !houseTile->getHouse()->isInvited(actor->getPlayer())) {
 					return RETURNVALUE_PLAYERISNOTINVITED;
 				}
@@ -425,7 +427,7 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		index = INDEX_WHEREEVER;
 		destItem = nullptr;
 
-		if (auto parent = getParent()) {
+		if (const auto& parent = getParent()) {
 			return parent->getContainer();
 		}
 		return shared_from_this();
@@ -446,7 +448,7 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		destItem = nullptr;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return shared_from_this();
 	}
@@ -491,7 +493,7 @@ void Container::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -526,7 +528,7 @@ void Container::updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -551,7 +553,7 @@ void Container::replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing
 		return;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -583,7 +585,7 @@ void Container::removeThing(const std::shared_ptr<Thing>& thing, uint32_t count)
 		return;
 	}
 
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return /*RETURNVALUE_NOTPOSSIBLE*/;
 	}
@@ -710,7 +712,7 @@ void Container::internalRemoveThing(const std::shared_ptr<Thing>& thing)
 
 void Container::internalAddThing(uint32_t, const std::shared_ptr<Thing>& thing)
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return;
 	}
@@ -743,7 +745,7 @@ ContainerIterator Container::iterator() const
 void ContainerIterator::advance()
 {
 	if (auto i = cur->get()) {
-		if (auto c = i->getContainer()) {
+		if (const auto& c = i->getContainer()) {
 			if (!c->empty()) {
 				over.push_back(c);
 			}

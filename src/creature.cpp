@@ -489,7 +489,7 @@ void Creature::onDeath()
 
 			if (attacker.get() != this) {
 				uint64_t gainExp = getGainedExperience(attacker);
-				if (auto attackerPlayer = attacker->getPlayer()) {
+				if (const auto& attackerPlayer = attacker->getPlayer()) {
 					attackerPlayer->removeAttacked(getPlayer());
 
 					Party* party = attackerPlayer->getParty();
@@ -515,7 +515,7 @@ void Creature::onDeath()
 
 	if (mostDamageCreature) {
 		if (mostDamageCreature != lastHitCreature && mostDamageCreature != lastHitCreatureMaster) {
-			auto mostDamageCreatureMaster = mostDamageCreature->getMaster();
+			const auto& mostDamageCreatureMaster = mostDamageCreature->getMaster();
 			if (lastHitCreature != mostDamageCreatureMaster &&
 			    (!lastHitCreatureMaster || mostDamageCreatureMaster != lastHitCreatureMaster)) {
 				mostDamageUnjustified = mostDamageCreature->onKilledCreature(getCreature(), false);
@@ -696,7 +696,7 @@ BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, Combat
 	}
 
 	if (attacker) {
-		if (auto attackerPlayer = attacker->getPlayer()) {
+		if (const auto& attackerPlayer = attacker->getPlayer()) {
 			for (int32_t slot = CONST_SLOT_FIRST; slot <= CONST_SLOT_LAST; ++slot) {
 				if (!attackerPlayer->isItemAbilityEnabled(static_cast<slots_t>(slot))) {
 					continue;
@@ -723,7 +723,7 @@ BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, Combat
 			attacker->onAttackedCreature(getCreature());
 			attacker->onAttackedCreatureBlockHit(blockType);
 			if (attacker->getMaster() && attacker->getMaster()->getPlayer()) {
-				auto masterPlayer = attacker->getMaster()->getPlayer();
+				const auto& masterPlayer = attacker->getMaster()->getPlayer();
 				masterPlayer->onAttackedCreature(getCreature());
 			}
 		}
@@ -956,7 +956,7 @@ void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 		return;
 	}
 
-	auto field = tile->getFieldItem();
+	const auto& field = tile->getFieldItem();
 	if (!field) {
 		return;
 	}
@@ -1310,7 +1310,7 @@ int64_t Creature::getStepDuration() const
 		calculatedStepSpeed = 1;
 	}
 
-	auto ground = tile->getGround();
+	const auto& ground = tile->getGround();
 	if (ground) {
 		groundSpeed = Item::items[ground->getID()].speed;
 		if (groundSpeed == 0) {
@@ -1323,7 +1323,7 @@ int64_t Creature::getStepDuration() const
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
 	int64_t stepDuration = std::ceil(duration / 50) * 50;
 
-	auto monster = this->getMonster();
+	const auto& monster = this->getMonster();
 	if (monster && monster->isTargetNearby() && !monster->isFleeing() && !monster->getMaster()) {
 		stepDuration *= 2;
 	}

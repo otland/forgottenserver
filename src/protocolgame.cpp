@@ -808,7 +808,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 void ProtocolGame::GetTileDescription(const std::shared_ptr<const Tile>& tile, NetworkMessage& msg)
 {
 	int32_t count;
-	auto ground = tile->getGround();
+	const auto& ground = tile->getGround();
 	if (ground) {
 		msg.addItem(ground);
 		count = 1;
@@ -2114,7 +2114,7 @@ void ProtocolGame::sendMarketEnter()
 		containerList.pop_back();
 
 		for (const auto& item : container->getItemList()) {
-			auto c = item->getContainer();
+			const auto& c = item->getContainer();
 			if (c && !c->empty()) {
 				containerList.push_back(c);
 				continue;
@@ -2354,7 +2354,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const std
 
 	msg.addString(traderName);
 
-	if (auto tradeContainer = item->getContainer()) {
+	if (const auto& tradeContainer = item->getContainer()) {
 		auto containerList = std::deque{tradeContainer};
 		auto itemList = std::deque{std::static_pointer_cast<const Item>(tradeContainer)};
 		while (!containerList.empty()) {
@@ -2362,7 +2362,7 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const std
 			containerList.pop_front();
 
 			for (const auto& item : container->getItemList()) {
-				auto container = item->getContainer();
+				const auto& container = item->getContainer();
 				if (container) {
 					containerList.push_back(container);
 				}
@@ -2432,7 +2432,7 @@ void ProtocolGame::sendCreatureSay(const std::shared_ptr<const Creature>& creatu
 	msg.addByte(0x00); // "(Traded)" suffix after player name
 
 	// Add level only for players
-	if (auto speaker = creature->getPlayer()) {
+	if (const auto& speaker = creature->getPlayer()) {
 		msg.add<uint16_t>(speaker->getLevel());
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2465,7 +2465,7 @@ void ProtocolGame::sendToChannel(const std::shared_ptr<const Creature>& creature
 		msg.addByte(0x00); // "(Traded)" suffix after player name
 
 		// Add level only for players
-		if (auto speaker = creature->getPlayer()) {
+		if (const auto& speaker = creature->getPlayer()) {
 			msg.add<uint16_t>(speaker->getLevel());
 		} else {
 			msg.add<uint16_t>(0x00);
@@ -2765,7 +2765,7 @@ void ProtocolGame::sendAddCreature(const std::shared_ptr<const Creature>& creatu
 		// screen
 		if (stackpos >= MAX_STACKPOS) {
 			// @todo: should we avoid this check?
-			if (auto tile = creature->getTile()) {
+			if (const auto& tile = creature->getTile()) {
 				sendUpdateTile(tile, pos);
 			}
 		} else {
@@ -3158,12 +3158,12 @@ void ProtocolGame::sendPodiumWindow(const std::shared_ptr<const Item>& item)
 		return;
 	}
 
-	auto podium = item->getPodium();
+	const auto& podium = item->getPodium();
 	if (!podium) {
 		return;
 	}
 
-	auto tile = item->getTile();
+	const auto& tile = item->getTile();
 	if (!tile) {
 		return;
 	}
@@ -3434,12 +3434,12 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
                                uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
-	auto otherPlayer = creature->getPlayer();
+	const auto& otherPlayer = creature->getPlayer();
 	std::shared_ptr<const Player> masterPlayer = nullptr;
 	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
-		auto master = creature->getMaster();
+		const auto& master = creature->getMaster();
 		if (master) {
 			masterPlayer = master->getPlayer();
 			if (masterPlayer) {
@@ -3518,7 +3518,7 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
 void ProtocolGame::AddCreatureIcons(NetworkMessage& msg, const std::shared_ptr<const Creature>& creature)
 {
 	const auto& creatureIcons = creature->getIcons();
-	if (auto monster = creature->getMonster()) {
+	if (const auto& monster = creature->getMonster()) {
 		const auto& monsterIcons = monster->getSpecialIcons();
 		msg.addByte(creatureIcons.size() + monsterIcons.size());
 		for (const auto& [iconId, level] : monsterIcons) {

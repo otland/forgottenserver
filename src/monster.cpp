@@ -260,7 +260,7 @@ void Monster::onCreatureMove(const std::shared_ptr<Creature>& creature, const st
 
 					auto tile = g_game.map.getTile(checkPosition);
 					if (tile) {
-						auto topCreature = tile->getTopCreature();
+						const auto& topCreature = tile->getTopCreature();
 						if (topCreature && followCreature != topCreature && isOpponent(topCreature)) {
 							selectTarget(topCreature);
 						}
@@ -407,13 +407,13 @@ void Monster::onCreatureEnter(const std::shared_ptr<Creature>& creature)
 bool Monster::isFriend(const std::shared_ptr<const Creature>& creature) const
 {
 	if (isSummon() && getMaster()->getPlayer()) {
-		auto masterPlayer = getMaster()->getPlayer();
+		const auto& masterPlayer = getMaster()->getPlayer();
 		std::shared_ptr<const Player> tmpPlayer = nullptr;
 
 		if (creature->getPlayer()) {
 			tmpPlayer = creature->getPlayer();
 		} else {
-			auto creatureMaster = creature->getMaster();
+			const auto& creatureMaster = creature->getMaster();
 
 			if (creatureMaster && creatureMaster->getPlayer()) {
 				tmpPlayer = creatureMaster->getPlayer();
@@ -1155,7 +1155,7 @@ void Monster::pushCreatures(const std::shared_ptr<Tile>& tile)
 		std::shared_ptr<Monster> lastPushedMonster = nullptr;
 
 		for (size_t i = 0; i < creatures->size();) {
-			auto monster = creatures->at(i)->getMonster();
+			const auto& monster = creatures->at(i)->getMonster();
 			if (monster && monster->isPushable()) {
 				if (monster != lastPushedMonster && Monster::pushCreature(monster)) {
 					lastPushedMonster = monster;
@@ -1868,7 +1868,7 @@ std::shared_ptr<Item> Monster::getCorpse(const std::shared_ptr<Creature>& lastHi
 			if (mostDamageCreature->getPlayer()) {
 				corpse->setCorpseOwner(mostDamageCreature->getID());
 			} else {
-				auto mostDamageCreatureMaster = mostDamageCreature->getMaster();
+				const auto& mostDamageCreatureMaster = mostDamageCreature->getMaster();
 				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
 					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 				}
@@ -2027,7 +2027,7 @@ void Monster::getPathSearchParams(const std::shared_ptr<const Creature>& creatur
 
 bool Monster::canPushItems() const
 {
-	auto master = this->master ? this->master->getMonster() : nullptr;
+	const auto& master = this->master ? this->master->getMonster() : nullptr;
 	if (master) {
 		return master->mType->info.canPushItems;
 	}

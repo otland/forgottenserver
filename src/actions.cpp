@@ -166,7 +166,7 @@ Action* Actions::getAction(const std::shared_ptr<const Item>& item)
 ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, const Position& pos, uint8_t index,
                                      const std::shared_ptr<Item>& item, bool isHotkey)
 {
-	if (auto door = item->getDoor()) {
+	if (const auto& door = item->getDoor()) {
 		if (!door->canUse(player)) {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
@@ -187,7 +187,7 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 		}
 	}
 
-	if (auto bed = item->getBed()) {
+	if (const auto& bed = item->getBed()) {
 		if (!bed->canUse(player)) {
 			if (!bed->getHouse()) {
 				return RETURNVALUE_YOUCANNOTUSETHISBED;
@@ -207,12 +207,12 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (auto container = item->getContainer()) {
+	if (const auto& container = item->getContainer()) {
 		std::shared_ptr<Container> openContainer;
 
 		// depot container
-		if (auto depot = container->getDepotLocker()) {
-			auto myDepotLocker = player->getDepotLocker();
+		if (const auto& depot = container->getDepotLocker()) {
+			const auto& myDepotLocker = player->getDepotLocker();
 			myDepotLocker->setParent(depot->getParent()->getTile());
 			openContainer = myDepotLocker;
 		} else {
@@ -283,8 +283,8 @@ bool Actions::useItem(const std::shared_ptr<Player>& player, const Position& pos
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (auto tile = item->getTile()) {
-			if (auto houseTile = tile->getHouseTile()) {
+		if (const auto& tile = item->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 					return false;
@@ -334,8 +334,8 @@ bool Actions::useItemEx(const std::shared_ptr<Player>& player, const Position& f
 	}
 
 	if (getBoolean(ConfigManager::ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (auto tile = item->getTile()) {
-			if (auto houseTile = tile->getHouseTile()) {
+		if (const auto& tile = item->getTile()) {
+			if (const auto& houseTile = tile->getHouseTile()) {
 				if (!item->getTopParent()->getCreature() && !houseTile->getHouse()->isInvited(player)) {
 					player->sendCancelMessage(RETURNVALUE_PLAYERISNOTINVITED);
 					return false;

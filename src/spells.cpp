@@ -720,7 +720,7 @@ bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Po
 	}
 
 	if (aggressive && needTarget && topVisibleCreature && player->hasSecureMode()) {
-		auto targetPlayer = topVisibleCreature->getPlayer();
+		const auto& targetPlayer = topVisibleCreature->getPlayer();
 		if (targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE &&
 		    !Combat::isInPvpZone(player, targetPlayer)) {
 			player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
@@ -984,7 +984,7 @@ bool InstantSpell::castSpell(const std::shared_ptr<Creature>& creature)
 	LuaVariant var;
 
 	if (casterTargetOrDirection) {
-		auto target = creature->getAttackedCreature();
+		const auto& target = creature->getAttackedCreature();
 		if (target && !target->isDead()) {
 			if (!canThrowSpell(creature, target)) {
 				return false;

@@ -297,7 +297,7 @@ void Npc::onCreatureMove(const std::shared_ptr<Creature>& creature, const std::s
 		}
 
 		if (creature.get() != this) {
-			auto player = creature->getPlayer();
+			const auto& player = creature->getPlayer();
 
 			// if player is now in range, add to spectators list, otherwise erase
 			if (player->canSee(position)) {
@@ -318,7 +318,7 @@ void Npc::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses 
 	}
 
 	// only players for script events
-	auto player = creature->getPlayer();
+	const auto& player = creature->getPlayer();
 	if (player) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureSay(player, type, text);
@@ -597,7 +597,7 @@ void NpcScriptInterface::registerFunctions()
 int NpcScriptInterface::luaActionSay(lua_State* L)
 {
 	// selfSay(words[, target])
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		return 0;
 	}
@@ -618,7 +618,7 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 int NpcScriptInterface::luaActionMove(lua_State* L)
 {
 	// selfMove(direction)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (npc) {
 		g_game.internalMoveCreature(npc, tfs::lua::getNumber<Direction>(L, 1));
 	}
@@ -630,7 +630,7 @@ int NpcScriptInterface::luaActionMoveTo(lua_State* L)
 	// selfMoveTo(x, y, z[, minTargetDist = 1[, maxTargetDist = 1[, fullPathSearch = true[, clearSight = true[,
 	// maxSearchDist = 0]]]]]) selfMoveTo(position[, minTargetDist = 1[, maxTargetDist = 1[, fullPathSearch = true[,
 	// clearSight = true[, maxSearchDist = 0]]]]])
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		return 0;
 	}
@@ -657,7 +657,7 @@ int NpcScriptInterface::luaActionMoveTo(lua_State* L)
 int NpcScriptInterface::luaActionTurn(lua_State* L)
 {
 	// selfTurn(direction)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (npc) {
 		g_game.internalCreatureTurn(npc, tfs::lua::getNumber<Direction>(L, 1));
 	}
@@ -667,7 +667,7 @@ int NpcScriptInterface::luaActionTurn(lua_State* L)
 int NpcScriptInterface::luaActionFollow(lua_State* L)
 {
 	// selfFollow(player)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		tfs::lua::pushBoolean(L, false);
 		return 1;
@@ -689,7 +689,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 	// getDistanceTo(uid)
 	ScriptEnvironment* env = tfs::lua::getScriptEnv();
 
-	auto npc = env->getNpc();
+	const auto& npc = env->getNpc();
 	if (!npc) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		lua_pushnil(L);
@@ -718,7 +718,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 int NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 {
 	// doNpcSetCreatureFocus(cid)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (npc) {
 		npc->setCreatureFocus(tfs::lua::getCreature(L, -1));
 	}
@@ -728,7 +728,7 @@ int NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 {
 	// getNpcCid()
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (npc) {
 		lua_pushnumber(L, npc->getID());
 	} else {
@@ -740,7 +740,7 @@ int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 int NpcScriptInterface::luaGetNpcParameter(lua_State* L)
 {
 	// getNpcParameter(paramKey)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		lua_pushnil(L);
 		return 1;
@@ -814,7 +814,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	// Close any eventual other shop window currently open.
 	player->closeShopWindow(false);
 
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -832,7 +832,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 int NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 {
 	// closeShopWindow(cid)
-	auto npc = tfs::lua::getScriptEnv()->getNpc();
+	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
 	if (!npc) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);

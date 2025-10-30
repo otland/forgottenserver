@@ -10,7 +10,7 @@
 ReturnValue DepotChest::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                  uint32_t flags, const std::shared_ptr<Creature>& actor /* = nullptr*/) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -24,7 +24,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const std::shared_ptr<const Thin
 		}
 
 		if (item->getTopParent().get() != this) {
-			if (auto container = item->getContainer()) {
+			if (const auto& container = item->getContainer()) {
 				addCount = container->getItemHoldingCount() + 1;
 			} else {
 				addCount = 1;
@@ -42,7 +42,7 @@ ReturnValue DepotChest::queryAdd(int32_t index, const std::shared_ptr<const Thin
 void DepotChest::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
                                      int32_t index, cylinderlink_t)
 {
-	auto parent = getParent();
+	const auto& parent = getParent();
 	if (parent) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
@@ -51,7 +51,7 @@ void DepotChest::postAddNotification(const std::shared_ptr<Thing>& thing, const 
 void DepotChest::postRemoveNotification(const std::shared_ptr<Thing>& thing,
                                         const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
-	auto parent = getParent();
+	const auto& parent = getParent();
 	if (parent) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}

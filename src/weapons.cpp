@@ -783,7 +783,7 @@ bool WeaponDistance::useWeapon(const std::shared_ptr<Player>& player, const std:
 	}
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		auto bow = player->getWeapon(true);
+		const auto& bow = player->getWeapon(true);
 		if (bow && bow->getHitChance() != 0) {
 			chance += bow->getHitChance();
 		}

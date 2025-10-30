@@ -298,9 +298,9 @@ std::optional<std::string> parseTowns(OTB::Loader& loader, const OTB::Node& town
 			return std::make_optional("Could not read town coordinates.");
 		}
 
-		map.towns.setTown(
-		    townId,
-		    new Town{.id{townId}, .name{townName}, .templePosition{town_coords.x, town_coords.y, town_coords.z}});
+		map.towns.setTown(townId, new Town{.id = townId,
+		                                   .name = std::string{townName},
+		                                   .templePosition = {town_coords.x, town_coords.y, town_coords.z}});
 	}
 	return std::nullopt;
 }

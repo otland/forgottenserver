@@ -19,7 +19,7 @@ void HouseTile::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 		return;
 	}
 
-	if (auto item = thing->getItem()) {
+	if (const auto& item = thing->getItem()) {
 		updateHouse(item);
 	}
 }
@@ -32,7 +32,7 @@ void HouseTile::internalAddThing(uint32_t index, const std::shared_ptr<Thing>& t
 		return;
 	}
 
-	if (auto item = thing->getItem()) {
+	if (const auto& item = thing->getItem()) {
 		updateHouse(item);
 	}
 }
@@ -43,11 +43,11 @@ void HouseTile::updateHouse(const std::shared_ptr<Item>& item)
 		return;
 	}
 
-	if (auto door = item->getDoor()) {
+	if (const auto& door = item->getDoor()) {
 		if (door->getDoorId() != 0) {
 			house->addDoor(door);
 		}
-	} else if (auto bed = item->getBed()) {
+	} else if (const auto& bed = item->getBed()) {
 		if (bed) {
 			house->addBed(bed);
 		}
@@ -57,15 +57,15 @@ void HouseTile::updateHouse(const std::shared_ptr<Item>& item)
 ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
                                 uint32_t flags, const std::shared_ptr<Creature>& actor /* = nullptr*/) const
 {
-	if (auto creature = thing->getCreature()) {
-		if (auto player = creature->getPlayer()) {
+	if (const auto& creature = thing->getCreature()) {
+		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				return RETURNVALUE_PLAYERISNOTINVITED;
 			}
 		} else {
 			return RETURNVALUE_NOTPOSSIBLE;
 		}
-	} else if (auto item = thing->getItem()) {
+	} else if (const auto& item = thing->getItem()) {
 		if (item->isStoreItem() && !item->hasAttribute(ITEM_ATTRIBUTE_WRAPID)) {
 			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
 		}
@@ -82,8 +82,8 @@ ReturnValue HouseTile::queryAdd(int32_t index, const std::shared_ptr<const Thing
 std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
                                                    std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
-	if (auto creature = thing->getCreature()) {
-		if (auto player = creature->getPlayer()) {
+	if (const auto& creature = thing->getCreature()) {
+		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
 				auto destTile = g_game.map.getTile(entryPos);
@@ -111,7 +111,7 @@ std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::sh
 ReturnValue HouseTile::queryRemove(const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
                                    const std::shared_ptr<Creature>& actor /*= nullptr*/) const
 {
-	auto item = thing->getItem();
+	const auto& item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
