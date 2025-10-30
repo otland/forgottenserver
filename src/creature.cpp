@@ -184,7 +184,7 @@ void Creature::onWalk()
 		if (getNextStep(dir, flags)) {
 			ReturnValue ret = g_game.internalMoveCreature(getCreature(), dir, flags);
 			if (ret != RETURNVALUE_NOERROR) {
-				if (auto player = getPlayer()) {
+				if (const auto& player = getPlayer()) {
 					player->sendCancelMessage(ret);
 					player->sendCancelWalk();
 				}
@@ -249,7 +249,7 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk()
 {
-	auto player = getPlayer();
+	const auto& player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -260,7 +260,7 @@ void Creature::startAutoWalk()
 
 void Creature::startAutoWalk(Direction direction)
 {
-	auto player = getPlayer();
+	const auto& player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -277,7 +277,7 @@ void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 		return;
 	}
 
-	auto player = getPlayer();
+	const auto& player = getPlayer();
 	if (player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
@@ -570,7 +570,7 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 				break;
 		}
 
-		auto tile = getTile();
+		const auto& tile = getTile();
 
 		if (splash) {
 			g_game.internalAddItem(tile, splash, INDEX_WHEREEVER, FLAG_NOLIMIT);
@@ -951,7 +951,7 @@ void Creature::onEndCondition(ConditionType_t)
 
 void Creature::onTickCondition(ConditionType_t type, bool& bRemove)
 {
-	auto tile = getTile();
+	const auto& tile = getTile();
 	if (!tile) {
 		return;
 	}

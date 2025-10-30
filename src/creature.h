@@ -182,7 +182,7 @@ public:
 	bool isInvisible() const;
 	ZoneType_t getZone() const
 	{
-		auto tile = getTile();
+		const auto& tile = getTile();
 		if (!tile) {
 			return ZONE_NORMAL;
 		}

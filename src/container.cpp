@@ -63,7 +63,7 @@ std::shared_ptr<Item> Container::clone() const
 
 std::shared_ptr<Container> Container::getParentContainer()
 {
-	auto thing = getParent();
+	const auto& thing = getParent();
 	if (!thing) {
 		return nullptr;
 	}
@@ -148,7 +148,7 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 void Container::updateItemWeight(int32_t diff)
 {
 	totalWeight += diff;
-	if (auto parentContainer = getParentContainer()) {
+	if (const auto& parentContainer = getParentContainer()) {
 		parentContainer->updateItemWeight(diff);
 	}
 }
@@ -672,7 +672,7 @@ ItemVector Container::getItems(bool recursive /*= false*/)
 void Container::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
                                     int32_t index, cylinderlink_t)
 {
-	auto topParent = getTopParent();
+	const auto& topParent = getTopParent();
 	if (topParent->getCreature()) {
 		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 	} else if (topParent.get() == this) {
@@ -688,7 +688,7 @@ void Container::postAddNotification(const std::shared_ptr<Thing>& thing, const s
 void Container::postRemoveNotification(const std::shared_ptr<Thing>& thing,
                                        const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
-	auto topParent = getTopParent();
+	const auto& topParent = getTopParent();
 	if (topParent->getCreature()) {
 		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 	} else if (topParent.get() == this) {

@@ -205,7 +205,7 @@ bool Item::operator==(const Item& otherItem) const
 
 const Position& Item::getPosition() const
 {
-	auto tile = getTile();
+	const auto& tile = getTile();
 	return tile ? tile->getPosition() : Tile::nullptr_tile->getPosition();
 }
 
@@ -294,19 +294,27 @@ std::shared_ptr<const Thing> Item::getTopParent() const
 
 std::shared_ptr<Tile> Item::getTile()
 {
-	auto topParent = getTopParent();
-	// get root thing
-	if (topParent && topParent->hasParent()) {
-		topParent = topParent->getParent();
+	auto parent = getTopParent();
+	if (!parent) {
+		return nullptr;
 	}
-	return topParent->getTile();
+
+	// get root thing
+	if (parent->hasParent()) {
+		parent = parent->getParent();
+	}
+	return parent->getTile();
 }
 
 std::shared_ptr<const Tile> Item::getTile() const
 {
 	auto parent = getTopParent();
+	if (!parent) {
+		return nullptr;
+	}
+
 	// get root thing
-	if (parent && parent->hasParent()) {
+	if (parent->hasParent()) {
 		parent = parent->getParent();
 	}
 	return parent->getTile();
@@ -327,7 +335,7 @@ uint16_t Item::getSubType() const
 
 std::shared_ptr<const Player> Item::getHoldingPlayer() const
 {
-	auto topParent = getTopParent();
+	const auto& topParent = getTopParent();
 	if (!topParent) {
 		return nullptr;
 	}

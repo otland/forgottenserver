@@ -128,7 +128,7 @@ bool BedItem::sleep(const std::shared_ptr<Player>& player)
 		return false;
 	}
 
-	auto nextBedItem = getNextBedItem();
+	const auto& nextBedItem = getNextBedItem();
 
 	internalSetSleeper(player);
 
@@ -181,7 +181,7 @@ void BedItem::wakeUp(const std::shared_ptr<Player>& player)
 	// update the bedSleepersMap
 	g_game.removeBedSleeper(sleeperGUID);
 
-	auto nextBedItem = getNextBedItem();
+	const auto& nextBedItem = getNextBedItem();
 
 	// unset sleep info
 	internalRemoveSleeper();

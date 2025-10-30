@@ -9,7 +9,7 @@
 
 const Position& Thing::getPosition() const
 {
-	auto tile = getTile();
+	const auto& tile = getTile();
 	if (!tile) {
 		return Tile::nullptr_tile->getPosition();
 	}

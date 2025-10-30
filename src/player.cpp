@@ -265,7 +265,7 @@ std::shared_ptr<Item> Player::getWeapon(bool ignoreAmmo /* = false*/) const
 
 WeaponType_t Player::getWeaponType() const
 {
-	auto item = getWeapon();
+	const auto& item = getWeapon();
 	if (!item) {
 		return WEAPON_NONE;
 	}
@@ -463,7 +463,7 @@ void Player::updateInventoryWeight()
 		}
 	}
 
-	if (auto storeInbox = getStoreInbox()) {
+	if (const auto& storeInbox = getStoreInbox()) {
 		inventoryWeight += storeInbox->getWeight();
 	}
 }
@@ -3382,7 +3382,7 @@ void Player::doAttacking(uint32_t)
 	if ((OTSYS_TIME() - lastAttack) >= getAttackSpeed()) {
 		bool result = false;
 
-		auto tool = getWeapon();
+		const auto& tool = getWeapon();
 		const Weapon* weapon = g_weapons->getWeapon(tool);
 		uint32_t delay = getAttackSpeed();
 		bool classicSpeed = getBoolean(ConfigManager::CLASSIC_ATTACK_SPEED);

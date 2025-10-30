@@ -29,7 +29,7 @@ void TrashHolder::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 
 	const ItemType& it = Item::items[id];
 	if (item->isHangable() && it.isGroundTile()) {
-		auto tile = getTile();
+		const auto& tile = getTile();
 		if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
 			return;
 		}

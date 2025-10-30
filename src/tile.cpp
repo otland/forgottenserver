@@ -449,7 +449,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 	}
 
 	if (!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) {
-		auto items = getItemList();
+		const auto& items = getItemList();
 		if (!items || items->empty()) {
 			g_game.removeTileToClean(getTile());
 			return;
@@ -539,7 +539,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 				}
 			}
 
-			auto field = getFieldItem();
+			const auto& field = getFieldItem();
 			if (!field || field->isBlocking() || field->getDamage() == 0) {
 				return RETURNVALUE_NOERROR;
 			}
@@ -627,7 +627,7 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 				}
 			}
 
-			if (const auto items = getItemList()) {
+			if (const auto& items = getItemList()) {
 				for (const auto& item : *items) {
 					const ItemType& iiType = Item::items[item->getID()];
 					if (iiType.blockSolid && (!iiType.moveable || item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID))) {
@@ -1352,17 +1352,17 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 
 	if (link == LINK_OWNER) {
 		if (hasFlag(TILESTATE_TELEPORT)) {
-			auto teleport = getTeleportItem();
+			const auto& teleport = getTeleportItem();
 			if (teleport) {
 				teleport->addThing(thing);
 			}
 		} else if (hasFlag(TILESTATE_TRASHHOLDER)) {
-			auto trashholder = getTrashHolder();
+			const auto& trashholder = getTrashHolder();
 			if (trashholder) {
 				trashholder->addThing(thing);
 			}
 		} else if (hasFlag(TILESTATE_MAILBOX)) {
-			auto mailbox = getMailbox();
+			const auto& mailbox = getMailbox();
 			if (mailbox) {
 				mailbox->addThing(thing);
 			}
