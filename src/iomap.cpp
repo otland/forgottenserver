@@ -33,8 +33,8 @@
 
 namespace {
 
-std::shared_ptr<Tile> createTile(std::shared_ptr<Item> ground, std::shared_ptr<Item> item, uint16_t x, uint16_t y,
-                                 uint8_t z)
+std::shared_ptr<Tile> createTile(const std::shared_ptr<Item>& ground, const std::shared_ptr<Item>& item, uint16_t x,
+                                 uint16_t y, uint8_t z)
 {
 	if (!ground) {
 		return std::make_shared<StaticTile>(x, y, z);
@@ -266,7 +266,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 
 		tile->setFlag(tileflags);
 
-		map.setTile(x, y, z, std::move(tile));
+		map.setTile(x, y, z, tile);
 	}
 	return std::nullopt;
 }

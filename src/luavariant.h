@@ -1,6 +1,8 @@
 #ifndef FS_LUAVARIANT_H
 #define FS_LUAVARIANT_H
 
+class Position;
+
 enum LuaVariantType_t
 {
 	VARIANT_NUMBER = 0,

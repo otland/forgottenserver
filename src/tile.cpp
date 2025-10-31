@@ -888,7 +888,7 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 				// remove old splash if exists
 				for (ItemVector::const_iterator it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end;
 				     ++it) {
-					auto oldSplash = *it;
+					const auto& oldSplash = *it;
 					if (!Item::items[oldSplash->getID()].isSplash()) {
 						continue;
 					}
@@ -1221,10 +1221,10 @@ int32_t Tile::getClientIndexOfCreature(const std::shared_ptr<const Player>& play
 
 	if (const CreatureVector* creatures = getCreatures()) {
 		for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-			auto c = *it;
+			const auto& tileCreature = *it;
 			if (*it == creature) {
 				return n;
-			} else if (player->canSeeCreature(c)) {
+			} else if (player->canSeeCreature(tileCreature)) {
 				++n;
 			}
 		}

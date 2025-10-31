@@ -15,7 +15,7 @@ class DepotLocker final : public Container
 public:
 	explicit DepotLocker(uint16_t type) : Container{type}, depotId{0} {}
 
-	void removeInbox(std::shared_ptr<Inbox> inbox);
+	void removeInbox(const std::shared_ptr<Inbox>& inbox);
 	uint16_t getDepotId() const { return depotId; }
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 

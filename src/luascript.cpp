@@ -11957,7 +11957,7 @@ int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 	lua_createtable(L, members.size(), 0);
 
 	int index = 0;
-	for (auto player : members) {
+	for (const auto& player : members) {
 		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
@@ -12766,7 +12766,7 @@ int LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 	lua_createtable(L, tiles.size(), 0);
 
 	int index = 0;
-	for (auto tile : tiles) {
+	for (const auto& tile : tiles) {
 		tfs::lua::pushSharedPtr(L, tile);
 		tfs::lua::setMetatable(L, -1, "Tile");
 		lua_rawseti(L, -2, ++index);
@@ -12787,7 +12787,7 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	lua_newtable(L);
 
 	int index = 0;
-	for (auto tile : tiles) {
+	for (const auto& tile : tiles) {
 		TileItemVector* itemVector = tile->getItemList();
 		if (itemVector) {
 			for (const auto& item : *itemVector) {
@@ -16072,7 +16072,7 @@ int LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 		lua_createtable(L, party->getInvitationCount(), 0);
 
 		int index = 0;
-		for (auto player : party->getInvitees()) {
+		for (const auto& player : party->getInvitees()) {
 			tfs::lua::pushSharedPtr(L, player);
 			tfs::lua::setMetatable(L, -1, "Player");
 			lua_rawseti(L, -2, ++index);

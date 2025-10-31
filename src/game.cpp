@@ -1313,22 +1313,21 @@ ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& toThing, const s
                                   int32_t index /*= INDEX_WHEREEVER*/, uint32_t flags /* = 0*/, bool test /* = false*/)
 {
 	uint32_t remainderCount = 0;
-	return internalAddItem(std::move(toThing), std::move(item), index, flags, test, remainderCount);
+	return internalAddItem(toThing, item, index, flags, test, remainderCount);
 }
 
-ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& _toThing, const std::shared_ptr<Item>& item,
+ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& toThing, const std::shared_ptr<Item>& item,
                                   int32_t index, uint32_t flags, bool test, uint32_t& remainderCount)
 {
-	if (!_toThing || !item) {
+	if (!toThing || !item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	auto destThing = _toThing;
 	std::shared_ptr<Item> toItem = nullptr;
-	auto toThing = _toThing->queryDestination(index, item, toItem, flags);
+	auto destThing = toThing->queryDestination(index, item, toItem, flags);
 
 	// check if we can add this item
-	ReturnValue ret = toThing->queryAdd(index, item, item->getItemCount(), flags);
+	ReturnValue ret = destThing->queryAdd(index, item, item->getItemCount(), flags);
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
 	}
@@ -1338,7 +1337,7 @@ ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& _toThing, const 
 	since the queryDestination can return a thing that might only hold a part of the full amount.
 	*/
 	uint32_t maxQueryCount = 0;
-	ret = destThing->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
+	ret = toThing->queryMaxCount(INDEX_WHEREEVER, item, item->getItemCount(), maxQueryCount, flags);
 
 	if (ret != RETURNVALUE_NOERROR) {
 		return ret;
@@ -1352,39 +1351,39 @@ ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& _toThing, const 
 		uint32_t m = std::min<uint32_t>(item->getItemCount(), maxQueryCount);
 		uint32_t n = std::min<uint32_t>(ITEM_STACK_SIZE - toItem->getItemCount(), m);
 
-		toThing->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
+		destThing->updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 
 		int32_t count = m - n;
 		if (count > 0) {
 			if (item->getItemCount() != count) {
 				auto remainderItem = item->clone();
 				remainderItem->setItemCount(count);
-				if (internalAddItem(destThing, remainderItem, INDEX_WHEREEVER, flags, false) != RETURNVALUE_NOERROR) {
+				if (internalAddItem(toThing, remainderItem, INDEX_WHEREEVER, flags, false) != RETURNVALUE_NOERROR) {
 					remainderCount = count;
 				}
 			} else {
-				toThing->addThing(index, item);
+				destThing->addThing(index, item);
 
-				int32_t itemIndex = toThing->getThingIndex(item);
+				int32_t itemIndex = destThing->getThingIndex(item);
 				if (itemIndex != -1) {
-					toThing->postAddNotification(item, nullptr, itemIndex);
+					destThing->postAddNotification(item, nullptr, itemIndex);
 				}
 			}
 		} else {
 			// fully merged with toItem, item will be destroyed
 			item->onRemoved();
 
-			int32_t itemIndex = toThing->getThingIndex(toItem);
+			int32_t itemIndex = destThing->getThingIndex(toItem);
 			if (itemIndex != -1) {
-				toThing->postAddNotification(toItem, nullptr, itemIndex);
+				destThing->postAddNotification(toItem, nullptr, itemIndex);
 			}
 		}
 	} else {
-		toThing->addThing(index, item);
+		destThing->addThing(index, item);
 
-		int32_t itemIndex = toThing->getThingIndex(item);
+		int32_t itemIndex = destThing->getThingIndex(item);
 		if (itemIndex != -1) {
-			toThing->postAddNotification(item, nullptr, itemIndex);
+			destThing->postAddNotification(item, nullptr, itemIndex);
 		}
 	}
 
@@ -1789,7 +1788,7 @@ ReturnValue Game::internalTeleport(const std::shared_ptr<Thing>& thing, const Po
 
 namespace {
 
-std::shared_ptr<Item> searchForItem(std::shared_ptr<Container> container, uint16_t itemId)
+std::shared_ptr<Item> searchForItem(const std::shared_ptr<Container>& container, uint16_t itemId)
 {
 	for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 		if ((*it)->getID() == itemId) {

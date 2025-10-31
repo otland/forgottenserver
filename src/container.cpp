@@ -97,7 +97,7 @@ void Container::addItem(const std::shared_ptr<Item>& item)
 	}
 
 	item->setParent(getContainer());
-	itemList.push_back(std::move(item));
+	itemList.push_back(item);
 }
 
 Attr_ReadValue Container::readAttr(AttrTypes_t attr, PropStream& propStream)

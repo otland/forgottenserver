@@ -253,7 +253,8 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 	return RETURNVALUE_CANNOTUSETHISOBJECT;
 }
 
-static void showUseHotkeyMessage(std::shared_ptr<Player> player, std::shared_ptr<const Item> item, uint32_t count)
+static void showUseHotkeyMessage(const std::shared_ptr<Player>& player, const std::shared_ptr<const Item>& item,
+                                 uint32_t count)
 {
 	const ItemType& it = Item::items[item->getID()];
 	if (!it.showCount) {

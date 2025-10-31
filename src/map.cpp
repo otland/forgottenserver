@@ -432,7 +432,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 					}
 				} else {
 					const SpectatorVec& cachedSpectators = it->second;
-					for (auto spectator : cachedSpectators) {
+					for (const auto& spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
 							spectators.emplace_back(spectator);
 						}

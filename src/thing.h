@@ -4,6 +4,8 @@
 #ifndef FS_THING_H
 #define FS_THING_H
 
+#include "enums.h"
+
 class Container;
 class Creature;
 class Item;
