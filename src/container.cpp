@@ -5,7 +5,6 @@
 
 #include "container.h"
 
-#include "cylinder.h"
 #include "depotchest.h"
 #include "game.h"
 #include "housetile.h"
@@ -504,7 +503,7 @@ void Container::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != Thing::virtualThing)) {
 		onAddContainerItem(item);
 	}
 }
@@ -516,7 +515,7 @@ void Container::addItemBack(const std::shared_ptr<Item>& item)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (hasParent() && (getParent() != VirtualCylinder::virtualCylinder)) {
+	if (hasParent() && (getParent() != Thing::virtualThing)) {
 		onAddContainerItem(item);
 	}
 }

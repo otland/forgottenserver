@@ -37,6 +37,8 @@ enum cylinderlink_t
 class Thing : public std::enable_shared_from_this<Thing>
 {
 public:
+	static const std::shared_ptr<Thing> virtualThing;
+
 	constexpr Thing() = default;
 	virtual ~Thing() = default;
 
