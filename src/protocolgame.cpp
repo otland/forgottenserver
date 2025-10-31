@@ -9,9 +9,7 @@
 #include "base64.h"
 #include "condition.h"
 #include "configmanager.h"
-#include "depotchest.h"
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
 #include "monster.h"
@@ -19,9 +17,7 @@
 #include "outfit.h"
 #include "outputmessage.h"
 #include "player.h"
-#include "podium.h"
 #include "scheduler.h"
-#include "storeinbox.h"
 
 extern CreatureEvents* g_creatureEvents;
 extern Chat* g_chat;

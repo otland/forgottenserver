@@ -1,7 +1,7 @@
 #ifndef FS_LUAVARIANT_H
 #define FS_LUAVARIANT_H
 
-class Position;
+#include "position.h"
 
 enum LuaVariantType_t
 {

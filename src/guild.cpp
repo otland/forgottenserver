@@ -5,6 +5,7 @@
 
 #include "guild.h"
 
+#include "database.h"
 #include "game.h"
 #include "tools.h"
 

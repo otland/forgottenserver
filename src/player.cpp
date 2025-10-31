@@ -21,7 +21,6 @@
 #include "party.h"
 #include "scheduler.h"
 #include "spectators.h"
-#include "storeinbox.h"
 #include "tools.h"
 #include "weapons.h"
 

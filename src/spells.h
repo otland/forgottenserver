@@ -228,7 +228,7 @@ public:
 
 	bool configureEvent(const pugi::xml_node& node) override;
 
-	virtual bool playerCastInstant(const std::shared_ptr<Player>& player, std::string& param);
+	bool playerCastInstant(const std::shared_ptr<Player>& player, std::string& param);
 
 	bool castSpell(const std::shared_ptr<Creature>& creature) override;
 	bool castSpell(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Creature>& target) override;

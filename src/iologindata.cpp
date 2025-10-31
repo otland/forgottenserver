@@ -7,10 +7,7 @@
 
 #include "condition.h"
 #include "configmanager.h"
-#include "depotchest.h"
 #include "game.h"
-#include "inbox.h"
-#include "storeinbox.h"
 
 extern Game g_game;
 

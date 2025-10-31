@@ -8,7 +8,6 @@
 #include "configmanager.h"
 #include "databasetasks.h"
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "scheduler.h"
 

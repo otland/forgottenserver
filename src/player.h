@@ -12,6 +12,7 @@
 #include "guild.h"
 #include "inbox.h"
 #include "protocolgame.h"
+#include "storeinbox.h"
 #include "town.h"
 #include "vocation.h"
 

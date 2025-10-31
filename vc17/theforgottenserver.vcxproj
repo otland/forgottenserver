@@ -179,7 +179,6 @@
     <ClCompile Include="..\src\container.cpp" />
     <ClCompile Include="..\src\creature.cpp" />
     <ClCompile Include="..\src\creatureevent.cpp" />
-    <ClCompile Include="..\src\cylinder.cpp" />
     <ClCompile Include="..\src\database.cpp" />
     <ClCompile Include="..\src\databasemanager.cpp" />
     <ClCompile Include="..\src\databasetasks.cpp" />
@@ -273,7 +272,6 @@
     <ClInclude Include="..\src\container.h" />
     <ClInclude Include="..\src\creature.h" />
     <ClInclude Include="..\src\creatureevent.h" />
-    <ClInclude Include="..\src\cylinder.h" />
     <ClInclude Include="..\src\database.h" />
     <ClInclude Include="..\src\databasemanager.h" />
     <ClInclude Include="..\src\databasetasks.h" />

@@ -10,7 +10,6 @@
 #include "container.h"
 #include "game.h"
 #include "housetile.h"
-#include "pugicast.h"
 #include "spells.h"
 
 extern Game g_game;
