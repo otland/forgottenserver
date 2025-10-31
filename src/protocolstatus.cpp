@@ -8,6 +8,7 @@
 #include "configmanager.h"
 #include "game.h"
 #include "outputmessage.h"
+#include "tasks.h"
 
 #include <ranges>
 

@@ -6,6 +6,7 @@
 #include "iomapserialize.h"
 
 #include "bed.h"
+#include "database.h"
 #include "game.h"
 #include "housetile.h"
 

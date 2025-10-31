@@ -17,6 +17,7 @@
 #include "outfit.h"
 #include "outputmessage.h"
 #include "player.h"
+#include "podium.h"
 #include "scheduler.h"
 
 extern CreatureEvents* g_creatureEvents;

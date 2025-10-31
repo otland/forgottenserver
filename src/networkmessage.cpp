@@ -5,6 +5,7 @@
 
 #include "networkmessage.h"
 
+#include "container.h"
 #include "podium.h"
 
 #include <boost/locale.hpp>

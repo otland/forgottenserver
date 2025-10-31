@@ -8,10 +8,9 @@
 #include "ban.h"
 #include "base64.h"
 #include "configmanager.h"
+#include "database.h"
 #include "game.h"
-#include "iologindata.h"
 #include "outputmessage.h"
-#include "rsa.h"
 #include "tasks.h"
 
 extern Game g_game;

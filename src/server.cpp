@@ -5,7 +5,6 @@
 
 #include "server.h"
 
-#include "ban.h"
 #include "configmanager.h"
 #include "scheduler.h"
 #include "tools.h"
