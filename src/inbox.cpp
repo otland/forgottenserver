@@ -34,7 +34,7 @@ void Inbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::
                                 int32_t index, cylinderlink_t)
 {
 	const auto& parent = getParent();
-	if (parent) {
+	if (auto parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
@@ -43,7 +43,13 @@ void Inbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const st
                                    int32_t index, cylinderlink_t)
 {
 	const auto& parent = getParent();
-	if (parent) {
+	if (auto parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
+}
+
+std::shared_ptr<Thing> Inbox::getParent() const
+{
+	auto parent = Container::getParent();
+	return parent ? parent->getParent() : nullptr;
 }

@@ -1415,7 +1415,7 @@ void MagicField::onStepInField(const std::shared_ptr<Creature>& creature)
 				}
 			}
 
-			std::shared_ptr<Player> targetPlayer = creature->getPlayer();
+			const auto& targetPlayer = creature->getPlayer();
 			if (!harmfulField && targetPlayer) {
 				auto attackerPlayer = g_game.getPlayerByID(ownerId);
 				if (attackerPlayer) {

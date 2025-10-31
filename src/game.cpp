@@ -1628,7 +1628,7 @@ std::shared_ptr<Item> Game::transformItem(const std::shared_ptr<Item>& item, uin
 		return item;
 	}
 
-	std::shared_ptr<Thing> parent = item->getParent();
+	auto parent = item->getParent();
 	if (!parent) {
 		return nullptr;
 	}

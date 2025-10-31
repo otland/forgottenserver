@@ -38,7 +38,7 @@ Container::~Container()
 		}
 
 		for (const auto& item : itemList) {
-			item->setParent(parent);
+			item->setParent(getParent());
 		}
 	} else {
 		for (const auto& item : itemList) {

@@ -24,8 +24,7 @@ public:
 
 	// Thing implementations
 	bool canRemove() const override { return false; }
-	std::shared_ptr<Thing> getParent() const override { return parent ? parent->getParent() : nullptr; }
-	std::shared_ptr<Thing> getRealParent() const override { return parent; }
+	std::shared_ptr<Thing> getParent() const override;
 };
 
 #endif // FS_INBOX_H

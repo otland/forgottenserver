@@ -195,7 +195,7 @@ bool House::transferToDepot() const
 		return false;
 	}
 
-	std::shared_ptr<Player> player = g_game.getPlayerByGUID(owner);
+	const auto& player = g_game.getPlayerByGUID(owner);
 	if (player) {
 		transferToDepot(player);
 	} else {

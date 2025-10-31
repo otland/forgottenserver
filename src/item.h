@@ -922,11 +922,9 @@ public:
 	std::shared_ptr<const Thing> getTopParent() const;
 	std::shared_ptr<Tile> getTile() override final;
 	std::shared_ptr<const Tile> getTile() const override final;
-	bool isRemoved() const override { return !parent || std::static_pointer_cast<Thing>(parent)->isRemoved(); }
+	bool isRemoved() const override { return !getParent() || getParent()->isRemoved(); }
 
 protected:
-	std::shared_ptr<Thing> parent = nullptr;
-
 	uint16_t id; // the same id as in ItemType
 
 private:

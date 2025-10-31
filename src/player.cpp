@@ -2055,7 +2055,7 @@ void Player::death(const std::shared_ptr<Creature>& lastHitCreature)
 			for (const auto& it : damageMap) {
 				CountBlock_t cb = it.second;
 				if ((OTSYS_TIME() - cb.ticks) <= inFightTicks) {
-					std::shared_ptr<Player> damageDealer = g_game.getPlayerByID(it.first);
+					const auto& damageDealer = g_game.getPlayerByID(it.first);
 					if (damageDealer) {
 						sumLevels += damageDealer->getLevel();
 					}
@@ -3814,7 +3814,7 @@ bool Player::lastHitIsPlayer(const std::shared_ptr<Creature>& lastHitCreature)
 		return true;
 	}
 
-	std::shared_ptr<Creature> lastHitMaster = lastHitCreature->getMaster();
+	const auto& lastHitMaster = lastHitCreature->getMaster();
 	return lastHitMaster && lastHitMaster->getPlayer();
 }
 
