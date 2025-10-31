@@ -347,7 +347,7 @@ std::shared_ptr<Thing> Tile::getTopVisibleThing(const std::shared_ptr<const Crea
 void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 {
 	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
-		auto it = g_game.browseFields.find(getTile());
+		auto it = g_game.browseFields.find(getTile().get());
 		if (it != g_game.browseFields.end()) {
 			it->second->addItemBack(item);
 			item->setParent(it->second);
@@ -385,7 +385,7 @@ void Tile::onUpdateTileItem(const std::shared_ptr<Item>& oldItem, const ItemType
                             const std::shared_ptr<Item>& newItem, const ItemType& newType)
 {
 	if (newItem->hasProperty(CONST_PROP_MOVEABLE) || newItem->getContainer()) {
-		auto it = g_game.browseFields.find(getTile());
+		auto it = g_game.browseFields.find(getTile().get());
 		if (it != g_game.browseFields.end()) {
 			int32_t index = it->second->getThingIndex(oldItem);
 			if (index != -1) {
@@ -394,7 +394,7 @@ void Tile::onUpdateTileItem(const std::shared_ptr<Item>& oldItem, const ItemType
 			}
 		}
 	} else if (oldItem->hasProperty(CONST_PROP_MOVEABLE) || oldItem->getContainer()) {
-		auto it = g_game.browseFields.find(getTile());
+		auto it = g_game.browseFields.find(getTile().get());
 		if (it != g_game.browseFields.end()) {
 			const auto& oldParent = oldItem->getParent();
 			it->second->removeThing(oldItem, oldItem->getItemCount());
@@ -424,7 +424,7 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
                             const std::shared_ptr<Item>& item)
 {
 	if (item->hasProperty(CONST_PROP_MOVEABLE) || item->getContainer()) {
-		auto it = g_game.browseFields.find(getTile());
+		auto it = g_game.browseFields.find(getTile().get());
 		if (it != g_game.browseFields.end()) {
 			it->second->removeThing(item, item->getItemCount());
 		}

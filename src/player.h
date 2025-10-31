@@ -191,7 +191,14 @@ public:
 		return inbox;
 	}
 
-	std::shared_ptr<StoreInbox> getStoreInbox() const { return storeInbox; }
+	std::shared_ptr<StoreInbox> getStoreInbox()
+	{
+		if (!storeInbox) {
+			storeInbox = std::make_shared<StoreInbox>(ITEM_STORE_INBOX);
+			storeInbox->setParent(shared_from_this());
+		}
+		return storeInbox;
+	}
 
 	uint32_t getClientIcons() const;
 

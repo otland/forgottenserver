@@ -11,12 +11,10 @@
 #include "creature.h"
 #include "creatureevent.h"
 #include "databasetasks.h"
-#include "depotchest.h"
 #include "events.h"
 #include "globalevent.h"
 #include "housetile.h"
 #include "http/http.h"
-#include "inbox.h"
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
@@ -1101,7 +1099,7 @@ ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& _fromThing, con
 	auto fromThing = _fromThing;
 	const auto& fromTile = fromThing->getTile();
 	if (fromTile) {
-		auto it = browseFields.find(fromTile);
+		auto it = browseFields.find(fromTile.get());
 		if (it != browseFields.end() && it->second == fromThing) {
 			fromThing = fromTile;
 		}
@@ -1407,7 +1405,7 @@ ReturnValue Game::internalRemoveItem(const std::shared_ptr<Item>& item, int32_t 
 
 	const auto& fromTile = parent->getTile();
 	if (fromTile) {
-		auto it = browseFields.find(fromTile);
+		auto it = browseFields.find(fromTile.get());
 		if (it != browseFields.end() && it->second == parent) {
 			parent = fromTile;
 		}
@@ -1634,7 +1632,7 @@ std::shared_ptr<Item> Game::transformItem(const std::shared_ptr<Item>& item, uin
 
 	const auto& fromTile = parent->getTile();
 	if (fromTile) {
-		auto it = browseFields.find(fromTile);
+		auto it = browseFields.find(fromTile.get());
 		if (it != browseFields.end() && it->second == parent) {
 			parent = fromTile;
 		}
@@ -2371,10 +2369,10 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 			return;
 		}
 
-		auto it = browseFields.find(tile);
+		auto it = browseFields.find(tile.get());
 		if (it == browseFields.end()) {
 			parentContainer = std::make_shared<Container>(tile);
-			browseFields[tile] = parentContainer;
+			browseFields[tile.get()] = parentContainer;
 			g_scheduler.addEvent(createSchedulerTask(
 			    30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
 		} else {
@@ -2547,10 +2545,10 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 
 	std::shared_ptr<Container> container;
 
-	auto it = browseFields.find(tile);
+	auto it = browseFields.find(tile.get());
 	if (it == browseFields.end()) {
 		container = std::make_shared<Container>(tile);
-		browseFields[tile] = container;
+		browseFields[tile.get()] = container;
 		g_scheduler.addEvent(
 		    createSchedulerTask(30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
 	} else {
@@ -5702,7 +5700,7 @@ void Game::decreaseBrowseFieldRef(const Position& pos)
 		return;
 	}
 
-	browseFields.erase(tile);
+	browseFields.erase(tile.get());
 }
 
 void Game::internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable)

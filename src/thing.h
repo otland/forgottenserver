@@ -47,7 +47,7 @@ public:
 	Thing& operator=(const Thing&) = delete;
 
 	bool hasParent() const { return getParent() != nullptr; }
-	virtual std::shared_ptr<Thing> getParent() const { return parent; }
+	virtual std::shared_ptr<Thing> getParent() const { return parent.lock(); }
 	virtual std::shared_ptr<Thing> getRealParent() const { return getParent(); }
 
 	virtual void setParent(const std::shared_ptr<Thing>& thing) { parent = thing; }
@@ -255,7 +255,7 @@ public:
 	virtual void startDecaying() {}
 
 private:
-	std::shared_ptr<Thing> parent = nullptr;
+	std::weak_ptr<Thing> parent;
 };
 
 #endif // FS_THING_H

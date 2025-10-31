@@ -478,7 +478,7 @@ public:
 	void removeGuild(uint32_t guildId);
 	void decreaseBrowseFieldRef(const Position& pos);
 
-	std::unordered_map<std::shared_ptr<Tile>, std::shared_ptr<Container>> browseFields;
+	std::unordered_map<Tile*, std::shared_ptr<Container>> browseFields;
 
 	void internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable);
 

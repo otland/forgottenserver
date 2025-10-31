@@ -33,15 +33,11 @@ Container::~Container()
 {
 	if (getID() == ITEM_BROWSEFIELD) {
 		if (const auto& tile = getTile()) {
-			g_game.browseFields.erase(tile);
+			g_game.browseFields.erase(tile.get());
 		}
 
 		for (const auto& item : itemList) {
 			item->setParent(getParent());
-		}
-	} else {
-		for (const auto& item : itemList) {
-			item->setParent(nullptr);
 		}
 	}
 }

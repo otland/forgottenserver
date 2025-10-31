@@ -37,24 +37,10 @@ MuteCountMap Player::muteCountMap;
 uint32_t Player::playerAutoID = 0x10000000;
 uint32_t Player::playerIDLimit = 0x20000000;
 
-Player::Player(ProtocolGame_ptr p) :
-    Creature(),
-    lastPing(OTSYS_TIME()),
-    lastPong(lastPing),
-    client(std::move(p)),
-    storeInbox(std::make_shared<StoreInbox>(ITEM_STORE_INBOX))
-{
-	// storeInbox->setParent(shared_from_this());
-}
+Player::Player(ProtocolGame_ptr p) : Creature{}, lastPing{OTSYS_TIME()}, lastPong{lastPing}, client{std::move(p)} {}
 
 Player::~Player()
 {
-	for (const auto& item : inventory) {
-		if (item) {
-			item->setParent(nullptr);
-		}
-	}
-
 	for (const auto& [_, depot] : depotChests) {
 		if (const auto& parent = depot->getRealParent()) {
 			parent->internalRemoveThing(depot->getItem());
@@ -64,8 +50,6 @@ Player::~Player()
 	if (depotLocker) {
 		depotLocker->removeInbox(inbox);
 	}
-
-	storeInbox->setParent(nullptr);
 
 	setWriteItem(nullptr);
 	setEditHouse(nullptr);

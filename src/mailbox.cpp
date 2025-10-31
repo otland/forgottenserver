@@ -6,7 +6,6 @@
 #include "mailbox.h"
 
 #include "game.h"
-#include "inbox.h"
 #include "iologindata.h"
 
 extern Game g_game;
@@ -39,6 +38,38 @@ std::string getReceiver(const std::shared_ptr<Item>& item)
 	std::getline(std::istringstream{text}, name);
 	boost::algorithm::trim(name);
 	return name;
+}
+
+bool sendItem(const std::shared_ptr<Item>& item)
+{
+	const auto& receiver = getReceiver(item);
+	/**No need to continue if its still empty**/
+	if (receiver.empty()) {
+		return false;
+	}
+
+	const auto& player = g_game.getPlayerByName(receiver);
+	if (player) {
+		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
+		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+			g_game.transformItem(item, item->getID() + 1);
+			player->onReceiveMail();
+			return true;
+		}
+	} else {
+		auto tmpPlayer = std::make_shared<Player>(nullptr);
+		if (!IOLoginData::loadPlayerByName(tmpPlayer, receiver)) {
+			return false;
+		}
+
+		if (g_game.internalMoveItem(item->getParent(), tmpPlayer->getInbox(), INDEX_WHEREEVER, item,
+		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
+			g_game.transformItem(item, item->getID() + 1);
+			IOLoginData::savePlayer(tmpPlayer);
+			return true;
+		}
+	}
+	return false;
 }
 
 } // namespace
@@ -82,36 +113,4 @@ void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const 
 	if (auto parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
-}
-
-bool Mailbox::sendItem(const std::shared_ptr<Item>& item) const
-{
-	const auto& receiver = getReceiver(item);
-	/**No need to continue if its still empty**/
-	if (receiver.empty()) {
-		return false;
-	}
-
-	const auto& player = g_game.getPlayerByName(receiver);
-	if (player) {
-		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
-		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
-			g_game.transformItem(item, item->getID() + 1);
-			player->onReceiveMail();
-			return true;
-		}
-	} else {
-		auto tmpPlayer = std::make_shared<Player>(nullptr);
-		if (!IOLoginData::loadPlayerByName(tmpPlayer, receiver)) {
-			return false;
-		}
-
-		if (g_game.internalMoveItem(item->getParent(), tmpPlayer->getInbox(), INDEX_WHEREEVER, item,
-		                            item->getItemCount(), nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
-			g_game.transformItem(item, item->getID() + 1);
-			IOLoginData::savePlayer(tmpPlayer);
-			return true;
-		}
-	}
-	return false;
 }

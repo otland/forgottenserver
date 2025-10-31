@@ -45,9 +45,6 @@ public:
 	                         int32_t index, cylinderlink_t link = LINK_OWNER) override;
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
 	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
-
-private:
-	bool sendItem(const std::shared_ptr<Item>& item) const;
 };
 
 #endif // FS_MAILBOX_H
