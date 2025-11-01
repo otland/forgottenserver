@@ -4773,6 +4773,7 @@ void Game::checkDecay()
 	while (it != end) {
 		auto item = *it;
 		if (!item->canDecay()) {
+			item->setDecaying(DECAYING_FALSE);
 			it = decayItems[bucket].erase(it);
 			continue;
 		}

@@ -38,22 +38,6 @@ uint32_t Player::playerIDLimit = 0x20000000;
 
 Player::Player(ProtocolGame_ptr p) : Creature{}, lastPing{OTSYS_TIME()}, lastPong{lastPing}, client{std::move(p)} {}
 
-Player::~Player()
-{
-	for (const auto& depot : depotChests | std::views::values) {
-		if (const auto& parent = depot->getRealParent()) {
-			parent->internalRemoveThing(depot->getItem());
-		}
-	}
-
-	if (depotLocker) {
-		depotLocker->removeInbox(inbox);
-	}
-
-	setWriteItem(nullptr);
-	setEditHouse(nullptr);
-}
-
 void Player::setID()
 {
 	if (id == 0) {

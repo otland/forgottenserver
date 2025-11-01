@@ -40,8 +40,6 @@ Npc::Npc(const std::string& name) : Creature(), filename("data/npc/" + name + ".
 	reset();
 }
 
-Npc::~Npc() { reset(); }
-
 void Npc::addList() { g_game.addNpc(getNpc()); }
 
 void Npc::removeList() { g_game.removeNpc(getNpc()); }

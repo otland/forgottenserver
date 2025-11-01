@@ -89,7 +89,7 @@ class Npc final : public Creature
 {
 public:
 	explicit Npc(const std::string& name);
-	~Npc();
+	~Npc() = default;
 
 	// non-copyable
 	Npc(const Npc&) = delete;

@@ -33,7 +33,7 @@ public:
 	static int32_t despawnRadius;
 
 	explicit Monster(MonsterType* mType);
-	~Monster();
+	~Monster() = default;
 
 	// non-copyable
 	Monster(const Monster&) = delete;

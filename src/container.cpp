@@ -13,6 +13,15 @@
 #include "spectators.h"
 #include "storeinbox.h"
 
+Container::~Container()
+{
+	if (getID() == ITEM_BROWSEFIELD) {
+		for (const auto& item : itemList) {
+			item->setParent(this->getParent());
+		}
+	}
+}
+
 std::shared_ptr<Item> Container::clone() const
 {
 	auto clone = std::static_pointer_cast<Container>(Item::clone());

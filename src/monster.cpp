@@ -49,12 +49,6 @@ Monster::Monster(MonsterType* mType) : Creature(), nameDescription(mType->nameDe
 	}
 }
 
-Monster::~Monster()
-{
-	clearTargetList();
-	clearFriendList();
-}
-
 void Monster::addList() { g_game.addMonster(getMonster()); }
 
 void Monster::removeList() { g_game.removeMonster(getMonster()); }

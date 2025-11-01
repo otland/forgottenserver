@@ -93,7 +93,7 @@ class Player final : public Creature
 {
 public:
 	explicit Player(ProtocolGame_ptr p);
-	~Player();
+	~Player() = default;
 
 	// non-copyable
 	Player(const Player&) = delete;
