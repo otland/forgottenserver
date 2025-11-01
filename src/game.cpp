@@ -5533,7 +5533,7 @@ void Game::parsePlayerNetworkMessage(uint32_t playerId, uint8_t recvByte, Networ
 std::vector<std::shared_ptr<Item>> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientCount, Player& player)
 {
 	uint16_t count = 0;
-	std::list<std::shared_ptr<Container>> containers{player.getInbox()};
+	auto containers = std::deque<std::shared_ptr<Container>>{player.getInbox()};
 
 	for (const auto& chest : player.depotChests) {
 		if (!chest.second->empty()) {

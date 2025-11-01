@@ -68,6 +68,9 @@ public:
 
 	virtual bool isRemoved() const { return true; }
 
+	virtual std::shared_ptr<Thing> getReceiver() { return nullptr; }
+	virtual std::shared_ptr<const Thing> getReceiver() const { return nullptr; }
+
 	/**
 	 * Query if the thing can add an object
 	 * \param index points to the destination index (inventory slot/container

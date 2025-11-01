@@ -24,6 +24,9 @@ public:
 	const Position& getDestPos() const { return destPos; }
 	void setDestPos(const Position& pos) { destPos = pos; }
 
+	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
+	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
+
 	ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
 	                     const std::shared_ptr<Creature>& = nullptr) const override
 	{

@@ -257,14 +257,14 @@ void Item::setID(uint16_t newid)
 std::shared_ptr<Thing> Item::getTopParent()
 {
 	auto aux = getParent();
-	std::shared_ptr<Thing> prevaux = nullptr;
+	auto prevaux = getReceiver();
 	if (!aux) {
 		return prevaux;
 	}
 
 	while (aux->hasParent()) {
-		prevaux = aux;
-		aux = aux->getParent();
+		prevaux = std::move(aux);
+		aux = prevaux->getParent();
 	}
 
 	if (prevaux) {
@@ -276,11 +276,11 @@ std::shared_ptr<Thing> Item::getTopParent()
 std::shared_ptr<const Thing> Item::getTopParent() const
 {
 	auto aux = getParent();
+	auto prevaux = getReceiver();
 	if (!aux) {
-		return nullptr;
+		return prevaux;
 	}
 
-	std::shared_ptr<Thing> prevaux = nullptr;
 	while (aux->hasParent()) {
 		prevaux = std::move(aux);
 		aux = prevaux->getParent();

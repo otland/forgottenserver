@@ -449,9 +449,8 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 	}
 
 	if (index != INDEX_WHEREEVER) {
-		const auto& itemFromIndex = getItemByIndex(index);
-		if (itemFromIndex) {
-			destItem = itemFromIndex;
+		if (const auto& itemFromIndex = getItemByIndex(index)) {
+			destItem = std::static_pointer_cast<Item>(itemFromIndex->getReceiver());
 		}
 
 		if (destItem) {
