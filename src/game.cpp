@@ -898,7 +898,7 @@ void Game::playerMoveItemByPlayerID(uint32_t playerId, const Position& fromPos, 
 
 void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position& fromPos, uint16_t spriteId,
                           uint8_t fromStackPos, const Position& toPos, uint8_t count,
-                          const std::shared_ptr<Item>& _item, const std::shared_ptr<Thing>& _toThing)
+                          const std::shared_ptr<Item>& itemHint, const std::shared_ptr<Thing>& toThingHint)
 {
 	if (!player->canDoAction()) {
 		uint32_t delay = player->getNextActionTime();
@@ -911,7 +911,7 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 
 	player->setNextActionTask(nullptr);
 
-	std::shared_ptr<Item> item = _item;
+	std::shared_ptr<Item> item = itemHint;
 	if (!item) {
 		uint8_t fromIndex = 0;
 		if (fromPos.x == 0xFFFF) {
@@ -944,7 +944,7 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 		return;
 	}
 
-	auto toThing = _toThing;
+	auto toThing = toThingHint;
 	if (!toThing) {
 		toThing = internalGetThing(player, toPos);
 		if (!toThing) {
@@ -1080,23 +1080,23 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 	}
 }
 
-ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& _fromThing, const std::shared_ptr<Thing>& _toThing,
-                                   int32_t index, const std::shared_ptr<Item>& item, uint32_t count,
-                                   std::shared_ptr<Item>* _moveItem, uint32_t flags /*= 0*/,
-                                   const std::shared_ptr<Creature>& actor /* = nullptr*/,
+ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& fromThingHint,
+                                   const std::shared_ptr<Thing>& toThingHint, int32_t index,
+                                   const std::shared_ptr<Item>& item, uint32_t count, std::shared_ptr<Item>* _moveItem,
+                                   uint32_t flags /*= 0*/, const std::shared_ptr<Creature>& actor /* = nullptr*/,
                                    const std::shared_ptr<Item>& tradeItem /* = nullptr*/,
                                    const Position* fromPos /*= nullptr*/, const Position* toPos /*= nullptr*/)
 {
 	const auto& actorPlayer = actor ? actor->getPlayer() : nullptr;
 	if (actorPlayer && fromPos && toPos) {
 		const ReturnValue ret =
-		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, _fromThing, _toThing);
+		    tfs::events::player::onMoveItem(actorPlayer, item, count, *fromPos, *toPos, fromThingHint, toThingHint);
 		if (ret != RETURNVALUE_NOERROR) {
 			return ret;
 		}
 	}
 
-	auto fromThing = _fromThing;
+	auto fromThing = fromThingHint;
 	const auto& fromTile = fromThing->getTile();
 	if (fromTile) {
 		auto it = browseFields.find(fromTile.get());
@@ -1110,7 +1110,7 @@ ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& _fromThing, con
 	std::shared_ptr<Thing> subThing;
 	int floorN = 0;
 
-	auto toThing = _toThing;
+	auto toThing = toThingHint;
 	while ((subThing = toThing->queryDestination(index, item, toItem, flags)) != toThing) {
 		toThing = subThing;
 
