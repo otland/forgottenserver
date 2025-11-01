@@ -35,7 +35,7 @@ public:
 	    Item{type}, maxSize{size}, unlocked{unlocked}, pagination{pagination}
 	{}
 
-	virtual ~Container();
+	virtual ~Container() = default;
 
 	// non-copyable
 	Container(const Container&) = delete;

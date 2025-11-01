@@ -476,7 +476,6 @@ public:
 	Guild_ptr getGuild(uint32_t id) const;
 	void addGuild(Guild_ptr guild);
 	void removeGuild(uint32_t guildId);
-	void decreaseBrowseFieldRef(const Position& pos);
 
 	std::unordered_map<Tile*, std::shared_ptr<Container>> browseFields;
 

@@ -617,11 +617,6 @@ void Player::closeContainer(uint8_t cid)
 	OpenContainer openContainer = it->second;
 	auto container = openContainer.container;
 	openContainers.erase(it);
-
-	if (container && container->getID() == ITEM_BROWSEFIELD) {
-		// when a player closes a browse field container, the global owner will be cleared by
-		// Game::decreaseBrowseFieldRef
-	}
 }
 
 void Player::setContainerIndex(uint8_t cid, uint16_t index)
