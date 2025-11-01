@@ -407,7 +407,9 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		destItem = nullptr;
 
 		if (const auto& parent = getParent()) {
-			return parent->getContainer();
+			if (const auto& parentContainer = parent->getContainer()) {
+				return parentContainer;
+			}
 		}
 		return shared_from_this();
 	}
@@ -438,7 +440,7 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		}
 
 		if (destItem) {
-			auto subCylinder = destItem;
+			auto subCylinder = std::move(destItem);
 			index = INDEX_WHEREEVER;
 			destItem = nullptr;
 			return subCylinder;

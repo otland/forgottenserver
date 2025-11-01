@@ -40,7 +40,7 @@ Player::Player(ProtocolGame_ptr p) : Creature{}, lastPing{OTSYS_TIME()}, lastPon
 
 Player::~Player()
 {
-	for (const auto& [_, depot] : depotChests) {
+	for (const auto& depot : depotChests | std::views::values) {
 		if (const auto& parent = depot->getRealParent()) {
 			parent->internalRemoveThing(depot->getItem());
 		}
@@ -804,8 +804,8 @@ std::shared_ptr<DepotChest> Player::getDepotChest(uint32_t depotId, bool autoCre
 		return nullptr;
 	}
 
-	const std::shared_ptr<DepotChest>& depotChest =
-	    depotChests.emplace(depotId, std::make_shared<DepotChest>(depotItemId)).first->second;
+	auto depotChest = std::make_shared<DepotChest>(depotItemId);
+	depotChests[depotId] = depotChest;
 	depotChest->setMaxDepotItems(getMaxDepotItems());
 	return depotChest;
 }
@@ -815,17 +815,17 @@ std::shared_ptr<DepotLocker> Player::getDepotLocker()
 	if (!depotLocker) {
 		depotLocker = std::make_shared<DepotLocker>(ITEM_LOCKER);
 		depotLocker->internalAddThing(Item::CreateItem(ITEM_MARKET));
-		depotLocker->internalAddThing(getInbox()->getItem());
+		depotLocker->internalAddThing(getInbox());
 
 		auto depotChest = std::make_shared<DepotChest>(ITEM_DEPOT, false);
 		// adding in reverse to align them from first to last
 		for (int16_t depotId = depotChest->capacity(); depotId >= 0; --depotId) {
 			if (const auto& box = getDepotChest(depotId, true)) {
-				depotChest->internalAddThing(box->getItem());
+				depotChest->internalAddThing(box);
 			}
 		}
 
-		depotLocker->internalAddThing(depotChest->getItem());
+		depotLocker->internalAddThing(depotChest);
 	}
 	return depotLocker;
 }
@@ -3126,8 +3126,8 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 			// check containers
 			std::vector<std::shared_ptr<Container>> containers;
 
-			for (const auto& [_, openContainers] : openContainers) {
-				auto container = openContainers.container;
+			for (const auto& openContainers : openContainers | std::views::values) {
+				const auto& container = openContainers.container;
 				if (!container->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 					containers.push_back(container);
 				}

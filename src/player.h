@@ -1199,7 +1199,7 @@ private:
 	std::unordered_set<uint32_t> VIPList;
 
 	std::map<uint8_t, OpenContainer> openContainers;
-	std::map<uint32_t, const std::shared_ptr<DepotChest>> depotChests;
+	std::map<uint32_t, std::shared_ptr<DepotChest>> depotChests;
 
 	std::map<uint16_t, uint8_t> outfits;
 	std::unordered_set<uint16_t> mounts;

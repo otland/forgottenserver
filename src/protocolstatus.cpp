@@ -10,8 +10,6 @@
 #include "outputmessage.h"
 #include "tasks.h"
 
-#include <ranges>
-
 extern Game g_game;
 
 std::map<Connection::Address, int64_t> ProtocolStatus::ipConnectMap;

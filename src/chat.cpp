@@ -300,7 +300,7 @@ bool Chat::load()
 			}
 
 			UsersMap tempUserMap = std::move(channel.users);
-			for (const auto& [_, user] : tempUserMap) {
+			for (const auto& user : tempUserMap | std::views::values) {
 				channel.addUser(user);
 			}
 			continue;

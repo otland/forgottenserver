@@ -156,7 +156,7 @@ void Game::saveGameState()
 
 	std::cout << "Saving server..." << std::endl;
 
-	for (const auto& [_, player] : players) {
+	for (const auto& player : players | std::views::values) {
 		player->loginPosition = player->getPosition();
 		IOLoginData::savePlayer(player);
 	}
@@ -2734,7 +2734,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	const auto& tradeItemContainer = tradeItem->getContainer();
 	if (tradeItemContainer) {
-		for (const auto& [item, _] : tradeItems) {
+		for (const auto& item : tradeItems | std::views::keys) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -2752,7 +2752,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 			}
 		}
 	} else {
-		for (const auto& [item, _] : tradeItems) {
+		for (const auto& item : tradeItems | std::views::keys) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;

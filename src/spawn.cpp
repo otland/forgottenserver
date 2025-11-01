@@ -247,7 +247,7 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (const auto& [_, monster] : spawnedMap) {
+	for (const auto& monster : spawnedMap | std::views::values) {
 		monster->setSpawn(nullptr);
 	}
 }

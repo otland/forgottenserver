@@ -295,12 +295,7 @@ std::shared_ptr<const Thing> Item::getTopParent() const
 std::shared_ptr<Tile> Item::getTile()
 {
 	auto parent = getTopParent();
-	if (!parent) {
-		return nullptr;
-	}
-
-	// get root thing
-	if (parent->hasParent()) {
+	if (parent && parent->hasParent()) {
 		parent = parent->getParent();
 	}
 	return parent->getTile();
@@ -309,12 +304,7 @@ std::shared_ptr<Tile> Item::getTile()
 std::shared_ptr<const Tile> Item::getTile() const
 {
 	auto parent = getTopParent();
-	if (!parent) {
-		return nullptr;
-	}
-
-	// get root thing
-	if (parent->hasParent()) {
+	if (parent && parent->hasParent()) {
 		parent = parent->getParent();
 	}
 	return parent->getTile();
