@@ -827,8 +827,7 @@ int32_t WeaponDistance::getElementDamage(const std::shared_ptr<const Player>& pl
 
 	int32_t attackValue = elementDamage;
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		auto weapon = player->getWeapon(true);
-		if (weapon) {
+		if (const auto& weapon = player->getWeapon(true)) {
 			attackValue += weapon->getAttack();
 		}
 	}
@@ -856,8 +855,7 @@ int32_t WeaponDistance::getWeaponDamage(const std::shared_ptr<const Player>& pla
 	int32_t attackValue = item->getAttack();
 
 	if (item->getWeaponType() == WEAPON_AMMO) {
-		auto weapon = player->getWeapon(true);
-		if (weapon) {
+		if (const auto& weapon = player->getWeapon(true)) {
 			attackValue += weapon->getAttack();
 		}
 	}
