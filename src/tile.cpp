@@ -48,7 +48,7 @@ bool Tile::hasProperty(const std::shared_ptr<const Item>& exclude, ITEMPROPERTY 
 
 	if (const TileItemVector* items = getItemList()) {
 		for (const auto& item : *items) {
-			if (item && item != exclude && item->hasProperty(prop)) {
+			if (item != exclude && item->hasProperty(prop)) {
 				return true;
 			}
 		}
@@ -728,7 +728,7 @@ ReturnValue Tile::queryRemove(const std::shared_ptr<const Thing>& thing, uint32_
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
 
-	std::shared_ptr<const Item> item = thing->getItem();
+	auto item = thing->getItem();
 	if (!item) {
 		return RETURNVALUE_NOTPOSSIBLE;
 	}
@@ -748,7 +748,6 @@ std::shared_ptr<Thing> Tile::queryDestination(int32_t&, const std::shared_ptr<co
                                               std::shared_ptr<Item>& destItem, uint32_t& flags)
 {
 	std::shared_ptr<Tile> destTile = nullptr;
-	destItem = nullptr;
 
 	if (hasFlag(TILESTATE_FLOORCHANGE_DOWN)) {
 		uint16_t dx = tilePos.x;
@@ -1293,7 +1292,7 @@ uint32_t Tile::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) const
 	const TileItemVector* items = getItemList();
 	if (items) {
 		for (const auto& item : *items) {
-			if (item && item->getID() == itemId) {
+			if (item->getID() == itemId) {
 				count += Item::countByType(item, subType);
 			}
 		}
@@ -1343,7 +1342,7 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 		std::static_pointer_cast<Player>(spectator)->postAddNotification(thing, oldParent, index, LINK_NEAR);
 	}
 
-	// Hold a strong reference during callbacks since the item might be moved/deleted (e.g., mailbox)
+	// add a reference to this item, it may be deleted after being added (mailbox for example)
 	const auto& creature = thing->getCreature();
 	std::shared_ptr<Item> item = nullptr;
 	if (!creature) {

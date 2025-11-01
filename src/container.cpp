@@ -13,22 +13,6 @@
 #include "spectators.h"
 #include "storeinbox.h"
 
-Container::Container(const std::shared_ptr<Tile>& tile) : Container{ITEM_BROWSEFIELD, 30, false, true}
-{
-	TileItemVector* itemVector = tile->getItemList();
-	if (itemVector) {
-		for (const auto& item : *itemVector) {
-			if ((item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) &&
-			    !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
-				itemList.push_front(item);
-				item->setParent(getContainer());
-			}
-		}
-	}
-
-	setParent(tile);
-}
-
 Container::~Container()
 {
 	if (getID() == ITEM_BROWSEFIELD) {

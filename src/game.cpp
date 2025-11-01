@@ -2345,6 +2345,24 @@ void Game::playerCloseContainer(uint32_t playerId, uint8_t cid)
 	player->sendCloseContainer(cid);
 }
 
+static auto createBrowseField(const std::shared_ptr<Tile>& tile)
+{
+	auto browseField = std::make_shared<Container>(ITEM_BROWSEFIELD);
+
+	TileItemVector* itemVector = tile->getItemList();
+	if (itemVector) {
+		for (const auto& item : *itemVector) {
+			if ((item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) &&
+			    !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
+				browseField->addItem(item);
+			}
+		}
+	}
+
+	browseField->setParent(tile);
+	return browseField;
+}
+
 void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 {
 	auto player = getPlayerByID(playerId);
@@ -2371,7 +2389,7 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 
 		auto it = browseFields.find(tile.get());
 		if (it == browseFields.end()) {
-			parentContainer = std::make_shared<Container>(tile);
+			parentContainer = createBrowseField(tile);
 			browseFields[tile.get()] = parentContainer;
 			g_scheduler.addEvent(createSchedulerTask(
 			    30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));
@@ -2547,7 +2565,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 
 	auto it = browseFields.find(tile.get());
 	if (it == browseFields.end()) {
-		container = std::make_shared<Container>(tile);
+		container = createBrowseField(tile);
 		browseFields[tile.get()] = container;
 		g_scheduler.addEvent(
 		    createSchedulerTask(30000, [this, position = tile->getPosition()]() { decreaseBrowseFieldRef(position); }));

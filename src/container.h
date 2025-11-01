@@ -35,8 +35,6 @@ public:
 	    Item{type}, maxSize{size}, unlocked{unlocked}, pagination{pagination}
 	{}
 
-	explicit Container(const std::shared_ptr<Tile>& tile);
-
 	virtual ~Container();
 
 	// non-copyable
