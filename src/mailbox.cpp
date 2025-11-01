@@ -102,7 +102,7 @@ void Mailbox::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 void Mailbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
                                   int32_t index, cylinderlink_t)
 {
-	if (auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
@@ -110,7 +110,7 @@ void Mailbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std
 void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
                                      int32_t index, cylinderlink_t)
 {
-	if (auto parent = getParent()) {
+	if (const auto& parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
