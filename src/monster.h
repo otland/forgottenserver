@@ -13,7 +13,7 @@ class Spawn;
 class Tile;
 
 using CreatureHashSet = std::unordered_set<std::shared_ptr<Creature>>;
-using CreatureList = std::list<std::shared_ptr<Creature>>;
+using CreatureList = std::deque<std::shared_ptr<Creature>>;
 using MonsterIconHashMap = std::unordered_map<MonsterIcon_t, uint16_t>;
 
 enum TargetSearchType_t

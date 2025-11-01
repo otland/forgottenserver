@@ -589,13 +589,12 @@ void Monster::onFollowCreatureComplete()
 {
 	auto it = std::find(targetList.begin(), targetList.end(), followCreature);
 	if (it != targetList.end()) {
-		const auto& target = *it;
-		targetList.erase(it);
-
 		if (hasFollowPath) {
-			targetList.push_front(target);
+			std::iter_swap(it, targetList.begin());
 		} else if (!isSummon()) {
-			targetList.push_back(target);
+			std::iter_swap(it, targetList.end() - 1);
+		} else {
+			targetList.erase(it);
 		}
 	}
 }
