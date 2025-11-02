@@ -1145,7 +1145,7 @@ static void pushCreatures(const std::shared_ptr<Tile>& tile)
 		std::shared_ptr<Monster> lastPushedMonster = nullptr;
 
 		for (size_t i = 0; i < creatures->size();) {
-			if (const auto& monster = creatures->at(i)->getMonster()) {
+			if (const auto monster = creatures->at(i)->getMonster()) {
 				if (monster->isPushable()) {
 					if (monster != lastPushedMonster && pushCreature(monster)) {
 						lastPushedMonster = monster;
