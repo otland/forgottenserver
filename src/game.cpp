@@ -321,7 +321,7 @@ static std::pair<Position, uint8_t> internalGetPosition(const std::shared_ptr<It
 				if (const auto& parent = item->getParent()) {
 					if (const auto& container = parent->getContainer()) {
 						const uint16_t y =
-						    static_cast<uint8_t>(0x40) | static_cast<uint8_t>(player->getContainerID(container));
+						    static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
 						const uint8_t z = container->getThingIndex(item);
 
 						return std::make_pair(Position{x, y, z}, z);
