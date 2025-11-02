@@ -7,7 +7,6 @@
 
 #include "bed.h"
 #include "configmanager.h"
-#include "container.h"
 #include "game.h"
 #include "housetile.h"
 #include "spells.h"
@@ -206,14 +205,12 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 		return RETURNVALUE_NOERROR;
 	}
 
-	if (const auto& container = item->getContainer()) {
-		auto openContainer = container;
-
+	if (auto container = item->getContainer()) {
 		// Handle depot containers
 		if (const auto& depot = container->getDepotLocker()) {
 			const auto& myDepotLocker = player->getDepotLocker();
 			myDepotLocker->setParent(depot->getParent()->getTile());
-			openContainer = myDepotLocker;
+			container = myDepotLocker;
 		}
 
 		// Handle corpse ownership restrictions
@@ -224,12 +221,12 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 		}
 
 		// Toggle container: open if closed, close if already open
-		int32_t oldContainerId = player->getContainerID(openContainer);
+		int32_t oldContainerId = player->getContainerID(container);
 		if (oldContainerId == -1) {
-			player->addContainer(index, openContainer);
-			player->onSendContainer(openContainer);
+			player->addContainer(index, container);
+			player->onSendContainer(container);
 		} else {
-			player->onCloseContainer(openContainer);
+			player->onCloseContainer(container);
 			player->closeContainer(oldContainerId);
 		}
 

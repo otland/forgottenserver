@@ -1026,9 +1026,10 @@ void Player::onRemoveTileItem(const std::shared_ptr<const Tile>& tile, const Pos
 		checkTradeState(item);
 
 		if (tradeItem) {
-			const std::shared_ptr<const Container>& container = item->getContainer();
-			if (container && container->isHoldingItem(tradeItem)) {
-				g_game.internalCloseTrade(getPlayer());
+			if (const auto& container = item->getContainer()) {
+				if (container->isHoldingItem(tradeItem)) {
+					g_game.internalCloseTrade(getPlayer());
+				}
 			}
 		}
 	}
@@ -2794,10 +2795,10 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 	}
 
 	if (destItem) {
-		if (const auto& container = destThing->getContainer()) {
+		if (const auto& receiver = destThing->getReceiver()) {
 			index = INDEX_WHEREEVER;
 			destItem = nullptr;
-			return container;
+			return receiver;
 		}
 	}
 	return getPlayer();

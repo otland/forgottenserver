@@ -318,16 +318,13 @@ void Game::internalGetPosition(const std::shared_ptr<Item>& item, Position& pos,
 	pos.z = 0;
 	stackpos = 0;
 
-	const auto& topParent = item->getTopParent();
-	if (topParent) {
-		const auto& creature = topParent->getCreature();
-		if (creature) {
+	if (const auto& topParent = item->getTopParent()) {
+		if (const auto& creature = topParent->getCreature()) {
 			if (const auto& player = creature->getPlayer()) {
 				pos.x = 0xFFFF;
 
 				const auto& parent = item->getParent();
-				const auto& container = parent->getContainer();
-				if (container) {
+				if (const auto& container = parent->getContainer()) {
 					pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
 					pos.z = container->getThingIndex(item);
 					stackpos = pos.z;
@@ -911,7 +908,7 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 
 	player->setNextActionTask(nullptr);
 
-	std::shared_ptr<Item> item = itemHint;
+	auto item = itemHint;
 	if (!item) {
 		uint8_t fromIndex = 0;
 		if (fromPos.x == 0xFFFF) {
@@ -1097,8 +1094,7 @@ ReturnValue Game::internalMoveItem(const std::shared_ptr<Thing>& fromThingHint,
 	}
 
 	auto fromThing = fromThingHint;
-	const auto& fromTile = fromThing->getTile();
-	if (fromTile) {
+	if (const auto& fromTile = fromThing->getTile()) {
 		auto it = browseFields.find(fromTile.get());
 		if (it != browseFields.end() && it->second == fromThing) {
 			fromThing = fromTile;
@@ -2432,7 +2428,7 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string
 	uint16_t maxTextLength = 0;
 	uint32_t internalWindowTextId = 0;
 
-	auto writeItem = player->getWriteItem(internalWindowTextId, maxTextLength);
+	const auto& writeItem = player->getWriteItem(internalWindowTextId, maxTextLength);
 	if (text.length() > maxTextLength || windowTextId != internalWindowTextId) {
 		return;
 	}
@@ -2443,16 +2439,16 @@ void Game::playerWriteItem(uint32_t playerId, uint32_t windowTextId, std::string
 	}
 
 	const auto& topParent = writeItem->getTopParent();
-
-	const auto& creature = topParent->getCreature();
-	if (creature && creature != player) {
+	if (topParent != player) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
 	}
 
-	if (const auto& owner = creature->getPlayer()) {
-		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
-		return;
+	if (const auto& creature = topParent->getCreature()) {
+		if (creature->getPlayer()) {
+			player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
+			return;
+		}
 	}
 
 	if (!writeItem->getPosition().isInRange(player->getPosition(), 1, 1, 0)) {
@@ -2536,8 +2532,7 @@ void Game::playerBrowseField(uint32_t playerId, const Position& pos)
 	}
 
 	uint8_t dummyContainerId = 0xF - ((pos.x % 3) * 3 + (pos.y % 3));
-	auto openContainer = player->getContainerByID(dummyContainerId);
-	if (openContainer) {
+	if (const auto& openContainer = player->getContainerByID(dummyContainerId)) {
 		player->onCloseContainer(openContainer);
 		player->closeContainer(dummyContainerId);
 	} else {
@@ -2553,7 +2548,7 @@ void Game::playerSeekInContainer(uint32_t playerId, uint8_t containerId, uint16_
 		return;
 	}
 
-	auto container = player->getContainerByID(containerId);
+	const auto& container = player->getContainerByID(containerId);
 	if (!container || !container->hasPagination()) {
 		return;
 	}
@@ -2646,7 +2641,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	auto tradeThing = internalGetThing(player, pos, stackPos, 0, STACKPOS_TOPDOWN_ITEM);
+	const auto& tradeThing = internalGetThing(player, pos, stackPos, 0, STACKPOS_TOPDOWN_ITEM);
 	if (!tradeThing) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		return;
@@ -2766,7 +2761,7 @@ bool Game::internalStartTrade(const std::shared_ptr<Player>& player, const std::
 		tradePartner->tradeState = TRADE_ACKNOWLEDGE;
 		tradePartner->tradePartner = player;
 	} else {
-		auto counterOfferItem = tradePartner->tradeItem;
+		const auto& counterOfferItem = tradePartner->tradeItem;
 		player->sendTradeItemRequest(tradePartner->getName(), counterOfferItem, false);
 		tradePartner->sendTradeItemRequest(player->getName(), tradeItem, false);
 	}
@@ -3994,7 +3989,7 @@ void Game::combatGetTypeInfo(CombatType_t combatType, const std::shared_ptr<Crea
 {
 	switch (combatType) {
 		case COMBAT_PHYSICALDAMAGE: {
-			std::shared_ptr<Item> splash;
+			std::shared_ptr<Item> splash = nullptr;
 			switch (target->getRace()) {
 				case RACE_VENOM:
 					color = TEXTCOLOR_LIGHTGREEN;
@@ -4705,7 +4700,7 @@ void Game::checkDecay()
 
 	auto it = decayItems[bucket].begin(), end = decayItems[bucket].end();
 	while (it != end) {
-		auto item = *it;
+		const auto item = *it;
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);
 			it = decayItems[bucket].erase(it);

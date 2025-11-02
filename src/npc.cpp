@@ -945,7 +945,7 @@ int NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 int NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 {
 	// npc:setFocus(creature)
-	const std::shared_ptr<Creature>& creature = tfs::lua::getCreature(L, 2);
+	const auto& creature = tfs::lua::getCreature(L, 2);
 	if (const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1)) {
 		npc->setCreatureFocus(creature);
 		tfs::lua::pushBoolean(L, true);
