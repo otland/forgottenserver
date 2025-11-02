@@ -260,17 +260,18 @@ std::shared_ptr<const Creature> Tile::getBottomVisibleCreature(const std::shared
 {
 	if (const CreatureVector* creatures = getCreatures()) {
 		if (creature) {
-			for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-				if (creature->canSeeCreature(*it)) {
-					return *it;
+			for (const auto& tileCreature : *creatures | std::views::reverse) {
+				if (creature->canSeeCreature(tileCreature)) {
+					return tileCreature;
 				}
 			}
+
 		} else {
-			for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-				if (!(*it)->isInvisible()) {
-					const auto& player = (*it)->getPlayer();
+			for (const auto& tileCreature : *creatures | std::views::reverse) {
+				if (!tileCreature->isInvisible()) {
+					const auto& player = tileCreature->getPlayer();
 					if (!player || !player->isInGhostMode()) {
-						return *it;
+						return tileCreature;
 					}
 				}
 			}
@@ -374,7 +375,7 @@ void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) &&
 	    item->isCleanable()) {
-		if (!dynamic_cast<HouseTile*>(this)) {
+		if (this->getHouseTile() == nullptr) {
 			g_game.addTileToClean(getTile());
 		}
 	}
@@ -500,12 +501,13 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 				return RETURNVALUE_NOTPOSSIBLE;
 			}
 
-			const CreatureVector* creatures = getCreatures();
-			if (monster->canPushCreatures() && !monster->isSummon()) {
-				if (creatures) {
+			if (const CreatureVector* creatures = getCreatures()) {
+				if (monster->canPushCreatures() && !monster->isSummon()) {
 					for (const auto& tileCreature : *creatures) {
-						if (tileCreature->getPlayer() && tileCreature->getPlayer()->isInGhostMode()) {
-							continue;
+						if (const auto& tilePlayer = tileCreature->getPlayer()) {
+							if (tilePlayer->isInGhostMode()) {
+								continue;
+							}
 						}
 
 						const auto& creatureMonster = tileCreature->getMonster();
@@ -514,11 +516,11 @@ ReturnValue Tile::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, u
 							return RETURNVALUE_NOTPOSSIBLE;
 						}
 					}
-				}
-			} else if (creatures && !creatures->empty()) {
-				for (const auto& tileCreature : *creatures) {
-					if (!tileCreature->isInGhostMode()) {
-						return RETURNVALUE_NOTENOUGHROOM;
+				} else {
+					for (const auto& tileCreature : *creatures) {
+						if (!tileCreature->isInGhostMode()) {
+							return RETURNVALUE_NOTENOUGHROOM;
+						}
 					}
 				}
 			}

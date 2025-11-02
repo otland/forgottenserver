@@ -760,10 +760,11 @@ void Game::playerMoveCreature(const std::shared_ptr<Player>& player, const std::
 				}
 			}
 
-			const auto& movingNpc = movingCreature->getNpc();
-			if (movingNpc && !Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
-				player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-				return;
+			if (const auto& movingNpc = movingCreature->getNpc()) {
+				if (!Spawns::isInZone(movingNpc->getMasterPos(), movingNpc->getMasterRadius(), toPos)) {
+					player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
+					return;
+				}
 			}
 		}
 	}
