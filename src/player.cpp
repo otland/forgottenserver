@@ -1122,12 +1122,12 @@ void Player::onChangeZone(ZoneType_t zone)
 		if (!group->access && isMounted()) {
 			dismount();
 			g_game.internalCreatureChangeOutfit(getPlayer(), defaultOutfit);
-			wasMounted = true;
+			wasMounted_ = true;
 		}
 	} else {
-		if (wasMounted) {
+		if (wasMounted_) {
 			toggleMount(true);
-			wasMounted = false;
+			wasMounted_ = false;
 		}
 	}
 
@@ -2728,7 +2728,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 
 		size_t i = 0;
 		while (i < containers.size()) {
-			const auto& tmpContainer = containers[i++];
+			const auto tmpContainer = containers[i++];
 			if (!autoStack || !isStackable) {
 				// we need to find first empty container as fast as we can for non-stackable items
 				uint32_t n = tmpContainer->capacity() -
@@ -4233,7 +4233,7 @@ void Player::setCurrentMount(uint16_t mountId) { currentMount = mountId; }
 
 bool Player::toggleMount(bool mount)
 {
-	if ((OTSYS_TIME() - lastToggleMount) < 3000 && !wasMounted) {
+	if ((OTSYS_TIME() - lastToggleMount) < 3000 && !wasMounted_) {
 		sendCancelMessage(RETURNVALUE_YOUAREEXHAUSTED);
 		return false;
 	}

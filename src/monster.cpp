@@ -1155,9 +1155,8 @@ static void pushCreatures(const std::shared_ptr<Tile>& tile)
 					monster->changeHealth(-monster->getHealth());
 					removeCount++;
 				}
-
-				++i;
 			}
+			++i;
 		}
 
 		if (removeCount > 0) {

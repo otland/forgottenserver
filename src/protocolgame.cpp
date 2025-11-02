@@ -3077,7 +3077,7 @@ void ProtocolGame::sendOutfitWindow()
 	}
 
 	bool mounted;
-	if (player->wasMounted) {
+	if (player->wasMounted()) {
 		mounted = currentOutfit.lookMount != 0;
 	} else {
 		mounted = player->isMounted();
@@ -3140,7 +3140,7 @@ void ProtocolGame::sendOutfitWindow()
 
 	msg.addByte(0x00); // Try outfit mode (?)
 	msg.addByte(mounted ? 0x01 : 0x00);
-	msg.addByte(player->randomizeMount ? 0x01 : 0x00);
+	msg.addByte(player->getRandomizeMount() ? 0x01 : 0x00);
 	writeToOutputBuffer(msg);
 }
 

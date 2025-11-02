@@ -10684,7 +10684,7 @@ int LuaScriptInterface::luaPlayerSave(lua_State* L)
 {
 	// player:save()
 	if (const auto& player = tfs::lua::getSharedPtr<Player>(L, 1)) {
-		player->loginPosition = player->getPosition();
+		player->setLoginPosition(player->getPosition());
 		tfs::lua::pushBoolean(L, IOLoginData::savePlayer(player));
 	} else {
 		lua_pushnil(L);

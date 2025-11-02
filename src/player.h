@@ -92,6 +92,9 @@ static constexpr int32_t NOTIFY_DEPOT_BOX_RANGE = 1;
 class Player final : public Creature
 {
 public:
+	static uint32_t playerAutoID;
+	static uint32_t playerIDLimit;
+
 	explicit Player(ProtocolGame_ptr p);
 	~Player() = default;
 
@@ -126,6 +129,12 @@ public:
 	bool hasMount(const Mount* mount) const;
 	bool hasMounts() const;
 	void dismount();
+
+	bool wasMounted() const { return wasMounted_; }
+	void setWasMounted(bool wasMounted) { wasMounted_ = wasMounted; }
+
+	bool getRandomizeMount() const { return randomizeMount; }
+	void setRandomizeMount(bool mode) { randomizeMount = mode; }
 
 	void sendFYIBox(const std::string& message)
 	{
@@ -181,6 +190,7 @@ public:
 	bool isInWar(const std::shared_ptr<const Player>& player) const;
 	bool isInWarList(uint32_t guildId) const;
 
+	void setLoginPosition(Position pos) { loginPosition = pos; }
 	void setLastWalkthroughAttempt(int64_t walkthroughAttempt) { lastWalkthroughAttempt = walkthroughAttempt; }
 	void setLastWalkthroughPosition(Position walkthroughPosition) { lastWalkthroughPosition = walkthroughPosition; }
 
@@ -371,6 +381,7 @@ public:
 	void addConditionSuppressions(uint32_t conditions) { conditionSuppressions |= conditions; }
 	void removeConditionSuppressions(uint32_t conditions) { conditionSuppressions &= ~conditions; }
 
+	const auto& getDepotChests() const { return depotChests; }
 	std::shared_ptr<DepotChest> getDepotChest(uint32_t depotId, bool autoCreate);
 	std::shared_ptr<DepotLocker> getDepotLocker();
 	void onReceiveMail() const;
@@ -389,6 +400,9 @@ public:
 	// safe-trade functions
 	void setTradeState(tradestate_t state) { tradeState = state; }
 	tradestate_t getTradeState() const { return tradeState; }
+	void setTradePartner(std::shared_ptr<Player> partner) { tradePartner = std::move(partner); }
+	std::shared_ptr<Player> getTradePartner() { return tradePartner; }
+	void setTradeItem(std::shared_ptr<Item> item) { tradeItem = std::move(item); }
 	std::shared_ptr<Item> getTradeItem() { return tradeItem; }
 
 	// shop functions
@@ -1111,6 +1125,9 @@ public:
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
 	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
 
+	void setNextWalkActionTask(SchedulerTask* task);
+	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
+
 	void setNextAction(int64_t time)
 	{
 		if (time > nextAction) {
@@ -1143,6 +1160,13 @@ public:
 	uint16_t getClientLowLevelBonusDisplay() const { return clientLowLevelBonusDisplay; }
 	void setClientLowLevelBonusDisplay(uint16_t value) { clientLowLevelBonusDisplay = value; }
 
+	int32_t getThingIndex(const std::shared_ptr<const Thing>& thing) const override;
+	size_t getFirstIndex() const override { return CONST_SLOT_FIRST; }
+	size_t getLastIndex() const override { return CONST_SLOT_LAST; }
+	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
+	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
+	std::shared_ptr<Thing> getThing(size_t index) const override;
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1154,9 +1178,6 @@ private:
 	void removeExperience(uint64_t exp, bool sendText = false);
 
 	void updateInventoryWeight();
-
-	void setNextWalkActionTask(SchedulerTask* task);
-	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
 
 	void death(const std::shared_ptr<Creature>& lastHitCreature) override;
 	bool dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
@@ -1184,13 +1205,6 @@ private:
 	void replaceThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;
 
 	void removeThing(const std::shared_ptr<Thing>& thing, uint32_t count) override;
-
-	int32_t getThingIndex(const std::shared_ptr<const Thing>& thing) const override;
-	size_t getFirstIndex() const override { return CONST_SLOT_FIRST; }
-	size_t getLastIndex() const override { return CONST_SLOT_LAST; }
-	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override;
-	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
-	std::shared_ptr<Thing> getThing(size_t index) const override;
 
 	void internalAddThing(const std::shared_ptr<Thing>& thing) override { internalAddThing(0, thing); }
 	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;
@@ -1311,16 +1325,13 @@ private:
 	bool chaseMode = false;
 	bool secureMode = false;
 	bool inMarket = false;
-	bool wasMounted = false;
+	bool wasMounted_ = false;
 	bool ghostMode = false;
 	bool pzLocked = false;
 	bool isConnecting = false;
 	bool addAttackSkillPoint = false;
 	bool inventoryAbilities[CONST_SLOT_LAST + 1] = {};
 	bool randomizeMount = false;
-
-	static uint32_t playerAutoID;
-	static uint32_t playerIDLimit;
 
 	void updateItemsLight(bool internal = false);
 	int32_t getStepSpeed() const override
@@ -1352,11 +1363,7 @@ private:
 	uint16_t getLookCorpse() const override;
 	void getPathSearchParams(const std::shared_ptr<const Creature>& creature, FindPathParams& fpp) const override;
 
-	friend class Game;
-	friend class Npc;
 	friend class LuaScriptInterface;
-	friend class Map;
-	friend class Actions;
 	friend class IOLoginData;
 	friend class ProtocolGame;
 };

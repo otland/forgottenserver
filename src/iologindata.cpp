@@ -254,9 +254,8 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 		}
 	}
 
-	player->loginPosition.x = result->getNumber<uint16_t>("posx");
-	player->loginPosition.y = result->getNumber<uint16_t>("posy");
-	player->loginPosition.z = result->getNumber<uint16_t>("posz");
+	player->setLoginPosition(
+	    {result->getNumber<uint16_t>("posx"), result->getNumber<uint16_t>("posy"), result->getNumber<uint8_t>("posz")});
 
 	player->lastLoginSaved = result->getNumber<time_t>("lastlogin");
 	player->lastLogout = result->getNumber<time_t>("lastlogout");
@@ -273,9 +272,9 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 
 	player->town = town;
 
-	const Position& loginPos = player->loginPosition;
+	const Position& loginPos = player->getLoginPosition();
 	if (loginPos.x == 0 && loginPos.y == 0 && loginPos.z == 0) {
-		player->loginPosition = player->getTemplePosition();
+		player->setLoginPosition(player->getTemplePosition());
 	}
 
 	player->staminaMinutes = result->getNumber<uint16_t>("stamina");

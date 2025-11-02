@@ -101,7 +101,6 @@ public:
 	std::shared_ptr<Thing> internalGetThing(const std::shared_ptr<Player>& player, const Position& pos) const;
 	std::shared_ptr<Thing> internalGetThing(const std::shared_ptr<Player>& player, const Position& pos, int32_t index,
 	                                        uint32_t spriteId, stackPosType_t type) const;
-	static void internalGetPosition(const std::shared_ptr<Item>& item, Position& pos, uint8_t& stackpos);
 
 	static std::string getTradeErrorDescription(ReturnValue ret, const std::shared_ptr<Item>& item);
 

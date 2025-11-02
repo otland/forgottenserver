@@ -157,7 +157,7 @@ void Game::saveGameState()
 	std::cout << "Saving server..." << std::endl;
 
 	for (const auto& player : players | std::views::values) {
-		player->loginPosition = player->getPosition();
+		player->setLoginPosition(player->getPosition());
 		IOLoginData::savePlayer(player);
 	}
 
@@ -311,33 +311,34 @@ std::shared_ptr<Thing> Game::internalGetThing(const std::shared_ptr<Player>& pla
 	return player->getInventoryItem(slot);
 }
 
-void Game::internalGetPosition(const std::shared_ptr<Item>& item, Position& pos, uint8_t& stackpos)
+static std::pair<Position, uint8_t> internalGetPosition(const std::shared_ptr<Item>& item)
 {
-	pos.x = 0;
-	pos.y = 0;
-	pos.z = 0;
-	stackpos = 0;
-
 	if (const auto& topParent = item->getTopParent()) {
 		if (const auto& creature = topParent->getCreature()) {
 			if (const auto& player = creature->getPlayer()) {
-				pos.x = 0xFFFF;
+				const uint16_t x = 0xFFFFu;
 
-				const auto& parent = item->getParent();
-				if (const auto& container = parent->getContainer()) {
-					pos.y = static_cast<uint16_t>(0x40) | static_cast<uint16_t>(player->getContainerID(container));
-					pos.z = container->getThingIndex(item);
-					stackpos = pos.z;
-				} else {
-					pos.y = player->getThingIndex(item);
-					stackpos = pos.y;
+				if (const auto& parent = item->getParent()) {
+					if (const auto& container = parent->getContainer()) {
+						const uint16_t y =
+						    static_cast<uint8_t>(0x40) | static_cast<uint8_t>(player->getContainerID(container));
+						const uint8_t z = container->getThingIndex(item);
+
+						return std::make_pair(Position{x, y, z}, z);
+					}
 				}
-			} else if (const auto& tile = topParent->getTile()) {
-				pos = tile->getPosition();
-				stackpos = tile->getThingIndex(item);
+
+				const uint16_t y = player->getThingIndex(item);
+				return std::make_pair(Position{x, y, 0}, y);
 			}
 		}
+
+		if (const auto& tile = topParent->getTile()) {
+			return std::make_pair(tile->getPosition(), tile->getThingIndex(item));
+		}
 	}
+
+	return std::make_pair(Position{0, 0, 0}, 0);
 }
 
 std::shared_ptr<Creature> Game::getCreatureByID(uint32_t id)
@@ -1024,7 +1025,7 @@ void Game::playerMoveItem(const std::shared_ptr<Player>& player, const Position&
 				}
 
 				// changing the position since its now in the inventory of the player
-				internalGetPosition(moveItem, itemPos, itemStackPos);
+				std::tie(itemPos, itemStackPos) = internalGetPosition(moveItem);
 			}
 
 			std::vector<Direction> listDir;
@@ -1843,12 +1844,12 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t spriteId)
 	Position fromPos, toPos;
 	uint8_t fromStackPos, toStackPos;
 	if (slotItem) {
-		internalGetPosition(slotItem, toPos, toStackPos);
+		std::tie(toPos, toStackPos) = internalGetPosition(slotItem);
 	}
 
 	const auto& equipItem = searchForItem(backpack, it.id);
 	if (equipItem) {
-		internalGetPosition(equipItem, fromPos, fromStackPos);
+		std::tie(fromPos, fromStackPos) = internalGetPosition(equipItem);
 	}
 
 	if (slotItem && slotItem->getID() == it.id &&
@@ -2103,7 +2104,7 @@ void Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 				}
 
 				// changing the position since its now in the inventory of the player
-				internalGetPosition(moveItem, itemPos, itemStackPos);
+				std::tie(itemPos, itemStackPos) = internalGetPosition(moveItem);
 			}
 
 			std::vector<Direction> listDir;
@@ -2263,7 +2264,7 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position& fromPos, uin
 				}
 
 				// changing the position since its now in the inventory of the player
-				internalGetPosition(moveItem, itemPos, itemStackPos);
+				std::tie(itemPos, itemStackPos) = internalGetPosition(moveItem);
 			}
 
 			std::vector<Direction> listDir;
@@ -2740,28 +2741,28 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 bool Game::internalStartTrade(const std::shared_ptr<Player>& player, const std::shared_ptr<Player>& tradePartner,
                               const std::shared_ptr<Item>& tradeItem)
 {
-	if (player->tradeState != TRADE_NONE &&
-	    !(player->tradeState == TRADE_ACKNOWLEDGE && player->tradePartner == tradePartner)) {
+	if (player->getTradeState() != TRADE_NONE &&
+	    !(player->getTradeState() == TRADE_ACKNOWLEDGE && player->getTradePartner() == tradePartner)) {
 		player->sendCancelMessage(RETURNVALUE_YOUAREALREADYTRADING);
 		return false;
-	} else if (tradePartner->tradeState != TRADE_NONE && tradePartner->tradePartner != player) {
+	} else if (tradePartner->getTradeState() != TRADE_NONE && tradePartner->getTradePartner() != player) {
 		player->sendCancelMessage(RETURNVALUE_THISPLAYERISALREADYTRADING);
 		return false;
 	}
 
-	player->tradePartner = tradePartner;
-	player->tradeItem = tradeItem;
-	player->tradeState = TRADE_INITIATED;
+	player->setTradePartner(tradePartner);
+	player->setTradeItem(tradeItem);
+	player->setTradeState(TRADE_INITIATED);
 	tradeItems[tradeItem] = player->getID();
 
 	player->sendTradeItemRequest(player->getName(), tradeItem, true);
 
-	if (tradePartner->tradeState == TRADE_NONE) {
+	if (tradePartner->getTradeState() == TRADE_NONE) {
 		tradePartner->sendTextMessage(MESSAGE_TRADE, fmt::format("{:s} wants to trade with you.", player->getName()));
-		tradePartner->tradeState = TRADE_ACKNOWLEDGE;
-		tradePartner->tradePartner = player;
+		tradePartner->setTradeState(TRADE_ACKNOWLEDGE);
+		tradePartner->setTradePartner(player);
 	} else {
-		const auto& counterOfferItem = tradePartner->tradeItem;
+		const auto& counterOfferItem = tradePartner->getTradeItem();
 		player->sendTradeItemRequest(tradePartner->getName(), counterOfferItem, false);
 		tradePartner->sendTradeItemRequest(player->getName(), tradeItem, false);
 	}
@@ -2780,7 +2781,7 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		return;
 	}
 
-	const auto& tradePartner = player->tradePartner;
+	const auto& tradePartner = player->getTradePartner();
 	if (!tradePartner) {
 		return;
 	}
@@ -2795,8 +2796,8 @@ void Game::playerAcceptTrade(uint32_t playerId)
 			return;
 		}
 
-		const auto& playerTradeItem = player->tradeItem;
-		const auto& partnerTradeItem = tradePartner->tradeItem;
+		const auto& playerTradeItem = player->getTradeItem();
+		const auto& partnerTradeItem = tradePartner->getTradeItem();
 
 		if (!tfs::events::player::onTradeAccept(player, tradePartner, playerTradeItem, partnerTradeItem)) {
 			internalCloseTrade(player, false);
@@ -2864,29 +2865,29 @@ void Game::playerAcceptTrade(uint32_t playerId)
 		if (!isSuccess) {
 			std::string errorDescription;
 
-			if (tradePartner->tradeItem) {
+			if (const auto& tradeItem = tradePartner->getTradeItem()) {
 				errorDescription = getTradeErrorDescription(tradePartnerRet, playerTradeItem);
 				tradePartner->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
-				tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
+				tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
 			}
 
-			if (player->tradeItem) {
+			if (const auto& tradeItem = player->getTradeItem()) {
 				errorDescription = getTradeErrorDescription(playerRet, partnerTradeItem);
 				player->sendTextMessage(MESSAGE_EVENT_ADVANCE, errorDescription);
-				player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
+				tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
 			}
 		}
 
 		tfs::events::player::onTradeCompleted(player, tradePartner, playerTradeItem, partnerTradeItem, isSuccess);
 
 		player->setTradeState(TRADE_NONE);
-		player->tradeItem = nullptr;
-		player->tradePartner = nullptr;
+		player->setTradeItem(nullptr);
+		player->setTradePartner(nullptr);
 		player->sendTradeClose();
 
 		tradePartner->setTradeState(TRADE_NONE);
-		tradePartner->tradeItem = nullptr;
-		tradePartner->tradePartner = nullptr;
+		tradePartner->setTradeItem(nullptr);
+		tradePartner->setTradePartner(nullptr);
 		tradePartner->sendTradeClose();
 	}
 }
@@ -2913,7 +2914,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 		return;
 	}
 
-	const auto& tradePartner = player->tradePartner;
+	const auto& tradePartner = player->getTradePartner();
 	if (!tradePartner) {
 		return;
 	}
@@ -2964,21 +2965,21 @@ void Game::playerCloseTrade(uint32_t playerId)
 
 void Game::internalCloseTrade(const std::shared_ptr<Player>& player, bool sendCancel /* = true*/)
 {
-	const auto& tradePartner = player->tradePartner;
+	const auto& tradePartner = player->getTradePartner();
 	if ((tradePartner && tradePartner->getTradeState() == TRADE_TRANSFER) ||
 	    player->getTradeState() == TRADE_TRANSFER) {
 		return;
 	}
 
-	if (player->getTradeItem()) {
-		tradeItems.erase(player->getTradeItem());
+	if (const auto& tradeItem = player->getTradeItem()) {
+		tradeItems.erase(tradeItem);
 
-		player->tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
-		player->tradeItem = nullptr;
+		tradeItem->onTradeEvent(ON_TRADE_CANCEL, player);
+		player->setTradeItem(nullptr);
 	}
 
 	player->setTradeState(TRADE_NONE);
-	player->tradePartner = nullptr;
+	player->setTradePartner(nullptr);
 
 	if (sendCancel) {
 		player->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
@@ -2986,15 +2987,15 @@ void Game::internalCloseTrade(const std::shared_ptr<Player>& player, bool sendCa
 	player->sendTradeClose();
 
 	if (tradePartner) {
-		if (tradePartner->getTradeItem()) {
-			tradeItems.erase(tradePartner->getTradeItem());
+		if (const auto& tradeItem = tradePartner->getTradeItem()) {
+			tradeItems.erase(tradeItem);
 
-			tradePartner->tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
-			tradePartner->tradeItem = nullptr;
+			tradeItem->onTradeEvent(ON_TRADE_CANCEL, tradePartner);
+			tradePartner->setTradeItem(nullptr);
 		}
 
 		tradePartner->setTradeState(TRADE_NONE);
-		tradePartner->tradePartner = nullptr;
+		tradePartner->setTradePartner(nullptr);
 
 		if (sendCancel) {
 			tradePartner->sendTextMessage(MESSAGE_STATUS_SMALL, "Trade cancelled.");
@@ -3418,7 +3419,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 		return;
 	}
 
-	player->randomizeMount = randomizeMount;
+	player->setRandomizeMount(randomizeMount);
 
 	const Outfit* playerOutfit = Outfits::getInstance().getOutfitByLookType(player->getSex(), outfit.lookType);
 	if (!playerOutfit) {
@@ -3450,7 +3451,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 			player->dismount();
 		}
 
-		player->wasMounted = false;
+		player->setWasMounted(false);
 	}
 
 	if (player->canWear(outfit.lookType, outfit.lookAddons)) {
@@ -3460,7 +3461,7 @@ void Game::playerChangeOutfit(uint32_t playerId, Outfit_t outfit, bool randomize
 			return;
 		}
 
-		if (player->randomizeMount && player->hasMounts()) {
+		if (player->getRandomizeMount() && player->hasMounts()) {
 			const Mount* mount = mounts.getMountByID(player->getRandomMount());
 			outfit.lookMount = mount->clientId;
 		}
@@ -5140,7 +5141,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 
 	uint64_t playerMoney = player->getMoney();
 	if (type == MARKETACTION_SELL) {
-		if (fee > (playerMoney + player->bankBalance)) {
+		if (fee > (playerMoney + player->getBankBalance())) {
 			return;
 		}
 
@@ -5169,18 +5170,18 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t spr
 		const auto debitCash = std::min(playerMoney, fee);
 		const auto debitBank = fee - debitCash;
 		removeMoney(player, debitCash);
-		player->bankBalance -= debitBank;
+		player->setBankBalance(player->getBankBalance() - debitBank);
 	} else {
 		uint64_t totalPrice = static_cast<uint64_t>(price) * amount;
 		totalPrice += fee;
-		if (totalPrice > (playerMoney + player->bankBalance)) {
+		if (totalPrice > (playerMoney + player->getBankBalance())) {
 			return;
 		}
 
 		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
-		player->bankBalance -= debitBank;
+		player->setBankBalance(player->getBankBalance() - debitBank);
 	}
 
 	tfs::iomarket::createOffer(player->getGUID(), static_cast<MarketAction_t>(type), it.id, amount, price, anonymous);
@@ -5208,7 +5209,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 	}
 
 	if (offer.type == MARKETACTION_BUY) {
-		player->bankBalance += offer.price * offer.amount;
+		player->setBankBalance(player->getBankBalance() + offer.price * offer.amount);
 		player->sendMarketEnter();
 	} else {
 		const ItemType& it = Item::items[offer.itemId];
@@ -5319,7 +5320,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 			}
 		}
 
-		player->bankBalance += totalPrice;
+		player->setBankBalance(player->getBankBalance() + totalPrice);
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
@@ -5357,14 +5358,14 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		}
 	} else {
 		uint64_t playerMoney = player->getMoney();
-		if (totalPrice > (playerMoney + player->bankBalance)) {
+		if (totalPrice > (playerMoney + player->getBankBalance())) {
 			return;
 		}
 
 		const auto debitCash = std::min(playerMoney, totalPrice);
 		const auto debitBank = totalPrice - debitCash;
 		removeMoney(player, debitCash);
-		player->bankBalance -= debitBank;
+		player->setBankBalance(player->getBankBalance() - debitBank);
 
 		if (it.stackable) {
 			uint16_t tmpAmount = amount;
@@ -5395,7 +5396,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		const auto& sellerPlayer = getPlayerByGUID(offer.playerId);
 		if (sellerPlayer) {
-			sellerPlayer->bankBalance += totalPrice;
+			sellerPlayer->setBankBalance(sellerPlayer->getBankBalance() + totalPrice);
 		} else {
 			IOLoginData::increaseBankBalance(offer.playerId, totalPrice);
 		}
@@ -5446,7 +5447,7 @@ std::vector<std::shared_ptr<Item>> Game::getMarketItemList(uint16_t wareId, uint
 	uint16_t count = 0;
 	auto containers = std::deque<std::shared_ptr<Container>>{player.getInbox()};
 
-	for (const auto& chest : player.depotChests) {
+	for (const auto& chest : player.getDepotChests()) {
 		if (!chest.second->empty()) {
 			containers.push_front(chest.second);
 		}
