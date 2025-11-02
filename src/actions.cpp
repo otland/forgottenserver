@@ -207,23 +207,23 @@ ReturnValue Actions::internalUseItem(const std::shared_ptr<Player>& player, cons
 	}
 
 	if (const auto& container = item->getContainer()) {
-		std::shared_ptr<Container> openContainer;
+		auto openContainer = container;
 
-		// depot container
+		// Handle depot containers
 		if (const auto& depot = container->getDepotLocker()) {
 			const auto& myDepotLocker = player->getDepotLocker();
 			myDepotLocker->setParent(depot->getParent()->getTile());
 			openContainer = myDepotLocker;
-		} else {
-			openContainer = container;
 		}
 
-		uint32_t corpseOwner = container->getCorpseOwner();
-		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
-			return RETURNVALUE_YOUARENOTTHEOWNER;
+		// Handle corpse ownership restrictions
+		if (uint32_t corpseOwner = container->getCorpseOwner()) {
+			if (!player->canOpenCorpse(corpseOwner)) {
+				return RETURNVALUE_YOUARENOTTHEOWNER;
+			}
 		}
 
-		// open/close container
+		// Toggle container: open if closed, close if already open
 		int32_t oldContainerId = player->getContainerID(openContainer);
 		if (oldContainerId == -1) {
 			player->addContainer(index, openContainer);

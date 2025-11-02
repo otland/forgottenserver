@@ -26,9 +26,10 @@ ReturnValue StoreInbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& th
 			return RETURNVALUE_CANNOTMOVEITEMISNOTSTOREITEM;
 		}
 
-		const auto& container = item->getContainer();
-		if (container && !container->empty()) {
-			return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+		if (const auto& container = item->getContainer()) {
+			if (!container->empty()) {
+				return RETURNVALUE_ITEMCANNOTBEMOVEDTHERE;
+			}
 		}
 	}
 

@@ -19,7 +19,7 @@ void Party::disband()
 		return;
 	}
 
-	auto currentLeader = leader;
+	const auto currentLeader = leader;
 	leader = nullptr;
 
 	currentLeader->setParty(nullptr);
@@ -140,7 +140,7 @@ bool Party::passPartyLeadership(const std::shared_ptr<Player>& player, bool forc
 	broadcastPartyMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} is now the leader of the party.", player->getName()),
 	                      true);
 
-	auto oldLeader = leader;
+	const auto oldLeader = leader;
 	leader = player;
 
 	memberList.insert(memberList.begin(), oldLeader);

@@ -19,8 +19,7 @@ bool canSend(const std::shared_ptr<const Item>& item)
 
 std::string getReceiver(const std::shared_ptr<Item>& item)
 {
-	const auto& container = item->getContainer();
-	if (container) {
+	if (const auto& container = item->getContainer()) {
 		for (const auto& containerItem : container->getItemList()) {
 			if (containerItem->getID() == ITEM_LABEL) {
 				return getReceiver(containerItem);
@@ -48,8 +47,7 @@ bool sendItem(const std::shared_ptr<Item>& item)
 		return false;
 	}
 
-	const auto& player = g_game.getPlayerByName(receiver);
-	if (player) {
+	if (const auto& player = g_game.getPlayerByName(receiver)) {
 		if (g_game.internalMoveItem(item->getParent(), player->getInbox(), INDEX_WHEREEVER, item, item->getItemCount(),
 		                            nullptr, FLAG_NOLIMIT) == RETURNVALUE_NOERROR) {
 			g_game.transformItem(item, item->getID() + 1);
@@ -77,8 +75,7 @@ bool sendItem(const std::shared_ptr<Item>& item)
 ReturnValue Mailbox::queryAdd(int32_t, const std::shared_ptr<const Thing>& thing, uint32_t, uint32_t,
                               const std::shared_ptr<Creature>&) const
 {
-	const auto& item = thing->getItem();
-	if (item && canSend(item)) {
+	if (const auto& item = thing->getItem(); item && canSend(item)) {
 		return RETURNVALUE_NOERROR;
 	}
 	return RETURNVALUE_NOTPOSSIBLE;
@@ -93,8 +90,7 @@ ReturnValue Mailbox::queryMaxCount(int32_t, const std::shared_ptr<const Thing>&,
 
 void Mailbox::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	const auto& item = thing->getItem();
-	if (item && canSend(item)) {
+	if (const auto& item = thing->getItem(); item && canSend(item)) {
 		sendItem(item);
 	}
 }

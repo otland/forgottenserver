@@ -1384,7 +1384,7 @@ bool ConditionDamage::doDamage(const std::shared_ptr<Creature>& creature, int32_
 	damage.primary.value = healthChange;
 	damage.primary.type = Combat::ConditionToDamageType(conditionType);
 
-	auto attacker = g_game.getCreatureByID(owner);
+	const auto& attacker = g_game.getCreatureByID(owner);
 	if (field && creature->getPlayer() && attacker && attacker->getPlayer()) {
 		damage.primary.value = static_cast<int32_t>(std::round(damage.primary.value / 2.));
 	}
@@ -1924,8 +1924,7 @@ void ConditionSpellGroupCooldown::addCondition(const std::shared_ptr<Creature>& 
 		setTicks(condition->getTicks());
 
 		if (subId != 0 && ticks > 0) {
-			const auto& player = creature->getPlayer();
-			if (player) {
+			if (const auto& player = creature->getPlayer()) {
 				player->sendSpellGroupCooldown(static_cast<SpellGroup_t>(subId), ticks);
 			}
 		}

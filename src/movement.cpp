@@ -638,8 +638,7 @@ bool MoveEvent::configureEvent(const pugi::xml_node& node)
 uint32_t MoveEvent::StepInField(const std::shared_ptr<Creature>& creature, const std::shared_ptr<Item>& item,
                                 const Position&)
 {
-	const auto& field = item->getMagicField();
-	if (field) {
+	if (const auto& field = item->getMagicField()) {
 		field->onStepInField(creature);
 		return 1;
 	}
@@ -702,8 +701,7 @@ ReturnValue MoveEvent::EquipItem(MoveEvent* moveEvent, const std::shared_ptr<Pla
 
 	const ItemType& it = Item::items[item->getID()];
 	if (it.transformEquipTo != 0) {
-		auto newItem = g_game.transformItem(item, it.transformEquipTo);
-		g_game.startDecay(newItem);
+		g_game.startDecay(g_game.transformItem(item, it.transformEquipTo));
 	} else {
 		player->setItemAbility(slot, true);
 	}

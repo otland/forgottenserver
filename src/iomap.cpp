@@ -114,7 +114,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 	uint16_t base_y = area_coord.y;
 	uint16_t z = area_coord.z;
 
-	for (auto& tileNode : tileAreaNode.children) {
+	for (const auto& tileNode : tileAreaNode.children) {
 		if (tileNode.type != OTBM_TILE && tileNode.type != OTBM_HOUSETILE) {
 			return std::make_optional("Unknown tile node.");
 		}
@@ -180,7 +180,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 				}
 
 				case OTBM_ATTR_ITEM: {
-					auto item = Item::CreateItem(propStream);
+					const auto item = Item::CreateItem(propStream);
 					if (!item) {
 						return std::make_optional(
 						    fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
@@ -216,7 +216,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 			}
 		}
 
-		for (auto& itemNode : tileNode.children) {
+		for (const auto& itemNode : tileNode.children) {
 			if (itemNode.type != OTBM_ITEM) {
 				return std::make_optional(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Unknown node type.", x, y, z));
 			}
@@ -226,7 +226,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 				return std::make_optional("Invalid item node.");
 			}
 
-			auto item = Item::CreateItem(stream);
+			const auto item = Item::CreateItem(stream);
 			if (!item) {
 				return std::make_optional(fmt::format("[x:{:d}, y:{:d}, z:{:d}] Failed to create item.", x, y, z));
 			}
@@ -273,7 +273,7 @@ std::optional<std::string> parseTileArea(OTB::Loader& loader, const OTB::Node& t
 
 std::optional<std::string> parseTowns(OTB::Loader& loader, const OTB::Node& townsNode, Map& map)
 {
-	for (auto& townNode : townsNode.children) {
+	for (const auto& townNode : townsNode.children) {
 		PropStream propStream;
 		if (townNode.type != OTBM_TOWN) {
 			return std::make_optional("Unknown town node.");
@@ -308,7 +308,7 @@ std::optional<std::string> parseTowns(OTB::Loader& loader, const OTB::Node& town
 std::optional<std::string> parseWaypoints(OTB::Loader& loader, const OTB::Node& waypointsNode, Map& map)
 {
 	PropStream propStream;
-	for (auto& node : waypointsNode.children) {
+	for (const auto& node : waypointsNode.children) {
 		if (node.type != OTBM_WAYPOINT) {
 			return std::make_optional("Unknown waypoint node.");
 		}
@@ -339,7 +339,7 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 	int64_t start = OTSYS_TIME();
 	try {
 		OTB::Loader loader{fileName.string(), OTB::Identifier{{'O', 'T', 'B', 'M'}}};
-		auto& root = loader.parseTree();
+		const auto& root = loader.parseTree();
 
 		PropStream propStream;
 		if (!loader.getProps(root, propStream)) {
@@ -398,25 +398,25 @@ bool IOMap::loadMap(Map* map, const std::filesystem::path& fileName)
 			return false;
 		}
 
-		auto& mapNode = root.children[0];
-		if (auto errorString = parseMapDataAttributes(loader, mapNode, *map, fileName)) {
+		const auto& mapNode = root.children[0];
+		if (const auto& errorString = parseMapDataAttributes(loader, mapNode, *map, fileName)) {
 			setLastErrorString(*errorString);
 			return false;
 		}
 
-		for (auto& mapDataNode : mapNode.children) {
+		for (const auto& mapDataNode : mapNode.children) {
 			if (mapDataNode.type == OTBM_TILE_AREA) {
-				if (auto errorString = parseTileArea(loader, mapDataNode, *map)) {
+				if (const auto& errorString = parseTileArea(loader, mapDataNode, *map)) {
 					setLastErrorString(*errorString);
 					return false;
 				}
 			} else if (mapDataNode.type == OTBM_TOWNS) {
-				if (auto errorString = parseTowns(loader, mapDataNode, *map)) {
+				if (const auto& errorString = parseTowns(loader, mapDataNode, *map)) {
 					setLastErrorString(*errorString);
 					return false;
 				}
 			} else if (mapDataNode.type == OTBM_WAYPOINTS && headerVersion > 1) {
-				if (auto errorString = parseWaypoints(loader, mapDataNode, *map)) {
+				if (const auto& errorString = parseWaypoints(loader, mapDataNode, *map)) {
 					setLastErrorString(*errorString);
 					return false;
 				}

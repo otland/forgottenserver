@@ -359,11 +359,8 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const auto& [item, pid] = it->second;
-
-			const auto& itemContainer = item->getContainer();
-			if (itemContainer) {
+		for (const auto& [item, pid] : itemMap | std::views::reverse | std::views::values) {
+			if (const auto& itemContainer = item->getContainer()) {
 				uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 				if (cid > 0) {
 					openContainersList.emplace(cid, itemContainer);
@@ -373,22 +370,21 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 			if (pid >= CONST_SLOT_FIRST && pid <= CONST_SLOT_LAST) {
 				player->internalAddThing(pid, item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				const auto& container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
 		}
 	}
 
-	for (auto& it : openContainersList) {
-		player->addContainer(it.first - 1, it.second);
-		player->onSendContainer(it.second);
+	for (const auto& [cid, container] : openContainersList) {
+		player->addContainer(cid - 1, container);
+		player->onSendContainer(container);
 	}
 
 	// load depot items
@@ -399,21 +395,18 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const auto& [item, pid] = it->second;
-
+		for (const auto& [item, pid] : itemMap | std::views::reverse | std::views::values) {
 			if (pid < 100) {
 				if (const auto& depotChest = player->getDepotChest(pid, true)) {
 					depotChest->internalAddThing(item);
 				}
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				const auto& container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -428,20 +421,16 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const auto& [item, pid] = it->second;
-
+		for (const auto& [item, pid] : itemMap | std::views::reverse | std::views::values) {
 			if (pid < 100) {
 				player->getInbox()->internalAddThing(item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				const auto& container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -456,20 +445,16 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 	         player->getGUID())))) {
 		loadItems(itemMap, result);
 
-		for (ItemMap::const_reverse_iterator it = itemMap.rbegin(), end = itemMap.rend(); it != end; ++it) {
-			const auto& [item, pid] = it->second;
-
+		for (const auto& [item, pid] : itemMap | std::views::reverse | std::views::values) {
 			if (pid < 100) {
 				player->getStoreInbox()->internalAddThing(item);
 			} else {
-				ItemMap::const_iterator it2 = itemMap.find(pid);
-
+				auto it2 = itemMap.find(pid);
 				if (it2 == itemMap.end()) {
 					continue;
 				}
 
-				const auto& container = it2->second.first->getContainer();
-				if (container) {
+				if (const auto& container = it2->second.first->getContainer()) {
 					container->internalAddThing(item);
 				}
 			}
@@ -535,7 +520,7 @@ bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const I
 
 			if (!openContainers.empty()) {
 				for (const auto& [id, openContainer] : openContainers) {
-					auto opcontainer = openContainer.container;
+					const auto& opcontainer = openContainer.container;
 
 					if (opcontainer == container) {
 						container->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, static_cast<int64_t>(id) + 1);
@@ -563,8 +548,7 @@ bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const I
 		for (const auto& item : container->getItemList()) {
 			++runningId;
 
-			const auto& subContainer = item->getContainer();
-			if (subContainer) {
+			if (const auto& subContainer = item->getContainer()) {
 				containers.emplace_back(subContainer, runningId);
 
 				if (subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER)) {
@@ -573,7 +557,7 @@ bool IOLoginData::saveItems(const std::shared_ptr<const Player>& player, const I
 
 				if (!openContainers.empty()) {
 					for (const auto& [id, openContainer] : openContainers) {
-						auto opcontainer = openContainer.container;
+						const auto& opcontainer = openContainer.container;
 
 						if (opcontainer == subContainer) {
 							subContainer->setIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER, id + 1);
@@ -752,8 +736,7 @@ bool IOLoginData::savePlayer(const std::shared_ptr<Player>& player)
 
 	ItemBlockList itemList;
 	for (int32_t slotId = CONST_SLOT_FIRST; slotId <= CONST_SLOT_LAST; ++slotId) {
-		auto item = player->inventory[slotId];
-		if (item) {
+		if (const auto& item = player->inventory[slotId]) {
 			itemList.emplace_back(slotId, item);
 		}
 	}
@@ -945,8 +928,7 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 		PropStream propStream;
 		propStream.init(attr.data(), attr.size());
 
-		auto item = Item::CreateItem(type, count);
-		if (item) {
+		if (const auto& item = Item::CreateItem(type, count)) {
 			if (!item->unserializeAttr(propStream)) {
 				std::cout << "WARNING: Serialize error in IOLoginData::loadItems" << std::endl;
 			}

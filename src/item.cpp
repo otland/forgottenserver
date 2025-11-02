@@ -70,8 +70,7 @@ std::shared_ptr<Container> Item::CreateItemAsContainer(const uint16_t type, uint
 		return nullptr;
 	}
 
-	auto newItem = std::make_shared<Container>(type, size);
-	return newItem;
+	return std::make_shared<Container>(type, size);
 }
 
 std::shared_ptr<Item> Item::CreateItem(PropStream& propStream)
@@ -149,7 +148,7 @@ Item::Item(const Item& i) : Thing{}, id{i.id}, count{i.count}, loadedFromMap{i.l
 
 std::shared_ptr<Item> Item::clone() const
 {
-	auto item = Item::CreateItem(id, count);
+	const auto item = Item::CreateItem(id, count);
 	if (attributes) {
 		item->attributes.reset(new ItemAttributes(*attributes));
 		if (item->getDuration() > 0) {
@@ -330,8 +329,7 @@ std::shared_ptr<const Player> Item::getHoldingPlayer() const
 		return nullptr;
 	}
 
-	const auto& creature = topParent->getCreature();
-	if (creature) {
+	if (const auto& creature = topParent->getCreature()) {
 		return creature->getPlayer();
 	}
 	return nullptr;

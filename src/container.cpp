@@ -24,25 +24,28 @@ Container::~Container()
 
 std::shared_ptr<Item> Container::clone() const
 {
-	auto clone = std::static_pointer_cast<Container>(Item::clone());
+	const auto clone = std::static_pointer_cast<Container>(Item::clone());
 	if (!clone) {
 		return nullptr;
 	}
 
+	// Clone all items inside this container
 	for (const auto& item : itemList) {
 		clone->addItem(item->clone());
 	}
+
+	// Preserve the total weight of the container
 	clone->totalWeight = totalWeight;
+
 	return clone;
 }
 
 std::shared_ptr<Container> Container::getParentContainer()
 {
-	const auto& thing = getParent();
-	if (!thing) {
-		return nullptr;
+	if (const auto& thing = getParent()) {
+		return thing->getContainer();
 	}
-	return thing->getContainer();
+	return nullptr;
 }
 
 std::string Container::getName(bool addArticle /* = false*/) const
@@ -67,10 +70,6 @@ bool Container::hasContainerParent() const
 
 void Container::addItem(const std::shared_ptr<Item>& item)
 {
-	if (!item) {
-		return;
-	}
-
 	item->setParent(getContainer());
 	itemList.push_back(item);
 }
@@ -105,7 +104,7 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 			return false;
 		}
 
-		auto item = Item::CreateItem(itemPropStream);
+		const auto item = Item::CreateItem(itemPropStream);
 		if (!item) {
 			return false;
 		}
@@ -436,10 +435,10 @@ std::shared_ptr<Thing> Container::queryDestination(int32_t& index, const std::sh
 		}
 
 		if (destItem) {
-			auto subCylinder = std::move(destItem);
+			const auto destThing = std::move(destItem);
 			index = INDEX_WHEREEVER;
 			destItem = nullptr;
-			return subCylinder;
+			return destThing;
 		}
 	}
 
@@ -720,7 +719,7 @@ ContainerIterator Container::iterator() const
 
 void ContainerIterator::advance()
 {
-	if (auto i = cur->get()) {
+	if (const auto i = cur->get()) {
 		if (const auto& c = i->getContainer()) {
 			if (!c->empty()) {
 				over.push_back(c);

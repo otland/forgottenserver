@@ -70,7 +70,7 @@ int64_t OTSYS_TIME();
 
 SpellGroup_t stringToSpellGroup(const std::string& value);
 
-const std::vector<Direction>& getShuffleDirections();
+std::array<Direction, 4> getShuffleDirections();
 
 namespace tfs {
 

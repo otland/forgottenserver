@@ -167,8 +167,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	} else if (listId == SUBOWNER_LIST) {
 		subOwnerList.parseList(textlist);
 	} else {
-		auto door = getDoorByNumber(listId);
-		if (door) {
+		if (const auto& door = getDoorByNumber(listId)) {
 			door->setAccessList(textlist);
 		}
 
@@ -195,11 +194,10 @@ bool House::transferToDepot() const
 		return false;
 	}
 
-	const auto& player = g_game.getPlayerByGUID(owner);
-	if (player) {
+	if (const auto& player = g_game.getPlayerByGUID(owner)) {
 		transferToDepot(player);
 	} else {
-		std::shared_ptr<Player> tmpPlayer = nullptr;
+		auto tmpPlayer = std::make_shared<Player>(nullptr);
 		if (!IOLoginData::loadPlayerById(tmpPlayer, owner)) {
 			return false;
 		}
@@ -222,12 +220,9 @@ bool House::transferToDepot(const std::shared_ptr<Player>& player) const
 			for (const auto& item : *items) {
 				if (item->isPickupable()) {
 					moveItemList.push_back(item);
-				} else {
-					const auto& container = item->getContainer();
-					if (container) {
-						for (const auto& containerItem : container->getItemList()) {
-							moveItemList.push_back(containerItem);
-						}
+				} else if (const auto& container = item->getContainer()) {
+					for (const auto& containerItem : container->getItemList()) {
+						moveItemList.push_back(containerItem);
 					}
 				}
 			}
@@ -251,7 +246,7 @@ bool House::getAccessList(uint32_t listId, std::string& list) const
 		return true;
 	}
 
-	auto door = getDoorByNumber(listId);
+	const auto& door = getDoorByNumber(listId);
 	if (!door) {
 		return false;
 	}
@@ -343,7 +338,7 @@ void House::resetTransferItem()
 
 std::shared_ptr<HouseTransferItem> HouseTransferItem::createHouseTransferItem(House* house)
 {
-	auto transferItem = std::make_shared<HouseTransferItem>(house);
+	const auto transferItem = std::make_shared<HouseTransferItem>(house);
 	transferItem->setID(ITEM_DOCUMENT_RO);
 	transferItem->setSubType(1);
 	transferItem->setSpecialDescription(fmt::format("It is a house transfer document for '{:s}'.", house->getName()));
@@ -420,14 +415,10 @@ void AccessList::parseList(std::string_view list)
 
 void AccessList::addPlayer(const std::string& name)
 {
-	auto player = g_game.getPlayerByName(name);
-	if (player) {
+	if (const auto& player = g_game.getPlayerByName(name)) {
 		playerList.insert(player->getGUID());
-	} else {
-		uint32_t guid = IOLoginData::getGuidByName(name);
-		if (guid != 0) {
-			playerList.insert(guid);
-		}
+	} else if (uint32_t guid = IOLoginData::getGuidByName(name)) {
+		playerList.insert(guid);
 	}
 }
 
@@ -664,7 +655,7 @@ void Houses::payHouses(RentPeriod_t rentPeriod) const
 			if (house->getPayRentWarnings() < 7) {
 				int32_t daysLeft = 7 - house->getPayRentWarnings();
 
-				auto letter = Item::CreateItem(ITEM_LETTER_STAMPED);
+				const auto& letter = Item::CreateItem(ITEM_LETTER_STAMPED);
 				std::string period;
 
 				switch (rentPeriod) {

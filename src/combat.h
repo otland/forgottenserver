@@ -90,7 +90,6 @@ public:
 
 	static bool isInPvpZone(const std::shared_ptr<const Creature>& attacker,
 	                        const std::shared_ptr<const Creature>& target);
-	static bool isProtected(const std::shared_ptr<const Player>& attacker, const std::shared_ptr<const Player>& target);
 	static bool isPlayerCombat(const std::shared_ptr<const Creature>& target);
 	static CombatType_t ConditionToDamageType(ConditionType_t type);
 	static ConditionType_t DamageToConditionType(CombatType_t type);

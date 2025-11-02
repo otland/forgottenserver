@@ -682,7 +682,7 @@ bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Po
 		return false;
 	}
 
-	auto tile = g_game.map.getTile(toPos);
+	const auto& tile = g_game.map.getTile(toPos);
 	if (!tile) {
 		player->sendCancelMessage(RETURNVALUE_NOTPOSSIBLE);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -702,7 +702,7 @@ bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Po
 		return false;
 	}
 
-	auto topVisibleCreature = tile->getBottomVisibleCreature(player);
+	const auto& topVisibleCreature = tile->getBottomVisibleCreature(player);
 	if (blockingCreature && topVisibleCreature) {
 		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
 		g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
@@ -720,12 +720,13 @@ bool Spell::playerRuneSpellCheck(const std::shared_ptr<Player>& player, const Po
 	}
 
 	if (aggressive && needTarget && topVisibleCreature && player->hasSecureMode()) {
-		const auto& targetPlayer = topVisibleCreature->getPlayer();
-		if (targetPlayer && targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE &&
-		    !Combat::isInPvpZone(player, targetPlayer)) {
-			player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
-			g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
-			return false;
+		if (const auto& targetPlayer = topVisibleCreature->getPlayer()) {
+			if (targetPlayer != player && player->getSkullClient(targetPlayer) == SKULL_NONE &&
+			    !Combat::isInPvpZone(player, targetPlayer)) {
+				player->sendCancelMessage(RETURNVALUE_TURNSECUREMODETOATTACKUNMARKEDPLAYERS);
+				g_game.addMagicEffect(player->getPosition(), CONST_ME_POFF);
+				return false;
+			}
 		}
 	}
 	return true;
@@ -984,18 +985,21 @@ bool InstantSpell::castSpell(const std::shared_ptr<Creature>& creature)
 	LuaVariant var;
 
 	if (casterTargetOrDirection) {
-		const auto& target = creature->getAttackedCreature();
-		if (target && !target->isDead()) {
-			if (!canThrowSpell(creature, target)) {
-				return false;
-			}
+		if (const auto& target = creature->getAttackedCreature()) {
+			if (!target->isDead()) {
+				if (!canThrowSpell(creature, target)) {
+					return false;
+				}
 
-			var.setNumber(target->getID());
-			return internalCastSpell(creature, var);
+				var.setNumber(target->getID());
+				return internalCastSpell(creature, var);
+			}
 		}
 
 		return false;
-	} else if (needDirection) {
+	}
+
+	if (needDirection) {
 		var.setPosition(Spells::getCasterPosition(creature, creature->getDirection()));
 	} else {
 		var.setPosition(creature->getPosition());
@@ -1139,8 +1143,8 @@ bool RuneSpell::executeUse(const std::shared_ptr<Player>& player, const std::sha
 
 	if (needTarget) {
 		if (!target) {
-			if (auto toTile = g_game.map.getTile(toPosition)) {
-				if (auto visibleCreature = toTile->getBottomVisibleCreature(player)) {
+			if (const auto& toTile = g_game.map.getTile(toPosition)) {
+				if (const auto& visibleCreature = toTile->getBottomVisibleCreature(player)) {
 					var.setNumber(visibleCreature->getID());
 				}
 			}
@@ -1158,9 +1162,10 @@ bool RuneSpell::executeUse(const std::shared_ptr<Player>& player, const std::sha
 	postCastSpell(player);
 
 	if (var.isNumber()) {
-		const auto& targetCreature = g_game.getCreatureByID(var.getNumber());
-		if (getPzLock() && targetCreature) {
-			player->onAttackedCreature(targetCreature->getCreature());
+		if (const auto& targetCreature = g_game.getCreatureByID(var.getNumber())) {
+			if (getPzLock()) {
+				player->onAttackedCreature(targetCreature->getCreature());
+			}
 		}
 	}
 

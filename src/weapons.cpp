@@ -666,7 +666,7 @@ bool WeaponDistance::useWeapon(const std::shared_ptr<Player>& player, const std:
 	int32_t damageModifier = 0;
 	const ItemType& it = Item::items[id];
 	if (it.weaponType == WEAPON_AMMO) {
-		auto mainWeaponItem = player->getWeapon(true);
+		const auto& mainWeaponItem = player->getWeapon(true);
 		const Weapon* mainWeapon = g_weapons->getWeapon(mainWeaponItem);
 		if (mainWeapon) {
 			damageModifier = mainWeapon->playerWeaponCheck(player, target, mainWeaponItem->getShootRange());
@@ -804,10 +804,12 @@ bool WeaponDistance::useWeapon(const std::shared_ptr<Player>& player, const std:
 
 			for (const auto& dir : destList) {
 				// Blocking tiles or tiles without ground ain't valid targets for spears
-				auto tmpTile = g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z);
-				if (tmpTile && !tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
-					destTile = tmpTile;
-					break;
+				if (const auto& tmpTile =
+				        g_game.map.getTile(destPos.x + dir.first, destPos.y + dir.second, destPos.z)) {
+					if (!tmpTile->hasFlag(TILESTATE_IMMOVABLEBLOCKSOLID) && tmpTile->getGround()) {
+						destTile = tmpTile;
+						break;
+					}
 				}
 			}
 		}

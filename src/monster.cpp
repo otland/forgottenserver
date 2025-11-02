@@ -253,11 +253,11 @@ void Monster::onCreatureMove(const std::shared_ptr<Creature>& creature, const st
 					Direction dir = getDirectionTo(position, followPosition);
 					const Position& checkPosition = getNextPosition(dir, position);
 
-					auto tile = g_game.map.getTile(checkPosition);
-					if (tile) {
-						const auto& topCreature = tile->getTopCreature();
-						if (topCreature && followCreature != topCreature && isOpponent(topCreature)) {
-							selectTarget(topCreature);
+					if (const auto& tile = g_game.map.getTile(checkPosition)) {
+						if (const auto& topCreature = tile->getTopCreature()) {
+							if (followCreature != topCreature && isOpponent(topCreature)) {
+								selectTarget(topCreature);
+							}
 						}
 					}
 				}
@@ -337,7 +337,7 @@ void Monster::removeTarget(const std::shared_ptr<Creature>& creature)
 void Monster::updateTargetList()
 {
 	for (auto friendIterator = friendList.begin(); friendIterator != friendList.end();) {
-		auto creature = *friendIterator;
+		const auto& creature = *friendIterator;
 		if (creature->isDead() || !canSee(creature->getPosition())) {
 			friendIterator = friendList.erase(friendIterator);
 		} else {
@@ -346,7 +346,7 @@ void Monster::updateTargetList()
 	}
 
 	for (auto targetIterator = targetList.begin(); targetIterator != targetList.end();) {
-		auto creature = *targetIterator;
+		const auto& creature = *targetIterator;
 		if (creature->isDead() || !canSee(creature->getPosition())) {
 			targetIterator = targetList.erase(targetIterator);
 		} else {
@@ -990,8 +990,7 @@ void Monster::onThinkDefense(uint32_t interval)
 				continue;
 			}
 
-			auto summon = Monster::createMonster(summonBlock.name);
-			if (summon) {
+			if (const auto& summon = Monster::createMonster(summonBlock.name)) {
 				if (g_game.placeCreature(summon, getPosition(), false, summonBlock.force, summonBlock.effect)) {
 					summon->setDropLoot(false);
 					summon->setSkillLoss(false);
@@ -1075,20 +1074,19 @@ void Monster::onWalkComplete()
 	}
 }
 
-bool Monster::pushItem(const std::shared_ptr<Item>& item)
+static bool pushItem(const std::shared_ptr<Item>& item)
 {
 	const Position& centerPos = item->getPosition();
 
-	static std::vector<std::pair<int32_t, int32_t>> relList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0},
-	                                                        {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
+	static auto relList = std::vector{std::pair{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
 	std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 
-	for (const auto& it : relList) {
-		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
-		auto tile = g_game.map.getTile(tryPos);
-		if (tile && g_game.canThrowObjectTo(centerPos, tryPos, true, true)) {
-			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(),
+	for (const auto& [dx, dy] : relList) {
+		Position tryPos(centerPos.x + dx, centerPos.y + dy, centerPos.z);
+		if (const auto& tile = g_game.map.getTile(tryPos)) {
+			if (g_game.canThrowObjectTo(centerPos, tryPos, true, true) &&
+			    g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(),
 			                            nullptr) == RETURNVALUE_NOERROR) {
 				return true;
 			}
@@ -1097,7 +1095,7 @@ bool Monster::pushItem(const std::shared_ptr<Item>& item)
 	return false;
 }
 
-void Monster::pushItems(const std::shared_ptr<Tile>& tile)
+static void pushItems(const std::shared_ptr<Tile>& tile)
 {
 	// We can not use iterators here since we can push the item to another tile which will invalidate the iterator.
 	// start from the end to minimize the amount of traffic
@@ -1107,13 +1105,14 @@ void Monster::pushItems(const std::shared_ptr<Tile>& tile)
 
 		int32_t downItemSize = tile->getDownItemCount();
 		for (int32_t i = downItemSize; --i >= 0;) {
-			auto item = items->at(i);
-			if (item && item->hasProperty(CONST_PROP_MOVEABLE) &&
-			    (item->hasProperty(CONST_PROP_BLOCKPATH) || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
-				if (moveCount < 20 && Monster::pushItem(item)) {
-					++moveCount;
-				} else if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
-					++removeCount;
+			if (const auto& item = items->at(i)) {
+				if (item->hasProperty(CONST_PROP_MOVEABLE) &&
+				    (item->hasProperty(CONST_PROP_BLOCKPATH) || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
+					if (moveCount < 20 && pushItem(item)) {
+						++moveCount;
+					} else if (g_game.internalRemoveItem(item) == RETURNVALUE_NOERROR) {
+						++removeCount;
+					}
 				}
 			}
 		}
@@ -1124,16 +1123,13 @@ void Monster::pushItems(const std::shared_ptr<Tile>& tile)
 	}
 }
 
-bool Monster::pushCreature(const std::shared_ptr<Creature>& creature)
+static bool pushCreature(const std::shared_ptr<Creature>& creature)
 {
-	static std::vector<Direction> dirList{DIRECTION_NORTH, DIRECTION_WEST, DIRECTION_EAST, DIRECTION_SOUTH};
-	std::shuffle(dirList.begin(), dirList.end(), getRandomGenerator());
-
-	for (Direction dir : dirList) {
+	for (Direction dir : getShuffleDirections()) {
 		const Position& tryPos = Spells::getCasterPosition(creature, dir);
-		auto toTile = g_game.map.getTile(tryPos);
-		if (toTile && !toTile->hasFlag(TILESTATE_BLOCKPATH)) {
-			if (g_game.internalMoveCreature(creature, dir) == RETURNVALUE_NOERROR) {
+		if (const auto& toTile = g_game.map.getTile(tryPos)) {
+			if (!toTile->hasFlag(TILESTATE_BLOCKPATH) &&
+			    g_game.internalMoveCreature(creature, dir) == RETURNVALUE_NOERROR) {
 				return true;
 			}
 		}
@@ -1141,7 +1137,7 @@ bool Monster::pushCreature(const std::shared_ptr<Creature>& creature)
 	return false;
 }
 
-void Monster::pushCreatures(const std::shared_ptr<Tile>& tile)
+static void pushCreatures(const std::shared_ptr<Tile>& tile)
 {
 	// We can not use iterators here since we can push a creature to another tile which will invalidate the iterator.
 	if (CreatureVector* creatures = tile->getCreatures()) {
@@ -1149,18 +1145,19 @@ void Monster::pushCreatures(const std::shared_ptr<Tile>& tile)
 		std::shared_ptr<Monster> lastPushedMonster = nullptr;
 
 		for (size_t i = 0; i < creatures->size();) {
-			const auto& monster = creatures->at(i)->getMonster();
-			if (monster && monster->isPushable()) {
-				if (monster != lastPushedMonster && Monster::pushCreature(monster)) {
-					lastPushedMonster = monster;
-					continue;
+			if (const auto& monster = creatures->at(i)->getMonster()) {
+				if (monster->isPushable()) {
+					if (monster != lastPushedMonster && pushCreature(monster)) {
+						lastPushedMonster = monster;
+						continue;
+					}
+
+					monster->changeHealth(-monster->getHealth());
+					removeCount++;
 				}
 
-				monster->changeHealth(-monster->getHealth());
-				removeCount++;
+				++i;
 			}
-
-			++i;
 		}
 
 		if (removeCount > 0) {
@@ -1211,14 +1208,14 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 
 	if (result && (canPushItems() || canPushCreatures())) {
 		const Position& pos = Spells::getCasterPosition(getMonster(), direction);
-		auto tile = g_game.map.getTile(pos);
-		if (tile) {
+
+		if (const auto& tile = g_game.map.getTile(pos)) {
 			if (canPushItems()) {
-				Monster::pushItems(tile);
+				pushItems(tile);
 			}
 
 			if (canPushCreatures()) {
-				Monster::pushCreatures(tile);
+				pushCreatures(tile);
 			}
 		}
 	}
@@ -1829,10 +1826,11 @@ bool Monster::canWalkTo(Position pos, Direction direction) const
 {
 	pos = getNextPosition(direction, pos);
 	if (isInSpawnRange(pos)) {
-		auto tile = g_game.map.getTile(pos);
-		if (tile && !tile->getTopVisibleCreature(getMonster()) &&
-		    tile->queryAdd(0, getMonster(), 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
-			return true;
+		if (const auto& tile = g_game.map.getTile(pos)) {
+			if (!tile->getTopVisibleCreature(getMonster()) &&
+			    tile->queryAdd(0, getMonster(), 1, FLAG_PATHFINDING) == RETURNVALUE_NOERROR) {
+				return true;
+			}
 		}
 	}
 	return false;
@@ -1856,16 +1854,18 @@ void Monster::death(const std::shared_ptr<Creature>&)
 std::shared_ptr<Item> Monster::getCorpse(const std::shared_ptr<Creature>& lastHitCreature,
                                          const std::shared_ptr<Creature>& mostDamageCreature)
 {
-	auto corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
-	if (corpse) {
-		if (mostDamageCreature) {
-			if (mostDamageCreature->getPlayer()) {
-				corpse->setCorpseOwner(mostDamageCreature->getID());
-			} else {
-				const auto& mostDamageCreatureMaster = mostDamageCreature->getMaster();
-				if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
-					corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
-				}
+	const auto& corpse = Creature::getCorpse(lastHitCreature, mostDamageCreature);
+	if (!corpse) {
+		return nullptr;
+	}
+
+	if (mostDamageCreature) {
+		if (mostDamageCreature->getPlayer()) {
+			corpse->setCorpseOwner(mostDamageCreature->getID());
+		} else {
+			const auto& mostDamageCreatureMaster = mostDamageCreature->getMaster();
+			if (mostDamageCreatureMaster && mostDamageCreatureMaster->getPlayer()) {
+				corpse->setCorpseOwner(mostDamageCreatureMaster->getID());
 			}
 		}
 	}

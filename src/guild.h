@@ -29,7 +29,7 @@ public:
 	uint32_t getId() const { return id; }
 	const std::string& getName() const { return name; }
 
-	void addMember(const std::shared_ptr<Player>& player);
+	void addMember(const std::shared_ptr<Player>& player) { membersOnline.push_back(player); }
 	void removeMember(const std::shared_ptr<Player>& player);
 	const std::list<std::shared_ptr<Player>>& getMembersOnline() const { return membersOnline; }
 	uint32_t getMemberCount() const { return memberCount; }

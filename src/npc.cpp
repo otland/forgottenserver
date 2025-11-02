@@ -28,7 +28,7 @@ void Npcs::reload()
 
 std::shared_ptr<Npc> Npc::createNpc(const std::string& name)
 {
-	auto npc = std::make_shared<Npc>(name);
+	const auto npc = std::make_shared<Npc>(name);
 	if (!npc->load()) {
 		return nullptr;
 	}
@@ -316,8 +316,7 @@ void Npc::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClasses 
 	}
 
 	// only players for script events
-	const auto& player = creature->getPlayer();
-	if (player) {
+	if (const auto& player = creature->getPlayer()) {
 		if (npcEventHandler) {
 			npcEventHandler->onCreatureSay(player, type, text);
 		}
@@ -431,7 +430,7 @@ bool Npc::canWalkTo(const Position& fromPos, Direction dir) const
 		return false;
 	}
 
-	auto tile = g_game.map.getTile(toPos);
+	const auto& tile = g_game.map.getTile(toPos);
 	if (!tile || tile->queryAdd(0, getNpc(), 1, 0) != RETURNVALUE_NOERROR) {
 		return false;
 	}
@@ -518,7 +517,7 @@ void Npc::removeShopPlayer(const std::shared_ptr<Player>& player) { shopPlayerSe
 void Npc::closeAllShopWindows()
 {
 	while (!shopPlayerSet.empty()) {
-		auto player = *shopPlayerSet.begin();
+		const auto player = *shopPlayerSet.begin();
 		if (!player->closeShopWindow()) {
 			removeShopPlayer(player);
 		}
@@ -602,8 +601,7 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 
 	const std::string& text = tfs::lua::getString(L, 1);
 	if (lua_gettop(L) >= 2) {
-		auto target = tfs::lua::getPlayer(L, 2);
-		if (target) {
+		if (const auto& target = tfs::lua::getPlayer(L, 2)) {
 			npc->doSayToPlayer(target, text);
 			return 0;
 		}
@@ -616,8 +614,7 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 int NpcScriptInterface::luaActionMove(lua_State* L)
 {
 	// selfMove(direction)
-	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
-	if (npc) {
+	if (const auto& npc = tfs::lua::getScriptEnv()->getNpc()) {
 		g_game.internalMoveCreature(npc, tfs::lua::getNumber<Direction>(L, 1));
 	}
 	return 0;
@@ -671,7 +668,7 @@ int NpcScriptInterface::luaActionFollow(lua_State* L)
 		return 1;
 	}
 
-	auto followedPlayer = tfs::lua::getPlayer(L, 1);
+	const auto& followedPlayer = tfs::lua::getPlayer(L, 1);
 	if (followedPlayer) {
 		npc->setFollowCreature(followedPlayer);
 		tfs::lua::pushBoolean(L, npc->canFollowCreature(followedPlayer));
@@ -696,7 +693,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 
 	uint32_t uid = tfs::lua::getNumber<uint32_t>(L, -1);
 
-	auto thing = env->getThingByUID(uid);
+	const auto& thing = env->getThingByUID(uid);
 	if (!thing) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
 		lua_pushnil(L);
@@ -716,8 +713,7 @@ int NpcScriptInterface::luagetDistanceTo(lua_State* L)
 int NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 {
 	// doNpcSetCreatureFocus(cid)
-	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
-	if (npc) {
+	if (const auto& npc = tfs::lua::getScriptEnv()->getNpc()) {
 		npc->setCreatureFocus(tfs::lua::getCreature(L, -1));
 	}
 	return 0;
@@ -726,8 +722,7 @@ int NpcScriptInterface::luaSetNpcFocus(lua_State* L)
 int NpcScriptInterface::luaGetNpcCid(lua_State* L)
 {
 	// getNpcCid()
-	const auto& npc = tfs::lua::getScriptEnv()->getNpc();
-	if (npc) {
+	if (const auto& npc = tfs::lua::getScriptEnv()->getNpc()) {
 		lua_pushnumber(L, npc->getID());
 	} else {
 		lua_pushnil(L);
@@ -802,7 +797,7 @@ int NpcScriptInterface::luaOpenShopWindow(lua_State* L)
 	}
 	lua_pop(L, 1);
 
-	auto player = tfs::lua::getPlayer(L, -1);
+	const auto& player = tfs::lua::getPlayer(L, -1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -837,7 +832,7 @@ int NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 		return 1;
 	}
 
-	auto player = tfs::lua::getPlayer(L, 1);
+	const auto& player = tfs::lua::getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -847,10 +842,8 @@ int NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 	int32_t buyCallback;
 	int32_t sellCallback;
 
-	auto merchant = player->getShopOwner(buyCallback, sellCallback);
-
 	// Check if we actually have a shop window with this player.
-	if (merchant == npc) {
+	if (const auto& merchant = player->getShopOwner(buyCallback, sellCallback); merchant == npc) {
 		player->sendCloseShop();
 
 		if (buyCallback != -1) {
@@ -872,7 +865,7 @@ int NpcScriptInterface::luaCloseShopWindow(lua_State* L)
 int NpcScriptInterface::luaDoSellItem(lua_State* L)
 {
 	// doSellItem(cid, itemid, amount, <optional> subtype, <optional> actionid, <optional: default: 1> canDropOnMap)
-	auto player = tfs::lua::getPlayer(L, 1);
+	const auto& player = tfs::lua::getPlayer(L, 1);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -899,7 +892,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 	if (it.stackable) {
 		while (amount > 0) {
 			int32_t stackCount = std::min<int32_t>(ITEM_STACK_SIZE, amount);
-			auto item = Item::CreateItem(it.id, stackCount);
+			const auto item = Item::CreateItem(it.id, stackCount);
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
 			}
@@ -914,7 +907,7 @@ int NpcScriptInterface::luaDoSellItem(lua_State* L)
 		}
 	} else {
 		for (uint32_t i = 0; i < amount; ++i) {
-			auto item = Item::CreateItem(it.id, subType);
+			const auto item = Item::CreateItem(it.id, subType);
 			if (item && actionId != 0) {
 				item->setActionId(actionId);
 			}
@@ -936,8 +929,7 @@ int NpcScriptInterface::luaNpcGetParameter(lua_State* L)
 {
 	// npc:getParameter(key)
 	const std::string& key = tfs::lua::getString(L, 2);
-	auto npc = tfs::lua::getSharedPtr<Npc>(L, 1);
-	if (npc) {
+	if (const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1)) {
 		auto it = npc->parameters.find(key);
 		if (it != npc->parameters.end()) {
 			tfs::lua::pushString(L, it->second);
@@ -954,8 +946,7 @@ int NpcScriptInterface::luaNpcSetFocus(lua_State* L)
 {
 	// npc:setFocus(creature)
 	const std::shared_ptr<Creature>& creature = tfs::lua::getCreature(L, 2);
-	auto npc = tfs::lua::getSharedPtr<Npc>(L, 1);
-	if (npc) {
+	if (const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1)) {
 		npc->setCreatureFocus(creature);
 		tfs::lua::pushBoolean(L, true);
 	} else {
@@ -973,14 +964,14 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 		return 1;
 	}
 
-	auto player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	auto npc = tfs::lua::getSharedPtr<Npc>(L, 1);
+	const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (!npc) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -1033,14 +1024,14 @@ int NpcScriptInterface::luaNpcOpenShopWindow(lua_State* L)
 int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 {
 	// npc:closeShopWindow(player)
-	auto player = tfs::lua::getPlayer(L, 2);
+	const auto& player = tfs::lua::getPlayer(L, 2);
 	if (!player) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
 
-	auto npc = tfs::lua::getSharedPtr<Npc>(L, 1);
+	const auto& npc = tfs::lua::getSharedPtr<Npc>(L, 1);
 	if (!npc) {
 		reportErrorFunc(L, tfs::lua::getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
 		tfs::lua::pushBoolean(L, false);
@@ -1050,8 +1041,7 @@ int NpcScriptInterface::luaNpcCloseShopWindow(lua_State* L)
 	int32_t buyCallback;
 	int32_t sellCallback;
 
-	auto merchant = player->getShopOwner(buyCallback, sellCallback);
-	if (merchant == npc) {
+	if (const auto& merchant = player->getShopOwner(buyCallback, sellCallback); merchant == npc) {
 		player->sendCloseShop();
 		if (buyCallback != -1) {
 			luaL_unref(L, LUA_REGISTRYINDEX, buyCallback);

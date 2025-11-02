@@ -33,14 +33,13 @@ void Teleport::serializeAttr(PropWriteStream& propWriteStream) const
 
 void Teleport::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 {
-	auto destTile = g_game.map.getTile(destPos);
+	const auto& destTile = g_game.map.getTile(destPos);
 	if (!destTile) {
 		return;
 	}
 
 	// Prevent infinite loop
-	auto destTeleport = destTile->getTeleportItem();
-	if (destTeleport) {
+	if (auto destTeleport = destTile->getTeleportItem()) {
 		auto lastPositions = std::vector{getPosition()};
 
 		while (true) {
@@ -50,7 +49,7 @@ void Teleport::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 				return;
 			}
 
-			auto tile = g_game.map.getTile(nextPos);
+			const auto& tile = g_game.map.getTile(nextPos);
 			if (!tile) {
 				break;
 			}

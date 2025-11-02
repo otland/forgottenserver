@@ -86,21 +86,21 @@ std::shared_ptr<Thing> HouseTile::queryDestination(int32_t& index, const std::sh
 		if (const auto& player = creature->getPlayer()) {
 			if (!house->isInvited(player)) {
 				const Position& entryPos = house->getEntryPosition();
-				auto destTile = g_game.map.getTile(entryPos);
-				if (!destTile) {
-					std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
-					          << " - Name: " << house->getName() << " - House id: " << house->getId()
-					          << " - Tile not found: " << entryPos << std::endl;
-
-					destTile = g_game.map.getTile(player->getTemplePosition());
-					if (!destTile) {
-						destTile = Tile::nullptrTile;
-					}
-				}
-
 				index = -1;
 				destItem = nullptr;
-				return destTile;
+
+				if (const auto& destTile = g_game.map.getTile(entryPos)) {
+					return destTile;
+				}
+
+				std::cout << "Error: [HouseTile::queryDestination] House entry not correct"
+				          << " - Name: " << house->getName() << " - House id: " << house->getId()
+				          << " - Tile not found: " << entryPos << std::endl;
+
+				if (const auto& destTile = g_game.map.getTile(player->getTemplePosition())) {
+					return destTile;
+				}
+				return Tile::nullptrTile;
 			}
 		}
 	}

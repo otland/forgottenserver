@@ -29,9 +29,10 @@ void TrashHolder::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 
 	const ItemType& it = Item::items[id];
 	if (item->isHangable() && it.isGroundTile()) {
-		const auto& tile = getTile();
-		if (tile && tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
-			return;
+		if (const auto& tile = getTile()) {
+			if (tile->hasFlag(TILESTATE_SUPPORTS_HANGABLE)) {
+				return;
+			}
 		}
 	}
 
@@ -45,11 +46,15 @@ void TrashHolder::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 void TrashHolder::postAddNotification(const std::shared_ptr<Thing>& thing,
                                       const std::shared_ptr<const Thing>& oldParent, int32_t index, cylinderlink_t)
 {
-	getParent()->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	if (const auto& parent = getParent()) {
+		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
+	}
 }
 
 void TrashHolder::postRemoveNotification(const std::shared_ptr<Thing>& thing,
                                          const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
 {
-	getParent()->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	if (const auto& parent = getParent()) {
+		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
+	}
 }

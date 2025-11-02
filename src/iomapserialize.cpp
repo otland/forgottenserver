@@ -128,8 +128,7 @@ bool IOMapSerialize::loadItem(PropStream& propStream, const std::shared_ptr<Thin
 	const ItemType& iType = Item::items[id];
 	if (iType.moveable || iType.forceSerialize || !tile) {
 		// create a new item
-		auto item = Item::CreateItem(id);
-		if (item) {
+		if (const auto item = Item::CreateItem(id)) {
 			if (item->unserializeAttr(propStream)) {
 				const auto& container = item->getContainer();
 				if (container && !loadContainer(propStream, container)) {
@@ -174,11 +173,10 @@ bool IOMapSerialize::loadItem(PropStream& propStream, const std::shared_ptr<Thin
 			}
 		} else {
 			// The map changed since the last save, just read the attributes
-			auto dummy = Item::CreateItem(id);
-			if (dummy) {
+			if (const auto dummy = Item::CreateItem(id)) {
 				dummy->unserializeAttr(propStream);
-				const auto& container = dummy->getContainer();
-				if (container) {
+
+				if (const auto& container = dummy->getContainer()) {
 					if (!loadContainer(propStream, container)) {
 						return false;
 					}

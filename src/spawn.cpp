@@ -170,7 +170,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 					continue;
 				}
 
-				auto npc = Npc::createNpc(nameAttribute.as_string());
+				const auto& npc = Npc::createNpc(nameAttribute.as_string());
 				if (!npc) {
 					continue;
 				}
@@ -307,7 +307,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, spawnBlock_t sb, bool startup /* = fa
 bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& pos, Direction dir,
                          bool startup /*= false*/)
 {
-	auto monster = std::make_shared<Monster>(mType);
+	const auto monster = std::make_shared<Monster>(mType);
 	if (!tfs::events::monster::onSpawn(monster, pos, startup, false)) {
 		return false;
 	}

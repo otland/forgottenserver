@@ -69,7 +69,7 @@ std::shared_ptr<BedItem> BedItem::getNextBedItem() const
 	Direction dir = Item::items[id].bedPartnerDir;
 	Position targetPos = getNextPosition(dir, getPosition());
 
-	auto tile = g_game.map.getTile(targetPos);
+	const auto& tile = g_game.map.getTile(targetPos);
 	if (!tile) {
 		return nullptr;
 	}

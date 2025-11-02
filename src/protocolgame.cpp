@@ -150,7 +150,7 @@ void ProtocolGame::release()
 void ProtocolGame::login(uint32_t characterId, uint32_t accountId, OperatingSystem_t operatingSystem)
 {
 	// dispatcher thread
-	auto foundPlayer = g_game.getPlayerByGUID(characterId);
+	const auto& foundPlayer = g_game.getPlayerByGUID(characterId);
 	if (!foundPlayer || getBoolean(ConfigManager::ALLOW_CLONES)) {
 		player = std::make_shared<Player>(getThis());
 
@@ -260,7 +260,7 @@ void ProtocolGame::connect(uint32_t playerId, OperatingSystem_t operatingSystem)
 	// dispatcher thread
 	eventConnect = 0;
 
-	auto foundPlayer = g_game.getPlayerByID(playerId);
+	const auto& foundPlayer = g_game.getPlayerByID(playerId);
 	if (!foundPlayer || foundPlayer->client) {
 		disconnectClient("You are already logged in.");
 		return;
@@ -803,8 +803,7 @@ void ProtocolGame::parsePacket(NetworkMessage& msg)
 void ProtocolGame::GetTileDescription(const std::shared_ptr<const Tile>& tile, NetworkMessage& msg)
 {
 	int32_t count;
-	const auto& ground = tile->getGround();
-	if (ground) {
+	if (const auto& ground = tile->getGround()) {
 		msg.addItem(ground);
 		count = 1;
 	} else {
@@ -880,8 +879,7 @@ void ProtocolGame::GetFloorDescription(NetworkMessage& msg, int32_t x, int32_t y
 {
 	for (int32_t nx = 0; nx < width; nx++) {
 		for (int32_t ny = 0; ny < height; ny++) {
-			auto tile = g_game.map.getTile(x + nx + offset, y + ny + offset, z);
-			if (tile) {
+			if (const auto& tile = g_game.map.getTile(x + nx + offset, y + ny + offset, z)) {
 				if (skip >= 0) {
 					msg.addByte(skip);
 					msg.addByte(0xFF);
@@ -913,7 +911,7 @@ void ProtocolGame::checkCreatureAsKnown(uint32_t id, bool& known, uint32_t& remo
 	if (knownCreatureSet.size() > 1300) {
 		// Look for a creature to remove
 		for (auto it = knownCreatureSet.begin(), end = knownCreatureSet.end(); it != end; ++it) {
-			auto creature = g_game.getCreatureByID(*it);
+			const auto& creature = g_game.getCreatureByID(*it);
 			if (!canSee(creature)) {
 				removedKnown = *it;
 				knownCreatureSet.erase(it);
@@ -2105,7 +2103,7 @@ void ProtocolGame::sendMarketEnter()
 	}
 
 	do {
-		auto container = containerList.back();
+		const auto container = containerList.back();
 		containerList.pop_back();
 
 		for (const auto& item : container->getItemList()) {
@@ -2353,12 +2351,11 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const std
 		auto containerList = std::deque{tradeContainer};
 		auto itemList = std::deque{std::static_pointer_cast<const Item>(tradeContainer)};
 		while (!containerList.empty()) {
-			auto container = containerList.front();
+			const auto container = containerList.front();
 			containerList.pop_front();
 
 			for (const auto& item : container->getItemList()) {
-				const auto& container = item->getContainer();
-				if (container) {
+				if (const auto& container = item->getContainer()) {
 					containerList.push_back(container);
 				}
 				itemList.push_back(item);
@@ -3312,13 +3309,8 @@ void ProtocolGame::sendVIPEntries()
 	const std::forward_list<VIPEntry>& vipEntries = IOLoginData::getVIPEntries(player->getAccount());
 
 	for (const VIPEntry& entry : vipEntries) {
-		VipStatus_t vipStatus = VIPSTATUS_ONLINE;
-
 		const auto& vipPlayer = g_game.getPlayerByGUID(entry.guid);
-
-		if (!vipPlayer || !player->canSeeCreature(vipPlayer)) {
-			vipStatus = VIPSTATUS_OFFLINE;
-		}
+		VipStatus_t vipStatus = vipPlayer && player->canSeeCreature(vipPlayer) ? VIPSTATUS_ONLINE : VIPSTATUS_OFFLINE;
 
 		sendVIP(entry.guid, entry.name, entry.description, entry.icon, entry.notify, vipStatus);
 	}
@@ -3429,15 +3421,11 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
                                uint32_t remove)
 {
 	CreatureType_t creatureType = creature->getType();
-	const auto& otherPlayer = creature->getPlayer();
-	std::shared_ptr<const Player> masterPlayer = nullptr;
 	uint32_t masterId = 0;
 
 	if (creatureType == CREATURETYPE_MONSTER) {
-		const auto& master = creature->getMaster();
-		if (master) {
-			masterPlayer = master->getPlayer();
-			if (masterPlayer) {
+		if (const auto& master = creature->getMaster()) {
+			if (const auto& masterPlayer = master->getPlayer()) {
 				masterId = master->getID();
 				creatureType = CREATURETYPE_SUMMON_OWN;
 			}
@@ -3486,6 +3474,8 @@ void ProtocolGame::AddCreature(NetworkMessage& msg, const std::shared_ptr<const 
 	AddCreatureIcons(msg, creature);
 
 	msg.addByte(player->getSkullClient(creature));
+
+	const auto& otherPlayer = creature->getPlayer();
 	msg.addByte(player->getPartyShield(otherPlayer));
 
 	if (!known) {

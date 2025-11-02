@@ -767,22 +767,22 @@ public:
 	{
 		if (!sendAll) {
 			// update one slot
-			const auto& slotThing = getThing(CONST_SLOT_RIGHT);
-			if (slotThing) {
-				const auto& slotItem = slotThing->getItem();
-				if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
-					sendInventoryItem(CONST_SLOT_RIGHT, slotItem);
+			if (const auto& slotThing = getThing(CONST_SLOT_RIGHT)) {
+				if (const auto& slotItem = slotThing->getItem()) {
+					if (slotItem->getWeaponType() == WEAPON_QUIVER) {
+						sendInventoryItem(CONST_SLOT_RIGHT, slotItem);
+					}
 				}
 			}
 		} else {
 			// update all slots
-			std::vector<slots_t> slots = {CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_AMMO};
+			constexpr auto slots = std::array{CONST_SLOT_RIGHT, CONST_SLOT_LEFT, CONST_SLOT_AMMO};
 			for (const auto& slot : slots) {
-				const auto& slotThing = getThing(slot);
-				if (slotThing) {
-					const auto& slotItem = slotThing->getItem();
-					if (slotItem && slotItem->getWeaponType() == WEAPON_QUIVER) {
-						sendInventoryItem(slot, slotItem);
+				if (const auto& slotThing = getThing(slot)) {
+					if (const auto& slotItem = slotThing->getItem()) {
+						if (slotItem->getWeaponType() == WEAPON_QUIVER) {
+							sendInventoryItem(slot, slotItem);
+						}
 					}
 				}
 			}
@@ -1254,7 +1254,7 @@ private:
 	SchedulerTask* walkTask = nullptr;
 	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
-	std::shared_ptr<StoreInbox> storeInbox;
+	std::shared_ptr<StoreInbox> storeInbox = nullptr;
 	DepotLocker_ptr depotLocker = nullptr;
 
 	uint32_t inventoryWeight = 0;

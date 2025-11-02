@@ -247,8 +247,7 @@ bool Creature::getNextStep(Direction& dir, uint32_t&)
 
 void Creature::startAutoWalk()
 {
-	const auto& player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (const auto& player = getPlayer(); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -258,8 +257,7 @@ void Creature::startAutoWalk()
 
 void Creature::startAutoWalk(Direction direction)
 {
-	const auto& player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (const auto& player = getPlayer(); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -275,8 +273,7 @@ void Creature::startAutoWalk(const std::vector<Direction>& listDir)
 		return;
 	}
 
-	const auto& player = getPlayer();
-	if (player && player->isMovementBlocked()) {
+	if (const auto& player = getPlayer(); player && player->isMovementBlocked()) {
 		player->sendCancelWalk();
 		return;
 	}
@@ -449,10 +446,11 @@ CreatureVector Creature::getKillers()
 	CreatureVector killers;
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
-	for (const auto& it : damageMap) {
-		auto attacker = g_game.getCreatureByID(it.first);
-		if (attacker && attacker.get() != this && timeNow - it.second.ticks <= inFightTicks) {
-			killers.push_back(attacker);
+	for (const auto& [id, count] : damageMap) {
+		if (const auto& attacker = g_game.getCreatureByID(id)) {
+			if (attacker.get() != this && timeNow - count.ticks <= inFightTicks) {
+				killers.push_back(attacker);
+			}
 		}
 	}
 	return killers;
@@ -462,7 +460,7 @@ void Creature::onDeath()
 {
 	bool lastHitUnjustified = false;
 	bool mostDamageUnjustified = false;
-	auto lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
+	const auto& lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
 	std::shared_ptr<Creature> lastHitCreatureMaster = nullptr;
 	if (lastHitCreature) {
 		lastHitUnjustified = lastHitCreature->onKilledCreature(getCreature());
@@ -575,7 +573,7 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
 			g_game.startDecay(splash);
 		}
 
-		auto corpse = getCorpse(lastHitCreature, mostDamageCreature);
+		const auto& corpse = getCorpse(lastHitCreature, mostDamageCreature);
 		if (corpse) {
 			g_game.internalAddItem(tile, corpse, INDEX_WHEREEVER, FLAG_NOLIMIT);
 			g_game.startDecay(corpse);
@@ -700,7 +698,7 @@ BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, Combat
 					continue;
 				}
 
-				auto item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
+				const auto& item = attackerPlayer->getInventoryItem(static_cast<slots_t>(slot));
 				if (!item) {
 					continue;
 				}
@@ -720,9 +718,10 @@ BlockType_t Creature::blockHit(const std::shared_ptr<Creature>& attacker, Combat
 		if (combatType != COMBAT_HEALING) {
 			attacker->onAttackedCreature(getCreature());
 			attacker->onAttackedCreatureBlockHit(blockType);
-			if (attacker->getMaster() && attacker->getMaster()->getPlayer()) {
-				const auto& masterPlayer = attacker->getMaster()->getPlayer();
-				masterPlayer->onAttackedCreature(getCreature());
+			if (const auto& master = attacker->getMaster()) {
+				if (const auto& masterPlayer = master->getPlayer()) {
+					masterPlayer->onAttackedCreature(getCreature());
+				}
 			}
 		}
 	}
@@ -1054,7 +1053,7 @@ bool Creature::setMaster(const std::shared_ptr<Creature>& newMaster)
 		newMaster->summons.push_back(getCreature());
 	}
 
-	auto oldMaster = master;
+	const auto oldMaster = master;
 	master = newMaster;
 
 	if (oldMaster) {
@@ -1308,8 +1307,7 @@ int64_t Creature::getStepDuration() const
 		calculatedStepSpeed = 1;
 	}
 
-	const auto& ground = tile->getGround();
-	if (ground) {
+	if (const auto& ground = tile->getGround()) {
 		groundSpeed = Item::items[ground->getID()].speed;
 		if (groundSpeed == 0) {
 			groundSpeed = 150;

@@ -15,6 +15,24 @@
 extern Game g_game;
 extern Weapons* g_weapons;
 
+static bool isProtected(const std::shared_ptr<const Player>& attacker, const std::shared_ptr<const Player>& target)
+{
+	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
+	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
+		return true;
+	}
+
+	if (!attacker->getVocation()->allowsPvp() || !target->getVocation()->allowsPvp()) {
+		return true;
+	}
+
+	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
+		return true;
+	}
+
+	return false;
+}
+
 std::vector<std::shared_ptr<Tile>> getList(const MatrixArea& area, const Position& targetPos, const Direction dir)
 {
 	auto casterPos = getNextPosition(dir, targetPos);
@@ -84,8 +102,7 @@ CombatDamage Combat::getCombatDamage(const std::shared_ptr<Creature>& creature,
 				    normal_random(std::fma(levelFormula, mina, minb), std::fma(levelFormula, maxa, maxb));
 			} else if (formulaType == COMBAT_FORMULA_SKILL) {
 				const auto& tool = player->getWeapon();
-				auto weapon = g_weapons->getWeapon(tool);
-				if (weapon) {
+				if (const auto& weapon = g_weapons->getWeapon(tool)) {
 					damage.primary.value =
 					    normal_random(minb, std::fma(weapon->getWeaponDamage(player, target, tool, true), maxa, maxb));
 					damage.secondary.type = weapon->getElementType();
@@ -269,24 +286,6 @@ ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& caster, const s
 bool Combat::isInPvpZone(const std::shared_ptr<const Creature>& attacker, const std::shared_ptr<const Creature>& target)
 {
 	return attacker->getZone() == ZONE_PVP && target->getZone() == ZONE_PVP;
-}
-
-bool Combat::isProtected(const std::shared_ptr<const Player>& attacker, const std::shared_ptr<const Player>& target)
-{
-	uint32_t protectionLevel = getNumber(ConfigManager::PROTECTION_LEVEL);
-	if (target->getLevel() < protectionLevel || attacker->getLevel() < protectionLevel) {
-		return true;
-	}
-
-	if (!attacker->getVocation()->allowsPvp() || !target->getVocation()->allowsPvp()) {
-		return true;
-	}
-
-	if (attacker->getSkull() == SKULL_BLACK && attacker->getSkullClient(target) == SKULL_NONE) {
-		return true;
-	}
-
-	return false;
 }
 
 ReturnValue Combat::canDoCombat(const std::shared_ptr<Creature>& attacker, const std::shared_ptr<Creature>& target)
@@ -590,7 +589,7 @@ void Combat::combatTileEffects(const SpectatorVec& spectators, const std::shared
 			}
 		}
 
-		auto item = Item::CreateItem(itemId);
+		const auto item = Item::CreateItem(itemId);
 		if (caster) {
 			item->setOwner(caster->getID());
 		}
@@ -891,7 +890,7 @@ void Combat::doTargetCombat(const std::shared_ptr<Creature>& caster, const std::
 void Combat::doAreaCombat(const std::shared_ptr<Creature>& caster, const Position& position, const AreaCombat* area,
                           CombatDamage& damage, const CombatParams& params)
 {
-	auto tiles =
+	const auto& tiles =
 	    caster ? getCombatArea(caster->getPosition(), position, area) : getCombatArea(position, position, area);
 
 	const auto& casterPlayer = caster ? caster->getPlayer() : nullptr;
@@ -1091,11 +1090,10 @@ void ValueCallback::getMinMaxValues(const std::shared_ptr<Player>& player, Comba
 		case COMBAT_FORMULA_SKILL: {
 			// onGetPlayerMinMaxValues(player, attackSkill, attackValue, attackFactor)
 			const auto& tool = player->getWeapon();
-			auto weapon = g_weapons->getWeapon(tool);
 			std::shared_ptr<Item> item = nullptr;
 
 			int32_t attackValue = 7;
-			if (weapon) {
+			if (const auto& weapon = g_weapons->getWeapon(tool)) {
 				attackValue = tool->getAttack();
 				if (tool->getWeaponType() == WEAPON_AMMO) {
 					item = player->getWeapon(true);
@@ -1399,27 +1397,23 @@ void MagicField::onStepInField(const std::shared_ptr<Creature>& creature)
 		return;
 	}
 
-	const ItemType& it = items[getID()];
-	if (it.conditionDamage) {
+	if (const ItemType& it = items[getID()]; it.conditionDamage) {
 		Condition* conditionCopy = it.conditionDamage->clone();
-		uint32_t ownerId = getOwner();
-		if (ownerId) {
+
+		if (uint32_t ownerId = getOwner()) {
 			bool harmfulField = true;
 
 			if (g_game.getWorldType() == WORLD_TYPE_NO_PVP || getTile()->hasFlag(TILESTATE_NOPVPZONE)) {
-				auto owner = g_game.getCreatureByID(ownerId);
-				if (owner) {
+				if (const auto& owner = g_game.getCreatureByID(ownerId)) {
 					if (owner->getPlayer() || (owner->isSummon() && owner->getMaster()->getPlayer())) {
 						harmfulField = false;
 					}
 				}
 			}
 
-			const auto& targetPlayer = creature->getPlayer();
-			if (!harmfulField && targetPlayer) {
-				auto attackerPlayer = g_game.getPlayerByID(ownerId);
-				if (attackerPlayer) {
-					if (Combat::isProtected(attackerPlayer, targetPlayer)) {
+			if (const auto& targetPlayer = creature->getPlayer(); !harmfulField && targetPlayer) {
+				if (const auto& attackerPlayer = g_game.getPlayerByID(ownerId)) {
+					if (isProtected(attackerPlayer, targetPlayer)) {
 						harmfulField = false;
 					}
 				}

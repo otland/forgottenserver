@@ -130,8 +130,7 @@ void Map::setTile(uint16_t x, uint16_t y, uint8_t z, const std::shared_ptr<Tile>
 			items->clear();
 		}
 
-		const auto& ground = newTile->getGround();
-		if (ground) {
+		if (const auto& ground = newTile->getGround()) {
 			tile->addThing(ground);
 			newTile->setGround(nullptr);
 		}
@@ -156,8 +155,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 		return;
 	}
 
-	const auto& tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK];
-	if (tile) {
+	if (const auto& tile = floor->tiles[x & FLOOR_MASK][y & FLOOR_MASK]) {
 		if (const CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				if (const auto& player = (*creatures)[i]->getPlayer()) {
@@ -174,8 +172,7 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 			}
 		}
 
-		const auto& ground = tile->getGround();
-		if (ground) {
+		if (const auto& ground = tile->getGround()) {
 			g_game.internalRemoveItem(ground);
 			tile->setGround(nullptr);
 		}
@@ -185,27 +182,24 @@ void Map::removeTile(uint16_t x, uint16_t y, uint8_t z)
 bool Map::placeCreature(const Position& centerPos, const std::shared_ptr<Creature>& creature,
                         bool extendedPos /* = false*/, bool forceLogin /* = false*/)
 {
-	bool foundTile;
-	bool placeInPZ;
+	bool foundTile = false;
+	bool placeInPZ = false;
 
 	auto tile = getTile(centerPos.x, centerPos.y, centerPos.z);
 	if (tile) {
 		placeInPZ = tile->hasFlag(TILESTATE_PROTECTIONZONE);
 		ReturnValue ret = tile->queryAdd(0, creature, 1, FLAG_IGNOREBLOCKITEM);
 		foundTile = forceLogin || ret == RETURNVALUE_NOERROR || ret == RETURNVALUE_PLAYERISNOTINVITED;
-	} else {
-		placeInPZ = false;
-		foundTile = false;
 	}
 
 	if (!foundTile) {
-		static std::vector<std::pair<int32_t, int32_t>> extendedRelList{
-		    {0, -2}, {2, 0}, {0, 2}, {-2, 0}, {-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
+		static auto extendedRelList = std::vector{std::pair{0, -2}, {2, 0},  {0, 2}, {-2, 0}, {-1, -1}, {0, -1},
+		                                          {1, -1},          {-1, 0}, {1, 0}, {-1, 1}, {0, 1},   {1, 1}};
 
-		static std::vector<std::pair<int32_t, int32_t>> normalRelList{{-1, -1}, {0, -1}, {1, -1}, {-1, 0},
-		                                                              {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
+		static auto normalRelList =
+		    std::vector{std::pair{-1, -1}, {0, -1}, {1, -1}, {-1, 0}, {1, 0}, {-1, 1}, {0, 1}, {1, 1}};
 
-		std::vector<std::pair<int32_t, int32_t>>& relList = (extendedPos ? extendedRelList : normalRelList);
+		auto& relList = extendedPos ? extendedRelList : normalRelList;
 
 		if (extendedPos) {
 			std::shuffle(relList.begin(), relList.begin() + 4, getRandomGenerator());
@@ -501,7 +495,7 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 bool Map::isTileClear(uint16_t x, uint16_t y, uint8_t z, bool blockFloor /*= false*/,
                       bool pathfinding /*= false*/) const
 {
-	const auto tile = getTile(x, y, z);
+	const auto& tile = getTile(x, y, z);
 	if (!tile) {
 		return true;
 	}
@@ -645,7 +639,7 @@ bool Map::isSightClear(const Position& fromPos, const Position& toPos, bool same
 
 const std::shared_ptr<Tile> Map::canWalkTo(const std::shared_ptr<const Creature>& creature, const Position& pos) const
 {
-	auto tile = getTile(pos.x, pos.y, pos.z);
+	const auto& tile = getTile(pos.x, pos.y, pos.z);
 	if (creature->getTile() != tile) {
 		if (!tile) {
 			return nullptr;
@@ -920,7 +914,6 @@ uint16_t AStarNodes::getTileWalkCost(const std::shared_ptr<const Creature>& crea
 {
 	uint16_t cost = 0;
 	if (tile->getTopVisibleCreature(creature)) {
-		// destroy creature cost
 		cost += MAP_NORMALWALKCOST * 3;
 	}
 

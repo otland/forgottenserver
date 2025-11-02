@@ -205,11 +205,6 @@ private:
 	bool isInSpawnRange(const Position& pos) const;
 	bool canWalkTo(Position pos, Direction direction) const;
 
-	static bool pushItem(const std::shared_ptr<Item>& item);
-	static void pushItems(const std::shared_ptr<Tile>& tile);
-	static bool pushCreature(const std::shared_ptr<Creature>& creature);
-	static void pushCreatures(const std::shared_ptr<Tile>& tile);
-
 	void onThinkTarget(uint32_t interval);
 	void onThinkYell(uint32_t interval);
 	void onThinkDefense(uint32_t interval);

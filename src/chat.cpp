@@ -343,8 +343,7 @@ ChatChannel* Chat::createChannel(const std::shared_ptr<const Player>& player, ui
 		}
 
 		case CHANNEL_PARTY: {
-			Party* party = player->getParty();
-			if (party) {
+			if (Party* party = player->getParty()) {
 				auto ret = partyChannels.emplace(std::make_pair(party, ChatChannel(channelId, "Party")));
 				return &ret.first->second;
 			}
@@ -359,10 +358,10 @@ ChatChannel* Chat::createChannel(const std::shared_ptr<const Player>& player, ui
 
 			// find a free private channel slot
 			for (uint16_t i = 100; i < 10000; ++i) {
-				auto ret =
+				auto [it, inserted] =
 				    privateChannels.emplace(std::make_pair(i, PrivateChatChannel(i, player->getName() + "'s Channel")));
-				if (ret.second) { // second is a bool that indicates that a new channel has been placed in the map
-					auto& newChannel = (*ret.first).second;
+				if (inserted) { // second is a bool that indicates that a new channel has been placed in the map
+					auto& newChannel = it->second;
 					newChannel.setOwner(player->getGUID());
 					return &newChannel;
 				}
@@ -380,33 +379,19 @@ bool Chat::deleteChannel(const std::shared_ptr<const Player>& player, uint16_t c
 {
 	switch (channelId) {
 		case CHANNEL_GUILD: {
-			const auto& guild = player->getGuild();
-			if (!guild) {
-				return false;
+			if (const auto& guild = player->getGuild()) {
+				guildChannels.erase(guild->getId());
+				return true;
 			}
-
-			auto it = guildChannels.find(guild->getId());
-			if (it == guildChannels.end()) {
-				return false;
-			}
-
-			guildChannels.erase(it);
-			break;
+			return false;
 		}
 
 		case CHANNEL_PARTY: {
-			Party* party = player->getParty();
-			if (!party) {
-				return false;
+			if (Party* party = player->getParty()) {
+				partyChannels.erase(party);
+				return true;
 			}
-
-			auto it = partyChannels.find(party);
-			if (it == partyChannels.end()) {
-				return false;
-			}
-
-			partyChannels.erase(it);
-			break;
+			return false;
 		}
 
 		default: {

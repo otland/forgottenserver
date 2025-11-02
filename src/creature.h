@@ -247,7 +247,7 @@ public:
 	std::shared_ptr<Creature> getMaster() const { return master; }
 
 	// Summons are owned by the master via shared_ptr to keep them alive while summoned.
-	const std::list<std::shared_ptr<Creature>>& getSummons() const { return summons; }
+	const std::vector<std::shared_ptr<Creature>>& getSummons() const { return summons; }
 
 	virtual int32_t getArmor() const { return 0; }
 	virtual int32_t getDefense() const { return 0; }
@@ -394,7 +394,7 @@ protected:
 	using CountMap = std::map<uint32_t, CountBlock_t>;
 	CountMap damageMap;
 
-	std::list<std::shared_ptr<Creature>> summons;
+	std::vector<std::shared_ptr<Creature>> summons;
 	CreatureEventList eventsList;
 	ConditionList conditions;
 	CreatureIconHashMap creatureIcons;
