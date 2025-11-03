@@ -997,13 +997,13 @@ void QTreeLeafNode::removeCreature(const std::shared_ptr<Creature>& c)
 {
 	auto iter = std::find(creature_list.begin(), creature_list.end(), c);
 	assert(iter != creature_list.end());
-	*iter = creature_list.back();
+	std::iter_swap(iter, creature_list.end() - 1);
 	creature_list.pop_back();
 
 	if (c->getPlayer()) {
 		iter = std::find(player_list.begin(), player_list.end(), c);
 		assert(iter != player_list.end());
-		*iter = player_list.back();
+		std::iter_swap(iter, player_list.end() - 1);
 		player_list.pop_back();
 	}
 }

@@ -2354,11 +2354,11 @@ void ProtocolGame::sendTradeItemRequest(const std::string& traderName, const std
 			const auto container = containerList.front();
 			containerList.pop_front();
 
-			for (const auto& item : container->getItemList()) {
-				if (const auto& container = item->getContainer()) {
+			for (const auto& containerItem : container->getItemList()) {
+				if (const auto& container = containerItem->getContainer()) {
 					containerList.push_back(container);
 				}
-				itemList.push_back(item);
+				itemList.push_back(containerItem);
 			}
 		}
 

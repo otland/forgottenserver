@@ -1194,12 +1194,10 @@ int32_t Tile::getClientIndexOfCreature(const std::shared_ptr<const Player>& play
 	}
 
 	if (const CreatureVector* creatures = getCreatures()) {
-		for (auto it = creatures->rbegin(), end = creatures->rend(); it != end; ++it) {
-			if (*it == creature) {
+		for (const auto& tileCreature : *creatures | std::views::reverse) {
+			if (tileCreature == creature) {
 				return n;
-			}
-
-			if (player->canSeeCreature(*it)) {
+			} else if (player->canSeeCreature(tileCreature)) {
 				++n;
 			}
 		}
