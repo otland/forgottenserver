@@ -1105,7 +1105,7 @@ static void pushItems(const std::shared_ptr<Tile>& tile)
 
 		int32_t downItemSize = tile->getDownItemCount();
 		for (int32_t i = downItemSize; --i >= 0;) {
-			if (const auto& item = items->at(i)) {
+			if (const auto item = items->at(i)) {
 				if (item->hasProperty(CONST_PROP_MOVEABLE) &&
 				    (item->hasProperty(CONST_PROP_BLOCKPATH) || item->hasProperty(CONST_PROP_BLOCKSOLID))) {
 					if (moveCount < 20 && pushItem(item)) {

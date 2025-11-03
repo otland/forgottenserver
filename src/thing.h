@@ -131,14 +131,14 @@ public:
 	 * Add the object to the thing
 	 * \param thing is the object to add
 	 */
-	virtual void addThing(const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
+	virtual void addThing(const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Add the object to the thing
 	 * \param index points to the destination index (inventory slot/container
 	 * position) \param thing is the object to add
 	 */
-	virtual void addThing(int32_t, const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
+	virtual void addThing(int32_t, const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Update the item count or type for an object
@@ -146,24 +146,21 @@ public:
 	 * \param itemId is the new item id
 	 * \param count is the new count value
 	 */
-	virtual void updateThing(const std::shared_ptr<Thing>&, uint16_t, uint32_t)
-	{
-		throw std::runtime_error("Not implemented");
-	};
+	virtual void updateThing(const std::shared_ptr<Thing>&, uint16_t, uint32_t) {}
 
 	/**
 	 * Replace an object with a new
 	 * \param index is the position to change (inventory slot/container
 	 * position) \param thing is the object to update
 	 */
-	virtual void replaceThing(uint32_t, const std::shared_ptr<Thing>&) { throw std::runtime_error("Not implemented"); };
+	virtual void replaceThing(uint32_t, const std::shared_ptr<Thing>&) {}
 
 	/**
 	 * Remove an object
 	 * \param thing is the object to delete
 	 * \param count is the new count value
 	 */
-	virtual void removeThing(const std::shared_ptr<Thing>&, uint32_t) { throw std::runtime_error("Not implemented"); };
+	virtual void removeThing(const std::shared_ptr<Thing>&, uint32_t) {}
 
 	/**
 	 * Is sent after an operation (move/add) to update internal values
@@ -173,9 +170,7 @@ public:
 	 */
 	virtual void postAddNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
 	                                 cylinderlink_t = LINK_OWNER)
-	{
-		throw std::runtime_error("Not implemented");
-	};
+	{}
 
 	/**
 	 * Is sent after an operation (move/remove) to update internal values
@@ -185,9 +180,7 @@ public:
 	 */
 	virtual void postRemoveNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
 	                                    cylinderlink_t = LINK_OWNER)
-	{
-		throw std::runtime_error("Not implemented");
-	};
+	{}
 
 	/**
 	 * Gets the index of an object

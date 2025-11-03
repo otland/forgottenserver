@@ -32,12 +32,6 @@ public:
 	ReturnValue queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
 	                          uint32_t& maxQueryCount, uint32_t flags) const override;
 
-	ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
-	                        const std::shared_ptr<Creature>& = nullptr) const override
-	{
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	std::shared_ptr<Thing> queryDestination(int32_t&, const std::shared_ptr<const Thing>&, std::shared_ptr<Item>&,
 	                                        uint32_t&) override
 	{

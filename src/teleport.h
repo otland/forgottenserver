@@ -27,18 +27,6 @@ public:
 	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
 	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
 
-	ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
-	                     const std::shared_ptr<Creature>& = nullptr) const override
-	{
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
-	ReturnValue queryMaxCount(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t&,
-	                          uint32_t) const override
-	{
-		return RETURNVALUE_NOTPOSSIBLE;
-	}
-
 	ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
 	                        const std::shared_ptr<Creature>& = nullptr) const override
 	{

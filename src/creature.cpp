@@ -262,8 +262,7 @@ void Creature::startAutoWalk(Direction direction)
 		return;
 	}
 
-	listWalkDir.clear();
-	listWalkDir.push_back(direction);
+	listWalkDir = {direction};
 	addEventWalk(true);
 }
 
