@@ -6582,7 +6582,7 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 int LuaScriptInterface::luaItemSplit(lua_State* L)
 {
 	// item:split([count = 1])
-	auto itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
@@ -7003,7 +7003,7 @@ int LuaScriptInterface::luaItemRemoveCustomAttribute(lua_State* L)
 int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 {
 	// item:moveTo(position or thing[, flags])
-	auto itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
@@ -7066,7 +7066,7 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 int LuaScriptInterface::luaItemTransform(lua_State* L)
 {
 	// item:transform(itemId[, count/subType = -1])
-	auto itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
+	auto* itemPtr = tfs::lua::getRawSharedPtr<Item>(L, 1);
 	if (!itemPtr) {
 		lua_pushnil(L);
 		return 1;
@@ -8411,7 +8411,7 @@ int LuaScriptInterface::luaCreatureIsImmune(lua_State* L)
 int LuaScriptInterface::luaCreatureRemove(lua_State* L)
 {
 	// creature:remove()
-	auto creaturePtr = tfs::lua::getRawSharedPtr<Creature>(L, 1);
+	auto* creaturePtr = tfs::lua::getRawSharedPtr<Creature>(L, 1);
 	if (!creaturePtr) {
 		lua_pushnil(L);
 		return 1;
