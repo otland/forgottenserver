@@ -130,6 +130,9 @@ public:
 		return std::static_pointer_cast<const Tile>(shared_from_this());
 	}
 
+	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
+	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
+
 	virtual std::shared_ptr<HouseTile> getHouseTile() { return nullptr; }
 	virtual std::shared_ptr<const HouseTile> getHouseTile() const { return nullptr; }
 
@@ -199,9 +202,6 @@ public:
 	int32_t getStackposOfItem(const std::shared_ptr<const Player>& player,
 	                          const std::shared_ptr<const Item>& item) const;
 
-	std::shared_ptr<Thing> getReceiver() override final { return shared_from_this(); }
-	std::shared_ptr<const Thing> getReceiver() const override final { return shared_from_this(); }
-
 	ReturnValue queryAdd(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count, uint32_t flags,
 	                     const std::shared_ptr<Creature>& actor = nullptr) const override;
 	ReturnValue queryMaxCount(int32_t index, const std::shared_ptr<const Thing>& thing, uint32_t count,
@@ -229,9 +229,9 @@ public:
 	std::shared_ptr<Thing> getThing(size_t index) const override final;
 
 	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-	                         int32_t index, cylinderlink_t link = LINK_OWNER) override final;
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override final;
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-	                            int32_t index, cylinderlink_t link = LINK_OWNER) override final;
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override final;
 
 	void internalAddThing(const std::shared_ptr<Thing>& thing) override final { internalAddThing(0, thing); };
 	void internalAddThing(uint32_t index, const std::shared_ptr<Thing>& thing) override;

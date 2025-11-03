@@ -110,7 +110,6 @@ public:
 	void removeThing(const std::shared_ptr<Thing>& thing, uint32_t count) override final;
 
 	int32_t getThingIndex(const std::shared_ptr<const Thing>& thing) const override final;
-	size_t getFirstIndex() const override final { return 0; }
 	size_t getLastIndex() const override final { return size(); }
 	uint32_t getItemTypeCount(uint16_t itemId, int32_t subType = -1) const override final;
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override final;
@@ -119,9 +118,9 @@ public:
 	ItemVector getItems(bool recursive = false);
 
 	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-	                         int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	void internalRemoveThing(const std::shared_ptr<Thing>& thing) override final;
 	void internalAddThing(const std::shared_ptr<Thing>& thing) override final { internalAddThing(0, thing); }

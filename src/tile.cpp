@@ -11,7 +11,6 @@
 #include "game.h"
 #include "housetile.h"
 #include "mailbox.h"
-#include "monster.h"
 #include "movement.h"
 #include "spectators.h"
 #include "teleport.h"
@@ -375,7 +374,7 @@ void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) &&
 	    item->isCleanable()) {
-		if (this->getHouseTile() == nullptr) {
+		if (!getHouseTile()) {
 			g_game.addTileToClean(getTile());
 		}
 	}
@@ -876,15 +875,14 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 		} else if (itemType.alwaysOnTop) {
 			if (itemType.isSplash() && items) {
 				// remove old splash if exists
-				for (ItemVector::const_iterator it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end;
-				     ++it) {
-					const auto& oldSplash = *it;
+				for (auto it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it) {
+					const auto oldSplash = *it;
 					if (!Item::items[oldSplash->getID()].isSplash()) {
 						continue;
 					}
 
 					removeThing(oldSplash, 1);
-					oldSplash->setParent(nullptr);
+					assert(oldSplash->getParent() == nullptr);
 					postRemoveNotification(oldSplash, nullptr, 0);
 					break;
 				}
@@ -910,30 +908,31 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 			}
 
 			onAddTileItem(item);
-		} else if (itemType.isMagicField() && items) {
-			// remove old field item if exists
-			for (ItemVector::const_iterator it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end;
-			     ++it) {
-				if (const auto& oldField = (*it)->getMagicField()) {
-					if (oldField->isReplaceable()) {
-						removeThing(oldField, 1);
-
-						oldField->setParent(nullptr);
-						postRemoveNotification(oldField, nullptr, 0);
-						break;
+		} else {
+			if (itemType.isMagicField()) {
+				if (items) {
+					// remove old field item if exists
+					for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
+						if (auto oldField = (*it)->getMagicField()) {
+							if (oldField->isReplaceable()) {
+								removeThing(oldField, 1);
+								assert(oldField->getParent() == nullptr);
+								postRemoveNotification(oldField, nullptr, 0);
+								break;
+							} else {
+								// This magic field cannot be replaced.
+								item->setParent(nullptr);
+								return;
+							}
+						}
 					}
-
-					// This magic field cannot be replaced.
-					item->setParent(nullptr);
-					return;
 				}
 			}
+			items = makeItemList();
+			items->insert(items->getBeginDownItem(), item);
+			items->addDownItemCount(1);
+			onAddTileItem(item);
 		}
-
-		items = makeItemList();
-		items->insert(items->getBeginDownItem(), item);
-		items->addDownItemCount(1);
-		onAddTileItem(item);
 	}
 }
 
@@ -1307,7 +1306,7 @@ std::shared_ptr<Thing> Tile::getThing(size_t index) const
 }
 
 void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-                               int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+                               int32_t index, ReceiverLink_t link /*= LINK_OWNER*/)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
@@ -1341,7 +1340,7 @@ void Tile::postAddNotification(const std::shared_ptr<Thing>& thing, const std::s
 }
 
 void Tile::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-                                  int32_t index, cylinderlink_t)
+                                  int32_t index, ReceiverLink_t)
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);

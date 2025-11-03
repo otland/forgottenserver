@@ -17,12 +17,12 @@ bool canSend(const std::shared_ptr<const Item>& item)
 	return item->getID() == ITEM_PARCEL || item->getID() == ITEM_LETTER;
 }
 
-std::string getReceiver(const std::shared_ptr<Item>& item)
+std::string getReceiverName(const std::shared_ptr<Item>& item)
 {
 	if (const auto& container = item->getContainer()) {
 		for (const auto& containerItem : container->getItemList()) {
 			if (containerItem->getID() == ITEM_LABEL) {
-				return getReceiver(containerItem);
+				return getReceiverName(containerItem);
 			}
 		}
 		return "";
@@ -41,7 +41,7 @@ std::string getReceiver(const std::shared_ptr<Item>& item)
 
 bool sendItem(const std::shared_ptr<Item>& item)
 {
-	const auto& receiver = getReceiver(item);
+	const auto& receiver = getReceiverName(item);
 	/**No need to continue if its still empty**/
 	if (receiver.empty()) {
 		return false;
@@ -96,7 +96,7 @@ void Mailbox::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 }
 
 void Mailbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-                                  int32_t index, cylinderlink_t)
+                                  int32_t index, ReceiverLink_t)
 {
 	if (const auto& parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
@@ -104,7 +104,7 @@ void Mailbox::postAddNotification(const std::shared_ptr<Thing>& thing, const std
 }
 
 void Mailbox::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-                                     int32_t index, cylinderlink_t)
+                                     int32_t index, ReceiverLink_t)
 {
 	if (const auto& parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);

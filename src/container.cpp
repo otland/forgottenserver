@@ -646,7 +646,7 @@ ItemVector Container::getItems(bool recursive /*= false*/)
 }
 
 void Container::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-                                    int32_t index, cylinderlink_t)
+                                    int32_t index, ReceiverLink_t)
 {
 	const auto& topParent = getTopParent();
 	if (topParent->getCreature()) {
@@ -662,7 +662,7 @@ void Container::postAddNotification(const std::shared_ptr<Thing>& thing, const s
 }
 
 void Container::postRemoveNotification(const std::shared_ptr<Thing>& thing,
-                                       const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
+                                       const std::shared_ptr<const Thing>& newParent, int32_t index, ReceiverLink_t)
 {
 	const auto& topParent = getTopParent();
 	if (topParent->getCreature()) {

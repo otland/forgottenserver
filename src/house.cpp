@@ -56,7 +56,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		}
 
 		// Remove players from beds
-		for (const auto& bed : bedsList) {
+		for (const auto& bed : beds) {
 			if (bed->getSleeper() != 0) {
 				bed->wakeUp(nullptr);
 			}
@@ -69,7 +69,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
-		for (const auto& door : doorSet) {
+		for (const auto& door : doors) {
 			door->setAccessList("");
 		}
 	} else {
@@ -259,29 +259,23 @@ bool House::isInvited(const std::shared_ptr<const Player>& player) const
 	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
 
-void House::addDoor(const std::shared_ptr<Door>& door)
+void House::addDoor(std::shared_ptr<Door> door)
 {
-	doorSet.insert(door);
 	door->setHouse(this);
+	doors.insert(std::move(door));
 }
 
-void House::removeDoor(const std::shared_ptr<Door>& door)
-{
-	auto it = doorSet.find(door);
-	if (it != doorSet.end()) {
-		doorSet.erase(it);
-	}
-}
+void House::removeDoor(const std::shared_ptr<Door>& door) { doors.erase(door); }
 
-void House::addBed(const std::shared_ptr<BedItem>& bed)
+void House::addBed(std::shared_ptr<BedItem> bed)
 {
-	bedsList.push_back(bed);
 	bed->setHouse(this);
+	beds.push_back(std::move(bed));
 }
 
 std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 {
-	for (const auto& door : doorSet) {
+	for (const auto& door : doors) {
 		if (door->getDoorId() == doorId) {
 			return door;
 		}
@@ -291,7 +285,7 @@ std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 
 std::shared_ptr<Door> House::getDoorByPosition(const Position& pos)
 {
-	for (const auto& door : doorSet) {
+	for (const auto& door : doors) {
 		if (door->getPosition() == pos) {
 			return door;
 		}
@@ -424,7 +418,7 @@ void AccessList::addPlayer(const std::string& name)
 
 namespace {
 
-const Guild_ptr getGuildByName(const std::string& name)
+const std::shared_ptr<Guild> getGuildByName(const std::string& name)
 {
 	uint32_t guildId = IOGuild::getGuildIdByName(name);
 	if (guildId == 0) {

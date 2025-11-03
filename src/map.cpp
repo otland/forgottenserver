@@ -10,7 +10,6 @@
 #include "game.h"
 #include "iomap.h"
 #include "iomapserialize.h"
-#include "monster.h"
 #include "spectators.h"
 
 extern Game g_game;
@@ -354,7 +353,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 		leafE = leafS;
 		for (int_fast32_t nx = startx1; nx <= endx2; nx += FLOOR_SIZE) {
 			if (leafE) {
-				const CreatureVector& node_list = (onlyPlayers ? leafE->player_list : leafE->creature_list);
+				const CreatureVector& node_list = (onlyPlayers ? leafE->players : leafE->creatures);
 				for (const auto& creature : node_list) {
 					const Position& cpos = creature->getPosition();
 					if (minRangeZ > cpos.z || maxRangeZ < cpos.z) {
@@ -984,27 +983,26 @@ Floor* QTreeLeafNode::createFloor(uint32_t z)
 	return array[z];
 }
 
-void QTreeLeafNode::addCreature(const std::shared_ptr<Creature>& c)
+void QTreeLeafNode::addCreature(std::shared_ptr<Creature> creature)
 {
-	creature_list.push_back(c);
-
-	if (c->getPlayer()) {
-		player_list.push_back(c);
+	if (creature->getPlayer()) {
+		players.push_back(creature);
 	}
+	creatures.push_back(std::move(creature));
 }
 
-void QTreeLeafNode::removeCreature(const std::shared_ptr<Creature>& c)
+void QTreeLeafNode::removeCreature(const std::shared_ptr<Creature>& creature)
 {
-	auto iter = std::find(creature_list.begin(), creature_list.end(), c);
-	assert(iter != creature_list.end());
-	std::iter_swap(iter, creature_list.end() - 1);
-	creature_list.pop_back();
+	auto iter = std::find(creatures.begin(), creatures.end(), creature);
+	assert(iter != creatures.end());
+	std::iter_swap(iter, creatures.end() - 1);
+	creatures.pop_back();
 
-	if (c->getPlayer()) {
-		iter = std::find(player_list.begin(), player_list.end(), c);
-		assert(iter != player_list.end());
-		std::iter_swap(iter, player_list.end() - 1);
-		player_list.pop_back();
+	if (creature->getPlayer()) {
+		iter = std::find(players.begin(), players.end(), creature);
+		assert(iter != players.end());
+		std::iter_swap(iter, players.end() - 1);
+		players.pop_back();
 	}
 }
 

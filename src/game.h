@@ -6,7 +6,9 @@
 
 #include "groups.h"
 #include "map.h"
+#include "monster.h"
 #include "mounts.h"
+#include "npc.h"
 #include "player.h"
 #include "position.h"
 #include "wildcardtree.h"
@@ -202,7 +204,7 @@ public:
 	bool removeCreature(const std::shared_ptr<Creature>& creature, bool isLogout = true);
 	void executeDeath(uint32_t creatureId);
 
-	void addCreatureCheck(const std::shared_ptr<Creature>& creature);
+	void addCreatureCheck(std::shared_ptr<Creature> creature);
 	static void removeCreatureCheck(const std::shared_ptr<Creature>& creature);
 
 	size_t getPlayersOnline() const { return players.size(); }
@@ -459,36 +461,36 @@ public:
 
 	void sendOfflineTrainingDialog(const std::shared_ptr<Player>& player);
 
-	const std::unordered_map<uint32_t, std::shared_ptr<Player>>& getPlayers() const { return players; }
-	const std::map<uint32_t, std::shared_ptr<Npc>>& getNpcs() const { return npcs; }
-	const std::map<uint32_t, std::shared_ptr<Monster>>& getMonsters() const { return monsters; }
+	const auto& getPlayers() const { return players; }
+	const auto& getNpcs() const { return npcs; }
+	const auto& getMonsters() const { return monsters; }
 
 	void addPlayer(std::shared_ptr<Player> player);
 	void removePlayer(const std::shared_ptr<Player>& player);
 
-	void addNpc(std::shared_ptr<Npc> npc);
-	void removeNpc(const std::shared_ptr<Npc>& npc);
+	void addNpc(std::shared_ptr<Npc> npc) { npcs[npc->getID()] = std::move(npc); }
+	void removeNpc(const std::shared_ptr<Npc>& npc) { npcs.erase(npc->getID()); }
 
-	void addMonster(std::shared_ptr<Monster> monster);
-	void removeMonster(const std::shared_ptr<Monster>& monster);
+	void addMonster(std::shared_ptr<Monster> monster) { monsters[monster->getID()] = std::move(monster); }
+	void removeMonster(const std::shared_ptr<Monster>& monster) { monsters.erase(monster->getID()); }
 
-	Guild_ptr getGuild(uint32_t id) const;
-	void addGuild(Guild_ptr guild);
-	void removeGuild(uint32_t guildId);
+	std::shared_ptr<Guild> getGuild(uint32_t id) const;
+	void addGuild(std::shared_ptr<Guild> guild) { guilds[guild->getId()] = std::move(guild); }
+	void removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 
 	std::unordered_map<Tile*, std::shared_ptr<Container>> browseFields;
 
 	void internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable);
 
 	std::shared_ptr<BedItem> getBedBySleeper(uint32_t guid) const;
-	void setBedSleeper(std::shared_ptr<BedItem> bed, uint32_t guid);
-	void removeBedSleeper(uint32_t guid);
+	void setBedSleeper(std::shared_ptr<BedItem> bed, uint32_t guid) { bedSleepersMap[guid] = std::move(bed); }
+	void removeBedSleeper(uint32_t guid) { bedSleepersMap.erase(guid); }
 
-	void updatePodium(const std::shared_ptr<Item>& item);
+	void updatePodium(const std::shared_ptr<Podium>& podium);
 
 	std::shared_ptr<Item> getUniqueItem(uint16_t uniqueId);
-	bool addUniqueItem(uint16_t uniqueId, const std::shared_ptr<Item>& item);
-	void removeUniqueItem(uint16_t uniqueId);
+	bool addUniqueItem(uint16_t uniqueId, std::shared_ptr<Item> item);
+	void removeUniqueItem(uint16_t uniqueId) { uniqueItems.erase(uniqueId); }
 
 	bool reload(ReloadTypes_t reloadType);
 
@@ -518,7 +520,7 @@ private:
 	std::unordered_map<uint32_t, std::shared_ptr<Player>> players;
 	std::unordered_map<std::string, std::shared_ptr<Player>> mappedPlayerNames;
 	std::unordered_map<uint32_t, std::shared_ptr<Player>> mappedPlayerGuids;
-	std::unordered_map<uint32_t, Guild_ptr> guilds;
+	std::unordered_map<uint32_t, std::shared_ptr<Guild>> guilds;
 	std::unordered_map<uint16_t, std::shared_ptr<Item>> uniqueItems;
 
 	std::list<std::shared_ptr<Item>> decayItems[EVENT_DECAY_BUCKETS];

@@ -38,9 +38,9 @@ public:
 	}
 
 	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-	                         int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	// Item implementations
 	bool canRemove() const override { return false; }

@@ -133,7 +133,7 @@ public:
 	Floor* createFloor(uint32_t z);
 	Floor* getFloor(uint8_t z) const { return array[z]; }
 
-	void addCreature(const std::shared_ptr<Creature>& c);
+	void addCreature(std::shared_ptr<Creature> c);
 	void removeCreature(const std::shared_ptr<Creature>& c);
 
 private:
@@ -141,8 +141,8 @@ private:
 	QTreeLeafNode* leafS = nullptr;
 	QTreeLeafNode* leafE = nullptr;
 	Floor* array[MAP_MAX_LAYERS] = {};
-	CreatureVector creature_list;
-	CreatureVector player_list;
+	CreatureVector creatures;
+	CreatureVector players;
 
 	friend class Map;
 	friend class QTreeNode;

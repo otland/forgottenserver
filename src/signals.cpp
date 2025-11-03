@@ -14,7 +14,6 @@
 #include "monsters.h"
 #include "mounts.h"
 #include "movement.h"
-#include "npc.h"
 #include "scheduler.h"
 #include "spells.h"
 #include "talkaction.h"

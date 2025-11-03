@@ -19,7 +19,7 @@ Attr_ReadValue DepotLocker::readAttr(AttrTypes_t attr, PropStream& propStream)
 }
 
 void DepotLocker::postAddNotification(const std::shared_ptr<Thing>& thing,
-                                      const std::shared_ptr<const Thing>& oldParent, int32_t index, cylinderlink_t)
+                                      const std::shared_ptr<const Thing>& oldParent, int32_t index, ReceiverLink_t)
 {
 	if (const auto& parent = getParent()) {
 		parent->postAddNotification(thing, oldParent, index, LINK_PARENT);
@@ -27,7 +27,7 @@ void DepotLocker::postAddNotification(const std::shared_ptr<Thing>& thing,
 }
 
 void DepotLocker::postRemoveNotification(const std::shared_ptr<Thing>& thing,
-                                         const std::shared_ptr<const Thing>& newParent, int32_t index, cylinderlink_t)
+                                         const std::shared_ptr<const Thing>& newParent, int32_t index, ReceiverLink_t)
 {
 	if (const auto& parent = getParent()) {
 		parent->postRemoveNotification(thing, newParent, index, LINK_PARENT);

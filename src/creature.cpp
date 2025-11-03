@@ -9,7 +9,6 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
-#include "monster.h"
 #include "party.h"
 #include "scheduler.h"
 #include "spectators.h"

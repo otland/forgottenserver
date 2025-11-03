@@ -202,12 +202,6 @@ bool Item::operator==(const Item& otherItem) const
 	return true;
 }
 
-const Position& Item::getPosition() const
-{
-	const auto& tile = getTile();
-	return tile ? tile->getPosition() : Tile::nullptrTile->getPosition();
-}
-
 void Item::setDefaultSubtype()
 {
 	const ItemType& it = items[id];

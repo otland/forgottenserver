@@ -14,9 +14,7 @@
 #include "events.h"
 #include "game.h"
 #include "iologindata.h"
-#include "monster.h"
 #include "movement.h"
-#include "npc.h"
 #include "outfit.h"
 #include "party.h"
 #include "scheduler.h"
@@ -564,16 +562,14 @@ int32_t Player::getDefaultStats(stats_t stat) const
 	}
 }
 
-void Player::addContainer(uint8_t cid, const std::shared_ptr<Container>& container)
+void Player::addContainer(uint8_t cid, std::shared_ptr<Container> container)
 {
 	if (cid > 0xF) {
 		return;
 	}
 
-	openContainers[cid] = {.container = container, .index = 0};
+	openContainers[cid] = {.container = std::move(container), .index = 0};
 }
-
-void Player::closeContainer(uint8_t cid) { openContainers.erase(cid); }
 
 void Player::setContainerIndex(uint8_t cid, uint16_t index)
 {
@@ -836,10 +832,8 @@ std::shared_ptr<Item> Player::getWriteItem(uint32_t& windowTextId, uint16_t& max
 	return writeItem;
 }
 
-void Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen /*= 0*/)
+uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen /*= 0*/)
 {
-	windowTextId++;
-
 	if (item) {
 		writeItem = item;
 		this->maxWriteLen = maxWriteLen;
@@ -847,6 +841,7 @@ void Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLe
 		writeItem = nullptr;
 		this->maxWriteLen = 0;
 	}
+	return ++windowTextId;
 }
 
 House* Player::getEditHouse(uint32_t& windowTextId, uint32_t& listId)
@@ -969,16 +964,14 @@ void Player::openSavedContainers()
 			continue;
 		}
 
-		const auto& itemContainer = item->getContainer();
-		if (itemContainer) {
+		if (const auto& itemContainer = item->getContainer()) {
 			uint8_t cid = item->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 			if (cid > 0) {
 				openContainersList.emplace(cid, itemContainer);
 			}
-			for (ContainerIterator it = itemContainer->iterator(); it.hasNext(); it.advance()) {
-				const auto& subContainer = (*it)->getContainer();
-				if (subContainer) {
-					uint8_t subcid = (*it)->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
+			for (auto it = itemContainer->iterator(); it.hasNext(); it.advance()) {
+				if (const auto& subContainer = (*it)->getContainer()) {
+					uint8_t subcid = subContainer->getIntAttr(ITEM_ATTRIBUTE_OPENCONTAINER);
 					if (subcid > 0) {
 						openContainersList.emplace(subcid, subContainer);
 					}
@@ -3027,7 +3020,7 @@ std::shared_ptr<Thing> Player::getThing(size_t index) const
 }
 
 void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-                                 int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+                                 int32_t index, ReceiverLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3084,7 +3077,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 }
 
 void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-                                    int32_t index, cylinderlink_t link /*= LINK_OWNER*/)
+                                    int32_t index, ReceiverLink_t link /*= LINK_OWNER*/)
 {
 	if (link == LINK_OWNER) {
 		// calling movement scripts
@@ -3612,9 +3605,8 @@ void Player::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& targ
 {
 	Creature::onAttackedCreatureDrainHealth(target, points);
 
-	if (target) {
-		if (party && !Combat::isPlayerCombat(target)) {
-			const auto& tmpMonster = target->getMonster();
+	if (target && party && !Combat::isPlayerCombat(target)) {
+		if (const auto& tmpMonster = target->getMonster()) {
 			if (tmpMonster && tmpMonster->isHostile()) {
 				// We have fulfilled a requirement for shared experience
 				party->updatePlayerTicks(getPlayer(), points);
@@ -4597,27 +4589,27 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	return muteConditions;
 }
 
-void Player::setGuild(Guild_ptr guild)
+void Player::setGuild(std::shared_ptr<Guild> newGuild)
 {
-	if (guild == this->guild) {
+	if (newGuild == guild) {
 		return;
 	}
 
-	const auto& oldGuild = this->guild;
+	const auto oldGuild = guild;
 
-	this->guildNick.clear();
-	this->guild = nullptr;
-	this->guildRank = nullptr;
+	guildNick.clear();
+	guild = nullptr;
+	guildRank = nullptr;
 
-	if (guild) {
-		const auto& rank = guild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);
+	if (newGuild) {
+		const auto& rank = newGuild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);
 		if (!rank) {
 			return;
 		}
 
-		this->guild = guild;
-		this->guildRank = rank;
-		guild->addMember(getPlayer());
+		guild = newGuild;
+		guildRank = rank;
+		newGuild->addMember(getPlayer());
 	}
 
 	if (oldGuild) {

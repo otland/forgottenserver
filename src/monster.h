@@ -176,14 +176,14 @@ private:
 
 	void updateLookDirection();
 
-	void addFriend(const std::shared_ptr<Creature>& creature);
+	void addFriend(std::shared_ptr<Creature> creature);
 	void removeFriend(const std::shared_ptr<Creature>& creature);
-	void addTarget(const std::shared_ptr<Creature>& creature, bool pushFront = false);
+	void addTarget(std::shared_ptr<Creature> creature, bool pushFront = false);
 	void removeTarget(const std::shared_ptr<Creature>& creature);
 
 	void updateTargetList();
-	void clearTargetList();
-	void clearFriendList();
+	void clearTargetList() { targetList.clear(); }
+	void clearFriendList() { friendList.clear(); }
 
 	void death(const std::shared_ptr<Creature>& lastHitCreature) override;
 	std::shared_ptr<Item> getCorpse(const std::shared_ptr<Creature>& lastHitCreature,

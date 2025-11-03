@@ -508,8 +508,6 @@ public:
 	Item& operator=(const Item&) = delete;
 	bool operator==(const Item& otherItem) const;
 
-	const Position& getPosition() const override;
-
 	std::shared_ptr<Item> getItem() override final { return std::static_pointer_cast<Item>(shared_from_this()); }
 	std::shared_ptr<const Item> getItem() const override final
 	{
@@ -898,7 +896,7 @@ public:
 	virtual void onRemoved();
 	virtual void onTradeEvent(TradeEvents_t, const std::shared_ptr<Player>&) {}
 
-	virtual void startDecaying() override;
+	virtual void startDecaying();
 
 	bool isLoadedFromMap() const { return loadedFromMap; }
 	void setLoadedFromMap(bool value) { loadedFromMap = value; }

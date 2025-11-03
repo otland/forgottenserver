@@ -12,8 +12,6 @@
 #include "game.h"
 #include "iologindata.h"
 #include "iomarket.h"
-#include "monster.h"
-#include "npc.h"
 #include "outfit.h"
 #include "outputmessage.h"
 #include "player.h"

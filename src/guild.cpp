@@ -13,7 +13,10 @@ extern Game g_game;
 
 void Guild::removeMember(const std::shared_ptr<Player>& player)
 {
-	membersOnline.remove(player);
+	if (auto it = std::find(membersOnline.begin(), membersOnline.end(), player); it != membersOnline.end()) {
+		std::iter_swap(it, membersOnline.end() - 1);
+		membersOnline.pop_back();
+	}
 
 	if (membersOnline.empty()) {
 		g_game.removeGuild(id);
@@ -55,7 +58,7 @@ GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
 	return nullptr;
 }
 
-Guild_ptr IOGuild::loadGuild(uint32_t guildId)
+std::shared_ptr<Guild> IOGuild::loadGuild(uint32_t guildId)
 {
 	Database& db = Database::getInstance();
 	DBResult_ptr result = db.storeQuery(fmt::format("SELECT `name` FROM `guilds` WHERE `id` = {:d}", guildId));

@@ -29,9 +29,9 @@ public:
 	uint32_t getId() const { return id; }
 	const std::string& getName() const { return name; }
 
-	void addMember(const std::shared_ptr<Player>& player) { membersOnline.push_back(player); }
+	void addMember(std::shared_ptr<Player> player) { membersOnline.push_back(std::move(player)); }
 	void removeMember(const std::shared_ptr<Player>& player);
-	const std::list<std::shared_ptr<Player>>& getMembersOnline() const { return membersOnline; }
+	const std::vector<std::shared_ptr<Player>>& getMembersOnline() const { return membersOnline; }
 	uint32_t getMemberCount() const { return memberCount; }
 	void setMemberCount(uint32_t count) { memberCount = count; }
 
@@ -45,7 +45,7 @@ public:
 	void setMotd(const std::string& motd) { this->motd = motd; }
 
 private:
-	std::list<std::shared_ptr<Player>> membersOnline;
+	std::vector<std::shared_ptr<Player>> membersOnline;
 	std::vector<GuildRank_ptr> ranks;
 	std::string name;
 	std::string motd;
@@ -53,11 +53,11 @@ private:
 	uint32_t memberCount = 0;
 };
 
-using Guild_ptr = std::shared_ptr<Guild>;
-
 namespace IOGuild {
-Guild_ptr loadGuild(uint32_t guildId);
+
+std::shared_ptr<Guild> loadGuild(uint32_t guildId);
 uint32_t getGuildIdByName(const std::string& name);
+
 }; // namespace IOGuild
 
 #endif // FS_GUILD_H

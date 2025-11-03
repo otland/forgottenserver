@@ -86,9 +86,6 @@ enum AccessHouseLevel_t
 	HOUSE_OWNER = 3,
 };
 
-using HouseTileList = std::list<std::shared_ptr<HouseTile>>;
-using HouseBedItemList = std::list<std::shared_ptr<BedItem>>;
-
 class HouseTransferItem final : public Item
 {
 public:
@@ -147,7 +144,7 @@ public:
 
 	uint32_t getId() const { return id; }
 
-	void addDoor(const std::shared_ptr<Door>& door);
+	void addDoor(std::shared_ptr<Door> door);
 	void removeDoor(const std::shared_ptr<Door>& door);
 	std::shared_ptr<Door> getDoorByNumber(uint32_t doorId) const;
 	std::shared_ptr<Door> getDoorByPosition(const Position& pos);
@@ -156,16 +153,14 @@ public:
 	void resetTransferItem();
 	bool executeTransfer(const std::shared_ptr<HouseTransferItem>& item, const std::shared_ptr<Player>& newOwner);
 
-	decltype(auto) getTiles() const { return houseTiles; }
-	decltype(auto) getDoors() const { return doorSet; }
+	const auto& getTiles() const { return houseTiles; }
+	const auto& getDoors() const { return doors; }
 
-	void addBed(const std::shared_ptr<BedItem>& bed);
-	const HouseBedItemList& getBeds() const { return bedsList; }
-	uint32_t getBedCount()
-	{
-		return static_cast<uint32_t>(
-		    std::ceil(bedsList.size() / 2.)); // each bed takes 2 sqms of space, ceil is just for bad maps
-	}
+	void addBed(std::shared_ptr<BedItem> bed);
+	const auto& getBeds() const { return beds; }
+
+	// each bed takes 2 sqms of space, ceil is just for bad maps
+	auto getBedCount() const { return (beds.size() + 1) / 2; }
 
 private:
 	bool transferToDepot() const;
@@ -176,9 +171,9 @@ private:
 
 	Container transferContainer{ITEM_LOCKER};
 
-	HouseTileList houseTiles;
-	std::set<std::shared_ptr<Door>> doorSet;
-	HouseBedItemList bedsList;
+	std::vector<std::shared_ptr<HouseTile>> houseTiles;
+	std::set<std::shared_ptr<Door>> doors;
+	std::vector<std::shared_ptr<BedItem>> beds;
 
 	std::string houseName;
 	std::string ownerName;

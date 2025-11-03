@@ -18,9 +18,7 @@
 #include "iologindata.h"
 #include "iomarket.h"
 #include "items.h"
-#include "monster.h"
 #include "movement.h"
-#include "npc.h"
 #include "outfit.h"
 #include "party.h"
 #include "podium.h"
@@ -1381,7 +1379,7 @@ ReturnValue Game::internalAddItem(const std::shared_ptr<Thing>& toThing, const s
 		}
 	}
 
-	if (!item->isRemoved() && item->getDuration() > 0) {
+	if (item->getDuration() > 0) {
 		if (item->getDecaying() != DECAYING_TRUE) {
 			item->setDecaying(DECAYING_TRUE);
 			toDecayItems.push_back(item);
@@ -1489,7 +1487,7 @@ std::shared_ptr<Item> Game::findItemOfType(const std::shared_ptr<Thing>& fromThi
 
 	size_t i = 0;
 	while (i < containers.size()) {
-		const auto& container = containers[i++];
+		const auto container = containers[i++];
 		for (const auto& item : container->getItemList()) {
 			if (item->getID() == itemId && (subType == -1 || subType == item->getSubType())) {
 				return item;
@@ -1542,7 +1540,7 @@ bool Game::removeMoney(const std::shared_ptr<Thing>& fromThing, uint64_t money, 
 
 	size_t i = 0;
 	while (i < containers.size()) {
-		const auto& container = containers[i++];
+		const auto container = containers[i++];
 		for (const auto& item : container->getItemList()) {
 			if (const auto& tmpContainer = item->getContainer()) {
 				containers.push_back(tmpContainer);
@@ -1621,8 +1619,7 @@ std::shared_ptr<Item> Game::transformItem(const std::shared_ptr<Item>& item, uin
 		return nullptr;
 	}
 
-	const auto& fromTile = parent->getTile();
-	if (fromTile) {
+	if (const auto& fromTile = parent->getTile()) {
 		auto it = browseFields.find(fromTile.get());
 		if (it != browseFields.end() && it->second == parent) {
 			parent = fromTile;
@@ -2315,8 +2312,7 @@ static auto createBrowseField(const std::shared_ptr<Tile>& tile)
 {
 	auto browseField = std::make_shared<Container>(ITEM_BROWSEFIELD);
 
-	TileItemVector* itemVector = tile->getItemList();
-	if (itemVector) {
+	if (TileItemVector* itemVector = tile->getItemList()) {
 		for (const auto& item : *itemVector) {
 			if ((item->getContainer() || item->hasProperty(CONST_PROP_MOVEABLE)) &&
 			    !item->hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
@@ -2341,8 +2337,11 @@ void Game::playerMoveUpContainer(uint32_t playerId, uint8_t cid)
 		return;
 	}
 
-	const auto& realParent = container->getRealParent();
-	auto parentContainer = realParent->getContainer();
+	std::shared_ptr<Container> parentContainer = nullptr;
+	if (const auto& realParent = container->getRealParent()) {
+		parentContainer = realParent->getContainer();
+	}
+
 	if (!parentContainer) {
 		const auto& tile = container->getTile();
 		if (!tile) {
@@ -2412,7 +2411,7 @@ void Game::playerRotateItem(uint32_t playerId, const Position& pos, uint8_t stac
 
 	if (const auto& podium = item->getPodium()) {
 		podium->setDirection(static_cast<Direction>((podium->getDirection() + 1) % 4));
-		updatePodium(item);
+		updatePodium(podium);
 	} else {
 		tfs::events::player::onRotateItem(player, item);
 	}
@@ -2689,8 +2688,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 		return;
 	}
 
-	const auto& tradeItemContainer = tradeItem->getContainer();
-	if (tradeItemContainer) {
+	if (const auto& tradeItemContainer = tradeItem->getContainer()) {
 		for (const auto& item : tradeItems | std::views::keys) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
@@ -2941,7 +2939,7 @@ void Game::playerLookInTrade(uint32_t playerId, bool lookAtCounterOffer, uint8_t
 	auto containers = std::vector{tradeContainer};
 	size_t i = 0;
 	while (i < containers.size()) {
-		const auto& container = containers[i++];
+		const auto container = containers[i++];
 		for (const auto& item : container->getItemList()) {
 			if (const auto& childContainer = item->getContainer()) {
 				containers.push_back(childContainer);
@@ -3785,7 +3783,7 @@ void Game::checkCreatureAttack(uint32_t creatureId)
 	}
 }
 
-void Game::addCreatureCheck(const std::shared_ptr<Creature>& creature)
+void Game::addCreatureCheck(std::shared_ptr<Creature> creature)
 {
 	creature->creatureCheck = true;
 
@@ -3795,7 +3793,7 @@ void Game::addCreatureCheck(const std::shared_ptr<Creature>& creature)
 	}
 
 	creature->inCheckCreaturesVector = true;
-	checkCreatureLists[uniform_random(0, EVENT_CREATURECOUNT - 1)].push_back(creature);
+	checkCreatureLists[uniform_random(0, EVENT_CREATURECOUNT - 1)].push_back(std::move(creature));
 }
 
 void Game::removeCreatureCheck(const std::shared_ptr<Creature>& creature)
@@ -5573,15 +5571,7 @@ void Game::removePlayer(const std::shared_ptr<Player>& player)
 	players.erase(player->getID());
 }
 
-void Game::addNpc(std::shared_ptr<Npc> npc) { npcs[npc->getID()] = std::move(npc); }
-
-void Game::removeNpc(const std::shared_ptr<Npc>& npc) { npcs.erase(npc->getID()); }
-
-void Game::addMonster(std::shared_ptr<Monster> monster) { monsters[monster->getID()] = std::move(monster); }
-
-void Game::removeMonster(const std::shared_ptr<Monster>& monster) { monsters.erase(monster->getID()); }
-
-Guild_ptr Game::getGuild(uint32_t id) const
+std::shared_ptr<Guild> Game::getGuild(uint32_t id) const
 {
 	auto it = guilds.find(id);
 	if (it == guilds.end()) {
@@ -5589,10 +5579,6 @@ Guild_ptr Game::getGuild(uint32_t id) const
 	}
 	return it->second;
 }
-
-void Game::addGuild(Guild_ptr guild) { guilds[guild->getId()] = std::move(guild); }
-
-void Game::removeGuild(uint32_t guildId) { guilds.erase(guildId); }
 
 void Game::internalRemoveItems(const std::vector<std::shared_ptr<Item>>& itemList, uint32_t amount, bool stackable)
 {
@@ -5622,27 +5608,19 @@ std::shared_ptr<BedItem> Game::getBedBySleeper(uint32_t guid) const
 	return it->second;
 }
 
-void Game::setBedSleeper(std::shared_ptr<BedItem> bed, uint32_t guid) { bedSleepersMap[guid] = std::move(bed); }
-
-void Game::removeBedSleeper(uint32_t guid) { bedSleepersMap.erase(guid); }
-
-void Game::updatePodium(const std::shared_ptr<Item>& item)
+void Game::updatePodium(const std::shared_ptr<Podium>& podium)
 {
-	if (!item->getPodium()) {
-		return;
-	}
-
-	const auto& tile = item->getTile();
+	const auto& tile = podium->getTile();
 	if (!tile) {
 		return;
 	}
 
 	// send to clients
 	SpectatorVec spectators;
-	map.getSpectators(spectators, item->getPosition(), true, true);
+	map.getSpectators(spectators, podium->getPosition(), true, true);
 	for (const auto& spectator : spectators) {
 		assert(spectator->getPlayer() != nullptr);
-		std::static_pointer_cast<Player>(spectator)->sendUpdateTileItem(tile, item->getPosition(), item);
+		std::static_pointer_cast<Player>(spectator)->sendUpdateTileItem(tile, podium->getPosition(), podium);
 	}
 }
 
@@ -5655,16 +5633,14 @@ std::shared_ptr<Item> Game::getUniqueItem(uint16_t uniqueId)
 	return it->second;
 }
 
-bool Game::addUniqueItem(uint16_t uniqueId, const std::shared_ptr<Item>& item)
+bool Game::addUniqueItem(uint16_t uniqueId, std::shared_ptr<Item> item)
 {
-	auto result = uniqueItems.emplace(uniqueId, item);
+	auto result = uniqueItems.emplace(uniqueId, std::move(item));
 	if (!result.second) {
 		std::cout << "Duplicate unique id: " << uniqueId << std::endl;
 	}
 	return result.second;
 }
-
-void Game::removeUniqueItem(uint16_t uniqueId) { uniqueItems.erase(uniqueId); }
 
 bool Game::reload(ReloadTypes_t reloadType)
 {

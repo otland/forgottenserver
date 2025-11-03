@@ -170,7 +170,9 @@ public:
 	uint32_t getBaseSpeed() const { return baseSpeed; }
 
 	int32_t getHealth() const { return health; }
+	void setHealth(int32_t newHealth) { health = std::clamp(newHealth, 0, healthMax); }
 	virtual int32_t getMaxHealth() const { return healthMax; }
+	virtual void setMaxHealth(int32_t newMaxHealth) { healthMax = newMaxHealth; }
 	bool isDead() const { return health <= 0; }
 
 	void setDrunkenness(uint8_t newDrunkenness) { drunkenness = newDrunkenness; }
@@ -179,6 +181,7 @@ public:
 	const Outfit_t getCurrentOutfit() const { return currentOutfit; }
 	void setCurrentOutfit(Outfit_t outfit) { currentOutfit = outfit; }
 	const Outfit_t getDefaultOutfit() const { return defaultOutfit; }
+	void setDefaultOutfit(Outfit_t outfit) { defaultOutfit = outfit; }
 	bool isInvisible() const;
 	ZoneType_t getZone() const
 	{
@@ -224,7 +227,6 @@ public:
 	void addFollower(const std::shared_ptr<Creature>& creature);
 	void removeFollower(const std::shared_ptr<Creature>& creature);
 	void removeFollowers();
-	void releaseFollowers();
 
 	// Pathfinding events
 	void updateFollowersPaths();
@@ -246,7 +248,8 @@ public:
 	bool isSummon() const { return master != nullptr; }
 	std::shared_ptr<Creature> getMaster() const { return master; }
 
-	const std::vector<std::shared_ptr<Creature>>& getSummons() const { return summons; }
+	const auto& getDamageMap() const { return damageMap; }
+	const auto& getSummons() const { return summons; }
 
 	virtual int32_t getArmor() const { return 0; }
 	virtual int32_t getDefense() const { return 0; }
@@ -379,7 +382,9 @@ public:
 
 	virtual void setStorageValue(uint32_t key, std::optional<int32_t> value, bool isSpawn = false);
 	virtual std::optional<int32_t> getStorageValue(uint32_t key) const;
-	decltype(auto) getStorageMap() const { return storageMap; }
+	const auto& getStorageMap() const { return storageMap; }
+
+	CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
 protected:
 	struct CountBlock_t
@@ -390,8 +395,7 @@ protected:
 
 	Position position;
 
-	using CountMap = std::map<uint32_t, CountBlock_t>;
-	CountMap damageMap;
+	std::map<uint32_t, CountBlock_t> damageMap;
 
 	std::vector<std::shared_ptr<Creature>> summons;
 	CreatureEventList eventsList;
@@ -448,7 +452,6 @@ protected:
 	{
 		return (0 != (scriptEventsBitField & (static_cast<uint32_t>(1) << event)));
 	}
-	CreatureEventList getCreatureEvents(CreatureEventType_t type);
 
 	void onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout);
 	virtual void doAttacking(uint32_t) {}
@@ -467,7 +470,6 @@ protected:
 
 	friend class Game;
 	friend class Map;
-	friend class LuaScriptInterface;
 
 private:
 	std::map<uint32_t, int32_t> storageMap;

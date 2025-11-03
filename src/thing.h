@@ -14,7 +14,7 @@ struct Position;
 
 inline constexpr int32_t INDEX_WHEREEVER = -1;
 
-enum cylinderflags_t
+enum ReceiverFlag_t
 {
 	FLAG_NOLIMIT = 1 << 0,             // Bypass limits like capacity/container limits, blocking items/creatures etc.
 	FLAG_IGNOREBLOCKITEM = 1 << 1,     // Bypass movable blocking item checks
@@ -26,7 +26,7 @@ enum cylinderflags_t
 	FLAG_IGNOREAUTOSTACK = 1 << 7,     // queryDestination will not try to stack items together
 };
 
-enum cylinderlink_t
+enum ReceiverLink_t
 {
 	LINK_OWNER,
 	LINK_PARENT,
@@ -169,7 +169,7 @@ public:
 	 * \param link holds the relation the object has to the thing
 	 */
 	virtual void postAddNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
-	                                 cylinderlink_t = LINK_OWNER)
+	                                 ReceiverLink_t = LINK_OWNER)
 	{}
 
 	/**
@@ -179,7 +179,7 @@ public:
 	 * \param link holds the relation the object has to the thing
 	 */
 	virtual void postRemoveNotification(const std::shared_ptr<Thing>&, const std::shared_ptr<const Thing>&, int32_t,
-	                                    cylinderlink_t = LINK_OWNER)
+	                                    ReceiverLink_t = LINK_OWNER)
 	{}
 
 	/**
@@ -245,8 +245,6 @@ public:
 	 * position)
 	 */
 	virtual void internalAddThing(uint32_t, const std::shared_ptr<Thing>&) {}
-
-	virtual void startDecaying() {}
 
 private:
 	std::weak_ptr<Thing> parent;

@@ -300,10 +300,10 @@ void Monster::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClas
 	}
 }
 
-void Monster::addFriend(const std::shared_ptr<Creature>& creature)
+void Monster::addFriend(std::shared_ptr<Creature> creature)
 {
 	assert(creature.get() != this);
-	friendList.insert(creature);
+	friendList.insert(std::move(creature));
 }
 
 void Monster::removeFriend(const std::shared_ptr<Creature>& creature)
@@ -314,14 +314,14 @@ void Monster::removeFriend(const std::shared_ptr<Creature>& creature)
 	}
 }
 
-void Monster::addTarget(const std::shared_ptr<Creature>& creature, bool pushFront /* = false*/)
+void Monster::addTarget(std::shared_ptr<Creature> creature, bool pushFront /* = false*/)
 {
 	assert(creature.get() != this);
 	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
 		if (pushFront) {
-			targetList.push_front(creature);
+			targetList.push_front(std::move(creature));
 		} else {
-			targetList.push_back(creature);
+			targetList.push_back(std::move(creature));
 		}
 	}
 }
@@ -361,10 +361,6 @@ void Monster::updateTargetList()
 		onCreatureFound(spectator);
 	}
 }
-
-void Monster::clearTargetList() { targetList.clear(); }
-
-void Monster::clearFriendList() { friendList.clear(); }
 
 void Monster::onCreatureFound(const std::shared_ptr<Creature>& creature, bool pushFront /* = false*/)
 {

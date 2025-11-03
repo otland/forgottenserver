@@ -157,6 +157,7 @@ public:
 	}
 
 	uint16_t getStaminaMinutes() const { return staminaMinutes; }
+	void setStaminaMinutes(uint16_t minutes) { staminaMinutes = std::min<uint16_t>(2520, minutes); }
 
 	bool addOfflineTrainingTries(skills_t skill, uint64_t tries);
 
@@ -176,8 +177,8 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	Guild_ptr getGuild() const { return guild; }
-	void setGuild(Guild_ptr guild);
+	std::shared_ptr<Guild> getGuild() const { return guild; }
+	void setGuild(std::shared_ptr<Guild> guild);
 
 	GuildRank_ptr getGuildRank() const { return guildRank; }
 	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
@@ -263,8 +264,8 @@ public:
 	}
 	Connection::Address getIP() const;
 
-	void addContainer(uint8_t cid, const std::shared_ptr<Container>& container);
-	void closeContainer(uint8_t cid);
+	void addContainer(uint8_t cid, std::shared_ptr<Container> container);
+	void closeContainer(uint8_t cid) { openContainers.erase(cid); }
 	void setContainerIndex(uint8_t cid, uint16_t index);
 
 	std::shared_ptr<Container> getContainerByID(uint8_t cid);
@@ -291,6 +292,7 @@ public:
 
 	uint32_t getAccount() const { return accountNumber; }
 	AccountType_t getAccountType() const { return accountType; }
+	void setAccountType(AccountType_t type) { accountType = type; }
 	uint32_t getLevel() const { return level; }
 	uint8_t getLevelPercent() const { return levelPercent; }
 	uint32_t getMagicLevel() const { return std::max<int32_t>(0, magLevel + varStats[STAT_MAGICPOINTS]); }
@@ -313,8 +315,8 @@ public:
 	uint64_t getExperience() const { return experience; }
 
 	time_t getLastLoginSaved() const { return lastLoginSaved; }
-
 	time_t getLastLogout() const { return lastLogout; }
+	time_t getPremiumEndsAt() const { return premiumEndsAt; }
 
 	const Position& getLoginPosition() const { return loginPosition; }
 	const Position& getTemplePosition() const { return town->templePosition; }
@@ -341,6 +343,7 @@ public:
 		}
 		return capacity;
 	}
+	void setCapacity(uint32_t newCapacity) { capacity = newCapacity; }
 
 	uint32_t getFreeCapacity() const
 	{
@@ -353,8 +356,22 @@ public:
 	}
 
 	int32_t getMaxHealth() const override { return std::max<int32_t>(1, healthMax + varStats[STAT_MAXHITPOINTS]); }
+	void setMaxHealth(int32_t newMaxHealth) override
+	{
+		healthMax = newMaxHealth;
+		health = std::min<int32_t>(health, getMaxHealth());
+	}
+
 	uint32_t getMana() const { return mana; }
+	void setMana(uint32_t newMana) { mana = std::min<int32_t>(newMana, getMaxMana()); }
+
 	uint32_t getMaxMana() const { return std::max<int32_t>(0, manaMax + varStats[STAT_MAXMANAPOINTS]); }
+	void setMaxMana(uint32_t newMaxMana)
+	{
+		manaMax = newMaxMana;
+		mana = std::min<int32_t>(mana, getMaxMana());
+	}
+
 	uint16_t getManaShieldBar() const { return manaShieldBar; }
 	void setManaShieldBar(uint16_t value) { manaShieldBar = value; }
 	uint16_t getMaxManaShieldBar() const { return maxManaShieldBar; }
@@ -406,9 +423,9 @@ public:
 	std::shared_ptr<Item> getTradeItem() { return tradeItem; }
 
 	// shop functions
-	void setShopOwner(const std::shared_ptr<Npc>& owner, int32_t onBuy, int32_t onSell)
+	void setShopOwner(std::shared_ptr<Npc> owner, int32_t onBuy, int32_t onSell)
 	{
-		shopOwner = owner;
+		shopOwner = std::move(owner);
 		purchaseCallback = onBuy;
 		saleCallback = onSell;
 	}
@@ -452,8 +469,11 @@ public:
 	bool updateSaleShopList(const std::shared_ptr<const Item>& item);
 	bool hasShopItemForSale(uint32_t itemId, uint8_t subType) const;
 
+	bool getChaseMode() const { return chaseMode; }
 	void setChaseMode(bool mode);
+	fightMode_t getFightMode() const { return fightMode; }
 	void setFightMode(fightMode_t mode) { fightMode = mode; }
+	bool getSecureMode() const { return secureMode; }
 	void setSecureMode(bool mode) { secureMode = mode; }
 
 	// combat functions
@@ -487,6 +507,7 @@ public:
 	}
 	uint16_t getBaseSkill(uint8_t skill) const { return skills[skill].level; }
 	uint16_t getSkillPercent(uint8_t skill) const { return skills[skill].percent; }
+	uint64_t getSkillTries(uint8_t skill) const { return skills[skill].tries; }
 
 	bool getAddAttackSkill() const { return addAttackSkillPoint; }
 	BlockType_t getLastAttackBlockType() const { return lastAttackBlockType; }
@@ -1121,9 +1142,9 @@ public:
 	void onThink(uint32_t interval) override;
 
 	void postAddNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& oldParent,
-	                         int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                         int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 	void postRemoveNotification(const std::shared_ptr<Thing>& thing, const std::shared_ptr<const Thing>& newParent,
-	                            int32_t index, cylinderlink_t link = LINK_OWNER) override;
+	                            int32_t index, ReceiverLink_t link = LINK_OWNER) override;
 
 	void setNextWalkActionTask(SchedulerTask* task);
 	void setNextActionTask(SchedulerTask* task, bool resetIdleTime = true);
@@ -1138,7 +1159,7 @@ public:
 	uint32_t getNextActionTime() const;
 
 	std::shared_ptr<Item> getWriteItem(uint32_t& windowTextId, uint16_t& maxWriteLen);
-	void setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen = 0);
+	uint32_t setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen = 0);
 
 	House* getEditHouse(uint32_t& windowTextId, uint32_t& listId);
 	void setEditHouse(House* house, uint32_t listId = 0);
@@ -1167,6 +1188,10 @@ public:
 	std::map<uint32_t, uint32_t>& getAllItemTypeCount(std::map<uint32_t, uint32_t>& countMap) const override;
 	std::shared_ptr<Thing> getThing(size_t index) const override;
 
+	void addExperience(const std::shared_ptr<Creature>& source, uint64_t exp, bool sendText = false);
+	void removeExperience(uint64_t exp, bool sendText = false);
+	double getLostPercent() const;
+
 private:
 	std::forward_list<Condition*> getMuteConditions() const;
 
@@ -1174,8 +1199,6 @@ private:
 	bool hasCapacity(const std::shared_ptr<const Item>& item, uint32_t count) const;
 
 	void gainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& source);
-	void addExperience(const std::shared_ptr<Creature>& source, uint64_t exp, bool sendText = false);
-	void removeExperience(uint64_t exp, bool sendText = false);
 
 	void updateInventoryWeight();
 
@@ -1198,7 +1221,6 @@ private:
 	std::shared_ptr<Thing> queryDestination(int32_t& index, const std::shared_ptr<const Thing>& thing,
 	                                        std::shared_ptr<Item>& destItem, uint32_t& flags) override;
 
-	void addThing(const std::shared_ptr<Thing>&) override {}
 	void addThing(int32_t index, const std::shared_ptr<Thing>& thing) override;
 
 	void updateThing(const std::shared_ptr<Thing>& thing, uint16_t itemId, uint32_t count) override;
@@ -1254,7 +1276,7 @@ private:
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
 	std::shared_ptr<BedItem> bedItem = nullptr;
-	Guild_ptr guild = nullptr;
+	std::shared_ptr<Guild> guild = nullptr;
 	GuildRank_ptr guildRank = nullptr;
 	Group* group = nullptr;
 	Inbox_ptr inbox = nullptr;
@@ -1352,7 +1374,7 @@ private:
 	uint32_t getAttackSpeed() const;
 
 	static uint16_t getBasisPointLevel(uint64_t count, uint64_t nextLevelCount);
-	double getLostPercent() const;
+
 	uint64_t getLostExperience() const override
 	{
 		return skillLoss ? static_cast<uint64_t>(experience * getLostPercent()) : 0;
@@ -1363,7 +1385,6 @@ private:
 	uint16_t getLookCorpse() const override;
 	void getPathSearchParams(const std::shared_ptr<const Creature>& creature, FindPathParams& fpp) const override;
 
-	friend class LuaScriptInterface;
 	friend class IOLoginData;
 	friend class ProtocolGame;
 };
