@@ -860,17 +860,17 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 		const ItemType& itemType = Item::items[item->getID()];
 		if (itemType.isGroundTile()) {
 			if (!ground) {
-				ground = item;
-				onAddTileItem(item);
+				ground = std::move(item);
+				onAddTileItem(ground);
 			} else {
 				const ItemType& oldType = Item::items[ground->getID()];
 
-				const auto oldGround = ground;
-				ground->setParent(nullptr);
-				ground = item;
+				const auto oldGround = std::move(ground);
+				oldGround->setParent(nullptr);
+				ground = std::move(item);
 				resetTileFlags(oldGround);
-				setTileFlags(item);
-				onUpdateTileItem(oldGround, oldType, item, itemType);
+				setTileFlags(ground);
+				onUpdateTileItem(oldGround, oldType, ground, itemType);
 				postRemoveNotification(oldGround, nullptr, 0);
 			}
 		} else if (itemType.alwaysOnTop) {

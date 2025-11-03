@@ -293,8 +293,7 @@ uint32_t ScriptEnvironment::addThing(const std::shared_ptr<Thing>& thing)
 		return 0;
 	}
 
-	const auto& creature = thing->getCreature();
-	if (creature) {
+	if (const auto& creature = thing->getCreature()) {
 		return creature->getID();
 	}
 
@@ -303,9 +302,9 @@ uint32_t ScriptEnvironment::addThing(const std::shared_ptr<Thing>& thing)
 		return item->getUniqueId();
 	}
 
-	for (const auto& it : localMap) {
-		if (it.second == item) {
-			return it.first;
+	for (const auto& [uid, localItem] : localMap) {
+		if (localItem == item) {
+			return uid;
 		}
 	}
 
@@ -7054,7 +7053,7 @@ int LuaScriptInterface::luaItemMoveTo(lua_State* L)
 	}
 
 	const auto& item = *itemPtr;
-	if (!item || item->isRemoved()) {
+	if (!item) {
 		lua_pushnil(L);
 		return 1;
 	}
