@@ -547,8 +547,6 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 		return false;
 	}
 
-	creature->releaseFollowers();
-
 	const auto& tile = creature->getTile();
 
 	std::vector<int32_t> oldStackPosVector;

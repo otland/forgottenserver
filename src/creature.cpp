@@ -858,8 +858,6 @@ void Creature::removeFollowers()
 	                followers.end());
 }
 
-void Creature::releaseFollowers() { followers.clear(); }
-
 void Creature::updateFollowersPaths()
 {
 	if (followers.empty()) {
