@@ -475,9 +475,8 @@ void Creature::onDeath()
 	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 	int32_t mostDamage = 0;
 	std::map<std::shared_ptr<Creature>, uint64_t> experienceMap;
-	for (const auto& it : damageMap) {
-		if (auto attacker = g_game.getCreatureByID(it.first)) {
-			CountBlock_t cb = it.second;
+	for (const auto& [id, cb] : damageMap) {
+		if (auto attacker = g_game.getCreatureByID(id)) {
 			if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
 				mostDamage = cb.total;
 				mostDamageCreature = attacker;

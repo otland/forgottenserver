@@ -316,7 +316,7 @@ static std::pair<Position, uint8_t> internalGetPosition(const std::shared_ptr<It
 	if (const auto& topParent = item->getTopParent()) {
 		if (const auto& creature = topParent->getCreature()) {
 			if (const auto& player = creature->getPlayer()) {
-				const uint16_t x = 0xFFFFu;
+				const uint16_t x = 0xFFFF;
 
 				if (const auto& parent = item->getParent()) {
 					if (const auto& container = parent->getContainer()) {
