@@ -28,9 +28,9 @@ void Guild::addRank(uint32_t rankId, std::string_view rankName, uint8_t level)
 	ranks.emplace_back(std::make_shared<GuildRank>(rankId, rankName, level));
 }
 
-GuildRank_ptr Guild::getRankById(uint32_t rankId)
+std::shared_ptr<GuildRank> Guild::getRankById(uint32_t rankId)
 {
-	for (auto rank : ranks) {
+	for (const auto& rank : ranks) {
 		if (rank->id == rankId) {
 			return rank;
 		}
@@ -38,9 +38,9 @@ GuildRank_ptr Guild::getRankById(uint32_t rankId)
 	return nullptr;
 }
 
-GuildRank_ptr Guild::getRankByName(const std::string& name) const
+std::shared_ptr<GuildRank> Guild::getRankByName(const std::string& name) const
 {
-	for (auto rank : ranks) {
+	for (const auto& rank : ranks) {
 		if (caseInsensitiveEqual(rank->name, name)) {
 			return rank;
 		}
@@ -48,9 +48,9 @@ GuildRank_ptr Guild::getRankByName(const std::string& name) const
 	return nullptr;
 }
 
-GuildRank_ptr Guild::getRankByLevel(uint8_t level) const
+std::shared_ptr<GuildRank> Guild::getRankByLevel(uint8_t level) const
 {
-	for (auto rank : ranks) {
+	for (const auto& rank : ranks) {
 		if (rank->level == level) {
 			return rank;
 		}

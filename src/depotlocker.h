@@ -8,8 +8,6 @@
 
 class Inbox;
 
-using DepotLocker_ptr = std::shared_ptr<DepotLocker>;
-
 class DepotLocker final : public Container
 {
 public:

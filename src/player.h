@@ -180,8 +180,8 @@ public:
 	std::shared_ptr<Guild> getGuild() const { return guild; }
 	void setGuild(std::shared_ptr<Guild> guild);
 
-	GuildRank_ptr getGuildRank() const { return guildRank; }
-	void setGuildRank(GuildRank_ptr newGuildRank) { guildRank = newGuildRank; }
+	std::shared_ptr<GuildRank> getGuildRank() const { return guildRank; }
+	void setGuildRank(std::shared_ptr<GuildRank> newGuildRank) { guildRank = std::move(newGuildRank); }
 
 	bool isGuildMate(const std::shared_ptr<const Player>& player) const;
 
@@ -1277,9 +1277,9 @@ private:
 	Connection::Address lastIP = {};
 	std::shared_ptr<BedItem> bedItem = nullptr;
 	std::shared_ptr<Guild> guild = nullptr;
-	GuildRank_ptr guildRank = nullptr;
+	std::shared_ptr<GuildRank> guildRank = nullptr;
 	Group* group = nullptr;
-	Inbox_ptr inbox = nullptr;
+	std::shared_ptr<Inbox> inbox = nullptr;
 	std::shared_ptr<Item> tradeItem = nullptr;
 	std::shared_ptr<Item> inventory[CONST_SLOT_LAST + 1] = {};
 	std::shared_ptr<Item> writeItem = nullptr;
@@ -1291,7 +1291,7 @@ private:
 	const Town* town = nullptr;
 	Vocation* vocation = nullptr;
 	std::shared_ptr<StoreInbox> storeInbox = nullptr;
-	DepotLocker_ptr depotLocker = nullptr;
+	std::shared_ptr<DepotLocker> depotLocker = nullptr;
 
 	uint32_t inventoryWeight = 0;
 	uint32_t capacity = 40000;
