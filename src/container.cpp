@@ -480,7 +480,7 @@ void Container::addThing(int32_t index, const std::shared_ptr<Thing>& thing)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (hasParent() && (getParent() != Thing::virtualThing)) {
+	if (hasParent()) {
 		onAddContainerItem(item);
 	}
 }
@@ -492,7 +492,7 @@ void Container::addItemBack(const std::shared_ptr<Item>& item)
 	ammoCount += item->getItemCount();
 
 	// send change to client
-	if (hasParent() && (getParent() != Thing::virtualThing)) {
+	if (hasParent()) {
 		onAddContainerItem(item);
 	}
 }

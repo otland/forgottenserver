@@ -461,12 +461,11 @@ void Creature::onDeath()
 	bool lastHitUnjustified = false;
 	bool mostDamageUnjustified = false;
 	const auto& lastHitCreature = g_game.getCreatureByID(lastHitCreatureId);
+
 	std::shared_ptr<Creature> lastHitCreatureMaster = nullptr;
 	if (lastHitCreature) {
 		lastHitUnjustified = lastHitCreature->onKilledCreature(getCreature());
 		lastHitCreatureMaster = lastHitCreature->getMaster();
-	} else {
-		lastHitCreatureMaster = nullptr;
 	}
 
 	std::shared_ptr<Creature> mostDamageCreature = nullptr;

@@ -246,7 +246,6 @@ public:
 	bool isSummon() const { return master != nullptr; }
 	std::shared_ptr<Creature> getMaster() const { return master; }
 
-	// Summons are owned by the master via shared_ptr to keep them alive while summoned.
 	const std::vector<std::shared_ptr<Creature>>& getSummons() const { return summons; }
 
 	virtual int32_t getArmor() const { return 0; }

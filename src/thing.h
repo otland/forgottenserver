@@ -37,8 +37,6 @@ enum cylinderlink_t
 class Thing : public std::enable_shared_from_this<Thing>
 {
 public:
-	static const std::shared_ptr<Thing> virtualThing;
-
 	constexpr Thing() = default;
 	virtual ~Thing() = default;
 
@@ -84,8 +82,8 @@ public:
 	virtual ReturnValue queryAdd(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
 	                             const std::shared_ptr<Creature>& = nullptr) const
 	{
-		throw std::runtime_error("Not implemented");
-	};
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
 
 	/**
 	 * Query the thing how much it can accept
@@ -98,8 +96,8 @@ public:
 	 */
 	virtual ReturnValue queryMaxCount(int32_t, const std::shared_ptr<const Thing>&, uint32_t, uint32_t&, uint32_t) const
 	{
-		throw std::runtime_error("Not implemented");
-	};
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
 
 	/**
 	 * Query if the thing can remove an object
@@ -111,8 +109,8 @@ public:
 	virtual ReturnValue queryRemove(const std::shared_ptr<const Thing>&, uint32_t, uint32_t,
 	                                const std::shared_ptr<Creature>& = nullptr) const
 	{
-		throw std::runtime_error("Not implemented");
-	};
+		return RETURNVALUE_NOTPOSSIBLE;
+	}
 
 	/**
 	 * Query the destination thing
@@ -126,8 +124,8 @@ public:
 	virtual std::shared_ptr<Thing> queryDestination(int32_t&, const std::shared_ptr<const Thing>&,
 	                                                std::shared_ptr<Item>&, uint32_t&)
 	{
-		throw std::runtime_error("Not implemented");
-	};
+		return nullptr;
+	}
 
 	/**
 	 * Add the object to the thing
