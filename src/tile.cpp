@@ -913,7 +913,7 @@ void Tile::addThing(int32_t, const std::shared_ptr<Thing>& thing)
 				if (items) {
 					// remove old field item if exists
 					for (auto it = items->getBeginDownItem(), end = items->getEndDownItem(); it != end; ++it) {
-						if (auto oldField = (*it)->getMagicField()) {
+						if (const auto oldField = (*it)->getMagicField()) {
 							if (oldField->isReplaceable()) {
 								removeThing(oldField, 1);
 								assert(oldField->getParent() == nullptr);
