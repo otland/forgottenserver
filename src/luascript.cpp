@@ -69,9 +69,6 @@ enum LuaDataType
 	LuaData_Tile,
 };
 
-// temporary item list
-std::multimap<ScriptEnvironment*, std::shared_ptr<Item>> tempItems = {};
-
 // result map
 uint32_t lastResultId = 0;
 std::map<uint32_t, DBResult_ptr> tempResults = {};
@@ -267,9 +264,6 @@ void ScriptEnvironment::resetEnv()
 	interface = nullptr;
 	localMap.clear();
 	tempResults.clear();
-
-	auto [first, last] = tempItems.equal_range(this);
-	tempItems.erase(first, last);
 }
 
 bool ScriptEnvironment::setCallbackId(int32_t callbackId, LuaScriptInterface* scriptInterface)
@@ -370,17 +364,7 @@ void ScriptEnvironment::removeItemByUID(uint32_t uid)
 		return;
 	}
 
-	auto it = localMap.find(uid);
-	if (it != localMap.end()) {
-		localMap.erase(it);
-	}
-}
-
-static void addTempItem(std::shared_ptr<Item> item) { tempItems.emplace(tfs::lua::getScriptEnv(), std::move(item)); }
-
-void tfs::lua::removeTempItem(const std::shared_ptr<Item>& item)
-{
-	std::erase_if(tempItems, [&item](const auto& pair) { return pair.second == item; });
+	localMap.erase(uid);
 }
 
 static uint32_t addResult(DBResult_ptr res)
@@ -4918,8 +4902,6 @@ int LuaScriptInterface::luaGameCreateItem(lua_State* L)
 		}
 
 		g_game.internalAddItem(tile, item, INDEX_WHEREEVER, FLAG_NOLIMIT);
-	} else {
-		addTempItem(item);
 	}
 
 	tfs::lua::pushSharedPtr(L, item);
@@ -4957,8 +4939,6 @@ int LuaScriptInterface::luaGameCreateContainer(lua_State* L)
 		}
 
 		g_game.internalAddItem(tile, container, INDEX_WHEREEVER, FLAG_NOLIMIT);
-	} else {
-		addTempItem(container);
 	}
 
 	tfs::lua::pushSharedPtr(L, container);
@@ -5928,11 +5908,7 @@ int LuaScriptInterface::luaTileAddItemEx(lua_State* L)
 	}
 
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 3, 0);
-	ReturnValue ret = g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags);
-	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, ret);
+	lua_pushnumber(L, g_game.internalAddItem(tile, item, INDEX_WHEREEVER, flags));
 	return 1;
 }
 
@@ -6608,8 +6584,6 @@ int LuaScriptInterface::luaItemClone(lua_State* L)
 		return 1;
 	}
 
-	addTempItem(clone);
-
 	tfs::lua::pushSharedPtr(L, clone);
 	tfs::lua::setItemMetatable(L, -1, clone);
 	return 1;
@@ -6654,8 +6628,6 @@ int LuaScriptInterface::luaItemSplit(lua_State* L)
 	}
 
 	*itemPtr = newItem;
-
-	addTempItem(splitItem);
 
 	tfs::lua::pushSharedPtr(L, splitItem);
 	tfs::lua::setItemMetatable(L, -1, splitItem);
@@ -7504,11 +7476,7 @@ int LuaScriptInterface::luaContainerAddItemEx(lua_State* L)
 
 	int32_t index = tfs::lua::getNumber<int32_t>(L, 3, INDEX_WHEREEVER);
 	uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 4, 0);
-	ReturnValue ret = g_game.internalAddItem(container, item, index, flags);
-	if (ret == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, ret);
+	lua_pushnumber(L, g_game.internalAddItem(container, item, index, flags));
 	return 1;
 }
 
@@ -9979,20 +9947,14 @@ int LuaScriptInterface::luaPlayerAddItemEx(lua_State* L)
 	}
 
 	bool canDropOnMap = tfs::lua::getBoolean(L, 3, false);
-	ReturnValue returnValue;
 	if (canDropOnMap) {
 		slots_t slot = tfs::lua::getNumber<slots_t>(L, 4, CONST_SLOT_WHEREEVER);
-		returnValue = g_game.internalPlayerAddItem(player, item, true, slot);
+		lua_pushnumber(L, g_game.internalPlayerAddItem(player, item, true, slot));
 	} else {
 		int32_t index = tfs::lua::getNumber<int32_t>(L, 4, INDEX_WHEREEVER);
 		uint32_t flags = tfs::lua::getNumber<uint32_t>(L, 5, 0);
-		returnValue = g_game.internalAddItem(player, item, index, flags);
+		lua_pushnumber(L, g_game.internalAddItem(player, item, index, flags));
 	}
-
-	if (returnValue == RETURNVALUE_NOERROR) {
-		tfs::lua::removeTempItem(item);
-	}
-	lua_pushnumber(L, returnValue);
 	return 1;
 }
 

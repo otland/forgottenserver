@@ -1414,8 +1414,6 @@ private:
 
 namespace tfs::lua {
 
-void removeTempItem(const std::shared_ptr<Item>& item);
-
 ScriptEnvironment* getScriptEnv();
 bool reserveScriptEnv();
 void resetScriptEnv();

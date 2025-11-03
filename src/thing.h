@@ -54,8 +54,8 @@ public:
 	virtual std::shared_ptr<const Tile> getTile() const { return nullptr; }
 
 	virtual const Position& getPosition() const;
-	virtual int32_t getThrowRange() const { throw std::runtime_error("Not implemented"); };
-	virtual bool isPushable() const { throw std::runtime_error("Not implemented"); };
+	virtual int32_t getThrowRange() const { return 0; };
+	virtual bool isPushable() const { return false; };
 
 	virtual std::shared_ptr<Container> getContainer() { return nullptr; }
 	virtual std::shared_ptr<const Container> getContainer() const { return nullptr; }

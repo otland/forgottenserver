@@ -225,8 +225,6 @@ void Item::setDefaultSubtype()
 
 void Item::onRemoved()
 {
-	tfs::lua::removeTempItem(getItem());
-
 	if (hasAttribute(ITEM_ATTRIBUTE_UNIQUEID)) {
 		g_game.removeUniqueItem(getUniqueId());
 	}
