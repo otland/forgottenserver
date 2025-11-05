@@ -144,7 +144,6 @@ private:
 	                           const std::shared_ptr<Item>& newItem);
 	void onRemoveContainerItem(uint32_t index, const std::shared_ptr<Item>& item);
 
-	std::shared_ptr<Container> getParentContainer();
 	void updateItemWeight(int32_t diff);
 
 	friend class ContainerIterator;

@@ -40,14 +40,6 @@ std::shared_ptr<Item> Container::clone() const
 	return clone;
 }
 
-std::shared_ptr<Container> Container::getParentContainer()
-{
-	if (const auto& thing = getParent()) {
-		return thing->getContainer();
-	}
-	return nullptr;
-}
-
 std::string Container::getName(bool addArticle /* = false*/) const
 {
 	const ItemType& it = items[id];
@@ -122,8 +114,10 @@ bool Container::unserializeItemNode(OTB::Loader& loader, const OTB::Node& node, 
 void Container::updateItemWeight(int32_t diff)
 {
 	totalWeight += diff;
-	if (const auto& parentContainer = getParentContainer()) {
-		parentContainer->updateItemWeight(diff);
+	if (const auto& parent = getParent()) {
+		if (const auto& parentContainer = parent->getContainer()) {
+			parentContainer->updateItemWeight(diff);
+		}
 	}
 }
 
