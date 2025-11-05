@@ -844,7 +844,7 @@ void Combat::doTargetCombat(Creature* caster, Creature* target, CombatDamage& da
 		}
 
 		if (!damage.leeched && damage.primary.type != COMBAT_HEALING && casterPlayer &&
-		    damage.origin != ORIGIN_CONDITION) {
+		    target != caster && damage.origin != ORIGIN_CONDITION) {
 			CombatDamage leechCombat;
 			leechCombat.origin = ORIGIN_NONE;
 			leechCombat.leeched = true;
