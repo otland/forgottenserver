@@ -29,7 +29,7 @@ int getPvpType()
 			return 2;
 	}
 
-	tfs::unreachable();
+	std::unreachable();
 }
 
 } // namespace
