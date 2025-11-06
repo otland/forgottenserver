@@ -955,14 +955,14 @@ void Monster::onThinkDefense(uint32_t interval)
 		}
 	}
 
-	if (!isSummon() && summons.size() < mType->info.maxSummons && hasFollowPath) {
+	if (!isSummon() && getSummons().size() < mType->info.maxSummons && hasFollowPath) {
 		for (const summonBlock_t& summonBlock : mType->info.summons) {
 			if (summonBlock.speed > defenseTicks) {
 				resetTicks = false;
 				continue;
 			}
 
-			if (summons.size() >= mType->info.maxSummons) {
+			if (getSummons().size() >= mType->info.maxSummons) {
 				continue;
 			}
 
@@ -972,7 +972,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			}
 
 			uint32_t summonCount = 0;
-			for (const auto& summon : summons) {
+			for (const auto& summon : getSummons() | tfs::views::lock_weak_ptrs) {
 				if (summon->getName() == summonBlock.name) {
 					++summonCount;
 				}
@@ -1835,11 +1835,11 @@ void Monster::death(const std::shared_ptr<Creature>&)
 {
 	removeAttackedCreature();
 
-	for (const auto& summon : summons) {
+	for (const auto& summon : getSummons() | tfs::views::lock_weak_ptrs) {
 		summon->changeHealth(-summon->getHealth());
 		summon->removeMaster();
 	}
-	summons.clear();
+	clearSummons();
 
 	clearTargetList();
 	clearFriendList();

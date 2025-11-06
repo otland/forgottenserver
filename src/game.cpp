@@ -587,7 +587,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 
 	removeCreatureCheck(creature);
 
-	for (const auto& summon : creature->summons) {
+	for (const auto& summon : creature->getSummons() | tfs::views::lock_weak_ptrs) {
 		summon->setSkillLoss(false);
 		removeCreature(summon);
 	}

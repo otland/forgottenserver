@@ -24,7 +24,7 @@ Creature::Creature() { onIdleStatus(); }
 
 Creature::~Creature()
 {
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->removeAttackedCreature();
 		summon->removeMaster();
 	}
@@ -398,11 +398,11 @@ void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const s
 
 		if (!summons.empty()) {
 			// check if any of our summons is out of range (+/- 2 floors or 30 tiles away)
-			std::forward_list<std::shared_ptr<Creature>> despawnList;
-			for (const auto& summon : summons) {
+			std::vector<std::shared_ptr<Creature>> despawnList;
+			for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 				const Position& pos = summon->getPosition();
 				if (newPos.getDistanceZ(pos) > 2 || std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30) {
-					despawnList.push_front(summon);
+					despawnList.push_back(summon);
 				}
 			}
 
@@ -744,7 +744,7 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 	onAttackedCreature(attackedCreature);
 	attackedCreature->onAttacked();
 
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->setAttackedCreature(creature);
 	}
 }
@@ -753,7 +753,7 @@ void Creature::removeAttackedCreature()
 {
 	attackedCreature = nullptr;
 
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->removeAttackedCreature();
 	}
 }
@@ -1051,10 +1051,7 @@ bool Creature::setMaster(const std::shared_ptr<Creature>& newMaster)
 	master = newMaster;
 
 	if (oldMaster) {
-		auto summon = std::find(oldMaster->summons.begin(), oldMaster->summons.end(), getCreature());
-		if (summon != oldMaster->summons.end()) {
-			oldMaster->summons.erase(summon);
-		}
+		oldMaster->removeSummon(getCreature());
 	}
 	return true;
 }

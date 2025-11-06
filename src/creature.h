@@ -249,7 +249,16 @@ public:
 	std::shared_ptr<Creature> getMaster() const { return master; }
 
 	const auto& getDamageMap() const { return damageMap; }
+
+	void removeSummon(const std::shared_ptr<Creature>& summon)
+	{
+		auto it = std::ranges::find_if(summons, [&summon](const auto& wp) { return summon == wp.lock(); });
+		if (it != summons.end()) {
+			summons.erase(it);
+		}
+	}
 	const auto& getSummons() const { return summons; }
+	void clearSummons() { summons.clear(); }
 
 	virtual int32_t getArmor() const { return 0; }
 	virtual int32_t getDefense() const { return 0; }
@@ -341,7 +350,6 @@ public:
 
 	virtual bool getCombatValues(int32_t&, int32_t&) { return false; }
 
-	size_t getSummonCount() const { return summons.size(); }
 	void setDropLoot(bool lootDrop) { this->lootDrop = lootDrop; }
 	void setSkillLoss(bool skillLoss) { this->skillLoss = skillLoss; }
 	void setUseDefense(bool useDefense) { canUseDefense = useDefense; }
@@ -397,7 +405,6 @@ protected:
 
 	std::map<uint32_t, CountBlock_t> damageMap;
 
-	std::vector<std::shared_ptr<Creature>> summons;
 	CreatureEventList eventsList;
 	ConditionList conditions;
 	CreatureIconHashMap creatureIcons;
@@ -472,6 +479,7 @@ protected:
 	friend class Map;
 
 private:
+	std::vector<std::weak_ptr<Creature>> summons;
 	std::map<uint32_t, int32_t> storageMap;
 };
 

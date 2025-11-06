@@ -74,6 +74,13 @@ std::array<Direction, 4> getShuffleDirections();
 
 namespace tfs {
 
+namespace views {
+
+constexpr auto lock_weak_ptrs = std::views::transform([](const auto& wp) { return wp.lock(); }) |
+                                std::views::filter([](const auto& sp) { return sp != nullptr; });
+
+} // namespace views
+
 #if __has_cpp_attribute(__cpp_lib_to_underlying)
 
 template <class T>
