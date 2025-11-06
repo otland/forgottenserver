@@ -29,6 +29,41 @@ local function getDestination(target, param, index)
 	return target
 end
 
+local function addDestionation(destination, itemId, count, subType)
+	local result
+	if destination:isCreature() and destination:isPlayer() then
+		-- itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = CONST_SLOT_WHEREEVER]]]]
+		result = destination:addItem(itemId, count, true, subType, CONST_SLOT_WHEREEVER)
+	elseif destination:isContainer() then
+		-- itemId[, count / subType = 1 [, index = INDEX_WHEREEVER[, flags = 0]]]
+		result = destination:addItem(itemId, count, subType, INDEX_WHEREEVER)
+	elseif destination:isTile() then
+		-- itemId[, count / subType = 1 [, flags = 0]]
+		result = destination:addItem(itemId, count, subType)
+	end
+
+	if type(result) == "table" then
+		return result
+	end
+	return {result}
+end
+
+local function sendPlayerItemInformation(player, data)
+    local lines = {}
+
+    for label, value in pairs(data) do
+        if value ~= nil then
+            table.insert(lines, label .. ": " .. tostring(value))
+        end
+    end
+
+    if #lines > 0 then
+		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
+        player:sendTextMessage(MESSAGE_STATUS_DEFAULT, "Item created successfully. [" .. table.concat(lines, ", ") .. "]")
+    end
+	return true
+end
+
 function onSay(player, words, param)
 	if not player:getGroup():getAccess() then
 		return true
@@ -53,29 +88,37 @@ function onSay(player, words, param)
 		return false
 	end
 
-    local count, subType, keyNumber, destinationParam, targetName, indexParam = nil, 1, 0, nil, nil, 0
+	local count, subType, keyNumber, destinationParam, targetName, indexParam = nil, nil, nil, nil, nil, nil
 
 	for i = 2, #split do
-        local arg = split[i]:trim()
-        local lowerArg = arg:lower()
-        local numArg = tonumber(arg)
+		local arg = split[i]:trim()
+		local lowerArg = arg:lower()
+		local numArg = tonumber(arg)
 
-        if i == 2 then
-            count = numArg or 1
-        elseif i == 3 and not table.contains(destinations, lowerArg) then
-            if numArg then
-                subType = numArg
-            else
-                targetName = arg
-            end
-        elseif table.contains(destinations, lowerArg) then
-            destinationParam = lowerArg
-        elseif numArg then
-            indexParam = numArg
-        elseif not targetName then
-            targetName = arg
-        end
-    end
+		if table.contains(destinations, lowerArg) and not destinationParam then
+			destinationParam = lowerArg
+		elseif not count then
+			if itemType:isFluidContainer() then
+				count = math.max(0, math.min(numArg, itemType:getCharges()))
+			else
+				count = math.min(10000, math.max(1, numArg or 1))
+			end
+		elseif not subType and not keyNumber then
+			if not itemType:isStackable() then
+				if itemType:isKey() then
+					keyNumber = numArg or 1
+				else
+					subType = numArg or 1
+				end
+			else
+				subType = 1
+			end
+		elseif not indexParam and destinationParam and numArg then
+			indexParam = numArg or 1
+		elseif not targetName then
+			targetName = arg
+		end
+	end
 
 	local targetPlayer = player
 	if targetName then
@@ -88,48 +131,8 @@ function onSay(player, words, param)
 		targetPlayer = found
 	end
 
-	if count then
-		if itemType:isFluidContainer() then
-			count = math.max(0, math.min(count, 99))
-		elseif itemType:isKey() then
-			keyNumber = count
-			count = 1
-		else
-			count = math.min(10000, math.max(1, count))
-		end
-	else
-		if not itemType:isFluidContainer() then
-			count = math.max(1, itemType:getCharges())
-		else
-			count = 0
-		end
-	end
-
 	local destination = getDestination(targetPlayer, destinationParam, indexParam)
-	
-	local result = {}
-	if itemType:isStackable() then
-		local item = destination:addItem(itemType:getId(), count, true, subType)
-		if item then
-			if type(result) == "table" then
-				table.concat(result, item)
-			else
-				table.insert(result, item)
-			end
-		end
-	else
-		for i = 1, count do
-			local item = destination:addItem(itemType:getId(), subType, true, 1)
-			if item then
-				if type(result) == "table" then
-					table.concat(result, item)
-				else
-					table.insert(result, item)
-				end
-			end
-		end
-	end
-
+	local result = addDestionation(destination, itemType:getId(), count, subType)
 	if result then
 		for _, item in ipairs(result) do
 			if itemType:isKey() then
@@ -137,7 +140,18 @@ function onSay(player, words, param)
 			end
 			item:decay()
 		end
-		player:getPosition():sendMagicEffect(CONST_ME_MAGIC_GREEN)
+
+		local itemInformation = {
+			["id"] = itemType:getId(),
+			["count"] = count,
+			["subtype"] = subType,
+			["keynumber"] = keyNumber,
+			["destination"] = destinationParam,
+			["target"] = targetName,
+			["index"] = indexParam
+		}
+
+		sendPlayerItemInformation(player, itemInformation)
 	end
 	return false
 end
