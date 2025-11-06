@@ -35,12 +35,9 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centerz").value()));
 
-		int32_t radius;
-		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
-		if (radiusAttribute) {
+		int32_t radius = -1;
+		if (const auto radiusAttribute = spawnNode.attribute("radius")) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
-		} else {
-			radius = -1;
 		}
 
 		if (radius > 30) {
@@ -54,8 +51,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 			continue;
 		}
 
-		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.front();
+		auto& spawn = spawnList.emplace_back(centerPos, radius);
 
 		for (auto childNode : spawnNode.children()) {
 			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
@@ -182,7 +178,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 				    Position(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
 				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z),
 				    radius);
-				npcList.push_front(npc);
+				npcList.push_back(npc);
 			}
 		}
 
@@ -199,7 +195,7 @@ void Spawns::startup()
 		return;
 	}
 
-	for (const auto& npc : npcList) {
+	for (const auto& npc : npcList | tfs::views::lock_weak_ptrs) {
 		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName()
 			          << "\" on position: " << npc->getMasterPos() << '.' << std::endl;

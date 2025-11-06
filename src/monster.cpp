@@ -467,7 +467,7 @@ void Monster::onCreatureLeave(const std::shared_ptr<Creature>& creature)
 
 bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAULT*/)
 {
-	std::list<std::shared_ptr<Creature>> resultList;
+	std::vector<std::shared_ptr<Creature>> resultList;
 	const Position& myPos = getPosition();
 
 	for (const auto& creature : targetList) {
