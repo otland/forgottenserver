@@ -97,24 +97,26 @@ function onSay(player, words, param)
 
 		if table.contains(destinations, lowerArg) and not destinationParam then
 			destinationParam = lowerArg
-		elseif not count then
-			if itemType:isFluidContainer() then
-				count = math.max(0, math.min(numArg, itemType:getCharges()))
-			else
-				count = math.min(10000, math.max(1, numArg or 1))
-			end
-		elseif not subType and not keyNumber then
-			if not itemType:isStackable() then
-				if itemType:isKey() then
-					keyNumber = numArg or 1
+		elseif numArg then
+			if not count then
+				if itemType:isFluidContainer() then
+					count = math.max(0, math.min(numArg, itemType:getCharges()))
 				else
-					subType = numArg or 1
+					count = math.min(10000, math.max(1, numArg or 1))
 				end
-			else
-				subType = 1
+			elseif not subType and not keyNumber then
+				if not itemType:isStackable() then
+					if itemType:isKey() then
+						keyNumber = numArg or 1
+					else
+						subType = numArg or 1
+					end
+				else
+					subType = 1
+				end
+			elseif not indexParam and destinationParam then
+				indexParam = numArg or 1
 			end
-		elseif not indexParam and destinationParam and numArg then
-			indexParam = numArg or 1
 		elseif not targetName then
 			targetName = arg
 		end
