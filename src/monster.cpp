@@ -756,7 +756,7 @@ void Monster::onThink(uint32_t interval)
 			addEventWalk();
 
 			if (isSummon()) {
-				if (!attackedCreature) {
+				if (const auto& attackedCreature = getAttackedCreature(); !attackedCreature) {
 					if (getMaster() && getMaster()->getAttackedCreature()) {
 						// This happens if the monster is summoned during combat
 						selectTarget(getMaster()->getAttackedCreature());
@@ -774,7 +774,8 @@ void Monster::onThink(uint32_t interval)
 				if (!followCreature || !hasFollowPath) {
 					searchTarget();
 				} else if (isFleeing()) {
-					if (attackedCreature && !canUseAttack(getPosition(), attackedCreature)) {
+					if (const auto& attackedCreature = getAttackedCreature();
+					    attackedCreature && !canUseAttack(getPosition(), attackedCreature)) {
 						searchTarget(TARGETSEARCH_ATTACKRANGE);
 					}
 				}
@@ -789,6 +790,7 @@ void Monster::onThink(uint32_t interval)
 
 void Monster::doAttacking(uint32_t interval)
 {
+	const auto& attackedCreature = getAttackedCreature();
 	if (!attackedCreature || (isSummon() && attackedCreature.get() == this)) {
 		return;
 	}
@@ -1053,7 +1055,7 @@ void Monster::onWalk()
 {
 	Creature::onWalk();
 
-	if ((attackedCreature || followCreature) && isFleeing()) {
+	if (const auto& attackedCreature = getAttackedCreature(); (attackedCreature || followCreature) && isFleeing()) {
 		if (lastPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
@@ -1190,7 +1192,8 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 					ignoreFieldDamage = false;
 				}
 				// target dancing
-				if (attackedCreature && attackedCreature == followCreature) {
+				if (const auto& attackedCreature = getAttackedCreature();
+				    attackedCreature && attackedCreature == followCreature) {
 					if (isFleeing()) {
 						result = getDanceStep(getPosition(), direction, false, false);
 					} else if (mType->info.staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
@@ -1232,9 +1235,11 @@ bool Monster::getRandomStep(const Position& creaturePos, Direction& direction) c
 bool Monster::getDanceStep(const Position& creaturePos, Direction& direction, bool keepAttack /*= true*/,
                            bool keepDistance /*= true*/)
 {
+	const auto& attackedCreature = getAttackedCreature();
+	assert(attackedCreature);
+
 	bool canDoAttackNow = canUseAttack(creaturePos, attackedCreature);
 
-	assert(attackedCreature);
 	const Position& centerPos = attackedCreature->getPosition();
 
 	int32_t offset_x = creaturePos.getOffsetX(centerPos);
@@ -1905,14 +1910,14 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 
 void Monster::updateLookDirection()
 {
-	if (!attackedCreature) {
+	if (attackedCreature.expired()) {
 		return;
 	}
 
 	auto lookDirection = DIRECTION_NONE;
 
 	const auto& currentPosition = getPosition();
-	const auto& targetPosition = attackedCreature->getPosition();
+	const auto& targetPosition = getAttackedCreature()->getPosition();
 
 	auto offsetX = targetPosition.getOffsetX(currentPosition);
 	auto absOffsetX = std::abs(offsetX);

@@ -232,11 +232,14 @@ public:
 	void updateFollowersPaths();
 
 	// combat functions
-	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature; }
+	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature.lock(); }
 	virtual void setAttackedCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeAttackedCreature();
 	virtual bool canAttackCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isAttackingCreature(const std::shared_ptr<Creature>& creature) { return attackedCreature == creature; }
+	virtual bool isAttackingCreature(const std::shared_ptr<Creature>& creature)
+	{
+		return creature == getAttackedCreature();
+	}
 
 	virtual BlockType_t blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
@@ -364,17 +367,17 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
-	std::shared_ptr<Thing> getParent() const override final { return tile; }
+	std::shared_ptr<Thing> getParent() const override final { return tile.lock(); }
 	void setParent(const std::shared_ptr<Thing>& thing) override final
 	{
 		tile = thing->getTile();
-		position = tile->getPosition();
+		position = thing->getTile()->getPosition();
 	}
 
 	const Position& getPosition() const override final { return position; }
 
-	std::shared_ptr<Tile> getTile() override final { return tile; }
-	std::shared_ptr<const Tile> getTile() const override final { return tile; }
+	std::shared_ptr<Tile> getTile() override final { return tile.lock(); }
+	std::shared_ptr<const Tile> getTile() const override final { return tile.lock(); }
 
 	const Position& getLastPosition() const { return lastPosition; }
 	void setLastPosition(Position newLastPos) { lastPosition = newLastPos; }
@@ -411,8 +414,8 @@ protected:
 
 	std::vector<Direction> listWalkDir;
 
-	std::shared_ptr<Tile> tile = nullptr;
-	std::shared_ptr<Creature> attackedCreature = nullptr;
+	std::weak_ptr<Tile> tile;
+	std::weak_ptr<Creature> attackedCreature;
 	std::shared_ptr<Creature> master = nullptr;
 	std::shared_ptr<Creature> followCreature = nullptr;
 	std::vector<std::shared_ptr<Creature>> followers;

@@ -402,7 +402,7 @@ uint32_t Player::getClientIcons() const
 		icons |= ICON_REDSWORDS;
 	}
 
-	if (tile && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+	if (const auto& tile = getTile(); tile && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		icons |= ICON_PIGEON;
 
 		// Don't show ICON_SWORDS if player is in protection zone.
@@ -799,8 +799,10 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
-		removeAttackedCreature();
+	if (const auto& attackedCreature = getAttackedCreature()) {
+		if ((hasLostConnection || noPongTime >= 7000) && attackedCreature->getPlayer()) {
+			removeAttackedCreature();
+		}
 	}
 
 	int32_t noPongKickTime = vocation->getNoPongKickTime();
@@ -1107,7 +1109,7 @@ void Player::onFollowCreatureDisappear(bool isLogout)
 void Player::onChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
-		if (attackedCreature && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
+		if (getAttackedCreature() && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 			removeAttackedCreature();
 			onAttackedCreatureDisappear(false);
 		}
@@ -1136,7 +1138,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
-		if (attackedCreature->getPlayer()) {
+		if (const auto& attackedCreature = getAttackedCreature(); attackedCreature->getPlayer()) {
 			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
@@ -1145,7 +1147,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	} else if (zone == ZONE_NORMAL) {
 		// attackedCreature can leave a pvp zone if not pzlocked
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-			if (attackedCreature->getPlayer()) {
+			if (const auto& attackedCreature = getAttackedCreature(); attackedCreature->getPlayer()) {
 				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
 			}
@@ -3309,14 +3311,14 @@ void Player::doAttacking(uint32_t)
 
 		if (const Weapon* weapon = g_weapons->getWeapon(tool)) {
 			if (!weapon->interruptSwing()) {
-				result = weapon->useWeapon(getPlayer(), tool, attackedCreature);
+				result = weapon->useWeapon(getPlayer(), tool, getAttackedCreature());
 			} else if (!classicSpeed && !canDoAction()) {
 				delay = getNextActionTime();
 			} else {
-				result = weapon->useWeapon(getPlayer(), tool, attackedCreature);
+				result = weapon->useWeapon(getPlayer(), tool, getAttackedCreature());
 			}
 		} else {
-			result = Weapon::useFist(getPlayer(), attackedCreature);
+			result = Weapon::useFist(getPlayer(), getAttackedCreature());
 		}
 
 		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
@@ -3360,13 +3362,13 @@ void Player::setChaseMode(bool mode)
 	bool prevChaseMode = chaseMode;
 	chaseMode = mode;
 
-	if (prevChaseMode != chaseMode) {
+	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature && prevChaseMode != chaseMode) {
 		if (chaseMode) {
-			if (!followCreature && attackedCreature) {
+			if (!followCreature) {
 				// chase opponent
 				setFollowCreature(attackedCreature);
 			}
-		} else if (attackedCreature) {
+		} else {
 			removeFollowCreature();
 			cancelNextWalk = true;
 		}
@@ -4235,7 +4237,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+		if (const auto& tile = getTile(); !group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 			sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 			return false;
 		}

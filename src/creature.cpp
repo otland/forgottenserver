@@ -124,7 +124,8 @@ void Creature::onThink(uint32_t interval)
 		onCreatureDisappear(followCreature, false);
 	}
 
-	if (attackedCreature && master != attackedCreature && !canSeeCreature(attackedCreature)) {
+	if (const auto& attackedCreature = getAttackedCreature();
+	    attackedCreature && master != attackedCreature && !canSeeCreature(attackedCreature)) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 
@@ -143,7 +144,7 @@ void Creature::onThink(uint32_t interval)
 
 void Creature::forceUpdatePath()
 {
-	if (!attackedCreature && !followCreature) {
+	if (attackedCreature.expired() && !followCreature) {
 		return;
 	}
 
@@ -153,11 +154,13 @@ void Creature::forceUpdatePath()
 
 void Creature::onAttacking(uint32_t interval)
 {
-	if (!attackedCreature) {
+	if (attackedCreature.expired()) {
 		return;
 	}
 
 	onAttacked();
+
+	const auto& attackedCreature = getAttackedCreature();
 	attackedCreature->onAttacked();
 
 	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
@@ -209,7 +212,7 @@ void Creature::onWalk()
 		addEventWalk();
 	}
 
-	if (attackedCreature || followCreature) {
+	if (!attackedCreature.expired() || followCreature) {
 		if (lastPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
@@ -339,7 +342,7 @@ void Creature::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool)
 
 void Creature::onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout)
 {
-	if (attackedCreature == creature) {
+	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature == creature) {
 		removeAttackedCreature();
 		onAttackedCreatureDisappear(isLogout);
 	}
@@ -364,14 +367,14 @@ void Creature::updateFollowCreaturePath(FindPathParams& fpp)
 
 void Creature::onChangeZone(ZoneType_t zone)
 {
-	if (attackedCreature && zone == ZONE_PROTECTION) {
+	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature && zone == ZONE_PROTECTION) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 }
 
 void Creature::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
-	if (zone == ZONE_PROTECTION) {
+	if (const auto& attackedCreature = getAttackedCreature(); zone == ZONE_PROTECTION) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 }
@@ -423,7 +426,8 @@ void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const s
 		}
 	}
 
-	if (creature == attackedCreature || (creature.get() == this && attackedCreature)) {
+	if (const auto& attackedCreature = getAttackedCreature();
+	    creature == attackedCreature || (creature.get() == this && attackedCreature)) {
 		if (newPos.z != oldPos.z || !canSee(attackedCreature->getPosition())) {
 			onCreatureDisappear(attackedCreature, false);
 		} else {
@@ -741,8 +745,8 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 
 	attackedCreature = creature;
 	creature->addFollower(getCreature());
-	onAttackedCreature(attackedCreature);
-	attackedCreature->onAttacked();
+	onAttackedCreature(creature);
+	creature->onAttacked();
 
 	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->setAttackedCreature(creature);
@@ -751,7 +755,7 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 
 void Creature::removeAttackedCreature()
 {
-	attackedCreature = nullptr;
+	attackedCreature.reset();
 
 	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->removeAttackedCreature();
@@ -1284,27 +1288,24 @@ int64_t Creature::getStepDuration() const
 		return 0;
 	}
 
-	uint32_t calculatedStepSpeed;
-	uint32_t groundSpeed;
-
 	int32_t stepSpeed = getStepSpeed();
+	uint32_t calculatedStepSpeed = 1;
 	if (stepSpeed > -Creature::speedB) {
 		calculatedStepSpeed =
 		    floor((Creature::speedA * log((stepSpeed / 2) + Creature::speedB) + Creature::speedC) + 0.5);
 		if (calculatedStepSpeed == 0) {
 			calculatedStepSpeed = 1;
 		}
-	} else {
-		calculatedStepSpeed = 1;
 	}
 
-	if (const auto& ground = tile->getGround()) {
-		groundSpeed = Item::items[ground->getID()].speed;
-		if (groundSpeed == 0) {
-			groundSpeed = 150;
+	uint32_t groundSpeed = 150;
+	if (const auto& tile = getTile()) {
+		if (const auto& ground = tile->getGround()) {
+			groundSpeed = Item::items[ground->getID()].speed;
+			if (groundSpeed == 0) {
+				groundSpeed = 150;
+			}
 		}
-	} else {
-		groundSpeed = 150;
 	}
 
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
