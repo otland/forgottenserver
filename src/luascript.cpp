@@ -8544,10 +8544,11 @@ int LuaScriptInterface::luaCreatureGetSummons(lua_State* L)
 		return 1;
 	}
 
-	lua_createtable(L, creature->getSummons().size(), 0);
+	const auto summons = creature->getSummons() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, summons.size(), 0);
 
 	int index = 0;
-	for (const auto& summon : creature->getSummons() | tfs::views::lock_weak_ptrs) {
+	for (const auto& summon : summons) {
 		tfs::lua::pushSharedPtr(L, summon);
 		tfs::lua::setCreatureMetatable(L, -1, summon);
 		lua_rawseti(L, -2, ++index);
