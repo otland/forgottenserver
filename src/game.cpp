@@ -580,6 +580,10 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 		creature->setMaster(nullptr);
 	}
 
+	for (const auto& condition : creature->getConditions()) {
+		creature->removeCondition(condition, true);
+	}
+
 	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
 
 	creature->removeList();

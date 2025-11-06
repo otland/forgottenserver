@@ -28,14 +28,7 @@ Creature::~Creature()
 		summon->removeAttackedCreature();
 		summon->removeMaster();
 	}
-
-	for (Condition* condition : conditions) {
-		condition->endCondition(getCreature());
-	}
-
-	for (auto condition : conditions) {
-		delete condition;
-	}
+	assert(conditions.empty());
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
@@ -1220,7 +1213,7 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	ConditionList tempConditions{conditions};
+	auto tempConditions = conditions;
 	for (Condition* condition : tempConditions) {
 		auto it = std::find(conditions.begin(), conditions.end(), condition);
 		if (it == conditions.end()) {

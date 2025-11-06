@@ -18,7 +18,6 @@ class Monster;
 class Npc;
 class Player;
 
-using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
 using CreatureIconHashMap = std::unordered_map<CreatureIcon_t, uint16_t>;
 
@@ -278,6 +277,7 @@ public:
 	void removeCombatCondition(ConditionType_t type);
 	Condition* getCondition(ConditionType_t type) const;
 	Condition* getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId = 0) const;
+	const auto& getConditions() const { return conditions; }
 	void executeConditions(uint32_t interval);
 	bool hasCondition(ConditionType_t type, uint32_t subId = 0) const;
 	virtual bool isImmune(ConditionType_t type) const;
@@ -409,7 +409,7 @@ protected:
 	std::map<uint32_t, CountBlock_t> damageMap;
 
 	CreatureEventList eventsList;
-	ConditionList conditions;
+	std::vector<Condition*> conditions;
 	CreatureIconHashMap creatureIcons;
 
 	std::vector<Direction> listWalkDir;
