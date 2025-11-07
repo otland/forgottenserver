@@ -113,7 +113,7 @@ private:
 	uint16_t downItemCount = 0;
 };
 
-static constexpr size_t TILE_UPDATE_THRESHOLD = 8;
+inline constexpr size_t TILE_UPDATE_THRESHOLD = 8;
 
 class Tile : public Cylinder
 {
