@@ -326,8 +326,6 @@ public:
 
 	virtual void onCreatureSay(Creature*, SpeakClasses, const std::string&) {}
 
-	virtual void onPlacedCreature() {}
-
 	virtual bool getCombatValues(int32_t&, int32_t&) { return false; }
 
 	size_t getSummonCount() const { return summons.size(); }

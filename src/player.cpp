@@ -3156,6 +3156,12 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 			for (const Container* container : containers) {
 				autoCloseContainers(container);
 			}
+
+			if (!oldParent && link == LINK_NEAR) {
+				if (!g_creatureEvents->playerLogin(this)) {
+					kickPlayer(true);
+				}
+			}
 		}
 	}
 }
@@ -3677,14 +3683,6 @@ void Player::onIdleStatus()
 
 	if (party) {
 		party->clearPlayerPoints(this);
-	}
-}
-
-void Player::onPlacedCreature()
-{
-	// scripting event - onLogin
-	if (!g_creatureEvents->playerLogin(this)) {
-		kickPlayer(true);
 	}
 }
 
