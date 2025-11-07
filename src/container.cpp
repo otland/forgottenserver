@@ -98,7 +98,7 @@ void Container::addItem(Item* item)
 	item->setParent(this);
 }
 
-void Container::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
+void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
 	switch (attr) {
 		case ATTR_CONTAINER_ITEMS:
@@ -111,7 +111,7 @@ void Container::readAttr(AttrTypes_t attr, const char*& first, const char* const
 	}
 }
 
-void Container::unserializeItemNode(const char*& first, const char* const last, const OTB::Node& node)
+void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator& const last, const OTB::Node& node)
 {
 	Item::unserializeItemNode(first, last, node);
 

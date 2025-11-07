@@ -20,7 +20,7 @@ public:
 	void setDepotId(uint16_t depotId) { this->depotId = depotId; }
 
 	// Serialization
-	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 
 	// Container implementations
 	DepotLocker* getDepotLocker() override { return this; }
