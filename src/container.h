@@ -52,8 +52,8 @@ public:
 
 	bool hasContainerParent() const;
 
-	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
-	void unserializeItemNode(const char*& first, const char* const last, const OTB::Node& node) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
+	void unserializeItemNode(OTB::iterator& first, const OTB::iterator& const last, const OTB::Node& node) override;
 
 	size_t size() const { return itemlist.size(); }
 	bool empty() const { return itemlist.empty(); }

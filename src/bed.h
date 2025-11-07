@@ -17,7 +17,7 @@ public:
 	BedItem* getBed() override { return this; }
 	const BedItem* getBed() const override { return this; }
 
-	void readAttr(AttrTypes_t attr, const char*& first, const char* const last) override;
+	void readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last) override;
 	void serializeAttr(PropWriteStream& propWriteStream) const override;
 
 	bool canRemove() const override { return !house; }

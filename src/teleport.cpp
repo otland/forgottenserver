@@ -9,7 +9,7 @@
 
 extern Game g_game;
 
-void Teleport::readAttr(AttrTypes_t attr, const char*& first, const char* const last)
+void Teleport::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator& last)
 {
 	switch (attr) {
 		case ATTR_TELE_DEST:
