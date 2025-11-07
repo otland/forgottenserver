@@ -522,11 +522,14 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		return false;
 	}
 
+	const auto& position = creature->getPosition();
+	const auto& tile = creature->getTile();
+
 	SpectatorVec spectators;
-	map.getSpectators(spectators, creature->getPosition(), true);
+	map.getSpectators(spectators, position, true);
 	for (Creature* spectator : spectators) {
 		if (Player* tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
+			tmpPlayer->sendCreatureAppear(creature, position, magicEffect);
 		}
 	}
 
@@ -534,10 +537,10 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 		spectator->onCreatureAppear(creature, true);
 	}
 
-	creature->getParent()->postAddNotification(creature, nullptr, 0);
-
 	addCreatureCheck(creature);
-	creature->onPlacedCreature();
+
+	tile->postAddNotification(creature, nullptr, 0);
+
 	return true;
 }
 

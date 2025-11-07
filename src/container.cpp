@@ -680,30 +680,38 @@ Thing* Container::getThing(size_t index) const { return getItemByIndex(index); }
 
 void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
-		topParent->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
-	} else if (topParent == this) {
-		// let the tile class notify surrounding players
-		if (topParent->hasParent()) {
-			topParent->getParent()->postAddNotification(thing, oldParent, index, LINK_NEAR);
+	const auto topParent = getTopParent();
+	if (topParent == this) {
+		if (const auto tile = topParent->getTile()) {
+			// Container is at the top level, on the ground
+			tile->postAddNotification(thing, oldParent, index, LINK_NEAR);
+		}
+	} else if (const auto creature = topParent->getCreature()) {
+		if (const auto player = creature->getPlayer()) {
+			// Container is inside a player's inventory
+			player->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 		}
 	} else {
+		// Container is inside another container
 		topParent->postAddNotification(thing, oldParent, index, LINK_PARENT);
 	}
 }
 
 void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	Cylinder* topParent = getTopParent();
-	if (topParent->getCreature()) {
-		topParent->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
-	} else if (topParent == this) {
-		// let the tile class notify surrounding players
-		if (topParent->hasParent()) {
-			topParent->getParent()->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+	const auto topParent = getTopParent();
+	if (topParent == this) {
+		if (const auto tile = topParent->getTile()) {
+			// Container is at the top level, on the ground
+			tile->postRemoveNotification(thing, newParent, index, LINK_NEAR);
+		}
+	} else if (const auto creature = topParent->getCreature()) {
+		if (const auto player = creature->getPlayer()) {
+			// Container is inside a player's inventory
+			player->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 		}
 	} else {
+		// Container is inside another container
 		topParent->postRemoveNotification(thing, newParent, index, LINK_PARENT);
 	}
 }
