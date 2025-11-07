@@ -11321,7 +11321,7 @@ int LuaScriptInterface::luaMonsterGetFriendList(lua_State* L)
 	lua_createtable(L, friendList.size(), 0);
 
 	int index = 0;
-	for (const auto& creature : friendList) {
+	for (const auto& creature : friendList | tfs::views::lock_weak_ptrs) {
 		tfs::lua::pushSharedPtr(L, creature);
 		tfs::lua::setCreatureMetatable(L, -1, creature);
 		lua_rawseti(L, -2, ++index);
@@ -11396,7 +11396,7 @@ int LuaScriptInterface::luaMonsterGetTargetList(lua_State* L)
 	lua_createtable(L, targetList.size(), 0);
 
 	int index = 0;
-	for (const auto& creature : targetList) {
+	for (const auto& creature : targetList | tfs::views::lock_weak_ptrs) {
 		tfs::lua::pushSharedPtr(L, creature);
 		lua_rawseti(L, -2, ++index);
 	}

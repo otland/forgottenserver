@@ -222,13 +222,11 @@ std::string Npc::getDescription(int32_t) const
 
 void Npc::goToFollowCreature()
 {
-	if (!followCreature) {
-		return;
+	if (const auto& followCreature = getFollowCreature()) {
+		FindPathParams fpp;
+		getPathSearchParams(followCreature, fpp);
+		updateFollowCreaturePath(fpp);
 	}
-
-	FindPathParams fpp;
-	getPathSearchParams(followCreature, fpp);
-	updateFollowCreaturePath(fpp);
 }
 
 void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)

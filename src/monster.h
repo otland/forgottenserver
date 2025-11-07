@@ -12,8 +12,6 @@ class Item;
 class Spawn;
 class Tile;
 
-using CreatureHashSet = std::unordered_set<std::shared_ptr<Creature>>;
-using CreatureList = std::deque<std::shared_ptr<Creature>>;
 using MonsterIconHashMap = std::unordered_map<MonsterIcon_t, uint16_t>;
 
 enum TargetSearchType_t
@@ -116,8 +114,8 @@ public:
 	bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
 	bool selectTarget(const std::shared_ptr<Creature>& creature);
 
-	const CreatureList& getTargetList() const { return targetList; }
-	const CreatureHashSet& getFriendList() const { return friendList; }
+	const auto& getTargetList() const { return targetList; }
+	const auto& getFriendList() const { return friendList; }
 
 	bool isTarget(const std::shared_ptr<const Creature>& creature) const;
 	bool isFleeing() const
@@ -140,8 +138,8 @@ public:
 	static uint32_t monsterAutoID;
 
 private:
-	CreatureHashSet friendList;
-	CreatureList targetList;
+	std::flat_set<std::weak_ptr<Creature>, std::owner_less<std::weak_ptr<Creature>>> friendList;
+	std::deque<std::weak_ptr<Creature>> targetList;
 	MonsterIconHashMap monsterIcons;
 
 	std::string name;
@@ -176,9 +174,13 @@ private:
 
 	void updateLookDirection();
 
-	void addFriend(std::shared_ptr<Creature> creature);
-	void removeFriend(const std::shared_ptr<Creature>& creature);
-	void addTarget(std::shared_ptr<Creature> creature, bool pushFront = false);
+	void addFriend(const std::shared_ptr<Creature>& creature)
+	{
+		assert(creature.get() != this);
+		friendList.emplace(creature);
+	}
+	void removeFriend(const std::shared_ptr<Creature>& creature) { friendList.erase(creature); }
+	void addTarget(const std::shared_ptr<Creature>& creature, bool pushFront = false);
 	void removeTarget(const std::shared_ptr<Creature>& creature);
 
 	void updateTargetList();

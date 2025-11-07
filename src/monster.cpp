@@ -243,7 +243,7 @@ void Monster::onCreatureMove(const std::shared_ptr<Creature>& creature, const st
 		updateIdleStatus();
 
 		if (!isSummon()) {
-			if (followCreature) {
+			if (const auto& followCreature = getFollowCreature()) {
 				const Position& followPosition = followCreature->getPosition();
 				const Position& position = getPosition();
 
@@ -300,35 +300,23 @@ void Monster::onCreatureSay(const std::shared_ptr<Creature>& creature, SpeakClas
 	}
 }
 
-void Monster::addFriend(std::shared_ptr<Creature> creature)
+void Monster::addTarget(const std::shared_ptr<Creature>& creature, bool pushFront /* = false*/)
 {
 	assert(creature.get() != this);
-	friendList.insert(std::move(creature));
-}
-
-void Monster::removeFriend(const std::shared_ptr<Creature>& creature)
-{
-	auto it = friendList.find(creature);
-	if (it != friendList.end()) {
-		friendList.erase(it);
-	}
-}
-
-void Monster::addTarget(std::shared_ptr<Creature> creature, bool pushFront /* = false*/)
-{
-	assert(creature.get() != this);
-	if (std::find(targetList.begin(), targetList.end(), creature) == targetList.end()) {
+	if (std::ranges::none_of(targetList,
+	                         [&creature](const auto& target) { return tfs::owner_equal(target, creature); })) {
 		if (pushFront) {
-			targetList.push_front(std::move(creature));
+			targetList.push_front(creature);
 		} else {
-			targetList.push_back(std::move(creature));
+			targetList.push_back(creature);
 		}
 	}
 }
 
 void Monster::removeTarget(const std::shared_ptr<Creature>& creature)
 {
-	auto it = std::find(targetList.begin(), targetList.end(), creature);
+	auto it = std::ranges::find_if(targetList,
+	                               [&creature](const auto& target) { return tfs::owner_equal(target, creature); });
 	if (it != targetList.end()) {
 		targetList.erase(it);
 	}
@@ -336,23 +324,15 @@ void Monster::removeTarget(const std::shared_ptr<Creature>& creature)
 
 void Monster::updateTargetList()
 {
-	for (auto friendIterator = friendList.begin(); friendIterator != friendList.end();) {
-		const auto& creature = *friendIterator;
-		if (creature->isDead() || !canSee(creature->getPosition())) {
-			friendIterator = friendList.erase(friendIterator);
-		} else {
-			++friendIterator;
-		}
-	}
+	friendList = friendList | tfs::views::lock_weak_ptrs | std::views::filter([this](const auto& creature) {
+		             return !creature->isDead() && canSee(creature->getPosition());
+	             }) |
+	             std::ranges::to<decltype(friendList)>();
 
-	for (auto targetIterator = targetList.begin(); targetIterator != targetList.end();) {
-		const auto& creature = *targetIterator;
-		if (creature->isDead() || !canSee(creature->getPosition())) {
-			targetIterator = targetList.erase(targetIterator);
-		} else {
-			++targetIterator;
-		}
-	}
+	targetList = targetList | tfs::views::lock_weak_ptrs | std::views::filter([this](const auto& creature) {
+		             return !creature->isDead() && canSee(creature->getPosition());
+	             }) |
+	             std::ranges::to<decltype(targetList)>();
 
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, position, true);
@@ -469,7 +449,8 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 {
 	const Position& myPos = getPosition();
 
-	auto resultList = targetList | std::views::filter([&](const auto& creature) {
+	auto resultList = targetList | tfs::views::lock_weak_ptrs |
+	                  std::views::filter([&, followCreature = getFollowCreature()](const auto& creature) {
 		                  return followCreature != creature && isTarget(creature) &&
 		                         (searchType == TARGETSEARCH_RANDOM || canUseAttack(myPos, creature));
 	                  }) |
@@ -496,7 +477,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 				}
 			} else {
 				int32_t minRange = std::numeric_limits<int32_t>::max();
-				for (const auto& creature : targetList) {
+				for (const auto& creature : targetList | tfs::views::lock_weak_ptrs) {
 					if (!isTarget(creature)) {
 						continue;
 					}
@@ -534,7 +515,8 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 	}
 
 	// lets just pick the first target in the list
-	for (const auto& target : targetList) {
+	const auto& followCreature = getFollowCreature();
+	for (const auto& target : targetList | tfs::views::lock_weak_ptrs) {
 		if (followCreature != target && selectTarget(target)) {
 			return true;
 		}
@@ -544,6 +526,7 @@ bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAUL
 
 void Monster::goToFollowCreature()
 {
+	const auto& followCreature = getFollowCreature();
 	if (!followCreature) {
 		return;
 	}
@@ -580,7 +563,9 @@ void Monster::goToFollowCreature()
 
 void Monster::onFollowCreatureComplete()
 {
-	auto it = std::find(targetList.begin(), targetList.end(), followCreature);
+	auto it = std::ranges::find_if(targetList, [followCreature = getFollowCreature()](const auto& target) {
+		return tfs::owner_equal(target, followCreature);
+	});
 	if (it != targetList.end()) {
 		if (hasFollowPath) {
 			std::iter_swap(it, targetList.begin());
@@ -636,7 +621,8 @@ bool Monster::selectTarget(const std::shared_ptr<Creature>& creature)
 		return false;
 	}
 
-	auto it = std::find(targetList.begin(), targetList.end(), creature);
+	auto it = std::ranges::find_if(targetList,
+	                               [&creature](const auto& target) { return tfs::owner_equal(target, creature); });
 	if (it == targetList.end()) {
 		// Target not found in our target list.
 		return false;
@@ -752,23 +738,23 @@ void Monster::onThink(uint32_t interval)
 		if (!isIdle) {
 			addEventWalk();
 
-			if (isSummon()) {
+			if (const auto& master = getMaster()) {
 				if (const auto& attackedCreature = getAttackedCreature(); !attackedCreature) {
-					if (getMaster() && getMaster()->getAttackedCreature()) {
+					if (master->getAttackedCreature()) {
 						// This happens if the monster is summoned during combat
-						selectTarget(getMaster()->getAttackedCreature());
-					} else if (getMaster() != followCreature) {
+						selectTarget(master->getAttackedCreature());
+					} else if (tfs::owner_equal(master, getFollowCreature())) {
 						// Our master has not ordered us to attack anything, lets follow him around instead.
-						setFollowCreature(getMaster());
+						setFollowCreature(master);
 					}
 				} else if (attackedCreature.get() == this) {
 					removeFollowCreature();
-				} else if (followCreature != attackedCreature) {
+				} else if (tfs::owner_equal(attackedCreature, getFollowCreature())) {
 					// This happens just after a master orders an attack, so lets follow it as well.
 					setFollowCreature(attackedCreature);
 				}
 			} else if (!targetList.empty()) {
-				if (!followCreature || !hasFollowPath) {
+				if (!getFollowCreature() || !hasFollowPath) {
 					searchTarget();
 				} else if (isFleeing()) {
 					if (const auto& attackedCreature = getAttackedCreature();
@@ -1052,7 +1038,7 @@ void Monster::onWalk()
 {
 	Creature::onWalk();
 
-	if (const auto& attackedCreature = getAttackedCreature(); (attackedCreature || followCreature) && isFleeing()) {
+	if ((getAttackedCreature() || getFollowCreature()) && isFleeing()) {
 		if (lastPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
@@ -1169,13 +1155,13 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 	}
 
 	bool result = false;
-	if (!walkingToSpawn && (!followCreature || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
+	if (!walkingToSpawn && (!getFollowCreature() || !hasFollowPath) && (!isSummon() || !isMasterInRange)) {
 		if (getTimeSinceLastMove() >= 1000) {
 			randomStepping = true;
 			// choose a random direction
 			result = getRandomStep(getPosition(), direction);
 		}
-	} else if ((isSummon() && isMasterInRange) || followCreature || walkingToSpawn) {
+	} else if ((isSummon() && isMasterInRange) || getFollowCreature() || walkingToSpawn) {
 		if (!hasFollowPath && getMaster() && !getMaster()->getPlayer()) {
 			randomStepping = true;
 			result = getRandomStep(getPosition(), direction);
@@ -1190,7 +1176,7 @@ bool Monster::getNextStep(Direction& direction, uint32_t& flags)
 				}
 				// target dancing
 				if (const auto& attackedCreature = getAttackedCreature();
-				    attackedCreature && attackedCreature == followCreature) {
+				    attackedCreature && tfs::owner_equal(attackedCreature, getFollowCreature())) {
 					if (isFleeing()) {
 						result = getDanceStep(getPosition(), direction, false, false);
 					} else if (mType->info.staticAttackChance < static_cast<uint32_t>(uniform_random(1, 100))) {
@@ -1907,14 +1893,15 @@ bool Monster::getCombatValues(int32_t& min, int32_t& max)
 
 void Monster::updateLookDirection()
 {
-	if (attackedCreature.expired()) {
+	const auto& attackedCreature = getAttackedCreature();
+	if (!attackedCreature) {
 		return;
 	}
 
 	auto lookDirection = DIRECTION_NONE;
 
 	const auto& currentPosition = getPosition();
-	const auto& targetPosition = getAttackedCreature()->getPosition();
+	const auto& targetPosition = attackedCreature->getPosition();
 
 	auto offsetX = targetPosition.getOffsetX(currentPosition);
 	auto absOffsetX = std::abs(offsetX);
@@ -1992,7 +1979,7 @@ void Monster::getPathSearchParams(const std::shared_ptr<const Creature>& creatur
 	fpp.maxTargetDist = mType->info.targetDistance;
 
 	if (isSummon()) {
-		if (followCreature && followCreature == getMaster()) {
+		if (const auto& followCreature = getFollowCreature(); followCreature && followCreature == getMaster()) {
 			fpp.summonTargetMaster = true;
 		}
 		if (getMaster() == creature) {
@@ -2018,10 +2005,10 @@ void Monster::getPathSearchParams(const std::shared_ptr<const Creature>& creatur
 
 bool Monster::canPushItems() const
 {
-	const auto& master = this->master ? this->master->getMonster() : nullptr;
-	if (master) {
-		return master->mType->info.canPushItems;
+	if (const auto& master = this->getMaster()) {
+		if (const auto& monster = master->getMonster()) {
+			return monster->mType->info.canPushItems;
+		}
 	}
-
 	return mType->info.canPushItems;
 }

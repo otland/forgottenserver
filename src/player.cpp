@@ -1249,7 +1249,8 @@ void Player::onCreatureMove(const std::shared_ptr<Creature>& creature, const std
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	if (hasFollowPath && (creature == followCreature || (creature.get() == this && followCreature))) {
+	if (const auto& followCreature = getFollowCreature();
+	    hasFollowPath && (creature == followCreature || (creature.get() == this && followCreature))) {
 		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
@@ -3246,6 +3247,7 @@ void Player::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 
 	Creature::setAttackedCreature(creature);
 
+	const auto& followCreature = getFollowCreature();
 	if (chaseMode) {
 		if (followCreature != creature) {
 			// chase opponent
@@ -3262,13 +3264,14 @@ void Player::removeAttackedCreature()
 {
 	Creature::removeAttackedCreature();
 
-	if (followCreature) {
+	if (getFollowCreature()) {
 		removeFollowCreature();
 	}
 }
 
 void Player::goToFollowCreature()
 {
+	const auto& followCreature = getFollowCreature();
 	if (walkTask || !followCreature) {
 		return;
 	}
@@ -3364,7 +3367,7 @@ void Player::setChaseMode(bool mode)
 
 	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature && prevChaseMode != chaseMode) {
 		if (chaseMode) {
-			if (!followCreature) {
+			if (!getFollowCreature()) {
 				// chase opponent
 				setFollowCreature(attackedCreature);
 			}

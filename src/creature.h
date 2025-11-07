@@ -211,11 +211,14 @@ public:
 	virtual void onWalkComplete() {}
 
 	// follow functions
-	std::shared_ptr<Creature> getFollowCreature() const { return followCreature; }
+	std::shared_ptr<Creature> getFollowCreature() const { return followCreature.lock(); }
 	virtual void setFollowCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeFollowCreature();
 	virtual bool canFollowCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isFollowingCreature(const std::shared_ptr<Creature>& creature) { return followCreature == creature; }
+	virtual bool isFollowingCreature(const std::shared_ptr<Creature>& creature)
+	{
+		return tfs::owner_equal(followCreature, creature);
+	}
 
 	// follow events
 	virtual void onFollowCreature(const std::shared_ptr<const Creature>&);
@@ -244,10 +247,10 @@ public:
 	                             bool ignoreResistances = false);
 
 	bool setMaster(const std::shared_ptr<Creature>& newMaster);
-	void removeMaster() { master = nullptr; }
+	void removeMaster() { master.reset(); }
 
-	bool isSummon() const { return master != nullptr; }
-	std::shared_ptr<Creature> getMaster() const { return master; }
+	bool isSummon() const { return !master.expired(); }
+	std::shared_ptr<Creature> getMaster() const { return master.lock(); }
 
 	const auto& getDamageMap() const { return damageMap; }
 
@@ -413,12 +416,6 @@ protected:
 
 	std::vector<Direction> listWalkDir;
 
-	std::weak_ptr<Tile> tile;
-	std::weak_ptr<Creature> attackedCreature;
-	std::shared_ptr<Creature> master = nullptr;
-	std::shared_ptr<Creature> followCreature = nullptr;
-	std::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>> followers;
-
 	uint64_t lastStep = 0;
 	int64_t lastPathUpdate = 0;
 	uint32_t id = 0;
@@ -481,7 +478,14 @@ protected:
 	friend class Map;
 
 private:
+	std::weak_ptr<Tile> tile;
+	std::weak_ptr<Creature> attackedCreature;
+	std::weak_ptr<Creature> master;
+	std::weak_ptr<Creature> followCreature;
+	std::flat_set<std::weak_ptr<Creature>, std::owner_less<std::weak_ptr<Creature>>> followers;
+
 	std::vector<std::weak_ptr<Creature>> summons;
+
 	std::map<uint32_t, int32_t> storageMap;
 };
 
