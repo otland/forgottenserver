@@ -470,17 +470,6 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 	}
 }
 
-void Tile::onUpdateTile(const SpectatorVec& spectators)
-{
-	const Position& cylinderMapPos = getPosition();
-
-	// send to clients
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
-	}
-}
-
 ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (const Creature* creature = thing.getCreature()) {
@@ -1400,11 +1389,6 @@ void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32
 {
 	SpectatorVec spectators;
 	g_game.map.getSpectators(spectators, getPosition(), true, true);
-
-	if (getThingCount() > 8) {
-		onUpdateTile(spectators);
-	}
-
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
 		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
