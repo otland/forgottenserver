@@ -351,12 +351,12 @@ MapAttributes loadMap(Map& map, std::filesystem::path fileName)
 
 	if (spawns.empty()) {
 		// OTBM file doesn't tell us about the spawnfile, lets guess it is mapname-spawn.xml.
-		spawns = fileName.stem().concat("-spawn.xml");
+		spawns = fileName.stem().concat("-spawn.xml").string();
 	}
 
 	if (houses.empty()) {
 		// OTBM file doesn't tell us about the housefile, lets guess it is mapname-house.xml.
-		houses = fileName.stem().concat("-house.xml");
+		houses = fileName.stem().concat("-house.xml").string();
 	}
 
 	for (const auto& node : mapNode.children) {
