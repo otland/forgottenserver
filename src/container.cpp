@@ -111,7 +111,7 @@ void Container::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iter
 	}
 }
 
-void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator& const last, const OTB::Node& node)
+void Container::unserializeItemNode(OTB::iterator& first, const OTB::iterator& last, const OTB::Node& node)
 {
 	Item::unserializeItemNode(first, last, node);
 
