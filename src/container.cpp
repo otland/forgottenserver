@@ -680,14 +680,14 @@ Thing* Container::getThing(size_t index) const { return getItemByIndex(index); }
 
 void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t)
 {
-	const auto& topParent = getTopParent();
+	const auto topParent = getTopParent();
 	if (topParent == this) {
-		if (const auto& tile = topParent->getTile()) {
+		if (const auto tile = topParent->getTile()) {
 			// Container is at the top level, on the ground
 			tile->postAddNotification(thing, oldParent, index, LINK_NEAR);
 		}
-	} else if (const auto& creature = topParent->getCreature()) {
-		if (const auto& player = creature->getPlayer()) {
+	} else if (const auto creature = topParent->getCreature()) {
+		if (const auto player = creature->getPlayer()) {
 			// Container is inside a player's inventory
 			player->postAddNotification(thing, oldParent, index, LINK_TOPPARENT);
 		}
@@ -699,14 +699,14 @@ void Container::postAddNotification(Thing* thing, const Cylinder* oldParent, int
 
 void Container::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	const auto& topParent = getTopParent();
+	const auto topParent = getTopParent();
 	if (topParent == this) {
-		if (const auto& tile = topParent->getTile()) {
+		if (const auto tile = topParent->getTile()) {
 			// Container is at the top level, on the ground
 			tile->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 		}
-	} else if (const auto& creature = topParent->getCreature()) {
-		if (const auto& player = creature->getPlayer()) {
+	} else if (const auto creature = topParent->getCreature()) {
+		if (const auto player = creature->getPlayer()) {
 			// Container is inside a player's inventory
 			player->postRemoveNotification(thing, newParent, index, LINK_TOPPARENT);
 		}
