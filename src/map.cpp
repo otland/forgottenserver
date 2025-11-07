@@ -366,7 +366,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 						continue;
 					}
 
-					spectators.emplace_back(creature);
+					spectators.emplace(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
@@ -427,7 +427,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 					const SpectatorVec& cachedSpectators = it->second;
 					for (const auto& spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							spectators.emplace_back(spectator);
+							spectators.emplace(spectator);
 						}
 					}
 				}

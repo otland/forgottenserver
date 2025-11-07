@@ -5203,7 +5203,7 @@ int LuaScriptInterface::luaPositionSendMagicEffect(lua_State* L)
 	SpectatorVec spectators;
 	if (lua_gettop(L) >= 3) {
 		if (const auto& player = tfs::lua::getPlayer(L, 3)) {
-			spectators.emplace_back(player);
+			spectators.emplace(player);
 		}
 	}
 
@@ -5230,7 +5230,7 @@ int LuaScriptInterface::luaPositionSendDistanceEffect(lua_State* L)
 	SpectatorVec spectators;
 	if (lua_gettop(L) >= 4) {
 		if (const auto& player = tfs::lua::getPlayer(L, 4)) {
-			spectators.emplace_back(player);
+			spectators.emplace(player);
 		}
 	}
 
@@ -8504,7 +8504,7 @@ int LuaScriptInterface::luaCreatureSay(lua_State* L)
 
 	SpectatorVec spectators;
 	if (target) {
-		spectators.emplace_back(target);
+		spectators.emplace(target);
 	}
 
 	// Prevent infinity echo on event onHear
