@@ -101,42 +101,6 @@ void skip(auto& first, const auto last, const std::size_t len)
 
 } // namespace OTB
 
-class PropWriteStream
-{
-public:
-	PropWriteStream() = default;
-
-	// non-copyable
-	PropWriteStream(const PropWriteStream&) = delete;
-	PropWriteStream& operator=(const PropWriteStream&) = delete;
-
-	std::string_view getStream() const { return {buffer.data(), buffer.size()}; }
-
-	void clear() { buffer.clear(); }
-
-	template <typename T>
-	void write(T add)
-	{
-		char* addr = reinterpret_cast<char*>(&add);
-		std::copy(addr, addr + sizeof(T), std::back_inserter(buffer));
-	}
-
-	void writeString(std::string_view str)
-	{
-		size_t strLength = str.size();
-		if (strLength > std::numeric_limits<uint16_t>::max()) {
-			write<uint16_t>(0);
-			return;
-		}
-
-		write(static_cast<uint16_t>(strLength));
-		std::copy(str.begin(), str.end(), std::back_inserter(buffer));
-	}
-
-private:
-	std::vector<char> buffer;
-};
-
 class PropStream
 {
 public:
