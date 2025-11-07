@@ -114,7 +114,8 @@ void IOMapSerialize::loadHouseItems(Map* map)
 
 	do {
 		auto attr = result->getString("data");
-		auto first = attr.begin(), last = attr.end();
+		auto first = attr.data();
+		auto last = first + attr.size();
 
 		try {
 			auto x = OTB::read<uint16_t>(first, last);
