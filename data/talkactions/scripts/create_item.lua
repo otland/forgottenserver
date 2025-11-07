@@ -29,7 +29,7 @@ local function getDestination(target, param, index)
 	return target
 end
 
-local function addDestionation(destination, itemId, count, subType)
+local function addItemToDestination(destination, itemId, count, subType)
 	local result
 	if destination:isCreature() and destination:isPlayer() then
 		-- itemId[, count = 1[, canDropOnMap = true[, subType = 1[, slot = CONST_SLOT_WHEREEVER]]]]
@@ -134,7 +134,7 @@ function onSay(player, words, param)
 	end
 
 	local destination = getDestination(targetPlayer, destinationParam, indexParam)
-	local result = addDestionation(destination, itemType:getId(), count, subType)
+	local result = addItemToDestination(destination, itemType:getId(), count, subType)
 	if result then
 		for _, item in ipairs(result) do
 			if itemType:isKey() then
