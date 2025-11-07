@@ -434,14 +434,14 @@ public:
 	{
 		onBuy = purchaseCallback;
 		onSell = saleCallback;
-		return shopOwner;
+		return shopOwner.lock();
 	}
 
 	std::shared_ptr<const Npc> getShopOwner(int32_t& onBuy, int32_t& onSell) const
 	{
 		onBuy = purchaseCallback;
 		onSell = saleCallback;
-		return shopOwner;
+		return shopOwner.lock();
 	}
 
 	// V.I.P. functions
@@ -1284,7 +1284,7 @@ private:
 	std::shared_ptr<Item> inventory[CONST_SLOT_LAST + 1] = {};
 	std::shared_ptr<Item> writeItem = nullptr;
 	House* editHouse = nullptr;
-	std::shared_ptr<Npc> shopOwner = nullptr;
+	std::weak_ptr<Npc> shopOwner;
 	Party* party = nullptr;
 	std::shared_ptr<Player> tradePartner = nullptr;
 	SchedulerTask* walkTask = nullptr;

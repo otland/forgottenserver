@@ -120,14 +120,14 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " He is in a party with ";
 		}
 
-		size_t memberCount = party->getMemberCount() + 1;
+		size_t memberCount = party->getMembers().size() + 1;
 		if (memberCount == 1) {
 			s << "1 member and ";
 		} else {
 			s << memberCount << " members and ";
 		}
 
-		size_t invitationCount = party->getInvitationCount();
+		size_t invitationCount = party->getInvitees().size();
 		if (invitationCount == 1) {
 			s << "1 pending invitation.";
 		} else {
@@ -2183,15 +2183,15 @@ void Player::removeList()
 {
 	g_game.removePlayer(getPlayer());
 
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
+	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		player->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
 	}
 }
 
 void Player::addList()
 {
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
+	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		player->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
 	}
 
 	g_game.addPlayer(getPlayer());
@@ -3056,7 +3056,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 			onSendContainer(container);
 		}
 
-		if (shopOwner && requireListUpdate) {
+		if (!shopOwner.expired() && requireListUpdate) {
 			updateSaleShopList(item);
 		}
 	} else if (const auto& creature = thing->getCreature()) {
@@ -3148,7 +3148,7 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 			}
 		}
 
-		if (shopOwner && requireListUpdate) {
+		if (!shopOwner.expired() && requireListUpdate) {
 			updateSaleShopList(item);
 		}
 	}

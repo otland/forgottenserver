@@ -4511,10 +4511,11 @@ int LuaScriptInterface::luaGameGetSpectators(lua_State* L)
 int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 {
 	// Game.getPlayers()
-	lua_createtable(L, g_game.getPlayersOnline(), 0);
+	const auto& players = g_game.getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, players.size(), 0);
 
 	int index = 0;
-	for (const auto& player : g_game.getPlayers() | std::views::values) {
+	for (const auto& player : players) {
 		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
@@ -4525,10 +4526,11 @@ int LuaScriptInterface::luaGameGetPlayers(lua_State* L)
 int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
 {
 	// Game.getNpcs()
-	lua_createtable(L, g_game.getNpcsOnline(), 0);
+	const auto& npcs = g_game.getNpcs() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, npcs.size(), 0);
 
 	int index = 0;
-	for (const auto& npc : g_game.getNpcs() | std::views::values) {
+	for (const auto& npc : npcs) {
 		tfs::lua::pushSharedPtr(L, npc);
 		tfs::lua::setMetatable(L, -1, "Npc");
 		lua_rawseti(L, -2, ++index);
@@ -4539,10 +4541,11 @@ int LuaScriptInterface::luaGameGetNpcs(lua_State* L)
 int LuaScriptInterface::luaGameGetMonsters(lua_State* L)
 {
 	// Game.getMonsters()
-	lua_createtable(L, g_game.getMonstersOnline(), 0);
+	const auto& monsters = g_game.getMonsters() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, monsters.size(), 0);
 
 	int index = 0;
-	for (const auto& monster : g_game.getMonsters() | std::views::values) {
+	for (const auto& monster : monsters) {
 		tfs::lua::pushSharedPtr(L, monster);
 		tfs::lua::setMetatable(L, -1, "Monster");
 		lua_rawseti(L, -2, ++index);
@@ -10729,16 +10732,16 @@ int LuaScriptInterface::luaPlayerSetGhostMode(lua_State* L)
 	}
 
 	if (player->isInGhostMode()) {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_OFFLINE);
+		for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+			if (!player->isAccessPlayer()) {
+				player->notifyStatusChange(player, VIPSTATUS_OFFLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), false);
 	} else {
-		for (const auto& it : g_game.getPlayers()) {
-			if (!it.second->isAccessPlayer()) {
-				it.second->notifyStatusChange(player, VIPSTATUS_ONLINE);
+		for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+			if (!player->isAccessPlayer()) {
+				player->notifyStatusChange(player, VIPSTATUS_ONLINE);
 			}
 		}
 		IOLoginData::updateOnlineStatus(player->getGUID(), true);
@@ -11701,7 +11704,7 @@ int LuaScriptInterface::luaGuildGetMembersOnline(lua_State* L)
 		return 1;
 	}
 
-	const auto& members = guild->getMembersOnline();
+	const auto& members = guild->getMembersOnline() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, members.size(), 0);
 
 	int index = 0;
@@ -12426,7 +12429,7 @@ int LuaScriptInterface::luaHouseGetBeds(lua_State* L)
 		return 1;
 	}
 
-	const auto& beds = house->getBeds();
+	const auto& beds = house->getBeds() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, beds.size(), 0);
 
 	int index = 0;
@@ -12459,7 +12462,7 @@ int LuaScriptInterface::luaHouseGetDoors(lua_State* L)
 		return 1;
 	}
 
-	const auto& doors = house->getDoors();
+	const auto& doors = house->getDoors() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, doors.size(), 0);
 
 	int index = 0;
@@ -12509,7 +12512,7 @@ int LuaScriptInterface::luaHouseGetTiles(lua_State* L)
 		return 1;
 	}
 
-	const auto& tiles = house->getTiles();
+	const auto& tiles = house->getTiles() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
 	lua_createtable(L, tiles.size(), 0);
 
 	int index = 0;
@@ -12534,7 +12537,7 @@ int LuaScriptInterface::luaHouseGetItems(lua_State* L)
 	lua_newtable(L);
 
 	int index = 0;
-	for (const auto& tile : tiles) {
+	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 		if (TileItemVector* itemVector = tile->getItemList()) {
 			for (const auto& item : *itemVector) {
 				tfs::lua::pushSharedPtr(L, item);
@@ -15786,9 +15789,11 @@ int LuaScriptInterface::luaPartyGetMembers(lua_State* L)
 		return 1;
 	}
 
+	const auto members = party->getMembers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, members.size(), 0);
+
 	int index = 0;
-	lua_createtable(L, party->getMemberCount(), 0);
-	for (const auto& player : party->getMembers()) {
+	for (const auto& player : members) {
 		tfs::lua::pushSharedPtr(L, player);
 		tfs::lua::setMetatable(L, -1, "Player");
 		lua_rawseti(L, -2, ++index);
@@ -15801,7 +15806,7 @@ int LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
 	// party:getMemberCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getMemberCount());
+		lua_pushnumber(L, party->getMembers().size());
 	} else {
 		lua_pushnil(L);
 	}
@@ -15812,17 +15817,19 @@ int LuaScriptInterface::luaPartyGetInvitees(lua_State* L)
 {
 	// party:getInvitees()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
-	if (party) {
-		lua_createtable(L, party->getInvitationCount(), 0);
-
-		int index = 0;
-		for (const auto& player : party->getInvitees()) {
-			tfs::lua::pushSharedPtr(L, player);
-			tfs::lua::setMetatable(L, -1, "Player");
-			lua_rawseti(L, -2, ++index);
-		}
-	} else {
+	if (!party) {
 		lua_pushnil(L);
+		return 1;
+	}
+
+	const auto invitees = party->getInvitees() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>();
+	lua_createtable(L, invitees.size(), 0);
+
+	int index = 0;
+	for (const auto& player : invitees) {
+		tfs::lua::pushSharedPtr(L, player);
+		tfs::lua::setMetatable(L, -1, "Player");
+		lua_rawseti(L, -2, ++index);
 	}
 	return 1;
 }
@@ -15832,7 +15839,7 @@ int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 	// party:getInviteeCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getInvitationCount());
+		lua_pushnumber(L, party->getInvitees().size());
 	} else {
 		lua_pushnil(L);
 	}

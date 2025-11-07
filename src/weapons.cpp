@@ -86,11 +86,11 @@ void Weapons::loadDefaults()
 Event_ptr Weapons::getEvent(const std::string& nodeName)
 {
 	if (caseInsensitiveEqual(nodeName, "melee")) {
-		return Event_ptr(new WeaponMelee(&scriptInterface));
+		return std::make_unique<WeaponMelee>(&scriptInterface);
 	} else if (caseInsensitiveEqual(nodeName, "distance")) {
-		return Event_ptr(new WeaponDistance(&scriptInterface));
+		return std::make_unique<WeaponDistance>(&scriptInterface);
 	} else if (caseInsensitiveEqual(nodeName, "wand")) {
-		return Event_ptr(new WeaponWand(&scriptInterface));
+		return std::make_unique<WeaponWand>(&scriptInterface);
 	}
 	return nullptr;
 }

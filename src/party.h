@@ -9,8 +9,6 @@
 class Creature;
 class Player;
 
-using PlayerVector = std::vector<std::shared_ptr<Player>>;
-
 static constexpr int32_t EXPERIENCE_SHARE_RANGE = 30;
 static constexpr int32_t EXPERIENCE_SHARE_FLOORS = 1;
 
@@ -26,13 +24,11 @@ enum SharedExpStatus_t : uint8_t
 class Party
 {
 public:
-	explicit Party(std::shared_ptr<Player> leader);
+	explicit Party(const std::shared_ptr<Player>& leader);
 
-	std::shared_ptr<Player> getLeader() const { return leader; }
-	PlayerVector& getMembers() { return memberList; }
-	const PlayerVector& getInvitees() const { return inviteList; }
-	size_t getMemberCount() const { return memberList.size(); }
-	size_t getInvitationCount() const { return inviteList.size(); }
+	std::shared_ptr<Player> getLeader() const { return leader.lock(); }
+	const auto& getMembers() { return memberList; }
+	const auto& getInvitees() const { return inviteList; }
 
 	void disband();
 	bool invitePlayer(const std::shared_ptr<Player>& player);
@@ -65,10 +61,10 @@ private:
 
 	std::map<uint32_t, int64_t> ticksMap;
 
-	PlayerVector memberList;
-	PlayerVector inviteList;
+	std::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> memberList;
+	std::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> inviteList;
 
-	std::shared_ptr<Player> leader;
+	std::weak_ptr<Player> leader;
 
 	bool sharedExpActive = false;
 	bool sharedExpEnabled = false;

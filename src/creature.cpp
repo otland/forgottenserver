@@ -394,13 +394,12 @@ void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const s
 
 		if (!summons.empty()) {
 			// check if any of our summons is out of range (+/- 2 floors or 30 tiles away)
-			std::vector<std::shared_ptr<Creature>> despawnList;
-			for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
-				const Position& pos = summon->getPosition();
-				if (newPos.getDistanceZ(pos) > 2 || std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30) {
-					despawnList.push_back(summon);
-				}
-			}
+			auto despawnList = summons | tfs::views::lock_weak_ptrs | std::views::filter([&newPos](const auto& summon) {
+				                   const Position& pos = summon->getPosition();
+				                   return newPos.getDistanceZ(pos) > 2 ||
+				                          std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30;
+			                   }) |
+			                   std::ranges::to<std::vector>();
 
 			for (const auto& despawnCreature : despawnList) {
 				g_game.removeCreature(despawnCreature, true);
@@ -816,42 +815,19 @@ void Creature::onFollowCreature(const std::shared_ptr<const Creature>&)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(const std::shared_ptr<const Creature>& creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	return it != followers.end();
-}
-
-void Creature::addFollower(const std::shared_ptr<Creature>& creature)
-{
-	// store a weak reference to avoid ownership cycles
-	if (!isFollower(creature)) {
-		followers.push_back(creature);
-	}
-}
-
-void Creature::removeFollower(const std::shared_ptr<Creature>& creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		followers.erase(it);
-	}
-}
-
 void Creature::removeFollowers()
 {
 	const Position& position = getPosition();
 
-	followers.erase(std::remove_if(followers.begin(), followers.end(),
-	                               [&position](const auto& creature) {
-		                               const Position& followerPosition = creature->getPosition();
-		                               uint16_t distance = position.getDistanceX(followerPosition) +
-		                                                   position.getDistanceY(followerPosition);
-		                               bool isInRemoveRange = distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                                      position.z != followerPosition.z;
-		                               return isInRemoveRange;
-	                               }),
-	                followers.end());
+	followers = followers | std::views::filter([&position](const auto& creature) {
+		            const Position& followerPosition = creature->getPosition();
+		            uint16_t distance =
+		                position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
+		            bool isInRemoveRange =
+		                distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
+		            return isInRemoveRange;
+	            }) |
+	            std::ranges::to<decltype(followers)>();
 }
 
 void Creature::updateFollowersPaths()

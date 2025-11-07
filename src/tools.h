@@ -79,4 +79,32 @@ constexpr auto lock_weak_ptrs = std::views::transform([](const auto& wp) { retur
 
 } // namespace tfs::views
 
+namespace tfs {
+
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+} // namespace tfs
+
 #endif // FS_TOOLS_H

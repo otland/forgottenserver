@@ -13,10 +13,7 @@ extern Game g_game;
 
 void Guild::removeMember(const std::shared_ptr<Player>& player)
 {
-	if (auto it = std::find(membersOnline.begin(), membersOnline.end(), player); it != membersOnline.end()) {
-		std::iter_swap(it, membersOnline.end() - 1);
-		membersOnline.pop_back();
-	}
+	membersOnline.erase(player);
 
 	if (membersOnline.empty()) {
 		g_game.removeGuild(id);

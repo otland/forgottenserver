@@ -222,9 +222,8 @@ public:
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	bool isFollower(const std::shared_ptr<const Creature>& creature);
-	void addFollower(const std::shared_ptr<Creature>& creature);
-	void removeFollower(const std::shared_ptr<Creature>& creature);
+	void addFollower(const std::shared_ptr<Creature>& creature) { followers.insert(creature); }
+	void removeFollower(const std::shared_ptr<Creature>& creature) { followers.erase(creature); }
 	void removeFollowers();
 
 	// Pathfinding events
@@ -418,7 +417,7 @@ protected:
 	std::weak_ptr<Creature> attackedCreature;
 	std::shared_ptr<Creature> master = nullptr;
 	std::shared_ptr<Creature> followCreature = nullptr;
-	std::vector<std::shared_ptr<Creature>> followers;
+	std::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>> followers;
 
 	uint64_t lastStep = 0;
 	int64_t lastPathUpdate = 0;

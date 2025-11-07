@@ -241,7 +241,7 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (const auto& monster : spawnedMap | std::views::values) {
+	for (const auto& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs) {
 		monster->setSpawn(nullptr);
 	}
 }
@@ -373,7 +373,7 @@ void Spawn::cleanup()
 {
 	auto it = spawnedMap.begin();
 	while (it != spawnedMap.end()) {
-		if (it->second->isRemoved()) {
+		if (const auto monster = it->second.lock(); !monster || monster->isRemoved()) {
 			it = spawnedMap.erase(it);
 		} else {
 			++it;
@@ -410,7 +410,7 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 void Spawn::removeMonster(const std::shared_ptr<Monster>& monster)
 {
 	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
-		if (it->second == monster) {
+		if (it->second.lock() == monster) {
 			spawnedMap.erase(it);
 			break;
 		}

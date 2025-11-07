@@ -105,7 +105,7 @@ class House
 public:
 	explicit House(uint32_t houseId);
 
-	void addTile(std::shared_ptr<HouseTile> tile);
+	void addTile(const std::shared_ptr<HouseTile>& tile);
 
 	bool canEditAccessList(uint32_t listId, const std::shared_ptr<const Player>& player);
 	// listId special values:
@@ -144,7 +144,7 @@ public:
 
 	uint32_t getId() const { return id; }
 
-	void addDoor(std::shared_ptr<Door> door);
+	void addDoor(const std::shared_ptr<Door>& door);
 	void removeDoor(const std::shared_ptr<Door>& door);
 	std::shared_ptr<Door> getDoorByNumber(uint32_t doorId) const;
 	std::shared_ptr<Door> getDoorByPosition(const Position& pos);
@@ -156,7 +156,7 @@ public:
 	const auto& getTiles() const { return houseTiles; }
 	const auto& getDoors() const { return doors; }
 
-	void addBed(std::shared_ptr<BedItem> bed);
+	void addBed(const std::shared_ptr<BedItem>& bed);
 	const auto& getBeds() const { return beds; }
 
 	// each bed takes 2 sqms of space, ceil is just for bad maps
@@ -171,9 +171,9 @@ private:
 
 	Container transferContainer{ITEM_LOCKER};
 
-	std::vector<std::shared_ptr<HouseTile>> houseTiles;
-	std::set<std::shared_ptr<Door>> doors;
-	std::vector<std::shared_ptr<BedItem>> beds;
+	std::flat_set<std::weak_ptr<HouseTile>, std::owner_less<std::weak_ptr<HouseTile>>> houseTiles;
+	std::flat_set<std::weak_ptr<Door>, std::owner_less<std::weak_ptr<Door>>> doors;
+	std::flat_set<std::weak_ptr<BedItem>, std::owner_less<std::weak_ptr<BedItem>>> beds;
 
 	std::string houseName;
 	std::string ownerName;

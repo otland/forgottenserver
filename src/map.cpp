@@ -1017,11 +1017,8 @@ uint32_t Map::clean() const
 
 	std::vector<std::shared_ptr<Item>> toRemove;
 
-	for (const auto& tile : g_game.getTilesToClean()) {
-		if (!tile) {
-			continue;
-		}
-
+	for (const auto& tile :
+	     g_game.getTilesToClean() | std::views::filter([](const auto& tile) { return tile != nullptr; })) {
 		if (const auto& items = tile->getItemList()) {
 			++tiles;
 			for (const auto& item : *items) {

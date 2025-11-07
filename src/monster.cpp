@@ -467,16 +467,13 @@ void Monster::onCreatureLeave(const std::shared_ptr<Creature>& creature)
 
 bool Monster::searchTarget(TargetSearchType_t searchType /*= TARGETSEARCH_DEFAULT*/)
 {
-	std::vector<std::shared_ptr<Creature>> resultList;
 	const Position& myPos = getPosition();
 
-	for (const auto& creature : targetList) {
-		if (followCreature != creature && isTarget(creature)) {
-			if (searchType == TARGETSEARCH_RANDOM || canUseAttack(myPos, creature)) {
-				resultList.push_back(creature);
-			}
-		}
-	}
+	auto resultList = targetList | std::views::filter([&](const auto& creature) {
+		                  return followCreature != creature && isTarget(creature) &&
+		                         (searchType == TARGETSEARCH_RANDOM || canUseAttack(myPos, creature));
+	                  }) |
+	                  std::ranges::to<std::vector>();
 
 	switch (searchType) {
 		case TARGETSEARCH_NEAREST: {

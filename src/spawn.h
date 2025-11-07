@@ -47,7 +47,7 @@ public:
 
 private:
 	// map of the spawned creatures
-	std::multimap<uint32_t, std::shared_ptr<Monster>> spawnedMap;
+	std::multimap<uint32_t, std::weak_ptr<Monster>> spawnedMap;
 
 	// map of creatures in the spawn
 	std::map<uint32_t, spawnBlock_t> spawnMap;

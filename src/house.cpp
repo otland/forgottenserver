@@ -17,10 +17,10 @@ extern Game g_game;
 
 House::House(uint32_t houseId) : id(houseId) {}
 
-void House::addTile(std::shared_ptr<HouseTile> tile)
+void House::addTile(const std::shared_ptr<HouseTile>& tile)
 {
 	tile->setFlag(TILESTATE_PROTECTIONZONE);
-	houseTiles.push_back(std::move(tile));
+	houseTiles.emplace(tile);
 }
 
 void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
@@ -47,7 +47,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 			transferToDepot();
 		}
 
-		for (const auto& tile : houseTiles) {
+		for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
 					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
@@ -56,7 +56,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		}
 
 		// Remove players from beds
-		for (const auto& bed : beds) {
+		for (const auto& bed : beds | tfs::views::lock_weak_ptrs) {
 			if (bed->getSleeper() != 0) {
 				bed->wakeUp(nullptr);
 			}
@@ -69,7 +69,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 		setAccessList(SUBOWNER_LIST, "");
 		setAccessList(GUEST_LIST, "");
 
-		for (const auto& door : doors) {
+		for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
 			door->setAccessList("");
 		}
 	} else {
@@ -176,7 +176,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	}
 
 	// kick uninvited players
-	for (const auto& tile : houseTiles) {
+	for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				const auto& player = (*creatures)[i]->getPlayer();
@@ -215,7 +215,7 @@ bool House::transferToDepot(const std::shared_ptr<Player>& player) const
 	}
 
 	ItemList moveItemList;
-	for (const auto& tile : houseTiles) {
+	for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (const auto& item : *items) {
 				if (item->isPickupable()) {
@@ -259,23 +259,23 @@ bool House::isInvited(const std::shared_ptr<const Player>& player) const
 	return getHouseAccessLevel(player) != HOUSE_NOT_INVITED;
 }
 
-void House::addDoor(std::shared_ptr<Door> door)
+void House::addDoor(const std::shared_ptr<Door>& door)
 {
 	door->setHouse(this);
-	doors.insert(std::move(door));
+	doors.emplace(door);
 }
 
 void House::removeDoor(const std::shared_ptr<Door>& door) { doors.erase(door); }
 
-void House::addBed(std::shared_ptr<BedItem> bed)
+void House::addBed(const std::shared_ptr<BedItem>& bed)
 {
 	bed->setHouse(this);
-	beds.push_back(std::move(bed));
+	beds.emplace(bed);
 }
 
 std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 {
-	for (const auto& door : doors) {
+	for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
 		if (door->getDoorId() == doorId) {
 			return door;
 		}
@@ -285,7 +285,7 @@ std::shared_ptr<Door> House::getDoorByNumber(uint32_t doorId) const
 
 std::shared_ptr<Door> House::getDoorByPosition(const Position& pos)
 {
-	for (const auto& door : doors) {
+	for (const auto& door : doors | tfs::views::lock_weak_ptrs) {
 		if (door->getPosition() == pos) {
 			return door;
 		}

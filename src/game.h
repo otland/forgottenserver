@@ -461,17 +461,17 @@ public:
 
 	void sendOfflineTrainingDialog(const std::shared_ptr<Player>& player);
 
-	const auto& getPlayers() const { return players; }
-	const auto& getNpcs() const { return npcs; }
-	const auto& getMonsters() const { return monsters; }
+	auto getPlayers() const { return players | std::views::values; }
+	auto getNpcs() const { return npcs | std::views::values; }
+	auto getMonsters() const { return monsters | std::views::values; }
 
-	void addPlayer(std::shared_ptr<Player> player);
+	void addPlayer(const std::shared_ptr<Player>& player);
 	void removePlayer(const std::shared_ptr<Player>& player);
 
-	void addNpc(std::shared_ptr<Npc> npc) { npcs[npc->getID()] = std::move(npc); }
+	void addNpc(const std::shared_ptr<Npc>& npc) { npcs[npc->getID()] = npc; }
 	void removeNpc(const std::shared_ptr<Npc>& npc) { npcs.erase(npc->getID()); }
 
-	void addMonster(std::shared_ptr<Monster> monster) { monsters[monster->getID()] = std::move(monster); }
+	void addMonster(const std::shared_ptr<Monster>& monster) { monsters[monster->getID()] = monster; }
 	void removeMonster(const std::shared_ptr<Monster>& monster) { monsters.erase(monster->getID()); }
 
 	std::shared_ptr<Guild> getGuild(uint32_t id) const;
@@ -517,21 +517,21 @@ private:
 	void checkDecay();
 	void internalDecayItem(const std::shared_ptr<Item>& item);
 
-	std::unordered_map<uint32_t, std::shared_ptr<Player>> players;
-	std::unordered_map<std::string, std::shared_ptr<Player>> mappedPlayerNames;
-	std::unordered_map<uint32_t, std::shared_ptr<Player>> mappedPlayerGuids;
+	std::unordered_map<uint32_t, std::weak_ptr<Player>> players;
+	std::unordered_map<std::string, std::weak_ptr<Player>> mappedPlayerNames;
+	std::unordered_map<uint32_t, std::weak_ptr<Player>> mappedPlayerGuids;
 	std::unordered_map<uint32_t, std::shared_ptr<Guild>> guilds;
 	std::unordered_map<uint16_t, std::shared_ptr<Item>> uniqueItems;
 
-	std::list<std::shared_ptr<Item>> decayItems[EVENT_DECAY_BUCKETS];
-	std::list<std::shared_ptr<Creature>> checkCreatureLists[EVENT_CREATURECOUNT];
+	std::list<std::weak_ptr<Item>> decayItems[EVENT_DECAY_BUCKETS];
+	std::list<std::weak_ptr<Creature>> checkCreatureLists[EVENT_CREATURECOUNT];
 
 	size_t lastBucket = 0;
 
 	WildcardTreeNode wildcardTree{false};
 
-	std::map<uint32_t, std::shared_ptr<Npc>> npcs;
-	std::map<uint32_t, std::shared_ptr<Monster>> monsters;
+	std::map<uint32_t, std::weak_ptr<Npc>> npcs;
+	std::map<uint32_t, std::weak_ptr<Monster>> monsters;
 
 	// list of items that are in trading state, mapped to the player holding them
 	std::map<std::shared_ptr<Item>, uint32_t> tradeItems;
