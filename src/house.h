@@ -246,7 +246,7 @@ public:
 
 	House* getHouseByPlayerId(uint32_t playerId);
 
-	bool loadHousesXML(const std::string& filename);
+	bool loadHousesXML(const std::filesystem::path& filename);
 
 	void payHouses(RentPeriod_t rentPeriod) const;
 

@@ -566,12 +566,12 @@ House* Houses::getHouseByPlayerId(uint32_t playerId)
 	return nullptr;
 }
 
-bool Houses::loadHousesXML(const std::string& filename)
+bool Houses::loadHousesXML(const std::filesystem::path& filename)
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file(filename.c_str());
 	if (!result) {
-		printXMLError("Error - Houses::loadHousesXML", filename, result);
+		printXMLError("Error - Houses::loadHousesXML", filename.string(), result);
 		return false;
 	}
 
