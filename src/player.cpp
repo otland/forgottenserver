@@ -3163,12 +3163,6 @@ void Player::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_
 void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index,
                                     cylinderlink_t link /*= LINK_OWNER*/)
 {
-	if (link == LINK_NEAR) {
-		if (tile->getThingCount() > 8) {
-			sendUpdateTile(tile, position);
-		}
-	}
-
 	if (link == LINK_OWNER) {
 		// calling movement scripts
 		g_moveEvents->onPlayerDeEquip(this, thing->getItem(), static_cast<slots_t>(index));
