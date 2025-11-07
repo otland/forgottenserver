@@ -140,7 +140,10 @@ function onSay(player, words, param)
 			if itemType:isKey() then
 				item:setAttribute(ITEM_ATTRIBUTE_ACTIONID, keyNumber)
 			end
-			item:decay()
+
+			if not itemType:isStackable() then
+				item:decay()
+			end
 		end
 
 		local itemInformation = {
