@@ -962,8 +962,8 @@ void IOLoginData::loadItems(ItemMap& itemMap, DBResult_ptr result)
 
 		Item* item = Item::CreateItem(type, count);
 		if (item) {
-			auto first = attr.begin();
-			item->unserializeAttr(first, attr.end());
+			auto first = attr.data();
+			item->unserializeAttr(first, first + attr.size());
 			std::pair<Item*, uint32_t> pair(item, pid);
 			itemMap[sid] = pair;
 		}
