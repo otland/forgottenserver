@@ -21,7 +21,6 @@
 #include "server.h"
 
 #include <fstream>
-#include <print>
 
 #if __has_include("gitmetadata.h")
 #include "gitmetadata.h"

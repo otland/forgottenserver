@@ -6,8 +6,6 @@
 #include "../game.h"
 #include "error.h"
 
-#include <utility>
-
 extern Game g_game;
 extern Vocations g_vocations;
 
