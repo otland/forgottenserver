@@ -108,10 +108,8 @@ bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 
 void Monster::onAttackedCreatureDisappear(bool) { attackTicks = 0; }
 
-void Monster::onCreatureAppear(Creature* creature, bool isLogin)
+void Monster::onCreatureAppear(Creature* creature)
 {
-	Creature::onCreatureAppear(creature, isLogin);
-
 	if (mType->info.creatureAppearEvent != -1) {
 		// onCreatureAppear(self, creature)
 		LuaScriptInterface* scriptInterface = mType->info.scriptInterface;
@@ -138,6 +136,8 @@ void Monster::onCreatureAppear(Creature* creature, bool isLogin)
 	}
 
 	if (creature == this) {
+		setLastPosition(getPosition());
+
 		// We just spawned lets look around to see who is there.
 		if (isSummon()) {
 			isMasterInRange = canSee(getMaster()->getPosition());

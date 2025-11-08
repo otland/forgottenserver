@@ -534,7 +534,7 @@ bool Game::placeCreature(Creature* creature, const Position& pos, bool extendedP
 	}
 
 	for (Creature* spectator : spectators) {
-		spectator->onCreatureAppear(creature, true);
+		spectator->onCreatureAppear(creature);
 	}
 
 	addCreatureCheck(creature);
