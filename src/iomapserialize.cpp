@@ -186,8 +186,8 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 		// Hack our way into the attributes
 		stream.write<uint8_t>(ATTR_CONTAINER_ITEMS);
 		stream.write<uint32_t>(container->size());
-		for (auto it = container->getReversedItems(), end = container->getReversedEnd(); it != end; ++it) {
-			saveItem(stream, *it);
+		for (const auto& item : container->getItemList() | std::views::reverse) {
+			saveItem(stream, item);
 		}
 	}
 
