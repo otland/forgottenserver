@@ -310,7 +310,6 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(const Tile*, const Position&) {}
 	virtual void onUpdateTileItem(const Tile*, const Position&, const Item*, const ItemType&, const Item*,
 	                              const ItemType&)
 	{}
