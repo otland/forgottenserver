@@ -191,7 +191,7 @@ void IOMapSerialize::saveItem(PropWriteStream& stream, const Item* item)
 		}
 	}
 
-	stream.write<uint8_t>(0x00); // attr end
+	stream.write<uint8_t>(ATTR_END); // attr end
 }
 
 void IOMapSerialize::saveTile(PropWriteStream& stream, const Tile* tile)
