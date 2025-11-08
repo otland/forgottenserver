@@ -538,6 +538,10 @@ void Item::unserializeAttr(OTB::iterator& first, const OTB::iterator& last)
 		}
 
 		readAttr(static_cast<AttrTypes_t>(attr), first, last);
+
+		if (attr == ATTR_CONTAINER_ITEMS) {
+			break;
+		}
 	}
 }
 
