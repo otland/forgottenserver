@@ -13,9 +13,9 @@ extern Game g_game;
 
 namespace {
 
-bool loadContainer(OTB::iterator& first, const OTB::iterator& last, Container* container);
+void loadContainer(OTB::iterator& first, const OTB::iterator& last, Container* container);
 
-bool loadItem(OTB::iterator& first, const OTB::iterator& last, Cylinder* parent)
+void loadItem(OTB::iterator& first, const OTB::iterator& last, Cylinder* parent)
 {
 	auto id = OTB::read<uint16_t>(first, last);
 
@@ -82,19 +82,14 @@ bool loadItem(OTB::iterator& first, const OTB::iterator& last, Cylinder* parent)
 			}
 		}
 	}
-	return true;
 }
 
-bool loadContainer(OTB::iterator& first, const OTB::iterator& last, Container* container)
+void loadContainer(OTB::iterator& first, const OTB::iterator& last, Container* container)
 {
 	while (container->serializationCount > 0) {
-		if (!loadItem(first, last, container)) {
-			return false;
-		}
+		loadItem(first, last, container);
 		container->serializationCount--;
 	}
-
-	return true;
 }
 
 } // namespace
