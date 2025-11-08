@@ -1465,7 +1465,7 @@ void setCreatureMetatable(lua_State* L, int32_t index, const Creature* creature)
 template <typename T>
 typename std::enable_if_t<std::is_enum_v<T>, T> getNumber(lua_State* L, int32_t arg)
 {
-	return static_cast<T>(getNumber<int64_t>(L, arg));
+	return static_cast<T>(getNumber<std::underlying_type_t<T>>(L, arg));
 }
 
 template <typename T>
