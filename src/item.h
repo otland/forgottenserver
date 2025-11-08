@@ -186,9 +186,9 @@ public:
 
 			void operator()(bool v) const { tfs::lua::pushBoolean(L, v); }
 
-			void operator()(const int64_t& v) const { lua_pushnumber(L, v); }
+			void operator()(const int64_t& v) const { tfs::lua::pushNumber(L, v); }
 
-			void operator()(const double& v) const { lua_pushnumber(L, v); }
+			void operator()(const double& v) const { tfs::lua::pushNumber(L, v); }
 		};
 
 		void pushToLua(lua_State* L) const { boost::apply_visitor(PushLuaVisitor(L), value); }
