@@ -544,6 +544,10 @@ void Item::unserializeAttr(OTB::iterator& first, const OTB::iterator& last)
 {
 	while (first != last) {
 		auto attr = OTB::read<uint8_t>(first, last);
+		if (attr == ATTR_END) {
+			break;
+		}
+
 		readAttr(static_cast<AttrTypes_t>(attr), first, last);
 	}
 }

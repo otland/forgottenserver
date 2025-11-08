@@ -88,16 +88,12 @@ bool loadItem(OTB::iterator& first, const OTB::iterator& last, Cylinder* parent)
 bool loadContainer(OTB::iterator& first, const OTB::iterator& last, Container* container)
 {
 	while (container->serializationCount > 0) {
-		loadItem(first, last, container);
+		if (!loadItem(first, last, container)) {
+			return false;
+		}
 		container->serializationCount--;
 	}
 
-	auto endAttr = OTB::read<uint8_t>(first, last);
-	if (endAttr != 0) {
-		std::cout << "[Warning - IOMapSerialize::loadContainer] Unserialization error for container item: "
-		          << container->getID() << std::endl;
-		return false;
-	}
 	return true;
 }
 
