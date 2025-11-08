@@ -49,11 +49,12 @@ template <class T>
 	std::array<char, sizeof(T)> buf;
 	auto it = buf.begin();
 
-	for (auto end = first + sizeof(T); first < end; ++first, ++it) {
+	auto end = first + sizeof(T);
+	while (first < end) {
 		if (*first == Node::ESCAPE) [[unlikely]] {
 			++first, ++end;
 		}
-		*it = *first;
+		*it++ = *first++;
 	}
 
 	if (first > last) [[unlikely]] {
@@ -67,16 +68,17 @@ template <class T>
 
 [[nodiscard]] std::string readString(auto& first, const auto last)
 {
-	auto len = read<uint16_t>(first, last);
+	const auto len = read<uint16_t>(first, last);
 
 	std::string out;
 	out.reserve(len);
 
-	for (auto end = first + len; first < end; ++first) {
+	auto end = first + len;
+	while (first < end) {
 		if (*first == Node::ESCAPE) [[unlikely]] {
 			++first, ++end;
 		}
-		out.push_back(*first);
+		out.push_back(*first++);
 	}
 
 	if (first > last) [[unlikely]] {
@@ -88,10 +90,13 @@ template <class T>
 
 void skip(auto& first, const auto last, const std::size_t len)
 {
-	for (auto end = first + len; first < end; ++first) {
+	auto end = first + len;
+	while (first < end) {
 		if (*first == Node::ESCAPE) [[unlikely]] {
-			++first, ++end;
+			++first;
+			++end;
 		}
+		++first;
 	}
 
 	if (first > last) [[unlikely]] {

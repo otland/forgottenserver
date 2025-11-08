@@ -64,9 +64,6 @@ public:
 
 	const ItemDeque& getItemList() const { return itemlist; }
 
-	ItemDeque::const_reverse_iterator getReversedItems() const { return itemlist.rbegin(); }
-	ItemDeque::const_reverse_iterator getReversedEnd() const { return itemlist.rend(); }
-
 	std::string getName(bool addArticle = false) const;
 
 	void addItem(Item* item);

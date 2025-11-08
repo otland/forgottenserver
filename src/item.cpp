@@ -535,7 +535,7 @@ void Item::readAttr(AttrTypes_t attr, OTB::iterator& first, const OTB::iterator&
 		}
 
 		default:
-			// fmt::print("Invalid attribute type: {:d}\n", tfs::to_underlying(attr));
+			std::println("Invalid attribute type: {:d}", std::to_underlying(attr));
 			break;
 	}
 }

@@ -34,6 +34,7 @@
 #include <mutex>
 #include <mysql/mysql.h>
 #include <optional>
+#include <print>
 #include <pugixml.hpp>
 #include <queue>
 #include <random>
