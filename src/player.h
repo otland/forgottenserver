@@ -679,6 +679,12 @@ public:
 			}
 		}
 	}
+	void sendLight()
+	{
+		if (client) {
+			client->sendCreatureLight(this);
+		}
+	}
 	void sendCreatureLight(const Creature* creature)
 	{
 		if (client) {

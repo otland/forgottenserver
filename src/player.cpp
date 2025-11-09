@@ -1124,16 +1124,15 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 	setLastPosition(getPosition());
 
 	if (isLogin) {
-		// Restore stored conditions
+		// Restore conditions stored during previous logout
 		for (Condition* condition : storedConditionList) {
 			addCondition(condition);
 		}
 		storedConditionList.clear();
 
-		// Update mute conditions considering offline time
 		int32_t offlineTime = 0;
 		if (getLastLogout() != 0) {
-			// Limit to 21 days to prevent overflow when converting to milliseconds
+			// Cap offline time to 21 days to avoid integer overflow when converting to milliseconds
 			offlineTime = std::min<int32_t>(time(nullptr) - getLastLogout(), 86400 * 21);
 		}
 
@@ -1149,7 +1148,6 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 
 		onChangeZone(getZone());
 
-		// Handle mount state and speed bonus
 		uint16_t currentMountId = currentOutfit.lookMount;
 		if (currentMountId != 0) {
 			if (Mount* currentMount = g_game.mounts.getMountByClientID(currentMountId)) {
@@ -1166,12 +1164,10 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 
 		IOLoginData::updateOnlineStatus(guid, true);
 
-		// Wake up if sleeping in a bed
 		if (BedItem* bed = g_game.getBedBySleeper(guid)) {
 			bed->wakeUp(this);
 		}
 
-		// Register player in guild
 		if (guild) {
 			guild->addMember(this);
 		}
@@ -1185,7 +1181,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 	sendStats();
 	sendSkills();
 	sendIcons();
-	sendCreatureLight(creature);
+	sendLight();
 	sendVIPEntries();
 	sendItemClasses();
 	sendClientFeatures();
