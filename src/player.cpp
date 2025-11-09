@@ -1179,6 +1179,7 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 
 	if (!g_creatureEvents->playerLogin(this)) {
 		kickPlayer(true);
+		return;
 	}
 
 	sendStats();
