@@ -153,7 +153,7 @@ public:
 	void resetTransferItem();
 	bool executeTransfer(const std::shared_ptr<HouseTransferItem>& item, const std::shared_ptr<Player>& newOwner);
 
-	const auto& getTiles() const { return houseTiles; }
+	const auto& getTiles() const { return tiles; }
 	const auto& getDoors() const { return doors; }
 
 	void addBed(const std::shared_ptr<BedItem>& bed);
@@ -171,7 +171,7 @@ private:
 
 	Container transferContainer{ITEM_LOCKER};
 
-	std::flat_set<std::weak_ptr<HouseTile>, std::owner_less<std::weak_ptr<HouseTile>>> houseTiles;
+	std::flat_set<std::weak_ptr<HouseTile>, std::owner_less<std::weak_ptr<HouseTile>>> tiles;
 	std::flat_set<std::weak_ptr<Door>, std::owner_less<std::weak_ptr<Door>>> doors;
 	std::flat_set<std::weak_ptr<BedItem>, std::owner_less<std::weak_ptr<BedItem>>> beds;
 

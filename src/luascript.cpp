@@ -15806,7 +15806,8 @@ int LuaScriptInterface::luaPartyGetMemberCount(lua_State* L)
 	// party:getMemberCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getMembers().size());
+		lua_pushnumber(
+		    L, std::ranges::count_if(party->getMembers(), [](const auto& member) { return !member.expired(); }));
 	} else {
 		lua_pushnil(L);
 	}
@@ -15839,7 +15840,8 @@ int LuaScriptInterface::luaPartyGetInviteeCount(lua_State* L)
 	// party:getInviteeCount()
 	Party* party = tfs::lua::getUserdata<Party>(L, 1);
 	if (party) {
-		lua_pushnumber(L, party->getInvitees().size());
+		lua_pushnumber(
+		    L, std::ranges::count_if(party->getInvitees(), [](const auto& invitee) { return !invitee.expired(); }));
 	} else {
 		lua_pushnil(L);
 	}

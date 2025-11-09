@@ -461,10 +461,8 @@ void Party::clearPlayerPoints(const std::shared_ptr<Player>& player)
 
 bool Party::canOpenCorpse(uint32_t ownerId) const
 {
-	if (const auto& leader = getLeader()) {
-		if (const auto& player = g_game.getPlayerByID(ownerId)) {
-			return leader->getID() == ownerId || player->getParty() == this;
-		}
+	if (const auto& player = g_game.getPlayerByID(ownerId)) {
+		return getLeader()->getID() == ownerId || player->getParty() == this;
 	}
 	return false;
 }

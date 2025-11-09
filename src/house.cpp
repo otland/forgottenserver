@@ -20,7 +20,7 @@ House::House(uint32_t houseId) : id(houseId) {}
 void House::addTile(const std::shared_ptr<HouseTile>& tile)
 {
 	tile->setFlag(TILESTATE_PROTECTIONZONE);
-	houseTiles.emplace(tile);
+	tiles.emplace(tile);
 }
 
 void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
@@ -47,7 +47,7 @@ void House::setOwner(uint32_t guid, bool updateDatabase /* = true*/,
 			transferToDepot();
 		}
 
-		for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
+		for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 			if (const CreatureVector* creatures = tile->getCreatures()) {
 				for (int32_t i = creatures->size(); --i >= 0;) {
 					kickPlayer(nullptr, (*creatures)[i]->getPlayer());
@@ -176,7 +176,7 @@ void House::setAccessList(uint32_t listId, std::string_view textlist)
 	}
 
 	// kick uninvited players
-	for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
+	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 		if (CreatureVector* creatures = tile->getCreatures()) {
 			for (int32_t i = creatures->size(); --i >= 0;) {
 				const auto& player = (*creatures)[i]->getPlayer();
@@ -215,7 +215,7 @@ bool House::transferToDepot(const std::shared_ptr<Player>& player) const
 	}
 
 	ItemList moveItemList;
-	for (const auto& tile : houseTiles | tfs::views::lock_weak_ptrs) {
+	for (const auto& tile : tiles | tfs::views::lock_weak_ptrs) {
 		if (const TileItemVector* items = tile->getItemList()) {
 			for (const auto& item : *items) {
 				if (item->isPickupable()) {

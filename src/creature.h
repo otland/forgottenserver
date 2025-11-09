@@ -214,8 +214,8 @@ public:
 	std::shared_ptr<Creature> getFollowCreature() const { return followCreature.lock(); }
 	virtual void setFollowCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeFollowCreature();
-	virtual bool canFollowCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isFollowingCreature(const std::shared_ptr<Creature>& creature)
+	bool canFollowCreature(const std::shared_ptr<Creature>& creature);
+	bool isFollowingCreature(const std::shared_ptr<Creature>& creature)
 	{
 		return tfs::owner_equal(followCreature, creature);
 	}
@@ -236,10 +236,10 @@ public:
 	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature.lock(); }
 	virtual void setAttackedCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeAttackedCreature();
-	virtual bool canAttackCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isAttackingCreature(const std::shared_ptr<Creature>& creature)
+	bool canAttackCreature(const std::shared_ptr<Creature>& creature);
+	bool isAttackingCreature(const std::shared_ptr<Creature>& creature)
 	{
-		return creature == getAttackedCreature();
+		return tfs::owner_equal(creature, attackedCreature);
 	}
 
 	virtual BlockType_t blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,

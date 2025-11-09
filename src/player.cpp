@@ -120,14 +120,16 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " He is in a party with ";
 		}
 
-		size_t memberCount = party->getMembers().size() + 1;
+		size_t memberCount =
+		    std::ranges::count_if(party->getMembers(), [](const auto& member) { return !member.expired(); }) + 1;
 		if (memberCount == 1) {
 			s << "1 member and ";
 		} else {
 			s << memberCount << " members and ";
 		}
 
-		size_t invitationCount = party->getInvitees().size();
+		size_t invitationCount =
+		    std::ranges::count_if(party->getInvitees(), [](const auto& invitee) { return !invitee.expired(); });
 		if (invitationCount == 1) {
 			s << "1 pending invitation.";
 		} else {
