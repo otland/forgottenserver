@@ -602,7 +602,7 @@ public:
 			client->sendChannelEvent(channelId, playerName, channelEvent);
 		}
 	}
-	void sendCreatureAppear(const Creature* creature, const Position& pos,
+	void sendAddCreature(const Creature* creature, const Position& pos,
 	                        MagicEffectClasses magicEffect = CONST_ME_NONE)
 	{
 		if (client) {
@@ -779,7 +779,7 @@ public:
 	                      const Item* newItem, const ItemType& newType) override;
 	void onRemoveTileItem(const Tile* tile, const Position& pos, const ItemType& iType, const Item* item) override;
 
-	void onCreatureAppear(Creature* creature) override;
+	void onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClasses magicEffect) override;
 	void onRemoveCreature(Creature* creature, bool isLogout) override;
 	void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                    const Position& oldPos, bool teleport) override;
@@ -803,6 +803,36 @@ public:
 	void onUpdateInventoryItem(Item* oldItem, Item* newItem);
 	void onRemoveInventoryItem(Item* item);
 
+	void sendVIPEntries() const
+	{
+		if (client) {
+			client->sendVIPEntries();
+		}
+	}
+	void sendItemClasses() const
+	{
+		if (client) {
+			client->sendItemClasses();
+		}
+	}
+	void sendClientFeatures() const
+	{
+		if (client) {
+			client->sendClientFeatures();
+		}
+	}
+	void sendMapDescription() const
+	{
+		if (client) {
+			client->sendMapDescription(position);
+		}
+	}
+	void sendPendingStateEntered() const
+	{
+		if (client) {
+			client->sendPendingStateEntered();
+		}
+	}
 	void sendCancelMessage(const std::string& msg) const
 	{
 		if (client) {
@@ -852,6 +882,12 @@ public:
 	{
 		if (client) {
 			client->sendIcons(getClientIcons());
+		}
+	}
+	void sendMagicEffect(uint8_t type) const
+	{
+		if (client) {
+			client->sendMagicEffect(position, type);
 		}
 	}
 	void sendMagicEffect(const Position& pos, uint8_t type) const

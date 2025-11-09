@@ -108,7 +108,7 @@ bool Monster::canWalkOnFieldType(CombatType_t combatType) const
 
 void Monster::onAttackedCreatureDisappear(bool) { attackTicks = 0; }
 
-void Monster::onCreatureAppear(Creature* creature)
+void Monster::onCreatureAppear(Creature* creature, bool, MagicEffectClasses)
 {
 	if (creature == this) {
 		setLastPosition(getPosition());

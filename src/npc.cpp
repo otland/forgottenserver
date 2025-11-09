@@ -234,7 +234,7 @@ void Npc::goToFollowCreature()
 	updateFollowCreaturePath(fpp);
 }
 
-void Npc::onCreatureAppear(Creature* creature)
+void Npc::onCreatureAppear(Creature* creature, bool, MagicEffectClasses)
 {
 	if (creature == this) {
 		setLastPosition(getPosition());
