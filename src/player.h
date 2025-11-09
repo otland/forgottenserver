@@ -177,11 +177,11 @@ public:
 	uint64_t getBankBalance() const { return bankBalance; }
 	void setBankBalance(uint64_t balance) { bankBalance = balance; }
 
-	std::shared_ptr<Guild> getGuild() const { return guild; }
-	void setGuild(std::shared_ptr<Guild> guild);
+	std::shared_ptr<Guild> getGuild() const { return guild.lock(); }
+	void setGuild(const std::shared_ptr<Guild>& guild);
 
-	std::shared_ptr<GuildRank> getGuildRank() const { return guildRank; }
-	void setGuildRank(std::shared_ptr<GuildRank> newGuildRank) { guildRank = std::move(newGuildRank); }
+	std::shared_ptr<GuildRank> getGuildRank() const { return guildRank.lock(); }
+	void setGuildRank(const std::shared_ptr<GuildRank>& guildRank) { this->guildRank = guildRank; }
 
 	bool isGuildMate(const std::shared_ptr<const Player>& player) const;
 
@@ -248,8 +248,8 @@ public:
 
 	bool hasFlag(PlayerFlags value) const { return (group->flags & value) != 0; }
 
-	std::shared_ptr<BedItem> getBedItem() const { return bedItem; }
-	void setBedItem(std::shared_ptr<BedItem> b) { bedItem = std::move(b); }
+	std::shared_ptr<BedItem> getBedItem() const { return bedItem.lock(); }
+	void setBedItem(const std::shared_ptr<BedItem>& bedItem) { this->bedItem = bedItem; }
 
 	void addBlessing(uint8_t blessing) { blessings.set(blessing); }
 	void removeBlessing(uint8_t blessing) { blessings.reset(blessing); }
@@ -417,10 +417,10 @@ public:
 	// safe-trade functions
 	void setTradeState(tradestate_t state) { tradeState = state; }
 	tradestate_t getTradeState() const { return tradeState; }
-	void setTradePartner(std::shared_ptr<Player> partner) { tradePartner = std::move(partner); }
-	std::shared_ptr<Player> getTradePartner() { return tradePartner; }
-	void setTradeItem(std::shared_ptr<Item> item) { tradeItem = std::move(item); }
-	std::shared_ptr<Item> getTradeItem() { return tradeItem; }
+	void setTradePartner(const std::shared_ptr<Player>& tradePartner) { this->tradePartner = tradePartner; }
+	std::shared_ptr<Player> getTradePartner() { return tradePartner.lock(); }
+	void setTradeItem(const std::shared_ptr<Item>& tradeItem) { this->tradeItem = tradeItem; }
+	std::shared_ptr<Item> getTradeItem() { return tradeItem.lock(); }
 
 	// shop functions
 	void setShopOwner(std::shared_ptr<Npc> owner, int32_t onBuy, int32_t onSell)
@@ -1275,18 +1275,18 @@ private:
 
 	ProtocolGame_ptr client;
 	Connection::Address lastIP = {};
-	std::shared_ptr<BedItem> bedItem = nullptr;
-	std::shared_ptr<Guild> guild = nullptr;
-	std::shared_ptr<GuildRank> guildRank = nullptr;
+	std::weak_ptr<BedItem> bedItem;
+	std::weak_ptr<Guild> guild;
+	std::weak_ptr<GuildRank> guildRank;
 	Group* group = nullptr;
 	std::shared_ptr<Inbox> inbox = nullptr;
-	std::shared_ptr<Item> tradeItem = nullptr;
+	std::weak_ptr<Item> tradeItem;
 	std::shared_ptr<Item> inventory[CONST_SLOT_LAST + 1] = {};
-	std::shared_ptr<Item> writeItem = nullptr;
+	std::weak_ptr<Item> writeItem;
 	House* editHouse = nullptr;
 	std::weak_ptr<Npc> shopOwner;
 	Party* party = nullptr;
-	std::shared_ptr<Player> tradePartner = nullptr;
+	std::weak_ptr<Player> tradePartner;
 	SchedulerTask* walkTask = nullptr;
 	const Town* town = nullptr;
 	Vocation* vocation = nullptr;

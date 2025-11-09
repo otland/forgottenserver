@@ -328,7 +328,7 @@ bool IOLoginData::loadPlayer(const std::shared_ptr<Player>& player, DBResult_ptr
 
 				rank = guild->getRankById(playerRankId);
 				if (!rank) {
-					player->guild = nullptr;
+					player->guild.reset();
 				}
 			}
 

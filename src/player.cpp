@@ -135,6 +135,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 		}
 	}
 
+	const auto& guild = getGuild();
+	const auto& guildRank = getGuildRank();
 	if (!guild || !guildRank) {
 		return s.str();
 	}
@@ -831,7 +833,7 @@ std::shared_ptr<Item> Player::getWriteItem(uint32_t& windowTextId, uint16_t& max
 {
 	windowTextId = this->windowTextId;
 	maxWriteLen = this->maxWriteLen;
-	return writeItem;
+	return writeItem.lock();
 }
 
 uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen /*= 0*/)
@@ -840,7 +842,7 @@ uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWri
 		writeItem = item;
 		this->maxWriteLen = maxWriteLen;
 	} else {
-		writeItem = nullptr;
+		writeItem.reset();
 		this->maxWriteLen = 0;
 	}
 	return ++windowTextId;
@@ -1006,7 +1008,7 @@ void Player::onUpdateTileItem(const std::shared_ptr<const Tile>& tile, const Pos
 	}
 
 	if (tradeState != TRADE_TRANSFER) {
-		if (tradeItem && oldItem == tradeItem) {
+		if (!tradeItem.expired() && tfs::owner_equal(oldItem, tradeItem)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 	}
@@ -1020,7 +1022,7 @@ void Player::onRemoveTileItem(const std::shared_ptr<const Tile>& tile, const Pos
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (const auto& container = item->getContainer()) {
 				if (container->isHoldingItem(tradeItem)) {
 					g_game.internalCloseTrade(getPlayer());
@@ -1064,7 +1066,7 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		if (guild) {
+		if (const auto& guild = getGuild()) {
 			guild->addMember(getPlayer());
 		}
 
@@ -1172,7 +1174,7 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 			removeFollowCreature();
 		}
 
-		if (tradePartner) {
+		if (!tradePartner.expired()) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 
@@ -1186,7 +1188,7 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 
 		g_chat->removeUserFromAllChannels(getPlayer());
 
-		if (guild) {
+		if (const auto& guild = getGuild()) {
 			guild->removeMember(getPlayer());
 		}
 
@@ -1260,11 +1262,13 @@ void Player::onCreatureMove(const std::shared_ptr<Creature>& creature, const std
 
 	if (tradeState != TRADE_TRANSFER) {
 		// check if we should close trade
-		if (tradeItem && !tradeItem->getPosition().isInRange(getPosition(), 1, 1, 0)) {
+		if (const auto& tradeItem = getTradeItem();
+		    tradeItem && !tradeItem->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 
-		if (tradePartner && !tradePartner->getPosition().isInRange(getPosition(), 2, 2, 0)) {
+		if (const auto& tradePartner = getTradePartner();
+		    tradePartner && !tradePartner->getPosition().isInRange(getPosition(), 2, 2, 0)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 	}
@@ -1343,7 +1347,7 @@ void Player::onRemoveContainerItem(const std::shared_ptr<const Container>& conta
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (tradeItem->getParent() != container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 			}
@@ -1394,7 +1398,7 @@ void Player::onRemoveInventoryItem(const std::shared_ptr<Item>& item)
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (const auto& container = item->getContainer()) {
 				if (container->isHoldingItem(tradeItem)) {
 					g_game.internalCloseTrade(getPlayer());
@@ -1406,16 +1410,16 @@ void Player::onRemoveInventoryItem(const std::shared_ptr<Item>& item)
 
 void Player::checkTradeState(const std::shared_ptr<const Item>& item)
 {
-	if (!tradeItem || tradeState == TRADE_TRANSFER) {
+	if (tradeItem.expired() || tradeState == TRADE_TRANSFER) {
 		return;
 	}
 
-	if (tradeItem == item) {
+	if (tfs::owner_equal(tradeItem, item)) {
 		g_game.internalCloseTrade(getPlayer());
 	} else if (auto parent = item->getParent()) {
 		auto container = parent->getContainer();
 		while (container) {
-			if (container == tradeItem) {
+			if (tfs::owner_equal(container, tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 				break;
 			}
@@ -2691,7 +2695,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 
 		for (uint32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
 			if (const auto& inventoryItem = inventory[slotIndex]) {
-				if (inventoryItem == tradeItem) {
+				if (tfs::owner_equal(inventoryItem, tradeItem)) {
 					continue;
 				}
 
@@ -2752,7 +2756,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 			uint32_t n = 0;
 
 			for (const auto& tmpItem : tmpContainer->getItemList()) {
-				if (tmpItem == tradeItem) {
+				if (tfs::owner_equal(tmpItem, tradeItem)) {
 					continue;
 				}
 
@@ -4048,6 +4052,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 
 bool Player::isInWar(const std::shared_ptr<const Player>& player) const
 {
+	const auto& guild = getGuild();
 	if (!player || !guild) {
 		return false;
 	}
@@ -4154,10 +4159,10 @@ bool Player::isPartner(const std::shared_ptr<const Player>& player) const
 
 bool Player::isGuildMate(const std::shared_ptr<const Player>& player) const
 {
-	if (!player || !guild) {
+	if (!player || guild.expired()) {
 		return false;
 	}
-	return guild == player->guild;
+	return tfs::owner_equal(guild, player->guild);
 }
 
 void Player::sendPlayerPartyIcons(const std::shared_ptr<Player>& player)
@@ -4199,11 +4204,11 @@ GuildEmblems_t Player::getGuildEmblem(const std::shared_ptr<const Player>& playe
 	}
 
 	if (player->getGuildWarVector().empty()) {
-		if (guild == playerGuild) {
+		if (tfs::owner_equal(guild, playerGuild)) {
 			return GUILDEMBLEM_MEMBER;
 		}
 		return GUILDEMBLEM_OTHER;
-	} else if (guild == playerGuild) {
+	} else if (tfs::owner_equal(guild, playerGuild)) {
 		return GUILDEMBLEM_ALLY;
 	} else if (isInWar(player)) {
 		return GUILDEMBLEM_ENEMY;
@@ -4594,17 +4599,17 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	return muteConditions;
 }
 
-void Player::setGuild(std::shared_ptr<Guild> newGuild)
+void Player::setGuild(const std::shared_ptr<Guild>& newGuild)
 {
-	if (newGuild == guild) {
+	if (tfs::owner_equal(newGuild, guild)) {
 		return;
 	}
 
-	const auto oldGuild = guild;
+	const auto oldGuild = getGuild();
 
 	guildNick.clear();
-	guild = nullptr;
-	guildRank = nullptr;
+	guild.reset();
+	guildRank.reset();
 
 	if (newGuild) {
 		const auto& rank = newGuild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);
