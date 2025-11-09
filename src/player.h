@@ -602,8 +602,7 @@ public:
 			client->sendChannelEvent(channelId, playerName, channelEvent);
 		}
 	}
-	void sendAddCreature(const Creature* creature, const Position& pos,
-	                        MagicEffectClasses magicEffect = CONST_ME_NONE)
+	void sendAddCreature(const Creature* creature, const Position& pos, MagicEffectClasses magicEffect = CONST_ME_NONE)
 	{
 		if (client) {
 			client->sendAddCreature(creature, pos, creature->getTile()->getClientIndexOfCreature(this, creature),
