@@ -1175,11 +1175,11 @@ void Player::onCreatureAppear(Creature* creature, bool isLogin, MagicEffectClass
 		if (guild) {
 			guild->addMember(this);
 		}
-	}
 
-	if (!g_creatureEvents->playerLogin(this)) {
-		kickPlayer(true);
-		return;
+		if (!g_creatureEvents->playerLogin(this)) {
+			kickPlayer(true);
+			return;
+		}
 	}
 
 	sendStats();
