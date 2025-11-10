@@ -1875,8 +1875,8 @@ bool Game::playerBroadcastMessage(const std::shared_ptr<Player>& player, const s
 
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
-	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
-		player->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
+	for (const auto& onlinePlayer : getPlayers() | tfs::views::lock_weak_ptrs) {
+		onlinePlayer->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
 	return true;
