@@ -42,7 +42,7 @@ jobs:
 
       - run: |
           sudo apt-get update && sudo apt-get install -y g++-14
-          sudo update-alternatives --get-selections
+          sudo update-alternatives --set c++ /usr/bin/g++-14
         if: ${{ matrix.os == 'ubuntu' }}
 
       - name: Initialize CodeQL
