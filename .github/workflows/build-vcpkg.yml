@@ -41,9 +41,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: |
-          sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-14 100
-          sudo update-alternatives --set c++ /usr/bin/g++-14
+      - run: echo CXX=g++-15 >> $GITHUB_ENV
+        if: ${{ matrix.os == 'macos' }}
+
+      - run: echo CXX=g++-14 >> $GITHUB_ENV
         if: ${{ matrix.os == 'ubuntu' }}
 
       - name: Initialize CodeQL
