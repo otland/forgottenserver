@@ -148,13 +148,13 @@ void Creature::forceUpdatePath()
 
 void Creature::onAttacking(uint32_t interval)
 {
-	if (attackedCreature.expired()) {
+	const auto& attackedCreature = getAttackedCreature();
+	if (!attackedCreature) {
 		return;
 	}
 
 	onAttacked();
 
-	const auto& attackedCreature = getAttackedCreature();
 	attackedCreature->onAttacked();
 
 	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
@@ -336,7 +336,7 @@ void Creature::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool)
 
 void Creature::onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout)
 {
-	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature == creature) {
+	if (tfs::owner_equal(attackedCreature, creature)) {
 		removeAttackedCreature();
 		onAttackedCreatureDisappear(isLogout);
 	}
@@ -825,9 +825,7 @@ void Creature::removeFollowers()
 		            const Position& followerPosition = creature->getPosition();
 		            uint16_t distance =
 		                position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
-		            bool isInRemoveRange =
-		                distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
-		            return isInRemoveRange;
+		            return distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
 	            }) |
 	            std::ranges::to<decltype(followers)>();
 }
