@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - run: |
-          sudo update-alternatives --install /usr/bin/g++ c++ /usr/bin/g++-14 100
+          sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++-14 100
           sudo update-alternatives --set c++ /usr/bin/g++-14
         if: ${{ matrix.os == 'ubuntu' }}
 
