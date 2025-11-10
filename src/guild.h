@@ -43,7 +43,7 @@ public:
 	void setMotd(std::string motd) { this->motd = std::move(motd); }
 
 private:
-	std::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<Player>>> membersOnline;
+	boost::container::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<Player>>> membersOnline;
 	std::vector<std::shared_ptr<GuildRank>> ranks;
 	std::string name;
 	std::string motd;

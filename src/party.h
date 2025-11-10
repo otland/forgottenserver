@@ -61,8 +61,8 @@ private:
 
 	std::map<uint32_t, int64_t> ticksMap;
 
-	std::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> memberList;
-	std::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> inviteList;
+	boost::container::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> memberList;
+	boost::container::flat_set<std::weak_ptr<Player>, std::owner_less<std::weak_ptr<const Player>>> inviteList;
 
 	std::weak_ptr<Player> leader;
 

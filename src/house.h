@@ -171,9 +171,9 @@ private:
 
 	Container transferContainer{ITEM_LOCKER};
 
-	std::flat_set<std::weak_ptr<HouseTile>, std::owner_less<std::weak_ptr<HouseTile>>> tiles;
-	std::flat_set<std::weak_ptr<Door>, std::owner_less<std::weak_ptr<Door>>> doors;
-	std::flat_set<std::weak_ptr<BedItem>, std::owner_less<std::weak_ptr<BedItem>>> beds;
+	boost::container::flat_set<std::weak_ptr<HouseTile>, std::owner_less<std::weak_ptr<HouseTile>>> tiles;
+	boost::container::flat_set<std::weak_ptr<Door>, std::owner_less<std::weak_ptr<Door>>> doors;
+	boost::container::flat_set<std::weak_ptr<BedItem>, std::owner_less<std::weak_ptr<BedItem>>> beds;
 
 	std::string houseName;
 	std::string ownerName;

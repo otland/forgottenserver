@@ -29,7 +29,7 @@ public:
 	void emplace(const std::shared_ptr<Creature>& creature) { vec.emplace(creature); }
 
 private:
-	std::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>> vec;
+	boost::container::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>> vec;
 };
 
 #endif // FS_SPECTATORS_H

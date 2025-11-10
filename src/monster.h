@@ -138,7 +138,7 @@ public:
 	static uint32_t monsterAutoID;
 
 private:
-	std::flat_set<std::weak_ptr<Creature>, std::owner_less<std::weak_ptr<Creature>>> friendList;
+	boost::container::flat_set<std::weak_ptr<Creature>, std::owner_less<std::weak_ptr<Creature>>> friendList;
 	std::deque<std::weak_ptr<Creature>> targetList;
 	MonsterIconHashMap monsterIcons;
 
