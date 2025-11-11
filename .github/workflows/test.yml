@@ -47,6 +47,6 @@ jobs:
           buildPreset: vcpkg
           buildPresetAdditionalArgs: "['--config', 'Debug']"
           configurePreset: vcpkg
-          configurePresetAdditionalArgs: "['-DBUILD_TESTING=ON']"
+          configurePresetAdditionalArgs: "['-DASAN=ON', '-DBUILD_TESTING=ON']"
           testPreset: vcpkg
           testPresetAdditionalArgs: "['--build-config', 'Debug', '--output-on-failure']"

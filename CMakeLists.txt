@@ -40,6 +40,18 @@ else()
     list(APPEND VCPKG_MANIFEST_FEATURES "lua")
 endif()
 
+option(ASAN "Enable address sanitizer" OFF)
+if (ASAN)
+    if (MSVC)
+        message(WARNING "ASAN is experimental on Windows/MSVC")
+        add_compile_options(/fsanitize=address)
+        add_link_options(/fsanitize=address)
+    else ()
+        add_compile_options(-fsanitize=address)
+        add_link_options(-fsanitize=address)
+    endif ()
+endif ()
+
 project(tfs CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
