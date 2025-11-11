@@ -39,11 +39,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: echo CXX=g++-15 >> $GITHUB_ENV
-        if: ${{ matrix.os == 'macos' }}
-
       - run: echo CXX=g++-14 >> $GITHUB_ENV
-        if: ${{ matrix.os == 'ubuntu' }}
+        if: ${{ matrix.os == 'macos' || matrix.os == 'ubuntu' }}
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
