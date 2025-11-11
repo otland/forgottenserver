@@ -507,11 +507,14 @@ bool Game::placeCreature(const std::shared_ptr<Creature>& creature, const Positi
 		return false;
 	}
 
+	const auto& position = creature->getPosition();
+	const auto& tile = creature->getTile();
+
 	SpectatorVec spectators;
-	map.getSpectators(spectators, creature->getPosition(), true);
+	map.getSpectators(spectators, position, true);
 	for (const auto& spectator : spectators) {
-		if (const auto& tmpPlayer = spectator->getPlayer()) {
-			tmpPlayer->sendCreatureAppear(creature, creature->getPosition(), magicEffect);
+		if (const auto& spectatorPlayer = spectator->getPlayer()) {
+			spectatorPlayer->sendCreatureAppear(creature, position, magicEffect);
 		}
 	}
 
@@ -519,10 +522,10 @@ bool Game::placeCreature(const std::shared_ptr<Creature>& creature, const Positi
 		spectator->onCreatureAppear(creature, true);
 	}
 
-	creature->getParent()->postAddNotification(creature, nullptr, 0);
-
 	addCreatureCheck(creature);
-	creature->onPlacedCreature();
+
+	tile->postAddNotification(creature, nullptr, 0);
+
 	return true;
 }
 

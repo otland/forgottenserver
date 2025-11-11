@@ -367,11 +367,6 @@ void Tile::onAddTileItem(const std::shared_ptr<Item>& item)
 		}
 	}
 
-	// event methods
-	for (const auto& spectator : spectators) {
-		spectator->onAddTileItem(getTile(), thingMapPos);
-	}
-
 	if ((!hasFlag(TILESTATE_PROTECTIONZONE) || getBoolean(ConfigManager::CLEAN_PROTECTION_ZONES)) &&
 	    item->isCleanable()) {
 		if (!getHouseTile()) {

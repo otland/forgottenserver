@@ -551,7 +551,6 @@ public:
 	void onChangeZone(ZoneType_t zone) override;
 	void onAttackedCreatureChangeZone(ZoneType_t zone) override;
 	void onIdleStatus() override;
-	void onPlacedCreature() override;
 
 	LightInfo getCreatureLight() const override;
 

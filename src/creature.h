@@ -331,13 +331,9 @@ public:
 	virtual void onWalk();
 	virtual bool getNextStep(Direction& dir, uint32_t& flags);
 
-	virtual void onAddTileItem(const std::shared_ptr<const Tile>&, const Position&) {}
 	virtual void onUpdateTileItem(const std::shared_ptr<const Tile>&, const Position&,
 	                              const std::shared_ptr<const Item>&, const ItemType&,
 	                              const std::shared_ptr<const Item>&, const ItemType&)
-	{}
-	virtual void onRemoveTileItem(const std::shared_ptr<const Tile>&, const Position&, const ItemType&,
-	                              const std::shared_ptr<const Item>&)
 	{}
 
 	virtual void onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin);
@@ -350,8 +346,6 @@ public:
 	virtual void onFollowCreatureDisappear(bool) {}
 
 	virtual void onCreatureSay(const std::shared_ptr<Creature>&, SpeakClasses, const std::string&) {}
-
-	virtual void onPlacedCreature() {}
 
 	virtual bool getCombatValues(int32_t&, int32_t&) { return false; }
 

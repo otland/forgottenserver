@@ -17634,10 +17634,10 @@ int LuaScriptInterface::luaGlobalEventTime(lua_State* L)
 
 		time_t difference = static_cast<time_t>(difftime(mktime(timeinfo), current_time));
 		if (difference < 0) {
-			difference += 86400000;
+			difference += 86400;
 		}
 
-		globalevent->setNextExecution(current_time + difference);
+		globalevent->setNextExecution((current_time + difference) * 1000);
 		globalevent->setEventType(GLOBALEVENT_TIMER);
 		tfs::lua::pushBoolean(L, true);
 	} else {

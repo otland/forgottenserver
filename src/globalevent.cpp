@@ -137,15 +137,14 @@ void GlobalEvents::timer()
 			continue;
 		}
 
-		nextScheduledTime = globalEvent.getInterval();
-		globalEvent.setNextExecution(now + nextScheduledTime);
+		nextScheduledTime = std::min<int64_t>(nextScheduledTime, globalEvent.getInterval());
+		globalEvent.setNextExecution(now + globalEvent.getInterval());
 
 		++it;
 	}
 
 	if (nextScheduledTime != std::numeric_limits<int64_t>::max()) {
-		timerEventId = g_scheduler.addEvent(
-		    createSchedulerTask(std::max<int64_t>(1000, nextScheduledTime), [this]() { timer(); }));
+		timerEventId = g_scheduler.addEvent(createSchedulerTask(nextScheduledTime, [this]() { timer(); }));
 	}
 }
 

@@ -72,14 +72,14 @@ SpellGroup_t stringToSpellGroup(const std::string& value);
 
 std::array<Direction, 4> getShuffleDirections();
 
-namespace tfs::views {
+namespace tfs {
+
+namespace views {
 
 constexpr auto lock_weak_ptrs = std::views::transform([](const auto& wp) { return wp.lock(); }) |
                                 std::views::filter([](const auto& sp) { return sp != nullptr; });
 
 } // namespace tfs::views
-
-namespace tfs {
 
 template <class T, class U>
 bool owner_equal(const std::shared_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
