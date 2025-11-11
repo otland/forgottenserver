@@ -1337,7 +1337,7 @@ void Tile::postRemoveNotification(const std::shared_ptr<Thing>& thing, const std
 		if (thingCount > TILE_UPDATE_THRESHOLD) {
 			// If the tile contains more than the defined threshold of things,
 			// send a full tile update to the player to keep the client’s view in sync
-			std::static_pointer_cast<Player>(spectator)->sendUpdateTile(this, tilePos);
+			std::static_pointer_cast<Player>(spectator)->sendUpdateTile(getTile(), tilePos);
 		}
 
 		std::static_pointer_cast<Player>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
