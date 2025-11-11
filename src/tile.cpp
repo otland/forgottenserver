@@ -465,17 +465,6 @@ void Tile::onRemoveTileItem(const SpectatorVec& spectators, const std::vector<in
 	}
 }
 
-void Tile::onUpdateTile(const SpectatorVec& spectators)
-{
-	const Position& cylinderMapPos = getPosition();
-
-	// send to clients
-	for (Creature* spectator : spectators) {
-		assert(dynamic_cast<Player*>(spectator) != nullptr);
-		static_cast<Player*>(spectator)->sendUpdateTile(this, cylinderMapPos);
-	}
-}
-
 ReturnValue Tile::queryAdd(int32_t, const Thing& thing, uint32_t, uint32_t flags, Creature*) const
 {
 	if (const Creature* creature = thing.getCreature()) {
@@ -1393,15 +1382,20 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 
 void Tile::postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, cylinderlink_t)
 {
-	SpectatorVec spectators;
-	g_game.map.getSpectators(spectators, getPosition(), true, true);
+	const auto thingCount = getThingCount();
 
-	if (getThingCount() > 8) {
-		onUpdateTile(spectators);
-	}
+	SpectatorVec spectators;
+	g_game.map.getSpectators(spectators, tilePos, true, true);
 
 	for (Creature* spectator : spectators) {
 		assert(dynamic_cast<Player*>(spectator) != nullptr);
+
+		if (thingCount > TILE_UPDATE_THRESHOLD) {
+			// If the tile contains more than the defined threshold of things,
+			// send a full tile update to the player to keep the client’s view in sync
+			static_cast<Player*>(spectator)->sendUpdateTile(this, tilePos);
+		}
+
 		static_cast<Player*>(spectator)->postRemoveNotification(thing, newParent, index, LINK_NEAR);
 	}
 
