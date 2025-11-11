@@ -3083,7 +3083,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 			}
 
 			if (!oldParent && link == LINK_NEAR) {
-				if (!g_creatureEvents->playerLogin(this)) {
+				if (!g_creatureEvents->playerLogin(getPlayer())) {
 					kickPlayer(true);
 				}
 			}

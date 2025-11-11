@@ -335,6 +335,9 @@ public:
 	                              const std::shared_ptr<const Item>&, const ItemType&,
 	                              const std::shared_ptr<const Item>&, const ItemType&)
 	{}
+	virtual void onRemoveTileItem(const std::shared_ptr<const Tile>&, const Position&, const ItemType&,
+	                              const std::shared_ptr<const Item>&)
+	{}
 
 	virtual void onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin);
 	virtual void onRemoveCreature(const std::shared_ptr<Creature>& creature, bool isLogout);
