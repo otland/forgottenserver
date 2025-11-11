@@ -3,7 +3,6 @@ RUN apk add --no-cache \
   build-base \
   boost-dev \
   cmake \
-  fmt-dev \
   luajit-dev \
   mariadb-connector-c-dev \
   openssl-dev \
@@ -22,7 +21,6 @@ RUN apk add --no-cache \
   boost-locale \
   boost-system \
   boost-json \
-  fmt \
   luajit \
   mariadb-connector-c \
   openssl \

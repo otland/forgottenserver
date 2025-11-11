@@ -220,14 +220,14 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 {
 	auto premiumEndsAt = now + days(30);
 
-	auto result = db.storeQuery(fmt::format(
+	auto result = db.storeQuery(std::format(
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `premium_ends_at`) VALUES ('ghij', 'ghij@example.com', SHA1('bar'), {:d}) RETURNING `id`",
 	    premiumEndsAt.count()));
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insert(
 	    "INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`, `sex`, `looktype`, `lookhead`, `lookbody`, `looklegs`, `lookfeet`, `lookaddons`) VALUES");
-	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id, "Test",
+	insert.addRow(std::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}, {:d}", id, "Test",
 	                          2597, 6, 1715719401, 1, 1094, 78, 132, 114, 0, 1));
 	BOOST_TEST(insert.execute());
 
@@ -242,7 +242,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	BOOST_TEST(session.at("premiumuntil").as_int64() == premiumEndsAt.count());
 
 	result = db.storeQuery(
-	    fmt::format("SELECT `token`, INET6_NTOA(`ip`) AS `ip` FROM `sessions` WHERE `account_id` = {:d}", id));
+	    std::format("SELECT `token`, INET6_NTOA(`ip`) AS `ip` FROM `sessions` WHERE `account_id` = {:d}", id));
 	BOOST_TEST(result, "Session not found in database.");
 	BOOST_TEST(result->getString("token") == tfs::base64::decode(session.at("sessionkey").as_string()));
 	BOOST_TEST(result->getString("ip") == ip);
@@ -280,7 +280,7 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, LoginFixture)
 	auto id = result->getNumber<uint64_t>("id");
 
 	DBInsert insert("INSERT INTO `players` (`account_id`, `name`, `level`, `vocation`, `lastlogin`) VALUES");
-	insert.addRow(fmt::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}", id, "Testtoken", 2597, 6, 1715719401));
+	insert.addRow(std::format("{:d}, \"{:s}\", {:d}, {:d}, {:d}", id, "Testtoken", 2597, 6, 1715719401));
 	BOOST_TEST(insert.execute());
 
 	auto&& [status, body] = tfs::http::handle_login(

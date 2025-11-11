@@ -561,7 +561,7 @@ int32_t LuaScriptInterface::getEvent(std::string_view eventName)
 	lua_pushnil(L);
 	lua_setglobal(L, eventName.data());
 
-	cacheFiles[runningEventId] = fmt::format("{:s}:{:s}", loadingFile, eventName);
+	cacheFiles[runningEventId] = std::format("{:s}:{:s}", loadingFile, eventName);
 	return runningEventId++;
 }
 
@@ -3880,7 +3880,7 @@ int LuaScriptInterface::luaAddEvent(lua_State* L)
 	// addEvent(callback, delay, ...)
 	int parameters = lua_gettop(L);
 	if (parameters < 2) {
-		reportErrorFunc(L, fmt::format("Not enough parameters: {:d}.", parameters));
+		reportErrorFunc(L, std::format("Not enough parameters: {:d}.", parameters));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
@@ -8928,7 +8928,7 @@ int LuaScriptInterface::luaCreatureSetStorageValue(lua_State* L)
 
 	uint32_t key = tfs::lua::getNumber<uint32_t>(L, 2);
 	if (IS_IN_KEYRANGE(key, RESERVED_RANGE)) {
-		reportErrorFunc(L, fmt::format("Accessing reserved range: {:d}", key));
+		reportErrorFunc(L, std::format("Accessing reserved range: {:d}", key));
 		tfs::lua::pushBoolean(L, false);
 		return 1;
 	}
