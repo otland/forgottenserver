@@ -205,15 +205,11 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	}
 
 	if (Container* container = item->getContainer()) {
-		Container* openContainer;
-
 		// depot container
 		if (DepotLocker* depot = container->getDepotLocker()) {
 			DepotLocker& myDepotLocker = player->getDepotLocker();
 			myDepotLocker.setParent(depot->getParent()->getTile());
-			openContainer = &myDepotLocker;
-		} else {
-			openContainer = container;
+			container = &myDepotLocker;
 		}
 
 		uint32_t corpseOwner = container->getCorpseOwner();
@@ -222,12 +218,12 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 		}
 
 		// open/close container
-		int32_t oldContainerId = player->getContainerID(openContainer);
+		int32_t oldContainerId = player->getContainerID(container);
 		if (oldContainerId == -1) {
-			player->addContainer(index, openContainer);
-			player->onSendContainer(openContainer);
+			player->addContainer(index, container);
+			player->onSendContainer(container);
 		} else {
-			player->onCloseContainer(openContainer);
+			player->onCloseContainer(container);
 			player->closeContainer(oldContainerId);
 		}
 
