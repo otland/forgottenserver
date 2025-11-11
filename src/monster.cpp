@@ -9,7 +9,6 @@
 #include "configmanager.h"
 #include "events.h"
 #include "game.h"
-#include "spectators.h"
 #include "spells.h"
 
 extern Game g_game;

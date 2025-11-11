@@ -11,7 +11,6 @@
 #include "iomap.h"
 #include "iomapserialize.h"
 #include "monster.h"
-#include "spectators.h"
 
 extern Game g_game;
 
@@ -265,7 +264,7 @@ void Map::moveCreature(Creature& creature, Tile& newTile, bool forceTeleport /* 
 	SpectatorVec spectators, newPosSpectators;
 	getSpectators(spectators, oldPos, true);
 	getSpectators(newPosSpectators, newPos, true);
-	spectators.addSpectators(newPosSpectators);
+	spectators.insert(newPosSpectators.begin(), newPosSpectators.end());
 
 	std::vector<int32_t> oldStackPosVector;
 	for (Creature* spectator : spectators) {
@@ -373,7 +372,7 @@ void Map::getSpectatorsInternal(SpectatorVec& spectators, const Position& center
 						continue;
 					}
 
-					spectators.emplace_back(creature);
+					spectators.insert(creature);
 				}
 				leafE = leafE->leafE;
 			} else {
@@ -411,7 +410,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 			auto it = playersSpectatorCache.find(centerPos);
 			if (it != playersSpectatorCache.end()) {
 				if (!spectators.empty()) {
-					spectators.addSpectators(it->second);
+					spectators.insert(it->second.begin(), it->second.end());
 				} else {
 					spectators = it->second;
 				}
@@ -426,7 +425,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 				if (!onlyPlayers) {
 					if (!spectators.empty()) {
 						const SpectatorVec& cachedSpectators = it->second;
-						spectators.addSpectators(cachedSpectators);
+						spectators.insert(cachedSpectators.begin(), cachedSpectators.end());
 					} else {
 						spectators = it->second;
 					}
@@ -434,7 +433,7 @@ void Map::getSpectators(SpectatorVec& spectators, const Position& centerPos, boo
 					const SpectatorVec& cachedSpectators = it->second;
 					for (Creature* spectator : cachedSpectators) {
 						if (spectator->getPlayer()) {
-							spectators.emplace_back(spectator);
+							spectators.insert(spectator);
 						}
 					}
 				}
