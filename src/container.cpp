@@ -10,7 +10,6 @@
 #include "housetile.h"
 #include "inbox.h"
 #include "iomap.h"
-#include "spectators.h"
 #include "storeinbox.h"
 
 extern Game g_game;
@@ -661,9 +660,9 @@ std::map<uint32_t, uint32_t>& Container::getAllItemTypeCount(std::map<uint32_t, 
 	return countMap;
 }
 
-ItemVector Container::getItems(bool recursive /*= false*/)
+std::vector<Item*> Container::getItems(bool recursive /*= false*/)
 {
-	ItemVector containerItems;
+	std::vector<Item*> containerItems;
 	if (recursive) {
 		for (ContainerIterator it = iterator(); it.hasNext(); it.advance()) {
 			containerItems.push_back(*it);

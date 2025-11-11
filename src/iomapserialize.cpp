@@ -7,6 +7,7 @@
 
 #include "bed.h"
 #include "game.h"
+#include "house.h"
 #include "housetile.h"
 
 extern Game g_game;
@@ -67,9 +68,8 @@ bool IOMapSerialize::saveHouseItems()
 	DBInsert stmt("INSERT INTO `tile_store` (`house_id`, `data`) VALUES ");
 
 	PropWriteStream stream;
-	for (const auto& it : g_game.map.houses.getHouses()) {
+	for (const auto& house : g_game.map.houses.getHouses() | std::views::values) {
 		// save house items
-		House* house = it.second;
 		for (HouseTile* tile : house->getTiles()) {
 			saveTile(stream, tile);
 
@@ -293,8 +293,7 @@ bool IOMapSerialize::saveHouseInfo()
 		return false;
 	}
 
-	for (const auto& it : g_game.map.houses.getHouses()) {
-		House* house = it.second;
+	for (const auto& house : g_game.map.houses.getHouses() | std::views::values) {
 		DBResult_ptr result = db.storeQuery(fmt::format("SELECT `id` FROM `houses` WHERE `id` = {:d}", house->getId()));
 		if (result) {
 			db.executeQuery(fmt::format(
@@ -313,9 +312,7 @@ bool IOMapSerialize::saveHouseInfo()
 
 	DBInsert stmt("INSERT INTO `house_lists` (`house_id` , `listid` , `list`) VALUES ");
 
-	for (const auto& it : g_game.map.houses.getHouses()) {
-		House* house = it.second;
-
+	for (const auto& house : g_game.map.houses.getHouses() | std::views::values) {
 		std::string listText;
 		if (house->getAccessList(GUEST_LIST, listText) && !listText.empty()) {
 			if (!stmt.addRow(fmt::format("{:d}, {:d}, {:s}", house->getId(), std::to_underlying(GUEST_LIST),

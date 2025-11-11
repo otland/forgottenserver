@@ -12,7 +12,6 @@
 #include "monster.h"
 #include "party.h"
 #include "scheduler.h"
-#include "spectators.h"
 
 double Creature::speedA = 857.36;
 double Creature::speedB = 261.29;
@@ -827,7 +826,7 @@ bool Creature::isFollower(const Creature* creature)
 void Creature::addFollower(Creature* creature)
 {
 	if (!isFollower(creature)) {
-		followers.push_back(creature);
+		followers.insert(creature);
 		creature->incrementReferenceCounter();
 	}
 }

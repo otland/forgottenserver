@@ -83,9 +83,6 @@ enum AccessHouseLevel_t
 	HOUSE_OWNER = 3,
 };
 
-using HouseTileList = std::list<HouseTile*>;
-using HouseBedItemList = std::list<BedItem*>;
-
 class HouseTransferItem final : public Item
 {
 public:
@@ -153,12 +150,12 @@ public:
 	void resetTransferItem();
 	bool executeTransfer(HouseTransferItem* item, Player* newOwner);
 
-	const HouseTileList& getTiles() const { return houseTiles; }
+	const auto& getTiles() const { return houseTiles; }
 
-	const std::set<Door*>& getDoors() const { return doorSet; }
+	const auto& getDoors() const { return doorSet; }
 
 	void addBed(BedItem* bed);
-	const HouseBedItemList& getBeds() const { return bedsList; }
+	const auto& getBeds() const { return bedsList; }
 	uint32_t getBedCount()
 	{
 		return static_cast<uint32_t>(
@@ -174,9 +171,9 @@ private:
 
 	Container transfer_container{ITEM_LOCKER};
 
-	HouseTileList houseTiles;
-	std::set<Door*> doorSet;
-	HouseBedItemList bedsList;
+	boost::container::flat_set<HouseTile*> houseTiles;
+	boost::container::flat_set<Door*> doorSet;
+	boost::container::flat_set<BedItem*> bedsList;
 
 	std::string houseName;
 	std::string ownerName;
@@ -197,8 +194,6 @@ private:
 	bool isLoaded = false;
 };
 
-using HouseMap = std::map<uint32_t, House*>;
-
 enum RentPeriod_t
 {
 	RENTPERIOD_DAILY,
@@ -211,49 +206,18 @@ enum RentPeriod_t
 class Houses
 {
 public:
-	Houses() = default;
-	~Houses()
-	{
-		for (const auto& it : houseMap) {
-			delete it.second;
-		}
-	}
-
-	// non-copyable
-	Houses(const Houses&) = delete;
-	Houses& operator=(const Houses&) = delete;
-
-	House* addHouse(uint32_t id)
-	{
-		auto it = houseMap.find(id);
-		if (it != houseMap.end()) {
-			return it->second;
-		}
-
-		House* house = new House(id);
-		houseMap[id] = house;
-		return house;
-	}
-
-	House* getHouse(uint32_t houseId)
-	{
-		auto it = houseMap.find(houseId);
-		if (it == houseMap.end()) {
-			return nullptr;
-		}
-		return it->second;
-	}
-
+	House* addHouse(uint32_t id);
+	House* getHouse(uint32_t houseId);
 	House* getHouseByPlayerId(uint32_t playerId);
 
 	bool loadHousesXML(const std::string& filename);
 
 	void payHouses(RentPeriod_t rentPeriod) const;
 
-	const HouseMap& getHouses() const { return houseMap; }
+	const auto& getHouses() const { return houseMap; }
 
 private:
-	HouseMap houseMap;
+	std::map<uint32_t, std::unique_ptr<House>> houseMap;
 };
 
 #endif // FS_HOUSE_H

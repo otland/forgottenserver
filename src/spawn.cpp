@@ -12,7 +12,6 @@
 #include "npc.h"
 #include "pugicast.h"
 #include "scheduler.h"
-#include "spectators.h"
 
 extern Monsters g_monsters;
 extern Game g_game;
