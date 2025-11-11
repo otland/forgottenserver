@@ -205,16 +205,16 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	}
 
 	if (Container* container = item->getContainer()) {
+		uint32_t corpseOwner = container->getCorpseOwner();
+		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
+			return RETURNVALUE_YOUARENOTTHEOWNER;
+		}
+
 		// depot container
 		if (DepotLocker* depot = container->getDepotLocker()) {
 			DepotLocker& myDepotLocker = player->getDepotLocker();
 			myDepotLocker.setParent(depot->getParent()->getTile());
 			container = &myDepotLocker;
-		}
-
-		uint32_t corpseOwner = container->getCorpseOwner();
-		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
-			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 
 		// open/close container
