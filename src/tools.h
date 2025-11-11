@@ -72,38 +72,38 @@ SpellGroup_t stringToSpellGroup(const std::string& value);
 
 std::array<Direction, 4> getShuffleDirections();
 
+namespace tfs::views {
+
+constexpr auto lock_weak_ptrs = std::views::transform([](const auto& wp) { return wp.lock(); }) |
+                                std::views::filter([](const auto& sp) { return sp != nullptr; });
+
+} // namespace tfs::views
+
 namespace tfs {
 
-#if __has_cpp_attribute(__cpp_lib_to_underlying)
-
-template <class T>
-using std::to_underlying<T>;
-
-#else
-
-inline constexpr auto to_underlying(auto e) noexcept { return static_cast<std::underlying_type_t<decltype(e)>>(e); }
-
-#endif
-
-#if __has_cpp_attribute(__cpp_lib_unreachable)
-
-using std::unreachable;
-
-#else
-
-[[noreturn]] inline void unreachable()
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
 {
-	// Uses compiler specific extensions if possible.
-	// Even if no extension is used, undefined behavior is still raised by
-	// an empty function body and the noreturn attribute.
-#if defined(_MSC_VER) && !defined(__clang__) // MSVC
-	__assume(false);
-#else                                        // GCC, Clang
-	__builtin_unreachable();
-#endif
+	return x.owner_before(y) == false && y.owner_before(x) == false;
 }
 
-#endif
+template <class T, class U>
+bool owner_equal(const std::shared_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::shared_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
+
+template <class T, class U>
+bool owner_equal(const std::weak_ptr<T>& x, const std::weak_ptr<U>& y) noexcept
+{
+	return x.owner_before(y) == false && y.owner_before(x) == false;
+}
 
 } // namespace tfs
 

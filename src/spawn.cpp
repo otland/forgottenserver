@@ -35,12 +35,9 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centery").value()),
 		                   pugi::cast<uint16_t>(spawnNode.attribute("centerz").value()));
 
-		int32_t radius;
-		pugi::xml_attribute radiusAttribute = spawnNode.attribute("radius");
-		if (radiusAttribute) {
+		int32_t radius = -1;
+		if (const auto radiusAttribute = spawnNode.attribute("radius")) {
 			radius = pugi::cast<int32_t>(radiusAttribute.value());
-		} else {
-			radius = -1;
 		}
 
 		if (radius > 30) {
@@ -54,8 +51,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 			continue;
 		}
 
-		spawnList.emplace_front(centerPos, radius);
-		Spawn& spawn = spawnList.front();
+		auto& spawn = spawnList.emplace_back(centerPos, radius);
 
 		for (auto childNode : spawnNode.children()) {
 			if (caseInsensitiveEqual(childNode.name(), "monsters")) {
@@ -182,7 +178,7 @@ bool Spawns::loadFromXml(const std::string& filename, bool isCalledByLua)
 				    Position(centerPos.x + pugi::cast<uint16_t>(childNode.attribute("x").value()),
 				             centerPos.y + pugi::cast<uint16_t>(childNode.attribute("y").value()), centerPos.z),
 				    radius);
-				npcList.push_front(npc);
+				npcList.push_back(npc);
 			}
 		}
 
@@ -199,7 +195,7 @@ void Spawns::startup()
 		return;
 	}
 
-	for (const auto& npc : npcList) {
+	for (const auto& npc : npcList | tfs::views::lock_weak_ptrs) {
 		if (!g_game.placeCreature(npc, npc->getMasterPos(), false, true)) {
 			std::cout << "[Warning - Spawns::startup] Couldn't spawn npc \"" << npc->getName()
 			          << "\" on position: " << npc->getMasterPos() << '.' << std::endl;
@@ -245,7 +241,7 @@ void Spawn::startSpawnCheck()
 
 Spawn::~Spawn()
 {
-	for (const auto& monster : spawnedMap | std::views::values) {
+	for (const auto& monster : spawnedMap | std::views::values | tfs::views::lock_weak_ptrs) {
 		monster->setSpawn(nullptr);
 	}
 }
@@ -334,9 +330,7 @@ bool Spawn::spawnMonster(uint32_t spawnId, MonsterType* mType, const Position& p
 
 void Spawn::startup()
 {
-	for (const auto& it : spawnMap) {
-		uint32_t spawnId = it.first;
-		const spawnBlock_t& sb = it.second;
+	for (const auto& [spawnId, sb] : spawnMap) {
 		spawnMonster(spawnId, sb, true);
 	}
 }
@@ -349,13 +343,11 @@ void Spawn::checkSpawn()
 
 	uint32_t spawnCount = 0;
 
-	for (auto& it : spawnMap) {
-		uint32_t spawnId = it.first;
+	for (auto& [spawnId, sb] : spawnMap) {
 		if (spawnedMap.find(spawnId) != spawnedMap.end()) {
 			continue;
 		}
 
-		spawnBlock_t& sb = it.second;
 		if (OTSYS_TIME() >= sb.lastSpawn + sb.interval) {
 			if (!spawnMonster(spawnId, sb)) {
 				sb.lastSpawn = OTSYS_TIME();
@@ -377,7 +369,7 @@ void Spawn::cleanup()
 {
 	auto it = spawnedMap.begin();
 	while (it != spawnedMap.end()) {
-		if (it->second->isRemoved()) {
+		if (const auto monster = it->second.lock(); !monster || monster->isRemoved()) {
 			it = spawnedMap.erase(it);
 		} else {
 			++it;
@@ -414,7 +406,7 @@ bool Spawn::addMonster(const std::string& name, const Position& pos, Direction d
 void Spawn::removeMonster(const std::shared_ptr<Monster>& monster)
 {
 	for (auto it = spawnedMap.begin(), end = spawnedMap.end(); it != end; ++it) {
-		if (it->second == monster) {
+		if (it->second.lock() == monster) {
 			spawnedMap.erase(it);
 			break;
 		}

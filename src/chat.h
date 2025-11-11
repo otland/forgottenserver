@@ -10,8 +10,8 @@
 class Party;
 class Player;
 
-using UsersMap = std::map<uint32_t, std::shared_ptr<Player>>;
-using InvitedMap = std::map<uint32_t, std::shared_ptr<const Player>>;
+using UsersMap = std::map<uint32_t, std::weak_ptr<Player>>;
+using InvitedMap = std::map<uint32_t, std::weak_ptr<const Player>>;
 
 class ChatChannel
 {

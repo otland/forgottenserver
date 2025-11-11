@@ -104,10 +104,8 @@ void Game::setGameState(GameState_t newState)
 			g_globalEvents->shutdown();
 
 			// kick all players that are still online
-			auto it = players.begin();
-			while (it != players.end()) {
-				it->second->kickPlayer(true);
-				it = players.begin();
+			for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>()) {
+				player->kickPlayer(true);
 			}
 
 			saveGameState();
@@ -127,13 +125,9 @@ void Game::setGameState(GameState_t newState)
 			g_globalEvents->save();
 
 			/* kick all players without the CanAlwaysLogin flag */
-			auto it = players.begin();
-			while (it != players.end()) {
-				if (!it->second->hasFlag(PlayerFlag_CanAlwaysLogin)) {
-					it->second->kickPlayer(true);
-					it = players.begin();
-				} else {
-					++it;
+			for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs | std::ranges::to<std::vector>()) {
+				if (!player->hasFlag(PlayerFlag_CanAlwaysLogin)) {
+					player->kickPlayer(true);
 				}
 			}
 
@@ -154,7 +148,7 @@ void Game::saveGameState()
 
 	std::cout << "Saving server..." << std::endl;
 
-	for (const auto& player : players | std::views::values) {
+	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
 		player->setLoginPosition(player->getPosition());
 		IOLoginData::savePlayer(player);
 	}
@@ -361,7 +355,7 @@ std::shared_ptr<Monster> Game::getMonsterByID(uint32_t id)
 	if (it == monsters.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.lock();
 }
 
 std::shared_ptr<Npc> Game::getNpcByID(uint32_t id)
@@ -374,7 +368,7 @@ std::shared_ptr<Npc> Game::getNpcByID(uint32_t id)
 	if (it == npcs.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.lock();
 }
 
 std::shared_ptr<Player> Game::getPlayerByID(uint32_t id)
@@ -387,34 +381,27 @@ std::shared_ptr<Player> Game::getPlayerByID(uint32_t id)
 	if (it == players.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.lock();
 }
 
-std::shared_ptr<Creature> Game::getCreatureByName(const std::string& s)
+std::shared_ptr<Creature> Game::getCreatureByName(const std::string& name)
 {
-	if (s.empty()) {
+	if (name.empty()) {
 		return nullptr;
 	}
 
-	const std::string& lowerCaseName = boost::algorithm::to_lower_copy(s);
-
-	if (auto it = mappedPlayerNames.find(lowerCaseName); it != mappedPlayerNames.end()) {
-		return it->second;
+	if (const auto& player = getPlayerByName(name)) {
+		return player;
 	}
 
-	auto equalCreatureName = [&](const auto& it) {
-		const auto& name = it.second->getName();
-		return lowerCaseName.size() == name.size() &&
-		       std::equal(lowerCaseName.begin(), lowerCaseName.end(), name.begin(),
-		                  [](char a, char b) { return a == std::tolower(b); });
-	};
-
-	if (auto it = std::find_if(npcs.begin(), npcs.end(), equalCreatureName); it != npcs.end()) {
-		return it->second;
+	if (const auto& npc = getNpcByName(name)) {
+		return npc;
 	}
 
-	if (auto it = std::find_if(monsters.begin(), monsters.end(), equalCreatureName); it != monsters.end()) {
-		return it->second;
+	for (const auto& monster : monsters | std::views::values | tfs::views::lock_weak_ptrs) {
+		if (boost::iequals(name, monster->getName())) {
+			return monster;
+		}
 	}
 
 	return nullptr;
@@ -426,9 +413,9 @@ std::shared_ptr<Npc> Game::getNpcByName(const std::string& name)
 		return nullptr;
 	}
 
-	for (const auto& it : npcs) {
-		if (caseInsensitiveEqual(name, it.second->getName())) {
-			return it.second;
+	for (const auto& npc : npcs | std::views::values | tfs::views::lock_weak_ptrs) {
+		if (boost::iequals(name, npc->getName())) {
+			return npc;
 		}
 	}
 	return nullptr;
@@ -444,7 +431,7 @@ std::shared_ptr<Player> Game::getPlayerByName(const std::string& s)
 	if (it == mappedPlayerNames.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.lock();
 }
 
 std::shared_ptr<Player> Game::getPlayerByGUID(const uint32_t& guid)
@@ -457,7 +444,7 @@ std::shared_ptr<Player> Game::getPlayerByGUID(const uint32_t& guid)
 	if (it == mappedPlayerGuids.end()) {
 		return nullptr;
 	}
-	return it->second;
+	return it->second.lock();
 }
 
 ReturnValue Game::getPlayerByNameWildcard(const std::string& s, std::shared_ptr<Player>& player)
@@ -489,9 +476,9 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, std::shared_ptr<
 
 std::shared_ptr<Player> Game::getPlayerByAccount(uint32_t acc)
 {
-	for (const auto& it : players) {
-		if (it.second->getAccount() == acc) {
-			return it.second;
+	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
+		if (player->getAccount() == acc) {
+			return player;
 		}
 	}
 	return nullptr;
@@ -580,6 +567,10 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 		creature->setMaster(nullptr);
 	}
 
+	for (const auto& condition : creature->getConditions()) {
+		creature->removeCondition(condition, true);
+	}
+
 	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
 
 	creature->removeList();
@@ -587,7 +578,7 @@ bool Game::removeCreature(const std::shared_ptr<Creature>& creature, bool isLogo
 
 	removeCreatureCheck(creature);
 
-	for (const auto& summon : creature->summons) {
+	for (const auto& summon : creature->getSummons() | tfs::views::lock_weak_ptrs) {
 		summon->setSkillLoss(false);
 		removeCreature(summon);
 	}
@@ -1428,7 +1419,7 @@ ReturnValue Game::internalRemoveItem(const std::shared_ptr<Item>& item, int32_t 
 		if (item->isRemoved()) {
 			item->onRemoved();
 			if (item->canDecay()) {
-				decayItems->remove(item);
+				decayItems->remove_if([&item](const auto& decayItem) { return decayItem.lock() == item; });
 			}
 		}
 
@@ -1884,8 +1875,8 @@ bool Game::playerBroadcastMessage(const std::shared_ptr<Player>& player, const s
 
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
-	for (const auto& it : players) {
-		it.second->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
+	for (const auto& onlinePlayer : getPlayers() | tfs::views::lock_weak_ptrs) {
+		onlinePlayer->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
 	return true;
@@ -3811,7 +3802,12 @@ void Game::checkCreatures(size_t index)
 	auto& checkCreatureList = checkCreatureLists[index];
 	auto it = checkCreatureList.begin(), end = checkCreatureList.end();
 	while (it != end) {
-		const auto& creature = *it;
+		const auto& creature = it->lock();
+		if (!creature) {
+			it = checkCreatureList.erase(it);
+			continue;
+		}
+
 		if (creature->creatureCheck) {
 			if (!creature->isDead()) {
 				creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
@@ -3833,7 +3829,7 @@ void Game::updateCreaturesPath(size_t index)
 	g_scheduler.addEvent(createSchedulerTask(getNumber(ConfigManager::PATHFINDING_INTERVAL),
 	                                         [=, this]() { updateCreaturesPath((index + 1) % EVENT_CREATURECOUNT); }));
 
-	for (const auto& creature : checkCreatureLists[index]) {
+	for (const auto& creature : checkCreatureLists[index] | tfs::views::lock_weak_ptrs) {
 		if (!creature->isDead()) {
 			creature->forceUpdatePath();
 		}
@@ -4698,7 +4694,12 @@ void Game::checkDecay()
 
 	auto it = decayItems[bucket].begin(), end = decayItems[bucket].end();
 	while (it != end) {
-		const auto item = *it;
+		const auto item = it->lock();
+		if (!item) {
+			it = decayItems[bucket].erase(it);
+			continue;
+		}
+
 		if (!item->canDecay()) {
 			item->setDecaying(DECAYING_FALSE);
 			it = decayItems[bucket].erase(it);
@@ -4767,8 +4768,8 @@ void Game::cleanup()
 void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 {
 	std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
-	for (const auto& it : players) {
-		it.second->sendTextMessage(type, text);
+	for (const auto& player : getPlayers() | tfs::views::lock_weak_ptrs) {
+		player->sendTextMessage(type, text);
 	}
 }
 
@@ -5554,13 +5555,13 @@ void Game::playerAnswerModalWindow(uint32_t playerId, uint32_t modalWindowId, ui
 	}
 }
 
-void Game::addPlayer(std::shared_ptr<Player> player)
+void Game::addPlayer(const std::shared_ptr<Player>& player)
 {
 	const std::string& lowercase_name = boost::algorithm::to_lower_copy(player->getName());
 	mappedPlayerNames[lowercase_name] = player;
 	mappedPlayerGuids[player->getGUID()] = player;
 	wildcardTree.insert(lowercase_name);
-	players[player->getID()] = std::move(player);
+	players[player->getID()] = player;
 }
 
 void Game::removePlayer(const std::shared_ptr<Player>& player)

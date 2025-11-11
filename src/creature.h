@@ -18,7 +18,6 @@ class Monster;
 class Npc;
 class Player;
 
-using ConditionList = std::list<Condition*>;
 using CreatureEventList = std::list<CreatureEvent*>;
 using CreatureIconHashMap = std::unordered_map<CreatureIcon_t, uint16_t>;
 
@@ -212,44 +211,58 @@ public:
 	virtual void onWalkComplete() {}
 
 	// follow functions
-	std::shared_ptr<Creature> getFollowCreature() const { return followCreature; }
+	std::shared_ptr<Creature> getFollowCreature() const { return followCreature.lock(); }
 	virtual void setFollowCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeFollowCreature();
-	virtual bool canFollowCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isFollowingCreature(const std::shared_ptr<Creature>& creature) { return followCreature == creature; }
+	bool canFollowCreature(const std::shared_ptr<Creature>& creature);
+	bool isFollowingCreature(const std::shared_ptr<Creature>& creature)
+	{
+		return tfs::owner_equal(followCreature, creature);
+	}
 
 	// follow events
 	virtual void onFollowCreature(const std::shared_ptr<const Creature>&);
 	virtual void onUnfollowCreature();
 
 	// Pathfinding functions
-	bool isFollower(const std::shared_ptr<const Creature>& creature);
-	void addFollower(const std::shared_ptr<Creature>& creature);
-	void removeFollower(const std::shared_ptr<Creature>& creature);
+	void addFollower(const std::shared_ptr<Creature>& creature) { followers.insert(creature); }
+	void removeFollower(const std::shared_ptr<Creature>& creature) { followers.erase(creature); }
 	void removeFollowers();
 
 	// Pathfinding events
 	void updateFollowersPaths();
 
 	// combat functions
-	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature; }
+	std::shared_ptr<Creature> getAttackedCreature() { return attackedCreature.lock(); }
 	virtual void setAttackedCreature(const std::shared_ptr<Creature>& creature);
 	virtual void removeAttackedCreature();
-	virtual bool canAttackCreature(const std::shared_ptr<Creature>& creature);
-	virtual bool isAttackingCreature(const std::shared_ptr<Creature>& creature) { return attackedCreature == creature; }
+	bool canAttackCreature(const std::shared_ptr<Creature>& creature);
+	bool isAttackingCreature(const std::shared_ptr<Creature>& creature)
+	{
+		return tfs::owner_equal(creature, attackedCreature);
+	}
 
 	virtual BlockType_t blockHit(const std::shared_ptr<Creature>& attacker, CombatType_t combatType, int32_t& damage,
 	                             bool checkDefense = false, bool checkArmor = false, bool field = false,
 	                             bool ignoreResistances = false);
 
 	bool setMaster(const std::shared_ptr<Creature>& newMaster);
-	void removeMaster() { master = nullptr; }
+	void removeMaster() { master.reset(); }
 
-	bool isSummon() const { return master != nullptr; }
-	std::shared_ptr<Creature> getMaster() const { return master; }
+	bool isSummon() const { return !master.expired(); }
+	std::shared_ptr<Creature> getMaster() const { return master.lock(); }
 
 	const auto& getDamageMap() const { return damageMap; }
+
+	void removeSummon(const std::shared_ptr<Creature>& summon)
+	{
+		auto it = std::ranges::find_if(summons, [&summon](const auto& wp) { return summon == wp.lock(); });
+		if (it != summons.end()) {
+			summons.erase(it);
+		}
+	}
 	const auto& getSummons() const { return summons; }
+	void clearSummons() { summons.clear(); }
 
 	virtual int32_t getArmor() const { return 0; }
 	virtual int32_t getDefense() const { return 0; }
@@ -266,6 +279,7 @@ public:
 	void removeCombatCondition(ConditionType_t type);
 	Condition* getCondition(ConditionType_t type) const;
 	Condition* getCondition(ConditionType_t type, ConditionId_t conditionId, uint32_t subId = 0) const;
+	const auto& getConditions() const { return conditions; }
 	void executeConditions(uint32_t interval);
 	bool hasCondition(ConditionType_t type, uint32_t subId = 0) const;
 	virtual bool isImmune(ConditionType_t type) const;
@@ -341,7 +355,6 @@ public:
 
 	virtual bool getCombatValues(int32_t&, int32_t&) { return false; }
 
-	size_t getSummonCount() const { return summons.size(); }
 	void setDropLoot(bool lootDrop) { this->lootDrop = lootDrop; }
 	void setSkillLoss(bool skillLoss) { this->skillLoss = skillLoss; }
 	void setUseDefense(bool useDefense) { canUseDefense = useDefense; }
@@ -356,17 +369,17 @@ public:
 	bool registerCreatureEvent(const std::string& name);
 	bool unregisterCreatureEvent(const std::string& name);
 
-	std::shared_ptr<Thing> getParent() const override final { return tile; }
+	std::shared_ptr<Thing> getParent() const override final { return tile.lock(); }
 	void setParent(const std::shared_ptr<Thing>& thing) override final
 	{
 		tile = thing->getTile();
-		position = tile->getPosition();
+		position = thing->getTile()->getPosition();
 	}
 
 	const Position& getPosition() const override final { return position; }
 
-	std::shared_ptr<Tile> getTile() override final { return tile; }
-	std::shared_ptr<const Tile> getTile() const override final { return tile; }
+	std::shared_ptr<Tile> getTile() override final { return tile.lock(); }
+	std::shared_ptr<const Tile> getTile() const override final { return tile.lock(); }
 
 	const Position& getLastPosition() const { return lastPosition; }
 	void setLastPosition(Position newLastPos) { lastPosition = newLastPos; }
@@ -397,18 +410,11 @@ protected:
 
 	std::map<uint32_t, CountBlock_t> damageMap;
 
-	std::vector<std::shared_ptr<Creature>> summons;
 	CreatureEventList eventsList;
-	ConditionList conditions;
+	std::vector<Condition*> conditions;
 	CreatureIconHashMap creatureIcons;
 
 	std::vector<Direction> listWalkDir;
-
-	std::shared_ptr<Tile> tile = nullptr;
-	std::shared_ptr<Creature> attackedCreature = nullptr;
-	std::shared_ptr<Creature> master = nullptr;
-	std::shared_ptr<Creature> followCreature = nullptr;
-	std::vector<std::shared_ptr<Creature>> followers;
 
 	uint64_t lastStep = 0;
 	int64_t lastPathUpdate = 0;
@@ -472,6 +478,14 @@ protected:
 	friend class Map;
 
 private:
+	std::weak_ptr<Tile> tile;
+	std::weak_ptr<Creature> attackedCreature;
+	std::weak_ptr<Creature> master;
+	std::weak_ptr<Creature> followCreature;
+	boost::container::flat_set<std::weak_ptr<Creature>, std::owner_less<std::weak_ptr<Creature>>> followers;
+
+	std::vector<std::weak_ptr<Creature>> summons;
+
 	std::map<uint32_t, int32_t> storageMap;
 };
 

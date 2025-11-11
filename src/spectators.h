@@ -8,44 +8,28 @@ class Creature;
 
 class SpectatorVec
 {
-	using Vec = std::vector<std::shared_ptr<Creature>>;
-	using Iterator = Vec::iterator;
-	using ConstIterator = Vec::const_iterator;
-
 public:
-	SpectatorVec() { vec.reserve(32); }
+	SpectatorVec() = default;
 
 	void addSpectators(const SpectatorVec& spectators)
 	{
 		for (const auto& spectator : spectators.vec) {
-			auto it = std::find(vec.begin(), vec.end(), spectator);
-			if (it != end()) {
-				continue;
-			}
-			vec.emplace_back(spectator);
+			vec.emplace(spectator);
 		}
 	}
 
-	void erase(const std::shared_ptr<Creature>& spectator)
-	{
-		auto it = std::find(vec.begin(), vec.end(), spectator);
-		if (it == end()) {
-			return;
-		}
-		std::iter_swap(it, end() - 1);
-		vec.pop_back();
-	}
+	void erase(const std::shared_ptr<Creature>& spectator) { vec.erase(spectator); }
 
 	size_t size() const { return vec.size(); }
 	bool empty() const { return vec.empty(); }
-	Iterator begin() { return vec.begin(); }
-	ConstIterator begin() const { return vec.begin(); }
-	Iterator end() { return vec.end(); }
-	ConstIterator end() const { return vec.end(); }
-	void emplace_back(std::shared_ptr<Creature> c) { vec.emplace_back(std::move(c)); }
+	auto begin() { return vec.begin(); }
+	const auto begin() const { return vec.begin(); }
+	auto end() { return vec.end(); }
+	const auto end() const { return vec.end(); }
+	void emplace(const std::shared_ptr<Creature>& creature) { vec.emplace(creature); }
 
 private:
-	Vec vec;
+	boost::container::flat_set<std::shared_ptr<Creature>, std::owner_less<std::shared_ptr<Creature>>> vec;
 };
 
 #endif // FS_SPECTATORS_H

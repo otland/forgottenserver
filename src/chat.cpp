@@ -36,8 +36,8 @@ void PrivateChatChannel::invitePlayer(const std::shared_ptr<const Player>& playe
 
 	player->sendTextMessage(MESSAGE_INFO_DESCR, fmt::format("{:s} has been invited.", invitePlayer->getName()));
 
-	for (const auto& it : users) {
-		it.second->sendChannelEvent(id, invitePlayer->getName(), CHANNELEVENT_INVITE);
+	for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+		user->sendChannelEvent(id, invitePlayer->getName(), CHANNELEVENT_INVITE);
 	}
 }
 
@@ -54,15 +54,15 @@ void PrivateChatChannel::excludePlayer(const std::shared_ptr<const Player>& play
 
 	excludePlayer->sendClosePrivate(id);
 
-	for (const auto& it : users) {
-		it.second->sendChannelEvent(id, excludePlayer->getName(), CHANNELEVENT_EXCLUDE);
+	for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+		user->sendChannelEvent(id, excludePlayer->getName(), CHANNELEVENT_EXCLUDE);
 	}
 }
 
 void PrivateChatChannel::closeChannel() const
 {
-	for (const auto& it : users) {
-		it.second->sendClosePrivate(id);
+	for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+		user->sendClosePrivate(id);
 	}
 }
 
@@ -85,8 +85,8 @@ bool ChatChannel::addUser(const std::shared_ptr<Player>& player)
 	}
 
 	if (!publicChannel) {
-		for (const auto& it : users) {
-			it.second->sendChannelEvent(id, player->getName(), CHANNELEVENT_JOIN);
+		for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+			user->sendChannelEvent(id, player->getName(), CHANNELEVENT_JOIN);
 		}
 	}
 
@@ -104,8 +104,8 @@ bool ChatChannel::removeUser(const std::shared_ptr<const Player>& player)
 	users.erase(iter);
 
 	if (!publicChannel) {
-		for (const auto& it : users) {
-			it.second->sendChannelEvent(id, player->getName(), CHANNELEVENT_LEAVE);
+		for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+			user->sendChannelEvent(id, player->getName(), CHANNELEVENT_LEAVE);
 		}
 	}
 
@@ -120,8 +120,8 @@ bool ChatChannel::hasUser(const std::shared_ptr<const Player>& player)
 
 void ChatChannel::sendToAll(const std::string& message, SpeakClasses type) const
 {
-	for (const auto& it : users) {
-		it.second->sendChannelMessage("", message, type, id);
+	for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+		user->sendChannelMessage("", message, type, id);
 	}
 }
 
@@ -131,8 +131,8 @@ bool ChatChannel::talk(const std::shared_ptr<const Player>& fromPlayer, SpeakCla
 		return false;
 	}
 
-	for (const auto& it : users) {
-		it.second->sendToChannel(fromPlayer, type, text, id);
+	for (const auto& user : users | std::views::values | tfs::views::lock_weak_ptrs) {
+		user->sendToChannel(fromPlayer, type, text, id);
 	}
 	return true;
 }
@@ -300,7 +300,7 @@ bool Chat::load()
 			}
 
 			UsersMap tempUserMap = std::move(channel.users);
-			for (const auto& user : tempUserMap | std::views::values) {
+			for (const auto& user : tempUserMap | std::views::values | tfs::views::lock_weak_ptrs) {
 				channel.addUser(user);
 			}
 			continue;

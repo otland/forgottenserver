@@ -1847,8 +1847,8 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 
 	if (channelUsers) {
 		msg.add<uint16_t>(channelUsers->size());
-		for (const auto& it : *channelUsers) {
-			msg.addString(it.second->getName());
+		for (const auto& users : *channelUsers | std::views::values | tfs::views::lock_weak_ptrs) {
+			msg.addString(users->getName());
 		}
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -1856,8 +1856,8 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 
 	if (invitedUsers) {
 		msg.add<uint16_t>(invitedUsers->size());
-		for (const auto& it : *invitedUsers) {
-			msg.addString(it.second->getName());
+		for (const auto& users : *invitedUsers | std::views::values | tfs::views::lock_weak_ptrs) {
+			msg.addString(users->getName());
 		}
 	} else {
 		msg.add<uint16_t>(0x00);

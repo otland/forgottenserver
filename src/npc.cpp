@@ -16,13 +16,12 @@ uint32_t Npc::npcAutoID = 0x20000000;
 
 void Npcs::reload()
 {
-	const std::map<uint32_t, std::shared_ptr<Npc>>& npcs = g_game.getNpcs();
-	for (const auto& it : npcs) {
-		it.second->closeAllShopWindows();
+	for (const auto& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs) {
+		npc->closeAllShopWindows();
 	}
 
-	for (const auto& it : npcs) {
-		it.second->reload();
+	for (const auto& npc : g_game.getNpcs() | tfs::views::lock_weak_ptrs) {
+		npc->reload();
 	}
 }
 
@@ -223,13 +222,11 @@ std::string Npc::getDescription(int32_t) const
 
 void Npc::goToFollowCreature()
 {
-	if (!followCreature) {
-		return;
+	if (const auto& followCreature = getFollowCreature()) {
+		FindPathParams fpp;
+		getPathSearchParams(followCreature, fpp);
+		updateFollowCreaturePath(fpp);
 	}
-
-	FindPathParams fpp;
-	getPathSearchParams(followCreature, fpp);
-	updateFollowCreaturePath(fpp);
 }
 
 void Npc::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool isLogin)

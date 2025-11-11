@@ -120,14 +120,16 @@ std::string Player::getDescription(int32_t lookDistance) const
 			s << " He is in a party with ";
 		}
 
-		size_t memberCount = party->getMemberCount() + 1;
+		size_t memberCount =
+		    std::ranges::count_if(party->getMembers(), [](const auto& member) { return !member.expired(); }) + 1;
 		if (memberCount == 1) {
 			s << "1 member and ";
 		} else {
 			s << memberCount << " members and ";
 		}
 
-		size_t invitationCount = party->getInvitationCount();
+		size_t invitationCount =
+		    std::ranges::count_if(party->getInvitees(), [](const auto& invitee) { return !invitee.expired(); });
 		if (invitationCount == 1) {
 			s << "1 pending invitation.";
 		} else {
@@ -135,6 +137,8 @@ std::string Player::getDescription(int32_t lookDistance) const
 		}
 	}
 
+	const auto& guild = getGuild();
+	const auto& guildRank = getGuildRank();
 	if (!guild || !guildRank) {
 		return s.str();
 	}
@@ -402,7 +406,7 @@ uint32_t Player::getClientIcons() const
 		icons |= ICON_REDSWORDS;
 	}
 
-	if (tile && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+	if (const auto& tile = getTile(); tile && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 		icons |= ICON_PIGEON;
 
 		// Don't show ICON_SWORDS if player is in protection zone.
@@ -799,8 +803,10 @@ void Player::sendPing()
 	}
 
 	int64_t noPongTime = timeNow - lastPong;
-	if ((hasLostConnection || noPongTime >= 7000) && attackedCreature && attackedCreature->getPlayer()) {
-		removeAttackedCreature();
+	if (const auto& attackedCreature = getAttackedCreature()) {
+		if ((hasLostConnection || noPongTime >= 7000) && attackedCreature->getPlayer()) {
+			removeAttackedCreature();
+		}
 	}
 
 	int32_t noPongKickTime = vocation->getNoPongKickTime();
@@ -829,7 +835,7 @@ std::shared_ptr<Item> Player::getWriteItem(uint32_t& windowTextId, uint16_t& max
 {
 	windowTextId = this->windowTextId;
 	maxWriteLen = this->maxWriteLen;
-	return writeItem;
+	return writeItem.lock();
 }
 
 uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWriteLen /*= 0*/)
@@ -838,7 +844,7 @@ uint32_t Player::setWriteItem(const std::shared_ptr<Item>& item, uint16_t maxWri
 		writeItem = item;
 		this->maxWriteLen = maxWriteLen;
 	} else {
-		writeItem = nullptr;
+		writeItem.reset();
 		this->maxWriteLen = 0;
 	}
 	return ++windowTextId;
@@ -1004,7 +1010,7 @@ void Player::onUpdateTileItem(const std::shared_ptr<const Tile>& tile, const Pos
 	}
 
 	if (tradeState != TRADE_TRANSFER) {
-		if (tradeItem && oldItem == tradeItem) {
+		if (!tradeItem.expired() && tfs::owner_equal(oldItem, tradeItem)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 	}
@@ -1018,7 +1024,7 @@ void Player::onRemoveTileItem(const std::shared_ptr<const Tile>& tile, const Pos
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (const auto& container = item->getContainer()) {
 				if (container->isHoldingItem(tradeItem)) {
 					g_game.internalCloseTrade(getPlayer());
@@ -1062,7 +1068,7 @@ void Player::onCreatureAppear(const std::shared_ptr<Creature>& creature, bool is
 		// mounted player moved to pz on login, update mount status
 		onChangeZone(getZone());
 
-		if (guild) {
+		if (const auto& guild = getGuild()) {
 			guild->addMember(getPlayer());
 		}
 
@@ -1107,7 +1113,7 @@ void Player::onFollowCreatureDisappear(bool isLogout)
 void Player::onChangeZone(ZoneType_t zone)
 {
 	if (zone == ZONE_PROTECTION) {
-		if (attackedCreature && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
+		if (getAttackedCreature() && !hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 			removeAttackedCreature();
 			onAttackedCreatureDisappear(false);
 		}
@@ -1136,7 +1142,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 			onAttackedCreatureDisappear(false);
 		}
 	} else if (zone == ZONE_NOPVP) {
-		if (attackedCreature->getPlayer()) {
+		if (const auto& attackedCreature = getAttackedCreature(); attackedCreature->getPlayer()) {
 			if (!hasFlag(PlayerFlag_IgnoreProtectionZone)) {
 				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
@@ -1145,7 +1151,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	} else if (zone == ZONE_NORMAL) {
 		// attackedCreature can leave a pvp zone if not pzlocked
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP) {
-			if (attackedCreature->getPlayer()) {
+			if (const auto& attackedCreature = getAttackedCreature(); attackedCreature->getPlayer()) {
 				removeAttackedCreature();
 				onAttackedCreatureDisappear(false);
 			}
@@ -1170,7 +1176,7 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 			removeFollowCreature();
 		}
 
-		if (tradePartner) {
+		if (!tradePartner.expired()) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 
@@ -1184,7 +1190,7 @@ void Player::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool is
 
 		g_chat->removeUserFromAllChannels(getPlayer());
 
-		if (guild) {
+		if (const auto& guild = getGuild()) {
 			guild->removeMember(getPlayer());
 		}
 
@@ -1247,7 +1253,8 @@ void Player::onCreatureMove(const std::shared_ptr<Creature>& creature, const std
 {
 	Creature::onCreatureMove(creature, newTile, newPos, oldTile, oldPos, teleport);
 
-	if (hasFollowPath && (creature == followCreature || (creature.get() == this && followCreature))) {
+	if (const auto& followCreature = getFollowCreature();
+	    hasFollowPath && (creature == followCreature || (creature.get() == this && followCreature))) {
 		g_dispatcher.addTask([id = getID()]() { g_game.updateCreatureWalk(id); });
 	}
 
@@ -1257,11 +1264,13 @@ void Player::onCreatureMove(const std::shared_ptr<Creature>& creature, const std
 
 	if (tradeState != TRADE_TRANSFER) {
 		// check if we should close trade
-		if (tradeItem && !tradeItem->getPosition().isInRange(getPosition(), 1, 1, 0)) {
+		if (const auto& tradeItem = getTradeItem();
+		    tradeItem && !tradeItem->getPosition().isInRange(getPosition(), 1, 1, 0)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 
-		if (tradePartner && !tradePartner->getPosition().isInRange(getPosition(), 2, 2, 0)) {
+		if (const auto& tradePartner = getTradePartner();
+		    tradePartner && !tradePartner->getPosition().isInRange(getPosition(), 2, 2, 0)) {
 			g_game.internalCloseTrade(getPlayer());
 		}
 	}
@@ -1340,7 +1349,7 @@ void Player::onRemoveContainerItem(const std::shared_ptr<const Container>& conta
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (tradeItem->getParent() != container && container->isHoldingItem(tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 			}
@@ -1391,7 +1400,7 @@ void Player::onRemoveInventoryItem(const std::shared_ptr<Item>& item)
 	if (tradeState != TRADE_TRANSFER) {
 		checkTradeState(item);
 
-		if (tradeItem) {
+		if (const auto& tradeItem = getTradeItem()) {
 			if (const auto& container = item->getContainer()) {
 				if (container->isHoldingItem(tradeItem)) {
 					g_game.internalCloseTrade(getPlayer());
@@ -1403,16 +1412,16 @@ void Player::onRemoveInventoryItem(const std::shared_ptr<Item>& item)
 
 void Player::checkTradeState(const std::shared_ptr<const Item>& item)
 {
-	if (!tradeItem || tradeState == TRADE_TRANSFER) {
+	if (tradeItem.expired() || tradeState == TRADE_TRANSFER) {
 		return;
 	}
 
-	if (tradeItem == item) {
+	if (tfs::owner_equal(tradeItem, item)) {
 		g_game.internalCloseTrade(getPlayer());
 	} else if (auto parent = item->getParent()) {
 		auto container = parent->getContainer();
 		while (container) {
-			if (container == tradeItem) {
+			if (tfs::owner_equal(container, tradeItem)) {
 				g_game.internalCloseTrade(getPlayer());
 				break;
 			}
@@ -2181,15 +2190,15 @@ void Player::removeList()
 {
 	g_game.removePlayer(getPlayer());
 
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
+	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		player->notifyStatusChange(getPlayer(), VIPSTATUS_OFFLINE);
 	}
 }
 
 void Player::addList()
 {
-	for (const auto& it : g_game.getPlayers()) {
-		it.second->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
+	for (const auto& player : g_game.getPlayers() | tfs::views::lock_weak_ptrs) {
+		player->notifyStatusChange(getPlayer(), VIPSTATUS_ONLINE);
 	}
 
 	g_game.addPlayer(getPlayer());
@@ -2688,7 +2697,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 
 		for (uint32_t slotIndex = CONST_SLOT_FIRST; slotIndex <= CONST_SLOT_LAST; ++slotIndex) {
 			if (const auto& inventoryItem = inventory[slotIndex]) {
-				if (inventoryItem == tradeItem) {
+				if (tfs::owner_equal(inventoryItem, tradeItem)) {
 					continue;
 				}
 
@@ -2749,7 +2758,7 @@ std::shared_ptr<Thing> Player::queryDestination(int32_t& index, const std::share
 			uint32_t n = 0;
 
 			for (const auto& tmpItem : tmpContainer->getItemList()) {
-				if (tmpItem == tradeItem) {
+				if (tfs::owner_equal(tmpItem, tradeItem)) {
 					continue;
 				}
 
@@ -3054,7 +3063,7 @@ void Player::postAddNotification(const std::shared_ptr<Thing>& thing, const std:
 			onSendContainer(container);
 		}
 
-		if (shopOwner && requireListUpdate) {
+		if (!shopOwner.expired() && requireListUpdate) {
 			updateSaleShopList(item);
 		}
 	} else if (const auto& creature = thing->getCreature()) {
@@ -3146,7 +3155,7 @@ void Player::postRemoveNotification(const std::shared_ptr<Thing>& thing, const s
 			}
 		}
 
-		if (shopOwner && requireListUpdate) {
+		if (!shopOwner.expired() && requireListUpdate) {
 			updateSaleShopList(item);
 		}
 	}
@@ -3244,6 +3253,7 @@ void Player::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 
 	Creature::setAttackedCreature(creature);
 
+	const auto& followCreature = getFollowCreature();
 	if (chaseMode) {
 		if (followCreature != creature) {
 			// chase opponent
@@ -3260,13 +3270,14 @@ void Player::removeAttackedCreature()
 {
 	Creature::removeAttackedCreature();
 
-	if (followCreature) {
+	if (getFollowCreature()) {
 		removeFollowCreature();
 	}
 }
 
 void Player::goToFollowCreature()
 {
+	const auto& followCreature = getFollowCreature();
 	if (walkTask || !followCreature) {
 		return;
 	}
@@ -3309,14 +3320,14 @@ void Player::doAttacking(uint32_t)
 
 		if (const Weapon* weapon = g_weapons->getWeapon(tool)) {
 			if (!weapon->interruptSwing()) {
-				result = weapon->useWeapon(getPlayer(), tool, attackedCreature);
+				result = weapon->useWeapon(getPlayer(), tool, getAttackedCreature());
 			} else if (!classicSpeed && !canDoAction()) {
 				delay = getNextActionTime();
 			} else {
-				result = weapon->useWeapon(getPlayer(), tool, attackedCreature);
+				result = weapon->useWeapon(getPlayer(), tool, getAttackedCreature());
 			}
 		} else {
-			result = Weapon::useFist(getPlayer(), attackedCreature);
+			result = Weapon::useFist(getPlayer(), getAttackedCreature());
 		}
 
 		SchedulerTask* task = createSchedulerTask(std::max<uint32_t>(SCHEDULER_MINTICKS, delay),
@@ -3360,13 +3371,13 @@ void Player::setChaseMode(bool mode)
 	bool prevChaseMode = chaseMode;
 	chaseMode = mode;
 
-	if (prevChaseMode != chaseMode) {
+	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature && prevChaseMode != chaseMode) {
 		if (chaseMode) {
-			if (!followCreature && attackedCreature) {
+			if (!getFollowCreature()) {
 				// chase opponent
 				setFollowCreature(attackedCreature);
 			}
-		} else if (attackedCreature) {
+		} else {
 			removeFollowCreature();
 			cancelNextWalk = true;
 		}
@@ -4043,6 +4054,7 @@ bool Player::hasLearnedInstantSpell(const std::string& spellName) const
 
 bool Player::isInWar(const std::shared_ptr<const Player>& player) const
 {
+	const auto& guild = getGuild();
 	if (!player || !guild) {
 		return false;
 	}
@@ -4149,10 +4161,10 @@ bool Player::isPartner(const std::shared_ptr<const Player>& player) const
 
 bool Player::isGuildMate(const std::shared_ptr<const Player>& player) const
 {
-	if (!player || !guild) {
+	if (!player || guild.expired()) {
 		return false;
 	}
-	return guild == player->guild;
+	return tfs::owner_equal(guild, player->guild);
 }
 
 void Player::sendPlayerPartyIcons(const std::shared_ptr<Player>& player)
@@ -4194,11 +4206,11 @@ GuildEmblems_t Player::getGuildEmblem(const std::shared_ptr<const Player>& playe
 	}
 
 	if (player->getGuildWarVector().empty()) {
-		if (guild == playerGuild) {
+		if (tfs::owner_equal(guild, playerGuild)) {
 			return GUILDEMBLEM_MEMBER;
 		}
 		return GUILDEMBLEM_OTHER;
-	} else if (guild == playerGuild) {
+	} else if (tfs::owner_equal(guild, playerGuild)) {
 		return GUILDEMBLEM_ALLY;
 	} else if (isInWar(player)) {
 		return GUILDEMBLEM_ENEMY;
@@ -4235,7 +4247,7 @@ bool Player::toggleMount(bool mount)
 			return false;
 		}
 
-		if (!group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
+		if (const auto& tile = getTile(); !group->access && tile->hasFlag(TILESTATE_PROTECTIONZONE)) {
 			sendCancelMessage(RETURNVALUE_ACTIONNOTPERMITTEDINPROTECTIONZONE);
 			return false;
 		}
@@ -4589,17 +4601,17 @@ std::forward_list<Condition*> Player::getMuteConditions() const
 	return muteConditions;
 }
 
-void Player::setGuild(std::shared_ptr<Guild> newGuild)
+void Player::setGuild(const std::shared_ptr<Guild>& newGuild)
 {
-	if (newGuild == guild) {
+	if (tfs::owner_equal(newGuild, guild)) {
 		return;
 	}
 
-	const auto oldGuild = guild;
+	const auto oldGuild = getGuild();
 
 	guildNick.clear();
-	guild = nullptr;
-	guildRank = nullptr;
+	guild.reset();
+	guildRank.reset();
 
 	if (newGuild) {
 		const auto& rank = newGuild->getRankByLevel(Guild::MEMBER_RANK_LEVEL_DEFAULT);

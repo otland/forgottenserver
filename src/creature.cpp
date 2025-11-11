@@ -24,18 +24,11 @@ Creature::Creature() { onIdleStatus(); }
 
 Creature::~Creature()
 {
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->removeAttackedCreature();
 		summon->removeMaster();
 	}
-
-	for (Condition* condition : conditions) {
-		condition->endCondition(getCreature());
-	}
-
-	for (auto condition : conditions) {
-		delete condition;
-	}
+	assert(conditions.empty());
 }
 
 bool Creature::canSee(const Position& myPos, const Position& pos, int32_t viewRangeX, int32_t viewRangeY)
@@ -120,11 +113,13 @@ int32_t Creature::getWalkDelay() const
 
 void Creature::onThink(uint32_t interval)
 {
-	if (followCreature && master != followCreature && !canSeeCreature(followCreature)) {
+	if (const auto& followCreature = getFollowCreature();
+	    followCreature && !tfs::owner_equal(master, followCreature) && !canSeeCreature(followCreature)) {
 		onCreatureDisappear(followCreature, false);
 	}
 
-	if (attackedCreature && master != attackedCreature && !canSeeCreature(attackedCreature)) {
+	if (const auto& attackedCreature = getAttackedCreature();
+	    attackedCreature && !tfs::owner_equal(master, attackedCreature) && !canSeeCreature(attackedCreature)) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 
@@ -143,7 +138,7 @@ void Creature::onThink(uint32_t interval)
 
 void Creature::forceUpdatePath()
 {
-	if (!attackedCreature && !followCreature) {
+	if (attackedCreature.expired() && followCreature.expired()) {
 		return;
 	}
 
@@ -153,11 +148,13 @@ void Creature::forceUpdatePath()
 
 void Creature::onAttacking(uint32_t interval)
 {
+	const auto& attackedCreature = getAttackedCreature();
 	if (!attackedCreature) {
 		return;
 	}
 
 	onAttacked();
+
 	attackedCreature->onAttacked();
 
 	if (g_game.isSightClear(getPosition(), attackedCreature->getPosition(), true)) {
@@ -209,7 +206,7 @@ void Creature::onWalk()
 		addEventWalk();
 	}
 
-	if (attackedCreature || followCreature) {
+	if (!attackedCreature.expired() || !followCreature.expired()) {
 		if (lastPathUpdate < OTSYS_TIME()) {
 			g_dispatcher.addTask(createTask([id = getID()]() { g_game.updateCreatureWalk(id); }));
 			lastPathUpdate = OTSYS_TIME() + getNumber(ConfigManager::PATHFINDING_DELAY);
@@ -339,12 +336,12 @@ void Creature::onRemoveCreature(const std::shared_ptr<Creature>& creature, bool)
 
 void Creature::onCreatureDisappear(const std::shared_ptr<const Creature>& creature, bool isLogout)
 {
-	if (attackedCreature == creature) {
+	if (tfs::owner_equal(attackedCreature, creature)) {
 		removeAttackedCreature();
 		onAttackedCreatureDisappear(isLogout);
 	}
 
-	if (followCreature == creature) {
+	if (tfs::owner_equal(followCreature, creature)) {
 		removeFollowCreature();
 		onFollowCreatureDisappear(isLogout);
 	}
@@ -354,7 +351,7 @@ void Creature::updateFollowCreaturePath(FindPathParams& fpp)
 {
 	listWalkDir.clear();
 
-	if (getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
+	if (const auto& followCreature = getFollowCreature(); getPathTo(followCreature->getPosition(), listWalkDir, fpp)) {
 		hasFollowPath = true;
 		startAutoWalk();
 	} else {
@@ -364,14 +361,14 @@ void Creature::updateFollowCreaturePath(FindPathParams& fpp)
 
 void Creature::onChangeZone(ZoneType_t zone)
 {
-	if (attackedCreature && zone == ZONE_PROTECTION) {
+	if (const auto& attackedCreature = getAttackedCreature(); attackedCreature && zone == ZONE_PROTECTION) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 }
 
 void Creature::onAttackedCreatureChangeZone(ZoneType_t zone)
 {
-	if (zone == ZONE_PROTECTION) {
+	if (const auto& attackedCreature = getAttackedCreature(); zone == ZONE_PROTECTION) {
 		onCreatureDisappear(attackedCreature, false);
 	}
 }
@@ -398,13 +395,12 @@ void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const s
 
 		if (!summons.empty()) {
 			// check if any of our summons is out of range (+/- 2 floors or 30 tiles away)
-			std::forward_list<std::shared_ptr<Creature>> despawnList;
-			for (const auto& summon : summons) {
-				const Position& pos = summon->getPosition();
-				if (newPos.getDistanceZ(pos) > 2 || std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30) {
-					despawnList.push_front(summon);
-				}
-			}
+			auto despawnList = summons | tfs::views::lock_weak_ptrs | std::views::filter([&newPos](const auto& summon) {
+				                   const Position& pos = summon->getPosition();
+				                   return newPos.getDistanceZ(pos) > 2 ||
+				                          std::max(newPos.getDistanceX(pos), newPos.getDistanceY(pos)) > 30;
+			                   }) |
+			                   std::ranges::to<std::vector>();
 
 			for (const auto& despawnCreature : despawnList) {
 				g_game.removeCreature(despawnCreature, true);
@@ -417,13 +413,15 @@ void Creature::onCreatureMove(const std::shared_ptr<Creature>& creature, const s
 		}
 	}
 
-	if (creature == followCreature || (creature.get() == this && followCreature)) {
+	if (const auto& followCreature = getFollowCreature();
+	    creature == followCreature || (creature.get() == this && followCreature)) {
 		if (newPos.z != oldPos.z || !canSee(followCreature->getPosition())) {
 			onCreatureDisappear(followCreature, false);
 		}
 	}
 
-	if (creature == attackedCreature || (creature.get() == this && attackedCreature)) {
+	if (const auto& attackedCreature = getAttackedCreature();
+	    creature == attackedCreature || (creature.get() == this && attackedCreature)) {
 		if (newPos.z != oldPos.z || !canSee(attackedCreature->getPosition())) {
 			onCreatureDisappear(attackedCreature, false);
 		} else {
@@ -518,7 +516,7 @@ void Creature::onDeath()
 	bool droppedCorpse = dropCorpse(lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 	death(lastHitCreature);
 
-	if (master) {
+	if (!master.expired()) {
 		setMaster(nullptr);
 	}
 
@@ -532,7 +530,7 @@ bool Creature::dropCorpse(const std::shared_ptr<Creature>& lastHitCreature,
                           bool mostDamageUnjustified)
 {
 	if (!lootDrop && getMonster()) {
-		if (master) {
+		if (!master.expired()) {
 			// scripting event - onDeath
 			const CreatureEventList& deathEvents = getCreatureEvents(CREATURE_EVENT_DEATH);
 			for (CreatureEvent* deathEvent : deathEvents) {
@@ -741,19 +739,19 @@ void Creature::setAttackedCreature(const std::shared_ptr<Creature>& creature)
 
 	attackedCreature = creature;
 	creature->addFollower(getCreature());
-	onAttackedCreature(attackedCreature);
-	attackedCreature->onAttacked();
+	onAttackedCreature(creature);
+	creature->onAttacked();
 
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->setAttackedCreature(creature);
 	}
 }
 
 void Creature::removeAttackedCreature()
 {
-	attackedCreature = nullptr;
+	attackedCreature.reset();
 
-	for (const auto& summon : summons) {
+	for (const auto& summon : summons | tfs::views::lock_weak_ptrs) {
 		summon->removeAttackedCreature();
 	}
 }
@@ -795,7 +793,7 @@ void Creature::setFollowCreature(const std::shared_ptr<Creature>& creature)
 
 void Creature::removeFollowCreature()
 {
-	followCreature = nullptr;
+	followCreature.reset();
 	onUnfollowCreature();
 }
 
@@ -819,42 +817,17 @@ void Creature::onFollowCreature(const std::shared_ptr<const Creature>&)
 void Creature::onUnfollowCreature() { hasFollowPath = false; }
 
 // Pathfinding Events
-bool Creature::isFollower(const std::shared_ptr<const Creature>& creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	return it != followers.end();
-}
-
-void Creature::addFollower(const std::shared_ptr<Creature>& creature)
-{
-	// store a weak reference to avoid ownership cycles
-	if (!isFollower(creature)) {
-		followers.push_back(creature);
-	}
-}
-
-void Creature::removeFollower(const std::shared_ptr<Creature>& creature)
-{
-	auto it = std::find(followers.begin(), followers.end(), creature);
-	if (it != followers.end()) {
-		followers.erase(it);
-	}
-}
-
 void Creature::removeFollowers()
 {
 	const Position& position = getPosition();
 
-	followers.erase(std::remove_if(followers.begin(), followers.end(),
-	                               [&position](const auto& creature) {
-		                               const Position& followerPosition = creature->getPosition();
-		                               uint16_t distance = position.getDistanceX(followerPosition) +
-		                                                   position.getDistanceY(followerPosition);
-		                               bool isInRemoveRange = distance >= Map::maxViewportX + Map::maxViewportY ||
-		                                                      position.z != followerPosition.z;
-		                               return isInRemoveRange;
-	                               }),
-	                followers.end());
+	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([&position](const auto& creature) {
+		            const Position& followerPosition = creature->getPosition();
+		            uint16_t distance =
+		                position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
+		            return distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
+	            }) |
+	            std::ranges::to<decltype(followers)>();
 }
 
 void Creature::updateFollowersPaths()
@@ -864,7 +837,7 @@ void Creature::updateFollowersPaths()
 	}
 
 	const Position& thisPosition = getPosition();
-	for (const auto& follower : followers) {
+	for (const auto& follower : followers | tfs::views::lock_weak_ptrs) {
 		const Position& followerPosition = follower->getPosition();
 
 		if (follower->lastPathUpdate < OTSYS_TIME()) {
@@ -996,7 +969,7 @@ void Creature::onAttackedCreatureDrainHealth(const std::shared_ptr<Creature>& ta
 
 bool Creature::onKilledCreature(const std::shared_ptr<Creature>& target, bool)
 {
-	if (master) {
+	if (const auto& master = getMaster()) {
 		master->onKilledCreature(target);
 	}
 
@@ -1010,6 +983,7 @@ bool Creature::onKilledCreature(const std::shared_ptr<Creature>& target, bool)
 
 void Creature::onGainExperience(uint64_t gainExp, const std::shared_ptr<Creature>& target)
 {
+	const auto& master = getMaster();
 	if (gainExp == 0 || !master) {
 		return;
 	}
@@ -1038,7 +1012,7 @@ void Creature::onGainExperience(uint64_t gainExp, const std::shared_ptr<Creature
 
 bool Creature::setMaster(const std::shared_ptr<Creature>& newMaster)
 {
-	if (!newMaster && !master) {
+	if (!newMaster && master.expired()) {
 		return false;
 	}
 
@@ -1047,14 +1021,11 @@ bool Creature::setMaster(const std::shared_ptr<Creature>& newMaster)
 		newMaster->summons.push_back(getCreature());
 	}
 
-	const auto oldMaster = master;
+	const auto oldMaster = getMaster();
 	master = newMaster;
 
 	if (oldMaster) {
-		auto summon = std::find(oldMaster->summons.begin(), oldMaster->summons.end(), getCreature());
-		if (summon != oldMaster->summons.end()) {
-			oldMaster->summons.erase(summon);
-		}
+		oldMaster->removeSummon(getCreature());
 	}
 	return true;
 }
@@ -1219,7 +1190,7 @@ Condition* Creature::getCondition(ConditionType_t type, ConditionId_t conditionI
 
 void Creature::executeConditions(uint32_t interval)
 {
-	ConditionList tempConditions{conditions};
+	auto tempConditions = conditions;
 	for (Condition* condition : tempConditions) {
 		auto it = std::find(conditions.begin(), conditions.end(), condition);
 		if (it == conditions.end()) {
@@ -1287,27 +1258,24 @@ int64_t Creature::getStepDuration() const
 		return 0;
 	}
 
-	uint32_t calculatedStepSpeed;
-	uint32_t groundSpeed;
-
 	int32_t stepSpeed = getStepSpeed();
+	uint32_t calculatedStepSpeed = 1;
 	if (stepSpeed > -Creature::speedB) {
 		calculatedStepSpeed =
 		    floor((Creature::speedA * log((stepSpeed / 2) + Creature::speedB) + Creature::speedC) + 0.5);
 		if (calculatedStepSpeed == 0) {
 			calculatedStepSpeed = 1;
 		}
-	} else {
-		calculatedStepSpeed = 1;
 	}
 
-	if (const auto& ground = tile->getGround()) {
-		groundSpeed = Item::items[ground->getID()].speed;
-		if (groundSpeed == 0) {
-			groundSpeed = 150;
+	uint32_t groundSpeed = 150;
+	if (const auto& tile = getTile()) {
+		if (const auto& ground = tile->getGround()) {
+			groundSpeed = Item::items[ground->getID()].speed;
+			if (groundSpeed == 0) {
+				groundSpeed = 150;
+			}
 		}
-	} else {
-		groundSpeed = 150;
 	}
 
 	double duration = std::floor(1000 * groundSpeed / calculatedStepSpeed);
