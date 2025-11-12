@@ -8,7 +8,7 @@
 #include "container.h"
 #include "podium.h"
 
-#include <boost/locale.hpp>
+#include <simdutf.h>
 
 std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 {
@@ -20,12 +20,11 @@ std::string NetworkMessage::getString(uint16_t stringLen /* = 0*/)
 		return {};
 	}
 
-	auto it = buffer.data() + info.position;
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
 	info.position += stringLen;
-
-	std::string_view latin1Str{reinterpret_cast<char*>(it), stringLen};
-	return boost::locale::conv::to_utf<char>(latin1Str.data(), latin1Str.data() + latin1Str.size(), "ISO-8859-1",
-	                                         boost::locale::conv::skip);
+	auto out = std::string(simdutf::utf8_length_from_latin1(it, stringLen), '\0');
+	std::ignore = simdutf::convert_latin1_to_utf8(it, stringLen, out.data());
+	return out;
 }
 
 Position NetworkMessage::getPosition()
@@ -39,15 +38,14 @@ Position NetworkMessage::getPosition()
 
 void NetworkMessage::addString(std::string_view value)
 {
-	std::string latin1Str = boost::locale::conv::from_utf<char>(value.data(), value.data() + value.size(), "ISO-8859-1",
-	                                                            boost::locale::conv::skip);
-	size_t stringLen = latin1Str.size();
+	auto stringLen = simdutf::latin1_length_from_utf8(value.data(), value.size());
 	if (!canAdd(stringLen + 2) || stringLen > 8192) {
 		return;
 	}
 
 	add<uint16_t>(stringLen);
-	std::memcpy(buffer.data() + info.position, latin1Str.data(), stringLen);
+	auto it = reinterpret_cast<char*>(buffer.data() + info.position);
+	std::ignore = simdutf::convert_utf8_to_latin1(value.data(), value.size(), it);
 	info.position += stringLen;
 	info.length += stringLen;
 }

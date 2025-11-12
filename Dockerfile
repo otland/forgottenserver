@@ -8,7 +8,8 @@ RUN apk add --no-cache \
   mariadb-connector-c-dev \
   openssl-dev \
   pugixml-dev \
-  samurai
+  samurai \
+  simdutf-dev
 
 COPY cmake /usr/src/forgottenserver/cmake/
 COPY src /usr/src/forgottenserver/src/
@@ -19,14 +20,14 @@ RUN cmake --preset default -DUSE_LUAJIT=ON && cmake --build --config RelWithDebI
 FROM alpine:3.22
 RUN apk add --no-cache \
   boost-iostreams \
-  boost-locale \
   boost-system \
   boost-json \
   fmt \
   luajit \
   mariadb-connector-c \
   openssl \
-  pugixml
+  pugixml \
+  simdutf
 
 COPY --from=build /usr/src/forgottenserver/build/RelWithDebInfo/tfs /bin/tfs
 COPY data /srv/data/
