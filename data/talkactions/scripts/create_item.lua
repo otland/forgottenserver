@@ -73,6 +73,12 @@ function onSay(player, words, param)
 		return false
 	end
 
+	local separatorPos = param:find(',')
+	if not separatorPos then
+		player:sendTextMessage(MESSAGE_INFO_DESCR, string.format("Usage: %s [item id or name], [count], [subtype or key number], [destination], [player name], [index].\nPossible destinations: " .. table.concat(destinations, ", ") .. "", words))
+		return false
+	end
+
 	local split = param:splitTrimmed(",")
 
 	local itemType = ItemType(split[1])
