@@ -1,4 +1,4 @@
-// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Copyright 2025 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -10,6 +10,8 @@
 #include "protocol.h"
 #include "server.h"
 #include "tasks.h"
+
+#include <print>
 
 Connection_ptr ConnectionManager::createConnection(boost::asio::io_context& io_context,
                                                    ConstServicePort_ptr servicePort)
@@ -34,10 +36,10 @@ void ConnectionManager::closeAll()
 
 	for (const auto& connection : connections) {
 		try {
-			boost::system::error_code error;
-			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			connection->socket.close(error);
-		} catch (boost::system::system_error&) {
+			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+			connection->socket.close();
+		} catch (boost::system::system_error& e) {
+			std::println("[Network error - {:s}] {:s}", __FUNCTION__, e.what());
 		}
 	}
 	connections.clear();
@@ -74,16 +76,17 @@ void Connection::close(bool force)
 
 void Connection::closeSocket()
 {
-	if (socket.is_open()) {
-		try {
-			readTimer.cancel();
-			writeTimer.cancel();
-			boost::system::error_code error;
-			socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, error);
-			socket.close(error);
-		} catch (boost::system::system_error& e) {
-			std::cout << "[Network error - Connection::closeSocket] " << e.what() << std::endl;
-		}
+	if (!socket.is_open()) {
+		return;
+	}
+
+	try {
+		readTimer.cancel();
+		writeTimer.cancel();
+		socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
+		socket.close();
+	} catch (boost::system::system_error& e) {
+		std::println("[Network error - {:s}] {:s}", __FUNCTION__, e.what());
 	}
 }
 
