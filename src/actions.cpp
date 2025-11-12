@@ -1,4 +1,4 @@
-// Copyright 2023 The Forgotten Server Authors. All rights reserved.
+// Copyright 2025 The Forgotten Server Authors. All rights reserved.
 // Use of this source code is governed by the GPL-2.0 License that can be found in the LICENSE file.
 
 #include "otpch.h"
@@ -205,29 +205,25 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos, uint8_
 	}
 
 	if (Container* container = item->getContainer()) {
-		Container* openContainer;
-
-		// depot container
-		if (DepotLocker* depot = container->getDepotLocker()) {
-			DepotLocker& myDepotLocker = player->getDepotLocker();
-			myDepotLocker.setParent(depot->getParent()->getTile());
-			openContainer = &myDepotLocker;
-		} else {
-			openContainer = container;
-		}
-
 		uint32_t corpseOwner = container->getCorpseOwner();
 		if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
 		}
 
+		// depot container
+		if (DepotLocker* depot = container->getDepotLocker()) {
+			DepotLocker& myDepotLocker = player->getDepotLocker();
+			myDepotLocker.setParent(depot->getParent()->getTile());
+			container = &myDepotLocker;
+		}
+
 		// open/close container
-		int32_t oldContainerId = player->getContainerID(openContainer);
+		int32_t oldContainerId = player->getContainerID(container);
 		if (oldContainerId == -1) {
-			player->addContainer(index, openContainer);
-			player->onSendContainer(openContainer);
+			player->addContainer(index, container);
+			player->onSendContainer(container);
 		} else {
-			player->onCloseContainer(openContainer);
+			player->onCloseContainer(container);
 			player->closeContainer(oldContainerId);
 		}
 
