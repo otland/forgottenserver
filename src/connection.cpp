@@ -39,7 +39,7 @@ void ConnectionManager::closeAll()
 			connection->socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
 			connection->socket.close();
 		} catch (boost::system::system_error& e) {
-			std::println("[Network error - {:s}] {:s}", __FUNCTION__, e.what());
+			std::println("[Network error - {}] {}", __FUNCTION__, e.what());
 		}
 	}
 	connections.clear();
@@ -86,7 +86,7 @@ void Connection::closeSocket()
 		socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
 		socket.close();
 	} catch (boost::system::system_error& e) {
-		std::println("[Network error - {:s}] {:s}", __FUNCTION__, e.what());
+		std::println("[Network error - {}] {}", __FUNCTION__, e.what());
 	}
 }
 
