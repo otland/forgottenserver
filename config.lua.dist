@@ -23,7 +23,6 @@ expFromPlayersLevelRange = 75
 -- NOTE: statusCountMaxPlayersPerIp allows you to only count up to X players per IP in status response (0 = disabled)
 ip = "127.0.0.1"
 bindOnlyGlobalAddress = false
-loginProtocolPort = 7171
 gameProtocolPort = 7172
 statusProtocolPort = 7171
 httpPort = 8080
