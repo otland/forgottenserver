@@ -241,12 +241,6 @@ BOOST_FIXTURE_TEST_CASE(test_login_success, LoginFixture)
 	BOOST_TEST(session.at("ispremium").as_bool() == true);
 	BOOST_TEST(session.at("premiumuntil").as_int64() == premiumEndsAt.count());
 
-	result = db.storeQuery(
-	    fmt::format("SELECT `token`, INET6_NTOA(`ip`) AS `ip` FROM `sessions` WHERE `account_id` = {:d}", id));
-	BOOST_TEST(result, "Session not found in database.");
-	BOOST_TEST(result->getString("token") == tfs::base64::decode(session.at("sessionkey").as_string()));
-	BOOST_TEST(result->getString("ip") == ip);
-
 	auto& worlds = body.at("playdata").at("worlds").as_array();
 	BOOST_TEST(worlds.size() == 1);
 	BOOST_TEST(worlds[0].at("id").as_int64() == 0);

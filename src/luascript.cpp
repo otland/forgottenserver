@@ -2285,6 +2285,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::SERVER_SAVE_SHUTDOWN);
 	registerEnumIn(L, "configKeys", ConfigManager::ONLINE_OFFLINE_CHARLIST);
 	registerEnumIn(L, "configKeys", ConfigManager::CHECK_DUPLICATE_STORAGE_KEYS);
+	registerEnumIn(L, "configKeys", ConfigManager::SESSION_TOKEN_IP_VERIFICATION);
 
 	registerEnumIn(L, "configKeys", ConfigManager::MAP_NAME);
 	registerEnumIn(L, "configKeys", ConfigManager::HOUSE_RENT_PERIOD);
@@ -2302,6 +2303,7 @@ void LuaScriptInterface::registerFunctions()
 	registerEnumIn(L, "configKeys", ConfigManager::MYSQL_SOCK);
 	registerEnumIn(L, "configKeys", ConfigManager::DEFAULT_PRIORITY);
 	registerEnumIn(L, "configKeys", ConfigManager::MAP_AUTHOR);
+	registerEnumIn(L, "configKeys", ConfigManager::SESSION_TOKEN_SECRET_KEY);
 
 	registerEnumIn(L, "configKeys", ConfigManager::SQL_PORT);
 	registerEnumIn(L, "configKeys", ConfigManager::MAX_PLAYERS);
@@ -2345,6 +2347,7 @@ void LuaScriptInterface::registerFunctions()
 
 	registerEnumIn(L, "configKeys", ConfigManager::QUEST_TRACKER_FREE_LIMIT);
 	registerEnumIn(L, "configKeys", ConfigManager::QUEST_TRACKER_PREMIUM_LIMIT);
+	registerEnumIn(L, "configKeys", ConfigManager::SESSION_TOKEN_EXPIRATION_TIME);
 
 	// os
 	registerMethod(L, "os", "mtime", LuaScriptInterface::luaSystemTime);

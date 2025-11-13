@@ -46,8 +46,6 @@ BOOST_FIXTURE_TEST_CASE(test_login_success_with_token, CacheInfoFixture)
 	    "INSERT INTO `accounts` (`name`, `email`, `password`, `secret`) VALUES ('foo', 'foo@example.com', SHA1('bar'), UNHEX('')) RETURNING `id`");
 	auto id = result->getNumber<uint64_t>("id");
 
-	DBInsert insertSession("INSERT INTO `sessions` (`account_id`, `token`, `expire_at`) VALUES");
-
 	DBInsert insertPlayers("INSERT INTO `players` (`account_id`, `name`) VALUES");
 	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Dejairzin"));
 	insertPlayers.addRow(fmt::format("{:d}, \"{:s}\"", id, "Goraca"));

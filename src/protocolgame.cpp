@@ -395,11 +395,7 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 
 	msg.skipBytes(1); // Gamemaster flag
 
-	auto sessionToken = tfs::base64::decode(msg.getString());
-	if (sessionToken.empty()) {
-		disconnectClient("Malformed session key.");
-		return;
-	}
+	auto sessionTokenString = msg.getString();
 
 	if (operatingSystem == CLIENTOS_QT_LINUX) {
 		msg.getString(); // OS name (?)
@@ -431,24 +427,43 @@ void ProtocolGame::onRecvFirstMessage(NetworkMessage& msg)
 		return;
 	}
 
+	if (sessionTokenString.length() != 40) {
+		disconnectClient("Malformed session key.");
+		return;
+	}
+	std::string sessionData = sessionTokenString.substr(0, 30);
+	std::string sessionSignature = sessionTokenString.substr(30, 10);
+
+	SessionToken sessionToken(sessionData, getString(ConfigManager::SESSION_TOKEN_SECRET_KEY));
+
+	if (!sessionToken.isSignValid(sessionSignature)) {
+		disconnectClient("Session token is invalid. Please log in to account again.");
+		return;
+	}
+
+	if (sessionToken.isExpired(getNumber(ConfigManager::SESSION_TOKEN_EXPIRATION_TIME))) {
+		disconnectClient("Session token has expired. Please log in to account again.");
+		return;
+	}
+
+	if (getBoolean(ConfigManager::SESSION_TOKEN_IP_VERIFICATION) && !sessionToken.isIpValid(ip.to_string())) {
+		disconnectClient("Session is assigned to a different IP. Please log in to account again.");
+		return;
+	}
+
 	Database& db = Database::getInstance();
 	auto result = db.storeQuery(fmt::format(
-	    "SELECT `a`.`id` AS `account_id`, INET6_NTOA(`s`.`ip`) AS `session_ip`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `sessions` `s` ON `a`.`id` = `s`.`account_id` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `s`.`token` = {:s} AND `s`.`expired_at` IS NULL AND `p`.`name` = {:s} AND `p`.`deletion` = 0",
-	    db.escapeString(sessionToken), db.escapeString(characterName)));
+	    "SELECT `a`.`id` AS `account_id`, `password`, `p`.`id` AS `character_id` FROM `accounts` `a` JOIN `players` `p` ON `a`.`id` = `p`.`account_id` WHERE `p`.`name` = {:s} AND `p`.`deletion` = 0",
+	    db.escapeString(characterName)));
 	if (!result) {
-		disconnectClient("Account name or password is not correct.");
+		disconnectClient("Cannot load account or character information. Probably character is deleted.");
 		return;
 	}
 
 	uint32_t accountId = result->getNumber<uint32_t>("account_id");
-	if (accountId == 0) {
-		disconnectClient("Account name or password is not correct.");
+	if (!sessionToken.isValidPassword(accountId, result->getString("password"))) {
+		disconnectClient("Password to account changed. Please log in to account again.");
 		return;
-	}
-
-	Connection::Address sessionIP = boost::asio::ip::make_address(result->getString("session_ip"));
-	if (!sessionIP.is_loopback() && ip != sessionIP) {
-		disconnectClient("Your game session is already locked to a different IP. Please log in again.");
 	}
 
 	g_dispatcher.addTask([=, thisPtr = getThis(), characterId = result->getNumber<uint32_t>("character_id")]() {
