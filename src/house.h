@@ -214,8 +214,8 @@ public:
 	Houses() = default;
 	~Houses()
 	{
-		for (const auto& it : houseMap) {
-			delete it.second;
+		for (auto&& house : houseMap | std::views::values) {
+			delete house;
 		}
 	}
 

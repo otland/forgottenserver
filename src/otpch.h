@@ -38,6 +38,7 @@
 #include <pugixml.hpp>
 #include <queue>
 #include <random>
+#include <ranges>
 #include <set>
 #include <sstream>
 #include <string>

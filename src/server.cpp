@@ -91,9 +91,9 @@ void ServiceManager::stop()
 
 	running = false;
 
-	for (auto& servicePortIt : acceptors) {
+	for (auto&& servicePort : acceptors | std::views::values | std::views::as_const) {
 		try {
-			boost::asio::post(io_context, [servicePort = servicePortIt.second]() { servicePort->onStopServer(); });
+			boost::asio::post(io_context, [servicePort]() { servicePort->onStopServer(); });
 		} catch (boost::system::system_error& e) {
 			std::cout << "[ServiceManager::stop] Network Error: " << e.what() << std::endl;
 		}

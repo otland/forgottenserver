@@ -70,22 +70,22 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
-		const std::string& talkactionWords = it->first;
-		if (!caseInsensitiveStartsWith(words, talkactionWords)) {
+		auto&& [words, talkAction] = *it;
+		if (!caseInsensitiveStartsWith(words, words)) {
 			++it;
 			continue;
 		}
 
 		std::string param;
-		if (wordsLength != talkactionWords.size()) {
-			param = words.substr(talkactionWords.size());
+		if (wordsLength != words.size()) {
+			param = words.substr(words.size());
 			if (param.front() != ' ') {
 				++it;
 				continue;
 			}
 			boost::algorithm::trim_left(param);
 
-			std::string separator = it->second.getSeparator();
+			std::string separator = talkAction.getSeparator();
 			if (separator != " ") {
 				if (!param.empty()) {
 					if (param != separator) {
@@ -98,17 +98,17 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (it->second.fromLua) {
-			if (it->second.getNeedAccess() && !player->getGroup()->access) {
+		if (talkAction.fromLua) {
+			if (talkAction.getNeedAccess() && !player->getGroup()->access) {
 				return TALKACTION_CONTINUE;
 			}
 
-			if (player->getAccountType() < it->second.getRequiredAccountType()) {
+			if (player->getAccountType() < talkAction.getRequiredAccountType()) {
 				return TALKACTION_CONTINUE;
 			}
 		}
 
-		if (it->second.executeSay(player, talkactionWords, param, type)) {
+		if (talkAction.executeSay(player, words, param, type)) {
 			return TALKACTION_CONTINUE;
 		}
 		return TALKACTION_BREAK;

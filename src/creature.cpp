@@ -447,9 +447,9 @@ CreatureVector Creature::getKillers()
 	CreatureVector killers;
 	const int64_t timeNow = OTSYS_TIME();
 	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
-	for (const auto& it : damageMap) {
-		Creature* attacker = g_game.getCreatureByID(it.first);
-		if (attacker && attacker != this && timeNow - it.second.ticks <= inFightTicks) {
+	for (auto&& [id, cb] : damageMap | std::views::as_const) {
+		Creature* attacker = g_game.getCreatureByID(id);
+		if (attacker && attacker != this && timeNow - cb.ticks <= inFightTicks) {
 			killers.push_back(attacker);
 		}
 	}
@@ -475,9 +475,8 @@ void Creature::onDeath()
 	const uint32_t inFightTicks = getNumber(ConfigManager::PZ_LOCKED);
 	int32_t mostDamage = 0;
 	std::map<Creature*, uint64_t> experienceMap;
-	for (const auto& it : damageMap) {
-		if (Creature* attacker = g_game.getCreatureByID(it.first)) {
-			CountBlock_t cb = it.second;
+	for (auto&& [id, cb] : damageMap | std::views::as_const) {
+		if (Creature* attacker = g_game.getCreatureByID(id)) {
 			if ((cb.total > mostDamage && (timeNow - cb.ticks <= inFightTicks))) {
 				mostDamage = cb.total;
 				mostDamageCreature = attacker;
@@ -505,8 +504,8 @@ void Creature::onDeath()
 		}
 	}
 
-	for (const auto& it : experienceMap) {
-		it.first->onGainExperience(it.second, this);
+	for (auto&& [attacker, gainExp] : experienceMap | std::views::as_const) {
+		attacker->onGainExperience(gainExp, this);
 	}
 
 	if (mostDamageCreature) {
@@ -898,10 +897,9 @@ double Creature::getDamageRatio(Creature* attacker) const
 	uint32_t totalDamage = 0;
 	uint32_t attackerDamage = 0;
 
-	for (const auto& it : damageMap) {
-		const CountBlock_t& cb = it.second;
+	for (auto&& [id, cb] : damageMap | std::views::as_const) {
 		totalDamage += cb.total;
-		if (it.first == attacker->getID()) {
+		if (id == attacker->getID()) {
 			attackerDamage += cb.total;
 		}
 	}

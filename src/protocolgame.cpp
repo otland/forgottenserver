@@ -1857,8 +1857,8 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 
 	if (channelUsers) {
 		msg.add<uint16_t>(channelUsers->size());
-		for (const auto& it : *channelUsers) {
-			msg.addString(it.second->getName());
+		for (auto&& user : *channelUsers | std::views::values | std::views::as_const) {
+			msg.addString(user->getName());
 		}
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -1866,8 +1866,8 @@ void ProtocolGame::sendChannel(uint16_t channelId, const std::string& channelNam
 
 	if (invitedUsers) {
 		msg.add<uint16_t>(invitedUsers->size());
-		for (const auto& it : *invitedUsers) {
-			msg.addString(it.second->getName());
+		for (auto&& user : *invitedUsers | std::views::values | std::views::as_const) {
+			msg.addString(user->getName());
 		}
 	} else {
 		msg.add<uint16_t>(0x00);
@@ -2104,9 +2104,9 @@ void ProtocolGame::sendMarketEnter()
 	std::map<uint16_t, uint32_t> depotItems;
 	std::forward_list<Container*> containerList{player->getInbox().get()};
 
-	for (const auto& chest : player->depotChests) {
-		if (!chest.second->empty()) {
-			containerList.push_front(chest.second.get());
+	for (auto&& chest : player->depotChests | std::views::values | std::views::as_const) {
+		if (!chest->empty()) {
+			containerList.push_front(chest.get());
 		}
 	}
 
@@ -2931,10 +2931,10 @@ void ProtocolGame::sendItems()
 		msg.add<uint16_t>(1); // always 1
 	}
 
-	for (const auto& item : inventory) {
-		msg.add<uint16_t>(Item::items[item.first].clientId); // item clientId
-		msg.addByte(0);                                      // always 0
-		msg.add<uint16_t>(item.second);                      // count
+	for (auto&& [itemId, count] : inventory | std::views::as_const) {
+		msg.add<uint16_t>(Item::items[itemId].clientId); // item clientId
+		msg.addByte(0);                                  // always 0
+		msg.add<uint16_t>(count);                        // count
 	}
 
 	writeToOutputBuffer(msg);
@@ -3399,15 +3399,15 @@ void ProtocolGame::sendModalWindow(const ModalWindow& modalWindow)
 	msg.addString(modalWindow.message);
 
 	msg.addByte(modalWindow.buttons.size());
-	for (const auto& it : modalWindow.buttons) {
-		msg.addString(it.first);
-		msg.addByte(it.second);
+	for (auto&& [text, id] : modalWindow.buttons | std::views::as_const) {
+		msg.addString(text);
+		msg.addByte(id);
 	}
 
 	msg.addByte(modalWindow.choices.size());
-	for (const auto& it : modalWindow.choices) {
-		msg.addString(it.first);
-		msg.addByte(it.second);
+	for (auto&& [text, id] : modalWindow.choices | std::views::as_const) {
+		msg.addString(text);
+		msg.addByte(id);
 	}
 
 	msg.addByte(modalWindow.defaultEscapeButton);
