@@ -315,7 +315,7 @@ public:
 	{}
 	virtual void onRemoveTileItem(const Tile*, const Position&, const ItemType&, const Item*) {}
 
-	virtual void onCreatureAppear(Creature* creature, bool isLogin);
+	virtual void onCreatureAppear(Creature*, bool, MagicEffectClasses) {}
 	virtual void onRemoveCreature(Creature* creature, bool isLogout);
 	virtual void onCreatureMove(Creature* creature, const Tile* newTile, const Position& newPos, const Tile* oldTile,
 	                            const Position& oldPos, bool teleport);
