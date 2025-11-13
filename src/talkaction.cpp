@@ -70,7 +70,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 {
 	size_t wordsLength = words.length();
 	for (auto it = talkActions.begin(); it != talkActions.end();) {
-		const std::string& talkactionWords = it->first;
+		auto&& [talkactionWords, talkaction] = *it;
 		if (!boost::istarts_with(words, talkactionWords)) {
 			++it;
 			continue;
@@ -85,7 +85,7 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 			boost::algorithm::trim_left(param);
 
-			std::string separator = it->second.getSeparator();
+			std::string separator = talkaction.getSeparator();
 			if (separator != " ") {
 				if (!param.empty()) {
 					if (param != separator) {
@@ -98,17 +98,17 @@ TalkActionResult_t TalkActions::playerSaySpell(Player* player, SpeakClasses type
 			}
 		}
 
-		if (it->second.fromLua) {
-			if (it->second.getNeedAccess() && !player->getGroup()->access) {
+		if (talkaction.fromLua) {
+			if (talkaction.getNeedAccess() && !player->getGroup()->access) {
 				return TALKACTION_CONTINUE;
 			}
 
-			if (player->getAccountType() < it->second.getRequiredAccountType()) {
+			if (player->getAccountType() < talkaction.getRequiredAccountType()) {
 				return TALKACTION_CONTINUE;
 			}
 		}
 
-		if (it->second.executeSay(player, talkactionWords, param, type)) {
+		if (talkaction.executeSay(player, talkactionWords, param, type)) {
 			return TALKACTION_CONTINUE;
 		}
 		return TALKACTION_BREAK;

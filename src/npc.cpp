@@ -16,12 +16,12 @@ uint32_t Npc::npcAutoID = 0x20000000;
 void Npcs::reload()
 {
 	const std::map<uint32_t, Npc*>& npcs = g_game.getNpcs();
-	for (const auto& it : npcs) {
-		it.second->closeAllShopWindows();
+	for (auto&& npc : npcs | std::views::values | std::views::as_const) {
+		npc->closeAllShopWindows();
 	}
 
-	for (const auto& it : npcs) {
-		it.second->reload();
+	for (auto&& npc : npcs | std::views::values | std::views::as_const) {
+		npc->reload();
 	}
 }
 

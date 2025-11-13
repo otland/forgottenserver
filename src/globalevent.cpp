@@ -154,9 +154,7 @@ void GlobalEvents::think()
 	int64_t now = OTSYS_TIME();
 
 	int64_t nextScheduledTime = std::numeric_limits<int64_t>::max();
-	for (auto& it : thinkMap) {
-		GlobalEvent& globalEvent = it.second;
-
+	for (auto&& globalEvent : thinkMap | std::views::values) {
 		int64_t nextExecutionTime = globalEvent.getNextExecution() - now;
 		if (nextExecutionTime > 0) {
 			if (nextExecutionTime < nextScheduledTime) {
@@ -185,8 +183,7 @@ void GlobalEvents::think()
 
 void GlobalEvents::execute(GlobalEvent_t type) const
 {
-	for (const auto& it : serverMap) {
-		const GlobalEvent& globalEvent = it.second;
+	for (auto&& globalEvent : serverMap | std::views::values | std::views::as_const) {
 		if (globalEvent.getEventType() == type) {
 			globalEvent.executeEvent();
 		}
@@ -206,9 +203,9 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 		case GLOBALEVENT_RECORD:
 		case GLOBALEVENT_SAVE: {
 			GlobalEventMap retMap;
-			for (const auto& it : serverMap) {
-				if (it.second.getEventType() == type) {
-					retMap.emplace(it.first, it.second);
+			for (const auto& [name, globalEvent] : serverMap) {
+				if (globalEvent.getEventType() == type) {
+					retMap.emplace(name, globalEvent);
 				}
 			}
 			return retMap;

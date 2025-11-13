@@ -155,9 +155,9 @@ void Game::saveGameState()
 
 	std::cout << "Saving server..." << std::endl;
 
-	for (const auto& it : players) {
-		it.second->loginPosition = it.second->getPosition();
-		IOLoginData::savePlayer(it.second);
+	for (auto&& player : players | std::views::values | std::views::as_const) {
+		player->loginPosition = player->getPosition();
+		IOLoginData::savePlayer(player);
 	}
 
 	Map::save();
@@ -419,9 +419,9 @@ Npc* Game::getNpcByName(const std::string& s)
 		return nullptr;
 	}
 
-	for (const auto& it : npcs) {
-		if (boost::iequals(s, it.second->getName())) {
-			return it.second;
+	for (auto&& npc : npcs | std::views::values | std::views::as_const) {
+		if (boost::iequals(s, npc->getName())) {
+			return npc;
 		}
 	}
 	return nullptr;
@@ -482,9 +482,9 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string& s, Player*& player)
 
 Player* Game::getPlayerByAccount(uint32_t acc)
 {
-	for (const auto& it : players) {
-		if (it.second->getAccount() == acc) {
-			return it.second;
+	for (auto&& player : players | std::views::values | std::views::as_const) {
+		if (player->getAccount() == acc) {
+			return player;
 		}
 	}
 	return nullptr;
@@ -1555,16 +1555,15 @@ bool Game::removeMoney(Thing* fromThing, uint64_t money, uint32_t flags /*= 0*/)
 		return false;
 	}
 
-	for (const auto& moneyEntry : moneyMap) {
-		Item* item = moneyEntry.second;
-		if (moneyEntry.first < money) {
+	for (auto&& [worth, item] : moneyMap | std::views::as_const) {
+		if (worth < money) {
 			internalRemoveItem(item);
-			money -= moneyEntry.first;
-		} else if (moneyEntry.first > money) {
-			const uint32_t worth = moneyEntry.first / item->getItemCount();
-			const uint32_t removeCount = std::ceil(money / static_cast<double>(worth));
+			money -= worth;
+		} else if (worth > money) {
+			const uint32_t worthPerItem = worth / item->getItemCount();
+			const uint32_t removeCount = std::ceil(money / static_cast<double>(worthPerItem));
 
-			addMoney(fromThing, (worth * removeCount) - money, flags);
+			addMoney(fromThing, (worthPerItem * removeCount) - money, flags);
 			internalRemoveItem(item, removeCount);
 			break;
 		} else {
@@ -1581,9 +1580,7 @@ void Game::addMoney(Thing* thing, uint64_t money, uint32_t flags /*= 0*/)
 		return;
 	}
 
-	for (const auto& it : Item::items.currencyItems) {
-		const uint64_t worth = it.first;
-
+	for (auto&& [worth, type] : Item::items.currencyItems | std::views::as_const) {
 		uint32_t currencyCoins = money / worth;
 		if (currencyCoins <= 0) {
 			continue;
@@ -1593,7 +1590,7 @@ void Game::addMoney(Thing* thing, uint64_t money, uint32_t flags /*= 0*/)
 		while (currencyCoins > 0) {
 			const uint16_t count = std::min<uint32_t>(ITEM_STACK_SIZE, currencyCoins);
 
-			Item* remaindItem = Item::CreateItem(it.second, count);
+			Item* remaindItem = Item::CreateItem(type, count);
 
 			ReturnValue ret = internalAddItem(thing, remaindItem, INDEX_WHEREEVER, flags);
 			if (ret != RETURNVALUE_NOERROR) {
@@ -1882,8 +1879,8 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
 
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
-	for (const auto& it : players) {
-		it.second->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
+	for (auto&& onlinePlayer : players | std::views::values | std::views::as_const) {
+		onlinePlayer->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
 	return true;
@@ -2696,8 +2693,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 
 	Container* tradeItemContainer = tradeItem->getContainer();
 	if (tradeItemContainer) {
-		for (const auto& it : tradeItems) {
-			Item* item = it.first;
+		for (auto&& item : tradeItems | std::views::keys | std::views::as_const) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -2715,8 +2711,7 @@ void Game::playerRequestTrade(uint32_t playerId, const Position& pos, uint8_t st
 			}
 		}
 	} else {
-		for (const auto& it : tradeItems) {
-			Item* item = it.first;
+		for (auto&& item : tradeItems | std::views::keys | std::views::as_const) {
 			if (tradeItem == item) {
 				player->sendCancelMessage("This item is already being traded.");
 				return;
@@ -4850,8 +4845,8 @@ void Game::ReleaseItem(Item* item) { ToReleaseItems.push_back(item); }
 void Game::broadcastMessage(const std::string& text, MessageClasses type) const
 {
 	std::cout << "> Broadcasted message: \"" << text << "\"." << std::endl;
-	for (const auto& it : players) {
-		it.second->sendTextMessage(type, text);
+	for (auto&& player : players | std::views::values | std::views::as_const) {
+		player->sendTextMessage(type, text);
 	}
 }
 
@@ -4910,8 +4905,8 @@ void Game::checkPlayersRecord()
 		uint32_t previousRecord = playersRecord;
 		playersRecord = playersOnline;
 
-		for (auto& it : g_globalEvents->getEventMap(GLOBALEVENT_RECORD)) {
-			it.second.executeRecord(playersRecord, previousRecord);
+		for (auto&& globalEvent : g_globalEvents->getEventMap(GLOBALEVENT_RECORD) | std::views::values) {
+			globalEvent.executeRecord(playersRecord, previousRecord);
 		}
 		updatePlayersRecord();
 	}
@@ -5572,9 +5567,9 @@ std::vector<Item*> Game::getMarketItemList(uint16_t wareId, uint16_t sufficientC
 	uint16_t count = 0;
 	std::list<Container*> containers{player.getInbox().get()};
 
-	for (const auto& chest : player.depotChests) {
-		if (!chest.second->empty()) {
-			containers.push_front(chest.second.get());
+	for (auto&& chest : player.depotChests | std::views::values | std::views::as_const) {
+		if (!chest->empty()) {
+			containers.push_front(chest.get());
 		}
 	}
 

@@ -1104,8 +1104,8 @@ bool Monster::pushItem(Item* item)
 
 	std::shuffle(relList.begin(), relList.end(), getRandomGenerator());
 
-	for (const auto& it : relList) {
-		Position tryPos(centerPos.x + it.first, centerPos.y + it.second, centerPos.z);
+	for (auto&& [dx, dy] : relList | std::views::as_const) {
+		Position tryPos(centerPos.x + dx, centerPos.y + dy, centerPos.z);
 		Tile* tile = g_game.map.getTile(tryPos);
 		if (tile && g_game.canThrowObjectTo(centerPos, tryPos, true, true)) {
 			if (g_game.internalMoveItem(item->getParent(), tile, INDEX_WHEREEVER, item, item->getItemCount(),
