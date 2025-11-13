@@ -62,7 +62,7 @@ LuaScriptInterface& MoveEvents::getScriptInterface() { return scriptInterface; }
 
 Event_ptr MoveEvents::getEvent(const std::string& nodeName)
 {
-	if (!caseInsensitiveEqual(nodeName, "movevent")) {
+	if (!boost::iequals(nodeName, "movevent")) {
 		return nullptr;
 	}
 	return Event_ptr(new MoveEvent(&scriptInterface));
@@ -890,17 +890,17 @@ ReturnValue MoveEvent::DeEquipItem(MoveEvent*, Player* player, Item* item, slots
 bool MoveEvent::loadFunction(const pugi::xml_attribute& attr, bool isScripted)
 {
 	const char* functionName = attr.as_string();
-	if (caseInsensitiveEqual(functionName, "onstepinfield")) {
+	if (boost::iequals(functionName, "onstepinfield")) {
 		stepFunction = StepInField;
-	} else if (caseInsensitiveEqual(functionName, "onstepoutfield")) {
+	} else if (boost::iequals(functionName, "onstepoutfield")) {
 		stepFunction = StepOutField;
-	} else if (caseInsensitiveEqual(functionName, "onaddfield")) {
+	} else if (boost::iequals(functionName, "onaddfield")) {
 		moveFunction = AddItemField;
-	} else if (caseInsensitiveEqual(functionName, "onremovefield")) {
+	} else if (boost::iequals(functionName, "onremovefield")) {
 		moveFunction = RemoveItemField;
-	} else if (caseInsensitiveEqual(functionName, "onequipitem")) {
+	} else if (boost::iequals(functionName, "onequipitem")) {
 		equipFunction = EquipItem;
-	} else if (caseInsensitiveEqual(functionName, "ondeequipitem")) {
+	} else if (boost::iequals(functionName, "ondeequipitem")) {
 		equipFunction = DeEquipItem;
 	} else {
 		if (!isScripted) {

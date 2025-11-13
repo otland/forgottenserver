@@ -14,12 +14,6 @@ std::string transformToSHA1(std::string_view input);
 std::string hmac(std::string_view algorithm, std::string_view key, std::string_view message);
 std::string generateToken(std::string_view key, uint64_t counter, size_t length = AUTHENTICATOR_DIGITS);
 
-// checks that str1 is equivalent to str2 ignoring letter case
-bool caseInsensitiveEqual(std::string_view str1, std::string_view str2);
-
-// checks that str1 starts with str2 ignoring letter case
-bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix);
-
 using StringVector = std::vector<std::string>;
 using IntegerVector = std::vector<int32_t>;
 

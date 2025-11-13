@@ -41,7 +41,7 @@ void GlobalEvents::clear(bool fromLua)
 
 Event_ptr GlobalEvents::getEvent(const std::string& nodeName)
 {
-	if (!caseInsensitiveEqual(nodeName, "globalevent")) {
+	if (!boost::iequals(nodeName, "globalevent")) {
 		return nullptr;
 	}
 	return Event_ptr(new GlobalEvent(&scriptInterface));
@@ -279,13 +279,13 @@ bool GlobalEvent::configureEvent(const pugi::xml_node& node)
 		eventType = GLOBALEVENT_TIMER;
 	} else if ((attr = node.attribute("type"))) {
 		const char* value = attr.value();
-		if (caseInsensitiveEqual(value, "startup")) {
+		if (boost::iequals(value, "startup")) {
 			eventType = GLOBALEVENT_STARTUP;
-		} else if (caseInsensitiveEqual(value, "shutdown")) {
+		} else if (boost::iequals(value, "shutdown")) {
 			eventType = GLOBALEVENT_SHUTDOWN;
-		} else if (caseInsensitiveEqual(value, "record")) {
+		} else if (boost::iequals(value, "record")) {
 			eventType = GLOBALEVENT_RECORD;
-		} else if (caseInsensitiveEqual(value, "save")) {
+		} else if (boost::iequals(value, "save")) {
 			eventType = GLOBALEVENT_SAVE;
 		} else {
 			std::cout << "[Error - GlobalEvent::configureEvent] No valid type \"" << attr.as_string()

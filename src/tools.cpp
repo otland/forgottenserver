@@ -133,18 +133,6 @@ std::string generateToken(std::string_view key, uint64_t counter, size_t length 
 	return token.substr(token.size() - length);
 }
 
-bool caseInsensitiveEqual(std::string_view str1, std::string_view str2)
-{
-	return str1.size() == str2.size() &&
-	       std::equal(str1.begin(), str1.end(), str2.begin(), [](char a, char b) { return tolower(a) == tolower(b); });
-}
-
-bool caseInsensitiveStartsWith(std::string_view str, std::string_view prefix)
-{
-	return str.size() >= prefix.size() && std::equal(prefix.begin(), prefix.end(), str.begin(),
-	                                                 [](char a, char b) { return tolower(a) == tolower(b); });
-}
-
 std::vector<std::string_view> explodeString(std::string_view inString, const std::string& separator,
                                             int32_t limit /* = -1*/)
 {
