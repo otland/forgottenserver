@@ -1898,8 +1898,8 @@ bool Game::playerBroadcastMessage(Player* player, const std::string& text) const
 
 	std::cout << "> " << player->getName() << " broadcasted: \"" << text << "\"." << std::endl;
 
-	for (auto&& player : players | std::views::values | std::views::as_const) {
-		player->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
+	for (auto&& onlinePlayer : players | std::views::values | std::views::as_const) {
+		onlinePlayer->sendPrivateMessage(player, TALKTYPE_BROADCAST, text);
 	}
 
 	return true;
