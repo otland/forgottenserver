@@ -822,10 +822,9 @@ void Creature::removeFollowers()
 	const Position& position = getPosition();
 
 	followers = followers | tfs::views::lock_weak_ptrs | std::views::filter([&position](const auto& creature) {
-		            const Position& followerPosition = creature->getPosition();
-		            uint16_t distance =
-		                position.getDistanceX(followerPosition) + position.getDistanceY(followerPosition);
-		            return distance >= Map::maxViewportX + Map::maxViewportY || position.z != followerPosition.z;
+		            auto distance =
+		                position.getDistanceX(creature->position) + position.getDistanceY(creature->position);
+		            return distance < Map::maxViewportX + Map::maxViewportY && position.z == creature->position.z;
 	            }) |
 	            std::ranges::to<decltype(followers)>();
 }
@@ -836,16 +835,13 @@ void Creature::updateFollowersPaths()
 		return;
 	}
 
-	const Position& thisPosition = getPosition();
 	for (const auto& follower : followers | tfs::views::lock_weak_ptrs) {
-		const Position& followerPosition = follower->getPosition();
-
 		if (follower->lastPathUpdate < OTSYS_TIME()) {
 			continue;
 		}
 
-		if (thisPosition.getDistanceX(followerPosition) >= Map::maxViewportX ||
-		    thisPosition.getDistanceY(followerPosition) >= Map::maxViewportY) {
+		if (position.getDistanceX(follower->position) >= Map::maxViewportX ||
+		    position.getDistanceY(follower->position) >= Map::maxViewportY) {
 			continue;
 		}
 
