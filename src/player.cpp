@@ -3379,7 +3379,6 @@ void Player::goToFollowCreature()
 void Player::getPathSearchParams(const Creature* creature, FindPathParams& fpp) const
 {
 	Creature::getPathSearchParams(creature, fpp);
-	fpp.fullPathSearch = true;
 }
 
 void Player::doAttacking(uint32_t)
