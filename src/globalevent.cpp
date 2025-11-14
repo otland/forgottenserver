@@ -203,9 +203,9 @@ GlobalEventMap GlobalEvents::getEventMap(GlobalEvent_t type)
 		case GLOBALEVENT_RECORD:
 		case GLOBALEVENT_SAVE: {
 			GlobalEventMap retMap;
-			for (auto&& globalEvent : serverMap | std::views::values | std::views::as_const) {
+			for (const auto& [name, globalEvent] : serverMap) {
 				if (globalEvent.getEventType() == type) {
-					retMap.emplace(globalEvent.getName(), globalEvent);
+					retMap.emplace(name, globalEvent);
 				}
 			}
 			return retMap;
